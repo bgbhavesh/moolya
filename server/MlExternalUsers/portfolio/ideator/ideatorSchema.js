@@ -3,6 +3,7 @@
    */
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef';
+import MlResolver from '../../../commons/mlResolverDef'
 
 let ideatorPortfolioSchema = ` 
     
@@ -35,3 +36,9 @@ let ideatorPortfolioSchema = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], ideatorPortfolioSchema]);
+
+let supportedApi = [
+  {api:'fetchIdeators', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchIdeaByPortfolioId', actionName:'READ', moduleName:"PORTFOLIO"},
+]
+MlResolver.MlModuleResolver.push(supportedApi)

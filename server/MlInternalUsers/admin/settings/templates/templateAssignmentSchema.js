@@ -1,12 +1,14 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let TemplateAssignment = `        
     type SubProcess{
             _id             : String
             processName     : String
             subProcessName  : String
             createdBy       : String      
-            createdDate     : String
+            createdDate     : Date
             steps           : [step]      
     }
     type step{
@@ -21,7 +23,7 @@ let TemplateAssignment = `
             templateCode: String
             templateName: String
             isActive          : Boolean
-            createdDate       : String
+            createdDate       : Date
     }
     type stepsTemplates{
             step        : String
@@ -33,11 +35,12 @@ let TemplateAssignment = `
             templatesubProcess        : String
             templateProcessName       : String
             templateSubProcessName    : String
+            templateGroupName         : String
             assignedTemplates         : [template]    
             createdBy                 : String      
-            createdDate               : String  
+            createdDate               : Date  
             modifiedBy                : String      
-            modifiedDate              : String
+            modifiedDate              : Date
             templateclusterId         : String
             templateclusterName       : String
             templatechapterId         : String
@@ -56,7 +59,7 @@ let TemplateAssignment = `
             templateCode: String
             templateName: String
             isActive          : Boolean
-            createdDate       : String
+            createdDate       : Date
     }
     input stepsTemplatesInput{
             step        : String
@@ -68,11 +71,12 @@ let TemplateAssignment = `
             templatesubProcess        : String
             templateProcessName       : String
             templateSubProcessName    : String
+            templateGroupName         : String
             assignedTemplates         : [stepInput]    
             createdBy                 : String      
-            createdDate               : String  
+            createdDate               : Date  
             modifiedBy                : String      
-            modifiedDate              : String 
+            modifiedDate              : Date 
             templateclusterId         : String
             templateclusterName       : String
             templatechapterId         : String
@@ -99,3 +103,14 @@ let TemplateAssignment = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],TemplateAssignment]);
+
+let supportedApi = [
+  {api:'findTemplateSteps', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT"},
+  {api:'fetchAssignedTemplate', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT", isWhiteList:true},
+  {api:'fetchSubProcess', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT", isWhiteList:true},
+  {api:'findAssignedTemplates', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT"},
+  {api:'findTemplateStepsSelect', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT", isWhiteList:true},
+  {api:'createTemplateAssignment', actionName:'CREATE', moduleName:"TEMPLATEASSIGNMENT"},
+  {api:'updateTemplateAssignment', actionName:'UPDATE', moduleName:"TEMPLATEASSIGNMENT"}
+];
+MlResolver.MlModuleResolver.push(supportedApi)

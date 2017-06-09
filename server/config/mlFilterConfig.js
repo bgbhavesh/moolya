@@ -9,12 +9,12 @@ if(Meteor.isServer){
       "moduleName" : "registration",
       "filterFields" : [
         {
-          "fieldName" : "createdDate",
+          "fieldName" : "registrationInfo.registrationDate",
           "displayName" : "Created Date",
-          "isActive" : true,
           "isDynamic" : null,
           "fieldType" : "Date",
-          "fieldResolverName" : null
+          "fieldResolverName" : null,
+          "isActive":true
         },
         {
           "fieldName" : "registrationInfo.firstName",
@@ -22,44 +22,67 @@ if(Meteor.isServer){
           "isActive" : true,
           "isDynamic" : null,
           "fieldType" : "String",
-          "fieldResolverName" : null
+          "fieldResolverName" : null,
+
         },
         {
           "fieldName" : "registrationInfo.clusterId",
           "displayName" : "Cluster",
           "isDynamic" : true,
           "fieldType" : "List",
-          "fieldResolverName" : "Reg_Clusters"
+          "fieldResolverName" : "Gen_Clusters",
+          "isActive":true,
+          "clearFields" : ["registrationInfo.chapterId","registrationInfo.subChapterId"]
         },
         {
           "fieldName" : "registrationInfo.chapterId",
           "displayName" : "Chapter",
           "isDynamic" : true,
           "fieldType" : "List",
-          "fieldResolverName" : "Reg_Chapters"
+          "fieldResolverName" : "Gen_Chapters",
+          "isActive":true,
+          "clearFields" : ["registrationInfo.subChapterId"]
         },
         {
           "fieldName" : "registrationInfo.subChapterId",
           "displayName" : "Sub Chapter",
           "isDynamic" : true,
           "fieldType" : "List",
-          "fieldResolverName" : "Reg_SubChapters"
-        },
-        {
-          "fieldName" : "registrationInfo.identityType",
-          "displayName" : "Identity",
-          "isDynamic" : true,
-          "fieldType" : "List",
-          "fieldResolverName" : "Gen_IdentityType"
+          "fieldResolverName" : "Gen_SubChapters",
+          "isActive":true
         },
         {
           "fieldName" : "registrationInfo.communityDefName",
           "displayName" : "Community",
-          "isDynamic" : false,
+          "isDynamic" : true,
           "fieldType" : "List",
           "fieldResolverName" : "Gen_Community",
-          "isCustom" : false
-        }
+          "isActive":true
+        },
+        {
+          "fieldName" : "registrationInfo.createdBy",
+          "displayName" : "Created By",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        },
+        {
+          "fieldName" : "registrationInfo.email",
+          "displayName" : "Email",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        },
+        {
+          "fieldName" : "allocation.assignee",
+          "displayName" : "Assigned To",
+          "isDynamic" : true,
+          "fieldType" : "String",
+          "fieldResolverName" : "null",
+          "isActive":true
+        },
 
       ]
     }});
@@ -81,59 +104,372 @@ if(Meteor.isServer){
           "displayName" : "User Name",
           "isDynamic" : null,
           "fieldType" : "String",
-          "fieldResolverName" : null
+          "fieldResolverName" : null,
+          "isActive":true
         },
         {
           "fieldName" : "clusterId",
           "displayName" : "Cluster",
           "isDynamic" : true,
           "fieldType" : "List",
-          "fieldResolverName" : "Gen_Clusters"
+          "fieldResolverName" : "Gen_Clusters",
+          "isActive":true,
+          "clearFields" : ["chapterId","subChapterId"]
         },
         {
           "fieldName" : "chapterId",
           "displayName" : "Chapter",
           "isDynamic" : true,
           "fieldType" : "List",
-          "fieldResolverName" : "Gen_Chapters"
+          "fieldResolverName" : "Gen_Chapters",
+          "isActive":true,
+          "clearFields" : ["subChapterId"]
         },
         {
           "fieldName" : "subChapterId",
           "displayName" : "Sub Chapter",
           "isDynamic" : true,
           "fieldType" : "List",
-          "fieldResolverName" : "Gen_SubChapters"
-        },
-        {
-          "fieldName" : "identityType",
-          "displayName" : "Identity",
-          "isDynamic" : true,
-          "fieldType" : "List",
-          "fieldResolverName" : "Gen_IdentityType"
+          "fieldResolverName" : "Gen_SubChapters",
+          "isActive":true
         },
         {
           "fieldName" : "communityType",
           "displayName" : "Community",
-          "isDynamic" : false,
+          "isDynamic" : true,
           "fieldType" : "List",
           "fieldResolverName" : "Gen_Community",
+          "isActive":true
         },
-        {
+       /* {
           "fieldName" : "isActive",
           "displayName" : "isActive??",
           "isDynamic" : true,
           "fieldType" : "Boolean",
-          "fieldResolverName" : "Gen_isActive"
+          "fieldResolverName" : "Gen_isActive",
+          "isActive":true
+        },*/
+        {
+          "fieldName" : "createdBy",
+          "displayName" : "Created By",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
         },
         {
-          "fieldName" : "accountType",
-          "displayName" : "Subscription Type",
-          "isDynamic" : true,
-          "fieldType" : "List",
-          "fieldResolverName" : "Gen_SubscriptionType"
-        }
+          "fieldName" : "portfolioUserName",
+          "displayName" : "Contact Email",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        },
       ]
     }});
   }
 
+  //for transaction log
+  let transactionLogFilterExists = MlFilters.findOne({"moduleName":"transactionLog"});
+  if(!transactionLogFilterExists){
+    MlFilters.upsert({"moduleName" : "transactionLog"},{$set:{
+      "filterName" : "TransactionLog Filter",
+      "filterDescription" : "TransactionLog Filter",
+      "isActive" : true,
+      "moduleName" : "transactionLog",
+      "filterFields" : [
+        {
+          "fieldName" : "clusterId",
+          "displayName" : "Cluster",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Clusters",
+          "isActive":true,
+          "clearFields" : ["chapterId","subChapterId"]
+        },
+        {
+          "fieldName" : "chapterId",
+          "displayName" : "Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Chapters",
+          "isActive":true,
+          "clearFields" : ["subChapterId"]
+        },
+        {
+          "fieldName" : "subChapterId",
+          "displayName" : "Sub Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_SubChapters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "communityId",
+          "displayName" : "Community",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Community",
+          "isActive":true
+        },
+        {
+          "fieldName" : "createdAt",
+          "displayName" : "Created Date",
+          "isDynamic" : null,
+          "fieldType" : "Date",
+          "fieldResolverName" : null,
+          "isActive":true
+        },
+
+      ]
+    }});
+  }
+
+  //for internalRequests
+  let internalRequestFilterExists = MlFilters.findOne({"moduleName":"internalRequests"});
+  if(!internalRequestFilterExists){
+    MlFilters.upsert({"moduleName" : "internalRequests"},{$set:{
+      "filterName" : "Internal Request Filter",
+      "filterDescription" : "Internal Request Filter",
+      "isActive" : true,
+      "moduleName" : "internalRequests",
+      "filterFields" : [
+        {
+          "fieldName" : "cluster",
+          "displayName" : "Cluster",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Clusters",
+          "isActive":true,
+          "clearFields" : ["chapter","subChapter"]
+        },
+        {
+          "fieldName" : "chapter",
+          "displayName" : "Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Chapters",
+          "isActive":true,
+          "clearFields" : ["subChapter"]
+        },
+        {
+          "fieldName" : "subChapter",
+          "displayName" : "Sub Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_SubChapters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "community",
+          "displayName" : "Community",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Community",
+          "isActive":true
+        },
+        {
+          "fieldName" : "transactionCreatedDate",
+          "displayName" : "Created Date",
+          "isDynamic" : null,
+          "fieldType" : "Date",
+          "fieldResolverName" : null,
+          "isActive":true
+        },
+        {
+          "fieldName" : "createdBy",
+          "displayName" : "Created By",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        },
+
+      ]
+    }});
+  }
+
+  //for approvedRequests
+  let approvedRequestFilterExists = MlFilters.findOne({"moduleName":"internalApprovedRequests"});
+  if(!approvedRequestFilterExists){
+    MlFilters.upsert({"moduleName" : "internalApprovedRequests"},{$set:{
+      "filterName" : "Internal Approved Request Filter",
+      "filterDescription" : "Internal Approved Request Filter",
+      "isActive" : true,
+      "moduleName" : "internalApprovedRequests",
+      "filterFields" : [
+        {
+          "fieldName" : "cluster",
+          "displayName" : "Cluster",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Clusters",
+          "isActive":true,
+          "clearFields" : ["chapter","subChapter"]
+        },
+        {
+          "fieldName" : "chapter",
+          "displayName" : "Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Chapters",
+          "isActive":true,
+          "clearFields" : ["subChapter"]
+        },
+        {
+          "fieldName" : "subChapter",
+          "displayName" : "Sub Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_SubChapters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "community",
+          "displayName" : "Community",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Community",
+          "isActive":true
+        },
+        {
+          "fieldName" : "transactionCreatedDate",
+          "displayName" : "Created Date",
+          "isDynamic" : null,
+          "fieldType" : "Date",
+          "fieldResolverName" : null,
+          "isActive":true
+        },
+        {
+          "fieldName" : "createdBy",
+          "displayName" : "Created By",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        },
+
+      ]
+    }});
+  }
+
+  //for process documents
+  let processDocumentsFilterExists = MlFilters.findOne({"moduleName":"documents"});
+  if(!processDocumentsFilterExists){
+    MlFilters.upsert({"moduleName" : "documents"},{$set:{
+      "filterName" : "Documents",
+      "filterDescription" : "Documents Filter",
+      "isActive" : true,
+      "moduleName" : "documents",
+      "filterFields" : [
+        {
+          "fieldName" : "clusters",
+          "displayName" : "Cluster",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Clusters",
+          "isActive":true,
+          "clearFields" : ["chapters","subChapters"]
+        },
+        {
+          "fieldName" : "chapters",
+          "displayName" : "Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Chapters",
+          "isActive":true,
+          "clearFields" : ["subChapter"]
+        },
+        {
+          "fieldName" : "subChapters",
+          "displayName" : "Sub Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_SubChapters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "communities",
+          "displayName" : "Community",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Community",
+          "isActive":true
+        },
+        {
+          "fieldName" : "date",
+          "displayName" : "Created Date",
+          "isDynamic" : null,
+          "fieldType" : "Date",
+          "fieldResolverName" : null,
+          "isActive":true
+        },
+
+      ]
+    }});
+  }
+
+  //for template assignment
+  let templateAssignmentFilterExists = MlFilters.findOne({"moduleName":"templateAssignment"});
+  if(!templateAssignmentFilterExists){
+    MlFilters.upsert({"moduleName" : "templateAssignment"},{$set:{
+      "filterName" : "Templates",
+      "filterDescription" : "Templates Filter",
+      "isActive" : true,
+      "moduleName" : "templateAssignment",
+      "filterFields" : [
+        {
+          "fieldName" : "templateclusterId",
+          "displayName" : "Cluster",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Clusters",
+          "isActive":true,
+          "clearFields" : ["templatechapterId","templatesubChapterId"]
+        },
+        {
+          "fieldName" : "templatechapterId",
+          "displayName" : "Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Chapters",
+          "isActive":true,
+          "clearFields" : ["subChapter"]
+        },
+        {
+          "fieldName" : "templatesubChapterId",
+          "displayName" : "Sub Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_SubChapters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "templatecommunityCode",
+          "displayName" : "Community",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Community",
+          "isActive":true
+        },
+        {
+          "fieldName" : "createdDate",
+          "displayName" : "Created Date",
+          "isDynamic" : null,
+          "fieldType" : "Date",
+          "fieldResolverName" : null,
+          "isActive":true
+        },
+        {
+          "fieldName" : "createdBy",
+          "displayName" : "Created By",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        },
+
+      ]
+    }});
+  }
 }

@@ -12,9 +12,9 @@ import supercluster from 'points-cluster';
 
 export const gMap = ({
   style, hoverDistance, options,
-  mapProps: { center, zoom },clusterRadius,
+  mapProps: {center, zoom,bounds },clusterRadius,onChildClick,
   onChange, onChildMouseEnter, onChildMouseLeave,
-  clusters,mapContext,module
+  clusters,mapContext,module,showImage
 }) => {
   return (
     <GoogleMap
@@ -24,6 +24,7 @@ export const gMap = ({
       center={center}
       zoom={zoom}
       onChange={onChange}
+      onChildClick={(evt, loc)=>onChildClick(evt, loc,zoom,center)}
       onChildMouseEnter={onChildMouseEnter}
       onChildMouseLeave={onChildMouseLeave}
     >
@@ -33,7 +34,7 @@ export const gMap = ({
             numPoints === 1
               ? <MapMarkers  key={id} lat={markerProps.lat} {...mapContext} module={module} hover={mapContext.hoverKey === markerProps.id}
                              lng={markerProps.lng} text={markerProps.desc}
-                             desc={markerProps.desc}  markerId={markerProps.recordId} isActive ={markerProps.isActive} status ={markerProps.status}/>
+                             desc={markerProps.desc}  markerId={markerProps.recordId} isActive ={markerProps.isActive} status ={markerProps.status} showImage={showImage}/>
               : <ClusterMarker key={id} {...markerProps} />
           ))
       }
@@ -52,6 +53,7 @@ const markerDataConfig = lifecycle({
     this.setState({markers:this.props.data||[],mapProps:{center:this.props.center,zoom:this.props.zoom}});
   },
   componentWillUpdate(nextProps) {
+    console.log(nextProps);
     if(!compareQueryOptions(this.props.data,nextProps.data)){
       this.setState({markers:nextProps.data,mapProps:{center:nextProps.center,zoom:nextProps.zoom}});
     }
@@ -453,7 +455,20 @@ const mapClusterHOC =compose(
       onChildMouseEnter: ({setHoveredMarkerId}) => (hoverKey, {id}) => {
         setHoveredMarkerId(id);
       },
-
+      onChildClick: ({setMapProps}) => (evt, loc, zoom, centerPoint) => {
+        let center = {
+          lat: loc.lat, lng: loc.lng
+        };
+        let myzoom={zoom:(zoom|| 0)+1};
+        if( parseFloat(center.lat).toFixed(4) != parseFloat(centerPoint.lat).toFixed(4) || parseFloat(center.lng).toFixed(4) != parseFloat(centerPoint.lng).toFixed(4)){
+          setMapProps({center,zoom}, function () {
+            setMapProps(myzoom);
+          });
+        } else {
+          setMapProps(myzoom);
+        }
+      },
+        //console.log(map, location, this);
       onChildMouseLeave: ({setHoveredMarkerId}) => (/* hoverKey, childProps */) => {
         setHoveredMarkerId(-1);
       },

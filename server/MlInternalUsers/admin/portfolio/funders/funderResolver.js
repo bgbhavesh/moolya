@@ -1,9 +1,8 @@
 /**
  * Created by venkatsrinag on 24/4/17.
  */
-import MlResolver from '../../../../commons/mlResolverDef'
-import MlRespPayload from '../../../../commons/mlPayload'
-import MlUserContext from '../../../../MlExternalUsers/mlUserContext'
+import MlResolver from "../../../../commons/mlResolverDef";
+import MlRespPayload from "../../../../commons/mlPayload";
 
 var _ = require('lodash')
 
@@ -14,11 +13,18 @@ MlResolver.MlMutationResolver['createFunderPortfolio'] = (obj, args, context, in
         {
             user = MlFunderPortfolio.findOne({"$and": [{'userId': args.userId}, {'communityId': args.communityType}]})
             if (!user) {
-                MlFunderPortfolio.insert({
-                    userId: args.userId,
-                    communityType: args.communityType,
-                    portfolioDetailsId: args.portfolioDetailsId
-                })
+                // MlFunderPortfolio.insert({
+                //     userId: args.userId,
+                //     communityType: args.communityType,
+                //     portfolioDetailsId: args.portfolioDetailsId,
+                //     funderAbout:args.funderAbout
+                // })
+              mlDBController.insert('MlFunderPortfolio', {
+                userId: args.userId,
+                communityType: args.communityType,
+                portfolioDetailsId: args.portfolioDetailsId,
+                funderAbout: args.funderAbout
+              }, context)
             }
         }
     } catch (e) {
@@ -52,7 +58,8 @@ MlResolver.MlMutationResolver['updateFunderPortfolio'] = (obj, args, context, in
                     }
                 }
 
-                let ret = MlFunderPortfolio.update({"portfolioDetailsId": args.portfoliodetailsId}, {$set: funderPortfolio})
+                // let ret = MlFunderPortfolio.update({"portfolioDetailsId": args.portfoliodetailsId}, {$set: funderPortfolio})
+              let ret = mlDBController.update('MlFunderPortfolio', {"portfolioDetailsId": args.portfoliodetailsId}, funderPortfolio, {$set: true}, context)
                 if (ret) {
                     let code = 200;
                     let response = new MlRespPayload().successPayload("Updated Successfully", code);

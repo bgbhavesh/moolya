@@ -5,6 +5,9 @@
 import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
 
 import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
+import { parse, buildASTSchema } from 'graphql';
+import { build } from 'graphql-utilities';
+import { traverse } from 'graphql-parser'
 import { Meteor } from 'meteor/meteor';
 import { WebApp } from 'meteor/webapp';
 import { check } from 'meteor/check';
@@ -18,12 +21,15 @@ import MlSchemaDef from '../../commons/mlSchemaDef';
 import _ from 'lodash';
 import ImageUploader from '../../commons/mlImageUploader';
 import MlRespPayload from '../../commons/mlPayload';
+let helmet = require('helmet');
 let cors = require('cors');
+const Fiber = Npm.require('fibers')
+let _language = require('graphql/language');
 let multipart 	= require('connect-multiparty'),
   fs 			    = require('fs'),
   multipartMiddleware = multipart();
 
-const resolvers=_.extend({Query: MlResolver.MlQueryResolver,Mutation:MlResolver.MlMutationResolver},MlResolver.MlUnionResolver);
+const resolvers=_.extend({Query: MlResolver.MlQueryResolver,Mutation:MlResolver.MlMutationResolver},MlResolver.MlUnionResolver,MlResolver.MlScalarResolver);
 const typeDefs = MlSchemaDef['schema']
   const executableSchema = makeExecutableSchema({
   typeDefs,
@@ -43,6 +49,8 @@ const defaultServerConfig = {
   cities:'/cities',
   communities:'/communities',
   couponValidate:'/coupons',
+  resetPassword:'/resetPassword',
+  forgotPassword: '/forgotPassword',
   graphiqlOptions : {
     passHeader : "'meteor-login-token': localStorage['Meteor.loginToken']"
   },
@@ -73,9 +81,14 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     }
   }
   const graphQLServer = express();
+
   config.configServer(graphQLServer)
+  graphQLServer.use(helmet());
+  graphQLServer.use(helmet.noCache());
+  graphQLServer.use(helmet.frameguard());
+  graphQLServer.use(helmet.hsts());
   graphQLServer.use(cors());
-  graphQLServer.use(config.path, bodyParser.json(), graphqlExpress(async (req) =>
+  graphQLServer.use(config.path, bodyParser.json(), graphqlExpress( async (req, res) =>
   {
     try {
       const customOptionsObject = typeof customOptions === 'function' ? customOptions(req) : customOptions;
@@ -84,7 +97,19 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
         ...defaultGraphQLOptions,
         ...customOptionsObject,
       };
-      context = getContext({req});
+
+      context = getContext({req, res});
+
+      if(!context||!context.userId){
+        res.json({unAuthorized:true,message:"Invalid Token"})
+        return;
+      }
+
+      var isAut = mlAuthorization.authChecker({req, context})
+      if(!isAut){
+          res.json({unAuthorized:true,message:"Not Authorized"})
+          return;
+      }
 
       return {
         schema  : executableSchema,
@@ -120,11 +145,41 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
         }
         switch (moduleName){
             case "USERS":{
-              response = MlResolver.MlMutationResolver['assignUsers'](null, {userId:data.userId, user:data.user, moduleName:data.moduleName, actionName:data.actionName}, context, null);
+              var ret = mlAuthorization.valiateApi(MlResolver.MlModuleResolver, 'updateCommunityDef')
+              var isAuth = false;
+              if(!ret.isWhiteList){
+                isAuth = mlAuthorization.validteAuthorization(context.userId, ret.moduleName, ret.actionName, req.body, false);
+              }
+              if(ret.isWhiteList || isAuth) {
+                response = MlResolver.MlMutationResolver['assignUsers'](null, {
+                  userId: data.userId,
+                  user: data.user,
+                  moduleName: data.moduleName,
+                  actionName: data.actionName
+                }, context, null);
+              }
+              else response = {unAuthorized:true,message:"Not Authorized"}
             }
             break;
             case "COMMUNITY":{
-              response = MlResolver.MlMutationResolver['updateCommunityDef'](null, {communityId:data.communityId, community:data.community, clusters:data.clusters, chapters:data.chapters, subchapters:data.subchapters}, context, null);
+              var ret = mlAuthorization.valiateApi(MlResolver.MlModuleResolver, 'updateCommunityDef')
+              var isAuth = false;
+              if(!ret.isWhiteList){
+                isAuth = mlAuthorization.validteAuthorization(context.userId, ret.moduleName, ret.actionName, req.body, false);
+              }
+
+              if(ret.isWhiteList || isAuth) {
+                response = MlResolver.MlMutationResolver['updateCommunityDef'](null, {
+                  communityId: data.communityId,
+                  clusterId: data.clusterId,
+                  chapterId: data.chapterId,
+                  subChapterId: data.subChapterId,
+                  community: data.community,
+                  clusters: data.clusters,
+                  chapters: data.chapters,
+                  subchapters: data.subchapters
+                }, context, null);
+              }
             }
             break;
             case "PROFILE":{
@@ -210,6 +265,20 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
               });
               break;
             }
+            case "SUBCHAPTER":{
+              imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "registrationDocuments/");
+              imageUploadCallback=Meteor.bindEnvironment(function(resp) {
+                if(data.subChapterId){
+                  MlResolver.MlMutationResolver['updateSubChapter'](null, {
+                    subChapterId: data.subChapterId,
+                    moduleName: data.moduleName,
+                    actionName: data.actionName,
+                    subChapterDetails:{subChapterImageLink: resp}
+                  }, context, null);
+                }
+              });
+              break;
+            }
           }
 
           if(imageUploaderPromise) {
@@ -255,7 +324,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
         let data = req.body.data;
         let apiKey = req.header("apiKey");
         if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
-          if(data.email&&data.countryId&&data.registrationType){
+          if(data.email&&data.countryId){
             let response;
             if(data) {
               response = MlResolver.MlMutationResolver['createRegistrationAPI'](null, {registration: data}, context, null);
@@ -494,6 +563,77 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     }))
   }
 
+  if(config.resetPassword){
+    graphQLServer.options('/resetPassword', cors());
+    graphQLServer.post(config.resetPassword, bodyParser.json(), Meteor.bindEnvironment(function (req, res) {
+      console.log(req, res);
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      var context = {};
+      context = getContext({req});
+      context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+      if(req)
+      {
+        let data = req.body;
+        console.log(data);
+        let apiKey = req.header("apiKey");
+        if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
+          let response;
+          response = MlResolver.MlMutationResolver['resetPasswords'](null, data, context, null);
+          res.send(response);
+        }else{
+          let code = 401;
+          let result = {message:"The request did not have valid authorization credentials"}
+          let response = new MlRespPayload().errorPayload(result, code);
+          console.log(response);
+          res.send(response);
+        }
+      }else{
+        console.log("Request Payload not provided");
+        res.send(new MlRespPayload().errorPayload({message:"Request Payload not provided"}, 400));
+      }
+    }))
+  }
+
+  if(config.forgotPassword){
+    graphQLServer.options('/forgotPassword', cors());
+    graphQLServer.post(config.forgotPassword, bodyParser.json(), Meteor.bindEnvironment(function (req, res) {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      var context = {};
+      context = getContext({req});
+      context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+      if(req)
+      {
+        let data = req.body;
+        console.log(data);
+        let apiKey = req.header("apiKey");
+        if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
+          let response;
+          response = MlResolver.MlMutationResolver['forgotPassword'](null, data, context, null);
+          res.send(response);
+        }else{
+          let code = 401;
+          let result = {message:"The request did not have valid authorization credentials"}
+          let response = new MlRespPayload().errorPayload(result, code);
+          console.log(response);
+          res.send(response);
+        }
+      }else{
+        console.log("Request Payload not provided");
+        res.send(new MlRespPayload().errorPayload({message:"Request Payload not provided"}, 400));
+      }
+    }))
+  }
+
   WebApp.connectHandlers.use(Meteor.bindEnvironment(graphQLServer));
+}
+
+function authChecker(req, res, next) {
+    if (!req.headers['meteor-login-token']) {
+        next();
+    } else {
+      next();
+    }
 }
 createApolloServer(defaultGraphQLOptions, defaultServerConfig);

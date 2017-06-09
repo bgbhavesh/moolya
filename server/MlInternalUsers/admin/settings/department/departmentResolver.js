@@ -1,6 +1,6 @@
 import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
-import MlEmailNotification from '../../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
+import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 
 MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) => {
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
@@ -46,17 +46,21 @@ MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) =
       var departmentExist = mlDBController.find('MlDepartments', {
         $and: [
           {departmentName: args.department.departmentName},
-          {"depatmentAvailable.cluster": {$in: ["all", args.department.depatmentAvailable[i].cluster]}},
-          {
-            "depatmentAvailable": {
-              $elemMatch: {
-                chapter: args.department.depatmentAvailable[i].chapter,
-                subChapter: args.department.depatmentAvailable[i].subChapter,
-              }
-            }
-          },
+          {displayName: args.department.displayName},
+          // {"depatmentAvailable.cluster": {$in: ["all", args.department.depatmentAvailable[i].cluster]}},
+          // {
+          //   "depatmentAvailable": {
+          //     $elemMatch: {
+          //       chapter: args.department.depatmentAvailable[i].chapter,
+          //       subChapter: args.department.depatmentAvailable[i].subChapter,
+          //     }
+          //   }
+          // },
         ]
       }, context).fetch()
+
+
+
 
       if (departmentExist.length > 0) {
         let code = 409;
@@ -140,50 +144,57 @@ MlResolver.MlQueryResolver['findDepartment'] = (obj, args, context, info) => {
   // let resp = MlDepartments.findOne({_id: args.departmentId});
   let resp = mlDBController.findOne('MlDepartments', {_id: args.departmentId}, context)
   return resp;
-  // if(resp){
-  //     let code = 200;
-  //     let result = {department: resp}
-  //     let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-  //     return response
-  // }
 }
 
 MlResolver.MlQueryResolver['fetchActiveDepartment'] = (obj, args, context, info) => {
   // let resp = MlDepartments.find({"isActive": true}).fetch();
   let resp = mlDBController.find('MlDepartments', {isActive: true}, context).fetch();
   return resp;
-  // if(resp){
-  //     let code = 200;
-  //     let result = {department: resp}
-  //     let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-  //     return response
-  // }
 }
-
-// MlResolver.MlQueryResolver['findDepartments'] = (obj, args, context, info) => {
-//
-// }
 
 MlResolver.MlQueryResolver['fetchMoolyaBasedDepartment'] = (obj, args, context, info) => {
   // let resp = MlDepartments.find({isMoolya: args.isMoolya, isActive: true}).fetch();
-  let resp = mlDBController.find('MlDepartments', {isMoolya: args.isMoolya, isActive: true}, context).fetch();
+  // let resp = mlDBController.find('MlDepartments', {isMoolya: args.isMoolya, isActive: true}, context).fetch();
+  let resp = mlDBController.find('MlDepartments', {
+    $or: [{
+      isMoolya: args.isMoolya,
+      isActive: true
+    }, {isSystemDefined: true, isActive: true}]
+  }, context).fetch();
   return resp;
 }
 
-
 MlResolver.MlQueryResolver['fetchMoolyaBasedDepartmentRoles'] = (obj, args, context, info) => {
   // let resp = MlDepartments.find({isMoolya: args.isMoolya, isActive: true}).fetch();
-  let resp = mlDBController.find('MlDepartments', {isMoolya: args.isMoolya, isActive: true,"depatmentAvailable.cluster": {$in: ["all",args.clusterId]}}, context).fetch();
+  if(!args.clusterId){
+    return [];
+  }
+  let resp = mlDBController.find('MlDepartments', {
+    $or: [{
+      isMoolya: args.isMoolya,
+      isActive: true,
+      "depatmentAvailable.cluster": {$in: ["all", args.clusterId]}
+    }, {isSystemDefined: true, isActive: true}]
+  }, context).fetch();
     return resp;
 }
 
 MlResolver.MlQueryResolver['fetchNonMoolyaBasedDepartment'] = (obj, args, context, info) => {
-  // let resp = MlDepartments.find({
+  // let resp = MlDepartments.find({isMoolya: args.isMoolya, isActive: true}, {depatmentAvailable: {$elemMatch: {subChapter: args.subChapter}}}).fetch();
+  let resp = MlDepartments.find({
+    $or: [{
+      $and: [{
+        isMoolya: args.isMoolya,
+        isActive: true
+      }, {depatmentAvailable: {$elemMatch: {subChapter: {$in: ['all', args.subChapter]}, isActive: true}}}]
+    }, {isSystemDefined: true, isActive: true}]
+  }).fetch();
+
+
+  // let resp = mlDBController.find('MlDepartments', {
   //   isMoolya: args.isMoolya,
   //   isActive: true
-  // }, {depatmentAvailable: {$elemMatch: {subChapter: args.subChapter}}}).fetch();
-
-  ;
+  // }, context, {depatmentAvailable: {$elemMatch: {subChapter: args.subChapter}}}).fetch();
   return resp;
 }
 
@@ -249,5 +260,52 @@ MlResolver.MlQueryResolver['fetchDepartmentsForRegistration'] = (obj, args, cont
       ]
     }, context).fetch()
   }
+  return resp;
+}
+
+MlResolver.MlQueryResolver['fetchClusterChapterSubChapterBasedDepartmentRoles'] = (obj, args, context, info) => {
+  if(!args.cluster || !args.chapter || !args.subChapter || typeof args.isMoolya == undefined ) {
+    return [];
+  }
+
+  let pipeline = [
+      { $match:
+        {
+          isActive: true,
+          isMoolya: args.isMoolya,
+          "depatmentAvailable.cluster": {$in: [ 'all', args.cluster ]},
+          "depatmentAvailable.chapter": {$in: [ 'all', args.chapter ]},
+          "depatmentAvailable.subChapter": {$in: [ 'all', args.subChapter ]}
+        }
+      },
+      {$lookup:
+        {
+          from: "mlSubDepartments",
+          localField: "_id",
+          foreignField: "departmentId",
+          as: "subDep"
+        }
+      },
+      {$unwind: '$subDep'},
+      {
+        $project: {
+          _id: 0,
+          departmentId: '$_id',
+          departmentName: '$displayName',
+          subDepartmentId: '$subDep._id',
+          subDepartmentName: '$subDep.displayName'
+        }
+      }
+    ];
+  let resp = mlDBController.aggregate('MlDepartments', pipeline, context);
+  return resp;
+}
+
+MlResolver.MlQueryResolver['fetchHierarchyMoolyaDepartment'] = (obj, args, context, info) => {
+  let resp = mlDBController.find('MlDepartments', {
+      isMoolya: args.isMoolya,
+      isActive: true,
+      "depatmentAvailable.cluster": {$in: [ 'all', args.clusterId ]}
+  }, context).fetch();
   return resp;
 }

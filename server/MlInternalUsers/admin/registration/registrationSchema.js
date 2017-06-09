@@ -1,5 +1,6 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef';
+import MlResolver from '../../../commons/mlResolverDef'
 
 let registrationSchema = `        
     
@@ -30,6 +31,8 @@ let registrationSchema = `
         addressState      :  String
         addressCountry : String
         addressPinCode : String
+        latitude        :  Int
+        longitude       :  Int
      }
      
      type SocialLinkInfoSchema{
@@ -93,6 +96,8 @@ let registrationSchema = `
       addressState      :  String
       addressCountry : String
       addressPinCode : String
+      latitude        :  Int
+      longitude       :  Int
     }
     
     input SocialLinkInfo{
@@ -168,28 +173,30 @@ let registrationSchema = `
         deviceNumber    :   String,
         ipAddress       :   String,
         ipLocation      :   String,  
-        registrationDate:   String,
+        registrationDate:   Date,
         userId          :   String,
         registrationStatus        :   String,
         assignedUser    :   String,
         profileImage    :   String,
-        status          : String,
-        transactionId   : String
-     
+        status          :   String,
+        createdBy       :   String
     }
     
     type RegistrationResponse{
         _id             :   String,
          status          :   String,
-        registrationInfo :  RegistrationInfo,
-        registrationDetails : RegistrationDetails
-        addressInfo     : [AddressInfoSchema]
+         registrationInfo :  RegistrationInfo,
+         registrationDetails : RegistrationDetails
+         addressInfo     : [AddressInfoSchema]
          emailInfo       : [EmailInfoSchema]
          contactInfo     : [ContactInfoSchema]
          socialLinksInfo : [SocialLinkInfoSchema]
          kycDocuments: [kycDocumentInfoSchema]
          transactionId : String
-        
+         transactionType : String
+         allocation     : allocation
+         transactionCreatedDate : String
+         transactionUpdatedDate : String
     }
     
     type RegistrationInfo{        
@@ -229,14 +236,14 @@ let registrationSchema = `
         deviceNumber    :   String,
         ipAddress       :   String,
         ipLocation      :   String,  
-        registrationDate:   String,
+        registrationDate:   Date,
         userId          :   String,
         registrationStatus        :   String,
         assignedUser    :   String,
         profileImage    :   String,
-        transactionId   :   String,
-        canAssign       :   Boolean,
-        canUnAssign     :   Boolean
+        transactionId   :   String
+        assignedUserId    :   String,
+        createdBy       :   String
     }
     
     type branchLocation{
@@ -418,12 +425,46 @@ let registrationSchema = `
          resendSmsVerification(mobileNumber:String):response
          verifyEmail(token:String):response
          verifyMobileNumber(mobileNumber:String,otp:Int):response
+         forgotPassword(email:String):response
+         resetPasswords(token:String, password:String):response
     }
     type Query{
         findRegistration(registrationId:String):Registration
         findRegistrationInfo(registrationId:String):RegistrationResponse
         findRegistrationInfoForUser:RegistrationResponse
+        fetchContextClusters: [Cluster]
+        fetchContextChapters(id:String): [Chapter]
+        fetchContextSubChapters(id:String): [SubChapter]
     }
     
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], registrationSchema]);
+let supportedApi = [
+    {api:'findRegistration', actionName:'READ', moduleName:"REGISTRATION"},
+    {api:'findRegistrationInfo', actionName:'READ', moduleName:"REGISTRATION"},
+    {api:'findRegistrationInfoForUser', actionName:'READ', moduleName:"REGISTRATION"},
+    {api:'registerAs', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'createRegistrationAPI', actionName:'CREATE', moduleName:"REGISTRATION"},
+    {api:'createRegistration', actionName:'CREATE', moduleName:"REGISTRATION"},
+    {api:'createGeneralInfoInRegistration', actionName:'CREATE', moduleName:"REGISTRATION"},
+    {api:'updateRegistration', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'updateRegistrationInfo', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'updateRegistrationUploadedDocumentUrl', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'updateRegistrationGeneralInfo', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'ApprovedStatusOfDocuments', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'RejectedStatusOfDocuments', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'RemoveFileFromDocuments', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'ApprovedStatusForUser', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'RejectedStatusForUser', actionName:'UPDATE', moduleName:"REGISTRATION"},
+    {api:'sendEmailVerificationForRegistration', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'sendSmsVerificationForRegistration', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'sendEmailVerification', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'resendSmsVerification', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'verifyEmail', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'verifyMobileNumber', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'fetchContextClusters', actionName:'READ', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'fetchContextChapters', actionName:'READ', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'fetchContextSubChapters', actionName:'READ', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'forgotPassword', actionName:'READ', moduleName:"REGISTRATION"},
+]
+MlResolver.MlModuleResolver.push(supportedApi)

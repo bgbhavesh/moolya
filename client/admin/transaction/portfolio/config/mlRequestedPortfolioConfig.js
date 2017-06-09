@@ -4,11 +4,11 @@ import gql from 'graphql-tag'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
 const mlRequestedPortfolioTableConfig=new MlViewer.View({
   name:"portfolioInfoTable",
-  module:"PortfolioRquest",//Module name for filter.
+  module:"portfolioDetails",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:['portfolioId', 'transactionType', 'portfolioUserName' , 'contactNumber', 'communityType', 'clusterName', 'chapterName', 'accountType', 'source', 'createdBy', 'status'],
-  searchFields:['portfolioId', 'transactionType', 'portfolioUserName' , 'contactNumber', 'communityType', 'clusterName', 'chapterName', 'accountType', 'source', 'createdBy', 'status'],
+  fields:['portfolioId', 'transactionType', 'portfolioUserName' , 'contactNumber', 'communityType', 'clusterName', 'chapterName','subChapterName', 'accountType', 'source', 'createdBy', 'status'],
+  searchFields:['portfolioId', 'transactionType', 'portfolioUserName' , 'contactNumber', 'communityType', 'clusterName', 'chapterName','subChapterName', 'accountType', 'source', 'createdBy', 'status'],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
@@ -87,7 +87,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
       actionName: 'approveUser',
       handler: (data) => {
         if (data && data.id) {
-          FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/" + data.id);
+          FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/" + data.id+"/"+data.communityType);
         } else {
           toastr.error("Please select a record");
         }
@@ -98,14 +98,14 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
       actionName: 'rejectUser',
       handler: (data) => {
         if (data && data.id) {
-          FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/" + data.id);
+          FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/" + data.id+"/"+data.communityType);
         } else {
           toastr.error("Please select a record");
         }
       }
     },
   ],
-  graphQlQuery:gql`
+  graphQlQuery:/*gql`
     query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
       data:SearchQuery(module:"Portfoliodetails", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
         totalRecords
@@ -130,7 +130,31 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
           }
       }
     }
-  `
+  `*/
+    gql`query ContextSpecSearch($offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
+                    data:ContextSpecSearch(module:"portfolioRequests",offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
+                    totalRecords
+                    data{
+                      ...on Portfoliodetails{
+                          id:_id
+                          portfolioId
+                          transactionType,
+                          portfolioUserName,
+                          contactNumber
+                          communityType
+                          clusterName
+                          chapterName
+                          subChapterName
+                          accountType
+                          source
+                          createdBy
+                          createdAt
+                          status
+                          assignedTo
+                     }
+                      }
+              }
+              }`
 });
 
 export {mlRequestedPortfolioTableConfig};

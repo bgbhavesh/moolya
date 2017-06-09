@@ -27,9 +27,29 @@ function clustersformatter (data){
   }else{
     return <div>All</div>;
   }
-
-
 }
+
+function chaptersformatter (data){
+
+  let chapters=data&&data.data&&data.data.chapters?data.data.chapters:[];
+  if(chapters.length>0){
+    return <div>{chapters.join()}</div>;
+  }else{
+    return <div>All</div>;
+  }
+}
+
+function subChaptersformatter (data){
+
+  let subChapters=data&&data.data&&data.data.subChapters?data.data.subChapters:[];
+  if(subChapters.length>0){
+    return <div>{subChapters.join()}</div>;
+  }else{
+    return <div>All</div>;
+  }
+}
+
+
 const mlDocumentMappingTableConfig=new MlViewer.View({
   name:"documentMappingTable",
   module:"documentMapping",//Module name for filter.
@@ -46,7 +66,10 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
     {dataField: "kycCategory", title: "Category",dataSort:true, customComponent:categoriesformatter},
     {dataField: "allowableFormat", title: "Allowable Format",dataSort:true, customComponent:allowableFormatformatter},
     {dataField: "allowableMaxSize", title: "Allowable Size",dataSort:true},
-    {dataField: "clusters", title: "Jurisdiction",dataSort:true, customComponent:clustersformatter}
+    {dataField: "clusters", title: "Jurisdiction",dataSort:true, customComponent:clustersformatter},
+    {dataField: "chapters", title: "Chapter",dataSort:true, customComponent:chaptersformatter},
+    {dataField: "subChapters", title: "Sub Chapter",dataSort:true, customComponent:subChaptersformatter}
+
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -66,7 +89,9 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        if(data && data.documentId){FlowRouter.go("/admin/settings/documentMappingList")}
+        if(data && data.documentId)
+          toastr.error("Please uncheck the record")
+        // {FlowRouter.go("/admin/settings/documentMappingList")}
         else {
           FlowRouter.go("/admin/settings/addDocumentMapping")
         }
@@ -116,6 +141,8 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
                               allowableMaxSize
                               allowableFormat
                               clusters
+                              chapters
+                              subChapters
                               kycCategory
                               isActive
                           }

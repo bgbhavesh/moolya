@@ -11,6 +11,7 @@ import moment from "moment";
 import {initalizeFloatLabel} from '../../admin/utils/formElemUtil';
 import {customFilterSearchQuery} from "./customFilterSearchQueryActionHandler"
 import _ from 'lodash';
+import _underscore from 'underscore'
 export default class MlCustomFilter extends Component {
   constructor(props){
     super(props);
@@ -20,7 +21,9 @@ export default class MlCustomFilter extends Component {
       selectedFromDate : null,
       selectedToDate : null,
       filterQueries : [],
-      dateQuery : {}}
+      dateQuery : {},
+      selectedDropdownValues : []
+    }
 
     this.fetchFilters.bind(this);
   }
@@ -29,6 +32,15 @@ export default class MlCustomFilter extends Component {
     $('.filter_btn').click(function(){
       $('.filter_table').toggleClass('filter_hide');
     });
+    setTimeout(function(){
+      $('[data-toggle="tooltip"]').tooltip({
+        container:'body',
+        trigger:"hover"
+      });
+      $('[data-toggle="tooltip').on('click', function () {
+        $(this).tooltip('hide');
+      });
+    },1000);
   }
   componentDidUpdate(){
     initalizeFloatLabel();
@@ -38,41 +50,52 @@ export default class MlCustomFilter extends Component {
     this.setState({filterFields : response})
 
   }
-  onFromDateSelection(fieldName,subType,event) {
+  onFromDateSelection(fieldName,subType,displayName,event) {
     if (event._d) {
-      let value = moment(event._d).format('MM-DD-YYYY');
+      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
       this.setState({selectedFromDate: value});
-      this.setFilterData(fieldName,value,"Date",subType)
+      this.setFilterData(fieldName,value,displayName,null,"Date",subType)
     }
   }
-  onToDateSelection(fieldName,subType,event) {
+  onToDateSelection(fieldName,subType,displayName,event) {
     if (event._d) {
-      let value = moment(event._d).format('MM-DD-YYYY');
+      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
       this.setState({selectedToDate: value});
-      this.setFilterData(fieldName,value,"Date",subType)
+      this.setFilterData(fieldName,value,displayName,null,"Date",subType)
     }
   }
-  optionsSelected(index,selectedFieldName, selectedValue, callback,selObject){
+  optionsSelected(index,selectedFieldName,displayName,clearFields,selectedValue, callback,selObject){
+
+    if(displayName == "Cluster"){
+      let that = this
+      var result = _.map(clearFields, function (currentObject) {
+        let selectedOption = "selectedOption_"+currentObject;
+        that.setState({[selectedOption] : null})
+      });
+    }
 
     let selectedOption = "selectedOption_"+selectedFieldName;
-
+    let selectedValues = this.state.selectedDropdownValues;
+    selectedValues.push({selectedOption})
+    this.setState({selectedDropdownValues : selectedValues})
     this.setState({[selectedOption] : selectedValue})
-    this.setFilterData(selectedFieldName,selectedValue,"List",null)
+    this.setFilterData(selectedFieldName,selectedValue,displayName,clearFields,"List",null)
+
 
 
   }
-  onInputBlur(fieldName,event){
+  onInputBlur(fieldName,displayName,event){
     let enteredValue = event.target.value
-    this.setFilterData(fieldName,enteredValue,"String",null)
+    this.setFilterData(fieldName,enteredValue,displayName,null,"String",null)
   }
 
   onSelectBoolean(value,fieldName,event){
     this.setFilterData(fieldName,value,"Boolean",null)
   }
 
-  setFilterData(selectedFieldName,selectedValue,selectedType,selectedSubType){
+  setFilterData(selectedFieldName,selectedValue,displayName,clearFields,selectedType,selectedSubType){
     let queries = this.state.filterQueries;
-    if(selectedValue){
+
 
       let selector = this.create_selector(selectedFieldName, selectedValue, selectedType,selectedSubType);
       //only for between operator
@@ -83,17 +106,40 @@ export default class MlCustomFilter extends Component {
         });
 
         if(selectedType == "Date"){
-          let dateSelect = {"fieldName" : selectedFieldName,"value" :  JSON.stringify(this.state.dateQuery),"fieldType" : selectedType,"operator" : selectedSubType}
+          let dateSelect = {"fieldName" : selectedFieldName,"value" :  JSON.stringify(this.state.dateQuery),"fieldType" : selectedType,"operator" :'$and' }
           queries.push(dateSelect)
         }else{
           queries.push(selector);
+          if(selectedType == "List"){
+            if(displayName == "Cluster"){
+
+              queries = queries || []
+
+
+              _.map(clearFields, function (currentObject) {
+                queries = _underscore.without(queries, _underscore.findWhere(queries, {
+                  fieldName: currentObject
+                }));
+              });
+
+
+
+           /*   queries = queries.filter(function( obj ) {
+                return obj.fieldName == "registrationInfo.chapterId";
+              });*/
+
+
+
+
+            }
+          }
         }
 
 
 
       this.setState({"filterQueries" : queries})
 
-    }
+
 
 
   }
@@ -146,13 +192,22 @@ export default class MlCustomFilter extends Component {
   }
   async onApplyFilter(){
       this.props.onFilterChange( this.state.filterQueries);
-    $('.filter_table').removeClass('filter_hide');
+      $('.filter_table').addClass('filter_hide');
   }
 
   async onCancelFilter(){
     this.setState({filterQueries : []});
-    this.props.onFilterChange(this.state.filterQueries);
-    this.setState({selectedOption : ""})
+    this.props.onFilterChange(null);
+    let selectedValues = this.state.selectedDropdownValues
+    let that = this;
+    var result = _.map(selectedValues, function (currentObject) {
+      let selectedOption = currentObject["selectedOption"];
+      that.setState({[selectedOption] : ""})
+    });
+    $('.filter_table').addClass('filter_hide');
+
+    this.refs.fromDateInput.state.inputValue = "";
+    this.refs.toDateInput.state.inputValue = "";
     this.refs.input.value = "";
   }
   render(){
@@ -232,10 +287,10 @@ export default class MlCustomFilter extends Component {
 
 
                 return(<span key={id}>
-                  {options.isActive&&dateSelect?<div className="form-group col-lg-3"><Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "From",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onFromDateSelection.bind(that,options.fieldName,"from")}/></div>:""}
-                  {options.isActive&&dateSelect?<div className="form-group col-lg-3"><Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "To",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onToDateSelection.bind(that,options.fieldName,"to")}/></div>:""}
-                  {options.isActive&&listSelect?<div className="col-lg-3"><Moolyaselect multiSelect={false} placeholder={options.displayName} valueKey={'value'} labelKey={'label'}  queryType={"graphql"} query={filterListQuery} reExecuteQuery={true} queryOptions={listOptions} selectedValue={selectedValue} onSelect={that.optionsSelected.bind(that,id,options.fieldName)} isDynamic={true} id={'list'+id} disabled={options.isRestrictedFilter}/></div>:""}
-                  {options.isActive&&stringSelect?<div className="form-group col-lg-3"><input type="text"  ref="input" placeholder={options.displayName} className="form-control float-label" id="" onBlur={that.onInputBlur.bind(that,options.fieldName)} disabled={options.isRestrictedFilter}/></div>:""}
+                  {options.isActive&&dateSelect?<div className="form-group col-lg-3"><Datetime ref="fromDateInput" dateFormat="DD-MM-YYYY" timeFormat={true}  inputProps={{placeholder: "From Date",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onFromDateSelection.bind(that,options.fieldName,"from",options.displayName)}/></div>:""}
+                  {options.isActive&&dateSelect?<div className="form-group col-lg-3"><Datetime ref="toDateInput" dateFormat="DD-MM-YYYY" timeFormat={true}  inputProps={{placeholder: "To Date",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onToDateSelection.bind(that,options.fieldName,"to",options.displayName)}/></div>:""}
+                  {options.isActive&&listSelect?<div className="col-lg-3"><Moolyaselect multiSelect={false} ref="listSelect" placeholder={options.displayName} valueKey={'value'} labelKey={'label'}  queryType={"graphql"} query={filterListQuery} reExecuteQuery={true} queryOptions={listOptions} selectedValue={selectedValue} onSelect={that.optionsSelected.bind(that,id,options.fieldName,options.displayName,options.clearFields)} isDynamic={true} id={'list'+id}/></div>:""}
+                  {options.isActive&&stringSelect?<div className="form-group col-lg-3"><input type="text"  ref="input" placeholder={options.displayName} className="form-control float-label" id="" onBlur={that.onInputBlur.bind(that,options.fieldName,options.displayName)} disabled={options.isRestrictedFilter}/></div>:""}
                   {/*{booleanSelect?<div className="col-lg-3">
                     <div className="input_types label_name">
                       <label>{options.displayName} : </label>
@@ -301,7 +356,7 @@ export default class MlCustomFilter extends Component {
 
 
         </div>
-        <div className="filter_btn"><img src="/images/filter_icon.png"/></div>
+        <div className="filter_btn"  data-toggle="tooltip" title="Filter"><img src="/images/filter_icon.png"/></div>
       </div>
     )
   }

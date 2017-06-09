@@ -3,6 +3,10 @@
  * Created by mohammed.mohasin on 26/04/17.
  */
 import mlSms from './mlSms';
+import MlDBController from './mlDBController';
+import MlTransactionsHandler from '../../server/commons/mlTransactionsLog';
+import passwordUtil from "./passwordUtil";
+
 var fromEmail = Meteor.settings.private.fromEmailAddr;
 export default MlAccounts=class MlAccounts {
 
@@ -39,6 +43,7 @@ export default MlAccounts=class MlAccounts {
     // Make sure the user exists, and address is one of their addresses.
     // var user = Meteor.users.findOne(regId);
     var userId=regId;
+    mlDBController = new MlDBController();
     var user=mlDBController.findOne('MlRegistration', {_id:regId},emailOptions.context||{});
     if (!user) throw new Error("Can't find user"); // pick the first unverified address if we weren't passed an address.
     //
@@ -318,5 +323,108 @@ export default MlAccounts=class MlAccounts {
     }
   }
 
+  static sendForgotPasswordEamil(email, context) {
+    user = mlDBController.findOne('users', {"$or":[{username:email},{'emails.address':email}]});
+    if(!user){
+      return {email:email, error: true,reason:"Invalid Email, User not register with this email", code:404};
+    }
+    context.userId = user._id;
+    context.browser = 'Forgot Password';
+    context.url="https://mymoolya.com";
+    let token = Random.secret();
+    let res = mlDBController.update('users', user._id, { 'services.password.reset.token': token }, {$set:true}, context);
+    if(res){
+      var emailOptions={};
+      //emailContent= MlAccounts.greet("To verify your account email,",user,Meteor.absoluteUrl('reset')+'/'+token);
+      emailOptions.from=fromEmail;
+      emailOptions.to=email;
+      emailOptions.subject="Forgot Password !";
+      emailOptions.html=Meteor.absoluteUrl('reset')+'/'+token;
+      Meteor.setTimeout(function () {
+        mlEmail.sendHtml(emailOptions);
+      }, 2 * 1000);
+      return {error: false,reason:"Reset link send successfully", code:200};
+    }
+  }
+
+  static resetPasswordWithToken(token, password, context) {
+    user = mlDBController.findOne('users', {"services.password.reset.token":token});
+     if(!user){
+      return {token:token, error: true,reason:"Reset link Expired/Used", code:404};
+    }
+    context.userId = user._id;
+    context.browser = 'Reset Password API';
+    context.url="https://mymoolya.com";
+    let salted = passwordUtil.hashPassword(password);
+    let res = mlDBController.update('users', user._id, { 'services.password.bcrypt': salted, 'services.password.reset': {} }, {$set:true}, context);
+    if(res){
+      return {error: false,reason:"Password reset successfully", code:200};
+    }
+  }
 }
+
+Meteor.methods({
+  checkPassword: function(digest) {
+    check(digest, String);
+    if (this.userId) {
+      var user = Meteor.user();
+      var password = {digest: digest, algorithm: 'sha-256'};
+      var result = Accounts._checkPassword(user, password);
+      return result.error == null;
+    } else {
+      return false;
+    }
+  }
+})
+
+Accounts.validateLoginAttempt(function (details) {
+  if(details&&details.user&&details.user.profile.InternalUprofile&&details.user.profile.InternalUprofile.moolyaProfile&&details.user.profile.InternalUprofile.moolyaProfile.assignedDepartment && details.user.profile.InternalUprofile.moolyaProfile.assignedDepartment.length == 1){
+    let departmentId = details.user.profile.InternalUprofile.moolyaProfile.assignedDepartment[0].department;
+    if(departmentId !='all') {
+      mlDBController = new MlDBController();
+      var department = mlDBController.findOne('MlDepartments',{_id:departmentId}, this);
+      if(!department.isActive){
+        throw new Meteor.Error('department-deactivated', 'You do not have any active department');
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
+  } else {
+    return true;
+  }
+})
+
+Accounts.onLogin(function (details) {
+if(details.type =="password") {
+  var userId = (details.user || {})._id;
+  let context = {
+    ip: details.connection.clientAddress,
+    browser: details.connection.httpHeaders['user-agent'],
+    url: details.connection.httpHeaders.host
+  };
+  let transactionDetails = `User logged in to application at ${new Date()} `;
+  new MlTransactionsHandler().recordTransaction({
+    'activity': 'login',
+    'transactionType': 'system',
+    'userId': userId,
+    'transactionDetails': transactionDetails,
+    'context': context,
+    'transactionTypeId': "system"
+  });
+}else{
+
+}
+});
+
+Accounts.onLogout(function (details) {
+  var userId=(details.user || {})._id;
+  let context={ip: details.connection.clientAddress,browser:details.connection.httpHeaders['user-agent'],url:details.connection.httpHeaders.host};
+  let transactionDetails=`User logged out of application at ${new Date()} `;
+  if(details&&details.user){
+    new MlTransactionsHandler().recordTransaction({'activity':'logout','transactionType':'system','transactionTypeId': "system",'userId':userId,'transactionDetails':transactionDetails,'context':context});
+  }
+});
 

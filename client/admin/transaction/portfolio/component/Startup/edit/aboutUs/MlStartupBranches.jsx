@@ -11,6 +11,7 @@ import { graphql } from 'react-apollo';
 import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
 import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails';
+import MlLoader from '../../../../../../../commons/components/loader/loader'
 
 export default class MlStartupBranches extends React.Component{
   constructor(props, context){
@@ -27,6 +28,7 @@ export default class MlStartupBranches extends React.Component{
       selectedObject:"default"
     }
     this.handleBlur.bind(this);
+    this.imagesDisplay.bind(this);
     return this;
   }
   componentDidUpdate(){
@@ -37,6 +39,7 @@ export default class MlStartupBranches extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+    this.imagesDisplay();
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.branches)
@@ -127,13 +130,14 @@ export default class MlStartupBranches extends React.Component{
           delete item[propName];
         }
       }
-      newItem = _.omit(item, "__typename");
-      let updateItem = _.omit(newItem, 'logo');
-      arr.push(updateItem)
+      let newItem = _.omit(item, "__typename");
+      // let updateItem = _.omit(newItem, 'logo');
+      arr.push(newItem)
     })
     startupBranches = arr;
     this.setState({startupBranches:startupBranches})
     this.props.getStartupBranches(startupBranches);
+
   }
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
@@ -150,6 +154,7 @@ export default class MlStartupBranches extends React.Component{
       if(result.success){
         this.setState({loading:true})
         this.fetchOnlyImages();
+        this.imagesDisplay();
       }
     }
   }
@@ -171,6 +176,27 @@ export default class MlStartupBranches extends React.Component{
     }
   }
 
+  async imagesDisplay(){
+    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
+    if (response) {
+      let detailsArray = response&&response.branches?response.branches:[]
+      let dataDetails =this.state.startupBranches
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      _.each(detailsArray, function (obj,key) {
+        cloneBackUp[key]["logo"] = obj.logo;
+      })
+      let listDetails = this.state.startupBranchesList || [];
+      listDetails = cloneBackUp
+      let cloneBackUpList = _.cloneDeep(listDetails);
+      this.setState({loading: false, startupBranches:cloneBackUp,startupBranchesList:cloneBackUpList});
+    }
+  }
+
+  emptyClick(e) {
+    if (this.state.popoverOpen)
+      this.setState({popoverOpen: false})
+  }
+
   render(){
     let branchesQuery=gql`query{
       data:fetchAssets {
@@ -181,10 +207,16 @@ export default class MlStartupBranches extends React.Component{
     let that = this;
     const showLoader = that.state.loading;
     let branchesArray = that.state.startupBranchesList || [];
+    let displayUploadButton = null
+    if(this.state.selectedObject != "default"){
+      displayUploadButton = true
+    }else{
+      displayUploadButton = false
+    }
     return (
-      <div>
+      <div onClick={this.emptyClick.bind(this)}>
         <h2>Branches</h2>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
         <div className="requested_input main_wrap_scroll">
 
           <ScrollArea
@@ -204,7 +236,7 @@ export default class MlStartupBranches extends React.Component{
                   </a>
                 </div>
                 {branchesArray.map(function (details, idx) {
-                  return(<div className="col-lg-2 col-md-3 col-sm-3" id={idx}>
+                  return(<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
                     <a href="#" id={"create_client"+idx}>
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
@@ -219,7 +251,7 @@ export default class MlStartupBranches extends React.Component{
             </div>
           </ScrollArea>
           <Popover placement="right" isOpen={this.state.popoverOpen}  target={"create_client"+this.state.selectedObject} toggle={this.toggle}>
-            {/* <PopoverTitle>Add Asset</PopoverTitle>*/}
+            <PopoverTitle>Add Branches</PopoverTitle>
             <PopoverContent>
               <div className="ml_create_client">
                 <div className="medium-popover scrollbar-wrap">
@@ -234,7 +266,7 @@ export default class MlStartupBranches extends React.Component{
                         <div className="form-group">
                           <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
                                         labelKey={'label'} queryType={"graphql"} query={branchesQuery}
-                                        isDynamic={true}
+                                        isDynamic={true} placeholder={'Select Branches..'}
                                         onSelect={this.onOptionSelected.bind(this)}
                                         selectedValue={this.state.selectedVal}/>
                         </div>
@@ -289,12 +321,12 @@ export default class MlStartupBranches extends React.Component{
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isCountryPrivate" defaultValue={this.state.data.isCountryPrivate} onClick={this.onLockChange.bind(this, "isCountryPrivate")}/>
                           <input type="checkbox" className="lock_input" id="isCountryPrivate" checked={this.state.data.isCountryPrivate}/>
                         </div>
-                        <div className="form-group">
+                        {displayUploadButton?<div className="form-group">
                           <div className="fileUpload mlUpload_btn">
                             <span>Upload Logo</span>
                             <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
                           </div>
-                        </div>
+                        </div>:""}
                         <div className="clearfix"></div>
                         <div className="form-group">
                           <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>

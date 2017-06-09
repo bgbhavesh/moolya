@@ -1,9 +1,9 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
-
+import MlResolver from '../../../commons/mlResolverDef'
 
 let contextSpecificSearch = `
-union ContextSpecSearchResult = Cluster | Chapter | SubChapter  | Community | MasterSettings | AuditLogs
+union ContextSpecSearchResult = GenericType| Cluster | Chapter | SubChapter  | Community | MasterSettings | AuditLogs | RegistrationInfo | Portfoliodetails | TransactionsLog | requests | TemplateAssignment | ProcessTransactions | officeTransactionType
 
 
 type ContextSpecSearchResp {
@@ -17,7 +17,8 @@ input ContextParams{
    subChapterId:String,
    communityId:String,
    settingsType:String,
-   moduleName: String
+   moduleName: String,
+   transactionTypeName: String
 }
 
 input SearchSpec{
@@ -30,3 +31,5 @@ type Query {
 }`
 
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],contextSpecificSearch]);
+let supportedApi = [{api:'ContextSpecSearch', actionName:'READ', moduleName:"GENERIC"}];
+MlResolver.MlModuleResolver.push(supportedApi)

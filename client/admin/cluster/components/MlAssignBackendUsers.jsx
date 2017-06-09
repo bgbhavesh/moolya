@@ -17,6 +17,7 @@ import {OnToggleSwitch} from "../../utils/formElemUtil";
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
+import MlLoader from '../../../commons/components/loader/loader'
 
 
 class MlAssignBackendUsers extends React.Component {
@@ -165,11 +166,6 @@ class MlAssignBackendUsers extends React.Component {
 
   render() {
       let MlActionConfig = [
-          // {
-          //   actionName: 'edit',
-          //   showAction: true,
-          //   handler: null
-          // },
           {
             showAction: true,
             actionName: 'save',
@@ -216,7 +212,7 @@ class MlAssignBackendUsers extends React.Component {
 
     return (
       <div className="admin_main_wrap">
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? ( <MlLoader/>) : (
           <div className="admin_padding_wrap">
             <h2>Assign Backend User to {contextHeader}</h2>
             <div className="main_wrap_scroll">
@@ -240,7 +236,8 @@ class MlAssignBackendUsers extends React.Component {
                       </div>
                     </div>
                     {/*{that.state.cluster.isActive ? */}
-                      <MlAssignBackendUserList clusterId={that.props.params.clusterId} updateSelectedBackEndUser={this.updateSelectedBackEndUser.bind(this)}/>
+                      <MlAssignBackendUserList clusterId={that.props.params.clusterId} chapterId={that.props.params.chapterId}
+                      subChapterId={that.props.params.subChapterId} communityId={that.props.params.communityId} updateSelectedBackEndUser={this.updateSelectedBackEndUser.bind(this)}/>
                       {/*:*/}
                       {/*<div></div>}*/}
                   </ScrollArea>

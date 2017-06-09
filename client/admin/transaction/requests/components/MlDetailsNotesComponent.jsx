@@ -2,7 +2,8 @@ import React, {Component, PropTypes} from 'react';
 import {render} from 'react-dom';
 import {findBackendUserActionHandler} from '../actions/findUserAction'
 let Select = require('react-select');
-import  {updateStusForTransactionActionHandler} from '../actions/updateStatusTransactionAction'
+import {initalizeFloatLabel} from "../../../utils/formElemUtil";
+import  {updateStusForTransactionActionHandler} from '../actions/updateStatusRequestsAction'
 export default class MlDetailsNotesComponent extends React.Component {
   constructor(props){
     super(props);
@@ -17,6 +18,10 @@ export default class MlDetailsNotesComponent extends React.Component {
     }
     return this;
   }
+  componentDidUpdate()
+      {
+        initalizeFloatLabel();
+      }
   componentWillReceiveProps(newProps){
     let type=newProps.type;
     if(type=="approval"){
@@ -30,11 +35,12 @@ export default class MlDetailsNotesComponent extends React.Component {
     }
 
   }
+
  async  onStatusSelect(val){
     this.setState({"status":val.value})
    let status=val.value
-   let transactionId=this.props.id
-   let response = await updateStusForTransactionActionHandler(transactionId,status);
+   let requestId=this.props.id
+   let response = await updateStusForTransactionActionHandler(requestId,status);
     if(response){
       toastr.success("transaction status changed successfully")
       if(status=="Approved"){
@@ -94,6 +100,10 @@ export default class MlDetailsNotesComponent extends React.Component {
       {value: 'WIP', label: 'WIP' , clearableValue: true},
       {value: 'Approved', label: 'Approved',clearableValue: true}
     ];
+    let actionActive='';
+    if(this.state.status){
+      actionActive='active'
+    }
     return (
       <div className="ml_tabs">
         <ul  className="nav nav-pills">
@@ -131,8 +141,10 @@ export default class MlDetailsNotesComponent extends React.Component {
                     <input type="text" placeholder="Device ID" defaultValue="" className="form-control float-label" id="" readOnly="true"/>
                   </div>
                   <div className="form-group">
+                    <span className={`placeHolder ${actionActive}`}>Actions</span>
                     <Select name="form-field-name" placeholder="Actions"  className="float-label"  options={statusOptions}  value={that.state.status} disabled={that.state.dispalyStatus} onChange={that.onStatusSelect.bind(that)} />
                   </div>
+                  <br className="clearfix" />
                  {/* <div className="ml_btn">
                     /!*<a href="#" className="save_btn">View</a>*!/
                     <a href="#" className="cancel_btn">Actions</a>

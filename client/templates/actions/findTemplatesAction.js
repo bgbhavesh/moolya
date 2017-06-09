@@ -16,6 +16,7 @@ export async function findTemplatesActionHandler(templateId,code) {
           templateName
           isActive
           createdDate
+          templateImage
         } 
       }
       }

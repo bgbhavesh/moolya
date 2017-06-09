@@ -4,6 +4,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 var FontAwesome = require('react-fontawesome');
 import StarRatings from '../../commons/components/starRatings';
 import {fetchIdeaActionHandler} from '../actions/IdeaActionHandler'
+import MlLoader from '../../../commons/components/loader/loader'
 
 
 export default class MlCustomActionButtons extends React.Component {
@@ -84,7 +85,7 @@ export default class MlCustomActionButtons extends React.Component {
     const showLoader = this.state.loading;
     return (
       <div className="admin_padding_wrap">
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
       <div>
         <div className="opacity"></div>
         <div className="panel-group bottom-buttons" id="accordion">

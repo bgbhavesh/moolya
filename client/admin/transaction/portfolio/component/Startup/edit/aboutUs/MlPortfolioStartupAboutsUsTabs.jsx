@@ -1,7 +1,5 @@
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar'
+import React from "react";
+import {render} from "react-dom";
 import MlStartupAboutUs from "./MlStartupAboutUs";
 import MlStartupRating from "./MlStartupRating";
 import MlStartupClients from "./MlStartupClients";
@@ -11,7 +9,7 @@ import MlStartupLegal from "./MlStartupLegal";
 import MlStartupSP from "./MlStartupSP";
 import MlStartupTechnology from "./MlStartupTechnology";
 import MlStartupAssets from "./MlStartupAssets";
-import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent"
+import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent";
 
 export default class MlStartupTab extends React.Component{
   constructor(props){
@@ -57,13 +55,20 @@ export default class MlStartupTab extends React.Component{
     let data = this.state.portfolioStartupAboutUs;
     data=details;
     this.setState({portfolioStartupAboutUs : data})
-    this.props.getPortfolioStartupAboutUsDetails(data,"aboutUs");
+    let updateItem = _.omit(details, 'logo');
+    this.props.getPortfolioStartupAboutUsDetails(updateItem,"aboutUs");
   }
   getStartupAssets(details){
-    let data = this.state.portfolioStartupAssets;
-    data = details;
-    this.setState({portfolioStartupAssets : data})
-    this.props.getPortfolioStartupAboutUsDetails(data,"assets");
+    // let data = this.state.portfolioStartupAssets;
+    // data = details;
+    this.setState({portfolioStartupAssets : details})
+    let ary = [];
+    _.each(details, function (obj) {
+      let updateItem = _.omit(obj, 'logo');
+      ary.push(updateItem)
+    })
+    var sendData = ary;
+    this.props.getPortfolioStartupAboutUsDetails(sendData,"assets");
   }
   getStartupClients(details){
     let data = this.state.portfolioStartupClients;
@@ -83,17 +88,30 @@ export default class MlStartupTab extends React.Component{
     this.setState({portfolioStartupInfo : data})
     this.props.getPortfolioStartupAboutUsDetails(data,"information");
   }
-  getStartupBranches(details){
-    let data = this.state.portfolioStartupBranches;
-    data = details;
-    this.setState({portfolioStartupBranches : data})
-    this.props.getPortfolioStartupAboutUsDetails(data,"branches");
+
+  getStartupBranches(details) {
+    // let data = this.state.portfolioStartupBranches;
+    // data = details;
+    this.setState({portfolioStartupBranches: details})
+    let ary = [];
+    _.each(details, function (obj) {
+      let updateItem = _.omit(obj, 'logo');
+      ary.push(updateItem)
+    })
+    var sendData = ary;
+    this.props.getPortfolioStartupAboutUsDetails(sendData, "branches");
   }
   getStartupTechnology(details){
-    let data = this.state.portfolioStartupTechnologies;
-    data = details;
-    this.setState({portfolioStartupTechnologies : data})
-    this.props.getPortfolioStartupAboutUsDetails(data,"technologies");
+    // let data = this.state.portfolioStartupTechnologies;
+    // data = details;
+    this.setState({portfolioStartupTechnologies : details})
+    let ary = [];
+    _.each(details, function (obj) {
+      let updateItem = _.omit(obj, 'logo');
+      ary.push(updateItem)
+    })
+    var sendData = ary;
+    this.props.getPortfolioStartupAboutUsDetails(sendData, "technologies");
   }
   getStartupLegalIssue(details){
     let data = this.state.portfolioStartupLegal;

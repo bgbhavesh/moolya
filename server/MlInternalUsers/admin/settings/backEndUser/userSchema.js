@@ -3,6 +3,8 @@
  */
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let BackEndUser = `
 
     type BackendUsers{
@@ -10,12 +12,16 @@ let BackEndUser = `
         password: String,
         username: String,
         profile:userProfile,
-        roleNames:[String]
+        roleNames:[String],
+        latitude:Float,
+        longitude:Float,
+        name: String,
     }
     
     type userProfile{
         isInternaluser: Boolean,
         isExternaluser: Boolean,
+        isMoolya      : Boolean
         isActive: Boolean,
         isChapterAdmin :Boolean,
         email: String,
@@ -23,8 +29,11 @@ let BackEndUser = `
         profileImage:String,
         numericalFormat: String,
         currencyTypes: String,
-        dateOfBirth: String,
-        genderType: String
+        dateOfBirth: Date,
+        genderType: String,
+        firstName: String,
+        middleName: String,
+        lastName: String,
     }
     
      type internalUserprofile{
@@ -47,6 +56,7 @@ let BackEndUser = `
         isDefault: Boolean,
         clusterId: String,
         clusterName:String,
+        clusterFlag:String,
         userRoles:[UserRoles],
     }
     
@@ -60,6 +70,8 @@ let BackEndUser = `
         validTo: String,
         subChapterId:String,
         communityId:String,
+        communityCode:String,
+        communityHierarchyLevel:Int,
         isActive:Boolean,
         hierarchyLevel:String,
         hierarchyCode:String,
@@ -69,7 +81,8 @@ let BackEndUser = `
         subDepartmentName : String,
         chapterName:String,
         subChapterName:String,
-        communityName:String
+        communityName:String,
+        clusterName : String
     }
     
     type MoolyaProfile{
@@ -109,8 +122,10 @@ let BackEndUser = `
         chapterId:String,
         subChapterId:String,
         communityId:String,
+        communityCode:String,
         isActive:Boolean,
         hierarchyLevel:Int,
+        communityHierarchyLevel:Int,
         hierarchyCode:String,
         roleName:String,
         departmentId: String,
@@ -142,7 +157,7 @@ let BackEndUser = `
         profileImage:String,
          numericalFormat: String,
         currencyTypes: String,
-        dateOfBirth: String,
+        dateOfBirth: Date,
         genderType: String
         
     }
@@ -152,6 +167,7 @@ let BackEndUser = `
     }
     
     input externalProfile{
+        profileId         : String,
         registrationId    : String,
         countryName       : String,
         countryId         : String,
@@ -180,6 +196,7 @@ let BackEndUser = `
     input profile{
         isInternaluser    : Boolean,
         isExternaluser    : Boolean,
+        isMoolya          : Boolean
         email             : String,
         isActive          : Boolean,
         isChapterAdmin    : Boolean,
@@ -188,9 +205,12 @@ let BackEndUser = `
         profileImage:String,
         numericalFormat: String,
         currencyTypes: String,
-        dateOfBirth: String,
+        dateOfBirth: Date,
         genderType: String,
-        profileImage: String
+        profileImage: String,
+        firstName: String,
+        middleName: String,
+        lastName: String,
     }
     
     input userObject{
@@ -206,7 +226,7 @@ let BackEndUser = `
       lastName: String,
       userName: String,
       genderType: String,
-      dateOfBirth: String
+      dateOfBirth: Date
     }
     
     input settingsAttributesObject{
@@ -281,6 +301,8 @@ let BackEndUser = `
         addressState      :  String
         addressCountry : String
         addressPinCode : String
+        latitude:Float,
+        longitude:Float
      }
      
        type SocialLinkInfoSchema{
@@ -406,18 +428,22 @@ let BackEndUser = `
         kycDocuments       : [KycDocumentInfo]
     }
     
+    
+    
    
     type Mutation{
         createUser(user:userObject!, moduleName:String, actionName:String):response
         updateUser(userId:String!, user:userObject!, moduleName:String, actionName:String):response
-        resetPassword (userId:String!, password: String!, moduleName:String, actionName:String):response
+        resetPassword (password: String!, moduleName:String, actionName:String):response
         addUserProfile(userId:String, user:userObject): String
         assignUsers(userId:String, user:userObject, moduleName:String, actionName:String): response
         deActivateUser(userId:String, deActive:Boolean, moduleName:String, actionName:String): response
-        updateDataEntry(userId: String, moduleName: String, actionName: String, attributes:attributesObject):response
+        updateDataEntry(moduleName: String, actionName: String, attributes:attributesObject):response
         updateSettings(userId: String, moduleName: String, actionName: String, settingsAttributes:settingsAttributesObject): response
         updateAddressBookInfo(userId: String, moduleName: String, actionName: String,type:String, addressBook:addressBook): response
         uploadUserImage(userId:String,moduleName:String,actionName:String,userProfilePic:String):response
+        setAdminDefaultProfile(clusterId:String!):response
+        deActivateAdminUserProfile(clusterId:String!):response
     }
     
     type Query{
@@ -430,17 +456,51 @@ let BackEndUser = `
         fetchUsersBysubChapterDepSubDep(clusterId:String, chapterId:String, subChapterId:String): [BackendUsers]
         fetchsubChapterUserDepSubDep(userId:String, subChapterId:String):[dep]  
         fetchAssignedAndUnAssignedUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String,subChapterName:String): [BackendUsers]
-        fetchUsersForDashboard(clusterId:String, chapterId:String, subChapterId:String, userType:String): SearchResp
+        fetchUsersForDashboard(clusterId:String, chapterId:String, subChapterId:String, userType:String,offset: Int,limit:Int,fieldsData:[GenericFilter]): SearchResp
         fetchUserTypeFromProfile:String
         fetchUserForReistration(clusterId:String, chapterId:String, subChapterId:String,communityId:String departmentId:String,subDepartmentId:String,roleId:String):[BackendUsers]
         fetchMapCenterCordsForUser(module:String, id:String):mapCenterCords
-        fetchAddressBookInfo(userId: String, moduleName: String, actionName: String):addressBookSchema
-        FindUserOnToken(token: String):response
+        fetchAddressBookInfo(moduleName: String, actionName: String):addressBookSchema
+        findUserOnToken(token: String):response
+        fetchInternalUserProfiles:[UserProfiles]
+        fetchUserRoleDetails(clusterId:String):UserRoles
+        fetchMoolyaInternalUsers : [BackendUsers]
+        passwordVerification(Details:String):response
     }
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],BackEndUser]);
-// userObject changed
-// fetchChapterBasedRoles(userId:String, clusterId:String): UserProfiles
-// fetchClusterBasedRoles(userId:String, clusterId:String): UserProfiles
+let supportedApi = [
+    {api:'fetchUserDetails', actionName:'READ', moduleName:"USERS", isWhiteList:true},
+    {api:'fetchUser', actionName:'READ', isWhiteList: true, moduleName:"USERS"},
+    {api:'fetchUsersByClusterDepSubDep', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchUserDepSubDep', actionName:'READ', moduleName:"USERS", isWhiteList:true},
+    {api:'fetchUserRoles', actionName:'READ', moduleName:"USERS", isWhiteList:true},
+    {api:'fetchAssignedUsers', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchUsersBysubChapterDepSubDep', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchsubChapterUserDepSubDep', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchAssignedAndUnAssignedUsers', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchUsersForDashboard', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchUserTypeFromProfile', actionName:'READ', isWhiteList: true, moduleName:"USERS"},
+    {api:'fetchMapCenterCordsForUser', actionName:'READ', isWhiteList: true, moduleName:"USERS"},
+    {api:'fetchAddressBookInfo', actionName:'READ', moduleName:"USERS", isWhiteList: true},
+    {api:'findUserOnToken', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchUserRoleDetails', actionName:'READ', moduleName:"USERS", isWhiteList:true},
+    {api:'fetchMoolyaInternalUsers', actionName:'READ', moduleName:"USERS", isWhiteList:true},
+    {api:'fetchInternalUserProfiles', actionName:'READ', moduleName:"USERS", isWhiteList:true},
+  // {api:'passwordVerification', actionName:'READ', moduleName:"USERS"},
 
+    {api:'createUser', actionName:'CREATE', moduleName:"USERS"},
+    {api:'updateUser', actionName:'UPDATE', moduleName:"USERS"},
+    {api:'resetPassword', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
+    {api:'addUserProfile', actionName:'UPDATE', moduleName:"USERS"},
+    {api:'assignUsers', actionName:'UPDATE', moduleName:"USERS"},
+    {api:'deActivateUser', actionName:'UPDATE', moduleName:"USERS"},
+    {api:'updateDataEntry', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
+    {api:'updateSettings', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
+    {api:'updateAddressBookInfo', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
+    {api:'uploadUserImage', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
+    {api:'deActivateAdminUserProfile', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
+    {api:'setAdminDefaultProfile', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
+];
+MlResolver.MlModuleResolver.push(supportedApi)

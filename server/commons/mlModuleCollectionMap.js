@@ -28,7 +28,7 @@ MlModuleCollectionMap['MlStatus'] = 'Status';
 MlModuleCollectionMap['MlSubChapters'] = 'SUBCHAPTER';
 MlModuleCollectionMap['MlSubDepartments'] = 'SUBDEPARTMENT';
 MlModuleCollectionMap['MlTaxation'] = 'TAXATION';
-MlModuleCollectionMap['MlTemplateTypes'] = 'TEMPLATETYPES';
+MlModuleCollectionMap['MlAccountTypes'] = 'ACCOUNTTYPES';
 
 //setttings
 MlModuleCollectionMap['MlBusinessType'] = 'BUSINESSTYPE';
@@ -56,7 +56,25 @@ MlModuleCollectionMap['MlRegistration'] = 'REGISTRATION';
 MlModuleCollectionMap['users'] = 'USERS';
 
 //portfolio
-MlModuleCollectionMap['MlIdeatorPortfolio'] = 'IDEATORPORTFOLIO';
+MlModuleCollectionMap['MlPortfolioDetails'] = 'PORTFOLIO';
+MlModuleCollectionMap['MlIdeatorPortfolio'] = 'PORTFOLIO';   //IDEATORPORTFOLIO
+MlModuleCollectionMap['MlIdeas'] = 'PORTFOLIO';
+MlModuleCollectionMap['MlFunderPortfolio'] = 'PORTFOLIO';
+MlModuleCollectionMap['MlStartupPortfolio'] = 'PORTFOLIO';
 MlModuleCollectionMap['MlPortfolioLibrary'] = 'PORTFOLIOLIBRARY';
 
+//hierarchy
+MlModuleCollectionMap['MlHierarchyAssignments'] = 'HIERARCHY';
+
+//Process Setup
+MlModuleCollectionMap['MlProcessSetup'] = 'PROCESSSETUP';
+MlModuleCollectionMap['MlProcessTransactions'] = 'PROCESSSETUP';
+//office
+MlModuleCollectionMap['MlOffice'] = 'OFFICE';
+MlModuleCollectionMap['MlOfficeMembers'] = 'OFFICE';
+MlModuleCollectionMap['MlOfficeTransaction'] = 'OFFICE';
+MlModuleCollectionMap['MlOfficeInvite'] = 'OFFICE';
+MlModuleCollectionMap['MlUserSubscriptions'] = 'SUBSCRIPTIONS';
+
 module.exports=  MlModuleCollectionMap;
+

@@ -1,11 +1,12 @@
 {
   "public":{
-  "graphqlUrl": "http://prod.moolya.in/graphql",
-  "graphqlPort":8090,
-  "googleApiKey": "AIzaSyAd7VZpzSCdkOrkgdhCbMm3JYqwGap0Pa4",
-  "LEADSQUARED_URL":"https://api.leadsquared.com/v2/LeadManagement.svc/Lead.Capture?accessKey=u$rf80902d50b1b4a630551bbbfb1c95ef3&secretKey=2dda53b546b6e068978f2c68415b6967ec3331fb",
-  "LEADSQUARED_ACTIVITY_URL":"https://api.leadsquared.com/v2/ProspectActivity.svc/Create?accessKey=u$rf80902d50b1b4a630551bbbfb1c95ef3&secretKey=2dda53b546b6e068978f2c68415b6967ec3331fb",
-  "isLeadSquaredTrackingEnabled":true
+    "googleApiKey": "AIzaSyAd7VZpzSCdkOrkgdhCbMm3JYqwGap0Pa4",
+    "isLeadSquaredTrackingEnabled":true,
+    "dateFormat":"MM-DD-YYYY hh:mm:ss",
+    "createNewUser":{
+      "code"    : 209,
+      "message" : "New User Created"
+    }
   },
   "private": {
       "subChapterName":"Moolya",

@@ -338,7 +338,21 @@ if(Meteor.isServer){
                     "dynamicLinkHandler" : "",
                     "subMenusId":"chapter_chapters",
                     "subMenuMappingId":"chapter_assignusers"
+                  },
+
+                  {
+                    "link" : "/admin/chapters/history",
+                    "name" : "History",
+                    "uniqueId" : "chapter_history",
+                    "isLink" : true,
+                    "isMenu" : true,
+                    "image" : "",
+                    "dynamicLink" : true,
+                    "dynamicLinkHandler" : "",
+                    "subMenusId":"chapter_chapters",
+                    "subMenuMappingId": "chapter_history"
                   }
+
                 ]
             //   }
             // ]
@@ -365,6 +379,18 @@ if(Meteor.isServer){
             "dynamicLinkHandler" : "",
             "subMenusId":"community",
             "subMenuMappingId":"community_Community_Details"
+          },
+          {
+            "link" : "/admin/community/history",
+            "name" : "History",
+            "uniqueId" : "community_Histroy_Details",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"community",
+            "subMenuMappingId":"community_Histroy_Details"
           },
           // {
           //   "link" : "/admin/community/assignusers",
@@ -447,7 +473,27 @@ if(Meteor.isServer){
                 "image": ""
               }
             ]
-          }
+          },
+          {
+            "link" : "/admin/documents/history",
+            "name" : "History",
+            "uniqueId" : "documents_History",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+              {
+                "link": "/admin/documents/history",
+                "name": "List Clusters",
+                "uniqueId": "documents_HistoryList",
+                "subMenuMappingId":"documents_History",
+                "subMenusId":"documents",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              }
+            ]
+          },
       ]
 
       },
@@ -493,7 +539,39 @@ if(Meteor.isServer){
                 ]
               },
             ]
-          }
+          },
+         /* {
+            "link" : "/admin/templates/history",
+            "name" : "History",
+            "uniqueId" : "templates_History",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"templates",
+            "subMenuMappingId":""
+          },*/
+          {
+            "link" : "/admin/templates/history",
+            "name" : "History",
+            "uniqueId" : "templates_History",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+              {
+                "link": "/admin/templates/history",
+                "name": "Templates History",
+                "uniqueId": "templates_HistoryList",
+                "subMenuMappingId":"templates_History",
+                "subMenusId":"templates",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              }
+            ]
+          },
         ]
       },
       {
@@ -628,6 +706,16 @@ if(Meteor.isServer){
                 "image" : "",
                 "subMenusId":"transaction_Registration",
                 //"subMenuMappingId":"transaction_registration_create"
+              },
+              {
+                "link" : "/admin/transactions/registrationHistory",
+                "name" : "History",
+                "uniqueId" : "transaction_registration_history",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "subMenusId":"transaction_Registration",
+                //"subMenuMappingId":"transaction_registration_create"
               }
             ]
           },
@@ -684,16 +772,16 @@ if(Meteor.isServer){
                 "subMenuMappingId":"portfolio_approved"
               },
 
-              {
-                "link" : "/admin/transactions/portfolio/createPortfolio",
-                "name" : "Create",
-                "uniqueId" : "portfolio_create",
-                "isLink" : true,
-                "isMenu" : true,
-                "image" : "",
-                "subMenusId":"portfolio",
-                //"subMenuMappingId":"transaction_registration_create"
-              },
+              // {
+              //   "link" : "/admin/transactions/portfolio/createPortfolio",
+              //   "name" : "Create",
+              //   "uniqueId" : "portfolio_create",
+              //   "isLink" : true,
+              //   "isMenu" : true,
+              //   "image" : "",
+              //   "subMenusId":"portfolio",
+              //   //"subMenuMappingId":"transaction_registration_create"
+              // },
               {
                 "link" : "/admin/transactions/portfolio/history",
                 "name" : "History",
@@ -733,7 +821,100 @@ if(Meteor.isServer){
               //   "subMenusId":"portfolio"
               // }
             ]
+          },
+          {
+            "link" : "/admin/transactions/office",
+            "name" : "Office",
+            "uniqueId" : "transaction_office_list",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu" : [
+              {
+                "link" : "/admin/transactions/office",
+                "name" : "Office",
+                "uniqueId" : "transaction_office",
+                "subMenuMappingId" : "transaction_office_list",
+                "subMenusId" : "transaction",
+                "isLink" : true,
+                "isMenu" : false,
+                "image" : ""
+              }
+            ]
+          },
+          {
+            "link" : "/admin/transactions/processSetupList",
+            "name" : "ProcessSetUp",
+            "uniqueId" : "transaction_ProcessSetup",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+              {
+                "link": "/admin/transactions/processSetupList",
+                "name": "List Process Setup",
+                "uniqueId": "transaction_ProcessSetupList",
+                "subMenuMappingId":"transaction_ProcessSetup",
+                "subMenusId":"transaction",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/transactions/editProcessSetup",
+                "name": "Edit Process Setup",
+                "uniqueId": "transaction_EditProcessSetup",
+                "subMenuMappingId":"transaction_ProcessSetup",
+                "subMenusId":"transaction",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          },
+
+          {
+            "link": "/admin/transactions/systemsLog ",
+            "name": "System",
+            "uniqueId": "systems_Log",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenusId": "transaction"
+            // "subMenuMappingId":"Transactions_Log"
+          },
+          {
+            "link": "/admin/transactions/interactionsLog ",
+            "name": "Interactions",
+            "uniqueId": "Interactions_Log",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenusId": "transaction"
+            // "subMenuMappingId":"Transactions_Log"
+          },
+          {
+            "link": "/admin/transactions/conversationsLog ",
+            "name": "Conversations",
+            "uniqueId": "Conversations_Log",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenusId": "transaction"
+            // "subMenuMappingId":"Transactions_Log"
+          },
+          {
+            "link": "/admin/transactions/history",
+            "name": "History",
+            "uniqueId": "History_Log",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenusId": "transaction"
+            // "subMenuMappingId":"Transactions_Log"
           }
+      //       "subMenu":[
+      //
       ]
       },
       {
@@ -1117,6 +1298,45 @@ if(Meteor.isServer){
               }]
           },
           {
+            "link" : "/admin/settings/actionsAndStatusesList",
+            "name" : "Action & Status",
+            "uniqueId" : "settings_Action_And_Status",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[
+              {
+                "link" : "/admin/settings/actionsAndStatusesList",
+                "name" : "Action & Status",
+                "uniqueId": "settings_Action_And_Status_List",
+                "subMenuMappingId":"settings_Action_And_Status",
+                "subMenusId":"settings",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+              },
+              {
+              "link": "/admin/settings/actionsAndStatusesEdit",
+              "name": "Edit Action & Status",
+              "uniqueId": "settings_Action_And_Status_Edit",
+              "subMenuMappingId":"settings_Action_And_Status",
+              "subMenusId":"settings",
+              "isLink": true,
+              "isMenu": false,
+              "image": "",
+              subMenu: [{
+                "link": "/admin/settings/actionsAndStatusesEdit",
+                "name": "Generic",
+                "uniqueId": "settings_Action_And_Status_Edit_Generic",
+                "subMenuMappingId":"settings_Action_And_Status_Edit",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }]
+            }]
+          },
+          {
             "link" : "/admin/settings/userTypeList",
             "name" : "User Categories",
             "uniqueId" : "settings_userTypes",
@@ -1225,14 +1445,14 @@ if(Meteor.isServer){
               }]
           },
           {
-            "link" : "/admin/settings/templateTypeList",
-            "name" : "Template Types",
+            "link" : "/admin/settings/accountTypeList",
+            "name" : "Account Types",
             "uniqueId" : "settings_templateTypes",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
             subMenu:[{
-              "link": "/admin/settings/addTemplateType",
+              "link": "/admin/settings/addAccountType",
               "name": "Add TemplateType",
               "uniqueId": "settings_AddTemplateType",
               "subMenuMappingId":"settings_templateTypes",
@@ -1242,7 +1462,7 @@ if(Meteor.isServer){
               "image": ""
             },
               {
-                "link": "/admin/settings/templateTypeList",
+                "link": "/admin/settings/accountTypeList",
                 "name": "List TemplateType",
                 "uniqueId": "settings_TemplateTypeList",
                 "subMenuMappingId":"settings_templateTypes",
@@ -1252,7 +1472,7 @@ if(Meteor.isServer){
                 "image": ""
               },
               {
-                "link": "/admin/settings/editTemplateType",
+                "link": "/admin/settings/editAccountType",
                 "name": "Edit TemplateType",
                 "uniqueId": "settings_EditTemplateType",
                 "subMenuMappingId":"settings_templateTypes",
@@ -1947,6 +2167,26 @@ if(Meteor.isServer){
                 "isMenu": true,
                 "image": ""
               }]
+          },
+          {
+            "link" : "/admin/settings/history",
+            "name" : "History",
+            "uniqueId" : "settings_history",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            subMenu:[
+              {
+                "link": "/admin/settings/history",
+                "name": "History List",
+                "uniqueId": "settings_historyList",
+                "subMenuMappingId":"settings_history",
+                "subMenusId":"settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+            ]
           }
         ]
       }

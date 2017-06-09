@@ -2,11 +2,18 @@ import React, {Component, PropTypes} from "react";
 import ScrollArea from 'react-scrollbar'
 var FontAwesome = require('react-fontawesome');
 import {multipartASyncFormHandler} from '../../../../client/commons/MlMultipartFormAction'
+import MlLoader from '../../../commons/components/loader/loader'
 
 export default class MlAppMyProfile extends Component {
   constructor(props) {
     super(props)
     this.state = {loading: true, data: {}};
+  }
+  componentDidMount() {
+    $(function () {
+      $('.float-label').jvFloat();
+    });
+    // this.initializeSwiper();
   }
   componentWillMount(){
     let userDetails = Meteor.user();
@@ -49,7 +56,7 @@ export default class MlAppMyProfile extends Component {
   const showLoader=this.state.loading;
   return (
     <div className="admin_main_wrap">
-      {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+      {showLoader === true ? (<MlLoader/>) : (
         <div className="admin_padding_wrap">
           <h2>My Profile Info</h2>
           <div className="main_wrap_scroll">

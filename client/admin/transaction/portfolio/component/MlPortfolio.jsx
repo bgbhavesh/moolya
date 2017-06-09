@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import formHandler from "../../../../commons/containers/MlFormHandler";
-import {updatePortfolioActionHandler, updateIdeatorIdeaActionHandler} from "../actions/updatePortfolioDetails";
+import {updatePortfolioActionHandler, updateIdeatorIdeaActionHandler, approvePortfolio, rejectPortfolio} from "../actions/updatePortfolioDetails";
 import {fetchTemplateHandler} from "../../../../commons/containers/templates/mltemplateActionHandler";
 import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
 import {findComments} from "../../../../commons/annotaterComments/findComments";
@@ -13,6 +13,7 @@ import {
 import moment from "moment";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import {fetchIdeaByPortfolioId} from "../../../../app/ideators/actions/IdeaActionHandler";
+import MlLoader from '../../../../commons/components/loader/loader'
 
 
 class MlPortfolio extends React.Component {
@@ -86,6 +87,32 @@ class MlPortfolio extends React.Component {
       this.setState({ideaId: " "})
     }
 
+  }
+  async updateApproveUser(){
+    let portfolioId = this.props.config
+    const response = await approvePortfolio(portfolioId);
+    if (response.success) {
+      toastr.success("Portfolio Approved Successfully")
+      FlowRouter.go('/admin/transactions/portfolio/requestedPortfolioList')
+    }else{
+      toastr.error(response.result)
+    }
+  }
+  approveUser(){
+    const resp = this.updateApproveUser();
+    return resp;
+  }
+  async updateRejectUser(){
+    let portfolioId = this.props.config
+    const response = await rejectPortfolio(portfolioId);
+    if (response) {
+      this.props.getRegistrationKYCDetails();
+      toastr.success("Portfolio Rejected Successfully")
+    }
+  }
+  rejectUser(){
+    const resp = this.updateRejectUser();
+    return resp;
   }
 
   async fetchIdeaId() {
@@ -199,34 +226,50 @@ class MlPortfolio extends React.Component {
 
   render() {
     let that = this;
-    let MlActionConfig = [
-      {
+    let MlActionConfig = []
+    if(FlowRouter.getRouteName() != "transaction_portfolio_EditRequests"){
+      MlActionConfig.push({
         showAction: true,
         actionName: 'edit',
         handler: null
-      },
-      {
-        actionName: 'save',
-        showAction: true,
-        handler: async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this))
-      },
-      {
-        showAction: true,
-        actionName: 'cancel',
-        handler: null
-      },
-      {
-        showAction: true,
-        actionName: 'assign',
-        handler: null
-      },
-      {
-        showAction: true,
-        actionName: 'comment',
-        handler: null,
-        iconID: 'Popover1'
-      },
-    ]
+      });
+    }
+    MlActionConfig.push({
+      actionName: 'save',
+      showAction: true,
+      handler: async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this))
+    });
+    MlActionConfig.push({
+      showAction: true,
+      actionName: 'cancel',
+      handler: async(event) => {
+        FlowRouter.go("/admin/transactions/portfolio/requestedPortfolioList")
+      }
+    });
+    MlActionConfig.push({
+      showAction: true,
+      actionName: 'assign',
+      handler: null
+    });
+    if(FlowRouter.getRouteName() != "transaction_portfolio_EditRequests") {
+      MlActionConfig.push(
+        {
+          showAction: true,
+          actionName: 'comment',
+          handler: null,
+          iconID: 'Popover1'
+        },
+        {
+          showAction: true,
+          actionName: 'approveUser',
+          handler:  this.approveUser.bind(this)
+        },
+        {
+          showAction: true,
+          actionName: 'rejectUser',
+          handler: this.rejectUser.bind(this)
+        });
+    }
     let EditComponent = "";
     let ViewComponent = "";
     if (this.props.viewMode) {
@@ -248,7 +291,7 @@ class MlPortfolio extends React.Component {
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
           <div className="admin_padding_wrap">
             <div className='step-progress'>
               {/*{this.props.viewMode?<ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>:<EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>}*/}

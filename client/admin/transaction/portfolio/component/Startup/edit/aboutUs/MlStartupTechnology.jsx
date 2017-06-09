@@ -1,15 +1,15 @@
-import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar'
-import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
-import Moolyaselect from  '../../../../../../../commons/components/select/MoolyaSelect';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
-import _ from 'lodash';
-import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
-import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails';
+import React, {Component, PropTypes} from "react";
+import {render} from "react-dom";
+import ScrollArea from "react-scrollbar";
+import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
+import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
+import Moolyaselect from "../../../../../../../commons/components/select/MoolyaSelect";
+import gql from "graphql-tag";
+import {graphql} from "react-apollo";
+import _ from "lodash";
+import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
+import {fetchDetailsStartupActionHandler} from "../../../../actions/findPortfolioStartupDetails";
+import MlLoader from "../../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
 
 
@@ -27,6 +27,7 @@ export default class MlStartupTechnology extends React.Component{
       selectedObject:"default"
     }
     this.handleBlur.bind(this);
+    this.imagesDisplay.bind(this);
     return this;
   }
   componentDidUpdate(){
@@ -37,6 +38,7 @@ export default class MlStartupTechnology extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+    this.imagesDisplay();
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.technologies)
@@ -68,7 +70,7 @@ export default class MlStartupTechnology extends React.Component{
 
   onLockChange(field, e){
     let details = this.state.data||{};
-    let key = e.target.id;
+    let key = field;
     details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
@@ -96,15 +98,27 @@ export default class MlStartupTechnology extends React.Component{
     })
   }
 
-  onOptionSelected(selectedId){
-    let details =this.state.data;
-    details=_.omit(details,["technologyId"]);
-    details=_.extend(details,{["technologyId"]: selectedId});
-    this.setState({data:details}, function () {
-      this.setState({"selectedVal" : selectedId})
-      this.sendDataToParent()
-    })
-
+  onOptionSelected(selectedId, callback, selObject) {
+    if (selectedId) {
+      let details = this.state.data;
+      // this.setState({aboutShow:selObject.about})
+      details = _.omit(details, ["technologyId"]);
+      details = _.extend(details, {["technologyId"]: selectedId, "technologyName": selObject.label, description: selObject.about});
+      this.setState({data: details}, function () {
+        this.setState({"selectedVal": selectedId, "technologyName": selObject.label, "description": selObject.about})
+        this.sendDataToParent()
+      })
+    } else {
+      let details = this.state.data;
+      // this.setState({aboutShow:''})
+      details = _.omit(details, ["technologyId"]);
+      details = _.omit(details, ["technologyName"]);
+      details = _.omit(details, ["description"]);
+      this.setState({data: details}, function () {
+        this.setState({"selectedVal": '', "technologyName": '', description:''})
+        this.sendDataToParent()
+      })
+    }
   }
 
   handleBlur(e){
@@ -130,14 +144,14 @@ export default class MlStartupTechnology extends React.Component{
           delete item[propName];
         }
       }
-      newItem = _.omit(item, "__typename");
-      let updateItem = _.omit(newItem, 'logo');
-      arr.push(updateItem)
+      let newItem = _.omit(item, "__typename");
+      // let updateItem = _.omit(newItem, 'logo');
+      arr.push(newItem)
     })
     startupTechnologies = arr;
     this.setState({startupTechnologies:startupTechnologies})
-    /*let indexArray = this.state.indexArray;*/
     this.props.getStartupTechnology(startupTechnologies);
+
   }
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
@@ -154,6 +168,7 @@ export default class MlStartupTechnology extends React.Component{
       if(result.success){
         this.setState({loading:true})
         this.fetchOnlyImages();
+        this.imagesDisplay();
       }
     }
   }
@@ -175,9 +190,30 @@ export default class MlStartupTechnology extends React.Component{
     }
   }
 
+  async imagesDisplay(){
+    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
+    if (response) {
+      let detailsArray = response&&response.technologies?response.technologies:[]
+      let dataDetails =this.state.startupTechnologies
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      _.each(detailsArray, function (obj,key) {
+        cloneBackUp[key]["logo"] = obj.logo;
+      })
+      let listDetails = this.state.startupTechnologiesList || [];
+      listDetails = cloneBackUp
+      let cloneBackUpList = _.cloneDeep(listDetails);
+      this.setState({loading: false, startupTechnologies:cloneBackUp,startupTechnologiesList:cloneBackUpList});
+    }
+  }
+
+  emptyClick(e) {
+    if (this.state.popoverOpen)
+      this.setState({popoverOpen: false})
+  }
   render(){
     let query=gql`query{
       data:fetchTechnologies {
+        about : about
         label:displayName
         value:_id
       }
@@ -185,10 +221,17 @@ export default class MlStartupTechnology extends React.Component{
     let that = this;
     const showLoader = that.state.loading;
     let technologiesArray = that.state.startupTechnologiesList || [];
+    let displayUploadButton = null
+    if(this.state.selectedObject != "default"){
+      displayUploadButton = true
+    }else{
+      displayUploadButton = false
+    }
+    //
     return (
-      <div>
+      <div onClick={this.emptyClick.bind(this)}>
         <h2>Technology</h2>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? ( <MlLoader/>) : (
         <div className="requested_input main_wrap_scroll">
           <ScrollArea
             speed={0.8}
@@ -224,38 +267,38 @@ export default class MlStartupTechnology extends React.Component{
             </div>
           </ScrollArea>
           <Popover placement="right" isOpen={this.state.popoverOpen}  target={"create_client"+this.state.selectedObject} toggle={this.toggle}>
-            {/* <PopoverTitle>Add Asset</PopoverTitle>*/}
+             <PopoverTitle>Add New Technology</PopoverTitle>
             <PopoverContent>
               <div className="ml_create_client">
                 <div className="medium-popover"><div className="row">
                   <div className="col-md-12">
                     <div className="form-group">
                       <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                    labelKey={'label'} queryType={"graphql"} query={query}
+                                    labelKey={'label'} queryType={"graphql"} query={query} placeholder={'Select Technology'}
                                     isDynamic={true}
                                     onSelect={this.onOptionSelected.bind(this)}
                                     selectedValue={this.state.selectedVal}/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" name="description" placeholder="Description" className="form-control float-label" id="" defaultValue={this.state.data.description}  onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/>
+                      <input type="text" name="description" placeholder="About" className="form-control float-label" defaultValue={this.state.data.description} disabled="true"  onBlur={this.handleBlur.bind(this)}/>
+                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/>
                       <input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
                     </div>
 
-                    <div className="form-group">
+                    {displayUploadButton?<div className="form-group">
                       <div className="fileUpload mlUpload_btn">
                         <span>Upload Logo</span>
                         <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
                       </div>
-                    </div>
+                    </div>:""}
                     <div className="clearfix"></div>
 
                     <div className="form-group">
                       <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                     </div>
                     <div className="ml_btn" style={{'textAlign': 'center'}}>
-                      <a href="#" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                      <a className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
                     </div>
                   </div>
                 </div></div>

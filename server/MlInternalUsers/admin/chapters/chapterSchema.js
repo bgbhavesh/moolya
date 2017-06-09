@@ -1,9 +1,12 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
+import MlResolver from '../../../commons/mlResolverDef'
+
 let chapterSchema = `
     type Chapter{
         _id:String,
         clusterId:String,
+        clusterName: String 
         chapterCode:String,
         chapterName:String,
         displayName:String,
@@ -19,7 +22,6 @@ let chapterSchema = `
         showOnMap:Boolean,
         isActive:Boolean
         status:status
-        
     }
     
     input chapterObject{
@@ -44,7 +46,7 @@ let chapterSchema = `
     }
     
     input associatedChapters{ 
-        chapterId:String
+        subChapterId:String
     }
     
     type internalSubChapterAccess{
@@ -63,9 +65,10 @@ let chapterSchema = `
     type SubChapter{
         _id:String
         clusterId:String
-        isDefaultSubChapter:String
+        isDefaultSubChapter:Boolean
         clusterName: String
         chapterId:String
+        subChapterUrl : String
         subChapterImageLink:String
         chapterName :String
         stateName : String
@@ -84,6 +87,7 @@ let chapterSchema = `
         isBespokeWorkFlow:Boolean
         internalSubChapterAccess:internalSubChapterAccess
         moolyaSubChapterAccess:moolyaSubChapterAccess
+        associatedSubChapters : [String]
     }
     
     input internalSubChapterAccessObject{
@@ -102,17 +106,17 @@ let chapterSchema = `
     
     input subChapterObject{
         subChapterId:String,
-        isDefaultSubChapter:String,
+        isDefaultSubChapter:Boolean,
         clusterId:String, 
         clusterName:String,
         stateId:String,
+        stateName : String,
         chapterId:String,
         chapterName:String,
-        stateName : String,
         subChapterCode:String,
         subChapterName:String,
         subChapterDisplayName:String,
-        associatedChapters:[associatedChapters],
+        associatedSubChapters:[String],   
         subChapterUrl:String,
         isUrlNotified:Boolean,
         subChapterEmail:String,
@@ -134,15 +138,15 @@ let chapterSchema = `
     }
     
     type Query{ 
-        fetchChapter:String
+        fetchChapter(chapterId: String): Chapter
         fetchChapters(id:String):[Chapter]
         fetchChaptersWithoutAll(id:String):[Chapter]
         fetchSubChapter(_id: String):SubChapter
         fetchSubChapters(id: String):SubChapterResponse
         fetchChaptersForMap:[Chapter]
         fetchSubChaptersSelect(id: String,displayAllOption:Boolean):[SubChapter]
-        fetchActiveSubChapters(id: String):[SubChapter]
-        fetchSubChaptersSelectNonMoolya(chapterId: String,clusterId:String):[SubChapter] 
+        fetchActiveSubChapters:[SubChapter]
+        fetchSubChaptersSelectNonMoolya(chapterId: String,clusterId:String, subChapterId : String):[SubChapter] 
         fetchActiveClusterChapters(clusters:[String],displayAllOption:Boolean):[Chapter]
         fetchActiveStatesChapters(states:[String],clusters:[String]):[Chapter]
         fetchActiveChaptersSubChapters(chapters:[String],clusters:[String],displayAllOption:Boolean):[SubChapter],
@@ -153,9 +157,29 @@ let chapterSchema = `
      type Mutation {
         createChapter(chapter:chapterObject):String
         updateChapter(chapterId:String, chapter:chapterObject):String
-        createSubChapter(subChapter:subChapterObject):String
+        createSubChapter(subChapter:subChapterObject, moduleName:String, actionName:String):response
         updateSubChapter(subChapterId:String, subChapterDetails:subChapterObject, moduleName:String, actionName:String):response
      }
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], chapterSchema]);
+let supportedApi = [
+    {api:'createChapter', actionName:'CREATE', moduleName:"CHAPTER"},
+    {api:'createSubChapter', actionName:'CREATE', moduleName:"SUBCHAPTER"},
+    {api:'updateChapter', actionName:'UPDATE', moduleName:"CHAPTER"},
+    {api:'updateSubChapter', actionName:'UPDATE', moduleName:"SUBCHAPTER"},
+    {api:'fetchChapter', actionName:'READ', moduleName:"CHAPTER"},
+    {api:'fetchChaptersWithoutAll', actionName:'READ', moduleName:"CHAPTER", isWhiteList:true},
+    {api:'fetchChapters', actionName:'READ', moduleName:"CHAPTER"},
+    {api:'fetchSubChapter', actionName:'READ', moduleName:"SUBCHAPTER"},
+    {api:'fetchSubChaptersSelect', actionName:'READ', moduleName:"SUBCHAPTER"},
+    {api:'fetchActiveSubChapters', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
+    {api:'fetchSubChaptersSelectNonMoolya', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
+    {api:'fetchActiveClusterChapters', actionName:'READ', moduleName:"CHAPTER", isWhiteList:true},
+    {api:'fetchActiveStatesChapters', actionName:'READ', moduleName:"CHAPTER"},
+    {api:'fetchActiveChaptersSubChapters', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
+    {api:'fetchSubChaptersForRegistration', actionName:'READ', moduleName:"SUBCHAPTER"},
+    {api:'fetchSubChaptersSelectMoolya', actionName:'READ', moduleName:"SUBCHAPTER"}
+]
+MlResolver.MlModuleResolver.push(supportedApi)
+

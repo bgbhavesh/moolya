@@ -10,6 +10,7 @@ import formHandler from '../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../commons/components/select/MoolyaSelect'
+import MlLoader from '../../commons/components/loader/loader'
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 
@@ -29,6 +30,7 @@ class MlAssignTemplate extends React.Component{
       processName : '',
       subProcess  : '',
       subProcessName : '',
+      templateGroupName:'',
       userTypes   : '',
       identity    : '',
       clusters    : '',
@@ -87,6 +89,7 @@ class MlAssignTemplate extends React.Component{
       templatesubProcess        : this.state.subProcess,
       templateProcessName       : this.state.processName,
       templateSubProcessName    : this.state.subProcessName,
+      templateGroupName         : this.refs.templateGroupName.value,
       templateclusterId         : this.state.clusters,
       templateclusterName       : this.state.clusterName,
       templatechapterId         : this.state.chapters,
@@ -191,6 +194,11 @@ class MlAssignTemplate extends React.Component{
     this.setState({communities:value})
     this.setState({communitiesName:selObject.label})
   }
+  showTemplateImage(row){
+
+    console.log(row);
+    window.open(row.templateImage)
+  }
 
 
   async switchTabEvent(stepName){
@@ -262,7 +270,7 @@ class MlAssignTemplate extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div>
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?( <MlLoader/>):(
 
             <div className="admin_main_wrap">
               <div className="admin_padding_wrap">
@@ -282,6 +290,12 @@ class MlAssignTemplate extends React.Component{
                         <div className="form-group">
                            <Moolyaselect multiSelect={false}  placeholder={"Sub Process"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subProcess} queryType={"graphql"} query={subProcessQuery} queryOptions={subprocessOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubProcess.bind(this)} />
                         </div>
+
+                        <div className="form-group">
+                          <input ref="templateGroupName"
+                                 placeholder="Group Name" className="form-control float-label"></input>
+                        </div>
+
                         <div className="form-group">
                           <Moolyaselect multiSelect={false}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'} onSelect={this.optionsBySelectClusters.bind(this)} />
                         </div>
@@ -299,6 +313,7 @@ class MlAssignTemplate extends React.Component{
                         </div>
                         <div className="form-group">
                           <Select name="form-field-name"  placeholder={"Identity"}  className="float-label"  options={IdentityOptions}  value={this.state.identity}  onChange={this.optionsBySelectIdentity.bind(this)}/>
+                          <br className="clearfix"/><br className="clearfix"/><br className="clearfix"/><br className="clearfix"/><br className="clearfix"/><br className="clearfix"/>
                         </div>
                       </form>
                     </ScrollArea>
@@ -332,7 +347,7 @@ class MlAssignTemplate extends React.Component{
                                 <div className="tab-pane active" id={'template'+key} >
                                   <div className="list-group nomargin-bottom">
                                       <a className="list-group-item" key={key} id={"template"}>{options.templateName}
-                                        <FontAwesome className="btn btn-xs btn-mlBlue pull-right" name='eye'/>
+                                        <FontAwesome className="btn btn-xs btn-mlBlue pull-right" name='eye' onClick={that.showTemplateImage.bind(that,options)}/>
                                       </a>
                                   </div>
                                 </div>

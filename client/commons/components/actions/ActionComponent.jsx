@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import  $ from 'jquery';
 import _ from 'lodash';
+import PopOverAction from '../popover/PopOverAction';
 export default class MlActionComponent extends Component {
   constructor(props){
     super(props);
@@ -15,6 +16,19 @@ export default class MlActionComponent extends Component {
       $('.bottom_actions_block').toggleClass('show_block');
       $(this).toggleClass('show_act');
     });*/
+    /*$('[data-toggle="tooltip"]').tooltip({
+      container:'body',
+      trigger:"hover"
+    });*/
+    setTimeout(function(){
+      $('[data-toggle="tooltip"]').tooltip({
+        container:'body',
+        trigger:"hover"
+      });
+      $('[data-toggle="tooltip').on('click', function () {
+        $(this).tooltip('hide');
+      });
+    },1000);
   }
 
   onActionSwitch(e){
@@ -24,8 +38,14 @@ export default class MlActionComponent extends Component {
 
   }
 
+  onMultiEdit(){
+    toastr.error("Multiple records cannot be edited, Please select a record");
+  }
+
 
   render(){
+    const count = this.props.count;
+    const that = this;
     let config=[
       {
         imagefield:'/images/edit_icon.png',
@@ -111,27 +131,36 @@ export default class MlActionComponent extends Component {
     let imagePath=this.props.imagePath;
 
       let actionView = this.props.ActionOptions.map(function(option) {
-        let activeClass='' ,activesubclass=''
-        let action=_.find(config, { 'actionName': option.actionName });
-        for(let i=0;i<config.length;i++) {
+        let activeClass = '', activesubclass = ''
+        let action = _.find(config, {'actionName': option.actionName});
+        for (let i = 0; i < config.length; i++) {
 
-          if(config[i].actionName==option.actionName&&option.showAction==true){
-                console.log("sucess")
-              activeClass="hex_btn"
-           activesubclass ="hex_btn hex_btn_in"
+          if (config[i].actionName == option.actionName && option.showAction == true) {
+            console.log("sucess")
+            activeClass = "hex_btn"
+            activesubclass = "hex_btn hex_btn_in"
           }
-          else if(config[i].actionName==option.actionName&&option.showAction!=true){
-            activeClass="hex_btn hide"
-            activesubclass ="hex_btn hex_btn_in"
+          else if (config[i].actionName == option.actionName && option.showAction != true) {
+            activeClass = "hex_btn hide"
+            activesubclass = "hex_btn hex_btn_in"
           }
         }
+        if (option.hasPopOver) {
+            return <PopOverAction handler={( (count > 1 && option.actionName == 'edit') ? that.onMultiEdit.bind(that) : (option.handler && option.handler))} {...option} key={option.actionName} activeClass={activeClass} iconClass={action['iconClass']}  activesubclass={activesubclass}/>
+        } else {
+
         return (
-          <div className={`${activeClass} `} key={option.actionName}  >
-            <div onClick={option.handler&&option.handler.bind(this,option)} key={option.actionName}   className={`${activesubclass} `} >
+          <div className={`${activeClass} `} key={option.actionName}>
+            <div
+              onClick={( (count > 1 && option.actionName == 'edit') ? that.onMultiEdit.bind(that) : (option.handler && option.handler.bind(this, option, null)))}
+              key={option.actionName} className={`${activesubclass} `} data-toggle="tooltip" title={option.actionName}
+              data-placement="top">
               {/*<img src={action['imagefield']} />*/}
               <span className={action['iconClass']} id={option.iconID}></span>
-            </div></div>
+            </div>
+          </div>
         )
+      }
        })
     return(
 

@@ -19,7 +19,7 @@ if(!department) {
     displayName: "Operations",
     departmentDesc: "Operations Department",
     isActive: true,
-    isMoolya: false,
+    isMoolya: true,
     depatmentAvailable: departmentAvailiable,
     isSystemDefined: true
   };
@@ -73,7 +73,19 @@ if(!clusterAdmin){
                     {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:permissions},
                     {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions}
+                    {moduleId:(_.find(mlModules, {code:"USERS"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"PORTFOLIO"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"TEMPLATEASSIGNMENT"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"INTERNALREQUESTS"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"INTERNALAPPROVEDREQUESTS"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions},
+                    {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions}
                   ]
     let role = {
       roleName:"clusteradmin",
@@ -94,7 +106,19 @@ if(!chapterAdmin){
     {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions}
+    {moduleId:(_.find(mlModules, {code:"USERS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"PORTFOLIO"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"TEMPLATEASSIGNMENT"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"INTERNALREQUESTS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"INTERNALAPPROVEDREQUESTS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions}
   ]
   let role = {
     roleName:"chapteradmin",
@@ -113,9 +137,25 @@ if(!subchapterAdmin){
   let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:dep._id, subDepartment:subDep._id, isActive:true}]
   let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
   let modules = [
+    {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions}
+    {moduleId:(_.find(mlModules, {code:"USERS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"PORTFOLIO"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"TEMPLATEASSIGNMENT"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"INTERNALREQUESTS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"INTERNALAPPROVEDREQUESTS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"DEPARTMENT"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"SUBDEPARTMENT"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"TEMPLATE"}))._id, actions:chapterPer},
   ]
   let role = {
     roleName:"subchapteradmin",
@@ -132,8 +172,24 @@ var communityAdmin = MlRoles.findOne({roleName:"communityadmin"})
 if(!communityAdmin){
   let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:dep._id, subDepartment:subDep._id, isActive:true}]
   let communityPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
+  let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
   let modules = [
-    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions}
+    {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"USERS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:communityPer},
+    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:communityPer},
+    {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"PORTFOLIO"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"TEMPLATEASSIGNMENT"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"INTERNALREQUESTS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"INTERNALAPPROVEDREQUESTS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions}
   ]
   let role = {
     roleName:"communityadmin",
@@ -155,12 +211,13 @@ var options = {
 
     isInternaluser : true,
     isExternaluser : false,
-    email: 'platformadmin@moolya.com',
+    email: 'platformadmin@mymoolya.com',
+    isMoolya:true,
     isActive:true,
     InternalUprofile:{
       moolyaProfile:{
         assignedDepartment:[{department:dep._id, subDepartment:subDep._id}],
-        email:"platformadmin@moolya.com",
+        email:"platformadmin@mymoolya.com",
         phoneNumber:"9999999999",
         userProfiles:[],
         isActive:true,
@@ -171,12 +228,12 @@ var options = {
     },
     isSystemDefined: true
   },
-  username: 'platformadmin@moolya.com',
+  username: 'platformadmin@mymoolya.com',
   password: adminPassword
 
 };
 
-var userObj = Meteor.users.findOne({username: "platformadmin@moolya.com"});
+var userObj = Meteor.users.findOne({username: "platformadmin@mymoolya.com"});
 if(!userObj){
   console.log("No Admin found, hence inserting a default Moolya Admin: ",options);
   platformAdminId = Accounts.createUser(options);
@@ -187,7 +244,7 @@ if(!userObj){
 
 var role = MlRoles.findOne({roleName:"platformadmin"})
 if(role){
-  var userRoles = [{roleId:role._id, clusterId:"all", chapterId:"all", subChapterId:"all", communityId:"all", hierarchyLevel:4, hierarchyCode:"PLATFORM", isActive:true, roleName:"platformadmin", departmentId:dep._id, departmentName:dep.departmentName, subDepartmentId:subDep._id, subDepartmentName:subDep.subDepartmentName}]
+  var userRoles = [{roleId:role._id, clusterId:"all", chapterId:"all", subChapterId:"all", communityId:"all", communityCode : "all", hierarchyLevel:4, hierarchyCode:"PLATFORM", isActive:true, roleName:"platformadmin", departmentId:dep._id, departmentName:dep.departmentName, subDepartmentId:subDep._id, subDepartmentName:subDep.subDepartmentName}]
   var userProfiles = [{
     clusterId:"all",
     userRoles:userRoles,
@@ -202,12 +259,12 @@ var systemAdminProfile = {
   profile:{
     isInternaluser : true,
     isExternaluser : false,
-    email: 'systemadmin@moolya.com',
+    email: 'systemadmin@mymoolya.com',
     isActive:true,
     InternalUprofile:{
       moolyaProfile:{
         assignedDepartment:[{department:dep._id, subDepartment:subDep._id}],
-        email:"systemadmin@moolya.com",
+        email:"systemadmin@mymoolya.com",
         phoneNumber:"9999999999",
         userProfiles:[],
         isActive:true,
@@ -218,11 +275,11 @@ var systemAdminProfile = {
     },
     isSystemDefined: true
   },
-  username: 'systemadmin@moolya.com',
+  username: 'systemadmin@mymoolya.com',
   password: adminPassword
 };
 
-var systemAdminUser = Meteor.users.findOne({username: "systemadmin@moolya.com"});
+var systemAdminUser = Meteor.users.findOne({username: "systemadmin@mymoolya.com"});
 if(!systemAdminUser){
   console.log("No Admin found, hence inserting a default Moolya System Admin: ",systemAdminProfile);
   Accounts.createUser(systemAdminProfile);
@@ -394,7 +451,7 @@ Accounts.validateLoginAttempt(function (user)
 
 
     return true;
-})
+});
 
 validateExternalUserLoginAttempt=(user)=>{
   let userExternal = user.user.profile.isExternaluser;
@@ -460,7 +517,7 @@ validateinternalUserLoginAttempt=(user)=>{
               subChapterActive = true
             }
 
-            let defaultCommunity = MlCommunityAccess.findOne({"$and":[{communityDefCode:role.communityId}, {isActive:true}]})
+            let defaultCommunity = MlCommunityAccess.findOne({"$and":[{communityDefCode:role.communityCode}, {isActive:true}]})
             if(defaultCommunity || role.communityId == "all"){
               communityActive = true
             }

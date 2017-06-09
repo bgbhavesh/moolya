@@ -41,6 +41,7 @@ export async function fetchfunderPortfolioAbout(portfoliodetailsId) {
                   isLinkedinUrlPrivate
                   facebookUrl
                   isFacebookUrlPrivate
+                  profilePic
                   investmentBudget {
                     from
                     isFromPrivate
@@ -89,6 +90,10 @@ export async function fetchfunderPortfolioPrincipal(portfoliodetailsId) {
                     isUserIdPrivate
                   }
                   index
+                  logo{
+                    fileUrl,
+                    fileName
+                  }
             }
           }
       `,
@@ -130,6 +135,10 @@ export async function fetchfunderPortfolioTeam(portfoliodetailsId) {
                     isUserIdPrivate
                   }
                   index
+                  logo{
+                    fileUrl,
+                    fileName
+                  }
             }
           }
       `,

@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let RegionalSchema = `
     type Regional
     {
@@ -41,3 +43,12 @@ let RegionalSchema = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],RegionalSchema]);
+
+let supportedApi = [
+  {api:'fetchRegional', actionName:'READ', moduleName:"REGIONAL"},
+  {api:'fetchRegionals', actionName:'READ', moduleName:"REGIONAL"},
+
+  {api:'createRegional', actionName:'CREATE', moduleName:"REGIONAL"},
+  {api:'updateRegional', actionName:'UPDATE', moduleName:"REGIONAL"}
+];
+MlResolver.MlModuleResolver.push(supportedApi)

@@ -6,8 +6,8 @@ export default class MlCommunityList extends Component {
 
   render(){
     const data=this.props.data||[];
-    const list=  data.map((prop) =>
-      <div className="col-lg-2 col-md-4 col-sm-4" key={prop.code}>
+    const list=  data.map((prop, idx) =>
+      <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
         <div className="list_block">
           <div className={`cluster_status ${prop.isActive?"active":"inactive"}_cl `}></div>
             <a href={communityRoutes.communityListRoute(prop.code)}>
@@ -16,11 +16,10 @@ export default class MlCommunityList extends Component {
               <span className={prop.communityImageLink}></span>
             </div>
           </a>
-          <h3>{prop.name}</h3>
+          <h3>{prop.displayName}</h3>
         </div>
       </div>
   );
-
     return (
         <div className="row communities_list">
           <h2>Communities</h2>

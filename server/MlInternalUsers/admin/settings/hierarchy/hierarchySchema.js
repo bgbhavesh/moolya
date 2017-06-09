@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let HierarchySchema = `
     type Hierarchy
     {
@@ -35,9 +37,9 @@ let HierarchySchema = `
     type Query{
         fetchMoolyaBasedDepartmentAndSubDepartment(clusterId:String):[DepartmentAndSubDepartmentDetails]
         fetchNonMoolyaBasedDepartmentAndSubDepartment(subChapterId:String):[Department]
-        fetchRolesForDepartment(departmentId:String,clusterId:String):[Roles]
-        fetchRolesForHierarchy(departmentId:String,subDepartmentId:String, clusterId:String, chapterId:String, subChapterId:String, communityId:String,levelCode:String): [Roles]
-        fetchRolesForFinalApprovalHierarchy(departmentId:String): [Roles]
+        fetchRolesForDepartment(departmentId:String,subDepartmentId:String,clusterId:String):[Roles]
+        fetchRolesForHierarchy(departmentId:String,subDepartmentId:String, clusterId:String, chapterId:String, subChapterId:String, communityId:String,levelCode:String,currentRoleId:String): [Roles]
+        fetchRolesForFinalApprovalHierarchy(departmentId:String,subDepartmentId:String, clusterId:String): [teamStructureAssignment]
     }
     type Mutation{
         updateHierarchyRoles(roles:[roleObject]):response
@@ -45,3 +47,14 @@ let HierarchySchema = `
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],HierarchySchema]);
+let supportedApi = [
+  {api:'fetchMoolyaBasedDepartmentAndSubDepartment', actionName:'READ', moduleName:"HIERARCHY"},
+  {api:'fetchNonMoolyaBasedDepartmentAndSubDepartment', actionName:'READ', moduleName:"HIERARCHY"},
+  {api:'fetchRolesForDepartment', actionName:'READ', moduleName:"HIERARCHY"},
+  {api:'fetchRolesForHierarchy', actionName:'READ', moduleName:"HIERARCHY"},
+  {api:'fetchRolesForFinalApprovalHierarchy', actionName:'READ', moduleName:"HIERARCHY"},
+  {api:'updateHierarchyRoles', actionName:'UPDATE', moduleName:"HIERARCHY"},
+  {api:'updateFinalApprovalRoles', actionName:'UPDATE', moduleName:"HIERARCHY"}
+]
+
+MlResolver.MlModuleResolver.push(supportedApi)

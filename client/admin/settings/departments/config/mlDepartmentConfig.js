@@ -78,16 +78,13 @@ const mlDepartmentTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        if(data&&data.id){FlowRouter.go("/admin/settings/departmentsList")}
+        if(data&&data.id)
+        // {FlowRouter.go("/admin/settings/departmentsList")}
+          toastr.error("Please uncheck the record")
         else{
         FlowRouter.go("/admin/settings/addDepartment")}
       }
-    },
-    // {
-    //   showAction: true,
-    //   actionName: 'logout',
-    //   handler: (data)=>{console.log(data);}
-    // }
+    }
   ],
   sizePerPage:5,
   graphQlQuery:gql`

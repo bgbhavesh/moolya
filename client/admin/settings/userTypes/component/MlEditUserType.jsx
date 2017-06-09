@@ -8,6 +8,8 @@ import formHandler from "../../../../commons/containers/MlFormHandler";
 import {findUserTypeActionHandler} from "../actions/findUserTypeAction";
 import {updateUserTypeActionHandler} from "../actions/updateUserTypeAction";
 import {OnToggleSwitch, initalizeFloatLabel} from "../../../utils/formElemUtil";
+import MlLoader from '../../../../commons/components/loader/loader'
+
 class MlEditUserType extends React.Component{
   constructor(props) {
     super(props);
@@ -109,7 +111,7 @@ class MlEditUserType extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
 
         <div className="admin_padding_wrap">
           <h2>Edit User Category</h2>

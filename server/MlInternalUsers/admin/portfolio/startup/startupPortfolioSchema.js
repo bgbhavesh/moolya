@@ -3,6 +3,8 @@
  */
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef';
+import MlResolver from '../../../../commons/mlResolverDef'
+
 
 let startupPortfolioSchema = `
 
@@ -78,7 +80,6 @@ let startupPortfolioSchema = `
         isDescriptionPrivate:Boolean,
         makePrivate:Boolean,
         index:Int,
-        companyName : String
     }
     
     type branchesOutput{
@@ -111,7 +112,7 @@ let startupPortfolioSchema = `
     
     type assetsOutput{
         assetTypeId:String,
-        assetName:String,
+        assetTypeName:String,
         isAssetTypePrivate:Boolean,
         quantity:String,
         isQuantityTypePrivate:Boolean,
@@ -320,19 +321,21 @@ let startupPortfolioSchema = `
     }
     
     input assets{
-        assetTypeId:String,
-        isAssetTypePrivate:Boolean,
-        quantity:String,
-        isQuantityTypePrivate:Boolean,
-        description:String,
-        isDescriptionPrivate:Boolean,
-        logo:logo,
-        makePrivate:Boolean,
-        index:Int
+      assetTypeId:String,
+      assetTypeName:String
+      isAssetTypePrivate:Boolean,
+      quantity:String,
+      isQuantityTypePrivate:Boolean,
+      description:String,
+      isDescriptionPrivate:Boolean,
+      logo:logo,
+      makePrivate:Boolean,
+      index:Int
     }
     
     input technologies{
        technologyId:String,
+       technologyName:String,
         description:String,
         isTechnologyPrivate:Boolean,
         isDescriptionPrivate:Boolean,
@@ -358,7 +361,7 @@ let startupPortfolioSchema = `
     }
     
     input lookingFor{
-        type:String,
+        lookingForName:String,
         typeId:String,
         isTypePrivate:Boolean,
         description:String,
@@ -403,7 +406,7 @@ let startupPortfolioSchema = `
     }
     
     input awardsRecognition{
-          award:String
+          awardName:String
           awardId:String
           isAwardPrivate:Boolean
           year:String
@@ -474,3 +477,19 @@ let startupPortfolioSchema = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], startupPortfolioSchema]);
+
+let supportedApi = [
+  {api:'fetchStartupPortfolioAboutUs', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchStartupPortfolioMemberships', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchStartupPortfolioCompliances', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchStartupPortfolioLicenses', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchStartupPortfolioManagement', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchStartupPortfolioInvestor', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchStartupPortfolioLookingFor', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchStartupPortfolioAwards', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchPortfolioMenu', actionName:'READ', moduleName:"PORTFOLIO"},
+
+  {api:'createStartupPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
+  {api:'updateStartupPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+]
+MlResolver.MlModuleResolver.push(supportedApi)

@@ -7,6 +7,7 @@ import {updateClusterActionHandler} from '../actions/updateCluster'
 import formHandler from '../../../commons/containers/MlFormHandler';
 import _ from 'lodash';
 import {OnToggleSwitch,initalizeFloatLabel} from '../../utils/formElemUtil';
+import MlLoader from '../../../commons/components/loader/loader'
 
 
 
@@ -40,7 +41,7 @@ class MlClusterDetails extends React.Component {
 
   async  updateCluster() {
     let clusterDetails = {
-      _id: this.refs.id.value,
+      _id: this.props.params,
       countryName: this.refs.countryName.value,
       displayName: this.refs.displayName.value,
       about: this.refs.about.value,
@@ -121,7 +122,7 @@ class MlClusterDetails extends React.Component {
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
 
             <div className="admin_padding_wrap">
               <h2>Edit Cluster Details</h2>
@@ -168,7 +169,7 @@ class MlClusterDetails extends React.Component {
                       <div className="email_notify">
                         <div className="input_types">
                           <input ref="isEmailNotified" type="checkbox" name="checkbox"
-                                 checked={this.state.data.isEmailNotified}
+                                 checked={this.state.data && this.state.data.isEmailNotified}
                                  onChange={this.onStatusChangeNotify.bind(this)}/>
                           <label htmlFor="checkbox1"><span> </span>Notify</label>
                         </div>

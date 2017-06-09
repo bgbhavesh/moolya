@@ -2,12 +2,12 @@
  * Created by venkatasrinag on 21/3/17.
  */
 
-import _ from 'lodash'
+import _ from "lodash";
 
 export function getAdminUserContext()
 {
     let user = Meteor.user();
-    let hierarchyLevel = null, hierarchyCode = null, defaultCluster = null;
+    let hierarchyLevel = null, hierarchyCode = null, defaultCluster = null, isMoolya = null, communityCode=null, roleName=null;
     if(user && user.profile && user.profile.isInternaluser == true)
     {
       let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
@@ -32,13 +32,18 @@ export function getAdminUserContext()
           if(!hierarchyLevel){
             hierarchyLevel=userRole.hierarchyLevel;
             hierarchyCode=userRole.hierarchyCode;
+            communityCode=userRole.communityCode;
           }else if(hierarchyLevel&&hierarchyLevel<userRole.hierarchyLevel){
             hierarchyLevel=userRole.hierarchyLevel;
             hierarchyCode=userRole.hierarchyCode;
+            communityCode=userRole.communityCode
           }
+          roleName = userRole.roleName
         })
       }
+      isMoolya = user.profile.isMoolya;
     }
 
-  return {hierarchyCode:hierarchyCode, hierarchyLevel:hierarchyLevel, clusterId:defaultCluster}
+  return {hierarchyCode:hierarchyCode, hierarchyLevel:hierarchyLevel, clusterId:defaultCluster, isMoolya: isMoolya, communityCode:communityCode, roleName:roleName}
 }
+

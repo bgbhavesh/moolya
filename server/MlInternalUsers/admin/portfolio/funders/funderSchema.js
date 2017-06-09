@@ -3,6 +3,7 @@
  */
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef';
+import MlResolver from '../../../../commons/mlResolverDef'
 
 let FunderPortfolioSchema = `
 
@@ -60,7 +61,8 @@ let FunderPortfolioSchema = `
         aboutTeam:String,
         isAboutTeamPrivate:Boolean,
         socialLinks:[SocialLinks]
-        index: Int
+        index: Int,
+        logo:imagesTypeSchema,
     }
 
     type Principal{
@@ -81,7 +83,8 @@ let FunderPortfolioSchema = `
         aboutPrincipal:String,
         isAboutPrincipalPrivate:Boolean,
         socialLinks:[SocialLinks],
-        index:Int
+        index:Int,
+        logo:imagesTypeSchema,
     }
     
     type Investments{
@@ -139,7 +142,7 @@ let FunderPortfolioSchema = `
         facebookUrl:String
         isFacebookUrlPrivate:Boolean
         investmentBudget:Investmentbudget,
-        logo:imagesTypeSchema
+        profilePic: String
     }
     
     type FunderPortfolio{
@@ -279,6 +282,7 @@ let FunderPortfolioSchema = `
         facebookUrl:String
         isFacebookUrlPrivate:Boolean
         investmentBudget:investmentbudget
+        profilePic: String
     }
     
     input funderPortfolio{
@@ -307,3 +311,16 @@ let FunderPortfolioSchema = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], FunderPortfolioSchema]);
+
+let supportedApi = [
+  {api:'fetchFunderAbout', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchfunderPortfolioInvestor', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchFunderPrincipal', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchFunderTeam', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchFunderAreaOfInterest', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchFunderSuccessStories', actionName:'READ', moduleName:"PORTFOLIO"},
+
+  {api:'createFunderPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
+  {api:'updateFunderPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+]
+MlResolver.MlModuleResolver.push(supportedApi)

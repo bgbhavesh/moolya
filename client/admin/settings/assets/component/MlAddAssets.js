@@ -8,6 +8,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {addAssets} from '../actions/addAssetsAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
 class MlAddAssets extends React.Component {
   constructor(props) {
     super(props);
@@ -74,7 +75,7 @@ class MlAddAssets extends React.Component {
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
 
             <div className="admin_padding_wrap">
                 <h2>Create Asset</h2>

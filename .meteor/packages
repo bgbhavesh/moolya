@@ -41,3 +41,15 @@ email
 random
 mobile-status-bar
 launch-screen
+meteorhacks:aggregate
+
+#
+# Testing related packages
+#
+practicalmeteor:mocha
+xolvio:cleaner
+hwillson:stub-collections
+dispatch:mocha
+dispatch:mocha-browser
+practicalmeteor:sinon
+practicalmeteor:chai

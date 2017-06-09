@@ -91,7 +91,7 @@ export default class ServiceProviderIndividualComponent extends React.Component{
   }
 
   optionsBySelectSubsidaryComapny(val){
-    this.setState({employmentStatus:val.value})
+    this.setState({employmentStatus:val})
   }
 
 
@@ -110,7 +110,7 @@ export default class ServiceProviderIndividualComponent extends React.Component{
   }
 
   optionsBySelectGender(val){
-    this.setState({gender:val})
+    this.setState({gender:val.value})
   }
   optionsBySelectTitle(val){
     this.setState({title:val})
@@ -170,9 +170,16 @@ export default class ServiceProviderIndividualComponent extends React.Component{
     }
   }
   ondateOfBirthSelection(event) {
+    var ageDifMs = Date.now() - event._d.getTime();
+    var ageDate = new Date(ageDifMs);
     if (event._d) {
       let value = moment(event._d).format('DD-MM-YYYY');
       this.setState({loading: false, dateOfBirth: value});
+    }
+    if((Math.abs(ageDate.getUTCFullYear() - 1970)>=18)){
+    }
+    else{
+      toastr.error("age limit exceeded")
     }
   }
   onemploymentDateSelection(event) {
@@ -186,6 +193,10 @@ export default class ServiceProviderIndividualComponent extends React.Component{
   }
 
   render(){
+    var yesterday = Datetime.moment().subtract(0,'day');
+    var valid = function( current ){
+      return current.isBefore( yesterday );
+    };
     let MlActionConfig
     let userType=this.props.userType;
     if(userType=='external'){
@@ -226,6 +237,11 @@ export default class ServiceProviderIndividualComponent extends React.Component{
       {value: 'Yes', label: 'Yes'},
       {value: 'No', label: 'No'}
     ];
+    let genderValues = [
+      {value: 'male', label: 'Male'},
+      {value: 'female', label: 'Female'},
+      {value: 'others', label: 'Others'}
+    ];
 
     let genderquery=gql`query($type:String,$hierarchyRefId:String){
      data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
@@ -242,6 +258,14 @@ export default class ServiceProviderIndividualComponent extends React.Component{
      }
      }
      `;
+    let employementquery=gql`query($type:String,$hierarchyRefId:String){
+     data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
+     label
+     value
+     }
+     }
+     `;
+    let employmentOption={options: { variables: {type : "EMPLOYMENTTYPE",hierarchyRefId:this.props.clusterId}}};
     let titleOption={options: { variables: {type : "TITLE",hierarchyRefId:this.props.clusterId}}};
     /*let citizenshipsquery=gql`query($type:String,$hierarchyRefId:String){
      data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
@@ -283,16 +307,17 @@ export default class ServiceProviderIndividualComponent extends React.Component{
     return (
 
       <div>
-        <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
           <div className="col-md-6 nopadding-left">
+            <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+
             <div className="form_bg">
               <form>
                 <div>
                   <div className="form-group">
-                    <input type="text" placeholder="Date & Time" className="form-control float-label" id=""/>
+                    <input type="text" placeholder="Date & Time" className="form-control float-label" id="" defaultValue={moment(this.props.registrationInfo.registrationDate).format('MM/DD/YYYY hh:mm:ss')} disabled="true"/>
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Request Id" className="form-control float-label" id=""  defaultValue={this.props.registrationInfo.registrationId}/>
+                    <input type="text" placeholder="Request Id" className="form-control float-label" id=""  defaultValue={this.props.registrationInfo.registrationId}  disabled="true" />
                   </div>
                   {/*<div className="form-group">
                    <Moolyaselect multiSelect={false} placeholder="select user category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedUserType} queryType={"graphql"} query={userTypequery} onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
@@ -314,12 +339,15 @@ export default class ServiceProviderIndividualComponent extends React.Component{
                     <input type="text" ref="displayName" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.displayName} placeholder="Display Name" className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is required"/>
                   </div>
                   <div className="form-group mandatory" id="date-of-birth">
-                    <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)} data-required={true} data-errMssg="Date Of Birth is required"/>
+                    <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={that.state.dateOfBirth} onChange={that.ondateOfBirthSelection.bind(that)}  isValidDate={ valid }  data-required={true} data-errMssg="Date Of Birth is required"/>
                     <FontAwesome name="calendar" className="password_icon"  onClick={that.openDatePickerDateOfBirth.bind(that)} />
-                    <br className="brclear"/>  <br className="brclear"/>  <br className="brclear"/>
+                    {/*<br className="brclear"/>  <br className="brclear"/>  <br className="brclear"/>*/}
                   </div>
+                  {/*<div className="form-group">*/}
+                    {/*<Moolyaselect multiSelect={false} placeholder="Select Gender" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.gender} queryType={"graphql"} query={genderquery}  queryOptions={genderOption} onSelect={that.optionsBySelectGender.bind(this)} isDynamic={true}/>*/}
+                  {/*</div>*/}
                   <div className="form-group">
-                    <Moolyaselect multiSelect={false} placeholder="Select Gender" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.gender} queryType={"graphql"} query={genderquery}  queryOptions={genderOption} onSelect={that.optionsBySelectGender.bind(this)} isDynamic={true}/>
+                    <Select name="form-field-name"  placeholder="Select Gender" value={this.state.gender}  options={genderValues} onChange={this.optionsBySelectGender.bind(this)} className="float-label" />
                   </div>
                   <div className="form-group">
                     <Moolyaselect multiSelect={true} placeholder="Select Citizenship" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.citizenships} queryType={"graphql"} query={citizenshipsquery}  onSelect={that.optionsBySelectCitizenships.bind(that)} isDynamic={true}/>
@@ -330,16 +358,20 @@ export default class ServiceProviderIndividualComponent extends React.Component{
 
               </form>
             </div>
+            </ScrollArea>
           </div>
           <div className="col-md-6 nopadding-right">
+            <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+
             <div className="form_bg">
               <form>
                 <div className="form-group">
                   <input type="text" ref="qualification" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.qualification}  placeholder="Qualification" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <Select name="form-field-name" placeholder="Employment Status" options={subsidary} value={this.state.employmentStatus} onChange={this.optionsBySelectSubsidaryComapny.bind(this)}  className="float-label"/>
-                </div>
+                  {/*<Select name="form-field-name" placeholder="Employment Status" options={subsidary} value={this.state.employmentStatus} onChange={this.optionsBySelectSubsidaryComapny.bind(this)}  className="float-label"/>*/}
+                  <Moolyaselect multiSelect={false} placeholder="Employment Status" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.employmentStatus} queryType={"graphql"} query={employementquery}  queryOptions={employmentOption} onSelect={that.optionsBySelectSubsidaryComapny.bind(this)} isDynamic={true}/>
+                  </div>
                 <div className="form-group">
                   <input type="text" ref="professionalTag" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.professionalTag}  placeholder="Professional Tag" className="form-control float-label" id=""/>
                 </div>
@@ -365,8 +397,8 @@ export default class ServiceProviderIndividualComponent extends React.Component{
                 </div>
               </form>
             </div>
+            </ScrollArea>
           </div>
-        </ScrollArea>
         <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
       </div>
     )

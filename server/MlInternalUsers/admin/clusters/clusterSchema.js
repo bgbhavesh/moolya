@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
+import MlResolver from '../../../commons/mlResolverDef'
+
 let clusterSchema = `
     type Cluster{
         _id:String
@@ -51,7 +53,7 @@ let clusterSchema = `
     }
     
     type Query{ 
-        fetchCluster(_id: String, moduleName:String!, actionName:String!):Cluster
+        fetchCluster(clusterId: String!, moduleName:String!, actionName:String!):Cluster
         fetchClustersForMap:[Cluster]
         fetchActiveClusters:[Cluster]
     }
@@ -60,9 +62,18 @@ let clusterSchema = `
     type Mutation 
     {
         createCluster(cluster:clusterObject, moduleName:String, actionName:String):String
-        upsertCluster(clusterId:String, cluster:clusterObject, moduleName:String!, actionName:String!): response
-        updateCluster(clusterId:String, clusterDetails:clusterUpdateObject, moduleName:String!, actionName:String!):String
+        upsertCluster(clusterId:String!, cluster:clusterObject, moduleName:String!, actionName:String!): response
+        updateCluster(clusterId:String!, clusterDetails:clusterUpdateObject, moduleName:String!, actionName:String!):String
     }    
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], clusterSchema]);
+let supportedApi = [
+    {api:'fetchCluster', actionName:'READ', moduleName:"CLUSTER"},
+    {api:'fetchClustersForMap', actionName:'READ', moduleName:"CLUSTER", isWhiteList:true},
+    {api:'fetchActiveClusters', actionName:'READ', moduleName:"CLUSTER"},
+    {api:'createCluster', actionName:'CREATE', moduleName:"CLUSTER"},
+    {api:'upsertCluster', actionName:'UPDATE', moduleName:"CLUSTER"},
+    {api:'updateCluster', actionName:'UPDATE', moduleName:"CLUSTER"}
+];
+MlResolver.MlModuleResolver.push(supportedApi)

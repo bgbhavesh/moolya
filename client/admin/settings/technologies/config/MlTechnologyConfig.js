@@ -4,7 +4,7 @@ import gql from 'graphql-tag'
 
 const mlTechnologiesTableConfig=new MlViewer.View({
   name:"AssetsTable",
-  module:"Assets",//Module name for filter.
+  module:"Technologies",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
   fields:["TechnologyName","TechnologyDisplayName","icon","about","isActive"],
@@ -41,7 +41,8 @@ const mlTechnologiesTableConfig=new MlViewer.View({
       actionName: 'add',
       handler: (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/technologiesList")
+          toastr.error("Please uncheck the record")
+          // FlowRouter.go("/admin/settings/technologiesList")
         }else {
           FlowRouter.go("/admin/settings/addTechnology")
         }

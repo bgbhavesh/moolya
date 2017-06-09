@@ -8,6 +8,8 @@ import formHandler from '../../../commons/containers/MlFormHandler';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
+import MlLoader from '../../../commons/components/loader/loader'
+import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 
 class MlEditCommunityFormComponent extends React.Component {
   constructor(props) {
@@ -23,6 +25,7 @@ class MlEditCommunityFormComponent extends React.Component {
     this.findComDef.bind(this);
     this.addEventHandler.bind(this);
     this.updateCommunityAccess.bind(this)
+    this.getUpdatedChapters.bind(this)
     return this;
   }
 
@@ -67,6 +70,11 @@ class MlEditCommunityFormComponent extends React.Component {
 
   }
 
+  getUpdatedChapters(data){
+      if(data.length > 0)
+        this.setState({chapters:data})
+  }
+
   async addEventHandler() {
     const resp = await this.updateCommunityAccess();
     return resp;
@@ -82,7 +90,7 @@ class MlEditCommunityFormComponent extends React.Component {
     const response = await findCommunityDefActionHandler(Id);
 
     if (response) {
-      this.setState({loading: false, data: response});
+      this.setState({data: response});
 
       // if (this.state.data.aboutCommunity) {
       //   this.setState({"data":{"aboutCommunity":this.state.data.aboutCommunity}});
@@ -108,6 +116,7 @@ class MlEditCommunityFormComponent extends React.Component {
       if(this.state.data.showOnMap){
         this.setState({showOnMap:this.state.data.showOnMap})
       }
+      this.setState({loading: false})
     }
   }
 
@@ -125,16 +134,22 @@ class MlEditCommunityFormComponent extends React.Component {
       communityId: this.props.params,
       clusters: this.state.clusters,
       chapters: this.state.chapters,
-      subchapters: this.state.subchapters
+      subchapters: this.state.subchapters,
+      clusterId:this.props.params.clusterId?this.props.params.clusterId:"",
+      chapterId:this.props.params.chapterId?this.props.params.chapterId:"",
+      subChapterId:this.props.params.subChapterId?this.props.params.subChapterId:"",
     }
     let response;
-    if(data.subchapters.length<1){
-      toastr.error('Please select Sub-Chapter');
-      response = false;
-    }else{
+    // if(data.subchapters.length<1)
+    // {
+    //   toastr.error('Please select Sub-Chapter');
+    //   response = false;
+    // }
+    // else
+    // {
       response = await multipartFormHandler(data, null);
-    }
-    this.setState({loading: false});
+    // }
+    // this.setState({loading: false});
     return response;
   }
 
@@ -182,30 +197,38 @@ class MlEditCommunityFormComponent extends React.Component {
       {
         showAction: true,
         actionName: 'cancel',
-        handler: null
+        handler: async(event) => FlowRouter.go('/admin/community')
       }
     ]
 
     let clusterquery = gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
+    let chapterOption = this.state.clusters.length>0?{options: {variables: {clusters: this.state.clusters}}}:{options: {variables: {clusters: []}}};
     let chapterquery = gql`query($clusters:[String]){  
         data:fetchActiveClusterChapters(clusters:$clusters) {
           value:_id
           label:chapterName
         }  
     }`;
+    let subChapterOption = this.state.chapters.length>0&&this.state.clusters.length>0?{options: {variables: {chapters: this.state.chapters,clusters: this.state.clusters}}}:{options: {variables: {chapters: [],clusters: []}}};
     let subChapterquery = gql`query($chapters:[String],$clusters:[String]){  
         data:fetchActiveChaptersSubChapters(chapters:$chapters,clusters:$clusters) {
           value:_id
           label:subChapterName
         }  
     }`;
-    let chapterOption = {options: {variables: {clusters: this.state.clusters}}};
-
-    let subChapterOption = this.state.chapters.length>0&&this.state.clusters.length>0?{options: {variables: {chapters: this.state.chapters,clusters: this.state.clusters}}}:{options: {variables: {chapters: [],clusters: []}}};
+    let loggedInUser = getAdminUserContext();
+    let clusterDisabled = "";
+    let chapterDisabled = "";
+    if(loggedInUser.hierarchyLevel < 4){
+      clusterDisabled = "disabled"
+    }else if(loggedInUser.hierarchyLevel < 3){
+      clusterDisabled = "disabled"
+      chapterDisabled  = "disabled"
+    }
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
 
           <div className="admin_padding_wrap">
             <h2>Edit Community Details</h2>
@@ -225,13 +248,13 @@ class MlEditCommunityFormComponent extends React.Component {
                     <Moolyaselect multiSelect={true} placeholder={"Cluster"} className="form-control float-label"
                                   valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters}
                                   queryType={"graphql"} query={clusterquery} isDynamic={true} id={'clusterquery'}
-                                  onSelect={this.optionsBySelectClusters.bind(this)}/>
+                                  onSelect={this.optionsBySelectClusters.bind(this)} disabled={clusterDisabled}/>
                   </div>
                   <div className="form-group">
                     <Moolyaselect multiSelect={true} placeholder={"Chapter"} className="form-control float-label"
                                   valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters}
-                                  queryType={"graphql"} query={chapterquery} queryOptions={chapterOption}
-                                  isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)}/>
+                                  queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} disabled={chapterDisabled}
+                                  isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} getUpdatedCallback={this.getUpdatedChapters.bind(this)}/>
                   </div>
                   <div className="form-group">
                     <Moolyaselect multiSelect={true} placeholder={"Sub Chapter"} className="form-control float-label"

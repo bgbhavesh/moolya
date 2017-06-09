@@ -38,7 +38,9 @@ const mlRequestTypeTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        if(data&&data.id){FlowRouter.go("/admin/settings/requestTypeList")}
+        if(data&&data.id)
+          toastr.error("Please uncheck the record")
+        // {FlowRouter.go("/admin/settings/requestTypeList")}
         else {
           FlowRouter.go("/admin/settings/addRequestType")
         }
@@ -53,7 +55,7 @@ const mlRequestTypeTableConfig=new MlViewer.View({
   sizePerPage:5,
   graphQlQuery:gql`
                 query SearchQuery( $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
-              data:SearchQuery(module:"request",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
+              data:SearchQuery(module:"REQUESTTYPE",offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                     totalRecords
                     data{
                      ...on Requests{

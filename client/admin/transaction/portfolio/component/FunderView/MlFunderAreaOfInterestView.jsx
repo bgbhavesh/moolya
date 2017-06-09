@@ -2,6 +2,7 @@ import React from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import {fetchfunderPortfolioAreaInterest} from "../../actions/findPortfolioFunderDetails";
+import MlLoader from '../../../../../commons/components/loader/loader'
 
 
 export default class MlFunderAreaOfInterestView extends React.Component {
@@ -76,7 +77,7 @@ export default class MlFunderAreaOfInterestView extends React.Component {
     let areaOfInterestArray = that.state.funderAreaOfInterestList || [];
     return (
       <div>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
         <div className="admin_padding_wrap">
           <h2>Area of Interest</h2>
           <div className="requested_input main_wrap_scroll">

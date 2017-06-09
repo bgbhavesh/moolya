@@ -8,8 +8,11 @@ import _ from 'lodash';
 export default class MlRequestedList extends Component {
   constructor(props){
      super(props);
-     this.state={show:false,showCreateComponent:false,requestId:null,transactionId:null,canAssign:false,canUnAssign:false};
+     this.state={show:false,showCreateComponent:false,requestId:null,transactionId:null,clusterId:null};
      this.assignActionHandler.bind(this);
+  }
+  showPopUp(value) {
+    this.setState({'show': value})
   }
   componentDidMount() {
 
@@ -24,7 +27,7 @@ export default class MlRequestedList extends Component {
   }
   assignActionHandler(data){
     if(data&&data.id){
-    this.setState({requestId:data.id,show:true,transactionId:data.transactionId,canAssign:data.canAssign,canUnAssign:data.canUnAssign});
+    this.setState({requestId:data.id,show:true,transactionId:data.registrationId,clusterId:data.clusterId});
     console.log(data);
     console.log("yipppe its working");
     }else {
@@ -33,7 +36,7 @@ export default class MlRequestedList extends Component {
     }
   }
   assignAddActionHandler(){
-    this.setState({showCreateComponent:true});
+    this.setState({show:true});
   }
   render() {
    let actions= mlUserTypeTableConfig.actionConfiguration;
@@ -44,18 +47,13 @@ export default class MlRequestedList extends Component {
       addAction.handler=this.assignAddActionHandler.bind(this);
     }
     let showAssignComponent=this.state.show;
-   let showCreateComponent=this.state.showCreateComponent;
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <h2>Requested List</h2>
-      {/*    <button id="createRegistrationRequest"></button>*/}
           <MlTableViewContainer {...mlUserTypeTableConfig} forceFetch={false}/>
-          {showAssignComponent&&<MlAssignComponent transactionType={"registration"} transactionId={this.state.transactionId} canAssign={this.state.canAssign} canUnAssign={this.state.canUnAssign}/>}
-          {showCreateComponent&&<CreateRequestComponent openPopUp={true}/>}
-        </div>
-
-
+          {showAssignComponent&&<MlAssignComponent transactionType={"registration"} transactionId={this.state.transactionId} clusterId={this.state.clusterId} showPopUp={this.showPopUp.bind(this)}/>}
+         </div>
       </div>
     )
   }

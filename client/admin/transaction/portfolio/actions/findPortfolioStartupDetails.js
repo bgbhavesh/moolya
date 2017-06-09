@@ -103,8 +103,8 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   isDescriptionPrivate
                 }
                 assets{
+                  assetTypeName
                   assetTypeId
-                  assetName
                   quantity
                   description
                   isAssetTypePrivate
@@ -258,12 +258,12 @@ export async function fetchStartupPortfolioLookingFor(portfoliodetailsId) {
 }
 
 export async function fetchStartupPortfolioAwards(portfoliodetailsId) {
-
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
             fetchStartupPortfolioAwards(portfoliodetailsId: $portfoliodetailsId) {
                   awardId
+                  awardName
                   index
                   isAwardPrivate
                   year
@@ -285,8 +285,6 @@ export async function fetchStartupPortfolioAwards(portfoliodetailsId) {
     forceFetch: true
   })
   const id = result.data.fetchStartupPortfolioAwards;
-  // let data = _.omit(id,'__typename')
-  // return data
   return id
 }
 export async function fetchStartupPortfolioMemberships(portfoliodetailsId) {

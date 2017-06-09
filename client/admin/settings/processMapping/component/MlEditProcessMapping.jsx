@@ -139,25 +139,33 @@ class MlEditProcessMapping extends React.Component{
     if (ret) {
       toastr.error(ret);
     } else {
-      let processDetails = {
-        processId: this.state.processId,
-        process: this.state.process,
-        communities: this.state.communities,
-        userTypes: this.state.userTypes,
-        identity: this.state.identity,
-        industries: this.state.industries,
-        professions: this.state.professions,
-        clusters: this.state.clusters,
-        states: this.state.states,
-        chapters: this.state.chapters,
-        subChapters: this.state.subChapters,
-        isActive: this.state.isActive,
-        documents: this.state.assignDocument
+      let type=this.state.assignDocument[0].type;
+      let category=this.state.assignDocument[0].category;
+      if(!type) {
+        toastr.error("Document type is required");
+      }else if(!category){
+        toastr.error("Kyc category is required");
+      }else {
+        let processDetails = {
+          processId: this.state.processId,
+          process: this.state.process,
+          communities: this.state.communities,
+          userTypes: this.state.userTypes,
+          identity: this.state.identity,
+          industries: this.state.industries,
+          professions: this.state.professions,
+          clusters: this.state.clusters,
+          states: this.state.states,
+          chapters: this.state.chapters,
+          subChapters: this.state.subChapters,
+          isActive: this.state.isActive,
+          documents: this.state.assignDocument
+        }
+        let id = this.state.id;
+        let process = processDetails;
+        const response = await updateProcessActionHandler(id, process)
+        return response;
       }
-      let id = this.state.id;
-      let process = processDetails;
-      const response = await updateProcessActionHandler(id, process)
-      return response;
     }
   }
   getAssignedDocuments(departments){
@@ -396,6 +404,12 @@ console.log(this.state.industries);
           <div className="col-md-6 nopadding-right"  >
             <div className="form_bg" >
               <div className="left_wrap">
+                <ScrollArea
+                  speed={0.8}
+                  className="left_wrap"
+                  smoothScrolling={true}
+                  default={true}
+                >
                 <form>
                   <Moolyaselect ref="cluster" multiSelect={true} mandatory={true} placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'} onSelect={this.optionsBySelectClusters.bind(this)} data-required={true} data-errMsg="Cluster is required" />
 
@@ -408,16 +422,7 @@ console.log(this.state.industries);
                   <Moolyaselect  ref="chapter" multiSelect={true} mandatory={true}  placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)} data-required={true} data-errMsg="Chapter is required"/>
 
                   <Moolyaselect  ref="subChapter" multiSelect={true} mandatory={true} placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters} queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)} data-required={true} data-errMsg="SubChapter is required"/>
-
-                </form>
-                <ScrollArea
-                  speed={0.8}
-                  className="left_wrap"
-                  smoothScrolling={true}
-                  default={true}
-                >
-                  <form style={{marginTop:'0px'}}>
-                    {this.state.data&&this.state.data.documents?(<MlAssignDocument getAssignedDocuments={this.getAssignedDocuments.bind(this)} documents={this.state.data&&this.state.data.documents} clusterId={this.state.clusters} chapterId={this.state.chapters} subChapterId={this.state.subChapters}/>):''}
+                  {this.state.data&&this.state.data.documents?(<MlAssignDocument getAssignedDocuments={this.getAssignedDocuments.bind(this)} documents={this.state.data&&this.state.data.documents} clusterId={this.state.clusters} chapterId={this.state.chapters} subChapterId={this.state.subChapters}/>):''}
                   </form>
                 </ScrollArea>
               </div>

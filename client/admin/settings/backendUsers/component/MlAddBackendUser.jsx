@@ -1,22 +1,23 @@
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag'
-import formHandler from '../../../../commons/containers/MlFormHandler'
-import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
-import MlAssignDepartmentComponent from './MlAssignDepartmentComponent'
-import MlContactFormComponent from './MlContactFormComponent'
-import {addBackendUserActionHandler} from '../actions/addBackendUserAction'
-import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
-import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+import React from "react";
+import {render} from "react-dom";
+import ScrollArea from "react-scrollbar";
+import {graphql} from "react-apollo";
+import gql from "graphql-tag";
+import formHandler from "../../../../commons/containers/MlFormHandler";
+import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
+import Moolyaselect from "../../../../commons/components/select/MoolyaSelect";
+import MlAssignDepartmentComponent from "./MlAssignDepartmentComponent";
+import MlContactFormComponent from "./MlContactFormComponent";
+import {addBackendUserActionHandler} from "../actions/addBackendUserAction";
+import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
+import {OnToggleSwitch, initalizeFloatLabel, passwordVisibilityHandler} from "../../../utils/formElemUtil";
+import Datetime from "react-datetime";
+import passwordSAS_validate from '../../../../../lib/common/validations/passwordSASValidator';
+
+import moment from "moment";
 
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
-import Datetime from "react-datetime";
-import moment from "moment";
 
 class MlAddBackendUser extends React.Component {
   constructor(props) {
@@ -30,7 +31,7 @@ class MlAddBackendUser extends React.Component {
       selectedBackendUser: 'Internal User',
       selectedSubChapter: '',
       pwdErrorMsg: '',
-      foundationDate: " ",
+      birthDate:null,
       genderSelectMale: " ",
       genderSelectFemale: " ",
       genderSelectOthers: " ",
@@ -41,7 +42,7 @@ class MlAddBackendUser extends React.Component {
     this.createBackendUser.bind(this);
     this.onBackendUserTypeSelect.bind(this);
     this.onBackendUserSelect.bind(this);
-    this.onFoundationDateSelection.bind(this);
+    this.onBirthDateSelection.bind(this);
     this.onGenderSelect = this.onGenderSelect.bind(this);
     return this;
   }
@@ -51,19 +52,12 @@ class MlAddBackendUser extends React.Component {
     OnToggleSwitch(false,true);
     passwordVisibilityHandler();
   }
-  onFoundationDateSelection(event) {
+  onBirthDateSelection(event) {
     if (event._d) {
-      let value = moment(event._d).format('DD-MM-YYYY');
-      this.setState({loading: false, foundationDate: value});
+      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
+      this.setState({loading: false, birthDate: value});
     }
   }
-
-
-  /*componentWillMount(){
-    let response = mlFieldValidations();
-    return response;
-  }
-*/
 
   async addEventHandler() {
     const resp = await this.createBackendUser();
@@ -79,20 +73,24 @@ class MlAddBackendUser extends React.Component {
       if (response.success) {
         FlowRouter.go("/admin/settings/backendUserList");
       }
-
-    }else {
+    } else {
       console.log(response)
     }
   };
 
- async onGenderSelect(e) {
-   let genderName = e.target.value;
-   if(genderName)
-   this.setState({loading: false, genderSelect:genderName})
- }
+  componentWillMount() {
+    const loggedInUser = getAdminUserContext();
+    this.setState({loginUserDetails: loggedInUser})
+    return loggedInUser;
+  }
+
+  onGenderSelect(e) {
+    let genderName = e.target.value;
+    if (genderName)
+      this.setState({loading: false, genderSelect: genderName})
+  }
 
   async  createBackendUser() {
-  //  this.updateBackend();
     let firstName= this.refs.firstName.value;
     let lastName= this.refs.lastName.value;
     let displayName= this.refs.displayName.value;
@@ -150,13 +148,17 @@ class MlAddBackendUser extends React.Component {
         moolyaProfile: moolyaProfile
       }
       let profile = {
+        firstName: this.refs.firstName.value,
+        middleName: this.refs.middleName.value,
+        lastName: this.refs.lastName.value,
         isInternaluser: true,
         isExternaluser: false,
+        isMoolya: moolyaProfile.userType && moolyaProfile.userType == 'moolya' ? true : false,
         email: this.refs.email.value,
         isActive:this.refs.deActive.checked,
         InternalUprofile: InternalUprofile,
         genderType:this.state.genderSelect,
-        dateOfBirth: this.state.foundationDate
+        dateOfBirth: this.state.birthDate
       }
       let userObject = {
         username: moolyaProfile.email,
@@ -165,27 +167,11 @@ class MlAddBackendUser extends React.Component {
       }
 
       const response = await addBackendUserActionHandler(userObject)
-      console.log(response);
+      if(!response.success){
+        toastr.error("Email already exists")
+      }
       return response;
     }
-
-   /* let userroles=[{
-      roleId:this.refs.role.value,
-      clusterId:this.refs.cluster.value,
-      chapterId:this.refs.chapter.value,
-      subChapterId:'',
-      communityId:'',
-      isActive: this.refs.isActive.checked,
-      hierarchyLevel:''
-
-    }]
-    let userprofiles=[{
-      isDefault: this.refs.isDefault.checked,
-      clusterId: this.refs.cluster.value,
-      userRoles:userroles
-    }]*/
-
-
 
   }
   getAssignedDepartments(departments){
@@ -197,9 +183,11 @@ class MlAddBackendUser extends React.Component {
 
   onBackendUserTypeSelect(val){
     if(val)
-      this.setState({selectedBackendUserType:val.value})
-    else
-      this.setState({selectedBackendUserType:''})
+      this.setState({selectedBackendUserType:val.value, selectedSubChapter:''})
+    else{
+      this.setState({selectedBackendUserType:'', selectedSubChapter:''})
+    }
+
   }
   onBackendUserSelect(val){
     this.setState({selectedBackendUser:val.value})
@@ -207,12 +195,28 @@ class MlAddBackendUser extends React.Component {
   optionsBySelectSubChapter(val){
     this.setState({selectedSubChapter:val})
   }
+  passwordValidation() {
+    let password = this.refs.password.value;
+    if (!password) {
+      this.setState({"pwdValidationMsg": ''})
+    } else {
+      let validate = passwordSAS_validate(password)
+      if (validate.isValid) {
+        this.setState({"pwdValidationMsg": ''})
+        // this.setState({passwordValidation: true})
+      }
+      else if (typeof (validate) == 'object') {
+        this.setState({"pwdValidationMsg": validate.errorMsg})
+      }
+
+    }
+  }
+
   onCheckPassword(){
     let password=this.refs.password.value;
     let confirmPassword=this.refs.confirmPassword.value;
     if(confirmPassword!=password){
       this.setState({"pwdErrorMsg":'Confirm Password does not match with Password'})
-      //alert("ur confirm pwd not match with pwd")
     }else{
       this.setState({"pwdErrorMsg":''})
     }
@@ -234,6 +238,10 @@ class MlAddBackendUser extends React.Component {
   }*/
 
   render(){
+    var yesterday = Datetime.moment().subtract(0,'day');
+    var valid = function( current ){
+      return current.isBefore( yesterday );
+    };
     let MlActionConfig = [
       {
         showAction: true,
@@ -248,11 +256,13 @@ class MlAddBackendUser extends React.Component {
         }
       }
     ]
-    let UserTypeOptions = [
-      {value: 'moolya', label: 'moolya' , clearableValue: true},
-      {value: 'non-moolya', label: 'non-moolya',clearableValue: true}
-    ];
-    let BackendUserOptions=[
+
+    let UserTypeOptions = (this.state.loginUserDetails && this.state.loginUserDetails.isMoolya) ? [
+      {value: 'moolya', label: 'moolya', clearableValue: true},
+      {value: 'non-moolya', label: 'non-moolya', clearableValue: true}
+    ] : [{value: 'non-moolya', label: 'non-moolya', clearableValue: true}]
+
+    let BackendUserOptions = [
       {value: 'Internal User', label: 'Internal User'},
       {value: 'External User', label: 'External User'}
     ]
@@ -264,10 +274,10 @@ class MlAddBackendUser extends React.Component {
     data:fetchActiveRoles{label:roleName,value:_id}
     }
 `;*/
-    let subChapterQuery=gql` query{
-  data:fetchActiveSubChapters{label:subChapterName,value:_id}
-}
-`;
+    let subChapterQuery = gql` query{
+      data:fetchActiveSubChapters{label:subChapterName,value:_id}
+    }
+  `;
 
     return (
       <div className="admin_main_wrap">
@@ -303,7 +313,8 @@ class MlAddBackendUser extends React.Component {
                       />
                     </div>
                     <div className="form-group">
-                      <input type="Password" ref="password" defaultValue={this.state.password} placeholder="Create Password" className="form-control float-label" id="password"/>
+                      <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdValidationMsg}</text>
+                      <input type="Password" ref="password" defaultValue={this.state.password} placeholder="Create Password"  onBlur={this.passwordValidation.bind(this)} className="form-control float-label" id="password"/>
                       <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
                     </div>
                     <div className="form-group">
@@ -336,7 +347,7 @@ class MlAddBackendUser extends React.Component {
                     </div>
 
                     <div className="form-group mandatory">
-                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={this.state.dateOfBirth} onChange={this.onFoundationDateSelection.bind(this)}/>
+                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={this.state.dateOfBirth} onChange={this.onBirthDateSelection.bind(this)} isValidDate={ valid } />
                       <FontAwesome name="calendar" className="password_icon"/>
                     </div>
 
@@ -359,10 +370,14 @@ class MlAddBackendUser extends React.Component {
 
                     <div className="form-group switch_wrap inline_switch">
                       <label>Global Assignment Availability</label>
-                      <label className="switch">
+                      {(this.state.selectedBackendUserType == 'non-moolya') ? <label className="switch">
+                        <input type="checkbox" ref="globalAssignment" disabled="disabled"/>
+                        <div className="slider"></div>
+                      </label> : <label className="switch">
                         <input type="checkbox" ref="globalAssignment"/>
                         <div className="slider"></div>
-                      </label>
+                      </label>}
+
                     </div>
                     <br className="brclear"/>
                     <div className="form-group switch_wrap inline_switch">

@@ -31,7 +31,8 @@ const mlHistoryTableConfig=new MlViewer.View({
   ],
   queryOptions:true,
   buildQueryOptions:(config)=>{
-    return {context:{moduleName:"CLUSTER, SUBCHAPTER",clusterId:config.params&&config.params.clusterId?config.params.clusterId:null}}
+    return {context:{moduleName:"CLUSTER,CHAPTER,SUBCHAPTER,COMMUNITY,USERS"}}
+    // return {context:{moduleName:"CLUSTER, SUBCHAPTER",clusterId:config.params&&config.params.clusterId?config.params.clusterId:null}}
   },
   sizePerPage:5,
   graphQlQuery:gql`

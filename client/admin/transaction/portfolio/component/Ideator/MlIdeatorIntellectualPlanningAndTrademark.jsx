@@ -6,6 +6,7 @@ var FontAwesome = require('react-fontawesome');
 import _ from 'lodash';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
 import {findIdeatorIntellectualPlanningTrademarkActionHandler} from '../../actions/findPortfolioIdeatorDetails'
+import MlLoader from '../../../../../commons/components/loader/loader'
 
 export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Component{
    constructor(props, context) {
@@ -84,7 +85,7 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <div className="main_wrap_scroll">

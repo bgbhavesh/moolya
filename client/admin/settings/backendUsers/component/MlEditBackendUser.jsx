@@ -1,25 +1,22 @@
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag'
-import formHandler from '../../../../commons/containers/MlFormHandler'
-import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
-import MlAssignDepartmentComponent from './MlAssignDepartmentComponent'
-import MlContactFormComponent from './MlContactFormComponent'
-import {findBackendUserActionHandler} from '../actions/findBackendUserAction'
-import {updateBackendUserActionHandler} from '../actions/updateBackendUserAction'
-import {resetPasswordActionHandler} from '../actions/resetPasswordAction'
-import {OnToggleSwitch,initalizeFloatLabel,passwordVisibilityHandler} from '../../../utils/formElemUtil';
+import React from "react";
+import {render} from "react-dom";
+import ScrollArea from "react-scrollbar";
+import {graphql} from "react-apollo";
+import gql from "graphql-tag";
+import formHandler from "../../../../commons/containers/MlFormHandler";
+import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
+import Moolyaselect from "../../../../commons/components/select/MoolyaSelect";
+import MlAssignDepartmentComponent from "./MlAssignDepartmentComponent";
+import MlContactFormComponent from "./MlContactFormComponent";
+import {findBackendUserActionHandler} from "../actions/findBackendUserAction";
+import {updateBackendUserActionHandler} from "../actions/updateBackendUserAction";
+import {resetPasswordActionHandler} from "../actions/resetPasswordAction";
+import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
+import passwordSAS_validate from '../../../../../lib/common/validations/passwordSASValidator';
+import {OnToggleSwitch, initalizeFloatLabel, passwordVisibilityHandler} from "../../../utils/formElemUtil";
+import moment from "moment";
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
-import Datetime from "react-datetime";
-import moment from "moment";
-import {MlMyProfile} from '../../../profile/component/MlMyprofile'
-import {updateDataEntry} from '../../../profile/actions/addProfilePicAction'
-
 
 
 class MlEditBackendUser extends React.Component{
@@ -35,7 +32,7 @@ class MlEditBackendUser extends React.Component{
       password:'',
       confirmPassword:'',
       selectedBackendUserType:'',
-      selectedBackendUser:'',
+      selectedBackendUser:'Internal User',
       clusterId:'',
       chapterId:'',
       communityId:'',
@@ -50,7 +47,7 @@ class MlEditBackendUser extends React.Component{
       pageLable:"Edit Backend User",
       foundationDate:" ",
       genderSelect:" ",
-      dateOfBirth: " ",
+      dateOfBirth: null,
       genderStateMale: " ",
       genderStateFemale: " ",
       genderStateOthers: " ",
@@ -67,9 +64,6 @@ class MlEditBackendUser extends React.Component{
     this.genderSelect = this.genderSelect.bind(this);
     this.getGender.bind(this);
     return this;
-  }
-  componentDidMount()
-  {
   }
 
   componentDidUpdate(){
@@ -119,8 +113,6 @@ class MlEditBackendUser extends React.Component{
   };
 
   componentWillMount() {
-
-   // this.getValue();
     let url = window.location.href;
     if(url.indexOf("dashboard") != -1){
       this.setState({pageLable:"Backend User Details"})
@@ -142,69 +134,93 @@ class MlEditBackendUser extends React.Component{
   }
 
 
-
-  async   findBackendUser(){
-    let userTypeId=this.props.config;
-    const response = await findBackendUserActionHandler(userTypeId);
-    this.setState({loading:false,data:response});
-   if(response){
-     this.setState({selectedBackendUserType:this.state.data.profile.InternalUprofile.moolyaProfile.userType})
-     this.setState({selectedSubChapter:this.state.data.profile.InternalUprofile.moolyaProfile.subChapter})
-     this.setState({selectedBackendUser:this.state.data.profile.InternalUprofile.moolyaProfile.roleType})
-     this.setState({deActive:this.state.data.profile.isActive})
-     this.setState({isActive:this.state.data.profile.InternalUprofile.moolyaProfile.isActive})
-     this.setState({globalStatus:this.state.data.profile.InternalUprofile.moolyaProfile.globalAssignment})
-     this.setState({genderSelect : response.profile.genderType, dateOfBirth:response.profile.dateOfBirth});
-     this.setState({profilePic: response.profile.profileImage})
-     let clusterId="",chapterId='',subChapterId='',communityId=''
-     let dataDetails=this.state.data
-       if(dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0]){
-       let userProfiles=dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"]
-         let userProfilesDetails=[]
-          ;
-         for(let i=0;i<userProfiles.length;i++){
-           let userRolesDetails=[]
-           let userRole=userProfiles[i].userRoles
-           for(let j=0;j<userRole.length;j++){
-             let json={
-               roleId:userRole[j].roleId,
-               roleName:userRole[j].roleName,
-               clusterId:userRole[j].clusterId,
-               chapterId:userRole[j].chapterId,
-               validFrom:userRole[j].validFrom,
-               validTo:userRole[j].validTo,
-               subChapterId:userRole[j].subChapterId,
-               communityId:userRole[j].communityId,
-               isActive:userRole[j].isActive,
-               hierarchyLevel:userRole[j].hierarchyLevel,
-               hierarchyCode:userRole[j].hierarchyCode,
-               departmentId:userRole[j].departmentId,
-               departmentName:userRole[j].departmentName,
-               subDepartmentId:userRole[j].subDepartmentId,
-               subDepartmentName:userRole[j].subDepartmentName,
-               chapterName:userRole[j].chapterName,
-               subChapterName:userRole[j].subChapterName,
-               communityName:userRole[j].communityName
-             }
-             userRolesDetails.push(json)
-           }
-         let json={
-           isDefault:userProfiles[i].isDefault,
-           clusterId:userProfiles[i].clusterId,
-           clusterName:userProfiles[i].clusterName,
-           userRoles:userRolesDetails
-         }
-           userProfilesDetails.push(json)
-         }
-       this.setState({'userProfiles':userProfilesDetails});
-
-
-       }
-
-     this.getGender();
-   }
+  passwordValidation() {
+    let password = this.refs.password.value;
+    if (!password) {
+      this.setState({"pwdValidationMsg": ''})
+    } else {
+      let validate = passwordSAS_validate(password)
+      if (validate.isValid) {
+        this.setState({"pwdValidationMsg": ''})
+        // this.setState({passwordValidation: true})
+      }
+      else if (typeof (validate) == 'object') {
+        this.setState({"pwdValidationMsg": validate.errorMsg})
+      }
 
     }
+  }
+
+  async  findBackendUser() {
+    const loggedInUser = getAdminUserContext();
+    let userTypeId = this.props.config;
+    const response = await findBackendUserActionHandler(userTypeId);
+    this.setState({loading: false, data: response});
+    if (response) {
+      let dateOfBirth=response.profile.dateOfBirth;
+      if(dateOfBirth&&dateOfBirth!= "Invalid Date"){
+        dateOfBirth=moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat)
+      }else{
+        dateOfBirth = null
+      }
+      this.setState({
+        loginUserDetails: loggedInUser,
+        selectedBackendUserType: this.state.data.profile.InternalUprofile.moolyaProfile.userType,
+        selectedSubChapter: this.state.data.profile.InternalUprofile.moolyaProfile.subChapter,
+        selectedBackendUser: this.state.data.profile.InternalUprofile.moolyaProfile.roleType,
+        deActive: this.state.data.profile.isActive,
+        isActive: this.state.data.profile.InternalUprofile.moolyaProfile.isActive,
+        globalStatus: this.state.data.profile.InternalUprofile.moolyaProfile.globalAssignment,
+        genderSelect: response.profile.genderType, dateOfBirth:dateOfBirth ,
+        profilePic: response.profile.profileImage
+      })
+      let clusterId = "", chapterId = '', subChapterId = '', communityId = ''
+      let dataDetails = this.state.data
+      if (dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0]) {
+        let userProfiles = dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"]
+        let userProfilesDetails = []
+          ;
+        for (let i = 0; i < userProfiles.length; i++) {
+          let userRolesDetails = []
+          let userRole = userProfiles[i].userRoles
+          for (let j = 0; j < userRole.length; j++) {
+            let json = {
+              roleId: userRole[j].roleId,
+              roleName: userRole[j].roleName,
+              clusterId: userRole[j].clusterId,
+              chapterId: userRole[j].chapterId,
+              validFrom: userRole[j].validFrom,
+              validTo: userRole[j].validTo,
+              subChapterId: userRole[j].subChapterId,
+              isActive: userRole[j].isActive,
+              hierarchyLevel: userRole[j].hierarchyLevel,
+              hierarchyCode: userRole[j].hierarchyCode,
+              departmentId: userRole[j].departmentId,
+              departmentName: userRole[j].departmentName,
+              subDepartmentId: userRole[j].subDepartmentId,
+              subDepartmentName: userRole[j].subDepartmentName,
+              chapterName: userRole[j].chapterName,
+              subChapterName: userRole[j].subChapterName,
+              communityName: userRole[j].communityName,
+              communityId: userRole[j].communityId,
+              communityCode : userRole[j].communityCode,
+              communityHierarchyLevel : userRole[j].communityHierarchyLevel
+            }
+            userRolesDetails.push(json)
+          }
+          let json = {
+            isDefault: userProfiles[i].isDefault,
+            clusterId: userProfiles[i].clusterId,
+            clusterName: userProfiles[i].clusterName,
+            userRoles: userRolesDetails
+          }
+          userProfilesDetails.push(json)
+        }
+        this.setState({'userProfiles': userProfilesDetails});
+      }
+      this.getGender();
+    }
+  }
 
   onGlobalStatusChanged(e){
     if(e.currentTarget.checked){
@@ -215,7 +231,6 @@ class MlEditBackendUser extends React.Component{
   }
 
   onisActiveChanged(event){
-
     let dataDetails=this.state.data;
     if(event.currentTarget.checked){
       this.setState({"deActive":true})
@@ -224,7 +239,6 @@ class MlEditBackendUser extends React.Component{
     }
   }
   onMakeDefultChange(id,event){
-    //this.updateBackendUser();
       let userProfilesDetails=this.state.userProfiles
     if(event.currentTarget.checked){
         let decision = false;
@@ -251,7 +265,6 @@ class MlEditBackendUser extends React.Component{
   }
 
   async  updateBackendUser() {
-   // this.updateBackend();
     let dataDetails=this.state.data
     let userprofiles=[]
     if(dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0]){
@@ -267,7 +280,6 @@ class MlEditBackendUser extends React.Component{
             validFrom:userRole[j].validFrom,
             validTo:userRole[j].validTo,
             subChapterId:userRole[j].subChapterId,
-            communityId:userRole[j].communityId,
             isActive:userRole[j].isActive,
             hierarchyLevel:userRole[j].hierarchyLevel,
             hierarchyCode:userRole[j].hierarchyCode,
@@ -275,7 +287,10 @@ class MlEditBackendUser extends React.Component{
             departmentId:userRole[j].departmentId,
             departmentName:userRole[j].departmentName,
             subDepartmentId:userRole[j].subDepartmentId,
-            subDepartmentName:userRole[j].subDepartmentName
+            subDepartmentName:userRole[j].subDepartmentName,
+            communityId:userRole[j].communityId,
+            communityCode : userRole[j].communityCode,
+            communityHierarchyLevel : userRole[j].communityHierarchyLevel
           }
           userRolesDetails.push(json)
         }
@@ -308,9 +323,13 @@ class MlEditBackendUser extends React.Component{
       moolyaProfile: moolyaProfile
     }
     let profile={
+      firstName: this.refs.firstName.value,
+      middleName: this.refs.middleName.value,
+      lastName: this.refs.lastName.value,
       isInternaluser: true,
       isExternaluser: false,
       email: this.refs.email.value,
+      isMoolya: moolyaProfile.userType && moolyaProfile.userType == 'moolya' ? true : false,
       isActive:this.refs.deActive.checked,
       InternalUprofile: InternalUprofile,
       genderType:this.state.genderSelect,
@@ -334,7 +353,7 @@ class MlEditBackendUser extends React.Component{
   }
 
   async resetPassword() {
-    if(this.state.showPasswordFields == true){
+    /*if(this.state.showPasswordFields){
       let userDetails={
         userId:this.refs.id.value,
         password:this.refs.confirmPassword.value
@@ -342,20 +361,40 @@ class MlEditBackendUser extends React.Component{
       this.onCheckPassword();
       if(this.state.pwdErrorMsg)
         toastr.error("Confirm Password does not match with Password");
-      else{
+      else{*/
         const response = await resetPasswordActionHandler(userDetails);
-        this.refs.id.value='';
+       /* this.refs.id.value='';
         this.refs.confirmPassword.value = '';
-        this.refs.password.value = '';
+        this.refs.password.value = '';*/
         this.setState({"pwdErrorMsg":'Password reset complete'})
-        toastr.success(response.result);
+     /*   toastr.success(response.result);
       }
     } else {
       this.setState({
         showPasswordFields:true
       })
-    }
+    }*/
+  }
 
+  async resetPassword(){
+      let email = this.refs.email.value
+      let data={email:email};
+      var header={ apiKey: "741432fd-8c10-404b-b65c-a4c4e9928d32"};
+      $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        url: Meteor.absoluteUrl('forgotPassword'),
+        data :JSON.stringify(data),
+        headers: header,
+        contentType: "application/json; charset=utf-8",
+        success:function(response){
+          if(response.success){
+            toastr.success(response.result)
+          } else {
+            toastr.error(response.result);
+          }
+        }
+      });
   }
 
   // ondateOfBirthSelection(event) {
@@ -402,15 +441,19 @@ class MlEditBackendUser extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          FlowRouter.go("/admin/settings/backendUserList")
+          if(FlowRouter.getRouteName() == "settings_EditBackendUser") {
+            FlowRouter.go("/admin/settings/backendUserList");
+          } else if(FlowRouter.getRouteName() == "dashboard_backendUserDetails") {
+            FlowRouter.go("/admin/dashboard/communities");
+          }
         }
       }
     ];
 
-    let UserTypeOptions = [
-      {value: 'moolya', label: 'moolya'},
-      {value: 'non-moolya', label: 'non-moolya'}
-    ];
+    let UserTypeOptions = (this.state.loginUserDetails && this.state.loginUserDetails.isMoolya) ? [
+      {value: 'moolya', label: 'moolya', clearableValue: true},
+      {value: 'non-moolya', label: 'non-moolya', clearableValue: true}
+    ] : [{value: 'non-moolya', label: 'non-moolya', clearableValue: true}]
 
     let BackendUserOptions=[
       {value: 'Internal User', label: 'Internal User'},
@@ -431,6 +474,12 @@ class MlEditBackendUser extends React.Component{
 `;
     const showLoader=this.state.loading;
     let that=this;
+    let Dob=that.state.dateOfBirth
+    if(Dob&&Dob!="Invalid date"){
+      Dob=moment(Dob).format('DD-MM-YYYY')
+    }else{
+      Dob=null
+    }
     return (
       <div className="admin_main_wrap">
         {showLoader===true?( <div className="loader_container"><div className="loader_wrap"></div></div>):(
@@ -472,12 +521,13 @@ class MlEditBackendUser extends React.Component{
                   )}
                     {/*  <Select name="form-field-name" value="select" options={options1} className="float-label"/>*/}
                     <div className="form-group">
-                    <Select name="form-field-name" placeholder="Select Role"  className="float-label"  options={BackendUserOptions}  value={that.state.selectedBackendUser}  onChange={that.onBackendUserSelect.bind(that)}
+                    <Select name="form-field-name" placeholder="Select Role"  className="float-label"  options={BackendUserOptions}  value={that.state.selectedBackendUser}  onChange={that.onBackendUserSelect.bind(that)} disabled={true}
                     />
                       </div>
-                {that.state.showPasswordFields ?
+               {/* {that.state.showPasswordFields ?
                   <div className="form-group">
-                    <input type="Password" ref="password" defaultValue={that.state.password} placeholder="Create Password" className="form-control float-label" id="password"/>
+                    <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{that.state.pwdValidationMsg}</text>
+                    <input type="Password" ref="password" defaultValue={that.state.password} placeholder="Create Password"  onBlur={that.passwordValidation.bind(that)}  className="form-control float-label" id="password"/>
                     <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
                   </div> : <div></div>}
                 {that.state.showPasswordFields ?
@@ -485,7 +535,7 @@ class MlEditBackendUser extends React.Component{
                     <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{that.state.pwdErrorMsg}</text>
                     <input type="Password" ref="confirmPassword" defaultValue={that.state.confirmPassword} placeholder="Confirm Password" className="form-control float-label" onBlur={that.onCheckPassword.bind(that)} id="confirmPassword"/>
                     <FontAwesome name='eye-slash' className="password_icon ConfirmPassword hide_p"/>
-                  </div> : <div></div>}
+                  </div> : <div></div>}*/}
 
                   <div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.resetPassword.bind(this)}>Reset Password</a> <a href="#" className="mlUpload_btn">Send Notification</a> </div>
 
@@ -514,7 +564,7 @@ class MlEditBackendUser extends React.Component{
 
                     <div className="form-group">
                       {/*<Datetime dateFormat="DD-MM-YYYY" placeholder="Date Of Birth" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} defaultValue={this.state.dateofbirth} onChange={this.ondateOfBirthSelection.bind(this)}/>*/}
-                      <input type="text" ref="dob"  placeholder="Date Of Birth" className="form-control float-label" defaultValue={that.state.data&&that.state.data.profile.dateOfBirth} disabled="disabled" />
+                      <input type="text" ref="dob"  placeholder="Date Of Birth" className="form-control float-label" defaultValue={Dob} disabled="disabled" />
                       <FontAwesome name="calendar" className="password_icon"/>
 
                     </div>
@@ -537,10 +587,16 @@ class MlEditBackendUser extends React.Component{
 
                   <div className="form-group switch_wrap inline_switch">
                     <label>Global Assignment Availability</label>
-                    <label className="switch">
-                      <input type="checkbox" ref="globalAssignment" checked={that.state.globalStatus}  onChange={that.onGlobalStatusChanged.bind(that)} />
+                    {(that.state.selectedBackendUserType == 'non-moolya') ? <label className="switch">
+                      <input type="checkbox" ref="globalAssignment" checked={that.state.globalStatus}
+                             disabled="disabled"/>
                       <div className="slider"></div>
-                    </label>
+                    </label> : <label className="switch">
+                      <input type="checkbox" ref="globalAssignment" checked={that.state.globalStatus}
+                             onChange={that.onGlobalStatusChanged.bind(that)}/>
+                      <div className="slider"></div>
+                    </label>}
+
                   </div>
                   <br className="brclear"/>
                   <div className="form-group switch_wrap inline_switch">
@@ -553,7 +609,7 @@ class MlEditBackendUser extends React.Component{
                   <br className="brclear"/>
                   {that.state.userProfiles.map(function (userProfiles, idx) {
                     return(
-                    <div>
+                    <div key={idx}>
                       {userProfiles.userRoles.map(function (userRoles, RId) {
                         return (
                           <div key={RId} className="panel panel-default">

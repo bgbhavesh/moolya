@@ -7,6 +7,8 @@ import controllable from 'react-controllables';
 import GoogleMap from 'google-map-react';
 import MapMarkers from './mapMarkers'
 import MapCluster from './MapCluster';
+import MlLoader from '../../../commons/components/loader/loader'
+import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 
 let defaultCenter={lat: 17.1144718, lng: 5.7694891};
 @controllable(['center', 'zoom', 'hoverKey', 'clickKey'])
@@ -14,18 +16,56 @@ export default class MoolyaMapView extends Component {
 
   constructor(props){
     super(props);
+    this.state = {
+      pubSelector: null
+    }
   }
   async componentWillMount() {
     let that = this;
+    let zoom = 1;
+    let loggedInUser = getAdminUserContext();
+    if(loggedInUser.hierarchyLevel != 4){
+      zoom = 4;
+    }
     let hasCenter=that.props.fetchCenter||false;
     if(hasCenter){
       let center= await that.props.fetchCenterHandler(that.props);
-      this.setState({center:center||defaultCenter,zoom:1});
+      this.setState({center:center||defaultCenter,zoom:zoom});
      }else{
       this.setState({
         center:defaultCenter,
-        zoom: 1,
+        zoom: zoom,
       });
+    }
+  }
+  componentWillUpdate(nextProps, nextState) {
+    if ((this.state.sizePerPage !== nextState.sizePerPage) || (this.state.pageNumber !== nextState.pageNumber)) {
+
+      let hasQueryOptions = this.props.queryOptions ? true : false;
+      let variables = {
+        offset: nextState.sizePerPage * (nextState.pageNumber - 1) || 0,
+        limit: nextState.sizePerPage || 20  //5
+      }
+      if (hasQueryOptions) {
+        let dynamicQueryOptions = this.props.buildQueryOptions ? this.props.buildQueryOptions(this.props) : {};
+        // let extendedVariables = _.extend(dynamicQueryOptions);
+        let extendedVariables = _.merge(dynamicQueryOptions, variables);
+        this.props.fetchMore(extendedVariables);
+      }
+      if(this.state.searchValue!==nextState.searchValue){
+        let searchCriteria=this.constructSearchCriteria(nextState.searchValue);
+        variables.fieldsData=searchCriteria||null
+        this.props.fetchMore(variables);
+      }
+      this.props.fetchMore(variables);
+    }
+    else if(this.state.searchValue!==nextState.searchValue){
+      let searchCriteria=this.constructSearchCriteria(nextState.searchValue);
+      let variables = {
+        offset: nextState.sizePerPage * (nextState.pageNumber - 1) || 0,
+        fieldsData :searchCriteria||null
+      }
+      this.props.fetchMore(variables);
     }
   }
 
@@ -33,11 +73,22 @@ export default class MoolyaMapView extends Component {
   {
     const hasCenter=this.state&&this.state.center?this.state.center:null;
     if(!hasCenter){
-      return <div className="loader_wrap"></div>;
+      return <MlLoader />;
     }
     const data=this.props.data&&this.props.data.data?this.props.data.data:[];
+    let MapComponent = null;
+    // Fix me
+    var path = window.location.pathname;
+    if(path.indexOf("communities") !== -1){
+      MapComponent=React.cloneElement(this.props.viewComponent,{data:data,config:this.props});
+    }
     return (
-      <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />
+      <span>
+        {MapComponent?MapComponent:
+          <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} showImage={this.props.showImage}/>
+        }
+      </span>
+
       );
 
     /*

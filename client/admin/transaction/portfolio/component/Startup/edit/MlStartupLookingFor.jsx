@@ -11,7 +11,7 @@ import { graphql } from 'react-apollo';
 import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
 import {fetchStartupPortfolioLookingFor} from '../../../actions/findPortfolioStartupDetails'
-
+import MlLoader from '../../../../../../commons/components/loader/loader'
 
 
 export default class MlStartupLookingFor extends React.Component{
@@ -22,16 +22,15 @@ export default class MlStartupLookingFor extends React.Component{
       data:{},
       startupLookingFor: [],
       popoverOpen:false,
-      // index:"",
       selectedIndex:-1,
       startupLookingForList:[],
-      // indexArray:[],
       selectedVal:null,
       selectedObject:"default"
     }
     this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
+    //this.imagesDisplay.bind(this);
     return this;
   }
 
@@ -43,6 +42,7 @@ export default class MlStartupLookingFor extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+    //this.imagesDisplay()
   }
   componentWillMount(){
     this.fetchPortfolioDetails();
@@ -63,10 +63,8 @@ export default class MlStartupLookingFor extends React.Component{
   addLookingFor(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
     if(this.state.startupLookingFor){
-      // this.setState({index: this.state.startupLookingFor.length})
       this.setState({selectedIndex: this.state.startupLookingFor.length})
     }else{
-      // this.setState({index:0})
       this.setState({selectedIndex:0})
     }
   }
@@ -78,11 +76,6 @@ export default class MlStartupLookingFor extends React.Component{
       delete details.logo['__typename'];
     }
     this.setState({selectedIndex:index, data:details, selectedObject : index, popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.typeId});
-    // let indexes = this.state.indexArray;    //index:index
-    // let indexArray = _.cloneDeep(indexes)
-    // indexArray.push(index);
-    // indexArray = _.uniq(indexArray);
-    // this.setState({indexArray: indexArray})
   }
   onSaveAction(e){
     this.setState({startupLookingForList:this.state.startupLookingFor, popoverOpen : false})
@@ -118,10 +111,11 @@ export default class MlStartupLookingFor extends React.Component{
     })
   }
 
-  onOptionSelected(selectedId){
+  onOptionSelected(selectedId,callback, selObject){
     let details =this.state.data;
     details=_.omit(details,["typeId"]);
-    details=_.extend(details,{["typeId"]:selectedId});
+    details=_.omit(details,["lookingForName"]);
+    details=_.extend(details,{["typeId"]:selectedId,["lookingForName"]: selObject.label});
     this.setState({data:details}, function () {
       this.setState({"selectedVal" : selectedId})
       this.sendDataToParent()
@@ -161,8 +155,10 @@ export default class MlStartupLookingFor extends React.Component{
     this.setState({startupLookingFor:startupLookingFor})
     // let indexArray = this.state.indexArray;
     this.props.getLookingForDetails(startupLookingFor);    //indexArray
+
   }
 
+/*
   onLogoFileUpload(e){
     if(e.target.files[0].length ==  0)
       return;
@@ -201,6 +197,24 @@ export default class MlStartupLookingFor extends React.Component{
     }
   }
 
+  async imagesDisplay(){
+    const response = await fetchStartupPortfolioLookingFor(this.props.portfolioDetailsId);
+    if (response) {
+      let detailsArray = response?response:[]
+      let dataDetails =this.state.startupLookingFor
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      _.each(detailsArray, function (obj,key) {
+        cloneBackUp[key]["logo"] = obj.logo;
+      })
+      let listDetails = this.state.startupLookingForList || [];
+      listDetails = cloneBackUp
+      let cloneBackUpList = _.cloneDeep(listDetails);
+      this.setState({loading: false, startupLookingFor:cloneBackUp,startupLookingForList:cloneBackUpList});
+    }
+  }
+*/
+
+
   render(){
     let query=gql`query($communityCode:String){
         data:fetchLookingFor(communityCode:$communityCode) {
@@ -214,8 +228,8 @@ export default class MlStartupLookingFor extends React.Component{
     let startupLookingForList = that.state.startupLookingForList || [];
     return (
       <div>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
-        <div className="admin_padding_wrap portfolio-main-wrap">
+        {showLoader === true ? ( <MlLoader/>) : (
+        <div className="portfolio-main-wrap">
           <h2>Looking For</h2>
           <div className="requested_input main_wrap_scroll">
 
@@ -251,37 +265,74 @@ export default class MlStartupLookingFor extends React.Component{
               </div>
             </ScrollArea>
             <Popover placement="right" isOpen={this.state.popoverOpen}  target={"create_client"+this.state.selectedObject} toggle={this.toggle}>
-              {/* <PopoverTitle>Add Asset</PopoverTitle>*/}
+               <PopoverTitle>Add New Looking For</PopoverTitle>
               <PopoverContent>
                 <div  className="ml_create_client">
+
+
+
                   <div className="medium-popover"><div className="row">
                     <div className="col-md-12">
+
+
+
                       <div className="form-group">
-                        <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                        <Moolyaselect multiSelect={false} placeholder="Select LookingFor" className="form-control float-label" valueKey={'value'}
                                       labelKey={'label'} queryType={"graphql"} query={query}
                                       isDynamic={true}
                                       queryOptions={lookingOption}
                                       onSelect={this.onOptionSelected.bind(this)}
                                       selectedValue={this.state.selectedVal}/>
-                      </div>
+
                       <div className="form-group">
                         <input type="text" name="description" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.description}  onBlur={this.handleBlur.bind(this)}/>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isDescriptionPrivate}/>
+                        <FontAwesome name='unlock' className="input_icon"/>
                       </div>
-                      <div className="form-group">
-                        <div className="fileUpload mlUpload_btn">
-                          <span>Upload Logo</span>
-                          <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
+                    <div className="form-group">
+                        <div className="input_types">
+                          <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                         </div>
-                      </div>
-                      <div className="form-group">
-                        <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
-                      </div>
-                      <div className="ml_btn" style={{'textAlign': 'center'}}>
-                        <a href="" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
-                      </div>
+                        <div className="ml_btn" style={{'textAlign': 'center'}}>
+                          <a href="" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                        </div>
                     </div>
                   </div></div>
+
+
+
+
+
+
+                  {/*<div className="medium-popover"><div className="row">*/}
+                    {/*<div className="col-md-12">*/}
+                      {/*<div className="form-group">*/}
+                        {/*<Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}*/}
+                                      {/*labelKey={'label'} queryType={"graphql"} query={query}*/}
+                                      {/*isDynamic={true}*/}
+                                      {/*queryOptions={lookingOption}*/}
+                                      {/*onSelect={this.onOptionSelected.bind(this)}*/}
+                                      {/*selectedValue={this.state.selectedVal}/>*/}
+                      {/*</div>*/}
+                      {/*<div className="form-group">*/}
+                        {/*<input type="text" name="description" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.description}  onBlur={this.handleBlur.bind(this)}/>*/}
+                        {/*<FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isDescriptionPrivate}/>*/}
+                      {/*</div>*/}
+                      {/*<div className="form-group">*/}
+                        {/*<div className="fileUpload mlUpload_btn">*/}
+                          {/*<span>Upload Logo</span>*/}
+                          {/*<input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />*/}
+                        {/*</div>*/}
+                      {/*</div>*/}
+                      {/*<div className="form-group">*/}
+                        {/*<div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>*/}
+                      {/*</div>*/}
+                      {/*<div className="ml_btn" style={{'textAlign': 'center'}}>*/}
+                        {/*<a href="" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>*/}
+                      {/*</div>*/}
+                    {/*</div>*/}
+                  {/*</div></div>*/}
+                </div>
+                  </div>
                 </div>
               </PopoverContent>
             </Popover>

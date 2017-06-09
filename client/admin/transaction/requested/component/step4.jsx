@@ -9,11 +9,15 @@ import gql from 'graphql-tag';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect';
 import {addRegistrationStep3Details} from '../actions/addRegistrationStep3DetailsAction';
 import {updateRegistrationInfoDetails} from '../actions/updateRegistration';
-import _ from "underscore";
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import update from 'immutability-helper';
 import {multipartASyncFormHandler} from '../../../../commons/MlMultipartFormAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
+import _ from 'lodash'
+import _underscore from 'underscore'
+
 export default class Step4 extends React.Component{
   constructor(props) {
     super(props);
@@ -23,15 +27,12 @@ export default class Step4 extends React.Component{
       selectedTab: false,
       selectedAddressLabel: null,
       selectedValue: null,
-      /* selectedValuesList : [],*/
-      //addressInformation: addressInfoArray,
-      /* addressDetails: [{
-       "socialLinkType": " ", "socialLinkTypeName": "Add New", 'socialLinkUrl': '',
-       }]*/
+
       socialLinkObject : {"socialLinkType": " ", "socialLinkTypeName": " ", 'socialLinkUrl': ''},
       socialLinkArray :[],
       uploadedProfilePic : "/images/ideator_01.png",
-      activeTab: "active"
+      activeTab: "active",
+
 
 
     }
@@ -82,6 +83,7 @@ export default class Step4 extends React.Component{
       this.setState({loading:false,socialLinkArray:response.socialLinksInfo});
       this.props.getRegistrationSocialLinks();
       this.setState({activeTab : "active"});
+      toastr.success("SocialLink removed successfully");
     }
 
   }
@@ -99,31 +101,34 @@ export default class Step4 extends React.Component{
   async onSavingSocialLink(index,value){
     let detailsType = "SOCIALLINKS";
     let registerid = this.props.registrationId;
-/*    if(this.state.selectedTab){
+    let refs = []
+    refs.push(this.refs["socialLinkType"])
+    refs.push(this.refs["socialLinkTypeUrl"])
+    let ret = mlFieldValidations(refs)
 
-
-
-
-    }else{*/
+    if (ret) {
+      toastr.error(ret);
+    }else{
       let socialLinkList = this.state.socialLinkObject;
       socialLinkList.socialLinkType = this.state.selectedValue,
-      socialLinkList.socialLinkTypeName = this.state.selectedSocialLinkLabel,
-      socialLinkList.socialLinkUrl = this.refs["socialLinkTypeUrl"].value;
-      const response = await addRegistrationStep3Details(socialLinkList,detailsType,registerid);
-      if(response){
-        if(!response.success){
+        socialLinkList.socialLinkTypeName = this.state.selectedSocialLinkLabel,
+        socialLinkList.socialLinkUrl = this.refs["socialLinkTypeUrl"].value;
+      const response = await addRegistrationStep3Details(socialLinkList, detailsType, registerid);
+      if (response) {
+        if (!response.success) {
           toastr.error(response.result);
           this.props.getRegistrationSocialLinks();
-        }else{
+        } else {
           this.props.getRegistrationSocialLinks();
           this.refs["socialLinkTypeUrl"].value = "";
-          this.setState({selectedValue : "",selectedSocialLinkLabel :""});
+          this.setState({selectedValue: "", selectedSocialLinkLabel: ""});
+          toastr.success("SocialLink created successfully");
         }
 
 
       }
-    //}
-
+      //}
+    }
     //this.findRegistration.bind(this);
   }
 
@@ -134,43 +139,58 @@ export default class Step4 extends React.Component{
 
   }
 
-  async onUpdatingSocialLinkDetails(index,value){
+  async onUpdatingSocialLinkDetails(index,value) {
     let detailsType = "SOCIALLINKS";
     let registerid = this.props.registrationId;
-    if (index !== -1) {
-      // do your stuff here
-      let registrationDetails = this.props.registrationData.socialLinksInfo
-      let dbData = _.pluck(registrationDetails, 'socialLinkType') || [];
-      let contactExist = null;
-      if(this.state.selectedValue){
-        contactExist = _.contains(dbData,this.state.selectedValue );
-      }
-      if(contactExist){
-        toastr.error("Social Link Type Already Exists!!!!!");
-        this.props.getRegistrationSocialLinks();
-      }else{
-        let labelValue = this.state.selectedSocialLinkLabel ? this.state.selectedSocialLinkLabel : this.state.socialLinkArray[index].socialLinkTypeName;
-        let valueSelected = this.state.selectedValue ? this.state.selectedValue : this.state.socialLinkArray[index].socialLinkType;
-        let updatedComment = update(this.state.socialLinkArray[index], {socialLinkTypeName : {$set: labelValue},socialLinkType : {$set: valueSelected},socialLinkUrl : {$set: this.refs["socialLinkTypeUrl"+index].value}});
 
-        let newData = update(this.state.socialLinkArray, {
-          $splice: [[index, 1, updatedComment]]
-        });
+      if (index !== -1) {
+        // do your stuff here
 
-
-        const response = await updateRegistrationInfoDetails(newData,detailsType,registerid);
-        if(response){
-          if(!response.success){
-            toastr.error(response.result);
-          }
-          this.props.getRegistrationSocialLinks();
-
+        let registrationDetails = this.props.registrationInfo.socialLinksInfo
+        let dbData = _underscore.pluck(registrationDetails, 'socialLinkType') || [];
+        let contactExist = null;
+        if (this.state.selectedValue) {
+          contactExist = _underscore.contains(dbData, this.state.selectedValue);
         }
-      }
+        if (contactExist) {
+          toastr.error("Social Link Type Already Exists!!!!!");
+          this.props.getRegistrationSocialLinks();
+        } else {
+          let refs = []
+          refs.push(this.refs["socialLinkType" + index])
+          refs.push(this.refs["socialLinkTypeUrl" + index])
+          let ret = mlFieldValidations(refs)
 
+          if (ret) {
+            toastr.error(ret);
+          } else {
+            let labelValue = this.state.selectedSocialLinkLabel ? this.state.selectedSocialLinkLabel : this.state.socialLinkArray[index].socialLinkTypeName;
+            let valueSelected = this.state.selectedValue ? this.state.selectedValue : this.state.socialLinkArray[index].socialLinkType;
+            let updatedComment = update(this.state.socialLinkArray[index], {
+              socialLinkTypeName: {$set: labelValue},
+              socialLinkType: {$set: valueSelected},
+              socialLinkUrl: {$set: this.refs["socialLinkTypeUrl" + index].value}
+            });
+
+            let newData = update(this.state.socialLinkArray, {
+              $splice: [[index, 1, updatedComment]]
+            });
+
+
+            const response = await updateRegistrationInfoDetails(newData, detailsType, registerid);
+            if (response) {
+              if (!response.success) {
+                toastr.error(response.result);
+              } else {
+                toastr.success("SocialLink updated successfully");
+              }
+              this.props.getRegistrationSocialLinks();
+
+            }
+          }
+        }
     }
   }
-
   onFileUpload(value){
     let file=document.getElementById("profilePic").files[0];
     let data = {moduleName: "REGISTRATION",actionName: "UPLOAD",documentId:null,registrationId:this.props.registrationId};
@@ -189,6 +209,25 @@ export default class Step4 extends React.Component{
 
     }
   }
+
+  async onClear(index,value){
+    this.refs["socialLinkTypeUrl"+index].value = "";
+/*
+    let updatedComment = update(this.state.socialLinkArray[index], {
+      socialLinkType :   {$set: ""}
+    });
+
+    let newData = update(this.state.socialLinkArray, {
+      $splice: [[index, 1, updatedComment]]
+    });
+    this.setState({socialLinkArray : newData});
+    let registrationDetails = _.cloneDeep(this.state.defaultData);
+    let omitData = _.omit(registrationDetails["socialLinksInfo"][index], 'socialLinkType') || [];
+    registrationDetails["socialLinksInfo"][index] = omitData
+    this.setState({defaultData : registrationDetails});*/
+
+  }
+
 
   render(){
     let MlActionConfig
@@ -219,7 +258,7 @@ export default class Step4 extends React.Component{
     let socialLinkTypeOption={options: { variables: {type : "SOCIALLINKS",hierarchyRefId:this.props.clusterId}}};
     return (
       <div className="step_form_wrap step2">
-        {showLoader===true?( <div className="loader_wrap"></div>):(<div>
+        {showLoader===true?( <MlLoader/>):(<div>
         <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
           <div className="col-md-6 nopadding-left">
 
@@ -237,7 +276,8 @@ export default class Step4 extends React.Component{
                   {that.state.socialLinkArray && (that.state.socialLinkArray.map(function(options,key) {
                     return(
                       <li key={key} onClick={() => that.onUpdating(key)}>
-                        <a href={'#socialLink'+key} data-toggle="tab">{options.socialLinkTypeName}&nbsp;<b><FontAwesome name='minus-square'/></b></a>
+                        <a href={'#socialLink'+key} data-toggle="tab">{options.socialLinkTypeName}&nbsp;<b>
+                          <FontAwesome name='minus-square'  onClick = {that.onDeleteSocialLink.bind(that,key)}/></b></a>
                       </li>
                     )
                   }))}
@@ -246,15 +286,15 @@ export default class Step4 extends React.Component{
                 <div className="tab-content clearfix">
                   <div className={"tab-pane"+this.state.activeTab} id="1a">
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} ref={'socialLinkType'}
+                      <Moolyaselect multiSelect={false} ref={'socialLinkType'} mandatory={true}
                                     placeholder="Select Social Link"
                                     className="form-control float-label" selectedValue={this.state.selectedValue}
                                     valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={socialLinkTypeQuery}
                                     queryOptions={socialLinkTypeOption} onSelect={this.optionsBySelectSocialLinkType.bind(this)}
-                                    isDynamic={true}/>
+                                    isDynamic={true} data-required={true} data-errMsg="SocialLink Type is required"/>
                     </div>
-                    <div className="form-group">
-                      <input type="text" placeholder="Enter URL" ref={'socialLinkTypeUrl'} className="form-control float-label" id=""/>
+                    <div className="form-group mandatory">
+                      <input type="text" placeholder="Enter URL" ref={'socialLinkTypeUrl'} className="form-control float-label" id="" data-required={true} data-errMsg="URL is required"/>
                     </div>
                     <div className="ml_icon_btn">
                       <a href="#" className="save_btn" onClick={this.onSavingSocialLink.bind(this)}><span
@@ -265,19 +305,19 @@ export default class Step4 extends React.Component{
                     return(<div className="tab-pane" id={'socialLink'+key}  key={key} >
                       <div className="form-group">
                         <Moolyaselect multiSelect={false} ref={'socialLinkType'+key}
-                                      placeholder="Select Social Link"
+                                      placeholder="Select Social Link" mandatory={true}
                                       className="form-control float-label" selectedValue={options.socialLinkType}
                                       valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={socialLinkTypeQuery}
                                       queryOptions={socialLinkTypeOption} onSelect={that.updateOptions.bind(that,key)}
-                                      isDynamic={true}/>
+                                      isDynamic={true} data-required={true} data-errMsg="SocialLink Type is required"/>
                       </div>
                       <div className="form-group">
-                        <input type="text" ref={'socialLinkTypeUrl'+key} placeholder="Enter URL" valueKey={options.socialLinkUrl} className="form-control float-label" defaultValue={options.socialLinkUrl}/>
+                        <input type="text" ref={'socialLinkTypeUrl'+key} placeholder="Enter URL" valueKey={options.socialLinkUrl} className="form-control float-label" defaultValue={options.socialLinkUrl} data-required={true} data-errMsg="URL is required"/>
                       </div>
                       <div className="ml_icon_btn">
                         <a href="#" className="save_btn"  onClick = {that.onUpdatingSocialLinkDetails.bind(that,key)}><span
                           className="ml ml-save"></span></a>
-                        <a href="#" className="cancel_btn" onClick = {that.onDeleteSocialLink.bind(that,key)}><span className="ml ml-delete"></span></a>
+                        <a href="#" className="cancel_btn" onClick = {that.onClear.bind(that,key)}><span className="ml ml-delete"></span></a>
                       </div>
                     </div>)
                   }))}

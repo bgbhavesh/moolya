@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let subDepartmentSchema = `
   
    
@@ -56,6 +58,19 @@ let subDepartmentSchema = `
         fetchSubDepartments(id: String):[SubDepartment]
         fetchActiveSubDepartments(departmentId: String):[SubDepartment]
         fetchSubDepartmentsForRegistration(id: String):[SubDepartment]
+        fetchSubDepartmentsHierarchy(id: String,subDepartmentId:String):[SubDepartment]
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],subDepartmentSchema]);
+let supportedApi = [
+    {api:'createSubDepartment', actionName:'CREATE', moduleName:"SUBDEPARTMENT"},
+    {api:'updateSubDepartment', actionName:'UPDATE', moduleName:"SUBDEPARTMENT"},
+    {api:'findSubDepartment', actionName:'READ', moduleName:"SUBDEPARTMENT"},
+    {api:'fetchSubDepartments', actionName:'READ', moduleName:"SUBDEPARTMENT"},
+    {api:'findSubDepartments', actionName:'READ', moduleName:"SUBDEPARTMENT"},
+    {api:'fetchActiveSubDepartments', actionName:'READ', moduleName:"SUBDEPARTMENT"},
+    {api:'fetchSubDepartmentsForRegistration', actionName:'READ', moduleName:"SUBDEPARTMENT", isWhiteList:true},
+    {api:'fetchSubDepartmentsHierarchy', actionName:'READ', moduleName:"SUBDEPARTMENT"}
+]
+
+MlResolver.MlModuleResolver.push(supportedApi)

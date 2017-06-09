@@ -1,8 +1,8 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
-import {Popover, PopoverContent} from "reactstrap";
-import {dataVisibilityHandler, OnLockSwitch} from "../../../../../utils/formElemUtil";
+import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../utils/formElemUtil";
 import Moolyaselect from "../../../../../../../client/commons/components/select/MoolyaSelect";
 import gql from "graphql-tag";
 import {graphql} from "react-apollo";
@@ -10,6 +10,7 @@ import _ from "lodash";
 import Datetime from "react-datetime";
 import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFormAction";
 import {fetchStartupPortfolioAwards} from "../../../actions/findPortfolioStartupDetails";
+import MlLoader from "../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
 
 export default class MlStartupAwards extends React.Component{
@@ -20,10 +21,8 @@ export default class MlStartupAwards extends React.Component{
       data:{},
       startupAwards: [],
       popoverOpen:false,
-      // index:"",
       selectedIndex:-1,
       startupAwardsList:[],
-      // indexArray:[],
       selectedVal:null,
       selectedObject:"default"
     }
@@ -31,17 +30,21 @@ export default class MlStartupAwards extends React.Component{
     this.handleYearChange.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
+    this.imagesDisplay.bind(this);
     return this;
   }
 
   componentDidUpdate(){
     OnLockSwitch();
-    dataVisibilityHandler();
+    dataVisibilityHandler()
+    initalizeFloatLabel();
   }
 
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+    this.imagesDisplay()
+    //initalizeFloatLabel();
   }
   componentWillMount(){
     this.fetchPortfolioDetails();
@@ -80,11 +83,6 @@ export default class MlStartupAwards extends React.Component{
       delete details.logo['__typename'];
     }
     this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.awardId});
-    // let indexes = this.state.indexArray;
-    // let indexArray = _.cloneDeep(indexes)
-    // indexArray.push(index);
-    // indexArray = _.uniq(indexArray);
-    // this.setState({indexArray: indexArray})
   }
 
   onLockChange(field, e){
@@ -117,16 +115,26 @@ export default class MlStartupAwards extends React.Component{
     })
   }
 
-  onOptionSelected(selectedAward){
-    let details =this.state.data;
-    details=_.omit(details,["awardId"]);
-    details=_.extend(details,{["awardId"]: selectedAward});
-    this.setState({data:details}, function () {
-      this.setState({"selectedVal" : selectedAward})
-      this.sendDataToParent()
-    })
+  onOptionSelected(selectedAward, callback, selObject) {
+    let details = this.state.data;
+    details = _.omit(details, ["awardId"]);
+    details = _.omit(details, ["awardName"]);
+    if(selectedAward){
+      details = _.extend(details, {["awardId"]: selectedAward, "awardName": selObject.label});
+      this.setState({data: details}, function () {
+        this.setState({"selectedVal": selectedAward, awardName: selObject.label})
+        this.sendDataToParent()
+      })
+    }else {
+      details = _.extend(details, {["awardId"]: '', "awardName": ''});
+      this.setState({data: details}, function () {
+        this.setState({"selectedVal": '', awardName: ''})
+        this.sendDataToParent()
+      })
+    }
 
   }
+
   handleBlur(e){
     let details =this.state.data;
     let name  = e.target.name;
@@ -162,13 +170,12 @@ export default class MlStartupAwards extends React.Component{
           }
         }
         newItem = _.omit(item, "__typename");
-        let updateItem = _.omit(newItem, 'logo');
-        arr.push(updateItem)
+        //let updateItem = _.omit(newItem, 'logo');
+        arr.push(newItem)
     })
     startupAwards = arr;
     this.setState({startupAwards:startupAwards})
-    // let indexArray = this.state.indexArray;
-    this.props.getAwardsDetails(startupAwards);    //indexArray
+    this.props.getAwardsDetails(startupAwards);
   }
 
   onLogoFileUpload(e){
@@ -187,6 +194,7 @@ export default class MlStartupAwards extends React.Component{
       if(result.success){
         this.setState({loading:true})
         this.fetchOnlyImages();
+        this.imagesDisplay();
       }
     }
   }
@@ -202,6 +210,7 @@ export default class MlStartupAwards extends React.Component{
         let curUpload=response[thisState]
         specificData['logo']= curUpload['logo']
         this.setState({loading: false, startupAwards:cloneBackUp });
+
       }else {
         this.setState({loading: false})
       }
@@ -209,7 +218,28 @@ export default class MlStartupAwards extends React.Component{
   }
 
 
+  async imagesDisplay(){
+    const response = await fetchStartupPortfolioAwards(this.props.portfolioDetailsId);
+    if (response) {
+      let detailsArray = response?response:[]
+      let dataDetails =this.state.startupAwards
+      let cloneBackUp = _.cloneDeep(dataDetails);
+      _.each(detailsArray, function (obj,key) {
+        cloneBackUp[key]["logo"] = obj.logo;
+      })
+      let listDetails = this.state.startupAwardsList || [];
+      listDetails = cloneBackUp
+      let cloneBackUpList = _.cloneDeep(listDetails);
+      this.setState({loading: false, startupAwards:cloneBackUp,startupAwardsList:cloneBackUpList});
+    }
+  }
+
+
   render(){
+    var yesterday = Datetime.moment().subtract(0,'day');
+    var valid = function( current ){
+      return current.isBefore( yesterday );
+    };
     let query=gql`query{
       data:fetchActiveAwards {
         label:awardDisplayName
@@ -219,13 +249,18 @@ export default class MlStartupAwards extends React.Component{
     let that = this;
     const showLoader = that.state.loading;
     let startupAwardsList = that.state.startupAwardsList || [];
+    let displayUploadButton = null;
+    if(this.state.selectedObject != "default"){
+      displayUploadButton = true
+    }else{
+      displayUploadButton = false
+    }
     return (
-      <div className="admin_main_wrap">
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
-        <div className="admin_padding_wrap portfolio-main-wrap">
+      <div>
+        {showLoader === true ? ( <MlLoader/>) : (
+        <div>
           <h2>Awards</h2>
           <div className="requested_input main_wrap_scroll">
-
             <ScrollArea
               speed={0.8}
               className="main_wrap_scroll"
@@ -247,7 +282,8 @@ export default class MlStartupAwards extends React.Component{
                         <div className="list_block">
                           <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                           {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
-                          <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
+                          <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img
+                            src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/></div>
                           <h3>{details.awardName?details.awardName:""}</h3>
                         </div>
                       </a>
@@ -257,6 +293,7 @@ export default class MlStartupAwards extends React.Component{
               </div>
             </ScrollArea>
             <Popover placement="right" isOpen={this.state.popoverOpen}  target={"create_client"+this.state.selectedObject} toggle={this.toggle}>
+              <PopoverTitle>Add Award</PopoverTitle>
               <PopoverContent>
                 <div  className="ml_create_client">
                   <div className="medium-popover"><div className="row">
@@ -270,19 +307,19 @@ export default class MlStartupAwards extends React.Component{
                       </div>
                       <div className="form-group">
                         <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                                  inputProps={{placeholder: "Select Year"}} defaultValue={this.state.data.year?this.state.data.year:" "}
-                                  closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)}/>
+                                  inputProps={{placeholder: "Select Year", className:"float-label form-control"}} defaultValue={this.state.data.year}
+                                  closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)} isValidDate={ valid }/>
                       </div>
                       <div className="form-group">
-                        <input type="text" name="description" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.description}  onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" name="description" placeholder="About" className="form-control float-label" defaultValue={this.state.data.description}  onBlur={this.handleBlur.bind(this)}/>
                         <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isDescriptionPrivate}/>
                       </div>
-                      <div className="form-group">
+                      {displayUploadButton?<div className="form-group">
                         <div className="fileUpload mlUpload_btn">
                           <span>Upload Logo</span>
                           <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
                         </div>
-                      </div>
+                      </div>:""}
                       <div className="clearfix"></div>
                       <div className="form-group">
                         <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>

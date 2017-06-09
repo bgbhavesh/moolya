@@ -2,14 +2,16 @@ import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../../utils/formElemUtil';
+import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../../utils/formElemUtil';
 /*import MlIdeatorPortfolioAbout from './MlIdeatorPortfolioAbout'*/
 import {findStartupManagementActionHandler} from '../../../actions/findPortfolioStartupDetails'
 import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
 import _ from 'lodash';
+import Datetime from "react-datetime";
+import moment from "moment";
+import MlLoader from '../../../../../../commons/components/loader/loader'
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
-
 
 export default class MlStartupManagement extends React.Component{
   constructor(props, context){
@@ -42,6 +44,7 @@ export default class MlStartupManagement extends React.Component{
   }
   componentDidUpdate()
   {
+    initalizeFloatLabel();
     OnLockSwitch();
     dataVisibilityHandler();
   }
@@ -114,7 +117,18 @@ export default class MlStartupManagement extends React.Component{
         this.setState({loading: false, startupManagement: response, startupManagementList: response});
       }
     }else{
-      this.setState({loading: false, startupManagement: that.context.startupPortfolio.management});
+      this.setState({loading: false, startupManagement: that.context.startupPortfolio.management, startupManagementList:that.context.startupPortfolio.management});
+    }
+  }
+  onDateChange(name, event) {
+    if (event._d) {
+      let value = moment(event._d).format('DD-MM-YYYY');
+      let details =this.state.data;
+      details=_.omit(details,[name]);
+      details=_.extend(details,{[name]:value});
+      this.setState({data:details}, function () {
+        this.sendDataToParent()
+      })
     }
   }
 
@@ -182,14 +196,17 @@ export default class MlStartupManagement extends React.Component{
   }
 
   render(){
+    var yesterday = Datetime.moment().subtract(0,'day');
+    var valid = function( current ){
+      return current.isBefore( yesterday );
+    };
     let that = this;
     const showLoader = that.state.loading;
     let managementArr = that.state.startupManagementList || [];
     return (
       <div>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
-      <div className="admin_main_wrap">
-        <div className="admin_padding_wrap portfolio-main-wrap">
+        {showLoader === true ? (<MlLoader/>) : (
+      <div>
           <h2>Management</h2>
           <div className="main_wrap_scroll">
             <ScrollArea
@@ -212,7 +229,7 @@ export default class MlStartupManagement extends React.Component{
                     return (
                       <div className="col-lg-2 col-md-3 col-sm-3" key={index}>
                           <div className="list_block notrans" onClick={that.onSelectUser.bind(that, index)}>
-                            <div className="hex_outer"><span className="ml ml-plus "></span></div>
+                            <div className="hex_outer"><img src={user.logo ? user.logo.fileUrl : "/images/def_profile.png"}/></div>
                             <h3>{user.firstName?user.firstName:""}</h3>
                           </div>
                       </div>
@@ -224,11 +241,8 @@ export default class MlStartupManagement extends React.Component{
                 <div id="management-form" className=" management-form-wrap" style={{'display':'none'}}>
 
                   <div className="col-md-6 nopadding-left">
-
-
                     <div className="form_bg">
                       <form>
-
                         <div className="form-group">
                           <input type="text" placeholder="Title" name="title" className="form-control float-label" defaultValue={this.state.data.title} id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isTitlePrivate" onClick={this.onClick.bind(this, "isTitlePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isTitlePrivate}/>
@@ -264,13 +278,21 @@ export default class MlStartupManagement extends React.Component{
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isYOFPrivate" onClick={this.onClick.bind(this, "isYOFPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isYOFPrivate}/>
                         </div>
 
-                        <div className="form-group">
-                          <input type="text" placeholder="Joining Date to this Company" name="joiningDate" defaultValue={this.state.data.joiningDate} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                        <div className="form-group date-pick-wrap">
+                          {/*<input type="text" placeholder="Joining Date to this Company" name="joiningDate" defaultValue={this.state.data.joiningDate} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>*/}
+                          <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
+                                    inputProps={{placeholder: "Joining Date to this Company"}}
+                                    closeOnSelect={true} value={this.state.data.joiningDate}
+                                    onChange={this.onDateChange.bind(this, "joiningDate")}  isValidDate={ valid }/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isJoiningDatePrivate" onClick={this.onClick.bind(this, "isJoiningDatePrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isJoiningDatePrivate}/>
                         </div>
 
-                        <div className="form-group">
-                          <input type="text" placeholder="First Job Joining Date" name="firstJobJoiningDate" defaultValue={this.state.data.firstJobJoiningDate} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                        <div className="form-group date-pick-wrap">
+                          {/*<input type="text" placeholder="First Job Joining Date" name="firstJobJoiningDate" defaultValue={this.state.data.firstJobJoiningDate} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>*/}
+                          <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
+                                    inputProps={{placeholder: "First Job Joining Date"}}
+                                    closeOnSelect={true} value={this.state.data.firstJobJoiningDate}
+                                    onChange={this.onDateChange.bind(this, "firstJobJoiningDate")}  isValidDate={ valid }/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isFJJDPrivate" onClick={this.onClick.bind(this, "isFJJDPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isFJJDPrivate}/>
                         </div>
                       </form>
@@ -333,11 +355,8 @@ export default class MlStartupManagement extends React.Component{
                   </div>
                   <br className="brclear"/>
                 </div>
-
             </ScrollArea>
           </div>
-        </div>
-
       </div>)}
       </div>
     )

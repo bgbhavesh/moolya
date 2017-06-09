@@ -12,6 +12,7 @@ export async function findBackendUserActionHandler(userTypeId) {
               profile{
                 isInternaluser,
                 isExternaluser,
+                isMoolya
                 isActive,
                 email,
                 profileImage,
@@ -63,7 +64,9 @@ export async function findBackendUserActionHandler(userTypeId) {
                       subDepartmentName,
                       chapterName,
                       subChapterName,
-                      communityName
+                      communityName,
+                      communityCode,
+                      communityHierarchyLevel
                     }
                   }
                     

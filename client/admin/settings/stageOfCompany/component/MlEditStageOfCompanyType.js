@@ -6,6 +6,8 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findStageOfCompanyTypeActionHandler} from '../actions/findStageOfCompanyTypeAction'
 import {updateStageOfCompanyTypeActionHandler} from '../actions/updateStageOfCompanyTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import MlLoader from '../../../../commons/components/loader/loader'
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 class MlEditStageOfCompanyType extends React.Component{
   constructor(props) {
     super(props);
@@ -52,18 +54,23 @@ class MlEditStageOfCompanyType extends React.Component{
     this.setState({loading:false,data:response});
   }
   async  updateStageOfCompanyType() {
-    let StageOfCompanyType = {
-      id: this.refs.id.value,
-      stageOfCompanyName: this.refs.stageOfCompanyName.value,
-      stageOfCompanyDisplayName: this.refs.stageOfCompanyDisplayName.value,
-      about: this.refs.about.value,
-      isActive: this.refs.isActive.checked
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let StageOfCompanyType = {
+        id: this.refs.id.value,
+        stageOfCompanyName: this.refs.stageOfCompanyName.value,
+        stageOfCompanyDisplayName: this.refs.stageOfCompanyDisplayName.value,
+        about: this.refs.about.value,
+        isActive: this.refs.isActive.checked
+      }
+      const response = await updateStageOfCompanyTypeActionHandler(StageOfCompanyType)
+      toastr.success("Edited Successfully");
+      return response;
+
     }
-    const response = await updateStageOfCompanyTypeActionHandler(StageOfCompanyType)
-    return response;
-
   }
-
   onStatusChange(e){
     const data=this.state.data;
     if(e.currentTarget.checked){
@@ -103,16 +110,16 @@ class MlEditStageOfCompanyType extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader===true?( <div className="loader_wrap"></div>):(
+        {showLoader===true?(<MlLoader/>):(
 
             <div className="admin_padding_wrap">
               <h2>Edit Stage Of Company Type</h2>
               <div className="col-md-6 nopadding-left">
                 <div className="form_bg">
                   <form>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
-                    <input type="text" ref="stageOfCompanyName" placeholder="Name" defaultValue={this.state.data&&this.state.data.stageOfCompanyName} className="form-control float-label" id=""/>
+                    <input type="text" ref="stageOfCompanyName" placeholder="Name" defaultValue={this.state.data&&this.state.data.stageOfCompanyName} className="form-control float-label" id="" data-required={true} data-errMsg="Name is required"/>
 
                   </div>
                   <div className="form-group">
@@ -125,8 +132,8 @@ class MlEditStageOfCompanyType extends React.Component{
               <div className="col-md-6 nopadding-right">
                 <div className="form_bg">
                   <form>
-                  <div className="form-group">
-                    <input type="text" ref="stageOfCompanyDisplayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.stageOfCompanyDisplayName} className="form-control float-label" id=""/>
+                  <div className="form-group mandatory">
+                    <input type="text" ref="stageOfCompanyDisplayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.stageOfCompanyDisplayName} className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is required"/>
                   </div>
                   <div className="form-group switch_wrap inline_switch">
                     <label>Status</label>

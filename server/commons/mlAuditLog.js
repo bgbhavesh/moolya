@@ -2,6 +2,9 @@ import async from 'async';
 import each from 'async/each';
 import _ from 'lodash';
 var diff = require('deep-diff').diff;
+
+import './mlModuleCollectionMap.js';
+
 //TODO: Drive the Audit Log through Audit Definition and configuration
 var isAuditEnabled=Meteor.settings.private.isAuditEnabled;
 class MlAuditLog {

@@ -7,19 +7,9 @@ import MoolyaSelect from "../../../commons/components/select/MoolyaSelect";
 import _ from "lodash";
 import Datetime from "react-datetime";
 import moment from "moment";
-import {getAdminUserContext} from '../../../commons/getAdminUserContext'
+import {getAdminUserContext} from "../../../commons/getAdminUserContext";
+import MlLoader from "../../../commons/components/loader/loader";
 let FontAwesome = require('react-fontawesome');
-
-/*let initSwiper = () => {
- new Swiper('.blocks_in_form', {
- speed: 400,
- spaceBetween: 25,
- slidesPerView:2,
- pagination: '.swiper-pagination',
- paginationClickable: true
- });
- }*/
-
 
 export default class MlAssignChapterBackendUserRoles extends React.Component {
   constructor(props) {
@@ -36,7 +26,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
         chapterId: this.props.chapterId ? this.props.chapterId : "",
         subChapterId: this.props.subChapterId ? this.props.subChapterId : "",
         communityId: this.props.communityId ? this.props.communityId : "",
-        hierarchyLevel: "",
+        hierarchyLevel: -1,
         hierarchyCode: "",
         departmentId: '',
         departmentName: '',
@@ -124,7 +114,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
         chapterId: this.props.chapterId ? this.props.chapterId : "",
         subChapterId: this.props.subChapterId ? this.props.subChapterId : "",
         communityId: this.props.communityId ? this.props.communityId : "",
-        hierarchyLevel: "",
+        hierarchyLevel: -1,
         hierarchyCode: "",
         departmentId: '',
         departmentName: '',
@@ -218,7 +208,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
       chapterId: this.props.chapterId ? this.props.chapterId : "",
       subChapterId: this.props.subChapterId ? this.props.subChapterId : "",
       communityId: this.props.communityId ? this.props.communityId : "",
-      hierarchyLevel: "",
+      hierarchyLevel: -1,
       hierarchyCode: "",
       departmentId: '',
       departmentName: '',
@@ -286,7 +276,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
     this.setState({roleForm: data});
     this.rolesArrayCreate(data, this.props.assignedRoles)
     const userDefaultObj = getAdminUserContext();
-    if (userDefaultObj.hierarchyCode == 'PLATFORM' || userDefaultObj.hierarchyCode == "CLUSTER")
+    if ((userDefaultObj.hierarchyCode == 'PLATFORM' || userDefaultObj.hierarchyCode == "CLUSTER") && this.props.isDefaultSubChapter)
       this.setState({showIsChapterAdmin: true})
     else
       this.setState({showIsChapterAdmin: false});
@@ -313,7 +303,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
 
     return (
       <div>
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
           <div>
             {userDepartments.map(function (department, id) {
               let queryOptions = {
@@ -425,17 +415,17 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                           return (
                             <div className="form_inner_block" key={idx}>
                               <div className="form-group">
-                                <input type="text" defaultValue={details.roleName} className="form-control float-label"
+                                <input type="text" defaultValue={details.roleName} placeholder="Role Name" className="form-control float-label"
                                        disabled="true"/>
                               </div>
                               <div className="form-group left_al">
                                 <input type="text" defaultValue={details.validTo}
-                                       className="form-control float-label"
+                                       className="form-control float-label" placeholder= "Valid To"
                                        disabled="true"/>
                               </div>
                               <div className="form-group left_al">
                                 <input type="text" defaultValue={details.validTo}
-                                       className="form-control float-label"
+                                       className="form-control float-label" placeholder="Valid From"
                                        disabled="true"/>
                               </div>
                               <div className="form-group switch_wrap">

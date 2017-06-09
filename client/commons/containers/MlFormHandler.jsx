@@ -3,6 +3,7 @@
  */
 import React, { Component } from 'react';
 import hoistNonReactStatic from 'hoist-non-react-statics';
+import MlLoader from '../../commons/components/loader/loader'
 
 function getDisplayName(WrappedComponent) {
   return WrappedComponent.displayName || WrappedComponent.name || 'Component';
@@ -57,7 +58,7 @@ export default function formHandler() {
 
         return (
           <div>
-            {showLoader===true&&<div className="loader_wrap"></div>}
+            {showLoader===true&&<MlLoader/>}
 
               <SourceComponent {...this.props} handler={this.handler.bind(this)}/>
 

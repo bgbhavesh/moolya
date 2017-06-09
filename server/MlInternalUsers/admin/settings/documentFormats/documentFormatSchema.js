@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let DocumentFormatsSchema = `
     type DocumentFormats
     {
@@ -7,7 +9,7 @@ let DocumentFormatsSchema = `
       docFormatDisplayName :String
       about :String
       _id :String
-      createdDateTime: String
+      createdDateTime: Date
       isActive :Boolean
     }
     input documentFormatObject{
@@ -30,3 +32,11 @@ let DocumentFormatsSchema = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],DocumentFormatsSchema]);
+let supportedApi = [
+    {api:'createDocumentFormat', actionName:'CREATE', moduleName:"DOCUMENTFORMAT"},
+    {api:'updateDocumentFormat', actionName:'UPDATE', moduleName:"DOCUMENTFORMAT"},
+    {api:'findDocumentFormat', actionName:'READ', moduleName:"DOCUMENTFORMAT"},
+    {api:'fetchDocumentsFormat', actionName:'READ', moduleName:"DOCUMENTFORMAT"},
+]
+
+MlResolver.MlModuleResolver.push(supportedApi)

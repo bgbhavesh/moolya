@@ -8,6 +8,7 @@ import formHandler from '../../../commons/containers/MlFormHandler';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
+import MlLoader from '../../../commons/components/loader/loader'
 
 class MlChapterCommunityDetails extends React.Component {
   constructor(props) {
@@ -76,12 +77,12 @@ class MlChapterCommunityDetails extends React.Component {
   async findComDef() {
     let communityId = this.props.params.communityId;
     let clusterId = this.props.params.clusterId;
-    let chapterId = this.props.params.chapterId;
-    let subChapterId = this.props.params.subChapterId;
+    let chapterId = this.props.params.chapterId?this.props.params.chapterId:"";
+    let subChapterId = this.props.params.subChapterId?this.props.params.subChapterId:"";
     const response = await findCommunityActionHandler(clusterId,chapterId,subChapterId,communityId);
 
     if (response) {
-      this.setState({loading: false, data: response});
+      this.setState({data: response});
 
       // if (this.state.data.aboutCommunity) {
       //   this.setState({"data":{"aboutCommunity":this.state.data.aboutCommunity}});
@@ -104,6 +105,7 @@ class MlChapterCommunityDetails extends React.Component {
       if (this.state.data.subchapters) {
         this.setState({subchapters: this.state.data.subchapters});
       }
+      this.setState({loading: false})
     }
   }
 
@@ -121,10 +123,13 @@ class MlChapterCommunityDetails extends React.Component {
       communityId: this.props.params.communityId,
       clusters: this.state.clusters,
       chapters: this.state.chapters,
-      subchapters: this.state.subchapters
+      subchapters: this.state.subchapters,
+      clusterId:this.props.params.clusterId?this.props.params.clusterId:"",
+      chapterId:this.props.params.chapterId?this.props.params.chapterId:"",
+      subChapterId:this.props.params.subChapterId?this.props.params.subChapterId:"",
     }
     let response = await multipartFormHandler(data, null);
-    this.setState({loading: false});
+    // this.setState({loading: false});
     return response;
   }
 
@@ -165,7 +170,16 @@ class MlChapterCommunityDetails extends React.Component {
       {
         showAction: true,
         actionName: 'cancel',
-        handler: null
+        handler: async function(event) {
+          if(FlowRouter.getRouteName() == "chapter_communities_communityDetails"){
+            let pararms = FlowRouter._current.params;
+            FlowRouter.go("/admin/chapters/" +
+              pararms.clusterId+"/"+pararms.chapterId+"/"+
+              pararms.subChapterId+"/"+pararms.subChapterName+"/communities");
+          } else {
+            FlowRouter.go('/admin/community')
+          }
+        }
       }
     ]
 
@@ -187,7 +201,7 @@ class MlChapterCommunityDetails extends React.Component {
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
-        {showLoader === true ? ( <div className="loader_wrap"></div>) : (
+        {showLoader === true ? (<MlLoader/>) : (
 
           <div className="admin_padding_wrap">
             <h2>Edit Community Details</h2>

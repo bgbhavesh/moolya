@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import MlAppContextProvider from '../../../commons/components/appContext/MlAppContextProvider';
 import MlAppHeader from '../components/MlAppHeader'
 import MlAppLeftNav from '../components/MlAppLeftNav'
+import MlLoader from '../../../commons/components/loader/loader'
 
 import { withApollo } from 'react-apollo';
 
@@ -19,12 +20,15 @@ class MlAppComponent extends Component{
 
     componentDidMount(){
         let isProfileMenu = this.props.isProfileMenu || false;
+        // let isProfileMenu =  false;
         this.fetchMenu(isProfileMenu)
     }
 
     componentWillReceiveProps(nextProps, nextState) {
-        let isProfileMenu = nextProps.isProfileMenu || false;
-        this.fetchMenu(isProfileMenu)
+       // let isProfileMenu = nextProps.isProfileMenu || false;
+      if(nextProps.isProfileMenu!==this.props.isProfileMenu){
+        this.fetchMenu(nextProps.isProfileMenu)
+      }
     }
 
     async fetchMenu(isProfileMenu){
@@ -43,7 +47,7 @@ class MlAppComponent extends Component{
         const showLoader = this.state.loading;
         const MlComponent = function (props) {
             if (props.showLoader) {
-                return <div className="loader_wrap"></div>;
+                return <MlLoader/>;
             }
             return (
                 <MlAppContextProvider theme={props.theme} menu={props.menu} language={props.language} userType={props.userType}>

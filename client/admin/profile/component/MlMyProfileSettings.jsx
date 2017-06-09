@@ -102,7 +102,6 @@ export default class MyProfileSettings extends React.Component{
     let Details = {
       currencySymbol : this.state.currencySymbol,
       measurementSystem :this.state.measurementSystem,
-      userId : Meteor.userId()
     }
     const dataresponse = await updateSettings(Details);
     console.log(dataresponse);
@@ -151,13 +150,7 @@ export default class MyProfileSettings extends React.Component{
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
           <h2>My Profile Settings</h2>
-          <div className="main_wrap_scroll">
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            ><form>
+          <form>
               <div className="col-md-6 nopadding-left">
                 <div className="form-group">
                   <Moolyaselect multiSelect={false}  placeholder={"Type Of Currency"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.currencySymbol} queryType={"graphql"} query={currencyquery}  isDynamic={true} id={'currencyquery'}  onSelect={this.optionsBySelectCurrencySymbol.bind(this)}  />
@@ -193,8 +186,6 @@ export default class MyProfileSettings extends React.Component{
               </div>
             </form>
 
-            </ScrollArea>
-          </div>
 
 
 

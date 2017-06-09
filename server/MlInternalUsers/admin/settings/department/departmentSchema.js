@@ -1,5 +1,7 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../../commons/mlResolverDef'
+
 let departmentSchema = `        
     
     type DepatmentAvailableSchema{
@@ -22,6 +24,13 @@ let departmentSchema = `
          subChapterList : [String]
          isMoolya       : Boolean
          depatmentAvailable:[DepatmentAvailableSchema]
+    }
+    
+    type DepartmentBasedOnClusterChapterAndSubChapter {
+        departmentId :  String
+        departmentName : String
+        subDepartmentId : String
+        subDepartmentName : String
     }
    
     input DepatmentAvailable{
@@ -54,8 +63,23 @@ let departmentSchema = `
         fetchNonMoolyaBasedDepartment(isMoolya:Boolean,subChapter:String):[Department]
         fetchDepartmentsForRegistration(cluster:String,chapter:String,subChapter:String):[Department]    
         fetchMoolyaBasedDepartmentRoles(isMoolya:Boolean,clusterId:String):[Department]
+        fetchClusterChapterSubChapterBasedDepartmentRoles(isMoolya: Boolean, cluster: String, chapter: String, subChapter: String): [DepartmentBasedOnClusterChapterAndSubChapter]
+        fetchHierarchyMoolyaDepartment(isMoolya:Boolean,clusterId:String):[Department]
     }
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], departmentSchema]);
-// findDepartments:String
+let supportedApi = [
+    {api:'createDepartment', actionName:'CREATE', moduleName:"DEPARTMENT"},
+    {api:'updateDepartment', actionName:'UPDATE', moduleName:"DEPARTMENT"},
+    {api:'fetchDepartments', actionName:'READ', moduleName:"DEPARTMENT"},
+    {api:'findDepartment', actionName:'READ', moduleName:"DEPARTMENT"},
+    {api:'fetchActiveDepartment', actionName:'READ', moduleName:"DEPARTMENT"},
+    {api:'fetchMoolyaBasedDepartment', actionName:'READ', moduleName:"DEPARTMENT"},
+    {api:'fetchNonMoolyaBasedDepartment', actionName:'READ', moduleName:"DEPARTMENT"},
+    {api:'fetchDepartmentsForRegistration', actionName:'READ', moduleName:"DEPARTMENT", isWhiteList:true},
+    {api:'fetchMoolyaBasedDepartmentRoles', actionName:'READ', moduleName:"DEPARTMENT"},
+    {api:'fetchClusterChapterSubChapterBasedDepartmentRoles', actionName:'READ', moduleName:"DEPARTMENT"},
+    {api:'fetchHierarchyMoolyaDepartment', actionName:'READ', moduleName:"DEPARTMENT", isWhiteList:true},
+]
+MlResolver.MlModuleResolver.push(supportedApi)

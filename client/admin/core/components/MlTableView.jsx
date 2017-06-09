@@ -12,7 +12,8 @@ export default class MlTableView extends Component {
       sort: null,
       selectedRow: null,
       searchValue:"",
-      filterValue:{},
+      filterValue:[],
+      selectedCount:0
     }
 
     this.onPageChange.bind(this);
@@ -55,6 +56,9 @@ export default class MlTableView extends Component {
         fieldsAry.push({fieldName: num, value: search.trim()})
       });
     }
+    if(this.props.filter){
+      fieldsAry=this.state.filterValue||[];
+    }
     return fieldsAry;
   }
 
@@ -78,6 +82,10 @@ export default class MlTableView extends Component {
 
   onSortChange(sortName, sortOrder) {
     let sortObj = [];
+
+    if(this.props.fieldsMap){
+        sortName=this.props.fieldsMap[sortName]||sortName;
+    }
     if (sortOrder === "asc") {
       sortObj.push({fieldName : sortName, sort : "asc"});
     } else {
@@ -87,18 +95,61 @@ export default class MlTableView extends Component {
   };
 
   handleRowSelect(row, isSelected, e) {
-    if (isSelected) {
-      this.setState({"selectedRow": row});
-    } else {
-      this.setState({"selectedRow": null});
+    //if its multiselect
+    if(this.props.multiSelect){
+      var selectedRows = this.state.selectedRow || [];
+      if (isSelected) {
+        selectedRows.push(row);
+        this.setState({"selectedRow": selectedRows});
+      }else{
+        selectedRows=_.without(selectedRows,row);
+        this.setState({"selectedRow":selectedRows});
+      }
+
+    }else {
+        if (isSelected) {
+          this.setState({
+            "selectedRow": row,
+            "selectedCount":this.state.selectedCount+1
+          });
+        } else {
+          this.setState({
+            "selectedRow": null,
+            "selectedCount":this.state.selectedCount-1
+          });
+        }
     }
   }
 
-  actionHandlerProxy(actionConfig) {
+   handleRowSelectAll(isSelected, rows) {
+    if (isSelected) {
+      this.setState({
+        "selectedRow": rows,
+        "selectedCount": rows.length
+      });
+    } else {
+      /*_.each(rows,function(row){
+        selectedRows=_.without(selectedRows,row);
+      })*/
+      this.setState({
+        "selectedRow":null,
+        "selectedCount":0
+      });
+    }
+  }
+
+  actionHandlerProxy(actionConfig,handlerCallback) {
+    console.log("yipppeeee");
     const selectedRow = this.state.selectedRow;
     const actions = this.props.actionConfiguration;
+    console.log(actions);
     const action = _.find(actions, {"actionName": actionConfig.actionName});
-    action.handler(selectedRow);
+    if(handlerCallback) {
+      console.log(handlerCallback);
+      handlerCallback(selectedRow);
+    }else{
+      action.handler(selectedRow);
+    }
   }
 
   onFilterChange(filterQuery){
@@ -111,12 +162,14 @@ export default class MlTableView extends Component {
     let loading = this.props.loading;
     let config = this.props;
     config["handleRowSelect"] = this.handleRowSelect.bind(this);
+    config["handleRowSelectAll"]=this.handleRowSelectAll.bind(this);
 
     let that = this;
     let actionsConf = _.clone(config.actionConfiguration);
     let actionsProxyList = [];
     actionsConf.forEach(function (action) {
-      let act = {actionName: action.actionName, showAction: action.showAction, iconID: action.iconID};
+      let act = {actionName: action.actionName,showAction: action.showAction,iconID: action.iconID,hasPopOver:action.hasPopOver,
+        popOverTitle:action.popOverTitle,placement:action.placement,target:action.target,actionComponent:action.actionComponent,popOverComponent:action.popOverComponent};
       act.handler = that.actionHandlerProxy.bind(that);
       actionsProxyList.push(act);
     });
@@ -133,8 +186,10 @@ export default class MlTableView extends Component {
         <MlTable {...config } totalDataSize={totalDataSize} data={data} pageNumber={this.state.pageNumber}
                  sizePerPage={this.state.sizePerPage} onPageChange={this.onPageChange.bind(this)}
                  onSizePerPageList={this.onSizePerPageList.bind(this)} onSearchChange={this.onSearchChange.bind(this)}
-                 handleRowSelect={that.handleRowSelect.bind(this)} onSortChange={this.onSortChange.bind(this)}></MlTable>
-        {config.showActionComponent === true && <MlActionComponent ActionOptions={actionsProxyList}/>}
+                 handleRowSelect={that.handleRowSelect.bind(this)}
+                 handleRowSelectAll={that.handleRowSelectAll.bind(this)}
+                 onSortChange={this.onSortChange.bind(this)}></MlTable>
+        {config.showActionComponent === true && <MlActionComponent count={this.state.selectedCount} ActionOptions={actionsProxyList}/>}
       </div>
     )}</div>)
   }

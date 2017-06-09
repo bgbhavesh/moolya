@@ -12,7 +12,7 @@ const mlHierarchyTableConfig=new MlViewer.View({
   searchFields:["level","module","role"],
   throttleRefresh:false,
   pagination:true,//To display pagination
-  selectRow:true,  //Enable checkbox/radio button to select the row.
+  selectRow:false,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "level", title: "Level",dataSort:true},
@@ -20,7 +20,7 @@ const mlHierarchyTableConfig=new MlViewer.View({
     {dataField: "role", title: "Role",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
-  showActionComponent:true,
+  showActionComponent:false,
   actionConfiguration:[
     {
       actionName: 'edit',

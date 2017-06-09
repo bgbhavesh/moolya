@@ -2,7 +2,6 @@ import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
 export async function findDepartmentActionHandler(DepartmentId) {
-  console.log(DepartmentId)
  let did=DepartmentId
   const result = await client.query({
     query: gql`

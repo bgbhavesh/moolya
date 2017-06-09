@@ -7,8 +7,8 @@ export const mlBackendUserListConfig=new MlViewer.View({
   name:"backendUserList",
   viewType:MlViewerTypes.LIST,
   extraFields:[],
-  fields:["username","eMail","city","regType"],
-  searchFields:["username","eMail","city","regType"],
+  fields:["username",'profile.InternalUprofile.moolyaProfile.firstName'],
+  searchFields:["username", 'profile.InternalUprofile.moolyaProfile.firstName'],
   throttleRefresh:true,
   pagination:true,
   moduleName:"BackendUsers",
@@ -16,27 +16,17 @@ export const mlBackendUserListConfig=new MlViewer.View({
   viewComponent:<MlBackendUserListView />,
   showActionComponent:true,
   actionConfiguration:[
-    // {
-    //   actionName: 'edit',
-    //   showAction: true,
-    //   handler: null
-    // },
     {
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
         FlowRouter.go("/admin/settings/addBackendUser")
       }
-    },
-    // {
-    //   showAction: true,
-    //   actionName: 'logout',
-    //   handler: (data)=>{console.log(data);}
-    // }
+    }
   ],
   graphQlQuery:gql`
-              query{
-              data:SearchQuery(module:"BackendUsers"){
+              query SearchQuery( $offset: Int, $limit: Int,$fieldsData:[GenericFilter], $sortData:[SortFilter]) {
+              data:SearchQuery(module:"Users",offset: $offset, limit: $limit,fieldsData:$fieldsData, sortData:$sortData){
                     totalRecords
                     data{
                      ...on BackendUsers{
@@ -46,6 +36,7 @@ export const mlBackendUserListConfig=new MlViewer.View({
                             profile {
                                       isInternaluser
                                       isExternaluser
+                                      isMoolya
                                       email,
                                       isActive,
                                       profileImage

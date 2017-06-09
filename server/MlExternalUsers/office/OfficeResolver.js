@@ -79,31 +79,12 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
       } else {
         let officeDetails = {
           officeId: ret,
-          // userId: userId,
-          // clusterId: profile.clusterId,
-          // clusterName: profile.clusterName,
-          // chapterId: profile.chapterId,
-          // chapterName: profile.chapterName,
-          // subChapterId: profile.subChapterId,
-          // subChapterName: profile.subChapterName,
-          // communityId: profile.communityId,
-          // communityName: profile.communityName,
-          //dateTime: new Date(),
-          // transactionId: 'TransId',
+          transactionType:'office setup',
           status: 'Pending'
         }
         let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'communityId', 'communityName']);
         let officeTransaction = _.extend(officeDetails, extendObj)
         MlResolver.MlMutationResolver['createOfficeTransaction'](obj, {officeTransaction}, context, info)
-        // let officeTransResponse = mlDBController.insert('MlOfficeTransaction', officeTrans, context);
-        // if(!officeTransResponse){
-        //   let code = 400;
-        //   let response = new MlRespPayload().errorPayload("error in transaction creation", code);
-        //   return response;
-        // }
-        // let code = 200;
-        // let response = new MlRespPayload().successPayload("Office transaction created", code);
-        // return response;
       }
     }
   }
@@ -295,6 +276,4 @@ MlResolver.MlMutationResolver['updateOfficeMember'] =(obj, args, context, info) 
     let response = new MlRespPayload().successPayload(e.message, code);
     return response;
   }
-
-
 }

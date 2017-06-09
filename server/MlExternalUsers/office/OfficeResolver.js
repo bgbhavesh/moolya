@@ -212,7 +212,8 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
           {
             args.registration.createdBy = Meteor.users.findOne({_id: context.userId}).username
           }
-          args.registration.firstName = args.officeMember.name;
+          args.registration.firstName = args.officeMember.firstName;
+          args.registration.lastName = args.officeMember.lastName;
           args.registration.email = args.officeMember.emailId;
           args.registration.contactNumber = args.officeMember.mobileNumber;
           let randomPassword = orderNumberGenService.generateRandomPassword()
@@ -238,9 +239,9 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
               email: args.officeMember.emailId,
               mobileNumber:args.officeMember.mobileNumber,
               isActive   : false,
-              firstName  :args.officeMember.name,
-              lastName   : args.officeMember.name,
-              displayName :args.officeMember.name+' '+ args.officeMember.name,
+              firstName  :args.officeMember.firstName,
+              lastName   : args.officeMember.lastName,
+              displayName :args.officeMember.firstName+' '+ args.officeMember.lastName,
               externalUserProfiles: [userProfile]
             }
             let userObject = {

@@ -1,5 +1,6 @@
 import MlCollections from '../../lib/common/commonSchemas'
 import _ from 'lodash';
+MlChaptersTemp = new Mongo.Collection('mlChaptersTemp');
 
 class MlDBController{
   constructor(){
@@ -159,13 +160,21 @@ class MlDBController{
 
   aggregate(collectionName, pipeline, context) {
     let collection;
+    let response;
     if(collectionName == "users") {
       collection = Meteor.users
     }
     else{
       collection = MlCollections[collectionName]
     }
-    let response = collection.aggregate(pipeline);
+    let hasLimit = pipeline.find((pipe) => pipe['$limit'] > 0 );
+    if(collectionName == 'MlChapters' && !hasLimit ){
+      pipeline.push({ $out: "mlChaptersTemp" });
+      let rst = collection.aggregate(pipeline);
+      response = MlChaptersTemp.find({}).fetch();
+    } else {
+      response = collection.aggregate(pipeline);
+    }
     return response;
   }
 }

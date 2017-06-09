@@ -199,22 +199,37 @@ class MlAuthorization
     {
         switch (moduleName){
 
-            case 'CLUSTER':{
-                if(isContextSpecSearch && req.variables.context == null ){
-                    return true;
-                }
-                if(roleDetails['clusterId'] && roleDetails['clusterId'] == req.variables['clusterId'] || (req.variables.context && roleDetails['clusterId'] == req.variables.context['clusterId'])){
-                    return true
-                }
+      case 'CLUSTER':{
+        if(isContextSpecSearch && req.variables.context == null ){
+          return true;
+        }
+        if(roleDetails['clusterId'] && roleDetails['clusterId'] == req.variables['clusterId'] || (req.variables.context && roleDetails['clusterId'] == req.variables.context['clusterId'])){
+          return true
+        }
+      }
+        break;
+      case 'CHAPTER':
+      {
+        if(isContextSpecSearch && req.variables.context){
+          if(roleDetails['clusterId'] == req.variables.context['clusterId']){
+            if(roleDetails['chapterId'] == 'all')
+              return true;
+            if(req.variables.context['chapterId'] == roleDetails['chapterId']){
+              return true;
             }
-            break;
-            case 'CHAPTER':
-            {
-                if(isContextSpecSearch && req.variables.context['clusterId'] == roleDetails['clusterId']){
-                  return true;
-                }
-            }
-            break;
+          }
+        }
+
+        if(req.variables['clusterId'] == roleDetails['clusterId']){
+          if(roleDetails['chapterId'] == 'all'){
+            return true;
+          }
+          if(req.variables['chapterId'] == roleDetails['chapterId']){
+            return true;
+          }
+        }
+      }
+        break;
 
             case 'SUBCHAPTER':
             {

@@ -138,7 +138,7 @@ let chapterSchema = `
     }
     
     type Query{ 
-        fetchChapter(chapterId: String): Chapter
+        fetchChapter(clusterId:String, chapterId: String): Chapter
         fetchChapters(id:String):[Chapter]
         fetchChaptersWithoutAll(id:String):[Chapter]
         fetchSubChapter(_id: String):SubChapter

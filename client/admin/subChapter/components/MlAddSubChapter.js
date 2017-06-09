@@ -171,9 +171,10 @@ class MlAddSubChapter extends React.Component {
 
   async findChapterDetails() {
     console.log(this.props);
+    let clusterId = this.props ? this.props.clusterId: ''
     let chapterId = this.props ? this.props.chapterId : ''
     if (chapterId) {
-      const response = await findChapterActionHandler(chapterId);
+      const response = await findChapterActionHandler(clusterId, chapterId);
       this.setState({loading: false, data: response});
     } else {
       this.setState({loading: false, data: ''})

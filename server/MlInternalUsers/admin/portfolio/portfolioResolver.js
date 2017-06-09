@@ -212,6 +212,7 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
       return response;
     }
     if(updatedResponse===1) {
+      let user = mlDBController.findOne('users', {_id: regRecord.userId}, context) || {};
       let portfolioDetails = {
         "transactionType": "processSetup",
         "communityType": regRecord.communityName,
@@ -227,6 +228,8 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
         "dateTime": new Date(),
         "status": "Yet To Start",
         "userId": regRecord.userId,
+        "username": regRecord.portfolioUserName,
+        "name": (user.profile&&user.profile.firstName?user.profile.firstName:"")+" "+(user.profile&&user.profile.lastName?user.profile.lastName:""),
         mobileNumber: regRecord.contactNumber,
       }
       orderNumberGenService.assignPortfolioId(portfolioDetails)

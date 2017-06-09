@@ -161,7 +161,7 @@ export default class MlOfficeItem extends React.Component {
                   <input type="text" placeholder="Transaction Id" defaultValue="transId" value={this.state.transInfo.transactionId} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Date & Time" defaultValue="date" value={this.state.userInfo.createdAt ? moment(this.state.userInfo.createdAt).format('MM/DD/YYYY HH:mm:ss') : '' } className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Date & Time" defaultValue="Date & Time" value={this.state.userInfo.createdAt ? moment(this.state.userInfo.createdAt).format('MM/DD/YYYY HH:mm:ss') : ' ' } className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Name" defaultValue="name" value={this.state.userInfo.name} className="form-control float-label" id=""/>

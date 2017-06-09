@@ -1,8 +1,8 @@
 /**
  * Created by venkatsrinag on 6/5/17.
  */
-import MlResolver from '../../commons/mlResolverDef'
-import MlRespPayload from '../../commons/mlPayload'
+import MlResolver from '../../../commons/mlResolverDef'
+import MlRespPayload from '../../../commons/mlPayload'
 import _ from 'lodash'
 
 MlResolver.MlQueryResolver['fetchConnections'] = (obj, args, context, info) =>{

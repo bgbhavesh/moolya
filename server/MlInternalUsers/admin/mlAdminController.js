@@ -83,11 +83,10 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
   const graphQLServer = express();
 
   config.configServer(graphQLServer)
-
   graphQLServer.use(helmet());
   graphQLServer.use(helmet.noCache());
   graphQLServer.use(helmet.frameguard());
-
+  graphQLServer.use(helmet.hsts());
   graphQLServer.use(cors());
   graphQLServer.use(config.path, bodyParser.json(), graphqlExpress( async (req, res) =>
   {

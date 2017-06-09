@@ -20,15 +20,8 @@ export default class CreateRequestComponent extends Component {
     return this;
   }
 
-  componentWillReceiveProps(newProps){
-    let popup=newProps.openPopUp
-    if(popup){
-      this.setState({show:true})
-    }
-  }
   async  optionsBySelectRequestType(value){
     this.setState({requestTypeId:value})
-    //   console.log(this.state.requestType)
   }
   async createRequest(){
     let requests={
@@ -49,17 +42,12 @@ export default class CreateRequestComponent extends Component {
     }
     const response = await createRequestsActionHandler(requests);
     if(response.success){
-      this.props.refreshList();
       this.setState({show:false,requestType:null})
-      // this.toggle();
-      // this.findRequestDetails();
       toastr.success("Request is created successfully");
       FlowRouter.go("/admin/transactions/requestedList");
-
     }else{
       this.setState({show:false,requestType:null})
       toastr.error(response.result);
-      // this.toggle();
       this.setState({requestType:null})
       FlowRouter.go("/admin/transactions/requestedList");
     }
@@ -85,7 +73,7 @@ export default class CreateRequestComponent extends Component {
   cancel(){
     //this.state.show = false
     this.setState({show:false})
-    FlowRouter.go("/admin/transactions/requestedList");/*/transactions/registrationRequested");*/
+    FlowRouter.go("/admin/transactions/requestedList");
   }
 
   render() {
@@ -95,14 +83,6 @@ export default class CreateRequestComponent extends Component {
         value:_id
       }
     }`;
-   /* let clusterquery=gql`query{ data:fetchActiveClusters{label:countryName,value:_id}}`;
-
-    let chapterquery=gql`query($id:String){
-    data:fetchChapters(id:$id) {
-        value:_id,
-        label:chapterName
-      }
-    }`;*/
 
     let subDepartmentquery=gql`query($id:String){
       data:fetchSubDepartments(id:$id) {
@@ -111,12 +91,6 @@ export default class CreateRequestComponent extends Component {
       }
     }`;
 
-    /*let subChapterquery=gql`query($chapterId:String,$clusterId:String){
-        data:fetchSubChaptersSelectMoolya(chapterId:$chapterId,clusterId:$clusterId) {
-          value:_id
-          label:subChapterName
-        }
-    }`;*/
     let clusterQuery = gql`query{
      data:fetchContextClusters {
         value:_id
@@ -124,6 +98,7 @@ export default class CreateRequestComponent extends Component {
       }
     }
     `;
+
     let chapterQuery = gql`query($id:String){  
       data:fetchContextChapters(id:$id) {
         value:_id
@@ -146,14 +121,11 @@ export default class CreateRequestComponent extends Component {
     }`;
     let chapterOption={options: { variables: {id:this.state.cluster}}};
     let subChapterOption={options: { variables: {id:this.state.chapter}}}
-   /* let chapterOption={options: { variables: {id:this.state.cluster}}};
-    let subchapterOption={options: { variables: {chapterId:this.state.chapter,clusterId:this.state.cluster}}};*/
     let communityOption={options: { variables: {clusterId:this.state.cluster, chapterId:this.state.chapter, subChapterId:this.state.subChapter}}};
 
     return (
-      <div className="popover-custom-class">
-        {this.state.show==true?
-          <div className="panel panel-default-bottom col-md-12">
+
+           <div className="" style={{'width':'400px'}}>
             <div className="mrgn-btm">
               <label>Create Request</label>
             </div>
@@ -186,14 +158,12 @@ export default class CreateRequestComponent extends Component {
               <a data-toggle="tooltip" title="Submit" data-placement="top" onClick={this.createRequest.bind(this)} className="hex_btn hex_btn_in">
                 <span className="ml ml-save"></span>
               </a>
-              <a data-toggle="tooltip" title="Cancel" data-placement="top" href="" className="hex_btn hex_btn_in" onClick={this.cancel.bind(this)}>
+              <a data-toggle="tooltip" title="Cancel" data-placement="top" href="" className="hex_btn hex_btn_in" onClick={this.props.closePopOver}>
                 <span className="ml ml-delete"></span>
               </a>
             </div>
 
           </div>
-          :<div></div>}
-      </div>
 
     )
   }

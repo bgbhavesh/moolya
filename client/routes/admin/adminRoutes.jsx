@@ -356,14 +356,16 @@ adminSection.route('/transactions/portfolio/history', {
 adminSection.route('/transactions/portfolio/editRequests/:id/:communityType', {
   name: 'transaction_portfolio_EditRequests',
   action(params){
-    mount(AdminLayout,{adminContent:<MlPortfolio viewMode={false} config={params.id} communityType={params.communityType}/>})
+    /*mount(AdminLayout,{adminContent:<MlPortfolio viewMode={false} config={params.id} communityType={params.communityType}/>})*/
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'portfolio', subModule:'edit'}} />, adminContent:<MlPortfolio viewMode={false} config={params.id} communityType={params.communityType}/>})
   }
 });
 
 adminSection.route('/transactions/portfolio/viewPortfolio/:id/:communityType', {
   name: 'transaction_portfolio_viewPortfolio',
   action(params){
-    mount(AdminLayout,{adminContent:<MlPortfolio viewMode={true} config={params.id} communityType={params.communityType}/>})
+    /*mount(AdminLayout,{adminContent:<MlPortfolio viewMode={true} config={params.id} communityType={params.communityType}/>})*/
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'portfolio', subModule:'view'}} />, adminContent:<MlPortfolio viewMode={true} config={params.id} communityType={params.communityType}/>})
   }
 });
 

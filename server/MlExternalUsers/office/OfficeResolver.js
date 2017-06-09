@@ -21,12 +21,32 @@ MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
   }
 }
 
+MlResolver.MlQueryResolver['fetchOfficeById'] = (obj, args, context, info) => {
+  let myOffice = [];
+  if (context.userId) {
+    myOffice = mlDBController.findOne('MlOffice', {_id:args.officeId})
+    return myOffice
+  } else {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload("Not a Valid user", code);
+    return response;
+  }
+}
+
 MlResolver.MlQueryResolver['fetchOfficeMembers'] = (obj, args, context, info) => {
   let query = {
     officeId:args.officeId,
     isPrincipal: args.isPrincipal
   }
   let response = mlDBController.find('MlOfficeMembers', query).fetch();
+  return response;
+}
+
+MlResolver.MlQueryResolver['fetchOfficeMember'] = (obj, args, context, info) => {
+  let query = {
+    _id:args.memberId
+  }
+  let response = mlDBController.findOne('MlOfficeMembers', query);
   return response;
 }
 
@@ -164,7 +184,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
         let response = new MlRespPayload().successPayload("Please add atleast one office memeber", code);
         return response;
     }
-
+    args.officeMember.joiningDate = new Date();
     var ret = new MlOfficeValidations().officeMemeberValidations(args.myOfficeId, args.officeMember);
     if(!ret.success){
         let code = 400;
@@ -183,7 +203,56 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
             // Send an invite to the Existing User
         }
         else{
-            // Soft Registration has to be done to new user
+          // Soft Registration has to be done to new user
+          var emails=[{address:args.officeMember.emailId,verified:false}];
+          args.registration = {}
+          if(Meteor.users.findOne({_id : context.userId}))
+          {
+            args.registration.createdBy = Meteor.users.findOne({_id: context.userId}).username
+          }
+          args.registration.firstName = args.officeMember.name;
+          args.registration.email = args.officeMember.emailId;
+          args.registration.contactNumber = args.officeMember.mobileNumber;
+          let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Yet To Start",emails:emails}, context)
+          if(id){
+            var userProfile = {
+              registrationId: id,
+              mobileNumber: args.officeMember.mobileNumber,
+              communityName: "BROWSER",
+              isDefault: false,
+              isActive: true,
+              isApprove:false,
+              isTypeOfficeBearer:true
+            }
+            let profile = {
+              isInternaluser: false,
+              isExternaluser: true,
+              email: args.officeMember.emailId,
+              mobileNumber:args.officeMember.mobileNumber,
+              isActive   : false,
+              firstName  :args.officeMember.name,
+              lastName   : args.officeMember.name,
+              displayName :args.officeMember.name+' '+ args.officeMember.name,
+              externalUserProfiles: [userProfile]
+            }
+            let userObject = {
+              username: args.officeMember.emailId,
+              profile: profile,
+              emails:emails?emails:[]
+            }
+            console.log(userObject);
+            orderNumberGenService .createUserProfileId(userProfile);
+            let userId = mlDBController.insert('users', userObject, context)
+            console.log(userId);
+           /* orderNumberGenService .createUserProfileId(userProfile);*/
+            //let userId = mlDBController.insert('users', {userObject}, context)
+            /*if(userId){
+              //Email & MobileNumber verification updates to user
+              mlDBController.update('users', {username: userObject.username},
+                {$set: {'services.email':registerDetails&&registerDetails.services?registerDetails.services.email:{},
+                  'emails':userObject.emails}},{'blackbox': true}, context);
+            }*/
+          }
         }
 
     }catch (e){
@@ -195,4 +264,24 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
     let code = 200;
     let response = new MlRespPayload().successPayload("Member Added Successfully", code);
     return response;
+}
+
+MlResolver.MlMutationResolver['updateOfficeMember'] =(obj, args, context, info) => {
+  if(!args.memberId){
+    let code = 400;
+    let response = new MlRespPayload().successPayload("Invalid Office", code);
+    return response;
+  }
+  try{
+    let ret = mlDBController.update('MlOfficeMembers', args.memberId, args.officeMember, {$set:true}, context);
+    let code = 200;
+    let response = new MlRespPayload().successPayload("Member Updated Successfully", code);
+    return response;
+  } catch (e){
+    let code = 400;
+    let response = new MlRespPayload().successPayload(e.message, code);
+    return response;
+  }
+
+
 }

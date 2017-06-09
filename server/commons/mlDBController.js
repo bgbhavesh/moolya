@@ -1,6 +1,5 @@
 import MlCollections from '../../lib/common/commonSchemas'
 import _ from 'lodash';
-MlChaptersTemp = new Mongo.Collection('mlChaptersTemp');
 
 class MlDBController{
   constructor(){
@@ -167,14 +166,8 @@ class MlDBController{
     else{
       collection = MlCollections[collectionName]
     }
-    let hasLimit = pipeline.find((pipe) => pipe['$limit'] > 0 );
-    if(collectionName == 'MlChapters' && !hasLimit ){
-      pipeline.push({ $out: "mlChaptersTemp" });
-      let rst = collection.aggregate(pipeline);
-      response = MlChaptersTemp.find({}).fetch();
-    } else {
       response = collection.aggregate(pipeline);
-    }
+
     return response;
   }
 }

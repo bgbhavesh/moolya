@@ -186,11 +186,11 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
     }
     args.officeMember.joiningDate = new Date();
     var ret = new MlOfficeValidations().officeMemeberValidations(args.myOfficeId, args.officeMember);
-    if(!ret.success){
+   /* if(!ret.success){
         let code = 400;
         let response = new MlRespPayload().successPayload(ret.msg, code);
         return response;
-    }
+    }*/
 
     try{
 
@@ -203,7 +203,56 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
             // Send an invite to the Existing User
         }
         else{
-            // Soft Registration has to be done to new user
+          // Soft Registration has to be done to new user
+          var emails=[{address:args.officeMember.emailId,verified:false}];
+          args.registration = {}
+          if(Meteor.users.findOne({_id : context.userId}))
+          {
+            args.registration.createdBy = Meteor.users.findOne({_id: context.userId}).username
+          }
+          args.registration.firstName = args.officeMember.name;
+          args.registration.email = args.officeMember.emailId;
+          args.registration.contactNumber = args.officeMember.mobileNumber;
+          let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Yet To Start",emails:emails}, context)
+          if(id){
+            var userProfile = {
+              registrationId: id,
+              mobileNumber: args.officeMember.mobileNumber,
+              communityName: "BROWSER",
+              isDefault: false,
+              isActive: true,
+              isApprove:false,
+              isTypeOfficeBearer:true
+            }
+            let profile = {
+              isInternaluser: false,
+              isExternaluser: true,
+              email: args.officeMember.emailId,
+              mobileNumber:args.officeMember.mobileNumber,
+              isActive   : false,
+              firstName  :args.officeMember.name,
+              lastName   : args.officeMember.name,
+              displayName :args.officeMember.name+' '+ args.officeMember.name,
+              externalUserProfiles: [userProfile]
+            }
+            let userObject = {
+              username: args.officeMember.emailId,
+              profile: profile,
+              emails:emails?emails:[]
+            }
+            console.log(userObject);
+            orderNumberGenService .createUserProfileId(userProfile);
+            let userId = mlDBController.insert('users', userObject, context)
+            console.log(userId);
+           /* orderNumberGenService .createUserProfileId(userProfile);*/
+            //let userId = mlDBController.insert('users', {userObject}, context)
+            /*if(userId){
+              //Email & MobileNumber verification updates to user
+              mlDBController.update('users', {username: userObject.username},
+                {$set: {'services.email':registerDetails&&registerDetails.services?registerDetails.services.email:{},
+                  'emails':userObject.emails}},{'blackbox': true}, context);
+            }*/
+          }
         }
 
     }catch (e){

@@ -77,7 +77,7 @@ let myOfficeSchema = `
        userId:String,
        firstName:String,
        lastName:String,
-       mobileNumber:Int,
+       mobileNumber:String,
        emailId:String,
        userType:String,
        description:String,

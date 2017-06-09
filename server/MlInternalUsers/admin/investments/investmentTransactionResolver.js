@@ -8,6 +8,11 @@ MlResolver.MlQueryResolver['fetchProcessTransactions'] = (obj, args, context, in
 }
 
 MlResolver.MlQueryResolver['fetchProcessStages'] = (obj, args, context, info) =>{
+    let processStage = mlDBController.find('MlProcessStages', {isActive:true}, context).fetch()
+    if(processStage){
+      return processStage
+    }
+  return {};
 }
 
 MlResolver.MlQueryResolver['fetchProcessActions'] = (obj, args, context, info) =>{

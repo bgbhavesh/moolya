@@ -223,7 +223,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
               <div className="panel-heading">Add Stages<img src="../images/add.png" onClick={that.addStageComponent.bind(that)}/></div>
               <div className="panel-body">
                 {that.state.stages.map(function (stage, sIdx) {
-                  let stageQuery = gql`query{data:fetchStageOfCompany {value:_id, label:stageOfCompanyName}}`;
+                  let stageQuery = gql`query{data:fetchProcessStages {value:_id, label:name}}`;
                    return(
                      <div className="row" key={sIdx}>
                        <div className="col-md-6">
@@ -247,7 +247,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
                        </div>
                        <div className="col-md-12">
                          {stage.stageActions.map(function (action, aIdx) {
-                           let actionQuery = gql`query{data:fetchStageOfCompany {value:_id, label:stageOfCompanyName}}`;
+                           let actionQuery = gql`query{data:fetchProcessStages {value:_id, label:name}}`;
                            return(
                              <div className="form_inner_block col-md-4" key={aIdx}>
                                <div className="add_form_block"><img src="../images/add.png" onClick={that.addActionComponent.bind(that, sIdx)}/></div>

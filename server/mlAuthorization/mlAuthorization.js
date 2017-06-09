@@ -97,24 +97,24 @@ class MlAuthorization
           return isValidAuth
     }
 
-    valiateApi(modules, typeName){
-        var moduleName, actionName, isWhiteList;
-        _.each(modules, function (module)
-        {
-            let validApi = _.find(module, {api:typeName})
-            if(validApi && validApi.isWhiteList){
-              isWhiteList = true
-              return;
-            }
-            if(validApi){
-              moduleName = validApi.moduleName;
-              actionName = validApi.actionName;
-              return;
-            }
-        })
+  valiateApi(modules, typeName){
+    var moduleName, actionName, isWhiteList;
+    _.each(modules, function (module)
+    {
+      let validApi = _.find(module, {api:typeName})
+      if(validApi && validApi.isWhiteList){
+        isWhiteList = true
+        return;
+      }
+      if(validApi){
+        moduleName = validApi.moduleName;
+        actionName = validApi.actionName;
+        return;
+      }
+    })
 
-        return {isWhiteList:isWhiteList, moduleName:moduleName, actionName:actionName}
-    }
+    return {isWhiteList:isWhiteList, moduleName:moduleName, actionName:actionName}
+  }
 
 
     validteAuthorization(userId, moduleName, actionName, req, isContextSpecSearch)
@@ -136,11 +136,11 @@ class MlAuthorization
             return false;
         }
 
-        var user = mlDBController.findOne('users', {_id: userId}, context)
-        if(user && user.profile && user.profile.isInternaluser == true)
-        {
-            let userProfileDetails = new MlAdminUserContext().userProfileDetails(userId);
-            var hierarchy = MlHierarchy.findOne({level:Number(userProfileDetails.hierarchyLevel)});
+    var user = mlDBController.findOne('users', {_id: userId}, context)
+    if(user && user.profile && user.profile.isInternaluser == true)
+    {
+      let userProfileDetails = new MlAdminUserContext().userProfileDetails(userId);
+      var hierarchy = MlHierarchy.findOne({level:Number(userProfileDetails.hierarchyLevel)});
 
             if(hierarchy.isParent===true){
               return true;
@@ -212,7 +212,7 @@ class MlAuthorization
       {
         if(isContextSpecSearch && req.variables.context){
           if(roleDetails['clusterId'] == req.variables.context['clusterId']){
-            if(roleDetails['chapterId'] == 'all')
+            if(roleDetails['chapterId'] == 'all' || actionName == 'READ')
               return true;
             if(req.variables.context['chapterId'] == roleDetails['chapterId']){
               return true;
@@ -500,15 +500,6 @@ class MlAuthorization
 
         return false
     }
-
-  // hasAccessBasedOnContext(context,moduleName,actionName,req){
-  //   let hasAccessBasedOnContext=true;
-  //   switch(moduleName){
-  //     case "MASTER_SETTINGS":
-  //       hasAccessBasedOnContext=new MlAdminMasterSettingsAuthorization(context).authorize(actionName,context,req);
-  //   }
-  //   return hasAccessBasedOnContext;
-  // }
 
 }
 

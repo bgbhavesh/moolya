@@ -197,6 +197,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
 
         var officeMember = args.officeMember;
         officeMember.officeId = args.myOfficeId;
+        officeMember.name = officeMember.firstName +' ' + officeMember.lastName;
         let ret = MlOfficeMembers.insert({...officeMember});
 
         let isUserExist = mlDBController.findOne('users', {username: args.officeMember.emailId})

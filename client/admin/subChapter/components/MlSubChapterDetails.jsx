@@ -242,6 +242,10 @@ class MlSubChapterDetails extends React.Component {
                           className="form-control float-label" disabled="disabled"/>
                   </div>
                   <div className="form-group">
+                    <input type="text" ref="state" placeholder="State" className="form-control float-label"
+                           defaultValue={this.state.data && this.state.data.stateName} readOnly="true"/>
+                  </div>
+                  <div className="form-group">
                     <input type="text" placeholder="Chapter Name" ref="chapterName" className="form-control float-label"
                            readOnly defaultValue={this.state.data && this.state.data.chapterName} disabled="disabled"/>
                   </div>
@@ -261,11 +265,11 @@ class MlSubChapterDetails extends React.Component {
                                     query={subChapterQuery} isDynamic={true} queryOptions={subChapterOption}
                                     onSelect={this.selectAssociateChapter.bind(this)}/>
                     </div>
-                    <br className="brclear"/>
-                    <div className="form-group">
-                      <input type="text" ref="state" placeholder="State" className="form-control float-label"
-                             defaultValue={this.state.data && this.state.data.stateName} readOnly="true"/>
-                    </div>
+                    {/*<br className="brclear"/>*/}
+                    {/*<div className="form-group">*/}
+                      {/*<input type="text" ref="state" placeholder="State" className="form-control float-label"*/}
+                             {/*defaultValue={this.state.data && this.state.data.stateName} readOnly="true"/>*/}
+                    {/*</div>*/}
                     <div className="form-group">
                       <input type="text" ref="subChapterEmail" placeholder="Sub-Chapter Email ID"
                              defaultValue={this.state.data && this.state.data.subChapterEmail}

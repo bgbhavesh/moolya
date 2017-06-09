@@ -19,14 +19,12 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
     {dataField: "requestId",title:"Id",'isKey':true,isHidden:true,selectRow:true},
     {dataField: "dateTime", title: "Created Date",dataSort:true,selectRow:true},
     {dataField: "userId", title: "User Name",dataSort:true,selectRow:true},
-    {dataField: "transactionType", title: "Activity",dataSort:true,selectRow:true},
-    {dataField: "clusterName", title: "Details",dataSort:true,selectRow:true},
-    {dataField: "chapterName", title: "TransactionTypeName",dataSort:true,selectRow:true},
+    {dataField: "transactionId", title: "Transaction Id",dataSort:true,selectRow:true},
     {dataField: "clusterName", title: "Cluster",dataSort:true,selectRow:true},
     {dataField: "chapterName", title: "Chapter",dataSort:true,selectRow:true},
     {dataField: "subChapterName", title: "Sub Chapter",dataSort:true,selectRow:true},
     {dataField: "communityName", title: "Community",dataSort:true,selectRow:true},
-    {dataField: "communityName", title: "Payment",dataSort:true,selectRow:true},
+    {dataField: "paymentDetails.paymentStatus", title: "Payment",dataSort:true,selectRow:true},
     {dataField: "status", title: "status",dataSort:true,selectRow:true}
   ],
   tableHeaderClass:'react_table_head',
@@ -51,6 +49,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
                           _id
                           userId
                           status
+                          transactionId
                           transactionType
                           clusterName
                           chapterName
@@ -58,6 +57,31 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
                           communityName
                           dateTime
                           mobileNumber
+                          paymentDetails{
+                            subscriptionName
+                            cost
+                            isTaxInclusive
+                            about
+                            dateTime
+                            
+                            totalAmountPaid
+                            paymentMode
+                            cardNumber
+                            cardHolderName
+                            promotionCode
+                            codeAmount
+                            promotionStatus
+                            voucherCode
+                            voucherAmount
+                            voucherStatus
+                            paymentStatus
+                          }
+                          deviceDetails{
+                            deviceName
+                            deviceId
+                            ipAddress
+                            location
+                          }
                       }
                     }
               }

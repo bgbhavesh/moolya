@@ -24,6 +24,7 @@ let investments = `
         voucherAmount:String,
         voucherStatus:String,
         paymentStatus:String
+        isPaid : Boolean
     }
     
     input stageActions{
@@ -93,6 +94,7 @@ let investments = `
         voucherAmount:String,
         voucherStatus:String,
         paymentStatus:String
+        isPaid : Boolean
     }
     
     type CustomerDetails{
@@ -180,7 +182,7 @@ let investments = `
         fetchProcessStages:[Stages]
         fetchProcessActions:[Actions]
         fetchProcessTransactionCustomerDetails(processTransactionId:String):CustomerDetails
-        fetchProcessSetup(processTransactionId:String):[ProcessSteps]
+        fetchProcessSetup(processTransactionId:String):ProcessSetup
     }
 `
 
@@ -188,6 +190,8 @@ let investments = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],investments]);
 
 let supportedApi = [
-  {api:'updateProcessSetup', actionName:'UPDATE', moduleName:"PROCESSSETUP"}
+  {api:'updateProcessSetup', actionName:'UPDATE', moduleName:"PROCESSSETUP"},
+  {api:'fetchProcessSetup', actionName:'READ', moduleName:"PROCESSSETUP"},
+  {api:'updateProcessTransaction', actionName:'UPDATE', moduleName:"PROCESSSETUP"}
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

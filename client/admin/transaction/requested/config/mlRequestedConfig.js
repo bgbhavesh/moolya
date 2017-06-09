@@ -5,6 +5,8 @@ import MlCustomFilter from "../../../../commons/customFilters/customFilter";
 import moment from "moment";
 import hierarchyValidations from "../../../../commons/containers/hierarchy/mlHierarchyValidations"
 import {validateTransaction} from '../actions/assignUserforTransactionAction'
+import MlAssignComponent from '../component/MlAssignComponent'
+
 
 function dateFormatter (data){
   let createdDateTime=data&&data.data&&data.data.registrationDate?data.data.registrationDate:null;
@@ -55,9 +57,8 @@ const mlUserTypeTableConfig=new MlViewer.View({
       actionName: 'edit',
       showAction: true,
       handler: async(data)=>{
-        //if(data && data.id && (Meteor.userId()==data.userName || Meteor.user().profile.email=="platformadmin@moolya.com")){
-        //  let response =  await validateTransaction(data.registrationId,"MlRegistration",data.assignedUserId);
-        if(data && data.id){
+        let response =  await validateTransaction(data.registrationId,"MlRegistration",data.assignedUserId);
+        if(data && data.id && response.success === true){
           FlowRouter.go("/admin/transactions/editRequests/"+data.id);
         }else if(data && data.id){
           toastr.error("User does not have access to edit record");
@@ -69,13 +70,16 @@ const mlUserTypeTableConfig=new MlViewer.View({
     {
       showAction: true,
       actionName: 'assign',
-      handler: (data) => {
-        console.log(data);
-        if (data && data.id) {
-          const internalConfig = data;
-        } else {
-          toastr.error("Please Select a record");
-        }
+      hasPopOver:true,
+      popOverTitle:'Assign Registration',
+      placement:'top',
+      target:'registrationAssign',
+      popOverComponent:<MlAssignComponent />,
+      actionComponent:function(props){
+          return  <div className={props.activeClass} id={props.actionName}>
+            <div onClick={props.onClickHandler} className={props.activesubclass} data-toggle="tooltip" title={props.actionName} data-placement="top" >
+              <span className={props.iconClass} id={props.target}></span>
+            </div></div>;
       }
     }
   ],

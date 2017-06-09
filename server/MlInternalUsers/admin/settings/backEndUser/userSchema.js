@@ -456,7 +456,7 @@ let BackEndUser = `
         fetchUsersBysubChapterDepSubDep(clusterId:String, chapterId:String, subChapterId:String): [BackendUsers]
         fetchsubChapterUserDepSubDep(userId:String, subChapterId:String):[dep]  
         fetchAssignedAndUnAssignedUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String,subChapterName:String): [BackendUsers]
-        fetchUsersForDashboard(clusterId:String, chapterId:String, subChapterId:String, userType:String): SearchResp
+        fetchUsersForDashboard(clusterId:String, chapterId:String, subChapterId:String, userType:String,offset: Int,limit:Int,fieldsData:[GenericFilter]): SearchResp
         fetchUserTypeFromProfile:String
         fetchUserForReistration(clusterId:String, chapterId:String, subChapterId:String,communityId:String departmentId:String,subDepartmentId:String,roleId:String):[BackendUsers]
         fetchMapCenterCordsForUser(module:String, id:String):mapCenterCords

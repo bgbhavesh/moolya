@@ -31,6 +31,7 @@ import MlAppProfileList from '../../../client/app/profile/components/MlAppProfil
 import MlAppMyOffice from '../../../client/app/profile/office/components/MlAppMyOffice'
 import MlAppAddOffice from '../../app/profile/office/components/MlAppAddOffice'
 import MlAppEditOffice from '../../app/profile/office/components/MlAppEditOffice'
+import MlAppMember from '../../app/profile/office/components/OfficeMemberInfo/MlAppMember'
 import MlAppOfficeMembersDetails from '../../app/profile/office/components/MlAppOfficeMembersDetails'
 import MlAppNewSpokePerson from '../../app/profile/office/components/MlAppNewSpokePerson'
 import MlAppPayOfficeSubscription from '../../app/profile/office/components/MlAppPayOfficeSubscription';
@@ -129,6 +130,13 @@ appSection.route('/editOffice/:officeId', {
   name: 'addOffice',
   action(){
     mount(AppLayout, {appContent: <MlAppEditOffice />, isProfileMenu: true})
+  }
+});
+
+appSection.route('/officeMember/:officeId/:memberId', {
+  name: 'officeMember',
+  action(){
+    mount(AppLayout, {appContent: <MlAppMember />, isProfileMenu: true})
   }
 });
 

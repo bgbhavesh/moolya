@@ -1,5 +1,6 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
+import _ from 'lodash'
 
 export async function updateProcessSetupActionHandler(data, details)
 {
@@ -26,5 +27,28 @@ export async function updateProcessSetupActionHandler(data, details)
     }
   })
   const id = result.data.updateProcessSetup;
+  return id
+}
+
+export async function updateProcessTransaction(transId, data) {
+
+  const result = await client.mutate({
+    mutation: gql`
+        mutation ($processTransactionId:String, $processTransactions: processTransactions) {
+        updateProcessTransaction(processTransactionId:$processTransactionId, processTransactions: $processTransactions) {
+          success
+          code
+          result
+        }
+      }
+    `,
+    variables: {
+      processTransactionId: transId,
+      processTransactions:data
+    },
+    forceFetch:true
+  });
+  console.log(result);
+  const id = result.data.updateProcessTransaction;
   return id
 }

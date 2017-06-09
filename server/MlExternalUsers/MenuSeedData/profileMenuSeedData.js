@@ -30,7 +30,7 @@ if(Meteor.isServer){
               "uniqueId" : "portfolio"
           },
           {
-            "image":"ml ml-institution",
+            "image":"ml ml-institutions",
             "link": "/app/myOffice",
             "isLink" : true,
             "isMenu" : true,

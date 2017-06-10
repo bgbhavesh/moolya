@@ -145,6 +145,10 @@ export default class MlAppNewSpokePerson extends React.Component {
     }
   }
 
+  backUserRoute(){
+    FlowRouter.go('/app/myOffice/')
+  }
+
   render() {
     let that = this;
     return (
@@ -269,7 +273,7 @@ export default class MlAppNewSpokePerson extends React.Component {
                   {/*</div>*/}
                   <div className="form-group">
                     <a className="mlUpload_btn" onClick={this.submitDetails.bind(this)}>Submit</a>
-                    <a href="#" className="mlUpload_btn">Cancel</a>
+                    <a className="mlUpload_btn" onClick={this.backUserRoute.bind(this)}>Cancel</a>
                   </div>
                 </form>
               </div>

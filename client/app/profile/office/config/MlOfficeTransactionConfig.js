@@ -32,9 +32,12 @@ const mlOfficeTransactionConfig = new MlViewer.View({
   tableHeaderClass: 'react_table_head',
   showActionComponent: false,
   actionConfiguration: [],
-  //temp query to view data need to change
-  graphQlQuery: gql` query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
-                        data: SearchQuery(module: "officeTransaction", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData) {
+  queryOptions:true,
+  buildQueryOptions:(config)=>{
+    return {context: {docId: config && config.params ? config.params : null}}
+  },
+  graphQlQuery: gql` query SearchQuery($context:ContextParams, $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
+                        data: SearchQuery(module: "officeTransaction", context:$context, offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData) {
                           totalRecords
                           data {
                             ... on officeTransactionType {

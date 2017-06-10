@@ -32,7 +32,7 @@ export default class PopOverAction extends React.Component {
     return (
       <span>
         <ActionComponent {...this.props} onClickHandler={this.props.handler.bind(this,this.props,this.clickHandler)}/>
-        <Popover placement={this.props.placement?this.props.placement:'top'} isOpen={this.state.popoverOpen} target={this.props.target} toggle={this.toggle}>
+        <Popover className={this.props.popoverClassName||''} placement={this.props.placement?this.props.placement:'top'} isOpen={this.state.popoverOpen} target={this.props.target} toggle={this.toggle}>
           <PopoverTitle>{this.props.popOverTitle}</PopoverTitle>
           <PopoverContent>{PopOverComponent}</PopoverContent>
         </Popover>

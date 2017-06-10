@@ -70,7 +70,7 @@ export default class MlAppNewSpokePerson extends React.Component {
       let TUC = usersData.teamUserCount?Number(usersData.teamUserCount):0
       let TC = usersData.totalCount?Number(usersData.totalCount):0
       if ((PUC + TUC) > TC)
-        return {success: false, result: 'Total count can not be greator than Principle and user'}
+        return {success: false, result: 'Total user count cannot be less than principal and team'}
       else if (!_.isEmpty(usersData.availableCommunities)) {
         let communities = usersData.availableCommunities
         let arrayCount = _.map(communities, 'userCount')
@@ -143,6 +143,10 @@ export default class MlAppNewSpokePerson extends React.Component {
       data.splice(id, 0, specificData);
       this.setState({availableCommunities: data})
     }
+  }
+
+  backUserRoute(){
+    FlowRouter.go('/app/myOffice/')
   }
 
   render() {
@@ -269,7 +273,7 @@ export default class MlAppNewSpokePerson extends React.Component {
                   {/*</div>*/}
                   <div className="form-group">
                     <a className="mlUpload_btn" onClick={this.submitDetails.bind(this)}>Submit</a>
-                    <a href="#" className="mlUpload_btn">Cancel</a>
+                    <a className="mlUpload_btn" onClick={this.backUserRoute.bind(this)}>Cancel</a>
                   </div>
                 </form>
               </div>

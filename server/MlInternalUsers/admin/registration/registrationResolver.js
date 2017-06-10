@@ -5,8 +5,8 @@ import MlAccounts from '../../../commons/mlAccounts'
 import mlRegistrationRepo from './mlRegistrationRepo';
 import MlAdminUserContext from '../../../mlAuthorization/mlAdminUserContext'
 import geocoder from 'geocoder'
-import _ from 'lodash'
-
+import _lodash from 'lodash'
+import _ from 'underscore'
 import moment from 'moment'
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
   var validationCheck=null;
@@ -323,7 +323,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
               //check if the registration profile(community based) exists for user and can be updated
                userId=existingUser._id;
                 let externalUserProfiles=existingUser.profile.externalUserProfiles
-                let userExProfile=_.find(externalUserProfiles,function (profile) {
+                let userExProfile=_lodash.find(externalUserProfiles,function (profile) {
                             return profile.registrationId==id
                           })
                 if(userExProfile){

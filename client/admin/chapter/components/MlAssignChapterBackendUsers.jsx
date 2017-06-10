@@ -9,7 +9,6 @@ import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
 import MlAssignChapterBackendUserList from "./MlAssignChapterBackendUserList";
 import MlAssignChapterBackendUserRoles from "./MlAssignChapterBackendUserRoles";
 import {multipartFormHandler} from "../../../commons/MlMultipartFormAction";
-// import {findSubChapterActionHandler} from "../actions/findSubChapter";
 import {findSubChapterActionHandler} from "../../../../client/admin/subChapter/actions/findSubChapter";
 import {findAdminUserDetails} from "../../../commons/findAdminUserDetails";
 import {fetchAdminUserRoles} from "../../../commons/fetchAdminUserRoles";
@@ -56,7 +55,7 @@ class MlAssignChapterBackendUsers extends React.Component {
 
   async findSubChapterDetails() {
     let subChapterId = this.props.params.subChapterId;
-    const response = await findSubChapterActionHandler(subChapterId);   //findSubChapterActionHandler
+    const response = await findSubChapterActionHandler(subChapterId);
     if(response){
       let isDefaultSubChapter= response.isDefaultSubChapter
       this.setState({isDefaultSubChapter: isDefaultSubChapter});

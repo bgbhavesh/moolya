@@ -13,9 +13,6 @@ import MlAppStartupTabs from '../../../client/app/startup/components/MlAppStartu
 import  MlAppIdeatorEditTabs from '../../../client/app/ideators/components/MlAppIdeatorEditTabs'
 import MlAppCommunitiesList from '../../../client/app/commons/components/MlAppCommunitiesList'
 
-// import MyProfileAddressBook from '../../admin/profile/component/MlMyProfileAddressBook'
-// import MyProfileSettings from '../../admin/profile/component/MlMyProfileSettings'
-import MlAppProfileTabs from '../../app/profile/components/MlAppProfileTabs'
 import MlAdminProfileHeader from'../../admin/layouts/header/MlAdminProfileHeader'
 import MlAppDashboard from '../../app/dashboard/components/MlAppDashboard'
 import MlPortfolioLanding from '../../app/commons/components/MlPortfolioLanding'
@@ -86,7 +83,6 @@ appSection.route('/appSwitchProfile', {
 appSection.route('/addressBook', {
   name: 'addressBook',
   action(){
-    // mount(AppLayout,{appContent:<MyProfileAddressBook/>, isProfileMenu:true})
     mount(AppLayout,{appContent:<MlAppProfileAddressBook/>, isProfileMenu:true})
   }
 });
@@ -128,8 +124,8 @@ appSection.route('/payOfficeSubscription/:officeId', {
 
 appSection.route('/editOffice/:officeId', {
   name: 'addOffice',
-  action(){
-    mount(AppLayout, {appContent: <MlAppEditOffice />, isProfileMenu: true})
+  action(params){
+    mount(AppLayout, {appContent: <MlAppEditOffice config={params.officeId} />, isProfileMenu: true})
   }
 });
 

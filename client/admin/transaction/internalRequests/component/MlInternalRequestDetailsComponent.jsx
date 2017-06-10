@@ -96,7 +96,7 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
         FlowRouter.go("/admin/transactions/requestedList");
       }
     }else{
-      toastr.error("User not available in hierarchy")
+      toastr.error("User doesn't have privileges to act on this request")
     }
   }
 

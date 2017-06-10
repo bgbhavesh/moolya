@@ -19,7 +19,6 @@ input ContextParams{
    settingsType:String,
    moduleName: String,
    transactionTypeName: String
-   docId:String
 }
 
 input SearchSpec{

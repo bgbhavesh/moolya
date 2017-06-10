@@ -182,3 +182,13 @@ updateArrayofObjects = (updateFor, source) =>{
   }
   return source;
 }
+
+MlResolver.MlQueryResolver['fetchPortfolioClusterId'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let portfolio = MlPortfolioDetails.findOne({"_id": args.portfoliodetailsId})
+    if (portfolio.clusterId) {
+      return portfolio;
+    }
+  }
+  return {};
+}

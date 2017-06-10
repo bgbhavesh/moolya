@@ -5,6 +5,7 @@
 import mlSms from './mlSms';
 import MlDBController from './mlDBController';
 import MlTransactionsHandler from '../../server/commons/mlTransactionsLog';
+import passwordUtil from "./passwordUtil";
 
 var fromEmail = Meteor.settings.private.fromEmailAddr;
 export default MlAccounts=class MlAccounts {
@@ -322,6 +323,44 @@ export default MlAccounts=class MlAccounts {
     }
   }
 
+  static sendForgotPasswordEamil(email, context) {
+    user = mlDBController.findOne('users', {"$or":[{username:email},{'emails.address':email}]});
+    if(!user){
+      return {email:email, error: true,reason:"Invalid Email, User not register with this email", code:404};
+    }
+    context.userId = user._id;
+    context.browser = 'Forgot Password';
+    context.url="https://mymoolya.com";
+    let token = Random.secret();
+    let res = mlDBController.update('users', user._id, { 'services.password.reset.token': token }, {$set:true}, context);
+    if(res){
+      var emailOptions={};
+      //emailContent= MlAccounts.greet("To verify your account email,",user,Meteor.absoluteUrl('reset')+'/'+token);
+      emailOptions.from=fromEmail;
+      emailOptions.to=email;
+      emailOptions.subject="Forgot Password !";
+      emailOptions.html=Meteor.absoluteUrl('reset')+'/'+token;
+      Meteor.setTimeout(function () {
+        mlEmail.sendHtml(emailOptions);
+      }, 2 * 1000);
+      return {error: false,reason:"Reset link send successfully", code:200};
+    }
+  }
+
+  static resetPasswordWithToken(token, password, context) {
+    user = mlDBController.findOne('users', {"services.password.reset.token":token});
+     if(!user){
+      return {token:token, error: true,reason:"Reset link Expired/Used", code:404};
+    }
+    context.userId = user._id;
+    context.browser = 'Reset Password API';
+    context.url="https://mymoolya.com";
+    let salted = passwordUtil.hashPassword(password);
+    let res = mlDBController.update('users', user._id, { 'services.password.bcrypt': salted, 'services.password.reset': {} }, {$set:true}, context);
+    if(res){
+      return {error: false,reason:"Password reset successfully", code:200};
+    }
+  }
 }
 
 Meteor.methods({
@@ -339,11 +378,11 @@ Meteor.methods({
 })
 
 Accounts.validateLoginAttempt(function (details) {
-  if(details&&details.user.profile.InternalUprofile&&details.user.profile.InternalUprofile.moolyaProfile&&details.user.profile.InternalUprofile.moolyaProfile.assignedDepartment && details.user.profile.InternalUprofile.moolyaProfile.assignedDepartment.length == 1){
+  if(details&&details.user&&details.user.profile.InternalUprofile&&details.user.profile.InternalUprofile.moolyaProfile&&details.user.profile.InternalUprofile.moolyaProfile.assignedDepartment && details.user.profile.InternalUprofile.moolyaProfile.assignedDepartment.length == 1){
     let departmentId = details.user.profile.InternalUprofile.moolyaProfile.assignedDepartment[0].department;
     if(departmentId !='all') {
       mlDBController = new MlDBController();
-      department = mlDBController.findOne('MlDepartments',{_id:departmentId}, this);
+      var department = mlDBController.findOne('MlDepartments',{_id:departmentId}, this);
       if(!department.isActive){
         throw new Meteor.Error('department-deactivated', 'You do not have any active department');
         return false;
@@ -373,7 +412,7 @@ if(details.type =="password") {
     'userId': userId,
     'transactionDetails': transactionDetails,
     'context': context,
-    'transactionTypeId': " "
+    'transactionTypeId': "system"
   });
 }else{
 
@@ -385,7 +424,7 @@ Accounts.onLogout(function (details) {
   let context={ip: details.connection.clientAddress,browser:details.connection.httpHeaders['user-agent'],url:details.connection.httpHeaders.host};
   let transactionDetails=`User logged out of application at ${new Date()} `;
   if(details&&details.user){
-    new MlTransactionsHandler().recordTransaction({'activity':'logout','transactionType':'system','userId':userId,'transactionDetails':transactionDetails,'context':context});
+    new MlTransactionsHandler().recordTransaction({'activity':'logout','transactionType':'system','transactionTypeId': "system",'userId':userId,'transactionDetails':transactionDetails,'context':context});
   }
 });
 

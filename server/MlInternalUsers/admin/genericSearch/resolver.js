@@ -286,7 +286,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     });
     totalRecords=MlDocumentMapping.find(query,findOptions).count();
   }
-  if(args.module=="transaction"){
+  if(args.module=="transactionTypes"){
     data= MlTransactionTypes.find(query,findOptions).fetch();
     totalRecords=MlTransactionTypes.find(query,findOptions).count();
   }
@@ -477,7 +477,26 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlProcessMapping.find(query,findOptions).count();
   }
   if(args.module=="documents"){
-    data= MlProcessMapping.find({isActive:true},query,findOptions).fetch();
+
+    let finalQuery={};
+    if(_.isEmpty(query)){
+      finalQuery= {isActive:true}
+    }else {
+      let filterQuery;
+      filterQuery = query['$and']?query['$and']:[]
+      var seen = false;
+      for(var j = 0; j != filterQuery.length; ++j) {
+        if(filterQuery[j].isActive){
+          seen = true;
+        }
+      }
+
+      if (!seen) {
+        filterQuery.push({isActive:true})
+      }
+      finalQuery.$and = filterQuery
+    }
+    data = MlProcessMapping.find(finalQuery, findOptions).fetch();
     data.map(function (doc,index) {
       let industryIds=[];
       let communityIds=[];
@@ -745,6 +764,11 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords = mlDBController.find('MlActionAndStatus', query, context, findOptions).count();
   }
 
+  if (args.module == "officeTransaction") {
+    let finalQuery =mergeQueries({userId:context.userId}, query);
+    data = mlDBController.find('MlOfficeTransaction', finalQuery, context, findOptions).fetch();
+    totalRecords = mlDBController.find('MlOfficeTransaction', finalQuery, context).count();
+  }
   return {'totalRecords':totalRecords,'data':data};
 }
 
@@ -777,7 +801,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "documentFormat":resolveType= 'DocumentFormats';break;
       case "kycCategory":resolveType= 'KycCategories';break;
       case "documentMapping":resolveType= 'DocumentMapping';break;
-      case "transaction":resolveType= 'Transaction';break;
+      case "transactionTypes":resolveType= 'Transaction';break;
       case "ACCOUNTTYPE":resolveType= 'Account';break;
       case "templates":resolveType= 'TemplateDetails';break;
       case "templateAssignment":resolveType= 'TemplateAssignment';break;
@@ -811,8 +835,10 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "regional":resolveType= 'Regional';break;
       case "title":resolveType= 'Title';break;
       case "community":resolveType= 'Community';break;
+      case "REQUESTTYPE":resolveType= 'Requests';break;
       case 'actionAndStatus':resolveType='ActionAndStatusType';break
-
+      case 'TransactionsLog':resolveType='TransactionsLog';break
+      case 'officeTransaction':resolveType='officeTransactionType';break
     }
 
     if(resolveType){

@@ -8,13 +8,15 @@ import MlAppIdeatorIdeas from "../../ideators/components/MlAppIdeatorIdeas";
 import MlAppPortfolio from "../../../app/commons/components/MlAppPortfolio";
 import {fetchPortfolioDetails} from "../actions/fetchUserDetails";
 import MlLoader from "../../../commons/components/loader/loader";
+import {fetchUserDetailsHandler} from "../actions/fetchUserDetails";
 
 export default class MlPortfolioLanding extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loading: true,
-      data: {}
+      data: {},
+      kycApproved : null
     }
     this.fetchPortfolioDetails.bind(this);
   }
@@ -24,12 +26,24 @@ export default class MlPortfolioLanding extends Component {
     return resp;
   }
 
+  componentDidMount(){
+    this.fetchUserDetails();
+
+  }
+
   async fetchPortfolioDetails() {
     const response = await fetchPortfolioDetails();
     if (response) {
       this.setState({loading: false, data: response})
     }else {
       this.setState({loading:false});
+    }
+  }
+
+  async fetchUserDetails() {
+    let response = await fetchUserDetailsHandler()
+    if (response) {
+      this.setState({kycApproved: response.status});
     }
   }
 
@@ -55,15 +69,46 @@ export default class MlPortfolioLanding extends Component {
       userCommunity = this.state.data.communityType
     }
 
-
+    let kycApproved =  this.state.kycApproved || ""
+    let approved;
+    if(kycApproved=="Approved"){
+      approved =  true
+    }else{
+      approved = false
+    }
     return (
       <div>
-        {showLoader === true ? (<MlLoader/>) : (
-          <div className="admin_main_wrap">
+        {showLoader === true? (<MlLoader/>) : (
+          <div>{kycApproved=="Approved"?<div className="admin_main_wrap">
             {(userCommunity == "Ideators") ?
               <MlAppIdeatorIdeas/> : <MlAppPortfolio config={portfolioId} communityType={userCommunity}/>
             }
-          </div>
+          </div>: <div className="app_main_wrap">
+
+            {/*<div className="view_switch map_view"/>*/}
+
+            <div className="app_padding_wrap no_padding">
+              <div className="list_view_block">
+                <div className="col-md-8 col-md-offset-4">
+                  <div className="profile_container my-office-main">
+                    <div className="profile_accounts">
+                      <span className="ml flaticon-ml-building"></span>
+                      <br />
+                      </div>
+                  </div>
+                </div>
+
+                <div className="col-md-12 text-center well mart100">
+
+                  <div className="col-md-12">
+                    <a href="#">Kindly complete hard registration,to create portfolio</a>
+                  </div>
+
+                </div>
+            </div>
+
+            </div>
+          </div>}</div>
         )}
       </div>
 

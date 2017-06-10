@@ -1,5 +1,6 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
+import MlResolver from '../../../commons/mlResolverDef'
 
 let transactOperations = `
 
@@ -25,3 +26,7 @@ type Mutation {
 }`
 
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],transactOperations]);
+let supportedApi = [
+  {api:'updateGenericTransaction', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+]
+MlResolver.MlModuleResolver.push(supportedApi)

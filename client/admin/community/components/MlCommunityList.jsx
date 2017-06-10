@@ -20,7 +20,6 @@ export default class MlCommunityList extends Component {
         </div>
       </div>
   );
-
     return (
         <div className="row communities_list">
           <h2>Communities</h2>

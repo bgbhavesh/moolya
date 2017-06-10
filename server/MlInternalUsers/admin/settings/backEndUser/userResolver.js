@@ -5,9 +5,10 @@ import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
 import passwordUtil from "../../../../commons/passwordUtil";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
+import getQuery from "../../genericSearch/queryConstructor";
 import _ from "lodash";
 import _underscore from "underscore";
-
+import geocoder from 'geocoder'
 
 MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, info) => {
     let user=Meteor.users.findOne(context.userId);
@@ -46,9 +47,9 @@ MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
       let response = new MlRespPayload().errorPayload("Username is required", code);
       return response;
     }
-  let extEmailExists = mlDBController.find('users', {'profile.email':args.user.profile.email, 'profile.isExternaluser':true }, context).count();
-      // if(Meteor.users.find({username:args.user.username}).count() > 0) {
-    if(mlDBController.find('users', {username:args.user.username}, context).count() > 0 || extEmailExists ){
+  let backEndUserExist = mlDBController.findOne('users', {'profile.email':args.user.profile.email}, context)
+  let registrationExist =   mlDBController.findOne('MlRegistration', {'registrationInfo.email':args.user.profile.email}, context)
+    if((backEndUserExist && backEndUserExist._id) || (registrationExist && registrationExist._id)){
         let code = 409;
         let response = new MlRespPayload().errorPayload("Already Exist", code);
         return response;
@@ -120,7 +121,7 @@ MlResolver.MlMutationResolver['resetPassword'] = (obj, args, context, info) => {
     //   return response;
     // }
   let salted = passwordUtil.hashPassword(args.password);
-    let resp = mlDBController.update('users', args.userId, {"services.password.bcrypt": salted}, {$set: true}, context)
+    let resp = mlDBController.update('users', context.userId, {"services.password.bcrypt": salted}, {$set: true}, context)
     if (resp) {
       let code = 200;
       let response = new MlRespPayload().successPayload("Password Reset complete", code);
@@ -327,55 +328,61 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
         let subChapter = mlDBController.findOne('MlSubChapters', {_id: args.subChapterId, isActive: true}, context)
         if (subChapter) {
           var isMoolya = subChapter.isDefaultSubChapter
-          // {"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}
-          let departments = mlDBController.find('MlDepartments', {$and:[{isMoolya:isMoolya}, {"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}]}, context).fetch();
+          let departments = mlDBController.find('MlDepartments', {'$or':[{isSystemDefined: true, isActive : true}, {$and: [{isMoolya: isMoolya}, {"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}]}]}, context).fetch();
           if (departments && departments.length > 0) {
             departments.map(function (department) {
-              let depUsers = mlDBController.find('users', {
-                "$and": [{
-                  "$or": [{
-                    "profile.InternalUprofile.moolyaProfile.assignedDepartment.department": department._id
-                  }, {
-                    "profile.InternalUprofile.moolyaProfile.globalAssignment": true
-                  }]
-                }, {
-                  'profile.isMoolya': isMoolya
-                }]
-              }, context).fetch();
-              depUsers.map(function (user) {
-                let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-                if ((user.profile.InternalUprofile.moolyaProfile.globalAssignment || user.profile.InternalUprofile.moolyaProfile.userProfiles.length == 0) && (user.profile.isActive)) {
-                  user.username = user.profile.InternalUprofile.moolyaProfile.firstName + " " + user.profile.InternalUprofile.moolyaProfile.lastName;
-                  if (_.isEmpty(_.find(users, user))) {
-                    users.push(user)
-                  }
-                }
-                else if (!user.profile.InternalUprofile.moolyaProfile.globalAssignment && userProfiles.length > 0 && user.profile.isActive) {
-                  userProfiles.map(function (profile) {
-                    if (profile.clusterId == args.clusterId) {
-                      let userRoles = profile.userRoles;
-                      user.username = user.profile.InternalUprofile.moolyaProfile.firstName + " " + user.profile.InternalUprofile.moolyaProfile.lastName;
-                      if (_.isEmpty(_.find(users, user))) {
-                        users.push(user)
-                      }
+
+              if (isMoolya) {
+                var moolyaUsersQuery = {"$and": [{"$or": [{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department": department._id}, {"profile.InternalUprofile.moolyaProfile.globalAssignment": true}]}, {'profile.isMoolya': true}]}
+                let depUsers = mlDBController.find('users', moolyaUsersQuery, context).fetch();
+                depUsers.map(function (user) {
+                  let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+                  if ((user.profile.InternalUprofile.moolyaProfile.globalAssignment || user.profile.InternalUprofile.moolyaProfile.userProfiles.length == 0) && (user.profile.isActive)) {
+                    user.username = user.profile.InternalUprofile.moolyaProfile.firstName + " " + user.profile.InternalUprofile.moolyaProfile.lastName;
+                    if (_.isEmpty(_.find(users, user))) {
+                      users.push(user)
                     }
+                  }
+                  else if (!user.profile.InternalUprofile.moolyaProfile.globalAssignment && userProfiles.length > 0 && user.profile.isActive) {
+                    userProfiles.map(function (profile) {
+                      if (profile.clusterId == args.clusterId) {
+                        user.username = user.profile.InternalUprofile.moolyaProfile.firstName + " " + user.profile.InternalUprofile.moolyaProfile.lastName;
+                        if (_.isEmpty(_.find(users, user))) {
+                          users.push(user)
+                        }
+                      }
+                    })
+                  }
+                })
+              } else {
+                var nonMoolyaUsersQuery = {"$and": [{'profile.InternalUprofile.moolyaProfile.assignedDepartment.department': department._id}, {'profile.InternalUprofile.moolyaProfile.subChapter': subChapter._id}, {'profile.isMoolya': false}]}
+                let depUsersNon = mlDBController.find('users', nonMoolyaUsersQuery, context).fetch();
+                if (depUsersNon && depUsersNon.length > 0) {
+                  _.each(depUsersNon, function (user, key) {
+                    user.username = user.profile.InternalUprofile.moolyaProfile.firstName + " " + user.profile.InternalUprofile.moolyaProfile.lastName;
+                    users.push(user)
                   })
                 }
-              })
+                users = _.uniqBy(users, '_id')
+              }
             })
           }
+          // users = _.uniqBy(users, '_id')
         }
       } else {
-        // let departments = MlDepartments.find({"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}).fetch();
         let departments = mlDBController.find('MlDepartments', {"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}, context).fetch();
         if (departments && departments.length > 0) {
+          // {"$or": [{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department": department._id}, {"profile.InternalUprofile.moolyaProfile.globalAssignment": true}]
           departments.map(function (department) {
-            // {"$and": [{"$or": [{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department": department._id}, {"profile.InternalUprofile.moolyaProfile.globalAssignment": true}]}, {'profile.isMoolya': true}]}
             let depUsers = mlDBController.find('users', {
-              "$or": [{
-                "profile.InternalUprofile.moolyaProfile.assignedDepartment.department": department._id
+              "$and": [{
+                "$or": [{
+                  "profile.InternalUprofile.moolyaProfile.assignedDepartment.department": department._id
+                }, {
+                  "profile.InternalUprofile.moolyaProfile.globalAssignment": true
+                }]
               }, {
-                "profile.InternalUprofile.moolyaProfile.globalAssignment": true
+                'profile.isMoolya': true
               }]
             }, context).fetch();
             depUsers.map(function (user) {
@@ -389,8 +396,6 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
               else if (!user.profile.InternalUprofile.moolyaProfile.globalAssignment && userProfiles.length > 0 && user.profile.isActive) {
                 userProfiles.map(function (profile) {
                   if (profile.clusterId == args.clusterId) {
-                    let userRoles = profile.userRoles;
-                    let activeRoles = _.find(userRoles, {"isActive": true});
                     user.username = user.profile.InternalUprofile.moolyaProfile.firstName + " " + user.profile.InternalUprofile.moolyaProfile.lastName;
                     if (_.isEmpty(_.find(users, user))) {
                       users.push(user)
@@ -462,7 +467,7 @@ MlResolver.MlQueryResolver['fetchUsersBysubChapterDepSubDep'] = (obj, args, cont
                 "profile.InternalUprofile.moolyaProfile.assignedDepartment.department": departments[i]._id
               }, {
                 'profile.isMoolya': false
-              }]
+              },{'profile.InternalUprofile.moolyaProfile.subChapter':subChapter._id}]
             }, context).fetch();
             if (depusers && depusers.length > 0) {
               _.each(depusers,function (user,key) {
@@ -635,6 +640,22 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info) => {
 
+    var totalRecords=0;
+    var findOptions = {};
+
+    if(args.offset && args.offset >0){   // `offset` may be `null`
+      findOptions.skip=args.offset;
+    };
+
+    if (args.limit&&args.limit > 0) { // `limit` may be `null`
+      findOptions.limit = args.limit;
+    }
+
+    let userFilterQuery={}; //'filter' applied by user
+    if (args.fieldsData){
+      userFilterQuery = getQuery.searchFunction(args);
+    }
+
   var userType = args.userType; // Backend, Funder, Ideator, Startup, etc.
 
   var loggedInUser = new MlAdminUserContext().userProfileDetails(context.userId);
@@ -683,19 +704,29 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                 communityDefCode:(communityCode||"all"),
               });
               if (profile) {
+                if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                  user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
+                  user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
+                }
+                user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                 users.push(user);
               }
             }
           })
         }
       //   // FOR Internal Users
-        let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context).fetch();
+        let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
         _.each(internalUsers, function (user){
           let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
           let profile = _.find(userProfiles, {clusterId:clusterId});
           if(profile){
             let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all"), subChapterId:(subChapterId||"all"), communityCode:(communityCode||"all")});
             if(roles){
+              if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+              }
+              user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
               users.push(user);
             }
           }
@@ -709,7 +740,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
       if(cluster.isActive && chapter.isActive && subChapter.isActive){
           if(userType == "All"){
               // FOR External Users
-              let externalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true},{"profile.isExternaluser":true}]}, context).fetch();
+              let externalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
               if(externalUsers && externalUsers.length>0) {
                 _.each(externalUsers, function (user) {
                   let userProfiles = user.profile.externalUserProfiles;
@@ -720,29 +751,44 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                       subChapterId: subChapterId
                     });
                     if (profile) {
+                      if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                        user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
+                        user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
+                      }
+                      user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                       users.push(user);
                     }
                   }
                 })
               }
               // FOR Internal Users
-              let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context).fetch();
+              let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
               _.each(internalUsers, function (user){
                   let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
                   let profile = _.find(userProfiles, {clusterId:clusterId});
                   if(profile){
                     let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all"), subChapterId:(subChapterId||"all")});
                     if(roles){
+                      if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                        user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                        user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                      }
+                      user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                       users.push(user);
                     }
                   }
               })
               // For Browsers
-              let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context).fetch();
+              let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
               if(browserUsers && browserUsers.length>0) {
                 _.each(browserUsers, function (user) {
                   let userProfiles = user.profile.externalUserProfiles;
                   if (!userProfiles || userProfiles.length<1) {
+                    if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                      user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
+                      user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
+                    }
+                    user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                       users.push(user);
                   }
                 })
@@ -756,13 +802,18 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                   if(profile){
                     let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all"),subChapterId:(subChapterId||"all")});
                     if(roles){
+                      if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                        user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                        user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                      }
+                      user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                       users.push(user);
                     }
                   }
               })
           }
           else if (userType == "Ideators" || userType =="Funders" || userType =="Startups" || userType =="Service Providers" || userType =="Companies" || userType =="Institutions"){
-              let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context).fetch();
+              let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
               _.each(allUsers, function (user){
                 let userProfiles = user.profile.externalUserProfiles;
                 let profile = _.filter(userProfiles, {clusterId:clusterId,chapterId:chapterId,subChapterId:subChapterId});
@@ -771,10 +822,20 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                     if (profile.communityId && profile.communityId != "all") {
                       let community = mlDBController.findOne('MlCommunity', {"$and": [{"_id": profile.communityId}]}, context);
                       if (community && community.communityName == userType) {
+                        if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                          user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
+                          user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
+                        }
+                        user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                         users.push(user);
                       }
                     } else if(profile.communityId && profile.communityId == "all") {
                       if (profile) {
+                        if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                          user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
+                          user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
+                        }
+                        user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                         users.push(user);
                       }
                     }
@@ -784,11 +845,16 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
               })
           }
           else{
-            let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context).fetch();
+            let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
             if(browserUsers && browserUsers.length>0) {
               _.each(browserUsers, function (user) {
                 let userProfiles = user.profile.externalUserProfiles;
                 if (!userProfiles || userProfiles.length<1) {
+                  if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                    user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
+                    user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
+                  }
+                  user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                   users.push(user);
                 }
               })
@@ -803,36 +869,51 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
     if(cluster.isActive && chapter.isActive){
       if(userType == "All"){
           // FOR External Users
-          let externalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true},{"profile.isExternaluser":true}]}, context).fetch();
+          let externalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
           if(externalUsers && externalUsers.length>0){
             _.each(externalUsers, function (user){
               let userProfiles = user.profile.externalUserProfiles;
               if(userProfiles){
                 let profile = _.find(userProfiles, {clusterId:clusterId,chapterId:chapterId});
                 if(profile){
+                  if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                    user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
+                    user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
+                  }
+                  user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                   users.push(user);
                 }
               }
             })
           }
           // FOR Internal Users
-          let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context).fetch();
+          let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
           _.each(internalUsers, function (user){
               let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
               let profile = _.find(userProfiles, {clusterId:clusterId});
               if(profile){
                 let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all")});
                 if(roles){
+                  if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                    user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                    user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                  }
+                  user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                   users.push(user);
                 }
               }
           })
           // For Browsers
-          let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context).fetch();
+          let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
           if(browserUsers && browserUsers.length>0) {
             _.each(browserUsers, function (user) {
               let userProfiles = user.profile.externalUserProfiles;
               if (!userProfiles || userProfiles.length<1) {
+                if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                  user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
+                  user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
+                }
+                user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                 users.push(user);
               }
             })
@@ -840,20 +921,25 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
       }
       else if(userType == "BackendUsers"){
         //   // UserType needed to be introduced
-          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context).fetch();
+          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
           _.each(allUsers, function (user){
               let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
               let profile = _.find(userProfiles, {clusterId:clusterId});
               if(profile){
                 let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all")});
                 if(roles){
+                  if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                    user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                    user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                  }
+                  user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                   users.push(user);
                 }
               }
           })
       }
       else if (userType == "Ideators" || userType =="Funders" || userType =="Startups" || userType =="Service Providers" || userType =="Companies" || userType =="Institutions"){
-          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context).fetch();
+          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
           _.each(allUsers, function (user){
             let userProfiles = user.profile.externalUserProfiles;
             let profile = _.filter(userProfiles, {clusterId:clusterId,chapterId:chapterId});
@@ -862,10 +948,20 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                 if (profile.communityId && profile.communityId != "all") {
                   let community = mlDBController.findOne('MlCommunity', {"$and": [{"_id": profile.communityId}]}, context);
                   if (community && community.communityName == userType) {
+                    if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                      user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
+                      user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
+                    }
+                    user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                     users.push(user);
                   }
                 } else if(profile.communityId && profile.communityId == "all") {
                   if (profile) {
+                    if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                      user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
+                      user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
+                    }
+                    user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                     users.push(user);
                   }
                 }
@@ -875,11 +971,16 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           })
       }
       else{
-        let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context).fetch();
+        let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
         if(browserUsers && browserUsers.length>0) {
           _.each(browserUsers, function (user) {
             let userProfiles = user.profile.externalUserProfiles;
             if (!userProfiles || userProfiles.length<1) {
+              if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
+                user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
+              }
+              user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
               users.push(user);
             }
           })
@@ -890,7 +991,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
   }else if(clusterId != "" && communityCode != ""){
     let cluster = mlDBController.findOne('MlClusters', {_id: clusterId}, context)
     if(cluster.isActive ){
-        let externalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true},{"profile.isExternaluser":true}]}, context).fetch();
+        let externalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
         if(externalUsers && externalUsers.length>0) {
           _.each(externalUsers, function (user) {
             let userProfiles = user.profile.externalUserProfiles;
@@ -900,19 +1001,29 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                 communityDefCode:(communityCode||"all"),
               });
               if (profile) {
+                if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                  user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
+                  user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
+                }
+                user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                 users.push(user);
               }
             }
           })
         }
       //   // FOR Internal Users
-        let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context).fetch();
+        let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
         _.each(internalUsers, function (user){
           let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
           let profile = _.find(userProfiles, {clusterId:clusterId});
           if(profile){
             let roles = _.find(profile.userRoles, {communityCode:(communityCode||"all")});
             if(roles){
+              if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+              }
+              user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
               users.push(user);
             }
           }
@@ -925,33 +1036,48 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
     if(cluster.isActive ){
       if(userType == "All"){
           // FOR External Users
-          let externalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true},{"profile.isExternaluser":true}]}, context).fetch();
+          let externalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isActive":true},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
           if(externalUsers && externalUsers.length>0){
             _.each(externalUsers, function (user){
               let userProfiles = user.profile.externalUserProfiles;
               if(userProfiles){
                 let profile = _.find(userProfiles, {clusterId:clusterId});
                 if(profile){
+                  if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                    user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
+                    user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
+                  }
+                  user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                   users.push(user);
                 }
               }
             })
           }
           // FOR Internal Users
-          let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context).fetch();
+          let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
           _.each(internalUsers, function (user){
               let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
               let profile = _.find(userProfiles, {clusterId:clusterId});
               if(profile){
+                if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                  user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                  user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                }
+                user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                   users.push(user);
               }
           })
           // For Browsers
-          let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context).fetch();
+          let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
           if(browserUsers && browserUsers.length>0) {
             _.each(browserUsers, function (user) {
               let userProfiles = user.profile.externalUserProfiles;
               if (!userProfiles || userProfiles.length<1) {
+                if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                  user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
+                  user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
+                }
+                user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                 users.push(user);
               }
             })
@@ -959,17 +1085,22 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
       }
       else if(userType == "BackendUsers"){
         //   // UserType needed to be introduced
-          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context).fetch();
+          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
           _.each(allUsers, function (user){
               let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
               let profile = _.find(userProfiles, {clusterId:clusterId});
               if(profile){
+                if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+                  user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+                  user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+                }
+                user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                   users.push(user);
               }
           })
       }
       else if (userType == "Ideators" || userType =="Funders" || userType =="Startups" || userType =="Service Providers" || userType =="Companies" || userType =="Institutions"){
-          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context).fetch();
+          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
           _.each(allUsers, function (user){
             let userProfiles = user.profile.externalUserProfiles;
             let profile = _.filter(userProfiles, {clusterId:clusterId});
@@ -978,10 +1109,20 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                 if (profile.communityId && profile.communityId != "all") {
                   let community = mlDBController.findOne('MlCommunity', {"$and": [{"_id": profile.communityId}]}, context);
                   if (community && community.communityName == userType) {
+                    if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                      user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
+                      user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
+                    }
+                    user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                     users.push(user);
                   }
                 } else if(profile.communityId && profile.communityId == "all") {
                   if (profile) {
+                    if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                      user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
+                      user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
+                    }
+                    user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                     users.push(user);
                   }
                 }
@@ -991,11 +1132,16 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           })
       }
       else{
-        let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context).fetch();
+        let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
         if(browserUsers && browserUsers.length>0) {
           _.each(browserUsers, function (user) {
             let userProfiles = user.profile.externalUserProfiles;
             if (!userProfiles || userProfiles.length<1) {
+              if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
+                user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
+              }
+              user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
               users.push(user);
             }
           })
@@ -1006,13 +1152,39 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
   } else{
 
       if(userType == "All"){
-        users = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isActive":true}]}, context).fetch();
+        let internal = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
+        let external = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
+        _.each(internal, function (user){
+          if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+            user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+            user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+          }
+          user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
+          users.push(user);
+        })
+        _.each(external, function (user){
+          if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+            user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
+            user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
+          }
+          user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
+          users.push(user);
+        })
+
       }
       else if(userType == "BackendUsers"){
-        users = mlDBController.find('users', {"$and":[{"profile.isInternaluser":true},{"profile.isActive":true},{"profile.isSystemDefined":{$exists:false}}]}, context).fetch();
+        var internalUsers = mlDBController.find('users', {"$and":[{"profile.isInternaluser":true},{"profile.isActive":true},{"profile.isSystemDefined":{$exists:false}}]}, context, findOptions).fetch();
+        _.each(internalUsers, function (user){
+            if(user.profile.addressInfo && user.profile.addressInfo.length>0){
+              user.latitude = user.profile.addressInfo[0].latitude?user.profile.addressInfo[0].latitude:null;
+              user.longitude = user.profile.addressInfo[0].longitude?user.profile.addressInfo[0].longitude:null;
+            }
+          user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
+            users.push(user);
+        })
       }
       else if(userType == "Ideators" || userType =="Funders" || userType =="Startups" || userType =="Service Providers" || userType =="Companies" || userType =="Institutions"){
-          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context).fetch();
+          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true},{"profile.isActive":true}]}, context, findOptions).fetch();
           _.each(allUsers, function (user){
 
                   let userProfiles = user.profile.externalUserProfiles;
@@ -1022,10 +1194,20 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
                               if (profile.communityId && profile.communityId != "all") {
                                   let community = mlDBController.findOne('MlCommunity', {"$and": [{"_id": profile.communityId}]}, context);
                                   if (community && community.communityName == userType) {
+                                    if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                                      user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
+                                      user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
+                                    }
+                                    user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                                       users.push(user);
                                   }
                               } else if(profile.communityId && profile.communityId == "all") {
                                   if (profile) {
+                                    if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                                      user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
+                                      user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
+                                    }
+                                    user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                                       users.push(user);
                                   }
                               }
@@ -1035,11 +1217,16 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           })
       }
       else{
-        let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context).fetch();
+        let browserUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":null},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
         if(browserUsers && browserUsers.length>0) {
           _.each(browserUsers, function (user) {
             let userProfiles = user.profile.externalUserProfiles;
             if (!userProfiles || userProfiles.length<1) {
+              if(user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length>0 && user.profile.externalUserAdditionalInfo[0].addressInfo && user.profile.externalUserAdditionalInfo[0].addressInfo.length>0){
+                user.latitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].latitude:null;
+                user.longitude = user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude?user.profile.externalUserAdditionalInfo[0].addressInfo[0].longitude:null;
+              }
+              user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
               users.push(user);
             }
           })
@@ -1047,7 +1234,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
       }
   }
 
-  context.module = "BackendUsers";
+  context.module = "Users";
   return {data:users, totalRecords:users&&users.length?users.length:0};
 }
 
@@ -1089,7 +1276,7 @@ MlResolver.MlQueryResolver['fetchUserForReistration'] = (obj, args, context, inf
 
 MlResolver.MlMutationResolver['updateDataEntry'] = (obj, args, context, info) => {
   // let user = Meteor.users.findOne({_id: args.userId});
-  let user = mlDBController.findOne('users', {_id: args.userId}, context)
+  let user = mlDBController.findOne('users', {_id: context.userId}, context)
   let resp;
   if(user){
     // resp = Meteor.users.update({_id:args.userId}, {$set:{"profile.isActive":args.isActive}});
@@ -1106,11 +1293,11 @@ MlResolver.MlMutationResolver['updateDataEntry'] = (obj, args, context, info) =>
 
 MlResolver.MlMutationResolver['updateSettings'] = (obj, args, context, info) => {
   // let user = Meteor.users.findOne({_id: args.userId});
-  let user = mlDBController.findOne('users', {_id: args.userId}, context)
+  let user = mlDBController.findOne('users', {_id: context.userId}, context)
   let resp;
   if(user){
-    // resp = Meteor.users.update({_id:args.userId}, {$set:{"profile.isActive":args.isActive}});
-    resp = mlDBController.update('users', args.userId,{"profile.numericalFormat":args.settingsAttributes.numericalFormat,"profile.currencyTypes":args.settingsAttributes.currencyTypes},{$set:true}, context)
+    // resp = Meteor.users.update({_id:args.userId}, {$set:{"profile.isActiv`e":args.isActive}});
+    resp = mlDBController.update('users', context.userId,{"profile.numericalFormat":args.settingsAttributes.numericalFormat,"profile.currencyTypes":args.settingsAttributes.currencyTypes},{$set:true}, context)
   }
   if(resp){
     resp = new MlRespPayload().successPayload("User Profile Updated Successfully", 200);
@@ -1133,8 +1320,36 @@ MlResolver.MlMutationResolver['updateAddressBookInfo'] = (obj, args, context, in
     } else if (args.type == "ADDRESSTYPE") {
         let addressTypes = []
         addressTypes = user.profile.addressInfo?user.profile.addressInfo:[];
-        addressTypes.push(args.addressBook.addressInfo[0]);
-      id = mlDBController.update('users', context.userId, {"profile.addressInfo": addressTypes}, {$set: true}, context)
+
+        // Fetching Lat Lng from Address
+        let city = args.addressBook.addressInfo[0].addressCity
+        let area = args.addressBook.addressInfo[0].addressArea
+        let locality = args.addressBook.addressInfo[0].addressLocality
+        let pin =args.addressBook.addressInfo[0].addressPinCode
+        geocoder.geocode(locality+","+area+","+city+","+pin, Meteor.bindEnvironment(function ( err, data ) {
+          if(err){
+            throw new Error("Invalid Locality selection "+e);
+          }
+          args.addressBook.addressInfo[0].latitude = data.results[0].geometry.location.lat;
+          args.addressBook.addressInfo[0].longitude = data.results[0].geometry.location.lng;
+
+          try{
+            // let id = MlClusters.insert(cluster);
+            addressTypes.push(args.addressBook.addressInfo[0]);
+            let id = mlDBController.update('users', context.userId, {"profile.addressInfo": addressTypes}, {$set: true}, context)
+
+            if(id){
+              let code = 200;
+              let result = {addressId: id}
+              let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+              return response
+            }
+          }catch(e){
+            throw new Error("Error while updating address "+e);
+          }
+
+        }),{key:Meteor.settings.private.googleApiKey});
+
     } else if (args.type == "EMAILTYPE") {
         let emailTypes = []
         emailTypes = user.profile.emailInfo?user.profile.emailInfo:[];
@@ -1151,11 +1366,14 @@ MlResolver.MlMutationResolver['updateAddressBookInfo'] = (obj, args, context, in
   }
 }
 
+
+
 MlResolver.MlQueryResolver['fetchAddressBookInfo'] = (obj, args, context, info) => {
-      let rest = null;
-      let user = mlDBController.findOne('users', {_id: args.userId}, context);
-      return user.profile;
+  let rest = null;
+  let user = mlDBController.findOne('users', {_id: context.userId}, context);
+  return user.profile;
 }
+
 
 MlResolver.MlQueryResolver['findUserOnToken'] = (obj, args, context, info) => {
   const hashedToken = Accounts._hashLoginToken(args.token)
@@ -1172,7 +1390,22 @@ MlResolver.MlQueryResolver['findUserOnToken'] = (obj, args, context, info) => {
     return response
   }
 }
-
+// MlResolver.MlQueryResolver['passwordVerification'] = (obj, args, context, info) => {
+//   if (context.userId) {
+//       // let userProfile = new MlAdminUserContext().userProfileDetails(context.userId);
+//     var user = mlDBController.findOne('users', {_id: context.userId}, context);
+//     console.log(user);
+//     let pwd = {digest: args.Details, algorithm: 'sha-256'};
+//     var result = Accounts._checkPassword(user, pwd);
+//     if(result.error) {
+//       return false;
+//     }else{
+//       return true
+//     }
+//   }else{
+//     return false;
+//   }
+// }
 
 
 MlResolver.MlMutationResolver['uploadUserImage'] = (obj, args, context, info) => {

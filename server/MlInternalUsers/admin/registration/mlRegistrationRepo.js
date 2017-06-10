@@ -98,7 +98,8 @@ class MlRegistrationRepo{
       }else{
         profileInfo.push(info)
       }
-      let resp = mlDBController.update('users', user.userId, {"profile.externalUserAdditionalInfo": profileInfo}, {$set:true}, context)
+      let resp = mlDBController.update('users', {_id:user._id}, {"profile.isActive":true,"profile.externalUserAdditionalInfo": profileInfo}, {$set:true}, context)
+      console.log(resp);
     }
   }
   ApproveExternalProfileInfo(regId,type,context) {

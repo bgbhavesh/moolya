@@ -14,21 +14,21 @@ import Datetime from "react-datetime";
 import moment from "moment";
 import MlLoader from '../../../commons/components/loader/loader'
 import {resetPasswordActionHandler} from "../../settings/backendUsers/actions/resetPasswordAction";
-
+import passwordSAS_validate from '../../../../lib/common/validations/passwordSASValidator';
 import {MlAdminProfile} from '../../../admin/layouts/header/MlAdminHeader'
 
 
-export default class MlMyProfile extends React.Component{
+export default class MlMyProfile extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      loading:true,
+      loading: true,
       firstName: " ",
       middleName: " ",
-      lastName:" ",
+      lastName: " ",
       userName: " ",
-      uploadedProfilePic : " ",
+      uploadedProfilePic: " ",
       registrationDetails: {},
       selectedBackendUser: " ",
       profilePic: " ",
@@ -36,13 +36,14 @@ export default class MlMyProfile extends React.Component{
       genderStateMale: " ",
       genderStateFemale: " ",
       genderStateOthers: " ",
-      dateOfBirth:null,
-      genderSelect:" ",
-      responsePic:" ",
-      password:'',
-      confirmPassword:'',
-      showPasswordFields:true,
-      passwordState: " "
+      dateOfBirth: null,
+      genderSelect: " ",
+      responsePic: " ",
+      password: '',
+      confirmPassword: '',
+      showPasswordFields: true,
+      passwordState: " ",
+      passwordValidation: false
 
       // Details:{
       //   firstName: " ",
@@ -54,48 +55,48 @@ export default class MlMyProfile extends React.Component{
     this.onFileUploadCallBack.bind(this);
     this.storeImage.bind(this);
     this.onFoundationDateSelection.bind(this);
-   this.firstNameUpdation =  this.firstNameUpdation.bind(this);
-    this.middleNameUpdation= this.middleNameUpdation.bind(this);
-    this.lastNameUpdation=this.lastNameUpdation.bind(this);
+    this.firstNameUpdation = this.firstNameUpdation.bind(this);
+    this.middleNameUpdation = this.middleNameUpdation.bind(this);
+    this.lastNameUpdation = this.lastNameUpdation.bind(this);
     this.displayNameUpdation.bind(this);
     this.updateProfile.bind(this);
     this.genderSelect = this.genderSelect.bind(this);
     this.onfoundationDateSelection.bind(this);
     this.checkExistingPassword.bind(this);
-   // this.showImage.bind(this);
+    // this.showImage.bind(this);
     //this.fileUpdation.bind(this);
-   // this.firstNameUpdation.bind(this);
+    // this.firstNameUpdation.bind(this);
     return this;
   }
+
   onFoundationDateSelection(event) {
     if (event._d) {
       let value = moment(event._d).format(Meteor.settings.public.dateFormat);
       this.setState({loading: false, foundationDate: value});
     }
   }
-  async checkExistingPassword(){
-    const that =  this;
+
+  async checkExistingPassword() {
+    const that = this;
+    this.setState({"pwdValidationMsg": ''})
     let pwd = this.refs.existingPassword.value;
     var digest = Package.sha.SHA256(pwd);
-    Meteor.call('checkPassword', digest, function(err, result) {
+    Meteor.call('checkPassword', digest, function (err, result) {
       if (result) {
-        that.setState({passwordState:'Passwords match!'})
-      }else{
-        that.setState({passwordState:'Passwords do not match!'})
+        that.setState({passwordState: 'Passwords match!'})
+      } else {
+        that.setState({passwordState: 'Passwords do not match!'})
       }
     });
   }
 
 
-
-
-  componentDidMount()
-  {
-    $(function() {
+  componentDidMount() {
+    $(function () {
       $('.float-label').jvFloat();
     });
 
-    $('.myprofile_left a').click(function(){
+    $('.myprofile_left a').click(function () {
       $('.myprofile_left a').removeClass("active");
       $(this).addClass("active");
     });
@@ -105,68 +106,68 @@ export default class MlMyProfile extends React.Component{
       effect: 'coverflow',
       grabCursor: true,
       centeredSlides: true,
-      initialSlide:1,
+      initialSlide: 1,
       slidesPerView: 'auto',
       coverflow: {
         rotate: 50,
         stretch: 0,
         depth: 100,
         modifier: 1,
-        slideShadows : true
+        slideShadows: true
       }
     });
   }
 
   onFileUploadCallBack(resp) {
-      if (resp) {
-          console.log(resp);
-          this.setState({"uploadedProfilePic": resp});
-          var temp = $.parseJSON(this.state.uploadedProfilePic).result;
-        this.setState({"responsePic":temp});
-        this.setState({"uploadedProfilePic":temp});
-          console.log(temp);
-          this.showImage(temp);
-          return temp;
-      }
+    if (resp) {
+      console.log(resp);
+      this.setState({"uploadedProfilePic": resp});
+      var temp = $.parseJSON(this.state.uploadedProfilePic).result;
+      this.setState({"responsePic": temp});
+      this.setState({"uploadedProfilePic": temp});
+      console.log(temp);
+      this.showImage(temp);
+      return temp;
+    }
   }
 
-    openDatePickerDateOfBirth(){
+  openDatePickerDateOfBirth() {
     $('#date-of-birth').toggleClass('rdtOpen')
   }
+
   async firstNameUpdation(e) {
-      this.setState({firstName: e.target.value})
+    this.setState({firstName: e.target.value})
   }
 
   async middleNameUpdation(e) {
-      this.setState({middleName: e.target.value})
+    this.setState({middleName: e.target.value})
   }
 
   async lastNameUpdation(e) {
-      this.setState({lastName: e.target.value})
+    this.setState({lastName: e.target.value})
   }
 
   async displayNameUpdation(e) {
-      this.setState({userName: e.target.value})
+    this.setState({userName: e.target.value})
   }
 
-async showImage(temp){
-  this.setState({responsePic:temp})
-}
+  async showImage(temp) {
+    this.setState({responsePic: temp})
+  }
 
   async storeImage() {
-  let Details = {
-      profileImage : this.state.uploadedProfilePic,
-      firstName :this.state.firstName,
-      middleName : this.state.middleName,
-      lastName : this.state.lastName,
+    let Details = {
+      profileImage: this.state.uploadedProfilePic,
+      firstName: this.state.firstName,
+      middleName: this.state.middleName,
+      lastName: this.state.lastName,
       userName: this.state.userName,
-      genderType:this.state.genderSelect,
-      dateOfBirth:this.state.dateOfBirth,
-      userId : Meteor.userId()
-  }
+      genderType: this.state.genderSelect,
+      dateOfBirth: this.state.dateOfBirth,
+    }
 
-  const dataresponse = await updateDataEntry(Details);
-  console.log(dataresponse);
+    const dataresponse = await updateDataEntry(Details);
+    console.log(dataresponse);
     toastr.success("Update Successful")
     return dataresponse;
   }
@@ -175,7 +176,7 @@ async showImage(temp){
     let userType = Meteor.userId();
     let user = Meteor.user();
     let isExternal = user.profile.isExternaluser;
-    if(isExternal){
+    if (isExternal) {
       this.setState({
         loading: false, firstName: user.profile.firstName,
         middleName: user.profile.middleName,
@@ -183,43 +184,45 @@ async showImage(temp){
         userName: user.profile.displayName,
         // uploadedProfilePic: response.profile.profileImage,
         genderSelect: "Male", //response.profile.genderType
-        dateOfBirth:moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat)
+        dateOfBirth: moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat)
       });
-    }else{
+    } else {
       let response = await findBackendUserActionHandler(userType);
       console.log(response);
-      this.setState({loading:false ,firstName : response.profile.InternalUprofile.moolyaProfile.firstName,
-        middleName:response.profile.InternalUprofile.moolyaProfile.middleName,
+      this.setState({
+        loading: false, firstName: response.profile.InternalUprofile.moolyaProfile.firstName,
+        middleName: response.profile.InternalUprofile.moolyaProfile.middleName,
         lastName: response.profile.InternalUprofile.moolyaProfile.lastName,
         userName: response.profile.InternalUprofile.moolyaProfile.displayName,
-        uploadedProfilePic:response.profile.profileImage,
-        genderSelect:response.profile.genderType,
-        dateOfBirth:moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat)
+        uploadedProfilePic: response.profile.profileImage,
+        genderSelect: response.profile.genderType,
+        dateOfBirth: moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat)
       });
     }
     this.genderSelect();
   }
 
-  componentWillMount(){
-    const resp= this.getValue();
+  componentWillMount() {
+    const resp = this.getValue();
     return resp;
   }
-  componentDidUpdate(){
+
+  componentDidUpdate() {
     initalizeFloatLabel();
     passwordVisibilityHandler();
   }
 
 
-  async genderSelect(){
+  async genderSelect() {
     //this.setState({genderSelect: e.target.value})
-    if(this.state.genderSelect === "Others"){
-      this.setState({genderStateMale: false,genderStateFemale:false,genderStateOthers:true })
+    if (this.state.genderSelect === "Others") {
+      this.setState({genderStateMale: false, genderStateFemale: false, genderStateOthers: true})
     }
-    else if(this.state.genderSelect === "Female"){
-      this.setState({genderStateFemale: true, genderStateMale: false, genderStateOthers:false})
+    else if (this.state.genderSelect === "Female") {
+      this.setState({genderStateFemale: true, genderStateMale: false, genderStateOthers: false})
     }
-    else{
-      this.setState({genderStateOthers:false, genderStateFemale: false, genderStateMale: true})
+    else {
+      this.setState({genderStateOthers: false, genderStateFemale: false, genderStateMale: true})
     }
   }
 
@@ -235,26 +238,25 @@ async showImage(temp){
   }
 
   async resetPassword() {
-    if(this.state.showPasswordFields){
-      let userDetails={
-        userId:Meteor.userId(),
-        password:this.refs.confirmPassword.value
+    if (this.state.showPasswordFields) {
+      let userDetails = {
+        userId: Meteor.userId(),
+        password: this.refs.confirmPassword.value
       }
       this.onCheckPassword();
-      if(this.state.pwdErrorMsg)
+      if (this.state.pwdErrorMsg)
         toastr.error("Confirm Password does not match with Password");
-
-      else{
+      else {
         const response = await resetPasswordActionHandler(userDetails);
         // this.refs.id.value='';
         this.refs.confirmPassword.value = '';
         this.refs.password.value = '';
-        this.setState({"pwdErrorMsg":'Password reset complete'})
+        this.setState({"pwdErrorMsg": 'Password reset complete'})
         toastr.success(response.result);
       }
     } else {
       this.setState({
-        showPasswordFields:true
+        showPasswordFields: true
       })
     }
     const resp = this.onFileUpload();
@@ -266,28 +268,46 @@ async showImage(temp){
     console.log('error handle');
     console.log(response);
   }
-  async updateProfile(){
+
+  async updateProfile() {
     let existingPwdField = this.refs.existingPassword.value;
     let password = this.refs.password.value;
     let confirmPassword = this.refs.confirmPassword.value;
-    if(existingPwdField && password && confirmPassword ) {
+    // let passwordValidation =  this.state.passwordValidation
+    if (existingPwdField && password && confirmPassword) {
       this.resetPassword();
-    }else
-      {
-        const resp = this.onFileUpload();
-        return resp;
-      }
-  }
-
-  onCheckPassword(){
-    let password=this.refs.password.value;
-    let confirmPassword=this.refs.confirmPassword.value;
-    if(confirmPassword!=password){
-      this.setState({"pwdErrorMsg":'Confirm Password does not match with Password'})
-    }else{
-      this.setState({"pwdErrorMsg":''})
+    } else {
+      const resp = this.onFileUpload();
+      return resp;
     }
   }
+
+  onCheckPassword() {
+    let password = this.refs.password.value;
+    let confirmPassword = this.refs.confirmPassword.value;
+    if (confirmPassword != password) {
+      this.setState({"pwdErrorMsg": 'Confirm Password does not match with Password'})
+    } else {
+      this.setState({"pwdErrorMsg": ''})
+    }
+  }
+
+  passwordValidation() {
+    let password = this.refs.password.value;
+    if (!password) {
+      this.setState({"pwdValidationMsg": ''})
+    } else {
+    let validate = passwordSAS_validate(password)
+    if (validate.isValid) {
+      this.setState({"pwdValidationMsg": ''})
+      this.setState({passwordValidation: true})
+    }
+    else if (typeof (validate) == 'object') {
+      this.setState({"pwdValidationMsg": validate.errorMsg})
+    }
+
+  }
+}
 
   async onFileUpload(){
     let user = {
@@ -380,7 +400,8 @@ async showImage(temp){
                       </div> : <div></div>}
                     {this.state.showPasswordFields ?
                       <div className="form-group">
-                        <input type="Password" ref="password" defaultValue={this.state.password} placeholder="New Password" className="form-control float-label" id="password"/>
+                        <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdValidationMsg}</text>
+                        <input type="Password" ref="password" defaultValue={this.state.password} onBlur={this.passwordValidation.bind(this)} placeholder="New Password" className="form-control float-label" id="password"/>
                         <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
                       </div> : <div></div>}
                     {this.state.showPasswordFields ?

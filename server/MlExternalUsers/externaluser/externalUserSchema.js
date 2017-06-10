@@ -7,7 +7,7 @@ import MlSchemaDef from '../../commons/mlSchemaDef'
 let externalUser = `
     input externalUser{
         username: String,
-        profile:profile
+        profile:  profile
     }
 
     input profile{
@@ -115,7 +115,7 @@ let externalUser = `
         communityDefCode:String,
         communityDefName:String,
         communityType:String,
-               
+        communityImage:String,        
         isDefault:Boolean,
         isActive:Boolean,
         accountType:String,

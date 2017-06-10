@@ -40,7 +40,8 @@ const mlProfessionTableConfig=new MlViewer.View({
       actionName: 'add',
       handler: (data)=>{
         if (data && data.id) {
-          FlowRouter.go("/admin/settings/professionList")
+          toastr.error("Please uncheck the record")
+          // FlowRouter.go("/admin/settings/professionList")
         }
         else {
           FlowRouter.go("/admin/settings/addProfession")

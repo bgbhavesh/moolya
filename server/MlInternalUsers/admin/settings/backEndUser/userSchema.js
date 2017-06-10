@@ -14,7 +14,8 @@ let BackEndUser = `
         profile:userProfile,
         roleNames:[String],
         latitude:Float,
-        longitude:Float
+        longitude:Float,
+        name: String,
     }
     
     type userProfile{
@@ -29,7 +30,10 @@ let BackEndUser = `
         numericalFormat: String,
         currencyTypes: String,
         dateOfBirth: Date,
-        genderType: String
+        genderType: String,
+        firstName: String,
+        middleName: String,
+        lastName: String,
     }
     
      type internalUserprofile{
@@ -163,6 +167,7 @@ let BackEndUser = `
     }
     
     input externalProfile{
+        profileId         : String,
         registrationId    : String,
         countryName       : String,
         countryId         : String,
@@ -202,7 +207,10 @@ let BackEndUser = `
         currencyTypes: String,
         dateOfBirth: Date,
         genderType: String,
-        profileImage: String
+        profileImage: String,
+        firstName: String,
+        middleName: String,
+        lastName: String,
     }
     
     input userObject{
@@ -426,11 +434,11 @@ let BackEndUser = `
     type Mutation{
         createUser(user:userObject!, moduleName:String, actionName:String):response
         updateUser(userId:String!, user:userObject!, moduleName:String, actionName:String):response
-        resetPassword (userId:String!, password: String!, moduleName:String, actionName:String):response
+        resetPassword (password: String!, moduleName:String, actionName:String):response
         addUserProfile(userId:String, user:userObject): String
         assignUsers(userId:String, user:userObject, moduleName:String, actionName:String): response
         deActivateUser(userId:String, deActive:Boolean, moduleName:String, actionName:String): response
-        updateDataEntry(userId: String, moduleName: String, actionName: String, attributes:attributesObject):response
+        updateDataEntry(moduleName: String, actionName: String, attributes:attributesObject):response
         updateSettings(userId: String, moduleName: String, actionName: String, settingsAttributes:settingsAttributesObject): response
         updateAddressBookInfo(userId: String, moduleName: String, actionName: String,type:String, addressBook:addressBook): response
         uploadUserImage(userId:String,moduleName:String,actionName:String,userProfilePic:String):response
@@ -448,25 +456,26 @@ let BackEndUser = `
         fetchUsersBysubChapterDepSubDep(clusterId:String, chapterId:String, subChapterId:String): [BackendUsers]
         fetchsubChapterUserDepSubDep(userId:String, subChapterId:String):[dep]  
         fetchAssignedAndUnAssignedUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String,subChapterName:String): [BackendUsers]
-        fetchUsersForDashboard(clusterId:String, chapterId:String, subChapterId:String, userType:String): SearchResp
+        fetchUsersForDashboard(clusterId:String, chapterId:String, subChapterId:String, userType:String,offset: Int,limit:Int,fieldsData:[GenericFilter]): SearchResp
         fetchUserTypeFromProfile:String
         fetchUserForReistration(clusterId:String, chapterId:String, subChapterId:String,communityId:String departmentId:String,subDepartmentId:String,roleId:String):[BackendUsers]
         fetchMapCenterCordsForUser(module:String, id:String):mapCenterCords
-        fetchAddressBookInfo(userId: String, moduleName: String, actionName: String):addressBookSchema
+        fetchAddressBookInfo(moduleName: String, actionName: String):addressBookSchema
         findUserOnToken(token: String):response
-        fetchInternalUserProfiles(userId: String):[UserProfiles]
+        fetchInternalUserProfiles:[UserProfiles]
         fetchUserRoleDetails(clusterId:String):UserRoles
         fetchMoolyaInternalUsers : [BackendUsers]
+        passwordVerification(Details:String):response
     }
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],BackEndUser]);
 let supportedApi = [
-    {api:'fetchUserDetails', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchUserDetails', actionName:'READ', moduleName:"USERS", isWhiteList:true},
     {api:'fetchUser', actionName:'READ', isWhiteList: true, moduleName:"USERS"},
     {api:'fetchUsersByClusterDepSubDep', actionName:'READ', moduleName:"USERS"},
-    {api:'fetchUserDepSubDep', actionName:'READ', moduleName:"USERS"},
-    {api:'fetchUserRoles', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchUserDepSubDep', actionName:'READ', moduleName:"USERS", isWhiteList:true},
+    {api:'fetchUserRoles', actionName:'READ', moduleName:"USERS", isWhiteList:true},
     {api:'fetchAssignedUsers', actionName:'READ', moduleName:"USERS"},
     {api:'fetchUsersBysubChapterDepSubDep', actionName:'READ', moduleName:"USERS"},
     {api:'fetchsubChapterUserDepSubDep', actionName:'READ', moduleName:"USERS"},
@@ -474,8 +483,12 @@ let supportedApi = [
     {api:'fetchUsersForDashboard', actionName:'READ', moduleName:"USERS"},
     {api:'fetchUserTypeFromProfile', actionName:'READ', isWhiteList: true, moduleName:"USERS"},
     {api:'fetchMapCenterCordsForUser', actionName:'READ', isWhiteList: true, moduleName:"USERS"},
-    {api:'fetchAddressBookInfo', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchAddressBookInfo', actionName:'READ', moduleName:"USERS", isWhiteList: true},
     {api:'findUserOnToken', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchUserRoleDetails', actionName:'READ', moduleName:"USERS", isWhiteList:true},
+    {api:'fetchMoolyaInternalUsers', actionName:'READ', moduleName:"USERS", isWhiteList:true},
+    {api:'fetchInternalUserProfiles', actionName:'READ', moduleName:"USERS", isWhiteList:true},
+  // {api:'passwordVerification', actionName:'READ', moduleName:"USERS"},
 
     {api:'createUser', actionName:'CREATE', moduleName:"USERS"},
     {api:'updateUser', actionName:'UPDATE', moduleName:"USERS"},
@@ -487,5 +500,7 @@ let supportedApi = [
     {api:'updateSettings', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
     {api:'updateAddressBookInfo', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
     {api:'uploadUserImage', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
+    {api:'deActivateAdminUserProfile', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
+    {api:'setAdminDefaultProfile', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

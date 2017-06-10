@@ -681,45 +681,45 @@ if (Meteor.isServer) {
                   "image": ""
                 }]
             },
-            {
-              "link" : "/admin/settings/requestTypeList",
-              "name" : "Request Types",
-              "uniqueId" : "settings_requestTypes",
-              "isLink" : true,
-              "isMenu" : true,
-              "image" : "",
-              subMenu:[{
-                "link": "/admin/settings/addRequestType",
-                "name": "Add RequestType",
-                "uniqueId": "settings_AddRequestType",
-                "subMenuMappingId":"settings_requestTypes",
-                "subMenusId":"settings",
-                "isLink": true,
-                "isMenu": false,
-                "image": ""
-              },
-                {
-                  "link": "/admin/settings/requestTypeList",
-                  "name": "List RequestType",
-                  "uniqueId": "settings_RequestTypeList",
-                  "subMenuMappingId":"settings_requestTypes",
-                  "subMenusId":"settings",
-                  "isLink": true,
-                  "isMenu": false,
-                  "image": ""
-                },
-                {
-                  "link": "/admin/settings/editRequestType",
-                  "name": "Edit RequestType",
-                  "uniqueId": "settings_EditRequestType",
-                  "subMenuMappingId":"settings_requestTypes",
-                  "subMenusId":"settings",
-                  "isLink": true,
-                  "isMenu": true,
-                  "image": ""
-                }]
-
-            },
+            // {
+            //   "link" : "/admin/settings/requestTypeList",
+            //   "name" : "Request Types",
+            //   "uniqueId" : "settings_requestTypes",
+            //   "isLink" : true,
+            //   "isMenu" : true,
+            //   "image" : "",
+            //   subMenu:[{
+            //     "link": "/admin/settings/addRequestType",
+            //     "name": "Add RequestType",
+            //     "uniqueId": "settings_AddRequestType",
+            //     "subMenuMappingId":"settings_requestTypes",
+            //     "subMenusId":"settings",
+            //     "isLink": true,
+            //     "isMenu": false,
+            //     "image": ""
+            //   },
+            //     {
+            //       "link": "/admin/settings/requestTypeList",
+            //       "name": "List RequestType",
+            //       "uniqueId": "settings_RequestTypeList",
+            //       "subMenuMappingId":"settings_requestTypes",
+            //       "subMenusId":"settings",
+            //       "isLink": true,
+            //       "isMenu": false,
+            //       "image": ""
+            //     },
+            //     {
+            //       "link": "/admin/settings/editRequestType",
+            //       "name": "Edit RequestType",
+            //       "uniqueId": "settings_EditRequestType",
+            //       "subMenuMappingId":"settings_requestTypes",
+            //       "subMenusId":"settings",
+            //       "isLink": true,
+            //       "isMenu": true,
+            //       "image": ""
+            //     }]
+            //
+            // },
             {
               "link" : "/admin/settings/taxationList",
               "name" : "Taxation",

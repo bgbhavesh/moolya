@@ -33,6 +33,30 @@ let Process = `
         documents   : [documentOutput]  
         processDocuments : [processDocumentOutput]
     }
+     type docFilesInputSchema{
+       fileId:String,
+       fileUrl: String,
+       fileName:String,
+       fileSize: String
+     }
+    type processDocumentOutput{
+        kycCategoryId:String,
+        kycCategoryName: String,
+        docTypeId:String,
+        docTypeName:String,
+        documentId:String,
+        documentDisplayName:String,
+        documentName:String,
+        isMandatory:Boolean,
+        isActive:Boolean,
+        inputLength:String,
+        allowableMaxSize:String,
+        allowableFormat:String,
+        docMappingDef:String,
+        docFiles:[docFilesInputSchema],
+        status: String
+    }
+   
     type processOutput{
         _id         : String,
          date        : Date,
@@ -50,6 +74,8 @@ let Process = `
         isActive    : Boolean,
         documents   : [documentOutput] , 
         processDocuments : [processDocumentOutput]
+       
+        
     }
     
     
@@ -85,21 +111,7 @@ let Process = `
         categoryName: String
         
     }
-    type processDocumentOutput{
-        kycCategoryId:String,
-        kycCategoryName: String,
-        docTypeId:String,
-        docTypeName:String,
-        documentId:String,
-        documentDisplayName:String,
-        documentName:String,
-        isMandatory:Boolean,
-        isActive:Boolean,
-        inputLength:String,
-        allowableMaxSize:String,
-        allowableFormat:String,
-        docMappingDef:String,
-    }
+    
     
     input community{
         id   :  String
@@ -174,7 +186,7 @@ let Process = `
     
     type Query{
       findProcess(id:String):processOutput
-      findProcessDocumentForRegistration(clusterId:String,chapterId:String,subChapterId:String,userType:String,communityType:String,identityType:String,profession:String,industry:String):processOutput
+      findProcessDocumentForRegistration(clusterId:String,chapterId:String,subChapterId:String,userType:String,communityType:String,identityType:String,profession:String,industry:String,email:String):processOutput
     }
     
 `

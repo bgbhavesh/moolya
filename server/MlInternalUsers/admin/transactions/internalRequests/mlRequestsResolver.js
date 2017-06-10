@@ -1,5 +1,6 @@
 import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
+import mlHierarchyAssignment from '../../../admin/genericTransactions/impl/MlHierarchyAssignment'
 
 MlResolver.MlMutationResolver['createRequestss'] = (obj, args, context, info) => {
   if(!args.requests.requestTypeId){
@@ -23,19 +24,31 @@ MlResolver.MlMutationResolver['createRequestss'] = (obj, args, context, info) =>
     let communityDetails = MlCommunityDefinition.findOne({"code":args.requests.community})|| {};
     args.requests.communityName = communityDetails.name;
 
+    if(Meteor.users.findOne({_id : context.userId}))
+    {
+      args.requests.createdBy = Meteor.users.findOne({_id: context.userId}).username
+    }
+
   let requestDetails = MlRequestType.findOne({"_id":args.requests.requestTypeId})|| {};
   if(requestDetails.requestName) {
     args.requests.requestTypeName = requestDetails.requestName;
-    orderNumberGenService.assignRequests(args.requests)
-    let id = mlDBController.insert('MlRequests', args.requests, context)
-    if (id) {
-      let code = 200;
-      let result = {requestId: id}
-      let response = new MlRespPayload().successPayload(result, code);
+    args.requests.userId = context.userId;
+    if(mlHierarchyAssignment.checkHierarchyExist(context.userId) === true){
+      orderNumberGenService.assignRequests(args.requests)
+      let id = mlDBController.insert('MlRequests', args.requests, context)
+      if (id) {
+        let code = 200;
+        let result = {requestId: id}
+        let response = new MlRespPayload().successPayload(result, code);
+        return response;
+      }
+    }else{
+      let result = "No Hierarchy available for user,contact Administrator"
+      let response = new MlRespPayload().errorPayload(result);
       return response;
     }
   }else{
-    let result = "Request Type required "
+    let result = "Request Type required"
       let response = new MlRespPayload().errorPayload(result);
     return response;
   }
@@ -48,13 +61,25 @@ MlResolver.MlQueryResolver['fetchRequestss'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['updateRequestsStatus'] = (obj, args, context, info) => {
-
-  let id = mlDBController.update('MlRequests', {requestId:args.requestsId},{status: args.status},  {$set: true},context)
-  if(id){
-    let code = 200;
-    let result = {requestsId : id}
-    let response = new MlRespPayload().successPayload(result, code);
-    return response
+  let requestId = args.requestsId;
+  let transaction = mlDBController.findOne("MlRequests", {requestId: requestId});
+  let decision = false;
+  if(args.status == "WIP" || args.status == "Approved"){
+    decision = mlHierarchyAssignment.canWorkOnInternalRequest(requestId,"MlRequests",context.userId)
+  }
+  if( decision === false ){
+    let code = 401;
+    let result = {message : "User doesn't have privileges to act on this request"}
+    let response = new MlRespPayload().errorPayload(result, code);
+    return response;
+  }else{
+    let id = mlDBController.update('MlRequests', {requestId:requestId},{status: args.status},  {$set: true},context)
+    if(id){
+      let code = 200;
+      let result = {requestsId : id}
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }
   }
 }
 

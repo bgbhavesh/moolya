@@ -58,7 +58,7 @@ function dateFormatter (data){
 }
 const mlActionsAndStatueseTableConfig=new MlViewer.View({
   name:"roleTypeTable",
-  module:"roles",//Module name for filter.
+  module:"actionAndStatus",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
   fields:["processId","isActive","process"],

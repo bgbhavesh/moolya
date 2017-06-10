@@ -12,6 +12,8 @@ import {addBackendUserActionHandler} from "../actions/addBackendUserAction";
 import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
 import {OnToggleSwitch, initalizeFloatLabel, passwordVisibilityHandler} from "../../../utils/formElemUtil";
 import Datetime from "react-datetime";
+import passwordSAS_validate from '../../../../../lib/common/validations/passwordSASValidator';
+
 import moment from "moment";
 
 let FontAwesome = require('react-fontawesome');
@@ -146,6 +148,9 @@ class MlAddBackendUser extends React.Component {
         moolyaProfile: moolyaProfile
       }
       let profile = {
+        firstName: this.refs.firstName.value,
+        middleName: this.refs.middleName.value,
+        lastName: this.refs.lastName.value,
         isInternaluser: true,
         isExternaluser: false,
         isMoolya: moolyaProfile.userType && moolyaProfile.userType == 'moolya' ? true : false,
@@ -190,6 +195,23 @@ class MlAddBackendUser extends React.Component {
   optionsBySelectSubChapter(val){
     this.setState({selectedSubChapter:val})
   }
+  passwordValidation() {
+    let password = this.refs.password.value;
+    if (!password) {
+      this.setState({"pwdValidationMsg": ''})
+    } else {
+      let validate = passwordSAS_validate(password)
+      if (validate.isValid) {
+        this.setState({"pwdValidationMsg": ''})
+        // this.setState({passwordValidation: true})
+      }
+      else if (typeof (validate) == 'object') {
+        this.setState({"pwdValidationMsg": validate.errorMsg})
+      }
+
+    }
+  }
+
   onCheckPassword(){
     let password=this.refs.password.value;
     let confirmPassword=this.refs.confirmPassword.value;
@@ -216,6 +238,10 @@ class MlAddBackendUser extends React.Component {
   }*/
 
   render(){
+    var yesterday = Datetime.moment().subtract(0,'day');
+    var valid = function( current ){
+      return current.isBefore( yesterday );
+    };
     let MlActionConfig = [
       {
         showAction: true,
@@ -287,7 +313,8 @@ class MlAddBackendUser extends React.Component {
                       />
                     </div>
                     <div className="form-group">
-                      <input type="Password" ref="password" defaultValue={this.state.password} placeholder="Create Password" className="form-control float-label" id="password"/>
+                      <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdValidationMsg}</text>
+                      <input type="Password" ref="password" defaultValue={this.state.password} placeholder="Create Password"  onBlur={this.passwordValidation.bind(this)} className="form-control float-label" id="password"/>
                       <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
                     </div>
                     <div className="form-group">
@@ -320,7 +347,7 @@ class MlAddBackendUser extends React.Component {
                     </div>
 
                     <div className="form-group mandatory">
-                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={this.state.dateOfBirth} onChange={this.onBirthDateSelection.bind(this)}/>
+                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} value={this.state.dateOfBirth} onChange={this.onBirthDateSelection.bind(this)} isValidDate={ valid } />
                       <FontAwesome name="calendar" className="password_icon"/>
                     </div>
 
@@ -343,10 +370,14 @@ class MlAddBackendUser extends React.Component {
 
                     <div className="form-group switch_wrap inline_switch">
                       <label>Global Assignment Availability</label>
-                      <label className="switch">
+                      {(this.state.selectedBackendUserType == 'non-moolya') ? <label className="switch">
+                        <input type="checkbox" ref="globalAssignment" disabled="disabled"/>
+                        <div className="slider"></div>
+                      </label> : <label className="switch">
                         <input type="checkbox" ref="globalAssignment"/>
                         <div className="slider"></div>
-                      </label>
+                      </label>}
+
                     </div>
                     <br className="brclear"/>
                     <div className="form-group switch_wrap inline_switch">

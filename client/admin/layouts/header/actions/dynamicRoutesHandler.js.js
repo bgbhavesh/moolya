@@ -167,6 +167,18 @@ export default function dynamicLinkHandler(path,params,queryParams){
         return `/admin/clusters/${dynamicParams.clusterId}/history`;
       }
     },
+    "chapter_history":function (params,queryParams) {
+      let dynamicParams=params||{};
+      if(_.has(dynamicParams,"subChapterId")){
+        return `/admin/chapters/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/${dynamicParams.subChapterName}/history`;
+      }
+    },
+    "community_Histroy_Details":function (params,queryParams) {
+      let dynamicParams=params||{};
+      if(_.has(dynamicParams,"communityId")){
+        return `/admin/community/${dynamicParams.communityId}/history`;
+      }
+    },
 
   }
   let menuLinkHandler=menuLinkHandlerConfig[path];

@@ -31,6 +31,8 @@ let registrationSchema = `
         addressState      :  String
         addressCountry : String
         addressPinCode : String
+        latitude        :  Int
+        longitude       :  Int
      }
      
      type SocialLinkInfoSchema{
@@ -94,6 +96,8 @@ let registrationSchema = `
       addressState      :  String
       addressCountry : String
       addressPinCode : String
+      latitude        :  Int
+      longitude       :  Int
     }
     
     input SocialLinkInfo{
@@ -174,7 +178,8 @@ let registrationSchema = `
         registrationStatus        :   String,
         assignedUser    :   String,
         profileImage    :   String,
-        status          : String   
+        status          :   String,
+        createdBy       :   String
     }
     
     type RegistrationResponse{
@@ -237,6 +242,8 @@ let registrationSchema = `
         assignedUser    :   String,
         profileImage    :   String,
         transactionId   :   String
+        assignedUserId    :   String,
+        createdBy       :   String
     }
     
     type branchLocation{
@@ -418,6 +425,8 @@ let registrationSchema = `
          resendSmsVerification(mobileNumber:String):response
          verifyEmail(token:String):response
          verifyMobileNumber(mobileNumber:String,otp:Int):response
+         forgotPassword(email:String):response
+         resetPasswords(token:String, password:String):response
     }
     type Query{
         findRegistration(registrationId:String):Registration
@@ -447,14 +456,15 @@ let supportedApi = [
     {api:'RemoveFileFromDocuments', actionName:'UPDATE', moduleName:"REGISTRATION"},
     {api:'ApprovedStatusForUser', actionName:'UPDATE', moduleName:"REGISTRATION"},
     {api:'RejectedStatusForUser', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'sendEmailVerificationForRegistration', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'sendSmsVerificationForRegistration', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'sendEmailVerification', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'resendSmsVerification', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'verifyEmail', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'verifyMobileNumber', actionName:'UPDATE', moduleName:"REGISTRATION"},
-    {api:'fetchContextClusters', actionName:'READ', moduleName:"REGISTRATION"},
-    {api:'fetchContextChapters', actionName:'READ', moduleName:"REGISTRATION"},
-    {api:'fetchContextSubChapters', actionName:'READ', moduleName:"REGISTRATION"},
+    {api:'sendEmailVerificationForRegistration', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'sendSmsVerificationForRegistration', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'sendEmailVerification', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'resendSmsVerification', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'verifyEmail', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'verifyMobileNumber', actionName:'UPDATE', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'fetchContextClusters', actionName:'READ', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'fetchContextChapters', actionName:'READ', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'fetchContextSubChapters', actionName:'READ', moduleName:"REGISTRATION", isWhiteList:true},
+    {api:'forgotPassword', actionName:'READ', moduleName:"REGISTRATION"},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

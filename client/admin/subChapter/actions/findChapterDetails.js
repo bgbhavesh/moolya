@@ -4,12 +4,13 @@
 import gql from 'graphql-tag'
 import {client} from '../../core/apolloConnection';
 
-export async function findChapterActionHandler(chapterId) {
+export async function findChapterActionHandler(clusterid, chapterId) {
+  let clusterId = clusterid
   let findChapterId = chapterId
   const result = await client.query({
     query: gql`
-    query  ($chapterId : String){
-        fetchChapter(chapterId: $chapterId){
+    query  ($clusterId : String, $chapterId : String){
+        fetchChapter(clusterId:$clusterId, chapterId: $chapterId){
           chapterId: _id
           clusterId
           clusterName
@@ -20,6 +21,7 @@ export async function findChapterActionHandler(chapterId) {
       }
     `,
     variables: {
+      clusterId:clusterId,
       chapterId: findChapterId
     },
     forceFetch: true

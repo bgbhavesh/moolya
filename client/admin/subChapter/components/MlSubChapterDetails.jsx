@@ -223,7 +223,8 @@ class MlSubChapterDetails extends React.Component {
         }
       }
     ]
-    let subChapterQuery=gql`query{data:fetchSubChaptersSelectNonMoolya { value:_id, label:subChapterName}}`;
+    var subChapterQuery = gql`query($subChapterId:String){data:fetchSubChaptersSelectNonMoolya(subChapterId:$subChapterId) { value:_id, label:subChapterName}}`;
+    var subChapterOption = {options: {variables: {subChapterId: this.props.params}}};
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
@@ -239,6 +240,10 @@ class MlSubChapterDetails extends React.Component {
                     <input type="text" placeholder="Cluster Name" ref="clusterName" readOnly
                           defaultValue={this.state.data && this.state.data.clusterName}
                           className="form-control float-label" disabled="disabled"/>
+                  </div>
+                  <div className="form-group">
+                    <input type="text" ref="state" placeholder="State" className="form-control float-label"
+                           defaultValue={this.state.data && this.state.data.stateName} readOnly="true"/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Chapter Name" ref="chapterName" className="form-control float-label"
@@ -257,14 +262,14 @@ class MlSubChapterDetails extends React.Component {
                       <Moolyaselect multiSelect={true} placeholder="Related Sub-Chapters"
                                     className="form-control float-label" valueKey={'value'} labelKey={'label'}
                                     selectedValue={this.state.data.associatedSubChapters} queryType={"graphql"}
-                                    query={subChapterQuery} isDynamic={true}
+                                    query={subChapterQuery} isDynamic={true} queryOptions={subChapterOption}
                                     onSelect={this.selectAssociateChapter.bind(this)}/>
                     </div>
-                    <br className="brclear"/>
-                    <div className="form-group">
-                      <input type="text" ref="state" placeholder="State" className="form-control float-label"
-                             defaultValue={this.state.data && this.state.data.stateName} readOnly="true"/>
-                    </div>
+                    {/*<br className="brclear"/>*/}
+                    {/*<div className="form-group">*/}
+                      {/*<input type="text" ref="state" placeholder="State" className="form-control float-label"*/}
+                             {/*defaultValue={this.state.data && this.state.data.stateName} readOnly="true"/>*/}
+                    {/*</div>*/}
                     <div className="form-group">
                       <input type="text" ref="subChapterEmail" placeholder="Sub-Chapter Email ID"
                              defaultValue={this.state.data && this.state.data.subChapterEmail}

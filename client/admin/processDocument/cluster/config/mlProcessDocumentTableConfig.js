@@ -3,6 +3,7 @@ import React from 'react';
 import gql from 'graphql-tag'
 import ActiveProcessFormatter from "../components/ActiveProcessDocFormatter"
 import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
+import MlCustomFilter from "../../../../commons/customFilters/customFilter";
 function stateFormatter(data){
   let processmapping = [];
   processmapping=data&&data.data&&data.data.stateNames?data.data.stateNames:[];
@@ -74,6 +75,8 @@ const mlProcessTableConfig=new MlViewer.View({
   throttleRefresh:false,
   pagination:false,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
+  filter:true,
+  filterComponent: <MlCustomFilter module="documents" moduleName="documents" />,
   buildQueryOptions:(config)=>
   {
     if(!config.params){
@@ -146,7 +149,7 @@ const mlProcessTableConfig=new MlViewer.View({
   ],
   graphQlQuery:gql`
                query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
-                data:SearchQuery(module:"DOCUMENTS", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
+                data:SearchQuery(module:"documents", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
                       totalRecords
                       data{
                        ...on ProcessType{

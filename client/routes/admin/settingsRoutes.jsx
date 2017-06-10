@@ -182,10 +182,12 @@ import MlHierarchyDetails from '../../admin/settings/hierarchy/component/MlHiera
 import MlFiltersList from '../../admin/settings/filters/components/MlFiltersList'
 import MlEditFilter from '../../admin/settings/filters/components/MlAddFilter'
 /*import MlEditFilter from '../../admin/settings/filters/components/MlEditFilter'*/
+import MlHierarchyTabHistoryList from '../../admin/settings/hierarchy/hierarchyAuditLog/components/MlHierarchyTabHistoryList'
 
 // @End
 
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
+import MlSettingsTabHistoryList from '../../admin/settings/settingsAuditLog/components/MlSettingsTabHistoryList'
 
 adminSection.route('/settings/departmentsList', {
   name: 'settings_DepartmentList',
@@ -266,10 +268,16 @@ adminSection.route('/settings/hierarchy/clusterhierarchy', {
     mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'hierarchy', subModule:'cluster'}}/>,adminContent:<MlViews viewMode={false} showInfinity={false} mapConfig={mlClusterMapConfig} listConfig={mlClusterListConfig} />})
   }
 });
+adminSection.route('/settings/hierarchy/history', {
+  name: 'hierarchy',
+  action(){
+    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'hierarchy', subModule:'history'}}/>,adminContent:<MlHierarchyTabHistoryList />})
+  }
+});
 adminSection.route('/settings/hierarchy/clusterhierarchy/:clusterId/chapters', {
   name: 'hierarchy_chapters',
   action(params){
-    mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterSubChaptersListConfig}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'hierarchy', subModule:'history'}}/>,adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterSubChaptersListConfig}/>})
   }
 });
 adminSection.route('/settings/hierarchy/clusterhierarchy/:clusterId/hierarchyDetails', {
@@ -1114,6 +1122,13 @@ adminSection.route('/settings/editActionsAndStatuses/:id/:Did', {
   name: 'settings_Generic_ActionsAndStatuses_Edit',
   action(){
     mount(AdminLayout,{adminContent:<MlEditGenericActionsAndStatuses />})
+  }
+});
+
+adminSection.route('/settings/history', {
+  name: 'settings_historyList',
+  action(){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'history'}} />,adminContent:< MlSettingsTabHistoryList/>})
   }
 });
 

@@ -60,10 +60,15 @@ let modules = [
     'awards',
     'fundingType',
     'portfolio',
-    'transactionLog',
+    'transactionsLog',
     'modulelist',
     "internalRequests",
-    "internalApprovedRequests"
+    "internalApprovedRequests",
+    "actionAndStatus",
+    "accountType",
+    'office',
+    "processSetup",
+    'subscriptions'
   ];
 
 // Meteor.startup(function () {

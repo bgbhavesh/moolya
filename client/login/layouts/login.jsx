@@ -76,7 +76,7 @@ MlLoginContent = React.createClass({
                   <div className="checkbox_wrap"><input type="checkbox"/><span>Remember me</span></div>
                   <button className="ml_submit_btn" ref="signIn" type="button" onClick={this.loginSubmit}>Sign in</button>
                   <br className="brclear"/>
-                  <p><a href="#">Forgot Password</a> | <a href="#">Register</a></p>
+                  <p><a href="/forgot-password">Forgot Password</a> | <a href="https://www.moolya.in/register">Register</a></p>
                 </form>
               </div>
             </div>

@@ -18,14 +18,14 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
       subDepartmentName:'',
       profileImage:'',
       firstName: " ",
-      status:null,
+      status:props.data.status,
       dispalyStatus:false
     }
     return this;
   }
   componentDidMount() {
     initalizeFloatLabel();
-    console.log(this.props.data)
+    // console.log(this.props.data)
   }
   componentWillReceiveProps(newProps){
    /* let type=newProps.type;
@@ -87,7 +87,7 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
     let status=val.value
     let requestId=this.props.data.requestId
     let response = await updateStusForTransactionActionHandler(requestId,status);
-    if(response){
+    if(response.success){
       toastr.success("transaction status changed successfully")
       if(status=="Approved"){
         FlowRouter.go("/admin/transactions/approvedList");
@@ -96,7 +96,7 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
         FlowRouter.go("/admin/transactions/requestedList");
       }
     }else{
-      toastr.error(response.error)
+      toastr.error("User doesn't have privileges to act on this request")
     }
   }
 

@@ -21,9 +21,10 @@ import MlSchemaDef from '../../commons/mlSchemaDef';
 import _ from 'lodash';
 import ImageUploader from '../../commons/mlImageUploader';
 import MlRespPayload from '../../commons/mlPayload';
+let helmet = require('helmet');
 let cors = require('cors');
 const Fiber = Npm.require('fibers')
-var _language = require('graphql/language');
+let _language = require('graphql/language');
 let multipart 	= require('connect-multiparty'),
   fs 			    = require('fs'),
   multipartMiddleware = multipart();
@@ -48,6 +49,8 @@ const defaultServerConfig = {
   cities:'/cities',
   communities:'/communities',
   couponValidate:'/coupons',
+  resetPassword:'/resetPassword',
+  forgotPassword: '/forgotPassword',
   graphiqlOptions : {
     passHeader : "'meteor-login-token': localStorage['Meteor.loginToken']"
   },
@@ -78,7 +81,12 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     }
   }
   const graphQLServer = express();
+
   config.configServer(graphQLServer)
+  graphQLServer.use(helmet());
+  graphQLServer.use(helmet.noCache());
+  graphQLServer.use(helmet.frameguard());
+  graphQLServer.use(helmet.hsts());
   graphQLServer.use(cors());
   graphQLServer.use(config.path, bodyParser.json(), graphqlExpress( async (req, res) =>
   {
@@ -91,6 +99,12 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       };
 
       context = getContext({req, res});
+
+      if(!context||!context.userId){
+        res.json({unAuthorized:true,message:"Invalid Token"})
+        return;
+      }
+
       var isAut = mlAuthorization.authChecker({req, context})
       if(!isAut){
           res.json({unAuthorized:true,message:"Not Authorized"})
@@ -535,6 +549,69 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
             }
             //res.send(cities);
           }
+        }else{
+          let code = 401;
+          let result = {message:"The request did not have valid authorization credentials"}
+          let response = new MlRespPayload().errorPayload(result, code);
+          console.log(response);
+          res.send(response);
+        }
+      }else{
+        console.log("Request Payload not provided");
+        res.send(new MlRespPayload().errorPayload({message:"Request Payload not provided"}, 400));
+      }
+    }))
+  }
+
+  if(config.resetPassword){
+    graphQLServer.options('/resetPassword', cors());
+    graphQLServer.post(config.resetPassword, bodyParser.json(), Meteor.bindEnvironment(function (req, res) {
+      console.log(req, res);
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      var context = {};
+      context = getContext({req});
+      context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+      if(req)
+      {
+        let data = req.body;
+        console.log(data);
+        let apiKey = req.header("apiKey");
+        if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
+          let response;
+          response = MlResolver.MlMutationResolver['resetPasswords'](null, data, context, null);
+          res.send(response);
+        }else{
+          let code = 401;
+          let result = {message:"The request did not have valid authorization credentials"}
+          let response = new MlRespPayload().errorPayload(result, code);
+          console.log(response);
+          res.send(response);
+        }
+      }else{
+        console.log("Request Payload not provided");
+        res.send(new MlRespPayload().errorPayload({message:"Request Payload not provided"}, 400));
+      }
+    }))
+  }
+
+  if(config.forgotPassword){
+    graphQLServer.options('/forgotPassword', cors());
+    graphQLServer.post(config.forgotPassword, bodyParser.json(), Meteor.bindEnvironment(function (req, res) {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      var context = {};
+      context = getContext({req});
+      context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+      if(req)
+      {
+        let data = req.body;
+        console.log(data);
+        let apiKey = req.header("apiKey");
+        if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
+          let response;
+          response = MlResolver.MlMutationResolver['forgotPassword'](null, data, context, null);
+          res.send(response);
         }else{
           let code = 401;
           let result = {message:"The request did not have valid authorization credentials"}

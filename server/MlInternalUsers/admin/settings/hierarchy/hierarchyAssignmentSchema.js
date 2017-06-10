@@ -76,8 +76,8 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],HierarchyAssignmentS
 let supportedApi = [
   {api:'fetchAssignedRolesHierarchy', actionName:'READ', moduleName:"HIERARCHY"},
   {api:'fetchFinalApprovalRole', actionName:'READ', moduleName:"HIERARCHY"},
-  {api:'fetchHierarchyRoles', actionName:'READ', moduleName:"HIERARCHY"},
-  {api:'fetchHierarchyUsers', actionName:'READ', moduleName:"HIERARCHY"},
+  {api:'fetchHierarchyRoles', actionName:'READ', moduleName:"HIERARCHY", isWhiteList:true},
+  {api:'fetchHierarchyUsers', actionName:'READ', moduleName:"HIERARCHY", isWhiteList:true},
 
   {api:'updateHierarchyAssignment', actionName:'UPDATE', moduleName:"HIERARCHY"},
 ]

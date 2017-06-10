@@ -80,8 +80,8 @@ const mlRoleTypeTableConfig=new MlViewer.View({
   module:"roles",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["roleName","displayName","roleType","userType","about"],
-  searchFields:["roleTypeName","roleTypeDisplayName","isActive"],
+  fields:["roleName","displayName","roleType","userType",'createdBy'],
+  searchFields:["roleName","displayName","roleType", "userType",'createdBy'],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
@@ -93,10 +93,11 @@ const mlRoleTypeTableConfig=new MlViewer.View({
     {dataField: "departmentsList", title: "Departments",dataSort:true,customComponent:departmentsFormatter},
     {dataField: "subdepartmentsList", title: "SubDepartments",dataSort:true,customComponent:subdepartmentsFormatter},
     {dataField: "clustersList", title: "Cluster",dataSort:true,customComponent:clustersFormatter},
-    {dataField: "createdDateTime", title: "Created Date and Time",dataSort:true,customComponent:dateFormatter},
-    {dataField: "createdBy", title: "Created By",dataSort:true,customComponent:createdByFormatter},
     {dataField: "clustersList", title: "Chapter",dataSort:true,customComponent:chapterFormatter},
     {dataField: "subChapterList", title: "Sub-Chapter",dataSort:true,customComponent:subChapterFormatter},
+    {dataField: "createdDateTime", title: "Created Date and Time",dataSort:true,customComponent:dateFormatter},
+    {dataField: "createdBy", title: "Created By",dataSort:true,customComponent:createdByFormatter},
+
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -116,7 +117,9 @@ const mlRoleTypeTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'add',
       handler: (data)=>{
-        if(data&&data.id){FlowRouter.go("/admin/settings/rolesList")}
+        if(data&&data.id)
+        // {FlowRouter.go("/admin/settings/rolesList")}
+          toastr.error("Please uncheck the record")
         else {
           FlowRouter.go("/admin/settings/createRole")
         }

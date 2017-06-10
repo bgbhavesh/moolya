@@ -22,6 +22,7 @@ let Filters = `
       fieldType : String
       fieldResolverName:String
       isCustom:Boolean
+      clearFields:[String]
       fieldList : [fieldListSpecificsOutput]
     }
     
@@ -50,7 +51,8 @@ let Filters = `
       fieldType : String
       fieldResolverName : String
       fieldList : [fieldListSpecifics]
-      isCustom:Boolean
+      isCustom:Boolean,
+      clearFields : [String]
     }
     
     type FiltersDropData{
@@ -93,10 +95,10 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Filters]);
 
 let supportedApi = [
   {api:'findFilters', actionName:'READ', moduleName:"FILTERS"},
-  {api:'fetchModuleFilters', actionName:'READ', moduleName:"FILTERS"},
-  {api:'fetchSelectedFilterListDropDown', actionName:'READ', moduleName:"FILTERS"},
-  {api:'fetchSelectedFilterData', actionName:'READ', moduleName:"FILTERS"},
-  {api:'fetchFilterListDropDown', actionName:'READ', moduleName:"FILTERS"},
+  {api:'fetchModuleFilters', actionName:'READ', moduleName:"FILTERS", isWhiteList:true},
+  {api:'fetchSelectedFilterListDropDown', actionName:'READ', moduleName:"FILTERS", isWhiteList:true},
+  {api:'fetchSelectedFilterData', actionName:'READ', moduleName:"FILTERS", isWhiteList:true},
+  {api:'fetchFilterListDropDown', actionName:'READ', moduleName:"FILTERS", isWhiteList:true},
   {api:'createRequestss', actionName:'CREATE', moduleName:"FILTERS"},
   {api:'updateFilter', actionName:'UPDATE', moduleName:"FILTERS"}
 ]

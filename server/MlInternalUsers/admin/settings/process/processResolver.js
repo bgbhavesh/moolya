@@ -126,26 +126,7 @@ MlResolver.MlMutationResolver['upsertProcessDocument'] = (obj, args, context, in
 
 MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, context, info) => {
   // TODO : Authorization
-
-  /*if (args.clusterId) {
-    let document= MlProcessMapping.findOne({"clusters":args.clusterId,"chapters": args.chapterId,"subChapters": args.subChapterId,"communities":args.communityType,"userTypes":args.userType,"identity":args.identityType,"professions":args.profession,"industries":args.industry
-    });
-    if(document!=undefined){
-      data=document.processDocuments;
-      data.map(function (doc,index) {
-        const allowableFormatData =  MlDocumentFormats.find( { _id: { $in: doc.allowableFormat } } ).fetch() || [];
-        let allowableFormatNames = [];  //@array of strings
-        allowableFormatData.map(function (doc) {
-          allowableFormatNames.push(doc.docFormatName)
-        });
-        data[index].allowableFormat = allowableFormatNames || [];
-      });
-      return document
-    }else{
-      let document= MlProcessMapping.findOne({"clusters":args.clusterId,"chapters": args.chapterId,"subChapters": args.subChapterId,"communities":args.communityType,"userTypes":args.userType,"identity":args.identityType,"professions":args.profession,"industries":args.industry
-      });
-    }
-    }*/
+  let email=args.email;
   let clusters=args.clusterId;
   let chapters=args.chapterId;
   let subChapters=args.subChapterId;
@@ -154,33 +135,40 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
   let userTypes=args.userType;
   let process=null
   let specificQuery=[];
-  //check for specific condition for all criteria fields of processmapping
-  if(clusters!=null&&chapters!=null&&subChapters!=null&&communities!=null&&professions!=null&&userTypes!=null){
+  let kycProcessDoc=null
+
+  function getTheKyc(email){
+
+
+    //check for specific condition for all criteria fields of processmapping
+    if(clusters!=null&&chapters!=null&&subChapters!=null&&communities!=null&&professions!=null&&userTypes!=null){
+      let val={clusters,chapters,subChapters,communities,professions,userTypes}
+      process=fetchProcessProxy(val);
+      if(process){
+        return process
+      }
+    }
+    //check for all or specific condition for all criteria fields of processmapping
     let val={clusters,chapters,subChapters,communities,professions,userTypes}
-   process=fetchProcessProxy(val);
+    for (var key in val) {
+      let qu={};
+      qu[key]={$in:['all',val[key]]};
+      specificQuery.push(qu);//console.log(qu);
+    }
+    let query={$and:specificQuery}
+    process=fetchProcessProxy(query);
     if(process){
       return process
     }
-  }
-  //check for all or specific condition for all criteria fields of processmapping
-  let val={clusters,chapters,subChapters,communities,professions,userTypes}
-  for (var key in val) {
-    let qu={};
-    qu[key]={$in:['all',val[key]]};
-    specificQuery.push(qu);//console.log(qu);
-  }
-  let query={$and:specificQuery}
-  process=fetchProcessProxy(query);
-  if(process){
-    return process
-  }
-  //check for 'all' condition on criteria fields of processmapping
-  let allVal={clusters:"all",chapters:"all",subChapters:"all",communities:"all",professions:"all",userTypes:"all"}
-  process=fetchProcessProxy(allVal);
-  if(process){
-    return process
-  }
+    //check for 'all' condition on criteria fields of processmapping
+    let allVal={clusters:"all",chapters:"all",subChapters:"all",communities:"all",professions:"all",userTypes:"all"}
+    process=fetchProcessProxy(allVal);
+    if(process){
+      return process
+    }
 
+
+  }
   function fetchProcessProxy(query){
     console.log(query)
     let document= MlProcessMapping.findOne({ $and: [query,{"identity":{ $in: [args.identityType]},"industries":{ $in: [args.industry]},"isActive":true}]})
@@ -198,6 +186,110 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
     }
   }
 
-    return process;
+
+  //checking for the email exist or not
+   let user=MlRegistration.find({"$and":[{"registrationInfo.email":email},{"status":"Approved"}]}).fetch();
+  if(user&&user.length>0){
+   let  ApprovedKyc=[];
+    let kycDoc=null;
+    //if user exist get the KYC of  approved Users
+   /* _.map(user,function(userDetails){
+      if(userDetails.kycDocuments){
+        let kyc=userDetails.kycDocuments
+        for(let i=0;i<kyc.length;i++){
+          ApprovedKyc.push(kyc[i])
+        }
+      }
+    })*/
+         for(let j=0;j<user.length;j++){
+           if(user[j].kycDocuments){
+             let kyc=user[j].kycDocuments
+             for(let i=0;i<kyc.length;i++){
+               ApprovedKyc.push(kyc[i])
+             }
+           }
+         }
+    kycDoc=_.uniqBy(ApprovedKyc, function (kyc) {
+      return kyc.documentId&&kyc.docTypeId;
+    });
+
+
+    if(kycDoc){
+      //get the kyc for multiple profile createria
+      kycProcessDoc=getTheKyc(email)
+      if(kycProcessDoc){
+        let props=['documentId','docTypeId'];
+        let Documents=[],MatchingDocuments=[]
+        let latestKyc=kycProcessDoc.processDocuments;
+        if(latestKyc.length>0){
+          //matching the documents in both latestkyc and alredy approved kyc
+                for(var i=0;i<kycDoc.length;i++){
+                  for(var j=0;j<latestKyc.length;j++){
+                    if((kycDoc[i].documentId==latestKyc[j].documentId)&&(kycDoc[i].docTypeId==latestKyc[j].docTypeId)){
+                      console.log(kycDoc[i])
+                      MatchingDocuments.push(kycDoc[i])
+                    }
+                  }
+                }
+                //if matching documents available
+                if(MatchingDocuments&&MatchingDocuments.length>0){
+                  //search for unmatched documents in latestkyc
+                  for (var i = 0, len = MatchingDocuments.length; i < len; i++) {
+                    for (var j = 0, len2 = latestKyc.length; j < len2; j++) {
+                      if ((MatchingDocuments[i].documentId === latestKyc[j].documentId)&&(MatchingDocuments[i].docTypeId === latestKyc[j].docTypeId)){
+                        latestKyc.splice(j, 1);
+                        len2=latestKyc.length;
+                      }
+                    }
+                  }
+                  console.log(latestKyc)
+                  //if unmatched docs found pushed to matching doc and return the documents
+                  if(latestKyc&&latestKyc.length){
+                      for(let i=0;i<latestKyc.length;i++){
+                        MatchingDocuments.push(latestKyc[i])
+                      }
+                        let kycProcess={
+                          'processDocuments':MatchingDocuments
+                        }
+                        if(kycProcess){
+                          return kycProcess
+
+                        }
+
+                  }else{
+                    //if no docs found in latest kyc  return matching docs
+                        let kycProcess={
+                          'processDocuments':MatchingDocuments
+                        }
+                        if(kycProcess){
+                          return kycProcess
+
+                        }
+                  }
+                }
+                else{
+                  //if no matching documents return the latest kyc
+                      let kycProcess={
+                        'processDocuments':latestKyc
+                      }
+                      if(kycProcess){
+                        return kycProcess
+
+                      }
+                }
+              }else{
+                  return kycProcessDoc
+              }
+              }
+
+            }
+
+      }else {
+      let processDocMap=getTheKyc(email)
+      if(processDocMap){
+        return processDocMap
+      }
+    }
+
 }
 

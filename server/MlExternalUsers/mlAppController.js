@@ -13,6 +13,7 @@ import express from 'express';
 import getContext from '../commons/mlAuthContext'
 import MlResolver from '../commons/mlResolverDef';
 import MlSchemaDef from '../commons/mlSchemaDef';
+import MlRespPayload from '../commons/mlPayload';
 import _ from 'lodash';
 let cors = require('cors');
 let multipart 	= require('connect-multiparty'),
@@ -32,6 +33,7 @@ const defaultServerConfig = {
   configServer: graphQLServer => {},
   graphiql: Meteor.isDevelopment,
   graphiqlPath: '/graphiql',
+  paymentReturnUrlPath:'/moolyaPaymentStatus',
   graphiqlOptions : {
     passHeader : "'meteor-login-token': localStorage['Meteor.loginToken']"
   },
@@ -89,6 +91,30 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>
             ...config.graphiqlOptions,
             endpointURL: config.path,
         }));
+    }
+
+    // return url for payment gateway, Need to send transcation type on payment
+    if(config.paymentReturnUrlPath){
+        graphQLServer.options(config.paymentReturnUrlPath, cors());
+        graphQLServer.post(config.paymentReturnUrlPath, bodyParser.json(), Meteor.bindEnvironment(function (req, res){
+          if(req){
+            let data = req.body;
+            let apiKey = req.header("apiKey");
+            // console.log(data);
+            if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
+              let response = MlResolver.MlMutationResolver['officeTransactionPayment'](null, data, context, null);
+              res.send(response);
+            }else{
+              let code = 401;
+              let result = {message:"The request did not have valid authorization credentials"}
+              let response = new MlRespPayload().errorPayload(result, code);
+              console.log(response);
+              res.send(response);
+            }
+          }else {
+            res.send(new MlRespPayload().errorPayload("Request Payload not provided", 400));
+          }
+        }))
     }
     WebApp.connectHandlers.use(Meteor.bindEnvironment(graphQLServer));
 }

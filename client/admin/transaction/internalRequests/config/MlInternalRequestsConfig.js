@@ -3,6 +3,7 @@ import React from 'react';
 import gql from 'graphql-tag'
 import MlInternalRequestDetailsComponent from '../../internalRequests/component/MlInternalRequestDetailsComponent'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
+import CreateRequest from '../component/CreateRequestComponent'
 
 const mlInternalRequestsTableConfig=new MlViewer.View({
   name:"TransactionsLogTable",
@@ -18,7 +19,7 @@ const mlInternalRequestsTableConfig=new MlViewer.View({
   columns:[
     {dataField: "requestId",title:"Id",'isKey':true,isHidden:true,selectRow:true},
     {dataField: "transactionCreatedDate", title: "Created Date",dataSort:true,selectRow:true},
-    {dataField: "requestId", title: "User Name",dataSort:true,selectRow:true},
+    {dataField: "requestId", title: "Module Id",dataSort:true,selectRow:true},
     {dataField: "requestTypeName", title: "Activity",dataSort:true,selectRow:true},
     {dataField: "clusterName", title: "Details",dataSort:true,selectRow:true},
     {dataField: "chapterName", title: "TransactionTypeName",dataSort:true,selectRow:true},
@@ -26,7 +27,8 @@ const mlInternalRequestsTableConfig=new MlViewer.View({
     {dataField: "chapterName", title: "Chapter",dataSort:true,selectRow:true},
     {dataField: "subChapterName", title: "Sub Chapter",dataSort:true,selectRow:true},
     {dataField: "communityName", title: "Community",dataSort:true,selectRow:true},
-    {dataField: "status", title: "status",dataSort:true,selectRow:true}
+    {dataField: "status", title: "status",dataSort:true,selectRow:true},
+    {dataField: "createdBy", title: "Created By",dataSort:true,selectRow:true}
   ],
   tableHeaderClass:'react_table_head',
   isExpandableRow:(row)=>{return true;},
@@ -34,10 +36,19 @@ const mlInternalRequestsTableConfig=new MlViewer.View({
   showActionComponent:true,
   actionConfiguration:[
     {
-      actionName: 'add',
       showAction: true,
-      handler: (data)=>{
-
+      showAction: true,
+      actionName: 'add',
+      hasPopOver:true,
+      popOverTitle:'Create Request',
+      placement:'top',
+      target:'createInternalRequest',
+      popOverComponent:<CreateRequest />,
+      actionComponent:function(props){
+        return  <div className={props.activeClass} id={props.actionName}>
+          <div onClick={props.onClickHandler} className={props.activesubclass} data-toggle="tooltip" title={props.actionName} data-placement="top" >
+            <span className={props.iconClass} id={props.target}></span>
+          </div></div>;
       }
     }
   ],
@@ -63,6 +74,7 @@ const mlInternalRequestsTableConfig=new MlViewer.View({
                           chapterName
                           subChapterName
                           communityName
+                          createdBy
                       }
                     }
               }

@@ -2,12 +2,12 @@ import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
 export async function findBackendUserActionHandler(userTypeId) {
-  let did=userTypeId
+  let userId=userTypeId
   const result = await client.query({
     query: gql`
     
-          query($id: String){
-            fetchUser(userId:$id){
+          query($userId:String){
+            fetchUser(userId:$userId){
               _id,
               profile{
                 isInternaluser,
@@ -71,7 +71,7 @@ export async function findBackendUserActionHandler(userTypeId) {
           }
     `,
     variables: {
-      id:did
+      userId
     },
     forceFetch:true
   })

@@ -6,12 +6,7 @@ import React from "react";
 import {render} from "react-dom";
 import _ from "lodash";
 import {fetchCommunitiesHandler} from "../../../../app/commons/actions/fetchCommunitiesActionHandler";
-import  {createOfficeActionHandler} from '../actions/createOfficeAction';
-var options = [
-  {value: 'Type of Funding', label: 'Type of Funding'},
-  {value: '2', label: '2'}
-];
-
+import {createOfficeActionHandler} from "../actions/createOfficeAction";
 
 export default class MlAppNewSpokePerson extends React.Component {
   constructor(props) {
@@ -21,7 +16,7 @@ export default class MlAppNewSpokePerson extends React.Component {
     return this;
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
     var mySwiper = new Swiper('.blocks_in_form', {
       speed: 400,
       spaceBetween: 20,
@@ -40,7 +35,7 @@ export default class MlAppNewSpokePerson extends React.Component {
       principalUserCount: this.refs.principalUserCount.value,
       teamUserCount: this.refs.teamUserCount.value,
       branchType: this.refs.branchType.value,
-      location: this.refs.location.value,
+      officeLocation: this.refs.officeLocation.value,
       streetLocality: this.refs.streetLocality.value,
       landmark: this.refs.landmark.value,
       area: this.refs.area.value,
@@ -49,7 +44,7 @@ export default class MlAppNewSpokePerson extends React.Component {
       country: this.refs.country.value,
       zipCode: this.refs.zipCode.value,
       about: this.refs.about.value,
-      availableCommunities : community
+      availableCommunities: community
     }
     let data = myOffice;
     for (var propName in data) {
@@ -58,19 +53,45 @@ export default class MlAppNewSpokePerson extends React.Component {
       }
     }
     console.log(data)
-    if(data.availableCommunities.length<1){
+    if (data.availableCommunities.length < 1) {
       data = _.omit(data, 'availableCommunities')
     }
+    let isValid = this.validateUserData(data)
+    if (isValid && isValid.success){
+      const resp = this.createMyOfficeAction(data)
+      // toastr.success(isValid.result);
+    }else
+      toastr.error(isValid.result);
+  }
 
-    const resp = this.createMyOfficeAction(data)
+  validateUserData(usersData) {
+    if (usersData && usersData.principalUserCount && usersData.teamUserCount && usersData.totalCount) {
+      let PUC = usersData.principalUserCount?Number(usersData.principalUserCount):0
+      let TUC = usersData.teamUserCount?Number(usersData.teamUserCount):0
+      let TC = usersData.totalCount?Number(usersData.totalCount):0
+      if ((PUC + TUC) > TC)
+        return {success: false, result: 'Total user count cannot be less than principal and team'}
+      else if (!_.isEmpty(usersData.availableCommunities)) {
+        let communities = usersData.availableCommunities
+        let arrayCount = _.map(communities, 'userCount')
+        let addArray = _.sum(arrayCount)
+        if (Number(addArray) > TUC)
+          return {success: false, result: 'Communities Users count can not be greater than Team user count'}
+        else
+          return {success: true, result: 'Validation done'}
+      } else
+        return {success: true, result: 'Validation done'}
+    } else
+      return {success: false, result: 'Please enter users Data'}
   }
 
   async createMyOfficeAction(myOffice) {
     const response = await createOfficeActionHandler(myOffice)
     if (response && response.success) {
-      FlowRouter.go('/app/officeMembersDetails/'+response.result)
+      // FlowRouter.go('/app/officeMembersDetails/' + response.result)
+      FlowRouter.go('/app/myOffice/')
       toastr.success('Office Successfully Created');
-    }else {
+    } else {
       toastr.error(response.result);
     }
     return response;
@@ -102,16 +123,30 @@ export default class MlAppNewSpokePerson extends React.Component {
   }
 
   handleBlur(id, e) {
-    if (e.target.value) {
+    if (e.target) {
       let data = this.state.availableCommunities;
+      let dataBackUp = _.cloneDeep(data);
+      let specificData = dataBackUp[id];
       let block = this.state.showCommunityBlock;
-      let user = {}
-      user.communityName = block[id].displayName
-      user.communityId = block[id].code
-      user.userCount = e.target.value
-      data.push(user)
+      if(_.isEmpty(specificData)){
+        specificData = {}
+        specificData.communityName = block[id].displayName
+        specificData.communityId = block[id].code
+        specificData.userCount = Number(e.target.value)
+        data.push(specificData)
+      }else {
+        specificData.communityName = block[id].displayName
+        specificData.communityId = block[id].code
+        specificData.userCount = Number(e.target.value)
+      }
+      data.splice(id, 1);
+      data.splice(id, 0, specificData);
       this.setState({availableCommunities: data})
     }
+  }
+
+  backUserRoute(){
+    FlowRouter.go('/app/myOffice/')
   }
 
   render() {
@@ -124,22 +159,22 @@ export default class MlAppNewSpokePerson extends React.Component {
               <div className="form_bg">
                 <form>
                   <div className="panel panel-default">
-                    <div className="panel-heading"> Subscription: Bespoke Office</div>
+                    <div className="panel-heading">  Subscription: Bespoke Office</div>
 
                     <div className="panel-body">
 
                       <div className="form-group">
                         <input type="number" placeholder="Total Number of Users" ref="totalCount"
-                               className="form-control float-label"/>
+                               className="form-control float-label" min="0"/>
                       </div>
 
                       <div className="form-group">
                         <input type="number" placeholder="Principal Users" className="form-control float-label"
-                               ref="principalUserCount"/>
+                               ref="principalUserCount" min="0"/>
                       </div>
                       <div className="form-group">
                         <input type="number" placeholder="Team Members" className="form-control float-label"
-                               ref="teamUserCount"/>
+                               ref="teamUserCount" min="0"/>
                       </div>
                       <div className="form-group switch_wrap switch_names">
 
@@ -171,7 +206,7 @@ export default class MlAppNewSpokePerson extends React.Component {
                                 <div className="form-group mart20">
                                   <input type="number" placeholder="Enter Total Numbers"
                                          onBlur={that.handleBlur.bind(that, idx)}
-                                         className="form-control float-label" ref='count'/>
+                                         className="form-control float-label" ref='count' min="0"/>
                                 </div>
                               </div>
                             )
@@ -197,7 +232,7 @@ export default class MlAppNewSpokePerson extends React.Component {
 
                   <div className="form-group">
                     <input type="text" placeholder="Office Location" className="form-control float-label"
-                           ref="location"/>
+                           ref="officeLocation"/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Street No/Locality" className="form-control float-label"
@@ -238,7 +273,7 @@ export default class MlAppNewSpokePerson extends React.Component {
                   {/*</div>*/}
                   <div className="form-group">
                     <a className="mlUpload_btn" onClick={this.submitDetails.bind(this)}>Submit</a>
-                    <a href="#" className="mlUpload_btn">Cancel</a>
+                    <a className="mlUpload_btn" onClick={this.backUserRoute.bind(this)}>Cancel</a>
                   </div>
                 </form>
               </div>

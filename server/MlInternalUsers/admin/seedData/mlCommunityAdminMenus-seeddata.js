@@ -1018,47 +1018,47 @@ if(Meteor.isServer){
               }
             ]
           },
-          {
-            "link" : "/admin/settings/gendersList",
-            "name" : "Gender",
-            "uniqueId" : "settings_Gender",
-            "isLink" : true,
-            "isMenu" : true,
-            "image" : "",
-            "subMenu": [
-
-              {
-                "link": "/admin/settings/addGender",
-                "name": "Add Gender",
-                "uniqueId": "settings_AddGender",
-                "subMenuMappingId":"settings_Gender",
-                "subMenusId":"settings",
-                "isLink": true,
-                "isMenu": false,
-                "image": ""
-              },
-              {
-                "link": "/admin/settings/gendersList",
-                "name": "List Gender",
-                "uniqueId": "settings_GenderList",
-                "subMenuMappingId":"settings_Gender",
-                "subMenusId":"settings",
-                "isLink": true,
-                "isMenu": false,
-                "image": ""
-              },
-              {
-                "link": "/admin/settings/editGender",
-                "name": "Edit Gender",
-                "uniqueId": "settings_EditGender",
-                "subMenuMappingId":"settings_Gender",
-                "subMenusId":"settings",
-                "isLink": true,
-                "isMenu": true,
-                "image": ""
-              }
-            ]
-          },
+          // {
+          //   "link" : "/admin/settings/gendersList",
+          //   "name" : "Gender",
+          //   "uniqueId" : "settings_Gender",
+          //   "isLink" : true,
+          //   "isMenu" : true,
+          //   "image" : "",
+          //   "subMenu": [
+          //
+          //     {
+          //       "link": "/admin/settings/addGender",
+          //       "name": "Add Gender",
+          //       "uniqueId": "settings_AddGender",
+          //       "subMenuMappingId":"settings_Gender",
+          //       "subMenusId":"settings",
+          //       "isLink": true,
+          //       "isMenu": false,
+          //       "image": ""
+          //     },
+          //     {
+          //       "link": "/admin/settings/gendersList",
+          //       "name": "List Gender",
+          //       "uniqueId": "settings_GenderList",
+          //       "subMenuMappingId":"settings_Gender",
+          //       "subMenusId":"settings",
+          //       "isLink": true,
+          //       "isMenu": false,
+          //       "image": ""
+          //     },
+          //     {
+          //       "link": "/admin/settings/editGender",
+          //       "name": "Edit Gender",
+          //       "uniqueId": "settings_EditGender",
+          //       "subMenuMappingId":"settings_Gender",
+          //       "subMenusId":"settings",
+          //       "isLink": true,
+          //       "isMenu": true,
+          //       "image": ""
+          //     }
+          //   ]
+          // },
           {                                  // @Created By Sireesha on 24-02-2017 for Cluster Admin Settings Email Type
             "link" : "/admin/settings/emailTypesList",
             "name" : "EmailTypes",

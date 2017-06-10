@@ -39,7 +39,8 @@ const mlAwardTypeTableConfig=new MlViewer.View({
       actionName: 'add',
       handler: (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/awardList")
+          toastr.error("Please uncheck the record")
+          // FlowRouter.go("/admin/settings/awardList")
         }else {
           FlowRouter.go("/admin/settings/addAward")
         }

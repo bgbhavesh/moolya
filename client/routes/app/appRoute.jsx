@@ -30,8 +30,11 @@ import MlAppSwitchProfile from '../../app/profile/components/MlAppSwitchProfile'
 import MlAppProfileList from '../../../client/app/profile/components/MlAppProfileList'
 import MlAppMyOffice from '../../../client/app/profile/office/components/MlAppMyOffice'
 import MlAppAddOffice from '../../app/profile/office/components/MlAppAddOffice'
+import MlAppEditOffice from '../../app/profile/office/components/MlAppEditOffice'
+import MlAppMember from '../../app/profile/office/components/OfficeMemberInfo/MlAppMember'
 import MlAppOfficeMembersDetails from '../../app/profile/office/components/MlAppOfficeMembersDetails'
 import MlAppNewSpokePerson from '../../app/profile/office/components/MlAppNewSpokePerson'
+import MlAppPayOfficeSubscription from '../../app/profile/office/components/MlAppPayOfficeSubscription';
 
 import RegistrationWizard from '../../admin/transaction/requested/component/RegistrationWizard'
 
@@ -95,6 +98,13 @@ appSection.route('/myOffice', {
   }
 });
 
+appSection.route('/myInvestments', {
+  name: 'myInvestments',
+  action(){
+    mount(AppLayout, {appContent: <MlAppMyOffice />, isProfileMenu: true})
+  }
+});
+
 appSection.route('/addOffice', {
   name: 'addOffice',
   action(){
@@ -106,6 +116,27 @@ appSection.route('/officeMembersDetails/:officeId', {
   name: 'officeMembersDetails',
   action(params){
     mount(AppLayout, {appContent: <MlAppOfficeMembersDetails config={params.officeId}/>, isProfileMenu: true})
+  }
+});
+
+appSection.route('/payOfficeSubscription/:officeId', {
+  name: 'payOfficeSubscription',
+  action(params){
+    mount(AppLayout, {appContent: <MlAppPayOfficeSubscription config={params.officeId}/>, isProfileMenu: true})
+  }
+});
+
+appSection.route('/editOffice/:officeId', {
+  name: 'addOffice',
+  action(){
+    mount(AppLayout, {appContent: <MlAppEditOffice />, isProfileMenu: true})
+  }
+});
+
+appSection.route('/officeMember/:officeId/:memberId', {
+  name: 'officeMember',
+  action(){
+    mount(AppLayout, {appContent: <MlAppMember />, isProfileMenu: true})
   }
 });
 

@@ -194,6 +194,11 @@ class MlAssignTemplate extends React.Component{
     this.setState({communities:value})
     this.setState({communitiesName:selObject.label})
   }
+  showTemplateImage(row){
+
+    console.log(row);
+    window.open(row.templateImage)
+  }
 
 
   async switchTabEvent(stepName){
@@ -342,7 +347,7 @@ class MlAssignTemplate extends React.Component{
                                 <div className="tab-pane active" id={'template'+key} >
                                   <div className="list-group nomargin-bottom">
                                       <a className="list-group-item" key={key} id={"template"}>{options.templateName}
-                                        <FontAwesome className="btn btn-xs btn-mlBlue pull-right" name='eye'/>
+                                        <FontAwesome className="btn btn-xs btn-mlBlue pull-right" name='eye' onClick={that.showTemplateImage.bind(that,options)}/>
                                       </a>
                                   </div>
                                 </div>

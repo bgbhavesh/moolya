@@ -4,7 +4,9 @@ import MlRegistrationPreCondition from './registrationPreConditions';
 import MlAccounts from '../../../commons/mlAccounts'
 import mlRegistrationRepo from './mlRegistrationRepo';
 import MlAdminUserContext from '../../../mlAuthorization/mlAdminUserContext'
-
+import geocoder from 'geocoder'
+import _lodash from 'lodash'
+import _ from 'underscore'
 import moment from 'moment'
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
   var validationCheck=null;
@@ -57,6 +59,10 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   let transactionCreatedDate = moment(date).format('DD/MM/YYYY hh:mm:ss')
   orderNumberGenService.assignRegistrationId(args.registration)
   var emails=[{address:args.registration.email,verified:false}];
+  if(Meteor.users.findOne({_id : context.userId}))
+  {
+    args.registration.createdBy = Meteor.users.findOne({_id: context.userId}).username
+  }
   let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Yet To Start",emails:emails,transactionId:args.registration.registrationId,transactionCreatedDate:transactionCreatedDate}, context)
   if(id){
 
@@ -116,14 +122,14 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
   if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 
   orderNumberGenService.assignRegistrationId(args.registration)
-  var emails=[{address:args.registration.email,verified:false}];
+  var emails=[{address:args.registration.email,verified:true}];
   //create transaction
   let resp = MlResolver.MlMutationResolver['createRegistrationTransaction'] (obj,{'transactionType':"registration"},context, info);
   args.registration.transactionId = resp.result;
   let id = mlDBController.insert('MlRegistration', {registrationInfo: registrationInfo,status: "Yet To Start",emails:emails, transactionId: resp.result}, context)
   if(id){
 
-    MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);
+  /*  MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);*/
     // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:id}, context, info);
 
     //send email and otp;
@@ -137,11 +143,9 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
 MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, info) => {
 
   var response=null;
-
- // let clusterInfo=MlClusters.findOne({_id:args.registration.clusterId})
- // var validate = MlRegistration.findOne({"$and":[{"registrationInfo.email":args.registration.email},{"registrationInfo.clusterId":args.registration.clusterId},{"registrationInfo.registrationType":args.registration.registrationType}]})
-  var validate = MlRegistration.findOne({"registrationInfo.email":args.registration.email})
-  if(validate){
+  var registrationExist = MlRegistration.findOne({"registrationInfo.email":args.registration.email})
+  var userExist = mlDBController.findOne('users', {"profile.email":args.registration.email}, context) || {};
+  if(registrationExist || userExist._id){
     let code = 400;
     let result = {message: "Registration Exist"}
     let errResp = new MlRespPayload().errorPayload(result, code);
@@ -155,6 +159,7 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     args.registration.userName = args.registration.email;
     var emails=[{address:args.registration.userName,verified:false}];
     orderNumberGenService.assignRegistrationId(args.registration);
+    args.registration.registrationDate=new Date();
     response = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Yet To Start",emails:emails,registrationDetails:{identityType:args.registration.identityType}}, context)
     if(response){
       MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:response}, context, info);
@@ -314,14 +319,23 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         var updateCount = 0;
         var userId = null;
 
-        if (existingUser) {
+      if (existingUser) {
               //check if the registration profile(community based) exists for user and can be updated
                userId=existingUser._id;
+                let externalUserProfiles=existingUser.profile.externalUserProfiles
+                let userExProfile=_lodash.find(externalUserProfiles,function (profile) {
+                            return profile.registrationId==id
+                          })
+                if(userExProfile){
+                     userProfile.profileId=userExProfile.profileId
+                }
                result = mlDBController.update('users', {username: userObject.username, 'profile.externalUserProfiles':{$elemMatch: {'registrationId': id}}},
                                                        {"profile.externalUserProfiles.$": userProfile}, {$set: true}, context)
 
               //if registration profile item doesn't exist,then update the profile
               if (result != 1) {
+                 orderNumberGenService .createUserProfileId(userProfile);
+                 //userProfile.profileId=profileId
                 updateCount = mlDBController.update('users', {username: userObject.username}, {'profile.externalUserProfiles': userProfile}, {$push: true}, context);
               } else {
                 updateCount = 1;
@@ -329,6 +343,8 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
               //Email & MobileNumber verification updates to user
               mlRegistrationRepo.updateUserVerificationDetails(id,'all',context);
         } else {
+
+
                userId = mlDBController.insert('users', userObject, context)
               if(userId){
                  //Email & MobileNumber verification updates to user
@@ -730,14 +746,57 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
         //   { _id : args.registrationId },
         //   { $push: { 'addressInfo': args.registration.addressInfo[0] } }
         // )
-        id = mlDBController.update('MlRegistration', args.registrationId, { 'addressInfo': args.registration.addressInfo[0] }, {$push:true}, context)
-      }else{
-        // id = MlRegistration.update(
-        //   { _id : args.registrationId },
-        //   { $set: { 'addressInfo': args.registration.addressInfo } }
-        // )
+        let city = args.registration.addressInfo[0].addressCity
+        let area = args.registration.addressInfo[0].addressArea
+        let locality = args.registration.addressInfo[0].addressLocality
+        let pin =args.registration.addressInfo[0].addressPinCode
+        geocoder.geocode(locality+","+area+","+city+","+pin, Meteor.bindEnvironment(function ( err, data ) {
+          if(err){
+            throw new Error("Invalid Locality selection "+e);
+          }
+          args.registration.addressInfo[0].latitude = data.results[0].geometry.location.lat;
+          args.registration.addressInfo[0].longitude = data.results[0].geometry.location.lng;
 
-        id = mlDBController.update('MlRegistration', args.registrationId, {'addressInfo': args.registration.addressInfo}, {$set: true}, context)
+          try{
+            // let id = MlClusters.insert(cluster);
+           let  id = mlDBController.update('MlRegistration', args.registrationId, { 'addressInfo': args.registration.addressInfo[0] }, {$push:true}, context)
+            if(id){
+              let code = 200;
+              let result = {addressId: id}
+              let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+              return response
+            }
+          }catch(e){
+            throw new Error("Error while updating address "+e);
+          }
+
+        }),{key:Meteor.settings.private.googleApiKey});
+      }else{
+        let city = args.registration.addressInfo[0].addressCity
+        let area = args.registration.addressInfo[0].addressArea
+        let locality = args.registration.addressInfo[0].addressLocality
+        let pin =args.registration.addressInfo[0].addressPinCode
+        geocoder.geocode(locality+","+area+","+city+","+pin, Meteor.bindEnvironment(function ( err, data ) {
+          if(err){
+            throw new Error("Invalid Locality selection "+e);
+          }
+          args.registration.addressInfo[0].latitude = data.results[0].geometry.location.lat;
+          args.registration.addressInfo[0].longitude = data.results[0].geometry.location.lng;
+
+          try{
+            // let id = MlClusters.insert(cluster);
+            let id = mlDBController.update('MlRegistration', args.registrationId, {'addressInfo': args.registration.addressInfo}, {$set: true}, context)
+            if(id){
+              let code = 200;
+              let result = {addressId: id}
+              let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+              return response
+            }
+          }catch(e){
+            throw new Error("Error while updating address "+e);
+          }
+        }),{key:Meteor.settings.private.googleApiKey});
+
       }
     }else if(args.type == "SOCIALLINKS") {
       let dbData = _.pluck(registrationDetails.socialLinksInfo, 'socialLinkType') || [];
@@ -1069,4 +1128,33 @@ MlResolver.MlQueryResolver['fetchContextSubChapters'] = (obj, args, context, inf
   let code = 200;
   let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
   return result
+}
+
+MlResolver.MlMutationResolver['forgotPassword'] = (obj, args, context, info) =>{
+  console.log(args);
+  if (args.email) {
+    const result= MlAccounts.sendForgotPasswordEamil(args.email, context);
+    if(result&&result.error){
+      let response = new MlRespPayload().errorPayload(result.reason||"",result.code);
+      return response;
+    }else{
+      return new MlRespPayload().successPayload(result.reason, 200);
+    }
+  }else{
+    return new MlRespPayload().errorPayload("Email is mandatory",403);
+  }
+}
+
+MlResolver.MlMutationResolver['resetPasswords'] = (obj, args, context, info) =>{
+  if (args.password && args.token) {
+    const result= MlAccounts.resetPasswordWithToken(args.token, args.password, context);
+    if(result&&result.error){
+      let response = new MlRespPayload().errorPayload(result.reason||"",result.code);
+      return response;
+    }else{
+      return new MlRespPayload().successPayload(result.reason, 200);
+    }
+  }else{
+    return new MlRespPayload().errorPayload("Reset link Expired/Used",403);
+  }
 }

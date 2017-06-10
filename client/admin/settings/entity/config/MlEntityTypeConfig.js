@@ -39,7 +39,8 @@ const mlEntityTableConfig=new MlViewer.View({
       actionName: 'add',
       handler: (data)=>{
         if(data && data.id){
-          FlowRouter.go("/admin/settings/entityList");
+          toastr.error("Please uncheck the record")
+          // FlowRouter.go("/admin/settings/entityList");
         } else {
           FlowRouter.go("/admin/settings/addEntity")
         }

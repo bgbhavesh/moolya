@@ -54,7 +54,7 @@ type SearchResp {
   data:[SearchResult]
 }
 type Query {
-  SearchQuery(module: String!,offset: Int,limit:Int,fieldsData:[GenericFilter],sortData:[SortFilter]): SearchResp!
+  SearchQuery(module: String!,context:ContextParams, offset: Int,limit:Int,fieldsData:[GenericFilter],sortData:[SortFilter]): SearchResp!
 }`
 
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],search]);

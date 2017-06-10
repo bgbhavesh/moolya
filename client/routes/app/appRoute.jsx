@@ -124,8 +124,8 @@ appSection.route('/payOfficeSubscription/:officeId', {
 
 appSection.route('/editOffice/:officeId', {
   name: 'addOffice',
-  action(){
-    mount(AppLayout, {appContent: <MlAppEditOffice />, isProfileMenu: true})
+  action(params){
+    mount(AppLayout, {appContent: <MlAppEditOffice config={params.officeId} />, isProfileMenu: true})
   }
 });
 

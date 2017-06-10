@@ -70,7 +70,7 @@ export default class MlAppNewSpokePerson extends React.Component {
       let TUC = usersData.teamUserCount?Number(usersData.teamUserCount):0
       let TC = usersData.totalCount?Number(usersData.totalCount):0
       if ((PUC + TUC) > TC)
-        return {success: false, result: 'Total count can not be greator than Principle and user'}
+        return {success: false, result: 'Total user count cannot be less than principal and team'}
       else if (!_.isEmpty(usersData.availableCommunities)) {
         let communities = usersData.availableCommunities
         let arrayCount = _.map(communities, 'userCount')

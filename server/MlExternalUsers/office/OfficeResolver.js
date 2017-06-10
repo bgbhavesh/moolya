@@ -163,7 +163,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
 
     if(_.isEmpty(args.officeMember)){
         let code = 400;
-        let response = new MlRespPayload().successPayload("Please add atleast one office memeber", code);
+        let response = new MlRespPayload().successPayload("Please add atleast one office member", code);
         return response;
     }
     args.officeMember.joiningDate = new Date();

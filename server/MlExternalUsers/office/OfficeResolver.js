@@ -7,7 +7,6 @@ import MlRespPayload from "../../commons/mlPayload";
 import MlUserContext from "../../MlExternalUsers/mlUserContext";
 import MlOfficeValidations from "../userSubscriptions/officeValidations";
 import passwordUtil from "../../commons/passwordUtil";
-
 import _ from "lodash";
 
 MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
@@ -174,86 +173,115 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
         return response;
     }
 
-    try{
+  try {
+
+    let isUserExist = mlDBController.findOne('users', {username: args.officeMember.emailId})
+    if (isUserExist) {
+      console.log('user already present')
+      // Send an invite to the Existing User
+    }
+    else {
+      // Soft Registration has to be done to new user
+      var emails = [{address: args.officeMember.emailId, verified: false}];
+      let randomPassword = orderNumberGenService.generateRandomPassword()
+
+      var adminUser = mlDBController.findOne('users', {_id: context.userId}) || {}
+
+      var registrationData = {
+        createdBy: adminUser.username,
+        password: randomPassword,
+        firstName: args.officeMember.firstName,
+        lastName: args.officeMember.lastName,
+        email:args.officeMember.emailId,
+        contactNumber: args.officeMember.mobileNumber,
+        communityName: "Browsers",
+        communityDefCode : "BRW",
+        registrationDate :new Date()
+      }
+
+      let profile = new MlUserContext(context.userId).userProfileDetails(context.userId)
+      let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName']);
+      let finalRegData = _.extend(registrationData, extendObj)
+
+      let registrationId = mlDBController.insert('MlRegistration', {
+        registrationInfo: finalRegData,
+        status: "Yet To Start",
+        emails: emails
+      }, context)
+      if (registrationId) { //for generating verfication token
+        console.log('registrationId' + registrationId)
+        // MlAccounts.sendVerificationEmail(registrationId,{emailContentType:"html",subject:"Email Verification",context:context});
+      }
+      if (registrationId) { //for creating new user
+        let officeTrans = {
+          officeId: args.myOfficeId,
+          transactionType: 'registration',
+          communityName: "Browsers",
+          status: 'done'
+        }
+        let officeTransaction = _.extend(officeTrans, extendObj)
+        MlResolver.MlMutationResolver['createOfficeTransaction'](obj, {officeTransaction}, context, info)
+
+        var userProfileTemp = {
+          registrationId: registrationId,
+          mobileNumber: args.officeMember.mobileNumber,
+          communityName: "Browsers",
+          communityDefCode : "BRW",
+          isDefault: false,
+          isActive: true,
+          isApprove: false,
+          isTypeOfficeBearer: true
+        }
+        let userProfile = _.extend(userProfileTemp, extendObj)
+        let profile = {
+          isInternaluser: false,
+          isExternaluser: true,
+          email: args.officeMember.emailId,
+          mobileNumber: args.officeMember.mobileNumber,
+          isActive: false,
+          firstName: args.officeMember.firstName,
+          lastName: args.officeMember.lastName,
+          displayName: args.officeMember.firstName + ' ' + args.officeMember.lastName,
+          externalUserProfiles: [userProfile]
+        }
+        let userObject = {
+          username: args.officeMember.emailId,
+          profile: profile,
+          emails: emails ? emails : []
+        }
+        orderNumberGenService.createUserProfileId(userProfile);
+        let userId = mlDBController.insert('users', userObject, context)
+        console.log('userId' + userId);
+        if (userId) {
+          //Email & MobileNumber verification updates to user
+          let registerDetails = mlDBController.findOne('MlRegistration', registrationId, context) || {};
+          mlDBController.update('users', {username: userObject.username},
+            {
+              $set: {
+                'services.email': registerDetails && registerDetails.services ? registerDetails.services.email : {},
+                'emails': userObject.emails
+              }
+            }, {'blackbox': true}, context);
+          let salted = passwordUtil.hashPassword(registerDetails.registrationInfo.password);
+          let res = mlDBController.update('users', {username: userObject.username}, {'services.password.bcrypt': salted}, {$set: true}, context);
+
+        }
 
         var officeMember = args.officeMember;
         officeMember.officeId = args.myOfficeId;
-        officeMember.name = officeMember.firstName +' ' + officeMember.lastName;
-        let ret = MlOfficeMembers.insert({...officeMember});
-
-        let isUserExist = mlDBController.findOne('users', {username: args.officeMember.emailId})
-        if(isUserExist){
-            // Send an invite to the Existing User
-        }
-        else{
-          // Soft Registration has to be done to new user
-          var emails=[{address:args.officeMember.emailId,verified:false}];
-          args.registration = {}
-          if(Meteor.users.findOne({_id : context.userId}))
-          {
-            args.registration.createdBy = Meteor.users.findOne({_id: context.userId}).username
-          }
-          args.registration.firstName = args.officeMember.firstName;
-          args.registration.lastName = args.officeMember.lastName;
-          args.registration.email = args.officeMember.emailId;
-          args.registration.contactNumber = args.officeMember.mobileNumber;
-          let randomPassword = orderNumberGenService.generateRandomPassword()
-          args.registration.password = randomPassword
-          args.registration.registrationDate =  new Date()
-          let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Yet To Start",emails:emails}, context)
-          if (id) { //for generating verfication token
-             MlAccounts.sendVerificationEmail(id,{emailContentType:"html",subject:"Email Verification",context:context});
-          }
-          if(id){ //for creating new user
-            var userProfile = {
-              registrationId: id,
-              mobileNumber: args.officeMember.mobileNumber,
-              communityName: "BROWSER",
-              isDefault: false,
-              isActive: true,
-              isApprove:false,
-              isTypeOfficeBearer:true
-            }
-            let profile = {
-              isInternaluser: false,
-              isExternaluser: true,
-              email: args.officeMember.emailId,
-              mobileNumber:args.officeMember.mobileNumber,
-              isActive   : false,
-              firstName  :args.officeMember.firstName,
-              lastName   : args.officeMember.lastName,
-              displayName :args.officeMember.firstName+' '+ args.officeMember.lastName,
-              externalUserProfiles: [userProfile]
-            }
-            let userObject = {
-              username: args.officeMember.emailId,
-              profile: profile,
-              emails:emails?emails:[]
-            }
-            console.log(userObject);
-            orderNumberGenService .createUserProfileId(userProfile);
-            let userId = mlDBController.insert('users', userObject, context)
-            console.log(userId);
-           /* orderNumberGenService .createUserProfileId(userProfile);*/
-            //let userId = mlDBController.insert('users', {userObject}, context)
-            if(userId){
-              //Email & MobileNumber verification updates to user
-              let registerDetails= mlDBController.findOne('MlRegistration', id, context) || {};
-              mlDBController.update('users', {username: userObject.username},
-                {$set: {'services.email':registerDetails&&registerDetails.services?registerDetails.services.email:{},
-                  'emails':userObject.emails}},{'blackbox': true}, context);
-              let salted = passwordUtil.hashPassword(registerDetails.registrationInfo.password);
-              let res = mlDBController.update('users', {username: userObject.username}, { 'services.password.bcrypt': salted}, {$set:true}, context);
-
-            }
-          }
-        }
-
-    }catch (e){
-      let code = 400;
-      let response = new MlRespPayload().successPayload(e.message, code);
-      return response;
+        officeMember.name = officeMember.firstName + ' ' + officeMember.lastName;
+        officeMember['registrationId'] = registrationId
+        officeMember['userId'] = context.userId
+        officeMember['createdDate'] = new Date()
+        let ret = mlDBController.insert('MlOfficeMembers', officeMember, context)
+      }
     }
+
+  } catch (e) {
+    let code = 400;
+    let response = new MlRespPayload().successPayload(e.message, code);
+    return response;
+  }
 
     let code = 200;
     let response = new MlRespPayload().successPayload("Member Added Successfully", code);

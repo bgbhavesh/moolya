@@ -6,7 +6,7 @@ export async function findUserActionHandler() {
   const result = await client.query({
     query: gql`
     
-          query($id: String){
+          query{
             fetchInternalUserProfiles{
                     isDefault,
                     clusterId,

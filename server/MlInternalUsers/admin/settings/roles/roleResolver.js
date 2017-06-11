@@ -100,6 +100,26 @@ MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
         return response;
       } else {
         var id = args.roleId;
+        if(args.role.isActive===false){
+          //check hierarchy exist for this role.
+          let resp = mlDBController.findOne('MlHierarchyAssignments', {
+            $or: [{"finalApproval.role":id},
+              {
+                "teamStructureAssignment": {
+                  $elemMatch: {
+                    roleId: id,
+                    isAssigned:true
+                  }
+                }
+              },
+            ]
+          }, context)
+          if(resp){
+            let code = 401;
+            let response = new MlRespPayload().errorPayload("Hierarchy associated for this role");
+            return response;
+          }
+        }
         // let result= MlRoles.update(id, {$set: args.role});
         let result = mlDBController.update('MlRoles', id, args.role, {$set: true}, context);
         let code = 200;

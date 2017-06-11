@@ -53,8 +53,13 @@ type SearchResp {
   totalRecords:Int,
   data:[SearchResult]
 }
+
+input CustomParams{
+   docId:String
+}
+
 type Query {
-  SearchQuery(module: String!,offset: Int,limit:Int,fieldsData:[GenericFilter],sortData:[SortFilter]): SearchResp!
+  SearchQuery(module: String!,customParams: CustomParams, offset: Int,limit:Int,fieldsData:[GenericFilter],sortData:[SortFilter]): SearchResp!
 }`
 
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],search]);

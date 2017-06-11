@@ -136,21 +136,25 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
       if(req && req.body && req.body.data)
       {
-        let data = JSON.parse(req.body.data)
-        let moduleName = data && data.moduleName
-        let response;
-        let file  = req.files.file;
-        if(file){
+        var response;
+        var data = JSON.parse(req.body.data)
+        if(data.userId==context.userId){
+          response = {unAuthorized: true, message: "Not Authorized"}
+        }else {
+          let moduleName = data && data.moduleName
+
+          let file = req.files.file;
+          if (file) {
             mlS3Client.uploadFile(file, "moolya-users", "moolya-admin-users/")
-        }
-        switch (moduleName){
-            case "USERS":{
+          }
+          switch (moduleName) {
+            case "USERS": {
               var ret = mlAuthorization.valiateApi(MlResolver.MlModuleResolver, 'updateCommunityDef')
               var isAuth = false;
-              if(!ret.isWhiteList){
+              if (!ret.isWhiteList) {
                 isAuth = mlAuthorization.validteAuthorization(context.userId, ret.moduleName, ret.actionName, req.body, false);
               }
-              if(ret.isWhiteList || isAuth) {
+              if (ret.isWhiteList || isAuth) {
                 response = MlResolver.MlMutationResolver['assignUsers'](null, {
                   userId: data.userId,
                   user: data.user,
@@ -158,17 +162,17 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                   actionName: data.actionName
                 }, context, null);
               }
-              else response = {unAuthorized:true,message:"Not Authorized"}
+              else response = {unAuthorized: true, message: "Not Authorized"}
             }
-            break;
-            case "COMMUNITY":{
+              break;
+            case "COMMUNITY": {
               var ret = mlAuthorization.valiateApi(MlResolver.MlModuleResolver, 'updateCommunityDef')
               var isAuth = false;
-              if(!ret.isWhiteList){
+              if (!ret.isWhiteList) {
                 isAuth = mlAuthorization.validteAuthorization(context.userId, ret.moduleName, ret.actionName, req.body, false);
               }
 
-              if(ret.isWhiteList || isAuth) {
+              if (ret.isWhiteList || isAuth) {
                 response = MlResolver.MlMutationResolver['updateCommunityDef'](null, {
                   communityId: data.communityId,
                   clusterId: data.clusterId,
@@ -181,12 +185,18 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                 }, context, null);
               }
             }
-            break;
-            case "PROFILE":{
-              response = MlResolver.MlMutationResolver['updateProfile'](null, {userId:data.userId, userProfile:data.userProfile, moduleName:data.moduleName, actionName:data.actionName}, context, null);
+              break;
+            case "PROFILE": {
+              response = MlResolver.MlMutationResolver['updateProfile'](null, {
+                userId: data.userId,
+                userProfile: data.userProfile,
+                moduleName: data.moduleName,
+                actionName: data.actionName
+              }, context, null);
               //console.log(response)
             }
-            break;
+              break;
+          }
         }
         res.send(response);
       }
@@ -311,12 +321,6 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       var context = {};
       context = getContext({req});
       context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-      console.log(req.body);
-      console.log("-----------");
-      console.log(req.headers);
-      console.log("-----------");
-      console.log(req.body.data);
-      console.log("-----------");
       if(req && req.body && req.body.data)
       {
         console.log("Processing started..!!");
@@ -361,12 +365,6 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     var context = {};
     context = getContext({req});
     context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    console.log(req.body);
-    console.log("-----------");
-    console.log(req.headers);
-    console.log("-----------");
-    console.log(req.body.data);
-    console.log("-----------");
     if(req)
     {
       let data = req.body.data;
@@ -411,12 +409,6 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       var context = {};
       context = getContext({req});
       context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-      console.log(req.body);
-      console.log("-----------");
-      console.log(req.headers);
-      console.log("-----------");
-      console.log(req.body.data);
-      console.log("-----------");
       if(req)
       {
         let data = req.body.data;
@@ -466,12 +458,6 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       var context = {};
       context = getContext({req});
       context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-      console.log(req.body);
-      console.log("-----------");
-      console.log(req.headers);
-      console.log("-----------");
-      console.log(req.body.data);
-      console.log("-----------");
       if(req)
       {
         let data = req.body.data;
@@ -516,12 +502,6 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       var context = {};
       context = getContext({req});
       context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-      console.log(req.body);
-      console.log("-----------");
-      console.log(req.headers);
-      console.log("-----------");
-      console.log(req.body.data);
-      console.log("-----------");
       if(req)
       {
         console.log("coupon validation processing started..!!");

@@ -32,6 +32,9 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   validationCheck=MlRegistrationPreCondition.validateMobile(args.registration);
   if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 
+  validationCheck=MlRegistrationPreCondition.validateBackEndUserExist(args.registration);
+  if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
+
   let accountTypeName = mlDBController.findOne('MlAccountTypes', {_id: args.registration.accountType}, context) || {};
   // let subChapterDetails = MlSubChapters.findOne({chapterId: args.registration.chapterId})||{};
   args.registration.accountType=accountTypeName.accountName;

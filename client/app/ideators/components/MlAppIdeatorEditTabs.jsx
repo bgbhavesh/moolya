@@ -11,7 +11,6 @@ import MlIdeatorStrategyAndPlanning from '../../../admin/transaction/portfolio/c
 import MlIdeatorLookingFor from '../../../admin/transaction/portfolio/component/Ideator/MlIdeatorLookingFor'
 import MlIdeatorIntellectualPlanningAndTrademark from '../../../admin/transaction/portfolio/component/Ideator/MlIdeatorIntellectualPlanningAndTrademark'
 import MlIdeatorIdeas from '../../../admin/transaction/portfolio/component/Ideator/MlIdeatorIdeas'
-import AppActionButtons from '../../commons/components/appActionButtons'
 import InteractionsCounter from '../../commons/components/InteractionsCounter'
 import {updatePortfolioActionHandler} from '../../../admin/transaction/portfolio/actions/updatePortfolioDetails';
 

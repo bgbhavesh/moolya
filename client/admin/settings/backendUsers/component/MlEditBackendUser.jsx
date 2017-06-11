@@ -513,7 +513,7 @@ class MlEditBackendUser extends React.Component{
                     <input type="text" ref="lastName" placeholder="Last Name" defaultValue={that.state.data&&that.state.data.profile.InternalUprofile.moolyaProfile.lastName} className="form-control float-label" id=""/>
                   </div>
                   <div className="form-group">
-                    <Select name="form-field-name" placeholder="Backend User Type"   className="float-label"  options={UserTypeOptions}  value={that.state.selectedBackendUserType}  onChange={that.onBackendUserTypeSelect.bind(that)}
+                    <Select name="form-field-name" placeholder="Backend User Type"   className="float-label"  options={UserTypeOptions}  value={that.state.selectedBackendUserType}  onChange={that.onBackendUserTypeSelect.bind(that)} disabled="disabled"
                     />
                   </div>
                   {that.state.selectedBackendUserType=='non-moolya'&&(

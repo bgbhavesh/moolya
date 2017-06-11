@@ -242,6 +242,11 @@ class MlAuthorization
                         }
                     }
                 }
+                if(actionName == "CREATE"){
+                  if((roleDetails['clusterId'] == req.variables.subChapter['clusterId'] && roleDetails['chapterId'] == req.variables.subChapter['chapterId']) && hierarchy.level>=2){
+                    return true
+                  }
+                }
 
                 if((roleDetails['clusterId'] == req.variables['clusterId'] && roleDetails['chapterId'] == req.variables['chapterId'])){
                     return true

@@ -76,7 +76,7 @@ let supportedApi = [
     {api:'findDepartment', actionName:'READ', moduleName:"DEPARTMENT"},
     {api:'fetchActiveDepartment', actionName:'READ', moduleName:"DEPARTMENT"},
     {api:'fetchMoolyaBasedDepartment', actionName:'READ', moduleName:"DEPARTMENT"},
-    {api:'fetchNonMoolyaBasedDepartment', actionName:'READ', moduleName:"DEPARTMENT"},
+    {api:'fetchNonMoolyaBasedDepartment', actionName:'READ', moduleName:"DEPARTMENT", isWhiteList:true},
     {api:'fetchDepartmentsForRegistration', actionName:'READ', moduleName:"DEPARTMENT", isWhiteList:true},
     {api:'fetchMoolyaBasedDepartmentRoles', actionName:'READ', moduleName:"DEPARTMENT"},
     {api:'fetchClusterChapterSubChapterBasedDepartmentRoles', actionName:'READ', moduleName:"DEPARTMENT"},

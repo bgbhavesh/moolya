@@ -765,7 +765,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
   //internal user
   if (args.module == "officeTransaction") {
-    let finalQuery = mergeQueries(query, {userId: context.userId, officeId: args.context.docId});
+    let finalQuery = mergeQueries(query, {userId: context.userId, officeId: args.customParams.docId});
     data = mlDBController.find('MlOfficeTransaction', finalQuery, context, findOptions).fetch();
     totalRecords = mlDBController.find('MlOfficeTransaction', finalQuery, context).count();
   }

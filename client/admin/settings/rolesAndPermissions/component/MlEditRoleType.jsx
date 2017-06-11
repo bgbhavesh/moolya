@@ -106,6 +106,9 @@ class MlEditRole extends React.Component {
 
     if (_.isEmpty(emptyCluster) && _.isEmpty(emptyChapter) && _.isEmpty(emptySubChapter) && _.isEmpty(emptyCommunity) && _.isEmpty(emptyDepartment) && _.isEmpty(emptySubDepartment)) {
       const response = await updateRoleActionHandler(roleDetails)
+      if(response.success === false){
+        //toastr.error("Hierarchy associated for this role");
+      }
       return response;
     } else {
       toastr.error("All Assign role fields Required");

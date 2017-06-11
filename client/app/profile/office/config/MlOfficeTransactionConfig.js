@@ -34,10 +34,10 @@ const mlOfficeTransactionConfig = new MlViewer.View({
   actionConfiguration: [],
   queryOptions:true,
   buildQueryOptions:(config)=>{
-    return {context: {docId: config && config.params ? config.params : null}}
+    return {customParams: {docId: config && config.params ? config.params : null}}
   },
-  graphQlQuery: gql` query SearchQuery($context:ContextParams, $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
-                        data: SearchQuery(module: "officeTransaction", context:$context, offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData) {
+  graphQlQuery: gql` query SearchQuery($customParams:CustomParams, $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
+                        data: SearchQuery(module: "officeTransaction", customParams:$customParams, offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData) {
                           totalRecords
                           data {
                             ... on officeTransactionType {

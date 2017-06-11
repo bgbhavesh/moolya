@@ -10,7 +10,7 @@ export default class CreateRequestComponent extends Component {
   constructor(props){
     super(props);
     this.state={
-      show:true,
+      //show:true,
       requestType:null,
       cluster:null,
       chapter:null,
@@ -24,6 +24,7 @@ export default class CreateRequestComponent extends Component {
     this.setState({requestTypeId:value})
   }
   async createRequest(){
+
     let requests={
       requestTypeId:this.state.requestTypeId,
       requestDescription:this.refs.about.value,
@@ -42,17 +43,23 @@ export default class CreateRequestComponent extends Component {
     }
     const response = await createRequestsActionHandler(requests);
     if(response.success){
-      this.setState({show:false,requestType:null})
+      this.setState({requestType:null})
       toastr.success("Request is created successfully");
+      this.props.closePopOver(false)
       FlowRouter.go("/admin/transactions/requestedList");
     }else{
-      this.setState({show:false,requestType:null})
+      this.setState({requestType:null})
       toastr.error(response.result);
       this.setState({requestType:null})
+      this.props.closePopOver(false)
       FlowRouter.go("/admin/transactions/requestedList");
     }
 
   }
+  /*click(){
+    this.createRequest();
+    this.props.closePopOver();
+  }*/
 
   optionsBySelectCluster(index, selectedIndex){
     this.setState({cluster:index})
@@ -72,7 +79,7 @@ export default class CreateRequestComponent extends Component {
 
   cancel(){
     //this.state.show = false
-    this.setState({show:false})
+    //this.setState({show:false})
     FlowRouter.go("/admin/transactions/requestedList");
   }
 

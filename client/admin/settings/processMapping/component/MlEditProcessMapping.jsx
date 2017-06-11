@@ -272,7 +272,7 @@ class MlEditProcessMapping extends React.Component{
 }
 `;
     let fetchcommunities = gql` query{
-  data:fetchCommunityDefinitionForSelect{label:name,value:code}
+  data:fetchCommunityDefinitionForProcessMapping{label:name,value:code}
 }
 `;
   /*  let fetchUsers = gql`query{

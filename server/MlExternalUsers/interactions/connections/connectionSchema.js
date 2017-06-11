@@ -43,6 +43,7 @@ let connections = `
     
     type Mutation{
         createConnection(connection:connection):response
+        connectionRequest(resourceId:String!,resourceType:String!):response
         updateConnection(connection:connection, connectionId:String):response
     }
     

@@ -134,6 +134,10 @@ MlResolver.MlMutationResolver['updateConnection'] = (obj, args, context, info) =
     }
 }
 
+MlResolver.MlMutationResolver['connectionRequest'] = (obj, args, context, info) =>{
+
+}
+
 
 validateExternalUser=(user)=>{
     let userExternal = user.profile.isExternaluser;

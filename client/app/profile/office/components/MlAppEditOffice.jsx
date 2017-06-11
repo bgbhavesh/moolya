@@ -5,10 +5,11 @@
 import React from 'react';
 import Tabs from 'react-responsive-tabs';
 import MlAppAddOfficeMember from './MlAppAddOfficeMember';
-import MlOfficeTrans from './MlOfficeTrans';
 import MlUpgradeOffice from './MlUpgradeOffice';
 import 'react-responsive-tabs/styles.css';
 import {findOfficeAction} from "../actions/findOfficeAction";
+import MlTableViewContainer from "../../../../../client/admin/core/containers/MlTableViewContainer";
+import {mlOfficeTransactionConfig} from "../config/MlOfficeTransactionConfig";
 
 export default class MlAppEditOffice extends React.Component{
   constructor(props){
@@ -39,9 +40,9 @@ export default class MlAppEditOffice extends React.Component{
 
   render(){
     let MlTabs = [
-      {name: 'Pricipal', tabContent: <MlAppAddOfficeMember />},
+      {name: 'Principal', tabContent: <MlAppAddOfficeMember />},
       {name: 'Team Member', tabContent: <MlAppAddOfficeMember availableCommunities={this.state.availableCommunities} />},
-      {name: 'Office Transaction', tabContent: <MlOfficeTrans/>},
+      {name: 'Office Transaction', tabContent: <MlTableViewContainer params={this.props.config} {...mlOfficeTransactionConfig}/>},
       {name: 'Upgrade Office', tabContent: <MlUpgradeOffice/>}
     ];
 

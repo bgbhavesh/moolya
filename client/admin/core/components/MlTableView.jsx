@@ -139,13 +139,10 @@ export default class MlTableView extends Component {
   }
 
   actionHandlerProxy(actionConfig,handlerCallback) {
-    console.log("yipppeeee");
     const selectedRow = this.state.selectedRow;
     const actions = this.props.actionConfiguration;
-    console.log(actions);
     const action = _.find(actions, {"actionName": actionConfig.actionName});
     if(handlerCallback) {
-      console.log(handlerCallback);
       handlerCallback(selectedRow);
     }else{
       action.handler(selectedRow);

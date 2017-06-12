@@ -98,6 +98,7 @@ export default class MlAppActionComponent extends React.Component {
     let actionOptions= this.props.actionOptions|| [];
 
     //todo: resourceType(module) and resourceId + subscription handler
+    //disabled:true/false depends on resourceType and resourceId.. control it
 
     let actionView = actionOptions.map(function (option, id) {
       let activeClass = '';
@@ -115,7 +116,7 @@ export default class MlAppActionComponent extends React.Component {
       }else{
       return (
         <li key={id} className={activeClass}>
-          <a href="#" onClick={option.handler && option.handler.bind(this, option)}> <span
+          <a href="#" onClick={option.handler && option.handler.bind(this, option,null)}> <span
             className={action['iconClass']}></span>
             <br />{option.actionName}</a>
         </li>

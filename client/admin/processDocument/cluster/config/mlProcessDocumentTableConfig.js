@@ -73,7 +73,7 @@ const mlProcessTableConfig=new MlViewer.View({
   fields:["processId","displayNprocessame","isActive"],
   searchFields:["processId","process","isActive"],
   throttleRefresh:false,
-  pagination:false,//To display pagination
+  pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   filter:true,
   filterComponent: <MlCustomFilter module="documents" moduleName="documents" />,

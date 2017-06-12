@@ -61,6 +61,20 @@ export default class MlAppMemberDetails extends React.Component{
       toastr.error(response.result);
     }
   }
+
+  async updateIsIndependent(e){
+    let update = {
+      isIndependent:e.target.checked
+    };
+    let id = FlowRouter.getParam('memberId');
+    let response = await updateOfficeMemberActionHandler(id, update);
+    if(response.success){
+      toastr.success(response.result);
+    } else {
+      toastr.error(response.result);
+    }
+  }
+
   render(){
     const that = this;
     let community = this.state.office.availableCommunities.find(function (item) {
@@ -105,7 +119,7 @@ export default class MlAppMemberDetails extends React.Component{
               <div className="form-group switch_wrap inline_switch">
                 <label>Show Independent</label>
                 <label className="switch">
-                  <input type="checkbox" disabled={true} checked={this.state.memberInfo.isIndependent} />
+                  <input type="checkbox" onClick={(e)=>this.updateIsIndependent(e)} defaultChecked={this.state.memberInfo.isIndependent} />
                   <div className="slider"></div>
                 </label>
               </div>

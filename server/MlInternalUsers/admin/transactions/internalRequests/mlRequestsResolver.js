@@ -24,20 +24,31 @@ MlResolver.MlMutationResolver['createRequestss'] = (obj, args, context, info) =>
     let communityDetails = MlCommunityDefinition.findOne({"code":args.requests.community})|| {};
     args.requests.communityName = communityDetails.name;
 
+    if(Meteor.users.findOne({_id : context.userId}))
+    {
+      args.requests.createdBy = Meteor.users.findOne({_id: context.userId}).username
+    }
+
   let requestDetails = MlRequestType.findOne({"_id":args.requests.requestTypeId})|| {};
   if(requestDetails.requestName) {
     args.requests.requestTypeName = requestDetails.requestName;
     args.requests.userId = context.userId;
-    orderNumberGenService.assignRequests(args.requests)
-    let id = mlDBController.insert('MlRequests', args.requests, context)
-    if (id) {
-      let code = 200;
-      let result = {requestId: id}
-      let response = new MlRespPayload().successPayload(result, code);
+    if(mlHierarchyAssignment.checkHierarchyExist(context.userId) === true){
+      orderNumberGenService.assignRequests(args.requests)
+      let id = mlDBController.insert('MlRequests', args.requests, context)
+      if (id) {
+        let code = 200;
+        let result = {requestId: id}
+        let response = new MlRespPayload().successPayload(result, code);
+        return response;
+      }
+    }else{
+      let result = "No Hierarchy available for user,contact Administrator"
+      let response = new MlRespPayload().errorPayload(result);
       return response;
     }
   }else{
-    let result = "Request Type required "
+    let result = "Request Type required"
       let response = new MlRespPayload().errorPayload(result);
     return response;
   }
@@ -58,7 +69,7 @@ MlResolver.MlMutationResolver['updateRequestsStatus'] = (obj, args, context, inf
   }
   if( decision === false ){
     let code = 401;
-    let result = {message : "User not available in hierarchy"}
+    let result = {message : "User doesn't have privileges to act on this request"}
     let response = new MlRespPayload().errorPayload(result, code);
     return response;
   }else{

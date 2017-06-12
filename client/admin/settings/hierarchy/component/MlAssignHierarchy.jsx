@@ -154,8 +154,8 @@ export default class MlAssignHierarchy extends React.Component {
     if( value.value=="unassign"){
          let allRoles = _.cloneDeep(this.state.allAssignedRoles);
          let currentRole = roles.teamStructureAssignment[index]
-         let reportingRoleAvailableCurrentLayer = _.find(roles, {roleId:currentRole.reportingRole,isAssigned:true})
-         let reportingRoleAvailableAllLayer = _.find(allRoles, {roleId:currentRole.reportingRole,isAssigned:true})
+         let reportingRoleAvailableCurrentLayer = _.find(roles, {reportingRole:currentRole.roleId,isAssigned:true})
+         let reportingRoleAvailableAllLayer = _.find(allRoles, {reportingRole:currentRole.roleId,isAssigned:true})
          if(reportingRoleAvailableCurrentLayer){
                toastr.error("Cannot unassign as reporting role has hierarchy");
          }else if(reportingRoleAvailableAllLayer){
@@ -255,9 +255,9 @@ export default class MlAssignHierarchy extends React.Component {
             data:fetchMoolyaBasedDepartment(isMoolya:$isMoolya){label:departmentName,value:_id}
           }
           `;
-    let subDepartmentOptions = {options: { variables: {id:this.state.finalApproval.department}}};
-    let subDepartmentquery=gql`query($id:String){
-      data:fetchSubDepartments(id:$id) {
+    let subDepartmentOptions = {options: { variables: {id:this.state.finalApproval.department,subDepartmentId:departmentInfo.subDepartmentId}}};
+    let subDepartmentquery=gql`query($id:String,$subDepartmentId:String){
+      data:fetchSubDepartmentsHierarchy(id:$id,subDepartmentId:$subDepartmentId) {
         value:_id
         label:subDepartmentName
       }
@@ -268,10 +268,10 @@ export default class MlAssignHierarchy extends React.Component {
         label:roleName
       }
     }`
-    let finalApprovalOptions = {options: { variables: {departmentId:this.state.finalApproval.department}}};
-    let finalApprovalQuery=gql`query($departmentId:String){
-      data:fetchRolesForFinalApprovalHierarchy(departmentId:$departmentId) {
-        value:_id
+    let finalApprovalOptions = {options: { variables: {departmentId:this.state.finalApproval.department,subDepartmentId:this.state.finalApproval.subDepartment,clusterId:this.props.clusterId}}};
+    let finalApprovalQuery=gql`query($departmentId:String,$subDepartmentId:String,$clusterId:String){
+      data:fetchRolesForFinalApprovalHierarchy(departmentId:$departmentId,subDepartmentId:$subDepartmentId,clusterId:$clusterId) {
+        value:roleId
         label:roleName
       }
     }`

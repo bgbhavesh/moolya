@@ -9,25 +9,24 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   module:"processSetup",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["transactionCreatedDate","requestId","requestTypeName", "clusterName", "chapterName", "subChapterName", "communityId", "status"],
-  searchFields:["transactionCreatedDate","requestId" ,"requestTypeName" , "clusterName", "chapterName", "subChapterName", "communityId", "status"],
+  fields:["dateTime","userId","name", "clusterName", "chapterName", "subChapterName", "communityId", "status"],
+  searchFields:["dateTime","userId" ,"name" , "clusterName", "chapterName", "subChapterName", "communityId", "status"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   filter:true,
   filterComponent: <MlCustomFilter module="processSetup" moduleName="processSetup" />,
   columns:[
-    {dataField: "requestId",title:"Id",'isKey':true,isHidden:true,selectRow:true},
+    {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},
     {dataField: "dateTime", title: "Created Date",dataSort:true,selectRow:true},
-    {dataField: "userId", title: "User Name",dataSort:true,selectRow:true},
-    {dataField: "transactionType", title: "Activity",dataSort:true,selectRow:true},
-    {dataField: "clusterName", title: "Details",dataSort:true,selectRow:true},
-    {dataField: "chapterName", title: "TransactionTypeName",dataSort:true,selectRow:true},
+    {dataField: "userId", title: "UserId",dataSort:true,selectRow:true},
+    {dataField: "name", title: "Name",dataSort:true,selectRow:true},
+    {dataField: "transactionId", title: "Transaction Id",dataSort:true,selectRow:true},
     {dataField: "clusterName", title: "Cluster",dataSort:true,selectRow:true},
     {dataField: "chapterName", title: "Chapter",dataSort:true,selectRow:true},
     {dataField: "subChapterName", title: "Sub Chapter",dataSort:true,selectRow:true},
     {dataField: "communityName", title: "Community",dataSort:true,selectRow:true},
-    {dataField: "communityName", title: "Payment",dataSort:true,selectRow:true},
-    {dataField: "status", title: "status",dataSort:true,selectRow:true}
+    {dataField: "paymentDetails.paymentStatus", title: "Payment",dataSort:true,selectRow:true},
+    {dataField: "status", title: "Status",dataSort:true,selectRow:true}
   ],
   tableHeaderClass:'react_table_head',
   isExpandableRow:(row)=>{return true;},
@@ -49,8 +48,11 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
                     data{
                       ...on ProcessTransactions{
                           _id
+                          name
+                          username
                           userId
                           status
+                          transactionId
                           transactionType
                           clusterName
                           chapterName
@@ -58,6 +60,31 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
                           communityName
                           dateTime
                           mobileNumber
+                          paymentDetails{
+                            subscriptionName
+                            cost
+                            isTaxInclusive
+                            about
+                            dateTime
+                            
+                            totalAmountPaid
+                            paymentMode
+                            cardNumber
+                            cardHolderName
+                            promotionCode
+                            codeAmount
+                            promotionStatus
+                            voucherCode
+                            voucherAmount
+                            voucherStatus
+                            paymentStatus
+                          }
+                          deviceDetails{
+                            deviceName
+                            deviceId
+                            ipAddress
+                            location
+                          }
                       }
                     }
               }

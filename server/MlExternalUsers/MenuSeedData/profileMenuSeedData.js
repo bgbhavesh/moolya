@@ -30,7 +30,7 @@ if(Meteor.isServer){
               "uniqueId" : "portfolio"
           },
           {
-            "image":"ml ml-institution",
+            "image":"ml ml-institutions",
             "link": "/app/myOffice",
             "isLink" : true,
             "isMenu" : true,
@@ -44,6 +44,14 @@ if(Meteor.isServer){
               "isMenu" : true,
               "name" : "My List",
               "uniqueId" : "myConnections"
+          },
+          {
+            "image":"fa fa-investment",
+            "link": "/app/myInvestment",
+            "isLink" : true,
+            "isMenu" : true,
+            "name" : "My Investment",
+            "uniqueId" : "myInvestment"
           },
           {
               "image":"fa fa-money",

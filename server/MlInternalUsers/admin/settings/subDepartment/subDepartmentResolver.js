@@ -181,3 +181,17 @@ MlResolver.MlQueryResolver['fetchSubDepartmentsForRegistration'] = (obj, args, c
     return response;
   }
 }
+
+MlResolver.MlQueryResolver['fetchSubDepartmentsHierarchy'] = (obj, args, context, info) => {
+  let result = []
+  if (args.id) {
+    var id= args.id;
+    // let response= MlSubDepartments.find({"departmentId":id,"isActive":true}).fetch()||[];
+    let response= mlDBController.find('MlSubDepartments', {"departmentId":id,"isActive":true}, context).fetch()||[];
+    if(response){
+      result = _.reject(response, {_id: args.subDepartmentId,isSystemDefined:false});
+      return result;
+    }
+    return response;
+  }
+}

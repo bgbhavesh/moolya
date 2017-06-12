@@ -7,6 +7,7 @@ import MlResolver from "../../commons/mlResolverDef";
 
 let myOfficeSchema = ` 
     type OfficeMembers{
+       _id: String,
        userId:String,
        firstName:String,
        lastName:String,
@@ -14,7 +15,7 @@ let myOfficeSchema = `
        emailId:String,
        description:String,
        name:String,
-       joiningDate:Date,
+       joiningDate:String,
        communityType:String,
        role:String,
        isActive:Boolean,
@@ -76,7 +77,7 @@ let myOfficeSchema = `
        userId:String,
        firstName:String,
        lastName:String,
-       mobileNumber:Int,
+       mobileNumber:String,
        emailId:String,
        userType:String,
        description:String,
@@ -139,6 +140,8 @@ let myOfficeSchema = `
   
     type Query{
         fetchOffice:[MyOffice]
+        fetchOfficeById(officeId:String):MyOffice
+        fetchOfficeMember(memberId:String):OfficeMembers
         fetchOfficeMembers(officeId:String, isPrincipal:Boolean):[OfficeMembers]
         findOfficeDetail(officeId:String):response
     }
@@ -146,24 +149,26 @@ let myOfficeSchema = `
     type Mutation{       
         createOffice(myOffice:myOffice):response
         createOfficeMembers(myOfficeId:String, officeMember:officeMembers):response
-        updateOfficeMembers(myOfficeId:String, officeMembers:officeMembers):response
+        updateOfficeMember(memberId:String, officeMember:officeMembers):response
         updateOffice(myOffice:myOffice, myOfficeId:String):response
         updateOfficeStatus(id:String):response
     }
 `
-
+// updateOfficeMembers(myOfficeId:String, officeMembers:officeMembers):response
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], myOfficeSchema]);
 let supportedApi = [
   {api: 'createOffice', actionName: 'CREATE', moduleName: "OFFICE"},
   {api: 'createOfficeMembers', actionName: 'CREATE', moduleName: "OFFICE"},
   {api: 'fetchOffice', actionName: 'READ', moduleName: "OFFICE"},
-  {api: 'updateOfficeMembers', actionName: 'UPDATE', moduleName: "OFFICE"},
+  {api: 'fetchOfficeById', actionName: 'READ', moduleName: "OFFICE"},
+  // {api: 'updateOfficeMembers', actionName: 'UPDATE', moduleName: "OFFICE"},
   {api: 'updateOffice', actionName: 'UPDATE', moduleName: "OFFICE"},
+  {api: 'updateOfficeMember', actionName: 'UPDATE', moduleName: "OFFICE"},
   {api: 'updateOfficeStatus', actionName: 'UPDATE', moduleName: "OFFICE"},
   {api: 'findOfficeDetail', actionName: 'READ', moduleName: "OFFICE"},
   {api: 'fetchOfficeMembers', actionName: 'READ', moduleName: "OFFICE"},
-
+  {api: 'fetchOfficeMember', actionName: 'READ', moduleName: "OFFICE"},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

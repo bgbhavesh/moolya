@@ -5,8 +5,8 @@ import MlAccounts from '../../../commons/mlAccounts'
 import mlRegistrationRepo from './mlRegistrationRepo';
 import MlAdminUserContext from '../../../mlAuthorization/mlAdminUserContext'
 import geocoder from 'geocoder'
-import _ from 'lodash'
-
+import _lodash from 'lodash'
+import _ from 'underscore'
 import moment from 'moment'
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
   var validationCheck=null;
@@ -30,6 +30,9 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
 
   let date=new Date()
   validationCheck=MlRegistrationPreCondition.validateMobile(args.registration);
+  if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
+
+  validationCheck=MlRegistrationPreCondition.validateBackEndUserExist(args.registration);
   if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 
   let accountTypeName = mlDBController.findOne('MlAccountTypes', {_id: args.registration.accountType}, context) || {};
@@ -59,6 +62,10 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   let transactionCreatedDate = moment(date).format('DD/MM/YYYY hh:mm:ss')
   orderNumberGenService.assignRegistrationId(args.registration)
   var emails=[{address:args.registration.email,verified:false}];
+  if(Meteor.users.findOne({_id : context.userId}))
+  {
+    args.registration.createdBy = Meteor.users.findOne({_id: context.userId}).username
+  }
   let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Yet To Start",emails:emails,transactionId:args.registration.registrationId,transactionCreatedDate:transactionCreatedDate}, context)
   if(id){
 
@@ -319,7 +326,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
               //check if the registration profile(community based) exists for user and can be updated
                userId=existingUser._id;
                 let externalUserProfiles=existingUser.profile.externalUserProfiles
-                let userExProfile=_.find(externalUserProfiles,function (profile) {
+                let userExProfile=_lodash.find(externalUserProfiles,function (profile) {
                             return profile.registrationId==id
                           })
                 if(userExProfile){

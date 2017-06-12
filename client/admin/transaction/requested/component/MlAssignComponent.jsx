@@ -7,12 +7,11 @@ import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {assignUserForTransactionAction,selfAssignUserForTransactionAction,unAssignUserForTransactionAction} from '../actions/assignUserforTransactionAction'
 import hierarchyValidations from "../../../../commons/containers/hierarchy/mlHierarchyValidations"
 
-export default class MlAssignComponent extends Component {
+export default class MlAssignComponent extends React.Component {
 
   constructor(props){
     super(props);
     this.state={
-                  show:true,
                   selectedValue:false,
                   selectedCluster:null,
                   selectedChapter:null,
@@ -66,11 +65,9 @@ export default class MlAssignComponent extends Component {
     this.setState({selectedUser:value})
   }
   cancel(){
-    this.props.showPopUp(false)
-    this.setState({show:false})
+    this.props.refreshList();
   }
   async assignUser(){
-    this.props.showPopUp(false)
     let params={
       "cluster": this.state.selectedCluster,
       "chapter": this.state.selectedChapter,
@@ -81,50 +78,49 @@ export default class MlAssignComponent extends Component {
       "role": this.state.selectedRole,
       "user": this.state.selectedUser
     }
-    if(hierarchyValidations.validateAssignAction(this.props.clusterId,this.state.selectedCluster)){
-      let transactionType=this.props.transactionType
-      const response = await assignUserForTransactionAction("Registration",params,this.props.transactionId,"Registration","assignTransaction");
+    if(hierarchyValidations.validateAssignAction(this.props.data.clusterId,this.state.selectedCluster)){
+      const response = await assignUserForTransactionAction("Registration",params,this.props.data.registrationId,"Registration","assignTransaction");
       if(response.success){
-        this.setState({show:false,selectedCluster:null,selectedChapter:null,selectedSubChapter:null,selectedCommunity:null,selectedDepartment:null,selectedSubDepartment:null,selectedRole:null,selectedUser:null})
+        this.setState({selectedCluster:null,selectedChapter:null,selectedSubChapter:null,selectedCommunity:null,selectedDepartment:null,selectedSubDepartment:null,selectedRole:null,selectedUser:null})
         toastr.success("Transaction assigned to user successfully");
+        this.props.closePopOver(false)
         FlowRouter.go("/admin/transactions/registrationRequested");
       }else{
         toastr.error("Wrong Hierarchy");
-        this.setState({show:false})
+        this.props.closePopOver(false)
         FlowRouter.go("/admin/transactions/registrationRequested");
       }
     }else{
       toastr.error("Wrong assignment");
-      this.setState({show:false})
+      this.props.closePopOver(false)
       FlowRouter.go("/admin/transactions/registrationRequested");
     }
 
   }
 
   async selfAssignTransaction(){
-    this.props.showPopUp(false)
-    let transactionType=this.props.transactionType
-    const response = await selfAssignUserForTransactionAction("Registration",this.props.transactionId,"Registration","selfAssignTransaction");
+    let transactionType=this.props.data.transactionType
+    const response = await selfAssignUserForTransactionAction("Registration",this.props.data.registrationId,"Registration","selfAssignTransaction");
     if(response.success){
       toastr.success("Self Assignment successfull");
+      this.props.closePopOver(false)
       FlowRouter.go("/admin/transactions/registrationRequested");
     }else{
       toastr.error("Wrong Hierarchy");
-      this.setState({show:false})
+      this.props.closePopOver(false)
       FlowRouter.go("/admin/transactions/registrationRequested");
     }
   }
 
   async unAssignTransaction(){
-    this.props.showPopUp(false)
-    let transactionType=this.props.transactionType
-    const response = await unAssignUserForTransactionAction("Registration",this.props.transactionId,"Registration","unAssignTransaction");
+    const response = await unAssignUserForTransactionAction("Registration",this.props.data.registrationId,"Registration","unAssignTransaction");
     if(response.success){
       toastr.success("UnAssignment successfull");
+      this.props.closePopOver(false)
       FlowRouter.go("/admin/transactions/registrationRequested");
     }else{
       toastr.error("Wrong Hierarchy");
-      this.setState({show:false})
+      this.props.closePopOver(false)
       FlowRouter.go("/admin/transactions/registrationRequested");
     }
   }
@@ -136,22 +132,7 @@ export default class MlAssignComponent extends Component {
       data:fetchMoolyaInternalUsers{label:username,value:_id}
     }
     `;
-   /* let clusterQuery=gql` query{
-      data:fetchActiveClusters{label:countryName,value:_id}
-    }
-    `;
-    let chapterQuery=gql`query($id:String){
-    data:fetchChapters(id:$id) {
-      value:_id
-      label:chapterName
-      }
-    }`;
-    let subChapterquery=gql`query($id:String){
-      data:fetchSubChaptersForRegistration(id:$id) {
-        value:_id
-        label:subChapterName
-      }
-    }`;*/
+
     let clusterQuery = gql`query{
      data:fetchContextClusters {
         value:_id
@@ -177,12 +158,7 @@ export default class MlAssignComponent extends Component {
       data:fetchCommunityDefinition{label:name,value:code}
     }
     `;
-   /* let departmentQuery=gql`query($cluster:String,$chapter:String,$subChapter:String){
-      data:fetchDepartmentsForRegistration(cluster:$cluster,chapter:$chapter,subChapter:$subChapter) {
-        value:_id
-        label:departmentName
-      }
-    }`;*/
+
     let departmentQuery=gql`query($isMoolya:Boolean,$clusterId:String){  
       data:fetchHierarchyMoolyaDepartment(isMoolya:$isMoolya,clusterId:$clusterId) {
         value:_id
@@ -211,7 +187,6 @@ export default class MlAssignComponent extends Component {
 
     let chapterOption={options: { variables: {id:this.state.selectedCluster}}};
     let subChapterOption={options: { variables: {id:this.state.selectedChapter}}}
-   /* let departmentOption={options: { variables: {cluster:this.state.selectedCluster,chapter:this.state.selectedChapter,subChapter:this.state.selectedSubChapter}}}*/
     let departmentOption={options: { variables: {isMoolya:true,clusterId:this.state.selectedCluster}}}
     let subDepartmentOption={options: { variables: {id:this.state.selectedDepartment}}};
     let roleOption={
@@ -231,13 +206,10 @@ export default class MlAssignComponent extends Component {
                     }}};
 
     return (
-      <div>
-      {this.state.show==true?
 
-    /*  <div className="ml_assignrequest" style={{'display':'none'}}>*/
-      <div className="panel panel-default-bottom col-md-12">
+
+      <div className="" style={{'width':'400px'}}>
         <div className="mrgn-btm">
-          {/*<input type="text" placeholder="Search User" className="search-form-control" />*/}
           <Moolyaselect multiSelect={false} placeholder="Select User" className="search-form-control"
                         valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedUser}
                         queryType={"graphql"} query={moolyaUserQuery} onSelect={that.optionsBySelectAllUser.bind(this)}
@@ -272,37 +244,22 @@ export default class MlAssignComponent extends Component {
             <Moolyaselect multiSelect={false} placeholder="Select User" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedUser} queryType={"graphql"} query={usersQuery} reExecuteQuery={true} queryOptions={usersOption} isDynamic={true} onSelect={this.optionsBySelectUser.bind(this)} />
           </div>
         </div>
-
+<br className="brclear"/>
         <div className="assign-popup">
           <a data-toggle="tooltip" title="Save" data-placement="top" onClick={this.assignUser.bind(this)} className="hex_btn hex_btn_in">
             <span className="ml ml-save"></span>
           </a>
-          <a data-toggle="tooltip" title="Cancel" data-placement="top" href="" className="hex_btn hex_btn_in" onClick={this.cancel.bind(this)}>
+          <a data-toggle="tooltip" title="Cancel" data-placement="top" href="" className="hex_btn hex_btn_in" onClick={this.props.closePopOver}>
             <span className="ml ml-delete"></span>
           </a>
-        </div>
-
-       {/* {this.props.canAssign?*/}
-        <div className="assign-popup">
           <a data-toggle="tooltip" title="Self assign" data-placement="top" onClick={this.selfAssignTransaction.bind(this)} className="hex_btn hex_btn_in">
             <span className="ml flaticon-ml-assign-user"></span>
           </a>
-        </div>
-          {/*:<div></div>}*/}
-
-        {/*{this.props.canUnAssign?*/}
-        <div className="assign-popup">
           <a data-toggle="tooltip" title=" Unassign" data-placement="top" onClick={this.unAssignTransaction.bind(this)} className="hex_btn hex_btn_in">
             <span className="ml flaticon-ml-unassign-user"></span>
           </a>
         </div>
-          {/*:<div></div>}*/}
-
-
       </div>
-        :<div></div>}
-      </div>
-
     )
   }
 }

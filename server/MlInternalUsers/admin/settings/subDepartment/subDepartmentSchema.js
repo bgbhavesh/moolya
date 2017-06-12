@@ -58,6 +58,7 @@ let subDepartmentSchema = `
         fetchSubDepartments(id: String):[SubDepartment]
         fetchActiveSubDepartments(departmentId: String):[SubDepartment]
         fetchSubDepartmentsForRegistration(id: String):[SubDepartment]
+        fetchSubDepartmentsHierarchy(id: String,subDepartmentId:String):[SubDepartment]
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],subDepartmentSchema]);
@@ -68,7 +69,8 @@ let supportedApi = [
     {api:'fetchSubDepartments', actionName:'READ', moduleName:"SUBDEPARTMENT"},
     {api:'findSubDepartments', actionName:'READ', moduleName:"SUBDEPARTMENT"},
     {api:'fetchActiveSubDepartments', actionName:'READ', moduleName:"SUBDEPARTMENT"},
-    {api:'fetchSubDepartmentsForRegistration', actionName:'READ', moduleName:"SUBDEPARTMENT", isWhiteList:true}
+    {api:'fetchSubDepartmentsForRegistration', actionName:'READ', moduleName:"SUBDEPARTMENT", isWhiteList:true},
+    {api:'fetchSubDepartmentsHierarchy', actionName:'READ', moduleName:"SUBDEPARTMENT"}
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

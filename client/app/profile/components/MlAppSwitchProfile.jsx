@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import {fetchExternalUserProfilesActionHandler,setDefaultProfileActionHandler,deActivateProfileProfileActionHandler,blockProfileActionHandler} from '../actions/switchUserProfilesActions';
 import _ from 'lodash';
-
+import {initalizeFloatLabel} from '../../../admin/utils/formElemUtil';
 export default class MlAppSwitchProfile extends React.Component{
 
   constructor(props, context){
@@ -49,9 +49,12 @@ export default class MlAppSwitchProfile extends React.Component{
     $(function () {
       $('.float-label').jvFloat();
     });
+
    // this.initializeSwiper();
   }
-
+componentDidUpdate(){
+  initalizeFloatLabel();
+}
 
 
   async fetchExternalUserProfiles(){
@@ -131,8 +134,12 @@ export default class MlAppSwitchProfile extends React.Component{
                   {this.state.userProfiles.map(function (prf, idx) {
                     return(
                       <div className="swiper-slide profile_accounts" key={idx} name={idx}>
-                        <img src={prf.countryFlag?prf.countryFlag:""}/><br />{prf.clusterName?prf.clusterName:""}
-                        <h2>{prf.communityDefName?prf.communityDefName:""}</h2>
+                       {/* <img src={prf.countryFlag?prf.countryFlag:""}/>*/}
+                       <span className={prf.communityImage}></span>
+                       <br />
+                        {prf.communityDefName?prf.communityDefName:""}{prf.identityType?(<text>_{prf.identityType}</text>):""}
+                        <br />{prf.chapterName?prf.chapterName:""}{prf.clusterName?(<text>_{prf.clusterName}</text>):""}
+                        {prf.accountType?(<h2>Subscription: {prf.accountType}</h2>):""}<br />
                       </div>
                     )
                   })}
@@ -169,7 +176,7 @@ export default class MlAppSwitchProfile extends React.Component{
                 <input type="text" placeholder="City" className="form-control float-label"  value={profileDetails.chapterName} disabled/>
               </div>
               <div className="form-group">
-                <input type="text" placeholder="Status" className="form-control float-label"  value={profileDetails.isProfileActive} disabled/>
+                <input type="text" placeholder="Status" className="form-control float-label"  value={profileDetails.isActive&&"Active"} disabled/>
               </div>
             </div>
 

@@ -138,11 +138,15 @@ export default class MlTableView extends Component {
     }
   }
 
-  actionHandlerProxy(actionConfig) {
+  actionHandlerProxy(actionConfig,handlerCallback) {
     const selectedRow = this.state.selectedRow;
     const actions = this.props.actionConfiguration;
     const action = _.find(actions, {"actionName": actionConfig.actionName});
-    action.handler(selectedRow);
+    if(handlerCallback) {
+      handlerCallback(selectedRow);
+    }else{
+      action.handler(selectedRow);
+    }
   }
 
   onFilterChange(filterQuery){
@@ -161,7 +165,8 @@ export default class MlTableView extends Component {
     let actionsConf = _.clone(config.actionConfiguration);
     let actionsProxyList = [];
     actionsConf.forEach(function (action) {
-      let act = {actionName: action.actionName, showAction: action.showAction, iconID: action.iconID};
+      let act = {actionName: action.actionName,showAction: action.showAction,iconID: action.iconID,hasPopOver:action.hasPopOver,
+        popOverTitle:action.popOverTitle,placement:action.placement,target:action.target,actionComponent:action.actionComponent,popOverComponent:action.popOverComponent};
       act.handler = that.actionHandlerProxy.bind(that);
       actionsProxyList.push(act);
     });

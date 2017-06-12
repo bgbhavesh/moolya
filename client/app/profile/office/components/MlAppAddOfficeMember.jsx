@@ -24,12 +24,12 @@ export default class MlAppAddOfficeMember extends React.Component{
       options : props.availableCommunities ? props.availableCommunities.map(function (item) {
         return { value: item.communityId, label: item.communityName }
       }) : [{ value: 'principle', label: 'Principle' }],
-      userType:"isFreeUser"
+      userType: props.availableCommunities ? "isFreeUser" :  "isAdminUser"
     }
   }
 
   async getMembers(){
-    let isPrinciple = this.props.availableCommunities ? true : false;
+    let isPrinciple = this.props.availableCommunities ? false : true;
     let officeId = FlowRouter.getParam('officeId');
     let result = await fetchOfficeMembers(officeId, isPrinciple);
     this.setState({
@@ -53,7 +53,9 @@ export default class MlAppAddOfficeMember extends React.Component{
     });
   }
   togglePopover(){
-    this.setState({popoverOpen:!this.state.popoverOpen});
+    this.setState({popoverOpen:!this.state.popoverOpen}, function(){
+      $('.float-label').jvFloat();
+    });
   }
   toggleUserType(evt){
     this.setState({
@@ -72,13 +74,16 @@ export default class MlAppAddOfficeMember extends React.Component{
       isFreeUser:false,
       isPaidUser: false,
       isAdminUser: false,
-      name: this.refs.name.value,
+      firstName: this.refs.fname.value,
+      lastName: this.refs.lname.value,
       emailId: this.refs.email.value,
-      mobileNumber: this.refs.phoneNumber.value,
       isPrincipal: (this.state.selected == 'principle' ? true : false),
       communityType: (this.state.selected == 'principle' ? '' : this.state.selected)
     };
     data[this.state.userType] = true;
+    if(this.refs.phoneNumber.value) {
+      data['mobileNumber'] = this.refs.phoneNumber.value;
+    }
     let id = FlowRouter.getParam('officeId');
     let response = await createOfficeMembers(id, data);
     if(response.success){
@@ -91,6 +96,7 @@ export default class MlAppAddOfficeMember extends React.Component{
       toastr.success(response.result);
     }
   }
+
   render(){
     const that = this;
     console.log(this.state.selected);
@@ -116,7 +122,7 @@ export default class MlAppAddOfficeMember extends React.Component{
                 {that.state.members.map(function (data, i) {
                   return (
                     <div className="col-lg-2 col-md-4 col-sm-4" key={i}>
-                      <a href="#" >
+                      <a href={'/app/officeMember/'+FlowRouter.getParam('officeId')+'/'+data._id} >
                         <div className="list_block notrans">
                           <div className="cluster_status active_cl"></div>
                           <div className="hex_outer"><span className="ml ml-funder"></span></div>
@@ -138,8 +144,10 @@ export default class MlAppAddOfficeMember extends React.Component{
             <div className="medium-popover"><div className="row">
               <div className="col-md-12">
                 <div className="form-group">
-                  <input type="text" ref="name" placeholder="Name" className="form-control float-label" id=""/>
-
+                  <input type="text" ref="fname" placeholder="First Name" className="form-control float-label" id=""/>
+                </div>
+                <div className="form-group">
+                  <input type="text" ref="lname" placeholder="Last Name" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
                   <input type="text" ref="email" placeholder="Email Id" className="form-control float-label" id=""/>
@@ -149,7 +157,6 @@ export default class MlAppAddOfficeMember extends React.Component{
                   <input type="number" ref="phoneNumber" placeholder="Phone Number" className="form-control float-label" id=""/>
 
                 </div>
-
                 <div className="form-group">
                   <Select
                     name="form-field-name"
@@ -160,15 +167,15 @@ export default class MlAppAddOfficeMember extends React.Component{
                 </div>
                 <div className="form-group invitation">
                   <div className="input_types">
-                    <input defaultChecked={true} onClick={(e)=>this.toggleUserType(e)} type="radio" name="radio" value="isFreeUser" />
+                    <input disabled={this.state.userType == "isAdminUser" ? true : false} defaultChecked={this.state.userType == "isFreeUser" ? true : false} onClick={(e)=>this.toggleUserType(e)} type="radio" name="radio" value="isFreeUser" />
                     <label htmlFor="checkbox1"><span></span>Free User</label>
                   </div>
                   <div className="input_types">
-                    <input onClick={(e)=>this.toggleUserType(e)} type="radio" name="radio" value="isPaidUser" />
+                    <input disabled={this.state.userType == "isAdminUser" ? true : false} onClick={(e)=>this.toggleUserType(e)} type="radio" name="radio" value="isPaidUser" />
                     <label htmlFor="checkbox1"><span></span>Paid User</label>
                   </div>
                   <div className="input_types">
-                    <input onClick={(e)=>this.toggleUserType(e)} type="radio" name="radio" value="isAdminUser" />
+                    <input disabled={this.state.userType == "isAdminUser" ? false : true} checked={this.state.userType == "isAdminUser" ? true : false} onClick={(e)=>this.toggleUserType(e)} type="radio" name="radio" value="isAdminUser" />
                     <label htmlFor="checkbox1"><span></span>Admin User</label>
                   </div>
                   <br className="brclear"/>

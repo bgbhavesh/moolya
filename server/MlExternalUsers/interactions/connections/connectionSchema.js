@@ -2,7 +2,7 @@
  * Created by venkatsrinag on 6/5/17.
  */
 import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../../commons/mlSchemaDef'
+import MlSchemaDef from '../../../commons/mlSchemaDef'
 
 
 let connections = `
@@ -43,6 +43,7 @@ let connections = `
     
     type Mutation{
         createConnection(connection:connection):response
+        connectionRequest(resourceId:String!,resourceType:String!):response
         updateConnection(connection:connection, connectionId:String):response
     }
     

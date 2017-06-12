@@ -159,13 +159,15 @@ class MlDBController{
 
   aggregate(collectionName, pipeline, context) {
     let collection;
+    let response;
     if(collectionName == "users") {
       collection = Meteor.users
     }
     else{
       collection = MlCollections[collectionName]
     }
-    let response = collection.aggregate(pipeline);
+      response = collection.aggregate(pipeline);
+
     return response;
   }
 }

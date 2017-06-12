@@ -20,12 +20,15 @@ class MlAppComponent extends Component{
 
     componentDidMount(){
         let isProfileMenu = this.props.isProfileMenu || false;
+        // let isProfileMenu =  false;
         this.fetchMenu(isProfileMenu)
     }
 
     componentWillReceiveProps(nextProps, nextState) {
-        let isProfileMenu = nextProps.isProfileMenu || false;
-        this.fetchMenu(isProfileMenu)
+       // let isProfileMenu = nextProps.isProfileMenu || false;
+      if(nextProps.isProfileMenu!==this.props.isProfileMenu){
+        this.fetchMenu(nextProps.isProfileMenu)
+      }
     }
 
     async fetchMenu(isProfileMenu){

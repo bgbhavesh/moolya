@@ -77,7 +77,7 @@ export default class MlFilterListRepo{
         }
 
         let communityResponse=_.each(result,function (option,id) {
-          options.push({"label":option.displayName,"value":option.name})
+          options.push({"label":option.displayName,"value":option.code})
         })
 
 
@@ -186,6 +186,20 @@ export default class MlFilterListRepo{
         let genSubChapterResponse=_.each(result,function (option,id) {
           options.push({"label":option.subChapterName,"value":option._id})
         })
+
+        break;
+
+      case "Gen_Users":
+
+        result= Meteor.users.find().fetch();
+
+        let genUsersResponse=_.each(result,function (option,id) {
+          if(option.profile.isInternaluser){
+            options.push({"label":option.profile.InternalUprofile.moolyaProfile.displayName,"value":option.profile.InternalUprofile.moolyaProfile.displayName})
+          }
+
+        })
+        options.push({"label": "Un Assigned","value" : "Un Assigned"})
 
         break;
 

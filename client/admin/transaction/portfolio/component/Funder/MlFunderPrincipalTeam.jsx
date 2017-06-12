@@ -6,10 +6,12 @@ import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../client/admi
 import _ from "lodash";
 import {multipartASyncFormHandler} from "../../../../../../client/commons/MlMultipartFormAction";
 import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../actions/findPortfolioFunderDetails";
+import {fetchClusterIdActionHandler} from '../../actions/findClusterIdForPortfolio'
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import MlLoader from '../../../../../commons/components/loader/loader'
-
+import gql from 'graphql-tag'
+import Moolyaselect from  '../../../../../commons/components/select/MoolyaSelect'
 export default class MlFunderPrincipalTeam extends React.Component {
   constructor(props, context) {
     super(props);
@@ -25,7 +27,9 @@ export default class MlFunderPrincipalTeam extends React.Component {
       funderTeamList: [],
       selectedVal: null,
       selectedObject: "default",
-      selectedTab: 'principal'
+      title:'',
+      selectedTab: 'principal',
+      clusterId:''
     }
     this.handleBlur.bind(this);
     this.onSavePrincipalAction.bind(this);
@@ -47,9 +51,15 @@ export default class MlFunderPrincipalTeam extends React.Component {
 
   componentWillMount() {
     this.fetchPrincipalDetails();
-    this.fetchTeamDetails()
+    this.fetchTeamDetails();
+    this.fetchClusterId();
   }
-
+  async fetchClusterId() {
+    const response = await fetchClusterIdActionHandler(this.props.portfolioDetailsId);
+    if (response) {
+      this.setState({loading: false, clusterId: response.clusterId});
+    }
+  }
   async fetchPrincipalDetails() {
     let that = this;
     let portfolioDetailsId = that.props.portfolioDetailsId;
@@ -132,6 +142,9 @@ export default class MlFunderPrincipalTeam extends React.Component {
     } else {
       this.setState({selectedIndex: 0})
     }
+  }
+  optionsBySelectTitle(val){
+    this.setState({title:val})
   }
 
   onStatusChangeNotify(e) {
@@ -307,6 +320,14 @@ export default class MlFunderPrincipalTeam extends React.Component {
   }
 
   render() {
+    let titlequery=gql`query($type:String,$hierarchyRefId:String){
+     data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
+     label
+     value
+     }
+     }
+     `;
+    let titleOption={options: { variables: {type : "TITLE",hierarchyRefId:this.state.clusterId}}};
     let that = this;
     const showLoader = that.state.loading;
     let funderPrincipalList = that.state.funderPrincipal || [];
@@ -424,16 +445,19 @@ export default class MlFunderPrincipalTeam extends React.Component {
                               <img src={this.state.data.logo ? this.state.data.logo.fileUrl : "/images/def_profile.png"}/>
                             </div>
                           </div>
+                          {/*<div className="form-group">*/}
+                            {/*<input type="text" placeholder="Title" name="title"*/}
+                                   {/*defaultValue={this.state.data.title}*/}
+                                   {/*className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>*/}
+                            {/*/!*<FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"*!/*/}
+                            {/*/!*onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>*!/*/}
+                            {/*/!*<input type="checkbox" className="lock_input"*!/*/}
+                            {/*/!*checked={this.state.data.isCompanyNamePrivate}/>*!/*/}
+                          {/*</div>*/}
                           <div className="form-group">
-                            <input type="text" placeholder="Title" name="title"
-                                   defaultValue={this.state.data.title}
-                                   className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                            {/*<FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"*/}
-                            {/*onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>*/}
-                            {/*<input type="checkbox" className="lock_input"*/}
-                            {/*checked={this.state.data.isCompanyNamePrivate}/>*/}
-                          </div>
+                            <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.title} queryType={"graphql"} query={titlequery}  queryOptions={titleOption} onSelect={that.optionsBySelectTitle.bind(this)} isDynamic={true}/>
 
+                          </div>
                           <div className="form-group">
                             <input type="text" placeholder="First Name" name="firstName"
                                    defaultValue={this.state.data.firstName} className="form-control float-label"
@@ -557,14 +581,18 @@ export default class MlFunderPrincipalTeam extends React.Component {
                             </div>
                           </div>
                           <div className="form-group">
-                            <input type="text" placeholder="Title" name="title"
-                                   defaultValue={this.state.data.title}
-                                   className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                            {/*<FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"*/}
-                            {/*onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>*/}
-                            {/*<input type="checkbox" className="lock_input"*/}
-                            {/*checked={this.state.data.isCompanyNamePrivate}/>*/}
+                            <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.title} queryType={"graphql"} query={titlequery}  queryOptions={titleOption} onSelect={that.optionsBySelectTitle.bind(this)} isDynamic={true}/>
+
                           </div>
+                          {/*<div className="form-group">*/}
+                            {/*<input type="text" placeholder="Title" name="title"*/}
+                                   {/*defaultValue={this.state.data.title}*/}
+                                   {/*className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>*/}
+                            {/*/!*<FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"*!/*/}
+                            {/*/!*onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>*!/*/}
+                            {/*/!*<input type="checkbox" className="lock_input"*!/*/}
+                            {/*/!*checked={this.state.data.isCompanyNamePrivate}/>*!/*/}
+                          {/*</div>*/}
 
                           <div className="form-group">
                             <input type="text" placeholder="First Name" name="firstName"

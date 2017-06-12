@@ -11,6 +11,7 @@ import {initalizeFloatLabel} from '../../../utils/formElemUtil'
 import {findOfficeTransactionHandler} from '../actions/findOfficeTranscation'
 import {updateSubcriptionDetail} from '../actions/updateSubscriptionDetail'
 import {updateOfficeStatus} from '../actions/updateOfficeStatus'
+import moment from 'moment'
 
 export default class MlOfficeItem extends React.Component {
   constructor(props){
@@ -18,6 +19,7 @@ export default class MlOfficeItem extends React.Component {
     this.state={
       transId:props.data.id,
       transInfo:{},
+      currentSlideIndex:0,
       userInfo:{},
       officeInfo:{
         availableCommunities:[]
@@ -27,9 +29,18 @@ export default class MlOfficeItem extends React.Component {
       about:'',
       isGenerateLinkDisable: false
     }
-    this.getTransaction(this.state.transId);
+    this.getTransaction.bind(this);
+    this.initializeSwiper.bind(this);
+    this.onSlideIndexChange.bind(this);
     return this;
   }
+
+  onSlideIndexChange(swiper){
+    if(this.state.currentSlideIndex!==swiper.activeIndex){
+      this.setState({'currentSlideIndex':swiper.activeIndex});
+    }
+  }
+
   componentDidMount() {
     initalizeFloatLabel();
     $(function() {
@@ -43,8 +54,29 @@ export default class MlOfficeItem extends React.Component {
         $(this).parent('.switch').removeClass('on');
       }
     });
-    // console.log(this.props.data)
+    this.initializeSwiper();
   }
+
+  initializeSwiper(){
+    const transId = this.state.transId;
+      setTimeout(function () {
+        let swiper =  new Swiper('#office_item'+transId, {
+          effect: 'coverflow',
+          slidesPerView: 3,
+          grabCursor: true,
+          centeredSlides: true,
+          initialSlide: 0
+        });
+      },100);
+  };
+
+  async componentWillMount() {
+    await this.getTransaction(this.state.transId);
+  }
+
+  componentWillReceiveProps(){
+
+ }
 
   async getTransaction(id){
     let response = await findOfficeTransactionHandler(id);
@@ -56,6 +88,7 @@ export default class MlOfficeItem extends React.Component {
           transInfo: result.trans,
           userInfo: result.user,
           officeInfo: result.office,
+          currentSlideIndex:0,
           tax: result.trans.orderSubscriptionDetails && result.trans.orderSubscriptionDetails.isTaxInclusive ? result.trans.orderSubscriptionDetails.isTaxInclusive : false,
           cost: result.trans.orderSubscriptionDetails && result.trans.orderSubscriptionDetails.cost ? result.trans.orderSubscriptionDetails.cost : '',
           about: result.trans.orderSubscriptionDetails && result.trans.orderSubscriptionDetails.about ? result.trans.orderSubscriptionDetails.about : '',
@@ -129,81 +162,82 @@ export default class MlOfficeItem extends React.Component {
       {value: 'WIP', label: 'WIP' , clearableValue: true},
       {value: 'Approved', label: 'Approved',clearableValue: true}
     ];
+    let transId = this.state.transId;
     return (
       <div className="ml_tabs">
         <ul className="nav nav-pills">
           <li className="active">
-            <a href="#1a" data-toggle="tab">Customer Details</a>
+            <a href={"#1a"+transId} data-toggle="tab">Customer Details</a>
           </li>
           <li>
-            <a href="#2a" data-toggle="tab">Order Details</a>
+            <a href={"#2a"+transId} onClick={this.initializeSwiper()} data-toggle="tab">Order Details</a>
           </li>
           <li>
-            <a href="#3a" data-toggle="tab">Payment Details</a>
+            <a href={"#3a"+transId} data-toggle="tab">Payment Details</a>
           </li>
           <li>
-            <a href="#4a" data-toggle="tab">Device Details</a>
+            <a href={"#4a"+transId} data-toggle="tab">Device Details</a>
           </li>
           <li>
-            <a href="#5a" data-toggle="tab">History</a>
+            <a href={"#5a"+transId} data-toggle="tab">History</a>
           </li>
         </ul>
         <div className="tab-content clearfix">
-          <div className="tab-pane active" id="1a">
+          <div className="tab-pane active" id={"1a"+transId}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="User Id" value={this.state.transInfo.userId} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="User Id" defaultValue='userId' value={this.state.transInfo.userId} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Transaction Id" value={this.state.transInfo.transactionId} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Transaction Id" defaultValue="transId" value={this.state.transInfo.transactionId} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Date & Time" defaultValue="27/08/2016 10:20:20" className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Date & Time" defaultValue="Date & Time" value={this.state.userInfo.createdAt ? moment(this.state.userInfo.createdAt).format('MM/DD/YYYY HH:mm:ss') : ' ' } className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Name" value={this.state.userInfo.name} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Name" defaultValue="name" value={this.state.userInfo.name} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Email ID" value={this.state.userInfo.email} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Email ID" defaultValue="email" value={this.state.userInfo.email} className="form-control float-label" id=""/>
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Phone no" value={this.state.userInfo.mobile} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Phone no" defaultValue="1234567879" value={this.state.userInfo.mobile} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Cluster" value={this.state.transInfo.clusterName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Cluster" defaultValue="cluster" value={this.state.transInfo.clusterName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Chapter" value={this.state.transInfo.chapterName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Chapter" defaultValue="chapter" value={this.state.transInfo.chapterName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Sub Chapter" value={this.state.transInfo.subChapterName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Sub Chapter" defaultValue="sub chapter" value={this.state.transInfo.subChapterName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Community" value={this.state.transInfo.communityName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Community" defaultValue="community" value={this.state.transInfo.communityName} className="form-control float-label" id=""/>
                 </div>
               </div>
             </div>
           </div>
-          <div className="tab-pane" id="2a">
+          <div className="tab-pane" id={"2a"+transId}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
                   <input type="text" placeholder="Order ID" defaultValue="Moo12345" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Subscription Name" value={this.state.officeInfo.subscriptionName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Subscription Name" defaultValue="Sub Id" value={this.state.officeInfo.subscriptionName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total number of users" value={this.state.officeInfo.totalCount} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Total number of users" defaultValue="12" value={this.state.officeInfo.totalCount} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total number of principal" value={this.state.officeInfo.principalUserCount} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Total number of principal" defaultValue="10" value={this.state.officeInfo.principalUserCount} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total number of Team" value={this.state.officeInfo.teamUserCount} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Total number of Team" defaultValue="2" value={this.state.officeInfo.teamUserCount} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group switch_wrap switch_names">
                   <span className="state_label acLabel">Specific</span><label className="switch nocolor-switch">
@@ -211,25 +245,27 @@ export default class MlOfficeItem extends React.Component {
                   <div className="slider"></div>
                 </label>
                   <span className="state_label">All Communities</span>
+                  <div className="clearfix" />
                 </div>
+                <br className="clearfix" />
+                <br className="clearfix" />
                 <div className="clearfix" />
 
-                <div className="swiper-container blocks_in_form">
-                  <div className="clearfix" />
+                <div className="swiper-container office_item" id={'office_item'+transId}>
                   <div className="swiper-wrapper">
                     {this.state.officeInfo.availableCommunities.map(function (item, i) {
                       return(
-                        <div className="swiper-slide" key={i}>
-                          <div className="team-block marb0">
-                            <span className="ml ml-moolya-symbol"></span>
-                            <h3>
-                              {item.communityName}
-                            </h3>
-                          </div>
-                          <div className="form-group mart20">
-                            <input type="text" value={item.userCount} placeholder="Enter Total Numbers" className="form-control float-label" id="cluster_name"/>
-                          </div>
+                      <div className="swiper-slide" key={i}>
+                        <div className="team-block marb0">
+                          <span className="ml ml-moolya-symbol"></span>
+                          <h3>
+                            {item.communityName}
+                          </h3>
                         </div>
+                        <div className="form-group mart20">
+                          <input type="text" value={item.userCount} placeholder="Enter Total Numbers" className="form-control float-label" id="cluster_name"/>
+                        </div>
+                      </div>
                       )
                     })}
 
@@ -239,31 +275,31 @@ export default class MlOfficeItem extends React.Component {
                   <div className="panel-heading">Office location</div>
                   <div className="panel-body">
                     <div className="form-group">
-                      <input type="text" placeholder="Plot no/Flat no/Door no" value={this.state.officeInfo.officeLocation} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue="234" placeholder="Plot no/Flat no/Door no" value={this.state.officeInfo.officeLocation} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Street no / Locality" value={this.state.officeInfo.streetLocality} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue="L3" placeholder="Street no / Locality" value={this.state.officeInfo.streetLocality} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Landmark" value={this.state.officeInfo.landmark} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue="landmark" placeholder="Landmark" value={this.state.officeInfo.landmark} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Area" value={this.state.officeInfo.area} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue="area" placeholder="Area" value={this.state.officeInfo.area} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="town /city" value={this.state.officeInfo.city} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue="city" placeholder="town /city" value={this.state.officeInfo.city} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="State" value={this.state.officeInfo.state} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue="state" placeholder="State" value={this.state.officeInfo.state} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Country" value={this.state.officeInfo.country} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue="country" placeholder="Country" value={this.state.officeInfo.country} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder="Zip Code" value={this.state.officeInfo.zipCode} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue="123456" placeholder="Zip Code" value={this.state.officeInfo.zipCode} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" placeholder ="Duration" value='' className="form-control float-label" id=""/>
+                      <input type="text" defaultValue="duration" placeholder ="Duration" value='' className="form-control float-label" id=""/>
                     </div>
                   </div>
                 </div>
@@ -273,19 +309,19 @@ export default class MlOfficeItem extends React.Component {
                   <div className="panel-heading">Generate payment link</div>
                   <div className="panel-body">
                     <div className="form-group">
-                      <input type="text" value={this.state.officeInfo.subscriptionName} placeholder="Subscription Name" className="form-control float-label" id="" />
+                      <input type="text" defaultValue="Sub Id" value={this.state.officeInfo.subscriptionName} placeholder="Subscription Name" className="form-control float-label" id="" />
                     </div>
                     <br className="brclear"/>
                     <div className="form-group ">
                       <input type="number" onChange={(e)=>this.updateCost(e)} value={this.state.cost} placeholder="Cost" className="form-control float-label"/>
-                      <div className="email_notify">
+                      <div className="email_notify" style={{right:'20px'}}>
                         <div className="input_types">
                           <input id="checkbox1" onChange={(e)=>this.updateTax(e)} checked={this.state.tax} type="checkbox" name="checkbox" value="1" /><label htmlFor="checkbox1"><span></span>TAX inclusive</label>
                         </div>
                       </div>
                     </div>
                     <div className="form-group">
-                      <textarea onChange={(e)=>this.updateAbout(e)} value={this.state.about} placeholder="About" className="form-control float-label" id=""></textarea>
+                      <textarea defaultValue=" " onChange={(e)=>this.updateAbout(e)} value={this.state.about} placeholder="About" className="form-control float-label" id=""></textarea>
                     </div>
                     <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.generateLink()}>Genrate Link</a>
                     <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.acitvateOffice()}>Activate office</a>
@@ -294,7 +330,7 @@ export default class MlOfficeItem extends React.Component {
               </div>
             </div>
           </div>
-          <div className="tab-pane active" id="3a">
+          <div className="tab-pane" id={"3a"+transId}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
@@ -332,7 +368,7 @@ export default class MlOfficeItem extends React.Component {
               </div>
             </div>
           </div>
-          <div className="tab-pane active" id="4a">
+          <div className="tab-pane" id={"4a"+transId}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
@@ -352,7 +388,7 @@ export default class MlOfficeItem extends React.Component {
               </div>
             </div>
           </div>
-          <div className="tab-pane active" id="5a">
+          <div className="tab-pane" id={"5a"+transId}>
             <div className="row">
               <div className="col-md-6">
                 One

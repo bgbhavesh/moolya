@@ -10,8 +10,7 @@ import MlPortfolioIdeatorLibraryView from '../../../admin/transaction/portfolio/
 import MlPortfolioIdeatorStrategyPlansView from '../../../admin/transaction/portfolio/component/IdeatorView/MlStartergyAndPlanningView'
 import MlPortfolioIdeatorLookingForView from '../../../admin/transaction/portfolio/component/IdeatorView/MlLookingForView'
 import MlPortfolioIdeatorPlanningTrademarkView from '../../../admin/transaction/portfolio/component/IdeatorView/MlInAndTrademarkView'
-// import AppActionButtons from '../../commons/components/appActionButtons'
-import TopIconsList from '../../commons/components/topIconsList'
+import InteractionsCounter from '../../commons/components/InteractionsCounter'
 import MlIdeaView from '../../../admin/transaction/portfolio/component/IdeatorView/MlIdeaView'
 import MlCustomActionButtons from '../components/MlCustomActionButtons'
 
@@ -99,7 +98,7 @@ render(){
   let tabs = this.state.tabs;
   return (
     <div className="col-md-12">
-      <TopIconsList/>
+      <InteractionsCounter/>
       <MlTabComponent tabs={tabs}/>
     </div>
   )

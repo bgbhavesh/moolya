@@ -9,8 +9,8 @@ export default  PopoverActionIcon =function(props){
     return (
 
       <li id={props.actionName} className={props.activeClass}>
-        <a href="#" onClick={props.onClickHandler}> <span
-          className={props.iconClass} id={props.target}></span>
+        <a href="#" onClick={props.onClickHandler} id={props.target}> <span
+          className={props.iconClass}></span>
           <br />{props.actionName}</a>
       </li>
     )

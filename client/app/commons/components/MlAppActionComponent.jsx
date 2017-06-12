@@ -4,6 +4,7 @@
 import React from "react";
 import {render} from "react-dom";
 import _ from "lodash";
+import PopOverAction from '../../../commons/components/popover/PopOverAction';
 
 export default class MlAppActionComponent extends React.Component {
 
@@ -15,12 +16,12 @@ export default class MlAppActionComponent extends React.Component {
   render() {
     let config = [
       {
-        name: 'like',
+        actionName: 'like',
         displayName:'Like',
         iconClass: 'ml fa fa-thumbs-o-up'
       },
       {
-        name: 'review',
+        actionName: 'review',
         displayName:'Review',
         iconClass: 'ml flaticon-ml-note'
       },
@@ -35,12 +36,12 @@ export default class MlAppActionComponent extends React.Component {
         iconClass: 'ml flaticon-ml-handshake'
       },
       {
-        name: 'collaborate',
+        actionName: 'collaborate',
         displayName:'Collaborate',
         iconClass: 'ml flaticon-ml-networking'
       },
       {
-        name: 'conversation',
+        actionName: 'conversation',
         displayName:'Conversation',
         iconClass: 'ml flaticon-ml-chat'
       },

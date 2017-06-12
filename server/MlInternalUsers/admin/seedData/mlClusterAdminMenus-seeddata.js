@@ -1252,6 +1252,18 @@ if(Meteor.isServer){
 
             ]
           },  // @End
+          {
+            "link" : "/admin/clusterSettings/history",
+            "name" : "History",
+            "uniqueId" : "clusterSettings_history",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"settings",
+            "subMenuMappingId": "clusterSettings_history"
+          }
         ]
       },
     ]

@@ -4,15 +4,92 @@ import _ from 'lodash';
 var diff = require('deep-diff').diff;
 
 import './mlModuleCollectionMap.js';
+import MlAdminUserContext from "../mlAuthorization/mlAdminUserContext";
 
 //TODO: Drive the Audit Log through Audit Definition and configuration
 var isAuditEnabled=Meteor.settings.private.isAuditEnabled;
 class MlAuditLog {
   constructor(){
+    this.contextRefNames.bind(this);
   }
+
+  contextRefNames(contextData){
+    var contextData=contextData||{};
+    if(contextData.clusterId && contextData.clusterId=== "all")contextData['clusterName'] ='all';
+    if(contextData.clusterId && contextData.clusterId!== "all"){
+      let clusterDetails = MlClusters.findOne({_id: contextData.clusterId}) || {};
+      contextData['clusterName'] = clusterDetails.clusterName||null;
+    }
+    if(contextData.chapterId && contextData.chapterId && contextData.chapterId === "all")contextData['chapterName'] ='all';
+    if(contextData.chapterId && contextData.chapterId !== "all"){
+      let chapterDetails = MlChapters.findOne({_id: contextData.chapterId}) || {};
+      contextData['chapterName'] = chapterDetails.chapterName||null;
+    }
+    if(contextData.subChapterId && contextData.subChapterId === "all")contextData['subChapterName']='all';
+    if(contextData.subChapterId && contextData.subChapterId !== "all"){
+      let subchapterDetails = MlSubChapters.findOne({_id: contextData.subChapterId}) || {};
+      contextData['subChapterName'] = subchapterDetails.subChapterName||null;
+    }
+    if(contextData.communityId && contextData.communityId === "all")contextData['communityName']='all';
+    if(contextData.communityId && contextData.communityId !== "all"){
+      let communityDetails = MlCommunity.findOne({_id: contextData.communityId}) || {};
+      contextData['communityName'] = communityDetails.communityName||null;
+    }
+    return contextData;
+
+  }
+
+  /*
+   * This method returns the context fields for audit log.
+   * @param userId of logged In User
+   * returns result Object containing context values({clusterId,chapterId,subChapterId,communityId,clusterName,chapterName,subChapterName,communityName})
+   */
+  contextData(userId){
+    var contextData={};
+    var user = Meteor.users.findOne({_id:userId});
+
+    try{
+      if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) { //resolve internal user context based on default profile
+        let details = new MlAdminUserContext().userProfileDetails(userId)||{};
+        contextData = {
+          clusterId: details.defaultProfileHierarchyRefId ? details.defaultProfileHierarchyRefId : null,
+          chapterId: details.defaultChapters && details.defaultChapters[0] ? details.defaultChapters[0] : null,
+          subChapterId: details.defaultSubChapters && details.defaultSubChapters[0] ? details.defaultSubChapters[0] : null,
+          communityId: details.defaultCommunities && details.defaultCommunities[0] ? details.defaultCommunities[0].communityId : null,
+          communityCode: details.defaultCommunities && details.defaultCommunities[0] ? details.defaultCommunities[0].communityCode : null
+
+        };
+
+
+
+      }else if(user&&user.profile&&user.profile.isExternaluser){ //resolve external user context based on default profile
+        let externalUProfile=new MlAppUserContext(userId).userProfileDetails();
+        contextData = {
+          clusterId: externalUProfile.defaultCluster,
+          chapterId: externalUProfile.defaultChapter,
+          subChapterId: externalUProfile.defaultSubChapter,
+          communityId:externalUProfile.defaultCommunity};
+
+      }else{
+        contextData={};
+      }
+      //resolve reference names for context fields
+      this.contextRefNames(contextData);
+    }catch(e){
+      //log error for transaction context
+    }
+    return contextData;
+  }
+
 
   insertAudit(auditParams, context){
     if(!isAuditEnabled){ return;}
+    let contextDetails = {}
+    try{
+      contextDetails = this.contextData(context.userId);
+    }catch(e){
+
+    }
     let userAgent = {
       OS: '-',
       ipAddress: context.ip,
@@ -36,6 +113,8 @@ class MlAuditLog {
       userAgent: userAgent,
       timeStamp: new Date()
     }
+    toInsert =_.extend(toInsert,contextDetails);
+
       auditParams.queryPayload = _.omit(auditParams.queryPayload, ['moduleName','actionName']);
 
       let oldValue = {};
@@ -64,6 +143,7 @@ class MlAuditLog {
           MlAudit.insert(toInsert);
         })
       }catch (err){
+
         toInsert.errorReason=JSON.stringify("Error: " + err + ".")
         MlAudit.insert(toInsert)
       }
@@ -72,6 +152,12 @@ class MlAuditLog {
 
   updateAudit(auditParams, context){
     if(!isAuditEnabled){ return;}
+    let contextDetails = {}
+    try{
+      contextDetails = this.contextData(context.userId);
+    }catch(e){
+
+    }
     let userAgent = {
       OS: '-',
       ipAddress: context.ip,
@@ -98,6 +184,7 @@ class MlAuditLog {
       userAgent: userAgent,
       timeStamp: new Date()
     }
+    toInsert =_.extend(toInsert,contextDetails);
 
     args = _.omit(auditParams.queryPayload, ['moduleName','actionName']);
     let oldValue = auditParams.oldValue;

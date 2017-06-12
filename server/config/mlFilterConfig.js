@@ -52,7 +52,7 @@ if(Meteor.isServer){
           "isActive":true
         },
         {
-          "fieldName" : "registrationInfo.communityDefName",
+          "fieldName" : "registrationInfo.communityDefCode",
           "displayName" : "Community",
           "isDynamic" : true,
           "fieldType" : "List",
@@ -134,7 +134,7 @@ if(Meteor.isServer){
           "isActive":true
         },
         {
-          "fieldName" : "communityType",
+          "fieldName" : "communityCode",
           "displayName" : "Community",
           "isDynamic" : true,
           "fieldType" : "List",
@@ -205,7 +205,7 @@ if(Meteor.isServer){
           "isActive":true
         },
         {
-          "fieldName" : "communityId",
+          "fieldName" : "communityCode",
           "displayName" : "Community",
           "isDynamic" : true,
           "fieldType" : "List",

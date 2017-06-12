@@ -66,7 +66,7 @@ export default class MlAppActionComponent extends React.Component {
         iconClass: 'ml flaticon-ml-cloud-computing-1'
       },
       {
-        actionName: 'uplaod',
+        actionName: 'upload',
         displayName:'Upload',
         iconClass: 'ml flaticon-ml-cloud-computing'
       },

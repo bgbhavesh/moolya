@@ -154,8 +154,8 @@ export default class MlAssignHierarchy extends React.Component {
     if( value.value=="unassign"){
          let allRoles = _.cloneDeep(this.state.allAssignedRoles);
          let currentRole = roles.teamStructureAssignment[index]
-         let reportingRoleAvailableCurrentLayer = _.find(roles, {roleId:currentRole.reportingRole,isAssigned:true})
-         let reportingRoleAvailableAllLayer = _.find(allRoles, {roleId:currentRole.reportingRole,isAssigned:true})
+         let reportingRoleAvailableCurrentLayer = _.find(roles, {reportingRole:currentRole.roleId,isAssigned:true})
+         let reportingRoleAvailableAllLayer = _.find(allRoles, {reportingRole:currentRole.roleId,isAssigned:true})
          if(reportingRoleAvailableCurrentLayer){
                toastr.error("Cannot unassign as reporting role has hierarchy");
          }else if(reportingRoleAvailableAllLayer){

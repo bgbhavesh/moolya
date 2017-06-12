@@ -13,6 +13,7 @@ export async function findRoleActionHandler(roleId) {
           subChapter
           userType
           about
+          isSystemDefined
           assignRoles{
             cluster
             chapter

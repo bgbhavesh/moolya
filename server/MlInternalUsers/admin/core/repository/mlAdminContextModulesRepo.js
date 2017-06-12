@@ -207,7 +207,7 @@ let CoreModules = {
         /*else
           serverQuery={'userId':context.userId,'status':{'$in':['Pending','WIP']}};*/
         break;
-      case 'approved':
+      case 'unauthorize':
         //if(userProfile.roleName === "platformadmin")
           serverQuery={'status':"Approved"};
         /*else

@@ -80,7 +80,7 @@ export default class MlAppMemberDetails extends React.Component{
     let community = this.state.office.availableCommunities.find(function (item) {
       return item.communityId == that.state.memberInfo.communityType;
     });
-    let communityName = community ?  community.communityName : '';
+    let communityName = community ?  community.communityName : ' ';
     return (
       <div>
         <div className="investement-view-content">
@@ -89,22 +89,22 @@ export default class MlAppMemberDetails extends React.Component{
               <div className="form_bg">
                 <form>
                   <div className="form-group">
-                    <input type="text" placeholder="Name" value={this.state.memberInfo.name} disabled={true} className="form-control float-label" id="cluster_name" />
+                    <input type="text" placeholder="Name" defaultValue=" " value={this.state.memberInfo.name} disabled={true} className="form-control float-label" id="cluster_name" />
                   </div>
 
                   <div className="form-group">
-                    <input type="text" placeholder="Phone Number" value={this.state.memberInfo.mobileNumber} disabled={true} className="form-control float-label" id="cluster_name"/>
+                    <input type="text" placeholder="Phone Number" defaultValue=" " value={this.state.memberInfo.mobileNumber} disabled={true} className="form-control float-label" id="cluster_name"/>
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Joining Date" value={this.state.memberInfo.joiningDate ? moment(this.state.memberInfo.joiningDate).format('MM/DD/YYYY HH:mm:ss') : ''} disabled={true} className="form-control float-label" id="cluster_name"/>
-                  </div>
-
-                  <div className="form-group">
-                    <input type="text" placeholder="Email-ID" value={this.state.memberInfo.emailId} disabled={true} className="form-control float-label" id="cluster_name" />
+                    <input type="text" placeholder="Joining Date" defaultValue=" " value={this.state.memberInfo.joiningDate ? moment(this.state.memberInfo.joiningDate).format('MM/DD/YYYY HH:mm:ss') : ' '} disabled={true} className="form-control float-label" id="cluster_name"/>
                   </div>
 
                   <div className="form-group">
-                    <input type="text" placeholder="Role" value={communityName} className="form-control float-label" id="cluster_name" />
+                    <input type="text" placeholder="Email-ID" defaultValue=" " value={this.state.memberInfo.emailId} disabled={true} className="form-control float-label" id="cluster_name" />
+                  </div>
+
+                  <div className="form-group">
+                    <input type="text" placeholder="Role" defaultValue=" " value={communityName} className="form-control float-label" id="cluster_name" />
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Status" value={this.state.memberInfo.isActive ? 'Active' : 'Not Active'} disabled={true}  className="form-control float-label" id="cluster_name" />

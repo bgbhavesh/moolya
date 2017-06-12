@@ -6,7 +6,7 @@ import MlTabComponent from "../../../commons/components/tabcomponent/MlTabCompon
 import MlPortfolioIdeatorBasicDetailsView from '../../../admin/transaction/portfolio/component/IdeatorView/MlPortfolioIdeatorBasicDetailsView'
 import MlPortfolioIdeatorProblemsAndSolutionsView from '../../../admin/transaction/portfolio/component/IdeatorView/MlProblemsAndSolutionsView'
 import MlPortfolioIdeatorAudienceView from '../../../admin/transaction/portfolio/component/IdeatorView/MlAudienceView'
-import MlPortfolioIdeatorLibraryView from '../../../admin/transaction/portfolio/component/IdeatorView/MlPortfolioLibrary'
+import MlPortfolioIdeatorLibraryView from '../../../admin/transaction/portfolio/component/IdeatorView/MlPortfolioLibrary.jsx'
 import MlPortfolioIdeatorStrategyPlansView from '../../../admin/transaction/portfolio/component/IdeatorView/MlStartergyAndPlanningView'
 import MlPortfolioIdeatorLookingForView from '../../../admin/transaction/portfolio/component/IdeatorView/MlLookingForView'
 import MlPortfolioIdeatorPlanningTrademarkView from '../../../admin/transaction/portfolio/component/IdeatorView/MlInAndTrademarkView'

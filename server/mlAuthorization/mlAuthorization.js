@@ -248,14 +248,11 @@ class MlAuthorization
               }
 
               if (actionName == "CREATE") {
-                if ((roleDetails['clusterId'] == req.variables.subChapter['clusterId'] && roleDetails['chapterId'] == req.variables.subChapter['chapterId']) && hierarchy.level >= 2) {
-                  return true
-                }
-              }
+                // if ((roleDetails['clusterId'] == req.variables.subChapter['clusterId'] && roleDetails['chapterId'] == req.variables.subChapter['chapterId']) && hierarchy.level >= 2) {
+                //   return true
+                // }
 
-              if (actionName == "UPDATE") {
-                if(req.subChapterId){
-                  var subChapter = mlDBController.findOne('MlSubChapters', {"_id": req.subChapterId}, context)
+                if(roleDetails['clusterId'] == req.variables.subChapter['clusterId']){
 
                   // cluster admin context
                   if (roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == 'all' && roleDetails['communityId'] == 'all') {
@@ -263,8 +260,28 @@ class MlAuthorization
                   }
 
                   // chapter admin context
-                  else if (roleDetails['chapterId'] == subChapter.chapterId && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all') {
+                  else if (roleDetails['chapterId'] == req.variables.subChapter['chapterId'] && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all') {
                     return true
+                  }
+
+                }
+              }
+
+              if (actionName == "UPDATE") {
+                if(req.subChapterId){
+                  var subChapter = mlDBController.findOne('MlSubChapters', {"_id": req.subChapterId}, context);
+
+                  if(roleDetails['clusterId'] == subChapter['clusterId']){
+
+                    // cluster admin context
+                    if (roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == 'all' && roleDetails['communityId'] == 'all') {
+                      return true
+                    }
+
+                    // chapter admin context
+                    else if (roleDetails['chapterId'] == subChapter.chapterId && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all') {
+                      return true
+                    }
                   }
                 }
               }

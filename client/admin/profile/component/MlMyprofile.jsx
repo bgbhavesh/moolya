@@ -5,6 +5,7 @@ var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar'
 import {updateBackendUserActionHandler} from '../../settings/backendUsers/actions/findBackendUserAction';
 import {initalizeFloatLabel, passwordVisibilityHandler} from '../../utils/formElemUtil';
+import {passwordVerification} from '../actions/addProfilePicAction'
 //import {addProfilePicAction} from "../actions/addProfilePicAction"
 import {multipartASyncFormHandler} from '../../../commons/MlMultipartFormAction'
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
@@ -63,6 +64,7 @@ export default class MlMyProfile extends React.Component {
     this.genderSelect = this.genderSelect.bind(this);
     this.onfoundationDateSelection.bind(this);
     this.checkExistingPassword.bind(this);
+    this.passwordCheck.bind(this);
     // this.showImage.bind(this);
     //this.fileUpdation.bind(this);
     // this.firstNameUpdation.bind(this);
@@ -77,19 +79,23 @@ export default class MlMyProfile extends React.Component {
   }
 
   async checkExistingPassword() {
-    const that = this;
-    this.setState({"pwdValidationMsg": ''})
     let pwd = this.refs.existingPassword.value;
-    var digest = Package.sha.SHA256(pwd);
-    Meteor.call('checkPassword', digest, function (err, result) {
-      if (result) {
-        that.setState({passwordState: 'Passwords match!'})
-      } else {
-        that.setState({passwordState: 'Passwords do not match!'})
-      }
-    });
+    var digest = CryptoJS.SHA256(pwd).toString()
+    console.log(digest);
+    this.passwordCheck(digest);
   }
 
+    async passwordCheck(digest)
+    {
+      const resp = await passwordVerification(digest)
+      console.log(resp);
+      if(resp.success){
+        this.setState({passwordState: 'Passwords match!'})
+      }else{
+        this.setState({passwordState: 'Passwords do not match'})
+      }
+      return resp;
+    }
 
   componentDidMount() {
     $(function () {

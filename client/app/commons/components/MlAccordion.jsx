@@ -20,24 +20,24 @@ export default class MlAccordion extends React.Component {
     let panelOptions = accordion.panelItems || [];
     let panelItems = panelOptions.map(function (option, index) {
       return (
-        <a className="re-btn" data-toggle="collapse" data-parent={"#" + accordionId}
+        <a className="re-btn" data-toggle="collapse" data-parent={"#" + accordionId} key={"panel"+index}
            href={"#" + accordionId + index}>{option.title}</a>
       )
     });
 
     var propz = _.omit(this.props, ['accordionOptions']);
-    let panelItemsContent = panleOptions.map(function (option, index) {
+    let panelItemsContent = panelOptions.map(function (option, index) {
       let isText = option.isText || false;
       let PanelComponent = React.cloneElement(option.contentComponent, propz);
-      return (
-        <div>
-          {isText ? (<div>{option.content}</div>) :
-            (<div id={accordionId + index} className="panel-collapse collapse" style={{'background': '#273545'}}>
+
+      if(isText){
+           return  (<div id={accordionId + index} key={"panelContent"+index} className="panel-collapse collapse" style={option.style}>{option.contentComponent}</div>);
+      }else{
+      return (<div id={accordionId + index} className="panel-collapse collapse" style={option.style}>
               {PanelComponent}
-            </div>)
-          }
-        </div>
-      )
+              </div>)
+     }
+
     });
 
     return (

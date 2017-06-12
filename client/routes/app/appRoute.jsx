@@ -21,6 +21,8 @@ import MlAppDashboard from '../../app/dashboard/components/MlAppDashboard'
 import MlPortfolioLanding from '../../app/commons/components/MlPortfolioLanding'
 import MlAppIdeatorAddIdea from '../../app/ideators/components/MlAppIdeatorAddIdea'
 import MlAppPortfolio from '../../app/commons/components/MlAppPortfolio'
+import   MlPortfolioIdeatorLibraryView from '../../admin/transaction/portfolio/component/IdeatorView/MlPortfolioLibrary.jsx'
+
 
 //profile
 import MlAppMyProfile from '../../app/profile/components/MlAppMyProfile'
@@ -94,6 +96,13 @@ appSection.route('/myOffice', {
   name: 'myOffice',
   action(){
     mount(AppLayout, {appContent: <MlAppMyOffice />, isProfileMenu: true})
+  }
+});
+
+appSection.route('/library', {
+  name: 'library',
+  action(){
+    mount(AppLayout, {appContent: <MlPortfolioIdeatorLibraryView />, isProfileMenu: true})
   }
 });
 

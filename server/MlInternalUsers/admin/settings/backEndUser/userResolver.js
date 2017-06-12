@@ -1373,22 +1373,25 @@ MlResolver.MlQueryResolver['findUserOnToken'] = (obj, args, context, info) => {
     return response
   }
 }
-// MlResolver.MlQueryResolver['passwordVerification'] = (obj, args, context, info) => {
-//   if (context.userId) {
-//       // let userProfile = new MlAdminUserContext().userProfileDetails(context.userId);
-//     var user = mlDBController.findOne('users', {_id: context.userId}, context);
-//     console.log(user);
-//     let pwd = {digest: args.Details, algorithm: 'sha-256'};
-//     var result = Accounts._checkPassword(user, pwd);
-//     if(result.error) {
-//       return false;
-//     }else{
-//       return true
-//     }
-//   }else{
-//     return false;
-//   }
-// }
+MlResolver.MlQueryResolver['passwordVerification'] = (obj, args, context, info) => {
+  if (context.userId) {
+    var user = mlDBController.findOne('users', {_id: context.userId}, context);
+    let pwd = {digest: args.Details, algorithm: 'sha-256'};
+    var result = Accounts._checkPassword(user, pwd);
+    if(result.error) {
+      let code = 404;
+      let errorResponse = new MlRespPayload().errorPayload(result, code);
+      return errorResponse
+    }else{
+
+        let code = 200;
+        let successResponse = new MlRespPayload().successPayload(result, code);
+        return successResponse
+    }
+  }else{
+    return false;
+  }
+}
 
 
 MlResolver.MlMutationResolver['uploadUserImage'] = (obj, args, context, info) => {

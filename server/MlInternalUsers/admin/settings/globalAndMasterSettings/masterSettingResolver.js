@@ -39,7 +39,7 @@ MlResolver.MlMutationResolver['updateMasterSetting'] = (obj, args, context, info
   //   return response;
   // }
 
-  let masterRecord=new MlMasterSettingRepo(context.userId).updateMasterSetting(args);
+  let masterRecord=new MlMasterSettingRepo(context.userId).updateMasterSetting(args, context);
   return masterRecord;
 };
 

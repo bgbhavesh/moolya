@@ -309,7 +309,7 @@ class MlHierarchyAssignment {
             clusterId: roleDetails.isSystemDefined ? "All" : role.clusterId,
             "finalApproval.role":role.roleId
           }, context)
-          if(hierarchy._id){
+          if(hierarchy&&hierarchy._id){
               if(hierarchy.finalApproval.role == role.roleId ){
                 finalApprover = true;
               }

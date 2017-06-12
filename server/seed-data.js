@@ -155,7 +155,10 @@ if(!subchapterAdmin){
     {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"DEPARTMENT"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"SUBDEPARTMENT"}))._id, actions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"TEMPLATE"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"TEMPLATES"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"ROLES"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"HIERARCHY"}))._id, actions:permissions},
+    {moduleId:(_.find(mlModules, {code:"CLUSTER"}))._id, actions:chapterPer},
   ]
   let role = {
     roleName:"subchapteradmin",

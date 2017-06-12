@@ -82,4 +82,15 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
     }
     return {'isValid':true};
   }
+  static  validateBackEndUserExist(registration) {
+
+    var userExist = mlDBController.findOne('users', {"profile.email":registration.email}, context) || {};
+    if(userExist._id){
+      let code = 409;
+      let message ="Backend user registred with the same email"
+      let errResp = new MlRespPayload().errorPayload(message, code);
+      return {'isValid':false,'validationResponse':errResp};
+    }
+    return {'isValid':true};
+  }
 }

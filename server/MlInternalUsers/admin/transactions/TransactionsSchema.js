@@ -201,6 +201,6 @@ let supportedApi = [
   {api:'updateRegistrationTransaction', actionName:'UPDATE', moduleName:"TRANSACTIONSLOG"},
   {api:'selfAssignTransaction', actionName:'UPDATE', moduleName:"TRANSACTIONSLOG"},
   {api:'unAssignTransaction', actionName:'UPDATE', moduleName:"TRANSACTIONSLOG"},
-  {api:'validateTransaction', actionName:'READ', moduleName:"TRANSACTIONSLOG"},
+  {api:'validateTransaction', actionName:'READ', moduleName:"TRANSACTIONSLOG", isWhiteList:true},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

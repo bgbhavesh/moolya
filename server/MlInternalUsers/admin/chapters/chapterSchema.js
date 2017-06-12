@@ -172,7 +172,7 @@ let supportedApi = [
     {api:'fetchChaptersWithoutAll', actionName:'READ', moduleName:"CHAPTER", isWhiteList:true},
     {api:'fetchChapters', actionName:'READ', moduleName:"CHAPTER"},
     {api:'fetchSubChapter', actionName:'READ', moduleName:"SUBCHAPTER"},
-    {api:'fetchSubChaptersSelect', actionName:'READ', moduleName:"SUBCHAPTER"},
+    {api:'fetchSubChaptersSelect', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
     {api:'fetchActiveSubChapters', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
     {api:'fetchSubChaptersSelectNonMoolya', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
     {api:'fetchActiveClusterChapters', actionName:'READ', moduleName:"CHAPTER", isWhiteList:true},

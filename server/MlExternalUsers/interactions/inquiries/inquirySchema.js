@@ -7,7 +7,7 @@ import MlSchemaDef from '../../../commons/mlSchemaDef'
 
 let inquirySchema = `
     type Mutation{
-        createInquiry(requestId:String!,requestType:String!,subject:String!,message:String!):response       
+        createInquiry(resourceId:String!,resourceType:String!,subject:String!,message:String!):response       
     }
 `
 

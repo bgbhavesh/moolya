@@ -8,12 +8,21 @@ export default class Inquiry extends React.Component {
 
   constructor(props) {
     super(props);
-    this.inquiryHandler.bind(this);
     return this;
   }
 
   async inquiryHandler(){
-    var response=await inquiryActionHandler();
+    var resourceDetails=this.props.data||{};
+    var subject=this.refs.subject.value&&this.refs.subject.value.trim()!==""?this.refs.subject.value.trim():null;
+    var message=this.refs.message.value&&this.refs.message.value.trim()!==""?this.refs.message.value.trim():null;
+    var response=await inquiryActionHandler({'resourceId':resourceDetails.resourceId,'resourceType':resourceDetails.resourceType,'subject':subject,'message':message});
+
+    if(response){
+      toastr.success("enquiry send successfully");
+    }else{
+      toastr.error("Failed to send the enquiry");
+    }
+    this.props.toggle();
   }
 
   render() {
@@ -21,13 +30,13 @@ export default class Inquiry extends React.Component {
     return (
       <div>
         <div className="form-group">
-          <input type="text" placeholder="Subject" defaultValue="Inquiry" className="form-control float-label"/>
+          <input type="text" ref='subject' placeholder="subject"  className="form-control float-label"/>
         </div>
         <div className="form-group">
-          <textarea placeholder="Message" defaultValue="Inquiry" className="form-control float-label"></textarea>
+          <textarea placeholder="message" ref='message' className="form-control float-label"></textarea>
         </div>
         <div className="ml_btn">
-          <a href="#" className="save_btn">Send</a>
+          <a href="#" className="save_btn" onClick={this.inquiryHandler.bind(this)}>Send</a>
           <a href="#" className="cancel_btn" onClick={this.props.toggle}>Cancel</a>
         </div>
       </div>

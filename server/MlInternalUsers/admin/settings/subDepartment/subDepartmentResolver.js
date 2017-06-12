@@ -189,7 +189,7 @@ MlResolver.MlQueryResolver['fetchSubDepartmentsHierarchy'] = (obj, args, context
     // let response= MlSubDepartments.find({"departmentId":id,"isActive":true}).fetch()||[];
     let response= mlDBController.find('MlSubDepartments', {"departmentId":id,"isActive":true}, context).fetch()||[];
     if(response){
-      result = _.reject(response, { _id: args.subDepartmentId});
+      result = _.reject(response, {_id: args.subDepartmentId,isSystemDefined:false});
       return result;
     }
     return response;

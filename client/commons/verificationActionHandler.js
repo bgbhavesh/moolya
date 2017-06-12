@@ -1,8 +1,9 @@
 import {client} from "../admin/core/apolloConnection";
 import gql from 'graphql-tag';
+import {appClient} from '../app/core/appConnection';
 
 export async function verifyEmailHandler(token){
-  const result = await client.mutate({
+  const result = await appClient.mutate({
     mutation: gql`
     mutation  ($token:String){
         verifyEmail(
@@ -23,7 +24,7 @@ export async function verifyEmailHandler(token){
 }
 
 export async function verifyMobileNumberHandler(mobileNumber,otp){
-  const result = await client.mutate({
+  const result = await appClient.mutate({
     mutation: gql`
     mutation($mobileNumber:String,$otp:Int){
         verifyMobileNumber(

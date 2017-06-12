@@ -1,6 +1,7 @@
 import _ from "lodash";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 import MlAdminContextQueryConstructor from "./mlAdminContextQueryConstructor";
+MlChaptersTemp = new Mongo.Collection('mlChaptersTemp');
 
 let mergeQueries=function(userFilter,serverFilter)
 {
@@ -72,8 +73,13 @@ let CoreModules = {
     }
     if(fieldsProj.limit){
       pipeline.push({$limit:parseInt(fieldsProj.limit)});
+    } else {
+      pipeline.push({ $out: "mlChaptersTemp" });
     }
     let myAggregateCheck = mlDBController.aggregate('MlChapters',pipeline, context);
+    if(!fieldsProj.limit) {
+      myAggregateCheck = MlChaptersTemp.find({}).fetch();
+    }
     const mytotalRecords=MlChapters.find(resultantQuery,fieldsProj).count();
     return {totalRecords:mytotalRecords,data:myAggregateCheck};
   },

@@ -64,11 +64,11 @@ export default class MlFilterListRepo{
 
         if(listData.length < 1){
           // let allCommuntities = _.contains(communityIds,"all");
-          let allCommuntities = _.contains(communityCode,"all") || [];
+          let allCommuntities = _.contains(communityCode,"all") || null;
           if(allCommuntities){
             result = MlCommunityDefinition.find({isActive : true}).fetch();
           }else{
-            result= MlCommunityDefinition.find({ _id: { $in: allCommuntities },isActive : true}).fetch();
+            result= MlCommunityDefinition.find({ code: { $in: communityCode },isActive : true}).fetch();
           }
 
         }else{
@@ -113,7 +113,7 @@ export default class MlFilterListRepo{
 
             clusterIds = [clusterIds]
 
-          let allclusterIds = _.contains(clusterIds,"all");
+          let allclusterIds = _.contains(clusterIds,"all") || null;
           if(allclusterIds){
             result = MlClusters.find({isActive : true}).fetch();
           }else{
@@ -137,7 +137,7 @@ export default class MlFilterListRepo{
             let arrayOfChapters = _.pluck(requestParams.filteredListId, 'value') || [];
             result= MlChapters.find({ clusterId: {$in : arrayOfChapters},isActive : true}).fetch();
           }else{
-            let allchapterIds = _.contains(chapterIds,"all");
+            let allchapterIds = _.contains(chapterIds,"all") || null;
             if(allchapterIds){
               result = MlChapters.find({isActive : true}).fetch();
             }else{
@@ -166,7 +166,7 @@ export default class MlFilterListRepo{
             let arrayOfGenSubChapter = _.pluck(requestParams.filteredListId, 'value') || [];
             result= MlSubChapters.find({clusterId: {$in : arrayOfGenSubChapter}, chapterId: {$in : arrayOfGenSubChapter},isActive : true}).fetch();
           }else{
-            let allsubChapterIds = _.contains(subChapterIds,"all");
+            let allsubChapterIds = _.contains(subChapterIds,"all") || null;
             if(allsubChapterIds){
               result = MlSubChapters.find({isActive : true}).fetch();
             }else{

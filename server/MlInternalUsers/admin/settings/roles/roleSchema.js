@@ -46,6 +46,7 @@ let Role = `
         modules: [Modules],
         isActive:Boolean,
         isHierarchyAssigned:Boolean
+        isSystemDefined:Boolean
   }
   
   scalar Date

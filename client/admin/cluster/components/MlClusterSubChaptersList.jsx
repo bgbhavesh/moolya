@@ -2,21 +2,36 @@ import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
 import clusterRoutes from '../actions/clustersRoutes';
 import {getAdminUserContext} from "../../../commons/getAdminUserContext";
+import {findRoleActionHandler} from '../../settings/rolesAndPermissions/actions/findRoleAction'
 export default class MlClusterSubChaptersList extends Component
 {
   constructor(props){
     super(props)
     this.state={
-      data:[]
+      data:[],
+      isSystemDefined:null
     }
     return this;
+  }
+  componentWillMount() {
+    const resp = this.findRole();
+    return resp;
+  }
+  async findRole() {
+    var loggedInUser = getAdminUserContext();
+    let roleid = loggedInUser.roleId
+    const response = await findRoleActionHandler(roleid);
+    if (response) {
+      this.setState({isSystemDefined:response.isSystemDefined})
+    }
   }
 
   render(){
     const data=this.props.data||[];
     let list = null;
     var loggedInUser = getAdminUserContext();
-    const subChapter =  (loggedInUser && loggedInUser.hierarchyLevel > 1) ? [{'href': '/admin/myroute'}] : []
+    let isSystemDefined=this.state.isSystemDefined;
+    const subChapter =  (loggedInUser && loggedInUser.hierarchyLevel > 1&& isSystemDefined) ? [{'href': '/admin/myroute'}] : []
     const addSubChapter = subChapter.map(function (item,idx) {
       return (
         <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>

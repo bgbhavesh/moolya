@@ -77,6 +77,13 @@ MlModuleCollectionMap['MlOfficeTransaction'] = 'OFFICE';
 MlModuleCollectionMap['MlOfficeInvite'] = 'OFFICE';
 MlModuleCollectionMap['MlUserSubscriptions'] = 'SUBSCRIPTIONS';
 MlModuleCollectionMap['MlLikes'] = 'INTERACTION';
+MlModuleCollectionMap['MlInquiries'] = 'INTERACTION';
+MlModuleCollectionMap['MlReviews'] = 'INTERACTION';
+MlModuleCollectionMap['MlViews'] = 'INTERACTION';
+MlModuleCollectionMap['MlComments'] = 'INTERACTION';
+MlModuleCollectionMap['MlFeedBacks'] = 'INTERACTION';
+MlModuleCollectionMap['MlConnections'] = 'INTERACTION';
+MlModuleCollectionMap['MlFollowings'] = 'INTERACTION';
 
 module.exports=  MlModuleCollectionMap;
 

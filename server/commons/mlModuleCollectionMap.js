@@ -67,6 +67,7 @@ MlModuleCollectionMap['MlPortfolioLibrary'] = 'PORTFOLIOLIBRARY';
 MlModuleCollectionMap['MlHierarchyAssignments'] = 'HIERARCHY';
 
 //Process Setup
+MlModuleCollectionMap['MlActions'] = 'MlActions';
 MlModuleCollectionMap['MlProcessSetup'] = 'PROCESSSETUP';
 MlModuleCollectionMap['MlProcessTransactions'] = 'PROCESSSETUP';
 //office

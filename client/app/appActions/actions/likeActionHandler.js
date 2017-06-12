@@ -25,5 +25,11 @@ export async function likeActionHandler(details) {
   return id;
 }
 
+export default async function handleLikeAction(details){
+
+    var resp = await likeActionHandler(details);
+    return resp;
+}
+
 
 

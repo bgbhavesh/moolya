@@ -10,14 +10,14 @@ MlResolver.MlMutationResolver['likeRequest'] = (obj, args, context, info) =>{
     if(args && context && context.userId){
       var resp=null;
         try {
-            let user =mlDBController.findOne({_id:context.userId}, context);
+            let user =mlDBController.findOne('users',{_id:context.userId}, context);
             //let isValid = validateExternalUser(fromuser)
             /*if(!isValid){let code = 400;let response = new MlRespPayload().errorPayload('Invalid User', code);
              return response;}*/
-          let likeRequest={requestId:args.requestId,requestType:args.requestType,isActive:true,userId:user._id,
+          let likeRequest={resourceId:args.resourceId,resourceType:args.resourceType,isActive:true,userId:user._id,
                        userEmail:user.username,createdOn:new Date()};
 
-          resp = MlLikes.insert(likeRequest);
+          resp = mlDBController.update('MlLikes',{'resourceId':args.resourceId,userId:user._id},likeRequest,{$set: true,upsert: true},context);
 
           if(resp){
             //todo: create a repo for like

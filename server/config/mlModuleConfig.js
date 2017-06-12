@@ -69,6 +69,7 @@ let modules = [
     'office',
     "processSetup",
     'subscriptions',
+    'interaction',
     'actions'
   ];
 

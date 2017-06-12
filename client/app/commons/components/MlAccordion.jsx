@@ -20,7 +20,7 @@ export default class MlAccordion extends React.Component {
     let panelOptions = accordion.panelItems || [];
     let panelItems = panelOptions.map(function (option, index) {
       return (
-        <a className="re-btn" data-toggle="collapse" data-parent={"#" + accordionId} key={"panel"+index} style={option.style}
+        <a className="re-btn" data-toggle="collapse" data-parent={"#" + accordionId} key={"panel"+index}
            href={"#" + accordionId + index}>{option.title}</a>
       )
     });

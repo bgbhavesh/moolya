@@ -26,7 +26,7 @@ export default class PopOverAction extends React.Component {
 
 
   render() {
-   let PopOverComponent =React.cloneElement(this.props.popOverComponent,{config:this.props,data:this.state.data,closePopOver:this.toggle});
+   let PopOverComponent =React.cloneElement(this.props.popOverComponent,{config:this.props,data:this.state.data,closePopOver:this.toggle,toggle:this.toggle});
     //let ActionComponent =React.cloneElement(this.props.actionComponent,{actionConfig:this.props,clickHandler:this.clickHandler});
     let ActionComponent =this.props.actionComponent;
     return (

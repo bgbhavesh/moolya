@@ -15,6 +15,14 @@ let AuditLogSchema = `
            field:String
            fieldName:String
            docId:String
+           clusterId:String
+           chapterId:String
+           subChapterId:String
+           clusterName:String
+           chapterName:String
+           subChapterName:String
+           communityId:String
+           communityCode:String
       }
       
       type Query{

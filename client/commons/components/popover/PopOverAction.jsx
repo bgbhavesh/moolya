@@ -19,7 +19,6 @@ export default class PopOverAction extends React.Component {
   }
 
   clickHandler(data){
-    console.log(data);
     this.setState({data:data,popoverOpen: !this.state.popoverOpen});
   }
 

@@ -402,27 +402,14 @@ class MlAuthorization
           }
           break;
           case 'ROLES':{
-            if(roleDetails['clusterId'] == req.variables['clusterId'])
-            {
-              // cluster admin context
-              if(roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
-                return true;
-              }
-              // chapter admin context
-              else if(roleDetails['chapterId'] == req.variables['chapterId'] && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
-                return true
-              }
-
-              // sub chapter admin context
-              else if(roleDetails['chapterId'] == req.variables['chapterId'] && roleDetails['subChapterId'] == req.variables['subChapterId'] && roleDetails['communityId'] == 'all'){
-                return true
-              }
-
-              // community admin context
-              else if(roleDetails['chapterId'] == req.variables['chapterId'] && roleDetails['subChapterId'] == req.variables['subChapterId'] && roleDetails['communityId'] == 'all'){
-                return true
-              }
-
+            if(actionName == 'READ'){
+              return true;
+            }
+          }
+          break;
+          case 'TEMPLATES':{
+            if(actionName == 'READ'){
+              return true;
             }
           }
           break;

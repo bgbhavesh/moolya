@@ -19,6 +19,7 @@ export default class MlOfficeItem extends React.Component {
     this.state={
       transId:props.data.id,
       transInfo:{},
+      currentSlideIndex:0,
       userInfo:{},
       officeInfo:{
         availableCommunities:[]
@@ -28,9 +29,18 @@ export default class MlOfficeItem extends React.Component {
       about:'',
       isGenerateLinkDisable: false
     }
-    this.getTransaction(this.state.transId);
+    this.getTransaction.bind(this);
+    this.initializeSwiper.bind(this);
+    this.onSlideIndexChange.bind(this);
     return this;
   }
+
+  onSlideIndexChange(swiper){
+    if(this.state.currentSlideIndex!==swiper.activeIndex){
+      this.setState({'currentSlideIndex':swiper.activeIndex});
+    }
+  }
+
   componentDidMount() {
     initalizeFloatLabel();
     $(function() {
@@ -44,8 +54,29 @@ export default class MlOfficeItem extends React.Component {
         $(this).parent('.switch').removeClass('on');
       }
     });
-    // console.log(this.props.data)
+    this.initializeSwiper();
   }
+
+  initializeSwiper(){
+    const transId = this.state.transId;
+      setTimeout(function () {
+        let swiper =  new Swiper('#office_item'+transId, {
+          effect: 'coverflow',
+          slidesPerView: 3,
+          grabCursor: true,
+          centeredSlides: true,
+          initialSlide: 0
+        });
+      },100);
+  };
+
+  async componentWillMount() {
+    await this.getTransaction(this.state.transId);
+  }
+
+  componentWillReceiveProps(){
+
+ }
 
   async getTransaction(id){
     let response = await findOfficeTransactionHandler(id);
@@ -57,6 +88,7 @@ export default class MlOfficeItem extends React.Component {
           transInfo: result.trans,
           userInfo: result.user,
           officeInfo: result.office,
+          currentSlideIndex:0,
           tax: result.trans.orderSubscriptionDetails && result.trans.orderSubscriptionDetails.isTaxInclusive ? result.trans.orderSubscriptionDetails.isTaxInclusive : false,
           cost: result.trans.orderSubscriptionDetails && result.trans.orderSubscriptionDetails.cost ? result.trans.orderSubscriptionDetails.cost : '',
           about: result.trans.orderSubscriptionDetails && result.trans.orderSubscriptionDetails.about ? result.trans.orderSubscriptionDetails.about : '',
@@ -138,7 +170,7 @@ export default class MlOfficeItem extends React.Component {
             <a href={"#1a"+transId} data-toggle="tab">Customer Details</a>
           </li>
           <li>
-            <a href={"#2a"+transId} data-toggle="tab">Order Details</a>
+            <a href={"#2a"+transId} onClick={this.initializeSwiper()} data-toggle="tab">Order Details</a>
           </li>
           <li>
             <a href={"#3a"+transId} data-toggle="tab">Payment Details</a>
@@ -213,11 +245,13 @@ export default class MlOfficeItem extends React.Component {
                   <div className="slider"></div>
                 </label>
                   <span className="state_label">All Communities</span>
+                  <div className="clearfix" />
                 </div>
+                <br className="clearfix" />
+                <br className="clearfix" />
                 <div className="clearfix" />
 
-                <div className="swiper-container blocks_in_form">
-                  <div className="clearfix" />
+                <div className="swiper-container office_item" id={'office_item'+transId}>
                   <div className="swiper-wrapper">
                     {this.state.officeInfo.availableCommunities.map(function (item, i) {
                       return(

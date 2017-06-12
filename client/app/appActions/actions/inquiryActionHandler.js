@@ -23,8 +23,11 @@ export async function inquiryActionHandler(details) {
       message:details.message
     }
   })
-  const id = result.data.createInquiry;
-  return id;
+  var resp = result.data.createInquiry;
+  if (resp.success) {
+   return resp;
+  }
+  return null;
 }
 
 

@@ -293,6 +293,35 @@ let ideatorPortfolioSchema = `
         isActive:Boolean
     }
     
+    input fileAttributes{
+    fileName:String,
+    fileUrl:String,
+    fileType:String
+    }
+    
+    type FileAttributes{
+    fileName:String,
+    fileUrl:String,
+    fileType:String
+    }
+    
+    input detailsInput{
+      userId:String,
+      images:[fileAttributes],
+      videos:[fileAttributes],
+      documents:[fileAttributes],
+      templates:[fileAttributes]
+    }
+    
+     type Details{
+      userId:String,
+      images:[FileAttributes],
+      videos:[FileAttributes],
+      documents:[FileAttributes],
+      templates:[FileAttributes]
+    }
+    
+    
     type Query{
         fetchIdeatorPortfolioDetails(portfoliodetailsId:String!):portfolioIdeatorDetailsInfo
         fetchIdeatorPortfolioIdeas(ideaId:String!):ideasObject
@@ -307,6 +336,8 @@ let ideatorPortfolioSchema = `
         fetchComments(annotationId:String): [commentsInfo]
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
         fetchIdeas(portfolioId:String):[Idea]
+        fetchLibrary(userId:String):[Details]
+        fetchAllowableFormats:Boolean
     }
     
     type Mutation{
@@ -318,6 +349,7 @@ let ideatorPortfolioSchema = `
         resolveComment(commentId:String): response
         reopenComment(commentId:String): response
         createIdea(idea:idea):response
+        createLibrary(detailsInput:detailsInput):response
         updateIdea(ideaId:String, idea:idea):response
     }
 `
@@ -338,11 +370,15 @@ let supportedApi = [
   {api:'fetchComments', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'fetchPortfolioMenu', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchIdeas', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchAllowableFormats', actionName:'READ', moduleName:"PORTFOLIO"},
+
+
 
   {api:'createIdeatorPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
   {api:'createAnnotation', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'createComment', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'createIdea', actionName:'CREATE', moduleName:"PORTFOLIO"},
+  {api:'createLibrary', actionName:'CREATE', moduleName:"PORTFOLIO"},
   {api:'updateAnnotation', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'updateIdeatorPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
   {api:'updateIdea', actionName:'UPDATE', moduleName:"PORTFOLIO"},

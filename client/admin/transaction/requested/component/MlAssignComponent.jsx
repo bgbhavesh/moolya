@@ -84,16 +84,19 @@ export default class MlAssignComponent extends React.Component {
         this.setState({selectedCluster:null,selectedChapter:null,selectedSubChapter:null,selectedCommunity:null,selectedDepartment:null,selectedSubDepartment:null,selectedRole:null,selectedUser:null})
         toastr.success("Transaction assigned to user successfully");
         this.props.closePopOver(false)
-        FlowRouter.go("/admin/transactions/registrationRequested");
+        FlowRouter.reload();
+        //FlowRouter.go("/admin/transactions/registrationRequested");
       }else{
         toastr.error("Wrong Hierarchy");
         this.props.closePopOver(false)
-        FlowRouter.go("/admin/transactions/registrationRequested");
+        FlowRouter.reload();
+        //FlowRouter.go("/admin/transactions/registrationRequested");
       }
     }else{
       toastr.error("Wrong assignment");
       this.props.closePopOver(false)
-      FlowRouter.go("/admin/transactions/registrationRequested");
+      FlowRouter.reload();
+      //FlowRouter.go("/admin/transactions/registrationRequested");
     }
 
   }
@@ -104,11 +107,13 @@ export default class MlAssignComponent extends React.Component {
     if(response.success){
       toastr.success("Self Assignment successfull");
       this.props.closePopOver(false)
-      FlowRouter.go("/admin/transactions/registrationRequested");
+      FlowRouter.reload();
+      //FlowRouter.go("/admin/transactions/registrationRequested");
     }else{
       toastr.error("Wrong Hierarchy");
       this.props.closePopOver(false)
-      FlowRouter.go("/admin/transactions/registrationRequested");
+      FlowRouter.reload();
+      //FlowRouter.go("/admin/transactions/registrationRequested");
     }
   }
 
@@ -117,11 +122,13 @@ export default class MlAssignComponent extends React.Component {
     if(response.success){
       toastr.success("UnAssignment successfull");
       this.props.closePopOver(false)
-      FlowRouter.go("/admin/transactions/registrationRequested");
+      FlowRouter.reload();
+      //FlowRouter.go("/admin/transactions/registrationRequested");
     }else{
       toastr.error("Wrong Hierarchy");
       this.props.closePopOver(false)
-      FlowRouter.go("/admin/transactions/registrationRequested");
+      FlowRouter.reload();
+      //FlowRouter.go("/admin/transactions/registrationRequested");
     }
   }
 

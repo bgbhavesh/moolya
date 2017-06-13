@@ -85,6 +85,8 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
         "quote" : value.quote.quote,
         "ranges" : value.quote.ranges,
         "userName" : value.userName,
+        "roleName" : value.roleName,
+        "profileImage" : value.profileImage,
         "createdAt" : value.createdAt
       })
     })

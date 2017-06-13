@@ -22,7 +22,8 @@ export default class MlCustomFilter extends Component {
       selectedToDate : null,
       filterQueries : [],
       dateQuery : {},
-      selectedDropdownValues : []
+      selectedDropdownValues : [],
+      isActiveField:''
     }
 
     this.fetchFilters.bind(this);
@@ -48,6 +49,21 @@ export default class MlCustomFilter extends Component {
   async fetchFilters(){
     const response = await findModuleCustomFilterActionHandler(this.props.moduleName);
     this.setState({filterFields : response})
+    let responseFields =  response&&response.filterFields || []
+    for(let i=0;i<responseFields.length;i++){
+      if(responseFields[i].fieldResolverName == "Gen_Clusters" && responseFields[i].isActive){
+        this.setState({isActiveField : "Cluster"})
+        break
+      }else if(responseFields[i].fieldResolverName == "Gen_Chapters" && responseFields[i].isActive){
+        this.setState({isActiveField : "Chapter"})
+        break
+      }else if(responseFields[i].fieldResolverName == "Gen_SubChapters" && responseFields[i].isActive){
+        this.setState({isActiveField : "SubChapter"})
+        break
+      }
+
+    }
+
 
   }
   onFromDateSelection(fieldName,subType,displayName,event) {
@@ -242,6 +258,7 @@ export default class MlCustomFilter extends Component {
                   return val;
                 });
 
+                let fieldActive = that.state.isActiveField || ""
 
              //   console.log(fieldListDataArray)
 
@@ -256,14 +273,14 @@ export default class MlCustomFilter extends Component {
                   listSelect = true
                   select =  "selectedOption_"+options.fieldName;
                   selectedValue = that.state[select];
-                  filterListQuery=gql`query fetchSelectedFilterListDropDown($moduleName:String!,$list:[fieldListSpecifics],$filteredListId : [GenericFilter]){
-                    data:fetchSelectedFilterListDropDown(moduleName:$moduleName,list:$list,filteredListId:$filteredListId) {
+                  filterListQuery=gql`query fetchSelectedFilterListDropDown($moduleName:String!,$list:[fieldListSpecifics],$filteredListId : [GenericFilter],$fieldActive:String!){
+                    data:fetchSelectedFilterListDropDown(moduleName:$moduleName,list:$list,filteredListId:$filteredListId,fieldActive:$fieldActive) {
                      label
                       value
                     }
                   }`;
 
-                    listOptions={options: { variables: {moduleName:options.fieldResolverName,list:fieldListDataArray,filteredListId:that.state.filterQueries}}}
+                    listOptions={options: { variables: {moduleName:options.fieldResolverName,list:fieldListDataArray,filteredListId:that.state.filterQueries,fieldActive:fieldActive}}}
 
 
 

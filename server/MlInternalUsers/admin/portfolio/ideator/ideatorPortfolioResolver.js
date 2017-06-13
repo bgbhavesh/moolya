@@ -4,6 +4,7 @@
 import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
 import MlUserContext from "../../../../MlExternalUsers/mlUserContext";
+import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 
 var _ = require('lodash')
 
@@ -171,10 +172,22 @@ MlResolver.MlQueryResolver['fetchAnnotations'] = (obj, args, context, info) => {
     try {
         if(args.portfoliodetailsId && args.docId){
             let annotatorObj = MlAnnotator.find({"$and":[{"portfolioId":args.portfoliodetailsId, "referenceDocId":args.docId}]}).fetch()
+            var firstName='';var lastName='';var profileImage = ''
             if(annotatorObj.length > 0){
                 _.each(annotatorObj, function (value) {
                       let quote = JSON.parse(value['quote'])
-                      annotators.push({annotatorId:value._id, quote:quote,userName: value.userName,createdAt:value.createdAt})
+                      var user = Meteor.users.findOne({_id:value.userId});
+                      if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+                        firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+                        lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+                        profileImage=user.profile&&user.profile.profileImage?user.profile.profileImage:''
+                      }else if(user&&user.profile&&user.profile.isExternaluser){
+                        firstName=(user.profile || {}).firstName||'';
+                        lastName =(user.profile || {}).lastName||'';
+                        profileImage=user.profile&&user.profile.profileImage?user.profile.profileImage:''
+                      }
+                    let details = new MlAdminUserContext().userProfileDetails(value.userId)||{};
+                      annotators.push({annotatorId:value._id, quote:quote,userName: firstName +''+ lastName,createdAt:value.createdAt,roleName:details.roleName,profileImage:profileImage})
                 })
             }
         }

@@ -10,6 +10,7 @@ let requestsSchema = `
         transactionTypeId         : String
         requestId                 : String
         userId                    : String
+        emailId                   : String
         requestTypeName           : String
         requestTypeId             : String
         requestDescription        : String
@@ -57,6 +58,7 @@ let requestsSchema = `
         transactionTypeId         : String
         requestId                 : String
         userId                    : String
+        emailId                   : String
         requestTypeName           : String
         requestTypeId             : String
         requestDescription        : String

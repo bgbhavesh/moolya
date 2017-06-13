@@ -885,7 +885,7 @@ $menuTrans:all 0.5s linear;
   img{width: 215px; margin-top: -130px;}
   h3{font-size:50px;}
   p{margin-top:10px;}
-  .ideabtn{display: inline-block; background: $mlRed; border: 0px; line-height: 27px; position: relative; text-decoration: none; font-size: 14px; height: 30px;  margin: 5px 0px 0px 0px;color: $mlWhite;text-shadow: none;text-align: center;padding:0px 10px}
+  .ideabtn{display: inline-block; background: $mlRed; border: 0px; line-height: 27px; position: relative; text-decoration: none; font-size: 14px; height: 30px;  margin: 5px 0px 0px 0px;color: $mlWhite;text-shadow: none;text-align: center;padding:0px 10px;cursor: pointer;}
   .ideabtn:after{position:absolute;right:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 0 15px 10px;border-color: transparent transparent transparent $mlRed;top: 0px;}
   .ideabtn:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent $mlRed transparent transparent;top: 0px;}
 
@@ -907,7 +907,7 @@ $menuTrans:all 0.5s linear;
   img{width: 215px; margin-top: -90px;}
   h3{font-size:30px;background: $mlRed; color: #fff; border-radius: 10px 10px 0 0; padding: 2px 0px 5px; margin-bottom: 10px;}
   p{margin-top:10px;}
-  .ideabtn{display: inline-block; background: $mlRed; border: 0px; line-height: 37px; position: relative; text-decoration: none; font-size: 18px; height: 40px; margin: 5px 0px 0px 0px; color: #ffffff; text-shadow: none; text-align: center; padding: 0px 10px;}
+  .ideabtn{display: inline-block; background: $mlRed; border: 0px; line-height: 37px; position: relative; text-decoration: none; font-size: 18px; height: 40px; margin: 5px 0px 0px 0px; color: #ffffff; text-shadow: none; text-align: center; padding: 0px 10px;cursor: pointer;}
   .ideabtn:after{position: absolute; right: -15px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 20px 0 20px 15px; border-color: transparent transparent transparent $mlRed; top: 0px;}
   .ideabtn:before{position: absolute; left: -15px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 20px 15px 20px 0px; border-color: transparent $mlRed transparent transparent; top: 0px;}
 
@@ -918,7 +918,7 @@ $menuTrans:all 0.5s linear;
   img{width: 215px; margin-top: -90px;}
   h3{font-size:28px;}
   p{margin-top:10px;}
-  .ideabtn{display: inline-block; background: $mlRed; border: 0px; line-height: 37px; position: relative; text-decoration: none; font-size: 18px; height: 40px; margin: 5px 0px 0px 0px; color: #ffffff; text-shadow: none; text-align: center; padding: 0px 10px;}
+  .ideabtn{display: inline-block; background: $mlRed; border: 0px; line-height: 37px; position: relative; text-decoration: none; font-size: 18px; height: 40px; margin: 5px 0px 0px 0px; color: #ffffff; text-shadow: none; text-align: center; padding: 0px 10px;cursor: pointer;}
   .ideabtn:after{position: absolute; right: -15px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 20px 0 20px 15px; border-color: transparent transparent transparent $mlRed; top: 0px;}
   .ideabtn:before{position: absolute; left: -15px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 20px 15px 20px 0px; border-color: transparent $mlRed transparent transparent; top: 0px;}
 

@@ -80,11 +80,11 @@ MlResolver.MlQueryResolver['findOfficeTransaction'] = (obj, args, context, info)
     {'$project':{ trans:1, user: { createdAt : "$user.createdAt", name : '$user.profile.displayName', email : '$user.username', mobile : '$user.profile.mobileNumber' } }},
     {'$lookup':{ from: 'mlOffice', localField: 'trans.officeId', foreignField: '_id', as: 'office'}},
     {'$unwind':'$office'},
-    {'$lookup':{ from: 'mlUserSubscriptions', localField: '_id', foreignField: 'resId', as: 'subscriptions'}},
-    {'$unwind':'$subscriptions'},
-    {'$sort':{'subscriptions._id':-1}},
-    {'$limit':1},
-    {'$project':{ trans:1, user:1, office:1, subscription:{ start:'$subscriptions.subscriptionDate', end:'$subscriptions.subscriptionEndDate' }}}
+    // {'$lookup':{ from: 'mlUserSubscriptions', localField: '_id', foreignField: 'resId', as: 'subscriptions'}},
+    // {'$unwind':'$subscriptions'},
+    // {'$sort':{'subscriptions._id':-1}},
+    // {'$limit':1},
+    // {'$project':{ trans:1, user:1, office:1, subscription:{ start:'$subscriptions.subscriptionDate', end:'$subscriptions.subscriptionEndDate' }}}
   ];
   let result = mlDBController.aggregate('MlOfficeTransaction', pipeline);
   let code = 200;

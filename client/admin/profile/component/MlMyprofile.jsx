@@ -199,7 +199,7 @@ export default class MlMyProfile extends React.Component {
         loading: false, firstName: response.profile.InternalUprofile.moolyaProfile.firstName,
         middleName: response.profile.InternalUprofile.moolyaProfile.middleName,
         lastName: response.profile.InternalUprofile.moolyaProfile.lastName,
-        userName: response.profile.InternalUprofile.moolyaProfile.displayName,
+        userName: response.profile.InternalUprofile.moolyaProfile.email,
         uploadedProfilePic: response.profile.profileImage,
         genderSelect: response.profile.genderType,
         dateOfBirth: moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat)

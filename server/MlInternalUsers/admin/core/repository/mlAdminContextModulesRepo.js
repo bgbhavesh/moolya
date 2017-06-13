@@ -382,7 +382,7 @@ let CoreModules = {
     let pipleline = [
       {'$lookup':{ from:'users',localField:'userId', 'foreignField':'_id', as:'user' }},
       {'$unwind':'$user'},
-      {'$project':{ 'userName':'$user.profile.displayName', 'userId':1,'transactionId':1,'clusterName':1,'chapterName':1,'subChapterName':1, 'communityName':1, 'status':1 }}
+      {'$project':{ 'userName':'$user.profile.displayName', 'dateTime':1, 'userId':1,'transactionId':1,'clusterName':1,'chapterName':1,'subChapterName':1, 'communityName':1, 'status':1 }}
     ];
     if(Object.keys(resultantQuery).length){
       pipleline.push({'$match':resultantQuery});

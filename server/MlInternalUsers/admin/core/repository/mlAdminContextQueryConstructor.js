@@ -108,7 +108,7 @@ class MlAdminContextQueryConstructor
             _.forIn(queryObj,function(value, key) {
               let obj={};
               obj[key]=value;
-              if(value&&!_.isEmpty(value)){
+              if(value){
                   andQueryObj.push(obj);
               }
         });

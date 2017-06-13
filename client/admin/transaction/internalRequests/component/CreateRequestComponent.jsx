@@ -33,6 +33,7 @@ export default class CreateRequestComponent extends Component {
       subChapter:this.state.subChapter,
       community:this.state.community,
       communityName: " ",
+      emailId: " ",
       requestsStatus:{
         code: "1",
         description:"requested"

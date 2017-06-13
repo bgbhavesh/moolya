@@ -392,19 +392,19 @@ let templateData =  this.state.templateSpecifications || [];
           </div>
         </div>
 
-        <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
+        {/*<div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">*/}
 
-          <div className="panel panel-default">
-            <div className="panel-heading">
-              Documents<input type="file" className="upload_file upload" name="file_source" />
+          {/*<div className="panel panel-default">*/}
+            {/*<div className="panel-heading">*/}
+              {/*Documents<input type="file" className="upload_file upload" name="file_source" />*/}
 
-          </div>
-            <div className="panel-body">
-              {/*<div className="thumbnail"><FontAwesome name='unlock'/><a className="view-pdf" href="/images/sample.pdf"><img src="/images/ppt.png"/></a><div className="title">Document</div></div>*/}
-              <div className="thumbnail"><FontAwesome name='unlock'/><a data-toggle="modal" data-target=".pdfpop" href="#"><img src="/images/ppt.png"/></a><div className="title">Document</div></div>
-            </div>
-          </div>
-        </div>
+          {/*</div>*/}
+            {/*<div className="panel-body">*/}
+              {/*/!*<div className="thumbnail"><FontAwesome name='unlock'/><a className="view-pdf" href="/images/sample.pdf"><img src="/images/ppt.png"/></a><div className="title">Document</div></div>*!/*/}
+              {/*<div className="thumbnail"><FontAwesome name='unlock'/><a data-toggle="modal" data-target=".pdfpop" href="#"><img src="/images/ppt.png"/></a><div className="title">Document</div></div>*/}
+            {/*</div>*/}
+          {/*</div>*/}
+        {/*</div>*/}
         <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-right">
           <div className="panel panel-default">
             <div className="panel-heading">
@@ -438,7 +438,6 @@ let templateData =  this.state.templateSpecifications || [];
               <li>
             <div className="panel-body">
               {videos}
-                <div className="title">Video</div>
             </div>
               </li>
             </ul>

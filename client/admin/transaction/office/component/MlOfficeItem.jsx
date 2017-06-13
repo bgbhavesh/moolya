@@ -2,16 +2,13 @@
  * Created by pankaj on 6/6/17.
  */
 
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-var Select = require('react-select');
-import {initalizeFloatLabel} from '../../../utils/formElemUtil'
+import React from 'react'
+import{initalizeFloatLabel} from '../../../utils/formElemUtil'
 import {findOfficeTransactionHandler} from '../actions/findOfficeTranscation'
 import {updateSubcriptionDetail} from '../actions/updateSubscriptionDetail'
 import {updateOfficeStatus} from '../actions/updateOfficeStatus'
 import moment from 'moment'
+var Select = require('react-select');
 
 export default class MlOfficeItem extends React.Component {
   constructor(props){
@@ -81,10 +78,25 @@ export default class MlOfficeItem extends React.Component {
   async getTransaction(id){
     let response = await findOfficeTransactionHandler(id);
     if(response){
+      let duration = '';
       let result = JSON.parse(response.result)[0];
       if(result){
+        console.log(result);
+        if(result.subscription){
+          let startDate = new moment(result.subscription.start);
+          let endDate = new moment(result.subscription.end);
+          let yearDiff = endDate.diff(startDate, 'years');
+          let monthDiff = endDate.diff(startDate, 'months')%(yearDiff ? yearDiff : 1);
+          if(yearDiff){
+            duration = duration+ yearDiff +' Year ';
+          }
+          if(monthDiff){
+            duration = duration+ monthDiff +' Month';
+          }
+        }
         result.office.availableCommunities = result.office.availableCommunities && result.office.availableCommunities.length ? result.office.availableCommunities : [];
         this.setState({
+          duration: duration,
           transInfo: result.trans,
           userInfo: result.user,
           officeInfo: result.office,
@@ -299,7 +311,7 @@ export default class MlOfficeItem extends React.Component {
                       <input type="text" defaultValue="123456" placeholder="Zip Code" value={this.state.officeInfo.zipCode} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue="duration" placeholder ="Duration" value='' className="form-control float-label" id=""/>
+                      <input type="text" defaultValue="duration" value={this.state.duration} placeholder ="" className="form-control float-label" id=""/>
                     </div>
                   </div>
                 </div>

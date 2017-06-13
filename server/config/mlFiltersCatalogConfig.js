@@ -30,7 +30,7 @@ if(Meteor.isServer){
           isDynamic:true
         },
         {
-          name:"communityType",
+          name:"communityCode",
           type:'List',
           resolverName : "Gen_Community",
           isDynamic:true
@@ -98,7 +98,7 @@ if(Meteor.isServer){
           isDynamic:true
         },
         {
-          name:"registrationInfo.communityDefName",
+          name:"registrationInfo.communityDefCode",
           type:'List',
           resolverName : "Gen_Community",
           isDynamic:true
@@ -150,7 +150,7 @@ if(Meteor.isServer){
           isDynamic:true
         },
         {
-          name:"communityType",
+          name:"communityCode",
           type:'List',
           resolverName : "Gen_Community",
           isDynamic:true

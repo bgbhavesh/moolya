@@ -46,8 +46,8 @@ const mlInternalRequestsTableConfig=new MlViewer.View({
       popOverComponent:<CreateRequest />,
       actionComponent:function(props){
         return  <div className={props.activeClass} id={props.actionName}>
-          <div onClick={props.onClickHandler} className={props.activesubclass} data-toggle="tooltip" title={props.actionName} data-placement="top" >
-            <span className={props.iconClass} id={props.target}></span>
+          <div onClick={props.onClickHandler} className={props.activesubclass} data-toggle="tooltip" title={props.actionName} data-placement="top" id={props.target}>
+            <span className={props.iconClass}></span>
           </div></div>;
       }
     }

@@ -147,10 +147,19 @@ let CoreModules = {
     }
     let serverQuery = {};
     let query = {};
+    let userContextQuery = {};
     requestParams = requestParams ? requestParams : null;
     let reqArray=requestParams.moduleName.split(',');
     serverQuery={moduleName:{$in:reqArray}}
-    query = mergeQueries(userFilterQuery, serverQuery);
+    let userProfile=new MlAdminUserContext().userProfileDetails(context.userId)||{};
+    if(userProfile.hierarchyLevel == 4){
+      userContextQuery = {}
+    }else if(userProfile.hierarchyLevel == 3){
+      let clusterIds = userProfile && userProfile.defaultProfileHierarchyRefId?userProfile.defaultProfileHierarchyRefId:[];
+      userContextQuery = {clusterId:{$in:clusterIds}}
+    }
+    query = mergeQueries(userContextQuery,userFilterQuery, serverQuery);
+
     const data = MlAudit.find(query, fieldsProj).fetch();
     const totalRecords = mlDBController.find('MlAudit', query, context, fieldsProj).count();
 
@@ -198,7 +207,7 @@ let CoreModules = {
         /*else
           serverQuery={'userId':context.userId,'status':{'$in':['Pending','WIP']}};*/
         break;
-      case 'approved':
+      case 'unauthorize':
         //if(userProfile.roleName === "platformadmin")
           serverQuery={'status':"Approved"};
         /*else

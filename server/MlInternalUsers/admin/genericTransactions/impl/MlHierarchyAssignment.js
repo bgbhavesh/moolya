@@ -3,6 +3,7 @@
  * Created by muralidhar on 23/05/17.
  */
 import MlAdminUserContext from '../../../../mlAuthorization/mlAdminUserContext'
+import _ from 'lodash';
 
 class MlHierarchyAssignment {
 
@@ -106,11 +107,12 @@ class MlHierarchyAssignment {
   getUserRoles(userId) {
     let role = null
     let user = mlDBController.findOne('users', {_id: userId}, context)
+    let userProfileDetails = new MlAdminUserContext().userProfileDetails(userId);
     let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles
     userProfiles.map(function (doc, index) {
       if (doc.isDefault) {
         let userRoles = doc && doc.userRoles ? doc.userRoles : [];
-        role = userRoles[0];
+        role = _.find(userRoles , {hierarchyCode:userProfileDetails.hierarchyCode})
       }
     });
     return role;
@@ -182,6 +184,10 @@ class MlHierarchyAssignment {
   canWorkOnInternalRequest(transactionId, collection, userId) {
     let transaction = mlDBController.findOne(collection, {requestId: transactionId});
     let userRole = this.getUserRoles(userId);
+    //checking final approver
+    if(this.checkisFinalApprover(userId)===true){
+      return true;
+    }
     let requestRole = this.getUserRoles(transaction.userId);
     if (this.checkisPlatformAdmin(userRole)) {
       return true;
@@ -286,6 +292,34 @@ class MlHierarchyAssignment {
       return false;
     }
   }
+
+  checkisFinalApprover(userId){
+    let finalApprover = false
+    let user = mlDBController.findOne('users', {_id: userId}, context)
+    let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles
+    userProfiles.map(function (doc, index) {
+      if (doc.isDefault) {
+        let userRoles = doc && doc.userRoles ? doc.userRoles : [];
+        userRoles.map(function (role) {
+          //let userhierarchy = this.findHierarchy(role.clusterId, role.departmentId, role.subDepartmentId, role.roleId);
+          let roleDetails = mlDBController.findOne('MlRoles', {_id: role.roleId})
+          let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
+            parentDepartment: role.departmentId,
+            parentSubDepartment: role.subDepartmentId,
+            clusterId: roleDetails.isSystemDefined ? "All" : role.clusterId,
+            "finalApproval.role":role.roleId
+          }, context)
+          if(hierarchy&&hierarchy._id){
+              if(hierarchy.finalApproval.role == role.roleId ){
+                finalApprover = true;
+              }
+          }
+        })
+      }
+    });
+    return finalApprover;
+  }
+
 }
 
 const mlHierarchyAssignment = new MlHierarchyAssignment();

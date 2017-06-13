@@ -7,7 +7,7 @@ import MlSchemaDef from '../../../commons/mlSchemaDef'
 
 let likeSchema = `
     type Mutation{
-        likeRequest(requestId:String!,requestType:String!):response       
+        likeRequest(resourceId:String!,resourceType:String!):response       
     }
 `
 

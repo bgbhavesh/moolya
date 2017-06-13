@@ -4,6 +4,7 @@
 import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
 import MlUserContext from "../../../../MlExternalUsers/mlUserContext";
+import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 
 var _ = require('lodash')
 
@@ -171,10 +172,22 @@ MlResolver.MlQueryResolver['fetchAnnotations'] = (obj, args, context, info) => {
     try {
         if(args.portfoliodetailsId && args.docId){
             let annotatorObj = MlAnnotator.find({"$and":[{"portfolioId":args.portfoliodetailsId, "referenceDocId":args.docId}]}).fetch()
+            var firstName='';var lastName='';var profileImage = ''
             if(annotatorObj.length > 0){
                 _.each(annotatorObj, function (value) {
                       let quote = JSON.parse(value['quote'])
-                      annotators.push({annotatorId:value._id, quote:quote,userName: value.userName,createdAt:value.createdAt})
+                      var user = Meteor.users.findOne({_id:value.userId});
+                      if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+                        firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+                        lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+                        profileImage=user.profile&&user.profile.profileImage?user.profile.profileImage:''
+                      }else if(user&&user.profile&&user.profile.isExternaluser){
+                        firstName=(user.profile || {}).firstName||'';
+                        lastName =(user.profile || {}).lastName||'';
+                        profileImage=user.profile&&user.profile.profileImage?user.profile.profileImage:''
+                      }
+                    let details = new MlAdminUserContext().userProfileDetails(value.userId)||{};
+                      annotators.push({annotatorId:value._id, quote:quote,userName: firstName +''+ lastName,createdAt:value.createdAt,roleName:details.roleName,profileImage:profileImage})
                 })
             }
         }
@@ -425,6 +438,86 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
         return response;
     }
 }
+
+MlResolver.MlMutationResolver['createLibrary'] = (obj, args, context, info) => {
+
+  var collectionExists = mlDBController.findOne('MlLibrary', {userId: context.userId}, context)
+  if (collectionExists) {
+    if(args.detailsInput.images) {
+      if(collectionExists.images){
+        let temp = collectionExists.images;
+        temp.push(args.detailsInput.images[0])
+        var updateExistingImageCollection = mlDBController.update('MlLibrary', {userId: context.userId}, {"images": temp}, {$set: 1}, context)
+      }else{
+        var updateImageCollection = mlDBController.update('MlLibrary', {userId: context.userId}, {"images": args.detailsInput.images}, {$set: 1}, context)
+      }
+    }
+    if(args.detailsInput.videos) {
+      if(collectionExists.videos) {
+        let temp = collectionExists.videos;
+        temp.push(args.detailsInput.videos[0])
+        var updateExistingVideoCollection = mlDBController.update('MlLibrary', {userId: context.userId}, {"videos": temp}, {$set: 1}, context)
+      }else{
+        var updateVideoCollection = mlDBController.update('MlLibrary', {userId: context.userId}, {"videos": args.detailsInput.videos}, {$set: 1}, context)
+      }
+    }
+    if(args.detailsInput.docments) {
+      if(collectionExists.documents) {
+        let temp = collectionExists.docments;
+        temp.push(args.detailsInput.docments[0])
+        var updateExistingDocumentCollection = mlDBController.update('MlLibrary', {userId: context.userId}, {"documents": temp}, {$set: 1}, context)
+      }else{
+        var updateDocumentCollection = mlDBController.update('MlLibrary', {userId: context.userId}, {"documents": args.detailsInput.documents}, {$set: 1}, context)
+      }
+    }
+    if(args.detailsInput.templates) {
+      if(collectionExists.templates) {
+        let temp = collectionExists.templates;
+        temp.push(args.detailsInput.templates[0])
+        var updateExistingTemplateCollection = mlDBController.update('MlLibrary', {userId: context.userId}, {"templates": temp}, {$set: 1}, context)
+      }else{
+        var updateTemplateCollection = mlDBController.update('MlLibrary', {userId: context.userId}, {"templates": args.detailsInput.templates}, {$set: 1}, context)
+      }
+    }
+  } else {
+    var newCollection = mlDBController.insert('MlLibrary', args.detailsInput, context)
+    return newCollection;
+    // }
+  }
+}
+
+
+MlResolver.MlQueryResolver['fetchLibrary'] = (obj, args, context, info) => {
+  var libraryData = mlDBController.find('MlLibrary', {userId: args.userId}, context).fetch();
+  // var filteredData = [];
+  // var filterData = libraryData.map(function(data){
+  //   var imageArray = data.images;
+  //   var imageDetails = imageArray.map(function(image){
+  //     filteredData.push(image.fileUrl)
+  //   })
+  // })
+    return libraryData;
+
+}
+
+
+
+MlResolver.MlQueryResolver['fetchAllowableFormats'] = (obj, args, context, info) => {
+  var allowableFormats = mlDBController.find('MlDocumentFormats',{isActive:true}, context).fetch();
+
+
+  return allowableFormats;
+
+}
+
+//
+// MlResolver.MlQueryResolver['fetchImages'] = (obj, args, context, info) => {
+//   var libraryData = mlDBController.find('MlLibrary', {userId: args.userId}, context).fetch();
+//
+//   return libraryData[0].images;
+//
+// }
+
 
 MlResolver.MlMutationResolver['updateIdea'] = (obj, args, context, info) => {
   if(args.idea) {

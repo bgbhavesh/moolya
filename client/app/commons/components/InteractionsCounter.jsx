@@ -22,12 +22,12 @@ export default class InteractionsCounter extends React.Component{
         iconClass: 'ml fa fa-thumbs-o-up'
       },
       {
-        name: 'connection',
+        name: 'connect',
         displayName:'Connections',
         iconClass: 'ml flaticon-ml-handshake'
       },
       {
-        name: 'collaboration',
+        name: 'collaborate',
         displayName:'Collaborations',
         iconClass: 'ml flaticon-ml-networking'
       },
@@ -47,77 +47,11 @@ export default class InteractionsCounter extends React.Component{
         iconClass: 'ml flaticon-ml-support'
       },
       {
-        name: 'enquiry',
+        name: 'enquire',
         displayName:'Enquiries',
         iconClass: 'ml flaticon-ml-handshake-1'
       }
     ];
-
-   /* return (
-      <div>
-        <div className="paperfold panel">
-          <ul className="header-action-buttons">
-            <li>
-              <a href="#"><span className="ml fa fa-thumbs-o-up"></span>
-                <b>200</b>
-              </a>
-              <span className="tooltipnew">
-        <span>Likes</span>
-      </span>
-            </li>
-            <li>
-              <a href="#"><span className="ml flaticon-ml-handshake"></span>
-                <b>92</b>
-              </a>
-              <span className="tooltipnew">
-        <span>Connections</span>
-      </span>
-            </li>
-            <li>
-              <a href="#"><span className="ml flaticon-ml-networking"></span>
-                <b>51</b>
-              </a>
-              <span className="tooltipnew">
-        <span>Collaborations</span>
-      </span>
-            </li>
-            <li>
-              <a href="#"><span className="ml flaticon-ml-shapes"></span>
-                <b>62</b>
-              </a>
-              <span className="tooltipnew">
-        <span>Favourites</span>
-      </span>
-            </li>
-            <li>
-              <a href="#"><span className="ml flaticon-ml-visibility"></span>
-                <b>85</b>
-              </a>
-              <span className="tooltipnew">
-        <span>Views</span>
-      </span>
-            </li>
-            <li>
-              <a href="#"><span className="ml flaticon-ml-support"></span>
-                <b>102</b>
-              </a>
-              <span className="tooltipnew">
-        <span>Enquiries</span>
-      </span>
-            </li>
-            <li>
-              <a href="#"><span className="ml flaticon-ml-handshake-1"></span>
-                <b>168</b>
-              </a>
-              <span className="tooltipnew">
-        <span>Partners</span>
-      </span>
-            </li>
-          </ul>
-        </div>
-        <button className="btn btn-default paperfold-toggle" style={{'visibility':'hidden','position':'absolute'}}>Toggle</button>
-      </div>
-    )*/
       //todo: configure the  this.props.actions
     let actionView = config.map(function(option) {
      /*let action = _.find(config, {'name': option.name});

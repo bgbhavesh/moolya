@@ -31,20 +31,22 @@ export async function updateDataEntry(Details) {
   return id;
 }
 
-// export async function passwordVerification(Details) {
-//   const result = await client.query({
-//     mutation: gql`
-//     query ($Details: String) {
-//     passwordVerification(Details:$Details) {
-//     success
-//     code
-//     result
-//   }
-// }
-// `
-//
-//   })
-//   const id = result.data.passwordVerification;
-//   return id;
-// }
+export async function passwordVerification(digest) {
+  const result = await client.query({
+    query: gql`
+    query ($Details: String) {
+    passwordVerification(Details:$Details) {
+    success
+    code
+    result
+  }
+}
+`,variables:{
+      Details:digest
+    }
+
+  })
+  const id = result.data.passwordVerification;
+  return id;
+}
 

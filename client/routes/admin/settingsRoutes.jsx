@@ -1030,6 +1030,14 @@ adminSection.route('/settings/contactTypesList', {
   }
 });
 
+adminSection.route('/clusterSettings/history', {
+  name: 'clusterSettings_history',
+  action(){
+    mount(AdminLayout,{adminContent:< MlContactTypesList/>})
+  }
+});
+
+
 adminSection.route('/settings/roleTypeList', {
     name: 'settings_RoleTypeList',
     action(){

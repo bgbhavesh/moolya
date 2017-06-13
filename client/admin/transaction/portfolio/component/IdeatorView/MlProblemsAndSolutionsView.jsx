@@ -92,6 +92,8 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
                   "quote" : value.quote.quote,
                   "ranges" : value.quote.ranges,
                   "userName" : value.userName,
+                  "roleName" : value.roleName,
+                  "profileImage" : value.profileImage,
                   "createdAt" : value.createdAt
               })
           })

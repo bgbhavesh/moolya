@@ -117,7 +117,8 @@ let investments = `
     }
     
     type Actions{
-        actionId:String
+        _id: String
+        displayName :String
     }
     
     type StageActions{
@@ -196,6 +197,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],investments]);
 let supportedApi = [
   {api:'updateProcessSetup', actionName:'UPDATE', moduleName:"PROCESSSETUP"},
   {api:'fetchProcessSetup', actionName:'READ', moduleName:"PROCESSSETUP"},
+  {api:'fetchProcessActions', actionName:'READ', moduleName:"ACTIONS"},
   {api:'fetchProcessStages', actionName:'READ', moduleName:"PROCESSSETUP"},
   {api:'updateProcessTransaction', actionName:'UPDATE', moduleName:"PROCESSSETUP"}
 ];

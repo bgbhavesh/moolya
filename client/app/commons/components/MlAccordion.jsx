@@ -33,7 +33,7 @@ export default class MlAccordion extends React.Component {
       if(isText){
            return  (<div id={accordionId + index} key={"panelContent"+index} className="panel-collapse collapse" style={option.style}>{option.contentComponent}</div>);
       }else{
-      return (<div id={accordionId + index} className="panel-collapse collapse" style={option.style}>
+      return (<div id={accordionId + index} key={"panelContent"+index} className="panel-collapse collapse" style={option.style}>
               {PanelComponent}
               </div>)
      }

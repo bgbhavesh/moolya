@@ -139,10 +139,16 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
     })
     if(!this.state.cost){
       toastr.error('Cost is required');
+      this.setState({
+        isGenerateLinkDisable:false
+      })
       return false;
     }
     if(this.state.cost < 1){
       toastr.error('Enter tha valid cost');
+      this.setState({
+        isGenerateLinkDisable:false
+      })
       return false;
     }
     let generateLinkInfo = {

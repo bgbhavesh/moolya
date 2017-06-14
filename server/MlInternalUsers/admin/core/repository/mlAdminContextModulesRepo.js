@@ -161,6 +161,16 @@ let CoreModules = {
     query = mergeQueries(userContextQuery,userFilterQuery, serverQuery);
 
     const data = MlAudit.find(query, fieldsProj).fetch();
+    data.map(function (doc,index) {
+      let userObj;
+      if(doc&&doc.userId){
+         userObj = Meteor.users.findOne({_id: doc.userId}) || {};
+      }
+
+      let firstName = userObj&&userObj.profile&&userObj.profile.InternalUprofile&&userObj.profile.InternalUprofile.moolyaProfile&&userObj.profile.InternalUprofile.moolyaProfile.firstName?userObj&&userObj.profile&&userObj.profile.InternalUprofile&&userObj.profile.InternalUprofile.moolyaProfile&&userObj.profile.InternalUprofile.moolyaProfile.firstName:"";
+      let lastName = userObj&&userObj.profile&&userObj.profile.InternalUprofile&&userObj.profile.InternalUprofile.moolyaProfile&&userObj.profile.InternalUprofile.moolyaProfile.lastName?userObj&&userObj.profile&&userObj.profile.InternalUprofile&&userObj.profile.InternalUprofile.moolyaProfile&&userObj.profile.InternalUprofile.moolyaProfile.lastName:"";
+      data[index].userName = firstName&&lastName?firstName +" "+ lastName:doc.userName
+    })
     const totalRecords = mlDBController.find('MlAudit', query, context, fieldsProj).count();
 
     return {totalRecords: totalRecords, data: data};
@@ -382,7 +392,7 @@ let CoreModules = {
     let pipleline = [
       {'$lookup':{ from:'users',localField:'userId', 'foreignField':'_id', as:'user' }},
       {'$unwind':'$user'},
-      {'$project':{ 'userName':'$user.profile.displayName', 'dateTime':1, 'userId':1,'transactionId':1,'clusterName':1,'chapterName':1,'subChapterName':1, 'communityName':1, 'status':1 }}
+      {'$project':{ 'userName':'$user.profile.displayName', 'dateTime':1, 'userId':1,'transactionId':1,'clusterName':1,'chapterName':1,'subChapterName':1, 'communityName':1, 'status':1 , 'profileId':'$user.profile.externalUserProfiles.profileId'}}
     ];
     if(Object.keys(resultantQuery).length){
       pipleline.push({'$match':resultantQuery});

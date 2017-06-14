@@ -359,6 +359,7 @@ export default class Step5 extends React.Component {
     }
 
     let registrationDocuments=this.state.registrationDocuments||[];
+    registrationDocuments= _.filter(registrationDocuments, function(doc) { return doc.docTypeName&&doc.documentId; });
     let registrationDocumentsGroup=_.groupBy(registrationDocuments,'docTypeName')||{};
     let that=this;
   //  const showLoader=this.state.loading;
@@ -369,9 +370,9 @@ export default class Step5 extends React.Component {
             return (<div key={key}>
                      <h3>{key}</h3>
                     {registrationDocumentsGroup[key].map(function (regDoc,id) {
-
+                      let documentExist=_.isEmpty(regDoc)
                       return(
-                       <DocumentViewer key={regDoc.documentId} doc={regDoc} selectedDocuments={that.state.selectedFiles} selectedDocType={that.state.selectedDocTypeFiles} onFileUpload={that.onFileUpload.bind(that)} onDocumentSelect={that.onDocumentSelect.bind(that)} onDocumentRemove={that.onDocumentRemove.bind(that)}/>);
+                        <div>{!documentExist&&regDoc.documentId!=null&&<DocumentViewer key={regDoc.documentId} doc={regDoc} selectedDocuments={that.state.selectedFiles} selectedDocType={that.state.selectedDocTypeFiles} onFileUpload={that.onFileUpload.bind(that)} onDocumentSelect={that.onDocumentSelect.bind(that)} onDocumentRemove={that.onDocumentRemove.bind(that)}/>} </div>)
                     })
                     }<br className="brclear"/></div>
                     )

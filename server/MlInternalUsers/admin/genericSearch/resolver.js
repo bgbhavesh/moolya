@@ -134,7 +134,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       const chapterData =  MlChapters.find( { _id: { $in: chapterIdsArray } } ).fetch() || [];
       const subchapterData =  MlSubChapters.find( { _id: { $in: subchapterIdsArray } } ).fetch() || [];
 
-      var clusterNames = _.pluck(clusterData, 'clusterNames') || [];
+      var clusterNames = _.pluck(clusterData, 'clusterName') || [];
       var chapterNamesArray = _.pluck(chapterData, 'chapterName') || [];
       var subchapterNamesArray = _.pluck(subchapterData, 'subChapterName') || [];
 
@@ -250,15 +250,33 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlDocumentMapping.find(query,findOptions).fetch();
     data.map(function (doc,index) {
       let clusterIds =[];
+      let chapterIds=[];
+      let subChapterIds=[];
       let kycCategoryIds = [];
       let allowableFormatIds = [];
       doc.clusters.map(function (ids) {
         clusterIds.push(ids)
       });
+      doc.chapters.map(function (ids) {
+        chapterIds.push(ids)
+      });
+      const chapterData =  MlChapters.find( { _id: { $in: chapterIds } } ).fetch() || [];
+      let chapterNames = [];  //@array of strings
+      chapterData.map(function (doc) {
+        chapterNames.push(doc.chapterName)
+      });
       const clusterData =  MlClusters.find( { _id: { $in: clusterIds } } ).fetch() || [];
       let clusterNames = [];  //@array of strings
       clusterData.map(function (doc) {
         clusterNames.push(doc.clusterName)
+      });
+      doc.subChapters.map(function (ids) {
+        subChapterIds.push(ids)
+      });
+      const subChapterData =  MlSubChapters.find( { _id: { $in: subChapterIds } } ).fetch() || [];
+      let subChapterNames = [];  //@array of strings
+      subChapterData.map(function (doc) {
+        subChapterNames.push(doc.subChapterName)
       });
 
       doc.kycCategory.map(function (ids) {
@@ -280,6 +298,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       });
 
       data[index].clusters = clusterNames || [];
+      data[index].chapters = chapterNames || [];
+      data[index].subChapterNames = subChapterNames || [];
       data[index].kycCategory = kycCategoryNames || [];
       data[index].allowableFormat = allowableFormatNames || [];
 

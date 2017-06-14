@@ -30,7 +30,7 @@ export default class MlAppInvestment extends Component {
     var data = this.state.data && this.state.data.processSteps && this.state.data.processSteps.length > 0 ? this.state.data.processSteps : ['']
     const dataList = data.map(function (stage, id) {
       return (
-        <span className="form-control float-label" key={id}>{stage.stageId}</span>
+        <span className="form-control float-label" key={id}>{stage.stageName}</span>
       )
     });
     const showLoader = this.state.loading;

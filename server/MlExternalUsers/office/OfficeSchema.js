@@ -149,7 +149,7 @@ let myOfficeSchema = `
     type Mutation{       
         createOffice(myOffice:myOffice):response
         createOfficeMembers(myOfficeId:String, officeMember:officeMembers):response
-        updateOfficeMember(memberId:String, officeMember:officeMembers):response
+        updateOfficeMember(officeId:String,memberId:String, officeMember:officeMembers):response
         updateOffice(myOffice:myOffice, myOfficeId:String):response
         updateOfficeStatus(id:String):response
     }

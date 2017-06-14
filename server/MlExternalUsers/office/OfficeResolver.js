@@ -298,6 +298,14 @@ MlResolver.MlMutationResolver['updateOfficeMember'] =(obj, args, context, info) 
     return response;
   }
   try{
+    if(args.officeMember.isPrincipal){
+      var myOffice = mlDBController.findOne('MlOffice', {_id: args.officeId});
+      let principalUserCount = MlOfficeMembers.find({officeId:args.officeId , isPrincipal:true}).count();
+      if(principalUserCount == myOffice.principalUserCount){
+        let response = new MlRespPayload().errorPayload('Limit Exceeded', code);
+        return response;
+      }
+    }
     let ret = mlDBController.update('MlOfficeMembers', args.memberId, args.officeMember, {$set:true}, context);
     let code = 200;
     let response = new MlRespPayload().successPayload("Member Updated Successfully", code);

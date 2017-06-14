@@ -5,12 +5,12 @@
 import gql from 'graphql-tag'
 import {appClient} from '../../../../app/core/appConnection';
 
-export async function updateOfficeMemberActionHandler(memberId,officeMembers) {
+export async function updateOfficeMemberActionHandler(officeId, memberId,officeMembers) {
 
   const result = await appClient.mutate({
     mutation: gql`
-          mutation($memberId:String, $officeMembers:officeMembers){
-              updateOfficeMember(memberId:$memberId, officeMember:$officeMembers){
+          mutation($officeId:String, $memberId:String, $officeMembers:officeMembers){
+              updateOfficeMember(officeId:$officeId, memberId:$memberId, officeMember:$officeMembers){
                   success,
                   code,
                   result
@@ -18,6 +18,7 @@ export async function updateOfficeMemberActionHandler(memberId,officeMembers) {
           }
       `,
     variables: {
+      officeId: officeId,
       memberId: memberId,
       officeMembers:officeMembers
     }

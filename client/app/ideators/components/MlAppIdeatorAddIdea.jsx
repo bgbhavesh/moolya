@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler, OnLockSwitch} from '../../../admin/utils/formElemUtil';
+import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../admin/utils/formElemUtil';
 import _ from 'lodash';
 import MlActionComponent from '../../../commons/components/actions/ActionComponent';
 import formHandler from '../../../commons/containers/MlFormHandler';
@@ -23,11 +23,13 @@ class MlAppIdeatorAddIdea extends React.Component{
   {
       OnLockSwitch();
       dataVisibilityHandler();
+    initalizeFloatLabel();
   }
   componentDidUpdate()
   {
       OnLockSwitch();
       dataVisibilityHandler();
+    initalizeFloatLabel();
   }
 
   async handleSuccess(response){
@@ -98,7 +100,7 @@ class MlAppIdeatorAddIdea extends React.Component{
                                       <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeaTitlePrivate"/><input type="checkbox" className="lock_input" id="makePrivate"/>
                                   </div>
                                   <div className="form-group">
-                                      <textarea placeholder="Describe..." className="form-control" ref="description" id="cl_about" name="description" ></textarea>
+                                      <textarea placeholder="Describe..." className="form-control float-label" ref="description" id="cl_about" name="description" ></textarea>
                                       <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeaDescriptionPrivate"/><input type="checkbox" className="lock_input" id="makePrivate" />
                                   </div>
                               </form>

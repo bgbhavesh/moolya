@@ -74,6 +74,7 @@
     "bootstrap": "^3.3.7",
     "connect-multiparty": "^2.0.0",
     "cors": "^2.8.1",
+    "csrf": "^3.0.6",
     "deep-diff": "^0.3.4",
     "deep-extend": "^0.4.1",
     "dinstar-sms-api": "^0.1.5",

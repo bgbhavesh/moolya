@@ -24,8 +24,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-[class^="flaticon-"], [class*=" flaticon-"],
-[class^="flaticon-"], [class*=" flaticon-"] {
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "Flaticon";
+    src: url("./Flaticon.svg#Flaticon") format("svg");
+  }
+}
+
+[class^="flaticon-"]:before, [class*=" flaticon-"]:before,
+[class^="flaticon-"]:after, [class*=" flaticon-"]:after {
   font-family: Flaticon;
   speak: none;
   font-style: normal;
@@ -33,43 +40,47 @@
   font-variant: normal;
   text-transform: none;
   line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
 }
 
 
-.flaticon-ml-active-user:before { content: "\f100"; }
-.flaticon-ml-inactive-user:before { content: "\f101"; }
-.flaticon-ml-user:before { content: "\f102"; }
-.flaticon-ml-unassign-user:before { content: "\f103"; }
-.flaticon-ml-assign-user:before { content: "\f104"; }
-.flaticon-ml-books:before { content: "\f105"; }
-.flaticon-ml-interface-2:before { content: "\f106"; }
-.flaticon-ml-security:before { content: "\f107"; }
-.flaticon-ml-interface-1:before { content: "\f108"; }
-.flaticon-ml-building:before { content: "\f109"; }
-.flaticon-ml-briefcase:before { content: "\f10a"; }
-.flaticon-ml-agenda:before { content: "\f10b"; }
-.flaticon-ml-file-1:before { content: "\f10c"; }
-.flaticon-ml-file:before { content: "\f10d"; }
-.flaticon-ml-handshake-1:before { content: "\f10e"; }
-.flaticon-ml-networking:before { content: "\f10f"; }
-.flaticon-ml-visibility:before { content: "\f110"; }
-.flaticon-ml-support:before { content: "\f111"; }
-.flaticon-ml-shapes:before { content: "\f112"; }
-.flaticon-ml-favorite:before { content: "\f113"; }
-.flaticon-ml-note-2:before { content: "\f114"; }
-.flaticon-ml-note-1:before { content: "\f115"; }
-.flaticon-ml-interface:before { content: "\f116"; }
-.flaticon-ml-share-files:before { content: "\f117"; }
-.flaticon-ml-chat:before { content: "\f118"; }
-.flaticon-ml-arrows:before { content: "\f119"; }
-.flaticon-ml-share-arrow:before { content: "\f11a"; }
-.flaticon-ml-cloud-computing-1:before { content: "\f11b"; }
+.flaticon-ml-pc-search:before { content: "\f100"; }
+.flaticon-ml-active-user:before { content: "\f101"; }
+.flaticon-ml-file-1:before { content: "\f102"; }
+.flaticon-ml-interface-2:before { content: "\f103"; }
+.flaticon-ml-interface-1:before { content: "\f104"; }
+.flaticon-ml-note-2:before { content: "\f105"; }
+.flaticon-ml-file:before { content: "\f106"; }
+.flaticon-ml-note-1:before { content: "\f107"; }
+.flaticon-ml-interface:before { content: "\f108"; }
+.flaticon-ml-arrows:before { content: "\f109"; }
+.flaticon-ml-agenda:before { content: "\f10a"; }
+.flaticon-ml-note:before { content: "\f10b"; }
+.flaticon-ml-books:before { content: "\f10c"; }
+.flaticon-ml-circle:before { content: "\f10d"; }
+.flaticon-ml-shapes:before { content: "\f10e"; }
+.flaticon-ml-share-arrow:before { content: "\f10f"; }
+.flaticon-ml-networking:before { content: "\f110"; }
+.flaticon-ml-assign-user:before { content: "\f111"; }
+.flaticon-ml-unassign-user:before { content: "\f112"; }
+.flaticon-ml-briefcase:before { content: "\f113"; }
+.flaticon-ml-favorite:before { content: "\f114"; }
+.flaticon-ml-handshake-1:before { content: "\f115"; }
+.flaticon-ml-visibility:before { content: "\f116"; }
+.flaticon-ml-security:before { content: "\f117"; }
+.flaticon-ml-building:before { content: "\f118"; }
+.flaticon-ml-cloud-computing-1:before { content: "\f119"; }
+.flaticon-ml-chat:before { content: "\f11a"; }
+.flaticon-ml-favorites:before { content: "\f11b"; }
 .flaticon-ml-cloud-computing:before { content: "\f11c"; }
-.flaticon-ml-circle:before { content: "\f11d"; }
-.flaticon-ml-note:before { content: "\f11e"; }
-.flaticon-ml-handshake:before { content: "\f11f"; }
-.flaticon-ml-favorites:before { content: "\f120"; }
-
+.flaticon-ml-support:before { content: "\f11d"; }
+.flaticon-ml-handshake:before { content: "\f11e"; }
+.flaticon-ml-inactive-user:before { content: "\f11f"; }
+.flaticon-ml-share-files:before { content: "\f120";}
 
 
 .ml-about:before {

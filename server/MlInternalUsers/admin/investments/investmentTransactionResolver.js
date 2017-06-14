@@ -1,7 +1,7 @@
 /**
  * Created by venkatsrinag on 6/6/17.
  */
-import MlResolver from '../../../commons/mlResolverDef'
+import MlResolver from "../../../commons/mlResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
 
 MlResolver.MlQueryResolver['fetchProcessTransactions'] = (obj, args, context, info) =>{
@@ -16,6 +16,8 @@ MlResolver.MlQueryResolver['fetchProcessStages'] = (obj, args, context, info) =>
 }
 
 MlResolver.MlQueryResolver['fetchProcessActions'] = (obj, args, context, info) =>{
+  let result = mlDBController.find('MlActions', {isActive: true}).fetch() || []
+  return result
 }
 
 MlResolver.MlQueryResolver['fetchProcessTransactionCustomerDetails'] = (obj, args, context, info) =>{
@@ -26,6 +28,23 @@ MlResolver.MlQueryResolver['fetchProcessSetup'] = (obj, args, context, info) =>{
     let processSetup = mlDBController.findOne('MlProcessSetup', {processTransactionId:args.processTransactionId}, context)
     if(processSetup){
         return processSetup
+    }
+  }
+  return {};
+}
+
+MlResolver.MlQueryResolver['fetchUserProcessSetup'] = (obj, args, context, info) => {
+  if (context.userId) {
+    console.log('server hit')
+    let processSetup = mlDBController.findOne('MlProcessSetup', {userId: context.userId}, context)
+    if (processSetup) {
+      processSetup.processSteps.map(function (steps, index) {
+        if (processSetup.processSteps[index]) {
+          let stageData = MlProcessStages.findOne({"_id": steps.stageId}) || {};
+          processSetup.processSteps[index].stageName = stageData.displayName || "";
+        }
+      })
+      return processSetup
     }
   }
   return {};

@@ -581,14 +581,18 @@ export default class MlFunderPrincipalTeam extends React.Component {
                             </div>
                           </div>
                           <div className="form-group">
-                            <input type="text" placeholder="Title" name="title"
-                                   defaultValue={this.state.data.title}
-                                   className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                            {/*<FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"*/}
-                            {/*onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>*/}
-                            {/*<input type="checkbox" className="lock_input"*/}
-                            {/*checked={this.state.data.isCompanyNamePrivate}/>*/}
+                            <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.title} queryType={"graphql"} query={titlequery}  queryOptions={titleOption} onSelect={that.optionsBySelectTitle.bind(this)} isDynamic={true}/>
+
                           </div>
+                          {/*<div className="form-group">*/}
+                            {/*<input type="text" placeholder="Title" name="title"*/}
+                                   {/*defaultValue={this.state.data.title}*/}
+                                   {/*className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>*/}
+                            {/*/!*<FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"*!/*/}
+                            {/*/!*onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>*!/*/}
+                            {/*/!*<input type="checkbox" className="lock_input"*!/*/}
+                            {/*/!*checked={this.state.data.isCompanyNamePrivate}/>*!/*/}
+                          {/*</div>*/}
 
                           <div className="form-group">
                             <input type="text" placeholder="First Name" name="firstName"

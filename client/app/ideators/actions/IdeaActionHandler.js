@@ -100,3 +100,81 @@ export async function fetchIdeaByPortfolioId(portfolioId) {
   const ideas = result.data.fetchIdeaByPortfolioId;
   return ideas
 }
+
+export async function createLibrary(detailsInput) {
+  const result = await appClient.mutate({
+    mutation: gql`
+   mutation ($detailsInput: detailsInput) {
+  createLibrary(detailsInput: $detailsInput) {
+    success
+    code
+    result
+  }
+}
+`,
+    variables:{
+      detailsInput
+    }
+  })
+  const id = result.data.createLibrary;
+  return id
+}
+
+export async function fetchLibrary(userId) {
+  const result = await appClient.query({
+    query: gql`
+    query($userId : String){
+  fetchLibrary(userId: $userId) {
+    userId
+    images {
+      fileName
+      fileUrl
+      fileType
+    }
+    videos {
+      fileName
+      fileUrl
+      fileType
+    }
+    documents {
+      fileName
+      fileUrl
+      fileType
+    }
+    templates {
+      fileName
+      fileUrl
+      fileType
+    }
+  }
+}
+
+
+        `,
+    variables:{
+  userId
+    }
+  })
+  const id = result.data.fetchLibrary;
+  return id
+}
+//
+
+export async function getAllowableDocumentFormats(format) {
+  const result = await appClient.query({
+    query: gql`
+query {
+  fetchAllowableFormats{
+   docFormatName
+  }
+}
+        `,
+    variables:{
+      format
+    }
+  })
+  const id = result.data.fetchAllowableFormats;
+  return id
+}
+
+

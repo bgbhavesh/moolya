@@ -2,16 +2,13 @@
  * Created by pankaj on 6/6/17.
  */
 
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-var Select = require('react-select');
-import {initalizeFloatLabel} from '../../../utils/formElemUtil'
+import React from 'react'
+import{initalizeFloatLabel} from '../../../utils/formElemUtil'
 import {findOfficeTransactionHandler} from '../actions/findOfficeTranscation'
 import {updateSubcriptionDetail} from '../actions/updateSubscriptionDetail'
 import {updateOfficeStatus} from '../actions/updateOfficeStatus'
 import moment from 'moment'
+var Select = require('react-select');
 
 export default class MlOfficeItem extends React.Component {
   constructor(props){
@@ -19,6 +16,7 @@ export default class MlOfficeItem extends React.Component {
     this.state={
       transId:props.data.id,
       transInfo:{},
+      currentSlideIndex:0,
       userInfo:{},
       officeInfo:{
         availableCommunities:[]
@@ -26,11 +24,21 @@ export default class MlOfficeItem extends React.Component {
       cost: 0,
       tax:false,
       about:'',
-      isGenerateLinkDisable: false
+      isGenerateLinkDisable: false,
+      duration : ' '
     }
-    this.getTransaction(this.state.transId);
+    this.getTransaction.bind(this);
+    this.initializeSwiper.bind(this);
+    this.onSlideIndexChange.bind(this);
     return this;
   }
+
+  onSlideIndexChange(swiper){
+    if(this.state.currentSlideIndex!==swiper.activeIndex){
+      this.setState({'currentSlideIndex':swiper.activeIndex});
+    }
+  }
+
   componentDidMount() {
     initalizeFloatLabel();
     $(function() {
@@ -44,19 +52,48 @@ export default class MlOfficeItem extends React.Component {
         $(this).parent('.switch').removeClass('on');
       }
     });
-    // console.log(this.props.data)
+    this.initializeSwiper();
   }
+
+  initializeSwiper(){
+    const transId = this.state.transId;
+      setTimeout(function () {
+        let swiper =  new Swiper('#office_item'+transId, {
+          effect: 'coverflow',
+          slidesPerView: 3,
+          grabCursor: true,
+          centeredSlides: true,
+          initialSlide: 0
+        });
+      },100);
+  };
+
+  async componentWillMount() {
+    await this.getTransaction(this.state.transId);
+  }
+
+  componentWillReceiveProps(){
+
+ }
 
   async getTransaction(id){
     let response = await findOfficeTransactionHandler(id);
     if(response){
+      let duration = ' ';
       let result = JSON.parse(response.result)[0];
       if(result){
+        console.log(result);
+        if(result.trans.duration){
+          let dbDuration = result.trans.duration;
+            duration = dbDuration.years+' Year'; // To do for month and all
+        }
         result.office.availableCommunities = result.office.availableCommunities && result.office.availableCommunities.length ? result.office.availableCommunities : [];
         this.setState({
+          duration: duration,
           transInfo: result.trans,
           userInfo: result.user,
           officeInfo: result.office,
+          currentSlideIndex:0,
           tax: result.trans.orderSubscriptionDetails && result.trans.orderSubscriptionDetails.isTaxInclusive ? result.trans.orderSubscriptionDetails.isTaxInclusive : false,
           cost: result.trans.orderSubscriptionDetails && result.trans.orderSubscriptionDetails.cost ? result.trans.orderSubscriptionDetails.cost : '',
           about: result.trans.orderSubscriptionDetails && result.trans.orderSubscriptionDetails.about ? result.trans.orderSubscriptionDetails.about : '',
@@ -67,7 +104,11 @@ export default class MlOfficeItem extends React.Component {
   }
 
   updateCost(e){
-    this.setState({"cost":e.currentTarget.value});
+    if(e.currentTarget.value >= 0) {
+      this.setState({"cost":e.currentTarget.value});
+    } else {
+      this.setState({"cost":0});
+    }
   }
 
   updateTax(e){
@@ -88,10 +129,16 @@ export default class MlOfficeItem extends React.Component {
     })
     if(!this.state.cost){
       toastr.error('Cost is required');
+      this.setState({
+        isGenerateLinkDisable:false
+      })
       return false;
     }
     if(this.state.cost < 1){
       toastr.error('Enter tha valid cost');
+      this.setState({
+        isGenerateLinkDisable:false
+      })
       return false;
     }
     let generateLinkInfo = {
@@ -138,7 +185,7 @@ export default class MlOfficeItem extends React.Component {
             <a href={"#1a"+transId} data-toggle="tab">Customer Details</a>
           </li>
           <li>
-            <a href={"#2a"+transId} data-toggle="tab">Order Details</a>
+            <a href={"#2a"+transId} onClick={this.initializeSwiper()} data-toggle="tab">Order Details</a>
           </li>
           <li>
             <a href={"#3a"+transId} data-toggle="tab">Payment Details</a>
@@ -213,11 +260,13 @@ export default class MlOfficeItem extends React.Component {
                   <div className="slider"></div>
                 </label>
                   <span className="state_label">All Communities</span>
+                  <div className="clearfix" />
                 </div>
+                <br className="clearfix" />
+                <br className="clearfix" />
                 <div className="clearfix" />
 
-                <div className="swiper-container blocks_in_form">
-                  <div className="clearfix" />
+                <div className="swiper-container office_item" id={'office_item'+transId}>
                   <div className="swiper-wrapper">
                     {this.state.officeInfo.availableCommunities.map(function (item, i) {
                       return(
@@ -265,7 +314,7 @@ export default class MlOfficeItem extends React.Component {
                       <input type="text" defaultValue="123456" placeholder="Zip Code" value={this.state.officeInfo.zipCode} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue="duration" placeholder ="Duration" value='' className="form-control float-label" id=""/>
+                      <input type="text" defaultValue="duration" value={this.state.duration} placeholder ="" className="form-control float-label" id=""/>
                     </div>
                   </div>
                 </div>

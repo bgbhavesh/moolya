@@ -68,7 +68,9 @@ let modules = [
     "accountType",
     'office',
     "processSetup",
-    'subscriptions'
+    'subscriptions',
+    'interaction',
+    'actions'
   ];
 
 // Meteor.startup(function () {

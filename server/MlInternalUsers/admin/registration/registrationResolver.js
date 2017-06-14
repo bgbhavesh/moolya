@@ -155,7 +155,7 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     return errResp;
   }
   else if (args.registration) {
-    let user = mlDBController.findOne('users', {"profile.email":'systemadmin@moolya.com'}, context) || {};
+    let user = mlDBController.findOne('users', {"profile.email":'systemadmin@mymoolya.com'}, context) || {};
     context.userId = user._id;
     context.browser = 'Registration API'
     context.url="https://moolya.in"

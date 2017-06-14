@@ -79,7 +79,10 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
         let officeDetails = {
           officeId: ret,
           transactionType:'office setup',
-          status: 'Pending'
+          status: 'Pending',
+          duration:{
+            years:1
+          }
         }
         let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'communityId', 'communityName']);
         let officeTransaction = _.extend(officeDetails, extendObj)
@@ -210,7 +213,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
       }, context)
       if (registrationId) { //for generating verfication token
         console.log('registrationId' + registrationId)
-        // MlAccounts.sendVerificationEmail(registrationId,{emailContentType:"html",subject:"Email Verification",context:context});
+        MlAccounts.sendVerificationEmail(registrationId,{emailContentType:"html",subject:"Email Verification",context:context});
       }
       if (registrationId) { //for creating new user
         let officeTrans = {

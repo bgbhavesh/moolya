@@ -67,6 +67,7 @@ MlModuleCollectionMap['MlPortfolioLibrary'] = 'PORTFOLIOLIBRARY';
 MlModuleCollectionMap['MlHierarchyAssignments'] = 'HIERARCHY';
 
 //Process Setup
+MlModuleCollectionMap['MlActions'] = 'MlActions';
 MlModuleCollectionMap['MlProcessSetup'] = 'PROCESSSETUP';
 MlModuleCollectionMap['MlProcessTransactions'] = 'PROCESSSETUP';
 //office
@@ -74,6 +75,15 @@ MlModuleCollectionMap['MlOffice'] = 'OFFICE';
 MlModuleCollectionMap['MlOfficeMembers'] = 'OFFICE';
 MlModuleCollectionMap['MlOfficeTransaction'] = 'OFFICE';
 MlModuleCollectionMap['MlOfficeInvite'] = 'OFFICE';
+MlModuleCollectionMap['MlUserSubscriptions'] = 'SUBSCRIPTIONS';
+MlModuleCollectionMap['MlLikes'] = 'INTERACTION';
+MlModuleCollectionMap['MlInquiries'] = 'INTERACTION';
+MlModuleCollectionMap['MlReviews'] = 'INTERACTION';
+MlModuleCollectionMap['MlViews'] = 'INTERACTION';
+MlModuleCollectionMap['MlComments'] = 'INTERACTION';
+MlModuleCollectionMap['MlFeedBacks'] = 'INTERACTION';
+MlModuleCollectionMap['MlConnections'] = 'INTERACTION';
+MlModuleCollectionMap['MlFollowings'] = 'INTERACTION';
 MlModuleCollectionMap['MlUserServiceCards'] = 'SUBSCRIPTIONS';
 
 module.exports=  MlModuleCollectionMap;

@@ -34,7 +34,6 @@ react-meteor-data
 
 npm-container
 
-apollo
 aldeed:schema-index
 dburles:mongo-collection-instances
 email
@@ -53,3 +52,4 @@ dispatch:mocha
 dispatch:mocha-browser
 practicalmeteor:sinon
 practicalmeteor:chai
+jparker:crypto-sha256

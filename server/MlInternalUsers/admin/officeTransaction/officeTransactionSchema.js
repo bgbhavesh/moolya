@@ -51,7 +51,7 @@ let officeTransaction = `
     
     type officeTransactionType {
       _id            : String
-      dataAndTime    : Date
+      dateTime       : Date
       userId         : String
       name           : String
       transactionId  : String
@@ -63,7 +63,8 @@ let officeTransaction = `
       status         : String
       action         : String
       userName       : String
-      transactionType :String
+      transactionType : String
+      profileId      : String
       orderSubscriptionDetails : OrderSubscriptionDetail
     }
     

@@ -337,14 +337,59 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
           }
         }
         if(resp){
-          if(subChapter && subChapter.chapterId){   //if(args.subChapterDetails && args.subChapterDetails.chapterId){
+
+          let subChapters = mlDBController.find('MlSubChapters', {chapterId:subChapter.chapterId}, context).fetch()
+          let status,activeCount=0,addCount=0,inactiveCount=0,inactiveCounts=0
+          if(subChapters){
+            subChapters.map(function (subchapter) {
+              if(subchapter.isActive && subchapter.showOnMap){
+                status = "active";
+                activeCount++
+              } else if(subchapter.isActive && !subchapter.showOnMap){
+                status = "add";
+                addCount++
+              } else if(!subchapter.isActive && subchapter.showOnMap){
+                status = "inactive";
+                inactiveCount++
+              } else if(!subchapter.isActive && !subchapter.showOnMap){
+                status = "inactive";
+                inactiveCounts++
+              }
+            })
+            if(subChapters.length == activeCount){
+              MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:subChapter.chapterId, chapter:{isActive:true, showOnMap:true}}, context, info)
+              let code = 200;
+              let result = {subChapter: resp}
+              let response = new MlRespPayload().successPayload(result, code);
+              return response
+            }else if(subChapters.length == addCount){
+              MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:subChapter.chapterId, chapter:{isActive:true, showOnMap:false}}, context, info)
+              let code = 200;
+              let result = {subChapter: resp}
+              let response = new MlRespPayload().successPayload(result, code);
+              return response
+            }else if(subChapters.length == inactiveCount){
+              MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:subChapter.chapterId, chapter:{isActive:false, showOnMap:true}}, context, info)
+              let code = 200;
+              let result = {subChapter: resp}
+              let response = new MlRespPayload().successPayload(result, code);
+              return response
+            }else if(subChapters.length == inactiveCounts){
+              MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:subChapter.chapterId, chapter:{isActive:false, showOnMap:false}}, context, info)
+              let code = 200;
+              let result = {subChapter: resp}
+              let response = new MlRespPayload().successPayload(result, code);
+              return response
+            }
+          }
+
+
+
+         /* if(subChapter && subChapter.chapterId){   //if(args.subChapterDetails && args.subChapterDetails.chapterId){
             MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:subChapter.chapterId, chapter:{isActive:subChapter.isActive, showOnMap:subChapter.showOnMap}}, context, info)
             // MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:args.subChapterDetails.chapterId, chapter:{isActive:subChapter.isActive, showOnMap:subChapter.showOnMap}}, context, info)
-          }
-            let code = 200;
-            let result = {subChapter: resp}
-            let response = new MlRespPayload().successPayload(result, code);
-            return response
+          }*/
+
         }
     }
 }

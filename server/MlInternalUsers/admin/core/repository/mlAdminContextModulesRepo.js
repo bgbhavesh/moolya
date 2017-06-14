@@ -147,10 +147,19 @@ let CoreModules = {
     }
     let serverQuery = {};
     let query = {};
+    let userContextQuery = {};
     requestParams = requestParams ? requestParams : null;
     let reqArray=requestParams.moduleName.split(',');
     serverQuery={moduleName:{$in:reqArray}}
-    query = mergeQueries(userFilterQuery, serverQuery);
+    let userProfile=new MlAdminUserContext().userProfileDetails(context.userId)||{};
+    if(userProfile.hierarchyLevel == 4){
+      userContextQuery = {}
+    }else if(userProfile.hierarchyLevel == 3){
+      let clusterIds = userProfile && userProfile.defaultProfileHierarchyRefId?userProfile.defaultProfileHierarchyRefId:[];
+      userContextQuery = {clusterId:{$in:clusterIds}}
+    }
+    query = mergeQueries(userContextQuery,userFilterQuery, serverQuery);
+
     const data = MlAudit.find(query, fieldsProj).fetch();
     const totalRecords = mlDBController.find('MlAudit', query, context, fieldsProj).count();
 
@@ -198,7 +207,7 @@ let CoreModules = {
         /*else
           serverQuery={'userId':context.userId,'status':{'$in':['Pending','WIP']}};*/
         break;
-      case 'approved':
+      case 'unauthorize':
         //if(userProfile.roleName === "platformadmin")
           serverQuery={'status':"Approved"};
         /*else
@@ -373,7 +382,7 @@ let CoreModules = {
     let pipleline = [
       {'$lookup':{ from:'users',localField:'userId', 'foreignField':'_id', as:'user' }},
       {'$unwind':'$user'},
-      {'$project':{ 'userName':'$user.profile.displayName', 'userId':1,'transactionId':1,'clusterName':1,'chapterName':1,'subChapterName':1, 'communityName':1, 'status':1 }}
+      {'$project':{ 'userName':'$user.profile.displayName', 'dateTime':1, 'userId':1,'transactionId':1,'clusterName':1,'chapterName':1,'subChapterName':1, 'communityName':1, 'status':1 , 'profileId':'$user.profile.externalUserProfiles.profileId'}}
     ];
     if(Object.keys(resultantQuery).length){
       pipleline.push({'$match':resultantQuery});
@@ -389,6 +398,118 @@ let CoreModules = {
     }
     var data= mlDBController.aggregate('MlOfficeTransaction',pipleline);
     var totalRecords=mlDBController.find('MlOfficeTransaction',resultantQuery,fieldsProj).count();
+    return {totalRecords:totalRecords,data:data};
+  },
+  MlDocumentRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){
+    var type=requestParams&&requestParams.type?requestParams.type:"";
+    var contextFieldMap={'clusterId':'clusters','chapterId':'chapters','subChapterId':'subchapters','communityId':'communities'};
+    var resultantQuery=MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery,contextFieldMap);
+    //construct context query with $in operator for each fields
+    resultantQuery=MlAdminContextQueryConstructor.constructQuery(resultantQuery,'$in');
+    var serverQuery ={};
+        serverQuery={'isActive':true};
+    //To display the latest record based on date
+    if(!fieldsProj.sort){
+      fieldsProj.sort={'date': -1}
+    }
+
+    //todo: internal filter query should be constructed.
+    //resultant query with $and operator
+    resultantQuery=MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery,resultantQuery,serverQuery),'$and');
+
+    var result=[];
+
+    let data=null
+    data=MlProcessMapping.find(resultantQuery,fieldsProj).fetch()||[];
+    data.map(function (doc,index) {
+      let industryIds=[];
+      let communityIds=[];
+      let clusterIds=[];
+      let stateIds=[];
+      let chapterIds=[];
+      let subChapterIds=[];
+      let professionIds=[];
+      let userTypeIds=[];
+      let processTypes=MlprocessTypes.findOne({_id:doc.process});
+      doc.communities.map(function (ids) {
+        communityIds.push(ids)
+      });
+      const communityData =  MlCommunityDefinition.find( { code: { $in: communityIds } } ).fetch() || [];
+      let communityNames = [];  //@array of strings
+      communityData.map(function (doc) {
+        communityNames.push(doc.name)
+      });
+      doc.industries.map(function (ids) {
+        industryIds.push(ids)
+      });
+      const industryData =  MlIndustries.find( { _id: { $in: industryIds } } ).fetch() || [];
+      let industryNames = [];  //@array of strings
+      industryData.map(function (doc) {
+        industryNames.push(doc.industryName)
+      });
+      doc.professions.map(function (ids) {
+        professionIds.push(ids)
+      });
+      const professionData =  MlProfessions.find( { _id: { $in: professionIds } } ).fetch() || [];
+      let professionNames = [];  //@array of strings
+      professionData.map(function (doc) {
+        professionNames.push(doc.professionName)
+      });
+      doc.clusters.map(function (ids) {
+        clusterIds.push(ids)
+      });
+      const clusterData =  MlClusters.find( { _id: { $in: clusterIds } } ).fetch() || [];
+      let clusterNames = [];  //@array of strings
+      clusterData.map(function (doc) {
+        clusterNames.push(doc.clusterName)
+      });
+      doc.states.map(function (ids) {
+        stateIds.push(ids)
+      });
+      const stateData =  MlStates.find( { _id: { $in: stateIds } } ).fetch() || [];
+      let stateNames = [];  //@array of strings
+      stateData.map(function (doc) {
+        stateNames.push(doc.name)
+      });
+      doc.chapters.map(function (ids) {
+        chapterIds.push(ids)
+      });
+      const chapterData =  MlChapters.find( { _id: { $in: chapterIds } } ).fetch() || [];
+      let chapterNames = [];  //@array of strings
+      chapterData.map(function (doc) {
+        chapterNames.push(doc.chapterName)
+      });
+
+      doc.subChapters.map(function (ids) {
+        subChapterIds.push(ids)
+      });
+      const subChapterData =  MlSubChapters.find( { _id: { $in: subChapterIds } } ).fetch() || [];
+      let subChapterNames = [];  //@array of strings
+      subChapterData.map(function (doc) {
+        subChapterNames.push(doc.subChapterName)
+      });
+      doc.userTypes.map(function (ids) {
+        userTypeIds.push(ids)
+      });
+      const userTypeData =  MlUserTypes.find( { _id: { $in: userTypeIds } } ).fetch() || [];
+      let userTypeNames = [];  //@array of strings
+      userTypeData.map(function (doc) {
+        userTypeNames.push(doc.userTypeName)
+      });
+
+      data[index].communityNames= communityNames || [];
+      data[index].professionNames= professionNames || [];
+      data[index].industrieNames= industryNames || [];
+      data[index].clusterNames = clusterNames || [];
+      data[index].stateNames = stateNames || [];
+      data[index].chapterNames = chapterNames || [];
+      data[index].subChapterNames = subChapterNames || [];
+      data[index].userTypeNames = userTypeNames || [];
+
+      data[index].processName=processTypes.processName;
+
+    });
+    var totalRecords=MlProcessMapping.find(resultantQuery,fieldsProj).count();
     return {totalRecords:totalRecords,data:data};
   }
 

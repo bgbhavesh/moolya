@@ -63,6 +63,15 @@ MlResolver.MlQueryResolver['findOfficeTransaction'] = (obj, args, context, info)
     let response = new MlRespPayload().successPayload("Office transaction id is required", code);
     return response;
   }
+  // let pipeline = [
+  //   {'$match':{_id:args.officeTransactionId}},
+  //   {'$project' : { trans: '$$ROOT'}},
+  //   {'$lookup':{ from: 'users', localField: 'trans.userId', foreignField: '_id', as: 'user'}},
+  //   {'$unwind':'$user'},
+  //   {'$project':{ trans:1, user: { createdAt : "$user.createdAt", name : '$user.profile.displayName', email : '$user.username', mobile : '$user.profile.mobileNumber' } }},
+  //   {'$lookup':{ from: 'mlOffice', localField: 'trans.officeId', foreignField: '_id', as: 'office'}},
+  //   {'$unwind':'$office'}
+  // ];
   let pipeline = [
     {'$match':{_id:args.officeTransactionId}},
     {'$project' : { trans: '$$ROOT'}},
@@ -70,7 +79,12 @@ MlResolver.MlQueryResolver['findOfficeTransaction'] = (obj, args, context, info)
     {'$unwind':'$user'},
     {'$project':{ trans:1, user: { createdAt : "$user.createdAt", name : '$user.profile.displayName', email : '$user.username', mobile : '$user.profile.mobileNumber' } }},
     {'$lookup':{ from: 'mlOffice', localField: 'trans.officeId', foreignField: '_id', as: 'office'}},
-    {'$unwind':'$office'}
+    {'$unwind':'$office'},
+    // {'$lookup':{ from: 'mlUserSubscriptions', localField: '_id', foreignField: 'resId', as: 'subscriptions'}},
+    // {'$unwind':'$subscriptions'},
+    // {'$sort':{'subscriptions._id':-1}},
+    // {'$limit':1},
+    // {'$project':{ trans:1, user:1, office:1, subscription:{ start:'$subscriptions.subscriptionDate', end:'$subscriptions.subscriptionEndDate' }}}
   ];
   let result = mlDBController.aggregate('MlOfficeTransaction', pipeline);
   let code = 200;

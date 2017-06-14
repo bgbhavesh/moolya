@@ -10,11 +10,11 @@ MlResolver.MlMutationResolver['createInquiry'] = (obj, args, context, info) =>{
     if(args && context && context.userId){
       var resp=null;
         try {
-            let user =mlDBController.findOne({_id:context.userId}, context);
+            let user =mlDBController.findOne('users',{_id:context.userId}, context);
             //let isValid = validateExternalUser(fromuser)
             /*if(!isValid){let code = 400;let response = new MlRespPayload().errorPayload('Invalid User', code);
              return response;}*/
-          let inquiry={requestId:args.requestId,requestType:args.requestType,subject:args.subject,
+          let inquiry={resourceId:args.resourceId,resourceType:args.resourceType,subject:args.subject,
                        message:args.message,userId:user._id,userEmail:user.username,createdOn:new Date()};
 
           resp = MlInquiries.insert(inquiry);

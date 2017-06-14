@@ -93,10 +93,12 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
         FlowRouter.go("/admin/transactions/approvedList");
       }
       else{
-        FlowRouter.go("/admin/transactions/requestedList");
+        FlowRouter.reload();
+        //FlowRouter.go("/admin/transactions/requestedList");
       }
     }else{
       toastr.error("User doesn't have privileges to act on this request")
+      FlowRouter.reload();
     }
   }
 

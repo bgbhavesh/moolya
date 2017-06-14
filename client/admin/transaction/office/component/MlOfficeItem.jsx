@@ -2,16 +2,13 @@
  * Created by pankaj on 6/6/17.
  */
 
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-var Select = require('react-select');
-import {initalizeFloatLabel} from '../../../utils/formElemUtil'
+import React from 'react'
+import{initalizeFloatLabel} from '../../../utils/formElemUtil'
 import {findOfficeTransactionHandler} from '../actions/findOfficeTranscation'
 import {updateSubcriptionDetail} from '../actions/updateSubscriptionDetail'
 import {updateOfficeStatus} from '../actions/updateOfficeStatus'
 import moment from 'moment'
+var Select = require('react-select');
 
 export default class MlOfficeItem extends React.Component {
   constructor(props){
@@ -27,7 +24,8 @@ export default class MlOfficeItem extends React.Component {
       cost: 0,
       tax:false,
       about:'',
-      isGenerateLinkDisable: false
+      isGenerateLinkDisable: false,
+      duration : ' '
     }
     this.getTransaction.bind(this);
     this.initializeSwiper.bind(this);
@@ -81,10 +79,17 @@ export default class MlOfficeItem extends React.Component {
   async getTransaction(id){
     let response = await findOfficeTransactionHandler(id);
     if(response){
+      let duration = ' ';
       let result = JSON.parse(response.result)[0];
       if(result){
+        console.log(result);
+        if(result.trans.duration){
+          let dbDuration = result.trans.duration;
+            duration = dbDuration.years+' Year'; // To do for month and all
+        }
         result.office.availableCommunities = result.office.availableCommunities && result.office.availableCommunities.length ? result.office.availableCommunities : [];
         this.setState({
+          duration: duration,
           transInfo: result.trans,
           userInfo: result.user,
           officeInfo: result.office,
@@ -120,10 +125,16 @@ export default class MlOfficeItem extends React.Component {
     })
     if(!this.state.cost){
       toastr.error('Cost is required');
+      this.setState({
+        isGenerateLinkDisable:false
+      })
       return false;
     }
     if(this.state.cost < 1){
       toastr.error('Enter tha valid cost');
+      this.setState({
+        isGenerateLinkDisable:false
+      })
       return false;
     }
     let generateLinkInfo = {
@@ -299,7 +310,7 @@ export default class MlOfficeItem extends React.Component {
                       <input type="text" defaultValue="123456" placeholder="Zip Code" value={this.state.officeInfo.zipCode} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue="duration" placeholder ="Duration" value='' className="form-control float-label" id=""/>
+                      <input type="text" defaultValue="duration" value={this.state.duration} placeholder ="" className="form-control float-label" id=""/>
                     </div>
                   </div>
                 </div>

@@ -34,20 +34,22 @@ const mlUserTypeTableConfig=new MlViewer.View({
     'chapterName': 'registrationInfo.chapterName',
     'accountType': 'registrationInfo.accountType',
     'assignedUser': 'registrationInfo.assignedUser',
-    'subChapterName': 'registrationInfo.subChapterName'
+    'subChapterName': 'registrationInfo.subChapterName',
+    'email':'registrationInfo.email',
+    'registrationId':'registrationInfo.registrationId'
   },
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "registrationDate", title: "Date",dataSort:true,customComponent:dateFormatter},
-    {dataField: "firstName", title: "Name",dataSort:true},
-    {dataField: "contactNumber", title: "ContactNo",dataSort:true},
-    {dataField: "communityName", title: "Community",dataSort:true},
+    {dataField: "registrationId",title:"Transaction ID",dataSort:true},
+    {dataField: "firstName", title: "Created By",dataSort:true},
+    {dataField: "email", title: "Email ID",dataSort:true},
     {dataField: "clusterName", title: "Cluster",dataSort:true},
     {dataField: "chapterName", title: "Chapter",dataSort:true},
     {dataField: "subChapterName", title: "SubChapter",dataSort:true},
-    {dataField: "accountType", title: "Subscription Type",dataSort:true},
-    {dataField: "source", title: "Source",dataSort:true},
+    {dataField: "communityName", title: "Community",dataSort:true},
+    {dataField: "registrationDate", title: "Date",dataSort:true,customComponent:dateFormatter},
     {dataField: "registrationStatus", title: "Status",dataSort:true},
+    // {dataField: "contactNumber", title: "ContactNo",dataSort:true},
     {dataField: "assignedUser", title: "Assignto",dataSort:true},
   ],
   tableHeaderClass:'react_table_head',
@@ -99,6 +101,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
                       			  clusterId
                       				chapterName
                               subChapterName
+                              email
                               accountType
                       				source
                               assignedUser

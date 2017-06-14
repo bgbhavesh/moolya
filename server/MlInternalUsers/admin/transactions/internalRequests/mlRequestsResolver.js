@@ -26,7 +26,8 @@ MlResolver.MlMutationResolver['createRequestss'] = (obj, args, context, info) =>
 
     if(Meteor.users.findOne({_id : context.userId}))
     {
-      args.requests.createdBy = Meteor.users.findOne({_id: context.userId}).username
+      args.requests.createdBy = Meteor.users.findOne({_id: context.userId}).profile.firstName;
+      args.requests.emailId = Meteor.users.findOne({_id: context.userId}).username;
     }
 
   let requestDetails = MlRequestType.findOne({"_id":args.requests.requestTypeId})|| {};

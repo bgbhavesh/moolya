@@ -4,23 +4,19 @@
 import MlResolver from '../../../commons/mlResolverDef'
 import MlRespPayload from '../../../commons/mlPayload'
 import _ from 'lodash';
-import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
-
+import mlInteractionService from '../mlInteractionRepoService';
 MlResolver.MlMutationResolver['createView'] = (obj, args, context, info) =>{
     if(args && context && context.userId){
       var resp=null;
         try {
-            let user =mlDBController.findOne({_id:context.userId}, context);
-            //let isValid = validateExternalUser(fromuser)
-            /*if(!isValid){let code = 400;let response = new MlRespPayload().errorPayload('Invalid User', code);
-             return response;}*/
-          let viewRequest={requestId:args.requestId,requestType:args.requestType,userId:user._id,
-                       userEmail:user.username,createdOn:new Date()};
+          var contextDetails=mlInteractionService.fetchContextUserDetails(context);
 
-          resp = MlViews.insert(viewRequest);
+          let viewRequest={resourceId:args.resourceId,resourceType:args.resourceType,userId:contextDetails._id,
+                       userEmail:contextDetails.username,createdOn:new Date()};
+
+          resp = mlDBController.update('MlViews',{'resourceId':args.resourceId},viewRequest,{$set: true,upsert: true},context);
 
           if(resp){
-            //todo: create a repo for like
             //transaction Log
           }
 

@@ -7,7 +7,7 @@ import MlSchemaDef from '../../../commons/mlSchemaDef'
 
 let viewSchema = `
     type Mutation{
-        createView(requestId:String!,requestType:String!):response       
+        createView(resourceId:String!,resourceType:String!):response       
     }
 `
 

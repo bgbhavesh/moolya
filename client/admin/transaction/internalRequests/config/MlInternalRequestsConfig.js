@@ -18,17 +18,16 @@ const mlInternalRequestsTableConfig=new MlViewer.View({
   filterComponent: <MlCustomFilter module="internalRequests" moduleName="internalRequests" />,
   columns:[
     {dataField: "requestId",title:"Id",'isKey':true,isHidden:true,selectRow:true},
-    {dataField: "transactionCreatedDate", title: "Created Date",dataSort:true,selectRow:true},
-    {dataField: "requestId", title: "Module Id",dataSort:true,selectRow:true},
-    {dataField: "requestTypeName", title: "Activity",dataSort:true,selectRow:true},
-    {dataField: "clusterName", title: "Details",dataSort:true,selectRow:true},
-    {dataField: "chapterName", title: "TransactionTypeName",dataSort:true,selectRow:true},
+    {dataField: "requestId", title: "Transaction Id",dataSort:true,selectRow:true},
+    {dataField: "createdBy", title: "Created By",dataSort:true,selectRow:true},
+    {dataField: "emailId", title: "Email Id",dataSort:true,selectRow:true},
     {dataField: "clusterName", title: "Cluster",dataSort:true,selectRow:true},
     {dataField: "chapterName", title: "Chapter",dataSort:true,selectRow:true},
     {dataField: "subChapterName", title: "Sub Chapter",dataSort:true,selectRow:true},
     {dataField: "communityName", title: "Community",dataSort:true,selectRow:true},
+    {dataField: "transactionCreatedDate", title: "Created Date",dataSort:true,selectRow:true},
     {dataField: "status", title: "status",dataSort:true,selectRow:true},
-    {dataField: "createdBy", title: "Created By",dataSort:true,selectRow:true}
+    {dataField: "requestTypeName", title: "Activity",dataSort:true,selectRow:true},
   ],
   tableHeaderClass:'react_table_head',
   isExpandableRow:(row)=>{return true;},
@@ -36,7 +35,6 @@ const mlInternalRequestsTableConfig=new MlViewer.View({
   showActionComponent:true,
   actionConfiguration:[
     {
-      showAction: true,
       showAction: true,
       actionName: 'add',
       hasPopOver:true,
@@ -66,6 +64,7 @@ const mlInternalRequestsTableConfig=new MlViewer.View({
                           userId
                           status
                           requestId
+                          emailId
                           requestTypeName
                           transactionCreatedDate
                           requestTypeId

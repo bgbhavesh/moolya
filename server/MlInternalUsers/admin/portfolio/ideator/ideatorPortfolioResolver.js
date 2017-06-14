@@ -440,67 +440,67 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['createLibrary'] = (obj, args, context, info) => {
-
-  var collectionExists = mlDBController.findOne('MlLibrary', {userId: context.userId}, context)
-  if (collectionExists) {
-    if(args.detailsInput.images) {
-      if(collectionExists.images){
-        let temp = collectionExists.images;
-        temp.push(args.detailsInput.images[0])
-        var updateExistingImageCollection = mlDBController.update('MlLibrary', {userId: context.userId}, {"images": temp}, {$set: 1}, context)
-      }else{
-        var updateImageCollection = mlDBController.update('MlLibrary', {userId: context.userId}, {"images": args.detailsInput.images}, {$set: 1}, context)
-      }
-    }
-    if(args.detailsInput.videos) {
-      if(collectionExists.videos) {
-        let temp = collectionExists.videos;
-        temp.push(args.detailsInput.videos[0])
-        var updateExistingVideoCollection = mlDBController.update('MlLibrary', {userId: context.userId}, {"videos": temp}, {$set: 1}, context)
-      }else{
-        var updateVideoCollection = mlDBController.update('MlLibrary', {userId: context.userId}, {"videos": args.detailsInput.videos}, {$set: 1}, context)
-      }
-    }
-    if(args.detailsInput.docments) {
-      if(collectionExists.documents) {
-        let temp = collectionExists.docments;
-        temp.push(args.detailsInput.docments[0])
-        var updateExistingDocumentCollection = mlDBController.update('MlLibrary', {userId: context.userId}, {"documents": temp}, {$set: 1}, context)
-      }else{
-        var updateDocumentCollection = mlDBController.update('MlLibrary', {userId: context.userId}, {"documents": args.detailsInput.documents}, {$set: 1}, context)
-      }
-    }
-    if(args.detailsInput.templates) {
-      if(collectionExists.templates) {
-        let temp = collectionExists.templates;
-        temp.push(args.detailsInput.templates[0])
-        var updateExistingTemplateCollection = mlDBController.update('MlLibrary', {userId: context.userId}, {"templates": temp}, {$set: 1}, context)
-      }else{
-        var updateTemplateCollection = mlDBController.update('MlLibrary', {userId: context.userId}, {"templates": args.detailsInput.templates}, {$set: 1}, context)
-      }
-    }
-  } else {
-    var newCollection = mlDBController.insert('MlLibrary', args.detailsInput, context)
-    return newCollection;
-    // }
+var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.detailsInput.userId}, context)
+  if(portfolioDetails ){
+    args.detailsInput.userId = portfolioDetails.userId;
   }
+    var collectionExists = mlDBController.findOne('MlLibrary', {userId: args.detailsInput.userId}, context)
+    if (collectionExists) {
+      if (args.detailsInput.images) {
+        if (collectionExists.images) {
+          let temp = collectionExists.images;
+          temp.push(args.detailsInput.images[0])
+          var updateExistingImageCollection = mlDBController.update('MlLibrary', {userId: args.detailsInput.userId}, {"images": temp}, {$set: 1}, context)
+        } else {
+          var updateImageCollection = mlDBController.update('MlLibrary', {userId: args.detailsInput.userId}, {"images": args.detailsInput.images}, {$set: 1}, context)
+        }
+      }
+      if (args.detailsInput.videos) {
+        if (collectionExists.videos) {
+          let temp = collectionExists.videos;
+          temp.push(args.detailsInput.videos[0])
+          var updateExistingVideoCollection = mlDBController.update('MlLibrary', {userId: args.detailsInput.userId}, {"videos": temp}, {$set: 1}, context)
+        } else {
+          var updateVideoCollection = mlDBController.update('MlLibrary', {userId: args.detailsInput.userId}, {"videos": args.detailsInput.videos}, {$set: 1}, context)
+        }
+      }
+      if (args.detailsInput.docments) {
+        if (collectionExists.documents) {
+          let temp = collectionExists.docments;
+          temp.push(args.detailsInput.docments[0])
+          var updateExistingDocumentCollection = mlDBController.update('MlLibrary', {userId: args.detailsInput.userId}, {"documents": temp}, {$set: 1}, context)
+        } else {
+          var updateDocumentCollection = mlDBController.update('MlLibrary', {userId: args.detailsInput.userId}, {"documents": args.detailsInput.documents}, {$set: 1}, context)
+        }
+      }
+      if (args.detailsInput.templates) {
+        if (collectionExists.templates) {
+          let temp = collectionExists.templates;
+          temp.push(args.detailsInput.templates[0])
+          var updateExistingTemplateCollection = mlDBController.update('MlLibrary', {userId: args.detailsInput.userId}, {"templates": temp}, {$set: 1}, context)
+        } else {
+          var updateTemplateCollection = mlDBController.update('MlLibrary', {userId: args.detailsInput.userId}, {"templates": args.detailsInput.templates}, {$set: 1}, context)
+        }
+      }
+    } else {
+      var newCollection = mlDBController.insert('MlLibrary', args.detailsInput, context)
+      return newCollection;
+      // }
+    }
+
 }
 
 
 MlResolver.MlQueryResolver['fetchLibrary'] = (obj, args, context, info) => {
-  var libraryData = mlDBController.find('MlLibrary', {userId: args.userId}, context).fetch();
-  // var filteredData = [];
-  // var filterData = libraryData.map(function(data){
-  //   var imageArray = data.images;
-  //   var imageDetails = imageArray.map(function(image){
-  //     filteredData.push(image.fileUrl)
-  //   })
-  // })
+  var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.userId}, context)
+  if (portfolioDetails) {
+    args.userId = portfolioDetails.userId;
+  }
+    var libraryData = mlDBController.find('MlLibrary', {userId: args.userId}, context).fetch();
+
     return libraryData;
 
 }
-
-
 
 MlResolver.MlQueryResolver['fetchAllowableFormats'] = (obj, args, context, info) => {
   var allowableFormats = mlDBController.find('MlDocumentFormats',{isActive:true}, context).fetch();

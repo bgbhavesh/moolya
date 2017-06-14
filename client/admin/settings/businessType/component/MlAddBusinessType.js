@@ -40,6 +40,7 @@ class MlAddBusinessType extends React.Component {
     }
 
     const response = await addBusinessTypeActionHandler(BusinessTypeDetails)
+    toastr.success("Business Type Created Successfully")
     return response;
   }
 

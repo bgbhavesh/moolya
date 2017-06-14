@@ -84,6 +84,7 @@ MlModuleCollectionMap['MlComments'] = 'INTERACTION';
 MlModuleCollectionMap['MlFeedBacks'] = 'INTERACTION';
 MlModuleCollectionMap['MlConnections'] = 'INTERACTION';
 MlModuleCollectionMap['MlFollowings'] = 'INTERACTION';
+MlModuleCollectionMap['MlUserServiceCards'] = 'SUBSCRIPTIONS';
 
 module.exports=  MlModuleCollectionMap;
 

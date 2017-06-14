@@ -40,7 +40,7 @@ let supportedApi = [
   {api:'updateSelectedSubDomain', actionName:'UPDATE', moduleName:"SUBDOMAIN"},
 
   {api:'findSubDomain', actionName:'READ', moduleName:"SUBDOMAIN"},
-  {api:'fetchIndustryDomain', actionName:'READ', moduleName:"SUBDOMAIN"}
+  {api:'fetchIndustryDomain', actionName:'READ', moduleName:"SUBDOMAIN", isWhiteList:true}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

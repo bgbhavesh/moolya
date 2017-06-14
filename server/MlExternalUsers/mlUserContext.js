@@ -26,7 +26,8 @@ class MlUserContext{
         check(userId,String);
         let userProfile = this.userProfileDetails(userId)||{};
         if(userProfile){
-            var menu = MlAppMenuConfig.findOne({communityDefCode: userProfile.communityCode})
+            // var menu = MlAppMenuConfig.findOne({communityDefCode: userProfile.communityCode})
+          var menu = MlAppMenuConfig.findOne({communityCode: userProfile.communityDefCode})
             if(menu)
                 return menu.menuName;
         }

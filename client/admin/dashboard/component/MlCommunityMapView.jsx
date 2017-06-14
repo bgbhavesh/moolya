@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import controllable from 'react-controllables';
-import MapCluster from '../../../commons/components/map/MapCluster';
+import MapCommunity from '../../../commons/components/map/MapCommunity';
 import MlLoader from '../../../commons/components/loader/loader'
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 
@@ -130,7 +130,7 @@ export default class MlCommunityMapView extends Component {
     return (
       <span>
         {communityIconList}
-        <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />
+        <MapCommunity data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />
       </span>
     );
   }

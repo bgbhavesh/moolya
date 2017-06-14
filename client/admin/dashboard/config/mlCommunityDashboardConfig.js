@@ -118,11 +118,11 @@ const mlCommunityDashboardMapConfig=new MlViewer.View({
               totalRecords
               data{
                   ...on BackendUsers{
-                      _id,
-                      text:name
+                      _id,                      
                       isActive:profile{isActive}                      
                       lat:latitude
                       lng:longitude
+                      text:communityCode
                       
                   }
               }      

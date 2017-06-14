@@ -7,7 +7,7 @@ import { ApolloProvider } from 'react-apollo';
 
 const defaultNetworkInterfaceConfig = {
     uri:  Meteor.absoluteUrl('graphql'),
-    opts: {},
+    opts: {credentials: 'same-origin',},
     useMeteorAccounts: true,
     batchingInterface: false
 };
@@ -34,13 +34,17 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
         applyMiddleware(request, next) {
           const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
           const currentUserToken = localStorageLoginToken || loginToken;
+          const tokenValue = getCookie('_csrf');
+          const csrfToken = tokenValue
           if (!currentUserToken) {
             next();
           }
           if (!request.options.headers) {
             request.options.headers = new Headers();
+
           }
           request.options.headers['meteor-login-token'] = currentUserToken;
+          request.options.headers['cookie'] = document.cookie;
           next();
         }
       }]);
@@ -80,10 +84,15 @@ const dataIdFromObject = defaultClientConfig.dataIdFromObject;
 
 export const client = new ApolloClient({networkInterface, dataIdFromObject});
 
+function getCookie(name) {
+  var value = "; " + document.cookie;
+  var parts = value.split("; " + name + "=");
+  if (parts.length == 2) return parts.pop().split(";").shift();
+}
 
 /*
 const networkInterace=createNetworkInterface(Meteor.settings.public.graphUrl);
-export const client = new ApolloClient({networkInterace,dataIdFromObject:r=>r.id});
+export const client = newap ApolloClient({networkInterace,dataIdFromObject:r=>r.id});
 
     networkInterface.use([{
       applyMiddleware(req, next) {

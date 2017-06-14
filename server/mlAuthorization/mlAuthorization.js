@@ -139,41 +139,45 @@ class MlAuthorization
     var user = mlDBController.findOne('users', {_id: userId}, context)
     if(user && user.profile && user.profile.isInternaluser == true)
     {
-      let userProfileDetails = new MlAdminUserContext().userProfileDetails(userId);
-      var hierarchy = MlHierarchy.findOne({level:Number(userProfileDetails.hierarchyLevel)});
+        let userProfileDetails = new MlAdminUserContext().userProfileDetails(userId);
+        var hierarchy = MlHierarchy.findOne({level:Number(userProfileDetails.hierarchyLevel)});
+        if(hierarchy.isParent===true){
+           return true;
+        }
 
-            if(hierarchy.isParent===true){
-              return true;
-            }
-            let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-            let user_roles;
+        let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
+        let user_roles;
 
-
-
-            // Selecting Default Profile
-            for(var i = 0; i < user_profiles.length; i++){
-                if(user_profiles[i].isDefault == true){
-                    user_roles = user_profiles[i].userRoles
-                    break;
-                }
-            }
-
-            if(user_roles && user_roles.length > 0){
-                let role;
-                // _.each(user_roles, function (role)
-                for(var i = 0; i < user_roles.length; i++){
-                    ret = this.validateRole(user_roles[i].roleId, module, action)
-                    if(ret){
-                      return this.validateDataContext(user_roles[i], moduleName, actionName, req, isContextSpecSearch, hierarchy)
-                    }
-                }
+        // Selecting Default Profile
+        for(var i = 0; i < user_profiles.length; i++){
+            if(user_profiles[i].isDefault == true){
+                user_roles = user_profiles[i].userRoles
+                break;
             }
         }
-        else if(user && user.profile && user.profile.isExternaluser == true){
-            return true
+
+        if(user_roles && user_roles.length > 0)
+        {
+
+            var highestRole = _.find(user_roles , {hierarchyCode:userProfileDetails.hierarchyCode})
+            ret = this.validateRole(highestRole.roleId, module, action)
+            if(ret){
+                return this.validateDataContext(highestRole, moduleName, actionName, req, isContextSpecSearch, hierarchy)
+            }
+            // let role;
+            // for(var i = 0; i < user_roles.length; i++){
+            //     ret = this.validateRole(user_roles[i].roleId, module, action)
+            //     if(ret){
+            //       return this.validateDataContext(user_roles[i], moduleName, actionName, req, isContextSpecSearch, hierarchy)
+            //     }
+            // }
         }
-        return ret;
     }
+    else if(user && user.profile && user.profile.isExternaluser == true){
+        return true
+    }
+    return ret;
+  }
 
     validateRole(roleId, accessModule, accessAction){
         let ret = false;

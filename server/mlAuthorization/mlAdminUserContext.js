@@ -66,7 +66,7 @@ class MlAdminUserContext
                 if (defaultCommunities.indexOf(userRole.communityId < 0))
                   defaultCommunities.push({communityId: userRole.communityId, communityCode: userRole.communityCode})
                 // defaultCommunities.push(userRole.communityId)
-              roleName = userRole.roleName
+                roleName = userRole.roleName
               }
           })
 

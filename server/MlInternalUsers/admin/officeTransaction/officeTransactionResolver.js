@@ -116,7 +116,7 @@ MlResolver.MlMutationResolver['officeTransactionPayment'] = (obj, args, context,
         subscriptionEndDate : moment(curDate).add(365, 'day')._d
       }
 
-      mlDBController.insert('MlUserSubscriptions', subscriptionObj, context)
+      //mlDBController.insert('MlUserSubscriptions', subscriptionObj, context)
     }
   } catch (e) {
     let code = 400;

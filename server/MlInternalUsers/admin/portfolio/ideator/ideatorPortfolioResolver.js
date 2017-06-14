@@ -187,7 +187,7 @@ MlResolver.MlQueryResolver['fetchAnnotations'] = (obj, args, context, info) => {
                         profileImage=user.profile&&user.profile.profileImage?user.profile.profileImage:''
                       }
                     let details = new MlAdminUserContext().userProfileDetails(value.userId)||{};
-                      annotators.push({annotatorId:value._id, quote:quote,userName: firstName +''+ lastName,createdAt:value.createdAt,roleName:details.roleName,profileImage:profileImage})
+                      annotators.push({annotatorId:value._id, quote:quote,userName: firstName +' '+ lastName,createdAt:value.createdAt,roleName:details.roleName,profileImage:profileImage})
                 })
             }
         }

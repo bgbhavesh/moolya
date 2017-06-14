@@ -44,7 +44,8 @@ adminSection.route('/clusters/:clusterId/chapters', {
 adminSection.route('/clusters/:clusterId/communities', {
   name: 'cluster_communities',
   action(params){
-    mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterCommunityListConfig}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterCommunityListConfig}/>})
+    // mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterCommunityListConfig}/>})
   }
 });
 adminSection.route('/clusters/:clusterId/communities/:communityId', {

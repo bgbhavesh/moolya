@@ -6,8 +6,11 @@ import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
-
+import {initalizeFloatLabel} from '../../../../../client/admin/utils/formElemUtil';
 export default class MlSpokePersonDetail extends React.Component {
+  componentDidUpdate(){
+    initalizeFloatLabel();
+  }
   render() {
     return (
       <div className="col-lg-12">

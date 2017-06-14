@@ -40,6 +40,7 @@ class MlAddCitizenship extends React.Component {
     }
 
     const response = await addCitizenshipActionHandler(CitizenshipDetails)
+    toastr.success("CitizenShip Created Successfully");
     return response;
   }
   componentDidMount()  {

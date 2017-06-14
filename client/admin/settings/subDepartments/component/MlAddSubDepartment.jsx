@@ -54,6 +54,7 @@ class MlAddSubDepartment extends React.Component{
       }
 
       const response = await addSubDepartmentActionHandler(SubDepartmentDetails);
+      toastr.success("SubDepartment Created Successfully");
       return response;
     }
   }

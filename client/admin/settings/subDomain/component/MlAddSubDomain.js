@@ -50,6 +50,7 @@ class MlAddSubDomain extends React.Component {
     }
 
     const response = await addSubDomain(subdomainInfo)
+    toastr.success("SubDomain Created Successfully")
     return response;
   }
   componentDidMount()  {

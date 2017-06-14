@@ -52,7 +52,7 @@ class MlRegional extends React.Component{
 
   async handleSuccess(response) {
     if(response){
-      toastr.error('Successfully Saved');
+      toastr.success('Successfully Saved');
       FlowRouter.go("/admin/settings/regionalsList");
     }
 

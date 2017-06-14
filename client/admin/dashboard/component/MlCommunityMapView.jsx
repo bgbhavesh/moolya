@@ -23,9 +23,9 @@ export default class MlCommunityMapView extends Component {
     if(loggedInUser.hierarchyLevel != 4){
       zoom = 4;
     }
-    let hasCenter=that.props.fetchCenter||false;
+    let hasCenter=that.props.config.fetchCenter||false;
     if(hasCenter){
-      let center= await that.props.fetchCenterHandler(that.props);
+      let center= await that.props.config.fetchCenterHandler(that.props.config);
       this.setState({center:center||defaultCenter,zoom:zoom});
     }else{
       this.setState({

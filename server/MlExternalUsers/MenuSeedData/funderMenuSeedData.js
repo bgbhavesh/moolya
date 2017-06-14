@@ -24,8 +24,8 @@ if(Meteor.isServer){
       // },
 
       {
-        "image":"fa fa-calender",
-        "link": "/app/dashboard",
+        "image":"ml flaticon-ml-pc-search",
+        "link": "/app/explore",
         "isLink" : true,
         "isMenu" : true,
         "name" : "Explore",
@@ -33,8 +33,8 @@ if(Meteor.isServer){
       },
 
       {
-        "image":"fa fa-calender",
-        "link": "/app/dashboard",
+        "image":"fa fa-calendar",
+        "link": "/app/calendar",
         "isLink" : true,
         "isMenu" : true,
         "name" : "Calender",

@@ -40,7 +40,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], FundingTypesSchema]
 
 let supportedApi = [
   {api:'fetchFundingType', actionName:'READ', moduleName:"FUNDINGTYPE"},
-  {api:'fetchFundingTypes', actionName:'READ', moduleName:"FUNDINGTYPE"},
+  {api:'fetchFundingTypes', actionName:'READ', moduleName:"FUNDINGTYPE", isWhiteList:true},
 
   {api:'createFundingType', actionName:'CREATE', moduleName:"FUNDINGTYPE"},
   {api:'updateFundingType', actionName:'UPDATE', moduleName:"FUNDINGTYPE"}

@@ -173,6 +173,9 @@ class MlAddBackendUser extends React.Component {
         if (!response.success) {
           toastr.error("Email already exists")
         }
+        else if(response.success){
+          toastr.success("Backend User Created Successfully")
+        }
         return response;
       }
     }

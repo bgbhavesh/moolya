@@ -68,6 +68,13 @@ appSection.route('/dashboard', {
   }
 });
 
+appSection.route('/explore', {
+  name: 'myProfile',
+  action(){
+    mount(AppLayout,{appContent:<MlAppMyProfile/>, isProfileMenu:true})
+  }
+});
+
 appSection.route('/myProfile', {
   name: 'myProfile',
   action(){

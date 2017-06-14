@@ -65,7 +65,7 @@ MlResolver.MlMutationResolver['createConnection'] = (obj, args, context, info) =
                 return response;
             }
 
-            let isAlreadyExist = MlConnections.findOne({"users.userid":{"$in":[context.userid, args.connection.toUser.userid]}})
+            let isAlreadyExist = MlConnections.findOne({"users.userid":{"$all":[context.userid, args.connection.toUser.userid]}})
             if(isAlreadyExist){
                 let code = 400;
                 let response = new MlRespPayload().errorPayload('Connection Already Exists', code);

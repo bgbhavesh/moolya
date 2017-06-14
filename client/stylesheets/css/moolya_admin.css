@@ -1381,7 +1381,6 @@ button.close {
 .menu_count{background: #ef4647; position: absolute; color: #fff; z-index: 9; border-radius: 50%;width: 22px; height: 22px; line-height: 22px; font-size: 9px; right: -15px; top: -8px; text-align: center;}
 .menunone{display: none !important;}
 .nomargintop{margin-top: 0 !important;}
-
 .m_red{color:#ef4647;}
 .m_yel{color:#ffc20e;}
 
@@ -1391,7 +1390,6 @@ button.close {
   position: fixed !important;
   bottom: 65px;
 }
-
 .popover-custom-class div{
   bottom: 0;
 }
@@ -1399,6 +1397,14 @@ button.close {
 .show-information{position: absolute; background: rgba(51, 51, 51, 0.76); width: 100%; top: 0; left: 0; height: 100%; z-index: 9; color: #fff; padding: 10px;border-radius: 0 0 4px 4px;text-align: center; line-height:50px}
 .uploaded_files .panel-body{position: relative;}
 .full_user_block .form_inner_block {width: 100%;}
-.full_user_block .ml{
-	font-size: 32px;
+.full_user_block .ml{	font-size: 32px;}
+
+.community_icon{
+  width: 10px;height:10px;border-radius:50%;position:absolute;
 }
+.id{background:#9a9c9e !important;}
+.fu{background:#82d51b !important;}
+.st{background:#d83952 !important;}
+.pr{background:#367064 !important;}
+.br{background:#922b71 !important;}
+.co{background:#0099ff !important;}

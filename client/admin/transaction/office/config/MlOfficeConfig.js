@@ -8,7 +8,7 @@ import gql from 'graphql-tag'
 import moment from 'moment'
 
 function dateFormatter (data){
-  let createdDateTime=data&&data.data&&data.data.date;
+  let createdDateTime=data&&data.data&&data.data.dateTime;
   return <div>{moment(createdDateTime).format('MM/DD/YYYY HH:mm:ss')}</div>;
 }
 const mlOfficeTableConfig=new MlViewer.View({
@@ -24,7 +24,7 @@ const mlOfficeTableConfig=new MlViewer.View({
   isExpandableRow:(row)=>{return true;},
   expandComponent:MlOfficeItem,
   columns:[
-    {dataField: "createdAt", title: "Date & Time",dataSort:true,customComponent:dateFormatter},
+    {dataField: "dateTime", title: "Date & Time",dataSort:true,customComponent:dateFormatter},
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "userId", title: "UserId",dataSort:true},
     {dataField: "userName", title: "Name",dataSort:true},
@@ -55,6 +55,7 @@ const mlOfficeTableConfig=new MlViewer.View({
                       transactionId
                       status
                       userName
+                      dateTime
                     }
                     }
               }

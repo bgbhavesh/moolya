@@ -17,9 +17,10 @@ export default class MlAppMyProfile extends Component {
   }
   componentWillMount(){
     let userDetails = Meteor.user();
+    console.log(userDetails)
     let firstName = userDetails.profile.firstName
     let lastName = userDetails.profile.lastName
-    let displayName = userDetails.profile.displayName
+    let displayName = userDetails.emails[0].address
     let profileImage = userDetails.profile.profileImage;
     this.setState({userId:Meteor.userId(),firstName: firstName, lastName:lastName, displayName:displayName,profileImage : profileImage, loading:false})
   }
@@ -97,7 +98,7 @@ export default class MlAppMyProfile extends Component {
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" placeholder="Display Name" className="form-control float-label"
+                      <input type="text" placeholder="User Name" className="form-control float-label"
                              defaultValue={this.state.displayName}/>
                     </div>
                     <div className="form-group">

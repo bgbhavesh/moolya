@@ -5,12 +5,12 @@ import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import {multipartASyncFormHandler} from '../../../commons/MlMultipartFormAction'
-import {createLibrary, fetchLibrary, getAllowableDocumentFormats} from '../actions/IdeaActionHandler'
-import MlVideoPlayer from  '../../../commons/videoPlayer/MlVideoPlayer'
+import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
+import {createLibrary, fetchLibrary, getAllowableDocumentFormats} from '../../../../../../app/ideators/actions/IdeaActionHandler'
+import MlVideoPlayer from  '../../../../../../commons/videoPlayer/MlVideoPlayer'
 
 
-export default class PortfolioLibrary extends React.Component{
+export default class  PortfolioLibrary extends React.Component{
 
   constructor(props) {
     super(props);
@@ -28,7 +28,7 @@ export default class PortfolioLibrary extends React.Component{
       videoUrl:'',
       fileType:"",
       fileName:""
-  };
+    };
 
     this.toggle = this.toggle.bind(this);
     this.fetchOnlyImages.bind(this);
@@ -41,14 +41,14 @@ export default class PortfolioLibrary extends React.Component{
     });
   }
 
-   ImageUpload(e){
+  ImageUpload(e){
     let file=document.getElementById("image_upload").files[0];
     this.setState({fileType:file.type,fileName:file.name });
     if(file) {
       let data = {moduleName: "PROFILE", actionName: "UPDATE"}
       let response =  multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "image"));
-      }
     }
+  }
 
   videoUpload() {
     let file = document.getElementById("video_upload").files[0];
@@ -59,9 +59,9 @@ export default class PortfolioLibrary extends React.Component{
     }
   }
   TemplateUpload(){
-     let file = document.getElementById("template_upload").files[0];
+    let file = document.getElementById("template_upload").files[0];
     this.setState({fileType:file.type,fileName:file.name });
-     if (file) {
+    if (file) {
       let data = {moduleName: "PROFILE", actionName: "UPDATE"}
       let response =  multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this,"template"));
     }
@@ -76,7 +76,7 @@ export default class PortfolioLibrary extends React.Component{
   }
 
   fetchOnlyImages(){
-     let userId = Meteor.userId();
+    let userId = this.props.portfolioDetailsId;
     this.getLibraryDetails(userId)
   }
 
@@ -118,7 +118,7 @@ export default class PortfolioLibrary extends React.Component{
     switch(dataType) {
       case "image":
         let  imageDetails = {
-          userId: Meteor.userId(),
+          userId: this.props.portfolioDetailsId,
           images: {
             fileName: this.state.fileName,
             fileUrl: link,
@@ -132,7 +132,7 @@ export default class PortfolioLibrary extends React.Component{
         break;
       case "video":
         let  videoDetails = {
-          userId: Meteor.userId(),
+          userId: this.props.portfolioDetailsId,
           videos: {
             fileName: this.state.fileName,
             fileUrl: link,
@@ -144,7 +144,7 @@ export default class PortfolioLibrary extends React.Component{
         break;
       case "document":
         let  documentDetails = {
-          userId: Meteor.userId(),
+          userId: this.props.portfolioDetailsId,
           documents: {
             fileName: this.state.fileName,
             fileUrl: link,
@@ -156,7 +156,7 @@ export default class PortfolioLibrary extends React.Component{
         break;
       case "template":
         let  templateDetails = {
-          userId: Meteor.userId(),
+          userId: this.props.portfolioDetailsId,
           templates: {
             fileName: this.state.fileName,
             fileUrl: link,
@@ -170,7 +170,8 @@ export default class PortfolioLibrary extends React.Component{
 
   }
   componentWillMount(){
-    userId =  Meteor.userId();
+    userId =  this.props.portfolioDetailsId;
+    console.log(this.props)
     this.getLibraryDetails(userId);
     this.getAllowableDocumentFormats();
   }
@@ -251,11 +252,11 @@ export default class PortfolioLibrary extends React.Component{
 
   }
 
-   random(link,index){
+  random(link,index){
     let data = this.state.imageSpecifications || [];
-     let imagePreviewUrl;
-     imagePreviewUrl = data[index].fileUrl;
-     this.setState({previewImage:imagePreviewUrl});
+    let imagePreviewUrl;
+    imagePreviewUrl = data[index].fileUrl;
+    this.setState({previewImage:imagePreviewUrl});
   }
 
   randomTemplate(link,index){
@@ -293,13 +294,13 @@ export default class PortfolioLibrary extends React.Component{
     let that = this;
     const Images = imageData.map(function(show,id) {
       return(
-        <div className="thumbnail"key={id}><FontAwesome name='unlock' /><a href="#" data-toggle="modal" data-target=".imagepop" onClick={that.random.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
+        <div className="thumbnail"key={id}><FontAwesome name='unlock'/><a href="#" data-toggle="modal" data-target=".imagepop" onClick={that.random.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
           <div id="images" className="title">{show.fileName}</div>
         </div>
-        )
+      )
     });
 
-let templateData =  this.state.templateSpecifications || [];
+    let templateData =  this.state.templateSpecifications || [];
     const Templates = templateData.map(function(show,id) {
       return(
         <div className="thumbnail"key={id}><FontAwesome name='unlock'/><a href="#" data-toggle="modal" data-target=".templatepop" onClick={that.randomTemplate.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
@@ -316,9 +317,9 @@ let templateData =  this.state.templateSpecifications || [];
         <div className="thumbnail">
           <FontAwesome name='unlock'/>
           <a href="" data-toggle="modal" data-target=".videopop" onClick={that.randomVideo.bind(that,show.fileUrl,id)}>
-          <video width="120" height="100" controls>
+            <video width="120" height="100" controls>
               <source src={show.fileUrl}type="video/mp4"></source>
-          </video>
+            </video>
           </a>
           <div className="title">{show.fileName}</div>
         </div>
@@ -334,7 +335,7 @@ let templateData =  this.state.templateSpecifications || [];
     return (
       <div>
         <h2>Library</h2>
-         {/*<Button color="danger" onClick={this.toggle}>{this.props.buttonLabel}</Button>*/}
+        {/*<Button color="danger" onClick={this.toggle}>{this.props.buttonLabel}</Button>*/}
         <Modal isOpen={this.state.modal} toggle={this.toggle} className={'library-popup'}>
           <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
           <ModalBody>
@@ -394,16 +395,16 @@ let templateData =  this.state.templateSpecifications || [];
 
         {/*<div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">*/}
 
-          {/*<div className="panel panel-default">*/}
-            {/*<div className="panel-heading">*/}
-              {/*Documents<input type="file" className="upload_file upload" name="file_source" />*/}
+        {/*<div className="panel panel-default">*/}
+        {/*<div className="panel-heading">*/}
+        {/*Documents<input type="file" className="upload_file upload" name="file_source" />*/}
 
-          {/*</div>*/}
-            {/*<div className="panel-body">*/}
-              {/*/!*<div className="thumbnail"><FontAwesome name='unlock'/><a className="view-pdf" href="/images/sample.pdf"><img src="/images/ppt.png"/></a><div className="title">Document</div></div>*!/*/}
-              {/*<div className="thumbnail"><FontAwesome name='unlock'/><a data-toggle="modal" data-target=".pdfpop" href="#"><img src="/images/ppt.png"/></a><div className="title">Document</div></div>*/}
-            {/*</div>*/}
-          {/*</div>*/}
+        {/*</div>*/}
+        {/*<div className="panel-body">*/}
+        {/*/!*<div className="thumbnail"><FontAwesome name='unlock'/><a className="view-pdf" href="/images/sample.pdf"><img src="/images/ppt.png"/></a><div className="title">Document</div></div>*!/*/}
+        {/*<div className="thumbnail"><FontAwesome name='unlock'/><a data-toggle="modal" data-target=".pdfpop" href="#"><img src="/images/ppt.png"/></a><div className="title">Document</div></div>*/}
+        {/*</div>*/}
+        {/*</div>*/}
         {/*</div>*/}
         <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-right">
           <div className="panel panel-default">
@@ -416,11 +417,11 @@ let templateData =  this.state.templateSpecifications || [];
               </div>
             </div>
             <ul>
-            <li>
-              <div className="panel-body">
-            {Images}
-              </div>
-            </li>
+              <li>
+                <div className="panel-body">
+                  {Images}
+                </div>
+              </li>
             </ul>
           </div>
         </div>
@@ -430,15 +431,15 @@ let templateData =  this.state.templateSpecifications || [];
               Videos
               <div className="fileUpload upload_file_mask pull-right">
                 <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-              <input type="file" className="upload_file upload" name="video_source" id="video_upload" onChange={that.videoUpload.bind(that)} />
+                  <input type="file" className="upload_file upload" name="video_source" id="video_upload" onChange={that.videoUpload.bind(that)} />
                 </a>
-            </div>
+              </div>
             </div>
             <ul>
               <li>
-            <div className="panel-body">
-              {videos}
-            </div>
+                <div className="panel-body">
+                  {videos}
+                </div>
               </li>
             </ul>
           </div>
@@ -453,88 +454,88 @@ let templateData =  this.state.templateSpecifications || [];
                 </a>
               </div>
             </div>
-            </div>
-
-            <ul>
-              <li>
-                <div className="panel-body">
-                  {Templates}
-                </div>
-              </li>
-            </ul>
           </div>
 
+          <ul>
+            <li>
+              <div className="panel-body">
+                {Templates}
+              </div>
+            </li>
+          </ul>
+        </div>
+
         {/*<div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-right">*/}
-          {/*<div className="panel panel-default">*/}
-            {/*<div className="panel-heading">*/}
-              {/*Templates  <span className="see-more pull-right">*/}
-              {/*<input type="file" className="upload_file upload" name="image_source" id="image_upload" onChange={this.TemplateUpload.bind(this)} /></span>*/}
-            {/*</div>*/}
-            {/*<div className="panel-body">*/}
-              {/*<div className="thumbnail"><FontAwesome name='lock'/><img src="/images/template_1.jpg"/><div className="title">Template</div></div>*/}
-            {/*</div>*/}
-            {/*<ul>*/}
-              {/*<li>*/}
-                {/*<div className="panel-body">*/}
-                  {/*{Templates}*/}
-                {/*</div>*/}
-              {/*</li>*/}
-            {/*</ul>*/}
-          {/*</div>*/}
+        {/*<div className="panel panel-default">*/}
+        {/*<div className="panel-heading">*/}
+        {/*Templates  <span className="see-more pull-right">*/}
+        {/*<input type="file" className="upload_file upload" name="image_source" id="image_upload" onChange={this.TemplateUpload.bind(this)} /></span>*/}
+        {/*</div>*/}
+        {/*<div className="panel-body">*/}
+        {/*<div className="thumbnail"><FontAwesome name='lock'/><img src="/images/template_1.jpg"/><div className="title">Template</div></div>*/}
+        {/*</div>*/}
+        {/*<ul>*/}
+        {/*<li>*/}
+        {/*<div className="panel-body">*/}
+        {/*{Templates}*/}
+        {/*</div>*/}
+        {/*</li>*/}
+        {/*</ul>*/}
+        {/*</div>*/}
         {/*</div>*/}
         {/*--------------------------------------*/}
 
         {/*<h2>Documents</h2>*/}
-         {/*<div className="col-md-12 library-wrap-details">*/}
-         {/*<div className="row">*/}
-         {/*<div className="col-lg-2 col-md-3 col-sm-3">*/}
-         {/*<div className="list_block">*/}
-         {/*<div className="cluster_status"><FontAwesome name='lock'/></div>*/}
+        {/*<div className="col-md-12 library-wrap-details">*/}
+        {/*<div className="row">*/}
+        {/*<div className="col-lg-2 col-md-3 col-sm-3">*/}
+        {/*<div className="list_block">*/}
+        {/*<div className="cluster_status"><FontAwesome name='lock'/></div>*/}
 
-         {/*<h3>Document</h3>*/}
-         {/*</div>*/}
-         {/*</div>*/}
-         {/*<div className="col-lg-2 col-md-3 col-sm-3">*/}
-         {/*<div className="list_block">*/}
-         {/*<div className="cluster_status"><FontAwesome name='lock'/></div>*/}
+        {/*<h3>Document</h3>*/}
+        {/*</div>*/}
+        {/*</div>*/}
+        {/*<div className="col-lg-2 col-md-3 col-sm-3">*/}
+        {/*<div className="list_block">*/}
+        {/*<div className="cluster_status"><FontAwesome name='lock'/></div>*/}
 
-         {/*<h3>Document</h3>*/}
-         {/*</div>*/}
-         {/*</div>*/}
-         {/*<div className="col-lg-2 col-md-3 col-sm-3">*/}
-         {/*<div className="list_block">*/}
-         {/*<div className="cluster_status"><FontAwesome name='lock'/></div>*/}
+        {/*<h3>Document</h3>*/}
+        {/*</div>*/}
+        {/*</div>*/}
+        {/*<div className="col-lg-2 col-md-3 col-sm-3">*/}
+        {/*<div className="list_block">*/}
+        {/*<div className="cluster_status"><FontAwesome name='lock'/></div>*/}
 
-         {/*<h3>Document</h3>*/}
-         {/*</div>*/}
-         {/*</div>*/}
-         {/*<div className="col-lg-2 col-md-3 col-sm-3">*/}
-         {/*<div className="list_block">*/}
-         {/*<div className="cluster_status"><FontAwesome name='lock'/></div>*/}
+        {/*<h3>Document</h3>*/}
+        {/*</div>*/}
+        {/*</div>*/}
+        {/*<div className="col-lg-2 col-md-3 col-sm-3">*/}
+        {/*<div className="list_block">*/}
+        {/*<div className="cluster_status"><FontAwesome name='lock'/></div>*/}
 
-         {/*<h3>Document</h3>*/}
-         {/*</div>*/}
-         {/*</div>*/}
-         {/*<div className="col-lg-2 col-md-3 col-sm-3">*/}
-         {/*<a href="/admin/editCluster">*/}
-         {/*<div className="list_block">*/}
-         {/*<div className="cluster_status"><FontAwesome name='lock'/></div>*/}
+        {/*<h3>Document</h3>*/}
+        {/*</div>*/}
+        {/*</div>*/}
+        {/*<div className="col-lg-2 col-md-3 col-sm-3">*/}
+        {/*<a href="/admin/editCluster">*/}
+        {/*<div className="list_block">*/}
+        {/*<div className="cluster_status"><FontAwesome name='lock'/></div>*/}
 
-         {/*<h3>Document</h3>*/}
-         {/*</div>*/}
-         {/*</a>*/}
-         {/*</div>*/}
-         {/*<div className="col-lg-2 col-md-3 col-sm-3">*/}
-         {/*<div className="list_block">*/}
-         {/*<div className="cluster_status"><FontAwesome name='lock'/></div>*/}
+        {/*<h3>Document</h3>*/}
+        {/*</div>*/}
+        {/*</a>*/}
+        {/*</div>*/}
+        {/*<div className="col-lg-2 col-md-3 col-sm-3">*/}
+        {/*<div className="list_block">*/}
+        {/*<div className="cluster_status"><FontAwesome name='lock'/></div>*/}
 
-         {/*<h3>Document</h3>*/}
-         {/*</div>*/}
+        {/*<h3>Document</h3>*/}
+        {/*</div>*/}
 
-         {/*</div>*/}
+        {/*</div>*/}
 
-         {/*</div>*/}
-         {/*</div>*/}
+        {/*</div>*/}
+        {/*</div>*/}
       </div>
     )
   }

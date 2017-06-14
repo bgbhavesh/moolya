@@ -33,6 +33,17 @@ MlResolver.MlQueryResolver['fetchProcessSetup'] = (obj, args, context, info) =>{
   return {};
 }
 
+MlResolver.MlQueryResolver['fetchUserProcessSetup'] = (obj, args, context, info) => {
+  if (context.userId) {
+    console.log('server hit')
+    let processSetup = mlDBController.findOne('MlProcessSetup', {userId: context.userId}, context)
+    if (processSetup) {
+      return processSetup
+    }
+  }
+  return {};
+}
+
 MlResolver.MlMutationResolver['createProcessTransaction'] = (obj, args, context, info) =>{
     if(args.portfoliodetails){
       let ret;

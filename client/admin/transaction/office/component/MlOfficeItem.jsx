@@ -104,7 +104,11 @@ export default class MlOfficeItem extends React.Component {
   }
 
   updateCost(e){
-    this.setState({"cost":e.currentTarget.value});
+    if(e.currentTarget.value >= 0) {
+      this.setState({"cost":e.currentTarget.value});
+    } else {
+      this.setState({"cost":0});
+    }
   }
 
   updateTax(e){

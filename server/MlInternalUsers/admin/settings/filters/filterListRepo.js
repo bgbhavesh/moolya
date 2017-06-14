@@ -156,12 +156,17 @@ export default class MlFilterListRepo{
           }
         }else if(requestParams.fieldActive == "Chapter"){ //display as per usercontext
           if(listData.length < 1){ //if isCustom false
+            if(userProfile.hierarchyLevel == 4 || userProfile.hierarchyLevel == 3 || userProfile.hierarchyLevel == 0){
+              result=MlChapters.find({ clusterId : { $in: [clusterIds] },isActive : true}).fetch();
+            }else{
               let allchapterIds = _.contains(chapterIds,"all") || null;
               if(allchapterIds){
                 result = MlChapters.find({isActive : true}).fetch();
               }else{
                 result= MlChapters.find({ _id: { $in: chapterIds },isActive : true}).fetch();
               }
+            }
+
           }else{ //if isCustom true
             let arrayOfChapters = _.pluck(requestParams.filteredListId, 'value') || [];
             result= MlChapters.find({ clusterId: {$in : arrayOfChapters},isActive : true}).fetch();

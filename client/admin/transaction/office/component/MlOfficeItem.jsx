@@ -104,7 +104,11 @@ export default class MlOfficeItem extends React.Component {
   }
 
   updateCost(e){
-    this.setState({"cost":e.currentTarget.value});
+    if(e.currentTarget.value >= 0) {
+      this.setState({"cost":e.currentTarget.value});
+    } else {
+      this.setState({"cost":0});
+    }
   }
 
   updateTax(e){
@@ -125,10 +129,16 @@ export default class MlOfficeItem extends React.Component {
     })
     if(!this.state.cost){
       toastr.error('Cost is required');
+      this.setState({
+        isGenerateLinkDisable:false
+      })
       return false;
     }
     if(this.state.cost < 1){
       toastr.error('Enter tha valid cost');
+      this.setState({
+        isGenerateLinkDisable:false
+      })
       return false;
     }
     let generateLinkInfo = {

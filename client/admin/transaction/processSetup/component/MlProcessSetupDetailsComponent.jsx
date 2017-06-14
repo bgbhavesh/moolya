@@ -85,13 +85,30 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
     let stages = this.state.stages;
     let data = this.state.data;
     data = _.omit(data, '__typename')
-    let response = await updateProcessSetupActionHandler(data, stages);
-    if(response && response.success){
-      toastr.success("Saved Successfully");
+    let isValid = this.validateDetails(stages)
+    if(isValid && isValid.success){
+      let response = await updateProcessSetupActionHandler(data, isValid.result);
+      if(response && response.success){
+        toastr.success("Saved Successfully");
+      }
+      return response;
+    }else{
+      toastr.error(isValid.result);
     }
-    return response;
   }
 
+  validateDetails(stages) {
+    let data = _.clone(stages)
+    if (!_.isEmpty(data)) {
+      _.remove(data, {stageId:''})
+      if(!_.isEmpty(data)){
+        console.log(data)
+        return {success: true, result: data}
+      }else
+        return {success: false, result: 'Select atleast one stage'}
+    } else
+      return {success: false, result: 'Please enter Details'}
+  }
   async findProcessSetupDetails() {
     let id = this.props.data._id
     const response = await fetchProcessSetupHandler(id);

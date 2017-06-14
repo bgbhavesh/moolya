@@ -14,14 +14,14 @@ if(Meteor.isServer){
         "uniqueId" : "dashboard"
       },
 
-      {
-        "image":"ml flaticon-ml-pc-searchs",
-        "link": "/app/dashboard",
-        "isLink" : true,
-        "isMenu" : true,
-        "name" : "Dashboard",
-        "uniqueId" : "dashboard"
-      },
+      // {
+      //   "image":"ml flaticon-ml-pc-searchs",
+      //   "link": "/app/dashboard",
+      //   "isLink" : true,
+      //   "isMenu" : true,
+      //   "name" : "Dashboard",
+      //   "uniqueId" : "dashboard"
+      // },
 
       {
         "image":"fa fa-calender",
@@ -53,11 +53,11 @@ if(Meteor.isServer){
 
       {
         "image":"ml ml-transaction",
-        "link": "/app/investments",
+        "link": "/app/transaction",
         "isLink" : true,
         "isMenu" : true,
-        "name" : "My Investments",
-        "uniqueId" : "myInvestments"
+        "name" : "My Transaction",
+        "uniqueId" : "myTransaction"
       },
 
       {

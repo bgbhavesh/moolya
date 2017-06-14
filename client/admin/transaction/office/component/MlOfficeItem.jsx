@@ -24,7 +24,8 @@ export default class MlOfficeItem extends React.Component {
       cost: 0,
       tax:false,
       about:'',
-      isGenerateLinkDisable: false
+      isGenerateLinkDisable: false,
+      duration : ' '
     }
     this.getTransaction.bind(this);
     this.initializeSwiper.bind(this);
@@ -78,21 +79,13 @@ export default class MlOfficeItem extends React.Component {
   async getTransaction(id){
     let response = await findOfficeTransactionHandler(id);
     if(response){
-      let duration = '';
+      let duration = ' ';
       let result = JSON.parse(response.result)[0];
       if(result){
         console.log(result);
-        if(result.subscription){
-          let startDate = new moment(result.subscription.start);
-          let endDate = new moment(result.subscription.end);
-          let yearDiff = endDate.diff(startDate, 'years');
-          let monthDiff = endDate.diff(startDate, 'months')%(yearDiff ? yearDiff : 1);
-          if(yearDiff){
-            duration = duration+ yearDiff +' Year ';
-          }
-          if(monthDiff){
-            duration = duration+ monthDiff +' Month';
-          }
+        if(result.trans.duration){
+          let dbDuration = result.trans.duration;
+            duration = dbDuration.years+' Year'; // To do for month and all
         }
         result.office.availableCommunities = result.office.availableCommunities && result.office.availableCommunities.length ? result.office.availableCommunities : [];
         this.setState({
@@ -111,7 +104,11 @@ export default class MlOfficeItem extends React.Component {
   }
 
   updateCost(e){
-    this.setState({"cost":e.currentTarget.value});
+    if(e.currentTarget.value >= 0) {
+      this.setState({"cost":e.currentTarget.value});
+    } else {
+      this.setState({"cost":0});
+    }
   }
 
   updateTax(e){
@@ -132,10 +129,16 @@ export default class MlOfficeItem extends React.Component {
     })
     if(!this.state.cost){
       toastr.error('Cost is required');
+      this.setState({
+        isGenerateLinkDisable:false
+      })
       return false;
     }
     if(this.state.cost < 1){
       toastr.error('Enter tha valid cost');
+      this.setState({
+        isGenerateLinkDisable:false
+      })
       return false;
     }
     let generateLinkInfo = {

@@ -65,7 +65,7 @@ class MlAddUserType extends React.Component {
         isActive: this.refs.isActive.checked
       }
       const response = await createUserTypeActionHandler(UserTypeDetails)
-
+      toastr.success("UserType Created Successfully");
       return response;
 
     }

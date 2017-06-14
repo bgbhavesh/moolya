@@ -85,7 +85,15 @@ MlResolver.MlQueryResolver['fetchFunderAbout'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {
     let portfolio = MlFunderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
     if (portfolio && portfolio.hasOwnProperty('funderAbout')) {
-      return portfolio['funderAbout'];
+      let details = portfolio.funderAbout
+      let extendData = MlProfessions.findOne({_id: details.profession, industryId: details.industry})|| {};
+      details.industry = extendData.industryName || "";
+      details.profession = extendData.professionName || ""
+      /*let userPersonal = MlMasterSettings.findOne({_id:details.gender}) || {}
+      details.gender = userPersonal.genderInfo ? userPersonal.genderInfo.genderName : ''*/
+      let userEmp = MlMasterSettings.findOne({_id:details.employmentStatus}) || {}
+      details.employmentStatus = userEmp.employmentTypeInfo ? userEmp.employmentTypeInfo.employmentName : ''
+      return details;
     }
   }
 

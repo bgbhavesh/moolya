@@ -45,14 +45,14 @@ if(Meteor.isServer){
               "name" : "My List",
               "uniqueId" : "myConnections"
           },
-          {
-            "image":"fa fa-investment",
-            "link": "/app/myInvestment",
-            "isLink" : true,
-            "isMenu" : true,
-            "name" : "My Investment",
-            "uniqueId" : "myInvestment"
-          },
+          // {
+          //   "image":"fa fa-investment",
+          //   "link": "/app/myInvestment",
+          //   "isLink" : true,
+          //   "isMenu" : true,
+          //   "name" : "My Investment",
+          //   "uniqueId" : "myInvestment"
+          // },
           {
               "image":"fa fa-money",
               "link": "/app/referalInvities",

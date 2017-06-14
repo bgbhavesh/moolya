@@ -7,6 +7,7 @@ import {render} from "react-dom";
 import _ from "lodash";
 import {fetchCommunitiesHandler} from "../../../../app/commons/actions/fetchCommunitiesActionHandler";
 import {createOfficeActionHandler} from "../actions/createOfficeAction";
+import {initalizeFloatLabel} from '../../../../../client/admin/utils/formElemUtil';
 
 export default class MlAppNewSpokePerson extends React.Component {
   constructor(props) {
@@ -17,6 +18,7 @@ export default class MlAppNewSpokePerson extends React.Component {
   }
 
   componentDidUpdate() {
+    initalizeFloatLabel();
     var mySwiper = new Swiper('.blocks_in_form', {
       speed: 400,
       spaceBetween: 20,

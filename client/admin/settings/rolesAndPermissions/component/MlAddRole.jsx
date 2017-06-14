@@ -88,6 +88,7 @@ class MlAddRole extends React.Component{
 
       if (_.isEmpty(emptyCluster) && _.isEmpty(emptyChapter) && _.isEmpty(emptySubChapter) && _.isEmpty(emptyCommunity) && _.isEmpty(emptyDepartment) && _.isEmpty(emptySubDepartment)) {
         const response = await addRoleActionHandler(roleDetails)
+        toastr.success("Role Created Successfully");
         return response;
       } else {
         toastr.error("All Assign role fields Required");

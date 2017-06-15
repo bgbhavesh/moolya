@@ -313,6 +313,12 @@ adminSection.route('/transactions/editRequests/:id', {
     mount(AdminLayout,{adminContent:<RegistrationWizard config={params.id}/>})
   }
 });
+adminSection.route('/transactions/editApprovedRequests/:id', {
+  name: 'transaction_registration_approved_edit',
+  action(params){
+    mount(AdminLayout,{adminContent:<RegistrationWizard config={params.id}/>})
+  }
+});
 
 adminSection.route('/transactions/createRegistration', {
   name: 'transaction_registration_create',

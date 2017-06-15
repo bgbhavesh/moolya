@@ -85,6 +85,9 @@ MlModuleCollectionMap['MlFeedBacks'] = 'INTERACTION';
 MlModuleCollectionMap['MlConnections'] = 'INTERACTION';
 MlModuleCollectionMap['MlFollowings'] = 'INTERACTION';
 MlModuleCollectionMap['MlUserServiceCards'] = 'SUBSCRIPTIONS';
+MlModuleCollectionMap['MlActivity'] = 'OFFICE'; //need to clarify the module name
+MlModuleCollectionMap['MlService'] = 'OFFICE'; //need to clarify the module name
+MlModuleCollectionMap['MlTask'] = 'OFFICE'; //need to clarify the module name
 
 module.exports=  MlModuleCollectionMap;
 

@@ -300,7 +300,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
 
       data[index].clusters = clusterNames || [];
       data[index].chapters = chapterNames || [];
-      data[index].subChapterNames = subChapterNames || [];
+      data[index].subChapters= subChapterNames || [];
       data[index].kycCategory = kycCategoryNames || [];
       data[index].allowableFormat = allowableFormatNames || [];
 

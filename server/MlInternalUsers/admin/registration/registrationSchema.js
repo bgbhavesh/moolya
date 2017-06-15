@@ -446,7 +446,7 @@ let supportedApi = [
     {api:'registerAs', actionName:'UPDATE', moduleName:"REGISTRATION"},
     {api:'createRegistrationAPI', actionName:'CREATE', moduleName:"REGISTRATION"},
     {api:'createRegistration', actionName:'CREATE', moduleName:"REGISTRATION"},
-    {api:'createGeneralInfoInRegistration', actionName:'CREATE', moduleName:"REGISTRATION"},
+    {api:'createGeneralInfoInRegistration', actionName:'UPDATE', moduleName:"REGISTRATION"},
     {api:'updateRegistration', actionName:'UPDATE', moduleName:"REGISTRATION"},
     {api:'updateRegistrationInfo', actionName:'UPDATE', moduleName:"REGISTRATION"},
     {api:'updateRegistrationUploadedDocumentUrl', actionName:'UPDATE', moduleName:"REGISTRATION"},

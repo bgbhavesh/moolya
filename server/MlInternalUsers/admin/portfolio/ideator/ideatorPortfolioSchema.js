@@ -358,7 +358,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], ideatorPortfolioSch
 
 let supportedApi = [
   {api:'fetchIdeatorPortfolioDetails', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchIdeatorPortfolioIdeas', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchIdeatorPortfolioIdeas', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'fetchIdeatorPortfolioProblemsAndSolutions', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchIdeatorPortfolioAudience', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchIdeatorPortfolioLibrary', actionName:'READ', moduleName:"PORTFOLIO"},

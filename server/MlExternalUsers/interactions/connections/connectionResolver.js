@@ -85,6 +85,7 @@ MlResolver.MlMutationResolver['connectionRequest'] = (obj, args, context, info) 
   try {
     var users = [];
     var connection = {};
+    var resp=null;
     var resourceDetails = mlInteractionService.fetchResourceBasedUserDetails(args.resourceType, args.resourceId, context);
     var fromuser = resourceDetails.contextUser;
     var toUser = resourceDetails.resourceOwner;
@@ -127,7 +128,7 @@ MlResolver.MlMutationResolver['connectionRequest'] = (obj, args, context, info) 
     return response;
   }
   let code = 200;
-  let response = new MlRespPayload().successPayload(resp, code);
+  let response = new MlRespPayload().errorPayload('connection request failed', code);
   return response;
 }
 

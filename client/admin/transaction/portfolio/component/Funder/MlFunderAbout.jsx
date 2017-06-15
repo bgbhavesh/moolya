@@ -191,10 +191,10 @@ export default class MlFunderAbout extends React.Component {
     const showLoader = this.state.loading;
     let investmentFrom = this.state.data&&this.state.data.investmentFrom?this.state.data.investmentFrom:"";
     let personal = null, familyFund= null;
-    if(investmentFrom == "PERSONAL"){
+    if(investmentFrom == "Personal Fund"){
       personal = true;
       familyFund = false;
-    }else if(investmentFrom == "FAMILY FUND"){
+    }else if(investmentFrom == "Family Fund"){
       familyFund = true;
       personal = false;
     }

@@ -54,13 +54,13 @@ let chapterSchema = `
       externalUser:UserObject
     }
     type moolyaSubChapterAccess{
-      backendUser:UserObject
+      
       externalUser:UserObject
     }
     type UserObject{
       canSearch:Boolean,
       canView:Boolean,
-      canDiscover:Boolean
+      canTransact:Boolean
     }
     type SubChapter{
         _id:String
@@ -95,13 +95,13 @@ let chapterSchema = `
       externalUser:UserInputObject,
     }
     input moolyaSubChapterAccessObject{
-      backendUser:UserInputObject,
+      
       externalUser:UserInputObject,
     }
     input UserInputObject{
       canSearch:Boolean,
       canView:Boolean,
-      canDiscover:Boolean
+      canTransact:Boolean
     }
     
     input subChapterObject{
@@ -183,3 +183,5 @@ let supportedApi = [
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 
+// backendUser:UserInputObject,
+// backendUser:UserObject

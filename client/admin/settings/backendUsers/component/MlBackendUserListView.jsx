@@ -15,8 +15,10 @@ export default class MlBackendUserListView extends Component {
         if (prop.profile.InternalUprofile.moolyaProfile.displayName) {
           username = prop.profile.InternalUprofile.moolyaProfile.displayName;
         } else {
-          let firstName = prop.profile.InternalUprofile.moolyaProfile.firstName;
-          let lastName = prop.profile.InternalUprofile.moolyaProfile.lastName
+          // let firstName = prop.profile.InternalUprofile.moolyaProfile.firstName;
+          // let lastName = prop.profile.InternalUprofile.moolyaProfile.lastName
+          let firstName = prop.profile.firstName;
+          let lastName = prop.profile.lastName
           username = firstName + " " + lastName
         }
         if (status == true) {

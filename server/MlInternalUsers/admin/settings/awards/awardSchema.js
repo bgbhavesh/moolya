@@ -26,6 +26,6 @@ let supportedApi = [
   {api:'UpdateAward', actionName:'UPDATE', moduleName:"AWARDS"},
 
   {api:'FindAward', actionName:'READ', moduleName:"AWARDS"},
-  {api:'fetchActiveAwards', actionName:'READ', moduleName:"AWARDS"}
+  {api:'fetchActiveAwards', actionName:'READ', moduleName:"AWARDS", isWhiteList:true}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

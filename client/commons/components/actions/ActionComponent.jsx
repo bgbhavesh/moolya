@@ -117,12 +117,12 @@ export default class MlActionComponent extends Component {
       {
         imagefield:'/images/act_select_icon.png',
         actionName:'documentApprove',
-        iconClass:'ml flaticon-ml-file'
+        iconClass:'ml flaticon-ml-file-1'
       },
       {
         imagefield:'/images/act_select_icon.png',
         actionName:'documentReject',
-        iconClass:'ml flaticon-ml-file-1'
+        iconClass:'ml flaticon-ml-file'
       },
       {
         imagefield:'/images/act_select_icon.png',

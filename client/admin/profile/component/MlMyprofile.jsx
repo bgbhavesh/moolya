@@ -189,7 +189,7 @@ export default class MlMyProfile extends React.Component {
         lastName: user.profile.lastName,
         userName: user.profile.displayName,
         // uploadedProfilePic: response.profile.profileImage,
-        genderSelect: "Male", //response.profile.genderType
+        genderSelect: response.profile.genderType,
         dateOfBirth: moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat)
       });
     } else {
@@ -222,13 +222,13 @@ export default class MlMyProfile extends React.Component {
   async genderSelect() {
     //this.setState({genderSelect: e.target.value})
     if (this.state.genderSelect === "Others") {
-      this.setState({genderStateMale: false, genderStateFemale: false, genderStateOthers: true})
+      this.setState({genderStateMale: false, genderStateFemale: false, genderStateOthers: "checked"})
     }
     else if (this.state.genderSelect === "Female") {
-      this.setState({genderStateFemale: true, genderStateMale: false, genderStateOthers: false})
+      this.setState({genderStateFemale: "checked", genderStateMale: false, genderStateOthers: false})
     }
     else {
-      this.setState({genderStateOthers: false, genderStateFemale: false, genderStateMale: true})
+      this.setState({genderStateOthers: false, genderStateFemale: false, genderStateMale: "checked"})
     }
   }
 

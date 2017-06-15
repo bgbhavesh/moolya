@@ -132,7 +132,7 @@ export default class MapMarkers extends Component {
     }else if(this.props.text == "SPS"){
       className = "community_icon"+" pr"
     }else{
-      className = "community_icon"+" others"
+      className = "community_icon"+" ot"
     }
 
     return (

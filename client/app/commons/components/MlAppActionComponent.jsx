@@ -16,6 +16,11 @@ export default class MlAppActionComponent extends React.Component {
   render() {
     let config = [
       {
+        actionName: 'follow',
+        displayName:'Follow',
+        iconClass: 'ml flaticon-ml-shapes'
+      },
+      {
         actionName: 'like',
         displayName:'Like',
         iconClass: 'ml fa fa-thumbs-o-up'

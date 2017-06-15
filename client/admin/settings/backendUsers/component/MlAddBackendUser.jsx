@@ -264,9 +264,9 @@ class MlAddBackendUser extends React.Component {
     ]
 
     let UserTypeOptions = (this.state.loginUserDetails && this.state.loginUserDetails.isMoolya) ? [
-      {value: 'moolya', label: 'moolya', clearableValue: true},
-      {value: 'non-moolya', label: 'non-moolya', clearableValue: true}
-    ] : [{value: 'non-moolya', label: 'non-moolya', clearableValue: true}]
+      {value: 'moolya', label: 'EcoSystem', clearableValue: true},
+      {value: 'non-moolya', label: 'SubChapter', clearableValue: true}
+    ] : [{value: 'non-moolya', label: 'SubChapter', clearableValue: true}]
 
     let BackendUserOptions = [
       {value: 'Internal User', label: 'Internal User'},

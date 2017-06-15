@@ -48,3 +48,21 @@ MlResolver.MlMutationResolver['followUser'] = (obj, args, context, info) =>{
         return response;
     }
 }
+
+MlResolver.MlQueryResolver['followersList'] = (obj, args, context, info) => {
+  var followersList = [];
+  if (context && context.userId) {
+    //todo: pagination based result
+     followersList = mlDBController.find('MlConnections',{"followerId":context.userId,isActive:true}).fetch();
+  }
+  return followersList;
+}
+
+MlResolver.MlQueryResolver['followingsList'] = (obj, args, context, info) => {
+  var followingsList = [];
+  if (context && context.userId) {
+    //todo: pagination based result
+     followingsList = mlDBController.find('MlConnections',{"followedBy":context.userId,isActive:true}).fetch();
+  }
+  return followingsList;
+}

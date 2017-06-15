@@ -82,7 +82,8 @@ export default class MlAppMemberDetails extends React.Component{
     let community = this.state.office.availableCommunities.find(function (item) {
       return item.communityId == that.state.memberInfo.communityType;
     });
-    let communityName = community ?  community.communityName : ' ';
+    let communityName = community ?  community.communityName : '';
+    communityName = communityName ? communityName : ( this.state.memberInfo.isPrincipal ? 'Principal':' ' ) ;
     return (
       <div>
         <div className="investement-view-content">

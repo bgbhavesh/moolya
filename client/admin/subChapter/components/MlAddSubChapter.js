@@ -191,7 +191,7 @@ class MlAddSubChapter extends React.Component {
 
   getMoolyaAccessStatus(details) {
     let moolyaSubChapterAccess = {
-      backendUser: details.backendUser ? details.backendUser : this.state.moolyaSubChapterAccess.backendUser,
+      // backendUser: details.backendUser ? details.backendUser : this.state.moolyaSubChapterAccess.backendUser,
       externalUser: details.externalUser ? details.externalUser : this.state.moolyaSubChapterAccess.externalUser
     }
     this.setState({moolyaSubChapterAccess: moolyaSubChapterAccess})
@@ -212,7 +212,6 @@ class MlAddSubChapter extends React.Component {
     if(resp){
       let result = JSON.parse(resp)
       if (result.success) {
-        console.log(result)
         let dataDetails = this.state.data
         let cloneBackUp = _.cloneDeep(dataDetails);
         cloneBackUp['subChapterImageLink'] = result.result

@@ -42,8 +42,9 @@ let connections = `
     }
     
     type Mutation{
-        createConnection(connection:connection):response
         connectionRequest(resourceId:String!,resourceType:String!):response
+        acceptConnection(connectionId:String!):response
+        rejectConnection(connectionId:String!):response
         updateConnection(connection:connection, connectionId:String):response
     }
     

@@ -68,7 +68,9 @@ class MlAppIdeatorAddIdea extends React.Component{
           {
               showAction: true,
               actionName: 'cancel',
-              handler: null
+              handler:  async(event) => {
+                FlowRouter.go("/app/portfolio")
+              }
           },
           {
               showAction: true,

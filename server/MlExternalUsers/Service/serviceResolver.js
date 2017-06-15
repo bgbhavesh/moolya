@@ -8,22 +8,20 @@ import MlUserContext from '../../MlExternalUsers/mlUserContext'
 var extendify = require('extendify');
 var _ = require('lodash')
 
-MlResolver.MlQueryResolver['fetchTasks'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver['fetchServices'] = (obj, args, context, info) => {
   let query = {
     userId:context.userId
   };
-  let result = mlDBController.find('MlTask', query, context).fetch()
+  let result = mlDBController.find('MlService', query , context).fetch()
   return result;
-
 }
 
-MlResolver.MlQueryResolver['fetchTask'] = (obj, args, context, info) => {
-  let result = mlDBController.findOne('MlTask', {_id:args.taskId} , context).fetch()
-
+MlResolver.MlQueryResolver['fetchService'] = (obj, args, context, info) => {
+  let result = mlDBController.findOne('MlService', {_id:args.serviceId} , context)
 }
 
-MlResolver.MlMutationResolver['createTask'] = (obj, args, context, info) => {
-  let result = mlDBController.insert('MlTask', args.task, context).fetch()
+MlResolver.MlMutationResolver['createService'] = (obj, args, context, info) => {
+  result = mlDBController.insert('MlService' ,args.service, context).fetch()
   if(result){
     let code = 200;
     let result = {userId: userId}
@@ -33,13 +31,13 @@ MlResolver.MlMutationResolver['createTask'] = (obj, args, context, info) => {
 
 }
 
-MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
-  let result = mlDBController.update('MlTask', { _id: args.taskId }, args.task, {'$set':1}, context).fetch()
+MlResolver.MlMutationResolver['updateService'] = (obj, args, context, info) => {
+  result = mlDBController.update('MlService', {_id:args.serviceId} ,args, context).fetch()
   if(result){
     let code = 200;
     let result = {userId: userId}
     let response = new MlRespPayload().successPayload(result, code);
     return response
   }
-
 }
+

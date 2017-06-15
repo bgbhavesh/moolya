@@ -29,24 +29,19 @@ export async function findSubChapterActionHandler(subChapterId) {
           backendUser {
             canView
             canSearch
-            canDiscover
+            canTransact
           }
           externalUser {
             canView
             canSearch
-            canDiscover
+            canTransact
           }
         }
         moolyaSubChapterAccess {
-          backendUser {
-            canView
-            canSearch
-            canDiscover
-          }
           externalUser {
             canView
             canSearch
-            canDiscover
+            canTransact
           }
     }
         }
@@ -60,3 +55,8 @@ export async function findSubChapterActionHandler(subChapterId) {
   const id = result.data.fetchSubChapter;
   return id
 }
+// backendUser {
+//   canView
+//   canSearch
+//   canTransact
+// }

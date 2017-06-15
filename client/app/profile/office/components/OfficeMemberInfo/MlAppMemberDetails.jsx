@@ -54,7 +54,8 @@ export default class MlAppMemberDetails extends React.Component{
     let update = {};
     update[type] = true;
     let id = FlowRouter.getParam('memberId');
-    let response = await updateOfficeMemberActionHandler(id, update);
+    let officeId = FlowRouter.getParam('officeId');
+    let response = await updateOfficeMemberActionHandler(officeId, id, update);
     if(response.success){
       toastr.success(response.result);
     } else {
@@ -67,7 +68,8 @@ export default class MlAppMemberDetails extends React.Component{
       isIndependent:e.target.checked
     };
     let id = FlowRouter.getParam('memberId');
-    let response = await updateOfficeMemberActionHandler(id, update);
+    let officeId = FlowRouter.getParam('officeId');
+    let response = await updateOfficeMemberActionHandler(officeId, id, update);
     if(response.success){
       toastr.success(response.result);
     } else {

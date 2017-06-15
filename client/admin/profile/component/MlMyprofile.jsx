@@ -17,7 +17,7 @@ import MlLoader from '../../../commons/components/loader/loader'
 import {resetPasswordActionHandler} from "../../settings/backendUsers/actions/resetPasswordAction";
 import passwordSAS_validate from '../../../../lib/common/validations/passwordSASValidator';
 import {MlAdminProfile} from '../../../admin/layouts/header/MlAdminHeader'
-
+import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 
 export default class MlMyProfile extends React.Component {
 
@@ -336,6 +336,14 @@ export default class MlMyProfile extends React.Component {
   }
 
   render(){
+    let userContext = getAdminUserContext();
+    let route;
+    if(userContext.hierarchyLevel >3){
+      route = "clusters"
+    }else {
+      route = "chapters"
+    }
+
     let MlActionConfig = [
       {
         showAction: true,
@@ -345,7 +353,7 @@ export default class MlMyProfile extends React.Component {
       {
         showAction: true,
         actionName: 'cancel',
-        handler: async(event) => FlowRouter.go('/admin/dashboard/clusters')
+        handler: async(event) => FlowRouter.go('/admin/dashboard/'+route)
       }
     ];
     const showLoader=this.state.loading;

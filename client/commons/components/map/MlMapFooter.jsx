@@ -52,7 +52,13 @@ export default class MlMapFooter extends React.Component {
     }
     if(response){
       users = response ? response : []
-      activeUsers = _.filter(users,  {'isActive': true});
+      // activeUsers = _.filter(users,  {'isActive': true});
+      activeUsers = _.filter(users, function(user) {
+
+        if(user.profile.isActive)
+          return user
+
+      });
       this.setState({loading:false, users: users, activeUsers:activeUsers})
     }
   }

@@ -36,9 +36,9 @@ class MlOfficeValidations{
         else{
             let communityMemberCount = MlOfficeMembers.find({officeId:officeId, isPrincipal: { '$ne' : true}, communityType:officeMember.communityType}).count();
             let cmc = _.filter(myOffice.availableCommunities, function (ac) {
-                return ac.communityName == officeMember.communityType
+                return ac.communityId == officeMember.communityType
             });
-          if( cmc && cmc.length &&  cmc[0].count == communityMemberCount )
+          if( cmc && cmc.length &&  cmc[0].userCount == communityMemberCount )
                 return {success:false, msg:'Limit Exceeded'}
         }
 

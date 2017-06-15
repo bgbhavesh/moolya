@@ -16,8 +16,10 @@ const mlOfficeTableConfig=new MlViewer.View({
   module:"office",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:['userId','userName','transactionId','clusterName','chapterName','subChapterName','communityName'],
-  searchFields:['userId','userName','transactionId','clusterName','chapterName','subChapterName','communityName'],
+  // fields:['userId','userName','transactionId','clusterName','chapterName','subChapterName','communityName'],
+  // searchFields:['userId','userName','transactionId','clusterName','chapterName','subChapterName','communityName'],
+  fields:['profileId','userName','transactionId','clusterName','chapterName','subChapterName','communityName'],
+  searchFields:['profileId','userName','transactionId','clusterName','chapterName','subChapterName','communityName'],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
@@ -26,7 +28,8 @@ const mlOfficeTableConfig=new MlViewer.View({
   columns:[
     {dataField: "dateTime", title: "Date & Time",dataSort:true,customComponent:dateFormatter},
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "userId", title: "UserId",dataSort:true},
+    // {dataField: "userId", title: "UserId",dataSort:true},
+    {dataField: "profileId", title: "UserId",dataSort:true},
     {dataField: "userName", title: "Name",dataSort:true},
     {dataField: "transactionId", title: "Trans Id"},
     {dataField:"clusterName", title:"Cluster"},
@@ -56,6 +59,7 @@ const mlOfficeTableConfig=new MlViewer.View({
                       status
                       userName
                       dateTime
+                      profileId
                     }
                     }
               }

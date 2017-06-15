@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import controllable from 'react-controllables';
-import MapCluster from '../../../commons/components/map/MapCluster';
+import MapCommunity from '../../../commons/components/map/MapCommunity';
 import MlLoader from '../../../commons/components/loader/loader'
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 
@@ -23,9 +23,9 @@ export default class MlCommunityMapView extends Component {
     if(loggedInUser.hierarchyLevel != 4){
       zoom = 4;
     }
-    let hasCenter=that.props.fetchCenter||false;
+    let hasCenter=that.props.config.fetchCenter||false;
     if(hasCenter){
-      let center= await that.props.fetchCenterHandler(that.props);
+      let center= await that.props.config.fetchCenterHandler(that.props.config);
       this.setState({center:center||defaultCenter,zoom:zoom});
     }else{
       this.setState({
@@ -130,7 +130,7 @@ export default class MlCommunityMapView extends Component {
     return (
       <span>
         {communityIconList}
-        <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />
+        <MapCommunity data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />
       </span>
     );
   }

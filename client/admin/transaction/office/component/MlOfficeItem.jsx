@@ -104,7 +104,11 @@ export default class MlOfficeItem extends React.Component {
   }
 
   updateCost(e){
-    this.setState({"cost":e.currentTarget.value});
+    if(e.currentTarget.value >= 0) {
+      this.setState({"cost":e.currentTarget.value});
+    } else {
+      this.setState({"cost":0});
+    }
   }
 
   updateTax(e){
@@ -125,10 +129,16 @@ export default class MlOfficeItem extends React.Component {
     })
     if(!this.state.cost){
       toastr.error('Cost is required');
+      this.setState({
+        isGenerateLinkDisable:false
+      })
       return false;
     }
     if(this.state.cost < 1){
       toastr.error('Enter tha valid cost');
+      this.setState({
+        isGenerateLinkDisable:false
+      })
       return false;
     }
     let generateLinkInfo = {
@@ -192,36 +202,36 @@ export default class MlOfficeItem extends React.Component {
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="User Id" defaultValue='userId' value={this.state.transInfo.userId} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="User Id" defaultValue=' ' value={this.state.transInfo.userId} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Transaction Id" defaultValue="transId" value={this.state.transInfo.transactionId} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Transaction Id" defaultValue=" " value={this.state.transInfo.transactionId} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Date & Time" defaultValue="Date & Time" value={this.state.userInfo.createdAt ? moment(this.state.userInfo.createdAt).format('MM/DD/YYYY HH:mm:ss') : ' ' } className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Date & Time" defaultValue=" " value={this.state.userInfo.createdAt ? moment(this.state.userInfo.createdAt).format('MM/DD/YYYY HH:mm:ss') : ' ' } className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Name" defaultValue="name" value={this.state.userInfo.name} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Name" defaultValue=" " value={this.state.userInfo.name} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Email ID" defaultValue="email" value={this.state.userInfo.email} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Email ID" defaultValue=" " value={this.state.userInfo.email} className="form-control float-label" id=""/>
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Phone no" defaultValue="1234567879" value={this.state.userInfo.mobile} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Phone no" defaultValue=" " value={this.state.userInfo.mobile} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Cluster" defaultValue="cluster" value={this.state.transInfo.clusterName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Cluster" defaultValue=" " value={this.state.transInfo.clusterName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Chapter" defaultValue="chapter" value={this.state.transInfo.chapterName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Chapter" defaultValue=" " value={this.state.transInfo.chapterName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Sub Chapter" defaultValue="sub chapter" value={this.state.transInfo.subChapterName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Sub Chapter" defaultValue=" " value={this.state.transInfo.subChapterName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Community" defaultValue="community" value={this.state.transInfo.communityName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Community" defaultValue=" " value={this.state.transInfo.communityName} className="form-control float-label" id=""/>
                 </div>
               </div>
             </div>
@@ -233,16 +243,16 @@ export default class MlOfficeItem extends React.Component {
                   <input type="text" placeholder="Order ID" defaultValue="Moo12345" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Subscription Name" defaultValue="Sub Id" value={this.state.officeInfo.subscriptionName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Subscription Name" defaultValue=" " value={this.state.officeInfo.subscriptionName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total number of users" defaultValue="12" value={this.state.officeInfo.totalCount} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Total number of users" defaultValue=" " value={this.state.officeInfo.totalCount} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total number of principal" defaultValue="10" value={this.state.officeInfo.principalUserCount} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Total number of principal" defaultValue=" " value={this.state.officeInfo.principalUserCount} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total number of Team" defaultValue="2" value={this.state.officeInfo.teamUserCount} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Total number of Team" defaultValue=" " value={this.state.officeInfo.teamUserCount} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group switch_wrap switch_names">
                   <span className="state_label acLabel">Specific</span><label className="switch nocolor-switch">
@@ -280,31 +290,31 @@ export default class MlOfficeItem extends React.Component {
                   <div className="panel-heading">Office location</div>
                   <div className="panel-body">
                     <div className="form-group">
-                      <input type="text" defaultValue="234" placeholder="Plot no/Flat no/Door no" value={this.state.officeInfo.officeLocation} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="Plot no/Flat no/Door no" value={this.state.officeInfo.officeLocation} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue="L3" placeholder="Street no / Locality" value={this.state.officeInfo.streetLocality} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="Street no / Locality" value={this.state.officeInfo.streetLocality} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue="landmark" placeholder="Landmark" value={this.state.officeInfo.landmark} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="Landmark" value={this.state.officeInfo.landmark} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue="area" placeholder="Area" value={this.state.officeInfo.area} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="Area" value={this.state.officeInfo.area} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue="city" placeholder="town /city" value={this.state.officeInfo.city} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="town /city" value={this.state.officeInfo.city} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue="state" placeholder="State" value={this.state.officeInfo.state} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="State" value={this.state.officeInfo.state} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue="country" placeholder="Country" value={this.state.officeInfo.country} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="Country" value={this.state.officeInfo.country} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue="123456" placeholder="Zip Code" value={this.state.officeInfo.zipCode} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="Zip Code" value={this.state.officeInfo.zipCode} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue="duration" value={this.state.duration} placeholder ="" className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " value={this.state.duration} placeholder ="" className="form-control float-label" id=""/>
                     </div>
                   </div>
                 </div>

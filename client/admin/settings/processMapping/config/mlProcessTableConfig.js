@@ -76,8 +76,8 @@ const mlProcessTableConfig=new MlViewer.View({
     {dataField: "clusters", title: "Cluster",dataSort:true,customComponent:clusterFormatter},
     {dataField: "states", title: "State",dataSort:true,customComponent:stateFormatter},
     {dataField:"chapters", title:"Chapter",dataSort:true,customComponent:chapterFormatter},
-    {dataField: "date", title: "Created Date",dataSort:true,customComponent:dateFormatter}
-
+    {dataField: "date", title: "Created Date",dataSort:true,customComponent:dateFormatter},
+    {dataField: "isActive", title: "Status",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,

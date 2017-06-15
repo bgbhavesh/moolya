@@ -1,23 +1,39 @@
 import {MlViewer,MlViewerTypes} from "../../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+import moment from "moment";
+
+function ipAddressFormatter(data){
+
+  let ipaddr=data&&data.data&&data.data.userAgent.ipAddress?data.data.userAgent.ipAddress:"";
+  return <div>{ipaddr}</div>
+
+}
+
+function dateFormatter (data){
+  let createdDateTime=data&&data.data&&data.data.timeStamp?data.data.timeStamp:null;
+  return <div>{createdDateTime&&moment(createdDateTime).format('DD-MM-YYYY hh:mm:ss')}</div>;
+}
 const mlPortfolioTabHistoryTableConfig=new MlViewer.View({
   name:"auditLogTable",
   module:"audit",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["moduleName", "fieldName" , "previousValue", "currentValue", "action"],
-  searchFields:["moduleName" , "fieldName", "previousValue", "currentValue", "action"],
+  fields:["moduleName", "fieldName" , "previousValue", "currentValue", "userName"],
+  searchFields:["moduleName" , "fieldName", "previousValue", "currentValue", "userName"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true},
+    {dataField: "timeStamp", title: "Date&Time",dataSort:true,customComponent:dateFormatter},
     {dataField: "moduleName", title: "Module",dataSort:true},
     {dataField: "fieldName", title: "Field Name",dataSort:true},
     {dataField: "previousValue", title: "Previous Value",dataSort:true},
     {dataField: "currentValue", title: "Current Value",dataSort:true},
-    {dataField: "action", title: "Action",dataSort:true},
+    //{dataField: "action", title: "Action",dataSort:true},
+    {dataField: "userName", title: "Modified By",dataSort:true},
+    {dataField: "userAgent", title: "IP Address",dataSort:true,customComponent:ipAddressFormatter},
     // {dataField: "ip", title: "IP",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
@@ -41,15 +57,21 @@ const mlPortfolioTabHistoryTableConfig=new MlViewer.View({
                         totalRecords
                            data{
                             ...on AuditLogs{
-                                  _id
+                                    _id
                                  moduleName
+                                 userName
                                  collectionName
                                  previousValue
                                  currentValue
+                                 userName
                                  action
                                  field
                                  fieldName
                                  docId
+                                 timeStamp
+                                 userAgent{
+                                  ipAddress
+                                 }
                           }
                       }
               }

@@ -16,6 +16,7 @@ let BackEndUser = `
         latitude:Float,
         longitude:Float,
         name: String,
+        communityCode : String
     }
     
     type userProfile{

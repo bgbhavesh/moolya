@@ -22,6 +22,7 @@ import _ from 'lodash';
 import ImageUploader from '../../commons/mlImageUploader';
 import MlRespPayload from '../../commons/mlPayload';
 let helmet = require('helmet');
+var Tokens = require('csrf')
 let cors = require('cors');
 const Fiber = Npm.require('fibers')
 let _language = require('graphql/language');
@@ -80,6 +81,9 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       ...customConfig.graphiqlOptions
     }
   }
+
+  var parseBody = bodyParser.json();
+
   const graphQLServer = express();
 
   config.configServer(graphQLServer)
@@ -88,7 +92,10 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
   graphQLServer.use(helmet.frameguard());
   graphQLServer.use(helmet.hsts());
   graphQLServer.use(cors());
-  graphQLServer.use(config.path, bodyParser.json(), graphqlExpress( async (req, res) =>
+
+  var tokens = new Tokens()
+  var secret = tokens.secretSync()
+  graphQLServer.use(config.path, parseBody,  graphqlExpress( async (req, res) =>
   {
     try {
       const customOptionsObject = typeof customOptions === 'function' ? customOptions(req) : customOptions;
@@ -105,6 +112,12 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
         return;
       }
 
+      const tokenValue = getCookie(req.headers.cookie, '_csrf');
+      var isValid = tokens.verify(secret, tokenValue)
+      if(!isValid){
+          res.json({unAuthorized:true,message:"Not Authorized"})
+          return;
+      }
       var isAut = mlAuthorization.authChecker({req, context})
       if(!isAut){
           res.json({unAuthorized:true,message:"Not Authorized"})
@@ -120,6 +133,11 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       return defaultGraphQLOptions;
     }
   }));
+  graphQLServer.use(function(req, res, next) {
+    var token = tokens.create(secret)
+    res.cookie('_csrf', token)
+    return next();
+  });
 
   if (config.graphiql){
     graphQLServer.use(config.graphiqlPath, graphiqlExpress({
@@ -616,4 +634,11 @@ function authChecker(req, res, next) {
       next();
     }
 }
+
+function getCookie(cookies, name) {
+  var value = "; " + cookies;
+  var parts = value.split("; " + name + "=");
+  if (parts.length == 2) return parts.pop().split(";").shift();
+}
+
 createApolloServer(defaultGraphQLOptions, defaultServerConfig);

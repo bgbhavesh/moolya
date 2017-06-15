@@ -7,9 +7,11 @@ import MlAdminUserContext from '../../../mlAuthorization/mlAdminUserContext';
 MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
   // TODO : Authorization
   let query={};
+  var chapterCotransactionunt = 0
   switch(args.moduleName){
     case "cluster":
       query={"clusterId":args.id};
+      chapterCount = mlDBController.find('MlChapters', {clusterId:args.id,isActive:true}, context).count();
       break;
     case "chapter":
       query={"chapterId":args.id};
@@ -36,6 +38,23 @@ MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
     })
   });
   // count: MlCommunity.find(query).count(),
+    let TU = _.map(response, 'count');
+    let totalUsers = _.sum(TU);
+    response.push({
+      key: '123',
+      count: totalUsers,
+      icon: "ml ml-users"
+    })
+  if(chapterCount>0){
+    response.push({
+      key: '321',
+      count: chapterCount,
+      icon: "ml ml-chapter"
+    })
+  }
+
+    /*let objs = {data:response, totalCount: totalUsers}
+    console.log(objs)*/
     return response;
 };
 

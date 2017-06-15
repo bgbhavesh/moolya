@@ -136,6 +136,8 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                                 profession: args.registrationInfo.profession ? args.registrationInfo.profession : "",
                                 // employerName: args.registrationInfo.employerName ? args.registrationInfo.employerName : "",
                                 mobileNumber: args.registrationInfo.contactNumber ? args.registrationInfo.contactNumber : "",
+                                investmentFrom:args.registrationInfo.investingFrom,
+                                category:args.portfoliodetails.userType,
                                 // facebookId: fb,
                                 // linkedInId: linkedIn,
                                 // twitterId: twitter,

@@ -31,11 +31,13 @@ MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
   let response=[];
   _.each(communityData,function (item,value) {
     query.communityDefId=item._id;
-    response.push({
-      key: item._id,
-      count: mlDBController.find('MlCommunity', query, context).count(),
-      icon: item.communityImageLink
-    })
+    if(item.communityImageLink!="ml ml-browser"){
+      response.push({
+        key: item._id,
+        count: mlDBController.find('MlCommunity', query, context).count(),
+        icon: item.communityImageLink
+      })
+    }
   });
   // count: MlCommunity.find(query).count(),
     let TU = _.map(response, 'count');
@@ -43,7 +45,7 @@ MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
     response.push({
       key: '123',
       count: totalUsers,
-      icon: "ml ml-users"
+      icon: "ml ml-browser"
     })
   if(chapterCount>0){
     response.push({

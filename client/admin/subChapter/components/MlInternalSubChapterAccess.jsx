@@ -50,9 +50,10 @@ export default class MlInternalSubChapterAccess extends React.Component {
     let status = this.refs.canSearchB.checked
     var backendUser = {
       canSearch: status,
-      canView: this.state.backendUser.canView ? this.state.backendUser.canView : false,
+      canView: false,
       canTransact: this.state.backendUser.canTransact ? this.state.backendUser.canTransact : false
     }
+    // this.state.backendUser.canView ? this.state.backendUser.canView : false
     this.setState({backendUser: backendUser});
     this.props.getInternalAccessStatus({backendUser: backendUser})
   }
@@ -64,8 +65,12 @@ export default class MlInternalSubChapterAccess extends React.Component {
       canView: status,
       canTransact: this.state.backendUser.canTransact ? this.state.backendUser.canTransact : false
     }
-    this.setState({backendUser: backendUser});
-    this.props.getInternalAccessStatus({backendUser: backendUser})
+    if(backendUser.canSearch){
+      this.setState({backendUser: backendUser});
+      this.props.getInternalAccessStatus({backendUser: backendUser})
+    }else {
+      toastr.error('Can-Search should be active for can-view active');
+    }
   }
 
   onStatusChangeCanTransactB(e) {
@@ -83,9 +88,10 @@ export default class MlInternalSubChapterAccess extends React.Component {
     let status = this.refs.canSearchE.checked
     var externalUser = {
       canSearch: status,
-      canView: this.state.externalUser.canView ? this.state.externalUser.canView : false,
+      canView: false,
       canTransact: this.state.externalUser.canTransact ? this.state.externalUser.canTransact : false
     }
+    // this.state.externalUser.canView ? this.state.externalUser.canView : false
     this.setState({externalUser: externalUser});
     this.props.getInternalAccessStatus({externalUser: externalUser})
   }
@@ -97,8 +103,12 @@ export default class MlInternalSubChapterAccess extends React.Component {
       canView: status,
       canTransact: this.state.externalUser.canTransact ? this.state.externalUser.canSearch : false
     }
-    this.setState({externalUser: externalUser});
-    this.props.getInternalAccessStatus({externalUser: externalUser})
+    if (externalUser.canSearch) {
+      this.setState({externalUser: externalUser});
+      this.props.getInternalAccessStatus({externalUser: externalUser})
+    } else {
+      toastr.error('Can-Search should be active for can-view active');
+    }
   }
 
   onStatusChangeCanTransactE(e) {

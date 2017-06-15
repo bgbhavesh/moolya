@@ -79,6 +79,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
                     totalRecords
                     data{
                       ...on RegistrationInfo{
+                             registrationId
                               firstName
                               lastName
                               id:_id

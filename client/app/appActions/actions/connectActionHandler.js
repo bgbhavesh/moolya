@@ -21,8 +21,55 @@ export async function connectActionHandler(details) {
       resourceType: details.resourceType
     }
   })
-  const id = result.data.connectionRequest;
-  return id;
+  var resp = result.data.connectionRequest;
+  if (resp.success) {
+   return resp;
+  }
+  return null;
+}
+
+export async function acceptConnectionActionHandler(details) {
+  const result = await appClient.mutate({
+    mutation: gql`
+          mutation  ($connectionId:String!){
+              acceptConnection(connectionId:$connectionId){
+                  success,
+                  code,
+                  result
+              }  
+          }
+      `,
+    variables: {
+      connectionId : details.connectionId
+    }
+  })
+  var resp = result.data.acceptConnection;
+  if (resp.success) {
+    return resp;
+  }
+  return null;
+}
+
+export async function rejectConnectionActionHandler(details) {
+  const result = await appClient.mutate({
+    mutation: gql`
+          mutation  ($connectionId:String!){
+              rejectConnection(connectionId:$connectionId){
+                  success,
+                  code,
+                  result
+              }  
+          }
+      `,
+    variables: {
+      connectionId : details.connectionId
+    }
+  })
+  var resp = result.data.rejectConnection;
+  if (resp.success) {
+    return resp;
+  }
+  return null;
 }
 
 

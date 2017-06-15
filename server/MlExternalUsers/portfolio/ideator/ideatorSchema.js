@@ -39,6 +39,6 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], ideatorPortfolioSch
 
 let supportedApi = [
   {api:'fetchIdeators', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchIdeaByPortfolioId', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchIdeaByPortfolioId', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

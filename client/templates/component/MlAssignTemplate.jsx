@@ -266,7 +266,10 @@ class MlAssignTemplate extends React.Component{
     let chapterOption={options: { variables: {id:this.state.clusters}}};
     let subChapterOption={options: { variables: {id:this.state.chapters,displayAllOption:true}}};
     let usertypeOption={options: { variables: { id: this.state.communities,displayAllOption:true}}};
-
+    let identityActive=''
+    if(this.state.identity){
+      identityActive='active'
+    }
     const showLoader=this.state.loading;
     return (
       <div>
@@ -312,6 +315,7 @@ class MlAssignTemplate extends React.Component{
                           <Moolyaselect multiSelect={false}  placeholder={"User Types"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.userTypes} queryType={"graphql"} query={fetchUsers} queryOptions={usertypeOption} isDynamic={true} onSelect={this.optionsBySelectUserType.bind(this)} />
                         </div>
                         <div className="form-group">
+                          <span className={`placeHolder ${identityActive}`}>Identity</span>
                           <Select name="form-field-name"  placeholder={"Identity"}  className="float-label"  options={IdentityOptions}  value={this.state.identity}  onChange={this.optionsBySelectIdentity.bind(this)}/>
                           <br className="clearfix"/><br className="clearfix"/><br className="clearfix"/><br className="clearfix"/><br className="clearfix"/><br className="clearfix"/>
                         </div>

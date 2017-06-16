@@ -44,43 +44,11 @@ MlResolver.MlQueryResolver['fetchConnections'] = (obj, args, context, info) => {
   return userConnections
 }
 
-MlResolver.MlQueryResolver['fetchConnection'] = (obj, args, context, info) => {
-
-}
-
-MlResolver.MlMutationResolver['updateConnection'] = (obj, args, context, info) => {
-  if (args && args.connection && args.connectionId) {
-    let connection = MlConnections.findOne({"_id": args.connectionId})
-    if (!connection) {
-      let code = 400;
-      let response = new MlRespPayload().errorPayload("Invalid Connection", code);
-      return response;
-    }
-    let updateFor = args.connection;
-    let fromIndex = _.findIndex(connection.users, {userid: context.userId})
-    let toIndex = _.findIndex(connection.users, {userid: updateFor.toUser.userid})
-
-    if (fromIndex > -1 && connection.users[toIndex].userid == updateFor.toUser.userid && connection.users[toIndex].userName == updateFor.toUser.userName) {
-      _.mergeWith(connection.users[toIndex], updateFor['toUser'])
-      connection.updatedBy = args.connection.updatedBy;
-      connection.isAccepted = args.connection.isAccepted;
-      connection.isDenied = args.connection.isDenied;
-      connection.resendCount = args.connection.resendCount;
-
-      let ret = MlConnections.update({"_id": args.connectionId}, {$set: connection})
-      if (ret) {
-        let code = 200;
-        let response = new MlRespPayload().successPayload("Connection Updated Successfully", code);
-        return response;
-      }
-    }
-    let code = 400;
-    let response = new MlRespPayload().errorPayload("Invalid Connection", code);
-    return response;
-
-  }
-}
-
+/*
+* This method returns creates the connection request.
+* @param resourceType and resourceId containing resource details
+* returns result if connection request is successuful
+*/
 MlResolver.MlMutationResolver['connectionRequest'] = (obj, args, context, info) => {
   try {
     var users = [];
@@ -122,7 +90,6 @@ MlResolver.MlMutationResolver['connectionRequest'] = (obj, args, context, info) 
       return  new MlRespPayload().successPayload(resp,200);
     }
     /*other conditions for connection request
-
     /*connection request is re-send only if
      1- user rejects the connection request.same user can only send the request.
      2- Note: if connection is blocked. then requestedFrom should be reset(or connection object should be deleted)
@@ -143,6 +110,11 @@ MlResolver.MlMutationResolver['connectionRequest'] = (obj, args, context, info) 
   return response;
 }
 
+/*
+ * This method returns success of accept connection request.
+ * @param connectionId containing connection details
+ * returns result if connection accepted
+ */
 MlResolver.MlMutationResolver['acceptConnection'] = (obj,args, context, info) => {
   try {
     var connectionId = args.connectionId;
@@ -183,21 +155,3 @@ MlResolver.MlMutationResolver['rejectConnection'] = (obj,args, context, info) =>
     return response;
   }
 }
-/* connection = {
- requestedFrom: context.userId,
- actionUserId:context.userId,
- isAccepted: false,
- isDenied: false,
- isBlocked:false
- };*/
-//'actionUserId':{$ne:toUser._id},"isAccepted":false,"isDenied":false,isBlocked:false
-// let isAlreadyExist = MlConnections.findOne({"users.userId": {"$all": [toUser,fromuser]}});
-// if (!isAlreadyExist) {//connection does not exist
-
-//if connection record exists - 1)  check if its request where all conditions are false(due to unblock)
-//                               2) check if is other connection is denied by you
-// MlConnections.update('MlConnections',{$or:[{"users.userId": {"$all": [toUser,fromuser]},isBlocked:false,isDenied:false,isAccepted:false},
-//                                           {"users.userId": {"$all": [toUser,fromuser]},isDenied:true,requestedFrom:fromuser._id}]},
-//    {},
-//    {$set:true},context);
-

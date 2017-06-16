@@ -267,7 +267,11 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioProblemsAndSolutions'] = (obj, 
   if(args.portfoliodetailsId){
     let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
     if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('problemSolution')) {
-      return ideatorPortfolio['problemSolution'];
+      var problemSoultion = ideatorPortfolio['problemSolution'];
+      if(ideatorPortfolio['problemSolution'].isProblemPrivate){
+        problemSoultion = _.omit(ideatorPortfolio['problemSolution'], "problemStatement");
+      }
+      return problemSoultion;
     }
   }
 

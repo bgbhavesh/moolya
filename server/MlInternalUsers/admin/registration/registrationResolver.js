@@ -66,10 +66,12 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   {
     args.registration.createdBy = Meteor.users.findOne({_id: context.userId}).username
   }
+
   let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Yet To Start",emails:emails,transactionId:args.registration.registrationId,transactionCreatedDate:transactionCreatedDate}, context)
   if(id){
-
     MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);
+    validationCheck=MlRegistrationPreCondition.validateActiveCommunity(id,args.registration);
+    if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
    // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:id}, context, info);
 
     //send email and otp;

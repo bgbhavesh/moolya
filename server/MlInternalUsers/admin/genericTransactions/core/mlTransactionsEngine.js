@@ -15,8 +15,12 @@ class MlTransactionsEngine{
   fetchTransactions(transactionType){
     switch(transactionType){
       case 'Registration':
-         let transaction=mlGenericTransactions;
-         return transaction;
+         let registrationInstance=mlGenericTransactions;
+         return registrationInstance;
+        break;
+      case 'Portfolio':
+        let porfolioInstance=mlGenericTransactions;
+        return porfolioInstance;
         break;
     }
   }

@@ -23,6 +23,7 @@ import Inquiry from  "../../../app/appActions/components/Inquiry";
 import Review from  "../../../app/appActions/components/Review";
 import handleLikeAction from '../../../app/appActions/actions/likeActionHandler';
 import handleFollowAction from '../../../app/appActions/actions/followActionHandler';
+import handleFavouriteAction from '../../../app/appActions/actions/favouriteActionHandler';
 
 class MlAppPortfolio extends React.Component{
   constructor(props){
@@ -207,6 +208,7 @@ class MlAppPortfolio extends React.Component{
     let that=this;
       let appActionConfig= [{showAction: true,actionName: 'connect',hasPopOver:true,popOverTitle:'Connect Request',placement:'top',target:'connectRequest',popOverComponent:<Connect />,actionComponent:PopoverActionIcon,handler:this.interactionActionHandler.bind(this)},
       {showAction: true,actionName: 'like',handleCallBack:handleLikeAction,handler:this.interactionActionHandler.bind(this)},
+      {showAction: true,actionName: 'favourite',handleCallBack:handleFavouriteAction,handler:this.interactionActionHandler.bind(this)},
       {showAction: true,actionName: 'follow',handleCallBack:handleFollowAction,handler:this.interactionActionHandler.bind(this)},
       {showAction: true,actionName: 'enquire',hasPopOver:true,popOverTitle:'Enquire',placement:'top',target:'enquireRequest',popOverComponent:<Inquiry />,actionComponent:PopoverActionIcon,handler:this.interactionActionHandler.bind(this)},
       {showAction: true,actionName: 'review',hasPopOver:true,popOverTitle:'Review',placement:'top',target:'reviewRequest',popOverComponent:<Review />,actionComponent:PopoverActionIcon,handler:this.interactionActionHandler.bind(this)},

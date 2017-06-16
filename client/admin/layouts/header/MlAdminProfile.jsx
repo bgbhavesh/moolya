@@ -59,7 +59,7 @@ class  MlAdminProfileApp extends Component {
     // let Details = {
     //   profilePic: this.refs.upload.value};
     let user = Meteor.user();
-    this.setState({firstName : user.profile.InternalUprofile.moolyaProfile.displayName,
+    this.setState({firstName : user.profile.InternalUprofile.moolyaProfile.firstName + user.profile.InternalUprofile.moolyaProfile.lastName,
       profilePic: this.props.user.profile.profileImage//response.profile.profileImage
     });
   }

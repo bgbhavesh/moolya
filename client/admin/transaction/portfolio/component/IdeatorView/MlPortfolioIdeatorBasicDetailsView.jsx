@@ -125,7 +125,7 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
 
                         <div className="form-group steps_pic_upload">
                           <div className="previewImg ProfileImg">
-                            <img src="/images/ideator_01.png"/>
+                            <img src={this.state.data.profilePic?this.state.data.profilePic:"/images/ideator_01.png"}/>
                           </div>
                         </div>
                         <br className="brclear"/>

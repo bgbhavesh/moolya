@@ -79,22 +79,27 @@ export default class MlMoolyaSubChapterAccess extends React.Component {
     let status = this.refs.canSearchE.checked
     var externalUser={
       canSearch:status,
-      canView: this.state.externalUser.canView?this.state.externalUser.canView:false,
+      canView: false,
       canTransact:this.state.externalUser.canTransact?this.state.externalUser.canTransact:false
     }
+    // this.state.externalUser.canView?this.state.externalUser.canView:false
     this.setState({externalUser:externalUser});
     this.props.getMoolyaAccessStatus({externalUser:externalUser})
   }
 
   onStatusChangeCanViewE(e) {
     let status = this.refs.canViewE.checked
-    var externalUser={
-      canSearch:this.state.externalUser.canSearch?this.state.externalUser.canSearch:false,
+    var externalUser = {
+      canSearch: this.state.externalUser.canSearch ? this.state.externalUser.canSearch : false,
       canView: status,
-      canTransact:this.state.externalUser.canTransact?this.state.externalUser.canSearch:false
+      canTransact: this.state.externalUser.canTransact ? this.state.externalUser.canSearch : false
     }
-    this.setState({externalUser:externalUser});
-    this.props.getMoolyaAccessStatus({externalUser:externalUser})
+    if (externalUser.canSearch) {
+      this.setState({externalUser: externalUser});
+      this.props.getMoolyaAccessStatus({externalUser: externalUser})
+    } else {
+      toastr.error('Can-Search should be active for can-view active');
+    }
   }
 
   onStatusChangeCanTransactE(e) {

@@ -3,13 +3,18 @@ import MlSchemaDef from '../../../../commons/mlSchemaDef'
 let AddressTypeSchema = `
     type AddressType
     {
-      addressName :String
-      aboutAddress :String
-      addressDisplayName :String
+      addressTypeInfo:addressDetails
       _id :String
       addressUploadIcon:String
       isActive :Boolean
     }
+    type addressDetails{
+      addressName :String
+      aboutAddress :String
+      _id :String
+      addressDisplayName :String
+    }
+    
     input addressTypeObject{
         addressName :String,
         aboutAddress :String,
@@ -26,7 +31,7 @@ let AddressTypeSchema = `
     }
     type Query{
         findAddressType(_id:String): AddressType
-        fetchAddressTypes:[AddressType]
+        fetchAddressTypes:[addressDetails]
     }
 `
 

@@ -37,6 +37,10 @@ let portfolioSchema = `
         industryId      : String, 
         professionId    : String,
         portfolioId     : String
+        transactionId   : String
+        transactionCreatedDate : String
+        transactionUpdatedDate : String
+        allocation      : allocation
     }
       input portfoliodetails{
         _id:String,
@@ -68,6 +72,9 @@ let portfolioSchema = `
         industryId      : String, 
         professionId    : String,
         portfolioId     : String
+        transactionId   : String
+        transactionCreatedDate : String
+        transactionUpdatedDate : String
     }
    
     input portfolio{

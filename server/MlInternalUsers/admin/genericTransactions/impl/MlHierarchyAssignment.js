@@ -29,10 +29,10 @@ class MlHierarchyAssignment {
       return true;
     } else if (clusterId != '') {
       //check valid oprational area
-      if (transaction.registrationInfo.clusterId == clusterId) {
+      //if (transaction.registrationInfo.clusterId == clusterId) {
         isValidAssignment = true;
         this.processAssignmentTransactions(transaction, userId);
-      }
+      //}
     }
     if (isValidAssignment === true && transaction.canAssign) {
       //proceed with assignment
@@ -98,9 +98,17 @@ class MlHierarchyAssignment {
         return false;
       }
     } else if (this.checkSystemSystemDefinedRole(userRole) && !this.checkSystemSystemDefinedRole(assignedRole)) {
-      return true;
+      if(userRole.hierarchyLevel>=assignedRole.hierarchyLevel){
+        return true;
+      }else{
+        return false;
+      }
     } else if (!this.checkSystemSystemDefinedRole(userRole) && this.checkSystemSystemDefinedRole(assignedRole)) {
-      return false;
+      if(userRole.hierarchyLevel>=assignedRole.hierarchyLevel){
+        return true;
+      }else{
+        return false;
+      }
     }
   }
 

@@ -50,7 +50,9 @@ orderNumberGenService = (function(){
       registration.registrationId="ML-RE-"+FormatUtil.leadingZeros(getNextSequence("registrationNumber"),8);
     },
     assignPortfolioId:function(portfolio){
-      portfolio.portfolioId="ML-PF-"+FormatUtil.leadingZeros(getNextSequence("portfolioNumber"),8);
+      let portfolioId = "ML-PF-"+FormatUtil.leadingZeros(getNextSequence("portfolioNumber"),8);
+      portfolio.portfolioId=portfolioId
+      portfolio.transactionId= portfolioId
     },
       assignTransationRequest:function(transaction){
       transaction.transactionTypeId="ML-TR-"+FormatUtil.leadingZeros(getNextSequence("transactionNumber"),8);

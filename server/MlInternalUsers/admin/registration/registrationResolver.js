@@ -523,6 +523,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       identityType  : regRecord.registrationInfo.identityType,
       industryId    : regRecord.registrationInfo.industry,
       professionId  : regRecord.registrationInfo.profession,
+      transactionCreatedDate : new Date()
      }
      orderNumberGenService.assignPortfolioId(portfolioDetails)
 

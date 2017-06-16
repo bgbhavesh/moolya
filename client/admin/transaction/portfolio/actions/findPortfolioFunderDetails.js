@@ -48,6 +48,8 @@ export async function fetchfunderPortfolioAbout(portfoliodetailsId) {
                     to
                     isToPrivate
                   }
+                  
+                  
             }
           }
       `,

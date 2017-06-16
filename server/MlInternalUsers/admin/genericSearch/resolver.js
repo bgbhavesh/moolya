@@ -2,6 +2,7 @@
   import getQuery from "../genericSearch/queryConstructor";
   import MlAdminUserContext from "../../../../server/mlAuthorization/mlAdminUserContext";
   import _ from "underscore";
+  import _lodash from 'lodash'
 
   let mergeQueries=function(userFilter,serverFilter){
   let query=userFilter||{};
@@ -316,14 +317,15 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
 
   if(args.module == 'Users'){
-    var curUserProfile = new MlAdminUserContext().userProfileDetails(context.userId);
-    var queryChange;
-    if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {   //sub-chapter_admin non-moolya
-      queryChange = {$and: [{'profile.isMoolya': false}, {'profile.InternalUprofile.moolyaProfile.subChapter': {$in: curUserProfile.defaultSubChapters}}, {'profile.isExternaluser': false}]}
-    } else {
-      queryChange = {'profile.isExternaluser': false}   //platform_admin
-    }
-    let queryList = mergeQueries(query, queryChange);
+    // var curUserProfile = new MlAdminUserContext().userProfileDetails(context.userId);
+    // var queryChange;
+    // if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {   //sub-chapter_admin non-moolya
+    //   queryChange = {$and: [{'profile.isMoolya': false}, {'profile.InternalUprofile.moolyaProfile.subChapter': {$in: curUserProfile.defaultSubChapters}}, {'profile.isExternaluser': false}]}
+    // } else {
+    //   queryChange = {'profile.isExternaluser': false}   //platform_admin
+    // }
+    var queryChange = accessControlQuery(context.userId, context) || {}
+    var queryList = mergeQueries(query, queryChange);
     data = Meteor.users.find(queryList, findOptions).fetch();
 
     data.map(function (doc,index) {
@@ -1041,3 +1043,22 @@ MlResolver.MlUnionResolver['SearchResult']= {
     return 'GenericType';
   }
 }
+
+  let accessControlQuery = function (userId, context) {
+    var curUserProfile = new MlAdminUserContext().userProfileDetails(userId);
+    var queryReturn;
+    if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {   //sub-chapter_admin non-moolya
+      let subChapterId = curUserProfile.defaultSubChapters ? curUserProfile.defaultSubChapters[0] : ''
+      let subChapterDetails = MlResolver.MlQueryResolver['fetchSubChapter'](null, {_id: subChapterId}, context, null)
+      if(!_.isEmpty(subChapterDetails.internalSubChapterAccess)){
+        let canSearch = subChapterDetails.internalSubChapterAccess.backendUser?subChapterDetails.internalSubChapterAccess.backendUser.canSearch:false
+        var associated = subChapterDetails.associatedSubChapters ? subChapterDetails.associatedSubChapters : []
+        if(canSearch)
+          curUserProfile.defaultSubChapters = _lodash.concat(curUserProfile.defaultSubChapters, associated)
+      }
+      queryReturn = {$and: [{'_id':{$ne: userId}},{'profile.isMoolya': false}, {'profile.InternalUprofile.moolyaProfile.subChapter': {$in: curUserProfile.defaultSubChapters}}, {'profile.isExternaluser': false}]}
+    } else {
+      queryReturn = {'profile.isExternaluser': false}   //platform_admin
+    }
+    return queryReturn;
+  }

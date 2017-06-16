@@ -162,7 +162,7 @@ class MlSubChapterDetails extends React.Component {
 
   getMoolyaAccessStatus(details) {
     let moolyaSubChapterAccess = {
-      backendUser: details.backendUser ? details.backendUser : this.state.moolyaSubChapterAccess.backendUser,
+      // backendUser: details.backendUser ? details.backendUser : this.state.moolyaSubChapterAccess.backendUser,
       externalUser: details.externalUser ? details.externalUser : this.state.moolyaSubChapterAccess.externalUser
     }
     this.setState({moolyaSubChapterAccess: moolyaSubChapterAccess})

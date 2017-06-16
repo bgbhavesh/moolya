@@ -198,12 +198,15 @@ export default class MlStartupBranches extends React.Component{
   }
 
   render(){
-    let branchesQuery=gql`query{
-      data:fetchAssets {
-        label:displayName
-        value:_id
-      }
-    }`;
+    let branchesQuery=gql`query  {
+  data: fetchAddressTypes {
+    label: addressName
+    value: _id
+  }
+}
+
+
+`;
     let that = this;
     const showLoader = that.state.loading;
     let branchesArray = that.state.startupBranchesList || [];
@@ -272,7 +275,7 @@ export default class MlStartupBranches extends React.Component{
                         </div>
                         <div className="form-group">
                           <input type="text" name="name" placeholder="Name" className="form-control float-label" id="" defaultValue={this.state.data.name}  onBlur={this.handleBlur.bind(this)}/>
-                          <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isNamePrivate" defaultValue={this.state.data.isNamePrivate} onClick={this.onLockChange.bind(this, "isNamePrivate")}/>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isNamePrivate" defaultValue={this.state.data.isNamePrivate} onClick={this.onLockChange.bind(this, "isNamePrivate")}/>
                           <input type="checkbox" className="lock_input" id="isNamePrivate" checked={this.state.data.isNamePrivate}/>
                         </div>
 

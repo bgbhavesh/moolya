@@ -17,7 +17,7 @@ import MlLoader from '../../../commons/components/loader/loader'
 import {resetPasswordActionHandler} from "../../settings/backendUsers/actions/resetPasswordAction";
 import passwordSAS_validate from '../../../../lib/common/validations/passwordSASValidator';
 import {MlAdminProfile} from '../../../admin/layouts/header/MlAdminHeader'
-
+import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 
 export default class MlMyProfile extends React.Component {
 
@@ -189,7 +189,7 @@ export default class MlMyProfile extends React.Component {
         lastName: user.profile.lastName,
         userName: user.profile.displayName,
         // uploadedProfilePic: response.profile.profileImage,
-        genderSelect: "Male", //response.profile.genderType
+        genderSelect: response.profile.genderType,
         dateOfBirth: moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat)
       });
     } else {
@@ -222,13 +222,13 @@ export default class MlMyProfile extends React.Component {
   async genderSelect() {
     //this.setState({genderSelect: e.target.value})
     if (this.state.genderSelect === "Others") {
-      this.setState({genderStateMale: false, genderStateFemale: false, genderStateOthers: true})
+      this.setState({genderStateMale: false, genderStateFemale: false, genderStateOthers: "checked"})
     }
     else if (this.state.genderSelect === "Female") {
-      this.setState({genderStateFemale: true, genderStateMale: false, genderStateOthers: false})
+      this.setState({genderStateFemale: "checked", genderStateMale: false, genderStateOthers: false})
     }
     else {
-      this.setState({genderStateOthers: false, genderStateFemale: false, genderStateMale: true})
+      this.setState({genderStateOthers: false, genderStateFemale: false, genderStateMale: "checked"})
     }
   }
 
@@ -336,6 +336,14 @@ export default class MlMyProfile extends React.Component {
   }
 
   render(){
+    let userContext = getAdminUserContext();
+    let route;
+    if(userContext.hierarchyLevel >3){
+      route = "clusters"
+    }else {
+      route = "chapters"
+    }
+
     let MlActionConfig = [
       {
         showAction: true,
@@ -345,7 +353,7 @@ export default class MlMyProfile extends React.Component {
       {
         showAction: true,
         actionName: 'cancel',
-        handler: async(event) => FlowRouter.go('/admin/dashboard/clusters')
+        handler: async(event) => FlowRouter.go('/admin/dashboard/'+route)
       }
     ];
     const showLoader=this.state.loading;

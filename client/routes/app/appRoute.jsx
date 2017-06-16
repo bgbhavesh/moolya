@@ -69,9 +69,9 @@ appSection.route('/dashboard', {
 });
 
 appSection.route('/explore', {
-  name: 'myProfile',
+  name: 'explore',
   action(){
-    mount(AppLayout,{appContent:<MlAppMyProfile/>, isProfileMenu:true})
+    mount(AppLayout,{appContent:< MlAppIdeatorLanding/>, isExploreMenu:true})
   }
 });
 

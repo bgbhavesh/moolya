@@ -21,8 +21,11 @@ export async function likeActionHandler(details) {
       resourceType: details.resourceType
     }
   })
-  const id = result.data.likeRequest;
-  return id;
+  const resp = result.data.likeRequest;
+  if (resp.success) {
+    toastr.success("You have successfully Liked a resource");
+  }
+  return null;
 }
 
 export default async function handleLikeAction(details){

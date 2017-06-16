@@ -5,7 +5,6 @@ import { render } from 'react-dom';
 import formHandler from '../../../commons/containers/MlFormHandler';
 import {updatePortfolioActionHandler, updateIdeatorIdeaActionHandler, requestProtfolioForGoLive} from '../../../../client/admin/transaction/portfolio/actions/updatePortfolioDetails';
 import {fetchTemplateHandler} from "../../../commons/containers/templates/mltemplateActionHandler";
-import MlActionComponent from '../../../commons/components/actions/ActionComponent';
 import {findComments} from '../../../commons/annotaterComments/findComments'
 import {createCommentActionHandler} from '../../../commons/annotaterComments/createComment';
 import {resolveCommentActionHandler} from '../../../commons/annotaterComments/createComment';
@@ -15,7 +14,15 @@ import moment from "moment";
 import MlCustomActionButtons from '../../ideators/components/MlCustomActionButtons'
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 import {fetchIdeaByPortfolioId} from '../../ideators/actions/IdeaActionHandler'
-import MlLoader from '../../../commons/components/loader/loader'
+import MlLoader from '../../../commons/components/loader/loader';
+import MlAppActionComponent from './MlAppActionComponent';
+import MlAccordion from './MlAccordion';
+import PopoverActionIcon from '../../../app/appActions/components/PopoverActionIcon';
+import Connect from  "../../../app/appActions/components/Connect";
+import Inquiry from  "../../../app/appActions/components/Inquiry";
+import Review from  "../../../app/appActions/components/Review";
+import handleLikeAction from '../../../app/appActions/actions/likeActionHandler';
+import handleFollowAction from '../../../app/appActions/actions/followActionHandler';
 
 class MlAppPortfolio extends React.Component{
   constructor(props){
@@ -30,6 +37,7 @@ class MlAppPortfolio extends React.Component{
     this.fetchComments.bind(this);
     this.toggle = this.toggle.bind(this);
     this.fetchIdeaId.bind(this);
+    this.interactionActionHandler.bind(this);
     return this;
   }
 
@@ -185,36 +193,32 @@ class MlAppPortfolio extends React.Component{
     FlowRouter.go("/app/portfolio");
   };
 
+  //handler for like,review,comment,inquiry,collaborate,connect
+  interactionActionHandler(actionConfig,handlerCallback) {
+    var resourceDetails={resourceId:this.props.config,resourceType:'portfolio'};
+    if(handlerCallback) {
+      handlerCallback(resourceDetails);
+    }else if(actionConfig&&actionConfig.handleCallBack){
+      actionConfig.handleCallBack(resourceDetails);
+    }
+  }
+
   render(){
     let that=this;
-    // let MlActionConfig = [
-    //   {
-    //     showAction: true,
-    //     actionName: 'edit',
-    //     handler: null
-    //   },
-    //   {
-    //     actionName: 'save',
-    //     showAction: true,
-    //     handler: async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this))
-    //   }
-    // ]
+      let appActionConfig= [{showAction: true,actionName: 'connect',hasPopOver:true,popOverTitle:'Connect Request',placement:'top',target:'connectRequest',popOverComponent:<Connect />,actionComponent:PopoverActionIcon,handler:this.interactionActionHandler.bind(this)},
+      {showAction: true,actionName: 'like',handleCallBack:handleLikeAction,handler:this.interactionActionHandler.bind(this)},
+      {showAction: true,actionName: 'follow',handleCallBack:handleFollowAction,handler:this.interactionActionHandler.bind(this)},
+      {showAction: true,actionName: 'enquire',hasPopOver:true,popOverTitle:'Enquire',placement:'top',target:'enquireRequest',popOverComponent:<Inquiry />,actionComponent:PopoverActionIcon,handler:this.interactionActionHandler.bind(this)},
+      {showAction: true,actionName: 'review',hasPopOver:true,popOverTitle:'Review',placement:'top',target:'reviewRequest',popOverComponent:<Review />,actionComponent:PopoverActionIcon,handler:this.interactionActionHandler.bind(this)},
+      {showAction: true,actionName: 'save',handler: async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this))},
+      {showAction: true,actionName: 'edit',handler: async(event) => this.props.handler(this.testEditPortfolioDetails.bind(this))},
+      {showAction: true,actionName: 'golive',handler: async(event) => this.props.handler(this.requestForGoLive.bind(this))}
+      ];
 
-    let MlAppActionConfig= [{
-        showAction: true,
-        actionName: 'save',
-        handler: async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this))
-      },
-      {
-        showAction: true,
-        actionName: 'edit',
-        handler: async(event) => this.props.handler(this.testEditPortfolioDetails.bind(this))
-      },
-      {
-        showAction: true,
-        actionName: 'golive',
-        handler: async(event) => this.props.handler(this.requestForGoLive.bind(this))
-      }]
+    export const genericPortfolioAccordionConfig= {id:'portfolioAccordion',
+      panelItems:[{'title':'Related',isText:true,contentComponent:'upcoming',style:{'background': '#273545'}},
+        {'title':'Actions',isText:false,style:{'background': '#ef4647'},contentComponent:<MlAppActionComponent resourceDetails={{resourceId:this.props.config,resourceType:'portfolio'}} actionOptions={appActionConfig}  />}]
+    };
 
     let EditComponent = ""; let ViewComponent = "";
     if(this.props.viewMode){
@@ -240,7 +244,7 @@ class MlAppPortfolio extends React.Component{
         {showLoader===true?(<MlLoader/>):(
           <div className="app_padding_wrap">
               {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}/>}
-              {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
+                {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
           </div>)}
         <div className="overlay"></div>
           <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
@@ -303,8 +307,8 @@ class MlAppPortfolio extends React.Component{
               <div className="overlay"></div>
             </PopoverContent>
           </Popover>
-        {isMyPortfolio?<AppActionButtons ActionOptions={MlAppActionConfig} showAction='showAction' actionName="actionName"/>:<MlCustomActionButtons/>}
-        {/*<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>*/}
+        {/*{isMyPortfolio?<AppActionButtons ActionOptions={appActionConfig} showAction='showAction' actionName="actionName"/>:<MlCustomActionButtons/>}*/}
+        {isMyPortfolio?<MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />:<MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />}
       </div>
     )
   }

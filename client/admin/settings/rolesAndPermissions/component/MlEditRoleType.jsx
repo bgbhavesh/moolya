@@ -173,8 +173,8 @@ class MlEditRole extends React.Component {
       }
     ]
     let UserTypeOptions = [
-      {value: 'moolya', label: 'moolya', clearableValue: true},
-      {value: 'non-moolya', label: 'non-moolya', clearableValue: true}
+      {value: 'moolya', label: 'EcoSystem', clearableValue: true},
+      {value: 'non-moolya', label: 'SubChapter', clearableValue: true}
     ];
     let BackendUserOptions = [
       {value: 'Internal User', label: 'Internal User'},

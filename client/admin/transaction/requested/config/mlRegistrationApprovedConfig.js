@@ -55,7 +55,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
       handler: (data)=>{
 
         if(data && data.id){
-          FlowRouter.go("/admin/transactions/editRequests/"+data.id);
+          FlowRouter.go("/admin/transactions/editApprovedRequests/"+data.id);
         } else{
           toastr.error("Please select a record");
         }
@@ -79,6 +79,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
                     totalRecords
                     data{
                       ...on RegistrationInfo{
+                             registrationId
                               firstName
                               lastName
                               id:_id

@@ -43,6 +43,14 @@ class MlUserContext{
         }
         return 'mlDefaultProfileMenu';
     }
+
+    getExploreMenu(userId){
+        check(userId,String);
+        let userProfile = this.userProfileDetails(userId)||{};
+        if(userProfile){
+        }
+        return 'mlExploreMenu';
+    }
 }
 
 

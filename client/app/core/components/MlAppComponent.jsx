@@ -20,8 +20,8 @@ class MlAppComponent extends Component{
 
     componentDidMount(){
         let isProfileMenu = this.props.isProfileMenu || false;
-        // let isProfileMenu =  false;
-        this.fetchMenu(isProfileMenu)
+        let isExploreMenu = this.props.isExploreMenu || false;
+        this.fetchMenu(isProfileMenu, isExploreMenu)
     }
 
     componentWillReceiveProps(nextProps, nextState) {
@@ -31,10 +31,12 @@ class MlAppComponent extends Component{
       }
     }
 
-    async fetchMenu(isProfileMenu){
+    async fetchMenu(isProfileMenu, isExploreMenu){
         let query = "";
         if(isProfileMenu)
             query = profileMenuQuery
+        else if(isExploreMenu)
+            query = exploreMenuQuery
         else
             query = defaultQuery;
 
@@ -111,6 +113,39 @@ const profileMenuQuery = gql`fragment subMenu on Menu{
 
               query LeftNavQuery($name: String!) {
                 data:fetchExternalUserProfileMenu(name: $name){
+                    name
+                    menu{
+                      ...subMenu
+                         subMenu{
+                          ...subMenu
+                            subMenu{
+                              ...subMenu
+                                  subMenu{
+                                     ...subMenu
+                                         }
+                                   }
+                              }
+                           }
+                    }
+      }`
+
+const exploreMenuQuery = gql`fragment subMenu on Menu{
+                  uniqueId
+                  isLink
+                  isMenu
+                  isDisabled
+                  name
+                  image
+                  link
+                  dynamicLink
+                  subMenuMappingId
+                  subMenusId
+                  hideSubMenu
+                  showInBreadCrum
+              }
+
+              query LeftNavQuery($name: String!) {
+                data:fetchExploreMenu(name: $name){
                     name
                     menu{
                       ...subMenu

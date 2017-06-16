@@ -66,10 +66,12 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   {
     args.registration.createdBy = Meteor.users.findOne({_id: context.userId}).username
   }
+
   let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Yet To Start",emails:emails,transactionId:args.registration.registrationId,transactionCreatedDate:transactionCreatedDate}, context)
   if(id){
-
     MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);
+    validationCheck=MlRegistrationPreCondition.validateActiveCommunity(id,args.registration);
+    if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
    // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:id}, context, info);
 
     //send email and otp;
@@ -523,6 +525,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       identityType  : regRecord.registrationInfo.identityType,
       industryId    : regRecord.registrationInfo.industry,
       professionId  : regRecord.registrationInfo.profession,
+      transactionCreatedDate : new Date()
      }
      orderNumberGenService.assignPortfolioId(portfolioDetails)
 
@@ -534,6 +537,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       registrationData.userName = regRecord.registrationInfo.userName;
       registrationData.profileImage = regRecord.registrationInfo.profileImage;
       registrationData.investmentFrom = regRecord.registrationInfo.investmentFrom;
+      registrationData.socialLinksInfo = regRecord.socialLinksInfo;
 
        try{
          MlResolver.MlMutationResolver['createPortfolioRequest'] (obj,{'portfoliodetails':portfolioDetails, 'registrationInfo':registrationData},context, info); //portfolio request

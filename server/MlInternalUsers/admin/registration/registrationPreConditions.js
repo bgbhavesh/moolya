@@ -40,7 +40,7 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
     }
 
     if(!isActiveCommunity){
-      let code = 409;
+      let code = 401;
       response = new MlRespPayload().errorPayload("Community not available for cluster", code);
       return {'isValid':false,'validationResponse':response};
      }

@@ -804,6 +804,44 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data = mlDBController.find('MlOfficeTransaction', finalQuery, context, findOptions).fetch();
     totalRecords = mlDBController.find('MlOfficeTransaction', finalQuery, context).count();
   }
+
+  if (args.module == "userTransaction") {
+    let pipeline = [{
+      '$match': {_id: context.userId}},
+      {'$lookup': {from: 'mlRegistration',localField: '_id',foreignField: 'registrationInfo.userId',as: 'registration'}},
+      {'$lookup':{from:'mlPortfolioDetails',localField:'_id',foreignField:'userId', as:'portfolio'}},
+      {'$lookup':{from:'mlOfficeTransaction',localField:'_id',foreignField:'userId', as:'office'}},
+      {'$lookup':{from:'mlTransactionsLog',localField:'_id',foreignField:'userId', as:'transactionLog'}},
+      {'$project':{"R":{
+        '$map':
+        { "input":"$registration", "as":"reg", 'in':
+        { "createdAt" :"$$reg.registrationInfo.registrationDate", "transactionId":"$$reg._id" ,"transactionType":"regisration",username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+        }
+      },
+        "P":{
+          '$map':
+          { "input":"$portfolio", "as":"port", 'in':
+          { "createdAt" :"$$port.timeStamp", "transactionId":"$$port._id" ,"transactionType":"portfolio", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+          }
+        },
+        "O":{
+          '$map':
+          { "input":"$office", "as":"off", 'in':
+          { "createdAt" :"$$off.dateTime", "transactionId":"$$off._id" ,"transactionType":"office", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName' , userId:'$_id'}
+          }
+        },
+        "T":{
+          '$map':
+          { "input":"$transactionLog", "as":"trans", 'in':
+          { "createdAt" :"$$trans.createdAt", "transactionId":"$$trans._id" ,"transactionType":"transaction", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+          }
+        }
+      }}
+    ]
+    let response = mlDBController.aggregate('users', pipeline, context);
+    data = _lodash.concat(response[0].R, response[0].P, response[0].O, response[0].T)
+    totalRecords = data.length
+  }
   return {'totalRecords':totalRecords,'data':data};
 }
 
@@ -874,6 +912,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case 'actionAndStatus':resolveType='ActionAndStatusType';break
       case 'TransactionsLog':resolveType='TransactionsLog';break
       case 'officeTransaction':resolveType='officeTransactionType';break
+      case 'userTransaction':resolveType='myTransaction';break
     }
 
     if(resolveType){

@@ -32,10 +32,9 @@ import MlAppAddOffice from '../../app/profile/office/components/MlAppAddOffice'
 import MlAppEditOffice from '../../app/profile/office/components/MlAppEditOffice'
 import MlAppMember from '../../app/profile/office/components/OfficeMemberInfo/MlAppMember'
 import MlAppOfficeMembersDetails from '../../app/profile/office/components/MlAppOfficeMembersDetails'
-// import MlAppNewSpokePerson from '../../app/profile/office/components/MlAppNewSpokePerson'
 import MlAppPayOfficeSubscription from '../../app/profile/office/components/MlAppPayOfficeSubscription';
 import MlAppInvestment from '../../app/investment/components/MlAppInvestment';
-
+import MlAppMyTransaction from '../../app/myTransaction/component/MlAppMyTransaction'
 import RegistrationWizard from '../../admin/transaction/requested/component/RegistrationWizard'
 
 //Funders
@@ -171,6 +170,13 @@ appSection.route('/portfolio', {
   name: 'portfolio',
   action(){
     mount(AppLayout,{appContent:<MlPortfolioLanding/>, isProfileMenu:true})
+  }
+});
+
+appSection.route('/transaction', {
+  name: 'myTransaction',
+  action(){
+    mount(AppLayout, {appContent: <MlAppMyTransaction />, isProfileMenu: false})
   }
 });
 

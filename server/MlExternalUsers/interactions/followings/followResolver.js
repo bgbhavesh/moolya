@@ -14,7 +14,7 @@ MlResolver.MlMutationResolver['followUser'] = (obj, args, context, info) =>{
           var resourceDetails = mlInteractionService.fetchResourceBasedUserDetails(args.resourceType, args.resourceId, context);
           var fromuser = resourceDetails.contextUser;
           var toUser = resourceDetails.resourceOwner;
-          if (!toUser._id || !fromuser._id) {
+          if (!toUser._id || !fromuser._id || fromuser._id===toUser._id) {
             let code = 400;
             let response = new MlRespPayload().errorPayload('Invalid User', code);
             return response;
@@ -57,7 +57,7 @@ MlResolver.MlQueryResolver['followersList'] = (obj, args, context, info) => {
   if (context && context.userId) {
     //todo: pagination based result
     var pipeline=[
-      {$match:{'followerId':context.userId}},
+      {$match:{'followerId':context.userId,isActive:true}},
       {$lookup:{from:'users',localField:'followedBy',foreignField:'_id',as:'userDetails'}},
       {$unwind:'$userDetails'},{$unwind:'$userDetails.profile.externalUserProfiles'},
       {$match:{'userDetails.profile.isActive':true,'userDetails.profile.externalUserProfiles.isActive':true}},
@@ -85,7 +85,7 @@ MlResolver.MlQueryResolver['followingsList'] = (obj, args, context, info) => {
   var followingsList = [];
   if (context && context.userId) {
     var pipeline=[
-      {$match:{'followedBy':context.userId}},
+      {$match:{'followedBy':context.userId,isActive:true}},
       {$lookup:{from:'users',localField:'followerId',foreignField:'_id',as:'userDetails'}},
       {$unwind:'$userDetails'},{$unwind:'$userDetails.profile.externalUserProfiles'},
       {$match:{'userDetails.profile.isActive':true,'userDetails.profile.externalUserProfiles.isActive':true}},

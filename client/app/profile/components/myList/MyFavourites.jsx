@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
+import ProfileTileComponent from './ProfileTileComponent';
 import MlLoader from '../../../../commons/components/loader/loader'
 import {fetchMyFavouritesActionHandler} from "../../actions/myListActions"
 export default class MyFavourites extends React.Component{

@@ -12,7 +12,6 @@ import MyWishlist from './MyWishlist';
 import MyFollowers from './MyFollowers';
 import MyFollowings from './MyFollowings';
 
-var FontAwesome = require('react-fontawesome');
 
 export default class MyList extends React.Component{
   constructor(props){
@@ -40,7 +39,6 @@ export default class MyList extends React.Component{
     let tabs = [
       {tabClassName:'ml ml-connect', title: <b>My Connections</b>,component: <MyConnections/>},
       {tabClassName:'ml ml-favourite',title: <b>My Favourites</b>,component: <MyFavourites/>},
-      {tabClassName:'ml ml-wishlist',title: <b>My Wishlist</b>,component: <MyWishlist/>},
       {tabClassName:'ml ml-connect',title: <b>My Followers</b>,component: <MyFollowers/>},
       {tabClassName:'ml ml-connect',title: <b>My Followings</b>,component: <MyFollowings/>}
     ]

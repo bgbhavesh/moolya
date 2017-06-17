@@ -9,7 +9,7 @@ let followSchema = `
      type FollowUser{
         id:String,
         userId:String,
-        userName:User,
+        userName:String,
         firstName:String,
         lastName:String,
         displayName:String,
@@ -26,8 +26,8 @@ let followSchema = `
     }
     
      type Query{
-        followersList:FollowUser
-        followingsList:FollowUser
+        followersList:[FollowUser]
+        followingsList:[FollowUser]
     }
 `
 

@@ -212,18 +212,17 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
         emails: emails
       }, context)
       if (registrationId) { //for generating verfication token
-        console.log('registrationId' + registrationId)
         MlAccounts.sendVerificationEmail(registrationId,{emailContentType:"html",subject:"Email Verification",context:context});
       }
       if (registrationId) { //for creating new user
-        let officeTrans = {
-          officeId: args.myOfficeId,
-          transactionType: 'registration',
-          communityName: "Browsers",
-          status: 'done'
-        }
-        let officeTransaction = _.extend(officeTrans, extendObj)
-        MlResolver.MlMutationResolver['createOfficeTransaction'](obj, {officeTransaction}, context, info)
+        // let officeTrans = {
+        //   officeId: args.myOfficeId,
+        //   transactionType: 'registration',
+        //   communityName: "Browsers",
+        //   status: 'done'
+        // }
+        // let officeTransaction = _.extend(officeTrans, extendObj)
+        // MlResolver.MlMutationResolver['createOfficeTransaction'](obj, {officeTransaction}, context, info)
 
         var userProfileTemp = {
           registrationId: registrationId,

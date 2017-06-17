@@ -49,20 +49,63 @@ MlResolver.MlMutationResolver['followUser'] = (obj, args, context, info) =>{
     }
 }
 
+/*
+* followerId-context.userId
+**/
 MlResolver.MlQueryResolver['followersList'] = (obj, args, context, info) => {
   var followersList = [];
   if (context && context.userId) {
     //todo: pagination based result
-     followersList = mlDBController.find('MlConnections',{"followerId":context.userId,isActive:true}).fetch();
+    var pipline=[
+      {$match:{'followerId':context.userId}},
+      {$lookup:{from:'users',localField:'followedBy',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails.profile.externalUserProfiles'},
+      {$match:{'userDetails.profile.isActive':true,'userDetails.profile.externalUserProfiles.isActive':true}},
+      {$group : {_id:'$followedBy',
+        'userId':{ $first: "$userDetails._id"},
+        'userName':{ $first: "$userDetails.username"},
+        'firstName':{ $first:'$userDetails.profile.firstName'},
+        'lastName':{ $first:'$userDetails.profile.lastName'},
+        'displayName':{ $first:'$userDetails.profile.displayName'},
+        'profileImage':{ $first:"$userDetails.profile.profileImage"},
+        'profileId':{ $first:"$userDetails.profile.profileId"},
+        'countryName':{ $first:'$userDetails.profile.externalUserProfiles.countryName'},
+        'communityName':{ $first:'$userDetails.profile.externalUserProfiles.communityName'},
+        'communityCode':{ $first:'$userDetails.profile.externalUserProfiles.communityDefCode'}
+      }}
+    ]
+    followersList=mlDBController.aggregate('MlFollowings',pipeline,context);
   }
   return followersList;
 }
-
+/*
+* followedBy-context.userId
+* */
 MlResolver.MlQueryResolver['followingsList'] = (obj, args, context, info) => {
   var followingsList = [];
   if (context && context.userId) {
+    var pipline=[
+      {$match:{'followedBy':context.userId}},
+      {$lookup:{from:'users',localField:'followerId',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails.profile.externalUserProfiles'},
+      {$match:{'userDetails.profile.isActive':true,'userDetails.profile.externalUserProfiles.isActive':true}},
+      {$group : {_id:'$followerId',
+        'id':{$first:"$_id"}, //follow Object Id
+        'userId':{ $first: "$userDetails._id"},
+        'userName':{ $first: "$userDetails.username"},
+        'firstName':{ $first:'$userDetails.profile.firstName'},
+        'lastName':{ $first:'$userDetails.profile.lastName'},
+        'displayName':{ $first:'$userDetails.profile.displayName'},
+        'profileImage':{ $first:"$userDetails.profile.profileImage"},
+        'profileId':{ $first:"$userDetails.profile.profileId"},
+        'countryName':{ $first:'$userDetails.profile.externalUserProfiles.countryName'},
+        'communityName':{ $first:'$userDetails.profile.externalUserProfiles.communityName'},
+        'communityCode':{ $first:'$userDetails.profile.externalUserProfiles.communityDefCode'}
+      }}
+    ]
+
     //todo: pagination based result
-     followingsList = mlDBController.find('MlConnections',{"followedBy":context.userId,isActive:true}).fetch();
+    followingsList=mlDBController.aggregate('MlFollowings',pipeline,context);
   }
   return followingsList;
 }

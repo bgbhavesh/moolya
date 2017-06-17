@@ -6,15 +6,19 @@ import MlSchemaDef from '../../../commons/mlSchemaDef'
 
 
 let followSchema = `
-     type Followings{
-        _id:String,
-        followerId:User,
-        followerEmail:String,
-        followedBy:String,
-        followedByEmail:String,
-        isActive:Boolean,
-        updatedOn:Boolean,
-        updatedBy:String
+     type FollowUser{
+        id:String,
+        userId:String,
+        userName:User,
+        firstName:String,
+        lastName:String,
+        displayName:String,
+        profileImage:String,
+        profileId:String,
+        countryName:String,
+        communityName:String,
+        communityCode:String,
+        
     }
     
     type Mutation{
@@ -22,8 +26,8 @@ let followSchema = `
     }
     
      type Query{
-        followersList:Followings
-        followingsList:Followings
+        followersList:FollowUser
+        followingsList:FollowUser
     }
 `
 

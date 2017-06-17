@@ -56,7 +56,7 @@ class MlAppPortfolio extends React.Component{
   getSelectedAnnotation(selAnnotation){
     if(!this.state.popoverOpen){
       this.toggle();
-      $('.comment-input-box').slideToggle();
+      $('.comment_wrap').slideToggle();
      }
     if(selAnnotation){
       this.setState({annotationData : selAnnotation},function(){
@@ -69,7 +69,7 @@ class MlAppPortfolio extends React.Component{
 
   commentClicked(){
 
-    $('.comment-input-box').slideToggle();
+    $('.comment_wrap').slideToggle();
     this.setState({"saveButton" : true})
 
   }
@@ -251,12 +251,12 @@ class MlAppPortfolio extends React.Component{
                   <ul id="comments-list" className="comments-list">
                     <li>
                       <div className="comment-main-level">
-                        <div className="comment-avatar"><img src="/images/p_1.jpg" alt=""/></div>
+                        <div className="comment-avatar"><img src={annotationDetails.profileImage?annotationDetails.profileImage:"/images/def_profile.png"} alt=""/></div>
                         <div className="comment-box">
                           <div style={{marginTop:'8px'}} className="annotate">1</div>
                           <div style={{paddingLeft:'50px'}} className="comment-head">
                             <h6 className="comment-name"> {annotationDetails.userName?annotationDetails.userName:""}</h6>
-                            <div className="author">Chapter Manager</div>
+                            <div className="author">{annotationDetails.roleName ? annotationDetails.roleName : ""}</div>
                             <span>{moment(annotationDetails.createdAt).format('DD MM YYYY,HH:MM:SS')}</span>
                           </div>
                           <div className="comment-content">
@@ -270,19 +270,28 @@ class MlAppPortfolio extends React.Component{
                         <a href="#" className="cancel_btn"  onClick={this.onReopenComment.bind(this)}>Re open</a>
                         <a href="#" className="cancel_btn"  onClick={this.commentClicked.bind(this)}>Comment</a>
                       </div>
-                      <div>
+                      {/*<div>
                         <textarea ref="comment" id="comment" className="form-control comment-input-box" placeholder="Enter your comment here"></textarea>
                         <div className="ml_icon_btn">
                           <a href="#" data-id={annotationDetails.id} className="save_btn"><span
                             className="ml ml-save"  onClick={this.onSavingComment.bind(this)}></span></a>
                         </div>
+                      </div>*/}
+                      <div className="comment_wrap">
+                      <textarea ref="comment"  id="comment" className="form-control comment-input-box"
+                                placeholder="Enter your comment here"></textarea>
+
+                        <a href="#" data-id={annotationDetails.id} className="circle_btn">
+                          <span className="fa fa-check" onClick={this.onSavingComment.bind(this)}></span>
+                        </a>
+
                       </div>
 
                       <ul className="comments-list reply-list">
                         {that.state.commentsData.map(function (options, key) {
                           return(<li key={key}>
                             <div className="comment-avatar">
-                              <img src="/images/p_2.jpg" alt=""/>
+                              <img src={options.profileImage?options.profileImage:"/images/def_profile.png"} alt=""/>
                             </div>
                             <div className="comment-box">
                               <div className="comment-head">

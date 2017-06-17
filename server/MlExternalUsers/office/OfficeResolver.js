@@ -196,9 +196,12 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
         firstName: args.officeMember.firstName,
         lastName: args.officeMember.lastName,
         email:args.officeMember.emailId,
+        userName:args.officeMember.emailId,
         contactNumber: args.officeMember.mobileNumber,
         communityName: "Browsers",
         communityDefCode : "BRW",
+        registrationType : "BRW",
+        communityDefName : "Browsers",
         registrationDate :new Date()
       }
 

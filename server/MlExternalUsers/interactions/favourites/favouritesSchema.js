@@ -10,8 +10,23 @@ let favourites = `
         markFavourite(resourceId:String!,resourceType:String!,isFavourite:Boolean):response
     }
     
+     type FavouriteUser{
+        id:String,
+        userId:String,
+        userName:User,
+        firstName:String,
+        lastName:String,
+        displayName:String,
+        profileImage:String,
+        profileId:String,
+        countryName:String,
+        communityName:String,
+        communityCode:String,
+        
+    }
+    
     type Query{
-        fetchFavourites:response
+        fetchFavourites:FavouriteUser
     }
 `
 

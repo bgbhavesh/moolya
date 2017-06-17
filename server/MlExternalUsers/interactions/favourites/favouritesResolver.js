@@ -25,6 +25,7 @@ MlResolver.MlQueryResolver['fetchFavourites'] = (obj, args, context, info) => {
       //todo:check with business to display multiple profiles for multiple users
       {$match:{'userDetails.profile.isActive':true,'userDetails.profile.externalUserProfiles.isActive':true}},
       {$group : {_id:'$connectionCode',// display first profile of user
+        'id':'$_id',//connection Object Id
         'userId':{ $first: "$users.userId"},
         'userName':{ $first: "$users.userName"},
         'firstName':{ $first:'$userDetails.profile.firstName'},

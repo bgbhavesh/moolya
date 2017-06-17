@@ -8,7 +8,7 @@ import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 import getQuery from "../../genericSearch/queryConstructor";
 import _ from "lodash";
 import _underscore from "underscore";
-import geocoder from 'geocoder'
+import geocoder from "geocoder";
 
 MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, info) => {
     let user=Meteor.users.findOne(context.userId);
@@ -176,38 +176,34 @@ MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
 };
 
 MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
-    // let user = Meteor.users.findOne({_id: args.userId});
-  let user = mlDBController.findOne('users', {_id: args.userId}, context)
-    let roleIds=[]
-    let userProfiles=user&&user.profile.InternalUprofile.moolyaProfile.userProfiles?user.profile.InternalUprofile.moolyaProfile.userProfiles:[];
-    userProfiles.map(function (doc,index) {
-      let clusterName=doc.clusterId
-      // const clusterData=MlClusters.findOne({ _id:clusterName})||[];
-      const clusterData= mlDBController.findOne('MlClusters', {_id: clusterName}, context)||[];
-      doc.clusterName=clusterData.clusterName||[]
-      let  userRoles=doc&&doc.userRoles?doc.userRoles:[];
-      userRoles.map(function (Rdoc,key) {
-        let roleName=Rdoc.roleId
-        // const rolesData =  MlRoles.findOne({ _id:roleName} )||[];
-        // const rolesData = mlDBController.findOne('MlRoles', {_id: roleName}, context)||[];
-        // Rdoc.roleName=rolesData.roleName||[]
-        if(Rdoc.subChapterId != 'all') {
+  let checkAccess = new MlAdminUserContext().nonMoolyaBackedUserAccess(args.userId, context.userId);
+  if (checkAccess) {
+    let user = mlDBController.findOne('users', {_id: args.userId}, context)
+    let userProfiles = user && user.profile.InternalUprofile.moolyaProfile.userProfiles ? user.profile.InternalUprofile.moolyaProfile.userProfiles : [];
+    userProfiles.map(function (doc, index) {
+      let clusterName = doc.clusterId
+      const clusterData = mlDBController.findOne('MlClusters', {_id: clusterName}, context) || [];
+      doc.clusterName = clusterData.clusterName || []
+      let userRoles = doc && doc.userRoles ? doc.userRoles : [];
+      userRoles.map(function (Rdoc, key) {
+        if (Rdoc.subChapterId != 'all') {
           const subChapterData = mlDBController.findOne('MlSubChapters', {_id: Rdoc.subChapterId}, context) || [];
           Rdoc.chapterName = subChapterData.chapterName;
           Rdoc.subChapterName = subChapterData.subChapterName;
         }
-        if(Rdoc.hierarchyCode == "CHAPTER" ){
+        if (Rdoc.hierarchyCode == "CHAPTER") {
           const chapterData = mlDBController.findOne('MlChapters', {_id: Rdoc.chapterId}, context) || [];
           Rdoc.chapterName = chapterData.chapterName;
         }
-        if(Rdoc.communityId != 'all'){
-          const communityData= mlDBController.findOne('MlCommunityDefinition', {code: Rdoc.communityCode}, context)||[];
+        if (Rdoc.communityId != 'all') {
+          const communityData = mlDBController.findOne('MlCommunityDefinition', {code: Rdoc.communityCode}, context) || [];
           Rdoc.communityName = communityData.name;
         }
       });
     });
     return user;
-};
+  }
+}
 
 MlResolver.MlQueryResolver['fetchUserDetails'] = (obj, args, context, info) =>
 {

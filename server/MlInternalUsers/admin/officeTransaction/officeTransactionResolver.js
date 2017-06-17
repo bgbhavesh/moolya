@@ -77,7 +77,7 @@ MlResolver.MlQueryResolver['findOfficeTransaction'] = (obj, args, context, info)
     {'$project' : { trans: '$$ROOT'}},
     {'$lookup':{ from: 'users', localField: 'trans.userId', foreignField: '_id', as: 'user'}},
     {'$unwind':'$user'},
-    {'$project':{ trans:1, user: { createdAt : "$user.createdAt", name : '$user.profile.displayName', email : '$user.username', mobile : '$user.profile.mobileNumber' } }},
+    {'$project':{ trans:1, user: { createdAt : "$user.createdAt", name : '$user.profile.displayName', email : '$user.username', mobile : '$user.profile.mobileNumber', profileId:'$user.profile.externalUserProfiles.profileId'}}},
     {'$lookup':{ from: 'mlOffice', localField: 'trans.officeId', foreignField: '_id', as: 'office'}},
     {'$unwind':'$office'},
     // {'$lookup':{ from: 'mlUserSubscriptions', localField: '_id', foreignField: 'resId', as: 'subscriptions'}},

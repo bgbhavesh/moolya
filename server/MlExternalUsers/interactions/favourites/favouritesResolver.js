@@ -16,15 +16,31 @@ MlResolver.MlQueryResolver['fetchFavourites'] = (obj, args, context, info) => {
   let userFavourites = [];
   if (context && context.userId) {
     //todo: pagination based result
-    let connections = mlDBController.find('MlConnections',{"users.userId": {"$in": [context.userId]},isAccepted:true}).fetch();
-    _.each(connections, function (connection) {
-      _.remove(connection.users, {userId: context.userId});
-      let toUser = connection.users[0];
-      userFavourites.push(toUser);
-    })
+    var pipeline=[{$match:{'users':{$elemMatch:{'userId':context.userId,isFavourite:true}}}},
+      {$unwind :"$users" },
+      {$match:{'users.userId':{$ne:context.userId}}},
+      {$lookup:{from:'users',localField:'users.userId',foreignField:'_id',as:'userDetails'}},//join with user
+      {$unwind:'$userDetails'},{$unwind:'$userDetails.profile.externalUserProfiles'},
+      //match the default profile of user //'userDetails.profile.externalUserProfiles.isDefault':true
+      //todo:check with business to display multiple profiles for multiple users
+      {$match:{'userDetails.profile.isActive':true,'userDetails.profile.externalUserProfiles.isActive':true}},
+      {$group : {_id:'$connectionCode',// display first profile of user
+        'id':{ $first: '$_id'},//connection Object Id
+        'userId':{ $first: "$users.userId"},
+        'userName':{ $first: "$users.userName"},
+        'firstName':{ $first:'$userDetails.profile.firstName'},
+        'lastName':{ $first:'$userDetails.profile.lastName'},
+        'displayName':{ $first:'$userDetails.profile.displayName'},
+        'profileImage':{ $first:"$userDetails.profile.profileImage"},
+        'profileId':{ $first:"$userDetails.profile.profileId"},
+        'countryName':{ $first:'$userDetails.profile.externalUserProfiles.countryName'},
+        'communityName':{ $first:'$userDetails.profile.externalUserProfiles.communityName'},
+        'communityCode':{ $first:'$userDetails.profile.externalUserProfiles.communityDefCode'}
+      }}];
+    userFavourites=mlDBController.aggregate('MlConnections',pipeline,context);
   }
 
-  return userFavourites
+  return userFavourites;
 }
 
 /*
@@ -42,7 +58,7 @@ MlResolver.MlMutationResolver['markFavourite'] = (obj, args, context, info) => {
       var resourceDetails = mlInteractionService.fetchResourceBasedUserDetails(args.resourceType, args.resourceId, context);
       var fromuser = resourceDetails.contextUser;
       var toUser = resourceDetails.resourceOwner;
-      if (!toUser._id || !fromuser._id) {
+      if (!toUser._id || !fromuser._id || fromuser._id===toUser._id) {
         let code = 400;
         let response = new MlRespPayload().errorPayload('Invalid User', code);
         return response;

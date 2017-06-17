@@ -71,13 +71,8 @@ class MlAppIdeatorAddIdea extends React.Component{
               handler:  async(event) => {
                 FlowRouter.go("/app/portfolio")
               }
-          },
-          {
-              showAction: true,
-              actionName: 'comment',
-              handler: null,
-             iconID:'Popover1'
           }
+
       ]
       const showLoader = this.state.loading;
       return (

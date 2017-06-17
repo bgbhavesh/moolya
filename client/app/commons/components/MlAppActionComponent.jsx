@@ -108,8 +108,8 @@ export default class MlAppActionComponent extends React.Component {
       {
         actionName: 'comment',
         displayName:'Comment',
-        iconClass: 'ml fa fa-thumbs-o-up'
-      },
+        iconClass: 'ml ml-save'
+      }
     ]
     let actionOptions= this.props.actionOptions|| [];
 

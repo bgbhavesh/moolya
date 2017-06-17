@@ -101,6 +101,11 @@ export default class MlAppActionComponent extends React.Component {
         iconClass: 'ml ml-save'
       },
       {
+        actionName: 'likes',
+        displayName:'Like',
+        iconClass: 'ml fa fa-thumbs-o-up'
+      },
+      {
         actionName: 'comment',
         displayName:'Comment',
         iconClass: 'ml ml-save'

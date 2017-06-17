@@ -62,7 +62,7 @@ MlResolver.MlMutationResolver['connectionRequest'] = (obj, args, context, info) 
     var resourceDetails = mlInteractionService.fetchResourceBasedUserDetails(args.resourceType, args.resourceId, context);
     var fromuser = resourceDetails.contextUser;
     var toUser = resourceDetails.resourceOwner;
-    if (!toUser._id || !fromuser._id) {
+    if (!toUser._id || !fromuser._id || fromuser._id===toUser._id) {
       let code = 400;
       let response = new MlRespPayload().errorPayload('Invalid User', code);
       return response;

@@ -13,7 +13,7 @@ let favourites = `
      type FavouriteUser{
         id:String,
         userId:String,
-        userName:User,
+        userName:String,
         firstName:String,
         lastName:String,
         displayName:String,
@@ -26,7 +26,7 @@ let favourites = `
     }
     
     type Query{
-        fetchFavourites:FavouriteUser
+        fetchFavourites:[FavouriteUser]
     }
 `
 

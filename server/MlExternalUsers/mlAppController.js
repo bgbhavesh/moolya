@@ -32,7 +32,7 @@ const defaultServerConfig = {
   path: '/graphqlApp',
   configServer: graphQLServer => {},
   graphiql: Meteor.isDevelopment,
-  graphiqlPath: '/graphiql',
+  graphiqlPath: '/graphiqlApp',
   paymentReturnUrlPath:'/moolyaPaymentStatus',
   graphiqlOptions : {
     passHeader : "'meteor-login-token': localStorage['Meteor.loginToken']"

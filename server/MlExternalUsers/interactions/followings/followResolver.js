@@ -56,7 +56,7 @@ MlResolver.MlQueryResolver['followersList'] = (obj, args, context, info) => {
   var followersList = [];
   if (context && context.userId) {
     //todo: pagination based result
-    var pipline=[
+    var pipeline=[
       {$match:{'followerId':context.userId}},
       {$lookup:{from:'users',localField:'followedBy',foreignField:'_id',as:'userDetails'}},
       {$unwind:'$userDetails'},{$unwind:'$userDetails.profile.externalUserProfiles'},
@@ -84,7 +84,7 @@ MlResolver.MlQueryResolver['followersList'] = (obj, args, context, info) => {
 MlResolver.MlQueryResolver['followingsList'] = (obj, args, context, info) => {
   var followingsList = [];
   if (context && context.userId) {
-    var pipline=[
+    var pipeline=[
       {$match:{'followedBy':context.userId}},
       {$lookup:{from:'users',localField:'followerId',foreignField:'_id',as:'userDetails'}},
       {$unwind:'$userDetails'},{$unwind:'$userDetails.profile.externalUserProfiles'},

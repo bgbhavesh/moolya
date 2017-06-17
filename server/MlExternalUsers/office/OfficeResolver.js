@@ -57,36 +57,43 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
       let userId = context.userId;
       let myOffice = args.myOffice;
       let profile = new MlUserContext(userId).userProfileDetails(userId)
-      myOffice['userId'] = context.userId;
-      myOffice['isActive'] = false;
-      myOffice['createdDate'] = new Date();
-      if (profile) {
-        myOffice["clusterId"] = profile.clusterId;
-        myOffice["clusterName"] = profile.clusterName;
-        myOffice["chapterId"] = profile.chapterId;
-        myOffice["chapterName"] = profile.chapterName;
-        myOffice["subChapterId"] = profile.subChapterId;
-        myOffice["subChapterName"] = profile.subChapterName;
-        myOffice["communityId"] = profile.communityId;
-        myOffice["communityName"] = profile.communityName;
-      }
-      ret = mlDBController.insert('MlOffice', myOffice, context)
-      if (!ret) {
-        let code = 400;
-        let response = new MlRespPayload().successPayload("Failed To Create Office", code);
-        return response;
-      } else {
-        let officeDetails = {
-          officeId: ret,
-          transactionType:'office setup',
-          status: 'Pending',
-          duration:{
-            years:1
-          }
+      let isFunder = _.isMatch(profile, {communityDefCode: 'FUN'})
+      if(isFunder){
+        myOffice['userId'] = context.userId;
+        myOffice['isActive'] = false;
+        myOffice['createdDate'] = new Date();
+        if (profile) {
+          myOffice["clusterId"] = profile.clusterId;
+          myOffice["clusterName"] = profile.clusterName;
+          myOffice["chapterId"] = profile.chapterId;
+          myOffice["chapterName"] = profile.chapterName;
+          myOffice["subChapterId"] = profile.subChapterId;
+          myOffice["subChapterName"] = profile.subChapterName;
+          myOffice["communityId"] = profile.communityId;
+          myOffice["communityName"] = profile.communityName;
         }
-        let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'communityId', 'communityName']);
-        let officeTransaction = _.extend(officeDetails, extendObj)
-        MlResolver.MlMutationResolver['createOfficeTransaction'](obj, {officeTransaction}, context, info)
+        ret = mlDBController.insert('MlOffice', myOffice, context)
+        if (!ret) {
+          let code = 400;
+          let response = new MlRespPayload().successPayload("Failed To Create Office", code);
+          return response;
+        } else {
+          let officeDetails = {
+            officeId: ret,
+            transactionType:'office setup',
+            status: 'Pending',
+            duration:{
+              years:1
+            }
+          }
+          let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'communityId', 'communityName']);
+          let officeTransaction = _.extend(officeDetails, extendObj)
+          MlResolver.MlMutationResolver['createOfficeTransaction'](obj, {officeTransaction}, context, info)
+        }
+      }else {
+        let code = 400;
+        let response = new MlRespPayload().errorPayload('Not Authorised to create office', code);
+        return response;
       }
     }
   }

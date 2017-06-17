@@ -24,6 +24,22 @@ let connections = `
         resendCount:Int
     }
     
+    type ConnectedUser{
+        id:String,
+        userId:String,
+        userName:String,
+        firstName:String,
+        lastName:String,
+        displayName:String,
+        profileImage:String,
+        profileId:String,
+        countryName:String,
+        communityName:String,
+        communityCode:String,
+        
+    }
+    
+    
     input user{
         userid:String,
         userName:String,
@@ -48,7 +64,7 @@ let connections = `
     }
     
     type Query{
-        fetchConnections:[Connection]
+        fetchConnections:[ConnectedUser]
     }
 `
 

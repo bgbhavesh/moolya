@@ -22,6 +22,7 @@ class MlAdminUserContext
     let defaultCommunities = [];
     let defaultCommunityHierarchyLevel;
     let roleName = null;
+    let roleId = null
     var user = Meteor.users.findOne({_id:userId});
     if(user && user.profile && user.profile.isInternaluser == true)
     {
@@ -67,6 +68,7 @@ class MlAdminUserContext
                   defaultCommunities.push({communityId: userRole.communityId, communityCode: userRole.communityCode})
                 // defaultCommunities.push(userRole.communityId)
                 roleName = userRole.roleName
+                roleId = userRole.roleId
               }
           })
 
@@ -75,12 +77,14 @@ class MlAdminUserContext
         return {hierarchyLevel:hierarchyLevel,hierarchyCode:hierarchyCode,
                 defaultProfileHierarchyCode:"CLUSTER",
                 defaultProfileHierarchyRefId:defaultCluster,
+                defaultCluster: defaultCluster,
                 defaultChapters:defaultChapters,
                 defaultSubChapters:defaultSubChapters,
                 defaultCommunities:defaultCommunities,
                 defaultCommunityHierarchyLevel:defaultCommunityHierarchyLevel,
                 isMoolya:isMoolya,
-                roleName:roleName
+                roleName:roleName,
+                roleId: roleId
         };
   }
 
@@ -112,6 +116,40 @@ class MlAdminUserContext
 
     }
     return {};
+  }
+
+  nonMoolyaBackedUserAccess(checkUser, userId) {
+    check(checkUser, String)
+    check(userId, String)
+    var curUserProfile = new MlAdminUserContext().userProfileDetails(userId);
+    var ret;
+    if (!curUserProfile.isMoolya) { //data access by non-moolya users
+      if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {
+        let subChapterId = curUserProfile.defaultSubChapters ? curUserProfile.defaultSubChapters[0] : ''
+        let subChapterDetails = MlSubChapters.findOne({
+          _id: subChapterId
+        })
+        if (!_.isEmpty(subChapterDetails.internalSubChapterAccess)) {
+          let canSearch = subChapterDetails.internalSubChapterAccess.backendUser ? subChapterDetails.internalSubChapterAccess.backendUser.canSearch : false
+          let canView = subChapterDetails.internalSubChapterAccess.backendUser ? subChapterDetails.internalSubChapterAccess.backendUser.canView : false
+          var associated = subChapterDetails.associatedSubChapters ? subChapterDetails.associatedSubChapters : []
+          if (canSearch && canView) {
+            curUserProfile.defaultSubChapters = _.concat(curUserProfile.defaultSubChapters, associated)
+            let availableUser = Meteor.users.findOne({
+              _id: checkUser,
+              'profile.isExternaluser': false,
+              'profile.InternalUprofile.moolyaProfile.subChapter': {$in: curUserProfile.defaultSubChapters}
+            })
+            if (!_.isEmpty(availableUser)) {
+              return true
+            }
+          }
+        }
+        return false
+      }
+    } else {
+      return true
+    }
   }
 }
 

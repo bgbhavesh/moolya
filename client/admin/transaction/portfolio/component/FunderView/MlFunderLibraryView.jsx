@@ -27,7 +27,10 @@ export default class PortfolioLibrary extends React.Component{
       templateSpecifications: [],
       videoUrl:'',
       fileType:"",
-      fileName:""
+      fileName:"",
+      imagesLock : {},
+      templatesLock: {},
+      videosLock: {}
     };
 
     this.toggle = this.toggle.bind(this);
@@ -79,6 +82,35 @@ export default class PortfolioLibrary extends React.Component{
       let userId = this.props.portfolioDetailsId;
     this.getLibraryDetails(userId)
   }
+
+  toggleImageLock(id){
+    let imageLock = this.state.imagesLock;
+    imageLock[id] = imageLock[id] ? false : true;
+    this.setState({
+      imageLock:imageLock
+    });
+    console.log(id);
+  }
+
+
+  toggleTemplateLock(id){
+    let templateLock = this.state.templatesLock;
+    templateLock [id] = templateLock [id] ? false : true;
+    this.setState({
+      templateLock :templateLock
+    });
+    console.log(id);
+  }
+
+  toggleVideoLock(id){
+    let videoLock = this.state.videosLock;
+    videoLock [id] = videoLock [id] ? false : true;
+    this.setState({
+      videoLock:videoLock
+    });
+    console.log(id);
+  }
+
 
   onFileUploadCallBack(type, resp) {
     if (resp) {
@@ -294,7 +326,9 @@ export default class PortfolioLibrary extends React.Component{
     let that = this;
     const Images = imageData.map(function(show,id) {
       return(
-        <div className="thumbnail"key={id}><FontAwesome name='unlock'/><a href="#" data-toggle="modal" data-target=".imagepop" onClick={that.random.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
+        <div className="thumbnail"key={id}>
+          {that.state.imagesLock[id] ? <FontAwesome onClick={()=>that.toggleImageLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleImageLock(id)} name='unlock'/> }
+          <a href="#" data-toggle="modal" data-target=".imagepop" onClick={that.random.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
           <div id="images" className="title">{show.fileName}</div>
         </div>
       )
@@ -303,7 +337,9 @@ export default class PortfolioLibrary extends React.Component{
     let templateData =  this.state.templateSpecifications || [];
     const Templates = templateData.map(function(show,id) {
       return(
-        <div className="thumbnail"key={id}><FontAwesome name='unlock'/><a href="#" data-toggle="modal" data-target=".templatepop" onClick={that.randomTemplate.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
+        <div className="thumbnail"key={id}>
+          {that.state.templatesLock[id] ? <FontAwesome onClick={()=>that.toggleTemplateLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleTemplateLock(id)} name='unlock'/> }
+          <a href="#" data-toggle="modal" data-target=".templatepop" onClick={that.randomTemplate.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
           <div id="templates" className="title">{show.fileName}</div>
         </div>
       )
@@ -315,7 +351,7 @@ export default class PortfolioLibrary extends React.Component{
     const videos = videodata.map(function(show,id){
       return(
         <div className="thumbnail">
-          <FontAwesome name='unlock'/>
+          {that.state.videosLock[id] ? <FontAwesome onClick={()=>that.toggleVideoLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleVideoLock(id)} name='unlock'/> }
           <a href="" data-toggle="modal" data-target=".videopop" onClick={that.randomVideo.bind(that,show.fileUrl,id)}>
             <video width="120" height="100" controls>
               <source src={show.fileUrl}type="video/mp4"></source>

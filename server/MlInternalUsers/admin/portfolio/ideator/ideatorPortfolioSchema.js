@@ -303,6 +303,7 @@ let ideatorPortfolioSchema = `
     fileName:String,
     fileUrl:String,
     fileType:String
+    isPrivate:Boolean
     }
     
     input detailsInput{
@@ -311,6 +312,12 @@ let ideatorPortfolioSchema = `
       videos:[fileAttributes],
       documents:[fileAttributes],
       templates:[fileAttributes]
+    }
+    
+    input privateData{
+      index: Int
+      element: Boolean
+      type: String
     }
     
      type Details{
@@ -350,6 +357,7 @@ let ideatorPortfolioSchema = `
         reopenComment(commentId:String): response
         createIdea(idea:idea):response
         createLibrary(detailsInput:detailsInput):response
+        updatePrivacyDetails(detailsInput:privateData): response
         updateIdea(ideaId:String, idea:idea):response
     }
 `
@@ -384,5 +392,7 @@ let supportedApi = [
   {api:'updateIdea', actionName:'UPDATE', moduleName:"PORTFOLIO"},
   {api:'resolveComment', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'reopenComment', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
+  {api:'updatePrivacyDetails', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true}
+
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

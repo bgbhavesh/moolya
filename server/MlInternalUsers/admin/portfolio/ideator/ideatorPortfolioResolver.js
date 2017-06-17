@@ -514,6 +514,16 @@ MlResolver.MlQueryResolver['fetchAllowableFormats'] = (obj, args, context, info)
 
 }
 
+MlResolver.MlMutationResolver['updatePrivacyDetails'] = (obj, args, context, info) => {
+  if(args.detailsInput.type === "image"){
+    var libraryData = mlDBController.find('MlLibrary', {userId: context.userId}, context).fetch();
+    libraryData[0].images[args.detailsInput.index].isPrivate = args.detailsInput.element
+    var updateTemplateCollection = mlDBController.update('MlLibrary', {userId: context.userId},{'images':libraryData[0].images}, {$set: 1}, context)
+  }
+}
+
+
+
 //
 // MlResolver.MlQueryResolver['fetchImages'] = (obj, args, context, info) => {
 //   var libraryData = mlDBController.find('MlLibrary', {userId: args.userId}, context).fetch();

@@ -18,7 +18,8 @@ import MlAppDashboard from '../../app/dashboard/components/MlAppDashboard'
 import MlPortfolioLanding from '../../app/commons/components/MlPortfolioLanding'
 import MlAppIdeatorAddIdea from '../../app/ideators/components/MlAppIdeatorAddIdea'
 import MlAppPortfolio from '../../app/commons/components/MlAppPortfolio'
-import   MlPortfolioIdeatorLibraryView from '../../admin/transaction/portfolio/component/IdeatorView/MlPortfolioLibrary.jsx'
+import MlmanageScheduler from '../../app/calendar/manageScheduler/components/manageScheduler'
+import MlPortfolioIdeatorLibraryView from '../../admin/transaction/portfolio/component/IdeatorView/MlPortfolioLibrary.jsx'
 
 
 //profile
@@ -262,5 +263,12 @@ appSection.route('/funder/:portfolioId', {
   name: 'funder',
   action(params){
     mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={"funder"}/>, isProfileMenu:false})
+  }
+});
+
+appSection.route('/calendar/manageScheduler', {
+  name: 'manageScheduler',
+  action(){
+    mount(AppLayout,{appContent:<MlmanageScheduler />})
   }
 });

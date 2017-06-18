@@ -121,7 +121,6 @@ getChildContext(){
     let tabs = this.state.tabs;
     return (
       <div className="col-md-12">
-        <InteractionsCounter/>
         <MlTabComponent tabs={tabs}/>
       </div>
     )

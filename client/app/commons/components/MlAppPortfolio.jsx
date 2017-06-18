@@ -24,6 +24,7 @@ import Review from  "../../../app/appActions/components/Review";
 import handleLikeAction from '../../../app/appActions/actions/likeActionHandler';
 import handleFollowAction from '../../../app/appActions/actions/followActionHandler';
 import handleFavouriteAction from '../../../app/appActions/actions/favouriteActionHandler';
+import InteractionsCounter from '../../commons/components/InteractionsCounter'
 
 class MlAppPortfolio extends React.Component{
   constructor(props){
@@ -245,6 +246,7 @@ class MlAppPortfolio extends React.Component{
       <div className="app_main_wrap">
         {showLoader===true?(<MlLoader/>):(
           <div className="app_padding_wrap">
+            <InteractionsCounter/>
               {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}/>}
                 {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
           </div>)}

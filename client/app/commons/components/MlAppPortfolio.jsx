@@ -246,7 +246,7 @@ class MlAppPortfolio extends React.Component{
       <div className="app_main_wrap">
         {showLoader===true?(<MlLoader/>):(
           <div className="app_padding_wrap">
-            <InteractionsCounter/>
+            <InteractionsCounter resourceType={'portfolio'} resourceId={this.props.config} />
               {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}/>}
                 {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
           </div>)}

@@ -815,25 +815,25 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       {'$project':{"R":{
         '$map':
         { "input":"$registration", "as":"reg", 'in':
-        { "createdAt" :"$$reg.registrationInfo.registrationDate", "transactionId":"$$reg._id" ,"transactionType":"regisration",username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+        { "createdAt" :"$$reg.registrationInfo.registrationDate", "transactionId":"$$reg._id" ,"transactionType":"$$reg.registrationInfo.transactionType",username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
         }
       },
         "P":{
           '$map':
           { "input":"$portfolio", "as":"port", 'in':
-          { "createdAt" :"$$port.timeStamp", "transactionId":"$$port._id" ,"transactionType":"portfolio", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+          { "createdAt" :"$$port.timeStamp", "transactionId":"$$port._id" ,"transactionType":"$$port.transactionType", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
           }
         },
         "O":{
           '$map':
           { "input":"$office", "as":"off", 'in':
-          { "createdAt" :"$$off.dateTime", "transactionId":"$$off._id" ,"transactionType":"office", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName' , userId:'$_id'}
+          { "createdAt" :"$$off.dateTime", "transactionId":"$$off._id" ,"transactionType":"$$off.transactionType", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName' , userId:'$_id'}
           }
         },
         "T":{
           '$map':
           { "input":"$transactionLog", "as":"trans", 'in':
-          { "createdAt" :"$$trans.createdAt", "transactionId":"$$trans._id" ,"transactionType":"transaction", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+          { "createdAt" :"$$trans.createdAt", "transactionId":"$$trans._id" ,"transactionType":"$$trans.transactionTypeName", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
           }
         }
       }}

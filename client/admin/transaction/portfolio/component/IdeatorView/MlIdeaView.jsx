@@ -78,6 +78,8 @@ export default class MlIdeaView extends React.Component {
         "quote": value.quote.quote,
         "ranges": value.quote.ranges,
         "userName": value.userName,
+        "roleName" : value.roleName,
+        "profileImage" : value.profileImage,
         "createdAt": value.createdAt
       })
     })
@@ -87,6 +89,7 @@ export default class MlIdeaView extends React.Component {
 
   componentDidMount() {
     $('.actions_switch').click();
+    $('.appCommentBox').addClass('in');
     this.initalizeAnnotaor()
     this.fetchIdeatorIdeas();
     this.fetchAnnotations();

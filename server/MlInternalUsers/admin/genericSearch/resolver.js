@@ -2,7 +2,7 @@
   import getQuery from "../genericSearch/queryConstructor";
   import MlAdminUserContext from "../../../../server/mlAuthorization/mlAdminUserContext";
   import _ from "underscore";
-  import _lodash from 'lodash'
+  import _lodash from "lodash";
 
   let mergeQueries=function(userFilter,serverFilter){
   let query=userFilter||{};
@@ -59,7 +59,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     var queryChange;
     if (userProfileDep.defaultSubChapters.indexOf("all") < 0) {
       userProfileDep.defaultSubChapters.push('all')
-      var serverQuery = {$and: [{isMoolya: false}, {isSystemDefined: false}, {depatmentAvailable: {$elemMatch: {subChapter: {$in: userProfileDep.defaultSubChapters}}}}]}
+      // var serverQuery = {$and: [{isMoolya: false}, {isSystemDefined: false}, {depatmentAvailable: {$elemMatch: {subChapter: {$in: userProfileDep.defaultSubChapters}}}}]}
+      var serverQuery = {depatmentAvailable: {$elemMatch: {subChapter: {$in: userProfileDep.defaultSubChapters},cluster:{$in:['all', userProfileDep.defaultCluster]}}}}
       queryChange = mergeQueries(query, serverQuery);
     }else {
       queryChange = query
@@ -105,7 +106,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     var queryChange;
     if (userProfileSub.defaultSubChapters.indexOf("all") < 0) {
       userProfileSub.defaultSubChapters.push('all')
-      var serverQuery ={$and: [{isMoolya: false}, {isSystemDefined: false},  {subDepatmentAvailable: {$elemMatch: {subChapter: {$in:userProfileSub.defaultSubChapters}}}}]}
+      // var serverQuery ={$and: [{isMoolya: false}, {isSystemDefined: false},  {subDepatmentAvailable: {$elemMatch: {subChapter: {$in:userProfileSub.defaultSubChapters}}}}]}
+      var serverQuery ={subDepatmentAvailable: {$elemMatch: {subChapter: {$in:userProfileSub.defaultSubChapters},cluster:{$in:['all', userProfileSub.defaultCluster]}}}}
       queryChange = mergeQueries(query, serverQuery);
     }else {
       queryChange = query
@@ -353,7 +355,18 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=Meteor.users.find(queryList,findOptions).count();
   }
   if(args.module == 'roles'){
-    data= MlRoles.find(query,findOptions).fetch();
+    var userProfileMenu = new MlAdminUserContext().userProfileDetails(context.userId);
+    var queryChange;
+    if (userProfileMenu.defaultSubChapters.indexOf("all") < 0) {
+      userProfileMenu.defaultSubChapters.push('all')
+      var serverQuery ={assignRoles: {$elemMatch: {cluster:{$in:['all', userProfileMenu.defaultCluster]},subChapter: {$in:userProfileMenu.defaultSubChapters}}}}
+      queryChange = mergeQueries(query, serverQuery);
+    }else {
+      queryChange = query
+    }
+
+    data = MlRoles.find(queryChange, findOptions).fetch();
+    // data= MlRoles.find(query,findOptions).fetch();
     data.map(function (doc,index) {
       let departmentsIdsArray = [];
       let subdepartmentsIdsArray = [];
@@ -402,7 +415,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       data[index].chaptersList = chapterNamesArray || [];
       data[index].subChapterList = subchapterNamesArray || [];
     });
-    totalRecords=MlRoles.find(query,findOptions).count();
+    totalRecords = MlRoles.find(queryChange, findOptions).count();
   }
 
   if(args.module=="industry"){
@@ -791,6 +804,44 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data = mlDBController.find('MlOfficeTransaction', finalQuery, context, findOptions).fetch();
     totalRecords = mlDBController.find('MlOfficeTransaction', finalQuery, context).count();
   }
+
+  if (args.module == "userTransaction") {
+    let pipeline = [{
+      '$match': {_id: context.userId}},
+      {'$lookup': {from: 'mlRegistration',localField: '_id',foreignField: 'registrationInfo.userId',as: 'registration'}},
+      {'$lookup':{from:'mlPortfolioDetails',localField:'_id',foreignField:'userId', as:'portfolio'}},
+      {'$lookup':{from:'mlOfficeTransaction',localField:'_id',foreignField:'userId', as:'office'}},
+      {'$lookup':{from:'mlTransactionsLog',localField:'_id',foreignField:'userId', as:'transactionLog'}},
+      {'$project':{"R":{
+        '$map':
+        { "input":"$registration", "as":"reg", 'in':
+        { "createdAt" :"$$reg.registrationInfo.registrationDate", "transactionId":"$$reg._id" ,"transactionType":"$$reg.registrationInfo.transactionType",username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+        }
+      },
+        "P":{
+          '$map':
+          { "input":"$portfolio", "as":"port", 'in':
+          { "createdAt" :"$$port.timeStamp", "transactionId":"$$port._id" ,"transactionType":"$$port.transactionType", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+          }
+        },
+        "O":{
+          '$map':
+          { "input":"$office", "as":"off", 'in':
+          { "createdAt" :"$$off.dateTime", "transactionId":"$$off._id" ,"transactionType":"$$off.transactionType", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName' , userId:'$_id'}
+          }
+        },
+        "T":{
+          '$map':
+          { "input":"$transactionLog", "as":"trans", 'in':
+          { "createdAt" :"$$trans.createdAt", "transactionId":"$$trans._id" ,"transactionType":"$$trans.transactionTypeName", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+          }
+        }
+      }}
+    ]
+    let response = mlDBController.aggregate('users', pipeline, context);
+    data = _lodash.concat(response[0].R, response[0].P, response[0].O, response[0].T)
+    totalRecords = data.length
+  }
   return {'totalRecords':totalRecords,'data':data};
 }
 
@@ -861,6 +912,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case 'actionAndStatus':resolveType='ActionAndStatusType';break
       case 'TransactionsLog':resolveType='TransactionsLog';break
       case 'officeTransaction':resolveType='officeTransactionType';break
+      case 'userTransaction':resolveType='myTransaction';break
     }
 
     if(resolveType){

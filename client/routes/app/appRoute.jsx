@@ -27,16 +27,15 @@ import MlAppMyProfile from '../../app/profile/components/MlAppMyProfile'
 import MlProfileSettings from '../../app/profile/components/MlProfileSettings'
 import MlAppProfileAddressBook from '../../app/profile/components/MlAppProfileAddressBook'
 import MlAppSwitchProfile from '../../app/profile/components/MlAppSwitchProfile';
-import MlAppProfileList from '../../../client/app/profile/components/MlAppProfileList'
+import MyList from '../../app/profile/components/myList/MyList'
 import MlAppMyOffice from '../../../client/app/profile/office/components/MlAppMyOffice'
 import MlAppAddOffice from '../../app/profile/office/components/MlAppAddOffice'
 import MlAppEditOffice from '../../app/profile/office/components/MlAppEditOffice'
 import MlAppMember from '../../app/profile/office/components/OfficeMemberInfo/MlAppMember'
 import MlAppOfficeMembersDetails from '../../app/profile/office/components/MlAppOfficeMembersDetails'
-// import MlAppNewSpokePerson from '../../app/profile/office/components/MlAppNewSpokePerson'
 import MlAppPayOfficeSubscription from '../../app/profile/office/components/MlAppPayOfficeSubscription';
 import MlAppInvestment from '../../app/investment/components/MlAppInvestment';
-
+import MlAppMyTransaction from '../../app/myTransaction/component/MlAppMyTransaction'
 import RegistrationWizard from '../../admin/transaction/requested/component/RegistrationWizard'
 
 //Funders
@@ -157,7 +156,7 @@ appSection.route('/officeMember/:officeId/:memberId', {
 appSection.route('/myConnections', {
   name: 'myConnections',
   action(){
-    mount(AppLayout, {appContent: <MlAppProfileList />, isProfileMenu: true})
+    mount(AppLayout, {appContent: <MyList />, isProfileMenu: true})
   }
 });
 
@@ -172,6 +171,13 @@ appSection.route('/portfolio', {
   name: 'portfolio',
   action(){
     mount(AppLayout,{appContent:<MlPortfolioLanding/>, isProfileMenu:true})
+  }
+});
+
+appSection.route('/transaction', {
+  name: 'myTransaction',
+  action(){
+    mount(AppLayout, {appContent: <MlAppMyTransaction />, isProfileMenu: false})
   }
 });
 

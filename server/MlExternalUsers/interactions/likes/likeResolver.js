@@ -5,6 +5,7 @@ import MlResolver from '../../../commons/mlResolverDef'
 import MlRespPayload from '../../../commons/mlPayload'
 import _ from 'lodash';
 import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
+import mlInteractionService from '../mlInteractionRepoService';
 
 MlResolver.MlMutationResolver['likeRequest'] = (obj, args, context, info) =>{
     if(args && context && context.userId){
@@ -35,6 +36,35 @@ MlResolver.MlMutationResolver['likeRequest'] = (obj, args, context, info) =>{
     }
 }
 
+MlResolver.MlQueryResolver['fetchLikes'] = (obj, args, context, info) =>{
+  if(args && args.resourceType &&context && context.userId){
+    var resp=null;
+    try {
+      let pileLine = [
+        { '$match': {
+            userId: context.userId,
+            resourceType: args.resourceType
+          }
+        }
+      ]
+      let pipeRes = mlInteractionService.getPipeline(args.resourceType);
+      if(pipeRes.length){
+        pileLine = pileLine.concat(pipeRes);
+      }
+      let resp = mlDBController.aggregate('MlLikes', pileLine, context);
+      let code = 200;
+      let response = new MlRespPayload().successPayload(resp, code);
+      return response;
+    }catch (e){
+      let code = 400;
+      let response = new MlRespPayload().errorPayload(e.message, code);
+      return response;
+    }
+    let code = 200;
+    let response = new MlRespPayload().successPayload(resp, code);
+    return response;
+  }
+}
 
 validateExternalUser=(user)=>{
     let userExternal = user.profile.isExternaluser;

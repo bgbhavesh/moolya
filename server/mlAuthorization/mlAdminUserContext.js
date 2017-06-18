@@ -77,6 +77,7 @@ class MlAdminUserContext
         return {hierarchyLevel:hierarchyLevel,hierarchyCode:hierarchyCode,
                 defaultProfileHierarchyCode:"CLUSTER",
                 defaultProfileHierarchyRefId:defaultCluster,
+                defaultCluster: defaultCluster,
                 defaultChapters:defaultChapters,
                 defaultSubChapters:defaultSubChapters,
                 defaultCommunities:defaultCommunities,

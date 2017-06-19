@@ -25,7 +25,7 @@ import handleLikeAction from '../../../app/appActions/actions/likeActionHandler'
 import handleFollowAction from '../../../app/appActions/actions/followActionHandler';
 import handleFavouriteAction from '../../../app/appActions/actions/favouriteActionHandler';
 import InteractionsCounter from '../../commons/components/InteractionsCounter'
-
+import MlAppPortfolioAccordionContainer from '../components/MlAppPortfolioAccordion';
 class MlAppPortfolio extends React.Component{
   constructor(props){
     super(props)
@@ -321,7 +321,8 @@ class MlAppPortfolio extends React.Component{
             </PopoverContent>
           </Popover>
         {/*{isMyPortfolio?<AppActionButtons ActionOptions={appActionConfig} showAction='showAction' actionName="actionName"/>:<MlCustomActionButtons/>}*/}
-        {isMyPortfolio?<MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />:<MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />}
+        {/*{isMyPortfolio?<MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />:<MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />}*/}
+         <MlAppPortfolioAccordionContainer communityType={this.props.communityType} actionOptions={appActionConfig} resourceId={this.props.config}/>
       </div>
     )
   }

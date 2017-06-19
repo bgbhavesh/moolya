@@ -202,6 +202,12 @@ if(Meteor.isServer){
           type:'String',
           resolverName : " "
         },
+        {
+          name:"emailId",
+          type:'String',
+          resolverName : " "
+        }
+
 
       ]
     }});
@@ -246,6 +252,11 @@ if(Meteor.isServer){
         },
         {
           name:"createdBy",
+          type:'String',
+          resolverName : " "
+        },
+        {
+          name:"emailId",
           type:'String',
           resolverName : " "
         },

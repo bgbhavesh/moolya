@@ -39,7 +39,7 @@ const typeDefs = MlSchemaDef['schema']
 
 // default server configuration object
 const defaultServerConfig = {
-  path: '/graphql',
+  path: '/moolyaAdmin',
   configServer: graphQLServer => {},
   graphiql: Meteor.isDevelopment,
   graphiqlPath: '/graphiql',

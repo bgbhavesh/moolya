@@ -3,8 +3,29 @@
  */
 import React from 'react';
 import MlAppScheduleHead from "../../commons/components/MlAppScheduleHead";
+import {fetchActivitiesActionHandler} from '../actions/fetchActivities';
 
 export default class MlAppActivityList extends React.Component{
+
+  constructor(props){
+    super(props);
+    this.state = {
+      activities:[]
+    }
+  }
+
+  componentWillMount(){
+    this.fetchActivities();
+  }
+  async fetchActivities(){
+    let profileId = FlowRouter.getParam('profileId');
+    let response = await fetchActivitiesActionHandler(profileId);
+    if(response){
+      this.setState({
+        activities:response
+      });
+    }
+  }
 
   render(){
     return (
@@ -21,36 +42,17 @@ export default class MlAppActivityList extends React.Component{
                   </div>
                 </a>
               </div>
-              <div className="col-lg-2 col-md-4 col-sm-4">
-                <div className="list_block img_list_block notrans">
-                  <img src="/images/activity_1.jpg"/>
-                  <h3>Demonstrate Projects</h3>
-                </div>
-              </div>
-              <div className="col-lg-2 col-md-4 col-sm-4">
-                <div className="list_block img_list_block notrans">
-                  <img src="/images/activity_2.jpg"/>
-                  <h3>Use of Investment</h3>
-                </div>
-              </div>
-              <div className="col-lg-2 col-md-4 col-sm-4">
-                <div className="list_block img_list_block notrans">
-                  <img src="/images/activity_3.jpg"/>
-                  <h3>Estimate Subsidies</h3>
-                </div>
-              </div>
-              <div className="col-lg-2 col-md-4 col-sm-4">
-                <div className="list_block img_list_block notrans">
-                  <img src="/images/activity_4.jpg"/>
-                  <h3>Equity of Crowd Funding</h3>
-                </div>
-              </div>
-              <div className="col-lg-2 col-md-4 col-sm-4">
-                <div className="list_block img_list_block notrans">
-                  <img src="/images/activity_5.jpg"/>
-                  <h3>Debate the issues</h3>
-                </div>
-              </div>
+
+              {this.state.activities.map(function (actvity, index) {
+                return (
+                  <div className="col-lg-2 col-md-4 col-sm-4" key={index}>
+                    <div className="list_block img_list_block notrans">
+                      <img src={actvity.imageLink ? actvity.imageLink : "/images/activity_1.jpg"}/>
+                      <h3>{actvity.displayName}</h3>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>

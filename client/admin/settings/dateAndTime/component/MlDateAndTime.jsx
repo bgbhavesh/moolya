@@ -109,6 +109,7 @@ class MlAddDateAndTime extends React.Component{
       hoursFormat: this.state.hoursFormat,
     }
     const response = await upsertDateAndTimeActionHandler(Details);
+    toastr.success("Saved Successfully")
     return response;
 
   }

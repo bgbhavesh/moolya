@@ -534,7 +534,7 @@ validateinternalUserLoginAttempt=(user)=>{
 
     if(!chapterActive){
         user.allowed = false
-        throw new Meteor.Error(403, "None of the Chapters are active");
+        throw new Meteor.Error(403, "Default Chapter Is Not Active");
     }
 
     if(!subChapterActive){

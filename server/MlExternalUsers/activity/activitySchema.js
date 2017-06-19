@@ -123,7 +123,6 @@ _id: String
     }
     
     input activityUpdate{
-      id: String
       teams:[teams]
       payment: payment
       facilitationCharge: facilitationCharge
@@ -162,7 +161,7 @@ _id: String
 
     type Mutation {
         createActivity(Details:activity):response
-        updateActivity(ActivityUpdate:activityUpdate):response
+        updateActivity(activityId:String, Details:activity):response
     }
 `
 

@@ -69,10 +69,10 @@ MlResolver.MlMutationResolver['createActivity'] = (obj, args, context, info) => 
 }
 
 MlResolver.MlMutationResolver['updateActivity'] = (obj, args, context, info) => {
-  let result = mlDBController.update('MlActivity', {_id:args.ActivityUpdate.id}, args.ActivityUpdate, {'$set':1}, context).fetch();
+  let result = mlDBController.update('MlActivity', {_id:args.activityId}, args.Details, {'$set':1}, context);
   if(result){
     let code = 200;
-    let result = {userId: userId}
+    let result = result
     let response = new MlRespPayload().successPayload(result, code);
     return response
   }

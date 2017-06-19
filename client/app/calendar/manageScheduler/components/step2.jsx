@@ -27,6 +27,7 @@ export default class Step1 extends React.Component{
   }
   componentDidMount()
   {
+
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(310+$('.admin_header').outerHeight(true)));
@@ -48,14 +49,15 @@ export default class Step1 extends React.Component{
   }
 
   async saveDetails(){
-    console.log(this.props.activityId)
-    let team  = this.state.team;
 
+    console.log(this.props)
+    let team  = this.state.team;
+    let id = FlowRouter.getQueryParam('id')
     let teams = {
       teams:team,
-      id : this.props.activityId
     }
-     const res = await updateActivityActionHandler(teams)
+
+     const res = await updateActivityActionHandler(id,teams)
      return res;
   }
   async SelectTeamMember(index,value){

@@ -21,11 +21,11 @@ export async function createActivityActionHandler (Details) {
 }
 
 
-export async function updateActivityActionHandler(ActivityUpdate) {
+export async function updateActivityActionHandler(activityId,Details) {
   const result = await appClient.mutate({
     mutation: gql`
-    mutation($ActivityUpdate:activityUpdate){
-        updateActivity(ActivityUpdate:$ActivityUpdate)
+    mutation($activityId:String, $Details:activity){
+        updateActivity(activityId:$activityId,Details:$Details){
         success
         code
         result
@@ -33,7 +33,8 @@ export async function updateActivityActionHandler(ActivityUpdate) {
       }
     `,
     variables: {
-      ActivityUpdate
+      activityId,
+      Details
     }
   });
   console.log(result)

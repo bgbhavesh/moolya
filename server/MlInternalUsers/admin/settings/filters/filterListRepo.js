@@ -246,6 +246,17 @@ export default class MlFilterListRepo{
 
         break;
 
+      case "Gen_TransactionType":
+
+        result= MlTransactionTypes.find({"isActive" : true}).fetch()
+
+        let genTransactionResponse=_.each(result,function (option,id) {
+          options.push({"label":option.transactionDisplayName,"value":option._id})
+        })
+
+        break;
+
+
     }
 
 

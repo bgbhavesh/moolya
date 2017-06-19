@@ -151,7 +151,7 @@ _id: String
     }
 
     type Query {
-        fetchActivities:[Activity]
+        fetchActivities(profileId:String):[Activity]
         fetchActivity(id:String):Activity
         getTeamMembers:[AvailableCommunities]
         getBranchDetails:[BranchType]

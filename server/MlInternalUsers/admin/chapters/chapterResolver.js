@@ -338,7 +338,7 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
         }
 
       if (resp) {
-        if (subChapter && subChapter.chapterId) {   //if(args.subChapterDetails && args.subChapterDetails.chapterId){
+        if (subChapter && subChapter.chapterId && subChapter.isDefaultSubChapter===true) {   //if(args.subChapterDetails && args.subChapterDetails.chapterId){
           MlResolver.MlMutationResolver['updateChapter'](obj, {
             chapterId: subChapter.chapterId,
             chapter: {isActive: subChapter.isActive, showOnMap: subChapter.showOnMap}

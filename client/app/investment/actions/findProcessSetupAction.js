@@ -15,6 +15,7 @@ export async function findProcessSetupActionHandler() {
             stageName
             stageActions{
               actionId
+              actionName
               isActive
             }
           isActive

@@ -10,10 +10,11 @@ var _ = require('lodash')
 
 MlResolver.MlQueryResolver['fetchActivities'] = (obj, args, context, info) => {
   let query = {
-    userId:context.userId  // to do for query
+    userId:context.userId,
+    profileId: args.profileId
   };
   let result = mlDBController.find('MlActivity', query , context).fetch()
-
+  return result;
 }
 
 MlResolver.MlQueryResolver['getTeamMembers'] = (obj, args, context, info) => {

@@ -9,8 +9,8 @@ import {ApolloClient,createNetworkInterface, createBatchingNetworkInterface} fro
 import { ApolloProvider } from 'react-apollo';
 
 const defaultNetworkInterfaceConfig = {
-  uri: Meteor.absoluteUrl('graphqlApp'),
-  opts: {},
+  uri: Meteor.absoluteUrl('moolya'),
+  opts: {credentials: 'same-origin'},
   useMeteorAccounts: true,
   batchingInterface: false
 };
@@ -44,7 +44,22 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
             request.options.headers = new Headers();
           }
           request.options.headers['meteor-login-token'] = currentUserToken;
+          request.options.headers['cookie'] = document.cookie;
           next();
+        }
+      }]);
+
+      networkInterface.useAfter([{
+        applyAfterware({ response }, next) {
+          if (response.status === 401) {
+            logout();
+          }
+
+          const clonedResponse = response.clone();
+
+          clonedResponse.json().then(data => {
+              next();
+          });
         }
       }]);
     }

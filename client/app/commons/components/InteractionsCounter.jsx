@@ -11,7 +11,7 @@ export default class InteractionsCounter extends React.Component{
 
   async componentWillMount() {
     //todo: this may be configured dynamically
-    var actionNames=['like','connect','collaborate','favourite','views','partner','enquire'];
+    var actionNames=['like','connect','collaborate','favourite','view','partner','enquire'];
     const response = await fetchInteractionsCountActionHandler({resourceType:this.props.resourceType,resourceId:this.props.resourceId,actionNames:actionNames});
     this.setState({data: response});
   }
@@ -41,7 +41,7 @@ export default class InteractionsCounter extends React.Component{
            return;
         }
       }*/
-      let actionCount=(_.find(data,{name:option.name})||{}).count;
+      let actionCount=(_.find(data,{actionName:option.name})||{}).count;
         return (
            <li key={option.name}>
              <a href="#"><span className={option.iconClass}></span>

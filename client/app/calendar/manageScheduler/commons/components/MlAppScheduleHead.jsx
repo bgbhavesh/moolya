@@ -39,7 +39,12 @@ export default class MlAppScheduleHead extends Component {
     return resp;
   }
 
-
+  taskMaster(){
+    FlowRouter.go('/app/calendar/manageSchedule/createTask')
+  }
+  toActivity(){
+    FlowRouter.go('/app/calendar/manageSchedule')
+  }
   render() {
     let users = this.state.profile || [];
     let profiles = [];
@@ -78,7 +83,7 @@ export default class MlAppScheduleHead extends Component {
           <li className="sub_list_wrap">{/*hidden_list*/}
             <ul className="sub_list">
               <li className="active_user">
-                <a href="#">
+                <a onClick={this.toActivity.bind(this)}>
                   <span className="icon_bg"><span className="icon_lg fa fa-file-text-o"></span></span><br />
                   <div className="tooltiprefer">
                     <span>Activity</span>
@@ -86,7 +91,7 @@ export default class MlAppScheduleHead extends Component {
                 </a>
               </li>
               <li>
-                <a href="#">
+                <a onClick={this.taskMaster.bind(this)}>
                   <span className="icon_bg"><span className="icon_lg fa fa-list-alt"></span></span><br />
                   <div className="tooltiprefer">
                     <span>Task Master</span>

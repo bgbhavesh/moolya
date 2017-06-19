@@ -284,6 +284,14 @@ if(Meteor.isServer){
           "fieldType" : "String",
           "fieldResolverName" : null,
         },
+        {
+          "fieldName" : "emailId",
+          "displayName" : "Email",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        }
 
       ]
     }});
@@ -348,6 +356,14 @@ if(Meteor.isServer){
           "fieldType" : "String",
           "fieldResolverName" : null,
         },
+        {
+          "fieldName" : "emailId",
+          "displayName" : "Email",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        }
 
       ]
     }});

@@ -4,6 +4,7 @@
 import MlResolver from '../../../commons/mlResolverDef'
 import MlRespPayload from '../../../commons/mlPayload'
 import _ from 'lodash';
+import mlInteractionService from '../mlInteractionRepoService';
 import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
 
 MlResolver.MlMutationResolver['createInquiry'] = (obj, args, context, info) =>{
@@ -11,18 +12,24 @@ MlResolver.MlMutationResolver['createInquiry'] = (obj, args, context, info) =>{
       var resp=null;
         try {
             let user =mlDBController.findOne('users',{_id:context.userId}, context);
-            //let isValid = validateExternalUser(fromuser)
-            /*if(!isValid){let code = 400;let response = new MlRespPayload().errorPayload('Invalid User', code);
-             return response;}*/
+          var resourceDetails = mlInteractionService.fetchResourceBasedUserDetails(args.resourceType, args.resourceId, context);
+          var fromuser = resourceDetails.contextUser;
+          var toUser = resourceDetails.resourceOwner;
+          if (!toUser._id || !fromuser._id || fromuser._id===toUser._id) {
+            let code = 400;
+            let response = new MlRespPayload().errorPayload('Invalid User', code);
+            return response;
+          }
           let inquiry={resourceId:args.resourceId,resourceType:args.resourceType,subject:args.subject,
-                       message:args.message,userId:user._id,userEmail:user.username,createdOn:new Date()};
+                       message:args.message,userId:fromuser._id,userEmail:fromuser.username,createdOn:new Date()};
 
-          resp = MlInquiries.insert(inquiry);
+          //resp = MlInquiries.insert(inquiry);
+          resp=mlDBController.insert('MlInquiries',inquiry,context);
 
           if(resp){
             //todo: create a repo for inquiry
             //send Email and transaction Log
-            //MlEmailNotification.sendInquiryEmail(inquiry,context);
+            MlEmailNotification.sendInquiryEmail({message:inquiry.message,subject:inquiry.subject,fromEmail:fromuser.username,toEmail:toUser.username},context);
             //Transaction Log
           }
 

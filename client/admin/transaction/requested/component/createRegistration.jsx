@@ -75,10 +75,14 @@ export default class MlCreateRegistration extends React.Component{
 
       }
       const response = await createRegistrationInfo(Details);
-      if (response.success) {
+      if(response.success){
         toastr.success("User created Successfully")
         FlowRouter.go("/admin/transactions/registrationRequested");
-      } else {
+      }else if(response.code==401&&!response.success){
+        toastr.error(response.result);
+        toastr.success("User created Successfully")
+        FlowRouter.go("/admin/transactions/registrationRequested");
+      }else{
         toastr.error(response.result);
       }
     }
@@ -252,7 +256,7 @@ export default class MlCreateRegistration extends React.Component{
                 <div className="form-group mandatory">
                   <input type="text" ref="contactNumber"   placeholder="Contact number" className="form-control float-label" id="" data-required={true} data-errMsg="Contact Number is required"/>
                 </div>
-                <div className="form-group">
+                <div className="form-group mandatory">
                   <input type="text" ref="email"   placeholder="Email ID" className="form-control float-label" id="" onChange={this.enteredUserName.bind(this)} data-required={true} data-errMsg="Email Id is required"/>
                 </div>
                 <div className="form-group">

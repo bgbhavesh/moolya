@@ -18,7 +18,8 @@ import MlAppDashboard from '../../app/dashboard/components/MlAppDashboard'
 import MlPortfolioLanding from '../../app/commons/components/MlPortfolioLanding'
 import MlAppIdeatorAddIdea from '../../app/ideators/components/MlAppIdeatorAddIdea'
 import MlAppPortfolio from '../../app/commons/components/MlAppPortfolio'
-import   MlPortfolioIdeatorLibraryView from '../../admin/transaction/portfolio/component/IdeatorView/MlPortfolioLibrary.jsx'
+import MlmanageScheduler from '../../app/calendar/manageScheduler/components/manageScheduler'
+import MlPortfolioIdeatorLibraryView from '../../admin/transaction/portfolio/component/IdeatorView/MlPortfolioLibrary.jsx'
 
 
 //profile
@@ -26,16 +27,15 @@ import MlAppMyProfile from '../../app/profile/components/MlAppMyProfile'
 import MlProfileSettings from '../../app/profile/components/MlProfileSettings'
 import MlAppProfileAddressBook from '../../app/profile/components/MlAppProfileAddressBook'
 import MlAppSwitchProfile from '../../app/profile/components/MlAppSwitchProfile';
-import MlAppProfileList from '../../../client/app/profile/components/MlAppProfileList'
+import MyList from '../../app/profile/components/myList/MyList'
 import MlAppMyOffice from '../../../client/app/profile/office/components/MlAppMyOffice'
 import MlAppAddOffice from '../../app/profile/office/components/MlAppAddOffice'
 import MlAppEditOffice from '../../app/profile/office/components/MlAppEditOffice'
 import MlAppMember from '../../app/profile/office/components/OfficeMemberInfo/MlAppMember'
 import MlAppOfficeMembersDetails from '../../app/profile/office/components/MlAppOfficeMembersDetails'
-// import MlAppNewSpokePerson from '../../app/profile/office/components/MlAppNewSpokePerson'
 import MlAppPayOfficeSubscription from '../../app/profile/office/components/MlAppPayOfficeSubscription';
 import MlAppInvestment from '../../app/investment/components/MlAppInvestment';
-
+import MlAppMyTransaction from '../../app/myTransaction/component/MlAppMyTransaction'
 import RegistrationWizard from '../../admin/transaction/requested/component/RegistrationWizard'
 
 //Funders
@@ -68,12 +68,12 @@ appSection.route('/dashboard', {
   }
 });
 
-appSection.route('/explore', {
-  name: 'explore',
-  action(){
-    mount(AppLayout,{appContent:< MlAppIdeatorLanding/>, isExploreMenu:true})
-  }
-});
+// appSection.route('/explore', {
+//   name: 'ideator',
+//   action(redirect){
+//     mount(AppLayout,{appContent:< MlAppIdeatorLanding/>, isExploreMenu:true})
+//   }
+// });
 
 appSection.route('/myProfile', {
   name: 'myProfile',
@@ -156,7 +156,7 @@ appSection.route('/officeMember/:officeId/:memberId', {
 appSection.route('/myConnections', {
   name: 'myConnections',
   action(){
-    mount(AppLayout, {appContent: <MlAppProfileList />, isProfileMenu: true})
+    mount(AppLayout, {appContent: <MyList />, isProfileMenu: true})
   }
 });
 
@@ -171,6 +171,13 @@ appSection.route('/portfolio', {
   name: 'portfolio',
   action(){
     mount(AppLayout,{appContent:<MlPortfolioLanding/>, isProfileMenu:true})
+  }
+});
+
+appSection.route('/transaction', {
+  name: 'myTransaction',
+  action(){
+    mount(AppLayout, {appContent: <MlAppMyTransaction />, isProfileMenu: false})
   }
 });
 
@@ -192,7 +199,7 @@ appSection.route('/myProfile/registerAs', {
 appSection.route('/ideator', {
   name: 'ideator',
   action(){
-      mount(AppLayout,{appContent:< MlAppIdeatorLanding/>})
+      mount(AppLayout,{appContent:<MlAppIdeatorLanding/>})
   }
 });
 appSection.route('/portfolio/view/:portfolioId/:communityType', {
@@ -262,5 +269,12 @@ appSection.route('/funder/:portfolioId', {
   name: 'funder',
   action(params){
     mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={"funder"}/>, isProfileMenu:false})
+  }
+});
+
+appSection.route('/calendar/manageScheduler', {
+  name: 'manageScheduler',
+  action(){
+    mount(AppLayout,{appContent:<MlmanageScheduler />})
   }
 });

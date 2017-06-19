@@ -9,6 +9,26 @@ import MlResolver from "../../commons/mlResolverDef";
 
 let activity=`
 
+type AvailableCommunities{
+  communityName: String
+  communityId: String
+  userCount: Int
+  id: String
+}
+
+
+type TeamDetails{
+  communityName: String
+  availableCommunities:[AvailableCommunities]
+  firstName: String
+  name: String
+  _id:String
+}
+
+type BranchType{
+branchType: String
+_id: String
+}
     type FacilitationCharge {
       amount: Int
       percentage: Int
@@ -47,8 +67,9 @@ let activity=`
       displayName: String
       isInternal: Boolean
       isExternal: Boolean
-      mode: String
       conversation: Conversation
+      mode: String
+      isServiceCardElligible: Boolean
       industryTypes:[String]
       note: String
       imageLink: String
@@ -59,6 +80,16 @@ let activity=`
       teams: [Teams]
       createdAt: Date
       updatedAt: Date
+    }
+    
+    input TeamName {
+      communityType: String
+      officeId: String
+    }
+    
+    type TeamUsers {
+      firstName: String
+      name: String
     }
 
      input facilitationCharge {
@@ -90,6 +121,10 @@ let activity=`
         hours:Int
         minutes:Int
     }
+    
+    input step2Activity{
+      teams:[teams]
+    }
 
     input activity {
       userId: String
@@ -99,6 +134,7 @@ let activity=`
       isInternal: Boolean
       isExternal: Boolean
       mode: String
+      isServiceCardElligible: Boolean
       conversation: conversation
       industryTypes:[String]
       note: String
@@ -115,11 +151,15 @@ let activity=`
     type Query {
         fetchActivities:[Activity]
         fetchActivity(id:String):Activity
+        getTeamMembers:[AvailableCommunities]
+        getBranchDetails:[BranchType]
+        getTeamUsers(Attributes:TeamName):[TeamUsers]
     }
 
     type Mutation {
-        createActivity:response
-        updateActivity:response
+        createActivity(Details:activity):response
+        updateActivity(_id:String):response
+        updateStep2Activity(step2: step2Activity): response
     }
 `
 
@@ -128,8 +168,13 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], activity]);
 let supportedApi = [
   {api:'fetchActivities', actionName:'READ', moduleName:"OFFICE"},
   {api:'fetchActivity', actionName:'READ', moduleName:"OFFICE"},
+  {api:'getBranchDetails', actionName:'READ', moduleName:"OFFICE"},
+  {api:'getTeamMembers', actionName:'READ', moduleName:"OFFICE"},
+  {api:'getTeamUsers', actionName:'READ', moduleName:"OFFICE"},
+
 
   {api:'createActivity', actionName:'CREATE', moduleName:"OFFICE"},
   {api:'updateActivity', actionName:'UPDATE', moduleName:"OFFICE"},
+  {api:'updateStep2Activity', actionName:'UPDATE', moduleName:"OFFICE"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

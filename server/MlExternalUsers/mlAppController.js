@@ -29,10 +29,10 @@ const executableSchema = makeExecutableSchema({
 
 // default server configuration object
 const defaultServerConfig = {
-  path: '/graphqlApp',
+  path: '/moolya',
   configServer: graphQLServer => {},
   graphiql: Meteor.isDevelopment,
-  graphiqlPath: '/graphiql',
+  graphiqlPath: '/graphiqlApp',
   paymentReturnUrlPath:'/moolyaPaymentStatus',
   graphiqlOptions : {
     passHeader : "'meteor-login-token': localStorage['Meteor.loginToken']"

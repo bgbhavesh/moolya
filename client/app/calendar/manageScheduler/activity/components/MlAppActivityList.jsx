@@ -31,7 +31,7 @@ export default class MlAppActivityList extends React.Component{
     return (
       <div className="app_main_wrap" style={{'overflow':'auto'}}>
         <div className="app_padding_wrap">
-          <MlAppScheduleHead/>
+          <MlAppScheduleHead type="activity"/>
           <div className="col-lg-12" id="show">
             <div className="row">
               <div className="col-lg-2 col-md-4 col-sm-4">

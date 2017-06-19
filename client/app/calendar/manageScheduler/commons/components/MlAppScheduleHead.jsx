@@ -41,25 +41,10 @@ export default class MlAppScheduleHead extends Component {
 
 
   render() {
-    let users = this.state.profile || [];
-    let profiles = [];
-    let that = this
-    const userProfile = users.map(function (profile, idx) {
-      return (
-        < li key={idx}>
-          <div >
-            <a href="#">
-              <span className="icon_bg"> <span className="icon_lg ml ml-funder"></span></span><br />
-              <div className="tooltiprefer">
-                <span>{profile.communityName}</span>
-              </div>
-            </a>
-          </div>
-        </li>
-      )
-
-    })
-
+    let profiles = this.state.profile || [];
+    let selectedProfileId = FlowRouter.getParam('profileId');
+    let that = this;
+    let type = this.props.type;
 
     return (
       <div className="col-lg-12">
@@ -73,44 +58,58 @@ export default class MlAppScheduleHead extends Component {
             </a>
           </li>
 
-          {userProfile}
-
-          <li className="sub_list_wrap">{/*hidden_list*/}
-            <ul className="sub_list">
-              <li className="active_user">
-                <a href="#">
-                  <span className="icon_bg"><span className="icon_lg fa fa-file-text-o"></span></span><br />
-                  <div className="tooltiprefer">
-                    <span>Activity</span>
+          {profiles.map(function (profile, idx) {
+            return (
+              <span key={idx}>
+                < li>
+                  <div >
+                    <a href={"/app/calendar/manageSchedule/"+profile.profileId+"/activityList"}>
+                      <span className="icon_bg"> <span className="icon_lg ml ml-funder"></span></span><br />
+                      <div className="tooltiprefer">
+                        <span>{profile.communityName}</span>
+                      </div>
+                    </a>
                   </div>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <span className="icon_bg"><span className="icon_lg fa fa-list-alt"></span></span><br />
-                  <div className="tooltiprefer">
-                    <span>Task Master</span>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <span className="icon_bg"><span className="icon_lg fa fa-puzzle-piece"></span></span><br />
-                  <div className="tooltiprefer">
-                    <span>Services</span>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <span className="icon_bg"><span className="icon_lg fa fa-calendar"></span></span><br />
-                  <div className="tooltiprefer">
-                    <span>Calendar</span>
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </li>
+                </li>
+                <li className={"sub_list_wrap "+ ( selectedProfileId == profile.profileId ? "" :"hidden_list" )}>
+                  <ul className="sub_list">
+                    <li className={ type == "activity" ? "active_user" : ""}>
+                      <a href={"/app/calendar/manageSchedule/"+profile.profileId+"/activityList"}>
+                        <span className="icon_bg"><span className="icon_lg fa fa-file-text-o"></span></span><br />
+                        <div className="tooltiprefer">
+                          <span>Activity</span>
+                        </div>
+                      </a>
+                    </li>
+                    <li className={ type == "task" ? "active_user" : ""}>
+                      <a href={"/app/calendar/manageSchedule/"+profile.profileId+"/taskList"}>
+                        <span className="icon_bg"><span className="icon_lg fa fa-list-alt"></span></span><br />
+                        <div className="tooltiprefer">
+                          <span>Task Master</span>
+                        </div>
+                      </a>
+                    </li>
+                    <li className={ type == "service" ? "active_user" : ""}>
+                      <a href="#">
+                        <span className="icon_bg"><span className="icon_lg fa fa-puzzle-piece"></span></span><br />
+                        <div className="tooltiprefer">
+                          <span>Services</span>
+                        </div>
+                      </a>
+                    </li>
+                    <li className={ type == "calendar" ? "active_user" : ""}>
+                      <a href="#">
+                        <span className="icon_bg"><span className="icon_lg fa fa-calendar"></span></span><br />
+                        <div className="tooltiprefer">
+                          <span>Calendar</span>
+                        </div>
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </span>
+            )
+          })}
         </ul>
       </div>
     )

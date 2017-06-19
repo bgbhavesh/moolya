@@ -29,7 +29,7 @@ export default class MlAppTaskList extends React.Component{
     return (
       <div className="app_main_wrap" style={{'overflow':'auto'}}>
         <div className="app_padding_wrap">
-          <MlAppScheduleHead/>
+          <MlAppScheduleHead type="task"/>
           <div className="col-lg-12">
             <div className="row">
               <div className="col-lg-2 col-md-4 col-sm-4">

@@ -100,7 +100,37 @@ MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
         return response;
       } else {
         var id = args.roleId;
-        if(args.role.isActive===false){
+        var assignRoles = args.role.assignRoles;
+        if(assignRoles){
+          var hierarchyFound = false
+          var response = null
+            assignRoles.map(function (assignRole) {
+              if(assignRole.isActive===false){
+                let departmentId = assignRole.department
+                let subDepartmentId = assignRole.subDepartment
+                let clusterId = assignRole.cluster
+                let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
+                  parentDepartment: departmentId,
+                  parentSubDepartment: subDepartmentId,
+                  clusterId: clusterId
+                }, context)
+                if(hierarchy){
+                  let teamStructure = hierarchy.teamStructureAssignment
+                  teamStructure.map(function (assignRole) {
+                    if((hierarchy.finalApproval.role==id)||(assignRole.roleId == id && assignRole.isAssigned === true)){
+                      let code = 401;
+                      response = new MlRespPayload().errorPayload("Hierarchy associated for this role");
+                      hierarchyFound = true
+                    }
+                  })
+                }
+              }
+            })
+          if(hierarchyFound === true){
+            return response;
+          }
+
+        }else if(args.role.isActive===false){
           //check hierarchy exist for this role.
           let resp = mlDBController.findOne('MlHierarchyAssignments', {
             $or: [{"finalApproval.role":id},
@@ -120,6 +150,7 @@ MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
             return response;
           }
         }
+
         // let result= MlRoles.update(id, {$set: args.role});
         let result = mlDBController.update('MlRoles', id, args.role, {$set: true}, context);
         let code = 200;

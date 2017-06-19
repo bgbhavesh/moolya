@@ -90,6 +90,7 @@ class MlNumericalFormat extends React.Component{
       valueSeparator: this.state.valueSeparator,
     }
     const response = await upsertNumericalFormatActionHandler(Details);
+    toastr.success("Saved Successfully")
     return response;
 
   }

@@ -35,13 +35,27 @@ MlResolver.MlQueryResolver['fetchProcessSetup'] = (obj, args, context, info) =>{
 
 MlResolver.MlQueryResolver['fetchUserProcessSetup'] = (obj, args, context, info) => {
   if (context.userId) {
-    console.log('server hit')
+    let Actions = mlDBController.find('MlActions', {}, context).fetch();
     let processSetup = mlDBController.findOne('MlProcessSetup', {userId: context.userId}, context)
     if (processSetup) {
       processSetup.processSteps.map(function (steps, index) {
         if (processSetup.processSteps[index]) {
           let stageData = MlProcessStages.findOne({"_id": steps.stageId}) || {};
           processSetup.processSteps[index].stageName = stageData.displayName || "";
+          if(processSetup.processSteps[index].stageActions && processSetup.processSteps[index].stageActions.length ){
+            processSetup.processSteps[index].stageActions = processSetup.processSteps[index].stageActions.map(function (action) {
+              let isFind = Actions.find(function (mlAction) {
+                 return mlAction._id == action.actionId
+              });
+              console.log('isFind',isFind);
+              if(isFind){
+                action.actionName = isFind.name;
+              }
+
+              return action;
+
+            });
+          }
         }
       })
       return processSetup

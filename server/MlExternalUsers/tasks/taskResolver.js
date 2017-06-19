@@ -10,7 +10,8 @@ var _ = require('lodash')
 
 MlResolver.MlQueryResolver['fetchTasks'] = (obj, args, context, info) => {
   let query = {
-    userId:context.userId
+    userId:context.userId,
+    profileId:args.profileId
   };
   let result = mlDBController.find('MlTask', query, context).fetch()
   return result;

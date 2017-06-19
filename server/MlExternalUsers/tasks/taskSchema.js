@@ -124,7 +124,7 @@
    }
 
    type Query{
-          fetchTasks:[Task]
+          fetchTasks(profileId:String):[Task]
           fetchTask(id:String):Task
    }
 

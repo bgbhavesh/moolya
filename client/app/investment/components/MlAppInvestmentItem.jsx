@@ -26,6 +26,14 @@ export default class MlAppInvestmentItem extends Component {
     });
   }
 
+  actionHandlerProxy(actionConfig,handlerCallback){
+  if(handlerCallback) {
+    handlerCallback(this);
+  }else if(actionConfig&&actionConfig.customHandler){
+  actionConfig.customHandler(this);
+  }
+};
+
   render(){
     const props = this.props;
     console.log(props.stages);
@@ -40,9 +48,8 @@ export default class MlAppInvestmentItem extends Component {
         let actionObj = MlAppInvestAction[action.actionName];
         if(actionObj){
           let config = actionObj.config
-          config.handler = async(event) => {
-            actionObj.handler(that);
-          };
+          config.handler = actionObj.handler;
+          config.handler =that.actionHandlerProxy.bind(that);
           return config;
         } else {
           return {

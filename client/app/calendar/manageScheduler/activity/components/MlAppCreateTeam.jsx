@@ -7,6 +7,12 @@ import Moolyaselect from  '../../../../../commons/components/select/MoolyaSelect
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import { createActivityActionHandler , getActivityActionHandler}  from './../actions/activityActionHandler';
+var Select = require('react-select');
+var options = [
+  {value: 'Audio', label: 'Audio'},
+  {value: 'Video', label: 'Video'},
+  {value: 'MeetUp', label: 'MeetUp'}
+];
 
 export default class MlAppCreateTeam extends React.Component{
   constructor(props){
@@ -21,23 +27,33 @@ export default class MlAppCreateTeam extends React.Component{
       deliverables:"",
       isInternal:false,
       isExternal:false,
-      serviceCard:""
+      serviceCard:"",
+      conversationType:[],
+      isVideo:false,
+      isAudio:false,
+      isMeetUp:false,
+      data:""
     }
     this.radioAction = this.radioAction.bind(this)
     this.radioAction2 =  this.radioAction2.bind(this)
+    // this.conversation =  this.conversation.bind(this);
     this.saveDetails.bind(this);
-    // this.getDetails.bind(this)
+    this.getDetails.bind(this)
   }
 
-  // componentWillMount(){
-  //   this.getDetails()
-  // }
+  componentWillMount(){
+    this.getDetails()
+  }
 
-  // async getDetails(){
-  //   const resp = await getActivityActionHandler()
-  //
-  // }
-
+  async getDetails(){
+    let id = FlowRouter.getQueryParam('id')
+    const resp = await getActivityActionHandler(id);
+    console.log(resp)
+    this.setState({data:resp})
+    this.setState({activityName:resp.name, displayName:resp.displayName})
+    console.log(this.state.activityName)
+    return resp;
+  }
 
   radioAction(e){
     let value = e.target.value;
@@ -100,8 +116,25 @@ updateMinutes(e){
     this.setState({serviceCard:value})
   }
 
+  conversation(val) {;
+    let that = this
+    let temp =[]
+    val.map(function(label){
+      temp.push(label.value)
+    })
+    that.setState({conversationType:temp})
+    val.map(function(label) {
+      if (label.value === "Video") {
+        that.setState({isVideo: true})
+      } else if (label.value === "Audio") {
+        that.setState({isAudio: true})
+      } else {
+        that.setState({isMeetUp: true})
+      }
+    })
+  }
+
   async saveDetails(){
-    console.log(createActivityActionHandler);
     let step1Details = {
       userId:" ",
       name: this.state.activityName,
@@ -116,16 +149,24 @@ updateMinutes(e){
         hours:this.state.hour,
         minutes:this.state.minute
       },
+      conversation:{
+        isVideo:this.state.isVideo,
+        isAudio:this.state.isAudio,
+        isMeetUp:this.state.isMeetup
+      },
       isServiceCardElligible:this.state.serviceCard,
       createdAt: " "
     }
     const resp = await createActivityActionHandler(step1Details);
+    if(resp) {
+      toastr.success("Saved Successfully")
+    }
     let id = resp.result;
     this.props.setId(id)
     FlowRouter.setQueryParams({id:id})
+    this.getDetails();
   }
 
-  componentWillMount(){}
 
   componentDidMount()
   {
@@ -148,7 +189,7 @@ updateMinutes(e){
               <form>
 
                 <div className="form-group">
-                  <input className="form-control float-label" placeholder="Activity Name" onBlur={this.textFieldSaves.bind(this,"ActivityName")}/>
+                  <input className="form-control float-label" placeholder="Activity Name" defaultValue={this.state.data && this.state.data.activityName} onBlur={this.textFieldSaves.bind(this,"ActivityName")}/>
                 </div>
                 <div className="form-group">
                   <div className="input_types">
@@ -161,7 +202,9 @@ updateMinutes(e){
                 </div>
                 {this.state.radioAction === "online"? <div className="form-group">
                   <span className="placeHolder active">Conversation type</span>
-                  <select className="form-control"><option>Conversation type</option></select>
+                  <div className="form-group">
+                    <Select name="form-field-name"  multi={true} options={options} value={this.state.conversationType} placeholder='Conversation Type' onChange={this.conversation.bind(this)} />
+                  </div>
                 </div> : <div></div>}
                 <div className="form-group">
                   <textarea className="form-control float-label" placeholder="Notes" onBlur={this.textFieldSaves.bind(this,"Notes")}></textarea>
@@ -184,7 +227,7 @@ updateMinutes(e){
             <div className="form_bg">
               <form>
                 <div className="form-group">
-                  <input className="form-control float-label" placeholder="Display Name" onBlur={this.textFieldSaves.bind(this,"DisplayName")}/>
+                  <input className="form-control float-label" placeholder="Display Name" defaultValue={this.state.displayName} onBlur={this.textFieldSaves.bind(this,"DisplayName")}/>
                 </div>
                 <div className="form-group">
                   <div className="input_types">

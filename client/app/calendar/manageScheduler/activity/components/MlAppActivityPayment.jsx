@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar';
+import {updateActivityActionHandler} from '../actions/activityActionHandler'
 
 export default class Step4 extends React.Component{
 constructor(props){
@@ -10,48 +11,98 @@ constructor(props){
   this.state={
     minute:"",
     discount:"",
-    taxAmountR:"",
-    taxPercentageR:"",
+    discountAmountR:false,
+    discountPercentageR:false,
     status:"",
     promo:"",
-    chargesAmount:"",
+    chargesAmount:0,
     chargesPercentage:"",
-    derivedValue:0
+    derivedValue:0,
+    discountAmountField:true
   }
 }
 
   discountEligibility(e){
   let discount = e.target.checked;
-  this.setState({discount:discount})
+  if(discount){
+    this.setState({discount:false})
+    }
   }
 
   discountAmountRadio(e) {
-    let tax = e.target.checked;
-    console.log(tax)
-    this.setState({discountAmountR:tax})
+    let discountAmount = e.target.checked;
+      this.setState({discountAmountR: discountAmount})
   }
 
   discountPercentageRadio(e) {
-    let tax = e.target.checked;
-    this.setState({discountPercentageR:tax})
+    let discountPercentage = e.target.checked;
+    this.setState({discountPercentageR:discountPercentage})
   }
 
   taxStatus(e) {
     let status = e.target.value;
-    this.setState({status:status})
+    if(status === "TaxInclusive") {
+      this.setState({status:true})
+    }else {
+      this.setState({status:false})
+    }
   }
 
   payableAmount(e){
+    console.log(e.currentTarget.value);
+    if(e.currentTarget.value ==="") {
+      e.currentTarget.value = 0;
+    }
   if(e.currentTarget.value >= 0) {
-    this.setState({"amountToPay":e.currentTarget.value});
+    this.setState({"amountToPay":e.currentTarget.value},function(){
+      if(this.state.discountAmount || this.state.facilitationAmount) {
+        let discount = this.state.discountAmount?parseInt(this.state.discountAmount):0;
+        let facilitationAmount = this.state.facilitationAmount?parseInt(this.state.facilitationAmount):0;
+        if(discount & facilitationAmount) {
+          let amt = facilitationAmount - discount;
+          let total = amt + parseInt(this.state.amountToPay);
+          this.setState({derivedValue:total})
+        }else if(discount) {
+          let total = parseInt(this.state.amountToPay) - discount;
+          this.setState({derivedValue:total})
+        }else if(facilitationAmount) {
+            let total = parseInt(this.state.amountToPay) - facilitationAmount;
+            this.setState({derivedValue:total})
+        }
+      }else {
+        let total = parseInt(this.state.amountToPay)
+        this.setState({derivedValue:total})
+      }
+    }).bind(this);
   } else {
     this.setState({"amountToPay":0});
   }
 }
   discountAmount(e){
+    if(e.currentTarget.value ==="") {
+      e.currentTarget.value = 0;
+    }
     if(this.state.discountAmountR) {
       if (e.currentTarget.value >= 0) {
-        this.setState({"discountAmount": e.currentTarget.value});
+        this.setState({"discountAmount": e.currentTarget.value}, function(){
+          if(this.state.amountToPay || this.state.facilitationAmount) {
+            let payableAmount = this.state.amountToPay?parseInt(this.state.amountToPay):0
+            let facilitationAmount = this.state.facilitationAmount?parseInt(this.state.facilitationAmount):0
+            if(payableAmount & facilitationAmount) {
+              let total = payableAmount + facilitationAmount - parseInt(this.state.discountAmount);
+              this.setState({derivedValue:total})
+            }else if(payableAmount){
+              let total = payableAmount - parseInt(this.state.discountAmount);
+              this.setState({derivedValue:total})
+            }else if(facilitationAmount) {
+              let total = facilitationAmount - parseInt(this.state.discountAmount);
+              this.setState({derivedValue:total})
+            }
+          } else {
+            let total = parseInt(this.state.discountAmount)
+            this.setState({derivedValue:total})
+          }
+        }).bind(this)
       } else {
         this.setState({"discountAmount": 0});
       }
@@ -59,9 +110,24 @@ constructor(props){
   }
 
   discountPercentage(e){
+    if(e.currentTarget.value ==="") {
+      e.currentTarget.value = 0.0;
+    }
     if(this.state.discountPercentageR) {
       if (e.currentTarget.value >= 0) {
-        this.setState({"discountPercentage": e.currentTarget.value});
+        this.setState({"discountPercentage": e.currentTarget.value}, function(){
+          if(this.state.facilitationPercentage) {
+            let totalPercentage = parseFloat(this.state.facilitationPercentage) - parseFloat(this.state.discountPercentage);
+            let amountPayable = this.state.amountToPay?parseFloat(this.state.amountToPay):0;
+            let total = (amountPayable * totalPercentage/ 100) + amountPayable;
+            this.setState({derivedValue:total})
+          }else {
+            let totalPercentage = parseFloat(this.state.discountPercentage);
+            let amountPayable = this.state.amountToPay?parseFloat(this.state.amountToPay):0;
+            let total = amountPayable - (amountPayable * totalPercentage / 100)  ;
+            this.setState({derivedValue:total})
+          }
+        }).bind(this);
       } else {
         this.setState({"discountPercentage": 0.0});
       }
@@ -70,19 +136,54 @@ constructor(props){
 
 
   facilitationAmount(e){
-    if(this.state.chargesAmount) {
+    if(e.currentTarget.value ==="") {
+      e.currentTarget.value = 0;
+    }
       if (e.currentTarget.value >= 0) {
-        this.setState({"facilitationAmount": e.currentTarget.value});
+        this.setState({"facilitationAmount": e.currentTarget.value}, function() {
+          if(this.state.amountToPay || this.state.discountAmount) {
+            let amountPayable = this.state.amountToPay?parseInt(this.state.amountToPay):0;
+            let discount = this.state.discountAmount?parseInt(this.state.discountAmount):0;
+            if(amountPayable & discount) {
+              let total = amountPayable - discount + parseInt(this.state.facilitationAmount);
+              this.setState({derivedValue:total})
+            } else if(amountPayable) {
+              let total = amountPayable + parseInt(this.state.facilitationAmount);
+              this.setState({derivedValue:total})
+            } else if(discount) {
+              let total = parseInt(this.state.facilitationAmount) - discount;
+              this.setState({derivedValue:total})
+            }
+          } else {
+            let total = parseInt(this.state.facilitationAmount)
+            this.setState({derivedValue:total})
+          }
+        }).bind(this);
       } else {
         this.setState({"facilitationAmount": 0});
       }
     }
-  }
+
 
   facilitationPercentage(e){
+    if(e.currentTarget.value ==="") {
+      e.currentTarget.value = 0.0;
+    }
     if(this.state.chargesPercentage) {
-      if (e.currentTarget.value >= 0) {
-        this.setState({"facilitationPercentage": e.currentTarget.value});
+      if (e.currentTarget.value >= 0.0) {
+        this.setState({"facilitationPercentage": e.currentTarget.value}, function(){
+          if(this.state.discountPercentage) {
+            let totalPercentage = parseFloat(this.state.facilitationPercentage) - parseFloat(this.state.discountPercentage);
+            let amountPayable = this.state.amountToPay?parseFloat(this.state.amountToPay):0.0;
+            let total = (amountPayable * totalPercentage / 100)+ amountPayable ;
+            this.setState({derivedValue:total})
+        }else{
+            let totalPercentage = parseFloat(this.state.facilitationPercentage);
+            let amountPayable = this.state.amountToPay?parseFloat(this.state.amountToPay):0.0;
+            let total = (amountPayable * totalPercentage / 100)+ amountPayable
+            this.setState({derivedValue:total})
+          }
+        }).bind(this);
       } else {
         this.setState({"facilitationPercentage": 0.0});
       }
@@ -90,26 +191,45 @@ constructor(props){
   }
 
   promoCode(e) {
-    let promoCode = e.target.checked;
-    this.setState({promo:promoCode})
+    let promoCode = e.target.checked
+    if(promoCode) {
+      this.setState({promo: false})
+    }
   }
 
   facilitationChargesPercentage(e) {
     let charges = e.target.checked;
-    console.log(charges)
     this.setState({chargesPercentage: charges})
   }
 
   facilitationChargesAmount(e) {
     let charges = e.target.checked
-    console.log(charges)
     this.setState({chargesAmount: charges})
   }
 
-  saveDetails(){
-    console.log(this.state.chargesAmount,this.state.facilitationAmount,this.state.taxAmount, this.state.amountToPay, )
+  async saveDetails(){
+    let id = FlowRouter.getQueryParam('id')
+    let payment = {
+      amount: this.state.amountToPay,
+      isDiscount: this.state.discount ? this.state.discount : false,
+      discountAmount: 0,
+      discountPercentage: this.state.discountPercentage ? this.state.discountPercentage : 0,
+      isTaxInclusive: this.state.status,
+      isPromoCodeApplicable: this.state.promo
+    }
+    facilitationCharge = {
+        amount: this.state.facilitationAmount?this.state.facilitationAmount:0,
+        percentage: this.state.facilitationPercentage?this.state.facilitationPercentage:0,
+        derivedAmount: this.state.derivedValue
+      }
+      let Details ={
+        payment:payment,
+        facilitationCharge:facilitationCharge
+    }
+console.log(payment)
+    const response = await updateActivityActionHandler(id,Details)
+    return response;
   }
-
 
   componentDidMount()
   {
@@ -173,7 +293,7 @@ constructor(props){
                 <br className="brclear"/>
               </div>
               <div className="form-group">
-                <label>Derived amount Rs. <input className="form-control inline_input medium_in" defaultValue={this.state.derivedValue}readOnly="readOnly"/> </label>
+                <label>Derived amount Rs. <input className="form-control inline_input medium_in" value={this.state.derivedValue} readOnly="readOnly"/> </label>
               </div>
             </form>
           </div>

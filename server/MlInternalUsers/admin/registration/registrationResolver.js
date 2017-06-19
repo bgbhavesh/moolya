@@ -249,7 +249,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
 
         var communityDef= mlDBController.findOne('MlCommunityDefinition', {code: (details.registrationType||null)}, context) || {};
 
-        validationCheck=MlRegistrationPreCondition.validateActiveCommunity(id,details);
+        validationCheck=MlRegistrationPreCondition.validateCommunity(id,details);
         if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 
         details.communityId = communityDetails._id;

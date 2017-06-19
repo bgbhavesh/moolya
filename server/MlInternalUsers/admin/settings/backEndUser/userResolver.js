@@ -1602,3 +1602,20 @@ MlResolver.MlQueryResolver['fetchMoolyaInternalUsers'] = (obj, args, context, in
     }, context).fetch() || [];
   return getUsers
 }
+
+
+MlResolver.MlQueryResolver['getUserProfiles'] = (obj, args, context, info) => {
+
+  let result = mlDBController.find('users', {_id:context.userId} , context).fetch()
+  let temp =[];
+  let userProfile = result[0].profile.externalUserProfiles;
+  userProfile.map(function(profile){
+        temp.push(profile)
+  })
+
+  temp.map(function(inst){
+    inst.displayName = result[0].profile.displayName;
+    inst.profileImage = result[0].profile.profileImage;
+  })
+  return temp;
+}

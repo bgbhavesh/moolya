@@ -6,11 +6,11 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar';
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../../../commons/components/select/MoolyaSelect'
 import gql from 'graphql-tag'
-import {getTeamUsersActionHandler, updateStep2DetailsActionHandler} from '../actions/activityActionHandler'
+import {getTeamUsersActionHandler, updateActivityActionHandler} from '../actions/activityActionHandler'
 
-export default class Step1 extends React.Component{
+export default class MlAppChooseTeam extends React.Component{
   constructor(props){
     super(props)
       this.state = {
@@ -27,6 +27,7 @@ export default class Step1 extends React.Component{
   }
   componentDidMount()
   {
+
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(310+$('.admin_header').outerHeight(true)));
@@ -48,13 +49,15 @@ export default class Step1 extends React.Component{
   }
 
   async saveDetails(){
-    console.log(this.state.team)
+
+    console.log(this.props)
     let team  = this.state.team;
+    let id = FlowRouter.getQueryParam('id')
     let teams = {
-      // id:"uJHKaju7gba7np2K4",
-      teams:team
+      teams:team,
     }
-     const res = await updateStep2DetailsActionHandler(teams)
+
+     const res = await updateActivityActionHandler(id,teams)
      return res;
   }
   async SelectTeamMember(index,value){

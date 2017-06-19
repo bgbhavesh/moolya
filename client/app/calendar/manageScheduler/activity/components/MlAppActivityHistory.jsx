@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar';
 
-export default class Step4 extends React.Component{
+export default class MlAppActivityHistory extends React.Component{
   componentDidMount()
   {
     $('.float-label').jvFloat();

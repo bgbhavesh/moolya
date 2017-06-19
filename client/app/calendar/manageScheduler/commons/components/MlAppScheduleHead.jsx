@@ -30,6 +30,14 @@ export default class MlAppScheduleHead extends Component {
     return resp
   }
 
+  changeProfile(profileId){
+    FlowRouter.go("/app/calendar/manageSchedule/"+profileId+"/activityList")
+  };
+  changeType(type){
+    let selectedProfileId = FlowRouter.getParam('profileId');
+    FlowRouter.go("/app/calendar/manageSchedule/"+selectedProfileId+"/"+type+"List")
+  }
+
   async getUserProfiles() {
     const resp = await getUserProfileActionHandler();
     this.setState({profile: resp})
@@ -63,7 +71,7 @@ export default class MlAppScheduleHead extends Component {
               <span key={idx}>
                 < li>
                   <div >
-                    <a href={"/app/calendar/manageSchedule/"+profile.profileId+"/activityList"}>
+                    <a href="" onClick={()=>that.changeProfile(profile.profileId)}>
                       <span className="icon_bg"> <span className="icon_lg ml ml-funder"></span></span><br />
                       <div className="tooltiprefer">
                         <span>{profile.communityName}</span>
@@ -74,7 +82,7 @@ export default class MlAppScheduleHead extends Component {
                 <li className={"sub_list_wrap "+ ( selectedProfileId == profile.profileId ? "" :"hidden_list" )}>
                   <ul className="sub_list">
                     <li className={ type == "activity" ? "active_user" : ""}>
-                      <a href={"/app/calendar/manageSchedule/"+profile.profileId+"/activityList"}>
+                      <a onClick={()=>that.changeType("activity")} href="">
                         <span className="icon_bg"><span className="icon_lg fa fa-file-text-o"></span></span><br />
                         <div className="tooltiprefer">
                           <span>Activity</span>
@@ -82,7 +90,7 @@ export default class MlAppScheduleHead extends Component {
                       </a>
                     </li>
                     <li className={ type == "task" ? "active_user" : ""}>
-                      <a href={"/app/calendar/manageSchedule/"+profile.profileId+"/taskList"}>
+                      <a onClick={()=>that.changeType("task")} href="">
                         <span className="icon_bg"><span className="icon_lg fa fa-list-alt"></span></span><br />
                         <div className="tooltiprefer">
                           <span>Task Master</span>
@@ -90,7 +98,7 @@ export default class MlAppScheduleHead extends Component {
                       </a>
                     </li>
                     <li className={ type == "service" ? "active_user" : ""}>
-                      <a href="#">
+                      <a onClick={()=>that.changeType("service")} href="">
                         <span className="icon_bg"><span className="icon_lg fa fa-puzzle-piece"></span></span><br />
                         <div className="tooltiprefer">
                           <span>Services</span>

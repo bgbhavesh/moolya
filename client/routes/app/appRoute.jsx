@@ -31,7 +31,7 @@ import MlAppMyTransaction from "../../app/myTransaction/component/MlAppMyTransac
 import RegistrationWizard from "../../admin/transaction/requested/component/RegistrationWizard";
 import {mlAppFunderConfig} from "../../app/funders/config/mlAppFunderConfig";
 import MlAppMyCalendar from "../../app/calendar/myCalendar/components/MlAppMyCalendar";
-
+import MlAppActivityList from "../../app/calendar/manageScheduler/activity/components/MlAppActivityList";
 //profile
 
 //Funders
@@ -279,5 +279,12 @@ appSection.route('/calendar/manageSchedule', {
   name: 'calendar_manageSchedule',
   action(){
     mount(AppLayout, {appContent: <MlAppManageSchedule />, isCalenderMenu: true})
+  }
+});
+
+appSection.route('/calendar/manageSchedule/:profileId/activityList', {
+  name: 'calendar_manageSchedule',
+  action(){
+    mount(AppLayout, {appContent: <MlAppActivityList />, isCalenderMenu: true})
   }
 });

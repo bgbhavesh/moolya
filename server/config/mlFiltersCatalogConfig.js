@@ -36,6 +36,12 @@ if(Meteor.isServer){
           isDynamic:true
         },
         {
+          name:"transactionType",
+          type:'List',
+          resolverName : "Gen_TransactionType",
+          isDynamic:true
+        },
+        {
           name:"isActive",
           type:'Boolean',
           resolverName : "Gen_isActive",
@@ -104,6 +110,12 @@ if(Meteor.isServer){
           isDynamic:true
         },
         {
+          name:"registrationInfo.transactionType",
+          type:'List',
+          resolverName : "Gen_TransactionType",
+          isDynamic:true
+        },
+        {
           name:"registrationInfo.createdBy",
           type:'String',
           resolverName : " "
@@ -154,6 +166,12 @@ if(Meteor.isServer){
           type:'List',
           resolverName : "Gen_Community",
           isDynamic:true
+        },
+        {
+          name:"transactionTypeName",
+          type:'List',
+          resolverName : "Gen_TransactionType",
+          isDynamic:true
         }
       ]
     }});
@@ -189,6 +207,12 @@ if(Meteor.isServer){
           name:"community",
           type:'List',
           resolverName : "Gen_Community",
+          isDynamic:true
+        },
+        {
+          name:"transactionTypeName",
+          type:'List',
+          resolverName : "Gen_TransactionType",
           isDynamic:true
         },
         {
@@ -248,6 +272,12 @@ if(Meteor.isServer){
           name:"transactionCreatedDate",
           type:'Date',
           resolverName : " ",
+          isDynamic:true
+        },
+        {
+          name:"transactionTypeName",
+          type:'List',
+          resolverName : "Gen_TransactionType",
           isDynamic:true
         },
         {

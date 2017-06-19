@@ -30,13 +30,13 @@ constructor(props){
   }
 
   discountAmountRadio(e) {
-    let discountAmount = e.target.checked;
-      this.setState({discountAmountR: discountAmount})
+    let discountAmountCheck = e.target.checked;
+      this.setState({discountAmountR: discountAmountCheck})
   }
 
   discountPercentageRadio(e) {
-    let discountPercentage = e.target.checked;
-    this.setState({discountPercentageR:discountPercentage})
+    let discountPercentageCheck = e.target.checked;
+    this.setState({discountPercentageR:discountPercentageCheck})
   }
 
   taxStatus(e) {
@@ -78,7 +78,7 @@ constructor(props){
     this.setState({"amountToPay":0});
   }
 }
-  discountAmount(e){
+  discountedAmount(e){
     if(e.currentTarget.value ==="") {
       e.currentTarget.value = 0;
     }
@@ -106,6 +106,8 @@ constructor(props){
       } else {
         this.setState({"discountAmount": 0});
       }
+    } else {
+      this.setState({"discountAmount": 0});
     }
   }
 
@@ -212,7 +214,7 @@ constructor(props){
     let payment = {
       amount: this.state.amountToPay,
       isDiscount: this.state.discount ? this.state.discount : false,
-      discountAmount: 0,
+      // discountAmount: this.state.discountAmount?this.state.discountAmount : 0,
       discountPercentage: this.state.discountPercentage ? this.state.discountPercentage : 0,
       isTaxInclusive: this.state.status,
       isPromoCodeApplicable: this.state.promo
@@ -258,7 +260,7 @@ console.log(payment)
               <br className="brclear"/>
               <div className="form-group">
                 <div className="input_types">
-                  <input id="radio1" type="radio" name="radio1" value="Amount" onChange={this.discountAmountRadio.bind(this)}/><label htmlFor="radio1"><span><span></span></span>Amount Rs <input className="form-control inline_input" onChange={(e)=>this.discountAmount(e)} value={this.state.discountAmount}  /></label>
+                  <input id="radio1" type="radio" name="radio1" value="Amount" onChange={this.discountAmountRadio.bind(this)}/><label htmlFor="radio1"><span><span></span></span>Amount Rs <input className="form-control inline_input" onChange={(e)=>this.discountedAmount(e)} value={this.state.discountAmount}/></label>
                 </div>
                 <div className="input_types">
                   <input id="radio2" type="radio" name="radio1" value="Percentage" onChange={this.discountPercentageRadio.bind(this)}/><label htmlFor="radio2"><span><span></span></span>Percentage <input className="form-control inline_input" onChange={(e)=>this.discountPercentage(e)} value={this.state.discountPercentage} /> % </label>

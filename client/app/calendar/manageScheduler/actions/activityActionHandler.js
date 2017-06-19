@@ -21,24 +21,23 @@ export async function createActivityActionHandler (Details) {
 }
 
 
-export async function updateStep2DetailsActionHandler(step2) {
+export async function updateActivityActionHandler(ActivityUpdate) {
   const result = await appClient.mutate({
     mutation: gql`
-    mutation($step2: step2Activity){
-        updateStep2Activity(step2:$step2){
+    mutation($ActivityUpdate:activityUpdate){
+        updateActivity(ActivityUpdate:$ActivityUpdate)
         success
         code
         result
       }
       }
     `,
-    forceFetch:true,
     variables: {
-      step2
+      ActivityUpdate
     }
   });
   console.log(result)
-  const teamMembers = result.data.updateStep2Activity;
+  const teamMembers = result.data.updateActivity;
   return teamMembers
 }
 
@@ -60,4 +59,40 @@ query ($Attributes: TeamName) {
   console.log(result)
   const teamMembers = result.data.getTeamUsers;
   return teamMembers
+}
+
+export async function getUserProfileActionHandler() {
+  const result = await appClient.query({
+    query: gql`
+query  {
+  getUserProfiles{
+    profileId
+    communityName
+    displayName
+    profileImage
+  }
+}
+    `
+  });
+  console.log(result)
+  const users = result.data.getUserProfiles;
+  return users
+}
+
+export async function getActivityActionHandler() {
+  const result = await appClient.query({
+    query: gql`
+query  {
+  fetchActivity{
+    profileId
+    communityName
+    displayName
+    profileImage
+  }
+}
+    `
+  });
+  console.log(result)
+  const users = result.data.fetchActivity;
+  return users
 }

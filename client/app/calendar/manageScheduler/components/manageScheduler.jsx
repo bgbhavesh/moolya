@@ -8,7 +8,15 @@ import Step2 from './step2';
 import Step3 from './step3';
 import Step4 from './step4';
 
-export default class CreateActivity extends React.Component{
+export default class MlmanageScheduler extends React.Component{
+  constructor(props){
+    super(props)
+    this.state={
+      activityId:" "
+    }
+
+this.getCreatedId.bind(this)
+  }
 
     componentDidMount() {
       $('.switch input').change(function () {
@@ -19,11 +27,18 @@ export default class CreateActivity extends React.Component{
         }
       });
     }
+
+    getCreatedId(value){
+    this.setState({activityId:value})
+      console.log(this.state.activityId)
+    }
+
+
   render(){
     const steps =
       [
-        {name: 'Create', component: <Step1 />,icon:<span className="ml fa fa-plus-square-o"></span>},
-        {name: 'Choose team', component: <Step2 />,icon:<span className="ml fa fa-users"></span>},
+        {name: 'Create', component: <Step1 setId={this.getCreatedId.bind(this)} />,icon:<span className="ml fa fa-plus-square-o"></span>},
+        {name: 'Choose team', component: <Step2 activityId={this.state.activityId}/>,icon:<span className="ml fa fa-users"></span>},
         {name: 'Payment', component: <Step3 />,icon:<span className="ml ml-payments"></span>},
         {name: 'History', component: <Step4 />,icon:<span className="ml ml-moolya-symbol"></span>}
       ]

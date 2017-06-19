@@ -6,8 +6,7 @@ import ScrollArea from 'react-scrollbar';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-import { createActivityActionHandler }  from './../actions/activityActionHandler';
-console.log(createActivityActionHandler);
+import { createActivityActionHandler , getActivityActionHandler}  from './../actions/activityActionHandler';
 
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 
@@ -29,7 +28,17 @@ export default class Step1 extends React.Component{
     this.radioAction = this.radioAction.bind(this)
     this.radioAction2 =  this.radioAction2.bind(this)
     this.saveDetails.bind(this);
+    // this.getDetails.bind(this)
   }
+
+  // componentWillMount(){
+  //   this.getDetails()
+  // }
+
+  // async getDetails(){
+  //   const resp = await getActivityActionHandler()
+  //
+  // }
 
 
   radioAction(e){
@@ -113,7 +122,9 @@ updateMinutes(e){
       createdAt: " "
     }
     const resp = await createActivityActionHandler(step1Details);
-    //return resp;
+    let id = resp.result;
+    this.props.setId(id)
+    FlowRouter.setQueryParams({id:id})
   }
 
   componentWillMount(){}
@@ -131,19 +142,6 @@ updateMinutes(e){
     data:fetchIndustries{label:industryName,value:_id}
     }
     `
-    let MlActionConfig = [
-      {
-        showAction: true,
-        actionName: 'save',
-        handler: async(event) => this.saveStep1Details.bind(this)
-      },
-      {
-        showAction: true,
-        actionName: 'cancel',
-        handler: async(event) => null
-
-      }
-    ]
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >

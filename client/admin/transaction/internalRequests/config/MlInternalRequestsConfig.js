@@ -25,6 +25,7 @@ const mlInternalRequestsTableConfig=new MlViewer.View({
     {dataField: "chapterName", title: "Chapter",dataSort:true,selectRow:true},
     {dataField: "subChapterName", title: "Sub Chapter",dataSort:true,selectRow:true},
     {dataField: "communityName", title: "Community",dataSort:true,selectRow:true},
+    {dataField: "transactionTypeName", title: "Transcation Type",dataSort:true,selectRow:true},
     {dataField: "transactionCreatedDate", title: "Created Date",dataSort:true,selectRow:true},
     {dataField: "status", title: "status",dataSort:true,selectRow:true},
     {dataField: "requestTypeName", title: "Activity",dataSort:true,selectRow:true},
@@ -74,6 +75,7 @@ const mlInternalRequestsTableConfig=new MlViewer.View({
                           subChapterName
                           communityName
                           createdBy
+                          transactionTypeName
                       }
                     }
               }

@@ -93,6 +93,10 @@ MlResolver.MlQueryResolver['fetchFunderAbout'] = (obj, args, context, info) => {
       details.gender = userPersonal.genderInfo ? userPersonal.genderInfo.genderName : ''*/
       let userEmp = MlMasterSettings.findOne({_id:details.employmentStatus}) || {}
       details.employmentStatus = userEmp.employmentTypeInfo ? userEmp.employmentTypeInfo.employmentName : ''
+
+      //for view action
+      MlResolver.MlMutationResolver['createView'](obj,{resourceId:args.portfoliodetailsId,resourceType:'portfolio'}, context, info);
+
       return details;
     }
   }

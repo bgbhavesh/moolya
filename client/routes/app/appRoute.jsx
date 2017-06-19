@@ -31,6 +31,9 @@ import MlAppMyTransaction from "../../app/myTransaction/component/MlAppMyTransac
 import RegistrationWizard from "../../admin/transaction/requested/component/RegistrationWizard";
 import {mlAppFunderConfig} from "../../app/funders/config/mlAppFunderConfig";
 import MlAppMyCalendar from "../../app/calendar/myCalendar/components/MlAppMyCalendar";
+import MlAppActivityList from "../../app/calendar/manageScheduler/activity/components/MlAppActivityList";
+import MlAppTaskList from "../../app/calendar/manageScheduler/activity/components/MlAppTaskList";
+import MlAppTaskLanding from "../../app/calendar/manageScheduler/task/components/MlAppTaskLanding";
 
 //profile
 
@@ -279,5 +282,27 @@ appSection.route('/calendar/manageSchedule', {
   name: 'calendar_manageSchedule',
   action(){
     mount(AppLayout, {appContent: <MlAppManageSchedule />, isCalenderMenu: true})
+  }
+});
+
+appSection.route('/calendar/manageSchedule/createTask', {
+  name: 'calendar_manageSchedule',
+  action(){
+    mount(AppLayout, {appContent: <MlAppTaskLanding />, isCalenderMenu: true})
+  }
+});
+
+
+appSection.route('/calendar/manageSchedule/:profileId/activityList', {
+  name: 'calendar_manageSchedule',
+  action(){
+    mount(AppLayout, {appContent: <MlAppActivityList />, isCalenderMenu: true})
+  }
+});
+
+appSection.route('/calendar/manageSchedule/:profileId/taskList', {
+  name: 'calendar_manageSchedule',
+  action(){
+    mount(AppLayout, {appContent: <MlAppTaskList />, isCalenderMenu: true})
   }
 });

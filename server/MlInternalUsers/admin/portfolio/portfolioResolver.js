@@ -45,15 +45,15 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                           let googleplus="";
                           if(args.registrationInfo && args.registrationInfo.socialLinksInfo && args.registrationInfo.socialLinksInfo.length>0){
                               _.each(args.registrationInfo.socialLinksInfo,function(link) {
-                                  if(link.socialLinkType == "FACEBOOK"){
+                                  if(link.socialLinkTypeName == "Facebook"){
                                       fb = link.socialLinkUrl
-                                  }else if(link.socialLinkType == "LINKEDIN"){
+                                  }else if(link.socialLinkTypeName == "Linkedin"){
                                       linkedIn = link.socialLinkUrl
                                   }
-                                  else if(link.socialLinkType == "TWITTER"){
+                                  else if(link.socialLinkTypeName == "Twitter"){
                                       twitter = link.socialLinkUrl
                                   }
-                                  else if(link.socialLinkType == "GOOGLEPLUS"){
+                                  else if(link.socialLinkTypeName == "GooglePlus"){
                                       googleplus = link.socialLinkUrl
                                 }
                               })
@@ -108,15 +108,15 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                           let googleplus="";
                           if(args.registrationInfo && args.registrationInfo.socialLinksInfo && args.registrationInfo.socialLinksInfo.length>0){
                               _.each(args.registrationInfo.socialLinksInfo,function(link) {
-                                  if(link.socialLinkType == "FACEBOOK"){
+                                  if(link.socialLinkTypeName == "Facebook"){
                                     fb = link.socialLinkUrl
-                                  }else if(link.socialLinkType == "LINKEDIN"){
+                                  }else if(link.socialLinkTypeName == "Linkedin"){
                                     linkedIn = link.socialLinkUrl
                                   }
-                                  else if(link.socialLinkType == "TWITTER"){
+                                  else if(link.socialLinkTypeName == "Twitter"){
                                     twitter = link.socialLinkUrl
                                   }
-                                  else if(link.socialLinkType == "GOOGLEPLUS"){
+                                  else if(link.socialLinkTypeName == "GooglePlus"){
                                     googleplus = link.socialLinkUrl
                                   }
                               })
@@ -136,12 +136,16 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                                 profession: args.registrationInfo.profession ? args.registrationInfo.profession : "",
                                 // employerName: args.registrationInfo.employerName ? args.registrationInfo.employerName : "",
                                 mobileNumber: args.registrationInfo.contactNumber ? args.registrationInfo.contactNumber : "",
-                                investmentFrom:args.registrationInfo.investingFrom,
-                                category:args.portfoliodetails.userType,
+                                investmentFrom:args.registrationInfo.investingFrom?args.registrationInfo.investingFrom:"",
+                                category:args.portfoliodetails.userType?args.portfoliodetails.userType:"",
+
                                 // facebookId: fb,
                                 // linkedInId: linkedIn,
                                 // twitterId: twitter,
                                 // gplusId: googleplus,
+                                facebookUrl: fb,
+                                linkedinUrl: linkedIn,
+                                profilePic: args.registrationInfo.profileImage ? args.registrationInfo.profileImage : "",
                                 logo:{fileUrl: args.registrationInfo.profileImage ? args.registrationInfo.profileImage : ""}
                               }
                           }

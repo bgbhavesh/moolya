@@ -130,21 +130,25 @@ export async function fetchLibrary(userId) {
       fileName
       fileUrl
       fileType
+      isPrivate
     }
     videos {
       fileName
       fileUrl
       fileType
+      isPrivate
     }
     documents {
       fileName
       fileUrl
       fileType
+      isPrivate
     }
     templates {
       fileName
       fileUrl
       fileType
+      isPrivate
     }
   }
 }
@@ -177,4 +181,31 @@ query {
   return id
 }
 
+
+export async function updatePrivacyDetails(index,element,type) {
+  let x = element;
+  element = x[index];
+  console.log(element)
+  const result = await appClient.mutate({
+    mutation: gql`
+   mutation ($detailsInput: privateData) {
+  updatePrivacyDetails(detailsInput: $detailsInput) {
+    success
+    code
+    result
+  }
+}
+`,
+    variables:{
+      detailsInput: {
+        index,
+        element,
+        type
+
+}
+    }
+  })
+  const id = result.data.updatePrivacyDetails;
+  return id
+}
 

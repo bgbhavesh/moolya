@@ -83,7 +83,7 @@ export default class MlAppActionComponent extends React.Component {
       {
         actionName: 'favourite',
         displayName:'Favourite',
-        iconName: 'ml flaticon-ml-shapes'
+        iconClass: 'ml flaticon-ml-shapes'
       },
       {
         actionName: 'edit',
@@ -98,6 +98,16 @@ export default class MlAppActionComponent extends React.Component {
       {
         actionName: 'golive',
         displayName:'GoLive',
+        iconClass: 'ml ml-save'
+      },
+      {
+        actionName: 'likes',
+        displayName:'Like',
+        iconClass: 'ml fa fa-thumbs-o-up'
+      },
+      {
+        actionName: 'comment',
+        displayName:'Comment',
         iconClass: 'ml ml-save'
       }
     ]

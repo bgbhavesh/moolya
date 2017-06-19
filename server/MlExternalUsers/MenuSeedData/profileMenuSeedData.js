@@ -30,12 +30,21 @@ if(Meteor.isServer){
               "uniqueId" : "portfolio"
           },
           {
-            "image":"ml ml-institutions",
+            "image": "ml ml-institutions",
             "link": "/app/myOffice",
-            "isLink" : true,
-            "isMenu" : true,
-            "name" : "My Office",
-            "uniqueId" : "myOffice"
+            "isLink": true,
+            "isMenu": true,
+            "name": "My Office",
+            "uniqueId": "myOffice",
+            "hideSubMenu": true,
+            "subMenu": [{
+              "link": "/app/addOffice",
+              "isLink": true,
+              "isMenu": false,
+              "name": "Add Office",
+              "uniqueId": "addOffice",
+              "subMenusId": "myOffice"
+            }]
           },
           {
               "image":"fa fa-list",

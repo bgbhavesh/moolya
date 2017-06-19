@@ -218,6 +218,9 @@ class MlEditBackendUser extends React.Component{
         this.setState({'userProfiles': userProfilesDetails});
       }
       this.getGender();
+    }else {
+      window.history.back()
+      toastr.error('Not Authorised');
     }
   }
 

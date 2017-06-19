@@ -1,57 +1,38 @@
 import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar';
-var FontAwesome = require('react-fontawesome');
+import { render } from 'react-dom'
+import _ from 'lodash';
+import {fetchInteractionsCountActionHandler} from '../actions/fetchInteractionCountActionHandler';
 
 export default class InteractionsCounter extends React.Component{
+  constructor(props){
+    super(props)
+    this.state =  {data: []};
+  }
+
+  async componentWillMount() {
+    //todo: this may be configured dynamically
+    var actionNames=['like','connect','collaborate','favourite','views','partner','enquire'];
+    const response = await fetchInteractionsCountActionHandler({resourceType:this.props.resourceType,resourceId:this.props.resourceId,actionNames:actionNames});
+    this.setState({data: response});
+  }
   componentDidMount()
   {
-    $('.paperfold').paperfold({
-      'toggle': $('.paperfold-toggle'),
-      'folds': 1
-    });
+    $('.paperfold').paperfold({'toggle': $('.paperfold-toggle'), 'folds': 1});
     $('.paperfold-toggle').click();
   }
 
   render(){
     let config = [
-      {
-        name: 'like',
-        displayName:'Like',
-        iconClass: 'ml fa fa-thumbs-o-up'
-      },
-      {
-        name: 'connect',
-        displayName:'Connections',
-        iconClass: 'ml flaticon-ml-handshake'
-      },
-      {
-        name: 'collaborate',
-        displayName:'Collaborations',
-        iconClass: 'ml flaticon-ml-networking'
-      },
-      {
-        name: 'favourite',
-        displayName:'Favourites',
-        iconClass: 'ml flaticon-ml-shapes'
-      },
-      {
-        name: 'view',
-        displayName:'Views',
-        iconClass: 'ml flaticon-ml-visibility'
-      },
-      {
-        name: 'partner',
-        displayName:'Partners',
-        iconClass: 'ml flaticon-ml-support'
-      },
-      {
-        name: 'enquire',
-        displayName:'Enquiries',
-        iconClass: 'ml flaticon-ml-handshake-1'
-      }
+      {name: 'like',displayName:'Like',iconClass: 'ml fa fa-thumbs-o-up'},
+      {name: 'connect', displayName:'Connections',iconClass: 'ml flaticon-ml-handshake'},
+      {name: 'collaborate',displayName:'Collaborations',iconClass: 'ml flaticon-ml-networking'},
+      {name: 'favourite',displayName:'Favourites',iconClass: 'ml flaticon-ml-shapes'},
+      {name: 'view',displayName:'Views',iconClass: 'ml flaticon-ml-visibility'},
+      {name: 'partner', displayName:'Partners',iconClass: 'ml flaticon-ml-support'},
+      {name: 'enquire',displayName:'Enquiries',iconClass: 'ml flaticon-ml-handshake-1'}
     ];
+
+    let data=this.state.data;
       //todo: configure the  this.props.actions
     let actionView = config.map(function(option) {
      /*let action = _.find(config, {'name': option.name});
@@ -60,10 +41,11 @@ export default class InteractionsCounter extends React.Component{
            return;
         }
       }*/
+      let actionCount=(_.find(data,{name:option.name})||{}).count;
         return (
            <li key={option.name}>
              <a href="#"><span className={option.iconClass}></span>
-             <b>{option.count}</b>
+             <b>{actionCount}</b>
              </a>
              <span className="tooltipnew">
              <span>{option.displayName}</span>

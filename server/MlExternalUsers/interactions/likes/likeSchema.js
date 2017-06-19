@@ -6,6 +6,9 @@ import MlSchemaDef from '../../../commons/mlSchemaDef'
 
 
 let likeSchema = `
+    type Query{
+        fetchLikes(resourceType:String):response       
+    }
     type Mutation{
         likeRequest(resourceId:String!,resourceType:String!):response       
     }

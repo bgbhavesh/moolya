@@ -40,8 +40,12 @@ class MlAddCitizenship extends React.Component {
     }
 
     const response = await addCitizenshipActionHandler(CitizenshipDetails)
-    toastr.success("CitizenShip Created Successfully");
-    return response;
+    if (!response.success) {
+      toastr.error("Already Exists")
+    } else if(response.success) {
+      toastr.success("CitizenShip Created Successfully");
+      FlowRouter.go("/admin/settings/citizenshipList");
+    }
   }
   componentDidMount()  {
     OnToggleSwitch(false,true);

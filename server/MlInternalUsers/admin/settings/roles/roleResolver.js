@@ -100,10 +100,12 @@ MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
         return response;
       } else {
         var id = args.roleId;
-        var assignRoles = role.assignRoles;
-        if(assignRoles.length>1){
+        var assignRoles = args.role.assignRoles;
+        if(assignRoles){
+          var hierarchyFound = false
+          var response = null
             assignRoles.map(function (assignRole) {
-              if(isActive===false){
+              if(assignRole.isActive===false){
                 let departmentId = assignRole.department
                 let subDepartmentId = assignRole.subDepartment
                 let clusterId = assignRole.cluster
@@ -114,16 +116,19 @@ MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
                 }, context)
                 if(hierarchy){
                   let teamStructure = hierarchy.teamStructureAssignment
-                  teamStructure.map(function () {
-                    if((hierarchy.finalApproval.role==id)||(teamStructure.roleId == id && teamStructure.isAssigned===true)){
+                  teamStructure.map(function (assignRole) {
+                    if((hierarchy.finalApproval.role==id)||(assignRole.roleId == id && assignRole.isAssigned === true)){
                       let code = 401;
-                      let response = new MlRespPayload().errorPayload("Hierarchy associated for this role");
-                      return response;
+                      response = new MlRespPayload().errorPayload("Hierarchy associated for this role");
+                      hierarchyFound = true
                     }
                   })
                 }
               }
             })
+          if(hierarchyFound === true){
+            return response;
+          }
 
         }else if(args.role.isActive===false){
           //check hierarchy exist for this role.

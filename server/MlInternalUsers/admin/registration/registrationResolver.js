@@ -525,6 +525,8 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       identityType  : regRecord.registrationInfo.identityType,
       industryId    : regRecord.registrationInfo.industry,
       professionId  : regRecord.registrationInfo.profession,
+      gender        : regRecord.registrationDetails.gender,
+        employmentStatus: regRecord.registrationDetails. employmentStatus,
       transactionCreatedDate : new Date()
      }
      orderNumberGenService.assignPortfolioId(portfolioDetails)
@@ -538,7 +540,8 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       registrationData.profileImage = regRecord.registrationInfo.profileImage;
       registrationData.investmentFrom = regRecord.registrationInfo.investmentFrom;
       registrationData.socialLinksInfo = regRecord.socialLinksInfo;
-
+      registrationData.gender = regRecord.registrationDetails.gender;
+      registrationData. employmentStatus = regRecord.registrationDetails.employmentStatus;
        try{
          MlResolver.MlMutationResolver['createPortfolioRequest'] (obj,{'portfoliodetails':portfolioDetails, 'registrationInfo':registrationData},context, info); //portfolio request
        }catch(e){

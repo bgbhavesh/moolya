@@ -3,12 +3,11 @@
  */
 import React from "react";
 var FontAwesome = require('react-fontawesome');
-import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 
 export default class MlAssignTask extends React.Component {
   render(){
     return(
-      <div>
+      <div className="popover">
         <h1>Attached Documents <a href="#" className="pull-right">Add</a></h1>
         <ul className="doc_upload">
           <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/></li>

@@ -58,40 +58,6 @@ export default class MlAppInvestmentItem extends Component {
           }
         }
     });
-    // console.log(MlAppInvestAction);
-    // MlAppInvestAction[0].handler = MlAppInvestAction[0].handler.bind(that);
-    // mlAppActionConfig.push(MlAppInvestAction[0]);
-    let mlAppActionConfig2 = props.stages.map(function (stage, i) {
-        return {
-          showAction:true,
-          actionName: stage.stageName,
-          handler: async(event) => {
-            if(!that.state.selected.resourceId){
-              toastr.error('Please select a portfolio');
-              return false;
-            }
-            if(currentStage.stageName == stage.stageName){
-              toastr.error('Already in '+stage.stageName+' Stage');
-              return false;
-            }
-            let dataToInsert = {
-              "resourceId": that.state.selected.resourceId,
-              "resourceType": "portfolio",
-              "resourceStage": stage.stageName
-            };
-            let response;
-            if(that.state.selected.stage.length){
-              response = await updateStageActionHandler(that.state.selected.stage[0]._id, dataToInsert);
-            } else {
-              response = await createStageActionHandler(dataToInsert);
-            }
-            if(response.success){
-              toastr.success('Updated Successfully');
-              that.props.fetchPortfolio();
-            }
-          }
-        }
-    });
 
     export const genericPortfolioAccordionConfig= {id:'myInvestmentAccordion',
       panelItems:[{'title':'Actions',isText:false,style:{'background': '#ef4647'},contentComponent:<MlAppActionComponent  actionOptions={mlAppActionConfig}  />}]

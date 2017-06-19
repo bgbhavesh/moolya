@@ -5,8 +5,7 @@
 import React, {Component} from "react";
 import MlAppActionComponent from "../../commons/components/MlAppActionComponent";
 import MlAccordion from '../../commons/components/MlAccordion';
-import {createStageActionHandler} from '../actions/createStage';
-import {updateStageActionHandler} from '../actions/updateStage';
+import MlAppInvestAction from './MlAppInvestActions';
 
 export default class MlAppInvestmentItem extends Component {
 
@@ -29,12 +28,33 @@ export default class MlAppInvestmentItem extends Component {
 
   render(){
     const props = this.props;
+    console.log(props.stages);
     const that = this;
     const currentStage = props.currentStage;
     const currentStageIndex = props.stages.findIndex(function (data) {
       return data.stageName == currentStage.stageName
     });
-    let mlAppActionConfig = props.stages.map(function (stage, i) {
+    let mlAppActionConfig = currentStage.stageActions.filter(function (action) {
+      return action.actionName && action.isActive;
+    }).map(function (action) {
+        let actionObj = MlAppInvestAction[action.actionName];
+        if(actionObj){
+          let config = actionObj.config
+          config.handler = async(event) => {
+            actionObj.handler(that);
+          };
+          return config;
+        } else {
+          return {
+            showAction: true,
+            actionName: action.actionName,
+          }
+        }
+    });
+    // console.log(MlAppInvestAction);
+    // MlAppInvestAction[0].handler = MlAppInvestAction[0].handler.bind(that);
+    // mlAppActionConfig.push(MlAppInvestAction[0]);
+    let mlAppActionConfig2 = props.stages.map(function (stage, i) {
         return {
           showAction:true,
           actionName: stage.stageName,

@@ -27,7 +27,11 @@ class MlAppComponent extends Component{
     componentWillReceiveProps(nextProps, nextState) {
        // let isProfileMenu = nextProps.isProfileMenu || false;
       if(nextProps.isProfileMenu!==this.props.isProfileMenu){
-        this.fetchMenu(nextProps.isProfileMenu)
+        this.fetchMenu(nextProps.isProfileMenu, nextProps.isExploreMenu)
+      }
+
+      if(nextProps.isExploreMenu!==this.props.isExploreMenu){
+          this.fetchMenu(nextProps.isProfileMenu, nextProps.isExploreMenu)
       }
     }
 

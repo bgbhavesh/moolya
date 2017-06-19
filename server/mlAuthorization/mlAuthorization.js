@@ -25,7 +25,6 @@ class MlAuthorization
           let isContextSpecSearch = false
           for(var i = 0; i < query.definitions.length; i++){
             const d = query.definitions[i];
-            // console.log(d.kind)
             switch (d.kind){
               case 'OperationDefinition':
                 if (schemaDef) {
@@ -40,30 +39,12 @@ class MlAuthorization
             typeName = operationType.name.value
           })
           let modules = MlResolver.MlModuleResolver;
-          // _.each(modules, function (module)
-          // {
-          //     let validApi = _.find(module, {api:typeName})
-          //     if(validApi && validApi.isWhiteList){
-          //         isWhiteList = true
-          //         return;
-          //     }
-          //     if(validApi){
-          //         moduleName = validApi.moduleName;
-          //         actionName = validApi.actionName;
-          //         return;
-          //     }
-          // })
-
           var ret = this.valiateApi(MlResolver.MlModuleResolver, typeName);
           isWhiteList = ret.isWhiteList;
           moduleName = ret.moduleName;
           actionName = ret.actionName;
-
-
           if(isWhiteList)
               return true
-
-
           if((typeName == 'ContextSpecSearch' || typeName == 'SearchQuery') && moduleName == 'GENERIC' && actionName == 'READ'){
               var startToken = schemaDef.loc.startToken
               do{

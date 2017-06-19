@@ -68,12 +68,12 @@ appSection.route('/dashboard', {
   }
 });
 
-appSection.route('/explore', {
-  name: 'explore',
-  action(){
-    mount(AppLayout,{appContent:< MlAppIdeatorLanding/>, isExploreMenu:true})
-  }
-});
+// appSection.route('/explore', {
+//   name: 'ideator',
+//   action(redirect){
+//     mount(AppLayout,{appContent:< MlAppIdeatorLanding/>, isExploreMenu:true})
+//   }
+// });
 
 appSection.route('/myProfile', {
   name: 'myProfile',
@@ -192,7 +192,7 @@ appSection.route('/myProfile/registerAs', {
 appSection.route('/ideator', {
   name: 'ideator',
   action(){
-      mount(AppLayout,{appContent:< MlAppIdeatorLanding/>})
+      mount(AppLayout,{appContent:<MlAppIdeatorLanding/>})
   }
 });
 appSection.route('/portfolio/view/:portfolioId/:communityType', {

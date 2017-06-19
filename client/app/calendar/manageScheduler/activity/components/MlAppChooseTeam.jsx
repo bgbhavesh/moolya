@@ -6,11 +6,11 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar';
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../../../commons/components/select/MoolyaSelect'
 import gql from 'graphql-tag'
 import {getTeamUsersActionHandler, updateActivityActionHandler} from '../actions/activityActionHandler'
 
-export default class Step1 extends React.Component{
+export default class MlAppChooseTeam extends React.Component{
   constructor(props){
     super(props)
       this.state = {

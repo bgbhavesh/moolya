@@ -13,7 +13,7 @@ import MlAppDashboard from "../../app/dashboard/components/MlAppDashboard";
 import MlPortfolioLanding from "../../app/commons/components/MlPortfolioLanding";
 import MlAppIdeatorAddIdea from "../../app/ideators/components/MlAppIdeatorAddIdea";
 import MlAppPortfolio from "../../app/commons/components/MlAppPortfolio";
-import MlmanageScheduler from "../../app/calendar/manageScheduler/components/manageScheduler";
+import MlAppManageSchedule from "../../app/calendar/manageScheduler/activity/components/MlAppManageSchedule";
 import MlPortfolioIdeatorLibraryView from "../../admin/transaction/portfolio/component/IdeatorView/MlPortfolioLibrary.jsx";
 import MlAppMyProfile from "../../app/profile/components/MlAppMyProfile";
 import MlProfileSettings from "../../app/profile/components/MlProfileSettings";
@@ -278,6 +278,6 @@ appSection.route('/calendar', {
 appSection.route('/calendar/manageSchedule', {
   name: 'calendar_manageSchedule',
   action(){
-    mount(AppLayout, {appContent: <MlmanageScheduler/>, isCalenderMenu: true})
+    mount(AppLayout, {appContent: <MlAppManageSchedule />, isCalenderMenu: true})
   }
 });

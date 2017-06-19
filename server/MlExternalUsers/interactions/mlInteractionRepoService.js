@@ -47,7 +47,80 @@ class MlInteractionService{
         return {resourceId:resourceId,resourceType:resourceType,resourceOwner:resourceOwnerUser,resourceOwnerId:resourceOwnerUser._id,resourceOwnerUserName:resourceOwnerUser.username,
           contextUserId:contextUser._id,contextUserName:contextUser.username,contextUser:contextUser};
     }
-
+    getPipeline(resourceType){
+      switch (resourceType){
+        case 'portfolio':
+          return [
+            { $lookup: {
+                from: "mlPortfolioDetails",
+                localField: "resourceId",
+                foreignField: "_id",
+                as: "portfolio"
+              }
+            },
+            {$unwind: "$portfolio"},
+            { '$lookup':{
+                from: "users",
+                localField: "portfolio.userId",
+                foreignField: "_id",
+                as: "user"
+              }
+            },
+            {$unwind: "$user"},
+            { '$lookup': {
+                from: "mlStage",
+                localField: "resourceId",
+                foreignField: "resourceId",
+                as: "stage"
+              }
+            },
+            { $project: {
+                user:{
+                  name:'$user.profile.displayName'
+                },
+                stage:1,
+                portfolio:1,
+                resourceId:1,
+              }
+            },
+            // { $lookup:
+            //   {
+            //     from: "mlIdeatorPortfolio",
+            //     localField: "resourceId",
+            //     foreignField: "portfolioDetailsId",
+            //     as: "ideator"
+            //   }
+            // },
+            { $lookup:
+                {
+                  from: "mlIdeas",
+                  localField: "resourceId",
+                  foreignField: "portfolioId",
+                  as: "idea"
+                }
+            },
+            { $lookup:
+              {
+                from: "mlStartupPortfolio",
+                localField: "resourceId",
+                foreignField: "portfolioDetailsId",
+                as: "startup"
+              }
+            },
+            { $lookup:
+              {
+                from: "mlFunderPortfolio",
+                localField: "resourceId",
+                foreignField: "portfolioDetailsId",
+                as: "funder"
+              }
+            },
+          ]
+        // To do : When all the communality portfolio done,  Will add remaining portfolio here.
+        default:
+          return [];
+      }
+    }
 
 }
 const mlInteractionService = new MlInteractionService();

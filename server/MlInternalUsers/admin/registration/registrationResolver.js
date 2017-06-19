@@ -66,10 +66,12 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   {
     args.registration.createdBy = Meteor.users.findOne({_id: context.userId}).username
   }
+
   let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Yet To Start",emails:emails,transactionId:args.registration.registrationId,transactionCreatedDate:transactionCreatedDate}, context)
   if(id){
-
     MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);
+    validationCheck=MlRegistrationPreCondition.validateActiveCommunity(id,args.registration);
+    if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
    // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:id}, context, info);
 
     //send email and otp;
@@ -163,7 +165,7 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     var emails=[{address:args.registration.userName,verified:false}];
     orderNumberGenService.assignRegistrationId(args.registration);
     args.registration.registrationDate=new Date();
-    response = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Yet To Start",emails:emails,registrationDetails:{identityType:args.registration.identityType}}, context)
+    response = mlDBController.insert('MlRegistration', {registrationInfo: args.registration,transactionId:args.registration.registrationId, status: "Yet To Start",emails:emails,registrationDetails:{identityType:args.registration.identityType}}, context)
     if(response){
       MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:response}, context, info);
      // MlResolver.MlMutationResolver['sendSmsVerification'](obj, {registrationId:response}, context, info);
@@ -205,7 +207,14 @@ MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context,
 
 MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, info) => {
   // TODO : Authorization
-  if (args.registrationId) {
+  let emailVerified = false
+  let registrationRecord=MlRegistration.findOne(args.registrationId)
+  if(registrationRecord&&registrationRecord.emails.length>0){
+    let email=registrationRecord.emails;
+    emailVerified=_.find(email,function(mail){
+      return mail.verified==true
+    })
+  if (args.registrationId && emailVerified) {
     var updatedResponse;
     var validationCheck=null;
     var result=null;
@@ -247,7 +256,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
 
         var communityDef= mlDBController.findOne('MlCommunityDefinition', {code: (details.registrationType||null)}, context) || {};
 
-        validationCheck=MlRegistrationPreCondition.validateActiveCommunity(id,details);
+        validationCheck=MlRegistrationPreCondition.validateCommunity(id,details);
         if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
 
         details.communityId = communityDetails._id;
@@ -386,6 +395,11 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
      result = {id: id};
     updatedResponse = new MlRespPayload().successPayload(result, code);
     return updatedResponse;
+  }else{
+    let code = 556;
+    let response = new MlRespPayload().errorPayload("End user email verification not done", code);
+    return response;
+  }
   }
 }
 
@@ -523,6 +537,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       identityType  : regRecord.registrationInfo.identityType,
       industryId    : regRecord.registrationInfo.industry,
       professionId  : regRecord.registrationInfo.profession,
+      transactionCreatedDate : new Date()
      }
      orderNumberGenService.assignPortfolioId(portfolioDetails)
 
@@ -534,6 +549,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       registrationData.userName = regRecord.registrationInfo.userName;
       registrationData.profileImage = regRecord.registrationInfo.profileImage;
       registrationData.investmentFrom = regRecord.registrationInfo.investmentFrom;
+      registrationData.socialLinksInfo = regRecord.socialLinksInfo;
 
        try{
          MlResolver.MlMutationResolver['createPortfolioRequest'] (obj,{'portfoliodetails':portfolioDetails, 'registrationInfo':registrationData},context, info); //portfolio request

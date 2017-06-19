@@ -40,8 +40,12 @@ class MlAddBusinessType extends React.Component {
     }
 
     const response = await addBusinessTypeActionHandler(BusinessTypeDetails)
-    toastr.success("Business Type Created Successfully")
-    return response;
+    if (!response.success) {
+      toastr.error("Already Exists")
+    } else if(response.success) {
+      toastr.success("BusinessType Created Successfully");
+      FlowRouter.go("/admin/settings/businessList");
+    }
   }
 
   componentDidMount() {

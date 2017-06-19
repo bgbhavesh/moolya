@@ -16,24 +16,29 @@ export default class MlAppActionComponent extends React.Component {
   render() {
     let config = [
       {
-        actionName: 'follow',
-        displayName:'Follow',
+        actionName: 'create',
+        displayName:'Create',
+        iconClass: 'ml flaticon-ml-shapes'
+      },
+      {
+        actionName: 'read',
+        displayName:'Read',
+        iconClass: 'ml flaticon-ml-shapes'
+      },
+      {
+        actionName: 'update',
+        displayName:'Update',
+        iconClass: 'ml flaticon-ml-shapes'
+      },
+      {
+        actionName: 'delete',
+        displayName:'Delete',
         iconClass: 'ml flaticon-ml-shapes'
       },
       {
         actionName: 'like',
         displayName:'Like',
         iconClass: 'ml fa fa-thumbs-o-up'
-      },
-      {
-        actionName: 'review',
-        displayName:'Review',
-        iconClass: 'ml flaticon-ml-note'
-      },
-      {
-        actionName: 'enquire',
-        displayName:'Enquire',
-        iconClass: 'ml flaticon-ml-support'
       },
       {
         actionName: 'connect',
@@ -44,6 +49,26 @@ export default class MlAppActionComponent extends React.Component {
         actionName: 'collaborate',
         displayName:'Collaborate',
         iconClass: 'ml flaticon-ml-networking'
+      },
+      {
+        actionName: 'favourite',
+        displayName:'Favourite',
+        iconClass: 'ml flaticon-ml-shapes'
+      },
+      {
+        actionName: 'view',
+        displayName:'View',
+        iconClass: 'ml flaticon-ml-shapes'
+      },
+      {
+        actionName: 'partner',
+        displayName:'Partner',
+        iconClass: 'ml flaticon-ml-shapes'
+      },
+      {
+        actionName: 'enquire',
+        displayName:'Enquire',
+        iconClass: 'ml flaticon-ml-support'
       },
       {
         actionName: 'conversation',
@@ -81,11 +106,6 @@ export default class MlAppActionComponent extends React.Component {
         iconClass: 'ml flaticon-ml-interface'
       },
       {
-        actionName: 'favourite',
-        displayName:'Favourite',
-        iconName: 'ml flaticon-ml-shapes'
-      },
-      {
         actionName: 'edit',
         displayName:'Edit',
         iconClass: 'ml ml-edit'
@@ -99,6 +119,86 @@ export default class MlAppActionComponent extends React.Component {
         actionName: 'golive',
         displayName:'GoLive',
         iconClass: 'ml ml-save'
+      },
+      {
+        actionName: 'comment',
+        displayName:'Comment',
+        iconClass: 'ml ml-save'
+      },
+      {
+        actionName: 'shortlist',
+        displayName:'Shortlist',
+        iconClass: 'ml ml-save'
+      },
+      {
+        actionName: 'onboard',
+        displayName:'Onboard',
+        iconClass: 'ml ml-save'
+      },
+      {
+        actionName: 'review',
+        displayName:'Review',
+        iconClass: 'ml flaticon-ml-note'
+      },
+      {
+        actionName: 'review',
+        displayName:'Review',
+        iconClass: 'ml ml-save'
+      },
+      {
+        actionName: 'assess',
+        displayName:'Assess',
+        iconClass: 'ml ml-save'
+      },
+      {
+        actionName: 'discuss',
+        displayName:'Discuss',
+        iconClass: 'ml ml-save'
+      },
+      {
+        actionName: 'promote',
+        displayName:'Promote',
+        iconClass: 'ml ml-save'
+      },
+      {
+        actionName: 'negotiate',
+        displayName:'Negotiate',
+        iconClass: 'ml ml-save'
+      },
+      {
+        actionName: 'valuation',
+        displayName:'Valuation',
+        iconClass: 'ml ml-save'
+      },
+      {
+        actionName: 'deport card',
+        displayName:'Deport Card',
+        iconClass: 'ml ml-save'
+      },
+      {
+        actionName: 'invest',
+        displayName:'Invest',
+        iconClass: 'ml ml-save'
+      },
+      {
+        actionName: 'term sheet',
+        displayName:'Term Sheet',
+        iconClass: 'ml ml-save'
+      },
+      {
+        actionName: 'exit',
+        displayName:'Exit',
+        iconClass: 'ml ml-save'
+      },
+      {
+        actionName: 'remove',
+        displayName:'Remove',
+        iconClass: 'ml ml-save'
+      },
+      {
+        actionName: 'follow',
+        displayName:'Follow',
+        iconClass: 'ml flaticon-ml-shapes'
       }
     ]
     let actionOptions= this.props.actionOptions|| [];

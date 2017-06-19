@@ -2,6 +2,7 @@ import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewe
 import React from 'react';
 import gql from 'graphql-tag'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
+import MlPortfolioAssignComponent from '../component/MlPortfolioAssignComponent'
 const mlRequestedPortfolioTableConfig=new MlViewer.View({
   name:"portfolioInfoTable",
   module:"portfolioDetails",//Module name for filter.
@@ -50,7 +51,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
       actionName: 'comment',
       handler: null
     },*/
-    {
+  /*  {
       showAction: true,
       actionName: 'assign',
       handler: (data)=>{
@@ -59,6 +60,21 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
         } else{
           toastr.error("Please select a record");
         }
+      }
+    },*/
+    {
+      showAction: true,
+      actionName: 'assign',
+      hasPopOver:true,
+      popOverTitle:'Assign Portfolio',
+      placement:'top',
+      target:'portfolioAssign',
+      popOverComponent:<MlPortfolioAssignComponent />,
+      actionComponent:function(props){
+        return  <div className={props.activeClass} id={props.actionName}>
+          <div onClick={props.onClickHandler} className={props.activesubclass} data-toggle="tooltip" title={props.actionName} data-placement="top" >
+            <span className={props.iconClass} id={props.target}></span>
+          </div></div>;
       }
     },
     {

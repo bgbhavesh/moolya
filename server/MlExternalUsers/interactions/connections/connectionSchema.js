@@ -24,6 +24,22 @@ let connections = `
         resendCount:Int
     }
     
+    type ConnectedUser{
+        id:String,
+        userId:String,
+        userName:String,
+        firstName:String,
+        lastName:String,
+        displayName:String,
+        profileImage:String,
+        profileId:String,
+        countryName:String,
+        communityName:String,
+        communityCode:String,
+        
+    }
+    
+    
     input user{
         userid:String,
         userName:String,
@@ -45,12 +61,10 @@ let connections = `
         connectionRequest(resourceId:String!,resourceType:String!):response
         acceptConnection(connectionId:String!):response
         rejectConnection(connectionId:String!):response
-        updateConnection(connection:connection, connectionId:String):response
     }
     
     type Query{
-        fetchConnections:[Connection]
-        fetchConnection(connectionId:String):Connection
+        fetchConnections:[ConnectedUser]
     }
 `
 

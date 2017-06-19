@@ -24,3 +24,13 @@ MlResolver.MlQueryResolver['fetchExternalUserProfileMenu'] = ( _, {name}, contex
   let menu = new MlUserContext().getDefaultProfileMenu(context.userId);
   return MlMenus.findOne({name:menu});
 }
+
+MlResolver.MlQueryResolver['fetchExploreMenu'] = ( _, {name}, context) =>{
+  let menu = new MlUserContext().getExploreMenu(context.userId);
+  return MlMenus.findOne({name:menu});
+}
+
+MlResolver.MlQueryResolver['fetchCalendarMenu'] = ( _, {name}, context) =>{
+  let menu = new MlUserContext().getCalendarMenu(context.userId);
+  return MlMenus.findOne({name:menu});
+}

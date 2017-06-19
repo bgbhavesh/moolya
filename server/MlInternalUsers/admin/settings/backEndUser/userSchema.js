@@ -190,6 +190,32 @@ let BackEndUser = `
         optional          : Boolean
     }
     
+    type ExternalProfile{
+        profileId         : String,
+        registrationId    : String,
+        countryName       : String,
+        countryId         : String,
+        cityName          : String,
+        cityId            : String,
+        mobileNumber      : String,
+        clusterId         : String,
+        clusterName       : String,
+        chapterId         : String,
+        chapterName       : String,
+        subChapterId      : String,
+        subChapterName    : String,
+        communityId       : String,
+        communityName     : String,
+        communityType     : String,
+        isDefault         : Boolean,
+        isActive          : Boolean,
+        accountType       : String,
+        optional          : Boolean,
+        displayName       : String,
+        profileImage      : String
+    }
+    
+    
     input up{
         userProfiles      : [externalProfile]        
     }
@@ -467,6 +493,7 @@ let BackEndUser = `
         fetchUserRoleDetails(clusterId:String):UserRoles
         fetchMoolyaInternalUsers : [BackendUsers]
         passwordVerification(Details:String):response
+        getUserProfiles:[ExternalProfile]
     }
 `
 
@@ -490,6 +517,7 @@ let supportedApi = [
     {api:'fetchMoolyaInternalUsers', actionName:'READ', moduleName:"USERS", isWhiteList:true},
     {api:'fetchInternalUserProfiles', actionName:'READ', moduleName:"USERS", isWhiteList:true},
     {api:'passwordVerification', actionName:'READ', moduleName:"USERS"},
+    {api:'getUserProfiles', actionName:'READ', moduleName:"USERS"},
 
     {api:'createUser', actionName:'CREATE', moduleName:"USERS"},
     {api:'updateUser', actionName:'UPDATE', moduleName:"USERS"},

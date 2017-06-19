@@ -42,6 +42,8 @@ MlResolver.MlQueryResolver['getTeamUsers'] = (obj, args, context, info) => {
 }
 
 
+
+
 MlResolver.MlQueryResolver['getBranchDetails'] = (obj, args, context, info) => {
 
   let result = mlDBController.find('MlOffice', {userId:context.userId} , context).fetch()
@@ -50,23 +52,24 @@ MlResolver.MlQueryResolver['getBranchDetails'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['fetchActivity'] = (obj, args, context, info) => {
   let result = mlDBController.findOne('MlActivity', {_id:args.activityId} , context);
+  return result;
 }
 
 
 MlResolver.MlMutationResolver['createActivity'] = (obj, args, context, info) => {
   args.Details.userId = context.userId
   args.Details.createdAt = new Date()
-  let result = mlDBController.insert('MlActivity', args.Details , context)
-  if(result){
+  let result1 = mlDBController.insert('MlActivity', args.Details , context)
+  if(result1){
     let code = 200;
-    let result = result;
+    let result = result1;
     let response = new MlRespPayload().successPayload(result, code);
     return response
   }
 }
 
 MlResolver.MlMutationResolver['updateActivity'] = (obj, args, context, info) => {
-  let result = mlDBController.update('MlActivity', {_id:args.activityId}, args.activity, {'$set':1}, context).fetch();
+  let result = mlDBController.update('MlActivity', {_id:args.ActivityUpdate.id}, args.ActivityUpdate, {'$set':1}, context).fetch();
   if(result){
     let code = 200;
     let result = {userId: userId}
@@ -75,12 +78,3 @@ MlResolver.MlMutationResolver['updateActivity'] = (obj, args, context, info) => 
   }
 }
 
-MlResolver.MlMutationResolver['updateStep2Activity'] = (obj, args, context, info) => {
-  let result = mlDBController.update('MlActivity', {_id:'uJHKaju7gba7np2K4'}, args.step2, {'$set':1}, context);
-  if(result){
-    let code = 200;
-    let result = this.result
-    let response = new MlRespPayload().successPayload(result, code);
-    return response
-  }
-}

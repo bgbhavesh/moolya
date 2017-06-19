@@ -8,7 +8,7 @@ var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import gql from 'graphql-tag'
-import {getTeamUsersActionHandler, updateStep2DetailsActionHandler} from '../actions/activityActionHandler'
+import {getTeamUsersActionHandler, updateActivityActionHandler} from '../actions/activityActionHandler'
 
 export default class Step1 extends React.Component{
   constructor(props){
@@ -48,13 +48,14 @@ export default class Step1 extends React.Component{
   }
 
   async saveDetails(){
-    console.log(this.state.team)
+    console.log(this.props.activityId)
     let team  = this.state.team;
+
     let teams = {
-      // id:"uJHKaju7gba7np2K4",
-      teams:team
+      teams:team,
+      id : this.props.activityId
     }
-     const res = await updateStep2DetailsActionHandler(teams)
+     const res = await updateActivityActionHandler(teams)
      return res;
   }
   async SelectTeamMember(index,value){

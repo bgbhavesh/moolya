@@ -82,7 +82,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>
             //   res.json({unAuthorized:true,message:"Invalid Token"})
             //   return;
             // }
-            //
+
             // let isValid = mlserviceCardHandler.validateResource(req.body.query, context);
             return {
                 schema  : executableSchema,

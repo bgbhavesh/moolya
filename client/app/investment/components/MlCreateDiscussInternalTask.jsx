@@ -1,5 +1,5 @@
 /**
- * Created by pankaj on 19/6/17.
+ * Created by pankaj on 20/6/17.
  */
 import React from "react";
 var FontAwesome = require('react-fontawesome');
@@ -7,7 +7,7 @@ import {fetchAllOfficeMembers} from '../actions/fetchAllTeamMember';
 let Select = require('react-select');
 import {createInternalTaskActionHandler} from '../actions/createInternalTask'
 
-export default class MlAssignTask extends React.Component {
+export default class MlCreateDiscussInternalTask extends React.Component {
 
   constructor(props){
     super(props);
@@ -17,7 +17,12 @@ export default class MlAssignTask extends React.Component {
       users: [],
       members:[],
       selectedUser:[],
-      docs:[]
+      docs:[],
+      modes:[
+        {value:"offline", label:"Offline"},
+        {value:"online", label:"Online"}
+      ],
+      mode:'',
     }
   }
   componentDidMount(){
@@ -45,8 +50,10 @@ export default class MlAssignTask extends React.Component {
         type: this.props.data.state.selected.portfolio.communityType
       },
       docs:this.state.docs,
-      note:this.refs.note.value
+      note:this.refs.note.value,
+      mode:this.state.mode
     };
+
     let response = await createInternalTaskActionHandler(dataToInsert);
     if(response.success) {
       toastr.success('Internal Task Created');
@@ -81,7 +88,7 @@ export default class MlAssignTask extends React.Component {
   addUser(user){
     let seletectUsers = this.state.selectedUser;
     let isAlready = seletectUsers.find(function (userId) {
-       return userId == user.value;
+      return userId == user.value;
     });
     if(!isAlready){
       seletectUsers.push(user.value);
@@ -99,6 +106,12 @@ export default class MlAssignTask extends React.Component {
     });
   }
 
+  addMode(mode){
+    this.setState({
+      mode:mode.value
+    });
+  }
+
   render(){
     const that = this;
     return(
@@ -112,15 +125,15 @@ export default class MlAssignTask extends React.Component {
 
         <div className="clearfix" />
         <h1>
-           Set priority of attendes
-           <a href="#" className="pull-right attendes-btn" onClick={()=>this.toggleAddUser()} style={ this.state.showAdd ? {} : {'display':'none'} }>Add</a>
-           <a href="#" className="pull-right close-btn"  onClick={()=>this.toggleAddUser()} style={ this.state.showAdd ? {'display':'none'} : {} }>Close</a>
+          Set priority of attendes
+          <a href="#" className="pull-right attendes-btn" onClick={()=>this.toggleAddUser()} style={ this.state.showAdd ? {} : {'display':'none'} }>Add</a>
+          <a href="#" className="pull-right close-btn"  onClick={()=>this.toggleAddUser()} style={ this.state.showAdd ? {'display':'none'} : {} }>Close</a>
         </h1>
         <div className="clearfix" />
         <div className="" style={ this.state.showAdd ? {'display':'none'} : {}}>
           <Select
             name="form-field-name"
-            value="one"
+            value=""
             className="form-control float-label"
             options={that.state.users}
             onChange={(value)=>that.addUser(value)}
@@ -149,6 +162,15 @@ export default class MlAssignTask extends React.Component {
         </div>
         <div className="clearfix" />
         <hr/>
+        <Select
+          name="form-field-name"
+          value={that.state.mode}
+          placeholder="Select Mode"
+          className="form-control float-label"
+          options={that.state.modes}
+          onChange={(value)=>that.addMode(value)}
+        />
+        <div className="clearfix" />
         <div className="form-group">
           <textarea ref="note" placeholder="Notes / Remarks" className="form-control float-label" id=""></textarea>
         </div>

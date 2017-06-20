@@ -1,11 +1,11 @@
 /**
- * Created by pankaj on 19/6/17.
+ * Created by Mukhil on 20/6/17.
  */
 import React from 'react';
 import MlAppScheduleHead from "../../commons/components/MlAppScheduleHead";
-import {fetchActivitiesActionHandler} from '../actions/fetchActivities';
+// import {fetchActivitiesActionHandler} from '../actions/fetchActivities';
 
-export default class MlAppActivityList extends React.Component{
+export default class MlAppServiceList extends React.Component{
 
   constructor(props){
     super(props);
@@ -14,27 +14,27 @@ export default class MlAppActivityList extends React.Component{
     }
   }
 
-  componentWillMount(){
-    this.fetchActivities();
-  }
-  async fetchActivities(){
-    let profileId = FlowRouter.getParam('profileId');
-    let response = await fetchActivitiesActionHandler(profileId);
-    if(response){
-      this.setState({
-        activities:response
-      });
-    }
-  }
+  // componentWillMount(){
+  //   this.fetchActivities();
+  // }
+  // async fetchActivities(){
+  //   let profileId = FlowRouter.getParam('profileId');
+  //   let response = await fetchActivitiesActionHandler(profileId);
+  //   if(response){
+  //     this.setState({
+  //       activities:response
+  //     });
+  //   }
+  // }
   addActivity() {
     let profileId = FlowRouter.getParam('profileId');
     console.log(profileId)
-    FlowRouter.go('/app/calendar/manageSchedule/'+profileId+'/createActivity');
+    FlowRouter.go('/app/calendar/manageSchedule/'+profileId+'/createService');
   }
 
-  editMode(index, id) {
-    let profileId = FlowRouter.getParam('profileId');
-    FlowRouter.go('/app/calendar/manageSchedule/'+profileId+'/editActivity?id='+id);
+  editMode(index) {
+    // let profileId = FlowRouter.getParam('profileId');
+    // FlowRouter.go('/app/calendar/manageSchedule/'+profileId+'/editService');
   }
 
   render(){
@@ -57,7 +57,7 @@ export default class MlAppActivityList extends React.Component{
               {this.state.activities.map(function (actvity, index) {
                 return (
                   <div className="col-lg-2 col-md-4 col-sm-4" key={index}>
-                    <div className="list_block img_list_block notrans" onClick={()=>that.editMode(index,actvity._id)}>
+                    <div className="list_block img_list_block notrans" onClick={()=>that.editMode(index)}>
                       <img src={actvity.imageLink ? actvity.imageLink : "/images/activity_1.jpg"}/>
                       <h3>{actvity.displayName}</h3>
                     </div>

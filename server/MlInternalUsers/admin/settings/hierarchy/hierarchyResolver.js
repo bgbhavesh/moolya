@@ -183,6 +183,14 @@ MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info
     }
 
   }
+/*  //removing roles whose reporting role is selected for current role
+  let teamStructure = args.roles
+  teamStructure.map(function (selectedRole) {
+    if(selectedRole.reportingRole==args.currentRoleId){
+      filteredRole = _.reject(filteredRole, {_id: selectedRole.roleId});
+    }
+  })*/
+
 
   return filteredRole;
 }

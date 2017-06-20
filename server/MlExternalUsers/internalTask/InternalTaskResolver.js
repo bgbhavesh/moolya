@@ -31,11 +31,14 @@ MlResolver.MlQueryResolver['fetchInternalTaskById'] = (obj, args, context, info)
 MlResolver.MlMutationResolver['createInternalTask'] = (obj, args, context, info) => {
     if(args.internalTask){
       if(args.internalTask.attendees && args.internalTask.attendees.length){
+        orderNumberGenService.createinternalTaskId(args.internalTask);
+        // Add task status time line
         args.internalTask.attendees.forEach(function (attendee) {
           let dataToInsert = args.internalTask;
           dataToInsert.userId = context.userId;
           dataToInsert.attendee = attendee;
-          mlDBController.insert('MlInternalTask', dataToInsert );
+          dataToInsert.status = 'pending';
+          mlDBController.insert('MlInternalTask', dataToInsert , context);
         });
         let code = 200;
         let response = new MlRespPayload().successPayload("Internal task inserted", code);

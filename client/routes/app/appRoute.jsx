@@ -292,10 +292,9 @@ appSection.route('/calendar/manageSchedule', {
 appSection.route('/calendar/manageSchedule/:profileId/createTask', {
   name: 'calendar_manageSchedule',
   action(params){
-    mount(AppLayout, {appContent: <MlAppTaskLanding profileId={params.profileId}/>, isCalenderMenu: true})
+    mount(AppLayout, {appContent: <MlAppTaskLanding profileId={params.profileId} editMode={false}/>, isCalenderMenu: true})
   }
 });
-
 
 appSection.route('/calendar/manageSchedule/:profileId/activityList', {
   name: 'calendar_manageSchedule',
@@ -329,8 +328,15 @@ appSection.route('/calendar/manageSchedule/:profileId/editActivity?id=:id', {
 
 appSection.route('/calendar/manageSchedule/:profileId/taskList', {
   name: 'calendar_manageSchedule',
-  action(){
-    mount(AppLayout, {appContent: <MlAppTaskList />, isCalenderMenu: true})
+  action(params){
+    mount(AppLayout, {appContent: <MlAppTaskList profileId={params.profileId}/>, isCalenderMenu: true})
+  }
+});
+
+appSection.route('/calendar/manageSchedule/:profileId/editTask/:taskId', {
+  name: 'calendar_manageSchedule',
+  action(params){
+    mount(AppLayout, {appContent: <MlAppTaskLanding profileId={params.profileId} taskId={params.taskId} editMode={true}/>, isCalenderMenu: true})
   }
 });
 

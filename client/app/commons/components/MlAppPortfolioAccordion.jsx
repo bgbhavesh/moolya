@@ -27,7 +27,7 @@ export default class MlAppPortfolioAccordionContainer extends React.Component{
     actionOptions.forEach(function (action) {
       var actionProp=_.find(serverActionProps,{actionName:action.actionName})||{};
       action.showAction=true;
-      action.isDisabled=actionProp.isDisabled||false;
+      action.isDisabled=actionProp.isDisabled||(action.isDisabled?action.isDisabled:false);
       action.isHidden=actionProp.isHidden||false;
       that.props.assignActionHandler(action);
     });
@@ -37,6 +37,13 @@ export default class MlAppPortfolioAccordionContainer extends React.Component{
   async componentWillMount(){
     var actionOptions=await this.fetchActionAttributes();
     this.setState({actions:actionOptions});
+  }
+
+  async componentWillUpdate(nextProps, nextState) {
+    if(!this.compareQueryOptions(this.props.interactionAutoId,nextProps.interactionAutoId)){
+      var actionOptions=await this.fetchActionAttributes();
+      this.setState({actions:actionOptions});
+    }
   }
 
 

@@ -26,6 +26,11 @@ export default class MlAppActivityList extends React.Component{
       });
     }
   }
+  addActivity() {
+    let profileId = FlowRouter.getParam('profileId');
+    console.log(profileId)
+    FlowRouter.go('/app/calendar/manageSchedule/'+profileId+'/createActivity');
+  }
 
   render(){
     return (
@@ -35,7 +40,7 @@ export default class MlAppActivityList extends React.Component{
           <div className="col-lg-12" id="show">
             <div className="row">
               <div className="col-lg-2 col-md-4 col-sm-4">
-                <a href="/app/createActivity">
+                <a href=" " onClick={() => this.addActivity()}>
                   <div className="list_block notrans">
                     <div className="hex_outer"><span className="ml ml-plus "></span></div>
                     <h3>Add New</h3>

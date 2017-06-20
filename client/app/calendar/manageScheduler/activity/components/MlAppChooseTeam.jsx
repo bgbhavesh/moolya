@@ -8,7 +8,7 @@ var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar';
 import Moolyaselect from  '../../../../../commons/components/select/MoolyaSelect'
 import gql from 'graphql-tag'
-import {getTeamUsersActionHandler, updateActivityActionHandler} from '../actions/activityActionHandler'
+import {getTeamUsersActionHandler, updateActivityActionHandler, getActivityActionHandler} from '../actions/activityActionHandler'
 
 export default class MlAppChooseTeam extends React.Component{
   constructor(props){
@@ -21,10 +21,31 @@ export default class MlAppChooseTeam extends React.Component{
         team: [{
           users:[]
         }],
+        responseTeam:[{}]
       }
       this.fetchTeam.bind(this)
+    this.getDetails.bind(this)
 
   }
+
+  componentWillMount(){
+    this.getDetails()
+  }
+
+  async getDetails() {
+  let id = FlowRouter.getQueryParam('id')
+  // const resp = await getActivityActionHandler(id)
+    // if(resp) {
+    //   this.setState({responseTeam: resp.teams})
+    //   console.log(this.state.team)
+    //   let temp = [{}]
+    //   temp = this.state.responseTeam
+    //   // Object.isExtensible(temp);
+    //   this.setState({team:temp})
+    //   console.log(this.state.team)
+    // }
+}
+
   componentDidMount()
   {
 
@@ -151,6 +172,7 @@ export default class MlAppChooseTeam extends React.Component{
                                   isDynamic={true} placeholder="Select Branch Type"
                                   onSelect={that.SelectBranch.bind(that, id)}
                                   selectedValue={indi.branch}/>
+                    <br className="clearfix"/><br className="clearfix"/><br className="clearfix"/>
                   </form>
                 </div>
                 <div className="col-md-6 nopadding-right">
@@ -162,14 +184,16 @@ export default class MlAppChooseTeam extends React.Component{
                                     isDynamic={true} placeholder="Select Team Member"
                                     onSelect={that.SelectTeamMember.bind(that, id)}
                                     selectedValue={indi.communityType}/>
+                      <br className="clearfix"/><br className="clearfix"/><br className="clearfix"/>
                     </div>
                   </form>
                 </div>
               </div>
+              <div className="col-md-12 nopadding att_members" >
+                <ul className="users_list">
               {indi.users.map(function ( user, index ) {
                 return (
-                  <div className="col-md-12 nopadding att_members" >
-                    <ul className="users_list">
+
                       <li>
                         <a href="#">
                           <img src="/images/p_3.jpg" /><br />
@@ -178,10 +202,10 @@ export default class MlAppChooseTeam extends React.Component{
                           </div>
                         </a>
                       </li>
-                    </ul>
-                  </div>
                 )
               })}
+                </ul>
+              </div>
             </div>
           </div>
         </div>

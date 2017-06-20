@@ -89,6 +89,7 @@ query($activityId: String)  {
     userId
     profileId
     name
+    deliverable
     displayName
     isInternal
     isExternal
@@ -105,6 +106,16 @@ query($activityId: String)  {
      amount
      percentage
      derivedAmount
+    }
+    teams{
+      branch
+      communityType
+      users
+    }
+    conversation{
+      isAudio
+      isVideo
+      isMeetup
     }
     payment{
       amount

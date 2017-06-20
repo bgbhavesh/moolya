@@ -32,7 +32,10 @@ export default class MlAppCreateTeam extends React.Component{
       isVideo:false,
       isAudio:false,
       isMeetUp:false,
-      data:""
+      data:"",
+      mode:"",
+      online:false,
+      offline:false
     }
     this.radioAction = this.radioAction.bind(this)
     this.radioAction2 =  this.radioAction2.bind(this)
@@ -50,8 +53,48 @@ export default class MlAppCreateTeam extends React.Component{
     const resp = await getActivityActionHandler(id);
     console.log(resp)
     this.setState({data:resp})
-    this.setState({activityName:resp.name, displayName:resp.displayName})
-    console.log(this.state.activityName)
+    this.setState({activityName:resp.name, displayName:resp.displayName,hour:resp.duration.hours,
+      minute:resp.duration.minutes, isExternal:resp.isExternal,
+      isInternal: resp.isInternal, radioAction:resp.mode ,serviceCard:resp.isServiceCardElligible,
+      notes:resp.note,deliverables:resp.deliverable[0]
+      })
+    let industries = [];
+    resp.industryTypes.map(function(indi){
+      industries.push(indi)
+    })
+    this.setState({selectedIndustryType:industries})
+
+    if(this.state.radioAction === "online") {
+      this.setState({online: true, offline:false})
+    } else {
+      this.setState({online: false, offline:true})
+    }
+    if(resp.conversation) {
+      this.setState({isVideo:resp.conversation.isVideo,
+        isAudio:resp.conversation.isAudio,
+        isMeetUp:resp.conversation.isMeetup})
+      let temp = []
+      if (this.state.isVideo) {
+        temp.push("Video")
+      } else if (this.state.isAudio) {
+        temp.push("Audio")
+      } else if (this.state.isMeetUp) {
+        temp.push("Meetup")
+      } else if (this.state.isMeetUp & this.state.isAudio) {
+        temp.push("Meetup", "Audio")
+      } else if (this.state.isMeetUp & this.state.isVideo) {
+        temp.push("Meetup")
+        temp.push("Video")
+      } else if (this.state.isAudio & this.state.isVideo) {
+        temp.push("Audio", "Video")
+      } else {
+        temp.push("Audio", "Video","Meetup")
+      }
+      this.setState({conversationType: temp})
+    }
+
+
+      console.log(this.state.activityName)
     return resp;
   }
 
@@ -178,7 +221,7 @@ updateMinutes(e){
 
     let industryTypeQuery = gql`
     query{
-    data:fetchIndustries{label:industryName,value:_id}
+    data:fetchIndustries{label:industryName,value:industryName}
     }
     `
     return (
@@ -189,14 +232,14 @@ updateMinutes(e){
               <form>
 
                 <div className="form-group">
-                  <input className="form-control float-label" placeholder="Activity Name" defaultValue={this.state.data && this.state.data.activityName} onBlur={this.textFieldSaves.bind(this,"ActivityName")}/>
+                  <input className="form-control float-label" placeholder="Activity Name" value={this.state.activityName} onChange={this.textFieldSaves.bind(this,"ActivityName")}/>
                 </div>
                 <div className="form-group">
                   <div className="input_types">
-                    <input id="radio1" type="radio" name="radio" onChange={this.radioAction2} value="Internal"/><label htmlFor="radio1"><span><span></span></span>Internal</label>
+                    <input id="radio1" type="radio" name="radio" onChange={this.radioAction2} checked={this.state.isInternal} value="Internal"/><label htmlFor="radio1"><span><span></span></span>Internal</label>
                   </div>
                   <div className="input_types">
-                    <input id="radio2" type="radio" name="radio" onChange={this.radioAction2} value="External"/><label htmlFor="radio2"><span><span></span></span>External</label>
+                    <input id="radio2" type="radio" name="radio" onChange={this.radioAction2} checked={this.state.isExternal} value="External"/><label htmlFor="radio2"><span><span></span></span>External</label>
                   </div>
                   <br className="brclear"/>
                 </div>
@@ -207,7 +250,7 @@ updateMinutes(e){
                   </div>
                 </div> : <div></div>}
                 <div className="form-group">
-                  <textarea className="form-control float-label" placeholder="Notes" onBlur={this.textFieldSaves.bind(this,"Notes")}></textarea>
+                  <textarea className="form-control float-label" placeholder="Notes" value={this.state.notes} onChange={this.textFieldSaves.bind(this,"Notes")}></textarea>
                 </div>
                 <div className="form-group">
                   <label>Duration: &nbsp;
@@ -227,14 +270,14 @@ updateMinutes(e){
             <div className="form_bg">
               <form>
                 <div className="form-group">
-                  <input className="form-control float-label" placeholder="Display Name" defaultValue={this.state.displayName} onBlur={this.textFieldSaves.bind(this,"DisplayName")}/>
+                  <input className="form-control float-label" placeholder="Display Name" value={this.state.displayName} onChange={this.textFieldSaves.bind(this,"DisplayName")}/>
                 </div>
                 <div className="form-group">
                   <div className="input_types">
-                    <input id="Online" type="radio" name="radio" value="online" onChange={this.radioAction}/><label htmlFor="Online" ><span><span></span></span>Online</label>
+                    <input id="Online" type="radio" name="radio" value="online" checked={this.state.online} onChange={this.radioAction}/><label htmlFor="Online" ><span><span></span></span>Online</label>
                   </div>
                   <div className="input_types">
-                    <input id="Offline" type="radio" name="radio" value="offline" onChange={this.radioAction} /><label htmlFor="Offline"  ><span><span></span></span>Offline</label>
+                    <input id="Offline" type="radio" name="radio" value="offline" checked={this.state.offline} onChange={this.radioAction} /><label htmlFor="Offline"  ><span><span></span></span>Offline</label>
                   </div>
                   <br className="brclear"/>
                 </div>
@@ -242,7 +285,7 @@ updateMinutes(e){
                               labelKey={'label'} queryType={"graphql"} query={industryTypeQuery}
                               isDynamic={true} placeholder="Select Industry Type"
                               onSelect={this.SelectIndustry.bind(this)}
-                              selectedValue={this.state.selectedIndustryType}/>
+                              selectedValue={this.state.selectedIndustryType} value={this.state.selectedIndustryType}/>
                 <div className="form-group">
                   <div className="fileUpload mlUpload_btn">
                     <span>Profile Pic</span>
@@ -252,7 +295,7 @@ updateMinutes(e){
                 </div>
                 <div className="form-group">
                   <div className="input_types">
-                    <input id="check1" type="checkbox" name="check1" value="1" onChange={this.checkBoxHandler.bind(this)}/><label ><span><span></span></span>Eligible for service card</label>
+                    <input id="check1" type="checkbox" name="check1" value="1" checked={this.state.serviceCard} onChange={this.checkBoxHandler.bind(this)}/><label ><span><span></span></span>Eligible for service card</label>
                   </div>
                   <br className="brclear"/>
                 </div>
@@ -263,7 +306,7 @@ updateMinutes(e){
           <div className="panel panel-default">
             <div className="panel-heading">Deliverables</div>
             <div className="panel-body">
-              <textarea className="form-control" onBlur={this.textFieldSaves.bind(this,"Deliverables")}></textarea>
+              <textarea className="form-control" value={this.state.deliverables} onChange={this.textFieldSaves.bind(this,"Deliverables")}></textarea>
             </div>
           </div>
         </ScrollArea>

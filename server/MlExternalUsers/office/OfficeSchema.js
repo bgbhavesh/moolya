@@ -72,6 +72,12 @@ let myOfficeSchema = `
         location : [LocationCoordinates]
     }
     
+    type OfficeMembersWithUserId {
+       _id: String
+       name: String,
+       userId: String
+       profileImage: String
+    }
     
     input officeMembers{
        userId:String,
@@ -143,6 +149,7 @@ let myOfficeSchema = `
         fetchOfficeById(officeId:String):MyOffice
         fetchOfficeMember(memberId:String):OfficeMembers
         fetchOfficeMembers(officeId:String, isPrincipal:Boolean):[OfficeMembers]
+        fetchAllOfficeMembersWithUserId:[OfficeMembersWithUserId]
         findOfficeDetail(officeId:String):response
     }
     
@@ -169,6 +176,8 @@ let supportedApi = [
   {api: 'findOfficeDetail', actionName: 'READ', moduleName: "OFFICE"},
   {api: 'fetchOfficeMembers', actionName: 'READ', moduleName: "OFFICE"},
   {api: 'fetchOfficeMember', actionName: 'READ', moduleName: "OFFICE"},
+  {api: 'fetchAllOfficeMembersWithUserId', actionName: 'READ', moduleName: "OFFICE"},
+
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

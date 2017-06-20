@@ -9,13 +9,15 @@ export async function fetchTasksActionHandler (profileId) {
     query: gql`
     query($profileId:String) {
       fetchTasks(profileId: $profileId) {
+        taskId : _id
         displayName
       }
     }
     `,
     variables: {
       profileId:profileId
-    }
+    },
+    forceFetch: true
   });
   const activities = result.data.fetchTasks;
   return activities

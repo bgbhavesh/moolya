@@ -43,11 +43,20 @@ MlResolver.MlMutationResolver['createTask'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
-  let result = mlDBController.update('MlTask', {_id: args.taskId}, args.task, {'$set': 1}, context).fetch()
-  if (result) {
-    let code = 200;
-    let result = {userId: userId}
-    let response = new MlRespPayload().successPayload(result, code);
+  let task = mlDBController.findOne('MlTask', {_id: args.taskId}, context)
+  if(task){
+    for(key in args.taskDetails){
+      task[key] = args.taskDetails[key]
+    }
+    let result = mlDBController.update('MlTask', {_id: args.taskId}, args.taskDetails, {'$set': 1}, context)
+    if (result) {
+      let code = 200;
+      let response = new MlRespPayload().successPayload('Successfully Updated', code);
+      return response
+    }
+  }else {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('Require a valid Task', code);
     return response
   }
 

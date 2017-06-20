@@ -24,6 +24,7 @@ class MlAppTaskLanding extends Component {
   async saveTaskDetails() {
     let sendData = this.state.createData
     console.log(sendData)
+    let taskId = this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id')
     var response;
     switch (this.state.saveType) {
       case 'taskCreate': {
@@ -32,14 +33,16 @@ class MlAppTaskLanding extends Component {
       }
         break;
       case 'session': {
-        response = await createSessionActionHandler(sendData)
+        if (taskId)
+          response = await createSessionActionHandler(taskId, sendData)
+        else
+          toastr.error("Invalid Request");
         return response
       }
         break;
       default :
         console.log('save type required')
     }
-
   }
 
   async handleError(response) {
@@ -50,9 +53,10 @@ class MlAppTaskLanding extends Component {
   async handleSuccess(response) {
     console.log(response)
     if (response && response.success) {
-      FlowRouter.setQueryParams({id:response.result})
+      if (this.state.saveType == 'taskCreate')
+        FlowRouter.setQueryParams({id: response.result})
       toastr.success("Saved Successfully");
-    }else if(response && !response.success){
+    } else if (response && !response.success) {
       toastr.error(response.result);
     }
   }
@@ -60,12 +64,14 @@ class MlAppTaskLanding extends Component {
 
   getCreateDetails(details) {
     details['profileId'] = this.props.profileId
-    this.setState({createData: details, saveType:'taskCreate'});
+    let typeHandel = this.props.editMode ? "session" : "taskCreate"
+    this.setState({createData: details, saveType: typeHandel});
   }
 
   getSessionDetails(details) {
-    console.log(details)
-    this.setState({sessionData: details, saveType:'session'});
+    let obj = {session: details}
+    console.log(obj)
+    this.setState({createData: obj, saveType: 'session'});
   }
 
   render() {
@@ -99,10 +105,17 @@ class MlAppTaskLanding extends Component {
 
     const steps =
       [
-        {name: 'Create Task', component: <MlAppTaskCreate getCreateDetails={this.getCreateDetails.bind(this)}/>},
-        {name: 'Create Session',
+        {
+          name: 'Create Task',
+          component: <MlAppTaskCreate getCreateDetails={this.getCreateDetails.bind(this)}
+                                      taskId={this.props.editMode ? this.props.taskId : ''}/>
+        },
+        {
+          name: 'Create Session',
           component: <MlAppTaskSession getSessionDetails={this.getSessionDetails.bind(this)}
-                                       taskId={FlowRouter.getQueryParam('id')} profileId={this.props.profileId}/>
+                                       taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id') }
+                                       editMode={this.props.editMode}
+                                       profileId={this.props.profileId}/>
         },
         {name: 'T&C', component: <MlAppTaskStep3 />},
         {name: 'Payment', component: <MlAppTaskStep4 />},
@@ -112,7 +125,7 @@ class MlAppTaskLanding extends Component {
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
-          <MlAppScheduleHead type="task" />
+          <MlAppScheduleHead type="task"/>
           <div className="clearfix"/>
           <div className="col-md-12">
             <div className='step-progress'>

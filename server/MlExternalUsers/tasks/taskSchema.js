@@ -47,6 +47,7 @@
    }
 
    type Task {
+      _id: String
       userId: String
       profileId: String
       name: String
@@ -57,7 +58,7 @@
       noOfSession: Int
       sessionFrequency: String
       duration: Duration
-      isSessionCardEligible: Boolean
+      isServiceCardEligible: Boolean
       session: [Session]
       termsAndCondition: TermsAndCondition
       attachments: [Attachments]
@@ -125,7 +126,7 @@
 
    type Query{
           fetchTasks(profileId:String):[Task]
-          fetchTask(id:String):Task
+          fetchTask(taskId:String):Task
    }
 
    type Mutation {

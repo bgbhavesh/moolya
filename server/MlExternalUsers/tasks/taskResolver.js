@@ -4,7 +4,6 @@
 
 import MlResolver from "../../commons/mlResolverDef";
 import MlRespPayload from "../../commons/mlPayload";
-import MlUserContext from "../../MlExternalUsers/mlUserContext";
 var _ = require('lodash')
 
 MlResolver.MlQueryResolver['fetchTasks'] = (obj, args, context, info) => {
@@ -18,23 +17,19 @@ MlResolver.MlQueryResolver['fetchTasks'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchTask'] = (obj, args, context, info) => {
-  let result = mlDBController.findOne('MlTask', {_id: args.taskId}, context).fetch()
-
+  let result = mlDBController.findOne('MlTask', {_id: args.taskId}, context) || []
+  return result
 }
 
 MlResolver.MlMutationResolver['createTask'] = (obj, args, context, info) => {
   if (args.taskDetails) {
     let userId = context.userId
     let obj = args.taskDetails
-    let profile = new MlUserContext(userId).userProfileDetails(userId)
     obj['userId'] = userId
-    if (!_.isEmpty(profile)) {
-      obj['profileId'] = profile.profileId || ''
-    }
-    let result = mlDBController.insert('MlTask', args.taskDetails, context)
-    if (result) {
+    let res = mlDBController.insert('MlTask', args.taskDetails, context)
+    if (res) {
       let code = 200;
-      let result = {taskId: result}
+      let result = res
       let response = new MlRespPayload().successPayload(result, code);
       return response
     }
@@ -48,12 +43,28 @@ MlResolver.MlMutationResolver['createTask'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
-  let result = mlDBController.update('MlTask', {_id: args.taskId}, args.task, {'$set': 1}, context).fetch()
-  if (result) {
-    let code = 200;
-    let result = {userId: userId}
-    let response = new MlRespPayload().successPayload(result, code);
+  if(!_.isEmpty(args.taskDetails)){
+    let task = mlDBController.findOne('MlTask', {_id: args.taskId}, context)
+    if(task){
+      for(key in args.taskDetails){
+        task[key] = args.taskDetails[key]
+      }
+      let result = mlDBController.update('MlTask', {_id: args.taskId}, args.taskDetails, {'$set': 1}, context)
+      if (result) {
+        let code = 200;
+        let response = new MlRespPayload().successPayload('Successfully Updated', code);
+        return response
+      }
+    }else {
+      let code = 400;
+      let response = new MlRespPayload().errorPayload('Require a valid Task', code);
+      return response
+    }
+  }else{
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('Cannot save empty task', code);
     return response
   }
+
 
 }

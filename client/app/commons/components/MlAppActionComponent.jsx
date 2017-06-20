@@ -208,6 +208,12 @@ export default class MlAppActionComponent extends React.Component {
 
     let actionView = actionOptions.map(function (option, id) {
       let activeClass = '';
+      option.anchorClass='';
+      if(option.isDisabled&&option.isDisabled===true){
+          option.handler=null;
+          option.anchorClass='act_disable';
+          option.isDisabled=true;
+      }
       let action = _.find(config, {'actionName': option.actionName});
       for (let i = 0; i < config.length; i++) {
         if (config[i].actionName == option.actionName && option.showAction == true) {
@@ -222,7 +228,7 @@ export default class MlAppActionComponent extends React.Component {
       }else{
       return (
         <li key={id} className={activeClass}>
-          <a href="#" onClick={option.handler && option.handler.bind(this, option,null)}> <span
+          <a className={option.anchorClass} onClick={option.handler && option.handler.bind(this, option,null)}> <span
             className={action['iconClass']}></span>
             <br />{option.actionName}</a>
         </li>

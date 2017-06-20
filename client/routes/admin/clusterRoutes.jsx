@@ -48,6 +48,13 @@ adminSection.route('/clusters/:clusterId/communities', {
     // mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterCommunityListConfig}/>})
   }
 });
+adminSection.route('/clusters/:clusterId/history', {
+  name: 'cluster_history',
+  action(params){
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterHistoryConfig}/>})
+    // mount(AdminLayout,{adminContent:< MlViews viewMode={false} showInfinity={false} params={params} listConfig={mlClusterCommunityListConfig}/>})
+  }
+});
 adminSection.route('/clusters/:clusterId/communities/:communityId', {
   name: 'cluster_communities_communityDetails',
     action(params){

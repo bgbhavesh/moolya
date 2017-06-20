@@ -15,6 +15,17 @@ export default class InteractionsCounter extends React.Component{
     const response = await fetchInteractionsCountActionHandler({resourceType:this.props.resourceType,resourceId:this.props.resourceId,actionNames:actionNames});
     this.setState({data: response});
   }
+
+  compareQueryOptions(a, b) {return JSON.stringify(a) === JSON.stringify(b);};
+
+  async componentWillUpdate(nextProps, nextState) {
+    var actionNames=['like','connect','collaborate','favourite','view','partner','enquire'];
+    if(!this.compareQueryOptions(this.props.interactionAutoId,nextProps.interactionAutoId)){
+      const response = await fetchInteractionsCountActionHandler({resourceType:this.props.resourceType,resourceId:this.props.resourceId,actionNames:actionNames});
+      this.setState({data: response});
+    }
+  }
+
   componentDidMount()
   {
     $('.paperfold').paperfold({'toggle': $('.paperfold-toggle'), 'folds': 1});

@@ -156,7 +156,7 @@ let CoreModules = {
       userContextQuery = {}
     }else if(userProfile.hierarchyLevel == 3){
       let clusterIds = userProfile && userProfile.defaultProfileHierarchyRefId?userProfile.defaultProfileHierarchyRefId:[];
-      userContextQuery = {clusterId:{$in:clusterIds}}
+      userContextQuery = {clusterId:{$in:[clusterIds]}}
     }
     query = mergeQueries(userContextQuery,userFilterQuery, serverQuery);
 
@@ -217,7 +217,7 @@ let CoreModules = {
         /*else
           serverQuery={'userId':context.userId,'status':{'$in':['Pending','WIP']}};*/
         break;
-      case 'unauthorize':
+      case 'approved':
         //if(userProfile.roleName === "platformadmin")
           serverQuery={'status':"Approved"};
         /*else

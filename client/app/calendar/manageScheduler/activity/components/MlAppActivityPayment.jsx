@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar';
-import {updateActivityActionHandler} from '../actions/activityActionHandler'
+import {updateActivityActionHandler, getActivityActionHandler} from '../actions/activityActionHandler'
 
 export default class Step4 extends React.Component{
 constructor(props){
@@ -19,6 +19,23 @@ constructor(props){
     chargesPercentage:"",
     derivedValue:0,
     discountAmountField:true
+  }
+  this.getDetails.bind(this)
+}
+
+componentWillMount() {
+ this.getDetails()
+}
+
+async getDetails() {
+  let id = FlowRouter.getQueryParam('id')
+  const resp = await getActivityActionHandler(id)
+  if(resp) {
+    this.setState({amountToPay:resp.payment.amount,discountAmount:resp.payment.discountAmount,
+      discountPercentage:resp.payment.discountPercentage,status:resp.payment.isTaxInclusive,
+      promo:resp.payment.isPromoCodeApplicable, facilitationAmount:resp.facilitationCharge.amount,
+      derivedValue:resp.facilitationCharge.derivedAmount,facilitationPercentage:resp.facilitationCharge.percentage
+    })
   }
 }
 
@@ -214,7 +231,7 @@ constructor(props){
     let payment = {
       amount: this.state.amountToPay,
       isDiscount: this.state.discount ? this.state.discount : false,
-      // discountAmount: this.state.discountAmount?this.state.discountAmount : 0,
+      discountAmount: this.state.discountAmount ? parseInt(this.state.discountAmount) : 0,
       discountPercentage: this.state.discountPercentage ? this.state.discountPercentage : 0,
       isTaxInclusive: this.state.status,
       isPromoCodeApplicable: this.state.promo
@@ -230,6 +247,7 @@ constructor(props){
     }
 console.log(payment)
     const response = await updateActivityActionHandler(id,Details)
+    this.getDetails();
     return response;
   }
 
@@ -269,17 +287,17 @@ console.log(payment)
               </div>
               <div className="form-group">
                 <div className="input_types">
-                  <input id="radio1" type="radio" name="radio2" value="TaxInclusive" onChange={this.taxStatus.bind(this)}/><label htmlFor="radio1"><span><span></span></span>Tax Inclusive</label>
+                  <input id="radio1" type="radio" name="radio2" value="TaxInclusive" checked={this.state.status} onChange={this.taxStatus.bind(this)}/><label htmlFor="radio1"><span><span></span></span>Tax Inclusive</label>
                 </div>
                 <div className="input_types">
-                  <input id="radio2" type="radio" name="radio2" value="TaxExclusive" onChange={this.taxStatus.bind(this)}/><label htmlFor="radio2"><span><span></span></span>Tax Exclusive </label>
+                  <input id="radio2" type="radio" name="radio2" value="TaxExclusive" checked={!this.state.status} onChange={this.taxStatus.bind(this)}/><label htmlFor="radio2"><span><span></span></span>Tax Exclusive </label>
                 </div>
                 <br className="brclear"/>
               </div>
               <div className="form-group switch_wrap switch_names inline_switch">
                 <label>Is Applicable for PROMOCODE</label>
                 <span className="state_label">Yes</span><label className="switch nocolor-switch">
-                <input type="checkbox"  onChange={this.promoCode.bind(this)}/>
+                <input type="checkbox" checked={this.state.promo} onChange={this.promoCode.bind(this)}/>
                 <div className="slider"></div>
               </label>
                 <span className="state_label acLabel">No</span>

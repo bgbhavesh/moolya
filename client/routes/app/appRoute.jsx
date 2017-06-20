@@ -33,8 +33,10 @@ import {mlAppFunderConfig} from "../../app/funders/config/mlAppFunderConfig";
 import MlAppMyCalendar from "../../app/calendar/myCalendar/components/MlAppMyCalendar";
 import MlAppScheduleHead from "../../app/calendar/manageScheduler/activity/components/MlAppActivityList";
 import MlAppActivityList from "../../app/calendar/manageScheduler/activity/components/MlAppActivityList";
+import MlAppCreateTeam from "../../app/calendar/manageScheduler/activity/components/MlAppCreateTeam";
 import MlAppTaskList from "../../app/calendar/manageScheduler/task/components/MlAppTaskList";
 import MlAppTaskLanding from "../../app/calendar/manageScheduler/task/components/MlAppTaskLanding";
+import MlAppServiceList from '../../app/calendar/manageScheduler/service/components/MlAppServiceList'
 
 //profile
 
@@ -308,9 +310,32 @@ appSection.route('/calendar/manageSchedule/:profileId/createActivity', {
   }
 });
 
+
+appSection.route('/calendar/manageSchedule/:profileId/createService', {
+  name: 'calendar_manageSchedule',
+  action(){
+    mount(AppLayout, {appContent:<MlAppManageSchedule />, isCalenderMenu: true})
+  }
+});
+
+
+appSection.route('/calendar/manageSchedule/:profileId/editActivity?id=:id', {
+  name: 'calendar_manageSchedule',
+  action(params){
+    mount(AppLayout, {appContent:<MlAppCreateTeam />, isCalenderMenu: true})
+  }
+});
+
 appSection.route('/calendar/manageSchedule/:profileId/taskList', {
   name: 'calendar_manageSchedule',
   action(){
     mount(AppLayout, {appContent: <MlAppTaskList />, isCalenderMenu: true})
+  }
+});
+
+appSection.route('/calendar/manageSchedule/:profileId/serviceList', {
+  name: 'calendar_manageSchedule',
+  action(){
+    mount(AppLayout, {appContent: <MlAppServiceList />, isCalenderMenu: true})
   }
 });

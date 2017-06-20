@@ -6,7 +6,7 @@ import ScrollArea from 'react-scrollbar';
 import Moolyaselect from  '../../../../../commons/components/select/MoolyaSelect'
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-import { createActivityActionHandler , getActivityActionHandler}  from './../actions/activityActionHandler';
+import { createActivityActionHandler , getActivityActionHandler, updateActivityActionHandler}  from './../actions/activityActionHandler';
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 
 var Select = require('react-select');
@@ -38,7 +38,8 @@ export default class MlAppCreateTeam extends React.Component{
       mode:"",
       online:false,
       offline:false,
-      responsePic:""
+      responsePic:"",
+      editScreen: false
     }
     this.radioAction = this.radioAction.bind(this)
     this.radioAction2 =  this.radioAction2.bind(this)
@@ -53,6 +54,11 @@ export default class MlAppCreateTeam extends React.Component{
 
   async getDetails(){
     let id = FlowRouter.getQueryParam('id')
+    if(!id) {
+      this.setState({editScreen:false})
+    }else {
+      this.setState({editScreen:true})
+    }
     const resp = await getActivityActionHandler(id);
     console.log(resp)
     this.setState({data:resp})
@@ -235,7 +241,14 @@ updateMinutes(e){
       },
       imageLink:this.state.responsePic,
       isServiceCardElligible:this.state.serviceCard,
-      createdAt: " "
+    }
+    if(this.state.editScreen) {
+      let id = FlowRouter.getQueryParam('id')
+      let profileId = FlowRouter.Param('profileId')
+      const res = await updateActivityActionHandler(id,step1Details)
+      this.getDetails();
+      FlowRouter.go('/calendar/manageSchedule/'+profileId+'/editActivity/?id='+id)
+      return res;
     }
     const resp = await createActivityActionHandler(step1Details);
     if(resp) {

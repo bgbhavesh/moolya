@@ -35,6 +35,7 @@ import MlAppScheduleHead from "../../app/calendar/manageScheduler/activity/compo
 import MlAppActivityList from "../../app/calendar/manageScheduler/activity/components/MlAppActivityList";
 import MlAppTaskList from "../../app/calendar/manageScheduler/task/components/MlAppTaskList";
 import MlAppTaskLanding from "../../app/calendar/manageScheduler/task/components/MlAppTaskLanding";
+import MlAppInternalTask from "../../app/internalTask/components/MlAppInternalTask";
 
 //profile
 
@@ -314,3 +315,11 @@ appSection.route('/calendar/manageSchedule/:profileId/taskList', {
     mount(AppLayout, {appContent: <MlAppTaskList />, isCalenderMenu: true})
   }
 });
+
+appSection.route('/task', {
+  name: 'my_task',
+  action(){
+    mount(AppLayout, {appContent: <MlAppInternalTask />})
+  }
+});
+

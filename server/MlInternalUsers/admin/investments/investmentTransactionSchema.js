@@ -30,6 +30,7 @@ let investments = `
     input stageActions{
         actionId:String,
         actionType:String,
+        actionName:String,
         isActive:Boolean
     }
     
@@ -124,6 +125,7 @@ let investments = `
     type StageActions{
         actionId:String,
         actionType:String,
+        actionName:String,
         isActive:Boolean
     }
     

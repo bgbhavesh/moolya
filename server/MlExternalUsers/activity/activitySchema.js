@@ -108,7 +108,7 @@ _id: String
       isDiscount: Boolean
       discountAmount: Int
       discountPercentage: Int
-      isTaxInclusive: Int
+      isTaxInclusive: Boolean
       isPromoCodeApplicable: Boolean
     }
     input teams {
@@ -122,8 +122,10 @@ _id: String
         minutes:Int
     }
     
-    input step2Activity{
+    input activityUpdate{
       teams:[teams]
+      payment: payment
+      facilitationCharge: facilitationCharge
     }
 
     input activity {
@@ -149,17 +151,19 @@ _id: String
     }
 
     type Query {
-        fetchActivities:[Activity]
+        fetchActivities(profileId:String):[Activity]
         fetchActivity(id:String):Activity
+        fetchActivities:[Activity]
+        fetchActivity(activityId:String):Activity
         getTeamMembers:[AvailableCommunities]
         getBranchDetails:[BranchType]
         getTeamUsers(Attributes:TeamName):[TeamUsers]
+        
     }
 
     type Mutation {
         createActivity(Details:activity):response
-        updateActivity(_id:String):response
-        updateStep2Activity(step2: step2Activity): response
+        updateActivity(activityId:String, Details:activity):response
     }
 `
 
@@ -174,7 +178,6 @@ let supportedApi = [
 
 
   {api:'createActivity', actionName:'CREATE', moduleName:"OFFICE"},
-  {api:'updateActivity', actionName:'UPDATE', moduleName:"OFFICE"},
-  {api:'updateStep2Activity', actionName:'UPDATE', moduleName:"OFFICE"}
+  {api:'updateActivity', actionName:'UPDATE', moduleName:"OFFICE"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -241,8 +241,8 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context
       let extendData = MlProfessions.findOne({_id: details.profession, industryId: details.industry})|| {};
       details.industry = extendData.industryName || "";
       details.profession = extendData.professionName || ""
-      let userPersonal = MlMasterSettings.findOne({_id:details.gender}) || {}
-      details.gender = userPersonal.genderInfo ? userPersonal.genderInfo.genderName : ''
+     // let userPersonal = MlMasterSettings.findOne({_id:details.gender}) || {}
+    //  details.gender = userPersonal.genderInfo ? userPersonal.genderInfo.genderName : ''
       let userEmp = MlMasterSettings.findOne({_id:details.employmentStatus}) || {}
       details.employmentStatus = userEmp.employmentTypeInfo ? userEmp.employmentTypeInfo.employmentName : ''
 

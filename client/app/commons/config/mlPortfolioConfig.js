@@ -7,24 +7,27 @@ import PopoverActionIcon from '../../appActions/components/PopoverActionIcon';
 import Connect from '../../appActions/components/Connect';
 import Inquiry from '../../appActions/components/Inquiry';
 import Review from '../../appActions/components/Review';
+import handleLikeAction from '../../../app/appActions/actions/likeActionHandler';
+import handleFollowAction from '../../../app/appActions/actions/followActionHandler';
+import handleFavouriteAction from '../../../app/appActions/actions/favouriteActionHandler';
 
-export const GenericPortfolioActions= [
-  {showAction: true,actionName: 'connect',hasPopOver:true,popOverTitle:'Connect Request',placement:'top',
-   target:'connectRequest',popOverComponent:<Connect />,actionComponent:<PopoverActionIcon />
-  },
-  {showAction: true,actionName: 'enquire',hasPopOver:true,popOverTitle:'Enquire',placement:'top',
-   target:'enquireRequest',popOverComponent:<Inquiry />,actionComponent:<PopoverActionIcon />
-  },
-  {showAction: true,actionName: 'review',hasPopOver:true,popOverTitle:'Review',placement:'top',
-   target:'reviewRequest',popOverComponent:<Review />,actionComponent:<PopoverActionIcon />
-  },
-  {showAction: true,actionName: 'save'},
-  {showAction: true,actionName: 'edit'},
-  {showAction: true,actionName: 'golive'}
+export const GenericPortfolioActionsConfig= [
+  {actionName: 'connect',actionType:'view',hasPopOver:true,popOverTitle:'Connect Request',placement:'top',target:'connectRequest',popOverComponent:<Connect />,actionComponent:PopoverActionIcon},
+  {actionName: 'like',actionType:'view',handleCallBack:handleLikeAction},
+  {actionName: 'favourite',actionType:'view',handleCallBack:handleFavouriteAction},
+  {actionName: 'follow',actionType:'view',handleCallBack:handleFollowAction},
+  {actionName: 'enquire',actionType:'view',hasPopOver:true,popOverTitle:'Enquire',placement:'top',target:'enquireRequest',popOverComponent:<Inquiry />,actionComponent:PopoverActionIcon},
+  {actionName: 'review',actionType:'view',hasPopOver:true,popOverTitle:'Review',placement:'top',target:'reviewRequest',popOverComponent:<Review />,actionComponent:PopoverActionIcon},
+  {actionName: 'comment',actionType:'view'},
+  {actionName: 'partner',actionType:'view'},
+  {actionName: 'collaborate',actionType:'view'},
+  {actionName: 'save',actionType:'edit'},
+  {actionName: 'edit',actionType:'edit'},
+  {actionName: 'golive',actionType:'edit'}
 ];
 
 export const GenericPortfolioAccordion= {id:'portfolioAccordion',
-  panelItems:[{'title':'Related',isText:true,contentComponent:'upcoming'},
+  panelItems:[//{'title':'Related',isText:true,contentComponent:'upcoming',style:{'background': '#273545'}},
               {'title':'Actions',isText:false,contentComponent:<MlAppActionComponent  />}]
     };
 

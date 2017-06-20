@@ -149,7 +149,7 @@ class MlAddSubChapter extends React.Component {
       if (_.isEmpty(data.moolyaSubChapterAccess)) {
         data = _.omit(data, 'moolyaSubChapterAccess')
       }
-      const response = await addSubChapterActionHandler(data)
+      const response = await addSubChapterActionHandler(this.props.clusterId, this.props.chapterId, data)
       return response;
     } else {
       toastr.error('Sub-Chapter Name is required')

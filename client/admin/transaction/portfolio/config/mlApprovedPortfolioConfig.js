@@ -54,7 +54,7 @@ const mlApprovedPortfolioTableConfig=new MlViewer.View({
       handler: (data)=>{
 
         if(data && data.id){
-          FlowRouter.go("/admin/transactions/editRequests/"+data.id);
+          FlowRouter.go("/admin/transactions/portfolio/editRequests/"+data.id+"/"+data.communityType);
         } else{
           toastr.error("Please select a record");
         }

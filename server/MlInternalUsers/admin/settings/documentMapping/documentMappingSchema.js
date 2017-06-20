@@ -107,7 +107,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],DocumentMapping]);
 let supportedApi = [
   {api:'findDocument', actionName:'READ', moduleName:"DOCUMENTMAPPING"},
   {api:'findDocuments', actionName:'READ', moduleName:"DOCUMENTMAPPING"},
-  {api:'findProcessDocuments', actionName:'READ', moduleName:"DOCUMENTMAPPING"},
+  {api:'findProcessDocuments', actionName:'READ', moduleName:"DOCUMENTMAPPING", isWhiteList:true},
   {api:'fetchKycDocProcessMapping', actionName:'READ', moduleName:"DOCUMENTMAPPING"},
   {api:'createDocument', actionName:'CREATE', moduleName:"DOCUMENTMAPPING"},
   {api:'updateDocument', actionName:'UPDATE', moduleName:"DOCUMENTMAPPING"}

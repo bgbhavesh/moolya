@@ -35,7 +35,7 @@ adminSection.route('/chapters/:clusterId/:chapterId/subChapters', {
 adminSection.route('/chapters/:clusterId/:chapterId/:subChapterId/:subChapterName/subChapterDetails', {
   name: 'chapter_subChapterDetails',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,adminContent:< MlSubChapterDetails params={params.subChapterId} clusterId={params.clusterId} chapterId={params.chapterId}  />})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,adminContent:< MlSubChapterDetails params={params.subChapterId} clusterId={params.clusterId} chapterId={params.chapterId}/>})
   }
 });
 

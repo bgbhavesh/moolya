@@ -4,12 +4,16 @@
 import gql from 'graphql-tag'
 import {client} from '../../core/apolloConnection';
 
-export async function addSubChapterActionHandler(subChapterDetails) {
+export async function addSubChapterActionHandler(ClusterId, ChapterId, subChapterDetails) {
+  let clusterId = ClusterId
+  let chapterId = ChapterId
   let subChapter = subChapterDetails;
   const result = await client.mutate({
     mutation: gql`
-    mutation  ($subChapter:subChapterObject, $moduleName:String, $actionName:String){
+    mutation  ($clusterId:String, $chapterId:String, $subChapter:subChapterObject, $moduleName:String, $actionName:String){
         createSubChapter(
+          clusterId:$clusterId,
+          chapterId:$chapterId,
           subChapter:$subChapter,
           moduleName:$moduleName,
           actionName:$actionName
@@ -21,6 +25,8 @@ export async function addSubChapterActionHandler(subChapterDetails) {
       }
     `,
     variables: {
+      clusterId:clusterId,
+      chapterId:chapterId,
       subChapter:subChapter,
       moduleName:"SUBCHAPTER",
       actionName:"CREATE"

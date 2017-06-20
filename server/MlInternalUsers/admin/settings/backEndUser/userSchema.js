@@ -481,7 +481,7 @@ let BackEndUser = `
         fetchUserRoles(userId:String):[contextRoles]
         fetchAssignedUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String,subChapterName:String): [BackendUsers]
         fetchUsersBysubChapterDepSubDep(clusterId:String, chapterId:String, subChapterId:String): [BackendUsers]
-        fetchsubChapterUserDepSubDep(userId:String, subChapterId:String):[dep]  
+        fetchsubChapterUserDepSubDep(userId:String, clusterId:String, chapterId:String, subChapterId:String):[dep]  
         fetchAssignedAndUnAssignedUsers(clusterId:String, chapterId:String, subChapterId:String, communityId:String,subChapterName:String): [BackendUsers]
         fetchUsersForDashboard(clusterId:String, chapterId:String, subChapterId:String, userType:String,offset: Int,limit:Int,fieldsData:[GenericFilter]): SearchResp
         fetchUserTypeFromProfile:String
@@ -508,7 +508,7 @@ let supportedApi = [
     {api:'fetchUsersBysubChapterDepSubDep', actionName:'READ', moduleName:"USERS"},
     {api:'fetchsubChapterUserDepSubDep', actionName:'READ', moduleName:"USERS"},
     {api:'fetchAssignedAndUnAssignedUsers', actionName:'READ', moduleName:"USERS"},
-    {api:'fetchUsersForDashboard', actionName:'READ', moduleName:"USERS"},
+    {api:'fetchUsersForDashboard', actionName:'READ', moduleName:"USERS", isWhiteList:true},
     {api:'fetchUserTypeFromProfile', actionName:'READ', isWhiteList: true, moduleName:"USERS"},
     {api:'fetchMapCenterCordsForUser', actionName:'READ', isWhiteList: true, moduleName:"USERS"},
     {api:'fetchAddressBookInfo', actionName:'READ', moduleName:"USERS", isWhiteList: true},

@@ -270,8 +270,10 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
 
   async findUserDepartments() {
     let userId = this.props.userId;
+    let clusterId =  this.props.clusterId
+    let chapterId =  this.props.chapterId
     let subChapterId = this.props.subChapterId;
-    const response = await findUserDepartmentypeActionHandler(userId, subChapterId);
+    const response = await findUserDepartmentypeActionHandler(userId, clusterId, chapterId, subChapterId);
     let data = response ? response : []
     this.setState({roleForm: data});
     this.rolesArrayCreate(data, this.props.assignedRoles)

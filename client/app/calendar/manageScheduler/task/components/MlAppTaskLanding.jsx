@@ -8,7 +8,7 @@ import MlAccordion from "../../../../commons/components/MlAccordion";
 import StepZilla from "../../../../../commons/components/stepzilla/StepZilla";
 import MlAppTaskCreate from "./MlAppTaskCreate";
 import MlAppTaskSession from "./MlAppTaskSession";
-import MlAppTaskStep3 from "./MlAppTaskStep3";
+import MlAppTaskConditions from "./MlAppTaskConditions";
 import MlAppTaskStep4 from "./MlAppTaskStep4";
 import MlAppTaskStep5 from "./MlAppTaskStep5";
 
@@ -32,7 +32,7 @@ class MlAppTaskLanding extends Component {
         return response
       }
         break;
-      case 'session': {
+      case 'taskUpdate': {
         if (taskId)
           response = await createSessionActionHandler(taskId, sendData)
         else
@@ -55,7 +55,7 @@ class MlAppTaskLanding extends Component {
     if (response && response.success) {
       if (this.state.saveType == 'taskCreate')
         FlowRouter.setQueryParams({id: response.result})
-      toastr.success("Saved Successfully");
+      toastr.success("Saved Successfully move to next step");
     } else if (response && !response.success) {
       toastr.error(response.result);
     }
@@ -64,14 +64,19 @@ class MlAppTaskLanding extends Component {
 
   getCreateDetails(details) {
     details['profileId'] = this.props.profileId
-    let typeHandel = this.props.editMode ? "session" : "taskCreate"
+    let typeHandel = this.props.editMode ? "taskUpdate" : "taskCreate"
     this.setState({createData: details, saveType: typeHandel});
   }
 
   getSessionDetails(details) {
     let obj = {session: details}
     console.log(obj)
-    this.setState({createData: obj, saveType: 'session'});
+    this.setState({createData: obj, saveType: 'taskUpdate'});
+  }
+
+  getConditionDetails(details) {
+    console.log(details)
+    this.setState({createData: details, saveType: 'taskUpdate'});
   }
 
   render() {
@@ -117,7 +122,10 @@ class MlAppTaskLanding extends Component {
                                        editMode={this.props.editMode}
                                        profileId={this.props.profileId}/>
         },
-        {name: 'T&C', component: <MlAppTaskStep3 />},
+        {name: 'T&C',
+          component: <MlAppTaskConditions getConditionDetails={this.getConditionDetails.bind(this) }
+                                          taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id') }/>
+        },
         {name: 'Payment', component: <MlAppTaskStep4 />},
         {name: 'History', component: <MlAppTaskStep5 />}
       ]

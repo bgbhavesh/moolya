@@ -68,13 +68,13 @@ export default class MlAppTaskSession extends Component {
     this.setState({sessionData: data}, function () {
       this.sendSessionDataToParent()
     })
-    let dataList = this.state.sessionDataList  //for list of activities proceed to list view
-    let cloneBackUpList = _.cloneDeep(dataList);
-    let specificDataList = cloneBackUpList[id]
-    specificDataList.activities = selectedValue
-    dataList.splice(id, 1);
-    dataList.splice(id, 0, specificDataList);
-    this.setState({sessionDataList: dataList})
+    // let dataList = this.state.sessionDataList  //for list of activities proceed to list view
+    // let cloneBackUpList = _.cloneDeep(dataList);
+    // let specificDataList = cloneBackUpList[id]
+    // specificDataList.activities = selectedValue
+    // dataList.splice(id, 1);
+    // dataList.splice(id, 0, specificDataList);
+    // this.setState({sessionDataList: dataList})
   }
   handelBlur(id, e){
     let name = e.target.name;

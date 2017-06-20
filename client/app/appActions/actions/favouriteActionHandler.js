@@ -25,6 +25,7 @@ export async function favouriteActionHandler(details) {
   const resp = result.data.markFavourite;
   if (resp.success) {
     toastr.success("user marked as favourite");
+    return resp;
   }
   return null;
 }

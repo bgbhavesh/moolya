@@ -112,12 +112,12 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
         return;
       }
 
-      const tokenValue = getCookie(req.headers.cookie, '_csrf');
+      /*const tokenValue = getCookie(req.headers.cookie, '_csrf');
       var isValid = tokens.verify(secret, tokenValue)
       if(!isValid){
           res.json({unAuthorized:true,message:"Not Authorized"})
           return;
-      }
+      }*/
       var isAut = mlAuthorization.authChecker({req, context})
       if(!isAut){
           res.json({unAuthorized:true,message:"Not Authorized"})

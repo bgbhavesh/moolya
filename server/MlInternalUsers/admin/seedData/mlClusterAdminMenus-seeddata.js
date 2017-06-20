@@ -214,7 +214,7 @@ if(Meteor.isServer){
             "subMenusId":"cluster",
             "subMenuMappingId":"cluster_assignusers"
           },
-          {
+         /* {
             "link" : "/admin/clusters/history",
             "name" : "History",
             "uniqueId" : "cluster_history",
@@ -225,7 +225,7 @@ if(Meteor.isServer){
             "dynamicLinkHandler" : "",
             "subMenusId":"cluster",
             "subMenuMappingId":"cluster_history"
-          }
+          }*/
         ]
 
       },

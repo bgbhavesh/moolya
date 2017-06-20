@@ -11,6 +11,12 @@ export async function fetchActivitiesActionHandler (profileId) {
       fetchActivities(profileId: $profileId) {
         displayName
         imageLink
+        mode
+        _id
+        duration {
+          hours
+          minutes
+        }
       }
     }
     `,

@@ -12,7 +12,7 @@ var FontAwesome = require('react-fontawesome');
 export default class MlAppTaskSession extends Component {
   constructor(props) {
     super(props);
-    this.state = {loading: true, data: {}, sessionData: []};
+    this.state = {loading: true, sessionData: [], sessionDataList:[]};
     this.findTaskDetails.bind(this);
     return this;
   }
@@ -25,21 +25,26 @@ export default class MlAppTaskSession extends Component {
   async findTaskDetails() {
     let taskId = this.props.taskId
     var response = await findTaskActionHandler(taskId);
-    console.log(response)
-    if (response) {
-      let userSession = _.range(this.state.data ? this.state.data.noOfSession : 0)
+    if(response){
+      let userSession = _.range(response ? response.noOfSession : 0)
       let obj = {
-        duration: {
-          hours: '',
-          minutes: ''
-        },
+        duration: {hours: 0,minutes: 0},
         activities: []
       }
       let sessionData = []
       _.each(userSession, function (item, value) {
         sessionData.push(obj)
       })
-      this.setState({loading: false, data: response, sessionData: sessionData});
+
+      if (response && !this.props.editMode) {
+        this.setState({loading: false, sessionData: sessionData, sessionDataList:sessionData});
+      }else{
+        if(_.isEmpty(response.session)){
+          this.setState({loading: false, sessionData: sessionData});
+        }else {
+          this.setState({loading: false, sessionData: response.session});
+        }
+      }
     }
     return response
   }
@@ -54,15 +59,35 @@ export default class MlAppTaskSession extends Component {
 
   optionsBySelectActivity(id, selectedValue, callback, selObject) {
     let data = this.state.sessionData
-    let specificData = data[id]
-    specificData.activities = _.concat(specificData.activities, selectedValue)
-
+    let cloneBackUp = _.cloneDeep(data);
+    let specificData = cloneBackUp[id]
+    // specificData.activities = _.uniq(_.concat(specificData.activities, selectedValue))
+    specificData.activities = _.uniq(selectedValue)
+    data.splice(id, 1);
+    data.splice(id, 0, specificData);
     this.setState({sessionData: data}, function () {
       this.sendSessionDataToParent()
     })
-    console.log(selObject);
+    let dataList = this.state.sessionDataList  //for list of activities proceed to list view
+    let cloneBackUpList = _.cloneDeep(dataList);
+    let specificDataList = cloneBackUpList[id]
+    specificDataList.activities = selectedValue
+    dataList.splice(id, 1);
+    dataList.splice(id, 0, specificDataList);
+    this.setState({sessionDataList: dataList})
   }
-
+  handelBlur(id, e){
+    let name = e.target.name;
+    let data = this.state.sessionData
+    let cloneBackUp = _.cloneDeep(data);
+    let specificData = cloneBackUp[id]
+    specificData.duration[name] = e.target.value
+    data.splice(id, 1);
+    data.splice(id, 0, specificData);
+    this.setState({sessionData: data}, function () {
+      this.sendSessionDataToParent()
+    })
+  }
   sendSessionDataToParent() {
     let data = this.state.sessionData;
     this.props.getSessionDetails(data);
@@ -104,79 +129,66 @@ export default class MlAppTaskSession extends Component {
         }
       }
     }`;
-    let userSession = _.range(this.state.data ? this.state.data.noOfSession : 0)
     const showLoader = this.state.loading;
     return (
       <div className="step_form_wrap step1">
         {/*{showLoader === true ? ( <MlLoader/>) : (*/}
           <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
           <div className="form_bg">
-          {userSession.map(function (session, id) {
+          {this.state.sessionData.map(function (session, id) {
             return (
               <div className="panel panel-default" key={id}>
                 <div className="panel-heading">
                   <div className="col-md-3 nopadding-left">Section 1</div>
                   <div className="col-md-3">
                     <div style={{'marginTop': '-4px'}}>
-                      <label>Duration: &nbsp; <input type="text" className="form-control inline_input"/> Hours
+                      <label>Duration: &nbsp; <input type="Number" defaultValue={session.duration?session.duration.hours:0} className="form-control inline_input" name="hours" min="0" onBlur={that.handelBlur.bind(that,id)}/> Hours
                         <input
-                          type="text" className="form-control inline_input"/> Mins </label>
+                          type="Number" className="form-control inline_input" defaultValue={session.duration?session.duration.minutes:0} name="minutes" onBlur={that.handelBlur.bind(that,id)} min="0"/> Mins </label>
                     </div>
                   </div>
                   <div className="col-md-3">
                     <div style={{'marginTop': '-12px'}}>
-                      <MoolyaSelect multiSelect={false} className="form-control float-label"
+                      <MoolyaSelect multiSelect={true} className="form-control float-label"
                                     valueKey={'value'}
                                     labelKey={'label'} queryType={"graphql"} query={query}
                                     queryOptions={queryOptions} isDynamic={true} placeholder="Select Activity"
                                     onSelect={that.optionsBySelectActivity.bind(that, id)}
+                                    selectedValue={session.activities}
                       />
                     </div>
                   </div>
                   <div className="col-md-3"></div>
                   &nbsp;
-                  <span className="see-more pull-right"><a href=""><FontAwesome name='plus'/>Add</a></span>
+                  {/*<span className="see-more pull-right"><a href=""><FontAwesome name='plus'/>Add</a></span>*/}
                 </div>
-                <div className="panel-body">
-                  <div className="swiper-container blocks_in_form">
-                    <div className="swiper-wrapper">
+                {session.activities.map(function (ss,idx) {
+                  return(
+                    <div className="panel-body" key={idx}>
+                      <div className="swiper-container blocks_in_form">
+                        <div className="swiper-wrapper">
+                          <div className="swiper-slide">
+                            <div className="list_block notrans funding_list">
+                              <div>
+                                <p className="online">mode online/offine</p>
+                                <span>Duration: <FontAwesome name='pencil'/></span><br />
+                                <div className="form-group">
+                                  <label><input type="text" className="form-control inline_input"/> Hours <input
+                                    type="text"
+                                    className="form-control inline_input"/>
+                                    Mins </label>
+                                </div>
 
-                      <div className="swiper-slide">
-                        <div className="list_block notrans funding_list">
-                          <div>
-                            <p className="offline">Offline</p>
-                            <span>Duration: <FontAwesome name='pencil'/></span><br />
-                            <div className="form-group">
-                              <label><input type="text" className="form-control inline_input"/> Hours <input
-                                type="text"
-                                className="form-control inline_input"/>
-                                Mins </label>
+                              </div>
+                              <h3>Activity display name</h3>
                             </div>
-
                           </div>
-                          <h3>name</h3>
-                        </div>
-                      </div>
 
-                      <div className="swiper-slide">
-                        <div className="list_block notrans funding_list">
-                          <div>
-                            <p className="online">mode online/offine</p>
-                            <span>Duration: <FontAwesome name='pencil'/></span><br />
-                            <div className="form-group">
-                              <label><input type="text" className="form-control inline_input"/> Hours <input
-                                type="text"
-                                className="form-control inline_input"/>
-                                Mins </label>
-                            </div>
-
-                          </div>
-                          <h3>Activity display name</h3>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
+                  )
+                })}
               </div>
             )
           })}

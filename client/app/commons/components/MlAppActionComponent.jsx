@@ -228,7 +228,7 @@ export default class MlAppActionComponent extends React.Component {
       }else{
       return (
         <li key={id} className={activeClass}>
-          <a href="#" className={option.anchorClass} onClick={option.handler && option.handler.bind(this, option,null)}> <span
+          <a className={option.anchorClass} onClick={option.handler && option.handler.bind(this, option,null)}> <span
             className={action['iconClass']}></span>
             <br />{option.actionName}</a>
         </li>

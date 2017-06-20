@@ -46,7 +46,7 @@ _id: String
       isDiscount: Boolean
       discountAmount: Int
       discountPercentage: Int
-      isTaxInclusive: Int
+      isTaxInclusive: Boolean
       isPromoCodeApplicable: Boolean
     }
 
@@ -104,12 +104,12 @@ _id: String
       isVideo: Boolean
       isMeetup: Boolean
     }
-    input payment {
-      amount: Int
-      isDiscount: Boolean
-      discountAmount: Int
-      discountPercentage: Int
-      isTaxInclusive: Boolean
+    input activityPayment {
+      amount: Int,
+      isDiscount: Boolean,
+      discountPercentage: Int,
+      discountAmount: Int,
+      isTaxInclusive: Boolean,
       isPromoCodeApplicable: Boolean
     }
     input teams {
@@ -125,7 +125,7 @@ _id: String
     
     input activityUpdate{
       teams:[teams]
-      payment: payment
+      payment: activityPayment
       facilitationCharge: facilitationCharge
     }
 
@@ -144,7 +144,7 @@ _id: String
       imageLink: String
       duration : duration
       deliverable: [String]
-      payment: payment
+      payment: activityPayment
       facilitationCharge: facilitationCharge
       teams: [teams]
       createdAt: Date

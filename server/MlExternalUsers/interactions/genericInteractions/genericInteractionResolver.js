@@ -7,6 +7,12 @@ import _ from 'lodash';
 import mlInteractionService from '../mlInteractionRepoService'
 
 
+var generateConnectionCode=function(u1,u2){
+  var connectionCode=u1+u2;
+  if(u1>u2)connectionCode=u2+u1;
+  if(u1===u2)connectionCode=null;
+  return connectionCode;
+}
 MlResolver.MlQueryResolver['fetchInteractionsCount'] = (obj, args, context, info) => {
   var counterList = [];
   var actionsList=args.actionNames||[];
@@ -46,4 +52,36 @@ MlResolver.MlQueryResolver['fetchInteractionsCount'] = (obj, args, context, info
     });
   }
   return counterList;
+}
+
+MlResolver.MlQueryResolver['fetchInteractionActionAttributes'] = (obj, args, context, info) => {
+  var actionsList = [];
+  var actionNames=args.actionNames||[];
+  var resourceId=args.resourceId;
+  var resourceType=args.resourceType;
+  var resourceDetails = mlInteractionService.fetchResourceBasedUserDetails(resourceType,resourceId, context);
+  if (context && context.userId) {
+    var connectionCode=generateConnectionCode(context.userId,resourceDetails.resourceOwnerId);
+    _.each(actionNames, function (action) {
+      switch(action){
+        case 'like':
+          let likesCount=MlLikes.find({resourceType:resourceType,resourceId:resourceId,isActive:true,userId:context.userId}).count();
+          actionsList.push({'actionName':'like',isDisabled:likesCount==1?true:false,isHidden:false});
+          break;
+        case 'connect':
+          let connectionCount=MlConnections.find({'isAccepted':true,'connectionCode':connectionCode}).count();
+          actionsList.push({'actionName':'connect',isDisabled:connectionCount==1?true:false,isHidden:false});
+          break;
+        case 'favourite':
+          let favouriteCount=MlConnections.find({'isAccepted':true,'connectionCode':connectionCode,'users':{'$elemMatch':{'userId':context.userId,'isFavourite':true}}}).count();
+          actionsList.push({'actionName':'favourite',isDisabled:favouriteCount==1?true:false,isHidden:false});
+          break;
+        case 'follow':
+          let followCount=MlFollowings.find({'isActive':true,'followerId':resourceDetails.resourceOwnerId,'followedBy':context.userId}).count();
+          actionsList.push({'actionName':'follow',isDisabled:followCount==1?true:false,isHidden:false});
+          break;
+      }
+    });
+  }
+  return actionsList;
 }

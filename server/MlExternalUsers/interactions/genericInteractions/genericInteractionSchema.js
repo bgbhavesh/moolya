@@ -10,8 +10,14 @@ let viewSchema = `
       actionName:String,
       count:Int  
     }
+    type ActionAttributes{
+      actionName:String,
+      isDisabled:Boolean,
+      isHidden:Boolean
+    }
     type Query{
-        fetchInteractionsCount(resourceId:String!,resourceType:String!,actionNames:[String]):[Counter]     
+        fetchInteractionsCount(resourceId:String!,resourceType:String!,actionNames:[String]):[Counter]
+        fetchInteractionActionAttributes(resourceId:String!,resourceType:String!,actionNames:[String]):[ActionAttributes]
     }
 `
 

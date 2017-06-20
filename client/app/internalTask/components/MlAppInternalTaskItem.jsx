@@ -13,7 +13,7 @@ export default class MlAppInternalTaskItem extends React.Component {
     this.state = {
       taskInfo: {
         docs:[],
-        attendees:[],
+        userInfo:[],
         community:{}
       },
       taskId:''
@@ -108,7 +108,7 @@ export default class MlAppInternalTaskItem extends React.Component {
                   <div className="panel panel-default">
                     <div className="panel-heading"> Date & Time: 27/08/16 | 10.40 AM </div>
                     <div className="panel-body">
-                      <p>Cleint: { task.resourceId }</p>
+                      <p>Cleint: { task.client }</p>
                       <p>Comunity: {task.community.name}</p>
                     </div>
                   </div>
@@ -117,14 +117,14 @@ export default class MlAppInternalTaskItem extends React.Component {
 
                     <div className="panel-body">
                       <ul className="users_list well well-sm">
-                        {task.attendees.map(function(user, index){
+                        {task.userInfo.map(function(user, index){
                           return(
                             <li key={index}>
                               <a href="#">
                                 <span></span>
-                                  <img src="/images/p_5.jpg" /><br />
+                                  <img src={ user.profileUrl ? user.profileUrl : "/images/p_5.jpg"} /><br />
                                     <div className="tooltiprefer">
-                                  <span>{user}</span>
+                                  <span>{user.name}</span>
                                 </div>
                               </a>
                             </li>

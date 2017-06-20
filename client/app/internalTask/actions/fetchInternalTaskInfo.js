@@ -19,8 +19,14 @@ export async function fetchInternalTaskInfo(taskId) {
           status
           note
           mode
+          client
           community {
             name
+          }
+          userInfo {
+            id
+            name
+            profileUrl
           }
         }
       }

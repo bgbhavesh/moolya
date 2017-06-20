@@ -38,6 +38,17 @@ MlResolver.MlQueryResolver['fetchInternalTaskById'] = (obj, args, context, info)
   let internalTask = [];
   if (args.internalTaskId) {
     internalTask = mlDBController.findOne('MlInternalTask', {_id: args.internalTaskId});
+    internalTask.stage = mlDBController.findOne('MlProcessStages', {_id: internalTask.stage}).displayName;
+    if(internalTask.community.code == "IDE"){
+      internalTask.client = mlDBController.findOne('MlIdeas', {portfolioId: internalTask.resourceId}).title;
+    }
+    internalTask.userInfo = mlDBController.find('users', {_id: { $in:internalTask.attendees }}).fetch().map(function(user){
+      return {
+        id: user._id,
+        name: user.profile.displayName,
+        profileUrl: user.profile.profileImage
+      };
+    });
     return internalTask;
   } else {
     let code = 400;

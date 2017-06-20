@@ -14,6 +14,12 @@ let internalTaskSchema = `
       name: String
     }
     
+    type InternalTaskUserInfo {
+      id: String,
+      name: String,
+      profileUrl: String
+    }
+    
     type InternalTask {
         _id: String
         userId:String
@@ -27,6 +33,8 @@ let internalTaskSchema = `
         status: String
         note: String
         mode: String
+        client: String
+        userInfo: [InternalTaskUserInfo]
     }
     
     input internalTaskCommunity {

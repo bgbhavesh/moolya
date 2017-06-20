@@ -2,8 +2,11 @@
  * Created by pankaj on 19/6/17.
  */
 
+import React from "react";
 import {createStageActionHandler} from '../actions/createStage';
 import {updateStageActionHandler} from '../actions/updateStage';
+import MlAssignTask from './MlAssignTask';
+import PopoverActionIcon from '../../appActions/components/PopoverActionIcon'
 
 module.exports = {
   assess: {
@@ -13,12 +16,13 @@ module.exports = {
       hasPopOver:true,
       popOverTitle:'Assess',
       placement:'top',
-      target:'assess',
-      actionComponent:'Hi',
-      popOverComponent:'<h1>Hi</h1>'//action.popOverComponent};
+      target:'assessTask',
+      popOverComponent: <MlAssignTask />,
+      actionComponent: PopoverActionIcon
     },
-    handler: async (ref) => {
+    handler: async (ref,zz,handlerCallback) => {
       console.log('Here', this, ref);
+      console.log('yea', zz, handlerCallback);
     }
   },
   like: {
@@ -45,11 +49,11 @@ module.exports = {
     config:{
       showAction: true,
       actionName: "wishlist",
+      customHandler: async (ref) => {
+        const currentStage = ref.props.currentStage;
+        changeStage(ref, currentStage, "wishlist");
+      }
     },
-    handler: async (ref) => {
-      const currentStage = ref.props.currentStage;
-      changeStage(ref, currentStage, "wishlist");
-    }
   },
   shortlist: {
     config:{

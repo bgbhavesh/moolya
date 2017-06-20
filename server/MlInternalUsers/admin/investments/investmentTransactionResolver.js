@@ -47,7 +47,6 @@ MlResolver.MlQueryResolver['fetchUserProcessSetup'] = (obj, args, context, info)
               let isFind = Actions.find(function (mlAction) {
                  return mlAction._id == action.actionId
               });
-              console.log('isFind',isFind);
               if(isFind){
                 action.actionName = isFind.name;
               }

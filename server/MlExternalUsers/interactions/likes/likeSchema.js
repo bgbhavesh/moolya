@@ -15,3 +15,8 @@ let likeSchema = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],likeSchema]);
+
+let supportedApi = [
+    {api:'fetchLikes', interactionType:"LIKE", userAction:"READ", systemAction:'READ', resource:"INTERACTION"},
+    {api:'likeRequest', interactionType:"LIKE", userAction:"ADD", systemAction:'CREATE', resource:"INTERACTION"}
+]

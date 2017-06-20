@@ -3,11 +3,25 @@ import ScrollArea from 'react-scrollbar'
 var FontAwesome = require('react-fontawesome');
 import {multipartASyncFormHandler} from '../../../../client/commons/MlMultipartFormAction'
 import MlLoader from '../../../commons/components/loader/loader'
+import passwordSAS_validate from '../../../../lib/common/validations/passwordSASValidator';
+import {resetPasswordActionHandler} from "../../../admin/settings/backendUsers/actions/resetPasswordAction";
+import {passwordVerification} from '../../../admin/profile/actions/addProfilePicAction'
+
+
 
 export default class MlAppMyProfile extends Component {
   constructor(props) {
     super(props)
-    this.state = {loading: true, data: {}};
+    this.state = {loading: true,
+      data: {},
+      password: '',
+      confirmPassword: '',
+      showPasswordFields: true,
+      passwordState: " ",
+      passwordValidation: false
+    };
+    this.checkExistingPassword.bind(this);
+    this.passwordCheck.bind(this);
   }
   componentDidMount() {
     $(function () {
@@ -26,6 +40,79 @@ export default class MlAppMyProfile extends Component {
   }
 
 
+  async checkExistingPassword() {
+    let pwd = this.refs.existingPassword.value;
+    var digest = CryptoJS.SHA256(pwd).toString()
+    console.log(digest);
+    this.passwordCheck(digest);
+  }
+
+  async resetPassword() {
+    if (this.state.showPasswordFields) {
+      let userDetails = {
+        userId: Meteor.userId(),
+        password: this.refs.confirmPassword.value
+      }
+      this.onCheckPassword();
+      if (this.state.pwdErrorMsg)
+        toastr.error("Confirm Password does not match with Password");
+      else {
+        const response = await resetPasswordActionHandler(userDetails);
+        // this.refs.id.value='';
+        this.refs.confirmPassword.value = '';
+        this.refs.password.value = '';
+        this.setState({"pwdErrorMsg": 'Password reset complete'})
+        toastr.success(response.result);
+      }
+    } else {
+      this.setState({
+        showPasswordFields: true
+      })
+    }
+    const resp = this.onFileUpload();
+    return resp;
+  }
+
+
+  onCheckPassword() {
+    let password = this.refs.password.value;
+    let confirmPassword = this.refs.confirmPassword.value;
+    if (confirmPassword != password) {
+      this.setState({"pwdErrorMsg": 'Confirm Password does not match with Password'})
+    } else {
+      this.setState({"pwdErrorMsg": ''})
+    }
+  }
+
+  async passwordCheck(digest)
+  {
+    const resp = await passwordVerification(digest)
+    console.log(resp);
+    if(resp.success){
+      this.setState({passwordState: 'Passwords match!'})
+      this.setState({passwordState: 'Passwords match!'})
+    }else{
+      this.setState({passwordState: 'Passwords do not match'})
+    }
+    return resp;
+  }
+
+  passwordValidation() {
+    let password = this.refs.password.value;
+    if (!password) {
+      this.setState({"pwdValidationMsg": ''})
+    } else {
+      let validate = passwordSAS_validate(password)
+      if (validate.isValid) {
+        this.setState({"pwdValidationMsg": ''})
+        this.setState({passwordValidation: true})
+      }
+      else if (typeof (validate) == 'object') {
+        this.setState({"pwdValidationMsg": validate.errorMsg})
+      }
+
+    }
+  }
 
   async onImageFileUpload(e){
     if(e.target.files[0].length ==  0)
@@ -101,14 +188,24 @@ export default class MlAppMyProfile extends Component {
                       <input type="text" placeholder="User Name" className="form-control float-label"
                              defaultValue={this.state.displayName}/>
                     </div>
-                    <div className="form-group">
-                      <input type="password" placeholder="Password" className="form-control float-label"/>
-                      <FontAwesome name='eye' className="password_icon"/>
-                    </div>
-                    <div className="form-group">
-                      <input type="password" placeholder="Confirm Password" className="form-control float-label"/>
-                      <FontAwesome name='eye' className="password_icon"/>
-                    </div>
+                    {this.state.showPasswordFields ?
+                      <div className="form-group">
+                        <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.passwordState}</text>
+                        <input type="Password" ref="existingPassword"  placeholder="Existing Password" className="form-control float-label" onBlur={this.checkExistingPassword.bind(this)}id="password"/>
+                        <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
+                      </div> : <div></div>}
+                    {this.state.showPasswordFields ?
+                      <div className="form-group">
+                        <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdValidationMsg}</text>
+                        <input type="Password" ref="password" defaultValue={this.state.password} onBlur={this.passwordValidation.bind(this)} placeholder="New Password" className="form-control float-label" id="password"/>
+                        <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
+                      </div> : <div></div>}
+                    {this.state.showPasswordFields ?
+                      <div className="form-group">
+                        <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdErrorMsg}</text>
+                        <input type="Password" ref="confirmPassword" defaultValue={this.state.confirmPassword} placeholder="Confirm New Password" className="form-control float-label" onBlur={this.onCheckPassword.bind(this)} id="confirmPassword"/>
+                        <FontAwesome name='eye-slash' className="password_icon ConfirmPassword hide_p"/>
+                      </div> : <div></div>}
                     <div className="form-group">
                       <input type="text" ref="dob" placeholder="Date Of Birth" className="form-control float-label"
                              defaultValue={this.state.dateOfBirth} disabled="true"/>

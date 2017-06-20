@@ -113,7 +113,7 @@
         noOfSession: Int
         sessionFrequency: String
         duration: duration
-        isSessionCardEligible: Boolean
+        isServiceCardEligible: Boolean
         session: [session]
         termsAndCondition: termsAndCondition
         attachments: [attachments]
@@ -124,13 +124,13 @@
    }
 
    type Query{
-          fetchTasks:[Task]
+          fetchTasks(profileId:String):[Task]
           fetchTask(id:String):Task
    }
 
    type Mutation {
-          createTask:response
-          updateTask:response
+          createTask(taskDetails:task):response
+          updateTask(taskId:String, taskDetails:task):response
    }
   `
 
@@ -140,7 +140,6 @@
   let supportedApi = [
     {api:'fetchTasks', actionName:'READ', moduleName:"OFFICE"},
     {api:'fetchTask', actionName:'READ', moduleName:"OFFICE"},
-
     {api:'createTask', actionName:'CREATE', moduleName:"OFFICE"},
     {api:'updateTask', actionName:'UPDATE', moduleName:"OFFICE"},
   ]

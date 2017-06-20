@@ -70,6 +70,7 @@ MlResolver.MlMutationResolver['createActivity'] = (obj, args, context, info) => 
 }
 
 MlResolver.MlMutationResolver['updateActivity'] = (obj, args, context, info) => {
+  args.Details.updatedAt = new Date();
   let result = mlDBController.update('MlActivity', {_id:args.activityId}, args.Details, {'$set':1}, context);
   if(result){
     let code = 200;

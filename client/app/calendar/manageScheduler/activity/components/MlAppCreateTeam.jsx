@@ -7,6 +7,8 @@ import Moolyaselect from  '../../../../../commons/components/select/MoolyaSelect
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import { createActivityActionHandler , getActivityActionHandler}  from './../actions/activityActionHandler';
+import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
+
 var Select = require('react-select');
 var options = [
   {value: 'Audio', label: 'Audio'},
@@ -35,7 +37,8 @@ export default class MlAppCreateTeam extends React.Component{
       data:"",
       mode:"",
       online:false,
-      offline:false
+      offline:false,
+      responsePic:""
     }
     this.radioAction = this.radioAction.bind(this)
     this.radioAction2 =  this.radioAction2.bind(this)
@@ -56,7 +59,7 @@ export default class MlAppCreateTeam extends React.Component{
     this.setState({activityName:resp.name, displayName:resp.displayName,hour:resp.duration.hours,
       minute:resp.duration.minutes, isExternal:resp.isExternal,
       isInternal: resp.isInternal, radioAction:resp.mode ,serviceCard:resp.isServiceCardElligible,
-      notes:resp.note,deliverables:resp.deliverable[0]
+      notes:resp.note,deliverables:resp.deliverable[0],responsePic:resp.imageLink
       })
     let industries = [];
     resp.industryTypes.map(function(indi){
@@ -74,21 +77,22 @@ export default class MlAppCreateTeam extends React.Component{
         isAudio:resp.conversation.isAudio,
         isMeetUp:resp.conversation.isMeetup})
       let temp = []
-      if (this.state.isVideo) {
-        temp.push("Video")
-      } else if (this.state.isAudio) {
-        temp.push("Audio")
-      } else if (this.state.isMeetUp) {
-        temp.push("Meetup")
-      } else if (this.state.isMeetUp & this.state.isAudio) {
+      if (this.state.isMeetUp & this.state.isAudio) {
         temp.push("Meetup", "Audio")
       } else if (this.state.isMeetUp & this.state.isVideo) {
         temp.push("Meetup")
         temp.push("Video")
       } else if (this.state.isAudio & this.state.isVideo) {
         temp.push("Audio", "Video")
-      } else {
+      } else if(this.state.isAudio & this.state.isVideo & this.state.isMeetUp) {
         temp.push("Audio", "Video","Meetup")
+      }
+      else  if (this.state.isVideo) {
+        temp.push("Video")
+      } else  if (this.state.isAudio) {
+        temp.push("Audio")
+      } else if (this.state.isMeetUp) {
+        temp.push("Meetup")
       }
       this.setState({conversationType: temp})
     }
@@ -159,6 +163,36 @@ updateMinutes(e){
     this.setState({serviceCard:value})
   }
 
+  async onFileUpload() {
+    let user = {
+      profile: {
+        InternalUprofile: {moolyaProfile: {profileImage: " "}}
+      }
+    }
+    let file = document.getElementById("profilePic").files[0];
+    if (file) {
+      let data = {moduleName: "PROFILE", actionName: "UPDATE", user: user}
+      let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
+      return response;
+    }
+  }
+
+  onFileUploadCallBack(resp) {
+    if (resp) {
+      console.log(resp);
+      this.setState({"uploadedProfilePic": resp});
+      var temp = $.parseJSON(this.state.uploadedProfilePic).result;
+      this.setState({"responsePic": temp});
+      this.showImage(temp);
+      return temp;
+    }
+  }
+  async showImage(temp) {
+    this.setState({responsePic: temp})
+    console.log(this.state.responsePic)
+  }
+
+
   conversation(val) {;
     let that = this
     let temp =[]
@@ -168,18 +202,20 @@ updateMinutes(e){
     that.setState({conversationType:temp})
     val.map(function(label) {
       if (label.value === "Video") {
-        that.setState({isVideo: true})
+        that.setState({isVideo: true, isAudio:false, isMeetUp:false })
       } else if (label.value === "Audio") {
-        that.setState({isAudio: true})
+        that.setState({isAudio: true, isVideo:false, isMeetUp:false })
       } else {
-        that.setState({isMeetUp: true})
+        that.setState({isMeetUp: true,isVideo:false, isAudio:false })
       }
     })
   }
 
   async saveDetails(){
+    let profileId = FlowRouter.getParam('profileId')
     let step1Details = {
       userId:" ",
+      profileId:profileId,
       name: this.state.activityName,
       displayName:this.state.displayName,
       isInternal:this.state.isInternal,
@@ -197,6 +233,7 @@ updateMinutes(e){
         isAudio:this.state.isAudio,
         isMeetUp:this.state.isMeetup
       },
+      imageLink:this.state.responsePic,
       isServiceCardElligible:this.state.serviceCard,
       createdAt: " "
     }
@@ -286,10 +323,13 @@ updateMinutes(e){
                               isDynamic={true} placeholder="Select Industry Type"
                               onSelect={this.SelectIndustry.bind(this)}
                               selectedValue={this.state.selectedIndustryType} value={this.state.selectedIndustryType}/>
+                <div className="previewImg ProfileImg">
+                  <img src={this.state.responsePic?this.state.responsePic:'/images/def_profile.png'}/>
+                </div>
                 <div className="form-group">
                   <div className="fileUpload mlUpload_btn">
                     <span>Profile Pic</span>
-                    <input type="file" className="upload" />
+                    <input type="file" className="upload" id="profilePic"  onChange={this.onFileUpload.bind(this)} />
                   </div>
                   <br className="brclear"/>
                 </div>

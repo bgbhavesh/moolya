@@ -9,12 +9,14 @@ import { check } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 import bodyParser from 'body-parser';
 import express from 'express';
+import _ from 'lodash';
 
 import getContext from '../commons/mlAuthContext'
 import MlResolver from '../commons/mlResolverDef';
 import MlSchemaDef from '../commons/mlSchemaDef';
 import MlRespPayload from '../commons/mlPayload';
-import _ from 'lodash';
+import mlserviceCardHandler from '../MlExternalUsers/userSubscriptions/serviceCardHandler'
+
 let cors = require('cors');
 let multipart 	= require('connect-multiparty'),
     fs 			    = require('fs'),
@@ -76,6 +78,12 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>
                ...customOptionsObject,
             };
             context = getContext({req});
+            if(!context||!context.userId){
+              res.json({unAuthorized:true,message:"Invalid Token"})
+              return;
+            }
+
+            let isValid = mlserviceCardHandler.validateResource(req.body.query, context);
             return {
                 schema  : executableSchema,
                 context : context

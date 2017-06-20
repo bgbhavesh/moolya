@@ -288,8 +288,8 @@ appSection.route('/calendar/manageSchedule', {
 
 appSection.route('/calendar/manageSchedule/:profileId/createTask', {
   name: 'calendar_manageSchedule',
-  action(){
-    mount(AppLayout, {appContent: <MlAppTaskLanding />, isCalenderMenu: true})
+  action(params){
+    mount(AppLayout, {appContent: <MlAppTaskLanding profileId={params.profileId}/>, isCalenderMenu: true})
   }
 });
 

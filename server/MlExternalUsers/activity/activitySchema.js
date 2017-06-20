@@ -61,6 +61,7 @@ _id: String
       }
 
     type Activity {
+      _id: String
       userId: String
       profileId: String
       name: String
@@ -152,8 +153,6 @@ _id: String
 
     type Query {
         fetchActivities(profileId:String):[Activity]
-        fetchActivity(id:String):Activity
-        fetchActivities:[Activity]
         fetchActivity(activityId:String):Activity
         getTeamMembers:[AvailableCommunities]
         getBranchDetails:[BranchType]
@@ -181,3 +180,5 @@ let supportedApi = [
   {api:'updateActivity', actionName:'UPDATE', moduleName:"OFFICE"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
+// fetchActivities:[Activity]
+// fetchActivity(id:String):Activity

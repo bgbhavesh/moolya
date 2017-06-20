@@ -129,8 +129,8 @@ MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
           if(hierarchyFound === true){
             return response;
           }
-
-        }else if(args.role.isActive===false){
+        }
+        if(args.role.isActive===false){
           //check hierarchy exist for this role.
           let resp = mlDBController.findOne('MlHierarchyAssignments', {
             $or: [{"finalApproval.role":id},

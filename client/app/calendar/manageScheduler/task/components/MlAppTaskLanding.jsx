@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {render} from "react-dom";
 import MlAppScheduleHead from "../../commons/components/MlAppScheduleHead";
 import formHandler from "../../../../../commons/containers/MlFormHandler";
-import {createTaskActionHandler} from '../actions/saveCalanderTask'
+import {createTaskActionHandler, createSessionActionHandler} from "../actions/saveCalanderTask";
 import MlAppActionComponent from "../../../../commons/components/MlAppActionComponent";
 import MlAccordion from "../../../../commons/components/MlAccordion";
 import StepZilla from "../../../../../commons/components/stepzilla/StepZilla";
@@ -24,8 +24,22 @@ class MlAppTaskLanding extends Component {
   async saveTaskDetails() {
     let sendData = this.state.createData
     console.log(sendData)
-    var response = await createTaskActionHandler(sendData)
-    return response
+    var response;
+    switch (this.state.saveType) {
+      case 'taskCreate': {
+        response = await createTaskActionHandler(sendData)
+        return response
+      }
+        break;
+      case 'session': {
+        response = await createSessionActionHandler(sendData)
+        return response
+      }
+        break;
+      default :
+        console.log('save type required')
+    }
+
   }
 
   async handleError(response) {
@@ -34,13 +48,24 @@ class MlAppTaskLanding extends Component {
   };
 
   async handleSuccess(response) {
-    if(response)
+    console.log(response)
+    if (response && response.success) {
+      FlowRouter.setQueryParams({id:response.result})
       toastr.success("Saved Successfully");
-  };
+    }else if(response && !response.success){
+      toastr.error(response.result);
+    }
+  }
 
 
   getCreateDetails(details) {
-    this.setState({createData: details});
+    details['profileId'] = this.props.profileId
+    this.setState({createData: details, saveType:'taskCreate'});
+  }
+
+  getSessionDetails(details) {
+    console.log(details)
+    this.setState({sessionData: details, saveType:'session'});
   }
 
   render() {
@@ -67,7 +92,7 @@ class MlAppTaskLanding extends Component {
           isText: false,
           style: {'background': '#ef4647'},
           contentComponent: <MlAppActionComponent
-            resourceDetails={{resourceId: 'sacsdvdsv', resourceType: 'portfolio'}}
+            resourceDetails={{resourceId: 'sacsdvdsv', resourceType: 'task'}}   //resource id need to be given
             actionOptions={appActionConfig}/>
         }]
     };
@@ -75,7 +100,10 @@ class MlAppTaskLanding extends Component {
     const steps =
       [
         {name: 'Create Task', component: <MlAppTaskCreate getCreateDetails={this.getCreateDetails.bind(this)}/>},
-        {name: 'Create Session', component: <MlAppTaskSession />},
+        {name: 'Create Session',
+          component: <MlAppTaskSession getSessionDetails={this.getSessionDetails.bind(this)}
+                                       taskId={FlowRouter.getQueryParam('id')} profileId={this.props.profileId}/>
+        },
         {name: 'T&C', component: <MlAppTaskStep3 />},
         {name: 'Payment', component: <MlAppTaskStep4 />},
         {name: 'History', component: <MlAppTaskStep5 />}

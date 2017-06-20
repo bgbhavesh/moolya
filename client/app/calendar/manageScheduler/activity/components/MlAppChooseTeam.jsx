@@ -8,7 +8,8 @@ var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar';
 import Moolyaselect from  '../../../../../commons/components/select/MoolyaSelect'
 import gql from 'graphql-tag'
-import {getTeamUsersActionHandler, updateActivityActionHandler} from '../actions/activityActionHandler'
+import {getTeamUsersActionHandler, updateActivityActionHandler, getActivityActionHandler} from '../actions/activityActionHandler'
+import _ from "lodash";
 
 export default class MlAppChooseTeam extends React.Component{
   constructor(props){
@@ -21,10 +22,37 @@ export default class MlAppChooseTeam extends React.Component{
         team: [{
           users:[]
         }],
+        responseTeam:[{}]
       }
       this.fetchTeam.bind(this)
+    // this.getDetails.bind(this)
 
   }
+
+  componentWillMount(){
+    this.getDetails()
+  }
+
+  async getDetails() {
+    let id = FlowRouter.getQueryParam('id')
+    if (id) {
+    const resp = await getActivityActionHandler(id)
+
+    if(resp) {
+      // this.setState({responseTeam: resp.teams})
+      let team = resp.teams && resp.teams.length ? resp.teams.map(function (data) {
+        return data;
+      }) : [{users: []}];  //this.state.responseTeam
+      console.log(team, Object.isExtensible(team));
+      this.setState({
+        team: team
+      });
+      // console.log(this.state.tea
+      // m)
+    }
+    }
+}
+
   componentDidMount()
   {
 
@@ -36,10 +64,14 @@ export default class MlAppChooseTeam extends React.Component{
 
   addComponent(){
     let team = this.state.team;
+    console.log(team,Object.isExtensible(team));
     team.push({
       users:[]
     });
-    this.setState({team:team});
+    console.log('team', team);
+    this.setState({
+      team:team
+    });
   }
 
   removeComponent(){
@@ -50,14 +82,30 @@ export default class MlAppChooseTeam extends React.Component{
 
   async saveDetails(){
 
-    console.log(this.props)
+    console.log(this.state.team)
     let team  = this.state.team;
+    let temp = [];
+      let x =[]
+      _.each(team, function (item)
+      {
+        for (var propName in item) {
+          if (item[propName] === null || item[propName] === undefined) {
+            delete item[propName];
+          }
+        }
+        let newItem = _.omit(item, "__typename");
+        x.push(newItem)
+      })
+    console.log(x)
+this.setState({team:x})
     let id = FlowRouter.getQueryParam('id')
     let teams = {
       teams:team,
     }
 
      const res = await updateActivityActionHandler(id,teams)
+    this.getDetails();
+
      return res;
   }
   async SelectTeamMember(index,value){
@@ -151,6 +199,7 @@ export default class MlAppChooseTeam extends React.Component{
                                   isDynamic={true} placeholder="Select Branch Type"
                                   onSelect={that.SelectBranch.bind(that, id)}
                                   selectedValue={indi.branch}/>
+                    <br className="clearfix"/><br className="clearfix"/><br className="clearfix"/>
                   </form>
                 </div>
                 <div className="col-md-6 nopadding-right">
@@ -162,14 +211,16 @@ export default class MlAppChooseTeam extends React.Component{
                                     isDynamic={true} placeholder="Select Team Member"
                                     onSelect={that.SelectTeamMember.bind(that, id)}
                                     selectedValue={indi.communityType}/>
+                      <br className="clearfix"/><br className="clearfix"/><br className="clearfix"/>
                     </div>
                   </form>
                 </div>
               </div>
+              <div className="col-md-12 nopadding att_members" >
+                <ul className="users_list">
               {indi.users.map(function ( user, index ) {
                 return (
-                  <div className="col-md-12 nopadding att_members" >
-                    <ul className="users_list">
+
                       <li>
                         <a href="#">
                           <img src="/images/p_3.jpg" /><br />
@@ -178,10 +229,10 @@ export default class MlAppChooseTeam extends React.Component{
                           </div>
                         </a>
                       </li>
-                    </ul>
-                  </div>
                 )
               })}
+                </ul>
+              </div>
             </div>
           </div>
         </div>

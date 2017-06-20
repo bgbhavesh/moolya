@@ -80,20 +80,78 @@ query  {
   return users
 }
 
-export async function getActivityActionHandler() {
+export async function getActivityActionHandler(id) {
+  const activityId = id;
   const result = await appClient.query({
     query: gql`
-query  {
-  fetchActivity{
+query($activityId: String)  {
+  fetchActivity(activityId:$activityId){
+    userId
     profileId
-    communityName
+    name
+    deliverable
     displayName
-    profileImage
+    isInternal
+    isExternal
+    mode
+    isServiceCardElligible
+    industryTypes
+    note
+    imageLink
+    duration{
+     hours
+     minutes
+    }
+    facilitationCharge{
+     amount
+     percentage
+     derivedAmount
+    }
+    teams{
+      branch
+      communityType
+      users
+    }
+    conversation{
+      isAudio
+      isVideo
+      isMeetup
+    }
+    payment{
+      amount
+      isDiscount
+      discountAmount
+      discountPercentage
+      isTaxInclusive
+      isPromoCodeApplicable
+    }
+    
   }
 }
-    `
+    `,
+    variables: {
+      activityId
+    }
   });
-  console.log(result)
   const users = result.data.fetchActivity;
   return users
 }
+
+
+// export async function getActivityDataActionHandler() {
+//   const result = await appClient.query({
+//     query: gql`
+// query  {
+//   fetchActivityData{
+//     profileId
+//     communityName
+//     displayName
+//     profileImage
+//   }
+// }
+//     `
+//   });
+//   console.log(result)
+//   const users = result.data.fetchActivity;
+//   return users
+// }

@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
-import StarRatings from '../../commons/components/starRatings'
+import StarRatings from '../../commons/components/StarRatings'
 
 
 

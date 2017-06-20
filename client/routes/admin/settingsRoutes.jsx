@@ -188,6 +188,7 @@ import MlHierarchyTabHistoryList from '../../admin/settings/hierarchy/hierarchyA
 
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 import MlSettingsTabHistoryList from '../../admin/settings/settingsAuditLog/components/MlSettingsTabHistoryList'
+import MlClusterSettingsTabHistoryList from '../../admin/settings/clusterSettingsAuditLog/components/MlClusterSettingsTabHistoryList'
 
 adminSection.route('/settings/departmentsList', {
   name: 'settings_DepartmentList',
@@ -1030,10 +1031,10 @@ adminSection.route('/settings/contactTypesList', {
   }
 });
 
-adminSection.route('/clusterSettings/history', {
-  name: 'clusterSettings_history',
+adminSection.route('/settings/cluster/history', {
+  name: 'clusterSettings_historyList',
   action(){
-    mount(AdminLayout,{adminContent:< MlContactTypesList/>})
+    mount(AdminLayout,{adminContent:< MlClusterSettingsTabHistoryList/>})
   }
 });
 

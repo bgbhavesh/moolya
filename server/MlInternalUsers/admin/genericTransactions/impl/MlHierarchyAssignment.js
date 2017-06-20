@@ -224,10 +224,22 @@ class MlHierarchyAssignment {
         return false;
       }
     } else if (this.checkSystemSystemDefinedRole(userRole) && !this.checkSystemSystemDefinedRole(requestRole)) {
+      if(userRole.hierarchyLevel>=requestRole.hierarchyLevel){
+        return true;
+      }else{
+        return false;
+      }
+    } else if (!this.checkSystemSystemDefinedRole(userRole) && this.checkSystemSystemDefinedRole(requestRole)) {
+      if(userRole.hierarchyLevel>=requestRole.hierarchyLevel){
+        return true;
+      }else{
+        return false;
+      }
+    }/*else if (this.checkSystemSystemDefinedRole(userRole) && !this.checkSystemSystemDefinedRole(requestRole)) {
       return true;
     } else if (!this.checkSystemSystemDefinedRole(userRole) && this.checkSystemSystemDefinedRole(requestRole)) {
       return false;
-    }
+    }*/
   }
 
   checkSystemSystemDefinedRole(userRole) {

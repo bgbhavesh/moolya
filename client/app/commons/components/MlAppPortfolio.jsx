@@ -196,7 +196,7 @@ class MlAppPortfolio extends React.Component{
   assignActionHandlerProxy(actionConfig){
     var action=actionConfig.actionName||'';
     var actionMap={'like':'interaction','connect':'interaction','favourite':'interaction','follow':'interaction','enquire':'interaction','review':'interaction','partner':'interaction','collaborate':'interaction'};
-    let actionName =actionMap[action]||'';
+    let actionName =actionMap[action]||action;
     switch(actionName){
       case 'interaction': actionConfig.handler=this.interactionActionHandler.bind(this); break;
       case 'save': actionConfig.handler=async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this)); break;

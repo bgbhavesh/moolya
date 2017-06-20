@@ -1,6 +1,6 @@
 import React from "react";
 import {render} from "react-dom";
-
+import StarRatings from '../../../app/commons/components/StarRatings';
 export default class Review extends React.Component {
 
   constructor(props) {
@@ -20,33 +20,9 @@ export default class Review extends React.Component {
                 <img src="/images/p_6.jpg" className="media-object"/>
               </div>
               <div className="media-body rating_xs">
-                <h4 className="media-heading">Media Top <span>27/03/2017, 08:10:15</span></h4>
+                <h4 className="media-heading">Media Top <span>16/06/2017, 08:10:15</span></h4>
                 <StarRatings/>
-                <p>Lorem ipsum...</p>
-              </div>
-            </div>
-          </li>
-          <li>
-            <div className="media">
-              <div className="media-left media-top">
-                <img src="/images/p_6.jpg" className="media-object"/>
-              </div>
-              <div className="media-body rating_xs">
-                <h4 className="media-heading">Media Top <span>27/03/2017, 08:10:15</span></h4>
-                <StarRatings/>
-                <p>Lorem ipsum...</p>
-              </div>
-            </div>
-          </li>
-          <li>
-            <div className="media">
-              <div className="media-left media-top">
-                <img src="/images/p_6.jpg" className="media-object"/>
-              </div>
-              <div className="media-body rating_xs">
-                <h4 className="media-heading">Media Top <span>27/03/2017, 08:10:15</span></h4>
-                <StarRatings/>
-                <p>Lorem ipsum...</p>
+                <p>Work in Progress..</p>
               </div>
             </div>
           </li>

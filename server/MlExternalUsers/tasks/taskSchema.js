@@ -125,7 +125,7 @@
 
    type Query{
           fetchTasks(profileId:String):[Task]
-          fetchTask(id:String):Task
+          fetchTask(taskId:String):Task
    }
 
    type Mutation {

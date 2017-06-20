@@ -16,10 +16,28 @@ MlResolver.MlQueryResolver['fetchInternalTask'] = (obj, args, context, info) => 
   }
 };
 
+MlResolver.MlQueryResolver['fetchMyInternalTask'] = (obj, args, context, info) => {
+  let internalTask = [];
+  if (context.userId) {
+    let query = {attendee: context.userId};
+    if(args.status && args.status.length) {
+      query['status']= {
+        '$in': args.status
+      }
+    };
+    internalTask = mlDBController.find('MlInternalTask', query).fetch();
+    return internalTask
+  } else {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload("Not a Valid user", code);
+    return response;
+  }
+};
+
 MlResolver.MlQueryResolver['fetchInternalTaskById'] = (obj, args, context, info) => {
   let internalTask = [];
   if (args.internalTaskId) {
-    internalTask = mlDBController.find('MlInternalTask', {_id: args.internalTaskId}).fetch();
+    internalTask = mlDBController.findOne('MlInternalTask', {_id: args.internalTaskId});
     return internalTask;
   } else {
     let code = 400;

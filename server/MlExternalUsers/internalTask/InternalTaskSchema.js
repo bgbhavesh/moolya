@@ -53,6 +53,7 @@ let internalTaskSchema = `
     type Query{
         fetchInternalTask:[InternalTask]
         fetchInternalTaskById(internalTaskId:String):InternalTask
+        fetchMyInternalTask(status:[String]):[InternalTask]
     }
     
     type Mutation{       
@@ -65,6 +66,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], internalTaskSchema]
 let supportedApi = [
   {api: 'fetchInternalTask', actionName: 'READ', moduleName: "OFFICE"},
   {api: 'fetchInternalTaskById', actionName: 'READ', moduleName: "OFFICE"},
+  {api: 'fetchMyInternalTask', actionName: 'READ', moduleName: "OFFICE"},
   {api: 'createInternalTask', actionName: 'CREATE', moduleName: "OFFICE"},
   {api: 'updateInternalTask', actionName: 'UPDATE', moduleName: "OFFICE"},
 ]

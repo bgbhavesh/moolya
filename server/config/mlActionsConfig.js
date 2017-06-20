@@ -1,7 +1,7 @@
 /**
  * Created by venkatasrinag on 27/1/17.
  */
-let actions = ["create", "read", "update", "delete", "like","connect","collaborate","favourite","view","partner","enquire","conversation","feedback","compare","share","download","upload","wishlist","favourite","edit","save","golive"]
+let actions = ["create", "read", "update", "delete", "like","connect","collaborate","favourite","view","partner","enquire","conversation","feedback","compare","share","download","upload","wishlist","favourite","edit","save","golive","comment"]
 
 // Meteor.startup(function () {
   for(i = 0; i < actions.length; i++){

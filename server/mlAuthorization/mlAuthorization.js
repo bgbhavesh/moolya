@@ -74,7 +74,7 @@ class MlAuthorization
             return false;
           }
 
-          isValidAuth = this.validteAuthorization(context.userId, moduleName, actionName, req.body, isContextSpecSearch);
+          isValidAuth = this.validteAuthorization(context.userId, moduleName, actionName, req.body.variables, isContextSpecSearch);
           return isValidAuth
     }
 
@@ -98,12 +98,12 @@ class MlAuthorization
   }
 
 
-    validteAuthorization(userId, moduleName, actionName, req, isContextSpecSearch)
+    validteAuthorization(userId, moduleName, actionName, variables, isContextSpecSearch)
     {
         check(userId, String)
         check(moduleName, String)
         check(actionName, String)
-        check(req, Object)
+        // check(variables, Object)
 
         let ret = false;
 
@@ -144,22 +144,9 @@ class MlAuthorization
                 var highestRole = _.find(user_roles , {hierarchyCode:userProfileDetails.hierarchyCode})
                 ret = this.validateRole(highestRole.roleId, module, action)
                 if(ret){
-                  return this.validateDataContext(highestRole, moduleName, actionName, req, isContextSpecSearch, hierarchy)
+                  return this.validateDataContext(highestRole, moduleName, actionName, variables, isContextSpecSearch, hierarchy)
                 }
-
-                let role;
-                var resp = null;
-                // _.each(user_roles, function (role)
-                // for(var i = 0; i < user_roles.length; i++){
-                //     ret = this.validateRole(user_roles[i].roleId, module, action)
-                //     if(ret){
-                //       resp = this.validateDataContext(user_roles[i], moduleName, actionName, req, isContextSpecSearch, hierarchy)
-                //       if(resp == true){
-                //         return resp
-                //       }
-                //     }
-                // }
-                return resp;
+                return ret;
             }
         }
         else if(user && user.profile && user.profile.isExternaluser == true){
@@ -169,363 +156,432 @@ class MlAuthorization
     }
 
     validateRole(roleId, accessModule, accessAction){
-        let ret = false;
-        let role = mlDBController.findOne('MlRoles', {_id: roleId})
-        if(role)
-        {
-            role.modules.map(function (module) {
-                if(module.moduleId == "all" || module.moduleId == accessModule._id){
-                    let actions = module.actions;
-                    actions.map(function (action) {
-                        if(action.actionId == "all" || action.actionId == accessAction._id || action.actionId == accessAction.code){
-                            ret = true;
-                            return;
-                        }
-                    })
-                }
-            })
-        }
-        return ret;
-    }
-
-    validateDataContext(roleDetails, moduleName, actionName, req, isContextSpecSearch)
-    {
-        switch (moduleName){
-
-      case 'CLUSTER':{
-        if(isContextSpecSearch && req.variables.context == null ){
-          return true;
-        }
-        if(roleDetails['clusterId'] && roleDetails['clusterId'] == req.variables['clusterId'] || (req.variables.context && roleDetails['clusterId'] == req.variables.context['clusterId'])){
-          return true
-        }
-      }
-        break;
-      case 'CHAPTER':
+      let ret = false;
+      let role = mlDBController.findOne('MlRoles', {_id: roleId})
+      if(role)
       {
-        if(isContextSpecSearch && req.variables.context){
-          if(roleDetails['clusterId'] == req.variables.context['clusterId']){
-            if(roleDetails['chapterId'] == 'all' || actionName == 'READ')
-              return true;
-            if(req.variables.context['chapterId'] == roleDetails['chapterId']){
-              return true;
-            }
+        role.modules.map(function (module) {
+          if(module.moduleId == "all" || module.moduleId == accessModule._id){
+            let actions = module.actions;
+            actions.map(function (action) {
+              if(action.actionId == "all" || action.actionId == accessAction._id || action.actionId == accessAction.code){
+                ret = true
+                return;
+              }
+            })
           }
-        }
-
-        if(req.variables['clusterId'] == roleDetails['clusterId']){
-          if(roleDetails['chapterId'] == 'all'){
-            return true;
-          }
-          if(req.variables['chapterId'] == roleDetails['chapterId']){
-            return true;
-          }
-        }
+        })
       }
-        break;
-
-            case 'SUBCHAPTER': {
-              if (isContextSpecSearch && req.variables.context) {
-                if (roleDetails['clusterId'] == req.variables.context['clusterId']) {
-                  if (roleDetails['chapterId'] == 'all')
-                    return true;
-                  if (req.variables.context['chapterId'] == roleDetails['chapterId']) {
-                    return true;
-                  }
-                }
-              }
-
-              if (actionName == "CREATE") {
-                // if ((roleDetails['clusterId'] == req.variables.subChapter['clusterId'] && roleDetails['chapterId'] == req.variables.subChapter['chapterId']) && hierarchy.level >= 2) {
-                //   return true
-                // }
-
-                if(roleDetails['clusterId'] == req.variables.subChapter['clusterId']){
-
-                  // cluster admin context
-                  if (roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == 'all' && roleDetails['communityId'] == 'all') {
-                    return true
-                  }
-
-                  // chapter admin context
-                  else if (roleDetails['chapterId'] == req.variables.subChapter['chapterId'] && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all') {
-                    return true
-                  }
-
-                }
-              }
-
-              if (actionName == "UPDATE") {
-                if(req.subChapterId){
-                  var subChapter = mlDBController.findOne('MlSubChapters', {"_id": req.subChapterId}, context);
-
-                  if(roleDetails['clusterId'] == subChapter['clusterId']){
-
-                    // cluster admin context
-                    if (roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == 'all' && roleDetails['communityId'] == 'all') {
-                      return true
-                    }
-
-                    // chapter admin context
-                    else if (roleDetails['chapterId'] == subChapter.chapterId && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all') {
-                      return true
-                    }
-                  }
-                }
-              }
-
-              if ((req.variables && roleDetails['clusterId'] == req.variables['clusterId'] && roleDetails['chapterId'] == req.variables['chapterId'])) {
-                return true
-              }
-
-              if (req.variables && (req.variables.subChapterId || req.variables.id)) {
-                var subChapterId = req.variables.subChapterId || req.variables.id;
-                var subChapter = mlDBController.findOne('MlSubChapters', {"_id": subChapterId}, context)
-                if (subChapter && roleDetails['clusterId'] == subChapter.clusterId) {
-                  // cluster admin context
-                  if (roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == 'all' && roleDetails['communityId'] == 'all') {
-                    return true
-                  }
-
-                  // chapter admin context
-                  else if (roleDetails['chapterId'] == subChapter.chapterId && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all') {
-                    return true
-                  }
-
-                  // sub chapter admin context
-                  else if (roleDetails['chapterId'] == subChapter.chapterId && roleDetails['subChapterId'] == subChapter.subChapterId && roleDetails['communityId'] == 'all') {
-                    return true
-                  }
-
-                  // community admin context
-                  else if (roleDetails['chapterId'] == subChapter.chapterId && roleDetails['subChapterId'] == subChapter.subChapterId && roleDetails['communityId'] == subChapter.communityId) {
-                    return true
-                  }
-
-                }
-                if (subChapter && roleDetails['clusterId'] == subChapter.clusterId && roleDetails['chapterId'] == subChapter.chapterId) {
-                  return true;
-                }
-              }
-            }
-            break;
-
-            case 'COMMUNITY':
-            {
-               return true
-            }
-            break;
-
-            case 'DEPARTMENT':
-            case 'SUBDEPARTMENT':
-            {
-                for(key in roleDetails){
-                    if(roleDetails[key] == req.variables.docId){
-                        return true
-                    }
-                }
-            }
-            break;
-            case 'USERS':{
-                  if(actionName == 'READ'){
-                      if(roleDetails['clusterId'] == req.variables['clusterId'])
-                      {
-                          // cluster admin context
-                          if(roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
-                              return true;
-                          }
-                          // chapter admin context
-                          else if(roleDetails['chapterId'] == req.variables['chapterId'] && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
-                             return true
-                          }
-
-                          // sub chapter admin context
-                          else if(roleDetails['chapterId'] == req.variables['chapterId'] && roleDetails['subChapterId'] == req.variables['subChapterId'] && roleDetails['communityId'] == 'all'){
-                            return true
-                          }
-
-                          // community admin context
-                          else if(roleDetails['chapterId'] == req.variables['chapterId'] && roleDetails['subChapterId'] == req.variables['subChapterId'] && roleDetails['communityId'] == 'all'){
-                            return true
-                          }
-
-                      }
-                      // For Dashboard Community Priming
-                      if(req.variables['clusterId'] == null || req.variables['userType']){
-                          return true
-                      }
-                      if(req.variables['subChapterId']){
-                        var subChapter = mlDBController.findOne('MlSubChapters', {"_id":req.variables.subChapterId}, context)
-                        if(subChapter && roleDetails['clusterId'] == subChapter.clusterId) {
-                          return true
-                        }
-                      }
-                  }
-                  // else if(actionName == 'UPDATE' && hierarchy.level==1){
-                  else if(actionName == 'UPDATE'){
-                    return true;
-                  }
-                  // else if(actionName == 'CREATE' && hierarchy.level==1){
-                  else if(actionName == 'CREATE'){
-                    return true;
-                  }
-
-            }
-            break;
-            case 'GLOBALSETTINGS':{
-              // if(actionName == 'CREATE' && hierarchy.level>=3){
-              if(actionName == 'CREATE'){
-                return true;
-              }
-              // else if(actionName == 'UPDATE' && hierarchy.level>=3){
-              else if(actionName == 'UPDATE'){
-                return true;
-              }
-              else if(actionName == 'READ'){
-                return true;
-              }
-            }
-            break;
-            case 'MASTERSETTINGS':{
-                // if(actionName == 'CREATE' && hierarchy.level>=3){
-                if(actionName == 'CREATE'){
-                  return true;
-                }
-                // else if(actionName == 'UPDATE' && hierarchy.level>=3){
-                else if(actionName == 'UPDATE'){
-                  return true
-                }
-                else if(actionName == 'READ'){
-                    return true;
-                }
-            }
-            break;
-          case 'REGISTRATION':{
-              if(actionName == 'CREATE' || isContextSpecSearch)
-                return true;
-
-              if(req.variables.registrationId){
-                    var registration = MlRegistration.findOne(req.variables.registrationId)
-                    if(!registration){
-                        return false;
-                    }
-
-                    if(roleDetails['clusterId'] == registration.registrationInfo.clusterId){
-                        // cluster admin context
-                        if(roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == 'all' && roleDetails['communityId'] == 'all'){
-                            return true
-                        }
-
-                        // chapter admin context
-                        else if(roleDetails['chapterId'] == registration.registrationInfo.chapterId && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
-                          return true
-                        }
-
-                        // sub chapter admin context
-                        else if(roleDetails['chapterId'] == registration.registrationInfo.chapterId && roleDetails['subChapterId'] == registration.registrationInfo.subChapterId && roleDetails['communityId'] == 'all'){
-                          return true
-                        }
-
-                        // community admin context
-                        else if(roleDetails['chapterId'] == registration.registrationInfo.chapterId && roleDetails['subChapterId'] == registration.registrationInfo.subChapterId && roleDetails['communityId'] == registration.registrationInfo.communityId){
-                          return true
-                        }
-                    }
-              }
-
-              if(actionName == 'READ')
-                return true;
-          }
-          break;
-          case 'ROLES':{
-            if(actionName == 'READ'){
-              return true;
-            }
-          }
-          break;
-          case 'TEMPLATES':{
-            if(actionName == 'READ'){
-              return true;
-            }
-          }
-          break;
-          case 'INTERNALREQUESTS':{
-            return true
-          }
-          break;
-          case 'INTERNALAPPROVEDREQUESTS':{
-            return true
-          }
-          break;
-          case 'DOCUMENTS':{
-            if(actionName == 'READ' || isContextSpecSearch){
-              return true;
-            }
-          }
-          break;
-          case 'TEMPLATEASSIGNMENT':{
-            if(actionName == 'READ' || isContextSpecSearch){
-              return true;
-            }
-          }
-          break;
-          case 'FILTERS':
-          case 'REQUESTTYPE':{
-              return true;
-          }
-          break;
-          case 'HIERARCHY':{
-            return true;
-          }
-            break;
-          case 'TAXATION':{
-            if(hierarchy.level>=3){
-              return true
-            }else if(actionName == 'READ' || isContextSpecSearch){
-              return true;
-            }
-          }
-          break;
-          case 'PORTFOLIO':{
-            if(actionName == 'CREATE' || isContextSpecSearch)
-              return true;
-
-            if(req.variables.portfoliodetailsId){
-              var portfolio = MlPortfolioDetails.findOne(req.variables.portfoliodetailsId)
-              if(!portfolio){
-                return false;
-              }
-              if(roleDetails['clusterId'] == portfolio.clusterId){
-                // cluster admin context
-                if(roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == 'all' && roleDetails['communityId'] == 'all'){
-                  return true
-                }
-
-                // chapter admin context
-                else if(roleDetails['chapterId'] == portfolio.chapterId && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
-                  return true
-                }
-
-                // sub chapter admin context
-                else if(roleDetails['chapterId'] == portfolio.chapterId && roleDetails['subChapterId'] == portfolio.subChapterId && roleDetails['communityId'] == 'all'){
-                  return true
-                }
-
-                // community admin context
-                else if(roleDetails['chapterId'] == portfolio.chapterId && roleDetails['subChapterId'] == portfolio.subChapterId && roleDetails['communityId'] == portfolio.communityId){
-                  return true
-                }
-              }
-
-
-
-            }
-          }
-          break;
-        }
-
-        return false
+      return ret;
     }
+
+    validateDataContext(roleDetails, moduleName, actionName, variables, isContextSpecSearch){
+      if(isContextSpecSearch || moduleName == 'GLOBALSETTINGS' || moduleName == 'MASTERSETTINGS')
+        return true;
+
+      if(moduleName == 'REGISTRATION')
+        variables = this.getRegistrationContextDetails(variables.registrationId)
+
+      else if(moduleName == 'PORTFOLIO')
+        variables = this.getPortfolioContextDetails(variables.portfoliodetailsId)
+
+      if(!this.validateCluster(roleDetails, variables))
+        return false
+
+      switch (moduleName){
+        case 'TAXATION':
+        case 'CLUSTER':
+          return true;
+        case 'CHAPTER':
+        case 'SUBCHAPTER':
+        case 'COMMUNITY':
+        case 'USERS':
+        case 'REGISTRATION':
+        case 'PORTFOLIO':{
+          return this.validateChapterSubChapter(roleDetails, variables);
+        }
+        break;
+      }
+    }
+
+    validateCluster(roleDetails, variables){
+      if(!variables)
+        return false
+      if(roleDetails.clusterId == variables['clusterId'])
+        return true;
+      return false;
+    }
+
+    validateChapterSubChapter(roleDetails, variables){
+      if(!variables)
+        return false
+
+      var isEqual = _.isMatch(roleDetails, {"chapterId":"all", 'subChapterId':'all', "communityId":"all"})
+      if(isEqual)
+        return true
+
+      isEqual = _.isMatch(roleDetails, {"chapterId":variables['chapterId'], 'subChapterId':'all', "communityId":"all"})
+      if(isEqual)
+        return true
+
+      isEqual = _.isMatch(roleDetails, {"chapterId":variables['chapterId'], 'subChapterId':variables['subChapterId'], "communityId":"all"})
+      if(isEqual)
+        return true
+
+      isEqual = _.isMatch(roleDetails, {"chapterId":variables['chapterId'], 'subChapterId':variables['subChapterId'], "communityId":variables['communityId']})
+      if(isEqual)
+        return true
+      return false
+    }
+
+    getRegistrationContextDetails(registrationId){
+      var registration = MlRegistration.findOne(registrationId)
+      if(!registration)
+        return
+
+      return registration.registrationInfo
+    }
+
+    getPortfolioContextDetails(portfolioDetailsId){
+      return MlPortfolioDetails.findOne(portfolioDetailsId)
+    }
+
+    // validateDataContext(roleDetails, moduleName, actionName, req, isContextSpecSearch)
+    // {
+    //     switch (moduleName)
+    //     {
+    //       case 'CLUSTER':{
+    //         if(isContextSpecSearch && req.variables.context == null ){
+    //           return true;
+    //         }
+    //         if(roleDetails['clusterId'] && roleDetails['clusterId'] == req.variables['clusterId'] || (req.variables.context && roleDetails['clusterId'] == req.variables.context['clusterId'])){
+    //           return true
+    //         }
+    //       }
+    //       break;
+    //       case 'CHAPTER':
+    //       {
+    //         if(isContextSpecSearch && req.variables.context){
+    //           if(roleDetails['clusterId'] == req.variables.context['clusterId']){
+    //             if(roleDetails['chapterId'] == 'all' || actionName == 'READ')
+    //               return true;
+    //             if(req.variables.context['chapterId'] == roleDetails['chapterId']){
+    //               return true;
+    //             }
+    //           }
+    //         }
+    //         if(req.variables['clusterId'] == roleDetails['clusterId']){
+    //           if(roleDetails['chapterId'] == 'all'){
+    //             return true;
+    //           }
+    //           if(req.variables['chapterId'] == roleDetails['chapterId']){
+    //             return true;
+    //           }
+    //         }
+    //       }
+    //       break;
+    //       case 'SUBCHAPTER': {
+    //         if (isContextSpecSearch && req.variables.context) {
+    //           if (roleDetails['clusterId'] == req.variables.context['clusterId']) {
+    //             if (roleDetails['chapterId'] == 'all')
+    //               return true;
+    //             if (req.variables.context['chapterId'] == roleDetails['chapterId']) {
+    //               return true;
+    //             }
+    //           }
+    //         }
+    //
+    //           if (actionName == "CREATE") {
+    //             // if ((roleDetails['clusterId'] == req.variables.subChapter['clusterId'] && roleDetails['chapterId'] == req.variables.subChapter['chapterId']) && hierarchy.level >= 2) {
+    //             //   return true
+    //             // }
+    //
+    //             if(roleDetails['clusterId'] == req.variables.subChapter['clusterId']){
+    //
+    //               // cluster admin context
+    //               if (roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == 'all' && roleDetails['communityId'] == 'all') {
+    //                 return true
+    //               }
+    //
+    //               // chapter admin context
+    //               else if (roleDetails['chapterId'] == req.variables.subChapter['chapterId'] && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all') {
+    //                 return true
+    //               }
+    //
+    //             }
+    //           }
+    //
+    //           if (actionName == "UPDATE") {
+    //             if(req.subChapterId){
+    //               var subChapter = mlDBController.findOne('MlSubChapters', {"_id": req.subChapterId}, context);
+    //
+    //               if(roleDetails['clusterId'] == subChapter['clusterId']){
+    //
+    //                 // cluster admin context
+    //                 if (roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == 'all' && roleDetails['communityId'] == 'all') {
+    //                   return true
+    //                 }
+    //
+    //                 // chapter admin context
+    //                 else if (roleDetails['chapterId'] == subChapter.chapterId && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all') {
+    //                   return true
+    //                 }
+    //               }
+    //             }
+    //           }
+    //
+    //           if ((req.variables && roleDetails['clusterId'] == req.variables['clusterId'] && roleDetails['chapterId'] == req.variables['chapterId'])) {
+    //             return true
+    //           }
+    //
+    //           if (req.variables && (req.variables.subChapterId || req.variables.id)) {
+    //             var subChapterId = req.variables.subChapterId || req.variables.id;
+    //             var subChapter = mlDBController.findOne('MlSubChapters', {"_id": subChapterId}, context)
+    //             if (subChapter && roleDetails['clusterId'] == subChapter.clusterId) {
+    //               // cluster admin context
+    //               if (roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == 'all' && roleDetails['communityId'] == 'all') {
+    //                 return true
+    //               }
+    //
+    //               // chapter admin context
+    //               else if (roleDetails['chapterId'] == subChapter.chapterId && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all') {
+    //                 return true
+    //               }
+    //
+    //               // sub chapter admin context
+    //               else if (roleDetails['chapterId'] == subChapter.chapterId && roleDetails['subChapterId'] == subChapter.subChapterId && roleDetails['communityId'] == 'all') {
+    //                 return true
+    //               }
+    //
+    //               // community admin context
+    //               else if (roleDetails['chapterId'] == subChapter.chapterId && roleDetails['subChapterId'] == subChapter.subChapterId && roleDetails['communityId'] == subChapter.communityId) {
+    //                 return true
+    //               }
+    //
+    //             }
+    //             if (subChapter && roleDetails['clusterId'] == subChapter.clusterId && roleDetails['chapterId'] == subChapter.chapterId) {
+    //               return true;
+    //             }
+    //           }
+    //         }
+    //         break;
+    //
+    //         case 'COMMUNITY':
+    //         {
+    //            return true
+    //         }
+    //         break;
+    //
+    //         case 'DEPARTMENT':
+    //         case 'SUBDEPARTMENT':
+    //         {
+    //             for(key in roleDetails){
+    //                 if(roleDetails[key] == req.variables.docId){
+    //                     return true
+    //                 }
+    //             }
+    //         }
+    //         break;
+    //         case 'USERS':{
+    //               if(actionName == 'READ'){
+    //                   if(roleDetails['clusterId'] == req.variables['clusterId'])
+    //                   {
+    //                       // cluster admin context
+    //                       if(roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
+    //                           return true;
+    //                       }
+    //                       // chapter admin context
+    //                       else if(roleDetails['chapterId'] == req.variables['chapterId'] && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
+    //                          return true
+    //                       }
+    //
+    //                       // sub chapter admin context
+    //                       else if(roleDetails['chapterId'] == req.variables['chapterId'] && roleDetails['subChapterId'] == req.variables['subChapterId'] && roleDetails['communityId'] == 'all'){
+    //                         return true
+    //                       }
+    //
+    //                       // community admin context
+    //                       else if(roleDetails['chapterId'] == req.variables['chapterId'] && roleDetails['subChapterId'] == req.variables['subChapterId'] && roleDetails['communityId'] == 'all'){
+    //                         return true
+    //                       }
+    //
+    //                   }
+    //                   // For Dashboard Community Priming
+    //                   if(req.variables['clusterId'] == null || req.variables['userType']){
+    //                       return true
+    //                   }
+    //                   if(req.variables['subChapterId']){
+    //                     var subChapter = mlDBController.findOne('MlSubChapters', {"_id":req.variables.subChapterId}, context)
+    //                     if(subChapter && roleDetails['clusterId'] == subChapter.clusterId) {
+    //                       return true
+    //                     }
+    //                   }
+    //               }
+    //               // else if(actionName == 'UPDATE' && hierarchy.level==1){
+    //               else if(actionName == 'UPDATE'){
+    //                 return true;
+    //               }
+    //               // else if(actionName == 'CREATE' && hierarchy.level==1){
+    //               else if(actionName == 'CREATE'){
+    //                 return true;
+    //               }
+    //
+    //         }
+    //         break;
+    //         case 'GLOBALSETTINGS':{
+    //           // if(actionName == 'CREATE' && hierarchy.level>=3){
+    //           if(actionName == 'CREATE'){
+    //             return true;
+    //           }
+    //           // else if(actionName == 'UPDATE' && hierarchy.level>=3){
+    //           else if(actionName == 'UPDATE'){
+    //             return true;
+    //           }
+    //           else if(actionName == 'READ'){
+    //             return true;
+    //           }
+    //         }
+    //         break;
+    //         case 'MASTERSETTINGS':{
+    //             // if(actionName == 'CREATE' && hierarchy.level>=3){
+    //             if(actionName == 'CREATE'){
+    //               return true;
+    //             }
+    //             // else if(actionName == 'UPDATE' && hierarchy.level>=3){
+    //             else if(actionName == 'UPDATE'){
+    //               return true
+    //             }
+    //             else if(actionName == 'READ'){
+    //                 return true;
+    //             }
+    //         }
+    //         break;
+    //       case 'REGISTRATION':{
+    //           if(actionName == 'CREATE' || isContextSpecSearch)
+    //             return true;
+    //
+    //           if(req.variables.registrationId){
+    //                 var registration = MlRegistration.findOne(req.variables.registrationId)
+    //                 if(!registration){
+    //                     return false;
+    //                 }
+    //
+    //                 if(roleDetails['clusterId'] == registration.registrationInfo.clusterId){
+    //                     // cluster admin context
+    //                     if(roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == 'all' && roleDetails['communityId'] == 'all'){
+    //                         return true
+    //                     }
+    //
+    //                     // chapter admin context
+    //                     else if(roleDetails['chapterId'] == registration.registrationInfo.chapterId && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
+    //                       return true
+    //                     }
+    //
+    //                     // sub chapter admin context
+    //                     else if(roleDetails['chapterId'] == registration.registrationInfo.chapterId && roleDetails['subChapterId'] == registration.registrationInfo.subChapterId && roleDetails['communityId'] == 'all'){
+    //                       return true
+    //                     }
+    //
+    //                     // community admin context
+    //                     else if(roleDetails['chapterId'] == registration.registrationInfo.chapterId && roleDetails['subChapterId'] == registration.registrationInfo.subChapterId && roleDetails['communityId'] == registration.registrationInfo.communityId){
+    //                       return true
+    //                     }
+    //                 }
+    //           }
+    //
+    //           if(actionName == 'READ')
+    //             return true;
+    //       }
+    //       break;
+    //       case 'ROLES':{
+    //         if(actionName == 'READ'){
+    //           return true;
+    //         }
+    //       }
+    //       break;
+    //       case 'TEMPLATES':{
+    //         if(actionName == 'READ'){
+    //           return true;
+    //         }
+    //       }
+    //       break;
+    //       case 'INTERNALREQUESTS':{
+    //         return true
+    //       }
+    //       break;
+    //       case 'INTERNALAPPROVEDREQUESTS':{
+    //         return true
+    //       }
+    //       break;
+    //       case 'DOCUMENTS':{
+    //         if(actionName == 'READ' || isContextSpecSearch){
+    //           return true;
+    //         }
+    //       }
+    //       break;
+    //       case 'TEMPLATEASSIGNMENT':{
+    //         if(actionName == 'READ' || isContextSpecSearch){
+    //           return true;
+    //         }
+    //       }
+    //       break;
+    //       case 'FILTERS':
+    //       case 'REQUESTTYPE':{
+    //           return true;
+    //       }
+    //       break;
+    //       case 'HIERARCHY':{
+    //         return true;
+    //       }
+    //         break;
+    //       case 'TAXATION':{
+    //         if(hierarchy.level>=3){
+    //           return true
+    //         }else if(actionName == 'READ' || isContextSpecSearch){
+    //           return true;
+    //         }
+    //       }
+    //       break;
+    //       case 'PORTFOLIO':{
+    //         if(actionName == 'CREATE' || isContextSpecSearch)
+    //           return true;
+    //
+    //         if(req.variables.portfoliodetailsId){
+    //           var portfolio = MlPortfolioDetails.findOne(req.variables.portfoliodetailsId)
+    //           if(!portfolio){
+    //             return false;
+    //           }
+    //           if(roleDetails['clusterId'] == portfolio.clusterId){
+    //             // cluster admin context
+    //             if(roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == 'all' && roleDetails['communityId'] == 'all'){
+    //               return true
+    //             }
+    //
+    //             // chapter admin context
+    //             else if(roleDetails['chapterId'] == portfolio.chapterId && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
+    //               return true
+    //             }
+    //
+    //             // sub chapter admin context
+    //             else if(roleDetails['chapterId'] == portfolio.chapterId && roleDetails['subChapterId'] == portfolio.subChapterId && roleDetails['communityId'] == 'all'){
+    //               return true
+    //             }
+    //
+    //             // community admin context
+    //             else if(roleDetails['chapterId'] == portfolio.chapterId && roleDetails['subChapterId'] == portfolio.subChapterId && roleDetails['communityId'] == portfolio.communityId){
+    //               return true
+    //             }
+    //           }
+    //
+    //
+    //
+    //         }
+    //       }
+    //       break;
+    //     }
+    //
+    //     return false
+    // }
 
 }
 

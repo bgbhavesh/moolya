@@ -88,21 +88,8 @@ class MlEditCommunityFormComponent extends React.Component {
   async findComDef() {
     let Id = this.props.params;
     const response = await findCommunityDefActionHandler(Id);
-
     if (response) {
       this.setState({data: response});
-
-      // if (this.state.data.aboutCommunity) {
-      //   this.setState({"data":{"aboutCommunity":this.state.data.aboutCommunity}});
-      // }
-      //
-      // if (this.state.data.showOnMap) {
-      //   this.setState({"data":{"showOnMap":this.state.data.showOnMap}});
-      // }
-      //
-      // if (this.state.data.showOnMap) {
-      //   this.setState({"data":{"showOnMap":this.state.data.showOnMap}});
-      // }
 
       if (this.state.data.clusters) {
         this.setState({clusters: this.state.data.clusters});

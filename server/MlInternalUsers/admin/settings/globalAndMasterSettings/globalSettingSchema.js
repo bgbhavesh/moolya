@@ -99,7 +99,7 @@ let GlobalSettingsSchema = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],GlobalSettingsSchema]);
 
 let supportedApi = [
-    {api:'fetchGlobalSettings', actionName:'READ', moduleName:"GLOBALSETTINGS"},
+    {api:'fetchGlobalSettings', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true},
     {api:'updateGlobalSetting', actionName:'UPDATE', moduleName:"GLOBALSETTINGS"},
 ]
 

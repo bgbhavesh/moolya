@@ -76,7 +76,7 @@ adminSection.route('/clusters/:clusterId/:chapterId/subChapters', {
 adminSection.route('/clusters/:clusterId/:chapterId/:subChapterId/:subChapterName/subChapterDetails', {
   name: 'cluster_chapter_subChapterDetails',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />,adminContent:< MlSubChapterDetails params={params.subChapterId}/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'cluster'}} />, adminContent:< MlSubChapterDetails params={params.subChapterId} clusterId={params.clusterId} chapterId={params.chapterId}/>})
   }
 });
 

@@ -124,11 +124,9 @@ MlResolver.MlQueryResolver['fetchChapters'] = (obj, args, context, info) => {
     let id= args.id;
     let response = [];
     if(id == "all"){
-      // response = MlChapters.find({isActive:true}).fetch()||[];
       response = mlDBController.find('MlChapters', {isActive:true}, context).fetch()||[];
       response.push({"chapterName" : "All","_id" : "all"});
     }else{
-      // response = MlChapters.find({"clusterId":id, "isActive":true}).fetch()||[];
       response = mlDBController.find('MlChapters', {"clusterId":id, "isActive":true}, context).fetch()||[];
       if(response.length > 0){
         response.push({"chapterName" : "All","_id" : "all"});
@@ -144,12 +142,9 @@ MlResolver.MlQueryResolver['fetchChaptersForMap'] = (obj, args, context, info) =
 }
 
 MlResolver.MlQueryResolver['fetchSubChapter'] = (obj, args, context, info) => {
-  // TODO : Authorization
-  if (args._id) {
-    var id= args._id;
-    // let response= MlSubChapters.findOne({"_id":id});
+  if (args.subChapterId) {
+    var id= args.subChapterId;
     let response = mlDBController.findOne('MlSubChapters', {"_id":id}, context)
-    // let stateName = MlStates.findOne({_id: response.stateId}).name;
     let stateName = mlDBController.findOne('MlStates', {_id: response.stateId}, context).name;
     response.stateName=stateName;
     return response;
@@ -158,24 +153,18 @@ MlResolver.MlQueryResolver['fetchSubChapter'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['fetchSubChapters'] = (obj, args, context, info) => {
   // let result =  MlSubChapters.find({chapterId: args.id}).fetch()||[];
-  let result = mlDBController.find('MlSubChapters', {chapterId: args.id}, context).fetch()||[];
+  let result = mlDBController.find('MlSubChapters', {chapterId: args.chapterId}, context).fetch()||[];
   return {data:result};
 }
 
 MlResolver.MlQueryResolver['fetchSubChaptersSelect'] = (obj, args, context, info) => {
-  // let result = MlSubChapters.find({chapterId: args.id}).fetch()||[];
   let chapterId=args.id;
   if(args.id&&args.id==='all'){
-    //chapterId={$regex:'.*',$options:"i"};
   }
-
   let result = mlDBController.find('MlSubChapters', {chapterId:chapterId}, context).fetch()||[];
-
- // if(args&&args.id&&args.id.trim()!==""){
-    if(args&&args.displayAllOption&&args.id&&args.id.trim()!==""){
+  if(args&&args.displayAllOption&&args.id&&args.id.trim()!==""){
     result.push({"subChapterName" : "All","_id" : "all"});
   }
-
   return result
 }
 
@@ -316,13 +305,6 @@ MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) =
 
 
 MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) => {
-  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args.subChapterDetails);
-  if (!isValidAuth) {
-    let code = 401;
-    let response = new MlRespPayload().errorPayload("Not Authorized", code);
-    return response;
-  }
-
     let subChapter = mlDBController.findOne('MlSubChapters', {_id: args.subChapterId}, context)
     if(subChapter){
         for(key in args.subChapterDetails){

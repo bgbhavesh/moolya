@@ -8,8 +8,9 @@ import MlResolver from "../../commons/mlResolverDef";
 
 let internalTaskSchema = `
     
-    type Community {
-      id: String
+    type InternalTaskCommunity {
+      code: String
+      type: String
       name: String
     }
     
@@ -19,15 +20,18 @@ let internalTaskSchema = `
         attendee: String
         name: String
         stage: String
-        client: String
-        community: Community
+        resourceId: String
+        community: InternalTaskCommunity
         attendees: [String]
         docs: [String]
         status: String
+        note: String
+        mode: String
     }
     
-    input community {
-      id: String
+    input internalTaskCommunity {
+      code: String
+      type: String
       name: String
     }
     
@@ -37,11 +41,13 @@ let internalTaskSchema = `
         attendee: String
         name: String
         stage: String
-        client: String
-        community: community
+        resourceId: String
+        community: internalTaskCommunity
         attendees: [String]
         docs: [String]
         status: String
+        note: String
+        mode: String
     }
   
     type Query{

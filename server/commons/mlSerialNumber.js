@@ -29,6 +29,11 @@ if (!profileNumber) {
   MlSerialNumbers.insert({_id: "profileNumber", seq: 0});
 }
 
+var internalTaskNumber = MlSerialNumbers.findOne({_id: "internalTaskNumber"});
+if (!internalTaskNumber) {
+  MlSerialNumbers.insert({_id: "internalTaskNumber", seq: 0});
+}
+
 orderNumberGenService = (function(){
   function getNextSequence(name) {
     var ret = MlSerialNumbers.update(
@@ -69,6 +74,9 @@ orderNumberGenService = (function(){
 
     createUserProfileId: function (userProfile) {
       userProfile.profileId = "ML-PRO-" + FormatUtil.leadingZeros(getNextSequence("profileNumber"), 8);
+    },
+    createinternalTaskId: function (taskObj) {
+      taskObj.internalTaskId = "ML-ITK-" + FormatUtil.leadingZeros(getNextSequence("internalTaskNumber"), 8);
     },
     generateRandomPassword:function(){
       var randomId = function makeid(){

@@ -36,6 +36,12 @@ if(Meteor.isServer){
           isDynamic:true
         },
         {
+          name:"transactionType",
+          type:'List',
+          resolverName : "Gen_TransactionType",
+          isDynamic:true
+        },
+        {
           name:"isActive",
           type:'Boolean',
           resolverName : "Gen_isActive",
@@ -104,6 +110,12 @@ if(Meteor.isServer){
           isDynamic:true
         },
         {
+          name:"registrationInfo.transactionType",
+          type:'List',
+          resolverName : "Gen_TransactionType",
+          isDynamic:true
+        },
+        {
           name:"registrationInfo.createdBy",
           type:'String',
           resolverName : " "
@@ -154,6 +166,12 @@ if(Meteor.isServer){
           type:'List',
           resolverName : "Gen_Community",
           isDynamic:true
+        },
+        {
+          name:"transactionTypeName",
+          type:'List',
+          resolverName : "Gen_TransactionType",
+          isDynamic:true
         }
       ]
     }});
@@ -192,6 +210,12 @@ if(Meteor.isServer){
           isDynamic:true
         },
         {
+          name:"transactionTypeName",
+          type:'List',
+          resolverName : "Gen_TransactionType",
+          isDynamic:true
+        },
+        {
           name:"transactionCreatedDate",
           type:'Date',
           resolverName : " ",
@@ -202,6 +226,12 @@ if(Meteor.isServer){
           type:'String',
           resolverName : " "
         },
+        {
+          name:"emailId",
+          type:'String',
+          resolverName : " "
+        }
+
 
       ]
     }});
@@ -245,7 +275,18 @@ if(Meteor.isServer){
           isDynamic:true
         },
         {
+          name:"transactionTypeName",
+          type:'List',
+          resolverName : "Gen_TransactionType",
+          isDynamic:true
+        },
+        {
           name:"createdBy",
+          type:'String',
+          resolverName : " "
+        },
+        {
+          name:"emailId",
           type:'String',
           resolverName : " "
         },

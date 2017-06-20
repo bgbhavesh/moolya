@@ -15,7 +15,7 @@ class MlAddRequestType extends React.Component{
   constructor(props) {
     super(props);
     this.state = {transactionId: ' ',
-      transactionType: ' '
+      transactionType: null
     }
     this.addEventHandler.bind(this);
     this.createRequestType.bind(this)

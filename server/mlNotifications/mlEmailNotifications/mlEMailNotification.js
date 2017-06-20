@@ -163,8 +163,8 @@ const MlEmailNotification= class MlEmailNotification {
     try {
       Meteor.setTimeout(function () {
         mlEmail.sendHtml({
-          from: inquiryData.userEmail,
-          to: inquiryData.to,
+          from: inquiryData.fromEmail,
+          to: inquiryData.toEmail,
           subject: inquiryData.subject,
           html: "<div>" + inquiryData.message + "</div>"
         });

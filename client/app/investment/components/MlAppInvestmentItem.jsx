@@ -5,8 +5,7 @@
 import React, {Component} from "react";
 import MlAppActionComponent from "../../commons/components/MlAppActionComponent";
 import MlAccordion from '../../commons/components/MlAccordion';
-import {createStageActionHandler} from '../actions/createStage';
-import {updateStageActionHandler} from '../actions/updateStage';
+import MlAppInvestAction from './MlAppInvestActions';
 
 export default class MlAppInvestmentItem extends Component {
 
@@ -27,41 +26,35 @@ export default class MlAppInvestmentItem extends Component {
     });
   }
 
+  actionHandlerProxy(actionConfig,handlerCallback){
+  if(handlerCallback) {
+    handlerCallback(this);
+  }else if(actionConfig&&actionConfig.customHandler){
+  actionConfig.customHandler(this);
+  }
+};
+
   render(){
     const props = this.props;
+    console.log(props.stages);
     const that = this;
     const currentStage = props.currentStage;
     const currentStageIndex = props.stages.findIndex(function (data) {
       return data.stageName == currentStage.stageName
     });
-    let mlAppActionConfig = props.stages.map(function (stage, i) {
-        return {
-          showAction:true,
-          actionName: stage.stageName,
-          handler: async(event) => {
-            if(!that.state.selected.resourceId){
-              toastr.error('Please select a portfolio');
-              return false;
-            }
-            if(currentStage.stageName == stage.stageName){
-              toastr.error('Already in '+stage.stageName+' Stage');
-              return false;
-            }
-            let dataToInsert = {
-              "resourceId": that.state.selected.resourceId,
-              "resourceType": "portfolio",
-              "resourceStage": stage.stageName
-            };
-            let response;
-            if(that.state.selected.stage.length){
-              response = await updateStageActionHandler(that.state.selected.stage[0]._id, dataToInsert);
-            } else {
-              response = await createStageActionHandler(dataToInsert);
-            }
-            if(response.success){
-              toastr.success('Updated Successfully');
-              that.props.fetchPortfolio();
-            }
+    let mlAppActionConfig = currentStage.stageActions.filter(function (action) {
+      return action.actionName && action.isActive;
+    }).map(function (action) {
+        let actionObj = MlAppInvestAction[action.actionName];
+        if(actionObj){
+          let config = actionObj.config
+          config.handler = actionObj.handler;
+          config.handler =that.actionHandlerProxy.bind(that);
+          return config;
+        } else {
+          return {
+            showAction: true,
+            actionName: action.actionName,
           }
         }
     });

@@ -2,7 +2,7 @@ import React from "react";
 import {render} from "react-dom";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import _ from "lodash";
-import StarRatings from "./starRatings";
+import StarRatings from "./StarRatings";
 var FontAwesome = require('react-fontawesome');
 
 

@@ -241,10 +241,13 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context
       let extendData = MlProfessions.findOne({_id: details.profession, industryId: details.industry})|| {};
       details.industry = extendData.industryName || "";
       details.profession = extendData.professionName || ""
-      let userPersonal = MlMasterSettings.findOne({_id:details.gender}) || {}
-      details.gender = userPersonal.genderInfo ? userPersonal.genderInfo.genderName : ''
+     // let userPersonal = MlMasterSettings.findOne({_id:details.gender}) || {}
+    //  details.gender = userPersonal.genderInfo ? userPersonal.genderInfo.genderName : ''
       let userEmp = MlMasterSettings.findOne({_id:details.employmentStatus}) || {}
       details.employmentStatus = userEmp.employmentTypeInfo ? userEmp.employmentTypeInfo.employmentName : ''
+
+      //for view action
+      MlResolver.MlMutationResolver['createView'](obj,{resourceId:args.portfoliodetailsId,resourceType:'portfolio'}, context, info);
       return details;
     }
     // if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('portfolioIdeatorDetails')) {
@@ -578,5 +581,8 @@ MlResolver.MlQueryResolver['fetchIdeas'] = (obj, args, context, info) => {
           }
     })
 
-    return ideas;
+  //for view action
+  MlResolver.MlMutationResolver['createView'](obj,{resourceId:args.portfolioId,resourceType:'portfolio'}, context, info);
+
+  return ideas;
 }

@@ -31,9 +31,13 @@ MlResolver.MlMutationResolver['createRequestss'] = (obj, args, context, info) =>
     }
 
   let requestDetails = MlRequestType.findOne({"_id":args.requests.requestTypeId})|| {};
+  let transactionTypeName = requestDetails.transactionType?requestDetails.transactionType:"";
+  let transactionTypeId = requestDetails.transactionId?requestDetails.transactionId:"";
   if(requestDetails.requestName) {
     args.requests.requestTypeName = requestDetails.requestName;
     args.requests.userId = context.userId;
+    args.requests.transactionTypeName = transactionTypeName;
+    args.requests.transactionTypeId = transactionTypeId;
     if(mlHierarchyAssignment.checkHierarchyExist(context.userId) === true){
       orderNumberGenService.assignRequests(args.requests)
       let id = mlDBController.insert('MlRequests', args.requests, context)

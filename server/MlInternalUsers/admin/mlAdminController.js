@@ -98,7 +98,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
   graphQLServer.use(config.path, parseBody,  graphqlExpress( async (req, res) =>
   {
     try {
-      const customOptionsObject = typeof customOptions === 'function' ? customOptions(req) : customOptions;
+      customOptionsObject = typeof customOptions === 'function' ? customOptions(req) : customOptions;
       const options = {
         ...executableSchema,
         ...defaultGraphQLOptions,

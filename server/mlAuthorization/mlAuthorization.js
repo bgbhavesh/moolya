@@ -141,24 +141,24 @@ class MlAuthorization
 
             if(user_roles && user_roles.length > 0){
 
-                // var highestRole = _.find(user_roles , {hierarchyCode:userProfileDetails.hierarchyCode})
-                // ret = this.validateRole(highestRole.roleId, module, action)
-                // if(ret){
-                //   return this.validateDataContext(highestRole, moduleName, actionName, req, isContextSpecSearch, hierarchy)
-                // }
+                var highestRole = _.find(user_roles , {hierarchyCode:userProfileDetails.hierarchyCode})
+                ret = this.validateRole(highestRole.roleId, module, action)
+                if(ret){
+                  return this.validateDataContext(highestRole, moduleName, actionName, req, isContextSpecSearch, hierarchy)
+                }
 
                 let role;
                 var resp = null;
                 // _.each(user_roles, function (role)
-                for(var i = 0; i < user_roles.length; i++){
-                    ret = this.validateRole(user_roles[i].roleId, module, action)
-                    if(ret){
-                      resp = this.validateDataContext(user_roles[i], moduleName, actionName, req, isContextSpecSearch, hierarchy)
-                      if(resp == true){
-                        return resp
-                      }
-                    }
-                }
+                // for(var i = 0; i < user_roles.length; i++){
+                //     ret = this.validateRole(user_roles[i].roleId, module, action)
+                //     if(ret){
+                //       resp = this.validateDataContext(user_roles[i], moduleName, actionName, req, isContextSpecSearch, hierarchy)
+                //       if(resp == true){
+                //         return resp
+                //       }
+                //     }
+                // }
                 return resp;
             }
         }
@@ -188,7 +188,7 @@ class MlAuthorization
         return ret;
     }
 
-    validateDataContext(roleDetails, moduleName, actionName, req, isContextSpecSearch, hierarchy)
+    validateDataContext(roleDetails, moduleName, actionName, req, isContextSpecSearch)
     {
         switch (moduleName){
 
@@ -360,19 +360,25 @@ class MlAuthorization
                           return true
                         }
                       }
-                  }else if(actionName == 'UPDATE' && hierarchy.level==1){
+                  }
+                  // else if(actionName == 'UPDATE' && hierarchy.level==1){
+                  else if(actionName == 'UPDATE'){
                     return true;
-                  }else if(actionName == 'CREATE' && hierarchy.level==1){
+                  }
+                  // else if(actionName == 'CREATE' && hierarchy.level==1){
+                  else if(actionName == 'CREATE'){
                     return true;
                   }
 
             }
             break;
             case 'GLOBALSETTINGS':{
-              if(actionName == 'CREATE' && hierarchy.level>=3){
+              // if(actionName == 'CREATE' && hierarchy.level>=3){
+              if(actionName == 'CREATE'){
                 return true;
               }
-              else if(actionName == 'UPDATE' && hierarchy.level>=3){
+              // else if(actionName == 'UPDATE' && hierarchy.level>=3){
+              else if(actionName == 'UPDATE'){
                 return true;
               }
               else if(actionName == 'READ'){
@@ -381,10 +387,12 @@ class MlAuthorization
             }
             break;
             case 'MASTERSETTINGS':{
-                if(actionName == 'CREATE' && hierarchy.level>=3){
+                // if(actionName == 'CREATE' && hierarchy.level>=3){
+                if(actionName == 'CREATE'){
                   return true;
                 }
-                else if(actionName == 'UPDATE' && hierarchy.level>=3){
+                // else if(actionName == 'UPDATE' && hierarchy.level>=3){
+                else if(actionName == 'UPDATE'){
                   return true
                 }
                 else if(actionName == 'READ'){

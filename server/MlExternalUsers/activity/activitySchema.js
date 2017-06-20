@@ -108,7 +108,7 @@ _id: String
       isDiscount: Boolean
       discountAmount: Int
       discountPercentage: Int
-      isTaxInclusive: Int
+      isTaxInclusive: Boolean
       isPromoCodeApplicable: Boolean
     }
     input teams {
@@ -151,8 +151,10 @@ _id: String
     }
 
     type Query {
-        fetchActivities:[Activity]
+        fetchActivities(profileId:String):[Activity]
         fetchActivity(id:String):Activity
+        fetchActivities:[Activity]
+        fetchActivity(activityId:String):Activity
         getTeamMembers:[AvailableCommunities]
         getBranchDetails:[BranchType]
         getTeamUsers(Attributes:TeamName):[TeamUsers]

@@ -1,6 +1,4 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import classNames from "classnames"
 import { render } from 'react-dom';
 import formHandler from '../../../commons/containers/MlFormHandler';
 import {updatePortfolioActionHandler, updateIdeatorIdeaActionHandler, requestProtfolioForGoLive} from '../../../../client/admin/transaction/portfolio/actions/updatePortfolioDetails';
@@ -9,23 +7,12 @@ import {findComments} from '../../../commons/annotaterComments/findComments'
 import {createCommentActionHandler} from '../../../commons/annotaterComments/createComment';
 import {resolveCommentActionHandler} from '../../../commons/annotaterComments/createComment';
 import {reopenCommentActionHandler} from '../../../commons/annotaterComments/createComment';
-import AppActionButtons from '../../commons/components/appActionButtons'
 import moment from "moment";
-import MlCustomActionButtons from '../../ideators/components/MlCustomActionButtons'
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 import {fetchIdeaByPortfolioId} from '../../ideators/actions/IdeaActionHandler'
 import MlLoader from '../../../commons/components/loader/loader';
-import MlAppActionComponent from './MlAppActionComponent';
-import MlAccordion from './MlAccordion';
-import PopoverActionIcon from '../../../app/appActions/components/PopoverActionIcon';
-import Connect from  "../../../app/appActions/components/Connect";
-import Inquiry from  "../../../app/appActions/components/Inquiry";
-import Review from  "../../../app/appActions/components/Review";
-import handleLikeAction from '../../../app/appActions/actions/likeActionHandler';
-import handleFollowAction from '../../../app/appActions/actions/followActionHandler';
-import handleFavouriteAction from '../../../app/appActions/actions/favouriteActionHandler';
 import InteractionsCounter from '../../commons/components/InteractionsCounter'
-
+import MlAppPortfolioAccordionContainer from '../components/MlAppPortfolioAccordion';
 class MlAppPortfolio extends React.Component{
   constructor(props){
     super(props)
@@ -40,6 +27,7 @@ class MlAppPortfolio extends React.Component{
     this.toggle = this.toggle.bind(this);
     this.fetchIdeaId.bind(this);
     this.interactionActionHandler.bind(this);
+    this.assignActionHandlerProxy.bind(this);
     return this;
   }
 
@@ -52,10 +40,10 @@ class MlAppPortfolio extends React.Component{
 
   componentDidMount(){
     let portfolioId = this.props.config;
-    var pathname = window.location.pathname
+    /*var pathname = window.location.pathname
     if(pathname.indexOf("view") != -1 || pathname.indexOf("edit") != -1 || this.props.communityType != "ideator"){
       this.setState({isMyPortfolio:true})
-    }
+    }*/
   }
 
   getContext(){
@@ -195,7 +183,7 @@ class MlAppPortfolio extends React.Component{
     FlowRouter.go("/app/portfolio");
   };
 
-  //handler for like,review,comment,inquiry,collaborate,connect
+  //handler for like,review,comment,inquiry,collaborate,connect,follow
   interactionActionHandler(actionConfig,handlerCallback) {
     var resourceDetails={resourceId:this.props.config,resourceType:'portfolio'};
     if(handlerCallback) {
@@ -205,9 +193,22 @@ class MlAppPortfolio extends React.Component{
     }
   }
 
+  assignActionHandlerProxy(actionConfig){
+    var action=actionConfig.actionName||'';
+    var actionMap={'like':'interaction','connect':'interaction','favourite':'interaction','follow':'interaction','enquire':'interaction','review':'interaction','partner':'interaction','collaborate':'interaction'};
+    let actionName =actionMap[action]||action;
+    switch(actionName){
+      case 'interaction': actionConfig.handler=this.interactionActionHandler.bind(this); break;
+      case 'save': actionConfig.handler=async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this)); break;
+      case 'edit': actionConfig.handler=async(event) => this.props.handler(this.testEditPortfolioDetails.bind(this)); break;
+      case 'goLive': actionConfig.handler=async(event) => this.props.handler(this.requestForGoLive.bind(this)); break;
+      case '': actionConfig.handler=() => {console.log("action handler is not defined")}; break;
+    }
+  }
+
   render(){
     let that=this;
-      let appActionConfig= [{showAction: true,actionName: 'connect',hasPopOver:true,popOverTitle:'Connect Request',placement:'top',target:'connectRequest',popOverComponent:<Connect />,actionComponent:PopoverActionIcon,handler:this.interactionActionHandler.bind(this)},
+     /* let appActionConfig= [{showAction: true,actionName: 'connect',hasPopOver:true,popOverTitle:'Connect Request',placement:'top',target:'connectRequest',popOverComponent:<Connect />,actionComponent:PopoverActionIcon,handler:this.interactionActionHandler.bind(this)},
       {showAction: true,actionName: 'like',handleCallBack:handleLikeAction,handler:this.interactionActionHandler.bind(this)},
       {showAction: true,actionName: 'favourite',handleCallBack:handleFavouriteAction,handler:this.interactionActionHandler.bind(this)},
       {showAction: true,actionName: 'follow',handleCallBack:handleFollowAction,handler:this.interactionActionHandler.bind(this)},
@@ -215,13 +216,11 @@ class MlAppPortfolio extends React.Component{
       {showAction: true,actionName: 'review',hasPopOver:true,popOverTitle:'Review',placement:'top',target:'reviewRequest',popOverComponent:<Review />,actionComponent:PopoverActionIcon,handler:this.interactionActionHandler.bind(this)},
       {showAction: true,actionName: 'save',handler: async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this))},
       {showAction: true,actionName: 'edit',handler: async(event) => this.props.handler(this.testEditPortfolioDetails.bind(this))},
-      {showAction: true,actionName: 'golive',handler: async(event) => this.props.handler(this.requestForGoLive.bind(this))}
-      ];
+      {showAction: true,actionName: 'golive',handler: async(event) => this.props.handler(this.requestForGoLive.bind(this))}];
 
-    export const genericPortfolioAccordionConfig= {id:'portfolioAccordion',
-      panelItems:[{'title':'Related',isText:true,contentComponent:'upcoming',style:{'background': '#273545'}},
+    var genericPortfolioAccordionConfig= {id:'portfolioAccordion',panelItems:[{'title':'Related',isText:true,contentComponent:'upcoming',style:{'background': '#273545'}},
         {'title':'Actions',isText:false,style:{'background': '#ef4647'},contentComponent:<MlAppActionComponent resourceDetails={{resourceId:this.props.config,resourceType:'portfolio'}} actionOptions={appActionConfig}  />}]
-    };
+    };*/
 
     let EditComponent = ""; let ViewComponent = "";
     if(this.props.viewMode){
@@ -321,7 +320,8 @@ class MlAppPortfolio extends React.Component{
             </PopoverContent>
           </Popover>
         {/*{isMyPortfolio?<AppActionButtons ActionOptions={appActionConfig} showAction='showAction' actionName="actionName"/>:<MlCustomActionButtons/>}*/}
-        {isMyPortfolio?<MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />:<MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />}
+        {/*{isMyPortfolio?<MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />:<MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />}*/}
+         <MlAppPortfolioAccordionContainer viewMode={this.props.viewMode} communityType={this.props.communityType} resourceId={this.props.config} assignActionHandler={this.assignActionHandlerProxy.bind(this)}/>
       </div>
     )
   }

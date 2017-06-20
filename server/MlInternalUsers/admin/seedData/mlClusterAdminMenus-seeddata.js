@@ -213,7 +213,19 @@ if(Meteor.isServer){
             "dynamicLinkHandler" : "",
             "subMenusId":"cluster",
             "subMenuMappingId":"cluster_assignusers"
-          }
+          },
+         /* {
+            "link" : "/admin/clusters/history",
+            "name" : "History",
+            "uniqueId" : "cluster_history",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "dynamicLink" : true,
+            "dynamicLinkHandler" : "",
+            "subMenusId":"cluster",
+            "subMenuMappingId":"cluster_history"
+          }*/
         ]
 
       },
@@ -1253,16 +1265,25 @@ if(Meteor.isServer){
             ]
           },  // @End
           {
-            "link" : "/admin/clusterSettings/history",
+            "link" : "/admin/settings/cluster/history",
             "name" : "History",
             "uniqueId" : "clusterSettings_history",
             "isLink" : true,
             "isMenu" : true,
             "image" : "",
-            "dynamicLink" : true,
-            "dynamicLinkHandler" : "",
-            "subMenusId":"settings",
-            "subMenuMappingId": "clusterSettings_history"
+            "subMenu": [
+
+                  {
+                    "link": "/admin/settings/cluster/history",
+                    "name": "History",
+                    "uniqueId": "clusterSettings_historyList",
+                    "subMenuMappingId":"clusterSettings_history",
+                    "subMenusId":"settings",
+                    "isLink": true,
+                    "isMenu": false,
+                    "image": ""
+                  }
+              ]
           }
         ]
       },

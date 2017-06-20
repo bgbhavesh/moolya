@@ -35,6 +35,7 @@ let internalTaskSchema = `
         mode: String
         client: String
         userInfo: [InternalTaskUserInfo]
+        createdAt: String
     }
     
     input internalTaskCommunity {

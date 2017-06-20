@@ -61,6 +61,7 @@ MlResolver.MlMutationResolver['createInternalTask'] = (obj, args, context, info)
     if(args.internalTask){
       if(args.internalTask.attendees && args.internalTask.attendees.length){
         orderNumberGenService.createinternalTaskId(args.internalTask);
+        args.internalTask.createdAt = new Date();
         // Add task status time line
         args.internalTask.attendees.forEach(function (attendee) {
           let dataToInsert = args.internalTask;

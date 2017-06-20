@@ -4,7 +4,8 @@
 import React from 'react';
 var FontAwesome = require('react-fontawesome');
 import {fetchInternalTaskInfo} from '../actions/fetchInternalTaskInfo';
-import {updateInternalTaskInfo} from '../actions/updateInternalTask'
+import {updateInternalTaskInfo} from '../actions/updateInternalTask';
+import moment from "moment";
 
 export default class MlAppInternalTaskItem extends React.Component {
 
@@ -106,7 +107,7 @@ export default class MlAppInternalTaskItem extends React.Component {
               <div className="col-md-6">
                 <div className="form_bg">
                   <div className="panel panel-default">
-                    <div className="panel-heading"> Date & Time: 27/08/16 | 10.40 AM </div>
+                    <div className="panel-heading"> Date & Time: {task.createdAt&&moment(task.createdAt).format('DD-MM-YYYY hh:mm:ss')} </div>
                     <div className="panel-body">
                       <p>Cleint: { task.client }</p>
                       <p>Comunity: {task.community.name}</p>

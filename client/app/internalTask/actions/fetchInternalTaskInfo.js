@@ -28,6 +28,7 @@ export async function fetchInternalTaskInfo(taskId) {
             name
             profileUrl
           }
+          createdAt
         }
       }
     `,

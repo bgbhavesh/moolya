@@ -60,53 +60,56 @@ export default class MlAppCreateTeam extends React.Component{
     if(!id) {
       this.setState({editScreen:false})
     }else {
-      this.setState({editScreen:true})
-    }
-    const resp = await getActivityActionHandler(id);
-    console.log(resp)
-    this.setState({data:resp})
-    this.setState({activityName:resp.name, displayName:resp.displayName,hour:resp.duration.hours,
-      minute:resp.duration.minutes, isExternal:resp.isExternal,
-      isInternal: resp.isInternal, radioAction:resp.mode ,serviceCard:resp.isServiceCardElligible,
-      notes:resp.note,deliverables:resp.deliverable[0],responsePic:resp.imageLink
-      })
-    let industries = [];
-    resp.industryTypes.map(function(indi){
-      industries.push(indi)
-    })
-    this.setState({selectedIndustryType:industries})
+      this.setState({editScreen: true})
 
-    if(this.state.radioAction === "online") {
-      this.setState({online: true, offline:false})
-    } else {
-      this.setState({online: false, offline:true})
-    }
-    if(resp.conversation) {
-      this.setState({isVideo:resp.conversation.isVideo,
-        isAudio:resp.conversation.isAudio,
-        isMeetUp:resp.conversation.isMeetup})
-      let temp = []
-      if (this.state.isMeetUp & this.state.isAudio) {
-        temp.push("Meetup", "Audio")
-      } else if (this.state.isMeetUp & this.state.isVideo) {
-        temp.push("Meetup")
-        temp.push("Video")
-      } else if (this.state.isAudio & this.state.isVideo) {
-        temp.push("Audio", "Video")
-      } else if(this.state.isAudio & this.state.isVideo & this.state.isMeetUp) {
-        temp.push("Audio", "Video","Meetup")
+      const resp = await getActivityActionHandler(id);
+      console.log(resp)
+      this.setState({data: resp})
+      this.setState({
+        activityName: resp.name, displayName: resp.displayName, hour: resp.duration.hours,
+        minute: resp.duration.minutes, isExternal: resp.isExternal,
+        isInternal: resp.isInternal, radioAction: resp.mode, serviceCard: resp.isServiceCardElligible,
+        notes: resp.note, deliverables: resp.deliverable[0], responsePic: resp.imageLink
+      })
+      let industries = [];
+      resp.industryTypes.map(function (indi) {
+        industries.push(indi)
+      })
+      this.setState({selectedIndustryType: industries})
+      if (this.state.radioAction === "online") {
+        this.setState({online: true, offline: false})
+      } else {
+        this.setState({online: false, offline: true})
       }
-      else  if (this.state.isVideo) {
-        temp.push("Video")
-      } else  if (this.state.isAudio) {
-        temp.push("Audio")
-      } else if (this.state.isMeetUp) {
-        temp.push("Meetup")
+      if (resp.conversation) {
+        this.setState({
+          isVideo: resp.conversation.isVideo,
+          isAudio: resp.conversation.isAudio,
+          isMeetUp: resp.conversation.isMeetup
+        })
+        let temp = []
+        if (this.state.isMeetUp & this.state.isAudio) {
+          temp.push("Meetup", "Audio")
+        } else if (this.state.isMeetUp & this.state.isVideo) {
+          temp.push("Meetup")
+          temp.push("Video")
+        } else if (this.state.isAudio & this.state.isVideo) {
+          temp.push("Audio", "Video")
+        } else if (this.state.isAudio & this.state.isVideo & this.state.isMeetUp) {
+          temp.push("Audio", "Video", "Meetup")
+        }
+        else if (this.state.isVideo) {
+          temp.push("Video")
+        } else if (this.state.isAudio) {
+          temp.push("Audio")
+        } else if (this.state.isMeetUp) {
+          temp.push("Meetup")
+        }
+        this.setState({conversationType: temp})
       }
-      this.setState({conversationType: temp})
-    }
       console.log(this.state.activityName)
-    return resp;
+      return resp;
+    }
   }
 
   radioAction(e){
@@ -245,7 +248,7 @@ updateMinutes(e){
     }
     if(this.state.editScreen) {
       let id = FlowRouter.getQueryParam('id')
-      let profileId = FlowRouter.Param('profileId')
+      let profileId = FlowRouter.getParam('profileId')
       const res = await updateActivityActionHandler(id,step1Details)
       this.getDetails();
       FlowRouter.go('/calendar/manageSchedule/'+profileId+'/editActivity/?id='+id)

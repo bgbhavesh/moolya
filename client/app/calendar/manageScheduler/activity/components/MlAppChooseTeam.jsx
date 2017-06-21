@@ -25,7 +25,7 @@ export default class MlAppChooseTeam extends React.Component{
         responseTeam:[{}]
       }
       this.fetchTeam.bind(this)
-    // this.getDetails.bind(this)
+      this.getDetails.bind(this)
 
   }
 
@@ -34,19 +34,34 @@ export default class MlAppChooseTeam extends React.Component{
   }
 
   async getDetails() {
+
     let id = FlowRouter.getQueryParam('id')
     if (id) {
     const resp = await getActivityActionHandler(id)
-
     if(resp) {
       // this.setState({responseTeam: resp.teams})
       let team = resp.teams && resp.teams.length ? resp.teams.map(function (data) {
         return data;
       }) : [{users: []}];  //this.state.responseTeam
       console.log(team, Object.isExtensible(team));
+      let x =[]
+      console.log(team)
+      _.each(team, function (item)
+      {
+        for (var propName in item) {
+          if (item[propName] === null || item[propName] === undefined) {
+            delete item[propName];
+          }
+        }
+        let newItem = _.omit(item, "__typename");
+        x.push(newItem)
+      })
       this.setState({
-        team: team
+        team: x
       });
+
+
+      console.log(this.state.team)
       // console.log(this.state.tea
       // m)
     }
@@ -97,13 +112,12 @@ export default class MlAppChooseTeam extends React.Component{
         x.push(newItem)
       })
     console.log(x)
-this.setState({team:x})
+    this.setState({team:x})
     let id = FlowRouter.getQueryParam('id')
     let teams = {
       teams:team,
     }
-
-     const res = await updateActivityActionHandler(id,teams)
+    const res = await updateActivityActionHandler(id,teams)
     this.getDetails();
 
      return res;

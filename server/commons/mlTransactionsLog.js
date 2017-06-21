@@ -63,7 +63,7 @@ class MlTransactionsHandler {
            lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
 
       }else if(user&&user.profile&&user.profile.isExternaluser){ //resolve external user context based on default profile
-        let externalUProfile=new MlAppUserContext(userId).userProfileDetails();
+        let externalUProfile=new MlAppUserContext(userId).userProfileDetails(userId);
         contextData = {
           clusterId: externalUProfile.defaultCluster,
           chapterId: externalUProfile.defaultChapter,

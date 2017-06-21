@@ -5,7 +5,7 @@ import {MlViewer, MlViewerTypes} from "../../../../../lib/common/mlViewer/mlView
 import React from "react";
 import gql from "graphql-tag";
 import MlAppTransaction from "../components/officeTransaction/MlAppTransaction";
-import MlGenericTransactionAccordion from '../../../../commons/components/transactionAccordion/MlGenericTransactionAccordion'
+import MlGenericTransactionAccordion from '../../../commons/components/transactionAccordion/MlGenericTransactionAccordion'
 
 const mlOfficeTransactionConfig = new MlViewer.View({
   name: "officeTransactionTable",

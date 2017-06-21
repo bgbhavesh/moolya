@@ -72,5 +72,22 @@ export async function rejectConnectionActionHandler(details) {
   return null;
 }
 
+export async function fetchConnectionRequestHandler(connectionId) {
+  const result = await appClient.query({
+    query: gql`
+    query($connectionId:String!){
+      fetchConnection(connectionId:$connectionId) {
+      }
+    }
+    `,
+    variables: {
+      connectionId:connectionId
+    },
+    forceFetch:true
+  });
+  const data = result.data.fetchConnection?result.data.fetchConnection:null;
+  return data;
+}
+
 
 

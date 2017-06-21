@@ -2,6 +2,7 @@
  * Created by mohammed.mohasin on 13/06/17.
  */
 import _ from 'lodash';
+import MlTransactionsHandler from '../../commons/mlTransactionsLog';
 class MlInteractionService{
 
   constructor(){
@@ -119,6 +120,30 @@ class MlInteractionService{
         // To do : When all the communality portfolio done,  Will add remaining portfolio here.
         default:
           return [];
+      }
+    }
+
+    createTransactionRequest(userId,transType,resourceId,context) {
+      try {
+        var transactionType = transType;
+        switch (transactionType) {
+          case 'connectionRequest':
+            new MlTransactionsHandler().recordTransaction({
+              'moduleName': 'interaction',
+              'activity': 'connection',
+              'transactionType': 'connectionRequest',
+              'userId': userId,
+              'activityDocId': resourceId,
+              'docId': resourceId,
+              'transactionDetails': 'connection request',
+              'context': context || {},
+              'transactionTypeId': "connectionRequest"
+            });
+            break;
+        }
+      } catch (e) {
+        //console
+        console.log(e);
       }
     }
 

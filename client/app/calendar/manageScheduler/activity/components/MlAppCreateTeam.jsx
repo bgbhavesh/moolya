@@ -1,3 +1,6 @@
+/**
+ * Created by Mukhil on 19/6/17.
+ */
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
@@ -102,8 +105,6 @@ export default class MlAppCreateTeam extends React.Component{
       }
       this.setState({conversationType: temp})
     }
-
-
       console.log(this.state.activityName)
     return resp;
   }
@@ -199,7 +200,7 @@ updateMinutes(e){
   }
 
 
-  conversation(val) {;
+  conversation(val) {
     let that = this
     let temp =[]
     val.map(function(label){
@@ -365,7 +366,8 @@ updateMinutes(e){
         </ScrollArea>
         <div className="ml_btn" style={{'textAlign':'center'}}>
           <div className="save_btn" onClick={this.saveDetails.bind(this)}>Save</div> <div className="cancel_btn">Cancel</div>
-        </div> </div>
+        </div>
+      </div>
     )
   }
 };

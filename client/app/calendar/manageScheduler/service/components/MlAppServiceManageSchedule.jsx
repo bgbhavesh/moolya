@@ -1,8 +1,14 @@
+/**
+ * Created by Mukhil on 20/6/17.
+ */
 import React, {Component} from "react";
 import {render} from "react-dom";
 import MlAppScheduleHead from "../../commons/components/MlAppScheduleHead";
 import StepZilla from "../../../../../commons/components/stepzilla/StepZilla";
 import MlAppServiceStep1 from "./MlAppServiceStep1";
+import MlAppServiceStep2 from './MlAppServiceStep2'
+import MlAppServiceTermsAndConditions from './MlAppServiceTermsAndConditions'
+import MlAppServicePayment from './MlAppServicePayment'
 // import MlAppChooseTeam from "./MlAppChooseTeam";
 // import MlAppActivityPayment from "./MlAppActivityPayment";
 // import MlAppActivityHistory from "./MlAppActivityHistory";
@@ -38,16 +44,25 @@ export default class MlAppServiceManageSchedule extends Component {
       [
         {
           name: 'Create',
-          component: <MlAppServiceStep1 setId={this.getCreatedId.bind(this)}/>,
+          component: <MlAppServiceStep1 />,
           icon: <span className="ml fa fa-plus-square-o"></span>
+        },
+        {
+          name: 'Select Tasks',
+          component: <MlAppServiceStep2 />,
+          icon: <span className="ml fa fa-users"></span>
+        },
+        {name: 'Terms & Conditions',
+          component: <MlAppServiceTermsAndConditions />,
+          icon: <span className="ml ml-payments"></span>},
+        {name: 'Payment',
+          component: <MlAppServicePayment />,
+          icon: <span className="ml ml-payments"></span>
+        },
+        {name: 'History',
+          // component: <MlAppServicePayment />,
+          icon: <span className="ml ml-moolya-symbol"></span>
         }
-        // {
-        //   name: 'Choose team',
-        //   component: <MlAppChooseTeam activityId={this.state.activityId}/>,
-        //   icon: <span className="ml fa fa-users"></span>
-        // },
-        // {name: 'Payment', component: <MlAppActivityPayment />, icon: <span className="ml ml-payments"></span>},
-        // {name: 'History', component: <MlAppActivityHistory />, icon: <span className="ml ml-moolya-symbol"></span>}
       ]
     return (
       <div className="app_main_wrap">

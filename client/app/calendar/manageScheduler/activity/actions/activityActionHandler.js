@@ -1,3 +1,6 @@
+/**
+ * Created by Mukhil on 19/6/17.
+ */
 import gql from 'graphql-tag'
 import {appClient} from '../../../../core/appConnection';
 

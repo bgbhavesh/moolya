@@ -43,18 +43,17 @@ let service=`
     name: String
     displayName: String
     noOfSession: Int
-    sessionFrequency: Int
+    sessionFrequency: String
     duration: Duration
     status: Boolean
     termsAndCondition: TermsAndCondition
-    attachments: Attachments
+    attachments: [Attachments]
     payment: Payment
     tasks: [String]
     facilitationCharge : FacilitationCharge
-    note: String
     createdAt: Date
     updatedAt: Date
-
+    validTill: Date
   }
 
    input facilitationCharge {
@@ -96,27 +95,27 @@ let service=`
         name: String
         displayName: String
         noOfSession: Int
-        sessionFrequency:Int
+        sessionFrequency:String
         duration: duration
         status: Boolean
         termsAndCondition: termsAndCondition
-        attachments: attachments
+        attachments: [attachments]
         payment: payment
         tasks: [String]
         facilitationCharge : facilitationCharge
-        note: String
         createdAt: Date
         updatedAt: Date
+        validTill: Date
     }
 
     type Query {
         fetchServices:[Service]
-        fetchService(id:String):Service
+        fetchService(serviceId:String):Service
     }
 
     type Mutation {
-        createService:response
-        updateService:response
+        createService(Services:service):response
+        updateService(serviceId:String,Services:service):response
     }
 `;
 

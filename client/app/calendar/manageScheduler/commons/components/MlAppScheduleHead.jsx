@@ -40,10 +40,10 @@ export default class MlAppScheduleHead extends Component {
 
   async getUserProfiles() {
     const resp = await getUserProfileActionHandler();
-    this.setState({profile: resp})
+    // this.setState({profile: resp})
     let name = resp[0].displayName;
     let profileImage = resp[0].profileImage;
-    this.setState({displayName: name, profilePic: profileImage})
+    this.setState({profile: resp, displayName: name, profilePic: profileImage})
     return resp;
   }
 

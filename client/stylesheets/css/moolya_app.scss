@@ -1241,3 +1241,28 @@ p{margin-top:10px;}
     }
   }
 }
+
+.company_block{
+  &.selected_block{
+    background:$mlRed;
+    border:$mlRed solid 1px;
+  }
+}
+
+.provider_block{
+  &.selected_block{
+    border:$mlRed solid 1px;
+    box-shadow:none;
+    h3{
+      background:$mlRed;
+
+    }
+  }
+}
+
+.ideators_list_block {
+  &.selected_block {
+    background:$mlRed;
+    border:$mlRed solid 1px;
+  }
+}

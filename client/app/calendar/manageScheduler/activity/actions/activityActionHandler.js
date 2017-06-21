@@ -1,3 +1,6 @@
+/**
+ * Created by Mukhil on 19/6/17.
+ */
 import gql from 'graphql-tag'
 import {appClient} from '../../../../core/appConnection';
 
@@ -73,9 +76,9 @@ query  {
     profileImage
   }
 }
-    `
+    `,
+    forceFetch:true
   });
-  console.log(result)
   const users = result.data.getUserProfiles;
   return users
 }
@@ -129,13 +132,46 @@ query($activityId: String)  {
   }
 }
     `,
+    forceFetch:true,
+
     variables: {
       activityId
-    }
+    },
+    forceFetch:true
   });
   const users = result.data.fetchActivity;
   return users
 }
+
+export async function fetchActivitiesActionHandler (profileId) {
+  const result = await appClient.query({
+    query: gql`
+    query($profileId:String) {
+      fetchActivities(profileId: $profileId) {
+        displayName
+        imageLink
+        mode
+        _id
+        duration {
+          hours
+          minutes
+        }
+        teams{
+      branch
+      communityType
+      users
+    }
+      }
+    }
+    `,
+    variables: {
+      profileId:profileId
+    }
+  });
+  const activities = result.data.fetchActivities;
+  return activities
+}
+
 
 
 // export async function getActivityDataActionHandler() {

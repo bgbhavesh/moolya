@@ -36,7 +36,7 @@ if(Meteor.isServer){
               "link": "provider",
               "isLink" : true,
               "isMenu" : true,
-              "name" : "Provider",
+              "name" : "Service Provider",
               "uniqueId" : "provider"
             },
 

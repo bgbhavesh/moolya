@@ -33,8 +33,9 @@ export default class MlAppActivityList extends React.Component{
   }
 
   editMode(index, id) {
+    console.log(id)
     let profileId = FlowRouter.getParam('profileId');
-    FlowRouter.go('/app/calendar/manageSchedule/'+profileId+'/editActivity?id='+id);
+    FlowRouter.go('/app/calendar/manageSchedule/'+profileId+'/createActivity?id='+id);
   }
 
   render(){

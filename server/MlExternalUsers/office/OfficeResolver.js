@@ -98,7 +98,7 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
         } else {
           let officeDetails = {
             officeId: ret,
-            transactionType:'office setup',
+            transactionType:'office',
             status: 'Pending',
             duration:{
               years:1

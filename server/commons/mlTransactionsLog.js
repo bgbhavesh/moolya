@@ -4,6 +4,7 @@ import MlAdminUserContext from "../mlAuthorization/mlAdminUserContext";
 class MlTransactionsHandler {
   constructor() {
     this.contextData.bind(this);
+    this.readTransaction.bind(this);
     this.contextRefNames.bind(this);
   }
 
@@ -63,7 +64,7 @@ class MlTransactionsHandler {
            lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
 
       }else if(user&&user.profile&&user.profile.isExternaluser){ //resolve external user context based on default profile
-        let externalUProfile=new MlAppUserContext(userId).userProfileDetails();
+        let externalUProfile=new MlAppUserContext(userId).userProfileDetails(userId);
         contextData = {
           clusterId: externalUProfile.defaultCluster,
           chapterId: externalUProfile.defaultChapter,
@@ -119,6 +120,11 @@ class MlTransactionsHandler {
       transactionRecord=_.extend(transactionRecord,contextData);
 
     const resp = MlTransactionsLog.insert(transactionRecord);
+    return resp;
+  }
+
+  readTransaction(transactionId){
+    const resp = MlTransactionsLog.findOne(transactionId);
     return resp;
   }
 }

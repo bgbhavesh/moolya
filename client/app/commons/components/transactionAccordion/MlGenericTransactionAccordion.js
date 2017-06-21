@@ -3,19 +3,23 @@
  */
 
 import React, {Component} from "react";
-import MlAppTransaction from '../../../../client/app/profile/office/components/officeTransaction/MlAppTransaction'
-
+import MlAppTransaction from '../../../profile/office/components/officeTransaction/MlAppTransaction'
+import MlConnectionRequest from './MlConnectionRequest';
 export default function MlGenericTransactionAccordion(props) {
   let data = props.data || {}
   switch (data.transactionType) {
-    case 'office setup': {
+    case 'office': {
       return <MlOffice config={data}/>
-    }
       break;
+    }
     case 'registration': {
       return <MlAppTransaction config={data}/>
-    }
       break;
+    }
+    case 'connectionRequest':{
+      return <MlConnectionRequest data={data}/>
+     break;
+    }
     default :
       return <MlEmptyView/>
   }

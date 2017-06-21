@@ -17,6 +17,11 @@ export async function fetchActivitiesActionHandler (profileId) {
           hours
           minutes
         }
+        teams{
+      branch
+      communityType
+      users
+    }
       }
     }
     `,

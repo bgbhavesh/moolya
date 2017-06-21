@@ -2,6 +2,7 @@
  * Created by mohammed.mohasin on 13/06/17.
  */
 import _ from 'lodash';
+import MlTransactionsHandler from '../../commons/mlTransactionsLog';
 class MlInteractionService{
 
   constructor(){
@@ -47,7 +48,7 @@ class MlInteractionService{
         return {resourceId:resourceId,resourceType:resourceType,resourceOwner:resourceOwnerUser,resourceOwnerId:resourceOwnerUser._id,resourceOwnerUserName:resourceOwnerUser.username,
           contextUserId:contextUser._id,contextUserName:contextUser.username,contextUser:contextUser};
     }
-    getPipeline(resourceType){
+    buildAggregationQuery(resourceType){
       switch (resourceType){
         case 'portfolio':
           return [
@@ -121,6 +122,44 @@ class MlInteractionService{
           return [];
       }
     }
+
+    createTransactionRequest(userId,transType,resourceId,context) {
+      try {
+        var transactionType = transType;
+        switch (transactionType) {
+          case 'connectionRequest':
+            new MlTransactionsHandler().recordTransaction({
+              'moduleName': 'interaction',
+              'activity': 'connection',
+              'transactionType': 'connectionRequest',
+              'userId': userId,
+              'activityDocId': resourceId,
+              'docId': resourceId,
+              'transactionDetails': 'connection request',
+              'context': context || {},
+              'transactionTypeId': "connectionRequest"
+            });
+            break;
+        }
+      } catch (e) {
+        //console
+        console.log(e);
+      }
+    }
+
+  fetchConnectionByTransaction(transactionId,transactionType) {
+    try {
+      switch (transactionType) {
+        case 'connectionRequest':
+          let transactionRec=new MlTransactionsHandler().readTransaction(transactionId);
+          return transactionRec.docId;
+          break;
+      }
+    } catch (e) {
+      //console
+      console.log(e);
+    }
+  }
 
 }
 const mlInteractionService = new MlInteractionService();

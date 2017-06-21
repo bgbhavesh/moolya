@@ -8,7 +8,7 @@ import MlAccordion from "../../../../commons/components/MlAccordion";
 import StepZilla from "../../../../../commons/components/stepzilla/StepZilla";
 import MlAppTaskCreate from "./MlAppTaskCreate";
 import MlAppTaskSession from "./MlAppTaskSession";
-import MlAppTaskStep3 from "./MlAppTaskStep3";
+import MlAppTaskConditions from "./MlAppTaskConditions";
 import MlAppTaskStep4 from "./MlAppTaskStep4";
 import MlAppTaskStep5 from "./MlAppTaskStep5";
 
@@ -24,6 +24,7 @@ class MlAppTaskLanding extends Component {
   async saveTaskDetails() {
     let sendData = this.state.createData
     console.log(sendData)
+    let taskId = this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id')
     var response;
     switch (this.state.saveType) {
       case 'taskCreate': {
@@ -31,15 +32,17 @@ class MlAppTaskLanding extends Component {
         return response
       }
         break;
-      case 'session': {
-        response = await createSessionActionHandler(sendData)
+      case 'taskUpdate': {
+        if (taskId)
+          response = await createSessionActionHandler(taskId, sendData)
+        else
+          toastr.error("Invalid Request");
         return response
       }
         break;
       default :
         console.log('save type required')
     }
-
   }
 
   async handleError(response) {
@@ -50,9 +53,10 @@ class MlAppTaskLanding extends Component {
   async handleSuccess(response) {
     console.log(response)
     if (response && response.success) {
-      FlowRouter.setQueryParams({id:response.result})
-      toastr.success("Saved Successfully");
-    }else if(response && !response.success){
+      if (this.state.saveType == 'taskCreate')
+        FlowRouter.setQueryParams({id: response.result})
+      toastr.success("Saved Successfully move to next step");
+    } else if (response && !response.success) {
       toastr.error(response.result);
     }
   }
@@ -60,12 +64,19 @@ class MlAppTaskLanding extends Component {
 
   getCreateDetails(details) {
     details['profileId'] = this.props.profileId
-    this.setState({createData: details, saveType:'taskCreate'});
+    let typeHandel = this.props.editMode ? "taskUpdate" : "taskCreate"
+    this.setState({createData: details, saveType: typeHandel});
   }
 
   getSessionDetails(details) {
+    let obj = {session: details}
+    console.log(obj)
+    this.setState({createData: obj, saveType: 'taskUpdate'});
+  }
+
+  getConditionDetails(details) {
     console.log(details)
-    this.setState({sessionData: details, saveType:'session'});
+    this.setState({createData: details, saveType: 'taskUpdate'});
   }
 
   render() {
@@ -99,12 +110,22 @@ class MlAppTaskLanding extends Component {
 
     const steps =
       [
-        {name: 'Create Task', component: <MlAppTaskCreate getCreateDetails={this.getCreateDetails.bind(this)}/>},
-        {name: 'Create Session',
-          component: <MlAppTaskSession getSessionDetails={this.getSessionDetails.bind(this)}
-                                       taskId={FlowRouter.getQueryParam('id')} profileId={this.props.profileId}/>
+        {
+          name: 'Create Task',
+          component: <MlAppTaskCreate getCreateDetails={this.getCreateDetails.bind(this)}
+                                      taskId={this.props.editMode ? this.props.taskId : ''}/>
         },
-        {name: 'T&C', component: <MlAppTaskStep3 />},
+        {
+          name: 'Create Session',
+          component: <MlAppTaskSession getSessionDetails={this.getSessionDetails.bind(this)}
+                                       taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id') }
+                                       editMode={this.props.editMode}
+                                       profileId={this.props.profileId}/>
+        },
+        {name: 'T&C',
+          component: <MlAppTaskConditions getConditionDetails={this.getConditionDetails.bind(this) }
+                                          taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id') }/>
+        },
         {name: 'Payment', component: <MlAppTaskStep4 />},
         {name: 'History', component: <MlAppTaskStep5 />}
       ]
@@ -112,7 +133,7 @@ class MlAppTaskLanding extends Component {
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
-          <MlAppScheduleHead type="task" />
+          <MlAppScheduleHead type="task"/>
           <div className="clearfix"/>
           <div className="col-md-12">
             <div className='step-progress'>

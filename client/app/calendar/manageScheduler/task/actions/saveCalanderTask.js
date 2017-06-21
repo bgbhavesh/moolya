@@ -3,6 +3,7 @@
  */
 import gql from "graphql-tag";
 import {appClient} from "../../../../core/appConnection";
+import _ from "lodash";
 
 export async function createTaskActionHandler(details) {
   const result = await appClient.mutate({
@@ -48,15 +49,48 @@ export async function findTaskActionHandler(taskId) {
     query: gql`
           query  ($taskId: String){
             fetchTask(taskId: $taskId) {
+              name
+              displayName
+              isInternal
+              isExternal
+              note
               noOfSession
+              sessionFrequency
+              duration {
+                hours
+                minutes
+              }
+              session{
+                duration {
+                  hours
+                  minutes
+                }
+                activities
+              }
+              termsAndCondition{
+                isReschedulable
+                noOfReschedulable
+              }
+              isServiceCardEligible
               sessionFrequency
             }
           }
       `,
     variables: {
       taskId: taskId
-    }
+    },
+    forceFetch: true
   })
-  const resp = result.data.fetchTask;
-  return resp;
+  var resp = result.data.fetchTask;
+  let data = _.omit(resp, '__typename')
+  data.duration = _.omit(data.duration, '__typename')
+  data.termsAndCondition = _.omit(data.termsAndCondition, '__typename')
+  let sessionArray = []
+  _.each(data.session,function (item,say) {
+    let value = _.omit(item, '__typename')
+    value.duration = _.omit(value.duration, '__typename')
+    sessionArray.push(value)
+  })
+  data.session = sessionArray
+  return data;
 }

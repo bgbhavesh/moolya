@@ -191,10 +191,10 @@ let MasterSettingsSchema = `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],MasterSettingsSchema]);
 let supportedApi = [
-    {api:'fetchMasterSettings', actionName:'READ', moduleName:"MASTERSETTINGS"},
-    {api:'findMasterSetting', actionName:'READ', moduleName:"MASTERSETTINGS"},
-    {api:'fetchMasterSettingsForDropDown', actionName:'READ', moduleName:"MASTERSETTINGS"},
-    {api:'fetchMasterSettingsForPlatFormAdmin', actionName:'READ', moduleName:"MASTERSETTINGS"},
+    {api:'fetchMasterSettings', actionName:'READ', moduleName:"MASTERSETTINGS", isWhiteList:true},
+    {api:'findMasterSetting', actionName:'READ', moduleName:"MASTERSETTINGS", isWhiteList:true},
+    {api:'fetchMasterSettingsForDropDown', actionName:'READ', moduleName:"MASTERSETTINGS", isWhiteList:true},
+    {api:'fetchMasterSettingsForPlatFormAdmin', actionName:'READ', moduleName:"MASTERSETTINGS", isWhiteList:true},
     {api:'createMasterSetting', actionName:'CREATE', moduleName:"MASTERSETTINGS"},
     {api:'updateMasterSetting', actionName:'UPDATE', moduleName:"MASTERSETTINGS"}
 ]

@@ -10,8 +10,8 @@ import MlAppInternalCompleteTask from './MlAppInternalCompleteTask';
 import 'react-responsive-tabs/styles.css';
 
 export default class MlAppInternalTask extends React.Component{
-  componentDidMount(){
 
+  componentDidMount() {
   }
 
   render(){
@@ -38,7 +38,6 @@ export default class MlAppInternalTask extends React.Component{
           <div className="col-md-12">
             <App/>
           </div>
-
         </div>
       </div>
     )

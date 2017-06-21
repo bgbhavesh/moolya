@@ -31,13 +31,24 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
     let response = new MlRespPayload().errorPayload("Already Exist", code);
     return response;
   }
+
   role.createdDateTime = new Date();
-  // role.createdBy = Meteor.users.findOne({_id:context.userId}).username;
   role.createdBy = mlDBController.findOne("users", {_id: context.userId}, context).username;
-  // let id = MlRoles.insert({...role});
+
+  _.each(role.modules, function (module)
+  {
+      for(var i = 0; i < module.actions.length; i++){
+        var dbAction = mlDBController.findOne("MlActions", {code: module.actions[i].actionId}, context);
+        if(!dbAction){
+          let code = 409;
+          let response = new MlRespPayload().errorPayload("Invalid Action", code);
+          return response;
+        }
+        module.actions[i].actionId = dbAction._id;
+      }
+  })
 
   // Adding Default Modules
-
   _.each(defaultModules, function (mod) {
     var module = mlDBController.findOne("MlModules", {code:mod}, context);
     var readAction = mlDBController.findOne("MlActions", {code: "READ"}, context);

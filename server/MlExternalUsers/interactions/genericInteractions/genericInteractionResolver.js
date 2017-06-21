@@ -34,7 +34,7 @@ MlResolver.MlQueryResolver['fetchInteractionsCount'] = (obj, args, context, info
               counterList.push({'actionName':'collaborate',count:0});
               break;
         case 'favourite':
-              let favouriteCount=MlConnections.find({'isAccepted':true,'users':{'$elemMatch':{'userId':resourceDetails.resourceOwnerId,'isFavourite':true}}}).count();
+              let favouriteCount=MlConnections.find({'isAccepted':true,'users.userId':resourceDetails.resourceOwnerId,'users':{'$elemMatch':{'userId':{$ne:resourceDetails.resourceOwnerId},'isFavourite':true}}}).count();
               counterList.push({'actionName':'favourite',count:favouriteCount});
               break;
         case 'view':

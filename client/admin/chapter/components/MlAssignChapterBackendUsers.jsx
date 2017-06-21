@@ -53,13 +53,15 @@ class MlAssignChapterBackendUsers extends React.Component {
     OnToggleSwitch(true, true);
   }
 
-  async findSubChapterDetails() {
-    let subChapterId = this.props.params.subChapterId;
-    const response = await findSubChapterActionHandler(subChapterId);
-    if(response){
-      let isDefaultSubChapter= response.isDefaultSubChapter
-      this.setState({isDefaultSubChapter: isDefaultSubChapter});
-    }
+    async findSubChapterDetails() {
+      let clusterId = this.props.params.clusterId;
+      let chapterId = this.props.params.chapterId;
+      let subChapterId = this.props.params.subChapterId;
+      const response = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
+      if(response){
+        let isDefaultSubChapter= response.isDefaultSubChapter
+        this.setState({isDefaultSubChapter: isDefaultSubChapter});
+      }
   }
 
   optionsBySelectUser(index, selectedIndex) {

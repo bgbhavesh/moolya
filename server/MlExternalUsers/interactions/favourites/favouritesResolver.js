@@ -16,7 +16,7 @@ MlResolver.MlQueryResolver['fetchFavourites'] = (obj, args, context, info) => {
   let userFavourites = [];
   if (context && context.userId) {
     //todo: pagination based result
-    var pipeline=[{$match:{'users':{$elemMatch:{'userId':context.userId,isFavourite:true}}}},
+    var pipeline=[{$match:{'isAccepted':true,'users':{$elemMatch:{'userId':context.userId,isFavourite:true}}}},
       {$unwind :"$users" },
       {$match:{'users.userId':{$ne:context.userId}}},
       {$lookup:{from:'users',localField:'users.userId',foreignField:'_id',as:'userDetails'}},//join with user

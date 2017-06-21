@@ -1,12 +1,26 @@
 import React from "react";
 import {render} from "react-dom";
 import StarRatings from '../../../app/commons/components/StarRatings';
+import {reviewActionHandler} from "../actions/reviewActionHandler";
 export default class Review extends React.Component {
 
   constructor(props) {
     super(props);
-    //this.reviewActionHandler.bind(this);
+    this.reviewHandler.bind(this);
     return this;
+  }
+
+  async reviewHandler(){
+    var resourceDetails=this.props.data||{};
+    var message=this.refs.message.value&&this.refs.message.value.trim()!==""?this.refs.message.value.trim():null;
+    var response=await reviewActionHandler({'resourceId':resourceDetails.resourceId,'resourceType':resourceDetails.resourceType,'message':message});
+
+    if(response){
+      toastr.success("review send successfully");
+    }else{
+      toastr.error("Failed to send the review");
+    }
+    this.props.toggle();
   }
 
   render() {

@@ -47,7 +47,7 @@ class MlInteractionService{
         return {resourceId:resourceId,resourceType:resourceType,resourceOwner:resourceOwnerUser,resourceOwnerId:resourceOwnerUser._id,resourceOwnerUserName:resourceOwnerUser.username,
           contextUserId:contextUser._id,contextUserName:contextUser.username,contextUser:contextUser};
     }
-    getPipeline(resourceType){
+    buildAggregationQuery(resourceType){
       switch (resourceType){
         case 'portfolio':
           return [

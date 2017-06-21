@@ -6,7 +6,7 @@ if(Meteor.isServer){
     "name":"mlCalendarMenu",
     "menu" : [
       {
-        "image":"ml ml-ideator",
+        "image":"fa fa-calendar",
         "link": "/app/calendar",
         "isLink" : true,
         "isMenu" : true,
@@ -14,7 +14,7 @@ if(Meteor.isServer){
         "uniqueId" : "calendar"
       },
       {
-        "image":"",
+        "image":"fa fa-calendar",
         "link": "/app/calendar/clientCalendar",
         "isLink" : true,
         "isMenu" : true,
@@ -23,7 +23,7 @@ if(Meteor.isServer){
       },
 
       {
-        "image":"",
+        "image":"fa fa-calendar",
         "link": "/app/calendar/officeCalendar",
         "isLink" : true,
         "isMenu" : true,
@@ -32,7 +32,7 @@ if(Meteor.isServer){
       },
 
       {
-        "image":"",
+        "image":"fa fa-cogs",
         "link": "/app/calendar/settings",
         "isLink" : true,
         "isMenu" : true,
@@ -41,7 +41,7 @@ if(Meteor.isServer){
       },
 
       {
-        "image":"",
+        "image":"fa fa-bell-o",
         "link": "/app/calendar/notification",
         "isLink" : true,
         "isMenu" : true,
@@ -50,7 +50,7 @@ if(Meteor.isServer){
       },
 
       {
-        "image":"",
+        "image":"fa fa-calendar-check-o",
         "link": "/app/calendar/manageSchedule",
         "isLink" : true,
         "isMenu" : true,

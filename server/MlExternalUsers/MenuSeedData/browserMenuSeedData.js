@@ -1,9 +1,9 @@
 /**
- * Created by venkatsrinag on 7/6/17.
+ * Created by vishwadeep on 21/6/17.
  */
 if(Meteor.isServer){
-  MlMenus.upsert({name:"mlFunderMenu"}, {$set:{
-    "name":"mlFunderMenu",
+  MlMenus.upsert({name:"mlBrowserMenu"}, {$set:{
+    "name":"mlBrowserMenu",
     "menu" : [
       {
         "image":"ml ml-dashboard",
@@ -13,16 +13,6 @@ if(Meteor.isServer){
         "name" : "Dashboard",
         "uniqueId" : "dashboard"
       },
-
-      // {
-      //   "image":"ml flaticon-ml-pc-searchs",
-      //   "link": "/app/dashboard",
-      //   "isLink" : true,
-      //   "isMenu" : true,
-      //   "name" : "Dashboard",
-      //   "uniqueId" : "dashboard"
-      // },
-
       {
         "image":"ml flaticon-ml-pc-search",
         "link": "/app/explore",
@@ -31,26 +21,6 @@ if(Meteor.isServer){
         "name" : "Explore",
         "uniqueId" : "explore"
       },
-
-      {
-        "image":"fa fa-calendar",
-        "link": "/app/calendar",
-        "isLink" : true,
-        "isMenu" : true,
-        "name" : "Calender",
-        "uniqueId" : "calender"
-      },
-
-
-      {
-        "image":"ml ml-investment",
-        "link": "/app/investments",
-        "isLink" : true,
-        "isMenu" : true,
-        "name" : "My Investments",
-        "uniqueId" : "myInvestments"
-      },
-
       {
         "image":"ml ml-transaction",
         "link": "/app/transaction",
@@ -59,7 +29,6 @@ if(Meteor.isServer){
         "name" : "My Transaction",
         "uniqueId" : "myTransaction"
       },
-
       {
         "image":"ml ml-chat",
         "link": "/app/conversations",
@@ -68,7 +37,6 @@ if(Meteor.isServer){
         "name" : "Conversations",
         "uniqueId" : "conversations"
       },
-
       {
         "image":"ml ml-subscribe",
         "link": "/app/subscriptions",
@@ -103,5 +71,5 @@ if(Meteor.isServer){
         "uniqueId" : "my_task"
       }
     ]
-  }})
+  }});
 }

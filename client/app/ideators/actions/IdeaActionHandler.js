@@ -157,7 +157,8 @@ export async function fetchLibrary(userId) {
         `,
     variables:{
   userId
-    }
+    },
+    forceFetch:true
   })
   const id = result.data.fetchLibrary;
   return id

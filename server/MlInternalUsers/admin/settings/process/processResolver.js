@@ -60,6 +60,39 @@ MlResolver.MlMutationResolver['updateProcess'] = (obj, args, context, info) => {
   if (args.id) {
     var id= args.id;
     args=_.omit(args,'id');
+    //find the old  details
+
+    let processResult=MlProcessMapping.findOne({"_id":id});
+    if(processResult&&processResult.documents){
+      let oldDocuments=processResult.documents
+      let newDocuments=args.process.documents
+      let differedDoc=[]
+      oldDocuments.map(function(current){
+         newDocuments.map(function(current_new){
+             if(current_new.type == current.type&& current_new.category == current.category&&current_new.isActive != current.isActive){
+               differedDoc.push(current_new)
+             }
+          })
+      });
+      console.log(differedDoc)
+      if(differedDoc.length>0){
+          for(let i=0;i<differedDoc.length;i++){
+            if(differedDoc[i].isActive==false){
+              let result = mlDBController.update('MlProcessMapping', {
+                _id: id, 'processDocuments': {
+                  $elemMatch: {
+                    'kycCategoryId': differedDoc[i].category, 'docTypeId': differedDoc[i].type
+                  }
+                }
+              }, {
+                "processDocuments.$.isMandatory": false,
+                "processDocuments.$.isActive": false
+              }, {$set: true}, context)
+            }
+          }
+
+      }
+    }
     // let result= MlProcessMapping.update(id, {$set: args.process});
     let result = mlDBController.update('MlProcessMapping', id, args.process, {$set:true}, context)
       let code = 200;

@@ -4,7 +4,7 @@
 import {MlViewer, MlViewerTypes} from "../../../../lib/common/mlViewer/mlViewer";
 import React from "react";
 import gql from "graphql-tag";
-import MlGenericTransactionAccordion from '../../../commons/components/transactionAccordion/MlGenericTransactionAccordion'
+import MlGenericTransactionAccordion from '../../commons/components/transactionAccordion/MlGenericTransactionAccordion'
 
 const mlMyTransactionTableConfig = new MlViewer.View({
   name: "MyTransactionTable",

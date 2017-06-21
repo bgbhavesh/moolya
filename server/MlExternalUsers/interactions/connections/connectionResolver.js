@@ -49,6 +49,23 @@ MlResolver.MlQueryResolver['fetchConnections'] = (obj, args, context, info) => {
   return userConnections
 }
 
+MlResolver.MlQueryResolver['fetchConnection'] = (obj, args, context, info) => {
+  try {
+    var resp=null;
+    var connection = mlDBController.findOne('MlConnections',{'_id':args.connectionId},context);
+    if(!connection&&!context.userId){
+      return null;
+    }
+    var requestedConnection=mlDBController.findOne('MlConnections',{_id:connection._id,isAccepted:false,isBlocked:false,isDenied:false,requestedFrom:{'$ne':context._id}},context);
+    if(requestedConnection)connection.canAccept=true;connection.canReject=true;
+
+    return connection;
+  } catch (e) {
+    return null;
+  }
+}
+
+
 /*
 * This method returns creates the connection request.
 * @param resourceType and resourceId containing resource details
@@ -91,19 +108,26 @@ MlResolver.MlMutationResolver['connectionRequest'] = (obj, args, context, info) 
         isBlocked:false,resendCount: 0,status:0};
 
       resp = mlDBController.insert('MlConnections',connection,context);
-
+      //create the transaction record and log
+      if(resp){
+           mlInteractionService.createTransactionRequest(toUser._id,'connectionRequest',resp);
+      }
       return  new MlRespPayload().successPayload(resp,200);
     }
     /*other conditions for connection request
     /*connection request is re-send only if
      1- user rejects the connection request.same user can only send the request.
      2- Note: if connection is blocked. then requestedFrom should be reset(or connection object should be deleted)
-     3-$0r condition 1)isDenied:false only if the connection is reset
+     3-$0r condition 1)isDenied:false only if the connection is reset and requestedFrom is empty
                      2)isDenied:true and requestFrom is not current user*/
-    resp=mlDBController.update('MlConnections',{connectionCode:connectionCode,isBlocked:false,isAccepted:false,$or:[{isDenied:false},{isDenied:true,requestedFrom:{$ne:fromuser._id}}]},
+    resp=mlDBController.update('MlConnections',{connectionCode:connectionCode,isBlocked:false,isAccepted:false,$or:[{isDenied:false,requestedFrom:{'$type': 10}},{isDenied:true,requestedFrom:{$ne:fromuser._id}}]},
                                          {updatedBy:fromuser.username,updatedAt:new Date(),actionUserId:fromuser._id,isDenied:false,requestedFrom:fromuser._id,status:0},
                                          {$set:true},context);
-    if(resp===1){ return new MlRespPayload().successPayload(resp,200) };
+    if(resp===1){
+      ////create the transaction record and log
+      mlInteractionService.createTransactionRequest(toUser._id,'connectionRequest',resp);
+      return new MlRespPayload().successPayload(resp,200)
+    };
 
   } catch (e) {
     let code = 400;

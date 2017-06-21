@@ -47,34 +47,50 @@ export default class PortfolioLibrary extends React.Component{
   ImageUpload(e){
     let file=document.getElementById("image_upload").files[0];
     this.setState({fileType:file.type,fileName:file.name });
-    if(file) {
+    let fileType = file.type
+    let typeShouldBe = _.compact(fileType.split('/'));
+    if(file && typeShouldBe && typeShouldBe[0]=="image") {
       let data = {moduleName: "PROFILE", actionName: "UPDATE"}
       let response =  multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "image"));
+    }else{
+      toastr.error("Please select a Image Format");
     }
   }
 
   videoUpload() {
     let file = document.getElementById("video_upload").files[0];
     this.setState({fileType:file.type,fileName:file.name });
-    if (file) {
+    let fileType = file.type
+    let typeShouldBe = _.compact(fileType.split('/'));
+    if (file  && typeShouldBe && typeShouldBe[0]=="video") {
       let data = {moduleName: "PROFILE", actionName: "UPDATE"}
       let response =  multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this,"video"));
+    }else{
+      toastr.error("Please select a Video Format");
     }
   }
   TemplateUpload(){
     let file = document.getElementById("template_upload").files[0];
     this.setState({fileType:file.type,fileName:file.name });
-    if (file) {
+    let fileType = file.type
+    let typeShouldBe = _.compact(fileType.split('/'));
+    if (file  && typeShouldBe && typeShouldBe[0]!="video" && typeShouldBe[0]!="image"  && typeShouldBe[0]!="audio") {
       let data = {moduleName: "PROFILE", actionName: "UPDATE"}
       let response =  multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this,"template"));
+    }else{
+      toastr.error("Please select a Template Format");
     }
   }
 
   documentUpload() {
     let file = document.getElementById("document_upload").files[0];
-    if (file) {
+    let fileType = file.type
+    let typeShouldBe = _.compact(fileType.split('/'));
+    if (file  && typeShouldBe && typeShouldBe[0]!="video" && typeShouldBe[0]!="image"  && typeShouldBe[0]!="audio") {
       let data = {moduleName: "PROFILE", actionName: "UPDATE"}
       let response =  multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this,"document"));
+    }else{
+      toastr.error("Please select a Document Format");
     }
   }
 
@@ -87,6 +103,7 @@ export default class PortfolioLibrary extends React.Component{
     if (resp) {
       switch(type){
         case "image":
+          let imgaeDataUpdate = this.fetchOnlyImages();
           this.setState({"uploadedImage": resp});
           var imageLink = $.parseJSON(this.state.uploadedImage).result;
           this.setState({"uploadedImage": imageLink});
@@ -95,18 +112,21 @@ export default class PortfolioLibrary extends React.Component{
           this.storeData(imageLink,"image")
           break;
         case "video":
+          let videoDataUpdate = this.fetchOnlyImages();
           this.setState({"uploadedVideo": resp});
           var videoLink = $.parseJSON(this.state.uploadedVideo).result;
           this.setState({"uploadedVideo": videoLink});
           this.storeData(videoLink,"video")
           break;
         case "document":
+          let documentDataUpdate = this.fetchOnlyImages();
           this.setState({"uploadedDocuments": resp});
           var documentLink = $.parseJSON(this.state.uploadedDocuments).result;
           this.setState({"uploadedDocuments": documentLink});
           this.storeData(documentLink,"video")
           break;
         case "template":
+          let templateDataUpdate = this.fetchOnlyImages();
           this.setState({"uploadedTemplate": resp});
           var templateLink = $.parseJSON(this.state.uploadedTemplate).result;
           this.setState({"uploadedTemplate": imageLink});
@@ -143,6 +163,7 @@ export default class PortfolioLibrary extends React.Component{
           }
         }
         const res = await createLibrary(videoDetails)
+        this.fetchOnlyImages();
         return res;
         break;
       case "document":
@@ -155,6 +176,7 @@ export default class PortfolioLibrary extends React.Component{
           }
         }
         const res1 = await createLibrary(documentDetails)
+        this.fetchOnlyImages();
         return res1;
         break;
       case "template":
@@ -167,6 +189,7 @@ export default class PortfolioLibrary extends React.Component{
           }
         }
         const res2 = await createLibrary(templateDetails)
+        this.fetchOnlyImages();
         return res2;
         break;
     }
@@ -214,7 +237,7 @@ export default class PortfolioLibrary extends React.Component{
     const resp = await fetchLibrary(userId)
     var libraryDetails = resp;
     var details = [];
-    if(libraryDetails[0].images) {
+    if(libraryDetails&&libraryDetails[0]&&libraryDetails[0].images) {
       libraryDetails.map(function (attributes) {
         details.push(attributes.images)
       })
@@ -231,7 +254,7 @@ export default class PortfolioLibrary extends React.Component{
     }else{
       this.setState({imageSpecifications:[]})
     }
-    if(libraryDetails[0].templates) {
+    if(libraryDetails&&libraryDetails[0]&&libraryDetails[0].templates) {
       libraryDetails.map(function (attributes) {
         details.push(attributes.templates)
       })
@@ -250,7 +273,7 @@ export default class PortfolioLibrary extends React.Component{
     }
 
 
-    if(libraryDetails[0].videos) {
+    if(libraryDetails&&libraryDetails[0]&&libraryDetails[0].videos) {
       let videoStructure = [] ;
       libraryDetails.map(function (attributes) {
         videoStructure.push(attributes.videos)

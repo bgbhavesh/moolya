@@ -318,7 +318,9 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
           firstName  :details.firstName,
           lastName   : details.lastName,
           displayName :details.firstName+' '+ details.lastName,
-          externalUserProfiles: [userProfile]
+          externalUserProfiles: [userProfile],
+          dateOfBirth : null,
+          genderType : null
         }
         let userObject = {
           username: details.email,
@@ -389,6 +391,15 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
             validationCheck=MlRegistrationPreCondition.validateActiveCommunity(id);
              if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
                   updatedResponse = mlDBController.update('MlRegistration', id, {registrationDetails: args.details}, {$set: true}, context);
+                let email=registrationRecord.registrationInfo.email
+                  var existingUser = mlDBController.findOne('users', {"username": email}, context)
+                  if(existingUser){
+                  let dob=args.details.dateOfBirth?moment(args.details.dateOfBirth).startOf("day").toDate():null
+                    let gender=args.details.gender?args.details.gender:null
+                    result = mlDBController.update('users', {username: email},
+                      {"profile.genderType":gender,"profile.dateOfBirth":dob}, {$set: true}, context)
+                  }
+
       }
 
     let code = 200;

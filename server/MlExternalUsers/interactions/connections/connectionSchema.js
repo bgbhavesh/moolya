@@ -21,7 +21,11 @@ let connections = `
         updatedBy:String,
         isAccepted:Boolean,
         isDenied:Boolean,
-        resendCount:Int
+        isBlocked:Boolean,
+        resendCount:Int,
+        canAccept:Boolean,
+        canReject:Boolean,
+        canRequest:Boolean
     }
     
     type ConnectedUser{
@@ -65,6 +69,7 @@ let connections = `
     
     type Query{
         fetchConnections:[ConnectedUser]
+        fetchConnection(connectionId:String!):Connection
     }
 `
 

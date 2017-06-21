@@ -39,7 +39,14 @@ if(Meteor.isServer){
                 "name" : "Funder",
                 "uniqueId" : "funder"
             },
-
+            {
+              "image":"fa fa-calendar",
+              "link": "/app/calendar",
+              "isLink" : true,
+              "isMenu" : true,
+              "name" : "Calender",
+              "uniqueId" : "calender"
+            },
             {
                 "image":"ml ml-provider",
                 "link": "provider",

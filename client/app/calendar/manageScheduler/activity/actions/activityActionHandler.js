@@ -76,9 +76,9 @@ query  {
     profileImage
   }
 }
-    `
+    `,
+    forceFetch:true
   });
-  console.log(result)
   const users = result.data.getUserProfiles;
   return users
 }
@@ -134,7 +134,8 @@ query($activityId: String)  {
     `,
     variables: {
       activityId
-    }
+    },
+    forceFetch:true
   });
   const users = result.data.fetchActivity;
   return users

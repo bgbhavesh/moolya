@@ -8,9 +8,16 @@ import MlResolver from "../../commons/mlResolverDef";
 
 let internalTaskSchema = `
     
-    type Community {
-      id: String
+    type InternalTaskCommunity {
+      code: String
+      type: String
       name: String
+    }
+    
+    type InternalTaskUserInfo {
+      id: String,
+      name: String,
+      profileUrl: String
     }
     
     type InternalTask {
@@ -19,15 +26,21 @@ let internalTaskSchema = `
         attendee: String
         name: String
         stage: String
-        client: String
-        community: Community
+        resourceId: String
+        community: InternalTaskCommunity
         attendees: [String]
         docs: [String]
         status: String
+        note: String
+        mode: String
+        client: String
+        userInfo: [InternalTaskUserInfo]
+        createdAt: String
     }
     
-    input community {
-      id: String
+    input internalTaskCommunity {
+      code: String
+      type: String
       name: String
     }
     
@@ -37,16 +50,19 @@ let internalTaskSchema = `
         attendee: String
         name: String
         stage: String
-        client: String
-        community: community
+        resourceId: String
+        community: internalTaskCommunity
         attendees: [String]
         docs: [String]
         status: String
+        note: String
+        mode: String
     }
   
     type Query{
         fetchInternalTask:[InternalTask]
         fetchInternalTaskById(internalTaskId:String):InternalTask
+        fetchMyInternalTask(status:[String]):[InternalTask]
     }
     
     type Mutation{       
@@ -59,6 +75,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], internalTaskSchema]
 let supportedApi = [
   {api: 'fetchInternalTask', actionName: 'READ', moduleName: "OFFICE"},
   {api: 'fetchInternalTaskById', actionName: 'READ', moduleName: "OFFICE"},
+  {api: 'fetchMyInternalTask', actionName: 'READ', moduleName: "OFFICE"},
   {api: 'createInternalTask', actionName: 'CREATE', moduleName: "OFFICE"},
   {api: 'updateInternalTask', actionName: 'UPDATE', moduleName: "OFFICE"},
 ]

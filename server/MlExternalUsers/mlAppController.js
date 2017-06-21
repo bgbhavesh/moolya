@@ -78,12 +78,12 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>
                ...customOptionsObject,
             };
             context = getContext({req});
-            if(!context||!context.userId){
-              res.json({unAuthorized:true,message:"Invalid Token"})
-              return;
-            }
+            // if(!context||!context.userId){
+            //   res.json({unAuthorized:true,message:"Invalid Token"})
+            //   return;
+            // }
 
-            let isValid = mlserviceCardHandler.validateResource(req.body.query, context);
+            // let isValid = mlserviceCardHandler.validateResource(req.body.query, context);
             return {
                 schema  : executableSchema,
                 context : context

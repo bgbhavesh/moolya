@@ -54,12 +54,12 @@ let Taxation = `
     }
     
     type Mutation{
-        createTaxation(taxation:taxationInput):String
-        updateTaxation(id:String,taxation:taxationInput): String
+        createTaxation(clusterId:String, taxation:taxationInput):String
+        updateTaxation(clusterId:String, id:String, taxation:taxationInput): String
     }
     
     type Query{
-        fetchTaxation(id:String) : taxation       
+        fetchTaxation(clusterId:String, id:String) : taxation       
     }
     
 `

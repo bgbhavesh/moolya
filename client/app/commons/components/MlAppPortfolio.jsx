@@ -184,13 +184,18 @@ class MlAppPortfolio extends React.Component{
   };
 
   //handler for like,review,comment,inquiry,collaborate,connect,follow
-  interactionActionHandler(actionConfig,handlerCallback) {
+  async interactionActionHandler(actionConfig,handlerCallback) {
     var resourceDetails={resourceId:this.props.config,resourceType:'portfolio'};
-    if(handlerCallback) {
+    if(handlerCallback) {//to handle the popover
       handlerCallback(resourceDetails);
-    }else if(actionConfig&&actionConfig.handleCallBack){
-      actionConfig.handleCallBack(resourceDetails);
+    }else if(actionConfig&&actionConfig.handleCallBack){//to handle actions
+      var resp=await actionConfig.handleCallBack(resourceDetails);
+       return resp;
     }
+  }
+  async onInteractionSuccess() {
+    var interactionAutoId=new Date().getTime();
+    this.setState({interactionAutoId:interactionAutoId});
   }
 
   assignActionHandlerProxy(actionConfig){
@@ -198,7 +203,7 @@ class MlAppPortfolio extends React.Component{
     var actionMap={'like':'interaction','connect':'interaction','favourite':'interaction','follow':'interaction','enquire':'interaction','review':'interaction','partner':'interaction','collaborate':'interaction'};
     let actionName =actionMap[action]||action;
     switch(actionName){
-      case 'interaction': actionConfig.handler=this.interactionActionHandler.bind(this); break;
+      case 'interaction': actionConfig.handler=async(actionData,callback) =>this.props.handler(this.interactionActionHandler.bind(this,actionData,callback), this.onInteractionSuccess.bind(this));break;
       case 'save': actionConfig.handler=async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this)); break;
       case 'edit': actionConfig.handler=async(event) => this.props.handler(this.testEditPortfolioDetails.bind(this)); break;
       case 'goLive': actionConfig.handler=async(event) => this.props.handler(this.requestForGoLive.bind(this)); break;
@@ -245,7 +250,7 @@ class MlAppPortfolio extends React.Component{
       <div className="app_main_wrap">
         {showLoader===true?(<MlLoader/>):(
           <div className="app_padding_wrap">
-            <InteractionsCounter resourceType={'portfolio'} resourceId={this.props.config} />
+            <InteractionsCounter resourceType={'portfolio'} resourceId={this.props.config} interactionAutoId={this.state.interactionAutoId} />
               {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}/>}
                 {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
           </div>)}
@@ -321,7 +326,7 @@ class MlAppPortfolio extends React.Component{
           </Popover>
         {/*{isMyPortfolio?<AppActionButtons ActionOptions={appActionConfig} showAction='showAction' actionName="actionName"/>:<MlCustomActionButtons/>}*/}
         {/*{isMyPortfolio?<MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />:<MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />}*/}
-         <MlAppPortfolioAccordionContainer viewMode={this.props.viewMode} communityType={this.props.communityType} resourceId={this.props.config} assignActionHandler={this.assignActionHandlerProxy.bind(this)}/>
+         <MlAppPortfolioAccordionContainer interactionAutoId={this.state.interactionAutoId} viewMode={this.props.viewMode} communityType={this.props.communityType} resourceId={this.props.config} assignActionHandler={this.assignActionHandlerProxy.bind(this)}/>
       </div>
     )
   }

@@ -673,6 +673,9 @@ li {display: inline-block; width: 14px; height: 14px; margin: 0 4px; text-indent
     li{
     display: inline-block; text-align: center;margin-right:30px;
     a{
+      &.act_disable{
+        cursor: no-drop !important;color: rgba(255, 255, 255, 0.49) !important;
+      }
       display: block; text-shadow: none;color:$mlWhite;padding: 3px; border-radius: 5px;font-size:12px;
       &:hover{
         text-decoration:none;padding: 3px;border-radius: 5px;color:$mlBlue;
@@ -1198,7 +1201,7 @@ p{margin-top:10px;}
 
 .RRT__tabs{
   .RRT__tab--selected{
-    
+
     &.ml{
       b{
   font-family: 'DINPro-Regular' !important;
@@ -1218,7 +1221,7 @@ p{margin-top:10px;}
     }
   }
   }
- 
+
   .ml{
     b{
   font-family: 'DINPro-Regular' !important;

@@ -42,6 +42,24 @@ MlResolver.MlQueryResolver['fetchOfficeMembers'] = (obj, args, context, info) =>
   return response;
 }
 
+MlResolver.MlQueryResolver['fetchAllOfficeMembersWithUserId'] = (obj, args, context, info) => {
+  let pipeline = [
+    { $match: { userId: context.userId } },
+    { $lookup:
+      {
+        from: "users",
+        localField: "emailId",
+        foreignField: "username",
+        as: "user"
+      }
+    },
+    { $unwind:"$user"},
+    { $project: {name:1, userId: '$user._id' , profileImage:'$user.profile.profileImage'} }
+  ];
+  let response = mlDBController.aggregate('MlOfficeMembers', pipeline);
+  return response;
+}
+
 MlResolver.MlQueryResolver['fetchOfficeMember'] = (obj, args, context, info) => {
   let query = {
     _id:args.memberId

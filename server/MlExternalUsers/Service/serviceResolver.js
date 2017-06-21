@@ -1,5 +1,5 @@
 /**
- * Created by Mukhil on 14/6/17.
+ * Created by Mukhil on 20/6/17.
  */
 
 import MlResolver from '../../commons/mlResolverDef'
@@ -18,13 +18,16 @@ MlResolver.MlQueryResolver['fetchServices'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['fetchService'] = (obj, args, context, info) => {
   let result = mlDBController.findOne('MlService', {_id:args.serviceId} , context)
+  return result;
 }
 
 MlResolver.MlMutationResolver['createService'] = (obj, args, context, info) => {
-  result = mlDBController.insert('MlService' ,args.service, context).fetch()
-  if(result){
+  // args.Services.createdAt = new Date();
+  args.Services.userId = context.userId;
+  result1 = mlDBController.insert('MlService' ,args.Services, context)
+  if(result1){
     let code = 200;
-    let result = {userId: userId}
+    let result = result1;
     let response = new MlRespPayload().successPayload(result, code);
     return response
   }
@@ -32,10 +35,10 @@ MlResolver.MlMutationResolver['createService'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['updateService'] = (obj, args, context, info) => {
-  result = mlDBController.update('MlService', {_id:args.serviceId} ,args, context).fetch()
-  if(result){
+  result1 = mlDBController.update('MlService', {_id:args.serviceId} ,args.Services,{$set: 1}, context)
+  if(result1){
     let code = 200;
-    let result = {userId: userId}
+    let result = result1
     let response = new MlRespPayload().successPayload(result, code);
     return response
   }

@@ -57,7 +57,7 @@ MlResolver.MlQueryResolver['fetchConnectionByTransaction'] = (obj, args, context
     var connectionId=mlInteractionService.fetchConnectionByTransaction(args.transactionId,'connectionRequest')||{};
     var connection = mlDBController.findOne('MlConnections',{'_id':connectionId},context);
     var requestedConnection=mlDBController.findOne('MlConnections',{_id:connection._id,isAccepted:false,isBlocked:false,isDenied:false,requestedFrom:{'$ne':context._id}},context);
-    if(requestedConnection)connection.canAccept=true;connection.canReject=true;
+    if(requestedConnection){connection.canAccept=true;connection.canReject=true;}
 
     return connection;
   } catch (e) {

@@ -70,12 +70,12 @@ appSection.route('/dashboard', {
   }
 });
 
-// appSection.route('/explore', {
-//   name: 'ideator',
-//   action(redirect){
-//     mount(AppLayout,{appContent:< MlAppIdeatorLanding/>, isExploreMenu:true})
-//   }
-// });
+appSection.route('/explore', {
+  name: 'ideator',
+  action(redirect){
+    mount(AppLayout,{appContent:< MlAppIdeatorLanding/>, isExploreMenu:true})
+  }
+});
 
 appSection.route('/myProfile', {
   name: 'myProfile',

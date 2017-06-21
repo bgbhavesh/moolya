@@ -12,7 +12,8 @@ Meteor.startup(function () {
         {communityCode:"INS", communityName:"institution", menuName:"mlDefaultMenu", isActive:true, isProfileMenu:false, isExploreMenu:false},
         {communityCode:"SPS", communityName:"serviceprovider", menuName:"mlDefaultMenu", isActive:true, isProfileMenu:false, isExploreMenu:false},
         {communityCode:"OFB", communityName:"officebarrer", menuName:"mlDefaultMenu", isActive:true, isProfileMenu:false, isExploreMenu:false},
-        {communityCode:"FUN", communityName:"funder", menuName:"mlExploreMenu", isActive:true, isProfileMenu:false, isExploreMenu:true}
+        // {communityCode:"FUN", communityName:"funder", menuName:"mlExploreMenu", isActive:true, isProfileMenu:false, isExploreMenu:true},
+        {communityCode:"BRW", communityName:"Browsers", menuName:"mlBrowserMenu", isActive:true, isProfileMenu:false, isExploreMenu:false},
     ]
 
     for(var i = 0; i < menus.length; i++){

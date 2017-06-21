@@ -60,7 +60,7 @@ MlResolver.MlMutationResolver['updateProcess'] = (obj, args, context, info) => {
   if (args.id) {
     var id= args.id;
     args=_.omit(args,'id');
-    //find the old  details
+    /*//find the old  details
 
     let processResult=MlProcessMapping.findOne({"_id":id});
     if(processResult&&processResult.documents){
@@ -92,7 +92,7 @@ MlResolver.MlMutationResolver['updateProcess'] = (obj, args, context, info) => {
           }
 
       }
-    }
+    }*/
     // let result= MlProcessMapping.update(id, {$set: args.process});
     let result = mlDBController.update('MlProcessMapping', id, args.process, {$set:true}, context)
       let code = 200;

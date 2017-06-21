@@ -1,5 +1,6 @@
 import React from "react";
 import {render} from "react-dom";
+import _ from 'lodash'
 import {fetchIdeaActionHandler} from '../actions/IdeaActionHandler'
 
 export default class MlIdeatorRelatedIdeas extends React.Component {
@@ -11,14 +12,13 @@ export default class MlIdeatorRelatedIdeas extends React.Component {
     return this;
   }
 
-  componentDidMount() {
-  }
   componentWillMount(){
-    this.fetchIdeatorIdeas();
+    const resp = this.fetchIdeatorIdeas();
+    return resp
   }
   async fetchIdeatorIdeas() {
     const response = await fetchIdeaActionHandler();
-    if(response){
+    if(!_.isEmpty(response)){
       this.setState({loading:false, ideas:response})
     }
   }

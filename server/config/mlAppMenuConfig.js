@@ -5,7 +5,7 @@
 Meteor.startup(function () {
 
     let menus = [
-        {communityCode:"FUN", communityName:"funder", menuName:"mlFunderMenu", isActive:true, isProfileMenu:false, isExploreMenu:false},
+        {communityCode:"FUN", communityName:"funder", menuName:"mlFunderMenu", isActive:true, isProfileMenu:false, isExploreMenu:true},
         {communityCode:"IDE", communityName:"ideator", menuName:"mlDefaultMenu", isActive:true, isProfileMenu:false, isExploreMenu:false},
         {communityCode:"STU", communityName:"startup", menuName:"mlDefaultMenu", isActive:true, isProfileMenu:false, isExploreMenu:false},
         {communityCode:"CMP", communityName:"company", menuName:"mlDefaultMenu", isActive:true, isProfileMenu:false, isExploreMenu:false},
@@ -13,7 +13,7 @@ Meteor.startup(function () {
         {communityCode:"SPS", communityName:"serviceprovider", menuName:"mlDefaultMenu", isActive:true, isProfileMenu:false, isExploreMenu:false},
         {communityCode:"OFB", communityName:"officebarrer", menuName:"mlDefaultMenu", isActive:true, isProfileMenu:false, isExploreMenu:false},
         // {communityCode:"FUN", communityName:"funder", menuName:"mlExploreMenu", isActive:true, isProfileMenu:false, isExploreMenu:true},
-        {communityCode:"BRW", communityName:"Browsers", menuName:"mlBrowserMenu", isActive:true, isProfileMenu:false, isExploreMenu:false},
+        {communityCode:"BRW", communityName:"Browsers", menuName:"mlBrowserMenu", isActive:true, isProfileMenu:false, isExploreMenu:true},
     ]
 
     for(var i = 0; i < menus.length; i++){

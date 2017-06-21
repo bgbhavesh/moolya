@@ -100,6 +100,14 @@ if(Meteor.isServer){
                 "name" : "News",
                 "uniqueId" : "news"
             },
+            {
+              "image":"fa fa-calendar-check-o",
+              "link": "/app/task",
+              "isLink" : true,
+              "isMenu" : true,
+              "name" : "Task",
+              "uniqueId" : "my_task"
+            }
         ]
     }})
 }

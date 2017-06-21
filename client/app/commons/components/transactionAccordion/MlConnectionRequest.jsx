@@ -7,27 +7,27 @@ import {fetchConnectionRequestHandler,acceptConnectionActionHandler,rejectConnec
 export default class MlConnectionRequest extends Component{
   constructor(props){
     super(props);
-    this.fetchConnectionDetails().bind(this);
+    this.fetchConnectionDetails.bind(this);
     this.state={'connectionId':null,'data':{}};
 
     return this;
   }
 
   async fetchConnectionDetails(){
-    var connection  = await fetchConnectionRequestHandler(this.state.connectionId);
-    this.setState({data:connection});
+    var transactionId=this.props.data&&this.props.data.transactionId?this.props.data.transactionId:null;
+    var connection  = await fetchConnectionRequestHandler(transactionId);
+    this.setState({data:connection||{},connectionId:(connection||{})._id});
   };
 
   async componentWillMount(){
-    var connectionId=this.props.data&&this.props.data.docId?this.props.data.docId:null;
-    await this.fetchConnectionDetails(connectionId);
+    await this.fetchConnectionDetails();
   }
 
   async acceptConnectionHandler(){
     var response=await acceptConnectionActionHandler({'connectionId':this.state.connectionId});
     if(response){
       toastr.success("connection accepted");
-      await this.fetchConnectionDetails(this.state.connectionId);
+      await this.fetchConnectionDetails();
     }else{
       toastr.error("Failed to accept the connect request");
     }
@@ -37,7 +37,7 @@ export default class MlConnectionRequest extends Component{
     var response=await rejectConnectionActionHandler({'connectionId':this.state.connectionId});
     if(response){
       toastr.success("connection rejected");
-      await this.fetchConnectionDetails(this.state.connectionId);
+      await this.fetchConnectionDetails();
     }else{
       toastr.error("Failed to reject the connection");
     }

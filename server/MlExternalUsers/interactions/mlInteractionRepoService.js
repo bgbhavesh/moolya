@@ -147,6 +147,20 @@ class MlInteractionService{
       }
     }
 
+  fetchConnectionByTransaction(transactionId,transactionType) {
+    try {
+      switch (transactionType) {
+        case 'connectionRequest':
+          let transactionRec=new MlTransactionsHandler().readTransaction(transactionId);
+          return transactionRec.docId;
+          break;
+      }
+    } catch (e) {
+      //console
+      console.log(e);
+    }
+  }
+
 }
 const mlInteractionService = new MlInteractionService();
 Object.freeze(mlInteractionService);

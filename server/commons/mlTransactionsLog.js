@@ -4,6 +4,7 @@ import MlAdminUserContext from "../mlAuthorization/mlAdminUserContext";
 class MlTransactionsHandler {
   constructor() {
     this.contextData.bind(this);
+    this.readTransaction.bind(this);
     this.contextRefNames.bind(this);
   }
 
@@ -119,6 +120,11 @@ class MlTransactionsHandler {
       transactionRecord=_.extend(transactionRecord,contextData);
 
     const resp = MlTransactionsLog.insert(transactionRecord);
+    return resp;
+  }
+
+  readTransaction(transactionId){
+    const resp = MlTransactionsLog.findOne(transactionId);
     return resp;
   }
 }

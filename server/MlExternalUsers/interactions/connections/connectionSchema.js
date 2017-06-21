@@ -15,7 +15,6 @@ let connections = `
     
     type Connection{
         _id:String,
-        toUser:User,
         requestedFrom:String,
         createdBy:String,
         updatedBy:String,
@@ -69,7 +68,7 @@ let connections = `
     
     type Query{
         fetchConnections:[ConnectedUser]
-        fetchConnection(connectionId:String!):Connection
+        fetchConnectionByTransaction(transactionId:String!):Connection
     }
 `
 

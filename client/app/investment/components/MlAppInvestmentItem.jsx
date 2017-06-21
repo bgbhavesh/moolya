@@ -27,18 +27,15 @@ export default class MlAppInvestmentItem extends Component {
   }
 
   actionHandlerProxy(actionConfig,handlerCallback){
-    console.log(actionConfig);
   if(handlerCallback) {
     handlerCallback(this);
   }else if(actionConfig&&actionConfig.customHandler){
-    console.log('Called', actionConfig);
-  actionConfig.customHandler(this);
+    actionConfig.customHandler(this);
   }
 };
 
   render(){
     const props = this.props;
-    console.log(props.stages);
     const that = this;
     const currentStage = props.currentStage;
     const currentStageIndex = props.stages.findIndex(function (data) {
@@ -50,7 +47,6 @@ export default class MlAppInvestmentItem extends Component {
         let actionObj = MlAppInvestAction[action.actionName];
         if(actionObj){
           let config = actionObj.config;
-          console.log(actionObj);
           config.handler = actionObj.handler;
           config.handler =that.actionHandlerProxy.bind(that);
           return config;
@@ -83,7 +79,7 @@ export default class MlAppInvestmentItem extends Component {
                   switch(data.portfolio.communityCode){
                     case "IDE":
                       return (<div className="col-md-3 col-sx-3 col-sm-4 col-lg-3" key={idx} onClick={()=>that.selectPortfolio(data)}>
-                        <div className={"ideators_list_block " + ( that.state.selected._id == data._id ? "selected"  : '') }>
+                        <div className={"ideators_list_block " + ( that.state.selected._id == data._id ? "selected_block"  : '') }>
                           <div className="premium">
                           <span>
                             type
@@ -107,7 +103,7 @@ export default class MlAppInvestmentItem extends Component {
                       break;
                     case "STU":
                       return (<div className="col-md-3 col-sx-3 col-sm-4 col-lg-3" key={idx} onClick={()=>that.selectPortfolio(data)}>
-                        <div className={"ideators_list_block " + ( that.state.selected._id == data._id ? "selected"  : '') }>
+                        <div className={"ideators_list_block " + ( that.state.selected._id == data._id ? "selected_block"  : '') }>
                           <div className="premium">
                           <span>
                             type

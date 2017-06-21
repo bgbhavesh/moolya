@@ -132,6 +132,8 @@ query($activityId: String)  {
   }
 }
     `,
+    forceFetch:true,
+
     variables: {
       activityId
     },
@@ -140,6 +142,36 @@ query($activityId: String)  {
   const users = result.data.fetchActivity;
   return users
 }
+
+export async function fetchActivitiesActionHandler (profileId) {
+  const result = await appClient.query({
+    query: gql`
+    query($profileId:String) {
+      fetchActivities(profileId: $profileId) {
+        displayName
+        imageLink
+        mode
+        _id
+        duration {
+          hours
+          minutes
+        }
+        teams{
+      branch
+      communityType
+      users
+    }
+      }
+    }
+    `,
+    variables: {
+      profileId:profileId
+    }
+  });
+  const activities = result.data.fetchActivities;
+  return activities
+}
+
 
 
 // export async function getActivityDataActionHandler() {

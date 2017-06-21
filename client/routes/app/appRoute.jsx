@@ -314,10 +314,10 @@ appSection.route('/calendar/manageSchedule/:profileId/createService', {
 });
 
 
-appSection.route('/calendar/manageSchedule/:profileId/editActivity?id=:id', {
+appSection.route('/calendar/manageSchedule/:profileId/editActivity', {
   name: 'calendar_manageSchedule',
   action(params){
-    mount(AppLayout, {appContent:<MlAppCreateTeam />, isCalenderMenu: true})
+    mount(AppLayout, {appContent:<MlAppManageSchedule />, isCalenderMenu: true})
   }
 });
 

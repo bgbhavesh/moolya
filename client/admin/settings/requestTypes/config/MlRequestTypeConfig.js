@@ -15,6 +15,10 @@ const mlRequestTypeTableConfig=new MlViewer.View({
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "requestName", title: "Request Type",dataSort:true},
     {dataField: "displayName", title: "Display Name",dataSort:true},
+    {dataField: "createdBy", title: "Created By",dataSort:true},
+    {dataField: "createdDate", title: "Created Date",dataSort:true},
+    {dataField: "updatedBy", title: "Updated By",dataSort:true},
+    {dataField: "updatedDate", title: "Updated Date",dataSort:true},
     {dataField: "isActive", title: "Active",dataSort:true},
     //{dataField: "isActive", title: "Active",customComponent:"ActiveFormatter"}
   ],
@@ -61,8 +65,12 @@ const mlRequestTypeTableConfig=new MlViewer.View({
                      ...on Requests{
                               requestName
                               displayName
-                              isActive
+                              isActive 
                               id:_id
+                              createdBy
+                              createdDate  
+                              updatedBy     
+                              updatedDate 
                           }
                       }
               }

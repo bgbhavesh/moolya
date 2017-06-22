@@ -16,6 +16,10 @@ const mlIndustryTypeTableConfig=new MlViewer.View({
     {dataField: "industryName", title: "Industry",dataSort:true},
     {dataField: "industryDisplayName", title: "Display Name",dataSort:true},
     {dataField: "about", title: "About",dataSort:true},
+    {dataField: "createdBy", title: "Created By",dataSort:true},
+    {dataField: "createdDate", title: "Created Date",dataSort:true},
+    {dataField: "updatedBy", title: "Updated By",dataSort:true},
+    {dataField: "updatedDate", title: "Updated Date",dataSort:true},
     {dataField: "isActive", title: "Active",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
@@ -65,6 +69,10 @@ const mlIndustryTypeTableConfig=new MlViewer.View({
                               about
                               isActive
                               id:_id
+                              createdBy
+                              createdDate  
+                              updatedBy     
+                              updatedDate  
                           }
                       }
               }

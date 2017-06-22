@@ -15,6 +15,10 @@ const mlKycCategoryTableConfig=new MlViewer.View({
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "docCategoryName", title: "Name",dataSort:true},
     {dataField: "docCategoryDisplayName", title: "Display Name",dataSort:true},
+    {dataField: "createdBy", title: "Created By",dataSort:true},
+    {dataField: "createdDate", title: "Created Date",dataSort:true},
+    {dataField: "updatedBy", title: "Updated By",dataSort:true},
+    {dataField: "updatedDate", title: "Updated Date",dataSort:true},
     {dataField: "isActive", title: "Active",dataSort:true},
     //{dataField: "isActive", title: "Active",customComponent:"ActiveFormatter"}
   ],
@@ -59,8 +63,12 @@ const mlKycCategoryTableConfig=new MlViewer.View({
                      ...on KycCategories{
                               docCategoryName
                               docCategoryDisplayName
-                              isActive
+                              isActive 
                               id:_id
+                              createdBy
+                              createdDate  
+                              updatedBy     
+                              updatedDate 
                           }
                       }
               }

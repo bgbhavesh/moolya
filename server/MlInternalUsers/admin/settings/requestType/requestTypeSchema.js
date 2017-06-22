@@ -9,6 +9,10 @@ let RequestTypeSchema = `
       displayName     : String
       requestDesc     : String
       _id             : String
+      createdBy       : String
+      createdDate     : Date
+      updatedBy       : String
+      updatedDate     : Date
       isActive        : Boolean
       transactionType : String
       transactionId   : String

@@ -8,11 +8,15 @@ let Award = `
       awardDisplayName :String
       about: String
       _id:String
+      createdBy     : String
+      createdDate   : Date
+      updatedBy     : String
+      updatedDate   : Date
       isActive:Boolean
     }
     type Mutation{
-        CreateAward(_id:String,awardName:String,awardDisplayName:String,about:String,isActive:Boolean, moduleName:String, actionName:String):response
-        UpdateAward(_id:String,awardName:String,awardDisplayName:String,about:String,isActive:Boolean, moduleName:String, actionName:String):response        
+        CreateAward(_id:String,awardName:String,awardDisplayName:String,about:String,isActive:Boolean,createdBy:String, moduleName:String, actionName:String):response
+        UpdateAward(_id:String,awardName:String,awardDisplayName:String,about:String,isActive:Boolean,updatedBy:String,moduleName:String, actionName:String):response        
     }
     type Query{
       FindAward(_id: String):Award

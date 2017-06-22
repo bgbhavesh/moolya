@@ -31,6 +31,23 @@ MlResolver.MlMutationResolver['CreateSpecification'] = (obj, args, context, info
     let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
     return response;
   }
+  var firstName='';var lastName='';
+  // let id = MlDepartments.insert({...args.department});
+  if(Meteor.users.findOne({_id : context.userId}))
+  {
+    let user = Meteor.users.findOne({_id: context.userId}) || {}
+    if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+      firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+      lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+    }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+      firstName=(user.profile || {}).firstName||'';
+      lastName =(user.profile || {}).lastName||'';
+    }
+  }
+  let createdBy = firstName +' '+lastName
+  args.createdBy = createdBy;
+  args.createdDate = new Date();
 
   let id = mlDBController.insert('MlSpecifications', args, context)
   if (id) {
@@ -76,6 +93,23 @@ MlResolver.MlMutationResolver['UpdateSpecification'] = (obj, args, context, info
       return response;
     }
     args=_.omit(args,'_id');
+    var firstName='';var lastName='';
+    // let id = MlDepartments.insert({...args.department});
+    if(Meteor.users.findOne({_id : context.userId}))
+    {
+      let user = Meteor.users.findOne({_id: context.userId}) || {}
+      if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+        firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+        lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+      }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+        firstName=(user.profile || {}).firstName||'';
+        lastName =(user.profile || {}).lastName||'';
+      }
+    }
+    let createdBy = firstName +' '+lastName
+    args.updatedBy = createdBy;
+    args.updatedDate = new Date();
     // let result= MlSpecifications.update(id, {$set: args});
     let result = mlDBController.update('MlSpecifications', id, args, {$set:true}, context)
     let code = 200;

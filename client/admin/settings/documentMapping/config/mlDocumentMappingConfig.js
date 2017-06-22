@@ -68,7 +68,11 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
     {dataField: "allowableMaxSize", title: "Allowable Size",dataSort:true},
     {dataField: "clusters", title: "Jurisdiction",dataSort:true, customComponent:clustersformatter},
     {dataField: "chapters", title: "Chapter",dataSort:true, customComponent:chaptersformatter},
-    {dataField: "subChapters", title: "Sub Chapter",dataSort:true, customComponent:subChaptersformatter}
+    {dataField: "subChapters", title: "Sub Chapter",dataSort:true, customComponent:subChaptersformatter},
+    {dataField: "createdBy", title: "Created By",dataSort:true},
+    {dataField: "createdDate", title: "Created Date",dataSort:true},
+    {dataField: "updatedBy", title: "Updated By",dataSort:true},
+    {dataField: "updatedDate", title: "Updated Date",dataSort:true},
 
   ],
   tableHeaderClass:'react_table_head',
@@ -145,6 +149,10 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
                               subChapters
                               kycCategory
                               isActive
+                              createdBy
+                              createdDate  
+                              updatedBy     
+                              updatedDate 
                           }
                       }
               }

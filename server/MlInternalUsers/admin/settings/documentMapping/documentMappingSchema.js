@@ -13,6 +13,10 @@ let DocumentMapping = `
         isActive : Boolean
         chapters: [String]
         subChapters: [String]
+       createdBy       : String
+       createdDate     : Date
+       updatedBy       : String
+       updatedDate     : Date
      }
      
      type allowableFormatOutput{
@@ -86,6 +90,10 @@ let DocumentMapping = `
         allowableMaxSize  : String,
         issuingAuthority  : String,
         isActive    : Boolean
+        createdBy       : String
+        createdDate     : Date
+        updatedBy       : String
+        updatedDate     : Date
       }
       
      

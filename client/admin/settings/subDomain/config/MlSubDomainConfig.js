@@ -18,6 +18,10 @@ const mlSubDomainTableConfig=new MlViewer.View({
     {dataField: "displayName", title: "Display Name",dataSort:true},
     {dataField: "industryId", title: "Industry",dataSort:true},
     {dataField: "about", title: "About",dataSort:true},
+    {dataField: "createdBy", title: "Created By",dataSort:true},
+    {dataField: "createdDate", title: "Created Date",dataSort:true},
+    {dataField: "updatedBy", title: "Updated By",dataSort:true},
+    {dataField: "updatedDate", title: "Updated Date",dataSort:true},
     {dataField: "isActive", title: "Status",dataSort:true},
   ],
   tableHeaderClass:'react_table_head',
@@ -62,6 +66,10 @@ const mlSubDomainTableConfig=new MlViewer.View({
                                 about
                                 isActive
                                 id:_id
+                              createdBy
+                              createdDate  
+                              updatedBy     
+                              updatedDate 
                                 
                             }
                         }

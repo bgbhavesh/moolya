@@ -12,6 +12,10 @@ let SubDomainSchema = `
         industryId:String,
         industryName:String,
         isActive:Boolean
+      createdBy     : String
+      createdDate   : Date
+      updatedBy     : String
+      updatedDate   : Date
     }
     
     input SubDomainMasterData
@@ -21,6 +25,10 @@ let SubDomainSchema = `
         about: String,
         industryId:String,
         isActive:Boolean
+      createdBy     : String
+      createdDate   : Date
+      updatedBy     : String
+      updatedDate   : Date
     }
     
     type Mutation 

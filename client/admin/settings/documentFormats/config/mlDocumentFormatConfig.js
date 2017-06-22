@@ -22,8 +22,12 @@ const mlDocumentFormatTableConfig=new MlViewer.View({
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "docFormatName", title: "Name",dataSort:true},
     {dataField: "docFormatDisplayName", title: "Display Name",dataSort:true},
+    {dataField: "createdBy", title: "Created By",dataSort:true},
+    {dataField: "createdDate", title: "Created Date",dataSort:true},
+    {dataField: "updatedBy", title: "Updated By",dataSort:true},
+    {dataField: "updatedDate", title: "Updated Date",dataSort:true},
     {dataField: "isActive", title: "Active",dataSort:true},
-    {dataField: "createdDateTime", title: "Created Date And Time",customComponent:dateFormatter},
+    // {dataField: "createdDateTime", title: "Created Date And Time",customComponent:dateFormatter},
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -68,8 +72,11 @@ const mlDocumentFormatTableConfig=new MlViewer.View({
                               docFormatDisplayName
                               isActive
                               about
-                              createdDateTime
                               id:_id
+                              createdBy
+                              createdDate  
+                              updatedBy     
+                              updatedDate  
                           }
                       }
               }

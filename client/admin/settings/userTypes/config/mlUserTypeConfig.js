@@ -16,6 +16,10 @@ const mlUserTypeTableConfig=new MlViewer.View({
     {dataField: "userTypeName", title: "User Category Name",dataSort:true},
     {dataField: "displayName", title: "Display Name",dataSort:true},
     {dataField: "communityName", title: "Community Name",dataSort:true},
+    {dataField: "createdBy", title: "Created By",dataSort:true},
+    {dataField: "createdDate", title: "Created Date",dataSort:true},
+    {dataField: "updatedBy", title: "Updated By",dataSort:true},
+    {dataField: "updatedDate", title: "Updated Date",dataSort:true},
     {dataField: "isActive", title: "Active",dataSort:true},
   ],
   tableHeaderClass:'react_table_head',
@@ -60,8 +64,12 @@ const mlUserTypeTableConfig=new MlViewer.View({
                               displayName
                               userTypeDesc
                               communityName
-                              isActive
+                              isActive 
                               id:_id
+                              createdBy
+                              createdDate  
+                              updatedBy     
+                              updatedDate 
                           }
                       }
               }

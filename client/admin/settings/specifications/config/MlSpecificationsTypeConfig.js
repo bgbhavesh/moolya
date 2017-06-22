@@ -16,6 +16,10 @@ const mlSpecificationTypeTableConfig=new MlViewer.View({
     {dataField: "specificationName", title: "Specification",dataSort:true},
     {dataField: "specificationDisplayName", title: "Display Name",dataSort:true},
     {dataField: "about", title: "About",dataSort:true},
+    {dataField: "createdBy", title: "Created By",dataSort:true},
+    {dataField: "createdDate", title: "Created Date",dataSort:true},
+    {dataField: "updatedBy", title: "Updated By",dataSort:true},
+    {dataField: "updatedDate", title: "Updated Date",dataSort:true},
     {dataField: "isActive", title: "Active",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
@@ -65,6 +69,10 @@ const mlSpecificationTypeTableConfig=new MlViewer.View({
                               about
                               isActive
                               id:_id
+                              createdBy
+                              createdDate  
+                              updatedBy     
+                              updatedDate  
                           }
                       }
               }

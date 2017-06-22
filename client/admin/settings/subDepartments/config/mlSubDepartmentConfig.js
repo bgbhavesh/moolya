@@ -64,6 +64,10 @@ const mlSubDepartmentTableConfig=new MlViewer.View({
     {dataField: "clustersList", title: "Cluster",dataSort:true,customComponent:clustersFormatter},
     {dataField: "clustersList", title: "Chapter",dataSort:true,customComponent:chapterFormatter},
     {dataField: "subChapterList", title: "Sub-Chapter",dataSort:true,customComponent:subChapterFormatter},
+    {dataField: "createdBy", title: "Created By",dataSort:true},
+    {dataField: "createdDate", title: "Created Date",dataSort:true},
+    {dataField: "updatedBy", title: "Updated By",dataSort:true},
+    {dataField: "updatedDate", title: "Updated Date",dataSort:true},
     {dataField: "isActive", title: "Active",dataSort:true},
 
     //{dataField: "isActive", title: "Active",customComponent:"ActiveFormatter"}
@@ -115,6 +119,10 @@ const mlSubDepartmentTableConfig=new MlViewer.View({
                               aboutSubDepartment
                               isActive
                               id:_id
+                              createdBy
+                              createdDate  
+                              updatedBy     
+                              updatedDate  
                           }
                       }
               }

@@ -19,6 +19,8 @@ export default class MlAppServiceTermsAndConditions extends React.Component{
       refund: "",
       attachment: [{
         name:"",
+        info:"",
+        isMandatory:""
       }],
       documentName:"",
       information:""
@@ -38,23 +40,35 @@ export default class MlAppServiceTermsAndConditions extends React.Component{
 
   async getDetails() {
     let id = FlowRouter.getQueryParam('id')
-    const response = await fetchServiceActionHandler(id)
-    console.log(response)
-    this.setState({
-      documentName:response.attachments.name,information:response.attachments.info,
-      mandatory:response.attachments.isMandatory,cancellation:response.termsAndCondition.isCancelable,
-      refund:response.termsAndCondition.isRefundable,reschedule:response.termsAndCondition.isReschedulable,
-      time:response.termsAndCondition.noOfReschedulable
-    })
-    this.getDetails();
+    if(id) {
+      const response = await fetchServiceActionHandler(id)
+      console.log(response)
+      if(response) {
+          let attachment = response.attachments && response.attachments.length? response.attachments.map(function(data){
+            return data
+          }):  {name:"",info:"",isMandatory:""}
+          let x = [];
+        _.each(attachment, function (item)
+        {
+          for (var propName in item) {
+            if (item[propName] === null || item[propName] === undefined) {
+              delete item[propName];
+            }
+          }
+          let newItem = _.omit(item, "__typename");
+          x.push(newItem)
+        })
+        this.setState({
+          attachment: x, cancellation: response.termsAndCondition.isCancelable,
+          refund: response.termsAndCondition.isRefundable, reschedule: response.termsAndCondition.isReschedulable,
+          time: response.termsAndCondition.noOfReschedulable
+        })
+      }
+    }
   }
 
   async saveDetails() {
-     let attachments = {
-       name:this.state.documentName,
-       info:this.state.information,
-       isMandatory:this.state.mandatory
-     }
+     let attachments = this.state.attachment
      let termsAndCondition = {
        isCancelable:this.state.cancellation,
        isRefundable:this.state.refund,
@@ -67,15 +81,23 @@ export default class MlAppServiceTermsAndConditions extends React.Component{
      }
     let id = FlowRouter.getQueryParam('id')
     const resp = await updateServiceActionHandler(id,service)
+    if(resp.success) {
+       toastr.success("Proceed to the next step")
+      this.getDetails();
+    }
     return resp
   }
-  information(e) {
+  information(index,e) {
+    let attachment = this.state.attachment;
     let value = e.target.value;
-    this.setState({information:value})
+    attachment[index].info = value
+    this.setState({attachment:attachment})
   }
-  documentName(e) {
+  documentName(index,e) {
+    let attachment = this.state.attachment
     let value = e.target.value;
-    this.setState({documentName:value})
+    attachment[index].name = value
+    this.setState({attachment:attachment})
   }
   cancellationApplicable(e) {
     let cancel = e.target.checked;
@@ -89,9 +111,11 @@ export default class MlAppServiceTermsAndConditions extends React.Component{
     let refund = e.target.checked;
     this.setState({refund:refund})
   }
-  isMandatory(e) {
+  isMandatory(index,e) {
+    let attachment = this.state.attachment
     let mandate = e.target.checked;
-    this.setState({mandatory:mandate})
+    attachment[index].isMandatory = mandate
+    this.setState({attachment:attachment})
   }
   times(e) {
     if(e.currentTarget.value >= 0) {
@@ -102,7 +126,11 @@ export default class MlAppServiceTermsAndConditions extends React.Component{
   }
   addComponent() {
     let attachments = this.state.attachment;
-    attachments.push({});
+    attachments.push({
+      name:"",
+      info:"",
+      isMandatory:""
+    });
     this.setState({
       attachment:attachments
     });
@@ -123,18 +151,18 @@ export default class MlAppServiceTermsAndConditions extends React.Component{
             <div className="panel panel-default">
               <div className="panel-heading">
                 Attachment 1
-                <span className="see-more pull-right"><a href=""><FontAwesome name='plus' onClick={that.addComponent.bind(that)}/><FontAwesome name='minus' onClick={that.removeComponent.bind(that)}/></a></span>
+                <span className="see-more pull-right"><a href=""><FontAwesome name='plus' onClick={that.addComponent.bind(that, index)}/><span><FontAwesome name='minus' onClick={that.removeComponent.bind(that)}/></span></a></span>
               </div>
               <div className="panel-body">
                 <form>
                   <div className="form-group">
-                    <input placeholder="Document name" className="form-control float-label" value={that.state.documentName} onChange={that.documentName.bind(that)}/>
+                    <input placeholder="Document name" className="form-control float-label" value={value.name} onChange={that.documentName.bind(that,index)}/>
                   </div>
                   <div className="form-group">
-                    <textarea className="form-control float-label" placeholder="Info" value={that.state.information} onChange={that.information.bind(that)}></textarea>
+                    <textarea className="form-control float-label" placeholder="Info" value={value.info} onChange={that.information.bind(that,index)}></textarea>
                   </div>
                   <div className="input_types">
-                    <input id="checkbox" type="checkbox" name="checkbox" value={that.state.mandatory} onChange={that.isMandatory.bind(that)}/><label htmlFor="checkbox"><span><span></span></span>Is Mandatory</label>
+                    <input id="checkbox" type="checkbox" name="checkbox" value={value.isMandatory} onChange={that.isMandatory.bind(that)}/><label htmlFor="checkbox"><span><span></span></span>Is Mandatory</label>
                   </div>
                   <br className="brclear"/>
                 </form>

@@ -227,7 +227,7 @@ export default class DocumentViewer extends React.Component{
 
 
            </div>
-        <div className="col-lg-12">
+        {/*<div className="col-lg-12">
           <div className="row">
         <div className="col-lg-2 col-md-3 col-sm-3">
           <a href="#" id="createDocument" data-placement="right" data-class="large_popover" >
@@ -276,7 +276,7 @@ export default class DocumentViewer extends React.Component{
               </div>
             </div>
           </PopoverContent>
-        </Popover>
+        </Popover>*/}
       </div>);
   }
 };

@@ -78,6 +78,9 @@ orderNumberGenService = (function(){
     createinternalTaskId: function (taskObj) {
       taskObj.internalTaskId = "ML-ITK-" + FormatUtil.leadingZeros(getNextSequence("internalTaskNumber"), 8);
     },
+    createInteractionSCcode: function (scDef) {
+      scDef.code = "ML-INT-"+ FormatUtil.leadingZeros(getNextSequence("interactionSC"), 8);
+    },
     generateRandomPassword:function(){
       var randomId = function makeid(){
         var text = "";

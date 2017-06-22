@@ -67,7 +67,7 @@ export default class MlAppServiceManageSchedule extends Component {
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
-          <MlAppScheduleHead/>
+          <MlAppScheduleHead type="service" />
           <div className="clearfix"/>
           <div className="col-md-12">
             <div className='step-progress'>

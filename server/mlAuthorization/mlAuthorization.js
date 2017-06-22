@@ -74,7 +74,8 @@ class MlAuthorization
             return false;
           }
 
-          isValidAuth = this.validteAuthorization(context.userId, moduleName, actionName, req.body.variables, isContextSpecSearch);
+          let variables = _.cloneDeep(req.body.variables)
+          isValidAuth = this.validteAuthorization(context.userId, moduleName, actionName, variables, isContextSpecSearch);
           return isValidAuth
     }
 
@@ -175,76 +176,96 @@ class MlAuthorization
       return ret;
     }
 
-    validateDataContext(roleDetails, moduleName, actionName, variables, isContextSpecSearch){
-      if(isContextSpecSearch || moduleName == 'GLOBALSETTINGS' || moduleName == 'MASTERSETTINGS')
-        return true;
-
-      if(moduleName == 'REGISTRATION')
-        variables = this.getRegistrationContextDetails(variables.registrationId)
-
-      else if(moduleName == 'PORTFOLIO')
-        variables = this.getPortfolioContextDetails(variables.portfoliodetailsId)
-
-      if(!this.validateCluster(roleDetails, variables))
-        return false
-
-      switch (moduleName){
-        case 'TAXATION':
-        case 'CLUSTER':
+      validateDataContext(roleDetails, moduleName, actionName, variables, isContextSpecSearch){
+        if(isContextSpecSearch || moduleName == 'GLOBALSETTINGS' || moduleName == 'MASTERSETTINGS')
           return true;
-        case 'CHAPTER':
-        case 'SUBCHAPTER':
-        case 'COMMUNITY':
-        case 'USERS':
-        case 'REGISTRATION':
-        case 'PORTFOLIO':{
-          return this.validateChapterSubChapter(roleDetails, variables);
+
+        var ctxDetails = this.getContextDetails(moduleName, actionName, variables);
+        if(!_.isEmpty(ctxDetails))
+          variables = ctxDetails;
+
+        if(!this.validateCluster(roleDetails, variables))
+          return false
+
+        switch (moduleName){
+          case 'TAXATION':
+          case 'CLUSTER':
+            return true;
+          case 'CHAPTER':
+          case 'SUBCHAPTER':
+          case 'COMMUNITY':
+          case 'USERS':
+          case 'REGISTRATION':
+          case 'PORTFOLIO':
+          case 'TEMPLATEASSIGNMENT':{
+            return this.validateChapterSubChapter(roleDetails, variables);
+          }
+          break;
         }
-        break;
       }
-    }
 
-    validateCluster(roleDetails, variables){
-      if(!variables)
+      getContextDetails(moduleName, actionName, variables){
+        switch(moduleName){
+          case 'REGISTRATION':{
+            if(actionName == 'CREATE')
+              return variables.registration;
+
+            return this.getRegistrationContextDetails(variables.registrationId)
+          }
+          break;
+          case 'PORTFOLIO':{
+            return MlPortfolioDetails.findOne(variables.portfoliodetailsId)
+          }
+          break;
+          case 'TEMPLATEASSIGNMENT':{
+            var template = MlTemplateAssignment.findOne(variables.id);
+            if(!template)
+              return;
+
+            return {clusterId:template.templateclusterId, chapterId:template.templatechapterId, subChapterId:template.templatesubChapterId, communityId:template.templateCommunityId}
+          }
+          break;
+        }
+        return variables;
+      }
+
+      validateCluster(roleDetails, variables){
+        if(!variables)
+          return false
+        if(roleDetails.clusterId == variables['clusterId'])
+          return true;
+        return false;
+      }
+
+      validateChapterSubChapter(roleDetails, variables){
+        if(!variables)
+          return false
+
+        var isEqual = _.isMatch(roleDetails, {"chapterId":"all", 'subChapterId':'all', "communityId":"all"})
+        if(isEqual)
+          return true
+
+        isEqual = _.isMatch(roleDetails, {"chapterId":variables['chapterId'], 'subChapterId':'all', "communityId":"all"})
+        if(isEqual)
+          return true
+
+        isEqual = _.isMatch(roleDetails, {"chapterId":variables['chapterId'], 'subChapterId':variables['subChapterId'], "communityId":"all"})
+        if(isEqual)
+          return true
+
+        isEqual = _.isMatch(roleDetails, {"chapterId":variables['chapterId'], 'subChapterId':variables['subChapterId'], "communityId":variables['communityId']})
+        if(isEqual)
+          return true
         return false
-      if(roleDetails.clusterId == variables['clusterId'])
-        return true;
-      return false;
-    }
+      }
 
-    validateChapterSubChapter(roleDetails, variables){
-      if(!variables)
-        return false
+      getRegistrationContextDetails(registrationId){
+        var registration = MlRegistration.findOne(registrationId)
+        if(!registration)
+          return
 
-      var isEqual = _.isMatch(roleDetails, {"chapterId":"all", 'subChapterId':'all', "communityId":"all"})
-      if(isEqual)
-        return true
-
-      isEqual = _.isMatch(roleDetails, {"chapterId":variables['chapterId'], 'subChapterId':'all', "communityId":"all"})
-      if(isEqual)
-        return true
-
-      isEqual = _.isMatch(roleDetails, {"chapterId":variables['chapterId'], 'subChapterId':variables['subChapterId'], "communityId":"all"})
-      if(isEqual)
-        return true
-
-      isEqual = _.isMatch(roleDetails, {"chapterId":variables['chapterId'], 'subChapterId':variables['subChapterId'], "communityId":variables['communityId']})
-      if(isEqual)
-        return true
-      return false
-    }
-
-    getRegistrationContextDetails(registrationId){
-      var registration = MlRegistration.findOne(registrationId)
-      if(!registration)
-        return
-
-      return registration.registrationInfo
-    }
-
-    getPortfolioContextDetails(portfolioDetailsId){
-      return MlPortfolioDetails.findOne(portfolioDetailsId)
-    }
+        return registration.registrationInfo
+      }
 
     // validateDataContext(roleDetails, moduleName, actionName, req, isContextSpecSearch)
     // {

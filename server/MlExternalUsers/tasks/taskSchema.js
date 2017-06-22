@@ -127,6 +127,7 @@
    type Query{
           fetchTasks(profileId:String):[Task]
           fetchTask(taskId:String):Task
+          fetchTaskDetails(name: String):Task
    }
 
    type Mutation {
@@ -140,6 +141,7 @@
 
   let supportedApi = [
     {api:'fetchTasks', actionName:'READ', moduleName:"OFFICE"},
+    {api:'fetchTaskDetails', actionName:'READ', moduleName:"OFFICE"},
     {api:'fetchTask', actionName:'READ', moduleName:"OFFICE"},
     {api:'createTask', actionName:'CREATE', moduleName:"OFFICE"},
     {api:'updateTask', actionName:'UPDATE', moduleName:"OFFICE"},

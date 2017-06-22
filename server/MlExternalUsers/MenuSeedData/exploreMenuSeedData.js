@@ -7,55 +7,55 @@ if(Meteor.isServer){
         "menu" : [
             {
               "image":"ml ml-ideator",
-              "link": "/app/ideator",
+              "link": "/app/explore",
               "isLink" : true,
               "isMenu" : true,
               "name" : "Ideator",
-              "uniqueId" : "ideator"
+              "uniqueId" : "explore_ideator"
             },
             {
               "image":"ml ml-startup",
-              "link": "/app/startup",
+              "link": "/app/explore/startup",
               "isLink" : true,
               "isMenu" : true,
               "name" : "Startup",
-              "uniqueId" : "startup"
+              "uniqueId" : "explore_startup"
             },
 
             {
               "image":"ml ml-funder",
-              "link": "/app/funder",
+              "link": "/app/explore/funder",
               "isLink" : true,
               "isMenu" : true,
               "name" : "Funder",
-              "uniqueId" : "funder"
+              "uniqueId" : "explore_funder"
             },
 
             {
               "image":"ml ml-provider",
-              "link": "provider",
+              "link": "/app/explore/provider",
               "isLink" : true,
               "isMenu" : true,
-              "name" : "Provider",
-              "uniqueId" : "provider"
+              "name" : "Service Provider",
+              "uniqueId" : "explore_provider"
             },
 
             {
               "image":"ml ml-company",
-              "link": "company",
+              "link": "/app/explore/company",
               "isLink" : true,
               "isMenu" : true,
               "name" : "Company",
-              "uniqueId" : "company"
+              "uniqueId" : "explore_company"
             },
 
             {
               "image":"ml ml-institutions",
-              "link": "/app/institutions",
+              "link": "/app/explore/institutions",
               "isLink" : true,
               "isMenu" : true,
               "name" : "Institutions",
-              "uniqueId" : "institutions"
+              "uniqueId" : "explore_institutions"
             }
         ]
     }});

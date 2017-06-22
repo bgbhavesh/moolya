@@ -489,11 +489,11 @@ let templateData =  this.state.templateSpecifications || [];
           <div className="panel panel-default">
             <div className="panel-heading">
               Images
-              <div className="fileUpload upload_file_mask pull-right">
+              {/*<div className="fileUpload upload_file_mask pull-right">
                 <a href="javascript:void(0);"><span className="ml ml-upload"></span>
                   <input type="file" className="upload_file upload" name="image_source" id="image_upload" onChange={that.ImageUpload.bind(that)} />
                 </a>
-              </div>
+              </div>*/}
             </div>
             <ul>
             <li>
@@ -508,11 +508,11 @@ let templateData =  this.state.templateSpecifications || [];
           <div className="panel panel-default">
             <div className="panel-heading">
               Videos
-              <div className="fileUpload upload_file_mask pull-right">
+              {/*<div className="fileUpload upload_file_mask pull-right">
                 <a href="javascript:void(0);"><span className="ml ml-upload"></span>
               <input type="file" className="upload_file upload" name="video_source" id="video_upload" onChange={that.videoUpload.bind(that)} />
                 </a>
-            </div>
+            </div>*/}
             </div>
             <ul>
               <li>
@@ -527,11 +527,11 @@ let templateData =  this.state.templateSpecifications || [];
           <div className="panel panel-default">
             <div className="panel-heading">
               Templates
-              <div className="fileUpload upload_file_mask pull-right">
+             {/* <div className="fileUpload upload_file_mask pull-right">
                 <a href="javascript:void(0);"><span className="ml ml-upload"></span>
                   <input type="file" className="upload_file upload" name="image_source" id="template_upload" onChange={that.TemplateUpload.bind(that)} />
                 </a>
-              </div>
+              </div>*/}
             </div>
             </div>
 

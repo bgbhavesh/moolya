@@ -15,13 +15,16 @@ let connections = `
     
     type Connection{
         _id:String,
-        toUser:User,
         requestedFrom:String,
         createdBy:String,
         updatedBy:String,
         isAccepted:Boolean,
         isDenied:Boolean,
-        resendCount:Int
+        isBlocked:Boolean,
+        resendCount:Int,
+        canAccept:Boolean,
+        canReject:Boolean,
+        canRequest:Boolean
     }
     
     type ConnectedUser{
@@ -65,6 +68,7 @@ let connections = `
     
     type Query{
         fetchConnections:[ConnectedUser]
+        fetchConnectionByTransaction(transactionId:String!):Connection
     }
 `
 

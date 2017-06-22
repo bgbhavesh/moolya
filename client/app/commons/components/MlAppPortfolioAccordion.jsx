@@ -27,7 +27,7 @@ export default class MlAppPortfolioAccordionContainer extends React.Component{
     actionOptions.forEach(function (action) {
       var actionProp=_.find(serverActionProps,{actionName:action.actionName})||{};
       action.showAction=true;
-      action.isDisabled=actionProp.isDisabled||(action.isDisabled?action.isDisabled:false);
+      action.isDisabled=actionProp.isDisabled;
       action.isHidden=actionProp.isHidden||false;
       that.props.assignActionHandler(action);
     });

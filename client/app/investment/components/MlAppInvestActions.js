@@ -119,20 +119,21 @@ module.exports = {
     config:{
       showAction: true,
       actionName: "like",
+      customHandler: async (ref) => {
+        const currentStage = ref.props.currentStage;
+        changeStage(ref, currentStage, "likes");
+      }
     },
-    handler: async (ref) => {
-      const currentStage = ref.props.currentStage;
-      changeStage(ref, currentStage, "likes");
-    }
   },
   comment: {
-    config:{
+    config: {
       showAction: true,
       actionName: "comment",
-    },
-    handler: async (ref) => {
-      const currentStage = ref.props.currentStage;
-      changeStage(ref, currentStage, "comment");
+      customHandler: async (ref) => {
+        console.log(ref);
+        const currentStage = ref.props.currentStage;
+        changeStage(ref, currentStage, "comment");
+      }
     }
   },
   wishlist: {
@@ -146,23 +147,23 @@ module.exports = {
     },
   },
   shortlist: {
-    config:{
+    config: {
       showAction: true,
       actionName: "shortlist",
-    },
-    handler: async (ref) => {
-      const currentStage = ref.props.currentStage;
-      changeStage(ref, currentStage, "shortlist");
+      customHandler: async (ref) => {
+        const currentStage = ref.props.currentStage;
+        changeStage(ref, currentStage, "shortlist");
+      }
     }
   },
   onboard: {
-    config:{
+    config: {
       showAction: true,
       actionName: "onboard",
-    },
-    handler: async (ref) => {
-      const currentStage = ref.props.currentStage;
-      changeStage(ref, currentStage, "onboard");
+      customHandler: async (ref) => {
+        const currentStage = ref.props.currentStage;
+        changeStage(ref, currentStage, "onboard");
+      }
     }
   }
 }

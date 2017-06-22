@@ -1241,3 +1241,41 @@ p{margin-top:10px;}
     }
   }
 }
+
+.company_block{
+  &.selected_block{
+    background:$mlRed;
+    border:$mlRed solid 1px;
+  }
+}
+
+.provider_block{
+  &.selected_block{
+    border:$mlRed solid 1px;
+    box-shadow:none;
+    h3{
+      background:$mlRed;
+
+    }
+  }
+}
+
+.ideators_list_block{
+  &.selected_block{
+    background:$mlRed;
+    border:$mlRed solid 1px;
+    .list_icon {
+      border-top: #CE3233 solid 1px;
+      .ml{
+        border:2px solid #CE3233;
+      }
+    }
+    h3{
+      border-bottom: #EF4647 solid 1px;
+    }
+    .block_footer {
+      background:$mlRed;
+      border-top: #DE1D1E solid 1px;
+    }
+  }
+}

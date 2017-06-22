@@ -8,6 +8,9 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import {initalizeFloatLabel} from '../../../../../client/admin/utils/formElemUtil';
 export default class MlSpokePersonDetail extends React.Component {
+  componentDidMount(){
+    initalizeFloatLabel();
+  }
   componentDidUpdate(){
     initalizeFloatLabel();
   }

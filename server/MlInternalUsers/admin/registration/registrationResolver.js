@@ -1192,3 +1192,58 @@ MlResolver.MlMutationResolver['resetPasswords'] = (obj, args, context, info) =>{
     return new MlRespPayload().errorPayload("Reset link Expired/Used",403);
   }
 }
+
+MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) => {
+
+  let kycDocumentObject = {}
+  let documentDetails;
+  let kycCategoryDetails;
+  let docTypeDetails;
+  if(args.documentID){
+     documentDetails = MlDocumentMapping.findOne({"_id":args.documentID});
+  }
+  kycDocumentObject.documentId = args.documentID;
+  kycDocumentObject.documentDisplayName = documentDetails.documentDisplayName;
+  kycDocumentObject.allowableFormat = documentDetails.allowableFormat;
+  kycDocumentObject.documentName = documentDetails.documentName;
+  kycDocumentObject.allowableMaxSize = documentDetails.allowableMaxSize;
+
+  if(args.kycDocID){
+    kycCategoryDetails = MlDocumentCategories.findOne({"_id":args.kycDocID});
+  }
+  if(args.docTypeID){
+    docTypeDetails = MlDocumentTypes.findOne({"_id":args.docTypeID});
+  }
+  kycDocumentObject.kycCategoryId = kycCategoryDetails._id
+  kycDocumentObject.kycCategoryName = kycCategoryDetails.docCategoryDisplayName
+  kycDocumentObject.docTypeId = docTypeDetails._id
+  kycDocumentObject.docTypeName = docTypeDetails.docTypeDisplayName
+  kycDocumentObject.isActive= true
+  kycDocumentObject.isMandatory= false
+
+ 
+  let id;
+  let registrationDetails;
+  if(args.registrationId){
+    registrationDetails = MlRegistration.findOne({"_id":args.registrationId});
+  }
+  if(registrationDetails.kycDocuments){
+    // id = MlRegistration.update(
+    //   { _id : args.registrationId,kycDocuments:{ $exists:false } },
+    //   { $push: { 'kycDocuments': args.registration.kycDocuments } }
+    // )
+    id = mlDBController.update('MlRegistration', {
+      _id: args.registrationId,
+      kycDocuments: {$exists: true}
+    }, {'kycDocuments': kycDocumentObject}, {$push: true}, context)
+  }else{
+    // id = MlRegistration.update(
+    //   { _id : args.registrationId,kycDocuments:{ $exists:false }},
+    //   { $set: { 'kycDocuments': args.registration.kycDocuments } }
+    // )
+    id = mlDBController.update('MlRegistration', {
+      _id: args.registrationId,
+      kycDocuments: {$exists: false}
+    }, {'kycDocuments': kycDocumentObject}, {$set: true}, context)
+  }
+}

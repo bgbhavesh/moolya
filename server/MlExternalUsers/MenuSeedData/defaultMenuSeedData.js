@@ -101,6 +101,14 @@ if(Meteor.isServer){
                 "uniqueId" : "news"
             },
             {
+              "image":"ml ml-transaction",
+              "link": "/app/transaction",
+              "isLink" : true,
+              "isMenu" : true,
+              "name" : "My Transaction",
+              "uniqueId" : "myTransaction"
+            },
+            {
               "image":"fa fa-calendar-check-o",
               "link": "/app/task",
               "isLink" : true,

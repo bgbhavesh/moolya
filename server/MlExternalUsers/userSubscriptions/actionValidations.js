@@ -58,21 +58,40 @@ class MlActionValidationService{
       return counter
     }
 
-    getSCInteractionsDefCount(services){
-      var counter = [];
-      _.each(services, function(service){
-          var defId = MlInteractionSCDef.findOne(service.serviceCardDefId)
-        _.each(defId.actions, function(action){
-          var interaction = {interactionType:action.actionName, limit:action.limit}
-          var index = _.findIndex(counter, {interactionType:action.actionName})
-          if(index < 0)
-            counter.push(interaction)
-          else{
-            counter[index].limit += action.limit;
-          }
-        })
-      })
-      return counter
+    // getSCInteractionsDefCount(services){
+    //   var counter = [];
+    //   _.each(services, function(service){
+    //       var defId = MlInteractionSCDef.findOne(service.serviceCardDefId)
+    //     _.each(defId.actions, function(action){
+    //       var interaction = {interactionType:action.actionName, limit:action.limit}
+    //       var index = _.findIndex(counter, {interactionType:action.actionName})
+    //       if(index < 0)
+    //         counter.push(interaction)
+    //       else{
+    //         counter[index].limit += action.limit;
+    //       }
+    //     })
+    //   })
+    //   return counter
+    // }
+    getInteractionSCLedgerBalance(userId, profile){
+
+    }
+
+    updateInteractionSCLedgerBalance(userId, profile){
+
+    }
+
+    createInteractionSCLedgerBalance(){
+
+    }
+
+    createInteractionSCJournal(){
+
+    }
+
+    getInteractionSCJournal(){
+
     }
 }
 

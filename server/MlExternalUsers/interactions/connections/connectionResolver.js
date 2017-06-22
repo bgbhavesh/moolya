@@ -49,15 +49,15 @@ MlResolver.MlQueryResolver['fetchConnections'] = (obj, args, context, info) => {
   return userConnections
 }
 
-MlResolver.MlQueryResolver['fetchConnection'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver['fetchConnectionByTransaction'] = (obj, args, context, info) => {
   try {
-    var resp=null;
-    var connection = mlDBController.findOne('MlConnections',{'_id':args.connectionId},context);
-    if(!connection&&!context.userId){
+    if(!args.transactionId&&!context.userId){
       return null;
     }
-    var requestedConnection=mlDBController.findOne('MlConnections',{_id:connection._id,isAccepted:false,isBlocked:false,isDenied:false,requestedFrom:{'$ne':context._id}},context);
-    if(requestedConnection)connection.canAccept=true;connection.canReject=true;
+    var connectionId=mlInteractionService.fetchConnectionByTransaction(args.transactionId,'connectionRequest')||{};
+    var connection = mlDBController.findOne('MlConnections',{'_id':connectionId},context);
+    var requestedConnection=mlDBController.findOne('MlConnections',{_id:connection._id,isAccepted:false,isBlocked:false,isDenied:false,requestedFrom:{'$ne':context.userId}},context);
+    if(requestedConnection){connection.canAccept=true;connection.canReject=true;}
 
     return connection;
   } catch (e) {
@@ -125,7 +125,8 @@ MlResolver.MlMutationResolver['connectionRequest'] = (obj, args, context, info) 
                                          {$set:true},context);
     if(resp===1){
       ////create the transaction record and log
-      mlInteractionService.createTransactionRequest(toUser._id,'connectionRequest',resp);
+      let connectionRec=mlDBController.findOne('MlConnections',{connectionCode:connectionCode},context)||{};
+      mlInteractionService.createTransactionRequest(toUser._id,'connectionRequest',connectionRec._id);
       return new MlRespPayload().successPayload(resp,200)
     };
 

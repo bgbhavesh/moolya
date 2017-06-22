@@ -1,13 +1,13 @@
 import MlResolver from "../../../commons/mlResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
-import MlRegistrationPreCondition from './registrationPreConditions';
-import MlAccounts from '../../../commons/mlAccounts'
-import mlRegistrationRepo from './mlRegistrationRepo';
-import MlAdminUserContext from '../../../mlAuthorization/mlAdminUserContext'
-import geocoder from 'geocoder'
-import _lodash from 'lodash'
-import _ from 'underscore'
-import moment from 'moment'
+import MlRegistrationPreCondition from "./registrationPreConditions";
+import MlAccounts from "../../../commons/mlAccounts";
+import mlRegistrationRepo from "./mlRegistrationRepo";
+import MlAdminUserContext from "../../../mlAuthorization/mlAdminUserContext";
+import geocoder from "geocoder";
+import _lodash from "lodash";
+import _ from "underscore";
+import moment from "moment";
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
   var validationCheck=null;
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
@@ -335,21 +335,22 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
 
       if (existingUser) {
               //check if the registration profile(community based) exists for user and can be updated
-               userId=existingUser._id;
-                let externalUserProfiles=existingUser.profile.externalUserProfiles
-                let userExProfile=_lodash.find(externalUserProfiles,function (profile) {
-                            return profile.registrationId==id
-                          })
-                if(userExProfile){
-                     userProfile.profileId=userExProfile.profileId
-                }
+        userId = existingUser._id;
+        let externalUserProfiles = existingUser.profile.externalUserProfiles
+        // let userExProfile=_lodash.find(externalUserProfiles,function (profile) {
+        //             return profile.registrationId==id
+        //           })
+        let userExProfile = _lodash.find(externalUserProfiles, {registrationId: id})
+        if (userExProfile) {
+          userProfile.profileId = userExProfile.profileId
+        } else {
+          orderNumberGenService.createUserProfileId(userProfile)
+        }
                result = mlDBController.update('users', {username: userObject.username, 'profile.externalUserProfiles':{$elemMatch: {'registrationId': id}}},
                                                        {"profile.externalUserProfiles.$": userProfile}, {$set: true}, context)
 
               //if registration profile item doesn't exist,then update the profile
-              if (result != 1) {
-                 orderNumberGenService .createUserProfileId(userProfile);
-                 //userProfile.profileId=profileId
+              if (result != 1) { //in the case of register as this query is used
                 updateCount = mlDBController.update('users', {username: userObject.username}, {'profile.externalUserProfiles': userProfile}, {$push: true}, context);
               } else {
                 updateCount = 1;
@@ -357,8 +358,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
               //Email & MobileNumber verification updates to user
               mlRegistrationRepo.updateUserVerificationDetails(id,'all',context);
         } else {
-
-
+            orderNumberGenService.createUserProfileId(userProfile)    //
                userId = mlDBController.insert('users', userObject, context)
               if(userId){
                  //Email & MobileNumber verification updates to user

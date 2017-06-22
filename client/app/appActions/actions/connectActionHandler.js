@@ -72,20 +72,31 @@ export async function rejectConnectionActionHandler(details) {
   return null;
 }
 
-export async function fetchConnectionRequestHandler(connectionId) {
+export async function fetchConnectionRequestHandler(transactionId) {
   const result = await appClient.query({
     query: gql`
-    query($connectionId:String!){
-      fetchConnection(connectionId:$connectionId) {
+    query($transactionId:String!){
+      fetchConnectionByTransaction(transactionId:$transactionId) {
+           _id
+           requestedFrom
+           createdBy
+           updatedBy
+           isAccepted
+           isDenied
+           isBlocked
+           resendCount
+           canAccept
+           canReject
+           canRequest
       }
     }
     `,
     variables: {
-      connectionId:connectionId
+      transactionId:transactionId
     },
     forceFetch:true
   });
-  const data = result.data.fetchConnection?result.data.fetchConnection:null;
+  const data = result.data.fetchConnectionByTransaction?result.data.fetchConnectionByTransaction:null;
   return data;
 }
 

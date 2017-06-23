@@ -56,6 +56,7 @@ let investments = `
     }
     
     input processTransactions{
+        portfolioId: String
         status:String,
         action:String,
         progress:Int,
@@ -153,6 +154,7 @@ let investments = `
     
     type ProcessTransactions{
         _id:String,
+        portfolioId: String
         status:String,
         action:String,
         progress:Int,

@@ -13,6 +13,10 @@ let FundingTypesSchema = `
         displayName :String,
         about: String,
         icon:String,
+      createdBy     : String
+      createdDate   : Date
+      updatedBy     : String
+      updatedDate   : Date
         isActive:Boolean
     }
     
@@ -22,6 +26,10 @@ let FundingTypesSchema = `
         displayName :String,
         about: String,
         icon:String,
+      createdBy     : String
+      createdDate   : Date
+      updatedBy     : String
+      updatedDate   : Date
         isActive:Boolean
     }
     

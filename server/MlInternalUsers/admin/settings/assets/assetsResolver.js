@@ -6,6 +6,23 @@ import MlRespPayload from '../../../../commons/mlPayload'
 
 
 MlResolver.MlMutationResolver['createAssets'] = (obj, args, context, info) => {
+  var firstName='';var lastName='';
+  // let id = MlDepartments.insert({...args.department});
+  if(Meteor.users.findOne({_id : context.userId}))
+  {
+    let user = Meteor.users.findOne({_id: context.userId}) || {}
+    if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+      firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+      lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+    }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+      firstName=(user.profile || {}).firstName||'';
+      lastName =(user.profile || {}).lastName||'';
+    }
+  }
+  let createdBy = firstName +' '+lastName
+  args.assetsMasterData.createdBy = createdBy;
+  args.assetsMasterData.createdDate = new Date();
     if(args && args.assetsMasterData){
         try{
             let ret = MlAssets.insert({...args.assetsMasterData})
@@ -27,6 +44,24 @@ MlResolver.MlMutationResolver['createAssets'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['updateSelectedAsset'] = (obj, args, context, info) => {
+  var firstName='';var lastName='';
+  // let id = MlDepartments.insert({...args.department});
+  if(Meteor.users.findOne({_id : context.userId}))
+  {
+    let user = Meteor.users.findOne({_id: context.userId}) || {}
+    if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+      firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+      lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+    }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+      firstName=(user.profile || {}).firstName||'';
+      lastName =(user.profile || {}).lastName||'';
+    }
+  }
+  let createdBy = firstName +' '+lastName
+  args.assetsMasterData.updatedBy = createdBy;
+  args.assetsMasterData.updatedDate = new Date();
+
     if(args && args.assetId && args.assetsMasterData){
         try{
             let resp = MlAssets.update({_id: args.assetId}, {$set: args.assetsMasterData}, {upsert: true})

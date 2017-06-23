@@ -28,6 +28,24 @@ MlResolver.MlMutationResolver['createDocument'] = (obj, args, context, info) => 
     let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
     return response;
   }
+  var firstName='';var lastName='';
+  // let id = MlDepartments.insert({...args.department});
+  if(Meteor.users.findOne({_id : context.userId}))
+  {
+    let user = Meteor.users.findOne({_id: context.userId}) || {}
+    if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+      firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+      lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+    }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+      firstName=(user.profile || {}).firstName||'';
+      lastName =(user.profile || {}).lastName||'';
+    }
+  }
+  let createdBy = firstName +' '+lastName
+  args.document.createdBy = createdBy;
+  args.document.createdDate = new Date();
+
   let id = MlDocumentMapping.insert({...args.document});
   if (id) {
     let code = 200;
@@ -68,9 +86,25 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
       let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
       return response;
     }
-
-
     args=_.omit(args,'_id');
+    var firstName='';var lastName='';
+    // let id = MlDepartments.insert({...args.department});
+    if(Meteor.users.findOne({_id : context.userId}))
+    {
+      let user = Meteor.users.findOne({_id: context.userId}) || {}
+      if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+        firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+        lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+      }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+        firstName=(user.profile || {}).firstName||'';
+        lastName =(user.profile || {}).lastName||'';
+      }
+    }
+    let createdBy = firstName +' '+lastName
+    args.document.updatedBy = createdBy;
+    args.document.updatedDate = new Date();
+
     let result= MlDocumentMapping.update({documentId:args.documentId}, {$set: args.document});
     let code = 200;
     let response = new MlRespPayload().successPayload(result, code);
@@ -229,5 +263,17 @@ MlResolver.MlQueryResolver['fetchKycDocProcessMapping'] = (obj, args, context, i
     }
     return data;
   }
+}
+
+MlResolver.MlQueryResolver['fetchKYCDocuments'] = (obj, args, context, info) => {
+
+  let result;
+  if(args.clusters&&args.chapters&&args.subChapters&&args.community&&args.kyc&&args.documentType){
+    result = MlDocumentMapping.find({"$and":[{ kycCategory : { $in: [args.kyc] },documentType: {$in :[args.documentType]}, clusters: {$in: args.clusters},
+      chapters: {$in: args.chapters},
+      subChapters:{$in: args.subChapters},isActive:true}]}).fetch()
+  }
+  return result;
+
 }
 

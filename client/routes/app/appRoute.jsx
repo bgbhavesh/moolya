@@ -313,6 +313,13 @@ appSection.route('/calendar/manageSchedule/:profileId/createService', {
   }
 });
 
+appSection.route('/calendar/manageSchedule/:profileId/editService', {
+  name: 'calendar_manageSchedule',
+  action(){
+    mount(AppLayout, {appContent:<MlAppServiceManageSchedule />, isCalenderMenu: true})
+  }
+});
+
 
 appSection.route('/calendar/manageSchedule/:profileId/editActivity', {
   name: 'calendar_manageSchedule',

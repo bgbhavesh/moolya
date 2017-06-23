@@ -18,10 +18,10 @@ let service=`
      info: String
      isMandatory: Boolean
   }
-  type Payment {
+  type ServicePayment {
      amount: Int
      isDiscount: Boolean
-     discountAmount: Boolean
+     discountAmount: Int
      discountPercentage: Int
      isTaxInclusive: Boolean
      isPromoCodeApplicable: Boolean
@@ -39,6 +39,7 @@ let service=`
 
   type Service {
     userId: String
+    _id: String
     profileId: String
     name: String
     displayName: String
@@ -48,7 +49,7 @@ let service=`
     status: Boolean
     termsAndCondition: TermsAndCondition
     attachments: [Attachments]
-    payment: Payment
+    payment: ServicePayment
     tasks: [String]
     facilitationCharge : FacilitationCharge
     createdAt: Date
@@ -68,10 +69,10 @@ let service=`
        isMandatory: Boolean
    }
 
-   input payment {
+   input servicepayment {
        amount: Int
        isDiscount: Boolean
-       discountAmount: Boolean
+       discountAmount: Int
        discountPercentage: Int
        isTaxInclusive: Boolean
        isPromoCodeApplicable: Boolean
@@ -100,7 +101,7 @@ let service=`
         status: Boolean
         termsAndCondition: termsAndCondition
         attachments: [attachments]
-        payment: payment
+        payment: servicepayment
         tasks: [String]
         facilitationCharge : facilitationCharge
         createdAt: Date
@@ -109,7 +110,7 @@ let service=`
     }
 
     type Query {
-        fetchServices:[Service]
+        fetchServices(profileId:String):[Service]
         fetchService(serviceId:String):Service
     }
 

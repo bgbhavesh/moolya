@@ -1,13 +1,13 @@
 import MlResolver from "../../../commons/mlResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
-import MlRegistrationPreCondition from './registrationPreConditions';
-import MlAccounts from '../../../commons/mlAccounts'
-import mlRegistrationRepo from './mlRegistrationRepo';
-import MlAdminUserContext from '../../../mlAuthorization/mlAdminUserContext'
-import geocoder from 'geocoder'
-import _lodash from 'lodash'
-import _ from 'underscore'
-import moment from 'moment'
+import MlRegistrationPreCondition from "./registrationPreConditions";
+import MlAccounts from "../../../commons/mlAccounts";
+import mlRegistrationRepo from "./mlRegistrationRepo";
+import MlAdminUserContext from "../../../mlAuthorization/mlAdminUserContext";
+import geocoder from "geocoder";
+import _lodash from "lodash";
+import _ from "underscore";
+import moment from "moment";
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
   var validationCheck=null;
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
@@ -335,21 +335,22 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
 
       if (existingUser) {
               //check if the registration profile(community based) exists for user and can be updated
-               userId=existingUser._id;
-                let externalUserProfiles=existingUser.profile.externalUserProfiles
-                let userExProfile=_lodash.find(externalUserProfiles,function (profile) {
-                            return profile.registrationId==id
-                          })
-                if(userExProfile){
-                     userProfile.profileId=userExProfile.profileId
-                }
+        userId = existingUser._id;
+        let externalUserProfiles = existingUser.profile.externalUserProfiles
+        // let userExProfile=_lodash.find(externalUserProfiles,function (profile) {
+        //             return profile.registrationId==id
+        //           })
+        let userExProfile = _lodash.find(externalUserProfiles, {registrationId: id})
+        if (userExProfile) {
+          userProfile.profileId = userExProfile.profileId
+        } else {
+          orderNumberGenService.createUserProfileId(userProfile)
+        }
                result = mlDBController.update('users', {username: userObject.username, 'profile.externalUserProfiles':{$elemMatch: {'registrationId': id}}},
                                                        {"profile.externalUserProfiles.$": userProfile}, {$set: true}, context)
 
               //if registration profile item doesn't exist,then update the profile
-              if (result != 1) {
-                 orderNumberGenService .createUserProfileId(userProfile);
-                 //userProfile.profileId=profileId
+              if (result != 1) { //in the case of register as this query is used
                 updateCount = mlDBController.update('users', {username: userObject.username}, {'profile.externalUserProfiles': userProfile}, {$push: true}, context);
               } else {
                 updateCount = 1;
@@ -357,8 +358,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
               //Email & MobileNumber verification updates to user
               mlRegistrationRepo.updateUserVerificationDetails(id,'all',context);
         } else {
-
-
+            orderNumberGenService.createUserProfileId(userProfile)    //
                userId = mlDBController.insert('users', userObject, context)
               if(userId){
                  //Email & MobileNumber verification updates to user
@@ -1190,5 +1190,60 @@ MlResolver.MlMutationResolver['resetPasswords'] = (obj, args, context, info) =>{
     }
   }else{
     return new MlRespPayload().errorPayload("Reset link Expired/Used",403);
+  }
+}
+
+MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) => {
+
+  let kycDocumentObject = {}
+  let documentDetails;
+  let kycCategoryDetails;
+  let docTypeDetails;
+  if(args.documentID){
+     documentDetails = MlDocumentMapping.findOne({"_id":args.documentID});
+  }
+  kycDocumentObject.documentId = args.documentID;
+  kycDocumentObject.documentDisplayName = documentDetails.documentDisplayName;
+  kycDocumentObject.allowableFormat = documentDetails.allowableFormat;
+  kycDocumentObject.documentName = documentDetails.documentName;
+  kycDocumentObject.allowableMaxSize = documentDetails.allowableMaxSize;
+
+  if(args.kycDocID){
+    kycCategoryDetails = MlDocumentCategories.findOne({"_id":args.kycDocID});
+  }
+  if(args.docTypeID){
+    docTypeDetails = MlDocumentTypes.findOne({"_id":args.docTypeID});
+  }
+  kycDocumentObject.kycCategoryId = kycCategoryDetails._id
+  kycDocumentObject.kycCategoryName = kycCategoryDetails.docCategoryDisplayName
+  kycDocumentObject.docTypeId = docTypeDetails._id
+  kycDocumentObject.docTypeName = docTypeDetails.docTypeDisplayName
+  kycDocumentObject.isActive= true
+  kycDocumentObject.isMandatory= false
+
+ 
+  let id;
+  let registrationDetails;
+  if(args.registrationId){
+    registrationDetails = MlRegistration.findOne({"_id":args.registrationId});
+  }
+  if(registrationDetails.kycDocuments){
+    // id = MlRegistration.update(
+    //   { _id : args.registrationId,kycDocuments:{ $exists:false } },
+    //   { $push: { 'kycDocuments': args.registration.kycDocuments } }
+    // )
+    id = mlDBController.update('MlRegistration', {
+      _id: args.registrationId,
+      kycDocuments: {$exists: true}
+    }, {'kycDocuments': kycDocumentObject}, {$push: true}, context)
+  }else{
+    // id = MlRegistration.update(
+    //   { _id : args.registrationId,kycDocuments:{ $exists:false }},
+    //   { $set: { 'kycDocuments': args.registration.kycDocuments } }
+    // )
+    id = mlDBController.update('MlRegistration', {
+      _id: args.registrationId,
+      kycDocuments: {$exists: false}
+    }, {'kycDocuments': kycDocumentObject}, {$set: true}, context)
   }
 }

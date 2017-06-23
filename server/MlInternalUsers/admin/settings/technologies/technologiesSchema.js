@@ -14,6 +14,10 @@ let TechnologiesSchema = `
         displayName :String,
         about: String,
         icon:String,
+        createdBy     : String
+        createdDate   : Date
+        updatedBy     : String
+        updatedDate   : Date
         isActive:Boolean
     }
     
@@ -23,6 +27,10 @@ let TechnologiesSchema = `
         displayName :String,
         about: String,
         icon:String,
+        createdBy     : String
+        createdDate   : Date
+        updatedBy     : String
+        updatedDate   : Date
         isActive:Boolean
     }
     

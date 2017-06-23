@@ -262,8 +262,8 @@ export default class MlAssignHierarchy extends React.Component {
         label:subDepartmentName
       }
     }`
-    let reportingRolequery=gql`query($departmentId:String,$subDepartmentId:String,$clusterId:String, $chapterId:String, $subChapterId:String, $communityId:String,$levelCode:String,$currentRoleId:String){
-      data:fetchRolesForHierarchy(departmentId:$departmentId,subDepartmentId:$subDepartmentId,clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId, communityId:$communityId,levelCode:$levelCode,currentRoleId:$currentRoleId) {
+    let reportingRolequery=gql`query($departmentId:String,$subDepartmentId:String,$clusterId:String, $chapterId:String, $subChapterId:String, $communityId:String,$levelCode:String,$currentRoleId:String,$roles:[teamStructureAssignmentInput]){
+      data:fetchRolesForHierarchy(departmentId:$departmentId,subDepartmentId:$subDepartmentId,clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId, communityId:$communityId,levelCode:$levelCode,currentRoleId:$currentRoleId,roles:$roles) {
         value:_id
         label:roleName
       }
@@ -310,7 +310,7 @@ export default class MlAssignHierarchy extends React.Component {
           <div className="panel-body">
             {that.state.unAssignedRoles.teamStructureAssignment.map(function (roles,id) {
               let parentDepartment = that.props.departmentInfo;
-              let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId}}};
+              let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId,roles:that.state.unAssignedRoles.teamStructureAssignment}}};
 
               return(
                 <div className="row" key={roles.roleId}>

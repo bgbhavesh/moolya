@@ -13,6 +13,10 @@ let subDepartmentSchema = `
         isActive:Boolean,
         departmentId:String,
         isMoolya:Boolean,
+        createdBy     : String
+        createdDate   : Date
+        updatedBy     : String
+         updatedDate  : Date
         departmentAliasName : String,
         clustersList   : [String],
         chaptersList   : [String],
@@ -45,6 +49,10 @@ let subDepartmentSchema = `
         isActive:Boolean,
         departmentId:String,
         isMoolya:Boolean,
+        createdBy     : String
+        createdDate   : Date
+        updatedBy     : String
+        updatedDate  : Date
         subDepatmentAvailable:[SubDepatmentAvailable]
     }
     

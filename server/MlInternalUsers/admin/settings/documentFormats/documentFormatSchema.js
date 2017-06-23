@@ -9,15 +9,22 @@ let DocumentFormatsSchema = `
       docFormatDisplayName :String
       about :String
       _id :String
-      createdDateTime: Date
-      isActive :Boolean
+      createdBy     : String
+      createdDate   : Date
+      updatedBy     : String
+      updatedDate   : Date
+      isActive      :Boolean
     }
     input documentFormatObject{
         docFormatName :String,
         docFormatDisplayName :String,
         about :String,
         _id :String,
-        isActive :Boolean
+        createdBy     : String
+        createdDate   : Date
+        updatedBy     : String
+        updatedDate   : Date
+        isActive      :Boolean
     }
     
    type Mutation 

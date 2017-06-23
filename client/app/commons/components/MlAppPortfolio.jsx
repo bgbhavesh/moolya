@@ -40,6 +40,7 @@ class MlAppPortfolio extends React.Component{
 
   componentDidMount(){
     let portfolioId = this.props.config;
+    $("#portfolioAccordion0").addClass("in")
     /*var pathname = window.location.pathname
     if(pathname.indexOf("view") != -1 || pathname.indexOf("edit") != -1 || this.props.communityType != "ideator"){
       this.setState({isMyPortfolio:true})
@@ -255,7 +256,7 @@ class MlAppPortfolio extends React.Component{
                 {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
           </div>)}
         <div className="overlay"></div>
-          <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
+          <Popover placement="bottom" isOpen={this.state.popoverOpen} target="comment" toggle={this.toggle}>
             <PopoverTitle>Portfolio Annotations</PopoverTitle>
             <PopoverContent>
               <div className="ml_annotations">
@@ -290,7 +291,7 @@ class MlAppPortfolio extends React.Component{
                         </div>
                       </div>*/}
                       <div className="comment_wrap">
-                      <textarea ref="comment"  id="comment" className="form-control comment-input-box"
+                      <textarea ref="comment"  id="commentData" className="form-control comment-input-box"
                                 placeholder="Enter your comment here"></textarea>
 
                         <a href="#" data-id={annotationDetails.id} className="circle_btn">

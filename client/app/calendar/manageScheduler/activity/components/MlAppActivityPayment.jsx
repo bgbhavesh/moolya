@@ -226,8 +226,9 @@ async getDetails() {
     this.setState({chargesAmount: charges})
   }
 
-  async saveDetails(){
+  async saveDetails() {
     let id = FlowRouter.getQueryParam('id')
+    let profileId = FlowRouter.getParam('profileId')
     let payment = {
       amount: this.state.amountToPay,
       isDiscount: this.state.discount ? this.state.discount : false,
@@ -245,9 +246,13 @@ async getDetails() {
         payment:payment,
         facilitationCharge:facilitationCharge
     }
-console.log(payment)
+    console.log(payment)
     const response = await updateActivityActionHandler(id,Details)
     this.getDetails();
+    if(response) {
+      toastr.success("Saved Successfully")
+      FlowRouter.go('/app/calendar/manageSchedule/'+profileId+'/activityList')
+    }
     return response;
   }
 

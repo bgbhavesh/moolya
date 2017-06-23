@@ -1,6 +1,25 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+import moment from 'moment'
+function createdateFormatter (data){
+  let createdDate=data&&data.data&&data.data.createdDate;
+  if(createdDate){
+    return <div>{moment(createdDate).format('MM-DD-YYYY HH:mm:ss')}</div>;
+  }
+  else {
+    return <div></div>
+  }
+}
+function updatedateFormatter (data){
+  let updateDate=data&&data.data&&data.data.updatedDate;
+  if(updateDate){
+    return <div>{moment(updateDate).format('MM-DD-YYYY HH:mm:ss')}</div>;
+  }
+  else {
+    return <div></div>
+  }
+}
 function categoriesformatter (data){
     let categories=data&&data.data&&data.data.kycCategory?data.data.kycCategory:[];
   //   let ids =[];
@@ -70,9 +89,9 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
     {dataField: "chapters", title: "Chapter",dataSort:true, customComponent:chaptersformatter},
     {dataField: "subChapters", title: "Sub Chapter",dataSort:true, customComponent:subChaptersformatter},
     {dataField: "createdBy", title: "Created By",dataSort:true},
-    {dataField: "createdDate", title: "Created Date",dataSort:true},
+    {dataField: "createdDate", title: "Created Date",dataSort:true,customComponent:createdateFormatter},
     {dataField: "updatedBy", title: "Updated By",dataSort:true},
-    {dataField: "updatedDate", title: "Updated Date",dataSort:true},
+    {dataField: "updatedDate", title: "Updated Date",dataSort:true,customComponent:updatedateFormatter},
 
   ],
   tableHeaderClass:'react_table_head',

@@ -74,7 +74,22 @@ function createdByFormatter(data){
     return <div>System Generated</div>;
   }
 }
-
+function updateddateFormatter(data){
+  let updatedDateTime=data&&data.data&&data.data.updatedDateTime;
+  if(updatedDateTime){
+    return <div>{moment(updatedDateTime).format('MM-DD-YYYY, HH:MM')}</div>;
+  } else {
+    return <div>System Generated</div>;
+  }
+}
+function updatedByFormatter(data){
+  let updatedBy=data&&data.data&&data.data.updatedBy;
+  if(updatedBy){
+    return <div>{updatedBy}</div>;
+  } else {
+    return <div>System Generated</div>;
+  }
+}
 const mlRoleTypeTableConfig=new MlViewer.View({
   name:"roleTypeTable",
   module:"roles",//Module name for filter.
@@ -97,6 +112,8 @@ const mlRoleTypeTableConfig=new MlViewer.View({
     {dataField: "subChapterList", title: "Sub-Chapter",dataSort:true,customComponent:subChapterFormatter},
     {dataField: "createdDateTime", title: "Created Date and Time",dataSort:true,customComponent:dateFormatter},
     {dataField: "createdBy", title: "Created By",dataSort:true,customComponent:createdByFormatter},
+    {dataField: "updatedDateTime", title: "Updated Date and Time",dataSort:true,customComponent:updateddateFormatter},
+    {dataField: "updatedBy", title: "Updated By",dataSort:true,customComponent: updatedByFormatter},
 
   ],
   tableHeaderClass:'react_table_head',
@@ -138,6 +155,8 @@ const mlRoleTypeTableConfig=new MlViewer.View({
                               roleType,
                               createdDateTime,
                               createdBy,
+                              updatedDateTime,
+                              updatedBy,
                               departmentsList,
                               subdepartmentsList,
                               clustersList,

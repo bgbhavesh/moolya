@@ -33,6 +33,24 @@ MlResolver.MlMutationResolver['CreateLookingFor'] = (obj, args, context, info) =
   if (MlCommunityDefinition.findOne({code:args.communityCode})){
     args.communityName=MlCommunityDefinition.findOne({code:args.communityCode}).name;
   }
+  var firstName='';var lastName='';
+  // let id = MlDepartments.insert({...args.department});
+  if(Meteor.users.findOne({_id : context.userId}))
+  {
+    let user = Meteor.users.findOne({_id: context.userId}) || {}
+    if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+      firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+      lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+    }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+      firstName=(user.profile || {}).firstName||'';
+      lastName =(user.profile || {}).lastName||'';
+    }
+  }
+  let createdBy = firstName +' '+lastName
+  args.createdBy = createdBy;
+  args.createdDate = new Date();
+
   let id = MlLookingFor.insert({...args});
   if (id) {
     let code = 200;
@@ -78,6 +96,24 @@ MlResolver.MlMutationResolver['UpdateLookingFor'] = (obj, args, context, info) =
       return response;
     }
     args=_.omit(args,'_id');
+    var firstName='';var lastName='';
+    // let id = MlDepartments.insert({...args.department});
+    if(Meteor.users.findOne({_id : context.userId}))
+    {
+      let user = Meteor.users.findOne({_id: context.userId}) || {}
+      if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+        firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+        lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+      }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+        firstName=(user.profile || {}).firstName||'';
+        lastName =(user.profile || {}).lastName||'';
+      }
+    }
+    let createdBy = firstName +' '+lastName
+    args.updatedBy = createdBy;
+    args.updatedDate = new Date();
+
     let result = MlLookingFor.update(id, {$set: args});
     let code = 200;
     let response = new MlRespPayload().successPayload(result, code);

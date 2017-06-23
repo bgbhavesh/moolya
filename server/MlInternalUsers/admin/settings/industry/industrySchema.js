@@ -8,7 +8,11 @@ let Industry = `
       industryDisplayName :String
       about: String
       _id:String
-      isActive:Boolean
+       createdBy     : String
+       createdDate   : Date
+       updatedBy     : String
+       updatedDate   : Date
+       isActive      :Boolean
     }
     type Mutation{
         CreateIndustry(_id:String,industryName:String,industryDisplayName:String,about:String,isActive:Boolean, moduleName:String, actionName:String):response

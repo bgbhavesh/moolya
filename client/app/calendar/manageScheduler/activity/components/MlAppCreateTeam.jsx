@@ -115,6 +115,11 @@ export default class MlAppCreateTeam extends React.Component{
   radioAction(e){
     let value = e.target.value;
     this.setState({radioAction: value})
+    if(value === "online"){
+      this.setState({online:true, offline:false})
+    } else {
+      this.setState({offline:true, online:false})
+    }
   }
 
   radioAction2(e) {
@@ -215,7 +220,7 @@ updateMinutes(e){
         that.setState({isVideo: true, isAudio:false, isMeetUp:false })
       } else if (label.value === "Audio") {
         that.setState({isAudio: true, isVideo:false, isMeetUp:false })
-      } else {
+      } else if(label.value === "MeetUp") {
         that.setState({isMeetUp: true,isVideo:false, isAudio:false })
       }
     })
@@ -251,12 +256,16 @@ updateMinutes(e){
       let profileId = FlowRouter.getParam('profileId')
       const res = await updateActivityActionHandler(id,step1Details)
       this.getDetails();
-      FlowRouter.go('/calendar/manageSchedule/'+profileId+'/editActivity/?id='+id)
-      return res;
+      if(res) {
+        toastr.success("Saved Successfully")
+        FlowRouter.go('/app/calendar/manageSchedule/' +profileId +'/editActivity/?id=' + id)
+        return res;
+      }
     }
     const resp = await createActivityActionHandler(step1Details);
     if(resp) {
       toastr.success("Saved Successfully")
+      FlowRouter.go('/app/calendar/manageSchedule/'+profileId+'/editActivity/?id='+id)
     }
     let id = resp.result;
     this.props.setId(id)
@@ -284,7 +293,6 @@ updateMinutes(e){
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
-
                 <div className="form-group">
                   <input className="form-control float-label" placeholder="Activity Name" value={this.state.activityName} onChange={this.textFieldSaves.bind(this,"ActivityName")}/>
                 </div>
@@ -328,10 +336,10 @@ updateMinutes(e){
                 </div>
                 <div className="form-group">
                   <div className="input_types">
-                    <input id="Online" type="radio" name="radio" value="online" checked={this.state.online} onChange={this.radioAction}/><label htmlFor="Online" ><span><span></span></span>Online</label>
+                    <input id="Online" type="radio" name="radio1" value="online" checked={this.state.online} onChange={this.radioAction}/><label htmlFor="Online" ><span><span></span></span>Online</label>
                   </div>
                   <div className="input_types">
-                    <input id="Offline" type="radio" name="radio" value="offline" checked={this.state.offline} onChange={this.radioAction} /><label htmlFor="Offline"  ><span><span></span></span>Offline</label>
+                    <input id="Offline" type="radio" name="radio1" value="offline" checked={this.state.offline} onChange={this.radioAction} /><label htmlFor="Offline"  ><span><span></span></span>Offline</label>
                   </div>
                   <br className="brclear"/>
                 </div>

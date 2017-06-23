@@ -38,8 +38,6 @@ MlResolver.MlMutationResolver['createTask'] = (obj, args, context, info) => {
     let response = new MlRespPayload().errorPayload('Data required', code);
     return response
   }
-
-
 }
 
 MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {

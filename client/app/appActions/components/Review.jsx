@@ -115,8 +115,8 @@ export default class Review extends React.Component {
                     <StarRatings initialRate={this.state.selectedReview.rating||0} readonly={true} /><div className="clearfix" />
                     <p>{this.state.selectedReview.message}</p>
                   </div>
+                  <span className="close_full rounded_btn" onClick={this.toggleView.bind(this,'view')}><span aria-hidden="true" className="fa fa-times"></span></span>
                 </div>
-               <span class="close_full rounded_btn" onClick={this.toggleView.bind(this,'view')}><span aria-hidden="true" class="fa fa-times"></span></span>
               </li>
           </ul>
         </div>}

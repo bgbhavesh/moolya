@@ -40,9 +40,9 @@ export default class MlAppTaskSession extends Component {
         this.setState({loading: false, sessionData: sessionData, sessionDataList:sessionData});
       }else{
         if(_.isEmpty(response.session)){
-          this.setState({loading: false, sessionData: sessionData});
+          this.setState({loading: false, sessionData: sessionData, sessionDataList:sessionData});
         }else {
-          this.setState({loading: false, sessionData: response.session});
+          this.setState({loading: false, sessionData: response.session, sessionDataList:response.session});
         }
       }
     }
@@ -61,21 +61,25 @@ export default class MlAppTaskSession extends Component {
     let data = this.state.sessionData
     let cloneBackUp = _.cloneDeep(data);
     let specificData = cloneBackUp[id]
-    // specificData.activities = _.uniq(_.concat(specificData.activities, selectedValue))
     specificData.activities = _.uniq(selectedValue)
     data.splice(id, 1);
     data.splice(id, 0, specificData);
     this.setState({sessionData: data}, function () {
-      this.sendSessionDataToParent()
+      this.sendSessionDataToParent();
+      this.copyToListActivity(id,selObject)
     })
-    // let dataList = this.state.sessionDataList  //for list of activities proceed to list view
-    // let cloneBackUpList = _.cloneDeep(dataList);
-    // let specificDataList = cloneBackUpList[id]
-    // specificDataList.activities = selectedValue
-    // dataList.splice(id, 1);
-    // dataList.splice(id, 0, specificDataList);
-    // this.setState({sessionDataList: dataList})
   }
+
+  copyToListActivity(id, selObject) {
+    let dataList = this.state.sessionDataList  //for list of activities proceed to list view
+    let cloneBackUpList = _.cloneDeep(dataList);
+    let specificDataList = cloneBackUpList[id]
+    specificDataList.activities = selObject
+    dataList.splice(id, 1);
+    dataList.splice(id, 0, specificDataList);
+    this.setState({sessionDataList: dataList})
+  }
+
   handelBlur(id, e){
     let name = e.target.name;
     let data = this.state.sessionData
@@ -86,10 +90,22 @@ export default class MlAppTaskSession extends Component {
     data.splice(id, 0, specificData);
     this.setState({sessionData: data}, function () {
       this.sendSessionDataToParent()
+      this.handelBlurCopy(id,name, e.target.value)
     })
   }
+
+  handelBlurCopy(id, name, value){
+    let dataList = this.state.sessionDataList     // anotherlist for listing
+    let cloneBackUpList = _.cloneDeep(dataList);
+    let specificDataList = cloneBackUpList[id]
+    specificDataList.duration[name] = value
+    dataList.splice(id, 1);
+    dataList.splice(id, 0, specificDataList);
+    this.setState({sessionDataList: dataList})
+  }
+
   sendSessionDataToParent() {
-    let data = this.state.sessionData;
+    let data = _.cloneDeep(this.state.sessionData);
     this.props.getSessionDetails(data);
   }
 
@@ -135,7 +151,7 @@ export default class MlAppTaskSession extends Component {
         {/*{showLoader === true ? ( <MlLoader/>) : (*/}
           <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
           <div className="form_bg">
-          {this.state.sessionData.map(function (session, id) {
+          {this.state.sessionDataList.map(function (session, id) {
             return (
               <div className="panel panel-default" key={id}>
                 <div className="panel-heading">
@@ -170,17 +186,17 @@ export default class MlAppTaskSession extends Component {
                           <div className="swiper-slide">
                             <div className="list_block notrans funding_list">
                               <div>
-                                <p className="online">mode online/offine</p>
+                                <p className="online">{ss.mode}</p>
                                 <span>Duration: <FontAwesome name='pencil'/></span><br />
                                 <div className="form-group">
-                                  <label><input type="text" className="form-control inline_input"/> Hours <input
+                                  <label><input type="text" className="form-control inline_input" defaultValue={ss.duration?ss.duration.hours:0}/> Hours <input
                                     type="text"
-                                    className="form-control inline_input"/>
-                                    Mins </label>
+                                    className="form-control inline_input" defaultValue={ss.duration?ss.duration.minutes:0}/>
+                                    Minutes</label>
                                 </div>
 
                               </div>
-                              <h3>Activity display name</h3>
+                              <h3>{ss.label}</h3>
                             </div>
                           </div>
 

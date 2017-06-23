@@ -37,6 +37,8 @@ let Role = `
         about:String,
         createdDateTime:Date,
         createdBy:String,
+        updatedDateTime:Date,
+        updatedBy:String,
         departmentsList : [String],
         subdepartmentsList : [String],
         clustersList   : [String],
@@ -97,6 +99,8 @@ let Role = `
       modules:[modules], 
       isActive:Boolean,
       isHierarchyAssigned:Boolean
+       updatedDateTime:Date,
+        updatedBy:String,
   }
   
   

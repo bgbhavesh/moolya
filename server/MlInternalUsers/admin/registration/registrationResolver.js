@@ -104,6 +104,8 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
     let response = new MlRespPayload().errorPayload("username is mandatory!!!!",code);
     return response;
   }
+  validationCheck=MlRegistrationPreCondition.validateRegisterAsActiveCommunity(args.registration);
+  if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
   var userInfo = mlDBController.findOne('MlRegistration', args.registrationId, context) || {};
   let userRegisterInfo=userInfo.registrationInfo;
   let registrationInfo=args.registration
@@ -148,7 +150,7 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
 MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, info) => {
 
   var response=null;
-  var registrationExist = MlRegistration.findOne({"registrationInfo.email":args.registration.email})
+  var registrationExist = MlRegistration.findOne({"registrationInfo.email":registrationInfo.email,status: { $nin: [ 'Rejected' ] }})//MlRegistration.findOne({"registrationInfo.email":args.registration.email})
   var userExist = mlDBController.findOne('users', {"profile.email":args.registration.email}, context) || {};
   if(registrationExist || userExist._id){
     let code = 400;
@@ -1221,7 +1223,7 @@ MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) 
   kycDocumentObject.isActive= true
   kycDocumentObject.isMandatory= false
 
- 
+
   let id;
   let registrationDetails;
   if(args.registrationId){

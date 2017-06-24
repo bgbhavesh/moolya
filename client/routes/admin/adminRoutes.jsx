@@ -20,6 +20,7 @@ import MlTransactionRequested from '../../admin/transaction/requests/components/
 import MlRequestedList from '../../admin/transaction/requested/component/MlRequestedList'
 import MlSystemsLogList from '../../admin/transaction/systemsLog/component/MlSystemsLogList'
 import MlRegistrtionApprovedList from '../../admin/transaction/requested/component/MlRegistrtionApprovedList'
+import MlRegistrtaionRejectedList from '../../admin/transaction/requested/component/MlRegistrationRejectedList'
 import  RegistrationWizard from  '../../admin/transaction/requested/component/RegistrationWizard'
 import MlProcessDocumentList from '../../admin/processDocument/cluster/components/MlProcessDocumentList'
 import MlProcessDocMapping from '../../admin/processDocument/cluster/components/MlProcessDocMapping'
@@ -227,6 +228,14 @@ adminSection.route('/transactions/registrationApprovedList', {
     mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'approved'}} />,  adminContent:<MlRegistrtionApprovedList/>})
   }
 });
+
+adminSection.route('/transactions/registrationRejectedList', {
+  name: 'transaction_registration_rejected',
+  action(){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'approved'}} />,  adminContent:<MlRegistrtaionRejectedList/>})
+  }
+});
+
 
 
 adminSection.route('/transactions/registrationRequested/edit', {

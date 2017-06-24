@@ -40,8 +40,10 @@ class MlUserContext{
         check(userId,String);
         let userProfile = this.userProfileDetails(userId)||{};
         if(userProfile){
+          let userDetails = {profile: userProfile, menuName: 'mlDefaultProfileMenu'}
+          return userDetails;
         }
-        return 'mlDefaultProfileMenu';
+        // return 'mlDefaultProfileMenu';
     }
 
     getExploreMenu(userId){

@@ -50,7 +50,7 @@ class MlAuthorization
               do{
                   if(startToken.value == 'module'){
                       moduleName = startToken.next.next.value.toUpperCase();
-                      if(moduleName == 'REGISTRATIONINFO' || moduleName == 'REGISTRATIONAPPROVEDINFO'){
+                      if(moduleName == 'REGISTRATIONINFO' || moduleName == 'REGISTRATIONAPPROVEDINFO' || moduleName=='REGISTRATIONREJECTEDINFO'){
                           moduleName = 'REGISTRATION';
                       }
 

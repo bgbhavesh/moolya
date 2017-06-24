@@ -51,7 +51,6 @@ MlResolver.MlQueryResolver['getBranchDetails'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['fetchActivity'] = (obj, args, context, info) => {
   let result = mlDBController.findOne('MlActivity', {_id:args.activityId} , context);
-  console.log("fetching",result);
   return result;
 }
 

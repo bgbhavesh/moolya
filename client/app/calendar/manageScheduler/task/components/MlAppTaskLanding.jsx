@@ -91,9 +91,9 @@ class MlAppTaskLanding extends Component {
       },
       {
         showAction: true,
-        actionName: 'golive',
+        actionName: 'exit',
         handler: async(event) => {
-          console.log('go live action handler')
+          FlowRouter.go('/app/calendar/manageSchedule/'+this.props.profileId+'/taskList')
         }
       }
     ];

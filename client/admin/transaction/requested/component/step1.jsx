@@ -10,6 +10,8 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import {updateRegistrationActionHandler,emailVerificationActionHandler,smsVerificationActionHandler} from '../actions/updateRegistration'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import {fetchIdentityTypes} from "../actions/findRegistration";
+import {findRegistrationActionHandler} from "../actions/findRegistration";
+
 import _ from 'lodash';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import MlLoader from '../../../../commons/components/loader/loader'
@@ -49,7 +51,8 @@ export default class step1 extends React.Component{
       defaultIdentityCompany:false,
       transactionId:'',
       selectedAccountsType: " ",
-      registrationDate:''
+      registrationDate:'',
+      emailVerified:false
     }
 
     this.fetchIdentityTypesMaster.bind(this);
@@ -83,6 +86,14 @@ export default class step1 extends React.Component{
     return response;
   }
 
+
+  async checkEmailVerify() {
+    const response = await findRegistrationActionHandler(this.props.registrationInfo.registrationId);
+    if(response.emails){
+      this.setState({emailVerified: response.emails[0].verified});
+    }
+    return response;
+  }
 
   componentWillMount() {
     console.log(this.props)
@@ -316,9 +327,9 @@ export default class step1 extends React.Component{
     let hours = moment().diff(registrationDate, 'hours')
     console.log(registrationDate)
     console.log(hours)
-    if(hours>=48) {
+    if(hours>=48 && this.state.emailVerified === false) {
       MlActionConfig = [
-        {
+      /*  {
           actionName: 'save',
           showAction: true,
           handler: this.updateRegistration.bind(this)
@@ -329,7 +340,7 @@ export default class step1 extends React.Component{
           handler: async(event) => {
             FlowRouter.go("/admin/transactions/registrationRequested")
           }
-        },
+        },*/
         {
           actionName: 'rejectUser',
           showAction: true,

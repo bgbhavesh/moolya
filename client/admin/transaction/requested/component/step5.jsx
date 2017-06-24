@@ -373,7 +373,7 @@ export default class Step5 extends React.Component {
                     {registrationDocumentsGroup[key].map(function (regDoc,id) {
                       let documentExist=_.isEmpty(regDoc)
                       return(
-                        <div>{!documentExist&&regDoc.documentId!=null&&<DocumentViewer key={regDoc.documentId} doc={regDoc} selectedDocuments={that.state.selectedFiles} selectedDocType={that.state.selectedDocTypeFiles} onFileUpload={that.onFileUpload.bind(that)} onDocumentSelect={that.onDocumentSelect.bind(that)} onDocumentRemove={that.onDocumentRemove.bind(that)} registrationId={registrationId} getRegistrationKYCDetails={that.props.getRegistrationKYCDetails(that)}/>} </div>)
+                        <div>{!documentExist&&regDoc.documentId!=null&&<DocumentViewer key={regDoc.documentId} doc={regDoc} selectedDocuments={that.state.selectedFiles} selectedDocType={that.state.selectedDocTypeFiles} onFileUpload={that.onFileUpload.bind(that)} onDocumentSelect={that.onDocumentSelect.bind(that)} onDocumentRemove={that.onDocumentRemove.bind(that)} registrationId={registrationId}/>} </div>)
                     })
                     }<br className="brclear"/></div>
                     )

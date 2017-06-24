@@ -24,3 +24,28 @@ export async function findDeptAndsubDeptActionHandler(clusterId) {
   const id = result.data.fetchMoolyaBasedDepartmentAndSubDepartment;
   return id
 }
+
+export async function findNonMoolyaDeptAndsubDeptActionHandler(clusterId,subChapterId) {
+  let cid=clusterId
+  const result = await client.query({
+    query: gql`
+       query  ($clusterId: String,$subChapterId:String){
+         fetchNonMoolyaBasedDepartmentAndSubDepartments(clusterId:$clusterId,subChapterId:$subChapterId) {
+            departmentId
+            departmentName
+            subDepartmentId
+      			subDepartmentName
+      			isMoolya
+      			isActive
+         }  
+        }
+    `,
+    variables: {
+      clusterId:cid,
+      subChapterId:subChapterId
+    },
+    forceFetch:true
+  })
+  const id = result.data.fetchNonMoolyaBasedDepartmentAndSubDepartments;
+  return id
+}

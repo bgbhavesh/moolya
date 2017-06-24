@@ -104,6 +104,8 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
     let response = new MlRespPayload().errorPayload("username is mandatory!!!!",code);
     return response;
   }
+  validationCheck=MlRegistrationPreCondition.validateRegisterAsActiveCommunity(args.registration);
+  if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
   var userInfo = mlDBController.findOne('MlRegistration', args.registrationId, context) || {};
   let userRegisterInfo=userInfo.registrationInfo;
   let registrationInfo=args.registration

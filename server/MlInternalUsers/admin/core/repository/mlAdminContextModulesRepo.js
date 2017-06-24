@@ -306,10 +306,11 @@ let CoreModules = {
     switch(type){
       //custom restriction for registration
       case 'requested':
-       // serverQuery={'status':{'$in':['Pending','Rejected']}};
+       serverQuery={'status':{'$in':['WIP', 'Yet To Start', 'Go Live']}};
         break;
       case 'approved':
-       serverQuery={'status':"Approved"};
+       // serverQuery={'status':"Approved"};
+        serverQuery={'status':"gone live"};
     }
     //todo: internal filter query should be constructed.
     //resultant query with $and operator

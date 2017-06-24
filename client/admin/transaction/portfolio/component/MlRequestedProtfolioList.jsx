@@ -10,8 +10,7 @@ export default class MlRequestedPortfolioList extends Component {
     this.state={show:false,requestId:null};
     this.assignActionHandler.bind(this);
   }
-  componentDidMount() {
-  }
+
   assignActionHandler(data){
     if(data&&data.id){
       this.setState({requestId:data.id,show:true});

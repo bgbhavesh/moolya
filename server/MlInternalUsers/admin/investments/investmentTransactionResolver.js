@@ -63,22 +63,30 @@ MlResolver.MlQueryResolver['fetchUserProcessSetup'] = (obj, args, context, info)
   return {};
 }
 
-MlResolver.MlMutationResolver['createProcessTransaction'] = (obj, args, context, info) =>{
-    if(args.portfoliodetails){
-      let ret;
-      try{
+MlResolver.MlMutationResolver['createProcessTransaction'] = (obj, args, context, info) => {
+  if (args.portfoliodetails) {
+    let ret;
+    try {
+      var trans = mlDBController.findOne('MlProcessTransactions', {
+        portfolioId: args.portfoliodetails.portfolioId
+      }, context)
+      if (!trans) {
         orderNumberGenService.assignProcessSetupTransaction(args.portfoliodetails)
         ret = mlDBController.insert('MlProcessTransactions', args.portfoliodetails, context)
-      }catch(e){
-        let code = 409;
-        let response = new MlRespPayload().errorPayload(e.message, code);
+      }else{
+        let code = 400;
+        let response = new MlRespPayload().errorPayload('Process setup already present', code);
         return response;
       }
-      let code = 200;
-      let response = new MlRespPayload().successPayload(ret, code);
+    } catch (e) {
+      let code = 409;
+      let response = new MlRespPayload().errorPayload(e.message, code);
       return response;
-
     }
+    let code = 200;
+    let response = new MlRespPayload().successPayload(ret, code);
+    return response;
+  }
 }
 
 MlResolver.MlMutationResolver['updateProcessSetup'] = (obj, args, context, info) =>{

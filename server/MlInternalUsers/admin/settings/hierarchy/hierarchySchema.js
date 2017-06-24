@@ -36,6 +36,7 @@ let HierarchySchema = `
     }
     type Query{
         fetchMoolyaBasedDepartmentAndSubDepartment(clusterId:String):[DepartmentAndSubDepartmentDetails]
+        fetchNonMoolyaBasedDepartmentAndSubDepartments(clusterId:String,subChapterId:String):[DepartmentAndSubDepartmentDetails]
         fetchNonMoolyaBasedDepartmentAndSubDepartment(subChapterId:String):[Department]
         fetchRolesForDepartment(departmentId:String,subDepartmentId:String,clusterId:String):[Roles]
         fetchRolesForHierarchy(departmentId:String,subDepartmentId:String, clusterId:String, chapterId:String, subChapterId:String, communityId:String,levelCode:String,currentRoleId:String,roles:[teamStructureAssignmentInput]): [Roles]

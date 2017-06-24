@@ -71,6 +71,7 @@ export default class MlAppCommunitiesList extends Component {
       identityType:this.state.identity,
       clusterId:this.state.clusterId,
       cityId:this.state.selectedCity,
+      countryId:this.state.country
 
     }
     let registrationId=this.state.registerId

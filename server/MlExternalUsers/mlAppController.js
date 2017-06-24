@@ -22,7 +22,7 @@ let multipart 	= require('connect-multiparty'),
     fs 			    = require('fs'),
     multipartMiddleware = multipart();
 
-const resolvers=_.extend({Query: MlResolver.MlQueryResolver,Mutation:MlResolver.MlMutationResolver},MlResolver.MlUnionResolver);
+const resolvers=_.extend({Query: MlResolver.MlQueryResolver,Mutation:MlResolver.MlMutationResolver},MlResolver.MlUnionResolver,MlResolver.MlScalarResolver);
 const typeDefs = MlSchemaDef['schema']
 const executableSchema = makeExecutableSchema({
   typeDefs,
@@ -78,10 +78,10 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>
                ...customOptionsObject,
             };
             context = getContext({req});
-            // if(!context||!context.userId){
-            //   res.json({unAuthorized:true,message:"Invalid Token"})
-            //   return;
-            // }
+            if(!context||!context.userId){
+              res.json({unAuthorized:true,message:"Invalid Token"})
+              return;
+            }
 
             // let isValid = mlserviceCardHandler.validateResource(req.body.query, context);
             return {

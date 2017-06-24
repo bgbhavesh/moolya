@@ -23,6 +23,10 @@ let departmentSchema = `
          chaptersList   : [String]
          subChapterList : [String]
          isMoolya       : Boolean
+          createdBy     : String
+          createdDate   : Date
+          updatedBy     : String
+           updatedDate  : Date
          depatmentAvailable:[DepatmentAvailableSchema]
     }
     
@@ -47,6 +51,10 @@ let departmentSchema = `
           departmentDesc:String,
           isActive:Boolean,
           isMoolya:Boolean,
+          createdBy     : String
+          createdDate   : Date
+          updatedBy     : String
+          updatedDate   : Date
           isSystemDefined : Boolean
           depatmentAvailable:[DepatmentAvailable]
     }

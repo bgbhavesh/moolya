@@ -33,6 +33,8 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
   }
 
   role.createdDateTime = new Date();
+  role.updatedDateTime= new Date();
+  role.updatedBy=  mlDBController.findOne("users", {_id: context.userId}, context).username;
   role.createdBy = mlDBController.findOne("users", {_id: context.userId}, context).username;
 
   _.each(role.modules, function (module)
@@ -161,6 +163,8 @@ MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
             return response;
           }
         }
+        role.updatedDateTime = new Date();
+        role.updatedBy = mlDBController.findOne("users", {_id: context.userId}, context).username;
 
         // let result= MlRoles.update(id, {$set: args.role});
         let result = mlDBController.update('MlRoles', id, args.role, {$set: true}, context);

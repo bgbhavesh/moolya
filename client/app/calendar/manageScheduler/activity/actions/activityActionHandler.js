@@ -60,7 +60,6 @@ query ($Attributes: TeamName) {
       Attributes
     }
   });
-  console.log(result)
   const teamMembers = result.data.getTeamUsers;
   return teamMembers
 }
@@ -132,8 +131,6 @@ query($activityId: String)  {
   }
 }
     `,
-    forceFetch:true,
-
     variables: {
       activityId
     },

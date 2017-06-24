@@ -69,8 +69,23 @@ MlResolver.MlMutationResolver['createDepartment'] = (obj, args, context, info) =
       }
     }
   }
-
+  var firstName='';var lastName='';
   // let id = MlDepartments.insert({...args.department});
+  if(Meteor.users.findOne({_id : context.userId}))
+  {
+    let user = Meteor.users.findOne({_id: context.userId}) || {}
+    if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+      firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+      lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+    }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+      firstName=(user.profile || {}).firstName||'';
+      lastName =(user.profile || {}).lastName||'';
+    }
+  }
+  let createdBy = firstName +' '+lastName
+  args.department.createdBy = createdBy;
+  args.department.createdDate = new Date();
   let id = mlDBController.insert('MlDepartments', args.department, context)
   if(id){
       MlEmailNotification.departmentVerficationEmail(id,context);
@@ -94,6 +109,24 @@ MlResolver.MlMutationResolver['updateDepartment'] = (obj, args, context, info) =
     // let department = MlDepartments.findOne({_id: args.departmentId});
     let department = mlDBController.findOne('MlDepartments', {_id: args.departmentId}, context)
     // let deactivate = args.department.isActive;
+    var firstName='';var lastName='';
+    // let id = MlDepartments.insert({...args.department});
+    if(Meteor.users.findOne({_id : context.userId}))
+    {
+      let user = Meteor.users.findOne({_id: context.userId}) || {}
+      if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+        firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+        lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+      }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+        firstName=(user.profile || {}).firstName||'';
+        lastName =(user.profile || {}).lastName||'';
+      }
+    }
+    let createdBy = firstName +' '+lastName
+    args.department.updatedBy = createdBy;
+    args.department.updatedDate = new Date();
+
     if (department) {
       if (department.isSystemDefined) {
         let code = 409;
@@ -114,6 +147,23 @@ MlResolver.MlMutationResolver['updateDepartment'] = (obj, args, context, info) =
         //     let deactivate = MlSubDepartments.update({_id:subDepartment._id}, {$set:subDepartment}, {upsert:true})
         //   })
         // }
+        // var firstName='';var lastName='';
+        // // let id = MlDepartments.insert({...args.department});
+        // if(Meteor.users.findOne({_id : context.userId}))
+        // {
+        //   let user = Meteor.users.findOne({_id: context.userId}) || {}
+        //   if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+        //
+        //     firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+        //     lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+        //   }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+        //     firstName=(user.profile || {}).firstName||'';
+        //     lastName =(user.profile || {}).lastName||'';
+        //   }
+        // }
+        // let createdBy = firstName +' '+lastName
+        // args.department.updatedBy = createdBy;
+        // args.department.updatedDate = new Date();
         if (resp) {
           MlResolver.MlMutationResolver['updateSubDepartment'](obj, {
             departmentId: args.departmentId,

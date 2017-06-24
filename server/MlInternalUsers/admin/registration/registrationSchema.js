@@ -427,6 +427,7 @@ let registrationSchema = `
          verifyMobileNumber(mobileNumber:String,otp:Int):response
          forgotPassword(email:String):response
          resetPasswords(token:String, password:String):response
+         createKYCDocument(registrationId:String,documentID:String,kycDocID:String,docTypeID:String):response
     }
     type Query{
         findRegistration(registrationId:String):Registration

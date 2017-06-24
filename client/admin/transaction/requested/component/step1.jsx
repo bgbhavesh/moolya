@@ -15,6 +15,7 @@ import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidat
 import MlLoader from '../../../../commons/components/loader/loader'
 import {findAccountTypeActionHandler} from '../../../settings/accountType/actions/findAccountTypeAction'
 import moment from 'moment'
+import {rejectStatusForUser} from '../actions/rejectUser'
 var FontAwesome = require('react-fontawesome');
 var options3 = [
   {value: 'Yes', label: 'Yes'},
@@ -47,7 +48,8 @@ export default class step1 extends React.Component{
       defaultIdentityIndividual: false,
       defaultIdentityCompany:false,
       transactionId:'',
-      selectedAccountsType: " "
+      selectedAccountsType: " ",
+      registrationDate:''
     }
 
     this.fetchIdentityTypesMaster.bind(this);
@@ -81,6 +83,7 @@ export default class step1 extends React.Component{
     return response;
   }
 
+
   componentWillMount() {
     console.log(this.props)
     this.fetchIdentityTypesMaster();
@@ -103,8 +106,9 @@ export default class step1 extends React.Component{
       selectedTypeOfIndustry:details.industry,
       profession:details.profession,
       transactionId : this.props.registrationData.transactionId,
-      selectedAccountsType:details.accountType
-    });
+      selectedAccountsType:details.accountType,
+      registrationDate:details.registrationDate
+          });
     //this.settingIdentity(details.identityType);
 
   }
@@ -293,26 +297,62 @@ export default class step1 extends React.Component{
 
   }
 
+  async updateRejectUser(){
+    let registrationId = this.props.registrationData._id
+    const response = await rejectStatusForUser(registrationId);
+    if (response) {
+      toastr.success("Registration Rejected Successfully")
+    }
+  }
+
+  rejectUser(){
+    const resp = this.updateRejectUser();
+    return resp;
+  }
+
   render(){
-    let MlActionConfig = [
-      {
-        actionName: 'save',
-        showAction: true,
-        handler: this.updateRegistration.bind(this)
-      },
-      // {
-      //   actionName: 'comment',
-      //   showAction: true,
-      //   handler: this.updateRegistration.bind(this)
-      // },
-      {
-        showAction: true,
-        actionName: 'cancel',
-        handler: async (event) => {
-          FlowRouter.go("/admin/transactions/registrationRequested")
+    let MlActionConfig
+    let registrationDate = this.state.registrationDate
+    let hours = moment().diff(registrationDate, 'hours')
+    console.log(registrationDate)
+    console.log(hours)
+    if(hours>=48) {
+      MlActionConfig = [
+        {
+          actionName: 'save',
+          showAction: true,
+          handler: this.updateRegistration.bind(this)
+        },
+        {
+          showAction: true,
+          actionName: 'cancel',
+          handler: async(event) => {
+            FlowRouter.go("/admin/transactions/registrationRequested")
+          }
+        },
+        {
+          actionName: 'rejectUser',
+          showAction: true,
+          handler: this.rejectUser.bind(this)
         }
-      }
-    ];
+
+      ];
+    }else{
+      MlActionConfig = [
+        {
+          actionName: 'save',
+          showAction: true,
+          handler: this.updateRegistration.bind(this)
+        },
+        {
+          showAction: true,
+          actionName: 'cancel',
+          handler: async(event) => {
+            FlowRouter.go("/admin/transactions/registrationRequested")
+          }
+        }
+      ];
+    }
 
 
     let countryQuery = gql`query{

@@ -98,13 +98,13 @@ class MlHierarchyAssignment {
         return false;
       }
     } else if (this.checkSystemSystemDefinedRole(userRole) && !this.checkSystemSystemDefinedRole(assignedRole)) {
-      if(userRole.hierarchyLevel>=assignedRole.hierarchyLevel){
+      if(userRole.hierarchyLevel>assignedRole.hierarchyLevel){
         return true;
       }else{
         return false;
       }
     } else if (!this.checkSystemSystemDefinedRole(userRole) && this.checkSystemSystemDefinedRole(assignedRole)) {
-      if(userRole.hierarchyLevel>=assignedRole.hierarchyLevel){
+      if(userRole.hierarchyLevel>assignedRole.hierarchyLevel){
         return true;
       }else{
         return false;

@@ -154,4 +154,40 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
     }
     return {'isValid':true};
   }
+  static  validateRegisterAsActiveCommunity(regDetails) {
+    let isActiveCommunity=true;
+    let response=null;
+    let registrationType=null,clusterId=null,countryId=null,countryClusterId=null;
+
+    if(regDetails){
+      clusterId=regDetails.clusterId;
+      registrationType=regDetails.registrationType;
+      countryId=regDetails.countryId;
+      let clusterObject = mlDBController.findOne('MlClusters', {"countryId":countryId,isActive:true}, context);
+      countryClusterId = clusterObject._id
+    }
+
+    //check community access is active at platform
+    var platformCommunity = mlDBController.findOne('MlCommunityAccess', {"hierarchyLevel":4, "communityDefCode":registrationType,isActive:true}, context);
+    if(!platformCommunity)isActiveCommunity=false;
+
+    //check community access is active at cluster
+    if(isActiveCommunity&&clusterId){
+      var clusterCommunity = mlDBController.findOne('MlCommunityAccess', {"hierarchyLevel":3,"clusterId":clusterId, "communityDefCode":registrationType,isActive:true}, context);
+      if(!clusterCommunity)isActiveCommunity=false;
+    }
+
+    //check comunity access is active at country
+    if(isActiveCommunity&&countryClusterId){
+      var countryCommunity = mlDBController.findOne('MlCommunityAccess', {"hierarchyLevel":3,"clusterId":countryClusterId, "communityDefCode":registrationType,isActive:true}, context);
+      if(!clusterCommunity)isActiveCommunity=false;
+    }
+
+    if(!isActiveCommunity){
+      let code = 401;
+      response = new MlRespPayload().errorPayload("Community not available for cluster", code);
+      return {'isValid':false,'validationResponse':response};
+    }
+    return {'isValid':true};
+  }
 }

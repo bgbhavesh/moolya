@@ -67,12 +67,9 @@ export async function findTaskActionHandler(taskId) {
                 }
                 activities
               }
-              termsAndCondition{
-                isReschedulable
-                noOfReschedulable
-              }
               isServiceCardEligible
               sessionFrequency
+              isActive
             }
           }
       `,
@@ -84,7 +81,7 @@ export async function findTaskActionHandler(taskId) {
   var resp = result.data.fetchTask;
   let data = _.omit(resp, '__typename')
   data.duration = _.omit(data.duration, '__typename')
-  data.termsAndCondition = _.omit(data.termsAndCondition, '__typename')
+  // data.termsAndCondition = _.omit(data.termsAndCondition, '__typename')
   let sessionArray = []
   _.each(data.session,function (item,say) {
     let value = _.omit(item, '__typename')
@@ -94,3 +91,8 @@ export async function findTaskActionHandler(taskId) {
   data.session = sessionArray
   return data;
 }
+
+// termsAndCondition{
+//   isReschedulable
+//   noOfReschedulable
+// }

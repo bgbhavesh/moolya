@@ -11,6 +11,7 @@ import MlAppTaskSession from "./MlAppTaskSession";
 import MlAppTaskConditions from "./MlAppTaskConditions";
 import MlAppTaskStep4 from "./MlAppTaskStep4";
 import MlAppTaskStep5 from "./MlAppTaskStep5";
+import _ from 'lodash'
 
 class MlAppTaskLanding extends Component {
   constructor(props) {
@@ -71,7 +72,13 @@ class MlAppTaskLanding extends Component {
   }
 
   getSessionDetails(details) {
-    let obj = {session: details}
+    let obj = {
+      duration: {
+        hours:_.sum(_.map(details, 'duration.hours')),
+        minutes:_.sum(_.map(details, 'duration.minutes'))
+      },
+      session: details
+    }
     console.log(obj)
     this.setState({createData: obj, saveType: 'taskUpdate'});
   }

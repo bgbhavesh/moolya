@@ -47,7 +47,7 @@ let activity=`
     slotBreakTime           : Int
     isOverlappingSchedule   : Int
     workingDays             : [CalendarSettingWorkingDays]
-    vacation                : [CalendarSettingVacation]
+    vacations               : [CalendarSettingVacation]
   }
   input calendarSettingSlotDuration {
     hours: Int
@@ -70,8 +70,8 @@ let activity=`
   
   input calendarSettingVacation {
     isActive: Boolean
-    start   : Date
-    end     : Date
+    start   : String
+    end     : String
     type    : String
     note    : String
   }
@@ -89,20 +89,27 @@ let activity=`
     slotBreakTime           : Int
     isOverlappingSchedule   : Boolean
     workingDays             : [calendarSettingWorkingDays]
-    vacation                : [calendarSettingVacation]
+    vacations               : [calendarSettingVacation]
   }
-  type Query {      
+  type Query {   
+     fetchMyCalendarSetting:CalendarSetting
   }
   
   type Mutation {
      updateMyCalendarSetting(calendarSetting:calendarSetting):response
+     updateMyCalendarWorkingDays(workingDays:[calendarSettingWorkingDays]):response
+     updateMyCalendarWorkingDay(workingDay:calendarSettingWorkingDays):response
+     updateMyCalendarVacation(vacation:calendarSettingVacation):response
   }
 `;
 
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], activity]);
 let supportedApi = [
-  // {api:'fetchMyCalendarSetting', actionName:'READ', moduleName:"OFFICE"},
+  {api:'fetchMyCalendarSetting', actionName:'READ', moduleName:"OFFICE"},
   {api:'updateMyCalendarSetting', actionName:'UPDATE', moduleName:"OFFICE"},
+  {api:'updateMyCalendarWorkingDay', actionName:'UPDATE', moduleName:"OFFICE"},
+  {api:'updateMyCalendarWorkingDays', actionName:'UPDATE', moduleName:"OFFICE"},
+  {api:'updateMyCalendarVacation', actionName:'UPDATE', moduleName:"OFFICE"},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

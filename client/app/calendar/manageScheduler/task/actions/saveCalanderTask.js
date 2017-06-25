@@ -67,6 +67,11 @@ export async function findTaskActionHandler(taskId) {
                 }
                 activities
               }
+              attachments{
+                name
+                info
+                isMandatory
+              }
               isServiceCardEligible
               sessionFrequency
               isActive
@@ -89,6 +94,12 @@ export async function findTaskActionHandler(taskId) {
     sessionArray.push(value)
   })
   data.session = sessionArray
+  let attachmentArray = []
+  _.each(data.attachments,function (item,say) {
+    let value = _.omit(item, '__typename')
+    attachmentArray.push(value)
+  })
+  data.attachments = attachmentArray
   return data;
 }
 

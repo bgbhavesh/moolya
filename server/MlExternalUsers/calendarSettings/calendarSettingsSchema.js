@@ -106,7 +106,6 @@ let activity=`
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], activity]);
 let supportedApi = [
-  // {api:'fetchMyCalendarSetting', actionName:'READ', moduleName:"OFFICE"},
   {api:'fetchMyCalendarSetting', actionName:'READ', moduleName:"OFFICE"},
   {api:'updateMyCalendarSetting', actionName:'UPDATE', moduleName:"OFFICE"},
   {api:'updateMyCalendarWorkingDay', actionName:'UPDATE', moduleName:"OFFICE"},

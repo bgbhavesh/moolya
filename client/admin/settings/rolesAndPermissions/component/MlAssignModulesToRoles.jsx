@@ -244,13 +244,13 @@ export default class MlAssignModulesToRoles extends React.Component {
             if(s.actionCode=='DELETE'){
               statusDelete=true;
             }
-            if(s.actionCode=='READ'){
+            if(s.actionCode=='READ' || s.actionCode == 'ALL'){
               statusRead=true;
             }
-            if(s.actionCode=='UPDATE'){
+            if(s.actionCode=='UPDATE' || s.actionCode == 'ALL'){
               statusUpdate=true;
             }
-            if(s.actionCode=='CREATE'){
+            if(s.actionCode=='CREATE' || s.actionCode == 'ALL'){
               statusCreate=true;
             }
           })

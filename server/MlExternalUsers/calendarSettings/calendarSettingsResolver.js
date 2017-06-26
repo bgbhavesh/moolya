@@ -4,6 +4,7 @@
 import MlResolver from '../../commons/mlResolverDef'
 import MlRespPayload from '../../commons/mlPayload'
 import MlUserContext from '../../MlExternalUsers/mlUserContext'
+import MlAppointment from './appointment';
 var extendify = require('extendify');
 var _ = require('lodash')
 
@@ -24,7 +25,29 @@ MlResolver.MlQueryResolver['fetchMyCalendarSetting'] = (obj, args, context, info
   }
   return mlDBController.findOne('MlCalendarSettings',{userId:userId, profileId:profileId}, context);
 
-}
+};
+
+MlResolver.MlQueryResolver['getMyCalendar'] = (obj, args, context, info) => {
+  let userId = context.userId;
+  let profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  if(!userId){
+    let code = 400;
+    let result = 'User ID is not defined for this user';
+    let response = new MlRespPayload().errorPayload(result, code);
+    return response;
+  }
+  if(!profileId){
+    let code = 400;
+    let result = 'Profile ID is not defined for this user';
+    let response = new MlRespPayload().errorPayload(result, code);
+    return response;
+  }
+  let mlAppointment = new MlAppointment();
+  let date = new Date();
+  let month = args.month ? args.month : date.getMonth() ;
+  let year = args.year ? args.year : date.getFullYear() ;
+  return mlAppointment.getUserCalendar(userId, profileId, month, year);
+};
 
 MlResolver.MlMutationResolver['updateMyCalendarSetting'] = (obj, args, context, info) => {
   let userId = context.userId;

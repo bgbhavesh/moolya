@@ -2,16 +2,16 @@ import React, {Component} from "react";
 import {render} from "react-dom";
 import MlAppScheduleHead from "../../commons/components/MlAppScheduleHead";
 import formHandler from "../../../../../commons/containers/MlFormHandler";
-import {createTaskActionHandler, createSessionActionHandler} from "../actions/saveCalanderTask";
+import {createTaskActionHandler, updateTaskActionHandler} from "../actions/saveCalanderTask";
 import MlAppActionComponent from "../../../../commons/components/MlAppActionComponent";
 import MlAccordion from "../../../../commons/components/MlAccordion";
 import StepZilla from "../../../../../commons/components/stepzilla/StepZilla";
 import MlAppTaskCreate from "./MlAppTaskCreate";
 import MlAppTaskSession from "./MlAppTaskSession";
 import MlAppTaskConditions from "./MlAppTaskConditions";
-import MlAppTaskStep4 from "./MlAppTaskStep4";
+import MlAppTaskPayment from "./MlAppTaskPayment";
 import MlAppTaskStep5 from "./MlAppTaskStep5";
-import _ from 'lodash'
+import _ from "lodash";
 
 class MlAppTaskLanding extends Component {
   constructor(props) {
@@ -35,7 +35,7 @@ class MlAppTaskLanding extends Component {
         break;
       case 'taskUpdate': {
         if (taskId)
-          response = await createSessionActionHandler(taskId, sendData)
+          response = await updateTaskActionHandler(taskId, sendData)
         else
           toastr.error("Invalid Request");
         return response
@@ -74,13 +74,18 @@ class MlAppTaskLanding extends Component {
   getSessionDetails(details) {
     let obj = {
       duration: {
-        hours:_.sum(_.map(details, 'duration.hours')),
-        minutes:_.sum(_.map(details, 'duration.minutes'))
+        hours: _.sum(_.map(details, 'duration.hours')),
+        minutes: _.sum(_.map(details, 'duration.minutes'))
       },
       session: details
     }
     console.log(obj)
     this.setState({createData: obj, saveType: 'taskUpdate'});
+  }
+
+  getPaymentDetails(details) {
+    console.log(details)
+    this.setState({createData: details, saveType: 'taskUpdate'});
   }
 
   getConditionDetails(details) {
@@ -100,7 +105,7 @@ class MlAppTaskLanding extends Component {
         showAction: true,
         actionName: 'exit',
         handler: async(event) => {
-          FlowRouter.go('/app/calendar/manageSchedule/'+this.props.profileId+'/taskList')
+          FlowRouter.go('/app/calendar/manageSchedule/' + this.props.profileId + '/taskList')
         }
       }
     ];
@@ -131,11 +136,15 @@ class MlAppTaskLanding extends Component {
                                        editMode={this.props.editMode}
                                        profileId={this.props.profileId}/>
         },
-        {name: 'T&C',
+        {
+          name: 'T&C',
           component: <MlAppTaskConditions getConditionDetails={this.getConditionDetails.bind(this) }
                                           taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id') }/>
         },
-        {name: 'Payment', component: <MlAppTaskStep4 />},
+        {name: 'Payment',
+          component: <MlAppTaskPayment getPaymentDetails={this.getPaymentDetails.bind(this)}
+                                       taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id') }/>
+        },
         {name: 'History', component: <MlAppTaskStep5 />}
       ]
 

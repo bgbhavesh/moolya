@@ -131,9 +131,9 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
   orderNumberGenService.assignRegistrationId(args.registration)
   var emails=[{address:args.registration.email,verified:true}];
   //create transaction
-  let resp = MlResolver.MlMutationResolver['createRegistrationTransaction'] (obj,{'transactionType':"registration"},context, info);
-  args.registration.transactionId = resp.result;
-  let id = mlDBController.insert('MlRegistration', {registrationInfo: registrationInfo,status: "Yet To Start",emails:emails, transactionId: resp.result}, context)
+  /*let resp = MlResolver.MlMutationResolver['createRegistrationTransaction'] (obj,{'transactionType':"registration"},context, info);
+  args.registration.transactionId = resp.result;*/
+  let id = mlDBController.insert('MlRegistration', {registrationInfo: registrationInfo,status: "Yet To Start",emails:emails, transactionId: registrationInfo.registrationId}, context)
   if(id){
 
   /*  MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);*/

@@ -182,6 +182,11 @@ let registrationSchema = `
         createdBy       :   String
     }
     
+     type emailVerification{
+          address  : String
+          verified  : Boolean
+    }
+    
     type RegistrationResponse{
         _id             :   String,
          status          :   String,
@@ -197,7 +202,11 @@ let registrationSchema = `
          allocation     : allocation
          transactionCreatedDate : String
          transactionUpdatedDate : String
+         emails  : [emailVerification]
     }
+    
+   
+    
     
     type RegistrationInfo{        
         _id             :   String,
@@ -243,7 +252,8 @@ let registrationSchema = `
         profileImage    :   String,
         transactionId   :   String
         assignedUserId    :   String,
-        createdBy       :   String
+        createdBy       :   String,
+        
     }
     
     type branchLocation{
@@ -443,7 +453,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], registrationSchema]
 let supportedApi = [
     {api:'findRegistration', actionName:'READ', moduleName:"REGISTRATION"},
     {api:'findRegistrationInfo', actionName:'READ', moduleName:"REGISTRATION"},
-    {api:'findRegistrationInfoForUser', actionName:'READ', moduleName:"REGISTRATION"},
+    {api:'findRegistrationInfoForUser', actionName:'READ', moduleName:"REGISTRATION", isAppWhiteList:true},
     {api:'registerAs', actionName:'UPDATE', moduleName:"REGISTRATION"},
     {api:'createRegistrationAPI', actionName:'CREATE', moduleName:"REGISTRATION"},
     {api:'createRegistration', actionName:'CREATE', moduleName:"REGISTRATION"},

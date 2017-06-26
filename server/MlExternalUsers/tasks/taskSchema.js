@@ -5,16 +5,7 @@
   import MlSchemaDef from '../../commons/mlSchemaDef'
   import MlResolver from "../../commons/mlResolverDef";
 
-
   let task=`
-
-   type TermsAndCondition {
-     isCancelable: Boolean
-     isRefundable: Boolean
-     isReschedulable: Boolean
-     noOfReschedulable: Int
-   }
-
    type Attachments {
      name: String
      info: String
@@ -60,25 +51,18 @@
       duration: Duration
       isServiceCardEligible: Boolean
       session: [Session]
-      termsAndCondition: TermsAndCondition
       attachments: [Attachments]
       payment: Payment
       facilitationCharge: FacilitationCharge
       createdAt: Date
       updatedAt: Date
+      isActive: Boolean
    }
 
 
    input session{
        duration : duration
        activities: [String]
-   }
-
-   input termsAndCondition {
-       isCancelable: Boolean
-       isRefundable: Boolean
-       isReschedulable: Boolean
-       noOfReschedulable: Int
    }
 
    input attachments {
@@ -116,12 +100,12 @@
         duration: duration
         isServiceCardEligible: Boolean
         session: [session]
-        termsAndCondition: termsAndCondition
         attachments: [attachments]
         payment: payment
         facilitationCharge: facilitationCharge
         createdAt: Date
         updatedAt: Date
+        isActive: Boolean
    }
 
    type Query{
@@ -147,3 +131,19 @@
     {api:'updateTask', actionName:'UPDATE', moduleName:"OFFICE"},
   ]
   MlResolver.MlModuleResolver.push(supportedApi)
+// termsAndCondition: TermsAndCondition
+
+// type TermsAndCondition {
+//   isCancelable: Boolean
+//   isRefundable: Boolean
+//   isReschedulable: Boolean
+//   noOfReschedulable: Int
+// }
+
+// input termsAndCondition {
+//   isCancelable: Boolean
+//   isRefundable: Boolean
+//   isReschedulable: Boolean
+//   noOfReschedulable: Int
+// }
+// termsAndCondition: termsAndCondition

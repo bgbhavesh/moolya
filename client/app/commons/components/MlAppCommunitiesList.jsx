@@ -71,6 +71,7 @@ export default class MlAppCommunitiesList extends Component {
       identityType:this.state.identity,
       clusterId:this.state.clusterId,
       cityId:this.state.selectedCity,
+      countryId:this.state.country
 
     }
     let registrationId=this.state.registerId
@@ -103,7 +104,9 @@ export default class MlAppCommunitiesList extends Component {
           });
           this.setState({communities:communitilist})
         }else if(userCommunity=="BRW"){
-          let communitilist=[]
+          let communitilist= _.filter(communities, function(community) {
+            return community.code!="BRW"
+          });
           this.setState({communities:communitilist})
         }else{
           let communitilist= _.filter(communities, function(community) {
@@ -112,7 +115,9 @@ export default class MlAppCommunitiesList extends Component {
           this.setState({communities:communitilist})
         }
       }else{
-        let communitilist=[]
+        let communitilist= _.filter(communities, function(community) {
+          return community.code!="BRW"
+        });
         this.setState({communities:communitilist})
       }
 

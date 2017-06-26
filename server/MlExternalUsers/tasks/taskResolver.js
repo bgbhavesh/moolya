@@ -26,6 +26,7 @@ MlResolver.MlMutationResolver['createTask'] = (obj, args, context, info) => {
     let userId = context.userId
     let obj = args.taskDetails
     obj['userId'] = userId
+    obj['createdAt'] = new Date ()
     let res = mlDBController.insert('MlTask', args.taskDetails, context)
     if (res) {
       let code = 200;
@@ -38,8 +39,6 @@ MlResolver.MlMutationResolver['createTask'] = (obj, args, context, info) => {
     let response = new MlRespPayload().errorPayload('Data required', code);
     return response
   }
-
-
 }
 
 MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
@@ -49,6 +48,7 @@ MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
       for(key in args.taskDetails){
         task[key] = args.taskDetails[key]
       }
+      args.taskDetails['updatedAt'] = new Date()
       let result = mlDBController.update('MlTask', {_id: args.taskId}, args.taskDetails, {'$set': 1}, context)
       if (result) {
         let code = 200;

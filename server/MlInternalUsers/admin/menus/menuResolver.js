@@ -5,6 +5,7 @@
 import MlResolver from '../../../commons/mlResolverDef'
 import MlAdminUserContext from '../../../mlAuthorization/mlAdminUserContext'
 import MlUserContext from '../../../MlExternalUsers/mlUserContext'
+var _lodash = require('lodash');
 
 
 MlResolver.MlQueryResolver['FetchMenu'] = (_,{name},context) =>{
@@ -22,7 +23,14 @@ MlResolver.MlQueryResolver['fetchExternalUserMenu'] = ( _, {name}, context) =>{
 
 MlResolver.MlQueryResolver['fetchExternalUserProfileMenu'] = ( _, {name}, context) =>{
   let menu = new MlUserContext().getDefaultProfileMenu(context.userId);
-  return MlMenus.findOne({name:menu});
+  if(menu){
+    var isBrowser = _lodash.isMatch(menu.profile,{communityDefCode:'BRW'})
+    let allMenus = MlMenus.findOne({name:menu.menuName});
+    if(isBrowser)
+      _lodash.remove(allMenus.menu, {uniqueId : "myOffice"})
+    return allMenus
+    // return MlMenus.findOne({name:menu.menuName});
+  }
 }
 
 MlResolver.MlQueryResolver['fetchExploreMenu'] = ( _, {name}, context) =>{

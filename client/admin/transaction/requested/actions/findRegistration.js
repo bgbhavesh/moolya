@@ -162,6 +162,10 @@ export async function findRegistrationActionHandler(registrationId) {
             fileSize
           }
         }
+        emails{
+          address
+          verified
+        }
           
         }
       }

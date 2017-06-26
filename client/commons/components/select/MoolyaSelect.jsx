@@ -110,7 +110,7 @@ export default class MoolyaSelect extends Component {
       for(let i=0;i<val.length;i++){
         refSelected.push(val[i].value)
       }
-      this.props.onSelect(refSelected,this.onChangeCallBackHandler);
+      this.props.onSelect(refSelected,this.onChangeCallBackHandler, val);
       // this.setState({ selectedValue: refSelected });
     }
     else{

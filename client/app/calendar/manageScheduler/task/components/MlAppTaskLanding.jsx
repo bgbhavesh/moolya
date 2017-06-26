@@ -11,6 +11,7 @@ import MlAppTaskSession from "./MlAppTaskSession";
 import MlAppTaskConditions from "./MlAppTaskConditions";
 import MlAppTaskStep4 from "./MlAppTaskStep4";
 import MlAppTaskStep5 from "./MlAppTaskStep5";
+import _ from 'lodash'
 
 class MlAppTaskLanding extends Component {
   constructor(props) {
@@ -64,12 +65,20 @@ class MlAppTaskLanding extends Component {
 
   getCreateDetails(details) {
     details['profileId'] = this.props.profileId
-    let typeHandel = this.props.editMode ? "taskUpdate" : "taskCreate"
+    let taskId = this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id')
+    let typeHandel = taskId ? "taskUpdate" : "taskCreate"
+    // let typeHandel = this.props.editMode ? "taskUpdate" : "taskCreate"
     this.setState({createData: details, saveType: typeHandel});
   }
 
   getSessionDetails(details) {
-    let obj = {session: details}
+    let obj = {
+      duration: {
+        hours:_.sum(_.map(details, 'duration.hours')),
+        minutes:_.sum(_.map(details, 'duration.minutes'))
+      },
+      session: details
+    }
     console.log(obj)
     this.setState({createData: obj, saveType: 'taskUpdate'});
   }
@@ -89,9 +98,9 @@ class MlAppTaskLanding extends Component {
       },
       {
         showAction: true,
-        actionName: 'golive',
+        actionName: 'exit',
         handler: async(event) => {
-          console.log('go live action handler')
+          FlowRouter.go('/app/calendar/manageSchedule/'+this.props.profileId+'/taskList')
         }
       }
     ];
@@ -113,7 +122,7 @@ class MlAppTaskLanding extends Component {
         {
           name: 'Create Task',
           component: <MlAppTaskCreate getCreateDetails={this.getCreateDetails.bind(this)}
-                                      taskId={this.props.editMode ? this.props.taskId : ''}/>
+                                      taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id')}/>
         },
         {
           name: 'Create Session',

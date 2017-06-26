@@ -37,12 +37,12 @@ export default class MlAppTaskSession extends Component {
       })
 
       if (response && !this.props.editMode) {
-        this.setState({loading: false, sessionData: sessionData, sessionDataList:sessionData});
+        this.setState({loading: false,data:response, sessionData: sessionData, sessionDataList:sessionData});
       }else{
         if(_.isEmpty(response.session)){
-          this.setState({loading: false, sessionData: sessionData});
+          this.setState({loading: false,data:response, sessionData: sessionData, sessionDataList:sessionData});
         }else {
-          this.setState({loading: false, sessionData: response.session});
+          this.setState({loading: false,data:response, sessionData: response.session, sessionDataList:response.session});
         }
       }
     }
@@ -61,35 +61,56 @@ export default class MlAppTaskSession extends Component {
     let data = this.state.sessionData
     let cloneBackUp = _.cloneDeep(data);
     let specificData = cloneBackUp[id]
-    // specificData.activities = _.uniq(_.concat(specificData.activities, selectedValue))
     specificData.activities = _.uniq(selectedValue)
+    specificData.duration.hours = _.sum(_.map(selObject, 'duration.hours'))
+    specificData.duration.minutes = _.sum(_.map(selObject, 'duration.minutes'))
     data.splice(id, 1);
     data.splice(id, 0, specificData);
     this.setState({sessionData: data}, function () {
-      this.sendSessionDataToParent()
+      this.sendSessionDataToParent();
+      this.copyToListActivity(id,selObject)
     })
-    // let dataList = this.state.sessionDataList  //for list of activities proceed to list view
-    // let cloneBackUpList = _.cloneDeep(dataList);
-    // let specificDataList = cloneBackUpList[id]
-    // specificDataList.activities = selectedValue
-    // dataList.splice(id, 1);
-    // dataList.splice(id, 0, specificDataList);
-    // this.setState({sessionDataList: dataList})
   }
+
+  copyToListActivity(id, selObject) {
+    let dataList = this.state.sessionDataList  //for list of activities proceed to list view
+    let cloneBackUpList = _.cloneDeep(dataList);
+    let specificDataList = cloneBackUpList[id]
+    specificDataList.activities = selObject
+    specificDataList.duration.hours = _.sum(_.map(selObject, 'duration.hours'))
+    specificDataList.duration.minutes = _.sum(_.map(selObject, 'duration.minutes'))
+    dataList.splice(id, 1);
+    dataList.splice(id, 0, specificDataList);
+    this.setState({sessionDataList: dataList})
+  }
+
   handelBlur(id, e){
     let name = e.target.name;
+    var value = e.target.value
     let data = this.state.sessionData
     let cloneBackUp = _.cloneDeep(data);
     let specificData = cloneBackUp[id]
-    specificData.duration[name] = e.target.value
+    specificData.duration[name] = value
     data.splice(id, 1);
     data.splice(id, 0, specificData);
     this.setState({sessionData: data}, function () {
       this.sendSessionDataToParent()
+      this.handelBlurCopy(id,name, value)
     })
   }
+
+  handelBlurCopy(id, name, value){
+    let dataList = this.state.sessionDataList     // anotherlist for listing
+    let cloneBackUpList = _.cloneDeep(dataList);
+    let specificDataList = cloneBackUpList[id]
+    specificDataList.duration[name] = value
+    dataList.splice(id, 1);
+    dataList.splice(id, 0, specificDataList);
+    this.setState({sessionDataList: dataList})
+  }
+
   sendSessionDataToParent() {
-    let data = this.state.sessionData;
+    let data = _.cloneDeep(this.state.sessionData);
     this.props.getSessionDetails(data);
   }
 
@@ -113,12 +134,14 @@ export default class MlAppTaskSession extends Component {
     let queryOptions = {
       options: {
         variables: {
-          profileId: profileId
+          profileId: profileId,
+          isExternal: this.state.data?this.state.data.isExternal: '',
+          isInternal: this.state.data?this.state.data.isInternal: ''
         }
       }
     };
-    let query = gql`query($profileId:String) {
-      data: fetchActivities(profileId: $profileId) {
+    let query = gql`query($profileId:String, $isInternal: Boolean, $isExternal : Boolean) {
+      data: fetchActivities(profileId: $profileId, isInternal : $isInternal, isExternal: $isExternal, ) {
         value:_id
         label: displayName
         imageLink
@@ -135,16 +158,17 @@ export default class MlAppTaskSession extends Component {
         {/*{showLoader === true ? ( <MlLoader/>) : (*/}
           <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
           <div className="form_bg">
-          {this.state.sessionData.map(function (session, id) {
+          {this.state.sessionDataList.map(function (session, id) {
+            let num = id+1
             return (
               <div className="panel panel-default" key={id}>
                 <div className="panel-heading">
-                  <div className="col-md-3 nopadding-left">Section 1</div>
+                  <div className="col-md-3 nopadding-left">Session {num}</div>
                   <div className="col-md-3">
                     <div style={{'marginTop': '-4px'}}>
-                      <label>Duration: &nbsp; <input type="Number" defaultValue={session.duration?session.duration.hours:0} className="form-control inline_input" name="hours" min="0" onBlur={that.handelBlur.bind(that,id)}/> Hours
+                      <label>Duration: &nbsp; <input type="Number" key={session.duration ? 'snotLoadedYetHrs' : 'sloadedHrs'} className="form-control inline_input" name="hours" value={session.duration?session.duration.hours:0} onChange={that.handelBlur.bind(that,id)} min="0"/> Hours
                         <input
-                          type="Number" className="form-control inline_input" defaultValue={session.duration?session.duration.minutes:0} name="minutes" onBlur={that.handelBlur.bind(that,id)} min="0"/> Mins </label>
+                          type="Number" className="form-control inline_input" key={session.duration ? 'snotLoadedYetMin' : 'sloadedMin'} name="minutes" value={session.duration?session.duration.minutes:0} onChange={that.handelBlur.bind(that,id)} min="0"/> Mins </label>
                     </div>
                   </div>
                   <div className="col-md-3">
@@ -170,17 +194,17 @@ export default class MlAppTaskSession extends Component {
                           <div className="swiper-slide">
                             <div className="list_block notrans funding_list">
                               <div>
-                                <p className="online">mode online/offine</p>
+                                <p className="online">{ss.mode}</p>
                                 <span>Duration: <FontAwesome name='pencil'/></span><br />
                                 <div className="form-group">
-                                  <label><input type="text" className="form-control inline_input"/> Hours <input
-                                    type="text"
-                                    className="form-control inline_input"/>
-                                    Mins </label>
+                                  <label><input type="text" key={ss.duration ? 'notLoadedYetHrs' : 'loadedHrs'} disabled="true" className="form-control inline_input" defaultValue={ss.duration?ss.duration.hours:0}/> Hours <input
+                                    type="text" key={ss.duration ? 'notLoadedYetMin' : 'loadedMin'} disabled="true"
+                                    className="form-control inline_input" defaultValue={ss.duration?ss.duration.minutes:0}/>
+                                    Minutes</label>
                                 </div>
 
                               </div>
-                              <h3>Activity display name</h3>
+                              <h3>{ss.label}</h3>
                             </div>
                           </div>
 

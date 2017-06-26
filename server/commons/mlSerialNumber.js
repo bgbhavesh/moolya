@@ -52,34 +52,37 @@ orderNumberGenService = (function(){
 
   return {
     assignRegistrationId:function(registration){
-      registration.registrationId="ML-RE-"+FormatUtil.leadingZeros(getNextSequence("registrationNumber"),8);
+      registration.registrationId="MLRE"+FormatUtil.leadingZeros(getNextSequence("registrationNumber"),8);
     },
     assignPortfolioId:function(portfolio){
-      let portfolioId = "ML-PF-"+FormatUtil.leadingZeros(getNextSequence("portfolioNumber"),8);
+      let portfolioId = "MLPF"+FormatUtil.leadingZeros(getNextSequence("portfolioNumber"),8);
       portfolio.portfolioId=portfolioId
       portfolio.transactionId= portfolioId
     },
       assignTransationRequest:function(transaction){
-      transaction.transactionTypeId="ML-TR-"+FormatUtil.leadingZeros(getNextSequence("transactionNumber"),8);
+      transaction.transactionTypeId="MLTR"+FormatUtil.leadingZeros(getNextSequence("transactionNumber"),8);
     },
     assignRequests:function(requests){
-      requests.requestId="ML-REQ-"+FormatUtil.leadingZeros(getNextSequence("requestsNumber"),8);
+      requests.requestId="MLREQ"+FormatUtil.leadingZeros(getNextSequence("requestsNumber"),8);
     },
     assignOfficeTransaction: function (officeTransaction) {
-      officeTransaction.transactionId = "ML-OF-" + FormatUtil.leadingZeros(getNextSequence("officeTransaction"), 8);
+      officeTransaction.transactionId = "MLOF" + FormatUtil.leadingZeros(getNextSequence("officeTransaction"), 8);
     },
     assignProcessSetupTransaction: function (officeTransaction) {
-      officeTransaction.transactionId = "ML-PS-" + FormatUtil.leadingZeros(getNextSequence("officeTransaction"), 8);
+      officeTransaction.transactionId = "MLPS" + FormatUtil.leadingZeros(getNextSequence("officeTransaction"), 8);
     },
 
     createUserProfileId: function (userProfile) {
-      userProfile.profileId = "ML-PRO-" + FormatUtil.leadingZeros(getNextSequence("profileNumber"), 8);
+      userProfile.profileId = "MLPRO" + FormatUtil.leadingZeros(getNextSequence("profileNumber"), 8);
     },
     createinternalTaskId: function (taskObj) {
-      taskObj.internalTaskId = "ML-ITK-" + FormatUtil.leadingZeros(getNextSequence("internalTaskNumber"), 8);
+      taskObj.internalTaskId = "MLITK" + FormatUtil.leadingZeros(getNextSequence("internalTaskNumber"), 8);
     },
     createInteractionSCcode: function (scDef) {
-      scDef.code = "ML-INT-"+ FormatUtil.leadingZeros(getNextSequence("interactionSC"), 8);
+      scDef.code = "MLINT"+ FormatUtil.leadingZeros(getNextSequence("interactionSC"), 8);
+    },
+    createBspokeOfficeSCcode: function (scDef) {
+      scDef.code = "ML-OFF-"+ FormatUtil.leadingZeros(getNextSequence("bspoke"), 8);
     },
     generateRandomPassword:function(){
       var randomId = function makeid(){

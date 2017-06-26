@@ -5,6 +5,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {addCitizenshipActionHandler} from '../actions/addCitizenshipTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 class MlAddCitizenship extends React.Component {
   constructor(props) {
     super(props);
@@ -32,19 +33,24 @@ class MlAddCitizenship extends React.Component {
   };
 
   async  createCitizenship() {
-    let CitizenshipDetails = {
-      citizenshipTypeName: this.refs.citizenshipTypeName.value,
-      citizenshipTypeDisplayName: this.refs.citizenshipTypeDisplayName.value,
-      about: this.refs.about.value,
-      isActive: this.refs.isActive.checked
-    }
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let CitizenshipDetails = {
+        citizenshipTypeName: this.refs.citizenshipTypeName.value,
+        citizenshipTypeDisplayName: this.refs.citizenshipTypeDisplayName.value,
+        about: this.refs.about.value,
+        isActive: this.refs.isActive.checked
+      }
 
-    const response = await addCitizenshipActionHandler(CitizenshipDetails)
-    if (!response.success) {
-      toastr.error("Already Exists")
-    } else if(response.success) {
-      toastr.success("CitizenShip Created Successfully");
-      FlowRouter.go("/admin/settings/citizenshipList");
+      const response = await addCitizenshipActionHandler(CitizenshipDetails)
+      if (!response.success) {
+        toastr.error("Already Exists")
+      } else if (response.success) {
+        toastr.success("CitizenShip Created Successfully");
+        FlowRouter.go("/admin/settings/citizenshipList");
+      }
     }
   }
   componentDidMount()  {
@@ -83,9 +89,9 @@ class MlAddCitizenship extends React.Component {
           <div className="col-md-6 nopadding-left">
           <div className="form_bg">
           <form>
-          <div className="form-group">
+          <div className="form-group mandatory">
           <input type="text" ref="citizenshipTypeName" placeholder="Citizenship Name"
-          className="form-control float-label"/>
+          className="form-control float-label" data-required={true} data-errMsg="Citizenship is required"/>
           </div>
           <div className="form-group">
           <textarea ref="about" placeholder="About" className="form-control float-label"></textarea>
@@ -96,9 +102,9 @@ class MlAddCitizenship extends React.Component {
           <div className="col-md-6 nopadding-right">
           <div className="form_bg">
           <form>
-          <div className="form-group">
+          <div className="form-group mandatory">
           <input type="text" ref="citizenshipTypeDisplayName" placeholder="Display Name"
-          className="form-control float-label"/>
+          className="form-control float-label" data-required={true} data-errMsg="Display Name is required"/>
           </div>
           <div className="form-group switch_wrap inline_switch">
           <label>Status</label>

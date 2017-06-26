@@ -36,6 +36,24 @@ MlResolver.MlMutationResolver['CreateProfession'] = (obj, args, context, info) =
     args.industryName = mlDBController.findOne('MlIndustries', {_id:args.industryId}, context).industryName;
   }
   // let id = MlProfessions.insert({...args});
+  var firstName='';var lastName='';
+  // let id = MlDepartments.insert({...args.department});
+  if(Meteor.users.findOne({_id : context.userId}))
+  {
+    let user = Meteor.users.findOne({_id: context.userId}) || {}
+    if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+      firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+      lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+    }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+      firstName=(user.profile || {}).firstName||'';
+      lastName =(user.profile || {}).lastName||'';
+    }
+  }
+  let createdBy = firstName +' '+lastName
+  args.createdBy = createdBy;
+  args.createdDate = new Date();
+
   let id = mlDBController.insert('MlProfessions',args, context);
   if (id) {
     let code = 200;
@@ -85,6 +103,24 @@ MlResolver.MlMutationResolver['UpdateProfession'] = (obj, args, context, info) =
     }
 
     args=_.omit(args,'_id');
+    var firstName='';var lastName='';
+    // let id = MlDepartments.insert({...args.department});
+    if(Meteor.users.findOne({_id : context.userId}))
+    {
+      let user = Meteor.users.findOne({_id: context.userId}) || {}
+      if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+        firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+        lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+      }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+        firstName=(user.profile || {}).firstName||'';
+        lastName =(user.profile || {}).lastName||'';
+      }
+    }
+    let createdBy = firstName +' '+lastName
+    args.updatedBy = createdBy;
+    args.updatedDate = new Date();
+
     // let result= MlProfessions.update(id, {$set: args});
     let result= mlDBController.update('MlProfessions',id , args, {$set:true}, context);
     let code = 200;

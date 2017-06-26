@@ -197,7 +197,8 @@ class MlAuthorization
           case 'USERS':
           case 'REGISTRATION':
           case 'PORTFOLIO':
-          case 'TEMPLATEASSIGNMENT':{
+          case 'TEMPLATEASSIGNMENT':
+          case "INTERNALREQUESTS":{
             return this.validateChapterSubChapter(roleDetails, variables);
           }
           break;
@@ -207,8 +208,11 @@ class MlAuthorization
       getContextDetails(moduleName, actionName, variables){
         switch(moduleName){
           case 'REGISTRATION':{
-            if(actionName == 'CREATE')
-              return variables.registration;
+            if(actionName == 'CREATE'){
+                let community = this.getCommunityId(variables.registration.clusterId, variables.registration.chapterId, variables.registration.subChapterId, variables.registration.registrationType)
+                variables.registration.communityId = community._id
+                return variables.registration;
+            }
 
             return this.getRegistrationContextDetails(variables.registrationId)
           }
@@ -223,6 +227,10 @@ class MlAuthorization
               return;
 
             return {clusterId:template.templateclusterId, chapterId:template.templatechapterId, subChapterId:template.templatesubChapterId, communityId:template.templateCommunityId}
+          }
+          break;
+          case 'INTERNALREQUESTS':{
+            return this.getInternalRequestContextDetails(variables, actionName)
           }
           break;
         }
@@ -264,7 +272,19 @@ class MlAuthorization
         if(!registration)
           return
 
+        let community = this.getCommunityId(registration.registrationInfo.clusterId, registration.registrationInfo.chapterId, registration.registrationInfo.subChapterId, registration.registrationInfo.registrationType)
+        registration.registrationInfo.communityId = community._id
         return registration.registrationInfo
+      }
+
+      getInternalRequestContextDetails(variables, actionName){
+        if(actionName == 'CREATE'){
+            return {clusterId:variables.requests['cluster'], chapterId:variables.requests['chapter'], subChapterId:variables.requests['subChapter'], communityId:variables.requests['community']};
+        }
+      }
+
+      getCommunityId(clusterId, chapterId, subChapterId, defCode){
+        return MlCommunity.findOne({communityDefCode:defCode, clusterId:clusterId, chapterId:chapterId, subChapterId:subChapterId})
       }
 
     // validateDataContext(roleDetails, moduleName, actionName, req, isContextSpecSearch)

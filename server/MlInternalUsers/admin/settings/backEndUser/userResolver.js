@@ -1619,3 +1619,16 @@ MlResolver.MlQueryResolver['getUserProfiles'] = (obj, args, context, info) => {
   })
   return temp;
 }
+
+MlResolver.MlQueryResolver['getUserProfile'] = (obj, args, context, info) => {
+  let result = mlDBController.findOne('users', {'profile.externalUserProfiles.profileId':args.profileId} , context)
+let profile = [];
+  let temp = result.profile.externalUserProfiles;
+  temp.map(function(data) {
+    if(data.profileId === args.profileId) {
+      profile.push(data)
+    }
+  })
+
+  return profile[0];
+}

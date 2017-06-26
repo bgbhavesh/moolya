@@ -37,14 +37,14 @@ MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],Menu]);
 let supportedApi = [{
   api: 'FetchMenu',
   actionName: 'READ',
-  isWhiteList: true,
+  isAppWhiteList: true,
   moduleName: "MENU"
 }, {
   api: 'fetchExternalUserMenu',
   actionName: 'READ',
-  isWhiteList: true,
-  moduleName: "MENU"
-}, {api: 'fetchExternalUserProfileMenu', isWhiteList: true, actionName: 'READ', moduleName: "MENU"},
-  {api: 'fetchExploreMenu', isWhiteList: true, actionName: 'READ', moduleName: "MENU"},
-  {api: 'fetchCalendarMenu', isWhiteList: true, actionName: 'READ', moduleName: "MENU"}];
+  isAppWhiteList: true,
+  resource: "MENU"
+}, {api: 'fetchExternalUserProfileMenu', isWhiteList: true, actionName: 'READ', moduleName: "MENU", isAppWhiteList: true,},
+  {api: 'fetchExploreMenu', isWhiteList: true, actionName: 'READ', moduleName: "MENU", isAppWhiteList: true,},
+  {api: 'fetchCalendarMenu', isWhiteList: true, actionName: 'READ', moduleName: "MENU", isAppWhiteList: true,}];
 MlResolver.MlModuleResolver.push(supportedApi)

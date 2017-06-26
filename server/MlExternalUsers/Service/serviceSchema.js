@@ -36,6 +36,30 @@ let service=`
      hours: Int
      minutes: Int
   }
+  
+  type Communities{
+    id: String
+    name:String
+  }
+  type SubChapters{
+    id: String
+    name: String
+  }
+  
+  type Cities{
+    id:String
+    name:String
+  }
+  
+  type Clusters{
+    id:String
+    name:String
+  }
+  
+  type States{
+    id:String
+    name:String
+  }
 
   type Service {
     userId: String
@@ -55,6 +79,11 @@ let service=`
     createdAt: Date
     updatedAt: Date
     validTill: Date
+    community: [Communities]
+    subChapter: [SubChapters]
+    city: [Cities]
+    state: [States]
+    cluster: Clusters
   }
 
    input facilitationCharge {
@@ -89,6 +118,30 @@ let service=`
       hours: Int
       minutes: Int
    }
+   
+  input communities{
+    id: String
+    name:String
+  }
+  input subChapters{
+    id: String
+    name: String
+  }
+  
+  input cities{
+    id:String
+    name:String
+  }
+  
+  input clusters{
+    id:String
+    name:String
+  }
+    
+  input states{
+   id:String
+    name:String
+  }
 
    input service {
         userId: String
@@ -107,6 +160,11 @@ let service=`
         createdAt: Date
         updatedAt: Date
         validTill: Date
+        community: [communities]
+        subChapter: [subChapters]
+        city: [cities]
+        state:[states]
+        cluster: clusters
     }
 
     type Query {

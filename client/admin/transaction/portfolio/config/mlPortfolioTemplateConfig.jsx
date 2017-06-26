@@ -57,7 +57,7 @@ const mlStartupViewExternalUserPortfolioTemplateConfig={
   component:MlViewStartupPortfolioTemplate
 };
 const mlFunderEditExternalUserPortfolioTemplateConfig={
-  templateName:"Portfolio-Template-Funder-Edit",
+  templateName:"Portfolio-Template-Investor-Edit",
   templateCode:"PFTFUNEDT",   //PFFUNEDT
   userType:'internal',
   process:'Registration',
@@ -68,7 +68,7 @@ const mlFunderEditExternalUserPortfolioTemplateConfig={
 };
 
 const mlFunderViewExternalUserPortfolioTemplateConfig={
-  templateName:"Portfolio-Template-Funder-View",
+  templateName:"Portfolio-Template-Investor-View",
   templateCode:"PFTFUNVIW",
   userType:'internal',
   process:'Registration',
@@ -131,7 +131,7 @@ const mlAppIdeatorViewExternalUserPortfolioTemplateConfig={
 // };
 
 const mlAppFunderEditExternalUserPortfolioTemplateConfig={
-  templateName:"Portfolio-Template-Funder-Edit",
+  templateName:"Portfolio-Template-Investor-Edit",
   templateCode:"PFTFUNEDT",
   userType:'external',
   process:'Registration',
@@ -142,7 +142,7 @@ const mlAppFunderEditExternalUserPortfolioTemplateConfig={
 };
 
 const mlAppFunderViewExternalUserPortfolioTemplateConfig={
-  templateName:"Portfolio-Template-Funder-View",
+  templateName:"Portfolio-Template-Investor-View",
   templateCode:"PFTFUNVIW",
   userType:'external',
   process:'Registration',

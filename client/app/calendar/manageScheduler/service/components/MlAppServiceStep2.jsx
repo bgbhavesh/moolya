@@ -178,11 +178,11 @@ export default class MlAppServiceStep2 extends React.Component{
               </div>
             </div>
 
-            <div className="col-md-3">
-              <div style={{'marginTop':'-12px'}}>
-                <input placeholder="Select Activity" value={data.activities[0]} disabled />
-              </div>
-            </div>
+            {/*<div className="col-md-3">*/}
+              {/*<div style={{'marginTop':'-12px'}}>*/}
+                {/*<input placeholder="Select Activity" value={data.activities[0]} disabled />*/}
+              {/*</div>*/}
+            {/*</div>*/}
             <div className="col-md-3"></div>
             &nbsp;
           </div>

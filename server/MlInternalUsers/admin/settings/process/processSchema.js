@@ -196,7 +196,7 @@ let supportedApi = [
     {api:'createProcess', actionName:'CREATE', moduleName:"PROCESSMAPPING"},
     {api:'updateProcess', actionName:'UPDATE', moduleName:"PROCESSMAPPING"},
     {api:'upsertProcessDocument', actionName:'UPDATE', moduleName:"PROCESSMAPPING"},
-    {api:'findProcess', actionName:'READ', moduleName:"PROCESSMAPPING"},
+    {api:'findProcess', actionName:'READ', moduleName:"PROCESSMAPPING", isWhiteList:true},
     {api:'findProcessDocumentForRegistration', actionName:'READ', moduleName:"PROCESSMAPPING", isWhiteList:true},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

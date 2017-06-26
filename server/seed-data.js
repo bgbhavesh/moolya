@@ -67,7 +67,7 @@ if(!platformrole){
 var clusterAdmin = MlRoles.findOne({roleName:"clusteradmin"})
 if(!clusterAdmin){
     let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", community : "all", department:dep._id, subDepartment:subDep._id, isActive:true}]
-    let clusterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
+    let clusterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, actionCode:"READ", isActive:true}]
     let modules = [
                     {moduleId:(_.find(mlModules, {code:"CLUSTER"}))._id, actions:clusterPer},
                     {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:permissions},
@@ -101,7 +101,7 @@ if(!clusterAdmin){
 var chapterAdmin = MlRoles.findOne({roleName:"chapteradmin"})
 if(!chapterAdmin){
   let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", community : "all", department:dep._id, subDepartment:subDep._id, isActive:true}]
-  let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
+  let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, actionCode:"READ", isActive:true}]
   let modules = [
     {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:permissions},
@@ -135,7 +135,7 @@ if(!chapterAdmin){
 var subchapterAdmin = MlRoles.findOne({roleName:"subchapteradmin"})
 if(!subchapterAdmin){
   let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", community : "all", department:dep._id, subDepartment:subDep._id, isActive:true}]
-  let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
+  let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, actionCode:"READ", isActive:true}]
   let modules = [
     {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:chapterPer},
@@ -174,8 +174,8 @@ if(!subchapterAdmin){
 var communityAdmin = MlRoles.findOne({roleName:"communityadmin"})
 if(!communityAdmin){
   let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", community : "all", department:dep._id, subDepartment:subDep._id, isActive:true}]
-  let communityPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
-  let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
+  let communityPer = [{actionId:(_.find(actions, {code:"READ"}))._id, actionCode:"READ", isActive:true}]
+  let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, actionCode:"READ", isActive:true}]
   let modules = [
     {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:chapterPer},
     {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:chapterPer},

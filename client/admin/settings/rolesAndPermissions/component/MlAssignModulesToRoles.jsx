@@ -19,7 +19,7 @@ export default class MlAssignModulesToRoles extends React.Component {
         validFrom: null,
         validTo: null,
         isActive: '',
-        actions: [{actionId: ''}]
+        actions: []
       }]
     }
     this.addDepartmentComponent.bind(this);
@@ -79,10 +79,10 @@ export default class MlAssignModulesToRoles extends React.Component {
       let assignModulesToRolesForm = []
       for (let i = 0; i < assignModulesToRolesDetails.length; i++) {
         let actions = assignModulesToRolesDetails[i].actions
-        let actionVal = [{actionId: ''}]
+        let actionVal = []
         if (actions) {
           for (let j = 0; j < actions.length; j++) {
-            actionVal.push({"actionId": actions[j].actionId})
+            actionVal.push({"actionId": actions[j].actionId, "actionCode": actions[j].actionCode})
           }
         }
         let validFromDate = null;
@@ -132,7 +132,7 @@ export default class MlAssignModulesToRoles extends React.Component {
     let actions = this.state.assignModulesToRoles[index].actions
     if (event.target.checked) {
       let value = event.target.name;
-      actions.push({actionId: value})
+      actions.push({actionId: value, actionCode: value.toUpperCase()})
     } else {
       let flag = '';
       _.each(actions, function (item, key) {
@@ -241,16 +241,16 @@ export default class MlAssignModulesToRoles extends React.Component {
             return current.isAfter(yesterday);
           }
           _.each(options.actions,function (s,v) {
-            if(s.actionId=='DELETE'){
+            if(s.actionCode=='DELETE'){
               statusDelete=true;
             }
-            if(s.actionId=='READ'){
+            if(s.actionCode=='READ'){
               statusRead=true;
             }
-            if(s.actionId=='UPDATE'){
+            if(s.actionCode=='UPDATE'){
               statusUpdate=true;
             }
-            if(s.actionId=='CREATE'){
+            if(s.actionCode=='CREATE'){
               statusCreate=true;
             }
           })

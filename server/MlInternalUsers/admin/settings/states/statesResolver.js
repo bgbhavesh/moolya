@@ -43,6 +43,14 @@ MlResolver.MlQueryResolver['FetchActiveStates'] = (obj, args, context, info) => 
     return resp;
   }
 };
+
+MlResolver.MlQueryResolver['FetchStates'] = (obj, args, context, info) => {
+    let resp = MlStates.find({"isActive":true}).fetch()
+    return resp;
+  }
+
+
+
 MlResolver.MlQueryResolver['FetchActiveStatesForCluster'] = (obj, args, context, info) => {
   /*  let states = MlStates.find({"isActive":true}).fetch()
     states.push({"name" : "All","_id" : "all"});

@@ -222,12 +222,13 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
           "transactionType": "processSetup",
           "dateTime": new Date(),
           "status": "Yet To Start",
+          portfolioId : args.portfoliodetailsId,
           "username": regRecord.portfolioUserName,
           "name": (user.profile && user.profile.firstName ? user.profile.firstName : "") + " " + (user.profile && user.profile.lastName ? user.profile.lastName : ""),
           mobileNumber: regRecord.contactNumber,
         }
         let portfolioDetails = _.extend(portfolioObject, extendObj)
-        orderNumberGenService.assignPortfolioId(portfolioDetails)
+        // orderNumberGenService.assignPortfolioId(portfolioDetails)
 
         if(_.isMatch(regRecord, {communityCode: 'FUN'})){
           MlResolver.MlMutationResolver['createProcessTransaction'](obj, {

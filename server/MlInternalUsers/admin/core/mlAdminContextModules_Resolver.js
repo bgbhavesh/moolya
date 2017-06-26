@@ -94,6 +94,11 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       requestParams.type='approved';
       result=CoreModulesRepo.MlRegistrationRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
+    case "registrationRejectedInfo":
+      requestParams=args.context||{};
+      requestParams.type='rejected';
+      result=CoreModulesRepo.MlRegistrationRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
     case "internalRequests":
       requestParams=args.context||{};
       requestParams.type='requested';
@@ -163,6 +168,7 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "hierarchy":resolveType= 'SubChapter';break;
       case "registrationInfo":resolveType= 'RegistrationInfo';break;
       case "registrationApprovedInfo":resolveType= 'RegistrationInfo';break;
+      case "registrationRejectedInfo":resolveType= 'RegistrationInfo';break;
       case "portfolioRequests":resolveType= 'Portfoliodetails';break;
       case "portfolioApproved":resolveType= 'Portfoliodetails';break;
       case "TransactionsLog":resolveType='TransactionsLog';break;

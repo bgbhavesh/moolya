@@ -15,6 +15,7 @@ export default class MlAppTaskCreate extends Component {
     }
     this.findTaskDetails.bind(this);
     this.handleBlur.bind(this);
+    this.onStatusChange.bind(this);
     this.taskDuration.bind(this)
     return this;
   }
@@ -34,7 +35,7 @@ export default class MlAppTaskCreate extends Component {
     let taskId = this.props.taskId
     if (taskId) {
       var response = await findTaskActionHandler(taskId);
-      if (response) {
+      if (!_.isEmpty(response)) {
         this.setState({loading: false, data: response});
       }
       return response
@@ -83,8 +84,21 @@ export default class MlAppTaskCreate extends Component {
     })
   }
 
+  onStatusChange(e) {
+    let details = this.state.data;
+    let name = 'isActive';
+    details = _.omit(details, [name]);
+    details = _.extend(details, {[name]: e.currentTarget.checked});
+    this.setState({data: details}, function () {
+      this.sendTaskDataToParent()
+    })
+  }
+
   sendTaskDataToParent() {
     let data = this.state.data;
+    // let isBooleanObj = _.pick(data, ['isActive', 'isExternal', 'isServiceCardEligible', 'isInternal']);
+    // data = _.pickBy(data, _.identity);
+    // data = _.extend(data, isBooleanObj)
     this.props.getCreateDetails(data);
   }
 
@@ -109,12 +123,14 @@ export default class MlAppTaskCreate extends Component {
                   <div className="form-group">
                     <div className="input_types">
                       <input id="radio1" type="radio" value={true} name="isInternal"
-                             onBlur={this.handleBlur.bind(this)}/><label
+                             defaultChecked={this.state.data.isInternal}
+                             onChange={this.handleBlur.bind(this)}/><label
                       htmlFor="radio1"><span><span></span></span>Internal</label>
                     </div>
                     <div className="input_types">
                       <input id="radio2" type="radio" name="isExternal" value={true}
-                             onBlur={this.handleBlur.bind(this)}/><label
+                             defaultChecked={this.state.data.isExternal}
+                             onChange={this.handleBlur.bind(this)}/><label
                       htmlFor="radio2"><span><span></span></span>External</label>
                     </div>
                     <br className="brclear"/>
@@ -127,11 +143,10 @@ export default class MlAppTaskCreate extends Component {
                     </label>
                   </div>
                   <div className="form-group">
-                    <label>Duration: &nbsp; <input className="form-control inline_input" ref="hours" type="Number"
-                                                   min="0"
-                                                   defaultValue={this.state.data.duration ? this.state.data.duration.hour : 0}
-                                                   onBlur={this.taskDuration.bind(this)}/> Hours <input
-                      className="form-control inline_input" ref="minutes" type="Number" min="0"
+                    <label>Duration: &nbsp; <input className="form-control inline_input" type="Number" disabled="true"
+                                                   defaultValue={this.state.data.duration ? this.state.data.duration.hours : 0}
+                                                  /> Hours <input
+                      className="form-control inline_input" disabled="true" type="Number" min="0"
                       defaultValue={this.state.data.duration ? this.state.data.duration.minutes : 0}/>
                       Mins </label>
                   </div>
@@ -157,10 +172,19 @@ export default class MlAppTaskCreate extends Component {
                   <div className="form-group">
                     <div className="input_types">
                       <input id="radio1" type="radio" name="isServiceCardEligible" value={true}
+                             defaultChecked={this.state.data.isServiceCardEligible}
                              onBlur={this.handleBlur.bind(this)}/>
                       <label htmlFor="radio1"><span><span></span></span>Eligible
                         for service card</label>
                     </div>
+                  </div>
+                  <div className="form-group switch_wrap inline_switch">
+                    <label className="">Status</label>
+                    <label className="switch">
+                      <input type="checkbox" ref="isActive" checked={this.state.data.isActive}
+                             onChange={this.onStatusChange.bind(this)}/>
+                      <div className="slider"></div>
+                    </label>
                   </div>
                   <br className="brclear"/>
                 </form>
@@ -171,3 +195,4 @@ export default class MlAppTaskCreate extends Component {
     )
   }
 };
+// onBlur={this.taskDuration.bind(this)}

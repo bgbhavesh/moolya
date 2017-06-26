@@ -122,7 +122,7 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
   }
   static  validateEmail(registration) {
     // let clusterInfo=MlClusters.findOne({countryId:args.registration.countryId})
-    var validate = MlRegistration.findOne({"registrationInfo.email":registration.email})
+    var validate = MlRegistration.findOne({"registrationInfo.email":registration.email,status: { $nin: [ 'Rejected' ] }})
     if(validate){
       /* var validate = MlRegistration.findOne({"$and":[{"registrationInfo.email":registration.email},{"registrationInfo.countryId":registration.countryId},{"registrationInfo.registrationType":registration.registrationType}]})
        if(validate){*/
@@ -180,7 +180,7 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
     //check comunity access is active at country
     if(isActiveCommunity&&countryClusterId){
       var countryCommunity = mlDBController.findOne('MlCommunityAccess', {"hierarchyLevel":3,"clusterId":countryClusterId, "communityDefCode":registrationType,isActive:true}, context);
-      if(!clusterCommunity)isActiveCommunity=false;
+      if(!countryCommunity)isActiveCommunity=false;
     }
 
     if(!isActiveCommunity){

@@ -268,6 +268,10 @@ let CoreModules = {
         break;
       case 'approved':
         serverQuery={'status':"Approved"};
+        break;
+      case 'rejected':
+        serverQuery={'status':"Rejected"};
+        break;
     }
 
     //To display the latest record based on date

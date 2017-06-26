@@ -188,6 +188,10 @@ class MlAuthorization
           return false
 
         switch (moduleName){
+          case 'INTERNALREQUESTS':{
+            return this.validateChapterSubChapter(roleDetails, variables.requests);
+          }
+          break;
           case 'TAXATION':
           case 'CLUSTER':
             return true;
@@ -223,6 +227,11 @@ class MlAuthorization
               return;
 
             return {clusterId:template.templateclusterId, chapterId:template.templatechapterId, subChapterId:template.templatesubChapterId, communityId:template.templateCommunityId}
+          }
+          break;
+          case 'INTERNALREQUESTS':{
+            if(actionName == 'CREATE')
+              return variables.requests;
           }
           break;
         }

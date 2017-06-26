@@ -38,6 +38,7 @@ let supportedApi = [{
   api: 'FetchMenu',
   actionName: 'READ',
   isAppWhiteList: true,
+  isWhiteList:true,
   moduleName: "MENU"
 }, {
   api: 'fetchExternalUserMenu',

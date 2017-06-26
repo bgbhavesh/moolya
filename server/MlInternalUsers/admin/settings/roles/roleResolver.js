@@ -167,8 +167,21 @@ MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
         role.updatedDateTime = new Date();
         role.updatedBy = mlDBController.findOne("users", {_id: context.userId}, context).username;
 
+        var updatedRole = args.role;
+
+        _.each(updatedRole.modules, function (module)
+        {
+          for(var i = 0; i < module.actions.length; i++){
+            var dbAction = mlDBController.findOne("MlActions", {code: module.actions[i].actionId}, context);
+            if(dbAction){
+              module.actions[i].actionId = dbAction._id;
+              module.actions[i].actionCode = dbAction.code;
+            }
+          }
+        })
+
         // let result= MlRoles.update(id, {$set: args.role});
-        let result = mlDBController.update('MlRoles', id, args.role, {$set: true}, context);
+        let result = mlDBController.update('MlRoles', id, updatedRole, {$set: true}, context);
         let code = 200;
         let response = new MlRespPayload().successPayload(result, code);
         return response

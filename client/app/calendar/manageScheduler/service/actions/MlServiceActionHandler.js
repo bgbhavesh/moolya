@@ -107,7 +107,6 @@ export async function updateServiceActionHandler(serviceId,Services) {
       Services
     }
   });
-  console.log(result)
   const teamMembers = result.data.updateService;
   return teamMembers
 }

@@ -17,6 +17,7 @@ let service=`
      name: String
      info: String
      isMandatory: Boolean
+     fileUrl : [String]
   }
   type ServicePayment {
      amount: Int
@@ -84,6 +85,12 @@ let service=`
     city: [Cities]
     state: [States]
     cluster: Clusters
+    isBeSpoke : Boolean
+    mode : String
+    industryId : [String]
+    conversation : [String]
+    expectedInput : String
+    expectedOutput : String
   }
 
    input facilitationCharge {
@@ -96,6 +103,7 @@ let service=`
        name: String
        info: String
        isMandatory: Boolean
+       fileUrl : [String]
    }
 
    input servicepayment {
@@ -165,11 +173,17 @@ let service=`
         city: [cities]
         state:[states]
         cluster: clusters
+        isBeSpoke : Boolean
+        mode : String
+        industryId : [String]
+        conversation : [String]
+        expectedInput : String
+        expectedOutput : String
     }
 
     type Query {
-        fetchServices(profileId:String):[Service]
-        fetchService(serviceId:String):Service
+        fetchUserServices(profileId:String):[Service]
+        findService(serviceId:String):Service
     }
 
     type Mutation {
@@ -182,9 +196,8 @@ let service=`
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], service]);
 
 let supportedApi = [
-  {api:'fetchServices', actionName:'READ', moduleName:"OFFICE"},
-  {api:'fetchService', actionName:'READ', moduleName:"OFFICE"},
-
+  {api:'fetchUserServices', actionName:'READ', moduleName:"OFFICE"},
+  {api:'findService', actionName:'READ', moduleName:"OFFICE"},
   {api:'createService', actionName:'CREATE', moduleName:"OFFICE"},
   {api:'updateService', actionName:'UPDATE', moduleName:"OFFICE"},
 ]

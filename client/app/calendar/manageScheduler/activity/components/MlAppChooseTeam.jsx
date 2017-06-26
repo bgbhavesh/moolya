@@ -89,9 +89,9 @@ export default class MlAppChooseTeam extends React.Component{
     });
   }
 
-  removeComponent(){
+  removeComponent(index,e){
     let team = this.state.team;
-    team.pop({})
+    team.splice(index,1)
     this.setState({team:team})
   }
 
@@ -205,7 +205,7 @@ export default class MlAppChooseTeam extends React.Component{
       return(
         <div className="col-md-6 nopadding-left">
           <div className="panel panel-default cal_view_task">
-            <div className="panel-heading">Suggestable teams <span className="see-more pull-right"><a href=""><FontAwesome name='plus' onClick={that.addComponent.bind(that,indi)}/></a><FontAwesome name='minus' onClick={that.removeComponent.bind(that)}/></span></div>
+            <div className="panel-heading">Suggestable teams <span className="see-more pull-right"><a href=""><FontAwesome name='plus' onClick={that.addComponent.bind(that,indi)}/></a><FontAwesome name='minus' onClick={that.removeComponent.bind(that, id)}/></span></div>
             <div className="panel-body ">
               <div className="col-md-12 nopadding">
                 <div className="col-md-6 nopadding-left">

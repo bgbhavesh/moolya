@@ -64,7 +64,6 @@ export default class MlAppTaskConditions extends Component {
     let attach = data['attachments']
     attach.push(emptyObj)
     this.setState({data: data})
-    console.log('test')
   }
 
   handleMandatory(id, e) {

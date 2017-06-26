@@ -77,8 +77,11 @@ export default class MlAppTaskCreate extends Component {
   handleBlur(e) {
     let details = this.state.data;
     let name = e.target.name;
+    let value = e.target.value
+    if(e.target.value== 'true')
+      value = e.target.checked
     details = _.omit(details, [name]);
-    details = _.extend(details, {[name]: e.target.value});
+    details = _.extend(details, {[name]: value});
     this.setState({data: details}, function () {
       this.sendTaskDataToParent()
     })
@@ -122,13 +125,13 @@ export default class MlAppTaskCreate extends Component {
                   </div>
                   <div className="form-group">
                     <div className="input_types">
-                      <input id="radio1" type="radio" value={true} name="isInternal"
+                      <input id="checkbox1" type="checkbox" value={true} name="isInternal"
                              defaultChecked={this.state.data.isInternal}
                              onChange={this.handleBlur.bind(this)}/><label
                       htmlFor="radio1"><span><span></span></span>Internal</label>
                     </div>
                     <div className="input_types">
-                      <input id="radio2" type="radio" name="isExternal" value={true}
+                      <input id="checkbox1" type="checkbox" name="isExternal" value={true}
                              defaultChecked={this.state.data.isExternal}
                              onChange={this.handleBlur.bind(this)}/><label
                       htmlFor="radio2"><span><span></span></span>External</label>
@@ -171,7 +174,7 @@ export default class MlAppTaskCreate extends Component {
                           value={this.state.data.sessionFrequency} onChange={this.onFrequencySelect.bind(this)}/>
                   <div className="form-group">
                     <div className="input_types">
-                      <input id="radio1" type="radio" name="isServiceCardEligible" value={true}
+                      <input id="checkbox1" type="checkbox" name="isServiceCardEligible" value={true}
                              defaultChecked={this.state.data.isServiceCardEligible}
                              onBlur={this.handleBlur.bind(this)}/>
                       <label htmlFor="radio1"><span><span></span></span>Eligible

@@ -327,6 +327,14 @@ adminSection.route('/transactions/createRegistration', {
   }
 });
 
+
+adminSection.route('/transactions/rejectedRegistrations', {
+  name: 'transaction_registration_reject',
+  action(params){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'history'}} />, adminContent:<MlRegistrationTabHistoryList/>})
+  }
+});
+
 adminSection.route('/transactions/registrationHistory', {
   name: 'transaction_registration_history',
   action(params){

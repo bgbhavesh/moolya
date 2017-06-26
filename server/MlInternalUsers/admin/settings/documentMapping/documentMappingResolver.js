@@ -231,15 +231,3 @@ MlResolver.MlQueryResolver['fetchKycDocProcessMapping'] = (obj, args, context, i
   }
 }
 
-MlResolver.MlQueryResolver['fetchKYCDocuments'] = (obj, args, context, info) => {
-
-  let result;
-  if(args.clusters&&args.chapters&&args.subChapters&&args.community&&args.kyc&&args.documentType){
-    result = MlDocumentMapping.find({"$and":[{ kycCategory : { $in: [args.kyc] },documentType: {$in :[args.documentType]}, clusters: {$in: args.clusters},
-      chapters: {$in: args.chapters},
-      subChapters:{$in: args.subChapters},isActive:true}]}).fetch()
-  }
-  return result;
-
-}
-

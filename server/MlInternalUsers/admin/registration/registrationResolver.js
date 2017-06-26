@@ -1204,10 +1204,19 @@ MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) 
   }
   kycDocumentObject.documentId = args.documentID;
   kycDocumentObject.documentDisplayName = documentDetails.documentDisplayName;
-  kycDocumentObject.allowableFormat = documentDetails.allowableFormat;
+
   kycDocumentObject.documentName = documentDetails.documentName;
   kycDocumentObject.allowableMaxSize = documentDetails.allowableMaxSize;
+  kycDocumentObject.allowableFormat = []
+  if(documentDetails.allowableFormat){
+    let documentFormat = MlDocumentFormats.find({"_id":{$in: documentDetails.allowableFormat}}).fetch();
+    let documentFormatArray = _.pluck(documentFormat, 'docFormatName') || [];
+    if(documentFormatArray){
+      let allowableFormatArray = documentFormatArray.join();
+      kycDocumentObject.allowableFormat.push(allowableFormatArray);
+    }
 
+  }
   if(args.kycDocID){
     kycCategoryDetails = MlDocumentCategories.findOne({"_id":args.kycDocID});
   }
@@ -1220,8 +1229,9 @@ MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) 
   kycDocumentObject.docTypeName = docTypeDetails.docTypeDisplayName
   kycDocumentObject.isActive= true
   kycDocumentObject.isMandatory= false
+  kycDocumentObject.status= "Awaiting upload"
 
- 
+
   let id;
   let registrationDetails;
   if(args.registrationId){
@@ -1246,4 +1256,6 @@ MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) 
       kycDocuments: {$exists: false}
     }, {'kycDocuments': kycDocumentObject}, {$set: true}, context)
   }
+
+  return id;
 }

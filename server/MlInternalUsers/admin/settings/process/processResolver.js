@@ -326,3 +326,26 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
 
 }
 
+MlResolver.MlQueryResolver['fetchKYCDocuments'] = (obj, args, context, info) => {
+
+  let result;
+  if(args.clusters&&args.chapters&&args.subChapters&&args.community&&args.kyc&&args.documentType){
+    result = MlProcessMapping.find({"$and":[{ 'documents.category' : args.kyc ,'documents.type': args.documentType, clusters: {$in: args.clusters},
+      chapters: {$in: args.chapters},
+      subChapters:{$in: args.subChapters},communities:{$in: [args.community]},isActive:true}]}).fetch()
+  }
+  let processDocuments = []
+  if(result && result.length>0){
+    for(let i=0;i < result.length;i++){
+      processDocuments.push(result[i].processDocuments)
+    }
+    return processDocuments&&processDocuments[0]
+  }else{
+    return;
+  }
+
+
+}
+
+
+

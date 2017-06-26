@@ -15,6 +15,7 @@ export async function findUserOfficeActionHandler() {
                 principalUserCount
                 
                 teamUserCount
+                isRegistrationApproved
               }  
           }
       `,

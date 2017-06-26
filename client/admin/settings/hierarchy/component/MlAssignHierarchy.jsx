@@ -364,8 +364,15 @@ export default class MlAssignHierarchy extends React.Component {
               {this.state.dataAvailable===true?
                 (<div className="panel-body">
                   {that.state.assignedRoles.teamStructureAssignment.map(function (roles,id) {
+                    let assignments = null;
+                    let team = that.state.assignedRoles.teamStructureAssignment
+                    if(team){
+                      assignments  = _.map(that.state.assignedRoles.teamStructureAssignment, function (row) {
+                        return _.omit(row, ['__typename']);
+                      });
+                    }
                     let parentDepartment = that.props.departmentInfo;
-                    let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
+                    let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId,roles:assignments}}};
                     //let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
 
                     return(
@@ -416,9 +423,16 @@ export default class MlAssignHierarchy extends React.Component {
             <div id="collapseTwo" className="panel-collapse collapse">
               {this.state.dataAvailable===true?
                 <div className="panel-body">
-                  {this.state.assignedRoles.teamStructureAssignment.map(function (roles,id) {
+                  {that.state.assignedRoles.teamStructureAssignment.map(function (roles,id) {
+                    let assignments = null;
+                    let team = that.state.assignedRoles.teamStructureAssignment
+                    if(team){
+                      assignments  = _.map(that.state.assignedRoles.teamStructureAssignment, function (row) {
+                        return _.omit(row, ['__typename']);
+                      });
+                    }
                     let parentDepartment = that.props.departmentInfo;
-                    let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
+                    let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId,roles:assignments}}};
                     //let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
 
                     return(
@@ -470,8 +484,16 @@ export default class MlAssignHierarchy extends React.Component {
               {this.state.dataAvailable===true?
                 (<div className="panel-body">
                   {this.state.assignedRoles.teamStructureAssignment.map(function (roles,id) {
+                    let assignments = null;
+                    let team = that.state.assignedRoles.teamStructureAssignment
+                    if(team){
+                      assignments  = _.map(that.state.assignedRoles.teamStructureAssignment, function (row) {
+                        return _.omit(row, ['__typename']);
+                      });
+                    }
+
                     let parentDepartment = that.props.departmentInfo;
-                    let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
+                    let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId,roles:assignments}}};
                     //let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
 
                     return(

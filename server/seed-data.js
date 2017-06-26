@@ -165,7 +165,7 @@ if(!platformrole){
     isActive:true,
     isSystemDefined: true
   }
-  MlRoles.update({roleName:"chapteradmin"}, {$set:role}, {upsert:true})
+  MlRoles.update({roleName:"subchapteradmin"}, {$set:role}, {upsert:true})
 }
 
 // var communityAdmin = MlRoles.findOne({roleName:"communityadmin"})
@@ -199,7 +199,7 @@ if(!platformrole){
     isActive:true,
     isSystemDefined: true
   }
-  MlRoles.update({roleName:"chapteradmin"}, {$set:role}, {upsert:true})
+  MlRoles.update({roleName:"communityadmin"}, {$set:role}, {upsert:true})
 }
 /*********************************** Default Moolya Roles Creation <End> **********************************************/
 

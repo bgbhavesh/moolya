@@ -254,14 +254,18 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
         registrationDate :new Date()
       }
 
+
+
       let profile = new MlUserContext(context.userId).userProfileDetails(context.userId)
       let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName']);
       let finalRegData = _.extend(registrationData, extendObj)
+      orderNumberGenService.assignRegistrationId(finalRegData)
 
       let registrationId = mlDBController.insert('MlRegistration', {
         registrationInfo: finalRegData,
         status: "Yet To Start",
-        emails: emails
+        emails: emails,
+        transactionId :finalRegData.registrationId
       }, context)
       if (registrationId) { //for generating verfication token
         MlAccounts.sendVerificationEmail(registrationId,{emailContentType:"html",subject:"Email Verification",context:context});

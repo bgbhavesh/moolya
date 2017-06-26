@@ -103,13 +103,13 @@ let portfolioSchema = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], portfolioSchema]);
 
 let supportedApi = [
-  {api:'fetchPortfolioDetailsByUserId', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchPortfolioDetails', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchPortfolioDetailsByUserId', actionName:'READ', moduleName:"PORTFOLIO", isAppWhiteList:true},
+  {api:'fetchPortfolioDetails', actionName:'READ', moduleName:"PORTFOLIO", isAppWhiteList:true},
 
-  {api:'createPortfolioRequest', actionName:'CREATE', moduleName:"PORTFOLIO"},
-  {api:'updatePortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+  {api:'createPortfolioRequest', actionName:'CREATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
+  {api:'updatePortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
   {api:'approvePortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'rejectPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'requestForGoLive', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+  {api:'requestForGoLive', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

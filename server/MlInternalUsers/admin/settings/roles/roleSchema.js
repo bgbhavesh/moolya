@@ -24,7 +24,8 @@ let Role = `
   }
   
   type Actions{
-      actionId : String
+      actionId : String,
+      actionCode: String
   }
 
   type Roles{
@@ -75,7 +76,8 @@ let Role = `
   }
   
   input actions{
-      actionId : String
+      actionId : String,
+      actionCode: String
   }
   
   input modules{

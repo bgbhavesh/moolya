@@ -509,7 +509,7 @@ let supportedApi = [
     {api:'fetchsubChapterUserDepSubDep', actionName:'READ', moduleName:"USERS"},
     {api:'fetchAssignedAndUnAssignedUsers', actionName:'READ', moduleName:"USERS"},
     {api:'fetchUsersForDashboard', actionName:'READ', moduleName:"USERS", isWhiteList:true},
-    {api:'fetchUserTypeFromProfile', actionName:'READ', isWhiteList: true, moduleName:"USERS"},
+    {api:'fetchUserTypeFromProfile', actionName:'READ', isWhiteList: true, moduleName:"USERS", isAppWhiteList:true},
     {api:'fetchMapCenterCordsForUser', actionName:'READ', isWhiteList: true, moduleName:"USERS"},
     {api:'fetchAddressBookInfo', actionName:'READ', moduleName:"USERS", isWhiteList: true},
     {api:'findUserOnToken', actionName:'READ', moduleName:"USERS"},

@@ -47,6 +47,7 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
           return response;
         }
         module.actions[i].actionId = dbAction._id;
+        module.actions[i].actionCode = dbAction.code;
       }
   })
 
@@ -63,7 +64,7 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
         validFrom: null,
         validTo: null,
         isActive: true,
-        actions: [{actionId: readAction._id}]
+        actions: [{actionId: readAction._id, actionCode:readAction.code}]
       }
       role.modules.push(moduleObj)
     }
@@ -314,9 +315,8 @@ MlResolver.MlQueryResolver['findRole'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.id) {
     var id = args.id;
-    // let response = MlRoles.findOne({"_id": id});
-    let response = mlDBController.findOne("MlRoles", {_id: id}, context)
-    return response;
+    let role = mlDBController.findOne("MlRoles", {_id: id}, context)
+    return role;
   }
 };
 

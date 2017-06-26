@@ -205,8 +205,13 @@ class MlAuthorization
         }
       }
 
-      getContextDetails(moduleName, actionName, variables){
+        getContextDetails(moduleName, actionName, variables){
         switch(moduleName){
+          case 'USERS':{
+              let community = this.getCommunityId(variables.clusterId, variables.chapterId, variables.subChapterId, variables.communityId)
+              variables.communityId= community._id
+          }
+          break;
           case 'REGISTRATION':{
             if(actionName == 'CREATE'){
                 let community = this.getCommunityId(variables.registration.clusterId, variables.registration.chapterId, variables.registration.subChapterId, variables.registration.registrationType)

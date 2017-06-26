@@ -104,7 +104,7 @@ let calendarSettingSlot=`
   
   type Query {   
      fetchMyCalendarSetting:CalendarSetting
-     getMyCalendar(month:Int): MonthCalendar
+     getMyCalendar(month:Int, year: Int): MonthCalendar
   }
   
   type Mutation {

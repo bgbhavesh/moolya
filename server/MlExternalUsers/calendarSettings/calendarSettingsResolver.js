@@ -43,7 +43,10 @@ MlResolver.MlQueryResolver['getMyCalendar'] = (obj, args, context, info) => {
     return response;
   }
   let mlAppointment = new MlAppointment();
-  return mlAppointment.getUserCalendar(userId, profileId, 5, 2017);
+  let date = new Date();
+  let month = args.month ? args.month : date.getMonth() ;
+  let year = args.year ? args.year : date.getFullYear() ;
+  return mlAppointment.getUserCalendar(userId, profileId, month, year);
 };
 
 MlResolver.MlMutationResolver['updateMyCalendarSetting'] = (obj, args, context, info) => {

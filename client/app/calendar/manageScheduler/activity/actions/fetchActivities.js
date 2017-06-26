@@ -27,7 +27,8 @@ export async function fetchActivitiesActionHandler (profileId) {
     `,
     variables: {
       profileId:profileId
-    }
+    },
+    forceFetch:true
   });
   const activities = result.data.fetchActivities;
   return activities

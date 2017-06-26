@@ -70,8 +70,8 @@ class MlInteractionService{
             {$unwind: "$user"},
             { '$lookup': {
                 from: "mlStage",
-                localField: "resourceId",
-                foreignField: "resourceId",
+                localField: "userId",
+                foreignField: "userId",
                 as: "stage"
               }
             },

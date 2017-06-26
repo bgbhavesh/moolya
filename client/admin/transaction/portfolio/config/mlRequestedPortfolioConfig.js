@@ -46,22 +46,6 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
         }
       }
     },
-    /*{
-      showAction: true,
-      actionName: 'comment',
-      handler: null
-    },*/
-  /*  {
-      showAction: true,
-      actionName: 'assign',
-      handler: (data)=>{
-        if(data && data.id){
-          const internalConfig=data;
-        } else{
-          toastr.error("Please select a record");
-        }
-      }
-    },*/
     {
       showAction: true,
       actionName: 'assign',
@@ -90,25 +74,15 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
     },
     // {
     //   showAction: true,
-    //   actionName: 'logout',
-    //   handler: (data)=>{console.log(data);}
+    //   actionName: 'approveUser',
+    //   handler: (data) => {
+    //     if (data && data.id) {
+    //       FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/" + data.id+"/"+data.communityType);
+    //     } else {
+    //       toastr.error("Please select a record");
+    //     }
+    //   }
     // },
-    /*{
-      showAction: true,
-      actionName: 'cancel',
-      handler: null
-    },*/
-    {
-      showAction: true,
-      actionName: 'approveUser',
-      handler: (data) => {
-        if (data && data.id) {
-          FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/" + data.id+"/"+data.communityType);
-        } else {
-          toastr.error("Please select a record");
-        }
-      }
-    },
     {
       showAction: true,
       actionName: 'rejectUser',

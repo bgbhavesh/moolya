@@ -11,6 +11,10 @@ let UserTypesSchema = `
       communityCode :String
       communityName :String
       _id           :String
+      createdBy     : String
+      createdDate   : Date
+      updatedBy     : String
+      updatedDate   : Date
       isActive      :Boolean
     }
      input userTypeObject{
@@ -19,6 +23,10 @@ let UserTypesSchema = `
         userTypeDesc  :String,
         communityCode :String,
         communityName :String,
+        createdBy       : String
+        createdDate     : Date
+        updatedBy       : String
+        updatedDate     : Date
         isActive      :Boolean
     }
     

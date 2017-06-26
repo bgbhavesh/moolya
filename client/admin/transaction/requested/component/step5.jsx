@@ -305,6 +305,7 @@ export default class Step5 extends React.Component {
   render(){
     let MlActionConfig
     let userType=this.props.userType;
+    let registrationId  =  this.props.registrationData&&this.props.registrationData._id?this.props.registrationData._id:""
     if(userType=='external'){
       MlActionConfig=[
         {
@@ -372,7 +373,7 @@ export default class Step5 extends React.Component {
                     {registrationDocumentsGroup[key].map(function (regDoc,id) {
                       let documentExist=_.isEmpty(regDoc)
                       return(
-                        <div>{!documentExist&&regDoc.documentId!=null&&<DocumentViewer key={regDoc.documentId} doc={regDoc} selectedDocuments={that.state.selectedFiles} selectedDocType={that.state.selectedDocTypeFiles} onFileUpload={that.onFileUpload.bind(that)} onDocumentSelect={that.onDocumentSelect.bind(that)} onDocumentRemove={that.onDocumentRemove.bind(that)}/>} </div>)
+                        <div>{!documentExist&&regDoc.documentId!=null&&<DocumentViewer key={regDoc.documentId} doc={regDoc} selectedDocuments={that.state.selectedFiles} selectedDocType={that.state.selectedDocTypeFiles} onFileUpload={that.onFileUpload.bind(that)} onDocumentSelect={that.onDocumentSelect.bind(that)} onDocumentRemove={that.onDocumentRemove.bind(that)} registrationId={registrationId}/>} </div>)
                     })
                     }<br className="brclear"/></div>
                     )

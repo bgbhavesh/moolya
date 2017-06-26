@@ -1,19 +1,19 @@
-import React, { Component, PropTypes }  from "react";
-import { render } from 'react-dom';
-import formHandler from '../../../commons/containers/MlFormHandler';
-import {updatePortfolioActionHandler, updateIdeatorIdeaActionHandler, requestProtfolioForGoLive} from '../../../../client/admin/transaction/portfolio/actions/updatePortfolioDetails';
+import React, {Component, PropTypes} from "react";
+import {render} from "react-dom";
+import formHandler from "../../../commons/containers/MlFormHandler";
+import {updatePortfolioActionHandler,updateIdeatorIdeaActionHandler} from "../../../../client/admin/transaction/portfolio/actions/updatePortfolioDetails";
 import {fetchTemplateHandler} from "../../../commons/containers/templates/mltemplateActionHandler";
-import {findComments} from '../../../commons/annotaterComments/findComments'
-import {createCommentActionHandler} from '../../../commons/annotaterComments/createComment';
-import {resolveCommentActionHandler} from '../../../commons/annotaterComments/createComment';
-import {reopenCommentActionHandler} from '../../../commons/annotaterComments/createComment';
+import {findComments} from "../../../commons/annotaterComments/findComments";
+import {createCommentActionHandler,resolveCommentActionHandler,reopenCommentActionHandler} from "../../../commons/annotaterComments/createComment";
 import moment from "moment";
-import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
-import {fetchIdeaByPortfolioId} from '../../ideators/actions/IdeaActionHandler'
-import MlLoader from '../../../commons/components/loader/loader';
-import InteractionsCounter from '../../commons/components/InteractionsCounter'
-import MlAppPortfolioAccordionContainer from '../components/MlAppPortfolioAccordion';
-class MlAppPortfolio extends React.Component{
+import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
+import {fetchIdeaByPortfolioId} from "../../ideators/actions/IdeaActionHandler";
+import MlLoader from "../../../commons/components/loader/loader";
+import InteractionsCounter from "../../commons/components/InteractionsCounter";
+import MlAppPortfolioAccordionContainer from "../components/MlAppPortfolioAccordion";
+import {requestPortfolioForGoLive} from "../actions/fetchUserDetails";
+
+class MlAppPortfolio extends Component{
   constructor(props){
     super(props)
     this.state = {editComponent:'', portfolio:{}, selectedTab:"", annotations:[], isOpen:false,
@@ -40,6 +40,7 @@ class MlAppPortfolio extends React.Component{
 
   componentDidMount(){
     let portfolioId = this.props.config;
+    $("#portfolioAccordion0").addClass("in")
     /*var pathname = window.location.pathname
     if(pathname.indexOf("view") != -1 || pathname.indexOf("edit") != -1 || this.props.communityType != "ideator"){
       this.setState({isMyPortfolio:true})
@@ -66,14 +67,11 @@ class MlAppPortfolio extends React.Component{
   }
 
   commentClicked(){
-
     $('.comment_wrap').slideToggle();
     this.setState({"saveButton" : true})
-
   }
 
   async componentWillMount() {
-
     if(this.props.viewMode){
       this.fetchViewPortfolioTemplate(this.props.config);
     }else{
@@ -173,10 +171,12 @@ class MlAppPortfolio extends React.Component{
     console.log('edit testing')
   }
 
-  async requestForGoLive(){
-      console.log("golive")
-      let portfolioId = this.props.config;
-      requestProtfolioForGoLive(portfolioId);
+  async requestForGoLive() {
+    let portfolioId = this.props.config;
+    const response = await requestPortfolioForGoLive(portfolioId);
+    if(response && response.success)
+      toastr.success("Go live requested to admin");
+    return response
   }
 
   async handleSuccess(response) {
@@ -206,7 +206,7 @@ class MlAppPortfolio extends React.Component{
       case 'interaction': actionConfig.handler=async(actionData,callback) =>this.props.handler(this.interactionActionHandler.bind(this,actionData,callback), this.onInteractionSuccess.bind(this));break;
       case 'save': actionConfig.handler=async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this)); break;
       case 'edit': actionConfig.handler=async(event) => this.props.handler(this.testEditPortfolioDetails.bind(this)); break;
-      case 'goLive': actionConfig.handler=async(event) => this.props.handler(this.requestForGoLive.bind(this)); break;
+      case 'golive': actionConfig.handler=async(event) => this.props.handler(this.requestForGoLive.bind(this)); break;
       case '': actionConfig.handler=() => {console.log("action handler is not defined")}; break;
     }
   }
@@ -255,7 +255,7 @@ class MlAppPortfolio extends React.Component{
                 {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
           </div>)}
         <div className="overlay"></div>
-          <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
+          <Popover placement="bottom" isOpen={this.state.popoverOpen} target="comment" toggle={this.toggle}>
             <PopoverTitle>Portfolio Annotations</PopoverTitle>
             <PopoverContent>
               <div className="ml_annotations">
@@ -290,7 +290,7 @@ class MlAppPortfolio extends React.Component{
                         </div>
                       </div>*/}
                       <div className="comment_wrap">
-                      <textarea ref="comment"  id="comment" className="form-control comment-input-box"
+                      <textarea ref="comment"  id="commentData" className="form-control comment-input-box"
                                 placeholder="Enter your comment here"></textarea>
 
                         <a href="#" data-id={annotationDetails.id} className="circle_btn">

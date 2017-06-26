@@ -188,7 +188,7 @@ export default class MlAppActionComponent extends React.Component {
       {
         actionName: 'exit',
         displayName:'Exit',
-        iconClass: 'ml ml-save'
+        iconClass: 'ml ml-delete'
       },
       {
         actionName: 'remove',

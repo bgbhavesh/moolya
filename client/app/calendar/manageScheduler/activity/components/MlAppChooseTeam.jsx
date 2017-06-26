@@ -119,7 +119,9 @@ export default class MlAppChooseTeam extends React.Component{
     }
     const res = await updateActivityActionHandler(id,teams)
     this.getDetails();
-
+    if(res.success) {
+      toastr.success("Saved Successfully")
+    }
      return res;
   }
   async SelectTeamMember(index,value){

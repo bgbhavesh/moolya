@@ -182,7 +182,8 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
     let response;
     if(args.portfoliodetailsId){
         let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId});
-        if(details){
+        let detailsUpdate = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {status: 'WIP'}, {$set:true}, context)
+        if(details && detailsUpdate){
             switch (details.communityType){
                 case 'Ideators':{
                     response = MlResolver.MlMutationResolver['updateIdeatorPortfolio'](obj, args, context, info)
@@ -206,59 +207,49 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
 }
 
 MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) => {
-  // TODO : Authorization
   if (args.portfoliodetailsId) {
     let updatedResponse;
-    let regRecord = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfoliodetailsId}, context) || {};
-    if(regRecord.status != "Approved"){
-      updatedResponse = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {"status": "Approved"}, {$set: true}, context)
-    }else{
-      let code = 401;
-      let response = new MlRespPayload().errorPayload("Portfolio already approved", code);
-      return response;
-    }
-    if(updatedResponse===1) {
-      let user = mlDBController.findOne('users', {_id: regRecord.userId}, context) || {};
-      let portfolioDetails = {
-        "transactionType": "processSetup",
-        "communityType": regRecord.communityName,
-        "communityCode": regRecord.communityCode,
-        "clusterId": regRecord.clusterId,
-        "chapterId": regRecord.chapterId,
-        "subChapterId": regRecord.subChapterId,
-        "communityId": regRecord.communityId,
-        clusterName: regRecord.clusterName,
-        chapterName: regRecord.chapterName,
-        subChapterName: regRecord.subChapterName,
-        communityName: regRecord.communityName,
-        "dateTime": new Date(),
-        "status": "Yet To Start",
-        "userId": regRecord.userId,
-        "username": regRecord.portfolioUserName,
-        "name": (user.profile&&user.profile.firstName?user.profile.firstName:"")+" "+(user.profile&&user.profile.lastName?user.profile.lastName:""),
-        mobileNumber: regRecord.contactNumber,
-      }
-      orderNumberGenService.assignPortfolioId(portfolioDetails)
+    let regRecord = mlDBController.findOne('MlPortfolioDetails', {
+        _id: args.portfoliodetailsId,
+        status: 'Go Live',
+      }, context) || {}
+    if (!_.isEmpty(regRecord)) {
+      updatedResponse = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {"status": "gone live"}, {$set: true}, context)
+      if (updatedResponse) {
+        let user = mlDBController.findOne('users', {_id: regRecord.userId}, context) || {};
+        let portfolioObject = _.pick(regRecord, ['userId','communityCode', 'clusterId', 'chapterId', 'subChapterId', 'communityId', 'clusterName', 'chapterName', 'subChapterName', 'communityName'])
+        let extendObj = {
+          "transactionType": "processSetup",
+          "dateTime": new Date(),
+          "status": "Yet To Start",
+          portfolioId : args.portfoliodetailsId,
+          "username": regRecord.portfolioUserName,
+          "name": (user.profile && user.profile.firstName ? user.profile.firstName : "") + " " + (user.profile && user.profile.lastName ? user.profile.lastName : ""),
+          mobileNumber: regRecord.contactNumber,
+        }
+        let portfolioDetails = _.extend(portfolioObject, extendObj)
+        // orderNumberGenService.assignPortfolioId(portfolioDetails)
 
-      try {
-        MlResolver.MlMutationResolver['createProcessTransaction'](obj, {
-          'portfoliodetails': portfolioDetails,
-        }, context, info); //portfolio request
-      } catch (e) {
-        console.log(e);
-        //send error response;
-      }
-    }
-      if(updatedResponse===1){
+        if(_.isMatch(regRecord, {communityCode: 'FUN'})){
+          MlResolver.MlMutationResolver['createProcessTransaction'](obj, {
+            'portfoliodetails': portfolioDetails,
+          }, context, info);
+        }
+
         let code = 200;
-        let result = {portfoliodetailsId : updatedResponse}
+        let result = {portfoliodetailsId: updatedResponse}
         let response = new MlRespPayload().successPayload(result, code);
         return response
-      }else{
+      } else {
         let code = 401;
         let response = new MlRespPayload().errorPayload("Please validate the user", code);
         return response;
       }
+    } else {
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("Portfolio not requested for go live", code);
+      return response;
+    }
   }
 }
 
@@ -274,7 +265,7 @@ MlResolver.MlMutationResolver["requestForGoLive"] = (obj, args, context, info) =
   if(details && details.userId == context.userId){
     try {
       let status = "Go Live";
-      let ret = mlDBController.update('MlPortfolioDetails', {"_id": args.portfoliodetailsId}, {status:status}, {$set: true}, context)
+      let ret = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {status:status}, {$set: true}, context)
       if (ret) {
         let code = 200;
         let response = new MlRespPayload().successPayload("Updated Successfully", code);

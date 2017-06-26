@@ -69,6 +69,7 @@ export async function fetchServiceActionHandler (serviceId) {
       }
       }
     `,
+    forceFetch:true,
     variables: {
       serviceId
     }
@@ -97,5 +98,25 @@ export async function updateServiceActionHandler(serviceId,Services) {
   console.log(result)
   const teamMembers = result.data.updateService;
   return teamMembers
+}
+
+
+export async function fetchServicesActionHandler (profileId) {
+  const result = await appClient.query({
+    query: gql`
+    query($profileId:String) {
+      fetchServices(profileId: $profileId) {
+        displayName
+        _id
+      }
+    }
+    `,
+    forceFetch:true,
+    variables: {
+      profileId:profileId
+    }
+  });
+  const services = result.data.fetchServices;
+  return services;
 }
 

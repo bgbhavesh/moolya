@@ -182,6 +182,11 @@ let registrationSchema = `
         createdBy       :   String
     }
     
+     type emailVerification{
+          address  : String
+          verified  : Boolean
+    }
+    
     type RegistrationResponse{
         _id             :   String,
          status          :   String,
@@ -197,7 +202,11 @@ let registrationSchema = `
          allocation     : allocation
          transactionCreatedDate : String
          transactionUpdatedDate : String
+         emails  : [emailVerification]
     }
+    
+   
+    
     
     type RegistrationInfo{        
         _id             :   String,
@@ -243,7 +252,8 @@ let registrationSchema = `
         profileImage    :   String,
         transactionId   :   String
         assignedUserId    :   String,
-        createdBy       :   String
+        createdBy       :   String,
+        
     }
     
     type branchLocation{
@@ -427,6 +437,7 @@ let registrationSchema = `
          verifyMobileNumber(mobileNumber:String,otp:Int):response
          forgotPassword(email:String):response
          resetPasswords(token:String, password:String):response
+         createKYCDocument(registrationId:String,documentID:String,kycDocID:String,docTypeID:String):response
     }
     type Query{
         findRegistration(registrationId:String):Registration

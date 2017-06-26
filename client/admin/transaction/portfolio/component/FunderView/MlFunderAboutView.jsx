@@ -16,11 +16,10 @@ export default class MlFunderAboutView extends React.Component{
     this.fetchPortfolioDetails.bind(this);
     return this;
   }
-  componentDidMount()
-  {
-  }
+
   componentWillMount(){
-    this.fetchPortfolioDetails();
+    const resp = this.fetchPortfolioDetails();
+    return resp;
   }
   async fetchPortfolioDetails() {
     let that = this;

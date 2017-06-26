@@ -8,6 +8,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {addSubDomain} from '../actions/addSubDomainAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import MlLoader from '../../../../commons/components/loader/loader'
 class MlAddSubDomain extends React.Component {
   constructor(props) {
@@ -38,20 +39,24 @@ class MlAddSubDomain extends React.Component {
     console.log(val)
   }
 
-  async   createSubDomain()
-  {
-    let subdomainInfo = {
-      name: this.refs.name.value,
-      displayName: this.refs.displayName.value,
-      about: this.refs.about.value,
-      industryId:this.state.industry,
-      isActive: this.refs.isActive.checked,
-      // icon:this.refs.assetIcon.files
-    }
+  async   createSubDomain() {
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let subdomainInfo = {
+        name: this.refs.name.value,
+        displayName: this.refs.displayName.value,
+        about: this.refs.about.value,
+        industryId: this.state.industry,
+        isActive: this.refs.isActive.checked,
+        // icon:this.refs.assetIcon.files
+      }
 
-    const response = await addSubDomain(subdomainInfo)
-    toastr.success("SubDomain Created Successfully")
-    return response;
+      const response = await addSubDomain(subdomainInfo)
+      toastr.success("SubDomain Created Successfully")
+      return response;
+    }
   }
   componentDidMount()  {
     OnToggleSwitch(false,true);
@@ -89,12 +94,12 @@ class MlAddSubDomain extends React.Component {
             <div className="col-md-6 nopadding-left">
               <div className="form_bg">
                 <form>
-                  <div className="form-group">
-                    <input type="text" ref="name" placeholder="Name" className="form-control float-label"/>
+                  <div className="form-group mandatory">
+                    <input type="text" ref="name" placeholder="Name" className="form-control float-label" data-required={true} data-errMsg="Name is required"/>
                   </div>
                   <br className="clearfix"/>
-                  <div className="form-group">
-                    <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label"/>
+                  <div className="form-group mandatory">
+                    <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" data-required={true} data-errMsg="Display Name is required"/>
                   </div>
                 </form>
               </div>
@@ -103,7 +108,7 @@ class MlAddSubDomain extends React.Component {
               <div className="form_bg">
                 <form>
                   <div className="form-group">
-                    <Moolyaselect multiSelect={false} placeholder="Select Type Of Industry" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.industry} queryType={"graphql"} query={industriesquery} onSelect={this.optionsBySelectTypeOfIndustry.bind(this)} isDynamic={true}/>
+                    <Moolyaselect multiSelect={false} mandatory={true} ref="industry" placeholder="Select Type Of Industry" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.industry} queryType={"graphql"} query={industriesquery} onSelect={this.optionsBySelectTypeOfIndustry.bind(this)} isDynamic={true} data-required={true} data-errMsg="Industry Type is required"/>
                   </div>
                   <div className="form-group">
                     <textarea ref="about" placeholder="About" className="form-control float-label" id=""></textarea>

@@ -29,7 +29,6 @@ export default class MlAppCreateTeam extends React.Component{
       activityName:"",
       displayName:"",
       notes:"",
-      deliverables:"",
       isInternal:false,
       isExternal:false,
       serviceCard:"",
@@ -42,10 +41,11 @@ export default class MlAppCreateTeam extends React.Component{
       online:false,
       offline:false,
       responsePic:"",
-      editScreen: false
+      editScreen: false,
+      deliverable:[" "]
     }
     this.radioAction = this.radioAction.bind(this)
-    this.radioAction2 =  this.radioAction2.bind(this)
+    // this.radioAction2 =  this.radioAction2.bind(this)
     // this.conversation =  this.conversation.bind(this);
     this.saveDetails.bind(this);
     this.getDetails.bind(this)
@@ -64,50 +64,57 @@ export default class MlAppCreateTeam extends React.Component{
 
       const resp = await getActivityActionHandler(id);
       console.log(resp)
-      this.setState({data: resp})
-      this.setState({
-        activityName: resp.name, displayName: resp.displayName, hour: resp.duration.hours,
-        minute: resp.duration.minutes, isExternal: resp.isExternal,
-        isInternal: resp.isInternal, radioAction: resp.mode, serviceCard: resp.isServiceCardElligible,
-        notes: resp.note, deliverables: resp.deliverable[0], responsePic: resp.imageLink
-      })
-      let industries = [];
-      resp.industryTypes.map(function (indi) {
-        industries.push(indi)
-      })
-      this.setState({selectedIndustryType: industries})
-      if (this.state.radioAction === "online") {
-        this.setState({online: true, offline: false})
-      } else {
-        this.setState({online: false, offline: true})
-      }
-      if (resp.conversation) {
+      if(resp) {
+        this.setState({data: resp})
         this.setState({
-          isVideo: resp.conversation.isVideo,
-          isAudio: resp.conversation.isAudio,
-          isMeetUp: resp.conversation.isMeetup
+          activityName: resp.name, displayName: resp.displayName, hour: resp.duration.hours,
+          minute: resp.duration.minutes, isExternal: resp.isExternal,
+          isInternal: resp.isInternal, radioAction: resp.mode, serviceCard: resp.isServiceCardElligible,
+          notes: resp.note, responsePic: resp.imageLink
         })
-        let temp = []
-        if (this.state.isMeetUp & this.state.isAudio) {
-          temp.push("Meetup", "Audio")
-        } else if (this.state.isMeetUp & this.state.isVideo) {
-          temp.push("Meetup")
-          temp.push("Video")
-        } else if (this.state.isAudio & this.state.isVideo) {
-          temp.push("Audio", "Video")
-        } else if (this.state.isAudio & this.state.isVideo & this.state.isMeetUp) {
-          temp.push("Audio", "Video", "Meetup")
+        let industries = [];
+        resp.industryTypes.map(function (indi) {
+          industries.push(indi)
+        })
+        let deli = [];
+        resp.deliverable.map(function(del){
+          deli.push(del)
+        })
+        this.setState({deliverable:deli})
+        this.setState({selectedIndustryType: industries})
+        if (this.state.radioAction === "online") {
+          this.setState({online: true, offline: false})
+        } else {
+          this.setState({online: false, offline: true})
         }
-        else if (this.state.isVideo) {
-          temp.push("Video")
-        } else if (this.state.isAudio) {
-          temp.push("Audio")
-        } else if (this.state.isMeetUp) {
-          temp.push("Meetup")
+        if (resp.conversation) {
+          this.setState({
+            isVideo: resp.conversation.isVideo,
+            isAudio: resp.conversation.isAudio,
+            isMeetUp: resp.conversation.isMeetUp
+          })
+          let temp = []
+          if (this.state.isMeetUp & this.state.isAudio) {
+            temp.push("Meetup", "Audio")
+          } else if (this.state.isMeetUp & this.state.isVideo) {
+            temp.push("Meetup")
+            temp.push("Video")
+          } else if (this.state.isAudio & this.state.isVideo) {
+            temp.push("Audio", "Video")
+          } else if (this.state.isAudio & this.state.isVideo & this.state.isMeetUp) {
+            temp.push("Audio", "Video", "Meetup")
+          }
+          else if (this.state.isVideo) {
+            temp.push("Video")
+          } else if (this.state.isAudio) {
+            temp.push("Audio")
+          } else if (this.state.isMeetUp) {
+            temp.push("Meetup")
+          }
+          this.setState({conversationType: temp})
         }
-        this.setState({conversationType: temp})
       }
-      console.log(this.state.activityName)
+      // console.log(this.state.activityName)
       return resp;
     }
   }
@@ -121,17 +128,15 @@ export default class MlAppCreateTeam extends React.Component{
       this.setState({offline:true, online:false})
     }
   }
-
-  radioAction2(e) {
-    let value = e.target.value;
-    if(value === "Internal"){
-      this.setState({isInternal:true, isExternal:false})
-    }
-    else if(value === "External"){
-      this.setState({isExternal:true, isInternal: false})
-    }
-  }
-
+  //
+  // radioAction2(e) {
+  //   this.setState({radioAction: value})
+  //   if(value === "online"){
+  //     this.setState({online:true, offline:false})
+  //   } else {
+  //     this.setState({offline:true, online:false})
+  //   }
+  // }
 
   SelectIndustry(value){
     this.setState({selectedIndustryType:value})
@@ -144,7 +149,8 @@ export default class MlAppCreateTeam extends React.Component{
       this.setState({"hour":0});
     }
   }
-updateMinutes(e){
+
+  updateMinutes(e){
   if(e.currentTarget.value >= 0) {
     this.setState({"minute":e.currentTarget.value});
   } else {
@@ -166,16 +172,21 @@ updateMinutes(e){
         let notesValue = e.target.value;
         this.setState({notes:notesValue})
         break;
-      case "Deliverables":
-        let deliverablesValue= e.target.value;
-        this.setState({deliverables:deliverablesValue})
-        break;
     }
   }
 
-  checkBoxHandler(e){
-    let value = e.target.checked;
-    this.setState({serviceCard:value})
+  checkBoxHandler(type,e){
+    switch(type){
+      case "ServiceCard":
+        let service = e.target.checked;
+        this.setState({serviceCard:service})
+      case "Internal":
+        let internal = e.target.checked;
+        this.setState({isInternal:internal})
+      case "External":
+        let external = e.target.checked;
+        this.setState({isExternal:external})
+    }
   }
 
   async onFileUpload() {
@@ -210,20 +221,22 @@ updateMinutes(e){
 
   conversation(val) {
     let that = this
-    let temp =[]
+    var temp = [];
     val.map(function(label){
       temp.push(label.value)
     })
     that.setState({conversationType:temp})
-    val.map(function(label) {
-      if (label.value === "Video") {
-        that.setState({isVideo: true, isAudio:false, isMeetUp:false })
-      } else if (label.value === "Audio") {
-        that.setState({isAudio: true, isVideo:false, isMeetUp:false })
-      } else if(label.value === "MeetUp") {
-        that.setState({isMeetUp: true,isVideo:false, isAudio:false })
-      }
-    })
+      temp.map(function(label) {
+        if (label === "Video") {
+          that.setState({isVideo: true })
+        } else if (label === "Audio") {
+          that.setState({isAudio: true})
+        } else if(label === "MeetUp") {
+          that.setState({isMeetUp: true })
+        }
+      })
+
+
   }
 
   async saveDetails(){
@@ -237,7 +250,7 @@ updateMinutes(e){
       isExternal:this.state.isExternal,
       mode:this.state.radioAction,
       note:this.state.notes,
-      deliverable:this.state.deliverables,
+      deliverable:this.state.deliverable,
       industryTypes:this.state.selectedIndustryType,
       duration:{
         hours:this.state.hour,
@@ -246,7 +259,7 @@ updateMinutes(e){
       conversation:{
         isVideo:this.state.isVideo,
         isAudio:this.state.isAudio,
-        isMeetUp:this.state.isMeetup
+        isMeetUp:this.state.isMeetUp
       },
       imageLink:this.state.responsePic,
       isServiceCardElligible:this.state.serviceCard,
@@ -273,6 +286,29 @@ updateMinutes(e){
     this.getDetails();
   }
 
+    addDeliverables() {
+    let deli = this.state.deliverable || []
+      deli.push("")
+      this.setState({deliverable:deli})
+    }
+
+  removeDeliverables(index,e) {
+    let deli = this.state.deliverable || []
+    deli.splice(index,1)
+    this.setState({
+      deliverable: deli
+    })
+  }
+
+
+   deliverableData(index,e) {
+    let deli = this.state.deliverable
+    deli[index] = e.target.value;
+    this.setState({
+      deliverable: deli
+    })
+  }
+
 
   componentDidMount()
   {
@@ -281,12 +317,24 @@ updateMinutes(e){
     $('.step_form_wrap').height(WinHeight-(310+$('.admin_header').outerHeight(true)));
   }
   render(){
-
+let that = this;
     let industryTypeQuery = gql`
     query{
     data:fetchIndustries{label:industryName,value:industryName}
     }
     `
+    const deliverables = that.state.deliverable || []
+   const deli =  deliverables.map(function(data, index){
+
+    return (
+      <div className="panel panel-default">
+        <div className="panel-heading">Deliverables <span className="see-more pull-right"><FontAwesome name='plus-square' onClick={that.addDeliverables.bind(that)} /><FontAwesome name='minus-square' onClick={that.removeDeliverables.bind(that,index)} /></span></div>
+        <div className="panel-body">
+          <textarea className="form-control" value={data} onChange={that.deliverableData.bind(that,index)}></textarea>
+        </div>
+      </div>
+    )
+   })
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
@@ -298,10 +346,10 @@ updateMinutes(e){
                 </div>
                 <div className="form-group">
                   <div className="input_types">
-                    <input id="radio1" type="radio" name="radio" onChange={this.radioAction2} checked={this.state.isInternal} value="Internal"/><label htmlFor="radio1"><span><span></span></span>Internal</label>
+                    <input id="radio1" type="checkbox" name="radio" onChange={this.checkBoxHandler.bind(this, "Internal")} checked={this.state.isInternal} value="Internal"/><label htmlFor="radio1"><span><span></span></span>Internal</label>
                   </div>
                   <div className="input_types">
-                    <input id="radio2" type="radio" name="radio" onChange={this.radioAction2} checked={this.state.isExternal} value="External"/><label htmlFor="radio2"><span><span></span></span>External</label>
+                    <input id="radio2" type="checkbox" name="radio" onChange={this.checkBoxHandler.bind(this, "External")} checked={this.state.isExternal} value="External"/><label htmlFor="radio2"><span><span></span></span>External</label>
                   </div>
                   <br className="brclear"/>
                 </div>
@@ -360,7 +408,7 @@ updateMinutes(e){
                 </div>
                 <div className="form-group">
                   <div className="input_types">
-                    <input id="check1" type="checkbox" name="check1" value="1" checked={this.state.serviceCard} onChange={this.checkBoxHandler.bind(this)}/><label ><span><span></span></span>Eligible for service card</label>
+                    <input id="check1" type="checkbox" name="check1" value="1" checked={this.state.serviceCard} onChange={this.checkBoxHandler.bind(this, "ServiceCard")}/><label ><span><span></span></span>Eligible for service card</label>
                   </div>
                   <br className="brclear"/>
                 </div>
@@ -368,12 +416,7 @@ updateMinutes(e){
             </div>
           </div>
           <br className="brclear"/>
-          <div className="panel panel-default">
-            <div className="panel-heading">Deliverables</div>
-            <div className="panel-body">
-              <textarea className="form-control" value={this.state.deliverables} onChange={this.textFieldSaves.bind(this,"Deliverables")}></textarea>
-            </div>
-          </div>
+          {deli}
         </ScrollArea>
         <div className="ml_btn" style={{'textAlign':'center'}}>
           <div className="save_btn" onClick={this.saveDetails.bind(this)}>Save</div> <div className="cancel_btn">Cancel</div>

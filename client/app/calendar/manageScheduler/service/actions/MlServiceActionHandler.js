@@ -64,15 +64,27 @@ export async function fetchServiceActionHandler (serviceId) {
           percentage
           derivedAmount
         }
+        state{
+          id
+          name
+        }
+        city{
+          id
+          name
+        }
+        community{
+          id
+          name
+        }
         createdAt
         updatedAt
       }
       }
     `,
-    forceFetch:true,
     variables: {
       serviceId
-    }
+    },
+    forceFetch:true
   });
   const service = result.data.fetchService;
   return service
@@ -95,7 +107,6 @@ export async function updateServiceActionHandler(serviceId,Services) {
       Services
     }
   });
-  console.log(result)
   const teamMembers = result.data.updateService;
   return teamMembers
 }
@@ -120,3 +131,24 @@ export async function fetchServicesActionHandler (profileId) {
   return services;
 }
 
+
+
+export async function fetchProfileActionHandler (profileId) {
+  const result = await appClient.query({
+    query: gql`
+    query ($profileId: String) {
+      getUserProfile(profileId: $profileId) {
+        clusterName
+        clusterId
+        countryId
+  }
+}
+    `,
+    forceFetch:true,
+    variables: {
+      profileId
+    }
+  });
+  const profile = result.data.getUserProfile;
+  return profile;
+}

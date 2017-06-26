@@ -38,14 +38,14 @@ _id: String
     type Conversation {
       isAudio: Boolean
       isVideo: Boolean
-      isMeetup: Boolean
+      isMeetUp: Boolean
     }
 
-    type Payment {
+    type ActivityPayment {
       amount: Int
       isDiscount: Boolean
-      discountAmount: Int
-      discountPercentage: Int
+      discountType: String
+      discountValue: Int
       isTaxInclusive: Boolean
       isPromoCodeApplicable: Boolean
     }
@@ -76,7 +76,7 @@ _id: String
       imageLink: String
       duration: Duration
       deliverable: [String]
-      payment: Payment
+      payment: ActivityPayment
       facilitationCharge: FacilitationCharge
       teams: [Teams]
       createdAt: Date
@@ -99,17 +99,17 @@ _id: String
       derivedAmount: Int
     }
 
-    input conversation {
+    input conversations {
       isAudio: Boolean
       isVideo: Boolean
-      isMeetup: Boolean
+      isMeetUp: Boolean
     }
     input activityPayment {
-      amount: Int,
-      isDiscount: Boolean,
-      discountPercentage: Int,
-      discountAmount: Int,
-      isTaxInclusive: Boolean,
+      amount: Int
+      isDiscount: Boolean
+      discountType: String
+      discountValue: Int
+      isTaxInclusive: Boolean
       isPromoCodeApplicable: Boolean
     }
     input teams {
@@ -138,7 +138,7 @@ _id: String
       isExternal: Boolean
       mode: String
       isServiceCardElligible: Boolean
-      conversation: conversation
+      conversation: conversations
       industryTypes:[String]
       note: String
       imageLink: String
@@ -152,7 +152,7 @@ _id: String
     }
 
     type Query {
-        fetchActivities(profileId:String):[Activity]
+        fetchActivities(profileId:String, isInternal: Boolean, isExternal: Boolean):[Activity]
         fetchActivity(activityId:String):Activity
         getTeamMembers:[AvailableCommunities]
         getBranchDetails:[BranchType]

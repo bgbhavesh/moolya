@@ -109,13 +109,12 @@ export default class MlAppInternalTaskItem extends React.Component {
                   <div className="panel panel-default">
                     <div className="panel-heading"> Date & Time: {task.createdAt&&moment(task.createdAt).format('DD-MM-YYYY hh:mm:ss')} </div>
                     <div className="panel-body">
-                      <p>Cleint: { task.client }</p>
-                      <p>Comunity: {task.community.name}</p>
+                      <p>Client: { task.client }</p>
+                      <p>Community: {task.community.name}</p>
                     </div>
                   </div>
                   <div className="panel panel-default">
-                    <div className="panel-heading"> Attendies </div>
-
+                    <div className="panel-heading"> Attendees </div>
                     <div className="panel-body">
                       <ul className="users_list well well-sm">
                         {task.userInfo.map(function(user, index){

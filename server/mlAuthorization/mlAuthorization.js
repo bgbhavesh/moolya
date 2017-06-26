@@ -197,7 +197,8 @@ class MlAuthorization
           case 'USERS':
           case 'REGISTRATION':
           case 'PORTFOLIO':
-          case 'TEMPLATEASSIGNMENT':{
+          case 'TEMPLATEASSIGNMENT':
+          case "INTERNALREQUESTS":{
             return this.validateChapterSubChapter(roleDetails, variables);
           }
           break;
@@ -223,6 +224,10 @@ class MlAuthorization
               return;
 
             return {clusterId:template.templateclusterId, chapterId:template.templatechapterId, subChapterId:template.templatesubChapterId, communityId:template.templateCommunityId}
+          }
+          break;
+          case 'INTERNALREQUESTS':{
+            return this.getInternalRequestContextDetails(variables, actionName)
           }
           break;
         }
@@ -265,6 +270,12 @@ class MlAuthorization
           return
 
         return registration.registrationInfo
+      }
+
+      getInternalRequestContextDetails(variables, actionName){
+        if(actionName == 'CREATE'){
+            return {clusterId:variables.requests['cluster'], chapterId:variables.requests['chapter'], subChapterId:variables.requests['subChapter'], communityId:variables.requests['community']};
+        }
       }
 
     // validateDataContext(roleDetails, moduleName, actionName, req, isContextSpecSearch)

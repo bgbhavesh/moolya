@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import MlAppScheduleHead from "../../commons/components/MlAppScheduleHead";
-import {fetchActivitiesActionHandler} from '../actions/fetchActivities';
+import {fetchActivitiesActionHandler} from '../actions/activityActionHandler';
 
 export default class MlAppActivityList extends React.Component{
 

@@ -81,6 +81,9 @@ orderNumberGenService = (function(){
     createInteractionSCcode: function (scDef) {
       scDef.code = "MLINT"+ FormatUtil.leadingZeros(getNextSequence("interactionSC"), 8);
     },
+    createBspokeOfficeSCcode: function (scDef) {
+      scDef.code = "ML-OFF-"+ FormatUtil.leadingZeros(getNextSequence("bspoke"), 8);
+    },
     generateRandomPassword:function(){
       var randomId = function makeid(){
         var text = "";

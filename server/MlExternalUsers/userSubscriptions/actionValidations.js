@@ -8,12 +8,12 @@ class MlActionValidationService{
     constructor(){
     }
 
-    validateUserActions(userId, resourceName, actionName, interactionType){
+    validateUserActions(userId, resourceName, userAction, interactionType){
       var defaultProfile = new MlUserContext().userProfileDetails(userId);
       if(defaultProfile)
         return false;
 
-      switch (actionName){
+      switch (userAction){
         case 'ADD':{
           return this.validateSCInteractions(userId, defaultProfile, resourceName, actionName, interactionType)
         }

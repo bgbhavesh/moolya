@@ -46,7 +46,8 @@ export default class MlAppNewSpokePerson extends React.Component {
       country: this.refs.country.value,
       zipCode: this.refs.zipCode.value,
       about: this.refs.about.value,
-      availableCommunities: community
+      availableCommunities: community,
+      isBeSpoke:true
     }
     let data = myOffice;
     for (var propName in data) {

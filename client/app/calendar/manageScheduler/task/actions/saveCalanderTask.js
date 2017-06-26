@@ -24,7 +24,7 @@ export async function createTaskActionHandler(details) {
   return resp;
 }
 
-export async function createSessionActionHandler(taskId, details) {
+export async function updateTaskActionHandler(taskId, details) {
   const result = await appClient.mutate({
     mutation: gql`
           mutation  ($taskDetails:task, $taskId: String){
@@ -72,6 +72,14 @@ export async function findTaskActionHandler(taskId) {
                 info
                 isMandatory
               }
+              payment{
+                amount
+                isDiscount
+                discountType
+                discountValue
+                isPromoCodeApplicable
+                derivedAmount
+              }
               isServiceCardEligible
               sessionFrequency
               isActive
@@ -86,7 +94,7 @@ export async function findTaskActionHandler(taskId) {
   var resp = result.data.fetchTask;
   let data = _.omit(resp, '__typename')
   data.duration = _.omit(data.duration, '__typename')
-  // data.termsAndCondition = _.omit(data.termsAndCondition, '__typename')
+  data.payment = _.omit(data.payment, '__typename')
   let sessionArray = []
   _.each(data.session,function (item,say) {
     let value = _.omit(item, '__typename')

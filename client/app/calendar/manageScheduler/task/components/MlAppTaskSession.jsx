@@ -163,7 +163,7 @@ export default class MlAppTaskSession extends Component {
             return (
               <div className="panel panel-default" key={id}>
                 <div className="panel-heading">
-                  <div className="col-md-3 nopadding-left">Section {num}</div>
+                  <div className="col-md-3 nopadding-left">Session {num}</div>
                   <div className="col-md-3">
                     <div style={{'marginTop': '-4px'}}>
                       <label>Duration: &nbsp; <input type="Number" key={session.duration ? 'snotLoadedYetHrs' : 'sloadedHrs'} className="form-control inline_input" name="hours" value={session.duration?session.duration.hours:0} onChange={that.handelBlur.bind(that,id)} min="0"/> Hours

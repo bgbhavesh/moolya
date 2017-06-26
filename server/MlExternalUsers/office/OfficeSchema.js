@@ -82,7 +82,8 @@ let myOfficeSchema = `
         availableCommunities:[AvailableCommunities]
         isActive:Boolean,
         isActivated:Boolean,
-        isExpired:Boolean
+        isExpired:Boolean 
+        isRegistrationApproved : Boolean
     }
     
     type OfficeMembersWithUserId {

@@ -15,10 +15,10 @@
    type Payment {
      amount: Int
      isDiscount: Boolean
-     discountAmount: Boolean
-     discountPercentage: Int
-     isTaxInclusive: Boolean
+     discountType : String
+     discountValue : Int
      isPromoCodeApplicable: Boolean
+     derivedAmount :Int
    }
 
    type FacilitationCharge {
@@ -73,10 +73,10 @@
    input payment {
        amount: Int
        isDiscount: Boolean
-       discountAmount: Boolean
-       discountPercentage: Int
-       isTaxInclusive: Boolean
+       discountType : String
+       discountValue : Int
        isPromoCodeApplicable: Boolean
+       derivedAmount : Int
    }
    input facilitationCharge {
         amount: Int

@@ -1202,13 +1202,15 @@ MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) 
   let kycCategoryDetails;
   let docTypeDetails;
   if(args.documentID){
-     documentDetails = MlDocumentMapping.findOne({"_id":args.documentID});
+     documentDetails = MlDocumentMapping.findOne({"_id":args.documentID}) || {};
+  }else{
+    return
   }
-  kycDocumentObject.documentId = args.documentID;
-  kycDocumentObject.documentDisplayName = documentDetails.documentDisplayName;
+  kycDocumentObject.documentId = args.documentID?args.documentID:"";
+  kycDocumentObject.documentDisplayName = documentDetails.documentDisplayName?documentDetails.documentDisplayName:"";
 
-  kycDocumentObject.documentName = documentDetails.documentName;
-  kycDocumentObject.allowableMaxSize = documentDetails.allowableMaxSize;
+  kycDocumentObject.documentName = documentDetails.documentName?documentDetails.documentName:"";
+  kycDocumentObject.allowableMaxSize = documentDetails.allowableMaxSize?documentDetails.allowableMaxSize:"";
   kycDocumentObject.allowableFormat = []
   if(documentDetails.allowableFormat){
     let documentFormat = MlDocumentFormats.find({"_id":{$in: documentDetails.allowableFormat}}).fetch();
@@ -1220,15 +1222,15 @@ MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) 
 
   }
   if(args.kycDocID){
-    kycCategoryDetails = MlDocumentCategories.findOne({"_id":args.kycDocID});
+    kycCategoryDetails = MlDocumentCategories.findOne({"_id":args.kycDocID}) || {};
   }
   if(args.docTypeID){
-    docTypeDetails = MlDocumentTypes.findOne({"_id":args.docTypeID});
+    docTypeDetails = MlDocumentTypes.findOne({"_id":args.docTypeID}) || {};
   }
-  kycDocumentObject.kycCategoryId = kycCategoryDetails._id
-  kycDocumentObject.kycCategoryName = kycCategoryDetails.docCategoryDisplayName
-  kycDocumentObject.docTypeId = docTypeDetails._id
-  kycDocumentObject.docTypeName = docTypeDetails.docTypeDisplayName
+  kycDocumentObject.kycCategoryId = kycCategoryDetails._id?kycCategoryDetails._id:"";
+  kycDocumentObject.kycCategoryName = kycCategoryDetails.docCategoryDisplayName?kycCategoryDetails.docCategoryDisplayName:"";
+  kycDocumentObject.docTypeId = docTypeDetails._id?docTypeDetails._id:"";
+  kycDocumentObject.docTypeName = docTypeDetails.docTypeDisplayName?docTypeDetails.docTypeDisplayName:"";
   kycDocumentObject.isActive= true
   kycDocumentObject.isMandatory= false
   kycDocumentObject.status= "Awaiting upload"
@@ -1258,6 +1260,10 @@ MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) 
       kycDocuments: {$exists: false}
     }, {'kycDocuments': kycDocumentObject}, {$set: true}, context)
   }
+  if(id){
+    return new MlRespPayload().successPayload("Document created successfully", 200);
+  }else{
+    return new MlRespPayload().errorPayload("Kindly enter all manditory fields",403);
+  }
 
-  return id;
 }

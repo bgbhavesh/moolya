@@ -20,6 +20,7 @@ import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import {createKYCDocument} from '../actions/createKYCDocumentAction'
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 export default class Step5 extends React.Component {
   constructor(props) {
     super(props);
@@ -361,16 +362,25 @@ export default class Step5 extends React.Component {
     this.setState({kycDocument:val})
   }
   async onSaveAction(key){
-    let documentID = this.state.kycDocument?this.state.kycDocument:null;
-    let kycDocID = this.state.kycCategory?this.state.kycCategory:null;
-    let docTypeID = this.state.documentType?this.state.documentType:null;
-    let registrationId  =  this.props.registrationData&&this.props.registrationData._id?this.props.registrationData._id:""
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let documentID = this.state.kycDocument ? this.state.kycDocument : null;
+      let kycDocID = this.state.kycCategory ? this.state.kycCategory : null;
+      let docTypeID = this.state.documentType ? this.state.documentType : null;
+      let registrationId = this.props.registrationData && this.props.registrationData._id ? this.props.registrationData._id : ""
 
 
-    const response = await createKYCDocument(registrationId,documentID,kycDocID,docTypeID);
-    if(response){
-      this.props.getRegistrationKYCDetails();
-      this.setState({[key] : !(this.state[key])})
+      const response = await createKYCDocument(registrationId, documentID, kycDocID, docTypeID);
+
+      if (response && response.success) {
+        toastr.success(response.result);
+        this.props.getRegistrationKYCDetails();
+        this.setState({[key]: !(this.state[key])})
+      } else {
+        toastr.error("Unable to create document,enter all manditory fields");
+      }
     }
   }
 

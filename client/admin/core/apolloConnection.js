@@ -60,6 +60,9 @@ const createMeteorNetworkInterface = (customNetworkInterfaceConfig = {}) => {
             if(data && data.unAuthorized){
                 FlowRouter.go('/unauthorize')
             }
+            else if(data && data.invalidToken){
+              FlowRouter.go('/login')
+            }
             else
               next();
           });

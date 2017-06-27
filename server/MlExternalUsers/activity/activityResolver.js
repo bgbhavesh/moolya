@@ -20,37 +20,37 @@ MlResolver.MlQueryResolver['fetchActivities'] = (obj, args, context, info) => {
 
   return result;
 }
-
-MlResolver.MlQueryResolver['getTeamMembers'] = (obj, args, context, info) => {
-let temp = [];
-let temp1 = [];
-  let result = mlDBController.find('MlOffice', {userId:context.userId} , context).fetch()
-
-  result.map(function(communities){
-    communities.availableCommunities.id = communities._id
-    temp.push(communities.availableCommunities)
-  })
-  temp.map(function(community){
-    community.map(function(attributes){
-      attributes.id = community.id
-      temp1.push(attributes)
-    })
-  })
-
-  return temp1
-}
-
-MlResolver.MlQueryResolver['getTeamUsers'] = (obj, args, context, info) => {
-
-  let result = mlDBController.find('MlOfficeMembers', {userId:context.userId, officeId:args.Attributes.officeId, communityType:args.Attributes.communityType} , context).fetch()
-  return result;
-}
-
-MlResolver.MlQueryResolver['getBranchDetails'] = (obj, args, context, info) => {
-
-  let result = mlDBController.find('MlOffice', {userId:context.userId} , context).fetch()
-  return result;
-}
+//
+// MlResolver.MlQueryResolver['getTeamMembers'] = (obj, args, context, info) => {
+// let temp = [];
+// let temp1 = [];
+//   let result = mlDBController.find('MlOffice', {userId:context.userId} , context).fetch()
+//
+//   result.map(function(communities){
+//     communities.availableCommunities.id = communities._id
+//     temp.push(communities.availableCommunities)
+//   })
+//   temp.map(function(community){
+//     community.map(function(attributes){
+//       attributes.id = community.id
+//       temp1.push(attributes)
+//     })
+//   })
+//
+//   return temp1
+// }
+//
+// MlResolver.MlQueryResolver['getTeamUsers'] = (obj, args, context, info) => {
+//
+//   let result = mlDBController.find('MlOfficeMembers', {userId:context.userId, officeId:args.Attributes.officeId, communityType:args.Attributes.communityType} , context).fetch()
+//   return result;
+// }
+//
+// MlResolver.MlQueryResolver['getBranchDetails'] = (obj, args, context, info) => {
+//
+//   let result = mlDBController.find('MlOffice', {userId:context.userId} , context).fetch()
+//   return result;
+// }
 
 MlResolver.MlQueryResolver['fetchActivity'] = (obj, args, context, info) => {
   let result = mlDBController.findOne('MlActivity', {_id:args.activityId} , context);
@@ -71,6 +71,7 @@ MlResolver.MlMutationResolver['createActivity'] = (obj, args, context, info) => 
 }
 
 MlResolver.MlMutationResolver['updateActivity'] = (obj, args, context, info) => {
+  args.Details.userId = context.userId
   args.Details.updatedAt = new Date();
   let result1 = mlDBController.update('MlActivity', {_id:args.activityId}, args.Details, {'$set':1}, context);
   if(result1){

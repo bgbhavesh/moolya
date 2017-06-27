@@ -16,6 +16,7 @@ let BackEndUser = `
         latitude:Float,
         longitude:Float,
         name: String,
+        clusterName:String
         communityCode : String
     }
     

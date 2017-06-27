@@ -24,6 +24,11 @@ let chapterSchema = `
         status:status
     }
     
+    type status{
+      code: String
+      description: String
+    }
+    
     input chapterObject{
         _id:String,
         clusterId:String,

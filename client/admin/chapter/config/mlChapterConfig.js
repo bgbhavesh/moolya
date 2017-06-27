@@ -105,6 +105,10 @@ const mlChapterListConfig=new MlViewer.View({
                               longitude
                               showOnMap
                               isActive
+                              status{
+                                code
+                                description
+                              }
                           }
                       }
               }

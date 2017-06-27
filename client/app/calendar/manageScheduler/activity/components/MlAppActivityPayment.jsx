@@ -33,25 +33,26 @@ componentWillMount() {
  this.getDetails()
 }
 
-async getDetails() {
+async  getDetails() {
   let id = FlowRouter.getQueryParam('id')
   const resp = await getActivityActionHandler(id)
   if(resp) {
     this.setState({amountToPay:resp.payment.amount,discountValue:resp.payment.discountValue,
       discountType:resp.payment.discountType,status:resp.payment.isTaxInclusive,
-      derivedValue:resp.facilitationCharge.derivedAmount
+      derivedValue:resp.facilitationCharge.derivedAmount, discount: !(resp.payment.isDiscount),
+      promo: !(resp.payment.isPromoCodeApplicable)
     })
-    if(resp.payment.isDiscount) {
-      this.setState({discount: false})
-    } else {
-      this.setState({discount: true})
-    }
-
-    if(resp.payment.isPromoCodeApplicable) {
-      this.setState({promo: false})
-    } else {
-      this.setState({promo: true})
-    }
+    // if(resp.payment.isDiscount) {
+    //   this.setState({discount: false})
+    // } else {
+    //   this.setState({discount: true})
+    // }
+    //
+    // if(resp.payment.isPromoCodeApplicable) {
+    //   this.setState({promo: false})
+    // } else {
+    //   this.setState({promo: true})
+    // }
 
   }
 
@@ -317,7 +318,7 @@ async getDetails() {
               <div className="form-group switch_wrap switch_names inline_switch">
                 <label>Is Eligible for discount</label>
                 <span className="state_label">Yes</span><label className="switch nocolor-switch">
-                <input type="checkbox" defaultChecked={this.state.discount} onChange={this.discountEligibility.bind(this)} />
+                <input type="checkbox" checked={this.state.discount} onChange={this.discountEligibility.bind(this)} />
                 <div className="slider"></div>
               </label>
                 <span className="state_label acLabel">No</span>
@@ -344,7 +345,7 @@ async getDetails() {
               <div className="form-group switch_wrap switch_names inline_switch">
                 <label>Is Applicable for PROMOCODE</label>
                 <span className="state_label">Yes</span><label className="switch nocolor-switch">
-                <input type="checkbox" defaultChecked={this.state.promo} onChange={this.promoCode.bind(this)}/>
+                <input type="checkbox" checked={this.state.promo} onChange={this.promoCode.bind(this)}/>
                 <div className="slider"></div>
               </label>
                 <span className="state_label acLabel">No</span>

@@ -416,6 +416,16 @@ if(Meteor.isServer){
                 "image" : "",
                 "subMenusId":"transaction_Registration",
                 //"subMenuMappingId":"transaction_registration_create"
+              },
+              {
+                "link" : "/admin/transactions/rejectedRegistrations",
+                "name" : "Reject",
+                "uniqueId" : "transaction_registration_reject",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "subMenusId":"transaction_Registration",
+                //"subMenuMappingId":"transaction_registration_create"
               }
             ]
           },

@@ -225,3 +225,61 @@ export async function findCountryCode(clusterId) {
 
 }
 
+export async function documentTypesActionHandler() {
+
+  const result = await client.query({
+    query: gql`query{  
+      fetchDocumentsType{
+        docTypeName 
+        docTypeDisplayName 
+        about 
+        _id 
+        isActive 
+      }  
+    }`
+  });
+  const id = result.data.fetchDocumentsType;
+  return id
+
+}
+
+
+/*
+export async function kycDocumentsActionHandler(chapters,clusters,subChapters,community,kyc,documentType,displayAllOption) {
+
+  const result = await client.query({
+    query: gql`query($chapters:[String],$clusters:[String],$subChapters:[String],$community:String,$kyc:String,$documentType:String,$displayAllOption:Boolean){
+        fetchKYCDocuments(chapters:$chapters,clusters:$clusters,subChapters:$subChapters,community:$community,kyc:$kyc,documentType:$documentType,displayAllOption:$displayAllOption) {
+
+            kycCategoryId
+            kycCategoryName
+            docTypeId
+            docTypeName
+            documentId
+            documentDisplayName
+            documentName
+            isMandatory
+            isActive
+            inputLength
+            allowableMaxSize
+            allowableFormat
+            status
+        }
+    }`,
+    variables: {
+      chapters: chapters,
+      clusters:clusters,
+      subChapters:subChapters,
+      community:community,
+      kyc:kyc,
+      documentType:documentType,
+      displayAllOption:false
+    },
+    forceFetch: true
+  });
+  const id = result.data.fetchKYCDocuments;
+  return id
+
+}
+*/
+

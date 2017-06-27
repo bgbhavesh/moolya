@@ -34,11 +34,19 @@ let myOfficeSchema = `
         communityName:String,
         communityId:String,
         userCount:Int
+        id: String
+
     }
-    
+      
     type LocationCoordinates { 
       lat : Float
       lang : Float
+    }
+    
+    
+    type BranchType{
+    branchType: String
+    _id: String
     }
     
     type MyOffice{
@@ -84,6 +92,11 @@ let myOfficeSchema = `
         isActivated:Boolean,
         isExpired:Boolean 
         isRegistrationApproved : Boolean
+    }
+    
+     type TeamUsers {
+      firstName: String
+      name: String
     }
     
     type OfficeMembersWithUserId {
@@ -167,6 +180,9 @@ let myOfficeSchema = `
         fetchOfficeMembers(officeId:String, isPrincipal:Boolean):[OfficeMembers]
         fetchAllOfficeMembersWithUserId:[OfficeMembersWithUserId]
         findOfficeDetail(officeId:String):response
+        getTeamUsers(Attributes:TeamName):[TeamUsers]
+        getTeamMembers:[AvailableCommunities]
+        getBranchDetails:[BranchType]
     }
     
     type Mutation{       

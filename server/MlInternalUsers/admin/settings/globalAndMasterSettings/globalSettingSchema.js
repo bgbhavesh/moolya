@@ -112,6 +112,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],GlobalSettingsSchema
 let supportedApi = [
     {api:'fetchGlobalSettings', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true},
     {api:'updateGlobalSetting', actionName:'UPDATE', moduleName:"GLOBALSETTINGS"},
+    {api:'findTimeZones', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true},
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

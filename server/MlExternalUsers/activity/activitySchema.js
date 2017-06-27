@@ -154,10 +154,7 @@ _id: String
     type Query {
         fetchActivities(profileId:String, isInternal: Boolean, isExternal: Boolean):[Activity]
         fetchActivity(activityId:String):Activity
-        getTeamMembers:[AvailableCommunities]
-        getBranchDetails:[BranchType]
-        getTeamUsers(Attributes:TeamName):[TeamUsers]
-        
+              
     }
 
     type Mutation {

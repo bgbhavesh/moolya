@@ -3,18 +3,19 @@ import MlRespPayload from "../../../../commons/mlPayload";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 
 var _ = require('lodash');
-var defaultModules = [
-  {moduleName:"CHAPTER", actions:[{actionId:"READ", actionCode:"READ"}]},
-  {moduleName:"SUBCHAPTER", actions:[{actionId:"READ", actionCode:"READ"}]},
-  {moduleName:"COMMUNITY", actions:[{actionId:"READ", actionCode:"READ"}]},
-  {moduleName:"INTERNALREQUESTS", actions:[{actionId:"CREATE", actionCode:"CREATE"}, {actionId:"READ", actionCode:"READ"}, {actionId:"UPDATE", actionCode:"UPDATE"}]}];
-
 MlResolver.MlQueryResolver['fetchRole'] = (obj, args, context, info) => {
   // return MlRoles.findOne({name});
   return mlDBController.findOne('MlRoles', {name}, context)
 }
 
 MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
+  var defaultModules = [
+    {moduleName:"CHAPTER", actions:[{actionId:"READ", actionCode:"READ"}]},
+    {moduleName:"SUBCHAPTER", actions:[{actionId:"READ", actionCode:"READ"}]},
+    {moduleName:"COMMUNITY", actions:[{actionId:"READ", actionCode:"READ"}]},
+    {moduleName:"INTERNALREQUESTS", actions:[{actionId:"CREATE", actionCode:"CREATE"}, {actionId:"READ", actionCode:"READ"}, {actionId:"UPDATE", actionCode:"UPDATE"}]}];
+
+
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
     let code = 401;

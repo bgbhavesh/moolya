@@ -1258,7 +1258,7 @@ MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) 
     id = mlDBController.update('MlRegistration', {
       _id: args.registrationId,
       kycDocuments: {$exists: false}
-    }, {'kycDocuments': kycDocumentObject}, {$set: true}, context)
+    }, {'kycDocuments': kycDocumentObject}, {$push: true}, context)
   }
   if(id){
     return new MlRespPayload().successPayload("Document created successfully", 200);

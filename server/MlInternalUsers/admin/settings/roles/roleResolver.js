@@ -3,18 +3,19 @@ import MlRespPayload from "../../../../commons/mlPayload";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 
 var _ = require('lodash');
-var defaultModules = [
-  {moduleName:"CHAPTER", actions:[{actionId:"READ", actionCode:"READ"}]},
-  {moduleName:"SUBCHAPTER", actions:[{actionId:"READ", actionCode:"READ"}]},
-  {moduleName:"COMMUNITY", actions:[{actionId:"READ", actionCode:"READ"}]},
-  {moduleName:"INTERNALREQUESTS", actions:[{actionId:"CREATE", actionCode:"CREATE"}, {actionId:"READ", actionCode:"READ"}, {actionId:"UPDATE", actionCode:"UPDATE"}]}];
-
 MlResolver.MlQueryResolver['fetchRole'] = (obj, args, context, info) => {
   // return MlRoles.findOne({name});
   return mlDBController.findOne('MlRoles', {name}, context)
 }
 
 MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
+  var defaultModules = [
+    {moduleName:"CHAPTER", actions:[{actionId:"READ", actionCode:"READ"}]},
+    {moduleName:"SUBCHAPTER", actions:[{actionId:"READ", actionCode:"READ"}]},
+    {moduleName:"COMMUNITY", actions:[{actionId:"READ", actionCode:"READ"}]},
+    {moduleName:"INTERNALREQUESTS", actions:[{actionId:"CREATE", actionCode:"CREATE"}, {actionId:"READ", actionCode:"READ"}, {actionId:"UPDATE", actionCode:"UPDATE"}]}];
+
+
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
     let code = 401;
@@ -290,7 +291,7 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
       query.assignRoles['$elemMatch'].isActive = true;
     }
     // let finalQuery = {$or: [query, {isSystemDefined: true, isActive: true}]}
-    let finalQuery = {$and: [query, {isSystemDefined: department.isSystemDefined, isActive: true}]}
+    let finalQuery = {$and: [query, {isActive: true}]}
     let valueGet = mlDBController.find('MlRoles', finalQuery, context).fetch()
     // let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"isActive": true}]}, context).fetch()
     // _.each(valueGet, function (item, say) {

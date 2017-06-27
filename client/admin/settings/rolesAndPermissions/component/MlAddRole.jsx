@@ -67,6 +67,7 @@ class MlAddRole extends React.Component{
     if (ret) {
       toastr.error(ret);
     } else {
+      _.remove(this.state.assignModulesToRoles, {moduleId: ""});
       let roleDetails = {
         roleName: this.refs.roleName.value,
         displayName: this.refs.diplayName.value,

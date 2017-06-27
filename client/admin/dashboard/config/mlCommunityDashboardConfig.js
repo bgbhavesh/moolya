@@ -48,6 +48,9 @@ const mlCommunityDashboardListConfig=new MlViewer.View({
                           isActive,
                           email
                       }
+                      communityCode
+                      roleNames
+                      clusterName
                   }
               }      
           }
@@ -119,7 +122,7 @@ const mlCommunityDashboardMapConfig=new MlViewer.View({
               data{
                   ...on BackendUsers{
                       _id,                      
-                      isActive:profile{isActive}                      
+                      profile:profile{isActive}                      
                       lat:latitude
                       lng:longitude
                       text:communityCode

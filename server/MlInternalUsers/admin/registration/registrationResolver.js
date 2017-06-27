@@ -150,7 +150,7 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
 MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, info) => {
 
   var response=null;
-  var registrationExist = MlRegistration.findOne({"registrationInfo.email":registrationInfo.email,status: { $nin: [ 'Rejected' ] }})//MlRegistration.findOne({"registrationInfo.email":args.registration.email})
+  var registrationExist = MlRegistration.findOne({"registrationInfo.email":args.registration.email,status: { $nin: [ 'Rejected' ] }})//MlRegistration.findOne({"registrationInfo.email":args.registration.email})
   var userExist = mlDBController.findOne('users', {"profile.email":args.registration.email}, context) || {};
   if(registrationExist || userExist._id){
     let code = 400;

@@ -33,6 +33,7 @@
    }
   
    type Session{
+       sessionId : String
        duration : Duration
        activities: [String]
    }
@@ -61,6 +62,7 @@
 
 
    input session{
+       sessionId : String
        duration : duration
        activities: [String]
    }

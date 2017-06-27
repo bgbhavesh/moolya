@@ -65,6 +65,7 @@ export async function findTaskActionHandler(taskId) {
                   hours
                   minutes
                 }
+                sessionId
                 activities
               }
               attachments{

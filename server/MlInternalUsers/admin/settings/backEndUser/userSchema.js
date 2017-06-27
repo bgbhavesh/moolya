@@ -517,7 +517,7 @@ let supportedApi = [
     {api:'fetchUserRoleDetails', actionName:'READ', moduleName:"USERS", isWhiteList:true},
     {api:'fetchMoolyaInternalUsers', actionName:'READ', moduleName:"USERS", isWhiteList:true},
     {api:'fetchInternalUserProfiles', actionName:'READ', moduleName:"USERS", isWhiteList:true},
-    {api:'passwordVerification', actionName:'READ', moduleName:"USERS"},
+    {api:'passwordVerification', actionName:'READ', moduleName:"USERS", isWhiteList:true},
     {api:'getUserProfiles', actionName:'READ', moduleName:"USERS"},
     {api:'getUserProfile',actionName:'READ', moduleName:"USERS"},
 

@@ -1,6 +1,7 @@
 import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
 import _ from "lodash";
+import _underscore from "underscore"
 /*
 MlResolver.MlQueryResolver['fetchProcess'] = (obj, args, context, info) =>{
   return MlProcessMapping.findOne({name});
@@ -325,4 +326,88 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
     }
 
 }
+
+MlResolver.MlQueryResolver['fetchKYCDocuments'] = (obj, args, context, info) => {
+
+  let clusters=args.clusters;
+  let chapters=args.chapters;
+  let subChapters=args.subChapters;
+  let communities=args.community;
+  let kycCategory=args.kyc;
+  let documentTyp=args.documentType;
+  let process=null
+  let specificQuery=[];
+
+  //check for specific condition for all criteria fields of processmapping
+  if((clusters&&clusters.length>0)&&(chapters&&chapters.length>0)&&(subChapters&&subChapters.length>0)&&(communities&&communities.length>0)){
+    let val={clusters,chapters,subChapters,communities}
+      let result = fetchProcessDocumentProxy(val);
+    if(result){
+      return result
+    }
+  }
+  //check for all or specific condition for all criteria fields of processmapping
+  let val={clusters,chapters,subChapters,communities}
+  for (var key in val) {
+    let qu={};
+    let values =val[key]
+    let stringValues =  values.toString();
+    qu[key]={$in:['all',stringValues]};
+    specificQuery.push(qu);//console.log(qu);
+  }
+  let query={$and:specificQuery}
+  process=fetchProcessDocumentProxy(query);
+  if(process){
+    return process
+  }
+  //check for 'all' condition on criteria fields of processmapping
+  let allVal={clusters:"all",chapters:"all",subChapters:"all",communities:"all"}
+  process=fetchProcessDocumentProxy(allVal);
+  if(process){
+    return process
+  }
+
+
+
+  /*let result;
+  if(args.clusters&&args.chapters&&args.subChapters&&args.community&&args.kyc&&args.documentType){
+    result = MlProcessMapping.find({"$and":[{ 'documents.category' : args.kyc ,'documents.type': args.documentType, clusters: {$in: args.clusters},
+      chapters: {$in: args.chapters},
+      subChapters:{$in: args.subChapters},communities:{$in: [args.community]},isActive:true}]}).fetch()
+  }
+*/
+
+  function fetchProcessDocumentProxy(query){
+    let data;
+    if(args.kyc && args.documentType){
+      let document= MlProcessMapping.findOne({ $and: [query,{'documents.category' : args.kyc ,'documents.type': args.documentType,"isActive":true}]})
+      if(document && document.processDocuments){
+        data=document.processDocuments;
+        data.map(function (doc,index) {
+          const allowableFormatData =  MlDocumentFormats.find( { _id: { $in: doc.allowableFormat } } ).fetch() || [];
+          let allowableFormatNames = [];  //@array of strings
+          allowableFormatData.map(function (doc) {
+            allowableFormatNames.push(doc.docFormatName)
+          });
+          data[index].allowableFormat = allowableFormatNames || [];
+        });
+        return data
+      }
+    }
+
+  }
+  /*let processDocuments = []
+  if(result && result.length>0){
+    for(let i=0;i < result.length;i++){
+      processDocuments.push(result[i].processDocuments)
+    }
+    return processDocuments&&processDocuments[0]
+  }else{
+    return;
+  }*/
+
+
+}
+
+
 

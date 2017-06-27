@@ -165,7 +165,7 @@ if(!platformrole){
     isActive:true,
     isSystemDefined: true
   }
-  MlRoles.update({roleName:"chapteradmin"}, {$set:role}, {upsert:true})
+  MlRoles.update({roleName:"subchapteradmin"}, {$set:role}, {upsert:true})
 }
 
 // var communityAdmin = MlRoles.findOne({roleName:"communityadmin"})
@@ -178,8 +178,8 @@ if(!platformrole){
     {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:readPermissions},
     {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"USERS"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:communityPer},
-    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:communityPer},
+    {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:readPermissions},
+    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:readPermissions},
     {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:readPermissions},
     {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
     {moduleId:(_.find(mlModules, {code:"PORTFOLIO"}))._id, actions:permissions},
@@ -199,7 +199,7 @@ if(!platformrole){
     isActive:true,
     isSystemDefined: true
   }
-  MlRoles.update({roleName:"chapteradmin"}, {$set:role}, {upsert:true})
+  MlRoles.update({roleName:"communityadmin"}, {$set:role}, {upsert:true})
 }
 /*********************************** Default Moolya Roles Creation <End> **********************************************/
 

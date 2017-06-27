@@ -6,7 +6,7 @@ import MlSchemaDef from '../../commons/mlSchemaDef'
 import MlResolver from "../../commons/mlResolverDef";
 
 
-let activity=`
+let calendarSettingSlot=`
   type CalendarSettingSlotDuration {
     hours: Int
     minutes: Int
@@ -49,6 +49,16 @@ let activity=`
     workingDays             : [CalendarSettingWorkingDays]
     vacations               : [CalendarSettingVacation]
   }
+  
+  type DayCalendar {
+    date:Int,
+    status: Int
+  }
+  
+  type MonthCalendar {
+    days: [DayCalendar]
+  }
+  
   input calendarSettingSlotDuration {
     hours: Int
     minutes: Int
@@ -91,8 +101,10 @@ let activity=`
     workingDays             : [calendarSettingWorkingDays]
     vacations               : [calendarSettingVacation]
   }
+  
   type Query {   
      fetchMyCalendarSetting:CalendarSetting
+     getMyCalendar(month:Int, year: Int): MonthCalendar
   }
   
   type Mutation {
@@ -104,9 +116,10 @@ let activity=`
 `;
 
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], activity]);
+MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], calendarSettingSlot]);
 let supportedApi = [
   {api:'fetchMyCalendarSetting', actionName:'READ', moduleName:"OFFICE"},
+  {api:'getMyCalendar', actionName:'READ', moduleName:"OFFICE"},
   {api:'updateMyCalendarSetting', actionName:'UPDATE', moduleName:"OFFICE"},
   {api:'updateMyCalendarWorkingDay', actionName:'UPDATE', moduleName:"OFFICE"},
   {api:'updateMyCalendarWorkingDays', actionName:'UPDATE', moduleName:"OFFICE"},

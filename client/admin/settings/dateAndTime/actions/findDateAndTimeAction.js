@@ -16,6 +16,7 @@ export async function findDateAndTimeActionHandler(Id)
               numberOfDaysInWeek
               firstDayOfWeek
               hoursFormat
+              timeZone
             }
           }
             

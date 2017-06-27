@@ -18,6 +18,12 @@ export async function findRegionalActionHandler()
               regionalCurrencyValue
               regionalZipFormat
               regionalFlag
+              numberOfDigitsAfterDecimal
+             firstDayOfWeek
+             currencySymbol
+             measurementSystem
+             currencyFormat
+             valueSeparator
             }
           }
             

@@ -37,6 +37,12 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
     return response;
   }
 
+  if (role.modules.length == 0) {
+    let code = 409;
+    let response = new MlRespPayload().errorPayload("Please Select One Module", code);
+    return response;
+  }
+
   role.createdDateTime = new Date();
   role.updatedDateTime= new Date();
   role.updatedBy=  mlDBController.findOne("users", {_id: context.userId}, context).username;

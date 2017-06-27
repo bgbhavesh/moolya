@@ -51,6 +51,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],HierarchySchema]);
 let supportedApi = [
   {api:'fetchMoolyaBasedDepartmentAndSubDepartment', actionName:'READ', moduleName:"HIERARCHY"},
   {api:'fetchNonMoolyaBasedDepartmentAndSubDepartment', actionName:'READ', moduleName:"HIERARCHY"},
+  {api:'fetchNonMoolyaBasedDepartmentAndSubDepartments', actionName:'UPDATE', moduleName:"HIERARCHY"},
   {api:'fetchRolesForDepartment', actionName:'READ', moduleName:"HIERARCHY"},
   {api:'fetchRolesForHierarchy', actionName:'READ', moduleName:"HIERARCHY"},
   {api:'fetchRolesForFinalApprovalHierarchy', actionName:'READ', moduleName:"HIERARCHY"},

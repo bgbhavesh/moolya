@@ -689,6 +689,36 @@ if(Meteor.isServer){
             ]
           },
           {
+            "link" : "/admin/transactions/processSetupList",
+            "name" : "ProcessSetUp",
+            "uniqueId" : "transaction_ProcessSetup",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenu": [
+              {
+                "link": "/admin/transactions/processSetupList",
+                "name": "List Process Setup",
+                "uniqueId": "transaction_ProcessSetupList",
+                "subMenuMappingId":"transaction_ProcessSetup",
+                "subMenusId":"transaction",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+              {
+                "link": "/admin/transactions/editProcessSetup",
+                "name": "Edit Process Setup",
+                "uniqueId": "transaction_EditProcessSetup",
+                "subMenuMappingId":"transaction_ProcessSetup",
+                "subMenusId":"transaction",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              }
+            ]
+          },
+          {
             "link": "/admin/transactions/systemsLog  ",
             "name": "System",
             "uniqueId": "systems_Log",

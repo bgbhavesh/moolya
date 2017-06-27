@@ -84,11 +84,13 @@ export default class MlCommunityList extends Component {
 
     const list=  data.map((prop, idx) =>
       <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
-        <div className="list_block">
+        <div className="list_block provider_block">
           <div className={`cluster_status ${prop.profile.isActive?"active":"inactive"}_cl `}><FontAwesome name={prop.profile.isActive?"check":"times"}/></div>
           {/*<div className={`cluster_status ${prop.statusField|| ""}_cl `}></div>*/}
-          <a href={dashboardRoutes.backendUserDetailRoute(clusterId,chapterId,subChapterId,prop._id)}> <div className={"hex_outer"}><img src={prop.countryFlag}/></div></a>
-          <h3>{prop.name}</h3>
+          {prop.communityCode?<a></a>:<a href={dashboardRoutes.backendUserDetailRoute(clusterId,chapterId,subChapterId,prop._id)}> <div className={"hex_outer"}><img src={prop.countryFlag}/></div></a>}
+          <h3>{prop.name}<br />
+            {prop.communityCode?prop.clusterName:prop.roleNames}
+          </h3>
         </div>
       </div>
   );
@@ -96,7 +98,7 @@ export default class MlCommunityList extends Component {
       <div>
           <div className="community_icons fixed_icon">
             <a data-toggle="tooltip" title="All" data-placement="bottom" className="All active_community" data-filter="all">
-              <span className="ml ml-select-all" onClick={this.onStatusChange.bind(this, "All")}></span>{/*<FontAwesome className="ml" name='th'/>*/}
+              <span className="ml ml-browser" onClick={this.onStatusChange.bind(this, "All")}></span>{/*<FontAwesome className="ml" name='th'/>*/}
             </a>
             <a data-toggle="tooltip" title="Ideators" data-placement="bottom" className="IDE" data-filter="ideator">
               <span className="ml ml-ideator" onClick={this.onStatusChange.bind(this, "Ideators")}></span>
@@ -110,9 +112,9 @@ export default class MlCommunityList extends Component {
             <a data-toggle="tooltip" title="Service Providers" data-placement="bottom" className="" data-filter="provider">
               <span className="ml ml-users" onClick={this.onStatusChange.bind(this, "Service Providers")}></span>
             </a>
-            <a data-toggle="tooltip" title="Browsers" data-placement="bottom" className="" data-filter="browser">
-              <span className="ml ml-browser" onClick={this.onStatusChange.bind(this, "Browsers")}></span>
-            </a>
+            {/*<a data-toggle="tooltip" title="Browsers" data-placement="bottom" className="" data-filter="browser">*/}
+              {/*<span className="ml ml-browser" onClick={this.onStatusChange.bind(this, "Browsers")}></span>*/}
+            {/*</a>*/}
             <a data-toggle="tooltip" title="Companies" data-placement="bottom" className="" data-filter="company">
               <span className="ml ml-company" onClick={this.onStatusChange.bind(this, "Companies")}></span>
             </a>

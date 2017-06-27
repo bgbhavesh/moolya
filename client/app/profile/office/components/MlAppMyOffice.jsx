@@ -45,11 +45,17 @@ export default class MlAppMyOffice extends Component {
     const response = await findUserOfficeActionHandler();
     if (!_.isEmpty(response)) {
       let isRegApp = _.find(response, {isRegistrationApproved: true})
-      if (isRegApp)
-        this.setState({loading: false, data: response, isRegApp: true});
+      let isOffice = _.find(response, {officeId: null})
+      if (isRegApp) {
+        if (isOffice) {
+          this.setState({loading: false, data: [], isRegApp: true});
+        } else {
+          this.setState({loading: false, data: response, isRegApp: true});
+        }
+      }
       else
         this.setState({loading: false, data: response, isRegApp: false});
-    }else
+    } else
       this.setState({loading: false});
   }
 
@@ -82,8 +88,8 @@ export default class MlAppMyOffice extends Component {
         <div className="swiper-slide office_accounts my-office-main" key={id}
              onClick={that.selectOffice.bind(that, office.officeId)}>
           <span className="ml flaticon-ml-building"></span><br />{office.officeLocation}
-          <h2>Total: {office.totalCount}</h2>
-          <h3>Principal:{office.principalUserCount}&nbsp;&nbsp;Team:{office.teamUserCount}</h3>
+          <h2>Total: {office.totalusercount}</h2>
+          <h3>Principal:{office.principalcount}&nbsp;&nbsp;Team:{office.teamMembercount}</h3>
         </div>
       )
     });

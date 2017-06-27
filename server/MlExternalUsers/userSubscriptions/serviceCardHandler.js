@@ -18,9 +18,12 @@ class MlserviceCardHandler{
       interactionType;
 
       if(!query)
-          return false;
+          return {success:false};
 
       var details = this.getQueryDetails(query);
+      if(resourceName != "OFFICE")
+        return {success:true}
+
       if(details && details.isWhiteList)
         return {success:true}
       if(!details || (details && (!details.resourceName || !details.actionName)))

@@ -180,12 +180,15 @@ export default class MlAppCreateTeam extends React.Component{
       case "ServiceCard":
         let service = e.target.checked;
         this.setState({serviceCard:service})
+            break;
       case "Internal":
         let internal = e.target.checked;
         this.setState({isInternal:internal})
+            break;
       case "External":
         let external = e.target.checked;
         this.setState({isExternal:external})
+            break;
     }
   }
 
@@ -346,10 +349,10 @@ let that = this;
                 </div>
                 <div className="form-group">
                   <div className="input_types">
-                    <input id="radio1" type="checkbox" name="radio" onChange={this.checkBoxHandler.bind(this, "Internal")} checked={this.state.isInternal} value="Internal"/><label htmlFor="radio1"><span><span></span></span>Internal</label>
+                    <input id="checkbox1" type="checkbox"  onChange={this.checkBoxHandler.bind(this, "Internal")} checked={this.state.isInternal} value="Internal"/><label htmlFor="radio1"><span><span></span></span>Internal</label>
                   </div>
                   <div className="input_types">
-                    <input id="radio2" type="checkbox" name="radio" onChange={this.checkBoxHandler.bind(this, "External")} checked={this.state.isExternal} value="External"/><label htmlFor="radio2"><span><span></span></span>External</label>
+                    <input id="checkbox2" type="checkbox"  onChange={this.checkBoxHandler.bind(this, "External")} checked={this.state.isExternal} value="External"/><label htmlFor="radio2"><span><span></span></span>External</label>
                   </div>
                   <br className="brclear"/>
                 </div>

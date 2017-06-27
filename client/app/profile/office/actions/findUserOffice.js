@@ -11,10 +11,9 @@ export async function findUserOfficeActionHandler() {
               fetchOfficeSC{
                 userId
                 officeId
-                totalCount
-                principalUserCount
-                
-                teamUserCount
+                totalusercount
+                principalcount
+                teamMembercount
                 isRegistrationApproved
               }  
           }

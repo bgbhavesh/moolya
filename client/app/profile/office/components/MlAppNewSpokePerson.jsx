@@ -7,7 +7,7 @@ import {render} from "react-dom";
 import _ from "lodash";
 import {fetchCommunitiesHandler} from "../../../../app/commons/actions/fetchCommunitiesActionHandler";
 import {createOfficeActionHandler} from "../actions/createOfficeAction";
-import {initalizeFloatLabel} from '../../../../../client/admin/utils/formElemUtil';
+import {initalizeFloatLabel} from "../../../../../client/admin/utils/formElemUtil";
 
 export default class MlAppNewSpokePerson extends React.Component {
   constructor(props) {
@@ -46,7 +46,8 @@ export default class MlAppNewSpokePerson extends React.Component {
       country: this.refs.country.value,
       zipCode: this.refs.zipCode.value,
       about: this.refs.about.value,
-      availableCommunities: community
+      availableCommunities: community,
+      isBeSpoke:true
     }
     let data = myOffice;
     for (var propName in data) {
@@ -119,6 +120,7 @@ export default class MlAppNewSpokePerson extends React.Component {
           let value = _.omit(say, '__typename')
           communityList.push(value);
         })
+        _.remove(communityList, {code: 'BRW'})
         this.setState({showCommunityBlock: communityList})
         return communityList;
       } else {

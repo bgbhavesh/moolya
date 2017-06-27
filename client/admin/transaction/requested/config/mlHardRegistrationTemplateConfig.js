@@ -56,7 +56,7 @@ const mlIdeatorIndividualHardRegistrationInternalUserTemplateConfig={
 };
 
 const mlFunderCompanyHardRegistrationExternalUserTemplateConfig={
-  templateName:"Hard-Reg-Funder-Company",
+  templateName:"Hard-Reg-Investor-Company",
   templateCode:"HRTFUNCMP",
   userType:'external',
   process:'Registration',
@@ -66,7 +66,7 @@ const mlFunderCompanyHardRegistrationExternalUserTemplateConfig={
   component:FunderCompanyHardReg
 };
 const mlFunderCompanyHardRegistrationInternalUserTemplateConfig={
-  templateName:"Hard-Reg-Funder-Company",
+  templateName:"Hard-Reg-Investor-Company",
   templateCode:"HRTFUNCMP",
   userType:'internal',
   process:'Registration',
@@ -77,7 +77,7 @@ const mlFunderCompanyHardRegistrationInternalUserTemplateConfig={
 };
 
 const mlFunderIndividualHardRegistrationExternalUserTemplateConfig={
-  templateName:"Hard-Reg-Funder-Individual",
+  templateName:"Hard-Reg-Investor-Individual",
   templateCode:"HRTFUNINV",
   userType:'external',
   process:'Registration',
@@ -87,7 +87,7 @@ const mlFunderIndividualHardRegistrationExternalUserTemplateConfig={
   component:FunderIndividualHardReg
 };
 const mlFunderIndividualHardRegistrationInternalUserTemplateConfig={
-  templateName:"Hard-Reg-Funder-Individual",
+  templateName:"Hard-Reg-Investor-Individual",
   templateCode:"HRTFUNINV",
   userType:'internal',
   process:'Registration',

@@ -187,6 +187,7 @@ let Process = `
     type Query{
       findProcess(id:String):processOutput
       findProcessDocumentForRegistration(clusterId:String,chapterId:String,subChapterId:String,userType:String,communityType:String,identityType:String,profession:String,industry:String,email:String):processOutput
+      fetchKYCDocuments(chapters:[String],clusters:[String],subChapters:[String],community:String,kyc:String,documentType:String,displayAllOption:Boolean):[processDocumentOutput]
     }
     
 `
@@ -196,7 +197,7 @@ let supportedApi = [
     {api:'createProcess', actionName:'CREATE', moduleName:"PROCESSMAPPING"},
     {api:'updateProcess', actionName:'UPDATE', moduleName:"PROCESSMAPPING"},
     {api:'upsertProcessDocument', actionName:'UPDATE', moduleName:"PROCESSMAPPING"},
-    {api:'findProcess', actionName:'READ', moduleName:"PROCESSMAPPING"},
+    {api:'findProcess', actionName:'READ', moduleName:"PROCESSMAPPING", isWhiteList:true},
     {api:'findProcessDocumentForRegistration', actionName:'READ', moduleName:"PROCESSMAPPING", isWhiteList:true},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

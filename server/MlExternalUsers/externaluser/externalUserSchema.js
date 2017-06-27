@@ -3,6 +3,7 @@
  */
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../commons/mlSchemaDef'
+import MlResolver from '../../commons/mlResolverDef'
 
 let externalUser = `
     input externalUser{
@@ -154,3 +155,16 @@ let externalUser = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],externalUser]);
+
+let supportedApi = [
+    {api:'fetchUserProfiles', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
+    {api:'findAddressBook', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
+    {api:'fetchUserProfiles', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
+    {api:'updateContactNumber', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
+    {api:'deActivateUserProfile', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
+    {api:'blockUserProfile', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
+    {api:'setDefaultProfile', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
+
+]
+
+MlResolver.MlModuleResolver.push(supportedApi)

@@ -7,6 +7,7 @@ import {render} from "react-dom";
 import {findUserOfficeActionHandler} from "../actions/findUserOffice";
 import {findOfficeAction} from "../actions/findOfficeAction";
 import MlLoader from "../../../../commons/components/loader/loader";
+import _ from "lodash";
 // import {findOfficeTransactionHandler} from '../../../../../client/admin/transaction/office/actions/findOfficeTranscation'
 
 export default class MlAppMyOffice extends Component {
@@ -42,7 +43,20 @@ export default class MlAppMyOffice extends Component {
 
   async findUserOffice() {
     const response = await findUserOfficeActionHandler();
-    this.setState({loading: false, data: response});
+    if (!_.isEmpty(response)) {
+      let isRegApp = _.find(response, {isRegistrationApproved: true})
+      let isOffice = _.find(response, {officeId: null})
+      if (isRegApp) {
+        if (isOffice) {
+          this.setState({loading: false, data: [], isRegApp: true});
+        } else {
+          this.setState({loading: false, data: response, isRegApp: true});
+        }
+      }
+      else
+        this.setState({loading: false, data: response, isRegApp: false});
+    } else
+      this.setState({loading: false});
   }
 
   addNewOffice() {
@@ -71,10 +85,11 @@ export default class MlAppMyOffice extends Component {
     let userOffice = this.state.data && this.state.data.length > 0 ? this.state.data : []
     const userOfficeList = userOffice.map(function (office, id) {
       return (
-        <div className="swiper-slide office_accounts my-office-main" key={id} onClick={that.selectOffice.bind(that, office.officeId)}>
+        <div className="swiper-slide office_accounts my-office-main" key={id}
+             onClick={that.selectOffice.bind(that, office.officeId)}>
           <span className="ml flaticon-ml-building"></span><br />{office.officeLocation}
-          <h2>Total: {office.totalCount}</h2>
-          <h3>Principal:{office.principalUserCount}&nbsp;&nbsp;Team:{office.teamUserCount}</h3>
+          <h2>Total: {office.totalusercount}</h2>
+          <h3>Principal:{office.principalcount}&nbsp;&nbsp;Team:{office.teamMembercount}</h3>
         </div>
       )
     });
@@ -85,39 +100,43 @@ export default class MlAppMyOffice extends Component {
         {showLoader === true ? ( <MlLoader/>) : (
           <div className="app_padding_wrap no_padding">
             <div className="list_view_block">
-              {(userOffice.length < 1) ? <div className="col-md-12 text-center">
-                <div className="col-md-offset-3 col-md-6 col-sm-6 col-xs-6 new-ideas2">
-                  <div className="col-md-6">
-                  </div>
-                  <div className="col-md-6">
-                    <a onClick={this.addNewOffice.bind(this)} className="ideabtn">Add new office</a>
-                  </div>
-                </div>
-              </div> : <div>
-                <div className="col-md-12 text-center">
-                  <div className="col-md-offset-3 col-md-6 col-sm-6 col-xs-6">
-                    <div className="swiper-container profile_container">
-                      <div className="swiper-wrapper">
-
-                        {userOfficeList}
-
-                      </div>
-                      <div className="swiper-pagination"></div>
+              {this.state.isRegApp ? <div>
+                {(userOffice.length < 1) ? <div className="col-md-12 text-center">
+                  <div className="col-md-offset-3 col-md-6 col-sm-6 col-xs-6 new-ideas2">
+                    <div className="col-md-6">
+                    </div>
+                    <div className="col-md-6">
+                      <a onClick={this.addNewOffice.bind(this)} className="ideabtn">Add new office</a>
                     </div>
                   </div>
-                </div>
-                <div className="col-md-12 text-center well mart100">
-                  <div className="col-md-4">
-                    <a className="fileUpload mlUpload_btn" onClick={this.addNewOffice.bind(this)}>Add New Office</a>
+                </div> : <div>
+                  <div className="col-md-12 text-center">
+                    <div className="col-md-offset-3 col-md-6 col-sm-6 col-xs-6">
+                      <div className="swiper-container profile_container">
+                        <div className="swiper-wrapper">
+
+                          {userOfficeList}
+
+                        </div>
+                        <div className="swiper-pagination"></div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="col-md-4">
-                    <a href="#" className="fileUpload mlUpload_btn disabled">Enter into Office</a>
+                  <div className="col-md-12 text-center well mart100">
+                    <div className="col-md-4">
+                      <a className="fileUpload mlUpload_btn" onClick={this.addNewOffice.bind(this)}>Add New Office</a>
+                    </div>
+                    <div className="col-md-4">
+                      <a href="#" className="fileUpload mlUpload_btn disabled">Enter into Office</a>
+                    </div>
+                    <div className="col-md-4">
+                      <a href="#" className="fileUpload mlUpload_btn disabled">Deactivate Office</a>
+                    </div>
                   </div>
-                  <div className="col-md-4">
-                    <a href="#" className="fileUpload mlUpload_btn disabled">Deactivate Office</a>
-                  </div>
-                </div>
-              </div>}
+                </div>}
+
+              </div> : <h3>Please complete Hard registration</h3>}
+
             </div>
           </div>)}
       </div>

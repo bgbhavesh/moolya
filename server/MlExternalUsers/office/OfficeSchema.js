@@ -34,11 +34,19 @@ let myOfficeSchema = `
         communityName:String,
         communityId:String,
         userCount:Int
+        id: String
+
     }
-    
+      
     type LocationCoordinates { 
       lat : Float
       lang : Float
+    }
+    
+    
+    type BranchType{
+    branchType: String
+    _id: String
     }
     
     type MyOffice{
@@ -70,6 +78,25 @@ let myOfficeSchema = `
         isActive:Boolean,
         paymentLink:String,
         location : [LocationCoordinates]
+    }
+    
+    type OfficeSC{
+        userId:String,
+        profileId:String,
+        officeId:String,
+        totalusercount:Int,
+        principalcount:Int,
+        teamMembercount:Int,
+        availableCommunities:[AvailableCommunities]
+        isActive:Boolean,
+        isActivated:Boolean,
+        isExpired:Boolean 
+        isRegistrationApproved : Boolean
+    }
+    
+     type TeamUsers {
+      firstName: String
+      name: String
     }
     
     type OfficeMembersWithUserId {
@@ -140,41 +167,46 @@ let myOfficeSchema = `
         subscriptionName :String
         about : String
         isActive:Boolean,
+        isBeSpoke:Boolean,
         paymentLink:String,
         location : [locationCoordinates]
      }
   
     type Query{
         fetchOffice:[MyOffice]
+        fetchOfficeSC:[OfficeSC]
         fetchOfficeById(officeId:String):MyOffice
         fetchOfficeMember(memberId:String):OfficeMembers
         fetchOfficeMembers(officeId:String, isPrincipal:Boolean):[OfficeMembers]
         fetchAllOfficeMembersWithUserId:[OfficeMembersWithUserId]
         findOfficeDetail(officeId:String):response
+        getTeamUsers(Attributes:TeamName):[TeamUsers]
+        getTeamMembers:[AvailableCommunities]
+        getBranchDetails:[BranchType]
     }
     
     type Mutation{       
         createOffice(myOffice:myOffice):response
-        createOfficeMembers(myOfficeId:String, officeMember:officeMembers):response
+          createOfficeMembers(myOfficeId:String, officeMember:officeMembers):response
         updateOfficeMember(officeId:String,memberId:String, officeMember:officeMembers):response
         updateOffice(myOffice:myOffice, myOfficeId:String):response
         updateOfficeStatus(id:String):response
     }
 `
-// updateOfficeMembers(myOfficeId:String, officeMembers:officeMembers):response
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], myOfficeSchema]);
-let supportedApi = [
-  {api: 'createOffice', actionName: 'CREATE', moduleName: "OFFICE"},
-  {api: 'createOfficeMembers', actionName: 'CREATE', moduleName: "OFFICE"},
-  {api: 'fetchOffice', actionName: 'READ', moduleName: "OFFICE"},
-  {api: 'fetchOfficeById', actionName: 'READ', moduleName: "OFFICE"},
+  let supportedApi = [
+  {api: 'createOffice', userAction:"CREATEOFFICE", actionName:'CREATE', resource: "OFFICE"},
+  {api: 'createOfficeMembers', userAction:"ADDMEMBER", actionName:'CREATE', resource: "OFFICE"},
+  {api: 'fetchOffice', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
+  {api: 'fetchOfficeSC', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
+  {api: 'fetchOfficeById', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
   // {api: 'updateOfficeMembers', actionName: 'UPDATE', moduleName: "OFFICE"},
   {api: 'updateOffice', actionName: 'UPDATE', moduleName: "OFFICE"},
   {api: 'updateOfficeMember', actionName: 'UPDATE', moduleName: "OFFICE"},
   {api: 'updateOfficeStatus', actionName: 'UPDATE', moduleName: "OFFICE"},
-  {api: 'findOfficeDetail', actionName: 'READ', moduleName: "OFFICE"},
-  {api: 'fetchOfficeMembers', actionName: 'READ', moduleName: "OFFICE"},
+  {api: 'findOfficeDetail', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
+  {api: 'fetchOfficeMembers', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
   {api: 'fetchOfficeMember', actionName: 'READ', moduleName: "OFFICE"},
   {api: 'fetchAllOfficeMembersWithUserId', actionName: 'READ', moduleName: "OFFICE"},
 

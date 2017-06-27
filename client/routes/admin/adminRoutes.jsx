@@ -61,6 +61,7 @@ import MlTransactionTabHistoryList from '../../admin/transaction/transactionAudi
 import MlRegistrationTabHistoryList from '../../admin/transaction/requested/registrationAuditLog/components/MlRegistrationTabHistoryList'
 import MlPotfolioTabHistoryList from '../../admin/transaction/portfolio/portfolioAuditLog/components/MlPotfolioTabHistoryList'
 import EditTaxation from '../../admin/transaction/office/component/MlOfficeList'
+import MlRegistrationRejectedList from '../../admin/transaction/requested/component/MlRegistrationRejectedList'
 
 const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
 if(localStorageLoginToken){
@@ -229,12 +230,14 @@ adminSection.route('/transactions/registrationApprovedList', {
   }
 });
 
+/*
 adminSection.route('/transactions/registrationRejectedList', {
   name: 'transaction_registration_rejected',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'approved'}} />,  adminContent:<MlRegistrtaionRejectedList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'reject'}} />,  adminContent:<MlRegistrtaionRejectedList/>})
   }
 });
+*/
 
 
 
@@ -333,6 +336,14 @@ adminSection.route('/transactions/createRegistration', {
   name: 'transaction_registration_create',
   action(params){
     mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'create'}} />, adminContent:<MlCreateRegistration/>})
+  }
+});
+
+
+adminSection.route('/transactions/rejectedRegistrations', {
+  name: 'transaction_registration_reject',
+  action(params){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'history'}} />, adminContent:<MlRegistrationRejectedList/>})
   }
 });
 

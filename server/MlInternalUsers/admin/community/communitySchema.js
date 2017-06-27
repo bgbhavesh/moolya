@@ -63,7 +63,7 @@ let supportedApi = [
     {api:'createCommunity', actionName:'CREATE', moduleName:"COMMUNITY"},
     {api:'updateCommunityDef', actionName:'UPDATE', moduleName:"COMMUNITY", isWhiteList:true},
     {api:'FetchMapData', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
-    {api:'fetchCommunities', actionName:'READ', moduleName:"COMMUNITY"},
+    {api:'fetchCommunities', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
     {api:'fetchCommunitiesSelect', actionName:'READ', moduleName:"COMMUNITY"},
     {api:'fetchCommunityDef', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
     {api:'fetchCommunitiesForRolesSelect', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true}

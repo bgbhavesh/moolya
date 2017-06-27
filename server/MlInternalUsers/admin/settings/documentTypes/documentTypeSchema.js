@@ -33,7 +33,7 @@ let DocumentTypesSchema = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],DocumentTypesSchema]);
 let supportedApi = [
   {api:'findDocumentType', actionName:'READ', moduleName:"DOCUMENTTYPE"},
-  {api:'fetchDocumentsType', actionName:'READ', moduleName:"DOCUMENTTYPE"},
+  {api:'fetchDocumentsType', actionName:'READ', moduleName:"DOCUMENTTYPE", isWhiteList:true},
   {api:'createDocumentType', actionName:'CREATE', moduleName:"DOCUMENTTYPE"},
   {api:'updateDocumentType', actionName:'UPDATE', moduleName:"DOCUMENTTYPE"}
 ]

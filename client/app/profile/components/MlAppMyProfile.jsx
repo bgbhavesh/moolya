@@ -73,18 +73,22 @@ export default class MlAppMyProfile extends Component {
           userId: Meteor.userId(),
           password: this.refs.confirmPassword.value
         }
-        this.onCheckPassword();
-        if (this.state.pwdErrorMsg)
-          toastr.error("Confirm Password does not match with Password");
-        else {
-          const response = await resetPasswordActionHandler(userDetails);
-          // this.refs.id.value='';
-          this.refs.confirmPassword.value = '';
-          this.refs.password.value = '';
-          this.setState({"pwdErrorMsg": 'Password reset complete'})
-          toastr.success(response.result);
-          $('#password').val("");
-          this.setState({PasswordReset:false,showChangePassword:true})
+        if(this.state.passwordState === 'Passwords match!') {
+          this.onCheckPassword();
+          if (this.state.pwdErrorMsg)
+            toastr.error("Confirm Password does not match with Password");
+          else {
+            const response = await resetPasswordActionHandler(userDetails);
+            // this.refs.id.value='';
+            this.refs.confirmPassword.value = '';
+            this.refs.password.value = '';
+            this.setState({"pwdErrorMsg": 'Password reset complete'})
+            toastr.success(response.result);
+            $('#password').val("");
+            this.setState({PasswordReset: false, showChangePassword: true})
+          }
+        }else {
+          toastr.error("Enter proper Existing Password")
         }
       } else {
         this.setState({

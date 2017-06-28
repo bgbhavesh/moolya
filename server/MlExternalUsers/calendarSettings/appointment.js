@@ -10,14 +10,14 @@ class MlAppointment {
   }
 
   /**
-   * Method :: buidSlotTimes
+   * Method :: buildSlotTimes
    * Desc   :: return the all slot for a user
    * @param duration :: Integer :: Interval of each slot
    * @param lunch    :: Array   :: Lunch times
    * @param slots    :: Array   :: All slot times of user
    * @returns {Array}
    */
-  buidSlotTimes(duration, lunch, slots){
+  buildSlotTimes(duration, lunch, slots){
     let response = [];
     let internal = duration.hours*60 + duration.minutes;
     slots = slots ? slots : [];
@@ -33,6 +33,124 @@ class MlAppointment {
   }
 
   /**
+   * Method :: getUserSlot
+   * Desc   :: Return the slots timing of specific date
+   * @param calendarSetting
+   * @param date
+   * @returns {userTimeSlot}
+   */
+  getUserSlot(calendarSetting, reqDate){
+    const that = this;
+    if(calendarSetting){
+      let date = new Date(reqDate);
+      /**
+       * Find request day through all the working day to get slots
+       */
+      let isWorkingDay = calendarSetting.workingDays.find(function (workingDay) {
+        return date.getDay() == workingDay.dayName;
+      });
+      if(isWorkingDay){
+        isWorkingDay.slotTimes = that.buildSlotTimes(calendarSetting.slotDuration, isWorkingDay.lunch, isWorkingDay.slots);
+        isWorkingDay.appointmentPerSlot = isWorkingDay.slotTimes.length;
+        isWorkingDay.totalSlots = isWorkingDay.appointmentPerSlot * calendarSetting.appointmentCountPerSlots;
+        delete isWorkingDay.lunch;
+        delete isWorkingDay.slots;
+        return isWorkingDay;
+      } else {
+        //Handle if user calendar is not set up
+      }
+    } else {
+      //they are free
+    }
+  }
+
+  /**
+   * Method :: getUserAvailabilityOfDifferentSlotOnDay
+   * Desc   :: Get the user available slots on specif date
+   * @param date
+   * @param slotsInfo
+   * @param userId
+   * @param profileId
+   * @returns {Array}
+   */
+  getUserAvailabilityOfDifferentSlotOnDay(date, slotsInfo, userId, profileId){
+    if(slotsInfo.isActive){
+      let endDate = new Date(date);
+      endDate.setDate(endDate.getDate()+1);
+      let appointments = mlDBController.find( 'MlAppointments', {'provider.userId':userId, 'provider.profileId':profileId, startDate: { gte:date } ,endDate: {lt:endDate} }).fetch();
+      let response = slotsInfo.slotTimes.map(function (time) {
+        let slotStartTime = getTimeDate(time.split('-')[0], date);
+        let slotEndTime = getTimeDate(time.split('-')[0], date);
+        let appoinmentsCountPerSlot = appointments.filter(function (appointment) {
+          let appointmentStartDate = new Date(appointment.startDate);
+          let appointmentEndDate = new Date(appointment.endDate);
+          return (slotStartTime >= appointmentStartDate && slotEndTime <= appointmentEndDate);
+        }).length;
+        return {
+          slotTime : time,
+          isAvailable: appoinmentsCountPerSlot == slotsInfo.appointmentPerSlot ? false : true
+        }
+      });
+        return response;
+
+    } else {
+      // User is not available
+    }
+  }
+
+  /**
+   * Method :: getSessionTimeSlots
+   * @param sessionId
+   * @param day
+   * @param month
+   * @param year
+   */
+  getSessionTimeSlots(sessionId, day, month, year){
+    const that = this;
+    let date = new Date();
+    date.setDate(day);
+    date.setMonth(month);
+    date.setYear(year);
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setSeconds(0);
+    let task = mlDBController.findOne('MlTask',{'session.sessionId':sessionId});
+
+    let calendarSetting = mlDBController.findOne('MlCalendarSettings',{userId: task.userId, profileId: task.profileId});
+    calendarSetting.vacations = calendarSetting.vacations ? calendarSetting.vacations : [];
+
+    let serviceProviderSlots = that.getUserSlot(calendarSetting, date);
+    let serviceProviderSlotsAvailability = that.getUserAvailabilityOfDifferentSlotOnDay(date, serviceProviderSlots, task.userId, task.profileId);
+    let teamSlotsAvailabilities = [];
+    // console.log(serviceProviderSlotsAvailability);
+    let session = task.session.find(function (data) {
+      return data.sessionId == sessionId;
+    });
+    let activities = mlDBController.find('MlActivity',{'_id': { $in: session.activities }}).fetch();
+    activities.forEach(function(activity){
+      activity.teams = activity.teams ? activity.teams : [];
+      //Skip for moolya admin
+      activity.teams.forEach(function (team) {
+        team.users = team.users ? team.users : [];
+        team.users.forEach(function (user) {
+          let calendarSetting = mlDBController.findOne('MlCalendarSettings',{userId: user.userId, profileId: user.profileId});
+          calendarSetting.vacations = calendarSetting.vacations ? calendarSetting.vacations : [];
+          let serviceProviderSlots = that.getUserSlot(calendarSetting, date);
+          let serviceProviderSlotsAvailability = that.getUserAvailabilityOfDifferentSlotOnDay(date, serviceProviderSlots, task.userId, task.profileId);
+          user.slotsAvailability = serviceProviderSlotsAvailability;
+          teamSlotsAvailabilities.push(user);
+        });
+      });
+    });
+    console.log(teamSlotsAvailabilities);
+    console.log(serviceProviderSlotsAvailability);
+    // console.log(session);
+    // console.log(activities[0].teams);
+    // console.log(sessionId, date, task, ServiceProviderSlots);
+
+  }
+
+  /**
    * Method :: getUserSlots
    * Desc   :: return specific user slots based on user calendar setting
    * @param calendarSetting :: Calender setting of user
@@ -45,9 +163,9 @@ class MlAppointment {
        * Looping through all the working day to get slots
        */
       let userSlots = calendarSetting.workingDays.map(function (workingDay) {
-        workingDay.slotTimes = that.buidSlotTimes(calendarSetting.slotDuration, workingDay.lunch, workingDay.slots);
-        workingDay.slotsPerday = workingDay.slotTimes.length;
-        workingDay.totalSlots = workingDay.slotsPerday * calendarSetting.appointmentCountPerSlots;
+        workingDay.slotTimes = that.buildSlotTimes(calendarSetting.slotDuration, workingDay.lunch, workingDay.slots);
+        workingDay.appointmentPerSlot = workingDay.slotTimes.length;
+        workingDay.totalSlots = workingDay.appointmentPerSlot * calendarSetting.appointmentCountPerSlots;
         delete workingDay.lunch;
         delete workingDay.slots;
         return workingDay;
@@ -200,9 +318,9 @@ class MlAppointment {
  * @param time
  * @returns {Date}
  */
-function getTimeDate(time) {
+function getTimeDate(time, date) {
   let timeParts = time.split(':');
-  let d = new Date();
+  let d = date ? new Date(date) : new Date();
   d.setHours(timeParts[0]);
   d.setMinutes(timeParts[1]);
   return d;

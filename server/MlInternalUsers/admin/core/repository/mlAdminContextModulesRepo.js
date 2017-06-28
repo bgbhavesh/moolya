@@ -322,6 +322,12 @@ let CoreModules = {
 
     var data= MlPortfolioDetails.find(resultantQuery,fieldsProj).fetch()||[];
     var totalRecords=MlPortfolioDetails.find(resultantQuery,fieldsProj).count();
+    data.map(function (doc,index) {
+      if(doc.allocation){
+        doc.assignedUser = doc.allocation.assignee
+        doc.assignedUserId = doc.allocation.assigneeId
+      }
+    });
     return {totalRecords:totalRecords,data:data};
   },
   MlTransactionLogRepo:(requestParams,userFilterQuery,contextQuery,fieldsProj, context)=>{

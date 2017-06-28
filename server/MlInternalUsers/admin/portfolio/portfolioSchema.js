@@ -43,6 +43,8 @@ let portfolioSchema = `
         transactionCreatedDate : String
         transactionUpdatedDate : String
         allocation      : allocation
+        assignedUser    : String
+        assignedUserId  : String
     }
       input portfoliodetails{
         _id:String,

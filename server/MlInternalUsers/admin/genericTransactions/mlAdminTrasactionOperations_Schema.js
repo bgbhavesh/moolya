@@ -22,7 +22,7 @@ input assignmentParams{
     }
 
 type Mutation {
-  updateGenericTransaction(module: String,params:transactionParams,transactionType:String,operation:String,transactionId:String):response
+  updateGenericTransaction(module: String,params:transactionParams,transactionType:String,operation:String,transactionId:[String]):response
 }`
 
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],transactOperations]);

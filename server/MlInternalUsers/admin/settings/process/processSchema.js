@@ -186,8 +186,8 @@ let Process = `
     
     type Query{
       findProcess(id:String):processOutput
-      findProcessDocumentForRegistration(clusterId:String,chapterId:String,subChapterId:String,userType:String,communityType:String,identityType:String,profession:String,industry:String,email:String):processOutput
       fetchKYCDocuments(chapters:[String],clusters:[String],subChapters:[String],community:String,kyc:String,documentType:String,displayAllOption:Boolean):[processDocumentOutput]
+      findProcessDocumentForRegistration(countryId:String,clusterId:String,chapterId:String,subChapterId:String,userType:String,communityType:String,identityType:String,profession:String,industry:String,email:String):[processDocumentOutput]
     }
     
 `

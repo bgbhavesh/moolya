@@ -301,3 +301,13 @@ MlResolver.MlMutationResolver['updatePortfolioProfilePic'] = (obj, args, context
   }
 }
 
+MlResolver.MlMutationResolver['removeIdetaorProfilePic'] = (obj, args, context, info) => {
+  let response;
+  if(args.portfoliodetailsId){
+    response = MlIdeatorPortfolio.update({portfolioDetailsId:args.portfoliodetailsId}, {$unset: { "portfolioIdeatorDetails.profilePic": ""}}, context)
+  }
+
+  return response;
+}
+
+

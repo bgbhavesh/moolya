@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 //import {fetchExternalUserProfilesActionHandler,setDefaultProfileActionHandler,deActivateProfileProfileActionHandler} from '../actions/switchUserProfilesActions';
 import {findUserActionHandler}  from '../actions/switchProfileActions'
-import {setAdminDefaultProfileActionHandler} from '../actions/switchProfileActions'
+import {setAdminDefaultProfileActionHandler,reloadPage} from '../actions/switchProfileActions'
 import {deActivateAdminProfileActionHandler} from '../actions/switchProfileActions'
 import {fetchClusterDetails} from '../actions/switchProfileActions'
 import {initalizeFloatLabel} from '../../../admin/utils/formElemUtil';
@@ -81,6 +81,7 @@ export default class MlAdminSwitchProfile extends React.Component{
 
     if(response){
       toastr.success("Default Profile set successfully");
+      reloadPage();
     }else{
       //throw error
       toastr.error("Failed to set the default profile");
@@ -198,9 +199,9 @@ export default class MlAdminSwitchProfile extends React.Component{
                 <div className="col-md-4" onClick={this.setDefaultUserProfile.bind(this)}>
                   <a href="#" className="fileUpload mlUpload_btn">Make Default</a>
                 </div>
-               {/* <div className="col-md-4" onClick={this.deactivateUserProfile.bind(this)}>
-                  <a href="#" className="fileUpload mlUpload_btn">Deactivate Profile</a>
-                </div>*/}
+                <div className="col-md-4" onClick={this.setDefaultUserProfile.bind(this)}>
+                  <a href="#" className="fileUpload mlUpload_btn">Switch Profile</a>
+                </div>
               </div>:""}
 
             </div>:<div>No Profiles Available</div>

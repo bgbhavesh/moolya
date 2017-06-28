@@ -122,4 +122,8 @@ export async function fetchClusterDetails(clusterId) {
 
 }
 
+export function reloadPage(){
+  location.reload();
+}
+
 

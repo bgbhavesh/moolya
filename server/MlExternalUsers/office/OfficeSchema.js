@@ -43,6 +43,16 @@ let myOfficeSchema = `
       lang : Float
     }
     
+    type ExternalUserProfiles {
+      profileId: String
+    } 
+    
+    type TeamMembersDetails {
+       name:String
+      _id: String
+      userId: String
+      externalUserProfiles: [ExternalUserProfiles]
+    }
     
     type BranchType{
     branchType: String
@@ -141,6 +151,12 @@ let myOfficeSchema = `
       lang : Float
     }
   
+      
+    input TeamName {
+      userType: String
+      officeId: String
+    }
+    
      input myOffice { 
         userId:String,
         userName : String,
@@ -180,7 +196,7 @@ let myOfficeSchema = `
         fetchOfficeMembers(officeId:String, isPrincipal:Boolean):[OfficeMembers]
         fetchAllOfficeMembersWithUserId:[OfficeMembersWithUserId]
         findOfficeDetail(officeId:String):response
-        getTeamUsers(Attributes:TeamName):[TeamUsers]
+        getTeamUsers(Attributes:TeamName):[TeamMembersDetails]
         getTeamMembers:[AvailableCommunities]
         getBranchDetails:[BranchType]
     }
@@ -201,6 +217,9 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], myOfficeSchema]);
   {api: 'fetchOffice', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
   {api: 'fetchOfficeSC', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
   {api: 'fetchOfficeById', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
+    {api:'getBranchDetails', actionName:'READ', moduleName:"OFFICE"},
+    {api:'getTeamMembers', actionName:'READ', moduleName:"OFFICE"},
+    {api:'getTeamUsers', actionName:'READ', moduleName:"OFFICE"},
   // {api: 'updateOfficeMembers', actionName: 'UPDATE', moduleName: "OFFICE"},
   {api: 'updateOffice', actionName: 'UPDATE', moduleName: "OFFICE"},
   {api: 'updateOfficeMember', actionName: 'UPDATE', moduleName: "OFFICE"},

@@ -73,6 +73,14 @@ class MlAddRole extends React.Component{
         toastr.error("Please Select One Module");
         return;
       }
+
+      for(var i = 0; i < modules.length; i++){
+        if(modules[i].actions.length == 0){
+          toastr.error("Please Select Action");
+          return;
+        }
+      }
+
       let roleDetails = {
         roleName: this.refs.roleName.value,
         displayName: this.refs.diplayName.value,

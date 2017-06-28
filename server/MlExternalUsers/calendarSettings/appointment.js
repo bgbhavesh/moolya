@@ -67,32 +67,59 @@ class MlAppointment {
   /**
    * Method :: getUserAvailabilityOfDifferentSlotOnDay
    * Desc   :: Get the user available slots on specif date
-   * @param date
-   * @param slotsInfo
-   * @param userId
-   * @param profileId
+   * @param date       :: Object - Date Object
+   * @param slotsInfo  :: Object - Slot information of the user
+   * @param userId     :: String - UserId of user
+   * @param profileId  :: String - ProfileId of user
    * @returns {Array}
    */
   getUserAvailabilityOfDifferentSlotOnDay(date, slotsInfo, userId, profileId){
+
+    /**
+     * Check slot is active or not
+     */
     if(slotsInfo.isActive){
+      /**
+       * Define the next day to get current date appointment
+       */
       let endDate = new Date(date);
       endDate.setDate(endDate.getDate()+1);
       let appointments = mlDBController.find( 'MlAppointments', {'provider.userId':userId, 'provider.profileId':profileId, startDate: { gte:date } ,endDate: {lt:endDate} }).fetch();
+
+      /**
+       * Create response
+       */
       let response = slotsInfo.slotTimes.map(function (time) {
         let slotStartTime = getTimeDate(time.split('-')[0], date);
-        let slotEndTime = getTimeDate(time.split('-')[0], date);
+        let slotEndTime = getTimeDate(time.split('-')[1], date);
+
+        /**
+         * Filter the current slot appointment form current day appointment
+         */
         let appoinmentsCountPerSlot = appointments.filter(function (appointment) {
           let appointmentStartDate = new Date(appointment.startDate);
           let appointmentEndDate = new Date(appointment.endDate);
           return (slotStartTime >= appointmentStartDate && slotEndTime <= appointmentEndDate);
         }).length;
+
+        /**
+         * Create status based on no of appointment count on this slot
+         */
+        let status = 0;
+        if(appoinmentsCountPerSlot == 0 || slotsInfo.appointmentPerSlot/2 < appoinmentsCountPerSlot ){
+          status = 0;
+        } else if(appoinmentsCountPerSlot != slotsInfo.appointmentPerSlot && slotsInfo.appointmentPerSlot/2 >= appoinmentsCountPerSlot){
+          status = 1;
+        } else if (appoinmentsCountPerSlot == slotsInfo.appointmentPerSlot){
+          status = 2;
+        }
         return {
           slotTime : time,
-          isAvailable: appoinmentsCountPerSlot == slotsInfo.appointmentPerSlot ? false : true
+          isAvailable: appoinmentsCountPerSlot == slotsInfo.appointmentPerSlot ? false : true,
+          status: status
         }
       });
         return response;
-
     } else {
       // User is not available
     }
@@ -107,6 +134,9 @@ class MlAppointment {
    */
   getSessionTimeSlots(sessionId, day, month, year){
     const that = this;
+    /**
+     * Initialize the date object and set date month and year
+     */
     let date = new Date();
     date.setDate(day);
     date.setMonth(month);
@@ -114,19 +144,32 @@ class MlAppointment {
     date.setHours(0);
     date.setMinutes(0);
     date.setSeconds(0);
+    /**
+     * Fetch user task info and calendar setting
+     */
     let task = mlDBController.findOne('MlTask',{'session.sessionId':sessionId});
-
     let calendarSetting = mlDBController.findOne('MlCalendarSettings',{userId: task.userId, profileId: task.profileId});
     calendarSetting.vacations = calendarSetting.vacations ? calendarSetting.vacations : [];
 
+    /**
+     * Get service provider available slots
+     */
     let serviceProviderSlots = that.getUserSlot(calendarSetting, date);
     let serviceProviderSlotsAvailability = that.getUserAvailabilityOfDifferentSlotOnDay(date, serviceProviderSlots, task.userId, task.profileId);
     let teamSlotsAvailabilities = [];
-    // console.log(serviceProviderSlotsAvailability);
+
+    /**
+     * Find the requested session
+     */
     let session = task.session.find(function (data) {
       return data.sessionId == sessionId;
     });
+
     let activities = mlDBController.find('MlActivity',{'_id': { $in: session.activities }}).fetch();
+
+    /**
+     * Get activity assignees available slots
+     */
     activities.forEach(function(activity){
       activity.teams = activity.teams ? activity.teams : [];
       //Skip for moolya admin
@@ -142,12 +185,35 @@ class MlAppointment {
         });
       });
     });
-    console.log(teamSlotsAvailabilities);
-    console.log(serviceProviderSlotsAvailability);
-    // console.log(session);
-    // console.log(activities[0].teams);
-    // console.log(sessionId, date, task, ServiceProviderSlots);
 
+    /**
+     * Intersection service provider available slots with assignees available slots
+     */
+    serviceProviderSlotsAvailability.forEach(function(serviceProviderSlotAvailabily){
+      let serviceProviderSlotStartTime = getTimeDate(serviceProviderSlotAvailabily.slotTime.split('-')[0], date);
+      let serviceProviderSlotEndTime = getTimeDate(serviceProviderSlotAvailabily.slotTime.split('-')[1], date);
+      let isServiceProviderSlotStartTimeFind = false;
+      let isServiceProviderSlotEndTimeFind = false;
+      teamSlotsAvailabilities.forEach(function (teamSlotsAvailability) {
+        teamSlotsAvailability.slotsAvailability.forEach(function (slotAvailability) {
+          if(!serviceProviderSlotAvailabily.isAvailable){
+            return;
+          }
+          let teamSlotStartTime = getTimeDate(slotAvailability.slotTime.split('-')[0], date);
+          let teamSlotEndTime = getTimeDate(slotAvailability.slotTime.split('-')[1], date);
+          if(teamSlotStartTime <= serviceProviderSlotStartTime && serviceProviderSlotStartTime < teamSlotEndTime) {
+            isServiceProviderSlotStartTimeFind = true;
+          }
+          if(isServiceProviderSlotStartTimeFind && !isServiceProviderSlotEndTimeFind){
+            serviceProviderSlotAvailabily.isAvailable = slotAvailability.isAvailable;
+          }
+          if(teamSlotStartTime < serviceProviderSlotEndTime && serviceProviderSlotEndTime <= teamSlotEndTime) {
+            isServiceProviderSlotEndTimeFind = true;
+          }
+        });
+      });
+    });
+    return serviceProviderSlotsAvailability;
   }
 
   /**

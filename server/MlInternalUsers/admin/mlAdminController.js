@@ -118,11 +118,11 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
           res.json({unAuthorized:true,message:"Not Authorized"})
           return;
       }*/
-      var isAut = mlAuthorization.authChecker({req, context})
+  /*    var isAut = mlAuthorization.authChecker({req, context})
       if(!isAut){
           res.json({unAuthorized:true,message:"Not Authorized"})
           return;
-      }
+      }*/
 
       return {
         schema  : executableSchema,

@@ -37,7 +37,7 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
     return response;
   }
 
-  if (role.modules.length == 0) {
+  if (role && role.modules && role.modules.length == 0) {
     let code = 409;
     let response = new MlRespPayload().errorPayload("Please Select One Module", code);
     return response;
@@ -47,6 +47,13 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
   role.updatedDateTime= new Date();
   role.updatedBy=  mlDBController.findOne("users", {_id: context.userId}, context).username;
   role.createdBy = mlDBController.findOne("users", {_id: context.userId}, context).username;
+
+  let uniqModule = _.uniqBy(role.modules, 'moduleId');
+  if (role.modules && uniqModule && uniqModule.length !== modules.length) {
+    let code = 409;
+    let response = new MlRespPayload().errorPayload("Please select different module", code);
+    return response;
+  }
 
   _.each(role.modules, function (module)
   {
@@ -141,6 +148,13 @@ MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
       } else {
         var id = args.roleId;
         var assignRoles = args.role.assignRoles;
+
+        let uniqModule = _.uniqBy(args.role.modules, 'moduleId');
+        if (_.isEmpty(args.role) || (args.role.modules && uniqModule && uniqModule.length !== modules.length)) {
+          let code = 409;
+          let response = new MlRespPayload().errorPayload("Please select different module", code);
+          return response;
+        }
         if(assignRoles){
           var hierarchyFound = false
           var response = null

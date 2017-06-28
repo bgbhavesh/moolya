@@ -162,6 +162,8 @@ class MlAuthorization
       if(role)
       {
         role.modules.map(function (module) {
+          if(module && !module.isActive)
+            return;
           if(module.moduleId == "all" || module.moduleId == accessModule._id){
             let actions = module.actions;
             actions.map(function (action) {

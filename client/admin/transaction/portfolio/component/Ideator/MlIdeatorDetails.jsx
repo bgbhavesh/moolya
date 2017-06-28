@@ -7,6 +7,7 @@ import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../
 import {findIdeatorDetailsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import MlLoader from '../../../../../commons/components/loader/loader'
 import _ from 'lodash';
+import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 
@@ -16,7 +17,9 @@ export default class MlIdeatorDetails extends React.Component{
     super(props);
     this.state={
         loading: true,
-        data:{}
+        data:{},
+      profilePic: " ",
+      defaultProfilePic: "/images/def_profile.png"
     }
     this.onClick.bind(this);
     this.handleBlur.bind(this);
@@ -74,7 +77,7 @@ export default class MlIdeatorDetails extends React.Component{
     if(empty){
       const response = await findIdeatorDetailsActionHandler(portfoliodetailsId);
       if (response) {
-        this.setState({loading: false, data: response});
+        this.setState({loading: false, data: response,profilePic:response.profilePic});
       }
     }else{
       this.setState({loading: false, data: that.context.ideatorPortfolio.portfolioIdeatorDetails});
@@ -90,6 +93,26 @@ export default class MlIdeatorDetails extends React.Component{
         }
       }
       this.props.getIdeatorDetails(data)
+  }
+
+  onFileUpload(e){
+    if(e.target.files[0].length ==  0)
+      return;
+    let file = e.target.files[0];
+    // let name = e.target.name;
+    // let fileName = e.target.files[0].name;
+    let data ={moduleName: "PORTFOLIO_PROFILE_IMG", actionName: "UPDATE", portfolioId:this.props.portfolioDetailsId,communityType:"IDE", portfolio:{portfolioIdeatorDetails:{profilePic:" "}}};
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
+  }
+  onFileUploadCallBack(resp){
+    if(resp){
+      let result = JSON.parse(resp)
+      if(result.success){
+        this.setState({profilePic:result.result})
+        this.setState({loading:true})
+        this.fetchPortfolioDetails();
+      }
+    }
   }
   render(){
     const showLoader = this.state.loading;
@@ -163,7 +186,11 @@ export default class MlIdeatorDetails extends React.Component{
 
                     <div className="form-group steps_pic_upload">
                       <div className="previewImg ProfileImg">
-                        <img src={this.state.data.profilePic?this.state.data.profilePic:'`'}/>
+                        <img src={this.state.profilePic?this.state.profilePic:this.state.defaultProfilePic}/>
+                      </div>
+                      <div className="fileUpload mlUpload_btn">
+                        <span>Profile Pic</span>
+                        <input type="file" className="upload" id="profilePic" onChange={this.onFileUpload.bind(this)}/>
                       </div>
                     </div>
                     <br className="brclear"/>

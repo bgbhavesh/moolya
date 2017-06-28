@@ -5,7 +5,7 @@ import {upsertRegionalActionHandler} from '../actions/upsertRegionalAction'
 import {findRegionalActionHandler} from '../actions/findRegionalAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {initalizeFloatLabel,OnToggleSwitch} from '../../../utils/formElemUtil';
 import MlLoader from '../../../../commons/components/loader/loader'
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
@@ -28,8 +28,15 @@ class MlRegional extends React.Component{
     return this;
   }
 
+   componentDidMount() {
+   if(this.state.data.isAcive){
+   $('#status').prop('checked', true);
+   }
+ }
+
   componentDidUpdate() {
     initalizeFloatLabel();
+    OnToggleSwitch(true,true);
     var WinHeight = $(window).height();
     $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
   }
@@ -121,6 +128,15 @@ class MlRegional extends React.Component{
            toastr.error("Please Enter Valid Phone Number")
        }
    }
+     onStatusChange(e){
+      const data=this.state.data;
+        if(e.currentTarget.checked){
+           this.setState({"currencyFormat":true});
+           }else{
+           this.setState({"currencyFormat":false});
+        }
+     }
+
   render(){
     let MlActionConfig = [
 
@@ -139,10 +155,9 @@ class MlRegional extends React.Component{
     ];
      let clusterquery=gql` query{  
           data:fetchCurrency{
-               label:currencyName
-               value:_id
-              label:currencyName
-    }  
+         label:currencyName
+         value:_id
+        }  
      }`;
      let decimalsLimit = [
        {value: '0', label: '0'},
@@ -202,19 +217,14 @@ class MlRegional extends React.Component{
                     <div className="form-group">
                          <span className={`placeHolder ${numberOfDigitsAfterDecimalActive}`}>Number Of Digits After Decimal </span>
                       <Select  name="form-field-name"  options={decimalsLimit} placeholder={"Number Of Digits After Decimal"}  value={this.state.numberOfDigitsAfterDecimal} onChange={this.optionsBySelectNumberOfDigitsAfterDecimal.bind(this)} className="float-label" />
-
                     </div>
                     <div className="form-group">
                           <Moolyaselect multiSelect={false}  placeholder={"Currency Symbol"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.currencySymbol} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'query'}  onSelect={this.optionsBySelectCurrencySymbol.bind(this)} />
                     </div>
-                    <div className="form-group">
-                     <span className={`placeHolder ${measurementSystemActive}`}>Measurement System </span>
-                     <Select  name="form-field-name"  options={measurementType} placeholder={"Measurement System"}  value={this.state.measurementSystem} onChange={this.optionsBySelectMeasurementSystem.bind(this)}  className="float-label" />
-                    </div>
-                    <div className="form-group">
+                      <div className="form-group">
                        <span className={`placeHolder ${valueSeparatorActive}`}>Value Separator</span>
-                       <Select  name="form-field-name"  options={valueSeperators} placeholder={"Value Separator"}   value={this.state.valueSeparator} onChange={this.optionsBySelectValueSeparator.bind(this)}   className="float-label"/>
-                    </div>
+                        <Select  name="form-field-name"  options={valueSeperators} placeholder={"Value Separator"}   value={this.state.valueSeparator} onChange={this.optionsBySelectValueSeparator.bind(this)}   className="float-label"/>
+                      </div>
                   </form>
                 </div>
               </div>
@@ -243,6 +253,17 @@ class MlRegional extends React.Component{
                       <div className="form-group">
                         <input type="text" ref="currencyValue" defaultValue={this.state.data && this.state.data.regionalCurrencyValue} placeholder="Currency Value" className="form-control float-label" id=""/>
                       </div>
+                      <div className="form-group">
+                      <span className={`placeHolder ${measurementSystemActive}`}>Measurement System </span>
+                      <Select  name="form-field-name"  options={measurementType} placeholder={"Measurement System"}  value={this.state.measurementSystem} onChange={this.optionsBySelectMeasurementSystem.bind(this)}  className="float-label" />
+                        </div>
+                         <div className="form-group switch_wrap inline_switch">
+                         <label>Currency Format</label>
+                           <label className="switch">
+                             <input type="checkbox" ref="status"  checked={this.state.currencyFormat} onChange={this.onStatusChange.bind(this)}/>
+                             <div className="slider"></div>
+                              </label>
+                         </div>
                       <br className="brclear"/>
                     </form>
                   </ScrollArea>

@@ -109,6 +109,11 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       requestParams.type='approved';
       result=CoreModulesRepo.MlInternalRequestRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
+    case "internalRejectedRequests":
+      requestParams=args.context||{};
+      requestParams.type='rejected';
+      result=CoreModulesRepo.MlInternalRequestRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
     case "portfolioRequests":
       requestParams=args.context||{};
       requestParams.type='requested';
@@ -176,6 +181,7 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "ConversationsLog":resolveType='TransactionsLog';break;
       case "internalRequests":resolveType='requests';break;
       case "internalApprovedRequests":resolveType='requests';break;
+      case "internalRejectedRequests":resolveType='requests';break;
       case "processSetup":resolveType='ProcessTransactions';break;
       case "officeTransaction":resolveType='officeTransactionType';break;
       case "documents":resolveType='ProcessType';break;

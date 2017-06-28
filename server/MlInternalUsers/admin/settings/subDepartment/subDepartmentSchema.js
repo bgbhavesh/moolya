@@ -74,7 +74,7 @@ let supportedApi = [
     {api:'createSubDepartment', actionName:'CREATE', moduleName:"SUBDEPARTMENT"},
     {api:'updateSubDepartment', actionName:'UPDATE', moduleName:"SUBDEPARTMENT"},
     {api:'findSubDepartment', actionName:'READ', moduleName:"SUBDEPARTMENT"},
-    {api:'fetchSubDepartments', actionName:'READ', moduleName:"SUBDEPARTMENT"},
+    {api:'fetchSubDepartments', actionName:'READ', moduleName:"SUBDEPARTMENT", isWhiteList:true},
     {api:'findSubDepartments', actionName:'READ', moduleName:"SUBDEPARTMENT"},
     {api:'fetchActiveSubDepartments', actionName:'READ', moduleName:"SUBDEPARTMENT"},
     {api:'fetchSubDepartmentsForRegistration', actionName:'READ', moduleName:"SUBDEPARTMENT", isWhiteList:true},

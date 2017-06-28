@@ -100,7 +100,8 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                           MlResolver.MlMutationResolver['createStartupPortfolio'](obj, portfolio, context, info)
                       break;
 
-                      case "Funders": {
+                      case "Investors": {
+
                           let funderInfo = {}
                           let fb = "";
                           let linkedIn="";
@@ -195,7 +196,7 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
                 }
                 break;
 
-                case "Funders":{
+                case "Investors":{
                     response = MlResolver.MlMutationResolver['updateFunderPortfolio'](obj, args, context, info)
                 }
                 break;

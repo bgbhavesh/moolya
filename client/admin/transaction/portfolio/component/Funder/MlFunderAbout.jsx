@@ -134,7 +134,7 @@ export default class MlFunderAbout extends React.Component {
 
   }
 
-    sendDataToParent(){
+  sendDataToParent(){
     let data = this.state.data;
     for (var propName in data) {
       if (data[propName] === null || data[propName] === undefined) {

@@ -26,7 +26,7 @@ export default class MlAppServiceStep1 extends React.Component{
   constructor(props){
     super(props)
     this.state = {
-      displayName:"",serviceName:"",frequencyType:"",validTillDate:null,status:"",clusterCode:"",
+      displayName:"",serviceName:"",frequencyType:"",validTillDate:"",status:"",clusterCode:"",
       chapterObject:[{id:"",name:""}],
       subChapterObject:[{}],
       communityObject:[{}],
@@ -65,7 +65,7 @@ async getDetails() {
     this.setState({
       serviceName: resp.name, displayName: resp.displayName, sessionsCost: resp.noOfSession,
       frequencyType: resp.sessionFrequency, hour: resp.duration.hours, minute: resp.duration.minutes,
-      status: resp.status, validTill: resp.validTill
+      status: resp.status, validTillDate: resp.validTill
     })
     let statess = []
     let citiess = []
@@ -74,21 +74,20 @@ async getDetails() {
     // let citiesArray = resp.city;
     // let communitiesArray = resp.community;
     resp.state.map(function (data) {
-      statess.push(data.name)
+      statess.push(data.id)
     })
     this.setState({states: statess})
     console.log(this.state.states)
 
 
     resp.city.map(function(data){
-        citiess.push(data.name)
+        citiess.push(data.id)
       })
       this.setState({chapters:citiess})
     console.log(this.state.chapters)
 
-
     resp.community.map(function(data){
-        communitiess.push(data.name)
+        communitiess.push(data.id)
       })
       this.setState({communities:communitiess})
     console.log(this.state.communities)
@@ -280,7 +279,7 @@ async getDetails() {
                   <label>Duration: &nbsp; <input type="text" className="form-control inline_input" onChange={(e)=>this.updateHours(e)} value={this.state.hour}  /> Hours <input type="text" className="form-control inline_input" onChange={(e)=>this.updateMinutes(e)} value={this.state.minute}  /> Mins </label>
                 </div>
                 <div className="form-group" id="date-time">
-                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Valid Till"}}   closeOnSelect={true} value={this.state.validTillDate} onChange={this.validTill.bind(this)}/>
+                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Valid Till"}}   closeOnSelect={true} value={moment(this.state.validTillDate).format('DD-MM-YY')} onChange={this.validTill.bind(this)}/>
                   <FontAwesome name="calendar" className="password_icon"  onClick={this.validTillToggle.bind(this)}/>
                 </div>
               </form>

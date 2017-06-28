@@ -22,8 +22,8 @@ let service=`
   type ServicePayment {
      amount: Int
      isDiscount: Boolean
-     discountAmount: Int
-     discountPercentage: Int
+     discountType: String
+     discountValue: Int
      isTaxInclusive: Boolean
      isPromoCodeApplicable: Boolean
   }
@@ -60,6 +60,10 @@ let service=`
   type States{
     id:String
     name:String
+  }
+  
+  type TotalTaskAmount{
+    totalAmount: Int
   }
 
   type Service {
@@ -109,8 +113,8 @@ let service=`
    input servicepayment {
        amount: Int
        isDiscount: Boolean
-       discountAmount: Int
-       discountPercentage: Int
+       discountType: String
+       discountValue: Int
        isTaxInclusive: Boolean
        isPromoCodeApplicable: Boolean
    }
@@ -184,6 +188,7 @@ let service=`
     type Query {
         fetchUserServices(profileId:String):[Service]
         findService(serviceId:String):Service
+        fetchTasksAmount(profileId:String):[TotalTaskAmount]
     }
 
     type Mutation {
@@ -198,6 +203,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], service]);
 let supportedApi = [
   {api:'fetchUserServices', actionName:'READ', moduleName:"OFFICE"},
   {api:'findService', actionName:'READ', moduleName:"OFFICE"},
+  {api:'fetchTasksAmount', actionName:'READ', moduleName:"OFFICE"},
   {api:'createService', actionName:'CREATE', moduleName:"OFFICE"},
   {api:'updateService', actionName:'UPDATE', moduleName:"OFFICE"},
 ]

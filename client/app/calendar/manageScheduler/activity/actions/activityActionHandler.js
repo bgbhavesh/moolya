@@ -52,6 +52,11 @@ export async function getTeamUsersActionHandler(Attributes) {
 query ($Attributes: TeamName) {
   getTeamUsers(Attributes: $Attributes) {
     name
+    userId
+    _id
+    externalUserProfiles{
+    profileId
+    }
   }
 }
     `,
@@ -111,8 +116,11 @@ query($activityId: String)  {
     }
     teams{
       branch
-      communityType
-      users
+      userType
+      users{
+        name
+        userId
+      }
     }
     conversation{
       isAudio
@@ -155,8 +163,11 @@ export async function fetchActivitiesActionHandler (profileId) {
         }
         teams{
       branch
-      communityType
-      users
+      userType
+      users{
+        name
+        userId
+      }
     }
       }
     }

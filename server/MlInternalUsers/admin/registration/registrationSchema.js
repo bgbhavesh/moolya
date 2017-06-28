@@ -477,5 +477,6 @@ let supportedApi = [
     {api:'fetchContextChapters', actionName:'READ', moduleName:"REGISTRATION", isWhiteList:true},
     {api:'fetchContextSubChapters', actionName:'READ', moduleName:"REGISTRATION", isWhiteList:true},
     {api:'forgotPassword', actionName:'READ', moduleName:"REGISTRATION"},
+    {api:'createKYCDocument',actionName:'UPDATE',moduleName:"REGISTRATION"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

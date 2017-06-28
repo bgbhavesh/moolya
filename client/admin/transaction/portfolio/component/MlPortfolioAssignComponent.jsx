@@ -78,8 +78,8 @@ export default class MlPortfolioAssignComponent extends React.Component {
       "role": this.state.selectedRole,
       "user": this.state.selectedUser
     }
-    if(hierarchyValidations.validateAssignAction(this.props.data.clusterId,this.state.selectedCluster)){
-      const response = await assignUserForTransactionAction("Portfolio",params,this.props.data.registrationId,"Portfolio","assignTransaction");
+    //if(hierarchyValidations.validateAssignAction(this.props.data.clusterId,this.state.selectedCluster)){
+      const response = await assignUserForTransactionAction("Portfolio",params,this.props.data.transactionId,"Portfolio","assignTransaction");
       if(response.success){
         this.setState({selectedCluster:null,selectedChapter:null,selectedSubChapter:null,selectedCommunity:null,selectedDepartment:null,selectedSubDepartment:null,selectedRole:null,selectedUser:null})
         toastr.success("Transaction assigned to user successfully");
@@ -90,17 +90,17 @@ export default class MlPortfolioAssignComponent extends React.Component {
         this.props.closePopOver(false)
         FlowRouter.reload();
       }
-    }else{
+    /*}else{
       toastr.error("Wrong assignment");
       this.props.closePopOver(false)
       FlowRouter.reload();
-    }
+    }*/
 
   }
 
   async selfAssignTransaction(){
     let transactionType=this.props.data.transactionType
-    const response = await selfAssignUserForTransactionAction("Portfolio",this.props.data.registrationId,"Portfolio","selfAssignTransaction");
+    const response = await selfAssignUserForTransactionAction("Portfolio",this.props.data.transactionId,"Portfolio","selfAssignTransaction");
     if(response.success){
       toastr.success("Self Assignment successfull");
       this.props.closePopOver(false)
@@ -113,7 +113,7 @@ export default class MlPortfolioAssignComponent extends React.Component {
   }
 
   async unAssignTransaction(){
-    const response = await unAssignUserForTransactionAction("Portfolio",this.props.data.registrationId,"Portfolio","unAssignTransaction");
+    const response = await unAssignUserForTransactionAction("Portfolio",this.props.data.transactionId,"Portfolio","unAssignTransaction");
     if(response.success){
       toastr.success("UnAssignment successfull");
       this.props.closePopOver(false)

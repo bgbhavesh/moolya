@@ -47,7 +47,7 @@ MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
       count: totalUsers,
       icon: "ml ml-browser"
     })
-  if(chapterCount>0){
+  if(chapterCount>=0){
     response.push({
       key: '321',
       count: chapterCount,

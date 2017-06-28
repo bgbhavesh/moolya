@@ -43,6 +43,8 @@ let portfolioSchema = `
         transactionCreatedDate : String
         transactionUpdatedDate : String
         allocation      : allocation
+        assignedUser    : String
+        assignedUserId  : String
     }
       input portfoliodetails{
         _id:String,
@@ -98,6 +100,7 @@ let portfolioSchema = `
           approvePortfolio(portfoliodetailsId:String):response
           rejectPortfolio(portfoliodetailsId:String):response
           requestForGoLive(portfoliodetailsId:String):response
+          updatePortfolioProfilePic(portfolioId:String,docUrl:String,communityType:String):response   
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], portfolioSchema]);

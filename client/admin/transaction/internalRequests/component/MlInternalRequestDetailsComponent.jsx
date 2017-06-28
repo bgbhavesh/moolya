@@ -105,7 +105,8 @@ export default class MlInternalRequestDetailsComponent extends React.Component {
   render() {
     let statusOptions = [
       {value: 'WIP', label: 'WIP' , clearableValue: true},
-      {value: 'Approved', label: 'Approved',clearableValue: true}
+      {value: 'Approved', label: 'Approved',clearableValue: true},
+      {value: 'Rejected', label: 'Rejected',clearableValue: true}
     ];
     return (
       <div className="ml_tabs">

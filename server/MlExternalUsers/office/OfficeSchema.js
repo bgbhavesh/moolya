@@ -94,9 +94,9 @@ let myOfficeSchema = `
         userId:String,
         profileId:String,
         officeId:String,
-        totalCount:Int,
-        principalUserCount:Int,
-        teamUserCount:Int,
+        totalusercount:Int,
+        principalcount:Int,
+        teamMembercount:Int,
         availableCommunities:[AvailableCommunities]
         isActive:Boolean,
         isActivated:Boolean,

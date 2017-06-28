@@ -27,13 +27,19 @@ MlResolver.MlQueryResolver['fetchOfficeSC'] = (obj, args, context, info) => {
     officeSC = mlDBController.find('MlOfficeSC', {userId: context.userId, isActive:true}).fetch()
     let extProfile = new MlUserContext(context.userId).userProfileDetails(context.userId)
     let regData = mlDBController.findOne('MlRegistration', {'registrationInfo.communityDefCode': extProfile.communityDefCode,'registrationInfo.userId':context.userId, status:'Approved'})
-    let isRegApproved = false
-    if(regData)
-      isRegApproved = true
-    var newArr = _.map(officeSC, function(element) {
-      return _.extend({}, element, {isRegistrationApproved: isRegApproved});
-    });
-    return newArr
+    if(regData){
+      if(!_.isEmpty(officeSC)){  //if office is there and reg approved
+        var newArr = _.map(officeSC, function(element) {
+          return _.extend({}, element, {isRegistrationApproved: true});
+        });
+        return newArr
+      }else{          //if no office and registration is approved
+        return [{isRegistrationApproved: true}]
+      }
+
+    }else {
+      return [{isRegistrationApproved: false}]
+    }
   } else {
     let code = 400;
     let response = new MlRespPayload().errorPayload("Not a Valid user", code);
@@ -74,6 +80,7 @@ MlResolver.MlQueryResolver['fetchAllOfficeMembersWithUserId'] = (obj, args, cont
       }
     },
     { $unwind:"$user"},
+    { $match: { 'user.profile.isActive':true } },
     { $project: {name:1, userId: '$user._id' , profileImage:'$user.profile.profileImage'} }
   ];
   let response = mlDBController.aggregate('MlOfficeMembers', pipeline);

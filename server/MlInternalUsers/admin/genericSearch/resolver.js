@@ -732,9 +732,13 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlFilters.find(query,findOptions).fetch();
     totalRecords=MlFilters.find(query,findOptions).count();
   }
-  if(args.module=="FunderPortfolio"){
-    data= MlFunderPortfolio.find(query,findOptions).fetch();
-    totalRecords=MlFunderPortfolio.find(query,findOptions).count();
+
+  if (args.module == "FunderPortfolio") {
+    let value = mlDBController.find('MlPortfolioDetails', {status: 'gone live', communityCode: "FUN"}, context).fetch()    //making dependency of funders on portfolio status
+    let portId = _lodash.map(value, '_id')
+    let finalQuery = mergeQueries(query, {portfolioDetailsId: {$in: portId}});
+    data = MlFunderPortfolio.find(finalQuery, findOptions).fetch();
+    totalRecords = MlFunderPortfolio.find(finalQuery, findOptions).count();
   }
 
   if(args.module=="SubDomain"){

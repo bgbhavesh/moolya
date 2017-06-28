@@ -307,6 +307,14 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
               });
               break;
             }
+            case "PORTFOLIO_PROFILE_IMG":{
+              imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "registrationDocuments/");
+              imageUploadCallback=Meteor.bindEnvironment(function(resp) {
+                let portfolioDocumentUploadReq={portfolioId:data.portfolioId,docUrl: resp,communityType:data.communityType,moduleName: data.moduleName,actionName: data.actionName};
+                MlResolver.MlMutationResolver['updatePortfolioProfilePic'](null,portfolioDocumentUploadReq, context, null);
+              });
+              break;
+            }
           }
 
           if(imageUploaderPromise) {

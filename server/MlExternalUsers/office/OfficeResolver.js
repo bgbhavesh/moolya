@@ -80,6 +80,7 @@ MlResolver.MlQueryResolver['fetchAllOfficeMembersWithUserId'] = (obj, args, cont
       }
     },
     { $unwind:"$user"},
+    { $match: { 'user.profile.isActive':true } },
     { $project: {name:1, userId: '$user._id' , profileImage:'$user.profile.profileImage'} }
   ];
   let response = mlDBController.aggregate('MlOfficeMembers', pipeline);

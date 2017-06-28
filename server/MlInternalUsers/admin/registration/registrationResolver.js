@@ -104,6 +104,8 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
     let response = new MlRespPayload().errorPayload("username is mandatory!!!!",code);
     return response;
   }
+  validationCheck=MlRegistrationPreCondition.validateRegisterAsActiveCommunity(args.registration);
+  if(validationCheck&&!validationCheck.isValid){return validationCheck.validationResponse;}
   var userInfo = mlDBController.findOne('MlRegistration', args.registrationId, context) || {};
   let userRegisterInfo=userInfo.registrationInfo;
   let registrationInfo=args.registration
@@ -129,9 +131,9 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
   orderNumberGenService.assignRegistrationId(args.registration)
   var emails=[{address:args.registration.email,verified:true}];
   //create transaction
-  let resp = MlResolver.MlMutationResolver['createRegistrationTransaction'] (obj,{'transactionType':"registration"},context, info);
-  args.registration.transactionId = resp.result;
-  let id = mlDBController.insert('MlRegistration', {registrationInfo: registrationInfo,status: "Yet To Start",emails:emails, transactionId: resp.result}, context)
+  /*let resp = MlResolver.MlMutationResolver['createRegistrationTransaction'] (obj,{'transactionType':"registration"},context, info);
+  args.registration.transactionId = resp.result;*/
+  let id = mlDBController.insert('MlRegistration', {registrationInfo: registrationInfo,status: "Yet To Start",emails:emails, transactionId: registrationInfo.registrationId}, context)
   if(id){
 
   /*  MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);*/
@@ -148,7 +150,7 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
 MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, info) => {
 
   var response=null;
-  var registrationExist = MlRegistration.findOne({"registrationInfo.email":args.registration.email})
+  var registrationExist = MlRegistration.findOne({"registrationInfo.email":args.registration.email,status: { $nin: [ 'Rejected' ] }})//MlRegistration.findOne({"registrationInfo.email":args.registration.email})
   var userExist = mlDBController.findOne('users', {"profile.email":args.registration.email}, context) || {};
   if(registrationExist || userExist._id){
     let code = 400;
@@ -1200,28 +1202,40 @@ MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) 
   let kycCategoryDetails;
   let docTypeDetails;
   if(args.documentID){
-     documentDetails = MlDocumentMapping.findOne({"_id":args.documentID});
+     documentDetails = MlDocumentMapping.findOne({"_id":args.documentID}) || {};
+  }else{
+    return
   }
-  kycDocumentObject.documentId = args.documentID;
-  kycDocumentObject.documentDisplayName = documentDetails.documentDisplayName;
-  kycDocumentObject.allowableFormat = documentDetails.allowableFormat;
-  kycDocumentObject.documentName = documentDetails.documentName;
-  kycDocumentObject.allowableMaxSize = documentDetails.allowableMaxSize;
+  kycDocumentObject.documentId = args.documentID?args.documentID:"";
+  kycDocumentObject.documentDisplayName = documentDetails.documentDisplayName?documentDetails.documentDisplayName:"";
 
+  kycDocumentObject.documentName = documentDetails.documentName?documentDetails.documentName:"";
+  kycDocumentObject.allowableMaxSize = documentDetails.allowableMaxSize?documentDetails.allowableMaxSize:"";
+  kycDocumentObject.allowableFormat = []
+  if(documentDetails.allowableFormat){
+    let documentFormat = MlDocumentFormats.find({"_id":{$in: documentDetails.allowableFormat}}).fetch();
+    let documentFormatArray = _.pluck(documentFormat, 'docFormatName') || [];
+    if(documentFormatArray){
+      let allowableFormatArray = documentFormatArray.join();
+      kycDocumentObject.allowableFormat.push(allowableFormatArray);
+    }
+
+  }
   if(args.kycDocID){
-    kycCategoryDetails = MlDocumentCategories.findOne({"_id":args.kycDocID});
+    kycCategoryDetails = MlDocumentCategories.findOne({"_id":args.kycDocID}) || {};
   }
   if(args.docTypeID){
-    docTypeDetails = MlDocumentTypes.findOne({"_id":args.docTypeID});
+    docTypeDetails = MlDocumentTypes.findOne({"_id":args.docTypeID}) || {};
   }
-  kycDocumentObject.kycCategoryId = kycCategoryDetails._id
-  kycDocumentObject.kycCategoryName = kycCategoryDetails.docCategoryDisplayName
-  kycDocumentObject.docTypeId = docTypeDetails._id
-  kycDocumentObject.docTypeName = docTypeDetails.docTypeDisplayName
+  kycDocumentObject.kycCategoryId = kycCategoryDetails._id?kycCategoryDetails._id:"";
+  kycDocumentObject.kycCategoryName = kycCategoryDetails.docCategoryDisplayName?kycCategoryDetails.docCategoryDisplayName:"";
+  kycDocumentObject.docTypeId = docTypeDetails._id?docTypeDetails._id:"";
+  kycDocumentObject.docTypeName = docTypeDetails.docTypeDisplayName?docTypeDetails.docTypeDisplayName:"";
   kycDocumentObject.isActive= true
   kycDocumentObject.isMandatory= false
+  kycDocumentObject.status= "Awaiting upload"
 
- 
+
   let id;
   let registrationDetails;
   if(args.registrationId){
@@ -1244,6 +1258,12 @@ MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) 
     id = mlDBController.update('MlRegistration', {
       _id: args.registrationId,
       kycDocuments: {$exists: false}
-    }, {'kycDocuments': kycDocumentObject}, {$set: true}, context)
+    }, {'kycDocuments': kycDocumentObject}, {$push: true}, context)
   }
+  if(id){
+    return new MlRespPayload().successPayload("Document created successfully", 200);
+  }else{
+    return new MlRespPayload().errorPayload("Kindly enter all manditory fields",403);
+  }
+
 }

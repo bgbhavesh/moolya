@@ -81,11 +81,11 @@ export default class MlPortfolioLanding extends Component {
         {showLoader === true? (<MlLoader/>) : (
           <div>{kycApproved=="Approved"?<div className="admin_main_wrap">
             {(userCommunity == "Ideators") ?
-              <MlAppIdeatorIdeas/> : <MlAppPortfolio config={portfolioId} communityType={userCommunity}/>
+              <MlAppIdeatorIdeas/> : <MlAppPortfolio config={portfolioId} communityType={userCommunity} viewMode={false}/>
             }
           </div>: <div className="app_main_wrap">
 
-            {/*<div className="view_switch map_view"/>*/}
+            {/*<div className="view_switch map_view"/>*/} 
 
             <div className="app_padding_wrap no_padding">
               <div className="list_view_block">

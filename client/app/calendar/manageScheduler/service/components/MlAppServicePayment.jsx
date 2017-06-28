@@ -34,12 +34,15 @@ export default class Step4 extends React.Component{
     let id = FlowRouter.getQueryParam('id')
     const resp = await fetchServiceActionHandler(id)
     if(resp) {
-      this.setState({amountToPay:resp.payment.amount,discountAmount:resp.payment.discountAmount,
-        discountPercentage:resp.payment.discountPercentage,status:resp.payment.isTaxInclusive,
-        promo:resp.payment.isPromoCodeApplicable, facilitationAmount:resp.facilitationCharge.amount,
-        derivedValue:resp.facilitationCharge.derivedAmount,facilitationPercentage:resp.facilitationCharge.percentage
+      this.setState({
+        amountToPay: resp.payment.amount, discountAmount: resp.payment.discountAmount,
+        discountPercentage: resp.payment.discountPercentage, status: resp.payment.isTaxInclusive,
+        promo: resp.payment.isPromoCodeApplicable, facilitationAmount: resp.facilitationCharge.amount,
+        derivedValue: resp.facilitationCharge.derivedAmount, facilitationPercentage: resp.facilitationCharge.percentage,
+        tasks: resp.tasks
       })
     }
+
   }
 
   discountEligibility(e){

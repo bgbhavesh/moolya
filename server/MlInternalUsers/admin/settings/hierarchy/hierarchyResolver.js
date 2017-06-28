@@ -23,6 +23,28 @@ MlResolver.MlQueryResolver['fetchMoolyaBasedDepartmentAndSubDepartment'] = (obj,
   return list;
 }
 
+MlResolver.MlQueryResolver['fetchNonMoolyaBasedDepartmentAndSubDepartments'] = (obj, args, context, info) => {
+  console.log("fetchNonMoolyaBasedDepartmentAndSubDepartment")
+  let list = [];
+  let resp = mlDBController.find('MlDepartments', {
+    $and: [
+      {isMoolya:false},
+      {"depatmentAvailable.cluster": {$in: ["all", args.clusterId]}},
+      {"depatmentAvailable.subChapter": {$in: ["all", args.subChapterId]}}
+    ]
+  }, context).fetch()
+  resp.map(function (department) {
+    let subDepartments = MlSubDepartments.find({"departmentId": department._id}).fetch();
+    subDepartments.map(function (subDepartment) {
+      let deptAndSubDepartment = null
+      deptAndSubDepartment ={departmentId:department._id,departmentName:department.departmentName,subDepartmentId:subDepartment._id,subDepartmentName:subDepartment.subDepartmentName,isMoolya:department.isMoolya,isActive:department.isActive}
+      list.push(deptAndSubDepartment)
+    })
+  })
+
+  return list;
+}
+
 
 MlResolver.MlMutationResolver['updateHierarchyRoles'] = (obj, args, context, info) => {
  /* let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);

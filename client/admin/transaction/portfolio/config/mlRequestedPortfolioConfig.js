@@ -3,6 +3,8 @@ import React from 'react';
 import gql from 'graphql-tag'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
 import MlPortfolioAssignComponent from '../component/MlPortfolioAssignComponent'
+import {validateTransaction} from '../actions/assignUserforTransactionAction'
+
 const mlRequestedPortfolioTableConfig=new MlViewer.View({
   name:"portfolioInfoTable",
   module:"portfolioDetails",//Module name for filter.
@@ -30,7 +32,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
     {dataField: "source", title: "Source",dataSort:true},
     {dataField: "createdBy", title: "Created By",dataSort:true},
     {dataField: "status", title: "Status",dataSort:true},
-    {dataField: "assignedTo", title: "Assign",dataSort:true},
+    {dataField: "assignedUser", title: "Assign",dataSort:true},
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -38,30 +40,17 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
     {
       actionName: 'edit',
       showAction: true,
-      handler: (data)=>{
-        if(data && data.id){
+      handler: async(data)=>{
+        let response =  await validateTransaction(data.transactionId,"MlPortfolioDetails",data.assignedUserId);
+        if(data && data.id && response.success === true){
           FlowRouter.go("/admin/transactions/portfolio/editRequests/"+data.id+"/"+data.communityType);
+        }else if(data && data.id){
+          toastr.error("User does not have access to edit record");
         } else{
-          toastr.error("Please select a record");
+          toastr.error("Please Select a record");
         }
       }
     },
-    /*{
-      showAction: true,
-      actionName: 'comment',
-      handler: null
-    },*/
-  /*  {
-      showAction: true,
-      actionName: 'assign',
-      handler: (data)=>{
-        if(data && data.id){
-          const internalConfig=data;
-        } else{
-          toastr.error("Please select a record");
-        }
-      }
-    },*/
     {
       showAction: true,
       actionName: 'assign',
@@ -90,25 +79,15 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
     },
     // {
     //   showAction: true,
-    //   actionName: 'logout',
-    //   handler: (data)=>{console.log(data);}
+    //   actionName: 'approveUser',
+    //   handler: (data) => {
+    //     if (data && data.id) {
+    //       FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/" + data.id+"/"+data.communityType);
+    //     } else {
+    //       toastr.error("Please select a record");
+    //     }
+    //   }
     // },
-    /*{
-      showAction: true,
-      actionName: 'cancel',
-      handler: null
-    },*/
-    {
-      showAction: true,
-      actionName: 'approveUser',
-      handler: (data) => {
-        if (data && data.id) {
-          FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/" + data.id+"/"+data.communityType);
-        } else {
-          toastr.error("Please select a record");
-        }
-      }
-    },
     {
       showAction: true,
       actionName: 'rejectUser',
@@ -167,6 +146,9 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
                           createdAt
                           status
                           assignedTo
+                          transactionId
+                          assignedUser
+                          assignedUserId
                      }
                       }
               }

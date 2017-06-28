@@ -5,16 +5,7 @@
   import MlSchemaDef from '../../commons/mlSchemaDef'
   import MlResolver from "../../commons/mlResolverDef";
 
-
   let task=`
-
-   type TermsAndCondition {
-     isCancelable: Boolean
-     isRefundable: Boolean
-     isReschedulable: Boolean
-     noOfReschedulable: Int
-   }
-
    type Attachments {
      name: String
      info: String
@@ -24,10 +15,10 @@
    type Payment {
      amount: Int
      isDiscount: Boolean
-     discountAmount: Boolean
-     discountPercentage: Int
-     isTaxInclusive: Boolean
+     discountType : String
+     discountValue : Int
      isPromoCodeApplicable: Boolean
+     derivedAmount :Int
    }
 
    type FacilitationCharge {
@@ -42,6 +33,7 @@
    }
   
    type Session{
+       sessionId : String
        duration : Duration
        activities: [String]
    }
@@ -60,25 +52,19 @@
       duration: Duration
       isServiceCardEligible: Boolean
       session: [Session]
-      termsAndCondition: TermsAndCondition
       attachments: [Attachments]
       payment: Payment
       facilitationCharge: FacilitationCharge
       createdAt: Date
       updatedAt: Date
+      isActive: Boolean
    }
 
 
    input session{
+       sessionId : String
        duration : duration
        activities: [String]
-   }
-
-   input termsAndCondition {
-       isCancelable: Boolean
-       isRefundable: Boolean
-       isReschedulable: Boolean
-       noOfReschedulable: Int
    }
 
    input attachments {
@@ -89,10 +75,10 @@
    input payment {
        amount: Int
        isDiscount: Boolean
-       discountAmount: Boolean
-       discountPercentage: Int
-       isTaxInclusive: Boolean
+       discountType : String
+       discountValue : Int
        isPromoCodeApplicable: Boolean
+       derivedAmount : Int
    }
    input facilitationCharge {
         amount: Int
@@ -116,12 +102,12 @@
         duration: duration
         isServiceCardEligible: Boolean
         session: [session]
-        termsAndCondition: termsAndCondition
         attachments: [attachments]
         payment: payment
         facilitationCharge: facilitationCharge
         createdAt: Date
         updatedAt: Date
+        isActive: Boolean
    }
 
    type Query{
@@ -147,3 +133,19 @@
     {api:'updateTask', actionName:'UPDATE', moduleName:"OFFICE"},
   ]
   MlResolver.MlModuleResolver.push(supportedApi)
+// termsAndCondition: TermsAndCondition
+
+// type TermsAndCondition {
+//   isCancelable: Boolean
+//   isRefundable: Boolean
+//   isReschedulable: Boolean
+//   noOfReschedulable: Int
+// }
+
+// input termsAndCondition {
+//   isCancelable: Boolean
+//   isRefundable: Boolean
+//   isReschedulable: Boolean
+//   noOfReschedulable: Int
+// }
+// termsAndCondition: termsAndCondition

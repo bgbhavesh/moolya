@@ -20,6 +20,7 @@ import MlTransactionRequested from '../../admin/transaction/requests/components/
 import MlRequestedList from '../../admin/transaction/requested/component/MlRequestedList'
 import MlSystemsLogList from '../../admin/transaction/systemsLog/component/MlSystemsLogList'
 import MlRegistrtionApprovedList from '../../admin/transaction/requested/component/MlRegistrtionApprovedList'
+import MlRegistrtaionRejectedList from '../../admin/transaction/requested/component/MlRegistrationRejectedList'
 import  RegistrationWizard from  '../../admin/transaction/requested/component/RegistrationWizard'
 import MlProcessDocumentList from '../../admin/processDocument/cluster/components/MlProcessDocumentList'
 import MlProcessDocMapping from '../../admin/processDocument/cluster/components/MlProcessDocMapping'
@@ -60,6 +61,8 @@ import MlTransactionTabHistoryList from '../../admin/transaction/transactionAudi
 import MlRegistrationTabHistoryList from '../../admin/transaction/requested/registrationAuditLog/components/MlRegistrationTabHistoryList'
 import MlPotfolioTabHistoryList from '../../admin/transaction/portfolio/portfolioAuditLog/components/MlPotfolioTabHistoryList'
 import EditTaxation from '../../admin/transaction/office/component/MlOfficeList'
+import MlRegistrationRejectedList from '../../admin/transaction/requested/component/MlRegistrationRejectedList'
+import MlRejectedInternalRequestsList from '../../admin/transaction/internalRequests/component/MlRejectedInternalRequestsList'
 
 const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
 if(localStorageLoginToken){
@@ -221,12 +224,30 @@ adminSection.route('/transactions/approvedList', {
   }
 });
 
+adminSection.route('/transactions/rejectList', {
+  name: 'transaction_RejectedList',
+  action(){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'reject'}} />, adminContent:<MlRejectedInternalRequestsList/>})
+    //mount(AdminLayout,{adminContent:<MlTransactionApprovals/>})
+  }
+});
+
 adminSection.route('/transactions/registrationApprovedList', {
   name: 'transaction_registration_approved',
   action(){
     mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'approved'}} />,  adminContent:<MlRegistrtionApprovedList/>})
   }
 });
+
+/*
+adminSection.route('/transactions/registrationRejectedList', {
+  name: 'transaction_registration_rejected',
+  action(){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'reject'}} />,  adminContent:<MlRegistrtaionRejectedList/>})
+  }
+});
+*/
+
 
 
 adminSection.route('/transactions/registrationRequested/edit', {
@@ -324,6 +345,14 @@ adminSection.route('/transactions/createRegistration', {
   name: 'transaction_registration_create',
   action(params){
     mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'create'}} />, adminContent:<MlCreateRegistration/>})
+  }
+});
+
+
+adminSection.route('/transactions/rejectedRegistrations', {
+  name: 'transaction_registration_reject',
+  action(params){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'reject'}} />, adminContent:<MlRegistrationRejectedList/>})
   }
 });
 

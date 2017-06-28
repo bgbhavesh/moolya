@@ -24,6 +24,11 @@ let chapterSchema = `
         status:status
     }
     
+    type status{
+      code: String
+      description: String
+    }
+    
     input chapterObject{
         _id:String,
         clusterId:String,
@@ -171,7 +176,7 @@ let supportedApi = [
     {api:'updateSubChapter', actionName:'UPDATE', moduleName:"SUBCHAPTER"},
     {api:'fetchChapter', actionName:'READ', moduleName:"CHAPTER"},
     {api:'fetchChaptersWithoutAll', actionName:'READ', moduleName:"CHAPTER", isWhiteList:true},
-    {api:'fetchChapters', actionName:'READ', moduleName:"CHAPTER"},
+    {api:'fetchChapters', actionName:'READ', moduleName:"CHAPTER", isWhiteList:true},
     {api:'fetchSubChapter', actionName:'READ', moduleName:"SUBCHAPTER"},
     {api:'fetchSubChaptersSelect', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
     {api:'fetchActiveSubChapters', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},

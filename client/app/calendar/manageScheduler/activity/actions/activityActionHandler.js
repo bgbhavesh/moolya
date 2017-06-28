@@ -117,13 +117,13 @@ query($activityId: String)  {
     conversation{
       isAudio
       isVideo
-      isMeetup
+      isMeetUp
     }
     payment{
       amount
       isDiscount
-      discountAmount
-      discountPercentage
+      discountType
+      discountValue
       isTaxInclusive
       isPromoCodeApplicable
     }
@@ -163,7 +163,8 @@ export async function fetchActivitiesActionHandler (profileId) {
     `,
     variables: {
       profileId:profileId
-    }
+    },
+    forceFetch:true
   });
   const activities = result.data.fetchActivities;
   return activities

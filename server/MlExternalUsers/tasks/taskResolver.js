@@ -24,6 +24,7 @@ MlResolver.MlQueryResolver['fetchTask'] = (obj, args, context, info) => {
 MlResolver.MlMutationResolver['createTask'] = (obj, args, context, info) => {
   if (args.taskDetails) {
     let userId = context.userId
+    orderNumberGenService.createTaskId(args.taskDetails);
     let obj = args.taskDetails
     obj['userId'] = userId
     obj['createdAt'] = new Date ()
@@ -45,11 +46,49 @@ MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
   if(!_.isEmpty(args.taskDetails)){
     let task = mlDBController.findOne('MlTask', {_id: args.taskId}, context)
     if(task){
+      if(!_.isEmpty(args.taskDetails.session)){
+        let countSessionAry = []
+        _.each(args.taskDetails.session,function (item,say) {   //attaching sessionId in session array
+          if(!item.sessionId)
+            orderNumberGenService.createSessionId(item);
+          countSessionAry.push(item)
+        })
+        args.taskDetails.session = countSessionAry
+        let activity = _.map(args.taskDetails.session, 'activities')
+        let act= []
+        _.each(activity, function (item,say) {   //removing the empty array
+          if(!_.isEmpty(item))
+            act.push(item)
+        })
+
+        let costAry = []
+        _.each(act,function (item,say) {    //amount calculation based on activity
+          let details = mlDBController.find('MlActivity',{_id:{$in:item}}, context).fetch()
+          let amount = _.map(details, 'facilitationCharge.derivedAmount')
+          _.each(amount, function (i,s) {
+            costAry.push(i)
+          })
+        })
+        let finalCost = _.sum(costAry)
+        let pick;
+        if(args.taskDetails.payment)   //picking up the last details without amount
+          pick = _.pick(args.taskDetails.payment, ['isDiscount','discountType','discountValue', 'isPromoCodeApplicable', 'derivedAmount'])
+        else
+          pick = _.pick(task.payment, ['isDiscount','discountType','discountValue', 'isPromoCodeApplicable', 'derivedAmount'])
+        let paymentAmount = {
+          amount: finalCost
+        }
+        paymentAmount = _.extend(paymentAmount, pick)
+        args.taskDetails = _.extend(args.taskDetails, {payment:paymentAmount})
+      }
+
       for(key in args.taskDetails){
         task[key] = args.taskDetails[key]
       }
+
       args.taskDetails['updatedAt'] = new Date()
-      let result = mlDBController.update('MlTask', {_id: args.taskId}, args.taskDetails, {'$set': 1}, context)
+      // let result = mlDBController.update('MlTask', {_id: args.taskId}, args.taskDetails, {'$set': 1}, context)
+      let result = mlDBController.update('MlTask', {_id: args.taskId}, task, {'$set': 1}, context)
       if (result) {
         let code = 200;
         let response = new MlRespPayload().successPayload('Successfully Updated', code);

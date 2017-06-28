@@ -24,7 +24,8 @@ let Role = `
   }
   
   type Actions{
-      actionId : String
+      actionId : String,
+      actionCode: String
   }
 
   type Roles{
@@ -37,6 +38,8 @@ let Role = `
         about:String,
         createdDateTime:Date,
         createdBy:String,
+        updatedDateTime:Date,
+        updatedBy:String,
         departmentsList : [String],
         subdepartmentsList : [String],
         clustersList   : [String],
@@ -73,7 +76,8 @@ let Role = `
   }
   
   input actions{
-      actionId : String
+      actionId : String,
+      actionCode: String
   }
   
   input modules{
@@ -97,6 +101,8 @@ let Role = `
       modules:[modules], 
       isActive:Boolean,
       isHierarchyAssigned:Boolean
+       updatedDateTime:Date,
+        updatedBy:String,
   }
   
   

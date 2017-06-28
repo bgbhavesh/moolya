@@ -34,6 +34,14 @@ if (!internalTaskNumber) {
   MlSerialNumbers.insert({_id: "internalTaskNumber", seq: 0});
 }
 
+var taskNumber = MlSerialNumbers.findOne({_id: "taskNumber"});
+if (!taskNumber) {
+  MlSerialNumbers.insert({_id: "taskNumber", seq: 0});
+}
+var sessionNumber = MlSerialNumbers.findOne({_id: "sessionNumber"});
+if (!sessionNumber) {
+  MlSerialNumbers.insert({_id: "sessionNumber", seq: 0});
+}
 orderNumberGenService = (function(){
   function getNextSequence(name) {
     var ret = MlSerialNumbers.update(
@@ -80,6 +88,15 @@ orderNumberGenService = (function(){
     },
     createInteractionSCcode: function (scDef) {
       scDef.code = "MLINT"+ FormatUtil.leadingZeros(getNextSequence("interactionSC"), 8);
+    },
+    createBspokeOfficeSCcode: function (scDef) {
+      scDef.code = "ML-OFF-"+ FormatUtil.leadingZeros(getNextSequence("bspoke"), 8);
+    },
+    createTaskId: function (userTask) {
+      userTask.transactionId = "MLTSK"+ FormatUtil.leadingZeros(getNextSequence("taskNumber"), 8);
+    },
+    createSessionId: function (userTask) {
+      userTask.sessionId = "MLSES"+ FormatUtil.leadingZeros(getNextSequence("sessionNumber"), 8);
     },
     generateRandomPassword:function(){
       var randomId = function makeid(){

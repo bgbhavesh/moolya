@@ -1,9 +1,9 @@
 /**
  * Created by venkatsrinag on 6/6/17.
  */
-import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../../../commons/mlSchemaDef'
-import MlResolver from '../../../commons/mlResolverDef'
+import {mergeStrings} from "gql-merge";
+import MlSchemaDef from "../../../commons/mlSchemaDef";
+import MlResolver from "../../../commons/mlResolverDef";
 
 let investments = `
 
@@ -56,6 +56,7 @@ let investments = `
     }
     
     input processTransactions{
+        portfolioId: String
         status:String,
         action:String,
         progress:Int,
@@ -153,6 +154,7 @@ let investments = `
     
     type ProcessTransactions{
         _id:String,
+        portfolioId: String
         status:String,
         action:String,
         progress:Int,
@@ -201,8 +203,8 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],investments]);
 let supportedApi = [
   {api:'updateProcessSetup', actionName:'UPDATE', moduleName:"PROCESSSETUP"},
   {api:'fetchProcessSetup', actionName:'READ', moduleName:"PROCESSSETUP"},
-  {api:'fetchProcessActions', actionName:'READ', moduleName:"ACTIONS"},
-  {api:'fetchProcessStages', actionName:'READ', moduleName:"PROCESSSETUP"},
+  {api: 'fetchProcessActions', actionName: 'READ', moduleName: "ACTIONS", isWhiteList: true},
+  {api:'fetchProcessStages', actionName:'READ', moduleName:"PROCESSSETUP", isWhiteList: true},
   {api:'updateProcessTransaction', actionName:'UPDATE', moduleName:"PROCESSSETUP"},
   {api:'fetchUserProcessSetup', actionName:'READ', moduleName:"PROCESSSETUP"}
 ];

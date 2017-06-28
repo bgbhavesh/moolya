@@ -22,7 +22,7 @@ let multipart 	= require('connect-multiparty'),
     fs 			    = require('fs'),
     multipartMiddleware = multipart();
 
-const resolvers=_.extend({Query: MlResolver.MlQueryResolver,Mutation:MlResolver.MlMutationResolver},MlResolver.MlUnionResolver);
+const resolvers=_.extend({Query: MlResolver.MlQueryResolver,Mutation:MlResolver.MlMutationResolver},MlResolver.MlUnionResolver,MlResolver.MlScalarResolver);
 const typeDefs = MlSchemaDef['schema']
 const executableSchema = makeExecutableSchema({
   typeDefs,
@@ -68,7 +68,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>
     }
     const graphQLServer = express();
     config.configServer(graphQLServer)
-    graphQLServer.use(config.path, bodyParser.json(), graphqlExpress(async (req) =>
+    graphQLServer.use(config.path, bodyParser.json(), graphqlExpress(async (req, res) =>
     {
         try {
             const customOptionsObject = typeof customOptions === 'function' ? customOptions(req) : customOptions;
@@ -83,7 +83,11 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>
               return;
             }
 
-            // let isValid = mlserviceCardHandler.validateResource(req.body.query, context);
+            let ret = mlserviceCardHandler.validateResource(req.body.query, context, req.body.variables);
+            if(!ret.success){
+                res.json({success:ret.success, message:ret.msg})
+                return
+            }
             return {
                 schema  : executableSchema,
                 context : context

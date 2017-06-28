@@ -222,6 +222,9 @@ let CoreModules = {
           serverQuery={'status':"Approved"};
         /*else
         serverQuery={'userId':context.userId,'status':"Approved"};*/
+      case 'rejected':
+        //if(userProfile.roleName === "platformadmin")
+        serverQuery={'status':"Rejected"};
     }
     //todo: internal filter query should be constructed.
     //resultant query with $and operator
@@ -264,10 +267,14 @@ let CoreModules = {
     switch(type){
       //custom restriction for registration
       case 'requested':
-        serverQuery={'status':{'$in':['Yet To Start','WIP','Rejected']}};
+        serverQuery={'status':{'$in':['Yet To Start','WIP']}};
         break;
       case 'approved':
         serverQuery={'status':"Approved"};
+        break;
+      case 'rejected':
+        serverQuery={'status':"Rejected"};
+        break;
     }
 
     //To display the latest record based on date
@@ -306,10 +313,11 @@ let CoreModules = {
     switch(type){
       //custom restriction for registration
       case 'requested':
-       // serverQuery={'status':{'$in':['Pending','Rejected']}};
+       serverQuery={'status':{'$in':['WIP', 'Yet To Start', 'Go Live']}};
         break;
       case 'approved':
-       serverQuery={'status':"Approved"};
+       // serverQuery={'status':"Approved"};
+        serverQuery={'status':"gone live"};
     }
     //todo: internal filter query should be constructed.
     //resultant query with $and operator
@@ -317,6 +325,12 @@ let CoreModules = {
 
     var data= MlPortfolioDetails.find(resultantQuery,fieldsProj).fetch()||[];
     var totalRecords=MlPortfolioDetails.find(resultantQuery,fieldsProj).count();
+    data.map(function (doc,index) {
+      if(doc.allocation){
+        doc.assignedUser = doc.allocation.assignee
+        doc.assignedUserId = doc.allocation.assigneeId
+      }
+    });
     return {totalRecords:totalRecords,data:data};
   },
   MlTransactionLogRepo:(requestParams,userFilterQuery,contextQuery,fieldsProj, context)=>{

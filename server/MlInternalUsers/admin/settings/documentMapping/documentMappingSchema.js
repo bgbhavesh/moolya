@@ -106,7 +106,7 @@ let DocumentMapping = `
         findDocuments: [DocumentOutput]
         findProcessDocuments(kycId:String,processId:String): [DocumentOutput]
         fetchKycDocProcessMapping(documentTypeId:String,clusterId:[String],chapterId:[String],subChapterId:[String]):[DocumentOutput]
-        fetchKYCDocuments(chapters:[String],clusters:[String],subChapters:[String],community:String,kyc:String,documentType:String,displayAllOption:Boolean):[DocumentOutput]
+        
       }
      
 `

@@ -8,18 +8,23 @@ export async function findUserOfficeActionHandler() {
   const result = await appClient.query({
     query: gql`
           query{
-              fetchOffice{
+              fetchOfficeSC{
                 userId
-                officeId : _id
-                totalCount
-                principalUserCount
-                officeLocation
-                teamUserCount
+                officeId
+                totalusercount
+                principalcount
+                teamMembercount
+                isRegistrationApproved
               }  
           }
       `,
       forceFetch: true
   })
-  const id = result.data.fetchOffice;
+  const id = result.data.fetchOfficeSC;
   return id
 }
+// fetchOffice
+// officeId : _id
+
+// include this one
+// officeLocation

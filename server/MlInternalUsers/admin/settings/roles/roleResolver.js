@@ -3,7 +3,12 @@ import MlRespPayload from "../../../../commons/mlPayload";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 
 var _ = require('lodash');
-var defaultModules = ["CHAPTER", "SUBCHAPTER", "COMMUNITY", "INTERNALREQUESTS"];
+
+var defaultModules = [
+  {moduleName:"CHAPTER", actions:[{actionId:"READ", actionCode:"READ"}]},
+  {moduleName:"SUBCHAPTER", actions:[{actionId:"READ", actionCode:"READ"}]},
+  {moduleName:"COMMUNITY", actions:[{actionId:"READ", actionCode:"READ"}]},
+  {moduleName:"INTERNALREQUESTS", actions:[{actionId:"CREATE", actionCode:"CREATE"}, {actionId:"READ", actionCode:"READ"}, {actionId:"UPDATE", actionCode:"UPDATE"}]}];
 
 MlResolver.MlQueryResolver['fetchRole'] = (obj, args, context, info) => {
   // return MlRoles.findOne({name});
@@ -11,6 +16,7 @@ MlResolver.MlQueryResolver['fetchRole'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
+  var dModules = _.cloneDeep(defaultModules)
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
     let code = 401;
@@ -32,8 +38,23 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
     return response;
   }
 
+  if (role && role.modules && role.modules.length == 0) {
+    let code = 409;
+    let response = new MlRespPayload().errorPayload("Please Select One Module", code);
+    return response;
+  }
+
   role.createdDateTime = new Date();
+  role.updatedDateTime= new Date();
+  role.updatedBy=  mlDBController.findOne("users", {_id: context.userId}, context).username;
   role.createdBy = mlDBController.findOne("users", {_id: context.userId}, context).username;
+
+  let uniqModule = _.uniqBy(role.modules, 'moduleId');
+  if (role.modules && uniqModule && uniqModule.length !== role.modules.length) {
+    let code = 409;
+    let response = new MlRespPayload().errorPayload("Please select different module", code);
+    return response;
+  }
 
   _.each(role.modules, function (module)
   {
@@ -45,27 +66,43 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
           return response;
         }
         module.actions[i].actionId = dbAction._id;
+        module.actions[i].actionCode = dbAction.code;
       }
   })
 
   // Adding Default Modules
-  _.each(defaultModules, function (mod) {
-    var module = mlDBController.findOne("MlModules", {code:mod}, context);
-    var readAction = mlDBController.findOne("MlActions", {code: "READ"}, context);
-    var isModAvailable = _.findIndex(role.modules, {moduleId:module._id})
-
-    if((isModAvailable <= 0) && module && readAction){
-      var moduleObj = {
-        moduleId: module._id,
-        moduleName: module.name,
-        validFrom: null,
-        validTo: null,
-        isActive: true,
-        actions: [{actionId: readAction._id}]
+  _.each(dModules, function (module) {
+    var moduleDef = mlDBController.findOne("MlModules", {code: module.moduleName}, context);
+    var isModAvailable = _.findIndex(role.modules, {moduleId: moduleDef._id})
+    if ((isModAvailable <= 0) && module) {
+      for (var i = 0; i < module.actions.length; i++) {
+        var dbAction = mlDBController.findOne("MlActions", {code: module.actions[i].actionId}, context);
+        module.actions[i].actionId = dbAction._id;
+        module.actions[i].actionCode = dbAction.code;
       }
-      role.modules.push(moduleObj)
     }
+
+    module["moduleId"] = moduleDef._id
+    module["moduleName"] = moduleDef.name
+    module["isActive"] = true
+    role.modules.push(module)
   })
+      // var module = mlDBController.findOne("MlModules", {code:mod}, context);
+      // var readAction = mlDBController.findOne("MlActions", {code: "READ"}, context);
+      // var isModAvailable = _.findIndex(role.modules, {moduleId:module._id})
+      //
+      // if((isModAvailable <= 0) && module && readAction){
+      //     var moduleObj = {
+      //       moduleId: module._id,
+      //       moduleName: module.name,
+      //       validFrom: null,
+      //       validTo: null,
+      //       isActive: true,
+      //       actions: [{actionId: readAction._id, actionCode:readAction.code}]
+      //     }
+      //   role.modules.push(moduleObj)
+      // }
+  // })
 
 
   let id = mlDBController.insert('MlRoles', role, context)
@@ -95,6 +132,8 @@ MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
   //   return response;
   // }
 
+  var dModules = _.cloneDeep(defaultModules)
+
   if (!args.role.roleName) {
     let code = 409;
     let response = new MlRespPayload().errorPayload("Role Name is required", code);
@@ -112,6 +151,31 @@ MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
       } else {
         var id = args.roleId;
         var assignRoles = args.role.assignRoles;
+
+        let uniqModule = _.uniqBy(args.role.modules, 'moduleId');
+        if (_.isEmpty(args.role) || (args.role.modules && uniqModule && uniqModule.length !== args.role.modules.length)) {
+          let code = 409;
+          let response = new MlRespPayload().errorPayload("Please select different module", code);
+          return response;
+        }
+
+        var isDefaultAvailiable = true
+        _.each(dModules, function (module) {
+            var moduleDef = mlDBController.findOne("MlModules", {code: module.moduleName}, context);
+            var isModAvailable = _.findIndex(args.role.modules, {moduleId: moduleDef._id})
+            if(isModAvailable < 0){
+                isDefaultAvailiable = false;
+                return isDefaultAvailiable
+            }
+        })
+
+        if(!isDefaultAvailiable){
+          let code = 409;
+          let response = new MlRespPayload().errorPayload("Default Modules Are Required", code);
+          return response;
+        }
+
+
         if(assignRoles){
           var hierarchyFound = false
           var response = null
@@ -161,9 +225,24 @@ MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
             return response;
           }
         }
+        role.updatedDateTime = new Date();
+        role.updatedBy = mlDBController.findOne("users", {_id: context.userId}, context).username;
+
+        var updatedRole = args.role;
+
+        _.each(updatedRole.modules, function (module)
+        {
+          for(var i = 0; i < module.actions.length; i++){
+            var dbAction = mlDBController.findOne("MlActions", {code: module.actions[i].actionId}, context);
+            if(dbAction){
+              module.actions[i].actionId = dbAction._id;
+              module.actions[i].actionCode = dbAction.code;
+            }
+          }
+        })
 
         // let result= MlRoles.update(id, {$set: args.role});
-        let result = mlDBController.update('MlRoles', id, args.role, {$set: true}, context);
+        let result = mlDBController.update('MlRoles', id, updatedRole, {$set: true}, context);
         let code = 200;
         let response = new MlRespPayload().successPayload(result, code);
         return response
@@ -253,7 +332,7 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
       query.assignRoles['$elemMatch'].isActive = true;
     }
     // let finalQuery = {$or: [query, {isSystemDefined: true, isActive: true}]}
-    let finalQuery = {$and: [query, {isSystemDefined: department.isSystemDefined, isActive: true}]}
+    let finalQuery = {$and: [query, {isActive: true}]}
     let valueGet = mlDBController.find('MlRoles', finalQuery, context).fetch()
     // let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"isActive": true}]}, context).fetch()
     // _.each(valueGet, function (item, say) {
@@ -310,9 +389,8 @@ MlResolver.MlQueryResolver['findRole'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.id) {
     var id = args.id;
-    // let response = MlRoles.findOne({"_id": id});
-    let response = mlDBController.findOne("MlRoles", {_id: id}, context)
-    return response;
+    let role = mlDBController.findOne("MlRoles", {_id: id}, context)
+    return role;
   }
 };
 

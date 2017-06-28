@@ -18,6 +18,7 @@ let GlobalSettingsSchema = `
            numberOfDaysInWeek:String
            firstDayOfWeek:String   
            hoursFormat:Boolean
+           timeZone:String
       }
       
       type NumericalInfo{
@@ -40,6 +41,12 @@ let GlobalSettingsSchema = `
              regionalZipFormat:String
              regionalCurrencySymbol:String
              regionalCurrencyValue:String,
+             numberOfDigitsAfterDecimal:String,
+             firstDayOfWeek:String,
+             currencySymbol:String,
+             measurementSystem:String,
+             currencyFormat:Boolean,
+             valueSeparator:String
        }
 
       input DateAndTimeInfoRequest{
@@ -50,6 +57,7 @@ let GlobalSettingsSchema = `
            numberOfDaysInWeek:String
            firstDayOfWeek:String 
            hoursFormat:Boolean
+           timeZone:String
       }
       
       input NumericalInfoRequest{
@@ -72,6 +80,12 @@ let GlobalSettingsSchema = `
              regionalZipFormat:String
              regionalCurrencySymbol:String
              regionalCurrencyValue:String
+             numberOfDigitsAfterDecimal:String,
+             firstDayOfWeek:String,
+             currencySymbol:String,
+             measurementSystem:String,
+             currencyFormat:Boolean,
+             valueSeparator:String
        }
       
       
@@ -86,9 +100,18 @@ let GlobalSettingsSchema = `
          numericalInfo:NumericalInfoRequest
          regionalInfo:RegionalInfoRequest
       }
+      
+      type timeZone{
+         _id:String
+         countryCode:String
+         country: String
+         timeZone:String
+         gmtOffset:String
+      }
 
       type Query{
         fetchGlobalSettings(type:GLOBAL_SETTINGS_TYPE):[GlobalSettings]    
+        findTimeZones(clusterId:String):[timeZone]
       }
     
     type Mutation{
@@ -101,6 +124,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],GlobalSettingsSchema
 let supportedApi = [
     {api:'fetchGlobalSettings', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true},
     {api:'updateGlobalSetting', actionName:'UPDATE', moduleName:"GLOBALSETTINGS"},
+    {api:'findTimeZones', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true},
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

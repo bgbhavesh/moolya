@@ -7,7 +7,7 @@ import MlAdminUserContext from '../../../mlAuthorization/mlAdminUserContext';
 MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
   // TODO : Authorization
   let query={};
-  var chapterCotransactionunt = 0
+  var chapterCount=0
   switch(args.moduleName){
     case "cluster":
       query={"clusterId":args.id};
@@ -47,7 +47,7 @@ MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
       count: totalUsers,
       icon: "ml ml-browser"
     })
-  if(chapterCount>0){
+  if(chapterCount>=0){
     response.push({
       key: '321',
       count: chapterCount,

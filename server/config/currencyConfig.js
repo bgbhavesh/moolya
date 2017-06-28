@@ -1773,10 +1773,14 @@ let currencyType = [
 ]
 
 Meteor.startup(function () {
-  for(var i = 0; i < currencyType.length; i++){
-    let currencyTypeData = MlCurrencyType.findOne({_id: currencyType[i]._id});
-    if(!currencyTypeData){
-      MlCurrencyType.insert(currencyType[i]);
+  let count = MlCurrencyType.find().count()
+  let length = currencyType.length
+  if (count != length) {
+    for (var i = 0; i < currencyType.length; i++) {
+      let currencyTypeData = MlCurrencyType.findOne({_id: currencyType[i]._id});
+      if (!currencyTypeData) {
+        MlCurrencyType.insert(currencyType[i]);
+      }
     }
   }
 })

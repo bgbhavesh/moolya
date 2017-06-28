@@ -5,15 +5,41 @@
 import MlResolver from "../../commons/mlResolverDef";
 import MlRespPayload from "../../commons/mlPayload";
 import MlUserContext from "../../MlExternalUsers/mlUserContext";
-import MlOfficeValidations from "../userSubscriptions/officeValidations";
+import mlOfficeValidationRepo from "./officeRepo";
 import passwordUtil from "../../commons/passwordUtil";
 import _ from "lodash";
 
 MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
-  let myOffice = [];
+  let officeSC = [];
   if (context.userId) {
-    myOffice = mlDBController.find('MlOffice', {userId: context.userId}).fetch()
-    return myOffice
+    officeSC = mlDBController.find('MlOffice', {userId: context.userId, isActive:true}).fetch()
+    return officeSC
+  } else {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload("Not a Valid user", code);
+    return response;
+  }
+}
+
+MlResolver.MlQueryResolver['fetchOfficeSC'] = (obj, args, context, info) => {
+  let officeSC = [];
+  if (context.userId) {
+    officeSC = mlDBController.find('MlOfficeSC', {userId: context.userId, isActive:true}).fetch()
+    let extProfile = new MlUserContext(context.userId).userProfileDetails(context.userId)
+    let regData = mlDBController.findOne('MlRegistration', {'registrationInfo.communityDefCode': extProfile.communityDefCode,'registrationInfo.userId':context.userId, status:'Approved'})
+    if(regData){
+      if(!_.isEmpty(officeSC)){  //if office is there and reg approved
+        var newArr = _.map(officeSC, function(element) {
+          return _.extend({}, element, {isRegistrationApproved: true});
+        });
+        return newArr
+      }else{          //if no office and registration is approved
+        return [{isRegistrationApproved: true}]
+      }
+
+    }else {
+      return [{isRegistrationApproved: false}]
+    }
   } else {
     let code = 400;
     let response = new MlRespPayload().errorPayload("Not a Valid user", code);
@@ -54,6 +80,7 @@ MlResolver.MlQueryResolver['fetchAllOfficeMembersWithUserId'] = (obj, args, cont
       }
     },
     { $unwind:"$user"},
+    { $match: { 'user.profile.isActive':true } },
     { $project: {name:1, userId: '$user._id' , profileImage:'$user.profile.profileImage'} }
   ];
   let response = mlDBController.aggregate('MlOfficeMembers', pipeline);
@@ -69,73 +96,84 @@ MlResolver.MlQueryResolver['fetchOfficeMember'] = (obj, args, context, info) => 
 }
 
 MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
-  var ret = "";
   try {
-    if (args.myOffice) {
-      let userId = context.userId;
-      let myOffice = args.myOffice;
-      let profile = new MlUserContext(userId).userProfileDetails(userId)
-      let isFunder = _.isMatch(profile, {communityDefCode: 'FUN'})
-      if(isFunder){
-        myOffice['userId'] = context.userId;
-        myOffice['isActive'] = false;
-        myOffice['createdDate'] = new Date();
-        if (profile) {
-          myOffice["clusterId"] = profile.clusterId;
-          myOffice["clusterName"] = profile.clusterName;
-          myOffice["chapterId"] = profile.chapterId;
-          myOffice["chapterName"] = profile.chapterName;
-          myOffice["subChapterId"] = profile.subChapterId;
-          myOffice["subChapterName"] = profile.subChapterName;
-          myOffice["communityId"] = profile.communityId;
-          myOffice["communityName"] = profile.communityName;
-        }
-        ret = mlDBController.insert('MlOffice', myOffice, context)
-        if (!ret) {
-          let code = 400;
-          let response = new MlRespPayload().successPayload("Failed To Create Office", code);
-          return response;
-        } else {
-          let officeDetails = {
-            officeId: ret,
-            transactionType:'office',
-            status: 'Pending',
-            duration:{
-              years:1
-            }
-          }
-          let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'communityId', 'communityName']);
-          let officeTransaction = _.extend(officeDetails, extendObj)
-          MlResolver.MlMutationResolver['createOfficeTransaction'](obj, {officeTransaction}, context, info)
-        }
-      }else {
+    let userId = context.userId;
+    var officeId = '';
+    let scDefId = "";
+    let scId = "";
+    let officeDetails = args.myOffice;
+    let profile = new MlUserContext(userId).userProfileDetails(userId)
+    let isFunder = _.isMatch(profile, {communityDefCode: 'FUN'})
+    if(isFunder){
+      // office record creation
+      officeId = mlOfficeValidationRepo.createOffice(officeDetails, profile, context);
+      if (!officeId) {
         let code = 400;
-        let response = new MlRespPayload().errorPayload('Not Authorised to create office', code);
+        let response = new MlRespPayload().successPayload("Failed To Create Office", code);
         return response;
       }
-    }
-  }
-  catch (e) {
-    let code = 400;
-    let response = new MlRespPayload().successPayload(e.message, code);
-    return response;
-  }
+      // office Transaction record creation
+      let details = {
+        officeId: officeId,
+        transactionType:'office',
+        status: 'Pending',
+        duration:{
+          years:1
+        }
+      }
+      let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'communityId', 'communityName']);
+      let officeTransaction = _.extend(details, extendObj)
+      MlResolver.MlMutationResolver['createOfficeTransaction'](obj, {officeTransaction}, context, info)
 
+      // office beSpoke Service Card Definition
+      if(officeDetails.isBeSpoke)
+        scDefId = mlOfficeValidationRepo.createBspokeSCDef(officeDetails, profile, context, officeId);
+      else{
+          // search for office id from MLOfficeSCDef
+      }
+
+      scId = mlOfficeValidationRepo.createofficeServiceCard(officeDetails, profile, context, scDefId, officeId)
+    }
+  }catch (e){
+    let code = 400;
+    return new MlRespPayload().successPayload("Failed To Create Office", code);
+  }
   let code = 200;
-  let response = new MlRespPayload().successPayload(ret, code);
+  let response = new MlRespPayload().successPayload(officeId, code);
   return response;
-}
+};
 
 MlResolver.MlMutationResolver['updateOffice'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['updateOfficeStatus'] = (obj, args, context, info) => {
+  let result;
   if(!args.id){
     let code = 400;
     let response = new MlRespPayload().successPayload('Office id is required', code);
     return response;
   }
-  let result = mlDBController.update('MlOffice', args.id, {isActive:true}, {$set:true},  context);
+  try{
+    // activating office
+    result = mlDBController.update('MlOffice', args.id, {isActive:true}, {$set:true},  context);
+    if(!result){
+      let code = 400;
+      return new MlRespPayload().successPayload('Error in Activating the office', code);
+    }
+    result = mlDBController.update('MlOfficeSC', {officeId:args.id, isActive:true}, {isActivated:true, isReconciled:true}, {$set:true}, context)
+    if(!result){
+      let code = 400;
+      return new MlRespPayload().successPayload('Error in Activating the Office Service Card', code);
+    }
+
+    // create a ledger balance entry
+    officeSC = mlDBController.findOne('MlOfficeSC', {officeId:args.id, isActive:true})
+    mlOfficeValidationRepo.createOfficeLedgerEntry(officeSC._id)
+
+  }catch (e){
+    let code = 400;
+    return new MlRespPayload().successPayload(e.message, code);
+  }
   let code = 200;
   let response = new MlRespPayload().successPayload('Office activated', code);
   return response;
@@ -181,7 +219,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
         let response = new MlRespPayload().successPayload("Invalid Office", code);
         return response;
     }
-    var ret = new MlOfficeValidations().validateOfficeExpiryDate(args.myOfficeId);
+    var ret = mlOfficeValidationRepo.validateOfficeExpiryDate(args.myOfficeId);
     if(!ret.success){
         let code = 400;
         let response = new MlRespPayload().successPayload(ret.msg, code);
@@ -194,13 +232,6 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
         return response;
     }
     args.officeMember.joiningDate = new Date();
-    var ret = new MlOfficeValidations().officeMemeberValidations(args.myOfficeId, args.officeMember);
-    if(!ret.success){
-        let code = 400;
-        let response = new MlRespPayload().successPayload(ret.msg, code);
-        return response;
-    }
-
   try {
 
     let isUserExist = mlDBController.findOne('users', {username: args.officeMember.emailId})
@@ -230,14 +261,18 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
         registrationDate :new Date()
       }
 
+
+
       let profile = new MlUserContext(context.userId).userProfileDetails(context.userId)
       let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName']);
       let finalRegData = _.extend(registrationData, extendObj)
+      orderNumberGenService.assignRegistrationId(finalRegData)
 
       let registrationId = mlDBController.insert('MlRegistration', {
         registrationInfo: finalRegData,
         status: "Yet To Start",
-        emails: emails
+        emails: emails,
+        transactionId :finalRegData.registrationId
       }, context)
       if (registrationId) { //for generating verfication token
         MlAccounts.sendVerificationEmail(registrationId,{emailContentType:"html",subject:"Email Verification",context:context});
@@ -304,12 +339,17 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
         officeMember['userId'] = context.userId
         officeMember['createdDate'] = new Date()
         let ret = mlDBController.insert('MlOfficeMembers', officeMember, context)
+
+        // update ledger balance and journal
+        ret = mlOfficeValidationRepo.updateLedgerBalanceOfficeJournal(args.myOfficeId, officeMember, context)
+        if(!ret)
+          return new MlRespPayload().errorPayload("Error In Updating Ledger Balance", 400);
       }
     }
 
   } catch (e) {
     let code = 400;
-    let response = new MlRespPayload().successPayload(e.message, code);
+    let response = new MlRespPayload().errorPayload(e.message, code);
     return response;
   }
 
@@ -342,4 +382,37 @@ MlResolver.MlMutationResolver['updateOfficeMember'] =(obj, args, context, info) 
     let response = new MlRespPayload().successPayload(e.message, code);
     return response;
   }
+}
+
+
+
+MlResolver.MlQueryResolver['getTeamMembers'] = (obj, args, context, info) => {
+  let temp = [];
+  let temp1 = [];
+  let result = mlDBController.find('MlOffice', {userId:context.userId} , context).fetch()
+
+  result.map(function(communities){
+    communities.availableCommunities.id = communities._id
+    temp.push(communities.availableCommunities)
+  })
+  temp.map(function(community){
+    community.map(function(attributes){
+      attributes.id = community.id
+      temp1.push(attributes)
+    })
+  })
+
+  return temp1
+}
+
+MlResolver.MlQueryResolver['getTeamUsers'] = (obj, args, context, info) => {
+
+  let result = mlDBController.find('MlOfficeMembers', {userId:context.userId, officeId:args.Attributes.officeId, communityType:args.Attributes.communityType} , context).fetch()
+  return result;
+}
+
+MlResolver.MlQueryResolver['getBranchDetails'] = (obj, args, context, info) => {
+
+  let result = mlDBController.find('MlOffice', {userId:context.userId} , context).fetch()
+  return result;
 }

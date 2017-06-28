@@ -100,7 +100,8 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                           MlResolver.MlMutationResolver['createStartupPortfolio'](obj, portfolio, context, info)
                       break;
 
-                      case "Funders": {
+                      case "Investors": {
+
                           let funderInfo = {}
                           let fb = "";
                           let linkedIn="";
@@ -195,7 +196,7 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
                 }
                 break;
 
-                case "Funders":{
+                case "Investors":{
                     response = MlResolver.MlMutationResolver['updateFunderPortfolio'](obj, args, context, info)
                 }
                 break;
@@ -282,3 +283,21 @@ MlResolver.MlMutationResolver["requestForGoLive"] = (obj, args, context, info) =
   let response = new MlRespPayload().errorPayload("Not Found", code);
   return response;
 }
+
+
+MlResolver.MlMutationResolver['updatePortfolioProfilePic'] = (obj, args, context, info) => {
+  if (args.portfolioId && args.communityType) {
+    if( args.communityType == "IDE"){
+      let updatedResponse = mlDBController.update('MlIdeatorPortfolio', {portfolioDetailsId:args.portfolioId,}, {'portfolioIdeatorDetails.profilePic': args.docUrl}, {$set:true}, context)
+      return updatedResponse;
+    }else if(args.communityType == "FUN"){
+      let updatedResponse = mlDBController.update('MlFunderPortfolio', {portfolioDetailsId:args.portfolioId,}, {'portfolioIdeatorDetails.profilePic': args.docUrl}, {$set:true}, context)
+      return updatedResponse;
+    }else if(args.communityType == "STU"){
+      let updatedResponse = mlDBController.update('MlStartupPortfolio', {portfolioDetailsId:args.portfolioId,}, {'portfolioIdeatorDetails.profilePic': args.docUrl}, {$set:true}, context)
+      return updatedResponse;
+    }
+
+  }
+}
+

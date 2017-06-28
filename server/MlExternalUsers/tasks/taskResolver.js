@@ -24,6 +24,7 @@ MlResolver.MlQueryResolver['fetchTask'] = (obj, args, context, info) => {
 MlResolver.MlMutationResolver['createTask'] = (obj, args, context, info) => {
   if (args.taskDetails) {
     let userId = context.userId
+    orderNumberGenService.createTaskId(args.taskDetails);
     let obj = args.taskDetails
     obj['userId'] = userId
     obj['createdAt'] = new Date ()
@@ -45,10 +46,14 @@ MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
   if(!_.isEmpty(args.taskDetails)){
     let task = mlDBController.findOne('MlTask', {_id: args.taskId}, context)
     if(task){
-      for(key in args.taskDetails){
-        task[key] = args.taskDetails[key]
-      }
       if(!_.isEmpty(args.taskDetails.session)){
+        let countSessionAry = []
+        _.each(args.taskDetails.session,function (item,say) {   //attaching sessionId in session array
+          if(!item.sessionId)
+            orderNumberGenService.createSessionId(item);
+          countSessionAry.push(item)
+        })
+        args.taskDetails.session = countSessionAry
         let activity = _.map(args.taskDetails.session, 'activities')
         let act= []
         _.each(activity, function (item,say) {   //removing the empty array
@@ -77,9 +82,13 @@ MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
         args.taskDetails = _.extend(args.taskDetails, {payment:paymentAmount})
       }
 
+      for(key in args.taskDetails){
+        task[key] = args.taskDetails[key]
+      }
 
       args.taskDetails['updatedAt'] = new Date()
-      let result = mlDBController.update('MlTask', {_id: args.taskId}, args.taskDetails, {'$set': 1}, context)
+      // let result = mlDBController.update('MlTask', {_id: args.taskId}, args.taskDetails, {'$set': 1}, context)
+      let result = mlDBController.update('MlTask', {_id: args.taskId}, task, {'$set': 1}, context)
       if (result) {
         let code = 200;
         let response = new MlRespPayload().successPayload('Successfully Updated', code);
@@ -104,7 +113,7 @@ MlResolver.MlQueryResolver['fetchTaskDetails'] = (obj, args, context, info) => {
   //   userId:context.userId,
   //   profileId:args.profileId
   // };
-  let result = mlDBController.findOne('MlTask', {name:args.name}, context)
+  let result = mlDBController.findOne('MlTask', {_id:args.name}, context)
   return result;
 
 }

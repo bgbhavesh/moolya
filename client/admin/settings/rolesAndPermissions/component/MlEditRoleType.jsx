@@ -82,6 +82,21 @@ class MlEditRole extends React.Component {
   }
 
   async  updateRole() {
+
+    var modules = _.cloneDeep(this.state.assignModulesToRoles);
+    for(var i = 0; i < modules.length; i++){
+      if(modules[i].actions.length == 0){
+        toastr.error("Please Select Action");
+        return;
+      }
+    }
+
+    let uniqModule = _.uniqBy(modules, 'moduleId');
+    if (modules && uniqModule && uniqModule.length !== modules.length) {
+      toastr.error('Please select different module');
+      return;
+    }
+
     let roleObject = {
       roleName: this.refs.roleName.value,
       displayName: this.refs.diplayName.value,
@@ -89,7 +104,7 @@ class MlEditRole extends React.Component {
       userType: this.state.selectedBackendUser,
       about: this.refs.about.value,
       assignRoles: this.state.assignRoleToClusters,
-      modules: this.state.assignModulesToRoles,
+      modules: modules,
       isActive: this.refs.isActive.checked
     }
     let roleDetails = {

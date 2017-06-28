@@ -80,10 +80,10 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], departmentSchema]);
 let supportedApi = [
     {api:'createDepartment', actionName:'CREATE', moduleName:"DEPARTMENT"},
     {api:'updateDepartment', actionName:'UPDATE', moduleName:"DEPARTMENT"},
-    {api:'fetchDepartments', actionName:'READ', moduleName:"DEPARTMENT"},
+    {api:'fetchDepartments', actionName:'READ', moduleName:"DEPARTMENT", isWhiteList:true},
     {api:'findDepartment', actionName:'READ', moduleName:"DEPARTMENT"},
     {api:'fetchActiveDepartment', actionName:'READ', moduleName:"DEPARTMENT"},
-    {api:'fetchMoolyaBasedDepartment', actionName:'READ', moduleName:"DEPARTMENT"},
+    {api:'fetchMoolyaBasedDepartment', actionName:'READ', moduleName:"DEPARTMENT", isWhiteList:true},
     {api:'fetchNonMoolyaBasedDepartment', actionName:'READ', moduleName:"DEPARTMENT", isWhiteList:true},
     {api:'fetchDepartmentsForRegistration', actionName:'READ', moduleName:"DEPARTMENT", isWhiteList:true},
     {api:'fetchMoolyaBasedDepartmentRoles', actionName:'READ', moduleName:"DEPARTMENT"},

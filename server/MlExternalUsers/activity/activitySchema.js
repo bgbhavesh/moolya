@@ -49,11 +49,18 @@ _id: String
       isTaxInclusive: Boolean
       isPromoCodeApplicable: Boolean
     }
+    
+    type UserProfileDetails{
+      _id: String
+      userId: String
+      profileId: String
+      name: String
+    }
 
     type Teams {
       branch: String
-      communityType: String
-      users: [String]
+      userType: String
+      users: [UserProfileDetails]
     }
     type Duration {
         hours:Int
@@ -84,7 +91,7 @@ _id: String
     }
     
     input TeamName {
-      communityType: String
+      userType: String
       officeId: String
     }
     
@@ -112,10 +119,16 @@ _id: String
       isTaxInclusive: Boolean
       isPromoCodeApplicable: Boolean
     }
+    input userProfileDetails{
+      userId: String
+      profileId: String
+      name: String
+    }
+    
     input teams {
       branch: String
-      communityType: String
-      users: [String]
+      userType: String
+      users: [userProfileDetails]
     }
 
     input duration {
@@ -168,9 +181,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], activity]);
 let supportedApi = [
   {api:'fetchActivities', actionName:'READ', moduleName:"OFFICE"},
   {api:'fetchActivity', actionName:'READ', moduleName:"OFFICE"},
-  {api:'getBranchDetails', actionName:'READ', moduleName:"OFFICE"},
-  {api:'getTeamMembers', actionName:'READ', moduleName:"OFFICE"},
-  {api:'getTeamUsers', actionName:'READ', moduleName:"OFFICE"},
+
 
 
   {api:'createActivity', actionName:'CREATE', moduleName:"OFFICE"},

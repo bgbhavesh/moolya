@@ -78,32 +78,44 @@ export default class MlAssignComponent extends React.Component {
       "role": this.state.selectedRole,
       "user": this.state.selectedUser
     }
-    if(hierarchyValidations.validateAssignAction(this.props.data.clusterId,this.state.selectedCluster)){
-      const response = await assignUserForTransactionAction("Registration",params,this.props.data.registrationId,"Registration","assignTransaction");
-      if(response.success){
-        this.setState({selectedCluster:null,selectedChapter:null,selectedSubChapter:null,selectedCommunity:null,selectedDepartment:null,selectedSubDepartment:null,selectedRole:null,selectedUser:null})
+    //if(hierarchyValidations.validateAssignAction(this.props.data.clusterId,this.state.selectedCluster)){
+    let data = this.props.data
+    let transactionIds = []
+    data.map(function (transaction) {
+      transactionIds.push(transaction.registrationId)
+    })
+
+      const response = await assignUserForTransactionAction("Registration", params, transactionIds, "Registration", "assignTransaction");
+      if (response.success) {
+        this.setState({
+          selectedCluster: null,
+          selectedChapter: null,
+          selectedSubChapter: null,
+          selectedCommunity: null,
+          selectedDepartment: null,
+          selectedSubDepartment: null,
+          selectedRole: null,
+          selectedUser: null
+        })
         toastr.success("Transaction assigned to user successfully");
         this.props.closePopOver(false)
         FlowRouter.reload();
-        //FlowRouter.go("/admin/transactions/registrationRequested");
-      }else{
+      } else {
         toastr.error("Wrong Hierarchy");
         this.props.closePopOver(false)
         FlowRouter.reload();
-        //FlowRouter.go("/admin/transactions/registrationRequested");
       }
-    }else{
-      toastr.error("Wrong assignment");
-      this.props.closePopOver(false)
-      FlowRouter.reload();
-      //FlowRouter.go("/admin/transactions/registrationRequested");
-    }
-
   }
 
   async selfAssignTransaction(){
+    let data = this.props.data
+    let transactionIds = []
+    data.map(function (transaction) {
+      transactionIds.push(transaction.registrationId)
+    })
+
     let transactionType=this.props.data.transactionType
-    const response = await selfAssignUserForTransactionAction("Registration",this.props.data.registrationId,"Registration","selfAssignTransaction");
+    const response = await selfAssignUserForTransactionAction("Registration",transactionIds,"Registration","selfAssignTransaction");
     if(response.success){
       toastr.success("Self Assignment successfull");
       this.props.closePopOver(false)
@@ -118,7 +130,12 @@ export default class MlAssignComponent extends React.Component {
   }
 
   async unAssignTransaction(){
-    const response = await unAssignUserForTransactionAction("Registration",this.props.data.registrationId,"Registration","unAssignTransaction");
+    let data = this.props.data
+    let transactionIds = []
+    data.map(function (transaction) {
+      transactionIds.push(transaction.registrationId)
+    })
+    const response = await unAssignUserForTransactionAction("Registration",transactionIds,"Registration","unAssignTransaction");
     if(response.success){
       toastr.success("UnAssignment successfull");
       this.props.closePopOver(false)

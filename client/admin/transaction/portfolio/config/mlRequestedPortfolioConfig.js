@@ -3,6 +3,8 @@ import React from 'react';
 import gql from 'graphql-tag'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
 import MlPortfolioAssignComponent from '../component/MlPortfolioAssignComponent'
+import {validateTransaction} from '../actions/assignUserforTransactionAction'
+
 const mlRequestedPortfolioTableConfig=new MlViewer.View({
   name:"portfolioInfoTable",
   module:"portfolioDetails",//Module name for filter.
@@ -14,6 +16,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   filter:true,
+  multiSelect:true,
   filterComponent: <MlCustomFilter module="portfolio" moduleName="portfolio" />,
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
@@ -30,19 +33,23 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
     {dataField: "source", title: "Source",dataSort:true},
     {dataField: "createdBy", title: "Created By",dataSort:true},
     {dataField: "status", title: "Status",dataSort:true},
-    {dataField: "assignedTo", title: "Assign",dataSort:true},
+    {dataField: "assignedUser", title: "Assign",dataSort:true},
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
+
   actionConfiguration:[
     {
       actionName: 'edit',
       showAction: true,
-      handler: (data)=>{
-        if(data && data.id){
+      handler: async(data)=>{
+        let response =  await validateTransaction(data.transactionId,"MlPortfolioDetails",data.assignedUserId);
+        if(data && data.id && response.success === true){
           FlowRouter.go("/admin/transactions/portfolio/editRequests/"+data.id+"/"+data.communityType);
+        }else if(data && data.id){
+          toastr.error("User does not have access to edit record");
         } else{
-          toastr.error("Please select a record");
+          toastr.error("Please Select a record");
         }
       }
     },
@@ -141,6 +148,9 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
                           createdAt
                           status
                           assignedTo
+                          transactionId
+                          assignedUser
+                          assignedUserId
                      }
                       }
               }

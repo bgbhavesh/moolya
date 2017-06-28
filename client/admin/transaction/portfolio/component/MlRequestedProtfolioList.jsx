@@ -33,7 +33,7 @@ export default class MlRequestedPortfolioList extends Component {
           <h2>Requested List</h2>
 
           <MlTableViewContainer {...mlRequestedPortfolioTableConfig} forceFetch={false}/>
-          {showAssignComponent&&<MlAssignComponent transactionType={"portfolio"}/>}
+
         </div>
 
 

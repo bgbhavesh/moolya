@@ -10,19 +10,27 @@ import Moolyaselect from  '../../../../../commons/components/select/MoolyaSelect
 import gql from 'graphql-tag'
 import {getTeamUsersActionHandler, updateActivityActionHandler, getActivityActionHandler} from '../actions/activityActionHandler'
 import _ from "lodash";
+var Select = require('react-select');
+
+var options = [
+  {value: 'Principal', label: 'Principal'},
+  {value: 'Team Member', label: 'Team Member'},
+  {value: 'MoolyaAdmins', label: 'MoolyaAdmins'}
+];
 
 export default class MlAppChooseTeam extends React.Component{
   constructor(props){
     super(props)
       this.state = {
-        communityType:"",
+        userType:"",
         branch:"",
         teamUsers:[],
         addComponent:[{}],
         team: [{
           users:[]
         }],
-        responseTeam:[{}]
+        responseTeam:[{}],
+        teamBearerType:[]
       }
       this.fetchTeam.bind(this)
       this.getDetails.bind(this)
@@ -125,18 +133,28 @@ export default class MlAppChooseTeam extends React.Component{
      return res;
   }
   async SelectTeamMember(index,value){
+    let that = this;
     console.log(index);
-    let team = this.state.team;
-    team[index].communityType = value;
+    that.setState({teamBearerType:value})
+    let team = that.state.team;
+    team[index].userType = value.label;
     let TeamAttributes = {
       officeId: team[index].branch,
-      communityType:team[index].communityType
+      userType:team[index].userType
     }
     const resp = await getTeamUsersActionHandler(TeamAttributes);
-    team[index].users = resp;
+    let temp = [];
+    resp.map(function(data){
+      temp.push({
+        name: data.name,
+        userId: data.userId
+      })
+    })
+    team[index].users = temp
     this.setState({
       team:team
     });
+    console.log(this.state.team)
     this.fetchTeam(this.state.team, index);
   }
 
@@ -153,23 +171,33 @@ export default class MlAppChooseTeam extends React.Component{
   async fetchTeam(temp, index){
     let TeamAttributes = {
         officeId: temp[0].branch,
-        communityType:temp[0].communityType
+        userType:temp[0].userType
     }
     const resp = await getTeamUsersActionHandler(TeamAttributes)
     console.log(resp)
     this.setState({teamUsers: resp})
   }
 
+  // teamBearers(val, index) {
+  //   console.log(index);
+  //   let team = this.state.team;
+  //   team[index].team = value;
+  //   this.setState({
+  //     team:team
+  //   });
+  //   this.setState({teamBearerType:val})
+  //     }
+
 
   render(){
-  let teamQuery= gql`
-   query  {
-  data: getTeamMembers {
-    label: communityName
-    value: communityId
-  }
-}
-  `;
+//   let teamQuery= gql`
+//    query  {
+//   data: getTeamMembers {
+//     label: communityName
+//     value: communityId
+//   }
+// }
+//   `;
 
   let branchQuery = gql`
   query{
@@ -221,13 +249,7 @@ export default class MlAppChooseTeam extends React.Component{
                 <div className="col-md-6 nopadding-right">
                   <form>
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} className="form-control f
-                      loat-label" valueKey={'value'}
-                                    labelKey={'label'} queryType={"graphql"} query={teamQuery}
-                                    isDynamic={true} placeholder="Select Team Member"
-                                    onSelect={that.SelectTeamMember.bind(that, id)}
-                                    selectedValue={indi.communityType}/>
-                      <br className="clearfix"/><br className="clearfix"/><br className="clearfix"/>
+                      <Select name="form-field-name" options={options} value={indi.userType} placeholder='Select Team Bearer' onChange={that.SelectTeamMember.bind(that, id)} />
                     </div>
                   </form>
                 </div>
@@ -238,7 +260,7 @@ export default class MlAppChooseTeam extends React.Component{
                 return (
 
                       <li>
-                        <a href="#">
+                        <a href="">
                           <img src="/images/p_3.jpg" /><br />
                           <div className="tooltiprefer">
                             <span>{user.name}</span>

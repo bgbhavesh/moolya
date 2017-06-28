@@ -3,19 +3,20 @@ import MlRespPayload from "../../../../commons/mlPayload";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 
 var _ = require('lodash');
+
+var defaultModules = [
+  {moduleName:"CHAPTER", actions:[{actionId:"READ", actionCode:"READ"}]},
+  {moduleName:"SUBCHAPTER", actions:[{actionId:"READ", actionCode:"READ"}]},
+  {moduleName:"COMMUNITY", actions:[{actionId:"READ", actionCode:"READ"}]},
+  {moduleName:"INTERNALREQUESTS", actions:[{actionId:"CREATE", actionCode:"CREATE"}, {actionId:"READ", actionCode:"READ"}, {actionId:"UPDATE", actionCode:"UPDATE"}]}];
+
 MlResolver.MlQueryResolver['fetchRole'] = (obj, args, context, info) => {
   // return MlRoles.findOne({name});
   return mlDBController.findOne('MlRoles', {name}, context)
 }
 
 MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
-  var defaultModules = [
-    {moduleName:"CHAPTER", actions:[{actionId:"READ", actionCode:"READ"}]},
-    {moduleName:"SUBCHAPTER", actions:[{actionId:"READ", actionCode:"READ"}]},
-    {moduleName:"COMMUNITY", actions:[{actionId:"READ", actionCode:"READ"}]},
-    {moduleName:"INTERNALREQUESTS", actions:[{actionId:"CREATE", actionCode:"CREATE"}, {actionId:"READ", actionCode:"READ"}, {actionId:"UPDATE", actionCode:"UPDATE"}]}];
-
-
+  var dModules = _.cloneDeep(defaultModules)
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
   if (!isValidAuth) {
     let code = 401;
@@ -37,10 +38,23 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
     return response;
   }
 
+  if (role && role.modules && role.modules.length == 0) {
+    let code = 409;
+    let response = new MlRespPayload().errorPayload("Please Select One Module", code);
+    return response;
+  }
+
   role.createdDateTime = new Date();
   role.updatedDateTime= new Date();
   role.updatedBy=  mlDBController.findOne("users", {_id: context.userId}, context).username;
   role.createdBy = mlDBController.findOne("users", {_id: context.userId}, context).username;
+
+  let uniqModule = _.uniqBy(role.modules, 'moduleId');
+  if (role.modules && uniqModule && uniqModule.length !== role.modules.length) {
+    let code = 409;
+    let response = new MlRespPayload().errorPayload("Please select different module", code);
+    return response;
+  }
 
   _.each(role.modules, function (module)
   {
@@ -57,7 +71,7 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
   })
 
   // Adding Default Modules
-  _.each(defaultModules, function (module) {
+  _.each(dModules, function (module) {
     var moduleDef = mlDBController.findOne("MlModules", {code: module.moduleName}, context);
     var isModAvailable = _.findIndex(role.modules, {moduleId: moduleDef._id})
     if ((isModAvailable <= 0) && module) {
@@ -118,6 +132,8 @@ MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
   //   return response;
   // }
 
+  var dModules = _.cloneDeep(defaultModules)
+
   if (!args.role.roleName) {
     let code = 409;
     let response = new MlRespPayload().errorPayload("Role Name is required", code);
@@ -135,6 +151,31 @@ MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
       } else {
         var id = args.roleId;
         var assignRoles = args.role.assignRoles;
+
+        let uniqModule = _.uniqBy(args.role.modules, 'moduleId');
+        if (_.isEmpty(args.role) || (args.role.modules && uniqModule && uniqModule.length !== args.role.modules.length)) {
+          let code = 409;
+          let response = new MlRespPayload().errorPayload("Please select different module", code);
+          return response;
+        }
+
+        var isDefaultAvailiable = true
+        _.each(dModules, function (module) {
+            var moduleDef = mlDBController.findOne("MlModules", {code: module.moduleName}, context);
+            var isModAvailable = _.findIndex(args.role.modules, {moduleId: moduleDef._id})
+            if(isModAvailable < 0){
+                isDefaultAvailiable = false;
+                return isDefaultAvailiable
+            }
+        })
+
+        if(!isDefaultAvailiable){
+          let code = 409;
+          let response = new MlRespPayload().errorPayload("Default Modules Are Required", code);
+          return response;
+        }
+
+
         if(assignRoles){
           var hierarchyFound = false
           var response = null

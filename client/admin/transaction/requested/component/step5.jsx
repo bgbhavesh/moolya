@@ -192,6 +192,7 @@ export default class Step5 extends React.Component {
   async findProcessDocuments() {
     let kycDocuments=this.props.registrationData&&this.props.registrationData.kycDocuments?this.props.registrationData.kycDocuments:[];
     if(kycDocuments.length<1) {
+      let countryId= this.props.registrationData && this.props.registrationData.registrationInfo.countryId ? this.props.registrationData.registrationInfo.countryId :'';
       let clusterId = this.props.registrationData && this.props.registrationData.registrationInfo.clusterId ? this.props.registrationData.registrationInfo.clusterId : '';
       let chapterId = this.props.registrationData && this.props.registrationData.registrationInfo.chapterId ? this.props.registrationData.registrationInfo.chapterId : '';
       let subChapterId = this.props.registrationData && this.props.registrationData.registrationInfo.subChapterId ? this.props.registrationData.registrationInfo.subChapterId : '';
@@ -201,12 +202,11 @@ export default class Step5 extends React.Component {
       let profession=this.props.registrationData && this.props.registrationData.registrationInfo.profession ? this.props.registrationData.registrationInfo.profession : '';
       let industry=this.props.registrationData && this.props.registrationData.registrationInfo.industry ? this.props.registrationData.registrationInfo.industry : '';
       let email=this.props.registrationData && this.props.registrationData.registrationInfo.email ? this.props.registrationData.registrationInfo.email : '';
-      const response = await  findProcessDocumentForRegistrationActionHandler(clusterId,chapterId,subChapterId,communityType,userType,identityType,profession,industry,email);
+      const response = await  findProcessDocumentForRegistrationActionHandler(countryId,clusterId,chapterId,subChapterId,communityType,userType,identityType,profession,industry,email);
       if (response) {
         let processDoc=response
-        if (processDoc.processDocuments) {
-          let processDocuments = processDoc.processDocuments
-          var ActiveResults = _underscore.where(processDocuments, {isActive: true});
+        if (processDoc&&processDoc.length>0) {
+          var ActiveResults = _underscore.where(processDoc, {isActive: true});
           var result = _.map(ActiveResults, function (currentObject){
 
             if(currentObject.status&&currentObject.docFiles) {
@@ -373,7 +373,7 @@ export default class Step5 extends React.Component {
                     {registrationDocumentsGroup[key].map(function (regDoc,id) {
                       let documentExist=_.isEmpty(regDoc)
                       return(
-                        <div>{!documentExist&&regDoc.documentId!=null&&<DocumentViewer key={regDoc.documentId} doc={regDoc} selectedDocuments={that.state.selectedFiles} selectedDocType={that.state.selectedDocTypeFiles} onFileUpload={that.onFileUpload.bind(that)} onDocumentSelect={that.onDocumentSelect.bind(that)} onDocumentRemove={that.onDocumentRemove.bind(that)} registrationId={registrationId} getRegistrationKYCDetails={that.props.getRegistrationKYCDetails(that)}/>} </div>)
+                        <div>{!documentExist&&regDoc.documentId!=null&&<DocumentViewer key={regDoc.documentId} doc={regDoc} selectedDocuments={that.state.selectedFiles} selectedDocType={that.state.selectedDocTypeFiles} onFileUpload={that.onFileUpload.bind(that)} onDocumentSelect={that.onDocumentSelect.bind(that)} onDocumentRemove={that.onDocumentRemove.bind(that)} />} </div>)
                     })
                     }<br className="brclear"/></div>
                     )

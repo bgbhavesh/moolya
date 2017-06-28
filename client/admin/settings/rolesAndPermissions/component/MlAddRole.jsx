@@ -67,6 +67,12 @@ class MlAddRole extends React.Component{
     if (ret) {
       toastr.error(ret);
     } else {
+       var modules = _.cloneDeep(this.state.assignModulesToRoles);
+      _.remove(modules, {moduleId: ""});
+      if(modules && modules.length == 0){
+        toastr.error("Please Select One Module");
+        return;
+      }
       let roleDetails = {
         roleName: this.refs.roleName.value,
         displayName: this.refs.diplayName.value,
@@ -75,7 +81,7 @@ class MlAddRole extends React.Component{
         userType: this.state.selectedBackendUser,
         about: this.refs.about.value,
         assignRoles: this.state.assignRoleToClusters,
-        modules: this.state.assignModulesToRoles,
+        modules: modules,
         isActive: this.refs.isActive.checked
       };
 

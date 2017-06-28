@@ -41,6 +41,12 @@ let GlobalSettingsSchema = `
              regionalZipFormat:String
              regionalCurrencySymbol:String
              regionalCurrencyValue:String,
+             numberOfDigitsAfterDecimal:String,
+             firstDayOfWeek:String,
+             currencySymbol:String,
+             measurementSystem:String,
+             currencyFormat:Boolean,
+             valueSeparator:String
        }
 
       input DateAndTimeInfoRequest{
@@ -74,6 +80,12 @@ let GlobalSettingsSchema = `
              regionalZipFormat:String
              regionalCurrencySymbol:String
              regionalCurrencyValue:String
+             numberOfDigitsAfterDecimal:String,
+             firstDayOfWeek:String,
+             currencySymbol:String,
+             measurementSystem:String,
+             currencyFormat:Boolean,
+             valueSeparator:String
        }
       
       

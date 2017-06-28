@@ -10,13 +10,13 @@ export default class MlChapterList extends Component {
       let image=prop.chapterImage&&prop.chapterImage.trim()!==""?<img src={`${prop.chapterImage}`}/>:<span className="ml ml-chapter"></span>;
       let icon, status;
 
-      if(prop.isActive && prop.showOnMap){
+      if(prop.status.description == "Active"){
         status = "active";
         // icon = "active-User"
-      } else if(prop.isActive && !prop.showOnMap){
+      } else if(prop.status.description == "Work In Progress"){
         status = "add";
         // icon ="add";
-      } else if(!prop.isActive && prop.showOnMap){
+      } else if(prop.status.description == "Inactive"){
         status = "inactive";
         // icon = "inactive-user"
       } else {

@@ -81,6 +81,12 @@ class MlAddRole extends React.Component{
         }
       }
 
+      let uniqModule = _.uniqBy(modules, 'moduleId');
+      if (modules && uniqModule && uniqModule.length !== modules.length) {
+        toastr.error('Please select different module');
+        return;
+      }
+
       let roleDetails = {
         roleName: this.refs.roleName.value,
         displayName: this.refs.diplayName.value,

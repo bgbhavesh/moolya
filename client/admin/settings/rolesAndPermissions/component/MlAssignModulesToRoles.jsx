@@ -55,6 +55,8 @@ export default class MlAssignModulesToRoles extends React.Component {
     });
     this.setState({
       assignModulesToRoles: assignModulesToRoles
+    }, () => {
+      this.props.getassignModulesToRoles(assignModulesToRoles)
     })
   }
 
@@ -145,6 +147,12 @@ export default class MlAssignModulesToRoles extends React.Component {
         }
       });
       actions.splice(flag, 1);
+
+      if(event.target.name == 'READ'){
+          var index = _.findIndex(actions, {actionCode:"UPDATE"})
+          if(index >= 0)
+              actions.splice(index, 1);
+      }
     }
     let ary = [];
     _.each(actions, function (s, v) {

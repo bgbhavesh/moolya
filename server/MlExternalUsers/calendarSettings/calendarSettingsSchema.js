@@ -105,6 +105,7 @@ let calendarSettingSlot=`
   type Query {   
      fetchMyCalendarSetting:CalendarSetting
      getMyCalendar(month:Int, year: Int): MonthCalendar
+     getMyCalendarDayAvailable:response
   }
   
   type Mutation {
@@ -120,6 +121,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], calendarSettingSlot
 let supportedApi = [
   {api:'fetchMyCalendarSetting', actionName:'READ', moduleName:"OFFICE"},
   {api:'getMyCalendar', actionName:'READ', moduleName:"OFFICE"},
+  {api:'getMyCalendarDayAvailable', actionName:'READ', moduleName:"OFFICE"},
   {api:'updateMyCalendarSetting', actionName:'UPDATE', moduleName:"OFFICE"},
   {api:'updateMyCalendarWorkingDay', actionName:'UPDATE', moduleName:"OFFICE"},
   {api:'updateMyCalendarWorkingDays', actionName:'UPDATE', moduleName:"OFFICE"},

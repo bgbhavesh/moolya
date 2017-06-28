@@ -8,6 +8,7 @@ let FontAwesome = require('react-fontawesome');
 import gql from 'graphql-tag'
 import Datetime from "react-datetime";
 import moment from "moment";
+import _ from 'lodash'
 export default class MlAssignModulesToRoles extends React.Component {
   constructor(props) {
     super(props);
@@ -133,6 +134,9 @@ export default class MlAssignModulesToRoles extends React.Component {
     if (event.target.checked) {
       let value = event.target.name;
       actions.push({actionId: value, actionCode: value.toUpperCase()})
+      if(value == 'UPDATE' && (_.findIndex(actions, {actionCode:"READ"}) < 0)){
+        actions.push({actionId: "READ", actionCode: "READ"})
+      }
     } else {
       let flag = '';
       _.each(actions, function (item, key) {

@@ -39,6 +39,8 @@ import MlAppTaskLanding from "../../app/calendar/manageScheduler/task/components
 import MlAppServiceList from "../../app/calendar/manageScheduler/service/components/MlAppServiceList";
 import MlAppInternalTask from "../../app/internalTask/components/MlAppInternalTask";
 import MlAppServiceManageSchedule from "../../app/calendar/manageScheduler/service/components/MlAppServiceManageSchedule";
+import MlAppSetCalendarSettings from '../../app/calendar/manageScheduler/setCalendar/components/MlAppSetCalendarSettings';
+
 import _ from "lodash";
 //profile
 
@@ -354,6 +356,13 @@ appSection.route('/calendar/manageSchedule/:profileId/serviceList', {
   name: 'calendar_manageSchedule',
   action(){
     mount(AppLayout, {appContent: <MlAppServiceList />, isCalenderMenu: true})
+  }
+});
+
+appSection.route('/calendar/manageSchedule/:profileId/setCalendar', {
+  name: 'calendar_manageSchedule',
+  action(){
+    mount(AppLayout, {appContent: <MlAppSetCalendarSettings />, isCalenderMenu: true})
   }
 });
 

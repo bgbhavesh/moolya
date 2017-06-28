@@ -100,6 +100,7 @@ let portfolioSchema = `
           approvePortfolio(portfoliodetailsId:String):response
           rejectPortfolio(portfoliodetailsId:String):response
           requestForGoLive(portfoliodetailsId:String):response
+          updatePortfolioProfilePic(portfolioId:String,docUrl:String,communityType:String):response   
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], portfolioSchema]);

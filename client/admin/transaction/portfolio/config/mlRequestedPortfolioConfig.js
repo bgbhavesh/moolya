@@ -16,6 +16,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   filter:true,
+  multiSelect:true,
   filterComponent: <MlCustomFilter module="portfolio" moduleName="portfolio" />,
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
@@ -36,6 +37,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
+
   actionConfiguration:[
     {
       actionName: 'edit',

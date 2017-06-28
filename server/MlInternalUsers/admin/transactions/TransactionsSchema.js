@@ -174,7 +174,7 @@ let transactionsSchema = `
       updateTransactionStatus(transactionId:String,status:String):response
       createRegistrationTransaction(transactionType:String):response
       updateRegistrationTransaction(transactionInfo:TransactionsInput):response
-      selfAssignTransaction(transactionId:String,collection:String):response
+      selfAssignTransaction(transactionId:[String],collection:String):response
       unAssignTransaction(transactionId:String,collection:String):response
       createTransactionLog(transaction:TransactionsLogInput):response
     }

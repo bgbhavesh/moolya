@@ -24,6 +24,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   filter:true,
+  multiSelect:true,
   filterComponent: <MlCustomFilter module="registration" moduleName="registration" />,
   fieldsMap: {
     'registrationDate': 'registrationInfo.registrationDate',
@@ -54,6 +55,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
+
   actionConfiguration:[
     {
       actionName: 'edit',

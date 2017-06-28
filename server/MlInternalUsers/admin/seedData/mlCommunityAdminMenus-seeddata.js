@@ -355,6 +355,36 @@ if(Meteor.isServer){
               }
             ]
           },
+            {
+              "link" : "/admin/transactions/rejectList",
+              "name" : "Rejects",
+              "uniqueId" : "transaction_Reject",
+              "isLink" : true,
+              "isMenu" : true,
+              "image" : "",
+              "subMenu": [
+                {
+                  "link": "/admin/transactions/rejectedList",
+                  "name": "List Requests",
+                  "uniqueId": "transaction_RejectedList",
+                  "subMenuMappingId":"transaction_Reject",
+                  "subMenusId":"transaction",
+                  "isLink": true,
+                  "isMenu": false,
+                  "image": ""
+                },
+                {
+                  "link": "/admin/transactions/editRequests",
+                  "name": "Edit Requests",
+                  "uniqueId": "transaction_EditRejected",
+                  "subMenuMappingId":"transaction_Reject",
+                  "subMenusId":"transaction",
+                  "isLink": true,
+                  "isMenu": true,
+                  "image": ""
+                }
+              ]
+            },
           {
             "link" : "/admin/transactions/registrationRequested",
             "name" : "Registration",
@@ -552,6 +582,36 @@ if(Meteor.isServer){
                   "isLink" : true,
                   "isMenu" : false,
                   "image" : ""
+                }
+              ]
+            },
+            {
+              "link" : "/admin/transactions/processSetupList",
+              "name" : "ProcessSetUp",
+              "uniqueId" : "transaction_ProcessSetup",
+              "isLink" : true,
+              "isMenu" : true,
+              "image" : "",
+              "subMenu": [
+                {
+                  "link": "/admin/transactions/processSetupList",
+                  "name": "List Process Setup",
+                  "uniqueId": "transaction_ProcessSetupList",
+                  "subMenuMappingId":"transaction_ProcessSetup",
+                  "subMenusId":"transaction",
+                  "isLink": true,
+                  "isMenu": false,
+                  "image": ""
+                },
+                {
+                  "link": "/admin/transactions/editProcessSetup",
+                  "name": "Edit Process Setup",
+                  "uniqueId": "transaction_EditProcessSetup",
+                  "subMenuMappingId":"transaction_ProcessSetup",
+                  "subMenusId":"transaction",
+                  "isLink": true,
+                  "isMenu": true,
+                  "image": ""
                 }
               ]
             },

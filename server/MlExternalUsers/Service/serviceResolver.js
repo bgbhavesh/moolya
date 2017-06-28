@@ -10,9 +10,10 @@ var _ = require('lodash')
 
 MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => {
   let query = {
-    userId:context.userId
+    userId:context.userId,
+    profileId:args.profileId
   };
-  let result = mlDBController.find('MlService', query , context).fetch()
+    let result = mlDBController.find('MlService', query , context).fetch()
   return result;
 }
 
@@ -35,6 +36,7 @@ MlResolver.MlMutationResolver['createService'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['updateService'] = (obj, args, context, info) => {
+  args.Services.userId = context.userId;
   let result1 = mlDBController.update('MlService', {_id:args.serviceId} ,args.Services,{$set: 1}, context)
   if(result1){
     let code = 200;
@@ -42,5 +44,27 @@ MlResolver.MlMutationResolver['updateService'] = (obj, args, context, info) => {
     let response = new MlRespPayload().successPayload(result, code);
     return response
   }
+}
+
+MlResolver.MlQueryResolver['fetchTasksAmount'] = (obj, args, context, info) => {
+  // let profileId = args.profileId
+  let temp = [];
+  let details = mlDBController.find('MlService', {'userId':context.userId, 'profileId': args.profileId}, context).fetch()
+
+  details.map(function(val){
+  if (val.tasks) {
+    val.tasks.map(function(data) {
+      temp.push(data)
+      })
+    }
+  })
+  let amount = mlDBController.find('MlTask', {'_id': {$in: temp}}, context).fetch()
+  let totalAmountOfTasks = []
+    amount.map(function(data) {
+      totalAmountOfTasks.push({
+        totalAmount:data.payment.derivedAmount
+        })
+    })
+  return totalAmountOfTasks;
 }
 

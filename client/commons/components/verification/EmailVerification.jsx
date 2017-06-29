@@ -14,17 +14,39 @@ export default class EmailVerification extends React.Component{
       mobileNumberVerified:false,
       loading:true
     }
-    this.verifyEmail.bind(this);
+    //this.verifyEmail.bind(this);
     this.verifyMobileNumber.bind(this);
   }
 
-
+   /*
+    verify-email flow changed.
+   */
   async componentWillMount()
   {
-    const resp=await this.verifyEmail(this.props.token);
+    //const resp=await this.verifyEmail(this.props.token);
+    let token = FlowRouter.getParam('token');
+    let data={token:token};
+    var header={ apiKey: "741432fd-8c10-404b-b65c-a4c4e9928d32"};
+    $.ajax({
+      type: 'POST',
+      dataType: 'json',
+      url: Meteor.absoluteUrl('verifyEmail'),
+      data :JSON.stringify(data),
+      headers: header,
+      contentType: "application/json; charset=utf-8",
+      success:function(response){
+        console.log(response);
+        if(response.success){
+          resp = JSON.parse(response.result);
+          this.setState({loading:false,emailVerificationSuccess:resp.emailVerified,email:resp.email,mobileNumber:resp.mobileNumber});
+        } else {
+          this.setState({loading:false,emailVerificationSuccess:false,emailVerificationMessage:response.result});
+        }
+      }.bind(this)
+    });
   }
 
-  async verifyEmail(token){
+ /* async verifyEmail(token){
     const response=await verifyEmailHandler(token);
     let resp=null;
     if(response.success){
@@ -34,7 +56,7 @@ export default class EmailVerification extends React.Component{
       this.setState({loading:false,emailVerificationSuccess:false,emailVerificationMessage:response.result});
     }
     return response;
-  }
+  }*/
 
   async verifyMobileNumber(){
     let mobileNumber=this.state.mobileNumber;

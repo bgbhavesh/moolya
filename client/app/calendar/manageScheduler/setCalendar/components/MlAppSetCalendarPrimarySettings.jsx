@@ -104,52 +104,48 @@ export default class MlAppSetCalendarPrimarySettings extends React.Component{
 
   render(){
     return (
-      <div className="app_main_wrap" style={{'overflow':'auto'}}>
-        <div className="app_padding_wrap">
-          <div className="step_form_wrap step1">
-            <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
-              <form>
-                <div className="form-group">
-                  <label>
-                    <FontAwesome name="clock-o"/>
-                    Slot duration: &nbsp;
-                    <input type="number" onChange={(evt)=>this.updateSlotDuration(evt, 'hours')} value={(this.state.slotDuration.hours ? this.state.slotDuration.hours : '')} className="form-control inline_input"/> Hours
-                    <input type="number" onChange={(evt)=>this.updateSlotDuration(evt, 'minutes')} value={(this.state.slotDuration.minutes ? this.state.slotDuration.minutes : '')} className="form-control inline_input"/> Mins
-                  </label>
-                </div>
-                <div className="form-group">
-                  <label>
-                    <FontAwesome name="clock-o"/>
-                    Number of Appointments per slot: &nbsp;
-                    <input type="number" onChange={(evt)=>this.updateAppointmentCountPerSlots(evt)} value={(this.state.appointmentCountPerSlots ? this.state.appointmentCountPerSlots : '')} className="form-control inline_input"/>
-                  </label>
-                </div>
-                <div className="form-group">
-                  <label>
-                    <FontAwesome name="clock-o"/>
-                    Time slots per break-up time: &nbsp;
-                    <input type="number" onChange={(evt)=>this.updateSlotBreakTime(evt)} value={(this.state.slotBreakTime ? this.state.slotBreakTime : '')} className="form-control inline_input"/>
-                  </label>
-                </div>
-                <div className="form-group switch_wrap switch_names inline_switch small_sw">
-                  <label style={{'marginLeft':'0px'}}><FontAwesome name="clock-o"/> Overlapping in schedule</label>
-                  <span className="state_label">Yes</span><label className="switch nocolor-switch">
-                  <input type="checkbox" onClick={(evt)=>this.updateOverlappingSchedule(evt)} checked={this.state.isOverlappingSchedule} />
-                  <div className="slider"></div>
-                </label>
-                  <span className="state_label acLabel">No</span>
-                </div>
-                <div className="clearfix"></div>
-              </form>
-              <div className="form-group">
-                <div className="ml_btn" style={{'textAlign':'center'}}>
-                  <button onClick={()=>this.updateCalendarSetting()} className="save_btn" >Save</button>
-                </div>
-              </div>
-            </ScrollArea>
+    <div className="step_form_wrap step1">
+      <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+        <form>
+          <div className="form-group">
+            <label>
+              <FontAwesome name="clock-o"/>
+              Slot duration: &nbsp;
+              <input type="number" onChange={(evt)=>this.updateSlotDuration(evt, 'hours')} value={(this.state.slotDuration.hours ? this.state.slotDuration.hours : '')} className="form-control inline_input"/> Hours
+              <input type="number" onChange={(evt)=>this.updateSlotDuration(evt, 'minutes')} value={(this.state.slotDuration.minutes ? this.state.slotDuration.minutes : '')} className="form-control inline_input"/> Mins
+            </label>
+          </div>
+          <div className="form-group">
+            <label>
+              <FontAwesome name="clock-o"/>
+              Number of Appointments per slot: &nbsp;
+              <input type="number" onChange={(evt)=>this.updateAppointmentCountPerSlots(evt)} value={(this.state.appointmentCountPerSlots ? this.state.appointmentCountPerSlots : '')} className="form-control inline_input"/>
+            </label>
+          </div>
+          <div className="form-group">
+            <label>
+              <FontAwesome name="clock-o"/>
+              Time slots per break-up time: &nbsp;
+              <input type="number" onChange={(evt)=>this.updateSlotBreakTime(evt)} value={(this.state.slotBreakTime ? this.state.slotBreakTime : '')} className="form-control inline_input"/>
+            </label>
+          </div>
+          <div className="form-group switch_wrap switch_names inline_switch small_sw">
+            <label style={{'marginLeft':'0px'}}><FontAwesome name="clock-o"/> Overlapping in schedule</label>
+            <span className="state_label">Yes</span><label className="switch nocolor-switch">
+            <input type="checkbox" onClick={(evt)=>this.updateOverlappingSchedule(evt)} checked={this.state.isOverlappingSchedule} />
+            <div className="slider"></div>
+          </label>
+            <span className="state_label acLabel">No</span>
+          </div>
+          <div className="clearfix"></div>
+        </form>
+        <div className="form-group">
+          <div className="ml_btn" style={{'textAlign':'center'}}>
+            <button onClick={()=>this.updateCalendarSetting()} className="save_btn" >Save</button>
           </div>
         </div>
-      </div>
+      </ScrollArea>
+    </div>
     )
   }
 };

@@ -90,6 +90,18 @@ function updatedByFormatter(data){
     return <div>System Generated</div>;
   }
 }
+//@for displaying roleTypes as EcoSystem and SubChapter
+function roleType(data){
+  let roleType = data&&data.data && data.data.roleType;
+   if(roleType == "moolya"){
+     return <div>EcoSystem</div>
+   }
+   else if(roleType == "non-moolya"){
+       return <div>subChapter</div>
+   }else{
+     return <div></div>
+   }
+}
 const mlRoleTypeTableConfig=new MlViewer.View({
   name:"roleTypeTable",
   module:"roles",//Module name for filter.
@@ -104,7 +116,7 @@ const mlRoleTypeTableConfig=new MlViewer.View({
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "roleName", title: "Role Name",dataSort:true},
     {dataField: "displayName", title: "Display Name",dataSort:true},
-    {dataField: "roleType", title: "Role Type",dataSort:true},
+    {dataField: "roleType", title: "Role Type",dataSort:true,customComponent:roleType},
     {dataField: "departmentsList", title: "Departments",dataSort:true,customComponent:departmentsFormatter},
     {dataField: "subdepartmentsList", title: "SubDepartments",dataSort:true,customComponent:subdepartmentsFormatter},
     {dataField: "clustersList", title: "Cluster",dataSort:true,customComponent:clustersFormatter},

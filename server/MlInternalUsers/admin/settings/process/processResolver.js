@@ -431,6 +431,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
     }).fetch()
     if (document && document.length > 0) {
       let combinationBasedDoc=[],kycDoc=[]
+
       document.map(function (processDoc) {
         if (processDoc && processDoc.processDocuments) {
           let combinationDoc = processDoc.processDocuments
@@ -474,7 +475,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
   }
 
   function getCountryBasedDocuments(country) {
-    let countryBasedDoc = []
+    let countryBasedDoc = [], kycDoc = []
     let document = MlProcessMapping.find({$and: [{"clusters": {$in: [country]}}, {isActive: true}]}).fetch()
     if (document && document.length > 0) {
       document.map(function (processDoc) {

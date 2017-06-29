@@ -11,23 +11,24 @@ MlResolver.MlQueryResolver['fetchIdeators'] = (obj, args, context, info) => {
   var allIdeas = MlIdeas.find({isActive:true}).fetch();
   allIds = _.map(allIdeas, "userId");
   allIds = _.uniq(allIds);
-  // allIds = _.pull(allIds, context.userId);
 
   _.each(allIds, function (userId) {
-    let portfolio = MlPortfolioDetails.find({userId:userId}).fetch();
-    let user = Meteor.users.findOne({_id:userId});
-    let ideas = MlIdeas.find({userId:userId}).fetch();
-    chapterName = portfolio[0].chapterName;
-    accountType = portfolio[0].accountType;
-    name = user.profile.firstName+" "+user.profile.lastName;
-     ideaObj = {
-       userId:userId,
-       ideas:ideas,
-       chapterName:chapterName,
-       name:name,
-       accountType:accountType
-     }
-     ideator.push(ideaObj)
+    let portfolio = MlPortfolioDetails.find({userId:userId, status: 'gone live'}).fetch();    //checking portfolio is gone live or not
+    if(!_.isEmpty(portfolio)){                                                                // checking portfolio is there or not
+      let user = Meteor.users.findOne({_id:userId});
+      let ideas = MlIdeas.find({userId:userId}).fetch();
+      let chapterName = portfolio[0].chapterName;
+      let accountType = portfolio[0].accountType;
+      let name = user.profile.firstName+" "+user.profile.lastName;
+      let ideaObj = {
+        userId:userId,
+        ideas:ideas,
+        chapterName:chapterName,
+        name:name,
+        accountType:accountType
+      }
+      ideator.push(ideaObj)
+    }
   })
 
   return ideator;

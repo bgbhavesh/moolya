@@ -212,7 +212,7 @@ export default class MlAppServiceStep2 extends React.Component{
     let profileId = FlowRouter.getParam('profileId')
     let serviceQuery = gql`query($profileId:String) {
      data: fetchTasks(profileId: $profileId) {
-        value: name
+        value: _id
         label: name
       }
     }

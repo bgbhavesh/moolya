@@ -274,7 +274,7 @@ export default class MlAppCreateTeam extends React.Component{
       this.getDetails();
       if(res) {
         toastr.success("Saved Successfully")
-        FlowRouter.go('/app/calendar/manageSchedule/' +profileId +'/editActivity/?id=' + id)
+        FlowRouter.go('/app/calendar/manageSchedule/'+profileId+'/editActivity/?id='+id)
         return res;
       }
     }

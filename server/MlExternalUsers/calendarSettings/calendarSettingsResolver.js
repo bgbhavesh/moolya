@@ -10,7 +10,12 @@ var _ = require('lodash')
 
 MlResolver.MlQueryResolver['fetchMyCalendarSetting'] = (obj, args, context, info) => {
   let userId = context.userId;
-  let profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  let profileId;
+  if(args.profileId){
+    profileId = args.profileId;
+  } else {
+    profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  }
   if(!userId){
     let code = 400;
     let result = 'User ID is not defined for this user';
@@ -56,12 +61,18 @@ MlResolver.MlQueryResolver['getMyCalendarDayAvailable'] = (obj, args, context, i
   let month = args.month ? args.month : date.getMonth() ;
   let year = args.year ? args.year : date.getFullYear() ;
   let sessionId = '123';
-  return mlAppointment.getSessionTimeSlots(sessionId, day, month, year);
+  // return mlAppointment.getSessionTimeSlots(sessionId, day, month, year);
+  return mlAppointment.bookAppointment('appointmentId', sessionId, 9, 30, day, month, year);
 };
 
 MlResolver.MlMutationResolver['updateMyCalendarSetting'] = (obj, args, context, info) => {
   let userId = context.userId;
-  let profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  let profileId;
+  if(args.profileId){
+    profileId = args.profileId;
+  } else {
+    profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  };
   if(!userId){
     let code = 400;
     let result = 'User ID is not defined for this user';

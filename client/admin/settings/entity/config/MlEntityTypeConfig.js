@@ -49,7 +49,7 @@ const mlEntityTableConfig=new MlViewer.View({
       showAction: true,
       handler:  (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/editEntity/"+data.id)
+          FlowRouter.go("/admin/settings/registration/editEntity/"+data.id)
         }
         else{
           toastr.error("Please select a Entity to edit")
@@ -65,15 +65,10 @@ const mlEntityTableConfig=new MlViewer.View({
           toastr.error("Please uncheck the record")
           // FlowRouter.go("/admin/settings/entityList");
         } else {
-          FlowRouter.go("/admin/settings/addEntity")
+          FlowRouter.go("/admin/settings/registration/addEntity")
         }
       }
-    },
-    // {
-    //   showAction: true,
-    //   actionName: 'logout',
-    //   handler: (data)=>{console.log(data);}
-    // }
+    }
   ],
   sizePerPage:5,
   graphQlQuery:gql`

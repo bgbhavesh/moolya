@@ -49,7 +49,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
         if(data && data.id){
-          FlowRouter.go("/admin/settings/editUserType/"+data.id);
+          FlowRouter.go("/admin/settings/documentProcess/editUserType/"+data.id);
         } else{
           toastr.error("Please select a User Category");
         }

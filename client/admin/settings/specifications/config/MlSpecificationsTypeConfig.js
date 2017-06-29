@@ -49,7 +49,7 @@ const mlSpecificationTypeTableConfig=new MlViewer.View({
       showAction: true,
       handler:  (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/editSpecification/"+data.id)
+          FlowRouter.go("/admin/settings/documentProcess/editSpecification/"+data.id)
         }
         else{
           toastr.error("Please select a Specification to Edit");
@@ -66,15 +66,10 @@ const mlSpecificationTypeTableConfig=new MlViewer.View({
           // FlowRouter.go("/admin/settings/specificationList")
         }
         else {
-          FlowRouter.go("/admin/settings/addSpecification")
+          FlowRouter.go("/admin/settings/documentProcess/addSpecification")
         }
       }
-    },
-    // {
-    //   showAction: true,
-    //   actionName: 'logout',
-    //   handler: (data)=>{console.log(data);}
-    // }
+    }
   ],
   sizePerPage:5,
   graphQlQuery:gql`

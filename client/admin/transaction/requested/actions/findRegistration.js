@@ -128,8 +128,11 @@ export async function findRegistrationActionHandler(registrationId) {
           addressArea
           addressCity
           addressState
+          addressStateId
           addressCountry
+          addressCountryId
           addressPinCode
+          isDefaultAddress
         }
         emailInfo {
           emailIdType
@@ -242,6 +245,10 @@ export async function documentTypesActionHandler() {
   return id
 
 }
+
+export async function fetchClusterDetails(registrationId) {
+}
+
 
 
 /*

@@ -23,6 +23,23 @@ MlResolver.MlMutationResolver['createProcess'] = (obj, args, context, info) =>{
         return response
     }
     // let id = MlProcessMapping.insert({...args.process});
+  var firstName='';var lastName='';
+  // let id = MlDepartments.insert({...args.department});
+  if(Meteor.users.findOne({_id : context.userId}))
+  {
+    let user = Meteor.users.findOne({_id: context.userId}) || {}
+    if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+      firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+      lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+    }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+      firstName=(user.profile || {}).firstName||'';
+      lastName =(user.profile || {}).lastName||'';
+    }
+  }
+  let createdBy = firstName +' '+lastName
+  args.process.createdBy = createdBy;
+  args.process.createdDate = new Date();
     let id = mlDBController.insert('MlProcessMapping', args.process, context)
     if(id){
         let code = 200;
@@ -95,6 +112,22 @@ MlResolver.MlMutationResolver['updateProcess'] = (obj, args, context, info) => {
       }
     }*/
     // let result= MlProcessMapping.update(id, {$set: args.process});
+    if(Meteor.users.findOne({_id : context.userId}))
+    {
+      let user = Meteor.users.findOne({_id: context.userId}) || {}
+      if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+        firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+        lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+      }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+        firstName=(user.profile || {}).firstName||'';
+        lastName =(user.profile || {}).lastName||'';
+      }
+    }
+    let createdBy = firstName +' '+lastName
+    args.process.updatedBy = createdBy;
+    args.process.updatedDate = new Date();
+
     let result = mlDBController.update('MlProcessMapping', id, args.process, {$set:true}, context)
       let code = 200;
     let response = new MlRespPayload().successPayload(result, code);
@@ -397,7 +430,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
       }]
     }).fetch()
     if (document && document.length > 0) {
-      let combinationBasedDoc=[]
+      let combinationBasedDoc=[],kycDoc=[]
       document.map(function (processDoc) {
         if (processDoc && processDoc.processDocuments) {
           let combinationDoc = processDoc.processDocuments
@@ -441,7 +474,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
   }
 
   function getCountryBasedDocuments(country) {
-    let countryBasedDoc = [], kycDoc = []
+    let countryBasedDoc = []
     let document = MlProcessMapping.find({$and: [{"clusters": {$in: [country]}}, {isActive: true}]}).fetch()
     if (document && document.length > 0) {
       document.map(function (processDoc) {

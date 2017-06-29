@@ -495,7 +495,7 @@ export default class step1 extends React.Component{
                       <input type="text" ref="lastName" placeholder="Last Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.lastName} className="form-control float-label" id="" data-required={true} data-errMsg="Last Name is required" />
                     </div>
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Your Country"  selectedValue={this.state.country} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={this.optionsBySelectCountry.bind(this)}  />
+                      <Moolyaselect multiSelect={false} mandatory={true} ref="country" className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Your Country"  selectedValue={this.state.country} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={this.optionsBySelectCountry.bind(this)} data-required={true} data-errMsg="Country is required"  />
                     </div>
                     <div className="form-group mandatory">
                       <input type="text" ref="contactNumber" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.contactNumber}  placeholder="Contact number" className="form-control float-label" id=""data-required={true} data-errMsg="Contact Number is required" />

@@ -135,7 +135,7 @@ export default class MapMarkers extends Component {
         :
         <div style={{'width': '200px'}} className={`cluster_map ${this.props.isActive?"active":"inactive"}`} id={this.props.markerId}
                           onMouseOver={this.onMouseEnterContent.bind(this,hoverActionHandler)} onMouseOut={this.onMouseLeaveContent.bind(this)}
-                          onClick={this.markerClickHandler.bind(this, this.props.flag)}>
+                          onClick={this.markerClickHandler.bind(this, this.props)}>
         <div className="hex_btn hex_btn_in">
           <span>
            {this.props.showImage && this.props.showImage===true?<img src={this.props.text}/>:<b>{this.props.text}</b>}</span>

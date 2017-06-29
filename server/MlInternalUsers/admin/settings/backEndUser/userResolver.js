@@ -925,8 +925,11 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
 
   } else if(clusterId != "" && chapterId != ""){
 
-    let cluster = mlDBController.findOne('MlClusters', {_id: clusterId}, context)
-    let chapter = mlDBController.findOne('MlChapters', {_id: chapterId}, context)
+    let chapter = mlDBController.findOne('MlChapters', {_id: chapterId}, context) || {};
+    let cluster = mlDBController.findOne('MlClusters', {_id: clusterId}, context);
+    if(!cluster){
+      cluster = mlDBController.findOne('MlClusters', {_id: chapter.clusterId}, context);
+    }
     if(cluster.isActive && chapter.isActive){
       if(userType == "All"){
           // FOR External Users

@@ -6,7 +6,10 @@ let Process = `
 
     type ProcessType{
         _id         : String,
-        date        : Date,
+        createdBy     : String,
+      createdDate   : Date,
+      updatedBy     : String,
+       updatedDate  : Date,
         processId   : String,
         processName : String,
         process     : String,
@@ -59,7 +62,10 @@ let Process = `
    
     type processOutput{
         _id         : String,
-         date        : Date,
+      createdBy     : String
+      createdDate   : Date
+      updatedBy     : String
+       updatedDate  : Date
         processId   : String,
         process     : String,
         communities : [String],
@@ -161,7 +167,10 @@ let Process = `
         
     }
     input processInput{
-        date: Date,
+      createdBy     : String
+      createdDate   : Date
+      updatedBy     : String
+       updatedDate  : Date
         processId   : String,
         process     : String,
         communities : [String],

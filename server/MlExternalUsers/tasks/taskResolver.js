@@ -113,7 +113,7 @@ MlResolver.MlQueryResolver['fetchTaskDetails'] = (obj, args, context, info) => {
   //   userId:context.userId,
   //   profileId:args.profileId
   // };
-  let result = mlDBController.findOne('MlTask', {name:args.name}, context)
+  let result = mlDBController.findOne('MlTask', {_id:args.name}, context)
   return result;
 
 }

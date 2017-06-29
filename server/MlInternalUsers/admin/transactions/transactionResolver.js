@@ -45,15 +45,22 @@ MlResolver.MlMutationResolver['assignTransaction'] = (obj, args, context, info) 
   var collection = args.collection
   var params = args.params;
   var hierarchyDesicion = false
-  let transaction = mlDBController.findOne(collection, {"transactionId": args.transactionId}, context)
-  if(transaction.allocation){
-     hierarchyDesicion = mlHierarchyAssignment.canSelfAssignTransactionAssignedTransaction(args.transactionId,collection,context.userId,transaction.allocation.assigneeId)
-  }else{
-     hierarchyDesicion = mlHierarchyAssignment.assignTransaction(args.transactionId,collection,context.userId,params.user)
-  }
+  var successCount = 0
+  var transactions = args.transactionId
+  transactions.map(function (transaction) {
+    let trans = mlDBController.findOne(collection, {"transactionId": transaction}, context)
+    if(trans.allocation){
+       hierarchyDesicion = mlHierarchyAssignment.canSelfAssignTransactionAssignedTransaction(transaction,collection,context.userId,trans.allocation.assigneeId)
+    }else{
+       hierarchyDesicion = mlHierarchyAssignment.assignTransaction(transaction,collection,context.userId,params.user)
+    }
+    if(hierarchyDesicion===true){
+      successCount++
+    }
+  })
   //get user details iterate through profiles match with role and get department and update allocation details.
 
-  if(hierarchyDesicion === true){
+  if(hierarchyDesicion === true && successCount == transactions.length) {
     let user = mlDBController.findOne('users', {_id: params.user}, context)
 
     let date=new Date();
@@ -68,11 +75,16 @@ MlResolver.MlMutationResolver['assignTransaction'] = (obj, args, context, info) 
     }
     //find hierarchy
     let hierarchy = mlHierarchyAssignment.findHierarchy(params.cluster,params.department,params.subDepartment,params.role)
-
-    let id =mlDBController.update(collection, {transactionId:args.transactionId},{allocation:allocation,status:"WIP",userId:params.user,hierarchy:hierarchy._id,transactionUpdatedDate:date}, {$set: true},context)
-    if(id){
+    let updateCount = 0
+    transactions.map(function (trans) {
+    let id =mlDBController.update(collection, {transactionId:trans},{allocation:allocation,status:"WIP",userId:params.user,hierarchy:hierarchy._id,transactionUpdatedDate:date}, {$set: true},context)
+      if (id) {
+        updateCount++
+      }
+    })
+    if(updateCount>0){
       let code = 200;
-      let result = {transactionId : id}
+      let result = {transactionId: ''}
       let response = new MlRespPayload().successPayload(result, code);
       return response
     }
@@ -133,15 +145,23 @@ MlResolver.MlMutationResolver['updateRegistrationTransaction'] = (obj, args, con
 MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, info) => {
   var collection = args.collection
   var hierarchyDesicion = false
-  let transaction = mlDBController.findOne(collection, {"transactionId": args.transactionId}, context)
-  if(transaction.allocation){
-    hierarchyDesicion = mlHierarchyAssignment.canSelfAssignTransactionAssignedTransaction(args.transactionId,collection,context.userId,transaction.allocation.assigneeId)
-  }else{
-    hierarchyDesicion = mlHierarchyAssignment.canSelfAssignTransaction(args.transactionId,collection,context.userId)
-  }
+  var successCount = 0
+  var transactions = args.transactionId
+  transactions.map(function (transaction) {
+    let trans = mlDBController.findOne(collection, {"transactionId": transaction}, context)
+    if(trans&&trans.allocation){
+      hierarchyDesicion = mlHierarchyAssignment.canSelfAssignTransactionAssignedTransaction(trans,collection,context.userId,trans.allocation.assigneeId)
+    }else{
+      hierarchyDesicion = mlHierarchyAssignment.canSelfAssignTransaction(trans,collection,context.userId)
+    }
+    if(hierarchyDesicion===true){
+      successCount++
+    }
+  })
+
   //get user details iterate through profiles match with role and get department and update allocation details.
 
-  if(hierarchyDesicion === true) {
+  if(hierarchyDesicion === true && successCount == transactions.length) {
     let user = mlDBController.findOne('users', {_id: context.userId}, context)
     let userprofiles = user.profile.InternalUprofile.moolyaProfile.userProfiles
     let userProfile = _.find(userprofiles, function (item) {
@@ -160,20 +180,27 @@ MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, in
       subDepartmentId: roleDetails.subDepartmentId,
     }
     //find hierarchy
-    let hierarchy = mlHierarchyAssignment.findHierarchy(roleDetails.clusterId, roleDetails.departmentId, roleDetails.subDepartmentId, roleDetails.roleId)
-    let id = mlDBController.update(collection, {transactionId: args.transactionId}, {
-      allocation: allocation,
-      status: "WIP",
-      userId: user._id,
-      hierarchy: hierarchy._id,
-      transactionUpdatedDate: date
-    }, {$set: true}, context)
-    if (id) {
+    let updateCount = 0
+    transactions.map(function (trans) {
+      let hierarchy = mlHierarchyAssignment.findHierarchy(roleDetails.clusterId, roleDetails.departmentId, roleDetails.subDepartmentId, roleDetails.roleId)
+      let id = mlDBController.update(collection, {transactionId: trans}, {
+        allocation: allocation,
+        status: "WIP",
+        userId: user._id,
+        hierarchy: hierarchy._id,
+        transactionUpdatedDate: date
+      }, {$set: true}, context)
+      if (id) {
+        updateCount++
+      }
+    })
+    if(updateCount>0){
       let code = 200;
-      let result = {transactionId: id}
+      let result = {transactionId: ''}
       let response = new MlRespPayload().successPayload(result, code);
       return response
     }
+
   }else{
     let code = 400;
     let result = {message:"Not available in hierarchy"}
@@ -184,14 +211,34 @@ MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, in
 
 MlResolver.MlMutationResolver['unAssignTransaction'] = (obj, args, context, info) => {
   var collection = args.collection
-  let transaction = mlDBController.findOne(collection, {"transactionId": args.transactionId}, context)
-  let hierarchyDesicion = mlHierarchyAssignment.canUnAssignTransaction(args.transactionId,collection,context.userId)
-  if(hierarchyDesicion === true){
-    let date=new Date();
-    let id =mlDBController.update(collection, {transactionId:args.transactionId},{allocation:"",status:"Yet To Start",userId:"",hierarchy:"",transactionUpdatedDate:date}, {$set: true},context)
-    if(id){
+  var hierarchyDesicion = false
+  var successCount = 0
+  var transactions = args.transactionId
+  transactions.map(function (transaction) {
+      let trans = mlDBController.findOne(collection, {"transactionId": transaction}, context)
+       hierarchyDesicion = mlHierarchyAssignment.canUnAssignTransaction(transaction,collection,context.userId)
+      if(hierarchyDesicion===true){
+        successCount++
+      }
+    })
+  if(hierarchyDesicion === true && successCount==transactions.length){
+    let updateCount = 0
+    transactions.map(function (trans) {
+      let date = new Date();
+      let id = mlDBController.update(collection, {transactionId:trans}, {
+        allocation: "",
+        status: "Yet To Start",
+        userId: "",
+        hierarchy: "",
+        transactionUpdatedDate: date
+      }, {$set: true}, context)
+      if(id){
+        updateCount++
+      }
+    })
+    if(updateCount>0){
       let code = 200;
-      let result = {transactionId : id}
+      let result = {transactionId: ''}
       let response = new MlRespPayload().successPayload(result, code);
       return response
     }

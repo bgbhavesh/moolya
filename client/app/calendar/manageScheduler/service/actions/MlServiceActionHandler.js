@@ -27,7 +27,7 @@ export async function fetchServiceActionHandler (serviceId) {
   const result = await appClient.query({
     query: gql`
     query($serviceId:String){
-        fetchService(serviceId:$serviceId){
+        findService(serviceId:$serviceId){
         userId
         profileId
         name
@@ -53,8 +53,8 @@ export async function fetchServiceActionHandler (serviceId) {
         payment{
           amount
           isDiscount
-          discountAmount
-          discountPercentage
+          discountType
+          discountValue
           isTaxInclusive
           isPromoCodeApplicable
         }
@@ -86,7 +86,7 @@ export async function fetchServiceActionHandler (serviceId) {
     },
     forceFetch:true
   });
-  const service = result.data.fetchService;
+  const service = result.data.findService;
   return service
 }
 
@@ -116,7 +116,7 @@ export async function fetchServicesActionHandler (profileId) {
   const result = await appClient.query({
     query: gql`
     query($profileId:String) {
-      fetchServices(profileId: $profileId) {
+      fetchUserServices(profileId: $profileId) {
         displayName
         _id
       }
@@ -127,7 +127,7 @@ export async function fetchServicesActionHandler (profileId) {
       profileId:profileId
     }
   });
-  const services = result.data.fetchServices;
+  const services = result.data.fetchUserServices;
   return services;
 }
 
@@ -151,4 +151,22 @@ export async function fetchProfileActionHandler (profileId) {
   });
   const profile = result.data.getUserProfile;
   return profile;
+}
+
+export async function fetchTasksAmountActionHandler (profileId) {
+  const result = await appClient.query({
+    query: gql`
+query ($profileId: String) {
+  fetchTasksAmount(profileId: $profileId) {
+    totalAmount
+  }
+}
+    `,
+    forceFetch:true,
+    variables: {
+      profileId:profileId
+    }
+  });
+  const services = result.data.fetchTasksAmount;
+  return services;
 }

@@ -407,7 +407,13 @@ MlResolver.MlQueryResolver['getTeamMembers'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['getTeamUsers'] = (obj, args, context, info) => {
 
-  let result = mlDBController.find('MlOfficeMembers', {userId:context.userId, officeId:args.Attributes.officeId, communityType:args.Attributes.communityType} , context).fetch()
+  let pipeline =[
+    {"$lookup":{from: "users",localField: "emailId",foreignField: "username",as: "user"}},
+    {"$unwind":"$user"},
+    {"$project":{userId:"$user._id", name:"$user.profile.displayName", externalUserProfiles:"$user.profile.externalUserProfiles"}}
+  ]
+
+  let result = mlDBController.aggregate('MlOfficeMembers', pipeline);
   return result;
 }
 

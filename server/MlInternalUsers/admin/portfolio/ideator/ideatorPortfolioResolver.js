@@ -426,7 +426,6 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
             }
 
             idea.userId = context.userId;
-            // let id = MlIdeas.insert({...idea})
             let id = mlDBController.insert('MlIdeas', idea, context)
             if(!id){
                 let code = 400;

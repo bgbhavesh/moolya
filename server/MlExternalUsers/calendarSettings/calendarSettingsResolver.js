@@ -10,7 +10,12 @@ var _ = require('lodash')
 
 MlResolver.MlQueryResolver['fetchMyCalendarSetting'] = (obj, args, context, info) => {
   let userId = context.userId;
-  let profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  let profileId;
+  if(args.profileId){
+    profileId = args.profileId;
+  } else {
+    profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  }
   if(!userId){
     let code = 400;
     let result = 'User ID is not defined for this user';
@@ -61,7 +66,12 @@ MlResolver.MlQueryResolver['getMyCalendarDayAvailable'] = (obj, args, context, i
 
 MlResolver.MlMutationResolver['updateMyCalendarSetting'] = (obj, args, context, info) => {
   let userId = context.userId;
-  let profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  let profileId;
+  if(args.profileId){
+    profileId = args.profileId;
+  } else {
+    profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  };
   if(!userId){
     let code = 400;
     let result = 'User ID is not defined for this user';

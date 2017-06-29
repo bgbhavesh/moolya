@@ -51,7 +51,7 @@ export default class MlAppSetCalendarSettings extends React.Component {
         // {name: 'Vacation', component: <MlAppSetCalendarTimmingSettings />,icon:<span className="ml fa fa-plane"></span>},
       ]
     return (
-      <div className="app_main_wrap" style={{'overflow':'auto'}}>
+      <div className="app_main_wrap">
         <div className="app_padding_wrap">
           <MlAppScheduleHead type="calendar"/>
           <div className="clearfix" />

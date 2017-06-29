@@ -61,7 +61,8 @@ MlResolver.MlQueryResolver['getMyCalendarDayAvailable'] = (obj, args, context, i
   let month = args.month ? args.month : date.getMonth() ;
   let year = args.year ? args.year : date.getFullYear() ;
   let sessionId = '123';
-  return mlAppointment.getSessionTimeSlots(sessionId, day, month, year);
+  // return mlAppointment.getSessionTimeSlots(sessionId, day, month, year);
+  return mlAppointment.bookAppointment('appointmentId', sessionId, 9, 30, day, month, year);
 };
 
 MlResolver.MlMutationResolver['updateMyCalendarSetting'] = (obj, args, context, info) => {

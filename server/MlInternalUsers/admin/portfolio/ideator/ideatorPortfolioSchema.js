@@ -72,7 +72,8 @@ let ideatorPortfolioSchema = `
         isTwitterIdPrivate:Boolean
         gplusId:String
         isGplusIdPrivate:Boolean
-        profilePic:String
+        profilePic:String,
+        privateFields:[PrivateKeys]
     }
     type ideasObject{
         _id:String

@@ -25,12 +25,10 @@ export async function fetchCalendarSettingsActionHandler (profileId) {
             start
             end
           }
-          slot{
+          slots{
             isActive
             start
-            startTimestamp
             end
-            endTimestamp
           }
         }
         vacations{

@@ -344,13 +344,13 @@ class MlEditBackendUser extends React.Component{
       profile:profile
     }
 
-    console.log(userObject)
     let updateUserObject={
       userId:this.refs.id.value,
       userObject:userObject
-
     }
-    const response = await updateBackendUserActionHandler(updateUserObject)
+
+    let loginUserDetails = this.state.loginUserDetails;    /*adding user context*/
+    const response = await updateBackendUserActionHandler(updateUserObject, loginUserDetails)
     return response;
   }
 

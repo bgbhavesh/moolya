@@ -77,7 +77,7 @@ let requestsSchema = `
         }
         
         type Mutation{
-          createRequestss(requests:requestsInput):response
+          createRequestss(requests:requestsInput,clusterId:String,chapterId:String,subChapterId:String,communityId:String):response
           updateRequestsStatus(requestsId:String,status:String):response
         }
 

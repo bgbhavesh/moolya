@@ -52,6 +52,7 @@ const defaultServerConfig = {
   couponValidate:'/coupons',
   resetPassword:'/resetPassword',
   forgotPassword: '/forgotPassword',
+  verifyEmail: '/verifyEmail',
   graphiqlOptions : {
     passHeader : "'meteor-login-token': localStorage['Meteor.loginToken']"
   },
@@ -631,6 +632,40 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       }
     }))
   }
+
+  if(config.verifyEmail){
+    graphQLServer.options('/verifyEmail', cors());
+    graphQLServer.post(config.verifyEmail, bodyParser.json(), Meteor.bindEnvironment(function (req, res) {
+      console.log(req, res);
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      var context = {};
+      context = getContext({req});
+      context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+      if(req)
+      {
+        let data = req.body;
+        console.log(data);
+        let apiKey = req.header("apiKey");
+        if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
+          let response;
+          response = MlResolver.MlMutationResolver['verifyEmail'](null, data, context, null);
+          //response = response.data&&response.data.verifyEmail?response.data.verifyEmail:{}
+          res.send(response);
+        }else{
+          let code = 401;
+          let result = {message:"The request did not have valid authorization credentials"}
+          let response = new MlRespPayload().errorPayload(result, code);
+          console.log(response);
+          res.send(response);
+        }
+      }else{
+        console.log("Request Payload not provided");
+        res.send(new MlRespPayload().errorPayload({message:"Request Payload not provided"}, 400));
+      }
+    }))
+  }
+
 
   WebApp.connectHandlers.use(Meteor.bindEnvironment(graphQLServer));
 }

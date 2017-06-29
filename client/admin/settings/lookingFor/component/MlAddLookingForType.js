@@ -38,7 +38,7 @@ class MlAddLookingFor extends React.Component {
   async handleSuccess(response) {
     if (response){
       if(response.success)
-        FlowRouter.go("/admin/settings/lookingForList");
+        FlowRouter.go("/admin/settings/registration/lookingForList");
       else
         toastr.error(response.result);
     }
@@ -88,8 +88,7 @@ class MlAddLookingFor extends React.Component {
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
-          FlowRouter.go("/admin/settings/lookingForList")
+          FlowRouter.go("/admin/settings/registration/lookingForList")
         }
       }
     ]

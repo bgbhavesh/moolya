@@ -989,6 +989,7 @@ if(Meteor.isServer){
         "isLink" : true,
         "isMenu" : true,
         "subMenu" : [
+
           {
             "link" : "/admin/settings/departmentsList",
             "name" : "Departments",
@@ -1068,6 +1069,310 @@ if(Meteor.isServer){
                 "image": ""
               }]
           },
+
+
+          //changing routes path
+          // {
+          //   "link" : "/admin/settings/entityList",
+          //   "name" : "Entity Types",
+          //   "uniqueId" : "settings_entityTypes",
+          //   "isLink" : true,
+          //   "isMenu" : true,
+          //   "image" : "",
+          //   subMenu:[{
+          //     "link": "/admin/settings/addEntity",
+          //     "name": "Add EntityType",
+          //     "uniqueId": "settings_AddEntityType",
+          //     "subMenuMappingId":"settings_entityTypes",
+          //     "subMenusId":"settings",
+          //     "isLink": true,
+          //     "isMenu": false,
+          //     "image": ""
+          //   },
+          //     {
+          //       "link": "/admin/settings/entityList",
+          //       "name": "List EntityType",
+          //       "uniqueId": "settings_EntityTypeList",
+          //       "subMenuMappingId":"settings_entityTypes",
+          //       "subMenusId":"settings",
+          //       "isLink": true,
+          //       "isMenu": false,
+          //       "image": ""
+          //     },
+          //     {
+          //       "link": "/admin/settings/editEntity",
+          //       "name": "Edit EntityType",
+          //       "uniqueId": "settings_EditEntityType",
+          //       "subMenuMappingId":"settings_entityTypes",
+          //       "subMenusId":"settings",
+          //       "isLink": true,
+          //       "isMenu": true,
+          //       "image": ""
+          //     }]
+          // },
+          // {
+          //   "link" : "/admin/settings/stageOfCompanyList",
+          //   "name" : "Stage Of Company",
+          //   "uniqueId" : "settings_stageOfCompanyTypes",
+          //   "isLink" : true,
+          //   "isMenu" : true,
+          //   "image" : "",
+          //   subMenu:[{
+          //     "link": "/admin/settings/addStageOfCompany",
+          //     "name": "Add StageOfCompanyType",
+          //     "uniqueId": "settings_AddStageOfCompanyType",
+          //     "subMenuMappingId":"settings_stageOfCompanyTypes",
+          //     "subMenusId":"settings",
+          //     "isLink": true,
+          //     "isMenu": false,
+          //     "image": ""
+          //   },
+          //     {
+          //       "link": "/admin/settings/stageOfCompanyList",
+          //       "name": "List StageOfCompanyType",
+          //       "uniqueId": "settings_StageOfCompanyTypeList",
+          //       "subMenuMappingId":"settings_stageOfCompanyTypes",
+          //       "subMenusId":"settings",
+          //       "isLink": true,
+          //       "isMenu": false,
+          //       "image": ""
+          //     },
+          //     {
+          //       "link": "/admin/settings/editStageOfCompany",
+          //       "name": "Edit StageOfCompanyType",
+          //       "uniqueId": "settings_EditStageOfCompanyType",
+          //       "subMenuMappingId":"settings_stageOfCompanyTypes",
+          //       "subMenusId":"settings",
+          //       "isLink": true,
+          //       "isMenu": true,
+          //       "image": ""
+          //     }]
+          // },
+
+          {
+            "link" : "/admin/settings/registration/entityList",
+            "name" : "Registration",
+            "uniqueId" : "settings_registration",
+            "isLink" : true,
+            "isMenu" : true,
+            "image" : "",
+            "subMenusId" : "settings",
+            "subMenuMappingId" : "settings_registration",
+            "subMenu" : [
+              {
+                "link" : "/admin/settings/registration/entityList",
+                "name" : "Entity Types",
+                "uniqueId" : "settings_entityTypes",
+                "isLink" : true,
+                "isMenu" : true,
+                "image" : "",
+                "subMenusId" : "settings_registration",
+                "subMenuMappingId" : "settings_entityTypes",
+                "subMenu" : [
+                  {
+                    "link" : "/admin/settings/registration/entityList",
+                    "name" : "List EntityType",
+                    "uniqueId" : "settings_EntityTypeList",
+                    "isLink" : true,
+                    "isMenu" : true,
+                    "image" : "",
+                    "subMenusId" : "settings_registration",
+                    "subMenuMappingId" : "settings_entityTypes"
+                  },
+                  {
+                    "link" : "/admin/settings/registration/addEntity",
+                    "name" : "Add EntityType",
+                    "uniqueId" : "settings_AddEntityType",
+                    "isLink" : true,
+                    "isMenu" : false,
+                    "image" : "",
+                    "subMenusId" : "settings_registration",
+                    "subMenuMappingId" : "settings_entityTypes"
+                  },
+                  {
+                    "link": "/admin/settings/registration/editEntity",
+                    "name": "Edit EntityType",
+                    "uniqueId" : "settings_EditEntityType",
+                    "isLink": true,
+                    "isMenu": true,
+                    "image": "",
+                    "subMenusId" : "settings_registration",
+                    "subMenuMappingId" : "settings_entityTypes"
+                  }
+                ]
+              },
+              {
+                "link": "/admin/settings/registration/stageOfCompanyList",
+                "name": "Stage Of Company",
+                "uniqueId": "settings_stageOfCompanyTypes",
+                "isLink": true,
+                "isMenu": true,
+                "image": "",
+                "subMenusId": "settings_registration",
+                "subMenuMappingId": "settings_stageOfCompanyTypes",
+                "subMenu": [
+                  {
+                    "link": "/admin/settings/registration/addStageOfCompany",
+                    "name": "Add StageOfCompanyType",
+                    "uniqueId": "settings_AddStageOfCompanyType",
+                    "subMenuMappingId": "settings_stageOfCompanyTypes",
+                    "subMenusId": "settings_registration",
+                    "isLink": true,
+                    "isMenu": false,
+                    "image": ""
+                  },
+                  {
+                    "link": "/admin/settings/registration/stageOfCompanyList",
+                    "name": "List StageOfCompanyType",
+                    "uniqueId": "settings_StageOfCompanyTypeList",
+                    "subMenuMappingId":"settings_stageOfCompanyTypes",
+                    "subMenusId":"settings_registration",
+                    "isLink": true,
+                    "isMenu": false,
+                    "image": ""
+                  },
+                  {
+                    "link": "/admin/settings/registration/editStageOfCompany",
+                    "name": "Edit StageOfCompanyType",
+                    "uniqueId": "settings_EditStageOfCompanyType",
+                    "subMenuMappingId":"settings_stageOfCompanyTypes",
+                    "subMenusId":"settings_registration",
+                    "isLink": true,
+                    "isMenu": true,
+                    "image": ""
+                  }
+                ]
+              },
+              {
+                "link": "/admin/settings/registration/businessList",
+                "name": "Business Types",
+                "uniqueId": "settings_businessTypes",
+                "isLink": true,
+                "isMenu": true,
+                "image": "",
+                "subMenusId": "settings_registration",
+                "subMenuMappingId": "settings_businessTypes",
+                subMenu: [{
+                  "link": "/admin/settings/registration/addBusiness",
+                  "name": "Add BusinessType",
+                  "uniqueId": "settings_AddBusinessType",
+                  "subMenuMappingId": "settings_businessTypes",
+                  "subMenusId": "settings_registration",
+                  "isLink": true,
+                  "isMenu": false,
+                  "image": ""
+                },
+                  {
+                    "link": "/admin/settings/registration/businessList",
+                    "name": "List BusinessType",
+                    "uniqueId": "settings_BusinessTypeList",
+                    "subMenuMappingId": "settings_businessTypes",
+                    "subMenusId": "settings_registration",
+                    "isLink": true,
+                    "isMenu": false,
+                    "image": ""
+                  },
+                  {
+                    "link": "/admin/settings/registration/editBusiness",
+                    "name": "Edit BusinessType",
+                    "uniqueId": "settings_EditBusinessType",
+                    "subMenuMappingId": "settings_businessTypes",
+                    "subMenusId": "settings_registration",
+                    "isLink": true,
+                    "isMenu": true,
+                    "image": ""
+                  }
+                ]
+              },
+              {
+                "link": "/admin/settings/registration/lookingForList",
+                "name": "Looking For",
+                "uniqueId": "settings_lookingForTypes",
+                "isLink": true,
+                "isMenu": true,
+                "image": "",
+                "subMenusId": "settings_registration",
+                "subMenuMappingId": "settings_lookingForTypes",
+                subMenu: [{
+                  "link": "/admin/settings/registration/addLookingFor",
+                  "name": "Add LookingForType",
+                  "uniqueId": "settings_AddLookingForType",
+                  "subMenuMappingId": "settings_lookingForTypes",
+                  "subMenusId": "settings_registration",
+                  "isLink": true,
+                  "isMenu": false,
+                  "image": ""
+                },
+                  {
+                    "link": "/admin/settings/registration/lookingForList",
+                    "name": "List LookingForType",
+                    "uniqueId": "settings_LookingForTypeList",
+                    "subMenuMappingId": "settings_lookingForTypes",
+                    "subMenusId": "settings_registration",
+                    "isLink": true,
+                    "isMenu": false,
+                    "image": ""
+                  },
+                  {
+                    "link": "/admin/settings/registration/editLookingFor",
+                    "name": "Edit LookingForType",
+                    "uniqueId": "settings_EditLookingForType",
+                    "subMenuMappingId": "settings_lookingForTypes",
+                    "subMenusId": "settings_registration",
+                    "isLink": true,
+                    "isMenu": true,
+                    "image": ""
+                  }
+                ]
+              },
+              {
+                "link": "/admin/settings/registration/citizenshipList",
+                "name": "Citizenship",
+                "uniqueId": "settings_citizenshipTypes",
+                "isLink": true,
+                "isMenu": true,
+                "image": "",
+                "subMenusId": "settings_registration",
+                "subMenuMappingId": "settings_citizenshipTypes",
+                subMenu: [{
+                  "link": "/admin/settings/registration/addCitizenship",
+                  "name": "Add CitizenshipType",
+                  "uniqueId": "settings_AddCitizenshipType",
+                  "subMenuMappingId": "settings_citizenshipTypes",
+                  "subMenusId": "settings_registration",
+                  "isLink": true,
+                  "isMenu": false,
+                  "image": ""
+                },
+                  {
+                    "link": "/admin/settings/registration/citizenshipList",
+                    "name": "List CitizenshipType",
+                    "uniqueId": "settings_CitizenshipTypeList",
+                    "subMenuMappingId": "settings_citizenshipTypes",
+                    "subMenusId": "settings_registration",
+                    "isLink": true,
+                    "isMenu": false,
+                    "image": ""
+                  },
+                  {
+                    "link": "/admin/settings/registration/editCitizenship",
+                    "name": "Edit CitizenshipType",
+                    "uniqueId": "settings_EditCitizenshipType",
+                    "subMenuMappingId": "settings_citizenshipTypes",
+                    "subMenusId": "settings_registration",
+                    "isLink": true,
+                    "isMenu": true,
+                    "image": ""
+                  }
+                ]
+              },
+
+            ]
+          },
+
+
+
+
           {
             "link" : "/admin/settings/templatesList",
             "name" : "Templates",
@@ -1812,196 +2117,121 @@ if(Meteor.isServer){
                 "image": ""
               }]
           },
-          {
-            "link" : "/admin/settings/entityList",
-            "name" : "Entity Types",
-            "uniqueId" : "settings_entityTypes",
-            "isLink" : true,
-            "isMenu" : true,
-            "image" : "",
-            subMenu:[{
-              "link": "/admin/settings/addEntity",
-              "name": "Add EntityType",
-              "uniqueId": "settings_AddEntityType",
-              "subMenuMappingId":"settings_entityTypes",
-              "subMenusId":"settings",
-              "isLink": true,
-              "isMenu": false,
-              "image": ""
-            },
-              {
-                "link": "/admin/settings/entityList",
-                "name": "List EntityType",
-                "uniqueId": "settings_EntityTypeList",
-                "subMenuMappingId":"settings_entityTypes",
-                "subMenusId":"settings",
-                "isLink": true,
-                "isMenu": false,
-                "image": ""
-              },
-              {
-                "link": "/admin/settings/editEntity",
-                "name": "Edit EntityType",
-                "uniqueId": "settings_EditEntityType",
-                "subMenuMappingId":"settings_entityTypes",
-                "subMenusId":"settings",
-                "isLink": true,
-                "isMenu": true,
-                "image": ""
-              }]
-          },
-          {
-            "link" : "/admin/settings/stageOfCompanyList",
-            "name" : "Stage Of Company",
-            "uniqueId" : "settings_stageOfCompanyTypes",
-            "isLink" : true,
-            "isMenu" : true,
-            "image" : "",
-            subMenu:[{
-              "link": "/admin/settings/addStageOfCompany",
-              "name": "Add StageOfCompanyType",
-              "uniqueId": "settings_AddStageOfCompanyType",
-              "subMenuMappingId":"settings_stageOfCompanyTypes",
-              "subMenusId":"settings",
-              "isLink": true,
-              "isMenu": false,
-              "image": ""
-            },
-              {
-                "link": "/admin/settings/stageOfCompanyList",
-                "name": "List StageOfCompanyType",
-                "uniqueId": "settings_StageOfCompanyTypeList",
-                "subMenuMappingId":"settings_stageOfCompanyTypes",
-                "subMenusId":"settings",
-                "isLink": true,
-                "isMenu": false,
-                "image": ""
-              },
-              {
-                "link": "/admin/settings/editStageOfCompany",
-                "name": "Edit StageOfCompanyType",
-                "uniqueId": "settings_EditStageOfCompanyType",
-                "subMenuMappingId":"settings_stageOfCompanyTypes",
-                "subMenusId":"settings",
-                "isLink": true,
-                "isMenu": true,
-                "image": ""
-              }]
-          },
-          {
-            "link" : "/admin/settings/businessList",
-            "name" : "Business Types",
-            "uniqueId" : "settings_businessTypes",
-            "isLink" : true,
-            "isMenu" : true,
-            "image" : "",
-            subMenu:[{
-              "link": "/admin/settings/addBusiness",
-              "name": "Add BusinessType",
-              "uniqueId": "settings_AddBusinessType",
-              "subMenuMappingId":"settings_businessTypes",
-              "subMenusId":"settings",
-              "isLink": true,
-              "isMenu": false,
-              "image": ""
-            },
-              {
-                "link": "/admin/settings/businessList",
-                "name": "List BusinessType",
-                "uniqueId": "settings_BusinessTypeList",
-                "subMenuMappingId":"settings_businessTypes",
-                "subMenusId":"settings",
-                "isLink": true,
-                "isMenu": false,
-                "image": ""
-              },
-              {
-                "link": "/admin/settings/editBusiness",
-                "name": "Edit BusinessType",
-                "uniqueId": "settings_EditBusinessType",
-                "subMenuMappingId":"settings_businessTypes",
-                "subMenusId":"settings",
-                "isLink": true,
-                "isMenu": true,
-                "image": ""
-              }]
-          },
-          {
-            "link" : "/admin/settings/citizenshipList",
-            "name" : "Citizenship",
-            "uniqueId" : "settings_citizenshipTypes",
-            "isLink" : true,
-            "isMenu" : true,
-            "image" : "",
-            subMenu:[{
-              "link": "/admin/settings/addCitizenship",
-              "name": "Add CitizenshipType",
-              "uniqueId": "settings_AddCitizenshipType",
-              "subMenuMappingId":"settings_citizenshipTypes",
-              "subMenusId":"settings",
-              "isLink": true,
-              "isMenu": false,
-              "image": ""
-            },
-              {
-                "link": "/admin/settings/citizenshipList",
-                "name": "List CitizenshipType",
-                "uniqueId": "settings_CitizenshipTypeList",
-                "subMenuMappingId":"settings_citizenshipTypes",
-                "subMenusId":"settings",
-                "isLink": true,
-                "isMenu": false,
-                "image": ""
-              },
-              {
-                "link": "/admin/settings/editCitizenship",
-                "name": "Edit CitizenshipType",
-                "uniqueId": "settings_EditCitizenshipType",
-                "subMenuMappingId":"settings_citizenshipTypes",
-                "subMenusId":"settings",
-                "isLink": true,
-                "isMenu": true,
-                "image": ""
-              }]
-          },
-          {
-            "link" : "/admin/settings/lookingForList",
-            "name" : "Looking For",
-            "uniqueId" : "settings_lookingForTypes",
-            "isLink" : true,
-            "isMenu" : true,
-            "image" : "",
-            subMenu:[{
-              "link": "/admin/settings/addLookingFor",
-              "name": "Add LookingForType",
-              "uniqueId": "settings_AddLookingForType",
-              "subMenuMappingId":"settings_lookingForTypes",
-              "subMenusId":"settings",
-              "isLink": true,
-              "isMenu": false,
-              "image": ""
-            },
-              {
-                "link": "/admin/settings/lookingForList",
-                "name": "List LookingForType",
-                "uniqueId": "settings_LookingForTypeList",
-                "subMenuMappingId":"settings_lookingForTypes",
-                "subMenusId":"settings",
-                "isLink": true,
-                "isMenu": false,
-                "image": ""
-              },
-              {
-                "link": "/admin/settings/editLookingFor",
-                "name": "Edit LookingForType",
-                "uniqueId": "settings_EditLookingForType",
-                "subMenuMappingId":"settings_lookingForTypes",
-                "subMenusId":"settings",
-                "isLink": true,
-                "isMenu": true,
-                "image": ""
-              }]
-          },
+
+          // {
+          //   "link" : "/admin/settings/businessList",
+          //   "name" : "Business Types",
+          //   "uniqueId" : "settings_businessTypes",
+          //   "isLink" : true,
+          //   "isMenu" : true,
+          //   "image" : "",
+          //   subMenu:[{
+          //     "link": "/admin/settings/addBusiness",
+          //     "name": "Add BusinessType",
+          //     "uniqueId": "settings_AddBusinessType",
+          //     "subMenuMappingId":"settings_businessTypes",
+          //     "subMenusId":"settings",
+          //     "isLink": true,
+          //     "isMenu": false,
+          //     "image": ""
+          //   },
+          //     {
+          //       "link": "/admin/settings/businessList",
+          //       "name": "List BusinessType",
+          //       "uniqueId": "settings_BusinessTypeList",
+          //       "subMenuMappingId":"settings_businessTypes",
+          //       "subMenusId":"settings",
+          //       "isLink": true,
+          //       "isMenu": false,
+          //       "image": ""
+          //     },
+          //     {
+          //       "link": "/admin/settings/editBusiness",
+          //       "name": "Edit BusinessType",
+          //       "uniqueId": "settings_EditBusinessType",
+          //       "subMenuMappingId":"settings_businessTypes",
+          //       "subMenusId":"settings",
+          //       "isLink": true,
+          //       "isMenu": true,
+          //       "image": ""
+          //     }]
+          // },
+          // {
+          //   "link" : "/admin/settings/citizenshipList",
+          //   "name" : "Citizenship",
+          //   "uniqueId" : "settings_citizenshipTypes",
+          //   "isLink" : true,
+          //   "isMenu" : true,
+          //   "image" : "",
+          //   subMenu:[{
+          //     "link": "/admin/settings/addCitizenship",
+          //     "name": "Add CitizenshipType",
+          //     "uniqueId": "settings_AddCitizenshipType",
+          //     "subMenuMappingId":"settings_citizenshipTypes",
+          //     "subMenusId":"settings",
+          //     "isLink": true,
+          //     "isMenu": false,
+          //     "image": ""
+          //   },
+          //     {
+          //       "link": "/admin/settings/citizenshipList",
+          //       "name": "List CitizenshipType",
+          //       "uniqueId": "settings_CitizenshipTypeList",
+          //       "subMenuMappingId":"settings_citizenshipTypes",
+          //       "subMenusId":"settings",
+          //       "isLink": true,
+          //       "isMenu": false,
+          //       "image": ""
+          //     },
+          //     {
+          //       "link": "/admin/settings/editCitizenship",
+          //       "name": "Edit CitizenshipType",
+          //       "uniqueId": "settings_EditCitizenshipType",
+          //       "subMenuMappingId":"settings_citizenshipTypes",
+          //       "subMenusId":"settings",
+          //       "isLink": true,
+          //       "isMenu": true,
+          //       "image": ""
+          //     }]
+          // },
+          // {
+          //   "link" : "/admin/settings/lookingForList",
+          //   "name" : "Looking For",
+          //   "uniqueId" : "settings_lookingForTypes",
+          //   "isLink" : true,
+          //   "isMenu" : true,
+          //   "image" : "",
+          //   subMenu:[{
+          //     "link": "/admin/settings/addLookingFor",
+          //     "name": "Add LookingForType",
+          //     "uniqueId": "settings_AddLookingForType",
+          //     "subMenuMappingId":"settings_lookingForTypes",
+          //     "subMenusId":"settings",
+          //     "isLink": true,
+          //     "isMenu": false,
+          //     "image": ""
+          //   },
+          //     {
+          //       "link": "/admin/settings/lookingForList",
+          //       "name": "List LookingForType",
+          //       "uniqueId": "settings_LookingForTypeList",
+          //       "subMenuMappingId":"settings_lookingForTypes",
+          //       "subMenusId":"settings",
+          //       "isLink": true,
+          //       "isMenu": false,
+          //       "image": ""
+          //     },
+          //     {
+          //       "link": "/admin/settings/editLookingFor",
+          //       "name": "Edit LookingForType",
+          //       "uniqueId": "settings_EditLookingForType",
+          //       "subMenuMappingId":"settings_lookingForTypes",
+          //       "subMenusId":"settings",
+          //       "isLink": true,
+          //       "isMenu": true,
+          //       "image": ""
+          //     }]
+          // },
 
           {
             "link" : "/admin/settings/assetsList",

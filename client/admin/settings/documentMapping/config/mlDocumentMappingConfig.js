@@ -102,7 +102,7 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
         if(data && data.documentId){
-          FlowRouter.go("/admin/settings/editDocumentMapping/"+data.documentId);
+          FlowRouter.go("/admin/settings/documentProcess/editDocumentMapping/"+data.documentId);
         } else{
           toastr.error("Please select a Document");
         }
@@ -116,7 +116,7 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
           toastr.error("Please uncheck the record")
         // {FlowRouter.go("/admin/settings/documentMappingList")}
         else {
-          FlowRouter.go("/admin/settings/addDocumentMapping")
+          FlowRouter.go("/admin/settings/documentProcess/addDocumentMapping")
         }
       }
     },

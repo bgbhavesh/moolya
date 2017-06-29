@@ -5,6 +5,7 @@ import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
 import MlUserContext from "../../../../MlExternalUsers/mlUserContext";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
+import portfolioValidationRepo from '../portfolioValidation'
 
 var _ = require('lodash')
 
@@ -246,14 +247,12 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context
       let userEmp = MlMasterSettings.findOne({_id:details.employmentStatus}) || {}
       details.employmentStatus = userEmp.employmentTypeInfo ? userEmp.employmentTypeInfo.employmentName : ''
 
+      var object = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, details)
+
       //for view action
       MlResolver.MlMutationResolver['createView'](obj,{resourceId:args.portfoliodetailsId,resourceType:'portfolio'}, context, info);
-      return details;
+      return object;
     }
-    // if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('portfolioIdeatorDetails')) {
-    //
-    //     return ideatorPortfolio['portfolioIdeatorDetails'];
-    // }
   }
 
   return {};

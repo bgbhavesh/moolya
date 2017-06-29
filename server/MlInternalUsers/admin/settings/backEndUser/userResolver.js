@@ -1698,7 +1698,7 @@ MlResolver.MlMutationResolver['setAdminDefaultProfile'] = (obj, args, context, i
   if(user&&args&&args.clusterId){
     var hasSwitchedProfile=user.profile.InternalUprofile.moolyaProfile.hasSwitchedProfile;
 
-    /*switch profile - if user has switched profile,check for profile switch flag and set switchedProfileDefaultId to selected id
+    /*switch profile/make default- if user has makes a profile as default,check for profile switch flag and set switchedProfileDefaultId to selected id
      * if user has switched his profile, then switchedProfileDefaultId value has the default profile Id.
      *Once user logs in again, default profile Id will be retained and switchProfile details will be cleared.
      * */

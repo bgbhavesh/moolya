@@ -16,6 +16,10 @@ export default class MlAppSetCalendarSettings extends React.Component {
     this.state = {
       primarySettings:{
         duration:{}
+      },
+      timingInfo : {
+        lunch:[],
+        slots:[]
       }
     }
   }
@@ -32,22 +36,27 @@ export default class MlAppSetCalendarSettings extends React.Component {
     let response = await fetchCalendarSettingsActionHandler(profileId);
     console.log('response: ',response);
     if(response){
+      response.workingDays = response.workingDays ? response.workingDays : [];
       let primarySettings = {
         slotDuration: response.slotDuration,
         appointmentCountPerSlots: response.appointmentCountPerSlots,
         slotBreakTime: response.slotBreakTime,
         isOverlappingSchedule: response.isOverlappingSchedule
       };
+      let timingInfo = response.workingDays[0];
+      console.log(timingInfo);
       this.setState({
-        primarySettings: primarySettings
-      })
+        primarySettings : primarySettings,
+        timingInfo      : timingInfo
+      });
+
     }
   }
 
   render(){
     const steps = [
         {name: 'Primary', component: <MlAppSetCalendarPrimarySettings primarySettings={this.state.primarySettings} />,icon:<span className="ml fa fa-file-text-o "></span>},
-        {name: 'Manage', component: <MlAppSetCalendarTimmingSettings />,icon:<span className="ml fa fa-calendar-plus-o"></span>},
+        {name: 'Manage', component: <MlAppSetCalendarTimmingSettings timingInfo={this.state.timingInfo} />,icon:<span className="ml fa fa-calendar-plus-o"></span>},
         // {name: 'Vacation', component: <MlAppSetCalendarTimmingSettings />,icon:<span className="ml fa fa-plane"></span>},
       ]
     return (

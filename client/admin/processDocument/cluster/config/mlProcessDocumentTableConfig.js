@@ -175,7 +175,7 @@ const mlProcessTableConfig=new MlViewer.View({
                         userTypes
                         userTypeNames
                         identity
-                        date
+                        createdDate
                         documents {
                           type
                           category

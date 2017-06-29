@@ -4,6 +4,7 @@ import MlRegistrationPreCondition from "./registrationPreConditions";
 import MlAccounts from "../../../commons/mlAccounts";
 import mlRegistrationRepo from "./mlRegistrationRepo";
 import MlAdminUserContext from "../../../mlAuthorization/mlAdminUserContext";
+import MlUserContext from '../../../MlExternalUsers/mlUserContext'
 import geocoder from "geocoder";
 import _lodash from "lodash";
 import _ from "underscore";
@@ -194,10 +195,12 @@ MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) 
 MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context, info) => {
   // TODO : Authorization
   let userId=context.userId
-  if(userId){
- user = mlDBController.findOne('users', {_id:userId}, context);
-    if(user){
-      let id=user.profile.externalUserProfiles[0].registrationId
+  if(userId){                                                             //getting user registrationId from its default profile
+ // user = mlDBController.findOne('users', {_id:userId}, context);
+    let profile = new MlUserContext(userId).userProfileDetails(userId)
+    if(profile){
+      // let id=user.profile.externalUserProfiles[0].registrationId
+      let id=profile.registrationId
       if(id){
         let response= MlRegistration.findOne({"_id":id});
         return response;
@@ -1232,6 +1235,20 @@ MlResolver.MlMutationResolver['resetPasswords'] = (obj, args, context, info) =>{
       return response;
     }else{
       return new MlRespPayload().successPayload(result.reason, 200);
+    }
+  }else{
+    return new MlRespPayload().errorPayload("Reset link Expired/Used",403);
+  }
+}
+
+MlResolver.MlMutationResolver['verifyEmail'] = (obj, args, context, info) =>{
+  if (args.token) {
+    const result= MlAccounts.verifyEmail(args.token, context);
+    if(result&&result.error){
+      let response = new MlRespPayload().errorPayload(result.reason||"",result.code);
+      return response;
+    }else{
+      return new MlRespPayload().successPayload(result, 200);
     }
   }else{
     return new MlRespPayload().errorPayload("Reset link Expired/Used",403);

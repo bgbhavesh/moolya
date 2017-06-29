@@ -49,7 +49,7 @@ const mlStageOfCompanyTableConfig=new MlViewer.View({
       showAction: true,
       handler:  (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/editStageOfCompany/"+data.id)
+          FlowRouter.go("/admin/settings/registration/editStageOfCompany/"+data.id)
         }
         else{
           toastr.error("Please select a Stage Of Company to edit")
@@ -65,15 +65,10 @@ const mlStageOfCompanyTableConfig=new MlViewer.View({
           toastr.error("Please uncheck the record")
           // FlowRouter.go("/admin/settings/stageOfCompanyList");
         } else {
-          FlowRouter.go("/admin/settings/addStageOfCompany")
+          FlowRouter.go("/admin/settings/registration/addStageOfCompany")
         }
       }
     },
-    // {
-    //   showAction: true,
-    //   actionName: 'logout',
-    //   handler: (data)=>{console.log(data);}
-    // }
   ],
   sizePerPage:5,
   graphQlQuery:gql`

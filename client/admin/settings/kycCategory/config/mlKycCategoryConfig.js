@@ -49,7 +49,7 @@ const mlKycCategoryTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
         if(data && data.id){
-          FlowRouter.go("/admin/settings/editKycCategory/"+data.id);
+          FlowRouter.go("/admin/settings/documentProcess/editKycCategory/"+data.id);
         } else{
           toastr.error("Please select a KYC Category");
         }
@@ -63,16 +63,11 @@ const mlKycCategoryTableConfig=new MlViewer.View({
           toastr.error("Please uncheck the record")
         // {FlowRouter.go("/admin/settings/kycCategoryList")}
         else {
-          FlowRouter.go("/admin/settings/addKycCategory")
+          FlowRouter.go("/admin/settings/documentProcess/addKycCategory")
 
         }
       }
     },
-    // {
-    //   showAction: true,
-    //   actionName: 'logout',
-    //   handler: (data)=>{console.log(data);}
-    // }
   ],
   graphQlQuery:gql`
               query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){

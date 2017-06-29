@@ -38,6 +38,11 @@ export default class MlAppScheduleHead extends Component {
     FlowRouter.go("/app/calendar/manageSchedule/"+selectedProfileId+"/"+type+"List")
   }
 
+  changeToCalendarSettings(){
+    let selectedProfileId = FlowRouter.getParam('profileId');
+    FlowRouter.go("/app/calendar/manageSchedule/"+selectedProfileId+"/setCalendar");
+  }
+
   async getUserProfiles() {
     const resp = await getUserProfileActionHandler();
     // this.setState({profile: resp})
@@ -106,7 +111,7 @@ export default class MlAppScheduleHead extends Component {
                       </a>
                     </li>
                     <li className={ type == "calendar" ? "active_user" : ""}>
-                      <a href="#">
+                      <a onClick={()=>that.changeToCalendarSettings()} href="">
                         <span className="icon_bg"><span className="icon_lg fa fa-calendar"></span></span><br />
                         <div className="tooltiprefer">
                           <span>Calendar</span>

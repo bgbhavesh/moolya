@@ -54,7 +54,7 @@ $menuTrans:all 0.5s linear;
 .app_menu ul .menu_item .menu_in .ml:before{font-size: 48px;}
 .app_menu ul .menu_item .menu_in img{margin-bottom: 5px;margin-top: -8px;}
 .app_menu ul .menu_item:nth-of-type(2) .menu_in img{margin-bottom: -3px; margin-top: -9px;}
-.app_menu ul .menu_item {background: #ffe144;display: inline-block;height: 102px;margin-left: 0px;margin-top: 6px;position: relative;width: 82px;padding-top: 4px;color: #000;text-align: center;cursor: pointer;font-size: 14px;}
+.app_menu ul .menu_item {background: #ffe144;display: inline-block;height: 102px;margin-left: 0px;margin-top: 6px;position: relative;width: 82px;padding-top: 4px;color: #000;text-align: center;cursor: pointer;font-size: 13px;}
 .app_menu ul .menu_item:before {border-bottom: 20px solid #ffe144;border-left: 41px solid transparent;border-right: 41px solid transparent;content: "";height: 0;left: 0;position: absolute;top: -20px;width: 0;}
 .app_menu ul .menu_item:after {content: "";position: absolute;left: 0;bottom: 0;width: 0;height: 0;border-bottom: 20px solid #fff;border-left: 41px solid transparent;border-right: 41px solid transparent;}
 /*.app_menu ul .menu_item.menu_item_in {background: #fff;display: inline-block;height: 102px;margin-left: 0px;margin-top: -16px;position: relative;width: 82px;padding-top: 15px;color: #273545;text-align: center;cursor: pointer;font-size: 14px;transform: scale(.95, .95);}
@@ -84,7 +84,7 @@ $menuTrans:all 0.5s linear;
   .popover-title {margin-bottom: 0px;border-bottom: 1px solid #ddd;color: #273545;font-size: 19px;}
 }
 .moolya_app{
-  .profile-img {width: 24px;margin-left: 2px;} //margin-top: -26px;
+  .profile-img {/* margin-top: -26px; */width: 24px;margin-left: 2px;}
   .ml_app_profile {border: 0px solid #ffc20e;box-sizing: border-box;position: fixed;top: 0;right: 0;padding: 0;border-radius: 0 0 0 100%;width: 2em;height: 2em;/*overflow: hidden;*/transition: all .25s ease-in;}
   .ml_app_profile:focus{outline: 0px;}
   .ml_app_profile.profile_open {background-color: $mlBlue;width: 253px;height: 203px;outline: none;opacity: inherit;border: 1px solid #ffc20e;z-index: 4;}
@@ -227,7 +227,7 @@ $menuTrans:all 0.5s linear;
     .nav>li>a:focus, .nav>li>a:hover{background-color: transparent;}
   }
   .users_list{padding: 5px 0px 4px 0px;border-radius: 6px;background-color: #273545;border: 1px solid #e3e3e3;margin-bottom:6px;
-    li{display: inline-block; margin:0px 6px; text-align: center; /* width: 120px; height: 120px; */ vertical-align: top;
+    li{display: inline-block; margin:0px 6px; text-align: center; /* width: 120px; height: 120px; */ vertical-align: top;position: relative;
       a{text-decoration: none;
         /*span{background:$mlGray; position: absolute; border-radius: 50%; width: 12px; height: 12px; margin-left: 46px;color: $mlBlue;}*/
         span.green{background:#09ce09; position: absolute; border-radius: 50%; width: 12px; height: 12px; margin-left: 46px;}
@@ -236,6 +236,9 @@ $menuTrans:all 0.5s linear;
         span.icon_bg{background:$mlGray;display: inline-block;height: 45px;width: 45px;border-radius: 50%;font-size: 28px;line-height: 45px;
           span.icon_lg{color: $mlBlue;}
           .flaticon-ml-active-user:before{font-weight: bold;font-size: 26px;}
+        }
+        .member_status{position: absolute;background: #ef4647;height: 14px;width: 14px;border-radius: 50%;top: 0px;right: 23px;text-align: center;
+          .fa{font-size: 9px;color: #fff;display: inherit;margin-top: 2px;}
         }
       }
       .tooltiprefer{
@@ -247,6 +250,7 @@ $menuTrans:all 0.5s linear;
         li{height: 63px;
           span.icon_bg{height: 38px;width: 38px;font-size: 20px;line-height: 38px;}
         }
+        .sub_list{margin-top: -6px;border-radius: 0px;}
         .tooltiprefer{
           span{font-size: 12px;}
         }
@@ -1199,7 +1203,7 @@ $menuTrans:all 0.5s linear;
 .cal_view_task {
   .sug_teams {
     .att_members {
-      margin-top: 0px;
+      margin: 0px;
     }
     .search_field{border: 0px;border-radius: 0px;border-bottom: 2px solid transparent;width: 120px;
       &:focus{border-bottom: 2px solid $mlRed;width: 100%;}
@@ -1223,7 +1227,6 @@ $menuTrans:all 0.5s linear;
       }
     }
   }
-
   .ml{
     b{
       font-family: 'DINPro-Regular' !important; font-weight:normal;
@@ -1239,7 +1242,7 @@ $menuTrans:all 0.5s linear;
   padding:0px;
   h3{
     font-size: 16px;
-    margin: 10px 0px;
+    margin: 2px 0px;
     width: 100%;
     background: $mlGray;
     padding: 10px;
@@ -1256,7 +1259,7 @@ $menuTrans:all 0.5s linear;
   }
   li{
     a{
-      display: inline-block; padding: 5px; float: left; width: 19%; text-align: center; background: $mlBlue; margin-right: 5px; margin-bottom: 5px; text-shadow: none; color: #fff; height: 100px; line-height: 95px;
+      display: inline-block; padding: 5px; float: left; width: 32%; text-align: center; background: $mlBlue; margin: 2px; text-shadow: none; color: #fff; height: 50px; line-height: 40px;
 
     }
     &:nth-last-child(1) {
@@ -1267,7 +1270,7 @@ $menuTrans:all 0.5s linear;
         line-height: 40px;
       }
     }
-    &:nth-last-child(2){
+    &:nth-last-child(3){
       a{
         background:$mlYellow;
         color: $mlBlue;
@@ -1364,17 +1367,92 @@ $menuTrans:all 0.5s linear;
 .footer_popover{
   width: 250px;
 }
-
 .rounded_btn{
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  background: $mlBlue;
-  position: absolute;
-  font-size: 12px;
-  color: $mlWhite;
-  line-height: 30px;
-  bottom: 20px;
-  right: 20px;
-  text-align:center;
+  border-radius: 50%; width: 30px; height: 30px; background: $mlBlue; position: absolute; font-size: 12px; color: $mlWhite; line-height: 30px; bottom: 20px; right: 20px; text-align:center;
 }
+/* .warning_popup{
+    position: absolute; z-index: 999; right: 0; width: 350px; top: 64px;
+    h1{
+          font-size: 22px;
+    text-align: center;
+    }
+
+    &:before {
+    top:0; right: 35px; border: solid transparent; content: " "; height: 0; width: 0; position: absolute; pointer-events: none; border-color: rgba(239, 70, 71, 0); border-top-color: #ef4647; border-width: 8px; margin-left: -8px;
+}
+} */
+
+.warning_popup{
+  background:$mlRed; color: $mlWhite;height:200px; text-shadow: none;border-radius:10px;padding: 10px;background-size: cover;background-position: center left;    position: fixed; z-index: 99999; width: 600px;left:25%;top:20%;
+  img{width: 215px; margin-top: -70px;}
+  h1{font-size:30px;}
+  p{padding: 15px 0px;margin: 0;}
+  .ml_btn{text-align: center;
+    .save_btn{background: $mlGray;color: $mlBlue;
+      &:after{border-color: transparent transparent transparent $mlGray;}
+      &:before{border-color: transparent $mlGray transparent transparent;}
+    }
+  }
+  .ideabtn{display: inline-block; background: $mlBlue; border: 0px; line-height: 37px; position: relative; text-decoration: none; font-size: 18px; height: 40px; margin: 5px 0px 0px 0px; color: $mlWhite; text-shadow: none; text-align: center; padding: 0px 10px;margin-right:37px;}
+  .ideabtn:after{position: absolute; right: -15px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 20px 0 20px 15px; border-color: transparent transparent transparent $mlBlue; top: 0px;}
+  .ideabtn:before{position: absolute; left: -15px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 20px 15px 20px 0px; border-color: transparent $mlBlue transparent transparent; top: 0px;}
+
+
+  .ideabtn2{display: inline-block; background: $mlGray; border: 0px; line-height: 37px; position: relative; text-decoration: none; font-size: 18px; height: 40px; margin: 5px 0px 0px 0px; color: $mlBlue; text-shadow: none; text-align: center; padding: 0px 10px;}
+  .ideabtn2:after{position: absolute; right: -15px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 20px 0 20px 15px; border-color: transparent transparent transparent $mlGray; top: 0px;}
+  .ideabtn2:before{position: absolute; left: -15px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 20px 15px 20px 0px; border-color: transparent $mlGray transparent transparent; top: 0px;}
+}
+
+.wrap_right{width: 80px;min-height: 200px;float: right;
+  ul{margin-bottom: 0px;}
+  li{height: 46px;line-height: 46px;text-align: center;background: $mlGray;margin-bottom: 1px;
+    &:hover {background: $mlRed;color: $mlWhite;text-shadow: 0px 1px 1px #333;cursor: pointer;}
+    &:first-of-type{border-radius: 4px 4px 0px 0px;}
+    &:last-of-type{border-radius: 0px 0px 4px 4px;}
+    &.active{background: $mlRed;color: $mlWhite;text-shadow: 0px 1px 1px #333;cursor: pointer;}
+  }
+}
+.wrap_left{width: calc(100% - 86px);float: left;}
+
+
+
+.calendar_access{
+  background:url(/images/cal_right.png) $mlRed right top no-repeat; color: $mlWhite;height:240px; text-shadow: none;border-radius:10px;padding: 40px 10px 0px 10px;margin-top:8%;
+  img{    width: 200px; margin-top: -31px; margin-left: -75px;}
+  h3{    font-size: 28px;line-height: 36px;
+    b{
+      font-weight: normal;
+      color: $mlYellow;
+    }
+  }
+  p{margin-top:10px;}
+  .ideabtn{display: inline-block; background: $mlYellow; border: 0px; line-height: 37px; position: relative; text-decoration: none; font-size: 18px; height: 40px; margin: 5px 0px 0px 0px; color: $mlBlue; text-shadow: none; text-align: center; padding: 0px 10px;}
+  .ideabtn:after{position: absolute; right: -15px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 20px 0 20px 15px; border-color: transparent transparent transparent $mlYellow; top: 0px;}
+  .ideabtn:before{position: absolute; left: -15px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 20px 15px 20px 0px; border-color: transparent $mlYellow transparent transparent; top: 0px;}
+
+}
+.notification_view{
+  li{
+    float: left; background: $mlGray; width: 48%; margin-left: 17px; margin-top: 16px; border-radius: 8px;
+    .left_icon{
+      float: left; width: 20%; height: 80px; background: $mlBlue; padding-top: 10px; padding-left: 25px; border-radius:8px 0 0 8px;
+      img{
+        border-radius: 50%; width: 70px; height: 70px; border: #b9c5cc solid 3px; margin-top: -5px;
+      }
+      .ml{
+        font-size: 55px; border-radius:50%; color: $mlWhite; text-shadow: none; padding:10px;
+
+      }
+    }
+    .right_text{
+      float: left; width: 80%; height: 80px; padding:10px; position:relative;
+      .read_more{
+        margin-top: -26px; position: absolute; right: 8px; bottom: 0; font-size: 20px;
+        a{
+          color: $mlBlue;
+        }
+      }
+    }
+  }
+}
+

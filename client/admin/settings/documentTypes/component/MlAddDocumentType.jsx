@@ -32,7 +32,7 @@ class MlAddDocumentType extends React.Component{
   async handleSuccess(response) {
     if (response){
       if(response.success)
-        FlowRouter.go("/admin/settings/documentTypeList");
+        FlowRouter.go("/admin/settings/documentProcess/documentTypeList");
       else
         toastr.error(response.result);
     }
@@ -57,28 +57,16 @@ class MlAddDocumentType extends React.Component{
 
   render(){
     let MlActionConfig = [
-      // {
-      //   actionName: 'edit',
-      //   showAction: true,
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'add',
         handler: async(event) => this.props.handler(this.createDocumentType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
-      // {
-      //   showAction: true,
-      //   actionName: 'logout',
-      //   handler: null
-      // }
-
       {
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
-          FlowRouter.go("/admin/settings/documentTypeList")
+          FlowRouter.go("/admin/settings/documentProcess/documentTypeList")
         }
       }
     ]

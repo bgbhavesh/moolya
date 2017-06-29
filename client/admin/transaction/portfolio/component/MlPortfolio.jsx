@@ -14,14 +14,14 @@ import moment from "moment";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import {fetchIdeaByPortfolioId} from "../../../../app/ideators/actions/IdeaActionHandler";
 import MlLoader from '../../../../commons/components/loader/loader'
-
+import _ from 'lodash'
 
 class MlPortfolio extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      editComponent: '', portfolio: {}, selectedTab: "", annotations: [], isOpen: false,
-      annotationData: {}, commentsData: [], popoverOpen: false, saveButton: false
+      editComponent: '', portfolio: {}, privateKeys:[], removePrivateKeys:[], selectedTab: "", annotations: [],
+      isOpen: false,annotationData: {}, commentsData: [], popoverOpen: false, saveButton: false
     }
     this.fetchEditPortfolioTemplate.bind(this);
     this.fetchViewPortfolioTemplate.bind(this);
@@ -32,6 +32,7 @@ class MlPortfolio extends React.Component {
     this.fetchComments.bind(this);
     this.toggle = this.toggle.bind(this);
     this.fetchIdeaId.bind(this);
+    this.updatePrivateKeys.bind(this);
     return this;
   }
 
@@ -198,14 +199,42 @@ class MlPortfolio extends React.Component {
     this.setState({idea: details});
   }
 
-  getPortfolioDetails(details) {
-    this.setState({portfolio: details});
+  getPortfolioDetails(portfolioDetails, privateKey) {
+    this.setState({portfolio: portfolioDetails});
+    if(!_.isEmpty(privateKey)){
+      this.updatePrivateKeys(privateKey.keyName, privateKey.booleanKey, privateKey.isPrivate)
+    }
+
+  }
+
+  updatePrivateKeys(keyName, booleanKey, isPrivate){
+    var index = _.findIndex(this.state.privateKeys, {keyName:keyName})
+    var privateKeys = this.state.privateKeys;
+    var removePrivateKeys = this.state.removePrivateKeys;
+    if(isPrivate && index < 0){
+      var rIndex = _.findIndex(this.state.removePrivateKeys, {keyName:keyName})
+      removePrivateKeys.splice(rIndex, 1);
+      privateKeys.push({keyName:keyName, booleanKey:booleanKey})
+      this.setState({privateKeys:privateKeys})
+    }else if(!isPrivate){
+      if(index >= 0){
+        var keyObj = _.cloneDeep(privateKeys[index])
+        removePrivateKeys.push(keyObj)
+        privateKeys.splice(index, 1);
+      }else{
+        removePrivateKeys.push({keyName:keyName, booleanKey:booleanKey})
+      }
+
+    }
+    this.setState({privateKeys:privateKeys, removePrivateKeys:removePrivateKeys})
   }
 
   async updatePortfolioDetails() {
-    let jsonData = {
+    var jsonData = {
       portfolioId: this.props.config,
-      portfolio: this.state.portfolio
+      portfolio: this.state.portfolio,
+      privateKeys: this.state.privateKeys,
+      removeKeys: this.state.removePrivateKeys
     }
     const response = await updatePortfolioActionHandler(jsonData)
     if (response) {

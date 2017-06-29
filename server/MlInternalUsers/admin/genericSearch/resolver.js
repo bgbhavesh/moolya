@@ -1105,8 +1105,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     var queryReturn;
     if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {   //sub-chapter_admin non-moolya
       let subChapterId = curUserProfile.defaultSubChapters ? curUserProfile.defaultSubChapters[0] : ''
-      let subChapterDetails = MlResolver.MlQueryResolver['fetchSubChapter'](null, {_id: subChapterId}, context, null)
-      if(!_.isEmpty(subChapterDetails.internalSubChapterAccess)){
+      // let subChapterDetails = MlResolver.MlQueryResolver['fetchSubChapter'](null, {_id: subChapterId}, context, null)
+      let subChapterDetails = mlDBController.findOne('MlSubChapters', {_id: subChapterId}, context)   /*not getting complete data so changing query*/
+      if(subChapterDetails && !_.isEmpty(subChapterDetails.internalSubChapterAccess)){
         let canSearch = subChapterDetails.internalSubChapterAccess.backendUser?subChapterDetails.internalSubChapterAccess.backendUser.canSearch:false
         var associated = subChapterDetails.associatedSubChapters ? subChapterDetails.associatedSubChapters : []
         if(canSearch)

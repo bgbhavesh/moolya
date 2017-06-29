@@ -49,7 +49,7 @@ const mlBusinessTypeTableConfig=new MlViewer.View({
       showAction: true,
       handler:  (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/editBusiness/"+data.id)
+          FlowRouter.go("/admin/settings/registration/editBusiness/"+data.id)
         }
         else{
           toastr.error("Please select a Business to edit")
@@ -65,7 +65,7 @@ const mlBusinessTypeTableConfig=new MlViewer.View({
           toastr.error("Please uncheck the record")
           // FlowRouter.go("/admin/settings/businessList");
         } else {
-          FlowRouter.go("/admin/settings/addBusiness")
+          FlowRouter.go("/admin/settings/registration/addBusiness")
         }
       }
     },

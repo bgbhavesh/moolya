@@ -42,7 +42,7 @@ class MlEditStageOfCompanyType extends React.Component{
   async handleSuccess(response) {
     if (response){
       if(response.success)
-        FlowRouter.go("/admin/settings/stageOfCompanyList");
+        FlowRouter.go("/admin/settings/registration/stageOfCompanyList");
       else
         toastr.error(response.result);
     }
@@ -92,17 +92,11 @@ class MlEditStageOfCompanyType extends React.Component{
         showAction: true,
         handler: async(event) => this.props.handler(this.updateStageOfCompanyType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
-      // {
-      //   showAction: true,
-      //   actionName: 'add',
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
-          FlowRouter.go("/admin/settings/stageOfCompanyList")
+          FlowRouter.go("/admin/settings/registration/stageOfCompanyList")
         }
       }
     ];

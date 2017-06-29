@@ -26,7 +26,7 @@ class MlAddCitizenship extends React.Component {
   async handleSuccess(response) {
     if (response){
       if(response.success)
-        FlowRouter.go("/admin/settings/citizenshipList");
+        FlowRouter.go("/admin/settings/registration/citizenshipList");
       else
         toastr.error(response.result);
     }
@@ -49,7 +49,7 @@ class MlAddCitizenship extends React.Component {
         toastr.error("Already Exists")
       } else if (response.success) {
         toastr.success("CitizenShip Created Successfully");
-        FlowRouter.go("/admin/settings/citizenshipList");
+        FlowRouter.go("/admin/settings/registration/citizenshipList");
       }
     }
   }
@@ -73,8 +73,7 @@ class MlAddCitizenship extends React.Component {
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
-          FlowRouter.go("/admin/settings/citizenshipList")
+          FlowRouter.go("/admin/settings/registration/citizenshipList")
         }
       }
     ]

@@ -50,7 +50,7 @@ const mlLookingForTableConfig=new MlViewer.View({
       showAction: true,
       handler:  (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/editLookingFor/"+data.id)
+          FlowRouter.go("/admin/settings/registration/editLookingFor/"+data.id)
         }
         else{
           toastr.error("Please select a Looking For to edit")
@@ -66,15 +66,10 @@ const mlLookingForTableConfig=new MlViewer.View({
           toastr.error("Please uncheck the record")
           // FlowRouter.go("/admin/settings/lookingForList")
         }else {
-          FlowRouter.go("/admin/settings/addLookingFor")
+          FlowRouter.go("/admin/settings/registration/addLookingFor")
         }
       }
-    },
-    // {
-    //   showAction: true,
-    //   actionName: 'logout',
-    //   handler: (data)=>{console.log(data);}
-    // }
+    }
   ],
   sizePerPage:5,
   graphQlQuery:gql`

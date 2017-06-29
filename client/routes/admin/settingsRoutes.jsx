@@ -597,91 +597,92 @@ adminSection.route('/settings/editProfession/:id', {
     mount(AdminLayout,{adminContent:<MlEditProfessionType config={params.id} />})
   }
 });
-adminSection.route('/settings/entityList', {
+// adminSection.route('/settings/entityList', {            //Segregation of admin settings
+adminSection.route('/settings/registration/entityList', {
   name: 'settings_EntityTypeList',
   action(){
     mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'entityTypes'}} />, adminContent:< MlEntityTypeList/>})
   }
 });
-adminSection.route('/settings/addEntity', {
+adminSection.route('/settings/registration/addEntity', {
   name: 'settings_AddEntityType',
   action(){
     mount(AdminLayout,{adminContent:< MlAddEntityType />})
   }
 });
-adminSection.route('/settings/editEntity/:id', {
+adminSection.route('/settings/registration/editEntity/:id', {
   name: 'settings_EditEntityType',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditEntityType config={params.id} />})
   }
 });
-adminSection.route('/settings/stageOfCompanyList', {
+adminSection.route('/settings/registration/stageOfCompanyList', {
   name: 'settings_StageOfCompanyTypeList',
   action(){
     mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'stageOfCompany'}} />, adminContent:< MlStageOfCompanyTypeList/>})
   }
 });
-adminSection.route('/settings/addStageOfCompany', {
+adminSection.route('/settings/registration/addStageOfCompany', {
   name: 'settings_AddStageOfCompanyType',
   action(){
     mount(AdminLayout,{adminContent:< MlAddStageOfCompanyType />})
   }
 });
-adminSection.route('/settings/editStageOfCompany/:id', {
+adminSection.route('/settings/registration/editStageOfCompany/:id', {
   name: 'settings_EditStageOfCompanyType',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditStageOfCompanyType config={params.id} />})
   }
 });
-adminSection.route('/settings/businessList', {
+adminSection.route('/settings/registration/businessList', {
   name: 'settings_BusinessTypeList',
   action(){
     mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'businessTypes'}} />, adminContent:< MlBusinessTypeList/>})
   }
 });
-adminSection.route('/settings/addBusiness', {
+adminSection.route('/settings/registration/addBusiness', {
   name: 'settings_AddBusinessType',
   action(){
     mount(AdminLayout,{adminContent:< MlAddBusinessType />})
   }
 });
-adminSection.route('/settings/editBusiness/:id', {
+adminSection.route('/settings/registration/editBusiness/:id', {
   name: 'settings_EditBusinessType',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditBusinessType config={params.id} />})
   }
 });
-adminSection.route('/settings/citizenshipList', {
+adminSection.route('/settings/registration/citizenshipList', {
   name: 'settings_CitizenshipTypeList',
   action(){
     mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'citizenship'}} />, adminContent:< MlCitizenshipTypeList/>})
   }
 });
-adminSection.route('/settings/addCitizenship', {
+adminSection.route('/settings/registration/addCitizenship', {
   name: 'settings_AddCitizenshipType',
   action(){
     mount(AdminLayout,{adminContent:< MlAddCitizenshipType />})
   }
 });
-adminSection.route('/settings/editCitizenship/:id', {
+adminSection.route('/settings/registration/editCitizenship/:id', {
   name: 'settings_EditCitizenshipType',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditCitizenshipType config={params.id} />})
   }
 });
-adminSection.route('/settings/lookingForList', {
+adminSection.route('/settings/registration/lookingForList', {
   name: 'settings_LookingForTypeList',
   action(){
     mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'lookingFor'}} />,adminContent:< MlLookingForTypeList/>})
   }
 });
-adminSection.route('/settings/addLookingFor', {
+adminSection.route('/settings/registration/addLookingFor', {
   name: 'settings_AddLookingForType',
   action(){
     mount(AdminLayout,{adminContent:< MlAddLookingForType />})
   }
 });
-adminSection.route('/settings/editLookingFor/:id', {
+adminSection.route('/settings/registration/editLookingFor/:id', {
   name: 'settings_EditLookingForType',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditLookingForType config={params.id} />})

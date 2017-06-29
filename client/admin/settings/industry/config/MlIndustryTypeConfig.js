@@ -49,7 +49,7 @@ const mlIndustryTypeTableConfig=new MlViewer.View({
       showAction: true,
       handler:  (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/editIndustry/"+data.id)
+          FlowRouter.go("/admin/settings/documentProcess/editIndustry/"+data.id)
         }
         else{
           toastr.error("Please select a Industry to Edit");
@@ -66,7 +66,7 @@ const mlIndustryTypeTableConfig=new MlViewer.View({
           // FlowRouter.go("/admin/settings/industryList")
         }
         else {
-          FlowRouter.go("/admin/settings/addIndustry")
+          FlowRouter.go("/admin/settings/documentProcess/addIndustry")
         }
       }
     },

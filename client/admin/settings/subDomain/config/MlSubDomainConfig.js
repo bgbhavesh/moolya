@@ -50,7 +50,7 @@ const mlSubDomainTableConfig=new MlViewer.View({
       showAction: true,
       handler:  (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/editSubDomain/"+data.id)
+          FlowRouter.go("/admin/settings/documentProcess/editSubDomain/"+data.id)
         }
         else{
           toastr.error("Please select a Sub Domain to edit")
@@ -64,9 +64,9 @@ const mlSubDomainTableConfig=new MlViewer.View({
       handler: (data)=>{
         if(data&&data.id){
           toastr.error("Please uncheck the record")
-          // FlowRouter.go("/admin/settings/SubDomainList")
+          // FlowRouter.go("/admin/settings/documentProcess/SubDomainList")
         }else {
-          FlowRouter.go("/admin/settings/addSubDomain")
+          FlowRouter.go("/admin/settings/documentProcess/addSubDomain")
         }
       }
     }

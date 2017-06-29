@@ -211,13 +211,16 @@ class MlAuthorization
         switch(moduleName){
           case 'USERS':{
               let community = this.getCommunityId(variables.clusterId, variables.chapterId, variables.subChapterId, variables.communityId)
-              variables.communityId= community._id
+              if(community)
+                variables.communityId= community._id
           }
           break;
           case 'REGISTRATION':{
             if(actionName == 'CREATE'){
                 let community = this.getCommunityId(variables.registration.clusterId, variables.registration.chapterId, variables.registration.subChapterId, variables.registration.registrationType)
-                variables.registration.communityId = community._id
+                if(community)
+                  variables.registration.communityId = community._id
+
                 return variables.registration;
             }
 

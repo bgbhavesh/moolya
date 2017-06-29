@@ -241,18 +241,76 @@ class MlAppointment {
       //they are free
     }
   }
-  // Will return service card slot ie intersection of all user slots
-  getServiceCardSlots(serviceId){
 
-  }
   //Will book appointment if user is free
-  bookAppointment(appointmentId){
+  bookAppointment(appointmentId, sessionId, hour, minute, day, month, year){
+    const that = this;
+    /**
+     * Initialize the date object and set date month and year
+     */
+    let date = new Date();
+    date.setDate(day);
+    date.setMonth(month);
+    date.setYear(year);
+    date.setHours(hour);
+    date.setMinutes(minute);
+    date.setSeconds(0);
+    /**
+     * Fetch user task info and calendar setting
+     */
+    let task = mlDBController.findOne('MlTask',{'session.sessionId':sessionId});
+    /**
+     * Find the requested session
+     */
+    let session = task.session.find(function (data) {
+      return data.sessionId == sessionId;
+    });
+    let sessionDuration = session.duration;
+    if(sessionDuration){
+      let availableSlots = that.getSessionTimeSlots(sessionId, day, month, year);
+      session.duration.hours = session.duration.hours ? session.duration.hours : 0 ;
+      session.duration.minutes = session.duration.minutes ? session.duration.minutes : 0 ;
+      let sessionDurationInMinutes = session.duration.hours * 60 + session.duration.minutes;
+      let canAppoinmentBook = true;
+      let isStartTimeFind = false;
+      let totalSlotsDuration = 0;
+      availableSlots.forEach(function (availableSlot) {
+        if(!canAppoinmentBook || totalSlotsDuration >= sessionDurationInMinutes ){
+          return ;
+        }
+        let slotStartTime = getTimeDate(availableSlot.slotTime.split('-')[0], date);
+        if(date.getHours() === slotStartTime.getHours() && date.getMinutes() === slotStartTime.getMinutes()){
+          isStartTimeFind = true;
+        }
+        let slotEndTime = getTimeDate(availableSlot.slotTime.split('-')[1], date);
+        let slotDifference = slotEndTime - slotStartTime;
+        let slotDurationInMinutes = Math.round(((slotDifference % 86400000) % 3600000) / 60000);
+        if(isStartTimeFind) {
+          console.log(slotStartTime, slotEndTime);
+          if(!availableSlot.isAvailable){
+            canAppoinmentBook =false;
+          }
+          totalSlotsDuration += slotDurationInMinutes;
+        }
+        // console.log(availableSlot, slotDurationInMinutes);
+      });
+      if(canAppoinmentBook){
+        return {
 
+        }
+      } else {
+
+      }
+      // console.log(availableSlots, session, sessionDuration, sessionDurationInMinutes);
+    } else {
+      //Send error session duration not set
+    }
   }
   //return booked appointment of user
   getAllAppointment(userId, profileId){
 
   }
+
   //return booked appointment of specific branch
   getBranchAppointment(branchId){
 

@@ -63,15 +63,10 @@ const mlUserTypeTableConfig=new MlViewer.View({
             toastr.error("Please uncheck the record")
           // {FlowRouter.go("/admin/settings/userTypeList")}
           else {
-            FlowRouter.go("/admin/settings/addUserType")
+            FlowRouter.go("/admin/settings/documentProcess/addUserType")
           }
       }
     },
-    // {
-    //   showAction: true,
-    //   actionName: 'logout',
-    //   handler: (data)=>{console.log(data);}
-    // }
   ],
   graphQlQuery:gql`
               query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){

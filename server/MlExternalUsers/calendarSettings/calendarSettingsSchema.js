@@ -38,7 +38,7 @@ let calendarSettingSlot=`
     isActive: Boolean
     dayName : Int
     lunch   : [CalendarSettingLunch]
-    slot    : [CalendarSettingSlot]
+    slots    : [CalendarSettingSlot]
   }
   
   type CalendarSetting {
@@ -91,7 +91,7 @@ let calendarSettingSlot=`
     isActive: Boolean
     dayName : Int
     lunch   : [calendarSettingLunch]
-    slot    : [calendarSettingSlot]
+    slots   : [calendarSettingSlot]
   }
   
   input calendarSetting {

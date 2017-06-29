@@ -89,7 +89,7 @@ let officeTransaction = `
 
     
     type Query {
-      findOfficeTransaction(officeTransactionId:String):response
+      findOfficeTransaction(officeTransactionId:String, clusterId: String, chapterId: String, subChapterId: String, communityId: String):response
       findAllTransaction : [myTransaction]
     }
     type Mutation {
@@ -109,3 +109,4 @@ let supportedApi = [
   {api: 'findAllTransaction', actionName: 'READ', moduleName: "OFFICE"},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
+// findOfficeTransaction(officeTransactionId:String):response    /* updated with all admin data context*/

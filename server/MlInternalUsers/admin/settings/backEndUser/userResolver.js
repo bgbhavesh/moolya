@@ -1694,7 +1694,7 @@ MlResolver.MlMutationResolver['setAdminDefaultProfile'] = (obj, args, context, i
   var response=null;
   var update=null;
   var result=null;
-  const user = Meteor.users.findOne({_id:userId}) || {}
+  const user = mlDBController.findOne('users',{_id:userId}) || {}
   if(user&&args&&args.clusterId){
     var hasSwitchedProfile=user.profile.InternalUprofile.moolyaProfile.hasSwitchedProfile;
 
@@ -1728,7 +1728,7 @@ MlResolver.MlMutationResolver['setAdminDefaultProfile'] = (obj, args, context, i
 MlResolver.MlMutationResolver['deActivateAdminUserProfile'] = (obj, args, context, info) => {
   let userId=context.userId;
   var response=null;
-  const user = Meteor.users.findOne({_id:userId}) || {}
+  const user = mlDBController.findOne('users',{_id:userId}) || {}
   if(user&&args&&args.clusterId){
     result = mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'clusterId': args.clusterId}}},
       {"profile.externalUserProfiles.$.isActive": true}, {$set: true}, context);
@@ -1746,7 +1746,7 @@ MlResolver.MlMutationResolver['deActivateAdminUserProfile'] = (obj, args, contex
 
 MlResolver.MlQueryResolver['fetchUserRoleDetails'] = (obj, args, context, info) => {
   let userId=context.userId
-  const user = Meteor.users.findOne({_id:userId}) || {}
+  const user = mlDBController.findOne('users',{_id:userId}) || {}
   if(user){
     var internalUserProfile = user&&user.profile&&user.profile.isInternaluser?user.profile.InternalUprofile:{};
     let moolyaProfile = internalUserProfile&&internalUserProfile.moolyaProfile?internalUserProfile.moolyaProfile:{}
@@ -1865,7 +1865,7 @@ MlResolver.MlMutationResolver['switchProfile'] = (obj, args, context, info) => {
   let userId=context.userId;
   var response=null;
   var result=null;
-  const user = Meteor.users.findOne({_id:userId}) || {};
+  const user = mlDBController.findOne('users',{_id:userId}) || {};
   if(user&&args&&args.clusterId){
     var defaultUserProfile=_.find(user.profile.InternalUprofile.moolyaProfile.userProfiles, {'isDefault':true })||user.profile.InternalUprofile.moolyaProfile.userProfiles[0];
     var defaultUserProfileId=defaultUserProfile?defaultUserProfile.clusterId:null;

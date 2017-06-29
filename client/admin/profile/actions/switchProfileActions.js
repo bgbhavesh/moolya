@@ -63,6 +63,26 @@ export async function setAdminDefaultProfileActionHandler(clusterId) {
   return id;
 }
 
+export async function switchProfileActionHandler(clusterId) {
+
+  const result = await client.mutate({
+    mutation: gql`
+          mutation($clusterId:String!){
+              switchProfile(clusterId:$clusterId){
+                  success,
+                  code,
+                  result
+              }  
+          }
+      `,
+    variables: {
+      clusterId:clusterId
+    }
+  })
+  const id = result.data.switchProfile;
+  return id;
+}
+
 export async function deActivateAdminProfileActionHandler(clusterId) {
 
   const result = await client.mutate({

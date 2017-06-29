@@ -471,6 +471,7 @@ let BackEndUser = `
         updateAddressBookInfo(userId: String, moduleName: String, actionName: String,type:String, addressBook:addressBook): response
         uploadUserImage(userId:String,moduleName:String,actionName:String,userProfilePic:String):response
         setAdminDefaultProfile(clusterId:String!):response
+        switchProfile(clusterId:String!):response
         deActivateAdminUserProfile(clusterId:String!):response
     }
     
@@ -534,5 +535,6 @@ let supportedApi = [
     {api:'uploadUserImage', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
     {api:'deActivateAdminUserProfile', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
     {api:'setAdminDefaultProfile', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
+    {api:'switchProfile', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true}
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -397,7 +397,8 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
       }]
     }).fetch()
     if (document && document.length > 0) {
-      let combinationBasedDoc=[]
+      let combinationBasedDoc=[],kycDoc=[]
+
       document.map(function (processDoc) {
         if (processDoc && processDoc.processDocuments) {
           let combinationDoc = processDoc.processDocuments

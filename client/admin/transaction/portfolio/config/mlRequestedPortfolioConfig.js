@@ -43,10 +43,10 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
       actionName: 'edit',
       showAction: true,
       handler: async(data)=>{
-        let response =  await validateTransaction(data.transactionId,"MlPortfolioDetails",data.assignedUserId);
-        if(data && data.id && response.success === true){
-          FlowRouter.go("/admin/transactions/portfolio/editRequests/"+data.id+"/"+data.communityType);
-        }else if(data && data.id){
+        let response =  await validateTransaction(data.transactionId,"MlPortfolioDetails",data[0].assignedUserId);
+        if(data && data[0].id && response.success === true){
+          FlowRouter.go("/admin/transactions/portfolio/editRequests/"+data[0].id+"/"+data[0].communityType);
+        }else if(data && data[0].id){
           toastr.error("User does not have access to edit record");
         } else{
           toastr.error("Please Select a record");

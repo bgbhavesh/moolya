@@ -26,7 +26,7 @@ class MlAddEntity extends React.Component {
   async handleSuccess(response) {
     if (response){
       if(response.success)
-        FlowRouter.go("/admin/settings/entityList");
+        FlowRouter.go("/admin/settings/registration/entityList");
       else
         toastr.error(response.result);
     }
@@ -70,7 +70,7 @@ class MlAddEntity extends React.Component {
         actionName: 'cancel',
         handler: async(event) => {
           this.props.handler(" ");
-          FlowRouter.go("/admin/settings/entityList")
+          FlowRouter.go("/admin/settings/registration/entityList")
         }
       }
     ]

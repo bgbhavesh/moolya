@@ -174,7 +174,11 @@ class MlAssignBackendUsers extends React.Component {
           {
             showAction: true,
             actionName: 'cancel',
-            handler: null
+            handler: async(event) => {
+              let pararms = FlowRouter._current.params;
+              FlowRouter.go("/admin/clusters/"+
+                pararms.clusterId+"/clusterDetails");
+            }
           }
       ]
       let loggedInUser = getAdminUserContext();

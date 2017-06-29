@@ -450,8 +450,9 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
         }
       })
       if (combinationBasedDoc && combinationBasedDoc.length > 0) {
-        kycDoc = _.uniqBy(combinationBasedDoc, function (kyc) {
-          return kyc.documentId && kyc.docTypeId;
+        //getting uniq documents based on documentId
+        kycDoc = _underscore.uniq(combinationBasedDoc, function (kyc) {
+          return kyc.documentId;
         });
         return kycDoc
       }
@@ -496,8 +497,9 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
         }
       })
       if (countryBasedDoc && countryBasedDoc.length > 0) {
-        kycDoc = _.uniqBy(countryBasedDoc, function (kyc) {
-          return kyc.documentId && kyc.docTypeId;
+        //getting uniq documents based on documentId
+        kycDoc = _underscore.uniq(countryBasedDoc, function (kyc) {
+          return kyc.documentId;
         });
         return kycDoc
       }

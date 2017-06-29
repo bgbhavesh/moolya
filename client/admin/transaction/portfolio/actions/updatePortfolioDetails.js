@@ -4,11 +4,13 @@ import {client} from '../../../core/apolloConnection';
 export async function updatePortfolioActionHandler(details) {
   let portfoliodetailsId  = details.portfolioId;
   let portfolio = details.portfolio;
+  let privateKeys = details.privateKeys
+  let removeKeys = details.removeKeys
 
   const result = await client.mutate({
       mutation: gql`
-          mutation  ($portfoliodetailsId: String, $portfolio:portfolio){
-              updatePortfolio(portfoliodetailsId:$portfoliodetailsId, portfolio:$portfolio){
+          mutation($portfoliodetailsId: String, $portfolio:portfolio, $privateKeys:[privateKeys], $removeKeys:[privateKeys]){
+              updatePortfolio(portfoliodetailsId:$portfoliodetailsId, portfolio:$portfolio, privateFields:$privateKeys, removeKeys:$removeKeys){
                   success,
                   code,
                   result
@@ -18,6 +20,8 @@ export async function updatePortfolioActionHandler(details) {
     variables: {
         portfoliodetailsId,
         portfolio,
+        privateKeys,
+        removeKeys
     }
   })
   const id = result.data.updatePortfolio;

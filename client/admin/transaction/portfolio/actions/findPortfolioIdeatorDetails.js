@@ -46,6 +46,10 @@ export async function findIdeatorDetailsActionHandler(portfoliodetailsId) {
               gplusId
               isGplusIdPrivate
               profilePic
+              privateFields{
+                keyName,
+                booleanKey
+              }
             }
           }
 

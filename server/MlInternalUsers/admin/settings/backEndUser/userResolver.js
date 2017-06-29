@@ -1685,21 +1685,27 @@ MlResolver.MlMutationResolver['setAdminDefaultProfile'] = (obj, args, context, i
   let userId=context.userId;
   var response=null;
   var update=null;
-  const user = Meteor.users.findOne({_id:userId}) || {}
+  var result=null;
+  const user = mlDBController.findOne('users',{_id:userId}) || {}
   if(user&&args&&args.clusterId){
+    var hasSwitchedProfile=user.profile.InternalUprofile.moolyaProfile.hasSwitchedProfile;
 
-    let result= mlDBController.update('users', {'_id':userId,'profile.InternalUprofile.moolyaProfile.userProfiles':{$elemMatch: {'isDefault': true}}},
-      {"profile.InternalUprofile.moolyaProfile.userProfiles.$.isDefault": false}, {$set: true,multi:true}, context);
+    /*switch profile/make default- if user has makes a profile as default,check for profile switch flag and set switchedProfileDefaultId to selected id
+     * if user has switched his profile, then switchedProfileDefaultId value has the default profile Id.
+     *Once user logs in again, default profile Id will be retained and switchProfile details will be cleared.
+     * */
+    if(hasSwitchedProfile){
+      result= mlDBController.update('users',{'_id':userId,"profile.InternalUprofile.moolyaProfile.hasSwitchedProfile": true,'profile.InternalUprofile.moolyaProfile.userProfiles':{$elemMatch: {'clusterId': args.clusterId}}},
+        {"profile.InternalUprofile.moolyaProfile.switchedProfileDefaultId": args.clusterId}, {$set: true}, context);
+    }else{
+      result= mlDBController.update('users', {'_id':userId,'profile.InternalUprofile.moolyaProfile.userProfiles':{$elemMatch: {'isDefault': true}}},
+        {"profile.InternalUprofile.moolyaProfile.userProfiles.$.isDefault": false}, {$set: true,multi:true}, context);
 
-    /*switch profile - if user has switched profile,check for profile switch flag and set switchedProfileDefaultId to selected id */
-     result= mlDBController.update('users',{'_id':userId,"profile.InternalUprofile.moolyaProfile.hasSwitchedProfile": true,'profile.InternalUprofile.moolyaProfile.userProfiles':{$elemMatch: {'clusterId': args.clusterId}}},
-      {"profile.InternalUprofile.moolyaProfile.userProfiles.$.isDefault": true,"profile.InternalUprofile.moolyaProfile.switchedProfileDefaultId": args.clusterId}, {$set: true}, context);
-
-    if(result!==1){
-     result= mlDBController.update('users',{'_id':userId,'profile.InternalUprofile.moolyaProfile.userProfiles':{$elemMatch: {'clusterId': args.clusterId}}},
-      {"profile.InternalUprofile.moolyaProfile.userProfiles.$.isDefault": true,
-       "profile.InternalUprofile.moolyaProfile.switchedProfileDefaultId":null}, {$set: true}, context);
+      result= mlDBController.update('users',{'_id':userId,"profile.InternalUprofile.moolyaProfile.hasSwitchedProfile": false,'profile.InternalUprofile.moolyaProfile.userProfiles':{$elemMatch: {'clusterId': args.clusterId}}},
+        {"profile.InternalUprofile.moolyaProfile.userProfiles.$.isDefault": true,
+          "profile.InternalUprofile.moolyaProfile.switchedProfileDefaultId":null}, {$set: true}, context);
     }
+
     response = new MlRespPayload().successPayload({}, 200);
 
 
@@ -1714,7 +1720,7 @@ MlResolver.MlMutationResolver['setAdminDefaultProfile'] = (obj, args, context, i
 MlResolver.MlMutationResolver['deActivateAdminUserProfile'] = (obj, args, context, info) => {
   let userId=context.userId;
   var response=null;
-  const user = Meteor.users.findOne({_id:userId}) || {}
+  const user = mlDBController.findOne('users',{_id:userId}) || {}
   if(user&&args&&args.clusterId){
     result = mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'clusterId': args.clusterId}}},
       {"profile.externalUserProfiles.$.isActive": true}, {$set: true}, context);
@@ -1732,7 +1738,7 @@ MlResolver.MlMutationResolver['deActivateAdminUserProfile'] = (obj, args, contex
 
 MlResolver.MlQueryResolver['fetchUserRoleDetails'] = (obj, args, context, info) => {
   let userId=context.userId
-  const user = Meteor.users.findOne({_id:userId}) || {}
+  const user = mlDBController.findOne('users',{_id:userId}) || {}
   if(user){
     var internalUserProfile = user&&user.profile&&user.profile.isInternaluser?user.profile.InternalUprofile:{};
     let moolyaProfile = internalUserProfile&&internalUserProfile.moolyaProfile?internalUserProfile.moolyaProfile:{}
@@ -1850,17 +1856,22 @@ let profile = [];
 MlResolver.MlMutationResolver['switchProfile'] = (obj, args, context, info) => {
   let userId=context.userId;
   var response=null;
-  var update=null;
-  const user = Meteor.users.findOne({_id:userId}) || {}
+  var result=null;
+  const user = mlDBController.findOne('users',{_id:userId}) || {};
   if(user&&args&&args.clusterId){
+    var defaultUserProfile=_.find(user.profile.InternalUprofile.moolyaProfile.userProfiles, {'isDefault':true })||user.profile.InternalUprofile.moolyaProfile.userProfiles[0];
+    var defaultUserProfileId=defaultUserProfile?defaultUserProfile.clusterId:null;
+    //Check if switchedProfileDefaultId exists for the first time and update defaultUserProfileId
+    result= mlDBController.update('users',{'_id':userId,$or:[{"profile.InternalUprofile.moolyaProfile.switchedProfileDefaultId" : { $type: 10 }},{"profile.InternalUprofile.moolyaProfile.switchedProfileDefaultId":{ $exists: false } }]},
+      {"profile.InternalUprofile.moolyaProfile.switchedProfileDefaultId":defaultUserProfileId}, {$set: true,multi:false}, context);
 
-    let result= mlDBController.update('users', {'_id':userId,'profile.InternalUprofile.moolyaProfile.userProfiles':{$elemMatch: {'isDefault': true}}},
+    /*clear the default flag of all profiles*/
+    result= mlDBController.update('users', {'_id':userId,'profile.InternalUprofile.moolyaProfile.userProfiles':{$elemMatch: {'isDefault': true}}},
       {"profile.InternalUprofile.moolyaProfile.userProfiles.$.isDefault": false}, {$set: true,multi:true}, context);
 
-    /*switch profile - if user has switched profile,set switchedProfileDefaultId to selected id */
+    /*switch profile - if user has switched profile,make the profile as default */
       result= mlDBController.update('users',{'_id':userId,'profile.InternalUprofile.moolyaProfile.userProfiles':{$elemMatch: {'clusterId': args.clusterId}}},
         {"profile.InternalUprofile.moolyaProfile.hasSwitchedProfile": true,
-         "profile.InternalUprofile.moolyaProfile.switchedProfileDefaultId": args.clusterId,
          "profile.InternalUprofile.moolyaProfile.userProfiles.$.isDefault": true}, {$set: true}, context);
 
       if(result==1) response = new MlRespPayload().successPayload({}, 200);

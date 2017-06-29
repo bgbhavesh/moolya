@@ -1198,6 +1198,20 @@ MlResolver.MlMutationResolver['resetPasswords'] = (obj, args, context, info) =>{
   }
 }
 
+MlResolver.MlMutationResolver['verifyEmail'] = (obj, args, context, info) =>{
+  if (args.token) {
+    const result= MlAccounts.verifyEmail(args.token, context);
+    if(result&&result.error){
+      let response = new MlRespPayload().errorPayload(result.reason||"",result.code);
+      return response;
+    }else{
+      return new MlRespPayload().successPayload(result, 200);
+    }
+  }else{
+    return new MlRespPayload().errorPayload("Reset link Expired/Used",403);
+  }
+}
+
 MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) => {
 
   let kycDocumentObject = {}

@@ -87,7 +87,7 @@ const mlProcessTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
         if(data && data.id){
-          FlowRouter.go("/admin/settings/editProcess/"+data.id);
+          FlowRouter.go("/admin/settings/documentProcess/editProcess/"+data.id);
         } else{
           toastr.error("Please select a Process Type");
         }
@@ -101,7 +101,7 @@ const mlProcessTableConfig=new MlViewer.View({
           toastr.error("Please uncheck the record")
           // FlowRouter.go("/admin/settings/processList")
         }else {
-          FlowRouter.go("/admin/settings/addProcess")
+          FlowRouter.go("/admin/settings/documentProcess/addProcess")
         }
       }
     },

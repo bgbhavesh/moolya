@@ -56,7 +56,7 @@ const mlDocumentFormatTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
         if(data && data.id){
-          FlowRouter.go("/admin/settings/editDocumentFormat/"+data.id);
+          FlowRouter.go("/admin/settings/documentProcess/editDocumentFormat/"+data.id);
         } else{
           toastr.error("Please select a Document Format");
         }
@@ -70,7 +70,7 @@ const mlDocumentFormatTableConfig=new MlViewer.View({
           toastr.error("Please uncheck the record")
           // FlowRouter.go("/admin/settings/documentFormatList");
         }else{
-          FlowRouter.go("/admin/settings/addDocumentFormat")
+          FlowRouter.go("/admin/settings/documentProcess/addDocumentFormat")
 
         }
       }

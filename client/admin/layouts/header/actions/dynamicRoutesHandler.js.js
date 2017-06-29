@@ -6,9 +6,9 @@ export default function dynamicLinkHandler(path,params,queryParams){
     "dashboard_chapters":function(params,queryParams){
       let dynamicParams=params||{};
       if(_.has(dynamicParams,"clusterId")&&_.has(dynamicParams,"chapterId")){
-        return `/admin/dashboard/${dynamicParams.clusterId}/${dynamicParams.chapterId}/subChapters`;
+        return `/admin/dashboard/${dynamicParams.clusterId}/${dynamicParams.chapterId}/subChapters?viewMode=${queryParams.viewMode}`; // View Mode added
       }else if(_.has(dynamicParams,"clusterId")){
-        return `/admin/dashboard/${dynamicParams.clusterId}/chapters`;
+        return `/admin/dashboard/${dynamicParams.clusterId}/chapters?viewMode=${queryParams.viewMode}`;  // View Mode added
       }else{
         return '/admin/dashboard/chapters';
       }

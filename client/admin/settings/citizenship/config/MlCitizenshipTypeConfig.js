@@ -49,7 +49,7 @@ const mlCitizenshipTableConfig=new MlViewer.View({
       showAction: true,
       handler:  (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/editCitizenship/"+data.id)
+          FlowRouter.go("/admin/settings/registration/editCitizenship/"+data.id)
         }
         else{
           toastr.error("Please select a Citizenship to edit")
@@ -65,7 +65,7 @@ const mlCitizenshipTableConfig=new MlViewer.View({
           toastr.error("Please uncheck the record")
           // FlowRouter.go("/admin/settings/citizenshipList");
         } else {
-        FlowRouter.go("/admin/settings/addCitizenship")
+        FlowRouter.go("/admin/settings/registration/addCitizenship")
       }}
 
     },

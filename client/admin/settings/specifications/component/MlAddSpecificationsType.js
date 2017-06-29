@@ -30,7 +30,7 @@ class MlAddSpecification extends React.Component{
   async handleSuccess(response) {
     if (response){
       if(response.success)
-        FlowRouter.go("/admin/settings/specificationList");
+        FlowRouter.go("/admin/settings/documentProcess/specificationList");
       else
         toastr.error(response.result);
     }
@@ -55,11 +55,6 @@ class MlAddSpecification extends React.Component{
   }
   render(){
     let MlActionConfig = [
-      // {
-      //   actionName: 'edit',
-      //   showAction: true,
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'save',
@@ -69,8 +64,7 @@ class MlAddSpecification extends React.Component{
       showAction: true,
       actionName: 'cancel',
       handler: async(event) => {
-      this.props.handler(" ");
-      FlowRouter.go("/admin/settings/specificationList")
+      FlowRouter.go("/admin/settings/documentProcess/specificationList")
     }
   }
 ]

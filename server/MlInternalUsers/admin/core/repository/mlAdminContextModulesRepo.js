@@ -212,19 +212,14 @@ let CoreModules = {
     switch(type){
       //custom restriction for registration
       case 'requested':
-        //if(userProfile.roleName === "platformadmin")
         serverQuery={'status':{'$in':['Pending','WIP']}};
-        /*else
-          serverQuery={'userId':context.userId,'status':{'$in':['Pending','WIP']}};*/
         break;
       case 'approved':
-        //if(userProfile.roleName === "platformadmin")
-          serverQuery={'status':"Approved"};
-        /*else
-        serverQuery={'userId':context.userId,'status':"Approved"};*/
+        serverQuery={'status':"Approved"};
+        break;
       case 'rejected':
-        //if(userProfile.roleName === "platformadmin")
         serverQuery={'status':"Rejected"};
+        break;
     }
     //todo: internal filter query should be constructed.
     //resultant query with $and operator

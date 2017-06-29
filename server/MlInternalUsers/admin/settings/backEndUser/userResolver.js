@@ -34,14 +34,6 @@ MlResolver.MlQueryResolver['fetchMapCenterCordsForUser'] = (obj, args, context, 
 }
 
 MlResolver.MlMutationResolver['createUser'] = (obj, args, context, info) => {
-    //todo: tocheck the Auth with roles and permission
-    // let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
-    // if (!isValidAuth) {
-    //   let code = 401;
-    //   let response = new MlRespPayload().errorPayload("Not Authorized", code);
-    //   return response;
-    // }
-
     if(!args.user.username){
       let code = 409;
       let response = new MlRespPayload().errorPayload("Username is required", code);

@@ -460,7 +460,7 @@ let BackEndUser = `
     
    
     type Mutation{
-        createUser(user:userObject!, moduleName:String, actionName:String):response
+        createUser(user:userObject!,clusterId:String, chapterId: String, subChapterId: String, communityId: String):response          
         updateUser(userId:String!, user:userObject!, moduleName:String, actionName:String):response
         resetPassword (password: String!, moduleName:String, actionName:String):response
         addUserProfile(userId:String, user:userObject): String
@@ -538,3 +538,4 @@ let supportedApi = [
     {api:'switchProfile', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true}
 ];
 MlResolver.MlModuleResolver.push(supportedApi)
+  // , moduleName:String, actionName:String

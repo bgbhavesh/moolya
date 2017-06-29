@@ -95,41 +95,20 @@ class MlAddBackendUser extends React.Component {
     if (ret) {
       toastr.error(ret);
     } else {
-      let firstName = this.refs.firstName.value;
-      let lastName = this.refs.lastName.value;
-      let displayName = this.refs.displayName.value;
-      let email = this.refs.email.value;
       let password = this.refs.password.value;
       let confirmPassword = this.refs.confirmPassword.value;
       let departments = this.state.mlAssignDepartmentDetails[0].department;
       let subdepartments = this.state.mlAssignDepartmentDetails[0].subDepartment;
-      // if(!firstName){
-      //   toastr.error("First Name is required");
-      // }
-      // else if(!lastName){
-      //   toastr.error("Last Name is required");
-      // }
-      // else if(!displayName){
-      //   toastr.error("Display Name is required");
-      // }
-      // else if (!email) {
-      //   toastr.error("Need to set a username or email");
-      // }
        if(!password){
         toastr.error("Password is required");
       }
       else if (confirmPassword != password) {
-
         toastr.error("Confirm Password does not match with Password")
-
       } else if (!departments) {
         toastr.error("Assign Department is required");
-
       }
       else if (!subdepartments) {
-
         toastr.error("Sub Department is required");
-
       }
       else {
         let moolyaProfile = {
@@ -168,8 +147,8 @@ class MlAddBackendUser extends React.Component {
           password: this.refs.password.value,
           profile: profile
         }
-
-        const response = await addBackendUserActionHandler(userObject)
+        let loginUserDetails = this.state.loginUserDetails;    /*adding user context*/
+        const response = await addBackendUserActionHandler(userObject, loginUserDetails)
         if (!response.success) {
           toastr.error("Email already exists")
         }

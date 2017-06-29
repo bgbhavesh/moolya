@@ -100,7 +100,8 @@ let portfolioSchema = `
           approvePortfolio(portfoliodetailsId:String):response
           rejectPortfolio(portfoliodetailsId:String):response
           requestForGoLive(portfoliodetailsId:String):response
-          updatePortfolioProfilePic(portfolioId:String,docUrl:String,communityType:String):response   
+          updatePortfolioProfilePic(portfolioId:String,docUrl:String,communityType:String):response 
+          removeIdetaorProfilePic(portfoliodetailsId:String):response
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], portfolioSchema]);
@@ -114,5 +115,6 @@ let supportedApi = [
   {api:'approvePortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'rejectPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'requestForGoLive', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
+  {api:'removeIdetaorProfilePic', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

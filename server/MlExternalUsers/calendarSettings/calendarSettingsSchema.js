@@ -42,6 +42,7 @@ let calendarSettingSlot=`
   }
   
   type CalendarSetting {
+    _id                     : String
     slotDuration            : CalendarSettingSlotDuration
     appointmentCountPerSlots: Int
     slotBreakTime           : Int
@@ -103,13 +104,13 @@ let calendarSettingSlot=`
   }
   
   type Query {   
-     fetchMyCalendarSetting:CalendarSetting
+     fetchMyCalendarSetting(profileId:String):CalendarSetting
      getMyCalendar(month:Int, year: Int): MonthCalendar
      getMyCalendarDayAvailable:response
   }
   
   type Mutation {
-     updateMyCalendarSetting(calendarSetting:calendarSetting):response
+     updateMyCalendarSetting(profileId:String,calendarSetting:calendarSetting):response
      updateMyCalendarWorkingDays(workingDays:[calendarSettingWorkingDays]):response
      updateMyCalendarWorkingDay(workingDay:calendarSettingWorkingDays):response
      updateMyCalendarVacation(vacation:calendarSettingVacation):response

@@ -8,6 +8,7 @@ import {findIdeatorDetailsActionHandler} from '../../actions/findPortfolioIdeato
 import MlLoader from '../../../../../commons/components/loader/loader'
 import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
+import {removePortfolioProfilePic} from '../../actions/removeIdatorPortfolioProficPic'
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 
@@ -114,6 +115,23 @@ export default class MlIdeatorDetails extends React.Component{
       }
     }
   }
+
+  async deleteProfilePic() {
+
+
+    const response = await removePortfolioProfilePic(this.props.portfolioDetailsId);
+    if(response){
+      this.fetchPortfolioDetails();
+      this.setState({profilePic:this.state.defaultProfilePic});
+    }else{
+      toastr.error("Error in deleting picture")
+    }
+   /* let details =this.state.data;
+
+    details=_.omit(details,["profilePic"]);
+   this.setState({data:details});
+    this.sendDataToParent()*/
+  }
   render(){
     const showLoader = this.state.loading;
     return (
@@ -186,12 +204,15 @@ export default class MlIdeatorDetails extends React.Component{
 
                     <div className="form-group steps_pic_upload">
                       <div className="previewImg ProfileImg">
+                        <span className="triangle-topright"><FontAwesome name='minus-square' onClick={this.deleteProfilePic.bind(this)}/></span>
                         <img src={this.state.profilePic?this.state.profilePic:this.state.defaultProfilePic}/>
+
                       </div>
                       <div className="fileUpload mlUpload_btn">
                         <span>Profile Pic</span>
                         <input type="file" className="upload" id="profilePic" onChange={this.onFileUpload.bind(this)}/>
                       </div>
+
                     </div>
                     <br className="brclear"/>
                     <div className="form-group">

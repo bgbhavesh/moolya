@@ -18,6 +18,7 @@ import {resetPasswordActionHandler} from "../../settings/backendUsers/actions/re
 import passwordSAS_validate from '../../../../lib/common/validations/passwordSASValidator';
 import {MlAdminProfile} from '../../../admin/layouts/header/MlAdminHeader'
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
+import {findMyProfileActionHandler} from '../actions/getProfileDetails'
 
 export default class MlMyProfile extends React.Component {
 
@@ -161,6 +162,13 @@ export default class MlMyProfile extends React.Component {
     this.setState({responsePic: temp})
   }
 
+
+  /**
+   * Method :: storeImage
+   * Description :: All the data is updated here calling the updateDataEntry()
+   * which gets an object as a param containing all the data
+   * returns ::  dataresponse
+   **/
   async storeImage() {
     let Details = {
       profileImage: this.state.uploadedProfilePic,
@@ -174,9 +182,18 @@ export default class MlMyProfile extends React.Component {
 
     const dataresponse = await updateDataEntry(Details);
     console.log(dataresponse);
-    toastr.success("Update Successful")
+    if(dataresponse){
+      toastr.success("Update Successful")
+    }
     return dataresponse;
   }
+
+  /**
+   * Method :: getValue
+   * Description :: This function is called when the componentWillMount
+   * It gets all the details from the db and auto-populates the respective fields
+   * returns ::  dataresponse
+   **/
 
   async getValue() {
     let userType = Meteor.userId();
@@ -193,7 +210,7 @@ export default class MlMyProfile extends React.Component {
         dateOfBirth: moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat)
       });
     } else {
-      let response = await findBackendUserActionHandler(userType);
+      let response = await findMyProfileActionHandler(userType);
       console.log(response);
       this.setState({
         loading: false, firstName: response.profile.InternalUprofile.moolyaProfile.firstName,
@@ -243,30 +260,40 @@ export default class MlMyProfile extends React.Component {
     this.resetBackendUers();
   }
 
+  /**
+   * Method :: resetPassword
+   * Description :: Resetting Password
+   * @params ::  No params
+   * returns ::  Validation of password
+   **/
+
   async resetPassword() {
     if (this.state.showPasswordFields) {
       let userDetails = {
         userId: Meteor.userId(),
         password: this.refs.confirmPassword.value
       }
-      this.onCheckPassword();
-      if (this.state.pwdErrorMsg)
-        toastr.error("Confirm Password does not match with Password");
-      else {
-        const response = await resetPasswordActionHandler(userDetails);
-        // this.refs.id.value='';
-        this.refs.confirmPassword.value = '';
-        this.refs.password.value = '';
-        this.setState({"pwdErrorMsg": 'Password reset complete'})
-        toastr.success(response.result);
+      if (this.state.passwordState === 'Passwords match!') {
+        this.onCheckPassword();
+        if (this.state.pwdErrorMsg)
+          toastr.error("Confirm Password does not match with Password");
+        else {
+          const response = await resetPasswordActionHandler(userDetails);
+          // this.refs.id.value='';
+          this.refs.confirmPassword.value = '';
+          this.refs.password.value = '';
+          this.setState({"pwdErrorMsg": 'Password reset complete'})
+          toastr.success(response.result);
+          $('#password').val("");
+          this.setState({PasswordReset: false, showChangePassword: true})
+          const resp = this.onFileUpload();
+          return resp;
+        }
+
+      }else {
+        toastr.error("Enter proper Existing Password")
       }
-    } else {
-      this.setState({
-        showPasswordFields: true
-      })
     }
-    const resp = this.onFileUpload();
-    return resp;
   }
 
 
@@ -274,6 +301,14 @@ export default class MlMyProfile extends React.Component {
     console.log('error handle');
     console.log(response);
   }
+
+  /**
+   * Method :: updateProfile
+   * Description :: Checking password fields
+   * Based on password fields resetPassword() is called
+   * otherwise updation of other data is carried on by calling onFileUpload().
+   * returns :: void
+   * **/
 
   async updateProfile() {
     let existingPwdField = this.refs.existingPassword.value;
@@ -284,9 +319,15 @@ export default class MlMyProfile extends React.Component {
       this.resetPassword();
     } else {
       const resp = this.onFileUpload();
-      return resp;
     }
   }
+
+  /**
+   * Method :: onCheckPassword
+   * Description :: Check the new password entered and the confirmation of the
+   * new password matches.
+   * returns :: this.state.pwdErrorMsg
+   * **/
 
   onCheckPassword() {
     let password = this.refs.password.value;
@@ -297,6 +338,12 @@ export default class MlMyProfile extends React.Component {
       this.setState({"pwdErrorMsg": ''})
     }
   }
+
+  /**
+   * Method :: passwordValidation
+   * Description :: Check the new password for SAS validation
+   * returns :: this.state.pwdValidationMsg
+   * **/
 
   passwordValidation() {
     let password = this.refs.password.value;
@@ -315,6 +362,13 @@ export default class MlMyProfile extends React.Component {
   }
 }
 
+  /**
+   * Method :: onFileUpload
+   * Description :: File uploading action is done here. Once uploaded it hits onFileUploadCallBack()
+   * and the return to current function and call storeImage()
+   * returns :: Hits storeImage()
+   * **/
+
   async onFileUpload(){
     let user = {
       profile: {
@@ -325,7 +379,6 @@ export default class MlMyProfile extends React.Component {
     if(file) {
       let data = {moduleName: "PROFILE", actionName: "UPDATE", userId: this.state.selectedBackendUser, user: user}
       let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
-      // this.showImage();
       this.storeImage();
 
       return response;

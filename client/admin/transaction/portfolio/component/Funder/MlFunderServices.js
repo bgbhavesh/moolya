@@ -16,14 +16,15 @@ export default class MlFunderServices extends Component {
     if (WinWidth > 768) {
       $(".tab_wrap_scroll").mCustomScrollbar({theme: "minimal-dark"});
     }
+    console.log(this.props)
   }
 
   render() {
     return (
       <div>
-        <FunderOrderServicesView/>
+        {/*<FunderOrderServicesView/>*/}
         <div className="clearfix"/>
-        <FunderCreateServicesView/>
+        <FunderCreateServicesView getServiceDetails={this.props.getServiceDetails} portfolioDetailsId={this.props.portfolioDetailsId} />
       </div>
     )
   }

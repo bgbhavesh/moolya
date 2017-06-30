@@ -124,6 +124,26 @@ MlResolver.MlQueryResolver['fetchfunderPortfolioInvestor'] = (obj, args, context
   return [];
 }
 
+MlResolver.MlQueryResolver['fetchfunderPortfolioService'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let portfolio = MlFunderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('services')) {
+      // if(portfolio && portfolio['services']){
+      //   portfolio.services.map(function(service,index) {
+      //     if(portfolio.investments[index]){
+      //       let investmentData = MlFundingTypes.findOne({"_id" : service.typeOfFundingId}) || {};
+      //       portfolio.investments[index].typeOfFundingName = investmentData.displayName || "";
+      //     }
+      //
+      //   })
+      // }
+      return portfolio['services'];
+    }
+  }
+
+  return [];
+}
+
 MlResolver.MlQueryResolver['fetchFunderPrincipal'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {
     let portfolio = MlFunderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})

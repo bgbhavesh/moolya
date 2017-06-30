@@ -154,6 +154,7 @@ class MlAppPortfolio extends Component{
       portfolioId :this.props.config,
       portfolio :this.state.portfolio
     }
+    console.log(jsonData)
     const response = await updatePortfolioActionHandler(jsonData)
     if(response){
       if(this.props.communityType == "Ideators" || this.props.communityType == "ideator"){

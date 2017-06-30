@@ -19,7 +19,9 @@ export async function updateSettings(Details) {
       "actionName": "UPDATE",
       "settingsAttributes": {
         "currencyTypes": Details.currencySymbol,
-        "numericalFormat": Details.measurementSystem
+        "numericalFormat": Details.measurementSystem,
+        "languages": Details.languages,
+        "timeZone": Details.timeZone
     }
   }});
   const id = result.data.updateSettings;

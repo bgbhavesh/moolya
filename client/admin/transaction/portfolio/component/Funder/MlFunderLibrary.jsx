@@ -10,7 +10,7 @@ import {createLibrary, fetchLibrary} from '../../../../../app/ideators/actions/I
 import MlVideoPlayer from  '../../../../../commons/videoPlayer/MlVideoPlayer'
 
 
-export default class PortfolioLibrary extends React.Component{
+export default class  PortfolioLibrary extends React.Component{
 
   constructor(props) {
     super(props);

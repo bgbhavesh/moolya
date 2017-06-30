@@ -8,7 +8,7 @@ import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
 let Select = require('react-select');
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 import {updateSettings} from '../actions/addSettingsAction';
-import {findBackendUserActionHandler} from '../../settings/backendUsers/actions/findBackendUserAction'
+import {findMyProfileActionHandler} from '../actions/getProfileDetails'
 
 
 
@@ -21,7 +21,10 @@ export default class MyProfileSettings extends React.Component{
       currencySymbol: " ",
       measurementSystem: " ",
       currencyTypes: " ",
-      numericalFormat:" "
+      numericalFormat:" ",
+      clusterId: " ",
+      languages: [],
+      timeZone:""
     }
     this.optionsBySelectCurrencySymbol.bind(this);
     this.optionsBySelectMeasurementSystem.bind(this);
@@ -31,6 +34,7 @@ export default class MyProfileSettings extends React.Component{
   }
 
   componentWillMount(){
+    // console.log(this.props.clusterId)
     const resp=this.getValue();
     return resp;
   }
@@ -82,6 +86,16 @@ export default class MyProfileSettings extends React.Component{
   optionsBySelectMeasurementSystem(data){
     this.setState({measurementSystem:data.value})
   }
+  optionsBySelectTimeZone(val){
+    console.log(val)
+    this.setState({timeZone:val})
+  }
+
+  optionsBySelectLanguage(val) {
+    // let languages = this.state.languages;
+    // languages.push(val)
+    this.setState({languages: val})
+  }
 
  async onSave(){
 
@@ -89,12 +103,22 @@ export default class MyProfileSettings extends React.Component{
   }
 
   async getValue() {
+   let that = this
     let userType = Meteor.userId();
-    let response = await findBackendUserActionHandler(userType);
+    let response = await findMyProfileActionHandler(userType);
     console.log(response);
-    this.setState({measurementSystem : response.profile.numericalFormat,
-      currencySymbol:response.profile.currencyTypes,
+    that.setState({measurementSystem : response.profile.numericalFormat,
+      currencySymbol:response.profile.currencyTypes, clusterId: response.profile.InternalUprofile.moolyaProfile.userProfiles,
+      language: response.profile.languages, timeZone: response.profile.timeZone
     });
+
+    let temp = that.state.clusterId || [];
+    temp.map(function(data) {
+      if(data.isDefault){
+        let cluster = data.clusterId;
+        that.setState({clusterId: cluster})
+      }
+    })
   }
 
   async dataSaving(){
@@ -102,6 +126,8 @@ export default class MyProfileSettings extends React.Component{
     let Details = {
       currencySymbol : this.state.currencySymbol,
       measurementSystem :this.state.measurementSystem,
+      languages: this.state.language,
+      timeZone: this.state.timeZone
     }
     const dataresponse = await updateSettings(Details);
     console.log(dataresponse);
@@ -140,12 +166,31 @@ export default class MyProfileSettings extends React.Component{
       }  
     }`;
 
+    let timeZonequery=gql`
+    query($clusterId:String){  
+      data:findTimeZones(clusterId:$clusterId){
+        value:_id
+        label:timeZone
+      }  
+    }
+    `;
+
+    let languagesquery=gql`
+    query{  
+      data:findLanguages{
+        value:lang_code
+        label:language_name
+      }  
+    }
+    `
+
     let measurementType = [
       {value: 'US System', label: 'US System'},
       {value: 'Metric System', label: 'Metric System'},
     ]
 
     let isExternaluser = Meteor.user().profile.isExternaluser;
+    let timeZoneOptions = {options: { variables: {clusterId:this.props.clusterId}}};
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
@@ -169,20 +214,20 @@ export default class MyProfileSettings extends React.Component{
               <div className="col-md-6">
 
                 <div className="form-group">
-                  <Select
-                    name="form-field-name" placeholder={"Language"}
-                    className="float-label"/>
+                  <div className="form-group">
+                    <Moolyaselect multiSelect={true}  placeholder={"Language"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.language} queryType={"graphql"} query={languagesquery} isDynamic={true} id={'languagesquery'}  onSelect={this.optionsBySelectLanguage.bind(this)} />
+                  </div>
                 </div>
                 <div className="form-group">
-                  <Select
-                    name="form-field-name"   placeholder={"Time Zone"}
-                    className="float-label"/>
-                </div>
+                  <div className="form-group">
+                    <Moolyaselect multiSelect={false}  placeholder={"Time zone"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.timeZone} queryType={"graphql"} query={timeZonequery} queryOptions={timeZoneOptions} isDynamic={true} id={'tzquery'}  onSelect={this.optionsBySelectTimeZone.bind(this)} />
+                  </div>
                 <br className="brclear"/>
                 <br className="brclear"/>
                 <br className="brclear"/>
                 <br className="brclear"/>
 
+              </div>
               </div>
             </form>
 

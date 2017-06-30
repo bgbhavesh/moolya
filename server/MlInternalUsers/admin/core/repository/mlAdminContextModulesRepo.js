@@ -421,7 +421,7 @@ let CoreModules = {
   },
   MlDocumentRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){
     var type=requestParams&&requestParams.type?requestParams.type:"";
-    var contextFieldMap={'clusterId':'clusters','chapterId':'chapters','subChapterId':'subchapters','communityId':'communities'};
+    var contextFieldMap={'clusterId':'clusters','chapterId':'chapters','subChapterId':'subChapters','communityId':'communities'};   /*database keys issue*/
     var resultantQuery=MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery,contextFieldMap);
     //construct context query with $in operator for each fields
     resultantQuery=MlAdminContextQueryConstructor.constructQuery(resultantQuery,'$in');

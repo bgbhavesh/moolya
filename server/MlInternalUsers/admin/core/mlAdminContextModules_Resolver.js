@@ -143,6 +143,7 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       result=CoreModulesRepo.MlTemplatesAssignmentRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
     case 'processSetup':
+      requestParams=args.context || {};
       result=CoreModulesRepo.MlProcessTransactionRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
     case 'officeTransaction':

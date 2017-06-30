@@ -7,6 +7,7 @@ import {initalizeFloatLabel} from "../../../utils/formElemUtil";
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import MoolyaSelect from "../../../../commons/components/select/MoolyaSelect";
+import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
 import _ from "lodash";
 var FontAwesome = require('react-fontawesome');
 
@@ -84,10 +85,11 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
   async saveProcessSetup() {
     let stages = this.state.stages;
     let data = this.state.data;
+    this.loggedUserDetails = getAdminUserContext();
     data = _.omit(data, '__typename')
     let isValid = this.validateDetails(stages)
-    if(isValid && isValid.success){
-      let response = await updateProcessSetupActionHandler(data, isValid.result);
+    if(isValid && isValid.success){                               /*attaching login admin user context to query*/
+      let response = await updateProcessSetupActionHandler(data, isValid.result, this.loggedUserDetails);
       if(response && response.success){
         toastr.success("Saved Successfully");
       }

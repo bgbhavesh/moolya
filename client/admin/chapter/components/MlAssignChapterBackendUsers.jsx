@@ -236,7 +236,7 @@ class MlAssignChapterBackendUsers extends React.Component {
                         <ScrollArea speed={0.8} className="left_wrap">
                           <div className="col-lg-4 col-md-6 col-sm-4" onClick={this.resetBackendUsers.bind(that)}>
                             <div className="list_block provider_block">
-                              <div className="cluster_status assign_cl"><span className="ml ml-assign"></span></div>
+                              <div className="cluster_status assign_cl">{/*<span className="ml ml-assign"></span>*/}</div>
                               <div className="provider_mask"><img src="/images/funder_bg.png"/> <img
                                 className="user_pic" src="/images/def_profile.png"/></div>
                               <h3>Assign <br/> Backend Users</h3>

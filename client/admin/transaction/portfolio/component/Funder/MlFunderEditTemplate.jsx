@@ -56,7 +56,7 @@ export default class MlFunderEditTemplate extends React.Component{
     return tabs;
   }
 
-  getSuccessStoriesDetails(details){
+  getSuccessStoriesDetails(details, privateKey){
     let data = this.state.funderPortfolio;
     data['successStories'] = details;
     this.setState({funderPortfolio : data})
@@ -66,24 +66,24 @@ export default class MlFunderEditTemplate extends React.Component{
       arr.push(updateItem)
     })
     data['successStories'] = arr;
-    this.props.getPortfolioDetails({funderPortfolio:data});
+    this.props.getPortfolioDetails({funderPortfolio:data}, privateKey);
   }
 
-  getAboutus(details){
+  getAboutus(details, privateKey){
     let data = this.state.funderPortfolio;
     data['funderAbout']=details;
     this.setState({funderPortfolio : data})
-    this.props.getPortfolioDetails({funderPortfolio : this.state.funderPortfolio});
+    this.props.getPortfolioDetails({funderPortfolio : this.state.funderPortfolio}, privateKey);
   }
 
-  getInvestmentsDetails(details){
+  getInvestmentsDetails(details, privateKey){
     let data = this.state.funderPortfolio;
     data['investments'] = details;
     this.setState({funderPortfolio : data})
-    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio});
+    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio}, privateKey);
   }
 
-  getPrincipalDetails(details){
+  getPrincipalDetails(details, privateKey){
     let data = this.state.funderPortfolio;
     if(data && !data.principal){
       data['principal']=[];
@@ -96,9 +96,9 @@ export default class MlFunderEditTemplate extends React.Component{
       arr.push(updateItem)
     })
     data['principal'] = arr;
-    this.props.getPortfolioDetails({funderPortfolio:data});
+    this.props.getPortfolioDetails({funderPortfolio:data}, privateKey);
   }
-  getTeamDetails(details){
+  getTeamDetails(details, privateKey){
     let data = this.state.funderPortfolio;
     if(data && !data.team){
       data['team']=[];
@@ -111,27 +111,27 @@ export default class MlFunderEditTemplate extends React.Component{
       arr.push(updateItem)
     })
     data['team'] = arr;
-    this.props.getPortfolioDetails({funderPortfolio:data});
+    this.props.getPortfolioDetails({funderPortfolio:data}, privateKey);
   }
 
-  getAreaOfInterestDetails(details){
+  getAreaOfInterestDetails(details, privateKey){
     let data = this.state.funderPortfolio;
     if(data && !data.areaOfInterest){
       data['areaOfInterest']=[];
     }
     data['areaOfInterest'] = details;
     this.setState({funderPortfolio : data})
-    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio});
+    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio}, privateKey);
   }
 
-  getFunderNewsDetails(details){
+  getFunderNewsDetails(details, privateKey){
     let data = this.state.funderPortfolio;
     if(data && !data.lookingFor){
       data['lookingFor']=[];
     }
     data['lookingFor'] = details;
     this.setState({funderPortfolio : data})
-    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio});
+    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio}, privateKey);
   }
 
   getFunderLibrary(details){

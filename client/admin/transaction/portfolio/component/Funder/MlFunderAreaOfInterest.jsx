@@ -21,7 +21,8 @@ export default class MlFunderAreaOfInterest extends React.Component {
       popoverOpen: false,
       selectedIndex: -1,
       funderAreaOfInterestList: [],
-      selectedObject: "default"
+      selectedObject: "default",
+      privateKey:{}
     }
     this.handleBlur.bind(this);
     this.onSaveAction.bind(this);
@@ -43,6 +44,9 @@ export default class MlFunderAreaOfInterest extends React.Component {
       if (response) {
         this.setState({loading: false, funderAreaOfInterest: response, funderAreaOfInterestList: response});
       }
+      _.each(response.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
     } else {
       this.setState({
         loading: false,
@@ -107,16 +111,20 @@ export default class MlFunderAreaOfInterest extends React.Component {
     }
   }
 
-  onLockChange(field, e) {
+  onLockChange(fieldName, field, e) {
     let details = this.state.data || {};
     let key = field;
+    var isPrivate = false;
     details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
       details = _.extend(details, {[key]: true});
+      isPrivate = true;
     } else {
       details = _.extend(details, {[key]: false});
     }
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
+    this.setState({privateKey:privateKey})
     this.setState({data: details}, function () {
       this.sendDataToParent()
     })
@@ -164,8 +172,9 @@ export default class MlFunderAreaOfInterest extends React.Component {
       arr.push(updateItem)
     })
     funderAreaOfInterest = arr;
+    funderAreaOfInterest=_.omit(funderAreaOfInterest,["privateFields"]);
     this.setState({funderAreaOfInterest: funderAreaOfInterest})
-    this.props.getAreaOfInterestDetails(funderAreaOfInterest);
+    this.props.getAreaOfInterestDetails(funderAreaOfInterest, this.state.privateKey);
   }
 
 

@@ -297,7 +297,7 @@ class MlHierarchyAssignment {
         return true;
       } else {
         let userhierarchy = this.findHierarchy(userRole.clusterId, userRole.departmentId, userRole.subDepartmentId, userRole.roleId);
-        if (userhierarchy._id) {
+        if (userhierarchy && userhierarchy._id) {
           let roles = userhierarchy.teamStructureAssignment;
           let activeHierarchyRoleAvailable = false;
           roles.map(function (role) {

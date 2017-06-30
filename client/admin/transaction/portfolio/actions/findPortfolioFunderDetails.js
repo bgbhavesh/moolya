@@ -9,47 +9,51 @@ export async function fetchfunderPortfolioAbout(portfoliodetailsId) {
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
-            fetchFunderAbout(portfoliodetailsId: $portfoliodetailsId) {
-                  firstName
-                  isFirstNamePrivate
-                  lastName
-                  isLastNamePrivate
-                  gender
-                  isGenderPrivate
-                  category
-                  isCategoryPrivate
-                  qualification
-                  isQualificationPrivate
-                  employmentStatus
-                  isEmploymentStatusPrivate
-                  professionalTag
-                  isProfessionalTagPrivate
-                  yearsOfExperience
-                  isYearsOfExperiencePrivate
-                  industry
-                  isIndustryPrivate
-                  profession
-                  isProfessionPrivate
-                  investmentFrom
-                  investmentCount
-                  isInvestmentCountPrivate
-                  emailId
-                  isEmailIdPrivate
-                  mobileNumber
-                  isMobileNumberPrivate
-                  linkedinUrl
-                  isLinkedinUrlPrivate
-                  facebookUrl
-                  isFacebookUrlPrivate
-                  profilePic
-                  investmentBudget {
-                    from
-                    isFromPrivate
-                    to
-                    isToPrivate
+            data:fetchFunderDetails(portfoliodetailsId: $portfoliodetailsId, key:"funderAbout") {
+                  funderAbout {
+                    firstName
+                    isFirstNamePrivate
+                    lastName
+                    isLastNamePrivate
+                    gender
+                    isGenderPrivate
+                    category
+                    isCategoryPrivate
+                    qualification
+                    isQualificationPrivate
+                    employmentStatus
+                    isEmploymentStatusPrivate
+                    professionalTag
+                    isProfessionalTagPrivate
+                    yearsOfExperience
+                    isYearsOfExperiencePrivate
+                    industry
+                    isIndustryPrivate
+                    profession
+                    isProfessionPrivate
+                    investmentFrom
+                    investmentCount
+                    isInvestmentCountPrivate
+                    emailId
+                    isEmailIdPrivate
+                    mobileNumber
+                    isMobileNumberPrivate
+                    linkedinUrl
+                    isLinkedinUrlPrivate
+                    facebookUrl
+                    isFacebookUrlPrivate
+                    profilePic
+                    investmentBudget {
+                      from
+                      isFromPrivate
+                      to
+                      isToPrivate
+                    }
+                    privateFields{
+                      keyName,
+                      booleanKey
+                    }
                   }
-                  
-                  
             }
           }
       `,
@@ -58,7 +62,7 @@ export async function fetchfunderPortfolioAbout(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  const id = result.data.fetchFunderAbout;
+  const id = result.data.data.funderAbout;
   let data = _.omit(id,'__typename')
   data.investmentBudget =_.omit(data.investmentBudget,'__typename')
   return data
@@ -69,33 +73,39 @@ export async function fetchfunderPortfolioPrincipal(portfoliodetailsId) {
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
-            fetchFunderPrincipal(portfoliodetailsId: $portfoliodetailsId) {
-                  title
-                  firstName
-                  isFirstNamePrivate
-                  lastName
-                  isLastNamePrivate
-                  designation
-                  isDesignationPrivate
-                  companyName
-                  duration
-                  isDurationPrivate
-                  yearsOfExperience
-                  isYearsOfExperiencePrivate
-                  qualification
-                  aboutPrincipal
-                  isQualificationPrivate
-                  isAboutPrincipalPrivate
-                  socialLinks{
-                    socialLinkType
-                    userId
-                    isUserIdPrivate
-                  }
-                  index
-                  logo{
-                    fileUrl,
-                    fileName
-                  }
+            data:fetchFunderDetails(portfoliodetailsId: $portfoliodetailsId, key:"principal") {
+                  principal {
+                    title
+                    firstName
+                    isFirstNamePrivate
+                    lastName
+                    isLastNamePrivate
+                    designation
+                    isDesignationPrivate
+                    companyName
+                    duration
+                    isDurationPrivate
+                    yearsOfExperience
+                    isYearsOfExperiencePrivate
+                    qualification
+                    aboutPrincipal
+                    isQualificationPrivate
+                    isAboutPrincipalPrivate
+                    socialLinks{
+                      socialLinkType
+                      userId
+                      isUserIdPrivate
+                    }
+                    index
+                    logo{
+                      fileUrl,
+                      fileName
+                    }
+                    privateFields{
+                      keyName,
+                      booleanKey
+                    }
+                  }  
             }
           }
       `,
@@ -104,7 +114,7 @@ export async function fetchfunderPortfolioPrincipal(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  const id = result.data.fetchFunderPrincipal;
+  const id = result.data.data.principal;
   // let data = _.omit(id,'__typename')
   // return data
   return id
@@ -114,7 +124,8 @@ export async function fetchfunderPortfolioTeam(portfoliodetailsId) {
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
-            fetchFunderTeam(portfoliodetailsId: $portfoliodetailsId) {
+            data:fetchFunderDetails(portfoliodetailsId: $portfoliodetailsId, key:"team") {
+                team{
                   title
                   firstName
                   isFirstNamePrivate
@@ -141,6 +152,11 @@ export async function fetchfunderPortfolioTeam(portfoliodetailsId) {
                     fileUrl,
                     fileName
                   }
+                  privateFields{
+                    keyName,
+                    booleanKey
+                  }
+                }  
             }
           }
       `,
@@ -149,7 +165,7 @@ export async function fetchfunderPortfolioTeam(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  const id = result.data.fetchFunderTeam;
+  const id = result.data.data.team;
   // let data = _.omit(id,'__typename')
   // return data
   return id
@@ -159,7 +175,8 @@ export async function fetchfunderPortfolioInvestor(portfoliodetailsId) {
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
-            fetchfunderPortfolioInvestor(portfoliodetailsId: $portfoliodetailsId) {
+            data:fetchFunderDetails(portfoliodetailsId: $portfoliodetailsId, key:"investments") {
+                investments{
                   dateOfInvestment
                   isDateOfInvestmentPrivate
                   companyName
@@ -173,6 +190,11 @@ export async function fetchfunderPortfolioInvestor(portfoliodetailsId) {
                   investmentAmount 
                   isInvestmentAmountPrivate 
                   index
+                  privateFields{
+                    keyName,
+                    booleanKey
+                  }
+                }  
             }
           }
       `,
@@ -181,7 +203,7 @@ export async function fetchfunderPortfolioInvestor(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  const id = result.data.fetchfunderPortfolioInvestor;
+  const id = result.data.data.investments;
   // let data = _.omit(id,'__typename')
   // return data
   return id
@@ -191,21 +213,27 @@ export async function fetchfunderPortfolioSuccess(portfoliodetailsId) {
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
-            fetchFunderSuccessStories(portfoliodetailsId: $portfoliodetailsId) {
-              date
-              isDatePrivate
-              storyImage
-              storyTitle
-              isStoryTitlePrivate
-              description
-              isDescPrivate
-              isPrivate
-              isActive
-              index
-              logo{
+            data:fetchFunderDetails(portfoliodetailsId: $portfoliodetailsId, key:"successStories") {
+              successStories{
+                date
+                isDatePrivate
+                storyImage
+                storyTitle
+                isStoryTitlePrivate
+                description
+                isDescPrivate
+                isPrivate
+                isActive
+                index
+                logo{
                     fileName
                     fileUrl
                 }
+                privateFields{
+                  keyName,
+                  booleanKey
+                }
+              }    
             }
           }
       `,
@@ -214,7 +242,7 @@ export async function fetchfunderPortfolioSuccess(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  const id = result.data.fetchFunderSuccessStories;
+  const id = result.data.data.successStories;
   return id
 }
 
@@ -222,15 +250,21 @@ export async function fetchfunderPortfolioAreaInterest(portfoliodetailsId) {
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
-            fetchFunderAreaOfInterest(portfoliodetailsId: $portfoliodetailsId) {
-              industryTypeId
-              industryTypeName
-              domainType
-              makePrivate
-              subDomainId
-              subDomainName
-              isActive
-              index
+            data:fetchFunderDetails(portfoliodetailsId: $portfoliodetailsId, key:"areaOfInterest") {
+              areaOfInterest{
+                industryTypeId
+                industryTypeName
+                domainType
+                makePrivate
+                subDomainId
+                subDomainName
+                isActive
+                index
+                privateFields{
+                  keyName,
+                  booleanKey
+                }
+              }    
             }
           }
       `,
@@ -239,7 +273,7 @@ export async function fetchfunderPortfolioAreaInterest(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  const id = result.data.fetchFunderAreaOfInterest;
+  const id = result.data.data.areaOfInterest;
   return id
 }
 

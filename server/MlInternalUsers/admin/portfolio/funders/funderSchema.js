@@ -19,6 +19,7 @@ let FunderPortfolioSchema = `
         isActive:Boolean
         index: Int
         logo:imagesTypeSchema,
+        privateFields:[PrivateKeys]
     }
     
      type imagesTypeSchema{
@@ -35,6 +36,7 @@ let FunderPortfolioSchema = `
         subDomainId : String
         subDomainName :String
         index: Int
+        privateFields:[PrivateKeys]
     }
     
     type SocialLinks{
@@ -63,6 +65,7 @@ let FunderPortfolioSchema = `
         socialLinks:[SocialLinks]
         index: Int,
         logo:imagesTypeSchema,
+        privateFields:[PrivateKeys]
     }
 
     type Principal{
@@ -85,6 +88,7 @@ let FunderPortfolioSchema = `
         socialLinks:[SocialLinks],
         index:Int,
         logo:imagesTypeSchema,
+        privateFields:[PrivateKeys]
     }
     
     type Investments{
@@ -101,6 +105,7 @@ let FunderPortfolioSchema = `
         investmentAmount :String,
         isInvestmentAmountPrivate :Boolean
         index: Int
+        privateFields:[PrivateKeys]
     }
     type Duration{
         hours: String
@@ -169,6 +174,7 @@ let FunderPortfolioSchema = `
         isFacebookUrlPrivate:Boolean
         investmentBudget:Investmentbudget,
         profilePic: String
+        privateFields:[PrivateKeys]
     }
     
     type FunderPortfolio{
@@ -351,6 +357,7 @@ let FunderPortfolioSchema = `
     }
     
     type Query{
+        fetchFunderDetails(portfoliodetailsId:String!, key:String): FunderPortfolio
         fetchFunderAbout(portfoliodetailsId:String!):FunderAbout
         fetchfunderPortfolioInvestor(portfoliodetailsId:String!):[Investments]
         fetchFunderPrincipal(portfoliodetailsId:String!):[Principal]
@@ -370,6 +377,7 @@ let FunderPortfolioSchema = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], FunderPortfolioSchema]);
 
 let supportedApi = [
+  {api:'fetchFunderDetails', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchFunderAbout', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchfunderPortfolioInvestor', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchFunderPrincipal', actionName:'READ', moduleName:"PORTFOLIO"},

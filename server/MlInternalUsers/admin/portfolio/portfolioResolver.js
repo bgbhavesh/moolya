@@ -189,7 +189,7 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
           privateFields = portfolioValidationRepo.updatePrivateKeys(args.privateFields, args.removeKeys, details.privateFields)
         }
         else{
-          privateFields = args.privateFields;
+          privateFields = args.privateFields || [];
         }
         let detailsUpdate = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {status: 'WIP'}, {$set:true}, context)
       if(privateFields){

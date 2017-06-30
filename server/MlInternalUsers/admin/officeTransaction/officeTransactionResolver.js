@@ -45,7 +45,13 @@ MlResolver.MlMutationResolver['updateOfficeTransactionOrderSubscriptionDetail'] 
     let response = new MlRespPayload().successPayload("Office subscription detail id is required", code);
     return response;
   }
-  let result = mlDBController.update('MlOfficeTransaction', args.id, { orderSubscriptionDetails: args.orderSubscriptionDetail }, {$set:true}, context)
+  let dataToUpdate = {
+    orderSubscriptionDetails: args.orderSubscriptionDetail
+  };
+  if(args.orderSubscriptionDetail.cost){
+    dataToUpdate.status = "Payment Generated";
+  }
+  let result = mlDBController.update('MlOfficeTransaction', args.id, dataToUpdate, {$set:true}, context)
   if(result){
     let code = 200;
     let response = new MlRespPayload().successPayload('Payment link generated successfully', code);
@@ -104,7 +110,7 @@ MlResolver.MlMutationResolver['officeTransactionPayment'] = (obj, args, context,
     let curDate = new Date()
     if (args.officeId) {
       var obj = {
-        status: 'payment done',
+        status: 'Payment Received',
         'deviceDetails.ipAddress': context.ip,
         'deviceDetails.deviceName': context.browser,
         paymentDetails: {

@@ -151,8 +151,6 @@ class MlAuthorization
             }
 
             if(user_roles && user_roles.length > 0){
-
-                // var highestRole = _.find(user_roles , {hierarchyCode:userProfileDetails.hierarchyCode})
                 for(var i = 0; i < user_roles.length; i++){
                   ret = this.validateRole(user_roles[i].roleId, module, action)
                   if(ret){
@@ -216,7 +214,8 @@ class MlAuthorization
           case 'PORTFOLIO':
           case 'TEMPLATEASSIGNMENT':
           case "INTERNALREQUESTS":
-          case "OFFICE":{              /*adding office for others five admin */
+          case "OFFICE":              /*adding office for others five admin */
+          case "PROCESSSETUP":{
             return this.validateChapterSubChapterCommunity(userProfileDetails, variables);
           }
           break;
@@ -301,35 +300,33 @@ class MlAuthorization
       }
 
       findCommunity(communityArray, communityId) {
-
-        for(var i = 0; i < communityArray.length; i++)
-        {
+        for (var i = 0; i < communityArray.length; i++) {
           var index = _.isMatch(communityArray[i], {communityCode: 'all'})
-          if(index)
+          if (index)
             return true
 
           index = _.isMatch(communityArray[i], {communityId: 'all'})
-          if(index)
+          if (index)
             return true
 
-          var community = MlCommunity.findOne({_id:communityId});
-          if(!community){
-            community = MlCommunity.findOne({communityDefCode:communityId});
-            if(!community)
+          var community = MlCommunity.findOne({_id: communityId});
+          if (!community) {
+            community = MlCommunity.findOne({communityDefCode: communityId});
+            if (!community)
               return false
           }
-          if(community){
+          if (community) {
             index = _.isMatch(communityArray[i], {communityId: community._id})
-            if(index)
+            if (index)
               return true
 
             index = _.isMatch(communityArray[i], {communityCode: community.communityDefCode})
             if (index) {
               return true;
             }
+            return false
           }
         }
-        return false
       }
 
       getRegistrationContextDetails(registrationId){
@@ -342,7 +339,7 @@ class MlAuthorization
 
       getInternalRequestContextDetails(variables, actionName){
         if(actionName == 'CREATE'){
-            return {clusterId:variables['clusterId'], chapterId:variables['chapterId'], subChapterId:variables['subChapterId'], communityId:variables['community']};
+          return {clusterId:variables['clusterId'], chapterId:variables['chapterId'], subChapterId:variables['subChapterId'], communityId:variables['community']};
         }
         let request = MlRequests.findOne({requestId:variables.requestsId})
         if(!request)

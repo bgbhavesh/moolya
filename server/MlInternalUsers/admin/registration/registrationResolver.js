@@ -638,8 +638,11 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
 MlResolver.MlMutationResolver['RejectedStatusForUser'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.registrationId) {
-    // let updatedResponse=MlRegistration.update({_id:args.registrationId},{$set: {"status":"Rejected"}});
     let updatedResponse = mlDBController.update('MlRegistration', args.registrationId, {"status": "Rejected"}, {$set: true}, context)
+    if(updatedResponse){
+      var resp = mlDBController.update('users', {'profile.externalUserProfiles.registrationId': args.registrationId}, {"profile.externalUserProfiles.$.isApprove": false}, {$set:true}, context);
+      return resp
+    }
     return updatedResponse;
   }
 }

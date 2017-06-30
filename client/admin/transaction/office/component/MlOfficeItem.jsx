@@ -86,7 +86,7 @@ export default class MlOfficeItem extends React.Component {
       let duration = ' ';
       let result = JSON.parse(response.result)[0];
       if(result){
-        console.log(result);
+        // console.log(result);
         if(result.trans.duration){
           let dbDuration = result.trans.duration;
             duration = dbDuration.years+' Year'; // To do for month and all

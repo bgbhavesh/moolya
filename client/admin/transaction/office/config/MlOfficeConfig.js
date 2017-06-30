@@ -11,6 +11,16 @@ function dateFormatter (data){
   let createdDateTime=data&&data.data&&data.data.dateTime;
   return <div>{moment(createdDateTime).format('MM/DD/YYYY HH:mm:ss')}</div>;
 }
+
+function paymentFormatter(data) {
+  let isPaid = data && data.data && data.data.paymentDetails && data.data.paymentDetails && data.data.paymentDetails.isPaid ? true : false;
+  if(isPaid){
+    return (<div>Paid</div>);
+  } else {
+    return (<div>Not Paid</div>);
+  }
+}
+
 const mlOfficeTableConfig=new MlViewer.View({
   name:"officeTable",
   module:"office",//Module name for filter.
@@ -37,7 +47,7 @@ const mlOfficeTableConfig=new MlViewer.View({
     {dataField:"subChapterName", title:"Sub Chapter"},
     {dataField:"communityName", title:"Community"},
     {dataField:"status", title:"Status"},
-    {dataField:"updatedBy", title:"Payment"},
+    {dataField:"paymentDetails", title:"Payment" , customComponent : paymentFormatter},
     {dataField:"updatedAt", title:"Action"},
   ],
   tableHeaderClass:'react_table_head',
@@ -60,6 +70,9 @@ const mlOfficeTableConfig=new MlViewer.View({
                       userName
                       dateTime
                       profileId
+                      paymentDetails{
+                        isPaid
+                      }
                     }
                     }
               }

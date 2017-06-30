@@ -96,9 +96,9 @@ MlResolver.MlQueryResolver['fetchOfficeMember'] = (obj, args, context, info) => 
 }
 
 MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
+  let officeId = '';
   try {
     let userId = context.userId;
-    var officeId = '';
     let scDefId = "";
     let scId = "";
     let officeDetails = args.myOffice;
@@ -155,6 +155,12 @@ MlResolver.MlMutationResolver['updateOfficeStatus'] = (obj, args, context, info)
   }
   try{
     // activating office
+    result = mlDBController.update('MlOfficeTransaction', { officeId: args.id }, { status:"Approved" }, {$set: true}, context);
+    if(!result) {
+      let code = 400;
+      return new MlRespPayload().successPayload('Error in Activating the office', code);
+    }
+
     result = mlDBController.update('MlOffice', args.id, {isActive:true}, {$set:true},  context);
     if(!result){
       let code = 400;

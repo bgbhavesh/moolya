@@ -11,9 +11,9 @@ import MlLoader from '../../../../../commons/components/loader/loader'
 export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Component{
    constructor(props, context) {
      super(props);
-     this.state =  {loading:true,data:{}};
+     this.state =  {loading:true,data:{}, privateKey:{}};
      this.fetchPortfolioDetails.bind(this);
-     return this;
+     return this
    }
   componentWillMount(){
     this.fetchPortfolioDetails();
@@ -38,6 +38,11 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
       if (response) {
         this.setState({loading: false, data: response});
       }
+
+
+      _.each(response.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
     }else{
       this.setState({loading: false, data: that.context.ideatorPortfolio.intellectualPlanning});
     }
@@ -53,16 +58,21 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
     })
   }
 
-  onLockChange(field, e){
+  onLockChange(fieldName, field, e){
     let details = this.state.data||{};
     let key = e.target.id;
+    var isPrivate = false
     details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
       details=_.extend(details,{[key]:true});
+      isPrivate = true
     }else{
       details=_.extend(details,{[key]:false});
     }
+
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
+    this.setState({privateKey:privateKey})
     this.setState({data:details}, function () {
       this.sendDataToParent()
     })
@@ -75,11 +85,12 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
         delete data[propName];
       }
     }
-    this.props.getIntellectualPlanning(data);
+    data=_.omit(data,["privateFields"]);
+    this.props.getIntellectualPlanning(data, this.state.privateKey);
   }
 
   render(){
-    let description =this.state.data.description?this.state.data.description:''
+    let description =this.state.data.IPdescription?this.state.data.IPdescription:''
     let isIntellectualPrivate = this.state.data.isIntellectualPrivate?this.state.data.isIntellectualPrivate:false
 
     const showLoader = this.state.loading;
@@ -105,8 +116,8 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
                     <div className="panel-body">
 
                       <div className="form-group nomargin-bottom">
-                        <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description} onBlur={this.onInputChange.bind(this)} name="description"></textarea>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIntellectualPrivate" onClick={this.onLockChange.bind(this, "isIntellectualPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={isIntellectualPrivate}/>
+                        <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description} onBlur={this.onInputChange.bind(this)} name="IPdescription"></textarea>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIntellectualPrivate" onClick={this.onLockChange.bind(this, "IPdescription", "isIntellectualPrivate")}/>
                       </div>
 
                     </div>

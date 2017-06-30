@@ -168,17 +168,26 @@ export default class MlStartupManagement extends React.Component{
     let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
   }
   onFileUploadCallBack(name,fileName, resp){
+    let that = this;
+    let details =this.state.data;
     if(resp){
       let result = JSON.parse(resp)
+      var temp = $.parseJSON(resp).result;
+      details=_.omit(details,[name]);
+      details=_.extend(details,{[name]:{fileName: fileName,fileUrl: temp}});
+      that.setState({data: details}, function () {
+        that.sendDataToParent()
+      })
       if(result.success){
-        this.setState({loading:true})
-        this.fetchOnlyImages();
+        that.setState({loading:true})
+        that.fetchOnlyImages();
       }
     }
   }
   async fetchOnlyImages(){
     const response = await findStartupManagementActionHandler(this.props.portfolioDetailsId);
     if (response) {
+      this.setState({loading:false})
       let thisState=this.state.selectedIndex;
       let dataDetails =this.state.startupManagement
       let cloneBackUp = _.cloneDeep(dataDetails);

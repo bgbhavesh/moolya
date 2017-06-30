@@ -9,6 +9,8 @@ import geocoder from "geocoder";
 import _lodash from "lodash";
 import _ from "underscore";
 import moment from "moment";
+var fs = Npm.require('fs');
+var Future = Npm.require('fibers/future');
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
   var validationCheck=null;
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
@@ -832,6 +834,7 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
         let area = args.registration.addressInfo[0].addressArea
         let locality = args.registration.addressInfo[0].addressLocality
         let pin =args.registration.addressInfo[0].addressPinCode
+        var fut = new Future();
         geocoder.geocode(locality+","+area+","+city+","+pin, Meteor.bindEnvironment(function ( err, data ) {
           if(err){
             throw new Error("Invalid Locality selection "+e);
@@ -846,13 +849,14 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
               let code = 200;
               let result = {addressId: id}
               let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-              return response
+              fut.return(response);
             }
           }catch(e){
             throw new Error("Error while updating address "+e);
           }
 
         }),{key:Meteor.settings.private.googleApiKey});
+        var addressData = fut.wait();
       }else{
         let city = args.registration.addressInfo[0].addressCity||"";
         let area = args.registration.addressInfo[0].addressArea||"";
@@ -872,12 +876,14 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
               let code = 200;
               let result = {addressId: id}
               let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-              return response
+              fut.return(response);
             }
           }catch(e){
             throw new Error("Error while updating address "+e);
           }
         }),{key:Meteor.settings.private.googleApiKey});
+
+        var addressData = fut.wait();
 
       }
     }else if(args.type == "SOCIALLINKS") {

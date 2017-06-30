@@ -32,7 +32,7 @@ export default class MlBackendUserListView extends Component {
       return (
         <div className="col-lg-2 col-md-4 col-sm-4" key={prop._id}>
           <div className="list_block provider_block">
-            <div className={`cluster_status ${userStatus}_cl`}><span className={`ml ml-${StatusActive}`}></span></div>
+            <div className={`cluster_status ${userStatus}_cl`}>{/*<span className={`ml ml-${StatusActive}`}></span>*/}</div>
             {prop.profile.isMoolya?<div className="list-moolya-icon"><span className="ml ml-moolya-symbol"></span></div>:<span></span>}
             <a href={backendUserRoute.backendUserDetailRoute(prop._id)}>
               <div className="provider_mask">

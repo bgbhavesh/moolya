@@ -19,9 +19,11 @@ export default class MlOfficeItem extends React.Component {
       transInfo:{},
       currentSlideIndex:0,
       userInfo:{},
-      officeInfo:{
-        availableCommunities:[]
+      officeInfo:{},
+      officeSC:{
+        availableCommunities: []
       },
+      officeSCDef:{},
       cost: 0,
       tax:false,
       about:'',
@@ -89,12 +91,15 @@ export default class MlOfficeItem extends React.Component {
           let dbDuration = result.trans.duration;
             duration = dbDuration.years+' Year'; // To do for month and all
         }
+        result.officeSC.availableCommunities = result.officeSC.availableCommunities && result.officeSC.availableCommunities.length ? result.officeSC.availableCommunities : [];
         result.office.availableCommunities = result.office.availableCommunities && result.office.availableCommunities.length ? result.office.availableCommunities : [];
         this.setState({
           duration: duration,
           transInfo: result.trans,
           userInfo: result.user,
           officeInfo: result.office,
+          officeSC: result.officeSC,
+          officeSCDef: result.officeSCDef,
           currentSlideIndex:0,
           tax: result.trans.orderSubscriptionDetails && result.trans.orderSubscriptionDetails.isTaxInclusive ? result.trans.orderSubscriptionDetails.isTaxInclusive : false,
           cost: result.trans.orderSubscriptionDetails && result.trans.orderSubscriptionDetails.cost ? result.trans.orderSubscriptionDetails.cost : '',
@@ -246,20 +251,20 @@ export default class MlOfficeItem extends React.Component {
                   <input type="text" placeholder="Order ID" defaultValue="Moo12345" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Subscription Name" defaultValue=" " value={this.state.officeInfo.subscriptionName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Subscription Name" defaultValue=" " value={this.state.officeSCDef.serviceCardName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total number of users" defaultValue=" " value={this.state.officeInfo.totalCount} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Total number of users" defaultValue=" " value={this.state.officeSC.totalusercount} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total number of principal" defaultValue=" " value={this.state.officeInfo.principalUserCount} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Total number of principal" defaultValue=" " value={this.state.officeSC.principalcount} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total number of Team" defaultValue=" " value={this.state.officeInfo.teamUserCount} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Total number of Team" defaultValue=" " value={this.state.officeSC.teamMembercount} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group switch_wrap switch_names">
                   <span className="state_label acLabel">Specific</span><label className="switch nocolor-switch">
-                  <input type="checkbox" checked={this.state.officeInfo.availableCommunities.length > 2 ? true : false} />
+                  <input type="checkbox" checked={this.state.officeSC.availableCommunities.length > 2 ? true : false} />
                   <div className="slider"></div>
                 </label>
                   <span className="state_label">All Communities</span>
@@ -271,7 +276,7 @@ export default class MlOfficeItem extends React.Component {
 
                 <div className="swiper-container office_item" id={'office_item'+transId}>
                   <div className="swiper-wrapper">
-                    {this.state.officeInfo.availableCommunities.map(function (item, i) {
+                    {this.state.officeSC.availableCommunities.map(function (item, i) {
                       return(
                       <div className="swiper-slide" key={i}>
                         <div className="team-block marb0">

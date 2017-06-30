@@ -70,7 +70,7 @@ componentDidUpdate(){
   async setDefaultUserProfile(){
 
     let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
-    const response = await setDefaultProfileActionHandler(profileDetails.registrationId);
+    const response = await setDefaultProfileActionHandler(profileDetails.profileId);
     if(response&&response.success){
       var resp=await this.fetchExternalUserProfiles();
       this.initializeSwiper();
@@ -85,7 +85,7 @@ componentDidUpdate(){
   async switchProfile(){
 
     let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
-    const response = await switchProfileActionHandler(profileDetails.registrationId);
+    const response = await switchProfileActionHandler(profileDetails.profileId);
     if(response&&response.success){
       var resp=await this.fetchExternalUserProfiles();
       this.initializeSwiper();
@@ -99,7 +99,7 @@ componentDidUpdate(){
 
   async deactivateUserProfile(){
     let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
-    const response = await deActivateProfileProfileActionHandler(profileDetails.registrationId);
+    const response = await deActivateProfileProfileActionHandler(profileDetails.profileId);
     if(response&&response.success){
       var resp=await this.fetchExternalUserProfiles();
       this.initializeSwiper();
@@ -112,7 +112,7 @@ componentDidUpdate(){
 
   async blockUserProfile(){
     let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
-    const response = await blockProfileActionHandler(profileDetails.registrationId);
+    const response = await blockProfileActionHandler(profileDetails.profileId);
     if(response&&response.success){
       toastr.success("Profile blocked successfully");
     }else{

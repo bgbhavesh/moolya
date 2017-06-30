@@ -185,14 +185,16 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
     var privateFields = [];
     if(args.portfoliodetailsId){
         let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId});
-        if(details && details.privateFields){
+        if(details && details.privateFields.length){
           privateFields = portfolioValidationRepo.updatePrivateKeys(args.privateFields, args.removeKeys, details.privateFields)
         }
         else{
-          privateFields = args.privateFields;
+          privateFields = args.privateFields || [];
         }
         let detailsUpdate = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {status: 'WIP'}, {$set:true}, context)
+      if(privateFields){
         detailsUpdate = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {privateFields:privateFields}, {$set:true}, context)
+      }
         if(details && detailsUpdate){
             switch (details.communityType){
                 case 'Ideators':{

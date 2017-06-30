@@ -222,7 +222,7 @@ input:checked + .slider:before {-webkit-transform: translateX(34px);-ms-transfor
 .ml_profile.profile_open>ol>li:nth-of-type(3) {right: 126px;top: 103px;}
 .ml_profile.profile_open>ol>li:nth-of-type(4) {right: 71px;top: 134px;}
 .ml_profile.profile_open>ol>li:nth-of-type(5) {right: 10px;top: 150px;}
-.filter_table{text-shadow:none;width: calc(100% - 20px);margin-top: -8px;height: auto;/*overflow: auto;*/position: absolute;z-index:2;transition: .2s linear;}
+.filter_table{text-shadow:none;width: calc(100% - 20px);margin-top: -8px;height: auto;/*overflow: auto;*/position: absolute;z-index:10;transition: .2s linear;}
 .filter_table.filter_hide{height: 16px;}
 .filter_table .panel{border-radius: 0px 0px 4px 4px;border-width:1px;max-height: 200px;margin-bottom: 0px;transition: .2s linear;padding-top: 20px;background: #ef4647;border-color: #ef4647;}
 .filter_table.filter_hide .panel{height: 0px;overflow:hidden;border-width:0px;padding: 0px;background: transparent;}

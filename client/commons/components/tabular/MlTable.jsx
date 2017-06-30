@@ -73,6 +73,8 @@ export default class MlTable extends React.Component {
       let columnOptions = {
         key: cl.dataField,
         dataField: cl.dataField,
+        headerTitle: false,
+        columnTitle: true,
         hidden: (cl.isHidden ? cl.isHidden : false),
         isKey: (cl.isKey ? cl.isKey : false),
         dataSort: (cl.dataSort ? cl.dataSort : false)

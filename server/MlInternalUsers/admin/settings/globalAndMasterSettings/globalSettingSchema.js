@@ -110,10 +110,18 @@ let GlobalSettingsSchema = `
          timeZone:String
          gmtOffset:String
       }
+      
+      type language{
+         _id:String
+         lang_code:String
+         language_name: String
+         native_name:String
+      }
 
       type Query{
         fetchGlobalSettings(type:GLOBAL_SETTINGS_TYPE):[GlobalSettings]    
         findTimeZones(clusterId:String):[timeZone]
+        findLanguages: [language]
       }
     
     type Mutation{
@@ -127,6 +135,7 @@ let supportedApi = [
     {api:'fetchGlobalSettings', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true},
     {api:'updateGlobalSetting', actionName:'UPDATE', moduleName:"GLOBALSETTINGS"},
     {api:'findTimeZones', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true},
+    {api:'findLanguages', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true}
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

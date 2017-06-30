@@ -102,6 +102,32 @@ let FunderPortfolioSchema = `
         isInvestmentAmountPrivate :Boolean
         index: Int
     }
+    type Duration{
+        hours: String
+        minutes: String
+    }
+    
+    type Attachments {
+        documentName: String
+        images: [String]
+    }
+    
+    type Services{
+        dateOfService:String
+        isDateOfServicePrivate :Boolean
+        industryType:[String]
+        conversationType:[String]
+        about:String
+        expectedInput : String
+        expectedOutput:String
+        mode:Boolean
+        session:String
+        duration:Duration
+        attachments :[Attachments]
+        isPrivate :Boolean
+        index: Int
+  }
+    
     
     type Investmentbudget{
         from:String
@@ -153,6 +179,7 @@ let FunderPortfolioSchema = `
         team                : [Team],
         areaOfInterest      : [AreaOfInterest],
         successStories      : [SuccessStories]
+        services            : Services
     }
   
     input successStories{
@@ -285,6 +312,33 @@ let FunderPortfolioSchema = `
         profilePic: String
     }
     
+    
+    input duration{
+        hours: String
+        minutes: String
+    }
+    
+    input attachments {
+        documentName: String
+        images: [String]
+    }
+    
+    input services{
+        dateOfService:String
+        isDateOfServicePrivate :Boolean
+        industryType:[String]
+        conversationType:[String]
+        about:String
+        expectedInput : String
+        expectedOutput:String
+        mode:Boolean
+        session:String
+        duration:duration
+        attachments :[attachments]
+        isPrivate :Boolean
+        index: Int
+  }
+    
     input funderPortfolio{
         portfolioDetailsId  : String,
         funderAbout         : funderAbout,
@@ -293,6 +347,7 @@ let FunderPortfolioSchema = `
         team                : [team],
         areaOfInterest      : [areaOfInterest],
         successStories      : [successStories]
+        services            : services
     }
     
     type Query{
@@ -302,7 +357,8 @@ let FunderPortfolioSchema = `
         fetchFunderTeam(portfoliodetailsId:String!):[Team]
         fetchFunderAreaOfInterest(portfoliodetailsId:String!):[AreaOfInterest]
         fetchFunderSuccessStories(portfoliodetailsId:String!):[SuccessStories]
-         fetchPortfolioClusterId(portfoliodetailsId:String):Portfoliodetails
+        fetchPortfolioClusterId(portfoliodetailsId:String):Portfoliodetails
+        fetchfunderPortfolioService(portfoliodetailsId:String!):Services
     }
     
     type Mutation{
@@ -320,6 +376,7 @@ let supportedApi = [
   {api:'fetchFunderTeam', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchFunderAreaOfInterest', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchFunderSuccessStories', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api: 'fetchfunderPortfolioService',actionName:'READ', moduleName:"PORTFOLIO" },
 
   {api:'createFunderPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
   {api:'updateFunderPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},

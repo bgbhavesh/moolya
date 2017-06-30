@@ -31,6 +31,8 @@ export async function findOfficeTransactionHandler(TransId, loggedUserDetails) {
     },
     forceFetch: true
   })
+  const id = result.data.findOfficeTransaction;
+  return id;
 }
 // export async function findOfficeTransactionHandler(TransId) {
 //   const result = await client.query({

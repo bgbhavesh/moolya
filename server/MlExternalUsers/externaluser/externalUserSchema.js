@@ -145,6 +145,7 @@ let externalUser = `
       deActivateUserProfile(profileId:String!):response
       blockUserProfile(profileId:String!):response
       setDefaultProfile(profileId:String!):response
+      switchExternalProfile(profileId:String!):response
     }
     
     type Query{

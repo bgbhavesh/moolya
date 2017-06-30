@@ -50,6 +50,14 @@ class MlAuthorization
               do{
                   if(startToken.value == 'module'){
                       moduleName = startToken.next.next.value.toUpperCase();
+                      /*
+                      Handling all three modules of interanal requests
+                      */
+
+                      if(moduleName == 'INTERNALREQUESTS' || moduleName == 'INTERNALAPPROVEDREQUESTS' || moduleName=='INTERNALREJECTEDREQUESTS'){
+                        moduleName = 'INTERNALREQUESTS';
+                      }
+
                       if(moduleName == 'REGISTRATIONINFO' || moduleName == 'REGISTRATIONAPPROVEDINFO' || moduleName=='REGISTRATIONREJECTEDINFO'){
                           moduleName = 'REGISTRATION';
                       }
@@ -60,6 +68,8 @@ class MlAuthorization
                       if(moduleName == 'OFFICETRANSACTION'){
                         moduleName = 'OFFICE';
                       }
+
+
 
                       if(moduleName == 'AUDIT_LOG')
                           return true
@@ -200,7 +210,8 @@ class MlAuthorization
           case 'REGISTRATION':
           case 'PORTFOLIO':
           case 'TEMPLATEASSIGNMENT':
-          case "INTERNALREQUESTS":{
+          case "INTERNALREQUESTS":
+          case "OFFICE":{              /*adding office for others five admin */
             return this.validateChapterSubChapter(roleDetails, variables);
           }
           break;
@@ -239,7 +250,12 @@ class MlAuthorization
             return {clusterId:template.templateclusterId, chapterId:template.templatechapterId, subChapterId:template.templatesubChapterId, communityId:template.templateCommunityId}
           }
           break;
-          case 'INTERNALREQUESTS':{
+          case 'INTERNALREQUESTS':
+          {
+            let community = this.getCommunityId(variables.clusterId, variables.chapterId, variables.subChapterId, variables.communityId)
+            if(community){
+              variables.communityId= community._id
+            }
             return this.getInternalRequestContextDetails(variables, actionName)
           }
           break;
@@ -289,12 +305,26 @@ class MlAuthorization
 
       getInternalRequestContextDetails(variables, actionName){
         if(actionName == 'CREATE'){
-            return {clusterId:variables.requests['cluster'], chapterId:variables.requests['chapter'], subChapterId:variables.requests['subChapter'], communityId:variables.requests['community']};
+            return {clusterId:variables['clusterId'], chapterId:variables['chapterId'], subChapterId:variables['subChapterId'], communityId:variables['communityId']};
+        }
+        if(actionName == 'UPDATE'){
+          let request = this.getRequest(variables.requestsId)
+          if(request){
+            variables.clusterId = request.cluster
+            variables.chapterId = request.chapter
+            variables.subChapterId = request.subChapter
+            variables.communityId = request.communityId
+          }
+          return variables;
         }
       }
 
       getCommunityId(clusterId, chapterId, subChapterId, defCode){
         return MlCommunity.findOne({communityDefCode:defCode, clusterId:clusterId, chapterId:chapterId, subChapterId:subChapterId})
+      }
+
+      getRequest(requestId){
+        return MlRequests.findOne({requestId:requestId})
       }
 
     // validateDataContext(roleDetails, moduleName, actionName, req, isContextSpecSearch)

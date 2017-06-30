@@ -441,12 +441,55 @@ MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'] = (obj, a
       mlDBController.update('MlRegistration', args.registrationId, {'registrationInfo.profileImage': args.docUrl}, {$set:true}, context)
   }
 }
+
+
+
 MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.registrationId) {
 
     let temp=0
         let registrationRecord=MlRegistration.findOne(args.registrationId)
+
+    let addressDetails = registrationRecord&&registrationRecord.addressInfo?registrationRecord.addressInfo:[]
+
+    /**
+     * Check whether registration contains address array
+     */
+    if(addressDetails&&addressDetails.length<1){
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("Default Address is manditory", code);
+      return response;
+    }else if(addressDetails&&addressDetails.length>0){
+      /**
+       * If registration contains address array
+       * Check isDefault Address Exist or Not
+       */
+      var found = addressDetails.some(function (el) {
+        return el.isDefaultAddress == true;
+      });
+      if (!found) {
+        /**
+         * If registration contains address array
+         * If default address not found throw an error
+         */
+        let code = 401;
+        let response = new MlRespPayload().errorPayload("Default Address is manditory", code);
+        return response;
+      }else if(found){
+        /**
+         * If registration contains address array
+         * If default address exist
+         * Check whether default address is active for single or multiple address
+         */
+        let addressData =  _.filter(addressDetails, {'isDefaultAddress': true});
+        if(addressData&&addressData.length>1){
+          let code = 401;
+          let response = new MlRespPayload().errorPayload("Only one default address should exist", code);
+          return response;
+        }
+      }
+    }
     if(registrationRecord&&registrationRecord.emails.length>0){
      let email=registrationRecord.emails;
       emailVerified=_.find(email,function(mail){
@@ -793,8 +836,8 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
           if(err){
             throw new Error("Invalid Locality selection "+e);
           }
-          args.registration.addressInfo[0].latitude = data.results[0].geometry.location.lat;
-          args.registration.addressInfo[0].longitude = data.results[0].geometry.location.lng;
+          args.registration.addressInfo[0].latitude = data&&data.results[0]&&data.results[0].geometry&&data.results[0].geometry.location&&data.results[0].geometry.location.lat?data.results[0].geometry.location.lat:null;
+          args.registration.addressInfo[0].longitude = data&&data.results[0]&&data.results[0].geometry&&data.results[0].geometry.location&&data.results[0].geometry.location.lat?data.results[0].geometry.location.lng:null;
 
           try{
             // let id = MlClusters.insert(cluster);
@@ -811,16 +854,16 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
 
         }),{key:Meteor.settings.private.googleApiKey});
       }else{
-        let city = args.registration.addressInfo[0].addressCity
-        let area = args.registration.addressInfo[0].addressArea
-        let locality = args.registration.addressInfo[0].addressLocality
-        let pin =args.registration.addressInfo[0].addressPinCode
+        let city = args.registration.addressInfo[0].addressCity||"";
+        let area = args.registration.addressInfo[0].addressArea||"";
+        let locality = args.registration.addressInfo[0].addressLocality||"";
+        let pin =args.registration.addressInfo[0].addressPinCode||"";
         geocoder.geocode(locality+","+area+","+city+","+pin, Meteor.bindEnvironment(function ( err, data ) {
           if(err){
             throw new Error("Invalid Locality selection "+e);
           }
-          args.registration.addressInfo[0].latitude = data.results[0].geometry.location.lat;
-          args.registration.addressInfo[0].longitude = data.results[0].geometry.location.lng;
+          args.registration.addressInfo[0].latitude = data&&data.results[0]&&data.results[0].geometry&&data.results[0].geometry.location&&data.results[0].geometry.location.lat?data.results[0].geometry.location.lat:null;
+          args.registration.addressInfo[0].longitude = data&&data.results[0]&&data.results[0].geometry&&data.results[0].geometry.location&&data.results[0].geometry.location.lat?data.results[0].geometry.location.lng:null;
 
           try{
             // let id = MlClusters.insert(cluster);
@@ -1192,6 +1235,20 @@ MlResolver.MlMutationResolver['resetPasswords'] = (obj, args, context, info) =>{
       return response;
     }else{
       return new MlRespPayload().successPayload(result.reason, 200);
+    }
+  }else{
+    return new MlRespPayload().errorPayload("Reset link Expired/Used",403);
+  }
+}
+
+MlResolver.MlMutationResolver['verifyEmail'] = (obj, args, context, info) =>{
+  if (args.token) {
+    const result= MlAccounts.verifyEmail(args.token, context);
+    if(result&&result.error){
+      let response = new MlRespPayload().errorPayload(result.reason||"",result.code);
+      return response;
+    }else{
+      return new MlRespPayload().successPayload(result, 200);
     }
   }else{
     return new MlRespPayload().errorPayload("Reset link Expired/Used",403);

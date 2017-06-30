@@ -66,6 +66,26 @@ export async function setDefaultProfileActionHandler(profileId) {
   return id;
 }
 
+export async function switchProfileActionHandler(profileId) {
+
+  const result = await appClient.mutate({
+    mutation: gql`
+          mutation($profileId:String!){
+              switchExternalProfile(profileId:$profileId){
+                  success,
+                  code,
+                  result
+              }  
+          }
+      `,
+    variables: {
+      profileId:profileId
+    }
+  })
+  const id = result.data.switchExternalProfile;
+  return id;
+}
+
 
 export async function deActivateProfileProfileActionHandler(profileId) {
 
@@ -105,4 +125,8 @@ export async function blockProfileActionHandler(profileId) {
   })
   const id = result.data.blockUserProfile;
   return id;
+}
+
+export function reloadPage(){
+  location.reload();
 }

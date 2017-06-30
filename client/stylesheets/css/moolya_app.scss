@@ -54,7 +54,7 @@ $menuTrans:all 0.5s linear;
 .app_menu ul .menu_item .menu_in .ml:before{font-size: 48px;}
 .app_menu ul .menu_item .menu_in img{margin-bottom: 5px;margin-top: -8px;}
 .app_menu ul .menu_item:nth-of-type(2) .menu_in img{margin-bottom: -3px; margin-top: -9px;}
-.app_menu ul .menu_item {background: #ffe144;display: inline-block;height: 102px;margin-left: 0px;margin-top: 6px;position: relative;width: 82px;padding-top: 4px;color: #000;text-align: center;cursor: pointer;font-size: 14px;}
+.app_menu ul .menu_item {background: #ffe144;display: inline-block;height: 102px;margin-left: 0px;margin-top: 6px;position: relative;width: 82px;padding-top: 4px;color: #000;text-align: center;cursor: pointer;font-size: 13px;}
 .app_menu ul .menu_item:before {border-bottom: 20px solid #ffe144;border-left: 41px solid transparent;border-right: 41px solid transparent;content: "";height: 0;left: 0;position: absolute;top: -20px;width: 0;}
 .app_menu ul .menu_item:after {content: "";position: absolute;left: 0;bottom: 0;width: 0;height: 0;border-bottom: 20px solid #fff;border-left: 41px solid transparent;border-right: 41px solid transparent;}
 /*.app_menu ul .menu_item.menu_item_in {background: #fff;display: inline-block;height: 102px;margin-left: 0px;margin-top: -16px;position: relative;width: 82px;padding-top: 15px;color: #273545;text-align: center;cursor: pointer;font-size: 14px;transform: scale(.95, .95);}
@@ -250,6 +250,7 @@ $menuTrans:all 0.5s linear;
         li{height: 63px;
           span.icon_bg{height: 38px;width: 38px;font-size: 20px;line-height: 38px;}
         }
+        .sub_list{margin-top: -6px;border-radius: 0px;}
         .tooltiprefer{
           span{font-size: 12px;}
         }
@@ -1367,17 +1368,7 @@ $menuTrans:all 0.5s linear;
   width: 250px;
 }
 .rounded_btn{
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  background: $mlBlue;
-  position: absolute;
-  font-size: 12px;
-  color: $mlWhite;
-  line-height: 30px;
-  bottom: 20px;
-  right: 20px;
-  text-align:center;
+  border-radius: 50%; width: 30px; height: 30px; background: $mlBlue; position: absolute; font-size: 12px; color: $mlWhite; line-height: 30px; bottom: 20px; right: 20px; text-align:center;
 }
 /* .warning_popup{
     position: absolute; z-index: 999; right: 0; width: 350px; top: 64px;
@@ -1396,8 +1387,7 @@ $menuTrans:all 0.5s linear;
   img{width: 215px; margin-top: -70px;}
   h1{font-size:30px;}
   p{padding: 15px 0px;margin: 0;}
-  .ml_btn{
-    text-align: center;
+  .ml_btn{text-align: center;
     .save_btn{background: $mlGray;color: $mlBlue;
       &:after{border-color: transparent transparent transparent $mlGray;}
       &:before{border-color: transparent $mlGray transparent transparent;}
@@ -1407,15 +1397,27 @@ $menuTrans:all 0.5s linear;
   .ideabtn:after{position: absolute; right: -15px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 20px 0 20px 15px; border-color: transparent transparent transparent $mlBlue; top: 0px;}
   .ideabtn:before{position: absolute; left: -15px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 20px 15px 20px 0px; border-color: transparent $mlBlue transparent transparent; top: 0px;}
 
+
   .ideabtn2{display: inline-block; background: $mlGray; border: 0px; line-height: 37px; position: relative; text-decoration: none; font-size: 18px; height: 40px; margin: 5px 0px 0px 0px; color: $mlBlue; text-shadow: none; text-align: center; padding: 0px 10px;}
   .ideabtn2:after{position: absolute; right: -15px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 20px 0 20px 15px; border-color: transparent transparent transparent $mlGray; top: 0px;}
   .ideabtn2:before{position: absolute; left: -15px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 20px 15px 20px 0px; border-color: transparent $mlGray transparent transparent; top: 0px;}
-
 }
+
+.wrap_right{width: 80px;min-height: 200px;float: right;
+  ul{margin-bottom: 0px;}
+  li{height: 46px;line-height: 46px;text-align: center;background: $mlGray;margin-bottom: 1px;
+    &:hover {background: $mlRed;color: $mlWhite;text-shadow: 0px 1px 1px #333;cursor: pointer;}
+    &:first-of-type{border-radius: 4px 4px 0px 0px;}
+    &:last-of-type{border-radius: 0px 0px 4px 4px;}
+    &.active{background: $mlRed;color: $mlWhite;text-shadow: 0px 1px 1px #333;cursor: pointer;}
+  }
+}
+.wrap_left{width: calc(100% - 86px);float: left;}
+
 
 
 .calendar_access{
-  background:url(/images/cal_right.png) $mlRed right top no-repeat; color: $mlWhite;height:240px; text-shadow: none;border-radius:10px;padding: 40px 10px 0px 10px;margin-top:10%;
+  background:url(/images/cal_right.png) $mlRed right top no-repeat; color: $mlWhite;height:240px; text-shadow: none;border-radius:10px;padding: 40px 10px 0px 10px;margin-top:8%;
   img{    width: 200px; margin-top: -31px; margin-left: -75px;}
   h3{    font-size: 28px;line-height: 36px;
     b{
@@ -1431,47 +1433,21 @@ $menuTrans:all 0.5s linear;
 }
 .notification_view{
   li{
-    float: left;
-    background: $mlGray;
-    width: 48%;
-    margin-left: 17px;
-    margin-top: 16px;
-    border-radius: 4px;
+    float: left; background: $mlGray; width: 48%; margin-left: 17px; margin-top: 16px; border-radius: 8px;
     .left_icon{
-      float: left;
-      width: 20%;
-      height: 100px;
-      background: $mlBlue;
-      padding-top: 20px;
-      padding-left: 25px;
-      border-radius:4px 0 0 4px;
+      float: left; width: 20%; height: 80px; background: $mlBlue; padding-top: 10px; padding-left: 25px; border-radius:8px 0 0 8px;
       img{
-        border-radius: 50%;
-        width: 70px;
-        height: 70px;
-        border: #b9c5cc solid 3px;
-        margin-top: -5px;
+        border-radius: 50%; width: 70px; height: 70px; border: #b9c5cc solid 3px; margin-top: -5px;
       }
       .ml{
-        font-size: 55px;
-        border-radius:50%;
-        background:$mlGray;
-        padding:10px;
+        font-size: 55px; border-radius:50%; color: $mlWhite; text-shadow: none; padding:10px;
 
       }
     }
     .right_text{
-      float: left;
-      width: 80%;
-      height: 100px;
-      padding:10px;
-      position:relative;
+      float: left; width: 80%; height: 80px; padding:10px; position:relative;
       .read_more{
-        margin-top: -26px;
-        position: absolute;
-        right: 8px;
-        bottom: 0;
-        font-size: 20px;
+        margin-top: -26px; position: absolute; right: 8px; bottom: 0; font-size: 20px;
         a{
           color: $mlBlue;
         }
@@ -1479,3 +1455,4 @@ $menuTrans:all 0.5s linear;
     }
   }
 }
+

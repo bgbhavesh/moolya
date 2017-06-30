@@ -13,7 +13,8 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
     super(props);
     this.state={
       loading:true,
-      data:{}
+      data:{},
+      privateKey:{}
     }
     this.onClick.bind(this);
     this.handleBlur.bind(this);
@@ -42,20 +43,30 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
       if (response) {
         this.setState({loading: false, data: response});
       }
+
+      _.each(response.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+
     }else{
       this.setState({loading: false, data: that.context.ideatorPortfolio.strategyAndPlanning});
     }
   }
-  onClick(field,e){
+  onClick(fieldName, field,e){
     let details = this.state.data||{};
     let key = e.target.id;
+    var isPrivate = false
     details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
       details=_.extend(details,{[key]:true});
+      isPrivate = true
     }else{
       details=_.extend(details,{[key]:false});
     }
+
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
+    this.setState({privateKey:privateKey})
     this.setState({data:details}, function () {
       this.sendDataToParent()
     })
@@ -78,11 +89,13 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
         delete data[propName];
       }
     }
-    this.props.getStrategyAndPlanning(data)
+
+    data=_.omit(data,["privateFields"]);
+    this.props.getStrategyAndPlanning(data, this.state.privateKey)
   }
 
   render(){
-    let description =this.state.data.description?this.state.data.description:''
+    let description =this.state.data.spDescription?this.state.data.spDescription:''
     let isStrategyPlansPrivate = this.state.data.isStrategyPlansPrivate?this.state.data.isStrategyPlansPrivate:false
     const showLoader = this.state.loading;
     return (
@@ -106,8 +119,8 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
                     <div className="panel-body">
 
                       <div className="form-group nomargin-bottom">
-                        <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description} name="description" onBlur={this.handleBlur.bind(this)}></textarea>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isStrategyPlansPrivate" onClick={this.onClick.bind(this, "isStrategyPlansPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={isStrategyPlansPrivate}/>
+                        <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description} name="spDescription" onBlur={this.handleBlur.bind(this)}></textarea>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isStrategyPlansPrivate" onClick={this.onClick.bind(this, "spDescription", "isStrategyPlansPrivate")}/>
                       </div>
 
                     </div>

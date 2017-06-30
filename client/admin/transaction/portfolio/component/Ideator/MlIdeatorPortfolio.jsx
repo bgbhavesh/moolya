@@ -67,37 +67,37 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
       let data = this.state.idea;
       data=details;
       this.setState({idea : data})
-      this.props.getIdeatorIdeaDetails(data);
+      this.props.getIdeatorIdeaDetails(data, privateKey);
     }
     getProblemSolution(details, privateKey) {
       let data = this.state.ideatorPortfolio;
       data['problemSolution']=details;
       this.setState({ideatorPortfolio : data})
-      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio}, privateKey);
     }
     getStrategyAndPlanning(details, privateKey) {
       let data = this.state.ideatorPortfolio;
       data['strategyAndPlanning']=details;
       this.setState({ideatorPortfolio : data})
-      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio}, privateKey);
     }
     getIntellectualPlanning(details, privateKey) {
       let data = this.state.ideatorPortfolio;
       data['intellectualPlanning']=details;
       this.setState({ideatorPortfolio : data})
-      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio}, privateKey);
     }
     getAudience(details, privateKey) {
       let data = this.state.ideatorPortfolio;
       data['audience']=details;
       this.setState({ideatorPortfolio : data})
-      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio}, privateKey);
     }
     getLookingFor(details, privateKey) {
       let data = this.state.ideatorPortfolio;
       data['lookingFor']=details;
       this.setState({ideatorPortfolio : data})
-      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio}, privateKey);
     }
 
     componentWillMount()

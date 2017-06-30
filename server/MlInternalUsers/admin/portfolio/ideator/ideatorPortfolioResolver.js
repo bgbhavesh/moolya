@@ -247,7 +247,7 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context
       let userEmp = MlMasterSettings.findOne({_id:details.employmentStatus}) || {}
       details.employmentStatus = userEmp.employmentTypeInfo ? userEmp.employmentTypeInfo.employmentName : ''
 
-      var object = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, details)
+      var object = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, details, context)
 
       //for view action
       MlResolver.MlMutationResolver['createView'](obj,{resourceId:args.portfoliodetailsId,resourceType:'portfolio'}, context, info);
@@ -259,8 +259,11 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context
 }
 MlResolver.MlQueryResolver['fetchIdeatorPortfolioIdeas'] = (obj, args, context, info) => {
   if(args.ideaId){
-    let ideatorPortfolio = MlIdeas.findOne({"_id": args.ideaId})
-      return ideatorPortfolio;
+    let idea = MlIdeas.findOne({"_id": args.ideaId})
+    if(!idea)
+      return {};
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(idea.portfolioId, idea, context)
+    return filteredObject;
   }
 
   return {};
@@ -583,4 +586,20 @@ MlResolver.MlQueryResolver['fetchIdeas'] = (obj, args, context, info) => {
   MlResolver.MlMutationResolver['createView'](obj,{resourceId:args.portfolioId,resourceType:'portfolio'}, context, info);
 
   return ideas;
+}
+
+MlResolver.MlQueryResolver['fetchIdeatorDetails'] = (obj, args, context, info) => {
+  if(_.isEmpty(args))
+      return;
+
+  var key = args.key;
+  var portfoliodetailsId = args.portfoliodetailsId
+  var ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+  if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty(key)) {
+    var object = ideatorPortfolio[key];
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    ideatorPortfolio[key] = filteredObject
+    return ideatorPortfolio;
+  }
+
 }

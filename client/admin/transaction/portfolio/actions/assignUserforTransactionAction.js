@@ -4,7 +4,7 @@ import {client} from '../../../core/apolloConnection';
 export async function assignUserForTransactionAction(module,params,transactionId,transactionType,operation) {
   const result = await client.mutate({
     mutation: gql`
-     mutation($module:String,$params:transactionParams,$transactionType:String,$operation:String,$transactionId:String){
+     mutation($module:String,$params:transactionParams,$transactionType:String,$operation:String,$transactionId:[String]){
     updateGenericTransaction(module:$module,params:$params,transactionType:$transactionType,operation:$operation,transactionId:$transactionId){
       success
       code
@@ -28,7 +28,7 @@ export async function assignUserForTransactionAction(module,params,transactionId
 export async function unAssignUserForTransactionAction(module,transactionId,transactionType,operation) {
   const result = await client.mutate({
     mutation: gql`
-     mutation($module:String,$params:transactionParams,$transactionType:String,$operation:String,$transactionId:String){
+     mutation($module:String,$params:transactionParams,$transactionType:String,$operation:String,$transactionId:[String]){
     updateGenericTransaction(module:$module,params:$params,transactionType:$transactionType,operation:$operation,transactionId:$transactionId){
       success
       code
@@ -51,7 +51,7 @@ export async function unAssignUserForTransactionAction(module,transactionId,tran
 export async function selfAssignUserForTransactionAction(module,transactionId,transactionType,operation) {
   const result = await client.mutate({
     mutation: gql`
-     mutation($module:String,$params:transactionParams,$transactionType:String,$operation:String,$transactionId:String){
+     mutation($module:String,$params:transactionParams,$transactionType:String,$operation:String,$transactionId:[String]){
     updateGenericTransaction(module:$module,params:$params,transactionType:$transactionType,operation:$operation,transactionId:$transactionId){
       success
       code
@@ -89,5 +89,25 @@ export async function validateTransaction(transactionId,collection,assignedUserI
     }
   })
   const id = result.data.validateTransaction;
+  return id
+}
+
+export async function validateAssignmentsDataContext(data,userId) {
+  const result = await client.mutate({
+    mutation: gql`
+     query($data:[transactionData],$userId:String){
+      validateAssignmentsDataContext(data:$data,userId:$userId){
+        success
+        code
+        result
+      }
+     }
+    `,
+    variables: {
+      data,
+      userId
+    }
+  })
+  const id = result.data.validateAssignmentsDataContext;
   return id
 }

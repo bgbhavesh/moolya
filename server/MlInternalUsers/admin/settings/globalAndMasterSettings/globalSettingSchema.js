@@ -42,6 +42,7 @@ let GlobalSettingsSchema = `
              regionalCurrencySymbol:String
              regionalCurrencyValue:String,
              numberOfDigitsAfterDecimal:String,
+             metricnumberOfDigitsAfterDecimal:String,
              firstDayOfWeek:String,
              currencySymbol:String,
              measurementSystem:String,
@@ -81,6 +82,7 @@ let GlobalSettingsSchema = `
              regionalCurrencySymbol:String
              regionalCurrencyValue:String
              numberOfDigitsAfterDecimal:String,
+             metricnumberOfDigitsAfterDecimal:String
              firstDayOfWeek:String,
              currencySymbol:String,
              measurementSystem:String,

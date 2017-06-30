@@ -732,9 +732,13 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlFilters.find(query,findOptions).fetch();
     totalRecords=MlFilters.find(query,findOptions).count();
   }
-  if(args.module=="FunderPortfolio"){
-    data= MlFunderPortfolio.find(query,findOptions).fetch();
-    totalRecords=MlFunderPortfolio.find(query,findOptions).count();
+
+  if (args.module == "FunderPortfolio") {
+    let value = mlDBController.find('MlPortfolioDetails', {status: 'gone live', communityCode: "FUN"}, context).fetch()    //making dependency of funders on portfolio status
+    let portId = _lodash.map(value, '_id')
+    let finalQuery = mergeQueries(query, {portfolioDetailsId: {$in: portId}});
+    data = MlFunderPortfolio.find(finalQuery, findOptions).fetch();
+    totalRecords = MlFunderPortfolio.find(finalQuery, findOptions).count();
   }
 
   if(args.module=="SubDomain"){
@@ -1101,8 +1105,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
     var queryReturn;
     if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {   //sub-chapter_admin non-moolya
       let subChapterId = curUserProfile.defaultSubChapters ? curUserProfile.defaultSubChapters[0] : ''
-      let subChapterDetails = MlResolver.MlQueryResolver['fetchSubChapter'](null, {_id: subChapterId}, context, null)
-      if(!_.isEmpty(subChapterDetails.internalSubChapterAccess)){
+      // let subChapterDetails = MlResolver.MlQueryResolver['fetchSubChapter'](null, {_id: subChapterId}, context, null)
+      let subChapterDetails = mlDBController.findOne('MlSubChapters', {_id: subChapterId}, context)   /*not getting complete data so changing query*/
+      if(subChapterDetails && !_.isEmpty(subChapterDetails.internalSubChapterAccess)){
         let canSearch = subChapterDetails.internalSubChapterAccess.backendUser?subChapterDetails.internalSubChapterAccess.backendUser.canSearch:false
         var associated = subChapterDetails.associatedSubChapters ? subChapterDetails.associatedSubChapters : []
         if(canSearch)

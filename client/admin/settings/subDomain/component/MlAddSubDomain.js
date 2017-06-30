@@ -28,7 +28,7 @@ class MlAddSubDomain extends React.Component {
   async handleSuccess(response) {
     if (response){
       if(response.success)
-        FlowRouter.go("/admin/settings/SubDomainList");
+        FlowRouter.go("/admin/settings/documentProcess/SubDomainList");
       else
         toastr.error(response.result);
     }
@@ -73,8 +73,7 @@ class MlAddSubDomain extends React.Component {
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
-          FlowRouter.go("/admin/settings/SubDomainList")
+          FlowRouter.go("/admin/settings/documentProcess/SubDomainList")
         }
       }
     ]

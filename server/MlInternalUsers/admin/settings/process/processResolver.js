@@ -23,6 +23,23 @@ MlResolver.MlMutationResolver['createProcess'] = (obj, args, context, info) =>{
         return response
     }
     // let id = MlProcessMapping.insert({...args.process});
+  var firstName='';var lastName='';
+  // let id = MlDepartments.insert({...args.department});
+  if(Meteor.users.findOne({_id : context.userId}))
+  {
+    let user = Meteor.users.findOne({_id: context.userId}) || {}
+    if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+      firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+      lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+    }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+      firstName=(user.profile || {}).firstName||'';
+      lastName =(user.profile || {}).lastName||'';
+    }
+  }
+  let createdBy = firstName +' '+lastName
+  args.process.createdBy = createdBy;
+  args.process.createdDate = new Date();
     let id = mlDBController.insert('MlProcessMapping', args.process, context)
     if(id){
         let code = 200;
@@ -95,6 +112,22 @@ MlResolver.MlMutationResolver['updateProcess'] = (obj, args, context, info) => {
       }
     }*/
     // let result= MlProcessMapping.update(id, {$set: args.process});
+    if(Meteor.users.findOne({_id : context.userId}))
+    {
+      let user = Meteor.users.findOne({_id: context.userId}) || {}
+      if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+        firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+        lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+      }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+        firstName=(user.profile || {}).firstName||'';
+        lastName =(user.profile || {}).lastName||'';
+      }
+    }
+    let createdBy = firstName +' '+lastName
+    args.process.updatedBy = createdBy;
+    args.process.updatedDate = new Date();
+
     let result = mlDBController.update('MlProcessMapping', id, args.process, {$set:true}, context)
       let code = 200;
     let response = new MlRespPayload().successPayload(result, code);
@@ -348,14 +381,18 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
   let kycProcessDoc = null
 
   function getTheKyc(email, subChapters) {
-
+      let allKycDoc=[],allCombinationDoc=[];
 
     //check for specific condition for all criteria fields of processmapping
     if (clusters != null && chapters != null && subChapters != null && communities != null && professions != null && userTypes != null) {
       let val = {clusters, chapters, subChapters, communities, professions, userTypes}
       process = fetchProcessProxy(val);
       if (process) {
-        return process
+        //need to return all the combination as per jiira-2189
+        // return process
+        process.map(function(doc){
+          allKycDoc.push(doc);
+        })
       }
     }
     //check for all or specific condition for all criteria fields of processmapping
@@ -368,7 +405,12 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
     let query = {$and: specificQuery}
     process = fetchProcessProxy(query);
     if (process) {
-      return process
+      //need to return all the combination as per jiira-2189
+      // return process
+      process.map(function(doc){
+        allKycDoc.push(doc);
+      })
+
     }
     //check for 'all' condition on criteria fields of processmapping
     let allVal = {
@@ -381,9 +423,19 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
     }
     process = fetchProcessProxy(allVal);
     if (process) {
-      return process
+      //need to return all the combination as per jiira-2189
+      // return process
+      process.map(function(doc){
+        allKycDoc.push(doc);
+      })
     }
-
+    if (allKycDoc && allKycDoc.length > 0) {
+      //getting uniq documents based on documentId
+      allCombinationDoc = _underscore.uniq(allKycDoc, function (kyc) {
+        return kyc.documentId;
+      });
+      return allCombinationDoc
+    }
 
   }
 
@@ -397,7 +449,8 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
       }]
     }).fetch()
     if (document && document.length > 0) {
-      let combinationBasedDoc=[]
+      let combinationBasedDoc=[],kycDoc=[]
+
       document.map(function (processDoc) {
         if (processDoc && processDoc.processDocuments) {
           let combinationDoc = processDoc.processDocuments
@@ -416,8 +469,9 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
         }
       })
       if (combinationBasedDoc && combinationBasedDoc.length > 0) {
-        kycDoc = _.uniqBy(combinationBasedDoc, function (kyc) {
-          return kyc.documentId && kyc.docTypeId;
+        //getting uniq documents based on documentId
+        kycDoc = _underscore.uniq(combinationBasedDoc, function (kyc) {
+          return kyc.documentId;
         });
         return kycDoc
       }
@@ -462,8 +516,9 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
         }
       })
       if (countryBasedDoc && countryBasedDoc.length > 0) {
-        kycDoc = _.uniqBy(countryBasedDoc, function (kyc) {
-          return kyc.documentId && kyc.docTypeId;
+        //getting uniq documents based on documentId
+        kycDoc = _underscore.uniq(countryBasedDoc, function (kyc) {
+          return kyc.documentId;
         });
         return kycDoc
       }
@@ -600,13 +655,21 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
             //get the selected subchapter based kyc
             let kyc=selectedSubChapterKYC()
             let subchapterKYC= processsChapterKYCDoc.concat(kyc)
+            ///retun the unique docuumnets
             let finalKYC= countryBasedDoc.concat(subchapterKYC)
+            finalKYC = _underscore.uniq(finalKYC, function (kyc) {
+              return kyc.documentId;
+            });
             return finalKYC
           } else {
             //get the kyc based on selected subchapter
             let kyc=selectedSubChapterKYC()
             if(kyc){
               let finalKYC= countryBasedDoc.concat(kyc)
+              ///return the unique docuumnets
+              finalKYC = _underscore.uniq(finalKYC, function (kyc) {
+                return kyc.documentId;
+              });
               return finalKYC
             }else{
               return countryBasedDoc
@@ -617,7 +680,11 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
           //get the kyc based on selected subchapter
           let kyc=selectedSubChapterKYC()
           if(kyc&&kyc.length>0){
-            let finalKYC= countryBasedDoc.concat(kyc)
+            let finalKYC= countryBasedDoc.concat(kyc);
+            ///return the unique docuumnets
+            finalKYC = _underscore.uniq(finalKYC, function (kyc) {
+              return kyc.documentId;
+            });
             return finalKYC
           }else{
             return countryBasedDoc

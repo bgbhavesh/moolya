@@ -15,7 +15,7 @@ import _ from 'lodash'
 export default class MlIdeatorPortfolioTemplate extends React.Component{
     constructor(props){
         super(props)
-        this.state =  {tabs: [], ideatorPortfolio:{}, idea:{}};
+        this.state =  {tabs: [], ideatorPortfolio:{}, idea:{}, privateKeys:[]};
         this.getIdeatorDetails.bind(this);
         this.getProblemSolution.bind(this)
         this.getChildContext.bind(this)
@@ -55,49 +55,49 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
         return tabs;
     }
 
-    getIdeatorDetails(details){
+    getIdeatorDetails(details, privateKey){
         let data = this.state.ideatorPortfolio;
         data['portfolioIdeatorDetails']=details;
         this.setState({ideatorPortfolio : data})
         // this.state.ideatorPortfolio['portfolioIdeatorDetails'] = details;
         // this.setState({ideatorDetails:details})
-        this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+        this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio}, privateKey);
     }
-    getIdeas(details) {
+    getIdeas(details, privateKey) {
       let data = this.state.idea;
       data=details;
       this.setState({idea : data})
-      this.props.getIdeatorIdeaDetails(data);
+      this.props.getIdeatorIdeaDetails(data, privateKey);
     }
-    getProblemSolution(details) {
+    getProblemSolution(details, privateKey) {
       let data = this.state.ideatorPortfolio;
       data['problemSolution']=details;
       this.setState({ideatorPortfolio : data})
-      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio}, privateKey);
     }
-    getStrategyAndPlanning(details) {
+    getStrategyAndPlanning(details, privateKey) {
       let data = this.state.ideatorPortfolio;
       data['strategyAndPlanning']=details;
       this.setState({ideatorPortfolio : data})
-      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio}, privateKey);
     }
-    getIntellectualPlanning(details) {
+    getIntellectualPlanning(details, privateKey) {
       let data = this.state.ideatorPortfolio;
       data['intellectualPlanning']=details;
       this.setState({ideatorPortfolio : data})
-      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio}, privateKey);
     }
-    getAudience(details) {
+    getAudience(details, privateKey) {
       let data = this.state.ideatorPortfolio;
       data['audience']=details;
       this.setState({ideatorPortfolio : data})
-      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio}, privateKey);
     }
-    getLookingFor(details) {
+    getLookingFor(details, privateKey) {
       let data = this.state.ideatorPortfolio;
       data['lookingFor']=details;
       this.setState({ideatorPortfolio : data})
-      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio}, privateKey);
     }
 
     componentWillMount()

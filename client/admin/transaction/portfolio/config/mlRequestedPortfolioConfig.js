@@ -16,6 +16,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   filter:true,
+  multiSelect:true,
   filterComponent: <MlCustomFilter module="portfolio" moduleName="portfolio" />,
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
@@ -36,15 +37,16 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
+
   actionConfiguration:[
     {
       actionName: 'edit',
       showAction: true,
       handler: async(data)=>{
-        let response =  await validateTransaction(data.transactionId,"MlPortfolioDetails",data.assignedUserId);
-        if(data && data.id && response.success === true){
-          FlowRouter.go("/admin/transactions/portfolio/editRequests/"+data.id+"/"+data.communityType);
-        }else if(data && data.id){
+        let response =  await validateTransaction(data.transactionId,"MlPortfolioDetails",data[0].assignedUserId);
+        if(data && data[0].id && response.success === true){
+          FlowRouter.go("/admin/transactions/portfolio/editRequests/"+data[0].id+"/"+data[0].communityType);
+        }else if(data && data[0].id){
           toastr.error("User does not have access to edit record");
         } else{
           toastr.error("Please Select a record");
@@ -70,8 +72,8 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'view',
       handler: (data)=>{
-        if(data && data.id){
-          FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/"+data.id+"/"+data.communityType);
+        if(data && data[0].id){
+          FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/"+data[0].id+"/"+data[0].communityType);
         } else{
           toastr.error("Please select a record");
         }
@@ -92,8 +94,8 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
       showAction: true,
       actionName: 'rejectUser',
       handler: (data) => {
-        if (data && data.id) {
-          FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/" + data.id+"/"+data.communityType);
+        if (data && data[0].id) {
+          FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/" + data[0].id+"/"+data[0].communityType);
         } else {
           toastr.error("Please select a record");
         }
@@ -149,6 +151,10 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
                           transactionId
                           assignedUser
                           assignedUserId
+                          clusterId
+                          chapterId
+                          subChapterId
+                          communityId
                      }
                       }
               }

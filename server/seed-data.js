@@ -85,7 +85,8 @@ if(!platformrole){
                     {moduleId:(_.find(mlModules, {code:"INTERNALAPPROVEDREQUESTS"}))._id, actions:permissions, isActive:true},
                     {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions, isActive:true},
                     {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions, isActive:true},
-                    {moduleId:(_.find(mlModules, {code:"PROCESSSETUP"}))._id, actions:permissions, isActive:true}
+                    {moduleId:(_.find(mlModules, {code:"PROCESSSETUP"}))._id, actions:permissions, isActive:true},
+                    {moduleId:(_.find(mlModules, {code:"OFFICE"}))._id, actions:permissions, isActive:true}   /*adding office module*/
                   ]
     var role = {
       roleName:"clusteradmin",
@@ -117,7 +118,8 @@ if(!platformrole){
     {moduleId:(_.find(mlModules, {code:"INTERNALAPPROVEDREQUESTS"}))._id, actions:permissions, isActive:true},
     {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions, isActive:true},
     {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions, isActive:true},
-    {moduleId:(_.find(mlModules, {code:"PROCESSSETUP"}))._id, actions:permissions, isActive:true}
+    {moduleId:(_.find(mlModules, {code:"PROCESSSETUP"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"OFFICE"}))._id, actions:permissions, isActive:true}   /*adding office module*/
   ]
   let role = {
     roleName:"chapteradmin",
@@ -158,7 +160,8 @@ if(!platformrole){
     {moduleId:(_.find(mlModules, {code:"ROLES"}))._id, actions:readPermissions, isActive:true},
     {moduleId:(_.find(mlModules, {code:"HIERARCHY"}))._id, actions:permissions, isActive:true},
     {moduleId:(_.find(mlModules, {code:"CLUSTER"}))._id, actions:readPermissions, isActive:true},
-    {moduleId:(_.find(mlModules, {code:"PROCESSSETUP"}))._id, actions:permissions, isActive:true}
+    {moduleId:(_.find(mlModules, {code:"PROCESSSETUP"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"OFFICE"}))._id, actions:permissions, isActive:true}   /*adding office module*/
   ]
   let role = {
     roleName:"subchapteradmin",
@@ -193,7 +196,8 @@ if(!platformrole){
     {moduleId:(_.find(mlModules, {code:"INTERNALAPPROVEDREQUESTS"}))._id, actions:permissions, isActive:true},
     {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions, isActive:true},
     {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions, isActive:true},
-    {moduleId:(_.find(mlModules, {code:"PROCESSSETUP"}))._id, actions:permissions, isActive:true}
+    {moduleId:(_.find(mlModules, {code:"PROCESSSETUP"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"OFFICE"}))._id, actions:permissions, isActive:true}   /*adding office module*/
   ]
   let role = {
     roleName:"communityadmin",

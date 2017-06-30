@@ -4,7 +4,7 @@ import  Select from 'react-select';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
-import {assignUserForTransactionAction,selfAssignUserForTransactionAction,unAssignUserForTransactionAction} from '../actions/assignUserforTransactionAction'
+import {assignUserForTransactionAction,selfAssignUserForTransactionAction,unAssignUserForTransactionAction,validateAssignmentsDataContext} from '../actions/assignUserforTransactionAction'
 import hierarchyValidations from "../../../../commons/containers/hierarchy/mlHierarchyValidations"
 
 export default class MlPortfolioAssignComponent extends React.Component {
@@ -63,11 +63,12 @@ export default class MlPortfolioAssignComponent extends React.Component {
   optionsBySelectUser(value){
 
     this.setState({selectedUser:value})
+    this.validateAssignmentsDataContext(value)
   }
   cancel(){
     this.props.refreshList();
   }
-  async assignUser(){
+  /*async assignUser(){
     let params={
       "cluster": this.state.selectedCluster,
       "chapter": this.state.selectedChapter,
@@ -90,11 +91,11 @@ export default class MlPortfolioAssignComponent extends React.Component {
         this.props.closePopOver(false)
         FlowRouter.reload();
       }
-    /*}else{
+    /!*}else{
       toastr.error("Wrong assignment");
       this.props.closePopOver(false)
       FlowRouter.reload();
-    }*/
+    }*!/
 
   }
 
@@ -122,6 +123,110 @@ export default class MlPortfolioAssignComponent extends React.Component {
       toastr.error("Wrong Hierarchy");
       this.props.closePopOver(false)
       FlowRouter.reload();
+    }
+  }*/
+
+  async validateAssignmentsDataContext(user){
+    let data = this.props.data
+    let selectedData = []
+    data.map(function (transaction) {
+      let json = {
+        clusterId : transaction.clusterId,
+        chapterId : transaction.chapterId,
+        subChapterId : transaction.subChapterId,
+        communityId : transaction.communityId,
+        transactionId : transaction.transactionId
+      }
+      selectedData.push(json)
+    })
+    let userId = user
+    const response = await validateAssignmentsDataContext(selectedData,userId);
+    if(response && response.success){
+      toastr.error("Selected transactions not availble in user context");
+      this.props.closePopOver(false)
+      //FlowRouter.reload();
+    }
+  }
+
+  async assignUser(){
+    let params={
+      "cluster": this.state.selectedCluster,
+      "chapter": this.state.selectedChapter,
+      "subChapter": this.state.selectedSubChapter,
+      "community": this.state.selectedCommunity,
+      "department": this.state.selectedDepartment,
+      "subDepartment": this.state.selectedSubDepartment,
+      "role": this.state.selectedRole,
+      "user": this.state.selectedUser
+    }
+    //if(hierarchyValidations.validateAssignAction(this.props.data.clusterId,this.state.selectedCluster)){
+    let data = this.props.data
+    let transactionIds = []
+    data.map(function (transaction) {
+      transactionIds.push(transaction.transactionId)
+    })
+
+    const response = await assignUserForTransactionAction("Portfolio", params, transactionIds, "Portfolio", "assignTransaction");
+    if (response.success) {
+      this.setState({
+        selectedCluster: null,
+        selectedChapter: null,
+        selectedSubChapter: null,
+        selectedCommunity: null,
+        selectedDepartment: null,
+        selectedSubDepartment: null,
+        selectedRole: null,
+        selectedUser: null
+      })
+      toastr.success("Transaction assigned to user successfully");
+      this.props.closePopOver(false)
+      FlowRouter.reload();
+    } else {
+      toastr.error("Wrong Hierarchy");
+      this.props.closePopOver(false)
+      FlowRouter.reload();
+    }
+  }
+
+  async selfAssignTransaction(){
+    let data = this.props.data
+    let transactionIds = []
+    data.map(function (transaction) {
+      transactionIds.push(transaction.transactionId)
+    })
+
+    let transactionType=this.props.data.transactionType
+    const response = await selfAssignUserForTransactionAction("Portfolio",transactionIds,"Portfolio","selfAssignTransaction");
+    if(response.success){
+      toastr.success("Self Assignment successfull");
+      this.props.closePopOver(false)
+      FlowRouter.reload();
+      //FlowRouter.go("/admin/transactions/registrationRequested");
+    }else{
+      toastr.error("Wrong Hierarchy");
+      this.props.closePopOver(false)
+      FlowRouter.reload();
+      //FlowRouter.go("/admin/transactions/registrationRequested");
+    }
+  }
+
+  async unAssignTransaction(){
+    let data = this.props.data
+    let transactionIds = []
+    data.map(function (transaction) {
+      transactionIds.push(transaction.transactionId)
+    })
+    const response = await unAssignUserForTransactionAction("Portfolio",transactionIds,"Portfolio","unAssignTransaction");
+    if(response.success){
+      toastr.success("UnAssignment successfull");
+      this.props.closePopOver(false)
+      FlowRouter.reload();
+      //FlowRouter.go("/admin/transactions/registrationRequested");
+    }else{
+      toastr.error("Wrong Hierarchy");
+      this.props.closePopOver(false)
+      FlowRouter.reload();
+      //FlowRouter.go("/admin/transactions/registrationRequested");
     }
   }
 

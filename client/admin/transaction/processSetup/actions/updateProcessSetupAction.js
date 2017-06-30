@@ -2,7 +2,7 @@ import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 import _ from 'lodash'
 
-export async function updateProcessSetupActionHandler(data, details)
+export async function updateProcessSetupActionHandler(data, details, loggedUserDetails)
 {
   let tId = data._id;
   let process = {
@@ -11,10 +11,14 @@ export async function updateProcessSetupActionHandler(data, details)
     processTransactionId:data._id,
     processSteps:details
   }
+  const {clusterId, chapterId, subChapterId, communityId} = loggedUserDetails;                     /*attaching default user role context*/
   const result = await client.mutate({
     mutation: gql`
-    mutation ($processTransactionId:String, $processSetup:processSetup){
-        updateProcessSetup(processTransactionId:$processTransactionId, processSetup:$processSetup) {
+    mutation ($processTransactionId:String, $processSetup:processSetup, $clusterId: String, $chapterId: String, $subChapterId: String, $communityId: String) {
+        updateProcessSetup(processTransactionId:$processTransactionId, processSetup:$processSetup, clusterId: $clusterId,
+            chapterId: $chapterId,
+            subChapterId: $subChapterId,
+            communityId: $communityId) {
             success
             code
             result
@@ -23,7 +27,11 @@ export async function updateProcessSetupActionHandler(data, details)
     `,
     variables: {
       processTransactionId:tId,
-      processSetup:process
+      processSetup:process,
+      clusterId,
+      chapterId,
+      subChapterId,
+      communityId
     }
   })
   const id = result.data.updateProcessSetup;

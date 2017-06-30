@@ -361,6 +361,50 @@ export default MlAccounts=class MlAccounts {
       return {error: false,reason:"Password reset successfully", code:200};
     }
   }
+
+  static resetSwitchProfile(userId,context){
+    try {
+      var user = mlDBController.findOne('users', {_id: userId}) || {};
+      var userProfile = user.profile || {};
+      var result = null;
+      var hasSwitchedProfile = userProfile.hasSwitchedProfile;
+      var switchedProfileDefaultId = userProfile.switchedProfileDefaultId;
+
+      if (!hasSwitchedProfile || !switchedProfileDefaultId) return;
+
+      if (userProfile.isInternaluser) {
+        /*reset switch profile to false and update the default profile  */
+        result = mlDBController.update('users', {'_id': userId,'profile.isInternaluser': true, "profile.hasSwitchedProfile": true,
+           "profile.InternalUprofile.moolyaProfile.userProfiles": {$elemMatch: {'clusterId': switchedProfileDefaultId}}},
+          {"profile.InternalUprofile.moolyaProfile.userProfiles.$.isDefault": true,
+           "profile.hasSwitchedProfile": false,"profile.switchedProfileDefaultId":null}, {$set: true}, context);
+
+        /*mark remaining profiles as false if default id is set*/
+        if(result===1){
+          result= mlDBController.update('users', {'_id':userId,'profile.InternalUprofile.moolyaProfile.userProfiles':{$elemMatch: {'clusterId':{$ne:switchedProfileDefaultId}}}},
+            {"profile.InternalUprofile.moolyaProfile.userProfiles.$.isDefault": false}, {$set: true,multi:true}, context);
+        }
+
+      } else {
+
+        /*reset switch profile to false and update the default profile  */
+        result = mlDBController.update('users', {'_id': userId,'profile.isExternaluser': true, "profile.hasSwitchedProfile": true,
+            "profile.externalUserProfiles": {$elemMatch: {'profileId': switchedProfileDefaultId}}},
+          {"profile.externalUserProfiles.$.isDefault": true,
+            "profile.hasSwitchedProfile": false,"profile.switchedProfileDefaultId":null}, {$set: true}, context);
+
+        /*mark remaining profiles as false if default id is set*/
+        if(result===1){
+          result= mlDBController.update('users', {'_id':userId,'profile.externalUserProfiles':{$elemMatch: {'profileId':{$ne:switchedProfileDefaultId}}}},
+            {"profile.externalUserProfiles.$.isDefault": false}, {$set: true,multi:true}, context);
+        }
+
+      }
+    } catch (e) {
+      console.log(e);
+    }
+
+  }
 }
 
 Meteor.methods({
@@ -403,8 +447,15 @@ if(details.type =="password") {
   let context = {
     ip: details.connection.clientAddress,
     browser: details.connection.httpHeaders['user-agent'],
-    url: details.connection.httpHeaders.host
+    url: details.connection.httpHeaders.host,
+    userId:userId,
+    deviceModel:"-",
+    deviceType: "-",
+    deviceVendor:"-"
   };
+    //check if the switch profile has to be changed
+    MlAccounts.resetSwitchProfile(userId,context);
+
   let transactionDetails = `User logged in to application at ${new Date()} `;
   new MlTransactionsHandler().recordTransaction({
     'activity': 'login',

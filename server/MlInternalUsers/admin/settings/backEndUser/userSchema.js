@@ -466,8 +466,8 @@ let BackEndUser = `
     
    
     type Mutation{
-        createUser(user:userObject!, moduleName:String, actionName:String):response
-        updateUser(userId:String!, user:userObject!, moduleName:String, actionName:String):response
+        createUser(user:userObject!,clusterId:String, chapterId: String, subChapterId: String, communityId: String):response           
+        updateUser(userId:String!, user:userObject!, clusterId: String, chapterId: String, subChapterId: String, communityId: String):response                                    
         resetPassword (password: String!, moduleName:String, actionName:String):response
         addUserProfile(userId:String, user:userObject): String
         assignUsers(userId:String, user:userObject, moduleName:String, actionName:String): response
@@ -477,6 +477,7 @@ let BackEndUser = `
         updateAddressBookInfo(userId: String, moduleName: String, actionName: String,type:String, addressBook:addressBook): response
         uploadUserImage(userId:String,moduleName:String,actionName:String,userProfilePic:String):response
         setAdminDefaultProfile(clusterId:String!):response
+        switchProfile(clusterId:String!):response
         deActivateAdminUserProfile(clusterId:String!):response
     }
     
@@ -542,5 +543,8 @@ let supportedApi = [
     {api:'uploadUserImage', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
     {api:'deActivateAdminUserProfile', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
     {api:'setAdminDefaultProfile', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true},
+    {api:'switchProfile', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true}
 ];
 MlResolver.MlModuleResolver.push(supportedApi)
+  // , moduleName:String, actionName:String
+/* removing excess variables>> moduleName:String, actionName:String*/

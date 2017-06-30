@@ -50,7 +50,7 @@ const mlProfessionTableConfig=new MlViewer.View({
       showAction: true,
       handler:  (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/editProfession/"+data.id)
+          FlowRouter.go("/admin/settings/documentProcess/editProfession/"+data.id)
         }
         else{
           toastr.error("Please select a Profession to edit")
@@ -67,7 +67,7 @@ const mlProfessionTableConfig=new MlViewer.View({
           // FlowRouter.go("/admin/settings/professionList")
         }
         else {
-          FlowRouter.go("/admin/settings/addProfession")
+          FlowRouter.go("/admin/settings/documentProcess/addProfession")
         }
       }
     },

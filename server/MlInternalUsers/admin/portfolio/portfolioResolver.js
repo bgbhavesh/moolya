@@ -5,6 +5,7 @@ import MlResolver from "../../../commons/mlResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
 import MlUserContext from "../../../MlExternalUsers/mlUserContext";
 import _ from "lodash";
+import portfolioValidationRepo from "./portfolioValidation";
 
 MlResolver.MlQueryResolver['fetchPortfolioDetails'] = (obj, args, context, info) => {
 }
@@ -181,9 +182,17 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
 
 MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) => {
     let response;
+    var privateFields = [];
     if(args.portfoliodetailsId){
         let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId});
+        if(details && details.privateFields){
+          privateFields = portfolioValidationRepo.updatePrivateKeys(args.privateFields, args.removeKeys, details.privateFields)
+        }
+        else{
+          privateFields = args.privateFields;
+        }
         let detailsUpdate = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {status: 'WIP'}, {$set:true}, context)
+        detailsUpdate = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {privateFields:privateFields}, {$set:true}, context)
         if(details && detailsUpdate){
             switch (details.communityType){
                 case 'Ideators':{
@@ -300,4 +309,14 @@ MlResolver.MlMutationResolver['updatePortfolioProfilePic'] = (obj, args, context
 
   }
 }
+
+MlResolver.MlMutationResolver['removeIdetaorProfilePic'] = (obj, args, context, info) => {
+  let response;
+  if(args.portfoliodetailsId){
+    response = MlIdeatorPortfolio.update({portfolioDetailsId:args.portfoliodetailsId}, {$unset: { "portfolioIdeatorDetails.profilePic": ""}}, context)
+  }
+
+  return response;
+}
+
 

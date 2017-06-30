@@ -5,6 +5,7 @@ import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
 import MlUserContext from "../../../../MlExternalUsers/mlUserContext";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
+import portfolioValidationRepo from '../portfolioValidation'
 
 var _ = require('lodash')
 
@@ -246,22 +247,23 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context
       let userEmp = MlMasterSettings.findOne({_id:details.employmentStatus}) || {}
       details.employmentStatus = userEmp.employmentTypeInfo ? userEmp.employmentTypeInfo.employmentName : ''
 
+      var object = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, details, context)
+
       //for view action
       MlResolver.MlMutationResolver['createView'](obj,{resourceId:args.portfoliodetailsId,resourceType:'portfolio'}, context, info);
-      return details;
+      return object;
     }
-    // if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('portfolioIdeatorDetails')) {
-    //
-    //     return ideatorPortfolio['portfolioIdeatorDetails'];
-    // }
   }
 
   return {};
 }
 MlResolver.MlQueryResolver['fetchIdeatorPortfolioIdeas'] = (obj, args, context, info) => {
   if(args.ideaId){
-    let ideatorPortfolio = MlIdeas.findOne({"_id": args.ideaId})
-      return ideatorPortfolio;
+    let idea = MlIdeas.findOne({"_id": args.ideaId})
+    if(!idea)
+      return {};
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(idea.portfolioId, idea, context)
+    return filteredObject;
   }
 
   return {};
@@ -426,7 +428,6 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
             }
 
             idea.userId = context.userId;
-            // let id = MlIdeas.insert({...idea})
             let id = mlDBController.insert('MlIdeas', idea, context)
             if(!id){
                 let code = 400;
@@ -585,4 +586,20 @@ MlResolver.MlQueryResolver['fetchIdeas'] = (obj, args, context, info) => {
   MlResolver.MlMutationResolver['createView'](obj,{resourceId:args.portfolioId,resourceType:'portfolio'}, context, info);
 
   return ideas;
+}
+
+MlResolver.MlQueryResolver['fetchIdeatorDetails'] = (obj, args, context, info) => {
+  if(_.isEmpty(args))
+      return;
+
+  var key = args.key;
+  var portfoliodetailsId = args.portfoliodetailsId
+  var ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+  if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty(key)) {
+    var object = ideatorPortfolio[key];
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    ideatorPortfolio[key] = filteredObject
+    return ideatorPortfolio;
+  }
+
 }

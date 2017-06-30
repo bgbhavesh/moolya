@@ -13,7 +13,8 @@ export default class MlIdeatorAudience extends React.Component{
     super(props);
     this.state={
       loading: true,
-      data:{}
+      data:{},
+      privateKey:{}
     }
     this.onClick.bind(this);
     this.handleBlur.bind(this);
@@ -34,20 +35,24 @@ export default class MlIdeatorAudience extends React.Component{
     dataVisibilityHandler();
   }
 
-  onClick(field,e){
+  onClick(fieldName, field, e){
     let details = this.state.data||{};
     let key = e.target.id;
     details=_.omit(details,[key]);
+    var isPrivate = false;
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
       details=_.extend(details,{[key]:true});
+      isPrivate = true;
     }else{
       details=_.extend(details,{[key]:false});
     }
+
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
+    this.setState({privateKey:privateKey})
     this.setState({data:details}, function () {
       this.sendDataToParent()
     })
-
   }
   handleBlur(e){
     let details =this.state.data;
@@ -67,7 +72,9 @@ export default class MlIdeatorAudience extends React.Component{
         delete data[propName];
       }
     }
-    this.props.getAudience(data)
+    data=_.omit(data,["privateFields"]);
+
+    this.props.getAudience(data, this.state.privateKey)
   }
   async fetchPortfolioInfo() {
     let that = this;
@@ -78,6 +85,11 @@ export default class MlIdeatorAudience extends React.Component{
       if (response) {
         this.setState({loading: false, data: response});
       }
+
+      _.each(response.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+
     }else{
       this.fetchOnlyImages();
       this.setState({loading: true, data: that.context.ideatorPortfolio.audience});
@@ -122,7 +134,6 @@ export default class MlIdeatorAudience extends React.Component{
       )
     });
     let description =this.state.data.description?this.state.data.description:''
-    let isAudiencePrivate = this.state.data.isAudiencePrivate?this.state.data.isAudiencePrivate:false
     return (
       <div className="admin_main_wrap">
         {showLoader === true ? ( <MlLoader/>) : (
@@ -138,8 +149,8 @@ export default class MlIdeatorAudience extends React.Component{
 
                     <div className="form-group nomargin-bottom">
                       <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description } disabled = {true} name="description" onBlur={this.handleBlur.bind(this)}></textarea>
-                      {/*<FontAwesome name='lock'  className="input_icon req_textarea_icon un_lock" id="isAudiencePrivate" />*/}
-                      <input type="checkbox" className="lock_input" id="makePrivate" checked={isAudiencePrivate}/>
+                      <FontAwesome name='lock'  className="input_icon req_textarea_icon un_lock" id="isAudiencePrivate" onClick={this.onClick.bind(this, "audience", "isAudiencePrivate")}/>
+                      {/*<input type="checkbox" className="lock_input" id="makePrivate" checked={isAudiencePrivate}/>*/}
                     </div>
 
                   </div>

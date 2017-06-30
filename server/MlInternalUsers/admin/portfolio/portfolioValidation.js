@@ -11,12 +11,16 @@ class portfolioValidation{
 
     omitPrivateDetails(portfolioDetailsId, object, context){
         var portfolioDetails = MlPortfolioDetails.findOne(portfolioDetailsId);
+        var user = Meteor.users.findOne({_id:context.userId});
         var praviteFields = portfolioDetails.privateFields
         var omittedFields = []
         _.each(praviteFields, function (praviteField)
         {
             if(object[praviteField.keyName] != undefined){
-                delete object[praviteField.keyName]
+
+                if((user && user.profile && !user.profile.isInternaluser) && (context.userId != portfolioDetails.userId)){
+                  delete object[praviteField.keyName]
+                }
                 var praviteObject = _.find(praviteFields, {keyName:praviteField.keyName})
                 omittedFields.push(praviteObject)
             }

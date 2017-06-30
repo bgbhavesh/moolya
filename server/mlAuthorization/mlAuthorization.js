@@ -210,7 +210,9 @@ class MlAuthorization
           case 'REGISTRATION':
           case 'PORTFOLIO':
           case 'TEMPLATEASSIGNMENT':
-          case "INTERNALREQUESTS":{
+          case "INTERNALREQUESTS":
+          case "OFFICE":
+          case "PROCESSSETUP":{              /*adding office and process setup for others five admin */
             return this.validateChapterSubChapter(roleDetails, variables);
           }
           break;

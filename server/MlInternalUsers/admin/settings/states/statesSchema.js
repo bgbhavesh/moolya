@@ -42,7 +42,7 @@ MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],States]);
 let supportedApi = [
   {api:'fetchState', actionName:'READ', moduleName:"STATES"},
   {api:'FetchActiveStates', actionName:'READ', moduleName:"STATES", isWhiteList:true},
-  {api:'fetchStatesPerCountry', actionName:'READ', moduleName:"STATES"},
+  {api:'fetchStatesPerCountry', actionName:'READ', moduleName:"STATES", isWhiteList:true},
   {api:'FetchActiveStatesForCluster', actionName:'READ', moduleName:"STATES"},
   {api:'updateState', actionName:'UPDATE', moduleName:"STATES"},
   {api: 'FetchStates', actionName:'READ' , moduleName:'STATES'}

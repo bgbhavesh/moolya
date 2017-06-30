@@ -82,7 +82,8 @@ let ideatorPortfolioSchema = `
         portfolioId:String
         description:String,
         isIdeasPrivate:Boolean,
-        isActive:Boolean
+        isActive:Boolean,
+        privateFields:[PrivateKeys]
     }
     
     type imagesTypeSchema{
@@ -97,27 +98,32 @@ let ideatorPortfolioSchema = `
         solutionStatement : String,
         isSolutionPrivate : Boolean,
         solutionImage     : [imagesTypeSchema]
+        privateFields:[PrivateKeys]
     }
    
     type audienceInfo{
-        description:String
+        audienceDescription:String
         isAudiencePrivate:Boolean,
         audienceImages : [imagesTypeSchema]
+        privateFields:[PrivateKeys]
     }
     
     type strategyplansInfo{
-        description:String
+        spDescription:String
         isStrategyPlansPrivate:Boolean
+        privateFields:[PrivateKeys]
     }
     
     type intellectualplanningInfo{
-        description:String
+        IPdescription:String
         isIntellectualPrivate :Boolean
+        privateFields:[PrivateKeys]
     }
     
     type lookingforInfo{
-        description:String
+        lookingForDescription:String
         isLookingForPrivate:Boolean
+        privateFields:[PrivateKeys]
     }
     
     type libraryInfo{
@@ -140,7 +146,6 @@ let ideatorPortfolioSchema = `
          intellectualPlanning : intellectualplanningInfo
          lookingFor : lookingforInfo
          library:libraryInfo
-         
     }
     
 
@@ -204,13 +209,13 @@ let ideatorPortfolioSchema = `
     }
     
     input audience{
-        description:String,
+        audienceDescription:String,
         isAudiencePrivate:Boolean,
         audienceImages : [imageFilesInputSchema]
     }
     
     input strategyAndPlanning{
-        description:String,
+        spDescription:String,
         isStrategyPlansPrivate:Boolean
     }
     input ideas{
@@ -222,12 +227,12 @@ let ideatorPortfolioSchema = `
     }
     
     input intellectualPlanning{
-        description:String, 
+        IPdescription:String, 
         isIntellectualPrivate :Boolean
     }
     
     input lookingFor{
-        description:String,
+        lookingForDescription:String,
         isLookingForPrivate:Boolean
     }
     
@@ -331,6 +336,7 @@ let ideatorPortfolioSchema = `
     
     
     type Query{
+        fetchIdeatorDetails(portfoliodetailsId:String!, key:String): ideatorPortfolioDetails
         fetchIdeatorPortfolioDetails(portfoliodetailsId:String!):portfolioIdeatorDetailsInfo
         fetchIdeatorPortfolioIdeas(ideaId:String!):ideasObject
         fetchIdeatorPortfolioProblemsAndSolutions(portfoliodetailsId:String!): problemSolutionInfo
@@ -366,6 +372,7 @@ let ideatorPortfolioSchema = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], ideatorPortfolioSchema]);
 
 let supportedApi = [
+  {api:'fetchIdeatorDetails', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchIdeatorPortfolioDetails', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchIdeatorPortfolioIdeas', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'fetchIdeatorPortfolioProblemsAndSolutions', actionName:'READ', moduleName:"PORTFOLIO"},

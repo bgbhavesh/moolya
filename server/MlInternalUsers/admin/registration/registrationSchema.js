@@ -28,11 +28,15 @@ let registrationSchema = `
         addressLandmark      :  String
         addressArea      :  String
         addressCity      :  String
+        addressCityId : String
         addressState      :  String
+        addressStateId  :String
         addressCountry : String
+        addressCountryId : String
         addressPinCode : String
         latitude        :  Int
         longitude       :  Int
+        isDefaultAddress:Boolean
      }
      
      type SocialLinkInfoSchema{
@@ -93,11 +97,15 @@ let registrationSchema = `
       addressLandmark      :  String
       addressArea      :  String
       addressCity      :  String
+      addressCityId : String
       addressState      :  String
+      addressStateId  :String
       addressCountry : String
+      addressCountryId : String
       addressPinCode : String
       latitude        :  Int
       longitude       :  Int
+      isDefaultAddress:Boolean
     }
     
     input SocialLinkInfo{

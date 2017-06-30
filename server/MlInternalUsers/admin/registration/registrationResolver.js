@@ -9,6 +9,8 @@ import geocoder from "geocoder";
 import _lodash from "lodash";
 import _ from "underscore";
 import moment from "moment";
+var fs = Npm.require('fs');
+var Future = Npm.require('fibers/future');
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
   var validationCheck=null;
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
@@ -231,7 +233,8 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         //get the registrtion Details
         registerDetails= mlDBController.findOne('MlRegistration', id, context) || {};
        let registrationInfo=registerDetails.registrationInfo;
-       if((registrationInfo.clusterId!=details.clusterId)||(registrationInfo.chapterId!=details.chapterId)||(registrationInfo.registrationType!=details.registrationType)||(registrationInfo.userType!=details.userType)||(registrationInfo.identityType!=details.identityType)||(registrationInfo.profession!=details.profession)||(registrationInfo.industry!=details.industry)){
+       //country and operational area changes then making kyc null.
+       if((registrationInfo.countryId!=details.countryId)||(registrationInfo.clusterId!=details.clusterId)||(registrationInfo.chapterId!=details.chapterId)||(registrationInfo.subChapterId!=details.subChapterId)||(registrationInfo.registrationType!=details.registrationType)||(registrationInfo.userType!=details.userType)||(registrationInfo.identityType!=details.identityType)||(registrationInfo.profession!=details.profession)||(registrationInfo.industry!=details.industry)){
          let updatedResp= MlRegistration.update({_id:id},{$unset:{kycDocuments:""}})
        }
 
@@ -441,12 +444,55 @@ MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'] = (obj, a
       mlDBController.update('MlRegistration', args.registrationId, {'registrationInfo.profileImage': args.docUrl}, {$set:true}, context)
   }
 }
+
+
+
 MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, info) => {
   // TODO : Authorization
   if (args.registrationId) {
 
     let temp=0
         let registrationRecord=MlRegistration.findOne(args.registrationId)
+
+    let addressDetails = registrationRecord&&registrationRecord.addressInfo?registrationRecord.addressInfo:[]
+
+    /**
+     * Check whether registration contains address array
+     */
+    if(addressDetails&&addressDetails.length<1){
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("Default Address is manditory", code);
+      return response;
+    }else if(addressDetails&&addressDetails.length>0){
+      /**
+       * If registration contains address array
+       * Check isDefault Address Exist or Not
+       */
+      var found = addressDetails.some(function (el) {
+        return el.isDefaultAddress == true;
+      });
+      if (!found) {
+        /**
+         * If registration contains address array
+         * If default address not found throw an error
+         */
+        let code = 401;
+        let response = new MlRespPayload().errorPayload("Default Address is manditory", code);
+        return response;
+      }else if(found){
+        /**
+         * If registration contains address array
+         * If default address exist
+         * Check whether default address is active for single or multiple address
+         */
+        let addressData =  _.filter(addressDetails, {'isDefaultAddress': true});
+        if(addressData&&addressData.length>1){
+          let code = 401;
+          let response = new MlRespPayload().errorPayload("Only one default address should exist", code);
+          return response;
+        }
+      }
+    }
     if(registrationRecord&&registrationRecord.emails.length>0){
      let email=registrationRecord.emails;
       emailVerified=_.find(email,function(mail){
@@ -789,12 +835,13 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
         let area = args.registration.addressInfo[0].addressArea
         let locality = args.registration.addressInfo[0].addressLocality
         let pin =args.registration.addressInfo[0].addressPinCode
+        var fut = new Future();
         geocoder.geocode(locality+","+area+","+city+","+pin, Meteor.bindEnvironment(function ( err, data ) {
           if(err){
             throw new Error("Invalid Locality selection "+e);
           }
-          args.registration.addressInfo[0].latitude = data.results[0].geometry.location.lat;
-          args.registration.addressInfo[0].longitude = data.results[0].geometry.location.lng;
+          args.registration.addressInfo[0].latitude = data&&data.results[0]&&data.results[0].geometry&&data.results[0].geometry.location&&data.results[0].geometry.location.lat?data.results[0].geometry.location.lat:null;
+          args.registration.addressInfo[0].longitude = data&&data.results[0]&&data.results[0].geometry&&data.results[0].geometry.location&&data.results[0].geometry.location.lat?data.results[0].geometry.location.lng:null;
 
           try{
             // let id = MlClusters.insert(cluster);
@@ -803,24 +850,25 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
               let code = 200;
               let result = {addressId: id}
               let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-              return response
+              fut.return(response);
             }
           }catch(e){
             throw new Error("Error while updating address "+e);
           }
 
         }),{key:Meteor.settings.private.googleApiKey});
+        var addressData = fut.wait();
       }else{
-        let city = args.registration.addressInfo[0].addressCity
-        let area = args.registration.addressInfo[0].addressArea
-        let locality = args.registration.addressInfo[0].addressLocality
-        let pin =args.registration.addressInfo[0].addressPinCode
+        let city = args.registration.addressInfo[0].addressCity||"";
+        let area = args.registration.addressInfo[0].addressArea||"";
+        let locality = args.registration.addressInfo[0].addressLocality||"";
+        let pin =args.registration.addressInfo[0].addressPinCode||"";
         geocoder.geocode(locality+","+area+","+city+","+pin, Meteor.bindEnvironment(function ( err, data ) {
           if(err){
             throw new Error("Invalid Locality selection "+e);
           }
-          args.registration.addressInfo[0].latitude = data.results[0].geometry.location.lat;
-          args.registration.addressInfo[0].longitude = data.results[0].geometry.location.lng;
+          args.registration.addressInfo[0].latitude = data&&data.results[0]&&data.results[0].geometry&&data.results[0].geometry.location&&data.results[0].geometry.location.lat?data.results[0].geometry.location.lat:null;
+          args.registration.addressInfo[0].longitude = data&&data.results[0]&&data.results[0].geometry&&data.results[0].geometry.location&&data.results[0].geometry.location.lat?data.results[0].geometry.location.lng:null;
 
           try{
             // let id = MlClusters.insert(cluster);
@@ -829,12 +877,14 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
               let code = 200;
               let result = {addressId: id}
               let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-              return response
+              fut.return(response);
             }
           }catch(e){
             throw new Error("Error while updating address "+e);
           }
         }),{key:Meteor.settings.private.googleApiKey});
+
+        var addressData = fut.wait();
 
       }
     }else if(args.type == "SOCIALLINKS") {

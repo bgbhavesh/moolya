@@ -59,13 +59,26 @@ let officeTransaction = `
       chapterName    : String
       subChapterName : String
       communityName  : String
-      payment        : String
+      paymentDetails  : PaymentDetail
       status         : String
       action         : String
       userName       : String
       transactionType : String
       profileId      : String
       orderSubscriptionDetails : OrderSubscriptionDetail
+    }
+    
+    type PaymentDetail {
+      datetime : Date
+      transactionId :String
+      totalAmountPaid: Int
+      paymentMode: String
+      promotionCode : String
+      codeAmount : String
+      promoCodeStatus : String
+      voucherCode : String
+      paymentStatus : String
+      isPaid :Boolean
     }
     
      type OrderSubscriptionDetail { 

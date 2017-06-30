@@ -91,3 +91,23 @@ export async function validateTransaction(transactionId,collection,assignedUserI
   const id = result.data.validateTransaction;
   return id
 }
+
+export async function validateAssignmentsDataContext(data,userId) {
+  const result = await client.mutate({
+    mutation: gql`
+     query($data:[transactionData],$userId:String){
+      validateAssignmentsDataContext(data:$data,userId:$userId){
+        success
+        code
+        result
+      }
+     }
+    `,
+    variables: {
+      data,
+      userId
+    }
+  })
+  const id = result.data.validateAssignmentsDataContext;
+  return id
+}

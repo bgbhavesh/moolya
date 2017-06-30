@@ -24,7 +24,8 @@ export default class MlStartupManagement extends React.Component{
       // indexArray:[],
       selectedIndex:-1,
       // arrIndex:"",
-      managementIndex:""
+      managementIndex:"",
+      responseImage:""
     }
     this.onClick.bind(this);
     this.handleBlur.bind(this);
@@ -175,13 +176,13 @@ export default class MlStartupManagement extends React.Component{
       var temp = $.parseJSON(resp).result;
       details=_.omit(details,[name]);
       details=_.extend(details,{[name]:{fileName: fileName,fileUrl: temp}});
-      that.setState({data: details}, function () {
+      that.setState({data: details,responseImage: temp}, function () {
         that.sendDataToParent()
       })
-      if(result.success){
-        that.setState({loading:true})
-        that.fetchOnlyImages();
-      }
+      // if(result.success){
+      //   that.setState({loading:true})
+      //   that.fetchOnlyImages();
+      // }
     }
   }
   async fetchOnlyImages(){
@@ -194,7 +195,7 @@ export default class MlStartupManagement extends React.Component{
       let specificData = cloneBackUp[thisState];
       if(specificData){
         let curUpload=response[thisState]
-        specificData['logo']= curUpload['logo']
+        specificData['logo']= curUpload['logo']?curUpload['logo']: " "
         this.setState({loading: false, startupManagement:cloneBackUp, data: specificData}, function () {
           $('#management-form').slideDown();
         });
@@ -320,7 +321,7 @@ export default class MlStartupManagement extends React.Component{
                             <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
                           </div>
                           <div className="previewImg ProfileImg">
-                            <img src={this.state.data && this.state.data.logo && this.state.data.logo.fileUrl?this.state.data.logo.fileUrl:""}/>
+                            <img src={this.state.responseImage?this.state.responseImage:" "}/>
                           </div>
                         </div>
 

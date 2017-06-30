@@ -152,8 +152,13 @@ class MlAuthorization
 
             if(user_roles && user_roles.length > 0){
 
-                var highestRole = _.find(user_roles , {hierarchyCode:userProfileDetails.hierarchyCode})
-                ret = this.validateRole(highestRole.roleId, module, action)
+                // var highestRole = _.find(user_roles , {hierarchyCode:userProfileDetails.hierarchyCode})
+                for(var i = 0; i < user_roles.length; i++){
+                  ret = this.validateRole(user_roles[i].roleId, module, action)
+                  if(ret){
+                    break;
+                  }
+                }
                 if(ret){
                   return this.validateDataContext(userProfileDetails, moduleName, actionName, variables, isContextSpecSearch, hierarchy)
                 }
@@ -296,25 +301,29 @@ class MlAuthorization
       }
 
       findCommunity(communityArray, communityId) {
-        var community = MlCommunity.findOne({_id:communityId});
-        if(!community){
-          community = MlCommunity.findOne({communityDefCode:communityId});
-          if(!community)
-            return false
-        }
 
-        for(var i = 0; i < communityArray.length; i++){
-          if(!communityArray[i].communityCode){
-            var index = _.findIndex(communityArray[i], {communityId: 'all'})
-            if(index >= 0)
+        for(var i = 0; i < communityArray.length; i++)
+        {
+          var index = _.isMatch(communityArray[i], {communityCode: 'all'})
+          if(index)
+            return true
+
+          index = _.isMatch(communityArray[i], {communityId: 'all'})
+          if(index)
+            return true
+
+          var community = MlCommunity.findOne({_id:communityId});
+          if(!community){
+            community = MlCommunity.findOne({communityDefCode:communityId});
+            if(!community)
+              return false
+          }
+          if(community){
+            index = _.isMatch(communityArray[i], {communityId: community._id})
+            if(index)
               return true
-            else{
-              index = _.findIndex(communityArray[i], {communityId: community._id})
-              if(index >= 0)
-                return true
-            }
-          }else{
-            var index = _.isMatch(communityArray[i], {communityCode: community.communityDefCode})
+
+            index = _.isMatch(communityArray[i], {communityCode: community.communityDefCode})
             if (index) {
               return true;
             }
@@ -333,12 +342,12 @@ class MlAuthorization
 
       getInternalRequestContextDetails(variables, actionName){
         if(actionName == 'CREATE'){
-            return {clusterId:variables['clusterId'], chapterId:variables['chapterId'], subChapterId:variables['subChapterId'], communityId:variables['communityId']};
+            return {clusterId:variables['clusterId'], chapterId:variables['chapterId'], subChapterId:variables['subChapterId'], communityId:variables['community']};
         }
         let request = MlRequests.findOne({requestId:variables.requestsId})
         if(!request)
           return {}
-        return {clusterId:request.cluster, chapterId:request.chapter, subChapterId:request.subChapter, communityId:request.communityId};
+        return {clusterId:request.cluster, chapterId:request.chapter, subChapterId:request.subChapter, communityId:request.community};
       }
 }
 

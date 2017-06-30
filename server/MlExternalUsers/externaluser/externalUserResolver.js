@@ -126,7 +126,7 @@ MlResolver.MlMutationResolver['deActivateUserProfile'] = (obj, args, context, in
   const user = Meteor.users.findOne({_id:userId}) || {}
   if(user&&args&&args.profileId){
     result = mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'profileId': args.profileId}}},
-      {"profile.externalUserProfiles.$.isActive": false}, {$set: true}, context);
+      {"profile.externalUserProfiles.$.isDefault": false}, {$set: true}, context);
     response = new MlRespPayload().successPayload({}, 200);
   }else {
     let code = 409;

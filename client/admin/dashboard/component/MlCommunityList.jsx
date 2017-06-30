@@ -85,7 +85,7 @@ export default class MlCommunityList extends Component {
     const list=  data.map((prop, idx) =>
       <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
         <div className="list_block provider_block">
-          <div className={`cluster_status ${prop.profile.isActive?"active":"inactive"}_cl `}><FontAwesome name={prop.profile.isActive?"check":"times"}/></div>
+          <div className={`cluster_status ${prop.profile.isActive?"active":"inactive"}_cl `}>{/*<FontAwesome name={prop.profile.isActive?"check":"times"}/>*/}</div>
           {/*<div className={`cluster_status ${prop.statusField|| ""}_cl `}></div>*/}
           {prop.communityCode?<a></a>:<a href={dashboardRoutes.backendUserDetailRoute(clusterId,chapterId,subChapterId,prop._id)}> <div className={"hex_outer"}><img src={prop.countryFlag}/></div></a>}
           <h3>{prop.name}<br />

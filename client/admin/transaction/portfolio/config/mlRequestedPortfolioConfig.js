@@ -151,6 +151,10 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
                           transactionId
                           assignedUser
                           assignedUserId
+                          clusterId
+                          chapterId
+                          subChapterId
+                          communityId
                      }
                       }
               }

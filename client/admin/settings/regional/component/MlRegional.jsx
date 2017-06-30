@@ -16,8 +16,9 @@ class MlRegional extends React.Component{
     super(props);
     this.state={
       numberOfDigitsAfterDecimal: '',
+      metricnumberOfDigitsAfterDecimal:'',
       measurementSystem:'',
-      currencyFormat:'',
+      // currencyFormat:'',
       currencySymbol:'',
       valueSeparator:'',
       data:[],
@@ -52,12 +53,15 @@ class MlRegional extends React.Component{
        if (this.state.data.numberOfDigitsAfterDecimal) {
           this.setState({numberOfDigitsAfterDecimal: this.state.data.numberOfDigitsAfterDecimal});
        }
+       if(this.state.data.metricnumberOfDigitsAfterDecimal){
+         this.setState({metricnumberOfDigitsAfterDecimal: this.state.data.metricnumberOfDigitsAfterDecimal});
+       }
        if (this.state.data.measurementSystem) {
           this.setState({measurementSystem: this.state.data.measurementSystem});
         }
-       if (this.state.data.currencyFormat) {
-          this.setState({measurementSystem: this.state.data.measurementSystem});
-       }
+       // if (this.state.data.currencyFormat) {
+       //    this.setState({measurementSystem: this.state.data.measurementSystem});
+       // }
        if (this.state.data.currencySymbol) {
         this.setState({currencySymbol: this.state.data.currencySymbol});
         }
@@ -99,8 +103,9 @@ class MlRegional extends React.Component{
       regionalCurrencyValue: this.refs.currencyValue.value,
       aboutRegion: this.refs.about.value,
       numberOfDigitsAfterDecimal:this.state.numberOfDigitsAfterDecimal,
+      metricnumberOfDigitsAfterDecimal:this.state.metricnumberOfDigitsAfterDecimal,
       measurementSystem: this.state.measurementSystem,
-      currencyFormat: this.state.currencyFormat,
+      // currencyFormat: this.state.currencyFormat,
       currencySymbol: this.state.currencySymbol,
       valueSeparator: this.state.valueSeparator,
     }
@@ -109,33 +114,57 @@ class MlRegional extends React.Component{
 
   }
    optionsBySelectNumberOfDigitsAfterDecimal(data){
-    this.setState({numberOfDigitsAfterDecimal:data.value})
+    if(data) {
+      this.setState({numberOfDigitsAfterDecimal: data.value})
+    }
+    else{
+      this.setState({numberOfDigitsAfterDecimal: ''})
+    }
    }
-    optionsBySelectMeasurementSystem(data){
-      this.setState({measurementSystem:data.value})
+  optionsBySelectMetricNumberOfDigitsAfterDecimal(data){
+     if(data){
+       this.setState({metricnumberOfDigitsAfterDecimal:data.value})
+     }
+    else{
+       this.setState({metricnumberOfDigitsAfterDecimal:''})
+     }
+  }
+    optionsBySelectMeasurementSystem(data) {
+      if (data) {
+        this.setState({measurementSystem: data.value})
+      }
+      else {
+        this.setState({measurementSystem:''})
+      }
     }
      optionsBySelectValueSeparator(data){
-        this.setState({valueSeparator:data.value})
+    if(data){
+      this.setState({valueSeparator:data.value})
+    }
+        else {
+      this.setState({valueSeparator:''})
+    }
      }
     optionsBySelectCurrencySymbol(val){
        this.setState({currencySymbol:val})
      }
+//@ to Validate the length of the Phone Number
    handleBlur(){
      //var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-       if(this.refs.phoneNumberFormat.value.match('^[0-9]+$')){
+       if((this.refs.phoneNumberFormat.value.match('^[0-9]+$')) &&(this.refs.phoneNumberFormat.value.length >=3) && (this.refs.phoneNumberFormat.value.length <=15) ){
          return true;
        }else{
            toastr.error("Please Enter Valid Phone Number")
        }
    }
-     onStatusChange(e){
-      const data=this.state.data;
-        if(e.currentTarget.checked){
-           this.setState({"currencyFormat":true});
-           }else{
-           this.setState({"currencyFormat":false});
-        }
-     }
+     // onStatusChange(e){
+     //  const data=this.state.data;
+     //    if(e.currentTarget.checked){
+     //       this.setState({"currencyFormat":true});
+     //       }else{
+     //       this.setState({"currencyFormat":false});
+     //    }
+     // }
 
   render(){
     let MlActionConfig = [
@@ -179,7 +208,7 @@ class MlRegional extends React.Component{
        {value: '-', label: '-'},
 
       ]
-    let numberOfDigitsAfterDecimalActive='',measurementSystemActive='',valueSeparatorActive=''
+    let numberOfDigitsAfterDecimalActive='',measurementSystemActive='',valueSeparatorActive='', metricnumberOfDigitsAfterDecimalActive=''
       if(this.state.numberOfDigitsAfterDecimal){
          numberOfDigitsAfterDecimalActive='active'
       }
@@ -188,6 +217,9 @@ class MlRegional extends React.Component{
       }
          if(this.state.valueSeparator){
          valueSeparatorActive='active'
+         }
+         if(this.state.metricnumberOfDigitsAfterDecimal){
+           metricnumberOfDigitsAfterDecimalActive='active'
          }
     const showLoader=this.state.loading;
     return (
@@ -206,7 +238,7 @@ class MlRegional extends React.Component{
                       <input type="text" ref="capitalName" defaultValue={this.state.data && this.state.data.capitalName} placeholder="Capital" className="form-control float-label"/>
                     </div>
                     <div className="form-group">
-                      <input type="text" ref="phoneNumberFormat" defaultValue={this.state.data && this.state.data.regionalPhoneNumber} placeholder="Phone Number Format" className="form-control float-label" id="" onBlur={this.handleBlur.bind(this)}/>
+                      <input type="text" ref="phoneNumberFormat" defaultValue={this.state.data && this.state.data.regionalPhoneNumber} placeholder="Phone Number Length" className="form-control float-label" id="" onBlur={this.handleBlur.bind(this)}/>
                     </div>
                     <div className="form-group">
                       <input type="text" ref="currencyName" defaultValue={this.state.data && this.state.data.regionalCurrencyName} placeholder="Currency Name" className="form-control float-label" id=""/>
@@ -215,15 +247,15 @@ class MlRegional extends React.Component{
                       <input type="text" ref="currencyMarking" defaultValue={this.state.data && this.state.data.regionalCurrencyMarking} placeholder="Currency Format" className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                         <span className={`placeHolder ${numberOfDigitsAfterDecimalActive}`}>Number Of Digits After Decimal </span>
+                         <span className={`placeHolder ${numberOfDigitsAfterDecimalActive}`}>Currency-Number Of Digits After Decimal </span>
                       <Select  name="form-field-name"  options={decimalsLimit} placeholder={"Number Of Digits After Decimal"}  value={this.state.numberOfDigitsAfterDecimal} onChange={this.optionsBySelectNumberOfDigitsAfterDecimal.bind(this)} className="float-label" />
                     </div>
                     <div className="form-group">
                           <Moolyaselect multiSelect={false}  placeholder={"Currency Symbol"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.currencySymbol} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'query'}  onSelect={this.optionsBySelectCurrencySymbol.bind(this)} />
                     </div>
                       <div className="form-group">
-                       <span className={`placeHolder ${valueSeparatorActive}`}>Value Separator</span>
-                        <Select  name="form-field-name"  options={valueSeperators} placeholder={"Value Separator"}   value={this.state.valueSeparator} onChange={this.optionsBySelectValueSeparator.bind(this)}   className="float-label"/>
+                       <span className={`placeHolder ${valueSeparatorActive}`}>Currency Value Separator</span>
+                        <Select  name="form-field-name"  options={valueSeperators} placeholder={" Currency Value Separator"}   value={this.state.valueSeparator} onChange={this.optionsBySelectValueSeparator.bind(this)}   className="float-label"/>
                       </div>
                   </form>
                 </div>
@@ -257,13 +289,18 @@ class MlRegional extends React.Component{
                       <span className={`placeHolder ${measurementSystemActive}`}>Measurement System </span>
                       <Select  name="form-field-name"  options={measurementType} placeholder={"Measurement System"}  value={this.state.measurementSystem} onChange={this.optionsBySelectMeasurementSystem.bind(this)}  className="float-label" />
                         </div>
-                         <div className="form-group switch_wrap inline_switch">
-                         <label>Currency Format</label>
-                           <label className="switch">
-                             <input type="checkbox" ref="status"  checked={this.state.currencyFormat} onChange={this.onStatusChange.bind(this)}/>
-                             <div className="slider"></div>
-                              </label>
-                         </div>
+                      <div className="form-group">
+                        <span className={`placeHolder ${ metricnumberOfDigitsAfterDecimalActive}`}>MetricSystem-Number Of Digits After Decimal </span>
+                        <Select  name="form-field-name"  options={decimalsLimit} placeholder={"MetricSystem-Number Of Digits After Decimal"}  value={this.state.metricnumberOfDigitsAfterDecimal} onChange={this.optionsBySelectMetricNumberOfDigitsAfterDecimal.bind(this)} className="float-label" />
+                      </div>
+                      <br className="brclear"/> <br className="brclear"/> <br className="brclear"/> <br className="brclear"/> <br className="brclear"/>
+                         {/*<div className="form-group switch_wrap inline_switch">*/}
+                         {/*<label>Currency Format</label>*/}
+                           {/*<label className="switch">*/}
+                             {/*<input type="checkbox" ref="status"  checked={this.state.currencyFormat} onChange={this.onStatusChange.bind(this)}/>*/}
+                             {/*<div className="slider"></div>*/}
+                              {/*</label>*/}
+                         {/*</div>*/}
                       <br className="brclear"/>
                     </form>
                   </ScrollArea>

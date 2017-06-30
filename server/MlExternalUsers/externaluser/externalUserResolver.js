@@ -125,8 +125,8 @@ MlResolver.MlMutationResolver['deActivateUserProfile'] = (obj, args, context, in
   var response=null;
   const user = Meteor.users.findOne({_id:userId}) || {}
   if(user&&args&&args.profileId){
-    result = mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'registrationId': args.profileId}}},
-      {"profile.externalUserProfiles.$.isActive": false}, {$set: true}, context);
+    result = mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'profileId': args.profileId}}},
+      {"profile.externalUserProfiles.$.isDefault": false}, {$set: true}, context);
     response = new MlRespPayload().successPayload({}, 200);
   }else {
     let code = 409;
@@ -144,7 +144,7 @@ MlResolver.MlMutationResolver['blockUserProfile'] = (obj, args, context, info) =
   var response=null;
   const user = Meteor.users.findOne({_id:userId}) || {}
   if(user&&args&&args.profileId){
-    result = mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'registrationId': args.profileId}}},
+    result = mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'profileId': args.profileId}}},
       {"profile.externalUserProfiles.$.isApprove": false}, {$set: true}, context);
     response = new MlRespPayload().successPayload({}, 200);
   }else {
@@ -169,13 +169,13 @@ MlResolver.MlMutationResolver['setDefaultProfile'] = (obj, args, context, info) 
      *Once user logs in again, default profile Id will be retained and switchProfile details will be cleared.
      * */
     if(hasSwitchedProfile){
-      result= mlDBController.update('users',{'_id':userId,"profile.hasSwitchedProfile": true,'profile.externalUserProfiles':{$elemMatch: {'registrationId': args.profileId}}},
+      result= mlDBController.update('users',{'_id':userId,"profile.hasSwitchedProfile": true,'profile.externalUserProfiles':{$elemMatch: {'profileId': args.profileId}}},
         {"profile.switchedProfileDefaultId": args.profileId}, {$set: true}, context);
     }else{
       result= mlDBController.update('users', {_id:userId,'profile.externalUserProfiles':{$elemMatch: {'isDefault': true}}},
         {"profile.externalUserProfiles.$.isDefault": false}, {$set: true,multi:true}, context);
 
-      result= mlDBController.update('users',{'_id':userId,"profile.hasSwitchedProfile": false,'profile.externalUserProfiles':{$elemMatch: {'registrationId': args.profileId}}},
+      result= mlDBController.update('users',{'_id':userId,"profile.hasSwitchedProfile": false,'profile.externalUserProfiles':{$elemMatch: {'profileId': args.profileId}}},
         {"profile.externalUserProfiles.$.isDefault": true, "profile.switchedProfileDefaultId":null}, {$set: true}, context);
 
     }
@@ -200,7 +200,7 @@ MlResolver.MlMutationResolver['switchExternalProfile'] = (obj, args, context, in
   if(user&&args&&args.profileId){
 
     var defaultUserProfile=_.find(user.profile.externalUserProfiles, {'isDefault':true })||user.profile.externalUserProfiles[0];
-    var defaultUserProfileId=defaultUserProfile?defaultUserProfile.registrationId:null;
+    var defaultUserProfileId=defaultUserProfile?defaultUserProfile.profileId:null;
     //Check if switchedProfileDefaultId exists for the first time and update defaultUserProfileId
     result= mlDBController.update('users',{'_id':userId,$or:[{"profile.switchedProfileDefaultId" : { $type: 10 }},{"profile.switchedProfileDefaultId":{ $exists: false } }]},
       {"profile.switchedProfileDefaultId":defaultUserProfileId}, {$set: true,multi:false}, context);
@@ -210,7 +210,7 @@ MlResolver.MlMutationResolver['switchExternalProfile'] = (obj, args, context, in
       {"profile.externalUserProfiles.$.isDefault": false}, {$set: true,multi:true}, context);
 
     /*switch profile - if user has switched profile,make the profile as default */
-    result= mlDBController.update('users',{'_id':userId,'profile.externalUserProfiles':{$elemMatch: {'registrationId': args.profileId}}},
+    result= mlDBController.update('users',{'_id':userId,'profile.externalUserProfiles':{$elemMatch: {'profileId': args.profileId}}},
       {"profile.hasSwitchedProfile": true,
         "profile.externalUserProfiles.$.isDefault": true}, {$set: true}, context);
 

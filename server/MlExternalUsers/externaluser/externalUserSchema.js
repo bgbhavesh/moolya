@@ -45,7 +45,8 @@ let externalUser = `
         communityType:String,
         isDefault:Boolean,
         isActive:Boolean,
-        accountType:String
+        accountType:String,
+        profileId:String
     }
     
     type ContactInfoSchema{
@@ -123,7 +124,8 @@ let externalUser = `
         isActive:Boolean,
         optional:Boolean,
         userType :String,
-        identityType:String
+        identityType:String,
+        profileId:String
     }
     
     input externalUserProfile{

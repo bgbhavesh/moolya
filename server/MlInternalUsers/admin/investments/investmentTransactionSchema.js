@@ -183,7 +183,7 @@ let investments = `
     
     type Mutation{
         createProcessTransaction(processTransactions:processTransactions):response
-        updateProcessSetup(processTransactionId:String, processSetup:processSetup):response
+        updateProcessSetup(processTransactionId:String, processSetup:processSetup, clusterId: String, chapterId: String, subChapterId: String, communityId: String):response
         updateProcessTransaction(processTransactionId:String, processTransactions:processTransactions):response
     }
     
@@ -202,7 +202,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],investments]);
 
 let supportedApi = [
   {api:'updateProcessSetup', actionName:'UPDATE', moduleName:"PROCESSSETUP"},
-  {api:'fetchProcessSetup', actionName:'READ', moduleName:"PROCESSSETUP"},
+  {api:'fetchProcessSetup', actionName:'READ', moduleName:"PROCESSSETUP", isWhiteList: true},
   {api: 'fetchProcessActions', actionName: 'READ', moduleName: "ACTIONS", isWhiteList: true},
   {api:'fetchProcessStages', actionName:'READ', moduleName:"PROCESSSETUP", isWhiteList: true},
   {api:'updateProcessTransaction', actionName:'UPDATE', moduleName:"PROCESSSETUP"},

@@ -197,6 +197,13 @@ MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
   }
 }
 
+
+MlResolver.MlQueryResolver['fetchMyProfile'] = (obj, args, context, info) => {
+  let user = mlDBController.findOne('users', {_id: args.userId}, context)
+  return user
+}
+
+
 MlResolver.MlQueryResolver['fetchUserDetails'] = (obj, args, context, info) =>
 {
     let userDetails = {};
@@ -1512,7 +1519,7 @@ MlResolver.MlMutationResolver['updateSettings'] = (obj, args, context, info) => 
   let resp;
   if(user){
     // resp = Meteor.users.update({_id:args.userId}, {$set:{"profile.isActiv`e":args.isActive}});
-    resp = mlDBController.update('users', context.userId,{"profile.numericalFormat":args.settingsAttributes.numericalFormat,"profile.currencyTypes":args.settingsAttributes.currencyTypes},{$set:true}, context)
+    resp = mlDBController.update('users', context.userId,{"profile.numericalFormat":args.settingsAttributes.numericalFormat,"profile.currencyTypes":args.settingsAttributes.currencyTypes, 'profile.languages': args.settingsAttributes.languages,'profile.timeZone': args.settingsAttributes.timeZone},{$set:true}, context)
   }
   if(resp){
     resp = new MlRespPayload().successPayload("User Profile Updated Successfully", 200);

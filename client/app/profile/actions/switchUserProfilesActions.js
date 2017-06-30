@@ -37,6 +37,7 @@ export async function fetchExternalUserProfilesActionHandler() {
         optional
         userType
         identityType
+        profileId
       }
     }
     `,

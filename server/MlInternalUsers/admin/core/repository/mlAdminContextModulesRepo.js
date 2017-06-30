@@ -359,7 +359,7 @@ let CoreModules = {
 
   MlProcessTransactionRepo:function(requestParams,userFilterQuery,contextQuery,fieldsProj, context){
 
-    var contextFieldMap={'clusterId':'clusterId','chapterId':'chapterId','subChapterId':'subChapterId','communityId':'communityId','communityCode':'communityCode'};
+    var contextFieldMap={};
     var resultantQuery=MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery,contextFieldMap);
 
     //community is is not captured in process transaction

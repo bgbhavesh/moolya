@@ -15,9 +15,9 @@ function dateFormatter (data){
 function paymentFormatter(data) {
   let isPaid = data && data.data && data.data.paymentDetails && data.data.paymentDetails && data.data.paymentDetails.isPaid ? true : false;
   if(isPaid){
-    return <div>Paid</div>;
+    return (<div>Paid</div>);
   } else {
-    return <div>Not Paid</div>;
+    return (<div>Not Paid</div>);
   }
 }
 

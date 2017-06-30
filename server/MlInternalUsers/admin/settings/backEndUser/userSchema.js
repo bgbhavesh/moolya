@@ -460,8 +460,8 @@ let BackEndUser = `
     
    
     type Mutation{
-        createUser(user:userObject!,clusterId:String, chapterId: String, subChapterId: String, communityId: String):response          
-        updateUser(userId:String!, user:userObject!, moduleName:String, actionName:String):response
+        createUser(user:userObject!,clusterId:String, chapterId: String, subChapterId: String, communityId: String):response           
+        updateUser(userId:String!, user:userObject!, clusterId: String, chapterId: String, subChapterId: String, communityId: String):response                                    
         resetPassword (password: String!, moduleName:String, actionName:String):response
         addUserProfile(userId:String, user:userObject): String
         assignUsers(userId:String, user:userObject, moduleName:String, actionName:String): response
@@ -539,3 +539,4 @@ let supportedApi = [
 ];
 MlResolver.MlModuleResolver.push(supportedApi)
   // , moduleName:String, actionName:String
+/* removing excess variables>> moduleName:String, actionName:String*/

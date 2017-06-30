@@ -2,6 +2,9 @@ import MlResolver from "../../../commons/mlResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
 import mlTransactionsListRepo from './mlTransactionsListRepo';
 import mlHierarchyAssignment from '../../admin/genericTransactions/impl/MlHierarchyAssignment'
+import MlAdminContextQueryConstructor from '../../admin/core/repository/mlAdminContextQueryConstructor'
+import _ from "underscore";
+import _lodash from 'lodash'
 
 
 MlResolver.MlMutationResolver['createTransaction'] = (obj, args, context, info) => {
@@ -307,6 +310,59 @@ MlResolver.MlQueryResolver['validateTransaction'] = (obj, args, context, info) =
       let response = new MlRespPayload().errorPayload(result, code);
       return response
     }
+  }
+
+}
+
+ /*
+  validateAssignmentsDataContext to validate assignments
+ */
+
+MlResolver.MlQueryResolver['validateAssignmentsDataContext'] = (obj, args, context, info) => {
+  let data = args.data
+  let userId = args.userId
+  let matchNotFound = false
+  if(data && userId){
+    let adminContext = new MlAdminContextQueryConstructor(userId).contextQuery()
+    let context = _lodash.concat(adminContext.clusterId, adminContext.chapterId,adminContext.subChapterId,adminContext.communityId)
+    if(adminContext.clusterId && !adminContext.chapterId && !adminContext.subChapterId && !adminContext.communityId){
+      data.map(function (trans) {
+        if(!_.contains(context,trans.clusterId)){
+          matchNotFound = true
+        }
+      })
+    }else if(adminContext.clusterId && adminContext.chapterId && !adminContext.subChapterId && !adminContext.communityId){
+      data.map(function (trans) {
+        if(!_.contains(context,trans.clusterId) || !_.contains(context,trans.chapterId)){
+          matchNotFound = true
+        }
+      })
+    }else if(adminContext.clusterId && adminContext.chapterId && adminContext.subChapterId && !adminContext.communityId){
+      data.map(function (trans) {
+        if(!_.contains(context,trans.clusterId) || !_.contains(context,trans.chapterId) || !_.contains(context,trans.subChapterId)){
+          matchNotFound = true
+        }
+      })
+    }else if(adminContext.clusterId && adminContext.chapterId && adminContext.subChapterId && adminContext.communityId){
+      data.map(function (trans) {
+        if(!_.contains(context,trans.clusterId) || !_.contains(context,trans.chapterId) || !_.contains(context,trans.subChapterId) || !_.contains(context,trans.communityId)){
+          matchNotFound = true
+        }
+      })
+    }
+
+    if(matchNotFound === true){
+      let code = 200;
+      let result = {status : ''}
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }else{
+      let code = 400;
+      let result = {status:''}
+      let response = new MlRespPayload().errorPayload(result, code);
+      return response
+    }
+    console.log(adminContext)
   }
 
 }

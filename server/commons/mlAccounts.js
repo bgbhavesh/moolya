@@ -387,6 +387,18 @@ export default MlAccounts=class MlAccounts {
 
       } else {
 
+        /*reset switch profile to false and update the default profile  */
+        result = mlDBController.update('users', {'_id': userId,'profile.isExternaluser': true, "profile.hasSwitchedProfile": true,
+            "profile.externalUserProfiles": {$elemMatch: {'profileId': switchedProfileDefaultId}}},
+          {"profile.externalUserProfiles.$.isDefault": true,
+            "profile.hasSwitchedProfile": false,"profile.switchedProfileDefaultId":null}, {$set: true}, context);
+
+        /*mark remaining profiles as false if default id is set*/
+        if(result===1){
+          result= mlDBController.update('users', {'_id':userId,'profile.externalUserProfiles':{$elemMatch: {'profileId':{$ne:switchedProfileDefaultId}}}},
+            {"profile.externalUserProfiles.$.isDefault": false}, {$set: true,multi:true}, context);
+        }
+
       }
     } catch (e) {
       console.log(e);

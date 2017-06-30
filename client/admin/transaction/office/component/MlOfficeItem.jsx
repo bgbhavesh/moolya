@@ -8,6 +8,7 @@ import {findOfficeTransactionHandler} from '../actions/findOfficeTranscation'
 import {updateSubcriptionDetail} from '../actions/updateSubscriptionDetail'
 import {updateOfficeStatus} from '../actions/updateOfficeStatus'
 import moment from 'moment'
+import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
 var Select = require('react-select');
 
 export default class MlOfficeItem extends React.Component {
@@ -69,6 +70,7 @@ export default class MlOfficeItem extends React.Component {
   };
 
   async componentWillMount() {
+    this.loggedUserDetails = getAdminUserContext();                                      /*getting user context*/
     await this.getTransaction(this.state.transId);
   }
 
@@ -77,7 +79,7 @@ export default class MlOfficeItem extends React.Component {
  }
 
   async getTransaction(id){
-    let response = await findOfficeTransactionHandler(id);
+    let response = await findOfficeTransactionHandler(id, this.loggedUserDetails);           /*adding user context fro auth*/
     if(response){
       let duration = ' ';
       let result = JSON.parse(response.result)[0];

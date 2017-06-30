@@ -242,3 +242,41 @@ export async function fetchfunderPortfolioAreaInterest(portfoliodetailsId) {
   const id = result.data.fetchFunderAreaOfInterest;
   return id
 }
+
+export async function fetchfunderPortfolioService(portfoliodetailsId) {
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            fetchfunderPortfolioService(portfoliodetailsId: $portfoliodetailsId) {
+                  dateOfService
+                  industryType
+                  conversationType
+                  about
+                  expectedInput
+                  expectedOutput
+                  mode
+                  session
+                  duration{
+                    hours
+                    minutes
+                  }
+                  attachments{
+                    documentName
+                    images
+                  }
+                  investmentAmount 
+                  isInvestmentAmountPrivate 
+                  index
+            }
+          }
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.fetchfunderPortfolioService;
+  // let data = _.omit(id,'__typename')
+  // return data
+  return id
+}

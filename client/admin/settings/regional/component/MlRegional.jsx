@@ -279,9 +279,9 @@ class MlRegional extends React.Component{
                       <div className="form-group">
                         <input type="text" ref="zipcodeFormat" defaultValue={this.state.data && this.state.data.regionalZipFormat} placeholder="ZipCode" className="form-control float-label" id=""/>
                       </div>
-                      <div className="form-group">
-                        <input type="text" ref="currencySymbol" defaultValue={this.state.data && this.state.data.regionalCurrencySymbol} placeholder="Currency Symbol" className="form-control float-label" id=""/>
-                      </div>
+                      {/*<div className="form-group">*/}   {/*duplicate used*/}
+                        {/*<input type="text" ref="currencySymbol" defaultValue={this.state.data && this.state.data.regionalCurrencySymbol} placeholder="Currency Symbol" className="form-control float-label" id=""/>*/}
+                      {/*</div>*/}
                       <div className="form-group">
                         <input type="text" ref="currencyValue" defaultValue={this.state.data && this.state.data.regionalCurrencyValue} placeholder="Currency Value" className="form-control float-label" id=""/>
                       </div>

@@ -185,7 +185,7 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
     var privateFields = [];
     if(args.portfoliodetailsId){
         let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId});
-        if(details && details.privateFields.length){
+        if(details && details.privateFields && details.privateFields.length){
           privateFields = portfolioValidationRepo.updatePrivateKeys(args.privateFields, args.removeKeys, details.privateFields)
         }
         else{

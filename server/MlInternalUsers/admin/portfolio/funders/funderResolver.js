@@ -3,6 +3,7 @@
  */
 import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
+import portfolioValidationRepo from '../portfolioValidation'
 
 var _ = require('lodash')
 
@@ -223,4 +224,20 @@ MlResolver.MlQueryResolver['fetchPortfolioClusterId'] = (obj, args, context, inf
     }
   }
   return {};
+}
+
+MlResolver.MlQueryResolver['fetchFunderDetails'] = (obj, args, context, info) => {
+  if(_.isEmpty(args))
+    return;
+
+  var key = args.key;
+  var portfoliodetailsId = args.portfoliodetailsId
+  var funderPortfolio = MlFunderPortfolio.findOne({"portfolioDetailsId": portfoliodetailsId})
+  if (funderPortfolio && funderPortfolio.hasOwnProperty(key)) {
+    var object = funderPortfolio[key];
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    funderPortfolio[key] = filteredObject
+    return funderPortfolio;
+  }
+
 }

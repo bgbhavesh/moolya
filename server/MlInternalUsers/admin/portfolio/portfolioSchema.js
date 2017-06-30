@@ -46,6 +46,7 @@ let portfolioSchema = `
         assignedUser    : String
         assignedUserId  : String
         privateFields:[PrivateKeys]
+        communityId:String
     }
     
     input privateKeys{

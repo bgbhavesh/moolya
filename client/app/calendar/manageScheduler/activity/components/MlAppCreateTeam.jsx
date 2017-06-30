@@ -404,7 +404,7 @@ let that = this;
                 </div>
                 <div className="form-group">
                   <div className="fileUpload mlUpload_btn">
-                    <span>Profile Pic</span>
+                    <span>Upload Image</span>
                     <input type="file" className="upload" id="profilePic"  onChange={this.onFileUpload.bind(this)} />
                   </div>
                   <br className="brclear"/>

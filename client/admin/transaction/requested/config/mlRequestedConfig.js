@@ -101,6 +101,9 @@ const mlUserTypeTableConfig=new MlViewer.View({
                               communityName
                       			  clusterName
                       			  clusterId
+                      			  chapterId
+                      			  subChapterId
+                      			  communityId
                       				chapterName
                               subChapterName
                               email

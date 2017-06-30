@@ -25,15 +25,15 @@ class MlUserContext{
     getDefaultMenu(userId){
         check(userId,String);
         let userProfile = this.userProfileDetails(userId)||{};
-        if(userProfile && userProfile.isApprove){
+        if(userProfile){
             // var menu = MlAppMenuConfig.findOne({communityDefCode: userProfile.communityCode})
           var menu = MlAppMenuConfig.findOne({communityCode: userProfile.communityDefCode})
             if(menu)
                 return menu.menuName;
         }
 
-        // return '';
-        return 'mlDefaultMenu';
+        return '';
+        // return 'mlDefaultMenu';
     }
 
     getDefaultProfileMenu(userId){

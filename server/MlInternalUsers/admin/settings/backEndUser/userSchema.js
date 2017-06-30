@@ -31,6 +31,8 @@ let BackEndUser = `
         profileImage:String,
         numericalFormat: String,
         currencyTypes: String,
+        languages: [String]
+        timeZone: String
         dateOfBirth: Date,
         genderType: String,
         firstName: String,
@@ -159,6 +161,8 @@ let BackEndUser = `
         profileImage:String,
          numericalFormat: String,
         currencyTypes: String,
+        languages: [String]
+        timeZone: String
         dateOfBirth: Date,
         genderType: String
         
@@ -260,6 +264,8 @@ let BackEndUser = `
     input settingsAttributesObject{
       currencyTypes: String,
       numericalFormat: String
+      languages: [String]
+      timeZone: String
     }
     
     
@@ -497,6 +503,7 @@ let BackEndUser = `
         passwordVerification(Details:String):response
         getUserProfiles:[ExternalProfile]
         getUserProfile(profileId: String) : ExternalProfile
+        fetchMyProfile(userId:String): BackendUsers
     }
 `
 
@@ -522,6 +529,7 @@ let supportedApi = [
     {api:'passwordVerification', actionName:'READ', moduleName:"USERS", isWhiteList:true},
     {api:'getUserProfiles', actionName:'READ', moduleName:"USERS"},
     {api:'getUserProfile',actionName:'READ', moduleName:"USERS"},
+    {api:'fetchMyProfile',actionName:'READ', moduleName:"USERS", isWhiteList: true},
 
     {api:'createUser', actionName:'CREATE', moduleName:"USERS"},
     {api:'updateUser', actionName:'UPDATE', moduleName:"USERS"},

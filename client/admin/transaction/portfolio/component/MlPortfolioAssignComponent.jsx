@@ -4,7 +4,7 @@ import  Select from 'react-select';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
-import {assignUserForTransactionAction,selfAssignUserForTransactionAction,unAssignUserForTransactionAction} from '../actions/assignUserforTransactionAction'
+import {assignUserForTransactionAction,selfAssignUserForTransactionAction,unAssignUserForTransactionAction,validateAssignmentsDataContext} from '../actions/assignUserforTransactionAction'
 import hierarchyValidations from "../../../../commons/containers/hierarchy/mlHierarchyValidations"
 
 export default class MlPortfolioAssignComponent extends React.Component {
@@ -63,6 +63,7 @@ export default class MlPortfolioAssignComponent extends React.Component {
   optionsBySelectUser(value){
 
     this.setState({selectedUser:value})
+    this.validateAssignmentsDataContext(value)
   }
   cancel(){
     this.props.refreshList();
@@ -124,6 +125,29 @@ export default class MlPortfolioAssignComponent extends React.Component {
       FlowRouter.reload();
     }
   }*/
+
+  async validateAssignmentsDataContext(user){
+    let data = this.props.data
+    let selectedData = []
+    data.map(function (transaction) {
+      let json = {
+        clusterId : transaction.clusterId,
+        chapterId : transaction.chapterId,
+        subChapterId : transaction.subChapterId,
+        communityId : transaction.communityId,
+        transactionId : transaction.transactionId
+      }
+      selectedData.push(json)
+    })
+    let userId = user
+    const response = await validateAssignmentsDataContext(selectedData,userId);
+    if(response && response.success){
+      toastr.error("Selected transactions not availble in user context");
+      this.props.closePopOver(false)
+      //FlowRouter.reload();
+    }
+  }
+
   async assignUser(){
     let params={
       "cluster": this.state.selectedCluster,

@@ -27,21 +27,29 @@ MlResolver.MlQueryResolver['findTimeZones'] = (obj, args, context, info) => {
   let clusterId = userProfile && userProfile.defaultProfileHierarchyRefId ? userProfile.defaultProfileHierarchyRefId : '';
   let response
   if(clusterId){
-    let cluster = mlDBController.findOne("MlClusters", {"_id": clusterId}, context)
-    if(cluster && cluster._id){
-      let timeZones = mlDBController.find("MlTimeZones", {"countryCode": cluster.clusterCode}, context).fetch();
-      if (timeZones) {
-        timeZones.map(function (tz) {
-          tz.timeZone = tz.timeZone+" "+tz.gmtOffset
-        })
-        let code = 200;
-        let response = new MlRespPayload().successPayload('', code);
-        return timeZones
+    if(clusterId === "all") {
+      let timeZones = mlDBController.find("MlTimeZones", {}, context).fetch();
+      return timeZones
+    }else {
+      let cluster = mlDBController.findOne("MlClusters", {"_id": clusterId}, context)
+      if(cluster && cluster._id){
+        let timeZones = mlDBController.find("MlTimeZones", {"countryCode": cluster.clusterCode}, context).fetch();
+        if (timeZones) {
+          timeZones.map(function (tz) {
+            tz.timeZone = tz.timeZone+" "+tz.gmtOffset
+          })
+          let code = 200;
+          let response = new MlRespPayload().successPayload('', code);
+          return timeZones
+        }
       }
     }
+
   }
 
   return [];
 }
-
-
+MlResolver.MlQueryResolver['findLanguages'] = (obj, args, context, info) => {
+  let languages = mlDBController.find("MlLanguages", {}, context).fetch();
+  return languages;
+}

@@ -25,25 +25,25 @@ class MlUserContext{
     getDefaultMenu(userId){
         check(userId,String);
         let userProfile = this.userProfileDetails(userId)||{};
-        if(userProfile){
+        if(userProfile && userProfile.isApprove){
             // var menu = MlAppMenuConfig.findOne({communityDefCode: userProfile.communityCode})
           var menu = MlAppMenuConfig.findOne({communityCode: userProfile.communityDefCode})
             if(menu)
                 return menu.menuName;
         }
 
-        return '';
-        // return 'mlDefaultMenu';
+        // return '';
+        return 'mlDefaultMenu';
     }
 
     getDefaultProfileMenu(userId){
         check(userId,String);
         let userProfile = this.userProfileDetails(userId)||{};
-        if(userProfile){
+        if(userProfile && userProfile.isApprove){
           let userDetails = {profile: userProfile, menuName: 'mlDefaultProfileMenu'}
           return userDetails;
         }
-        // return 'mlDefaultProfileMenu';
+        return 'mlDefaultProfileMenu';
     }
 
     getExploreMenu(userId){

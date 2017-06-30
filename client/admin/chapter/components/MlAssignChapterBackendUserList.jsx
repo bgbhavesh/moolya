@@ -57,7 +57,7 @@ export default class MlAssignChapterBackendUserList extends React.Component{
               return (
                 <div className="col-lg-4 col-md-6 col-sm-4" key={ids} onClick={that.onBackEndUserClick.bind(that, user)}>
                   <div className="list_block provider_block">
-                    <div className={`cluster_status ${status}_cl`}><span className={`ml ml-${icon}`}></span></div>
+                    <div className={`cluster_status ${status}_cl`}>{/*<span className={`ml ml-${icon}`}></span>*/}</div>
                     <div className="provider_mask"><img src="/images/funder_bg.png"/>
                       <img className="user_pic" src="/images/def_profile.png"/>
                     </div>

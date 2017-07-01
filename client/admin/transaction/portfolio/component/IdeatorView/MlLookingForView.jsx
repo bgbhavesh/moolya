@@ -132,6 +132,10 @@ export default class MlPortfolioIdeatorLookingForView extends React.Component {
       this.setState({portfolioIdeatorInfo : response});
     }
 
+    _.each(response.privateFields, function (pf) {
+      $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+
   }
 
   render(){

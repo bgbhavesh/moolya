@@ -14,6 +14,28 @@ class portfolioValidation{
         var user = Meteor.users.findOne({_id:context.userId});
         var praviteFields = portfolioDetails.privateFields
         var omittedFields = []
+
+        if(_.isArray(object)){
+
+          _.each(object, function (item, index) {
+              var omittedfields = []
+            _.each(praviteFields, function (praviteField){
+              if(item[praviteField.keyName] != undefined && praviteField.index == index){
+
+                if((user && user.profile && !user.profile.isInternaluser) && (context.userId != portfolioDetails.userId)){
+                  delete item[praviteField.keyName]
+                }
+                var praviteObject = _.find(praviteFields, {keyName:praviteField.keyName})
+                omittedfields.push(praviteObject)
+              }
+            })
+
+            item.privateFields = _.cloneDeep(omittedfields);
+
+          })
+          return object;
+
+        }
         _.each(praviteFields, function (praviteField)
         {
             if(object[praviteField.keyName] != undefined){

@@ -69,6 +69,10 @@ export default class MlFunderAreaOfInterestView extends React.Component {
     if (response) {
       this.setState({loading: false, funderAreaOfInterestList: response});
     }
+
+    _.each(response.privateFields, function (pf) {
+      $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   render() {

@@ -131,6 +131,9 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
       response.problemImage ? response.problemImage : response.problemImage =[];
       response.solutionImage ? response.solutionImage : response.solutionImage =[];
       this.setState({portfolioIdeatorInfo : response});
+      _.each(response.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
   }
 
   render(){

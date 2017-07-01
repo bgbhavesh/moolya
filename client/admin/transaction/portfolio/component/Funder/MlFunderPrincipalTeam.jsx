@@ -30,6 +30,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
       title:'',
       selectedTab: 'principal',
       clusterId:'',
+      privateKeys:[],
       privateKey:{}
     }
     this.handleBlur.bind(this);
@@ -69,12 +70,18 @@ export default class MlFunderPrincipalTeam extends React.Component {
       const response = await fetchfunderPortfolioPrincipal(portfolioDetailsId);
       if (response) {
         this.setState({loading: false, funderPrincipal: response, funderPrincipalList: response});
+        // this.setState({privateKeys:response.privateFields})
+        // _.each(response.privateFields, function (pf) {
+        //   $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+        // })
       }
     } else {
+      var funderPrincipalList = [];
+      funderPrincipalList.push(that.context.funderPortfolio.principal)
       this.setState({
         loading: false,
         funderPrincipal: that.context.funderPortfolio.principal,
-        funderPrincipalList: that.context.funderPortfolio.principal
+        funderPrincipalList: funderPrincipalList
       });
     }
   }
@@ -86,10 +93,11 @@ export default class MlFunderPrincipalTeam extends React.Component {
       const response = await fetchfunderPortfolioTeam(portfolioDetailsId);
       if (response) {
         this.setState({loading: false, funderTeam: response, funderTeamList: response});
+        _.each(response.privateFields, function (pf) {
+          $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+        })
       }
-      _.each(response.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
+
     } else {
       this.setState({
         loading: false,
@@ -111,7 +119,8 @@ export default class MlFunderPrincipalTeam extends React.Component {
     } else {
       details = _.extend(details, {[key]: false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
+
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:this.state.selectedTab}
     this.setState({privateKey:privateKey})
     this.setState({data: details}, function () {
       this.sendDataToParent()
@@ -183,6 +192,14 @@ export default class MlFunderPrincipalTeam extends React.Component {
       popoverOpenP: !(this.state.popoverOpenP),
       // "selectedVal": details.typeOfFundingId
     });
+
+    setTimeout(function () {
+      _.each(details.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+    }, 10)
+
+
   }
   onTeamTileClick(index, e) {
     let cloneArray = _.cloneDeep(this.state.funderTeam);
@@ -198,6 +215,12 @@ export default class MlFunderPrincipalTeam extends React.Component {
       popoverOpenT: !(this.state.popoverOpenT),
       // "selectedVal": details.typeOfFundingId
     });
+
+    setTimeout(function () {
+      _.each(details.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+    }, 10)
   }
 
   sendDataToParent() {
@@ -216,11 +239,12 @@ export default class MlFunderPrincipalTeam extends React.Component {
           }
         }
         let newItem = _.omit(item, "__typename");
+        newItem =_.omit(newItem,"privateFields");
         // let updateItem = _.omit(newItem, 'logo');
         arr.push(newItem)
       })
       funderPrincipal = arr;
-      funderPrincipal=_.omit(funderPrincipal,["privateFields"]);
+      // funderPrincipal=_.omit(funderPrincipal,["privateFields"]);
       this.setState({funderPrincipal: funderPrincipal})
       this.props.getPrincipalDetails(funderPrincipal, this.state.privateKey);
 
@@ -238,11 +262,12 @@ export default class MlFunderPrincipalTeam extends React.Component {
           }
         }
         let newItem = _.omit(item, "__typename");
+        newItem =_.omit(newItem,"privateFields");
         // let updateItem = _.omit(newItem, 'logo');
         arr.push(newItem)
       })
       funderTeam = arr;
-      funderTeam=_.omit(funderTeam,["privateFields"]);
+      // funderTeam=_.omit(funderTeam,["privateFields"]);
       this.setState({funderTeam: funderTeam})
       this.props.getTeamDetails(funderTeam, this.state.privateKey);
     }
@@ -487,15 +512,15 @@ export default class MlFunderPrincipalTeam extends React.Component {
                             <input type="text" placeholder="Designation" name="designation"
                                    defaultValue={this.state.data.designation}
                                    className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                            <FontAwesome name='unlock' className="input_icon" id="isDesignationPrivate"
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isDesignationPrivate"
                                          onClick={this.onLockChange.bind(this, "designation", "isDesignationPrivate")}/>
                           </div>
                           <div className="form-group">
-                            <input type="text" placeholder="Company Name" name="companyName"
-                                   defaultValue={this.state.data.companyName}
+                            <input type="text" placeholder="Company Name" name="principalcompanyName"
+                                   defaultValue={this.state.data.principalcompanyName}
                                    className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                            <FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"
-                                         onClick={this.onLockChange.bind(this,"companyName", "isCompanyNamePrivate")}/>
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isCompanyNamePrivate"
+                                         onClick={this.onLockChange.bind(this,"principalcompanyName", "isCompanyNamePrivate")}/>
 
                           </div>
 
@@ -511,7 +536,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                             <input type="text" placeholder="Years of Experience" name="yearsOfExperience"
                                    defaultValue={this.state.data.yearsOfExperience}
                                    className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                            <FontAwesome name='unlock' className="input_icon" id="isYearsOfExperiencePrivate"
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isYearsOfExperiencePrivate"
                                          onClick={this.onLockChange.bind(this,"yearsOfExperience", "isYearsOfExperiencePrivate")}/>
 
                           </div>
@@ -519,7 +544,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                             <input type="text" placeholder="Qualification" name="qualification"
                                    defaultValue={this.state.data.qualification}
                                    className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                            <FontAwesome name='unlock' className="input_icon" id="isQualificationPrivate"
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isQualificationPrivate"
                                          onClick={this.onLockChange.bind(this, "qualification", "isQualificationPrivate")}/>
 
                           </div>
@@ -527,7 +552,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                             <input type="text" placeholder="About" name="aboutPrincipal"
                                    defaultValue={this.state.data.aboutPrincipal}
                                    className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                            <FontAwesome name='unlock' className="input_icon" id="isAboutPrincipalPrivate"
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isAboutPrincipalPrivate"
                                          onClick={this.onLockChange.bind(this,"aboutPrincipal", "isAboutPrincipalPrivate")}/>
 
                           </div>
@@ -617,11 +642,11 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                          onClick={this.onLockChange.bind(this,"designation", "isDesignationPrivate")}/>
                           </div>
                           <div className="form-group">
-                            <input type="text" placeholder="Company Name" name="companyName"
-                                   defaultValue={this.state.data.companyName}
+                            <input type="text" placeholder="Company Name" name="teamcompanyName"
+                                   defaultValue={this.state.data.teamcompanyName}
                                    className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
                             <FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"
-                                         onClick={this.onLockChange.bind(this,"companyName", "isCompanyNamePrivate")}/>
+                                         onClick={this.onLockChange.bind(this,"teamcompanyName", "isCompanyNamePrivate")}/>
 
                           </div>
 

@@ -132,10 +132,11 @@ export default class MlFunderAbout extends React.Component {
       const response = await fetchfunderPortfolioAbout(portfoliodetailsId);
       if (response) {
         this.setState({loading: false, data: response, profilePic:response.profilePic});
-      }
-      _.each(response.privateFields, function (pf) {
+        _.each(response.privateFields, function (pf) {
           $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
+        })
+      }
+
     }else{
       this.setState({loading: false, data: that.context.funderPortfolio.funderAbout});
     }

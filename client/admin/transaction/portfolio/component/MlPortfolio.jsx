@@ -202,31 +202,48 @@ class MlPortfolio extends React.Component {
   getPortfolioDetails(portfolioDetails, privateKey) {
     this.setState({portfolio: portfolioDetails});
     if(!_.isEmpty(privateKey)){
-      this.updatePrivateKeys(privateKey.keyName, privateKey.booleanKey, privateKey.isPrivate)
+      this.updatePrivateKeys(privateKey)
     }
 
   }
 
-  updatePrivateKeys(keyName, booleanKey, isPrivate){
-    var index = _.findIndex(this.state.privateKeys, {keyName:keyName})
+  updatePrivateKeys(privateKey){
+    var keyName = privateKey.keyName
+    var booleanKey = privateKey.booleanKey
+    var isPrivate = privateKey.isPrivate
+    var index = -1;
+    var tabName = ""
+    if(privateKey.index >= 0){
+      index = privateKey.index
+    }
+    if(privateKey.tabName){
+      tabName = privateKey.tabName
+    }
+
+    var keyIndex = _.findIndex(this.state.privateKeys, {keyName:keyName})
+    if(keyIndex < 0 && index >= 0){
+      keyIndex = _.findIndex(this.state.privateKeys, {keyName:keyName, index:index})
+    }
     var privateKeys = this.state.privateKeys;
     var removePrivateKeys = this.state.removePrivateKeys;
-    if(isPrivate && index < 0){
+    if(isPrivate && keyIndex < 0){
       var rIndex = _.findIndex(this.state.removePrivateKeys, {keyName:keyName})
       removePrivateKeys.splice(rIndex, 1);
-      privateKeys.push({keyName:keyName, booleanKey:booleanKey})
+      privateKeys.push({keyName:keyName, booleanKey:booleanKey, index:index, tabName:tabName})
       this.setState({privateKeys:privateKeys})
     }else if(!isPrivate){
-      if(index >= 0){
-        var keyObj = _.cloneDeep(privateKeys[index])
+      if(keyIndex >= 0){
+        var keyObj = _.cloneDeep(privateKeys[keyIndex])
         removePrivateKeys.push(keyObj)
-        privateKeys.splice(index, 1);
+        privateKeys.splice(keyIndex, 1);
       }else{
-        removePrivateKeys.push({keyName:keyName, booleanKey:booleanKey})
+        removePrivateKeys.push({keyName:keyName, booleanKey:booleanKey, index:index, tabName:tabName})
       }
 
     }
     this.setState({privateKeys:privateKeys, removePrivateKeys:removePrivateKeys})
+    console.log(this.state.privateKeys)
+    console.log(this.state.removePrivateKeys)
   }
 
   async updatePortfolioDetails() {

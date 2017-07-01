@@ -293,6 +293,11 @@ export default class AddressDetails extends React.Component{
       if (this.state.selectedValue) {
         contactExist = _underscore.contains(dbData, this.state.selectedValue);
       }
+      let clusterDetails = await findClusterTypeActionHandler(this.props.clusterId)
+      let clusterCountry = clusterDetails&&clusterDetails.countryName?clusterDetails.countryName:null;
+      let addressSelectedCountry = this.state.countrySelectedValue?this.state.countrySelectedValue:this.state.addressDetails[index].addressCountry;
+
+      let isDeafaultChecked = this.refs["defaultAddress"+index].checked;
 
       if (contactExist) {
         toastr.error("Address Type Already Exists!!!!!");
@@ -315,6 +320,8 @@ export default class AddressDetails extends React.Component{
 
         if (ret) {
           toastr.error(ret);
+        }else if(clusterCountry && addressSelectedCountry && isDeafaultChecked && clusterCountry != addressSelectedCountry) {
+          toastr.error("Selected cluster and default address country should be same");
         } else {
           let labelValue = this.state.selectedAddressLabel ? this.state.selectedAddressLabel : this.state.addressDetails[index].addressTypeName;
           let valueSelected = this.state.selectedValue ? this.state.selectedValue : this.state.addressDetails[index].addressType;

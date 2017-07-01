@@ -4,6 +4,7 @@ import {initalizeFloatLabel} from "../../../../utils/formElemUtil";
 import {findAnnotations} from "../../../../../commons/annotator/findAnnotations";
 import {initializeMlAnnotator} from "../../../../../commons/annotator/mlAnnotator";
 import {createAnnotationActionHandler} from "../../actions/updatePortfolioDetails";
+import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
 import {fetchIdeaActionHandler} from "../../../../../app/ideators/actions/IdeaActionHandler";
 import _ from "lodash";
 var FontAwesome = require('react-fontawesome');
@@ -21,6 +22,7 @@ export default class MlIdeaView extends React.Component {
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
+    this.validateUserForAnnotation(this)
   }
 
   initalizeAnnotaor() {
@@ -86,14 +88,26 @@ export default class MlIdeaView extends React.Component {
     this.state.content.annotator('loadAnnotations', quotes);
     return response;
   }
-
+  componentWillMount() {
+    let resp = this.validateUserForAnnotation();
+    return resp
+  }
   componentDidMount() {
     $('.actions_switch').click();
     $('.appCommentBox').addClass('in');
-    this.initalizeAnnotaor()
     this.fetchIdeatorIdeas();
+    if(this.state.isUserValidForAnnotation){
+      this.initalizeAnnotaor()
+    }
     this.fetchAnnotations();
     initalizeFloatLabel();
+  }
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response) {
+      this.setState({isUserValidForAnnotation:response})
+    }
   }
 
   async fetchIdeatorIdeas() {

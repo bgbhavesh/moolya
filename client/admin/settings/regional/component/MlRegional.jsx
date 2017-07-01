@@ -19,7 +19,7 @@ class MlRegional extends React.Component{
       metricnumberOfDigitsAfterDecimal:'',
       measurementSystem:'',
       // currencyFormat:'',
-      currencySymbol:'',
+      // currencySymbol:'',       /*unused state*/
       valueSeparator:'',
       data:[],
       loading:true
@@ -99,7 +99,7 @@ class MlRegional extends React.Component{
       regionalCurrencyName: this.refs.currencyName.value,
       regionalCurrencyMarking: this.refs.currencyMarking.value,
       regionalZipFormat: this.refs.zipcodeFormat.value,
-      regionalCurrencySymbol: this.refs.currencySymbol.value,
+      // regionalCurrencySymbol: this.refs.currencySymbol.value,       /*unused refs*/
       regionalCurrencyValue: this.refs.currencyValue.value,
       aboutRegion: this.refs.about.value,
       numberOfDigitsAfterDecimal:this.state.numberOfDigitsAfterDecimal,

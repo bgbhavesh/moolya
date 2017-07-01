@@ -20,7 +20,7 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
     }
     this.fetchPortfolioInfo.bind(this);
     this.createAnnotations.bind(this);
-    this.fetchAnnotations.bind(this);
+    //this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
     this.validateUserForAnnotation(this)
@@ -115,10 +115,10 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
     });
 
     this.fetchPortfolioInfo();
-    if(this.state.isUserValidForAnnotation){
+  /*  if(this.state.isUserValidForAnnotation){
       this.initalizeAnnotaor()
     }
-    this.fetchAnnotations();
+    this.fetchAnnotations();*/
     initalizeFloatLabel();
   }
   async validateUserForAnnotation() {
@@ -126,6 +126,8 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
     const response = await validateUserForAnnotation(portfolioId);
     if (response) {
       this.setState({isUserValidForAnnotation:response})
+      this.initalizeAnnotaor()
+      this.fetchAnnotations();
     }
   }
 

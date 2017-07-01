@@ -19,7 +19,7 @@ export default class MlIdeaView extends React.Component {
       portfolioIdeatorInfo: {},
     }
     this.fetchIdeatorIdeas.bind(this);
-    this.fetchAnnotations.bind(this);
+    //this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
     this.validateUserForAnnotation(this)
@@ -96,10 +96,6 @@ export default class MlIdeaView extends React.Component {
     $('.actions_switch').click();
     $('.appCommentBox').addClass('in');
     this.fetchIdeatorIdeas();
-    if(this.state.isUserValidForAnnotation){
-      this.initalizeAnnotaor()
-    }
-    this.fetchAnnotations();
     initalizeFloatLabel();
   }
   async validateUserForAnnotation() {
@@ -107,6 +103,10 @@ export default class MlIdeaView extends React.Component {
     const response = await validateUserForAnnotation(portfolioId);
     if (response) {
       this.setState({isUserValidForAnnotation:response})
+
+      this.initalizeAnnotaor()
+
+      this.fetchAnnotations();
     }
   }
 

@@ -19,7 +19,7 @@ export default class MlPortfolioIdeatorStrategyPlansView extends React.Component
       portfolioIdeatorInfo: {}
     }
     this.fetchPortfolioInfo.bind(this);
-    this.fetchAnnotations.bind(this);
+    //this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
     this.validateUserForAnnotation(this)
@@ -112,10 +112,6 @@ export default class MlPortfolioIdeatorStrategyPlansView extends React.Component
     });
 
     this.fetchPortfolioInfo();
-    if(this.state.isUserValidForAnnotation){
-      this.initalizeAnnotaor()
-    }
-    this.fetchAnnotations();
     initalizeFloatLabel();
   }
   async validateUserForAnnotation() {
@@ -123,6 +119,8 @@ export default class MlPortfolioIdeatorStrategyPlansView extends React.Component
     const response = await validateUserForAnnotation(portfolioId);
     if (response) {
       this.setState({isUserValidForAnnotation:response})
+      this.initalizeAnnotaor();
+      this.fetchAnnotations();
     }
   }
   async fetchPortfolioInfo(){

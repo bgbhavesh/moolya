@@ -273,3 +273,21 @@ export async function findIdeatorIntellectualPlanningTrademarkActionHandler(port
 }
 
 
+export async function validateUserForAnnotation(portfoliodetailsId) {
+
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            validateUserForAnnotation(portfoliodetailsId: $portfoliodetailsId)
+          }
+
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data && result.data.validateUserForAnnotation;
+  return id
+}
+

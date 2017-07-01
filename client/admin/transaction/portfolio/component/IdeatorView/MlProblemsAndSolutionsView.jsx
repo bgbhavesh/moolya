@@ -11,6 +11,7 @@ import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotato
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
 import _ from 'lodash'
+import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
 
 export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Component {
   constructor(props, context) {
@@ -29,6 +30,7 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
       this.fetchAnnotations.bind(this);
       this.initalizeAnnotaor.bind(this);
       this.annotatorEvents.bind(this);
+    this.validateUserForAnnotation(this)
     }
 
   initalizeAnnotaor(){
@@ -101,13 +103,27 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
 
       return response;
   }
+  componentWillMount() {
+    let resp = this.validateUserForAnnotation();
+    return resp
+  }
 
   componentDidMount(){
     $('.actions_switch').click();
-    this.initalizeAnnotaor()
+
     this.fetchPortfolioInfo();
+    if(this.state.isUserValidForAnnotation){
+      this.initalizeAnnotaor()
+    }
     this.fetchAnnotations();
     initalizeFloatLabel();
+  }
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response) {
+      this.setState({isUserValidForAnnotation:response})
+    }
   }
 
   async fetchPortfolioInfo(){

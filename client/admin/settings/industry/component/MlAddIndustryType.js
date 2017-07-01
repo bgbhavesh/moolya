@@ -30,7 +30,7 @@ class MlAddIndustry extends React.Component{
   async handleSuccess(response) {
     if (response){
       if(response.success)
-        FlowRouter.go("/admin/settings/industryList");
+        FlowRouter.go("/admin/settings/documentProcess/industryList");
       else
         toastr.error(response.result);
     }
@@ -52,17 +52,12 @@ class MlAddIndustry extends React.Component{
         toastr.error("Already Exists")
       } else if(response.success) {
         toastr.success("Industry Created Successfully");
-        FlowRouter.go("/admin/settings/industryList");
+        FlowRouter.go("/admin/settings/documentProcess/industryList");
       }
     }
   }
   render(){
     let MlActionConfig = [
-      // {
-      //   actionName: 'edit',
-      //   showAction: true,
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'save',
@@ -72,8 +67,7 @@ class MlAddIndustry extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
-          FlowRouter.go("/admin/settings/industryList")
+          FlowRouter.go("/admin/settings/documentProcess/industryList")
         }
       }
     ]

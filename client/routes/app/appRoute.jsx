@@ -13,7 +13,6 @@ import MlAppDashboard from "../../app/dashboard/components/MlAppDashboard";
 import MlPortfolioLanding from "../../app/commons/components/MlPortfolioLanding";
 import MlAppIdeatorAddIdea from "../../app/ideators/components/MlAppIdeatorAddIdea";
 import MlAppPortfolio from "../../app/commons/components/MlAppPortfolio";
-import MlAppManageSchedule from "../../app/calendar/manageScheduler/activity/components/MlAppManageSchedule";
 import MlPortfolioIdeatorLibraryView from "../../admin/transaction/portfolio/component/IdeatorView/MlPortfolioLibrary.jsx";
 import MlAppMyProfile from "../../app/profile/components/MlAppMyProfile";
 import MlProfileSettings from "../../app/profile/components/MlProfileSettings";
@@ -31,15 +30,37 @@ import MlAppMyTransaction from "../../app/myTransaction/component/MlAppMyTransac
 import RegistrationWizard from "../../admin/transaction/requested/component/RegistrationWizard";
 import {mlAppFunderConfig} from "../../app/funders/config/mlAppFunderConfig";
 import MlAppMyCalendar from "../../app/calendar/myCalendar/components/MlAppMyCalendar";
+
+/**
+ * Activities Routes
+ */
+import MlAppActivity from "../../app/calendar/manageScheduler/activity/components/MlAppActivity";
 import MlAppScheduleHead from "../../app/calendar/manageScheduler/activity/components/MlAppActivityList";
 import MlAppActivityList from "../../app/calendar/manageScheduler/activity/components/MlAppActivityList";
 import MlAppCreateTeam from "../../app/calendar/manageScheduler/activity/components/MlAppCreateTeam";
+
+/**
+ * Tasks Routes
+ */
 import MlAppTaskList from "../../app/calendar/manageScheduler/task/components/MlAppTaskList";
 import MlAppTaskLanding from "../../app/calendar/manageScheduler/task/components/MlAppTaskLanding";
+
+/**
+ * Services Routes
+ */
 import MlAppServiceList from "../../app/calendar/manageScheduler/service/components/MlAppServiceList";
-import MlAppInternalTask from "../../app/internalTask/components/MlAppInternalTask";
 import MlAppServiceManageSchedule from "../../app/calendar/manageScheduler/service/components/MlAppServiceManageSchedule";
+
+/**
+ * Internal Tasks Routes
+ */
+import MlAppInternalTask from "../../app/internalTask/components/MlAppInternalTask";
+
+/**
+ * Set Calendars Routes
+ */
 import MlAppSetCalendarSettings from '../../app/calendar/manageScheduler/setCalendar/components/MlAppSetCalendarSettings';
+
 
 import _ from "lodash";
 //profile
@@ -303,7 +324,7 @@ appSection.route('/calendar/manageSchedule/:profileId/activityList', {
 appSection.route('/calendar/manageSchedule/:profileId/createActivity', {
   name: 'calendar_manageSchedule',
   action(){
-    mount(AppLayout, {appContent:<MlAppManageSchedule />, isCalenderMenu: true})
+    mount(AppLayout, {appContent:<MlAppActivity />, isCalenderMenu: true})
   }
 });
 
@@ -326,7 +347,7 @@ appSection.route('/calendar/manageSchedule/:profileId/editService', {
 appSection.route('/calendar/manageSchedule/:profileId/editActivity', {
   name: 'calendar_manageSchedule',
   action(params){
-    mount(AppLayout, {appContent:<MlAppManageSchedule />, isCalenderMenu: true})
+    mount(AppLayout, {appContent:<MlAppActivity />, isCalenderMenu: true})
   }
 });
 

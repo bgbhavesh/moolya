@@ -74,7 +74,7 @@ export const appSection = FlowRouter.group({
   {
       userId = Meteor.userId();
       if (!userId) {
-          FlowRouter.go('/login')
+        redirect('/login')
       }
   }]
 });

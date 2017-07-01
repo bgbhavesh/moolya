@@ -352,6 +352,7 @@ let ideatorPortfolioSchema = `
         fetchIdeas(portfolioId:String):[Idea]
         fetchLibrary(userId:String):[Details]
         fetchAllowableFormats:Boolean
+        validateUserForAnnotation(portfoliodetailsId:String!):Boolean
     }
     
     type Mutation{
@@ -372,6 +373,7 @@ let ideatorPortfolioSchema = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], ideatorPortfolioSchema]);
 
 let supportedApi = [
+  {api:'validateUserForAnnotation', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchIdeatorDetails', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchIdeatorPortfolioDetails', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchIdeatorPortfolioIdeas', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},

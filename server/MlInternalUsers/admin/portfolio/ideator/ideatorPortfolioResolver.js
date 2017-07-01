@@ -603,3 +603,20 @@ MlResolver.MlQueryResolver['fetchIdeatorDetails'] = (obj, args, context, info) =
   }
 
 }
+
+MlResolver.MlQueryResolver['validateUserForAnnotation'] = (obj, args, context, info) => {
+  if(args.portfoliodetailsId){
+    var portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfoliodetailsId}, context);
+    var user = mlDBController.findOne('users', {_id: context.userId}, context);
+    if(portfolio && portfolio.userId){
+        if(portfolio.userId == context.userId){
+          return true;
+        }
+        if(user.profile.isInternaluser){
+          return true;
+        }
+        return false;
+    }
+  }
+
+}

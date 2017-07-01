@@ -9,7 +9,7 @@ import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
-
+import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
 
 export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Component {
   constructor(props) {
@@ -23,7 +23,7 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
-
+    this.validateUserForAnnotation(this)
   }
 
   initalizeAnnotaor(){
@@ -94,7 +94,10 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
 
     return response;
   }
-
+  componentWillMount() {
+    let resp = this.validateUserForAnnotation();
+    return resp
+  }
 
   componentDidMount()
   {
@@ -111,10 +114,19 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
       $('.comment-input-box').slideToggle();
     });
 
-    this.initalizeAnnotaor()
     this.fetchPortfolioInfo();
+    if(this.state.isUserValidForAnnotation){
+      this.initalizeAnnotaor()
+    }
     this.fetchAnnotations();
     initalizeFloatLabel();
+  }
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response) {
+      this.setState({isUserValidForAnnotation:response})
+    }
   }
 
   async fetchPortfolioInfo(){

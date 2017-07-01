@@ -81,7 +81,7 @@ export const adminSection = FlowRouter.group({
     console.log('running /adminPrefix trigger');
      userId = Meteor.userId();
     if (!userId) {
-      FlowRouter.go('/login')
+      redirect('/login')
     }
   }]
 });

@@ -115,7 +115,9 @@ export default class MlStartupManagement extends React.Component{
     if(empty){
       const response = await findStartupManagementActionHandler(portfoliodetailsId);
       if (response) {
+        console.log(response)
         this.setState({loading: false, startupManagement: response, startupManagementList: response});
+        this.fetchOnlyImages()
       }
     }else{
       this.setState({loading: false, startupManagement: that.context.startupPortfolio.management, startupManagementList:that.context.startupPortfolio.management});
@@ -321,13 +323,10 @@ export default class MlStartupManagement extends React.Component{
                             <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
                           </div>
                           <div className="previewImg ProfileImg">
-                            <img src={this.state.responseImage?this.state.responseImage:" "}/>
+                            <img src={this.state.data && this.state.data.logo?this.state.data.logo.fileUrl:this.state.responseImage?this.state.responseImage:" "}/>
                           </div>
                         </div>
-
-
                         <br className="brclear"/>
-
                         <div className="form-group">
                           <input type="text" placeholder="Qualification" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isQualificationPrivate" onClick={this.onClick.bind(this, "isQualificationPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isQualificationPrivate}/>

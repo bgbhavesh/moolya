@@ -11,7 +11,7 @@ export default class MlFunderAboutView extends React.Component{
     super(props);
     this.state={
       loading: true,
-      data:{}
+      data:{},
     }
     this.fetchPortfolioDetails.bind(this);
     return this;
@@ -30,6 +30,10 @@ export default class MlFunderAboutView extends React.Component{
       if (response) {
         this.setState({loading: false, data: response});
       }
+
+      _.each(response.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
     }else{
       this.setState({loading: false, data: that.context.funderPortfolio.funderAbout});
     }

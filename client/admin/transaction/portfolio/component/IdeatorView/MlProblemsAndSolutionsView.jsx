@@ -27,7 +27,7 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
 
       this.createAnnotations.bind(this);
       this.fetchPortfolioInfo.bind(this);
-      this.fetchAnnotations.bind(this);
+      //this.fetchAnnotations.bind(this);
       this.initalizeAnnotaor.bind(this);
       this.annotatorEvents.bind(this);
     this.validateUserForAnnotation(this)
@@ -112,10 +112,8 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
     $('.actions_switch').click();
 
     this.fetchPortfolioInfo();
-    if(this.state.isUserValidForAnnotation){
-      this.initalizeAnnotaor()
-    }
-    this.fetchAnnotations();
+
+    //this.fetchAnnotations();
     initalizeFloatLabel();
   }
   async validateUserForAnnotation() {
@@ -123,6 +121,8 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
     const response = await validateUserForAnnotation(portfolioId);
     if (response) {
       this.setState({isUserValidForAnnotation:response})
+      this.initalizeAnnotaor()
+      this.fetchAnnotations()
     }
   }
 
@@ -131,6 +131,9 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
       response.problemImage ? response.problemImage : response.problemImage =[];
       response.solutionImage ? response.solutionImage : response.solutionImage =[];
       this.setState({portfolioIdeatorInfo : response});
+      _.each(response.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
   }
 
   render(){

@@ -172,7 +172,7 @@ class MlAdminUserContext
   getUserLatLng(profile){
     var latitude = null;
     var longitude = null;
-    if(profile.addressInfo && profile.addressInfo.length>0){
+    if(profile && profile.addressInfo && profile.addressInfo.length>0){   /*profile of the user should be there*/
       var address = _.find(profile.addressInfo, {isDefaultAddress:true});
       if(!address){
         address = profile.addressInfo[0]

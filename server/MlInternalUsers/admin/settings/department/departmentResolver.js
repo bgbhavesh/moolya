@@ -173,7 +173,7 @@ MlResolver.MlQueryResolver['fetchMoolyaBasedDepartmentRoles'] = (obj, args, cont
 MlResolver.MlQueryResolver['fetchNonMoolyaBasedDepartment'] = (obj, args, context, info) => {
   let resp = mlDBController.find('MlDepartments', {
     $or: [
-      {"depatmentAvailable.cluster": {$in: ["all", args.cluster]},isActive:true},
+      {"depatmentAvailable.cluster": {$in: ["all", args.clusterId]},isActive:true},
       {
         "depatmentAvailable": {
           $elemMatch: {

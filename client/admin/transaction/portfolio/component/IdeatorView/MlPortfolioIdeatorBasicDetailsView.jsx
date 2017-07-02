@@ -52,6 +52,10 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
     if (response) {
       this.setState({loading: false, data: response});
     }
+
+    _.each(response.privateFields, function (pf) {
+      $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
 

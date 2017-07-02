@@ -62,7 +62,7 @@ export async function fetchfunderPortfolioAbout(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  const id = result.data.data.funderAbout;
+  const id = result.data.data && result.data.data.funderAbout;
   let data = _.omit(id,'__typename')
   data.investmentBudget =_.omit(data.investmentBudget,'__typename')
   return data
@@ -82,7 +82,8 @@ export async function fetchfunderPortfolioPrincipal(portfoliodetailsId) {
                     isLastNamePrivate
                     designation
                     isDesignationPrivate
-                    companyName
+                    principalcompanyName
+                    isCompanyNamePrivate
                     duration
                     isDurationPrivate
                     yearsOfExperience
@@ -114,7 +115,7 @@ export async function fetchfunderPortfolioPrincipal(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  const id = result.data.data.principal;
+  const id = result.data.data && result.data.data.principal;
   // let data = _.omit(id,'__typename')
   // return data
   return id
@@ -133,7 +134,8 @@ export async function fetchfunderPortfolioTeam(portfoliodetailsId) {
                   isLastNamePrivate
                   designation
                   isDesignationPrivate
-                  companyName
+                  teamcompanyName
+                  isCompanyNamePrivate
                   duration
                   isDurationPrivate
                   yearsOfExperience
@@ -165,7 +167,7 @@ export async function fetchfunderPortfolioTeam(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  const id = result.data.data.team;
+  const id = result.data.data && result.data.data.team;
   // let data = _.omit(id,'__typename')
   // return data
   return id
@@ -179,7 +181,7 @@ export async function fetchfunderPortfolioInvestor(portfoliodetailsId) {
                 investments{
                   dateOfInvestment
                   isDateOfInvestmentPrivate
-                  companyName
+                  investmentcompanyName
                   isCompanyNamePrivate
                   typeOfFundingId
                   typeOfFundingName
@@ -203,7 +205,7 @@ export async function fetchfunderPortfolioInvestor(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  const id = result.data.data.investments;
+  const id = result.data.data && result.data.data.investments;
   // let data = _.omit(id,'__typename')
   // return data
   return id
@@ -242,7 +244,7 @@ export async function fetchfunderPortfolioSuccess(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  const id = result.data.data.successStories;
+  const id = result.data.data && result.data.data.successStories;
   return id
 }
 
@@ -273,7 +275,7 @@ export async function fetchfunderPortfolioAreaInterest(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  const id = result.data.data.areaOfInterest;
+  const id = result.data.data && result.data.data.areaOfInterest;
   return id
 }
 

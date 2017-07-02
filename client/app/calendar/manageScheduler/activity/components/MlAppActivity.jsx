@@ -7,12 +7,12 @@ import MlAppChooseTeam from "./MlAppChooseTeam";
 import MlAppActivityPayment from "./MlAppActivityPayment";
 import MlAppActivityHistory from "./MlAppActivityHistory";
 
-export default class MlAppManageSchedule extends Component {
+export default class MlAppActivity extends Component {
   constructor(props) {
     super(props)
     this.state = {
       activityId: " "
-    }
+    };
 
     this.getCreatedId.bind(this)
   }
@@ -28,14 +28,13 @@ export default class MlAppManageSchedule extends Component {
   }
 
   getCreatedId(value) {
-    this.setState({activityId: value})
+    this.setState({activityId: value});
     console.log(this.state.activityId)
   }
 
 
   render() {
-    const steps =
-      [
+    const steps = [
         {
           name: 'Create',
           component: <MlAppCreateTeam setId={this.getCreatedId.bind(this)}/>,
@@ -46,9 +45,17 @@ export default class MlAppManageSchedule extends Component {
           component: <MlAppChooseTeam activityId={this.state.activityId}/>,
           icon: <span className="ml fa fa-users"></span>
         },
-        {name: 'Payment', component: <MlAppActivityPayment />, icon: <span className="ml ml-payments"></span>},
-        {name: 'History', component: <MlAppActivityHistory />, icon: <span className="ml ml-moolya-symbol"></span>}
-      ]
+        {
+          name: 'Payment', component:
+          <MlAppActivityPayment />,
+          icon: <span className="ml ml-payments"></span>
+        },
+        {
+          name: 'History',
+          component: <MlAppActivityHistory />,
+          icon: <span className="ml ml-moolya-symbol"></span>
+        }
+      ];
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
@@ -61,7 +68,6 @@ export default class MlAppManageSchedule extends Component {
               </div>
             </div>
           </div>
-
         </div>
       </div>
     )

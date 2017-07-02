@@ -19,7 +19,7 @@ export default class MlPortfolioIdeatorLookingForView extends React.Component {
       portfolioIdeatorInfo: {}
     }
     this.fetchPortfolioInfo.bind(this);
-    this.fetchAnnotations.bind(this);
+    //this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
     this.validateUserForAnnotation(this)
@@ -112,10 +112,10 @@ export default class MlPortfolioIdeatorLookingForView extends React.Component {
     });
 
     this.fetchPortfolioInfo();
-    if(this.state.isUserValidForAnnotation){
+   /* if(this.state.isUserValidForAnnotation){
       this.initalizeAnnotaor()
     }
-    this.fetchAnnotations();
+    this.fetchAnnotations();*/
     initalizeFloatLabel();
   }
   async validateUserForAnnotation() {
@@ -123,6 +123,8 @@ export default class MlPortfolioIdeatorLookingForView extends React.Component {
     const response = await validateUserForAnnotation(portfolioId);
     if (response) {
       this.setState({isUserValidForAnnotation:response})
+      this.initalizeAnnotaor()
+      this.fetchAnnotations();
     }
   }
 
@@ -131,6 +133,10 @@ export default class MlPortfolioIdeatorLookingForView extends React.Component {
     if(response){
       this.setState({portfolioIdeatorInfo : response});
     }
+
+    _.each(response.privateFields, function (pf) {
+      $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
 
   }
 

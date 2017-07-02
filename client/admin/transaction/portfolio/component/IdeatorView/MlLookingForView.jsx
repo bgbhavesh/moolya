@@ -16,7 +16,8 @@ export default class MlPortfolioIdeatorLookingForView extends React.Component {
     super(props);
 
     this.state = {
-      portfolioIdeatorInfo: {}
+      portfolioIdeatorInfo: {},
+      isUserValidForAnnotation:false
     }
     this.fetchPortfolioInfo.bind(this);
     //this.fetchAnnotations.bind(this);
@@ -121,7 +122,7 @@ export default class MlPortfolioIdeatorLookingForView extends React.Component {
   async validateUserForAnnotation() {
     const portfolioId = this.props.portfolioDetailsId
     const response = await validateUserForAnnotation(portfolioId);
-    if (response) {
+    if (response && !this.state.isUserValidForAnnotation) {
       this.setState({isUserValidForAnnotation:response})
       this.initalizeAnnotaor()
       this.fetchAnnotations();
@@ -151,7 +152,7 @@ export default class MlPortfolioIdeatorLookingForView extends React.Component {
           <div id="lookingForContent" className="panel panel-default panel-form-view">
 
             <div className="panel-body">
-              {this.state.portfolioIdeatorInfo.description}
+              {this.state.portfolioIdeatorInfo.lookingForDescription}
             </div>
           </div>
 

@@ -101,7 +101,7 @@ export default class MlIdeaView extends React.Component {
   async validateUserForAnnotation() {
     const portfolioId = this.props.portfolioDetailsId
     const response = await validateUserForAnnotation(portfolioId);
-    if (response) {
+    if (response && !this.state.isUserValidForAnnotation) {
       this.setState({isUserValidForAnnotation:response})
 
       this.initalizeAnnotaor()

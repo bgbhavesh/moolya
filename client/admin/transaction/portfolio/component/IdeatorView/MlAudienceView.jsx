@@ -85,11 +85,6 @@ export default class MlIdeatorAudience extends React.Component{
       if (response) {
         this.setState({loading: false, data: response});
       }
-
-      _.each(response.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-
     }else{
       this.fetchOnlyImages();
       this.setState({loading: true, data: that.context.ideatorPortfolio.audience});
@@ -133,7 +128,7 @@ export default class MlIdeatorAudience extends React.Component{
         </div>
       )
     });
-    let description =this.state.data.description?this.state.data.description:''
+    let description =this.state.data.audienceDescription?this.state.data.audienceDescription:''
     return (
       <div className="admin_main_wrap">
         {showLoader === true ? ( <MlLoader/>) : (
@@ -149,7 +144,7 @@ export default class MlIdeatorAudience extends React.Component{
 
                     <div className="form-group nomargin-bottom">
                       <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description } disabled = {true} name="description" onBlur={this.handleBlur.bind(this)}></textarea>
-                      <FontAwesome name='lock'  className="input_icon req_textarea_icon un_lock" id="isAudiencePrivate" onClick={this.onClick.bind(this, "audience", "isAudiencePrivate")}/>
+                      {/*<FontAwesome name='lock'  className="input_icon req_textarea_icon un_lock" id="isAudiencePrivate" onClick={this.onClick.bind(this, "audience", "isAudiencePrivate")}/>*/}
                       {/*<input type="checkbox" className="lock_input" id="makePrivate" checked={isAudiencePrivate}/>*/}
                     </div>
 

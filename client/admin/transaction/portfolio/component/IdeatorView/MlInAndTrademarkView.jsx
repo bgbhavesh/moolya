@@ -124,7 +124,7 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
   async validateUserForAnnotation() {
     const portfolioId = this.props.portfolioDetailsId
     const response = await validateUserForAnnotation(portfolioId);
-    if (response) {
+    if (response && !this.state.isUserValidForAnnotation) {
       this.setState({isUserValidForAnnotation:response})
       this.initalizeAnnotaor()
       this.fetchAnnotations();
@@ -150,7 +150,7 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
           <div id="trademarkContent" className="panel panel-default panel-form-view">
 
             <div className="panel-body">
-              {this.state.portfolioIdeatorInfo.description}
+              {this.state.portfolioIdeatorInfo.IPdescription}
             </div>
           </div>
 

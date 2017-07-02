@@ -95,10 +95,12 @@ MlResolver.MlQueryResolver['fetchFunderAbout'] = (obj, args, context, info) => {
       let userEmp = MlMasterSettings.findOne({_id:details.employmentStatus}) || {}
       details.employmentStatus = userEmp.employmentTypeInfo ? userEmp.employmentTypeInfo.employmentName : ''
 
+      var object = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, details, context)
+
       //for view action
       MlResolver.MlMutationResolver['createView'](obj,{resourceId:args.portfoliodetailsId,resourceType:'portfolio'}, context, info);
 
-      return details;
+      return object;
     }
   }
 

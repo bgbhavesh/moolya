@@ -9,8 +9,7 @@ export async function fetchfunderPortfolioAbout(portfoliodetailsId) {
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
-            data:fetchFunderDetails(portfoliodetailsId: $portfoliodetailsId, key:"funderAbout") {
-                  funderAbout {
+            data:fetchFunderAbout(portfoliodetailsId: $portfoliodetailsId) {
                     firstName
                     isFirstNamePrivate
                     lastName
@@ -53,7 +52,6 @@ export async function fetchfunderPortfolioAbout(portfoliodetailsId) {
                       keyName,
                       booleanKey
                     }
-                  }
             }
           }
       `,
@@ -62,7 +60,7 @@ export async function fetchfunderPortfolioAbout(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  const id = result.data.data && result.data.data.funderAbout;
+  const id = result.data.data && result.data.data;
   let data = _.omit(id,'__typename')
   data.investmentBudget =_.omit(data.investmentBudget,'__typename')
   return data

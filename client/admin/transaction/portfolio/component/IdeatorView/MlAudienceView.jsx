@@ -131,45 +131,58 @@ export default class MlIdeatorAudience extends React.Component{
     let description =this.state.data.audienceDescription?this.state.data.audienceDescription:''
     return (
       <div className="admin_main_wrap">
-        {showLoader === true ? ( <MlLoader/>) : (
-          <div className="requested_input">
+        <div className="col-lg-12 col-sm-12">
+          <div className="row">
             <h2>Audience</h2>
-            <div className="col-lg-12">
-              <div className="row">
-                <div className="panel panel-default panel-form">
-                  <div className="panel-heading">
-                    Audience
-                  </div>
-                  <div className="panel-body">
+            <div id="trademarkContent" className="panel panel-default panel-form-view">
 
-                    <div className="form-group nomargin-bottom">
-                      <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description } disabled = {true} name="description" onBlur={this.handleBlur.bind(this)}></textarea>
-                      {/*<FontAwesome name='lock'  className="input_icon req_textarea_icon un_lock" id="isAudiencePrivate" onClick={this.onClick.bind(this, "audience", "isAudiencePrivate")}/>*/}
-                      {/*<input type="checkbox" className="lock_input" id="makePrivate" checked={isAudiencePrivate}/>*/}
-                    </div>
-
-                  </div>
-                </div>
-                <div className="panel panel-default">
-                  {/*<div className="panel-heading">Add Images</div>*/}
-                  <div className="panel-body nopadding">
-                    <div className="upload-file-wrap">
-                      {/*<input type="file" id="siFileinput" name="audienceImages" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onAudienceImageFileUpload.bind(this)} multiple />*/}
-                      {/*<label htmlFor="siFileinput">*/}
-                      {/*<figure>*/}
-                      {/*<i className="fa fa-upload" aria-hidden="true"></i>*/}
-                      {/*</figure>*/}
-                      {/*</label>*/}
-                    </div>
-
-                    {audienceImages}
-
-                  </div>
-                </div>
-
+              <div className="panel-body">
+                {description }
               </div>
             </div>
-          </div>)}
+
+          </div>
+        </div>
+        {/*{showLoader === true ? ( <MlLoader/>) : (*/}
+          {/*<div className="requested_input">*/}
+            {/*<h2>Audience</h2>*/}
+            {/*<div className="col-lg-12">*/}
+              {/*<div className="row">*/}
+                {/*<div className="panel panel-default panel-form">*/}
+                  {/*<div className="panel-heading">*/}
+                    {/*Audience*/}
+                  {/*</div>*/}
+                  {/*<div className="panel-body">*/}
+
+                    {/*<div className="form-group nomargin-bottom">*/}
+                      {/*<textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description } name="audienceDescription" onBlur={this.handleBlur.bind(this)}></textarea>*/}
+                      {/*/!*<FontAwesome name='lock'  className="input_icon req_textarea_icon un_lock" id="isAudiencePrivate" onClick={this.onClick.bind(this, "audience", "isAudiencePrivate")}/>*!/*/}
+                      {/*/!*<input type="checkbox" className="lock_input" id="makePrivate" checked={isAudiencePrivate}/>*!/*/}
+                    {/*</div>*/}
+
+                  {/*</div>*/}
+                {/*</div>*/}
+                {/*<div className="panel panel-default">*/}
+                  {/*/!*<div className="panel-heading">Add Images</div>*!/*/}
+                  {/*<div className="panel-body nopadding">*/}
+                    {/*<div className="upload-file-wrap">*/}
+                      {/*/!*<input type="file" id="siFileinput" name="audienceImages" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onAudienceImageFileUpload.bind(this)} multiple />*!/*/}
+                      {/*/!*<label htmlFor="siFileinput">*!/*/}
+                      {/*/!*<figure>*!/*/}
+                      {/*/!*<i className="fa fa-upload" aria-hidden="true"></i>*!/*/}
+                      {/*/!*</figure>*!/*/}
+                      {/*/!*</label>*!/*/}
+                    {/*</div>*/}
+
+                    {/*{audienceImages}*/}
+
+                  {/*</div>*/}
+                {/*</div>*/}
+
+              {/*</div>*/}
+            {/*</div>*/}
+          {/*</div>*/}
+        {/*)}*/}
       </div>
     )
   }

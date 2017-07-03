@@ -789,7 +789,7 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
 
   let id = " "
  let registrationDetails =MlRegistration.findOne({_id: args.registrationId}) || {};
-
+  var fut = new Future();
   if(args && args.registration){
     if(args.type == "CONTACTTYPE"){
       let dbData = _.pluck(registrationDetails.contactInfo, 'numberType') || [];
@@ -838,7 +838,6 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
         let area = args.registration.addressInfo[0].addressArea
         let locality = args.registration.addressInfo[0].addressLocality
         let pin =args.registration.addressInfo[0].addressPinCode
-        var fut = new Future();
         geocoder.geocode(locality+","+area+","+city+","+pin, Meteor.bindEnvironment(function ( err, data ) {
           if(err){
             throw new Error("Invalid Locality selection "+e);

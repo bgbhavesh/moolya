@@ -88,7 +88,11 @@ export default class MoolyaMapView extends Component {
         {MapComponent?MapComponent:
           <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} showImage={this.props.showImage}/>
         }
-        {data.length>0?<MlMapFooter data={data} mapContext={this.props}/>:<div></div>}
+        {data.length>0?<MlMapFooter data={data} mapContext={this.props}/>:
+          <div className="bottom_actions_block bottom_count">
+            <div><b>0</b> of <b>0</b> users are Active<br/></div>
+          </div>
+        }
 
       </span>
 

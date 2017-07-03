@@ -101,7 +101,7 @@ query($activityId: String)  {
     isInternal
     isExternal
     mode
-    isServiceCardElligible
+    isServiceCardEligible
     industryTypes
     note
     imageLink
@@ -122,11 +122,7 @@ query($activityId: String)  {
         userId
       }
     }
-    conversation{
-      isAudio
-      isVideo
-      isMeetUp
-    }
+    conversation
     payment{
       amount
       isDiscount

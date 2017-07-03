@@ -30,6 +30,8 @@ class MlUserContext{
           var menu = MlAppMenuConfig.findOne({communityCode: userProfile.communityDefCode})
             if(menu)
                 return menu.menuName;
+            else
+              return 'mlBrowserMenu'   /*quick fix*/
         }
 
         return '';

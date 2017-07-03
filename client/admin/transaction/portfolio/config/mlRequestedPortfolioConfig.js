@@ -4,6 +4,12 @@ import gql from 'graphql-tag'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
 import MlPortfolioAssignComponent from '../component/MlPortfolioAssignComponent'
 import {validateTransaction} from '../actions/assignUserforTransactionAction'
+import moment from "moment";
+
+function dateFormatter (data){
+  let createdDateTime=data&&data.data&&data.data.createdAt?data.data.createdAt:null;
+  return <div>{createdDateTime&&moment(createdDateTime).format('MM-DD-YYYY hh:mm:ss')}</div>;
+}
 
 const mlRequestedPortfolioTableConfig=new MlViewer.View({
   name:"portfolioInfoTable",
@@ -21,7 +27,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "portfolioId", title: "Requested Id",dataSort:true},
-    {dataField: "createdAt", title: "Date & Time",dataSort:true},
+    {dataField: "createdAt", title: "Date & Time",dataSort:true,customComponent:dateFormatter},
     {dataField: "transactionType", title: "Transaction Type",dataSort:true},
     {dataField: "portfolioUserName", title: "Name",dataSort:true},
     {dataField: "contactNumber", title: "Contact No",dataSort:true},
@@ -155,6 +161,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
                           chapterId
                           subChapterId
                           communityId
+                          
                      }
                       }
               }

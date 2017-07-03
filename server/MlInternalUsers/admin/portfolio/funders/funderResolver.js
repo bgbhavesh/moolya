@@ -88,12 +88,12 @@ MlResolver.MlQueryResolver['fetchFunderAbout'] = (obj, args, context, info) => {
     if (portfolio && portfolio.hasOwnProperty('funderAbout')) {
       let details = portfolio.funderAbout
       let extendData = MlProfessions.findOne({_id: details.profession, industryId: details.industry})|| {};
-      details.industry = extendData.industryName || "";
-      details.profession = extendData.professionName || ""
+      details.industry = extendData.industryName || details.industry;
+      details.profession = extendData.professionName || details.profession;
       /*let userPersonal = MlMasterSettings.findOne({_id:details.gender}) || {}
       details.gender = userPersonal.genderInfo ? userPersonal.genderInfo.genderName : ''*/
       let userEmp = MlMasterSettings.findOne({_id:details.employmentStatus}) || {}
-      details.employmentStatus = userEmp.employmentTypeInfo ? userEmp.employmentTypeInfo.employmentName : ''
+      details.employmentStatus = userEmp.employmentTypeInfo ? userEmp.employmentTypeInfo.employmentName : details.employmentStatus;
 
       var object = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, details, context)
 

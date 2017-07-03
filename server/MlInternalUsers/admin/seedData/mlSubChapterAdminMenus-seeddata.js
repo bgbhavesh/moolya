@@ -581,7 +581,7 @@ if(Meteor.isServer){
               },
               {
                 "link" : "/admin/transactions/rejectedRegistrations",
-                "name" : "Create",
+                "name" : "Reject",
                 "uniqueId" : "transaction_registration_reject",
                 "isLink" : true,
                 "isMenu" : true,

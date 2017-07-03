@@ -5,7 +5,11 @@ var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
 import {findIdeatorAudienceActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
-import _ from 'lodash';
+import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
+import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
+import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
+import _ from 'lodash'
+import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
 import MlLoader from '../../../../../commons/components/loader/loader'
 
 export default class MlIdeatorAudience extends React.Component{
@@ -21,9 +25,17 @@ export default class MlIdeatorAudience extends React.Component{
     this.onAudienceImageFileUpload.bind(this)
     this.fetchPortfolioInfo.bind(this);
     this.fetchOnlyImages.bind(this);
+    this.initalizeAnnotaor.bind(this);
+    this.annotatorEvents.bind(this);
+    this.validateUserForAnnotation(this)
   }
+
+
+
   componentWillMount(){
     this.fetchPortfolioInfo();
+    let resp = this.validateUserForAnnotation();
+    return resp
   }
   componentDidUpdate(){
     OnLockSwitch();
@@ -33,6 +45,79 @@ export default class MlIdeatorAudience extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+  }
+
+  initalizeAnnotaor() {
+    initializeMlAnnotator(this.annotatorEvents.bind(this))
+    this.state.content = jQuery("#psContent").annotator();
+    this.state.content.annotator('addPlugin', 'MyPlugin', {
+      pluginInit: function () {
+      }
+    });
+  }
+
+  annotatorEvents(event, annotation, editor) {
+    if (!annotation)
+      return;
+    switch (event) {
+      case 'create': {
+        let response = this.createAnnotations(annotation);
+      }
+        break;
+      case 'update': {
+      }
+        break;
+      case 'annotationViewer': {
+        if (annotation[0].id) {
+          this.props.getSelectedAnnotations(annotation[0]);
+        } else {
+          this.props.getSelectedAnnotations(annotation[1]);
+        }
+      }
+        break;
+    }
+  }
+  async createAnnotations(annotation) {
+    let details = {portfolioId: this.props.portfolioDetailsId, docId: "audience", quote: JSON.stringify(annotation)}
+    const response = await createAnnotationActionHandler(details);
+    if (response && response.success) {
+      this.fetchAnnotations(true);
+    }
+    return response;
+  }
+
+  async fetchAnnotations(isCreate) {
+    const response = await findAnnotations(this.props.portfolioDetailsId, "audience");
+    let resp = JSON.parse(response.result);
+    let annotations = this.state.annotations;
+    this.setState({annotations: JSON.parse(response.result)})
+
+    let quotes = [];
+
+    _.each(this.state.annotations, function (value) {
+      quotes.push({
+        "id": value.annotatorId,
+        "text": value.quote.text,
+        "quote": value.quote.quote,
+        "ranges": value.quote.ranges,
+        "userName": value.userName,
+        "roleName" : value.roleName,
+        "profileImage" : value.profileImage,
+        "createdAt": value.createdAt
+      })
+    })
+    this.state.content.annotator('loadAnnotations', quotes);
+    return response;
+  }
+
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response && !this.state.isUserValidForAnnotation) {
+      this.setState({isUserValidForAnnotation:response})
+      this.initalizeAnnotaor()
+      this.fetchAnnotations()
+    }
   }
 
   onClick(fieldName, field, e){
@@ -131,45 +216,58 @@ export default class MlIdeatorAudience extends React.Component{
     let description =this.state.data.audienceDescription?this.state.data.audienceDescription:''
     return (
       <div className="admin_main_wrap">
-        {showLoader === true ? ( <MlLoader/>) : (
-          <div className="requested_input">
+        <div className="col-lg-12 col-sm-12">
+          <div className="row">
             <h2>Audience</h2>
-            <div className="col-lg-12">
-              <div className="row">
-                <div className="panel panel-default panel-form">
-                  <div className="panel-heading">
-                    Audience
-                  </div>
-                  <div className="panel-body">
+            <div id="psContent" className="panel panel-default panel-form-view">
 
-                    <div className="form-group nomargin-bottom">
-                      <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description } disabled = {true} name="description" onBlur={this.handleBlur.bind(this)}></textarea>
-                      {/*<FontAwesome name='lock'  className="input_icon req_textarea_icon un_lock" id="isAudiencePrivate" onClick={this.onClick.bind(this, "audience", "isAudiencePrivate")}/>*/}
-                      {/*<input type="checkbox" className="lock_input" id="makePrivate" checked={isAudiencePrivate}/>*/}
-                    </div>
-
-                  </div>
-                </div>
-                <div className="panel panel-default">
-                  {/*<div className="panel-heading">Add Images</div>*/}
-                  <div className="panel-body nopadding">
-                    <div className="upload-file-wrap">
-                      {/*<input type="file" id="siFileinput" name="audienceImages" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onAudienceImageFileUpload.bind(this)} multiple />*/}
-                      {/*<label htmlFor="siFileinput">*/}
-                      {/*<figure>*/}
-                      {/*<i className="fa fa-upload" aria-hidden="true"></i>*/}
-                      {/*</figure>*/}
-                      {/*</label>*/}
-                    </div>
-
-                    {audienceImages}
-
-                  </div>
-                </div>
-
+              <div className="panel-body">
+                {description }
               </div>
             </div>
-          </div>)}
+
+          </div>
+        </div>
+        {/*{showLoader === true ? ( <MlLoader/>) : (*/}
+          {/*<div className="requested_input">*/}
+            {/*<h2>Audience</h2>*/}
+            {/*<div className="col-lg-12">*/}
+              {/*<div className="row">*/}
+                {/*<div className="panel panel-default panel-form">*/}
+                  {/*<div className="panel-heading">*/}
+                    {/*Audience*/}
+                  {/*</div>*/}
+                  {/*<div className="panel-body">*/}
+
+                    {/*<div className="form-group nomargin-bottom">*/}
+                      {/*<textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description } name="audienceDescription" onBlur={this.handleBlur.bind(this)}></textarea>*/}
+                      {/*/!*<FontAwesome name='lock'  className="input_icon req_textarea_icon un_lock" id="isAudiencePrivate" onClick={this.onClick.bind(this, "audience", "isAudiencePrivate")}/>*!/*/}
+                      {/*/!*<input type="checkbox" className="lock_input" id="makePrivate" checked={isAudiencePrivate}/>*!/*/}
+                    {/*</div>*/}
+
+                  {/*</div>*/}
+                {/*</div>*/}
+                {/*<div className="panel panel-default">*/}
+                  {/*/!*<div className="panel-heading">Add Images</div>*!/*/}
+                  {/*<div className="panel-body nopadding">*/}
+                    {/*<div className="upload-file-wrap">*/}
+                      {/*/!*<input type="file" id="siFileinput" name="audienceImages" className="inputfile inputfile-upload" data-multiple-caption="{count} files selected" accept="image/*" onChange={this.onAudienceImageFileUpload.bind(this)} multiple />*!/*/}
+                      {/*/!*<label htmlFor="siFileinput">*!/*/}
+                      {/*/!*<figure>*!/*/}
+                      {/*/!*<i className="fa fa-upload" aria-hidden="true"></i>*!/*/}
+                      {/*/!*</figure>*!/*/}
+                      {/*/!*</label>*!/*/}
+                    {/*</div>*/}
+
+                    {/*{audienceImages}*/}
+
+                  {/*</div>*/}
+                {/*</div>*/}
+
+              {/*</div>*/}
+            {/*</div>*/}
+          {/*</div>*/}
+        {/*)}*/}
       </div>
     )
   }

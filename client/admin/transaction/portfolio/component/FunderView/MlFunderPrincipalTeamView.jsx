@@ -147,6 +147,10 @@ export default class MlFunderPrincipalTeamView extends React.Component {
   }
   onSelectPrincipal(index, e){
     this.setState({PIndex:index})
+
+    _.each(this.state.funderPrincipalList[index].privateFields, function (pf) {
+      $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
   onSelectTeam(index, e){
     this.setState({TIndex:index})

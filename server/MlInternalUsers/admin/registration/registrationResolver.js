@@ -853,7 +853,9 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
               let code = 200;
               let result = {addressId: id}
               let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-              fut.return(response);
+              if(response){
+                fut.return(response);
+              }
             }
           }catch(e){
             throw new Error("Error while updating address "+e);
@@ -880,7 +882,10 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
               let code = 200;
               let result = {addressId: id}
               let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
-              fut.return(response);
+              if(response){
+                fut.return(response);
+              }
+
             }
           }catch(e){
             throw new Error("Error while updating address "+e);

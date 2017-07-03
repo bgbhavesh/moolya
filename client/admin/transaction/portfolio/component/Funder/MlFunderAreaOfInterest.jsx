@@ -43,10 +43,11 @@ export default class MlFunderAreaOfInterest extends React.Component {
       const response = await fetchfunderPortfolioAreaInterest(portfolioDetailsId);
       if (response) {
         this.setState({loading: false, funderAreaOfInterest: response, funderAreaOfInterestList: response});
+        _.each(response.privateFields, function (pf) {
+          $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+        })
       }
-      _.each(response.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
+
     } else {
       this.setState({
         loading: false,
@@ -54,6 +55,8 @@ export default class MlFunderAreaOfInterest extends React.Component {
         funderAreaOfInterestList: that.context.funderPortfolio.areaOfInterest
       });
     }
+
+    this.setState({loading:false})
   }
 
   handleBlur(e) {
@@ -172,7 +175,7 @@ export default class MlFunderAreaOfInterest extends React.Component {
       arr.push(updateItem)
     })
     funderAreaOfInterest = arr;
-    funderAreaOfInterest=_.omit(funderAreaOfInterest,["privateFields"]);
+    // funderAreaOfInterest=_.omit(funderAreaOfInterest,["privateFields"]);
     this.setState({funderAreaOfInterest: funderAreaOfInterest})
     this.props.getAreaOfInterestDetails(funderAreaOfInterest, this.state.privateKey);
   }

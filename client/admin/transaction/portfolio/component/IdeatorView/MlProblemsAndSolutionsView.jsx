@@ -119,7 +119,7 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
   async validateUserForAnnotation() {
     const portfolioId = this.props.portfolioDetailsId
     const response = await validateUserForAnnotation(portfolioId);
-    if (response) {
+    if (response && !this.state.isUserValidForAnnotation) {
       this.setState({isUserValidForAnnotation:response})
       this.initalizeAnnotaor()
       this.fetchAnnotations()
@@ -131,6 +131,9 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
       response.problemImage ? response.problemImage : response.problemImage =[];
       response.solutionImage ? response.solutionImage : response.solutionImage =[];
       this.setState({portfolioIdeatorInfo : response});
+      _.each(response.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
   }
 
   render(){

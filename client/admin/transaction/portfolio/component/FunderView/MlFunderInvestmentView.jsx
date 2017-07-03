@@ -153,6 +153,10 @@ export default class MlFunderInvestmentView extends React.Component {
     this.fetchAnnotations(id);
     $('.investement-view-content .funding-investers').slideUp();
     $('#funding_show').slideDown()
+
+    _.each(getData.privateFields, function (pf) {
+      $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   render() {

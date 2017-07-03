@@ -23,7 +23,7 @@ let portfolioSchema = `
         accountType:String,
         source:String,
         createdBy:String,
-        createdAt:String,
+        createdAt:Date,
         status:String,
         assignedTo:String,
         progress:String,
@@ -51,12 +51,16 @@ let portfolioSchema = `
     
     input privateKeys{
       keyName:String,
-      booleanKey:String
+      booleanKey:String,
+      index:Int,
+      tabName:String
     },
     
     type PrivateKeys{
       keyName:String,
-      booleanKey:String
+      booleanKey:String,
+      index:Int,
+      tabName:String
     },
     
     input portfoliodetails{
@@ -76,6 +80,7 @@ let portfolioSchema = `
         accountType:String,
         source:String,
         createdBy:String,
+        createdAt:Date,
         status:String,
         assignedTo:String,
         progress:String,

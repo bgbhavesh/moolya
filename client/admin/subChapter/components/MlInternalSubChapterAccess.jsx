@@ -130,7 +130,8 @@ export default class MlInternalSubChapterAccess extends React.Component {
     return (
 
       <div className="panel-body">
-        <ul className="nav nav-tabs" role="tablist">
+        <div className="ml_tabs">
+        <ul className="nav nav-pills" role="tablist">
           <li role="presentation" className="active" onClick={this.getSelectedTab.bind(this, "backendUser")}><a
             href="#home" aria-controls="home" role="tab" data-toggle="tab">Backend user Access</a></li>
           <li role="presentation" onClick={this.getSelectedTab.bind(this, "externalUser")}>
@@ -218,7 +219,7 @@ export default class MlInternalSubChapterAccess extends React.Component {
             </div>
           </div>
         }
-
+        </div>
       </div>
 
     )

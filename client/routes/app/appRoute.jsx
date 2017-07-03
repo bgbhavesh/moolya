@@ -37,7 +37,7 @@ import MlAppMyCalendar from "../../app/calendar/myCalendar/components/MlAppMyCal
 import MlAppActivity from "../../app/calendar/manageScheduler/activity/components/MlAppActivity";
 import MlAppScheduleHead from "../../app/calendar/manageScheduler/activity/components/MlAppActivityList";
 import MlAppActivityList from "../../app/calendar/manageScheduler/activity/components/MlAppActivityList";
-import MlAppCreateTeam from "../../app/calendar/manageScheduler/activity/components/MlAppCreateTeam";
+import MlAppCreateTeam from "../../app/calendar/manageScheduler/activity/components/MlAppActivityBasicInfo";
 
 /**
  * Tasks Routes

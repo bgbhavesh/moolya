@@ -1,22 +1,44 @@
+/** ************************************************************
+ * Date: 19 Jun, 2017
+ * Programmer: Mukhil <mukhil.padnamanabhan@raksan.in>
+ * Description : This will manage the activities
+ * JavaScript XML file MlAppActivity.jsx
+ * *************************************************************** */
+
+/**
+ * Imports libs and components
+ */
 import React, {Component} from "react";
-import {render} from "react-dom";
 import MlAppScheduleHead from "../../commons/components/MlAppScheduleHead";
 import StepZilla from "../../../../../commons/components/stepzilla/StepZilla";
-import MlAppCreateTeam from "./MlAppCreateTeam";
+import MlAppBasicInfo from "./MlAppActivityBasicInfo";
 import MlAppChooseTeam from "./MlAppChooseTeam";
 import MlAppActivityPayment from "./MlAppActivityPayment";
 import MlAppActivityHistory from "./MlAppActivityHistory";
+import { createActivityActionHandler , getActivityActionHandler, updateActivityActionHandler }  from './../actions/activityActionHandler';
 
 export default class MlAppActivity extends Component {
+
+  /**
+   * Constructor
+   * @param props :: Object - Parents data
+   */
   constructor(props) {
     super(props)
     this.state = {
-      activityId: " "
+      activityId: " ",
+      basicInfo: {
+        industryTypes:[],
+        duration: {},
+        deliverable: ['']
+      },
     };
-
-    this.getCreatedId.bind(this)
   }
 
+  /**
+   * ComponentDidMount
+   * Desc :: Initializing the switch and fetch activity data in edit mode
+   */
   componentDidMount() {
     $('.switch input').change(function () {
       if ($(this).is(':checked')) {
@@ -25,24 +47,94 @@ export default class MlAppActivity extends Component {
         $(this).parent('.switch').removeClass('on');
       }
     });
+    this.getActivityDetails();
   }
 
-  getCreatedId(value) {
-    this.setState({activityId: value});
-    console.log(this.state.activityId)
+  /**
+   * Method :: getActivityDetails
+   * Desc   :: fetch the current activity details from server and set in state
+   * @returns Void
+   */
+  async getActivityDetails(){
+    const that = this;
+    let id = FlowRouter.getQueryParam('id');
+    if(!id) {
+      this.setState({editScreen:false})
+    }else {
+      let activity = await getActivityActionHandler(id);
+      if(activity) {
+        let duration = activity.duration ? activity.duration :{};
+        duration = {
+          hours   : duration.hours ? duration.hours   : '',
+          minutes : duration.minutes ? duration.minutes : ''
+        };
+
+        /**
+         * Set activity basic info
+         */
+        let activityBasicInfo = {
+          name                  : activity.name,
+          displayName           : activity.displayName,
+          isInternal            : activity.isInternal,
+          isExternal            : activity.isExternal,
+          mode                  : activity.mode ? activity.mode : "online",
+          isServiceCardEligible : activity.isServiceCardEligible,
+          industryTypes         : activity.industryTypes ? activity.industryTypes : [],
+          duration              : duration,
+          deliverable           : activity.deliverable && activity.deliverable.length ? (new Array(activity.deliverable))[0] : [''],
+          note                  : activity.note,
+          imageLink             : activity.imageLink,
+          conversation          : activity.conversation && activity.conversation.length ? (new Array(activity.conversation))[0] : []
+        };
+        that.setState({
+          basicInfo: activityBasicInfo
+        });
+      }
+    }
   }
 
+  /**
+   * Method :: saveActivity
+   * Desc   :: Save activity data on server
+   * @param data :: Object :: Activity data
+   * @returns Void
+   */
+  async saveActivity(data) {
+    let id = FlowRouter.getQueryParam('id');
+    if(id){
+      const res = await updateActivityActionHandler(id, data);
+      if(res){
+        toastr.success("Saved Successfully");
+      }
+    } else {
+      const res = await createActivityActionHandler(data);
+      if(res) {
+        toastr.success("Saved Successfully");
+        FlowRouter.setQueryParams({id:res.result});
+      }
+    }
+  }
 
+  /**
+   * Render
+   * Desc   :: Render the HTML for this component
+   * @returns {HTML}
+   */
   render() {
+    const that = this;
+
+    /**
+     * Setting up steps for activity different step
+     */
     const steps = [
         {
           name: 'Create',
-          component: <MlAppCreateTeam setId={this.getCreatedId.bind(this)}/>,
+          component: <MlAppBasicInfo saveActivity={that.saveActivity} data={that.state.basicInfo} />,
           icon: <span className="ml fa fa-plus-square-o"></span>
         },
         {
           name: 'Choose team',
-          component: <MlAppChooseTeam activityId={this.state.activityId}/>,
+          component: <MlAppChooseTeam saveActivity={that.saveActivity} activityId={this.state.activityId}/>,
           icon: <span className="ml fa fa-users"></span>
         },
         {
@@ -56,10 +148,14 @@ export default class MlAppActivity extends Component {
           icon: <span className="ml ml-moolya-symbol"></span>
         }
       ];
+
+    /**
+     * Return the html to render
+     */
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
-          <MlAppScheduleHead/>
+          <MlAppScheduleHead s/>
           <div className="clearfix"/>
           <div className="col-md-12">
             <div className='step-progress'>

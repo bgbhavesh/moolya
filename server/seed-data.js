@@ -316,6 +316,7 @@ if(!hierarchyAssignment) {
       roleId: clusterAdminHierarchy._id,
       roleName: clusterAdminHierarchy.roleName,
       displayName: clusterAdminHierarchy.displayName,
+      roleType: "Internal User",
       isAssigned: true,
       assignedLevel: "cluster",
       reportingRole: ""
@@ -324,6 +325,7 @@ if(!hierarchyAssignment) {
         roleId: chapterAdminHierarchy._id,
         roleName: chapterAdminHierarchy.roleName,
         displayName: chapterAdminHierarchy.displayName,
+        roleType: "Internal User",
         isAssigned: true,
         assignedLevel: "chapter",
         reportingRole: clusterAdminHierarchy._id
@@ -332,6 +334,7 @@ if(!hierarchyAssignment) {
         roleId: subchapterAdminHierarchy._id,
         roleName: subchapterAdminHierarchy.roleName,
         displayName: subchapterAdminHierarchy.displayName,
+        roleType: "Internal User",
         isAssigned: true,
         assignedLevel: "chapter",
         reportingRole: chapterAdminHierarchy._id
@@ -340,6 +343,7 @@ if(!hierarchyAssignment) {
         roleId: communityAdminHierarchy._id,
         roleName: communityAdminHierarchy.roleName,
         displayName: communityAdminHierarchy.displayName,
+        roleType: "Internal User",
         isAssigned: true,
         assignedLevel: "community",
         reportingRole: subchapterAdminHierarchy._id

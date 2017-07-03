@@ -42,8 +42,9 @@ class MlOfficeRepo{
       myOffice['subChapterName']  = profile.subChapterName;
       myOffice["communityId"]     = profile.communityId;
       myOffice["communityName"]   = profile.communityName;
-      myOffice["branchType "]     = officeDetails.branchType;
-      myOffice["officeLocation "] = officeDetails.officeLocation;
+      myOffice["officeName"]      = officeDetails.officeName;
+      myOffice["branchType"]      = officeDetails.branchType;
+      myOffice["officeLocation"]  = officeDetails.officeLocation;
       myOffice["landmark"]        = officeDetails.landmark;
       myOffice["streetLocality"]  = officeDetails.streetLocality;
       myOffice["area"]            = officeDetails.area;
@@ -206,7 +207,7 @@ class MlOfficeRepo{
 
 
       // office journal entry should create
-      
+
       return true;
     }
 

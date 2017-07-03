@@ -137,6 +137,10 @@ export default class MlFunderSuccessStories extends React.Component {
   }
 
   onSaveAction(e) {
+    var isDate = _.findIndex(this.state.funderSuccess, {date:''})
+    var dateKey = _.compact(_.map(this.state.funderSuccess, 'date'));
+    if ((isDate > 0) || (dateKey.length != this.state.funderSuccess.length))
+      toastr.error("Please select Date");
     this.setState({funderSuccessList: this.state.funderSuccess, popoverOpen: false})
   }
 
@@ -262,9 +266,9 @@ export default class MlFunderSuccessStories extends React.Component {
                         <div className="col-md-12">
                           <div className="form-group">
                             <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
-                                      inputProps={{placeholder: "Select Date"}} ref="date" closeOnSelect={true}
+                                      inputProps={{placeholder: "Select Date"}} ref="date"
                                       defaultValue={this.state.data.date ? this.state.data.date : ''}
-                                      onBlur={this.dateChange.bind(this)}  isValidDate={ valid }/>
+                                      onBlur={this.dateChange.bind(this)}  isValidDate={ valid }/> {/**/} {/*closeOnSelect={true}*/}
                             <FontAwesome name='unlock' className="input_icon un_lock"
                                          onClick={this.onLockChange.bind(this, "date", "isDatePrivate")}/>
                           </div>

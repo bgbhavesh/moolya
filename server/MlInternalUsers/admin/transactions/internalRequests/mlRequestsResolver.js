@@ -24,10 +24,10 @@ MlResolver.MlMutationResolver['createRequestss'] = (obj, args, context, info) =>
     let communityDetails = MlCommunityDefinition.findOne({"code":args.requests.community})|| {};
     args.requests.communityName = communityDetails.name;
 
-    if(Meteor.users.findOne({_id : context.userId}))
-    {
-      args.requests.createdBy = Meteor.users.findOne({_id: context.userId}).profile.firstName;
-      args.requests.emailId = Meteor.users.findOne({_id: context.userId}).username;
+    let user = mlDBController.findOne('users', {_id: context.userId}, context)
+    if(user){
+      args.requests.createdBy =user.profile.InternalUprofile.moolyaProfile.firstName?user.profile.InternalUprofile.moolyaProfile.firstName:""+" "+user.profile.InternalUprofile.moolyaProfile.lastName?user.profile.InternalUprofile.moolyaProfile.lastName:"";
+      args.requests.emailId = user.profile.email;
     }
 
   let requestDetails = MlRequestType.findOne({"_id":args.requests.requestTypeId})|| {};

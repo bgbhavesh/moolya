@@ -36,6 +36,7 @@ export default class MlAppNewSpokePerson extends React.Component {
       totalCount: this.refs.totalCount.value,
       principalUserCount: this.refs.principalUserCount.value,
       teamUserCount: this.refs.teamUserCount.value,
+      officeName: this.refs.officeName.value,
       branchType: this.refs.branchType.value,
       officeLocation: this.refs.officeLocation.value,
       streetLocality: this.refs.streetLocality.value,
@@ -235,6 +236,10 @@ export default class MlAppNewSpokePerson extends React.Component {
             <div className="col-md-6">
               <div className="form_bg">
                 <form>
+                  <div className="form-group">
+                    <input type="text" placeholder="Office Name" className="form-control float-label" ref="officeName"/>
+                  </div>
+
                   <div className="form-group">
                     <input type="text" placeholder="Branch Type" className="form-control float-label" ref="branchType"/>
                   </div>

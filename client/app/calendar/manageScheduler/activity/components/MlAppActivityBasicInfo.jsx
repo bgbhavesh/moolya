@@ -271,6 +271,10 @@ export default class MlAppBasicInfo extends React.Component{
    * Desc :: intilize float labels
    */
   componentDidMount() {
+
+    $('.float-label').jvFloat();
+    let WinHeight = $(window).height();
+    $('.step_form_wrap').height(WinHeight-(220+$('.app_header').outerHeight(true)));
     $('.switch input').change(function () {
       if ($(this).is(':checked')) {
         $(this).parent('.switch').addClass('on');
@@ -278,9 +282,6 @@ export default class MlAppBasicInfo extends React.Component{
         $(this).parent('.switch').removeClass('on');
       }
     });
-    $('.float-label').jvFloat();
-    var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(310+$('.admin_header').outerHeight(true)));
   }
 
   /**

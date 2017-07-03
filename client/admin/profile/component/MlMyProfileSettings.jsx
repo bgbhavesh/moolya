@@ -23,7 +23,7 @@ export default class MyProfileSettings extends React.Component{
       currencyTypes: " ",
       numericalFormat:" ",
       clusterId: " ",
-      languages: [],
+      languages: "",
       timeZone:""
     }
     this.optionsBySelectCurrencySymbol.bind(this);
@@ -87,13 +87,10 @@ export default class MyProfileSettings extends React.Component{
     this.setState({measurementSystem:data.value})
   }
   optionsBySelectTimeZone(val){
-    console.log(val)
     this.setState({timeZone:val})
   }
 
   optionsBySelectLanguage(val) {
-    // let languages = this.state.languages;
-    // languages.push(val)
     this.setState({languages: val})
   }
 
@@ -109,7 +106,7 @@ export default class MyProfileSettings extends React.Component{
     console.log(response);
     that.setState({measurementSystem : response.profile.numericalFormat,
       currencySymbol:response.profile.currencyTypes, clusterId: response.profile.InternalUprofile.moolyaProfile.userProfiles,
-      language: response.profile.languages, timeZone: response.profile.timeZone
+      languages: response.profile.languages, timeZone: response.profile.timeZone
     });
 
     let temp = that.state.clusterId || [];
@@ -126,7 +123,7 @@ export default class MyProfileSettings extends React.Component{
     let Details = {
       currencySymbol : this.state.currencySymbol,
       measurementSystem :this.state.measurementSystem,
-      languages: this.state.language,
+      languages: this.state.languages,
       timeZone: this.state.timeZone
     }
     const dataresponse = await updateSettings(Details);
@@ -215,7 +212,7 @@ export default class MyProfileSettings extends React.Component{
 
                 <div className="form-group">
                   <div className="form-group">
-                    <Moolyaselect multiSelect={true}  placeholder={"Language"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.language} queryType={"graphql"} query={languagesquery} isDynamic={true} id={'languagesquery'}  onSelect={this.optionsBySelectLanguage.bind(this)} />
+                    <Moolyaselect multiSelect={false}  placeholder={"Language"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.languages} queryType={"graphql"} query={languagesquery} isDynamic={true} id={'languagesquery'}  onSelect={this.optionsBySelectLanguage.bind(this)} />
                   </div>
                 </div>
                 <div className="form-group">

@@ -103,8 +103,8 @@ export default class MlCommunityList extends Component {
             <a data-toggle="tooltip" title="Ideators" data-placement="bottom" className="IDE" data-filter="ideator">
               <span className="ml ml-ideator" onClick={this.onStatusChange.bind(this, "Ideators")}></span>
             </a>
-            <a data-toggle="tooltip" title="Funders" data-placement="bottom" className="FUN" data-filter="funder">
-              <span className="ml ml-funder" onClick={this.onStatusChange.bind(this, "Funders")}></span>
+            <a data-toggle="tooltip" title="Investors" data-placement="bottom" className="FUN" data-filter="funder">
+              <span className="ml ml-funder" onClick={this.onStatusChange.bind(this, "Investors")}></span>
             </a>
             <a data-toggle="tooltip" title="Start Ups" data-placement="bottom" className="STU" data-filter="startup">
               <span className="ml ml-startup" onClick={this.onStatusChange.bind(this, "Startups")}></span>

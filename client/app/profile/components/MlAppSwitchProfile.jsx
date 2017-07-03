@@ -89,7 +89,7 @@ componentDidUpdate(){
     if(response&&response.success){
       var resp=await this.fetchExternalUserProfiles();
       this.initializeSwiper();
-      toastr.success("Profile Switched Successfully");
+      toastr.success("Profile switched successfully");
       reloadPage();
     }else{
       //throw error

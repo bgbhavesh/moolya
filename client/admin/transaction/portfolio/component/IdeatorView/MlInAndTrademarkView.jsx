@@ -20,7 +20,7 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
     }
     this.fetchPortfolioInfo.bind(this);
     this.createAnnotations.bind(this);
-    this.fetchAnnotations.bind(this);
+    //this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
     this.validateUserForAnnotation(this)
@@ -115,17 +115,19 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
     });
 
     this.fetchPortfolioInfo();
-    if(this.state.isUserValidForAnnotation){
+  /*  if(this.state.isUserValidForAnnotation){
       this.initalizeAnnotaor()
     }
-    this.fetchAnnotations();
+    this.fetchAnnotations();*/
     initalizeFloatLabel();
   }
   async validateUserForAnnotation() {
     const portfolioId = this.props.portfolioDetailsId
     const response = await validateUserForAnnotation(portfolioId);
-    if (response) {
+    if (response && !this.state.isUserValidForAnnotation) {
       this.setState({isUserValidForAnnotation:response})
+      this.initalizeAnnotaor()
+      this.fetchAnnotations();
     }
   }
 
@@ -148,7 +150,7 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
           <div id="trademarkContent" className="panel panel-default panel-form-view">
 
             <div className="panel-body">
-              {this.state.portfolioIdeatorInfo.description}
+              {this.state.portfolioIdeatorInfo.IPdescription}
             </div>
           </div>
 

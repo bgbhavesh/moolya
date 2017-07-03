@@ -3,7 +3,7 @@ import {render} from "react-dom";
 import {BootstrapTable, TableHeaderColumn} from "react-bootstrap-table";
 import {fetchProcessSetupHandler} from "../actions/fetchProcessSetupHandler";
 import {updateProcessSetupActionHandler, updateProcessTransaction} from "../actions/updateProcessSetupAction";
-import {initalizeFloatLabel} from "../../../utils/formElemUtil";
+import {initalizeFloatLabel,OnToggleSwitch} from "../../../utils/formElemUtil";
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import MoolyaSelect from "../../../../commons/components/select/MoolyaSelect";
@@ -32,6 +32,9 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
 
   componentDidMount() {
     initalizeFloatLabel();
+  }
+  componentDidUpdate(){
+    OnToggleSwitch(true,true);
   }
 
   componentWillReceiveProps(newProps){
@@ -244,7 +247,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
           </div>
           <div className="tab-pane" id={`processSetup${that.props.data._id}`}>
             <div className="panel panel-default">
-              <div className="panel-heading">Add Stages<img src="/images/add.png" onClick={that.addStageComponent.bind(that)}/></div>
+              <div className="panel-heading">Add Stages<img className="pull-right" src="/images/add.png" onClick={that.addStageComponent.bind(that)}/></div>
               <div className="panel-body">
                 {that.state.stages.map(function (stage, sIdx) {
                    return(
@@ -260,7 +263,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
                          </div>
                        </div>
                        <div className="col-md-6">
-                         <div className="form-group switch_wrap">
+                         <div className="form-group switch_wrap inline_switch small_sw">
                            <label>Status</label>
                            <label className="switch">
                              <input type="checkbox" checked={stage.isActive} onChange={that.onStageStatusChange.bind(that, sIdx)}/>
@@ -284,7 +287,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
                                <div className="form-group">
                                  <input type="text" placeholder="Type" className="form-control float-label" />
                                </div>
-                               <div className="form-group switch_wrap">
+                               <div className="form-group switch_wrap inline_switch small_sw">
                                  <label>Status</label>
                                  <label className="switch">
                                    <input type="checkbox" checked={action.isActive} onChange={that.onActionStatusChange.bind(that, sIdx, aIdx)}/>

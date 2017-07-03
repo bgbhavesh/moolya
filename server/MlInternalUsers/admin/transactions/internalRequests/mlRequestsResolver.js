@@ -69,7 +69,7 @@ MlResolver.MlMutationResolver['updateRequestsStatus'] = (obj, args, context, inf
   let requestId = args.requestsId;
   let transaction = mlDBController.findOne("MlRequests", {requestId: requestId});
   let decision = false;
-  if(args.status == "WIP" || args.status == "Approved"){
+  if(args.status == "WIP" || args.status == "Approved" || args.status == "Rejected"){
     decision = mlHierarchyAssignment.canWorkOnInternalRequest(requestId,"MlRequests",context.userId)
   }
   if( decision === false ){

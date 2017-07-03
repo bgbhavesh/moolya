@@ -44,7 +44,7 @@ class MlEditIndustryType extends React.Component{
   async handleSuccess(response) {
     if (response){
       if(response.success)
-        FlowRouter.go("/admin/settings/industryList");
+        FlowRouter.go("/admin/settings/documentProcess/industryList");
       else
         toastr.error(response.result);
     }
@@ -90,17 +90,11 @@ class MlEditIndustryType extends React.Component{
         showAction: true,
         handler: async(event) => this.props.handler(this.updateIndustryType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
-      // {
-      //   showAction: true,
-      //   actionName: 'add',
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
-          FlowRouter.go("/admin/settings/industryList")
+          FlowRouter.go("/admin/settings/documentProcess/industryList")
         }
       }
     ];

@@ -42,10 +42,11 @@ export default class MlFunderSuccessStories extends React.Component {
       const response = await fetchfunderPortfolioSuccess(portfolioDetailsId);
       if (response) {
         this.setState({loading: false, funderSuccess: response, funderSuccessList: response});
+        // _.each(response.privateFields, function (pf) {
+        //   $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+        // })
       }
-      _.each(response.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
+
     } else {
       this.setState({
         loading: false,
@@ -88,6 +89,12 @@ export default class MlFunderSuccessStories extends React.Component {
       selectedObject: index,
       popoverOpen: !(this.state.popoverOpen)
     });
+
+    setTimeout(function () {
+      _.each(details.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+    }, 10)
   }
 
   componentDidUpdate() {
@@ -122,7 +129,7 @@ export default class MlFunderSuccessStories extends React.Component {
     } else {
       details = _.extend(details, {[key]: false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex}
     this.setState({privateKey:privateKey})
     this.setState({data: details}, function () {
       this.sendDataToParent()
@@ -130,6 +137,10 @@ export default class MlFunderSuccessStories extends React.Component {
   }
 
   onSaveAction(e) {
+    var isDate = _.findIndex(this.state.funderSuccess, {date:''})
+    var dateKey = _.compact(_.map(this.state.funderSuccess, 'date'));
+    if ((isDate > 0) || (dateKey.length != this.state.funderSuccess.length))
+      toastr.error("Please select Date");
     this.setState({funderSuccessList: this.state.funderSuccess, popoverOpen: false})
   }
 
@@ -188,11 +199,12 @@ export default class MlFunderSuccessStories extends React.Component {
         }
       }
       let newItem = _.omit(item, "__typename");
+      newItem =_.omit(newItem,"privateFields");
       // let updateItem = _.omit(newItem, 'logo');
       arr.push(newItem)
     })
     funderSuccess = arr;
-    funderSuccess=_.omit(funderSuccess,["privateFields"]);
+    // funderSuccess=_.omit(funderSuccess,["privateFields"]);
     this.setState({funderSuccess: funderSuccess})
     this.props.getSuccessStoriesDetails(funderSuccess, this.state.privateKey);
   }
@@ -254,10 +266,10 @@ export default class MlFunderSuccessStories extends React.Component {
                         <div className="col-md-12">
                           <div className="form-group">
                             <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
-                                      inputProps={{placeholder: "Select Date"}} ref="date" closeOnSelect={true}
+                                      inputProps={{placeholder: "Select Date"}} ref="date"
                                       defaultValue={this.state.data.date ? this.state.data.date : ''}
-                                      onBlur={this.dateChange.bind(this)}  isValidDate={ valid }/>
-                            <FontAwesome name='unlock' className="input_icon"
+                                      onBlur={this.dateChange.bind(this)}  isValidDate={ valid }/> {/**/} {/*closeOnSelect={true}*/}
+                            <FontAwesome name='unlock' className="input_icon un_lock"
                                          onClick={this.onLockChange.bind(this, "date", "isDatePrivate")}/>
                           </div>
                           <div className="clearfix"></div>
@@ -275,7 +287,7 @@ export default class MlFunderSuccessStories extends React.Component {
                             <input type="text" placeholder="Enter title of Story" className="form-control float-label"
                                    name="storyTitle" defaultValue={this.state.data.storyTitle}
                                    onBlur={this.handleBlur.bind(this)}/>
-                            <FontAwesome name='unlock' className="input_icon"
+                            <FontAwesome id="isStoryTitlePrivate" name='unlock' className="input_icon un_lock"
                                          onClick={this.onLockChange.bind(this, "storyTitle", "isStoryTitlePrivate")}/>
 
                           </div>
@@ -283,7 +295,7 @@ export default class MlFunderSuccessStories extends React.Component {
                             <input type="text" placeholder="Description" className="form-control float-label"
                                    name="description" defaultValue={this.state.data.description}
                                    onBlur={this.handleBlur.bind(this)}/>
-                            <FontAwesome name='unlock' className="input_icon"
+                            <FontAwesome id="isDescPrivate" name='unlock' className="input_icon un_lock"
                                          onClick={this.onLockChange.bind(this, "description", "isDescPrivate")}/>
 
                           </div>

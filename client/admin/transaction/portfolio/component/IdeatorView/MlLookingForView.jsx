@@ -16,10 +16,11 @@ export default class MlPortfolioIdeatorLookingForView extends React.Component {
     super(props);
 
     this.state = {
-      portfolioIdeatorInfo: {}
+      portfolioIdeatorInfo: {},
+      isUserValidForAnnotation:false
     }
     this.fetchPortfolioInfo.bind(this);
-    this.fetchAnnotations.bind(this);
+    //this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
     this.validateUserForAnnotation(this)
@@ -112,17 +113,19 @@ export default class MlPortfolioIdeatorLookingForView extends React.Component {
     });
 
     this.fetchPortfolioInfo();
-    if(this.state.isUserValidForAnnotation){
+   /* if(this.state.isUserValidForAnnotation){
       this.initalizeAnnotaor()
     }
-    this.fetchAnnotations();
+    this.fetchAnnotations();*/
     initalizeFloatLabel();
   }
   async validateUserForAnnotation() {
     const portfolioId = this.props.portfolioDetailsId
     const response = await validateUserForAnnotation(portfolioId);
-    if (response) {
+    if (response && !this.state.isUserValidForAnnotation) {
       this.setState({isUserValidForAnnotation:response})
+      this.initalizeAnnotaor()
+      this.fetchAnnotations();
     }
   }
 
@@ -131,6 +134,10 @@ export default class MlPortfolioIdeatorLookingForView extends React.Component {
     if(response){
       this.setState({portfolioIdeatorInfo : response});
     }
+
+    _.each(response.privateFields, function (pf) {
+      $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
 
   }
 
@@ -145,7 +152,7 @@ export default class MlPortfolioIdeatorLookingForView extends React.Component {
           <div id="lookingForContent" className="panel panel-default panel-form-view">
 
             <div className="panel-body">
-              {this.state.portfolioIdeatorInfo.description}
+              {this.state.portfolioIdeatorInfo.lookingForDescription}
             </div>
           </div>
 

@@ -19,7 +19,7 @@ const mlRejectedInternalRequestsTableConfig=new MlViewer.View({
     {dataField: "requestId",title:"Id",'isKey':true,isHidden:true,selectRow:true},
     {dataField: "requestId", title: "Transaction Id",dataSort:true,selectRow:true},
     {dataField: "createdBy", title: "Created By",dataSort:true,selectRow:true},
-    {dataField: "requestId", title: "Email Id",dataSort:true,selectRow:true},
+    {dataField: "emailId", title: "Email Id",dataSort:true,selectRow:true},
     {dataField: "clusterName", title: "Cluster",dataSort:true,selectRow:true},
     {dataField: "chapterName", title: "Chapter",dataSort:true,selectRow:true},
     {dataField: "subChapterName", title: "Sub Chapter",dataSort:true,selectRow:true},
@@ -48,6 +48,7 @@ const mlRejectedInternalRequestsTableConfig=new MlViewer.View({
                           userId
                           status
                           requestId
+                          emailId
                           requestTypeName
                           transactionCreatedDate
                           transactionTypeName

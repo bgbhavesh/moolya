@@ -51,7 +51,7 @@ let supportedApi = [
   {api:'createAssets', actionName:'CREATE', moduleName:"ASSETS"},
   {api:'updateSelectedAsset', actionName:'UPDATE', moduleName:"ASSETS"},
 
-  {api:'fetchAssets', actionName:'READ', moduleName:"ASSETS"},
+  {api:'fetchAssets', actionName:'READ', moduleName:"ASSETS",isWhiteList:true},
   {api:'findAsset', actionName:'READ', moduleName:"ASSETS"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

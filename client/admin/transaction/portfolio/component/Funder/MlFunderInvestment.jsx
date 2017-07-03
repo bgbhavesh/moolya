@@ -8,7 +8,7 @@ import Datetime from "react-datetime";
 import gql from "graphql-tag";
 import {graphql} from "react-apollo";
 import Moolyaselect from "../../../../../../client/commons/components/select/MoolyaSelect";
-import MlLoader from '../../../../../commons/components/loader/loader'
+import MlLoader from "../../../../../commons/components/loader/loader";
 import {fetchfunderPortfolioInvestor} from "../../actions/findPortfolioFunderDetails";
 var FontAwesome = require('react-fontawesome');
 
@@ -108,6 +108,10 @@ export default class MlFunderInvestment extends React.Component {
   }
 
   onSaveAction(e) {
+    var isDate = _.findIndex(this.state.funderInvestment, {dateOfInvestment:''})
+    var dateKey = _.compact(_.map(this.state.funderInvestment, 'dateOfInvestment'));
+    if ((isDate > 0) || (dateKey.length != this.state.funderInvestment.length))
+      toastr.error("Please select Date");
     this.setState({funderInvestmentList: this.state.funderInvestment, popoverOpen: false})
   }
 
@@ -216,17 +220,17 @@ export default class MlFunderInvestment extends React.Component {
                 <div className="col-lg-12">
                   <div className="row">
                     <div className="col-lg-2 col-md-4 col-sm-4">
-                      <a href="#" id="create_clientdefault" data-placement="top" data-class="large_popover">
+                      <a href="" id="create_clientdefault" data-placement="top" data-class="large_popover">
                         <div className="list_block notrans" onClick={this.addInvestment.bind(this)}>
                           <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                          <h3 onClick={this.addInvestment.bind(this)}>Add New Investor</h3>
+                          <h3 onClick={this.addInvestment.bind(this)}>Add New Investment</h3>
                         </div>
                       </a>
                     </div>
                     {funderInvestmentList.map(function (details, idx) {
                       return (
                         <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
-                          <a href="#" id={"create_client" + idx}>
+                          <a href="" id={"create_client" + idx}>
                             <div className="list_block notrans funding_list">
                               {/*<div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>*/}
                               <div className="cluster_status inactive_cl">
@@ -248,7 +252,7 @@ export default class MlFunderInvestment extends React.Component {
               </ScrollArea>
               <Popover placement="right" isOpen={this.state.popoverOpen}
                        target={"create_client" + this.state.selectedObject} toggle={this.toggle}>
-                <PopoverTitle> Add New Member </PopoverTitle>
+                <PopoverTitle> Add New Investment </PopoverTitle>
                 <PopoverContent>
                   <div className="ml_create_client">
                     <div className="medium-popover">

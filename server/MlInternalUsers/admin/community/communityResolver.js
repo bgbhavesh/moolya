@@ -30,11 +30,14 @@ MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
   let communityData= mlDBController.find('MlCommunityDefinition', {isActive:true}, context).fetch();
   let response=[];
   _.each(communityData,function (item,value) {
-    query.communityDefId=item._id;
+    // query.communityDefId=item._id;
+    query.communityDefName = item.name;
+    query.isApprove=true;
     if(item.communityImageLink!="ml ml-browser"){
       response.push({
         key: item._id,
-        count: mlDBController.find('MlCommunity', query, context).count(),
+        // count: mlDBController.find('MlCommunity', query, context).count(),
+        count: mlDBController.find('users', {'profile.externalUserProfiles':{$elemMatch: query}}, context).count(),
         icon: item.communityImageLink
       })
     }

@@ -13,8 +13,8 @@ const mlRejectedInternalRequestsTableConfig=new MlViewer.View({
   searchFields:["transactionCreatedDate","requestId" ,"requestTypeName" , "clusterName", "chapterName", "subChapterName", "communityId", "status"],
   throttleRefresh:false,
   pagination:true,//To display pagination
-  filter:true,
-  filterComponent: <MlCustomFilter module="internalRejectedRequests" moduleName="internalRejectedRequests" />,
+ /* filter:true,
+  filterComponent: <MlCustomFilter module="internalRejectedRequests" moduleName="internalRejectedRequests" />,*/
   columns:[
     {dataField: "requestId",title:"Id",'isKey':true,isHidden:true,selectRow:true},
     {dataField: "requestId", title: "Transaction Id",dataSort:true,selectRow:true},

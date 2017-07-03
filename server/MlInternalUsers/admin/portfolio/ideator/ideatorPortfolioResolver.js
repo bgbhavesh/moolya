@@ -240,8 +240,8 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context
     if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('portfolioIdeatorDetails')) {
       let details = ideatorPortfolio.portfolioIdeatorDetails
       let extendData = MlProfessions.findOne({_id: details.profession, industryId: details.industry})|| {};
-      details.industry = extendData.industryName || "";
-      details.profession = extendData.professionName || ""
+      details.industry = extendData.industryName || details.industry;
+      details.profession = extendData.professionName ||  details.profession;
      // let userPersonal = MlMasterSettings.findOne({_id:details.gender}) || {}
     //  details.gender = userPersonal.genderInfo ? userPersonal.genderInfo.genderName : ''
       let userEmp = MlMasterSettings.findOne({_id:details.employmentStatus}) || {}

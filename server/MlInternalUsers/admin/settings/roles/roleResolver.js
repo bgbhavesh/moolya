@@ -74,37 +74,18 @@ MlResolver.MlMutationResolver['createRole'] = (obj, args, context, info) => {
   _.each(dModules, function (module) {
     var moduleDef = mlDBController.findOne("MlModules", {code: module.moduleName}, context);
     var isModAvailable = _.findIndex(role.modules, {moduleId: moduleDef._id})
-    if ((isModAvailable <= 0) && module) {
+    if ((isModAvailable < 0) && module) {
       for (var i = 0; i < module.actions.length; i++) {
         var dbAction = mlDBController.findOne("MlActions", {code: module.actions[i].actionId}, context);
         module.actions[i].actionId = dbAction._id;
         module.actions[i].actionCode = dbAction.code;
       }
+      module["moduleId"] = moduleDef._id
+      module["moduleName"] = moduleDef.name
+      module["isActive"] = true
+      role.modules.push(module)
     }
-
-    module["moduleId"] = moduleDef._id
-    module["moduleName"] = moduleDef.name
-    module["isActive"] = true
-    role.modules.push(module)
   })
-      // var module = mlDBController.findOne("MlModules", {code:mod}, context);
-      // var readAction = mlDBController.findOne("MlActions", {code: "READ"}, context);
-      // var isModAvailable = _.findIndex(role.modules, {moduleId:module._id})
-      //
-      // if((isModAvailable <= 0) && module && readAction){
-      //     var moduleObj = {
-      //       moduleId: module._id,
-      //       moduleName: module.name,
-      //       validFrom: null,
-      //       validTo: null,
-      //       isActive: true,
-      //       actions: [{actionId: readAction._id, actionCode:readAction.code}]
-      //     }
-      //   role.modules.push(moduleObj)
-      // }
-  // })
-
-
   let id = mlDBController.insert('MlRoles', role, context)
   if (id) {
     let code = 200;

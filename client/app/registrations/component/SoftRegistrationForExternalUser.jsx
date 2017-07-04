@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { render } from 'react-dom';
-import Step1forExtenalUser from './Step1forExtenalUser';
-import {initalizeFloatLabel} from '../../../utils/formElemUtil';
-export default class SoftRegistrationForExternalUser extends React.Component{
+import MlAppStep1ExternalUser from './MlAppStep1ExternalUser';
+import {initalizeFloatLabel} from '../../../admin/utils/formElemUtil';
+export default class SoftRegistrationForExternalUser extends Component{
 
   constructor(props){
     super(props);
@@ -10,7 +10,7 @@ export default class SoftRegistrationForExternalUser extends React.Component{
   }
 
   getRegistrationSteps(props){
-    let softRegSteps=[{name: 'Basic info','icon':<span className="ml ml-basic-Information"></span>, component: <Step1forExtenalUser {...props}/>}];
+    let softRegSteps=[{name: 'Basic info','icon':<span className="ml ml-basic-Information"></span>, component: <MlAppStep1ExternalUser {...props}/>}];
 
     return softRegSteps;
   }

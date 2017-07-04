@@ -203,6 +203,8 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                   subchapters: data.subchapters
                 }, context, null);
               }
+              else
+                response = {unAuthorized: true, message: "Not Authorized"};
             }
               break;
             case "PROFILE": {

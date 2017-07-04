@@ -81,8 +81,11 @@ class MlEditCommunityFormComponent extends React.Component {
   }
 
   async handleSuccess(response) {
-    window.history.back()
-    // FlowRouter.go("/admin/community");
+    var resp = JSON.parse(response)
+    if(resp && resp.unAuthorized){
+      FlowRouter.go('/unauthorize')
+    }else
+      window.history.back()
   };
 
   async findComDef() {
@@ -126,18 +129,8 @@ class MlEditCommunityFormComponent extends React.Component {
       chapterId:this.props.params.chapterId?this.props.params.chapterId:"",
       subChapterId:this.props.params.subChapterId?this.props.params.subChapterId:"",
     }
-    let response;
-    // if(data.subchapters.length<1)
-    // {
-    //   toastr.error('Please select Sub-Chapter');
-    //   response = false;
-    // }
-    // else
-    // {
-      response = await multipartFormHandler(data, null);
-    // }
-    // this.setState({loading: false});
-    return response;
+    var resp = await multipartFormHandler(data, null);
+    return resp;
   }
 
   optionsBySelectClusters(val) {

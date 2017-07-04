@@ -1,21 +1,23 @@
-/**
- * Created by Mukhil on 18/6/17.
- */
+/** ************************************************************
+ * Date: 19 Jun, 2017
+ * Programmer: Mukhil <mukhil.padnamanabhan@raksan.in>
+ * Description : This will manage the team information
+ * JavaScript XML file MlAppChooseTeam.jsx
+ * *************************************************************** */
+
 import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar';
 import Moolyaselect from  '../../../../../commons/components/select/MoolyaSelect'
 import gql from 'graphql-tag'
 import {getTeamUsersActionHandler, updateActivityActionHandler, getActivityActionHandler} from '../actions/activityActionHandler'
 import _ from "lodash";
-var Select = require('react-select');
+let Select = require('react-select');
+let FontAwesome = require('react-fontawesome');
 
-var options = [
-  {value: 'Principal', label: 'Principal'},
-  {value: 'Team Member', label: 'Team Member'},
-  {value: 'MoolyaAdmins', label: 'MoolyaAdmins'}
+let options = [
+  {value: 'principal', label: 'Principal'},
+  {value: 'teamMember', label: 'Team Member'},
+  {value: 'moolyaAdmins', label: 'Moolya Admins'}
 ];
 
 export default class MlAppChooseTeam extends React.Component{

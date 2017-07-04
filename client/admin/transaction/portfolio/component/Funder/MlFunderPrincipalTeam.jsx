@@ -161,7 +161,10 @@ export default class MlFunderPrincipalTeam extends React.Component {
     }
   }
   optionsBySelectTitle(val){
-    this.setState({title:val})
+    // this.setState({title:val})
+    this.setState({title:val}, function () {
+      this.sendDataToParent()
+    })
   }
 
   onStatusChangeNotify(e) {

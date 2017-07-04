@@ -35,12 +35,6 @@ _id: String
       derivedAmount: Int
     }
 
-    type Conversation {
-      isAudio: Boolean
-      isVideo: Boolean
-      isMeetUp: Boolean
-    }
-
     type ActivityPayment {
       amount: Int
       isDiscount: Boolean
@@ -75,9 +69,9 @@ _id: String
       displayName: String
       isInternal: Boolean
       isExternal: Boolean
-      conversation: Conversation
+      conversation: [String]
       mode: String
-      isServiceCardElligible: Boolean
+      isServiceCardEligible: Boolean
       industryTypes:[String]
       note: String
       imageLink: String
@@ -105,12 +99,7 @@ _id: String
       percentage: Int
       derivedAmount: Int
     }
-
-    input conversations {
-      isAudio: Boolean
-      isVideo: Boolean
-      isMeetUp: Boolean
-    }
+    
     input activityPayment {
       amount: Int
       isDiscount: Boolean
@@ -150,8 +139,8 @@ _id: String
       isInternal: Boolean
       isExternal: Boolean
       mode: String
-      isServiceCardElligible: Boolean
-      conversation: conversations
+      isServiceCardEligible: Boolean
+      conversation: [String]
       industryTypes:[String]
       note: String
       imageLink: String

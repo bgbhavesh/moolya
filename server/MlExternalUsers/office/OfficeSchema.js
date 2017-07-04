@@ -74,6 +74,7 @@ let myOfficeSchema = `
         communityId: String
         communityName: String
         barerCount:Int
+        officeName : String
         branchType : String
         officeLocation : String
         landmark:String
@@ -171,6 +172,7 @@ let myOfficeSchema = `
         communityId: String
         communityName: String
         barerCount:Int
+        officeName : String
         branchType : String
         officeLocation : String
         landmark:String

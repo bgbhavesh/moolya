@@ -280,6 +280,9 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                                     portfolio = {portfolio:{funderPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
                                     break;
                               }
+
+                              portfolio.privateFields = [];
+                              portfolio.removeKeys = [];
                               MlResolver.MlMutationResolver['updatePortfolio'](null, portfolio, context, null)
                           }
                       });

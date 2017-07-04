@@ -185,11 +185,9 @@ class MlAdminUserContext
   getCommunityBasedExternalUser(userProfiles, user, userType){
     var users = [];
     _.each(userProfiles, function (profile) {
-      if (profile && profile.isActive && profile.isApprove) {
         if (profile.communityId && profile.communityId != "") {
-          let community = mlDBController.findOne('MlCommunity', {"$and": [{"_id": profile.communityId}]}, context);
-          if (community && community.communityName == userType) {
-
+          // let community = mlDBController.findOne('MlCommunity', {"$and": [{"_id": profile.communityId}]}, context);
+          if (profile.communityDefName == userType) {
             user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
             user.communityCode = profile.communityDefCode;
             // user.clusterName = "";
@@ -201,7 +199,6 @@ class MlAdminUserContext
 
             users.push(user);
           }
-        }
       }
     })
     return users;

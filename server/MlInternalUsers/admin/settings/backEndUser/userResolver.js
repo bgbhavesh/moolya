@@ -661,6 +661,8 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
   var subChapterId = args.subChapterId?args.subChapterId:"";
   var communityCode = args.communityCode?args.communityCode:"";
 
+  var queryObj = {isActive: true, isApprove:true, communityDefName:userType};
+
   // Directly clicking on Community Priming
   if(!args.clusterId){
 
@@ -794,15 +796,15 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
               })
           }
           else if (userType == "Ideators" || userType =="Investors" || userType =="Startups" || userType =="Service Providers" || userType =="Companies" || userType =="Institutions"){
-              let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
+            queryObj.clusterId = clusterId;
+            queryObj.chapterId = chapterId;
+            queryObj.subChapterId = subChapterId;
+            let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true}, {'profile.externalUserProfiles':{$elemMatch: queryObj}}]}, context, findOptions).fetch();
               _.each(allUsers, function (user){
                 let userProfiles = user.profile.externalUserProfiles;
-                let profile = _.filter(userProfiles, {clusterId:clusterId,chapterId:chapterId,subChapterId:subChapterId});
-                if(profile && profile.length>0) {
                   let resp = new MlAdminUserContext().getCommunityBasedExternalUser(userProfiles, user, userType);
-                  var newArr = _.concat(users,resp);
+                  let newArr = _.concat(users,resp);
                   users = newArr
-                }
               })
           }
       }
@@ -873,15 +875,14 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           })
       }
       else if (userType == "Ideators" || userType =="Investors" || userType =="Startups" || userType =="Service Providers" || userType =="Companies" || userType =="Institutions"){
-          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
+        queryObj.clusterId = clusterId;
+        queryObj.chapterId = chapterId;
+        let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true}, {'profile.externalUserProfiles':{$elemMatch: queryObj}}]}, context, findOptions).fetch();
           _.each(allUsers, function (user){
             let userProfiles = user.profile.externalUserProfiles;
-            let profile = _.filter(userProfiles, {clusterId:clusterId,chapterId:chapterId});
-            if(profile && profile.length>0) {
               let resp = new MlAdminUserContext().getCommunityBasedExternalUser(userProfiles, user, userType);
-              var newArr = _.concat(users,resp);
+              let newArr = _.concat(users,resp);
               users = newArr
-            }
           })
       }
     }
@@ -982,15 +983,13 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           })
       }
       else if (userType == "Ideators" || userType =="Investors" || userType =="Startups" || userType =="Service Providers" || userType =="Companies" || userType =="Institutions"){
-          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
+        queryObj.clusterId = clusterId;
+        let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true}, {'profile.externalUserProfiles':{$elemMatch: queryObj}}]}, context, findOptions).fetch();
           _.each(allUsers, function (user){
-            let userProfiles = user.profile.externalUserProfiles;
-            let profile = _.filter(userProfiles, {clusterId:clusterId});
-            if(profile && profile.length>0) {
+              let userProfiles = user.profile.externalUserProfiles;
               let resp = new MlAdminUserContext().getCommunityBasedExternalUser(userProfiles, user, userType);
-              var newArr = _.concat(users,resp);
+              let newArr = _.concat(users,resp);
               users = newArr
-            }
           })
       }
     }
@@ -1049,15 +1048,12 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
         })
       }
       else if(userType == "Ideators" || userType =="Investors" || userType =="Startups" || userType =="Service Providers" || userType =="Companies" || userType =="Institutions"){
-          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true}]}, context, findOptions).fetch();
+          let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true}, {'profile.externalUserProfiles':{$elemMatch: queryObj}}]}, context, findOptions).fetch();
           _.each(allUsers, function (user){
-
                   let userProfiles = user.profile.externalUserProfiles;
-                  if(userProfiles && userProfiles.length>0) {
-                    let resp = new MlAdminUserContext().getCommunityBasedExternalUser(userProfiles, user, userType);
-                    var newArr = _.concat(users,resp);
-                    users = newArr
-                  }
+                  let resp = new MlAdminUserContext().getCommunityBasedExternalUser(userProfiles, user, userType);
+                  let newArr = _.concat(users,resp);
+                  users = newArr
           })
       }
   }

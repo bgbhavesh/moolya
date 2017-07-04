@@ -13,9 +13,16 @@ const dashboardRoutes = {
     return `/admin/dashboard/${clusterId}/${chapterId}/${subChapterId}/communities?viewMode=${v}`;
   },
   backendUserDetailRoute:(clusterId, chapterId, subChapterId, backendUserId, route)=> {
-    if(clusterId!=""){
+    if(clusterId!="" && chapterId!="" && subChapterId!=""){
       return `/admin/dashboard/${clusterId}/${chapterId}/${subChapterId}/communities/${backendUserId}/backendUserDetails`;
-    }else{
+    }
+    else if(clusterId!="" && chapterId!=""){
+      return `/admin/dashboard/${clusterId}/${chapterId}/communities/${backendUserId}/backendUserDetails`;
+    }
+    else if(clusterId!=""){
+      return `/admin/dashboard/${clusterId}/communities/${backendUserId}/backendUserDetails`;
+    }
+    else{
       return `/admin/dashboard/communities/${backendUserId}/backendUserDetails`;
     }
   },

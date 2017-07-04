@@ -54,16 +54,16 @@ export default class MoolyaSelect extends Component {
 
   componentWillUpdate(nextProps, nextState) {
     if(this.state.searchTerm!==nextState.searchTerm){
-      const resp=this.fetchSelectOptions(nextProps,this.onChangeCallBackHandler);
+      const resp=this.fetchSelectOptions(nextProps,this.onChangeCallBackHandler,nextState.searchTerm);
     }else if(!this.compareQueryOptions(this.props.queryOptions,nextProps.queryOptions)){
-      const resp=this.fetchSelectOptions(nextProps,this.onChangeCallBackHandler);
+      const resp=this.fetchSelectOptions(nextProps,this.onChangeCallBackHandler,this.state.searchTerm);
     }
   }
 
-  fetchSelectOptions(props,queryCallbackHandler){
+  fetchSelectOptions(props,queryCallbackHandler,searchTerm){
     let queryOptions=props.queryOptions&&props.queryOptions.options&&props.queryOptions.options.variables?props.queryOptions:{options:{variables:{}}};
-    if(this.state.searchTerm&&this.state.searchTerm!==""){
-      queryOptions.options.variables.searchQuery=this.state.searchTerm;
+    if(searchTerm&&searchTerm.trim()!==""){
+      queryOptions.options.variables.searchQuery=searchTerm.trim();
     }
     if(props.queryOptions&&props.queryOptions.options&&props.queryOptions.options.variables){
     //  queryOptions.options.forceFetch=true;

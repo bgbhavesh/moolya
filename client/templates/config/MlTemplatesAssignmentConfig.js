@@ -15,7 +15,7 @@ function creatorDateFormatter (data){
 
 function modifiedDateFormatter (data){
   if(data&&data.data&&data.data.modifiedDate){
-    let modifiedDateTime = data&&data.data&&data.data.createdDate?data.data.createdDate:'';
+    let modifiedDateTime = data&&data.data&&data.data.modifiedDate?data.data.modifiedDate:'';
     return <div>{moment(modifiedDateTime).format('MM-DD-YYYY, HH:MM')}</div>
   }else{
     return <div></div>;

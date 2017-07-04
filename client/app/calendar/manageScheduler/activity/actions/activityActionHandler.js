@@ -155,14 +155,14 @@ export async function fetchActivitiesActionHandler (profileId) {
           hours
           minutes
         }
-        teams{
-      branch
-      userType
-      users{
-        name
-        userId
-      }
-    }
+        teams {
+          resourceType
+          resourceId
+          users {
+            userId
+            profileId
+          }
+        }
       }
     }
     `,

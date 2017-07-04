@@ -245,7 +245,7 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'] = (obj, args, context
      // let userPersonal = MlMasterSettings.findOne({_id:details.gender}) || {}
     //  details.gender = userPersonal.genderInfo ? userPersonal.genderInfo.genderName : ''
       let userEmp = MlMasterSettings.findOne({_id:details.employmentStatus}) || {}
-      details.employmentStatus = userEmp.employmentTypeInfo ? userEmp.employmentTypeInfo.employmentName : ''
+      details.employmentStatus = userEmp.employmentTypeInfo ? userEmp.employmentTypeInfo.employmentName :  details.employmentStatus
 
       var object = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, details, context)
 

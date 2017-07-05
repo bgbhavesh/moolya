@@ -4,18 +4,16 @@ import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
 import ScrollArea from "react-scrollbar";
-import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 import {
-  updateRegistrationActionHandler,
   emailVerificationActionHandler,
   smsVerificationActionHandler
 } from "../../../admin/transaction/requested/actions/updateRegistration";
 import {initalizeFloatLabel} from "../../../admin/utils/formElemUtil";
 import {fetchIdentityTypes} from "../actions/findRegistration";
 import _ from "lodash";
-import {mlFieldValidations} from "../../../commons/validations/mlfieldValidation";
 import MlLoader from "../../../commons/components/loader/loader";
 import moment from "moment";
+// import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 var Select = require('react-select');
 // import {fetchIdentityTypes} from "../../../admin/transaction/requested/actions/findRegistration";
 var options3 = [
@@ -24,6 +22,9 @@ var options3 = [
 ];
 var i = 1;
 
+/**
+ * This file will be in the view mode for the external user, have to remove all the handlers
+ * */
 export default class MlAppStep1ExternalUser extends Component {
   constructor(props) {
     super(props);
@@ -53,7 +54,6 @@ export default class MlAppStep1ExternalUser extends Component {
     }
 
     this.fetchIdentityTypesMaster.bind(this);
-    this.updateRegistrationInfo.bind(this);
     return this;
   }
 
@@ -188,61 +188,6 @@ export default class MlAppStep1ExternalUser extends Component {
     this.setState({userType: value})
   }
 
-
-  async updateRegistrationInfo() {
-    let ret = mlFieldValidations(this.refs)
-    if (ret) {
-      toastr.error(ret);
-    } else {
-
-      let Details = {
-        registrationId: this.props.registrationId,
-        registrationDetail: {
-          //  registrationDate :this.refs.datetime.value,
-          registrationId: this.state.registrationId,
-          firstName: this.refs.firstName.value,
-          lastName: this.refs.lastName.value,
-          countryId: this.state.country,
-          contactNumber: this.refs.contactNumber.value,
-          email: this.refs.email.value,
-          cityId: this.state.selectedCity,
-          registrationType: this.state.registrationType,
-          userName: this.refs.userName.value,
-          password: this.refs.password.value,
-          accountType: this.state.selectedAccountsType,
-          institutionAssociation: this.state.institutionAssociation,
-          companyname: this.refs.companyName.value,
-          companyUrl: this.refs.companyUrl.value,
-          remarks: this.refs.remarks.value,
-          referralType: this.state.refered,
-          clusterId: this.state.cluster,
-          chapterId: this.state.chapter,
-          subChapterId: this.state.subChapter,
-          communityName: this.state.coummunityName,
-          identityType: this.state.identityType,
-          userType: this.state.userType,
-          industry: this.state.selectedTypeOfIndustry,
-          profession: this.state.profession,
-          // transactionId:this.state.transactionId,
-        }
-      }
-      const response = await updateRegistrationActionHandler(Details);
-      return response;
-    }
-  }
-
-  async updateRegistration() {
-    const response = await this.updateRegistrationInfo();
-    console.log(response);
-    if (response.success) {
-      this.props.refetchRegistrationAndTemplates();
-      toastr.success("Saved Successfully")
-    } else {
-      toastr.error(response.result);
-    }
-    return response;
-  }
-
   async sendEmailVerification() {
     const response = await emailVerificationActionHandler(this.props.registrationId);
     if (response.success) {
@@ -267,21 +212,6 @@ export default class MlAppStep1ExternalUser extends Component {
   }
 
   render() {
-    let MlActionConfig = [
-      {
-        actionName: 'save',
-        showAction: true,
-        handler: this.updateRegistration.bind(this)
-      },
-      {
-        showAction: true,
-        actionName: 'cancel',
-        handler: async(event) => {
-          FlowRouter.go("/admin/transactions/registrationRequested")
-        }
-      }
-    ];
-
 
     let countryQuery = gql`query{
  data:fetchCountries {
@@ -397,11 +327,11 @@ export default class MlAppStep1ExternalUser extends Component {
                     <div className="form-group">
                       <input type="text" ref="datetime" placeholder="Date & Time"
                              defaultValue={moment(that.state.registrationDetails && that.state.registrationDetails.registrationDate).format('MM/DD/YYYY hh:mm:ss')}
-                             className="form-control float-label" id="" disabled="true"/>
+                             className="form-control float-label"  disabled="true"/>
                     </div>
                     <div className="form-group">
                       <input type="text" placeholder="Request ID" defaultValue={that.state.registrationId}
-                             className="form-control float-label" id="" disabled="true"/>
+                             className="form-control float-label"  disabled="true"/>
                     </div>
                     <div className="form-group mandatory">
                       <input type="text" ref="firstName" placeholder="First Name"
@@ -412,7 +342,7 @@ export default class MlAppStep1ExternalUser extends Component {
                     <div className="form-group mandatory">
                       <input type="text" ref="lastName" placeholder="Last Name"
                              defaultValue={that.state.registrationDetails && that.state.registrationDetails.lastName}
-                             className="form-control float-label" id="" data-required={true}
+                             className="form-control float-label"  data-required={true}
                              data-errMsg="Last Name is required" disabled="true"/>
                     </div>
                     <div className="form-group">
@@ -424,13 +354,13 @@ export default class MlAppStep1ExternalUser extends Component {
                     <div className="form-group mandatory">
                       <input type="text" ref="contactNumber"
                              defaultValue={that.state.registrationDetails && that.state.registrationDetails.contactNumber}
-                             placeholder="Contact number" className="form-control float-label" id=""
+                             placeholder="Contact number" className="form-control float-label"
                              data-required={true} data-errMsg="Contact Number is required" disabled="true"/>
                     </div>
                     <div className="form-group mandatory">
                       <input type="text" ref="email"
                              defaultValue={that.state.registrationDetails && that.state.registrationDetails.email}
-                             placeholder="Email ID" className="form-control float-label" id="" disabled="true"
+                             placeholder="Email ID" className="form-control float-label"  disabled="true"
                              data-required={true} data-errMsg="Email Id is required"/>
                     </div>
                     <div className="form-group">
@@ -540,27 +470,27 @@ export default class MlAppStep1ExternalUser extends Component {
                         <div className="form-group">
                           <input type="text" placeholder="Source"
                                  defaultValue={that.state.registrationDetails && that.state.registrationDetails.source}
-                                 className="form-control float-label" id="" disabled="true"/>
+                                 className="form-control float-label"  disabled="true"/>
                         </div>
                         <div className="form-group">
                           <input type="text" placeholder="Device Name"
                                  defaultValue={that.state.registrationDetails && that.state.registrationDetails.deviceName}
-                                 className="form-control float-label" id="" disabled="true"/>
+                                 className="form-control float-label"  disabled="true"/>
                         </div>
                         <div className="form-group">
                           <input type="text" placeholder="Device Number"
                                  defaultValue={that.state.registrationDetails && that.state.registrationDetails.deviceNumber}
-                                 className="form-control float-label" id="" disabled="true"/>
+                                 className="form-control float-label"  disabled="true"/>
                         </div>
                         <div className="form-group">
                           <input type="text" placeholder="IP Address"
                                  defaultValue={that.state.registrationDetails && that.state.registrationDetails.ipAddress}
-                                 className="form-control float-label" id="" disabled="true"/>
+                                 className="form-control float-label"  disabled="true"/>
                         </div>
                         <div className="form-group">
                           <input type="text" placeholder="IP Location"
                                  defaultValue={that.state.registrationDetails && that.state.registrationDetails.ipLocation}
-                                 className="form-control float-label" id="" disabled="true"/>
+                                 className="form-control float-label"  disabled="true"/>
                         </div>
                       </div>
                     </div>
@@ -577,12 +507,12 @@ export default class MlAppStep1ExternalUser extends Component {
                     <div className="form-group">
                       <input type="text" placeholder="User Name" ref="userName"
                              defaultValue={that.state.registrationDetails && that.state.registrationDetails.userName}
-                             className="form-control float-label" id="" disabled="true"/>
+                             className="form-control float-label"  disabled="true"/>
                     </div>
                     <div className="form-group">
                       <input type="Password" placeholder="Password" ref="password"
                              defaultValue={that.state.registrationDetails && that.state.registrationDetails.password}
-                             className="form-control float-label" id="" disabled="true"/>
+                             className="form-control float-label"  disabled="true"/>
                     </div>
                     <div className="form-group">
                       {/*<span className="placeHolder active">Account Type</span>*/}
@@ -604,17 +534,17 @@ export default class MlAppStep1ExternalUser extends Component {
                     <div className="form-group">
                       <input type="text" ref="companyName" placeholder="Company Name"
                              defaultValue={that.state.registrationDetails && that.state.registrationDetails.companyname}
-                             className="form-control float-label" id="" disabled="true"/>
+                             className="form-control float-label"  disabled="true"/>
                     </div>
                     <div className="form-group">
                       <input type="text" ref="companyUrl" placeholder="Company URL"
                              defaultValue={that.state.registrationDetails && that.state.registrationDetails.companyUrl}
-                             className="form-control float-label" id="" disabled="true"/>
+                             className="form-control float-label"  disabled="true"/>
                     </div>
                     <div className="form-group">
                       <input type="text" ref="remarks" placeholder="Remarks"
                              defaultValue={that.state.registrationDetails && that.state.registrationDetails.remarks}
-                             className="form-control float-label" id="" disabled="true"/>
+                             className="form-control float-label"  disabled="true"/>
                     </div>
                     <div className="form-group mandatory">
                       <span className={`placeHolder ${referedActive}`}>How Did You Know About Us</span>
@@ -624,24 +554,12 @@ export default class MlAppStep1ExternalUser extends Component {
                               data-errMsg="How Did You Know About Us is required" overflow="scroll" disabled={true}/>
                     </div>
 
-                    {/* <div className="panel panel-default">
-                     <div className="panel-heading">Process Status</div>
-                     <div className="panel-body button-with-icon">
-                     <button type="button" className="btn btn-labeled btn-success"  onClick={this.sendSmsVerification.bind(this)} >
-                     <span className="btn-label"><FontAwesome name='key'/></span>Send OTP</button>
-                     <button type="button" className="btn btn-labeled btn-success" onClick={this.sendEmailVerification.bind(this)}>
-                     <span className="btn-label"><span className="ml ml-email"></span></span>Send Email</button>
-                     /!*<button type="button" className="btn btn-labeled btn-success" >
-                     <span className="btn-label"><FontAwesome name='bullhorn'/></span>Send Ann.Temp</button>*!/
-                     </div>
-                     </div>*/}
-
                   </form>
                 </div>
               </ScrollArea>
             </div>
 
-            <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+            {/*<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>*/}
           </div>
         )}
       </div>

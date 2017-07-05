@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import {client} from '../../admin/core/apolloConnection';
+import {client} from '../../core/apolloConnection';
 
 export async function updateTemplateAssignmentActionHandler(templateId,templateDetails) {
   let tid=templateId;

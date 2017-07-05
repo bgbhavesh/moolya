@@ -2,16 +2,15 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import {findTemplatesActionHandler} from '../actions/findTemplatesAction'
-import {findStepTemplatesAssignmentActionHandler} from '../actions/findTemplatesAssignmentAction'
 import {findTemplateStepsActionHandler} from '../actions/findTemplateAssignmentStepsAction'
-import {updateTemplateAssignmentActionHandler} from '../actions/updateTemplateAssignmentAction'
-import MlActionComponent from '../../commons/components/actions/ActionComponent'
-import formHandler from '../../commons/containers/MlFormHandler';
+import {addTemplateAssignmentActionHandler} from '../actions/addTemplateAssignmentAction'
+import MlActionComponent from '../../../commons/components/actions/ActionComponent'
+import MlStepAvailability from './MlStepAvailabilityComponent'
+import formHandler from '../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../commons/components/select/MoolyaSelect'
-import MlStepAvailability from './MlStepAvailabilityComponent'
-import MlLoader from '../../commons/components/loader/loader'
+import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
+import MlLoader from '../../../commons/components/loader/loader'
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 
@@ -22,7 +21,8 @@ let IdentityOptions = [
   {value:'all',label:'All'}
 ];
 
-class MlEditAssignTemplate extends React.Component{
+
+class MlAssignTemplate extends React.Component{
   constructor(props){
     super(props);
     this.state={
@@ -30,6 +30,7 @@ class MlEditAssignTemplate extends React.Component{
       processName : '',
       subProcess  : '',
       subProcessName : '',
+      templateGroupName:'',
       userTypes   : '',
       identity    : '',
       clusters    : '',
@@ -45,7 +46,6 @@ class MlEditAssignTemplate extends React.Component{
       data        : '',
       stepAvailability:[]
     }
-    this.findTemplate.bind(this);
     return this;
   }
   componentDidMount()
@@ -62,16 +62,13 @@ class MlEditAssignTemplate extends React.Component{
       }
     });
   }
-  componentWillMount() {
-    console.log(this.props)
-    const resp=this.findTemplate();
-    return resp;
-  }
+
 
   getStepAvailability(details){
     console.log(details);
     this.setState({'stepAvailability':details})
   }
+
   async addEventHandler() {
     const resp=await this.updateAddressType();
     return resp;
@@ -82,53 +79,11 @@ class MlEditAssignTemplate extends React.Component{
   };
 
   async handleSuccess(response) {
-    if(response.success) {
-      FlowRouter.go("/admin/templates/templateList");
-    }else{
-      toastr.error(response.result);
-    }
+    FlowRouter.go("/admin/templates/templateList");
   };
 
-  async findTemplate(){
-    let Id=this.props.config;
-    const response = await findStepTemplatesAssignmentActionHandler(Id);
-    let subProcessId = response.templatesubProcess;
-    if(response){
-      const steps=await this.findSteps(subProcessId);
-      this.setState({steps:steps||[]});
-      let stepDetails=[];
-      stepDetails= steps;
-      let stepName=''
-      for(i=0;i<1;i++){
-        stepName = stepDetails[i].stepCode;
-      }
-      const templates=await this.findTemplates(subProcessId,stepName);
-      this.setState({templateInfo:templates||[]})
-      this.setState({
-        loading           : false,
-        process           : response.templateprocess,
-        subProcess        : response.templatesubProcess,
-        processName       : response.processName,
-        subProcessName    : response.subProcessName,
-        templateGroupName : response.templateGroupName,
-        communities       : response.templatecommunityCode,
-        userTypes         : response.templateuserType,
-        identity          : response.templateidentity,
-        clusters          : response.templateclusterId,
-        chapters          : response.templatechapterId,
-        subChapters       : response.templatesubChapterId,
-        stepAvailability  : response.assignedTemplates,
-        clusterName       : response.templateclusterName,
-        chapterName       : response.templatechapterName,
-        subChapterName    : response.templatesubChapterName,
-        communitiesName   : response.templatecommunityName,
-        data              : response
-      })
-    }
-  }
 
-  async  updateTemplateAssignment() {
-    let id                       = this.props.config;
+  async  addTemplateAssignment() {
     let Details = {
       templateprocess           : this.state.process,
       templatesubProcess        : this.state.subProcess,
@@ -141,13 +96,13 @@ class MlEditAssignTemplate extends React.Component{
       templatechapterName       : this.state.chapterName,
       templatesubChapterId      : this.state.subChapters,
       templatesubChapterName    : this.state.subChapterName,
-      templatecommunityCode       : this.state.communities,
+      templatecommunityCode     : this.state.communities,
       templatecommunityName     : this.state.communitiesName,
       templateuserType          : this.state.userTypes,
       templateidentity          : this.state.identity,
       assignedTemplates         : this.state.stepAvailability
     }
-    const response = await updateTemplateAssignmentActionHandler(id,Details);
+    const response = await addTemplateAssignmentActionHandler(Details);
     return response;
   }
 
@@ -159,8 +114,11 @@ class MlEditAssignTemplate extends React.Component{
       this.setState({"data":{"isActive":false}});
     }
   }
+
   async findSteps(subProcessId) {
+    //let subProcessId = this.state.subProcess
     const response = await findTemplateStepsActionHandler(subProcessId,this.props.stepCode);
+    console.log(response)
     if(response){
       let steps = response.steps||[];
       return steps;
@@ -170,11 +128,12 @@ class MlEditAssignTemplate extends React.Component{
 
 
   async findTemplates(subProcessId,stepName) {
+    console.log(subProcessId+"--"+stepName)
     const response = await findTemplatesActionHandler(subProcessId,stepName);
     console.log(response);
     let templates=[];
     if(response){
-      templates = response.templates||[];
+       templates = response.templates||[];
     }
     return templates;
   }
@@ -187,10 +146,18 @@ class MlEditAssignTemplate extends React.Component{
   async optionsBySelectSubProcess(value, calback, selObject){
     this.setState({subProcess:value})
     this.setState({subProcessName:selObject.label})
-    const templates=await this.findTemplates(value);
-    this.setState({templateInfo:templates||[]})
-    const steps=await this.findSteps();
+    const steps=await this.findSteps(value);
     this.setState({steps:steps||[]});
+    console.log(this.state.steps);
+    let stepDetails=[];
+    stepDetails= steps;
+    let stepName=''
+    for(i=0;i<1;i++){
+      stepName = stepDetails[i].stepCode;
+    }
+    const templates=await this.findTemplates(value,stepName);
+    this.setState({templateInfo:templates||[]})
+    console.log(this.state.templateInfo);
   }
 
   optionsBySelectUserType(val){
@@ -198,18 +165,23 @@ class MlEditAssignTemplate extends React.Component{
   }
 
   optionsBySelectIdentity(val){
+    if(val){
     this.setState({identity:val.value})
+  }else{
+      this.setState({identity:null})
+
+    }
   }
 
   optionsBySelectClusters(value, calback, selObject){
     this.setState({clusters:value,chapters:null})
-    this.setState({clusterName:selObject.label})
+    this.setState({clusterName:selObject.label});
     this.setState({chapterName:null});
   }
 
   optionsBySelectChapters(value, calback, selObject){
     this.setState({chapters:value,subChapters:null})
-    this.setState({chapterName:selObject.label})
+    this.setState({chapterName:selObject.label});
     this.setState({subChapterName:null})
   }
 
@@ -222,15 +194,18 @@ class MlEditAssignTemplate extends React.Component{
     this.setState({communities:value})
     this.setState({communitiesName:selObject.label})
   }
-  async switchTabEvent(stepName){
-    console.log("switch tab step"+stepName)
-    const templates=await this.findTemplates(this.state.subProcess,stepName);
-    this.setState({templateInfo:templates||[]})
-  }
   showTemplateImage(row){
 
     console.log(row);
     window.open(row.templateImage)
+  }
+
+
+  async switchTabEvent(stepName){
+    console.log("switch tab step"+stepName)
+    const templates=await this.findTemplates(this.state.subProcess,stepName);
+    this.setState({templateInfo:templates||[]})
+    console.log(this.state.templateInfo);
   }
 
   render(){
@@ -239,13 +214,13 @@ class MlEditAssignTemplate extends React.Component{
       {
         actionName: 'save',
         showAction: true,
-        handler: async(event) => this.props.handler(this.updateTemplateAssignment.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+        handler: async(event) => this.props.handler(this.addTemplateAssignment.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
       {
         actionName: 'cancel',
         showAction: true,
-        handler: async(event) => {
-            FlowRouter.go("/admin/templates/templateList");
+        handler: async (event) => {
+          FlowRouter.go("/admin/templates/templateList");
         }
       }
     ]
@@ -280,6 +255,7 @@ class MlEditAssignTemplate extends React.Component{
     label:chapterName
       }  
     }`;
+
     let subChapterquery=gql`query($id:String,$displayAllOption:Boolean){  
       data:fetchSubChaptersSelect(id:$id,displayAllOption:$displayAllOption) {
         value:_id
@@ -297,11 +273,11 @@ class MlEditAssignTemplate extends React.Component{
     const showLoader=this.state.loading;
     return (
       <div>
-        {showLoader===true?(<MlLoader/>):(
+        {showLoader===true?( <MlLoader/>):(
 
             <div className="admin_main_wrap">
               <div className="admin_padding_wrap">
-                <h2>Edit Template Assignment</h2>
+                <h2>Template Assignment</h2>
                 <div className="col-md-6 nopadding-left">
                   <div className="form_bg left_wrap">
                     <ScrollArea
@@ -315,12 +291,14 @@ class MlEditAssignTemplate extends React.Component{
                           <Moolyaselect multiSelect={false} placeholder={"Process"} className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.process} queryType={"graphql"} query={processQuery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectProcess.bind(this)} />
                         </div>
                         <div className="form-group">
-                          <Moolyaselect multiSelect={false}  placeholder={"Sub Process"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subProcess} queryType={"graphql"} query={subProcessQuery} queryOptions={subprocessOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubProcess.bind(this)} />
+                           <Moolyaselect multiSelect={false}  placeholder={"Sub Process"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subProcess} queryType={"graphql"} query={subProcessQuery} queryOptions={subprocessOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubProcess.bind(this)} />
                         </div>
+
                         <div className="form-group">
-                          <input ref="templateGroupName" value={this.state.templateGroupName&&this.state.templateGroupName} readOnly="true"
+                          <input ref="templateGroupName"
                                  placeholder="Group Name" className="form-control float-label"></input>
                         </div>
+
                         <div className="form-group">
                           <Moolyaselect multiSelect={false}  placeholder={"Cluster"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.clusters} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'clusterquery'} onSelect={this.optionsBySelectClusters.bind(this)} />
                         </div>
@@ -334,12 +312,12 @@ class MlEditAssignTemplate extends React.Component{
                           <Moolyaselect multiSelect={false}  placeholder={"Communities"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.communities} queryType={"graphql"} query={fetchcommunities}  isDynamic={true} id={'fetchcommunities'} onSelect={this.optionsBySelectCommunities.bind(this)} />
                         </div>
                         <div className="form-group">
-                          <Moolyaselect multiSelect={false}  placeholder={"User Types"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.userTypes} queryType={"graphql"} query={fetchUsers}  queryOptions={usertypeOption} isDynamic={true} id={'fetchuserTypes'} onSelect={this.optionsBySelectUserType.bind(this)} />
+                          <Moolyaselect multiSelect={false}  placeholder={"User Types"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.userTypes} queryType={"graphql"} query={fetchUsers} queryOptions={usertypeOption} isDynamic={true} onSelect={this.optionsBySelectUserType.bind(this)} />
                         </div>
                         <div className="form-group">
                           <span className={`placeHolder ${identityActive}`}>Identity</span>
                           <Select name="form-field-name"  placeholder={"Identity"}  className="float-label"  options={IdentityOptions}  value={this.state.identity}  onChange={this.optionsBySelectIdentity.bind(this)}/>
-                          <br className="clearfix"/><br className="clearfix"/><br className="clearfix"/>
+                          <br className="clearfix"/><br className="clearfix"/><br className="clearfix"/><br className="clearfix"/><br className="clearfix"/><br className="clearfix"/>
                         </div>
                       </form>
                     </ScrollArea>
@@ -351,8 +329,9 @@ class MlEditAssignTemplate extends React.Component{
                       speed={0.8}
                       className="left_wrap"
                       smoothScrolling={true}
-                      default={true}>
-                      {this.state.data&&this.state.stepAvailability?(<MlStepAvailability getStepAvailability={this.getStepAvailability.bind(this)} subProcessConfig={this.state.subProcess} stepDetails={this.state.data&&this.state.stepAvailability}/>):""}
+                      default={true}
+                    >
+                      <MlStepAvailability getStepAvailability={this.getStepAvailability.bind(this)} subProcessConfig={this.state.subProcess}/>
                       <div className="panel panel-default">
                         <div className="panel-heading">Template Step Details</div>
                         <div className="panel-body">
@@ -367,16 +346,15 @@ class MlEditAssignTemplate extends React.Component{
                             </ul>
 
                             <div className="tab-content clearfix">
-
                               {that.state.templateInfo.map(function(options,key) {
                                 return(
-                                  <div className="tab-pane active" id={'template'+key} key={key}>
-                                    <div className="list-group nomargin-bottom">
+                                <div className="tab-pane active" id={'template'+key} >
+                                  <div className="list-group nomargin-bottom">
                                       <a className="list-group-item" key={key} id={"template"}>{options.templateName}
                                         <FontAwesome className="btn btn-xs btn-mlBlue pull-right" name='eye' onClick={that.showTemplateImage.bind(that,options)}/>
                                       </a>
-                                    </div>
                                   </div>
+                                </div>
                                 )})}
                             </div>
                           </div>
@@ -386,13 +364,13 @@ class MlEditAssignTemplate extends React.Component{
                   </div>
                 </div>
                 {/*<span className="actions_switch show_act"></span>
-                 <div className="bottom_actions_block show_block">
-                 <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/edit_icon.png"/> </a></div>
-                 <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_add_icon.png"/> </a></div>
-                 <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_logout_icon.png"/> </a></div>
-                 <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_progress_icon.png"/> </a></div>
-                 <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_select_icon.png"/> </a></div>
-                 </div>*/}
+                <div className="bottom_actions_block show_block">
+                  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/edit_icon.png"/> </a></div>
+                  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_add_icon.png"/> </a></div>
+                  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_logout_icon.png"/> </a></div>
+                  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_progress_icon.png"/> </a></div>
+                  <div className="hex_btn"><a href="#" className="hex_btn hex_btn_in"> <img src="/images/act_select_icon.png"/> </a></div>
+                </div>*/}
               </div>
               <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
             </div>
@@ -401,4 +379,5 @@ class MlEditAssignTemplate extends React.Component{
     )
   }
 };
-export default MlAssignTemplate = formHandler()(MlEditAssignTemplate);
+
+export default MlAssignTemplate = formHandler()(MlAssignTemplate);

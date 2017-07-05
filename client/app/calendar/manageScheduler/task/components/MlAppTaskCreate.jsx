@@ -1,5 +1,14 @@
+/** ************************************************************
+ * Date: 22 Jun, 2017
+ * Programmer: Pankaj <mukhil.padnamanabhan@raksan.in>
+ * Description : This will manage the task basic info
+ * JavaScript XML file MlAppTaskCreate.jsx
+ * *************************************************************** */
+
+/**
+ * Imports libs and components
+ */
 import React, {Component} from "react";
-import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import {findTaskActionHandler} from "../actions/saveCalanderTask";
 import MlLoader from "../../../../../commons/components/loader/loader";
@@ -7,25 +16,34 @@ import _ from "lodash";
 let Select = require('react-select');
 
 export default class MlAppTaskCreate extends Component {
-  constructor(props, context) {
+
+  /**
+   * Constructor
+   * @param props :: Object - Parents data
+   */
+  constructor(props) {
     super(props);
     this.state = {
       loading: true,
       data: {}
-    }
-    this.findTaskDetails.bind(this);
-    this.handleBlur.bind(this);
-    this.onStatusChange.bind(this);
-    this.taskDuration.bind(this)
+    };
     return this;
   }
 
+  /**
+   * Component Did Mount
+   * Desc :: Initialize js float
+   */
   componentDidMount() {
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight - (310 + $('.admin_header').outerHeight(true)));
   }
 
+  /**
+   * Component Wil Mount
+   * Desc :: Initialize js float
+   */
   componentWillMount() {
     const resp = this.findTaskDetails();
     return resp;
@@ -60,26 +78,13 @@ export default class MlAppTaskCreate extends Component {
     }
   }
 
-  taskDuration(e) {
-    let details = this.state.data;
-    let name = 'duration';
-    let duration = {
-      hours: this.refs.hours.value,
-      minutes: this.refs.minutes.value
-    }
-    details = _.omit(details, [name]);
-    details = _.extend(details, {[name]: duration});
-    this.setState({data: details}, function () {
-      this.sendTaskDataToParent()
-    })
-  }
-
   handleBlur(e) {
     let details = this.state.data;
     let name = e.target.name;
     let value = e.target.value
-    if(e.target.value== 'true')
+    if(e.target.value== 'true'){
       value = e.target.checked
+    }
     details = _.omit(details, [name]);
     details = _.extend(details, {[name]: value});
     this.setState({data: details}, function () {
@@ -99,9 +104,6 @@ export default class MlAppTaskCreate extends Component {
 
   sendTaskDataToParent() {
     let data = this.state.data;
-    // let isBooleanObj = _.pick(data, ['isActive', 'isExternal', 'isServiceCardEligible', 'isInternal']);
-    // data = _.pickBy(data, _.identity);
-    // data = _.extend(data, isBooleanObj)
     this.props.getCreateDetails(data);
   }
 

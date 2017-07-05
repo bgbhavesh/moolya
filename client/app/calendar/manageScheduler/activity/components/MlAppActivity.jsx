@@ -135,6 +135,8 @@ export default class MlAppActivity extends Component {
   async saveActivity(data) {
     let id = FlowRouter.getQueryParam('id');
     if(id){
+      let profileId = FlowRouter.getParam('profileId');
+      data.profileId = profileId;
       const res = await updateActivityActionHandler(id, data);
       if(res){
         toastr.success("Saved Successfully");

@@ -1,5 +1,6 @@
+
+
 import React, {Component} from "react";
-import {render} from "react-dom";
 import MlAppScheduleHead from "../../commons/components/MlAppScheduleHead";
 import formHandler from "../../../../../commons/containers/MlFormHandler";
 import {createTaskActionHandler, updateTaskActionHandler} from "../actions/saveCalanderTask";
@@ -72,14 +73,18 @@ class MlAppTaskLanding extends Component {
   }
 
   getSessionDetails(details) {
+    let totalMinutes = details.reduce(function(sum, value) {
+      let duration = value.duration ? value.duration : {};
+      return sum + (duration.hours ? duration.hours : 0)*60 + ( duration.minutes ? duration.minutes : 0 ) ;
+    }, 0);
     let obj = {
       duration: {
-        hours: _.sum(_.map(details, 'duration.hours')),
-        minutes: _.sum(_.map(details, 'duration.minutes'))
+        hours: parseInt(totalMinutes/60),
+        minutes: totalMinutes % 60
       },
       session: details
     }
-    console.log(obj)
+    console.log(obj);
     this.setState({createData: obj, saveType: 'taskUpdate'});
   }
 

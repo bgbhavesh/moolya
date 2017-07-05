@@ -132,6 +132,7 @@ export default class Step4 extends React.Component{
   async saveDetails() {
     let paymentData = this.state.paymentData;
     if(!paymentData.isDiscount){
+      delete  paymentData.discountType;
       delete  paymentData.discountValue;
     }
     this.props.saveActivity({payment:paymentData});

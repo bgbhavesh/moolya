@@ -413,13 +413,24 @@ MlResolver.MlQueryResolver['getTeamMembers'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['getTeamUsers'] = (obj, args, context, info) => {
 
-  let pipeline =[
-    {"$lookup":{from: "users",localField: "emailId",foreignField: "username",as: "user"}},
-    {"$unwind":"$user"},
-    {"$project":{userId:"$user._id", name:"$user.profile.displayName", externalUserProfiles:"$user.profile.externalUserProfiles"}}
-  ]
+  let pipeline =[];
+  if(args.officeId) {
+    pipeline.push({$match:{officeId:args.officeId}});
+  }
+  pipeline.push({"$lookup":{from: "users",localField: "emailId",foreignField: "username",as: "user"}});
+  pipeline.push({"$unwind":"$user"});
+  pipeline.push({"$project":{ communityType : '$communityType', userId:"$user._id", profileImage:"$user.profile.profileImage", name:"$user.profile.displayName", externalUserProfiles:"$user.profile.externalUserProfiles"}});
+  let result = mlDBController.aggregate('MlOfficeMembers', pipeline).map(function (user) {
+    let profileId;
+    if(!user.communityType){
+      profileId = user.externalUserProfiles[0].profileId;
+    } else {
+      //Handle once user can diff type of community team member
+    }
+    user.profileId = profileId;
+    return user;
+  });
 
-  let result = mlDBController.aggregate('MlOfficeMembers', pipeline);
   return result;
 }
 

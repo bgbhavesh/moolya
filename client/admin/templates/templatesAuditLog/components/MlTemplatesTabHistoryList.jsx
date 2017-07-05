@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import MlTableViewContainer from "../../../admin/core/containers/MlTableViewContainer";
+import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
 import {mlTemplatesTabHistoryTableConfig} from "../config/templatesTabHistoryConfig";
 export default class MlTemplatesTabHistoryList extends Component {
 

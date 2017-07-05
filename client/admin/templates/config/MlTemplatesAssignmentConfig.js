@@ -2,7 +2,7 @@ import {MlViewer,MlViewerTypes} from "/lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
 import moment from 'moment'
-import MlCustomFilter from "../../commons/customFilters/customFilter";
+import MlCustomFilter from "../../../commons/customFilters/customFilter";
 
 function creatorDateFormatter (data){
   if(data&&data.data&&data.data.createdDate){

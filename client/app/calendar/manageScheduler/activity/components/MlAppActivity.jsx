@@ -32,6 +32,12 @@ export default class MlAppActivity extends Component {
         duration: {},
         deliverable: ['']
       },
+      teamInfo: [{
+        users:[]
+      }],
+      paymentInfo:{
+        isDiscount: false
+      },
     };
   }
 
@@ -86,8 +92,35 @@ export default class MlAppActivity extends Component {
           imageLink             : activity.imageLink,
           conversation          : activity.conversation && activity.conversation.length ? (new Array(activity.conversation))[0] : []
         };
+        let teamInfo = activity.teams ? activity.teams : [{users: []}];
+        teamInfo = teamInfo.map(function (team) {
+          return {
+            resourceId: team.resourceId,
+            resourceType: team.resourceType,
+            users: team.users.map(function (user) {
+              return {
+                userId: user.userId,
+                profileId: user.profileId,
+                isMandatory: user.isMandatory
+              }
+            })
+          }
+        });
+
+        let paymentInfo = activity.payment ? activity.payment : {};
+
+        paymentInfo = {
+          amount: paymentInfo.amount ? paymentInfo.amount : '',
+          derivedAmount: paymentInfo.derivedAmount ? paymentInfo.derivedAmount : '',
+          discountType: paymentInfo.discountType ? paymentInfo.discountType : '',
+          discountValue: paymentInfo.discountValue ? paymentInfo.discountValue : '',
+          isDiscount: paymentInfo.isDiscount ? paymentInfo.isDiscount : false
+        };
+
         that.setState({
-          basicInfo: activityBasicInfo
+          basicInfo: activityBasicInfo,
+          teamInfo: teamInfo,
+          paymentInfo: paymentInfo
         });
       }
     }
@@ -134,12 +167,12 @@ export default class MlAppActivity extends Component {
         },
         {
           name: 'Choose team',
-          component: <MlAppChooseTeam saveActivity={that.saveActivity} activityId={this.state.activityId}/>,
+          component: <MlAppChooseTeam saveActivity={that.saveActivity} data={this.state.teamInfo}/>,
           icon: <span className="ml fa fa-users"></span>
         },
         {
           name: 'Payment', component:
-          <MlAppActivityPayment />,
+          <MlAppActivityPayment saveActivity={that.saveActivity} data={this.state.paymentInfo} />,
           icon: <span className="ml ml-payments"></span>
         },
         {

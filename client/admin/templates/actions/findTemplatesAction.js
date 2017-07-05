@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import {client} from '../../admin/core/apolloConnection';
+import {client} from '../../core/apolloConnection';
 
 export async function findTemplatesActionHandler(templateId,code) {
   let tid       = templateId

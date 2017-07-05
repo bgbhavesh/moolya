@@ -46,11 +46,11 @@ export default class MlAppTaskConditions extends Component {
 
   handleBlur(id, e) {
     let name = e.target.name;
-    var value = e.target.value
-    let data = this.state.data
+    var value = e.target.value;
+    let data = this.state.data;
     let cloneBackUp = _.cloneDeep(data);
-    let specificData = cloneBackUp.attachments[id]
-    specificData[name] = value
+    let specificData = cloneBackUp.attachments[id];
+    specificData[name] = value;
     data.attachments.splice(id, 1);
     data.attachments.splice(id, 0, specificData);
     this.setState({data: data}, function () {
@@ -59,10 +59,10 @@ export default class MlAppTaskConditions extends Component {
   }
 
   addAttachment() {
-    let emptyObj = {name: '', info: '', isMandatory: false}
+    let emptyObj = {name: '', info: '', isMandatory: false};
     let data = this.state.data
-    let attach = data['attachments']
-    attach.push(emptyObj)
+    let attach = data['attachments'];
+    attach.push(emptyObj);
     this.setState({data: data})
   }
 
@@ -82,10 +82,6 @@ export default class MlAppTaskConditions extends Component {
 
   sendConditionDataToParent() {
     let data = this.state.data;
-    // let TAC = _.pick(data, 'isReschedulable', 'noOfReschedulable')
-    // data = _.omit(data, 'isReschedulable')
-    // data = _.omit(data, 'noOfReschedulable')
-    // _.merge(data['termsAndCondition'], TAC)
     this.props.getConditionDetails(data);
   }
 

@@ -58,7 +58,14 @@ export async function fetchServiceActionHandler (serviceId) {
           isTaxInclusive
           isPromoCodeApplicable
         }
-        tasks
+        tasks {
+          id
+          sequence
+          sessions{
+            id
+            sequence
+          }
+        }
         facilitationCharge{
           amount
           percentage

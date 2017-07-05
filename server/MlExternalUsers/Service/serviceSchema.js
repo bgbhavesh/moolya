@@ -65,6 +65,17 @@ let service=`
   type TotalTaskAmount{
     totalAmount: Int
   }
+  
+  type ServiceTaskSessions {
+    id : String
+    sequence: Int 
+  }
+  
+  type ServiceTask {
+    id : String
+    sequence: Int
+    sessions: [ServiceTaskSessions]
+  }
 
   type Service {
     userId: String
@@ -79,7 +90,7 @@ let service=`
     termsAndCondition: TermsAndCondition
     attachments: [Attachments]
     payment: ServicePayment
-    tasks: [String]
+    tasks: [ServiceTask]
     facilitationCharge : FacilitationCharge
     createdAt: Date
     updatedAt: Date
@@ -154,6 +165,17 @@ let service=`
    id:String
     name:String
   }
+  
+  input serviceTaskSessions {
+    id : String
+    sequence: Int 
+  }
+  
+  input serviceTask {
+    id : String
+    sequence: Int
+    sessions: [serviceTaskSessions]
+  }
 
    input service {
         userId: String
@@ -167,7 +189,7 @@ let service=`
         termsAndCondition: termsAndCondition
         attachments: [attachments]
         payment: servicepayment
-        tasks: [String]
+        tasks: [serviceTask]
         facilitationCharge : facilitationCharge
         createdAt: Date
         updatedAt: Date

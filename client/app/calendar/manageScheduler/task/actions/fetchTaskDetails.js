@@ -17,6 +17,7 @@ query ($name: String) {
       minutes
     }
     session {
+      sessionId
       duration {
         hours
         minutes

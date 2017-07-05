@@ -78,7 +78,9 @@ export async function findTaskActionHandler(taskId) {
                 isDiscount
                 discountType
                 discountValue
-                isPromoCodeApplicable
+                activitiesDerived
+                activitiesDiscount
+                activitiesAmount
                 derivedAmount
               }
               isServiceCardEligible

@@ -65,11 +65,22 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   let transactionCreatedDate = moment(date).format('DD/MM/YYYY hh:mm:ss')
   orderNumberGenService.assignRegistrationId(args.registration)
   var emails=[{address:args.registration.email,verified:false}];
-  if(Meteor.users.findOne({_id : context.userId}))
+  var user = mlDBController.findOne('users', {_id: context.userId}) || {}
+  var firstName='';var lastName='';
+  if(user)
   {
-    args.registration.createdBy = Meteor.users.findOne({_id: context.userId}).username
-  }
+    if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
 
+      firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+      lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+    }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+      firstName=(user.profile || {}).firstName||'';
+      lastName =(user.profile || {}).lastName||'';
+    }
+
+  }
+  let createdBy = firstName +' '+lastName
+  args.registration.createdBy = createdBy?createdBy:user.username;
   let id = mlDBController.insert('MlRegistration', {registrationInfo: args.registration, status: "Yet To Start",emails:emails,transactionId:args.registration.registrationId,transactionCreatedDate:transactionCreatedDate}, context)
   if(id){
     MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId:id}, context, info);
@@ -232,7 +243,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         let details = args.registrationDetails || {};
         //get the registrtion Details
         registerDetails= mlDBController.findOne('MlRegistration', id, context) || {};
-       let registrationInfo=registerDetails.registrationInfo;
+       let registrationInfo=registerDetails.registrationInfo?registerDetails.registrationInfo:{};
        //country and operational area changes then making kyc null.
        if((registrationInfo.countryId!=details.countryId)||(registrationInfo.clusterId!=details.clusterId)||(registrationInfo.chapterId!=details.chapterId)||(registrationInfo.subChapterId!=details.subChapterId)||(registrationInfo.registrationType!=details.registrationType)||(registrationInfo.userType!=details.userType)||(registrationInfo.identityType!=details.identityType)||(registrationInfo.profession!=details.profession)||(registrationInfo.industry!=details.industry)){
          let updatedResp= MlRegistration.update({_id:id},{$unset:{kycDocuments:""}})
@@ -253,6 +264,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         details.chapterName = subChapterDetails.chapterName;
         details.subChapterName = subChapterDetails.subChapterName;
         details.subChapterId = subChapterDetails._id;
+        details.createdBy = registrationInfo.createdBy;
 
 
         details.registrationDate = registerDetails&&registerDetails.registrationDate?registerDetails.registrationDate:new Date();

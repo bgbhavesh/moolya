@@ -182,22 +182,24 @@ class MlAdminUserContext
     }
     return {lat: latitude, lng: longitude}
   }
-  getCommunityBasedExternalUser(userProfiles, user, userType){
+  getCommunityBasedExternalUser(userProfiles, user, userType, locationName){
     var users = [];
     _.each(userProfiles, function (profile) {
+        let userObj = {};
         if (profile.communityId && profile.communityId != "") {
-          // let community = mlDBController.findOne('MlCommunity', {"$and": [{"_id": profile.communityId}]}, context);
           if (profile.communityDefName == userType) {
-            user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
-            user.communityCode = profile.communityDefCode;
-            // user.clusterName = "";
-
+            userObj.profile = user.profile;
+            userObj.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
+            userObj.communityCode = profile.communityDefCode;
+            if(locationName){
+              userObj.clusterName = profile[locationName];
+            }
             let externalProfile = _.find(user.profile.externalUserAdditionalInfo, {profileId:profile.profileId});
             let resp = new MlAdminUserContext().getUserLatLng(externalProfile);
-            user.latitude = resp.lat;
-            user.longitude = resp.lng;
+            userObj.latitude = resp.lat;
+            userObj.longitude = resp.lng;
 
-            users.push(user);
+            users.push(userObj);
           }
       }
     })
@@ -223,23 +225,23 @@ class MlAdminUserContext
     }
     return roles;
   }
-  getAllExternalUser(userProfiles, user, cluster){
+  getAllExternalUser(userProfiles, user, locationName){
     var users = [];
     _.each(userProfiles, function (profile) {
-      if(profile && profile.isActive && profile.isApprove){
-        user.name = (user.profile.firstName ? user.profile.firstName : "") + " " + (user.profile.lastName ? user.profile.lastName : "");
-        user.communityCode = profile.communityDefCode ? profile.communityDefCode : " ";
-        if(cluster){
-          user.clusterName = cluster.clusterName;
+        let userObj = {};
+        userObj.profile = user.profile;
+        userObj.name = (user.profile.firstName ? user.profile.firstName : "") + " " + (user.profile.lastName ? user.profile.lastName : "");
+        userObj.communityCode = profile.communityDefCode ? profile.communityDefCode : " ";
+        if(locationName){
+          userObj.clusterName = profile[locationName];
         }
         if (user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length > 0) {
           let externalProfile = _.find(user.profile.externalUserAdditionalInfo, {profileId:profile.profileId});
           var resp = new MlAdminUserContext().getUserLatLng(externalProfile);
-          user.latitude = resp.lat;
-          user.longitude = resp.lng;
-          users.push(user);
+          userObj.latitude = resp.lat;
+          userObj.longitude = resp.lng;
+          users.push(userObj);
         }
-      }
     })
     return users;
   }

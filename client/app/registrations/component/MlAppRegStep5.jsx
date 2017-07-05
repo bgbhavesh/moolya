@@ -7,18 +7,19 @@ import {multipartASyncFormHandler} from "../../../commons/MlMultipartFormAction"
 import MlAppDocumentViewer from "./MlAppDocumentViewer";
 import {findProcessDocumentForRegistrationActionHandler} from "../actions/findProcessDocumentForRegistration";
 import {addRegistrationStep3Details} from "../actions/addRegistrationStep3DetailsAction";
-import MlActionComponent from "../../../commons/components/actions/ActionComponent";
-import {approvedStausForDocuments} from "../actions/approvedStatusForDocuments";
-import {rejectedStausForDocuments} from "../actions/rejectedStatusForDocuments";
 import {removeFileFromDocumentsActionHandler} from "../actions/removeFileFromDocuments";
-import {approvedStatusForUser} from "../actions/approveUser";
-import {rejectStatusForUser} from "../actions/rejectUser";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
+import MlAccordion from "../../../app/commons/components/MlAccordion";
+import MlAppActionComponent from "../../../app/commons/components/MlAppActionComponent";
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import {createKYCDocument} from "../actions/createKYCDocumentAction";
 import {mlFieldValidations} from "../../../commons/validations/mlfieldValidation";
+// import {approvedStausForDocuments} from "../actions/approvedStatusForDocuments";
+// import {rejectedStausForDocuments} from "../actions/rejectedStatusForDocuments";
+// import {approvedStatusForUser} from "../actions/approveUser";
+// import {rejectStatusForUser} from "../actions/rejectUser";
 //import formHandler from '../../../../commons/containers/MlFormHandler';
 export default class MlAppRegStep5 extends React.Component {
   constructor(props) {
@@ -67,139 +68,9 @@ export default class MlAppRegStep5 extends React.Component {
   };
 
   async handleSuccess(response) {
-
     this.props.getRegistrationKYCDetails();
   };
 
-  async updateapprovedDocuments() {
-    let registrationId = this.props.registrationData._id
-    let selectedDocs = this.state.selectedFiles
-    let selectedDocType = this.state.selectedDocTypeFiles
-    const response = await approvedStausForDocuments(selectedDocs, selectedDocType, registrationId);
-    if (response.success) {
-      this.setState({selectedFiles: []})
-      this.setState({selectedDocTypeFiles: []})
-      this.props.getRegistrationKYCDetails();
-      toastr.success("Selected Documents Approved Successfully")
-    }
-    else {
-      this.setState({selectedFiles: []})
-      this.setState({selectedDocTypeFiles: []})
-      this.props.getRegistrationKYCDetails();
-      toastr.error(response.result)
-    }
-  }
-
-  async downloadSelectedDocuments() {
-    let registrationId = this.props.registrationData._id
-    let selectedDocs = this.state.selectedFiles
-    console.log(selectedDocs);
-
-    let registrationDocuments = this.state.registrationDocuments
-    console.log(registrationDocuments)
-    let kycDocFile = []
-    for (let i = 0; i < selectedDocs.length; i++) {
-      kycDoc = _.find(registrationDocuments, function (item) {
-        return item.documentId == selectedDocs[i];
-      });
-      if (kycDoc) {
-        if (kycDoc.docFiles) {
-          let DocFiles = kycDoc.docFiles
-          for (let j = 0; j < DocFiles.length; j++) {
-            kycDocFile.push(DocFiles[j].fileUrl)
-          }
-        }
-
-      }
-
-    }
-    if (kycDocFile.length >= 1) {
-      for (let i = 0; i < kycDocFile.length; i++) {
-        var pom = document.createElement('a');
-        pom.setAttribute('href', kycDocFile[i]);
-        pom.setAttribute('download', kycDocFile[i]);
-        pom.click();
-      }
-      this.setState({selectedFiles: []})
-      this.setState({selectedDocTypeFiles: []})
-      this.props.getRegistrationKYCDetails();
-    } else {
-      toastr.error("please select kyc documents")
-    }
-
-  }
-
-  approvedDocuments() {
-    const resp = this.updateapprovedDocuments();
-    return resp;
-  }
-
-  downloadDocuments() {
-    const resp = this.downloadSelectedDocuments();
-    return resp;
-  }
-
-  async updateRejectedDocuments() {
-    let registrationId = this.props.registrationData._id
-    let selectedDocs = this.state.selectedFiles
-    let selectedDocType = this.state.selectedDocTypeFiles
-    const response = await rejectedStausForDocuments(selectedDocs, selectedDocType, registrationId);
-    if (response.success) {
-      this.setState({selectedFiles: []})
-      this.setState({selectedDocTypeFiles: []})
-      this.props.getRegistrationKYCDetails();
-      toastr.success("Selected Documents Rejected Successfully")
-    } else {
-      this.setState({selectedFiles: []})
-      this.setState({selectedDocTypeFiles: []})
-      this.props.getRegistrationKYCDetails();
-      toastr.error(response.result)
-    }
-  }
-
-
-  rejectedDocuments() {
-    const resp = this.updateRejectedDocuments();
-    return resp;
-  }
-
-  async updateApproveUser() {
-    let registrationId = this.props.registrationData._id
-    const response = await approvedStatusForUser(registrationId);
-    /*  if (response) {
-     this.props.getRegistrationKYCDetails();
-     toastr.success("User Approved Successfully")
-     }else{
-     this.props.getRegistrationKYCDetails();
-     toastr.error("Please validate user")
-     }*/
-    if (response.success) {
-      this.props.getRegistrationKYCDetails();
-      toastr.success("User Approved Successfully")
-    } else {
-      this.props.getRegistrationKYCDetails();
-      toastr.error(response.result)
-    }
-  }
-
-  approveUser() {
-    const resp = this.updateApproveUser();
-    return resp;
-  }
-
-  async updateRejectUser() {
-    let registrationId = this.props.registrationData._id
-    const response = await rejectStatusForUser(registrationId);
-    if (response) {
-      this.props.getRegistrationKYCDetails();
-      toastr.success("User Rejected Successfully")
-    }
-  }
-
-  rejectUser() {
-    const resp = this.updateRejectUser();
-    return resp;
-  }
 
   async findProcessDocuments() {
     let kycDocuments = this.props.registrationData && this.props.registrationData.kycDocuments ? this.props.registrationData.kycDocuments : [];
@@ -290,7 +161,6 @@ export default class MlAppRegStep5 extends React.Component {
     let docFormate = kycDoc.allowableFormat[0]
     console.log(docFormate)
     let lowerDocFormate = docFormate.toLowerCase();
-    console.log(lowerDocFormate)
     let docResponse = _.includes(lowerDocFormate, fileFormate);
     if (docResponse) {
       let data = {
@@ -484,59 +354,30 @@ export default class MlAppRegStep5 extends React.Component {
     };
 
     /**
-     * checking the condition for the users based on the permission has to verify the external user
+     * kyc handlers
      * */
-    if (userType == 'external') {
-      MlActionConfig = [
+    let appActionConfig = [
+      {
+        showAction: true,
+        actionName: 'exit',
+        handler: null
+      }
+    ]
+
+    export const genericPortfolioAccordionConfig = {
+      id: 'registrationAccordion',
+      panelItems: [
         {
-          showAction: true,
-          actionName: 'save',
-          handler: null
-        },
-        {
-          showAction: true,
-          actionName: 'cancel',
-          handler: null
-        },
-      ]
-    } else {
-      MlActionConfig = [
-        {
-          actionName: 'documentApprove',
-          showAction: true,
-          handler: this.approvedDocuments.bind(this)
-        },
-        {
-          actionName: 'documentReject',
-          showAction: true,
-          handler: this.rejectedDocuments.bind(this)
-        },
-        {
-          actionName: 'download',
-          showAction: true,
-          handler: this.downloadDocuments.bind(this)
-        },
-        {
-          showAction: false,
-          actionName: 'save',
-          handler: null
-        },
-        {
-          showAction: false,
-          actionName: 'comment',
-          handler: null
-        },
-        {
-          showAction: true,
-          actionName: 'approveUser',
-          handler: this.approveUser.bind(this)
-        },
-        {
-          showAction: true,
-          actionName: 'rejectUser',
-          handler: this.rejectUser.bind(this)
-        }
-      ]
+          'title': 'Actions',
+          isText: false,
+          style: {'background': '#ef4647'},
+          contentComponent: <MlAppActionComponent
+            resourceDetails={{
+              resourceId: 'registrationId',
+              resourceType: 'registration'
+            }}
+            actionOptions={appActionConfig}/>
+        }]
     }
 
     /*   let registrationDocuments=this.state.registrationDocuments||[];
@@ -550,22 +391,22 @@ export default class MlAppRegStep5 extends React.Component {
     return (
       <div className="step_form_wrap step5">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
-          {Object.keys(registrationDocumentsGroup).map(function (key) {
-            return (<div className="col-md-12">
+          {Object.keys(registrationDocumentsGroup).map(function (key,id) {
+            return (<div className="col-md-12" key={id}>
               <div key={key} className="row">
                 <h3>{key}</h3>
-                {registrationDocumentsGroup[key].map(function (regDoc, id) {
+                {registrationDocumentsGroup[key].map(function (regDoc, idx) {
                   let documentExist = _.isEmpty(regDoc)
                   return (
-                    <div>{!documentExist && regDoc.documentId != null &&
-                    <MlAppDocumentViewer key={regDoc.documentId} doc={regDoc} selectedDocuments={that.state.selectedFiles}
-                                    selectedDocType={that.state.selectedDocTypeFiles}
-                                    onFileUpload={that.onFileUpload.bind(that)}
-                                    onDocumentSelect={that.onDocumentSelect.bind(that)}
-                                    onDocumentRemove={that.onDocumentRemove.bind(that)}/>} </div>)
+                    <div key={idx}>{!documentExist && regDoc.documentId != null &&
+                    <MlAppDocumentViewer key={regDoc.documentId} doc={regDoc}
+                                         selectedDocuments={that.state.selectedFiles}
+                                         selectedDocType={that.state.selectedDocTypeFiles}
+                                         onFileUpload={that.onFileUpload.bind(that)}
+                                         onDocumentSelect={that.onDocumentSelect.bind(that)}
+                                         onDocumentRemove={that.onDocumentRemove.bind(that)}/>} </div>)
 
                 })
-
                 }
                 <div className="col-lg-4">
                   <div className="panel panel-default uploaded_files">
@@ -648,23 +489,6 @@ export default class MlAppRegStep5 extends React.Component {
                                             onSelect={that.optionsBySelectKYCDocument.bind(that)} data-required={true}
                                             data-errMsg="Document Type is required"/>
                             </div>
-                            {/* <div className="clearfix"></div>
-
-                             <div className="form-group">
-                             <div className="input_types"><input id="checkbox1" type="checkbox" name="checkbox" value="1" /><label htmlFor="checkbox1"><span></span>Make Private</label></div>
-                             </div>
-                             <div className="clearfix"></div>
-
-                             <ul className="popover_doc_scroll">
-                             <li><img src="/images/sub_default.jpg"/><br/>One</li>
-                             <li><img src="/images/sub_default.jpg"/><br/>One</li>
-                             <li><img src="/images/sub_default.jpg"/><br/>One</li>
-                             <li><img src="/images/sub_default.jpg"/><br/>One</li>
-                             <li><img src="/images/sub_default.jpg"/><br/>One</li>
-                             <li><img src="/images/sub_default.jpg"/><br/>One</li>
-                             <li><img src="/images/sub_default.jpg"/><br/>One</li>
-                             </ul>*/}
-
                             <div className="clearfix"></div>
                             <div className="ml_btn mart20" style={{'textAlign': 'center'}}>
                               <a href="#" className="save_btn"
@@ -683,7 +507,8 @@ export default class MlAppRegStep5 extends React.Component {
             </div>)
           })}
         </ScrollArea>
-        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+        {/*<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>*/}
+        <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
       </div>
     )
   }

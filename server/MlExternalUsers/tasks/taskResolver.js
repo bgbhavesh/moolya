@@ -109,11 +109,9 @@ MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchTaskDetails'] = (obj, args, context, info) => {
-  // let query = {
-  //   userId:context.userId,
-  //   profileId:args.profileId
-  // };
   let result = mlDBController.findOne('MlTask', {_id:args.name}, context)
   return result;
 
 }
+
+

@@ -36,7 +36,7 @@ MlResolver.MlMutationResolver['createService'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['updateService'] = (obj, args, context, info) => {
-  args.Services.userId = context.userId;
+  // args.Services.userId = context.userId;
   let result1 = mlDBController.update('MlService', {_id:args.serviceId} ,args.Services,{$set: 1}, context)
   if(result1){
     let code = 200;
@@ -67,4 +67,31 @@ MlResolver.MlQueryResolver['fetchTasksAmount'] = (obj, args, context, info) => {
     })
   return totalAmountOfTasks;
 }
+
+MlResolver.MlQueryResolver['getProfileBasedOnPortfolio'] = (obj, args, context, info) => {
+  let query = {
+    _id: args.portfolioId
+  };
+  let result = mlDBController.findOne('MlPortfolioDetails', query , context)
+  return result;
+}
+
+MlResolver.MlQueryResolver['getServiceBasedOnProfileId'] = (obj, args, context, info) => {
+  let query = {
+    profileId: args.profileId
+  };
+  let result = mlDBController.findOne('MlService', query , context)
+  return result;
+}
+
+MlResolver.MlQueryResolver['getTaskFromService'] = (obj, args, context, info) => {
+  let query = {
+  _id: args.serviceId
+  };
+  let result = mlDBController.findOne('MlService', query , context)
+  return result;
+}
+
+
+
 

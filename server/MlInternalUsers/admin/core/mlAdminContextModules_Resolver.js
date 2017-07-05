@@ -153,6 +153,10 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       requestParams=args.context||{};
       result=CoreModulesRepo.MlDocumentRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
+    case 'serviceCards':
+      // requestParams=args.context || {};
+      result=CoreModulesRepo.MlServiceCardsTransactionRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
   }
 
   return {totalRecords:result.totalRecords||0,data:result.data||[]};
@@ -186,6 +190,7 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "processSetup":resolveType='ProcessTransactions';break;
       case "officeTransaction":resolveType='officeTransactionType';break;
       case "documents":resolveType='ProcessType';break;
+      case "serviceCards":resolveType='AdminService';break;
     }
 
     if(resolveType){

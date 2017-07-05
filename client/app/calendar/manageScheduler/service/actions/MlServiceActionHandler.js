@@ -170,3 +170,25 @@ query ($profileId: String) {
   const services = result.data.fetchTasksAmount;
   return services;
 }
+
+export async function getProfileBasedOnPortfolio (portfolioId) {
+  const result = await appClient.query({
+    query: gql`
+query ($portfolioId: String) {
+  getProfileBasedOnPortfolio(portfolioId: $portfolioId) {
+    profileId
+  }
+}
+    `,
+    forceFetch:true,
+    variables: {
+      portfolioId
+    }
+  });
+  const services = result.data.getProfileBasedOnPortfolio;
+  return services;
+}
+
+
+
+

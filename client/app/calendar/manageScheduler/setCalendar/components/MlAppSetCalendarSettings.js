@@ -8,6 +8,7 @@ import {fetchCalendarSettingsActionHandler} from '../actions/fetchCalendarSettin
 import StepZilla from "../../../../../commons/components/stepzilla/StepZilla";
 import MlAppSetCalendarPrimarySettings from './MlAppSetCalendarPrimarySettings';
 import MlAppSetCalendarTimmingSettings from './MlAppSetCalendarTimmingSettings';
+import MlAppSetCalendarVacation from './MlAppSetCalendarVacation';
 
 export default class MlAppSetCalendarSettings extends React.Component {
 
@@ -57,7 +58,7 @@ export default class MlAppSetCalendarSettings extends React.Component {
     const steps = [
         {name: 'Primary', component: <MlAppSetCalendarPrimarySettings primarySettings={this.state.primarySettings} />,icon:<span className="ml fa fa-file-text-o "></span>},
         {name: 'Manage', component: <MlAppSetCalendarTimmingSettings timingInfo={this.state.timingInfo} />,icon:<span className="ml fa fa-calendar-plus-o"></span>},
-        {name: 'Vacation', component: <MlAppSetCalendarTimmingSettings />,icon:<span className="ml fa fa-plane"></span>},
+        {name: 'Vacation', component: <MlAppSetCalendarVacation />,icon:<span className="ml fa fa-plane"></span>},
       ]
     return (
       <div className="app_main_wrap">

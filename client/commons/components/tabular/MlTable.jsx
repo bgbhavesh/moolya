@@ -1,6 +1,6 @@
 import React from "react";
 import {BootstrapTable, TableHeaderColumn} from "react-bootstrap-table";
-import {OnToggleSwitch} from "../../../admin/utils/formElemUtil";
+import {OnToggleSwitch} from "../../utils/formElemUtil";
 import $ from "jquery";
 //var mCustomScrollbar = require('malihu-custom-scrollbar-plugin');
 export default class MlTable extends React.Component {

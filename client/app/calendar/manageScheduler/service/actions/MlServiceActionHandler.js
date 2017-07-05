@@ -50,13 +50,16 @@ export async function fetchServiceActionHandler (serviceId) {
           info
           isMandatory
         }
-        payment{
+        payment {
           amount
           isDiscount
           discountType
           discountValue
           isTaxInclusive
           isPromoCodeApplicable
+          tasksAmount
+          tasksDiscount
+          tasksDerived
         }
         tasks {
           id

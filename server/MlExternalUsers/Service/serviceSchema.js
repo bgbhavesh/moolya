@@ -21,6 +21,9 @@ let service=`
   }
   type ServicePayment {
      amount: Int
+     tasksAmount: Int
+     tasksDiscount: Int
+     tasksDerived: Int
      isDiscount: Boolean
      discountType: String
      discountValue: Int
@@ -123,6 +126,9 @@ let service=`
 
    input servicepayment {
        amount: Int
+       tasksAmount: Int
+       tasksDiscount: Int
+       tasksDerived: Int
        isDiscount: Boolean
        discountType: String
        discountValue: Int

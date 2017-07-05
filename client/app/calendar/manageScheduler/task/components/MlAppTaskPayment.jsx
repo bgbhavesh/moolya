@@ -121,8 +121,18 @@ export default class MlAppTaskPayment extends Component {
             <div className="centered_form">
               <form>
                 <div className="form-group">
-                  <label>Enter payable amount Rs. <input className="form-control inline_input medium_in"
-                                                         defaultValue={this.state.data.payment.amount} disabled="true"/>
+                  <label>Activity actual amount <input className="form-control inline_input medium_in"
+                                                         defaultValue={this.state.data.payment.activitiesAmount} disabled="true"/>
+                  </label>
+                </div>
+                <div className="form-group">
+                  <label>Activity discount amount <input className="form-control inline_input medium_in"
+                                                         defaultValue={this.state.data.payment.activitiesDiscount} disabled="true"/>
+                  </label>
+                </div>
+                <div className="form-group">
+                  <label>Activity derived amount <input className="form-control inline_input medium_in"
+                                                         defaultValue={this.state.data.payment.activitiesDerived} disabled="true"/>
                   </label>
                 </div>
                 <div className="form-group switch_wrap switch_names inline_switch">
@@ -153,16 +163,6 @@ export default class MlAppTaskPayment extends Component {
                   </label>
                   </div>
                   <br className="brclear"/>
-                </div>
-
-                <div className="form-group switch_wrap switch_names inline_switch">
-                  <label>Is Applicable for PROMOCODE</label>
-                  <span className="state_label">Yes</span><label className="switch nocolor-switch">
-                  <input type="checkbox" name="isPromoCodeApplicable" checked={this.state.data.isPromoCodeApplicable}
-                         onChange={this.onStatusChange.bind(this)}/>
-                  <div className="slider"></div>
-                </label>
-                  <span className="state_label acLabel">No</span>
                 </div>
                 <div className="form-group">
                   <label>Derived amount Rs. <input className="form-control inline_input medium_in"

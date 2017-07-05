@@ -3,11 +3,13 @@ import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import gql from "graphql-tag";
 import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
-import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 import {updateRegistrationActionHandler} from "../actions/updateRegistration";
 import Datetime from "react-datetime";
 import moment from "moment";
 import {initalizeFloatLabel} from "../../../admin/utils/formElemUtil";
+import MlAccordion from "../../../app/commons/components/MlAccordion";
+import MlAppActionComponent from "../../../app/commons/components/MlAppActionComponent";
+// import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 
@@ -208,37 +210,44 @@ export default class MlAppFunderIndividualComponent extends React.Component {
     var valid = function (current) {
       return current.isBefore(yesterday);
     };
-    let MlActionConfig
     let userType = this.props.userType;
-    if (userType == 'external') {
-      MlActionConfig = [
-        {
-          showAction: true,
-          actionName: 'save',
-          handler: this.updateRegistration.bind(this),
-        },
-        {
-          showAction: true,
-          actionName: 'cancel',
-          handler: null
-        },
-      ]
-    } else {
-      MlActionConfig = [
-        {
-          actionName: 'save',
-          showAction: true,
-          handler: this.updateRegistration.bind(this)
-        },
-        {
-          showAction: true,
-          actionName: 'cancel',
-          handler: async(event) => {
-            FlowRouter.go("/admin/transactions/requestedList")
-          }
+
+    /**
+     * action handlers
+     * */
+    let appActionConfig = [
+      {
+        showAction: true,
+        actionName: 'save',
+        handler: this.updateRegistration.bind(this),
+      },
+      {
+        showAction: true,
+        actionName: 'exit',
+        handler: async(event) => {
+          FlowRouter.go("/app/myProfile/registerAs")
         }
-      ]
+      }
+    ]
+
+    export const genericPortfolioAccordionConfig = {
+      id: 'registrationAccordion',
+      panelItems: [
+        {
+          'title': 'Actions',
+          isText: false,
+          style: {'background': '#ef4647'},
+          contentComponent: <MlAppActionComponent
+            resourceDetails={{
+              resourceId: 'registrationId',
+              resourceType: 'registration'
+            }}
+            actionOptions={appActionConfig}/>
+        }]
     }
+    {/**need to pass generic regId*/
+    }
+
     let subsidary = [
       {value: 'Yes', label: 'Yes'},
       {value: 'No', label: 'No'}
@@ -471,7 +480,8 @@ export default class MlAppFunderIndividualComponent extends React.Component {
           </ScrollArea>
         </div>
         {/*</ScrollArea>*/}
-        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+        <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
+        {/*<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>*/}
       </div>
     )
   }

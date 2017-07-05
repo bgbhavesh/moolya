@@ -43,7 +43,7 @@ export default class MlAppSetCalendarSettings extends React.Component {
         slotBreakTime: response.slotBreakTime,
         isOverlappingSchedule: response.isOverlappingSchedule
       };
-      let timingInfo = response.workingDays[0];
+      let timingInfo = response.workingDays;
       console.log(timingInfo);
       this.setState({
         primarySettings : primarySettings,
@@ -57,7 +57,7 @@ export default class MlAppSetCalendarSettings extends React.Component {
     const steps = [
         {name: 'Primary', component: <MlAppSetCalendarPrimarySettings primarySettings={this.state.primarySettings} />,icon:<span className="ml fa fa-file-text-o "></span>},
         {name: 'Manage', component: <MlAppSetCalendarTimmingSettings timingInfo={this.state.timingInfo} />,icon:<span className="ml fa fa-calendar-plus-o"></span>},
-        // {name: 'Vacation', component: <MlAppSetCalendarTimmingSettings />,icon:<span className="ml fa fa-plane"></span>},
+        {name: 'Vacation', component: <MlAppSetCalendarTimmingSettings />,icon:<span className="ml fa fa-plane"></span>},
       ]
     return (
       <div className="app_main_wrap">

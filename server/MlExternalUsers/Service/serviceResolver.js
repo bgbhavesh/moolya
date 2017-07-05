@@ -36,7 +36,22 @@ MlResolver.MlMutationResolver['createService'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['updateService'] = (obj, args, context, info) => {
-  // args.Services.userId = context.userId;
+  args.Services.userId = context.userId;
+  if(args.Services.tasks){
+    let taskIds = args.Services.tasks.map(function (task) { return task.id; });
+    let tasks = mlDBController.find('MlTask', {_id: { $in : taskIds } }, context).fetch();
+    let taskAmount = 0;
+    let taskDerivedAmount = 0;
+    tasks.forEach(function (task) {
+      taskAmount += task.payment && task.payment.amount ? task.payment.amount : 0;
+      taskDerivedAmount += task.payment && task.payment.derivedAmount ? task.payment.derivedAmount : 0;
+    });
+    args.Services.payment = args.Services.payment ? args.Services.payment : {};
+    args.Services.payment["tasksAmount"] = taskAmount;
+    args.Services.payment["tasksDiscount"] = taskAmount - taskDerivedAmount;
+    args.Services.payment["tasksDerived"] = taskDerivedAmount;
+    args.Services.payment["amount"] = taskDerivedAmount;
+  }
   let result1 = mlDBController.update('MlService', {_id:args.serviceId} ,args.Services,{$set: 1}, context)
   if(result1){
     let code = 200;

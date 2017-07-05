@@ -21,6 +21,9 @@ let service=`
   }
   type ServicePayment {
      amount: Int
+     tasksAmount: Int
+     tasksDiscount: Int
+     tasksDerived: Int
      isDiscount: Boolean
      discountType: String
      discountValue: Int
@@ -66,6 +69,17 @@ let service=`
     totalAmount: Int
   }
   
+  type ServiceTaskSessions {
+    id : String
+    sequence: Int 
+  }
+  
+  type ServiceTask {
+    id : String
+    sequence: Int
+    sessions: [ServiceTaskSessions]
+  }
+  
   type PortfolioDetails{
     portfolioId: String
   }
@@ -83,7 +97,7 @@ let service=`
     termsAndCondition: TermsAndCondition
     attachments: [Attachments]
     payment: ServicePayment
-    tasks: [String]
+    tasks: [ServiceTask]
     facilitationCharge : FacilitationCharge
     createdAt: Date
     updatedAt: Date
@@ -177,6 +191,9 @@ let service=`
 
    input servicepayment {
        amount: Int
+       tasksAmount: Int
+       tasksDiscount: Int
+       tasksDerived: Int
        isDiscount: Boolean
        discountType: String
        discountValue: Int
@@ -219,6 +236,17 @@ let service=`
    id:String
     name:String
   }
+  
+  input serviceTaskSessions {
+    id : String
+    sequence: Int 
+  }
+  
+  input serviceTask {
+    id : String
+    sequence: Int
+    sessions: [serviceTaskSessions]
+  }
 
    input service {
         userId: String
@@ -232,7 +260,7 @@ let service=`
         termsAndCondition: termsAndCondition
         attachments: [attachments]
         payment: servicepayment
-        tasks: [String]
+        tasks: [serviceTask]
         facilitationCharge : facilitationCharge
         createdAt: Date
         updatedAt: Date

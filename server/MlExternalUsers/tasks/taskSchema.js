@@ -17,7 +17,9 @@
      isDiscount: Boolean
      discountType : String
      discountValue : Int
-     isPromoCodeApplicable: Boolean
+     activitiesDerived: Int
+     activitiesDiscount: Int
+     activitiesAmount: Int
      derivedAmount :Int
    }
 
@@ -72,14 +74,18 @@
        info: String
        isMandatory: Boolean
    }
+   
    input payment {
        amount: Int
        isDiscount: Boolean
        discountType : String
        discountValue : Int
-       isPromoCodeApplicable: Boolean
-       derivedAmount : Int
+       activitiesDerived: Int
+       activitiesDiscount: Int
+       activitiesAmount: Int
+       derivedAmount :Int
    }
+   
    input facilitationCharge {
         amount: Int
         percentage: Int

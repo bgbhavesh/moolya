@@ -63,16 +63,18 @@ export default class MlServiceCardStep4 extends React.Component{
     console.log(resp)
     if (resp.payment) {
       this.setState({
-        amountToPay: resp.payment.amount,
+        derivedValue: resp.payment.amount,
         discountAmount: resp.payment.discountValue,
-        discountType: resp.payment.discountType,
+        discountType:resp.payment.discountType,
         discountPercentage: resp.payment.discountValue,
         status: resp.payment.isTaxInclusive,
         promo: resp.payment.isPromoCodeApplicable,
-        facilitationAmount: resp.facilitationCharge.amount ? resp.facilitationCharge.amount : 0,
-        facilitationPercentage: resp.facilitationCharge.percentage ? resp.facilitationCharge.percentage : 0,
-        derivedValue: resp.facilitationCharge.derivedAmount,
-        tasks: resp.tasks
+        tasks: resp.tasks,
+        tasksAmount: resp.payment.tasksAmount,
+        tasksDerived: resp.payment.tasksDerived,
+        tasksDiscount: resp.payment.tasksDiscount,
+        facilitationAmount: resp.facilitationCharge.amount,
+        facilitationPercentage: resp.facilitationCharge.percentage
       })
     }
     if (this.state.discountType === 'amount') {
@@ -112,21 +114,27 @@ export default class MlServiceCardStep4 extends React.Component{
     }
     if (e.currentTarget.value >= 0) {
       this.setState({"facilitationAmount": e.currentTarget.value}, function() {
-        if(this.state.amountToPay || this.state.discountAmount) {
-          let amountPayable = this.state.amountToPay?parseInt(this.state.amountToPay):0;
-          let discount = this.state.discountAmount?parseInt(this.state.discountAmount):0;
-          if(amountPayable & discount) {
-            let total = amountPayable - discount + parseInt(this.state.facilitationAmount);
-            this.setState({derivedValue:total})
-          } else if(amountPayable) {
-            let total = amountPayable + parseInt(this.state.facilitationAmount);
-            this.setState({derivedValue:total})
-          } else if(discount) {
-            let total = parseInt(this.state.facilitationAmount) - discount;
-            this.setState({derivedValue:total})
-          }
-        } else {
-          let total = parseInt(this.state.facilitationAmount)
+        // if(this.state.amountToPay || this.state.discountAmount) {
+        //   let amountPayable = this.state.amountToPay?parseInt(this.state.amountToPay):0;
+        //   let discount = this.state.discountAmount?parseInt(this.state.discountAmount):0;
+        //   if(amountPayable & discount) {
+        //     let total = amountPayable - discount + parseInt(this.state.facilitationAmount);
+        //     this.setState({derivedValue:total})
+        //   } else if(amountPayable) {
+        //     let total = amountPayable + parseInt(this.state.facilitationAmount);
+        //     this.setState({derivedValue:total})
+        //   } else if(discount) {
+        //     let total = parseInt(this.state.facilitationAmount) - discount;
+        //     this.setState({derivedValue:total})
+        //   }
+        // } else {
+        //   let total = parseInt(this.state.facilitationAmount)
+        //   this.setState({derivedValue:total})
+        // }
+        if(this.state.chargesAmount){
+          let facilitationAmount = parseInt(this.state.facilitationAmount)
+          let derivedAmount = parseInt(this.state.derivedValue)
+          let total = derivedAmount + facilitationAmount;
           this.setState({derivedValue:total})
         }
       }).bind(this);
@@ -149,17 +157,21 @@ export default class MlServiceCardStep4 extends React.Component{
     if(this.state.chargesPercentage) {
       if (e.currentTarget.value >= 0.0) {
         this.setState({"facilitationPercentage": e.currentTarget.value}, function(){
-          if(this.state.discountPercentage) {
-            let totalPercentage = parseFloat(this.state.facilitationPercentage) - parseFloat(this.state.discountPercentage);
-            let amountPayable = this.state.amountToPay?parseFloat(this.state.amountToPay):0.0;
-            let total = (amountPayable * totalPercentage / 100)+ amountPayable ;
-            this.setState({derivedValue:total})
-          }else{
-            let totalPercentage = parseFloat(this.state.facilitationPercentage);
-            let amountPayable = this.state.amountToPay?parseFloat(this.state.amountToPay):0.0;
-            let total = (amountPayable * totalPercentage / 100)+ amountPayable
-            this.setState({derivedValue:total})
-          }
+          // if(this.state.discountPercentage) {
+          //   let totalPercentage = parseFloat(this.state.facilitationPercentage) - parseFloat(this.state.discountPercentage);
+          //   let amountPayable = this.state.amountToPay?parseFloat(this.state.amountToPay):0.0;
+          //   let total = (amountPayable * totalPercentage / 100)+ amountPayable ;
+          //   this.setState({derivedValue:total})
+          // }else{
+          //   let totalPercentage = parseFloat(this.state.facilitationPercentage);
+          //   let amountPayable = this.state.amountToPay?parseFloat(this.state.amountToPay):0.0;
+          //   let total = (amountPayable * totalPercentage / 100)+ amountPayable
+          //   this.setState({derivedValue:total})
+          // }
+          let facilitationPercentage = parseInt(this.state.facilitationPercentage)
+          let derivedAmount = parseInt(this.state.derivedValue)
+          let total = (derivedAmount * facilitationPercentage)/100;
+          this.setState({derivedValue:total})
         }).bind(this);
       } else {
         this.setState({"facilitationPercentage": 0.0});
@@ -209,7 +221,7 @@ export default class MlServiceCardStep4 extends React.Component{
     }
     let id = this.props.data._id;
     let payment = {
-      amount: this.state.amountToPay,
+      amount: this.state.derivedValue,
       isDiscount: this.state.discount ? this.state.discount : false,
       discountType: this.state.discountType,
       discountValue: this.state.discountValue,
@@ -303,7 +315,21 @@ export default class MlServiceCardStep4 extends React.Component{
           <div className="centered_form">
             <form>
               <div className="form-group">
-                <label>Enter payable amount Rs.<input type="number" disabled value={this.state.amountToPay}  className="form-control "/>
+                <label>
+                  Tasks actual amount
+                  <input type="number" disabled value={this.state.tasksAmount}  className="form-control "/>
+                </label>
+              </div>
+              <div className="form-group">
+                <label>
+                  Task discount amount
+                  <input type="number" disabled value={this.state.tasksDiscount}  className="form-control "/>
+                </label>
+              </div>
+              <div className="form-group">
+                <label>
+                  Task derived amount
+                  <input type="number" disabled value={this.state.tasksDerived}  className="form-control "/>
                 </label>
               </div>
               <div className="form-group switch_wrap switch_names inline_switch">

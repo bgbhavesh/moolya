@@ -48,9 +48,12 @@ export default class Step4 extends React.Component{
         tasks: resp.tasks,
         tasksAmount: resp.payment.tasksAmount,
         tasksDerived: resp.payment.tasksDerived,
-        tasksDiscount: resp.payment.tasksDiscount
+        tasksDiscount: resp.payment.tasksDiscount,
+        facilitationAmount: resp.facilitationCharge.amount,
+        facilitationPercentage: resp.facilitationCharge.percentage
       })
     }
+
     if(this.state.discountType === 'amount') {
       this.setState({discountAmountR: true, discountPercentageR: false, discountPercentage:0})
     }else {

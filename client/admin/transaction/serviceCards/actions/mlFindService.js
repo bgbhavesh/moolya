@@ -73,7 +73,7 @@ query ($profileId: String) {
  **/
 
 
-export async function fetchTaskDetails (name) {
+  export async function fetchTaskDetails (name) {
   const result = await client.query({
     query: gql`
 query ($name: String) {
@@ -86,6 +86,7 @@ query ($name: String) {
       minutes
     }
     session {
+      sessionId
       duration {
         hours
         minutes
@@ -116,35 +117,70 @@ export async function getTaskFromService (serviceId) {
   console.log(serviceId)
   const result = await client.query({
     query: gql`
-query ($serviceId: String) {
-  getTaskFromService(serviceId: $serviceId) {
-   tasks
-   termsAndCondition{
-      isCancelable
-      isRefundable
-      isReschedulable
-      noOfReschedulable
-    }
-    attachments{
-      name
-      info
-      isMandatory
-    }
-    payment{
-      amount
-      isDiscount
-      discountType
-      discountValue
-      isTaxInclusive
-      isPromoCodeApplicable
-    }
-    facilitationCharge{
-      amount
-      percentage
-      derivedAmount
-    }
-  }
-}
+    query($serviceId:String){
+        getTaskFromService(serviceId:$serviceId){
+         userId
+        profileId
+        name
+        displayName
+        noOfSession
+        sessionFrequency
+        duration{
+         hours
+         minutes
+        }
+        status
+        termsAndCondition{
+          isCancelable
+          isRefundable
+          isReschedulable
+          noOfReschedulable
+        }
+        attachments{
+          name
+          info
+          isMandatory
+        }
+        payment {
+          amount
+          isDiscount
+          discountType
+          discountValue
+          isTaxInclusive
+          isPromoCodeApplicable
+          tasksAmount
+          tasksDiscount
+          tasksDerived
+        }
+        tasks {
+          id
+          sequence
+          sessions{
+            id
+            sequence
+          }
+        }
+        facilitationCharge{
+          amount
+          percentage
+          derivedAmount
+        }
+        state{
+          id
+          name
+        }
+        city{
+          id
+          name
+        }
+        community{
+          id
+          name
+        }
+        createdAt
+        updatedAt
+      }
+      }
     `,
     variables: {
       serviceId

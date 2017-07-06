@@ -29,6 +29,7 @@ import MlAppInvestment from "../../app/investment/components/MlAppInvestment";
 import MlAppMyTransaction from "../../app/myTransaction/component/MlAppMyTransaction";
 // import RegistrationWizard from "../../admin/transaction/requested/component/RegistrationWizard";
 import MlAppRegistrationWizard from "../../../client/app/registrations/component/MlAppRegistrationWizard";
+import MlAppTempRoute from "../../../client/app/registrations/component/MlAppTempRoute";
 import {mlAppFunderConfig} from "../../app/funders/config/mlAppFunderConfig";
 import MlAppMyCalendar from "../../app/calendar/myCalendar/components/MlAppMyCalendar";
 
@@ -277,6 +278,15 @@ appSection.route('/register/:id', {
   }
 });
 
+/**
+ * temporary route*/
+
+appSection.route('/register/', {
+  name: 'registeras',
+  action(params){
+    mount(AppLayout,{appContent:< MlAppTempRoute/>})
+  }
+});
 
 // Funders
 appSection.route('/funder', {

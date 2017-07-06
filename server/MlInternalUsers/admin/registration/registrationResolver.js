@@ -4,7 +4,7 @@ import MlRegistrationPreCondition from "./registrationPreConditions";
 import MlAccounts from "../../../commons/mlAccounts";
 import mlRegistrationRepo from "./mlRegistrationRepo";
 import MlAdminUserContext from "../../../mlAuthorization/mlAdminUserContext";
-import MlUserContext from '../../../MlExternalUsers/mlUserContext'
+import MlUserContext from "../../../MlExternalUsers/mlUserContext";
 import geocoder from "geocoder";
 import _lodash from "lodash";
 import _ from "underscore";
@@ -1351,5 +1351,10 @@ MlResolver.MlMutationResolver['createKYCDocument'] = (obj, args, context, info) 
   }else{
     return new MlRespPayload().errorPayload("Kindly enter all manditory fields",403);
   }
+}
 
+MlResolver.MlQueryResolver['findUserPendingRegistration'] = (obj, args, context, info) => {
+  let user = mlDBController.findOne('users', {_id: context.userId}, context) || {}
+  let resp = mlDBController.find('MlRegistration', {'registrationInfo.userName': user.username, status: { $nin: [ 'Approved' ] }}, context).fetch() || []
+  return resp;
 }

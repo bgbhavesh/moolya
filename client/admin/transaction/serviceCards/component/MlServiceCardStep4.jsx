@@ -37,7 +37,8 @@ export default class MlServiceCardStep4 extends React.Component{
       derivedValue:0,
       discountAmountField:true,
       discountType:"",
-      discountValue:""
+      discountValue:"",
+      initialAmount:""
     }
     this.getDetails.bind(this)
   }
@@ -63,6 +64,7 @@ export default class MlServiceCardStep4 extends React.Component{
     console.log(resp)
     if (resp.payment) {
       this.setState({
+        initialAmount: resp.payment.amount,
         derivedValue: resp.payment.amount,
         discountAmount: resp.payment.discountValue,
         discountType:resp.payment.discountType,
@@ -109,30 +111,13 @@ export default class MlServiceCardStep4 extends React.Component{
    */
 
   facilitationAmount(e){
-    let initialAmount = this.state.derivedValue;
+    let initialAmount = this.state.initialAmount;
     if(e.currentTarget.value ==="") {
       this.setState({derivedValue: initialAmount})
       e.currentTarget.value = 0;
     }
     if (e.currentTarget.value >= 0) {
       this.setState({"facilitationAmount": e.currentTarget.value}, function() {
-        // if(this.state.amountToPay || this.state.discountAmount) {
-        //   let amountPayable = this.state.amountToPay?parseInt(this.state.amountToPay):0;
-        //   let discount = this.state.discountAmount?parseInt(this.state.discountAmount):0;
-        //   if(amountPayable & discount) {
-        //     let total = amountPayable - discount + parseInt(this.state.facilitationAmount);
-        //     this.setState({derivedValue:total})
-        //   } else if(amountPayable) {
-        //     let total = amountPayable + parseInt(this.state.facilitationAmount);
-        //     this.setState({derivedValue:total})
-        //   } else if(discount) {
-        //     let total = parseInt(this.state.facilitationAmount) - discount;
-        //     this.setState({derivedValue:total})
-        //   }
-        // } else {
-        //   let total = parseInt(this.state.facilitationAmount)
-        //   this.setState({derivedValue:total})
-        // }
         if(this.state.chargesAmount){
           let facilitationAmount = parseInt(this.state.facilitationAmount)
           let derivedAmount = parseInt(this.state.derivedValue)
@@ -153,7 +138,7 @@ export default class MlServiceCardStep4 extends React.Component{
    */
 
   facilitationPercentage(e){
-    let initialAmount = this.state.derivedValue;
+    let initialAmount = this.state.initialAmount;
     if(e.currentTarget.value ==="") {
       this.setState({derivedValue : initialAmount})
       e.currentTarget.value = 0.0;
@@ -161,17 +146,6 @@ export default class MlServiceCardStep4 extends React.Component{
     if(this.state.chargesPercentage) {
       if (e.currentTarget.value >= 0.0) {
         this.setState({"facilitationPercentage": e.currentTarget.value}, function(){
-          // if(this.state.discountPercentage) {
-          //   let totalPercentage = parseFloat(this.state.facilitationPercentage) - parseFloat(this.state.discountPercentage);
-          //   let amountPayable = this.state.amountToPay?parseFloat(this.state.amountToPay):0.0;
-          //   let total = (amountPayable * totalPercentage / 100)+ amountPayable ;
-          //   this.setState({derivedValue:total})
-          // }else{
-          //   let totalPercentage = parseFloat(this.state.facilitationPercentage);
-          //   let amountPayable = this.state.amountToPay?parseFloat(this.state.amountToPay):0.0;
-          //   let total = (amountPayable * totalPercentage / 100)+ amountPayable
-          //   this.setState({derivedValue:total})
-          // }
           let facilitationPercentage = parseInt(this.state.facilitationPercentage)
           let derivedAmount = parseInt(this.state.derivedValue)
           let total = (derivedAmount * facilitationPercentage)/100;

@@ -48,7 +48,7 @@ class MlInteractionService{
         return {resourceId:resourceId,resourceType:resourceType,resourceOwner:resourceOwnerUser,resourceOwnerId:resourceOwnerUser._id,resourceOwnerUserName:resourceOwnerUser.username,
           contextUserId:contextUser._id,contextUserName:contextUser.username,contextUser:contextUser};
     }
-    buildAggregationQuery(resourceType){
+    buildAggregationQuery(resourceType, userId){
       switch (resourceType){
         case 'portfolio':
           return [
@@ -70,8 +70,8 @@ class MlInteractionService{
             {$unwind: "$user"},
             { '$lookup': {
                 from: "mlStage",
-                localField: "userId",
-                foreignField: "userId",
+                localField: "resourceId",
+                foreignField: "resourceId",
                 as: "stage"
               }
             },
@@ -79,7 +79,13 @@ class MlInteractionService{
                 user:{
                   name:'$user.profile.displayName'
                 },
-                stage:1,
+                stage: {
+                  "$filter": {
+                    input: "$stage",
+                    as: "data",
+                    cond: { "$eq": ["$$data.userId", userId] }
+                  }
+                },
                 portfolio:1,
                 resourceId:1,
               }

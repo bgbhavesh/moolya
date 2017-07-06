@@ -13,19 +13,21 @@ MlResolver.MlQueryResolver['fetchIdeators'] = (obj, args, context, info) => {
   allIds = _.uniq(allIds);
 
   _.each(allIds, function (userId) {
-    let portfolio = MlPortfolioDetails.find({userId:userId, status: 'gone live'}).fetch();    //checking portfolio is gone live or not
-    if(!_.isEmpty(portfolio)){                                                                // checking portfolio is there or not
+    let portfolios = MlPortfolioDetails.find({userId:userId, status: 'gone live'}).fetch();    //checking portfolio is gone live or not
+    var ideasArr = [];
+    if(!_.isEmpty(portfolios)){                                                                // checking portfolio is there or not
+      _.each(portfolios, function (portfolio) {
+        // let ideas = MlIdeas.find({userId:userId}).fetch();
+        ideas = MlIdeas.findOne({portfolioId:portfolio._id}) || {};
+        ideasArr.push(ideas);
+      })
       let user = Meteor.users.findOne({_id:userId});
-      let ideas = MlIdeas.find({userId:userId}).fetch();
-      let chapterName = portfolio[0].chapterName;
-      let accountType = portfolio[0].accountType;
-      let name = user.profile.firstName+" "+user.profile.lastName;
       let ideaObj = {
         userId:userId,
-        ideas:ideas,
-        chapterName:chapterName,
-        name:name,
-        accountType:accountType
+        ideas:ideasArr,
+        chapterName:portfolios[0].chapterName,
+        name:user.profile.firstName+" "+user.profile.lastName,
+        accountType:portfolios[0].accountType
       }
       ideator.push(ideaObj)
     }

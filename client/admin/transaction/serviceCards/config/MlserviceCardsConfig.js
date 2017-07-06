@@ -80,6 +80,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
                     data{
                       ...on AdminService{
                             userId
+                            email
                             _id
                             profileId
                             name

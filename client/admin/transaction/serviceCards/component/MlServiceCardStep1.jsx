@@ -45,7 +45,8 @@ export default class MlServiceCardStep1 extends React.Component{
       communityObject:[{}],
       chapters:[],chapterName:[],
       states:[],subChapterName:[],
-      communities:[],communitiesName:[]
+      communities:[],communitiesName:[],
+      daysRemaining:""
     }
   }
 
@@ -82,7 +83,15 @@ export default class MlServiceCardStep1 extends React.Component{
     this.props.data.community.map(function(data){
       communitiess.push(data.name)
     })
-    this.setState({communities:communitiess})
+    this.setState({communities:communitiess});
+
+    var validTillDate = Date.parse(this.props.data.validTill);
+    var currentDate = new Date();
+    var remainingDate =  Math.floor((validTillDate - currentDate) / (1000*60*60*24));
+    this.setState({
+      daysRemaining: remainingDate
+    })
+    console.log(this.state.daysRemaining)
   }
 
   /**
@@ -145,7 +154,7 @@ export default class MlServiceCardStep1 extends React.Component{
                 </div>
                 <br className="brclear"/>
                 <div className="form-group">
-                  <label>Service expires &nbsp; <input type="text" className="form-control inline_input" value={this.state.serviceExpiral}  /> days from the date of purchase</label>
+                  <label>Service expires &nbsp; <input type="text" className="form-control inline_input" value={this.state.daysRemaining} disabled /> days from the date of purchase</label>
                 </div>
               </form>
             </div>

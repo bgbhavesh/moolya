@@ -99,6 +99,7 @@ query ($name: String) {
     variables: {
       name
     },
+    forceFetch: true
   });
   console.log(result)
   const taskDetails = result.data.fetchTaskDetails;
@@ -185,6 +186,7 @@ export async function getTaskFromService (serviceId) {
     variables: {
       serviceId
     },
+    forceFetch: true
   });
   console.log(result)
   const taskDetails = result.data.getTaskFromService;

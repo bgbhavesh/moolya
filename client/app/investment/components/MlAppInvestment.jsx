@@ -47,7 +47,9 @@ export default class MlAppInvestment extends Component {
     const that = this;
 
     let data = this.state.data && this.state.data.processSteps && this.state.data.processSteps.length > 0 ? this.state.data.processSteps : [];
-    const MlTabs = data.map(function (stage, id) {
+    const MlTabs = data.filter(function (stage) {
+      return stage.isActive;
+    }).map(function (stage, id) {
       return {
           name: stage.stageName,
           tabContent: <MlAppInvestmentItem fetchPortfolio={that.fetchPortfolio}  stages={data} portfolio={that.state.portfolio} currentStage={stage} />

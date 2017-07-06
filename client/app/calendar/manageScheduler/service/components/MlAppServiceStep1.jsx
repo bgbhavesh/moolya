@@ -151,15 +151,6 @@ async getDetails() {
       const res = await updateServiceActionHandler(idExist,services)
       this.getDetails();
     }
-
-  }
-
-  noOfSessions(e) {
-    if(e.currentTarget.value >= 0) {
-      this.setState({"sessionsCost":e.currentTarget.value});
-    } else {
-      this.setState({"sessionsCost":0});
-    }
   }
 
   serviceExpires(e) {
@@ -185,21 +176,6 @@ async getDetails() {
 
   frequency(value) {
     this.setState({frequencyType:value.value})
-  }
-
-  updateHours(e){
-    if(e.currentTarget.value >= 0) {
-      this.setState({"hour":e.currentTarget.value});
-    } else {
-      this.setState({"hour":0});
-    }
-  }
-  updateMinutes(e){
-    if(e.currentTarget.value >= 0) {
-      this.setState({"minute":e.currentTarget.value});
-    } else {
-      this.setState({"minute":0});
-    }
   }
 
   validTillToggle(){
@@ -240,11 +216,11 @@ async getDetails() {
   render(){
 
     let statesQuery=gql`query ($countryId: String) {
-    data: fetchStatesPerCountry(countryId: $countryId) {
-    value: _id
-    label: name
-  }
-}`;
+        data: fetchStatesPerCountry(countryId: $countryId) {
+        value: _id
+        label: name
+      }
+    }`;
 
     let citiesQuery=gql`query($id:String){data:fetchChapters(id:$id) {
     value:_id
@@ -272,11 +248,14 @@ async getDetails() {
                   <input type="text" placeholder="Service Name" className="form-control float-label" id="" value={this.state.serviceName} onChange={this.textFieldSaves.bind(this,"ServiceName")}/>
                 </div>
                 <div className="form-group">
-                  <label>Total number of Sessions Rs. <input type="text"className="form-control inline_input" onChange={(e)=>this.noOfSessions(e)} value={this.state.sessionsCost}  /> </label>
+                  <label>Total number of Sessions Rs. <input type="text"className="form-control inline_input" disabled={true} value={this.state.sessionsCost}  /> </label>
                   {/*<input type="number" className="form-control "/>*/}
                 </div>
                 <div className="form-group">
-                  <label>Duration: &nbsp; <input type="text" className="form-control inline_input" onChange={(e)=>this.updateHours(e)} value={this.state.hour}  /> Hours <input type="text" className="form-control inline_input" onChange={(e)=>this.updateMinutes(e)} value={this.state.minute}  /> Mins </label>
+                  <label>Duration: &nbsp;
+                    <input type="text" className="form-control inline_input" disabled={true} value={this.state.hour}  /> Hours
+                    <input type="text" className="form-control inline_input" disabled={true} value={this.state.minute}  /> Mins
+                  </label>
                 </div>
                 <div className="form-group" id="date-time">
                   <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Valid Till"}}   closeOnSelect={true} value={moment(this.state.validTillDate).format('DD-MM-YY')} onChange={this.validTill.bind(this)}/>

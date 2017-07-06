@@ -12,6 +12,7 @@ import MlLoader from "../../../commons/components/loader/loader";
 import InteractionsCounter from "../../commons/components/InteractionsCounter";
 import MlAppPortfolioAccordionContainer from "../components/MlAppPortfolioAccordion";
 import {requestPortfolioForGoLive} from "../actions/fetchUserDetails";
+import {appClient} from "../../core/appConnection";
 
 class MlAppPortfolio extends Component{
   constructor(props){
@@ -107,7 +108,7 @@ class MlAppPortfolio extends Component{
       comment :  this.refs.comment.value
     }
 
-    const response =  await createCommentActionHandler(commentsData)
+    const response =  await createCommentActionHandler(commentsData,appClient)
 
     if(response){
       this.setState({annotationData : this.state.annotationData},function(){
@@ -117,20 +118,20 @@ class MlAppPortfolio extends Component{
   }
 
   async onResolveComment(){
-    const response = await resolveCommentActionHandler(this.state.annotationData.id)
+    const response = await resolveCommentActionHandler(this.state.annotationData.id,appClient)
     return response;
   }
 
 
   async onReopenComment(){
-    const response = await reopenCommentActionHandler(this.state.annotationData.id)
+    const response = await reopenCommentActionHandler(this.state.annotationData.id,appClient)
     return response;
   }
 
 
   async fetchComments(annotationId){
     if(annotationId){
-      const response = await findComments(annotationId);
+      const response = await findComments(annotationId,appClient);
       this.setState({commentsData : response},function () {
 
       });

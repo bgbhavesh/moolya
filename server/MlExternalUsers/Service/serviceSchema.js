@@ -21,6 +21,9 @@ let service=`
   }
   type ServicePayment {
      amount: Int
+     tasksAmount: Int
+     tasksDiscount: Int
+     tasksDerived: Int
      isDiscount: Boolean
      discountType: String
      discountValue: Int
@@ -65,8 +68,83 @@ let service=`
   type TotalTaskAmount{
     totalAmount: Int
   }
+  
+  type ServiceTaskSessions {
+    id : String
+    sequence: Int 
+  }
+  
+  type ServiceTask {
+    id : String
+    sequence: Int
+    sessions: [ServiceTaskSessions]
+  }
+  
+  type PortfolioDetails{
+    portfolioId: String
+  }
 
   type Service {
+    userId: String
+    _id: String
+    profileId: String
+    name: String
+    displayName: String
+    noOfSession: Int
+    sessionFrequency: String
+    duration: Duration
+    status: Boolean
+    termsAndCondition: TermsAndCondition
+    attachments: [Attachments]
+    payment: ServicePayment
+    tasks: [ServiceTask]
+    facilitationCharge : FacilitationCharge
+    createdAt: Date
+    updatedAt: Date
+    validTill: Date
+    community: [Communities]
+    subChapter: [SubChapters]
+    city: [Cities]
+    state: [States]
+    cluster: Clusters
+    isBeSpoke : Boolean
+    mode : String
+    industryId : [String]
+    conversation : [String]
+    expectedInput : String
+    expectedOutput : String
+    isApproved: Boolean
+  }
+  
+  type UserDetails{
+    accountType: String
+    chapterId: String
+    chapterName: String
+    cityId: String
+    cityName: String
+    clusterId: String
+    clusterName: String
+    communityDefCode: String
+    communityDefName: String
+    communityId: String
+    communityName: String
+    communityType: String
+    countryId: String
+    countryName: String
+    identityType: String
+    isActive: Boolean
+    isApprove: Boolean
+    isDefault: Boolean
+    mobileNumber: String
+    optional: Boolean
+    profileId: String
+    registrationId: String
+    subChapterId: String
+    subChapterName: String
+    userType: String
+  }
+  
+  type AdminService{
     userId: String
     _id: String
     profileId: String
@@ -95,6 +173,7 @@ let service=`
     conversation : [String]
     expectedInput : String
     expectedOutput : String
+    userDetails: UserDetails
   }
 
    input facilitationCharge {
@@ -112,6 +191,9 @@ let service=`
 
    input servicepayment {
        amount: Int
+       tasksAmount: Int
+       tasksDiscount: Int
+       tasksDerived: Int
        isDiscount: Boolean
        discountType: String
        discountValue: Int
@@ -154,6 +236,17 @@ let service=`
    id:String
     name:String
   }
+  
+  input serviceTaskSessions {
+    id : String
+    sequence: Int 
+  }
+  
+  input serviceTask {
+    id : String
+    sequence: Int
+    sessions: [serviceTaskSessions]
+  }
 
    input service {
         userId: String
@@ -167,7 +260,7 @@ let service=`
         termsAndCondition: termsAndCondition
         attachments: [attachments]
         payment: servicepayment
-        tasks: [String]
+        tasks: [serviceTask]
         facilitationCharge : facilitationCharge
         createdAt: Date
         updatedAt: Date
@@ -183,12 +276,16 @@ let service=`
         conversation : [String]
         expectedInput : String
         expectedOutput : String
+        isApproved: Boolean
     }
 
     type Query {
         fetchUserServices(profileId:String):[Service]
         findService(serviceId:String):Service
         fetchTasksAmount(profileId:String):[TotalTaskAmount]
+        getProfileBasedOnPortfolio(portfolioId:String): PortfolioDetails
+        getServiceBasedOnProfileId(profileId:String): AdminService
+        getTaskFromService(serviceId:String):Service
     }
 
     type Mutation {
@@ -204,6 +301,9 @@ let supportedApi = [
   {api:'fetchUserServices', actionName:'READ', moduleName:"OFFICE"},
   {api:'findService', actionName:'READ', moduleName:"OFFICE"},
   {api:'fetchTasksAmount', actionName:'READ', moduleName:"OFFICE"},
+  {api:'getProfileBasedOnPortfolio', actionName:'READ', moduleName:"OFFICE"},
+  {api:'getServiceBasedOnProfileId', actionName:'READ', moduleName:"OFFICE"},
+  {api:'getTaskFromService', actionName:'READ', moduleName:"OFFICE"},
   {api:'createService', actionName:'CREATE', moduleName:"OFFICE"},
   {api:'updateService', actionName:'UPDATE', moduleName:"OFFICE"},
 ]

@@ -1,13 +1,12 @@
 
 import gql from 'graphql-tag'
 
-import {client} from '../../../client/admin/core/apolloConnection'
 import _ from 'lodash'
 
 
-export async function findComments(annotationId) {
-
-  const result = await client.query({
+export async function findComments(annotationId,client) {
+  var connection=client||{};
+  const result = await connection.query({
     query: gql`
           query ($annotationId: String!) {
               fetchComments(annotationId: $annotationId) {

@@ -85,7 +85,7 @@ export default class MlMapFooter extends React.Component {
           return user
       });
     }else {
-      activeData = _.filter(data,  {'isActive': true});
+      activeData = _.filter(data,  {'isActive': true, 'showOnMap':true});
     }
     const showLoader = that.state.loading;
     return (

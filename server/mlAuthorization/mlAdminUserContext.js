@@ -205,23 +205,25 @@ class MlAdminUserContext
     })
     return users;
   }
-  getUserRolesName(userProfiles){
+  getUserRolesName(userProfile, filteredRoles){
     var roles = [];
     var hierarchyLevel=[];
-    var defaultProfile = _.find(userProfiles, {isDefault:true});
-    if(defaultProfile){
-      var userRoles = defaultProfile && defaultProfile.userRoles ? defaultProfile.userRoles : [];
-      if(userRoles && userRoles.length>0){
-        hierarchyLevel = _underscore.pluck(userRoles, 'hierarchyLevel') || [];
-        hierarchyLevel.sort(function (a, b) {
-          return b - a
-        });
-        _.each(defaultProfile.userRoles, function (role){
-          if (role.hierarchyLevel == hierarchyLevel[0]) {
-            roles.push(role.roleName);
-          }
-        })
-      }
+    var userProfile=userProfile;
+    var userRoles = filteredRoles;
+    // if(findDefaultProfile) {
+    //   userProfile = _.find(userProfiles, {isDefault:true});
+    //   userRoles = userProfile && userProfile.userRoles ? userProfile.userRoles : [];
+    // }
+    if(userRoles && userRoles.length>0){
+      hierarchyLevel = _underscore.pluck(userRoles, 'hierarchyLevel') || [];
+      hierarchyLevel.sort(function (a, b) {
+        return b - a
+      });
+      _.each(userProfile.userRoles, function (role){
+        if (role.hierarchyLevel == hierarchyLevel[0]) {
+          roles.push(role.roleName);
+        }
+      })
     }
     return roles;
   }

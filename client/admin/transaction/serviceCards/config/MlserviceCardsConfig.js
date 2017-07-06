@@ -63,7 +63,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   tableHeaderClass:'react_table_head',
   isExpandableRow:(row)=>{return true;},
   expandComponent:MlServiceCardsDetailsComponent,
-  showActionComponent:true,
+  showActionComponent:false,
   actionConfiguration:[
     {
       actionName: 'add',

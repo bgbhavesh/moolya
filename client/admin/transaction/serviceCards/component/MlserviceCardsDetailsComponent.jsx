@@ -111,7 +111,7 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
                   <input type="text" placeholder="User Id" value={that.state.data.userId} className="form-control float-label" readOnly="true"/>
                 </div>
                 <div className="form-group ">
-                  <input type="text" placeholder="Transaction Id" value={that.state.data.transactionId} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Transaction Id" value={that.props.data._id} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Date & Time" value={moment(that.props.data.createdAt).format('DD-MM-YYYY')} className="form-control float-label"  readOnly="true"/>

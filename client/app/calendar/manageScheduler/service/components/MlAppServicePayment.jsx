@@ -34,7 +34,7 @@ export default class Step4 extends React.Component{
   }
 
   async getDetails() {
-    let id = FlowRouter.getQueryParam('id')
+    let id = FlowRouter.getQueryParam('id');
     const resp = await fetchServiceActionHandler(id);
     console.log(resp);
     if(resp.payment) {

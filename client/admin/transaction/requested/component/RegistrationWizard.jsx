@@ -183,7 +183,7 @@ export default class RegistrationWizard extends React.Component{
         {showLoader===true?(<MlLoader/>):(
           <div className="admin_padding_wrap">
             {/*<h2>Registration Process</h2>*/}
-            <div className='step-progress' >
+            <div className='step-progress last_step_none' >
               <div >
                 {hasSoftRegTemplate&&<SoftRegComponent {...registrationConfig}/>}
                 {hasHardRegTemplate&&<HardRegComponent {...registrationConfig}/>}

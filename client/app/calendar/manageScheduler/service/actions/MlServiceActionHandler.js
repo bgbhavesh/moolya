@@ -50,15 +50,25 @@ export async function fetchServiceActionHandler (serviceId) {
           info
           isMandatory
         }
-        payment{
+        payment {
           amount
           isDiscount
           discountType
           discountValue
           isTaxInclusive
           isPromoCodeApplicable
+          tasksAmount
+          tasksDiscount
+          tasksDerived
         }
-        tasks
+        tasks {
+          id
+          sequence
+          sessions{
+            id
+            sequence
+          }
+        }
         facilitationCharge{
           amount
           percentage
@@ -170,3 +180,25 @@ query ($profileId: String) {
   const services = result.data.fetchTasksAmount;
   return services;
 }
+
+export async function getProfileBasedOnPortfolio (portfolioId) {
+  const result = await appClient.query({
+    query: gql`
+query ($portfolioId: String) {
+  getProfileBasedOnPortfolio(portfolioId: $portfolioId) {
+    profileId
+  }
+}
+    `,
+    forceFetch:true,
+    variables: {
+      portfolioId
+    }
+  });
+  const services = result.data.getProfileBasedOnPortfolio;
+  return services;
+}
+
+
+
+

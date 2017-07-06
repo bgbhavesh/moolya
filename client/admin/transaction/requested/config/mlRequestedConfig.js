@@ -42,7 +42,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "registrationId",title:"Transaction ID",dataSort:true},
-    {dataField: "firstName", title: "Created By",dataSort:true},
+    {dataField: "createdBy", title: "Created By",dataSort:true},
     {dataField: "email", title: "Email ID",dataSort:true},
     {dataField: "clusterName", title: "Cluster",dataSort:true},
     {dataField: "chapterName", title: "Chapter",dataSort:true},
@@ -114,6 +114,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
                       				registrationDate
                               transactionId                              
                               assignedUserId
+                              createdBy
                           }
                       }
               }

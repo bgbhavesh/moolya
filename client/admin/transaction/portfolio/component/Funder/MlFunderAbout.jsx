@@ -243,7 +243,7 @@ export default class MlFunderAbout extends React.Component {
                       </div>
 
                       <div className="form-group">
-                        <input type="text" placeholder="User Category" name="category" defaultValue={this.state.data.category} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" placeholder="User Category" name="category" defaultValue={this.state.data.category} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)} disabled="disabled"/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isCategoryPrivate" onClick={this.onClick.bind(this, "category", "isCategoryPrivate")}/>
                       </div>
 
@@ -268,12 +268,12 @@ export default class MlFunderAbout extends React.Component {
                       </div>
 
                       <div className="form-group">
-                        <input type="text" placeholder="Industry" name="industry" defaultValue={this.state.data.industry} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" placeholder="Industry" name="industry" defaultValue={this.state.data.industry} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)} disabled="disabled"/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isIndustryPrivate" onClick={this.onClick.bind(this, "industry", "isIndustryPrivate")}/>
                       </div>
 
                       <div className="form-group">
-                        <input type="text" placeholder="Profession" name="profession" defaultValue={this.state.data.profession} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" placeholder="Profession" name="profession" defaultValue={this.state.data.profession} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)} disabled="disabled"/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isProfessionPrivate" onClick={this.onClick.bind(this,"profession", "isProfessionPrivate")}/>
                       </div>
                     </form>
@@ -343,12 +343,12 @@ export default class MlFunderAbout extends React.Component {
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isInvestmentCountPrivate" onClick={this.onClick.bind(this,"investmentCount", "isInvestmentCountPrivate")}/>
                       </div>
                       <div className="form-group">
-                        <input type="text" placeholder="Phone No" name="mobileNumber" defaultValue={this.state.data.mobileNumber} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" placeholder="Phone No" name="mobileNumber" defaultValue={this.state.data.mobileNumber} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)} disabled="disabled"/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isMobileNumberPrivate" onClick={this.onClick.bind(this,"mobileNumber", "isMobileNumberPrivate")}/>
                       </div>
 
                       <div className="form-group">
-                        <input type="text" placeholder="Email Id" name="emailId" defaultValue={this.state.data.emailId} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" placeholder="Email Id" name="emailId" defaultValue={this.state.data.emailId} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)} disabled="disabled"/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isEmailIdPrivate" onClick={this.onClick.bind(this,"emailId", "isEmailIdPrivate")}/>
                       </div>
 

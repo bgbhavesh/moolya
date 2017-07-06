@@ -99,6 +99,7 @@ query ($name: String) {
     variables: {
       name
     },
+    forceFetch: true
   });
   console.log(result)
   const taskDetails = result.data.fetchTaskDetails;
@@ -185,6 +186,7 @@ export async function getTaskFromService (serviceId) {
     variables: {
       serviceId
     },
+    forceFetch: true
   });
   console.log(result)
   const taskDetails = result.data.getTaskFromService;
@@ -203,7 +205,7 @@ export async function updateServiceActionHandler(serviceId,Services) {
   const result = await client.mutate({
     mutation: gql`
     mutation($serviceId:String, $Services:service){
-        updateService(serviceId:$serviceId,Services:$Services){
+        updateServiceAdmin(serviceId:$serviceId,Services:$Services){
         success
         code
         result
@@ -215,7 +217,7 @@ export async function updateServiceActionHandler(serviceId,Services) {
       Services
     }
   });
-  const response = result.data.updateService;
+  const response = result.data.updateServiceAdmin;
   return response
 }
 

@@ -110,6 +110,14 @@ if(Meteor.isServer){
               "name" : "Privacy",
               "uniqueId" : "privacy"
           },
+          {
+            "image":"ml ml-moolya-symbol",
+            "link": "/app/register",
+            "isLink" : true,
+            "isMenu" : true,
+            "name" : "Registration",
+            "uniqueId" : "registeras"
+          },
       ]
   }})
 }

@@ -49,8 +49,8 @@ export default class Step4 extends React.Component{
         tasksAmount: resp.payment.tasksAmount,
         tasksDerived: resp.payment.tasksDerived,
         tasksDiscount: resp.payment.tasksDiscount,
-        facilitationAmount: resp.facilitationCharge.amount,
-        facilitationPercentage: resp.facilitationCharge.percentage
+        facilitationAmount: resp.facilitationCharge ? resp.facilitationCharge.amount : '',
+        facilitationPercentage: resp.facilitationCharge ? resp.facilitationCharge.percentage : ''
       })
     }
 

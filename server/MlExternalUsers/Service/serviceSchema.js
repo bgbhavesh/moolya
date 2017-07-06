@@ -146,6 +146,7 @@ let service=`
   
   type AdminService{
     userId: String
+    email: String
     _id: String
     profileId: String
     name: String
@@ -291,6 +292,7 @@ let service=`
     type Mutation {
         createService(Services:service):response
         updateService(serviceId:String,Services:service):response
+        updateServiceAdmin(serviceId:String,Services:service):response
     }
 `;
 
@@ -306,6 +308,7 @@ let supportedApi = [
   {api:'getTaskFromService', actionName:'READ', moduleName:"OFFICE"},
   {api:'createService', actionName:'CREATE', moduleName:"OFFICE"},
   {api:'updateService', actionName:'UPDATE', moduleName:"OFFICE"},
+  {api:'updateServiceAdmin', actionName:'UPDATE', moduleName:"OFFICE"}
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

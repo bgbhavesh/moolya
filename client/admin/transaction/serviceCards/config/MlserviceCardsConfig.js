@@ -18,9 +18,9 @@ import MlCustomFilter from '../../../../commons/customFilters/customFilter';
 
 function createdateFormatter (data){
   console.log(data)
-  let createdDate=data&&data.data&&data.data.createdAt;
-  if(createdDate){
-    return <div>{moment(createdAt).format('MM-DD-YYYY HH:mm:ss')}</div>;
+  let createdAt=data&&data.data&&data.data.createdAt;
+  if(createdAt){
+    return <div>{moment(createdAt).format('DD-MM-YYYY HH:mm:ss')}</div>;
   }
   else {
     return <div></div>
@@ -29,7 +29,7 @@ function createdateFormatter (data){
 function updatedateFormatter (data){
   let updateDate=data&&data.data&&data.data.updatedDate;
   if(updateDate){
-    return <div>{moment(updateDate).format('MM-DD-YYYY HH:mm:ss')}</div>;
+    return <div>{moment(updateDate).format('DD-MM-YYYY HH:mm:ss')}</div>;
   }
   else {
     return <div></div>
@@ -63,7 +63,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   tableHeaderClass:'react_table_head',
   isExpandableRow:(row)=>{return true;},
   expandComponent:MlServiceCardsDetailsComponent,
-  showActionComponent:true,
+  showActionComponent:false,
   actionConfiguration:[
     {
       actionName: 'add',

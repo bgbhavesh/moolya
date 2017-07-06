@@ -106,7 +106,7 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
         };
       });
     } else {
-      slots = [{}, {}];
+      slots = [{}];
     }
     this.setState({
       slots: slots,
@@ -187,7 +187,11 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
    * @param index --> index for slots array of object(s)
    */
   updateSlotEndTime(value, index) {
-    let { slots } = this.state;
+    let { slots, lunch } = this.state;
+    if (!lunch[0].end) {
+      index -= 1;
+      slots[0].isActive = true;
+    }
     slots[index]['end'] = new Moment(value).format('HH:mm');
     this.setState({
       slots: slots,
@@ -343,14 +347,14 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
    */
   async updateCalendarSetting(event) {
     event.preventDefault();
-    const { lunch, slots } = this.state;
+    const { lunch, slots, isActive, dayName } = this.state;
     this.isValidSlotsTime = true;
     this.isValidBreakTime = true;
     if (isEmpty(slots[0])) {
       toastr.error('Please set the working time');
     } else {
       this.validateSlotsTime();
-      if(!isEmpty(lunch[0])) {
+      if(!isEmpty(lunch[0].end)) {
         this.validateBreakTime();
       }
       if (this.isValidSlotsTime && this.isValidBreakTime) {
@@ -403,17 +407,23 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
         }
         let response;
         if (workingTimeInfo && workingTimeInfo.length === 0) {
-          toastr.error('Please select a week day');
-        } else {
-          workingTimeInfo = await this.constructData(workingTimeInfo);
-          if (workingTimeInfo.length > 1) {
-            response = await updateCalendarWorkingDaysActionHandler(workingTimeInfo);
-            this.showResponseMsg(response);
-          } else {
-            response = await updateCalendarWorkingDayActionHandler(workingTimeInfo[0]);
-            this.showResponseMsg(response);
+          let workingDays = {
+            isActive: isActive,
+            dayName: dayName,
+            slots: slots && slots.length > 0 ? slots : [],
+            lunch: lunch && lunch.length > 0 ? lunch : []
           }
+          workingTimeInfo.push(workingDays);
         }
+        workingTimeInfo = await this.constructData(workingTimeInfo);
+        if (workingTimeInfo.length > 1) {
+          response = await updateCalendarWorkingDaysActionHandler(workingTimeInfo);
+          this.showResponseMsg(response);
+        } else {
+          response = await updateCalendarWorkingDayActionHandler(workingTimeInfo[0]);
+          this.showResponseMsg(response);
+        }
+        this.props.fetchCalendarSettings();
       }
     }
   }

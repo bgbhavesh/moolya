@@ -80,7 +80,13 @@ MlResolver.MlMutationResolver['assignTransaction'] = (obj, args, context, info) 
     let hierarchy = mlHierarchyAssignment.findHierarchy(params.cluster,params.department,params.subDepartment,params.role)
     let updateCount = 0
     transactions.map(function (trans) {
-    let id =mlDBController.update(collection, {transactionId:trans},{allocation:allocation,status:"WIP",userId:params.user,hierarchy:hierarchy._id,transactionUpdatedDate:date}, {$set: true},context)
+    let id =mlDBController.update(collection, {transactionId:trans},
+      {allocation:allocation,
+        status:"WIP",
+        //userId:params.user,
+        hierarchy:hierarchy._id,
+        transactionUpdatedDate:date}
+      , {$set: true},context)
       if (id) {
         updateCount++
       }
@@ -189,7 +195,7 @@ MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, in
       let id = mlDBController.update(collection, {transactionId: trans}, {
         allocation: allocation,
         status: "WIP",
-        userId: user._id,
+        //userId: user._id,
         hierarchy: hierarchy._id,
         transactionUpdatedDate: date
       }, {$set: true}, context)
@@ -231,7 +237,7 @@ MlResolver.MlMutationResolver['unAssignTransaction'] = (obj, args, context, info
       let id = mlDBController.update(collection, {transactionId:trans}, {
         allocation: "",
         status: "Yet To Start",
-        userId: "",
+        //userId: "",
         hierarchy: "",
         transactionUpdatedDate: date
       }, {$set: true}, context)

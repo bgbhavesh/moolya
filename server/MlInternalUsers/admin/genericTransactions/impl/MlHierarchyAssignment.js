@@ -17,10 +17,9 @@ class MlHierarchyAssignment {
     return hierarchy;
   }
 
-  canSelfAssignTransaction(transactionId, collection, userId) {
-
+  canSelfAssignTransaction(transaction, collection, userId) {
     var isValidAssignment = false;
-    let transaction = mlDBController.findOne(collection, {transactionId: transactionId});
+   // let transaction = mlDBController.findOne(collection, {transactionId: transactionId});
     let userProfile = new MlAdminUserContext().userProfileDetails(userId) || {};
     let hirarichyLevel = userProfile.hierarchyLevel;
     let clusterId = userProfile && userProfile.defaultProfileHierarchyRefId ? userProfile.defaultProfileHierarchyRefId : '';
@@ -28,11 +27,8 @@ class MlHierarchyAssignment {
     if (this.validateProfileAccess(userProfile)) {
       return true;
     } else if (clusterId != '') {
-      //check valid oprational area
-      //if (transaction.registrationInfo.clusterId == clusterId) {
         isValidAssignment = true;
         this.processAssignmentTransactions(transaction, userId);
-      //}
     }
     if (isValidAssignment === true && transaction.canAssign) {
       //proceed with assignment

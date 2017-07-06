@@ -23,6 +23,7 @@ export default class MlAppSetCalendarSettings extends React.Component {
         slots:[]
       }
     }
+    this.fetchCalendarSettings = this.fetchCalendarSettings.bind(this);
   }
 
   componentDidMount() {
@@ -57,7 +58,7 @@ export default class MlAppSetCalendarSettings extends React.Component {
   render(){
     const steps = [
         {name: 'Primary', component: <MlAppSetCalendarPrimarySettings primarySettings={this.state.primarySettings} />,icon:<span className="ml fa fa-file-text-o "></span>},
-        {name: 'Manage', component: <MlAppSetCalendarTimmingSettings timingInfo={this.state.timingInfo} />,icon:<span className="ml fa fa-calendar-plus-o"></span>},
+        {name: 'Manage', component: <MlAppSetCalendarTimmingSettings timingInfo={this.state.timingInfo} fetchCalendarSettings={this.fetchCalendarSettings}/>,icon:<span className="ml fa fa-calendar-plus-o"></span>},
         {name: 'Vacation', component: <MlAppSetCalendarVacation />,icon:<span className="ml fa fa-plane"></span>},
       ]
     return (

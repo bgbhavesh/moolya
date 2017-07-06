@@ -27,9 +27,9 @@ import MlProcessDocMapping from '../../admin/processDocument/cluster/components/
 import {mlCommunityListConfig} from '../../admin/community/config/mlCommunityConfig'
 import MlAdminProcessDocHeader from '../../admin/layouts/header/MlAdminProcessDocHeader';
 import MlCreateRegistration from '../../admin/transaction/requested/component/createRegistration'
-import MlAssignedTemplatesList from '../../templates/component/MlAssignedTemplatesList'
-import MlAssignTemplate from '../../templates/component/MlAssignTemplate'
-import MlEditAssignTemplate from '../../templates/component/MlEditAssignTemplate'
+import MlAssignedTemplatesList from '../../admin/templates/component/MlAssignedTemplatesList'
+import MlAssignTemplate from '../../admin/templates/component/MlAssignTemplate'
+import MlEditAssignTemplate from '../../admin/templates/component/MlEditAssignTemplate'
 import MlRequestedPortfolioList from '../../admin/transaction/portfolio/component/MlRequestedProtfolioList'
 import MlApprovedPortfolioList from '../../admin/transaction/portfolio/component/MlApprovedPortfolioList'
 import MlCreatePortfolio from '../../admin/transaction/portfolio/component/MlCreatePortfolio'
@@ -50,13 +50,14 @@ import MlConversationsLogList from '../../admin/transaction/conversations/compon
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 
 import MlProcessSetupRequestsList from '../../admin/transaction/processSetup/component/MlProcessSetupRequestsList'
+import MlserviceCardsList from  '../../admin/transaction/serviceCards/component/MlserviceCardsList'
 
 import MlInternalRequestsList from '../../admin/transaction/internalRequests/component/MlInternalRequestsList'
 import MlApprovedInternalRequestsList from '../../admin/transaction/internalRequests/component/MlApprovedInternalRequestsList'
 
 import MlCommunityTabHistoryList from '../../admin/community/communityAuditLog/components/MlCommunityTabHistoryList'
 import MlDocumentsTabHistoryList from '../../admin/processDocument/documentsAuditLog/components/MlDocumentsTabHistoryList'
-import MlTemplatesTabHistoryList from '../../templates/templatesAuditLog/components/MlTemplatesTabHistoryList'
+import MlTemplatesTabHistoryList from '../../admin/templates/templatesAuditLog/components/MlTemplatesTabHistoryList'
 import MlTransactionTabHistoryList from '../../admin/transaction/transactionAuditLog/components/MlTransactionTabHistoryList'
 import MlRegistrationTabHistoryList from '../../admin/transaction/requested/registrationAuditLog/components/MlRegistrationTabHistoryList'
 import MlPotfolioTabHistoryList from '../../admin/transaction/portfolio/portfolioAuditLog/components/MlPotfolioTabHistoryList'
@@ -460,5 +461,13 @@ adminSection.route('/transactions/processSetupList', {
   name: 'transaction_ProcessSetupList',
   action(){
     mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'requests'}} />, adminContent:<MlProcessSetupRequestsList/>})
+  }
+});
+
+
+adminSection.route('/transactions/serviceCardsList', {
+  name: 'Service_Cards',
+  action(params){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'conversations'}} />, adminContent:<MlserviceCardsList/>})
   }
 });

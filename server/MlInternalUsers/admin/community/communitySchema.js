@@ -61,7 +61,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], communitySchema]);
 let supportedApi = [
     {api:'createCommunityAccess', actionName:'CREATE', moduleName:"COMMUNITY"},
     {api:'createCommunity', actionName:'CREATE', moduleName:"COMMUNITY"},
-    {api:'updateCommunityDef', actionName:'UPDATE', moduleName:"COMMUNITY", isWhiteList:true},
+    {api:'updateCommunityDef', actionName:'UPDATE', moduleName:"COMMUNITY"},
     {api:'FetchMapData', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
     {api:'fetchCommunities', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
     {api:'fetchCommunitiesSelect', actionName:'READ', moduleName:"COMMUNITY"},

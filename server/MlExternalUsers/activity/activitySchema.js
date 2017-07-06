@@ -40,20 +40,18 @@ _id: String
       isDiscount: Boolean
       discountType: String
       discountValue: Int
-      isTaxInclusive: Boolean
-      isPromoCodeApplicable: Boolean
+      derivedAmount: Int
     }
     
     type UserProfileDetails{
-      _id: String
       userId: String
       profileId: String
-      name: String
+      isMandatory: Boolean
     }
-
+    
     type Teams {
-      branch: String
-      userType: String
+      resourceType: String
+      resourceId: String
       users: [UserProfileDetails]
     }
     type Duration {
@@ -105,18 +103,17 @@ _id: String
       isDiscount: Boolean
       discountType: String
       discountValue: Int
-      isTaxInclusive: Boolean
-      isPromoCodeApplicable: Boolean
+      derivedAmount: Int
     }
     input userProfileDetails{
       userId: String
       profileId: String
-      name: String
+      isMandatory: Boolean
     }
     
     input teams {
-      branch: String
-      userType: String
+      resourceType: String
+      resourceId: String
       users: [userProfileDetails]
     }
 

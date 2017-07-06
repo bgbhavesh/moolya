@@ -109,7 +109,9 @@ export default class MlServiceCardStep4 extends React.Component{
    */
 
   facilitationAmount(e){
+    let initialAmount = this.state.derivedValue;
     if(e.currentTarget.value ==="") {
+      this.setState({derivedValue: initialAmount})
       e.currentTarget.value = 0;
     }
     if (e.currentTarget.value >= 0) {
@@ -151,7 +153,9 @@ export default class MlServiceCardStep4 extends React.Component{
    */
 
   facilitationPercentage(e){
+    let initialAmount = this.state.derivedValue;
     if(e.currentTarget.value ==="") {
+      this.setState({derivedValue : initialAmount})
       e.currentTarget.value = 0.0;
     }
     if(this.state.chargesPercentage) {

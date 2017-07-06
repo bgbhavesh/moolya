@@ -8,11 +8,33 @@
 /**
  * Imports libs and components
  */
+import moment from "moment";
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
 import MlServiceCardsDetailsComponent  from '../component/MlserviceCardsDetailsComponent'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
+
+
+function createdateFormatter (data){
+  console.log(data)
+  let createdDate=data&&data.data&&data.data.createdAt;
+  if(createdDate){
+    return <div>{moment(createdAt).format('MM-DD-YYYY HH:mm:ss')}</div>;
+  }
+  else {
+    return <div></div>
+  }
+}
+function updatedateFormatter (data){
+  let updateDate=data&&data.data&&data.data.updatedDate;
+  if(updateDate){
+    return <div>{moment(updateDate).format('MM-DD-YYYY HH:mm:ss')}</div>;
+  }
+  else {
+    return <div></div>
+  }
+}
 
 const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   name:"ProcessSetupTable",
@@ -27,7 +49,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   filterComponent: <MlCustomFilter module="processSetup" moduleName="processSetup" />,
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},
-    {dataField: "createdAt", title: "Date & Time",dataSort:true,selectRow:true},
+    {dataField: "createdAt", title: "Date & Time",dataSort:true,selectRow:true, customComponent:createdateFormatter},
     {dataField: "userId", title: "UserId",dataSort:true,selectRow:true},
     {dataField: "profileId", title: "Profile Id",dataSort:true,selectRow:true},
     {dataField: "service", title: "Transaction Type",dataSort:true,selectRow:true},

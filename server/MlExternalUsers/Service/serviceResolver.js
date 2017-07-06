@@ -22,7 +22,7 @@ MlResolver.MlQueryResolver['findService'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['createService'] = (obj, args, context, info) => {
-  // args.Services.createdAt = new Date();
+  args.Services.createdAt = new Date();
   args.Services.userId = context.userId;
   let  result1 = mlDBController.insert('MlService' ,args.Services, context)
   if(result1){

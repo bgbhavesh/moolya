@@ -146,6 +146,7 @@ let service=`
   
   type AdminService{
     userId: String
+    email: String
     _id: String
     profileId: String
     name: String

@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
-import ideatorListRoutes from "../actions/ideatorListRoutes";
+// import ideatorListRoutes from "../actions/ideatorListRoutes";
 import {fetchIdeators} from "../actions/IdeaActionHandler";
 
 export default class MlAppIdeatorLanding extends Component {

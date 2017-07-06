@@ -588,6 +588,9 @@ let CoreModules = {
       data.push(details)
       var userData = mlDBController.find('users', {'profile.externalUserProfiles.profileId': details.profileId}).fetch()
       userData.map(function (list) {
+        data.map(function(mail){
+          mail.email = list.username;
+        })
         list.profile.externalUserProfiles.map(function (user) {
           data.map(function(item){
             item.userDetails = user

@@ -199,11 +199,11 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
    * validateBreakTime() --> add vlidation for breaktime duration
    */
   validateBreakTime() {
-    let { slots, lunch } = this.state;
+    let { slots, lunch, workEndTime } = this.state;
     let isRepeat = true;
     let breakStartTime, breakEndTime;
     let slotStartTime = slots[0].start ? new Moment(slots[0].start, 'HH:mm').format('HH:mm') : '';
-    let slotEndTime = slots[1].end ? new Moment(slots[1].end, 'HH:mm').format('HH:mm') : '';
+    let slotEndTime = workEndTime ? new Moment(workEndTime, 'HH:mm').format('HH:mm') : '';
     this.isValidStartTime = new Moment(breakStartTime, 'HH:mm').isBefore(new Moment(slotStartTime, 'HH:mm'));
     this.isValidEndTime = new Moment(breakStartTime, 'HH:mm').isAfter(new Moment(slotEndTime, 'HH:mm'));
     lunch.forEach((data, index) => {
@@ -244,8 +244,8 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
    * validateSlotsTime() --> add vlidation for slots duration
    */
   validateSlotsTime() {
-    const { slots } = this.state;
-    this.isValidSlotsTime = new Moment(slots[0].start, 'HH:mm').isBefore(new Moment(slots[1].end, 'HH:mm'));
+    const { slots, workEndTime } = this.state;
+    this.isValidSlotsTime = new Moment(slots[0].start, 'HH:mm').isBefore(new Moment(workEndTime, 'HH:mm'));
     if (!this.isValidSlotsTime) {
       toastr.error('Start time must be less than end time');
     }

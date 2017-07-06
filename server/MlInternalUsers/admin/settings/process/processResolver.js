@@ -693,6 +693,8 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
 
 
         }
+      }else{
+        return countryBasedDoc
       }
     }
     function selectedSubChapterKYC(){

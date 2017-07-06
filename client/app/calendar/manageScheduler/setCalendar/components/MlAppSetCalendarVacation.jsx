@@ -23,6 +23,14 @@ export default class MlAppSetCalendarVacation extends Component {
         type: 'holiday'
       }
     };
+    this.errorMessages = {
+      startTime: 'Start Time',
+      startDate: 'Start Date',
+      endTime: 'End Time',
+      endDate: 'End Date',
+      note: 'Vacation Name',
+      type: 'Break Type'
+    };
     this.breakTypes = [
       {name: 'holiday'},
       {name: 'travel'}
@@ -118,7 +126,7 @@ export default class MlAppSetCalendarVacation extends Component {
     let errorFields = [];
     Object.keys(vacationData).forEach((field) => {
       if (isEmpty(vacationData[field])) {
-        errorFields.push(field);
+        errorFields.push(this.errorMessages[field]);
         this.isValid = false;
       }
     });
@@ -130,6 +138,9 @@ export default class MlAppSetCalendarVacation extends Component {
         }
       });
       toastr.error(`${errorMsg} are required`);
+      return;
+    } else if (errorMsg) {
+      toastr.error(`${errorMsg} is required`);
       return;
     }
     if (this.isValid) {

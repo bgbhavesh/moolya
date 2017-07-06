@@ -270,7 +270,7 @@ async getDetails() {
                 <div className="form-group">
                   <input type="text" placeholder="Display Name" className="form-control float-label" value={this.state.displayName} onChange={this.textFieldSaves.bind(this,"DisplayName")} id=""/>
                 </div>
-                <span className="placeHolder active">Frequency type</span>
+                <span className="placeHolder active">Renewal Frequency</span>
                 <div className="form-group">
                   <Select name="form-field-name"   options={options} value={this.state.frequencyType} placeholder='Frequency Type' onChange={this.frequency.bind(this)} />
                 </div>

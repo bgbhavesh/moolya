@@ -1450,5 +1450,6 @@ button.close {
 .hour_block{float: left;width: 40px;height: 80px;color: #fff;text-shadow: none;line-height: 80px;text-align: center;font-size: 12px;}
 .hour_block.color_01{background: transparent;}
 .hour_block.color_02{background: transparent;}
-
+.last_step_none .progtrckr li:last-of-type em{display: none;}
+.last_step_none .progtrckr li:nth-last-child(2) em{width: 90px;}
 

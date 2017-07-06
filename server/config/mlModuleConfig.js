@@ -70,7 +70,8 @@ let modules = [
     "processSetup",
     'subscriptions',
     'interaction',
-    'actions'
+    'actions',
+    'serviceCards'
   ];
 
 // Meteor.startup(function () {

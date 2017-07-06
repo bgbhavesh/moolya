@@ -34,7 +34,7 @@ export default class Step4 extends React.Component{
   }
 
   async getDetails() {
-    let id = FlowRouter.getQueryParam('id')
+    let id = FlowRouter.getQueryParam('id');
     const resp = await fetchServiceActionHandler(id);
     console.log(resp);
     if(resp.payment) {
@@ -49,8 +49,8 @@ export default class Step4 extends React.Component{
         tasksAmount: resp.payment.tasksAmount,
         tasksDerived: resp.payment.tasksDerived,
         tasksDiscount: resp.payment.tasksDiscount,
-        facilitationAmount: resp.facilitationCharge.amount,
-        facilitationPercentage: resp.facilitationCharge.percentage
+        facilitationAmount: resp.facilitationCharge ? resp.facilitationCharge.amount : '',
+        facilitationPercentage: resp.facilitationCharge ? resp.facilitationCharge.percentage : ''
       })
     }
 

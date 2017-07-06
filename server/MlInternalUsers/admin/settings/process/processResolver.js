@@ -624,7 +624,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
            countryBasedDoc = getCountryBasedDocuments(response._id);
           if (countryBasedDoc) {
             console.log(countryBasedDoc);
-            return countryBasedDoc
+            //return countryBasedDoc
           }
         }
       }

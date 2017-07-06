@@ -63,6 +63,7 @@ const mlSubChapterDashboardMapConfig=new MlViewer.View({
                                    lat:latitude
                                    lng:longitude
                                    isActive:isActive
+                                   showOnMap:showOnMap
                           }
                       }
               }

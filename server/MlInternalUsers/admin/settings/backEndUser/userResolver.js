@@ -749,20 +749,20 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
             let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true}, {'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles':{$elemMatch: queryObj}}]}, context, findOptions).fetch();
             _.each(internalUsers, function (user){
               let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-              // let profile = _.find(userProfiles, {clusterId:cluster._id});
-              // if(profile){
-              //   let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all"), subChapterId:(subChapterId||"all")});
-                if(userProfiles){
+              let profile = _.find(userProfiles, {clusterId:cluster._id});
+              if(profile){
+                let roles = _.filter(profile.userRoles, {chapterId:(chapterId||"all"), subChapterId:(subChapterId||"all")});
+                if(roles){
                   let resp = new MlAdminUserContext().getUserLatLng(user.profile);
                   user.latitude = resp.lat;
                   user.longitude = resp.lng;
                   user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
 
-                  let roles = new MlAdminUserContext().getUserRolesName(userProfiles);
-                  user.roleNames = roles;
+                  let respRoles = new MlAdminUserContext().getUserRolesName(profile, roles);
+                  user.roleNames = respRoles;
                   users.push(user);
                 }
-              // }
+              }
             })
 
             // FOR External Users
@@ -785,20 +785,20 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
             let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true}, {'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles':{$elemMatch: queryObj}}]}, context, findOptions).fetch();
               _.each(allUsers, function (user){
                   let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-                  // let profile = _.find(userProfiles, {clusterId:cluster._id});
-                  // if(profile){
-                  //   let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all"),subChapterId:(subChapterId||"all")});
-                    if(userProfiles){
+                  let profile = _.find(userProfiles, {clusterId:cluster._id});
+                  if(profile){
+                    let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all"),subChapterId:(subChapterId||"all")});
+                    if(roles){
                       let resp = new MlAdminUserContext().getUserLatLng(user.profile);
                       user.latitude = resp.lat;
                       user.longitude = resp.lng;
                       user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
 
-                      let roles = new MlAdminUserContext().getUserRolesName(userProfiles);
-                      user.roleNames = roles;
+                      let respRoles = new MlAdminUserContext().getUserRolesName(profile, roles);
+                      user.roleNames = respRoles;
                       users.push(user);
                     }
-                  // }
+                  }
               })
           }
           else if (userType == "Ideators" || userType =="Investors" || userType =="Startups" || userType =="Service Providers" || userType =="Companies" || userType =="Institutions"){
@@ -832,20 +832,20 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
         let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true}, {'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles':{$elemMatch: queryObj}}]}, context, findOptions).fetch();
         _.each(internalUsers, function (user){
           let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-          // let profile = _.find(userProfiles, {clusterId:cluster._id});
-          // if(profile){
-          //   let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all")});
-            if(userProfiles){
+          let profile = _.find(userProfiles, {clusterId:cluster._id});
+          if(profile){
+            let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all")});
+            if(roles){
               let resp = new MlAdminUserContext().getUserLatLng(user.profile);
               user.latitude = resp.lat;
               user.longitude = resp.lng;
               user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
 
-              let roles = new MlAdminUserContext().getUserRolesName(userProfiles);
-              user.roleNames = roles;
+              let respRoles = new MlAdminUserContext().getUserRolesName(profile, roles);
+              user.roleNames = respRoles;
               users.push(user);
             }
-          // }
+          }
         })
 
         // FOR External Users
@@ -869,20 +869,20 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
         let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true}, {'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles':{$elemMatch: queryObj}}]}, context, findOptions).fetch();
           _.each(allUsers, function (user){
               let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-              // let profile = _.find(userProfiles, {clusterId:cluster._id});
-              // if(profile){
-              //   let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all")});
-                if(userProfiles){
+              let profile = _.find(userProfiles, {clusterId:cluster._id});
+              if(profile){
+                let roles = _.find(profile.userRoles, {chapterId:(chapterId||"all")});
+                if(roles){
                   let resp = new MlAdminUserContext().getUserLatLng(user.profile);
                   user.latitude = resp.lat;
                   user.longitude = resp.lng;
                   user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
 
-                  let roles = new MlAdminUserContext().getUserRolesName(userProfiles);
-                  user.roleNames = roles;
+                  let respRoles = new MlAdminUserContext().getUserRolesName(profile, roles);
+                  user.roleNames = respRoles;
                   users.push(user);
                 }
-              // }
+              }
           })
       }
       else if (userType == "Ideators" || userType =="Investors" || userType =="Startups" || userType =="Service Providers" || userType =="Companies" || userType =="Institutions"){
@@ -910,20 +910,20 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
       let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true}, {'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles':{$elemMatch: queryObj}}]}, context, findOptions).fetch();
       _.each(internalUsers, function (user){
         let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-        // let profile = _.find(userProfiles, {clusterId:clusterId});
-        // if(profile){
-        //   let roles = _.find(profile.userRoles, {communityCode:(communityCode||"all")});
-          if(userProfiles){
+        let profile = _.find(userProfiles, {clusterId:clusterId});
+        if(profile){
+          let roles = _.find(profile.userRoles, {communityCode:(communityCode||"all")});
+          if(roles){
             let resp = new MlAdminUserContext().getUserLatLng(user.profile);
             user.latitude = resp.lat;
             user.longitude = resp.lng;
             user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
 
-            let roles = new MlAdminUserContext().getUserRolesName(userProfiles);
-            user.roleNames = roles;
+            let respRoles = new MlAdminUserContext().getUserRolesName(profile, roles);
+            user.roleNames = respRoles;
             users.push(user);
           }
-        // }
+        }
       })
 
       // External User
@@ -954,15 +954,15 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
         let internalUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true}, {'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles':{$elemMatch: queryObj}}]}, context, findOptions).fetch();
         _.each(internalUsers, function (user){
           let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-          // let profile = _.find(userProfiles, {clusterId:clusterId});
-          if(userProfiles){
+          let profile = _.find(userProfiles, {clusterId:clusterId});
+          if(profile){
             let resp = new MlAdminUserContext().getUserLatLng(user.profile);
             user.latitude = resp.lat;
             user.longitude = resp.lng;
             user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
 
-            let roles = new MlAdminUserContext().getUserRolesName(userProfiles);
-            user.roleNames = roles;
+            let respRoles = new MlAdminUserContext().getUserRolesName(profile, profile.userRoles);
+            user.roleNames = respRoles;
             users.push(user);
           }
         })
@@ -987,14 +987,14 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
         let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isInternaluser":true}, {'profile.InternalUprofile.moolyaProfile.userProfiles.userRoles':{$elemMatch: queryObj}}]}, context, findOptions).fetch();
           _.each(allUsers, function (user){
               let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-              // let profile = _.find(userProfiles, {clusterId:clusterId});
-              if(userProfiles){
+              let profile = _.find(userProfiles, {clusterId:clusterId});
+              if(profile){
                 let resp = new MlAdminUserContext().getUserLatLng(user.profile);
                 user.latitude = resp.lat;
                 user.longitude = resp.lng;
                 user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
-                let roles = new MlAdminUserContext().getUserRolesName(userProfiles);
-                user.roleNames = roles;
+                let respRoles = new MlAdminUserContext().getUserRolesName(profile, profile.userRoles);
+                user.roleNames = respRoles;
                 users.push(user);
               }
           })
@@ -1027,8 +1027,11 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           user.longitude = resp.lng;
           user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
           var userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-          let roles = new MlAdminUserContext().getUserRolesName(userProfiles);
-          user.roleNames = roles;
+          let defaultProfile = _.find(userProfiles, {isDefault:true});
+          if(defaultProfile){
+            let roles = new MlAdminUserContext().getUserRolesName(defaultProfile, defaultProfile.userRoles);
+            user.roleNames = roles;
+          }
           users.push(user);
         })
 
@@ -1062,8 +1065,11 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
           user.longitude = resp.lng;
           user.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
           var userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
-          let roles = new MlAdminUserContext().getUserRolesName(userProfiles);
-          user.roleNames = roles;
+          let defaultProfile = _.find(userProfiles, {isDefault:true});
+          if(defaultProfile) {
+            let roles = new MlAdminUserContext().getUserRolesName(defaultProfile, defaultProfile.userRoles);
+            user.roleNames = roles;
+          }
           users.push(user);
         })
       }

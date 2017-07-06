@@ -2,6 +2,7 @@ import React, { Component, PropTypes }  from "react";
 import {render} from "react-dom";
 import MlTabComponent from "../../../commons/components/tabcomponent/MlTabComponent";
 import _ from 'lodash'
+import {getProfileBasedOnPortfolio} from '../../../app/calendar/manageScheduler/service/actions/MlServiceActionHandler'
 import MlFunderAbout from '../../../admin/transaction/portfolio/component/Funder/MlFunderAbout'
 import MlFunderAreaOfInterest from '../../../admin/transaction/portfolio/component/Funder/MlFunderAreaOfInterest'
 import MlFunderEngagementMethod from '../../../admin/transaction/portfolio/component/Funder/MlFunderEngagementMethod'
@@ -22,6 +23,7 @@ export default class MlAppFunderEditTabs extends React.Component{
     this.getFunderNewsDetails.bind(this);
     this.getFunderLibrary.bind(this);
     this.getServiceDetails.bind(this);
+    this.saveDataToServices.bind(this);
   }
 
   getChildContext(){
@@ -109,10 +111,22 @@ export default class MlAppFunderEditTabs extends React.Component{
   }
 
   getServiceDetails(details){
+    if(details.services){
+      let portfolioId = details.portfolioId;
+      console.log()
+      this.saveDataToServices(portfolioId)
+    }
+    console.log(details)
     let data = this.state.funderPortfolio;
     data['services'] = details;
     this.setState({funderPortfolio : data})
     this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio});
+  }
+
+  async saveDataToServices(portfolioId){
+      const resp = await getProfileBasedOnPortfolio(portfolioId)
+      this.saveServiceDetails()
+      return resp
   }
 
   getFunderNewsDetails(details){

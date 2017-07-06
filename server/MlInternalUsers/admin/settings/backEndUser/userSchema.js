@@ -31,7 +31,7 @@ let BackEndUser = `
         profileImage:String,
         numericalFormat: String,
         currencyTypes: String,
-        languages: [String]
+        languages: String
         timeZone: String
         dateOfBirth: Date,
         genderType: String,
@@ -159,9 +159,9 @@ let BackEndUser = `
         isActive:Boolean,
         userProfiles:[userprofiles],
         profileImage:String,
-         numericalFormat: String,
+        numericalFormat: String,
         currencyTypes: String,
-        languages: [String]
+        languages: String
         timeZone: String
         dateOfBirth: Date,
         genderType: String

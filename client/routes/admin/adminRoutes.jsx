@@ -50,6 +50,7 @@ import MlConversationsLogList from '../../admin/transaction/conversations/compon
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 
 import MlProcessSetupRequestsList from '../../admin/transaction/processSetup/component/MlProcessSetupRequestsList'
+import MlserviceCardsList from  '../../admin/transaction/serviceCards/component/MlserviceCardsList'
 
 import MlInternalRequestsList from '../../admin/transaction/internalRequests/component/MlInternalRequestsList'
 import MlApprovedInternalRequestsList from '../../admin/transaction/internalRequests/component/MlApprovedInternalRequestsList'
@@ -460,5 +461,13 @@ adminSection.route('/transactions/processSetupList', {
   name: 'transaction_ProcessSetupList',
   action(){
     mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'requests'}} />, adminContent:<MlProcessSetupRequestsList/>})
+  }
+});
+
+
+adminSection.route('/transactions/serviceCardsList', {
+  name: 'Service_Cards',
+  action(params){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'conversations'}} />, adminContent:<MlserviceCardsList/>})
   }
 });

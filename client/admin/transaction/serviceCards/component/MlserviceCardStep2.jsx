@@ -4,13 +4,12 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import {fetchServiceActionHandler} from '../actions/MlServiceActionHandler'
+// import {fetchServiceActionHandler} from '../actions/mlFindService'
 var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
-import {fetchTaskDetailsActionHandler} from '../../task/actions/fetchTaskDetails'
-import {updateServiceActionHandler} from '../actions/MlServiceActionHandler'
-import Moolyaselect from "../../../../../commons/components/select/MoolyaSelect";
+import {getTaskFromService, fetchTaskDetails} from '../actions/mlFindService'
+import Moolyaselect from "../../../../commons/components/select/MoolyaSelect";
 
 
 export default class MlAppServiceStep2 extends React.Component{
@@ -47,8 +46,8 @@ export default class MlAppServiceStep2 extends React.Component{
   }
 
   async getInitialData() {
-    let serviceId = FlowRouter.getQueryParam('id');
-    const resp = await fetchServiceActionHandler(serviceId);
+    let serviceId = this.props.data._id;
+    const resp = await getTaskFromService(serviceId);
     if(resp) {
       let taskNames = resp.tasks.map(function (task) {
         return task.id;
@@ -110,14 +109,14 @@ export default class MlAppServiceStep2 extends React.Component{
 
   }
 
-  async storeData() {
-    let serviceId = FlowRouter.getQueryParam('id')
-    let task = {
-      tasks :this.state.taskData
-    };
-    const resp = await updateServiceActionHandler(serviceId,task)
-    return resp
-  }
+  // async storeData() {
+  //   let serviceId = FlowRouter.getQueryParam('id')
+  //   let task = {
+  //     tasks :this.state.taskData
+  //   };
+  //   const resp = await updateServiceActionHandler(serviceId,task)
+  //   return resp
+  // }
 
   respectiveTab(name) {
     let that = this;
@@ -148,7 +147,7 @@ export default class MlAppServiceStep2 extends React.Component{
       this.setState({displayName:" ",noOfSession:" ",sessionFrequency:" ",
         hours:" ",minutes:" ",activities:" "})
     }else {
-      const resp = await fetchTaskDetailsActionHandler(tasks);
+      const resp = await fetchTaskDetails(tasks);
       console.log(resp)
       this.setState({
         displayName: resp.displayName, noOfSession: resp.noOfSession, sessionFrequency: resp.sessionFrequency,
@@ -158,25 +157,25 @@ export default class MlAppServiceStep2 extends React.Component{
     }
   }
 
-  async getTaskDetailsInitially() {
-    let task = this.state.selectedTask;
-    let temp = this.state.taskNames;
-    temp.push(task)
-    this.setState({taskNames: temp})
-    let tasks = this.state.selectedTask;
-    if(!tasks) {
-      this.setState({displayName:" ",noOfSession:" ",sessionFrequency:" ",
-        hours:" ",minutes:" ",activities:" "})
-    }else {
-      const resp = await fetchTaskDetailsActionHandler(tasks);
-      console.log(resp)
-      this.setState({
-        displayName: resp.displayName, noOfSession: resp.noOfSession, sessionFrequency: resp.sessionFrequency,
-        hours: resp.duration.hours, minutes: resp.duration.minutes, activities: resp.session
-      });
-      return resp
-    }
-  }
+  // async getTaskDetailsInitially() {
+  //   let task = this.state.selectedTask;
+  //   let temp = this.state.taskNames;
+  //   temp.push(task)
+  //   this.setState({taskNames: temp})
+  //   let tasks = this.state.selectedTask;
+  //   if(!tasks) {
+  //     this.setState({displayName:" ",noOfSession:" ",sessionFrequency:" ",
+  //       hours:" ",minutes:" ",activities:" "})
+  //   }else {
+  //     const resp = await fetchTaskDetailsActionHandler(tasks);
+  //     console.log(resp)
+  //     this.setState({
+  //       displayName: resp.displayName, noOfSession: resp.noOfSession, sessionFrequency: resp.sessionFrequency,
+  //       hours: resp.duration.hours, minutes: resp.duration.minutes, activities: resp.session
+  //     });
+  //     return resp
+  //   }
+  // }
 
   updateSessionSequence(evt, sessionId) {
     const that = this;
@@ -224,9 +223,9 @@ export default class MlAppServiceStep2 extends React.Component{
     let toggleTabs = []
     const tabs = taskTabs.map(function(tab, index){
       return (
-          <li >
-            <a href="" data-toggle="tab" onClick={that.respectiveTab.bind(that, tab)}><FontAwesome name='minus-square'/> {tab}</a>
-          </li>
+        <li >
+          <a href="" data-toggle="tab" onClick={that.respectiveTab.bind(that, tab)}><FontAwesome name='minus-square'/> {tab}</a>
+        </li>
       )
     });
 
@@ -246,23 +245,23 @@ export default class MlAppServiceStep2 extends React.Component{
         });
         return(
           <div className="panel panel-info" key={index}>
-          <div className="panel-heading">
-            <div className="col-md-2 nopadding-left">Session {index+1}</div>
-            <div className="col-md-4">
-              <div  style={{'marginTop':'-4px'}}>
-                <label>Duration: &nbsp; <input type="text" className="form-control inline_input" value={data.duration.hours}/> Hours <input type="text" className="form-control inline_input" value={data.duration.minutes}/> Mins </label>
+            <div className="panel-heading">
+              <div className="col-md-2 nopadding-left">Session {index+1}</div>
+              <div className="col-md-4">
+                <div  style={{'marginTop':'-4px'}}>
+                  <label>Duration: &nbsp; <input type="text" className="form-control inline_input" value={data.duration.hours}/> Hours <input type="text" className="form-control inline_input" value={data.duration.minutes}/> Mins </label>
+                </div>
               </div>
-            </div>
-            <div className="col-md-offset-2 col-md-3">
-              <div  style={{'marginTop':'-4px'}}>
-                <label>
-                  Sequence: &nbsp;
-                  <input className="form-control inline_input" type="number" min="0" onChange={(evt)=>that.updateSessionSequence(evt, data.sessionId)} />
-                </label>
+              <div className="col-md-offset-2 col-md-3">
+                <div  style={{'marginTop':'-4px'}}>
+                  <label>
+                    Sequence: &nbsp;
+                    <input className="form-control inline_input" type="number" min="0" onChange={(evt)=>that.updateSessionSequence(evt, data.sessionId)} />
+                  </label>
+                </div>
               </div>
+              &nbsp;
             </div>
-            &nbsp;
-          </div>
             <div className="panel-body">
               <div className="swiper-container manage_tasks">
                 <div className="swiper-wrapper">
@@ -309,57 +308,53 @@ export default class MlAppServiceStep2 extends React.Component{
                   <li className="active">
                     <a href="#newTask" data-toggle="tab" className="add-contact" onClick={that.newTask.bind(that)}><FontAwesome name='plus-square'/> Add new task</a>
                   </li>
-                {tabs}
+                  {tabs}
                 </ul>
               </div>
 
-                <div className="tab-content clearfix">
-                  <div className="tab-pane active" id="newTask">
-                    <div className="col-md-6 nopadding-left">
-                      <form>
-                        <div className="form-group">
-                          {/*<select className="form-control"><option>Select task</option></select>*/}
-                          <Moolyaselect multiSelect={false} placeholder="Select Tasks" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedTask} queryType={"graphql"} query={serviceQuery} reExecuteQuery={true} queryOptions={serviceOption} isDynamic={true} onSelect={this.optionsBySelectService.bind(this)} />
-                        </div>
-                        <div className="form-group">
-                          <label>Total number of Sessions Rs. <input className="form-control inline_input"  value={noOfSession}  /> </label>
-                        </div>
-                        <div className="form-group">
-                          <label>Duration: &nbsp; <input type="text" className="form-control inline_input"  value={hours} disabled /> Hours <input type="text" className="form-control inline_input" value={minutes} disabled /> Mins </label>
-                        </div>
-                      </form>
-                    </div>
-                    <div className="col-md-6 nopadding-right">
-                      <form>
-                        <div className="form-group">
-                          <input type="text" className="form-control" placeholder="Display Name" value={displayName}/>
-                        </div>
-                        <div className="form-group">
-                          <span className="placeHolder active">Frequency</span>
-                          <input className="form-control" value={sessionFrequency}></input>
-                        </div>
-                        <div className="form-group">
-                          <label>
-                            Sequence
-                            <input className="form-control inline_input" type="number" min="0"/>
-                          </label>
-                        </div>
-                      </form>
-                    </div>
-                    <br className="brclear"/>
-                      {sessionsList}
-                    <div className="ml_icon_btn">
-                      <div className="save_btn" onClick={that.saveDetails.bind(that)}><span className="ml ml-save"></span></div>
-                      <a href="" className="cancel_btn"><span className="ml ml-delete"></span></a>
-                    </div>
+              <div className="tab-content clearfix">
+                <div className="tab-pane active" id="newTask">
+                  <div className="col-md-6 nopadding-left">
+                    <form>
+                      <div className="form-group">
+                        {/*<select className="form-control"><option>Select task</option></select>*/}
+                        <Moolyaselect multiSelect={false} placeholder="Select Tasks" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedTask} queryType={"graphql"} query={serviceQuery} reExecuteQuery={true} queryOptions={serviceOption} isDynamic={true} onSelect={this.optionsBySelectService.bind(this)} />
+                      </div>
+                      <div className="form-group">
+                        <label>Total number of Sessions Rs. <input className="form-control inline_input"  value={noOfSession}  /> </label>
+                      </div>
+                      <div className="form-group">
+                        <label>Duration: &nbsp; <input type="text" className="form-control inline_input"  value={hours} disabled /> Hours <input type="text" className="form-control inline_input" value={minutes} disabled /> Mins </label>
+                      </div>
+                    </form>
                   </div>
-                  <div className="tab-pane" id="2a">
-                    2
+                  <div className="col-md-6 nopadding-right">
+                    <form>
+                      <div className="form-group">
+                        <input type="text" className="form-control" placeholder="Display Name" value={displayName}/>
+                      </div>
+                      <div className="form-group">
+                        <span className="placeHolder active">Frequency</span>
+                        <input className="form-control" value={sessionFrequency}></input>
+                      </div>
+                      <div className="form-group">
+                        <label>
+                          Sequence
+                          <input className="form-control inline_input" type="number" min="0"/>
+                        </label>
+                      </div>
+                    </form>
                   </div>
+                  <br className="brclear"/>
+                  {sessionsList}
                 </div>
-
+                <div className="tab-pane" id="2a">
+                  2
+                </div>
               </div>
+
             </div>
+          </div>
         </ScrollArea>
       </div>
     )

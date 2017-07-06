@@ -8,6 +8,7 @@ import MlAppRegAddressDetails from "./MlAppRegAddressDetails";
 import MlAccordion from "../../../app/commons/components/MlAccordion";
 import MlAppActionComponent from "../../../app/commons/components/MlAppActionComponent";
 import MlAppRegEmailDetails from "./MlAppRegEmailDetails";
+import _ from 'underscore'
 // import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 var FontAwesome = require('react-fontawesome');
 export default class MlAppRegStep3 extends React.Component {
@@ -49,6 +50,45 @@ export default class MlAppRegStep3 extends React.Component {
     initalizeFloatLabel();
 
 
+  }
+
+  componentWillUnmount(){
+
+    let registrationRecord = this.props.registrationData
+    let addressDetails = registrationRecord&&registrationRecord.addressInfo?registrationRecord.addressInfo:[]
+    /**
+     * Check whether registration contains address array
+     */
+    if(addressDetails&&addressDetails.length<1){
+      toastr.error("Default Address is manditory")
+    }else if(addressDetails&&addressDetails.length>0){
+      /**
+       * If registration contains address array
+       * Check isDefault Address Exist or Not
+       */
+      var found = addressDetails.some(function (el) {
+        return el.isDefaultAddress == true;
+      });
+      if (!found) {
+        /**
+         * If registration contains address array
+         * If default address not found throw an error
+         */
+
+        toastr.error("Default Address is manditory")
+
+      }else if(found){
+        /**
+         * If registration contains address array
+         * If default address exist
+         * Check whether default address is active for single or multiple address
+         */
+        let addressData =  _.filter(addressDetails, {'isDefaultAddress': true});
+        if(addressData&&addressData.length>1){
+          toastr.error("Only one default address should exist")
+        }
+      }
+    }
   }
 
   /* componentWillReceiveProps(nextProps){

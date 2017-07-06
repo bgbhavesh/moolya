@@ -977,7 +977,38 @@ if (Meteor.isServer) {
               "image": "",
               "subMenusId": "transaction"
               // "subMenuMappingId":"Transactions_Log"
-            }
+            },
+            {
+              "link": "/admin/transactions/serviceCardsList",
+              "name": "ServiceCards",
+              "uniqueId": "Service_Cards",
+              "subMenusId": "transaction",
+              "isLink": true,
+              "isMenu": true,
+              "image": "",
+              "subMenu": [
+                // {
+                //   "link": "/admin/transactions/serviceCardsList",
+                //   "name": "List ServiceCards",
+                //   "uniqueId": "Service_Cards",
+                //   "subMenuMappingId": "transaction_ServiceCards",
+                //   "subMenusId": "transaction",
+                //   "isLink": true,
+                //   "isMenu": false,
+                //   "image": ""
+                // },
+                // {
+                //   "link": "/admin/transactions/editServiceCards",
+                //   "name": "Edit ServiceCards",
+                //   "uniqueId": "transaction_EditServiceCards",
+                //   "subMenuMappingId": "transaction_ServiceCards",
+                //   "subMenusId": "transaction",
+                //   "isLink": true,
+                //   "isMenu": true,
+                //   "image": ""
+                // }
+              ]
+            },
             //       "subMenu":[
             //
           ]
@@ -2902,7 +2933,20 @@ if (Meteor.isServer) {
                   "image": ""
                 },
               ]
-            }
+            },
+
+              // subMenu: [
+              //   {
+              //     "link": "/admin/settings/history",
+              //     "name": "History List",
+              //     "uniqueId": "settings_historyList",
+              //     "subMenuMappingId": "settings_history",
+              //     "subMenusId": "settings",
+              //     "isLink": true,
+              //     "isMenu": false,
+              //     "image": ""
+              //   }]
+
           ]
         }
       ]

@@ -55,7 +55,7 @@ export default class MlAppRegistrationWizard extends Component {
 
   async getRegistrationKYCDetails(details) {
     //refer proper object
-    this.setState({'registrationDetails': data})
+    //this.setState({'registrationDetails': data})
     const resp = await this.findRegistration();
     this.setState({'registrationDetails': resp})
 

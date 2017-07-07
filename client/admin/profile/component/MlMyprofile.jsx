@@ -45,7 +45,9 @@ export default class MlMyProfile extends React.Component {
       confirmPassword: '',
       showPasswordFields: true,
       passwordState: " ",
-      passwordValidation: false
+      passwordValidation: false,
+      PasswordReset:false,
+      showChangePassword:true
 
       // Details:{
       //   firstName: " ",
@@ -93,7 +95,7 @@ export default class MlMyProfile extends React.Component {
       if(resp.success){
         this.setState({passwordState: 'Passwords match!'})
       }else{
-        this.setState({passwordState: 'Passwords do not match'})
+        this.setState({passwordState: 'Invalid Password'})
       }
       return resp;
     }
@@ -276,7 +278,7 @@ export default class MlMyProfile extends React.Component {
       if (this.state.passwordState === 'Passwords match!') {
         this.onCheckPassword();
         if (this.state.pwdErrorMsg)
-          toastr.error("Confirm Password does not match with Password");
+          toastr.error("Confirm Password does not match with  New Password");
         else {
           const response = await resetPasswordActionHandler(userDetails);
           // this.refs.id.value='';
@@ -289,9 +291,8 @@ export default class MlMyProfile extends React.Component {
           const resp = this.onFileUpload();
           return resp;
         }
-
       }else {
-        toastr.error("Enter proper Existing Password")
+        toastr.error("Please enter a valid password")
       }
     }
   }
@@ -388,6 +389,15 @@ export default class MlMyProfile extends React.Component {
     }
   }
 
+  OnChangePassword(){
+    this.setState({PasswordReset:true,showChangePassword:false})
+  }
+
+  cancelResetPassword(){
+    $('#password').val("");
+    this.setState({PasswordReset:false,showChangePassword:true})
+  }
+
   render(){
     let userContext = getAdminUserContext();
     let route;
@@ -462,26 +472,24 @@ export default class MlMyProfile extends React.Component {
                     {this.state.showPasswordFields ?
                       <div className="form-group">
                         <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.passwordState}</text>
-                        <input type="Password" ref="existingPassword"  placeholder="Existing Password" className="form-control float-label" onBlur={this.checkExistingPassword.bind(this)}id="password"/>
+                        <input type="Password" ref="existingPassword"  placeholder="Password" className="form-control float-label" onBlur={this.checkExistingPassword.bind(this)}id="password" data-required={true} data-errMsg="Existing password is required"/>
                         <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
                       </div> : <div></div>}
-                    {this.state.showPasswordFields ?
-                      <div className="form-group">
-                        <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdValidationMsg}</text>
-                        <input type="Password" ref="password" defaultValue={this.state.password} onBlur={this.passwordValidation.bind(this)} placeholder="New Password" className="form-control float-label" id="password"/>
-                        <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
-                      </div> : <div></div>}
-                    {this.state.showPasswordFields ?
-                      <div className="form-group">
-                        <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdErrorMsg}</text>
-                        <input type="Password" ref="confirmPassword" defaultValue={this.state.confirmPassword} placeholder="Confirm New Password" className="form-control float-label" onBlur={this.onCheckPassword.bind(this)} id="confirmPassword"/>
-                        <FontAwesome name='eye-slash' className="password_icon ConfirmPassword hide_p"/>
-                      </div> : <div></div>}
-                    {/*<div className="form-group">*/}
-                      {/*<input type="text" ref="dob" placeholder="Date Of Birth" className="form-control float-label"  disabled="true" />*/}
-                      {/*<FontAwesome name='calendar' className="password_icon" />*/}
+                    {this.state.showChangePassword?(<div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.OnChangePassword.bind(this)}>Change Password</a></div>):""}
+                    {this.state.PasswordReset?(
+                      <div>
+                        <div className="form-group">
+                          <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdValidationMsg}</text>
+                          <input type="Password" ref="password" defaultValue={this.state.password} onBlur={this.passwordValidation.bind(this)} placeholder="New Password" className="form-control float-label" id="password" data-required={true} data-errMsg="New Password is required"/>
+                          <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
+                        </div>
+                        <div className="form-group">
+                          <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdErrorMsg}</text>
+                          <input type="Password" ref="confirmPassword" defaultValue={this.state.confirmPassword} placeholder="Confirm New Password" className="form-control float-label" onBlur={this.onCheckPassword.bind(this)} id="confirmPassword" data-errMsg="Confirm Password is required"/>
+                          <FontAwesome name='eye-slash' className="password_icon ConfirmPassword hide_p"/>
+                        </div>
+                        <div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.resetPassword.bind(this)}>Save</a> <a href="#" className="mlUpload_btn" onClick={this.cancelResetPassword.bind(this)}>Cancel</a> </div></div>):""}
 
-                    {/*</div>*/}
 
                     <div className="form-group" id="date-of-birth">
                       <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}  closeOnSelect={true} value={this.state.dateOfBirth?moment(this.state.dateOfBirth).format('DD-MM-YYYY'): null} onChange={this.onfoundationDateSelection.bind(this)} />

@@ -1,12 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import  $ from 'jquery'
 import MlInfinityView from '../infinityView/MlInfinityView'
-import MoolyaListView from '../list/ListView'
-import MoolyaMapView from '../map/MoolyaMapView'
-import MlActionComponent from '../actions/ActionComponent'
-import MlMapViewContainer from "../../../admin/core/containers/MlMapViewContainer"
+//import MoolyaListView from '../list/ListView'
+//import MlMapViewContainer from "../../../admin/core/containers/MlMapViewContainer"
 
 export default class MoolyaAdminView extends Component {
   constructor(props){
@@ -14,8 +9,6 @@ export default class MoolyaAdminView extends Component {
    /* this.state={
       viewMode:true
     }*/
-
-
   }
 
  /* viewModeChange(mode){
@@ -34,7 +27,7 @@ export default class MoolyaAdminView extends Component {
         <div>
           <div className="admin_main_wrap">
             {/*{viewMode ? <MoolyaMapView/> : <div><MoolyaListView {...listViewProps}/></div> }*/}
-            {viewMode ? <MlMapViewContainer {...config.mapConfig} /> : <div><MoolyaListView {...listViewProps}/></div> }
+            {/*{viewMode ? <MlMapViewContainer {...config.mapConfig} /> : <div><MoolyaListView {...listViewProps}/></div> }*/}
             {showInfinity && (<MlInfinityView {...infinityViewProps} />)}
           </div>
         </div>

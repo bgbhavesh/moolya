@@ -142,12 +142,60 @@ let externalUser = `
       index     : String
     }
     
+     input ContactInfo{
+      numberType        : String
+      numberTypeName        : String
+      countryCode           : String
+      contactNumber       : String
+    }
+    
+    input EmailInfo{
+       emailIdType        : String
+       emailIdTypeName        : String
+       emailId           : String
+    }
+    
+    input AddressInfo{
+      addressType       : String
+      addressTypeName  : String
+      name             : String
+      phoneNumber      :  String
+      addressFlat      :  String
+      addressLocality      :  String
+      addressLandmark      :  String
+      addressArea      :  String
+      addressCity      :  String
+      addressState      :  String
+      addressStateId  :String
+      addressCountry : String
+      addressCountryId : String
+      addressPinCode : String
+      latitude        :  Int
+      longitude       :  Int
+      isDefaultAddress:Boolean
+    }
+    
+    input SocialLinkInfo{
+       socialLinkTypeName    : String
+       socialLinkType        : String
+       socialLinkUrl         : String
+     }
+    
+    input registrationObject{
+        socialLinksInfo:[SocialLinkInfo],
+        addressInfo:[AddressInfo],
+        emailInfo : [EmailInfo],
+        contactInfo:[ContactInfo]
+    }
+    
     type Mutation{
       updateContactNumber(contactDetails:contactObj):response
+      createUserGeneralInfo(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,profileId:String!,type:String!):response
       deActivateUserProfile(profileId:String!):response
       blockUserProfile(profileId:String!):response
       setDefaultProfile(profileId:String!):response
       switchExternalProfile(profileId:String!):response
+      updateUserGeneralInfo(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,profileId:String!,type:String!):response
     }
     
     type Query{
@@ -167,6 +215,8 @@ let supportedApi = [
     {api:'deActivateUserProfile', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
     {api:'blockUserProfile', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
     {api:'setDefaultProfile', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
+    {api:'createUserAddressInfo', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
+    {api:'updateUserGeneralInfo', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
 
 ]
 

@@ -78,13 +78,14 @@ class MlRegistrationRepo{
   updateExternalProfileInfo(regId,type,context){
     var  regDetails= mlDBController.findOne('MlRegistration',regId, context) || {};
     var  user= mlDBController.findOne('users',{'profile.externalUserProfiles':{$elemMatch: {'registrationId': regId}}}, context) || {};
-    var exProfile = _.find(user.profile.externalUserProfiles, {'registrationId': regId});
+    let userExternalProfile = user.profile&&user.profile.externalUserProfiles?user.profile.externalUserProfiles:[]
+    var exProfile = _.find(userExternalProfile, {'registrationId': regId});
     var updatedCount=0;
     if(regDetails){
      // orderNumberGenService.generateProfileId(regDetails)
       var info = {
-        clusterId          : regDetails.clusterId,
-        registrationId     : regDetails.registrationId,
+        clusterId          : exProfile.clusterId,
+        registrationId     : exProfile.registrationId,
         profileId          : exProfile.profileId,
         socialLinksInfo    : regDetails.socialLinksInfo,
         addressInfo        : regDetails.addressInfo,

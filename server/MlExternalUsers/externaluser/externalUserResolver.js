@@ -5,6 +5,10 @@ import MlResolver from '../../commons/mlResolverDef'
 import MlRespPayload from '../../commons/mlPayload'
 import MlUserContext from '../../MlExternalUsers/mlUserContext'
 import _ from 'lodash'
+import _underscore from 'underscore'
+var fs = Npm.require('fs');
+var Future = Npm.require('fibers/future');
+import geocoder from "geocoder";
 
 MlResolver.MlQueryResolver['fetchIdeatorUsers'] = (obj, args, context, info) =>
 {
@@ -61,29 +65,23 @@ MlResolver.MlQueryResolver['fetchIdeatorUsers'] = (obj, args, context, info) =>
 MlResolver.MlQueryResolver['findAddressBook'] = (obj, args, context, info) => {
   // TODO : Authorization
   let userId=context.userId
-  const user = Meteor.users.findOne({_id:userId}) || {}
+
+  var  user= mlDBController.findOne('users',{_id:userId},context) || {};
   if(user){
     var registrationId;
     var clusterId;
-    // const userProfile = user.profile.isExternaluser?user.profile.externalUserProfiles:[]
-
     let profile = new MlUserContext(userId).userProfileDetails(userId)
-    // for(var i = 0; i < userProfile.length; i++){
-    //   if(userProfile[i].isDefault == true){
-    //     registrationId = userProfile[i].registrationId;
-    //     clusterId = userProfile[i].clusterId;
-    //     break;
-    //   }
-    // }
+
     registrationId = profile.registrationId;
     clusterId = profile.clusterId;
     const addInfo = user.profile.externalUserAdditionalInfo?user.profile.externalUserAdditionalInfo:[]
     var infoDetails;
-    _.each(addInfo,function (say,value) {
+   /* _.each(addInfo,function (say,value) {
       if(say.registrationId == registrationId && say.clusterId == clusterId){
         infoDetails = say
       }
-    })
+    })*/
+    infoDetails = _underscore.find(addInfo, {'profileId': profile.profileId}) || {};
     return infoDetails;
   }else {
     let code = 409;
@@ -93,7 +91,181 @@ MlResolver.MlQueryResolver['findAddressBook'] = (obj, args, context, info) => {
 }
 
 
-MlResolver.MlMutationResolver['updateContactNumber'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver['updateUserGeneralInfo'] = (obj, args, context, info) => {
+
+  let id = " "
+  // let registrationDetails =MlRegistration.findOne({_id: args.registrationId}) || {};
+  let registrationDetails = mlDBController.findOne('users',{_id:context.userId},context) || {};
+  if(args && args.registration) {
+    if (args.type == "CONTACTTYPE") {
+      id = mlDBController.update('users', {_id: context.userId,'profile.externalUserAdditionalInfo.profileId': args.profileId}, {'profile.externalUserAdditionalInfo.$.contactInfo': args.registration.contactInfo},{$set: true}, context)
+    } else if (args.type == "ADDRESSTYPE") {
+      id = mlDBController.update('users', {_id: context.userId,'profile.externalUserAdditionalInfo.profileId': args.profileId}, {'profile.externalUserAdditionalInfo.$.addressInfo': args.registration.addressInfo},{$set: true}, context)
+    } else if (args.type == "SOCIALLINKS") {
+      //id = mlDBController.update('MlRegistration', args.registrationId, {'socialLinksInfo': args.registration.socialLinksInfo}, {$set: true}, context)
+      id = mlDBController.update('users', {_id: context.userId,'profile.externalUserAdditionalInfo.profileId': args.profileId}, {'profile.externalUserAdditionalInfo.$.socialLinksInfo': args.registration.socialLinksInfo},{$set: true}, context)
+    } else if (args.type == "EMAILTYPE") {
+      //id = mlDBController.update('MlRegistration', args.registrationId, {'emailInfo': args.registration.emailInfo}, {$set: true}, context)
+      id = mlDBController.update('users', {_id: context.userId,'profile.externalUserAdditionalInfo.profileId': args.profileId}, {'profile.externalUserAdditionalInfo.$.emailInfo':args.registration.emailInfo},{$set: true}, context)
+    }
+  }
+
+  if(id){
+    let code = 200;
+    let response = new MlRespPayload().successPayload(id, code);
+    return response
+  }
+
+
+}
+
+MlResolver.MlMutationResolver['createUserGeneralInfo'] = (obj, args, context, info) => {
+    let id = "";
+    let response;
+  var fut = new Future();
+  if(args.registration&& args.registrationId && args.profileId){
+
+    var  registrationDetails= mlDBController.findOne('users',{_id:context.userId},context) || {};
+
+
+    const addInfo = registrationDetails.profile.externalUserAdditionalInfo?registrationDetails.profile.externalUserAdditionalInfo:[]
+    let infoDetails = _underscore.find(addInfo, {'profileId': args.profileId}) || {};
+
+
+    if(args && args.registration){
+      if(args.type == "CONTACTTYPE"){
+
+        let dbData = _underscore.pluck(infoDetails.contactInfo, 'numberType') || [];
+        let contactExist = null;
+        if(args.registration&&args.registration.contactInfo&&args.registration.contactInfo[0]){
+          contactExist = _underscore.contains(dbData, args.registration.contactInfo[0].numberType);
+        }
+
+        if(contactExist){
+          let code = 409;
+          let response = new MlRespPayload().errorPayload("Contact type already exist!!!!", code);
+          return response;
+        }
+
+        if(infoDetails.contactInfo){
+          id = mlDBController.update('users', {_id: context.userId,'profile.externalUserAdditionalInfo.profileId': args.profileId}, {'profile.externalUserAdditionalInfo.$.contactInfo': args.registration.contactInfo[0]},{$push: true}, context)
+        }else{
+          //id = mlDBController.update('MlRegistration', args.registrationId, {'contactInfo': args.registration.contactInfo}, {$set: true}, context)
+          id = mlDBController.update('users', {_id: context.userId,'profile.externalUserAdditionalInfo.profileId': args.profileId}, {'profile.externalUserAdditionalInfo.$.contactInfo': [args.registration.contactInfo[0]]},{$set: true}, context)
+        }
+
+      }else if(args.type == "ADDRESSTYPE"){
+        let dbData = _underscore.pluck(infoDetails.addressInfo, 'addressType') || [];
+        let addressExist = null;
+        if(args.registration.addressInfo&&args.registration.addressInfo[0]){
+          addressExist = _underscore.contains(dbData, args.registration.addressInfo[0].addressType);
+        }
+
+        if(addressExist){
+          let code = 409;
+          let response = new MlRespPayload().errorPayload("Address type already exist!!!!", code);
+          return response;
+        }
+        if(infoDetails.addressInfo){
+          // id = MlRegistration.update(
+          //   { _id : args.registrationId },
+          //   { $push: { 'addressInfo': args.registration.addressInfo[0] } }
+          // )
+          let city = args.registration.addressInfo[0].addressCity
+          let area = args.registration.addressInfo[0].addressArea
+          let locality = args.registration.addressInfo[0].addressLocality
+          let pin =args.registration.addressInfo[0].addressPinCode
+          geocoder.geocode(locality+","+area+","+city+","+pin, Meteor.bindEnvironment(function ( err, data ) {
+            if(err){
+              throw new Error("Invalid Locality selection "+e);
+            }
+            args.registration.addressInfo[0].latitude = data&&data.results[0]&&data.results[0].geometry&&data.results[0].geometry.location&&data.results[0].geometry.location.lat?data.results[0].geometry.location.lat:null;
+            args.registration.addressInfo[0].longitude = data&&data.results[0]&&data.results[0].geometry&&data.results[0].geometry.location&&data.results[0].geometry.location.lat?data.results[0].geometry.location.lng:null;
+
+            try{
+              // let id = MlClusters.insert(cluster);
+             /* let  id = mlDBController.update('users', {_id: context.userId},{'profile.externalUserAdditionalInfo.profileId': args.profileId}, {'$push': {
+                'profile.externalUserAdditionalInfo.$.addressInfo': args.registration.addressInfo[0]
+              }}, context)*/
+              id = mlDBController.update('users', {_id: context.userId,'profile.externalUserAdditionalInfo.profileId': args.profileId}, {'profile.externalUserAdditionalInfo.$.addressInfo': args.registration.addressInfo[0]},{$push: true}, context)
+              if(id){
+                let code = 200;
+                let result = {addressId: id}
+                 response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+                if(response){
+                  fut.return(response);
+                }
+              }
+            }catch(e){
+              throw new Error("Error while updating address "+e);
+            }
+
+          }),{key:Meteor.settings.private.googleApiKey});
+          var addressData = fut.wait();
+        }else{
+          let city = args.registration.addressInfo[0].addressCity||"";
+          let area = args.registration.addressInfo[0].addressArea||"";
+          let locality = args.registration.addressInfo[0].addressLocality||"";
+          let pin =args.registration.addressInfo[0].addressPinCode||"";
+          geocoder.geocode(locality+","+area+","+city+","+pin, Meteor.bindEnvironment(function ( err, data ) {
+            if(err){
+              throw new Error("Invalid Locality selection "+e);
+            }
+            args.registration.addressInfo[0].latitude = data&&data.results[0]&&data.results[0].geometry&&data.results[0].geometry.location&&data.results[0].geometry.location.lat?data.results[0].geometry.location.lat:null;
+            args.registration.addressInfo[0].longitude = data&&data.results[0]&&data.results[0].geometry&&data.results[0].geometry.location&&data.results[0].geometry.location.lat?data.results[0].geometry.location.lng:null;
+
+            try{
+              // let id = MlClusters.insert(cluster);
+              //let id = mlDBController.update('MlRegistration', args.registrationId, {'addressInfo': args.registration.addressInfo}, {$set: true}, context)
+               id = mlDBController.update('users', {_id: context.userId,'profile.externalUserAdditionalInfo.profileId': args.profileId}, {'profile.externalUserAdditionalInfo.$.addressInfo': [args.registration.addressInfo[0]]},{$set: true}, context)
+              if(id){
+                let code = 200;
+                let result = {addressId: id}
+                let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+                if(response){
+                  fut.return(response);
+                }
+
+              }
+            }catch(e){
+              throw new Error("Error while updating address "+e);
+            }
+          }),{key:Meteor.settings.private.googleApiKey});
+
+          var addressData = fut.wait();
+
+        }
+      }else if (args.type == "EMAILTYPE") {
+        let dbData = _underscore.pluck(infoDetails.emailInfo, 'emailIdType') || [];
+        let emailTypeExist = null;
+        if(args.registration.emailInfo[0]){
+          emailTypeExist = _underscore.contains(dbData, args.registration.emailInfo[0].emailIdType);
+        }
+
+        if(emailTypeExist){
+          let code = 409;
+          let response = new MlRespPayload().errorPayload("Email   type already exist!!!!", code);
+          return response;
+        }
+        if(infoDetails.emailInfo){
+          id = mlDBController.update('users', {_id: context.userId,'profile.externalUserAdditionalInfo.profileId': args.profileId}, {'profile.externalUserAdditionalInfo.$.emailInfo': args.registration.emailInfo[0]},{$push: true}, context)
+        }else{
+          id = mlDBController.update('users', {_id: context.userId,'profile.externalUserAdditionalInfo.profileId': args.profileId}, {'profile.externalUserAdditionalInfo.$.emailInfo': [args.registration.emailInfo[0]]},{$set: true}, context)
+        }
+      }
+    }
+
+
+  }
+
+  if(id){
+    let code = 200;
+
+
+    let response = new MlRespPayload().successPayload(id, code);
+    return response
+  }
+
 
 }
 

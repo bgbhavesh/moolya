@@ -3,6 +3,7 @@ import React from 'react';
 import gql from 'graphql-tag'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
 import moment from "moment";
+import {client} from '../../../core/apolloConnection';
 
 function dateFormatter (data){
   let createdDateTime=data&&data.data&&data.data.createdAt?data.data.createdAt:null;
@@ -20,7 +21,7 @@ const mlApprovedPortfolioTableConfig=new MlViewer.View({
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   filter:true,
-  filterComponent: <MlCustomFilter module="portfolio" moduleName="portfolio" />,
+  filterComponent: <MlCustomFilter module="portfolio" moduleName="portfolio" client={client} />,
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
    /* {dataField: "firstName", title: "Date & Time",dataSort:true},

@@ -591,7 +591,7 @@ export default class AppAddressDetails extends React.Component {
                   <div className="form-group switch_wrap inline_switch">
                     <label>Is defaultAddress</label>
                     <label className="switch">
-                      <input type="checkbox" ref={'defaultAddress'+key}/>
+                      <input type="checkbox" ref={'defaultAddress'+key} defaultChecked={options.isDefaultAddress}/>
                       <div className="slider"></div>
                     </label>
                   </div>

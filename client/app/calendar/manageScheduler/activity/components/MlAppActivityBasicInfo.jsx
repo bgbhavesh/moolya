@@ -432,7 +432,7 @@ export default class MlAppBasicInfo extends React.Component{
           })}
           <div className="form-group switch_wrap switch_names inline_switch">
             <label>Status</label>
-            <label className="switch nocolor-switch">
+            <label className="switch">
               <input type="checkbox" />
               <div className="slider"></div>
             </label>

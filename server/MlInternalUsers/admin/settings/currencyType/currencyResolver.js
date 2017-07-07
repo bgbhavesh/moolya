@@ -6,7 +6,7 @@ MlResolver.MlQueryResolver['fetchCurrency'] = (obj, args, context, info) =>{
   let currency;
     currency =  MlCurrencyType.find({isActive: true}).fetch();
     currenctUniq=_.uniqBy(currency, function (e) {
-      return e.currencyName;
+      return e.currencyName+" "+e.symbol_native;
     });
   currencySort = _.sortBy(currenctUniq, 'currencyName');
   return currencySort;

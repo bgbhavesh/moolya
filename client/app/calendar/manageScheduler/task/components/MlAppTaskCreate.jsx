@@ -176,10 +176,10 @@ export default class MlAppTaskCreate extends Component {
                           value={this.state.data.sessionFrequency} onChange={this.onFrequencySelect.bind(this)}/>
                   <div className="form-group">
                     <div className="input_types">
-                      <input id="checkbox1" type="checkbox" name="isServiceCardEligible" value={true}
+                      <input id="isServiceCardEligible" type="checkbox" name="isServiceCardEligible" value={true}
                              defaultChecked={this.state.data.isServiceCardEligible}
                              onBlur={this.handleBlur.bind(this)}/>
-                      <label htmlFor="radio1"><span><span></span></span>Eligible
+                      <label htmlFor="isServiceCardEligible"><span><span></span></span>Eligible
                         for service card</label>
                     </div>
                   </div>

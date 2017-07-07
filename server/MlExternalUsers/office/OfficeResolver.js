@@ -57,7 +57,19 @@ MlResolver.MlQueryResolver['fetchOfficeById'] = (obj, args, context, info) => {
     let response = new MlRespPayload().errorPayload("Not a Valid user", code);
     return response;
   }
-}
+};
+
+MlResolver.MlQueryResolver['fetchOfficeSCById'] = (obj, args, context, info) => {
+  let myOffice = [];
+  if (context.userId) {
+    myOffice = mlDBController.findOne('MlOfficeSC', {officeId:args.officeId});
+    return myOffice
+  } else {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload("Not a Valid user", code);
+    return response;
+  }
+};
 
 MlResolver.MlQueryResolver['fetchOfficeMembers'] = (obj, args, context, info) => {
   let query = {
@@ -191,12 +203,12 @@ MlResolver.MlQueryResolver['findOfficeDetail'] = (obj, args, context, info) => {
     let response = new MlRespPayload().successPayload("Office Id is required", code);
     return response;
   }
-  let pipeline = [{'$match': {_id: args.officeId}},
+  let pipeline = [{'$match': {officeId: args.officeId}},
     {'$project': {office: '$$ROOT'}},
     {
       '$lookup': {
         from: 'mlOfficeTransaction',
-        localField: 'office._id',
+        localField: 'office.officeId',
         foreignField: 'officeId',
         as: 'officeTransaction'
       }
@@ -212,7 +224,7 @@ MlResolver.MlQueryResolver['findOfficeDetail'] = (obj, args, context, info) => {
       }
     }
   ];
-  let result = mlDBController.aggregate('MlOffice', pipeline);
+  let result = mlDBController.aggregate('MlOfficeSC', pipeline);
   let code = 200;
   let response = new MlRespPayload().successPayload(result, code);
   return response;

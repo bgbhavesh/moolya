@@ -368,14 +368,14 @@ export default class MlAppBasicInfo extends React.Component{
                 </div>
                 <div className="form-group switch_wrap switch_names inline_switch">
                   <label>Activity Mode</label>
-                  <span className="state_label">
+                  <span className={this.state.basicData.mode == 'online' ? "state_label acLabel" : "state_label"}>
                     Online
                   </span>
                   <label className="switch nocolor-switch">
                     <input type="checkbox" checked={this.state.basicData.mode !== 'online'} onChange={(evt) => that.changeMode(evt)}/>
                     <div className="slider"></div>
                   </label>
-                  <span className="state_label acLabel">
+                  <span className={this.state.basicData.mode == 'offline' ? "state_label acLabel" : "state_label"}>
                     Offline
                   </span>
                 </div>
@@ -430,6 +430,13 @@ export default class MlAppBasicInfo extends React.Component{
               </div>
             )
           })}
+          <div className="form-group switch_wrap switch_names inline_switch">
+            <label>Status</label>
+            <label className="switch">
+              <input type="checkbox" />
+              <div className="slider"></div>
+            </label>
+          </div>
         </ScrollArea>
         <div className="ml_btn" style={{'textAlign':'center'}}>
           <div className="save_btn" onClick={this.saveDetails.bind(this)}>Save</div> <div className="cancel_btn">Cancel</div>

@@ -8,7 +8,7 @@ export async function fetchOfficeMemberById(officeId) {
   const result = await appClient.query({
     query: gql`
           query($officeId:String){
-              fetchOfficeById(officeId:$officeId){
+              fetchOfficeSCById(officeId:$officeId){
                  _id
                  userId
                  availableCommunities {
@@ -23,5 +23,5 @@ export async function fetchOfficeMemberById(officeId) {
     },
     forceFetch: true
   });
-  return result.data.fetchOfficeById;
+  return result.data.fetchOfficeSCById;
 }

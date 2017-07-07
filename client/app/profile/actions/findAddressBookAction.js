@@ -32,6 +32,7 @@ export async function findAddressBookActionHandler() {
           addressCountry
           addressCountryId
           addressPinCode
+          isDefaultAddress
         }
         contactInfo {
           numberType

@@ -909,7 +909,7 @@ if (Meteor.isServer) {
             },
             {
               "link": "/admin/transactions/processSetupList",
-              "name": "ProcessSetUp",
+              "name": "Investor Process Setup",
               "uniqueId": "transaction_ProcessSetup",
               "isLink": true,
               "isMenu": true,

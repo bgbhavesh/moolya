@@ -127,12 +127,10 @@ export default class PortfolioLibrary extends React.Component{
     switch(dataType) {
       case "image":
         let  imageDetails = {
-          userId: Meteor.userId(),
-          images: {
             fileName: this.state.fileName,
             fileUrl: link,
-            fileType: this.state.fileType
-          }
+            fileType: this.state.fileType,
+            libraryType: dataType
         }
         const resp = await createLibrary(imageDetails)
         this.fetchOnlyImages();
@@ -141,24 +139,20 @@ export default class PortfolioLibrary extends React.Component{
         break;
       case "video":
         let  videoDetails = {
-          userId: Meteor.userId(),
-          videos: {
             fileName: this.state.fileName,
             fileUrl: link,
-            fileType: this.state.fileType
-          }
+            fileType: this.state.fileType,
+            libraryType: dataType
         }
         const res = await createLibrary(videoDetails)
         return res;
         break;
       case "document":
         let  documentDetails = {
-          userId: Meteor.userId(),
-          documents: {
             fileName: this.state.fileName,
             fileUrl: link,
-            fileType: this.state.fileType
-          }
+            fileType: this.state.fileType,
+            libraryType: dataType
         }
         const res1 = await createLibrary(documentDetails)
         return res1;
@@ -169,7 +163,8 @@ export default class PortfolioLibrary extends React.Component{
           templates: {
             fileName: this.state.fileName,
             fileUrl: link,
-            fileType: this.state.fileType
+            fileType: this.state.fileType,
+            libraryType: dataType
           }
         }
         const res2 = await createLibrary(templateDetails)

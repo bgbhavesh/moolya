@@ -3,6 +3,7 @@
  * Created by muralidhar on 23/05/17.
  */
 import MlAdminUserContext from '../../../../mlAuthorization/mlAdminUserContext'
+import _ from 'lodash';
 
 class MlHierarchyAssignment {
 
@@ -16,10 +17,9 @@ class MlHierarchyAssignment {
     return hierarchy;
   }
 
-  canSelfAssignTransaction(transactionId, collection, userId) {
-
+  canSelfAssignTransaction(transaction, collection, userId) {
     var isValidAssignment = false;
-    let transaction = mlDBController.findOne(collection, {transactionId: transactionId});
+   // let transaction = mlDBController.findOne(collection, {transactionId: transactionId});
     let userProfile = new MlAdminUserContext().userProfileDetails(userId) || {};
     let hirarichyLevel = userProfile.hierarchyLevel;
     let clusterId = userProfile && userProfile.defaultProfileHierarchyRefId ? userProfile.defaultProfileHierarchyRefId : '';
@@ -27,11 +27,8 @@ class MlHierarchyAssignment {
     if (this.validateProfileAccess(userProfile)) {
       return true;
     } else if (clusterId != '') {
-      //check valid oprational area
-      if (transaction.registrationInfo.clusterId == clusterId) {
         isValidAssignment = true;
         this.processAssignmentTransactions(transaction, userId);
-      }
     }
     if (isValidAssignment === true && transaction.canAssign) {
       //proceed with assignment
@@ -97,20 +94,29 @@ class MlHierarchyAssignment {
         return false;
       }
     } else if (this.checkSystemSystemDefinedRole(userRole) && !this.checkSystemSystemDefinedRole(assignedRole)) {
-      return true;
+      if(userRole.hierarchyLevel>assignedRole.hierarchyLevel){
+        return true;
+      }else{
+        return false;
+      }
     } else if (!this.checkSystemSystemDefinedRole(userRole) && this.checkSystemSystemDefinedRole(assignedRole)) {
-      return false;
+      if(userRole.hierarchyLevel>assignedRole.hierarchyLevel){
+        return true;
+      }else{
+        return false;
+      }
     }
   }
 
   getUserRoles(userId) {
     let role = null
     let user = mlDBController.findOne('users', {_id: userId}, context)
+    let userProfileDetails = new MlAdminUserContext().userProfileDetails(userId);
     let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles
     userProfiles.map(function (doc, index) {
       if (doc.isDefault) {
         let userRoles = doc && doc.userRoles ? doc.userRoles : [];
-        role = userRoles[0];
+        role = _.find(userRoles , {hierarchyCode:userProfileDetails.hierarchyCode})
       }
     });
     return role;
@@ -182,6 +188,10 @@ class MlHierarchyAssignment {
   canWorkOnInternalRequest(transactionId, collection, userId) {
     let transaction = mlDBController.findOne(collection, {requestId: transactionId});
     let userRole = this.getUserRoles(userId);
+    //checking final approver
+    if(this.checkisFinalApprover(userId)===true){
+      return true;
+    }
     let requestRole = this.getUserRoles(transaction.userId);
     if (this.checkisPlatformAdmin(userRole)) {
       return true;
@@ -210,10 +220,22 @@ class MlHierarchyAssignment {
         return false;
       }
     } else if (this.checkSystemSystemDefinedRole(userRole) && !this.checkSystemSystemDefinedRole(requestRole)) {
+      if(userRole.hierarchyLevel>=requestRole.hierarchyLevel){
+        return true;
+      }else{
+        return false;
+      }
+    } else if (!this.checkSystemSystemDefinedRole(userRole) && this.checkSystemSystemDefinedRole(requestRole)) {
+      if(userRole.hierarchyLevel>=requestRole.hierarchyLevel){
+        return true;
+      }else{
+        return false;
+      }
+    }/*else if (this.checkSystemSystemDefinedRole(userRole) && !this.checkSystemSystemDefinedRole(requestRole)) {
       return true;
     } else if (!this.checkSystemSystemDefinedRole(userRole) && this.checkSystemSystemDefinedRole(requestRole)) {
       return false;
-    }
+    }*/
   }
 
   checkSystemSystemDefinedRole(userRole) {
@@ -271,7 +293,7 @@ class MlHierarchyAssignment {
         return true;
       } else {
         let userhierarchy = this.findHierarchy(userRole.clusterId, userRole.departmentId, userRole.subDepartmentId, userRole.roleId);
-        if (userhierarchy._id) {
+        if (userhierarchy && userhierarchy._id) {
           let roles = userhierarchy.teamStructureAssignment;
           let activeHierarchyRoleAvailable = false;
           roles.map(function (role) {
@@ -286,6 +308,34 @@ class MlHierarchyAssignment {
       return false;
     }
   }
+
+  checkisFinalApprover(userId){
+    let finalApprover = false
+    let user = mlDBController.findOne('users', {_id: userId}, context)
+    let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles
+    userProfiles.map(function (doc, index) {
+      if (doc.isDefault) {
+        let userRoles = doc && doc.userRoles ? doc.userRoles : [];
+        userRoles.map(function (role) {
+          //let userhierarchy = this.findHierarchy(role.clusterId, role.departmentId, role.subDepartmentId, role.roleId);
+          let roleDetails = mlDBController.findOne('MlRoles', {_id: role.roleId})
+          let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
+            parentDepartment: role.departmentId,
+            parentSubDepartment: role.subDepartmentId,
+            clusterId: roleDetails.isSystemDefined ? "All" : role.clusterId,
+            "finalApproval.role":role.roleId
+          }, context)
+          if(hierarchy&&hierarchy._id){
+              if(hierarchy.finalApproval.role == role.roleId ){
+                finalApprover = true;
+              }
+          }
+        })
+      }
+    });
+    return finalApprover;
+  }
+
 }
 
 const mlHierarchyAssignment = new MlHierarchyAssignment();

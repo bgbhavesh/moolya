@@ -2,6 +2,7 @@
  * Created by mohammed.mohasin on 2/02/17.
  */
 
+import _underscore from "underscore";
 var _ = require('lodash');
 
 class MlAdminUserContext
@@ -22,6 +23,7 @@ class MlAdminUserContext
     let defaultCommunities = [];
     let defaultCommunityHierarchyLevel;
     let roleName = null;
+    let roleId = null
     var user = Meteor.users.findOne({_id:userId});
     if(user && user.profile && user.profile.isInternaluser == true)
     {
@@ -66,7 +68,8 @@ class MlAdminUserContext
                 if (defaultCommunities.indexOf(userRole.communityId < 0))
                   defaultCommunities.push({communityId: userRole.communityId, communityCode: userRole.communityCode})
                 // defaultCommunities.push(userRole.communityId)
-              roleName = userRole.roleName
+                roleName = userRole.roleName
+                roleId = userRole.roleId
               }
           })
 
@@ -75,12 +78,14 @@ class MlAdminUserContext
         return {hierarchyLevel:hierarchyLevel,hierarchyCode:hierarchyCode,
                 defaultProfileHierarchyCode:"CLUSTER",
                 defaultProfileHierarchyRefId:defaultCluster,
+                defaultCluster: defaultCluster,
                 defaultChapters:defaultChapters,
                 defaultSubChapters:defaultSubChapters,
                 defaultCommunities:defaultCommunities,
                 defaultCommunityHierarchyLevel:defaultCommunityHierarchyLevel,
                 isMoolya:isMoolya,
-                roleName:roleName
+                roleName:roleName,
+                roleId: roleId
         };
   }
 
@@ -112,6 +117,135 @@ class MlAdminUserContext
 
     }
     return {};
+  }
+
+  nonMoolyaBackedUserAccess(checkUser, userId) {
+    check(checkUser, String)
+    check(userId, String)
+    var curUserProfile = new MlAdminUserContext().userProfileDetails(userId);
+    if (!curUserProfile.isMoolya) { //data access by non-moolya users
+      if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {
+        let subChapterId = curUserProfile.defaultSubChapters ? curUserProfile.defaultSubChapters[0] : ''
+        var subChapterInternal = mlDBController.findOne('users', {
+          _id: checkUser,
+          'profile.isExternaluser': false,
+          'profile.InternalUprofile.moolyaProfile.subChapter': subChapterId
+        }, context)
+
+        if(subChapterInternal)
+          return true
+
+        let isExcess = this.userAccessForOtherUsers(curUserProfile, checkUser, subChapterId)
+        if(isExcess)
+          return true
+        else
+          return false
+      }
+    } else {
+      return true
+    }
+  }
+
+  userAccessForOtherUsers(curUserProfile, checkUser, subChapterId) {
+    let subChapterDetails = MlSubChapters.findOne({
+      _id: subChapterId
+    })
+    if (!_.isEmpty(subChapterDetails.internalSubChapterAccess)) {
+      let canSearch = subChapterDetails.internalSubChapterAccess.backendUser ? subChapterDetails.internalSubChapterAccess.backendUser.canSearch : false
+      let canView = subChapterDetails.internalSubChapterAccess.backendUser ? subChapterDetails.internalSubChapterAccess.backendUser.canView : false
+      var associated = subChapterDetails.associatedSubChapters ? subChapterDetails.associatedSubChapters : []
+      if (canSearch && canView) {
+        curUserProfile.defaultSubChapters = _.concat(curUserProfile.defaultSubChapters, associated)
+        let availableUser = Meteor.users.findOne({
+          _id: checkUser,
+          'profile.isExternaluser': false,
+          'profile.InternalUprofile.moolyaProfile.subChapter': {$in: curUserProfile.defaultSubChapters}
+        })
+        if (!_.isEmpty(availableUser)) {
+          return true
+        }
+      }
+    }else
+      return false
+  }
+
+  getUserLatLng(profile){
+    var latitude = null;
+    var longitude = null;
+    if(profile && profile.addressInfo && profile.addressInfo.length>0){   /*profile of the user should be there*/
+      var address = _.find(profile.addressInfo, {isDefaultAddress:true});
+      if(!address){
+        address = profile.addressInfo[0]
+      }
+      latitude = address.latitude;
+      longitude = address.longitude;
+    }
+    return {lat: latitude, lng: longitude}
+  }
+  getCommunityBasedExternalUser(userProfiles, user, userType, locationName){
+    var users = [];
+    _.each(userProfiles, function (profile) {
+        let userObj = {};
+        if (profile.communityId && profile.communityId != "") {
+          if (profile.communityDefName == userType) {
+            userObj.profile = user.profile;
+            userObj.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
+            userObj.communityCode = profile.communityDefCode;
+            if(locationName){
+              userObj.clusterName = profile[locationName];
+            }
+            let externalProfile = _.find(user.profile.externalUserAdditionalInfo, {profileId:profile.profileId});
+            let resp = new MlAdminUserContext().getUserLatLng(externalProfile);
+            userObj.latitude = resp.lat;
+            userObj.longitude = resp.lng;
+
+            users.push(userObj);
+          }
+      }
+    })
+    return users;
+  }
+  getUserRolesName(userProfile, filteredRoles){
+    var roles = [];
+    var hierarchyLevel=[];
+    var userProfile=userProfile;
+    var userRoles = filteredRoles;
+    // if(findDefaultProfile) {
+    //   userProfile = _.find(userProfiles, {isDefault:true});
+    //   userRoles = userProfile && userProfile.userRoles ? userProfile.userRoles : [];
+    // }
+    if(userRoles && userRoles.length>0){
+      hierarchyLevel = _underscore.pluck(userRoles, 'hierarchyLevel') || [];
+      hierarchyLevel.sort(function (a, b) {
+        return b - a
+      });
+      _.each(userProfile.userRoles, function (role){
+        if (role.hierarchyLevel == hierarchyLevel[0]) {
+          roles.push(role.roleName);
+        }
+      })
+    }
+    return roles;
+  }
+  getAllExternalUser(userProfiles, user, locationName){
+    var users = [];
+    _.each(userProfiles, function (profile) {
+        let userObj = {};
+        userObj.profile = user.profile;
+        userObj.name = (user.profile.firstName ? user.profile.firstName : "") + " " + (user.profile.lastName ? user.profile.lastName : "");
+        userObj.communityCode = profile.communityDefCode ? profile.communityDefCode : " ";
+        if(locationName){
+          userObj.clusterName = profile[locationName];
+        }
+        if (user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length > 0) {
+          let externalProfile = _.find(user.profile.externalUserAdditionalInfo, {profileId:profile.profileId});
+          var resp = new MlAdminUserContext().getUserLatLng(externalProfile);
+          userObj.latitude = resp.lat;
+          userObj.longitude = resp.lng;
+          users.push(userObj);
+        }
+    })
+    return users;
   }
 }
 

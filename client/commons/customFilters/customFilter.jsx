@@ -22,7 +22,8 @@ export default class MlCustomFilter extends Component {
       selectedToDate : null,
       filterQueries : [],
       dateQuery : {},
-      selectedDropdownValues : []
+      selectedDropdownValues : [],
+      isActiveField:''
     }
 
     this.fetchFilters.bind(this);
@@ -48,18 +49,34 @@ export default class MlCustomFilter extends Component {
   async fetchFilters(){
     const response = await findModuleCustomFilterActionHandler(this.props.moduleName);
     this.setState({filterFields : response})
+    let responseFields =  response&&response.filterFields || []
+    for(let i=0;i<responseFields.length;i++){
+      if(responseFields[i].fieldResolverName == "Gen_Clusters" && responseFields[i].isActive){
+        this.setState({isActiveField : "Cluster"})
+        break
+      }else if(responseFields[i].fieldResolverName == "Gen_Chapters" && responseFields[i].isActive){
+        this.setState({isActiveField : "Chapter"})
+        break
+      }else if(responseFields[i].fieldResolverName == "Gen_SubChapters" && responseFields[i].isActive){
+        this.setState({isActiveField : "SubChapter"})
+        break
+      }
+
+    }
+
 
   }
   onFromDateSelection(fieldName,subType,displayName,event) {
     if (event._d) {
-      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
+      let value = moment(event._d).format("MM/DD/YYYY HH:mm:ss");
       this.setState({selectedFromDate: value});
       this.setFilterData(fieldName,value,displayName,null,"Date",subType)
     }
   }
   onToDateSelection(fieldName,subType,displayName,event) {
     if (event._d) {
-      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
+      //let value = moment(event._d).format(Meteor.settings.public.dateFormat);
+      let value = moment(event._d).format("MM/DD/YYYY HH:mm:ss");
       this.setState({selectedToDate: value});
       this.setFilterData(fieldName,value,displayName,null,"Date",subType)
     }
@@ -168,6 +185,7 @@ export default class MlCustomFilter extends Component {
         select = {"fieldName" : selectedFieldName,"value" :  selectedValue,"fieldType" : selectedType,"operator" : "$and"}
         return select;
       case "Date":
+        //let dateTime = moment(selectedValue).format("MM/DD/YYYY HH:mm:ss");
         let value= moment(selectedValue).startOf("day").toDate();
         if(selectedSubType==="from"){
           select= this.state.dateQuery
@@ -242,6 +260,7 @@ export default class MlCustomFilter extends Component {
                   return val;
                 });
 
+                let fieldActive = that.state.isActiveField || ""
 
              //   console.log(fieldListDataArray)
 
@@ -256,14 +275,14 @@ export default class MlCustomFilter extends Component {
                   listSelect = true
                   select =  "selectedOption_"+options.fieldName;
                   selectedValue = that.state[select];
-                  filterListQuery=gql`query fetchSelectedFilterListDropDown($moduleName:String!,$list:[fieldListSpecifics],$filteredListId : [GenericFilter]){
-                    data:fetchSelectedFilterListDropDown(moduleName:$moduleName,list:$list,filteredListId:$filteredListId) {
+                  filterListQuery=gql`query fetchSelectedFilterListDropDown($moduleName:String!,$list:[fieldListSpecifics],$filteredListId : [GenericFilter],$fieldActive:String!){
+                    data:fetchSelectedFilterListDropDown(moduleName:$moduleName,list:$list,filteredListId:$filteredListId,fieldActive:$fieldActive) {
                      label
                       value
                     }
                   }`;
 
-                    listOptions={options: { variables: {moduleName:options.fieldResolverName,list:fieldListDataArray,filteredListId:that.state.filterQueries}}}
+                    listOptions={options: { variables: {moduleName:options.fieldResolverName,list:fieldListDataArray,filteredListId:that.state.filterQueries,fieldActive:fieldActive}}}
 
 
 
@@ -287,8 +306,8 @@ export default class MlCustomFilter extends Component {
 
 
                 return(<span key={id}>
-                  {options.isActive&&dateSelect?<div className="form-group col-lg-3"><Datetime ref="fromDateInput" dateFormat="DD-MM-YYYY" timeFormat={true}  inputProps={{placeholder: "From Date",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onFromDateSelection.bind(that,options.fieldName,"from",options.displayName)}/></div>:""}
-                  {options.isActive&&dateSelect?<div className="form-group col-lg-3"><Datetime ref="toDateInput" dateFormat="DD-MM-YYYY" timeFormat={true}  inputProps={{placeholder: "To Date",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onToDateSelection.bind(that,options.fieldName,"to",options.displayName)}/></div>:""}
+                  {options.isActive&&dateSelect?<div className="form-group col-lg-3"><Datetime ref="fromDateInput" dateFormat="MM/DD/YYYY" timeFormat={true}  inputProps={{placeholder: "From Date",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onFromDateSelection.bind(that,options.fieldName,"from",options.displayName)}/></div>:""}
+                  {options.isActive&&dateSelect?<div className="form-group col-lg-3"><Datetime ref="toDateInput" dateFormat="MM/DD/YYYY" timeFormat={true}  inputProps={{placeholder: "To Date",className:"float-label form-control",disabled:restrictedFilterStatus}}   closeOnSelect={true} onChange={that.onToDateSelection.bind(that,options.fieldName,"to",options.displayName)}/></div>:""}
                   {options.isActive&&listSelect?<div className="col-lg-3"><Moolyaselect multiSelect={false} ref="listSelect" placeholder={options.displayName} valueKey={'value'} labelKey={'label'}  queryType={"graphql"} query={filterListQuery} reExecuteQuery={true} queryOptions={listOptions} selectedValue={selectedValue} onSelect={that.optionsSelected.bind(that,id,options.fieldName,options.displayName,options.clearFields)} isDynamic={true} id={'list'+id}/></div>:""}
                   {options.isActive&&stringSelect?<div className="form-group col-lg-3"><input type="text"  ref="input" placeholder={options.displayName} className="form-control float-label" id="" onBlur={that.onInputBlur.bind(that,options.fieldName,options.displayName)} disabled={options.isRestrictedFilter}/></div>:""}
                   {/*{booleanSelect?<div className="col-lg-3">

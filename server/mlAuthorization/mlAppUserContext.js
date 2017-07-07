@@ -17,7 +17,7 @@ class MlAppUserContext
     var user = Meteor.users.findOne({_id:userId});
     if(user && user.profile && user.profile.isExternaluser === true)
     {
-      var user_profiles = user.profile.externalUserProfile||[];
+      var user_profiles = user.profile.externalUserProfiles||[];
        // Selecting Default Profile
        defaultProfile=_.find(user_profiles, {'isDefault': true });
       //if default Profile is available then,

@@ -25,7 +25,6 @@ class MlAuthorization
           let isContextSpecSearch = false
           for(var i = 0; i < query.definitions.length; i++){
             const d = query.definitions[i];
-            // console.log(d.kind)
             switch (d.kind){
               case 'OperationDefinition':
                 if (schemaDef) {
@@ -40,36 +39,26 @@ class MlAuthorization
             typeName = operationType.name.value
           })
           let modules = MlResolver.MlModuleResolver;
-          // _.each(modules, function (module)
-          // {
-          //     let validApi = _.find(module, {api:typeName})
-          //     if(validApi && validApi.isWhiteList){
-          //         isWhiteList = true
-          //         return;
-          //     }
-          //     if(validApi){
-          //         moduleName = validApi.moduleName;
-          //         actionName = validApi.actionName;
-          //         return;
-          //     }
-          // })
-
           var ret = this.valiateApi(MlResolver.MlModuleResolver, typeName);
           isWhiteList = ret.isWhiteList;
           moduleName = ret.moduleName;
           actionName = ret.actionName;
-
-
           if(isWhiteList)
               return true
-
-
           if((typeName == 'ContextSpecSearch' || typeName == 'SearchQuery') && moduleName == 'GENERIC' && actionName == 'READ'){
               var startToken = schemaDef.loc.startToken
               do{
                   if(startToken.value == 'module'){
                       moduleName = startToken.next.next.value.toUpperCase();
-                      if(moduleName == 'REGISTRATIONINFO' || moduleName == 'REGISTRATIONAPPROVEDINFO'){
+                      /*
+                      Handling all three modules of interanal requests
+                      */
+
+                      if(moduleName == 'INTERNALREQUESTS' || moduleName == 'INTERNALAPPROVEDREQUESTS' || moduleName=='INTERNALREJECTEDREQUESTS'){
+                        moduleName = 'INTERNALREQUESTS';
+                      }
+
+                      if(moduleName == 'REGISTRATIONINFO' || moduleName == 'REGISTRATIONAPPROVEDINFO' || moduleName=='REGISTRATIONREJECTEDINFO'){
                           moduleName = 'REGISTRATION';
                       }
 
@@ -79,6 +68,8 @@ class MlAuthorization
                       if(moduleName == 'OFFICETRANSACTION'){
                         moduleName = 'OFFICE';
                       }
+
+
 
                       if(moduleName == 'AUDIT_LOG')
                           return true
@@ -93,7 +84,8 @@ class MlAuthorization
             return false;
           }
 
-          isValidAuth = this.validteAuthorization(context.userId, moduleName, actionName, req.body, isContextSpecSearch);
+          let variables = _.cloneDeep(req.body.variables)
+          isValidAuth = this.validteAuthorization(context.userId, moduleName, actionName, variables, isContextSpecSearch);
           return isValidAuth
     }
 
@@ -117,12 +109,12 @@ class MlAuthorization
   }
 
 
-    validteAuthorization(userId, moduleName, actionName, req, isContextSpecSearch)
+    validteAuthorization(userId, moduleName, actionName, variables, isContextSpecSearch)
     {
         check(userId, String)
         check(moduleName, String)
         check(actionName, String)
-        check(req, Object)
+        // check(variables, Object)
 
         let ret = false;
 
@@ -136,11 +128,11 @@ class MlAuthorization
             return false;
         }
 
-    var user = mlDBController.findOne('users', {_id: userId}, context)
-    if(user && user.profile && user.profile.isInternaluser == true)
-    {
-      let userProfileDetails = new MlAdminUserContext().userProfileDetails(userId);
-      var hierarchy = MlHierarchy.findOne({level:Number(userProfileDetails.hierarchyLevel)});
+        var user = mlDBController.findOne('users', {_id: userId}, context)
+        if(user && user.profile && user.profile.isInternaluser == true)
+        {
+            let userProfileDetails = new MlAdminUserContext().userProfileDetails(userId);
+            var hierarchy = MlHierarchy.findOne({level:Number(userProfileDetails.hierarchyLevel)});
 
             if(hierarchy.isParent===true){
               return true;
@@ -159,14 +151,16 @@ class MlAuthorization
             }
 
             if(user_roles && user_roles.length > 0){
-                let role;
-                // _.each(user_roles, function (role)
                 for(var i = 0; i < user_roles.length; i++){
-                    ret = this.validateRole(user_roles[i].roleId, module, action)
-                    if(ret){
-                      return this.validateDataContext(user_roles[i], moduleName, actionName, req, isContextSpecSearch, hierarchy)
-                    }
+                  ret = this.validateRole(user_roles[i].roleId, module, action)
+                  if(ret){
+                    break;
+                  }
                 }
+                if(ret){
+                  return this.validateDataContext(userProfileDetails, moduleName, actionName, variables, isContextSpecSearch, hierarchy)
+                }
+                return ret;
             }
         }
         else if(user && user.profile && user.profile.isExternaluser == true){
@@ -176,331 +170,182 @@ class MlAuthorization
     }
 
     validateRole(roleId, accessModule, accessAction){
-        let ret = false;
-        let role = mlDBController.findOne('MlRoles', {_id: roleId})
-        if(role)
-        {
-            role.modules.map(function (module) {
-                if(module.moduleId == "all" || module.moduleId == accessModule._id){
-                    let actions = module.actions;
-                    actions.map(function (action) {
-                        if(action.actionId == "all" || action.actionId == accessAction._id || action.actionId == accessAction.code){
-                            ret = true;
-                            return;
-                        }
-                    })
-                }
+      let ret = false;
+      let role = mlDBController.findOne('MlRoles', {_id: roleId})
+      if(role)
+      {
+        role.modules.map(function (module) {
+          if(module && !module.isActive)
+            return;
+          if(module.moduleId == "all" || module.moduleId == accessModule._id){
+            let actions = module.actions;
+            actions.map(function (action) {
+              if(action.actionId == "all" || action.actionId == accessAction._id || action.actionId == accessAction.code){
+                ret = true
+                return;
+              }
             })
-        }
-        return ret;
+          }
+        })
+      }
+      return ret;
     }
 
-    validateDataContext(roleDetails, moduleName, actionName, req, isContextSpecSearch, hierarchy)
-    {
-        switch (moduleName){
-
-      case 'CLUSTER':{
-        if(isContextSpecSearch && req.variables.context == null ){
+      validateDataContext(userProfileDetails, moduleName, actionName, variables, isContextSpecSearch){
+        if(isContextSpecSearch || moduleName == 'GLOBALSETTINGS' || moduleName == 'MASTERSETTINGS')
           return true;
-        }
-        if(roleDetails['clusterId'] && roleDetails['clusterId'] == req.variables['clusterId'] || (req.variables.context && roleDetails['clusterId'] == req.variables.context['clusterId'])){
-          return true
+
+        var ctxDetails = this.getContextDetails(moduleName, actionName, variables);
+        if(!_.isEmpty(ctxDetails))
+          variables = ctxDetails;
+
+        if(!this.validateCluster(userProfileDetails, variables))
+          return false
+
+        switch (moduleName){
+          case 'TAXATION':
+          case 'CLUSTER':
+            return true;
+          case 'CHAPTER':
+          case 'SUBCHAPTER':
+          case 'COMMUNITY':
+          case 'USERS':
+          case 'REGISTRATION':
+          case 'PORTFOLIO':
+          case 'TEMPLATEASSIGNMENT':
+          case "INTERNALREQUESTS":
+          case "OFFICE":              /*adding office for others five admin */
+          case "PROCESSSETUP":{
+            return this.validateChapterSubChapterCommunity(userProfileDetails, variables);
+          }
+          break;
         }
       }
-        break;
-      case 'CHAPTER':
-      {
-        if(isContextSpecSearch && req.variables.context){
-          if(roleDetails['clusterId'] == req.variables.context['clusterId']){
-            if(roleDetails['chapterId'] == 'all' || actionName == 'READ')
-              return true;
-            if(req.variables.context['chapterId'] == roleDetails['chapterId']){
-              return true;
-            }
-          }
-        }
 
-        if(req.variables['clusterId'] == roleDetails['clusterId']){
-          if(roleDetails['chapterId'] == 'all'){
-            return true;
-          }
-          if(req.variables['chapterId'] == roleDetails['chapterId']){
-            return true;
-          }
-        }
-      }
-        break;
-
-            case 'SUBCHAPTER':
-            {
-                if(isContextSpecSearch && req.variables.context){
-                    if(roleDetails['clusterId'] == req.variables.context['clusterId']){
-                        if(roleDetails['chapterId'] == 'all')
-                           return true;
-                        if(req.variables.context['chapterId'] == roleDetails['chapterId']){
-                            return true;
-                        }
-                    }
-                }
-
-                if((roleDetails['clusterId'] == req.variables['clusterId'] && roleDetails['chapterId'] == req.variables['chapterId'])){
-                    return true
-                }
-
-                if(req.variables.id)
-                {
-                    var subChapter = mlDBController.findOne('MlSubChapters', {"_id":req.variables.id}, context)
-                    if(subChapter && roleDetails['clusterId'] == subChapter.clusterId){
-                        // cluster admin context
-                        if(roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == 'all' && roleDetails['communityId'] == 'all'){
-                          return true
-                        }
-
-                        // chapter admin context
-                        else if(roleDetails['chapterId'] == subChapter.chapterId && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
-                          return true
-                        }
-
-                        // sub chapter admin context
-                        else if(roleDetails['chapterId'] == subChapter.chapterId && roleDetails['subChapterId'] == subChapter.subChapterId && roleDetails['communityId'] == 'all'){
-                          return true
-                        }
-
-                        // community admin context
-                        else if(roleDetails['chapterId'] == subChapter.chapterId && roleDetails['subChapterId'] == subChapter.subChapterId && roleDetails['communityId'] == subChapter.communityId){
-                          return true
-                        }
-
-                    }
-                    if(subChapter && roleDetails['clusterId'] == subChapter.clusterId && roleDetails['chapterId'] == subChapter.chapterId){
-                           return true;
-                    }
-                }
-            }
-            break;
-
-            case 'COMMUNITY':
-            {
-               return true
-            }
-            break;
-
-            case 'DEPARTMENT':
-            case 'SUBDEPARTMENT':
-            {
-                for(key in roleDetails){
-                    if(roleDetails[key] == req.variables.docId){
-                        return true
-                    }
-                }
-            }
-            break;
-            case 'USERS':{
-                  if(actionName == 'READ'){
-                      if(roleDetails['clusterId'] == req.variables['clusterId'])
-                      {
-                          // cluster admin context
-                          if(roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
-                              return true;
-                          }
-                          // chapter admin context
-                          else if(roleDetails['chapterId'] == req.variables['chapterId'] && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
-                             return true
-                          }
-
-                          // sub chapter admin context
-                          else if(roleDetails['chapterId'] == req.variables['chapterId'] && roleDetails['subChapterId'] == req.variables['subChapterId'] && roleDetails['communityId'] == 'all'){
-                            return true
-                          }
-
-                          // community admin context
-                          else if(roleDetails['chapterId'] == req.variables['chapterId'] && roleDetails['subChapterId'] == req.variables['subChapterId'] && roleDetails['communityId'] == 'all'){
-                            return true
-                          }
-
-                      }
-                      // For Dashboard Community Priming
-                      if(req.variables['clusterId'] == null || req.variables['userType']){
-                          return true
-                      }
-                      if(req.variables['subChapterId']){
-                        var subChapter = mlDBController.findOne('MlSubChapters', {"_id":req.variables.subChapterId}, context)
-                        if(subChapter && roleDetails['clusterId'] == subChapter.clusterId) {
-                          return true
-                        }
-                      }
-                  }else if(actionName == 'UPDATE' && hierarchy.level==1){
-                    return true;
-                  }else if(actionName == 'CREATE' && hierarchy.level==1){
-                    return true;
-                  }
-
-            }
-            break;
-            case 'GLOBALSETTINGS':{
-              if(actionName == 'CREATE' && hierarchy.level>=3){
-                return true;
-              }
-              else if(actionName == 'UPDATE' && hierarchy.level>=3){
-                return true;
-              }
-              else if(actionName == 'READ'){
-                return true;
-              }
-            }
-            break;
-            case 'MASTERSETTINGS':{
-                if(actionName == 'CREATE' && hierarchy.level>=3){
-                  return true;
-                }
-                else if(actionName == 'UPDATE' && hierarchy.level>=3){
-                  return true
-                }
-                else if(actionName == 'READ'){
-                    return true;
-                }
-            }
-            break;
+      getContextDetails(moduleName, actionName, variables){
+        switch(moduleName){
           case 'REGISTRATION':{
-              if(actionName == 'CREATE' || isContextSpecSearch)
-                return true;
-
-              if(req.variables.registrationId){
-                    var registration = MlRegistration.findOne(req.variables.registrationId)
-                    if(!registration){
-                        return false;
-                    }
-
-                    if(roleDetails['clusterId'] == registration.registrationInfo.clusterId){
-                        // cluster admin context
-                        if(roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == 'all' && roleDetails['communityId'] == 'all'){
-                            return true
-                        }
-
-                        // chapter admin context
-                        else if(roleDetails['chapterId'] == registration.registrationInfo.chapterId && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
-                          return true
-                        }
-
-                        // sub chapter admin context
-                        else if(roleDetails['chapterId'] == registration.registrationInfo.chapterId && roleDetails['subChapterId'] == registration.registrationInfo.subChapterId && roleDetails['communityId'] == 'all'){
-                          return true
-                        }
-
-                        // community admin context
-                        else if(roleDetails['chapterId'] == registration.registrationInfo.chapterId && roleDetails['subChapterId'] == registration.registrationInfo.subChapterId && roleDetails['communityId'] == registration.registrationInfo.communityId){
-                          return true
-                        }
-                    }
-              }
-
-              if(actionName == 'READ')
-                return true;
-          }
-          break;
-          case 'ROLES':{
-            if(roleDetails['clusterId'] == req.variables['clusterId'])
+            if(actionName == 'CREATE')
             {
-              // cluster admin context
-              if(roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
-                return true;
-              }
-              // chapter admin context
-              else if(roleDetails['chapterId'] == req.variables['chapterId'] && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
-                return true
-              }
-
-              // sub chapter admin context
-              else if(roleDetails['chapterId'] == req.variables['chapterId'] && roleDetails['subChapterId'] == req.variables['subChapterId'] && roleDetails['communityId'] == 'all'){
-                return true
-              }
-
-              // community admin context
-              else if(roleDetails['chapterId'] == req.variables['chapterId'] && roleDetails['subChapterId'] == req.variables['subChapterId'] && roleDetails['communityId'] == 'all'){
-                return true
-              }
-
+                var reg = variables.registration;
+                return {clusterId:reg.clusterId, chapterId:reg.chapterId, subChapterId:reg.subChapterId, communityId:reg.registrationType}
             }
-          }
-          break;
-          case 'INTERNALREQUESTS':{
-            return true
-          }
-          break;
-          case 'INTERNALAPPROVEDREQUESTS':{
-            return true
-          }
-          break;
-          case 'DOCUMENTS':{
-            if(actionName == 'READ' || isContextSpecSearch){
-              return true;
-            }
-          }
-          break;
-          case 'TEMPLATEASSIGNMENT':{
-            if(actionName == 'READ' || isContextSpecSearch){
-              return true;
-            }
-          }
-          break;
-          case 'FILTERS':
-          case 'REQUESTTYPE':{
-              return true;
-          }
-          break;
-          case 'HIERARCHY':{
-            return true;
-          }
-            break;
-          case 'TAXATION':{
-            if(hierarchy.level>=3){
-              return true
-            }else if(actionName == 'READ' || isContextSpecSearch){
-              return true;
-            }
+            return this.getRegistrationContextDetails(variables.registrationId)
           }
           break;
           case 'PORTFOLIO':{
-            if(actionName == 'CREATE' || isContextSpecSearch)
-              return true;
-
-            if(req.variables.portfoliodetailsId){
-              var portfolio = MlPortfolioDetails.findOne(req.variables.portfoliodetailsId)
-              if(!portfolio){
-                return false;
-              }
-              if(roleDetails['clusterId'] == portfolio.clusterId){
-                // cluster admin context
-                if(roleDetails['chapterId'] == 'all' && roleDetails['subChapterId'] == 'all' && roleDetails['communityId'] == 'all'){
-                  return true
-                }
-
-                // chapter admin context
-                else if(roleDetails['chapterId'] == portfolio.chapterId && roleDetails['subChapterId'] == "all" && roleDetails['communityId'] == 'all'){
-                  return true
-                }
-
-                // sub chapter admin context
-                else if(roleDetails['chapterId'] == portfolio.chapterId && roleDetails['subChapterId'] == portfolio.subChapterId && roleDetails['communityId'] == 'all'){
-                  return true
-                }
-
-                // community admin context
-                else if(roleDetails['chapterId'] == portfolio.chapterId && roleDetails['subChapterId'] == portfolio.subChapterId && roleDetails['communityId'] == portfolio.communityId){
-                  return true
-                }
-              }
-
-
-
+            var portfolio = MlPortfolioDetails.findOne(variables.portfoliodetailsId)
+            if(!portfolio)
+              return {}
+            return {clusterId:portfolio.clusterId, chapterId:portfolio.chapterId, subChapterId:portfolio.subChapterId, communityId:portfolio.communityCode}
+          }
+          break;
+          case 'TEMPLATEASSIGNMENT':{
+            if(actionName == 'CREATE'){
+              var reg = variables.template;
+              return {clusterId:reg.templateclusterId, chapterId:reg.templatechapterId, subChapterId:reg.templatesubChapterId, communityId:reg.templatecommunityCode}
             }
+
+            var template = MlTemplateAssignment.findOne(variables.id);
+            if(!template)
+              return;
+
+            return {clusterId:template.templateclusterId, chapterId:template.templatechapterId, subChapterId:template.templatesubChapterId, communityId:template.templatecommunityCode}
+          }
+          break;
+          case 'INTERNALREQUESTS':{
+            return this.getInternalRequestContextDetails(variables, actionName)
           }
           break;
         }
+        return variables;
+      }
 
-        return false
-    }
+      validateCluster(roleDetails, variables){
+        if(!variables)
+          return false
+        if(roleDetails.defaultProfileHierarchyRefId == variables['clusterId'])
+          return true;
+        return false;
+      }
 
+      validateChapterSubChapterCommunity(roleDetails, variables){
+        if(!variables)
+          return false
+
+        isChapter = this.findChapterSubChapter(roleDetails.defaultChapters, variables['chapterId'])
+        if(!isChapter)
+          return false;
+        isSubChapter = this.findChapterSubChapter(roleDetails.defaultSubChapters, variables['subChapterId'])
+        if(!isSubChapter)
+          return false
+        isCommunity = this.findCommunity(roleDetails.defaultCommunities, variables['chapterId'], variables['subChapterId'], variables['communityId'])
+        if(!isCommunity)
+          return false
+
+        return true;
+      }
+
+      findChapterSubChapter(defaultArray, value){
+        var index = _.indexOf(defaultArray, "all")
+        if(index >= 0){
+          return true;
+        }
+        index = _.indexOf(defaultArray, value)
+        if(index >= 0){
+          return true;
+        }
+
+        return false;
+      }
+
+      findCommunity(communityArray, chapterId, subChapterId, communityId) {
+        for (var i = 0; i < communityArray.length; i++) {
+          var index = _.isMatch(communityArray[i], {communityCode: 'all'})
+          if (index)
+            return true
+
+          index = _.isMatch(communityArray[i], {communityId: 'all'})
+          if (index)
+            return true
+
+          var community = MlCommunity.findOne({_id: communityId});
+          if (!community) {
+            community = MlCommunity.findOne({communityDefCode: communityId, chapterId:chapterId, subChapterId:subChapterId});
+            if (!community)
+              return false
+          }
+          if (community) {
+            index = _.isMatch(communityArray[i], {communityId: community._id})
+            if (index)
+              return true
+
+            index = _.isMatch(communityArray[i], {communityCode: community.communityDefCode})
+            if (index) {
+              return true;
+            }
+            return false
+          }
+        }
+      }
+
+      getRegistrationContextDetails(registrationId){
+        var registration = MlRegistration.findOne(registrationId)
+        if(!registration)
+          return {}
+        var reg = registration.registrationInfo
+        return {clusterId:reg.clusterId, chapterId:reg.chapterId, subChapterId:reg.subChapterId, communityId:reg.registrationType}
+      }
+
+      getInternalRequestContextDetails(variables, actionName){
+        if(actionName == 'CREATE'){
+          return {clusterId:variables['clusterId'], chapterId:variables['chapterId'], subChapterId:variables['subChapterId'], communityId:variables['communityId']};
+        }
+        let request = MlRequests.findOne({requestId:variables.requestsId})
+        if(!request)
+          return {}
+        return {clusterId:request.cluster, chapterId:request.chapter, subChapterId:request.subChapter, communityId:request.community};
+      }
 }
 
 module.exports = MlAuthorization

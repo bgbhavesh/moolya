@@ -28,11 +28,15 @@ let registrationSchema = `
         addressLandmark      :  String
         addressArea      :  String
         addressCity      :  String
+        addressCityId : String
         addressState      :  String
+        addressStateId  :String
         addressCountry : String
+        addressCountryId : String
         addressPinCode : String
         latitude        :  Int
         longitude       :  Int
+        isDefaultAddress:Boolean
      }
      
      type SocialLinkInfoSchema{
@@ -93,11 +97,15 @@ let registrationSchema = `
       addressLandmark      :  String
       addressArea      :  String
       addressCity      :  String
+      addressCityId : String
       addressState      :  String
+      addressStateId  :String
       addressCountry : String
+      addressCountryId : String
       addressPinCode : String
       latitude        :  Int
       longitude       :  Int
+      isDefaultAddress:Boolean
     }
     
     input SocialLinkInfo{
@@ -182,6 +190,11 @@ let registrationSchema = `
         createdBy       :   String
     }
     
+     type emailVerification{
+          address  : String
+          verified  : Boolean
+    }
+    
     type RegistrationResponse{
         _id             :   String,
          status          :   String,
@@ -197,7 +210,11 @@ let registrationSchema = `
          allocation     : allocation
          transactionCreatedDate : String
          transactionUpdatedDate : String
+         emails  : [emailVerification]
     }
+    
+   
+    
     
     type RegistrationInfo{        
         _id             :   String,
@@ -243,7 +260,8 @@ let registrationSchema = `
         profileImage    :   String,
         transactionId   :   String
         assignedUserId    :   String,
-        createdBy       :   String
+        createdBy       :   String,
+        
     }
     
     type branchLocation{
@@ -427,6 +445,7 @@ let registrationSchema = `
          verifyMobileNumber(mobileNumber:String,otp:Int):response
          forgotPassword(email:String):response
          resetPasswords(token:String, password:String):response
+         createKYCDocument(registrationId:String,documentID:String,kycDocID:String,docTypeID:String):response
     }
     type Query{
         findRegistration(registrationId:String):Registration
@@ -435,6 +454,7 @@ let registrationSchema = `
         fetchContextClusters: [Cluster]
         fetchContextChapters(id:String): [Chapter]
         fetchContextSubChapters(id:String): [SubChapter]
+        findUserPendingRegistration:[Registration] 
     }
     
 `
@@ -442,11 +462,11 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], registrationSchema]
 let supportedApi = [
     {api:'findRegistration', actionName:'READ', moduleName:"REGISTRATION"},
     {api:'findRegistrationInfo', actionName:'READ', moduleName:"REGISTRATION"},
-    {api:'findRegistrationInfoForUser', actionName:'READ', moduleName:"REGISTRATION"},
+    {api:'findRegistrationInfoForUser', actionName:'READ', moduleName:"REGISTRATION", isAppWhiteList:true},
     {api:'registerAs', actionName:'UPDATE', moduleName:"REGISTRATION"},
     {api:'createRegistrationAPI', actionName:'CREATE', moduleName:"REGISTRATION"},
     {api:'createRegistration', actionName:'CREATE', moduleName:"REGISTRATION"},
-    {api:'createGeneralInfoInRegistration', actionName:'CREATE', moduleName:"REGISTRATION"},
+    {api:'createGeneralInfoInRegistration', actionName:'UPDATE', moduleName:"REGISTRATION"},
     {api:'updateRegistration', actionName:'UPDATE', moduleName:"REGISTRATION"},
     {api:'updateRegistrationInfo', actionName:'UPDATE', moduleName:"REGISTRATION"},
     {api:'updateRegistrationUploadedDocumentUrl', actionName:'UPDATE', moduleName:"REGISTRATION"},
@@ -466,5 +486,7 @@ let supportedApi = [
     {api:'fetchContextChapters', actionName:'READ', moduleName:"REGISTRATION", isWhiteList:true},
     {api:'fetchContextSubChapters', actionName:'READ', moduleName:"REGISTRATION", isWhiteList:true},
     {api:'forgotPassword', actionName:'READ', moduleName:"REGISTRATION"},
+    {api:'createKYCDocument',actionName:'UPDATE',moduleName:"REGISTRATION"},
+    {api:'findUserPendingRegistration',actionName:'READ',moduleName:"REGISTRATION", isWhiteList:true}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

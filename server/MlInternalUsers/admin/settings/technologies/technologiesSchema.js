@@ -14,6 +14,10 @@ let TechnologiesSchema = `
         displayName :String,
         about: String,
         icon:String,
+        createdBy     : String
+        createdDate   : Date
+        updatedBy     : String
+        updatedDate   : Date
         isActive:Boolean
     }
     
@@ -23,6 +27,10 @@ let TechnologiesSchema = `
         displayName :String,
         about: String,
         icon:String,
+        createdBy     : String
+        createdDate   : Date
+        updatedBy     : String
+        updatedDate   : Date
         isActive:Boolean
     }
     
@@ -44,7 +52,7 @@ let supportedApi = [
   {api:'updateSelectedTechnology', actionName:'UPDATE', moduleName:"TECHNOLOGIES"},
 
   {api:'findTechnology', actionName:'READ', moduleName:"TECHNOLOGIES"},
-  {api:'fetchTechnologies', actionName:'READ', moduleName:"TECHNOLOGIES"}
+  {api:'fetchTechnologies', actionName:'READ', moduleName:"TECHNOLOGIES",isWhiteList:true}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

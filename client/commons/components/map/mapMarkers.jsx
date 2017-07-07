@@ -63,7 +63,7 @@ export default class MapMarkers extends Component {
 
   markerClickHandler(data)
   {
-    console.log(data);
+    // console.log(data);
     if(data.module == 'cluster')
       FlowRouter.go('/admin/dashboard/'+data.markerId+'/chapters?viewMode=true');
     if(data.module == 'chapter')
@@ -117,8 +117,8 @@ export default class MapMarkers extends Component {
     if(this.props.status && (this.props.status.code == 111)){
       status = "active"
     }
-    console.log(this.props.flag);
-    console.log(this.props.text);
+    // console.log(this.props.flag);
+    // console.log(this.props.text);
     return (
       <div>{this.props.status?
         <div style={{'width': '200px'}} className={`cluster_map ${status}`} id={this.props.markerId}
@@ -135,7 +135,7 @@ export default class MapMarkers extends Component {
         :
         <div style={{'width': '200px'}} className={`cluster_map ${this.props.isActive?"active":"inactive"}`} id={this.props.markerId}
                           onMouseOver={this.onMouseEnterContent.bind(this,hoverActionHandler)} onMouseOut={this.onMouseLeaveContent.bind(this)}
-                          onClick={this.markerClickHandler.bind(this, this.props.flag)}>
+                          onClick={this.markerClickHandler.bind(this, this.props)}>
         <div className="hex_btn hex_btn_in">
           <span>
            {this.props.showImage && this.props.showImage===true?<img src={this.props.text}/>:<b>{this.props.text}</b>}</span>

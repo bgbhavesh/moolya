@@ -13,7 +13,7 @@ import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
 import {OnToggleSwitch, initalizeFloatLabel, passwordVisibilityHandler} from "../../../utils/formElemUtil";
 import Datetime from "react-datetime";
 import passwordSAS_validate from '../../../../../lib/common/validations/passwordSASValidator';
-
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import moment from "moment";
 
 let FontAwesome = require('react-fontawesome');
@@ -91,88 +91,73 @@ class MlAddBackendUser extends React.Component {
   }
 
   async  createBackendUser() {
-    let firstName= this.refs.firstName.value;
-    let lastName= this.refs.lastName.value;
-    let displayName= this.refs.displayName.value;
-    let email = this.refs.email.value;
-    let password = this.refs.password.value;
-    let confirmPassword = this.refs.confirmPassword.value;
-    let departments=this.state.mlAssignDepartmentDetails[0].department;
-    let subdepartments=this.state.mlAssignDepartmentDetails[0].subDepartment;
-    if(!firstName){
-      toastr.error("First Name is required");
-    }
-    else if(!lastName){
-      toastr.error("Last Name is required");
-    }
-    else if(!displayName){
-      toastr.error("Display Name is required");
-    }
-    else if (!email) {
-      toastr.error("Need to set a username or email");
-    }
-    else if(!password){
-      toastr.error("Password is required");
-    }
-    else if (confirmPassword != password) {
-
-      toastr.error("Confirm Password does not match with Password")
-
-    } else if(!departments){
-
-      toastr.error("Assign Department is required");
-
-    }
-   else if(!subdepartments){
-
-  toastr.error("Sub Department is required");
-
-}
-    else {
-      let moolyaProfile = {
-        firstName: this.refs.firstName.value,
-        middleName: this.refs.middleName.value,
-        lastName: this.refs.lastName.value,
-        userType: this.state.selectedBackendUserType,
-        subChapter: this.state.selectedSubChapter,
-        roleType: this.state.selectedBackendUser,
-        assignedDepartment: this.state.mlAssignDepartmentDetails,
-        displayName: this.refs.displayName.value,
-        email: this.refs.email.value,
-        contact: this.state.mlAssignContactDetails,
-        globalAssignment: this.refs.globalAssignment.checked,
-        isActive: this.refs.deActive.checked,
-        userProfiles: []
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let password = this.refs.password.value;
+      let confirmPassword = this.refs.confirmPassword.value;
+      let departments = this.state.mlAssignDepartmentDetails[0].department;
+      let subdepartments = this.state.mlAssignDepartmentDetails[0].subDepartment;
+       if(!password){
+        toastr.error("Password is required");
       }
-      let InternalUprofile = {
-        moolyaProfile: moolyaProfile
+      else if (confirmPassword != password) {
+        toastr.error("Confirm Password does not match with Password")
+      } else if (!departments) {
+        toastr.error("Assign Department is required");
       }
-      let profile = {
-        firstName: this.refs.firstName.value,
-        middleName: this.refs.middleName.value,
-        lastName: this.refs.lastName.value,
-        isInternaluser: true,
-        isExternaluser: false,
-        isMoolya: moolyaProfile.userType && moolyaProfile.userType == 'moolya' ? true : false,
-        email: this.refs.email.value,
-        isActive:this.refs.deActive.checked,
-        InternalUprofile: InternalUprofile,
-        genderType:this.state.genderSelect,
-        dateOfBirth: this.state.birthDate
+      else if (!subdepartments) {
+        toastr.error("Sub Department is required");
       }
-      let userObject = {
-        username: moolyaProfile.email,
-        password: this.refs.password.value,
-        profile: profile
+      else {
+        let moolyaProfile = {
+          firstName: this.refs.firstName.value,
+          middleName: this.refs.middleName.value,
+          lastName: this.refs.lastName.value,
+          userType: this.state.selectedBackendUserType,
+          subChapter: this.state.selectedSubChapter,
+          roleType: this.state.selectedBackendUser,
+          assignedDepartment: this.state.mlAssignDepartmentDetails,
+          displayName: this.refs.displayName.value,
+          email: this.refs.email.value,
+          contact: this.state.mlAssignContactDetails,
+          globalAssignment: this.refs.globalAssignment.checked,
+          isActive: this.refs.deActive.checked,
+          userProfiles: []
+        }
+        let InternalUprofile = {
+          moolyaProfile: moolyaProfile
+        }
+        let profile = {
+          firstName: this.refs.firstName.value,
+          middleName: this.refs.middleName.value,
+          lastName: this.refs.lastName.value,
+          isInternaluser: true,
+          isExternaluser: false,
+          isMoolya: moolyaProfile.userType && moolyaProfile.userType == 'moolya' ? true : false,
+          email: this.refs.email.value,
+          isActive: this.refs.deActive.checked,
+          InternalUprofile: InternalUprofile,
+          genderType: this.state.genderSelect,
+          dateOfBirth: this.state.birthDate
+        }
+        let userObject = {
+          username: moolyaProfile.email,
+          password: this.refs.password.value,
+          profile: profile
+        }
+        let loginUserDetails = this.state.loginUserDetails;    /*adding user context*/
+        const response = await addBackendUserActionHandler(userObject, loginUserDetails)
+        if (!response.success) {
+          toastr.error("Email already exists")
+        }
+        else if(response.success){
+          toastr.success("Backend User Created Successfully")
+        }
+        return response;
       }
-
-      const response = await addBackendUserActionHandler(userObject)
-      if(!response.success){
-        toastr.error("Email already exists")
-      }
-      return response;
     }
-
   }
   getAssignedDepartments(departments){
     this.setState({'mlAssignDepartmentDetails':departments})
@@ -258,9 +243,9 @@ class MlAddBackendUser extends React.Component {
     ]
 
     let UserTypeOptions = (this.state.loginUserDetails && this.state.loginUserDetails.isMoolya) ? [
-      {value: 'moolya', label: 'moolya', clearableValue: true},
-      {value: 'non-moolya', label: 'non-moolya', clearableValue: true}
-    ] : [{value: 'non-moolya', label: 'non-moolya', clearableValue: true}]
+      {value: 'moolya', label: 'EcoSystem', clearableValue: true},
+      {value: 'non-moolya', label: 'SubChapter', clearableValue: true}
+    ] : [{value: 'non-moolya', label: 'SubChapter', clearableValue: true}]
 
     let BackendUserOptions = [
       {value: 'Internal User', label: 'Internal User'},
@@ -301,8 +286,8 @@ class MlAddBackendUser extends React.Component {
                     <div className="form-group mandatory">
                       <input type="text" ref="lastName" placeholder="Last Name" className="form-control float-label" id="" data-required={true} data-errMsg="Last Name is Required"/>
                     </div>
-                    <div className="form-group">
-                      <Select name="form-field-name" placeholder="Backend User Type"  className="float-label"  options={UserTypeOptions}  value={this.state.selectedBackendUserType}  onChange={this.onBackendUserTypeSelect.bind(this)} />
+                    <div className="form-group mandatory">
+                      <Select name="form-field-name" ref="UserType" placeholder="Backend User Type"  className="float-label"  options={UserTypeOptions}  value={this.state.selectedBackendUserType}  onChange={this.onBackendUserTypeSelect.bind(this)} data-required={true} data-errMsg="BackendUserType is required"/>
                     </div>
 
                     {this.state.selectedBackendUserType=='non-moolya'&&(
@@ -312,12 +297,12 @@ class MlAddBackendUser extends React.Component {
                       <Select name="form-field-name" placeholder="Select Role"  className="float-label"  options={BackendUserOptions}  value={this.state.selectedBackendUser}  onChange={this.onBackendUserSelect.bind(this)} disabled={true}
                       />
                     </div>
-                    <div className="form-group">
+                    <div className="form-group mandatory">
                       <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdValidationMsg}</text>
                       <input type="Password" ref="password" defaultValue={this.state.password} placeholder="Create Password"  onBlur={this.passwordValidation.bind(this)} className="form-control float-label" id="password"/>
                       <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
                     </div>
-                    <div className="form-group">
+                    <div className="form-group mandatory">
                       <text style={{float:'right',color:'#ef4647',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdErrorMsg}</text>
                       <input type="Password" ref="confirmPassword" defaultValue={this.state.confirmPassword} placeholder="Confirm Password" className="form-control float-label" onBlur={this.onCheckPassword.bind(this)} id="confirmPassword"/>
                       <FontAwesome name='eye-slash' className="password_icon ConfirmPassword hide_p"/>

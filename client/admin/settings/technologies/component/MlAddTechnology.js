@@ -8,6 +8,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {addTechnology} from '../actions/addTechnologyAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import MlLoader from '../../../../commons/components/loader/loader'
 class MlAddTechnology extends React.Component {
   constructor(props) {
@@ -33,18 +34,22 @@ class MlAddTechnology extends React.Component {
     }
   };
 
-  async createTechnology()
-  {
-    let techInfo = {
-      technologyName: this.refs.name.value,
-      displayName: this.refs.displayName.value,
-      about: this.refs.about.value,
-      isActive: this.refs.isActive.checked,
-      // icon:this.refs.assetIcon.files
-    }
+  async createTechnology() {
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let techInfo = {
+        technologyName: this.refs.name.value,
+        displayName: this.refs.displayName.value,
+        about: this.refs.about.value,
+        isActive: this.refs.isActive.checked,
+        // icon:this.refs.assetIcon.files
+      }
 
-    const response = await addTechnology(techInfo)
-    return response;
+      const response = await addTechnology(techInfo)
+      return response;
+    }
   }
   componentDidMount()  {
     OnToggleSwitch(false,true);
@@ -77,8 +82,8 @@ class MlAddTechnology extends React.Component {
                 <div className="col-md-6 nopadding-left">
                     <div className="form_bg">
                         <form>
-                            <div className="form-group">
-                                <input type="text" ref="name" placeholder="Name" className="form-control float-label"/>
+                            <div className="form-group mandatory">
+                                <input type="text" ref="name" placeholder="Name" className="form-control float-label" data-required={true} data-errMsg="Name is required"/>
                             </div>
                             <div className="form-group">
                                 <textarea ref="about" placeholder="About" className="form-control float-label" id=""></textarea>
@@ -89,8 +94,8 @@ class MlAddTechnology extends React.Component {
               <div className="col-md-6 nopadding-right">
                 <div className="form_bg">
                   <form>
-                    <div className="form-group">
-                        <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label"/>
+                    <div className="form-group mandatory">
+                        <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" data-required={true} data-errMsg="Display Name is required"/>
                     </div>
 
                     <div className="form-group">

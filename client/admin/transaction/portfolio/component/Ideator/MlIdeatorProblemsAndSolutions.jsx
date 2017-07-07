@@ -13,7 +13,7 @@ import {findIdeatorProblemsAndSolutionsActionHandler} from '../../actions/findPo
 export default class MlIdeatorProblemsAndSolutions extends React.Component{
   constructor(props, context) {
     super(props);
-    this.state =  {loading: true, data:{}};
+    this.state =  {loading: true, data:{}, privateKey:{}};
     this.onProblemImageFileUpload.bind(this);
     this.onSolutionImageFileUpload.bind(this);
     this.fetchPortfolioInfo.bind(this);
@@ -32,6 +32,10 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
       if (response) {
         this.setState({loading: false, data: response});
       }
+      _.each(response.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+
     }else{
       this.fetchOnlyImages();
       this.setState({loading: true, data: this.context.ideatorPortfolio.problemSolution});
@@ -59,16 +63,21 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
       })
   }
 
-  onLockChange(field, e){
+  onLockChange(fieldName, field, e){
       let details = this.state.data||{};
       let key = e.target.id;
+      var isPrivate = false;
       details=_.omit(details,[key]);
       let className = e.target.className;
       if(className.indexOf("fa-lock") != -1){
         details=_.extend(details,{[key]:true});
+        isPrivate = true;
       }else{
         details=_.extend(details,{[key]:false});
       }
+
+      var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
+      this.setState({privateKey:privateKey})
       this.setState({data:details}, function () {
         this.sendDataToParent()
       })
@@ -103,7 +112,9 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
         delete data[propName];
       }
     }
-    this.props.getProblemSolution(data);
+
+    data=_.omit(data,["privateFields"]);
+    this.props.getProblemSolution(data, this.state.privateKey);
   }
 
   componentDidUpdate(){
@@ -160,7 +171,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     <div className="panel-body">
                       <div className="form-group nomargin-bottom">
                         <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="problems" onBlur={this.onInputChange.bind(this)} name="problemStatement" defaultValue={problemStatement}></textarea>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isProblemPrivate" onClick={this.onLockChange.bind(this, "isProblemPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={problemLockStatus}/>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isProblemPrivate" onClick={this.onLockChange.bind(this, "problemStatement", "isProblemPrivate")}/>
                       </div>
                     </div>
                   </div>
@@ -189,7 +200,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     <div className="panel-body">
                       <div className="form-group nomargin-bottom">
                         <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="solution" onBlur={this.onInputChange.bind(this)} name="solutionStatement" defaultValue={solutionStatement}></textarea>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isSolutionPrivate" onClick={this.onLockChange.bind(this, "isSolutionPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={solutionLockStatus}/>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isSolutionPrivate" onClick={this.onLockChange.bind(this, "solutionStatement", "isSolutionPrivate")}/>
                       </div>
                     </div>
                   </div>

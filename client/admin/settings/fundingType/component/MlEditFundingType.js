@@ -9,6 +9,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findFundingTypeActionHandler} from '../actions/findFundingTypeAction'
 import {updateFundingTypeActionHandler} from '../actions/updateFundingTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import MlLoader from '../../../../commons/components/loader/loader'
 class MlEditFundingType extends React.Component{
   constructor(props) {
@@ -61,17 +62,21 @@ class MlEditFundingType extends React.Component{
   }
 
   async  updateSelectedTechnology() {
-    let assetDetails = {
-      fundingTypeName: this.refs.name.value,
-      displayName: this.refs.displayName.value,
-      about: this.refs.about.value,
-      isActive: this.refs.isActive.checked
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let assetDetails = {
+        fundingTypeName: this.refs.name.value,
+        displayName: this.refs.displayName.value,
+        about: this.refs.about.value,
+        isActive: this.refs.isActive.checked
+      }
+
+      const response = await updateFundingTypeActionHandler(this.props.config, assetDetails)
+      return response;
     }
-
-    const response = await updateFundingTypeActionHandler(this.props.config, assetDetails)
-    return response;
   }
-
   render(){
     let MlActionConfig = [
       {
@@ -100,9 +105,9 @@ class MlEditFundingType extends React.Component{
             <div className="col-md-6 nopadding-left">
               <div className="form_bg">
                 <form>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
-                    <input type="text" ref="name" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.fundingTypeName}/>
+                    <input type="text" ref="name" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.fundingTypeName} data-required={true} data-errMsg="Funding Type Name is required"/>
                   </div>
                   <div className="form-group">
                     <textarea ref="about" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.about}></textarea>
@@ -113,8 +118,8 @@ class MlEditFundingType extends React.Component{
             <div className="col-md-6 nopadding-right">
               <div className="form_bg">
                 <form>
-                  <div className="form-group">
-                    <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" defaultValue={this.state.data.displayName}/>
+                  <div className="form-group mandatory">
+                    <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" defaultValue={this.state.data.displayName} data-required={true} data-errMsg="Display Name is required"/>
                   </div>
 
                   <div className="form-group">

@@ -28,7 +28,7 @@ export default MlAccounts=class MlAccounts {
       'If you need our help, write to us at startup@moolya.in or give us a call +91-40-6551 8300.' +'<br/><br/>'+
       'Have an empowering day!<br/><br/>Regards,<br/>Team moolya.'+
       '</div></body></html>';*/
-    var greeting='<html xmlns="http://www.w3.org/1999/xhtml"> <body> <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#e1e4e7" background="https://s3.ap-south-1.amazonaws.com/moolya-public-images/email_background.png" style="background-size:cover; background-position:center;"> <tr> <td align="center"><table class="table-inner" width="600" border="0" align="center" cellpadding="0" cellspacing="0"> <tr> <td height="60"></td></tr><tr> <td align="center" style="border-top:3px solid #ef4647; border-radius:4px; border-left: 1px solid #ccc; border-right: 1px solid #ccc;" bgcolor="#FFFFFF"><table width="550" align="center" class="table-inner" border="0" cellspacing="0" cellpadding="0"> <tr> <td height="15"></td></tr><tr> <td> <table class="table-full" border="0" align="left" cellpadding="0" cellspacing="0"> <tr> <td align="center" style="line-height:0px;"><img style="display:block; line-height:0px; font-size:0px; border:0px;" src="https://s3.ap-south-1.amazonaws.com/moolya-public-images/moolya_logo.png" alt="logo"/></td></tr></table> <table width="1" height="15" border="0" cellpadding="0" cellspacing="0" align="left"> <tr> <td height="15" style="font-size: 0;line-height: 0;border-collapse: collapse;"><p style="padding-left: 26px;">&nbsp;</p></td></tr></table> <table align="right" class="table-full" border="0" cellspacing="0" cellpadding="0"> <tr> <td align="center" style="font-family: "Roboto", sans-serif; font-size:14px; color:#7f8c8d; line-height:30px;"><a href="#"><img src="https://s3.ap-south-1.amazonaws.com/moolya-public-images/world_startup.png"></a> </td></tr></table> </td></tr><tr> <td height="15"></td></tr></table></td></tr><tr> <td align="center" bgcolor="#FFFFFF" style=" border-radius:4px; border: 1px solid #ccc; border-top: 0;"><table align="center" class="table-inner" width="550" border="0" cellspacing="0" cellpadding="0"> <tr> <td align="left" style="font-family: "Roboto", sans-serif; font-size:15px; font-weight:600; color:#485D74; line-height:30px;"><p style="text-align: left;"> Dear <span style="color: #ef4647; font-weight:bold">'+ (user&&user.registrationInfo&&user.registrationInfo.firstName?user.registrationInfo.firstName+',':"")+'</span></p><p style="font-size: 15px;">Greetings and thank you for creating an account with <span style="color:#ef4747;">m</span><span style="color:#ffc316">oo</span><span style="color:#ef4747">lya ! </span></p><p> There is just one more step before you can explore infinite possibilities with <span style="color:#ef4747;">m</span><span style="color:#ffc316">oo</span><span style="color:#ef4747">lya</span>: you need to activate your <span style="color:#ef4747;">m</span><span style="color:#ffc316">oo</span><span style="color:#ef4747">lya</span> account. To activate your account, click on the following link or copy and paste the link into your browser\'s address bar. </p><p> Link:'+ url +'</p><p>After you activate your account, you can complete your profile. You will receive occasional emails from us about new information or other updates.</p><p> If you need our help, write to us at <span style="color:#ef4647">startup@moolya.in</span> or <br>give us a call <span style="color:#ef4647">+91-40-6551 8300.</span> </p><p> Have an <span style="color:#ef4647">empowering</span> day ! </p><p>Regards </p><p>Team <span style="color:#ef4747;">m</span><span style="color:#ffc316">oo</span><span style="color:#ef4747">lya</span> </p></td></tr><tr> <td height="40"></td></tr><tr> <td height="40" align="left" style="font-family: "Roboto", sans-serif; font-size:10px; color:#485D74; line-height:14px; border-top: 1px solid #ccc"> <p><span style="color:#ef4647">Disclaimer:</span> Breach of confidentiality: </p><p>This email and any files transmitted with it are confidential and intended solely for the use of the individual or entity to whom they are addressed. If you have received this email in error please notify us at ‘startup@moolya.in’. This message contains confidential information and is intended only for the individual named. If you are not the named addressee you should not disseminate, distribute or copy this e-mail. Please notify the sender immediately by e-mail if you have received this e-mail by mistake and delete this e-mail from your system. If you are not the intended recipient you are notified that disclosing, copying, distributing or taking any action in reliance on the contents of this information is strictly prohibited.</p><p> <span style="color:#ef4647">Disclaimer:</span> Liability for the unintentional transmission of computer viruses: </p><p> WARNING: Although we have taken reasonable precautions to ensure no viruses are present in this email, we cannot accept responsibility for any loss or damage arising from the use of this email or attachments. </p></td></tr><tr> <td height="20"></td></tr></table></td></tr><tr> <td> <table align="left" class="table-full" border="0" cellspacing="0" cellpadding="0"> <tr> <td style="font-family: "Roboto", sans-serif; font-size:12px; color:#7f8c8d; line-height:30px;"> © 2017 moolya All Rights Reserved. </td></tr></table> </td></tr><tr> <td height="60"></td></tr></table></table> </body></html>';
+    var greeting='<html xmlns="http://www.w3.org/1999/xhtml"> <body> <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#e1e4e7" background="https://s3.ap-south-1.amazonaws.com/moolya-public-images/email_background.png" style="background-size:cover; background-position:center;"> <tr> <td align="center"><table class="table-inner" width="600" border="0" align="center" cellpadding="0" cellspacing="0"> <tr> <td height="60"></td></tr><tr> <td align="center" style="border-top:3px solid #ef4647; border-radius:4px; border-left: 1px solid #ccc; border-right: 1px solid #ccc;" bgcolor="#FFFFFF"><table width="550" align="center" class="table-inner" border="0" cellspacing="0" cellpadding="0"> <tr> <td height="15"></td></tr><tr> <td> <table class="table-full" border="0" align="left" cellpadding="0" cellspacing="0"> <tr> <td align="center" style="line-height:0px;"><img style="display:block; line-height:0px; font-size:0px; border:0px;" src="https://s3.ap-south-1.amazonaws.com/moolya-public-images/moolya_logo.png" alt="logo"/></td></tr></table> <table width="1" height="15" border="0" cellpadding="0" cellspacing="0" align="left"> <tr> <td height="15" style="font-size: 0;line-height: 0;border-collapse: collapse;"><p style="padding-left: 26px;">&nbsp;</p></td></tr></table> <table align="right" class="table-full" border="0" cellspacing="0" cellpadding="0"> <tr> <td align="center" style="font-family: "Roboto", sans-serif; font-size:14px; color:#7f8c8d; line-height:30px;"><a href="#"><img src="https://s3.ap-south-1.amazonaws.com/moolya-public-images/world_startup.png"></a> </td></tr></table> </td></tr><tr> <td height="15"></td></tr></table></td></tr><tr> <td align="center" bgcolor="#FFFFFF" style=" border-radius:4px; border: 1px solid #ccc; border-top: 0;"><table align="center" class="table-inner" width="550" border="0" cellspacing="0" cellpadding="0"> <tr> <td align="left" style="font-family: "Roboto", sans-serif; font-size:15px; font-weight:600; color:#485D74; line-height:30px;"><p style="text-align: left;"> Dear <span style="color: #ef4647; font-weight:bold">'+ (user&&user.registrationInfo&&user.registrationInfo.firstName?user.registrationInfo.firstName+',':"")+'</span></p><p style="font-size: 15px;">Greetings and thank you for creating an account with <span style="color:#ef4747;">m</span><span style="color:#ffc316">oo</span><span style="color:#ef4747">lya ! </span></p><p> There is just one more step before you can explore infinite possibilities with <span style="color:#ef4747;">m</span><span style="color:#ffc316">oo</span><span style="color:#ef4747">lya</span>: you need to activate your <span style="color:#ef4747;">m</span><span style="color:#ffc316">oo</span><span style="color:#ef4747">lya</span> account. To activate your account, click on the following link or copy and paste the link into your browser\'s address bar. </p><p> Link:<a href="'+url+'" id="link" >'+url+'</a></p><p>After you activate your account, you can complete your profile. You will receive occasional emails from us about new information or other updates.</p><p> If you need our help, write to us at <span style="color:#ef4647">startup@moolya.in</span> or <br>give us a call <span style="color:#ef4647">+91-40-6551 8300.</span> </p><p> Have an <span style="color:#ef4647">empowering</span> day ! </p><p>Regards </p><p>Team <span style="color:#ef4747;">m</span><span style="color:#ffc316">oo</span><span style="color:#ef4747">lya</span> </p></td></tr><tr> <td height="40"></td></tr><tr> <td height="40" align="left" style="font-family: "Roboto", sans-serif; font-size:10px; color:#485D74; line-height:14px; border-top: 1px solid #ccc"> <p><span style="color:#ef4647">Disclaimer:</span> Breach of confidentiality: </p><p>This email and any files transmitted with it are confidential and intended solely for the use of the individual or entity to whom they are addressed. If you have received this email in error please notify us at ‘startup@moolya.in’. This message contains confidential information and is intended only for the individual named. If you are not the named addressee you should not disseminate, distribute or copy this e-mail. Please notify the sender immediately by e-mail if you have received this e-mail by mistake and delete this e-mail from your system. If you are not the intended recipient you are notified that disclosing, copying, distributing or taking any action in reliance on the contents of this information is strictly prohibited.</p><p> <span style="color:#ef4647">Disclaimer:</span> Liability for the unintentional transmission of computer viruses: </p><p> WARNING: Although we have taken reasonable precautions to ensure no viruses are present in this email, we cannot accept responsibility for any loss or damage arising from the use of this email or attachments. </p></td></tr><tr> <td height="20"></td></tr></table></td></tr><tr> <td> <table align="left" class="table-full" border="0" cellspacing="0" cellpadding="0"> <tr> <td style="font-family: "Roboto", sans-serif; font-size:12px; color:#7f8c8d; line-height:30px;"> © 2017 moolya All Rights Reserved. </td></tr></table> </td></tr><tr> <td height="60"></td></tr></table></table> </body></html>';
     return greeting;
   };
 
@@ -361,6 +361,50 @@ export default MlAccounts=class MlAccounts {
       return {error: false,reason:"Password reset successfully", code:200};
     }
   }
+
+  static resetSwitchProfile(userId,context){
+    try {
+      var user = mlDBController.findOne('users', {_id: userId}) || {};
+      var userProfile = user.profile || {};
+      var result = null;
+      var hasSwitchedProfile = userProfile.hasSwitchedProfile;
+      var switchedProfileDefaultId = userProfile.switchedProfileDefaultId;
+
+      if (!hasSwitchedProfile || !switchedProfileDefaultId) return;
+
+      if (userProfile.isInternaluser) {
+        /*reset switch profile to false and update the default profile  */
+        result = mlDBController.update('users', {'_id': userId,'profile.isInternaluser': true, "profile.hasSwitchedProfile": true,
+           "profile.InternalUprofile.moolyaProfile.userProfiles": {$elemMatch: {'clusterId': switchedProfileDefaultId}}},
+          {"profile.InternalUprofile.moolyaProfile.userProfiles.$.isDefault": true,
+           "profile.hasSwitchedProfile": false,"profile.switchedProfileDefaultId":null}, {$set: true}, context);
+
+        /*mark remaining profiles as false if default id is set*/
+        if(result===1){
+          result= mlDBController.update('users', {'_id':userId,'profile.InternalUprofile.moolyaProfile.userProfiles':{$elemMatch: {'clusterId':{$ne:switchedProfileDefaultId}}}},
+            {"profile.InternalUprofile.moolyaProfile.userProfiles.$.isDefault": false}, {$set: true,multi:true}, context);
+        }
+
+      } else {
+
+        /*reset switch profile to false and update the default profile  */
+        result = mlDBController.update('users', {'_id': userId,'profile.isExternaluser': true, "profile.hasSwitchedProfile": true,
+            "profile.externalUserProfiles": {$elemMatch: {'profileId': switchedProfileDefaultId}}},
+          {"profile.externalUserProfiles.$.isDefault": true,
+            "profile.hasSwitchedProfile": false,"profile.switchedProfileDefaultId":null}, {$set: true}, context);
+
+        /*mark remaining profiles as false if default id is set*/
+        if(result===1){
+          result= mlDBController.update('users', {'_id':userId,'profile.externalUserProfiles':{$elemMatch: {'profileId':{$ne:switchedProfileDefaultId}}}},
+            {"profile.externalUserProfiles.$.isDefault": false}, {$set: true,multi:true}, context);
+        }
+
+      }
+    } catch (e) {
+      console.log(e);
+    }
+
+  }
 }
 
 Meteor.methods({
@@ -403,8 +447,15 @@ if(details.type =="password") {
   let context = {
     ip: details.connection.clientAddress,
     browser: details.connection.httpHeaders['user-agent'],
-    url: details.connection.httpHeaders.host
+    url: details.connection.httpHeaders.host,
+    userId:userId,
+    deviceModel:"-",
+    deviceType: "-",
+    deviceVendor:"-"
   };
+    //check if the switch profile has to be changed
+    MlAccounts.resetSwitchProfile(userId,context);
+
   let transactionDetails = `User logged in to application at ${new Date()} `;
   new MlTransactionsHandler().recordTransaction({
     'activity': 'login',

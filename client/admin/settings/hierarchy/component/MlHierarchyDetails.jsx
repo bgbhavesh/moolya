@@ -3,6 +3,7 @@ import {render} from "react-dom";
 import {BootstrapTable, TableHeaderColumn} from "react-bootstrap-table";
 import ScrollArea from "react-scrollbar";
 import {findDeptAndsubDeptActionHandler} from "../actions/findDeptAndsubDeptAction";
+import {findNonMoolyaDeptAndsubDeptActionHandler} from "../actions/findDeptAndsubDeptAction";
 import MlAssignHierarchy from "./MlAssignHierarchy";
 import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
 import {updateRolesActionHandler} from "../actions/updateRolesAction";
@@ -64,22 +65,45 @@ export default class MlHierarchyDetails extends React.Component {
   }
   async findDeptAndsubDept(){
     let clusterId = this.props.clusterId;
-    const response = await findDeptAndsubDeptActionHandler(clusterId);
-    if(response){
-      let hierarchyInfo=[];
-      for (let i = 0; i < response.length; i++) {
-        let json = {
-          departmentId: response[i].departmentId,
-          departmentName:response[i].departmentName,
-          subDepartmentId:response[i].subDepartmentId,
-          subDepartmentName:response[i].subDepartmentName,
-          isMoolya:response[i].isMoolya,
-          isActive:response[i].isActive
+    let subChapterId = this.props.subChapterId;
+    let isDefault=this.props.defaultSubChapter;
+
+    if(isDefault == "true"){
+      const response = await findDeptAndsubDeptActionHandler(clusterId);
+      if(response){
+        let hierarchyInfo=[];
+        for (let i = 0; i < response.length; i++) {
+          let json = {
+            departmentId: response[i].departmentId,
+            departmentName:response[i].departmentName,
+            subDepartmentId:response[i].subDepartmentId,
+            subDepartmentName:response[i].subDepartmentName,
+            isMoolya:response[i].isMoolya,
+            isActive:response[i].isActive
+          }
+          hierarchyInfo.push(json)
         }
-        hierarchyInfo.push(json)
+        this.setState({hierarchyInfo:hierarchyInfo});
       }
-      this.setState({hierarchyInfo:hierarchyInfo});
+    }else if(isDefault == "false"){
+      const nonMoolya = await findNonMoolyaDeptAndsubDeptActionHandler(clusterId,subChapterId);
+      if(nonMoolya){
+        let hierarchyInfo=[];
+        for (let i = 0; i < nonMoolya.length; i++) {
+          let json = {
+            departmentId: nonMoolya[i].departmentId,
+            departmentName:nonMoolya[i].departmentName,
+            subDepartmentId:nonMoolya[i].subDepartmentId,
+            subDepartmentName:nonMoolya[i].subDepartmentName,
+            isMoolya:nonMoolya[i].isMoolya,
+            isActive:nonMoolya[i].isActive
+          }
+          hierarchyInfo.push(json)
+        }
+        this.setState({hierarchyInfo:hierarchyInfo});
+      }
     }
+
   }
 
   async  updateunassignedRoles() {

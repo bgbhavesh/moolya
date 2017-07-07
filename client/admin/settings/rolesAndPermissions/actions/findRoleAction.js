@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function findRoleActionHandler(roleId) {
+  export async function findRoleActionHandler(roleId) {
   let id=roleId
   const result = await client.query({
     query: gql`
@@ -13,6 +13,7 @@ export async function findRoleActionHandler(roleId) {
           subChapter
           userType
           about
+          isSystemDefined
           assignRoles{
             cluster
             chapter
@@ -30,6 +31,7 @@ export async function findRoleActionHandler(roleId) {
             isActive          
             actions{
               actionId
+              actionCode
             }
           }
           isActive

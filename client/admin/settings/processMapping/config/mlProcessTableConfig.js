@@ -52,9 +52,24 @@ function  communityFormatter(data) {
   }
 }
 
-function dateFormatter (data){
-  let createdDateTime=data&&data.data&&data.data.date;
-  return <div>{moment(createdDateTime).format('MM/DD/YYYY HH:mm:ss')}</div>;
+function updatedateFormatter (data){
+  let updateDate=data&&data.data&&data.data.updatedDate;
+  if(updateDate){
+    return <div>{moment(updateDate).format('MM-DD-YYYY HH:mm:ss')}</div>;
+  }
+  else {
+    return <div></div>
+  }
+}
+
+function createdateFormatter (data){
+  let createdDate=data&&data.data&&data.data.createdDate;
+  if(createdDate){
+    return <div>{moment(createdDate).format('MM-DD-YYYY HH:mm:ss')}</div>;
+  }
+  else {
+    return <div></div>
+  }
 }
 const mlProcessTableConfig=new MlViewer.View({
   name:"roleTypeTable",
@@ -76,8 +91,11 @@ const mlProcessTableConfig=new MlViewer.View({
     {dataField: "clusters", title: "Cluster",dataSort:true,customComponent:clusterFormatter},
     {dataField: "states", title: "State",dataSort:true,customComponent:stateFormatter},
     {dataField:"chapters", title:"Chapter",dataSort:true,customComponent:chapterFormatter},
-    {dataField: "date", title: "Created Date",dataSort:true,customComponent:dateFormatter}
-
+    {dataField: "createdBy", title: "Created By",dataSort:true},
+    {dataField: "createdDate", title: "CreatedDate And Time",dataSort:true,customComponent:createdateFormatter},
+    {dataField: "updatedBy", title: "Updated By",dataSort:true},
+    {dataField: "updatedDate", title: "Updated Date",dataSort:true,customComponent:updatedateFormatter},
+    {dataField: "isActive", title: "Status",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -87,7 +105,7 @@ const mlProcessTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
         if(data && data.id){
-          FlowRouter.go("/admin/settings/editProcess/"+data.id);
+          FlowRouter.go("/admin/settings/documentProcess/editProcess/"+data.id);
         } else{
           toastr.error("Please select a Process Type");
         }
@@ -101,7 +119,7 @@ const mlProcessTableConfig=new MlViewer.View({
           toastr.error("Please uncheck the record")
           // FlowRouter.go("/admin/settings/processList")
         }else {
-          FlowRouter.go("/admin/settings/addProcess")
+          FlowRouter.go("/admin/settings/documentProcess/addProcess")
         }
       }
     },
@@ -112,27 +130,31 @@ const mlProcessTableConfig=new MlViewer.View({
     // }
   ],
   graphQlQuery:gql`
-                query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
-                data:SearchQuery(module:"processmapping", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
-                      totalRecords
-                      data{
-                       ...on ProcessType{
-                             id:_id,
-                              processId, 
-                              process,
-                              processName,
-                              isActive,
-                              communities,
-                              industries,
-                              professions,
-                              clusters,
-                              states,
-                              chapters,
-                              date
-                            }
-                        }
+                              query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
+                data: SearchQuery(module: "processmapping", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData) {
+                  totalRecords
+                  data {
+                    ... on ProcessType {
+                      id: _id
+                      processId
+                      process
+                      processName
+                      isActive
+                      communities
+                      industries
+                      professions
+                      clusters
+                      states
+                      chapters
+                      createdBy
+                      createdDate
+                      updatedBy
+                      updatedDate
+                    }
+                  }
                 }
-               }
+              }
+
               `
 });
 

@@ -9,6 +9,7 @@ import MapMarkers from './mapMarkers'
 import MapCluster from './MapCluster';
 import MlLoader from '../../../commons/components/loader/loader'
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
+import MlMapFooter from "../map/MlMapFooter"
 
 let defaultCenter={lat: 17.1144718, lng: 5.7694891};
 @controllable(['center', 'zoom', 'hoverKey', 'clickKey'])
@@ -87,9 +88,15 @@ export default class MoolyaMapView extends Component {
         {MapComponent?MapComponent:
           <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} showImage={this.props.showImage}/>
         }
+        {data.length>0?<MlMapFooter data={data} mapContext={this.props}/>:
+          <div className="bottom_actions_block bottom_count">
+            <div><b>0</b> of <b>0</b> users are Active<br/></div>
+          </div>
+        }
+
       </span>
 
-      );
+    );
 
     /*
     const places = this.props.data&&this.props.data.data?this.props.data.data.map(place => {

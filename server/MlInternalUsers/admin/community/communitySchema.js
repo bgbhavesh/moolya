@@ -62,10 +62,10 @@ let supportedApi = [
     {api:'createCommunityAccess', actionName:'CREATE', moduleName:"COMMUNITY"},
     {api:'createCommunity', actionName:'CREATE', moduleName:"COMMUNITY"},
     {api:'updateCommunityDef', actionName:'UPDATE', moduleName:"COMMUNITY"},
-    {api:'FetchMapData', actionName:'READ', moduleName:"COMMUNITY"},
-    {api:'fetchCommunities', actionName:'READ', moduleName:"COMMUNITY"},
+    {api:'FetchMapData', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
+    {api:'fetchCommunities', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
     {api:'fetchCommunitiesSelect', actionName:'READ', moduleName:"COMMUNITY"},
-    {api:'fetchCommunityDef', actionName:'READ', moduleName:"COMMUNITY"},
-    {api:'fetchCommunitiesForRolesSelect', actionName:'READ', moduleName:"COMMUNITY"}
+    {api:'fetchCommunityDef', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
+    {api:'fetchCommunitiesForRolesSelect', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

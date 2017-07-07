@@ -6,6 +6,23 @@ import MlRespPayload from '../../../../commons/mlPayload'
 
 
 MlResolver.MlMutationResolver['createTechnology'] = (obj, args, context, info) => {
+  var firstName='';var lastName='';
+  // let id = MlDepartments.insert({...args.department});
+  if(Meteor.users.findOne({_id : context.userId}))
+  {
+    let user = Meteor.users.findOne({_id: context.userId}) || {}
+    if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+      firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+      lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+    }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+      firstName=(user.profile || {}).firstName||'';
+      lastName =(user.profile || {}).lastName||'';
+    }
+  }
+  let createdBy = firstName +' '+lastName
+  args.technologyMasterData.createdBy = createdBy;
+  args.technologyMasterData.createdDate = new Date();
   if(args && args.technologyMasterData){
     try{
       let ret = MlTechnologies.insert({...args.technologyMasterData})
@@ -27,6 +44,24 @@ MlResolver.MlMutationResolver['createTechnology'] = (obj, args, context, info) =
 }
 
 MlResolver.MlMutationResolver['updateSelectedTechnology'] = (obj, args, context, info) => {
+  var firstName='';var lastName='';
+  // let id = MlDepartments.insert({...args.department});
+  if(Meteor.users.findOne({_id : context.userId}))
+  {
+    let user = Meteor.users.findOne({_id: context.userId}) || {}
+    if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+      firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+      lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+    }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+      firstName=(user.profile || {}).firstName||'';
+      lastName =(user.profile || {}).lastName||'';
+    }
+  }
+  let createdBy = firstName +' '+lastName
+  args.technologyMasterData.updatedBy = createdBy;
+  args.technologyMasterData.updatedDate = new Date();
+
   if(args && args.technologyId && args.technologyMasterData){
     try{
       let resp = MlTechnologies.update({_id: args.technologyId}, {$set: args.technologyMasterData}, {upsert: true})

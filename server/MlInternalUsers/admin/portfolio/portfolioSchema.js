@@ -10,6 +10,8 @@ let portfolioSchema = `
         _id:String,
         transactionType:String,
         portfolioUserName:String,
+        gender: String,
+        employmentStatus:String,
         userId:String,
         userType:String,
         contactNumber:String,
@@ -21,7 +23,7 @@ let portfolioSchema = `
         accountType:String,
         source:String,
         createdBy:String,
-        createdAt:String,
+        createdAt:Date,
         status:String,
         assignedTo:String,
         progress:String,
@@ -37,11 +39,36 @@ let portfolioSchema = `
         industryId      : String, 
         professionId    : String,
         portfolioId     : String
+        transactionId   : String
+        transactionCreatedDate : String
+        transactionUpdatedDate : String
+        allocation      : allocation
+        assignedUser    : String
+        assignedUserId  : String
+        privateFields:[PrivateKeys]
+        communityId:String
     }
-      input portfoliodetails{
+    
+    input privateKeys{
+      keyName:String,
+      booleanKey:String,
+      index:Int,
+      tabName:String
+    },
+    
+    type PrivateKeys{
+      keyName:String,
+      booleanKey:String,
+      index:Int,
+      tabName:String
+    },
+    
+    input portfoliodetails{
         _id:String,
         transactionType:String,
         portfolioUserName:String,
+        gender:String,
+        employmentStatus:String,
         userId:String,
         userType:String,
         contactNumber:String,
@@ -53,6 +80,7 @@ let portfolioSchema = `
         accountType:String,
         source:String,
         createdBy:String,
+        createdAt:Date,
         status:String,
         assignedTo:String,
         progress:String,
@@ -68,6 +96,9 @@ let portfolioSchema = `
         industryId      : String, 
         professionId    : String,
         portfolioId     : String
+        transactionId   : String
+        transactionCreatedDate : String
+        transactionUpdatedDate : String
     }
    
     input portfolio{
@@ -83,22 +114,25 @@ let portfolioSchema = `
     
     type Mutation{
           createPortfolioRequest(portfoliodetails:portfoliodetails):response
-          updatePortfolio(portfoliodetailsId:String, portfolio:portfolio):response
+          updatePortfolio(portfoliodetailsId:String, portfolio:portfolio, privateFields:[privateKeys], removeKeys:[privateKeys]):response
           approvePortfolio(portfoliodetailsId:String):response
           rejectPortfolio(portfoliodetailsId:String):response
           requestForGoLive(portfoliodetailsId:String):response
+          updatePortfolioProfilePic(portfolioId:String,docUrl:String,communityType:String):response 
+          removeIdetaorProfilePic(portfoliodetailsId:String):response
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], portfolioSchema]);
 
 let supportedApi = [
-  {api:'fetchPortfolioDetailsByUserId', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchPortfolioDetails', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchPortfolioDetailsByUserId', actionName:'READ', moduleName:"PORTFOLIO", isAppWhiteList:true},
+  {api:'fetchPortfolioDetails', actionName:'READ', moduleName:"PORTFOLIO", isAppWhiteList:true},
 
-  {api:'createPortfolioRequest', actionName:'CREATE', moduleName:"PORTFOLIO"},
-  {api:'updatePortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+  {api:'createPortfolioRequest', actionName:'CREATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
+  {api:'updatePortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
   {api:'approvePortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'rejectPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'requestForGoLive', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+  {api:'requestForGoLive', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
+  {api:'removeIdetaorProfilePic', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

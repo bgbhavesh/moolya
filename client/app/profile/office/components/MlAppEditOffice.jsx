@@ -42,7 +42,7 @@ export default class MlAppEditOffice extends React.Component{
     let MlTabs = [
       {name: 'Principal', tabContent: <MlAppAddOfficeMember />},
       {name: 'Team Member', tabContent: <MlAppAddOfficeMember availableCommunities={this.state.availableCommunities} />},
-      {name: 'Office Transaction', tabContent: <MlTableViewContainer {...mlOfficeTransactionConfig}/>},
+      {name: 'Office Transaction', tabContent: <MlTableViewContainer params={this.props.config} {...mlOfficeTransactionConfig}/>},
       {name: 'Upgrade Office', tabContent: <MlUpgradeOffice/>}
     ];
 

@@ -2,6 +2,7 @@
   import getQuery from "../genericSearch/queryConstructor";
   import MlAdminUserContext from "../../../../server/mlAuthorization/mlAdminUserContext";
   import _ from "underscore";
+  import _lodash from "lodash";
 
   let mergeQueries=function(userFilter,serverFilter){
   let query=userFilter||{};
@@ -58,7 +59,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     var queryChange;
     if (userProfileDep.defaultSubChapters.indexOf("all") < 0) {
       userProfileDep.defaultSubChapters.push('all')
-      var serverQuery = {$and: [{isMoolya: false}, {isSystemDefined: false}, {depatmentAvailable: {$elemMatch: {subChapter: {$in: userProfileDep.defaultSubChapters}}}}]}
+      // var serverQuery = {$and: [{isMoolya: false}, {isSystemDefined: false}, {depatmentAvailable: {$elemMatch: {subChapter: {$in: userProfileDep.defaultSubChapters}}}}]}
+      var serverQuery = {depatmentAvailable: {$elemMatch: {subChapter: {$in: userProfileDep.defaultSubChapters},cluster:{$in:['all', userProfileDep.defaultCluster]}}}}
       queryChange = mergeQueries(query, serverQuery);
     }else {
       queryChange = query
@@ -104,7 +106,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     var queryChange;
     if (userProfileSub.defaultSubChapters.indexOf("all") < 0) {
       userProfileSub.defaultSubChapters.push('all')
-      var serverQuery ={$and: [{isMoolya: false}, {isSystemDefined: false},  {subDepatmentAvailable: {$elemMatch: {subChapter: {$in:userProfileSub.defaultSubChapters}}}}]}
+      // var serverQuery ={$and: [{isMoolya: false}, {isSystemDefined: false},  {subDepatmentAvailable: {$elemMatch: {subChapter: {$in:userProfileSub.defaultSubChapters}}}}]}
+      var serverQuery ={subDepatmentAvailable: {$elemMatch: {subChapter: {$in:userProfileSub.defaultSubChapters},cluster:{$in:['all', userProfileSub.defaultCluster]}}}}
       queryChange = mergeQueries(query, serverQuery);
     }else {
       queryChange = query
@@ -134,7 +137,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       const chapterData =  MlChapters.find( { _id: { $in: chapterIdsArray } } ).fetch() || [];
       const subchapterData =  MlSubChapters.find( { _id: { $in: subchapterIdsArray } } ).fetch() || [];
 
-      var clusterNames = _.pluck(clusterData, 'clusterNames') || [];
+      var clusterNames = _.pluck(clusterData, 'clusterName') || [];
       var chapterNamesArray = _.pluck(chapterData, 'chapterName') || [];
       var subchapterNamesArray = _.pluck(subchapterData, 'subChapterName') || [];
 
@@ -250,15 +253,33 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlDocumentMapping.find(query,findOptions).fetch();
     data.map(function (doc,index) {
       let clusterIds =[];
+      let chapterIds=[];
+      let subChapterIds=[];
       let kycCategoryIds = [];
       let allowableFormatIds = [];
       doc.clusters.map(function (ids) {
         clusterIds.push(ids)
       });
+      doc.chapters.map(function (ids) {
+        chapterIds.push(ids)
+      });
+      const chapterData =  MlChapters.find( { _id: { $in: chapterIds } } ).fetch() || [];
+      let chapterNames = [];  //@array of strings
+      chapterData.map(function (doc) {
+        chapterNames.push(doc.chapterName)
+      });
       const clusterData =  MlClusters.find( { _id: { $in: clusterIds } } ).fetch() || [];
       let clusterNames = [];  //@array of strings
       clusterData.map(function (doc) {
         clusterNames.push(doc.clusterName)
+      });
+      doc.subChapters.map(function (ids) {
+        subChapterIds.push(ids)
+      });
+      const subChapterData =  MlSubChapters.find( { _id: { $in: subChapterIds } } ).fetch() || [];
+      let subChapterNames = [];  //@array of strings
+      subChapterData.map(function (doc) {
+        subChapterNames.push(doc.subChapterName)
       });
 
       doc.kycCategory.map(function (ids) {
@@ -280,6 +301,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       });
 
       data[index].clusters = clusterNames || [];
+      data[index].chapters = chapterNames || [];
+      data[index].subChapters= subChapterNames || [];
       data[index].kycCategory = kycCategoryNames || [];
       data[index].allowableFormat = allowableFormatNames || [];
 
@@ -296,14 +319,15 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
 
   if(args.module == 'Users'){
-    var curUserProfile = new MlAdminUserContext().userProfileDetails(context.userId);
-    var queryChange;
-    if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {   //sub-chapter_admin non-moolya
-      queryChange = {$and: [{'profile.isMoolya': false}, {'profile.InternalUprofile.moolyaProfile.subChapter': {$in: curUserProfile.defaultSubChapters}}, {'profile.isExternaluser': false}]}
-    } else {
-      queryChange = {'profile.isExternaluser': false}   //platform_admin
-    }
-    let queryList = mergeQueries(query, queryChange);
+    // var curUserProfile = new MlAdminUserContext().userProfileDetails(context.userId);
+    // var queryChange;
+    // if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {   //sub-chapter_admin non-moolya
+    //   queryChange = {$and: [{'profile.isMoolya': false}, {'profile.InternalUprofile.moolyaProfile.subChapter': {$in: curUserProfile.defaultSubChapters}}, {'profile.isExternaluser': false}]}
+    // } else {
+    //   queryChange = {'profile.isExternaluser': false}   //platform_admin
+    // }
+    var queryChange = accessControlQuery(context.userId, context) || {}
+    var queryList = mergeQueries(query, queryChange);
     data = Meteor.users.find(queryList, findOptions).fetch();
 
     data.map(function (doc,index) {
@@ -331,7 +355,18 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=Meteor.users.find(queryList,findOptions).count();
   }
   if(args.module == 'roles'){
-    data= MlRoles.find(query,findOptions).fetch();
+    var userProfileMenu = new MlAdminUserContext().userProfileDetails(context.userId);
+    var queryChange;
+    if (userProfileMenu.defaultSubChapters.indexOf("all") < 0) {
+      userProfileMenu.defaultSubChapters.push('all')
+      var serverQuery ={assignRoles: {$elemMatch: {cluster:{$in:['all', userProfileMenu.defaultCluster]},subChapter: {$in:userProfileMenu.defaultSubChapters}}}}
+      queryChange = mergeQueries(query, serverQuery);
+    }else {
+      queryChange = query
+    }
+
+    data = MlRoles.find(queryChange, findOptions).fetch();
+    // data= MlRoles.find(query,findOptions).fetch();
     data.map(function (doc,index) {
       let departmentsIdsArray = [];
       let subdepartmentsIdsArray = [];
@@ -380,7 +415,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       data[index].chaptersList = chapterNamesArray || [];
       data[index].subChapterList = subchapterNamesArray || [];
     });
-    totalRecords=MlRoles.find(query,findOptions).count();
+    totalRecords = MlRoles.find(queryChange, findOptions).count();
   }
 
   if(args.module=="industry"){
@@ -697,9 +732,13 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlFilters.find(query,findOptions).fetch();
     totalRecords=MlFilters.find(query,findOptions).count();
   }
-  if(args.module=="FunderPortfolio"){
-    data= MlFunderPortfolio.find(query,findOptions).fetch();
-    totalRecords=MlFunderPortfolio.find(query,findOptions).count();
+
+  if (args.module == "FunderPortfolio") {
+    let value = mlDBController.find('MlPortfolioDetails', {status: 'gone live', communityCode: "FUN"}, context).fetch()    //making dependency of funders on portfolio status
+    let portId = _lodash.map(value, '_id')
+    let finalQuery = mergeQueries(query, {portfolioDetailsId: {$in: portId}});
+    data = MlFunderPortfolio.find(finalQuery, findOptions).fetch();
+    totalRecords = MlFunderPortfolio.find(finalQuery, findOptions).count();
   }
 
   if(args.module=="SubDomain"){
@@ -763,11 +802,49 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     });
     totalRecords = mlDBController.find('MlActionAndStatus', query, context, findOptions).count();
   }
-
+  //internal user
   if (args.module == "officeTransaction") {
-    let finalQuery =mergeQueries({userId:context.userId}, query);
+    let finalQuery = mergeQueries(query, {userId: context.userId, officeId: args.customParams.docId});
     data = mlDBController.find('MlOfficeTransaction', finalQuery, context, findOptions).fetch();
     totalRecords = mlDBController.find('MlOfficeTransaction', finalQuery, context).count();
+  }
+
+  if (args.module == "userTransaction") {
+    let pipeline = [{
+      '$match': {_id: context.userId}},
+      {'$lookup': {from: 'mlRegistration',localField: '_id',foreignField: 'registrationInfo.userId',as: 'registration'}},
+      {'$lookup':{from:'mlPortfolioDetails',localField:'_id',foreignField:'userId', as:'portfolio'}},
+      {'$lookup':{from:'mlOfficeTransaction',localField:'_id',foreignField:'userId', as:'office'}},
+      {'$lookup':{from:'mlTransactionsLog',localField:'_id',foreignField:'userId', as:'transactionLog'}},
+      {'$project':{"R":{
+        '$map':
+        { "input":"$registration", "as":"reg", 'in':
+        { "createdAt" :"$$reg.registrationInfo.registrationDate", "transactionId":"$$reg._id" ,"transactionType":"$$reg.registrationInfo.transactionType",username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+        }
+      },
+        "P":{
+          '$map':
+          { "input":"$portfolio", "as":"port", 'in':
+          { "createdAt" :"$$port.timeStamp", "transactionId":"$$port._id" ,"transactionType":"$$port.transactionType", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+          }
+        },
+        "O":{
+          '$map':
+          { "input":"$office", "as":"off", 'in':
+          { "createdAt" :"$$off.dateTime", "transactionId":"$$off._id" ,"transactionType":"$$off.transactionType", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName' , userId:'$_id'}
+          }
+        },
+        "T":{
+          '$map':
+          { "input":"$transactionLog", "as":"trans", 'in':
+          { "createdAt" :"$$trans.createdAt", "transactionId":"$$trans._id" ,"transactionType":"$$trans.transactionTypeName", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+          }
+        }
+      }}
+    ]
+    let response = mlDBController.aggregate('users', pipeline, context);
+    data = _lodash.concat(response[0].R, response[0].P, response[0].O, response[0].T)
+    totalRecords = data.length
   }
   return {'totalRecords':totalRecords,'data':data};
 }
@@ -839,6 +916,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case 'actionAndStatus':resolveType='ActionAndStatusType';break
       case 'TransactionsLog':resolveType='TransactionsLog';break
       case 'officeTransaction':resolveType='officeTransactionType';break
+      case 'userTransaction':resolveType='myTransaction';break
     }
 
     if(resolveType){
@@ -1021,3 +1099,23 @@ MlResolver.MlUnionResolver['SearchResult']= {
     return 'GenericType';
   }
 }
+
+  let accessControlQuery = function (userId, context) {
+    var curUserProfile = new MlAdminUserContext().userProfileDetails(userId);
+    var queryReturn;
+    if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {   //sub-chapter_admin non-moolya
+      let subChapterId = curUserProfile.defaultSubChapters ? curUserProfile.defaultSubChapters[0] : ''
+      // let subChapterDetails = MlResolver.MlQueryResolver['fetchSubChapter'](null, {_id: subChapterId}, context, null)
+      let subChapterDetails = mlDBController.findOne('MlSubChapters', {_id: subChapterId}, context)   /*not getting complete data so changing query*/
+      if(subChapterDetails && !_.isEmpty(subChapterDetails.internalSubChapterAccess)){
+        let canSearch = subChapterDetails.internalSubChapterAccess.backendUser?subChapterDetails.internalSubChapterAccess.backendUser.canSearch:false
+        var associated = subChapterDetails.associatedSubChapters ? subChapterDetails.associatedSubChapters : []
+        if(canSearch)
+          curUserProfile.defaultSubChapters = _lodash.concat(curUserProfile.defaultSubChapters, associated)
+      }
+      queryReturn = {$and: [{'_id':{$ne: userId}},{'profile.isMoolya': false}, {'profile.InternalUprofile.moolyaProfile.subChapter': {$in: curUserProfile.defaultSubChapters}}, {'profile.isExternaluser': false}]}
+    } else {
+      queryReturn = {'profile.isExternaluser': false}   //platform_admin
+    }
+    return queryReturn;
+  }

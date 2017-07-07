@@ -73,7 +73,7 @@ const mlProcessTableConfig=new MlViewer.View({
   fields:["processId","displayNprocessame","isActive"],
   searchFields:["processId","process","isActive"],
   throttleRefresh:false,
-  pagination:false,//To display pagination
+  pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   filter:true,
   filterComponent: <MlCustomFilter module="documents" moduleName="documents" />,
@@ -148,43 +148,44 @@ const mlProcessTableConfig=new MlViewer.View({
     // }
   ],
   graphQlQuery:gql`
-               query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
-                data:SearchQuery(module:"documents", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
-                      totalRecords
-                      data{
-                       ...on ProcessType{
-                             id:_id,
-                             processId, 
-                              process,
-                              processName,
-                              isActive,
-                              communities,
-                        			communityNames
-                              industries,
-                              industrieNames,
-                              professions
-                      				professionNames,
-                              clusters,
-                              clusterNames
-                              states,
-                              stateNames
-                              chapters,
-                        			chapterNames
-                              subChapters,
-                        			subChapterNames
-                              userTypes,
-                        			userTypeNames
-                              identity
-                              date
-                              documents {
-                                  type
-                                  category
-                                  isActive
-                                }
-                            }
+              query ContextSpecSearch($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
+                  data: ContextSpecSearch(module: "documents", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData) {
+                    totalRecords
+                    data {
+                      ... on ProcessType {
+                        id: _id
+                        processId
+                        process
+                        processName
+                        isActive
+                        communities
+                        communityNames
+                        industries
+                        industrieNames
+                        professions
+                        professionNames
+                        clusters
+                        clusterNames
+                        states
+                        stateNames
+                        chapters
+                        chapterNames
+                        subChapters
+                        subChapterNames
+                        userTypes
+                        userTypeNames
+                        identity
+                        createdDate
+                        documents {
+                          type
+                          category
+                          isActive
                         }
+                      }
+                    }
+                  }
                 }
-               }
+
               `
 });
 

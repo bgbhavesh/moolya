@@ -23,6 +23,10 @@ let departmentSchema = `
          chaptersList   : [String]
          subChapterList : [String]
          isMoolya       : Boolean
+          createdBy     : String
+          createdDate   : Date
+          updatedBy     : String
+           updatedDate  : Date
          depatmentAvailable:[DepatmentAvailableSchema]
     }
     
@@ -47,6 +51,10 @@ let departmentSchema = `
           departmentDesc:String,
           isActive:Boolean,
           isMoolya:Boolean,
+          createdBy     : String
+          createdDate   : Date
+          updatedBy     : String
+          updatedDate   : Date
           isSystemDefined : Boolean
           depatmentAvailable:[DepatmentAvailable]
     }
@@ -60,7 +68,7 @@ let departmentSchema = `
         fetchDepartments:[Department]
         fetchActiveDepartment:[Department]
         fetchMoolyaBasedDepartment(isMoolya:Boolean):[Department]
-        fetchNonMoolyaBasedDepartment(isMoolya:Boolean,subChapter:String):[Department]
+        fetchNonMoolyaBasedDepartment(isMoolya:Boolean,clusterId:String,subChapter:String):[Department]
         fetchDepartmentsForRegistration(cluster:String,chapter:String,subChapter:String):[Department]    
         fetchMoolyaBasedDepartmentRoles(isMoolya:Boolean,clusterId:String):[Department]
         fetchClusterChapterSubChapterBasedDepartmentRoles(isMoolya: Boolean, cluster: String, chapter: String, subChapter: String): [DepartmentBasedOnClusterChapterAndSubChapter]
@@ -72,11 +80,11 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], departmentSchema]);
 let supportedApi = [
     {api:'createDepartment', actionName:'CREATE', moduleName:"DEPARTMENT"},
     {api:'updateDepartment', actionName:'UPDATE', moduleName:"DEPARTMENT"},
-    {api:'fetchDepartments', actionName:'READ', moduleName:"DEPARTMENT"},
+    {api:'fetchDepartments', actionName:'READ', moduleName:"DEPARTMENT", isWhiteList:true},
     {api:'findDepartment', actionName:'READ', moduleName:"DEPARTMENT"},
     {api:'fetchActiveDepartment', actionName:'READ', moduleName:"DEPARTMENT"},
-    {api:'fetchMoolyaBasedDepartment', actionName:'READ', moduleName:"DEPARTMENT"},
-    {api:'fetchNonMoolyaBasedDepartment', actionName:'READ', moduleName:"DEPARTMENT"},
+    {api:'fetchMoolyaBasedDepartment', actionName:'READ', moduleName:"DEPARTMENT", isWhiteList:true},
+    {api:'fetchNonMoolyaBasedDepartment', actionName:'READ', moduleName:"DEPARTMENT", isWhiteList:true},
     {api:'fetchDepartmentsForRegistration', actionName:'READ', moduleName:"DEPARTMENT", isWhiteList:true},
     {api:'fetchMoolyaBasedDepartmentRoles', actionName:'READ', moduleName:"DEPARTMENT"},
     {api:'fetchClusterChapterSubChapterBasedDepartmentRoles', actionName:'READ', moduleName:"DEPARTMENT"},

@@ -6,6 +6,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findCitizenshipActionHandler} from '../actions/findCitizenshipTypeAction'
 import {updateCitizenshipTypeActionHandler} from '../actions/updateCitizenshipTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import MlLoader from '../../../../commons/components/loader/loader'
 class MlEditCitizenshipType extends React.Component{
   constructor(props) {
@@ -43,7 +44,7 @@ class MlEditCitizenshipType extends React.Component{
   async handleSuccess(response) {
     if (response){
       if(response.success)
-        FlowRouter.go("/admin/settings/citizenshipList");
+        FlowRouter.go("/admin/settings/registration/citizenshipList");
       else
         toastr.error(response.result);
     }
@@ -55,16 +56,20 @@ class MlEditCitizenshipType extends React.Component{
     this.setState({loading:false,data:response});
   }
   async  updateCitizenshipType() {
-    let CitizenshipType = {
-      id: this.refs.id.value,
-      citizenshipTypeName: this.refs.citizenshipTypeName.value,
-      citizenshipTypeDisplayName: this.refs.citizenshipTypeDisplayName.value,
-      about: this.refs.about.value,
-      isActive: this.refs.isActive.checked
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let CitizenshipType = {
+        id: this.refs.id.value,
+        citizenshipTypeName: this.refs.citizenshipTypeName.value,
+        citizenshipTypeDisplayName: this.refs.citizenshipTypeDisplayName.value,
+        about: this.refs.about.value,
+        isActive: this.refs.isActive.checked
+      }
+      const response = await updateCitizenshipTypeActionHandler(CitizenshipType)
+      return response;
     }
-    const response = await updateCitizenshipTypeActionHandler(CitizenshipType)
-    return response;
-
   }
 
   onStatusChange(e){
@@ -83,17 +88,11 @@ class MlEditCitizenshipType extends React.Component{
         showAction: true,
         handler: async(event) => this.props.handler(this.updateCitizenshipType.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
-      // {
-      //   showAction: true,
-      //   actionName: 'add',
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
-          FlowRouter.go("/admin/settings/citizenshipList")
+          FlowRouter.go("/admin/settings/registration/citizenshipList")
         }
       }
     ];
@@ -108,9 +107,9 @@ class MlEditCitizenshipType extends React.Component{
               <div className="col-md-6 nopadding-left">
                 <div className="form_bg">
                   <form>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
-                    <input type="text" ref="citizenshipTypeName" placeholder="Name" defaultValue={this.state.data&&this.state.data.citizenshipTypeName} className="form-control float-label"/>
+                    <input type="text" ref="citizenshipTypeName" placeholder="Name" defaultValue={this.state.data&&this.state.data.citizenshipTypeName} className="form-control float-label" data-required={true} data-errMsg="Citizenship Name is required"/>
 
                   </div>
                   <div className="form-group">
@@ -123,8 +122,8 @@ class MlEditCitizenshipType extends React.Component{
               <div className="col-md-6 nopadding-right">
                 <div className="form_bg">
                   <form>
-                  <div className="form-group">
-                    <input type="text" ref="citizenshipTypeDisplayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.citizenshipTypeDisplayName} className="form-control float-label"/>
+                  <div className="form-group mandatory">
+                    <input type="text" ref="citizenshipTypeDisplayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.citizenshipTypeDisplayName} className="form-control float-label" data-required={true} data-errMsg="Display Name is required"/>
                   </div>
                   <div className="form-group switch_wrap inline_switch">
                     <label>Status</label>

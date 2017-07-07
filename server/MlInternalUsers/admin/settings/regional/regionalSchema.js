@@ -16,6 +16,13 @@ let RegionalSchema = `
       regionalZipFormat : String
       regionalCurrencySymbol: String
       regionalCurrencyValue: String
+      numberOfDigitsAfterDecimal :String
+      metricnumberOfDigitsAfterDecimal :String
+      firstDayOfWeek:String,
+      currencySymbol:String,
+      measurementSystem:String,
+      currencyFormat:Boolean,
+      valueSeparator:String
     }
     input regionalObject{
         clusterName : String,
@@ -28,6 +35,13 @@ let RegionalSchema = `
         regionalZipFormat : String,
         regionalCurrencySymbol: String,
         regionalCurrencyValue: String,
+        numberOfDigitsAfterDecimal :String,
+        metricnumberOfDigitsAfterDecimal :String
+        firstDayOfWeek:String,
+        currencySymbol:String,
+        measurementSystem:String,
+        currencyFormat:Boolean,
+        valueSeparator:String
         _id :String,
     }
     

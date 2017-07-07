@@ -53,6 +53,12 @@ const mlCommunityListConfig=new MlViewer.View({
   sort:true,
   search:false,
   viewComponent:<MlCommunityList />,
+  queryOptions:true,
+  buildQueryOptions:(config)=>
+  {
+    let userDefaultObj = getAdminUserContext()
+    return {clusterId:userDefaultObj.clusterId?userDefaultObj.clusterId:null}
+  },
   graphQlQuery:gql`
               query{
               data:fetchCommunities{
@@ -113,6 +119,10 @@ const mlCommunityChaptersConfig=new MlViewer.View({
                       longitude
                       showOnMap
                       isActive
+                      status{
+                        code
+                        description
+                      }
                   }
               }
       }

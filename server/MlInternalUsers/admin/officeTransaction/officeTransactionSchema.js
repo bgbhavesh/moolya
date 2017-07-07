@@ -51,7 +51,7 @@ let officeTransaction = `
     
     type officeTransactionType {
       _id            : String
-      dataAndTime    : Date
+      dateTime       : Date
       userId         : String
       name           : String
       transactionId  : String
@@ -59,12 +59,26 @@ let officeTransaction = `
       chapterName    : String
       subChapterName : String
       communityName  : String
-      payment        : String
+      paymentDetails  : PaymentDetail
       status         : String
       action         : String
       userName       : String
-      transactionType :String
+      transactionType : String
+      profileId      : String
       orderSubscriptionDetails : OrderSubscriptionDetail
+    }
+    
+    type PaymentDetail {
+      datetime : Date
+      transactionId :String
+      totalAmountPaid: Int
+      paymentMode: String
+      promotionCode : String
+      codeAmount : String
+      promoCodeStatus : String
+      voucherCode : String
+      paymentStatus : String
+      isPaid :Boolean
     }
     
      type OrderSubscriptionDetail { 
@@ -76,9 +90,20 @@ let officeTransaction = `
       about : String
     }
     
+    type myTransaction {
+      userId: String
+      createdAt: String
+      transactionId: String
+      username: String
+      firstName: String
+      lastName: String
+      transactionType: String
+    }
+
+    
     type Query {
-      findOfficeTransaction(officeTransactionId:String):response
-      
+      findOfficeTransaction(officeTransactionId:String, clusterId: String, chapterId: String, subChapterId: String, communityId: String):response
+      findAllTransaction : [myTransaction]
     }
     type Mutation {
       createOfficeTransaction(officeTransaction:officeTransaction):response
@@ -93,6 +118,8 @@ let supportedApi = [
   {api: 'createOfficeTransaction', actionName: 'CREATE', moduleName: "OFFICE"},
   {api: 'findOfficeTransaction', actionName: 'READ', moduleName: "OFFICE"},
   {api: 'updateOfficeTransactionOrderSubscriptionDetail', actionName: 'UPDATE', moduleName: "OFFICE"},
-  {api: 'officeTransactionPayment', actionName: 'UPDATE', moduleName: "OFFICE"}
+  {api: 'officeTransactionPayment', actionName: 'UPDATE', moduleName: "OFFICE"},
+  {api: 'findAllTransaction', actionName: 'READ', moduleName: "OFFICE"},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
+// findOfficeTransaction(officeTransactionId:String):response    /* updated with all admin data context*/

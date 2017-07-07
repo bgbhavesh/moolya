@@ -2,16 +2,14 @@
  * Created by pankaj on 6/6/17.
  */
 
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-var Select = require('react-select');
-import {initalizeFloatLabel} from '../../../utils/formElemUtil'
+import React from 'react'
+import{initalizeFloatLabel} from '../../../utils/formElemUtil'
 import {findOfficeTransactionHandler} from '../actions/findOfficeTranscation'
 import {updateSubcriptionDetail} from '../actions/updateSubscriptionDetail'
 import {updateOfficeStatus} from '../actions/updateOfficeStatus'
 import moment from 'moment'
+import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
+var Select = require('react-select');
 
 export default class MlOfficeItem extends React.Component {
   constructor(props){
@@ -19,18 +17,31 @@ export default class MlOfficeItem extends React.Component {
     this.state={
       transId:props.data.id,
       transInfo:{},
+      currentSlideIndex:0,
       userInfo:{},
-      officeInfo:{
-        availableCommunities:[]
+      officeInfo:{},
+      officeSC:{
+        availableCommunities: []
       },
+      officeSCDef:{},
       cost: 0,
       tax:false,
       about:'',
-      isGenerateLinkDisable: false
+      isGenerateLinkDisable: false,
+      duration : ' '
     }
-    this.getTransaction(this.state.transId);
+    this.getTransaction.bind(this);
+    this.initializeSwiper.bind(this);
+    this.onSlideIndexChange.bind(this);
     return this;
   }
+
+  onSlideIndexChange(swiper){
+    if(this.state.currentSlideIndex!==swiper.activeIndex){
+      this.setState({'currentSlideIndex':swiper.activeIndex});
+    }
+  }
+
   componentDidMount() {
     initalizeFloatLabel();
     $(function() {
@@ -44,19 +55,52 @@ export default class MlOfficeItem extends React.Component {
         $(this).parent('.switch').removeClass('on');
       }
     });
-    // console.log(this.props.data)
+    this.initializeSwiper();
   }
 
+  initializeSwiper(){
+    const transId = this.state.transId;
+      setTimeout(function () {
+        let swiper =  new Swiper('#office_item'+transId, {
+          effect: 'coverflow',
+          slidesPerView: 3,
+          grabCursor: true,
+          centeredSlides: true,
+          initialSlide: 0
+        });
+      },100);
+  };
+
+  async componentWillMount() {
+    this.loggedUserDetails = getAdminUserContext();                                      /*getting user context*/
+    await this.getTransaction(this.state.transId);
+  }
+
+  componentWillReceiveProps(){
+
+ }
+
   async getTransaction(id){
-    let response = await findOfficeTransactionHandler(id);
+    let response = await findOfficeTransactionHandler(id, this.loggedUserDetails);           /*adding user context fro auth*/
     if(response){
+      let duration = ' ';
       let result = JSON.parse(response.result)[0];
       if(result){
+        // console.log(result);
+        if(result.trans.duration){
+          let dbDuration = result.trans.duration;
+            duration = dbDuration.years+' Year'; // To do for month and all
+        }
+        result.officeSC.availableCommunities = result.officeSC.availableCommunities && result.officeSC.availableCommunities.length ? result.officeSC.availableCommunities : [];
         result.office.availableCommunities = result.office.availableCommunities && result.office.availableCommunities.length ? result.office.availableCommunities : [];
         this.setState({
+          duration: duration,
           transInfo: result.trans,
           userInfo: result.user,
           officeInfo: result.office,
+          officeSC: result.officeSC,
+          officeSCDef: result.officeSCDef,
+          currentSlideIndex:0,
           tax: result.trans.orderSubscriptionDetails && result.trans.orderSubscriptionDetails.isTaxInclusive ? result.trans.orderSubscriptionDetails.isTaxInclusive : false,
           cost: result.trans.orderSubscriptionDetails && result.trans.orderSubscriptionDetails.cost ? result.trans.orderSubscriptionDetails.cost : '',
           about: result.trans.orderSubscriptionDetails && result.trans.orderSubscriptionDetails.about ? result.trans.orderSubscriptionDetails.about : '',
@@ -67,7 +111,11 @@ export default class MlOfficeItem extends React.Component {
   }
 
   updateCost(e){
-    this.setState({"cost":e.currentTarget.value});
+    if(e.currentTarget.value >= 0) {
+      this.setState({"cost":e.currentTarget.value});
+    } else {
+      this.setState({"cost":0});
+    }
   }
 
   updateTax(e){
@@ -88,10 +136,16 @@ export default class MlOfficeItem extends React.Component {
     })
     if(!this.state.cost){
       toastr.error('Cost is required');
+      this.setState({
+        isGenerateLinkDisable:false
+      })
       return false;
     }
     if(this.state.cost < 1){
       toastr.error('Enter tha valid cost');
+      this.setState({
+        isGenerateLinkDisable:false
+      })
       return false;
     }
     let generateLinkInfo = {
@@ -138,7 +192,7 @@ export default class MlOfficeItem extends React.Component {
             <a href={"#1a"+transId} data-toggle="tab">Customer Details</a>
           </li>
           <li>
-            <a href={"#2a"+transId} data-toggle="tab">Order Details</a>
+            <a href={"#2a"+transId} onClick={this.initializeSwiper()} data-toggle="tab">Order Details</a>
           </li>
           <li>
             <a href={"#3a"+transId} data-toggle="tab">Payment Details</a>
@@ -155,36 +209,37 @@ export default class MlOfficeItem extends React.Component {
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="User Id" defaultValue='userId' value={this.state.transInfo.userId} className="form-control float-label" id=""/>
+                  {/*<input type="text" placeholder="User Id" defaultValue=' ' value={this.state.transInfo.userId} className="form-control float-label"/>*/}
+                  <input type="text" placeholder="User Id" defaultValue=' ' value={this.state.userInfo.profileId?this.state.userInfo.profileId:''} className="form-control float-label"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Transaction Id" defaultValue="transId" value={this.state.transInfo.transactionId} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Transaction Id" defaultValue=" " value={this.state.transInfo.transactionId} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Date & Time" defaultValue="Date & Time" value={this.state.userInfo.createdAt ? moment(this.state.userInfo.createdAt).format('MM/DD/YYYY HH:mm:ss') : ' ' } className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Date & Time" defaultValue=" " value={this.state.userInfo.createdAt ? moment(this.state.userInfo.createdAt).format('MM/DD/YYYY HH:mm:ss') : ' ' } className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Name" defaultValue="name" value={this.state.userInfo.name} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Name" defaultValue=" " value={this.state.userInfo.name} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Email ID" defaultValue="email" value={this.state.userInfo.email} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Email ID" defaultValue=" " value={this.state.userInfo.email} className="form-control float-label" id=""/>
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Phone no" defaultValue="1234567879" value={this.state.userInfo.mobile} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Phone no" defaultValue=" " value={this.state.userInfo.mobile} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Cluster" defaultValue="cluster" value={this.state.transInfo.clusterName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Cluster" defaultValue=" " value={this.state.transInfo.clusterName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Chapter" defaultValue="chapter" value={this.state.transInfo.chapterName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Chapter" defaultValue=" " value={this.state.transInfo.chapterName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Sub Chapter" defaultValue="sub chapter" value={this.state.transInfo.subChapterName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Sub Chapter" defaultValue=" " value={this.state.transInfo.subChapterName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Community" defaultValue="community" value={this.state.transInfo.communityName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Community" defaultValue=" " value={this.state.transInfo.communityName} className="form-control float-label" id=""/>
                 </div>
               </div>
             </div>
@@ -196,30 +251,32 @@ export default class MlOfficeItem extends React.Component {
                   <input type="text" placeholder="Order ID" defaultValue="Moo12345" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Subscription Name" defaultValue="Sub Id" value={this.state.officeInfo.subscriptionName} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Subscription Name" defaultValue=" " value={this.state.officeSCDef.serviceCardName} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total number of users" defaultValue="12" value={this.state.officeInfo.totalCount} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Total number of users" defaultValue=" " value={this.state.officeSC.totalusercount} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total number of principal" defaultValue="10" value={this.state.officeInfo.principalUserCount} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Total number of principal" defaultValue=" " value={this.state.officeSC.principalcount} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total number of Team" defaultValue="2" value={this.state.officeInfo.teamUserCount} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Total number of Team" defaultValue=" " value={this.state.officeSC.teamMembercount} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group switch_wrap switch_names">
                   <span className="state_label acLabel">Specific</span><label className="switch nocolor-switch">
-                  <input type="checkbox" checked={this.state.officeInfo.availableCommunities.length > 2 ? true : false} />
+                  <input type="checkbox" checked={this.state.officeSC.availableCommunities.length > 2 ? true : false} />
                   <div className="slider"></div>
                 </label>
                   <span className="state_label">All Communities</span>
+                  <div className="clearfix" />
                 </div>
+                <br className="clearfix" />
+                <br className="clearfix" />
                 <div className="clearfix" />
 
-                <div className="swiper-container blocks_in_form">
-                  <div className="clearfix" />
+                <div className="swiper-container office_item" id={'office_item'+transId}>
                   <div className="swiper-wrapper">
-                    {this.state.officeInfo.availableCommunities.map(function (item, i) {
+                    {this.state.officeSC.availableCommunities.map(function (item, i) {
                       return(
                       <div className="swiper-slide" key={i}>
                         <div className="team-block marb0">
@@ -241,31 +298,31 @@ export default class MlOfficeItem extends React.Component {
                   <div className="panel-heading">Office location</div>
                   <div className="panel-body">
                     <div className="form-group">
-                      <input type="text" defaultValue="234" placeholder="Plot no/Flat no/Door no" value={this.state.officeInfo.officeLocation} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="Plot no/Flat no/Door no" value={this.state.officeInfo.officeLocation} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue="L3" placeholder="Street no / Locality" value={this.state.officeInfo.streetLocality} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="Street no / Locality" value={this.state.officeInfo.streetLocality} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue="landmark" placeholder="Landmark" value={this.state.officeInfo.landmark} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="Landmark" value={this.state.officeInfo.landmark} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue="area" placeholder="Area" value={this.state.officeInfo.area} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="Area" value={this.state.officeInfo.area} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue="city" placeholder="town /city" value={this.state.officeInfo.city} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="town /city" value={this.state.officeInfo.city} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue="state" placeholder="State" value={this.state.officeInfo.state} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="State" value={this.state.officeInfo.state} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue="country" placeholder="Country" value={this.state.officeInfo.country} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="Country" value={this.state.officeInfo.country} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue="123456" placeholder="Zip Code" value={this.state.officeInfo.zipCode} className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " placeholder="Zip Code" value={this.state.officeInfo.zipCode} className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" defaultValue="duration" placeholder ="Duration" value='' className="form-control float-label" id=""/>
+                      <input type="text" defaultValue=" " value={this.state.duration} placeholder ="" className="form-control float-label" id=""/>
                     </div>
                   </div>
                 </div>

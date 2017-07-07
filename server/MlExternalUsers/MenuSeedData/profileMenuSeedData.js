@@ -30,12 +30,21 @@ if(Meteor.isServer){
               "uniqueId" : "portfolio"
           },
           {
-            "image":"ml ml-institutions",
+            "image": "ml ml-institutions",
             "link": "/app/myOffice",
-            "isLink" : true,
-            "isMenu" : true,
-            "name" : "My Office",
-            "uniqueId" : "myOffice"
+            "isLink": true,
+            "isMenu": true,
+            "name": "My Office",
+            "uniqueId": "myOffice",
+            "hideSubMenu": true,
+            "subMenu": [{
+              "link": "/app/addOffice",
+              "isLink": true,
+              "isMenu": false,
+              "name": "Add Office",
+              "uniqueId": "addOffice",
+              "subMenusId": "myOffice"
+            }]
           },
           {
               "image":"fa fa-list",
@@ -45,6 +54,14 @@ if(Meteor.isServer){
               "name" : "My List",
               "uniqueId" : "myConnections"
           },
+          // {
+          //   "image":"fa fa-investment",
+          //   "link": "/app/myInvestment",
+          //   "isLink" : true,
+          //   "isMenu" : true,
+          //   "name" : "My Investment",
+          //   "uniqueId" : "myInvestment"
+          // },
           {
               "image":"fa fa-money",
               "link": "/app/referalInvities",
@@ -92,6 +109,14 @@ if(Meteor.isServer){
               "isMenu" : true,
               "name" : "Privacy",
               "uniqueId" : "privacy"
+          },
+          {
+            "image":"ml ml-moolya-symbol",
+            "link": "/app/register",
+            "isLink" : true,
+            "isMenu" : true,
+            "name" : "Registration",
+            "uniqueId" : "registeras"
           },
       ]
   }})

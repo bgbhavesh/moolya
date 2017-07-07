@@ -10,11 +10,14 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import {updateRegistrationActionHandler,emailVerificationActionHandler,smsVerificationActionHandler} from '../actions/updateRegistration'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import {fetchIdentityTypes} from "../actions/findRegistration";
+import {findRegistrationActionHandler} from "../actions/findRegistration";
+
 import _ from 'lodash';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import MlLoader from '../../../../commons/components/loader/loader'
 import {findAccountTypeActionHandler} from '../../../settings/accountType/actions/findAccountTypeAction'
 import moment from 'moment'
+import {rejectStatusForUser} from '../actions/rejectUser'
 var FontAwesome = require('react-fontawesome');
 var options3 = [
   {value: 'Yes', label: 'Yes'},
@@ -47,7 +50,9 @@ export default class step1 extends React.Component{
       defaultIdentityIndividual: false,
       defaultIdentityCompany:false,
       transactionId:'',
-      selectedAccountsType: " "
+      selectedAccountsType: " ",
+      registrationDate:'',
+      emailVerified:false
     }
 
     this.fetchIdentityTypesMaster.bind(this);
@@ -81,6 +86,15 @@ export default class step1 extends React.Component{
     return response;
   }
 
+
+  async checkEmailVerify() {
+    const response = await findRegistrationActionHandler(this.props.registrationInfo.registrationId);
+    if(response.emails){
+      this.setState({emailVerified: response.emails[0].verified});
+    }
+    return response;
+  }
+
   componentWillMount() {
     console.log(this.props)
     this.fetchIdentityTypesMaster();
@@ -103,8 +117,9 @@ export default class step1 extends React.Component{
       selectedTypeOfIndustry:details.industry,
       profession:details.profession,
       transactionId : this.props.registrationData.transactionId,
-      selectedAccountsType:details.accountType
-    });
+      selectedAccountsType:details.accountType,
+      registrationDate:details.registrationDate
+          });
     //this.settingIdentity(details.identityType);
 
   }
@@ -293,26 +308,62 @@ export default class step1 extends React.Component{
 
   }
 
+  async updateRejectUser(){
+    let registrationId = this.props.registrationData._id
+    const response = await rejectStatusForUser(registrationId);
+    if (response) {
+      toastr.success("Registration Rejected Successfully")
+    }
+  }
+
+  rejectUser(){
+    const resp = this.updateRejectUser();
+    return resp;
+  }
+
   render(){
-    let MlActionConfig = [
-      {
-        actionName: 'save',
-        showAction: true,
-        handler: this.updateRegistration.bind(this)
-      },
-      // {
-      //   actionName: 'comment',
-      //   showAction: true,
-      //   handler: this.updateRegistration.bind(this)
-      // },
-      {
-        showAction: true,
-        actionName: 'cancel',
-        handler: async (event) => {
-          FlowRouter.go("/admin/transactions/registrationRequested")
+    let MlActionConfig
+    let registrationDate = this.state.registrationDate
+    let hours = moment().diff(registrationDate, 'hours')
+    console.log(registrationDate)
+    console.log(hours)
+    if(hours>=48 && this.state.emailVerified === false) {
+      MlActionConfig = [
+      /*  {
+          actionName: 'save',
+          showAction: true,
+          handler: this.updateRegistration.bind(this)
+        },
+        {
+          showAction: true,
+          actionName: 'cancel',
+          handler: async(event) => {
+            FlowRouter.go("/admin/transactions/registrationRequested")
+          }
+        },*/
+        {
+          actionName: 'rejectUser',
+          showAction: true,
+          handler: this.rejectUser.bind(this)
         }
-      }
-    ];
+
+      ];
+    }else{
+      MlActionConfig = [
+        {
+          actionName: 'save',
+          showAction: true,
+          handler: this.updateRegistration.bind(this)
+        },
+        {
+          showAction: true,
+          actionName: 'cancel',
+          handler: async(event) => {
+            FlowRouter.go("/admin/transactions/registrationRequested")
+          }
+        }
+      ];
+    }
 
 
     let countryQuery = gql`query{
@@ -444,7 +495,7 @@ export default class step1 extends React.Component{
                       <input type="text" ref="lastName" placeholder="Last Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.lastName} className="form-control float-label" id="" data-required={true} data-errMsg="Last Name is required" />
                     </div>
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Your Country"  selectedValue={this.state.country} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={this.optionsBySelectCountry.bind(this)}  />
+                      <Moolyaselect multiSelect={false} mandatory={true} ref="country" className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Your Country"  selectedValue={this.state.country} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={this.optionsBySelectCountry.bind(this)} data-required={true} data-errMsg="Country is required"  />
                     </div>
                     <div className="form-group mandatory">
                       <input type="text" ref="contactNumber" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.contactNumber}  placeholder="Contact number" className="form-control float-label" id=""data-required={true} data-errMsg="Contact Number is required" />

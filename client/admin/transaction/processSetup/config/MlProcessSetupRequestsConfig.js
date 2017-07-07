@@ -13,7 +13,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   searchFields:["dateTime","userId" ,"name" , "clusterName", "chapterName", "subChapterName", "communityId", "status"],
   throttleRefresh:false,
   pagination:true,//To display pagination
-  filter:true,
+  filter:false,
   filterComponent: <MlCustomFilter module="processSetup" moduleName="processSetup" />,
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},
@@ -42,8 +42,8 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
     }
   ],
   graphQlQuery:
-  gql`query ContextSpecSearch($context:ContextParams $offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
-                    data:ContextSpecSearch(module:"processSetup",offset:$offset, context:$context, limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
+  gql`query ContextSpecSearch($offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
+                    data:ContextSpecSearch(module:"processSetup",offset:$offset, limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
                     totalRecords
                     data{
                       ...on ProcessTransactions{
@@ -93,3 +93,5 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
 
 export {mlProcessSetupRequestsTableConfig};
 
+// $context:ContextParams
+// context:$context,

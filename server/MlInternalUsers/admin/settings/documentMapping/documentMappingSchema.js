@@ -13,6 +13,10 @@ let DocumentMapping = `
         isActive : Boolean
         chapters: [String]
         subChapters: [String]
+       createdBy       : String
+       createdDate     : Date
+       updatedBy       : String
+       updatedDate     : Date
      }
      
      type allowableFormatOutput{
@@ -86,6 +90,10 @@ let DocumentMapping = `
         allowableMaxSize  : String,
         issuingAuthority  : String,
         isActive    : Boolean
+        createdBy       : String
+        createdDate     : Date
+        updatedBy       : String
+        updatedDate     : Date
       }
       
      
@@ -98,6 +106,7 @@ let DocumentMapping = `
         findDocuments: [DocumentOutput]
         findProcessDocuments(kycId:String,processId:String): [DocumentOutput]
         fetchKycDocProcessMapping(documentTypeId:String,clusterId:[String],chapterId:[String],subChapterId:[String]):[DocumentOutput]
+        
       }
      
 `
@@ -107,7 +116,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],DocumentMapping]);
 let supportedApi = [
   {api:'findDocument', actionName:'READ', moduleName:"DOCUMENTMAPPING"},
   {api:'findDocuments', actionName:'READ', moduleName:"DOCUMENTMAPPING"},
-  {api:'findProcessDocuments', actionName:'READ', moduleName:"DOCUMENTMAPPING"},
+  {api:'findProcessDocuments', actionName:'READ', moduleName:"DOCUMENTMAPPING", isWhiteList:true},
   {api:'fetchKycDocProcessMapping', actionName:'READ', moduleName:"DOCUMENTMAPPING"},
   {api:'createDocument', actionName:'CREATE', moduleName:"DOCUMENTMAPPING"},
   {api:'updateDocument', actionName:'UPDATE', moduleName:"DOCUMENTMAPPING"}

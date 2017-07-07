@@ -1,9 +1,9 @@
 /**
  * Created by venkatsrinag on 6/6/17.
  */
-import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../../../commons/mlSchemaDef'
-import MlResolver from '../../../commons/mlResolverDef'
+import {mergeStrings} from "gql-merge";
+import MlSchemaDef from "../../../commons/mlSchemaDef";
+import MlResolver from "../../../commons/mlResolverDef";
 
 let investments = `
 
@@ -30,6 +30,7 @@ let investments = `
     input stageActions{
         actionId:String,
         actionType:String,
+        actionName:String,
         isActive:Boolean
     }
     
@@ -55,6 +56,7 @@ let investments = `
     }
     
     input processTransactions{
+        portfolioId: String
         status:String,
         action:String,
         progress:Int,
@@ -117,17 +119,20 @@ let investments = `
     }
     
     type Actions{
-        actionId:String
+        _id: String
+        displayName :String
     }
     
     type StageActions{
         actionId:String,
         actionType:String,
+        actionName:String,
         isActive:Boolean
     }
     
     type ProcessSteps{
         stageId:String,
+        stageName : String
         stageActions:[StageActions]
         isActive:Boolean
     }
@@ -149,6 +154,7 @@ let investments = `
     
     type ProcessTransactions{
         _id:String,
+        portfolioId: String
         status:String,
         action:String,
         progress:Int,
@@ -177,7 +183,7 @@ let investments = `
     
     type Mutation{
         createProcessTransaction(processTransactions:processTransactions):response
-        updateProcessSetup(processTransactionId:String, processSetup:processSetup):response
+        updateProcessSetup(processTransactionId:String, processSetup:processSetup, clusterId: String, chapterId: String, subChapterId: String, communityId: String):response
         updateProcessTransaction(processTransactionId:String, processTransactions:processTransactions):response
     }
     
@@ -187,6 +193,7 @@ let investments = `
         fetchProcessActions:[Actions]
         fetchProcessTransactionCustomerDetails(processTransactionId:String):CustomerDetails
         fetchProcessSetup(processTransactionId:String):ProcessSetup
+        fetchUserProcessSetup:ProcessSetup
     }
 `
 
@@ -195,8 +202,10 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],investments]);
 
 let supportedApi = [
   {api:'updateProcessSetup', actionName:'UPDATE', moduleName:"PROCESSSETUP"},
-  {api:'fetchProcessSetup', actionName:'READ', moduleName:"PROCESSSETUP"},
-  {api:'fetchProcessStages', actionName:'READ', moduleName:"PROCESSSETUP"},
-  {api:'updateProcessTransaction', actionName:'UPDATE', moduleName:"PROCESSSETUP"}
+  {api:'fetchProcessSetup', actionName:'READ', moduleName:"PROCESSSETUP", isWhiteList: true},
+  {api: 'fetchProcessActions', actionName: 'READ', moduleName: "ACTIONS", isWhiteList: true},
+  {api:'fetchProcessStages', actionName:'READ', moduleName:"PROCESSSETUP", isWhiteList: true},
+  {api:'updateProcessTransaction', actionName:'UPDATE', moduleName:"PROCESSSETUP"},
+  {api:'fetchUserProcessSetup', actionName:'READ', moduleName:"PROCESSSETUP"}
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

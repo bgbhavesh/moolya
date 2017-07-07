@@ -4,11 +4,12 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 import _ from 'lodash';
 
+
 export default class DocumentViewer extends React.Component{
   constructor(props){
     super(props);
-   /* this.state={
-      selectedDocuments:[]
+  /*  this.state={
+      popoverOpen:false,
     }*/
     return this;
   }
@@ -72,6 +73,7 @@ export default class DocumentViewer extends React.Component{
   OnFileRemove(docTypeId,documentId,fileId){
     this.props.onDocumentRemove(docTypeId,documentId,fileId)
   }
+
   render(){
     let selectedDocs=this.props.selectedDocuments
     if(selectedDocs.length==0){
@@ -84,7 +86,9 @@ export default class DocumentViewer extends React.Component{
     if(isMandatory){
       mandatory='*'
     }
+  /*  let allowFormat  = doc&&doc.allowableFormat&&doc.allowableFormat.toString();*/
     return (
+
       <div className="col-lg-4">
            <div className="panel panel-default uploaded_files">
            <div className="panel-heading">
@@ -116,6 +120,46 @@ export default class DocumentViewer extends React.Component{
            </div>
            </div>
 
-           </div>);
+
+
+
+
+        {/*<div className="col-lg-4 nopadding-right">
+          <div className="panel panel-default uploaded_files">
+            <div className="panel-heading">
+              <div className="input_types"><input id="chapter_admin_check" type="checkbox" name="checkbox" value="1" /><label htmlFor="chapter_admin_check"><span></span>Passport</label></div>
+              <div className="pull-right block_action">
+                <div className="fileUpload upload_file_mask">
+                  <a href="javascript:void(0);"><span className="ml ml-upload"></span>
+                    <input type="file" className="upload_file upload" name="file_source" /></a>
+                </div>
+              </div>
+              <div className="pull-right block_action">
+                <span className="single_icon ml ml-information"></span>
+              </div>
+            </div>
+            <div className="panel-body uploaded_files_swiper" onClick={this.addDocument.bind(this)}>
+              <ul className="swiper-wrapper">
+                <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><a id="createDocument" data-placement="top" data-class="large_popover" onClick={this.addDocument.bind(this)}><img src="/images/sub_default.jpg" onClick={this.addDocument.bind(this)}/></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>*/}
+
+
+               {/* <div className="col-lg-12">
+          <div className="row">
+        <div className="col-lg-2 col-md-3 col-sm-3">
+          <a href="#" id="createDocument" data-placement="right" data-class="large_popover" >
+            <div className="list_block notrans" onClick={this.addDocument.bind(this)}>
+              <div className="hex_outer"><span className="ml ml-plus "></span></div>
+              <h3 onClick={this.addDocument.bind(this)}>Add New Document</h3>
+            </div>
+          </a>
+        </div>
+          </div>
+        </div>*/}
+
+      </div>);
   }
 };

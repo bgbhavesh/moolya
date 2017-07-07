@@ -26,7 +26,7 @@ const mlDocumentTypesTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
         if(data && data.id){
-          FlowRouter.go("/admin/settings/editDocumentType/"+data.id);
+          FlowRouter.go("/admin/settings/documentProcess/editDocumentType/"+data.id);
         } else{
           toastr.error("Please select a Document Type");
         }

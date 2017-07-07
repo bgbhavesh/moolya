@@ -1,9 +1,9 @@
-import React from "react";
+import React, {Component} from "react";
 import {render} from "react-dom";
-import ideatorListRoutes from '../actions/ideatorListRoutes';
-import {fetchIdeators} from '../actions/IdeaActionHandler'
+// import ideatorListRoutes from "../actions/ideatorListRoutes";
+import {fetchIdeators} from "../actions/IdeaActionHandler";
 
-export default class MlAppIdeatorLanding extends React.Component {
+export default class MlAppIdeatorLanding extends Component {
   constructor(props){
     super(props);
     this.state={
@@ -12,8 +12,7 @@ export default class MlAppIdeatorLanding extends React.Component {
     }
     this.fetchIdeators.bind(this)
   }
-  componentDidMount() {
-  }
+
   componentWillMount(){
       const resp = this.fetchIdeators()
       return resp
@@ -25,8 +24,14 @@ export default class MlAppIdeatorLanding extends React.Component {
         this.setState({loading:false, ideators:response})
       }
   }
-
+  viewIdeatorDetails(portfolioId, e){
+    if(this.props.isExplore)
+      FlowRouter.go('/app/explore/ideator/'+portfolioId)
+    else
+      FlowRouter.go('/app/ideator/'+portfolioId)
+  }
   render() {
+    let that = this
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
@@ -35,7 +40,8 @@ export default class MlAppIdeatorLanding extends React.Component {
               {this.state.ideators.map(function (ideator, idx) {
                   return (
                     <div className="col-md-3 col-sx-3 col-sm-4 col-lg-3" key={idx}>
-                      <a href={ideatorListRoutes.ideatorDetailsRoute("ideator",ideator.ideas[0].portfolioId)}>
+                      {/*<a href={ideatorListRoutes.ideatorDetailsRoute("ideator",ideator.ideas[0].portfolioId)}>*/}
+                      <a href='' onClick={that.viewIdeatorDetails.bind(that, ideator.ideas[0].portfolioId)}>
                         <div className="ideators_list_block">
                           <div className="premium">
                             <span>{ideator.accountType}</span>

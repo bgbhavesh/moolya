@@ -108,6 +108,8 @@ export default class MlStartupViewClients extends React.Component {
         "quote" : value.quote.quote,
         "ranges" : value.quote.ranges,
         "userName" : value.userName,
+        "roleName" : value.roleName,
+        "profileImage" : value.profileImage,
         "createdAt" : value.createdAt
       })
     })

@@ -1,15 +1,22 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../../commons/mlSchemaDef'
+import MlResolver from '../../../admin/../../commons/mlResolverDef'
+
 let AddressTypeSchema = `
     type AddressType
     {
-      addressName :String
-      aboutAddress :String
-      addressDisplayName :String
+      addressTypeInfo:addressDetails
       _id :String
       addressUploadIcon:String
       isActive :Boolean
     }
+    type addressDetails{
+      addressName :String
+      aboutAddress :String
+      _id :String
+      addressDisplayName :String
+    }
+    
     input addressTypeObject{
         addressName :String,
         aboutAddress :String,
@@ -26,8 +33,12 @@ let AddressTypeSchema = `
     }
     type Query{
         findAddressType(_id:String): AddressType
-        fetchAddressTypes:[AddressType]
+        fetchAddressTypes:[addressDetails]
     }
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],AddressTypeSchema]);
+let supportedApi = [
+  {api:'fetchAddressTypes', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true}
+];
+MlResolver.MlModuleResolver.push(supportedApi)

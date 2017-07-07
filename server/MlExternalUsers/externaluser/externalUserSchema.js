@@ -3,6 +3,7 @@
  */
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../commons/mlSchemaDef'
+import MlResolver from '../../commons/mlResolverDef'
 
 let externalUser = `
     input externalUser{
@@ -44,7 +45,8 @@ let externalUser = `
         communityType:String,
         isDefault:Boolean,
         isActive:Boolean,
-        accountType:String
+        accountType:String,
+        profileId:String
     }
     
     type ContactInfoSchema{
@@ -122,7 +124,8 @@ let externalUser = `
         isActive:Boolean,
         optional:Boolean,
         userType :String,
-        identityType:String
+        identityType:String,
+        profileId:String
     }
     
     input externalUserProfile{
@@ -144,6 +147,7 @@ let externalUser = `
       deActivateUserProfile(profileId:String!):response
       blockUserProfile(profileId:String!):response
       setDefaultProfile(profileId:String!):response
+      switchExternalProfile(profileId:String!):response
     }
     
     type Query{
@@ -154,3 +158,16 @@ let externalUser = `
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],externalUser]);
+
+let supportedApi = [
+    {api:'fetchUserProfiles', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
+    {api:'findAddressBook', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
+    {api:'fetchUserProfiles', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
+    {api:'updateContactNumber', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
+    {api:'deActivateUserProfile', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
+    {api:'blockUserProfile', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
+    {api:'setDefaultProfile', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
+
+]
+
+MlResolver.MlModuleResolver.push(supportedApi)

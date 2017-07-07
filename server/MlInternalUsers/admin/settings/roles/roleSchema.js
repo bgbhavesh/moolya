@@ -24,7 +24,8 @@ let Role = `
   }
   
   type Actions{
-      actionId : String
+      actionId : String,
+      actionCode: String
   }
 
   type Roles{
@@ -37,6 +38,8 @@ let Role = `
         about:String,
         createdDateTime:Date,
         createdBy:String,
+        updatedDateTime:Date,
+        updatedBy:String,
         departmentsList : [String],
         subdepartmentsList : [String],
         clustersList   : [String],
@@ -46,6 +49,7 @@ let Role = `
         modules: [Modules],
         isActive:Boolean,
         isHierarchyAssigned:Boolean
+        isSystemDefined:Boolean
   }
   
   scalar Date
@@ -72,7 +76,8 @@ let Role = `
   }
   
   input actions{
-      actionId : String
+      actionId : String,
+      actionCode: String
   }
   
   input modules{
@@ -96,6 +101,8 @@ let Role = `
       modules:[modules], 
       isActive:Boolean,
       isHierarchyAssigned:Boolean
+       updatedDateTime:Date,
+        updatedBy:String,
   }
   
   
@@ -118,7 +125,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],Role]);
 let supportedApi = [
     {api:'fetchRole', actionName:'READ', moduleName:"ROLES"},
     {api:'fetchRolesByDepSubDep', actionName:'READ', moduleName:"ROLES", isWhiteList:true},
-    {api:'findRole', actionName:'READ', moduleName:"ROLES"},
+    {api:'findRole', actionName:'READ', moduleName:"ROLES", isWhiteList:true},
     {api:'fetchActiveRoles', actionName:'READ', moduleName:"ROLES"},
     {api:'fetchAllAssignedRoles', actionName:'READ', moduleName:"ROLES"},
     {api:'fetchRolesForRegistration', actionName:'READ', moduleName:"ROLES"},

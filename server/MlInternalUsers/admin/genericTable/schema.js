@@ -27,7 +27,7 @@ let moolya = `
 //MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],moolya]);
 
 let search = `
-union SearchResult = GenericType | Cluster | Chapter | SubChapter | Community | Department | SubDepartment | Requests | Countries | States | Cities | UserTypes | Transaction | RoleTypes | DocumentTypes | DocumentFormats | KycCategories | DocumentMapping | Account | BackendUsers | Industry | Specification | Profession | Entity | StageOfCompany | BusinessType | Citizenship | LookingFor | Assets | Technologies | SubDomain | FundingType | Roles | ProcessType | Tax | taxation | Title | Regional | Language | DateAndTime | NumericalFormat | AddressType | CompanyType | Gender | SocialLinks | EmployeeType | EmailType | ContactType | RegistrationInfo | TemplateDetails | TemplateAssignment | Hierarchy | Portfoliodetails | Award | Filters | FunderPortfolio | ActionAndStatusType | officeTransactionType 
+union SearchResult = GenericType | Cluster | Chapter | SubChapter | Community | Department | SubDepartment | Requests | Countries | States | Cities | UserTypes | Transaction | RoleTypes | DocumentTypes | DocumentFormats | KycCategories | DocumentMapping | Account | BackendUsers | Industry | Specification | Profession | Entity | StageOfCompany | BusinessType | Citizenship | LookingFor | Assets | Technologies | SubDomain | FundingType | Roles | ProcessType | Tax | taxation | Title | Regional | Language | DateAndTime | NumericalFormat | AddressType | CompanyType | Gender | SocialLinks | EmployeeType | EmailType | ContactType | RegistrationInfo | TemplateDetails | TemplateAssignment | Hierarchy | Portfoliodetails | Award | Filters | FunderPortfolio | ActionAndStatusType | officeTransactionType | myTransaction 
 
 input SearchGenericSpec{
   filter:[GenericFilter],
@@ -53,8 +53,13 @@ type SearchResp {
   totalRecords:Int,
   data:[SearchResult]
 }
+
+input CustomParams{
+   docId:String
+}
+
 type Query {
-  SearchQuery(module: String!,offset: Int,limit:Int,fieldsData:[GenericFilter],sortData:[SortFilter]): SearchResp!
+  SearchQuery(module: String!,customParams: CustomParams, offset: Int,limit:Int,fieldsData:[GenericFilter],sortData:[SortFilter]): SearchResp!
 }`
 
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'],search]);

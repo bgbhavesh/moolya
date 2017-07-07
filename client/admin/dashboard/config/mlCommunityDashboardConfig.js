@@ -3,6 +3,8 @@ import gql from 'graphql-tag'
 import MlCommunityMapView from "../component/MlCommunityMapView"
 import MlCommunityList from '../component/MlCommunityList'
 import React from 'react';
+import MapDetails from "../../../../client/commons/components/map/mapDetails"
+import maphandler from "../../../../client/commons/components/map/findMapDetailsTypeAction"
 
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 
@@ -46,6 +48,9 @@ const mlCommunityDashboardListConfig=new MlViewer.View({
                           isActive,
                           email
                       }
+                      communityCode
+                      roleNames
+                      clusterName
                   }
               }      
           }
@@ -60,6 +65,7 @@ const mlCommunityDashboardMapConfig=new MlViewer.View({
   throttleRefresh:true,
   pagination:false,
   sort:false,
+  fetchCenter:true,
   queryOptions:true,
   buildQueryOptions:(config)=>{
     if(!config.params){
@@ -75,18 +81,51 @@ const mlCommunityDashboardMapConfig=new MlViewer.View({
         subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null,
         userType:config.params&&config.params.userType?config.params.userType:"All"}
   },
+  fetchCenterHandler:async function(config){
+    let userDefaultObj = getAdminUserContext();
+    let clusterId = config&&config.params&&config.params.clusterId?config.params.clusterId:userDefaultObj.clusterId;
+    let mapDetailsQuery = {moduleName: config.module,id: clusterId?clusterId:null};
+    let center=await maphandler.fetchDefaultCenterOfUser(mapDetailsQuery);
+    return center;
+  },
   viewComponent:<MlCommunityMapView params={this.params}/>,
+  actionConfiguration:[
+    {
+      actionName: 'onMouseEnter',
+      hoverComponent: <MapDetails />,
+      handler:  function (config,mapHoverHandlerCallback) {
+        let mapDetailsQuery = {moduleName: config.module,id: config.markerId};
+        const mapDataPromise =  maphandler.findMapDetailsTypeActionHandler(mapDetailsQuery);
+        mapDataPromise.then(data =>{
+          //console.log(data);
+          if(mapHoverHandlerCallback){
+            mapHoverHandlerCallback(data);
+          };
+        });
+        return null;
+      }
+    },
+    {
+      actionName: 'onMouseLeave',
+      // hoverComponent:<MapDetails />,
+      handler:  (data)=>{
+        if(data&&data.id){
+          console.log('on leave called')
+        }
+      }
+    }
+  ],
   graphQlQuery:gql`
     query($clusterId:String, $chapterId:String, $subChapterId:String, $userType:String){
           data:fetchUsersForDashboard(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId, userType:$userType){
               totalRecords
               data{
                   ...on BackendUsers{
-                      _id,
-                      text:name
-                      isActive:profile{isActive}                      
+                      _id,                      
+                      profile:profile{isActive}                      
                       lat:latitude
                       lng:longitude
+                      text:communityCode
                       
                   }
               }      

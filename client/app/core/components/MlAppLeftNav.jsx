@@ -59,13 +59,13 @@ export default class MlAppLeftNav extends Component {
         let data = this.context.menu||{};
         let menu = data.menu || [];
         let parentKey = find(path, menu)
-        let navOptions = menu.map(function (dataItem) {
+        let navOptions = menu.map(function (dataItem, idx) {
             let activeClass
             if (parentKey == dataItem.uniqueId) {
                 activeClass = 'active_menu'
             }
             return (
-                <li className={`menu_item ${activeClass}`} key={dataItem.uniqueId}>
+                <li className={`menu_item ${activeClass}`} key={idx}>
                     <a href={dataItem.link} id={dataItem.uniqueId}>
                         <div className={"menu_in"}>
                             <span className={dataItem.image}></span>

@@ -26,16 +26,42 @@ class MlUserContext{
         check(userId,String);
         let userProfile = this.userProfileDetails(userId)||{};
         if(userProfile){
+            // var menu = MlAppMenuConfig.findOne({communityDefCode: userProfile.communityCode})
+          var menu = MlAppMenuConfig.findOne({communityCode: userProfile.communityDefCode})
+            if(menu)
+                return menu.menuName;
+            else
+              return 'mlBrowserMenu'   /*quick fix*/
         }
-        return 'mlDefaultMenu';
+
+        return '';
+        // return 'mlDefaultMenu';
     }
 
     getDefaultProfileMenu(userId){
         check(userId,String);
         let userProfile = this.userProfileDetails(userId)||{};
         if(userProfile){
+          let userDetails = {profile: userProfile, menuName: 'mlDefaultProfileMenu'}
+          return userDetails;
         }
-        return 'mlDefaultProfileMenu';
+        // return 'mlDefaultProfileMenu';
+    }
+
+    getExploreMenu(userId){
+        check(userId,String);
+        let userProfile = this.userProfileDetails(userId)||{};
+        if(userProfile){
+        }
+        return 'mlExploreMenu';
+    }
+
+    getCalendarMenu(userId) {
+      check(userId, String);
+      let userProfile = this.userProfileDetails(userId) || {};
+      if (userProfile) {
+      }
+      return 'mlCalendarMenu';
     }
 }
 

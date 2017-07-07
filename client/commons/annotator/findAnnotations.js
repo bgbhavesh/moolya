@@ -5,7 +5,7 @@ import {client} from '../../../client/admin/core/apolloConnection'
 import _ from 'lodash'
 
 export async function findAnnotations(portfoliodetailsId, docId) {
-
+  var connection=client||{};
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!, $docId:String!) {

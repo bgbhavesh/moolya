@@ -36,9 +36,10 @@ let HierarchySchema = `
     }
     type Query{
         fetchMoolyaBasedDepartmentAndSubDepartment(clusterId:String):[DepartmentAndSubDepartmentDetails]
+        fetchNonMoolyaBasedDepartmentAndSubDepartments(clusterId:String,subChapterId:String):[DepartmentAndSubDepartmentDetails]
         fetchNonMoolyaBasedDepartmentAndSubDepartment(subChapterId:String):[Department]
         fetchRolesForDepartment(departmentId:String,subDepartmentId:String,clusterId:String):[Roles]
-        fetchRolesForHierarchy(departmentId:String,subDepartmentId:String, clusterId:String, chapterId:String, subChapterId:String, communityId:String,levelCode:String,currentRoleId:String): [Roles]
+        fetchRolesForHierarchy(departmentId:String,subDepartmentId:String, clusterId:String, chapterId:String, subChapterId:String, communityId:String,levelCode:String,currentRoleId:String,roles:[teamStructureAssignmentInput]): [Roles]
         fetchRolesForFinalApprovalHierarchy(departmentId:String,subDepartmentId:String, clusterId:String): [teamStructureAssignment]
     }
     type Mutation{
@@ -50,6 +51,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],HierarchySchema]);
 let supportedApi = [
   {api:'fetchMoolyaBasedDepartmentAndSubDepartment', actionName:'READ', moduleName:"HIERARCHY"},
   {api:'fetchNonMoolyaBasedDepartmentAndSubDepartment', actionName:'READ', moduleName:"HIERARCHY"},
+  {api:'fetchNonMoolyaBasedDepartmentAndSubDepartments', actionName:'UPDATE', moduleName:"HIERARCHY"},
   {api:'fetchRolesForDepartment', actionName:'READ', moduleName:"HIERARCHY"},
   {api:'fetchRolesForHierarchy', actionName:'READ', moduleName:"HIERARCHY"},
   {api:'fetchRolesForFinalApprovalHierarchy', actionName:'READ', moduleName:"HIERARCHY"},

@@ -162,7 +162,7 @@ export default class Individual extends React.Component{
   }
   ondateOfBirthSelection(event) {
     if (event._d) {
-      let value = moment(event._d).format('DD-MM-YYYY');
+      let value = moment(event._d).format('MM/DD/YYYY');
       this.setState({loading: false, dateOfBirth: value});
     }
   }

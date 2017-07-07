@@ -81,28 +81,18 @@ class MlEditCommunityFormComponent extends React.Component {
   }
 
   async handleSuccess(response) {
-    window.history.back()
-    // FlowRouter.go("/admin/community");
+    var resp = JSON.parse(response)
+    if(resp && resp.unAuthorized){
+      FlowRouter.go('/unauthorize')
+    }else
+      window.history.back()
   };
 
   async findComDef() {
     let Id = this.props.params;
     const response = await findCommunityDefActionHandler(Id);
-
     if (response) {
       this.setState({data: response});
-
-      // if (this.state.data.aboutCommunity) {
-      //   this.setState({"data":{"aboutCommunity":this.state.data.aboutCommunity}});
-      // }
-      //
-      // if (this.state.data.showOnMap) {
-      //   this.setState({"data":{"showOnMap":this.state.data.showOnMap}});
-      // }
-      //
-      // if (this.state.data.showOnMap) {
-      //   this.setState({"data":{"showOnMap":this.state.data.showOnMap}});
-      // }
 
       if (this.state.data.clusters) {
         this.setState({clusters: this.state.data.clusters});
@@ -139,18 +129,8 @@ class MlEditCommunityFormComponent extends React.Component {
       chapterId:this.props.params.chapterId?this.props.params.chapterId:"",
       subChapterId:this.props.params.subChapterId?this.props.params.subChapterId:"",
     }
-    let response;
-    // if(data.subchapters.length<1)
-    // {
-    //   toastr.error('Please select Sub-Chapter');
-    //   response = false;
-    // }
-    // else
-    // {
-      response = await multipartFormHandler(data, null);
-    // }
-    // this.setState({loading: false});
-    return response;
+    var resp = await multipartFormHandler(data, null);
+    return resp;
   }
 
   optionsBySelectClusters(val) {

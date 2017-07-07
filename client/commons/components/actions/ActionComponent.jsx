@@ -38,8 +38,13 @@ export default class MlActionComponent extends Component {
 
   }
 
-  onMultiEdit(){
-    toastr.error("Multiple records cannot be edited, Please select a record");
+  onMultiEdit(actionName){
+    if(actionName == "edit"){
+      toastr.error("Multiple records cannot be edited, Please select a record");
+    }else if(actionName == "view"){
+      toastr.error("Multiple records cannot be viewed, Please select a record");
+    }
+
   }
 
 
@@ -112,12 +117,12 @@ export default class MlActionComponent extends Component {
       {
         imagefield:'/images/act_select_icon.png',
         actionName:'documentApprove',
-        iconClass:'ml flaticon-ml-file'
+        iconClass:'ml flaticon-ml-file-1'
       },
       {
         imagefield:'/images/act_select_icon.png',
         actionName:'documentReject',
-        iconClass:'ml flaticon-ml-file-1'
+        iconClass:'ml flaticon-ml-file'
       },
       {
         imagefield:'/images/act_select_icon.png',
@@ -146,13 +151,13 @@ export default class MlActionComponent extends Component {
           }
         }
         if (option.hasPopOver) {
-            return <PopOverAction handler={( (count > 1 && option.actionName == 'edit') ? that.onMultiEdit.bind(that) : (option.handler && option.handler))} {...option} key={option.actionName} activeClass={activeClass} iconClass={action['iconClass']}  activesubclass={activesubclass}/>
+            return <PopOverAction handler={( (count > 1 && option.actionName == 'edit'  || option.actionName == 'view') ? that.onMultiEdit.bind(that, option.actionName) : (option.handler && option.handler))} {...option} key={option.actionName} activeClass={activeClass} iconClass={action['iconClass']}  activesubclass={activesubclass}/>
         } else {
 
         return (
           <div className={`${activeClass} `} key={option.actionName}>
             <div
-              onClick={( (count > 1 && option.actionName == 'edit') ? that.onMultiEdit.bind(that) : (option.handler && option.handler.bind(this, option, null)))}
+              onClick={( (count > 1 && (option.actionName == 'edit'  || option.actionName == 'view' ) ) ? that.onMultiEdit.bind(that, option.actionName) : (option.handler && option.handler.bind(this, option, null)))}
               key={option.actionName} className={`${activesubclass} `} data-toggle="tooltip" title={option.actionName}
               data-placement="top">
               {/*<img src={action['imagefield']} />*/}

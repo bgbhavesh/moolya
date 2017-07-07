@@ -24,7 +24,8 @@ export default class MlStartupManagement extends React.Component{
       // indexArray:[],
       selectedIndex:-1,
       // arrIndex:"",
-      managementIndex:""
+      managementIndex:"",
+      responseImage:""
     }
     this.onClick.bind(this);
     this.handleBlur.bind(this);
@@ -114,7 +115,9 @@ export default class MlStartupManagement extends React.Component{
     if(empty){
       const response = await findStartupManagementActionHandler(portfoliodetailsId);
       if (response) {
+        console.log(response)
         this.setState({loading: false, startupManagement: response, startupManagementList: response});
+        this.fetchOnlyImages()
       }
     }else{
       this.setState({loading: false, startupManagement: that.context.startupPortfolio.management, startupManagementList:that.context.startupPortfolio.management});
@@ -168,24 +171,33 @@ export default class MlStartupManagement extends React.Component{
     let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
   }
   onFileUploadCallBack(name,fileName, resp){
+    let that = this;
+    let details =this.state.data;
     if(resp){
       let result = JSON.parse(resp)
-      if(result.success){
-        this.setState({loading:true})
-        this.fetchOnlyImages();
-      }
+      var temp = $.parseJSON(resp).result;
+      details=_.omit(details,[name]);
+      details=_.extend(details,{[name]:{fileName: fileName,fileUrl: temp}});
+      that.setState({data: details,responseImage: temp}, function () {
+        that.sendDataToParent()
+      })
+      // if(result.success){
+      //   that.setState({loading:true})
+      //   that.fetchOnlyImages();
+      // }
     }
   }
   async fetchOnlyImages(){
     const response = await findStartupManagementActionHandler(this.props.portfolioDetailsId);
     if (response) {
+      this.setState({loading:false})
       let thisState=this.state.selectedIndex;
       let dataDetails =this.state.startupManagement
       let cloneBackUp = _.cloneDeep(dataDetails);
       let specificData = cloneBackUp[thisState];
       if(specificData){
         let curUpload=response[thisState]
-        specificData['logo']= curUpload['logo']
+        specificData['logo']= curUpload['logo']?curUpload['logo']: " "
         this.setState({loading: false, startupManagement:cloneBackUp, data: specificData}, function () {
           $('#management-form').slideDown();
         });
@@ -311,13 +323,10 @@ export default class MlStartupManagement extends React.Component{
                             <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
                           </div>
                           <div className="previewImg ProfileImg">
-                            <img src={this.state.data && this.state.data.logo && this.state.data.logo.fileUrl?this.state.data.logo.fileUrl:""}/>
+                            <img src={this.state.data && this.state.data.logo?this.state.data.logo.fileUrl:this.state.responseImage?this.state.responseImage:" "}/>
                           </div>
                         </div>
-
-
                         <br className="brclear"/>
-
                         <div className="form-group">
                           <input type="text" placeholder="Qualification" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isQualificationPrivate" onClick={this.onClick.bind(this, "isQualificationPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isQualificationPrivate}/>

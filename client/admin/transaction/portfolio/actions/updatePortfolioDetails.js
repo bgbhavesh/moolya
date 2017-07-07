@@ -4,11 +4,13 @@ import {client} from '../../../core/apolloConnection';
 export async function updatePortfolioActionHandler(details) {
   let portfoliodetailsId  = details.portfolioId;
   let portfolio = details.portfolio;
+  let privateKeys = details.privateKeys
+  let removeKeys = details.removeKeys
 
   const result = await client.mutate({
       mutation: gql`
-          mutation  ($portfoliodetailsId: String, $portfolio:portfolio){
-              updatePortfolio(portfoliodetailsId:$portfoliodetailsId, portfolio:$portfolio){
+          mutation($portfoliodetailsId: String, $portfolio:portfolio, $privateKeys:[privateKeys], $removeKeys:[privateKeys]){
+              updatePortfolio(portfoliodetailsId:$portfoliodetailsId, portfolio:$portfolio, privateFields:$privateKeys, removeKeys:$removeKeys){
                   success,
                   code,
                   result
@@ -18,6 +20,8 @@ export async function updatePortfolioActionHandler(details) {
     variables: {
         portfoliodetailsId,
         portfolio,
+        privateKeys,
+        removeKeys
     }
   })
   const id = result.data.updatePortfolio;
@@ -70,7 +74,6 @@ export async function createAnnotationActionHandler(details) {
     }
   })
   const id = result.data.createAnnotation;
-  console.log(id);
   return id
 }
 
@@ -91,7 +94,6 @@ export async function approvePortfolio(portfolioId) {
   })
 
   const id = result.data.approvePortfolio;
-
   return id
 }
 
@@ -112,26 +114,25 @@ export async function rejectPortfolio(portfolioId) {
   })
 
   const id = result.data.rejectPortfolio;
-
   return id
 }
 
-export async function requestProtfolioForGoLive(resId) {
-  let portfoliodetailsId  = resId
-  const result = await client.mutate({
-    mutation: gql`
-            mutation  ($portfoliodetailsId: String, ){
-                requestForGoLive(portfoliodetailsId:$portfoliodetailsId){
-                    success,
-                    code,
-                    result
-                }  
-            }
-        `,
-    variables: {
-      portfoliodetailsId
-    }
-  })
-  const response = result;
-  return portfoliodetailsId
-}
+// export async function requestProtfolioForGoLive(resId) {
+//   let portfoliodetailsId  = resId
+//   const result = await client.mutate({
+//     mutation: gql`
+//             mutation  ($portfoliodetailsId: String, ){
+//                 requestForGoLive(portfoliodetailsId:$portfoliodetailsId){
+//                     success,
+//                     code,
+//                     result
+//                 }
+//             }
+//         `,
+//     variables: {
+//       portfoliodetailsId
+//     }
+//   })
+//   const response = result;
+//   return portfoliodetailsId
+// }

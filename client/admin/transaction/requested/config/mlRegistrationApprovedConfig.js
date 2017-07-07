@@ -28,20 +28,22 @@ const mlUserTypeTableConfig=new MlViewer.View({
     'chapterName': 'registrationInfo.chapterName',
     'subChapterName': 'registrationInfo.subChapterName',
     'accountType': 'registrationInfo.accountType',
-    'assignedUser': 'registrationInfo.assignedUser'
+    'assignedUser': 'registrationInfo.assignedUser',
+    'email':'registrationInfo.email',
+    'registrationId':'registrationInfo.registrationId'
   },
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "registrationDate", title: "Date",dataSort:true,customComponent:dateFormatter},
-    {dataField: "firstName", title: "Name",dataSort:true},
-    {dataField: "contactNumber", title: "ContactNo",dataSort:true},
-    {dataField: "communityName", title: "Community",dataSort:true},
+    {dataField: "registrationId",title:"Transaction ID",dataSort:true},
+    {dataField: "createdBy", title: "Created By",dataSort:true},
+    {dataField: "email", title: "Email ID",dataSort:true},
     {dataField: "clusterName", title: "Cluster",dataSort:true},
     {dataField: "chapterName", title: "Chapter",dataSort:true},
     {dataField: "subChapterName", title: "SubChapter",dataSort:true},
-    {dataField: "accountType", title: "Subscription Type",dataSort:true},
-    {dataField: "source", title: "Source",dataSort:true},
+    {dataField: "communityName", title: "Community",dataSort:true},
+    {dataField: "registrationDate", title: "Date",dataSort:true,customComponent:dateFormatter},
     {dataField: "registrationStatus", title: "Status",dataSort:true},
+    // {dataField: "contactNumber", title: "ContactNo",dataSort:true},
     {dataField: "assignedUser", title: "Assignto",dataSort:true},
   ],
   tableHeaderClass:'react_table_head',
@@ -53,7 +55,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
       handler: (data)=>{
 
         if(data && data.id){
-          FlowRouter.go("/admin/transactions/editRequests/"+data.id);
+          FlowRouter.go("/admin/transactions/editApprovedRequests/"+data.id);
         } else{
           toastr.error("Please select a record");
         }
@@ -77,6 +79,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
                     totalRecords
                     data{
                       ...on RegistrationInfo{
+                             registrationId
                               firstName
                               lastName
                               id:_id
@@ -86,10 +89,12 @@ const mlUserTypeTableConfig=new MlViewer.View({
                       				chapterName
                               subChapterName
                               accountType
+                              email
                       				source
                               assignedUser
               								registrationStatus
                       				registrationDate
+                      				createdBy
                           }
                       }
               }

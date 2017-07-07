@@ -8,12 +8,13 @@ import Step5 from './step5';
 import Step6 from './step6';
 import Step7 from './step7';
 import _ from 'lodash';
-import {findRegistrationActionHandler} from '../actions/findRegistration'
+import {findRegistrationActionHandler,documentTypesActionHandler} from '../actions/findRegistration'
 import MlLoader from '../../../../commons/components/loader/loader'
 import IdeatorIndividualHardReg from '../component/IdeatorIndividualHardReg';
 import InstitutionHardReg from '../component/InstitutionHardReg';
 import SoftRegistration from '../component/SoftRegistration';
 import {fetchTemplateHandler} from "../../../../commons/containers/templates/mltemplateActionHandler";
+import _underscore from 'underscore'
 export default class RegistrationWizard extends React.Component{
 
   constructor(props){
@@ -24,7 +25,8 @@ export default class RegistrationWizard extends React.Component{
       hardRegSteps:[],
       softRegComponent:'',
       hardRegComponent:'',
-      registrationDetails:{}
+      registrationDetails:{},
+      kycDocumentList:[]
     }
     this.findRegistration.bind(this);
     this.fetchHardRegistrationTemplate.bind(this);
@@ -72,6 +74,31 @@ export default class RegistrationWizard extends React.Component{
 
   async findRegistration() {
     const response = await findRegistrationActionHandler(this.props.config);
+    let docTypeArray = [];
+    let kycDocumentsArray = [];
+    if(response){
+      const result = await documentTypesActionHandler();
+      let docTypeArray = _underscore.pluck(result, '_id') || [];
+      let kycDocuments = response&&response.kycDocuments?response.kycDocuments:[];
+      for(let k=0;k < docTypeArray.length;k++){
+        kycDocumentsArray[docTypeArray[k]] = []
+      }
+      if(kycDocuments){
+        let documentExist;
+        for(let i=0;i< kycDocuments.length;i++){
+          if(kycDocuments[i] && kycDocuments[i].docTypeId && docTypeArray && docTypeArray.length>0){
+            documentExist = _underscore.contains(docTypeArray,kycDocuments[i].docTypeId);
+            if(documentExist){
+              if(kycDocumentsArray && kycDocumentsArray[kycDocuments[i].docTypeId]){
+                kycDocumentsArray[kycDocuments[i].docTypeId].push(kycDocuments[i])
+              }
+
+            }
+          }
+        }
+      }
+    }
+    this.setState({loading : false,kycDocumentList: kycDocumentsArray })
     this.setState({loading: false, registrationDetails: response});
     return response;
   }
@@ -120,6 +147,7 @@ export default class RegistrationWizard extends React.Component{
 
       getRegistrationKYCDetails:this.getRegistrationKYCDetails.bind(this),
       registrationData:this.state.registrationDetails,
+      kycDocuments : this.state.kycDocumentList,
 
       setHardRegistrationSteps:this.setHardRegistrationSteps.bind(this),
       setSoftRegistrationSteps:this.setSoftRegistrationSteps.bind(this)
@@ -155,7 +183,7 @@ export default class RegistrationWizard extends React.Component{
         {showLoader===true?(<MlLoader/>):(
           <div className="admin_padding_wrap">
             {/*<h2>Registration Process</h2>*/}
-            <div className='step-progress' >
+            <div className='step-progress last_step_none' >
               <div >
                 {hasSoftRegTemplate&&<SoftRegComponent {...registrationConfig}/>}
                 {hasHardRegTemplate&&<HardRegComponent {...registrationConfig}/>}

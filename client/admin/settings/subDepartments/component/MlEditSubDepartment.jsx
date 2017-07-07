@@ -203,12 +203,12 @@ class MlEditSubDepartment extends React.Component{
                       {this.state.data != '' && (<div>
                         <div className="form-group switch_wrap switch_names" disabled="true">
                           <label>Select Type</label><br/>
-                          <span className="state_label acLabel">moolya</span><label className="switch">
+                          <span className="state_label acLabel">EcoSystem</span><label className="switch">
                           <input type="checkbox" ref="appType" checked={this.state.data && !this.state.data.isMoolya}
                                  disabled="true"/>
                           <div className="slider"></div>
                         </label>
-                          <span className="state_label">non-moolya</span>
+                          <span className="state_label">SubChapter</span>
                         </div>
                         <br className="brclear"/>
                         {this.state.data && this.state.data.isMoolya ?

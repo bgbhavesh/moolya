@@ -12,7 +12,7 @@ import {findBackendUserActionHandler} from "../actions/findBackendUserAction";
 import {updateBackendUserActionHandler} from "../actions/updateBackendUserAction";
 import {resetPasswordActionHandler} from "../actions/resetPasswordAction";
 import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
-import passwordSAS_validate from '../../../../../lib/common/validations/passwordSASValidator';
+import passwordSAS_validate from "../../../../../lib/common/validations/passwordSASValidator";
 import {OnToggleSwitch, initalizeFloatLabel, passwordVisibilityHandler} from "../../../utils/formElemUtil";
 import moment from "moment";
 let FontAwesome = require('react-fontawesome');
@@ -60,7 +60,6 @@ class MlEditBackendUser extends React.Component{
     this.onGlobalStatusChanged = this.onGlobalStatusChanged.bind(this);
     this.onisActiveChanged= this.onisActiveChanged.bind(this);
     this.onMakeDefultChange=this.onMakeDefultChange.bind(this);
-  //  this.ondateOfBirthSelection.bind(this);
     this.genderSelect = this.genderSelect.bind(this);
     this.getGender.bind(this);
     return this;
@@ -219,6 +218,9 @@ class MlEditBackendUser extends React.Component{
         this.setState({'userProfiles': userProfilesDetails});
       }
       this.getGender();
+    }else {
+      window.history.back()
+      toastr.error('Not Authorised');
     }
   }
 
@@ -342,13 +344,13 @@ class MlEditBackendUser extends React.Component{
       profile:profile
     }
 
-    console.log(userObject)
     let updateUserObject={
       userId:this.refs.id.value,
       userObject:userObject
-
     }
-    const response = await updateBackendUserActionHandler(updateUserObject)
+
+    let loginUserDetails = this.state.loginUserDetails;    /*adding user context*/
+    const response = await updateBackendUserActionHandler(updateUserObject, loginUserDetails)
     return response;
   }
 
@@ -397,13 +399,6 @@ class MlEditBackendUser extends React.Component{
       });
   }
 
-  // ondateOfBirthSelection(event) {
-  //   if (event._d) {
-  //     let value = moment(event._d).format('DD-MM-YYYY');
-  //     this.setState({loading: false, dateofbirth: value});
-  //   }
-  // }
-
   getAssignedDepartments(departments){
     this.setState({'mlAssignDepartmentDetails':departments})
   }
@@ -451,9 +446,9 @@ class MlEditBackendUser extends React.Component{
     ];
 
     let UserTypeOptions = (this.state.loginUserDetails && this.state.loginUserDetails.isMoolya) ? [
-      {value: 'moolya', label: 'moolya', clearableValue: true},
-      {value: 'non-moolya', label: 'non-moolya', clearableValue: true}
-    ] : [{value: 'non-moolya', label: 'non-moolya', clearableValue: true}]
+      {value: 'moolya', label: 'EcoSystem', clearableValue: true},
+      {value: 'non-moolya', label: 'SubChapter', clearableValue: true}
+    ] : [{value: 'non-moolya', label: 'SubChapter', clearableValue: true}]
 
     let BackendUserOptions=[
       {value: 'Internal User', label: 'Internal User'},
@@ -513,17 +508,21 @@ class MlEditBackendUser extends React.Component{
                     <input type="text" ref="lastName" placeholder="Last Name" defaultValue={that.state.data&&that.state.data.profile.InternalUprofile.moolyaProfile.lastName} className="form-control float-label" id=""/>
                   </div>
                   <div className="form-group">
-                    <Select name="form-field-name" placeholder="Backend User Type"   className="float-label"  options={UserTypeOptions}  value={that.state.selectedBackendUserType}  onChange={that.onBackendUserTypeSelect.bind(that)}
+                    <Select name="form-field-name" placeholder="Backend User Type"   className="float-label"  options={UserTypeOptions}  value={that.state.selectedBackendUserType}  onChange={that.onBackendUserTypeSelect.bind(that)} disabled="disabled"
                     />
                   </div>
-                  {that.state.selectedBackendUserType=='non-moolya'&&(
-                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Select Subchapter"  selectedValue={that.state.selectedSubChapter} queryType={"graphql"} query={subChapterQuery} isDynamic={true}  onSelect={that.optionsBySelectSubChapter.bind(that)} />
-                  )}
-                    {/*  <Select name="form-field-name" value="select" options={options1} className="float-label"/>*/}
+                    {that.state.selectedBackendUserType == 'non-moolya' && (
+                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                                    labelKey={'label'} placeholder="Select Subchapter"
+                                    selectedValue={that.state.selectedSubChapter} queryType={"graphql"}
+                                    query={subChapterQuery} isDynamic={true}
+                                    onSelect={that.optionsBySelectSubChapter.bind(that)}/>
+                    )}
                     <div className="form-group">
-                    <Select name="form-field-name" placeholder="Select Role"  className="float-label"  options={BackendUserOptions}  value={that.state.selectedBackendUser}  onChange={that.onBackendUserSelect.bind(that)} disabled={true}
-                    />
-                      </div>
+                      <Select name="form-field-name" placeholder="Select Role" className="float-label"
+                              options={BackendUserOptions} value={that.state.selectedBackendUser}
+                              onChange={that.onBackendUserSelect.bind(that)} disabled={true} />
+                    </div>
                {/* {that.state.showPasswordFields ?
                   <div className="form-group">
                     <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{that.state.pwdValidationMsg}</text>
@@ -563,8 +562,7 @@ class MlEditBackendUser extends React.Component{
                   </div>
 
                     <div className="form-group">
-                      {/*<Datetime dateFormat="DD-MM-YYYY" placeholder="Date Of Birth" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}   closeOnSelect={true} defaultValue={this.state.dateofbirth} onChange={this.ondateOfBirthSelection.bind(this)}/>*/}
-                      <input type="text" ref="dob"  placeholder="Date Of Birth" className="form-control float-label" defaultValue={Dob} disabled="disabled" />
+                      <input type="text" ref="dob"  placeholder="Date Of Birth" className="form-control float-label " defaultValue={Dob} disabled="disabled" />
                       <FontAwesome name="calendar" className="password_icon"/>
 
                     </div>

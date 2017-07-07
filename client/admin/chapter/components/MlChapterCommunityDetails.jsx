@@ -22,7 +22,8 @@ class MlChapterCommunityDetails extends React.Component {
     }
     this.findComDef.bind(this);
     this.addEventHandler.bind(this);
-    this.updateCommunityAccess.bind(this)
+    this.updateCommunityAccess.bind(this);
+    this.onStatusChangeMap.bind(this)
     return this;
   }
 
@@ -159,6 +160,18 @@ class MlChapterCommunityDetails extends React.Component {
       this.setState({"data": {"isActive": false}});
     }
   }
+  onStatusChangeMap(e)
+  {
+    let updatedData = this.state.data||{};
+    updatedData=_.omit(updatedData,["showOnMap"]);
+    if (e.currentTarget.checked) {
+      var z=_.extend(updatedData,{showOnMap:true});
+      this.setState({data:z,loading:false});
+    } else {
+      var z=_.extend(updatedData,{showOnMap:false});
+      this.setState({data:z,loading:false});
+    }
+  }
 
   render() {
     let MlActionConfig = [
@@ -241,7 +254,7 @@ class MlChapterCommunityDetails extends React.Component {
                     <label>Show on map</label>
                     <label className="switch">
                       <input type="checkbox" ref="showOnMap"
-                             defaultValue={this.state.data && this.state.data.showOnMap}/>
+                             checked={this.state.data && this.state.data.showOnMap} onChange={this.onStatusChangeMap.bind(this)}/>
                       <div className="slider"></div>
                     </label>
                   </div>

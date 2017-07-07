@@ -125,6 +125,10 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioAboutUs'] = (obj, args, context
 
       })
     }
+
+    //for view action
+    MlResolver.MlMutationResolver['createView'](obj,{resourceId:args.portfoliodetailsId,resourceType:'portfolio'}, context, info);
+
     if (startAboutUsArray) {
       return startAboutUsArray
     }

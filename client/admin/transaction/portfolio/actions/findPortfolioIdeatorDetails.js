@@ -46,6 +46,10 @@ export async function findIdeatorDetailsActionHandler(portfoliodetailsId) {
               gplusId
               isGplusIdPrivate
               profilePic
+              privateFields{
+                keyName,
+                booleanKey
+              }
             }
           }
 
@@ -65,13 +69,17 @@ export async function findIdeatorIdeasActionHandler(ideaId) {
     query: gql`
           query ($ideaId: String!) {
             fetchIdeatorPortfolioIdeas(ideaId: $ideaId) {
-                _id
-                title
-                portfolioId
-                description
-                isIdeasTitlePrivate
-                isIdeasPrivate
-                isActive
+              _id
+              title
+              portfolioId
+              description
+              isIdeasTitlePrivate
+              isIdeasPrivate
+              isActive
+              privateFields{
+                keyName,
+                booleanKey
+              }
             }
           }
 
@@ -81,7 +89,8 @@ export async function findIdeatorIdeasActionHandler(ideaId) {
     },
     forceFetch: true
   })
-  const id = result.data.fetchIdeatorPortfolioIdeas;
+  const id
+    = result.data.fetchIdeatorPortfolioIdeas;
   let data = _.omit(id, '__typename')
   console.log(data)
   return data
@@ -91,18 +100,24 @@ export async function findIdeatorProblemsAndSolutionsActionHandler(portfoliodeta
   const result = await client.query({
       query: gql`
           query ($portfoliodetailsId: String!) {
-              fetchIdeatorPortfolioProblemsAndSolutions(portfoliodetailsId: $portfoliodetailsId) {
-                  problemStatement
-                  isProblemPrivate
-                  problemImage {
-                    fileUrl
-                    fileName
-                  }
-                  solutionStatement
-                  isSolutionPrivate
-                  solutionImage {
-                    fileUrl
-                    fileName
+              data:fetchIdeatorDetails(portfoliodetailsId: $portfoliodetailsId, key:"problemSolution") {
+                  problemSolution{
+                      problemStatement
+                      isProblemPrivate
+                      problemImage {
+                        fileUrl
+                        fileName
+                      }
+                      solutionStatement
+                      isSolutionPrivate
+                      solutionImage {
+                        fileUrl
+                        fileName
+                      }
+                      privateFields{
+                        keyName,
+                        booleanKey
+                      }
                   }      
               }
           }
@@ -113,7 +128,7 @@ export async function findIdeatorProblemsAndSolutionsActionHandler(portfoliodeta
     },
     forceFetch: true
   })
-  const id = result.data.fetchIdeatorPortfolioProblemsAndSolutions;
+  const id = result.data.data && result.data.data.problemSolution;
   let data = _.omit(id, '__typename')
   return data
 }
@@ -122,13 +137,21 @@ export async function findIdeatorAudienceActionHandler(portfoliodetailsId) {
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
-            fetchIdeatorPortfolioAudience(portfoliodetailsId: $portfoliodetailsId) {
-                description
-                isAudiencePrivate
-                 audienceImages {
-                    fileUrl
-                    fileName
+            data:fetchIdeatorDetails(portfoliodetailsId: $portfoliodetailsId, key:"audience") {
+                audience{
+                  audienceDescription
+                  isAudiencePrivate
+                  audienceImages {
+                      fileUrl
+                      fileName
                   }
+                  
+                  privateFields{
+                    keyName,
+                    booleanKey
+                  }
+                  
+                }
             }
           }
 
@@ -138,7 +161,7 @@ export async function findIdeatorAudienceActionHandler(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  const id = result.data.fetchIdeatorPortfolioAudience;
+  const id = result.data.data && result.data.data.audience;
   let data = _.omit(id, '__typename')
   console.log(data)
   return data
@@ -170,9 +193,16 @@ export async function findIdeatorStrategyPlansActionHandler(portfoliodetailsId) 
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
-            fetchIdeatorPortfolioStrategyAndPlanning(portfoliodetailsId: $portfoliodetailsId) {
-              description
-              isStrategyPlansPrivate
+            data:fetchIdeatorDetails(portfoliodetailsId: $portfoliodetailsId, key:"strategyAndPlanning") {
+              strategyAndPlanning{
+                spDescription
+                isStrategyPlansPrivate
+                privateFields{
+                  keyName,
+                  booleanKey
+                }
+              }
+              
             }
           }
 
@@ -182,7 +212,7 @@ export async function findIdeatorStrategyPlansActionHandler(portfoliodetailsId) 
     },
     forceFetch: true
   })
-  const id = result.data.fetchIdeatorPortfolioStrategyAndPlanning;
+  const id = result.data.data && result.data.data.strategyAndPlanning;
   let data = _.omit(id, '__typename')
   return data
 }
@@ -191,9 +221,15 @@ export async function findIdeatorLookingForActionHandler(portfoliodetailsId) {
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
-            fetchIdeatorPortfolioLookingFor(portfoliodetailsId: $portfoliodetailsId) {
-              description
-              isLookingForPrivate
+            data:fetchIdeatorDetails(portfoliodetailsId: $portfoliodetailsId, key:"lookingFor") {
+              lookingFor{
+                lookingForDescription
+                isLookingForPrivate
+                privateFields{
+                  keyName,
+                  booleanKey
+                }
+              }
             }
           }
 
@@ -203,7 +239,7 @@ export async function findIdeatorLookingForActionHandler(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  const id = result.data.fetchIdeatorPortfolioLookingFor;
+  const id = result.data.data && result.data.data.lookingFor;
   let data = _.omit(id, '__typename')
   return data
 }
@@ -213,9 +249,15 @@ export async function findIdeatorIntellectualPlanningTrademarkActionHandler(port
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
-            fetchIdeatorPortfolioIntellectualPlanning(portfoliodetailsId: $portfoliodetailsId) {
-              description
-              isIntellectualPrivate
+            data:fetchIdeatorDetails(portfoliodetailsId: $portfoliodetailsId, key:"intellectualPlanning") {
+              intellectualPlanning{
+                IPdescription
+                isIntellectualPrivate
+                privateFields{
+                  keyName,
+                  booleanKey
+                }
+              }
             }
           }
 
@@ -225,9 +267,27 @@ export async function findIdeatorIntellectualPlanningTrademarkActionHandler(port
     },
     forceFetch: true
   })
-  const id = result.data.fetchIdeatorPortfolioIntellectualPlanning;
+  const id = result.data.data && result.data.data.intellectualPlanning;
   let data = _.omit(id, '__typename')
   return data
 }
 
+
+export async function validateUserForAnnotation(portfoliodetailsId) {
+
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            validateUserForAnnotation(portfoliodetailsId: $portfoliodetailsId)
+          }
+
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data && result.data.validateUserForAnnotation;
+  return id
+}
 

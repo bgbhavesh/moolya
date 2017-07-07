@@ -11,6 +11,10 @@ let LookingForSchema = `
       communityName: String
       about: String
       _id:String
+      createdBy     : String
+      createdDate   : Date
+      updatedBy     : String
+      updatedDate   : Date
       isActive:Boolean
     }
    type Mutation 
@@ -28,7 +32,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],LookingForSchema]);
 
 let supportedApi = [
   {api:'FindLookingFor', actionName:'READ', moduleName:"LOOKINGFOR"},
-  {api:'fetchLookingFor', actionName:'READ', moduleName:"LOOKINGFOR"},
+  {api:'fetchLookingFor', actionName:'READ', moduleName:"LOOKINGFOR", isWhiteList:true},
 
   {api:'CreateLookingFor', actionName:'CREATE', moduleName:"LOOKINGFOR"},
   {api:'UpdateLookingFor', actionName:'UPDATE', moduleName:"LOOKINGFOR"}

@@ -8,6 +8,7 @@ let FontAwesome = require('react-fontawesome');
 import gql from 'graphql-tag'
 import Datetime from "react-datetime";
 import moment from "moment";
+import _ from 'lodash'
 export default class MlAssignModulesToRoles extends React.Component {
   constructor(props) {
     super(props);
@@ -19,7 +20,7 @@ export default class MlAssignModulesToRoles extends React.Component {
         validFrom: null,
         validTo: null,
         isActive: '',
-        actions: [{actionId: ''}]
+        actions: []
       }]
     }
     this.addDepartmentComponent.bind(this);
@@ -54,6 +55,8 @@ export default class MlAssignModulesToRoles extends React.Component {
     });
     this.setState({
       assignModulesToRoles: assignModulesToRoles
+    }, () => {
+      this.props.getassignModulesToRoles(assignModulesToRoles)
     })
   }
 
@@ -79,10 +82,10 @@ export default class MlAssignModulesToRoles extends React.Component {
       let assignModulesToRolesForm = []
       for (let i = 0; i < assignModulesToRolesDetails.length; i++) {
         let actions = assignModulesToRolesDetails[i].actions
-        let actionVal = [{actionId: ''}]
+        let actionVal = []
         if (actions) {
           for (let j = 0; j < actions.length; j++) {
-            actionVal.push({"actionId": actions[j].actionId})
+            actionVal.push({"actionId": actions[j].actionId, "actionCode": actions[j].actionCode})
           }
         }
         let validFromDate = null;
@@ -132,7 +135,10 @@ export default class MlAssignModulesToRoles extends React.Component {
     let actions = this.state.assignModulesToRoles[index].actions
     if (event.target.checked) {
       let value = event.target.name;
-      actions.push({actionId: value})
+      actions.push({actionId: value, actionCode: value.toUpperCase()})
+      if(value == 'CREATE' || value == 'UPDATE' && (_.findIndex(actions, {actionCode:"READ"}) < 0)){
+        actions.push({actionId: "READ", actionCode: "READ"})
+      }
     } else {
       let flag = '';
       _.each(actions, function (item, key) {
@@ -141,6 +147,15 @@ export default class MlAssignModulesToRoles extends React.Component {
         }
       });
       actions.splice(flag, 1);
+
+      if(event.target.name == 'READ'){
+          var index = _.findIndex(actions, {actionCode:"UPDATE"})
+          if(index >= 0)
+              actions.splice(index, 1);
+          index = _.findIndex(actions, {actionCode:"CREATE"})
+          if(index >= 0)
+            actions.splice(index, 1);
+      }
     }
     let ary = [];
     _.each(actions, function (s, v) {
@@ -241,16 +256,16 @@ export default class MlAssignModulesToRoles extends React.Component {
             return current.isAfter(yesterday);
           }
           _.each(options.actions,function (s,v) {
-            if(s.actionId=='DELETE'){
+            if(s.actionCode=='DELETE'){
               statusDelete=true;
             }
-            if(s.actionId=='READ'){
+            if(s.actionCode=='READ' || s.actionCode == 'ALL'){
               statusRead=true;
             }
-            if(s.actionId=='UPDATE'){
+            if(s.actionCode=='UPDATE' || s.actionCode == 'ALL'){
               statusUpdate=true;
             }
-            if(s.actionId=='CREATE'){
+            if(s.actionCode=='CREATE' || s.actionCode == 'ALL'){
               statusCreate=true;
             }
           })

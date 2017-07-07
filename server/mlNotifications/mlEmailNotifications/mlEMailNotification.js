@@ -158,6 +158,23 @@ const MlEmailNotification= class MlEmailNotification {
       console.log("mlUserRegistrationOtp:Error while sending the OTP Email Notification" + e);
     }
   }
+
+  static sendInquiryEmail(inquiryData, context) {
+    try {
+      Meteor.setTimeout(function () {
+        mlEmail.sendHtml({
+          from: inquiryData.fromEmail,
+          to: inquiryData.toEmail,
+          subject: inquiryData.subject,
+          html: "<div>" + inquiryData.message + "</div>"
+        });
+      }, 2 * 1000);
+
+    } catch (e) {
+      console.log("Failed to send inquiry email");
+    }
+  }
+
 }
 
 export default MlEmailNotification;

@@ -17,19 +17,20 @@ export default class MlClusterChapterList extends Component
       let image=prop.countryFlag&&prop.countryFlag.trim()!==""?<img src={`${prop.countryFlag}`}/>:<span className="ml ml-chapter"></span>;
       let icon, status;
 
-      if(prop.isActive && prop.showOnMap){
-        status = "active";
-        // icon = "active-User"
-      } else if(prop.isActive && !prop.showOnMap){
-        status = "add";
-        // icon ="add";
-      } else if(!prop.isActive && prop.showOnMap){
-        status = "inactive";
-        // icon = "inactive-user"
+      if(prop.status.description == "Active"){
+          status = "active";
+          // icon = "active-User"
+      } else if(prop.status.description == "Work In Progress"){
+          status = "add";
+          // icon ="add";
+      } else if(prop.status.description == "Inactive"){
+          status = "inactive";
+          // icon = "inactive-user"
       } else {
-        status = "assign";
-        // icon = "assign";
+          status = "assign";
+          // icon = "assign";
       }
+
       return (
         <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
           <div className="list_block">

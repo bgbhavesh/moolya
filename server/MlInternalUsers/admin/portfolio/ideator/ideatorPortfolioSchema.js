@@ -72,7 +72,8 @@ let ideatorPortfolioSchema = `
         isTwitterIdPrivate:Boolean
         gplusId:String
         isGplusIdPrivate:Boolean
-        profilePic:String
+        profilePic:String,
+        privateFields:[PrivateKeys]
     }
     type ideasObject{
         _id:String
@@ -81,7 +82,8 @@ let ideatorPortfolioSchema = `
         portfolioId:String
         description:String,
         isIdeasPrivate:Boolean,
-        isActive:Boolean
+        isActive:Boolean,
+        privateFields:[PrivateKeys]
     }
     
     type imagesTypeSchema{
@@ -96,27 +98,32 @@ let ideatorPortfolioSchema = `
         solutionStatement : String,
         isSolutionPrivate : Boolean,
         solutionImage     : [imagesTypeSchema]
+        privateFields:[PrivateKeys]
     }
    
     type audienceInfo{
-        description:String
+        audienceDescription:String
         isAudiencePrivate:Boolean,
         audienceImages : [imagesTypeSchema]
+        privateFields:[PrivateKeys]
     }
     
     type strategyplansInfo{
-        description:String
+        spDescription:String
         isStrategyPlansPrivate:Boolean
+        privateFields:[PrivateKeys]
     }
     
     type intellectualplanningInfo{
-        description:String
+        IPdescription:String
         isIntellectualPrivate :Boolean
+        privateFields:[PrivateKeys]
     }
     
     type lookingforInfo{
-        description:String
+        lookingForDescription:String
         isLookingForPrivate:Boolean
+        privateFields:[PrivateKeys]
     }
     
     type libraryInfo{
@@ -139,7 +146,6 @@ let ideatorPortfolioSchema = `
          intellectualPlanning : intellectualplanningInfo
          lookingFor : lookingforInfo
          library:libraryInfo
-         
     }
     
 
@@ -203,13 +209,13 @@ let ideatorPortfolioSchema = `
     }
     
     input audience{
-        description:String,
+        audienceDescription:String,
         isAudiencePrivate:Boolean,
         audienceImages : [imageFilesInputSchema]
     }
     
     input strategyAndPlanning{
-        description:String,
+        spDescription:String,
         isStrategyPlansPrivate:Boolean
     }
     input ideas{
@@ -221,12 +227,12 @@ let ideatorPortfolioSchema = `
     }
     
     input intellectualPlanning{
-        description:String, 
+        IPdescription:String, 
         isIntellectualPrivate :Boolean
     }
     
     input lookingFor{
-        description:String,
+        lookingForDescription:String,
         isLookingForPrivate:Boolean
     }
     
@@ -293,7 +299,44 @@ let ideatorPortfolioSchema = `
         isActive:Boolean
     }
     
+    input fileAttributes{
+    fileName:String,
+    fileUrl:String,
+    fileType:String
+    }
+    
+    type FileAttributes{
+    fileName:String,
+    fileUrl:String,
+    fileType:String
+    isPrivate:Boolean
+    }
+    
+    input detailsInput{
+      userId:String,
+      images:[fileAttributes],
+      videos:[fileAttributes],
+      documents:[fileAttributes],
+      templates:[fileAttributes]
+    }
+    
+    input privateData{
+      index: Int
+      element: Boolean
+      type: String
+    }
+    
+     type Details{
+      userId:String,
+      images:[FileAttributes],
+      videos:[FileAttributes],
+      documents:[FileAttributes],
+      templates:[FileAttributes]
+    }
+    
+    
     type Query{
+        fetchIdeatorDetails(portfoliodetailsId:String!, key:String): ideatorPortfolioDetails
         fetchIdeatorPortfolioDetails(portfoliodetailsId:String!):portfolioIdeatorDetailsInfo
         fetchIdeatorPortfolioIdeas(ideaId:String!):ideasObject
         fetchIdeatorPortfolioProblemsAndSolutions(portfoliodetailsId:String!): problemSolutionInfo
@@ -307,6 +350,9 @@ let ideatorPortfolioSchema = `
         fetchComments(annotationId:String): [commentsInfo]
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
         fetchIdeas(portfolioId:String):[Idea]
+        fetchLibrary(userId:String):[Details]
+        fetchAllowableFormats:Boolean
+        validateUserForAnnotation(portfoliodetailsId:String!):Boolean
     }
     
     type Mutation{
@@ -318,6 +364,8 @@ let ideatorPortfolioSchema = `
         resolveComment(commentId:String): response
         reopenComment(commentId:String): response
         createIdea(idea:idea):response
+        createLibrary(detailsInput:detailsInput):response
+        updatePrivacyDetails(detailsInput:privateData): response
         updateIdea(ideaId:String, idea:idea):response
     }
 `
@@ -325,8 +373,10 @@ let ideatorPortfolioSchema = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], ideatorPortfolioSchema]);
 
 let supportedApi = [
+  {api:'validateUserForAnnotation', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchIdeatorDetails', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchIdeatorPortfolioDetails', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchIdeatorPortfolioIdeas', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchIdeatorPortfolioIdeas', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'fetchIdeatorPortfolioProblemsAndSolutions', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchIdeatorPortfolioAudience', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchIdeatorPortfolioLibrary', actionName:'READ', moduleName:"PORTFOLIO"},
@@ -338,15 +388,21 @@ let supportedApi = [
   {api:'fetchComments', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'fetchPortfolioMenu', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchIdeas', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchAllowableFormats', actionName:'READ', moduleName:"PORTFOLIO"},
+
+
 
   {api:'createIdeatorPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
   {api:'createAnnotation', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'createComment', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'createIdea', actionName:'CREATE', moduleName:"PORTFOLIO"},
+  {api:'createLibrary', actionName:'CREATE', moduleName:"PORTFOLIO"},
   {api:'updateAnnotation', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'updateIdeatorPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
   {api:'updateIdea', actionName:'UPDATE', moduleName:"PORTFOLIO"},
   {api:'resolveComment', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'reopenComment', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
+  {api:'updatePrivacyDetails', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true}
+
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -53,7 +53,9 @@ export default class MlAppAddOfficeMember extends React.Component{
     });
   }
   togglePopover(){
-    this.setState({popoverOpen:!this.state.popoverOpen});
+    this.setState({popoverOpen:!this.state.popoverOpen}, function(){
+      $('.float-label').jvFloat();
+    });
   }
   toggleUserType(evt){
     this.setState({

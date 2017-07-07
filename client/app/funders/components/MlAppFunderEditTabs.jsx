@@ -2,6 +2,7 @@ import React, { Component, PropTypes }  from "react";
 import {render} from "react-dom";
 import MlTabComponent from "../../../commons/components/tabcomponent/MlTabComponent";
 import _ from 'lodash'
+import {getProfileBasedOnPortfolio} from '../../../app/calendar/manageScheduler/service/actions/MlServiceActionHandler'
 import MlFunderAbout from '../../../admin/transaction/portfolio/component/Funder/MlFunderAbout'
 import MlFunderAreaOfInterest from '../../../admin/transaction/portfolio/component/Funder/MlFunderAreaOfInterest'
 import MlFunderEngagementMethod from '../../../admin/transaction/portfolio/component/Funder/MlFunderEngagementMethod'
@@ -10,6 +11,8 @@ import MlFunderLibrary from '../../../admin/transaction/portfolio/component/Fund
 import MlFunderNews from '../../../admin/transaction/portfolio/component/Funder/MlFunderNews'
 import MlFunderPrincipalTeam from '../../../admin/transaction/portfolio/component/Funder/MlFunderPrincipalTeam'
 import MlFunderSuccessStories from '../../../admin/transaction/portfolio/component/Funder/MlFunderSuccessStories'
+import MlFunderServices from '../../../admin/transaction/portfolio/component/Funder/MlFunderServices'
+import FunderCreateServicesView from '../../../admin/transaction/portfolio/component/Funder/funderCreateServicesView'
 
 export default class MlAppFunderEditTabs extends React.Component{
   constructor(props){
@@ -18,7 +21,9 @@ export default class MlAppFunderEditTabs extends React.Component{
     this.getChildContext.bind(this)
     this.getInvestmentsDetails.bind(this);
     this.getFunderNewsDetails.bind(this);
-    this.getFunderLibrary.bind(this)
+    this.getFunderLibrary.bind(this);
+    this.getServiceDetails.bind(this);
+    this.saveDataToServices.bind(this);
   }
 
   getChildContext(){
@@ -49,7 +54,8 @@ export default class MlAppFunderEditTabs extends React.Component{
       {tabClassName: 'tab', panelClassName: 'panel', title:"Area Of Interests" , component:<MlFunderAreaOfInterest key="6" getAreaOfInterestDetails={this.getAreaOfInterestDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Success Stories" , component:<MlFunderSuccessStories key="7" getSuccessStoriesDetails={this.getSuccessStoriesDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlFunderLibrary key="8" getFunderLibrary={this.getFunderLibrary.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"News" , component:<MlFunderNews key="9" getFunderNewsDetails={this.getFunderNewsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>}
+      {tabClassName: 'tab', panelClassName: 'panel', title:"News" , component:<MlFunderNews key="9" getFunderNewsDetails={this.getFunderNewsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Services" , component:<FunderCreateServicesView key="10" getServiceDetails={this.getServiceDetails.bind(this)}  portfolioDetailsId={this.props.portfolioDetailsId}/>} //getFunderServicesDetails={this.getFunderServicesDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}
     ]
     return tabs;
   }
@@ -102,6 +108,25 @@ export default class MlAppFunderEditTabs extends React.Component{
     data['areaOfInterest'] = details;
     this.setState({funderPortfolio : data})
     this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio});
+  }
+
+  getServiceDetails(details){
+    if(details.services){
+      let portfolioId = details.portfolioId;
+      console.log()
+      this.saveDataToServices(portfolioId)
+    }
+    console.log(details)
+    let data = this.state.funderPortfolio;
+    data['services'] = details;
+    this.setState({funderPortfolio : data})
+    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio});
+  }
+
+  async saveDataToServices(portfolioId){
+      const resp = await getProfileBasedOnPortfolio(portfolioId)
+      this.saveServiceDetails()
+      return resp
   }
 
   getFunderNewsDetails(details){

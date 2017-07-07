@@ -8,33 +8,46 @@ import gql from 'graphql-tag'
 import moment from 'moment'
 
 function dateFormatter (data){
-  let createdDateTime=data&&data.data&&data.data.date;
+  let createdDateTime=data&&data.data&&data.data.dateTime;
   return <div>{moment(createdDateTime).format('MM/DD/YYYY HH:mm:ss')}</div>;
 }
+
+function paymentFormatter(data) {
+  let isPaid = data && data.data && data.data.paymentDetails && data.data.paymentDetails && data.data.paymentDetails.isPaid ? true : false;
+  if(isPaid){
+    return (<div>Paid</div>);
+  } else {
+    return (<div>Not Paid</div>);
+  }
+}
+
 const mlOfficeTableConfig=new MlViewer.View({
   name:"officeTable",
   module:"office",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:['userId','userName','transactionId','clusterName','chapterName','subChapterName','communityName'],
-  searchFields:['userId','userName','transactionId','clusterName','chapterName','subChapterName','communityName'],
+  // fields:['userId','userName','transactionId','clusterName','chapterName','subChapterName','communityName'],
+  // searchFields:['userId','userName','transactionId','clusterName','chapterName','subChapterName','communityName'],
+  fields:['profileId','userName','transactionId','clusterName','chapterName','subChapterName','communityName'],
+  searchFields:['profileId','userName','transactionId','clusterName','chapterName','subChapterName','communityName'],
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   isExpandableRow:(row)=>{return true;},
   expandComponent:MlOfficeItem,
   columns:[
-    {dataField: "createdAt", title: "Date & Time",dataSort:true,customComponent:dateFormatter},
+    {dataField: "dateTime", title: "Date & Time",dataSort:true,customComponent:dateFormatter},
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "userId", title: "UserId",dataSort:true},
+    // {dataField: "userId", title: "UserId",dataSort:true},
+    {dataField: "profileId", title: "UserId",dataSort:true},
     {dataField: "userName", title: "Name",dataSort:true},
     {dataField: "transactionId", title: "Trans Id"},
     {dataField:"clusterName", title:"Cluster"},
     {dataField:"chapterName", title:"Chapter"},
     {dataField:"subChapterName", title:"Sub Chapter"},
     {dataField:"communityName", title:"Community"},
-    {dataField:"updatedBy", title:"Payment"},
     {dataField:"status", title:"Status"},
+    {dataField:"paymentDetails", title:"Payment" , customComponent : paymentFormatter},
     {dataField:"updatedAt", title:"Action"},
   ],
   tableHeaderClass:'react_table_head',
@@ -55,6 +68,11 @@ const mlOfficeTableConfig=new MlViewer.View({
                       transactionId
                       status
                       userName
+                      dateTime
+                      profileId
+                      paymentDetails{
+                        isPaid
+                      }
                     }
                     }
               }

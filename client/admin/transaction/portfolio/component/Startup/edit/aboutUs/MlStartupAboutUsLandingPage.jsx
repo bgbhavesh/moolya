@@ -39,7 +39,6 @@ export default class MlStartupAboutUs extends React.Component{
 
   render(){
     let aboutUsImages=null;
-    console.log("dsfsdfdsfsdfds")
     console.log(this.state.startupAboutUs.aboutUs);
     let startupAboutUs=this.state.startupAboutUs;
     if(startupAboutUs){

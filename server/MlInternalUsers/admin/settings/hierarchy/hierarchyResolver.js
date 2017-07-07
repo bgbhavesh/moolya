@@ -23,6 +23,28 @@ MlResolver.MlQueryResolver['fetchMoolyaBasedDepartmentAndSubDepartment'] = (obj,
   return list;
 }
 
+MlResolver.MlQueryResolver['fetchNonMoolyaBasedDepartmentAndSubDepartments'] = (obj, args, context, info) => {
+  console.log("fetchNonMoolyaBasedDepartmentAndSubDepartment")
+  let list = [];
+  let resp = mlDBController.find('MlDepartments', {
+    $and: [
+      {isMoolya:false},
+      {"depatmentAvailable.cluster": {$in: ["all", args.clusterId]}},
+      {"depatmentAvailable.subChapter": {$in: ["all", args.subChapterId]}}
+    ]
+  }, context).fetch()
+  resp.map(function (department) {
+    let subDepartments = MlSubDepartments.find({"departmentId": department._id}).fetch();
+    subDepartments.map(function (subDepartment) {
+      let deptAndSubDepartment = null
+      deptAndSubDepartment ={departmentId:department._id,departmentName:department.departmentName,subDepartmentId:subDepartment._id,subDepartmentName:subDepartment.subDepartmentName,isMoolya:department.isMoolya,isActive:department.isActive}
+      list.push(deptAndSubDepartment)
+    })
+  })
+
+  return list;
+}
+
 
 MlResolver.MlMutationResolver['updateHierarchyRoles'] = (obj, args, context, info) => {
  /* let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
@@ -183,11 +205,31 @@ MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info
     }
 
   }
+  //removing roles whose reporting role is selected for current role
+  let teamStructureAssignment = args.roles
+  /*teamStructure.map(function (selectedRole) {
+    if(selectedRole.reportingRole==args.currentRoleId){
+      filteredRole = _.reject(filteredRole, {_id: selectedRole.roleId});
+    }
+  })*/
+
+  let currentRole = args.currentRoleId;
+  for (i = 0; i < teamStructureAssignment.length; i++) {
+    for (j = 0; j < teamStructureAssignment.length; j++) {
+      let role = teamStructureAssignment[j];
+      if (role.reportingRole == currentRole && role.isAssigned === true) {
+        filteredRole = _.reject(filteredRole, {_id: role.roleId});
+        currentRole = role.roleId
+        break;
+      }
+    }
+  }
+
 
   return filteredRole;
 }
 
-MlResolver.MlQueryResolver['fetchRolesForFinalApprovalHierarchy'] = (obj, args, context, info) => { //
+/*MlResolver.MlQueryResolver['fetchRolesForFinalApprovalHierarchy'] = (obj, args, context, info) => { //
   let roles = [];
   let levelCode = "";
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
@@ -214,13 +256,12 @@ MlResolver.MlQueryResolver['fetchRolesForFinalApprovalHierarchy'] = (obj, args, 
     roles = valueGet;
   }
   return roles;
-}
+}*/
 
 MlResolver.MlQueryResolver['fetchRolesForFinalApprovalHierarchy'] = (obj, args, context, info) => {
   let response;
-  let levelCode = "";
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
-  if (department && department.isActive) {
+  if (department && department.isActive && department.isSystemDefined===false) {
       response = mlDBController.findOne('MlHierarchyAssignments', {
         parentDepartment: args.departmentId,
         parentSubDepartment: args.subDepartmentId,
@@ -238,6 +279,30 @@ MlResolver.MlQueryResolver['fetchRolesForFinalApprovalHierarchy'] = (obj, args, 
      //response.teamStructureAssignment = filteredSteps;
     return filteredSteps;
    }
+  }else if (department && department.isActive && department.isSystemDefined===true){
+    let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles.department": {"$in": [args.departmentId]}}, {"isActive": true}]}, context).fetch()
+    _.each(valueGet, function (item, say) {
+      let ary = []
+      _.each(item.assignRoles, function (value, key) {
+        if ( value.cluster == 'all') {
+          if (value.isActive) {
+            ary.push(value);
+          }
+        }
+      })
+      item.assignRoles = ary
+    })
+    _.each(valueGet, function (item, key) {
+      if (item) {
+        if (item.assignRoles.length < 1) {
+          valueGet.splice(key, 1)
+        }
+      }
+    })
+    response = valueGet;
+    response.map(function (role) {
+      role.roleId = role._id
+    })
   }
   return response;
 }

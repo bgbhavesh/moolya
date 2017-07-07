@@ -11,16 +11,15 @@ export default class MlFunderAboutView extends React.Component{
     super(props);
     this.state={
       loading: true,
-      data:{}
+      data:{},
     }
     this.fetchPortfolioDetails.bind(this);
     return this;
   }
-  componentDidMount()
-  {
-  }
+
   componentWillMount(){
-    this.fetchPortfolioDetails();
+    const resp = this.fetchPortfolioDetails();
+    return resp;
   }
   async fetchPortfolioDetails() {
     let that = this;
@@ -31,6 +30,10 @@ export default class MlFunderAboutView extends React.Component{
       if (response) {
         this.setState({loading: false, data: response});
       }
+
+      _.each(response.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
     }else{
       this.setState({loading: false, data: that.context.funderPortfolio.funderAbout});
     }
@@ -138,7 +141,7 @@ export default class MlFunderAboutView extends React.Component{
                             {/*<input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />*/}
                             {/*</div>*/}
                             <div className="previewImg ProfileImg">
-                              <img src="/images/def_profile.png"/>
+                              <img src={this.state.data.profilePic?this.state.data.profilePic:"/images/def_profile.png"}/>
                             </div>
                           </div>
                           <div className="clearfix"></div>

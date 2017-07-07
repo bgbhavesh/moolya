@@ -9,6 +9,10 @@ let KycCategoriesSchema = `
       docCategoryDisplayName :String
       about :String
       _id :String
+      createdBy     :  String
+      createdDate   :  Date
+      updatedBy     :  String
+      updatedDate   :  Date
       isActive :Boolean
     }
     input kycCategoryObject{
@@ -16,7 +20,11 @@ let KycCategoriesSchema = `
         docCategoryDisplayName :String,
         about :String,
         _id :String,
-        isActive :Boolean
+        createdBy     : String
+        createdDate   : Date
+        updatedBy     : String
+        updatedDate   : Date
+        isActive      : Boolean
     }
     
    type Mutation 

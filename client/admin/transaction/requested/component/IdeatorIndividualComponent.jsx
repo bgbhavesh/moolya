@@ -161,7 +161,7 @@ export default class IdeatorIndividualComponent extends React.Component{
     var ageDifMs = Date.now() - event._d.getTime();
     var ageDate = new Date(ageDifMs);
     if (event._d) {
-      let value = moment(event._d).format('DD-MM-YYYY');
+      let value = moment(event._d).format('MM/DD/YYYY');
       this.setState({loading: false, dateOfBirth: value});
     }
     if((Math.abs(ageDate.getUTCFullYear() - 1970)>10)){

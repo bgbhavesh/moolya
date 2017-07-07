@@ -8,6 +8,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import {addAssets} from '../actions/addAssetsAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import MlLoader from '../../../../commons/components/loader/loader'
 class MlAddAssets extends React.Component {
   constructor(props) {
@@ -38,18 +39,23 @@ class MlAddAssets extends React.Component {
     }
   };
 
-  async createAsset()
-  {
-    let assetInfo = {
-      assetName: this.refs.name.value,
-      displayName: this.refs.displayName.value,
-      about: this.refs.about.value,
-      isActive: this.refs.isActive.checked,
-      // icon:this.refs.assetIcon.files
-    }
+  async createAsset() {
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let assetInfo = {
+        assetName: this.refs.name.value,
+        displayName: this.refs.displayName.value,
+        about: this.refs.about.value,
+        isActive: this.refs.isActive.checked,
+        // icon:this.refs.assetIcon.files
+      }
 
-    const response = await addAssets(assetInfo)
-    return response;
+      const response = await addAssets(assetInfo)
+      toastr.success("Asset Created Successfully")
+      return response;
+    }
   }
   componentDidMount()  {
     OnToggleSwitch(false,true);
@@ -82,8 +88,8 @@ class MlAddAssets extends React.Component {
                 <div className="col-md-6 nopadding-left">
                     <div className="form_bg">
                         <form>
-                            <div className="form-group">
-                                <input type="text" ref="name" placeholder="Name" className="form-control float-label"/>
+                            <div className="form-group mandatory">
+                                <input type="text" ref="name" placeholder="Name" className="form-control float-label" data-required={true} data-errMsg="Name is required"/>
                             </div>
                             <div className="form-group">
                                 <textarea ref="about" placeholder="About" className="form-control float-label" id=""></textarea>
@@ -94,8 +100,8 @@ class MlAddAssets extends React.Component {
               <div className="col-md-6 nopadding-right">
                 <div className="form_bg">
                   <form>
-                    <div className="form-group">
-                        <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label"/>
+                    <div className="form-group mandatory">
+                        <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" data-required={true} data-errMsg="Display Name is required"/>
                     </div>
 
                     <div className="form-group">

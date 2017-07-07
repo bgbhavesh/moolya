@@ -3,7 +3,6 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 // import InteractionsCounter from '../../components/InteractionsCounter'
-// import AppActionButtons from '../../components/appActionButtons'
 
 export default class AppStartupManagement extends React.Component{
   componentDidMount()

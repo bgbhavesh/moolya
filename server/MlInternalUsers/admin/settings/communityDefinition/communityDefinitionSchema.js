@@ -20,6 +20,7 @@ let CommunityDefinition = `
       fetchCommunityDefinition:[CommunityDefinition]
        fetchCommunityDefinitionForSelect:[CommunityDefinition]
        fetchCommunityDefinitionAPI:[CommunityDefinition]
+         fetchCommunityDefinitionForProcessMapping:[CommunityDefinition]
     }
 `
 
@@ -28,5 +29,6 @@ let supportedApi = [
     {api:'fetchCommunityDefinition', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
     {api:'fetchCommunityDefinitionForSelect', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
     {api:'fetchCommunityDefinitionAPI', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
+  {api:'fetchCommunityDefinitionForProcessMapping', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

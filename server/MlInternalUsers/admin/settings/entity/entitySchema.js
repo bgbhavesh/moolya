@@ -8,6 +8,10 @@ let Entity = `
       entityDisplayName :String
       about: String
       _id:String
+      createdBy     : String
+      createdDate   : Date
+      updatedBy     : String
+      updatedDate   : Date
       isActive:Boolean
     }
     type Mutation{
@@ -24,7 +28,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], Entity]);
 
 let supportedApi = [
   {api:'FindEntity', actionName:'READ', moduleName:"ENTITY"},
-  {api:'fetchEntities', actionName:'READ', moduleName:"ENTITY"},
+  {api:'fetchEntities', actionName:'READ', moduleName:"ENTITY", isWhiteList:true},
 
   {api:'CreateEntity', actionName:'CREATE', moduleName:"ENTITY"},
   {api:'UpdateEntity', actionName:'UPDATE', moduleName:"ENTITY"}

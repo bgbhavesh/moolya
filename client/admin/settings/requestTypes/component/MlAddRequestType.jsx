@@ -7,7 +7,7 @@ import {addRequestActionHandler} from '../actions/addRequestTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
-
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 
 
 let FontAwesome = require('react-fontawesome');
@@ -15,7 +15,7 @@ class MlAddRequestType extends React.Component{
   constructor(props) {
     super(props);
     this.state = {transactionId: ' ',
-      transactionType: ' '
+      transactionType: null
     }
     this.addEventHandler.bind(this);
     this.createRequestType.bind(this)
@@ -42,17 +42,22 @@ class MlAddRequestType extends React.Component{
   };
 
   async  createRequestType() {
-    let RequestTypeDetails = {
-      requestName: this.refs.requestName.value,
-      displayName: this.refs.displayName.value,
-      requestDesc: this.refs.requestDesc.value,
-      isActive: this.refs.isActive.checked,
-      transactionType:this.state.transactionType,
-      transactionId:this.state.transactionId
-    };
-    const response = await addRequestActionHandler(RequestTypeDetails);
-    return response;
-
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let RequestTypeDetails = {
+        requestName: this.refs.requestName.value,
+        displayName: this.refs.displayName.value,
+        requestDesc: this.refs.requestDesc.value,
+        isActive: this.refs.isActive.checked,
+        transactionType: this.state.transactionType,
+        transactionId: this.state.transactionId
+      };
+      const response = await addRequestActionHandler(RequestTypeDetails);
+      toastr.success("Request Type Created Successfully")
+      return response;
+    }
   }
   componentDidMount()
   {
@@ -94,8 +99,8 @@ class MlAddRequestType extends React.Component{
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
-                <div className="form-group">
-                  <input type="text" ref="requestName" placeholder="Name" className="form-control float-label" id=""/>
+                <div className="form-group mandatory">
+                  <input type="text" ref="requestName" placeholder="Name" className="form-control float-label" id="" data-required={true} data-errMsg="Request name is required"/>
                 </div>
                 <div className="form-group">
                   <textarea  ref="requestDesc" placeholder="About" className="form-control float-label" id=""></textarea>
@@ -107,11 +112,11 @@ class MlAddRequestType extends React.Component{
           <div className="col-md-6 nopadding-right">
             <div className="form_bg">
               <form>
-                <div className="form-group">
-                  <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id=""/>
+                <div className="form-group mandatory">
+                  <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" id="" data-required={true} data-errMsg="DisplayName is required"/>
                 </div>
                 <div className="form-group">
-                  <Moolyaselect multiSelect={false} placeholder="Transaction Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.transactionType} queryType={"graphql"}  query={transactionType} onSelect={this.optionBySelectTransactionType.bind(this)} isDynamic={true}/>
+                  <Moolyaselect ref="transactionType" mandatory={true} multiSelect={false} placeholder="Transaction Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.transactionType} queryType={"graphql"}  query={transactionType} onSelect={this.optionBySelectTransactionType.bind(this)} isDynamic={true} data-required={true} data-errMsg="Transaction type is required"/>
                 </div>
 
                 <div className="form-group switch_wrap inline_switch">

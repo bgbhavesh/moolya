@@ -5,25 +5,39 @@ import {upsertRegionalActionHandler} from '../actions/upsertRegionalAction'
 import {findRegionalActionHandler} from '../actions/findRegionalAction'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
-import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {initalizeFloatLabel,OnToggleSwitch} from '../../../utils/formElemUtil';
 import MlLoader from '../../../../commons/components/loader/loader'
-
+import gql from 'graphql-tag'
+import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
 import ScrollArea from 'react-scrollbar';
-
+let Select = require('react-select');
 class MlRegional extends React.Component{
   constructor(props) {
     super(props);
     this.state={
+      numberOfDigitsAfterDecimal: '',
+      metricnumberOfDigitsAfterDecimal:'',
+      measurementSystem:'',
+      // currencyFormat:'',
+      // currencySymbol:'',       /*unused state*/
+      valueSeparator:'',
       data:[],
       loading:true
     }
     this.addEventHandler.bind(this);
     this.createRegional.bind(this);
     return this;
-  }s
+  }
+
+   componentDidMount() {
+   if(this.state.data.isAcive){
+   $('#status').prop('checked', true);
+   }
+ }
 
   componentDidUpdate() {
     initalizeFloatLabel();
+    OnToggleSwitch(true,true);
     var WinHeight = $(window).height();
     $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));
   }
@@ -36,6 +50,24 @@ class MlRegional extends React.Component{
     const response = await findRegionalActionHandler();
     if(response.length>0) {
       this.setState({loading: false, data: response[0].regionalInfo});
+       if (this.state.data.numberOfDigitsAfterDecimal) {
+          this.setState({numberOfDigitsAfterDecimal: this.state.data.numberOfDigitsAfterDecimal});
+       }
+       if(this.state.data.metricnumberOfDigitsAfterDecimal){
+         this.setState({metricnumberOfDigitsAfterDecimal: this.state.data.metricnumberOfDigitsAfterDecimal});
+       }
+       if (this.state.data.measurementSystem) {
+          this.setState({measurementSystem: this.state.data.measurementSystem});
+        }
+       // if (this.state.data.currencyFormat) {
+       //    this.setState({measurementSystem: this.state.data.measurementSystem});
+       // }
+       if (this.state.data.currencySymbol) {
+        this.setState({currencySymbol: this.state.data.currencySymbol});
+        }
+        if (this.state.data.valueSeparator) {
+         this.setState({valueSeparator: this.state.data.valueSeparator});
+       }
     }else{
       this.setState({loading: false});
     }
@@ -52,7 +84,7 @@ class MlRegional extends React.Component{
 
   async handleSuccess(response) {
     if(response){
-      toastr.error('Successfully Saved');
+      toastr.success('Successfully Saved');
       FlowRouter.go("/admin/settings/regionalsList");
     }
 
@@ -67,14 +99,73 @@ class MlRegional extends React.Component{
       regionalCurrencyName: this.refs.currencyName.value,
       regionalCurrencyMarking: this.refs.currencyMarking.value,
       regionalZipFormat: this.refs.zipcodeFormat.value,
-      regionalCurrencySymbol: this.refs.currencySymbol.value,
+      // regionalCurrencySymbol: this.refs.currencySymbol.value,       /*unused refs*/
       regionalCurrencyValue: this.refs.currencyValue.value,
       aboutRegion: this.refs.about.value,
+      numberOfDigitsAfterDecimal:this.state.numberOfDigitsAfterDecimal,
+      metricnumberOfDigitsAfterDecimal:this.state.metricnumberOfDigitsAfterDecimal,
+      measurementSystem: this.state.measurementSystem,
+      // currencyFormat: this.state.currencyFormat,
+      currencySymbol: this.state.currencySymbol,
+      valueSeparator: this.state.valueSeparator,
     }
     const response = await upsertRegionalActionHandler(regionalInfo);
     return response;
 
   }
+   optionsBySelectNumberOfDigitsAfterDecimal(data){
+    if(data) {
+      this.setState({numberOfDigitsAfterDecimal: data.value})
+    }
+    else{
+      this.setState({numberOfDigitsAfterDecimal: ''})
+    }
+   }
+  optionsBySelectMetricNumberOfDigitsAfterDecimal(data){
+     if(data){
+       this.setState({metricnumberOfDigitsAfterDecimal:data.value})
+     }
+    else{
+       this.setState({metricnumberOfDigitsAfterDecimal:''})
+     }
+  }
+    optionsBySelectMeasurementSystem(data) {
+      if (data) {
+        this.setState({measurementSystem: data.value})
+      }
+      else {
+        this.setState({measurementSystem:''})
+      }
+    }
+     optionsBySelectValueSeparator(data){
+    if(data){
+      this.setState({valueSeparator:data.value})
+    }
+        else {
+      this.setState({valueSeparator:''})
+    }
+     }
+    optionsBySelectCurrencySymbol(val){
+       this.setState({currencySymbol:val})
+     }
+//@ to Validate the length of the Phone Number
+   handleBlur(){
+     //var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+       if((this.refs.phoneNumberFormat.value.match('^[0-9]+$')) &&(this.refs.phoneNumberFormat.value.length >=3) && (this.refs.phoneNumberFormat.value.length <=15) ){
+         return true;
+       }else{
+           toastr.error("Please Enter Valid Phone Number")
+       }
+   }
+     // onStatusChange(e){
+     //  const data=this.state.data;
+     //    if(e.currentTarget.checked){
+     //       this.setState({"currencyFormat":true});
+     //       }else{
+     //       this.setState({"currencyFormat":false});
+     //    }
+     // }
+
   render(){
     let MlActionConfig = [
 
@@ -91,6 +182,45 @@ class MlRegional extends React.Component{
         }
       }
     ];
+     let clusterquery=gql` query{  
+          data:fetchCurrency{
+         label:currencyName
+         value:_id
+        }  
+     }`;
+     let decimalsLimit = [
+       {value: '0', label: '0'},
+       {value: '1', label: '1'},
+       {value: '2', label: '2'},
+       {value: '3', label: '3'},
+    ]
+     let measurementType = [
+        {value: 'US System', label: 'US System'},
+        {value: 'Metric System', label: 'Metric System'},
+     ]
+      let valueSeperators = [
+       {value: ',', label: ','},
+       {value: '.', label: '.'},
+       {value: '/', label: '/'},
+       {value: '_', label: '_'},
+       {value: ';', label: ';'},
+       {value: ':', label: ':'},
+       {value: '-', label: '-'},
+
+      ]
+    let numberOfDigitsAfterDecimalActive='',measurementSystemActive='',valueSeparatorActive='', metricnumberOfDigitsAfterDecimalActive=''
+      if(this.state.numberOfDigitsAfterDecimal){
+         numberOfDigitsAfterDecimalActive='active'
+      }
+      if(this.state.measurementSystem){
+         measurementSystemActive='active'
+      }
+         if(this.state.valueSeparator){
+         valueSeparatorActive='active'
+         }
+         if(this.state.metricnumberOfDigitsAfterDecimal){
+           metricnumberOfDigitsAfterDecimalActive='active'
+         }
     const showLoader=this.state.loading;
     return (
       <div>
@@ -108,14 +238,25 @@ class MlRegional extends React.Component{
                       <input type="text" ref="capitalName" defaultValue={this.state.data && this.state.data.capitalName} placeholder="Capital" className="form-control float-label"/>
                     </div>
                     <div className="form-group">
-                      <input type="text" ref="phoneNumberFormat" defaultValue={this.state.data && this.state.data.regionalPhoneNumber} placeholder="Phone Number Format" className="form-control float-label" id=""/>
+                      <input type="text" ref="phoneNumberFormat" defaultValue={this.state.data && this.state.data.regionalPhoneNumber} placeholder="Phone Number Length" className="form-control float-label" id="" onBlur={this.handleBlur.bind(this)}/>
                     </div>
                     <div className="form-group">
                       <input type="text" ref="currencyName" defaultValue={this.state.data && this.state.data.regionalCurrencyName} placeholder="Currency Name" className="form-control float-label" id=""/>
                     </div>
                     <div className="form-group">
-                      <input type="text" ref="currencyMarking" defaultValue={this.state.data && this.state.data.regionalCurrencyMarking} placeholder="Currency Marking" className="form-control float-label" id=""/>
+                      <input type="text" ref="currencyMarking" defaultValue={this.state.data && this.state.data.regionalCurrencyMarking} placeholder="Currency Format" className="form-control float-label" id=""/>
                     </div>
+                    <div className="form-group">
+                         <span className={`placeHolder ${numberOfDigitsAfterDecimalActive}`}>Currency-Number Of Digits After Decimal </span>
+                      <Select  name="form-field-name"  options={decimalsLimit} placeholder={"Number Of Digits After Decimal"}  value={this.state.numberOfDigitsAfterDecimal} onChange={this.optionsBySelectNumberOfDigitsAfterDecimal.bind(this)} className="float-label" />
+                    </div>
+                    <div className="form-group">
+                          <Moolyaselect multiSelect={false}  placeholder={"Currency Symbol"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.currencySymbol} queryType={"graphql"} query={clusterquery}  isDynamic={true} id={'query'}  onSelect={this.optionsBySelectCurrencySymbol.bind(this)} />
+                    </div>
+                      <div className="form-group">
+                       <span className={`placeHolder ${valueSeparatorActive}`}>Currency Value Separator</span>
+                        <Select  name="form-field-name"  options={valueSeperators} placeholder={" Currency Value Separator"}   value={this.state.valueSeparator} onChange={this.optionsBySelectValueSeparator.bind(this)}   className="float-label"/>
+                      </div>
                   </form>
                 </div>
               </div>
@@ -136,14 +277,30 @@ class MlRegional extends React.Component{
 
                       </div>
                       <div className="form-group">
-                        <input type="text" ref="zipcodeFormat" defaultValue={this.state.data && this.state.data.regionalZipFormat} placeholder="Zipcode Format" className="form-control float-label" id=""/>
+                        <input type="text" ref="zipcodeFormat" defaultValue={this.state.data && this.state.data.regionalZipFormat} placeholder="ZipCode" className="form-control float-label" id=""/>
                       </div>
-                      <div className="form-group">
-                        <input type="text" ref="currencySymbol" defaultValue={this.state.data && this.state.data.regionalCurrencySymbol} placeholder="Currency Symbol" className="form-control float-label" id=""/>
-                      </div>
+                      {/*<div className="form-group">*/}   {/*duplicate used*/}
+                        {/*<input type="text" ref="currencySymbol" defaultValue={this.state.data && this.state.data.regionalCurrencySymbol} placeholder="Currency Symbol" className="form-control float-label" id=""/>*/}
+                      {/*</div>*/}
                       <div className="form-group">
                         <input type="text" ref="currencyValue" defaultValue={this.state.data && this.state.data.regionalCurrencyValue} placeholder="Currency Value" className="form-control float-label" id=""/>
                       </div>
+                      <div className="form-group">
+                      <span className={`placeHolder ${measurementSystemActive}`}>Measurement System </span>
+                      <Select  name="form-field-name"  options={measurementType} placeholder={"Measurement System"}  value={this.state.measurementSystem} onChange={this.optionsBySelectMeasurementSystem.bind(this)}  className="float-label" />
+                        </div>
+                      <div className="form-group">
+                        <span className={`placeHolder ${ metricnumberOfDigitsAfterDecimalActive}`}>MetricSystem-Number Of Digits After Decimal </span>
+                        <Select  name="form-field-name"  options={decimalsLimit} placeholder={"MetricSystem-Number Of Digits After Decimal"}  value={this.state.metricnumberOfDigitsAfterDecimal} onChange={this.optionsBySelectMetricNumberOfDigitsAfterDecimal.bind(this)} className="float-label" />
+                      </div>
+                      <br className="brclear"/> <br className="brclear"/> <br className="brclear"/> <br className="brclear"/> <br className="brclear"/>
+                         {/*<div className="form-group switch_wrap inline_switch">*/}
+                         {/*<label>Currency Format</label>*/}
+                           {/*<label className="switch">*/}
+                             {/*<input type="checkbox" ref="status"  checked={this.state.currencyFormat} onChange={this.onStatusChange.bind(this)}/>*/}
+                             {/*<div className="slider"></div>*/}
+                              {/*</label>*/}
+                         {/*</div>*/}
                       <br className="brclear"/>
                     </form>
                   </ScrollArea>

@@ -9,18 +9,20 @@ import { check } from 'meteor/check';
 import { Accounts } from 'meteor/accounts-base';
 import bodyParser from 'body-parser';
 import express from 'express';
+import _ from 'lodash';
 
 import getContext from '../commons/mlAuthContext'
 import MlResolver from '../commons/mlResolverDef';
 import MlSchemaDef from '../commons/mlSchemaDef';
 import MlRespPayload from '../commons/mlPayload';
-import _ from 'lodash';
+import mlserviceCardHandler from '../MlExternalUsers/userSubscriptions/serviceCardHandler'
+
 let cors = require('cors');
 let multipart 	= require('connect-multiparty'),
     fs 			    = require('fs'),
     multipartMiddleware = multipart();
 
-const resolvers=_.extend({Query: MlResolver.MlQueryResolver,Mutation:MlResolver.MlMutationResolver},MlResolver.MlUnionResolver);
+const resolvers=_.extend({Query: MlResolver.MlQueryResolver,Mutation:MlResolver.MlMutationResolver},MlResolver.MlUnionResolver,MlResolver.MlScalarResolver);
 const typeDefs = MlSchemaDef['schema']
 const executableSchema = makeExecutableSchema({
   typeDefs,
@@ -29,10 +31,10 @@ const executableSchema = makeExecutableSchema({
 
 // default server configuration object
 const defaultServerConfig = {
-  path: '/graphqlApp',
+  path: '/moolya',
   configServer: graphQLServer => {},
   graphiql: Meteor.isDevelopment,
-  graphiqlPath: '/graphiql',
+  graphiqlPath: '/graphiqlApp',
   paymentReturnUrlPath:'/moolyaPaymentStatus',
   graphiqlOptions : {
     passHeader : "'meteor-login-token': localStorage['Meteor.loginToken']"
@@ -66,7 +68,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>
     }
     const graphQLServer = express();
     config.configServer(graphQLServer)
-    graphQLServer.use(config.path, bodyParser.json(), graphqlExpress(async (req) =>
+    graphQLServer.use(config.path, bodyParser.json(), graphqlExpress(async (req, res) =>
     {
         try {
             const customOptionsObject = typeof customOptions === 'function' ? customOptions(req) : customOptions;
@@ -76,6 +78,16 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>
                ...customOptionsObject,
             };
             context = getContext({req});
+            if(!context||!context.userId){
+              res.json({unAuthorized:true,message:"Invalid Token"})
+              return;
+            }
+
+            let ret = mlserviceCardHandler.validateResource(req.body.query, context, req.body.variables);
+            if(!ret.success){
+                res.json({success:ret.success, message:ret.msg})
+                return
+            }
             return {
                 schema  : executableSchema,
                 context : context

@@ -1,15 +1,15 @@
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-var Select = require('react-select');
-var FontAwesome = require('react-fontawesome');
-import {fetchProcessSetupHandler} from '../actions/fetchProcessSetupHandler'
-import {updateProcessSetupActionHandler, updateProcessTransaction} from '../actions/updateProcessSetupAction'
-import {initalizeFloatLabel} from '../../../utils/formElemUtil'
+import React from "react";
+import {render} from "react-dom";
+import {BootstrapTable, TableHeaderColumn} from "react-bootstrap-table";
+import {fetchProcessSetupHandler} from "../actions/fetchProcessSetupHandler";
+import {updateProcessSetupActionHandler, updateProcessTransaction} from "../actions/updateProcessSetupAction";
+import {initalizeFloatLabel,OnToggleSwitch} from "../../../utils/formElemUtil";
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import MoolyaSelect from "../../../../commons/components/select/MoolyaSelect";
+import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
+import _ from "lodash";
+var FontAwesome = require('react-fontawesome');
 
 export default class MlProcessSetupDetailsComponent extends React.Component {
   constructor(props){
@@ -33,6 +33,9 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
   componentDidMount() {
     initalizeFloatLabel();
   }
+  componentDidUpdate(){
+    OnToggleSwitch(true,true);
+  }
 
   componentWillReceiveProps(newProps){
     let userId=newProps.data.userId
@@ -45,12 +48,12 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
 
   addStageComponent(e){
     this.setState({
-      stages: this.state.stages.concat([{stageId: "", isActive:false, stageActions: [{actionId: "",actionType:"",isActive:false,}]}])
+      stages: this.state.stages.concat([{stageId: "", isActive:false, stageActions: [{actionId: "",actionType:"",isActive:false}]}])
     })
   }
   addActionComponent(sIdx, e){
     let stages = this.state.stages
-    let action = stages[sIdx].stageActions.concat([{actionId: "",actionType:"",isActive:false,}]);
+    let action = stages[sIdx].stageActions.concat([{actionId: "",actionType:"",isActive:false}]);
     stages[sIdx].stageActions = action;
     this.setState({stages:stages})
   }
@@ -59,36 +62,58 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
     let stages = this.state.stages;
     stages[sIdx]['stageId'] = selectedValue;
     this.setState({stages: stages});
-    this.sendDataToParent();
   }
   optionsBySelectAction(sIdx, aIdx, selectedValue){
     let stages = this.state.stages
     stages[sIdx].stageActions[aIdx]['actionId'] = selectedValue;
     this.setState({stages:stages})
-    this.sendDataToParent();
   }
   onStageStatusChange(sIdx, e){
     let value = e.target.checked
     let stages = this.state.stages;
-    stages[sIdx]['isActive'] = value;
+    let cloneBackUp = _.cloneDeep(stages);
+    let specificBackup = cloneBackUp[sIdx];
+    specificBackup['isActive'] = value;
+    stages.splice(sIdx, 1);
+    stages.splice(sIdx, 0, specificBackup);
     this.setState({stages: stages});
-    this.sendDataToParent();
   }
   onActionStatusChange(sIdx, aIdx, e){
     let value = e.target.checked
     let stages = this.state.stages
     stages[sIdx].stageActions[aIdx]['isActive'] = value;
     this.setState({stages:stages})
-    this.sendDataToParent();
   }
 
-  async sendDataToParent(){
+  async saveProcessSetup() {
     let stages = this.state.stages;
     let data = this.state.data;
-    let response = await updateProcessSetupActionHandler(data, stages);
-    return response;
+    this.loggedUserDetails = getAdminUserContext();
+    data = _.omit(data, '__typename')
+    let isValid = this.validateDetails(stages)
+    if(isValid && isValid.success){                               /*attaching login admin user context to query*/
+      let response = await updateProcessSetupActionHandler(data, isValid.result, this.loggedUserDetails);
+      if(response && response.success){
+        toastr.success("Saved Successfully");
+      }
+      return response;
+    }else{
+      toastr.error(isValid.result);
+    }
   }
 
+  validateDetails(stages) {
+    let data = _.clone(stages)
+    if (!_.isEmpty(data)) {
+      _.remove(data, {stageId:''})
+      if(!_.isEmpty(data)){
+        console.log(data)
+        return {success: true, result: data}
+      }else
+        return {success: false, result: 'Select atleast one stage'}
+    } else
+      return {success: false, result: 'Please enter Details'}
+  }
   async findProcessSetupDetails() {
     let id = this.props.data._id
     const response = await fetchProcessSetupHandler(id);
@@ -119,10 +144,16 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
     })
     if(!this.state.cost){
       toastr.error('Cost is required');
+      this.setState({
+        isGenerateLinkDisable:false
+      })
       return false;
     }
     if(this.state.cost < 1){
       toastr.error('Enter tha valid cost');
+      this.setState({
+        isGenerateLinkDisable:false
+      })
       return false;
     }
     let generateLinkInfo = {
@@ -143,21 +174,17 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
     }
   }
 
-  async acitvateOffice(){
-    if(this.state.officeInfo.isActive){
+  async acitvateOffice() {
+    if (this.state.officeInfo.isActive) {
       toastr.error('Office already activated');
       return false;
     }
-    // let response = await updateOfficeStatus(this.state.officeInfo._id);
-    // if(response.success){
-    //   toastr.success(response.result);
-    // } else {
-    //   toastr.error(response.result);
-    // }
   }
 
 
   render() {
+    let stageQuery = gql`query{data:fetchProcessStages {value:_id, label:name}}`;
+    let actionQuery = gql`query{data:fetchProcessActions {value:_id, label:displayName}}`;
     let that = this;
     let stages = that.state.stages;
     return (
@@ -182,37 +209,37 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="User Id" value={that.state.data.userId} className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="User Id" value={that.state.data.userId} className="form-control float-label" readOnly="true"/>
                 </div>
                 <div className="form-group ">
-                  <input type="text" placeholder="Transaction Id" value={that.state.data.transactionId} className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Transaction Id" value={that.state.data.transactionId} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Date & Time" value={that.state.data.dateTime} className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Date & Time" value={that.state.data.dateTime} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="clearfix"></div>
                 <div className="form-group">
-                  <input type="text" placeholder="Name" value={that.state.data.name} className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Name" value={that.state.data.name} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Email" value={that.state.data.username} className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Email" value={that.state.data.username} className="form-control float-label"  readOnly="true"/>
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Phone Number" value={that.state.data.mobileNumber} className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Phone Number" value={that.state.data.mobileNumber} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Cluster" value={that.state.data.clusterName} className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Cluster" value={that.state.data.clusterName} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Chapter" value={that.state.data.chapterName} className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Chapter" value={that.state.data.chapterName} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Sub Chapter" value={that.state.data.subChapterName} className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Sub Chapter" value={that.state.data.subChapterName} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Community" value={that.state.data.communityName} className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Community" value={that.state.data.communityName} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <br className="clearfix" />
               </div>
@@ -220,10 +247,9 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
           </div>
           <div className="tab-pane" id={`processSetup${that.props.data._id}`}>
             <div className="panel panel-default">
-              <div className="panel-heading">Add Stages<img src="../images/add.png" onClick={that.addStageComponent.bind(that)}/></div>
+              <div className="panel-heading">Add Stages<img className="pull-right" src="/images/add.png" onClick={that.addStageComponent.bind(that)}/></div>
               <div className="panel-body">
                 {that.state.stages.map(function (stage, sIdx) {
-                  let stageQuery = gql`query{data:fetchProcessStages {value:_id, label:name}}`;
                    return(
                      <div className="row" key={sIdx}>
                        <div className="col-md-6">
@@ -237,7 +263,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
                          </div>
                        </div>
                        <div className="col-md-6">
-                         <div className="form-group switch_wrap">
+                         <div className="form-group switch_wrap inline_switch small_sw">
                            <label>Status</label>
                            <label className="switch">
                              <input type="checkbox" checked={stage.isActive} onChange={that.onStageStatusChange.bind(that, sIdx)}/>
@@ -247,22 +273,21 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
                        </div>
                        <div className="col-md-12">
                          {stage.stageActions.map(function (action, aIdx) {
-                           let actionQuery = gql`query{data:fetchProcessStages {value:_id, label:name}}`;
                            return(
                              <div className="form_inner_block col-md-4" key={aIdx}>
-                               <div className="add_form_block"><img src="../images/add.png" onClick={that.addActionComponent.bind(that, sIdx)}/></div>
+                               <div className="add_form_block"><img src="/images/add.png" onClick={that.addActionComponent.bind(that, sIdx)}/></div>
                                <div className="form-group">
                                  <MoolyaSelect multiSelect={false} className="form-control float-label"
                                                valueKey={'value'}
                                                labelKey={'label'} queryType={"graphql"} query={actionQuery} isDynamic={true}
-                                               onSelect={that.optionsBySelectAction.bind(that, sIdx)}
+                                               onSelect={that.optionsBySelectAction.bind(that, sIdx, aIdx)}
                                                placeholder="Select Action"
-                                               selectedValue={sIdx}/>
+                                               selectedValue={action.actionId}/>
                                </div>
                                <div className="form-group">
-                                 <input type="text" placeholder="Type" className="form-control float-label" id="" />
+                                 <input type="text" placeholder="Type" className="form-control float-label" />
                                </div>
-                               <div className="form-group switch_wrap">
+                               <div className="form-group switch_wrap inline_switch small_sw">
                                  <label>Status</label>
                                  <label className="switch">
                                    <input type="checkbox" checked={action.isActive} onChange={that.onActionStatusChange.bind(that, sIdx, aIdx)}/>
@@ -279,6 +304,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
                 <hr/>
               </div>
             </div>
+            <a className="fileUpload mlUpload_btn" onClick={this.saveProcessSetup.bind(this)}>Save details</a>
           </div>
           <div className="tab-pane" id={`paymentDetails${that.props.data._id}`}>
             <div className="row">
@@ -287,11 +313,11 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
                   <div className="panel-heading">Generate payment link</div>
                   <div className="panel-body">
                     <div className="form-group">
-                      <input type="text" placeholder="Subscription Name" className="form-control float-label" id="" ref="subscriptionName"/>
+                      <input type="text" placeholder="Subscription Name" className="form-control float-label"  ref="subscriptionName"/>
                     </div>
                     <br className="brclear"/>
                     <div className="form-group ">
-                      <input type="number" onChange={(e)=>this.updateCost(e)} value={this.state.cost} placeholder="Cost" className="form-control float-label"/>
+                      <input type="Number" onChange={(e)=>this.updateCost(e)} value={this.state.cost} placeholder="Cost" min="0" className="form-control float-label"/>
                       <div className="email_notify">
                         <div className="input_types">
                           <input id="checkbox1" onChange={(e)=>this.updateTax(e)} checked={this.state.tax} type="checkbox" name="checkbox" value="1" /><label htmlFor="checkbox1"><span></span>TAX inclusive</label>
@@ -299,43 +325,43 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
                       </div>
                     </div>
                     <div className="form-group">
-                      <textarea onChange={(e)=>this.updateAbout(e)} value={this.state.about} placeholder="About" className="form-control float-label" id=""></textarea>
+                      <textarea onChange={(e)=>this.updateAbout(e)} defaultValue={this.state.about} placeholder="About" className="form-control float-label"></textarea>
                     </div>
-                    <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.generateLink()}>Genrate Link</a>
+                    <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.generateLink()}>Generate Link</a>
                     <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.acitvateOffice()}>Activate office</a>
                   </div>
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Transaction Date & Time" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.dateTime?that.state.data.paymentDetails.dateTime:""} className="form-control float-label" id="" readOnly={true}/>
+                  <input type="text" placeholder="Transaction Date & Time" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.dateTime?that.state.data.paymentDetails.dateTime:""} className="form-control float-label"  readOnly={true}/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Transaction ID" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.transactionId?that.state.data.paymentDetails.transactionId:""} className="form-control float-label" id="" readOnly={true}/>
+                  <input type="text" placeholder="Transaction ID" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.transactionId?that.state.data.paymentDetails.transactionId:""} className="form-control float-label"  readOnly={true}/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Total amount paid" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.totalAmountPaid?that.state.data.paymentDetails.totalAmountPaid:""} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Total amount paid" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.totalAmountPaid?that.state.data.paymentDetails.totalAmountPaid:""} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Payment mode" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.paymentMode?that.state.data.paymentDetails.paymentMode:""} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Payment mode" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.paymentMode?that.state.data.paymentDetails.paymentMode:""} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Card number" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.cardNumber?that.state.data.paymentDetails.cardNumber:""} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Card number" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.cardNumber?that.state.data.paymentDetails.cardNumber:""} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Card Holder name" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.cardHolderName?that.state.data.paymentDetails.cardHolderName:""} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Card Holder name" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.cardHolderName?that.state.data.paymentDetails.cardHolderName:""} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Promotion Code" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.promotionCode?that.state.data.paymentDetails.promotionCode:""} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Promotion Code" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.promotionCode?that.state.data.paymentDetails.promotionCode:""} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Code Amount" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.codeAmount?that.state.data.paymentDetails.codeAmount:""} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Code Amount" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.codeAmount?that.state.data.paymentDetails.codeAmount:""} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Status" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.promotionStatus?that.state.data.paymentDetails.promotionStatus:""} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Status" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.promotionStatus?that.state.data.paymentDetails.promotionStatus:""} className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Voucher Code" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.voucherCode?that.state.data.paymentDetails.voucherCode:""} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Voucher Code" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.voucherCode?that.state.data.paymentDetails.voucherCode:""} className="form-control float-label" />
                 </div>
               </div>
             </div>
@@ -344,18 +370,18 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Device Name" value={that.state.data.deviceDetails&&that.state.data.deviceDetails.deviceName?that.state.data.deviceDetails.deviceName:""} className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="Device Name" value={that.state.data.deviceDetails&&that.state.data.deviceDetails.deviceName?that.state.data.deviceDetails.deviceName:""} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group ">
-                  <input type="text" placeholder="Device Id" value={that.state.data.deviceDetails&&that.state.data.deviceDetails.deviceId?that.state.data.deviceDetails.deviceId:""} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Device Id" value={that.state.data.deviceDetails&&that.state.data.deviceDetails.deviceId?that.state.data.deviceDetails.deviceId:""} className="form-control float-label" />
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="IP Address" value={that.state.data.deviceDetails&&that.state.data.deviceDetails.ipAddress?that.state.data.deviceDetails.ipAddress:""} className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="IP Address" value={that.state.data.deviceDetails&&that.state.data.deviceDetails.ipAddress?that.state.data.deviceDetails.ipAddress:""} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="IP Location" value={that.state.data.deviceDetails&&that.state.data.deviceDetails.location?that.state.data.deviceDetails.location:""} className="form-control float-label" id="" readOnly="true"/>
+                  <input type="text" placeholder="IP Location" value={that.state.data.deviceDetails&&that.state.data.deviceDetails.location?that.state.data.deviceDetails.location:""} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <br className="clearfix" />
               </div>

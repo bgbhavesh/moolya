@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import controllable from 'react-controllables';
-import MapCluster from '../../../commons/components/map/MapCluster';
+import MapCommunity from '../../../commons/components/map/MapCommunity';
 import MlLoader from '../../../commons/components/loader/loader'
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 
@@ -23,9 +23,9 @@ export default class MlCommunityMapView extends Component {
     if(loggedInUser.hierarchyLevel != 4){
       zoom = 4;
     }
-    let hasCenter=that.props.fetchCenter||false;
+    let hasCenter=that.props.config.fetchCenter||false;
     if(hasCenter){
-      let center= await that.props.fetchCenterHandler(that.props);
+      let center= await that.props.config.fetchCenterHandler(that.props.config);
       this.setState({center:center||defaultCenter,zoom:zoom});
     }else{
       this.setState({
@@ -35,11 +35,20 @@ export default class MlCommunityMapView extends Component {
     }
   }
   componentDidMount() {
+
+  }
+  componentDidUpdate(){
+    /*let loggedInUser = getAdminUserContext();
+    if(loggedInUser.hierarchyLevel == 0){
+      $('.community_icons a').removeClass('active_community');
+      $('.'+communityCode).addClass('active_community');
+    }*/
+
     let loggedInUser = getAdminUserContext();
     if(loggedInUser.hierarchyLevel != 0) {
       $(".community_icons a").click(function () {
-        $('.community_icons a').removeClass('active_community');
-        $(this).addClass('active_community');
+        $('.community_icons a').removeClass('map_active_community');
+        $(this).addClass('map_active_community');
         var value = $(this).attr('data-filter');
         if (value == "all") {
           $('.filter-block').show('1000');
@@ -51,15 +60,8 @@ export default class MlCommunityMapView extends Component {
       });
     }
     if(loggedInUser.hierarchyLevel == 0){
-      $('.community_icons a').removeClass('active_community');
-      $('.'+communityCode).addClass('active_community');
-    }
-  }
-  componentDidUpdate(){
-    let loggedInUser = getAdminUserContext();
-    if(loggedInUser.hierarchyLevel == 0){
-      $('.community_icons a').removeClass('active_community');
-      $('.'+communityCode).addClass('active_community');
+      $('.community_icons a').removeClass('map_active_community');
+      $('.'+communityCode).addClass('map_active_community');
     }
   }
 
@@ -97,40 +99,40 @@ export default class MlCommunityMapView extends Component {
     }
     const data=this.props.data?this.props.data:[];
     const communityIconList=
-      <div className="community_icons">
-        <a data-toggle="tooltip" title="All" data-placement="bottom" className="All active_community" data-filter="all">
-          <span className="ml ml-select-all" onClick={this.onStatusChange.bind(this, "All")}></span>{/*<FontAwesome className="ml" name='th'/>*/}
+      <div className="community_icons c_map">
+        <a data-toggle="tooltip" title="All" data-placement="bottom" className="All map_active_community" data-filter="all">
+          <span className="ml ml-browser br" onClick={this.onStatusChange.bind(this, "All")}></span>{/*<FontAwesome className="ml" name='th'/>*/}
         </a>
-        <a data-toggle="tooltip" title="Ideators" data-placement="bottom" className="IDE" data-filter="ideator">
-          <span className="ml ml-ideator" onClick={this.onStatusChange.bind(this, "Ideators")}></span>
+        <a data-toggle="tooltip" title="Ideators" data-placement="bottom" className="IDE " data-filter="ideator">
+          <span className="ml ml-ideator id" onClick={this.onStatusChange.bind(this, "Ideators")}></span>
         </a>
-        <a data-toggle="tooltip" title="Funders" data-placement="bottom" className="FUN" data-filter="funder">
-          <span className="ml ml-funder" onClick={this.onStatusChange.bind(this, "Funders")}></span>
+        <a data-toggle="tooltip" title="Investors" data-placement="bottom" className="FUN" data-filter="funder">
+          <span className="ml ml-funder fu" onClick={this.onStatusChange.bind(this, "Investors")}></span>
         </a>
         <a data-toggle="tooltip" title="Start Ups" data-placement="bottom" className="STU" data-filter="startup">
-          <span className="ml ml-startup" onClick={this.onStatusChange.bind(this, "Startups")}></span>
+          <span className="ml ml-startup st" onClick={this.onStatusChange.bind(this, "Startups")}></span>
         </a>
         <a data-toggle="tooltip" title="Service Providers" data-placement="bottom" className="Service Providers" data-filter="provider">
-          <span className="ml ml-users" onClick={this.onStatusChange.bind(this, "Service Providers")}></span>
+          <span className="ml ml-users pr" onClick={this.onStatusChange.bind(this, "Service Providers")}></span>
         </a>
-        <a data-toggle="tooltip" title="Browsers" data-placement="bottom" className="Browsers" data-filter="browser">
-          <span className="ml ml-browser" onClick={this.onStatusChange.bind(this, "Browsers")}></span>
-        </a>
+        {/*<a data-toggle="tooltip" title="Browsers" data-placement="bottom" className="Browsers" data-filter="browser">*/}
+          {/*<span className="ml ml-browser br" onClick={this.onStatusChange.bind(this, "Browsers")}></span>*/}
+        {/*</a>*/}
         <a data-toggle="tooltip" title="Companies" data-placement="bottom" className="Companies" data-filter="company">
-          <span className="ml ml-company" onClick={this.onStatusChange.bind(this, "Companies")}></span>
+          <span className="ml ml-company co" onClick={this.onStatusChange.bind(this, "Companies")}></span>
         </a>
         <a data-toggle="tooltip" title="Institutions" data-placement="bottom" className="Institutions" data-filter="institution">
-          <span className="ml ml-institutions" onClick={this.onStatusChange.bind(this, "Institutions")}></span>
+          <span className="ml ml-institutions in" onClick={this.onStatusChange.bind(this, "Institutions")}></span>
         </a>
         <a data-toggle="tooltip" title="Backend Users" data-placement="bottom" className="BackendUsers" data-filter="internalUser">
-          <span className="ml ml-moolya-symbol" onClick={this.onStatusChange.bind(this, "BackendUsers")}></span>
+          <span className="ml ml-moolya-symbol ot" onClick={this.onStatusChange.bind(this, "BackendUsers")}></span>
         </a>
       </div>
 
     return (
       <span>
         {communityIconList}
-        <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />
+        <MapCommunity data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />
       </span>
     );
   }

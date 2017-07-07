@@ -14,14 +14,15 @@ import moment from "moment";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import {fetchIdeaByPortfolioId} from "../../../../app/ideators/actions/IdeaActionHandler";
 import MlLoader from '../../../../commons/components/loader/loader'
-
+import _ from 'lodash'
+import {client} from '../../../core/apolloConnection';
 
 class MlPortfolio extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      editComponent: '', portfolio: {}, selectedTab: "", annotations: [], isOpen: false,
-      annotationData: {}, commentsData: [], popoverOpen: false, saveButton: false
+      editComponent: '', portfolio: {}, privateKeys:[], removePrivateKeys:[], selectedTab: "", annotations: [],
+      isOpen: false,annotationData: {}, commentsData: [], popoverOpen: false, saveButton: false
     }
     this.fetchEditPortfolioTemplate.bind(this);
     this.fetchViewPortfolioTemplate.bind(this);
@@ -32,6 +33,7 @@ class MlPortfolio extends React.Component {
     this.fetchComments.bind(this);
     this.toggle = this.toggle.bind(this);
     this.fetchIdeaId.bind(this);
+    this.updatePrivateKeys.bind(this);
     return this;
   }
 
@@ -160,7 +162,7 @@ class MlPortfolio extends React.Component {
       comment: this.refs.comment.value
     }
 
-    const response = await createCommentActionHandler(commentsData)
+    const response = await createCommentActionHandler(commentsData,client)
 
     if (response) {
       this.setState({annotationData: this.state.annotationData}, function () {
@@ -171,7 +173,7 @@ class MlPortfolio extends React.Component {
   }
 
   async onResolveComment() {
-    const response = await resolveCommentActionHandler(this.state.annotationData.id)
+    const response = await resolveCommentActionHandler(this.state.annotationData.id,client)
     if (response && response.success)
       toastr.success(response.result);
     return response;
@@ -179,7 +181,7 @@ class MlPortfolio extends React.Component {
 
 
   async onReopenComment() {
-    const response = await reopenCommentActionHandler(this.state.annotationData.id)
+    const response = await reopenCommentActionHandler(this.state.annotationData.id,client)
     if (response && response.success)
       toastr.success(response.result);
     return response;
@@ -188,7 +190,7 @@ class MlPortfolio extends React.Component {
 
   async fetchComments(annotationId) {
     if (annotationId) {
-      const response = await findComments(annotationId);
+      const response = await findComments(annotationId,client);
       this.setState({commentsData: response}, function () {
       });
     }
@@ -198,14 +200,59 @@ class MlPortfolio extends React.Component {
     this.setState({idea: details});
   }
 
-  getPortfolioDetails(details) {
-    this.setState({portfolio: details});
+  getPortfolioDetails(portfolioDetails, privateKey) {
+    this.setState({portfolio: portfolioDetails});
+    if(!_.isEmpty(privateKey)){
+      this.updatePrivateKeys(privateKey)
+    }
+
+  }
+
+  updatePrivateKeys(privateKey){
+    var keyName = privateKey.keyName
+    var booleanKey = privateKey.booleanKey
+    var isPrivate = privateKey.isPrivate
+    var index = -1;
+    var tabName = ""
+    if(privateKey.index >= 0){
+      index = privateKey.index
+    }
+    if(privateKey.tabName){
+      tabName = privateKey.tabName
+    }
+
+    var keyIndex = _.findIndex(this.state.privateKeys, {keyName:keyName})
+    if(keyIndex < 0 && index >= 0){
+      keyIndex = _.findIndex(this.state.privateKeys, {keyName:keyName, index:index})
+    }
+    var privateKeys = this.state.privateKeys;
+    var removePrivateKeys = this.state.removePrivateKeys;
+    if(isPrivate && keyIndex < 0){
+      var rIndex = _.findIndex(this.state.removePrivateKeys, {keyName:keyName})
+      removePrivateKeys.splice(rIndex, 1);
+      privateKeys.push({keyName:keyName, booleanKey:booleanKey, index:index, tabName:tabName})
+      this.setState({privateKeys:privateKeys})
+    }else if(!isPrivate){
+      if(keyIndex >= 0){
+        var keyObj = _.cloneDeep(privateKeys[keyIndex])
+        removePrivateKeys.push(keyObj)
+        privateKeys.splice(keyIndex, 1);
+      }else{
+        removePrivateKeys.push({keyName:keyName, booleanKey:booleanKey, index:index, tabName:tabName})
+      }
+
+    }
+    this.setState({privateKeys:privateKeys, removePrivateKeys:removePrivateKeys})
+    console.log(this.state.privateKeys)
+    console.log(this.state.removePrivateKeys)
   }
 
   async updatePortfolioDetails() {
-    let jsonData = {
+    var jsonData = {
       portfolioId: this.props.config,
-      portfolio: this.state.portfolio
+      portfolio: this.state.portfolio,
+      privateKeys: this.state.privateKeys,
+      removeKeys: this.state.removePrivateKeys
     }
     const response = await updatePortfolioActionHandler(jsonData)
     if (response) {
@@ -320,7 +367,7 @@ class MlPortfolio extends React.Component {
                         <div style={{paddingLeft: '50px'}} className="comment-head">
                           <h6
                             className="comment-name"> {annotationDetails.userName ? annotationDetails.userName : ""}</h6>
-                          <div className="author">Manager</div>
+                          <div className="author">{annotationDetails.roleName ? annotationDetails.roleName : ""}</div>
                           <span>{moment(annotationDetails.createdAt).format('DD MMM YYYY,HH:MM:SS')}</span>
                         </div>
                         <div className="comment-content">

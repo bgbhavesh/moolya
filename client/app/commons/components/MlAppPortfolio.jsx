@@ -1,23 +1,20 @@
-import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
-import classNames from "classnames"
-import { render } from 'react-dom';
-import formHandler from '../../../commons/containers/MlFormHandler';
-import {updatePortfolioActionHandler, updateIdeatorIdeaActionHandler, requestProtfolioForGoLive} from '../../../../client/admin/transaction/portfolio/actions/updatePortfolioDetails';
+import React, {Component, PropTypes} from "react";
+import {render} from "react-dom";
+import formHandler from "../../../commons/containers/MlFormHandler";
+import {updatePortfolioActionHandler,updateIdeatorIdeaActionHandler} from "../../../../client/admin/transaction/portfolio/actions/updatePortfolioDetails";
 import {fetchTemplateHandler} from "../../../commons/containers/templates/mltemplateActionHandler";
-import MlActionComponent from '../../../commons/components/actions/ActionComponent';
-import {findComments} from '../../../commons/annotaterComments/findComments'
-import {createCommentActionHandler} from '../../../commons/annotaterComments/createComment';
-import {resolveCommentActionHandler} from '../../../commons/annotaterComments/createComment';
-import {reopenCommentActionHandler} from '../../../commons/annotaterComments/createComment';
-import AppActionButtons from '../../commons/components/appActionButtons'
+import {findComments} from "../../../commons/annotaterComments/findComments";
+import {createCommentActionHandler,resolveCommentActionHandler,reopenCommentActionHandler} from "../../../commons/annotaterComments/createComment";
 import moment from "moment";
-import MlCustomActionButtons from '../../ideators/components/MlCustomActionButtons'
-import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
-import {fetchIdeaByPortfolioId} from '../../ideators/actions/IdeaActionHandler'
-import MlLoader from '../../../commons/components/loader/loader'
+import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
+import {fetchIdeaByPortfolioId} from "../../ideators/actions/IdeaActionHandler";
+import MlLoader from "../../../commons/components/loader/loader";
+import InteractionsCounter from "../../commons/components/InteractionsCounter";
+import MlAppPortfolioAccordionContainer from "../components/MlAppPortfolioAccordion";
+import {requestPortfolioForGoLive} from "../actions/fetchUserDetails";
+import {appClient} from "../../core/appConnection";
 
-class MlAppPortfolio extends React.Component{
+class MlAppPortfolio extends Component{
   constructor(props){
     super(props)
     this.state = {editComponent:'', portfolio:{}, selectedTab:"", annotations:[], isOpen:false,
@@ -30,6 +27,8 @@ class MlAppPortfolio extends React.Component{
     this.fetchComments.bind(this);
     this.toggle = this.toggle.bind(this);
     this.fetchIdeaId.bind(this);
+    this.interactionActionHandler.bind(this);
+    this.assignActionHandlerProxy.bind(this);
     return this;
   }
 
@@ -42,10 +41,11 @@ class MlAppPortfolio extends React.Component{
 
   componentDidMount(){
     let portfolioId = this.props.config;
-    var pathname = window.location.pathname
+    $("#portfolioAccordion0").addClass("in")
+    /*var pathname = window.location.pathname
     if(pathname.indexOf("view") != -1 || pathname.indexOf("edit") != -1 || this.props.communityType != "ideator"){
       this.setState({isMyPortfolio:true})
-    }
+    }*/
   }
 
   getContext(){
@@ -56,7 +56,7 @@ class MlAppPortfolio extends React.Component{
   getSelectedAnnotation(selAnnotation){
     if(!this.state.popoverOpen){
       this.toggle();
-      $('.comment-input-box').slideToggle();
+      $('.comment_wrap').slideToggle();
      }
     if(selAnnotation){
       this.setState({annotationData : selAnnotation},function(){
@@ -68,14 +68,11 @@ class MlAppPortfolio extends React.Component{
   }
 
   commentClicked(){
-
-    $('.comment-input-box').slideToggle();
+    $('.comment_wrap').slideToggle();
     this.setState({"saveButton" : true})
-
   }
 
   async componentWillMount() {
-
     if(this.props.viewMode){
       this.fetchViewPortfolioTemplate(this.props.config);
     }else{
@@ -111,7 +108,7 @@ class MlAppPortfolio extends React.Component{
       comment :  this.refs.comment.value
     }
 
-    const response =  await createCommentActionHandler(commentsData)
+    const response =  await createCommentActionHandler(commentsData,appClient)
 
     if(response){
       this.setState({annotationData : this.state.annotationData},function(){
@@ -121,20 +118,20 @@ class MlAppPortfolio extends React.Component{
   }
 
   async onResolveComment(){
-    const response = await resolveCommentActionHandler(this.state.annotationData.id)
+    const response = await resolveCommentActionHandler(this.state.annotationData.id,appClient)
     return response;
   }
 
 
   async onReopenComment(){
-    const response = await reopenCommentActionHandler(this.state.annotationData.id)
+    const response = await reopenCommentActionHandler(this.state.annotationData.id,appClient)
     return response;
   }
 
 
   async fetchComments(annotationId){
     if(annotationId){
-      const response = await findComments(annotationId);
+      const response = await findComments(annotationId,appClient);
       this.setState({commentsData : response},function () {
 
       });
@@ -158,6 +155,7 @@ class MlAppPortfolio extends React.Component{
       portfolioId :this.props.config,
       portfolio :this.state.portfolio
     }
+    console.log(jsonData)
     const response = await updatePortfolioActionHandler(jsonData)
     if(response){
       if(this.props.communityType == "Ideators" || this.props.communityType == "ideator"){
@@ -175,46 +173,61 @@ class MlAppPortfolio extends React.Component{
     console.log('edit testing')
   }
 
-  async requestForGoLive(){
-      console.log("golive")
-      let portfolioId = this.props.config;
-      requestProtfolioForGoLive(portfolioId);
+  async requestForGoLive() {
+    let portfolioId = this.props.config;
+    const response = await requestPortfolioForGoLive(portfolioId);
+    if(response && response.success)
+      toastr.success("Go live requested to admin");
+    return response
   }
 
   async handleSuccess(response) {
     FlowRouter.go("/app/portfolio");
   };
 
+  //handler for like,review,comment,inquiry,collaborate,connect,follow
+  async interactionActionHandler(actionConfig,handlerCallback) {
+    var resourceDetails={resourceId:this.props.config,resourceType:'portfolio'};
+    if(handlerCallback) {//to handle the popover
+      handlerCallback(resourceDetails);
+    }else if(actionConfig&&actionConfig.handleCallBack){//to handle actions
+      var resp=await actionConfig.handleCallBack(resourceDetails);
+       return resp;
+    }
+  }
+  async onInteractionSuccess() {
+    var interactionAutoId=new Date().getTime();
+    this.setState({interactionAutoId:interactionAutoId});
+  }
+
+  assignActionHandlerProxy(actionConfig){
+    var action=actionConfig.actionName||'';
+    var actionMap={'like':'interaction','connect':'interaction','favourite':'interaction','follow':'interaction','enquire':'interaction','review':'interaction','partner':'interaction','collaborate':'interaction'};
+    let actionName =actionMap[action]||action;
+    switch(actionName){
+      case 'interaction': actionConfig.handler=async(actionData,callback) =>this.props.handler(this.interactionActionHandler.bind(this,actionData,callback), this.onInteractionSuccess.bind(this));break;
+      case 'save': actionConfig.handler=async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this)); break;
+      case 'edit': actionConfig.handler=async(event) => this.props.handler(this.testEditPortfolioDetails.bind(this)); break;
+      case 'golive': actionConfig.handler=async(event) => this.props.handler(this.requestForGoLive.bind(this)); break;
+      case '': actionConfig.handler=() => {console.log("action handler is not defined")}; break;
+    }
+  }
+
   render(){
     let that=this;
-    // let MlActionConfig = [
-    //   {
-    //     showAction: true,
-    //     actionName: 'edit',
-    //     handler: null
-    //   },
-    //   {
-    //     actionName: 'save',
-    //     showAction: true,
-    //     handler: async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this))
-    //   }
-    // ]
+     /* let appActionConfig= [{showAction: true,actionName: 'connect',hasPopOver:true,popOverTitle:'Connect Request',placement:'top',target:'connectRequest',popOverComponent:<Connect />,actionComponent:PopoverActionIcon,handler:this.interactionActionHandler.bind(this)},
+      {showAction: true,actionName: 'like',handleCallBack:handleLikeAction,handler:this.interactionActionHandler.bind(this)},
+      {showAction: true,actionName: 'favourite',handleCallBack:handleFavouriteAction,handler:this.interactionActionHandler.bind(this)},
+      {showAction: true,actionName: 'follow',handleCallBack:handleFollowAction,handler:this.interactionActionHandler.bind(this)},
+      {showAction: true,actionName: 'enquire',hasPopOver:true,popOverTitle:'Enquire',placement:'top',target:'enquireRequest',popOverComponent:<Inquiry />,actionComponent:PopoverActionIcon,handler:this.interactionActionHandler.bind(this)},
+      {showAction: true,actionName: 'review',hasPopOver:true,popOverTitle:'Review',placement:'top',target:'reviewRequest',popOverComponent:<Review />,actionComponent:PopoverActionIcon,handler:this.interactionActionHandler.bind(this)},
+      {showAction: true,actionName: 'save',handler: async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this))},
+      {showAction: true,actionName: 'edit',handler: async(event) => this.props.handler(this.testEditPortfolioDetails.bind(this))},
+      {showAction: true,actionName: 'golive',handler: async(event) => this.props.handler(this.requestForGoLive.bind(this))}];
 
-    let MlAppActionConfig= [{
-        showAction: true,
-        actionName: 'save',
-        handler: async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this))
-      },
-      {
-        showAction: true,
-        actionName: 'edit',
-        handler: async(event) => this.props.handler(this.testEditPortfolioDetails.bind(this))
-      },
-      {
-        showAction: true,
-        actionName: 'golive',
-        handler: async(event) => this.props.handler(this.requestForGoLive.bind(this))
-      }]
+    var genericPortfolioAccordionConfig= {id:'portfolioAccordion',panelItems:[{'title':'Related',isText:true,contentComponent:'upcoming',style:{'background': '#273545'}},
+        {'title':'Actions',isText:false,style:{'background': '#ef4647'},contentComponent:<MlAppActionComponent resourceDetails={{resourceId:this.props.config,resourceType:'portfolio'}} actionOptions={appActionConfig}  />}]
+    };*/
 
     let EditComponent = ""; let ViewComponent = "";
     if(this.props.viewMode){
@@ -239,11 +252,12 @@ class MlAppPortfolio extends React.Component{
       <div className="app_main_wrap">
         {showLoader===true?(<MlLoader/>):(
           <div className="app_padding_wrap">
+            <InteractionsCounter resourceType={'portfolio'} resourceId={this.props.config} interactionAutoId={this.state.interactionAutoId} />
               {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}/>}
-              {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
+                {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
           </div>)}
         <div className="overlay"></div>
-          <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
+          <Popover placement="bottom" isOpen={this.state.popoverOpen} target="comment" toggle={this.toggle}>
             <PopoverTitle>Portfolio Annotations</PopoverTitle>
             <PopoverContent>
               <div className="ml_annotations">
@@ -251,12 +265,12 @@ class MlAppPortfolio extends React.Component{
                   <ul id="comments-list" className="comments-list">
                     <li>
                       <div className="comment-main-level">
-                        <div className="comment-avatar"><img src="/images/p_1.jpg" alt=""/></div>
+                        <div className="comment-avatar"><img src={annotationDetails.profileImage?annotationDetails.profileImage:"/images/def_profile.png"} alt=""/></div>
                         <div className="comment-box">
                           <div style={{marginTop:'8px'}} className="annotate">1</div>
                           <div style={{paddingLeft:'50px'}} className="comment-head">
                             <h6 className="comment-name"> {annotationDetails.userName?annotationDetails.userName:""}</h6>
-                            <div className="author">Chapter Manager</div>
+                            <div className="author">{annotationDetails.roleName ? annotationDetails.roleName : ""}</div>
                             <span>{moment(annotationDetails.createdAt).format('DD MM YYYY,HH:MM:SS')}</span>
                           </div>
                           <div className="comment-content">
@@ -270,19 +284,28 @@ class MlAppPortfolio extends React.Component{
                         <a href="#" className="cancel_btn"  onClick={this.onReopenComment.bind(this)}>Re open</a>
                         <a href="#" className="cancel_btn"  onClick={this.commentClicked.bind(this)}>Comment</a>
                       </div>
-                      <div>
+                      {/*<div>
                         <textarea ref="comment" id="comment" className="form-control comment-input-box" placeholder="Enter your comment here"></textarea>
                         <div className="ml_icon_btn">
                           <a href="#" data-id={annotationDetails.id} className="save_btn"><span
                             className="ml ml-save"  onClick={this.onSavingComment.bind(this)}></span></a>
                         </div>
+                      </div>*/}
+                      <div className="comment_wrap">
+                      <textarea ref="comment"  id="commentData" className="form-control comment-input-box"
+                                placeholder="Enter your comment here"></textarea>
+
+                        <a href="#" data-id={annotationDetails.id} className="circle_btn">
+                          <span className="fa fa-check" onClick={this.onSavingComment.bind(this)}></span>
+                        </a>
+
                       </div>
 
                       <ul className="comments-list reply-list">
                         {that.state.commentsData.map(function (options, key) {
                           return(<li key={key}>
                             <div className="comment-avatar">
-                              <img src="/images/p_2.jpg" alt=""/>
+                              <img src={options.profileImage?options.profileImage:"/images/def_profile.png"} alt=""/>
                             </div>
                             <div className="comment-box">
                               <div className="comment-head">
@@ -303,8 +326,9 @@ class MlAppPortfolio extends React.Component{
               <div className="overlay"></div>
             </PopoverContent>
           </Popover>
-        {isMyPortfolio?<AppActionButtons ActionOptions={MlAppActionConfig} showAction='showAction' actionName="actionName"/>:<MlCustomActionButtons/>}
-        {/*<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>*/}
+        {/*{isMyPortfolio?<AppActionButtons ActionOptions={appActionConfig} showAction='showAction' actionName="actionName"/>:<MlCustomActionButtons/>}*/}
+        {/*{isMyPortfolio?<MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />:<MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />}*/}
+         <MlAppPortfolioAccordionContainer interactionAutoId={this.state.interactionAutoId} viewMode={this.props.viewMode} communityType={this.props.communityType} resourceId={this.props.config} assignActionHandler={this.assignActionHandlerProxy.bind(this)}/>
       </div>
     )
   }

@@ -20,7 +20,8 @@ export default class MlFunderSuccessStories extends React.Component {
       popoverOpen: false,
       selectedIndex: -1,
       funderSuccessList: [],
-      selectedObject: "default"
+      selectedObject: "default",
+      privateKey:{}
     }
     this.handleBlur.bind(this);
     this.onSaveAction.bind(this);
@@ -41,7 +42,11 @@ export default class MlFunderSuccessStories extends React.Component {
       const response = await fetchfunderPortfolioSuccess(portfolioDetailsId);
       if (response) {
         this.setState({loading: false, funderSuccess: response, funderSuccessList: response});
+        // _.each(response.privateFields, function (pf) {
+        //   $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+        // })
       }
+
     } else {
       this.setState({
         loading: false,
@@ -84,6 +89,12 @@ export default class MlFunderSuccessStories extends React.Component {
       selectedObject: index,
       popoverOpen: !(this.state.popoverOpen)
     });
+
+    setTimeout(function () {
+      _.each(details.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+    }, 10)
   }
 
   componentDidUpdate() {
@@ -106,22 +117,30 @@ export default class MlFunderSuccessStories extends React.Component {
     }
   }
 
-  onLockChange(field, e) {
+  onLockChange(fieldName, field, e) {
     let details = this.state.data || {};
     let key = field;
+    var isPrivate = false;
     details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
       details = _.extend(details, {[key]: true});
+      isPrivate = true;
     } else {
       details = _.extend(details, {[key]: false});
     }
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex}
+    this.setState({privateKey:privateKey})
     this.setState({data: details}, function () {
       this.sendDataToParent()
     })
   }
 
   onSaveAction(e) {
+    var isDate = _.findIndex(this.state.funderSuccess, {date:''})
+    var dateKey = _.compact(_.map(this.state.funderSuccess, 'date'));
+    if ((isDate > 0) || (dateKey.length != this.state.funderSuccess.length))
+      toastr.error("Please select Date");
     this.setState({funderSuccessList: this.state.funderSuccess, popoverOpen: false})
   }
 
@@ -180,12 +199,14 @@ export default class MlFunderSuccessStories extends React.Component {
         }
       }
       let newItem = _.omit(item, "__typename");
+      newItem =_.omit(newItem,"privateFields");
       // let updateItem = _.omit(newItem, 'logo');
       arr.push(newItem)
     })
     funderSuccess = arr;
+    // funderSuccess=_.omit(funderSuccess,["privateFields"]);
     this.setState({funderSuccess: funderSuccess})
-    this.props.getSuccessStoriesDetails(funderSuccess);
+    this.props.getSuccessStoriesDetails(funderSuccess, this.state.privateKey);
   }
 
   render() {
@@ -245,13 +266,11 @@ export default class MlFunderSuccessStories extends React.Component {
                         <div className="col-md-12">
                           <div className="form-group">
                             <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
-                                      inputProps={{placeholder: "Select Date"}} ref="date" closeOnSelect={true}
+                                      inputProps={{placeholder: "Select Date"}} ref="date"
                                       defaultValue={this.state.data.date ? this.state.data.date : ''}
-                                      onBlur={this.dateChange.bind(this)}  isValidDate={ valid }/>
-                            <FontAwesome name='unlock' className="input_icon"
-                                         onClick={this.onLockChange.bind(this, "isDatePrivate")}/>
-                            <input type="checkbox" className="lock_input"
-                                   checked={this.state.data.isDatePrivate}/>
+                                      onBlur={this.dateChange.bind(this)}  isValidDate={ valid }/> {/**/} {/*closeOnSelect={true}*/}
+                            <FontAwesome name='unlock' className="input_icon un_lock"
+                                         onClick={this.onLockChange.bind(this, "date", "isDatePrivate")}/>
                           </div>
                           <div className="clearfix"></div>
                           <div className="form-group">
@@ -268,19 +287,17 @@ export default class MlFunderSuccessStories extends React.Component {
                             <input type="text" placeholder="Enter title of Story" className="form-control float-label"
                                    name="storyTitle" defaultValue={this.state.data.storyTitle}
                                    onBlur={this.handleBlur.bind(this)}/>
-                            <FontAwesome name='unlock' className="input_icon"
-                                         onClick={this.onLockChange.bind(this, "isStoryTitlePrivate")}/>
-                            <input type="checkbox" className="lock_input"
-                                   checked={this.state.data.isStoryTitlePrivate}/>
+                            <FontAwesome id="isStoryTitlePrivate" name='unlock' className="input_icon un_lock"
+                                         onClick={this.onLockChange.bind(this, "storyTitle", "isStoryTitlePrivate")}/>
+
                           </div>
                           <div className="form-group">
                             <input type="text" placeholder="Description" className="form-control float-label"
                                    name="description" defaultValue={this.state.data.description}
                                    onBlur={this.handleBlur.bind(this)}/>
-                            <FontAwesome name='unlock' className="input_icon"
-                                         onClick={this.onLockChange.bind(this, "isDescPrivate")}/>
-                            <input type="checkbox" className="lock_input"
-                                   checked={this.state.data.isDescPrivate}/>
+                            <FontAwesome id="isDescPrivate" name='unlock' className="input_icon un_lock"
+                                         onClick={this.onLockChange.bind(this, "description", "isDescPrivate")}/>
+
                           </div>
                           <div className="ml_btn" style={{'textAlign': 'center'}}>
                             <a className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>

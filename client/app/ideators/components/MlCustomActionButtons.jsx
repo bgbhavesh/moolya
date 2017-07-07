@@ -2,7 +2,7 @@ import React from "react";
 import {render} from "react-dom";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 var FontAwesome = require('react-fontawesome');
-import StarRatings from '../../commons/components/starRatings';
+import StarRatings from '../../commons/components/StarRatings';
 import {fetchIdeaActionHandler} from '../actions/IdeaActionHandler'
 import MlLoader from '../../../commons/components/loader/loader'
 

@@ -22,6 +22,7 @@ import _ from 'lodash';
 import ImageUploader from '../../commons/mlImageUploader';
 import MlRespPayload from '../../commons/mlPayload';
 let helmet = require('helmet');
+var Tokens = require('csrf')
 let cors = require('cors');
 const Fiber = Npm.require('fibers')
 let _language = require('graphql/language');
@@ -38,7 +39,7 @@ const typeDefs = MlSchemaDef['schema']
 
 // default server configuration object
 const defaultServerConfig = {
-  path: '/graphql',
+  path: '/moolyaAdmin',
   configServer: graphQLServer => {},
   graphiql: Meteor.isDevelopment,
   graphiqlPath: '/graphiql',
@@ -51,6 +52,7 @@ const defaultServerConfig = {
   couponValidate:'/coupons',
   resetPassword:'/resetPassword',
   forgotPassword: '/forgotPassword',
+  verifyEmail: '/verifyEmail',
   graphiqlOptions : {
     passHeader : "'meteor-login-token': localStorage['Meteor.loginToken']"
   },
@@ -80,6 +82,9 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       ...customConfig.graphiqlOptions
     }
   }
+
+  var parseBody = bodyParser.json();
+
   const graphQLServer = express();
 
   config.configServer(graphQLServer)
@@ -88,10 +93,13 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
   graphQLServer.use(helmet.frameguard());
   graphQLServer.use(helmet.hsts());
   graphQLServer.use(cors());
-  graphQLServer.use(config.path, bodyParser.json(), graphqlExpress( async (req, res) =>
+
+  var tokens = new Tokens()
+  var secret = tokens.secretSync()
+  graphQLServer.use(config.path, parseBody,  graphqlExpress( async (req, res) =>
   {
     try {
-      const customOptionsObject = typeof customOptions === 'function' ? customOptions(req) : customOptions;
+      customOptionsObject = typeof customOptions === 'function' ? customOptions(req) : customOptions;
       const options = {
         ...executableSchema,
         ...defaultGraphQLOptions,
@@ -101,14 +109,20 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       context = getContext({req, res});
 
       if(!context||!context.userId){
-        res.json({unAuthorized:true,message:"Invalid Token"})
+        res.json({invalidToken:true,message:"Invalid Token"})
         return;
       }
 
-      var isAut = mlAuthorization.authChecker({req, context})
-      if(!isAut){
+      /*const tokenValue = getCookie(req.headers.cookie, '_csrf');
+      var isValid = tokens.verify(secret, tokenValue)
+      if(!isValid){
           res.json({unAuthorized:true,message:"Not Authorized"})
           return;
+      }*/
+      var isAut = mlAuthorization.authChecker({req, context})
+      if (!isAut) {
+        res.json({unAuthorized: true, message: "Not Authorized"})
+        return;
       }
 
       return {
@@ -120,6 +134,11 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       return defaultGraphQLOptions;
     }
   }));
+  graphQLServer.use(function(req, res, next) {
+    var token = tokens.create(secret)
+    res.cookie('_csrf', token)
+    return next();
+  });
 
   if (config.graphiql){
     graphQLServer.use(config.graphiqlPath, graphiqlExpress({
@@ -136,21 +155,25 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
       if(req && req.body && req.body.data)
       {
-        let data = JSON.parse(req.body.data)
-        let moduleName = data && data.moduleName
-        let response;
-        let file  = req.files.file;
-        if(file){
+        var response;
+        var data = JSON.parse(req.body.data)
+        if(data.userId==context.userId){
+          response = {unAuthorized: true, message: "Not Authorized"}
+        }else {
+          let moduleName = data && data.moduleName
+
+          let file = req.files.file;
+          if (file) {
             mlS3Client.uploadFile(file, "moolya-users", "moolya-admin-users/")
-        }
-        switch (moduleName){
-            case "USERS":{
+          }
+          switch (moduleName) {
+            case "USERS": {
               var ret = mlAuthorization.valiateApi(MlResolver.MlModuleResolver, 'updateCommunityDef')
               var isAuth = false;
-              if(!ret.isWhiteList){
+              if (!ret.isWhiteList) {
                 isAuth = mlAuthorization.validteAuthorization(context.userId, ret.moduleName, ret.actionName, req.body, false);
               }
-              if(ret.isWhiteList || isAuth) {
+              if (ret.isWhiteList || isAuth) {
                 response = MlResolver.MlMutationResolver['assignUsers'](null, {
                   userId: data.userId,
                   user: data.user,
@@ -158,17 +181,17 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                   actionName: data.actionName
                 }, context, null);
               }
-              else response = {unAuthorized:true,message:"Not Authorized"}
+              else response = {unAuthorized: true, message: "Not Authorized"}
             }
-            break;
-            case "COMMUNITY":{
+              break;
+            case "COMMUNITY": {
               var ret = mlAuthorization.valiateApi(MlResolver.MlModuleResolver, 'updateCommunityDef')
               var isAuth = false;
-              if(!ret.isWhiteList){
+              if (!ret.isWhiteList) {
                 isAuth = mlAuthorization.validteAuthorization(context.userId, ret.moduleName, ret.actionName, req.body, false);
               }
 
-              if(ret.isWhiteList || isAuth) {
+              if (ret.isWhiteList || isAuth) {
                 response = MlResolver.MlMutationResolver['updateCommunityDef'](null, {
                   communityId: data.communityId,
                   clusterId: data.clusterId,
@@ -180,13 +203,21 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                   subchapters: data.subchapters
                 }, context, null);
               }
+              else
+                response = {unAuthorized: true, message: "Not Authorized"};
             }
-            break;
-            case "PROFILE":{
-              response = MlResolver.MlMutationResolver['updateProfile'](null, {userId:data.userId, userProfile:data.userProfile, moduleName:data.moduleName, actionName:data.actionName}, context, null);
+              break;
+            case "PROFILE": {
+              response = MlResolver.MlMutationResolver['updateProfile'](null, {
+                userId: data.userId,
+                userProfile: data.userProfile,
+                moduleName: data.moduleName,
+                actionName: data.actionName
+              }, context, null);
               //console.log(response)
             }
-            break;
+              break;
+          }
         }
         res.send(response);
       }
@@ -247,10 +278,13 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                                   case 'Startups':
                                     portfolio = {portfolio:{startupPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
                                   break;
-                                  case 'Funders':
+                                  case 'Investors':
                                     portfolio = {portfolio:{funderPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
                                     break;
                               }
+
+                              portfolio.privateFields = [];
+                              portfolio.removeKeys = [];
                               MlResolver.MlMutationResolver['updatePortfolio'](null, portfolio, context, null)
                           }
                       });
@@ -276,6 +310,14 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                     subChapterDetails:{subChapterImageLink: resp}
                   }, context, null);
                 }
+              });
+              break;
+            }
+            case "PORTFOLIO_PROFILE_IMG":{
+              imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "registrationDocuments/");
+              imageUploadCallback=Meteor.bindEnvironment(function(resp) {
+                let portfolioDocumentUploadReq={portfolioId:data.portfolioId,docUrl: resp,communityType:data.communityType,moduleName: data.moduleName,actionName: data.actionName};
+                MlResolver.MlMutationResolver['updatePortfolioProfilePic'](null,portfolioDocumentUploadReq, context, null);
               });
               break;
             }
@@ -311,12 +353,6 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       var context = {};
       context = getContext({req});
       context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-      console.log(req.body);
-      console.log("-----------");
-      console.log(req.headers);
-      console.log("-----------");
-      console.log(req.body.data);
-      console.log("-----------");
       if(req && req.body && req.body.data)
       {
         console.log("Processing started..!!");
@@ -361,12 +397,6 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     var context = {};
     context = getContext({req});
     context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    console.log(req.body);
-    console.log("-----------");
-    console.log(req.headers);
-    console.log("-----------");
-    console.log(req.body.data);
-    console.log("-----------");
     if(req)
     {
       let data = req.body.data;
@@ -411,12 +441,6 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       var context = {};
       context = getContext({req});
       context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-      console.log(req.body);
-      console.log("-----------");
-      console.log(req.headers);
-      console.log("-----------");
-      console.log(req.body.data);
-      console.log("-----------");
       if(req)
       {
         let data = req.body.data;
@@ -466,12 +490,6 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       var context = {};
       context = getContext({req});
       context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-      console.log(req.body);
-      console.log("-----------");
-      console.log(req.headers);
-      console.log("-----------");
-      console.log(req.body.data);
-      console.log("-----------");
       if(req)
       {
         let data = req.body.data;
@@ -516,12 +534,6 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
       var context = {};
       context = getContext({req});
       context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-      console.log(req.body);
-      console.log("-----------");
-      console.log(req.headers);
-      console.log("-----------");
-      console.log(req.body.data);
-      console.log("-----------");
       if(req)
       {
         console.log("coupon validation processing started..!!");
@@ -626,6 +638,40 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     }))
   }
 
+  if(config.verifyEmail){
+    graphQLServer.options('/verifyEmail', cors());
+    graphQLServer.post(config.verifyEmail, bodyParser.json(), Meteor.bindEnvironment(function (req, res) {
+      console.log(req, res);
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      var context = {};
+      context = getContext({req});
+      context.ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+      if(req)
+      {
+        let data = req.body;
+        console.log(data);
+        let apiKey = req.header("apiKey");
+        if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
+          let response;
+          response = MlResolver.MlMutationResolver['verifyEmail'](null, data, context, null);
+          //response = response.data&&response.data.verifyEmail?response.data.verifyEmail:{}
+          res.send(response);
+        }else{
+          let code = 401;
+          let result = {message:"The request did not have valid authorization credentials"}
+          let response = new MlRespPayload().errorPayload(result, code);
+          console.log(response);
+          res.send(response);
+        }
+      }else{
+        console.log("Request Payload not provided");
+        res.send(new MlRespPayload().errorPayload({message:"Request Payload not provided"}, 400));
+      }
+    }))
+  }
+
+
   WebApp.connectHandlers.use(Meteor.bindEnvironment(graphQLServer));
 }
 
@@ -636,4 +682,11 @@ function authChecker(req, res, next) {
       next();
     }
 }
+
+function getCookie(cookies, name) {
+  var value = "; " + cookies;
+  var parts = value.split("; " + name + "=");
+  if (parts.length == 2) return parts.pop().split(";").shift();
+}
+
 createApolloServer(defaultGraphQLOptions, defaultServerConfig);

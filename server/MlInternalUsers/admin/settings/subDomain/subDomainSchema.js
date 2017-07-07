@@ -12,6 +12,10 @@ let SubDomainSchema = `
         industryId:String,
         industryName:String,
         isActive:Boolean
+      createdBy     : String
+      createdDate   : Date
+      updatedBy     : String
+      updatedDate   : Date
     }
     
     input SubDomainMasterData
@@ -21,6 +25,10 @@ let SubDomainSchema = `
         about: String,
         industryId:String,
         isActive:Boolean
+      createdBy     : String
+      createdDate   : Date
+      updatedBy     : String
+      updatedDate   : Date
     }
     
     type Mutation 
@@ -30,7 +38,7 @@ let SubDomainSchema = `
     }
     type Query{
         findSubDomain(SubDomainId:String): SubDomain
-        fetchIndustryDomain(industryId: String):SubDomain
+        fetchIndustryDomain(industryId: String):[SubDomain]
     }
 `
 
@@ -40,7 +48,7 @@ let supportedApi = [
   {api:'updateSelectedSubDomain', actionName:'UPDATE', moduleName:"SUBDOMAIN"},
 
   {api:'findSubDomain', actionName:'READ', moduleName:"SUBDOMAIN"},
-  {api:'fetchIndustryDomain', actionName:'READ', moduleName:"SUBDOMAIN"}
+  {api:'fetchIndustryDomain', actionName:'READ', moduleName:"SUBDOMAIN", isWhiteList:true}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

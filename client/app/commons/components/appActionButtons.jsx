@@ -2,7 +2,7 @@ import React from "react";
 import {render} from "react-dom";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import _ from "lodash";
-import StarRatings from "./starRatings";
+import StarRatings from "./StarRatings";
 var FontAwesome = require('react-fontawesome');
 
 
@@ -119,7 +119,7 @@ export default class AppActionButtons extends React.Component {
               </div>
             </div>
 
-            <div id="collapseTwo" className="panel-collapse collapse" style={{'background': '#ef4647'}}>
+            <div id="collapseTwo" className="panel-collapse collapse appCommentBox" style={{'background': '#ef4647'}}>
               <div className="action_buttons">
                 <ul>
                   <li><a href="#" id="pop_connect"
@@ -138,6 +138,9 @@ export default class AppActionButtons extends React.Component {
                   <li><a href="#" id="pop_collaborate" onClick={this.actionClick.bind(this, "pop_collaborate")}>
                     <span className="ml flaticon-ml-networking">
                     </span><br />Collaborate</a></li>
+                  <li><a href="#" id="Popover1">
+                    <span className="ml flaticon-ml-networking">
+                    </span><br />Comment</a></li>
                   {actionView}
                 </ul>
               </div>

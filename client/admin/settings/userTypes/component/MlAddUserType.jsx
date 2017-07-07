@@ -44,7 +44,7 @@ class MlAddUserType extends React.Component {
   async handleSuccess(response) {
     if (response) {
       if (response.success)
-        FlowRouter.go("/admin/settings/UserTypeList");
+        FlowRouter.go("/admin/settings/documentProcess/UserTypeList");
       else
         toastr.error(response.result);
     }
@@ -65,7 +65,7 @@ class MlAddUserType extends React.Component {
         isActive: this.refs.isActive.checked
       }
       const response = await createUserTypeActionHandler(UserTypeDetails)
-
+      toastr.success("UserType Created Successfully");
       return response;
 
     }
@@ -99,7 +99,7 @@ class MlAddUserType extends React.Component {
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          FlowRouter.go("/admin/settings/userTypeList")
+          FlowRouter.go("/admin/settings/documentProcess/userTypeList")
         }
       }
     ];

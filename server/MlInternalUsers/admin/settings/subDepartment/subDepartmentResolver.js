@@ -56,6 +56,23 @@ MlResolver.MlMutationResolver['createSubDepartment'] = (obj, args, context, info
         let code = 409;
         return new MlRespPayload().errorPayload("Already Exist", code);
     }
+  var firstName='';var lastName='';
+  // let id = MlDepartments.insert({...args.department});
+  if(Meteor.users.findOne({_id : context.userId}))
+  {
+    let user = Meteor.users.findOne({_id: context.userId}) || {}
+    if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+      firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+      lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+    }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+      firstName=(user.profile || {}).firstName||'';
+      lastName =(user.profile || {}).lastName||'';
+    }
+  }
+  let createdBy = firstName +' '+lastName
+  args.subDepartment.createdBy = createdBy;
+  args.subDepartment.createdDate = new Date();
     // let id = MlSubDepartments.insert({...args.subDepartment});
     let id = mlDBController.insert('MlSubDepartments', args.subDepartment, context)
     if(id){
@@ -96,6 +113,23 @@ MlResolver.MlMutationResolver['updateSubDepartment'] = (obj, args, context, info
   }
 
   if (args.subDepartmentId) {
+    var firstName='';var lastName='';
+    // let id = MlDepartments.insert({...args.department});
+    if(Meteor.users.findOne({_id : context.userId}))
+    {
+      let user = Meteor.users.findOne({_id: context.userId}) || {}
+      if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+        firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+        lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+      }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+        firstName=(user.profile || {}).firstName||'';
+        lastName =(user.profile || {}).lastName||'';
+      }
+    }
+    let createdBy = firstName +' '+lastName
+    args.subDepartment.updatedBy = createdBy;
+    args.subDepartment.updatedDate = new Date();
     // let subDepartment = MlSubDepartments.findOne({_id: args.subDepartmentId});
     let subDepartment = mlDBController.findOne('MlSubDepartments', {_id: args.subDepartmentId}, context)
     if(subDepartment)
@@ -189,7 +223,7 @@ MlResolver.MlQueryResolver['fetchSubDepartmentsHierarchy'] = (obj, args, context
     // let response= MlSubDepartments.find({"departmentId":id,"isActive":true}).fetch()||[];
     let response= mlDBController.find('MlSubDepartments', {"departmentId":id,"isActive":true}, context).fetch()||[];
     if(response){
-      result = _.reject(response, { _id: args.subDepartmentId});
+      result = _.reject(response, {_id: args.subDepartmentId,isSystemDefined:false});
       return result;
     }
     return response;

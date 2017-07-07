@@ -67,6 +67,26 @@ class MlAddRole extends React.Component{
     if (ret) {
       toastr.error(ret);
     } else {
+       var modules = _.cloneDeep(this.state.assignModulesToRoles);
+      _.remove(modules, {moduleId: ""});
+      if(modules && modules.length == 0){
+        toastr.error("Please Select One Module");
+        return;
+      }
+
+      for(var i = 0; i < modules.length; i++){
+        if(modules[i].actions.length == 0){
+          toastr.error("Please Select Action");
+          return;
+        }
+      }
+
+      let uniqModule = _.uniqBy(modules, 'moduleId');
+      if (modules && uniqModule && uniqModule.length !== modules.length) {
+        toastr.error('Please select different module');
+        return;
+      }
+
       let roleDetails = {
         roleName: this.refs.roleName.value,
         displayName: this.refs.diplayName.value,
@@ -75,7 +95,7 @@ class MlAddRole extends React.Component{
         userType: this.state.selectedBackendUser,
         about: this.refs.about.value,
         assignRoles: this.state.assignRoleToClusters,
-        modules: this.state.assignModulesToRoles,
+        modules: modules,
         isActive: this.refs.isActive.checked
       };
 
@@ -88,6 +108,7 @@ class MlAddRole extends React.Component{
 
       if (_.isEmpty(emptyCluster) && _.isEmpty(emptyChapter) && _.isEmpty(emptySubChapter) && _.isEmpty(emptyCommunity) && _.isEmpty(emptyDepartment) && _.isEmpty(emptySubDepartment)) {
         const response = await addRoleActionHandler(roleDetails)
+        toastr.success("Role Created Successfully");
         return response;
       } else {
         toastr.error("All Assign role fields Required");
@@ -131,8 +152,8 @@ class MlAddRole extends React.Component{
       }
     ]
     let UserTypeOptions = [
-      {value: 'moolya', label: 'moolya', clearableValue: true},
-      {value: 'non-moolya', label: 'non-moolya', clearableValue: true}
+      {value: 'moolya', label: 'EcoSystem', clearableValue: true},
+      {value: 'non-moolya', label: 'SubChapter', clearableValue: true}
     ];
     let BackendUserOptions = [
       {value: 'Internal User', label: 'Internal User'},

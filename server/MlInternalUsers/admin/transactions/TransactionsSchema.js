@@ -167,6 +167,13 @@ let transactionsSchema = `
        role           : String
        user           : String      
     }
+    input transactionData{
+        clusterId     : String
+        chapterId     : String
+        subChapterId  : String
+        communityId   : String
+        transactionId : String
+    }
     type Mutation{
       createTransaction(transaction:TransactionsInput):response
       updateTransaction(transactionId:TransactionsInput,collection:String):response
@@ -174,7 +181,7 @@ let transactionsSchema = `
       updateTransactionStatus(transactionId:String,status:String):response
       createRegistrationTransaction(transactionType:String):response
       updateRegistrationTransaction(transactionInfo:TransactionsInput):response
-      selfAssignTransaction(transactionId:String,collection:String):response
+      selfAssignTransaction(transactionId:[String],collection:String):response
       unAssignTransaction(transactionId:String,collection:String):response
       createTransactionLog(transaction:TransactionsLogInput):response
     }
@@ -183,6 +190,7 @@ let transactionsSchema = `
       fetchTransactions(transactionType:String,status:[String]):[Transactions]
       fetchTransactionsLog(userId:String,transactionTypeName:String):[TransactionsLog]
       validateTransaction(transactionId:String,collection:String,assignedUserId:String):response
+      validateAssignmentsDataContext(data:[transactionData],userId:String):response
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], transactionsSchema]);
@@ -201,6 +209,7 @@ let supportedApi = [
   {api:'updateRegistrationTransaction', actionName:'UPDATE', moduleName:"TRANSACTIONSLOG"},
   {api:'selfAssignTransaction', actionName:'UPDATE', moduleName:"TRANSACTIONSLOG"},
   {api:'unAssignTransaction', actionName:'UPDATE', moduleName:"TRANSACTIONSLOG"},
-  {api:'validateTransaction', actionName:'READ', moduleName:"TRANSACTIONSLOG"},
+  {api:'validateTransaction', actionName:'READ', moduleName:"TRANSACTIONSLOG", isWhiteList:true},
+  {api:'validateAssignmentsDataContext', actionName:'READ', moduleName:"TRANSACTIONSLOG", isWhiteList:true},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

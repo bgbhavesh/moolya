@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 //import {fetchExternalUserProfilesActionHandler,setDefaultProfileActionHandler,deActivateProfileProfileActionHandler} from '../actions/switchUserProfilesActions';
 import {findUserActionHandler}  from '../actions/switchProfileActions'
-import {setAdminDefaultProfileActionHandler} from '../actions/switchProfileActions'
+import {setAdminDefaultProfileActionHandler,reloadPage,switchProfileActionHandler} from '../actions/switchProfileActions'
 import {deActivateAdminProfileActionHandler} from '../actions/switchProfileActions'
 import {fetchClusterDetails} from '../actions/switchProfileActions'
 import {initalizeFloatLabel} from '../../../admin/utils/formElemUtil';
@@ -16,6 +16,7 @@ export default class MlAdminSwitchProfile extends React.Component{
     this.state= {loading: true,swiper:null,userProfiles:[],currentSlideIndex:0,clusterData:{}};
     this.fetchExternalUserProfiles.bind(this);
     this.setDefaultUserProfile.bind(this);
+    this.switchUserProfile.bind(this);
     this.deactivateUserProfile.bind(this);
     this.onSlideIndexChange.bind(this);
     this.initializeSwiper.bind(this);
@@ -77,13 +78,28 @@ export default class MlAdminSwitchProfile extends React.Component{
   async setDefaultUserProfile(){
 
     let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
-    const response = await setAdminDefaultProfileActionHandler(profileDetails.clusterId);
-
+    var response=null;
+       response = await setAdminDefaultProfileActionHandler(profileDetails.clusterId);
     if(response){
       toastr.success("Default Profile set successfully");
+      reloadPage();
     }else{
       //throw error
       toastr.error("Failed to set the default profile");
+    }
+  }
+
+  async switchUserProfile(){
+
+    let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
+    var response=null;
+      response = await switchProfileActionHandler(profileDetails.clusterId);
+    if(response){
+      toastr.success("Profile switched successfully");
+      reloadPage();
+    }else{
+      //throw error
+      toastr.error("Failed to switch the profile");
     }
   }
 
@@ -198,9 +214,9 @@ export default class MlAdminSwitchProfile extends React.Component{
                 <div className="col-md-4" onClick={this.setDefaultUserProfile.bind(this)}>
                   <a href="#" className="fileUpload mlUpload_btn">Make Default</a>
                 </div>
-               {/* <div className="col-md-4" onClick={this.deactivateUserProfile.bind(this)}>
-                  <a href="#" className="fileUpload mlUpload_btn">Deactivate Profile</a>
-                </div>*/}
+                <div className="col-md-4" onClick={this.switchUserProfile.bind(this)}>
+                  <a href="#" className="fileUpload mlUpload_btn">Switch Profile</a>
+                </div>
               </div>:""}
 
             </div>:<div>No Profiles Available</div>

@@ -653,20 +653,33 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
                 }
               })
             }
+            let finalKYC=[]
             //get the selected subchapter based kyc
             let kyc=selectedSubChapterKYC()
             let subchapterKYC= processsChapterKYCDoc.concat(kyc)
             ///retun the unique docuumnets
-            let finalKYC= countryBasedDoc.concat(subchapterKYC)
+            //if country based documents available
+            if(countryBasedDoc&&countryBasedDoc.length>0){
+               finalKYC= countryBasedDoc.concat(subchapterKYC)
+            }else{
+              finalKYC=subchapterKYC
+            }
+
             finalKYC = _underscore.uniq(finalKYC, function (kyc) {
               return kyc.documentId;
             });
             return finalKYC
           } else {
+            let finalKYC=[]
             //get the kyc based on selected subchapter
             let kyc=selectedSubChapterKYC()
             if(kyc){
-              let finalKYC= countryBasedDoc.concat(kyc)
+              //if country based documents available
+              if(countryBasedDoc&&countryBasedDoc.length>0){
+                 finalKYC= countryBasedDoc.concat(kyc)
+              }else{
+                finalKYC= kyc
+              }
               ///return the unique docuumnets
               finalKYC = _underscore.uniq(finalKYC, function (kyc) {
                 return kyc.documentId;
@@ -681,7 +694,13 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
           //get the kyc based on selected subchapter
           let kyc=selectedSubChapterKYC()
           if(kyc&&kyc.length>0){
-            let finalKYC= countryBasedDoc.concat(kyc);
+            let finalKYC=[];
+            //if country based documents available
+            if(countryBasedDoc&&countryBasedDoc.length>0){
+               finalKYC= countryBasedDoc.concat(kyc);
+            }else {
+              finalKYC=kyc
+            }
             ///return the unique docuumnets
             finalKYC = _underscore.uniq(finalKYC, function (kyc) {
               return kyc.documentId;

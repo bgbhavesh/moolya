@@ -366,6 +366,7 @@ export default class MlAppBasicInfo extends React.Component{
                 <div className="form-group">
                   <input className="form-control float-label" placeholder="Display Name" value={that.state.basicData.displayName} onChange={that.textFieldSaves.bind(that,"displayName")}/>
                 </div>
+                <br className="brclear" />
                 <div className="form-group switch_wrap switch_names inline_switch">
                   <label>Activity Mode</label>
                   <span className={this.state.basicData.mode == 'online' ? "state_label acLabel" : "state_label"}>
@@ -379,7 +380,7 @@ export default class MlAppBasicInfo extends React.Component{
                     Offline
                   </span>
                 </div>
-
+                <br className="brclear" />
                 <Moolyaselect multiSelect={true}
                               className="form-control float-label"
                               valueKey={'value'}

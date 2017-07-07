@@ -58,16 +58,28 @@ let internalTaskSchema = `
         note: String
         mode: String
     }
+    
+    input selfInternalTask {
+      note: String
+      name: String
+      dueDate: String
+      priority: String
+      resourceId: String
+      expectedInput: String
+      expectedOutput: String
+    }
   
     type Query{
         fetchInternalTask:[InternalTask]
         fetchInternalTaskById(internalTaskId:String):InternalTask
         fetchMyInternalTask(status:[String]):[InternalTask]
+        fetchSelfCreatedInternalTask(status:[String]):[InternalTask]
     }
     
     type Mutation{       
         createInternalTask(internalTask:internalTask):response
         updateInternalTask(internalTaskId:String, internalTask:internalTask):response
+        createSelfInternalTask(selfInternalTask:selfInternalTask): response
     }
 `
 

@@ -430,6 +430,13 @@ export default class MlAppBasicInfo extends React.Component{
               </div>
             )
           })}
+          <div className="form-group switch_wrap switch_names inline_switch">
+            <label>Status</label>
+            <label className="switch nocolor-switch">
+              <input type="checkbox" />
+              <div className="slider"></div>
+            </label>
+          </div>
         </ScrollArea>
         <div className="ml_btn" style={{'textAlign':'center'}}>
           <div className="save_btn" onClick={this.saveDetails.bind(this)}>Save</div> <div className="cancel_btn">Cancel</div>

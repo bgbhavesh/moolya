@@ -49,13 +49,18 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
       actionName: 'edit',
       showAction: true,
       handler: async(data)=>{
-        let response =  await validateTransaction(data.transactionId,"MlPortfolioDetails",data[0].assignedUserId);
-        if(data && data[0].id && response.success === true){
-          FlowRouter.go("/admin/transactions/portfolio/editRequests/"+data[0].id+"/"+data[0].communityType);
-        }else if(data && data[0].id){
-          toastr.error("User does not have access to edit record");
-        } else{
+        let list = data
+        if(!list || list.length==0 ){
           toastr.error("Please Select a record");
+        } else if(list && list.length>1){
+          toastr.error("Multiple records cannot be edited, Please select a record");
+        } else{
+          let response =  await validateTransaction(data.transactionId,"MlPortfolioDetails",data[0].assignedUserId);
+          if(response.success === true ){
+            FlowRouter.go("/admin/transactions/portfolio/editRequests/"+data[0].id+"/"+data[0].communityType);
+          }else{
+            toastr.error("User does not have access to edit record");
+          }
         }
       }
     },
@@ -77,25 +82,23 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
     {
       showAction: true,
       actionName: 'view',
-      handler: (data)=>{
-        if(data && data[0].id){
-          FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/"+data[0].id+"/"+data[0].communityType);
+      handler: async(data)=>{
+        let list = data
+        if(!list || list.length==0 ){
+          toastr.error("Please Select a record");
+        } else if(list && list.length>1){
+          toastr.error("Multiple records cannot be viewd, Please select a record");
         } else{
-          toastr.error("Please select a record");
+          let response =  await validateTransaction(data.transactionId,"MlPortfolioDetails",data[0].assignedUserId);
+          if(response.success === true ){
+            FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/"+data[0].id+"/"+data[0].communityType);
+          }else{
+            toastr.error("User does not have access to view record");
+          }
         }
+
       }
     },
-    // {
-    //   showAction: true,
-    //   actionName: 'approveUser',
-    //   handler: (data) => {
-    //     if (data && data.id) {
-    //       FlowRouter.go("/admin/transactions/portfolio/viewPortfolio/" + data.id+"/"+data.communityType);
-    //     } else {
-    //       toastr.error("Please select a record");
-    //     }
-    //   }
-    // },
     {
       showAction: true,
       actionName: 'rejectUser',
@@ -108,32 +111,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
       }
     },
   ],
-  graphQlQuery:/*gql`
-    query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
-      data:SearchQuery(module:"Portfoliodetails", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
-        totalRecords
-          data{
-            ...on Portfoliodetails{
-                id:_id
-                portfolioId
-                transactionType,
-                portfolioUserName,
-              	contactNumber
-                communityType
-                clusterName
-                chapterName
-                subChapterName
-                accountType
-                source
-                createdBy
-                createdAt
-                status
-                assignedTo
-            }
-          }
-      }
-    }
-  `*/
+  graphQlQuery:
     gql`query ContextSpecSearch($offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
                     data:ContextSpecSearch(module:"portfolioRequests",offset:$offset,limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
                     totalRecords

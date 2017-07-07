@@ -84,7 +84,7 @@ MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
           pick = _.pick(task.payment, ['activitiesDerived', 'activitiesDiscount', 'activitiesAmount', 'isDiscount','discountType','discountValue', 'derivedAmount'])
         let paymentAmount = {
           activitiesAmount: finalActivitiesAmount,
-          activitiesDiscount: finalActivitiesDerivedAmount - finalActivitiesAmount,
+          activitiesDiscount: finalActivitiesAmount - finalActivitiesDerivedAmount,
           activitiesDerived: finalActivitiesDerivedAmount,
           amount: finalActivitiesDerivedAmount
         };

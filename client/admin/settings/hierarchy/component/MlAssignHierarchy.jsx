@@ -399,7 +399,7 @@ export default class MlAssignHierarchy extends React.Component {
                         </div>
                         <div className="col-md-4">
                           <div className="form-group">
-                            <Moolyaselect multiSelect={false} className="form-control float-label" selectedValue={roles.reportingRole} valueKey={'value'} labelKey={'label'} placeholder="Reporting role"  queryType={"graphql"} query={reportingRolequery} reExecuteQuery={true} queryOptions={reportingRoleOptions} isDynamic={true}  onSelect={that.optionsBySelectAssignedReportingRole.bind(that,id)} />
+                            <Moolyaselect multiSelect={false} disabled={true} className="form-control float-label" selectedValue={roles.reportingRole} valueKey={'value'} labelKey={'label'} placeholder="Reporting role"  queryType={"graphql"} query={reportingRolequery} reExecuteQuery={true} queryOptions={reportingRoleOptions} isDynamic={true}  onSelect={that.optionsBySelectAssignedReportingRole.bind(that,id)} />
                           </div>
                         </div>
                         <br className="brclear" />
@@ -460,7 +460,7 @@ export default class MlAssignHierarchy extends React.Component {
                         </div>
                         <div className="col-md-4">
                           <div className="form-group">
-                            <Moolyaselect multiSelect={false} className="form-control float-label" selectedValue={roles.reportingRole} valueKey={'value'} labelKey={'label'} placeholder="Reporting role"  queryType={"graphql"} query={reportingRolequery} reExecuteQuery={true} queryOptions={reportingRoleOptions} isDynamic={true}  onSelect={that.optionsBySelectAssignedReportingRole.bind(that,id)} />
+                            <Moolyaselect multiSelect={false} disabled={true} className="form-control float-label" selectedValue={roles.reportingRole} valueKey={'value'} labelKey={'label'} placeholder="Reporting role"  queryType={"graphql"} query={reportingRolequery} reExecuteQuery={true} queryOptions={reportingRoleOptions} isDynamic={true}  onSelect={that.optionsBySelectAssignedReportingRole.bind(that,id)} />
                           </div>
                         </div>
                         <hr />
@@ -520,7 +520,7 @@ export default class MlAssignHierarchy extends React.Component {
                         </div>
                         <div className="col-md-4">
                           <div className="form-group">
-                            <Moolyaselect multiSelect={false} className="form-control float-label" selectedValue={roles.reportingRole} valueKey={'value'} labelKey={'label'} placeholder="Reporting role"  queryType={"graphql"} query={reportingRolequery} reExecuteQuery={true} queryOptions={reportingRoleOptions} isDynamic={true}   onSelect={that.optionsBySelectAssignedReportingRole.bind(that,id)} />
+                            <Moolyaselect multiSelect={false} disabled={true} className="form-control float-label" selectedValue={roles.reportingRole} valueKey={'value'} labelKey={'label'} placeholder="Reporting role"  queryType={"graphql"} query={reportingRolequery} reExecuteQuery={true} queryOptions={reportingRoleOptions} isDynamic={true}   onSelect={that.optionsBySelectAssignedReportingRole.bind(that,id)} />
                           </div>
                         </div>
                         <hr />

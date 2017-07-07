@@ -163,11 +163,11 @@ export default class MlAppChooseTeam extends React.Component{
     if(evt.target.value == "connections") {
       teamData[index].resourceType="connections";
       delete teamData[index].resourceId;
-
+      teamData[index].users = [];
     } else if (evt.target.value == "moolyaAdmins") {
-      teamData[index].resourceType="connections";
+      teamData[index].resourceType="moolyaAdmins";
       delete teamData[index].resourceId;
-
+      teamData[index].users = [];
     } else {
       let officeId = evt.target.value;
       teamData[index].resourceType="office";
@@ -182,11 +182,12 @@ export default class MlAppChooseTeam extends React.Component{
             userId: user.userId
           }
         });
-        this.setState({
-          teamData:teamData
-        });
+
       }
     }
+    this.setState({
+      teamData:teamData
+    });
   }
 
   /**

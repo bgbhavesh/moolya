@@ -185,6 +185,7 @@ let myOfficeSchema = `
         fetchOffice:[MyOffice]
         fetchOfficeSC:[OfficeSC]
         fetchOfficeById(officeId:String):MyOffice
+        fetchOfficeSCById(officeId:String):MyOffice
         fetchOfficeMember(memberId:String):OfficeMembers
         fetchOfficeMembers(officeId:String, isPrincipal:Boolean):[OfficeMembers]
         fetchAllOfficeMembersWithUserId:[OfficeMembersWithUserId]

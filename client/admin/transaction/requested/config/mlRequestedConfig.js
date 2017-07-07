@@ -61,13 +61,18 @@ const mlUserTypeTableConfig=new MlViewer.View({
       actionName: 'edit',
       showAction: true,
       handler: async(data)=>{
-        let response =  await validateTransaction(data.registrationId,"MlRegistration",data[0].assignedUserId);
-        if(data && data[0].id && response.success === true){
-          FlowRouter.go("/admin/transactions/editRequests/"+data[0].id);
-        }else if(data && data[0].id){
-          toastr.error("User does not have access to edit record");
-        } else{
+        let list = data
+        if(!list || list.length==0 ){
           toastr.error("Please Select a record");
+        } else if(list && list.length>1){
+          toastr.error("Multiple records cannot be edited, Please select a record");
+        } else{
+          let response =  await validateTransaction(data.registrationId,"MlRegistration",data[0].assignedUserId);
+          if(response.success === true ){
+            FlowRouter.go("/admin/transactions/editRequests/"+data[0].id);
+          }else {
+            toastr.error("User does not have access to edit record");
+          }
         }
       }
     },

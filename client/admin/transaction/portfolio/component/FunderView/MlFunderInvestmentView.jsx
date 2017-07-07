@@ -5,6 +5,7 @@ import {fetchfunderPortfolioInvestor} from "../../actions/findPortfolioFunderDet
 import {initializeMlAnnotator} from "../../../../../commons/annotator/mlAnnotator";
 import {createAnnotationActionHandler} from "../../actions/updatePortfolioDetails";
 import {findAnnotations} from "../../../../../commons/annotator/findAnnotations";
+import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
 import MlLoader from '../../../../../commons/components/loader/loader'
 
 export default class MlFunderInvestmentView extends React.Component {
@@ -23,6 +24,7 @@ export default class MlFunderInvestmentView extends React.Component {
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
+    this.validateUserForAnnotation(this)
     return this;
   }
 
@@ -126,6 +128,15 @@ export default class MlFunderInvestmentView extends React.Component {
 
   componentWillMount() {
     this.fetchPortfolioDetails();
+    let resp = this.validateUserForAnnotation();
+    return resp
+  }
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response && !this.state.isUserValidForAnnotation) {
+      this.setState({isUserValidForAnnotation:response})
+    }
   }
 
   async fetchPortfolioDetails() {
@@ -147,10 +158,12 @@ export default class MlFunderInvestmentView extends React.Component {
       this.state.content.annotator('destroy');
     }
     this.state.content = null;
-    this.initalizeAnnotaor();
     this.state.annotations = [];
     this.setState({loading: false, viewCurDetail: ary, tabIndex: id});
-    this.fetchAnnotations(id);
+    if(this.state.isUserValidForAnnotation){
+      this.initalizeAnnotaor();
+      this.fetchAnnotations(id);
+    }
     $('.investement-view-content .funding-investers').slideUp();
     $('#funding_show').slideDown()
 

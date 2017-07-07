@@ -23,7 +23,8 @@ class MlAddRole extends React.Component{
       selectedUserType:'',
       selectedBackendUser:'Internal User',
       selectedSubChapter:'',
-      selectedCommunity:''
+      selectedCommunity:'',
+      isNonMoolyaAvailable: false
     }
     this.addEventHandler.bind(this);
     return this;
@@ -96,7 +97,8 @@ class MlAddRole extends React.Component{
         about: this.refs.about.value,
         assignRoles: this.state.assignRoleToClusters,
         modules: modules,
-        isActive: this.refs.isActive.checked
+        isActive: this.refs.isActive.checked,
+        isNonMoolyaAvailable: this.refs.isNonMoolyaAvailable.checked
       };
 
       var emptyCluster = _.filter(roleDetails.assignRoles, ['cluster', ''])
@@ -130,11 +132,6 @@ class MlAddRole extends React.Component{
   onBackendUserSelect(val){
     this.setState({selectedBackendUser:val.value})
   }
-  // optionsBySelectSubChapter(val){
-  //   this.setState({selectedSubChapter:val})
-  // }
-
-
 
   render(){
     let MlActionConfig = [
@@ -153,7 +150,7 @@ class MlAddRole extends React.Component{
     ]
     let UserTypeOptions = [
       {value: 'moolya', label: 'EcoSystem', clearableValue: true},
-      {value: 'non-moolya', label: 'SubChapter', clearableValue: true}
+      {value: 'non-moolya', label: 'non-moolya subchapter', clearableValue: true}
     ];
     let BackendUserOptions = [
       {value: 'Internal User', label: 'Internal User'},
@@ -220,6 +217,13 @@ class MlAddRole extends React.Component{
                         <input type="checkbox" ref="isActive" />
                         <div className="slider"></div>
                       </label>
+                    </div>
+                    <div className="form-group">
+                      <div className="input_types">
+                        <div className="input_types"><input id="checkbox1" type="checkbox" ref="isNonMoolyaAvailable"
+                                                            value="1"/><label
+                          htmlFor="checkbox1"><span></span>Is Available for non-moolya ?</label></div>
+                      </div>
                     </div>
                     <br className="brclear"/>
 

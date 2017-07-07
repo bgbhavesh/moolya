@@ -16,7 +16,6 @@ export async function findAddressBookActionHandler() {
           emailId
           emailIdType
           emailIdTypeName
-          index
         }
         addressInfo {
           addressType
@@ -29,16 +28,16 @@ export async function findAddressBookActionHandler() {
           addressArea
           addressCity
           addressState
+          addressStateId
           addressCountry
+          addressCountryId
           addressPinCode
-          index
         }
         contactInfo {
           numberType
           numberTypeName
           countryCode
           contactNumber
-          index
         }
       }
     }
@@ -48,6 +47,8 @@ export async function findAddressBookActionHandler() {
   const id = result.data.findAddressBook;
   return id
 }
+
+
 // {
 //   findAddressBook{
 //   success,

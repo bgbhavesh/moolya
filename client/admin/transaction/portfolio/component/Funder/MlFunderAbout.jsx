@@ -6,6 +6,7 @@ var Select = require('react-select');
 import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {fetchfunderPortfolioAbout} from '../../actions/findPortfolioFunderDetails'
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
+import {putDataIntoTheLibrary} from '../../../../../app/commons/actions/putDataIntoTheLibrary'
 import _ from 'lodash';
 import MlLoader from '../../../../../commons/components/loader/loader'
 
@@ -22,6 +23,7 @@ export default class MlFunderAbout extends React.Component {
     this.onClick.bind(this);
     this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
+    this.libraryAction.bind(this)
     return this;
   }
   componentWillMount(){
@@ -162,14 +164,22 @@ export default class MlFunderAbout extends React.Component {
     if(e.target.files[0].length ==  0)
       return;
     let file = e.target.files[0];
-    // let name = e.target.name;
-    // let fileName = e.target.files[0].name;
     let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{funderAbout:{profilePic:" "}}};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
   }
-  onFileUploadCallBack(resp){
+  onFileUploadCallBack(file,resp){
     if(resp){
       let result = JSON.parse(resp)
+      let userOption = confirm("Do you want to add the file into the library")
+      if(userOption){
+        let fileObjectStructure = {
+          fileName: file.name,
+          fileType: file.type,
+          fileUrl: result.result,
+          libraryType: "image"
+        }
+        this.libraryAction(fileObjectStructure)
+      }
       if(result.success){
         this.setState({profilePic:result.result})
         this.setState({loading:true})
@@ -177,6 +187,13 @@ export default class MlFunderAbout extends React.Component {
       }
     }
   }
+
+  async libraryAction(file) {
+    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file)
+    return resp;
+  }
+
   async fetchOnlyImages(){
     let that = this;
     const response = await fetchfunderPortfolioAbout(that.props.portfolioDetailsId);

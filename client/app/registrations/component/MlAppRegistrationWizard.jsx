@@ -9,6 +9,7 @@ import MlLoader from "../../../../client/commons/components/loader/loader";
 import {findRegistrationActionHandler, documentTypesActionHandler} from "../actions/findRegistration";
 import {fetchTemplateHandler} from "../../../../client/commons/containers/templates/mltemplateActionHandler";
 import _underscore from "underscore";
+import {appClient} from '../../core/appConnection';
 export default class MlAppRegistrationWizard extends Component {
 
   constructor(props) {
@@ -104,7 +105,8 @@ export default class MlAppRegistrationWizard extends Component {
       subProcess: "Registration",
       stepCode: "SOFT",
       userType: userType,
-      recordId: regDetails._id
+      recordId: regDetails._id,
+      connection:appClient
     });
     this.setState({softRegComponent: reg && reg.component ? reg.component : null});
     if (!reg || !reg.component) {
@@ -120,7 +122,8 @@ export default class MlAppRegistrationWizard extends Component {
       subProcess: "Registration",
       stepCode: "HARD",
       userType: userType,
-      recordId: regDetails._id
+      recordId: regDetails._id,
+      connection:appClient
     });
     this.setState({hardRegComponent: reg && reg.component ? reg.component : null});
     if (!reg || !reg.component) {

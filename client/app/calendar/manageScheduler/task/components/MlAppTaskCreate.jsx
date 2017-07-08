@@ -141,7 +141,7 @@ export default class MlAppTaskCreate extends Component {
                     <br className="brclear"/>
                   </div>
                   <div className="form-group">
-                    <label>Total number of Sessions Rs. <input className="form-control inline_input medium_in"
+                    <label>Total number of Sessions <input className="form-control inline_input medium_in"
                                                                type="Number" min="0"
                                                                defaultValue={this.state.data.noOfSession}
                                                                name="noOfSession" onBlur={this.handleBlur.bind(this)}/>

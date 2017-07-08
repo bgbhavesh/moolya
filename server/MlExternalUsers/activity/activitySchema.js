@@ -154,6 +154,7 @@ _id: String
 
     type Query {
         fetchActivities(profileId:String, isInternal: Boolean, isExternal: Boolean):[Activity]
+        fetchActivitiesForTask(taskId:String):[Activity]
         fetchActivity(activityId:String):Activity
               
     }
@@ -168,6 +169,7 @@ _id: String
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], activity]);
 let supportedApi = [
   {api:'fetchActivities', actionName:'READ', moduleName:"OFFICE"},
+  {api:'fetchActivitiesForTask', actionName:'READ', moduleName:"OFFICE"},
   {api:'fetchActivity', actionName:'READ', moduleName:"OFFICE"},
 
 

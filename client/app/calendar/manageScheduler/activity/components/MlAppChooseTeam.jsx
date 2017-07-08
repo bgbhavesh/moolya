@@ -25,6 +25,7 @@ export default class MlAppChooseTeam extends React.Component{
     this.state = {
       teamData: props.data ? props.data : [{users: []}],
       isExternal: props.isExternal ? props.isExternal : false,
+      isInternal: props.isInternal ? props.isInternal : false,
       offices : []
     };
   }
@@ -40,7 +41,7 @@ export default class MlAppChooseTeam extends React.Component{
       this.setState({
         teamData: props.data ? props.data : [{users: []}],
         isExternal: props.isExternal ? props.isExternal : false,
-        offices : []
+        isInternal: props.isInternal ? props.isInternal : false
       });
     }
   }
@@ -285,7 +286,7 @@ export default class MlAppChooseTeam extends React.Component{
                             <option value="connections">My Connections</option>
                             <option hidden={!that.state.isExternal} disabled={!that.state.isExternal} value="moolyaAdmins">Moolya Admins</option>
                             {that.state.offices.map(function (office , index) {
-                              return <option key={index} value={office._id}>{ office.officeName + " - " + office.branchType }</option>
+                              return <option key={index} hidden={!that.state.isInternal} disabled={!that.state.isInternal} value={office._id}>{ office.officeName + " - " + office.branchType }</option>
                             })}
                           </select>
                         </div>

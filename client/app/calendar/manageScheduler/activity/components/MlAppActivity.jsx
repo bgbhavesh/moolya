@@ -123,6 +123,7 @@ export default class MlAppActivity extends Component {
           basicInfo: activityBasicInfo,
           teamInfo: teamInfo,
           isExternal: activity.isExternal,
+          isInternal: activity.isInternal,
           paymentInfo: paymentInfo
         });
       }
@@ -176,7 +177,7 @@ export default class MlAppActivity extends Component {
         },
         {
           name: 'Choose team',
-          component: <MlAppChooseTeam getActivityDetails={this.getActivityDetails} saveActivity={that.saveActivity} isExternal={this.state.isExternal} data={this.state.teamInfo}/>,
+          component: <MlAppChooseTeam getActivityDetails={this.getActivityDetails} saveActivity={that.saveActivity} isInternal={this.state.isInternal} isExternal={this.state.isExternal} data={this.state.teamInfo}/>,
           icon: <span className="ml fa fa-users"></span>
         },
         {

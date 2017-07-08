@@ -224,6 +224,7 @@ export default class MlAppBasicInfo extends React.Component{
     if(data.mode !== 'online') {
       delete data.conversation;
     }
+    data.isServiceCardEligible = data.isExternal ? data.isServiceCardEligible : false;
     data.duration = duration ;
     that.props.saveActivity(data);
   }
@@ -412,7 +413,7 @@ export default class MlAppBasicInfo extends React.Component{
                 </div>
                 <div className="form-group">
                   <div className="input_types">
-                    <input id="isServiceCardEligible" type="checkbox" name="check1" value="true" checked={that.state.basicData.isServiceCardEligible} onChange={that.checkBoxHandler.bind(that, "isServiceCardEligible")}/>
+                    <input id="isServiceCardEligible" type="checkbox" name="check1" value="true" disabled={!that.state.basicData.isExternal} checked={that.state.basicData.isServiceCardEligible && that.state.basicData.isExternal } onChange={that.checkBoxHandler.bind(that, "isServiceCardEligible")}/>
                     <label htmlFor="isServiceCardEligible" ><span><span></span></span>
                       Eligible for service card
                     </label>

@@ -40,7 +40,7 @@ export default class MlAppBasicInfo extends React.Component{
         displayName           : "",
         isInternal            : false,
         isExternal            : false,
-        status              : false,
+        isActive              : false,
         mode                  : "online",
         isServiceCardEligible : false,
         industryTypes         : [],
@@ -443,7 +443,7 @@ export default class MlAppBasicInfo extends React.Component{
           <div className="form-group switch_wrap switch_names inline_switch">
             <label>Status</label>
             <label className="switch">
-              <input type="checkbox" onChange={that.checkBoxHandler.bind(that, "status")} checked={this.state.basicData.status} value="status" />
+              <input type="checkbox" onChange={that.checkBoxHandler.bind(that, "isActive")} checked={this.state.basicData.isActive} value="isActive" />
               <div className="slider"></div>
             </label>
           </div>

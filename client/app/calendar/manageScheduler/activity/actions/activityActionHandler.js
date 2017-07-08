@@ -103,7 +103,7 @@ export async function getActivityActionHandler(id) {
           isServiceCardEligible
           industryTypes
           note
-          status
+          isActive
           imageLink
           duration{
            hours

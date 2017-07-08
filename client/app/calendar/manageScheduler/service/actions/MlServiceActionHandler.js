@@ -201,5 +201,33 @@ query ($portfolioId: String) {
 }
 
 
-
-
+export async function fetchTaskDetailsForServiceCard (profileId) {
+  const result = await appClient.query({
+    query: gql`
+      query($profileId:String) {
+        fetchTaskDetailsForServiceCard(profileId: $profileId) {
+          displayName
+          noOfSession
+          sessionFrequency
+          duration {
+            hours
+            minutes
+          }
+          session {
+            sessionId
+            duration {
+              hours
+              minutes
+            }
+            activities
+          }
+        }
+      }
+    `,
+    variables: {
+      profileId:profileId
+    },
+  });
+  const taskDetails = result.data.fetchTaskDetailsForServiceCard;
+  return taskDetails
+}

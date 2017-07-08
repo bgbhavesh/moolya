@@ -78,7 +78,7 @@ _id: String
       payment: ActivityPayment
       facilitationCharge: FacilitationCharge
       teams: [Teams]
-      status: Boolean
+      isActive: Boolean
       createdAt: Date
       updatedAt: Date
     }
@@ -147,7 +147,7 @@ _id: String
       payment: activityPayment
       facilitationCharge: facilitationCharge
       teams: [teams]
-      status: Boolean
+      isActive: Boolean
       createdAt: Date
       updatedAt: Date
     }

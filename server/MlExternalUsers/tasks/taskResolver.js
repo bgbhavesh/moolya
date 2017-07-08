@@ -15,7 +15,6 @@ MlResolver.MlQueryResolver['fetchTasks'] = (obj, args, context, info) => {
   };
   let result = mlDBController.find('MlTask', query, context).fetch()
   return result;
-
 }
 
 MlResolver.MlQueryResolver['fetchTask'] = (obj, args, context, info) => {
@@ -123,7 +122,19 @@ MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
 MlResolver.MlQueryResolver['fetchTaskDetails'] = (obj, args, context, info) => {
   let result = mlDBController.findOne('MlTask', {_id:args.name}, context)
   return result;
+};
 
-}
-
+MlResolver.MlQueryResolver['fetchTaskDetailsForServiceCard'] = (obj, args, context, info) => {
+  let query = {
+    userId: context.userId,
+    isExternal: true,
+    isActive: true,
+    isServiceCardEligible: true
+  };
+  if(args.profileId){
+    query.profileId = args.profileId;
+  };
+  let result = mlDBController.find('MlTask', query, context).fetch()
+  return result;
+};
 

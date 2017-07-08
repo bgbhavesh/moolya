@@ -135,6 +135,16 @@ export default class MlAppTaskSession extends Component {
     }.bind(this));
   }
 
+  removeActivity(index, idx) {
+    let sessionData = this.state.sessionData;
+    sessionData[index].activities.splice(idx, 1);
+    this.setState({
+      sessionData: sessionData
+    }, function () {
+      this.sendSessionDataToParent();
+    }.bind(this));
+  }
+
   render() {
     const that = this;
     let options = that.state.activities ? that.state.activities.map(function (activity) {
@@ -191,6 +201,7 @@ export default class MlAppTaskSession extends Component {
                                 </div>
                               </div>
                               <h3>{activity.displayName}</h3>
+                              {/*<span onClick={()=>that.removeActivity(id, idx)} aria-hidden="true" className="fa fa-lock"></span>*/}
                             </div>
                           </div>
                         </div>

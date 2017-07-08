@@ -35,6 +35,7 @@ import {client} from '../../../core/apolloConnection';
             }
           }
           isActive
+          isNonMoolyaAvailable
       }
       }
     `,

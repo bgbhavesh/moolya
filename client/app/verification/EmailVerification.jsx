@@ -1,8 +1,7 @@
 import React from 'react';
-import { render } from 'react-dom';
-import {verifyEmailHandler,verifyMobileNumberHandler} from '../../verificationActionHandler';
-import MlLoader from '../../../commons/components/loader/loader'
-
+import {verifyEmailHandler,verifyMobileNumberHandler} from '../../commons/verificationActionHandler';
+import MlLoader from '../../commons/components/loader/loader'
+import {appClient} from '../core/appConnection';
 export default class EmailVerification extends React.Component{
 
   constructor(props){
@@ -47,7 +46,7 @@ export default class EmailVerification extends React.Component{
   }
 
  /* async verifyEmail(token){
-    const response=await verifyEmailHandler(token);
+    const response=await verifyEmailHandler(token,appClient);
     let resp=null;
     if(response.success){
       resp = JSON.parse(response.result);
@@ -61,7 +60,7 @@ export default class EmailVerification extends React.Component{
   async verifyMobileNumber(){
     let mobileNumber=this.state.mobileNumber;
     let otp=this.refs.otpValue.value;
-    const response=await verifyMobileNumberHandler(mobileNumber,otp);
+    const response=await verifyMobileNumberHandler(mobileNumber,otp,appClient);
     let resp=null;
     if(response.success){
       resp = JSON.parse(response.result);

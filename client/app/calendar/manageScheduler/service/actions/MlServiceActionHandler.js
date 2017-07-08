@@ -33,6 +33,7 @@ export async function fetchServiceActionHandler (serviceId) {
         name
         displayName
         noOfSession
+        validTill
         sessionFrequency
         duration{
          hours

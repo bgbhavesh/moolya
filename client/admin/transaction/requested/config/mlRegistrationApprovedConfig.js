@@ -3,6 +3,7 @@ import React from "react";
 import gql from "graphql-tag";
 import moment from "moment";
 import MlCustomFilter from "../../../../commons/customFilters/customFilter";
+import {client} from '../../../core/apolloConnection';
 function dateFormatter (data){
   let createdDateTime=data&&data.data&&data.data.registrationDate?data.data.registrationDate:null;
   return <div>{createdDateTime&&moment(createdDateTime).format('MM-DD-YYYY hh:mm:ss')}</div>;
@@ -18,7 +19,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   filter:true,
-  filterComponent: <MlCustomFilter module="registration" moduleName="registration" />,
+  filterComponent: <MlCustomFilter module="registration" moduleName="registration" client={client}/>,
   fieldsMap: {
     'registrationDate': 'registrationInfo.registrationDate',
     'firstName': 'registrationInfo.firstName',

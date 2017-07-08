@@ -32,7 +32,8 @@ export default class MlAppServiceStep1 extends React.Component{
       communityObject:[{}],
       chapters:[],chapterName:[],
       states:[],subChapterName:[],
-      communities:[],communitiesName:[]
+      communities:[],communitiesName:[],
+      daysRemaining:""
     }
     this.getDetails.bind(this)
     this.getUserProfile.bind(this)
@@ -94,10 +95,16 @@ async getDetails() {
 
   }
 
+  var validTillDate = Date.parse(this.state.validTillDate);
+  var currentDate = new Date();
+  var remainingDate =  Math.floor((validTillDate - currentDate) / (1000*60*60*24));
+  isNaN(remainingDate)?remainingDate="":remainingDate;
+  this.setState({
+    daysRemaining: remainingDate
+  })
+
   this.getUserProfile();
-
 }
-
   async saveDetails() {
     let cities = []
     let states = []
@@ -150,14 +157,6 @@ async getDetails() {
     }else {
       const res = await updateServiceActionHandler(idExist,services)
       this.getDetails();
-    }
-  }
-
-  serviceExpires(e) {
-    if(e.currentTarget.value >= 0) {
-      this.setState({"serviceExpiral":e.currentTarget.value});
-    } else {
-      this.setState({"serviceExpiral":0});
     }
   }
 
@@ -298,7 +297,7 @@ async getDetails() {
                 </div>
                 <br className="brclear"/>
                 <div className="form-group">
-                  <label>Service expires &nbsp; <input type="text" className="form-control inline_input" onChange={(e)=>this.serviceExpires(e)} value={this.state.serviceExpiral}  /> days from the date of purchase</label>
+                  <label>Service expires &nbsp; <input type="text" className="form-control inline_input" disabled value={this.state.daysRemaining}  /> days from the date of purchase</label>
                 </div>
               </form>
             </div>

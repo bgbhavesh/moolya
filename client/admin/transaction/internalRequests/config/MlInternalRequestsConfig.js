@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import MlInternalRequestDetailsComponent from '../../internalRequests/component/MlInternalRequestDetailsComponent'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
 import CreateRequest from '../component/CreateRequestComponent'
+import {client} from '../../../core/apolloConnection';
 
 const mlInternalRequestsTableConfig=new MlViewer.View({
   name:"TransactionsLogTable",
@@ -15,7 +16,7 @@ const mlInternalRequestsTableConfig=new MlViewer.View({
   throttleRefresh:false,
   pagination:true,//To display pagination
   filter:true,
-  filterComponent: <MlCustomFilter module="internalRequests" moduleName="internalRequests" />,
+  filterComponent: <MlCustomFilter module="internalRequests" moduleName="internalRequests" client={client} />,
   columns:[
     {dataField: "requestId",title:"Id",'isKey':true,isHidden:true,selectRow:true},
     {dataField: "requestId", title: "Transaction Id",dataSort:true,selectRow:true},

@@ -8,8 +8,10 @@ var _ = require('lodash')
 
 MlResolver.MlQueryResolver['fetchTasks'] = (obj, args, context, info) => {
   let query = {
-    userId:context.userId,
-    profileId:args.profileId
+    userId: context.userId
+  };
+  if(args.profileId){
+    query.profileId = args.profileId;
   };
   let result = mlDBController.find('MlTask', query, context).fetch()
   return result;
@@ -68,11 +70,11 @@ MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
           let details = mlDBController.find('MlActivity',{_id:{$in:item}}, context).fetch()
           let amount = _.map(details, 'payment.amount');
           _.each(amount, function (i,s) {
-            activitiesAmount.push(i)
+            activitiesAmount.push(i ? i : 0);
           });
           let derivedAmount = _.map(details, 'payment.derivedAmount');
           _.each(derivedAmount, function (i,s) {
-            activitiesDerivedAmount.push(i)
+            activitiesDerivedAmount.push(i ? i : 0);
           });
         });
         let finalActivitiesAmount = _.sum(activitiesAmount);

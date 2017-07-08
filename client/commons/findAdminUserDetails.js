@@ -1,11 +1,11 @@
 
 import gql from 'graphql-tag'
-import {client} from '../admin/core/apolloConnection';
 
 
-export async function findAdminUserDetails(userId) {
+export async function findAdminUserDetails(userId,connection) {
   let id=userId
-  const result = await client.query({
+  var connection=connection||{};
+  const result = await connection.query({
     query: gql`
         query($id: String){
             data:fetchUserDetails(userId:$id){

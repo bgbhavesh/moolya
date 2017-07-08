@@ -158,9 +158,9 @@ let CoreModules = {
       let clusterIds = userProfile && userProfile.defaultProfileHierarchyRefId ? userProfile.defaultProfileHierarchyRefId : [];
       userContextQuery = {clusterId: {$in: [clusterIds]}}
     }
-    query = mergeQueries(userContextQuery, userFilterQuery, serverQuery);
+    query = mergeQueries( userFilterQuery, serverQuery);
 
-    const data = MlAudit.find(query, fieldsProj).fetch();
+    const data = MlAudit.find(query, userContextQuery,fieldsProj).fetch();
     data.map(function (doc, index) {
       let userObj;
       if (doc && doc.userId) {

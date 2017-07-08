@@ -91,13 +91,13 @@ class MlAppPortfolio extends Component{
 
   async fetchEditPortfolioTemplate(pId) {
       let userType = this.context.userType;
-      const reg = await fetchTemplateHandler({process:"Registration",subProcess:"Registration", stepCode:"PORTFOLIO", recordId:pId, mode:"edit", userType:userType});
+      const reg = await fetchTemplateHandler({process:"Registration",subProcess:"Registration", stepCode:"PORTFOLIO", recordId:pId, mode:"edit", userType:userType,connection:appClient});
       this.setState({editComponent:reg&&reg.component?reg.component:null});
   }
 
   async fetchViewPortfolioTemplate(id) {
     let userType = this.context.userType;
-    const reg= await fetchTemplateHandler({process:"Registration",subProcess:"Registration", stepCode:"PORTFOLIO", recordId:id, mode:"view", userType:userType});
+    const reg= await fetchTemplateHandler({process:"Registration",subProcess:"Registration", stepCode:"PORTFOLIO", recordId:id, mode:"view", userType:userType,connection:appClient});
     this.setState({editComponent:reg&&reg.component?reg.component:null});
   }
 

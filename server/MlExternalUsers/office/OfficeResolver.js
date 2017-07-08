@@ -431,6 +431,7 @@ MlResolver.MlQueryResolver['getTeamUsers'] = (obj, args, context, info) => {
   }
   pipeline.push({"$lookup":{from: "users",localField: "emailId",foreignField: "username",as: "user"}});
   pipeline.push({"$unwind":"$user"});
+  pipeline.push({ $match: { 'user.profile.isActive':true } });
   pipeline.push({"$project":{ communityType : '$communityType', userId:"$user._id", profileImage:"$user.profile.profileImage", name:"$user.profile.displayName", externalUserProfiles:"$user.profile.externalUserProfiles"}});
   let result = mlDBController.aggregate('MlOfficeMembers', pipeline).map(function (user) {
     let profileId;

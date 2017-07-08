@@ -104,7 +104,7 @@ export async function fetchIdeaByPortfolioId(portfolioId) {
 export async function createLibrary(detailsInput) {
   const result = await appClient.mutate({
     mutation: gql`
-   mutation ($detailsInput: detailsInput) {
+   mutation ($detailsInput: libraryInput) {
   createLibrary(detailsInput: $detailsInput) {
     success
     code
@@ -125,36 +125,14 @@ export async function fetchLibrary(userId) {
     query: gql`
     query($userId : String){
   fetchLibrary(userId: $userId) {
-    userId
-    images {
+      userId
       fileName
       fileUrl
       fileType
       isPrivate
-    }
-    videos {
-      fileName
-      fileUrl
-      fileType
-      isPrivate
-    }
-    documents {
-      fileName
-      fileUrl
-      fileType
-      isPrivate
-    }
-    templates {
-      fileName
-      fileUrl
-      fileType
-      isPrivate
-    }
+      libraryType
   }
-}
-
-
-        `,
+}`,
     variables:{
   userId
     },

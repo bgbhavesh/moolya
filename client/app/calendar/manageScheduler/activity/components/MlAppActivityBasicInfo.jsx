@@ -214,6 +214,12 @@ export default class MlAppBasicInfo extends React.Component{
     if(!parseInt(duration.minutes)){
       delete duration.minutes;
     }
+
+    if(!duration.hours && !duration.minutes){
+      toastr.error("Enter a valid duration");
+      return false;
+    }
+
     if(data.mode !== 'online') {
       delete data.conversation;
     }
@@ -282,6 +288,7 @@ export default class MlAppBasicInfo extends React.Component{
         $(this).parent('.switch').removeClass('on');
       }
     });
+    this.props.getActivityDetails();
   }
 
   /**

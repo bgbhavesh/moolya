@@ -6,7 +6,7 @@ import moment from "moment";
 import hierarchyValidations from "../../../../commons/containers/hierarchy/mlHierarchyValidations"
 import {validateTransaction} from '../actions/assignUserforTransactionAction'
 import MlAssignComponent from '../component/MlAssignComponent'
-
+import {client} from '../../../core/apolloConnection';
 
 function dateFormatter (data){
   let createdDateTime=data&&data.data&&data.data.registrationDate?data.data.registrationDate:null;
@@ -25,7 +25,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
   selectRow:true,  //Enable checkbox/radio button to select the row.
   filter:true,
   multiSelect:true,
-  filterComponent: <MlCustomFilter module="registration" moduleName="registration" />,
+  filterComponent: <MlCustomFilter module="registration" moduleName="registration" client={client}/>,
   fieldsMap: {
     'registrationDate': 'registrationInfo.registrationDate',
     'firstName': 'registrationInfo.firstName',

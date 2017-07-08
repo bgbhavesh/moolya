@@ -137,7 +137,8 @@ class MlPortfolio extends React.Component {
       stepCode: "PORTFOLIO",
       recordId: pId,
       mode: "edit",
-      userType: userType
+      userType: userType,
+      connection:client
     });
     this.setState({editComponent: reg && reg.component ? reg.component : null});
   }
@@ -150,7 +151,8 @@ class MlPortfolio extends React.Component {
       stepCode: "PORTFOLIO",
       recordId: id,
       mode: "view",
-      userType: userType
+      userType: userType,
+      connection:client
     });
     this.setState({editComponent: reg && reg.component ? reg.component : null});
   }

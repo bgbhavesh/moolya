@@ -135,6 +135,16 @@ export default class MlAppTaskSession extends Component {
     }.bind(this));
   }
 
+  removeActivity(index, idx) {
+    let sessionData = this.state.sessionData;
+    sessionData[index].activities.splice(idx, 1);
+    this.setState({
+      sessionData: sessionData
+    }, function () {
+      this.sendSessionDataToParent();
+    }.bind(this));
+  }
+
   render() {
     const that = this;
     let options = that.state.activities ? that.state.activities.map(function (activity) {
@@ -162,7 +172,10 @@ export default class MlAppTaskSession extends Component {
                     <div style={{'marginTop': '-12px'}}>
                       <Select
                         name="activity-list"
-                        options={options}
+                        options={options.filter(function (activity) {
+                          console.log(session.activities.indexOf(activity.value));
+                          return session.activities.indexOf(activity.value) == -1;
+                        })}
                         onChange={(value) => that.addActivity(value, id)}
                       />
                     </div>
@@ -182,7 +195,9 @@ export default class MlAppTaskSession extends Component {
                             <div className="list_block notrans funding_list">
                               <div>
                                 <p className="online">{activity.mode}</p>
-                                <span>Duration: <FontAwesome name='pencil'/></span><br />
+                                <span>Duration:
+                                  {/*<FontAwesome name='pencil'/>*/}
+                                </span><br />
                                 <div className="form-group">
                                   <label><input type="text" key={activity.duration ? 'notLoadedYetHrs' : 'loadedHrs'} disabled="true" className="form-control inline_input" defaultValue={activity.duration ? activity.duration.hours:0}/> Hours <input
                                     type="text" key={activity.duration ? 'notLoadedYetMin' : 'loadedMin'} disabled="true"
@@ -191,6 +206,7 @@ export default class MlAppTaskSession extends Component {
                                 </div>
                               </div>
                               <h3>{activity.displayName}</h3>
+                              {/*<span onClick={()=>that.removeActivity(id, idx)} aria-hidden="true" className="fa fa-lock"></span>*/}
                             </div>
                           </div>
                         </div>

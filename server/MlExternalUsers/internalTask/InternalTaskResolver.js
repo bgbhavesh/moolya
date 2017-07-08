@@ -34,6 +34,27 @@ MlResolver.MlQueryResolver['fetchMyInternalTask'] = (obj, args, context, info) =
   }
 };
 
+MlResolver.MlQueryResolver['fetchSelfCreatedInternalTask'] = (obj, args, context, info) => {
+  let internalTask = [];
+  if (context.userId) {
+    let query = {
+      isSelfAssigned: true,
+      userId: context.userId
+    };
+    if(args.status && args.status.length) {
+      query['status']= {
+        '$in': args.status
+      }
+    }
+    internalTask = mlDBController.find('MlInternalTask', query).fetch();
+    return internalTask;
+  } else {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload("Not a Valid user", code);
+    return response;
+  }
+};
+
 MlResolver.MlQueryResolver['fetchInternalTaskById'] = (obj, args, context, info) => {
   let internalTask = [];
   if (args.internalTaskId) {
@@ -67,6 +88,7 @@ MlResolver.MlMutationResolver['createInternalTask'] = (obj, args, context, info)
           let dataToInsert = args.internalTask;
           dataToInsert.userId = context.userId;
           dataToInsert.attendee = attendee;
+          dataToInsert.isSelfAssigned = false;
           dataToInsert.status = 'pending';
           mlDBController.insert('MlInternalTask', dataToInsert , context);
         });
@@ -83,6 +105,24 @@ MlResolver.MlMutationResolver['createInternalTask'] = (obj, args, context, info)
       let response = new MlRespPayload().errorPayload("Internal task data is required", code);
       return response;
     }
+};
+
+MlResolver.MlMutationResolver['createSelfInternalTask'] = (obj, args, context, info) => {
+  if(args.selfInternalTask){
+      let dataToInsert = args.selfInternalTask;
+      dataToInsert.userId = context.userId;
+      dataToInsert.createdAt = new Date();
+      dataToInsert.status = 'pending';
+      dataToInsert.isSelfAssigned = true;
+      let result = mlDBController.insert('MlInternalTask', dataToInsert , context);
+      let code = 200;
+      let response = new MlRespPayload().successPayload("Internal task created", code);
+      return response;
+  } else {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload("Internal task data is required", code);
+    return response;
+  }
 };
 
 MlResolver.MlMutationResolver['updateInternalTask'] = (obj, args, context, info) => {
@@ -105,3 +145,5 @@ MlResolver.MlMutationResolver['updateInternalTask'] = (obj, args, context, info)
       return response;
     }
 };
+
+

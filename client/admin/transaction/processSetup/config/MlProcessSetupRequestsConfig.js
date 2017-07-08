@@ -3,6 +3,7 @@ import React from 'react';
 import gql from 'graphql-tag'
 import MlProcessSetupDetailsComponent from '../../processSetup/component/MlProcessSetupDetailsComponent'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
+import {client} from '../../../core/apolloConnection';
 
 const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   name:"ProcessSetupTable",
@@ -14,7 +15,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   throttleRefresh:false,
   pagination:true,//To display pagination
   filter:false,
-  filterComponent: <MlCustomFilter module="processSetup" moduleName="processSetup" />,
+  filterComponent: <MlCustomFilter module="processSetup" moduleName="processSetup" client={client}/>,
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},
     {dataField: "dateTime", title: "Created Date",dataSort:true,selectRow:true},

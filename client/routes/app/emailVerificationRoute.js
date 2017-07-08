@@ -1,4 +1,4 @@
-import EmailVerification from '../../commons/components/verification/EmailVerification';
+import EmailVerification from '../../app/verification/EmailVerification';
 import {mount} from 'react-mounter';
 
 FlowRouter.route( '/verify-email/:token', {

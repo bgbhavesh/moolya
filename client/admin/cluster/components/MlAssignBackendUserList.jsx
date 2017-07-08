@@ -1,13 +1,6 @@
 import React from 'react';
-import {Meteor} from 'meteor/meteor';
-import {render} from 'react-dom';
-import ScrollArea from 'react-scrollbar';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag'
 import {fetchAssignUsersActionHandler} from '../../../commons/fetchAssignUsers'
-
-let FontAwesome = require('react-fontawesome');
-let Select = require('react-select');
+import {client} from '../../core/apolloConnection';
 
 export default class MlAssignBackendUserList extends React.Component{
     constructor(props){
@@ -30,7 +23,7 @@ export default class MlAssignBackendUserList extends React.Component{
       let chapterId = this.props.chapterId?this.props.chapterId:"";
       let subChapterId = this.props.subChapterId?this.props.subChapterId:"";
       let communityId = this.props.communityId?this.props.communityId:"";
-      const response = await fetchAssignUsersActionHandler(clusterId, chapterId, subChapterId, communityId, "");
+      const response = await fetchAssignUsersActionHandler(clusterId, chapterId, subChapterId, communityId, "",client);
       let data = response ? response : []
       this.setState({loading:false, backendUsers:data});
     }

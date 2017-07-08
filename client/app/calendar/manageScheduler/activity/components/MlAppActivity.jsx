@@ -196,7 +196,7 @@ export default class MlAppActivity extends Component {
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
-          <MlAppScheduleHead s/>
+          <MlAppScheduleHead type="activity"/>
           <div className="clearfix"/>
           <div className="col-md-12">
             <div className='step-progress'>

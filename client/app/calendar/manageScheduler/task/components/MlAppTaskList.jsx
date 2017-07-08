@@ -50,7 +50,7 @@ export default class MlAppTaskList extends React.Component{
                 <a href="" onClick={()=>this.onClickAdd()}>
                   <div className="list_block notrans">
                     <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                    <h3>Add New</h3>
+                    <h3>Create a task</h3>
                   </div>
                 </a>
               </div>

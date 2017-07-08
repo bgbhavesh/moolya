@@ -50,7 +50,7 @@ export default class MlAppActivityList extends React.Component{
                 <a href=" " onClick={() => that.addActivity()}>
                   <div className="list_block notrans">
                     <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                    <h3>Add New</h3>
+                    <h3>Create an activity</h3>
                   </div>
                 </a>
               </div>

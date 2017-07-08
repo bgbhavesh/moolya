@@ -76,6 +76,7 @@ export default class MlAppActivity extends Component {
           minutes : duration.minutes ? duration.minutes : ''
         };
 
+        console.log(activity);
         /**
          * Set activity basic info
          */
@@ -84,6 +85,7 @@ export default class MlAppActivity extends Component {
           displayName           : activity.displayName,
           isInternal            : activity.isInternal,
           isExternal            : activity.isExternal,
+          status                : activity.status,
           mode                  : activity.mode ? activity.mode : "online",
           isServiceCardEligible : activity.isServiceCardEligible,
           industryTypes         : activity.industryTypes ? activity.industryTypes : [],

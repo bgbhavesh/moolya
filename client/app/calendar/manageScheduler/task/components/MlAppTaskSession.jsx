@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import gql from "graphql-tag";
 import {findTaskActionHandler} from "../actions/saveCalanderTask";
 import MoolyaSelect from "../../../../../commons/components/select/MoolyaSelect";
-import {fetchActivitiesActionHandler} from '../../activity/actions/activityActionHandler';
+import {fetchActivitiesActionHandler, fetchActivitiesForTaskActionHandler} from '../../activity/actions/activityActionHandler';
 import _ from "lodash";
 import Select from 'react-select';
 import ScrollArea from "react-scrollbar";
@@ -59,7 +59,9 @@ export default class MlAppTaskSession extends Component {
 
   async fetchActivities() {
     let profileId = this.props.profileId;
-    let response = await fetchActivitiesActionHandler(profileId);
+    let taskId = this.props.taskId;
+    let response = await fetchActivitiesForTaskActionHandler(taskId);
+    // let response = await fetchActivitiesActionHandler(profileId);
     if(response){
       this.setState({
         activities: response

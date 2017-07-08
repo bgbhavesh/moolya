@@ -192,7 +192,9 @@ export default class MlAppTaskSession extends Component {
                             <div className="list_block notrans funding_list">
                               <div>
                                 <p className="online">{activity.mode}</p>
-                                <span>Duration: <FontAwesome name='pencil'/></span><br />
+                                <span>Duration:
+                                  {/*<FontAwesome name='pencil'/>*/}
+                                </span><br />
                                 <div className="form-group">
                                   <label><input type="text" key={activity.duration ? 'notLoadedYetHrs' : 'loadedHrs'} disabled="true" className="form-control inline_input" defaultValue={activity.duration ? activity.duration.hours:0}/> Hours <input
                                     type="text" key={activity.duration ? 'notLoadedYetMin' : 'loadedMin'} disabled="true"

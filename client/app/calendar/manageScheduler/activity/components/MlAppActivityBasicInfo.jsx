@@ -288,6 +288,7 @@ export default class MlAppBasicInfo extends React.Component{
         $(this).parent('.switch').removeClass('on');
       }
     });
+    this.props.getActivityDetails();
   }
 
   /**

@@ -39,6 +39,7 @@ export default class MlAppActivity extends Component {
         isDiscount: false
       },
     };
+    this.getActivityDetails = this.getActivityDetails.bind(this);
   }
 
   /**
@@ -168,17 +169,17 @@ export default class MlAppActivity extends Component {
     const steps = [
         {
           name: 'Create',
-          component: <MlAppBasicInfo saveActivity={that.saveActivity} data={that.state.basicInfo} />,
+          component: <MlAppBasicInfo getActivityDetails={this.getActivityDetails} saveActivity={that.saveActivity} data={that.state.basicInfo} />,
           icon: <span className="ml fa fa-plus-square-o"></span>
         },
         {
           name: 'Choose team',
-          component: <MlAppChooseTeam saveActivity={that.saveActivity} data={this.state.teamInfo}/>,
+          component: <MlAppChooseTeam getActivityDetails={this.getActivityDetails} saveActivity={that.saveActivity} data={this.state.teamInfo}/>,
           icon: <span className="ml fa fa-users"></span>
         },
         {
           name: 'Payment', component:
-          <MlAppActivityPayment saveActivity={that.saveActivity} data={this.state.paymentInfo} />,
+          <MlAppActivityPayment getActivityDetails={this.getActivityDetails} saveActivity={that.saveActivity} data={this.state.paymentInfo} />,
           icon: <span className="ml ml-payments"></span>
         },
         {

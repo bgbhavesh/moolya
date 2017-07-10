@@ -92,8 +92,7 @@ export default class MlServiceProviderEditTabs extends Component {
         title: "Clients",
         component: <MlServiceProviderClients key="6"
                                              getServiceProviderClients={this.getServiceProviderClients.bind(this)}
-                                             portfolioDetailsId={this.props.portfolioDetailsId}
-                                             clientsDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.clients}/>
+                                             portfolioDetailsId={this.props.portfolioDetailsId}/>
       }
     ]
     return tabs;
@@ -161,11 +160,11 @@ export default class MlServiceProviderEditTabs extends Component {
     this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, []);
   }
 
-  getServiceProviderClients(details) {
-    let data = this.state.portfolioStartupClients;
-    data = details;
-    this.setState({portfolioStartupClients: data})
-    this.props.getPortfolioStartupAboutUsDetails(data, "clients");
+  getServiceProviderClients(details, privateKey) {
+    let data = this.state.serviceProviderPortfolio;
+    data['clients'] = details;
+    this.setState({serviceProviderPortfolio: data})
+    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey);
   }
 
 

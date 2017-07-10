@@ -46,6 +46,7 @@ let serviceProviderPortfolioSchema = `
     type servicesOutput{
       servicesDescription : String
       isServicesPrivate   : Boolean
+      privateFields:[PrivateKeys]
     }
     
     type imageFilesInputSchemaOutput{

@@ -9,6 +9,7 @@ import MlLoader from '../../../../../commons/components/loader/loader'
 import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 import {removePortfolioProfilePic} from '../../actions/removeIdatorPortfolioProficPic'
+import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler'
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 
@@ -26,6 +27,7 @@ export default class MlIdeatorDetails extends React.Component{
     this.onClick.bind(this);
     this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
+    this.libraryAction.bind(this);
     return this;
   }
 
@@ -117,17 +119,33 @@ export default class MlIdeatorDetails extends React.Component{
     // let name = e.target.name;
     // let fileName = e.target.files[0].name;
     let data ={moduleName: "PORTFOLIO_PROFILE_IMG", actionName: "UPDATE", portfolioId:this.props.portfolioDetailsId,communityType:"IDE", portfolio:{portfolioIdeatorDetails:{profilePic:" "}}};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
   }
-  onFileUploadCallBack(resp){
+  onFileUploadCallBack(file,resp){
     if(resp){
       let result = JSON.parse(resp)
+      let userOption = confirm("Do you want to add the file into the library")
+      if(userOption){
+        let fileObjectStructure = {
+          fileName: file.name,
+          fileType: file.type,
+          fileUrl: result.result,
+          libraryType: "image"
+        }
+        this.libraryAction(fileObjectStructure)
+      }
       if(result.success){
         this.setState({profilePic:result.result})
         this.setState({loading:true})
         this.fetchPortfolioDetails();
       }
     }
+  }
+
+  async libraryAction(file) {
+    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
+    return resp;
   }
 
   async deleteProfilePic() {

@@ -14,7 +14,7 @@ import MlServiceProviderAwards from "../edit/MlServiceProviderAwards";
 import MlServiceProviderMCL from "../edit/MlServiceProviderMCL";
 import MlServiceProviderServices from "../edit/MlServiceProviderServices";
 import MlServiceProviderClients from "../edit/MlServiceProviderClients";
-import PortfolioLibrary from '../../../../../../commons/genericComponents/portfolioLibrary'
+import PortfolioLibrary from '../../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import {client} from '../../../../../core/apolloConnection'
 //todo:import the View components//
 

@@ -7,7 +7,7 @@ import _ from "lodash";
 import {multipartASyncFormHandler} from "../../../../../../client/commons/MlMultipartFormAction";
 import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../actions/findPortfolioFunderDetails";
 import {fetchClusterIdActionHandler} from '../../actions/findClusterIdForPortfolio'
-import {putDataIntoTheLibrary} from '../../../../../commons/actions/LibraryActionHandler';
+import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import MlLoader from '../../../../../commons/components/loader/loader'

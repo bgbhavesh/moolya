@@ -6,7 +6,7 @@ var Select = require('react-select');
 import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {fetchfunderPortfolioAbout} from '../../actions/findPortfolioFunderDetails'
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
-import {putDataIntoTheLibrary} from '../../../../../commons/actions/LibraryActionHandler'
+import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler'
 import _ from 'lodash';
 import MlLoader from '../../../../../commons/components/loader/loader'
 

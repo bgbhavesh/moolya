@@ -15,7 +15,7 @@ import MlStartupViewClients from './MlStartupViewClients';
 import MlStartupViewTechnologies from './MlStartupViewTechnologies';
 import MlStartupViewAssets from './MlStartupViewAssets'
 import MlTabComponent from "../../../../../commons/components/tabcomponent/MlTabComponent";
-import PortfolioLibrary from '../../../../../commons/genericComponents/portfolioLibrary'
+import PortfolioLibrary from '../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import {client} from '../../../../core/apolloConnection'
 
 export default class MlViewStartupPortfolioTemplate extends React.Component {
@@ -56,7 +56,7 @@ export default class MlViewStartupPortfolioTemplate extends React.Component {
       {tabClassName: 'tab', panelClassName: 'panel', title:"Assets" , component:<MlStartupViewAssets key="2"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Technologies" , component:<MlStartupViewTechnologies key="2"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
 
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , component:<MlStartupViewManagement key="2"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , component:<MlStartupViewManagement key="2" isAdmin={true} client={client} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Investor" , component:<MlStartupViewInvestor key="3"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       /*{tabClassName: 'tab', panelClassName: 'panel', title:"Data" , component:<MlStartupViewData key="4" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},*/
       // {tabClassName: 'tab', panelClassName: 'panel', title:"Charts" , component:<MlIdeatorDetails key="5" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},

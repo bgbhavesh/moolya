@@ -10,7 +10,7 @@ import MlIdeatorStrategyAndPlanning from '../../../admin/transaction/portfolio/c
 import MlIdeatorLookingFor from '../../../admin/transaction/portfolio/component/Ideator/MlIdeatorLookingFor'
 import MlIdeatorIntellectualPlanningAndTrademark from '../../../admin/transaction/portfolio/component/Ideator/MlIdeatorIntellectualPlanningAndTrademark'
 import MlIdeatorIdeas from '../../../admin/transaction/portfolio/component/Ideator/MlIdeatorIdeas'
-import PortfolioLibrary from '../../../commons/genericComponents/portfolioLibrary';
+import PortfolioLibrary from '../../../commons/components/portfolioLibrary/PortfolioLibrary';
 import {appClient} from '../../core/appConnection'
 import InteractionsCounter from '../../commons/components/InteractionsCounter'
 import {updatePortfolioActionHandler} from '../../../admin/transaction/portfolio/actions/updatePortfolioDetails';
@@ -47,9 +47,9 @@ getChildContext(){
   getTabComponents(){
     let tabs = [
       {tabClassName: 'tab', panelClassName: 'panel', title:"Ideas", component:<MlIdeatorIdeas  key="2" getIdeas={this.getIdeas.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} ideaId={this.props.ideaId}/> },
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Ideator" , component:<MlIdeatorDetails key="1"  portfolioDetailsId={this.props.portfolioDetailsId} getIdeatorDetails={this.getIdeatorDetails.bind(this)}/>},    //this.props.portfolioDetailsId}
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions" , component:<MlIdeatorProblemsAndSolutions key="2"  portfolioDetailsId={this.props.portfolioDetailsId}  getProblemSolution={this.getProblemSolution.bind(this)}/>},   //id will be dyanmic
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlIdeatorAudience key="3"  portfolioDetailsId={this.props.portfolioDetailsId} getAudience={this.getAudience.bind(this)}/>},                            //id will be dyanmic
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Ideator" , component:<MlIdeatorDetails key="1" isAdmin={false} client={appClient} portfolioDetailsId={this.props.portfolioDetailsId} getIdeatorDetails={this.getIdeatorDetails.bind(this)}/>},    //this.props.portfolioDetailsId}
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions" , component:<MlIdeatorProblemsAndSolutions isAdmin={false} client={appClient} key="2"  portfolioDetailsId={this.props.portfolioDetailsId}  getProblemSolution={this.getProblemSolution.bind(this)}/>},   //id will be dyanmic
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlIdeatorAudience key="3" isAdmin={false} client={appClient}  portfolioDetailsId={this.props.portfolioDetailsId} getAudience={this.getAudience.bind(this)}/>},                            //id will be dyanmic
       {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<PortfolioLibrary key="4" client={appClient} isAdmin={false} portfolioDetailsId={this.props.portfolioDetailsId} />},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Plans" , component:<MlIdeatorStrategyAndPlanning key="5"  portfolioDetailsId={this.props.portfolioDetailsId} getStrategyAndPlanning={this.getStrategyAndPlanning.bind(this)}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"IntellectualPlanning and Trademark" , component:<MlIdeatorIntellectualPlanningAndTrademark key="6"  portfolioDetailsId={this.props.portfolioDetailsId} getIntellectualPlanning={this.getIntellectualPlanning.bind(this)}/>},

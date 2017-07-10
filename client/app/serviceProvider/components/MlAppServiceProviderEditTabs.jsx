@@ -14,7 +14,7 @@ import MlServiceProviderAwards from "../../../admin/transaction/portfolio/compon
 import MlServiceProviderMCL from "../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderMCL";
 import MlServiceProviderServices from "../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderServices";
 import MlServiceProviderClients from "../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderClients";
-import PortfolioLibrary from '../../../commons/genericComponents/portfolioLibrary'
+import PortfolioLibrary from '../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import {appClient} from '../../core/appConnection'
 
 export default class MlAppServiceProviderEditTabs extends Component {

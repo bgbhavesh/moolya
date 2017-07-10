@@ -61,6 +61,7 @@ MlModuleCollectionMap['MlIdeatorPortfolio'] = 'PORTFOLIO';   //IDEATORPORTFOLIO
 MlModuleCollectionMap['MlIdeas'] = 'PORTFOLIO';
 MlModuleCollectionMap['MlFunderPortfolio'] = 'PORTFOLIO';
 MlModuleCollectionMap['MlStartupPortfolio'] = 'PORTFOLIO';
+MlModuleCollectionMap['MlServiceProviderPortfolio'] = 'PORTFOLIO';
 MlModuleCollectionMap['MlPortfolioLibrary'] = 'PORTFOLIOLIBRARY';
 
 //hierarchy

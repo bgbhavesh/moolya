@@ -6,7 +6,7 @@ import MlViews from "../../admin/core/components/MlViews";
 import MlAppIdeatorLanding from "../../../client/app/ideators/components/MlAppIdeatorLanding";
 import MlAppIdeatorTabs from "../../../client/app/ideators/components/MlAppIdeatorTabs";
 import MlAppStartupLanding from "../../../client/app/startup/components/MlAppStartupLanding";
-import MlAppStartupTabs from "../../../client/app/startup/components/MlAppStartupTabs";
+// import MlAppStartupTabs from "../../../client/app/startup/components/MlAppStartupTabs";
 import MlAppCommunitiesList from "../../../client/app/commons/components/MlAppCommunitiesList";
 import MlAdminProfileHeader from "../../admin/layouts/header/MlAdminProfileHeader";
 import MlAppDashboard from "../../app/dashboard/components/MlAppDashboard";
@@ -264,12 +264,12 @@ appSection.route('/startup', {
     mount(AppLayout,{appContent:< MlAppStartupLanding/>})
   }
 });
-appSection.route('/startup/:id', {
-  name: 'startup',
-  action(params){
-    mount(AppLayout,{appContent:< MlAppStartupTabs config={params.id}/>})
-  }
-});
+// appSection.route('/startup/:id', {
+//   name: 'startup',
+//   action(params){
+//     mount(AppLayout,{appContent:< MlAppStartupTabs config={params.id}/>})
+//   }
+// });
 
 appSection.route('/register/:id', {
   name: 'registeras',

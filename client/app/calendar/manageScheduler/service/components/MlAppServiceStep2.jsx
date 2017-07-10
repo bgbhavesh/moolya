@@ -322,7 +322,7 @@ export default class MlAppServiceStep2 extends React.Component{
                           <Moolyaselect multiSelect={false} placeholder="Select Tasks" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.selectedTask} queryType={"graphql"} query={serviceQuery} reExecuteQuery={true} queryOptions={serviceOption} isDynamic={true} onSelect={this.optionsBySelectService.bind(this)} />
                         </div>
                         <div className="form-group">
-                          <label>Total number of Sessions Rs. <input className="form-control inline_input"  value={noOfSession}  /> </label>
+                          <label>Total number of Sessions <input className="form-control inline_input"  value={noOfSession}  /> </label>
                         </div>
                         <div className="form-group">
                           <label>Duration: &nbsp; <input type="text" className="form-control inline_input"  value={hours} disabled /> Hours <input type="text" className="form-control inline_input" value={minutes} disabled /> Mins </label>

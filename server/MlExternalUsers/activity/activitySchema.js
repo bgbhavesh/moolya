@@ -40,20 +40,18 @@ _id: String
       isDiscount: Boolean
       discountType: String
       discountValue: Int
-      isTaxInclusive: Boolean
-      isPromoCodeApplicable: Boolean
+      derivedAmount: Int
     }
     
     type UserProfileDetails{
-      _id: String
       userId: String
       profileId: String
-      name: String
+      isMandatory: Boolean
     }
-
+    
     type Teams {
-      branch: String
-      userType: String
+      resourceType: String
+      resourceId: String
       users: [UserProfileDetails]
     }
     type Duration {
@@ -80,6 +78,7 @@ _id: String
       payment: ActivityPayment
       facilitationCharge: FacilitationCharge
       teams: [Teams]
+      isActive: Boolean
       createdAt: Date
       updatedAt: Date
     }
@@ -105,18 +104,17 @@ _id: String
       isDiscount: Boolean
       discountType: String
       discountValue: Int
-      isTaxInclusive: Boolean
-      isPromoCodeApplicable: Boolean
+      derivedAmount: Int
     }
     input userProfileDetails{
       userId: String
       profileId: String
-      name: String
+      isMandatory: Boolean
     }
     
     input teams {
-      branch: String
-      userType: String
+      resourceType: String
+      resourceId: String
       users: [userProfileDetails]
     }
 
@@ -149,12 +147,14 @@ _id: String
       payment: activityPayment
       facilitationCharge: facilitationCharge
       teams: [teams]
+      isActive: Boolean
       createdAt: Date
       updatedAt: Date
     }
 
     type Query {
         fetchActivities(profileId:String, isInternal: Boolean, isExternal: Boolean):[Activity]
+        fetchActivitiesForTask(taskId:String):[Activity]
         fetchActivity(activityId:String):Activity
               
     }
@@ -169,6 +169,7 @@ _id: String
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], activity]);
 let supportedApi = [
   {api:'fetchActivities', actionName:'READ', moduleName:"OFFICE"},
+  {api:'fetchActivitiesForTask', actionName:'READ', moduleName:"OFFICE"},
   {api:'fetchActivity', actionName:'READ', moduleName:"OFFICE"},
 
 

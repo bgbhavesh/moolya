@@ -19,7 +19,7 @@ MlResolver.MlQueryResolver['fetchActivities'] = (obj, args, context, info) => {
   let result = mlDBController.find('MlActivity', query , context).fetch()
 
   return result;
-}
+};
 //
 // MlResolver.MlQueryResolver['getTeamMembers'] = (obj, args, context, info) => {
 // let temp = [];
@@ -55,7 +55,7 @@ MlResolver.MlQueryResolver['fetchActivities'] = (obj, args, context, info) => {
 MlResolver.MlQueryResolver['fetchActivity'] = (obj, args, context, info) => {
   let result = mlDBController.findOne('MlActivity', {_id:args.activityId} , context);
   return result;
-}
+};
 
 
 MlResolver.MlMutationResolver['createActivity'] = (obj, args, context, info) => {
@@ -82,3 +82,36 @@ MlResolver.MlMutationResolver['updateActivity'] = (obj, args, context, info) => 
   }
 }
 
+MlResolver.MlQueryResolver['fetchActivitiesForTask'] = (obj, args, context, info) => {
+  if(!args.taskId){
+    let code = 400;
+    let response = new MlRespPayload().errorPayload("Task id is required", code);
+    return response;
+  }
+
+  let task = mlDBController.findOne('MlTask', args.taskId , context)
+
+  let query = {
+    userId:context.userId,
+    profileId: task.profileId,
+    isActive: true
+  };
+
+  if(task.isInternal && task.isExternal){
+      query["$or"] = [
+        {isInternal: true},
+        {isExternal: true}
+      ];
+  } else if (task.isExternal && task.isServiceCardEligible) {
+    query.isExternal = true;
+    query.isServiceCardEligible = true;
+  } else {
+    query.isExternal = task.isExternal;
+    query.isInternal = task.isInternal;
+    query.isServiceCardEligible = task.isServiceCardEligible;
+  }
+
+  let result = mlDBController.find('MlActivity', query , context).fetch()
+
+  return result;
+}

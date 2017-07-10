@@ -15,6 +15,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import {fetchIdeaByPortfolioId} from "../../../../app/ideators/actions/IdeaActionHandler";
 import MlLoader from '../../../../commons/components/loader/loader'
 import _ from 'lodash'
+import {client} from '../../../core/apolloConnection';
 
 class MlPortfolio extends React.Component {
   constructor(props) {
@@ -136,7 +137,8 @@ class MlPortfolio extends React.Component {
       stepCode: "PORTFOLIO",
       recordId: pId,
       mode: "edit",
-      userType: userType
+      userType: userType,
+      connection:client
     });
     this.setState({editComponent: reg && reg.component ? reg.component : null});
   }
@@ -149,7 +151,8 @@ class MlPortfolio extends React.Component {
       stepCode: "PORTFOLIO",
       recordId: id,
       mode: "view",
-      userType: userType
+      userType: userType,
+      connection:client
     });
     this.setState({editComponent: reg && reg.component ? reg.component : null});
   }
@@ -161,7 +164,7 @@ class MlPortfolio extends React.Component {
       comment: this.refs.comment.value
     }
 
-    const response = await createCommentActionHandler(commentsData)
+    const response = await createCommentActionHandler(commentsData,client)
 
     if (response) {
       this.setState({annotationData: this.state.annotationData}, function () {
@@ -172,7 +175,7 @@ class MlPortfolio extends React.Component {
   }
 
   async onResolveComment() {
-    const response = await resolveCommentActionHandler(this.state.annotationData.id)
+    const response = await resolveCommentActionHandler(this.state.annotationData.id,client)
     if (response && response.success)
       toastr.success(response.result);
     return response;
@@ -180,7 +183,7 @@ class MlPortfolio extends React.Component {
 
 
   async onReopenComment() {
-    const response = await reopenCommentActionHandler(this.state.annotationData.id)
+    const response = await reopenCommentActionHandler(this.state.annotationData.id,client)
     if (response && response.success)
       toastr.success(response.result);
     return response;
@@ -189,7 +192,7 @@ class MlPortfolio extends React.Component {
 
   async fetchComments(annotationId) {
     if (annotationId) {
-      const response = await findComments(annotationId);
+      const response = await findComments(annotationId,client);
       this.setState({commentsData: response}, function () {
       });
     }

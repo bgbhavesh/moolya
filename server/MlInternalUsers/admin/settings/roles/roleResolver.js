@@ -314,26 +314,12 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
     }
     // let finalQuery = {$or: [query, {isSystemDefined: true, isActive: true}]}
     let finalQuery = {$and: [query, {isActive: true}]}
+
+    /**sepecific showing roles of nonmoolya to non-moolya admin*/
+    if(!userProfile.isMoolya)
+      finalQuery = {$and: [query, {isActive: true}, {isNonMoolyaAvailable : true}]}
     let valueGet = mlDBController.find('MlRoles', finalQuery, context).fetch()
     // let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"isActive": true}]}, context).fetch()
-    // _.each(valueGet, function (item, say) {
-    //   let ary = []
-    //   _.each(item.assignRoles, function (value, key) {
-    //     if (value.cluster == args.clusterId || value.cluster == 'all') {
-    //       if (value.isActive) {
-    //         ary.push(value);
-    //       }
-    //     }
-    //   })
-    //   item.assignRoles = ary
-    // })
-    // _.each(valueGet, function (item, key) {
-    //   if (item) {
-    //     if (item.assignRoles.length < 1) {
-    //       valueGet.splice(key, 1)
-    //     }
-    //   }
-    // })
     roles = valueGet;
   }
 

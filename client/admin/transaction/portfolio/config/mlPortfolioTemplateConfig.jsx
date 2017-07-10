@@ -12,8 +12,11 @@ import MlFunderViewTemplate from '../component/FunderView/MlFunderViewTemplate'
 import MlAppFunderViewTabs from '../../../../app/funders/components/MlAppFunderViewTabs'
 import MlAppFunderEditTabs from '../../../../app/funders/components/MlAppFunderEditTabs'
 import MlAppStartupEditTabs from '../../../../app/startup/components/MlAppStartupEditTabs'
-
-
+import MlAppServiceProviderEditTabs from "../../../../app/serviceProvider/components/MlAppServiceProviderEditTabs";
+import MlAppServiceProviderViewTabs from "../../../../app/serviceProvider/components/MlAppServiceProviderViewTabs";
+/**
+ * admin config files for internal users
+ * */
 const mlIdeatorEditExternalUserPortfolioTemplateConfig={
   templateName:"Portfolio-Template-Ideator-Edit",
   templateCode:"PFTIDEEDT",
@@ -78,15 +81,38 @@ const mlFunderViewExternalUserPortfolioTemplateConfig={
   stepName:'Portfolio',
   component:MlFunderViewTemplate
 };
-
+const mlServiceProviderEditExternalUserPortfolioTemplateConfig = {
+  templateName: "Portfolio-Template-ServiceProvider-Edit",
+  templateCode: "PFTSPSEDT",
+  userType: 'internal',
+  process: 'Registration',
+  subProcess: 'Registration',
+  stepCode: 'PORTFOLIO',
+  stepName: 'Portfolio',
+  component: MlServiceProviderEditTabs
+};
+const mlServiceProviderViewExternalUserPortfolioTemplateConfig = {
+  templateName: "Portfolio-Template-ServiceProvider-View",
+  templateCode: "PFTSPSVIW",
+  userType: 'internal',
+  process: 'Registration',
+  subProcess: 'Registration',
+  stepCode: 'PORTFOLIO',
+  stepName: 'Portfolio',
+  component: MlServiceProviderViewTabs
+};
 mlRegistrationTemplates.setTemplate(mlIdeatorEditExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlIdeatorViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlStartupEditExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlStartupViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlFunderEditExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlFunderViewExternalUserPortfolioTemplateConfig);
+mlRegistrationTemplates.setTemplate(mlServiceProviderEditExternalUserPortfolioTemplateConfig);
+mlRegistrationTemplates.setTemplate(mlServiceProviderViewExternalUserPortfolioTemplateConfig);
 
-
+/**
+ * app config files for external users
+ * */
 const mlAppIdeatorEditExternalUserPortfolioTemplateConfig={
   templateName:"Portfolio-Template-Ideator-Edit",
   templateCode:"PFTIDEEDT",
@@ -153,9 +179,33 @@ const mlAppFunderViewExternalUserPortfolioTemplateConfig={
   component:MlAppFunderViewTabs
 };
 
+const mlAppServiceProviderEditExternalUserPortfolioTemplateConfig = {
+  templateName: "Portfolio-Template-ServiceProvider-Edit",
+  templateCode: "PFTSPSEDT",
+  userType: 'external',
+  process: 'Registration',
+  subProcess: 'Registration',
+  stepCode: 'PORTFOLIO',
+  stepName: 'Portfolio',
+  component: MlAppServiceProviderEditTabs
+};
+
+const mlAppServiceProviderViewExternalUserPortfolioTemplateConfig = {
+  templateName: "Portfolio-Template-ServiceProvider-View",
+  templateCode: "PFTSPSVIW",
+  userType: 'internal',
+  process: 'Registration',
+  subProcess: 'Registration',
+  stepCode: 'PORTFOLIO',
+  stepName: 'Portfolio',
+  component: MlAppServiceProviderViewTabs
+};
+
 mlRegistrationTemplates.setTemplate(mlAppIdeatorEditExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppIdeatorViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppStartupEditExternalUserPortfolioTemplateConfig);
 // mlRegistrationTemplates.setTemplate(mlAppStartupViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppFunderViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppFunderEditExternalUserPortfolioTemplateConfig);
+mlRegistrationTemplates.setTemplate(mlAppServiceProviderEditExternalUserPortfolioTemplateConfig);
+mlRegistrationTemplates.setTemplate(mlAppServiceProviderViewExternalUserPortfolioTemplateConfig);

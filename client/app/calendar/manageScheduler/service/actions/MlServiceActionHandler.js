@@ -33,6 +33,7 @@ export async function fetchServiceActionHandler (serviceId) {
         name
         displayName
         noOfSession
+        validTill
         sessionFrequency
         duration{
          hours
@@ -50,15 +51,25 @@ export async function fetchServiceActionHandler (serviceId) {
           info
           isMandatory
         }
-        payment{
+        payment {
           amount
           isDiscount
           discountType
           discountValue
           isTaxInclusive
           isPromoCodeApplicable
+          tasksAmount
+          tasksDiscount
+          tasksDerived
         }
-        tasks
+        tasks {
+          id
+          sequence
+          sessions{
+            id
+            sequence
+          }
+        }
         facilitationCharge{
           amount
           percentage
@@ -169,4 +180,54 @@ query ($profileId: String) {
   });
   const services = result.data.fetchTasksAmount;
   return services;
+}
+
+export async function getProfileBasedOnPortfolio (portfolioId) {
+  const result = await appClient.query({
+    query: gql`
+query ($portfolioId: String) {
+  getProfileBasedOnPortfolio(portfolioId: $portfolioId) {
+    profileId
+  }
+}
+    `,
+    forceFetch:true,
+    variables: {
+      portfolioId
+    }
+  });
+  const services = result.data.getProfileBasedOnPortfolio;
+  return services;
+}
+
+
+export async function fetchTaskDetailsForServiceCard (profileId) {
+  const result = await appClient.query({
+    query: gql`
+      query($profileId:String) {
+        fetchTaskDetailsForServiceCard(profileId: $profileId) {
+          displayName
+          noOfSession
+          sessionFrequency
+          duration {
+            hours
+            minutes
+          }
+          session {
+            sessionId
+            duration {
+              hours
+              minutes
+            }
+            activities
+          }
+        }
+      }
+    `,
+    variables: {
+      profileId:profileId
+    },
+  });
+  const taskDetails = result.data.fetchTaskDetailsForServiceCard;
+  return taskDetails
 }

@@ -43,15 +43,12 @@ let myOfficeSchema = `
       lang : Float
     }
     
-    type ExternalUserProfiles {
-      profileId: String
-    } 
-    
     type TeamMembersDetails {
-       name:String
+      name:String
       _id: String
       userId: String
-      externalUserProfiles: [ExternalUserProfiles]
+      profileId: String
+      profileImage: String
     }
     
     type BranchType{
@@ -151,12 +148,6 @@ let myOfficeSchema = `
       lat : Float
       lang : Float
     }
-  
-      
-    input TeamName {
-      userType: String
-      officeId: String
-    }
     
      input myOffice { 
         userId:String,
@@ -194,18 +185,19 @@ let myOfficeSchema = `
         fetchOffice:[MyOffice]
         fetchOfficeSC:[OfficeSC]
         fetchOfficeById(officeId:String):MyOffice
+        fetchOfficeSCById(officeId:String):MyOffice
         fetchOfficeMember(memberId:String):OfficeMembers
         fetchOfficeMembers(officeId:String, isPrincipal:Boolean):[OfficeMembers]
         fetchAllOfficeMembersWithUserId:[OfficeMembersWithUserId]
         findOfficeDetail(officeId:String):response
-        getTeamUsers(Attributes:TeamName):[TeamMembersDetails]
+        getTeamUsers(officeId: String):[TeamMembersDetails]
         getTeamMembers:[AvailableCommunities]
         getBranchDetails:[BranchType]
     }
     
     type Mutation{       
         createOffice(myOffice:myOffice):response
-          createOfficeMembers(myOfficeId:String, officeMember:officeMembers):response
+        createOfficeMembers(myOfficeId:String, officeMember:officeMembers):response
         updateOfficeMember(officeId:String,memberId:String, officeMember:officeMembers):response
         updateOffice(myOffice:myOffice, myOfficeId:String):response
         updateOfficeStatus(id:String):response

@@ -46,23 +46,22 @@ export async function updateActivityActionHandler(activityId,Details) {
 }
 
 
-export async function getTeamUsersActionHandler(Attributes) {
+export async function getTeamUsersActionHandler(officeId) {
   const result = await appClient.query({
     query: gql`
-query ($Attributes: TeamName) {
-  getTeamUsers(Attributes: $Attributes) {
-    name
-    userId
-    _id
-    externalUserProfiles{
-    profileId
-    }
-  }
-}
+      query ($officeId: String) {
+        getTeamUsers(officeId: $officeId) {
+          _id
+          name
+          userId
+          profileId
+          profileImage
+        }
+      }
     `,
     forceFetch:true,
     variables: {
-      Attributes
+      officeId:officeId
     }
   });
   const teamMembers = result.data.getTeamUsers;
@@ -91,49 +90,49 @@ export async function getActivityActionHandler(id) {
   const activityId = id;
   const result = await appClient.query({
     query: gql`
-query($activityId: String)  {
-  fetchActivity(activityId:$activityId){
-    userId
-    profileId
-    name
-    deliverable
-    displayName
-    isInternal
-    isExternal
-    mode
-    isServiceCardEligible
-    industryTypes
-    note
-    imageLink
-    duration{
-     hours
-     minutes
-    }
-    facilitationCharge{
-     amount
-     percentage
-     derivedAmount
-    }
-    teams{
-      branch
-      userType
-      users{
-        name
-        userId
+      query($activityId: String)  {
+        fetchActivity(activityId:$activityId){
+          userId
+          profileId
+          name
+          deliverable
+          displayName
+          isInternal
+          isExternal
+          mode
+          isServiceCardEligible
+          industryTypes
+          note
+          isActive
+          imageLink
+          duration{
+           hours
+           minutes
+          }
+          facilitationCharge{
+           amount
+           percentage
+           derivedAmount
+          }
+          teams{
+            resourceId
+            resourceType
+            users{
+              userId
+              profileId
+              isMandatory
+            }
+          }
+          conversation
+          payment{
+            amount
+            isDiscount
+            discountType
+            discountValue
+            derivedAmount
+          } 
+        }
       }
-    }
-    conversation
-    payment{
-      amount
-      isDiscount
-      discountType
-      discountValue
-      isTaxInclusive
-      isPromoCodeApplicable
-    }
-    
-  }
-}
     `,
     variables: {
       activityId
@@ -157,14 +156,14 @@ export async function fetchActivitiesActionHandler (profileId) {
           hours
           minutes
         }
-        teams{
-      branch
-      userType
-      users{
-        name
-        userId
-      }
-    }
+        teams {
+          resourceType
+          resourceId
+          users {
+            userId
+            profileId
+          }
+        }
       }
     }
     `,
@@ -177,6 +176,38 @@ export async function fetchActivitiesActionHandler (profileId) {
   return activities
 }
 
+export async function fetchActivitiesForTaskActionHandler(taskId){
+  const result = await appClient.query({
+    query: gql`
+    query($taskId:String) {
+      fetchActivitiesForTask(taskId: $taskId) {
+        displayName
+        imageLink
+        mode
+        _id
+        duration {
+          hours
+          minutes
+        }
+        teams {
+          resourceType
+          resourceId
+          users {
+            userId
+            profileId
+          }
+        }
+      }
+    }
+    `,
+    variables: {
+      taskId:taskId
+    },
+    forceFetch:true
+  });
+  const activities = result.data.fetchActivitiesForTask;
+  return activities
+}
 
 
 // export async function getActivityDataActionHandler() {

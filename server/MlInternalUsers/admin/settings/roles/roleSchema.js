@@ -50,6 +50,7 @@ let Role = `
         isActive:Boolean,
         isHierarchyAssigned:Boolean
         isSystemDefined:Boolean
+        isNonMoolyaAvailable : Boolean
   }
   
   scalar Date
@@ -103,6 +104,7 @@ let Role = `
       isHierarchyAssigned:Boolean
        updatedDateTime:Date,
         updatedBy:String,
+      isNonMoolyaAvailable : Boolean
   }
   
   

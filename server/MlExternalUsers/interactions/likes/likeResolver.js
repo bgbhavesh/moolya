@@ -47,7 +47,7 @@ MlResolver.MlQueryResolver['fetchLikes'] = (obj, args, context, info) =>{
           }
         }
       ]
-      let pipeRes = mlInteractionService.buildAggregationQuery(args.resourceType);
+      let pipeRes = mlInteractionService.buildAggregationQuery(args.resourceType, context.userId);
       if(pipeRes.length){
         pileLine = pileLine.concat(pipeRes);
       }

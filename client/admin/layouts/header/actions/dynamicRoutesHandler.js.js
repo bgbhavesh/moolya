@@ -17,8 +17,17 @@ export default function dynamicLinkHandler(path,params,queryParams){
 
     "dashboard_communities":function(params,queryParams){
         let dynamicParams=params||{};
+        let otherParams = FlowRouter.current().params;
+        let otherQueryParams = FlowRouter.current().queryParams;
+        let viewMode = otherQueryParams.viewMode?otherQueryParams.viewMode:true
       if(_.has(dynamicParams,"clusterId")&&_.has(dynamicParams,"chapterId")&&_.has(dynamicParams,"subChapterId")){
         return `/admin/dashboard/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/communities`;
+      }
+      else if(_.has(otherParams,"clusterId")&&_.has(otherParams,"chapterId")){
+        return `/admin/dashboard/${otherParams.clusterId}/${otherParams.chapterId}/communities?viewMode=${viewMode}`;
+      }
+      else if(_.has(otherParams,"clusterId")){
+        return `/admin/dashboard/${otherParams.clusterId}/communities?viewMode=${viewMode}`;
       }
       else{
         return '/admin/dashboard/communities';

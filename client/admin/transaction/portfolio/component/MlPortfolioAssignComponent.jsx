@@ -11,6 +11,11 @@ export default class MlPortfolioAssignComponent extends React.Component {
 
   constructor(props){
     super(props);
+    let list = this.props.data
+    if(!list || list.length==0 ){
+      toastr.error("Please Select a record");
+      this.props.closePopOver(false)
+    }
     this.state={
                   selectedValue:false,
                   selectedCluster:null,

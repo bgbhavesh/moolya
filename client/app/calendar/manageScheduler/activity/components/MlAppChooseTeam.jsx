@@ -5,290 +5,334 @@
  * JavaScript XML file MlAppChooseTeam.jsx
  * *************************************************************** */
 
+/**
+ * Import libs and components
+ */
 import React from 'react';
 import ScrollArea from 'react-scrollbar';
-import Moolyaselect from  '../../../../../commons/components/select/MoolyaSelect'
-import gql from 'graphql-tag'
-import {getTeamUsersActionHandler, updateActivityActionHandler, getActivityActionHandler} from '../actions/activityActionHandler'
-import _ from "lodash";
-let Select = require('react-select');
+import {getTeamUsersActionHandler } from '../actions/activityActionHandler';
+import { fetchOfficeActionHandler } from '../actions/fetchOffices';
 let FontAwesome = require('react-fontawesome');
 
-let options = [
-  {value: 'principal', label: 'Principal'},
-  {value: 'teamMember', label: 'Team Member'},
-  {value: 'moolyaAdmins', label: 'Moolya Admins'}
-];
-
 export default class MlAppChooseTeam extends React.Component{
+
+  /**
+   * Constructor
+   * @param props :: Object - Parents data
+   */
   constructor(props){
-    super(props)
-      this.state = {
-        userType:"",
-        branch:"",
-        teamUsers:[],
-        addComponent:[{}],
-        team: [{
-          users:[]
-        }],
-        responseTeam:[{}],
-        teamBearerType:[]
-      }
-      this.fetchTeam.bind(this)
-      this.getDetails.bind(this)
-
+    super(props);
+    this.state = {
+      teamData: props.data ? props.data : [{users: []}],
+      isExternal: props.isExternal ? props.isExternal : false,
+      isInternal: props.isInternal ? props.isInternal : false,
+      offices : []
+    };
   }
 
-  componentWillMount(){
-    this.getDetails()
-  }
-
-  async getDetails() {
-
-    let id = FlowRouter.getQueryParam('id')
-    if (id) {
-    const resp = await getActivityActionHandler(id)
-    if(resp) {
-      // this.setState({responseTeam: resp.teams})
-      let team = resp.teams && resp.teams.length ? resp.teams.map(function (data) {
-        return data;
-      }) : [{users: []}];  //this.state.responseTeam
-      console.log(team, Object.isExtensible(team));
-      let x =[]
-      console.log(team)
-      _.each(team, function (item)
-      {
-        for (var propName in item) {
-          if (item[propName] === null || item[propName] === undefined) {
-            delete item[propName];
-          }
-        }
-        let newItem = _.omit(item, "__typename");
-        x.push(newItem)
-      })
+  /**
+   * Component Will Receive Props
+   * Desc :: Set basic date in steps from props
+   * @param props :: Object - Parents data
+   */
+  componentWillReceiveProps(props){
+    let id = FlowRouter.getQueryParam('id');
+    if(id) {
       this.setState({
-        team: x
+        teamData: props.data ? props.data : [{users: []}],
+        isExternal: props.isExternal ? props.isExternal : false,
+        isInternal: props.isInternal ? props.isInternal : false
       });
-
-
-      console.log(this.state.team)
-      // console.log(this.state.tea
-      // m)
     }
+  }
+
+  /**
+   * Component Will Mount
+   * Desc :: call offices and users fetch functions
+   */
+  componentWillMount(){
+    this.getOffices();
+    this.getUsers();
+  }
+
+  /**
+   * Method :: getUsers
+   * Desc   :: fetch the users of current team
+   * @returns Void
+   */
+  async getUsers(){
+    const that = this;
+
+    let teamData = this.state.teamData;
+    teamData = await teamData.map(async function (team) {
+      if(team.resourceType == "office") {
+        const resp = await getTeamUsersActionHandler(team.resourceId);
+        let users = resp.map(function (user) {
+          let userInfo = {
+            name: user.name,
+            profileId: user.profileId,
+            profileImage: user.profileImage,
+            userId: user.userId
+          };
+          let isFind = team.users.find(function (teamUser){ return teamUser.profileId == user.profileId && teamUser.userId == user.userId });
+          if(isFind) {
+            userInfo.isAdded = true;
+            userInfo.isMandatory = isFind.isMandatory;
+          }
+          return userInfo;
+        });
+        team.users = users;
+      }
+      return team;
+    });
+
+    /**
+     * Resolve the promise
+     */
+    Promise.all(teamData).then(function(value) {
+      that.setState({
+        teamData : value
+      });
+    });
+
+  }
+
+  /**
+   * Method :: getOffices
+   * Desc   :: fetch the offices of user
+   * @returns Void
+   */
+  async getOffices () {
+    let response = await fetchOfficeActionHandler();
+    if(response){
+      this.setState({
+        offices:response
+      })
     }
-}
+  }
 
-  componentDidMount()
-  {
-
+  /**
+   * Component Did Mount
+   * Desc :: Initialize the js float
+   */
+  componentDidMount() {
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(310+$('.admin_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight-(220+$('.app_header').outerHeight(true)));
+    this.props.getActivityDetails();
   }
 
-
-  addComponent(){
-    let team = this.state.team;
-    console.log(team,Object.isExtensible(team));
-    team.push({
-      users:[]
-    });
-    console.log('team', team);
-    this.setState({
-      team:team
-    });
-  }
-
-  removeComponent(index,e){
-    let team = this.state.team;
-    team.splice(index,1)
-    this.setState({team:team})
-  }
-
+  /**
+   * Method :: saveDetails
+   * Desc   :: save team details in activity
+   * @returns Void
+   */
   async saveDetails(){
-
-    console.log(this.state.team)
-    let team  = this.state.team;
-    let temp = [];
-      let x =[]
-      _.each(team, function (item)
-      {
-        for (var propName in item) {
-          if (item[propName] === null || item[propName] === undefined) {
-            delete item[propName];
-          }
+    let data = this.state.teamData.map(function (team) {
+      team.users = team.users.filter(function (user) {
+        return user.isAdded;
+      }).map(function (user) {
+        return {
+          profileId: user.profileId,
+          userId: user.userId,
+          isMandatory: user.isMandatory ? true : false
         }
-        let newItem = _.omit(item, "__typename");
-        x.push(newItem)
-      })
-    console.log(x)
-    this.setState({team:x})
-    let id = FlowRouter.getQueryParam('id')
-    let teams = {
-      teams:team,
-    }
-    const res = await updateActivityActionHandler(id,teams)
-    this.getDetails();
-    if(res.success) {
-      toastr.success("Saved Successfully")
-    }
-     return res;
-  }
-  async SelectTeamMember(index,value){
-    let that = this;
-    console.log(index);
-    that.setState({teamBearerType:value})
-    let team = that.state.team;
-    team[index].userType = value.label;
-    let TeamAttributes = {
-      officeId: team[index].branch,
-      userType:team[index].userType
-    }
-    const resp = await getTeamUsersActionHandler(TeamAttributes);
-    let temp = [];
-    resp.map(function(data){
-      temp.push({
-        name: data.name,
-        userId: data.userId
-      })
-    })
-    team[index].users = temp
-    this.setState({
-      team:team
+      });
+      return team;
     });
-    console.log(this.state.team)
-    this.fetchTeam(this.state.team, index);
+    this.props.saveActivity({teams: data});
   }
 
-  SelectBranch(index,value){
-    console.log(index);
-    let team = this.state.team;
-    team[index].branch = value;
+  /**
+   * Method :: addTeam
+   * Desc   :: add new team in activity
+   * @returns Void
+   */
+  addTeam() {
+    let teamData = this.state.teamData;
+    teamData.push({users:[]});
     this.setState({
-      team:team
+      teamData : teamData
     });
-    // this.fetchTeam(this.state.team, index);
   }
 
-  async fetchTeam(temp, index){
-    let TeamAttributes = {
-        officeId: temp[0].branch,
-        userType:temp[0].userType
+  /**
+   * Method :: addTeam
+   * Desc   :: remove new team in activity
+   * @returns Void
+   */
+  removeTeam(index) {
+    let teamData = this.state.teamData;
+    teamData.splice(index , 1);
+    this.setState({
+      teamData : teamData
+    });
+  }
+
+  /**
+   * Method :: chooseTeamType
+   * Desc   :: update team type in specific team
+   * @param evt   :: Object  :: javascript event object
+   * @param index :: Integer :: Index of specific team
+   * @returns Void
+   */
+  async chooseTeamType(evt, index){
+
+    let teamData = this.state.teamData;
+    if(evt.target.value == "connections") {
+      teamData[index].resourceType="connections";
+      delete teamData[index].resourceId;
+      teamData[index].users = [];
+    } else if (evt.target.value == "moolyaAdmins") {
+      teamData[index].resourceType="moolyaAdmins";
+      delete teamData[index].resourceId;
+      teamData[index].users = [];
+    } else {
+      let officeId = evt.target.value;
+      teamData[index].resourceType="office";
+      teamData[index].resourceId=evt.target.value;
+      const resp = await getTeamUsersActionHandler(officeId);
+      if(resp){
+        teamData[index].users = resp.map(function (user) {
+          return {
+            name: user.name,
+            profileId: user.profileId,
+            profileImage: user.profileImage,
+            userId: user.userId
+          }
+        });
+
+      }
     }
-    const resp = await getTeamUsersActionHandler(TeamAttributes)
-    console.log(resp)
-    this.setState({teamUsers: resp})
+    this.setState({
+      teamData:teamData
+    });
   }
 
-  // teamBearers(val, index) {
-  //   console.log(index);
-  //   let team = this.state.team;
-  //   team[index].team = value;
-  //   this.setState({
-  //     team:team
-  //   });
-  //   this.setState({teamBearerType:val})
-  //     }
+  /**
+   * Method :: addUser
+   * Desc   :: add user in team
+   * @param teamIndex :: Integer :: Index of specific team
+   * @param userIndex :: Integer :: Index of specific user
+   * @returns Void
+   */
+  addUser(teamIndex, userIndex){
+    let teamData = this.state.teamData;
+    teamData[teamIndex].users[userIndex].isAdded = true;
+    this.setState({
+      teamData: teamData
+    });
+  }
 
+  /**
+   * Method :: updateIsMandatory
+   * Desc   :: Make user mandatory
+   * @param evt       :: Object  :: javascript event object
+   * @param teamIndex :: Integer :: Index of specific team
+   * @param userIndex :: Integer :: Index of specific user
+   * @returns Void
+   */
+  updateIsMandatory(evt, teamIndex, userIndex) {
+    let teamData = this.state.teamData;
+    teamData[teamIndex].users[userIndex].isAdded = true;
+    teamData[teamIndex].users[userIndex].isMandatory = evt.target.checked;
+    this.setState({
+      teamData: teamData
+    });
+  }
 
+  /**
+   * Render
+   * Desc   :: Render the HTML for this component
+   * @returns {HTML}
+   */
   render(){
-//   let teamQuery= gql`
-//    query  {
-//   data: getTeamMembers {
-//     label: communityName
-//     value: communityId
-//   }
-// }
-//   `;
-
-  let branchQuery = gql`
-  query{
-  data: getBranchDetails{
-    label: branchType
-    value: _id
-  }
-}
-
-`;
-
-  let that =  this;
-    let data = that.state.teamUsers || []
-    // const users =  data.map(function(user, id){
-    //   return(
-    //     <div className="col-md-12 nopadding att_members" >
-    //       <ul className="users_list">
-    //         <li>
-    //           <a href="#">
-    //             <img src="/images/p_3.jpg" /><br />
-    //             <div className="tooltiprefer">
-    //               <span>{user.name}</span>
-    //             </div>
-    //           </a>
-    //         </li>
-    //       </ul>
-    //     </div>
-    //   )
-    // })
-
-    // let temp = this.state.addComponent || []
-    const newComponent =  this.state.team.map(function(indi, id){
-      return(
-        <div className="col-md-6 nopadding-left">
-          <div className="panel panel-default cal_view_task">
-            <div className="panel-heading">Suggestable teams <span className="see-more pull-right"><a href=""><FontAwesome name='plus' onClick={that.addComponent.bind(that,indi)}/></a><FontAwesome name='minus' onClick={that.removeComponent.bind(that, id)}/></span></div>
-            <div className="panel-body ">
-              <div className="col-md-12 nopadding">
-                <div className="col-md-6 nopadding-left">
-                  <form>
-                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
-                                  labelKey={'label'} queryType={"graphql"} query={branchQuery}
-                                  isDynamic={true} placeholder="Select Branch Type"
-                                  onSelect={that.SelectBranch.bind(that, id)}
-                                  selectedValue={indi.branch}/>
-                    <br className="clearfix"/><br className="clearfix"/><br className="clearfix"/>
-                  </form>
-                </div>
-                <div className="col-md-6 nopadding-right">
-                  <form>
-                    <div className="form-group">
-                      <Select name="form-field-name" options={options} value={indi.userType} placeholder='Select Team Bearer' onChange={that.SelectTeamMember.bind(that, id)} />
-                    </div>
-                  </form>
-                </div>
-              </div>
-              <div className="col-md-12 nopadding att_members" >
-                <ul className="users_list">
-              {indi.users.map(function ( user, index ) {
-                return (
-
-                      <li>
-                        <a href="">
-                          <img src="/images/p_3.jpg" /><br />
-                          <div className="tooltiprefer">
-                            <span>{user.name}</span>
-                          </div>
-                        </a>
-                      </li>
-                )
-              })}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      )
-    })
+  const that =  this;
+    /**
+     * Return the HTML
+     */
     return (
       <div className="step_form_wrap step1">
-        <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
-          <br/>
-          {newComponent}
-        </ScrollArea>
-        <div className="ml_btn" style={{'textAlign':'center'}}>
-          <div className="save_btn" onClick={this.saveDetails.bind(this)}>Save</div> <div className="cancel_btn">Cancel</div>
-        </div>
+      <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true} >
+        <br/>
+        {that.state.teamData.map(function (team, index) {
+          return (
+            <div className="col-md-12 nopadding-left" key={index}>
+              <div className="panel panel-default cal_view_task">
+                <div className="panel-heading">
+                  Suggestable teams
+                  <span className="see-more pull-right">
+                    { index == 0
+                      ?
+                      <a href="" onClick={()=>that.addTeam()}>
+                        <FontAwesome name='plus'/>
+                      </a>
+                      :
+                      <a href="" onClick={()=>that.removeTeam(index)}>
+                        <FontAwesome name='minus'/>
+                      </a>
+                    }
+
+                  </span>
+                </div>
+                <div className="panel-body sug_teams">
+                  <div className="col-md-12 nopadding">
+                    <div className="col-md-6 nopadding-right">
+                      <form>
+                        <div className="form-group">
+                          <span className="placeHolder active">Choose team Type</span>
+                          <select defaultValue="chooseTeam" value={ team.resourceType == 'office' && team.resourceId ? team.resourceId : team.resourceType } className="form-control" onChange={(evt)=>that.chooseTeamType(evt, index)}>
+                            <option value="chooseTeam" disabled="disabled">Choose team Type</option>
+                            <option value="connections">My Connections</option>
+                            <option hidden={!that.state.isExternal} disabled={!that.state.isExternal} value="moolyaAdmins">Moolya Admins</option>
+                            {that.state.offices.map(function (office , index) {
+                              return <option key={index} hidden={!that.state.isInternal} disabled={!that.state.isInternal} value={office._id}>{ office.officeName + " - " + office.branchType }</option>
+                            })}
+                          </select>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                  <div className="col-md-12">
+                    <input type="text" name="search" className="search_field" placeholder="Search.."/>
+                  </div>
+                  <div className="col-md-12 nopadding att_members" >
+                    <ul className="users_list">
+                      {team.users.map(function (user, userIndex) {
+                        return (
+                         <li key={userIndex}>
+                            <a href="">
+                              <img src="/images/p_3.jpg" /><br />
+                              <div className="tooltiprefer">
+                                <span>{user.name}</span>
+                              </div>
+                              <span className="member_status" onClick={() => that.addUser(index, userIndex)}>
+                                { user.isAdded ? <FontAwesome name="check" /> : <FontAwesome name="plus" /> }
+                              </span>
+                            </a>
+                            <div className="input_types">
+                              <br />
+                              <input id={"mandatory"+index+userIndex} checked={ user.isMandatory ? true : false } name="Mandatory" type="checkbox" value="Mandatory" onChange={(evt)=>that.updateIsMandatory(evt, index, userIndex)} />
+                              <label htmlFor={"mandatory"+index+userIndex}>
+                                <span><span></span></span>
+                                Mandatory
+                              </label>
+                            </div>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
+        })}
+      </ScrollArea>
+      <div className="ml_btn" style={{'textAlign':'center'}}>
+        <div className="save_btn" onClick={this.saveDetails.bind(this)}>Save</div> <div className="cancel_btn">Cancel</div>
       </div>
+    </div>
     )
   }
 };

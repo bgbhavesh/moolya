@@ -17,7 +17,9 @@
      isDiscount: Boolean
      discountType : String
      discountValue : Int
-     isPromoCodeApplicable: Boolean
+     activitiesDerived: Int
+     activitiesDiscount: Int
+     activitiesAmount: Int
      derivedAmount :Int
    }
 
@@ -72,14 +74,18 @@
        info: String
        isMandatory: Boolean
    }
+   
    input payment {
        amount: Int
        isDiscount: Boolean
        discountType : String
        discountValue : Int
-       isPromoCodeApplicable: Boolean
-       derivedAmount : Int
+       activitiesDerived: Int
+       activitiesDiscount: Int
+       activitiesAmount: Int
+       derivedAmount :Int
    }
+   
    input facilitationCharge {
         amount: Int
         percentage: Int
@@ -114,6 +120,8 @@
           fetchTasks(profileId:String):[Task]
           fetchTask(taskId:String):Task
           fetchTaskDetails(name: String):Task
+          fetchTaskDetailsAdmin(name: [String]): [Task]
+          fetchTaskDetailsForServiceCard(profileId:String):[Task]
    }
 
    type Mutation {
@@ -129,6 +137,8 @@
     {api:'fetchTasks', actionName:'READ', moduleName:"OFFICE"},
     {api:'fetchTaskDetails', actionName:'READ', moduleName:"OFFICE"},
     {api:'fetchTask', actionName:'READ', moduleName:"OFFICE"},
+    {api:'fetchTaskDetailsForServiceCard', actionName:'READ', moduleName:"OFFICE"},
+    {api:'fetchTaskDetailsAdmin', actionName:'READ', moduleName:"OFFICE"},
     {api:'createTask', actionName:'CREATE', moduleName:"OFFICE"},
     {api:'updateTask', actionName:'UPDATE', moduleName:"OFFICE"},
   ]

@@ -6,7 +6,7 @@ import moment from "moment";
 import hierarchyValidations from "../../../../commons/containers/hierarchy/mlHierarchyValidations"
 import {validateTransaction} from '../actions/assignUserforTransactionAction'
 import MlAssignComponent from '../component/MlAssignComponent'
-
+import {client} from '../../../core/apolloConnection';
 
 function dateFormatter (data){
   let createdDateTime=data&&data.data&&data.data.registrationDate?data.data.registrationDate:null;
@@ -25,7 +25,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
   selectRow:true,  //Enable checkbox/radio button to select the row.
   filter:true,
   multiSelect:true,
-  filterComponent: <MlCustomFilter module="registration" moduleName="registration" />,
+  filterComponent: <MlCustomFilter module="registration" moduleName="registration" client={client}/>,
   fieldsMap: {
     'registrationDate': 'registrationInfo.registrationDate',
     'firstName': 'registrationInfo.firstName',
@@ -42,7 +42,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "registrationId",title:"Transaction ID",dataSort:true},
-    {dataField: "firstName", title: "Created By",dataSort:true},
+    {dataField: "createdBy", title: "Created By",dataSort:true},
     {dataField: "email", title: "Email ID",dataSort:true},
     {dataField: "clusterName", title: "Cluster",dataSort:true},
     {dataField: "chapterName", title: "Chapter",dataSort:true},
@@ -61,13 +61,18 @@ const mlUserTypeTableConfig=new MlViewer.View({
       actionName: 'edit',
       showAction: true,
       handler: async(data)=>{
-        let response =  await validateTransaction(data.registrationId,"MlRegistration",data[0].assignedUserId);
-        if(data && data[0].id && response.success === true){
-          FlowRouter.go("/admin/transactions/editRequests/"+data[0].id);
-        }else if(data && data[0].id){
-          toastr.error("User does not have access to edit record");
-        } else{
+        let list = data
+        if(!list || list.length==0 ){
           toastr.error("Please Select a record");
+        } else if(list && list.length>1){
+          toastr.error("Multiple records cannot be edited, Please select a record");
+        } else{
+          let response =  await validateTransaction(data.registrationId,"MlRegistration",data[0].assignedUserId);
+          if(response.success === true ){
+            FlowRouter.go("/admin/transactions/editRequests/"+data[0].id);
+          }else {
+            toastr.error("User does not have access to edit record");
+          }
         }
       }
     },
@@ -114,6 +119,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
                       				registrationDate
                               transactionId                              
                               assignedUserId
+                              createdBy
                           }
                       }
               }

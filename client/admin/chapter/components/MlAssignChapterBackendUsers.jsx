@@ -15,6 +15,7 @@ import {fetchAdminUserRoles} from "../../../commons/fetchAdminUserRoles";
 import {OnToggleSwitch} from "../../utils/formElemUtil";
 import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 import MlLoader from "../../../commons/components/loader/loader";
+import {client} from '../../core/apolloConnection';
 var _ = require('lodash');
 
 
@@ -70,7 +71,7 @@ class MlAssignChapterBackendUsers extends React.Component {
   }
 
   async findUserDetails(userId) {
-    const userDetails = await findAdminUserDetails(userId);
+    const userDetails = await findAdminUserDetails(userId,client);
     if (userDetails) {
       this.setState({
         selectedBackendUser: userId,
@@ -92,7 +93,7 @@ class MlAssignChapterBackendUsers extends React.Component {
   }
 
   async find_Chapter_Roles(userId) {
-      const userRoles = await fetchAdminUserRoles(userId);
+      const userRoles = await fetchAdminUserRoles(userId,client);
       var roles = userRoles && userRoles.length > 0 ? userRoles : [];
       this.setState({
           loading: false,

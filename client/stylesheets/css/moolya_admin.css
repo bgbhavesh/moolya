@@ -122,6 +122,7 @@ h1,h2,h3,h4,h5,h6{font-family: 'DINPro-Regular';font-weight:normal;margin: 0px;l
 .community_icons a .ml{font-size: 19px; color: #fff; border-radius: 100%; padding: 5px; margin-right: 5px; text-shadow: none;text-shadow: none;line-height: 40px;border:solid 2px transparent;background-color: #B9C5CC; }
 .community_icons a .fa.ml{display: inherit;}
 .community_icons a.active_community .ml{border: 2px solid #ef4647;background-color: #ef4647;color: #fff;}
+.community_icons a.map_active_community .ml{border: 2px solid #273545;background:#ef4647 !important;color: #fff;}
 .community_icons a{text-decoration: none;}
 .ideator_mask{position: relative;width: 103px;height: 139px;background: url(../images/ideator_bg.png);top: 4px;left: 39px;}
 .ideator_mask img{border: 0px;top: 5px;left: 5px;border-radius: 50%;width: 93px;height: 93px;}
@@ -1450,5 +1451,9 @@ button.close {
 .hour_block{float: left;width: 40px;height: 80px;color: #fff;text-shadow: none;line-height: 80px;text-align: center;font-size: 12px;}
 .hour_block.color_01{background: transparent;}
 .hour_block.color_02{background: transparent;}
-
-
+.last_step_none .progtrckr li:last-of-type em{display: none;}
+.last_step_none .progtrckr li:nth-last-child(2) em{width: 90px;}
+.fixed_icon{
+  position: fixed;
+  top: 111px;
+}

@@ -35,6 +35,13 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
           user = MlPortfolioDetails.findOne({"$and": [{'userId': portfolioDetails.userId}, {'communityType': portfolioDetails.communityType}]})
           if (!user || portfolioDetails.communityType == 'Ideators') {
               // ret = MlPortfolioDetails.insert({...portfolioDetails})
+            let user = mlDBController.findOne('users', {_id: portfolioDetails.userId}, context)
+
+            /** introducing profile Id based on registration in portfolio from users*/
+            if(user && user.profile && user.profile.externalUserProfiles){
+              let reqProfile = _.find(user.profile.externalUserProfiles, {registrationId: portfolioDetails.registrationId})
+              portfolioDetails['profileId'] = reqProfile.profileId || ''
+            }
               ret = mlDBController.insert('MlPortfolioDetails', portfolioDetails, context)
               if(ret){
                   switch (portfolioDetails.communityType){
@@ -320,5 +327,24 @@ MlResolver.MlMutationResolver['removeIdetaorProfilePic'] = (obj, args, context, 
 
   return response;
 }
+
+MlResolver.MlMutationResolver['putDataIntoTheLibrary'] = (obj, args, context, info) => {
+  let response;
+  var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfoliodetailsId}, context)
+  if (portfolioDetails) {
+    args.files.userId = context.userId;
+    if (args.portfoliodetailsId) {
+      response = mlDBController.insert('MlLibrary', args.files, context)
+    }
+    return response;
+  }
+}
+
+
+
+
+
+
+
 
 

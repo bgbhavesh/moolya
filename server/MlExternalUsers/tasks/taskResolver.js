@@ -8,12 +8,13 @@ var _ = require('lodash')
 
 MlResolver.MlQueryResolver['fetchTasks'] = (obj, args, context, info) => {
   let query = {
-    userId:context.userId,
-    profileId:args.profileId
+    userId: context.userId
+  };
+  if(args.profileId){
+    query.profileId = args.profileId;
   };
   let result = mlDBController.find('MlTask', query, context).fetch()
   return result;
-
 }
 
 MlResolver.MlQueryResolver['fetchTask'] = (obj, args, context, info) => {
@@ -53,7 +54,7 @@ MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
             orderNumberGenService.createSessionId(item);
           countSessionAry.push(item)
         })
-        args.taskDetails.session = countSessionAry
+        args.taskDetails.session = countSessionAry;
         let activity = _.map(args.taskDetails.session, 'activities')
         let act= []
         _.each(activity, function (item,say) {   //removing the empty array
@@ -61,23 +62,33 @@ MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
             act.push(item)
         })
 
-        let costAry = []
+        let costAry = [];
+        let activitiesAmount = [];
+        let activitiesDerivedAmount = [];
         _.each(act,function (item,say) {    //amount calculation based on activity
           let details = mlDBController.find('MlActivity',{_id:{$in:item}}, context).fetch()
-          let amount = _.map(details, 'facilitationCharge.derivedAmount')
+          let amount = _.map(details, 'payment.amount');
           _.each(amount, function (i,s) {
-            costAry.push(i)
-          })
-        })
-        let finalCost = _.sum(costAry)
+            activitiesAmount.push(i ? i : 0);
+          });
+          let derivedAmount = _.map(details, 'payment.derivedAmount');
+          _.each(derivedAmount, function (i,s) {
+            activitiesDerivedAmount.push(i ? i : 0);
+          });
+        });
+        let finalActivitiesAmount = _.sum(activitiesAmount);
+        let finalActivitiesDerivedAmount = _.sum(activitiesDerivedAmount);
         let pick;
         if(args.taskDetails.payment)   //picking up the last details without amount
-          pick = _.pick(args.taskDetails.payment, ['isDiscount','discountType','discountValue', 'isPromoCodeApplicable', 'derivedAmount'])
+          pick = _.pick(args.taskDetails.payment, ['activitiesDerived', 'activitiesDiscount', 'activitiesAmount', 'isDiscount','discountType','discountValue', 'derivedAmount'])
         else
-          pick = _.pick(task.payment, ['isDiscount','discountType','discountValue', 'isPromoCodeApplicable', 'derivedAmount'])
+          pick = _.pick(task.payment, ['activitiesDerived', 'activitiesDiscount', 'activitiesAmount', 'isDiscount','discountType','discountValue', 'derivedAmount'])
         let paymentAmount = {
-          amount: finalCost
-        }
+          activitiesAmount: finalActivitiesAmount,
+          activitiesDiscount: finalActivitiesAmount - finalActivitiesDerivedAmount,
+          activitiesDerived: finalActivitiesDerivedAmount,
+          amount: finalActivitiesDerivedAmount
+        };
         paymentAmount = _.extend(paymentAmount, pick)
         args.taskDetails = _.extend(args.taskDetails, {payment:paymentAmount})
       }
@@ -109,11 +120,21 @@ MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchTaskDetails'] = (obj, args, context, info) => {
-  // let query = {
-  //   userId:context.userId,
-  //   profileId:args.profileId
-  // };
   let result = mlDBController.findOne('MlTask', {_id:args.name}, context)
   return result;
+};
 
-}
+MlResolver.MlQueryResolver['fetchTaskDetailsForServiceCard'] = (obj, args, context, info) => {
+  let query = {
+    userId: context.userId,
+    isExternal: true,
+    isActive: true,
+    isServiceCardEligible: true
+  };
+  if(args.profileId){
+    query.profileId = args.profileId;
+  };
+  let result = mlDBController.find('MlTask', query, context).fetch()
+  return result;
+};
+

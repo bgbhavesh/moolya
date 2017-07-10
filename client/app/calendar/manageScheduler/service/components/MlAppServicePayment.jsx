@@ -25,9 +25,7 @@ export default class Step4 extends React.Component{
       discountAmountField:true,
       discountType:"",
       discountValue:""
-    }
-    this.getDetails.bind(this)
-    this.getTotalAmount.bind(this)
+    };
     this.discountEligibility = this.discountEligibility.bind(this)
   }
 
@@ -36,54 +34,33 @@ export default class Step4 extends React.Component{
   }
 
   async getDetails() {
-    let id = FlowRouter.getQueryParam('id')
-    const resp = await fetchServiceActionHandler(id)
-    console.log(resp)
+    let id = FlowRouter.getQueryParam('id');
+    const resp = await fetchServiceActionHandler(id);
+    console.log(resp);
     if(resp.payment) {
       this.setState({
         derivedValue: resp.payment.amount,
-        discountAmount: resp.payment.discountValue, discountType:resp.payment.discountType,
-        discountPercentage: resp.payment.discountValue, status: resp.payment.isTaxInclusive,
+        discountAmount: resp.payment.discountValue,
+        discountType:resp.payment.discountType,
+        discountPercentage: resp.payment.discountValue,
+        status: resp.payment.isTaxInclusive,
         promo: resp.payment.isPromoCodeApplicable,
-        tasks: resp.tasks
+        tasks: resp.tasks,
+        tasksAmount: resp.payment.tasksAmount,
+        tasksDerived: resp.payment.tasksDerived,
+        tasksDiscount: resp.payment.tasksDiscount,
+        facilitationAmount: resp.facilitationCharge ? resp.facilitationCharge.amount : '',
+        facilitationPercentage: resp.facilitationCharge ? resp.facilitationCharge.percentage : ''
       })
     }
+
     if(this.state.discountType === 'amount') {
       this.setState({discountAmountR: true, discountPercentageR: false, discountPercentage:0})
     }else {
       this.setState({discountAmountR: false, discountPercentageR: true, discountAmount: 0})
     }
-    this.getTotalAmount();
   }
 
-  async getTotalAmount() {
-    var total = 0;
-    let profileId = FlowRouter.getParam('profileId')
-    const resp = await fetchTasksAmountActionHandler(profileId)
-
-    temp = []
-    resp.map(function(data){
-      temp.push(data.totalAmount)
-    })
-    console.log(temp)
-    $.each(temp,function() {
-      total += this;
-    });
-    this.setState({amountToPay:total})
-    // let amountPayable = parseInt(this.state.amountToPay);
-    // let discountAmount = parseInt(this.state.discountAmount?this.state.discountAmount: 0);
-    // let discountPercentage = parseFloat(this.state.discountPercentage?this.state.discountPercentage: 0)
-    // if(!discountPercentage){
-    //   let totalAmount = amountPayable - discountAmount;
-    //   this.setState({derivedValue:totalAmount})
-    // }else{
-    //   let totalAmount = amountPayable/discountPercentage*100;
-    //   this.setState({derivedValue:totalAmount})
-    // }
-
-
-    // console.log(this.state.derivedValue)
-  }
 
   discountEligibility(e){
     let discount = e.target.checked;
@@ -115,36 +92,7 @@ export default class Step4 extends React.Component{
     }
   }
 
-  // payableAmount(e){
-  //   console.log(e.currentTarget.value);
-  //   if(e.currentTarget.value ==="") {
-  //     e.currentTarget.value = 0;
-  //   }
-  //   if(e.currentTarget.value >= 0) {
-  //     this.setState({"amountToPay":e.currentTarget.value},function(){
-  //       if(this.state.discountAmount || this.state.facilitationAmount) {
-  //         let discount = this.state.discountAmount?parseInt(this.state.discountAmount):0;
-  //         let facilitationAmount = this.state.facilitationAmount?parseInt(this.state.facilitationAmount):0;
-  //         if(discount & facilitationAmount) {
-  //           let amt = facilitationAmount - discount;
-  //           let total = amt + parseInt(this.state.amountToPay);
-  //           this.setState({derivedValue:total})
-  //         }else if(discount) {
-  //           let total = parseInt(this.state.amountToPay) - discount;
-  //           this.setState({derivedValue:total})
-  //         }else if(facilitationAmount) {
-  //           let total = parseInt(this.state.amountToPay) - facilitationAmount;
-  //           this.setState({derivedValue:total})
-  //         }
-  //       }else {
-  //         let total = parseInt(this.state.amountToPay)
-  //         this.setState({derivedValue:total})
-  //       }
-  //     }).bind(this);
-  //   } else {
-  //     this.setState({"amountToPay":0});
-  //   }
-  // }
+
   discountedAmount(e){
     if(e.currentTarget.value ==="") {
       e.currentTarget.value = 0;
@@ -203,62 +151,6 @@ export default class Step4 extends React.Component{
     }
   }
 
-
-  // facilitationAmount(e){
-  //   if(e.currentTarget.value ==="") {
-  //     e.currentTarget.value = 0;
-  //   }
-  //   if (e.currentTarget.value >= 0) {
-  //     this.setState({"facilitationAmount": e.currentTarget.value}, function() {
-  //       if(this.state.amountToPay || this.state.discountAmount) {
-  //         let amountPayable = this.state.amountToPay?parseInt(this.state.amountToPay):0;
-  //         let discount = this.state.discountAmount?parseInt(this.state.discountAmount):0;
-  //         if(amountPayable & discount) {
-  //           let total = amountPayable - discount + parseInt(this.state.facilitationAmount);
-  //           this.setState({derivedValue:total})
-  //         } else if(amountPayable) {
-  //           let total = amountPayable + parseInt(this.state.facilitationAmount);
-  //           this.setState({derivedValue:total})
-  //         } else if(discount) {
-  //           let total = parseInt(this.state.facilitationAmount) - discount;
-  //           this.setState({derivedValue:total})
-  //         }
-  //       } else {
-  //         let total = parseInt(this.state.facilitationAmount)
-  //         this.setState({derivedValue:total})
-  //       }
-  //     }).bind(this);
-  //   } else {
-  //     this.setState({"facilitationAmount": 0});
-  //   }
-  // }
-  //
-  //
-  // facilitationPercentage(e){
-  //   if(e.currentTarget.value ==="") {
-  //     e.currentTarget.value = 0.0;
-  //   }
-  //   if(this.state.chargesPercentage) {
-  //     if (e.currentTarget.value >= 0.0) {
-  //       this.setState({"facilitationPercentage": e.currentTarget.value}, function(){
-  //         if(this.state.discountPercentage) {
-  //           let totalPercentage = parseFloat(this.state.facilitationPercentage) - parseFloat(this.state.discountPercentage);
-  //           let amountPayable = this.state.amountToPay?parseFloat(this.state.amountToPay):0.0;
-  //           let total = (amountPayable * totalPercentage / 100)+ amountPayable ;
-  //           this.setState({derivedValue:total})
-  //         }else{
-  //           let totalPercentage = parseFloat(this.state.facilitationPercentage);
-  //           let amountPayable = this.state.amountToPay?parseFloat(this.state.amountToPay):0.0;
-  //           let total = (amountPayable * totalPercentage / 100)+ amountPayable
-  //           this.setState({derivedValue:total})
-  //         }
-  //       }).bind(this);
-  //     } else {
-  //       this.setState({"facilitationPercentage": 0.0});
-  //     }
-  //   }
-  // }
-
   promoCode(e) {
     let promoCode = e.target.checked
     if(promoCode) {
@@ -267,16 +159,6 @@ export default class Step4 extends React.Component{
       this.setState({promo: true})
     }
   }
-
-  // facilitationChargesPercentage(e) {
-  //   let charges = e.target.checked;
-  //   this.setState({chargesPercentage: charges})
-  // }
-  //
-  // facilitationChargesAmount(e) {
-  //   let charges = e.target.checked
-  //   this.setState({chargesAmount: charges})
-  // }
 
   async saveDetails(){
     let amount = this.state.discountAmount;
@@ -327,7 +209,21 @@ export default class Step4 extends React.Component{
           <div className="centered_form">
             <form>
               <div className="form-group">
-                <label>Enter payable amount Rs.<input type="number" disabled value={this.state.amountToPay}  className="form-control "/>
+                <label>
+                  Tasks actual amount
+                  <input type="number" disabled value={this.state.tasksAmount}  className="form-control "/>
+                </label>
+              </div>
+              <div className="form-group">
+                <label>
+                  Task discount amount
+                  <input type="number" disabled value={this.state.tasksDiscount}  className="form-control "/>
+                </label>
+              </div>
+              <div className="form-group">
+                <label>
+                  Task derived amount
+                  <input type="number" disabled value={this.state.tasksDerived}  className="form-control "/>
                 </label>
               </div>
               <div className="form-group switch_wrap switch_names inline_switch">

@@ -32,7 +32,8 @@ export default class MlAppServiceStep1 extends React.Component{
       communityObject:[{}],
       chapters:[],chapterName:[],
       states:[],subChapterName:[],
-      communities:[],communitiesName:[]
+      communities:[],communitiesName:[],
+      daysRemaining:""
     }
     this.getDetails.bind(this)
     this.getUserProfile.bind(this)
@@ -94,10 +95,16 @@ async getDetails() {
 
   }
 
+  var validTillDate = Date.parse(this.state.validTillDate);
+  var currentDate = new Date();
+  var remainingDate =  Math.floor((validTillDate - currentDate) / (1000*60*60*24));
+  isNaN(remainingDate)?remainingDate="":remainingDate;
+  this.setState({
+    daysRemaining: remainingDate
+  })
+
   this.getUserProfile();
-
 }
-
   async saveDetails() {
     let cities = []
     let states = []
@@ -151,23 +158,6 @@ async getDetails() {
       const res = await updateServiceActionHandler(idExist,services)
       this.getDetails();
     }
-
-  }
-
-  noOfSessions(e) {
-    if(e.currentTarget.value >= 0) {
-      this.setState({"sessionsCost":e.currentTarget.value});
-    } else {
-      this.setState({"sessionsCost":0});
-    }
-  }
-
-  serviceExpires(e) {
-    if(e.currentTarget.value >= 0) {
-      this.setState({"serviceExpiral":e.currentTarget.value});
-    } else {
-      this.setState({"serviceExpiral":0});
-    }
   }
 
   textFieldSaves(type,e){
@@ -185,21 +175,6 @@ async getDetails() {
 
   frequency(value) {
     this.setState({frequencyType:value.value})
-  }
-
-  updateHours(e){
-    if(e.currentTarget.value >= 0) {
-      this.setState({"hour":e.currentTarget.value});
-    } else {
-      this.setState({"hour":0});
-    }
-  }
-  updateMinutes(e){
-    if(e.currentTarget.value >= 0) {
-      this.setState({"minute":e.currentTarget.value});
-    } else {
-      this.setState({"minute":0});
-    }
   }
 
   validTillToggle(){
@@ -240,11 +215,11 @@ async getDetails() {
   render(){
 
     let statesQuery=gql`query ($countryId: String) {
-    data: fetchStatesPerCountry(countryId: $countryId) {
-    value: _id
-    label: name
-  }
-}`;
+        data: fetchStatesPerCountry(countryId: $countryId) {
+        value: _id
+        label: name
+      }
+    }`;
 
     let citiesQuery=gql`query($id:String){data:fetchChapters(id:$id) {
     value:_id
@@ -272,11 +247,14 @@ async getDetails() {
                   <input type="text" placeholder="Service Name" className="form-control float-label" id="" value={this.state.serviceName} onChange={this.textFieldSaves.bind(this,"ServiceName")}/>
                 </div>
                 <div className="form-group">
-                  <label>Total number of Sessions Rs. <input type="text"className="form-control inline_input" onChange={(e)=>this.noOfSessions(e)} value={this.state.sessionsCost}  /> </label>
+                  <label>Total number of Sessions Rs. <input type="text"className="form-control inline_input" disabled={true} value={this.state.sessionsCost}  /> </label>
                   {/*<input type="number" className="form-control "/>*/}
                 </div>
                 <div className="form-group">
-                  <label>Duration: &nbsp; <input type="text" className="form-control inline_input" onChange={(e)=>this.updateHours(e)} value={this.state.hour}  /> Hours <input type="text" className="form-control inline_input" onChange={(e)=>this.updateMinutes(e)} value={this.state.minute}  /> Mins </label>
+                  <label>Duration: &nbsp;
+                    <input type="text" className="form-control inline_input" disabled={true} value={this.state.hour}  /> Hours
+                    <input type="text" className="form-control inline_input" disabled={true} value={this.state.minute}  /> Mins
+                  </label>
                 </div>
                 <div className="form-group" id="date-time">
                   <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Valid Till"}}   closeOnSelect={true} value={moment(this.state.validTillDate).format('DD-MM-YY')} onChange={this.validTill.bind(this)}/>
@@ -291,7 +269,7 @@ async getDetails() {
                 <div className="form-group">
                   <input type="text" placeholder="Display Name" className="form-control float-label" value={this.state.displayName} onChange={this.textFieldSaves.bind(this,"DisplayName")} id=""/>
                 </div>
-                <span className="placeHolder active">Frequency type</span>
+                <span className="placeHolder active">Renewal Frequency</span>
                 <div className="form-group">
                   <Select name="form-field-name"   options={options} value={this.state.frequencyType} placeholder='Frequency Type' onChange={this.frequency.bind(this)} />
                 </div>
@@ -319,7 +297,7 @@ async getDetails() {
                 </div>
                 <br className="brclear"/>
                 <div className="form-group">
-                  <label>Service expires &nbsp; <input type="text" className="form-control inline_input" onChange={(e)=>this.serviceExpires(e)} value={this.state.serviceExpiral}  /> days from the date of purchase</label>
+                  <label>Service expires &nbsp; <input type="text" className="form-control inline_input" disabled value={this.state.daysRemaining}  /> days from the date of purchase</label>
                 </div>
               </form>
             </div>

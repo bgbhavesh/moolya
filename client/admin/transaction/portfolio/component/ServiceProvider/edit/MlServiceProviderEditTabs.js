@@ -124,8 +124,8 @@ export default class MlServiceProviderEditTabs extends Component {
     this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio});
   }
 
-  getServiceProviderMCL(details) {
-    let data = this.state.startupPortfolio;
+  getServiceProviderMCL(details, privateKey) {
+    let data = this.state.serviceProviderPortfolio;
     if (details.memberships) {
       data['memberships'] = details.memberships;
     }
@@ -135,8 +135,8 @@ export default class MlServiceProviderEditTabs extends Component {
     if (details.licenses) {
       data['licenses'] = details.licenses;
     }
-    this.setState({startupPortfolio: data})
-    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, []);
+    this.setState({serviceProviderPortfolio: data})
+    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey);
   }
 
   getServiceProviderServices(details) {

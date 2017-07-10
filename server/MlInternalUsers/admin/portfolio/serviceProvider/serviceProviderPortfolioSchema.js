@@ -46,6 +46,7 @@ let serviceProviderPortfolioSchema = `
     type servicesOutput{
       servicesDescription : String
       isServicesPrivate   : Boolean
+      privateFields:[PrivateKeys]
     }
     
     type imageFilesInputSchemaOutput{
@@ -76,17 +77,20 @@ let serviceProviderPortfolioSchema = `
 
     type membershipsOutput{
         membershipDescription : String, 
-        isMembershipPrivate   : Boolean
+        isMembershipPrivate   : Boolean,
+        privateFields:[PrivateKeys]
     }
     
     type compliancesOutput{
        compliancesDescription:String, 
-       isCompliancesPrivate :Boolean
+       isCompliancesPrivate :Boolean,
+       privateFields:[PrivateKeys]
     }
     
     type licensesOutput{
        licensesDescription : String, 
-       isLicensesPrivate   : Boolean
+       isLicensesPrivate   : Boolean,
+       privateFields:[PrivateKeys]
     }
     
      type serviceProviderPortfolioDetails{

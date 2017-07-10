@@ -84,8 +84,7 @@ export default class MlServiceProviderEditTabs extends Component {
         title: "Services",
         component: <MlServiceProviderServices key="5"
                                               getServiceProviderServices={this.getServiceProviderServices.bind(this)}
-                                              portfolioDetailsId={this.props.portfolioDetailsId}
-                                              serviceProductsDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.serviceProducts}/>
+                                              portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {
         tabClassName: 'tab',
@@ -125,8 +124,8 @@ export default class MlServiceProviderEditTabs extends Component {
     this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio});
   }
 
-  getServiceProviderMCL(details) {
-    let data = this.state.startupPortfolio;
+  getServiceProviderMCL(details, privateKey) {
+    let data = this.state.serviceProviderPortfolio;
     if (details.memberships) {
       data['memberships'] = details.memberships;
     }
@@ -136,15 +135,15 @@ export default class MlServiceProviderEditTabs extends Component {
     if (details.licenses) {
       data['licenses'] = details.licenses;
     }
-    this.setState({startupPortfolio: data})
-    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, []);
+    this.setState({serviceProviderPortfolio: data})
+    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey);
   }
 
-  getServiceProviderServices(details) {
-    let data = this.state.portfolioStartupSP;
-    data = details;
-    this.setState({portfolioStartupSP: data})
-    this.props.getPortfolioStartupAboutUsDetails(data, "serviceProducts");
+  getServiceProviderServices(details, privateKey) {
+    let data = this.state.serviceProviderPortfolio;
+    data['services']=details;
+    this.setState({serviceProviderPortfolio : data})
+    this.props.getPortfolioDetails({serviceProviderPortfolio:this.state.serviceProviderPortfolio}, privateKey);
   }
 
   getFunderLibrary(details) {

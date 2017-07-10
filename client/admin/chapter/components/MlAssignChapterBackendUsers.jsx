@@ -186,9 +186,16 @@ class MlAssignChapterBackendUsers extends React.Component {
         actionName: 'cancel',
         handler: async(event) => {
           let pararms = FlowRouter._current.params;
-          FlowRouter.go("/admin/chapters/"+
+          let path = FlowRouter._current.path;
+          if (path.indexOf("clusters") != -1) {
+            FlowRouter.go("/admin/clusters/"+
+              pararms.clusterId+"/"+pararms.chapterId+"/"+
+              pararms.subChapterId+"/"+pararms.subChapterName+"/subChapterDetails");
+          } else {
+            FlowRouter.go("/admin/chapters/"+
             pararms.clusterId+"/"+pararms.chapterId+"/"+
             pararms.subChapterId+"/"+pararms.subChapterName+"/subChapterDetails");
+          }
         }
       }
     ]

@@ -300,19 +300,24 @@ export async function fetchServiceProviderMemberships(portfoliodetailsId) {
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
-            fetchStartupPortfolioMemberships(portfoliodetailsId: $portfoliodetailsId) {
-                  description
-                  isDescriptionPrivate
+            data:fetchServiceProviderDetails(portfoliodetailsId: $portfoliodetailsId, key:"memberships") {
+              memberships{
+                membershipDescription
+                isMembershipPrivate
+                privateFields{
+                  keyName,
+                  booleanKey
+                }
+              }
             }
           }
-
       `,
     variables: {
       portfoliodetailsId: portfoliodetailsId
     },
     forceFetch: true
   })
-  const id = result.data.fetchStartupPortfolioMemberships;
+  const id = result.data.data && result.data.data.memberships;
   let data = _.omit(id, '__typename')
   return data
 }
@@ -321,9 +326,15 @@ export async function fetchServiceProviderCompliances(portfoliodetailsId) {
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
-            fetchStartupPortfolioCompliances(portfoliodetailsId: $portfoliodetailsId) {
-                  description
-                  isDescriptionPrivate
+            data:fetchServiceProviderDetails(portfoliodetailsId: $portfoliodetailsId, key:"compliances") {
+              compliances{
+                compliancesDescription
+                isCompliancesPrivate
+                privateFields{
+                  keyName,
+                  booleanKey
+                }
+              }
             }
           }
 
@@ -333,7 +344,7 @@ export async function fetchServiceProviderCompliances(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  const id = result.data.fetchStartupPortfolioCompliances;
+  const id = result.data.data && result.data.data.compliances;
   let data = _.omit(id, '__typename')
   return data
 }
@@ -341,9 +352,15 @@ export async function fetchServiceProviderLicenses(portfoliodetailsId) {
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
-            fetchStartupPortfolioLicenses(portfoliodetailsId: $portfoliodetailsId) {
-                  description
-                  isDescriptionPrivate
+            data:fetchServiceProviderDetails(portfoliodetailsId: $portfoliodetailsId, key:"licenses") {
+              licenses{
+                licensesDescription
+                isLicensesPrivate
+                privateFields{
+                  keyName,
+                  booleanKey
+                }
+              }
             }
           }
 
@@ -353,7 +370,35 @@ export async function fetchServiceProviderLicenses(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  const id = result.data.fetchStartupPortfolioLicenses;
+  const id = result.data.data && result.data.data.licenses;
+  let data = _.omit(id, '__typename')
+  return data
+}
+
+export async function findServiceProviderServicesActionHandler(portfoliodetailsId) {
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            data:fetchServiceProviderDetails(portfoliodetailsId: $portfoliodetailsId, key:"services") {
+              services{
+                servicesDescription
+                isServicesPrivate
+                privateFields{
+                  keyName,
+                  booleanKey
+                }
+              }
+              
+            }
+          }
+
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.data && result.data.data.services;
   let data = _.omit(id, '__typename')
   return data
 }

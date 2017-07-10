@@ -40,13 +40,18 @@ export default class MlStartupEditTemplate extends React.Component{
       $('.RRT__tabs').addClass('horizon-swiper');
       $('.RRT__tab').addClass('horizon-item');
       $('.horizon-swiper').horizonSwiper();
-    },300);
+    },10);
+  }
+
+  backClickHandler(){
+    let tabs = this.state.tabs;
+    this.setState({tabs: tabs})
   }
 
   getTabComponents(){
     let tabs = [
 
-      {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlStartupAboutUs key="1" getAboutus={this.getAboutus.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlStartupAboutUs key="1" getAboutus={this.getAboutus.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.backClickHandler.bind(this)}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , component:<MlStartupManagement key="2" getManagementDetails={this.getManagementDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Investor" , component:<MlStartupInvestor key="3" getInvestorDetails={this.getInvestorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Data" , component:<MlStartupData key="4" portfolioDetailsId={this.props.portfolioDetailsId}/>},

@@ -300,24 +300,25 @@ let ideatorPortfolioSchema = `
     }
     
     input fileAttributes{
-    fileName:String,
-    fileUrl:String,
-    fileType:String
+        fileName:String,
+        fileUrl:String,
+        fileType:String
     }
     
     type FileAttributes{
-    fileName:String,
-    fileUrl:String,
-    fileType:String
-    isPrivate:Boolean
+        fileName:String,
+        fileUrl:String,
+        fileType:String
+        isPrivate:Boolean
     }
     
-    input detailsInput{
-      userId:String,
-      images:[fileAttributes],
-      videos:[fileAttributes],
-      documents:[fileAttributes],
-      templates:[fileAttributes]
+    input libraryInput{
+      userId: String
+      fileName: String
+      fileUrl: String
+      fileType: String
+      isPrivate: Boolean
+      libraryType: String
     }
     
     input privateData{
@@ -327,11 +328,12 @@ let ideatorPortfolioSchema = `
     }
     
      type Details{
-      userId:String,
-      images:[FileAttributes],
-      videos:[FileAttributes],
-      documents:[FileAttributes],
-      templates:[FileAttributes]
+      userId: String
+      fileName: String
+      fileUrl: String
+      fileType: String
+      isPrivate: Boolean
+      libraryType: String
     }
     
     
@@ -364,7 +366,7 @@ let ideatorPortfolioSchema = `
         resolveComment(commentId:String): response
         reopenComment(commentId:String): response
         createIdea(idea:idea):response
-        createLibrary(detailsInput:detailsInput):response
+        createLibrary(detailsInput:libraryInput):response
         updatePrivacyDetails(detailsInput:privateData): response
         updateIdea(ideaId:String, idea:idea):response
     }

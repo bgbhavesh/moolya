@@ -39,6 +39,7 @@ export default class MlAppActivity extends Component {
         isDiscount: false
       },
     };
+    this.getActivityDetails = this.getActivityDetails.bind(this);
   }
 
   /**
@@ -83,6 +84,7 @@ export default class MlAppActivity extends Component {
           displayName           : activity.displayName,
           isInternal            : activity.isInternal,
           isExternal            : activity.isExternal,
+          status                : activity.status,
           mode                  : activity.mode ? activity.mode : "online",
           isServiceCardEligible : activity.isServiceCardEligible,
           industryTypes         : activity.industryTypes ? activity.industryTypes : [],
@@ -120,6 +122,8 @@ export default class MlAppActivity extends Component {
         that.setState({
           basicInfo: activityBasicInfo,
           teamInfo: teamInfo,
+          isExternal: activity.isExternal,
+          isInternal: activity.isInternal,
           paymentInfo: paymentInfo
         });
       }
@@ -168,17 +172,17 @@ export default class MlAppActivity extends Component {
     const steps = [
         {
           name: 'Create',
-          component: <MlAppBasicInfo saveActivity={that.saveActivity} data={that.state.basicInfo} />,
+          component: <MlAppBasicInfo getActivityDetails={this.getActivityDetails} saveActivity={that.saveActivity} data={that.state.basicInfo} />,
           icon: <span className="ml fa fa-plus-square-o"></span>
         },
         {
           name: 'Choose team',
-          component: <MlAppChooseTeam saveActivity={that.saveActivity} data={this.state.teamInfo}/>,
+          component: <MlAppChooseTeam getActivityDetails={this.getActivityDetails} saveActivity={that.saveActivity} isInternal={this.state.isInternal} isExternal={this.state.isExternal} data={this.state.teamInfo}/>,
           icon: <span className="ml fa fa-users"></span>
         },
         {
           name: 'Payment', component:
-          <MlAppActivityPayment saveActivity={that.saveActivity} data={this.state.paymentInfo} />,
+          <MlAppActivityPayment getActivityDetails={this.getActivityDetails} saveActivity={that.saveActivity} data={this.state.paymentInfo} />,
           icon: <span className="ml ml-payments"></span>
         },
         {
@@ -194,7 +198,7 @@ export default class MlAppActivity extends Component {
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
-          <MlAppScheduleHead s/>
+          <MlAppScheduleHead type="activity"/>
           <div className="clearfix"/>
           <div className="col-md-12">
             <div className='step-progress'>

@@ -14,6 +14,7 @@ import React from 'react';
 import gql from 'graphql-tag'
 import MlServiceCardsDetailsComponent  from '../component/MlserviceCardsDetailsComponent'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
+import {client} from '../../../core/apolloConnection';
 
 
 function createdateFormatter (data){
@@ -46,7 +47,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   throttleRefresh:false,
   pagination:true,//To display pagination
   filter:false,
-  filterComponent: <MlCustomFilter module="processSetup" moduleName="processSetup" />,
+  filterComponent: <MlCustomFilter module="processSetup" moduleName="processSetup" client={client}/>,
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},
     {dataField: "createdAt", title: "Date & Time",dataSort:true,selectRow:true, customComponent:createdateFormatter},

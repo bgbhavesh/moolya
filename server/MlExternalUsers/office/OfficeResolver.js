@@ -75,7 +75,7 @@ MlResolver.MlQueryResolver['fetchOfficeMembers'] = (obj, args, context, info) =>
   let query = {
     officeId:args.officeId,
     isPrincipal: args.isPrincipal
-  }
+  };
   let response = mlDBController.find('MlOfficeMembers', query).fetch();
   return response;
 }
@@ -100,10 +100,61 @@ MlResolver.MlQueryResolver['fetchAllOfficeMembersWithUserId'] = (obj, args, cont
 }
 
 MlResolver.MlQueryResolver['fetchOfficeMember'] = (obj, args, context, info) => {
-  let query = {
-    _id:args.memberId
-  }
-  let response = mlDBController.findOne('MlOfficeMembers', query);
+
+  let pipeline = [
+    {
+      $match : {
+        _id:args.memberId
+      }
+    },
+    {
+      $lookup:
+        {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "users"
+        }
+    },
+    {
+      $unwind : {
+        "path": "$users",
+        "preserveNullAndEmptyArrays": true
+      }
+    },
+    {
+      $project: {
+        userId: "$userId",
+        firstName: "$firstName",
+        lastName: "$lastName",
+        mobileNumber: "$mobileNumber",
+        emailId: "$emailId",
+        userType: "$userType",
+        description: "$description",
+        name: "$name",
+        joiningDate: "$joiningDate",
+        role: "$role",
+        isActive: "$users.profile.isActive",
+        isIndependent: "$isIndependent",
+        isInternalUserInteraction: "$isInternalUserInteraction",
+        isExternalUserInteraction: "$isExternalUserInteraction",
+        isFreeze: "$isFreeze",
+        isRetire: "$isRetire",
+        communityType: "$communityType",
+        isPrincipal: "$isPrincipal",
+        isFreeUser: "$isFreeUser",
+        isPaidUser: "$isPaidUser",
+        isAdminUser: "$isAdminUser"
+      }
+    }
+  ]
+
+  // let query = {
+  //   _id:args.memberId
+  // };
+  // let response = mlDBController.findOne('MlOfficeMembers', query);
+  let response = mlDBController.aggregate('MlOfficeMembers', pipeline);
+  response = response.length ? response[0] : [];
   return response;
 }
 
@@ -431,6 +482,7 @@ MlResolver.MlQueryResolver['getTeamUsers'] = (obj, args, context, info) => {
   }
   pipeline.push({"$lookup":{from: "users",localField: "emailId",foreignField: "username",as: "user"}});
   pipeline.push({"$unwind":"$user"});
+  pipeline.push({ $match: { 'user.profile.isActive':true } });
   pipeline.push({"$project":{ communityType : '$communityType', userId:"$user._id", profileImage:"$user.profile.profileImage", name:"$user.profile.displayName", externalUserProfiles:"$user.profile.externalUserProfiles"}});
   let result = mlDBController.aggregate('MlOfficeMembers', pipeline).map(function (user) {
     let profileId;

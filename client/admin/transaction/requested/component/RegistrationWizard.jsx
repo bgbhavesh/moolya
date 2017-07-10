@@ -15,6 +15,7 @@ import InstitutionHardReg from '../component/InstitutionHardReg';
 import SoftRegistration from '../component/SoftRegistration';
 import {fetchTemplateHandler} from "../../../../commons/containers/templates/mltemplateActionHandler";
 import _underscore from 'underscore'
+import {client} from '../../../core/apolloConnection';
 export default class RegistrationWizard extends React.Component{
 
   constructor(props){
@@ -105,14 +106,14 @@ export default class RegistrationWizard extends React.Component{
 
   async fetchSoftRegistrationTemplate(regDetails) {
     let userType = this.context.userType;
-    const reg= await fetchTemplateHandler({process:"Registration",subProcess:"Registration",stepCode:"SOFT",userType:userType,recordId:regDetails._id});
+    const reg= await fetchTemplateHandler({process:"Registration",subProcess:"Registration",stepCode:"SOFT",userType:userType,recordId:regDetails._id,connection:client});
     this.setState({softRegComponent:reg&&reg.component?reg.component:null});
     if(!reg||!reg.component){this.setState({"softRegSteps":[]})};
   }
 
   async fetchHardRegistrationTemplate(regDetails) {
     let userType = this.context.userType;
-    const reg= await fetchTemplateHandler({process:"Registration",subProcess:"Registration",stepCode:"HARD",userType:userType,recordId:regDetails._id});
+    const reg= await fetchTemplateHandler({process:"Registration",subProcess:"Registration",stepCode:"HARD",userType:userType,recordId:regDetails._id,connection:client});
     this.setState({hardRegComponent:reg&&reg.component?reg.component:null});
     if(!reg||!reg.component){this.setState({"hardRegSteps":[]})};
   }

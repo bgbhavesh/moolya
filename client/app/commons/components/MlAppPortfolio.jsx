@@ -17,8 +17,8 @@ import {appClient} from "../../core/appConnection";
 class MlAppPortfolio extends Component{
   constructor(props){
     super(props)
-    this.state = {editComponent:'', portfolio:{}, selectedTab:"", annotations:[], isOpen:false,
-      annotationData: {},commentsData:[], popoverOpen: false, saveButton:false}
+    this.state = {editComponent:'', portfolio:{}, selectedTab:"", privateKeys:[], removePrivateKeys:[],
+      annotations:[], isOpen:false,annotationData: {},commentsData:[], popoverOpen: false, saveButton:false}
     this.fetchEditPortfolioTemplate.bind(this);
     this.fetchViewPortfolioTemplate.bind(this);
     this.getPortfolioDetails.bind(this);
@@ -40,12 +40,12 @@ class MlAppPortfolio extends Component{
 
 
   componentDidMount(){
+    // $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+20));
+    // if(WinWidth > 768){
+    //   $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
+
     let portfolioId = this.props.config;
     $("#portfolioAccordion0").addClass("in")
-    /*var pathname = window.location.pathname
-    if(pathname.indexOf("view") != -1 || pathname.indexOf("edit") != -1 || this.props.communityType != "ideator"){
-      this.setState({isMyPortfolio:true})
-    }*/
   }
 
   getContext(){
@@ -87,17 +87,18 @@ class MlAppPortfolio extends Component{
     }else{
       this.setState({ideaId:" "})
     }
+    return;
   }
 
   async fetchEditPortfolioTemplate(pId) {
       let userType = this.context.userType;
-      const reg = await fetchTemplateHandler({process:"Registration",subProcess:"Registration", stepCode:"PORTFOLIO", recordId:pId, mode:"edit", userType:userType});
+      const reg = await fetchTemplateHandler({process:"Registration",subProcess:"Registration", stepCode:"PORTFOLIO", recordId:pId, mode:"edit", userType:userType,connection:appClient});
       this.setState({editComponent:reg&&reg.component?reg.component:null});
   }
 
   async fetchViewPortfolioTemplate(id) {
     let userType = this.context.userType;
-    const reg= await fetchTemplateHandler({process:"Registration",subProcess:"Registration", stepCode:"PORTFOLIO", recordId:id, mode:"view", userType:userType});
+    const reg= await fetchTemplateHandler({process:"Registration",subProcess:"Registration", stepCode:"PORTFOLIO", recordId:id, mode:"view", userType:userType,connection:appClient});
     this.setState({editComponent:reg&&reg.component?reg.component:null});
   }
 
@@ -146,14 +147,56 @@ class MlAppPortfolio extends Component{
     this.setState({idea:details});
   }
 
-  getPortfolioDetails(details){
+  getPortfolioDetails(details, privateKey){
     this.setState({portfolio:details});
+    if(!_.isEmpty(privateKey)){
+      this.updatePrivateKeys(privateKey)
+    }
+  }
+
+  updatePrivateKeys(privateKey){
+    var keyName = privateKey.keyName
+    var booleanKey = privateKey.booleanKey
+    var isPrivate = privateKey.isPrivate
+    var index = -1;
+    var tabName = ""
+    if(privateKey.index >= 0){
+      index = privateKey.index
+    }
+    if(privateKey.tabName){
+      tabName = privateKey.tabName
+    }
+
+    var keyIndex = _.findIndex(this.state.privateKeys, {keyName:keyName})
+    if(keyIndex < 0 && index >= 0){
+      keyIndex = _.findIndex(this.state.privateKeys, {keyName:keyName, index:index})
+    }
+    var privateKeys = this.state.privateKeys;
+    var removePrivateKeys = this.state.removePrivateKeys;
+    if(isPrivate && keyIndex < 0){
+      var rIndex = _.findIndex(this.state.removePrivateKeys, {keyName:keyName})
+      removePrivateKeys.splice(rIndex, 1);
+      privateKeys.push({keyName:keyName, booleanKey:booleanKey, index:index, tabName:tabName})
+      this.setState({privateKeys:privateKeys})
+    }else if(!isPrivate){
+      if(keyIndex >= 0){
+        var keyObj = _.cloneDeep(privateKeys[keyIndex])
+        removePrivateKeys.push(keyObj)
+        privateKeys.splice(keyIndex, 1);
+      }else{
+        removePrivateKeys.push({keyName:keyName, booleanKey:booleanKey, index:index, tabName:tabName})
+      }
+
+    }
+    this.setState({privateKeys:privateKeys, removePrivateKeys:removePrivateKeys})
   }
 
   async updatePortfolioDetails() {
     let jsonData={
       portfolioId :this.props.config,
-      portfolio :this.state.portfolio
+      portfolio :this.state.portfolio,
+      privateKeys: this.state.privateKeys,
+      removeKeys: this.state.removePrivateKeys
     }
     console.log(jsonData)
     const response = await updatePortfolioActionHandler(jsonData)
@@ -252,10 +295,11 @@ class MlAppPortfolio extends Component{
       <div className="app_main_wrap">
         {showLoader===true?(<MlLoader/>):(
           <div className="app_padding_wrap">
+            <div className="col-md-12">
             <InteractionsCounter resourceType={'portfolio'} resourceId={this.props.config} interactionAutoId={this.state.interactionAutoId} />
               {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}/>}
                 {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
-          </div>)}
+            </div></div>)}
         <div className="overlay"></div>
           <Popover placement="bottom" isOpen={this.state.popoverOpen} target="comment" toggle={this.toggle}>
             <PopoverTitle>Portfolio Annotations</PopoverTitle>

@@ -8,7 +8,7 @@ export async function fetchInternalTask(status) {
   const result = await appClient.query({
     query: gql`
       query($status:[String]) {
-        fetchMyInternalTask(status:$status) {
+        fetchSelfCreatedInternalTask(status:$status) {
           _id
           name
           status

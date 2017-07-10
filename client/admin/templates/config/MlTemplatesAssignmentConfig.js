@@ -3,7 +3,7 @@ import React from 'react';
 import gql from 'graphql-tag'
 import moment from 'moment'
 import MlCustomFilter from "../../../commons/customFilters/customFilter";
-
+import {client} from '../../core/apolloConnection';
 function creatorDateFormatter (data){
   if(data&&data.data&&data.data.createdDate){
     let createdDateTime = data&&data.data&&data.data.createdDate?data.data.createdDate:'';
@@ -33,7 +33,7 @@ const mltemplatesassignmetConfig=new MlViewer.View({
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   filter:true,
-  filterComponent: <MlCustomFilter module="templateAssignment" moduleName="templateAssignment" />,
+  filterComponent: <MlCustomFilter module="templateAssignment" moduleName="templateAssignment" client={client} />,
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "createdDate", title: "Created Date", customComponent: creatorDateFormatter,dataSort:true},

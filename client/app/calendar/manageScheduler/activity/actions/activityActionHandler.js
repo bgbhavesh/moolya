@@ -103,6 +103,7 @@ export async function getActivityActionHandler(id) {
           isServiceCardEligible
           industryTypes
           note
+          isActive
           imageLink
           duration{
            hours
@@ -175,6 +176,38 @@ export async function fetchActivitiesActionHandler (profileId) {
   return activities
 }
 
+export async function fetchActivitiesForTaskActionHandler(taskId){
+  const result = await appClient.query({
+    query: gql`
+    query($taskId:String) {
+      fetchActivitiesForTask(taskId: $taskId) {
+        displayName
+        imageLink
+        mode
+        _id
+        duration {
+          hours
+          minutes
+        }
+        teams {
+          resourceType
+          resourceId
+          users {
+            userId
+            profileId
+          }
+        }
+      }
+    }
+    `,
+    variables: {
+      taskId:taskId
+    },
+    forceFetch:true
+  });
+  const activities = result.data.fetchActivitiesForTask;
+  return activities
+}
 
 
 // export async function getActivityDataActionHandler() {

@@ -129,7 +129,7 @@ export default class  PortfolioLibrary extends React.Component{
     if (resp) {
       switch(type){
         case "image":
-          let imgaeDataUpdate = this.fetchOnlyImages();
+          // let imgaeDataUpdate = this.fetchOnlyImages();
           this.setState({"uploadedImage": resp});
           var imageLink = $.parseJSON(this.state.uploadedImage).result;
           this.setState({"uploadedImage": imageLink});
@@ -138,21 +138,21 @@ export default class  PortfolioLibrary extends React.Component{
           this.storeData(imageLink,"image")
           break;
         case "video":
-          let videoDataUpdate = this.fetchOnlyImages();
+          // let videoDataUpdate = this.fetchOnlyImages();
           this.setState({"uploadedVideo": resp});
           var videoLink = $.parseJSON(this.state.uploadedVideo).result;
           this.setState({"uploadedVideo": videoLink});
           this.storeData(videoLink,"video")
           break;
         case "document":
-          let documentDataUpdate = this.fetchOnlyImages();
+          // let documentDataUpdate = this.fetchOnlyImages();
           this.setState({"uploadedDocuments": resp});
           var documentLink = $.parseJSON(this.state.uploadedDocuments).result;
           this.setState({"uploadedDocuments": documentLink});
           this.storeData(documentLink,"video")
           break;
         case "template":
-          let templateDataUpdate = this.fetchOnlyImages();
+          // let templateDataUpdate = this.fetchOnlyImages();
           this.setState({"uploadedTemplate": resp});
           var templateLink = $.parseJSON(this.state.uploadedTemplate).result;
           this.setState({"uploadedTemplate": imageLink});
@@ -168,11 +168,10 @@ export default class  PortfolioLibrary extends React.Component{
       case "image":
         let  imageDetails = {
           userId: this.props.portfolioDetailsId,
-          images: {
-            fileName: this.state.fileName,
-            fileUrl: link,
-            fileType: this.state.fileType
-          }
+          fileName: this.state.fileName,
+          fileUrl: link,
+          fileType: this.state.fileType,
+          libraryType: dataType
         }
         const resp = await createLibrary(imageDetails)
         this.fetchOnlyImages();
@@ -182,11 +181,10 @@ export default class  PortfolioLibrary extends React.Component{
       case "video":
         let  videoDetails = {
           userId: this.props.portfolioDetailsId,
-          videos: {
-            fileName: this.state.fileName,
-            fileUrl: link,
-            fileType: this.state.fileType
-          }
+          fileName: this.state.fileName,
+          fileUrl: link,
+          fileType: this.state.fileType,
+          libraryType: dataType
         }
         const res = await createLibrary(videoDetails)
         this.fetchOnlyImages();
@@ -195,11 +193,11 @@ export default class  PortfolioLibrary extends React.Component{
       case "document":
         let  documentDetails = {
           userId: this.props.portfolioDetailsId,
-          documents: {
-            fileName: this.state.fileName,
-            fileUrl: link,
-            fileType: this.state.fileType
-          }
+          fileName: this.state.fileName,
+          fileUrl: link,
+          fileType: this.state.fileType,
+          libraryType: dataType
+
         }
         const res1 = await createLibrary(documentDetails)
         this.fetchOnlyImages();
@@ -208,11 +206,10 @@ export default class  PortfolioLibrary extends React.Component{
       case "template":
         let  templateDetails = {
           userId: this.props.portfolioDetailsId,
-          templates: {
-            fileName: this.state.fileName,
-            fileUrl: link,
-            fileType: this.state.fileType
-          }
+          fileName: this.state.fileName,
+          fileUrl: link,
+          fileType: this.state.fileType,
+          libraryType: dataType
         }
         const res2 = await createLibrary(templateDetails)
         this.fetchOnlyImages();
@@ -223,80 +220,34 @@ export default class  PortfolioLibrary extends React.Component{
   }
   componentWillMount(){
     userId =  this.props.portfolioDetailsId;
-    console.log(this.props)
     this.getLibraryDetails(userId);
     // this.getAllowableDocumentFormats();
   }
 
   async getLibraryDetails(userId) {
+    let that = this;
     const resp = await fetchLibrary(userId)
-    if (resp.length !== 0) {
-      var libraryDetails = resp;
-      var details = [];
-      if (libraryDetails[0].images) {
-        libraryDetails.map(function (attributes) {
-          details.push(attributes.images)
-        })
-        let imagesArray = details;
-        var imageDetails = [];
-        if (imagesArray != null) {
-          imagesArray.map(function (imageAttributes) {
-            if (imageAttributes) {
-              imageDetails = imageAttributes
-            }
-          })
-          this.setState({imageSpecifications: imageDetails})
-        }
-      } else {
-        this.setState({imageSpecifications: []})
+    let images = [];
+    let videos = [];
+    let templates = [];
+    let documents = [];
+    resp.map(function (data) {
+      if (data.libraryType === "image") {
+        images.push(data)
+        that.setState({imageSpecifications: images})
+        console.log(images)
+      } else if (data.libraryType === "video") {
+        videos.push(data)
+        that.setState({videoSpecifications: videos})
+      } else if (data.libraryType === "template") {
+        templates.push(data)
+        that.setState({templateSpecifications: templates})
+      } else if (data.libraryType === "document") {
+        documents.push(data)
+        that.setState({documentSpecifications: documents})
       }
-      if (libraryDetails[0].templates) {
-        libraryDetails.map(function (attributes) {
-          details.push(attributes.templates)
-        })
-        let templatesArray = details;
-        var templateDetails = [];
-        if (templatesArray != null) {
-          templatesArray.map(function (templateAttributes) {
-            if (templateAttributes) {
-              templateDetails = templateAttributes
-            }
-          })
-          this.setState({templateSpecifications: templateDetails})
-        }
-      } else {
-        this.setState({templateSpecifications: []})
-      }
-
-
-      if (libraryDetails[0].videos) {
-        let videoStructure = [];
-        libraryDetails.map(function (attributes) {
-          videoStructure.push(attributes.videos)
-        })
-        let videoArray = videoStructure;
-        var videoDetails = [];
-        if (videoArray != null) {
-          videoArray.map(function (videoAttributes) {
-            if (videoAttributes) {
-              videoDetails = videoAttributes
-            }
-          })
-          this.setState({videoSpecifications: videoDetails})
-        }
-      } else {
-        this.setState({videoSpecifications: []})
-      }
-
-    }
+    })
   }
-
-  // async getAllowableDocumentFormats(){
-  //   const response = await getAllowableDocumentFormats()
-  //   return response;
-  // }
-
-
 
   randomVideo(link,index){
     let data = this.state.videoSpecifications || [];

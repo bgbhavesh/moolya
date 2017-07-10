@@ -14,7 +14,7 @@ import ScrollArea from "react-scrollbar";
 import {addSubChapterActionHandler} from "../actions/addSubChapter";
 import MlInternalSubChapterAccess from "../components/MlInternalSubChapterAccess";
 import MlMoolyaSubChapterAccess from "../components/MlMoolyaSubChapterAccess";
-import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 import {multipartASyncFormHandler} from "../../../../client/commons/MlMultipartFormAction";
 import gql from "graphql-tag";
 var Select = require('react-select');

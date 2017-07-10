@@ -16,7 +16,7 @@ import {removeFileFromDocumentsActionHandler} from '../actions/removeFileFromDoc
 import {approvedStatusForUser} from '../actions/approveUser'
 import {rejectStatusForUser} from '../actions/rejectUser'
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import {createKYCDocument} from '../actions/createKYCDocumentAction'

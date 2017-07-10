@@ -6,7 +6,7 @@ import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
-import {initalizeFloatLabel} from '../../../../../client/admin/utils/formElemUtil';
+import {initalizeFloatLabel} from '../../../../../client/commons/utils/formElemUtil';
 export default class MlSpokePersonDetail extends React.Component {
   componentDidMount(){
     initalizeFloatLabel();

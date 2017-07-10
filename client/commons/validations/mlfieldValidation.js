@@ -14,7 +14,7 @@ export function mlFieldValidations(elements) {
         }
 
       }
-    }else if(element instanceof Object && element['props']!==undefined){
+    }else if(element instanceof Object &&  element['props'] instanceof Object && element['props']!==undefined){
       var selectObj = element;
       var isRequired = selectObj.props['data-required'];
        var value = selectObj.props['selectedValue']

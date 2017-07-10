@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { render } from 'react-dom';
 import MlAppStep1ExternalUser from './MlAppStep1ExternalUser';
-import {initalizeFloatLabel} from '../../../admin/utils/formElemUtil';
+import {initalizeFloatLabel} from '../../../commons/utils/formElemUtil';
 export default class SoftRegistrationForExternalUser extends Component{
 
   constructor(props){

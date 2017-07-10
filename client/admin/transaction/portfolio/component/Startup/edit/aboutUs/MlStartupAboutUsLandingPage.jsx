@@ -19,7 +19,8 @@ export default class MlStartupAboutUs extends React.Component{
     this.fetchPortfolioDetails.bind(this);
   }
   selectedTab(field,e){
-   this.setState({aboutStartup : true})
+    this.setState({aboutStartup : true})
+    this.props.backClickHandler(this.getStartUpState.bind(this))
   }
   getPortfolioStartupAboutUsDetails(details,tabName){
     this.props.getAboutus(details,tabName);

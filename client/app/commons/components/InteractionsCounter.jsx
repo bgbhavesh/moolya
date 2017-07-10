@@ -32,6 +32,11 @@ export default class InteractionsCounter extends React.Component{
     $('.paperfold-toggle').click();
   }
 
+  onBackHandler(e){
+    console.log("on BackClick")
+    this.props.backHandler();
+  }
+
   render(){
     let config = [
       {name: 'like',displayName:'Like',iconClass: 'ml fa fa-thumbs-o-up'},
@@ -69,6 +74,7 @@ export default class InteractionsCounter extends React.Component{
     return(
       <div>
         <div className="paperfold panel">
+          <a className="startup-logo" href="" onClick={this.onBackHandler.bind(this)}><img src="/images/startup_02.png"/></a>
           <ul className="header-action-buttons">
             {actionView}
           </ul>

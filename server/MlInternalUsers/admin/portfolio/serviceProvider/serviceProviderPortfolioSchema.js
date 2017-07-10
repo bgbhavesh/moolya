@@ -54,12 +54,13 @@ let serviceProviderPortfolioSchema = `
        fileName:String
      }
     
-    type aboutUsOutput{
-        logo      : [imagesTypeSchema]
-        description : String
-        annotatorId : String
-        isLogoPrivate :Boolean
-        isDescriptionPrivate : Boolean
+    type aboutOutput{        
+        aboutTitle            : String
+        isAboutTitlePrivate   : Boolean
+        aboutDescription      : String,
+        isDescriptionPrivate  : Boolean,
+        aboutImages           : [imagesTypeSchema]
+        privateFields         : [PrivateKeys]
     }
     
     type awardsRecognitionOutput{
@@ -99,6 +100,7 @@ let serviceProviderPortfolioSchema = `
          userId               : String
          communityType        : String
          portfolioDetailsId   : String
+         about                : aboutOutput
          licenses             : licensesOutput
          compliances          : compliancesOutput
          memberships          : membershipsOutput
@@ -132,12 +134,12 @@ let serviceProviderPortfolioSchema = `
        fileName:String
      }
      
-    input aboutUs{
-        logo      : [imageFilesInputSchema]
-        description : String
-        annotatorId : String
-        isLogoPrivate :Boolean
-        isDescriptionPrivate : Boolean
+    input about{
+      aboutTitle : String
+      isAboutTitlePrivate : Boolean
+      aboutDescription:String,
+      isDescriptionPrivate:Boolean,
+      aboutImages : [imageFilesInputSchema]
     }
     
     input awardsRecognition{
@@ -174,7 +176,7 @@ let serviceProviderPortfolioSchema = `
         compliances         : compliances
         memberships         : memberships
         awardsRecognition   : [awardsRecognition]
-        aboutUs             : aboutUs
+        about               : about
         services            : services
         clients             : [clients]
     }

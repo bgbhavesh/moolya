@@ -449,8 +449,9 @@ MlResolver.MlQueryResolver['fetchUsersBysubChapterDepSubDep'] = (obj, args, cont
           subChapterId: args.subChapterId ? args.subChapterId : ""
         }, context, info)
       } else {
+        /**fetching all departments in the case of non-moolya subchapter condition change*/   // {isMoolya: false},
         let departments = mlDBController.find('MlDepartments', {
-          $or: [{$and: [{isMoolya: false}, {depatmentAvailable: {$elemMatch: {subChapter: {$in: ['all', subChapter._id]}}}}]}, {
+          $or: [{$and: [{depatmentAvailable: {$elemMatch: {subChapter: {$in: ['all', subChapter._id]}}}}]}, {
             isSystemDefined: true,
             isActive: true
           }]

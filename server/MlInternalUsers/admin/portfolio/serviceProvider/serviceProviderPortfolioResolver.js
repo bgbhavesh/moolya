@@ -4,8 +4,11 @@
 import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
 import _ from "lodash";
+// import MlUserContext from "../../../../MlExternalUsers/mlUserContext";
+// import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
+import portfolioValidationRepo from '../portfolioValidation'
 
-MlResolver.MlMutationResolver['createStartupPortfolio'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver['createServiceProviderPortfolio'] = (obj, args, context, info) => {
   try {
     if (args && args.userId && args.communityType) {
       user = MlServiceProviderPortfolio.findOne({"$and": [{'userId': args.userId}, {'communityId': args.communityType}]})
@@ -67,6 +70,20 @@ MlResolver.MlMutationResolver['updateServiceProviderPortfolio'] = (obj, args, co
       return response;
     }
   }
+}
+
+MlResolver.MlQueryResolver['fetchServiceProviderDetails'] = (obj, args, context, info) => {
+  if(_.isEmpty(args))
+    return;
+  var key = args.key;
+  var serviceProviderPortfolio = MlServiceProviderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+  if (serviceProviderPortfolio && serviceProviderPortfolio.hasOwnProperty(key)) {
+    var object = serviceProviderPortfolio[key];
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    serviceProviderPortfolio[key] = filteredObject
+    return serviceProviderPortfolio;
+  }
+
 }
 
 updateArrayofObjects = (updateFor, source) =>{

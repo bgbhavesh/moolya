@@ -5,9 +5,9 @@ import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import {multipartASyncFormHandler} from '../MlMultipartFormAction'
-import {createLibrary, fetchLibrary, updateLibraryData} from '../actions/LibraryActionHandler'
-import MlVideoPlayer from  '../videoPlayer/MlVideoPlayer'
+import {multipartASyncFormHandler} from '../../MlMultipartFormAction'
+import {createLibrary, fetchLibrary, updateLibraryData} from '../../actions/mlLibraryActionHandler'
+import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
 
 
 export default class  PortfolioLibrary extends React.Component{

@@ -9,7 +9,6 @@ import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 import _ from "lodash";
-// import MlFunderAbout from "../../Funder/MlFunderAbout";
 import PortfolioLibrary from '../../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import MlServiceProviderAwards from "./MlServiceProviderAwards";
 import MlServiceProviderMCL from "./MlServiceProviderMCL";

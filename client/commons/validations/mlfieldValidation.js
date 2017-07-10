@@ -1,5 +1,5 @@
 var Select = require('react-select');
-import Moolyaselect from '../../commons/components/select/MoolyaSelect'
+//import Moolyaselect from '../../commons/components/select/MoolyaSelect'
 export function mlFieldValidations(elements) {
 
   for (var  key in  elements) {
@@ -14,7 +14,7 @@ export function mlFieldValidations(elements) {
         }
 
       }
-    }else if(element instanceof Moolyaselect){
+    }else if(element instanceof Object &&  element['props'] instanceof Object && element['props']!==undefined){
       var selectObj = element;
       var isRequired = selectObj.props['data-required'];
        var value = selectObj.props['selectedValue']

@@ -7,16 +7,20 @@ import Tabs from 'react-responsive-tabs';
 export default class MlTabComponent extends React.Component {
     constructor(props){
         super(props)
-        this.state =  {tabs: props.tabs};
+        this.state =  {tabs: props.tabs, selectedTabKey: props.selectedTabKey};
         this.onActivate.bind(this)
     }
 
     onActivate(index){
+        if(this.state.tabs[index].title == ''){
+            this.props.backClickHandler();
+        }
         console.log('Tab ' + index + ' was activated!')
     }
 
     render() {
       let tabs = this.state.tabs;
-      return <Tabs items={tabs} onChange={this.onActivate} />;
+      let selectedTabKey = this.state.selectedTabKey
+      return <Tabs items={tabs} onChange={this.onActivate.bind(this)} selectedTabKey={selectedTabKey}/>;
     }
 }

@@ -137,7 +137,8 @@ class MlPortfolio extends React.Component {
       stepCode: "PORTFOLIO",
       recordId: pId,
       mode: "edit",
-      userType: userType
+      userType: userType,
+      connection:client
     });
     this.setState({editComponent: reg && reg.component ? reg.component : null});
   }
@@ -150,7 +151,8 @@ class MlPortfolio extends React.Component {
       stepCode: "PORTFOLIO",
       recordId: id,
       mode: "view",
-      userType: userType
+      userType: userType,
+      connection:client
     });
     this.setState({editComponent: reg && reg.component ? reg.component : null});
   }
@@ -243,8 +245,6 @@ class MlPortfolio extends React.Component {
 
     }
     this.setState({privateKeys:privateKeys, removePrivateKeys:removePrivateKeys})
-    console.log(this.state.privateKeys)
-    console.log(this.state.removePrivateKeys)
   }
 
   async updatePortfolioDetails() {

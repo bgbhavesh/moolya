@@ -317,7 +317,7 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
 
     /**sepecific showing roles of nonmoolya to non-moolya admin*/
     if(!userProfile.isMoolya)
-      finalQuery = {$or:[{isNonMoolyaAvailable : true} ,finalQuery]}
+      finalQuery = {$and: [query, {isActive: true}, {isNonMoolyaAvailable : true}]}
     let valueGet = mlDBController.find('MlRoles', finalQuery, context).fetch()
     // let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"isActive": true}]}, context).fetch()
     roles = valueGet;

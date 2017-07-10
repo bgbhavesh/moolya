@@ -1,6 +1,6 @@
 import React from "react";
 import {render} from "react-dom";
-import {initalizeFloatLabel} from "../../../admin/utils/formElemUtil";
+import {initalizeFloatLabel} from "../../../commons/utils/formElemUtil";
 import ScrollArea from "react-scrollbar";
 import {graphql} from "react-apollo";
 import MlAppRegContactDetails from "./MlAppRegContactDetails";

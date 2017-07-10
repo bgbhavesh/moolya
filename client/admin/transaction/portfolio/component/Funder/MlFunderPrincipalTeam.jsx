@@ -7,6 +7,7 @@ import _ from "lodash";
 import {multipartASyncFormHandler} from "../../../../../../client/commons/MlMultipartFormAction";
 import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../actions/findPortfolioFunderDetails";
 import {fetchClusterIdActionHandler} from '../../actions/findClusterIdForPortfolio'
+import {putDataIntoTheLibrary} from '../../../../../commons/actions/LibraryActionHandler';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import MlLoader from '../../../../../commons/components/loader/loader'
@@ -39,6 +40,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
     this.onSaveTeamAction.bind(this);
     this.fetchPrincipalDetails.bind(this);
     this.fetchTeamDetails.bind(this);
+    this.libraryAction.bind(this);
     return this;
   }
 
@@ -309,18 +311,34 @@ export default class MlFunderPrincipalTeam extends React.Component {
       portfolioDetailsId: this.props.portfolioDetailsId,
       portfolio: {team: [{logo: {fileUrl: '', fileName: fileName}, index: this.state.selectedIndex}]}
     };
-    let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
+    let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this,file));
   }
 
-  onFileUploadCallBack(resp) {
+  onFileUploadCallBack(file,resp) {
     if (resp) {
       let result = JSON.parse(resp)
+      let userOption = confirm("Do you want to add the file into the library")
+      if(userOption){
+        let fileObjectStructure = {
+          fileName: file.name,
+          fileType: file.type,
+          fileUrl: result.result,
+          libraryType: "image"
+        }
+        this.libraryAction(fileObjectStructure)
+      }
       if (result.success) {
         toastr.success("Photo Updated Successfully");
         this.setState({loading: true})
         this.fetchOnlyImages();
       }
     }
+  }
+
+  async libraryAction(file) {
+    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
+    return resp;
   }
 
   async fetchOnlyImages() {

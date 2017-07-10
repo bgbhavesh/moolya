@@ -7,7 +7,7 @@ import {render} from "react-dom";
 import _ from "lodash";
 import {fetchCommunitiesHandler} from "../../../../app/commons/actions/fetchCommunitiesActionHandler";
 import {createOfficeActionHandler} from "../actions/createOfficeAction";
-import {initalizeFloatLabel} from "../../../../../client/admin/utils/formElemUtil";
+import {initalizeFloatLabel} from "../../../../../client/commons/utils/formElemUtil";
 
 export default class MlAppNewSpokePerson extends React.Component {
   constructor(props) {
@@ -72,14 +72,18 @@ export default class MlAppNewSpokePerson extends React.Component {
       let PUC = usersData.principalUserCount ? Number(usersData.principalUserCount) : 0
       let TUC = usersData.teamUserCount ? Number(usersData.teamUserCount) : 0
       let TC = usersData.totalCount ? Number(usersData.totalCount) : 0
-      if ((PUC + TUC) > TC)
-        return {success: false, result: 'Total user count cannot be less than principal and team'}
+      // if ((PUC + TUC) > TC)  MOOLYA-2378
+      if ((PUC + TUC) != TC)
+        // return {success: false, result: 'Total user count cannot be less than principal and team'}
+        return {success: false, result: 'Total user count should be equal to principal and team'}
       else if (!_.isEmpty(usersData.availableCommunities)) {
         let communities = usersData.availableCommunities
         let arrayCount = _.map(communities, 'userCount')
         let addArray = _.sum(arrayCount)
-        if (Number(addArray) > TUC)
-          return {success: false, result: 'Communities Users count can not be greater than Team user count'}
+        // if (Number(addArray) > TUC) MOOLYA-2378
+        if (Number(addArray) != TUC)
+          // return {success: false, result: 'Communities Users count can not be greater than Team user count'}
+          return {success: false, result: 'Communities Users count should be equal to Team user count'}
         else
           return {success: true, result: 'Validation done'}
       } else

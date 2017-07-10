@@ -151,8 +151,9 @@ class MlAuthorization
             }
 
             if(user_roles && user_roles.length > 0){
-                for(var i = 0; i < user_roles.length; i++){
-                  ret = this.validateRole(user_roles[i].roleId, module, action)
+                var sortedRoles = _.reverse(_.sortBy(user_roles, ['hierarchyLevel']))
+                for(var i = 0; i < sortedRoles.length; i++){
+                  ret = this.validateRole(sortedRoles[i].roleId, module, action)
                   if(ret){
                     break;
                   }
@@ -279,7 +280,7 @@ class MlAuthorization
         isSubChapter = this.findChapterSubChapter(roleDetails.defaultSubChapters, variables['subChapterId'])
         if(!isSubChapter)
           return false
-        isCommunity = this.findCommunity(roleDetails.defaultCommunities, variables['chapterId'], variables['subChapterId'], variables['communityId'])
+        isCommunity = this.findCommunity(roleDetails.defaultCommunities, variables['communityId'])
         if(!isCommunity)
           return false
 
@@ -311,9 +312,7 @@ class MlAuthorization
 
           var community = MlCommunity.findOne({_id: communityId});
           if (!community) {
-            community = MlCommunity.findOne({communityDefCode: communityId, chapterId:chapterId, subChapterId:subChapterId});
-            if (!community)
-              return false
+            community = MlCommunity.findOne({communityDefCode: communityId});
           }
           if (community) {
             index = _.isMatch(communityArray[i], {communityId: community._id})
@@ -324,9 +323,9 @@ class MlAuthorization
             if (index) {
               return true;
             }
-            return false
           }
         }
+        return false
       }
 
       getRegistrationContextDetails(registrationId){
@@ -339,7 +338,7 @@ class MlAuthorization
 
       getInternalRequestContextDetails(variables, actionName){
         if(actionName == 'CREATE'){
-          return {clusterId:variables['clusterId'], chapterId:variables['chapterId'], subChapterId:variables['subChapterId'], communityId:variables['communityId']};
+          return {clusterId:variables['clusterId'], chapterId:variables['chapterId'], subChapterId:variables['subChapterId'], communityId:variables['community']};
         }
         let request = MlRequests.findOne({requestId:variables.requestsId})
         if(!request)

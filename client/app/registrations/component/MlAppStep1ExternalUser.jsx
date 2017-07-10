@@ -8,7 +8,7 @@ import {
   emailVerificationActionHandler,
   smsVerificationActionHandler
 } from "../../../admin/transaction/requested/actions/updateRegistration";
-import {initalizeFloatLabel} from "../../../admin/utils/formElemUtil";
+import {initalizeFloatLabel} from "../../../commons/utils/formElemUtil";
 import {fetchIdentityTypes} from "../actions/findRegistration";
 import _ from "lodash";
 import MlLoader from "../../../commons/components/loader/loader";

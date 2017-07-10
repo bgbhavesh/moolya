@@ -222,6 +222,11 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
                     response = MlResolver.MlMutationResolver['updateFunderPortfolio'](obj, args, context, info)
                 }
                 break;
+                case "Service Providers":{
+                  console.log('update service provider')
+                  // response = MlResolver.MlMutationResolver['updateServiceProviderPortfolio'](obj, args, context, info)
+                }
+                break;
             }
         }
     }

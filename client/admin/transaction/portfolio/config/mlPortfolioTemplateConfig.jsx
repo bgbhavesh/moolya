@@ -5,6 +5,8 @@ import mlRegistrationTemplates from '../../../../commons/containers/templates/ml
 import MlViewIdeatorPortfolioTemplate from '../component/IdeatorView/MlViewIdeatorPortfolio'
 import MlStartupEditTemplate from '../component/Startup/edit/MlStartupEditTemplate'
 import MlViewStartupPortfolioTemplate from '../component/StartupView/MlViewStartupPortfolioTemplate'
+import MlServiceProviderEditTabs from '../component/ServiceProvider/edit/MlServiceProviderEditTabs'
+import MlServiceProviderViewTabs from '../component/ServiceProvider/view/MlServiceProviderViewTabs'
 import MlAppIdeatorEditTabs from '../../../../app/ideators/components/MlAppIdeatorEditTabs'
 import MlAppIdeatorTabs from '../../../../app/ideators/components/MlAppIdeatorTabs'
 import MlFunderEditTemplate from '../component/Funder/MlFunderEditTemplate'

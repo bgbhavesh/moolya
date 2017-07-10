@@ -236,5 +236,5 @@ export default class MlStartupMCL extends React.Component {
   }
 };
 MlStartupMCL.contextTypes = {
-  startupPortfolio: PropTypes.object,
+  serviceProviderPortfolio: PropTypes.object,
 };

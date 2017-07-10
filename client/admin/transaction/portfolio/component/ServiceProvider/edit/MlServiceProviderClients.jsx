@@ -6,7 +6,7 @@ import {dataVisibilityHandler, OnLockSwitch} from "../../../../../utils/formElem
 import {graphql} from "react-apollo";
 import _ from "lodash";
 import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFormAction";
-import {fetchDetailsStartupActionHandler} from "../../../actions/findPortfolioServiceProviderDetails";
+import {fetchDetailsStartupActionHandler, fetchServiceProviderClients} from "../../../actions/findPortfolioServiceProviderDetails";
 import MlLoader from "../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
 
@@ -17,16 +17,18 @@ export default class MlServiceProviderClients extends Component {
     this.state = {
       loading: false,
       data: {},
-      startupClients: this.props.clientsDetails || [],
+      serviceProviderClients:[],
       popoverOpen: false,
       selectedIndex: -1,
-      startupClientsList: this.props.clientsDetails || [],
+      serviceProviderClientsList:[],
       selectedVal: null,
-      selectedObject: "default"
+      selectedObject: "default",
+      privateKey:{},
     }
     this.handleBlur.bind(this);
     this.onSaveAction.bind(this);
     this.imagesDisplay.bind(this);
+    this.fetchPortfolioDetails.bind(this);
     return this;
   }
 
@@ -42,27 +44,49 @@ export default class MlServiceProviderClients extends Component {
   }
 
   componentWillMount() {
-    let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.clients)
-    if (!empty) {
+    // let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.clients)
+    // if (!empty) {
+    //   this.setState({
+    //     loading: false,
+    //     serviceProviderClients: this.context.startupPortfolio.clients,
+    //     serviceProviderClientsList: this.context.startupPortfolio.clients
+    //   });
+    // }
+    this.fetchPortfolioDetails();
+  }
+
+  async fetchPortfolioDetails() {
+    let that = this;
+    let portfolioDetailsId = that.props.portfolioDetailsId;
+    let empty = _.isEmpty(that.context.serviceProviderPortfolio && that.context.serviceProviderPortfolio.clients)
+    if (empty) {
+      const response = await fetchServiceProviderClients(portfolioDetailsId);
+      if (response) {
+        this.setState({loading: false, serviceProviderClients: response, serviceProviderClientsList: response});
+        // _.each(response.privateFields, function (pf) {
+        //   $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+        // })
+      }
+    } else {
       this.setState({
         loading: false,
-        startupClients: this.context.startupPortfolio.clients,
-        startupClientsList: this.context.startupPortfolio.clients
+        serviceProviderClients: that.context.serviceProviderPortfolio.clients,
+        serviceProviderClientsList: that.context.serviceProviderPortfolio.clients
       });
     }
   }
 
   addClient() {
     this.setState({selectedObject: "default", popoverOpen: !(this.state.popoverOpen), data: {}})
-    if (this.state.startupClients) {
-      this.setState({selectedIndex: this.state.startupClients.length})
+    if (this.state.serviceProviderClients) {
+      this.setState({selectedIndex: this.state.serviceProviderClients.length})
     } else {
       this.setState({selectedIndex: 0})
     }
   }
 
   onTileSelect(index, e) {
-    let cloneArray = _.cloneDeep(this.state.startupClients);
+    let cloneArray = _.cloneDeep(this.state.serviceProviderClients);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
     if (details && details.logo) {
@@ -75,25 +99,35 @@ export default class MlServiceProviderClients extends Component {
       popoverOpen: !(this.state.popoverOpen),
       "selectedVal": details.companyId
     });
+
+    setTimeout(function () {
+      _.each(details.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+    }, 10)
   }
 
-  onLockChange(field, e) {
+  onLockChange(fieldName, field, e) {
     let details = this.state.data || {};
     let key = e.target.id;
+    var isPrivate = false;
     details = _.omit(details, [key]);
     let className = e.target.className;
     if (className.indexOf("fa-lock") != -1) {
       details = _.extend(details, {[key]: true});
+      isPrivate = true
     } else {
       details = _.extend(details, {[key]: false});
     }
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex}
+    this.setState({privateKey:privateKey})
     this.setState({data: details}, function () {
       this.sendDataToParent()
     })
   }
 
   onSaveAction(e) {
-    this.setState({startupClientsList: this.state.startupClients, popoverOpen: false})
+    this.setState({serviceProviderClientsList: this.state.serviceProviderClients, popoverOpen: false})
   }
 
   onStatusChangeNotify(e) {
@@ -122,12 +156,12 @@ export default class MlServiceProviderClients extends Component {
 
   sendDataToParent() {
     let data = this.state.data;
-    let clients = this.state.startupClients;
-    let startupClients = _.cloneDeep(clients);
+    let clients = this.state.serviceProviderClients;
+    let serviceProviderClients = _.cloneDeep(clients);
     data.index = this.state.selectedIndex;
-    startupClients[this.state.selectedIndex] = data;
+    serviceProviderClients[this.state.selectedIndex] = data;
     let arr = [];
-    _.each(startupClients, function (item) {
+    _.each(serviceProviderClients, function (item) {
       for (var propName in item) {
         if (item[propName] === null || item[propName] === undefined) {
           delete item[propName];
@@ -135,11 +169,12 @@ export default class MlServiceProviderClients extends Component {
       }
       newItem = _.omit(item, "__typename");
       let updateItem = _.omit(newItem, 'logo');
+      updateItem =_.omit(updateItem,"privateFields");
       arr.push(updateItem)
     })
-    startupClients = arr;
-    this.setState({startupClients: startupClients})
-    this.props.getServiceProviderClients(startupClients);
+    serviceProviderClients = arr;
+    this.setState({serviceProviderClients: serviceProviderClients})
+    this.props.getServiceProviderClients(serviceProviderClients, this.state.privateKey);
 
   }
 
@@ -173,13 +208,13 @@ export default class MlServiceProviderClients extends Component {
     const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
     if (response) {
       let thisState = this.state.selectedIndex;
-      let dataDetails = this.state.startupClients
+      let dataDetails = this.state.serviceProviderClients
       let cloneBackUp = _.cloneDeep(dataDetails);
       let specificData = cloneBackUp[thisState];
       if (specificData) {
         let curUpload = response.clients[thisState]
         specificData['logo'] = curUpload['logo']
-        this.setState({loading: false, startupClients: cloneBackUp});
+        this.setState({loading: false, serviceProviderClients: cloneBackUp});
       } else {
         this.setState({loading: false})
       }
@@ -190,15 +225,15 @@ export default class MlServiceProviderClients extends Component {
     const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
     if (response) {
       let detailsArray = response && response.clients ? response.clients : []
-      let dataDetails = this.state.startupClients
+      let dataDetails = this.state.serviceProviderClients
       let cloneBackUp = _.cloneDeep(dataDetails);
       _.each(detailsArray, function (obj, key) {
         cloneBackUp[key]["logo"] = obj.logo;
       })
-      let listDetails = this.state.startupClientsList || [];
+      let listDetails = this.state.serviceProviderClientsList || [];
       listDetails = cloneBackUp
       let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, startupClients: cloneBackUp, startupClientsList: cloneBackUpList});
+      this.setState({loading: false, serviceProviderClients: cloneBackUp, serviceProviderClientsList: cloneBackUpList});
     }
   }
 
@@ -210,7 +245,7 @@ export default class MlServiceProviderClients extends Component {
   render() {
     let that = this;
     const showLoader = that.state.loading;
-    let clientsArray = that.state.startupClientsList || [];
+    let clientsArray = that.state.serviceProviderClientsList || [];
     let displayUploadButton = null;
     if (this.state.selectedObject != "default") {
       displayUploadButton = true
@@ -242,8 +277,7 @@ export default class MlServiceProviderClients extends Component {
                     return (<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
                       <a href="#" id={"create_client" + idx}>
                         <div className="list_block">
-                          <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate}/><input
-                          type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
+                          <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate}/>
                           <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}>
                             <img src={details.logo && details.logo.fileUrl}/></div>
                           {/*<h3>{details.description} <span className="assets-list">50</span></h3>*/}
@@ -267,20 +301,16 @@ export default class MlServiceProviderClients extends Component {
                           <input type="text" name="companyName" placeholder="Company Name"
                                  className="form-control float-label" defaultValue={this.state.data.companyName}
                                  onBlur={this.handleBlur.bind(this)}/>
-                          <FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"
+                          <FontAwesome name='unlock' className="input_icon un_lock" id="isCompanyNamePrivate"
                                        defaultValue={this.state.data.isCompanyNamePrivate}
-                                       onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>
-                          <input type="checkbox" className="lock_input" id="isCompanyNamePrivate"
-                                 checked={this.state.data.isCompanyNamePrivate}/>
+                                       onClick={this.onLockChange.bind(this, "companyName", "isCompanyNamePrivate")}/>
                         </div>
                         <div className="form-group">
-                          <input type="text" name="description" placeholder="About" className="form-control float-label"
-                                 id="" defaultValue={this.state.data.description} onBlur={this.handleBlur.bind(this)}/>
-                          <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate"
+                          <input type="text" name="clientDescription" placeholder="About" className="form-control float-label"
+                                 id="" defaultValue={this.state.data.clientDescription} onBlur={this.handleBlur.bind(this)}/>
+                          <FontAwesome name='unlock' className="input_icon un_lock" id="isDescriptionPrivate"
                                        defaultValue={this.state.data.isDescriptionPrivate}
-                                       onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/>
-                          <input type="checkbox" className="lock_input" id="isDescriptionPrivate"
-                                 checked={this.state.data.isDescriptionPrivate}/>
+                                       onClick={this.onLockChange.bind(this,"clientDescription", "isDescriptionPrivate")}/>
                         </div>
                         {displayUploadButton ? <div className="form-group">
                           <div className="fileUpload mlUpload_btn">
@@ -312,5 +342,5 @@ export default class MlServiceProviderClients extends Component {
   }
 }
 MlServiceProviderClients.contextTypes = {
-  startupPortfolio: PropTypes.object,
+  serviceProviderPortfolio: PropTypes.object,
 };

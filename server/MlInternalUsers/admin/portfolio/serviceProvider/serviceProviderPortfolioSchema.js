@@ -40,7 +40,8 @@ let serviceProviderPortfolioSchema = `
         clientDescription:String,
         isClientDescriptionPrivate:Boolean,
         isPrivate :Boolean,
-        index:Int
+        index:Int,
+        privateFields:[PrivateKeys]
     }
     
     type servicesOutput{

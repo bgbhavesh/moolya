@@ -68,11 +68,12 @@ let serviceProviderPortfolioSchema = `
         isAwardPrivate:Boolean
         year:String
         isYearPrivate:Boolean
-        description:String
-        isDescriptionPrivate:Boolean
+        awardDescription:String
+        isAwardDescriptionPrivate:Boolean
         logo:imagesTypeSchema,
         isPrivate:Boolean,
         index: Int
+        privateFields:[PrivateKeys]
     }
 
     type membershipsOutput{

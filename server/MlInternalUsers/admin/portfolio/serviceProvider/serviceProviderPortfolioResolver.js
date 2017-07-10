@@ -83,7 +83,6 @@ MlResolver.MlQueryResolver['fetchServiceProviderDetails'] = (obj, args, context,
     serviceProviderPortfolio[key] = filteredObject
     return serviceProviderPortfolio;
   }
-
 }
 
 updateArrayofObjects = (updateFor, source) =>{

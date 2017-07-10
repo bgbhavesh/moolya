@@ -84,7 +84,7 @@ export default class MlAppActivity extends Component {
           displayName           : activity.displayName,
           isInternal            : activity.isInternal,
           isExternal            : activity.isExternal,
-          status                : activity.status,
+          isActive              : activity.isActive,
           mode                  : activity.mode ? activity.mode : "online",
           isServiceCardEligible : activity.isServiceCardEligible,
           industryTypes         : activity.industryTypes ? activity.industryTypes : [],

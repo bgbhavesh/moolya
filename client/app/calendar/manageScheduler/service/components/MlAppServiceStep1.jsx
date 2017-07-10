@@ -247,7 +247,7 @@ async getDetails() {
                   <input type="text" placeholder="Service Name" className="form-control float-label" id="" value={this.state.serviceName} onChange={this.textFieldSaves.bind(this,"ServiceName")}/>
                 </div>
                 <div className="form-group">
-                  <label>Total number of Sessions Rs. <input type="text"className="form-control inline_input" disabled={true} value={this.state.sessionsCost}  /> </label>
+                  <label>Total number of Sessions <input type="text"className="form-control inline_input" disabled={true} value={this.state.sessionsCost}  /> </label>
                   {/*<input type="number" className="form-control "/>*/}
                 </div>
                 <div className="form-group">

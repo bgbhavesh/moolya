@@ -9,77 +9,26 @@ export async function fetchServiceProviderPortfolioAwards(portfoliodetailsId) {
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
-            fetchStartupPortfolioAwards(portfoliodetailsId: $portfoliodetailsId) {
-                  awardId
-                  awardName
-                  index
-                  isAwardPrivate
-                  year
-                  isYearPrivate
-                  description
-                  isDescriptionPrivate
-                  logo{
-                    fileName
-                    fileUrl
-                  }
-                  makePrivate
-            }
-          }
-
-      `,
-    variables: {
-      portfoliodetailsId: portfoliodetailsId
-    },
-    forceFetch: true
-  })
-  const id = result.data.fetchStartupPortfolioAwards;
-  return id
-}
-
-
-export async function findStartupManagementActionHandler(portfoliodetailsId) {
-
-  const result = await client.query({
-    query: gql`
-          query ($portfoliodetailsId: String!) {
-            fetchStartupPortfolioManagement(portfoliodetailsId: $portfoliodetailsId) {
-               title
-               isTitlePrivate
-               firstName
-               isFirstNamePrivate
-               lastName
-               isLastNamePrivate
-               middleName
-               isMiddleNamePrivate
-               qualification
-               isQualificationPrivate
-               certification 
-               isCertificationPrivate 
-               profilePic 
-               isProfilePicPrivate 
-               gender 
-               isGenderPrivate 
-               designation 
-               isDesignationPrivate
-               yearsOfExperience 
-               isYOEPrivate 
-               joiningDate 
-               isJoiningDatePrivate
-               firstJobJoiningDate 
-               isFJJDPrivate 
-               universities 
-               isUniversitiesPrivate
-               awards 
-               isAwardsPrivate
-               linkedInUrl 
-               isLinkedInUrlPrivate
-               about 
-               isAboutPrivate
-                logo{
-                  fileName
-                  fileUrl
+            data: fetchServiceProviderDetails(portfoliodetailsId: $portfoliodetailsId, key:"awardsRecognition") {
+            awardsRecognition{
+              awardId
+              awardName
+              index
+              isAwardPrivate
+              year
+              isYearPrivate
+              awardDescription
+              isAwardDescriptionPrivate
+              logo{
+                fileName
+                fileUrl
+              } 
+              isPrivate
+              privateFields{
+                  keyName,
+                  booleanKey
                 }
-                index
+              }
             }
           }
 
@@ -89,13 +38,8 @@ export async function findStartupManagementActionHandler(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  console.log(result)
-  const id = result.data.fetchStartupPortfolioManagement;
-  let managementArray = [];
-  managementArray = _.map(id, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  return managementArray;
+  const id = result.data.data && result.data.data.awardsRecognition;
+  return id
 }
 
 export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
@@ -263,36 +207,6 @@ export async function findStartupInvestorDetailsActionHandler(portfoliodetailsId
     forceFetch: true
   })
   const id = result.data.fetchStartupPortfolioInvestor;
-  return id
-}
-
-export async function fetchStartupPortfolioLookingFor(portfoliodetailsId) {
-
-  const result = await client.query({
-    query: gql`
-          query ($portfoliodetailsId: String!) {
-            fetchStartupPortfolioLookingFor(portfoliodetailsId: $portfoliodetailsId) {
-                lookingForName,
-                typeId,
-                isTypePrivate
-                description
-                isDescriptionPrivate
-                logo{
-                    fileName
-                    fileUrl
-                  }
-                index
-                makePrivate
-            }
-          }
-
-      `,
-    variables: {
-      portfoliodetailsId: portfoliodetailsId
-    },
-    forceFetch: true
-  })
-  const id = result.data.fetchStartupPortfolioLookingFor;
   return id
 }
 

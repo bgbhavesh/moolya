@@ -168,6 +168,12 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                       }
                       break;
                     case "Service Providers": {
+                      let portfolio = {
+                        userId: portfolioDetails.userId,
+                        communityType: portfolioDetails.communityType,
+                        portfolioDetailsId: ret
+                      }
+                      MlResolver.MlMutationResolver['createServiceProviderPortfolio'](obj, portfolio, context, info)
                       console.log("creating service provider")
                     }
                       break;
@@ -223,8 +229,7 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
                 }
                 break;
                 case "Service Providers":{
-                  console.log('update service provider')
-                  // response = MlResolver.MlMutationResolver['updateServiceProviderPortfolio'](obj, args, context, info)
+                  response = MlResolver.MlMutationResolver['updateServiceProviderPortfolio'](obj, args, context, info)
                 }
                 break;
             }

@@ -6,13 +6,14 @@ import MlTabComponent from "../../../commons/components/tabcomponent/MlTabCompon
 import MlPortfolioIdeatorBasicDetailsView from '../../../admin/transaction/portfolio/component/IdeatorView/MlPortfolioIdeatorBasicDetailsView'
 import MlPortfolioIdeatorProblemsAndSolutionsView from '../../../admin/transaction/portfolio/component/IdeatorView/MlProblemsAndSolutionsView'
 import MlPortfolioIdeatorAudienceView from '../../../admin/transaction/portfolio/component/IdeatorView/MlAudienceView'
-import MlPortfolioIdeatorLibraryView from '../../../admin/transaction/portfolio/component/IdeatorView/MlPortfolioLibrary.jsx'
 import MlPortfolioIdeatorStrategyPlansView from '../../../admin/transaction/portfolio/component/IdeatorView/MlStartergyAndPlanningView'
 import MlPortfolioIdeatorLookingForView from '../../../admin/transaction/portfolio/component/IdeatorView/MlLookingForView'
 import MlPortfolioIdeatorPlanningTrademarkView from '../../../admin/transaction/portfolio/component/IdeatorView/MlInAndTrademarkView'
 import InteractionsCounter from '../../commons/components/InteractionsCounter'
 import MlIdeaView from '../../../admin/transaction/portfolio/component/IdeatorView/MlIdeaView'
 import MlCustomActionButtons from '../components/MlCustomActionButtons'
+import PortfolioLibrary from '../../../commons/genericComponents/portfolioLibrary'
+import {appClient} from '../../core/appConnection'
 
 // import MlAppIdeatorIdeas from './MlAppIdeatorIdeas'
 
@@ -72,7 +73,7 @@ getTabComponents(){
     {tabClassName: 'tab', panelClassName: 'panel', title:"Ideator" , component:<MlPortfolioIdeatorBasicDetailsView key="1"  portfolioDetailsId={this.props.portfolioDetailsId}  getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
     {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions" , component:<MlPortfolioIdeatorProblemsAndSolutionsView key="2"  portfolioDetailsId={this.props.portfolioDetailsId}  getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
     {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlPortfolioIdeatorAudienceView key="3"  portfolioDetailsId={this.props.portfolioDetailsId}  getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-    {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlPortfolioIdeatorLibraryView key="4"  portfolioDetailsId={this.props.portfolioDetailsId}  getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<PortfolioLibrary isAdmin={false} client={appClient} key="4"  portfolioDetailsId={this.props.portfolioDetailsId}  getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
     {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Plans" , component:<MlPortfolioIdeatorStrategyPlansView key="5"  portfolioDetailsId={this.props.portfolioDetailsId}  getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
     {tabClassName: 'tab', panelClassName: 'panel', title:"IntellectualPlanning and Trademark" , component:<MlPortfolioIdeatorPlanningTrademarkView key="6"  portfolioDetailsId={this.props.portfolioDetailsId}  getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
     {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlPortfolioIdeatorLookingForView key="7"  portfolioDetailsId={this.props.portfolioDetailsId}  getSelectedAnnotations={this.props.getSelectedAnnotations}/>},

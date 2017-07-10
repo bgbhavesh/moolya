@@ -7,7 +7,7 @@ import ScrollArea from 'react-scrollbar';
 import Moment from 'moment';
 import { isEmpty, filter, cloneDeep, sortBy } from 'lodash';
 import Datetime from "react-datetime";
-import { initalizeFloatLabel } from '../../../../../admin/utils/formElemUtil';
+import { initalizeFloatLabel } from '../../../../../commons/utils/formElemUtil';
 import {
   updateCalendarWorkingDayActionHandler,
   updateCalendarWorkingDaysActionHandler } from '../actions/updateCalendarTimingSettings';

@@ -8,7 +8,7 @@ import {findRegistrationActionHandler, findCountryCode} from "../actions/findReg
 import {updateRegistrationInfoDetails} from "../actions/updateRegistration";
 import update from "immutability-helper";
 import MlLoader from "../../../commons/components/loader/loader";
-import {initalizeFloatLabel} from "../../../admin/utils/formElemUtil";
+import {initalizeFloatLabel} from "../../../commons/utils/formElemUtil";
 import {mlFieldValidations} from "../../../commons/validations/mlfieldValidation";
 import _underscore from "underscore";
 var FontAwesome = require('react-fontawesome');

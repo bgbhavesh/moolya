@@ -7,7 +7,7 @@ import _ from "lodash";
 import {multipartASyncFormHandler} from "../../../../../../client/commons/MlMultipartFormAction";
 import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../actions/findPortfolioFunderDetails";
 import {fetchClusterIdActionHandler} from '../../actions/findClusterIdForPortfolio'
-import {putDataIntoTheLibrary} from '../../../../../app/commons/actions/putDataIntoTheLibrary'
+import {putDataIntoTheLibrary} from '../../../../../commons/actions/LibraryActionHandler';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import MlLoader from '../../../../../commons/components/loader/loader'
@@ -337,7 +337,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
 
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
-    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file)
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
     return resp;
   }
 

@@ -6,7 +6,7 @@ import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
 import {updateRegistrationActionHandler} from "../actions/updateRegistration";
 import Datetime from "react-datetime";
 import moment from "moment";
-import {initalizeFloatLabel} from "../../../admin/utils/formElemUtil";
+import {initalizeFloatLabel} from "../../../commons/utils/formElemUtil";
 import {mlFieldValidations} from "../../../commons/validations/mlfieldValidation";
 import MlAccordion from "../../../app/commons/components/MlAccordion";
 import MlAppActionComponent from "../../../app/commons/components/MlAppActionComponent";

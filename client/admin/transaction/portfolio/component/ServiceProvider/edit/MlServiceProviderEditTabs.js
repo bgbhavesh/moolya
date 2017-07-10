@@ -10,11 +10,12 @@ import {render} from "react-dom";
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 import _ from "lodash";
 import MlFunderAbout from "../../Funder/MlFunderAbout";
-import MlFunderLibrary from "../../Funder/MlFunderLibrary";
+import PortfolioLibrary from '../../../../../../commons/genericComponents/portfolioLibrary'
 import MlServiceProviderAwards from "./MlServiceProviderAwards";
 import MlServiceProviderMCL from "./MlServiceProviderMCL";
 import MlServiceProviderServices from "./MlServiceProviderServices";
 import MlServiceProviderClients from "./MlServiceProviderClients";
+import {client} from '../../../../../core/apolloConnection'
 
 export default class MlServiceProviderEditTabs extends Component {
   constructor(props) {
@@ -67,7 +68,7 @@ export default class MlServiceProviderEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Library",
-        component: <MlFunderLibrary key="3" getFunderLibrary={this.getFunderLibrary.bind(this)}
+        component: <PortfolioLibrary isAdmin={true} client={client} key="3" getFunderLibrary={this.getFunderLibrary.bind(this)}
                                     portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {

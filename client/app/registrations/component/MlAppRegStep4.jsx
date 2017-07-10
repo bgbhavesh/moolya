@@ -11,7 +11,7 @@ import update from "immutability-helper";
 import {multipartASyncFormHandler} from "../../../commons/MlMultipartFormAction";
 import MlAccordion from "../../../app/commons/components/MlAccordion";
 import MlAppActionComponent from "../../../app/commons/components/MlAppActionComponent";
-import {initalizeFloatLabel} from "../../../admin/utils/formElemUtil";
+import {initalizeFloatLabel} from "../../../commons/utils/formElemUtil";
 import MlLoader from "../../../commons/components/loader/loader";
 import _underscore from "underscore";
 // import MlActionComponent from "../../../commons/components/actions/ActionComponent";

@@ -9,8 +9,8 @@ import MyProfileSettings from '../../../admin/profile/component/MlMyProfileSetti
 import MlMyProfile from '../../../admin/profile/component/MlMyprofile'
 import AppActionButtons from '../../commons/components/appActionButtons'
 import 'react-responsive-tabs/styles.css'
-import   MlPortfolioIdeatorLibraryView from '../../../admin/transaction/portfolio/component/IdeatorView/MlPortfolioLibrary.jsx'
-
+import PortfolioLibrary from '../../../commons/genericComponents/portfolioLibrary'
+import {appClient} from '../../core/appConnection'
 
 export default class MlAppProfileTabs extends React.Component{
 constructor(props){
@@ -29,7 +29,7 @@ getTabComponents(){
     {tabClassName: 'tab', panelClassName: 'panel', title:"Personal Info" , component:<MlMyProfile key="1"/>},    //this.props.portfolioDetailsId}
     {tabClassName: 'tab', panelClassName: 'panel', title:"Address Book" , component:<MyProfileAddressBook key="2"/>},   //id will be dyanmic
     {tabClassName: 'tab', panelClassName: 'panel', title:"Settings" , component:<MyProfileSettings key="3" />},
-    {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlPortfolioIdeatorLibraryView key="4" />},     //id will be dyanmic
+    {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<PortfolioLibrary key="4" isAdmin={false} client={appClient}/>},     //id will be dyanmic
   ]
   return tabs;
 }

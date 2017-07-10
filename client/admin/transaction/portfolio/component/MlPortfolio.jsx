@@ -242,8 +242,6 @@ class MlPortfolio extends React.Component {
 
     }
     this.setState({privateKeys:privateKeys, removePrivateKeys:removePrivateKeys})
-    console.log(this.state.privateKeys)
-    console.log(this.state.removePrivateKeys)
   }
 
   async updatePortfolioDetails() {

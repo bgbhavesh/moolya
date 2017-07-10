@@ -1,19 +1,20 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
-import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
-import MlStartupManagement from "./MlStartupManagement";
-import _ from "lodash";
-import MlStartupAboutUs from "./aboutUs/MlStartupAboutUsLandingPage";
-import MlStartupInvestor from "./MlStartupInvestor";
-import MlStartupData from "./MlStartupData";
-import MlStartupAwards from "./MlStartupAwards";
-import MlStartupMCL from "./MlStartupMCL";
-import MlStartupLookingFor from "./MlStartupLookingFor";
-import MlStartupLibrary from './MlStartupLibrary'
-import PortfolioLibrary from '../../../../../../app/ideators/components/MlAppIdeatorLibrary'
+import MlTabComponent from "../../../commons/components/tabcomponent/MlTabComponent";
+import _ from 'lodash'
+import MlStartupAboutUs from "../../../admin/transaction/portfolio/component/Startup/edit/aboutUs/MlStartupAboutUsLandingPage"
+import MlStartupManagement from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupManagement"
+import MlStartupInvestor from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupInvestor";
+import MlStartupData from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupData";
+import MlStartupCharts from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupCharts";
+import MlStartupAwards from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupAwards";
+import MlStartupMCL from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupMCL";
+import MlStartupLookingFor from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupLookingFor";
+import MlStartupLibrary from '../../../admin/transaction/portfolio/component/Startup/edit/MlStartupLibrary'
+import MlVerticalTabComponent from '../../../commons/components/tabcomponent/MlVerticalTabComponent'
 
+export default class MlAppStartupEditTabs extends React.Component{
 
-export default class MlStartupEditTemplate extends React.Component{
   constructor(props){
     super(props)
     this.state =  {tabs: [],aboutUs: {}, startupPortfolio:{}};
@@ -40,7 +41,7 @@ export default class MlStartupEditTemplate extends React.Component{
       $('.RRT__tabs').addClass('horizon-swiper');
       $('.RRT__tab').addClass('horizon-item');
       $('.horizon-swiper').horizonSwiper();
-    },10);
+    },200);
   }
 
   backClickHandler(){
@@ -51,11 +52,11 @@ export default class MlStartupEditTemplate extends React.Component{
   getTabComponents(){
     let tabs = [
 
-      {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlStartupAboutUs key="1" getAboutus={this.getAboutus.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.backClickHandler.bind(this)}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlStartupAboutUs key="1" getAboutus={this.getAboutus.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.backClickHandler.bind(this)} isApp={true}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , component:<MlStartupManagement key="2" getManagementDetails={this.getManagementDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Investor" , component:<MlStartupInvestor key="3" getInvestorDetails={this.getInvestorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Data" , component:<MlStartupData key="4" portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      // {tabClassName: 'tab', panelClassName: 'panel', title:"Charts" , component:<MlIdeatorDetails key="5" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Charts" , component:<MlStartupCharts key="5" getStartupCharts={this.getStartupCharts.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Awards" , component:<MlStartupAwards key="6" getAwardsDetails={this.getAwardsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlStartupLibrary key="7"  portfolioDetailsId={this.props.portfolioDetailsId}/>}, //
       {tabClassName: 'tab', panelClassName: 'panel', title:"M C & L" , component:<MlStartupMCL key="8" getStartupMCL={this.getStartupMCL.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
@@ -122,6 +123,11 @@ export default class MlStartupEditTemplate extends React.Component{
     this.setState({startupPortfolio : data})
     this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio});
   }
+
+  getStartupCharts(details){
+
+  }
+
   getStartupMCL(details){
     let data = this.state.startupPortfolio;
     if(details.memberships){
@@ -142,7 +148,7 @@ export default class MlStartupEditTemplate extends React.Component{
     let tabs = this.getTabComponents();
     function getTabs() {
       return tabs.map(tab => ({
-        tabClassName: 'moolya_btn', // Optional
+        tabClassName: 'horizon-item', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
         getContent: () => tab.component
@@ -154,8 +160,10 @@ export default class MlStartupEditTemplate extends React.Component{
   render(){
     let tabs = this.state.tabs;
     return <MlTabComponent tabs={tabs}/>
+    // return  <MlVerticalTabComponent/>
   }
+
 }
-MlStartupEditTemplate.childContextTypes = {
+MlAppStartupEditTabs.childContextTypes = {
   startupPortfolio: PropTypes.object,
 };

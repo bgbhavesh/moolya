@@ -11,6 +11,7 @@ import MlFunderEditTemplate from '../component/Funder/MlFunderEditTemplate'
 import MlFunderViewTemplate from '../component/FunderView/MlFunderViewTemplate'
 import MlAppFunderViewTabs from '../../../../app/funders/components/MlAppFunderViewTabs'
 import MlAppFunderEditTabs from '../../../../app/funders/components/MlAppFunderEditTabs'
+import MlAppStartupEditTabs from '../../../../app/startup/components/MlAppStartupEditTabs'
 
 
 const mlIdeatorEditExternalUserPortfolioTemplateConfig={
@@ -108,16 +109,16 @@ const mlAppIdeatorViewExternalUserPortfolioTemplateConfig={
   component:MlAppIdeatorTabs
 };
 
-// const mlAppStartupEditExternalUserPortfolioTemplateConfig={
-//   templateName:"Portfolio-Template-Startup-Edit",
-//   templateCode:"PFSTUEDT",
-//   userType:'external',
-//   process:'Registration',
-//   subProcess:'Registration',
-//   stepCode:'PORTFOLIO',
-//   stepName:'Portfolio',
-//   component:MlStartupEditTemplate
-// };
+const mlAppStartupEditExternalUserPortfolioTemplateConfig={
+  templateName:"Portfolio-Template-Startup-Edit",
+  templateCode:"PFSTUEDT",
+  userType:'external',
+  process:'Registration',
+  subProcess:'Registration',
+  stepCode:'PORTFOLIO',
+  stepName:'Portfolio',
+  component:MlAppStartupEditTabs
+};
 //
 // const mlAppStartupViewExternalUserPortfolioTemplateConfig={
 //   templateName:"Portfolio-Template-Startup-View",
@@ -154,7 +155,7 @@ const mlAppFunderViewExternalUserPortfolioTemplateConfig={
 
 mlRegistrationTemplates.setTemplate(mlAppIdeatorEditExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppIdeatorViewExternalUserPortfolioTemplateConfig);
-// mlRegistrationTemplates.setTemplate(mlAppStartupEditExternalUserPortfolioTemplateConfig);
+mlRegistrationTemplates.setTemplate(mlAppStartupEditExternalUserPortfolioTemplateConfig);
 // mlRegistrationTemplates.setTemplate(mlAppStartupViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppFunderViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppFunderEditExternalUserPortfolioTemplateConfig);

@@ -151,8 +151,9 @@ class MlAuthorization
             }
 
             if(user_roles && user_roles.length > 0){
-                for(var i = 0; i < user_roles.length; i++){
-                  ret = this.validateRole(user_roles[i].roleId, module, action)
+                var sortedRoles = _.reverse(_.sortBy(user_roles, ['hierarchyLevel']))
+                for(var i = 0; i < sortedRoles.length; i++){
+                  ret = this.validateRole(sortedRoles[i].roleId, module, action)
                   if(ret){
                     break;
                   }
@@ -312,8 +313,6 @@ class MlAuthorization
           var community = MlCommunity.findOne({_id: communityId});
           if (!community) {
             community = MlCommunity.findOne({communityDefCode: communityId});
-            if (!community)
-              return false
           }
           if (community) {
             index = _.isMatch(communityArray[i], {communityId: community._id})
@@ -324,9 +323,9 @@ class MlAuthorization
             if (index) {
               return true;
             }
-            return false
           }
         }
+        return false
       }
 
       getRegistrationContextDetails(registrationId){

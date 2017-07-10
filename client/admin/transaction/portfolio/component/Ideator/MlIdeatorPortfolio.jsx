@@ -4,11 +4,12 @@ import MlTabComponent from "../../../../../commons/components/tabcomponent/MlTab
 import MlIdeatorDetails from "../Ideator/MlIdeatorDetails";
 import MlIdeatorProblemsAndSolutions from "../Ideator/MlIdeatorProblemsAndSolutions";
 import MlIdeatorAudience from "../Ideator/MlIdeatorAudience";
-import MlIdeatorLibrary from "../Ideator/MlIdeatorLibrary";
 import MlIdeatorStrategyAndPlanning from "../Ideator/MlIdeatorStrategyAndPlanning";
 import MlIdeatorIntellectualPlanningAndTrademark from "../Ideator/MlIdeatorIntellectualPlanningAndTrademark";
 import MlIdeatorLookingFor from "../Ideator/MlIdeatorLookingFor";
 import MlIdeatorIdeas from '../Ideator/MlIdeatorIdeas'
+import PortfolioLibrary from '../../../../../commons/genericComponents/portfolioLibrary'
+import {client} from '../../../../core/apolloConnection'
 import _ from 'lodash'
 
 
@@ -47,7 +48,7 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
           {tabClassName: 'tab', panelClassName: 'panel', title:"Ideator" , component:<MlIdeatorDetails key="1" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
           {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions", component:<MlIdeatorProblemsAndSolutions key="3" getProblemSolution={this.getProblemSolution.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
           {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlIdeatorAudience key="4" getAudience={this.getAudience.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-          {tabClassName: 'tab', panelClassName: 'panel', title:"Library", component:<MlIdeatorLibrary  key="5" portfolioDetailsId={this.props.portfolioDetailsId}  /> },
+          {tabClassName: 'tab', panelClassName: 'panel', title:"Library", component:<PortfolioLibrary client={client} isAdmin={true} key="5" portfolioDetailsId={this.props.portfolioDetailsId}  /> },
           {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Planning", component:<MlIdeatorStrategyAndPlanning key="6" getStrategyAndPlanning={this.getStrategyAndPlanning.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
           {tabClassName: 'tab', panelClassName: 'panel', title:"Intellectual Planning and Trademark" , component:<MlIdeatorIntellectualPlanningAndTrademark key="7" getIntellectualPlanning={this.getIntellectualPlanning.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
           {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For", component:<MlIdeatorLookingFor  key="8" getLookingFor={this.getLookingFor.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>}

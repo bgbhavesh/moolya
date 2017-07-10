@@ -463,7 +463,7 @@ MlResolver.MlQueryResolver['fetchLibrary'] = (obj, args, context, info) => {
   if (portfolioDetails) {
     args.userId = portfolioDetails.userId;
   }
-    var libraryData = mlDBController.find('MlLibrary', {userId: args.userId}, context).fetch();
+    var libraryData = mlDBController.find('MlLibrary', {userId: args.userId, isActive: true}, context).fetch();
 
     return libraryData;
 
@@ -487,13 +487,15 @@ MlResolver.MlMutationResolver['updatePrivacyDetails'] = (obj, args, context, inf
 
 
 
-//
-// MlResolver.MlQueryResolver['fetchImages'] = (obj, args, context, info) => {
-//   var libraryData = mlDBController.find('MlLibrary', {userId: args.userId}, context).fetch();
-//
-//   return libraryData[0].images;
-//
-// }
+MlResolver.MlMutationResolver['updateLibraryData'] = (obj, args, context, info) => {
+  var libraryData = mlDBController.find('MlLibrary', {userId: context.userId}, context).fetch();
+  libraryData.map(function (data) {
+    if (data.fileUrl === args.files) {
+      let libraryUpdate = mlDBController.update('MlLibrary', {_id: data._id}, {isActive: false}, {$set: 1}, context);
+      return libraryUpdate;
+    }
+  })
+}
 
 
 MlResolver.MlMutationResolver['updateIdea'] = (obj, args, context, info) => {

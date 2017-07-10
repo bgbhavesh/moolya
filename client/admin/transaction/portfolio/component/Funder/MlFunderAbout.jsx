@@ -6,7 +6,7 @@ var Select = require('react-select');
 import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {fetchfunderPortfolioAbout} from '../../actions/findPortfolioFunderDetails'
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
-import {putDataIntoTheLibrary} from '../../../../../app/commons/actions/putDataIntoTheLibrary'
+import {putDataIntoTheLibrary} from '../../../../../commons/actions/LibraryActionHandler'
 import _ from 'lodash';
 import MlLoader from '../../../../../commons/components/loader/loader'
 
@@ -190,7 +190,7 @@ export default class MlFunderAbout extends React.Component {
 
   async libraryAction(file) {
     let portfolioDetailsId = this.props.portfolioDetailsId;
-    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file)
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
     return resp;
   }
 

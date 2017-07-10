@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import {reloadPage,fetchExternalUserProfilesActionHandler,setDefaultProfileActionHandler,deActivateProfileProfileActionHandler,blockProfileActionHandler,switchProfileActionHandler} from '../actions/switchUserProfilesActions';
 import _ from 'lodash';
-import {initalizeFloatLabel} from '../../../admin/utils/formElemUtil';
+import {initalizeFloatLabel} from '../../../commons/utils/formElemUtil';
 export default class MlAppSwitchProfile extends React.Component{
 
   constructor(props, context){

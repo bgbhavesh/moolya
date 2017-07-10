@@ -5,7 +5,7 @@ import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
 import _ from "lodash";
 
-MlResolver.MlMutationResolver['createStartupPortfolio'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver['createServiceProviderPortfolio'] = (obj, args, context, info) => {
   try {
     if (args && args.userId && args.communityType) {
       user = MlServiceProviderPortfolio.findOne({"$and": [{'userId': args.userId}, {'communityId': args.communityType}]})
@@ -67,6 +67,37 @@ MlResolver.MlMutationResolver['updateServiceProviderPortfolio'] = (obj, args, co
       return response;
     }
   }
+}
+
+MlResolver.MlQueryResolver['fetchServiceProviderPortfolioMemberships'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let portfolio = MlServiceProviderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('memberships')) {
+      return portfolio['memberships'];
+    }
+  }
+
+  return {};
+}
+MlResolver.MlQueryResolver['fetchServiceProviderPortfolioCompliances'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let portfolio = MlServiceProviderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('compliances')) {
+      return portfolio['compliances'];
+    }
+  }
+
+  return {};
+}
+MlResolver.MlQueryResolver['fetchServiceProviderPortfolioLicenses'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let portfolio = MlServiceProviderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('licenses')) {
+      return portfolio['licenses'];
+    }
+  }
+
+  return {};
 }
 
 updateArrayofObjects = (updateFor, source) =>{

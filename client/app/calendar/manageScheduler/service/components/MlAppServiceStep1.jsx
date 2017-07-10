@@ -12,7 +12,7 @@ import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
 import {createServiceActionHandler, fetchServiceActionHandler, fetchProfileActionHandler, updateServiceActionHandler} from '../actions/MlServiceActionHandler'
 var Select = require('react-select');
-import Moolyaselect from "../../../../../commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../../../commons/components/MlAppSelectWrapper";
 
 
 

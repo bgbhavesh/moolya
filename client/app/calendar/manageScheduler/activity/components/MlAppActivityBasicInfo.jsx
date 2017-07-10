@@ -10,7 +10,7 @@
  */
 import React from 'react';
 import ScrollArea from 'react-scrollbar';
-import Moolyaselect from  '../../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../../commons/components/MlAppSelectWrapper'
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'

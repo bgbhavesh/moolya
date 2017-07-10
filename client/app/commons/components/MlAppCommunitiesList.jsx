@@ -4,7 +4,7 @@ import gql from "graphql-tag";
 import {render} from "react-dom";
 import {fetchCommunitiesHandler} from "../actions/fetchCommunitiesActionHandler";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../commons/components/MlAppSelectWrapper";
 import {fetchUserDetailsHandler} from "../actions/fetchUserDetails";
 import {registerAsInfo} from "../../../admin/transaction/requested/actions/registrationAs";
 let Select = require('react-select');

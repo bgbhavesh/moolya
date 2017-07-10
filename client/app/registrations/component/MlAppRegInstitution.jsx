@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import gql from "graphql-tag";
-import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../commons/components/MlAppSelectWrapper";
 import {updateRegistrationActionHandler} from "../actions/updateRegistration";
 import Datetime from "react-datetime";
 import moment from "moment";

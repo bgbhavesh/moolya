@@ -4,6 +4,9 @@
 import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
 import _ from "lodash";
+// import MlUserContext from "../../../../MlExternalUsers/mlUserContext";
+// import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
+import portfolioValidationRepo from '../portfolioValidation'
 
 MlResolver.MlMutationResolver['createServiceProviderPortfolio'] = (obj, args, context, info) => {
   try {
@@ -69,35 +72,18 @@ MlResolver.MlMutationResolver['updateServiceProviderPortfolio'] = (obj, args, co
   }
 }
 
-MlResolver.MlQueryResolver['fetchServiceProviderPortfolioMemberships'] = (obj, args, context, info) => {
-  if (args.portfoliodetailsId) {
-    let portfolio = MlServiceProviderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-    if (portfolio && portfolio.hasOwnProperty('memberships')) {
-      return portfolio['memberships'];
-    }
+MlResolver.MlQueryResolver['fetchServiceProviderDetails'] = (obj, args, context, info) => {
+  if(_.isEmpty(args))
+    return;
+  var key = args.key;
+  var serviceProviderPortfolio = MlServiceProviderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+  if (serviceProviderPortfolio && serviceProviderPortfolio.hasOwnProperty(key)) {
+    var object = serviceProviderPortfolio[key];
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    serviceProviderPortfolio[key] = filteredObject
+    return serviceProviderPortfolio;
   }
 
-  return {};
-}
-MlResolver.MlQueryResolver['fetchServiceProviderPortfolioCompliances'] = (obj, args, context, info) => {
-  if (args.portfoliodetailsId) {
-    let portfolio = MlServiceProviderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-    if (portfolio && portfolio.hasOwnProperty('compliances')) {
-      return portfolio['compliances'];
-    }
-  }
-
-  return {};
-}
-MlResolver.MlQueryResolver['fetchServiceProviderPortfolioLicenses'] = (obj, args, context, info) => {
-  if (args.portfoliodetailsId) {
-    let portfolio = MlServiceProviderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-    if (portfolio && portfolio.hasOwnProperty('licenses')) {
-      return portfolio['licenses'];
-    }
-  }
-
-  return {};
 }
 
 updateArrayofObjects = (updateFor, source) =>{

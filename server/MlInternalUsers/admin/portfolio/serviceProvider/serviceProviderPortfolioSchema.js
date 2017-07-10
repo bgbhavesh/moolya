@@ -89,6 +89,19 @@ let serviceProviderPortfolioSchema = `
        isLicensesPrivate   : Boolean
     }
     
+     type serviceProviderPortfolioDetails{
+         _id                  : String
+         userId               : String
+         communityType        : String
+         portfolioDetailsId   : String
+         licenses             : licensesOutput
+         compliances          : compliancesOutput
+         memberships          : membershipsOutput
+         awardsRecognition    : [awardsRecognitionOutput]
+         clients              : [clientsOutput]
+         services             : servicesOutput
+    }
+    
     input logo{
       fileName : String,
       fileUrl:String
@@ -162,12 +175,7 @@ let serviceProviderPortfolioSchema = `
     }
     
     type Query{
-        fetchServiceProviderPortfolioAwards(portfoliodetailsId:String!) : [awardsRecognitionOutput]
-        fetchServiceProviderPortfolioMemberships(portfoliodetailsId:String!) : membershipsOutput
-        fetchServiceProviderPortfolioCompliances(portfoliodetailsId:String!) : compliancesOutput
-        fetchServiceProviderPortfolioLicenses(portfoliodetailsId:String!) : licensesOutput
-        fetchServiceProviderPortfolioClients(portfoliodetailsId:String!) : [clientsOutput]
-        fetchServiceProviderPortfolioServices(portfoliodetailsId:String!) : servicesOutput
+        fetchServiceProviderDetails(portfoliodetailsId:String!, key:String!) : serviceProviderPortfolioDetails
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
     }
     
@@ -180,13 +188,7 @@ let serviceProviderPortfolioSchema = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], serviceProviderPortfolioSchema]);
 
 let supportedApi = [
-  {api: 'fetchServiceProviderPortfolioAwards', actionName: 'READ', moduleName: "PORTFOLIO"},
-  {api: 'fetchServiceProviderPortfolioMemberships', actionName: 'READ', moduleName: "PORTFOLIO"},
-  {api: 'fetchServiceProviderPortfolioCompliances', actionName: 'READ', moduleName: "PORTFOLIO"},
-  {api: 'fetchServiceProviderPortfolioLicenses', actionName: 'READ', moduleName: "PORTFOLIO"},
-  {api: 'fetchServiceProviderPortfolioClients', actionName: 'READ', moduleName: "PORTFOLIO"},
-  {api: 'fetchServiceProviderPortfolioServices', actionName: 'READ', moduleName: "PORTFOLIO"},
-
+  {api: 'fetchServiceProviderDetails', actionName: 'READ', moduleName: "PORTFOLIO"},
   {api: 'createServiceProviderPortfolio', actionName: 'CREATE', moduleName: "PORTFOLIO"},
   {api: 'updateServiceProviderPortfolio', actionName: 'UPDATE', moduleName: "PORTFOLIO"},
   {api: 'fetchPortfolioMenu', actionName: 'READ', moduleName: "PORTFOLIO"},

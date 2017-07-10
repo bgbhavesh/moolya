@@ -37,6 +37,12 @@ export default class MlStartupAboutUs extends React.Component{
 
   }
 
+  getStartUpState() {
+    this.setState({aboutStartup: false})
+    $('.last-item').removeClass('menunone');
+    this.props.backClickHandler()
+  }
+
   render(){
     let aboutUsImages=null;
     console.log(this.state.startupAboutUs.aboutUs);
@@ -81,8 +87,8 @@ export default class MlStartupAboutUs extends React.Component{
         </div>
         <div className="col-md-6 col-sm-6 nopadding-right">
           <div className="panel panel-default panel-form-view">
-            <div className="panel-heading">Rating <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
-            <div className="panel-body">
+            <div className="panel-heading ">Rating <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
+            <div className="panel-body rating_small">
               <div className="star_ratings">
                 <Rating
                   empty="fa fa-star-o empty"
@@ -123,7 +129,7 @@ export default class MlStartupAboutUs extends React.Component{
 
         </div>
         </ScrollArea>
-      </div>):(<div>{<MlStartupTab getPortfolioStartupAboutUsDetails={this.getPortfolioStartupAboutUsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupAboutUsDetails={this.state.startupAboutUs}></MlStartupTab> }</div>)}
+      </div>):(<div>{<MlStartupTab getStartUpState={this.getStartUpState.bind(this)} getPortfolioStartupAboutUsDetails={this.getPortfolioStartupAboutUsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupAboutUsDetails={this.state.startupAboutUs} isApp={this.props.isApp}></MlStartupTab> }</div>)}
       </div>
 
     )

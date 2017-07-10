@@ -81,32 +81,32 @@ export default class MlAppStartupTabs extends React.Component{
   getTabComponents(){
     let tabs = [
 
-      // {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlStartupViewAboutUs key="1"  portfolioDetailsId={this.state.startupId} />},
-      // {tabClassName: 'tab', panelClassName: 'panel', title:"Clients" , component:<MlStartupViewClients key="2"  portfolioDetailsId={this.state.startupId} />},
-      // {tabClassName: 'tab', panelClassName: 'panel', title:"Assets" , component:<MlStartupViewAssets key="2"  portfolioDetailsId={this.state.startupId} />},
-      // {tabClassName: 'tab', panelClassName: 'panel', title:"Technologies" , component:<MlStartupViewTechnologies key="2"  portfolioDetailsId={this.state.startupId} />},
-      //
-      // {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , component:<MlStartupViewManagement key="2"  portfolioDetailsId={this.state.startupId} />},
-      // {tabClassName: 'tab', panelClassName: 'panel', title:"Investor" , component:<MlStartupViewInvestor key="3"  portfolioDetailsId={this.state.startupId} />},
-      // /*{tabClassName: 'tab', panelClassName: 'panel', title:"Data" , component:<MlStartupViewData key="4" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},*/
-      // // {tabClassName: 'tab', panelClassName: 'panel', title:"Charts" , component:<MlIdeatorDetails key="5" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      // {tabClassName: 'tab', panelClassName: 'panel', title:"Awards" , component:<MlStartupViewAwards key="6"  portfolioDetailsId={this.state.startupId} />},
-      // {tabClassName: 'tab', panelClassName: 'panel', title:"Branches" , component:<MlStartupViewBranches key="7"  portfolioDetailsId={this.state.startupId} />},
-      // {tabClassName: 'tab', panelClassName: 'panel', title:"M C & L" , component:<MlStartupViewMCL key="8" portfolioDetailsId={this.state.startupId} />},
-      // {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlStartupViewLookingFor key="9"  portfolioDetailsId={this.state.startupId} />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlStartupViewAboutUs key="1"  portfolioDetailsId={this.state.startupId} />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Clients" , component:<MlStartupViewClients key="2"  portfolioDetailsId={this.state.startupId} />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Assets" , component:<MlStartupViewAssets key="2"  portfolioDetailsId={this.state.startupId} />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Technologies" , component:<MlStartupViewTechnologies key="2"  portfolioDetailsId={this.state.startupId} />},
 
-      {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<AppStartupAboutUs key="1"  portfolioDetailsId={this.state.startupId} />},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , component:<AppStartupManagement key="2"  portfolioDetailsId={this.state.startupId} />},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Clients" , component:<AppStartupClients key="2"  portfolioDetailsId={this.state.startupId} />},
-      // {tabClassName: 'tab', panelClassName: 'panel', title:"Assets" , component:<MlStartupViewAssets key="2"  portfolioDetailsId={this.state.startupId} />},
-      // {tabClassName: 'tab', panelClassName: 'panel', title:"Technologies" , component:<MlStartupViewTechnologies key="2"  portfolioDetailsId={this.state.startupId} />},
-      // {tabClassName: 'tab', panelClassName: 'panel', title:"Investor" , component:<MlStartupViewInvestor key="3"  portfolioDetailsId={this.state.startupId} />},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Data" , component:<AppStartupData key="4" portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Charts" , component:<AppStartupCharts key="5" />},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Awards" , component:<AppStartupAwards key="7"  portfolioDetailsId={this.state.startupId} />},
-      //{tabClassName: 'tab', panelClassName: 'panel', title:"Branches" , component:<MlStartupViewBranches key="8"  portfolioDetailsId={this.state.startupId} />},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"M C & L" , component:<AppStartupMCL key="9" portfolioDetailsId={this.state.startupId} />},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<AppStartupLookingFor key="10"  portfolioDetailsId={this.state.startupId} />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , component:<MlStartupViewManagement key="2"  portfolioDetailsId={this.state.startupId} />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Investor" , component:<MlStartupViewInvestor key="3"  portfolioDetailsId={this.state.startupId} />},
+      /*{tabClassName: 'tab', panelClassName: 'panel', title:"Data" , component:<MlStartupViewData key="4" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},*/
+      // {tabClassName: 'tab', panelClassName: 'panel', title:"Charts" , component:<MlIdeatorDetails key="5" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Awards" , component:<MlStartupViewAwards key="6"  portfolioDetailsId={this.state.startupId} />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Branches" , component:<MlStartupViewBranches key="7"  portfolioDetailsId={this.state.startupId} />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"M C & L" , component:<MlStartupViewMCL key="8" portfolioDetailsId={this.state.startupId} />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlStartupViewLookingFor key="9"  portfolioDetailsId={this.state.startupId} />}
+
+      // {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<AppStartupAboutUs key="1"  portfolioDetailsId={this.state.startupId} />},
+      // {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , component:<AppStartupManagement key="2"  portfolioDetailsId={this.state.startupId} />},
+      // {tabClassName: 'tab', panelClassName: 'panel', title:"Clients" , component:<AppStartupClients key="2"  portfolioDetailsId={this.state.startupId} />},
+      // // {tabClassName: 'tab', panelClassName: 'panel', title:"Assets" , component:<MlStartupViewAssets key="2"  portfolioDetailsId={this.state.startupId} />},
+      // // {tabClassName: 'tab', panelClassName: 'panel', title:"Technologies" , component:<MlStartupViewTechnologies key="2"  portfolioDetailsId={this.state.startupId} />},
+      // // {tabClassName: 'tab', panelClassName: 'panel', title:"Investor" , component:<MlStartupViewInvestor key="3"  portfolioDetailsId={this.state.startupId} />},
+      // {tabClassName: 'tab', panelClassName: 'panel', title:"Data" , component:<AppStartupData key="4" portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      // {tabClassName: 'tab', panelClassName: 'panel', title:"Charts" , component:<AppStartupCharts key="5" />},
+      // {tabClassName: 'tab', panelClassName: 'panel', title:"Awards" , component:<AppStartupAwards key="7"  portfolioDetailsId={this.state.startupId} />},
+      // //{tabClassName: 'tab', panelClassName: 'panel', title:"Branches" , component:<MlStartupViewBranches key="8"  portfolioDetailsId={this.state.startupId} />},
+      // {tabClassName: 'tab', panelClassName: 'panel', title:"M C & L" , component:<AppStartupMCL key="9" portfolioDetailsId={this.state.startupId} />},
+      // {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<AppStartupLookingFor key="10"  portfolioDetailsId={this.state.startupId} />},
 
     ]
     return tabs;

@@ -81,7 +81,8 @@ export default class MlAppTaskCreate extends Component {
   handleBlur(e) {
     let details = this.state.data;
     let name = e.target.name;
-    let value = e.target.value
+    let value = e.target.value;
+    console.log(name,value, e.target.checked);
     if(e.target.value== 'true'){
       value = e.target.checked
     }
@@ -104,6 +105,7 @@ export default class MlAppTaskCreate extends Component {
 
   sendTaskDataToParent() {
     let data = this.state.data;
+    data.isServiceCardEligible = data.isExternal ? data.isServiceCardEligible : false;
     this.props.getCreateDetails(data);
   }
 
@@ -127,16 +129,16 @@ export default class MlAppTaskCreate extends Component {
                   </div>
                   <div className="form-group">
                     <div className="input_types">
-                      <input id="checkbox1" type="checkbox" value={true} name="isInternal"
+                      <input id="isInternal" type="checkbox" value={true} name="isInternal"
                              defaultChecked={this.state.data.isInternal}
                              onChange={this.handleBlur.bind(this)}/><label
-                      htmlFor="radio1"><span><span></span></span>Internal</label>
+                      htmlFor="isInternal"><span><span></span></span>Internal</label>
                     </div>
                     <div className="input_types">
-                      <input id="checkbox1" type="checkbox" name="isExternal" value={true}
+                      <input id="isExternal" type="checkbox" name="isExternal" value={true}
                              defaultChecked={this.state.data.isExternal}
                              onChange={this.handleBlur.bind(this)}/><label
-                      htmlFor="radio2"><span><span></span></span>External</label>
+                      htmlFor="isExternal"><span><span></span></span>External</label>
                     </div>
                     <br className="brclear"/>
                   </div>
@@ -177,8 +179,9 @@ export default class MlAppTaskCreate extends Component {
                   <div className="form-group">
                     <div className="input_types">
                       <input id="isServiceCardEligible" type="checkbox" name="isServiceCardEligible" value={true}
-                             defaultChecked={this.state.data.isServiceCardEligible}
-                             onBlur={this.handleBlur.bind(this)}/>
+                             checked={this.state.data.isServiceCardEligible && this.state.data.isExternal}
+                             disabled={!this.state.data.isExternal}
+                             onChange={this.handleBlur.bind(this)}/>
                       <label htmlFor="isServiceCardEligible"><span><span></span></span>Eligible
                         for service card</label>
                     </div>

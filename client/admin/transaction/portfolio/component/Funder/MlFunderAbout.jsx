@@ -6,6 +6,7 @@ var Select = require('react-select');
 import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {fetchfunderPortfolioAbout} from '../../actions/findPortfolioFunderDetails'
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
+import {putDataIntoTheLibrary} from '../../../../../app/commons/actions/putDataIntoTheLibrary'
 import _ from 'lodash';
 import MlLoader from '../../../../../commons/components/loader/loader'
 
@@ -22,6 +23,7 @@ export default class MlFunderAbout extends React.Component {
     this.onClick.bind(this);
     this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
+    this.libraryAction.bind(this)
     return this;
   }
   componentWillMount(){
@@ -36,10 +38,15 @@ export default class MlFunderAbout extends React.Component {
   }
   componentDidUpdate()
   {
+    var WinWidth = $(window).width();
+    var WinHeight = $(window).height();
+    $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
+    if(WinWidth > 768){
+      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
     OnLockSwitch();
     dataVisibilityHandler();
-    var WinHeight = $(window).height();
-    $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
+    /*var WinHeight = $(window).height();
+    $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));*/
     initalizeFloatLabel();
   }
   onClick(fieldName, field,e){
@@ -162,14 +169,22 @@ export default class MlFunderAbout extends React.Component {
     if(e.target.files[0].length ==  0)
       return;
     let file = e.target.files[0];
-    // let name = e.target.name;
-    // let fileName = e.target.files[0].name;
     let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{funderAbout:{profilePic:" "}}};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
   }
-  onFileUploadCallBack(resp){
+  onFileUploadCallBack(file,resp){
     if(resp){
       let result = JSON.parse(resp)
+      let userOption = confirm("Do you want to add the file into the library")
+      if(userOption){
+        let fileObjectStructure = {
+          fileName: file.name,
+          fileType: file.type,
+          fileUrl: result.result,
+          libraryType: "image"
+        }
+        this.libraryAction(fileObjectStructure)
+      }
       if(result.success){
         this.setState({profilePic:result.result})
         this.setState({loading:true})
@@ -177,6 +192,13 @@ export default class MlFunderAbout extends React.Component {
       }
     }
   }
+
+  async libraryAction(file) {
+    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file)
+    return resp;
+  }
+
   async fetchOnlyImages(){
     let that = this;
     const response = await fetchfunderPortfolioAbout(that.props.portfolioDetailsId);
@@ -213,17 +235,10 @@ export default class MlFunderAbout extends React.Component {
         {showLoader === true ? ( <MlLoader/>) : (
       <div>
         <h2>About Us</h2>
-        <div className="main_wrap_scroll">
-          <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true}>
+        <div className="tab_wrap_scroll">
 
             <div className="col-md-6 nopadding-left">
-              <div className="left_wrap">
-                <ScrollArea
-                  speed={0.8}
-                  className="left_wrap"
-                  smoothScrolling={true}
-                  default={true}
-                >
+
                   <div className="form_bg">
                     <form>
 
@@ -278,17 +293,10 @@ export default class MlFunderAbout extends React.Component {
                       </div>
                     </form>
                   </div>
-                </ScrollArea>
-              </div>
+
+
             </div>
             <div className="col-md-6 nopadding-right">
-              <div className="left_wrap">
-                <ScrollArea
-                  speed={0.8}
-                  className="left_wrap"
-                  smoothScrolling={true}
-                  default={true}
-                >
                   <div className="form_bg">
                     <form>
                       <div className="previewImg ProfileImg">
@@ -377,10 +385,8 @@ export default class MlFunderAbout extends React.Component {
                       {/*</div>*/}
                     </form>
                   </div>
-                </ScrollArea>
-              </div>
+
             </div>
-          </ScrollArea>
           <br className="brclear"/>
         </div>
       </div>

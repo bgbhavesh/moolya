@@ -40,6 +40,7 @@ export default class MlAppBasicInfo extends React.Component{
         displayName           : "",
         isInternal            : false,
         isExternal            : false,
+        isActive              : false,
         mode                  : "online",
         isServiceCardEligible : false,
         industryTypes         : [],
@@ -223,6 +224,7 @@ export default class MlAppBasicInfo extends React.Component{
     if(data.mode !== 'online') {
       delete data.conversation;
     }
+    data.isServiceCardEligible = data.isExternal ? data.isServiceCardEligible : false;
     data.duration = duration ;
     that.props.saveActivity(data);
   }
@@ -411,7 +413,7 @@ export default class MlAppBasicInfo extends React.Component{
                 </div>
                 <div className="form-group">
                   <div className="input_types">
-                    <input id="isServiceCardEligible" type="checkbox" name="check1" value="true" checked={that.state.basicData.isServiceCardEligible} onChange={that.checkBoxHandler.bind(that, "isServiceCardEligible")}/>
+                    <input id="isServiceCardEligible" type="checkbox" name="check1" value="true" disabled={!that.state.basicData.isExternal} checked={that.state.basicData.isServiceCardEligible && that.state.basicData.isExternal } onChange={that.checkBoxHandler.bind(that, "isServiceCardEligible")}/>
                     <label htmlFor="isServiceCardEligible" ><span><span></span></span>
                       Eligible for service card
                     </label>
@@ -441,7 +443,7 @@ export default class MlAppBasicInfo extends React.Component{
           <div className="form-group switch_wrap switch_names inline_switch">
             <label>Status</label>
             <label className="switch">
-              <input type="checkbox" />
+              <input type="checkbox" onChange={that.checkBoxHandler.bind(that, "isActive")} checked={this.state.basicData.isActive} value="isActive" />
               <div className="slider"></div>
             </label>
           </div>

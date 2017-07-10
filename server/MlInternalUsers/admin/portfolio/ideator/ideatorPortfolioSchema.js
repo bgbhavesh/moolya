@@ -369,6 +369,7 @@ let ideatorPortfolioSchema = `
         createLibrary(detailsInput:libraryInput):response
         updatePrivacyDetails(detailsInput:privateData): response
         updateIdea(ideaId:String, idea:idea):response
+        updateLibraryData(files: String): response
     }
 `
 
@@ -391,6 +392,7 @@ let supportedApi = [
   {api:'fetchPortfolioMenu', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchIdeas', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchAllowableFormats', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchLibrary', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
 
 
 
@@ -398,13 +400,14 @@ let supportedApi = [
   {api:'createAnnotation', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'createComment', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'createIdea', actionName:'CREATE', moduleName:"PORTFOLIO"},
-  {api:'createLibrary', actionName:'CREATE', moduleName:"PORTFOLIO"},
+  {api:'createLibrary', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'updateAnnotation', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'updateIdeatorPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
   {api:'updateIdea', actionName:'UPDATE', moduleName:"PORTFOLIO"},
   {api:'resolveComment', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'reopenComment', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'updatePrivacyDetails', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true}
+  {api:'updatePrivacyDetails', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
+  {api:'updateLibraryData', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true}
 
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

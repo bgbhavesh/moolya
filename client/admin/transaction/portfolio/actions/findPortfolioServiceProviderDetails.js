@@ -374,3 +374,31 @@ export async function fetchServiceProviderLicenses(portfoliodetailsId) {
   let data = _.omit(id, '__typename')
   return data
 }
+
+export async function findServiceProviderServicesActionHandler(portfoliodetailsId) {
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            data:fetchServiceProviderDetails(portfoliodetailsId: $portfoliodetailsId, key:"services") {
+              services{
+                servicesDescription
+                isServicesPrivate
+                privateFields{
+                  keyName,
+                  booleanKey
+                }
+              }
+              
+            }
+          }
+
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.data && result.data.data.services;
+  let data = _.omit(id, '__typename')
+  return data
+}

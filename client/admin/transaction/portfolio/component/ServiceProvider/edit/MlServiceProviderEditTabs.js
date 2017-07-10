@@ -10,11 +10,12 @@ import {render} from "react-dom";
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 import _ from "lodash";
 import MlFunderAbout from "../../Funder/MlFunderAbout";
-import MlFunderLibrary from "../../Funder/MlFunderLibrary";
+import PortfolioLibrary from '../../../../../../commons/genericComponents/portfolioLibrary'
 import MlServiceProviderAwards from "./MlServiceProviderAwards";
 import MlServiceProviderMCL from "./MlServiceProviderMCL";
 import MlServiceProviderServices from "./MlServiceProviderServices";
 import MlServiceProviderClients from "./MlServiceProviderClients";
+import {client} from '../../../../../core/apolloConnection'
 
 export default class MlServiceProviderEditTabs extends Component {
   constructor(props) {
@@ -67,7 +68,7 @@ export default class MlServiceProviderEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Library",
-        component: <MlFunderLibrary key="3" getFunderLibrary={this.getFunderLibrary.bind(this)}
+        component: <PortfolioLibrary isAdmin={true} client={client} key="3" getFunderLibrary={this.getFunderLibrary.bind(this)}
                                     portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {
@@ -83,8 +84,7 @@ export default class MlServiceProviderEditTabs extends Component {
         title: "Services",
         component: <MlServiceProviderServices key="5"
                                               getServiceProviderServices={this.getServiceProviderServices.bind(this)}
-                                              portfolioDetailsId={this.props.portfolioDetailsId}
-                                              serviceProductsDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.serviceProducts}/>
+                                              portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {
         tabClassName: 'tab',
@@ -139,11 +139,11 @@ export default class MlServiceProviderEditTabs extends Component {
     this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey);
   }
 
-  getServiceProviderServices(details) {
-    let data = this.state.portfolioStartupSP;
-    data = details;
-    this.setState({portfolioStartupSP: data})
-    this.props.getPortfolioStartupAboutUsDetails(data, "serviceProducts");
+  getServiceProviderServices(details, privateKey) {
+    let data = this.state.serviceProviderPortfolio;
+    data['services']=details;
+    this.setState({serviceProviderPortfolio : data})
+    this.props.getPortfolioDetails({serviceProviderPortfolio:this.state.serviceProviderPortfolio}, privateKey);
   }
 
   getFunderLibrary(details) {

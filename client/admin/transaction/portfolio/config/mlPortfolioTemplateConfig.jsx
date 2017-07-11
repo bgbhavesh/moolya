@@ -195,7 +195,7 @@ const mlAppServiceProviderEditExternalUserPortfolioTemplateConfig = {
 const mlAppServiceProviderViewExternalUserPortfolioTemplateConfig = {
   templateName: "Portfolio-Template-ServiceProvider-View",
   templateCode: "PFTSPSVIW",
-  userType: 'internal',
+  userType: 'external',
   process: 'Registration',
   subProcess: 'Registration',
   stepCode: 'PORTFOLIO',

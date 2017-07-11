@@ -9,7 +9,7 @@ import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 import MlServiceProviderViewAwards from "../view/MlServiceProviderViewAwards";
-import MlServiceProviderAbout from "../edit/MlServiceProviderAbout";
+import MlServiceProviderViewAbout from "../view/MlServiceProviderViewAbout";
 import MlServiceProviderViewMCL from "../view/MlServiceProviderViewMCL";
 import MlServiceProviderViewServices from "../view/MlServiceProviderViewServices";
 import MlServiceProviderViewClients from "../view/MlServiceProviderViewClients";
@@ -45,7 +45,7 @@ export default class MlServiceProviderViewTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "About",
-        component: <MlServiceProviderAbout key="1"
+        component: <MlServiceProviderViewAbout key="1"
                                            portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {

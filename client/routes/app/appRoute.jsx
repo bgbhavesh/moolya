@@ -70,6 +70,10 @@ import MlAppExplore from "../../app/explore/components/MlAppExplore";
 //profile
 //Funders
 
+// Provider
+import {mlAppServiceProviderConfig} from '../../app/serviceProvider/config/mlAppServiceProviderConfig'
+
+
 export const appSection = FlowRouter.group({
   prefix: "/app",
   name: 'app',
@@ -270,6 +274,21 @@ appSection.route('/startup', {
 //     mount(AppLayout,{appContent:< MlAppStartupTabs config={params.id}/>})
 //   }
 // });
+
+appSection.route('/provider', {
+  name: 'provider',
+  action(){
+    var listConfig = _.extend(mlAppServiceProviderConfig, {isExplore: false});
+    mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} listConfig={listConfig} />})
+  }
+});
+
+appSection.route('/provider/:portfolioId', {
+  name: 'provider',
+  action(params){
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={"provider"}/>, isProfileMenu:false})
+  }
+});
 
 appSection.route('/register/:id', {
   name: 'registeras',

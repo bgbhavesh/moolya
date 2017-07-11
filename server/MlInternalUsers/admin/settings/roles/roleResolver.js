@@ -106,13 +106,6 @@ MlResolver.MlQueryResolver['findRole'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['updateRole'] = (obj, args, context, info) => {
-  // let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
-  // if (!isValidAuth) {
-  //   let code = 401;
-  //   let response = new MlRespPayload().errorPayload("Not Authorized", code);
-  //   return response;
-  // }
-
   var dModules = _.cloneDeep(defaultModules)
 
   if (!args.role.roleName) {
@@ -278,10 +271,9 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
     return roles;
   }
 
-  // let department = MlDepartments.findOne({"_id":args.departmentId})
+  var subChapter;
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId, isActive:true}, context)
   if (department) {
-
 
     let query = {};
     query.isActive = true;
@@ -296,6 +288,7 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
     if(args.subChapterId){
       query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
       query.assignRoles['$elemMatch'].subChapter = {$in: ['all', args.subChapterId] };
+      subChapter = mlDBController.findOne('MlSubChapters', {_id:subChapterId}, context)
     }
     if(args.communityId){
       query.assignRoles && query.assignRoles['$elemMatch'] ? '' : (query.assignRoles = {}, query.assignRoles['$elemMatch']={});
@@ -315,11 +308,17 @@ MlResolver.MlQueryResolver['fetchRolesByDepSubDep'] = (obj, args, context, info)
     // let finalQuery = {$or: [query, {isSystemDefined: true, isActive: true}]}
     let finalQuery = {$and: [query, {isActive: true}]}
 
-    /**sepecific showing roles of nonmoolya to non-moolya admin*/
-    if(!userProfile.isMoolya)
-      finalQuery = {$and: [query, {isActive: true}, {isNonMoolyaAvailable : true}]}
+    /**sepecific showing roles of nonmoolya to non-moolya admin by venu sir*/
+    // if(!userProfile.isMoolya)
+    //   finalQuery = {$and: [query, {isActive: true}, {isNonMoolyaAvailable : true}]}
+    if (subChapter && !subChapter.isDefaultSubChapter) {
+      query.assignRoles.$elemMatch.subChapter = args.subChapterId
+      let querySpecific = _.cloneDeep(query)
+      query.assignRoles.$elemMatch.subChapter = 'all'
+      let queryAll = query
+      finalQuery = {$or:[{$and: [querySpecific, {isActive: true}]}, {$and: [queryAll, {isActive: true}, {isNonMoolyaAvailable : true}]}]}
+    }
     let valueGet = mlDBController.find('MlRoles', finalQuery, context).fetch()
-    // let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"isActive": true}]}, context).fetch()
     roles = valueGet;
   }
 

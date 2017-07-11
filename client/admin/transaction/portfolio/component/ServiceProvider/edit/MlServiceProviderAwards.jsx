@@ -299,7 +299,7 @@ export default class MlServiceProviderAwards extends Component {
                       <a href="" id="create_clientdefault" data-placement="top" data-class="large_popover">
                         <div className="list_block notrans" onClick={this.addAward.bind(this)}>
                           <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                          <h3 onClick={this.addAward.bind(this)}>Add New Awards</h3>
+                          <h3>Add New Awards</h3>
                         </div>
                       </a>
                     </div>

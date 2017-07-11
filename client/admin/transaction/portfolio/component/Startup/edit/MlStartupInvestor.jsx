@@ -9,6 +9,7 @@ import {graphql} from "react-apollo";
 import _ from "lodash";
 import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFormAction";
 import {findStartupInvestorDetailsActionHandler} from "../../../actions/findPortfolioStartupDetails";
+import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from "../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
 
@@ -30,6 +31,7 @@ export default class MlStartupInvestor extends React.Component{
     this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.imagesDisplay.bind(this);
+    this.libraryAction.bind(this);
     return this;
   }
 
@@ -162,17 +164,33 @@ export default class MlStartupInvestor extends React.Component{
     let name = e.target.name;
     let fileName = e.target.files[0].name;
     let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{investor:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, file));
   }
-  onFileUploadCallBack(name,fileName, resp){
-    if(resp){
-      let result = JSON.parse(resp);
-      if(result.success){
-        this.setState({loading:true})
-        this.fetchOnlyImages();
-        this.imagesDisplay()
+  onFileUploadCallBack(name,file, resp) {
+    if (resp) {
+      let result = JSON.parse(resp)
+      let userOption = confirm("Do you want to add the file into the library")
+      if (userOption) {
+        let fileObjectStructure = {
+          fileName: file.name,
+          fileType: file.type,
+          fileUrl: result.result,
+          libraryType: "image"
+        }
+        this.libraryAction(fileObjectStructure)
+        if (result.success) {
+          this.setState({loading: true})
+          this.fetchOnlyImages();
+          this.imagesDisplay()
+        }
       }
     }
+  }
+
+  async libraryAction(file) {
+    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
+    return resp;
   }
 
   async fetchOnlyImages(){

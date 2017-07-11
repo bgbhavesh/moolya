@@ -6,7 +6,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {addRequestActionHandler} from '../actions/addRequestTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 
 

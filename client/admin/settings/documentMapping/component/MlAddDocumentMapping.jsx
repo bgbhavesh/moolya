@@ -9,7 +9,7 @@ import {addDocumentMappingActionHandler} from '../actions/addDocumentMappingActi
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 // import MlAssignDocument from './MlAssignDocument'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 
 let Select = require('react-select');

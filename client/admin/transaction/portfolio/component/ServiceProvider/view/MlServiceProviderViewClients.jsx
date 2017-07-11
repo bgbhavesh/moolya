@@ -106,8 +106,6 @@ export default class MlServiceProviderViewClients extends React.Component {
     let that = this;
     let portfoliodetailsId = that.props.portfolioDetailsId;
     const response = await fetchServiceProviderPortfolioClients(portfoliodetailsId);
-    console.log("/////////////////////////////////");
-    console.log(response)
     if (response) {
       this.setState({loading: false, serviceProviderClientsList: response});
     }

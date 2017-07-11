@@ -19,7 +19,8 @@ export default class MlStartupAboutUs extends React.Component{
     this.fetchPortfolioDetails.bind(this);
   }
   selectedTab(field,e){
-   this.setState({aboutStartup : true})
+    this.setState({aboutStartup : true})
+    this.props.backClickHandler(this.getStartUpState.bind(this))
   }
   getPortfolioStartupAboutUsDetails(details,tabName){
     this.props.getAboutus(details,tabName);
@@ -35,6 +36,12 @@ export default class MlStartupAboutUs extends React.Component{
       this.setState({loading: false, startupAboutUs: response, startupAboutUsList: response});
     }
 
+  }
+
+  getStartUpState() {
+    this.setState({aboutStartup: false})
+    $('.last-item').removeClass('menunone');
+    this.props.backClickHandler()
   }
 
   render(){
@@ -81,8 +88,8 @@ export default class MlStartupAboutUs extends React.Component{
         </div>
         <div className="col-md-6 col-sm-6 nopadding-right">
           <div className="panel panel-default panel-form-view">
-            <div className="panel-heading">Rating <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
-            <div className="panel-body">
+            <div className="panel-heading ">Rating <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
+            <div className="panel-body rating_small">
               <div className="star_ratings">
                 <Rating
                   empty="fa fa-star-o empty"
@@ -123,7 +130,7 @@ export default class MlStartupAboutUs extends React.Component{
 
         </div>
         </ScrollArea>
-      </div>):(<div>{<MlStartupTab getPortfolioStartupAboutUsDetails={this.getPortfolioStartupAboutUsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupAboutUsDetails={this.state.startupAboutUs}></MlStartupTab> }</div>)}
+      </div>):(<div>{<MlStartupTab getStartUpState={this.getStartUpState.bind(this)} getPortfolioStartupAboutUsDetails={this.getPortfolioStartupAboutUsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupAboutUsDetails={this.state.startupAboutUs} isApp={this.props.isApp}></MlStartupTab> }</div>)}
       </div>
 
     )

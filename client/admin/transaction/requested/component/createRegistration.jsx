@@ -8,7 +8,7 @@ import moment from "moment";
 import ScrollArea from "react-scrollbar";
 var FontAwesome = require('react-fontawesome');
 import gql from 'graphql-tag';
-import Moolyaselect from '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from '../../../commons/components/MlAdminSelectWrapper'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {createRegistrationInfo} from '../actions/createRegistrationInfo'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';

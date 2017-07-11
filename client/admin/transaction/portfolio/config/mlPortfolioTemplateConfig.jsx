@@ -1,29 +1,21 @@
-/**
- * Created by vishwadeep on 6/4/17.
- */
-/**
- * admin routes
- * */
-import React from "react";
-import MlIdeatorPortfolioTemplate from "../component/Ideator/MlIdeatorPortfolio";
-import mlRegistrationTemplates from "../../../../commons/containers/templates/mlRegistrationTemplate";
-import MlViewIdeatorPortfolioTemplate from "../component/IdeatorView/MlViewIdeatorPortfolio";
-import MlStartupEditTemplate from "../component/Startup/edit/MlStartupEditTemplate";
-import MlViewStartupPortfolioTemplate from "../component/StartupView/MlViewStartupPortfolioTemplate";
-import MlFunderEditTemplate from "../component/Funder/MlFunderEditTemplate";
-import MlFunderViewTemplate from "../component/FunderView/MlFunderViewTemplate";
-import MlServiceProviderEditTabs from "../component/ServiceProvider/edit/MlServiceProviderEditTabs";
-import MlServiceProviderViewTabs from "../component/ServiceProvider/view/MlServiceProviderViewTabs";
-/**
- * app routes
- * */
-import MlAppFunderViewTabs from "../../../../app/funders/components/MlAppFunderViewTabs";
-import MlAppFunderEditTabs from "../../../../app/funders/components/MlAppFunderEditTabs";
-import MlAppIdeatorEditTabs from "../../../../app/ideators/components/MlAppIdeatorEditTabs";
-import MlAppIdeatorTabs from "../../../../app/ideators/components/MlAppIdeatorTabs";
+import React from 'react';
+import gql from 'graphql-tag'
+import MlIdeatorPortfolioTemplate from '../component/Ideator/MlIdeatorPortfolio'
+import mlRegistrationTemplates from '../../../../commons/containers/templates/mlRegistrationTemplate';
+import MlViewIdeatorPortfolioTemplate from '../component/IdeatorView/MlViewIdeatorPortfolio'
+import MlStartupEditTemplate from '../component/Startup/edit/MlStartupEditTemplate'
+import MlViewStartupPortfolioTemplate from '../component/StartupView/MlViewStartupPortfolioTemplate'
+import MlServiceProviderEditTabs from '../component/ServiceProvider/edit/MlServiceProviderEditTabs'
+import MlServiceProviderViewTabs from '../component/ServiceProvider/view/MlServiceProviderViewTabs'
+import MlAppIdeatorEditTabs from '../../../../app/ideators/components/MlAppIdeatorEditTabs'
+import MlAppIdeatorTabs from '../../../../app/ideators/components/MlAppIdeatorTabs'
+import MlFunderEditTemplate from '../component/Funder/MlFunderEditTemplate'
+import MlFunderViewTemplate from '../component/FunderView/MlFunderViewTemplate'
+import MlAppFunderViewTabs from '../../../../app/funders/components/MlAppFunderViewTabs'
+import MlAppFunderEditTabs from '../../../../app/funders/components/MlAppFunderEditTabs'
+import MlAppStartupEditTabs from '../../../../app/startup/components/MlAppStartupEditTabs'
 import MlAppServiceProviderEditTabs from "../../../../app/serviceProvider/components/MlAppServiceProviderEditTabs";
 import MlAppServiceProviderViewTabs from "../../../../app/serviceProvider/components/MlAppServiceProviderViewTabs";
-
 /**
  * admin config files for internal users
  * */
@@ -153,19 +145,19 @@ const mlAppStartupEditExternalUserPortfolioTemplateConfig={
   subProcess:'Registration',
   stepCode:'PORTFOLIO',
   stepName:'Portfolio',
-  component:MlStartupEditTemplate
+  component:MlAppStartupEditTabs
 };
-
-const mlAppStartupViewExternalUserPortfolioTemplateConfig={
-  templateName:"Portfolio-Template-Startup-View",
-  templateCode:"PFSTUVIW",
-  userType:'external',
-  process:'Registration',
-  subProcess:'Registration',
-  stepCode:'PORTFOLIO',
-  stepName:'Portfolio',
-  component:MlViewStartupPortfolioTemplate
-};
+//
+// const mlAppStartupViewExternalUserPortfolioTemplateConfig={
+//   templateName:"Portfolio-Template-Startup-View",
+//   templateCode:"PFSTUVIW",
+//   userType:'external',
+//   process:'Registration',
+//   subProcess:'Registration',
+//   stepCode:'PORTFOLIO',
+//   stepName:'Portfolio',
+//   component:MlViewStartupPortfolioTemplate
+// };
 
 const mlAppFunderEditExternalUserPortfolioTemplateConfig={
   templateName:"Portfolio-Template-Investor-Edit",
@@ -214,7 +206,7 @@ const mlAppServiceProviderViewExternalUserPortfolioTemplateConfig = {
 mlRegistrationTemplates.setTemplate(mlAppIdeatorEditExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppIdeatorViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppStartupEditExternalUserPortfolioTemplateConfig);
-mlRegistrationTemplates.setTemplate(mlAppStartupViewExternalUserPortfolioTemplateConfig);
+// mlRegistrationTemplates.setTemplate(mlAppStartupViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppFunderViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppFunderEditExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppServiceProviderEditExternalUserPortfolioTemplateConfig);

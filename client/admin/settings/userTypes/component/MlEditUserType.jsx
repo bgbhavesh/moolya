@@ -3,7 +3,7 @@ import {render} from "react-dom";
 import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper';
 import formHandler from "../../../../commons/containers/MlFormHandler";
 import {findUserTypeActionHandler} from "../actions/findUserTypeAction";
 import {updateUserTypeActionHandler} from "../actions/updateUserTypeAction";

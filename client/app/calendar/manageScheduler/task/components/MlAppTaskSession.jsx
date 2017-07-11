@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import gql from "graphql-tag";
 import {findTaskActionHandler} from "../actions/saveCalanderTask";
-import MoolyaSelect from "../../../../../commons/components/select/MoolyaSelect";
+import MoolyaSelect from "../../../../commons/components/MlAppSelectWrapper";
 import {fetchActivitiesActionHandler, fetchActivitiesForTaskActionHandler} from '../../activity/actions/activityActionHandler';
 import _ from "lodash";
 import Select from 'react-select';

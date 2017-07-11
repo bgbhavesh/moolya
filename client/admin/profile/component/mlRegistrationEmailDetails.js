@@ -6,7 +6,7 @@ import ScrollArea from 'react-scrollbar';
 import  Select from 'react-select';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import Moolyaselect from  '../../../commons/components/select/MoolyaSelect';
+import Moolyaselect from  '../../commons/components/MlAdminSelectWrapper';
 import update from 'immutability-helper';
 import {updateContactDetails} from '../actions/addAddressBookAction'
 import {getContactDetails} from '../actions/getAddressBookAction'

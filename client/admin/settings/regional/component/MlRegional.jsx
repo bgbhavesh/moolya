@@ -8,7 +8,7 @@ import formHandler from '../../../../commons/containers/MlFormHandler';
 import {initalizeFloatLabel,OnToggleSwitch} from '../../../utils/formElemUtil';
 import MlLoader from '../../../../commons/components/loader/loader'
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import ScrollArea from 'react-scrollbar';
 let Select = require('react-select');
 class MlRegional extends React.Component{

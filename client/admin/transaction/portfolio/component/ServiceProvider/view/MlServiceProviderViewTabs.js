@@ -8,28 +8,19 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
-import _ from "lodash";
-import MlFunderAbout from "../../Funder/MlFunderAbout";
-import MlFunderLibrary from "../../Funder/MlFunderLibrary";
-import MlServiceProviderAwards from "../edit/MlServiceProviderAwards";
-import MlServiceProviderMCL from "../edit/MlServiceProviderMCL";
+import MlServiceProviderViewAwards from "../view/MlServiceProviderViewAwards";
+import MlServiceProviderAbout from "../edit/MlServiceProviderAbout";
+import MlServiceProviderViewMCL from "../view/MlServiceProviderViewMCL";
 import MlServiceProviderServices from "../edit/MlServiceProviderServices";
 import MlServiceProviderClients from "../edit/MlServiceProviderClients";
+import PortfolioLibrary from "../../../../../../commons/components/portfolioLibrary/PortfolioLibrary";
+import {client} from "../../../../../core/apolloConnection";
 //todo:import the View components//
 
 export default class MlServiceProviderViewTabs extends Component {
   constructor(props) {
     super(props)
     this.state = {tabs: [], aboutUs: {}, serviceProviderPortfolio: {}};
-    this.getChildContext.bind(this)
-    this.getAwardsDetails.bind(this);
-    this.getFunderLibrary.bind(this)
-  }
-
-  getChildContext() {
-    return {
-      serviceProviderPortfolio: this.state.serviceProviderPortfolio
-    }
   }
 
   componentDidMount() {
@@ -54,121 +45,51 @@ export default class MlServiceProviderViewTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "About",
-        component: <MlFunderAbout key="1" getAboutus={this.getAboutus.bind(this)}
-                                  portfolioDetailsId={this.props.portfolioDetailsId}/>
+        component: <MlServiceProviderAbout key="1"
+                                           portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Awards and Rewards",
-        component: <MlServiceProviderAwards key="2" getAwardsDetails={this.getAwardsDetails.bind(this)}
-                                            portfolioDetailsId={this.props.portfolioDetailsId}/>
+        component: <MlServiceProviderViewAwards key="2"
+                                                portfolioDetailsId={this.props.portfolioDetailsId}
+                                                getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Library",
-        component: <MlFunderLibrary key="3" getFunderLibrary={this.getFunderLibrary.bind(this)}
-                                    portfolioDetailsId={this.props.portfolioDetailsId}/>
+        component: <PortfolioLibrary isAdmin={true} client={client} key="3"
+                                     portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "MCL",
-        component: <MlServiceProviderMCL key="4" getServiceProviderMCL={this.getServiceProviderMCL.bind(this)}
-                                         portfolioDetailsId={this.props.portfolioDetailsId}/>
+        component: <MlServiceProviderViewMCL key="4"
+                                             portfolioDetailsId={this.props.portfolioDetailsId}
+                                             getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Services",
         component: <MlServiceProviderServices key="5"
-                                              getServiceProviderServices={this.getServiceProviderServices.bind(this)}
                                               portfolioDetailsId={this.props.portfolioDetailsId}
-                                              serviceProductsDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.serviceProducts}/>
+                                              getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Clients",
         component: <MlServiceProviderClients key="6"
-                                             getServiceProviderClients={this.getServiceProviderClients.bind(this)}
                                              portfolioDetailsId={this.props.portfolioDetailsId}
-                                             clientsDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.clients}/>
+                                             getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       }
     ]
     return tabs;
   }
-
-  /**
-   * getting all values from the child components and passing all to Main component through props
-   * */
-  getAboutus(details, privateKey) {
-    let data = this.state.serviceProviderPortfolio;
-    data['funderAbout'] = details;
-    this.setState({serviceProviderPortfolio: data})
-    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey);
-  }
-
-  getAwardsDetails(details) {
-    let data = this.state.serviceProviderPortfolio;
-    if (data && !data.awardsRecognition) {
-      data['awardsRecognition'] = [];
-    }
-    this.setState({serviceProviderPortfolio: data})
-    let arr = [];
-    _.each(details, function (obj) {
-      let updateItem = _.omit(obj, 'logo');
-      arr.push(updateItem)
-    })
-    data['awardsRecognition'] = arr;
-    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio});
-  }
-
-  getServiceProviderMCL(details) {
-    let data = this.state.startupPortfolio;
-    if (details.memberships) {
-      data['memberships'] = details.memberships;
-    }
-    if (details.compliances) {
-      data['compliances'] = details.compliances;
-    }
-    if (details.licenses) {
-      data['licenses'] = details.licenses;
-    }
-    this.setState({startupPortfolio: data})
-    this.props.getPortfolioDetails({startupPortfolio: this.state.startupPortfolio}, []);
-  }
-
-  getServiceProviderServices(details) {
-    let data = this.state.portfolioStartupSP;
-    data = details;
-    this.setState({portfolioStartupSP: data})
-    this.props.getPortfolioStartupAboutUsDetails(data, "serviceProducts");
-  }
-
-  getFunderLibrary(details) {
-    let data = this.state.serviceProviderPortfolio;
-    if (details.memberships) {
-      data['memberships'] = details.memberships;
-    }
-    if (details.compliances) {
-      data['compliances'] = details.compliances;
-    }
-    if (details.licenses) {
-      data['licenses'] = details.licenses;
-    }
-    this.setState({serviceProviderPortfolio: data})
-    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, []);
-  }
-
-  getServiceProviderClients(details) {
-    let data = this.state.portfolioStartupClients;
-    data = details;
-    this.setState({portfolioStartupClients: data})
-    this.props.getPortfolioStartupAboutUsDetails(data, "clients");
-  }
-
 
   /**
    * tab mounting component
@@ -193,10 +114,3 @@ export default class MlServiceProviderViewTabs extends Component {
     return <MlTabComponent tabs={tabs}/>
   }
 }
-
-/**
- * preparing context of all the data coming from child component
- * */
-MlServiceProviderViewTabs.childContextTypes = {
-  serviceProviderPortfolio: PropTypes.object,
-};

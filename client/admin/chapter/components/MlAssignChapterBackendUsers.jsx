@@ -5,7 +5,7 @@ import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 import formHandler from "../../../commons/containers/MlFormHandler";
-import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 import MlAssignChapterBackendUserList from "./MlAssignChapterBackendUserList";
 import MlAssignChapterBackendUserRoles from "./MlAssignChapterBackendUserRoles";
 import {multipartFormHandler} from "../../../commons/MlMultipartFormAction";
@@ -186,9 +186,16 @@ class MlAssignChapterBackendUsers extends React.Component {
         actionName: 'cancel',
         handler: async(event) => {
           let pararms = FlowRouter._current.params;
-          FlowRouter.go("/admin/chapters/"+
+          let path = FlowRouter._current.path;
+          if (path.indexOf("clusters") != -1) {
+            FlowRouter.go("/admin/clusters/"+
+              pararms.clusterId+"/"+pararms.chapterId+"/"+
+              pararms.subChapterId+"/"+pararms.subChapterName+"/subChapterDetails");
+          } else {
+            FlowRouter.go("/admin/chapters/"+
             pararms.clusterId+"/"+pararms.chapterId+"/"+
             pararms.subChapterId+"/"+pararms.subChapterName+"/subChapterDetails");
+          }
         }
       }
     ]

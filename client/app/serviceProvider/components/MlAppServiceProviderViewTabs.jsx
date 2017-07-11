@@ -10,11 +10,12 @@ import {render} from "react-dom";
 import _ from "lodash";
 import MlTabComponent from "../../../commons/components/tabcomponent/MlTabComponent";
 import MlFunderAbout from "../../../admin/transaction/portfolio/component/Funder/MlFunderAbout";
-import MlFunderLibrary from "../../../admin/transaction/portfolio/component/Funder/MlFunderLibrary";
 import MlServiceProviderAwards from "../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderAwards";
 import MlServiceProviderMCL from "../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderMCL";
 import MlServiceProviderServices from "../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderServices";
 import MlServiceProviderClients from "../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderClients";
+import PortfolioLibrary from '../../../commons/components/portfolioLibrary/PortfolioLibrary'
+import {appClient} from '../../core/appConnection'
 //todo:import the View components//
 
 export default class MlAppServiceProviderViewTabs extends Component {
@@ -68,7 +69,7 @@ export default class MlAppServiceProviderViewTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Library",
-        component: <MlFunderLibrary key="3" getFunderLibrary={this.getFunderLibrary.bind(this)}
+        component: <PortfolioLibrary isAdmin={false} client={appClient} key="3" getFunderLibrary={this.getFunderLibrary.bind(this)}
                                     portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {

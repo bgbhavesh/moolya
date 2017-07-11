@@ -1,23 +1,28 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../utils/formElemUtil";
+import _ from "lodash";
+import ScrollArea from 'react-scrollbar';
+import MlLoader from "../../../../../../commons/components/loader/loader";
+import {findServiceProviderServicesActionHandler} from "../../../actions/findPortfolioServiceProviderDetails";
 var FontAwesome = require('react-fontawesome');
 
-
-export default class MlServiceProviderServices extends React.Component {
+export default class MlServiceProviderServices extends Component {
   constructor(props, context) {
     super(props);
     this.state = {
       loading: true,
-      data: this.props.serviceProductsDetails || {},
+      data: {},
+      privateKey: {}
     }
+    this.onClick.bind(this);
     this.handleBlur.bind(this);
-    return this;
+    this.fetchPortfolioDetails.bind(this);
   }
 
-  componentDidUpdate() {
-    OnLockSwitch();
-    dataVisibilityHandler();
+  componentWillMount() {
+    const resp = this.fetchPortfolioDetails();
+    return resp
   }
 
   componentDidMount() {
@@ -25,11 +30,49 @@ export default class MlServiceProviderServices extends React.Component {
     dataVisibilityHandler();
   }
 
-  componentWillMount() {
-    let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.serviceProducts)
-    if (!empty) {
-      this.setState({loading: false, data: this.context.startupPortfolio.serviceProducts});
+  componentDidUpdate() {
+    OnLockSwitch();
+    dataVisibilityHandler();
+  }
+
+  async fetchPortfolioDetails() {
+    let that = this;
+    let portfoliodetailsId = that.props.portfolioDetailsId;
+    let empty = _.isEmpty(that.context.serviceProviderPortfolio && that.context.serviceProviderPortfolio.services)
+    if (empty) {
+      const response = await findServiceProviderServicesActionHandler(portfoliodetailsId);
+      if (response) {
+        this.setState({loading: false, data: response});
+      }
+
+      _.each(response.privateFields, function (pf) {
+        $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+
+    } else {
+      this.setState({loading: false, data: that.context.serviceProviderPortfolio.services});
     }
+  }
+
+  onClick(fieldName, field, e) {
+    let details = this.state.data || {};
+    let key = e.target.id;
+    var isPrivate = false
+    details = _.omit(details, [key]);
+    let className = e.target.className;
+    if (className.indexOf("fa-lock") != -1) {
+      details = _.extend(details, {[key]: true});
+      isPrivate = true
+    } else {
+      details = _.extend(details, {[key]: false});
+    }
+
+    var privateKey = {keyName: fieldName, booleanKey: field, isPrivate: isPrivate}
+    this.setState({privateKey: privateKey})
+    this.setState({data: details}, function () {
+      this.sendDataToParent()
+    })
+
   }
 
   handleBlur(e) {
@@ -49,55 +92,56 @@ export default class MlServiceProviderServices extends React.Component {
         delete data[propName];
       }
     }
-    this.props.getServiceProviderServices(data)
-  }
 
-  onLockChange(field, e) {
-    let details = this.state.data || {};
-    let key = e.target.id;
-    details = _.omit(details, [key]);
-    let className = e.target.className;
-    if (className.indexOf("fa-lock") != -1) {
-      details = _.extend(details, {[key]: true});
-    } else {
-      details = _.extend(details, {[key]: false});
-    }
-    this.setState({data: details}, function () {
-      this.sendDataToParent()
-    })
+    data = _.omit(data, ["privateFields"]);
+    this.props.getServiceProviderServices(data, this.state.privateKey)
   }
 
   render() {
+    let description = this.state.data.servicesDescription ? this.state.data.servicesDescription : ''
+    let isServicesPrivate = this.state.data.isServicesPrivate ? this.state.data.isServicesPrivate : false
+    const showLoader = this.state.loading;
     return (
+      <div className="admin_main_wrap">
+        {showLoader === true ? (<MlLoader/>) : (
+          <div className="admin_main_wrap">
+            <div className="admin_padding_wrap">
+              <div className="main_wrap_scroll">
+                <ScrollArea
+                  speed={0.8}
+                  className="main_wrap_scroll"
+                  smoothScrolling={true}
+                  default={true}
+                >
+                  <div className="row requested_input">
+                    <div className="col-lg-12">
+                      <div className="panel panel-default panel-form">
+                        <div className="panel-heading">
+                          Services
+                        </div>
+                        <div className="panel-body">
+                          <div className="form-group nomargin-bottom">
+                            <textarea placeholder="Describe..." className="form-control" id="cl_about"
+                                      defaultValue={description} name="servicesDescription"
+                                      onBlur={this.handleBlur.bind(this)}></textarea>
+                            <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
+                                         id="isServicesPrivate"
+                                         onClick={this.onClick.bind(this, "servicesDescription", "isServicesPrivate")}/>
+                          </div>
 
+                        </div>
+                      </div>
 
-      <div className="requested_input">
-        <div className="col-lg-12">
-          <div className="row">
-            <h2>Services</h2>
-            <div className="panel panel-default panel-form">
-
-              <div className="panel-body">
-
-                <div className="form-group nomargin-bottom">
-                  <textarea placeholder="Describe..." name="description" className="form-control" id="cl_about"
-                            defaultValue={this.state.data && this.state.data.description}
-                            onBlur={this.handleBlur.bind(this)}></textarea>
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate"
-                               defaultValue={this.state.data && this.state.data.isDescriptionPrivate}
-                               onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/><input type="checkbox"
-                                                                                                      className="lock_input"
-                                                                                                      id="isDescriptionPrivate"
-                                                                                                      checked={this.state.data.isDescriptionPrivate}/>
-                </div>
+                    </div>
+                  </div>
+                </ScrollArea>
               </div>
             </div>
-          </div>
-        </div>
+          </div>)}
       </div>
     )
   }
-}
+};
 MlServiceProviderServices.contextTypes = {
-  startupPortfolio: PropTypes.object,
+  serviceProviderPortfolio: PropTypes.object,
 };

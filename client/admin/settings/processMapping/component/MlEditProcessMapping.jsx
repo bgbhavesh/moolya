@@ -10,7 +10,7 @@ import {updateProcessActionHandler} from '../actions/updateProcessMappingAction'
 import {findProcessActionHandler} from '../actions/findProcessAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import MlAssignDocument from './MlAssignDocument'
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 let Select = require('react-select');

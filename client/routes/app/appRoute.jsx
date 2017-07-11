@@ -6,14 +6,14 @@ import MlViews from "../../admin/core/components/MlViews";
 import MlAppIdeatorLanding from "../../../client/app/ideators/components/MlAppIdeatorLanding";
 import MlAppIdeatorTabs from "../../../client/app/ideators/components/MlAppIdeatorTabs";
 import MlAppStartupLanding from "../../../client/app/startup/components/MlAppStartupLanding";
-import MlAppStartupTabs from "../../../client/app/startup/components/MlAppStartupTabs";
+// import MlAppStartupTabs from "../../../client/app/startup/components/MlAppStartupTabs";
 import MlAppCommunitiesList from "../../../client/app/commons/components/MlAppCommunitiesList";
 import MlAdminProfileHeader from "../../admin/layouts/header/MlAdminProfileHeader";
 import MlAppDashboard from "../../app/dashboard/components/MlAppDashboard";
 import MlPortfolioLanding from "../../app/commons/components/MlPortfolioLanding";
 import MlAppIdeatorAddIdea from "../../app/ideators/components/MlAppIdeatorAddIdea";
 import MlAppPortfolio from "../../app/commons/components/MlAppPortfolio";
-import MlPortfolioIdeatorLibraryView from "../../admin/transaction/portfolio/component/IdeatorView/MlPortfolioLibrary.jsx";
+import PortfolioLibrary from '../../commons/components/portfolioLibrary/PortfolioLibrary'
 import MlAppMyProfile from "../../app/profile/components/MlAppMyProfile";
 import MlProfileSettings from "../../app/profile/components/MlProfileSettings";
 import MlAppProfileAddressBook from "../../app/profile/components/MlAppProfileAddressBook";
@@ -27,6 +27,7 @@ import MlAppOfficeMembersDetails from "../../app/profile/office/components/MlApp
 import MlAppPayOfficeSubscription from "../../app/profile/office/components/MlAppPayOfficeSubscription";
 import MlAppInvestment from "../../app/investment/components/MlAppInvestment";
 import MlAppMyTransaction from "../../app/myTransaction/component/MlAppMyTransaction";
+import {appClient} from '../../app/core/appConnection'
 // import RegistrationWizard from "../../admin/transaction/requested/component/RegistrationWizard";
 import MlAppRegistrationWizard from "../../../client/app/registrations/component/MlAppRegistrationWizard";
 import MlAppTempRoute from "../../../client/app/registrations/component/MlAppTempRoute";
@@ -128,7 +129,7 @@ appSection.route('/myOffice', {
 appSection.route('/library', {
   name: 'library',
   action(){
-    mount(AppLayout, {appContent: <MlPortfolioIdeatorLibraryView />, isProfileMenu: true})
+    mount(AppLayout, {appContent: <PortfolioLibrary client={appClient} isAdmin={false} />, isProfileMenu: true})
   }
 });
 
@@ -263,12 +264,12 @@ appSection.route('/startup', {
     mount(AppLayout,{appContent:< MlAppStartupLanding/>})
   }
 });
-appSection.route('/startup/:id', {
-  name: 'startup',
-  action(params){
-    mount(AppLayout,{appContent:< MlAppStartupTabs config={params.id}/>})
-  }
-});
+// appSection.route('/startup/:id', {
+//   name: 'startup',
+//   action(params){
+//     mount(AppLayout,{appContent:< MlAppStartupTabs config={params.id}/>})
+//   }
+// });
 
 appSection.route('/register/:id', {
   name: 'registeras',

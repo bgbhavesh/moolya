@@ -9,7 +9,7 @@ import gql from 'graphql-tag'
 import formHandler from '../../../../commons/containers/MlFormHandler'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import {client} from '../../../../admin/core/apolloConnection';
 

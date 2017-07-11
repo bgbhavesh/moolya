@@ -111,7 +111,8 @@ let portfolioSchema = `
     input portfolio{
         ideatorPortfolio:ideatorPortfolio,
         startupPortfolio:startupPortfolio,
-        funderPortfolio:funderPortfolio
+        funderPortfolio:funderPortfolio,
+        serviceProviderPortfolio:serviceProviderPortfolio
     }
     
     type Query{

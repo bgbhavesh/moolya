@@ -5,15 +5,23 @@
 Meteor.startup(function () {
 
     let menus = [
-        {communityCode:"FUN", communityName:"funder", menuName:"mlFunderMenu", isActive:true, isProfileMenu:false, isExploreMenu:true},
+        {communityCode:"FUN", communityName:"funder", menuName:"mlFunderMenu", isActive:true, isProfileMenu:false, isExploreMenu:false},
         {communityCode:"IDE", communityName:"ideator", menuName:"mlDefaultMenu", isActive:true, isProfileMenu:false, isExploreMenu:false},
         {communityCode:"STU", communityName:"startup", menuName:"mlDefaultMenu", isActive:true, isProfileMenu:false, isExploreMenu:false},
         {communityCode:"CMP", communityName:"company", menuName:"mlDefaultMenu", isActive:true, isProfileMenu:false, isExploreMenu:false},
         {communityCode:"INS", communityName:"institution", menuName:"mlDefaultMenu", isActive:true, isProfileMenu:false, isExploreMenu:false},
         {communityCode:"SPS", communityName:"serviceprovider", menuName:"mlDefaultMenu", isActive:true, isProfileMenu:false, isExploreMenu:false},
         {communityCode:"OFB", communityName:"officebarrer", menuName:"mlDefaultMenu", isActive:true, isProfileMenu:false, isExploreMenu:false},
-        // {communityCode:"FUN", communityName:"funder", menuName:"mlExploreMenu", isActive:true, isProfileMenu:false, isExploreMenu:true},
-        {communityCode:"BRW", communityName:"Browsers", menuName:"mlBrowserMenu", isActive:true, isProfileMenu:false, isExploreMenu:true},
+        {communityCode:"BRW", communityName:"Browsers", menuName:"mlBrowserMenu", isActive:true, isProfileMenu:false, isExploreMenu:false},
+
+        {communityCode:"FUN", communityName:"funder", menuName:"mlDefaultProfileMenu", isActive:true, isProfileMenu:true},
+        {communityCode:"BRW", communityName:"Browsers", menuName:"mlBrowserProfileMenu", isActive:true, isProfileMenu:true},
+        {communityCode:"IDE", communityName:"ideator", menuName:"mlDefaultProfileMenu", isActive:true, isProfileMenu:true},
+        {communityCode:"STU", communityName:"startup", menuName:"mlDefaultProfileMenu", isActive:true, isProfileMenu:true},
+        {communityCode:"CMP", communityName:"company", menuName:"mlDefaultProfileMenu", isActive:true, isProfileMenu:true},
+        {communityCode:"INS", communityName:"institution", menuName:"mlDefaultProfileMenu", isActive:true, isProfileMenu:true},
+        {communityCode:"SPS", communityName:"serviceprovider", menuName:"mlDefaultProfileMenu", isActive:true, isProfileMenu:true},
+        {communityCode:"OFB", communityName:"officebarrer", menuName:"mlDefaultProfileMenu", isActive:true, isProfileMenu:true}
     ]
 
     for(var i = 0; i < menus.length; i++){

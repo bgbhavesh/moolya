@@ -466,16 +466,16 @@ export default class AddressDetails extends React.Component{
                   <input type="text" ref={'phoneNumber'} placeholder="Phone Number" className="form-control float-label" id="" data-required={true} data-errMsg="Phone Number is required" />
                 </div>
                 <div className="form-group mandatory">
-                  <input type="text" ref={'addressFlat'} placeholder="Flat/House/Floor/Bulding No" className="form-control float-label" id="" a data-required={true} data-errMsg="Flat/House/Floor/Bulding No is required"/>
+                  <input type="text" ref={'addressFlat'} placeholder="Flat/House/Floor/Bulding No" className="form-control float-label" id="" data-required={true} data-errMsg="Flat/House/Floor/Bulding No is required"/>
                 </div>
                 <div className="form-group mandatory">
                   <input type="text" ref={'addressLocality'} placeholder="Colony/Street/Locality" className="form-control float-label" id=""  data-required={true} data-errMsg="Colony/Street/Locality is required"/>
                 </div>
                 <div className="form-group mandatory">
-                  <input type="text" ref={'addressLandmark'} placeholder="Landmark" className="form-control float-label" id="" data-required={true} data-errMsg="Landmark is required" />
+                  <input type="text" ref={'addressLandmark'} placeholder="Landmark" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group mandatory">
-                  <input type="text" ref={'addressArea'} placeholder="Area" className="form-control float-label" id=""  data-required={true} data-errMsg="Area is required"/>
+                  <input type="text" ref={'addressArea'} placeholder="Area" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group mandatory">
                   <input type="text" ref={'addressCity'} placeholder="Town/City" className="form-control float-label" id=""  data-required={true} data-errMsg="Town/City is required"/>

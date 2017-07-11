@@ -9,7 +9,7 @@ import {findProcessDocumentForRegistrationActionHandler} from "../actions/findPr
 import {addRegistrationStep3Details} from "../actions/addRegistrationStep3DetailsAction";
 import {removeFileFromDocumentsActionHandler} from "../actions/removeFileFromDocuments";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../commons/components/MlAppSelectWrapper";
 import MlAccordion from "../../../app/commons/components/MlAccordion";
 import MlAppActionComponent from "../../../app/commons/components/MlAppActionComponent";
 import {graphql} from "react-apollo";

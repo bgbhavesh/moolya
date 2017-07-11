@@ -7,7 +7,7 @@ import {findRequestTypeActionHandler} from '../actions/findRequestTypeAction'
 import {updateRequestTypeActionHandler} from '../actions/updateRequestTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import MlLoader from '../../../../commons/components/loader/loader'
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 class MlEditRequestType extends React.Component{

@@ -3,7 +3,7 @@ import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
-import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../commons/components/MlAppSelectWrapper";
 import {addRegistrationStep3Details} from "../actions/addRegistrationStep3DetailsAction";
 import {updateRegistrationInfoDetails} from "../actions/updateRegistration";
 import {mlFieldValidations} from "../../../commons/validations/mlfieldValidation";

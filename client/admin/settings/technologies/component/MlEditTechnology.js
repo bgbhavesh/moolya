@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findTechnologyActionHandler} from '../actions/findTechnologyAction'

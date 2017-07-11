@@ -8,7 +8,7 @@ import {render} from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import {graphql} from 'react-apollo';
 import gql from 'graphql-tag';
-import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../commons/components/MlAppSelectWrapper'
 import {createUserGeneralInfoDetails} from '../actions/updateAddressBookInfo'
 import {updateUserGeneralInfoDetails} from '../actions/updateAddressBookInfo'
 import {findAddressBookActionHandler} from '../actions/findAddressBookAction'

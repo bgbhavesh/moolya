@@ -1,5 +1,5 @@
 var Select = require('react-select');
-//import Moolyaselect from '../../commons/components/select/MoolyaSelect'
+//import Moolyaselect from '../../commons/containers/select/MlSelectComposer'
 export function mlFieldValidations(elements) {
 
   for (var  key in  elements) {

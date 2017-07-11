@@ -9,7 +9,7 @@ import MyProfileSettings from '../../../admin/profile/component/MlMyProfileSetti
 import MlMyProfile from '../../../admin/profile/component/MlMyprofile'
 import AppActionButtons from '../../commons/components/appActionButtons'
 import 'react-responsive-tabs/styles.css'
-import PortfolioLibrary from '../../../commons/genericComponents/portfolioLibrary'
+import PortfolioLibrary from '../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import {appClient} from '../../core/appConnection'
 
 export default class MlAppProfileTabs extends React.Component{

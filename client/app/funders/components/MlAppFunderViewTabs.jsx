@@ -12,7 +12,7 @@ import MlFunderPrincipalTeamView from '../../../admin/transaction/portfolio/comp
 import MlFunderSuccessStoriesView from '../../../admin/transaction/portfolio/component/FunderView/MlFunderSuccessStoriesView'
 import MlFunderServices from '../../../admin/transaction/portfolio/component/Funder/MlFunderServices'
 import {appClient} from '../../core/appConnection'
-import PortfolioLibrary from '../../../commons/genericComponents/portfolioLibrary';
+import PortfolioLibrary from '../../../commons/components/portfolioLibrary/PortfolioLibrary';
 
 export default class MlAppFunderViewTabs extends React.Component{
   constructor(props){

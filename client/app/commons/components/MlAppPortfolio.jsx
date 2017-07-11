@@ -18,7 +18,7 @@ class MlAppPortfolio extends Component{
   constructor(props){
     super(props)
     this.state = {editComponent:'', portfolio:{}, selectedTab:"", privateKeys:[], removePrivateKeys:[],
-      annotations:[], isOpen:false,annotationData: {},commentsData:[], popoverOpen: false, saveButton:false}
+      annotations:[], isOpen:false,annotationData: {},commentsData:[], popoverOpen: false, saveButton:false, backHandlerMethod:""}
     this.fetchEditPortfolioTemplate.bind(this);
     this.fetchViewPortfolioTemplate.bind(this);
     this.getPortfolioDetails.bind(this);
@@ -256,6 +256,17 @@ class MlAppPortfolio extends Component{
     }
   }
 
+  backHandler(){
+    if(!_.isString(this.state.backHandlerMethod)){
+      this.state.backHandlerMethod();
+      this.setState({backHandlerMethod:""})
+    }
+  }
+
+  setBackHandler(backHandlerMethod){
+    this.setState({backHandlerMethod:backHandlerMethod})
+  }
+
   render(){
     let that=this;
      /* let appActionConfig= [{showAction: true,actionName: 'connect',hasPopOver:true,popOverTitle:'Connect Request',placement:'top',target:'connectRequest',popOverComponent:<Connect />,actionComponent:PopoverActionIcon,handler:this.interactionActionHandler.bind(this)},
@@ -296,8 +307,8 @@ class MlAppPortfolio extends Component{
         {showLoader===true?(<MlLoader/>):(
           <div className="app_padding_wrap">
             <div className="col-md-12">
-            <InteractionsCounter resourceType={'portfolio'} resourceId={this.props.config} interactionAutoId={this.state.interactionAutoId} />
-              {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}/>}
+            <InteractionsCounter resourceType={'portfolio'} resourceId={this.props.config} interactionAutoId={this.state.interactionAutoId} backHandler={this.backHandler.bind(this)} />
+              {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} setBackHandler={this.setBackHandler.bind(this)}/>}
                 {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
             </div></div>)}
         <div className="overlay"></div>

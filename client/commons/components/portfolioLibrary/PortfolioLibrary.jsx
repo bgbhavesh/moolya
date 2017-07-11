@@ -1,3 +1,14 @@
+/** ************************************************************
+ * Date: 19 Jun, 2017
+ * Programmer: Mukhil <mukhil.padnamanabhan@raksan.in>
+ * Description : This will manage the activities basic information
+ * JavaScript XML file MlAppActivityBasicInfo.jsx
+ * *************************************************************** */
+
+/**
+ * Imports libs and components
+ */
+
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
@@ -5,12 +16,17 @@ import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import {multipartASyncFormHandler} from '../MlMultipartFormAction'
-import {createLibrary, fetchLibrary, updateLibraryData} from '../actions/LibraryActionHandler'
-import MlVideoPlayer from  '../videoPlayer/MlVideoPlayer'
+import {multipartASyncFormHandler} from '../../MlMultipartFormAction'
+import {createLibrary, fetchLibrary, updateLibraryData} from '../../actions/mlLibraryActionHandler'
+import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
 
 
 export default class  PortfolioLibrary extends React.Component{
+
+  /**
+   * Constructor
+   * @param props :: Object - Parents data
+   */
 
   constructor(props) {
     super(props);
@@ -38,12 +54,35 @@ export default class  PortfolioLibrary extends React.Component{
     this.updateLibrary.bind(this);
   }
 
+  /**
+   * componentWillMount
+   * Desc :: data to be loaded on the mounting
+   * @param props :: Object - Parents data
+   */
+
+  componentWillMount(){
+    userId =  this.props.portfolioDetailsId;
+    this.getLibraryDetails(userId);
+  }
+
+  /**
+   * Method :: toggle
+   * Desc   :: toggles the Modal component
+   * @returns Void
+   */
+
   toggle() {
     this.setState({
       modal: !this.state.modal
-
     });
   }
+
+  /**
+   * Method :: ImageUpload
+   * Desc   :: Handles the image uploading event
+   * @param :: Event Handler
+   * @returns Void
+   */
 
   ImageUpload(e){
     let file=document.getElementById("image_upload").files[0];
@@ -58,6 +97,12 @@ export default class  PortfolioLibrary extends React.Component{
     }
   }
 
+  /**
+   * Method :: videoUpload
+   * Desc   :: Handles the video uploading event
+   * @returns Void
+   */
+
   videoUpload() {
     let file = document.getElementById("video_upload").files[0];
     this.setState({fileType:file.type,fileName:file.name });
@@ -70,18 +115,31 @@ export default class  PortfolioLibrary extends React.Component{
       toastr.error("Please select a Video Format");
     }
   }
+
+  /**
+   * Method :: TemplateUpload
+   * Desc   :: Handles the template uploading event
+   * @returns Void
+   */
+
   TemplateUpload(){
     let file = document.getElementById("template_upload").files[0];
     this.setState({fileType:file.type,fileName:file.name });
     let fileType = file.type
     let typeShouldBe = _.compact(fileType.split('/'));
-    if (file  && typeShouldBe && typeShouldBe[0]!="video" && typeShouldBe[0]!="image"  && typeShouldBe[0]!="audio") {
+    if (file  && typeShouldBe && typeShouldBe[0]=="image") {
       let data = {moduleName: "PROFILE", actionName: "UPDATE"}
       let response =  multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this,"template"));
     }else{
       toastr.error("Please select a Template Format");
     }
   }
+
+  /**
+   * Method :: documentUpload
+   * Desc   :: Handles the document uploading event
+   * @returns Void
+   */
 
   documentUpload() {
     let file = document.getElementById("document_upload").files[0];
@@ -93,10 +151,23 @@ export default class  PortfolioLibrary extends React.Component{
     }
   }
 
+  /**
+   * Method :: fetchOnlyImages
+   * Desc   :: Gets the images once its uploaded
+   * @returns Void
+   */
+
   fetchOnlyImages(){
     let userId = this.props.portfolioDetailsId;
     this.getLibraryDetails(userId)
   }
+
+  /**
+   * Method :: toggleImageLock
+   * Desc   :: Handles the image locking functionality
+   * @param :: id - type :: Number
+   * @returns Void
+   */
 
   toggleImageLock(id){
     let imageLock = this.state.imagesLock;
@@ -104,7 +175,6 @@ export default class  PortfolioLibrary extends React.Component{
     this.setState({
       imageLock:imageLock
     });
-    console.log(id);
   }
 
 
@@ -212,18 +282,14 @@ export default class  PortfolioLibrary extends React.Component{
           fileType: this.state.fileType,
           libraryType: dataType
         }
-        const res2 = await createLibrary(templateDetails, this.props.isAdmin)
+        const res2 = await createLibrary(templateDetails, this.props.client)
         this.fetchOnlyImages();
         return res2;
         break;
     }
 
   }
-  componentWillMount(){
-    userId =  this.props.portfolioDetailsId;
-    this.getLibraryDetails(userId);
-    console.log(this.props.client)
-  }
+
 
   async getLibraryDetails(userId) {
     let that = this;

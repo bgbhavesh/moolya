@@ -350,3 +350,35 @@ export async function fetchServiceProviderClients(portfoliodetailsId) {
   const id = result.data.data && result.data.data.clients;
   return id
 }
+
+export async function findServiceProviderAboutActionHandler(portfoliodetailsId) {
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            data:fetchServiceProviderDetails(portfoliodetailsId: $portfoliodetailsId, key:"about") {
+                about{
+                  aboutTitle
+                  isAboutTitlePrivate
+                  aboutDescription
+                  isDescriptionPrivate
+                  aboutImages {
+                      fileUrl
+                      fileName
+                  }
+                  privateFields{
+                    keyName,
+                    booleanKey
+                  }
+                }
+            }
+          }
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.data && result.data.data.about;
+  let data = _.omit(id, '__typename')
+  return data
+}

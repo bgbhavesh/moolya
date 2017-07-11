@@ -23,7 +23,7 @@ export default class MlCustomFilter extends React.Component {
     var filterType=this.props.type?this.props.type:'admin';
     if(filterType==='admin'){
       return (
-        <MlCustomFilterComponent filterDefinition={this.state.filterDefinition} {...this.props}/>
+        <MlCustomFilterComponent connection={this.props.client} filterDefinition={this.state.filterDefinition} {...this.props}/>
       );
     }
   }

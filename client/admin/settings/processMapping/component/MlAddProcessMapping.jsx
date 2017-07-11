@@ -11,7 +11,7 @@ import {updateProcessActionHandler} from '../actions/updateProcessMappingAction'
 import MlAssignDocument from './MlAssignDocument'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 let Select = require('react-select');
 

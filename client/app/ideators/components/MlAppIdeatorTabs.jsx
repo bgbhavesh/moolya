@@ -12,7 +12,7 @@ import MlPortfolioIdeatorPlanningTrademarkView from '../../../admin/transaction/
 import InteractionsCounter from '../../commons/components/InteractionsCounter'
 import MlIdeaView from '../../../admin/transaction/portfolio/component/IdeatorView/MlIdeaView'
 import MlCustomActionButtons from '../components/MlCustomActionButtons'
-import PortfolioLibrary from '../../../commons/genericComponents/portfolioLibrary'
+import PortfolioLibrary from '../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import {appClient} from '../../core/appConnection'
 
 // import MlAppIdeatorIdeas from './MlAppIdeatorIdeas'

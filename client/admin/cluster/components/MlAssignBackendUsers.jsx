@@ -183,8 +183,7 @@ class MlAssignBackendUsers extends React.Component {
               let path = FlowRouter._current.path;
               if (path.indexOf("clusters") != -1) {
                 FlowRouter.go("/admin/clusters/"+
-                  pararms.clusterId+"/"+pararms.chapterId+"/"+
-                  pararms.subChapterId+"/"+pararms.subChapterName+"/subChapterDetails");
+                  pararms.clusterId+"/clusterDetails");
               } else {
                 FlowRouter.go("/admin/chapters/"+
                   pararms.clusterId+"/"+pararms.chapterId+"/"+

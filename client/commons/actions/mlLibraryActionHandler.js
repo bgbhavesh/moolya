@@ -80,3 +80,23 @@ export async function putDataIntoTheLibrary(portfolioDetailsId, files, connectio
   const id = result.data.putDataIntoTheLibrary;
   return id;
 }
+
+export async function updatePrivacyDetails(detailsInput, connection) {
+  const result = await connection.mutate({
+    mutation: gql`
+      mutation($detailsInput:privateData){
+        updatePrivacyDetails(detailsInput:$detailsInput) {
+          success
+          code
+          result
+        }
+      }
+    `,
+    variables: {
+      detailsInput
+    },
+    forceFetch: true
+  });
+  const id = result.data.updatePrivacyDetails;
+  return id;
+}

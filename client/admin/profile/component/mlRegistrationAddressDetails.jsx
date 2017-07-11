@@ -243,7 +243,6 @@ export default class AddressDetails extends React.Component{
                                 isDynamic={true}/>
                 </div>
                 <div className="form-group">
-                  {console.log(that.state.addressDetails)}
                   <input type="text"  ref={'name'} placeholder="Name" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">

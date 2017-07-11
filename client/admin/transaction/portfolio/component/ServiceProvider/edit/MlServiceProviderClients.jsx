@@ -6,7 +6,7 @@ import {dataVisibilityHandler, OnLockSwitch} from "../../../../../utils/formElem
 import {graphql} from "react-apollo";
 import _ from "lodash";
 import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFormAction";
-import {fetchDetailsStartupActionHandler, fetchServiceProviderClients} from "../../../actions/findPortfolioServiceProviderDetails";
+import {fetchServiceProviderClients} from "../../../actions/findPortfolioServiceProviderDetails";
 import MlLoader from "../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
 
@@ -205,7 +205,7 @@ export default class MlServiceProviderClients extends Component {
   }
 
   async fetchOnlyImages() {
-    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
+    const response = await fetchServiceProviderClients(this.props.portfolioDetailsId);
     if (response) {
       let thisState = this.state.selectedIndex;
       let dataDetails = this.state.serviceProviderClients
@@ -222,7 +222,7 @@ export default class MlServiceProviderClients extends Component {
   }
 
   async imagesDisplay() {
-    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
+    const response = await fetchServiceProviderClients(this.props.portfolioDetailsId);
     if (response) {
       let detailsArray = response && response.clients ? response.clients : []
       let dataDetails = this.state.serviceProviderClients
@@ -266,7 +266,7 @@ export default class MlServiceProviderClients extends Component {
               <div className="col-lg-12">
                 <div className="row">
                   <div className="col-lg-2 col-md-3 col-sm-3">
-                    <a href="#" id="create_clientdefault" data-placement="right" data-class="large_popover">
+                    <a href="" id="create_clientdefault" data-placement="right" data-class="large_popover">
                       <div className="list_block notrans" onClick={this.addClient.bind(this)}>
                         <div className="hex_outer"><span className="ml ml-plus "></span></div>
                         <h3 onClick={this.addClient.bind(this)}>Add New Client</h3>
@@ -275,7 +275,7 @@ export default class MlServiceProviderClients extends Component {
                   </div>
                   {clientsArray.map(function (details, idx) {
                     return (<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
-                      <a href="#" id={"create_client" + idx}>
+                      <a href="" id={"create_client" + idx}>
                         <div className="list_block">
                           <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate}/>
                           <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}>
@@ -308,9 +308,9 @@ export default class MlServiceProviderClients extends Component {
                         <div className="form-group">
                           <input type="text" name="clientDescription" placeholder="About" className="form-control float-label"
                                  id="" defaultValue={this.state.data.clientDescription} onBlur={this.handleBlur.bind(this)}/>
-                          <FontAwesome name='unlock' className="input_icon un_lock" id="isDescriptionPrivate"
-                                       defaultValue={this.state.data.isDescriptionPrivate}
-                                       onClick={this.onLockChange.bind(this,"clientDescription", "isDescriptionPrivate")}/>
+                          <FontAwesome name='unlock' className="input_icon un_lock" id="isClientDescriptionPrivate"
+                                       defaultValue={this.state.data.isClientDescriptionPrivate}
+                                       onClick={this.onLockChange.bind(this,"clientDescription", "isClientDescriptionPrivate")}/>
                         </div>
                         {displayUploadButton ? <div className="form-group">
                           <div className="fileUpload mlUpload_btn">
@@ -321,14 +321,14 @@ export default class MlServiceProviderClients extends Component {
                         </div> : ""}
                         <div className="clearfix"></div>
                         <div className="form-group">
-                          <div className="input_types"><input id="makePrivate" type="checkbox"
-                                                              checked={this.state.data.makePrivate && this.state.data.makePrivate}
+                          <div className="input_types"><input id="isPrivate" type="checkbox"
+                                                              checked={this.state.data && this.state.data.isPrivate}
                                                               name="checkbox"
                                                               onChange={this.onStatusChangeNotify.bind(this)}/><label
                             htmlFor="checkbox1"><span></span>Make Private</label></div>
                         </div>
                         <div className="ml_btn" style={{'textAlign': 'center'}}>
-                          <a href="#" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                          <a href="" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
                         </div>
                       </div>
                     </div>

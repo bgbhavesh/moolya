@@ -6,7 +6,7 @@ import {dataVisibilityHandler, OnLockSwitch} from "../../../../../utils/formElem
 import {graphql} from "react-apollo";
 import _ from "lodash";
 import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFormAction";
-import {fetchDetailsStartupActionHandler, fetchServiceProviderClients} from "../../../actions/findPortfolioServiceProviderDetails";
+import {fetchServiceProviderClients} from "../../../actions/findPortfolioServiceProviderDetails";
 import MlLoader from "../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
 
@@ -205,7 +205,7 @@ export default class MlServiceProviderClients extends Component {
   }
 
   async fetchOnlyImages() {
-    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
+    const response = await fetchServiceProviderClients(this.props.portfolioDetailsId);
     if (response) {
       let thisState = this.state.selectedIndex;
       let dataDetails = this.state.serviceProviderClients
@@ -222,7 +222,7 @@ export default class MlServiceProviderClients extends Component {
   }
 
   async imagesDisplay() {
-    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
+    const response = await fetchServiceProviderClients(this.props.portfolioDetailsId);
     if (response) {
       let detailsArray = response && response.clients ? response.clients : []
       let dataDetails = this.state.serviceProviderClients

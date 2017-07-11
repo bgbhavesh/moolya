@@ -47,8 +47,8 @@ export default class MlCommunityMapView extends Component {
     let loggedInUser = getAdminUserContext();
     if(loggedInUser.hierarchyLevel != 0) {
       $(".community_icons a").click(function () {
-        $('.community_icons a').removeClass('map_active_community');
-        $(this).addClass('map_active_community');
+        $('.community_icons a').removeClass('active_community');
+        $(this).addClass('active_community');
         var value = $(this).attr('data-filter');
         if (value == "all") {
           $('.filter-block').show('1000');
@@ -60,8 +60,8 @@ export default class MlCommunityMapView extends Component {
       });
     }
     if(loggedInUser.hierarchyLevel == 0){
-      $('.community_icons a').removeClass('map_active_community');
-      $('.'+communityCode).addClass('map_active_community');
+      $('.community_icons a').removeClass('active_community');
+      $('.'+communityCode).addClass('active_community');
     }
   }
 
@@ -99,7 +99,7 @@ export default class MlCommunityMapView extends Component {
     }
     const data=this.props.data?this.props.data:[];
     const communityIconList=
-      <div className="community_icons c_map">
+      <div className="community_icons">
         <a data-toggle="tooltip" title="All" data-placement="bottom" className="All map_active_community" data-filter="all">
           <span className="ml ml-browser br" onClick={this.onStatusChange.bind(this, "All")}></span>{/*<FontAwesome className="ml" name='th'/>*/}
         </a>

@@ -741,6 +741,14 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords = MlFunderPortfolio.find(finalQuery, findOptions).count();
   }
 
+  if (args.module == "serviceProviderPortfolioDetails") {
+    let value = mlDBController.find('MlPortfolioDetails', {status: 'gone live', communityCode: "SPS"}, context).fetch()
+    let portId = _lodash.map(value, '_id')
+    let finalQuery = mergeQueries(query, {portfolioDetailsId: {$in: portId}});
+    data = MlServiceProviderPortfolio.find(finalQuery, findOptions).fetch();
+    totalRecords = MlServiceProviderPortfolio.find(finalQuery, findOptions).count();
+  }
+
   if(args.module=="SubDomain"){
     var domain= MlSubDomain.find(query,findOptions).fetch();
     let modArray =[]
@@ -873,6 +881,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "registrationInfo":resolveType= 'RegistrationInfo';break;
       case "registrationApprovedInfo":resolveType= 'RegistrationInfo';break;
       case "FunderPortfolio":resolveType= 'FunderPortfolio';break;
+      case "serviceProviderPortfolioDetails":resolveType= 'serviceProviderPortfolioDetails';break;
       case "Portfoliodetails":resolveType= 'Portfoliodetails';break;
       case "documentType":resolveType= 'DocumentTypes';break;
       case "documentFormat":resolveType= 'DocumentFormats';break;

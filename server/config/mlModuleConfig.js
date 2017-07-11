@@ -71,7 +71,8 @@ let modules = [
     'subscriptions',
     'interaction',
     'actions',
-    'serviceCards'
+    'serviceCards',
+    'serviceProviderPortfolioDetails'
   ];
 
 // Meteor.startup(function () {

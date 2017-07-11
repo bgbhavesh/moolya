@@ -161,6 +161,10 @@ export default class step1 extends React.Component{
     this.setState({registrationType:value});
     this.setState({identityType:null});
     this.setState({coummunityName:selObject.label})
+    this.setState({cluster:null});
+    this.setState({chapter:null});
+    this.setState({subchapter:null});
+    this.setState({userType:null});
   }
   optionBySelectSubscription(val){
     this.setState({subscription:val.value})

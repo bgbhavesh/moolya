@@ -6,7 +6,7 @@ import {findCommunityActionHandler} from '../../cluster/actions/fetchCommunityAc
 import MlActionComponent from '../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../commons/containers/MlFormHandler';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../commons/components/MlAdminSelectWrapper'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 import MlLoader from '../../../commons/components/loader/loader'
 

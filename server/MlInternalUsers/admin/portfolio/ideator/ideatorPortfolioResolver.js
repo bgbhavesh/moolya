@@ -452,30 +452,31 @@ var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.d
   if(portfolioDetails ){
     args.detailsInput.userId = portfolioDetails.userId;
   }
-      var newCollection = mlDBController.insert('MlLibrary', args.detailsInput, context)
+  args.detailsInput.userId= context.userId;
+  var newCollection = mlDBController.insert('MlLibrary', args.detailsInput, context)
       return newCollection;
     }
 
 
 
 MlResolver.MlQueryResolver['fetchLibrary'] = (obj, args, context, info) => {
-  var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.userId}, context)
-  if (portfolioDetails) {
-    args.userId = portfolioDetails.userId;
-  }
-    var libraryData = mlDBController.find('MlLibrary', {userId: args.userId, isActive: true}, context).fetch();
-
+  if (!args.userId) {
+    var libraryData = mlDBController.find('MlLibrary', {userId: context.userId, isActive: true}, context).fetch();
     return libraryData;
-
+  } else {
+    var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.userId}, context)
+    if (portfolioDetails) {
+      args.userId = portfolioDetails.userId;
+    }
+    var libraryData = mlDBController.find('MlLibrary', {userId: args.userId, isActive: true}, context).fetch();
+    return libraryData;
+  }
 }
 
 MlResolver.MlQueryResolver['fetchAllowableFormats'] = (obj, args, context, info) => {
   var allowableFormats = mlDBController.find('MlDocumentFormats',{isActive:true}, context).fetch();
-
-
   return allowableFormats;
-
-}
+  }
 
 MlResolver.MlMutationResolver['updatePrivacyDetails'] = (obj, args, context, info) => {
   if(args.detailsInput.type === "image"){

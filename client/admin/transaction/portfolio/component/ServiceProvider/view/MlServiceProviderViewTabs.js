@@ -9,10 +9,10 @@ import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 import MlServiceProviderViewAwards from "../view/MlServiceProviderViewAwards";
-import MlServiceProviderAbout from "../edit/MlServiceProviderAbout";
+import MlServiceProviderViewAbout from "../view/MlServiceProviderViewAbout";
 import MlServiceProviderViewMCL from "../view/MlServiceProviderViewMCL";
-import MlServiceProviderServices from "../edit/MlServiceProviderServices";
-import MlServiceProviderClients from "../edit/MlServiceProviderClients";
+import MlServiceProviderViewServices from "../view/MlServiceProviderViewServices";
+import MlServiceProviderViewClients from "../view/MlServiceProviderViewClients";
 import PortfolioLibrary from "../../../../../../commons/components/portfolioLibrary/PortfolioLibrary";
 import {client} from "../../../../../core/apolloConnection";
 //todo:import the View components//
@@ -45,8 +45,9 @@ export default class MlServiceProviderViewTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "About",
-        component: <MlServiceProviderAbout key="1"
-                                           portfolioDetailsId={this.props.portfolioDetailsId}/>
+        component: <MlServiceProviderViewAbout key="1"
+                                           portfolioDetailsId={this.props.portfolioDetailsId}
+                                           getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
       {
         tabClassName: 'tab',
@@ -75,7 +76,7 @@ export default class MlServiceProviderViewTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Services",
-        component: <MlServiceProviderServices key="5"
+        component: <MlServiceProviderViewServices key="5"
                                               portfolioDetailsId={this.props.portfolioDetailsId}
                                               getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
@@ -83,7 +84,7 @@ export default class MlServiceProviderViewTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Clients",
-        component: <MlServiceProviderClients key="6"
+        component: <MlServiceProviderViewClients key="6"
                                              portfolioDetailsId={this.props.portfolioDetailsId}
                                              getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       }

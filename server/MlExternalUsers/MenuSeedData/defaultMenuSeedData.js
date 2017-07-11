@@ -49,7 +49,7 @@ if(Meteor.isServer){
             },
             {
                 "image":"ml ml-provider",
-                "link": "provider",
+                "link": "/app/provider",
                 "isLink" : true,
                 "isMenu" : true,
                 "name" : "Provider",
@@ -58,7 +58,7 @@ if(Meteor.isServer){
 
             {
                 "image":"ml ml-company",
-                "link": "company",
+                "link": "/app/company",
                 "isLink" : true,
                 "isMenu" : true,
                 "name" : "Company",

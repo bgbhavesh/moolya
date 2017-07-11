@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../commons/components/MlAdminSelectWrapper'
 import update from 'immutability-helper';
 import {updateContactDetails} from '../actions/addAddressBookAction'
 import {getContactDetails} from '../actions/getAddressBookAction'

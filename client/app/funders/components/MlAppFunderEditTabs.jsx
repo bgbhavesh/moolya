@@ -7,7 +7,7 @@ import MlFunderAbout from '../../../admin/transaction/portfolio/component/Funder
 import MlFunderAreaOfInterest from '../../../admin/transaction/portfolio/component/Funder/MlFunderAreaOfInterest'
 import MlFunderEngagementMethod from '../../../admin/transaction/portfolio/component/Funder/MlFunderEngagementMethod'
 import MlFunderInvestment from '../../../admin/transaction/portfolio/component/Funder/MlFunderInvestment'
-import PortfolioLibrary from '../../../commons/genericComponents/portfolioLibrary';
+import PortfolioLibrary from '../../../commons/components/portfolioLibrary/PortfolioLibrary';
 import MlFunderNews from '../../../admin/transaction/portfolio/component/Funder/MlFunderNews'
 import MlFunderPrincipalTeam from '../../../admin/transaction/portfolio/component/Funder/MlFunderPrincipalTeam'
 import MlFunderSuccessStories from '../../../admin/transaction/portfolio/component/Funder/MlFunderSuccessStories'

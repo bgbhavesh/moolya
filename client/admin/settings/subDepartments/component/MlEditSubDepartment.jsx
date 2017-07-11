@@ -7,7 +7,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findSubDepartmentActionHandler} from '../actions/findSubDepartmentAction'
 import {updateSubDepartmentActionHandler} from '../actions/updateSubDepartmentAction'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import MlAssignDepartments from './MlAssignDepartments'
 import MlMoolyaAssignDepartment from './MlMoolyaAssignDepartment'
 import {findDepartmentActionHandler} from '../actions/findDepartmentAction'

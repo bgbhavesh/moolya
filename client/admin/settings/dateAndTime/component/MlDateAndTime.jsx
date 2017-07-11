@@ -6,7 +6,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import {findDateAndTimeActionHandler} from '../actions/findDateAndTimeAction'
 import {initalizeFloatLabel,OnToggleSwitch} from '../../../utils/formElemUtil';
 let Select = require('react-select');

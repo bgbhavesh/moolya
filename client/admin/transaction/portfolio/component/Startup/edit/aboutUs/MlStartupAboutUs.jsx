@@ -4,6 +4,7 @@ import ScrollArea from "react-scrollbar";
 import {fetchDetailsStartupActionHandler} from "../../../../actions/findPortfolioStartupDetails";
 import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
+import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
@@ -18,6 +19,7 @@ export default class MlStartupAboutUs extends React.Component{
 
     this.handleBlur.bind(this);
     this.fetchOnlyImages.bind(this);
+    this.libraryAction.bind(this);
     return this;
 
   }
@@ -67,15 +69,31 @@ export default class MlStartupAboutUs extends React.Component{
     let name = e.target.name;
     let fileName = e.target.files[0].name;
     let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{aboutUs:{logo:[{fileUrl:'', fileName : fileName}]}}};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, file));
   }
-  onFileUploadCallBack(name,fileName, resp){
+  onFileUploadCallBack(name,file, resp){
     if(resp){
       let result = JSON.parse(resp)
+      let userOption = confirm("Do you want to add the file into the library")
+      if(userOption){
+        let fileObjectStructure = {
+          fileName: file.name,
+          fileType: file.type,
+          fileUrl: result.result,
+          libraryType: "image"
+        }
+        this.libraryAction(fileObjectStructure)
+      }
       if(result.success){
         this.fetchOnlyImages();
       }
     }
+  }
+
+  async libraryAction(file) {
+    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
+    return resp;
   }
 
   async fetchOnlyImages() {

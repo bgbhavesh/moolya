@@ -6,7 +6,7 @@ var FontAwesome = require('react-fontawesome');
 import  Select from 'react-select';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect';
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper';
 import {addRegistrationStep3Details} from '../actions/addRegistrationStep3DetailsAction';
 import {updateRegistrationInfoDetails} from '../actions/updateRegistration';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';

@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar'
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../commons/components/MlAdminSelectWrapper'
 let Select = require('react-select');
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 import {updateSettings} from '../actions/addSettingsAction';

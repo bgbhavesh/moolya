@@ -9,7 +9,7 @@ import {updateUserGeneralInfoDetails} from '../actions/updateAddressBookInfo'
 import {findAddressBookActionHandler} from '../actions/findAddressBookAction'
 import {findCountryCode} from '../../registrations/actions/findRegistration'
 import {mlFieldValidations} from "../../../commons/validations/mlfieldValidation";
-import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../commons/components/MlAppSelectWrapper'
 var FontAwesome = require('react-fontawesome');
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';

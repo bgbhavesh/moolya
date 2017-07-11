@@ -7,7 +7,7 @@ import _ from "lodash";
 import Datetime from "react-datetime";
 import gql from "graphql-tag";
 import {graphql} from "react-apollo";
-import Moolyaselect from "../../../../../../client/commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../../../commons/components/MlAdminSelectWrapper";
 import MlLoader from "../../../../../commons/components/loader/loader";
 import {fetchfunderPortfolioInvestor} from "../../actions/findPortfolioFunderDetails";
 var FontAwesome = require('react-fontawesome');

@@ -9,7 +9,7 @@ import MlStepAvailability from './MlStepAvailabilityComponent'
 import formHandler from '../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../commons/components/MlAdminSelectWrapper'
 import MlLoader from '../../../commons/components/loader/loader'
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');

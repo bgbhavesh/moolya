@@ -8,6 +8,7 @@ import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormA
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
 import MlLoader from '../../../../../commons/components/loader/loader'
 import {findIdeatorProblemsAndSolutionsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
+import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler'
 
 
 export default class MlIdeatorProblemsAndSolutions extends React.Component{
@@ -18,6 +19,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     this.onSolutionImageFileUpload.bind(this);
     this.fetchPortfolioInfo.bind(this);
     this.fetchOnlyImages.bind(this);
+    this.libraryAction.bind(this);
     return this;
   }
 
@@ -90,7 +92,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
       let name = e.target.name;
       let fileName = e.target.files[0].name;
       let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{problemSolution:{problemImage:[{fileUrl:'', fileName : fileName}]}}};
-      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, file));
   }
 
   onSolutionImageFileUpload(e){
@@ -100,7 +102,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
       let name = e.target.name;
       let fileName = e.target.files[0].name;
       let data= {moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{problemSolution:{solutionImage:[{fileUrl:'', fileName : fileName}]}}};
-      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, file));
   }
 
   sendDataToParent() {
@@ -127,13 +129,30 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     dataVisibilityHandler();
   }
 
-  onFileUploadCallBack(name,fileName, resp){
+  onFileUploadCallBack(file,name, resp){
       if(resp){
           let result = JSON.parse(resp)
+        let userOption = confirm("Do you want to add the file into the library")
+        if(userOption){
+          let fileObjectStructure = {
+            fileName: file.name,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
+        }
           if(result.success){
               this.fetchOnlyImages();
           }
       }
+  }
+
+
+  async libraryAction(file) {
+    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
+    return resp;
   }
 
   render(){

@@ -10,6 +10,7 @@ import MlStartupSP from "./MlStartupSP";
 import MlStartupTechnology from "./MlStartupTechnology";
 import MlStartupAssets from "./MlStartupAssets";
 import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent";
+import {client} from '../../../../../../core/apolloConnection'
 import MlStartupEditTemplate from '../MlStartupEditTemplate'
 
 export default class MlStartupTab extends React.Component{
@@ -21,9 +22,10 @@ export default class MlStartupTab extends React.Component{
   }
 
   componentDidMount(){
+    var props = this.props
     setTimeout(function(){
       $('.last-item').addClass('menunone');
-      if(this.props.isApp) {
+      if(props.isApp) {
         $('div[role="tab"]').each(function (index) {
           var test = $(this).text();
           $(this).empty();
@@ -41,8 +43,8 @@ export default class MlStartupTab extends React.Component{
 
   getTabComponents(){
     let tabs = [
-      {tabClassName: 'tab back_icon fa fa-hand-o-left', panelClassName: 'panel', title:""},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"About Us", component:<MlStartupAboutUs  key="1"  getStartupAboutUs={this.getStartupAboutUs.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} aboutUsDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.aboutUs}/> },
+      // {tabClassName: 'tab back_icon fa fa-hand-o-left', panelClassName: 'panel', title:""},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"About Us", component:<MlStartupAboutUs client={client} isAdmin={true} key="1"  getStartupAboutUs={this.getStartupAboutUs.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} aboutUsDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.aboutUs}/> },
       {tabClassName: 'tab', panelClassName: 'panel', title:"Rating" , component:<MlStartupRating key="2" getStartupRating={this.getStartupRating.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} ratingDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.rating}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Client", component:<MlStartupClients key="3" getStartupClients={this.getStartupClients.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} clientsDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.clients}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Services & Products" , component:<MlStartupSP key="4"  getStartupSP={this.getStartupServiceProducts.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} serviceProductsDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.serviceProducts}/>},
@@ -147,7 +149,7 @@ export default class MlStartupTab extends React.Component{
 
   render(){
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} selectedTabKey= {1} backClickHandler={this.props.getStartUpState}/>
+    return <MlTabComponent tabs={tabs} backClickHandler={this.props.getStartUpState}/>
   }
 }
 

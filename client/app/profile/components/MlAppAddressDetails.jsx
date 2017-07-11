@@ -6,7 +6,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
-import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../commons/components/MlAppSelectWrapper'
 import {mlFieldValidations} from "../../../commons/validations/mlfieldValidation";
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';

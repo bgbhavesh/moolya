@@ -5,7 +5,7 @@ import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import formHandler from "../../../../commons/containers/MlFormHandler";
 import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
-import Moolyaselect from "../../../../commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../../commons/components/MlAdminSelectWrapper";
 import MlAssignDepartmentComponent from "./MlAssignDepartmentComponent";
 import MlContactFormComponent from "./MlContactFormComponent";
 import {addBackendUserActionHandler} from "../actions/addBackendUserAction";

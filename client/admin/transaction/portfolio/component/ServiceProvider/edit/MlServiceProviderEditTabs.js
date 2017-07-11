@@ -9,12 +9,12 @@ import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 import _ from "lodash";
-import MlFunderAbout from "../../Funder/MlFunderAbout";
-import PortfolioLibrary from '../../../../../../commons/genericComponents/portfolioLibrary'
+import PortfolioLibrary from '../../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import MlServiceProviderAwards from "./MlServiceProviderAwards";
 import MlServiceProviderMCL from "./MlServiceProviderMCL";
 import MlServiceProviderServices from "./MlServiceProviderServices";
 import MlServiceProviderClients from "./MlServiceProviderClients";
+import MlServiceProviderAbout from './MlServiceProviderAbout'
 import {client} from '../../../../../core/apolloConnection'
 
 export default class MlServiceProviderEditTabs extends Component {
@@ -54,7 +54,7 @@ export default class MlServiceProviderEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "About",
-        component: <MlFunderAbout key="1" getAboutus={this.getAboutus.bind(this)}
+        component: <MlServiceProviderAbout key="1" getAboutus={this.getAboutus.bind(this)}
                                   portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {
@@ -92,8 +92,7 @@ export default class MlServiceProviderEditTabs extends Component {
         title: "Clients",
         component: <MlServiceProviderClients key="6"
                                              getServiceProviderClients={this.getServiceProviderClients.bind(this)}
-                                             portfolioDetailsId={this.props.portfolioDetailsId}
-                                             clientsDetails={this.props.startupAboutUsDetails && this.props.startupAboutUsDetails.clients}/>
+                                             portfolioDetailsId={this.props.portfolioDetailsId}/>
       }
     ]
     return tabs;
@@ -104,7 +103,7 @@ export default class MlServiceProviderEditTabs extends Component {
    * */
   getAboutus(details, privateKey) {
     let data = this.state.serviceProviderPortfolio;
-    data['funderAbout'] = details;
+    data['about'] = details;
     this.setState({serviceProviderPortfolio: data})
     this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey);
   }
@@ -161,11 +160,11 @@ export default class MlServiceProviderEditTabs extends Component {
     this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, []);
   }
 
-  getServiceProviderClients(details) {
-    let data = this.state.portfolioStartupClients;
-    data = details;
-    this.setState({portfolioStartupClients: data})
-    this.props.getPortfolioStartupAboutUsDetails(data, "clients");
+  getServiceProviderClients(details, privateKey) {
+    let data = this.state.serviceProviderPortfolio;
+    data['clients'] = details;
+    this.setState({serviceProviderPortfolio: data})
+    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey);
   }
 
 

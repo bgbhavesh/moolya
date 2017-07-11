@@ -11,7 +11,7 @@ import MlTabComponent from "../../../../../../commons/components/tabcomponent/Ml
 import MlServiceProviderViewAwards from "../view/MlServiceProviderViewAwards";
 import MlServiceProviderAbout from "../edit/MlServiceProviderAbout";
 import MlServiceProviderViewMCL from "../view/MlServiceProviderViewMCL";
-import MlServiceProviderServices from "../edit/MlServiceProviderServices";
+import MlServiceProviderViewServices from "../view/MlServiceProviderViewServices";
 import MlServiceProviderViewClients from "../view/MlServiceProviderViewClients";
 import PortfolioLibrary from "../../../../../../commons/components/portfolioLibrary/PortfolioLibrary";
 import {client} from "../../../../../core/apolloConnection";
@@ -75,7 +75,7 @@ export default class MlServiceProviderViewTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Services",
-        component: <MlServiceProviderServices key="5"
+        component: <MlServiceProviderViewServices key="5"
                                               portfolioDetailsId={this.props.portfolioDetailsId}
                                               getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },

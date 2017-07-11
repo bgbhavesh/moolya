@@ -308,9 +308,9 @@ export default class MlServiceProviderClients extends Component {
                         <div className="form-group">
                           <input type="text" name="clientDescription" placeholder="About" className="form-control float-label"
                                  id="" defaultValue={this.state.data.clientDescription} onBlur={this.handleBlur.bind(this)}/>
-                          <FontAwesome name='unlock' className="input_icon un_lock" id="isDescriptionPrivate"
-                                       defaultValue={this.state.data.isDescriptionPrivate}
-                                       onClick={this.onLockChange.bind(this,"clientDescription", "isDescriptionPrivate")}/>
+                          <FontAwesome name='unlock' className="input_icon un_lock" id="isClientDescriptionPrivate"
+                                       defaultValue={this.state.data.isClientDescriptionPrivate}
+                                       onClick={this.onLockChange.bind(this,"clientDescription", "isClientDescriptionPrivate")}/>
                         </div>
                         {displayUploadButton ? <div className="form-group">
                           <div className="fileUpload mlUpload_btn">
@@ -321,8 +321,8 @@ export default class MlServiceProviderClients extends Component {
                         </div> : ""}
                         <div className="clearfix"></div>
                         <div className="form-group">
-                          <div className="input_types"><input id="makePrivate" type="checkbox"
-                                                              checked={this.state.data.makePrivate && this.state.data.makePrivate}
+                          <div className="input_types"><input id="isPrivate" type="checkbox"
+                                                              checked={this.state.data && this.state.data.isPrivate}
                                                               name="checkbox"
                                                               onChange={this.onStatusChangeNotify.bind(this)}/><label
                             htmlFor="checkbox1"><span></span>Make Private</label></div>

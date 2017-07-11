@@ -5,7 +5,7 @@ import ScrollArea from 'react-scrollbar'
 var FontAwesome = require('react-fontawesome');
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
-import Moolyaselect from  '../../../../../../../commons/components/select/MoolyaSelect';
+import Moolyaselect from  '../../../../../../commons/components/MlAdminSelectWrapper';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import _ from 'lodash';

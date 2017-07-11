@@ -3,7 +3,7 @@ import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
-import Moolyaselect from "../../../../../../../commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../../../../../commons/components/MlAdminSelectWrapper";
 import gql from "graphql-tag";
 import {graphql} from "react-apollo";
 import _ from "lodash";

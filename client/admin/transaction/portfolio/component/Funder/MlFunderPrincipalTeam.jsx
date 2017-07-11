@@ -12,7 +12,7 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import MlLoader from '../../../../../commons/components/loader/loader'
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../../commons/components/MlAdminSelectWrapper'
 export default class MlFunderPrincipalTeam extends React.Component {
   constructor(props, context) {
     super(props);

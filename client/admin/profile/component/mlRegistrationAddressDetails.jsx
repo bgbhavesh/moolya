@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import { graphql } from 'react-apollo';
-import Moolyaselect from  '../../../commons/components/select/MoolyaSelect';
+import Moolyaselect from  '../../commons/components/MlAdminSelectWrapper';
 import {updateRegistrationInfoDetails} from '../actions/updateRegistration'
 import update from 'immutability-helper';
 import {updateContactDetails} from '../actions/addAddressBookAction'

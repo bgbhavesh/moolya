@@ -71,7 +71,8 @@ export default class MlAppIdeatorIdeas extends React.Component {
     let that = this
     const showLoader = this.state.loading;
     return (
-      <div>
+      <div className="app_main_wrap">
+        <div className="app_padding_wrap">
         <h2>Ideas</h2>
         {showLoader === true ? (<MlLoader/>) : (
           <div className="main_wrap_scroll idea_details">
@@ -128,6 +129,7 @@ export default class MlAppIdeatorIdeas extends React.Component {
               }
             </ScrollArea>
           </div>)}
+      </div>
       </div>
     )
   }

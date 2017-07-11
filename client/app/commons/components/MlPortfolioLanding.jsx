@@ -63,11 +63,13 @@ export default class MlPortfolioLanding extends Component {
     // let communityType = "";
     // let portfolioId = this.state.data._id
     let portfolioId = this.state.data.portfolioId
-    if (this.state.data && this.state.data.communityType == "Funders") {
-      userCommunity = "funder"
-    }else {
-      userCommunity = this.state.data.communityType
-    }
+    // if (this.state.data && this.state.data.communityType == "Funders") {
+    //   userCommunity = "funder"
+    // }else {
+    //   userCommunity = this.state.data.communityType
+    // }
+
+    userCommunity = this.state.data.communityType
 
     let kycApproved =  this.state.kycApproved || ""
     let approved;
@@ -116,4 +118,3 @@ export default class MlPortfolioLanding extends Component {
     )
   }
 }
-//<MlAppIdeatorIdeas/> : <MlAppPortfolio config={portfolioId} communityType={communityType}/>

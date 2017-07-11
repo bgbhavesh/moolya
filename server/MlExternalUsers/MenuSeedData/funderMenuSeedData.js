@@ -13,16 +13,6 @@ if(Meteor.isServer){
         "name" : "Dashboard",
         "uniqueId" : "dashboard"
       },
-
-      // {
-      //   "image":"ml flaticon-ml-pc-searchs",
-      //   "link": "/app/dashboard",
-      //   "isLink" : true,
-      //   "isMenu" : true,
-      //   "name" : "Dashboard",
-      //   "uniqueId" : "dashboard"
-      // },
-
       {
         "image":"ml flaticon-ml-pc-search",
         "link": "/app/explore",
@@ -32,14 +22,14 @@ if(Meteor.isServer){
         "uniqueId" : "explore"
       },
 
-      {
-        "image":"fa fa-calendar",
-        "link": "/app/calendar",
-        "isLink" : true,
-        "isMenu" : true,
-        "name" : "Calender",
-        "uniqueId" : "calender"
-      },
+      // {
+      //   "image":"fa fa-calendar",
+      //   "link": "/app/calendar",
+      //   "isLink" : true,
+      //   "isMenu" : true,
+      //   "name" : "Calender",
+      //   "uniqueId" : "calender"
+      // },
 
 
       {
@@ -94,14 +84,14 @@ if(Meteor.isServer){
         "name" : "Settings",
         "uniqueId" : "settings"
       },
-      {
-        "image":"fa fa-calendar-check-o",
-        "link": "/app/task",
-        "isLink" : true,
-        "isMenu" : true,
-        "name" : "Task",
-        "uniqueId" : "my_task"
-      }
+      // {
+      //   "image":"fa fa-calendar-check-o",
+      //   "link": "/app/task",
+      //   "isLink" : true,
+      //   "isMenu" : true,
+      //   "name" : "Task",
+      //   "uniqueId" : "my_task"
+      // }
     ]
   }})
 }

@@ -84,7 +84,7 @@ $menuTrans:all 0.5s linear;
   .popover-title {margin-bottom: 0px;border-bottom: 1px solid #ddd;color: #273545;font-size: 19px;}
 }
 .moolya_app{
-  .profile-img {/* margin-top: -26px; */width: 24px;margin-left: 2px;}
+  .profile-img {margin-top: -30px;width: 20px;margin-left: 0px;}
   .ml_app_profile {border: 0px solid #ffc20e;box-sizing: border-box;position: fixed;top: 0;right: 0;padding: 0;border-radius: 0 0 0 100%;width: 2em;height: 2em;/*overflow: hidden;*/transition: all .25s ease-in;}
   .ml_app_profile:focus{outline: 0px;}
   .ml_app_profile.profile_open {background-color: $mlBlue;width: 253px;height: 203px;outline: none;opacity: inherit;border: 1px solid #ffc20e;z-index: 4;}
@@ -92,15 +92,20 @@ $menuTrans:all 0.5s linear;
   .ml_app_profile ol, .ml_app_profile li {margin: 0;padding: 0;list-style-type: none;}
   .ml_app_profile li {position: absolute;}
   .ml_app_profile li, .ml_app_profile a {display: block;box-sizing: border-box;/*position: absolute;*//*position: relative;*/top: -5em;right: -5em;/*border: 1px dotted #f00;*/transition: all 0.2s ease-in;}
-  .ml_app_profile a {-webkit-border-radius: 50%;-moz-border-radius: 50%;border: 2px solid #fff;width: 40px;height: 40px;overflow: hidden;text-align: center;font-size: 22px;/*box-shadow: 0 0 10px rgba(50, 50, 50, 0.75);*/color: #000;background-color: #ffc20e;text-decoration: none;outline: none;}
+  .ml_app_profile a {-webkit-border-radius: 50%;-moz-border-radius: 50%;border: 2px solid #fff;width: 35px;height: 35px;overflow: hidden;text-align: center;font-size: 22px;/*box-shadow: 0 0 10px rgba(50, 50, 50, 0.75);*/color: #000;background-color: #ffc20e;text-decoration: none;outline: none;}
   .ml_app_profile>ol>li, nav>ol>li>a { /* So the first tier sits on top of the second tier disk */z-index: 10;}
   .ml_app_profile li:active a, .ml_app_profile li:focus a, .ml_app_profile li.focus a {background-color: #fff;box-shadow: 0 0 10px rgba(0, 0, 0, 1);outline: none;position: relative;left: 0;top: auto;/*z-index: 25;*/}
   .ml_app_profile>ol>li:active, nav>ol>li:focus, .ml_app_profile>ol>li.focus { /* Keep this to make sure only the current item appears above the disc. */z-index: 25;}
-  .ml_app_profile.profile_open>ol>li:nth-of-type(1) {right: 197px;top: 6px;}
-  .ml_app_profile.profile_open>ol>li:nth-of-type(2) {right: 172px;top: 59px;}
-  .ml_app_profile.profile_open>ol>li:nth-of-type(3) {right: 126px;top: 103px;}
-  .ml_app_profile.profile_open>ol>li:nth-of-type(4) {right: 71px;top: 134px;}
-  .ml_app_profile.profile_open>ol>li:nth-of-type(5) {right: 10px;top: 150px;}
+
+
+  .ml_app_profile.profile_open>ol>li:nth-of-type(1) {right: 203px;top: 7px;}
+  .ml_app_profile.profile_open>ol>li:nth-of-type(2) {right: 187px;top: 47px;}
+  .ml_app_profile.profile_open>ol>li:nth-of-type(3) {right: 162px;top: 81px;}
+  .ml_app_profile.profile_open>ol>li:nth-of-type(4) {right: 131px;top: 109px;}
+  .ml_app_profile.profile_open>ol>li:nth-of-type(5) {right: 93px;top: 132px;}
+  .ml_app_profile.profile_open>ol>li:nth-of-type(6) {right: 51px;top: 147px;}
+  .ml_app_profile.profile_open>ol>li:nth-of-type(7) {right: 7px;top: 157px;}
+
   .header_search{/* position: absolute;right: 90px; */}
   .notification{/* position: absolute;right: 55px;float:right */margin-right: 55px;margin-left:10px;}
   .notification .noti_count{color: $mlBlack;background: $mlYellow; border-radius: 100%; width: 15px; height: 15px; font-size: 10px; /* padding: 5px; */ line-height: 15px; position: absolute; margin-left: 8px; top: 7px; right: 0px;}
@@ -548,6 +553,7 @@ $menuTrans:all 0.5s linear;
 .funders_list .funders_list_block h3{padding: 10px 45px; font-size: 20px; font-weight: normal; color: #ffe144; border-bottom: #161e27 solid 1px; margin-bottom: 0px;}
 .funders_list .funders_list_block .list_icon{font-size: 22px; color: #fff; border-top: #34404e solid 1px; padding: 12px 0px 0px; font-weight: normal;}
 .funders_list .funders_list_block .list_icon .ml{background: #B9C5CC; border-radius: 50%; padding: 14px; color: #273545; text-shadow: 0px 1px 1px #eee;font-size: 70px;display: inline-block;border: 2px solid #161e27;}
+.funders_list .funders_list_block .list_icon img{border-radius: 50%;display: inline-block;border: 2px solid #161e27;width:102px;height:102px;}
 .funders_list .funders_list_block p{color: #fff;}
 .block_footer{position: absolute; text-align: center; width: 100%; bottom: 0; background: #212d3c; padding: 10px 0px; border-top: #34404e solid 1px;border-radius: 0px 0px 10px 10px;}
 .block_footer span{color: #fff; text-shadow: none; font-weight: normal; font-size: 21px; padding: 5px 0px;}
@@ -660,7 +666,7 @@ $menuTrans:all 0.5s linear;
   position: fixed; bottom: 0; border-radius:none !important; padding-left:0px; padding-right:0px; z-index:1030;
   .opacity{display:none; background: none repeat scroll 0 0 rgba(0, 0, 0, 0.8); height: 100%; left: 0; position: fixed; text-align: center; top: 0; width: 100%; z-index: 999; }
   .panel{background:transparent; border:none; box-shadow:none; margin: 0px; }
-  .panel-heading{padding: 0px;height: auto;
+  .panel-heading{padding: 0px;height:auto;
     .panel-title{
       .re-btn{display: inline-block; background: $mlBlue; border: 0px; line-height: 25px; position: relative; text-decoration: none; font-size: 12px; height: 25px; margin: 0px 6px 0px 21px; color: $mlWhite; text-shadow: none; text-align: center;padding:0px 10px;}
       .re-btn:after{position: absolute; right: -10px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 25px 0 0px 10px; border-color: transparent transparent transparent $mlBlue; top: 0px;}
@@ -1242,8 +1248,8 @@ $menuTrans:all 0.5s linear;
   padding:0px;
   h3{
     font-size: 16px;
-    margin: 2px 0px;
-    width: 100%;
+    margin: 2px 2px;
+    width: 98%;
     background: $mlGray;
     padding: 10px;
     .fa{
@@ -1441,11 +1447,13 @@ $menuTrans:all 0.5s linear;
       }
       .ml{
         font-size: 55px; border-radius:50%; color: $mlWhite; text-shadow: none; padding:10px;
-
       }
     }
     .right_text{
-      float: left; width: 80%; height: 80px; padding:10px; position:relative;
+      float: left; width: 80%; height: 80px; padding:5px; position:relative;
+      span{
+        font-size: 12px;font-weight:bold;color:$mlBlue;
+      }
       .read_more{
         margin-top: -26px; position: absolute; right: 8px; bottom: 0; font-size: 20px;
         a{
@@ -1455,8 +1463,23 @@ $menuTrans:all 0.5s linear;
     }
   }
 }
-.portfolio-main-wrap{
 
+
+@-webkit-keyframes horizontal {0% {-webkit-transform: translate(0,0); transform: translate(0,0); } 6% {-webkit-transform: translate(5px,0); transform: translate(5px,0); } 12% {-webkit-transform: translate(0,0); transform: translate(0,0); } 18% {-webkit-transform: translate(5px,0); transform: translate(5px,0); } 24% {-webkit-transform: translate(0,0); transform: translate(0,0); } 30% {-webkit-transform: translate(5px,0); transform: translate(5px,0); } 36% {-webkit-transform: translate(0,0); transform: translate(0,0); } }
+@keyframes horizontal { 0% {-webkit-transform: translate(0,0); -ms-transform: translate(0,0); transform: translate(0,0); } 6% {-webkit-transform: translate(5px,0); -ms-transform: translate(5px,0); transform: translate(5px,0); } 12% {-webkit-transform: translate(0,0); -ms-transform: translate(0,0); transform: translate(0,0); } 18% {-webkit-transform: translate(5px,0); -ms-transform: translate(5px,0); transform: translate(5px,0); } 24% {-webkit-transform: translate(0,0); -ms-transform: translate(0,0); transform: translate(0,0); } 30% {-webkit-transform: translate(5px,0); -ms-transform: translate(5px,0); transform: translate(5px,0); } 36% {-webkit-transform: translate(0,0); -ms-transform: translate(0,0); transform: translate(0,0); } }
+.faa-horizontal.animated,.faa-horizontal.animated-hover:hover, .faa-parent.animated-hover:hover > .faa-horizontal {-webkit-animation: horizontal 2s ease infinite; animation: horizontal 2s ease infinite; }
+
+.moolya_app .RRT__tab.back_icon{border-radius: 50%;width: 35px;height: 35px;line-height: 0px;}
+.moolya_app .RRT__tab.back_icon i{margin-left: -5px; margin-top: -1px;}
+
+.btn-success.active.focus, .btn-success.active:focus, .btn-success.active:hover, .btn-success:active.focus, .btn-success:active:focus, .btn-success:active:hover, .open>.dropdown-toggle.btn-success.focus, .open>.dropdown-toggle.btn-success:focus, .open>.dropdown-toggle.btn-success:hover{
+  color: #fff;
+  background-color: $mlBlue;
+  border-color: #255625;
+  text-shadow: none;
+  outline:0;
 }
-
-.moolya_app .RRT__tab.back_icon{border-radius: 50%;width: 35px;height: 35px;padding: 0px;line-height: 34px;text-align: center;}
+.sp_about{
+  .media-object{border-radius:4px;    margin-bottom: 10px;}
+  .media-body{padding-top: 24px;}
+}

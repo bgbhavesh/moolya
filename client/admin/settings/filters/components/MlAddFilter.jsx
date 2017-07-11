@@ -7,7 +7,7 @@ import ScrollArea from 'react-scrollbar';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import MlAssignClustersToFilters from './mlAssignClustersToFilters'
 import MlAssignModulesToFilters from './MlAssignModulesToFIlters'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import {fetchFilterCatalogActionHandler} from '../actions/fetchFilterCatalogActionHandler'
 import {updateFilterActionHandler} from '../actions/createFilterActionHandler'
 import {fetchSelectedFilterDataActionHandler} from '../actions/fetchSelectedFilterDataActionHandler'

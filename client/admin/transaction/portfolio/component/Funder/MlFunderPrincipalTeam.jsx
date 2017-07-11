@@ -7,11 +7,12 @@ import _ from "lodash";
 import {multipartASyncFormHandler} from "../../../../../../client/commons/MlMultipartFormAction";
 import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../actions/findPortfolioFunderDetails";
 import {fetchClusterIdActionHandler} from '../../actions/findClusterIdForPortfolio'
+import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import MlLoader from '../../../../../commons/components/loader/loader'
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../../commons/components/MlAdminSelectWrapper'
 export default class MlFunderPrincipalTeam extends React.Component {
   constructor(props, context) {
     super(props);
@@ -31,13 +32,15 @@ export default class MlFunderPrincipalTeam extends React.Component {
       selectedTab: 'principal',
       clusterId:'',
       privateKeys:[],
-      privateKey:{}
+      privateKey:{},
+      principalContext:'active'
     }
     this.handleBlur.bind(this);
     this.onSavePrincipalAction.bind(this);
     this.onSaveTeamAction.bind(this);
     this.fetchPrincipalDetails.bind(this);
     this.fetchTeamDetails.bind(this);
+    this.libraryAction.bind(this);
     return this;
   }
 
@@ -308,24 +311,41 @@ export default class MlFunderPrincipalTeam extends React.Component {
       portfolioDetailsId: this.props.portfolioDetailsId,
       portfolio: {team: [{logo: {fileUrl: '', fileName: fileName}, index: this.state.selectedIndex}]}
     };
-    let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
+    let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this,file));
   }
 
-  onFileUploadCallBack(resp) {
+  onFileUploadCallBack(file,resp) {
     if (resp) {
       let result = JSON.parse(resp)
+      let userOption = confirm("Do you want to add the file into the library")
+      if(userOption){
+        let fileObjectStructure = {
+          fileName: file.name,
+          fileType: file.type,
+          fileUrl: result.result,
+          libraryType: "image"
+        }
+        this.libraryAction(fileObjectStructure)
+      }
       if (result.success) {
+        toastr.success("Photo Updated Successfully");
         this.setState({loading: true})
         this.fetchOnlyImages();
       }
     }
   }
 
+  async libraryAction(file) {
+    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
+    return resp;
+  }
+
   async fetchOnlyImages() {
 
     if(this.state.selectedTab == "principal"){
       const response = await fetchfunderPortfolioPrincipal(this.props.portfolioDetailsId);
-      if (response) {
+      if (response && !_.isEmpty(response)) {
         let thisState = this.state.selectedIndex;
         let dataDetails = this.state.funderPrincipal
         let cloneBackUp = _.cloneDeep(dataDetails);
@@ -333,14 +353,14 @@ export default class MlFunderPrincipalTeam extends React.Component {
         if (specificData) {
           let curUpload = response[thisState]
           specificData['logo'] = curUpload['logo']
-          this.setState({loading: false, funderPrincipal: cloneBackUp});
+          this.setState({loading: false, funderPrincipal: cloneBackUp, principalContext:"active", teamContext:""});
         } else {
-          this.setState({loading: false})
+          this.setState({loading: false, principalContext:"active", teamContext:""})
         }
       }
     }else if(this.state.selectedTab == "team" ){
       const response = await fetchfunderPortfolioTeam(this.props.portfolioDetailsId);
-      if (response) {
+      if (response && !_.isEmpty(response)) {
         let thisState = this.state.selectedIndex;
         let dataDetails = this.state.funderTeam
         let cloneBackUp = _.cloneDeep(dataDetails);
@@ -348,9 +368,9 @@ export default class MlFunderPrincipalTeam extends React.Component {
         if (specificData) {
           let curUpload = response[thisState]
           specificData['logo'] = curUpload['logo']
-          this.setState({loading: false, funderTeam: cloneBackUp});
+          this.setState({loading: false, funderTeam: cloneBackUp, teamContext:"active", principalContext:""});
         } else {
-          this.setState({loading: false})
+          this.setState({loading: false, teamContext:"active", principalContext:""})
         }
       }
     }
@@ -376,18 +396,19 @@ export default class MlFunderPrincipalTeam extends React.Component {
           <div className="main_wrap_scroll">
             <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true}>
               <div className="ml_tabs ml_tabs_large">
-                <ul className="nav nav-pills">
-                  <li id="principal" className="active" onClick={this.onTabSelect.bind(this, "principal")}>
+                <ul className="nav nav-pills" id="myTabs">
+                  <li id="principal" className={that.state.principalContext} onClick={this.onTabSelect.bind(this, "principal")}>
                     <a href="#1a" data-toggle="tab">Principal</a>
                   </li>
-                  <li id="team" onClick={this.onTabSelect.bind(this, "team")}>
+                  <li id="team" className={that.state.teamContext} onClick={this.onTabSelect.bind(this, "team")}>
                     <a href="#2a" data-toggle="tab">Team</a>
                   </li>
                 </ul>
 
                   {/*principle list*/}
                   <div className="tab-content clearfix requested_input">
-                    <div className="tab-pane active" id="1a">
+                    {/*<div className="tab-pane active" id="1a">*/}
+                    <div id="1a" className={`tab-pane ${that.state.principalContext}`}>
                       <div className="col-lg-12">
                         <div className="row">
                           <div className="col-lg-2 col-md-4 col-sm-4" onClick={this.addPrincipal.bind(this)}>
@@ -425,7 +446,8 @@ export default class MlFunderPrincipalTeam extends React.Component {
                     </div>
 
                     {/*team list view*/}
-                    <div className="tab-pane" id="2a">
+                    {/*<div className="tab-pane" id="2a">*/}
+                    <div id="2a" className={`tab-pane ${that.state.teamContext}`}>
                       <div className="col-lg-12">
                         <div className="row">
                           <div className="col-lg-2 col-md-4 col-sm-4" onClick={this.addTeam.bind(this)}>

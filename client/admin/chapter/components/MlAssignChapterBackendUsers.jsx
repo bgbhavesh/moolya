@@ -5,7 +5,7 @@ import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 import formHandler from "../../../commons/containers/MlFormHandler";
-import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 import MlAssignChapterBackendUserList from "./MlAssignChapterBackendUserList";
 import MlAssignChapterBackendUserRoles from "./MlAssignChapterBackendUserRoles";
 import {multipartFormHandler} from "../../../commons/MlMultipartFormAction";
@@ -15,6 +15,7 @@ import {fetchAdminUserRoles} from "../../../commons/fetchAdminUserRoles";
 import {OnToggleSwitch} from "../../utils/formElemUtil";
 import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 import MlLoader from "../../../commons/components/loader/loader";
+import {client} from '../../core/apolloConnection';
 var _ = require('lodash');
 
 
@@ -70,7 +71,7 @@ class MlAssignChapterBackendUsers extends React.Component {
   }
 
   async findUserDetails(userId) {
-    const userDetails = await findAdminUserDetails(userId);
+    const userDetails = await findAdminUserDetails(userId,client);
     if (userDetails) {
       this.setState({
         selectedBackendUser: userId,
@@ -92,7 +93,7 @@ class MlAssignChapterBackendUsers extends React.Component {
   }
 
   async find_Chapter_Roles(userId) {
-      const userRoles = await fetchAdminUserRoles(userId);
+      const userRoles = await fetchAdminUserRoles(userId,client);
       var roles = userRoles && userRoles.length > 0 ? userRoles : [];
       this.setState({
           loading: false,
@@ -185,9 +186,16 @@ class MlAssignChapterBackendUsers extends React.Component {
         actionName: 'cancel',
         handler: async(event) => {
           let pararms = FlowRouter._current.params;
-          FlowRouter.go("/admin/chapters/"+
+          let path = FlowRouter._current.path;
+          if (path.indexOf("clusters") != -1) {
+            FlowRouter.go("/admin/clusters/"+
+              pararms.clusterId+"/"+pararms.chapterId+"/"+
+              pararms.subChapterId+"/"+pararms.subChapterName+"/subChapterDetails");
+          } else {
+            FlowRouter.go("/admin/chapters/"+
             pararms.clusterId+"/"+pararms.chapterId+"/"+
             pararms.subChapterId+"/"+pararms.subChapterName+"/subChapterDetails");
+          }
         }
       }
     ]

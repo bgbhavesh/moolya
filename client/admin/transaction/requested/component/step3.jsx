@@ -8,7 +8,7 @@ import ScrollArea from 'react-scrollbar'
 import  Select from 'react-select';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import  ContactDetails from './contactDetails';
 import AddressDetails from '../component/mlRegistrationAddressDetails'
 import EmailDetails from '../component/mlRegistrationEmailDetails'

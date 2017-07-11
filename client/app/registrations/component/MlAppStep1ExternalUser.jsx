@@ -2,13 +2,13 @@ import React, {Component} from "react";
 import {render} from "react-dom";
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
-import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../commons/components/MlAppSelectWrapper";
 import ScrollArea from "react-scrollbar";
 import {
   emailVerificationActionHandler,
   smsVerificationActionHandler
 } from "../../../admin/transaction/requested/actions/updateRegistration";
-import {initalizeFloatLabel} from "../../../admin/utils/formElemUtil";
+import {initalizeFloatLabel} from "../../../commons/utils/formElemUtil";
 import {fetchIdentityTypes} from "../actions/findRegistration";
 import _ from "lodash";
 import MlLoader from "../../../commons/components/loader/loader";

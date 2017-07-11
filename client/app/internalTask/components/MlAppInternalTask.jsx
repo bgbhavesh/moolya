@@ -8,6 +8,7 @@ import MlAppInternalPendingTask from './MlAppInternalPendingTask';
 import MlAppInternalCurrentTask from './MlAppInternalCurrentTask';
 import MlAppInternalCompleteTask from './MlAppInternalCompleteTask';
 import MlAppInternalRejectTask from './MlAppInternalRejectTask';
+import MlAppInternalMyTask from './myTask/MlAppInternalMyTask';
 import 'react-responsive-tabs/styles.css';
 
 export default class MlAppInternalTask extends React.Component{
@@ -17,11 +18,11 @@ export default class MlAppInternalTask extends React.Component{
 
   render(){
     let MlTabs = [
-      {name: 'Pending Requests', tabContent: <MlAppInternalPendingTask/>},
-      {name: 'Current Tasks', tabContent: <MlAppInternalCurrentTask/>},
-      {name: 'Completed Tasks', tabContent: <MlAppInternalCompleteTask/>},
-      {name: 'Rejected Tasks', tabContent: <MlAppInternalRejectTask/>}
-
+      { name: 'My Tasks', tabContent: <MlAppInternalMyTask/> },
+      { name: 'Pending Tasks', tabContent: <MlAppInternalPendingTask/> },
+      { name: 'Current Tasks', tabContent: <MlAppInternalCurrentTask/> },
+      { name: 'Completed Tasks', tabContent: <MlAppInternalCompleteTask/> },
+      { name: 'Rejected Tasks', tabContent: <MlAppInternalRejectTask/> }
     ];
 
     function getTabs() {

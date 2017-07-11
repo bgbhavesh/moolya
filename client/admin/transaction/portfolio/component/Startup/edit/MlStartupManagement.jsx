@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../../utils/formElemUtil';
+import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 /*import MlIdeatorPortfolioAbout from './MlIdeatorPortfolioAbout'*/
 import {findStartupManagementActionHandler} from '../../../actions/findPortfolioStartupDetails'
 import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
@@ -32,6 +33,7 @@ export default class MlStartupManagement extends React.Component{
     this.addManagement.bind(this);
     this.onSelectUser.bind(this);
     this.fetchPortfolioDetails.bind(this);
+    this.libraryAction.bind(this);
     return this;
   }
 
@@ -168,16 +170,26 @@ export default class MlStartupManagement extends React.Component{
     let name = e.target.name;
     let fileName = e.target.files[0].name;
     let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{management:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, file));
   }
-  onFileUploadCallBack(name,fileName, resp){
+  onFileUploadCallBack(name,file, resp){
     let that = this;
     let details =this.state.data;
     if(resp){
       let result = JSON.parse(resp)
+      let userOption = confirm("Do you want to add the file into the library")
+      if(userOption){
+        let fileObjectStructure = {
+          fileName: file.name,
+          fileType: file.type,
+          fileUrl: result.result,
+          libraryType: "image"
+        }
+        this.libraryAction(fileObjectStructure)
+      }
       var temp = $.parseJSON(resp).result;
       details=_.omit(details,[name]);
-      details=_.extend(details,{[name]:{fileName: fileName,fileUrl: temp}});
+      details=_.extend(details,{[name]:{fileName: file.fileName,fileUrl: temp}});
       that.setState({data: details,responseImage: temp}, function () {
         that.sendDataToParent()
       })
@@ -187,6 +199,15 @@ export default class MlStartupManagement extends React.Component{
       // }
     }
   }
+
+
+  async libraryAction(file) {
+    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
+    return resp;
+  }
+
+
   async fetchOnlyImages(){
     const response = await findStartupManagementActionHandler(this.props.portfolioDetailsId);
     if (response) {

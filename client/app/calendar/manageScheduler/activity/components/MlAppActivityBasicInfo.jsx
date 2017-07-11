@@ -10,7 +10,7 @@
  */
 import React from 'react';
 import ScrollArea from 'react-scrollbar';
-import Moolyaselect from  '../../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../../commons/components/MlAppSelectWrapper'
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
@@ -40,6 +40,7 @@ export default class MlAppBasicInfo extends React.Component{
         displayName           : "",
         isInternal            : false,
         isExternal            : false,
+        isActive              : false,
         mode                  : "online",
         isServiceCardEligible : false,
         industryTypes         : [],
@@ -214,9 +215,16 @@ export default class MlAppBasicInfo extends React.Component{
     if(!parseInt(duration.minutes)){
       delete duration.minutes;
     }
+
+    if(!duration.hours && !duration.minutes){
+      toastr.error("Enter a valid duration");
+      return false;
+    }
+
     if(data.mode !== 'online') {
       delete data.conversation;
     }
+    data.isServiceCardEligible = data.isExternal ? data.isServiceCardEligible : false;
     data.duration = duration ;
     that.props.saveActivity(data);
   }
@@ -282,6 +290,7 @@ export default class MlAppBasicInfo extends React.Component{
         $(this).parent('.switch').removeClass('on');
       }
     });
+    this.props.getActivityDetails();
   }
 
   /**
@@ -366,20 +375,21 @@ export default class MlAppBasicInfo extends React.Component{
                 <div className="form-group">
                   <input className="form-control float-label" placeholder="Display Name" value={that.state.basicData.displayName} onChange={that.textFieldSaves.bind(that,"displayName")}/>
                 </div>
+                <br className="brclear" />
                 <div className="form-group switch_wrap switch_names inline_switch">
                   <label>Activity Mode</label>
-                  <span className="state_label">
+                  <span className={this.state.basicData.mode == 'online' ? "state_label acLabel" : "state_label"}>
                     Online
                   </span>
                   <label className="switch nocolor-switch">
                     <input type="checkbox" checked={this.state.basicData.mode !== 'online'} onChange={(evt) => that.changeMode(evt)}/>
                     <div className="slider"></div>
                   </label>
-                  <span className="state_label acLabel">
+                  <span className={this.state.basicData.mode == 'offline' ? "state_label acLabel" : "state_label"}>
                     Offline
                   </span>
                 </div>
-
+                <br className="brclear" />
                 <Moolyaselect multiSelect={true}
                               className="form-control float-label"
                               valueKey={'value'}
@@ -403,7 +413,7 @@ export default class MlAppBasicInfo extends React.Component{
                 </div>
                 <div className="form-group">
                   <div className="input_types">
-                    <input id="isServiceCardEligible" type="checkbox" name="check1" value="true" checked={that.state.basicData.isServiceCardEligible} onChange={that.checkBoxHandler.bind(that, "isServiceCardEligible")}/>
+                    <input id="isServiceCardEligible" type="checkbox" name="check1" value="true" disabled={!that.state.basicData.isExternal} checked={that.state.basicData.isServiceCardEligible && that.state.basicData.isExternal } onChange={that.checkBoxHandler.bind(that, "isServiceCardEligible")}/>
                     <label htmlFor="isServiceCardEligible" ><span><span></span></span>
                       Eligible for service card
                     </label>
@@ -430,6 +440,13 @@ export default class MlAppBasicInfo extends React.Component{
               </div>
             )
           })}
+          <div className="form-group switch_wrap switch_names inline_switch">
+            <label>Status</label>
+            <label className="switch">
+              <input type="checkbox" onChange={that.checkBoxHandler.bind(that, "isActive")} checked={this.state.basicData.isActive} value="isActive" />
+              <div className="slider"></div>
+            </label>
+          </div>
         </ScrollArea>
         <div className="ml_btn" style={{'textAlign':'center'}}>
           <div className="save_btn" onClick={this.saveDetails.bind(this)}>Save</div> <div className="cancel_btn">Cancel</div>

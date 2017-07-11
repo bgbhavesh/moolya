@@ -174,7 +174,7 @@ async function changeStage(that, currentStage, currentStageName){
     return false;
   }
   if(currentStage.stageName == currentStageName){
-    toastr.error('Already in '+stage.stageName+' Stage');
+    toastr.error('Already in '+currentStageName+' Stage');
     return false;
   }
   let dataToInsert = {
@@ -189,7 +189,7 @@ async function changeStage(that, currentStage, currentStageName){
     response = await createStageActionHandler(dataToInsert);
   }
   if(response.success){
-    toastr.success('Updated Successfully');
+    toastr.success('Portfolio moved to '+ currentStageName + ' stage');
     that.props.fetchPortfolio();
   }
 }

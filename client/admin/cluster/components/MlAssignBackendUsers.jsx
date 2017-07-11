@@ -5,7 +5,7 @@ import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 import formHandler from "../../../commons/containers/MlFormHandler";
-import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 import MlAssignBackendUserList from "./MlAssignBackendUserList";
 import MlAssignBackednUserRoles from "./MlAssignBackendUserRoles";
 import {mlClusterConfig} from "../config/mlClusterConfig";
@@ -18,6 +18,7 @@ import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 import MlLoader from '../../../commons/components/loader/loader'
+import {client} from '../../core/apolloConnection';
 
 
 class MlAssignBackendUsers extends React.Component {
@@ -80,7 +81,7 @@ class MlAssignBackendUsers extends React.Component {
 
   async findUserDetails(userId)
   {
-      const userDetails = await findAdminUserDetails(userId);
+      const userDetails = await findAdminUserDetails(userId,client);
       if (userDetails){
           this.setState({selectedBackendUser:userId})
           this.setState({username:userDetails.userName})
@@ -101,7 +102,7 @@ class MlAssignBackendUsers extends React.Component {
   async find_Cluster_Roles(userId)
   {
       let roles = [];
-      const userRoles = await fetchAdminUserRoles(userId);
+      const userRoles = await fetchAdminUserRoles(userId,client);
       if (userRoles)
           roles = userRoles || [];
       this.setState({loading:false, user_Roles: roles, selectedBackendUser: userId, mlroleDetails: roles});

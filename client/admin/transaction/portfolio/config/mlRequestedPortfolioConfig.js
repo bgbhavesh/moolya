@@ -5,6 +5,7 @@ import MlCustomFilter from '../../../../commons/customFilters/customFilter';
 import MlPortfolioAssignComponent from '../component/MlPortfolioAssignComponent'
 import {validateTransaction} from '../actions/assignUserforTransactionAction'
 import moment from "moment";
+import {client} from '../../../core/apolloConnection';
 
 function dateFormatter (data){
   let createdDateTime=data&&data.data&&data.data.createdAt?data.data.createdAt:null;
@@ -23,7 +24,7 @@ const mlRequestedPortfolioTableConfig=new MlViewer.View({
   selectRow:true,  //Enable checkbox/radio button to select the row.
   filter:true,
   multiSelect:true,
-  filterComponent: <MlCustomFilter module="portfolio" moduleName="portfolio" />,
+  filterComponent: <MlCustomFilter module="portfolio" moduleName="portfolio" client={client} />,
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "portfolioId", title: "Requested Id",dataSort:true},

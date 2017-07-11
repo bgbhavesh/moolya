@@ -24,8 +24,26 @@ export default class MlAppChooseTeam extends React.Component{
     super(props);
     this.state = {
       teamData: props.data ? props.data : [{users: []}],
+      isExternal: props.isExternal ? props.isExternal : false,
+      isInternal: props.isInternal ? props.isInternal : false,
       offices : []
     };
+  }
+
+  /**
+   * Component Will Receive Props
+   * Desc :: Set basic date in steps from props
+   * @param props :: Object - Parents data
+   */
+  componentWillReceiveProps(props){
+    let id = FlowRouter.getQueryParam('id');
+    if(id) {
+      this.setState({
+        teamData: props.data ? props.data : [{users: []}],
+        isExternal: props.isExternal ? props.isExternal : false,
+        isInternal: props.isInternal ? props.isInternal : false
+      });
+    }
   }
 
   /**
@@ -101,6 +119,7 @@ export default class MlAppChooseTeam extends React.Component{
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(220+$('.app_header').outerHeight(true)));
+    this.props.getActivityDetails();
   }
 
   /**
@@ -163,11 +182,11 @@ export default class MlAppChooseTeam extends React.Component{
     if(evt.target.value == "connections") {
       teamData[index].resourceType="connections";
       delete teamData[index].resourceId;
-
+      teamData[index].users = [];
     } else if (evt.target.value == "moolyaAdmins") {
-      teamData[index].resourceType="connections";
+      teamData[index].resourceType="moolyaAdmins";
       delete teamData[index].resourceId;
-
+      teamData[index].users = [];
     } else {
       let officeId = evt.target.value;
       teamData[index].resourceType="office";
@@ -182,11 +201,12 @@ export default class MlAppChooseTeam extends React.Component{
             userId: user.userId
           }
         });
-        this.setState({
-          teamData:teamData
-        });
+
       }
     }
+    this.setState({
+      teamData:teamData
+    });
   }
 
   /**
@@ -228,7 +248,6 @@ export default class MlAppChooseTeam extends React.Component{
    */
   render(){
   const that =  this;
-
     /**
      * Return the HTML
      */
@@ -265,9 +284,9 @@ export default class MlAppChooseTeam extends React.Component{
                           <select defaultValue="chooseTeam" value={ team.resourceType == 'office' && team.resourceId ? team.resourceId : team.resourceType } className="form-control" onChange={(evt)=>that.chooseTeamType(evt, index)}>
                             <option value="chooseTeam" disabled="disabled">Choose team Type</option>
                             <option value="connections">My Connections</option>
-                            <option value="moolyaAdmins">Moolya Admins</option>
+                            <option hidden={!that.state.isExternal} disabled={!that.state.isExternal} value="moolyaAdmins">Moolya Admins</option>
                             {that.state.offices.map(function (office , index) {
-                              return <option key={index} value={office._id}>{ office.officeName + " - " + office.branchType }</option>
+                              return <option key={index} hidden={!that.state.isInternal} disabled={!that.state.isInternal} value={office._id}>{ office.officeName + " - " + office.branchType }</option>
                             })}
                           </select>
                         </div>

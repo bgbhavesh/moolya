@@ -300,24 +300,25 @@ let ideatorPortfolioSchema = `
     }
     
     input fileAttributes{
-    fileName:String,
-    fileUrl:String,
-    fileType:String
+        fileName:String,
+        fileUrl:String,
+        fileType:String
     }
     
     type FileAttributes{
-    fileName:String,
-    fileUrl:String,
-    fileType:String
-    isPrivate:Boolean
+        fileName:String,
+        fileUrl:String,
+        fileType:String
+        isPrivate:Boolean
     }
     
-    input detailsInput{
-      userId:String,
-      images:[fileAttributes],
-      videos:[fileAttributes],
-      documents:[fileAttributes],
-      templates:[fileAttributes]
+    input libraryInput{
+      userId: String
+      fileName: String
+      fileUrl: String
+      fileType: String
+      isPrivate: Boolean
+      libraryType: String
     }
     
     input privateData{
@@ -327,11 +328,12 @@ let ideatorPortfolioSchema = `
     }
     
      type Details{
-      userId:String,
-      images:[FileAttributes],
-      videos:[FileAttributes],
-      documents:[FileAttributes],
-      templates:[FileAttributes]
+      userId: String
+      fileName: String
+      fileUrl: String
+      fileType: String
+      isPrivate: Boolean
+      libraryType: String
     }
     
     
@@ -364,9 +366,10 @@ let ideatorPortfolioSchema = `
         resolveComment(commentId:String): response
         reopenComment(commentId:String): response
         createIdea(idea:idea):response
-        createLibrary(detailsInput:detailsInput):response
+        createLibrary(detailsInput:libraryInput):response
         updatePrivacyDetails(detailsInput:privateData): response
         updateIdea(ideaId:String, idea:idea):response
+        updateLibraryData(files: String): response
     }
 `
 
@@ -389,6 +392,7 @@ let supportedApi = [
   {api:'fetchPortfolioMenu', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchIdeas', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchAllowableFormats', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchLibrary', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
 
 
 
@@ -396,13 +400,14 @@ let supportedApi = [
   {api:'createAnnotation', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'createComment', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'createIdea', actionName:'CREATE', moduleName:"PORTFOLIO"},
-  {api:'createLibrary', actionName:'CREATE', moduleName:"PORTFOLIO"},
+  {api:'createLibrary', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'updateAnnotation', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'updateIdeatorPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
   {api:'updateIdea', actionName:'UPDATE', moduleName:"PORTFOLIO"},
   {api:'resolveComment', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'reopenComment', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'updatePrivacyDetails', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true}
+  {api:'updatePrivacyDetails', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
+  {api:'updateLibraryData', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true}
 
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -1,6 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { Meteor } from 'meteor/meteor';
-import dataComposer from './AdminViewContainer'
 import MoolyaAdminView from "../../components/adminview/AdminView";
 //const AdminViewComposer = dataComposer(MoolyaAdminView);
 export default class MoolyaAdminViewComponent extends Component {

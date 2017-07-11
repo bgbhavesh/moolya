@@ -8,12 +8,13 @@ var _ = require('lodash')
 
 MlResolver.MlQueryResolver['fetchTasks'] = (obj, args, context, info) => {
   let query = {
-    userId:context.userId,
-    profileId:args.profileId
+    userId: context.userId
+  };
+  if(args.profileId){
+    query.profileId = args.profileId;
   };
   let result = mlDBController.find('MlTask', query, context).fetch()
   return result;
-
 }
 
 MlResolver.MlQueryResolver['fetchTask'] = (obj, args, context, info) => {
@@ -68,11 +69,11 @@ MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
           let details = mlDBController.find('MlActivity',{_id:{$in:item}}, context).fetch()
           let amount = _.map(details, 'payment.amount');
           _.each(amount, function (i,s) {
-            activitiesAmount.push(i)
+            activitiesAmount.push(i ? i : 0);
           });
           let derivedAmount = _.map(details, 'payment.derivedAmount');
           _.each(derivedAmount, function (i,s) {
-            activitiesDerivedAmount.push(i)
+            activitiesDerivedAmount.push(i ? i : 0);
           });
         });
         let finalActivitiesAmount = _.sum(activitiesAmount);
@@ -84,7 +85,7 @@ MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
           pick = _.pick(task.payment, ['activitiesDerived', 'activitiesDiscount', 'activitiesAmount', 'isDiscount','discountType','discountValue', 'derivedAmount'])
         let paymentAmount = {
           activitiesAmount: finalActivitiesAmount,
-          activitiesDiscount: finalActivitiesDerivedAmount - finalActivitiesAmount,
+          activitiesDiscount: finalActivitiesAmount - finalActivitiesDerivedAmount,
           activitiesDerived: finalActivitiesDerivedAmount,
           amount: finalActivitiesDerivedAmount
         };
@@ -121,7 +122,19 @@ MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
 MlResolver.MlQueryResolver['fetchTaskDetails'] = (obj, args, context, info) => {
   let result = mlDBController.findOne('MlTask', {_id:args.name}, context)
   return result;
+};
 
-}
-
+MlResolver.MlQueryResolver['fetchTaskDetailsForServiceCard'] = (obj, args, context, info) => {
+  let query = {
+    userId: context.userId,
+    isExternal: true,
+    isActive: true,
+    isServiceCardEligible: true
+  };
+  if(args.profileId){
+    query.profileId = args.profileId;
+  };
+  let result = mlDBController.find('MlTask', query, context).fetch()
+  return result;
+};
 

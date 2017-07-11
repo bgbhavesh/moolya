@@ -12,7 +12,7 @@ import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
 import {createServiceActionHandler, fetchServiceActionHandler, fetchProfileActionHandler, updateServiceActionHandler} from '../actions/MlServiceActionHandler'
 var Select = require('react-select');
-import Moolyaselect from "../../../../../commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../../../commons/components/MlAppSelectWrapper";
 
 
 
@@ -32,7 +32,8 @@ export default class MlAppServiceStep1 extends React.Component{
       communityObject:[{}],
       chapters:[],chapterName:[],
       states:[],subChapterName:[],
-      communities:[],communitiesName:[]
+      communities:[],communitiesName:[],
+      daysRemaining:""
     }
     this.getDetails.bind(this)
     this.getUserProfile.bind(this)
@@ -94,10 +95,16 @@ async getDetails() {
 
   }
 
+  var validTillDate = Date.parse(this.state.validTillDate);
+  var currentDate = new Date();
+  var remainingDate =  Math.floor((validTillDate - currentDate) / (1000*60*60*24));
+  isNaN(remainingDate)?remainingDate="":remainingDate;
+  this.setState({
+    daysRemaining: remainingDate
+  })
+
   this.getUserProfile();
-
 }
-
   async saveDetails() {
     let cities = []
     let states = []
@@ -150,14 +157,6 @@ async getDetails() {
     }else {
       const res = await updateServiceActionHandler(idExist,services)
       this.getDetails();
-    }
-  }
-
-  serviceExpires(e) {
-    if(e.currentTarget.value >= 0) {
-      this.setState({"serviceExpiral":e.currentTarget.value});
-    } else {
-      this.setState({"serviceExpiral":0});
     }
   }
 
@@ -248,7 +247,7 @@ async getDetails() {
                   <input type="text" placeholder="Service Name" className="form-control float-label" id="" value={this.state.serviceName} onChange={this.textFieldSaves.bind(this,"ServiceName")}/>
                 </div>
                 <div className="form-group">
-                  <label>Total number of Sessions Rs. <input type="text"className="form-control inline_input" disabled={true} value={this.state.sessionsCost}  /> </label>
+                  <label>Total number of Sessions <input type="text"className="form-control inline_input" disabled={true} value={this.state.sessionsCost}  /> </label>
                   {/*<input type="number" className="form-control "/>*/}
                 </div>
                 <div className="form-group">
@@ -298,7 +297,7 @@ async getDetails() {
                 </div>
                 <br className="brclear"/>
                 <div className="form-group">
-                  <label>Service expires &nbsp; <input type="text" className="form-control inline_input" onChange={(e)=>this.serviceExpires(e)} value={this.state.serviceExpiral}  /> days from the date of purchase</label>
+                  <label>Service expires &nbsp; <input type="text" className="form-control inline_input" disabled value={this.state.daysRemaining}  /> days from the date of purchase</label>
                 </div>
               </form>
             </div>

@@ -1,3 +1,14 @@
+/** ************************************************************
+ * Date: 19 Jun, 2017
+ * Programmer: Mukhil <mukhil.padnamanabhan@raksan.in>
+ * Description : This will manage the activities basic information
+ * JavaScript XML file MlAppActivityBasicInfo.jsx
+ * *************************************************************** */
+
+/**
+ * Imports libs and components
+ */
+
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
@@ -5,12 +16,17 @@ import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
-import {createLibrary, fetchLibrary} from '../../../../../app/ideators/actions/IdeaActionHandler'
-import MlVideoPlayer from  '../../../../../commons/videoPlayer/MlVideoPlayer'
+import {multipartASyncFormHandler} from '../../MlMultipartFormAction'
+import {createLibrary, fetchLibrary, updateLibraryData} from '../../actions/mlLibraryActionHandler'
+import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
 
 
 export default class  PortfolioLibrary extends React.Component{
+
+  /**
+   * Constructor
+   * @param props :: Object - Parents data
+   */
 
   constructor(props) {
     super(props);
@@ -35,14 +51,38 @@ export default class  PortfolioLibrary extends React.Component{
 
     this.toggle = this.toggle.bind(this);
     this.fetchOnlyImages.bind(this);
+    this.updateLibrary.bind(this);
   }
+
+  /**
+   * componentWillMount
+   * Desc :: data to be loaded on the mounting
+   * @param props :: Object - Parents data
+   */
+
+  componentWillMount(){
+    userId =  this.props.portfolioDetailsId;
+    this.getLibraryDetails(userId);
+  }
+
+  /**
+   * Method :: toggle
+   * Desc   :: toggles the Modal component
+   * @returns Void
+   */
 
   toggle() {
     this.setState({
       modal: !this.state.modal
-
     });
   }
+
+  /**
+   * Method :: ImageUpload
+   * Desc   :: Handles the image uploading event
+   * @param :: Event Handler
+   * @returns Void
+   */
 
   ImageUpload(e){
     let file=document.getElementById("image_upload").files[0];
@@ -57,6 +97,12 @@ export default class  PortfolioLibrary extends React.Component{
     }
   }
 
+  /**
+   * Method :: videoUpload
+   * Desc   :: Handles the video uploading event
+   * @returns Void
+   */
+
   videoUpload() {
     let file = document.getElementById("video_upload").files[0];
     this.setState({fileType:file.type,fileName:file.name });
@@ -69,18 +115,31 @@ export default class  PortfolioLibrary extends React.Component{
       toastr.error("Please select a Video Format");
     }
   }
+
+  /**
+   * Method :: TemplateUpload
+   * Desc   :: Handles the template uploading event
+   * @returns Void
+   */
+
   TemplateUpload(){
     let file = document.getElementById("template_upload").files[0];
     this.setState({fileType:file.type,fileName:file.name });
     let fileType = file.type
     let typeShouldBe = _.compact(fileType.split('/'));
-    if (file  && typeShouldBe && typeShouldBe[0]!="video" && typeShouldBe[0]!="image"  && typeShouldBe[0]!="audio") {
+    if (file  && typeShouldBe && typeShouldBe[0]=="image") {
       let data = {moduleName: "PROFILE", actionName: "UPDATE"}
       let response =  multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this,"template"));
     }else{
       toastr.error("Please select a Template Format");
     }
   }
+
+  /**
+   * Method :: documentUpload
+   * Desc   :: Handles the document uploading event
+   * @returns Void
+   */
 
   documentUpload() {
     let file = document.getElementById("document_upload").files[0];
@@ -92,10 +151,23 @@ export default class  PortfolioLibrary extends React.Component{
     }
   }
 
+  /**
+   * Method :: fetchOnlyImages
+   * Desc   :: Gets the images once its uploaded
+   * @returns Void
+   */
+
   fetchOnlyImages(){
     let userId = this.props.portfolioDetailsId;
     this.getLibraryDetails(userId)
   }
+
+  /**
+   * Method :: toggleImageLock
+   * Desc   :: Handles the image locking functionality
+   * @param :: id - type :: Number
+   * @returns Void
+   */
 
   toggleImageLock(id){
     let imageLock = this.state.imagesLock;
@@ -103,7 +175,6 @@ export default class  PortfolioLibrary extends React.Component{
     this.setState({
       imageLock:imageLock
     });
-    console.log(id);
   }
 
 
@@ -129,7 +200,7 @@ export default class  PortfolioLibrary extends React.Component{
     if (resp) {
       switch(type){
         case "image":
-          let imgaeDataUpdate = this.fetchOnlyImages();
+          // let imgaeDataUpdate = this.fetchOnlyImages();
           this.setState({"uploadedImage": resp});
           var imageLink = $.parseJSON(this.state.uploadedImage).result;
           this.setState({"uploadedImage": imageLink});
@@ -138,21 +209,21 @@ export default class  PortfolioLibrary extends React.Component{
           this.storeData(imageLink,"image")
           break;
         case "video":
-          let videoDataUpdate = this.fetchOnlyImages();
+          // let videoDataUpdate = this.fetchOnlyImages();
           this.setState({"uploadedVideo": resp});
           var videoLink = $.parseJSON(this.state.uploadedVideo).result;
           this.setState({"uploadedVideo": videoLink});
           this.storeData(videoLink,"video")
           break;
         case "document":
-          let documentDataUpdate = this.fetchOnlyImages();
+          // let documentDataUpdate = this.fetchOnlyImages();
           this.setState({"uploadedDocuments": resp});
           var documentLink = $.parseJSON(this.state.uploadedDocuments).result;
           this.setState({"uploadedDocuments": documentLink});
           this.storeData(documentLink,"video")
           break;
         case "template":
-          let templateDataUpdate = this.fetchOnlyImages();
+          // let templateDataUpdate = this.fetchOnlyImages();
           this.setState({"uploadedTemplate": resp});
           var templateLink = $.parseJSON(this.state.uploadedTemplate).result;
           this.setState({"uploadedTemplate": imageLink});
@@ -168,13 +239,12 @@ export default class  PortfolioLibrary extends React.Component{
       case "image":
         let  imageDetails = {
           userId: this.props.portfolioDetailsId,
-          images: {
-            fileName: this.state.fileName,
-            fileUrl: link,
-            fileType: this.state.fileType
-          }
+          fileName: this.state.fileName,
+          fileUrl: link,
+          fileType: this.state.fileType,
+          libraryType: dataType
         }
-        const resp = await createLibrary(imageDetails)
+        const resp = await createLibrary(imageDetails, this.props.client)
         this.fetchOnlyImages();
         return resp;
 
@@ -182,128 +252,74 @@ export default class  PortfolioLibrary extends React.Component{
       case "video":
         let  videoDetails = {
           userId: this.props.portfolioDetailsId,
-          videos: {
-            fileName: this.state.fileName,
-            fileUrl: link,
-            fileType: this.state.fileType
-          }
+          fileName: this.state.fileName,
+          fileUrl: link,
+          fileType: this.state.fileType,
+          libraryType: dataType
         }
-        const res = await createLibrary(videoDetails)
+        const res = await createLibrary(videoDetails, this.props.client)
         this.fetchOnlyImages();
         return res;
         break;
       case "document":
         let  documentDetails = {
           userId: this.props.portfolioDetailsId,
-          documents: {
-            fileName: this.state.fileName,
-            fileUrl: link,
-            fileType: this.state.fileType
-          }
+          fileName: this.state.fileName,
+          fileUrl: link,
+          fileType: this.state.fileType,
+          libraryType: dataType
+
         }
-        const res1 = await createLibrary(documentDetails)
+        const res1 = await createLibrary(documentDetails, this.props.client)
         this.fetchOnlyImages();
         return res1;
         break;
       case "template":
         let  templateDetails = {
           userId: this.props.portfolioDetailsId,
-          templates: {
-            fileName: this.state.fileName,
-            fileUrl: link,
-            fileType: this.state.fileType
-          }
+          fileName: this.state.fileName,
+          fileUrl: link,
+          fileType: this.state.fileType,
+          libraryType: dataType
         }
-        const res2 = await createLibrary(templateDetails)
+        const res2 = await createLibrary(templateDetails, this.props.client)
         this.fetchOnlyImages();
         return res2;
         break;
     }
 
   }
-  componentWillMount(){
-    userId =  this.props.portfolioDetailsId;
-    console.log(this.props)
-    this.getLibraryDetails(userId);
-    // this.getAllowableDocumentFormats();
-  }
+
 
   async getLibraryDetails(userId) {
-    const resp = await fetchLibrary(userId)
-    if (resp.length !== 0) {
-      var libraryDetails = resp;
-      var details = [];
-      if (libraryDetails[0].images) {
-        libraryDetails.map(function (attributes) {
-          details.push(attributes.images)
-        })
-        let imagesArray = details;
-        var imageDetails = [];
-        if (imagesArray != null) {
-          imagesArray.map(function (imageAttributes) {
-            if (imageAttributes) {
-              imageDetails = imageAttributes
-            }
-          })
-          this.setState({imageSpecifications: imageDetails})
-        }
-      } else {
-        this.setState({imageSpecifications: []})
+    let that = this;
+    const resp = await fetchLibrary(userId, this.props.client)
+    let images = [];
+    let videos = [];
+    let templates = [];
+    let documents = [];
+    resp.map(function (data) {
+      if (data.libraryType === "image") {
+        images.push(data)
+        that.setState({imageSpecifications: images})
+      } else if (data.libraryType === "video") {
+        videos.push(data)
+        that.setState({videoSpecifications: videos})
+      } else if (data.libraryType === "template") {
+        templates.push(data)
+        that.setState({templateSpecifications: templates})
+      } else if (data.libraryType === "document") {
+        documents.push(data)
+        that.setState({documentSpecifications: documents})
       }
-      if (libraryDetails[0].templates) {
-        libraryDetails.map(function (attributes) {
-          details.push(attributes.templates)
-        })
-        let templatesArray = details;
-        var templateDetails = [];
-        if (templatesArray != null) {
-          templatesArray.map(function (templateAttributes) {
-            if (templateAttributes) {
-              templateDetails = templateAttributes
-            }
-          })
-          this.setState({templateSpecifications: templateDetails})
-        }
-      } else {
-        this.setState({templateSpecifications: []})
-      }
-
-
-      if (libraryDetails[0].videos) {
-        let videoStructure = [];
-        libraryDetails.map(function (attributes) {
-          videoStructure.push(attributes.videos)
-        })
-        let videoArray = videoStructure;
-        var videoDetails = [];
-        if (videoArray != null) {
-          videoArray.map(function (videoAttributes) {
-            if (videoAttributes) {
-              videoDetails = videoAttributes
-            }
-          })
-          this.setState({videoSpecifications: videoDetails})
-        }
-      } else {
-        this.setState({videoSpecifications: []})
-      }
-
-    }
+    })
   }
-
-  // async getAllowableDocumentFormats(){
-  //   const response = await getAllowableDocumentFormats()
-  //   return response;
-  // }
-
-
 
   randomVideo(link,index){
     let data = this.state.videoSpecifications || [];
     let videoPreviewUrl;
     videoPreviewUrl = data[index].fileUrl;
     this.setState({previewVideo:videoPreviewUrl,videoUrl:videoPreviewUrl});
-
   }
 
   random(link,index){
@@ -334,6 +350,54 @@ export default class  PortfolioLibrary extends React.Component{
       return false;
     });
   }
+
+  delete(index, type) {
+    switch(type){
+      case "image":
+        let imageData = this.state.imageSpecifications;
+        let initialImageData = imageData[index];
+        imageData.splice(index, 1);
+        this.setState({
+          imageSpecifications: imageData
+        });
+        this.updateLibrary(initialImageData.fileUrl)
+        break;
+      case "video":
+        let videoData = this.state.videoSpecifications;
+        let initialVideoData = videoData[index];
+        videoData.splice(index, 1);
+        this.setState({
+          videoSpecifications: videoData
+        });
+        this.updateLibrary(initialVideoData.fileUrl)
+        break;
+      case "template":
+        let templateData = this.state.templateSpecifications;
+        let initialTemplateData = templateData[index];
+        templateData.splice(index, 1);
+        this.setState({
+          templateSpecifications: templateData
+        });
+        this.updateLibrary(initialTemplateData.fileUrl)
+        break;
+      case "document":
+        let documentData = this.state.imageSpecifications;
+        let initialDocumentData = documentData[index];
+        documentData.splice(index, 1);
+        this.setState({
+          imageSpecifications: documentData
+        });
+        this.updateLibrary(initialDocumentData.fileUrl)
+        break;
+    }
+
+  }
+
+  async updateLibrary(files) {
+    const response = await updateLibraryData(files, this.props.client)
+    return response;
+  }
+
   render(){
     var videoJsOptions = [{
       autoplay: true,
@@ -349,7 +413,8 @@ export default class  PortfolioLibrary extends React.Component{
     const Images = imageData.map(function(show,id) {
       return(
         <div className="thumbnail"key={id}>
-          {that.state.imagesLock[id] ? <FontAwesome onClick={()=>that.toggleImageLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleImageLock(id)} name='unlock'/> }
+          {that.props.isAdmin?" ":that.state.imagesLock[id] ? <FontAwesome onClick={()=>that.toggleImageLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleImageLock(id)} name='unlock'/> }
+          {that.props.isAdmin?"": <span className="triangle-topright"><FontAwesome name='minus' onClick={()=>that.delete(id, "image")} /></span>}
           <a href="#" data-toggle="modal" data-target=".imagepop" onClick={that.random.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
           <div id="images" className="title">{show.fileName}</div>
         </div>
@@ -360,7 +425,8 @@ export default class  PortfolioLibrary extends React.Component{
     const Templates = templateData.map(function(show,id) {
       return(
         <div className="thumbnail"key={id}>
-          {that.state.templatesLock[id] ? <FontAwesome onClick={()=>that.toggleTemplateLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleTemplateLock(id)} name='unlock'/> }
+          {that.props.isAdmin?"":that.state.templatesLock[id] ? <FontAwesome onClick={()=>that.toggleTemplateLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleTemplateLock(id)} name='unlock'/> }
+          {that.props.isAdmin?"":  <span className="triangle-topright"><FontAwesome name='minus' onClick={()=>that.delete(id, "template")} /></span>}
           <a href="#" data-toggle="modal" data-target=".templatepop" onClick={that.randomTemplate.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
           <div id="templates" className="title">{show.fileName}</div>
         </div>
@@ -373,7 +439,8 @@ export default class  PortfolioLibrary extends React.Component{
     const videos = videodata.map(function(show,id){
       return(
         <div className="thumbnail">
-          {that.state.videosLock[id] ? <FontAwesome onClick={()=>that.toggleVideoLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleVideoLock(id)} name='unlock'/> }<FontAwesome name='unlock'/>
+          {that.props.isAdmin?"":that.state.videosLock[id] ? <FontAwesome onClick={()=>that.toggleVideoLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleVideoLock(id)} name='unlock'/> }<FontAwesome name='unlock'/>
+          {that.props.isAdmin?"":  <span className="triangle-topright"><FontAwesome name='minus' onClick={()=>that.delete(id, "video")} /></span>}
           <a href="" data-toggle="modal" data-target=".videopop" onClick={that.randomVideo.bind(that,show.fileUrl,id)}>
             <video width="120" height="100" controls>
               <source src={show.fileUrl}type="video/mp4"></source>
@@ -393,7 +460,6 @@ export default class  PortfolioLibrary extends React.Component{
     return (
       <div>
         <h2>Library</h2>
-        {/*<Button color="danger" onClick={this.toggle}>{this.props.buttonLabel}</Button>*/}
         <Modal isOpen={this.state.modal} toggle={this.toggle} className={'library-popup'}>
           <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
           <ModalBody>
@@ -436,7 +502,6 @@ export default class  PortfolioLibrary extends React.Component{
             </div>
           </div>
         </div>
-
         <div className="modal fade bs-example-modal-sm library-popup videopop" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
           <div className="modal-dialog" role="document">
             <div className="modal-content">
@@ -470,7 +535,7 @@ export default class  PortfolioLibrary extends React.Component{
               Images
               <div className="fileUpload upload_file_mask pull-right">
                 <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-                  <input type="file" className="upload_file upload" name="image_source" id="image_upload" onChange={that.ImageUpload.bind(that)} />
+                  {that.props.isAdmin?"":<input type="file" className="upload_file upload" name="image_source" id="image_upload" onChange={that.ImageUpload.bind(that)} />}
                 </a>
               </div>
             </div>
@@ -489,7 +554,7 @@ export default class  PortfolioLibrary extends React.Component{
               Videos
               <div className="fileUpload upload_file_mask pull-right">
                 <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-                  <input type="file" className="upload_file upload" name="video_source" id="video_upload" onChange={that.videoUpload.bind(that)} />
+                  {that.props.isAdmin?"":<input type="file" className="upload_file upload" name="video_source" id="video_upload" onChange={that.videoUpload.bind(that)} />}
                 </a>
               </div>
             </div>
@@ -508,12 +573,11 @@ export default class  PortfolioLibrary extends React.Component{
               Templates
               <div className="fileUpload upload_file_mask pull-right">
                 <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-                  <input type="file" className="upload_file upload" name="image_source" id="template_upload" onChange={that.TemplateUpload.bind(that)} />
+                  {that.props.isAdmin?"":<input type="file" className="upload_file upload" name="image_source" id="template_upload" onChange={that.TemplateUpload.bind(that)} />}
                 </a>
               </div>
             </div>
           </div>
-
           <ul>
             <li>
               <div className="panel-body">
@@ -522,78 +586,6 @@ export default class  PortfolioLibrary extends React.Component{
             </li>
           </ul>
         </div>
-
-        {/*<div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-right">*/}
-        {/*<div className="panel panel-default">*/}
-        {/*<div className="panel-heading">*/}
-        {/*Templates  <span className="see-more pull-right">*/}
-        {/*<input type="file" className="upload_file upload" name="image_source" id="image_upload" onChange={this.TemplateUpload.bind(this)} /></span>*/}
-        {/*</div>*/}
-        {/*<div className="panel-body">*/}
-        {/*<div className="thumbnail"><FontAwesome name='lock'/><img src="/images/template_1.jpg"/><div className="title">Template</div></div>*/}
-        {/*</div>*/}
-        {/*<ul>*/}
-        {/*<li>*/}
-        {/*<div className="panel-body">*/}
-        {/*{Templates}*/}
-        {/*</div>*/}
-        {/*</li>*/}
-        {/*</ul>*/}
-        {/*</div>*/}
-        {/*</div>*/}
-        {/*--------------------------------------*/}
-
-        {/*<h2>Documents</h2>*/}
-        {/*<div className="col-md-12 library-wrap-details">*/}
-        {/*<div className="row">*/}
-        {/*<div className="col-lg-2 col-md-3 col-sm-3">*/}
-        {/*<div className="list_block">*/}
-        {/*<div className="cluster_status"><FontAwesome name='lock'/></div>*/}
-
-        {/*<h3>Document</h3>*/}
-        {/*</div>*/}
-        {/*</div>*/}
-        {/*<div className="col-lg-2 col-md-3 col-sm-3">*/}
-        {/*<div className="list_block">*/}
-        {/*<div className="cluster_status"><FontAwesome name='lock'/></div>*/}
-
-        {/*<h3>Document</h3>*/}
-        {/*</div>*/}
-        {/*</div>*/}
-        {/*<div className="col-lg-2 col-md-3 col-sm-3">*/}
-        {/*<div className="list_block">*/}
-        {/*<div className="cluster_status"><FontAwesome name='lock'/></div>*/}
-
-        {/*<h3>Document</h3>*/}
-        {/*</div>*/}
-        {/*</div>*/}
-        {/*<div className="col-lg-2 col-md-3 col-sm-3">*/}
-        {/*<div className="list_block">*/}
-        {/*<div className="cluster_status"><FontAwesome name='lock'/></div>*/}
-
-        {/*<h3>Document</h3>*/}
-        {/*</div>*/}
-        {/*</div>*/}
-        {/*<div className="col-lg-2 col-md-3 col-sm-3">*/}
-        {/*<a href="/admin/editCluster">*/}
-        {/*<div className="list_block">*/}
-        {/*<div className="cluster_status"><FontAwesome name='lock'/></div>*/}
-
-        {/*<h3>Document</h3>*/}
-        {/*</div>*/}
-        {/*</a>*/}
-        {/*</div>*/}
-        {/*<div className="col-lg-2 col-md-3 col-sm-3">*/}
-        {/*<div className="list_block">*/}
-        {/*<div className="cluster_status"><FontAwesome name='lock'/></div>*/}
-
-        {/*<h3>Document</h3>*/}
-        {/*</div>*/}
-
-        {/*</div>*/}
-
-        {/*</div>*/}
-        {/*</div>*/}
       </div>
     )
   }

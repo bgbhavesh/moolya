@@ -11,7 +11,7 @@ import {multipartASyncFormHandler} from "../../../../client/commons/MlMultipartF
 import ScrollArea from "react-scrollbar";
 import MlInternalSubChapterAccess from "../components/MlInternalSubChapterAccess";
 import MlMoolyaSubChapterAccess from "../components/MlMoolyaSubChapterAccess";
-import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 import gql from "graphql-tag";
 // import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 var Select = require('react-select');

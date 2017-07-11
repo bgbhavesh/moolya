@@ -449,8 +449,9 @@ MlResolver.MlQueryResolver['fetchUsersBysubChapterDepSubDep'] = (obj, args, cont
           subChapterId: args.subChapterId ? args.subChapterId : ""
         }, context, info)
       } else {
+        /**fetching all departments in the case of non-moolya subchapter condition change*/   // {isMoolya: false},
         let departments = mlDBController.find('MlDepartments', {
-          $or: [{$and: [{isMoolya: false}, {depatmentAvailable: {$elemMatch: {subChapter: {$in: ['all', subChapter._id]}}}}]}, {
+          $or: [{$and: [{depatmentAvailable: {$elemMatch: {subChapter: {$in: ['all', subChapter._id]}}}}]}, {
             isSystemDefined: true,
             isActive: true
           }]
@@ -491,9 +492,9 @@ MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context
   } else if (subChapter && !subChapter.isDefaultSubChapter) {
     let user = mlDBController.findOne('users', {_id: args.userId}, context)
     // let subChapterDep = MlDepartments.find({"depatmentAvailable.subChapter":subChapter._id}).fetch();
-
+    /**fetching all departments for non-moolya*/ //{isMoolya: false},
     let subChapterDep = mlDBController.find('MlDepartments', {
-      $or: [{$and: [{isMoolya: false}, {depatmentAvailable: {$elemMatch: {subChapter: {$in: ['all', subChapter._id]}}}}]}, {
+      $or: [{$and: [{depatmentAvailable: {$elemMatch: {subChapter: {$in: ['all', subChapter._id]}}}}]}, {
         isSystemDefined: true,
         isActive: true
       }]

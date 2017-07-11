@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 var Select = require('react-select');
-import Moolyaselect from '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from '../../../commons/components/MlAdminSelectWrapper'
 import ScrollArea from 'react-scrollbar';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {updateRegistrationActionHandler,emailVerificationActionHandler,smsVerificationActionHandler} from '../actions/updateRegistration'

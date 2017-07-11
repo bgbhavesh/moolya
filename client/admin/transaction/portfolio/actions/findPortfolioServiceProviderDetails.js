@@ -366,7 +366,7 @@ export async function fetchServiceProviderClients(portfoliodetailsId) {
                       fileName
                       fileUrl
                     }
-                    makePrivate
+                    isPrivate
                     index
                     privateFields{
                       keyName,

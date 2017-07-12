@@ -19,10 +19,6 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import {multipartASyncFormHandler} from '../../MlMultipartFormAction'
 import {createLibrary, fetchLibrary, updateLibraryData, updatePrivacyDetails} from '../../actions/mlLibraryActionHandler'
 import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
-import MlFileViewer from '../../docViewer/MlDocViewer'
-
-
-
 
 
 export default class  PortfolioLibrary extends React.Component{
@@ -70,6 +66,10 @@ export default class  PortfolioLibrary extends React.Component{
 
   componentWillMount(){
     let portfolioId = FlowRouter.getRouteName();
+    let path = FlowRouter.current().path
+    if(path.indexOf("view")>0){
+      this.state.explore = true
+    }
     if(portfolioId !== "portfolio"){
       this.state.explore = true
     }

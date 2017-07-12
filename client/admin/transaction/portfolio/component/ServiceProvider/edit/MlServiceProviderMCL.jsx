@@ -34,6 +34,16 @@ export default class MlStartupMCL extends React.Component {
   componentDidUpdate() {
     OnLockSwitch();
     dataVisibilityHandler();
+
+    _.each(this.state.memberships.privateFields, function (pf) {
+      $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+    _.each(this.state.compliances.privateFields, function (pf) {
+      $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+    _.each(this.state.licenses.privateFields, function (pf) {
+      $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   async fetchPortfolioDetails() {
@@ -59,25 +69,25 @@ export default class MlStartupMCL extends React.Component {
       if (responseM) {
         this.setState({memberships: responseM});
       }
-      _.each(responseM.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
+      // _.each(responseM.privateFields, function (pf) {
+      //   $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      // })
 
       const responseC = await fetchServiceProviderCompliances(portfoliodetailsId);
       if (responseC) {
         this.setState({compliances: responseC});
       }
-      _.each(responseC.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
+      // _.each(responseC.privateFields, function (pf) {
+      //   $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      // })
 
       const responseL = await fetchServiceProviderLicenses(portfoliodetailsId);
       if (responseL) {
         this.setState({licenses: responseL});
       }
-      _.each(responseL.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
+      // _.each(responseL.privateFields, function (pf) {
+      //   $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      // })
 
       data = {
         memberships: this.state.memberships,

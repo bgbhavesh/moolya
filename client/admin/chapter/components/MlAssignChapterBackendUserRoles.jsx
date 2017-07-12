@@ -3,7 +3,7 @@ import {render} from "react-dom";
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import {findUserDepartmentypeActionHandler} from "../actions/findUserDepartments";
-import MoolyaSelect from "../../../commons/components/select/MoolyaSelect";
+import MoolyaSelect from "../../commons/components/MlAdminSelectWrapper";
 import _ from "lodash";
 import Datetime from "react-datetime";
 import moment from "moment";

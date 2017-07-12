@@ -10,8 +10,10 @@ import MlFunderEngagementMethodView from './MlFunderEngagementMethodView'
 import MlFunderAreaOfInterestView from './MlFunderAreaOfInterestView'
 import MlFunderLibraryView from './MlFunderLibraryView'
 import MlFunderNewsView from './MlFunderNewsView'
+import PortfolioLibrary from '../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import MlFunderPrincipalTeamView from './MlFunderPrincipalTeamView'
 import MlFunderSuccessStoriesView from './MlFunderSuccessStoriesView'
+import {client} from '../../../../core/apolloConnection'
 
 export default class MlFunderViewTemplate extends React.Component{
   constructor(props){
@@ -50,7 +52,7 @@ export default class MlFunderViewTemplate extends React.Component{
       {tabClassName: 'tab', panelClassName: 'panel', title:"Engagement Methods" , component:<MlFunderEngagementMethodView key="4" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Area Of Interests" , component:<MlFunderAreaOfInterestView key="6" getAreaOfInterestDetails={this.getAreaOfInterestDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Success Stories" , component:<MlFunderSuccessStoriesView key="7" getSuccessStoriesDetails={this.getSuccessStoriesDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlFunderLibraryView key="8" getFunderLibrary={this.getFunderLibrary.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<PortfolioLibrary client={client} isAdmin={true} key="8" getFunderLibrary={this.getFunderLibrary.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"News" , component:<MlFunderNewsView key="9" getFunderNewsDetails={this.getFunderNewsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>}
     ]
     return tabs;

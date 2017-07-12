@@ -18,7 +18,7 @@ class MlAppPortfolio extends Component{
   constructor(props){
     super(props)
     this.state = {editComponent:'', portfolio:{}, selectedTab:"", privateKeys:[], removePrivateKeys:[],
-      annotations:[], isOpen:false,annotationData: {},commentsData:[], popoverOpen: false, saveButton:false}
+      annotations:[], isOpen:false,annotationData: {},commentsData:[], popoverOpen: false, saveButton:false, backHandlerMethod:""}
     this.fetchEditPortfolioTemplate.bind(this);
     this.fetchViewPortfolioTemplate.bind(this);
     this.getPortfolioDetails.bind(this);
@@ -212,9 +212,9 @@ class MlAppPortfolio extends Component{
     }
   }
 
-  async testEditPortfolioDetails(){
-    console.log('edit testing')
-  }
+  // async testEditPortfolioDetails(){
+  //   console.log('edit testing')
+  // }
 
   async requestForGoLive() {
     let portfolioId = this.props.config;
@@ -243,6 +243,7 @@ class MlAppPortfolio extends Component{
     this.setState({interactionAutoId:interactionAutoId});
   }
 
+  /**removing edit not required in edit mode only save can be used*/
   assignActionHandlerProxy(actionConfig){
     var action=actionConfig.actionName||'';
     var actionMap={'like':'interaction','connect':'interaction','favourite':'interaction','follow':'interaction','enquire':'interaction','review':'interaction','partner':'interaction','collaborate':'interaction'};
@@ -250,10 +251,21 @@ class MlAppPortfolio extends Component{
     switch(actionName){
       case 'interaction': actionConfig.handler=async(actionData,callback) =>this.props.handler(this.interactionActionHandler.bind(this,actionData,callback), this.onInteractionSuccess.bind(this));break;
       case 'save': actionConfig.handler=async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this)); break;
-      case 'edit': actionConfig.handler=async(event) => this.props.handler(this.testEditPortfolioDetails.bind(this)); break;
+      // case 'edit': actionConfig.handler=async(event) => this.props.handler(this.testEditPortfolioDetails.bind(this)); break;
       case 'golive': actionConfig.handler=async(event) => this.props.handler(this.requestForGoLive.bind(this)); break;
       case '': actionConfig.handler=() => {console.log("action handler is not defined")}; break;
     }
+  }
+
+  backHandler(){
+    if(!_.isString(this.state.backHandlerMethod)){
+      this.state.backHandlerMethod();
+      this.setState({backHandlerMethod:""})
+    }
+  }
+
+  setBackHandler(backHandlerMethod){
+    this.setState({backHandlerMethod:backHandlerMethod})
   }
 
   render(){
@@ -296,8 +308,8 @@ class MlAppPortfolio extends Component{
         {showLoader===true?(<MlLoader/>):(
           <div className="app_padding_wrap">
             <div className="col-md-12">
-            <InteractionsCounter resourceType={'portfolio'} resourceId={this.props.config} interactionAutoId={this.state.interactionAutoId} />
-              {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}/>}
+            <InteractionsCounter resourceType={'portfolio'} resourceId={this.props.config} interactionAutoId={this.state.interactionAutoId} backHandler={this.backHandler.bind(this)} />
+              {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} setBackHandler={this.setBackHandler.bind(this)}/>}
                 {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
             </div></div>)}
         <div className="overlay"></div>

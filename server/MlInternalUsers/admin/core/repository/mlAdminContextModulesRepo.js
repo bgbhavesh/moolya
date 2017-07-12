@@ -471,9 +471,16 @@ let CoreModules = {
     };
     /*database keys issue*/
     var resultantQuery = MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery, contextFieldMap);
+    //add all for each option
+    _.each(resultantQuery, function (r) {
+      if (_.isArray(r)) {
+        r.push('all');
+      }
+    });
     //construct context query with $in operator for each fields
     resultantQuery = MlAdminContextQueryConstructor.constructQuery(resultantQuery, '$in');
     var serverQuery = {};
+
     serverQuery = {'isActive': true};
     //To display the latest record based on date
     if (!fieldsProj.sort) {

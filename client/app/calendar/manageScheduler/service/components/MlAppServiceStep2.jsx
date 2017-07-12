@@ -10,7 +10,7 @@ import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
 import {fetchTaskDetailsActionHandler} from '../../task/actions/fetchTaskDetails'
 import {updateServiceActionHandler} from '../actions/MlServiceActionHandler'
-import Moolyaselect from "../../../../../commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../../../commons/components/MlAppSelectWrapper";
 
 
 export default class MlAppServiceStep2 extends React.Component{

@@ -6,7 +6,7 @@ var FontAwesome = require('react-fontawesome');
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import ScrollArea from 'react-scrollbar';
-import Moolyaselect from '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from '../../../commons/components/MlAdminSelectWrapper'
 
 export default class Step1 extends React.Component{
 

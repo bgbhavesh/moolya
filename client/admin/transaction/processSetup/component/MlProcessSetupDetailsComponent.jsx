@@ -6,7 +6,7 @@ import {updateProcessSetupActionHandler, updateProcessTransaction} from "../acti
 import {initalizeFloatLabel,OnToggleSwitch} from "../../../utils/formElemUtil";
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
-import MoolyaSelect from "../../../../commons/components/select/MoolyaSelect";
+import MoolyaSelect from "../../../commons/components/MlAdminSelectWrapper";
 import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
 import _ from "lodash";
 var FontAwesome = require('react-fontawesome');

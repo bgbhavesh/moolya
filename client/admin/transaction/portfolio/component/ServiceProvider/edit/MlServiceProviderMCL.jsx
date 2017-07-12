@@ -19,7 +19,8 @@ export default class MlStartupMCL extends React.Component {
       data: {},
       memberships: {},
       licenses: {},
-      compliances: {}
+      compliances: {},
+      privateKey:{},
     }
     this.onLockChange.bind(this);
     this.handleBlur.bind(this);
@@ -33,6 +34,16 @@ export default class MlStartupMCL extends React.Component {
   componentDidUpdate() {
     OnLockSwitch();
     dataVisibilityHandler();
+
+    _.each(this.state.memberships.privateFields, function (pf) {
+      $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+    _.each(this.state.compliances.privateFields, function (pf) {
+      $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+    _.each(this.state.licenses.privateFields, function (pf) {
+      $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   async fetchPortfolioDetails() {
@@ -58,14 +69,25 @@ export default class MlStartupMCL extends React.Component {
       if (responseM) {
         this.setState({memberships: responseM});
       }
+      // _.each(responseM.privateFields, function (pf) {
+      //   $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      // })
+
       const responseC = await fetchServiceProviderCompliances(portfoliodetailsId);
       if (responseC) {
         this.setState({compliances: responseC});
       }
+      // _.each(responseC.privateFields, function (pf) {
+      //   $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      // })
+
       const responseL = await fetchServiceProviderLicenses(portfoliodetailsId);
       if (responseL) {
         this.setState({licenses: responseL});
       }
+      // _.each(responseL.privateFields, function (pf) {
+      //   $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      // })
 
       data = {
         memberships: this.state.memberships,
@@ -97,10 +119,10 @@ export default class MlStartupMCL extends React.Component {
     })
   }
 
-  onLockChange(field, type, e) {
+  onLockChange(fieldName, field, type, e) {
     let details = this.state.data || {};
     let key = e.target.id;
-    // details=_.omit(details,[key]);
+    var isPrivate = false;
     let className = e.target.className;
 
     let mcl = details[type];
@@ -109,6 +131,7 @@ export default class MlStartupMCL extends React.Component {
         // details=_.extend(details,{[key]:true});
         mcl[key] = true
         details[type] = mcl;
+        isPrivate = true
       } else {
         // details=_.extend(details,{[key]:false});
         mcl[key] = false
@@ -122,6 +145,8 @@ export default class MlStartupMCL extends React.Component {
       }
     }
 
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
+    this.setState({privateKey:privateKey})
     this.setState({data: details}, function () {
       this.sendDataToParent()
     })
@@ -144,7 +169,10 @@ export default class MlStartupMCL extends React.Component {
         delete data['memberships'][propName];
       }
     }
-    this.props.getServiceProviderMCL(data)
+    data['memberships']=_.omit(data['memberships'],["privateFields"]);
+    data['compliances']=_.omit(data['compliances'],["privateFields"]);
+    data['licenses']=_.omit(data['licenses'],["privateFields"]);
+    this.props.getServiceProviderMCL(data, this.state.privateKey)
   }
 
   render() {
@@ -167,14 +195,12 @@ export default class MlStartupMCL extends React.Component {
                       <div className="panel-heading">Membership</div>
                       <div className="panel-body ">
                         <div className="form-group nomargin-bottom">
-                          <textarea placeholder="Describe..." name="description" className="form-control" id="cl_about"
-                                    defaultValue={this.state.data && this.state.data.memberships && this.state.data.memberships.description ? this.state.data.memberships.description : ""}
+                          <textarea placeholder="Describe..." name="membershipDescription" className="form-control" id="cl_about"
+                                    defaultValue={this.state.data && this.state.data.memberships && this.state.data.memberships.membershipDescription ? this.state.data.memberships.membershipDescription : ""}
                                     onBlur={this.handleBlur.bind(this, "memberships")}></textarea>
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
-                                       id="isDescriptionPrivate"
-                                       onClick={this.onLockChange.bind(this, "isDescriptionPrivate", "memberships")}/><input
-                          type="checkbox" className="lock_input" id="isDescriptionPrivate"
-                          checked={this.state.data && this.state.data.memberships && this.state.data.memberships.isDescriptionPrivate ? this.state.data.memberships.isDescriptionPrivate : false}/>
+                                       id="isMembershipPrivate"
+                                       onClick={this.onLockChange.bind(this, "membershipDescription", "isMembershipPrivate", "memberships")}/>
                         </div>
                       </div>
                     </div>
@@ -185,14 +211,12 @@ export default class MlStartupMCL extends React.Component {
                       <div className="panel-heading">Compliances</div>
                       <div className="panel-body ">
                         <div className="form-group nomargin-bottom">
-                          <textarea placeholder="Describe..." name="description" className="form-control" id="cl_about"
-                                    defaultValue={this.state.data && this.state.data.compliances && this.state.data.compliances.description ? this.state.data.compliances.description : ""}
+                          <textarea placeholder="Describe..." name="compliancesDescription" className="form-control" id="cl_about"
+                                    defaultValue={this.state.data && this.state.data.compliances && this.state.data.compliances.compliancesDescription ? this.state.data.compliances.compliancesDescription : ""}
                                     onBlur={this.handleBlur.bind(this, "compliances")}></textarea>
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
-                                       id="isDescriptionPrivate"
-                                       onClick={this.onLockChange.bind(this, "isDescriptionPrivate", "compliances")}/><input
-                          type="checkbox" className="lock_input" id="isDescriptionPrivate"
-                          checked={this.state.data && this.state.data.compliances && this.state.data.compliances.isDescriptionPrivate ? this.state.data.compliances.isDescriptionPrivate : false}/>
+                                       id="isCompliancesPrivate"
+                                       onClick={this.onLockChange.bind(this, "compliancesDescription", "isCompliancesPrivate", "compliances")}/>
                         </div>
                       </div>
                     </div>
@@ -201,14 +225,12 @@ export default class MlStartupMCL extends React.Component {
                       <div className="panel-heading">Licenses</div>
                       <div className="panel-body ">
                         <div className="form-group nomargin-bottom">
-                          <textarea placeholder="Describe..." name="description" className="form-control" id="cl_about"
-                                    defaultValue={this.state.data && this.state.data.licenses && this.state.data.licenses.description ? this.state.data.licenses.description : ""}
+                          <textarea placeholder="Describe..." name="licensesDescription" className="form-control" id="cl_about"
+                                    defaultValue={this.state.data && this.state.data.licenses && this.state.data.licenses.licensesDescription ? this.state.data.licenses.licensesDescription : ""}
                                     onBlur={this.handleBlur.bind(this, "licenses")}></textarea>
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
-                                       id="isDescriptionPrivate"
-                                       onClick={this.onLockChange.bind(this, "isDescriptionPrivate", "licenses")}/><input
-                          type="checkbox" className="lock_input" id="isDescriptionPrivate"
-                          checked={this.state.data && this.state.data.licenses && this.state.data.licenses.isDescriptionPrivate ? this.state.data.licenses.isDescriptionPrivate : false}/>
+                                       id="isLicensesPrivate"
+                                       onClick={this.onLockChange.bind(this, "licensesDescription", "isLicensesPrivate", "licenses")}/>
                         </div>
                       </div>
                     </div>
@@ -224,5 +246,5 @@ export default class MlStartupMCL extends React.Component {
   }
 };
 MlStartupMCL.contextTypes = {
-  startupPortfolio: PropTypes.object,
+  serviceProviderPortfolio: PropTypes.object,
 };

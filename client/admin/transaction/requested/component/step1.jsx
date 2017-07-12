@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 var Select = require('react-select');
-import Moolyaselect from '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from '../../../commons/components/MlAdminSelectWrapper'
 import ScrollArea from 'react-scrollbar';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {updateRegistrationActionHandler,emailVerificationActionHandler,smsVerificationActionHandler} from '../actions/updateRegistration'
@@ -161,6 +161,10 @@ export default class step1 extends React.Component{
     this.setState({registrationType:value});
     this.setState({identityType:null});
     this.setState({coummunityName:selObject.label})
+    this.setState({cluster:null});
+    this.setState({chapter:null});
+    this.setState({subchapter:null});
+    this.setState({userType:null});
   }
   optionBySelectSubscription(val){
     this.setState({subscription:val.value})

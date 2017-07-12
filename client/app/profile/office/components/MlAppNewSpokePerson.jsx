@@ -7,7 +7,7 @@ import {render} from "react-dom";
 import _ from "lodash";
 import {fetchCommunitiesHandler} from "../../../../app/commons/actions/fetchCommunitiesActionHandler";
 import {createOfficeActionHandler} from "../actions/createOfficeAction";
-import {initalizeFloatLabel} from "../../../../../client/admin/utils/formElemUtil";
+import {initalizeFloatLabel} from "../../../../../client/commons/utils/formElemUtil";
 
 export default class MlAppNewSpokePerson extends React.Component {
   constructor(props) {

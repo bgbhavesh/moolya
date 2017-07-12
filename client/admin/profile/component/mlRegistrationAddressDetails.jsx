@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
 import { graphql } from 'react-apollo';
-import Moolyaselect from  '../../../commons/components/select/MoolyaSelect';
+import Moolyaselect from  '../../commons/components/MlAdminSelectWrapper';
 import {updateRegistrationInfoDetails} from '../actions/updateRegistration'
 import update from 'immutability-helper';
 import {updateContactDetails} from '../actions/addAddressBookAction'
@@ -243,7 +243,6 @@ export default class AddressDetails extends React.Component{
                                 isDynamic={true}/>
                 </div>
                 <div className="form-group">
-                  {console.log(that.state.addressDetails)}
                   <input type="text"  ref={'name'} placeholder="Name" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">

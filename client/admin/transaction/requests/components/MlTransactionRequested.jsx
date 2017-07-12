@@ -7,7 +7,7 @@ import {findTransactionRequestActionHandler} from '../actions/findRequests'
 import moment from 'moment'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import CreateRequestComponent from '../../requested/component/CreateRequestComponent'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import {addReqgistrationRequestInfo} from '../../requested/actions/addRegistrationRequestAction'
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 import { graphql } from 'react-apollo';

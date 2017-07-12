@@ -3,7 +3,8 @@
  */
 import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
-import _ from "lodash";
+// import _ from "lodash";
+var _ = require('lodash')
 // import MlUserContext from "../../../../MlExternalUsers/mlUserContext";
 // import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 import portfolioValidationRepo from '../portfolioValidation'
@@ -83,7 +84,6 @@ MlResolver.MlQueryResolver['fetchServiceProviderDetails'] = (obj, args, context,
     serviceProviderPortfolio[key] = filteredObject
     return serviceProviderPortfolio;
   }
-
 }
 
 updateArrayofObjects = (updateFor, source) =>{

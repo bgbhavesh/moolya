@@ -12,15 +12,15 @@ export default class MlTabComponent extends React.Component {
     }
 
     onActivate(index){
-        if(this.state.tabs[index].title == ''){
-            this.props.backClickHandler();
-        }
+        // if(this.state.tabs[index].title == ''){
+        //     this.props.backClickHandler();
+        // }
         console.log('Tab ' + index + ' was activated!')
     }
 
     render() {
       let tabs = this.state.tabs;
       let selectedTabKey = this.state.selectedTabKey
-      return <Tabs items={tabs} onChange={this.onActivate.bind(this)} selectedTabKey={selectedTabKey}/>;
+      return <Tabs items={tabs} onChange={this.onActivate.bind(this)} />;
     }
 }

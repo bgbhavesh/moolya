@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../admin/utils/formElemUtil';
+import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../commons/utils/formElemUtil';
 import _ from 'lodash';
 import MlActionComponent from '../../../commons/components/actions/ActionComponent';
 import formHandler from '../../../commons/containers/MlFormHandler';

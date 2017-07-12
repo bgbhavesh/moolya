@@ -46,7 +46,7 @@ export default class MlStartupCharts extends React.Component{
         toYear:2015,
         fromMonth:"April",
         toMonth:"March",
-        totalEmployment:20
+        totalEmployment:200
       },
       {
         fromYear:2015,
@@ -233,9 +233,9 @@ export default class MlStartupCharts extends React.Component{
       },
       {
         department:"Support",
-        fromYear:20113,
+        fromYear:2013,
         fromMonth:"March",
-        toYear:20114,
+        toYear:2014,
         toMonth:"April",
         employmentNumber:400
       }
@@ -304,7 +304,7 @@ export default class MlStartupCharts extends React.Component{
       title = "Pie Chart With Tooltip",
       // value accessor
       value = function(d) {
-        return +d && d.employmentNumber;
+        return d && +d.employmentNumber;
       },
       // name accessor
       name = function(d) {

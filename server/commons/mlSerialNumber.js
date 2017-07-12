@@ -34,6 +34,10 @@ if (!internalTaskNumber) {
   MlSerialNumbers.insert({_id: "internalTaskNumber", seq: 0});
 }
 
+var activityNumber = MlSerialNumbers.findOne({_id: "activityNumber"});
+if (!activityNumber) {
+  MlSerialNumbers.insert({_id: "activityNumber", seq: 0});
+}
 var taskNumber = MlSerialNumbers.findOne({_id: "taskNumber"});
 if (!taskNumber) {
   MlSerialNumbers.insert({_id: "taskNumber", seq: 0});
@@ -41,6 +45,10 @@ if (!taskNumber) {
 var sessionNumber = MlSerialNumbers.findOne({_id: "sessionNumber"});
 if (!sessionNumber) {
   MlSerialNumbers.insert({_id: "sessionNumber", seq: 0});
+}
+var serviceNumber = MlSerialNumbers.findOne({_id: "serviceNumber"});
+if (!serviceNumber) {
+  MlSerialNumbers.insert({_id: "serviceNumber", seq: 0});
 }
 orderNumberGenService = (function(){
   function getNextSequence(name) {
@@ -92,11 +100,17 @@ orderNumberGenService = (function(){
     createBspokeOfficeSCcode: function (scDef) {
       scDef.code = "ML-OFF-"+ FormatUtil.leadingZeros(getNextSequence("bspoke"), 8);
     },
+    createActivityId: function (userActivity) {
+      userActivity.transactionId = "MLACT"+ FormatUtil.leadingZeros(getNextSequence("activityNumber"), 8);
+    },
     createTaskId: function (userTask) {
       userTask.transactionId = "MLTSK"+ FormatUtil.leadingZeros(getNextSequence("taskNumber"), 8);
     },
     createSessionId: function (userTask) {
       userTask.sessionId = "MLSES"+ FormatUtil.leadingZeros(getNextSequence("sessionNumber"), 8);
+    },
+    createServiceId: function (userService) {
+      userService.transactionId = "MLSER"+ FormatUtil.leadingZeros(getNextSequence("serviceNumber"), 8);
     },
     generateRandomPassword:function(){
       var randomId = function makeid(){

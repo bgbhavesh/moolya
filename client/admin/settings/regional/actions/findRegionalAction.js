@@ -24,6 +24,7 @@ export async function findRegionalActionHandler()
               currencySymbol
               measurementSystem
               currencyFormat
+              rounding
               valueSeparator
             }
           }

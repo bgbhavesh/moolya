@@ -4,7 +4,7 @@ import MlCommunityMapView from "../component/MlCommunityMapView"
 import MlCommunityList from '../component/MlCommunityList'
 import React from 'react';
 import MapDetails from "../../../../client/commons/components/map/mapDetails"
-import maphandler from "../../../../client/commons/components/map/findMapDetailsTypeAction"
+import maphandler from "../actions/findMapDetailsTypeAction"
 import MlMapFooter from '../component/MlMapFooter';
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 

@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
 import {client} from '../../../admin/core/apolloConnection';
 
-export async function findMapDetailsTypeActionHandler(ModuleTypeDetails) {
+/*export async function findMapDetailsTypeActionHandler(ModuleTypeDetails) {
   let did=ModuleTypeDetails
   const result = await client.query({
     query: gql`
@@ -21,9 +21,9 @@ export async function findMapDetailsTypeActionHandler(ModuleTypeDetails) {
   })
   const totalResult = result.data.data;
   return totalResult
-}
+}*/
 
-export async function fetchDefaultCenterOfUser(ModuleTypeDetails) {
+/*export async function fetchDefaultCenterOfUser(ModuleTypeDetails) {
   let did=ModuleTypeDetails
   let result = await client.query({
     query: gql`
@@ -42,7 +42,7 @@ export async function fetchDefaultCenterOfUser(ModuleTypeDetails) {
   });
   result=result&&result.data&&result.data.data?result.data.data:null;
   return result;
-}
+}*/
 
 /*export async function fetchUsers(clusterId, chapterId, subChapterId, userType) {
 

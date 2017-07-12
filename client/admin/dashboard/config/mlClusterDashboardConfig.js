@@ -2,7 +2,7 @@ import {MlViewer,MlViewerTypes} from "../../../../lib/common/mlViewer/mlViewer";
 import MlClusterList from '../component/MlClusterList'
 import MlMapViewContainer from "../../core/containers/MlMapViewContainer"
 import MapDetails from "../../../../client/commons/components/map/mapDetails"
-import maphandler from "../../../../client/commons/components/map/findMapDetailsTypeAction"
+import maphandler from "../actions/findMapDetailsTypeAction"
 import React from 'react';
 import gql from 'graphql-tag'
 import MlMapFooter from '../component/MlMapFooter';

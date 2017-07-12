@@ -195,6 +195,10 @@ export default class MlFunderInvestment extends React.Component {
   }
 
   render() {
+    var yesterday = Datetime.moment().subtract(0,'day');
+    var valid = function( current ){
+      return current.isBefore( yesterday );
+    };
     let query = gql`query{
       data:fetchFundingTypes {
         label:displayName
@@ -262,7 +266,7 @@ export default class MlFunderInvestment extends React.Component {
                             <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
                                       inputProps={{placeholder: "Enter Date of Investment"}} ref="dateOfInvestment"
                                       defaultValue={this.state.data.dateOfInvestment ? this.state.data.dateOfInvestment : ''}
-                                      onBlur={this.dateChange.bind(this)}/>
+                                      onBlur={this.dateChange.bind(this)} closeOnSelect={true} isValidDate={ valid }/>
                             <FontAwesome name='unlock' className="input_icon un_lock" id="isDateOfInvestmentPrivate"
                                          onClick={this.onLockChange.bind(this, "dateOfInvestment", "isDateOfInvestmentPrivate")}/>
                           </div>

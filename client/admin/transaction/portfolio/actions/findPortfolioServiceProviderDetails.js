@@ -77,6 +77,40 @@ export async function fetchServiceProviderPortfolioClients(portfoliodetailsId) {
   return id
 }
 
+export async function fetchServiceProviderPortfolioAbout(portfoliodetailsId) {
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            data: fetchServiceProviderDetails(portfoliodetailsId: $portfoliodetailsId, key:"about") {
+            about{
+              aboutTitle
+              isAboutTitlePrivate
+              aboutDescription
+              isDescriptionPrivate
+              aboutImages{
+                fileName
+                fileUrl
+              } 
+              privateFields{
+                  keyName,
+                  booleanKey
+                }
+              }
+            }
+          }
+
+
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.data && result.data.data.about;
+  return id
+}
+
+
 export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
   const result = await client.query({
     query: gql`

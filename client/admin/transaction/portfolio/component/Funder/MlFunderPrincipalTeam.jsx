@@ -33,7 +33,8 @@ export default class MlFunderPrincipalTeam extends React.Component {
       clusterId:'',
       privateKeys:[],
       privateKey:{},
-      principalContext:'active'
+      principalContext:'active',
+      teamContext:''
     }
     this.handleBlur.bind(this);
     this.onSavePrincipalAction.bind(this);
@@ -79,12 +80,12 @@ export default class MlFunderPrincipalTeam extends React.Component {
         // })
       }
     } else {
-      var funderPrincipalList = [];
-      funderPrincipalList.push(that.context.funderPortfolio.principal)
+      // var funderPrincipalList = [];
+      // funderPrincipalList.push(that.context.funderPortfolio.principal)
       this.setState({
         loading: false,
         funderPrincipal: that.context.funderPortfolio.principal,
-        funderPrincipalList: funderPrincipalList
+        funderPrincipalList: that.context.funderPortfolio.principal
       });
     }
   }
@@ -164,9 +165,10 @@ export default class MlFunderPrincipalTeam extends React.Component {
     }
   }
   optionsBySelectTitle(val){
-    // this.setState({title:val})
-    this.setState({title:val}, function () {
-      this.sendDataToParent()
+    let data = _.cloneDeep(this.state.data);
+    data.title=val;
+    this.setState({data:data}, function () {
+      this.sendDataToParent();
     })
   }
 
@@ -515,7 +517,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                             {/*/!*checked={this.state.data.isCompanyNamePrivate}/>*!/*/}
                           {/*</div>*/}
                           <div className="form-group">
-                            <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.title} queryType={"graphql"} query={titlequery}  queryOptions={titleOption} onSelect={that.optionsBySelectTitle.bind(this)} isDynamic={true}/>
+                            <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.data.title} queryType={"graphql"} query={titlequery}  queryOptions={titleOption} onSelect={that.optionsBySelectTitle.bind(this)} isDynamic={true}/>
 
                           </div>
                           <div className="form-group">
@@ -630,7 +632,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                             </div>
                           </div>
                           <div className="form-group">
-                            <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.title} queryType={"graphql"} query={titlequery}  queryOptions={titleOption} onSelect={that.optionsBySelectTitle.bind(this)} isDynamic={true}/>
+                            <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.data.title} queryType={"graphql"} query={titlequery}  queryOptions={titleOption} onSelect={that.optionsBySelectTitle.bind(this)} isDynamic={true}/>
 
                           </div>
                           {/*<div className="form-group">*/}

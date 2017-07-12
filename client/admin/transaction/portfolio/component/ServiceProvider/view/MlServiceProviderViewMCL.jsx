@@ -32,7 +32,6 @@ export default class MlServiceProviderViewMCL extends Component {
 
   componentDidMount() {
     this.initalizeAnnotaor()
-    this.fetchAnnotations();
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight - (68 + $('.admin_header').outerHeight(true)));
 
@@ -64,7 +63,9 @@ export default class MlServiceProviderViewMCL extends Component {
       licenses: this.state.licenses,
       compliances: this.state.compliances
     }
-    this.setState({data: data})
+    this.setState({data: data},function () {
+      this.fetchAnnotations();
+    })
 
   }
 
@@ -101,7 +102,7 @@ export default class MlServiceProviderViewMCL extends Component {
   }
 
   async createAnnotations(annotation) {
-    let details = {portfolioId: this.props.portfolioDetailsId, docId: "startupMCL", quote: JSON.stringify(annotation)}
+    let details = {portfolioId: this.props.portfolioDetailsId, docId: "serviceproviderMCL", quote: JSON.stringify(annotation)}
     const response = await createAnnotationActionHandler(details);
     if (response && response.success) {
       this.fetchAnnotations(true);
@@ -111,7 +112,7 @@ export default class MlServiceProviderViewMCL extends Component {
 
 
   async fetchAnnotations(isCreate) {
-    const response = await findAnnotations(this.props.portfolioDetailsId, "startupMCL");
+    const response = await findAnnotations(this.props.portfolioDetailsId, "serviceproviderMCL");
     let resp = JSON.parse(response.result);
     let annotations = this.state.annotations;
     this.setState({annotations: JSON.parse(response.result)})

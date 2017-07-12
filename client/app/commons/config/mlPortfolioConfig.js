@@ -22,9 +22,10 @@ export const GenericPortfolioActionsConfig= [
   {actionName: 'partner',actionType:'view',isDisabled:true},
   {actionName: 'collaborate',actionType:'view',isDisabled:true},
   {actionName: 'save',actionType:'edit'},
-  {actionName: 'edit',actionType:'edit'},
+  // {actionName: 'edit',actionType:'edit'},
   {actionName: 'golive',actionType:'edit'}
 ];
+/**removing edit not required in edit mode only save can be used*/
 
 export const GenericPortfolioAccordion= {id:'portfolioAccordion',
   panelItems:[//{'title':'Related',isText:true,contentComponent:'upcoming',style:{'background': '#273545'}},

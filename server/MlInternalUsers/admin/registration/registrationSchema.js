@@ -211,6 +211,8 @@ let registrationSchema = `
          transactionCreatedDate : String
          transactionUpdatedDate : String
          emails  : [emailVerification]
+         isAllowRegisterAs : Boolean
+         pendingRegId : String
     }
     
    

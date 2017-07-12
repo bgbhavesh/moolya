@@ -286,15 +286,16 @@ export default class MlAppServiceStep2 extends React.Component{
       }
     })
     // that.setState({activities:temp})
-    let profileId = FlowRouter.getParam('profileId')
-    let serviceQuery = gql`query($profileId:String) {
-     data: fetchTaskDetailsForServiceCard(profileId: $profileId) {
+    let profileId = FlowRouter.getParam('profileId');
+    let serviceId = FlowRouter.getQueryParam('id');
+    let serviceQuery = gql`query($profileId:String, $serviceId: String) {
+     data: fetchTaskDetailsForServiceCard(profileId: $profileId, serviceId: $serviceId) {
         value: _id
         label: name
       }
     }
     `;
-    let serviceOption={options: { variables: {profileId:profileId}}};
+    let serviceOption={options: { variables: {profileId:profileId, serviceId: serviceId}}};
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >

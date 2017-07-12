@@ -147,12 +147,12 @@ export default class MlAppActivity extends Component {
     if(id){
       const res = await updateActivityActionHandler(id, data);
       if(res){
-        toastr.success("Saved Successfully");
+        toastr.success("Updated Successfully");
       }
     } else {
       const res = await createActivityActionHandler(data);
       if(res) {
-        toastr.success("Saved Successfully");
+        toastr.success("Created Successfully");
         FlowRouter.setQueryParams({id:res.result});
       }
     }

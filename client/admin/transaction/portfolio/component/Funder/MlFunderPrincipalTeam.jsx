@@ -33,7 +33,8 @@ export default class MlFunderPrincipalTeam extends React.Component {
       clusterId:'',
       privateKeys:[],
       privateKey:{},
-      principalContext:'active'
+      principalContext:'active',
+      teamContext:''
     }
     this.handleBlur.bind(this);
     this.onSavePrincipalAction.bind(this);
@@ -79,12 +80,12 @@ export default class MlFunderPrincipalTeam extends React.Component {
         // })
       }
     } else {
-      var funderPrincipalList = [];
-      funderPrincipalList.push(that.context.funderPortfolio.principal)
+      // var funderPrincipalList = [];
+      // funderPrincipalList.push(that.context.funderPortfolio.principal)
       this.setState({
         loading: false,
         funderPrincipal: that.context.funderPortfolio.principal,
-        funderPrincipalList: funderPrincipalList
+        funderPrincipalList: that.context.funderPortfolio.principal
       });
     }
   }
@@ -164,10 +165,23 @@ export default class MlFunderPrincipalTeam extends React.Component {
     }
   }
   optionsBySelectTitle(val){
-    // this.setState({title:val})
-    this.setState({title:val}, function () {
-      this.sendDataToParent()
-    })
+    let index = this.state.selectedIndex;
+
+    if(this.state.selectedTab == "principal"){
+      let fun = this.state.funderPrincipal
+      let data = _.cloneDeep(fun);
+      data[index].title=val
+      this.setState({funderPrincipal:data})
+    }else{
+      let fun = this.state.funderTeam
+      let data = _.cloneDeep(fun);
+      data[index].title=val
+      this.setState({funderTeam:data})
+    }
+    this.sendDataToParent();
+    // this.setState({title:val}, function () {
+    //   this.sendDataToParent()
+    // })
   }
 
   onStatusChangeNotify(e) {
@@ -236,6 +250,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
       let fun = this.state.funderPrincipal;
       let funderPrincipal = _.cloneDeep(fun);
       data.index = this.state.selectedIndex;
+      data.title=this.state.title
       funderPrincipal[this.state.selectedIndex] = data;
       let arr = [];
       _.each(funderPrincipal, function (item) {
@@ -259,6 +274,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
       let fun = this.state.funderTeam;
       let funderTeam = _.cloneDeep(fun);
       data.index = this.state.selectedIndex;
+      data.title=this.state.title;
       funderTeam[this.state.selectedIndex] = data;
       let arr = [];
       _.each(funderTeam, function (item) {
@@ -515,7 +531,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                             {/*/!*checked={this.state.data.isCompanyNamePrivate}/>*!/*/}
                           {/*</div>*/}
                           <div className="form-group">
-                            <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.title} queryType={"graphql"} query={titlequery}  queryOptions={titleOption} onSelect={that.optionsBySelectTitle.bind(this)} isDynamic={true}/>
+                            <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.data.title} queryType={"graphql"} query={titlequery}  queryOptions={titleOption} onSelect={that.optionsBySelectTitle.bind(this)} isDynamic={true}/>
 
                           </div>
                           <div className="form-group">
@@ -630,7 +646,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                             </div>
                           </div>
                           <div className="form-group">
-                            <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.title} queryType={"graphql"} query={titlequery}  queryOptions={titleOption} onSelect={that.optionsBySelectTitle.bind(this)} isDynamic={true}/>
+                            <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.data.title} queryType={"graphql"} query={titlequery}  queryOptions={titleOption} onSelect={that.optionsBySelectTitle.bind(this)} isDynamic={true}/>
 
                           </div>
                           {/*<div className="form-group">*/}

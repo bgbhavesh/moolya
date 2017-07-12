@@ -15,6 +15,7 @@ MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
       break;
     case "chapter":
       query={"chapterId":args.id};
+      chapterCount = mlDBController.find('MlSubChapters', {chapterId:args.id,isActive:true}, context).count();
       break;
     case "subChapter":
       query={"subChapterId":args.id};

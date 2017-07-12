@@ -13,7 +13,7 @@ import MlAppDashboard from "../../app/dashboard/components/MlAppDashboard";
 import MlPortfolioLanding from "../../app/commons/components/MlPortfolioLanding";
 import MlAppIdeatorAddIdea from "../../app/ideators/components/MlAppIdeatorAddIdea";
 import MlAppPortfolio from "../../app/commons/components/MlAppPortfolio";
-import PortfolioLibrary from '../../commons/components/portfolioLibrary/PortfolioLibrary'
+import Library from '../../commons/components/portfolioLibrary/libraryRoute'
 import MlAppMyProfile from "../../app/profile/components/MlAppMyProfile";
 import MlProfileSettings from "../../app/profile/components/MlProfileSettings";
 import MlAppProfileAddressBook from "../../app/profile/components/MlAppProfileAddressBook";
@@ -133,7 +133,7 @@ appSection.route('/myOffice', {
 appSection.route('/library', {
   name: 'library',
   action(){
-    mount(AppLayout, {appContent: <PortfolioLibrary client={appClient} isAdmin={false} />, isProfileMenu: true})
+    mount(AppLayout, {appContent: <Library client={appClient} />, isProfileMenu: true})
   }
 });
 

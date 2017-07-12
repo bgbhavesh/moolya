@@ -502,31 +502,11 @@ MlResolver.MlQueryResolver['fetchAllowableFormats'] = (obj, args, context, info)
   }
 
 MlResolver.MlMutationResolver['updatePrivacyDetails'] = (obj, args, context, info) => {
-  if(args.detailsInput.type === "image"){
-    var libraryData1 = mlDBController.find('MlLibrary', {userId: context.userId, libraryType:args.detailsInput.type}, context).fetch();
+   var libraryData1 = mlDBController.find('MlLibrary', {userId: context.userId, libraryType:args.detailsInput.type}, context).fetch();
     libraryData1[args.detailsInput.index].isPrivate = args.detailsInput.element
     var updateTemplateCollection1 = mlDBController.update('MlLibrary', {_id: libraryData1[args.detailsInput.index]._id},{isPrivate:args.detailsInput.element}, {$set: 1}, context)
     return updateTemplateCollection1;
-  }
-  else if(args.detailsInput.type === "video"){
-    var libraryData2 = mlDBController.find('MlLibrary', {userId: context.userId, libraryType:args.detailsInput.type}, context).fetch();
-    libraryData2[args.detailsInput.index].isPrivate = args.detailsInput.element
-    var updateTemplateCollection2 = mlDBController.update('MlLibrary', {_id: libraryData2[args.detailsInput.index]._id},{isPrivate:args.detailsInput.element}, {$set: 1}, context)
-    return updateTemplateCollection2;
-  } else if(args.detailsInput.type === "document"){
-    var libraryData3 = mlDBController.find('MlLibrary', {userId: context.userId, libraryType:args.detailsInput.type}, context).fetch();
-    libraryData3[args.detailsInput.index].isPrivate = args.detailsInput.element
-    var updateTemplateCollection3 = mlDBController.update('MlLibrary', {_id: libraryData3[args.detailsInput.index]._id},{isPrivate:args.detailsInput.element}, {$set: 1}, context)
-    return updateTemplateCollection3;
-  } else   if(args.detailsInput.type === "template"){
-    var libraryData = mlDBController.find('MlLibrary', {userId: context.userId, libraryType:args.detailsInput.type}, context).fetch();
-    libraryData[args.detailsInput.index].isPrivate = args.detailsInput.element
-    var updateTemplateCollection = mlDBController.update('MlLibrary', {_id: libraryData[args.detailsInput.index]._id},{isPrivate:args.detailsInput.element}, {$set: 1}, context)
-    return updateTemplateCollection;
-  }
 }
-
-
 
 MlResolver.MlMutationResolver['updateLibraryData'] = (obj, args, context, info) => {
   var libraryData = mlDBController.find('MlLibrary', {userId: context.userId}, context).fetch();

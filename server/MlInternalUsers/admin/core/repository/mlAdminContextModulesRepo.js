@@ -181,25 +181,34 @@ let CoreModules = {
     let moolyaQuery = {};
     var processedData = []
     //User selection filter.
-    let clusterId = requestParams && requestParams.clusterId ? requestParams.clusterId : null;
-    if (clusterId) {
-      nonMoolyaQuery = {"clusterId": clusterId, isDefaultSubChapter: false};
-      moolyaQuery = {"clusterId": clusterId, isDefaultSubChapter: true}
-    }
-    var nonMoolya = mlDBController.find('MlSubChapters', nonMoolyaQuery, context, fieldsProj).fetch();
-    var moolya = mlDBController.findOne('MlSubChapters', moolyaQuery, context, fieldsProj);
-    if (moolya && moolya.isDefaultSubChapter === true) {
-      processedData.push(moolya)
-      if (nonMoolya) {
-        nonMoolya.map(function (doc, id) {
-          processedData.push(doc)
-        })
+    var userProfile = new MlAdminUserContext().userProfileDetails(context.userId) || {};
+    if(userProfile.hierarchyLevel == 4){
+      let clusterId = requestParams && requestParams.clusterId ? requestParams.clusterId : null;
+      if (clusterId) {
+        nonMoolyaQuery = {"clusterId": clusterId, isDefaultSubChapter: false};
+        moolyaQuery = {"clusterId": clusterId, isDefaultSubChapter: true}
       }
+      var nonMoolya = mlDBController.find('MlSubChapters', nonMoolyaQuery, context, fieldsProj).fetch();
+      var moolya = mlDBController.findOne('MlSubChapters', moolyaQuery, context, fieldsProj);
+      if (moolya && moolya.isDefaultSubChapter === true) {
+        processedData.push(moolya)
+        if (nonMoolya) {
+          nonMoolya.map(function (doc, id) {
+            processedData.push(doc)
+          })
+        }
+      }
+      data = processedData
+      var totalRecords = mlDBController.find('MlSubChapters', nonMoolyaQuery, context, fieldsProj).count();
+      return {totalRecords: totalRecords + 1, data: data};
+    }else{
+      let subChapters = userProfile.defaultSubChapters
+      let clusterId = requestParams && requestParams.clusterId ? requestParams.clusterId : null;
+      nonMoolyaQuery = {"clusterId": clusterId,"_id":{'$in':subChapters}, isDefaultSubChapter: false};
+      var data = mlDBController.find('MlSubChapters', nonMoolyaQuery, context, fieldsProj).fetch();
+      var totalRecords = mlDBController.find('MlSubChapters', nonMoolyaQuery, context, fieldsProj).count();
+      return {totalRecords: totalRecords , data: data};
     }
-    data = processedData
-    var totalRecords = mlDBController.find('MlSubChapters', nonMoolyaQuery, context, fieldsProj).count();
-    return {totalRecords: totalRecords + 1, data: data};
-
   },
   MlInternalRequestRepo: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
     var type = requestParams && requestParams.type ? requestParams.type : "";
@@ -607,6 +616,35 @@ let CoreModules = {
     })
     var totalRecords = MlService.find({}).count();
     return {totalRecords: totalRecords, data: data};
+  },
+  MlHierarchyClusterRepo: (requestParams, userFilterQuery, contextQuery, fieldsProj, context) => {
+    var resultantQuery = mergeQueries(contextQuery, userFilterQuery);
+    var countriesId = [];
+    var activeCluster = [];
+    var userProfile = new MlAdminUserContext().userProfileDetails(context.userId) || {};
+    if(userProfile.hierarchyLevel == 4){
+      let activeCountries = mlDBController.find('MlCountries', {isActive: true}, context, {sort: {country: 1}}).fetch();
+      activeCountries.map(function (country) {
+        countriesId.push(country._id);
+      })
+      let Clusters = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).fetch();
+      countriesId.map(function (id) {
+        Clusters.map(function (cluster) {
+          if (cluster.countryId == id) {
+            activeCluster.push(cluster);
+          }
+        })
+      })
+      const data = activeCluster;
+      const totalRecords = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).count();
+      return {totalRecords: totalRecords, data: data};
+    }else{
+      let clusterIds = userProfile && userProfile.defaultCluster ? userProfile.defaultCluster : [];
+      resultantQuery = {_id: {$in: [clusterIds]}}
+      var data = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).fetch();
+      var totalRecords = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).count();
+      return {totalRecords: totalRecords + 1, data: data};
+    }
   }
 }
 

@@ -54,8 +54,19 @@ MlResolver.MlQueryResolver['fetchActivities'] = (obj, args, context, info) => {
 // }
 
 MlResolver.MlQueryResolver['fetchActivity'] = (obj, args, context, info) => {
-  let result = mlDBController.findOne('MlActivity', {_id:args.activityId} , context);
-  return result;
+  let result = mlDBController.findOne('MlActivity', {_id: args.activityId} , context);
+  if (result) {
+    let query = {
+      transactionId: result.transactionId,
+      isCurrentVersion: true
+    };
+    let activity = mlDBController.findOne('MlActivity', query, context);
+    return activity;
+  } else  {
+    let code = 404;
+    let response = new MlRespPayload().successPayload('Activity not found', code);
+    return response;
+  }
 };
 
 MlResolver.MlMutationResolver['createActivity'] = (obj, args, context, info) => {

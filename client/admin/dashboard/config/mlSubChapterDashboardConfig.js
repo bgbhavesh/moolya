@@ -5,7 +5,8 @@ import MapDetails from "../../../../client/commons/components/map/mapDetails"
 import maphandler from "../../../../client/commons/components/map/findMapDetailsTypeAction"
 import React from 'react';
 import gql from 'graphql-tag'
-
+import MlMapFooter from '../component/MlMapFooter';
+import {getAdminUserContext} from '../../../commons/getAdminUserContext';
 const mlSubChapterDashboardMapConfig=new MlViewer.View({
   name:"subChapterDashBoardMap",
   viewType:MlViewerTypes.MAP,
@@ -20,7 +21,17 @@ const mlSubChapterDashboardMapConfig=new MlViewer.View({
     let center=await maphandler.fetchDefaultCenterOfUser(mapDetailsQuery);
     return center;
   },
+  fetchZoom:true,
+  fetchZoomHandler:async function(reqParams){
+    var zoom=1;
+    let loggedInUser = getAdminUserContext();
+    if(loggedInUser.hierarchyLevel != 4){
+      zoom = 4;
+    }
+    return zoom;
+  },
   viewComponent:<MlMapViewContainer />,
+  mapFooterComponent:<MlMapFooter />,
   queryOptions:true,
   buildQueryOptions:(config)=>{
     return {context:{clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,chapterId:config.params&&config.params.chapterId?config.params.chapterId:null}}

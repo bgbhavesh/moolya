@@ -157,6 +157,9 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       // requestParams=args.context || {};
       result=CoreModulesRepo.MlServiceCardsTransactionRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
+    case 'clusterHierarchy':
+      result=CoreModulesRepo.MlHierarchyClusterRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
   }
 
   return {totalRecords:result.totalRecords||0,data:result.data||[]};
@@ -191,6 +194,7 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "officeTransaction":resolveType='officeTransactionType';break;
       case "documents":resolveType='ProcessType';break;
       case "serviceCards":resolveType='AdminService';break;
+      case "clusterHierarchy":resolveType='Cluster';break;
     }
 
     if(resolveType){

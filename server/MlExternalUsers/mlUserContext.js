@@ -24,28 +24,33 @@ class MlUserContext{
 
     getDefaultMenu(userId){
         check(userId,String);
+        var  menu = ''
         let userProfile = this.userProfileDetails(userId)||{};
-        if(userProfile){
-            // var menu = MlAppMenuConfig.findOne({communityDefCode: userProfile.communityCode})
-          var menu = MlAppMenuConfig.findOne({communityCode: userProfile.communityDefCode})
-            if(menu)
-                return menu.menuName;
-            else
-              return 'mlBrowserMenu'   /*quick fix*/
+        if(userProfile && userProfile.communityDefCode){
+          menu =   MlAppMenuConfig.findOne({"$and":[{isProfileMenu: false}, {communityCode: userProfile.communityDefCode}, {isActive:true}]});
         }
-
-        return '';
-        // return 'mlDefaultMenu';
+        else{
+          // commmunity type browser will not have any profile
+          menu =   MlAppMenuConfig.findOne({"$and":[{isProfileMenu: false}, {communityCode: 'BRW'}, {isActive:true}]});
+        }
+        if(menu)
+          return menu.menuName;
+        return menu;
     }
 
     getDefaultProfileMenu(userId){
-        check(userId,String);
+        var  menu = ''
         let userProfile = this.userProfileDetails(userId)||{};
-        if(userProfile){
-          let userDetails = {profile: userProfile, menuName: 'mlDefaultProfileMenu'}
-          return userDetails;
+        if(userProfile && userProfile.communityDefCode){
+          menu =   MlAppMenuConfig.findOne({"$and":[{isProfileMenu: true}, {communityCode: userProfile.communityDefCode}, {isActive:true}]});
         }
-        // return 'mlDefaultProfileMenu';
+        else{
+          // commmunity type browser will not have any profile
+          menu =   MlAppMenuConfig.findOne({"$and":[{isProfileMenu: true}, {communityCode: 'BRW'}, {isActive:true}]});
+        }
+        if(menu)
+          return menu.menuName;
+        return menu;
     }
 
     getExploreMenu(userId){

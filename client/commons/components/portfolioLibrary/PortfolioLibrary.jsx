@@ -17,7 +17,7 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import {multipartASyncFormHandler} from '../../MlMultipartFormAction'
-import {createLibrary, fetchLibrary, updateLibraryData} from '../../actions/mlLibraryActionHandler'
+import {createLibrary, fetchLibrary, updateLibraryData, updatePrivacyDetails} from '../../actions/mlLibraryActionHandler'
 import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
 import MlFileViewer from '../../docViewer/MlDocViewer'
 
@@ -52,12 +52,14 @@ export default class  PortfolioLibrary extends React.Component{
       imagesLock : {},
       templatesLock: {},
       videosLock: {},
+      documentsLock:{},
       explore: false
     };
 
     this.toggle = this.toggle.bind(this);
     this.fetchOnlyImages.bind(this);
     this.updateLibrary.bind(this);
+    this.dataPrivacyHandler.bind(this);
   }
 
   /**
@@ -185,35 +187,68 @@ export default class  PortfolioLibrary extends React.Component{
    */
 
   toggleImageLock(id){
+    let images = this.state.imageSpecifications;
+    let imageDetails = {
+      index: id,
+      element: images[id].isPrivate? false : true,
+      type: "image"
+    }
+    this.dataPrivacyHandler(imageDetails)
     let imageLock = this.state.imagesLock;
     imageLock[id] = imageLock[id] ? false : true;
     this.setState({
-      imageLock:imageLock
+      imagesLock: imageLock
     });
+  }
+
+  async dataPrivacyHandler(detailsInput) {
+    const response = await updatePrivacyDetails(detailsInput, this.props.client)
+    return response;
   }
 
 
   toggleTemplateLock(id){
-    let templateLock = this.state.templatesLock;
-    templateLock [id] = templateLock [id] ? false : true;
+    let templates = this.state.templateSpecifications;
+    let templatesLock = this.state.templatesLock;
+    let templateDetails = {
+      index: id,
+      element: templates[id].isPrivate? false : true,
+      type: "template"
+    }
+    this.dataPrivacyHandler(templateDetails)
+    templateLock[id] = templateLock [id] ? false : true;
     this.setState({
-      templateLock :templateLock
+      templatesLock :templatesLock
     });
   }
 
   toggleVideoLock(id){
+    let videos = this.state.videoSpecifications;
     let videoLock = this.state.videosLock;
-    videoLock [id] = videoLock [id] ? false : true;
+    let videoDetails = {
+      index: id,
+      element: videos[id].isPrivate? false : true,
+      type: "video"
+    }
+    this.dataPrivacyHandler(videoDetails)
+    videoLock[id] = videoLock [id] ? false : true;
     this.setState({
-      videoLock:videoLock
+      videosLock:videoLock
     });
   }
 
   toggleDocumentLock(id){
-    let imageLock = this.state.imagesLock;
-    imageLock[id] = imageLock[id] ? false : true;
+    let documents = this.state.documentSpecifications;
+    let documentsLock = this.state.documentsLock;
+    let documentDetails = {
+      index: id,
+      element: documents[id].isPrivate? false : true,
+      type: "document"
+    }
+    this.dataPrivacyHandler(documentDetails)
+    documentsLock[id] = documentsLock[id] ? false : true;
     this.setState({
-      imageLock:imageLock
+      documentsLock:documentsLock
     });
   }
 
@@ -251,6 +286,8 @@ export default class  PortfolioLibrary extends React.Component{
       }
     }
   }
+
+
   async storeData(link,dataType){
     switch(dataType) {
       case "image":
@@ -436,7 +473,7 @@ export default class  PortfolioLibrary extends React.Component{
     const Images = imageData.map(function(show,id) {
       return(
         <div className="thumbnail"key={id}>
-          {that.state.explore ||that.props.isAdmin?" ":that.state.imagesLock[id] ? <FontAwesome onClick={()=>that.toggleImageLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleImageLock(id)} name='unlock'/> }
+          {that.state.explore ||that.props.isAdmin?" ":that.state.imagesLock[id] || show.isPrivate? <FontAwesome onClick={()=>that.toggleImageLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleImageLock(id)} name='unlock'/> }
           {that.state.explore ||that.props.isAdmin?"": <span className="triangle-topright"><FontAwesome name='minus' onClick={()=>that.delete(id, "image")} /></span>}
           <a href="#" data-toggle="modal" data-target=".imagepop" onClick={that.random.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
           <div id="images" className="title">{show.fileName}</div>
@@ -448,7 +485,7 @@ export default class  PortfolioLibrary extends React.Component{
     const Templates = templateData.map(function(show,id) {
       return(
         <div className="thumbnail"key={id}>
-          {that.state.explore || that.props.isAdmin?"":that.state.templatesLock[id] ? <FontAwesome onClick={()=>that.toggleTemplateLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleTemplateLock(id)} name='unlock'/> }
+          {that.state.explore || that.props.isAdmin?"":that.state.templatesLock[id] || show.isPrivate ? <FontAwesome onClick={()=>that.toggleTemplateLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleTemplateLock(id)} name='unlock'/> }
           {that.state.explore || that.props.isAdmin?"":  <span className="triangle-topright"><FontAwesome name='minus' onClick={()=>that.delete(id, "template")} /></span>}
           <a href="#" data-toggle="modal" data-target=".templatepop" onClick={that.randomTemplate.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
           <div id="templates" className="title">{show.fileName}</div>
@@ -460,7 +497,7 @@ export default class  PortfolioLibrary extends React.Component{
     const videos = videodata.map(function(show,id){
       return(
         <div className="thumbnail" key={id}>
-          {that.state.explore || that.props.isAdmin?"":that.state.videosLock[id] ? <FontAwesome onClick={()=>that.toggleVideoLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleVideoLock(id)} name='unlock'/> }<FontAwesome name='unlock'/>
+          {that.state.explore || that.props.isAdmin?"":that.state.videosLock[id] || show.isPrivate ? <FontAwesome onClick={()=>that.toggleVideoLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleVideoLock(id)} name='unlock'/> }
           {that.state.explore || that.props.isAdmin?"":  <span className="triangle-topright"><FontAwesome name='minus' onClick={()=>that.delete(id, "video")} /></span>}
           <a href="" data-toggle="modal" data-target=".videopop" onClick={that.randomVideo.bind(that,show.fileUrl,id)}>
             <video width="120" height="100" controls>
@@ -476,7 +513,7 @@ export default class  PortfolioLibrary extends React.Component{
     const Documents = documentData.map(function(show,id){
       return(
         <div className="thumbnail"key={id}>
-          {that.state.explore || that.props.isAdmin?" ":that.state.imagesLock[id] ? <FontAwesome onClick={()=>that.toggleDocumentLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleDocumentLock(id)} name='unlock'/> }
+          {that.state.explore || that.props.isAdmin?" ":that.state.documentsLock[id] || show.isPrivate ? <FontAwesome onClick={()=>that.toggleDocumentLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleDocumentLock(id)} name='unlock'/> }
           {that.state.explore || that.props.isAdmin?"": <span className="triangle-topright"><FontAwesome name='minus' onClick={()=>that.delete(id, "document")} /></span>}
           <a href="#" data-toggle="modal" data-target=".documentpop" onClick={that.randomDocument.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
           <div id="images" className="title">{show.fileName}</div>
@@ -523,6 +560,7 @@ export default class  PortfolioLibrary extends React.Component{
                 <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
               </div>
               <div className="modal-body">
+                <iframe src={this.state.previewDocument}/>
                 {/*{console.log(this.state.previewDocument)}*/}
                 {/*{<MlFileViewer/>}*/}
                 {/*<div className="img_scroll"><MlDocViewer/></div>*/}

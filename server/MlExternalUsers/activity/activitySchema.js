@@ -156,7 +156,6 @@ _id: String
         fetchActivities(profileId:String, isInternal: Boolean, isExternal: Boolean):[Activity]
         fetchActivitiesForTask(taskId:String):[Activity]
         fetchActivity(activityId:String):Activity
-              
     }
 
     type Mutation {
@@ -171,9 +170,6 @@ let supportedApi = [
   {api:'fetchActivities', actionName:'READ', moduleName:"OFFICE"},
   {api:'fetchActivitiesForTask', actionName:'READ', moduleName:"OFFICE"},
   {api:'fetchActivity', actionName:'READ', moduleName:"OFFICE"},
-
-
-
   {api:'createActivity', actionName:'CREATE', moduleName:"OFFICE"},
   {api:'updateActivity', actionName:'UPDATE', moduleName:"OFFICE"}
 ]

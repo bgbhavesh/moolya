@@ -88,6 +88,15 @@ const mlCommunityDashboardMapConfig=new MlViewer.View({
     let center=await maphandler.fetchDefaultCenterOfUser(mapDetailsQuery);
     return center;
   },
+  fetchZoom:true,
+  fetchZoomHandler:async function(reqParams){
+    var zoom=1;
+    let loggedInUser = getAdminUserContext();
+    if(loggedInUser.hierarchyLevel != 4){
+      zoom = 4;
+    }
+    return zoom;
+  },
   viewComponent:<MlCommunityMapView params={this.params}/>,
   mapFooterComponent:<MlMapFooter />,
   actionConfiguration:[

@@ -6,6 +6,7 @@ import maphandler from "../../../../client/commons/components/map/findMapDetails
 import React from 'react';
 import gql from 'graphql-tag'
 import MlMapFooter from '../component/MlMapFooter';
+import {getAdminUserContext} from '../../../commons/getAdminUserContext';
 const mlClusterDashboardListConfig=new MlViewer.View({
   name:"clusterDashBoardList",
   viewType:MlViewerTypes.LIST,
@@ -52,6 +53,15 @@ const mlClusterDashboardMapConfig=new MlViewer.View({
     let mapDetailsQuery = {moduleName: reqParams.module,id: reqParams&&reqParams.params&&reqParams.params.clusterId?reqParams.params.clusterId:null};
     let center=await maphandler.fetchDefaultCenterOfUser(mapDetailsQuery);
     return center;
+  },
+  fetchZoom:true,
+  fetchZoomHandler:async function(reqParams){
+    var zoom=1;
+    let loggedInUser = getAdminUserContext();
+    if(loggedInUser.hierarchyLevel != 4){
+      zoom = 4;
+    }
+    return zoom;
   },
   viewComponent:<MlMapViewContainer />,
   mapFooterComponent:<MlMapFooter />,

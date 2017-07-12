@@ -5,7 +5,6 @@ import controllable from 'react-controllables';
 //import MapMarkers from './mapMarkers'
 import MapCluster from './MapCluster';
 import MlLoader from '../../../commons/components/loader/loader'
-import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 
 let defaultCenter={lat: 17.1144718, lng: 5.7694891};
 @controllable(['center', 'zoom', 'hoverKey', 'clickKey'])
@@ -20,10 +19,14 @@ export default class MoolyaMapView extends Component {
   async componentWillMount() {
     let that = this;
     let zoom = 1;
-    let loggedInUser = getAdminUserContext();
+    let hasZoom=that.props.fetchZoom||false;
+    if(hasZoom){
+       zoom= await that.props.fetchZoomHandler(that.props)||zoom;
+    }
+    /*let loggedInUser = getAdminUserContext();
     if(loggedInUser.hierarchyLevel != 4){
       zoom = 4;
-    }
+    }*/
     let hasCenter=that.props.fetchCenter||false;
     if(hasCenter){
       let center= await that.props.fetchCenterHandler(that.props);

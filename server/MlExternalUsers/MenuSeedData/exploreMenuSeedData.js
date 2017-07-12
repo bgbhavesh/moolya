@@ -33,11 +33,11 @@ if(Meteor.isServer){
 
             {
               "image":"ml ml-provider",
-              "link": "/app/explore/provider",
+              "link": "/app/explore/serviceProvider",
               "isLink" : true,
               "isMenu" : true,
               "name" : "Service Provider",
-              "uniqueId" : "explore_provider"
+              "uniqueId" : "explore"
             },
 
             {
@@ -46,7 +46,7 @@ if(Meteor.isServer){
               "isLink" : true,
               "isMenu" : true,
               "name" : "Company",
-              "uniqueId" : "explore_company"
+              "uniqueId" : "explore"
             },
 
             {
@@ -55,7 +55,7 @@ if(Meteor.isServer){
               "isLink" : true,
               "isMenu" : true,
               "name" : "Institutions",
-              "uniqueId" : "explore_institutions"
+              "uniqueId" : "explore"
             }
         ]
     }});

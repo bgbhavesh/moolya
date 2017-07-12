@@ -5,7 +5,8 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 import _ from 'lodash'
-export async function fetchfunderPortfolioAbout(portfoliodetailsId) {
+export async function fetchfunderPortfolioAbout(portfoliodetailsId)
+{
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {

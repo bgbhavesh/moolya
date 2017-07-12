@@ -266,7 +266,7 @@ export default class MlServiceProviderClients extends Component {
               <div className="col-lg-12">
                 <div className="row">
                   <div className="col-lg-2 col-md-3 col-sm-3">
-                    <a href="#" id="create_clientdefault" data-placement="right" data-class="large_popover">
+                    <a href="" id="create_clientdefault" data-placement="right" data-class="large_popover">
                       <div className="list_block notrans" onClick={this.addClient.bind(this)}>
                         <div className="hex_outer"><span className="ml ml-plus "></span></div>
                         <h3 onClick={this.addClient.bind(this)}>Add New Client</h3>
@@ -275,7 +275,7 @@ export default class MlServiceProviderClients extends Component {
                   </div>
                   {clientsArray.map(function (details, idx) {
                     return (<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
-                      <a href="#" id={"create_client" + idx}>
+                      <a href="" id={"create_client" + idx}>
                         <div className="list_block">
                           <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate}/>
                           <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}>
@@ -328,7 +328,7 @@ export default class MlServiceProviderClients extends Component {
                             htmlFor="checkbox1"><span></span>Make Private</label></div>
                         </div>
                         <div className="ml_btn" style={{'textAlign': 'center'}}>
-                          <a href="#" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                          <a href="" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
                         </div>
                       </div>
                     </div>

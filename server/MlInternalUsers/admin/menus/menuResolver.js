@@ -22,14 +22,9 @@ MlResolver.MlQueryResolver['fetchExternalUserMenu'] = ( _, {name}, context) =>{
 }
 
 MlResolver.MlQueryResolver['fetchExternalUserProfileMenu'] = ( _, {name}, context) =>{
-  let menu = new MlUserContext().getDefaultProfileMenu(context.userId);
-  if(menu){
-    var isBrowser = _lodash.isMatch(menu.profile,{communityDefCode:'BRW'})
-    let allMenus = MlMenus.findOne({name:menu.menuName});
-    if(isBrowser)
-      _lodash.remove(allMenus.menu, {uniqueId : "myOffice"})
-    return allMenus
-    // return MlMenus.findOne({name:menu.menuName});
+  let menuName = new MlUserContext().getDefaultProfileMenu(context.userId);
+  if(menuName){
+    return MlMenus.findOne({name:menuName});
   }
 }
 

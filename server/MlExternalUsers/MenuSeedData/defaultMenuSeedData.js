@@ -39,17 +39,17 @@ if(Meteor.isServer){
                 "name" : "Funder",
                 "uniqueId" : "funder"
             },
-            {
-              "image":"fa fa-calendar",
-              "link": "/app/calendar",
-              "isLink" : true,
-              "isMenu" : true,
-              "name" : "Calender",
-              "uniqueId" : "calender"
-            },
+            // {
+            //   "image":"fa fa-calendar",
+            //   "link": "/app/calendar",
+            //   "isLink" : true,
+            //   "isMenu" : true,
+            //   "name" : "Calender",
+            //   "uniqueId" : "calender"
+            // },
             {
                 "image":"ml ml-provider",
-                "link": "provider",
+                "link": "/app/provider",
                 "isLink" : true,
                 "isMenu" : true,
                 "name" : "Provider",
@@ -58,7 +58,7 @@ if(Meteor.isServer){
 
             {
                 "image":"ml ml-company",
-                "link": "company",
+                "link": "/app/company",
                 "isLink" : true,
                 "isMenu" : true,
                 "name" : "Company",
@@ -108,14 +108,14 @@ if(Meteor.isServer){
               "name" : "My Transaction",
               "uniqueId" : "myTransaction"
             },
-            {
-              "image":"fa fa-calendar-check-o",
-              "link": "/app/task",
-              "isLink" : true,
-              "isMenu" : true,
-              "name" : "Task",
-              "uniqueId" : "my_task"
-            }
+            // {
+            //   "image":"fa fa-calendar-check-o",
+            //   "link": "/app/task",
+            //   "isLink" : true,
+            //   "isMenu" : true,
+            //   "name" : "Task",
+            //   "uniqueId" : "my_task"
+            // }
         ]
     }})
 }

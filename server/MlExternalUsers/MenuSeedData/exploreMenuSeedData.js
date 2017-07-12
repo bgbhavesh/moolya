@@ -7,11 +7,11 @@ if(Meteor.isServer){
         "menu" : [
             {
               "image":"ml ml-ideator",
-              "link": "/app/explore",
+              "link": "/app/explore/ideator",
               "isLink" : true,
               "isMenu" : true,
               "name" : "Ideator",
-              "uniqueId" : "explore_ideator"
+              "uniqueId" : "explore"
             },
             {
               "image":"ml ml-startup",
@@ -24,11 +24,11 @@ if(Meteor.isServer){
 
             {
               "image":"ml ml-funder",
-              "link": "/app/explore/funder",
+              "link": "/app/explore/investor",
               "isLink" : true,
               "isMenu" : true,
-              "name" : "Funder",
-              "uniqueId" : "explore_funder"
+              "name" : "Investor",
+              "uniqueId" : "explore"
             },
 
             {

@@ -212,9 +212,9 @@ class MlAppPortfolio extends Component{
     }
   }
 
-  async testEditPortfolioDetails(){
-    console.log('edit testing')
-  }
+  // async testEditPortfolioDetails(){
+  //   console.log('edit testing')
+  // }
 
   async requestForGoLive() {
     let portfolioId = this.props.config;
@@ -243,6 +243,7 @@ class MlAppPortfolio extends Component{
     this.setState({interactionAutoId:interactionAutoId});
   }
 
+  /**removing edit not required in edit mode only save can be used*/
   assignActionHandlerProxy(actionConfig){
     var action=actionConfig.actionName||'';
     var actionMap={'like':'interaction','connect':'interaction','favourite':'interaction','follow':'interaction','enquire':'interaction','review':'interaction','partner':'interaction','collaborate':'interaction'};
@@ -250,7 +251,7 @@ class MlAppPortfolio extends Component{
     switch(actionName){
       case 'interaction': actionConfig.handler=async(actionData,callback) =>this.props.handler(this.interactionActionHandler.bind(this,actionData,callback), this.onInteractionSuccess.bind(this));break;
       case 'save': actionConfig.handler=async(event) => this.props.handler(this.updatePortfolioDetails.bind(this), this.handleSuccess.bind(this)); break;
-      case 'edit': actionConfig.handler=async(event) => this.props.handler(this.testEditPortfolioDetails.bind(this)); break;
+      // case 'edit': actionConfig.handler=async(event) => this.props.handler(this.testEditPortfolioDetails.bind(this)); break;
       case 'golive': actionConfig.handler=async(event) => this.props.handler(this.requestForGoLive.bind(this)); break;
       case '': actionConfig.handler=() => {console.log("action handler is not defined")}; break;
     }

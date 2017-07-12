@@ -5,7 +5,7 @@ import MapDetails from "../../../../client/commons/components/map/mapDetails"
 import maphandler from "../../../../client/commons/components/map/findMapDetailsTypeAction"
 import React from 'react';
 import gql from 'graphql-tag'
-
+import MlMapFooter from '../component/MlMapFooter';
 const mlSubChapterDashboardMapConfig=new MlViewer.View({
   name:"subChapterDashBoardMap",
   viewType:MlViewerTypes.MAP,
@@ -21,6 +21,7 @@ const mlSubChapterDashboardMapConfig=new MlViewer.View({
     return center;
   },
   viewComponent:<MlMapViewContainer />,
+  mapFooterComponent:<MlMapFooter />,
   queryOptions:true,
   buildQueryOptions:(config)=>{
     return {context:{clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,chapterId:config.params&&config.params.chapterId?config.params.chapterId:null}}

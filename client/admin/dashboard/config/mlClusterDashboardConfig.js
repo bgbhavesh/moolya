@@ -5,6 +5,7 @@ import MapDetails from "../../../../client/commons/components/map/mapDetails"
 import maphandler from "../../../../client/commons/components/map/findMapDetailsTypeAction"
 import React from 'react';
 import gql from 'graphql-tag'
+import MlMapFooter from '../component/MlMapFooter';
 const mlClusterDashboardListConfig=new MlViewer.View({
   name:"clusterDashBoardList",
   viewType:MlViewerTypes.LIST,
@@ -53,6 +54,7 @@ const mlClusterDashboardMapConfig=new MlViewer.View({
     return center;
   },
   viewComponent:<MlMapViewContainer />,
+  mapFooterComponent:<MlMapFooter />,
   actionConfiguration:[
     {
       actionName: 'onMouseEnter',

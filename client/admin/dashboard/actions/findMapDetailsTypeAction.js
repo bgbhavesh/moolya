@@ -1,5 +1,5 @@
 import gql from 'graphql-tag'
-import {client} from '../../../admin/core/apolloConnection';
+import {client} from '../../core/apolloConnection';
 
 export async function findMapDetailsTypeActionHandler(ModuleTypeDetails) {
   let did=ModuleTypeDetails
@@ -44,7 +44,7 @@ export async function fetchDefaultCenterOfUser(ModuleTypeDetails) {
   return result;
 }
 
-/*export async function fetchUsers(clusterId, chapterId, subChapterId, userType) {
+export async function fetchUsers(clusterId, chapterId, subChapterId, userType) {
 
   const result = await client.query({
     query: gql`
@@ -62,7 +62,7 @@ export async function fetchDefaultCenterOfUser(ModuleTypeDetails) {
                           email
                       }
                   }
-              }
+              }      
           }
       }
     `,
@@ -76,4 +76,4 @@ export async function fetchDefaultCenterOfUser(ModuleTypeDetails) {
   })
   const id = result.data.data.data;
   return id
-}*/
+}

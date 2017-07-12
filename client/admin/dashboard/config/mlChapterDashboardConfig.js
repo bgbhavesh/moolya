@@ -6,7 +6,7 @@ import gql from 'graphql-tag'
 import MapDetails from "../../../../client/commons/components/map/mapDetails"
 import maphandler from "../../../../client/commons/components/map/findMapDetailsTypeAction"
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
-
+import MlMapFooter from '../component/MlMapFooter';
 const mlChapterDashboardListConfig=new MlViewer.View({
   name:"chapterDashBoardList",
   module:"chapter",
@@ -82,6 +82,7 @@ const mlChapterDashboardMapConfig=new MlViewer.View({
     return center;
   },
   viewComponent:<MlMapViewContainer />,
+  mapFooterComponent:<MlMapFooter />,
   actionConfiguration:[
     {
       actionName: 'onMouseEnter',

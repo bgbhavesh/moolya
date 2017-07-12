@@ -5,7 +5,7 @@ import MlCommunityList from '../component/MlCommunityList'
 import React from 'react';
 import MapDetails from "../../../../client/commons/components/map/mapDetails"
 import maphandler from "../../../../client/commons/components/map/findMapDetailsTypeAction"
-
+import MlMapFooter from '../component/MlMapFooter';
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 
 const mlCommunityDashboardListConfig=new MlViewer.View({
@@ -89,6 +89,7 @@ const mlCommunityDashboardMapConfig=new MlViewer.View({
     return center;
   },
   viewComponent:<MlCommunityMapView params={this.params}/>,
+  mapFooterComponent:<MlMapFooter />,
   actionConfiguration:[
     {
       actionName: 'onMouseEnter',

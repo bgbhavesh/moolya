@@ -19,8 +19,19 @@ MlResolver.MlQueryResolver['fetchTasks'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchTask'] = (obj, args, context, info) => {
-  let result = mlDBController.findOne('MlTask', {_id: args.taskId}, context) || []
-  return result
+  let result = mlDBController.findOne('MlTask', {_id: args.taskId} , context);
+  if (result) {
+    let query = {
+      transactionId: result.transactionId,
+      isCurrentVersion: true
+    };
+    let task = mlDBController.findOne('MlTask', query, context);
+    return task;
+  } else  {
+    let code = 404;
+    let response = new MlRespPayload().successPayload('Task not found', code);
+    return response;
+  }
 }
 
 MlResolver.MlMutationResolver['createTask'] = (obj, args, context, info) => {

@@ -121,7 +121,7 @@
           fetchTask(taskId:String):Task
           fetchTaskDetails(name: String):Task
           fetchTaskDetailsAdmin(name: [String]): [Task]
-          fetchTaskDetailsForServiceCard(profileId:String):[Task]
+          fetchTaskDetailsForServiceCard(profileId:String, serviceId: String):[Task]
    }
 
    type Mutation {

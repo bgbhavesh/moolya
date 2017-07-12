@@ -22,6 +22,7 @@ let RegionalSchema = `
       currencySymbol:String,
       measurementSystem:String,
       currencyFormat:Boolean,
+      rounding : String,
       valueSeparator:String
     }
     input regionalObject{
@@ -41,6 +42,7 @@ let RegionalSchema = `
         currencySymbol:String,
         measurementSystem:String,
         currencyFormat:Boolean,
+        rounding : String,
         valueSeparator:String
         _id :String,
     }

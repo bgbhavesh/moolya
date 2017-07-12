@@ -47,7 +47,9 @@ let GlobalSettingsSchema = `
              currencySymbol:String,
              measurementSystem:String,
              currencyFormat:Boolean,
+             rounding:String,
              valueSeparator:String
+             _id:String
        }
 
       input DateAndTimeInfoRequest{
@@ -87,6 +89,7 @@ let GlobalSettingsSchema = `
              currencySymbol:String,
              measurementSystem:String,
              currencyFormat:Boolean,
+             rounding:String,
              valueSeparator:String
        }
       
@@ -121,7 +124,9 @@ let GlobalSettingsSchema = `
       type Query{
         fetchGlobalSettings(type:GLOBAL_SETTINGS_TYPE):[GlobalSettings]    
         findTimeZones(clusterId:String):[timeZone]
+        findRounding : [RegionalInfo]
         findLanguages: [language]
+        findCurrencyNames : [RegionalInfo]
       }
     
     type Mutation{
@@ -135,6 +140,8 @@ let supportedApi = [
     {api:'fetchGlobalSettings', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true},
     {api:'updateGlobalSetting', actionName:'UPDATE', moduleName:"GLOBALSETTINGS"},
     {api:'findTimeZones', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true},
+    {api: 'findCurrencyNames', actionName:'READ',moduleName:"GLOBALSETTINGS", isWhiteList:true},
+    {api:'findRounding', actionName:'READ', moudleName:"GLOBALSETTTINGS",isWhiteList:true},
     {api:'findLanguages', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true}
 ]
 

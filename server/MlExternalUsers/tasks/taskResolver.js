@@ -150,10 +150,12 @@ MlResolver.MlQueryResolver['fetchTaskDetailsForServiceCard'] = (obj, args, conte
   if (args.serviceId) {
     let service = mlDBController.findOne('MlService', args.serviceId , context);
     let taskQuery = [];
-    taskQuery = service.tasks.reduce(function(result, task) {
-      return result.concat(task._id);
-    }, []);
-    taskQuery = _.uniq(taskQuery);
+    if (service.tasks && service.tasks.length > 0) {
+      taskQuery = service.tasks.reduce(function(result, task) {
+        return result.concat(task._id);
+      }, []);
+      taskQuery = _.uniq(taskQuery);
+    }
     query["$or"] = [
       {_id: {'$in': taskQuery}},
       {isCurrentVersion: true}

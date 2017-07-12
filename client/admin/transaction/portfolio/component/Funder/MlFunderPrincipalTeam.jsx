@@ -165,23 +165,11 @@ export default class MlFunderPrincipalTeam extends React.Component {
     }
   }
   optionsBySelectTitle(val){
-    let index = this.state.selectedIndex;
-
-    if(this.state.selectedTab == "principal"){
-      let fun = this.state.funderPrincipal
-      let data = _.cloneDeep(fun);
-      data[index].title=val
-      this.setState({funderPrincipal:data})
-    }else{
-      let fun = this.state.funderTeam
-      let data = _.cloneDeep(fun);
-      data[index].title=val
-      this.setState({funderTeam:data})
-    }
-    this.sendDataToParent();
-    // this.setState({title:val}, function () {
-    //   this.sendDataToParent()
-    // })
+    let data = _.cloneDeep(this.state.data);
+    data.title=val;
+    this.setState({data:data}, function () {
+      this.sendDataToParent();
+    })
   }
 
   onStatusChangeNotify(e) {
@@ -250,7 +238,6 @@ export default class MlFunderPrincipalTeam extends React.Component {
       let fun = this.state.funderPrincipal;
       let funderPrincipal = _.cloneDeep(fun);
       data.index = this.state.selectedIndex;
-      data.title=this.state.title
       funderPrincipal[this.state.selectedIndex] = data;
       let arr = [];
       _.each(funderPrincipal, function (item) {
@@ -274,7 +261,6 @@ export default class MlFunderPrincipalTeam extends React.Component {
       let fun = this.state.funderTeam;
       let funderTeam = _.cloneDeep(fun);
       data.index = this.state.selectedIndex;
-      data.title=this.state.title;
       funderTeam[this.state.selectedIndex] = data;
       let arr = [];
       _.each(funderTeam, function (item) {

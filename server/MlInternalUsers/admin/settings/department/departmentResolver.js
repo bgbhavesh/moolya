@@ -171,19 +171,20 @@ MlResolver.MlQueryResolver['fetchMoolyaBasedDepartmentRoles'] = (obj, args, cont
 }
 
 MlResolver.MlQueryResolver['fetchNonMoolyaBasedDepartment'] = (obj, args, context, info) => {
-  /**data population based on login showing */
-  let userDetails = mlDBController.findOne('users', {_id:context.userId}, context)
-  let query= {};
-  if(userDetails && userDetails.profile && userDetails.profile.isMoolya)
-    query = {subChapter: args.subChapter}
-  else
-    query = {subChapter:{$in:['all', args.subChapter]}}
+  // /**data population based on login showing */
+  // let userDetails = mlDBController.findOne('users', {_id:context.userId}, context)
+  // let query= {};
+  // if(userDetails && userDetails.profile && userDetails.profile.isMoolya)
+  //   query = {subChapter: args.subChapter}
+  // else
+  //   query = {subChapter:{$in:['all', args.subChapter]}}
+  /**fetching all and specific departments based on cluster or subchapter*/
   let resp = mlDBController.find('MlDepartments', {
     $or: [
       {"depatmentAvailable.cluster": {$in: ["all", args.clusterId]},isActive:true},
       {
         "depatmentAvailable": {
-          $elemMatch: query
+          $elemMatch: {subChapter:{$in:['all', args.subChapter]}}
         }
       },
     ]

@@ -211,8 +211,6 @@ export default class MlAppRegAddressDetails extends React.Component {
     refs.push(this.refs["phoneNumber"])
     refs.push(this.refs["addressFlat"])
     refs.push(this.refs["addressLocality"])
-    refs.push(this.refs["addressLandmark"])
-    refs.push(this.refs["addressArea"])
     refs.push(this.refs["addressCity"])
     refs.push(this.refs["addressState"])
     refs.push(this.refs["addressCountry"])
@@ -314,8 +312,6 @@ export default class MlAppRegAddressDetails extends React.Component {
         refs.push(this.refs["phoneNumber" + index])
         refs.push(this.refs["addressFlat" + index])
         refs.push(this.refs["addressLocality" + index])
-        refs.push(this.refs["addressLandmark" + index])
-        refs.push(this.refs["addressArea" + index])
         refs.push(this.refs["addressCity" + index])
         refs.push(this.refs["addressState" + index])
         refs.push(this.refs["addressCountry" + index])
@@ -479,13 +475,13 @@ export default class MlAppRegAddressDetails extends React.Component {
                        className="form-control float-label" id="" data-required={true}
                        data-errMsg="Colony/Street/Locality is required"/>
               </div>
-              <div className="form-group mandatory">
+              <div className="form-group">
                 <input type="text" ref={'addressLandmark'} placeholder="Landmark" className="form-control float-label"
-                       id="" data-required={true} data-errMsg="Landmark is required"/>
+                       id=""/>
               </div>
-              <div className="form-group mandatory">
-                <input type="text" ref={'addressArea'} placeholder="Area" className="form-control float-label" id=""
-                       data-required={true} data-errMsg="Area is required"/>
+              <div className="form-group">
+                <input type="text" ref={'addressArea'} placeholder="Area"
+                       className="form-control float-label" id=""/>
               </div>
               <div className="form-group mandatory">
                 <input type="text" ref={'addressCity'} placeholder="Town/City" className="form-control float-label"
@@ -570,15 +566,15 @@ export default class MlAppRegAddressDetails extends React.Component {
                            defaultValue={options.addressLocality} data-required={true}
                            data-errMsg="Colony/Street/Locality is required"/>
                   </div>
-                  <div className="form-group mandatory">
+                  <div className="form-group">
                     <input type="text" ref={'addressLandmark' + key} placeholder="Landmark" name={'addressLandmark'}
                            className="form-control float-label" id="" defaultValue={options.addressLandmark}
-                           data-required={true} data-errMsg="Landmark is required"/>
+                           />
                   </div>
-                  <div className="form-group mandatory">
+                  <div className="form-group">
                     <input type="text" ref={'addressArea' + key} placeholder="Area" name={'addressArea'}
                            className="form-control float-label" id="" defaultValue={options.addressArea}
-                           data-required={true} data-errMsg="Area is required"/>
+                           />
                   </div>
                   <div className="form-group mandatory">
                     <input type="text" ref={'addressCity' + key} placeholder="Town/City" name={'addressCity'}

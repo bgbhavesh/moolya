@@ -74,8 +74,6 @@ export default class AppAddressDetails extends React.Component {
     refs.push(this.refs["phoneNumber"])
     refs.push(this.refs["addressFlat"])
     refs.push(this.refs["addressLocality"])
-    refs.push(this.refs["addressLandmark"])
-    refs.push(this.refs["addressArea"])
     refs.push(this.refs["addressCity"])
     refs.push(this.refs["addressState"])
     refs.push(this.refs["addressCountry"])
@@ -312,8 +310,6 @@ export default class AppAddressDetails extends React.Component {
         refs.push(this.refs["phoneNumber" + index])
         refs.push(this.refs["addressFlat" + index])
         refs.push(this.refs["addressLocality" + index])
-        refs.push(this.refs["addressLandmark" + index])
-        refs.push(this.refs["addressArea" + index])
         refs.push(this.refs["addressCity" + index])
         refs.push(this.refs["addressState" + index])
         refs.push(this.refs["addressCountry" + index])
@@ -460,21 +456,21 @@ export default class AppAddressDetails extends React.Component {
                 <Moolyaselect multiSelect={false} ref={'address'}
                               placeholder="Select Address Type" query={addressTypeQuery} queryOptions={addressTypeOption}
                               className="form-control float-label" selectedValue={this.state.selectedValue}
-                              valueKey={'value'} labelKey={'label'} queryType={"graphql"}
+                              valueKey={'value'} labelKey={'label'} queryType={"graphql"} mandatory={true}
                               isDynamic={true} onSelect={this.optionsBySelectAddressType.bind(this)}
                               data-required={true} data-errMsg="Address Type is required"/>
                 {/*<input type="text"  ref={'name'} placeholder="Name" className="form-control float-label" />*/}
               </div>
-              <div className="form-group">
+              <div className="form-group mandatory">
                 <input type="text"  ref={'name'} placeholder="Name" className="form-control float-label" data-required={true} data-errMsg="Name is required"/>
               </div>
-              <div className="form-group">
+              <div className="form-group mandatory">
                 <input type="text" ref={'phoneNumber'} placeholder="Phone Number" className="form-control float-label" data-required={true} data-errMsg="Phone Number is required" />
               </div>
-              <div className="form-group">
+              <div className="form-group mandatory">
                 <input type="text" ref={'addressFlat'} placeholder="Flat/House/Floor/Building No" className="form-control float-label"  data-required={true} data-errMsg="Flat/House/Floor/Bulding No is required"/>
               </div>
-              <div className="form-group">
+              <div className="form-group mandatory">
                 <input type="text" ref={'addressLocality'} placeholder="Colony/Street/Locality" className="form-control float-label" data-required={true} data-errMsg="Colony/Street/Locality is required"/>
               </div>
               <div className="form-group">
@@ -483,7 +479,7 @@ export default class AppAddressDetails extends React.Component {
               <div className="form-group">
                 <input type="text" ref={'addressArea'} placeholder="Area" className="form-control float-label"/>
               </div>
-              <div className="form-group">
+              <div className="form-group mandatory">
                 <input type="text" ref={'addressCity'} placeholder="Town/City" className="form-control float-label" data-required={true} data-errMsg="Town/City is required"/>
               </div>
               <div className="form-group">
@@ -500,7 +496,7 @@ export default class AppAddressDetails extends React.Component {
                             valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={statesQuery}
                             onSelect={this.optionsBySelectState.bind(this)} queryOptions={statesOption}
                             isDynamic={true} data-required={true} data-errMsg="State is required"/>
-              <div className="form-group">
+              <div className="form-group mandatory">
                 <input type="text" ref={'addressPinCode'} placeholder="Pincode" name ={'addressPinCode'}
                        className="form-control float-label" data-required={true} data-errMsg="PinCode is required" />
               </div>
@@ -522,42 +518,49 @@ export default class AppAddressDetails extends React.Component {
                 <div className="tab-pane" id={'adressType' + key} key={key}>
                   <div className="form-group">
                     <Moolyaselect multiSelect={false} ref={'address' + key}
-                                  placeholder="Select NumberType"
+                                  placeholder="Select NumberType" mandatory={true}
                                   className="form-control float-label" selectedValue={options.addressType}
                                   valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={addressTypeQuery}
                                   queryOptions={addressTypeOption}
                                   isDynamic={true} data-required={true} data-errMsg="Address Type is required"/>
                     {/*<input type="text"  ref={'name'} placeholder="Name" className="form-control float-label" defaultValue="addressType" />*/}
                   </div>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" name ={'name'} ref={'name' + key} placeholder="Name"
-                           className="form-control float-label" defaultValue={options.name} data-required={true} data-errMsg="Name is required"/>
+                           className="form-control float-label" defaultValue={options.name}
+                           data-required={true} data-errMsg="Name is required"/>
                   </div>
 
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" name ={'phoneNumber'} ref={'phoneNumber' + key} placeholder="Phone Number"
-                           className="form-control float-label" defaultValue={options.phoneNumber} data-required={true} data-errMsg="Phone Number is required" />
+                           className="form-control float-label" defaultValue={options.phoneNumber}
+                           data-required={true} data-errMsg="Phone Number is required" />
                   </div>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" ref={'addressFlat' + key} name ={'addressFlat'} className="form-control float-label"
-                           placeholder="Flat/House/Floor/Bulding No" defaultValue={options.addressFlat} data-required={true} data-errMsg="Flat/House/Floor/Bulding No is required"/>
+                           placeholder="Flat/House/Floor/Bulding No" defaultValue={options.addressFlat}
+                           data-required={true} data-errMsg="Flat/House/Floor/Bulding No is required"/>
                   </div>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" ref={'addressLocality' + key} name ={'addressLocality'}
                            placeholder="Colony/Street/Locality" className="form-control float-label"
-                           defaultValue={options.addressLocality} data-required={true} data-errMsg="Colony/Street/Locality is required"/>
+                           defaultValue={options.addressLocality}
+                           data-required={true} data-errMsg="Colony/Street/Locality is required"/>
                   </div>
                   <div className="form-group">
                     <input type="text" ref={'addressLandmark' + key} placeholder="Landmark" name ={'addressLandmark'}
-                           className="form-control float-label" defaultValue={options.addressLandmark} data-required={true} data-errMsg="Landmark is required"/>
+                           className="form-control float-label" defaultValue={options.addressLandmark}
+                           />
                   </div>
                   <div className="form-group">
                     <input type="text" ref={'addressArea' + key} placeholder="Area" name ={'addressArea'}
-                           className="form-control float-label" defaultValue={options.addressArea} data-required={true} data-errMsg="Area is required"/>
+                           className="form-control float-label" defaultValue={options.addressArea}
+                           />
                   </div>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" ref={'addressCity' + key} placeholder="Town/City" name ={'addressCity'}
-                           className="form-control float-label" defaultValue={options.addressCity} data-required={true} data-errMsg="Town/City is required"/>
+                           className="form-control float-label" defaultValue={options.addressCity}
+                           data-required={true} data-errMsg="Town/City is required"/>
                   </div>
                  {/* <div className="form-group">
                     <input type="text" ref={'addressState' + key} placeholder="State" name ={'addressState'}
@@ -569,8 +572,8 @@ export default class AppAddressDetails extends React.Component {
                   </div>*/}
                   <div className="form-group">
                     <Moolyaselect multiSelect={false} ref={'addressCountry' + key} className="form-control float-label"
-                                  valueKey={'value'} labelKey={'label'} placeholder="Your Country"  selectedValue={options.addressCountryId}
-                                  queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={that.countryUpdateOptions.bind(that,key)}
+                                  valueKey={'value'} labelKey={'label'} placeholder="Your Country"
+                                  selectedValue={options.addressCountryId} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={that.countryUpdateOptions.bind(that,key)}
                                   disabled={false}  data-required={true} data-errMsg="Country is required"/>
                   </div>
                   {/* <div className="form-group">
@@ -585,9 +588,10 @@ export default class AppAddressDetails extends React.Component {
                                 valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={statesQuery}
                                 onSelect={that.stateUpdateOptions.bind(that,key)} queryOptions={statesOption}
                                 isDynamic={true} data-required={true} data-errMsg="State is required"/>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" ref={'addressPinCode' + key} placeholder="Pincode" name ={'addressPinCode'}
-                           className="form-control float-label" defaultValue={options.addressPinCode} data-required={true} data-errMsg="PinCode is required"/>
+                           className="form-control float-label" defaultValue={options.addressPinCode}
+                           data-required={true} data-errMsg="PinCode is required"/>
                   </div>
                   <div className="form-group switch_wrap inline_switch">
                     <label>Is defaultAddress</label>

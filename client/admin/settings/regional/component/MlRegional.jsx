@@ -21,8 +21,11 @@ class MlRegional extends React.Component{
       // currencyFormat:'',
       // currencySymbol:'',       /*unused state*/
       valueSeparator:'',
+      regionalCurrencyName :'',
+      rounding:'',
       data:[],
       loading:true
+
     }
     this.addEventHandler.bind(this);
     this.createRegional.bind(this);
@@ -62,12 +65,18 @@ class MlRegional extends React.Component{
        // if (this.state.data.currencyFormat) {
        //    this.setState({measurementSystem: this.state.data.measurementSystem});
        // }
+      if (this.state.data.regionalCurrencyName) {
+        this.setState({regionalCurrencyName: this.state.data.regionalCurrencyName});
+      }
        if (this.state.data.currencySymbol) {
         this.setState({currencySymbol: this.state.data.currencySymbol});
         }
         if (this.state.data.valueSeparator) {
          this.setState({valueSeparator: this.state.data.valueSeparator});
        }
+      if (this.state.data.rounding) {
+        this.setState({rounding: this.state.data.rounding});
+      }
     }else{
       this.setState({loading: false});
     }
@@ -94,9 +103,9 @@ class MlRegional extends React.Component{
     let regionalInfo = {
       clusterName :this.refs.cluster.value ,
       capitalName : this.refs.cluster.capitalName,
-      regionalFlag : '',
+      regionalFlag : this.refs.cluster.regionalFlag,
       regionalPhoneNumber: this.refs.phoneNumberFormat.value,
-      regionalCurrencyName: this.refs.currencyName.value,
+      // regionalCurrencyName: this.refs.currencyName.value,    /*unused refs*/
       regionalCurrencyMarking: this.refs.currencyMarking.value,
       regionalZipFormat: this.refs.zipcodeFormat.value,
       // regionalCurrencySymbol: this.refs.currencySymbol.value,       /*unused refs*/
@@ -107,7 +116,9 @@ class MlRegional extends React.Component{
       measurementSystem: this.state.measurementSystem,
       // currencyFormat: this.state.currencyFormat,
       currencySymbol: this.state.currencySymbol,
+      regionalCurrencyName : this.state.regionalCurrencyName,
       valueSeparator: this.state.valueSeparator,
+      rounding:this.state.rounding
     }
     const response = await upsertRegionalActionHandler(regionalInfo);
     return response;
@@ -145,16 +156,22 @@ class MlRegional extends React.Component{
       this.setState({valueSeparator:''})
     }
      }
+  optionsBySelectRound(val){
+    this.setState({rounding:val})
+  }
     optionsBySelectCurrencySymbol(val){
        this.setState({currencySymbol:val})
      }
+  optionsBySelectCurrencyName(val){
+    this.setState({ regionalCurrencyName:val})
+  }
 //@ to Validate the length of the Phone Number
    handleBlur(){
      //var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-       if((this.refs.phoneNumberFormat.value.match('^[0-9]+$')) &&(this.refs.phoneNumberFormat.value.length >=3) && (this.refs.phoneNumberFormat.value.length <=15) ){
+       if((this.refs.phoneNumberFormat.value.match('^[0-9]+$')) &&(this.refs.phoneNumberFormat.value >=5) && (this.refs.phoneNumberFormat.value <=15) ){
          return true;
        }else{
-           toastr.error("Please Enter Valid Phone Number")
+           toastr.error("Please Enter a number in between 5-15 ")
        }
    }
      // onStatusChange(e){
@@ -183,11 +200,25 @@ class MlRegional extends React.Component{
       }
     ];
      let clusterquery=gql` query{  
-          data:fetchCurrency{
-         label:currencyName
-         value:_id
+          data:fetchCurrencySymbol{
+          label:currencyCode
+          value:_id
         }  
      }`;
+
+    let currencyquery=gql` query{  
+          data:findCurrencyNames{
+          label:regionalCurrencyName
+          value:_id
+        }  
+     }`;
+
+    let roundquery=gql` query{  
+      data:findRounding{
+        value:_id
+        label:rounding
+      }  
+    }`;
      let decimalsLimit = [
        {value: '0', label: '0'},
        {value: '1', label: '1'},
@@ -241,7 +272,8 @@ class MlRegional extends React.Component{
                       <input type="text" ref="phoneNumberFormat" defaultValue={this.state.data && this.state.data.regionalPhoneNumber} placeholder="Phone Number Length" className="form-control float-label" id="" onBlur={this.handleBlur.bind(this)}/>
                     </div>
                     <div className="form-group">
-                      <input type="text" ref="currencyName" defaultValue={this.state.data && this.state.data.regionalCurrencyName} placeholder="Currency Name" className="form-control float-label" id=""/>
+                      {/*<input type="text" ref="currencyName" defaultValue={this.state.data && this.state.data.regionalCurrencyName} placeholder="Currency Name" className="form-control float-label" id=""/>*/}
+                      <Moolyaselect multiSelect={false}  placeholder={"Currency Name"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.regionalCurrencyName} queryType={"graphql"} query={currencyquery}  isDynamic={true} id={'query'} onSelect={this.optionsBySelectCurrencyName.bind(this)}/>
                     </div>
                     <div className="form-group">
                       <input type="text" ref="currencyMarking" defaultValue={this.state.data && this.state.data.regionalCurrencyMarking} placeholder="Currency Format" className="form-control float-label" id=""/>
@@ -270,7 +302,7 @@ class MlRegional extends React.Component{
                   >
                     <form>
                       <div className="previewImg">
-                        {/*<img ref="url" src={this.state.data.regionalFlag}/>*/}
+                        <img ref="url" src={this.state.data.regionalFlag}/>
                       </div>
                       <div className="form-group">
                         <textarea ref="about" defaultValue={this.state.data && this.state.data.aboutRegion} placeholder="About" className="form-control float-label" id=""></textarea>
@@ -292,6 +324,12 @@ class MlRegional extends React.Component{
                       <div className="form-group">
                         <span className={`placeHolder ${ metricnumberOfDigitsAfterDecimalActive}`}>MetricSystem-Number Of Digits After Decimal </span>
                         <Select  name="form-field-name"  options={decimalsLimit} placeholder={"MetricSystem-Number Of Digits After Decimal"}  value={this.state.metricnumberOfDigitsAfterDecimal} onChange={this.optionsBySelectMetricNumberOfDigitsAfterDecimal.bind(this)} className="float-label" />
+                      </div>
+                      {/*<div className="form-group">*/}
+                        {/*<input type="text"  placeholder="Rounding" className="form-control float-label" id=""/>*/}
+                      {/*</div>*/}
+                      <div className="form-group">
+                        <Moolyaselect multiSelect={false}  placeholder={"Rounding"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.rounding} queryType={"graphql"} query={roundquery} onSelect={this.optionsBySelectRound.bind(this)} />
                       </div>
                       <br className="brclear"/> <br className="brclear"/> <br className="brclear"/> <br className="brclear"/> <br className="brclear"/>
                          {/*<div className="form-group switch_wrap inline_switch">*/}

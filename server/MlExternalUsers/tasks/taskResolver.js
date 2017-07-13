@@ -8,7 +8,8 @@ var _ = require('lodash')
 
 MlResolver.MlQueryResolver['fetchTasks'] = (obj, args, context, info) => {
   let query = {
-    userId: context.userId
+    userId: context.userId,
+    isCurrentVersion: true
   };
   if(args.profileId){
     query.profileId = args.profileId;
@@ -18,17 +19,28 @@ MlResolver.MlQueryResolver['fetchTasks'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchTask'] = (obj, args, context, info) => {
-  let result = mlDBController.findOne('MlTask', {_id: args.taskId}, context) || []
-  return result
+  let result = mlDBController.findOne('MlTask', {_id: args.taskId} , context);
+  if (result) {
+    let query = {
+      transactionId: result.transactionId,
+      isCurrentVersion: true
+    };
+    let task = mlDBController.findOne('MlTask', query, context);
+    return task;
+  } else  {
+    let code = 404;
+    let response = new MlRespPayload().successPayload('Task not found', code);
+    return response;
+  }
 }
 
 MlResolver.MlMutationResolver['createTask'] = (obj, args, context, info) => {
   if (args.taskDetails) {
-    let userId = context.userId
     orderNumberGenService.createTaskId(args.taskDetails);
-    let obj = args.taskDetails
-    obj['userId'] = userId
-    obj['createdAt'] = new Date ()
+    args.taskDetails.userId = context.userId;
+    args.taskDetails.createdAt = new Date ();
+    args.taskDetails.versions = 0.001;
+    args.taskDetails.isCurrentVersion = true;
     let res = mlDBController.insert('MlTask', args.taskDetails, context)
     if (res) {
       let code = 200;
@@ -45,7 +57,15 @@ MlResolver.MlMutationResolver['createTask'] = (obj, args, context, info) => {
 
 MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
   if(!_.isEmpty(args.taskDetails)){
-    let task = mlDBController.findOne('MlTask', {_id: args.taskId}, context)
+    let oldTask = mlDBController.findOne('MlTask', {_id: args.taskId}, context);
+    let task;
+    if (oldTask) {
+      let query = {
+        transactionId: oldTask.transactionId,
+        isCurrentVersion: true
+      };
+      task = mlDBController.findOne('MlTask', query, context);
+    }
     if(task){
       if(!_.isEmpty(args.taskDetails.session)){
         let countSessionAry = []
@@ -92,15 +112,22 @@ MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
         paymentAmount = _.extend(paymentAmount, pick)
         args.taskDetails = _.extend(args.taskDetails, {payment:paymentAmount})
       }
-
-      for(key in args.taskDetails){
-        task[key] = args.taskDetails[key]
+      task.isCurrentVersion = false;
+      let updatedOldVersionTask = mlDBController.update('MlTask', {_id: task._id}, task, {'$set':1}, context);
+      args.taskDetails.isCurrentVersion = true;
+      args.taskDetails.userId = task.userId;
+      // args.taskDetails.transactionId = task.transactionId;
+      args.taskDetails.updatedAt = new Date();
+      args.taskDetails.versions = task.versions + 0.001;
+      args.taskDetails.attachments = (args.taskDetails.attachments && args.taskDetails.attachments.length > 0) ?
+        args.taskDetails.attachments : task.attachments;
+      for(key in task){
+        if ((typeof args.taskDetails[key] === 'undefined' || args.taskDetails[key] === null) && key !== 'createdAt' && key !== '_id') {
+          args.taskDetails[key] = task[key];
+        }
       }
-
-      args.taskDetails['updatedAt'] = new Date()
-      // let result = mlDBController.update('MlTask', {_id: args.taskId}, args.taskDetails, {'$set': 1}, context)
-      let result = mlDBController.update('MlTask', {_id: args.taskId}, task, {'$set': 1}, context)
-      if (result) {
+      let newVersionActivity = mlDBController.insert('MlTask', args.taskDetails , context);
+      if (newVersionActivity) {
         let code = 200;
         let response = new MlRespPayload().successPayload('Successfully Updated', code);
         return response
@@ -131,6 +158,20 @@ MlResolver.MlQueryResolver['fetchTaskDetailsForServiceCard'] = (obj, args, conte
     isActive: true,
     isServiceCardEligible: true
   };
+  if (args.serviceId) {
+    let service = mlDBController.findOne('MlService', args.serviceId , context);
+    let taskQuery = [];
+    if (service.tasks && service.tasks.length > 0) {
+      taskQuery = service.tasks.reduce(function(result, task) {
+        return result.concat(task._id);
+      }, []);
+      taskQuery = _.uniq(taskQuery);
+    }
+    query["$or"] = [
+      {_id: {'$in': taskQuery}},
+      {isCurrentVersion: true}
+    ];
+  }
   if(args.profileId){
     query.profileId = args.profileId;
   };

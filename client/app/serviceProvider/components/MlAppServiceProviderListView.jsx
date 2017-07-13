@@ -6,9 +6,9 @@ export default class MlAppServiceProviderListView extends Component {
 
   viewDetails(portfolioId, e){
     if(this.props.config.isExplore)
-      FlowRouter.go('/app/explore/provider/'+portfolioId)
+      FlowRouter.go('/app/explore/serviceProvider/'+portfolioId)
     else
-      FlowRouter.go('/app/provider/'+portfolioId)
+      FlowRouter.go('/app/serviceProvider/'+portfolioId)
   }
 
   render(){
@@ -21,7 +21,7 @@ export default class MlAppServiceProviderListView extends Component {
           <div className="funders_list_block">
             {/*<div className="premium"><span>Starter</span></div>*/}
             <h3>{provider.about&&provider.about.aboutTitle?provider.about.aboutTitle:""}</h3>
-            <div className="list_icon"><span className="ml ml-funder"></span></div>
+            <div className="list_icon"><span className="ml ml-provider"></span></div>
             <div className="block_footer">
               <span>New York</span>
             </div>

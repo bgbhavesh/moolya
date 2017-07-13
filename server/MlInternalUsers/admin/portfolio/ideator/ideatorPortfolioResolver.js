@@ -448,14 +448,19 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['createLibrary'] = (obj, args, context, info) => {
-var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.detailsInput.userId}, context)
-  if(portfolioDetails ){
-    args.detailsInput.userId = portfolioDetails.userId;
-  }
-  args.detailsInput.userId= context.userId;
-  var newCollection = mlDBController.insert('MlLibrary', args.detailsInput, context)
-      return newCollection;
+  if (context.url.indexOf("transactions") > 0) {
+    var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.detailsInput.userId}, context)
+    if (portfolioDetails) {
+      args.detailsInput.userId = portfolioDetails.userId;
     }
+    var newCollection = mlDBController.insert('MlLibrary', args.detailsInput, context)
+    return newCollection;
+  }else {
+    args.detailsInput.userId = context.userId;
+    var newPortfolioCollection= mlDBController.insert('MlLibrary', args.detailsInput, context)
+    return newPortfolioCollection
+  }
+}
 
 
 
@@ -502,31 +507,11 @@ MlResolver.MlQueryResolver['fetchAllowableFormats'] = (obj, args, context, info)
   }
 
 MlResolver.MlMutationResolver['updatePrivacyDetails'] = (obj, args, context, info) => {
-  if(args.detailsInput.type === "image"){
-    var libraryData1 = mlDBController.find('MlLibrary', {userId: context.userId, libraryType:args.detailsInput.type}, context).fetch();
+   var libraryData1 = mlDBController.find('MlLibrary', {userId: context.userId, libraryType:args.detailsInput.type}, context).fetch();
     libraryData1[args.detailsInput.index].isPrivate = args.detailsInput.element
     var updateTemplateCollection1 = mlDBController.update('MlLibrary', {_id: libraryData1[args.detailsInput.index]._id},{isPrivate:args.detailsInput.element}, {$set: 1}, context)
     return updateTemplateCollection1;
-  }
-  else if(args.detailsInput.type === "video"){
-    var libraryData2 = mlDBController.find('MlLibrary', {userId: context.userId, libraryType:args.detailsInput.type}, context).fetch();
-    libraryData2[args.detailsInput.index].isPrivate = args.detailsInput.element
-    var updateTemplateCollection2 = mlDBController.update('MlLibrary', {_id: libraryData2[args.detailsInput.index]._id},{isPrivate:args.detailsInput.element}, {$set: 1}, context)
-    return updateTemplateCollection2;
-  } else if(args.detailsInput.type === "document"){
-    var libraryData3 = mlDBController.find('MlLibrary', {userId: context.userId, libraryType:args.detailsInput.type}, context).fetch();
-    libraryData3[args.detailsInput.index].isPrivate = args.detailsInput.element
-    var updateTemplateCollection3 = mlDBController.update('MlLibrary', {_id: libraryData3[args.detailsInput.index]._id},{isPrivate:args.detailsInput.element}, {$set: 1}, context)
-    return updateTemplateCollection3;
-  } else   if(args.detailsInput.type === "template"){
-    var libraryData = mlDBController.find('MlLibrary', {userId: context.userId, libraryType:args.detailsInput.type}, context).fetch();
-    libraryData[args.detailsInput.index].isPrivate = args.detailsInput.element
-    var updateTemplateCollection = mlDBController.update('MlLibrary', {_id: libraryData[args.detailsInput.index]._id},{isPrivate:args.detailsInput.element}, {$set: 1}, context)
-    return updateTemplateCollection;
-  }
 }
-
-
 
 MlResolver.MlMutationResolver['updateLibraryData'] = (obj, args, context, info) => {
   var libraryData = mlDBController.find('MlLibrary', {userId: context.userId}, context).fetch();
@@ -536,6 +521,27 @@ MlResolver.MlMutationResolver['updateLibraryData'] = (obj, args, context, info) 
       return libraryUpdate;
     }
   })
+}
+
+MlResolver.MlMutationResolver['putDataIntoTheLibrary'] = (obj, args, context, info) => {
+  let response;
+  if(context.url.indexOf("transactions") > 0) {
+    var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfoliodetailsId}, context)
+    if (portfolioDetails) {
+      args.files.userId = portfolioDetails.userId;
+      var libraryDataAdmin = mlDBController.insert('MlLibrary', args.files,  context);
+      return libraryDataAdmin;
+    }
+  } else {
+    var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfoliodetailsId}, context)
+    if (portfolioDetails) {
+      args.files.userId = context.userId;
+      if (args.portfoliodetailsId) {
+        response = mlDBController.insert('MlLibrary', args.files, context)
+      }
+      return response;
+    }
+  }
 }
 
 

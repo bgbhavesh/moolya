@@ -30,6 +30,7 @@ export async function fetchLibrary(userId, connection) {
       fileType
       isPrivate
       libraryType
+      inCentralLibrary
   }
 }`,
     variables:{

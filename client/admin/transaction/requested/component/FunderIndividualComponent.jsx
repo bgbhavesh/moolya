@@ -404,7 +404,7 @@ export default class Individual extends React.Component{
                   <input type="text" ref="employerWebsite" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.employerWebsite}  placeholder="Employer Website" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group" id="date-time">
-                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Employment Date"}}   closeOnSelect={true} value={that.state.employmentDate} onChange={that.onemploymentDateSelection.bind(that)}/>
+                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Employment Date"}}   closeOnSelect={true} value={that.state.employmentDate} onChange={that.onemploymentDateSelection.bind(that)} isValidDate={ valid }/>
                   <FontAwesome name="calendar" className="password_icon" onClick={that.openDatePickerEmploymentDate.bind(that)}/>
                 </div>
                 <div className="form-group">

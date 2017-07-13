@@ -34,6 +34,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
     initalizeFloatLabel();
   }
   componentDidUpdate(){
+    initalizeFloatLabel();
     OnToggleSwitch(true,true);
   }
 

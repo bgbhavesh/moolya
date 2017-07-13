@@ -6,7 +6,7 @@ export default class MlAppFunderListView extends Component {
 
   viewFunderDetails(portfolioId, e){
     if(this.props.config.isExplore)
-      FlowRouter.go('/app/explore/funder/'+portfolioId)
+      FlowRouter.go('/app/explore/investor/'+portfolioId)
     else
       FlowRouter.go('/app/funder/'+portfolioId)
   }

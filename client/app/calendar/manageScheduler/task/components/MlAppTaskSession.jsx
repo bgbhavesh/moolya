@@ -189,32 +189,34 @@ export default class MlAppTaskSession extends Component {
                 {session.activities.map(function (ss,idx) {
                   let activity = that.state.activities.find(function (activity) { return ss == activity._id; });
                   console.log(activity);
-                  return(
-                    <div className="panel-body" key={idx}>
-                      <div className="swiper-container blocks_in_form">
-                        <div className="swiper-wrapper">
-                          <div className="swiper-slide">
-                            <div className="list_block notrans funding_list">
-                              <div>
-                                <p className="online">{activity.mode}</p>
-                                <span>Duration:
-                                  {/*<FontAwesome name='pencil'/>*/}
+                  if (activity) {
+                    return(
+                      <div className="panel-body" key={idx}>
+                        <div className="swiper-container blocks_in_form">
+                          <div className="swiper-wrapper">
+                            <div className="swiper-slide">
+                              <div className="list_block notrans funding_list">
+                                <div>
+                                  <p className="online">{activity.mode}</p>
+                                  <span>Duration:
+                                    {/*<FontAwesome name='pencil'/>*/}
                                 </span><br />
-                                <div className="form-group">
-                                  <label><input type="text" key={activity.duration ? 'notLoadedYetHrs' : 'loadedHrs'} disabled="true" className="form-control inline_input" defaultValue={activity.duration ? activity.duration.hours:0}/> Hours <input
-                                    type="text" key={activity.duration ? 'notLoadedYetMin' : 'loadedMin'} disabled="true"
-                                    className="form-control inline_input" defaultValue={activity.duration ? activity.duration.minutes : 0 }/>
-                                    Minutes</label>
+                                  <div className="form-group">
+                                    <label><input type="text" key={activity.duration ? 'notLoadedYetHrs' : 'loadedHrs'} disabled="true" className="form-control inline_input" defaultValue={activity.duration ? activity.duration.hours:0}/> Hours <input
+                                      type="text" key={activity.duration ? 'notLoadedYetMin' : 'loadedMin'} disabled="true"
+                                      className="form-control inline_input" defaultValue={activity.duration ? activity.duration.minutes : 0 }/>
+                                      Minutes</label>
+                                  </div>
                                 </div>
+                                <h3>{activity.displayName}</h3>
+                                {/*<span onClick={()=>that.removeActivity(id, idx)} aria-hidden="true" className="fa fa-lock"></span>*/}
                               </div>
-                              <h3>{activity.displayName}</h3>
-                              {/*<span onClick={()=>that.removeActivity(id, idx)} aria-hidden="true" className="fa fa-lock"></span>*/}
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  )
+                    );
+                  }
                 })}
               </div>
             )

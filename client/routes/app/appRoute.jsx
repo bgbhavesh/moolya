@@ -5,15 +5,13 @@ import AppLayout from "../../app/layouts/appLayout";
 import MlViews from "../../admin/core/components/MlViews";
 import MlAppIdeatorLanding from "../../../client/app/ideators/components/MlAppIdeatorLanding";
 import MlAppIdeatorTabs from "../../../client/app/ideators/components/MlAppIdeatorTabs";
-import MlAppStartupLanding from "../../../client/app/startup/components/MlAppStartupLanding";
-// import MlAppStartupTabs from "../../../client/app/startup/components/MlAppStartupTabs";
 import MlAppCommunitiesList from "../../../client/app/commons/components/MlAppCommunitiesList";
 import MlAdminProfileHeader from "../../admin/layouts/header/MlAdminProfileHeader";
 import MlAppDashboard from "../../app/dashboard/components/MlAppDashboard";
 import MlPortfolioLanding from "../../app/commons/components/MlPortfolioLanding";
 import MlAppIdeatorAddIdea from "../../app/ideators/components/MlAppIdeatorAddIdea";
 import MlAppPortfolio from "../../app/commons/components/MlAppPortfolio";
-import PortfolioLibrary from '../../commons/components/portfolioLibrary/PortfolioLibrary'
+import Library from '../../commons/components/portfolioLibrary/libraryRoute'
 import MlAppMyProfile from "../../app/profile/components/MlAppMyProfile";
 import MlProfileSettings from "../../app/profile/components/MlProfileSettings";
 import MlAppProfileAddressBook from "../../app/profile/components/MlAppProfileAddressBook";
@@ -67,11 +65,9 @@ import MlAppSetCalendarSettings from '../../app/calendar/manageScheduler/setCale
 
 import _ from "lodash";
 import MlAppExplore from "../../app/explore/components/MlAppExplore";
-//profile
-//Funders
 
-// Provider
 import {mlAppServiceProviderConfig} from '../../app/serviceProvider/config/mlAppServiceProviderConfig'
+import  {mlAppStartupConfig} from '../../app/startup/config/mlAppStartupConfig'
 
 
 export const appSection = FlowRouter.group({
@@ -133,7 +129,7 @@ appSection.route('/myOffice', {
 appSection.route('/library', {
   name: 'library',
   action(){
-    mount(AppLayout, {appContent: <PortfolioLibrary client={appClient} isAdmin={false} />, isProfileMenu: true})
+    mount(AppLayout, {appContent: <Library client={appClient} />, isProfileMenu: true})
   }
 });
 
@@ -261,21 +257,26 @@ appSection.route('/ideator/editPortfolio/', {
   }
 });
 
-//Startups
+/**
+ * startup tabs
+ * */
 appSection.route('/startup', {
   name: 'startup',
   action(){
-    mount(AppLayout,{appContent:< MlAppStartupLanding/>})
+    // mount(AppLayout,{appContent:< MlAppStartupLanding/>})
+    var listConfig = _.extend(mlAppStartupConfig, {isExplore: false});
+    mount(AppLayout, {appContent: <MlViews viewMode={false} showInfinity={false} listConfig={listConfig}/>})
   }
 });
-// appSection.route('/startup/:id', {
-//   name: 'startup',
-//   action(params){
-//     mount(AppLayout,{appContent:< MlAppStartupTabs config={params.id}/>})
-//   }
-// });
+appSection.route('/startup/:portfolioId', {
+  name: 'startup',
+  action(params){
+    // mount(AppLayout,{appContent:< MlAppStartupTabs config={params.id}/>})
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={"startup"}/>})
+  }
+});
 
-appSection.route('/provider', {
+appSection.route('/serviceProvider', {
   name: 'provider',
   action(){
     var listConfig = _.extend(mlAppServiceProviderConfig, {isExplore: false});
@@ -283,10 +284,10 @@ appSection.route('/provider', {
   }
 });
 
-appSection.route('/provider/:portfolioId', {
+appSection.route('/serviceProvider/:portfolioId', {
   name: 'provider',
   action(params){
-    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={"provider"}/>, isProfileMenu:false})
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={"serviceProvider"}/>, isProfileMenu:false})
   }
 });
 
@@ -299,7 +300,7 @@ appSection.route('/register/:id', {
 });
 
 /**
- * temporary route*/
+ * temporary route for registration*/
 
 appSection.route('/register/', {
   name: 'registeras',
@@ -308,12 +309,18 @@ appSection.route('/register/', {
   }
 });
 
+
+import MlInfiniteScroll from '../../commons/core/mlInfiniteScroll/components/MlInfiniteScroll';
+import {mlAppFunderConfig2} from "../../app/funders/config/mlAppFunderConfig2";
+
 // Funders
 appSection.route('/funder', {
   name: 'funder',
   action(){
-    var listConfig = _.extend(mlAppFunderConfig, {isExplore: false});
-    mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} listConfig={listConfig} />})
+    var config = _.extend(mlAppFunderConfig2, {isExplore: false});
+    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={config} />})
+    // var listConfig = _.extend(mlAppFunderConfig, {isExplore: false});
+    // mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} listConfig={listConfig} />})
   }
 });
 
@@ -419,7 +426,10 @@ appSection.route('/calendar/manageSchedule/:profileId/setCalendar', {
   }
 });
 
-//explore menus
+/**
+ * Explore menus for all communities
+ * */
+
 appSection.route('/explore', {
   name: 'explore',
   action(){
@@ -430,7 +440,7 @@ appSection.route('/explore', {
 appSection.route('/explore/ideator/', {
   name: 'explore',
   action(params){
-    mount(AppLayout,{appContent:< MlAppIdeatorLanding/>})
+    mount(AppLayout,{appContent:< MlAppIdeatorLanding isExplore={true}/>})
   }
 });
 
@@ -445,13 +455,49 @@ appSection.route('/explore/investor', {
   name: 'explore',
   action(){
     var listConfig = _.extend(mlAppFunderConfig, {isExplore: true});
-    mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} isExplore={true} listConfig={listConfig} />})
+    mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} listConfig={listConfig} />})
+  }
+  // isExplore={true}
+  /**removing explore menu from left nav*/
+});
+
+appSection.route('/explore/investor/:portfolioId', {
+  name: 'explore',
+  action(params){
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={"funder"}/>})
+  }
+  // , isExploreMenu:true
+  /**removing explore menu from left nav*/
+});
+
+appSection.route('/explore/serviceProvider', {
+  name: 'explore',
+  action(){
+    var listConfig = _.extend(mlAppServiceProviderConfig, {isExplore: true});
+    mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} listConfig={listConfig} />})
   }
 });
 
-appSection.route('/explore/funder/:portfolioId', {
-  name: 'explore_funder',
+appSection.route('/explore/serviceProvider/:portfolioId', {
+  name: 'explore',
   action(params){
-    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={"funder"}/>, isExploreMenu:true})
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={"serviceProvider"}/>})
   }
+  /**there is no need to send community type other than ideator*/
+});
+
+appSection.route('/explore/startup', {
+  name: 'explore',
+  action(){
+    var listConfig = _.extend(mlAppStartupConfig, {isExplore: true});
+    mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} listConfig={listConfig} />})
+  }
+});
+
+appSection.route('/explore/startup/:portfolioId', {
+  name: 'explore',
+  action(params){
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={"startup"}/>})
+  }
+  /**there is no need to send community type other than ideator*/
 });

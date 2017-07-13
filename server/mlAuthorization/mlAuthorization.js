@@ -68,6 +68,9 @@ class MlAuthorization
                       if(moduleName == 'OFFICETRANSACTION'){
                         moduleName = 'OFFICE';
                       }
+                      if(moduleName == 'CLUSTERHIERARCHY'){
+                        moduleName = 'CLUSTER';
+                      }
 
 
 

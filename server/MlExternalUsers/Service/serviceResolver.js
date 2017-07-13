@@ -19,8 +19,19 @@ MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => 
 }
 
 MlResolver.MlQueryResolver['findService'] = (obj, args, context, info) => {
-  let result = mlDBController.findOne('MlService', {_id:args.serviceId} , context)
-  return result;
+  let result = mlDBController.findOne('MlService', {_id: args.serviceId} , context);
+  if (result) {
+    let query = {
+      transactionId: result.transactionId,
+      isCurrentVersion: true
+    };
+    let service = mlDBController.findOne('MlService', query, context);
+    return service;
+  } else  {
+    let code = 404;
+    let response = new MlRespPayload().successPayload('Service not found', code);
+    return response;
+  }
 }
 
 MlResolver.MlMutationResolver['createService'] = (obj, args, context, info) => {

@@ -1,7 +1,7 @@
 import gql from 'graphql-tag'
-import {client} from '../../../admin/core/apolloConnection';
+import {client} from '../../core/apolloConnection';
 
-/*export async function findMapDetailsTypeActionHandler(ModuleTypeDetails) {
+export async function findMapDetailsTypeActionHandler(ModuleTypeDetails) {
   let did=ModuleTypeDetails
   const result = await client.query({
     query: gql`
@@ -21,9 +21,9 @@ import {client} from '../../../admin/core/apolloConnection';
   })
   const totalResult = result.data.data;
   return totalResult
-}*/
+}
 
-/*export async function fetchDefaultCenterOfUser(ModuleTypeDetails) {
+export async function fetchDefaultCenterOfUser(ModuleTypeDetails) {
   let did=ModuleTypeDetails
   let result = await client.query({
     query: gql`
@@ -42,9 +42,9 @@ import {client} from '../../../admin/core/apolloConnection';
   });
   result=result&&result.data&&result.data.data?result.data.data:null;
   return result;
-}*/
+}
 
-/*export async function fetchUsers(clusterId, chapterId, subChapterId, userType) {
+export async function fetchUsers(clusterId, chapterId, subChapterId, userType) {
 
   const result = await client.query({
     query: gql`
@@ -62,7 +62,7 @@ import {client} from '../../../admin/core/apolloConnection';
                           email
                       }
                   }
-              }
+              }      
           }
       }
     `,
@@ -76,4 +76,4 @@ import {client} from '../../../admin/core/apolloConnection';
   })
   const id = result.data.data.data;
   return id
-}*/
+}

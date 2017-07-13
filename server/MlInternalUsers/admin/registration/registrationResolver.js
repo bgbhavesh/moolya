@@ -206,19 +206,27 @@ MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) 
 }
 
 MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context, info) => {
-  // TODO : Authorization
   let userId=context.userId
-  if(userId){                                                             //getting user registrationId from its default profile
- // user = mlDBController.findOne('users', {_id:userId}, context);
+  if(userId){                                                             /**getting user registrationId from its default profile*/
     let profile = new MlUserContext(userId).userProfileDetails(userId)
     if(profile){
-      // let id=user.profile.externalUserProfiles[0].registrationId
-      let id=profile.registrationId
-      if(id){
-        let response= MlRegistration.findOne({"_id":id});
+      let registerId=profile.registrationId
+      let username = mlDBController.findOne('users', {_id:userId}, context).username
+      if(registerId){
+        let response = MlRegistration.findOne({"_id": registerId});  /**getting if any registration is other than pending or approved state*/
+        let isAllowRegisterAs = mlDBController.findOne('MlRegistration', {
+          "registrationInfo.userName": username,
+          "status": {$nin: ["Approved", 'Rejected']}
+        })
+        if (_lodash.isEmpty(isAllowRegisterAs))
+          response.isAllowRegisterAs = true
+        else{
+          response.isAllowRegisterAs = false
+          response.pendingRegId = isAllowRegisterAs._id
+        }
+
         return response;
       }
-
     }
   }
 }

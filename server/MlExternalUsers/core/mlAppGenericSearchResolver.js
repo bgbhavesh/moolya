@@ -19,8 +19,13 @@ MlResolver.MlUnionResolver['AppGenericSearchUnion'] =  {
     switch (moduleName){
       case 'ACTIVITY':
         return 'Activity';
+        break
       case 'FUNDERPORTFOLIO':
         return 'FunderPortfolio';
+        break;
+      case "SERVICEPROVIDERPORTFOLIODETAILS":  //serviceProviderPortfolioDetails
+        return'serviceProviderPortfolioDetails';
+        break;
       default:
         return 'Generic';
     }
@@ -28,24 +33,35 @@ MlResolver.MlUnionResolver['AppGenericSearchUnion'] =  {
 };
 
 MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
-  console.log(obj, args);
+  // console.log(obj, args);
   let moduleName = args ? args.module : "";
   moduleName =moduleName.toUpperCase();
   let count = 0;
   let data = [];
-  console.log(args);
+  // console.log(args);
+  let findOptions = {
+    skip: args.queryProperty.skip,
+    limit: args.queryProperty.limit
+  };
   if (moduleName == "FUNDERPORTFOLIO") {
       let value = mlDBController.find('MlPortfolioDetails', {status: 'gone live', communityCode: "FUN"}, context).fetch()    //making dependency of funders on portfolio status
       let portId = _lodash.map(value, '_id');
-      let findOptions = {
-        skip: args.queryProperty.skip,
-        limit: args.queryProperty.limit
-      };
       // let finalQuery = mergeQueries(query, {portfolioDetailsId: {$in: portId}});
       let finalQuery = {portfolioDetailsId: {$in: portId}};
       data = MlFunderPortfolio.find(finalQuery, findOptions).fetch();
       count = MlFunderPortfolio.find(finalQuery).count();
-  } else {
+  }
+
+  if (args.module == "serviceProviderPortfolioDetails") {
+    let value = mlDBController.find('MlPortfolioDetails', {status: 'gone live', communityCode: "SPS"}, context).fetch()
+    let portId = _lodash.map(value, '_id')
+    // let finalQuery = mergeQueries(query, {portfolioDetailsId: {$in: portId}});
+    let finalQuery = {portfolioDetailsId: {$in: portId}};
+    data = MlServiceProviderPortfolio.find(finalQuery, findOptions).fetch();
+    count = MlServiceProviderPortfolio.find(finalQuery, findOptions).count();
+  }
+
+  else {
     return {
       count: 10,
       data:[

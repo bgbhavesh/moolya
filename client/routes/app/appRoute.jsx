@@ -280,7 +280,8 @@ appSection.route('/serviceProvider', {
   name: 'provider',
   action(){
     var listConfig = _.extend(mlAppServiceProviderConfig, {isExplore: false});
-    mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} listConfig={listConfig} />})
+    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
+    // mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} listConfig={listConfig} />})
   }
 });
 

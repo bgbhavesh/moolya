@@ -308,12 +308,16 @@ appSection.route('/register/', {
   }
 });
 
+
+import MlInfiniteScroll from '../../commons/core/mlInfiniteScroll/components/MlInfiniteScroll';
+import {mlAppFunderConfig2} from "../../app/funders/config/mlAppFunderConfig2";
+
 // Funders
 appSection.route('/funder', {
   name: 'funder',
   action(){
-    var listConfig = _.extend(mlAppFunderConfig, {isExplore: false});
-    mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} listConfig={listConfig} />})
+    var config = _.extend(mlAppFunderConfig2, {isExplore: false});
+    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={config} />})
   }
 });
 

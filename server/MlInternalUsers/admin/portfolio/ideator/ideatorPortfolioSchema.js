@@ -368,7 +368,7 @@ let ideatorPortfolioSchema = `
         createIdea(idea:idea):response
         createLibrary(detailsInput:libraryInput):response
         updatePrivacyDetails(detailsInput:privateData): response
-        updateIdea(ideaId:String, idea:idea):response
+        updateIdea(ideaId:String, idea:idea, clusterId: String, chapterId: String, subChapterId: String, communityId: String):response
         updateLibraryData(files: String): response
     }
 `

@@ -448,14 +448,19 @@ MlResolver.MlMutationResolver['createIdea'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['createLibrary'] = (obj, args, context, info) => {
-var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.detailsInput.userId}, context)
-  if(portfolioDetails ){
-    args.detailsInput.userId = portfolioDetails.userId;
-  }
-  args.detailsInput.userId= context.userId;
-  var newCollection = mlDBController.insert('MlLibrary', args.detailsInput, context)
-      return newCollection;
+  if (context.url.indexOf("transactions") > 0) {
+    var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.detailsInput.userId}, context)
+    if (portfolioDetails) {
+      args.detailsInput.userId = portfolioDetails.userId;
     }
+    var newCollection = mlDBController.insert('MlLibrary', args.detailsInput, context)
+    return newCollection;
+  }else {
+    args.detailsInput.userId = context.userId;
+    var newPortfolioCollection= mlDBController.insert('MlLibrary', args.detailsInput, context)
+    return newPortfolioCollection
+  }
+}
 
 
 
@@ -516,6 +521,27 @@ MlResolver.MlMutationResolver['updateLibraryData'] = (obj, args, context, info) 
       return libraryUpdate;
     }
   })
+}
+
+MlResolver.MlMutationResolver['putDataIntoTheLibrary'] = (obj, args, context, info) => {
+  let response;
+  if(context.url.indexOf("transactions") > 0) {
+    var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfoliodetailsId}, context)
+    if (portfolioDetails) {
+      args.files.userId = portfolioDetails.userId;
+      var libraryDataAdmin = mlDBController.insert('MlLibrary', args.files,  context);
+      return libraryDataAdmin;
+    }
+  } else {
+    var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfoliodetailsId}, context)
+    if (portfolioDetails) {
+      args.files.userId = context.userId;
+      if (args.portfoliodetailsId) {
+        response = mlDBController.insert('MlLibrary', args.files, context)
+      }
+      return response;
+    }
+  }
 }
 
 

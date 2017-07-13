@@ -379,7 +379,7 @@ let ideatorPortfolioSchema = `
         createIdea(idea:idea):response
         createLibrary(detailsInput:libraryInput):response
         updatePrivacyDetails(detailsInput:privateData): response
-        updateIdea(ideaId:String, idea:idea):response
+        updateIdea(ideaId:String, idea:idea, clusterId: String, chapterId: String, subChapterId: String, communityId: String):response
         updateLibraryData(files: String): response
         putDataIntoTheLibrary(portfoliodetailsId:String,files:file): response
     }
@@ -417,7 +417,7 @@ let supportedApi = [
   {api:'createLibrary', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'updateAnnotation', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'updateIdeatorPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
-  {api:'updateIdea', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+  {api:'updateIdea', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
   {api:'resolveComment', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'reopenComment', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'updatePrivacyDetails', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},

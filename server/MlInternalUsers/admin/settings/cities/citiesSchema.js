@@ -48,7 +48,7 @@ let supportedApi = [
   {api:'fetchCity', actionName:'READ', moduleName:"CITIES"},
   {api:'fetchCitiesPerState', actionName:'READ', moduleName:"CITIES"},
   {api:'fetchCitiesPerCountry', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
-  {api:'searchCities', actionName:'READ', moduleName:"CITIES"},
+  {api:'searchCities', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
   {api:'updateCity', actionName:'UPDATE', moduleName:"CITIES"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

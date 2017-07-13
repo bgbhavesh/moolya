@@ -240,6 +240,47 @@ let startupPortfolioSchema = `
         clients             : [clientsOutput]
         legalIssue          : legalIssueOutput
     }
+
+      type EmploymentOfCompany{
+      about: String
+      fromMonth: Date
+      fromYear: Date
+      toMonth: Date
+      toYear: Date
+      numberOfEmployment: Int
+    }
+    type ProfitRevenueLiability{
+      entityType: [String]
+      fromMonth: Date
+      fromYear: Date
+      toMonth: Date
+      toYear: Date
+      valueType: [String]
+      value: Int
+    }
+    type ReviewOfCompany{
+      year: Date
+      value: Int
+      about: String
+    }
+    type EmployeeBreakupDepartment{
+      fromMonth: Date
+      fromYear: Date
+      toMonth: Date
+      toYear: Date
+      department: [String]
+      numberOfEmployment: Int
+      about: String
+    }
+        
+     type chartsOutput{
+      employmentOfCompany:[EmploymentOfCompany]
+      profitRevenueLiability:[ProfitRevenueLiability]
+      reviewOfCompany:[ReviewOfCompany]
+      employeeBreakupDepartment:[EmployeeBreakupDepartment]
+    }
+    
+    
     
     input logo{
       fileName : String,
@@ -315,7 +356,7 @@ let startupPortfolioSchema = `
         isCountryPrivate:Boolean,
         addressImage : String,
         isAddressImagePrivate:Boolean,
-          logo:logo,
+        logo:logo,
         makePrivate:Boolean,
         index:Int
     }
@@ -339,7 +380,7 @@ let startupPortfolioSchema = `
         description:String,
         isTechnologyPrivate:Boolean,
         isDescriptionPrivate:Boolean,
-          logo:logo,
+        logo:logo,
         makePrivate:Boolean,
         index:Int
     }
@@ -432,10 +473,42 @@ let startupPortfolioSchema = `
          description:String, 
         isDescriptionPrivate :Boolean
     }
-   input charts{
-        fileType:String,
-        portfolioId:String,
-        isActive:Boolean
+    input employmentOfCompany{
+      about: String
+      fromMonth: Date
+      fromYear: Date
+      toMonth: Date
+      toYear: Date
+      numberOfEmployment: Int
+    }
+    input profitRevenueLiability{
+      entityType: [String]
+      fromMonth: Date
+      fromYear: Date
+      toMonth: Date
+      toYear: Date
+      valueType: [String]
+      value: Int
+    }
+     input reviewOfCompany{
+      year: Date
+      value: Int
+      about: String
+    }
+    input employeeBreakupDepartment{
+      fromMonth: Date
+      fromYear: Date
+      toMonth: Date
+      toYear: Date
+      department: [String]
+      numberOfEmployment: Int
+      about: String
+    }
+    input charts{
+        employmentOfCompany: employmentOfCompany
+        profitRevenueLiability: profitRevenueLiability
+        reviewOfCompany: reviewOfCompany
+        employeeBreakupDepartment: employeeBreakupDepartment
     }
     input startupPortfolio{
         portfolioDetailsId  : String
@@ -467,12 +540,15 @@ let startupPortfolioSchema = `
         fetchStartupPortfolioInvestor(portfoliodetailsId:String!):[investorOutput]
         fetchStartupPortfolioLookingFor(portfoliodetailsId:String!):[lookingForOutput]
         fetchStartupPortfolioAwards(portfoliodetailsId:String!):[awardsRecognitionOutput]
+        fetchStartupPortfolioCharts(portfoliodetailsId:String):[chartsOutput]
+        fetchStartupPortfolioChart(portfoliodetailsId:String,chartDetails: charts):[chartsOutput]
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
     }
     
     type Mutation{
         createStartupPortfolio(portfolio:startupPortfolio):response
         updateStartupPortfolio(portfoliodetailsId:String,portfolio:startupPortfolio):response
+        createStartupPortfolioChart(portfoliodetailsId:String,chartDetails: charts): response
     }
 `
 
@@ -487,9 +563,12 @@ let supportedApi = [
   {api:'fetchStartupPortfolioInvestor', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchStartupPortfolioLookingFor', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchStartupPortfolioAwards', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchStartupPortfolioCharts', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchStartupPortfolioChart', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchPortfolioMenu', actionName:'READ', moduleName:"PORTFOLIO"},
 
   {api:'createStartupPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
   {api:'updateStartupPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+  {api:'createStartupPortfolioChart', actionName:'UPDATE', moduleName:"PORTFOLIO"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

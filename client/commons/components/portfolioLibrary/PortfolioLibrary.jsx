@@ -16,7 +16,7 @@ import { Modal, ModalHeader, ModalBody} from 'reactstrap';
 import {multipartASyncFormHandler} from '../../MlMultipartFormAction'
 import {createLibrary, fetchLibrary, updateLibraryData, updatePrivacyDetails} from '../../actions/mlLibraryActionHandler'
 import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
-
+import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 
   export default class  PortfolioLibrary extends React.Component{
 
@@ -47,10 +47,13 @@ import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
       videosLock: {},
       documentsLock:{},
       explore: false,
-      hideLock: false
+      hideLock: false,
+      popoverOpen:false,
+      myPortfolio: false
     };
 
     this.toggle = this.toggle.bind(this);
+    this.toggle1 = this.toggle1.bind(this);
     this.refetchData.bind(this);
     this.updateLibrary.bind(this);
     this.dataPrivacyHandler.bind(this);
@@ -66,12 +69,16 @@ import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
     let portfolioId = FlowRouter.getRouteName();
     let path = FlowRouter.current().path
     if(path.indexOf("view")>0){
-      this.setState({explore : true})
+      this.setState({explore : false, myPortfolio: true})
     }
     if(portfolioId !== "portfolio"){
       this.setState({explore : true})
     }
     if(portfolioId === "library"){
+      this.setState({explore : false})
+      this.setState({hideLock: true})
+    }
+    if(portfolioId === "transaction_portfolio_EditRequests"){
       this.setState({explore : false})
       this.setState({hideLock: true})
     }
@@ -99,7 +106,7 @@ import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
    */
 
   ImageUpload(e){
-    let file=document.getElementById("image_upload").files[0];
+    let file = e.target.files[0];
     this.setState({fileType:file.type,fileName:file.name });
     let fileType = file.type
     let typeShouldBe = _.compact(fileType.split('/'));
@@ -282,10 +289,17 @@ import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
 
   onFileUploadCallBack(type, resp) {
     if (resp) {
-          this.setState({uploadedData: resp});
-          var link = $.parseJSON(this.state.uploadedData).result;
-          this.setState({uploadedData: link });
-          this.storeData(link, type)
+      this.setState({uploadedData: resp});
+      var link = $.parseJSON(this.state.uploadedData).result;
+      this.setState({uploadedData: link});
+        let userOption = confirm("Do you want to add the file into the library")
+        if (userOption) {
+          let addToCentralLibrary = true
+          this.storeData(link, type ,addToCentralLibrary )
+      }else{
+          let addToCentralLibrary = false
+          this.storeData(link, type ,addToCentralLibrary )
+        }
     }
   }
 
@@ -296,13 +310,14 @@ import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
    * @returns resp - type :: Object
    */
 
-  async storeData(link,dataType){
+  async storeData(link,dataType, addToCentralLibrary){
         let  Details = {
           userId: this.props.portfolioDetailsId,
           fileName: this.state.fileName,
           fileUrl: link,
           fileType: this.state.fileType,
-          libraryType: dataType
+          libraryType: dataType,
+          inCentralLibrary: addToCentralLibrary
         }
         const resp = await createLibrary(Details, this.props.client)
         this.refetchData();
@@ -368,6 +383,12 @@ import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
     this.setState({previewTemplate:templatePreviewUrl});
   }
 
+    toggle1() {
+      this.setState({
+        popoverOpen: !this.state.popoverOpen
+      });
+    }
+
   componentDidMount(){
 
     (function(a){a.createModal=function(b){defaults={scrollable:false};var b=a.extend({},defaults,b);var c=(b.scrollable===true)?'style="max-height: 420px;overflow-y: auto;"':"";html='<div class="modal fade library-popup" id="myModal">';html+='<div class="modal-dialog">';html+='<div class="modal-content">';html+='<div class="modal-header">';html+='<button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ã—</button>';if(b.title.length>0){html+='<h4 class="modal-title">'+b.title+"</h4>"}html+="</div>";html+='<div class="modal-body" '+c+">";html+=b.message;html+="</div>";a("body").prepend(html);a("#myModal").modal().on("hidden.bs.modal",function(){a(this).remove()})}})(jQuery);
@@ -429,6 +450,10 @@ import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
     return response;
   }
 
+    PopOverAction(){
+      this.setState({popoverOpen : !(this.state.popoverOpen)})
+    }
+
   render(){
     var videoJsOptions = [{
       autoplay: true,
@@ -446,6 +471,18 @@ import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
           <div id="images" className="title">{show.fileName}</div>
         </div>
       )
+    });
+    let   popImageData = this.state.imageSpecifications||[];
+    const popImages = popImageData.map(function(show,id) {
+      if(show.inCentralLibrary){
+      return(
+        <div className="thumbnail"key={id}>
+          {that.state.explore ||that.props.isAdmin?" ":that.state.imagesLock[id] || show.isPrivate? !that.state.hideLock?<FontAwesome onClick={()=>that.toggleImageLock(id)} name='lock' />:"" :!that.state.hideLock? <FontAwesome onClick={()=>that.toggleImageLock(id)} name='unlock'/>:"" }
+          {that.state.explore ||that.props.isAdmin?"": <FontAwesome name='trash-o' onClick={()=>that.delete(id, "image")} />}
+          <a href="#" data-toggle="modal" data-target=".imagepop" onClick={that.random.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
+          <div id="images" className="title">{show.fileName}</div>
+        </div>
+      )}
     });
 
     let   templateData =  this.state.templateSpecifications || [];
@@ -551,9 +588,9 @@ import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
           <div className="panel panel-default">
             <div className="panel-heading">
               Images
-              <div className="fileUpload upload_file_mask pull-right">
-                <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-                  {that.state.explore || that.props.isAdmin?"":<input type="file" className="upload_file upload" name="image_source" id="image_upload" onChange={that.ImageUpload.bind(that)} />}
+              <div className="fileUpload upload_file_mask pull-right" id="create_client">
+                <a href="javascript:void(0);">
+                  {that.state.explore || that.props.isAdmin?"":<span className="ml ml-upload" onClick={that.PopOverAction.bind(that)}></span>}
                 </a>
               </div>
             </div>
@@ -612,6 +649,26 @@ import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
                 </div>
           </div>
         </div>
+        <Popover placement="bottom" isOpen={this.state.popoverOpen} target={"create_client"} toggle1={this.toggle1}>
+          <PopoverTitle>Library</PopoverTitle>
+          <PopoverContent>
+            <div  className="ml_create_client">
+              <div className="medium-popover">
+                <div className="row">
+                 <div className="col-md-12">
+                  <div className="form-group">
+                    {popImages}
+                    <div className="fileUpload mlUpload_btn">
+                      <span>Upload</span>
+                      <input type="file" className="upload" ref="upload" onChange={this.ImageUpload.bind(this)}/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
     )
   }

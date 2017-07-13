@@ -7,6 +7,10 @@ var BarTooltip = require('react-d3-tooltip').BarTooltip;
 var BarGroupTooltip = require('react-d3-tooltip').BarGroupTooltip;
 var LineTooltip = require('react-d3-tooltip').LineTooltip;
 var PieTooltip = require('react-d3-tooltip').PieTooltip;
+import MlBarChart from '../../../../../../commons/components/d3/MlBarChart'
+import MlBarGroupChart from '../../../../../../commons/components/d3/MlBarGroupChart'
+import MlLineChart from '../../../../../../commons/components/d3/MlLineChart'
+import MlPieChart from '../../../../../../commons/components/d3/MlPieChart'
 
 export default class MlStartupCharts extends React.Component{
   constructor(props, context){
@@ -331,38 +335,36 @@ export default class MlStartupCharts extends React.Component{
       ]
     return(
       <div>
-        <BarTooltip
+        <MlBarChart
           title= {employmentDataTitle}
           data= {this.state.employmentData}
           width= {width}
           height= {height}
-          chartSeries = {employmentDataChartSeries}
-          x= {employmentDataX}
           xScale= {xScale}
+          chartSeries = {employmentDataChartSeries}
         />
 
-        <BarGroupTooltip
+        <MlBarGroupChart
           title= {prlTitle}
           data= {this.state.prlData}
-            width= {width}
+          width= {width}
           height= {height}
           chartSeries = {prlChartSeries}
-          x= {prlX}
           xScale= {xScale}
           xLabel = {prlXLabel}
           yLabel = {prlYLabel}
         />
-        <LineTooltip
+        <MlLineChart
           title= {reviewTitle}
           data= {this.state.reviewData}
           width= {width}
           height= {height}
           margins= {margins}
           chartSeries= {reviewChartSeries}
-          x= {reviewX}
+         /* x= {reviewX}*/
           xScale= {xScale}
         />
-        <PieTooltip
+        <MlPieChart
           title= {title}
           data= {this.state.empBreakUpData}
           width= {width}

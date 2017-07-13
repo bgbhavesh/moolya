@@ -9,6 +9,8 @@ export async function fetchUserDetailsHandler() {
         findRegistrationInfoForUser {
        _id
        status
+       isAllowRegisterAs
+       pendingRegId
           registrationInfo {
             firstName
             lastName

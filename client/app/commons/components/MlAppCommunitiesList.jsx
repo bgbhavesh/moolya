@@ -32,6 +32,14 @@ export default class MlAppCommunitiesList extends Component {
   async fetchUserDetails() {
     let response = await fetchUserDetailsHandler()
     if (response) {
+      this.isAllowRegisterAs = response.isAllowRegisterAs
+      if(response.isAllowRegisterAs)
+        toastr.success("user can set another registeras");
+      else{
+        FlowRouter.go("/app/register/"+response.pendingRegId);
+        toastr.error("Complete one or more profile hard registration");
+      }
+
       let registrationInfo = response.registrationInfo
       this.setState({
         status: response.status,
@@ -49,8 +57,9 @@ export default class MlAppCommunitiesList extends Component {
   }
 
     setSelectedCommunity(selCommunity,idx, e){
-        this.setState({selectedCommunity:selCommunity, popoverOpen : !(this.state.popoverOpen)})
-      this.setState({identity:null,registrationType:null,clusterId:null})
+      /**reducing one setState*/
+      // this.setState({selectedCommunity:selCommunity, popoverOpen : !(this.state.popoverOpen)})
+      this.setState({selectedCommunity:selCommunity, popoverOpen : !(this.state.popoverOpen), identity:null,registrationType:null,clusterId:null})
     }
 
     toggle() {

@@ -102,8 +102,10 @@ let Role = `
       modules:[modules], 
       isActive:Boolean,
       isHierarchyAssigned:Boolean
-       updatedDateTime:Date,
-        updatedBy:String,
+      createdDateTime:Date,
+      createdBy:String,
+      updatedDateTime:Date,
+      updatedBy:String,
       isNonMoolyaAvailable : Boolean
   }
   

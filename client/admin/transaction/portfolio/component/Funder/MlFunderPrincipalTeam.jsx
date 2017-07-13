@@ -498,15 +498,18 @@ export default class MlFunderPrincipalTeam extends React.Component {
                     <div className="medium-popover">
                       <div className="row">
                         <div className="col-md-12">
-                          <div className="form-group">
-                            <div className="fileUpload mlUpload_btn">
-                              <span>Upload Pic</span>
-                              <input type="file" className="upload" onChange={this.onPrincipalLogoFileUpload.bind(this)}/>
-                            </div>
-                            <div className="previewImg ProfileImg">
-                              <img src={this.state.data.logo ? this.state.data.logo.fileUrl : "/images/def_profile.png"}/>
-                            </div>
-                          </div>
+                          {this.state.selectedObject != "default"?
+                            <div className="form-group">
+                              <div className="fileUpload mlUpload_btn">
+                                <span>Upload Pic</span>
+                                <input type="file" className="upload" onChange={this.onPrincipalLogoFileUpload.bind(this)}/>
+                              </div>
+                              <div className="previewImg ProfileImg">
+                                <img src={this.state.data.logo ? this.state.data.logo.fileUrl : "/images/def_profile.png"}/>
+                              </div>
+                            </div>:<div></div>
+                          }
+
                           {/*<div className="form-group">*/}
                             {/*<input type="text" placeholder="Title" name="title"*/}
                                    {/*defaultValue={this.state.data.title}*/}
@@ -622,15 +625,18 @@ export default class MlFunderPrincipalTeam extends React.Component {
                     <div className="medium-popover">
                       <div className="row">
                         <div className="col-md-12">
-                          <div className="form-group">
-                            <div className="fileUpload mlUpload_btn">
-                              <span>Upload Pic</span>
-                              <input type="file" className="upload" onChange={this.onTeamLogoFileUpload.bind(this)}/>
-                            </div>
-                            <div className="previewImg ProfileImg">
-                              <img src={this.state.data.logo ? this.state.data.logo.fileUrl : "/images/def_profile.png"}/>
-                            </div>
-                          </div>
+                          {this.state.selectedObject != "default" ?
+                            <div className="form-group">
+                              <div className="fileUpload mlUpload_btn">
+                                <span>Upload Pic</span>
+                                <input type="file" className="upload" onChange={this.onTeamLogoFileUpload.bind(this)}/>
+                              </div>
+                              <div className="previewImg ProfileImg">
+                                <img
+                                  src={this.state.data.logo ? this.state.data.logo.fileUrl : "/images/def_profile.png"}/>
+                              </div>
+                            </div> : <div></div>
+                          }
                           <div className="form-group">
                             <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.data.title} queryType={"graphql"} query={titlequery}  queryOptions={titleOption} onSelect={that.optionsBySelectTitle.bind(this)} isDynamic={true}/>
 

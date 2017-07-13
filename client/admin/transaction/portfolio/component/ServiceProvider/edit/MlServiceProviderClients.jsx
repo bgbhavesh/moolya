@@ -168,8 +168,8 @@ export default class MlServiceProviderClients extends Component {
         }
       }
       newItem = _.omit(item, "__typename");
-      let updateItem = _.omit(newItem, 'logo');
-      updateItem =_.omit(updateItem,"privateFields");
+      // let updateItem = _.omit(newItem, 'logo');
+      let updateItem =_.omit(newItem,"privateFields");
       arr.push(updateItem)
     })
     serviceProviderClients = arr;
@@ -212,7 +212,7 @@ export default class MlServiceProviderClients extends Component {
       let cloneBackUp = _.cloneDeep(dataDetails);
       let specificData = cloneBackUp[thisState];
       if (specificData) {
-        let curUpload = response.clients[thisState]
+        let curUpload = response[thisState]
         specificData['logo'] = curUpload['logo']
         this.setState({loading: false, serviceProviderClients: cloneBackUp});
       } else {
@@ -274,10 +274,17 @@ export default class MlServiceProviderClients extends Component {
                     </a>
                   </div>
                   {clientsArray.map(function (details, idx) {
+                    if(details.isPrivate){
+                      $("#isPrivate"+idx).removeClass('un_lock fa-unlock').addClass('fa-lock');
+                    }else{
+                      $("#isPrivate"+idx).removeClass('fa-lock').addClass('un_lock fa-unlock');
+                    }
                     return (<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
                       <a href="" id={"create_client" + idx}>
                         <div className="list_block">
-                          <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate}/>
+                          {/*<FontAwesome name='unlock' id="makePrivate" defaultValue={}/>*/}
+                          <FontAwesome name='unlock' className="input_icon un_lock" id={"isPrivate" + idx}
+                                       defaultValue={details.isPrivate}/>
                           <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}>
                             <img src={details.logo && details.logo.fileUrl}/></div>
                           {/*<h3>{details.description} <span className="assets-list">50</span></h3>*/}

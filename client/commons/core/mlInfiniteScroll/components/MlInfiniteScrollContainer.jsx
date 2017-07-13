@@ -46,6 +46,9 @@ export default class MlInfiniteScrollContainer extends Component {
         skip : data.length ? this.props.data.data.length : 0,
       }
     };
+    if(props.sort) {
+      options.queryProperty['sortBy'] = props.sortBy;
+    }
     this.props.fetchMore(options);
   }
 

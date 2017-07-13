@@ -22,7 +22,8 @@ export default class MlInfiniteScrollView extends Component {
 
   render() {
     const {data, viewComponent}= this.props;
-    let ListComponent =React.cloneElement(viewComponent,{data:data});
+    let pConfig=_.extend(this.props);
+    let ListComponent =React.cloneElement(viewComponent,{data:data, config:pConfig});
     return (
       <div>
         {ListComponent}

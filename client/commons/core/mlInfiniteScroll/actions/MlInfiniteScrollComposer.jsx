@@ -50,6 +50,9 @@ export default class MlInfiniteScrollComposer extends Component {
           }
         }
       };
+      if(config.sort) {
+        options.variables.queryProperty['sortBy'] = props.defaultSortBy;
+      }
       // let hasQueryOptions=config.queryOptions?true:false;
       // if(hasQueryOptions){
       //   let dynamicQueryOptions=config.buildQueryOptions?config.buildQueryOptions(config):{};

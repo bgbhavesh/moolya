@@ -25,7 +25,7 @@ export default class MlInfiniteScrollFooter extends Component {
     const props = that.props;
     return (
       <div className="ml_btn" style={{textAlign: "center"}}>
-        <button className="ml_submit_btn" style={{float: "none"}} disabled={!props.hasMore} onClick={()=>props.loadMore()}>Load More</button>
+        <button className="ml_submit_btn" style={{float: "none"}} hidden={!props.hasMore} disabled={!props.hasMore} onClick={()=>props.loadMore()}>Load More</button>
       </div>
     )
   }

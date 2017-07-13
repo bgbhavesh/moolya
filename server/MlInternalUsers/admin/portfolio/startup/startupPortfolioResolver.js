@@ -262,11 +262,6 @@ MlResolver.MlMutationResolver['createStartupPortfolioChart'] = (obj, args, conte
   }
 }
 
-
-
-
-
-
 updateArrayofObjects = (updateFor, source) =>{
   if(_.isArray(updateFor) && _.isArray(source)){
     _.each(updateFor, function (obj) {

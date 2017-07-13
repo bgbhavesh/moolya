@@ -6,9 +6,9 @@ export default class MlAppServiceProviderListView extends Component {
 
   viewDetails(portfolioId, e){
     if(this.props.config.isExplore)
-      FlowRouter.go('/app/explore/provider/'+portfolioId)
+      FlowRouter.go('/app/explore/serviceProvider/'+portfolioId)
     else
-      FlowRouter.go('/app/provider/'+portfolioId)
+      FlowRouter.go('/app/serviceProvider/'+portfolioId)
   }
 
   render(){

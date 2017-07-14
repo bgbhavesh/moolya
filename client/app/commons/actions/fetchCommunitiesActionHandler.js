@@ -11,6 +11,7 @@ export async function fetchCommunitiesHandler() {
             data: getOfficeUserTypes {
                 _id,
                 name,
+                code,
                 displayName,
                 isActive,
             }
@@ -28,8 +29,9 @@ export async function fetchAllCommunitiesHandler() {
     query: gql`
            query {
             data: getOfficeUserTypes {
-                _id,
+                _id
                 name,
+                code,
                 displayName,
                 isActive,
             }

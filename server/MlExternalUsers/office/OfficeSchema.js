@@ -117,6 +117,7 @@ let myOfficeSchema = `
     type OfficeUserTypes{
         _id:String,
         name:String,
+        code: String,
         displayName:String,
         isActive:Boolean
     }

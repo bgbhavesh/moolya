@@ -506,5 +506,5 @@ MlResolver.MlQueryResolver['getBranchDetails'] = (obj, args, context, info) => {
 
 
 MlResolver.MlQueryResolver['getOfficeUserTypes'] = () => {
-  return MlOfficeUserType.find({"isActive":true}).fetch();
+  return MlOfficeUserType.find({"isActive":true, code: {$ne: 'PRI'}}).fetch();
 }

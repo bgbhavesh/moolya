@@ -541,3 +541,22 @@ MlResolver.MlQueryResolver['getBranchDetails'] = (obj, args, context, info) => {
 MlResolver.MlQueryResolver['getOfficeUserTypes'] = () => {
   return MlOfficeUserType.find({"isActive":true, code: {$ne: 'PRI'}}).fetch();
 }
+
+MlResolver.MlMutationResolver['getMyOfficeRole'] = (obj, args, context, info) => {
+  let role;
+  let query = {
+    officeId: args.officeId,
+    userId: context.userId
+  };
+  let result = mlDBController.findOne('MlOfficeMembers', query);
+  if(result.isPrincipal){
+    role = 'Principal';
+  } else if (result.isAdminUser){
+    role = 'AdminUser';
+  } else {
+    role = 'User';
+  }
+  let code = 200;
+  let response = new MlRespPayload().successPayload(role, code);
+  return response;
+}

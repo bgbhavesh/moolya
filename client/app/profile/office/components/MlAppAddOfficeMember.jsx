@@ -93,7 +93,8 @@ export default class MlAppAddOfficeMember extends React.Component{
       });
       this.getMembers();
     } else {
-      toastr.success(response.result);
+      toastr.error(response.result)
+      this.setState({popoverOpen:false})
     }
   }
 
@@ -115,7 +116,7 @@ export default class MlAppAddOfficeMember extends React.Component{
                   <a href="#" id="create_client1" onClick={()=>this.togglePopover()} data-class="large_popover" >
                     <div className="list_block notrans">
                       <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                      <h3>Add New</h3>
+                      <h3>Add New Member</h3>
                     </div>
                   </a>
                 </div>

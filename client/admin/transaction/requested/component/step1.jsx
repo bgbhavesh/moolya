@@ -11,7 +11,6 @@ import {updateRegistrationActionHandler,emailVerificationActionHandler,smsVerifi
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import {fetchIdentityTypes} from "../actions/findRegistration";
 import {findRegistrationActionHandler} from "../actions/findRegistration";
-
 import _ from 'lodash';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import MlLoader from '../../../../commons/components/loader/loader'
@@ -363,7 +362,12 @@ export default class step1 extends React.Component{
           showAction: true,
           actionName: 'cancel',
           handler: async(event) => {
-            FlowRouter.go("/admin/transactions/registrationRequested")
+            let routeName=FlowRouter.getRouteName();
+            if(routeName==="transaction_registration_approved_edit"){
+              FlowRouter.go("/admin/transactions/registrationApprovedList")
+            }else if(routeName==="transaction_registration_requested_edit"){
+              FlowRouter.go("/admin/transactions/registrationRequested")
+            }
           }
         }
       ];

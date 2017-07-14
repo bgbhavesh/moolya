@@ -319,12 +319,22 @@ let ideatorPortfolioSchema = `
       fileType: String
       isPrivate: Boolean
       libraryType: String
+      inCentralLibrary: Boolean
     }
     
     input privateData{
       index: Int
       element: Boolean
       type: String
+    }
+    
+      input file{
+      userId: String
+      fileName: String
+      fileUrl: String
+      fileType: String
+      libraryType: String 
+      inCentralLibrary: Boolean
     }
     
      type Details{
@@ -334,6 +344,7 @@ let ideatorPortfolioSchema = `
       fileType: String
       isPrivate: Boolean
       libraryType: String
+      inCentralLibrary: Boolean
     }
     
     
@@ -370,6 +381,7 @@ let ideatorPortfolioSchema = `
         updatePrivacyDetails(detailsInput:privateData): response
         updateIdea(ideaId:String, idea:idea, clusterId: String, chapterId: String, subChapterId: String, communityId: String):response
         updateLibraryData(files: String): response
+        putDataIntoTheLibrary(portfoliodetailsId:String,files:file): response
     }
 `
 
@@ -393,6 +405,8 @@ let supportedApi = [
   {api:'fetchIdeas', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchAllowableFormats', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchLibrary', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
+  {api:'putDataIntoTheLibrary', actionName:'CREATE', moduleName:"PORTFOLIO",isWhiteList:true},
+
 
 
 
@@ -403,7 +417,7 @@ let supportedApi = [
   {api:'createLibrary', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'updateAnnotation', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'updateIdeatorPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
-  {api:'updateIdea', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+  {api:'updateIdea', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
   {api:'resolveComment', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'reopenComment', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'updatePrivacyDetails', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},

@@ -1,7 +1,5 @@
 import React, {Component, PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
-import controllable from 'react-controllables';
-import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 
 import _ from 'lodash';
 
@@ -40,7 +38,6 @@ export default class MapMarkers extends Component {
   constructor(props) {
     super(props);
     this.state = {loading: true, data: {}, isHover: false};
-    this.markerClickHandler.bind(this);
     this.onMouseEnterHandlerCallback.bind(this);
   }
 
@@ -61,28 +58,6 @@ export default class MapMarkers extends Component {
     this.setState({isHover: false});
   }
 
-  markerClickHandler(data)
-  {
-    console.log(data);
-    if(data.module == 'cluster')
-      FlowRouter.go('/admin/dashboard/'+data.markerId+'/chapters?viewMode=true');
-    if(data.module == 'chapter')
-    {
-      if(this.props.params)
-      {
-        if(this.props.params.clusterId)
-          FlowRouter.go('/admin/dashboard/'+this.props.params.clusterId+'/'+data.markerId+'/subChapters?viewMode=true');
-      }
-      else
-      {
-        let loggedInUser = getAdminUserContext();
-        FlowRouter.go('/admin/dashboard/'+loggedInUser.clusterId+'/'+data.markerId+'/subChapters?viewMode=true');
-      }
-    }
-
-    if(data.module == 'subChapter')
-      FlowRouter.go('/admin/dashboard/'+this.props.params.clusterId+'/'+this.props.params.chapterId+'/'+data.markerId+'/communities?viewMode=true');
-  }
 
   /*async findModuleDetails() {
     let json = {
@@ -100,6 +75,8 @@ export default class MapMarkers extends Component {
     let actionConfig = this.props.actionConfiguration|| [];
     let hoverInConfig = _.find(actionConfig, {actionName: 'onMouseEnter'});
     let hoverActionHandler=hoverInConfig&&hoverInConfig.handler?hoverInConfig.handler:null;
+    let markerClickConfig = _.find(actionConfig, {actionName: 'onMarkerClick'});
+    let markerClickActionHandler=markerClickConfig&&markerClickConfig.handler?markerClickConfig.handler:null;
     let hoverComp = hoverInConfig&&hoverInConfig.hoverComponent?hoverInConfig.hoverComponent:"";
     let data = this.state.data && this.state.data ? this.state.data : [];
     let HoverComponent = React.cloneElement(hoverComp, {data: data});

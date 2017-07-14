@@ -64,7 +64,6 @@ export default class MlAppStep1ExternalUser extends Component {
   }
 
   componentWillMount() {
-    console.log(this.props)
     this.fetchIdentityTypesMaster();
 
     let details = this.props.registrationInfo;
@@ -302,7 +301,6 @@ export default class MlAppStep1ExternalUser extends Component {
     let identityTypez = _.filter(that.state.identityTypesData, function (i) {
         return _.indexOf(i.communities, that.state.registrationType) >= 0 ? true : false;
       }) || [];
-    console.log(identityTypez);
     let canSelectIdentity = identityTypez && identityTypez.length > 0 ? true : false;
     let countryOption = {options: {variables: {countryId: this.state.country}}};
     let referedActive = '', institutionAssociationActive = ''

@@ -24,7 +24,23 @@ MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
 MlResolver.MlQueryResolver['fetchOfficeSC'] = (obj, args, context, info) => {
   let officeSC = [];
   if (context.userId) {
-    officeSC = mlDBController.find('MlOfficeSC', {userId: context.userId, isActive:true}).fetch()
+    let myOffices = mlDBController.find('MlOfficeMembers', {userId: context.userId, isActive:true}).fetch().map(function (data) {
+      return data.officeId;
+    });
+    let officeQuery= {
+      $or: [
+        {
+          officeId: {
+            $in: myOffices
+          }
+        },
+        {
+          userId: context.userId
+        }
+      ],
+      isActive:true
+    };
+    officeSC = mlDBController.find('MlOfficeSC', officeQuery).fetch()
     let extProfile = new MlUserContext(context.userId).userProfileDetails(context.userId)
     let regData = mlDBController.findOne('MlRegistration', {'registrationInfo.communityDefCode': extProfile.communityDefCode,'registrationInfo.userId':context.userId, status:'Approved'})
     if(regData){
@@ -170,11 +186,28 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
     if(isFunder){
       // office record creation
       officeId = mlOfficeValidationRepo.createOffice(officeDetails, profile, context);
+
       if (!officeId) {
         let code = 400;
         let response = new MlRespPayload().successPayload("Failed To Create Office", code);
         return response;
       }
+
+      let officeMemberData = {
+        officeId: officeId,
+        userId: userId,
+        isFreeUser:false,
+        isPaidUser: false,
+        isAdminUser: true,
+        mobileNumber:profile.mobileNumber,
+        joiningDate: new Date(),
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        name: profile.firstName + ' ' + profile.lastName,
+        emailId: profile.email,
+        isPrincipal: true
+      };
+      let ret = mlDBController.insert('MlOfficeMembers', officeMemberData, context)
       // office Transaction record creation
       let details = {
         officeId: officeId,
@@ -323,10 +356,10 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
         email:args.officeMember.emailId,
         userName:args.officeMember.emailId,
         contactNumber: args.officeMember.mobileNumber,
-        communityName: "Browsers",
-        communityDefCode : "BRW",
-        registrationType : "BRW",
-        communityDefName : "Browsers",
+        communityName: "Office Bearer",
+        communityDefCode : "OFB",
+        registrationType : "OFB",
+        communityDefName : "Office Bearer",
         registrationDate :new Date()
       }
 
@@ -359,8 +392,8 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
         var userProfileTemp = {
           registrationId: registrationId,
           mobileNumber: args.officeMember.mobileNumber,
-          communityName: "Browsers",
-          communityDefCode : "BRW",
+          communityName: "Office Bearer",
+          communityDefCode : "OFB",
           isDefault: false,
           isActive: true,
           isApprove: false,
@@ -502,4 +535,28 @@ MlResolver.MlQueryResolver['getBranchDetails'] = (obj, args, context, info) => {
 
   let result = mlDBController.find('MlOffice', {userId:context.userId} , context).fetch()
   return result;
+}
+
+
+MlResolver.MlQueryResolver['getOfficeUserTypes'] = () => {
+  return MlOfficeUserType.find({"isActive":true, code: {$ne: 'PRI'}}).fetch();
+}
+
+MlResolver.MlMutationResolver['getMyOfficeRole'] = (obj, args, context, info) => {
+  let role;
+  let query = {
+    officeId: args.officeId,
+    userId: context.userId
+  };
+  let result = mlDBController.findOne('MlOfficeMembers', query);
+  if(result.isPrincipal){
+    role = 'Principal';
+  } else if (result.isAdminUser){
+    role = 'AdminUser';
+  } else {
+    role = 'User';
+  }
+  let code = 200;
+  let response = new MlRespPayload().successPayload(role, code);
+  return response;
 }

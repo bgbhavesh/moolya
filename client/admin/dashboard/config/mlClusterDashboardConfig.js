@@ -89,6 +89,30 @@ const mlClusterDashboardMapConfig=new MlViewer.View({
           console.log('on leave called')
         }
       }
+    },
+    {
+      actionName: 'onMarkerClick',
+      // hoverComponent:<MapDetails />,
+      handler:  (data)=>{
+        if(data.module == 'cluster')
+          FlowRouter.go('/admin/dashboard/'+data.markerId+'/chapters?viewMode=true');
+        if(data.module == 'chapter')
+        {
+          if(data&&data.params)
+          {
+            if(data.params.clusterId)
+              FlowRouter.go('/admin/dashboard/'+data.params.clusterId+'/'+data.markerId+'/subChapters?viewMode=true');
+          }
+          else
+          {
+            let loggedInUser = getAdminUserContext();
+            FlowRouter.go('/admin/dashboard/'+loggedInUser.clusterId+'/'+data.markerId+'/subChapters?viewMode=true');
+          }
+        }
+
+        if(data.module == 'subChapter')
+          FlowRouter.go('/admin/dashboard/'+data.params.clusterId+'/'+data.params.chapterId+'/'+data.markerId+'/communities?viewMode=true');
+      }
     }
   ],
   // async function (data) {

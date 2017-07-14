@@ -2,8 +2,6 @@ import React from "react";
 import {render} from "react-dom";
 import {mount} from "react-mounter";
 import AppLayout from "../../app/layouts/appLayout";
-import MlViews from "../../admin/core/components/MlViews";
-import MlAppIdeatorLanding from "../../../client/app/ideators/components/MlAppIdeatorLanding";
 import MlAppIdeatorTabs from "../../../client/app/ideators/components/MlAppIdeatorTabs";
 import MlAppCommunitiesList from "../../../client/app/commons/components/MlAppCommunitiesList";
 import MlAdminProfileHeader from "../../admin/layouts/header/MlAdminProfileHeader";
@@ -68,6 +66,7 @@ import MlAppExplore from "../../app/explore/components/MlAppExplore";
 
 import {mlAppServiceProviderConfig} from '../../app/serviceProvider/config/mlAppServiceProviderConfig'
 import  {mlAppStartupConfig} from '../../app/startup/config/mlAppStartupConfig'
+import  {mlAppIdeatorConfig} from '../../app/ideators/config/mlAppIdeatorConfig'
 
 /**
  * Import infinite scroll component
@@ -226,7 +225,8 @@ appSection.route('/myProfile/registerAs', {
 appSection.route('/ideator', {
   name: 'ideator',
   action(){
-      mount(AppLayout,{appContent:<MlAppIdeatorLanding/>})
+    var listConfig = _.extend(mlAppIdeatorConfig, {isExplore: false});
+    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
   }
 });
 appSection.route('/portfolio/view/:portfolioId/:communityType', {
@@ -268,9 +268,10 @@ appSection.route('/ideator/editPortfolio/', {
 appSection.route('/startup', {
   name: 'startup',
   action(){
-    // mount(AppLayout,{appContent:< MlAppStartupLanding/>})
+    // mount(AppLayout, {appContent: <MlViews viewMode={false} showInfinity={false} listConfig={listConfig}/>})
     var listConfig = _.extend(mlAppStartupConfig, {isExplore: false});
-    mount(AppLayout, {appContent: <MlViews viewMode={false} showInfinity={false} listConfig={listConfig}/>})
+    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
+    /**infinite scroll component*/
   }
 });
 appSection.route('/startup/:portfolioId', {
@@ -287,6 +288,7 @@ appSection.route('/serviceProvider', {
     var listConfig = _.extend(mlAppServiceProviderConfig, {isExplore: false});
     mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
     // mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} listConfig={listConfig} />})
+    /**using infinite scroll*/
   }
 });
 
@@ -442,7 +444,9 @@ appSection.route('/explore', {
 appSection.route('/explore/ideator/', {
   name: 'explore',
   action(params){
-    mount(AppLayout,{appContent:< MlAppIdeatorLanding isExplore={true}/>})
+    // mount(AppLayout,{appContent:< MlAppIdeatorLanding isExplore={true}/>})
+    var listConfig = _.extend(mlAppIdeatorConfig, {isExplore: true});
+    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
   }
 });
 
@@ -478,7 +482,9 @@ appSection.route('/explore/serviceProvider', {
   name: 'explore',
   action(){
     var listConfig = _.extend(mlAppServiceProviderConfig, {isExplore: true});
-    mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} listConfig={listConfig} />})
+    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
+    // mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} listConfig={listConfig} />})
+    /**using infinite scroll*/
   }
 });
 
@@ -494,7 +500,9 @@ appSection.route('/explore/startup', {
   name: 'explore',
   action(){
     var listConfig = _.extend(mlAppStartupConfig, {isExplore: true});
-    mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} listConfig={listConfig} />})
+    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
+    // mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} listConfig={listConfig} />})
+    /**import of infinite scroll component*/
   }
 });
 

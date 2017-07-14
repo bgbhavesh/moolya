@@ -69,6 +69,11 @@ import MlAppExplore from "../../app/explore/components/MlAppExplore";
 import {mlAppServiceProviderConfig} from '../../app/serviceProvider/config/mlAppServiceProviderConfig'
 import  {mlAppStartupConfig} from '../../app/startup/config/mlAppStartupConfig'
 
+/**
+ * Import infinite scroll component
+ */
+import MlInfiniteScroll from '../../commons/core/mlInfiniteScroll/components/MlInfiniteScroll';
+import {mlAppFunderConfig2} from "../../app/funders/config/mlAppFunderConfig2";
 
 export const appSection = FlowRouter.group({
   prefix: "/app",
@@ -310,10 +315,6 @@ appSection.route('/register/', {
   }
 });
 
-
-import MlInfiniteScroll from '../../commons/core/mlInfiniteScroll/components/MlInfiniteScroll';
-import {mlAppFunderConfig2} from "../../app/funders/config/mlAppFunderConfig2";
-
 // Funders
 appSection.route('/funder', {
   name: 'funder',
@@ -455,8 +456,10 @@ appSection.route('/explore/ideator/:portfolioId', {
 appSection.route('/explore/investor', {
   name: 'explore',
   action(){
-    var listConfig = _.extend(mlAppFunderConfig, {isExplore: true});
-    mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} listConfig={listConfig} />})
+    // var listConfig = _.extend(mlAppFunderConfig, {isExplore: true});
+    // mount(AppLayout,{appContent:<MlViews viewMode={false} showInfinity={false} listConfig={listConfig} />})
+    let listConfig = _.extend(mlAppFunderConfig2, {isExplore: true});
+    mount(AppLayout,{appContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
   }
   // isExplore={true}
   /**removing explore menu from left nav*/

@@ -32,6 +32,9 @@ export default class MlAppNewSpokePerson extends React.Component {
 
   submitDetails() {
     let community = _.uniqBy(this.state.availableCommunities, 'communityId');
+    community = community.filter(function (data) {
+      return typeof data.userCount !== undefined && data.userCount !== 0;
+    });
     let myOffice = {
       totalCount: this.refs.totalCount.value,
       principalUserCount: this.refs.principalUserCount.value,

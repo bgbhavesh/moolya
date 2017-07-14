@@ -71,7 +71,7 @@ export default class MlInfiniteScrollContainer extends Component {
               smoothScrolling={true}
             >
               { props.header ? <MlInfiniteScrollHeader config={props.header} updateSearchValue={this.updateSearchValue} /> : '' }
-              <MlInfiniteScrollView viewComponent={viewComponent} data={data} />
+              <MlInfiniteScrollView viewComponent={viewComponent} data={data} config={props} />
               <MlInfiniteScrollFooter hasMore={hasMore} loadMore={this.loadMore} />
             </ScrollArea>
           </div>

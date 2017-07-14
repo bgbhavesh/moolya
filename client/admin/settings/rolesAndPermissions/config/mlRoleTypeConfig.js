@@ -63,7 +63,7 @@ function dateFormatter(data){
   if(createdDateTime){
     return <div>{moment(createdDateTime).format('MM-DD-YYYY, HH:MM')}</div>;
   } else {
-    return <div>System Generated</div>;
+    return <div></div>;
   }
 }
 function createdByFormatter(data){
@@ -71,7 +71,7 @@ function createdByFormatter(data){
   if(createdBy){
     return <div>{createdBy}</div>;
   } else {
-    return <div>System Generated</div>;
+    return <div></div>;
   }
 }
 function updateddateFormatter(data){
@@ -79,7 +79,7 @@ function updateddateFormatter(data){
   if(updatedDateTime){
     return <div>{moment(updatedDateTime).format('MM-DD-YYYY, HH:MM')}</div>;
   } else {
-    return <div>System Generated</div>;
+    return <div></div>;
   }
 }
 function updatedByFormatter(data){
@@ -87,7 +87,7 @@ function updatedByFormatter(data){
   if(updatedBy){
     return <div>{updatedBy}</div>;
   } else {
-    return <div>System Generated</div>;
+    return <div></div>;
   }
 }
 //@for displaying roleTypes as EcoSystem and SubChapter

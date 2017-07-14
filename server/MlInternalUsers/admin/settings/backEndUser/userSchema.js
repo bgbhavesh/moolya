@@ -19,6 +19,25 @@ let BackEndUser = `
         clusterName:String
         communityCode : String
     }
+    type ExternalUsers{
+        _id: String,
+        username: String,
+        profile:ExternalUserProfile,
+    }
+    type ExternalUserProfile{
+        isInternaluser: Boolean,
+        isExternaluser: Boolean,
+        isActive: Boolean,
+        email: String,
+        profileImage:String,
+        dateOfBirth: Date,
+        genderType: String,
+        firstName: String,
+        middleName: String,
+        lastName: String,
+        externalUserProfiles:[ExternalProfile],
+        externalUserAdditionalInfo:[externalUserAdditionalInfoSchema]
+    }
     
     type userProfile{
         isInternaluser: Boolean,
@@ -484,6 +503,7 @@ let BackEndUser = `
     type Query{
         fetchUserDetails(userId:String): userDetails
         fetchUser(userId:String): BackendUsers
+        fetchExternalUserDetails: ExternalUsers
         fetchUsersByClusterDepSubDep(clusterId:String, chapterId:String, subChapterId:String, communityId:String): [BackendUsers]
         fetchUserDepSubDep(userId:String, clusterId:String):[dep]
         fetchUserRoles(userId:String):[contextRoles]
@@ -510,6 +530,7 @@ let BackEndUser = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],BackEndUser]);
 let supportedApi = [
     {api:'fetchUserDetails', actionName:'READ', moduleName:"USERS", isWhiteList:true},
+    {api:'fetchExternalUserDetails', actionName:'READ', moduleName:"USERS", isWhiteList:true},
     {api:'fetchUser', actionName:'READ', isWhiteList: true, moduleName:"USERS"},
     {api:'fetchUsersByClusterDepSubDep', actionName:'READ', moduleName:"USERS"},
     {api:'fetchUserDepSubDep', actionName:'READ', moduleName:"USERS", isWhiteList:true},

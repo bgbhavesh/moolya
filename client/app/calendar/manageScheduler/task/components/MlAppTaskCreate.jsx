@@ -115,6 +115,10 @@ export default class MlAppTaskCreate extends Component {
       {value: 'monthly', label: 'Monthly'},
       {value: 'daily', label: 'Daily'}
     ]
+    let sessionFrequencyActive=''
+    if(this.state.data.sessionFrequency){
+      sessionFrequencyActive='active'
+    }
     const showLoader = this.state.loading;
     return (
       <div className="step_form_wrap step1">
@@ -127,6 +131,7 @@ export default class MlAppTaskCreate extends Component {
                     <input type="text" placeholder="Task Name" name="name" defaultValue={this.state.data.name}
                            className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
                   </div>
+                  <label>Task Type</label><br/>
                   <div className="form-group">
                     <div className="input_types">
                       <input id="isInternal" type="checkbox" value={true} name="isInternal"
@@ -173,9 +178,12 @@ export default class MlAppTaskCreate extends Component {
                             name="note" id="cl_about" onBlur={this.handleBlur.bind(this)}>
                   </textarea>
                   </div>
-                  <span className="placeHolder active">Frequency</span>
-                  <Select className="form-control" options={sessionFrequencyOptions}
+                  <div className="form-group">
+                  {/*<span className="placeHolder active">Frequency</span>*/}
+                    <span className={`placeHolder ${sessionFrequencyActive}`}>Frequency</span>
+                  <Select className="form-field-name" options={sessionFrequencyOptions} placeholder="Frequency"
                           value={this.state.data.sessionFrequency} onChange={this.onFrequencySelect.bind(this)}/>
+                  </div>
                   <div className="form-group">
                     <div className="input_types">
                       <input id="isServiceCardEligible" type="checkbox" name="isServiceCardEligible" value={true}

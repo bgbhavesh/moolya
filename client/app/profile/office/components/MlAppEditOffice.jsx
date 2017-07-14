@@ -8,6 +8,7 @@ import MlAppAddOfficeMember from './MlAppAddOfficeMember';
 import MlUpgradeOffice from './MlUpgradeOffice';
 import 'react-responsive-tabs/styles.css';
 import {findOfficeAction} from "../actions/findOfficeAction";
+import {getMyOfficeRoleActionHandler} from "../actions/getMyOfficeRole";
 import MlTableViewContainer from "../../../../../client/admin/core/containers/MlTableViewContainer";
 import {mlOfficeTransactionConfig} from "../config/MlOfficeTransactionConfig";
 
@@ -15,12 +16,24 @@ export default class MlAppEditOffice extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      availableCommunities:[]
+      availableCommunities:[],
+      role : ''
     }
   }
   componentWillMount() {
     const resp = this.officeDetails();
+    this.getMyOfficeRole();
     return resp;
+  }
+
+  async getMyOfficeRole() {
+    let officeId = FlowRouter.getParam('officeId')
+    let response = await getMyOfficeRoleActionHandler(officeId);
+    if(response.success){
+      this.setState({
+        role: response.result
+      })
+    }
   }
 
   async officeDetails() {
@@ -39,9 +52,11 @@ export default class MlAppEditOffice extends React.Component{
   }
 
   render(){
+    const that = this;
+    const isAddNewMember = that.state.role == "Principal" || that.state.role == "AdminUser";
     let MlTabs = [
-      {name: 'Principal', tabContent: <MlAppAddOfficeMember />},
-      {name: 'Team Member', tabContent: <MlAppAddOfficeMember availableCommunities={this.state.availableCommunities} />},
+      {name: 'Principal', tabContent: <MlAppAddOfficeMember isAdd={isAddNewMember} />},
+      {name: 'Team Member', tabContent: <MlAppAddOfficeMember isAdd={isAddNewMember} availableCommunities={this.state.availableCommunities} />},
       {name: 'Office Transaction', tabContent: <MlTableViewContainer params={this.props.config} {...mlOfficeTransactionConfig}/>},
       {name: 'Upgrade Office', tabContent: <MlUpgradeOffice/>}
     ];

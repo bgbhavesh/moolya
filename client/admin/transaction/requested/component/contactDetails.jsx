@@ -96,7 +96,7 @@ export default class ContactDetails extends React.Component{
          } else {
            this.findRegistration();
            this.props.registrationDetails();
-           this.refs.countryCode.value = "";
+           // this.refs.countryCode.value = "";
            this.refs["contactNumber"].value = "";
            this.setState({selectedNumberTypeValue: "", selectedNumberTypeLabel: ""});
            toastr.success("Contact is created successfully");

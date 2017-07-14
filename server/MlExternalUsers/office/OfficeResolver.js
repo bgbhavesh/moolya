@@ -323,10 +323,10 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
         email:args.officeMember.emailId,
         userName:args.officeMember.emailId,
         contactNumber: args.officeMember.mobileNumber,
-        communityName: "Browsers",
-        communityDefCode : "BRW",
-        registrationType : "BRW",
-        communityDefName : "Browsers",
+        communityName: "Office Bearer",
+        communityDefCode : "OFB",
+        registrationType : "OFB",
+        communityDefName : "Office Bearer",
         registrationDate :new Date()
       }
 
@@ -359,8 +359,8 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
         var userProfileTemp = {
           registrationId: registrationId,
           mobileNumber: args.officeMember.mobileNumber,
-          communityName: "Browsers",
-          communityDefCode : "BRW",
+          communityName: "Office Bearer",
+          communityDefCode : "OFB",
           isDefault: false,
           isActive: true,
           isApprove: false,

@@ -503,3 +503,8 @@ MlResolver.MlQueryResolver['getBranchDetails'] = (obj, args, context, info) => {
   let result = mlDBController.find('MlOffice', {userId:context.userId} , context).fetch()
   return result;
 }
+
+
+MlResolver.MlQueryResolver['getOfficeUserTypes'] = () => {
+  return MlOfficeUserType.find({"isActive":true}).fetch();
+}

@@ -49,10 +49,10 @@ if(Meteor.isServer){
             // },
             {
                 "image":"ml ml-provider",
-                "link": "/app/provider",
+                "link": "/app/serviceProvider",
                 "isLink" : true,
                 "isMenu" : true,
-                "name" : "Provider",
+                "name" : "Service Provider",
                 "uniqueId" : "provider"
             },
 

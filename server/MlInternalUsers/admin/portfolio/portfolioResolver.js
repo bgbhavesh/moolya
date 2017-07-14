@@ -342,17 +342,7 @@ MlResolver.MlMutationResolver['removeIdetaorProfilePic'] = (obj, args, context, 
   return response;
 }
 
-MlResolver.MlMutationResolver['putDataIntoTheLibrary'] = (obj, args, context, info) => {
-  let response;
-  var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfoliodetailsId}, context)
-  if (portfolioDetails) {
-    args.files.userId = context.userId;
-    if (args.portfoliodetailsId) {
-      response = mlDBController.insert('MlLibrary', args.files, context)
-    }
-    return response;
-  }
-}
+
 
 
 

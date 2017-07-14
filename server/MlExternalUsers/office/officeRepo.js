@@ -111,7 +111,7 @@ class MlOfficeRepo{
       // var scId = mlDBController.insert('MlOfficeSC', updatedOffice, context)
     }
 
-    // This Method Will create a office service card from the definition
+    // This Method Will create be Spoke Service Card Definition
     createBspokeSCDef(officeDetails, profile, context, officeId){
       let bSpokeOffice = {};
       bSpokeOffice["officeId"]              = officeId
@@ -193,10 +193,10 @@ class MlOfficeRepo{
         ledgerBalance.principalcount = ledgerBalance.principalcount - 1;
       }
       else{
-        var index = _.findIndex(ledgerBalance.availableCommunities, {communityName:officeMemberDetails.communityType})
+        var index = _.findIndex(ledgerBalance.availableCommunities, {communityId:officeMemberDetails.communityType})
         if(index < 0)
           throw  new Error('Invalid Community Type')
-        ledgerBalance.availableCommunities[index].limit = ledgerBalance.availableCommunities[index].limit - 1;
+        ledgerBalance.availableCommunities[index].userCount = ledgerBalance.availableCommunities[index].userCount - 1;
         ledgerBalance.teamMembercount = ledgerBalance.teamMembercount - 1;
       }
 
@@ -257,11 +257,11 @@ class MlOfficeRepo{
           if(ledgerBalance.teamMembercount == 0)
             return {success:false, msg:'Team User Count Limit Exceeded'}
 
-          var obj = _.find(ledgerBalance.availableCommunities, {communityName:payload.officeMember.communityType})
+          var obj = _.find(ledgerBalance.availableCommunities, {communityId:payload.officeMember.communityType})
           if(!obj)
             return {success:false, msg:'Invalid Community Type'}
 
-          if(obj.limit == 0)
+          if(obj.userCount == 0)
             return {success:false, msg:'Limit Exceeded'}
         }
         return {success:true}

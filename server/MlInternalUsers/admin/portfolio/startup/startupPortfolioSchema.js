@@ -532,6 +532,13 @@ let startupPortfolioSchema = `
         charts              : charts
         legalIssue          : legalIssue
     }
+    type startupPortfolioOutput{
+        _id                  : String
+        userId               : String
+        communityType        : String
+        portfolioDetailsId   : String
+        aboutUs              : aboutUsOutput
+    }
     
     type Query{
         fetchStartupPortfolioAboutUs(portfoliodetailsId:String!):startupPortfolioAboutUsOutput

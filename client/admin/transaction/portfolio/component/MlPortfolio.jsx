@@ -16,6 +16,7 @@ import {fetchIdeaByPortfolioId} from "../../../../app/ideators/actions/IdeaActio
 import MlLoader from '../../../../commons/components/loader/loader'
 import _ from 'lodash'
 import {client} from '../../../core/apolloConnection';
+import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
 
 class MlPortfolio extends React.Component {
   constructor(props) {
@@ -259,7 +260,8 @@ class MlPortfolio extends React.Component {
       if (this.props.communityType == "Ideators") {
         let idea = this.state.idea
         if (idea) {
-          const response1 = await updateIdeatorIdeaActionHandler(idea)
+          const loggedInUser = getAdminUserContext();
+          const response1 = await updateIdeatorIdeaActionHandler(idea, loggedInUser)
           return response1;
         }
       }

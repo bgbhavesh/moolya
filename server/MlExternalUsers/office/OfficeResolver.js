@@ -405,7 +405,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
         officeMember.officeId = args.myOfficeId;
         officeMember.name = officeMember.firstName + ' ' + officeMember.lastName;
         officeMember['registrationId'] = registrationId
-        officeMember['userId'] = context.userId
+        officeMember['userId'] = userId
         officeMember['createdDate'] = new Date()
         let ret = mlDBController.insert('MlOfficeMembers', officeMember, context)
 

@@ -14,6 +14,7 @@ import MlFunderViewTemplate from '../component/FunderView/MlFunderViewTemplate'
 import MlAppFunderViewTabs from '../../../../app/funders/components/MlAppFunderViewTabs'
 import MlAppFunderEditTabs from '../../../../app/funders/components/MlAppFunderEditTabs'
 import MlAppStartupEditTabs from '../../../../app/startup/components/MlAppStartupEditTabs'
+import MlAppStartupViewTabs from '../../../../app/startup/components/MlAppStartupViewTabs'
 import MlAppServiceProviderEditTabs from "../../../../app/serviceProvider/components/MlAppServiceProviderEditTabs";
 import MlAppServiceProviderViewTabs from "../../../../app/serviceProvider/components/MlAppServiceProviderViewTabs";
 /**
@@ -147,17 +148,17 @@ const mlAppStartupEditExternalUserPortfolioTemplateConfig={
   stepName:'Portfolio',
   component:MlAppStartupEditTabs
 };
-//
-// const mlAppStartupViewExternalUserPortfolioTemplateConfig={
-//   templateName:"Portfolio-Template-Startup-View",
-//   templateCode:"PFSTUVIW",
-//   userType:'external',
-//   process:'Registration',
-//   subProcess:'Registration',
-//   stepCode:'PORTFOLIO',
-//   stepName:'Portfolio',
-//   component:MlViewStartupPortfolioTemplate
-// };
+
+const mlAppStartupViewExternalUserPortfolioTemplateConfig={
+  templateName:"Portfolio-Template-Startup-View",
+  templateCode:"PFSTUVIW",
+  userType:'external',
+  process:'Registration',
+  subProcess:'Registration',
+  stepCode:'PORTFOLIO',
+  stepName:'Portfolio',
+  component:MlAppStartupViewTabs
+};
 
 const mlAppFunderEditExternalUserPortfolioTemplateConfig={
   templateName:"Portfolio-Template-Investor-Edit",
@@ -206,7 +207,7 @@ const mlAppServiceProviderViewExternalUserPortfolioTemplateConfig = {
 mlRegistrationTemplates.setTemplate(mlAppIdeatorEditExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppIdeatorViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppStartupEditExternalUserPortfolioTemplateConfig);
-// mlRegistrationTemplates.setTemplate(mlAppStartupViewExternalUserPortfolioTemplateConfig);
+mlRegistrationTemplates.setTemplate(mlAppStartupViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppFunderViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppFunderEditExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppServiceProviderEditExternalUserPortfolioTemplateConfig);

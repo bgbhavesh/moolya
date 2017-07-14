@@ -29,9 +29,6 @@ class MlserviceCardHandler{
       if(!details || (details && (!details.resourceName || !details.actionName)))
           return {success:false, msg:"Invalid Details"};
 
-      if(userAction == 'CREATE')
-        return {success:true};
-
       resourceName = details.resourceName;
       userAction = details.actionName;
       interactionType = details.interactionType;

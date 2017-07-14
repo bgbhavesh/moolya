@@ -28,15 +28,15 @@ export async function updatePortfolioActionHandler(details) {
   return id
 }
 
-export async function updateIdeatorIdeaActionHandler(details) {
+export async function updateIdeatorIdeaActionHandler(details, loginUserDetails) {
   let ideaId  = details._id;
   let idea = _.omit(details, '_id');
   idea = _.omit(idea, 'portfolioId');
-
+  const {clusterId, chapterId, subChapterId, communityId} = loginUserDetails
   const result = await client.mutate({
     mutation: gql`
-          mutation  ($ideaId: String, $idea:idea){
-              updateIdea(ideaId:$ideaId, idea:$idea){
+          mutation  ($ideaId: String, $idea:idea, $clusterId: String, $chapterId: String, $subChapterId: String, $communityId: String){
+              updateIdea(ideaId:$ideaId, idea:$idea, clusterId: $clusterId, chapterId : $chapterId, subChapterId : $subChapterId, communityId : $communityId){
                   success,
                   code,
                   result
@@ -46,6 +46,10 @@ export async function updateIdeatorIdeaActionHandler(details) {
     variables: {
       ideaId:ideaId,
       idea:idea,
+      clusterId,
+      chapterId,
+      subChapterId,
+      communityId
     }
   })
   const id = result.data.updateIdea;

@@ -450,8 +450,16 @@ Accounts.validateLoginAttempt(function (user)
     //     user.allowed = false
     //     throw new Meteor.Error(403, "User account is inactive!");
     // }
+  if (user && !user.allowed) {
+    let username = user.methodArguments[0].user ? user.methodArguments[0].user.username : ''
+    let regData = MlRegistration.findOne({'registrationInfo.email': username, emails: {$elemMatch: {verified: false}}})
+    if (regData)
+      throw new Meteor.Error(403, "Email verification is pending");
+    else
+      throw new Meteor.Error(403, "User not found!");
+  }
 
-    if(user && user.user && user.user.profile && user.user.profile.isExternaluser){
+    else if(user && user.user && user.user.profile && user.user.profile.isExternaluser){
       let isAllowed= validateExternalUserLoginAttempt(user);
       if(!isAllowed)throw new Meteor.Error(403, "User account is inactive!");
       return true;

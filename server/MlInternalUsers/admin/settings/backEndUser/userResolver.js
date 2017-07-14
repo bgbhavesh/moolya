@@ -15,6 +15,11 @@ MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, in
     return user&&user.profile&&user.profile.isInternaluser?"internal":"external";
 }
 
+MlResolver.MlQueryResolver['fetchExternalUserDetails'] = (obj, args, context, info) => {
+  let user= mlDBController.findOne('users', {'_id':context.userId}, context)
+  return user;
+}
+
 MlResolver.MlQueryResolver['fetchMapCenterCordsForUser'] = (obj, args, context, info) => {
   //Resolve the context of the User and hierarchy
   //todo: check internal /external user

@@ -20,7 +20,7 @@ export default class MlAppFunderListView extends Component {
         <a href='' onClick={that.viewFunderDetails.bind(that, funder.portfolioDetailsId)}>
           <div className="funders_list_block">
             <div className="premium"><span>Starter</span></div>
-            <h3>{funder.funderAbout.firstName}</h3>
+            <h3>{funder.funderAbout ? funder.funderAbout.firstName : ''}</h3>
             <div className="list_icon"><span className="ml ml-funder"></span></div>
             <div className="block_footer">
               <span>New York</span>

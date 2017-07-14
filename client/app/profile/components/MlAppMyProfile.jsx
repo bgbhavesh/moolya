@@ -7,6 +7,7 @@ import passwordSAS_validate from '../../../../lib/common/validations/passwordSAS
 import {resetPasswordActionHandler} from "../../../admin/settings/backendUsers/actions/resetPasswordAction";
 import {passwordVerification} from '../../../admin/profile/actions/addProfilePicAction'
 import {mlFieldValidations} from '../../../commons/validations/mlfieldValidation';
+import {fetchUserDetails} from '../actions/findAddressBookAction'
 import moment from "moment";
 
 
@@ -25,7 +26,7 @@ export default class MlAppMyProfile extends Component {
     };
     this.checkExistingPassword.bind(this);
     this.passwordCheck.bind(this);
-
+    this.findUserDetails.bind(this)
   }
   componentDidMount() {
     $(function () {
@@ -33,27 +34,40 @@ export default class MlAppMyProfile extends Component {
     });
     // this.initializeSwiper();
   }
-  componentWillMount(){
-    let userDetails = Meteor.user();
-    console.log(userDetails)
-    let firstName = userDetails.profile.firstName
-    let lastName = userDetails.profile.lastName
-    let displayName = userDetails.emails[0].address
-    let dateOfBirth = userDetails.profile.dateOfBirth? moment(userDetails.profile.dateOfBirth).format(Meteor.settings.public.dateFormat):""
-    let profileImage = userDetails.profile.profileImage
-    let gender= userDetails.profile.genderType
-    this.setState({userId:Meteor.userId(),firstName: firstName, lastName:lastName, displayName:displayName,profileImage : profileImage, dateOfBirth:dateOfBirth, loading:false})
-    if (gender === "others") {
+  componentDidUpdate(){
+    if (this.state.gender === "others") {
       this.setState({genderStateMale: false, genderStateFemale: false, genderStateOthers: "checked"})
     }
-    else if (gender=== "female") {
+    else if (this.state.gender=== "female") {
       this.setState({genderStateFemale: "checked", genderStateMale: false, genderStateOthers: false})
     }
-    else if( gender=== "male"){
+    else if( this.state.gender=== "male"){
       this.setState({genderStateOthers: false, genderStateFemale: false, genderStateMale: "checked"})
     }
   }
+  componentWillMount(){
+    let resp = this.findUserDetails();
+    return resp
+  }
 
+  async findUserDetails() {
+    const response = await fetchUserDetails();
+    if (response) {
+      this.setState({
+        loading: false,
+        userDetails: response,
+        firstName:response.profile.firstName,
+        lastName:response.profile.lastName,
+        displayName:response.profile.firstName+" "+response.profile.lastName,
+        dateOfBirth:response.profile.dateOfBirth?moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat):"",
+        profileImage:response.profile.profileImage,
+        gender:response.profile.genderType,
+        userId:response._id
+      });
+    }else {
+      this.setState({loading:false});
+    }
+  }
 
 
   async checkExistingPassword() {
@@ -70,7 +84,7 @@ export default class MlAppMyProfile extends Component {
     } else {
       if (this.state.showPasswordFields) {
         let userDetails = {
-          userId: Meteor.userId(),
+          userId:this.state.userId,
           password: this.refs.confirmPassword.value
         }
         if(this.state.passwordState === 'Passwords match!') {
@@ -147,7 +161,7 @@ export default class MlAppMyProfile extends Component {
     let file = e.target.files[0];
     let name = e.target.name;
     let fileName = e.target.files[0].name;
-    let user = {profile: {InternalUprofile: {moolyaProfile: {profileImage:" "}}}}
+    let user = {profile: {profileImage:" "}}
     if(file) {
       let data = {moduleName: "PROFILE", actionName: "UPDATE", userId:this.state.userId, user: user}
       let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
@@ -159,13 +173,12 @@ export default class MlAppMyProfile extends Component {
     if(resp){
       let result = JSON.parse(resp)
       if(result.success){
-        this.setState({loading:true})
-        let userDetails= Meteor.user();
-        let profileImage = userDetails.profile.profileImage;
-        this.setState({profileImage : profileImage, loading:false})
+        this.setState({profileImage : result.result})
+        toastr.success("Photo Updated Successfully");
       }
     }
   }
+
   OnChangePassword(){
     this.setState({PasswordReset:true,showChangePassword:false})
   }
@@ -237,7 +250,7 @@ export default class MlAppMyProfile extends Component {
                     <div className="form-group">
                       <div className="fileUpload mlUpload_btn">
                         <span>Profile Pic</span>
-                        <input type="file" className="upload" id="profilePic" onChange={this.onImageFileUpload.bind(this)}/>
+                        <input type="file" className="upload" id="profilePic" name="profileImage" accept="image/*" onChange={this.onImageFileUpload.bind(this)}/>
                       </div>
                       <div className="previewImg ProfileImg">
                         <img src={this.state.profileImage}/>

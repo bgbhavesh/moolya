@@ -48,7 +48,7 @@ adminSection.route('/dashboard/clusters', {
 adminSection.route('/dashboard/chapters', {
   name: 'dashboard_chapters',
   action(){
-    mount(AdminLayout, {
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,
       adminContent: <MlViews showInfinity={true} mapConfig={mlChapterDashboardMapConfig}
                              listConfig={mlChapterDashboardListConfig}/>
     })

@@ -10,6 +10,7 @@ import MlStartupAwards from "./MlStartupAwards";
 import MlStartupMCL from "./MlStartupMCL";
 import MlStartupLookingFor from "./MlStartupLookingFor";
 import PortfolioLibrary from '../../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
+import MlStartupCharts from "./MlStartupCharts/MlStartupCharts";
 import {client} from '../../../../../core/apolloConnection'
 
 
@@ -55,7 +56,7 @@ export default class MlStartupEditTemplate extends React.Component{
       {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , component:<MlStartupManagement  client={client} isAdmin={true} key="2" getManagementDetails={this.getManagementDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Investor" , component:<MlStartupInvestor key="3" getInvestorDetails={this.getInvestorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Data" , component:<MlStartupData key="4" portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      // {tabClassName: 'tab', panelClassName: 'panel', title:"Charts" , component:<MlIdeatorDetails key="5" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Charts" , component:<MlStartupCharts key="5" getChartDetails={this.getChartDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Awards" , component:<MlStartupAwards key="6" getAwardsDetails={this.getAwardsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<PortfolioLibrary key="7" client={client} isAdmin={true} portfolioDetailsId={this.props.portfolioDetailsId}/>}, //
       {tabClassName: 'tab', panelClassName: 'panel', title:"M C & L" , component:<MlStartupMCL key="8" getStartupMCL={this.getStartupMCL.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
@@ -135,6 +136,17 @@ export default class MlStartupEditTemplate extends React.Component{
     }
     this.setState({startupPortfolio : data})
     this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio}, []);
+  }
+
+  getChartDetails(details,tabName){
+    let data = this.state.startupPortfolio;
+    data["charts"] = {}
+
+      data["charts"][tabName] = details;
+
+
+    this.props.getPortfolioDetails({startupPortfolio : data});
+
   }
 
   componentWillMount()

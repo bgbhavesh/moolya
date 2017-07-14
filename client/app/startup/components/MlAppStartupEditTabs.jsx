@@ -6,7 +6,7 @@ import MlStartupAboutUs from "../../../admin/transaction/portfolio/component/Sta
 import MlStartupManagement from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupManagement"
 import MlStartupInvestor from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupInvestor";
 import MlStartupData from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupData";
-import MlStartupCharts from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupCharts";
+import MlStartupCharts from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupCharts/MlStartupCharts";
 import MlStartupAwards from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupAwards";
 import MlStartupMCL from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupMCL";
 import MlStartupLookingFor from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupLookingFor";

@@ -7,19 +7,23 @@ var BarTooltip = require('react-d3-tooltip').BarTooltip;
 var BarGroupTooltip = require('react-d3-tooltip').BarGroupTooltip;
 var LineTooltip = require('react-d3-tooltip').LineTooltip;
 var PieTooltip = require('react-d3-tooltip').PieTooltip;
-import MlBarChart from '../../../../../../commons/components/d3/MlBarChart'
-import MlBarGroupChart from '../../../../../../commons/components/d3/MlBarGroupChart'
-import MlLineChart from '../../../../../../commons/components/d3/MlLineChart'
-import MlPieChart from '../../../../../../commons/components/d3/MlPieChart'
+import MlBarChart from '../../../../../../../commons/components/d3/MlBarChart'
+import MlBarGroupChart from '../../../../../../../commons/components/d3/MlBarGroupChart'
+import MlLineChart from '../../../../../../../commons/components/d3/MlLineChart'
+import MlPieChart from '../../../../../../../commons/components/d3/MlPieChart'
+import MlStartupChartSubTabs from '../MlStartupCharts/MlStartupChartSubTabs'
+import {fetchDetailsStartupChartsActionHandler} from '../../../../actions/findPortfolioStartupDetails'
 
 export default class MlStartupCharts extends React.Component{
   constructor(props, context){
     super(props)
-    this.state = {employmentData:[], prlData:[], reviewData:[], empBreakUpData:[]}
+    this.state = {employmentData:[], prlData:[], reviewData:[], empBreakUpData:[],graphSelected:false, startupPortfolio:{},
+      startupCharts:[],startupChartsList:[]}
     this.getEmploymentOfCompany.bind(this)
     this.getProfitRevenueLiability.bind(this)
     this.getReviewOfCompany.bind(this)
     this.getEmployeeBreakUpDepartment.bind(this)
+    this.fetchPortfolioStartupChartDetails.bind(this)
   }
 
   componentDidMount(){
@@ -27,7 +31,19 @@ export default class MlStartupCharts extends React.Component{
     this.getProfitRevenueLiability();
     this.getReviewOfCompany();
     this.getEmployeeBreakUpDepartment();
+    this.fetchPortfolioStartupChartDetails();
   }
+
+  async fetchPortfolioStartupChartDetails() {
+    let that = this;
+    let portfoliodetailsId=that.props.portfolioDetailsId;
+    const response = await fetchDetailsStartupChartsActionHandler(portfoliodetailsId);
+    if (response) {
+      this.setState({loading: false, startupCharts: response, startupChartsList: response});
+    }
+
+  }
+
 
   getEmploymentOfCompany(){
     var actualData = [
@@ -255,6 +271,20 @@ export default class MlStartupCharts extends React.Component{
     this.setState({empBreakUpData:barChartData})
   }
 
+  selectedGraph(){
+    this.setState({"graphSelected" :  true})
+    $('.last-item').removeClass('menunone');
+    //this.props.backClickHandler()
+  }
+
+  getPortfolioStartupAboutUsDetails(details,tabName){
+    let data = this.state.startupPortfolio;
+    data[tabName] = details;
+    this.props.getChartDetails(details,tabName);
+  }
+
+
+
   render(){
     var width = 450,
       height = 400,
@@ -335,15 +365,18 @@ export default class MlStartupCharts extends React.Component{
       ]
     return(
       <div>
-        <MlBarChart
+        <div className="ml_btn">
+          <a className="save_btn" onClick={this.selectedGraph.bind(this)}>Edit</a>
+        </div>
+        {this.state.graphSelected===false?(<div><MlBarChart
           title= {employmentDataTitle}
           data= {this.state.employmentData}
           width= {width}
           height= {height}
           xScale= {xScale}
           chartSeries = {employmentDataChartSeries}
-        />
-
+        /></div>
+/*
         <MlBarGroupChart
           title= {prlTitle}
           data= {this.state.prlData}
@@ -361,7 +394,7 @@ export default class MlStartupCharts extends React.Component{
           height= {height}
           margins= {margins}
           chartSeries= {reviewChartSeries}
-         /* x= {reviewX}*/
+         /!* x= {reviewX}*!/
           xScale= {xScale}
         />
         <MlPieChart
@@ -372,7 +405,9 @@ export default class MlStartupCharts extends React.Component{
           chartSeries= {chartSeries}
           value = {value}
           name = {name}
-        />
+        />*/
+        ):(<div>{<MlStartupChartSubTabs getPortfolioStartupAboutUsDetails={this.getPortfolioStartupAboutUsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupChartsDetails={this.state.startupCharts}></MlStartupChartSubTabs> }</div>)}
+
       </div>
     )
   }

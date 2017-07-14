@@ -219,7 +219,18 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioLicenses'] = (obj, args, contex
 }
 
 MlResolver.MlQueryResolver['fetchStartupPortfolioCharts'] = (obj, args, context, info) => {
-  var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfolioDetailsId}, context)
+  if (args.portfoliodetailsId) {
+    let startChartsArray = {}
+    let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    startChartsArray["employmentOfCompany"] = portfolio&&portfolio.charts&&portfolio.charts.employmentOfCompany?portfolio.charts.employmentOfCompany:[];
+    startChartsArray["profitRevenueLiability"] = portfolio&&portfolio.charts&&portfolio.charts.profitRevenueLiability?portfolio.charts.profitRevenueLiability:[];
+    startChartsArray["reviewOfCompany"] = portfolio&&portfolio.charts&&portfolio.charts.reviewOfCompany?portfolio.charts.reviewOfCompany:[];
+    startChartsArray["employeeBreakupDepartment"] = portfolio&&portfolio.charts&&portfolio.charts.employeeBreakupDepartment?portfolio.charts.employeeBreakupDepartment:[];
+    if (startChartsArray) {
+      return startChartsArray
+    }
+  }
+ /* var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfolioDetailsId}, context)
   if (portfolioDetails) {
     args.userId = portfolioDetails.userId;
     var query = {
@@ -227,7 +238,7 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioCharts'] = (obj, args, context,
     }
     var startupChartDetails = mlDBController.findOne('MlStartupPortfolio', query, context);
     return startupChartDetails.charts;
-  }
+  }*/
 }
 
 MlResolver.MlQueryResolver['fetchStartupPortfolioChart'] = (obj, args, context, info) => {

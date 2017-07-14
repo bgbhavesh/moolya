@@ -353,3 +353,62 @@ export async function fetchStartupPortfolioLicenses(portfoliodetailsId) {
   return data
   // return id
 }
+
+export async function fetchDetailsStartupChartsActionHandler(portfoliodetailsId) {
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            fetchStartupPortfolioCharts(portfoliodetailsId: $portfoliodetailsId) {
+               
+                employmentOfCompany{
+                  about
+                  fromMonth
+                  fromYear
+                  toMonth
+                  toYear
+                  numberOfEmployment
+                  index
+                }
+                profitRevenueLiability{
+                  entityType
+                  fromMonth
+                  fromYear
+                  toMonth
+                  toYear
+                  valueType
+                  value
+                }
+                reviewOfCompany{
+                  year
+                  value
+                  about
+                }
+                employeeBreakupDepartment{
+                  fromMonth
+                  fromYear
+                  toMonth
+                  toYear
+                  department
+                  numberOfEmployment
+                  about
+                }
+            }
+          }
+
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+
+  const data = result.data.fetchStartupPortfolioCharts;
+  /*let data = _.omit(id,'__typename');*/
+  let chartsArray = {}
+  chartsArray["employmentOfCompany"]=_.map(data.employmentOfCompany, function (row) {return _.omit(row, ['__typename'])});
+  chartsArray["profitRevenueLiability"]=_.map(data.profitRevenueLiability, function (row) {return _.omit(row, ['__typename'])});
+  chartsArray["reviewOfCompany"]=_.map(data.reviewOfCompany, function (row) {return _.omit(row, ['__typename'])});
+  chartsArray["employeeBreakupDepartment"]=_.map(data.employeeBreakupDepartment, function (row) {return _.omit(row, ['__typename'])});
+
+  return chartsArray
+}

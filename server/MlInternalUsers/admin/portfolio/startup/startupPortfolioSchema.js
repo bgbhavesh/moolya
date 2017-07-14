@@ -243,11 +243,12 @@ let startupPortfolioSchema = `
 
       type EmploymentOfCompany{
       about: String
-      fromMonth: Date
-      fromYear: Date
-      toMonth: Date
-      toYear: Date
+      fromMonth: String
+      fromYear: String
+      toMonth: String
+      toYear: String
       numberOfEmployment: Int
+      index: Int
     }
     type ProfitRevenueLiability{
       entityType: [String]
@@ -273,7 +274,7 @@ let startupPortfolioSchema = `
       about: String
     }
         
-     type chartsOutput{
+   type chartsOutput{
       employmentOfCompany:[EmploymentOfCompany]
       profitRevenueLiability:[ProfitRevenueLiability]
       reviewOfCompany:[ReviewOfCompany]
@@ -475,18 +476,19 @@ let startupPortfolioSchema = `
     }
     input employmentOfCompany{
       about: String
-      fromMonth: Date
-      fromYear: Date
-      toMonth: Date
-      toYear: Date
+      fromMonth: String
+      fromYear: String
+      toMonth: String
+      toYear: String
       numberOfEmployment: Int
+      index : Int
     }
     input profitRevenueLiability{
       entityType: [String]
-      fromMonth: Date
-      fromYear: Date
-      toMonth: Date
-      toYear: Date
+      fromMonth: String
+      fromYear: String
+      toMonth: String
+      toYear: String
       valueType: [String]
       value: Int
     }
@@ -496,19 +498,19 @@ let startupPortfolioSchema = `
       about: String
     }
     input employeeBreakupDepartment{
-      fromMonth: Date
-      fromYear: Date
-      toMonth: Date
-      toYear: Date
+      fromMonth: String
+      fromYear: String
+      toMonth: String
+      toYear: String
       department: [String]
       numberOfEmployment: Int
       about: String
     }
     input charts{
-        employmentOfCompany: employmentOfCompany
-        profitRevenueLiability: profitRevenueLiability
-        reviewOfCompany: reviewOfCompany
-        employeeBreakupDepartment: employeeBreakupDepartment
+        employmentOfCompany: [employmentOfCompany]
+        profitRevenueLiability: [profitRevenueLiability]
+        reviewOfCompany: [reviewOfCompany]
+        employeeBreakupDepartment: [employeeBreakupDepartment]
     }
     input startupPortfolio{
         portfolioDetailsId  : String
@@ -540,7 +542,7 @@ let startupPortfolioSchema = `
         fetchStartupPortfolioInvestor(portfoliodetailsId:String!):[investorOutput]
         fetchStartupPortfolioLookingFor(portfoliodetailsId:String!):[lookingForOutput]
         fetchStartupPortfolioAwards(portfoliodetailsId:String!):[awardsRecognitionOutput]
-        fetchStartupPortfolioCharts(portfoliodetailsId:String):[chartsOutput]
+        fetchStartupPortfolioCharts(portfoliodetailsId:String):chartsOutput
         fetchStartupPortfolioChart(portfoliodetailsId:String,chartDetails: charts):[chartsOutput]
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
     }

@@ -52,7 +52,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       count = MlFunderPortfolio.find(finalQuery).count();
   }
 
-  if (args.module == "serviceProviderPortfolioDetails") {
+  else if (args.module == "serviceProviderPortfolioDetails") {
     let value = mlDBController.find('MlPortfolioDetails', {status: 'gone live', communityCode: "SPS"}, context).fetch()
     let portId = _lodash.map(value, '_id')
     // let finalQuery = mergeQueries(query, {portfolioDetailsId: {$in: portId}});
@@ -63,10 +63,9 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
 
   else {
     return {
-      count: 10,
+      count: 0,
       data:[
-        {_id: 3, name:"pankaj", displayName:"Hello"},
-        {_id: 4, name:"pankaj1", displayName:"Hello1"}
+
       ]
     }
   }

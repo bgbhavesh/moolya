@@ -8,13 +8,13 @@ import gql from 'graphql-tag'
 export const mlAppFunderConfig2=new MlAppViewer({
   name:"FundersList",
   moduleName:"FunderPortfolio",
-  perPageLimit: 3,
-  header: {
-    search: true,
-    searchFields:["firstName","lastName","category","investmentBudget"],
-    sort:true,
-    sortBy: '_id'
-  },
+  perPageLimit: 20,
+  // header: {
+  //   search: true,
+  //   searchFields:["firstName","lastName","category","investmentBudget"],
+  //   sort:true,
+  //   sortBy: '_id'
+  // },
   viewComponent:<MlAppFunderListView />,
   graphQlQuery:gql`
               query ($module: String!, $queryProperty: appGenericSearchQueryProperty) {

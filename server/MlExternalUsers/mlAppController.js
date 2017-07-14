@@ -85,7 +85,8 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>
 
             let ret = mlserviceCardHandler.validateResource(req.body.query, context, req.body.variables);
             if(!ret.success){
-                res.json({success:ret.success, message:ret.msg})
+                var response = new MlRespPayload().errorPayload(ret.msg, 400);
+                res.json({data:{data:response}})
                 return
             }
             return {

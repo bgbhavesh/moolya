@@ -63,10 +63,9 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
 
   else {
     return {
-      count: 10,
+      count: 0,
       data:[
-        {_id: 3, name:"pankaj", displayName:"Hello"},
-        {_id: 4, name:"pankaj1", displayName:"Hello1"}
+
       ]
     }
   }

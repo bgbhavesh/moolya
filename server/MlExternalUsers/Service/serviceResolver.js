@@ -2,86 +2,163 @@
  * Created by Mukhil on 20/6/17.
  */
 
-import MlResolver from '../../commons/mlResolverDef'
-import MlRespPayload from '../../commons/mlPayload'
-import MlUserContext from '../../MlExternalUsers/mlUserContext'
+import MlResolver from '../../commons/mlResolverDef';
+import MlRespPayload from '../../commons/mlPayload';
+import MlUserContext from '../../MlExternalUsers/mlUserContext';
 var extendify = require('extendify');
-var _ = require('lodash')
+var _ = require('lodash');
 
 MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => {
   let query = {
     userId: context.userId,
-    profileId:args.profileId
+    profileId:args.profileId,
+    isCurrentVersion: true
   };
-    let result = mlDBController.find('MlService', query , context).fetch()
+  let result = mlDBController.find('MlService', query , context).fetch()
   return result;
 }
 
 MlResolver.MlQueryResolver['findService'] = (obj, args, context, info) => {
-  let result = mlDBController.findOne('MlService', {_id:args.serviceId} , context)
-  return result;
+  let result = mlDBController.findOne('MlService', {_id: args.serviceId} , context);
+  if (result) {
+    let query = {
+      transactionId: result.transactionId,
+      isCurrentVersion: true
+    };
+    let service = mlDBController.findOne('MlService', query, context);
+    return service;
+  } else  {
+    let code = 404;
+    let response = new MlRespPayload().successPayload('Service not found', code);
+    return response;
+  }
 }
 
 MlResolver.MlMutationResolver['createService'] = (obj, args, context, info) => {
   args.Services.createdAt = new Date();
   args.Services.userId = context.userId;
-  let  result1 = mlDBController.insert('MlService' ,args.Services, context)
-  if(result1){
+  orderNumberGenService.createServiceId(args.Services);
+  args.Services.isCurrentVersion = true;
+  args.Services.versions = 0.001;
+  let  result = mlDBController.insert('MlService' ,args.Services, context)
+  if(result){
     let code = 200;
-    let result = result1;
     let response = new MlRespPayload().successPayload(result, code);
     return response
   }
-
 }
 
 MlResolver.MlMutationResolver['updateService'] = (obj, args, context, info) => {
-  args.Services.userId = context.userId;
-  if(args.Services.tasks){
-    let taskIds = args.Services.tasks.map(function (task) { return task.id; });
-    let tasks = mlDBController.find('MlTask', {_id: { $in : taskIds } }, context).fetch();
-    let taskAmount = 0;
-    let taskDerivedAmount = 0;
-    tasks.forEach(function (task) {
-      taskAmount += task.payment && task.payment.amount ? task.payment.amount : 0;
-      taskDerivedAmount += task.payment && task.payment.derivedAmount ? task.payment.derivedAmount : 0;
-    });
-    args.Services.payment = args.Services.payment ? args.Services.payment : {};
-    args.Services.payment["tasksAmount"] = taskAmount;
-    args.Services.payment["tasksDiscount"] = taskAmount - taskDerivedAmount;
-    args.Services.payment["tasksDerived"] = taskDerivedAmount;
-    args.Services.payment["amount"] = taskDerivedAmount;
-  }
-  let result1 = mlDBController.update('MlService', {_id:args.serviceId} ,args.Services,{$set: 1}, context)
-  if(result1){
-    let code = 200;
-    let result = result1
-    let response = new MlRespPayload().successPayload(result, code);
+  if(!_.isEmpty(args.Services)) {
+    let oldService = mlDBController.findOne('MlService', {_id: args.serviceId}, context);
+    let service;
+    if (oldService) {
+      let query = {
+        transactionId: oldService.transactionId,
+        isCurrentVersion: true
+      };
+      service = mlDBController.findOne('MlService', query, context);
+    }
+    if (service) {
+      if(args.Services.tasks){
+        let taskIds = args.Services.tasks.map(function (task) { return task.id; });
+        let tasks = mlDBController.find('MlTask', {_id: { $in : taskIds } }, context).fetch();
+        let taskAmount = 0;
+        let taskDerivedAmount = 0;
+        tasks.forEach(function (task) {
+          taskAmount += task.payment && task.payment.amount ? task.payment.amount : 0;
+          taskDerivedAmount += task.payment && task.payment.derivedAmount ? task.payment.derivedAmount : 0;
+        });
+        args.Services.payment = args.Services.payment ? args.Services.payment : {};
+        args.Services.payment["tasksAmount"] = taskAmount;
+        args.Services.payment["tasksDiscount"] = taskAmount - taskDerivedAmount;
+        args.Services.payment["tasksDerived"] = taskDerivedAmount;
+        args.Services.payment["amount"] = taskDerivedAmount;
+      }
+      args.Services.userId = service.userId;
+      args.Services.updatedAt = new Date();
+      service.isCurrentVersion = false;
+      args.Services.transactionId = service.transactionId;
+      args.Services.versions = service.versions + 0.001;
+      args.Services.isCurrentVersion = true;
+      let result = mlDBController.update('MlService', {_id: service._id}, service, {$set: 1}, context);
+      for(key in service){
+        if ((typeof args.Services[key] === 'undefined' || args.Services[key] === null) && key !== 'createdAt' && key !== '_id') {
+          args.Services[key] = service[key];
+        }
+      }
+      let newVersionServer = mlDBController.insert('MlService', args.Services , context);
+      if(newVersionServer){
+        let code = 200;
+        let response = new MlRespPayload().successPayload(result, code);
+        return response
+      }
+    } else {
+      let code = 404;
+      let response = new MlRespPayload().successPayload('Service not found', code);
+      return response
+    }
+  } else {
+    let code = 400;
+    let response = new MlRespPayload().successPayload('Data are required', code);
     return response
   }
+
 }
 
 MlResolver.MlMutationResolver['updateServiceAdmin'] = (obj, args, context, info) => {
-  if(args.Services.tasks){
-    let taskIds = args.Services.tasks.map(function (task) { return task.id; });
-    let tasks = mlDBController.find('MlTask', {_id: { $in : taskIds } }, context).fetch();
-    let taskAmount = 0;
-    let taskDerivedAmount = 0;
-    tasks.forEach(function (task) {
-      taskAmount += task.payment && task.payment.amount ? task.payment.amount : 0;
-      taskDerivedAmount += task.payment && task.payment.derivedAmount ? task.payment.derivedAmount : 0;
-    });
-    args.Services.payment = args.Services.payment ? args.Services.payment : {};
-    args.Services.payment["tasksAmount"] = taskAmount;
-    args.Services.payment["tasksDiscount"] = taskAmount - taskDerivedAmount;
-    args.Services.payment["tasksDerived"] = taskDerivedAmount;
-    args.Services.payment["amount"] = taskDerivedAmount;
-  }
-  let result1 = mlDBController.update('MlService', {_id:args.serviceId} ,args.Services,{$set: 1}, context)
-  if(result1){
-    let code = 200;
-    let result = result1
-    let response = new MlRespPayload().successPayload(result, code);
+  if (!_.isEmpty(args.Services)) {
+    let oldService = mlDBController.findOne('MlService', {_id: args.serviceId}, context);
+    let service;
+    if (oldService) {
+      let query = {
+        transactionId: oldService.transactionId,
+        isCurrentVersion: true
+      };
+      service = mlDBController.findOne('MlService', query, context);
+    }
+    if (service) {
+      if(args.Services.tasks){
+        let taskIds = args.Services.tasks.map(function (task) { return task.id; });
+        let tasks = mlDBController.find('MlTask', {_id: { $in : taskIds } }, context).fetch();
+        let taskAmount = 0;
+        let taskDerivedAmount = 0;
+        tasks.forEach(function (task) {
+          taskAmount += task.payment && task.payment.amount ? task.payment.amount : 0;
+          taskDerivedAmount += task.payment && task.payment.derivedAmount ? task.payment.derivedAmount : 0;
+        });
+        args.Services.payment = args.Services.payment ? args.Services.payment : {};
+        args.Services.payment["tasksAmount"] = taskAmount;
+        args.Services.payment["tasksDiscount"] = taskAmount - taskDerivedAmount;
+        args.Services.payment["tasksDerived"] = taskDerivedAmount;
+        args.Services.payment["amount"] = taskDerivedAmount;
+      }
+      args.Services.userId = service.userId;
+      args.Services.updatedAt = new Date();
+      service.isCurrentVersion = false;
+      args.Services.transactionId = service.transactionId;
+      args.Services.versions = args.Services.isApproved ? Math.ceil(service.versions) : (service.versions + 0.001);
+      args.Services.isCurrentVersion = true;
+      let result = mlDBController.update('MlService', {_id: service._id}, service, {$set: 1}, context);
+      for(key in service){
+        if ((typeof args.Services[key] === 'undefined' || args.Services[key] === null) && key !== 'createdAt' && key !== '_id') {
+          args.Services[key] = service[key];
+        }
+      }
+      let newVersionServer = mlDBController.insert('MlService', args.Services , context);
+      if(newVersionServer){
+        let code = 200;
+        let response = new MlRespPayload().successPayload(result, code);
+        return response
+      }
+    } else {
+      let code = 404;
+      let response = new MlRespPayload().successPayload('Service not found', code);
+      return response
+    }
+  } else {
+    let code = 400;
+    let response = new MlRespPayload().successPayload('Data are required', code);
     return response
   }
 }

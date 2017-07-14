@@ -471,10 +471,10 @@ export default class AddressDetails extends React.Component{
                 <div className="form-group mandatory">
                   <input type="text" ref={'addressLocality'} placeholder="Colony/Street/Locality" className="form-control float-label" id=""  data-required={true} data-errMsg="Colony/Street/Locality is required"/>
                 </div>
-                <div className="form-group mandatory">
+                <div className="form-group">
                   <input type="text" ref={'addressLandmark'} placeholder="Landmark" className="form-control float-label" id=""/>
                 </div>
-                <div className="form-group mandatory">
+                <div className="form-group">
                   <input type="text" ref={'addressArea'} placeholder="Area" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group mandatory">

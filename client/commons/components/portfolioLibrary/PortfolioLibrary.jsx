@@ -1,8 +1,8 @@
 /** ************************************************************
  * Date: 19 Jun, 2017
  * Programmer: Mukhil <mukhil.padnamanabhan@raksan.in>
- * Description : This will manage the activities basic information
- * JavaScript XML file MlAppActivityBasicInfo.jsx
+ * Description : This will manage the library actions across all the porfolios
+ * JavaScript XML file PortfolioLibrary.jsx
  * *************************************************************** */
 
 /**
@@ -10,18 +10,15 @@
  */
 
 import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody} from 'reactstrap';
 import {multipartASyncFormHandler} from '../../MlMultipartFormAction'
 import {createLibrary, fetchLibrary, updateLibraryData, updatePrivacyDetails} from '../../actions/mlLibraryActionHandler'
 import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
+import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 
-
-export default class  PortfolioLibrary extends React.Component{
+  export default class  PortfolioLibrary extends React.Component{
 
   /**
    * Constructor
@@ -49,11 +46,15 @@ export default class  PortfolioLibrary extends React.Component{
       templatesLock: {},
       videosLock: {},
       documentsLock:{},
-      explore: false
+      explore: false,
+      hideLock: false,
+      popoverOpen:false,
+      myPortfolio: false
     };
 
     this.toggle = this.toggle.bind(this);
-    this.fetchOnlyImages.bind(this);
+    this.toggle1 = this.toggle1.bind(this);
+    this.refetchData.bind(this);
     this.updateLibrary.bind(this);
     this.dataPrivacyHandler.bind(this);
   }
@@ -68,13 +69,18 @@ export default class  PortfolioLibrary extends React.Component{
     let portfolioId = FlowRouter.getRouteName();
     let path = FlowRouter.current().path
     if(path.indexOf("view")>0){
-      this.state.explore = true
+      this.setState({explore : false, myPortfolio: true})
     }
     if(portfolioId !== "portfolio"){
-      this.state.explore = true
+      this.setState({explore : true})
     }
     if(portfolioId === "library"){
-      this.state.explore = false
+      this.setState({explore : false})
+      this.setState({hideLock: true})
+    }
+    if(portfolioId === "transaction_portfolio_EditRequests"){
+      this.setState({explore : false})
+      this.setState({hideLock: true})
     }
     userId =  this.props.portfolioDetailsId?this.props.portfolioDetailsId: "";
     this.getLibraryDetails(userId);
@@ -100,7 +106,7 @@ export default class  PortfolioLibrary extends React.Component{
    */
 
   ImageUpload(e){
-    let file=document.getElementById("image_upload").files[0];
+    let file = e.target.files[0];
     this.setState({fileType:file.type,fileName:file.name });
     let fileType = file.type
     let typeShouldBe = _.compact(fileType.split('/'));
@@ -158,6 +164,7 @@ export default class  PortfolioLibrary extends React.Component{
 
   documentUpload() {
     let file = document.getElementById("document_upload").files[0];
+    this.setState({fileType:file.type,fileName:file.name });
     let fileType = file.type
     let typeShouldBe = _.compact(fileType.split('/'));
     if (file  && typeShouldBe && typeShouldBe[1]==="pdf") {
@@ -169,12 +176,12 @@ export default class  PortfolioLibrary extends React.Component{
   }
 
   /**
-   * Method :: fetchOnlyImages
+   * Method :: refetchData
    * Desc   :: Gets the images once its uploaded
    * @returns Void
    */
 
-  fetchOnlyImages(){
+  refetchData(){
     let userId = this.props.portfolioDetailsId;
     this.getLibraryDetails(userId)
   }
@@ -189,31 +196,32 @@ export default class  PortfolioLibrary extends React.Component{
   toggleImageLock(id){
     let images = this.state.imageSpecifications;
     let imageDetails = {
-      index: id,
-      element: images[id].isPrivate? false : true,
-      type: "image"
+        index: id,
+        element: images[id].isPrivate? false : true,
+        type: "image"
     }
     this.dataPrivacyHandler(imageDetails)
     let imageLock = this.state.imagesLock;
-    imageLock[id] = imageLock[id] ? false : true;
+    imageLock[id] = imageLock[id]? false : true;
     this.setState({
-      imagesLock: imageLock
+         imagesLock: imageLock
     });
   }
 
-  async dataPrivacyHandler(detailsInput) {
-    const response = await updatePrivacyDetails(detailsInput, this.props.client)
-    return response;
-  }
-
+  /**
+   * Method :: toggleTemplateLock
+   * Desc   :: Handles the template locking functionality
+   * @param :: id - type :: Number
+   * @returns Void
+   */
 
   toggleTemplateLock(id){
     let templates = this.state.templateSpecifications;
     let templatesLock = this.state.templatesLock;
     let templateDetails = {
-      index: id,
-      element: templates[id].isPrivate? false : true,
-      type: "template"
+        index: id,
+        element: templates[id].isPrivate? false : true,
+        type: "template"
     }
     this.dataPrivacyHandler(templateDetails)
     templateLock[id] = templateLock [id] ? false : true;
@@ -221,128 +229,107 @@ export default class  PortfolioLibrary extends React.Component{
       templatesLock :templatesLock
     });
   }
+  /**
+   * Method :: toggleVideoLock
+   * Desc   :: Handles the video locking functionality
+   * @param :: id - type :: Number
+   * @returns Void
+   */
+
 
   toggleVideoLock(id){
     let videos = this.state.videoSpecifications;
     let videoLock = this.state.videosLock;
     let videoDetails = {
-      index: id,
-      element: videos[id].isPrivate? false : true,
-      type: "video"
+        index: id,
+        element: videos[id].isPrivate? false : true,
+        type: "video"
     }
     this.dataPrivacyHandler(videoDetails)
     videoLock[id] = videoLock [id] ? false : true;
     this.setState({
-      videosLock:videoLock
+         videosLock:videoLock
     });
   }
+
+  /**
+   * Method :: toggleDocumentLock
+   * Desc   :: Handles the document locking functionality
+   * @param :: id - type :: Number
+   * @returns Void
+   */
+
 
   toggleDocumentLock(id){
     let documents = this.state.documentSpecifications;
     let documentsLock = this.state.documentsLock;
     let documentDetails = {
-      index: id,
-      element: documents[id].isPrivate? false : true,
-      type: "document"
+        index: id,
+        element: documents[id].isPrivate? false : true,
+        type: "document"
     }
     this.dataPrivacyHandler(documentDetails)
     documentsLock[id] = documentsLock[id] ? false : true;
     this.setState({
-      documentsLock:documentsLock
+         documentsLock:documentsLock
     });
   }
 
+  async dataPrivacyHandler(detailsInput) {
+    const  response = await updatePrivacyDetails(detailsInput, this.props.client)
+    return response;
+  }
+
+  /**
+   * Method :: onFileUploadCallBack
+   * Desc   :: Handles all the file uploads
+   * @param :: type - type :: String : resp - type :: Object
+   * @returns Void
+   */
+
   onFileUploadCallBack(type, resp) {
     if (resp) {
-      switch(type){
-        case "image":
-          this.setState({"uploadedImage": resp});
-          var imageLink = $.parseJSON(this.state.uploadedImage).result;
-          this.setState({"uploadedImage": imageLink});
-          let imageArray = this.state.imageSpecifications
-          this.setState({imageSpecifications:imageArray})
-          this.storeData(imageLink,"image")
-          break;
-        case "video":
-          this.setState({"uploadedVideo": resp});
-          var videoLink = $.parseJSON(this.state.uploadedVideo).result;
-          this.setState({"uploadedVideo": videoLink});
-          this.storeData(videoLink,"video")
-          break;
-        case "document":
-          this.setState({"uploadedDocuments": resp});
-          var documentLink = $.parseJSON(this.state.uploadedDocuments).result;
-          this.setState({"uploadedDocuments": documentLink});
-          this.storeData(documentLink,"document")
-          break;
-        case "template":
-          this.setState({"uploadedTemplate": resp});
-          var templateLink = $.parseJSON(this.state.uploadedTemplate).result;
-          this.setState({"uploadedTemplate": imageLink});
-          let templateArray = this.state.templateSpecifications
-          this.setState({templateSpecifications:templateArray})
-          this.storeData(templateLink,"template")
-          break;
-      }
+      this.setState({uploadedData: resp});
+      var link = $.parseJSON(this.state.uploadedData).result;
+      this.setState({uploadedData: link});
+        let userOption = confirm("Do you want to add the file into the library")
+        if (userOption) {
+          let addToCentralLibrary = true
+          this.storeData(link, type ,addToCentralLibrary )
+      }else{
+          let addToCentralLibrary = false
+          this.storeData(link, type ,addToCentralLibrary )
+        }
     }
   }
 
+  /**
+   * Method :: storeData
+   * Desc   :: Handles all the data storing activities
+   * @param :: link - type :: String : dataType - type :: String
+   * @returns resp - type :: Object
+   */
 
-  async storeData(link,dataType){
-    switch(dataType) {
-      case "image":
-        let  imageDetails = {
+  async storeData(link,dataType, addToCentralLibrary){
+        let  Details = {
           userId: this.props.portfolioDetailsId,
           fileName: this.state.fileName,
           fileUrl: link,
           fileType: this.state.fileType,
-          libraryType: dataType
+          libraryType: dataType,
+          inCentralLibrary: addToCentralLibrary
         }
-        const resp = await createLibrary(imageDetails, this.props.client)
-        this.fetchOnlyImages();
+        const resp = await createLibrary(Details, this.props.client)
+        this.refetchData();
         return resp;
-        break;
-      case "video":
-        let  videoDetails = {
-          userId: this.props.portfolioDetailsId,
-          fileName: this.state.fileName,
-          fileUrl: link,
-          fileType: this.state.fileType,
-          libraryType: dataType
-        }
-        const res = await createLibrary(videoDetails, this.props.client)
-        this.fetchOnlyImages();
-        return res;
-        break;
-      case "document":
-        let  documentDetails = {
-          userId: this.props.portfolioDetailsId,
-          fileName: this.state.fileName,
-          fileUrl: link,
-          fileType: this.state.fileType,
-          libraryType: dataType
-
-        }
-        const res1 = await createLibrary(documentDetails, this.props.client)
-        this.fetchOnlyImages();
-        return res1;
-        break;
-      case "template":
-        let  templateDetails = {
-          userId: this.props.portfolioDetailsId,
-          fileName: this.state.fileName,
-          fileUrl: link,
-          fileType: this.state.fileType,
-          libraryType: dataType
-        }
-        const res2 = await createLibrary(templateDetails, this.props.client)
-        this.fetchOnlyImages();
-        return res2;
-        break;
-    }
-
   }
 
+  /**
+   * Method :: getLibraryDetails
+   * Desc   :: Handles all the data storing activities
+   * @param :: userId - type :: String
+   * @returns Void
+   */
 
   async getLibraryDetails(userId) {
     let that = this;
@@ -396,6 +383,12 @@ export default class  PortfolioLibrary extends React.Component{
     this.setState({previewTemplate:templatePreviewUrl});
   }
 
+    toggle1() {
+      this.setState({
+        popoverOpen: !this.state.popoverOpen
+      });
+    }
+
   componentDidMount(){
 
     (function(a){a.createModal=function(b){defaults={scrollable:false};var b=a.extend({},defaults,b);var c=(b.scrollable===true)?'style="max-height: 420px;overflow-y: auto;"':"";html='<div class="modal fade library-popup" id="myModal">';html+='<div class="modal-dialog">';html+='<div class="modal-content">';html+='<div class="modal-header">';html+='<button type="button" class="close" data-dismiss="modal" aria-hidden="true">Ã—</button>';if(b.title.length>0){html+='<h4 class="modal-title">'+b.title+"</h4>"}html+="</div>";html+='<div class="modal-body" '+c+">";html+=b.message;html+="</div>";a("body").prepend(html);a("#myModal").modal().on("hidden.bs.modal",function(){a(this).remove()})}})(jQuery);
@@ -418,7 +411,7 @@ export default class  PortfolioLibrary extends React.Component{
         let initialImageData = imageData[index];
         imageData.splice(index, 1);
         this.setState({
-          imageSpecifications: imageData
+             imageSpecifications: imageData
         });
         this.updateLibrary(initialImageData.fileUrl)
         break;
@@ -427,7 +420,7 @@ export default class  PortfolioLibrary extends React.Component{
         let initialVideoData = videoData[index];
         videoData.splice(index, 1);
         this.setState({
-          videoSpecifications: videoData
+             videoSpecifications: videoData
         });
         this.updateLibrary(initialVideoData.fileUrl)
         break;
@@ -436,69 +429,80 @@ export default class  PortfolioLibrary extends React.Component{
         let initialTemplateData = templateData[index];
         templateData.splice(index, 1);
         this.setState({
-          templateSpecifications: templateData
+             templateSpecifications: templateData
         });
         this.updateLibrary(initialTemplateData.fileUrl)
         break;
       case "document":
-        let documentData = this.state.imageSpecifications;
+        let documentData = this.state.documentSpecifications;
         let initialDocumentData = documentData[index];
         documentData.splice(index, 1);
         this.setState({
-          imageSpecifications: documentData
+             documentSpecifications: documentData
         });
         this.updateLibrary(initialDocumentData.fileUrl)
         break;
     }
-
   }
 
   async updateLibrary(files) {
-    const response = await updateLibraryData(files, this.props.client)
+    const  response = await updateLibraryData(files, this.props.client)
     return response;
   }
+
+    PopOverAction(){
+      this.setState({popoverOpen : !(this.state.popoverOpen)})
+    }
 
   render(){
     var videoJsOptions = [{
       autoplay: true,
       controls: true,
-      sources: [{
-        src: this.state.previewVideo,
-        type: 'video/mp4'
-      }]
+      sources: [{src: this.state.previewVideo, type: 'video/mp4'}]
     }]
-
-    let imageData = this.state.imageSpecifications||[];
     let that = this;
+    let   imageData = this.state.imageSpecifications||[];
     const Images = imageData.map(function(show,id) {
       return(
         <div className="thumbnail"key={id}>
-          {that.state.explore ||that.props.isAdmin?" ":that.state.imagesLock[id] || show.isPrivate? <FontAwesome onClick={()=>that.toggleImageLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleImageLock(id)} name='unlock'/> }
-          {that.state.explore ||that.props.isAdmin?"": <span className="triangle-topright"><FontAwesome name='minus' onClick={()=>that.delete(id, "image")} /></span>}
+          {that.state.explore ||that.props.isAdmin?" ":that.state.imagesLock[id] || show.isPrivate? !that.state.hideLock?<FontAwesome onClick={()=>that.toggleImageLock(id)} name='lock' />:"" :!that.state.hideLock? <FontAwesome onClick={()=>that.toggleImageLock(id)} name='unlock'/>:"" }
+          {that.state.explore ||that.props.isAdmin?"": <FontAwesome name='trash-o' onClick={()=>that.delete(id, "image")} />}
           <a href="#" data-toggle="modal" data-target=".imagepop" onClick={that.random.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
           <div id="images" className="title">{show.fileName}</div>
         </div>
       )
     });
+    let   popImageData = this.state.imageSpecifications||[];
+    const popImages = popImageData.map(function(show,id) {
+      if(show.inCentralLibrary){
+      return(
+        <div className="thumbnail"key={id}>
+          {that.state.explore ||that.props.isAdmin?" ":that.state.imagesLock[id] || show.isPrivate? !that.state.hideLock?<FontAwesome onClick={()=>that.toggleImageLock(id)} name='lock' />:"" :!that.state.hideLock? <FontAwesome onClick={()=>that.toggleImageLock(id)} name='unlock'/>:"" }
+          {that.state.explore ||that.props.isAdmin?"": <FontAwesome name='trash-o' onClick={()=>that.delete(id, "image")} />}
+          <a href="#" data-toggle="modal" data-target=".imagepop" onClick={that.random.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
+          <div id="images" className="title">{show.fileName}</div>
+        </div>
+      )}
+    });
 
-    let templateData =  this.state.templateSpecifications || [];
+    let   templateData =  this.state.templateSpecifications || [];
     const Templates = templateData.map(function(show,id) {
       return(
         <div className="thumbnail"key={id}>
-          {that.state.explore || that.props.isAdmin?"":that.state.templatesLock[id] || show.isPrivate ? <FontAwesome onClick={()=>that.toggleTemplateLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleTemplateLock(id)} name='unlock'/> }
-          {that.state.explore || that.props.isAdmin?"":  <span className="triangle-topright"><FontAwesome name='minus' onClick={()=>that.delete(id, "template")} /></span>}
+          {that.state.explore || that.props.isAdmin?"":that.state.templatesLock[id] || show.isPrivate ?!that.state.hideLock? <FontAwesome onClick={()=>that.toggleTemplateLock(id)} name='lock' />:"" : !that.state.hideLock?<FontAwesome onClick={()=>that.toggleTemplateLock(id)} name='unlock'/>:"" }
+          {that.state.explore || that.props.isAdmin?"":  <FontAwesome name='trash-o' onClick={()=>that.delete(id, "template")} />}
           <a href="#" data-toggle="modal" data-target=".templatepop" onClick={that.randomTemplate.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
           <div id="templates" className="title">{show.fileName}</div>
         </div>
       )
     });
 
-    let videodata= this.state.videoSpecifications || [];
+    let   videodata= this.state.videoSpecifications || [];
     const videos = videodata.map(function(show,id){
       return(
         <div className="thumbnail" key={id}>
-          {that.state.explore || that.props.isAdmin?"":that.state.videosLock[id] || show.isPrivate ? <FontAwesome onClick={()=>that.toggleVideoLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleVideoLock(id)} name='unlock'/> }
-          {that.state.explore || that.props.isAdmin?"":  <span className="triangle-topright"><FontAwesome name='minus' onClick={()=>that.delete(id, "video")} /></span>}
+          {that.state.explore || that.props.isAdmin?"":that.state.videosLock[id] || show.isPrivate ? !that.state.hideLock?<FontAwesome onClick={()=>that.toggleVideoLock(id)} name='lock' />:"" : !that.state.hideLock?<FontAwesome onClick={()=>that.toggleVideoLock(id)} name='unlock'/>:"" }
+          {that.state.explore || that.props.isAdmin?"": <FontAwesome name='trash-o' onClick={()=>that.delete(id, "video")} />}
           <a href="" data-toggle="modal" data-target=".videopop" onClick={that.randomVideo.bind(that,show.fileUrl,id)}>
             <video width="120" height="100" controls>
               <source src={show.fileUrl}type="video/mp4"></source>
@@ -509,12 +513,12 @@ export default class  PortfolioLibrary extends React.Component{
       )
     });
 
-    let documentData= this.state.documentSpecifications || [];
+    let   documentData= this.state.documentSpecifications || [];
     const Documents = documentData.map(function(show,id){
       return(
         <div className="thumbnail"key={id}>
-          {that.state.explore || that.props.isAdmin?" ":that.state.documentsLock[id] || show.isPrivate ? <FontAwesome onClick={()=>that.toggleDocumentLock(id)} name='lock' /> : <FontAwesome onClick={()=>that.toggleDocumentLock(id)} name='unlock'/> }
-          {that.state.explore || that.props.isAdmin?"": <span className="triangle-topright"><FontAwesome name='minus' onClick={()=>that.delete(id, "document")} /></span>}
+          {that.state.explore || that.props.isAdmin?" ":that.state.documentsLock[id] || show.isPrivate ?!that.state.hideLock? <FontAwesome onClick={()=>that.toggleDocumentLock(id)} name='lock' />:"" :!that.state.hideLock? <FontAwesome onClick={()=>that.toggleDocumentLock(id)} name='unlock'/>:"" }
+          {that.state.explore || that.props.isAdmin?"": <FontAwesome name='trash-o' onClick={()=>that.delete(id, "document")} />}
           <a href="#" data-toggle="modal" data-target=".documentpop" onClick={that.randomDocument.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
           <div id="images" className="title">{show.fileName}</div>
         </div>
@@ -580,40 +584,22 @@ export default class  PortfolioLibrary extends React.Component{
             </div>
           </div>
         </div>
-
-        {/*<div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">*/}
-
-        {/*<div className="panel panel-default">*/}
-        {/*<div className="panel-heading">*/}
-        {/*Documents<input type="file" className="upload_file upload" name="file_source" />*/}
-
-        {/*</div>*/}
-        {/*<div className="panel-body">*/}
-        {/*/!*<div className="thumbnail"><FontAwesome name='unlock'/><a className="view-pdf" href="/images/sample.pdf"><img src="/images/ppt.png"/></a><div className="title">Document</div></div>*!/*/}
-        {/*<div className="thumbnail"><FontAwesome name='unlock'/><a data-toggle="modal" data-target=".pdfpop" href="#"><img src="/images/ppt.png"/></a><div className="title">Document</div></div>*/}
-        {/*</div>*/}
-        {/*</div>*/}
-        {/*</div>*/}
-        <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-right">
+        <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
           <div className="panel panel-default">
             <div className="panel-heading">
               Images
-              <div className="fileUpload upload_file_mask pull-right">
-                <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-                  {that.state.explore || that.props.isAdmin?"":<input type="file" className="upload_file upload" name="image_source" id="image_upload" onChange={that.ImageUpload.bind(that)} />}
+              <div className="fileUpload upload_file_mask pull-right" id="create_client">
+                <a href="javascript:void(0);">
+                  {that.state.explore || that.props.isAdmin?"":<span className="ml ml-upload" onClick={that.PopOverAction.bind(that)}></span>}
                 </a>
               </div>
             </div>
-            <ul>
-              <li>
                 <div className="panel-body">
                   {Images}
                 </div>
-              </li>
-            </ul>
           </div>
         </div>
-        <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
+        <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-right">
           <div className="panel panel-default">
             <div className="panel-heading">
               Videos
@@ -632,7 +618,8 @@ export default class  PortfolioLibrary extends React.Component{
             </ul>
           </div>
         </div>
-        <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-right">
+        <br className="brclear"/>
+        <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
           <div className="panel panel-default">
             <div className="panel-heading">
               Templates
@@ -642,14 +629,10 @@ export default class  PortfolioLibrary extends React.Component{
                 </a>
               </div>
             </div>
-          </div>
-          <ul>
-            <li>
               <div className="panel-body">
                 {Templates}
               </div>
-            </li>
-          </ul>
+        </div>
         </div>
         <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-right">
           <div className="panel panel-default">
@@ -661,15 +644,31 @@ export default class  PortfolioLibrary extends React.Component{
                 </a>
               </div>
             </div>
-            <ul>
-              <li>
                 <div className="panel-body">
                   {Documents}
                 </div>
-              </li>
-            </ul>
           </div>
         </div>
+        <Popover placement="bottom" isOpen={this.state.popoverOpen} target={"create_client"} toggle1={this.toggle1}>
+          <PopoverTitle>Library</PopoverTitle>
+          <PopoverContent>
+            <div  className="ml_create_client">
+              <div className="medium-popover">
+                <div className="row">
+                 <div className="col-md-12">
+                  <div className="form-group">
+                    {popImages}
+                    <div className="fileUpload mlUpload_btn">
+                      <span>Upload</span>
+                      <input type="file" className="upload" ref="upload" onChange={this.ImageUpload.bind(this)}/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
     )
   }

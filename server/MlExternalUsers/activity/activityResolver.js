@@ -10,7 +10,8 @@ var _ = require('lodash')
 MlResolver.MlQueryResolver['fetchActivities'] = (obj, args, context, info) => {
   let query = {
     userId:context.userId,
-    profileId: args.profileId
+    profileId: args.profileId,
+    isCurrentVersion: true
   };
   if(args.isInternal || args.isExternal){
     let typeQuery = _.pickBy(args, _.isBoolean)
@@ -53,31 +54,84 @@ MlResolver.MlQueryResolver['fetchActivities'] = (obj, args, context, info) => {
 // }
 
 MlResolver.MlQueryResolver['fetchActivity'] = (obj, args, context, info) => {
-  let result = mlDBController.findOne('MlActivity', {_id:args.activityId} , context);
-  return result;
+  let result = mlDBController.findOne('MlActivity', {_id: args.activityId} , context);
+  if (result) {
+    let query = {
+      transactionId: result.transactionId,
+      isCurrentVersion: true
+    };
+    let activity = mlDBController.findOne('MlActivity', query, context);
+    return activity;
+  } else  {
+    let code = 404;
+    let response = new MlRespPayload().successPayload('Activity not found', code);
+    return response;
+  }
 };
 
-
 MlResolver.MlMutationResolver['createActivity'] = (obj, args, context, info) => {
-  args.Details.userId = context.userId
-  args.Details.createdAt = new Date()
-  let result1 = mlDBController.insert('MlActivity', args.Details , context)
-  if(result1){
-    let code = 200;
-    let result = result1;
-    let response = new MlRespPayload().successPayload(result, code);
+  if (args.Details) {
+    args.Details.userId = context.userId;
+    args.Details.isCurrentVersion = true;
+    args.Details.createdAt = new Date();
+    args.Details.versions = 0.001;
+    orderNumberGenService.createActivityId(args.Details);
+    let result = mlDBController.insert('MlActivity', args.Details , context)
+    if(result){
+      let code = 200;
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }
+  } else {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('Data required', code);
     return response
   }
 }
 
 MlResolver.MlMutationResolver['updateActivity'] = (obj, args, context, info) => {
-  args.Details.userId = context.userId
-  args.Details.updatedAt = new Date();
-  let result1 = mlDBController.update('MlActivity', {_id:args.activityId}, args.Details, {'$set':1}, context);
-  if(result1){
-    let code = 200;
-    let result = result1
-    let response = new MlRespPayload().successPayload(result, code);
+  let oldVersionActivity = mlDBController.findOne('MlActivity', {_id: args.activityId}, context);
+  let oldActiveActivity;
+  if (oldVersionActivity) {
+    let query = {
+      transactionId: oldVersionActivity.transactionId,
+      isCurrentVersion: true
+    };
+    oldActiveActivity = mlDBController.findOne('MlActivity', query, context);
+  }
+  if (oldActiveActivity) {
+    if (!args.Details.teams) {
+      args.Details.teams = _.cloneDeep(oldActiveActivity.teams)
+    } else if (args.Details.teams) {
+      let activity = _.omit(oldActiveActivity, 'teams');
+      activity.teams = args.Details.teams;
+      args.Details = _.cloneDeep(activity);
+    }
+    if (!args.Details.payment) {
+      args.Details.payment = _.cloneDeep(oldActiveActivity.payment)
+    } else if (args.Details.payment) {
+      let activity = _.omit(oldActiveActivity, 'payment');
+      activity.payment = args.Details.payment;
+      args.Details = _.cloneDeep(activity);
+    }
+    oldActiveActivity.isCurrentVersion = false;
+    let updatedOldVersionActivity = mlDBController.update('MlActivity', {_id: oldActiveActivity._id}, oldActiveActivity, {'$set':1}, context);
+    args.Details = _.omit(args.Details, '_id');
+    args.Details.isCurrentVersion = true;
+    args.Details.userId = oldActiveActivity.userId
+    args.Details.updatedAt = new Date();
+    args.Details.transactionId = oldActiveActivity.transactionId;
+    args.Details.versions = oldActiveActivity.versions + 0.001;
+    let newVersionActivity = mlDBController.insert('MlActivity', args.Details , context);
+    if(newVersionActivity){
+      let code = 200;
+      let result = newVersionActivity
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }
+  } else {
+    let code = 404;
+    let response = new MlRespPayload().errorPayload('Activity not found', code);
     return response
   }
 }
@@ -96,7 +150,6 @@ MlResolver.MlQueryResolver['fetchActivitiesForTask'] = (obj, args, context, info
     profileId: task.profileId,
     isActive: true
   };
-
   if(task.isInternal && task.isExternal){
       query["$or"] = [
         {isInternal: true},
@@ -110,7 +163,17 @@ MlResolver.MlQueryResolver['fetchActivitiesForTask'] = (obj, args, context, info
     query.isInternal = task.isInternal;
     query.isServiceCardEligible = task.isServiceCardEligible;
   }
-
+  let sessionQuery = [];
+  if (task.session && task.session.length > 0) {
+    sessionQuery = task.session.reduce(function(result, session) {
+      return result.concat(session.activities);
+    }, []);
+  }
+  sessionQuery = _.uniq(sessionQuery);
+  query["$or"] = [
+    {_id: {'$in': sessionQuery}},
+    {isCurrentVersion: true}
+  ];
   let result = mlDBController.find('MlActivity', query , context).fetch()
 
   return result;

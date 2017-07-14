@@ -25,7 +25,7 @@ MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'], currencySchema]);
 
 let supportedApi = [
 
-  {api:'fetchCurrency', actionName:'READ', moduleName:"GLOBALSETTINGS"},
-  {api:'fetchCurrencySymbol',actionName:'READ',moduleName:"GLOBALSETTINGS"}
+  {api:'fetchCurrency', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true},
+  {api:'fetchCurrencySymbol',actionName:'READ',moduleName:"GLOBALSETTINGS", isWhiteList:true}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -273,16 +273,18 @@ export default class MlFunderSuccessStories extends React.Component {
                                          onClick={this.onLockChange.bind(this, "date", "isDatePrivate")}/>
                           </div>
                           <div className="clearfix"></div>
-                          <div className="form-group">
-                            <div className="fileUpload mlUpload_btn">
-                              <span>Upload Pic</span>
-                              <input type="file" className="upload" name="logo" id="logo" accept="image/*"
-                                     onChange={this.onLogoFileUpload.bind(this)}/>
-                            </div>
-                            {/*<div className="previewImg ProfileImg">*/}
-                            {/*<img src="/images/ideator_01.png"/>*/}
-                            {/*</div>*/}
-                          </div>
+                          {this.state.selectedObject != "default" ?
+                            <div className="form-group">
+                              <div className="fileUpload mlUpload_btn">
+                                <span>Upload Pic</span>
+                                <input type="file" className="upload" name="logo" id="logo" accept="image/*"
+                                       onChange={this.onLogoFileUpload.bind(this)}/>
+                              </div>
+                              {/*<div className="previewImg ProfileImg">*/}
+                              {/*<img src="/images/ideator_01.png"/>*/}
+                              {/*</div>*/}
+                            </div> : <div></div>
+                          }
                           <div className="form-group">
                             <input type="text" placeholder="Enter title of Story" className="form-control float-label"
                                    name="storyTitle" defaultValue={this.state.data.storyTitle}

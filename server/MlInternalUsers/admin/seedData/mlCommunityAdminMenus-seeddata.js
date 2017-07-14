@@ -297,7 +297,7 @@ if(Meteor.isServer){
           "subMenu":[
           {
             "link" : "/admin/transactions/requestedList",
-            "name" : "Requests",
+            "name" : "Internal Requests",
             "uniqueId" : "transaction_Requestes",
             "isLink" : true,
             "isMenu" : true,
@@ -327,7 +327,7 @@ if(Meteor.isServer){
           },
           {
             "link" : "/admin/transactions/approvedList",
-            "name" : "Approvals",
+            "name" : "Requests Approved",
             "uniqueId" : "transaction_Approved",
             "isLink" : true,
             "isMenu" : true,
@@ -357,7 +357,7 @@ if(Meteor.isServer){
           },
             {
               "link" : "/admin/transactions/rejectList",
-              "name" : "Rejects",
+              "name" : "Requests Rejected",
               "uniqueId" : "transaction_Reject",
               "isLink" : true,
               "isMenu" : true,

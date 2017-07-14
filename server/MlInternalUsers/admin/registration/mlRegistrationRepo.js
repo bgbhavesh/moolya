@@ -96,7 +96,10 @@ class MlRegistrationRepo{
       let user = mlDBController.findOne('users', {"profile.externalUserProfiles.registrationId": {"$in": [regId]}}, context);
       let profileInfo = [];
       if(user.profile.externalUserAdditionalInfo){
-        profileInfo.push(user.profile.externalUserAdditionalInfo)
+        let existingRecords = user.profile.externalUserAdditionalInfo
+        existingRecords.map(function (oldRecord) {
+          profileInfo.push(oldRecord)
+        })
         profileInfo.push(info)
       }else{
         profileInfo.push(info)

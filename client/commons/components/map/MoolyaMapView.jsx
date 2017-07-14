@@ -1,15 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import  $ from 'jquery'
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import controllable from 'react-controllables';
-import GoogleMap from 'google-map-react';
-import MapMarkers from './mapMarkers'
+//import GoogleMap from 'google-map-react';
+//import MapMarkers from './mapMarkers'
 import MapCluster from './MapCluster';
 import MlLoader from '../../../commons/components/loader/loader'
-import {getAdminUserContext} from '../../../commons/getAdminUserContext'
-import MlMapFooter from "../map/MlMapFooter"
 
 let defaultCenter={lat: 17.1144718, lng: 5.7694891};
 @controllable(['center', 'zoom', 'hoverKey', 'clickKey'])
@@ -24,10 +19,14 @@ export default class MoolyaMapView extends Component {
   async componentWillMount() {
     let that = this;
     let zoom = 1;
-    let loggedInUser = getAdminUserContext();
+    let hasZoom=that.props.fetchZoom||false;
+    if(hasZoom){
+       zoom= await that.props.fetchZoomHandler(that.props)||zoom;
+    }
+    /*let loggedInUser = getAdminUserContext();
     if(loggedInUser.hierarchyLevel != 4){
       zoom = 4;
-    }
+    }*/
     let hasCenter=that.props.fetchCenter||false;
     if(hasCenter){
       let center= await that.props.fetchCenterHandler(that.props);
@@ -78,21 +77,27 @@ export default class MoolyaMapView extends Component {
     }
     const data=this.props.data&&this.props.data.data?this.props.data.data:[];
     let MapComponent = null;
+    let MapFooterComponent=null;
     // Fix me
     var path = window.location.pathname;
     if(path.indexOf("communities") !== -1){
       MapComponent=React.cloneElement(this.props.viewComponent,{data:data,config:this.props});
+    }
+
+    if(this.props.mapFooterComponent){
+      MapFooterComponent=React.cloneElement(this.props.mapFooterComponent,{data:data,mapContext:this.props});
     }
     return (
       <span>
         {MapComponent?MapComponent:
           <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} showImage={this.props.showImage}/>
         }
-        {data.length>0?<MlMapFooter data={data} mapContext={this.props}/>:
+        {/*{data.length>0?<MlMapFooter data={data} mapContext={this.props}/>:
           <div className="bottom_actions_block bottom_count">
             <div><b>0</b> of <b>0</b> users are Active<br/></div>
           </div>
-        }
+        }*/}
+        {MapFooterComponent}
 
       </span>
 

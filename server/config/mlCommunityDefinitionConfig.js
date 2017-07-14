@@ -9,7 +9,7 @@ let communityDef = [{_id:"ideators",name:"Ideators","code":"IDE",displayName:"Id
   {_id:"serviceproviders",name:"Service Providers","code":"SPS",displayName:"Service Providers","showOnMap":false,"aboutCommunity":"Service Providers","communityImageLink" : "ml ml-users","isActive":true},
   {_id:"institutions",name:"Institutions","code":"INS",displayName:"Institutions","showOnMap":false,"aboutCommunity":"Institutions","communityImageLink" : "ml ml-institutions","isActive":true},
   {_id:"browsers",name:"Browsers","code":"BRW",displayName:"Browsers","showOnMap":false,"aboutCommunity":"Browsers","communityImageLink" : "ml ml-browser","isActive":true},
-  {_id:"officebearer",name:"Office Bearer","code":"OFB",displayName:"Office Bearer","showOnMap":false,"aboutCommunity":"Office Bearer","communityImageLink" : "ml ml-moolya-symbol","isActive":false}
+  {_id:"officebearer",name:"Office Bearer","code":"OFB",displayName:"Office Bearer","showOnMap":false,"aboutCommunity":"Office Bearer","communityImageLink" : "ml ml-moolya-symbol","isActive":true}
   ];
 
  Meteor.startup(function () {

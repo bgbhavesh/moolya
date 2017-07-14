@@ -5,7 +5,7 @@
 import React from "react";
 import {render} from "react-dom";
 import _ from "lodash";
-import {fetchCommunitiesHandler} from "../../../../app/commons/actions/fetchCommunitiesActionHandler";
+import {fetchAllCommunitiesHandler} from "../../../../app/commons/actions/fetchCommunitiesActionHandler";
 import {createOfficeActionHandler} from "../actions/createOfficeAction";
 import {initalizeFloatLabel} from "../../../../../client/commons/utils/formElemUtil";
 
@@ -117,7 +117,7 @@ export default class MlAppNewSpokePerson extends React.Component {
   }
 
   async fetchCommunities(specCode) {
-    let communities = await fetchCommunitiesHandler();
+    let communities = await fetchAllCommunitiesHandler();
     if (communities) {
       let communityList = []
       if (!specCode) {

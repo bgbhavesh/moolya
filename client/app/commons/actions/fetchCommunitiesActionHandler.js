@@ -25,3 +25,25 @@ export async function fetchCommunitiesHandler() {
     const communities = result.data.data;
     return communities;
 }
+
+export async function fetchAllCommunitiesHandler() {
+  const result = await appClient.query({
+    query: gql`
+           query {
+            data: fetchAllCommunitiesFromDef {
+                name,
+                communityName,
+                displayName,
+                code,
+                communityImageLink,
+                aboutCommunity,
+                isActive,
+            }
+          }
+        `,
+    forceFetch:true
+  })
+
+  const communities = result.data.data;
+  return communities;
+}

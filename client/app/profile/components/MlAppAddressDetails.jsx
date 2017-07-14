@@ -366,7 +366,7 @@ export default class AppAddressDetails extends React.Component {
 
   addressTabSelected(index,value){
     this.setState({selectedTab : true,activeTab : ""});
-    let countryValue = this.state.countryId?this.state.countryId:this.state.addressDetails[index].addressCountryId;
+    let countryValue = this.state.countryId?this.state.countryId:this.state.details[index].addressCountryId;
     this.setState({countryId:countryValue})
   }
 

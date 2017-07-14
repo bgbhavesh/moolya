@@ -117,7 +117,7 @@ export default class MlAppHeader extends Component {
                 <a href="/app/calendar"><img className="profile-img" src="/images/6.png" /></a>
               </li>
               <li data-toggle="tooltip" title="My Tasks" data-placement="top">
-                <a href=""><img className="profile-img" src="/images/7.png" /></a>
+                <a href="/app/task"><img className="profile-img" src="/images/7.png" /></a>
               </li>
               <li data-toggle="tooltip" title="Logout" data-placement="top">
                 <a onClick={this.logoutUser.bind(this)}><img className="profile-img" src="/images/5.png"/></a>

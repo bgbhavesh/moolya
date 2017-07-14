@@ -5,7 +5,7 @@ import Moolyaselect from  '../../commons/containers/select/MlSelectComposer'
 import {graphql} from 'react-apollo';
 import Datetime from "react-datetime";
 import moment from "moment";
-import {initalizeFloatLabel} from '../../admin/utils/formElemUtil';
+import {initalizeFloatLabel} from '../utils/formElemUtil';
 import _ from 'lodash';
 import _underscore from 'underscore'
 export default class MlCustomFilterComponent extends Component {

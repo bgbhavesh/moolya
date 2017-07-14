@@ -24,7 +24,23 @@ MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
 MlResolver.MlQueryResolver['fetchOfficeSC'] = (obj, args, context, info) => {
   let officeSC = [];
   if (context.userId) {
-    officeSC = mlDBController.find('MlOfficeSC', {userId: context.userId, isActive:true}).fetch()
+    let myOffices = mlDBController.find('MlOfficeMembers', {userId: context.userId, isActive:true}).fetch().map(function (data) {
+      return data.officeId;
+    });
+    let officeQuery= {
+      $or: [
+        {
+          officeId: {
+            $in: myOffices
+          }
+        },
+        {
+          userId: context.userId
+        }
+      ],
+      isActive:true
+    };
+    officeSC = mlDBController.find('MlOfficeSC', officeQuery).fetch()
     let extProfile = new MlUserContext(context.userId).userProfileDetails(context.userId)
     let regData = mlDBController.findOne('MlRegistration', {'registrationInfo.communityDefCode': extProfile.communityDefCode,'registrationInfo.userId':context.userId, status:'Approved'})
     if(regData){
@@ -170,11 +186,28 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
     if(isFunder){
       // office record creation
       officeId = mlOfficeValidationRepo.createOffice(officeDetails, profile, context);
+
       if (!officeId) {
         let code = 400;
         let response = new MlRespPayload().successPayload("Failed To Create Office", code);
         return response;
       }
+
+      let officeMemberData = {
+        officeId: officeId,
+        userId: userId,
+        isFreeUser:false,
+        isPaidUser: false,
+        isAdminUser: true,
+        mobileNumber:profile.mobileNumber,
+        joiningDate: new Date(),
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        name: profile.firstName + ' ' + profile.lastName,
+        emailId: profile.email,
+        isPrincipal: true
+      };
+      let ret = mlDBController.insert('MlOfficeMembers', officeMemberData, context)
       // office Transaction record creation
       let details = {
         officeId: officeId,

@@ -219,11 +219,6 @@ let startupPortfolioSchema = `
         description:String, 
         isDescriptionPrivate :Boolean
     }
-   type chartsOutput{
-        fileType:String,
-        portfolioId:String,
-        isActive:Boolean
-    }
     type ratingOutput{,
         rating:String
         isRatingPrivate:Boolean
@@ -241,44 +236,48 @@ let startupPortfolioSchema = `
         legalIssue          : legalIssueOutput
     }
 
-      type EmploymentOfCompany{
-      about: String
-      fromMonth: String
-      fromYear: String
-      toMonth: String
-      toYear: String
-      numberOfEmployment: Int
-      index: Int
-    }
+   type EmploymentOfCompany{
+      eofAbout: String
+      eofFromMonth: String
+      eofFromYear: String
+      eofToMonth: String
+      eofToYear: String
+      eofNumberOfEmployment: Int
+      index : Int
+   }
     type ProfitRevenueLiability{
-      entityType: [String]
-      fromMonth: Date
-      fromYear: Date
-      toMonth: Date
-      toYear: Date
-      valueType: [String]
-      value: Int
+      prlEntityType: String
+      prlFromMonth: String
+      prlFromYear: String
+      prlToMonth: String
+      prlToYear: String
+      pelValueType: String
+      prlValue: Int
+      prlabout:String
+      index : Int
     }
     type ReviewOfCompany{
-      year: Date
-      value: Int
-      about: String
+      rofYear: String
+      rofValue: Int
+      rofAbout: String
+      index : Int
     }
     type EmployeeBreakupDepartment{
-      fromMonth: Date
-      fromYear: Date
-      toMonth: Date
-      toYear: Date
-      department: [String]
-      numberOfEmployment: Int
-      about: String
+      ebdFromMonth: String
+      ebdFromYear: String
+      ebdToMonth: String
+      ebdToYear: String
+      ebdDepartment: String
+      ebdNumberOfEmployment: Int
+      ebdAbout: String
+      index : Int
     }
         
    type chartsOutput{
-      employmentOfCompany:[EmploymentOfCompany]
-      profitRevenueLiability:[ProfitRevenueLiability]
-      reviewOfCompany:[ReviewOfCompany]
-      employeeBreakupDepartment:[EmployeeBreakupDepartment]
+      employmentOfCompanyChart:[EmploymentOfCompany]
+      profitRevenueLiabilityChart:[ProfitRevenueLiability]
+      reviewOfCompanyChart:[ReviewOfCompany]
+      employeeBreakupDepartmentChart:[EmployeeBreakupDepartment]
     }
     
     
@@ -475,43 +474,42 @@ let startupPortfolioSchema = `
         isDescriptionPrivate :Boolean
     }
     input employmentOfCompany{
-      about: String
-      fromMonth: String
-      fromYear: String
-      toMonth: String
-      toYear: String
-      numberOfEmployment: Int
-      index : Int
+      eofAbout: String
+      eofFromMonth: String
+      eofFromYear: String
+      eofToMonth: String
+      eofToYear: String
+      eofNumberOfEmployment: Int
+      index: Int
     }
     input profitRevenueLiability{
-      entityType: [String]
-      fromMonth: String
-      fromYear: String
-      toMonth: String
-      toYear: String
-      valueType: [String]
-      value: Int
+      prlEntityType: String
+      prlFromMonth: String
+      prlFromYear: String
+      prlToMonth: String
+      prlToYear: String
+      pelValueType: String
+      prlValue: Int
+      prlabout:String
+      index : Int
     }
-     input reviewOfCompany{
-      year: Date
-      value: Int
-      about: String
+    input reviewOfCompany{
+      rofYear: String
+      rofValue: Int
+      rofAbout: String
+      index : Int
     }
     input employeeBreakupDepartment{
-      fromMonth: String
-      fromYear: String
-      toMonth: String
-      toYear: String
-      department: [String]
-      numberOfEmployment: Int
-      about: String
+      ebdFromMonth: String
+      ebdFromYear: String
+      ebdToMonth: String
+      ebdToYear: String
+      ebdDepartment: String
+      ebdNumberOfEmployment: Int
+      ebdAbout: String
+      index : Int
     }
-    input charts{
-        employmentOfCompany: [employmentOfCompany]
-        profitRevenueLiability: [profitRevenueLiability]
-        reviewOfCompany: [reviewOfCompany]
-        employeeBreakupDepartment: [employeeBreakupDepartment]
-    }
+   
     input startupPortfolio{
         portfolioDetailsId  : String
         licenses            : licenses
@@ -529,7 +527,10 @@ let startupPortfolioSchema = `
         branches            : [branches]
         clients             : [clients]
         management          : [startupManagement]
-        charts              : charts
+        employmentOfCompanyChart: [employmentOfCompany]
+        reviewOfCompanyChart: [reviewOfCompany]
+        profitRevenueLiabilityChart:  [profitRevenueLiability]
+        employeeBreakupDepartmentChart: [employeeBreakupDepartment]
         legalIssue          : legalIssue
     }
     type startupPortfolioOutput{
@@ -550,14 +551,14 @@ let startupPortfolioSchema = `
         fetchStartupPortfolioLookingFor(portfoliodetailsId:String!):[lookingForOutput]
         fetchStartupPortfolioAwards(portfoliodetailsId:String!):[awardsRecognitionOutput]
         fetchStartupPortfolioCharts(portfoliodetailsId:String):chartsOutput
-        fetchStartupPortfolioChart(portfoliodetailsId:String,chartDetails: charts):[chartsOutput]
+        
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
     }
     
     type Mutation{
         createStartupPortfolio(portfolio:startupPortfolio):response
         updateStartupPortfolio(portfoliodetailsId:String,portfolio:startupPortfolio):response
-        createStartupPortfolioChart(portfoliodetailsId:String,chartDetails: charts): response
+        
     }
 `
 

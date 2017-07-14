@@ -222,10 +222,19 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioCharts'] = (obj, args, context,
   if (args.portfoliodetailsId) {
     let startChartsArray = {}
     let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-    startChartsArray["employmentOfCompany"] = portfolio&&portfolio.charts&&portfolio.charts.employmentOfCompany?portfolio.charts.employmentOfCompany:[];
-    startChartsArray["profitRevenueLiability"] = portfolio&&portfolio.charts&&portfolio.charts.profitRevenueLiability?portfolio.charts.profitRevenueLiability:[];
-    startChartsArray["reviewOfCompany"] = portfolio&&portfolio.charts&&portfolio.charts.reviewOfCompany?portfolio.charts.reviewOfCompany:[];
-    startChartsArray["employeeBreakupDepartment"] = portfolio&&portfolio.charts&&portfolio.charts.employeeBreakupDepartment?portfolio.charts.employeeBreakupDepartment:[];
+    startChartsArray["employmentOfCompanyChart"] = portfolio&&portfolio.employmentOfCompanyChart?portfolio.employmentOfCompanyChart:[];
+    startChartsArray["profitRevenueLiabilityChart"] = portfolio&&portfolio.profitRevenueLiabilityChart?portfolio.profitRevenueLiabilityChart:[];
+    startChartsArray["reviewOfCompanyChart"] = portfolio&&portfolio.reviewOfCompanyChart?portfolio.reviewOfCompanyChart:[];
+    startChartsArray["employeeBreakupDepartmentChart"] = portfolio&&portfolio.employeeBreakupDepartmentChart?portfolio.employeeBreakupDepartmentChart:[];
+   /* if(startChartsArray && startChartsArray.profitRevenueLiabilityChart){
+      startChartsArray.profitRevenueLiabilityChart.map(function(data,index) {
+        if(startChartsArray.profitRevenueLiabilityChart[index]){
+          let entityData = MlEntity.findOne({"_id":data.prlEntityType}) || "";
+          startChartsArray.profitRevenueLiabilityChart[index].prlEntityName = entityData.entityDisplayName || "";
+        }
+
+      })
+    }*/
     if (startChartsArray) {
       return startChartsArray
     }
@@ -241,7 +250,7 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioCharts'] = (obj, args, context,
   }*/
 }
 
-MlResolver.MlQueryResolver['fetchStartupPortfolioChart'] = (obj, args, context, info) => {
+/*MlResolver.MlQueryResolver['fetchStartupPortfolioChart'] = (obj, args, context, info) => {
   var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfolioDetailsId}, context)
   if (portfolioDetails) {
     args.userId = portfolioDetails.userId;
@@ -257,9 +266,9 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioChart'] = (obj, args, context, 
     })
     return startUpChart;
   }
-}
+}*/
 
-MlResolver.MlMutationResolver['createStartupPortfolioChart'] = (obj, args, context, info) => {
+/*MlResolver.MlMutationResolver['createStartupPortfolioChart'] = (obj, args, context, info) => {
   var query = {
     _id: args.startUpPortfolioId,
   }
@@ -271,7 +280,7 @@ MlResolver.MlMutationResolver['createStartupPortfolioChart'] = (obj, args, conte
     var startupChartDetailsInsert = mlDBController.insert('MlStartupPortfolio', query,{'charts':args.chartDetails}, context);
     return startupChartDetailsInsert;
   }
-}
+}*/
 
 updateArrayofObjects = (updateFor, source) =>{
   if(_.isArray(updateFor) && _.isArray(source)){

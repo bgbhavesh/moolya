@@ -140,11 +140,7 @@ export default class MlStartupEditTemplate extends React.Component{
 
   getChartDetails(details,tabName){
     let data = this.state.startupPortfolio;
-    data["charts"] = {}
-
-      data["charts"][tabName] = details;
-
-
+    data[tabName] = details;
     this.props.getPortfolioDetails({startupPortfolio : data});
 
   }

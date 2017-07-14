@@ -154,6 +154,10 @@ export default class Company extends React.Component{
   }
 
   render(){
+    var yesterday = Datetime.moment().subtract(0,'day');
+    var valid = function( current ){
+      return current.isBefore( yesterday );
+    };
     let MlActionConfig
     let userType=this.props.userType;
     if(userType=='external'){
@@ -185,7 +189,12 @@ export default class Company extends React.Component{
           showAction: true,
           actionName: 'cancel',
           handler: async(event) => {
-            FlowRouter.go("/admin/transactions/registrationRequested")
+            let routeName=FlowRouter.getRouteName();
+            if(routeName==="transaction_registration_approved_edit"){
+              FlowRouter.go("/admin/transactions/registrationApprovedList")
+            }else if(routeName==="transaction_registration_requested_edit"){
+              FlowRouter.go("/admin/transactions/registrationRequested")
+            }
           }
         }
       ]
@@ -284,7 +293,7 @@ export default class Company extends React.Component{
                 <input type="text" ref="companyEmail" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyEmail} placeholder="Company Email" className="form-control float-label" id=""/>
               </div>
               <div className="form-group">
-                <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Foundation Year"}}   closeOnSelect={true} value={that.state.foundationDate} onChange={that.onFoundationDateSelection.bind(that)}/>
+                <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Foundation Year"}}   closeOnSelect={true} value={that.state.foundationDate} onChange={that.onFoundationDateSelection.bind(that)} isValidDate={ valid }/>
                 <FontAwesome name="calendar" className="password_icon"/>
               </div>
               <div className="form-group">

@@ -8,3 +8,8 @@ MlResolver.MlQueryResolver['fetchCommunitiesFromDef'] = (obj, args, context, inf
     let appCommunities = mlDBController.find('MlCommunityDefinition', {isActive:true}, context).fetch();
     return appCommunities;
 }
+
+MlResolver.MlQueryResolver['fetchAllCommunitiesFromDef'] = (obj, args, context, info) =>{
+  let appCommunities = mlDBController.find('MlCommunityDefinition', {}, context).fetch();
+  return appCommunities;
+}

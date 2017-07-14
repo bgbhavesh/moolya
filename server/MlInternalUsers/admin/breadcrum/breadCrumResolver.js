@@ -4,11 +4,19 @@
 
 import MlResolver from '../../../commons/mlResolverDef'
 import MlAdminUserContext from '../../../mlAuthorization/mlAdminUserContext'
-
+import _ from 'lodash';
 
 MlResolver.MlQueryResolver['FetchBreadCrumHierarchyDetails'] = (obj, args, context, info) =>{
   let details=[];
   let request=args&&args.hierarchyContext?args.hierarchyContext:{};
+  /**
+   Time-Line for Cluster, Chapter, Subchapter and Community Admins
+   **/
+  var user = new MlAdminUserContext().userProfileDetails(context.userId)||{};
+  if(_.isEmpty(request) && user.hierarchyCode !="PLATFORM"){
+    request.clusterId = user.defaultCluster;
+  }
+
   if(request.clusterId&&request.clusterId.trim()!==""){
        // let cluster=MlClusters.findOne(request.clusterId);
     if(request.clusterId=="all")

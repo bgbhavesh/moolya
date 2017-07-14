@@ -27,8 +27,8 @@ export async function fetchAllCommunitiesHandler() {
   const result = await appClient.query({
     query: gql`
            query {
-            data: getOfficeUserTypes {
-                _id,
+            data: fetchAllCommunitiesFromDef {
+                _id
                 name,
                 code,
                 displayName,

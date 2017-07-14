@@ -125,7 +125,6 @@ export default class MlAppNewSpokePerson extends React.Component {
           let value = _.omit(say, '__typename')
           communityList.push(value);
         })
-        _.remove(communityList, {code: 'BRW'})
         this.setState({showCommunityBlock: communityList})
         return communityList;
       } else {

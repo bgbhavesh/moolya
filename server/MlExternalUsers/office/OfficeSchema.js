@@ -114,6 +114,13 @@ let myOfficeSchema = `
        profileImage: String
     }
     
+    type OfficeUserTypes{
+        _id:String,
+        name:String,
+        displayName:String,
+        isActive:Boolean
+    }
+    
     input officeMembers{
        userId:String,
        firstName:String,
@@ -193,6 +200,7 @@ let myOfficeSchema = `
         getTeamUsers(officeId: String):[TeamMembersDetails]
         getTeamMembers:[AvailableCommunities]
         getBranchDetails:[BranchType]
+        getOfficeUserTypes:[OfficeUserTypes]
     }
     
     type Mutation{       
@@ -214,6 +222,8 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], myOfficeSchema]);
     {api:'getBranchDetails', actionName:'READ', moduleName:"OFFICE"},
     {api:'getTeamMembers', actionName:'READ', moduleName:"OFFICE"},
     {api:'getTeamUsers', actionName:'READ', moduleName:"OFFICE"},
+    {api:'getOfficeUserTypes', actionName:'READ', moduleName:"OFFICE", isAppWhiteList:true},
+
   // {api: 'updateOfficeMembers', actionName: 'UPDATE', moduleName: "OFFICE"},
   {api: 'updateOffice', actionName: 'UPDATE', moduleName: "OFFICE"},
   {api: 'updateOfficeMember', actionName: 'UPDATE', moduleName: "OFFICE"},

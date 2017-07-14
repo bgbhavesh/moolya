@@ -11,6 +11,9 @@ MlResolver.MlQueryResolver['FetchBreadCrumHierarchyDetails'] = (obj, args, conte
   let request=args&&args.hierarchyContext?args.hierarchyContext:{};
   if(request.clusterId&&request.clusterId.trim()!==""){
        // let cluster=MlClusters.findOne(request.clusterId);
+    if(request.clusterId=="all")
+      request.clusterId = mlDBController.findOne('MlChapters', request.chapterId, context).clusterId
+
         let cluster= mlDBController.findOne('MlClusters', request.clusterId, context)
        details.push({hierarchyLevel:3,hierarchyRefId:cluster._id,hierarchyRefName:cluster.clusterName,'moduleFieldRef':'clusterId'});
   }

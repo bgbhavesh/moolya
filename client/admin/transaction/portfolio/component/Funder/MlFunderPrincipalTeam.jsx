@@ -300,7 +300,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
       portfolioDetailsId: this.props.portfolioDetailsId,
       portfolio: {principal: [{logo: {fileUrl: '', fileName: fileName}, index: this.state.selectedIndex}]}
     };
-    let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
+    let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this,file));
   }
   onTeamLogoFileUpload(e) {
     if (e.target.files[0].length == 0)
@@ -322,8 +322,8 @@ export default class MlFunderPrincipalTeam extends React.Component {
       let userOption = confirm("Do you want to add the file into the library")
       if(userOption){
         let fileObjectStructure = {
-          fileName: file.name,
-          fileType: file.type,
+          fileName: file&&file.name?file.name:"",
+          fileType: file&&file.type?file.type:"",
           fileUrl: result.result,
           libraryType: "image"
         }

@@ -2,11 +2,11 @@
  * Created by venkatsrinag on 14/7/17.
  */
 let userTypes = [
-  {name:"officebarers", displayName:"Office Bearers", "isActive":true},
-  {name:"consultant",   displayName:"Consultant", "isActive":true},
-  {name:"serviceprovider", displayName:"Service Provider", "isActive":true},
-  {name:"principal", displayName:"Principal", "isActive":true},
-  {name:"cofunder", displayName:"Co-Funder", "isActive":true}
+  {name:"officebarers",code:'OFB', displayName:"Office Bearers", "isActive":true},
+  {name:"consultant",code:'CNST',   displayName:"Consultant", "isActive":true},
+  {name:"serviceprovider",code:'SP', displayName:"Service Provider", "isActive":true},
+  {name:"principal",code:'PRI', displayName:"Principal", "isActive":true},
+  {name:"cofunder",code:'COF', displayName:"Co-Funder", "isActive":true}
 ];
 
 Meteor.startup(function () {

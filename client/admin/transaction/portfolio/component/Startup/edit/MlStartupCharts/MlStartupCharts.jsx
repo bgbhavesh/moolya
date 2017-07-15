@@ -407,7 +407,7 @@ export default class MlStartupCharts extends React.Component{
           value = {value}
           name = {name}
         />*/
-        ):(<div>{<MlStartupChartSubTabs getPortfolioStartupChartDetails={this.getPortfolioStartupChartDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupChartsDetails={this.state.startupCharts}></MlStartupChartSubTabs> }</div>)}
+        ):(<div>{<MlStartupChartSubTabs getPortfolioStartupChartDetails={this.getPortfolioStartupChartDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupChartsDetails={this.state.startupCharts} isApp={this.props.isApp}></MlStartupChartSubTabs> }</div>)}
 
       </div>
     )

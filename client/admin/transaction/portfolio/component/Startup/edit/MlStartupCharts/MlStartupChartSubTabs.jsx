@@ -88,20 +88,20 @@ export default class MlStartupChartSubTabs extends React.Component{
     var props = this.props
     setTimeout(function(){
       $('.last-item').addClass('menunone');
-      if(props.isApp) {
+      if(!props.isApp) {
         $('div[role="tab"]').each(function (index) {
           var test = $(this).text();
           $(this).empty();
           $(this).html('<div class="moolya_btn moolya_btn_in">' + test + '</div>');
         });
+        $('.first-item').addClass('menunone');
         $('.RRT__tabs').addClass('horizon-swiper');
         $('.RRT__tab').addClass('horizon-item');
-        $('.last-item').addClass('menunone');
         $('.RRT__panel').addClass('nomargintop');
         $('.RRT__panel .RRT__panel').removeClass('nomargintop');
-        //$('.horizon-swiper').horizonSwiper();
+        $('.horizon-swiper').horizonSwiper();
       }
-    },2);
+    },10);
     let path = FlowRouter._current.path;
     if (path.indexOf("app") != -1){
       this.setState({admin: false, client: appClient})
@@ -114,7 +114,7 @@ export default class MlStartupChartSubTabs extends React.Component{
     let tabs = this.getTabComponents();
     function getTabs() {
       return tabs.map(tab => ({
-        tabClassName: 'moolya_btn'+tab.tabClassName?tab.tabClassName:"", // Optional
+        tabClassName: 'moolya_btn', // Optional
         panelClassName: 'panel1', // Optional
         title: tab.title,
         getContent: () => tab.component

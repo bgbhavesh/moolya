@@ -209,6 +209,9 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
       }
       let response = new MlRespPayload().errorPayload("End user email verification not done", 556);
       return {'isValid':false,'validationResponse':response};
+    }else{/** if email does not exist,return response*/
+    let response = new MlRespPayload().errorPayload("Atleast one email is required for registration",556);
+      return {'isValid':false,'validationResponse':response};
     }
   }
 }

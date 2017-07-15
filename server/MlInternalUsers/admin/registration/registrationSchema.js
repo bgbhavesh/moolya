@@ -456,7 +456,7 @@ let registrationSchema = `
         fetchContextClusters: [Cluster]
         fetchContextChapters(id:String): [Chapter]
         fetchContextSubChapters(id:String): [SubChapter]
-        findUserPendingRegistration:[Registration] 
+        findUserPendingRegistration:[RegistrationResponse] 
     }
     
 `

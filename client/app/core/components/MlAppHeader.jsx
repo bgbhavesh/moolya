@@ -1,8 +1,7 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import {logout} from "../../../../client/admin/layouts/header/actions/logoutAction";
-import {fetchUserDetailsHandler} from "../../commons/actions/fetchUserDetails";
-import MlLoader from '../../../commons/components/loader/loader'
+// import {fetchUserDetailsHandler} from "../../commons/actions/fetchUserDetails";
 var FontAwesome = require('react-fontawesome');
 
 
@@ -10,13 +9,13 @@ export default class MlAppHeader extends Component {
   constructor(props, context) {
     super(props, context);
     this.regStatus = false;
-    this.fetchUserDetails = this.fetchUserDetails.bind(this);
+    // this.fetchUserDetails = this.fetchUserDetails.bind(this);
     this.state = {loading: false,data: {}}
     return this;
   }
   componentDidUpdate(){
     var WinWidth = $(window).width();
-    if(WinWidth > 768){
+     if(WinWidth > 768){
     $(".app_menu,.app_main_wrap").mCustomScrollbar({theme:"minimal-dark"});
   }
   }
@@ -45,33 +44,36 @@ export default class MlAppHeader extends Component {
   }
 
   /**fetching user details from registration*/
-  componentWillMount(){
-    this.fetchUserDetails();
-    // return resp
-  }
+  // componentWillMount(){
+  //   const resp = this.fetchUserDetails();
+  //   return resp
+  // }
 
+  /**this is having issues*/
+  // async fetchUserDetails() {
+  //   console.log('need to make server call')
+    // let response = await fetchUserDetailsHandler()
+    // console.log(response)
+    // if (response)
+    //   this.setState({data: response, loading:false})
+  // }
 
-  async fetchUserDetails() {
-    let response = await fetchUserDetailsHandler()
-    console.log(response)
-    // this.regStatus = response.isAllowRegisterAs
-    // console.log('---this--', this.regStatus);
-    // this.forceUpdate();
-    if (response)
-      this.setState({data: response, loading:false})
-  }
-
+  /**user logout function*/
   logoutUser() {
     logout();
   }
 
+  /**
+   * redirect to registration page
+   * */
   registrationRedirect() {
-    let pendingRegId = this.state.data ? this.state.data.pendingRegId : ''
-    FlowRouter.go("/app/register/" + pendingRegId);
+    FlowRouter.go("/app/register/");
+    // let pendingRegId = this.state.data ? this.state.data.pendingRegId : ''
+    // FlowRouter.go("/app/register/" + pendingRegId);
   }
 
   render() {
-    console.log(this.regStatus)
+    // console.log(this.regStatus)
     // const showLoader=this.state.loading;
     return (
       <div>
@@ -99,11 +101,11 @@ export default class MlAppHeader extends Component {
               <li data-toggle="tooltip" title="My Profile" data-placement="right">
                 <a href="/app/myprofile"><img className="profile-img" src="/images/1.png"/></a>
               </li>
-              {(this.state.data && !this.state.data.isAllowRegisterAs) ?
-                <li data-toggle="tooltip" title="Registration" data-placement="right">
-                  <a href="" onClick={this.registrationRedirect.bind(this)}><img className="profile-img"
-                                                                                 src="/images/2.png"/></a>
-                </li> : <div></div>}
+              {/*{(this.state.data && !this.state.data.isAllowRegisterAs) ?*/}
+                {/*<li data-toggle="tooltip" title="Registration" data-placement="right">*/}
+                  {/*<a href="" onClick={this.registrationRedirect.bind(this)}><img className="profile-img"*/}
+                                                                                 {/*src="/images/2.png"/></a>*/}
+                {/*</li> : <div></div>}*/}
               <li data-toggle="tooltip" title="Switch Profile" data-placement="right">
                 <a href="/app/appSwitchProfile"><img className="profile-img" src="/images/3.png"/></a>
               </li>

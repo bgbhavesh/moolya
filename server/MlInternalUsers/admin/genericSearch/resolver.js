@@ -830,38 +830,41 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       {'$lookup':{from:'mlPortfolioDetails',localField:'_id',foreignField:'userId', as:'portfolio'}},
       {'$lookup':{from:'mlOfficeTransaction',localField:'_id',foreignField:'userId', as:'office'}},
       {'$lookup':{from:'mlTransactionsLog',localField:'_id',foreignField:'userId', as:'transactionLog'}},
-      {'$project':{"R":{
+      {'$project':{"registration":{
         '$map':
         { "input":"$registration", "as":"reg", 'in':
         { "createdAt" :"$$reg.registrationInfo.registrationDate", "transactionId":"$$reg._id" ,"transactionType":"$$reg.registrationInfo.transactionType",username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
         }
       },
-        "P":{
+        "portfolio":{
           '$map':
           { "input":"$portfolio", "as":"port", 'in':
           { "createdAt" :"$$port.timeStamp", "transactionId":"$$port._id" ,"transactionType":"$$port.transactionType", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
           }
         },
-        "O":{
+        "office":{
           '$map':
           { "input":"$office", "as":"off", 'in':
           { "createdAt" :"$$off.dateTime", "transactionId":"$$off._id" ,"transactionType":"$$off.transactionType", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName' , userId:'$_id'}
           }
         },
-        "T":{
+        "transactionLog":{
           '$map':
           { "input":"$transactionLog", "as":"trans", 'in':
           { "createdAt" :"$$trans.createdAt", "transactionId":"$$trans._id" ,"transactionType":"$$trans.transactionTypeName", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
           }
-        }
-      }}
+        },
+      }},
+      {'$project': {data: { "$concatArrays" : [ "$registration", "$portfolio", "$office", "$transactionLog" ] } }},
+      {"$unwind" : "$data"},
+      {"$replaceRoot": { newRoot: "$data" }}
     ]
-    let response = mlDBController.aggregate('users', pipeline, context);
-    data = _lodash.concat(response[0].R, response[0].P, response[0].O, response[0].T)
+    data = mlDBController.aggregate('users', pipeline, context);
+    // data = _lodash.concat(response[0].R, response[0].P, response[0].O, response[0].T)
     totalRecords = data.length
   }
   return {'totalRecords':totalRecords,'data':data};
-}
+};
 
 MlResolver.MlUnionResolver['SearchResult']= {
   __resolveType(data, context, info){

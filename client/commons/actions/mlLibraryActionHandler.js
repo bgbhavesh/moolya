@@ -19,11 +19,32 @@ export async function createLibrary(detailsInput, connection) {
   return id
 }
 
+export async function updateLibrary(id,files, connection) {
+  const result = await connection.mutate({
+    mutation: gql`
+   mutation ($files:libraryInput, $id: String) {
+  updateLibrary(files:$files, id:$id) {
+    success
+    code
+    result
+  }
+}
+`,
+    variables:{
+      id,
+      files
+    }
+  })
+  const resultId = result.data.updateLibrary;
+  return resultId
+}
+
 export async function fetchLibrary(userId, connection) {
   const result = await connection.query({
     query: gql`
     query($userId : String){
   fetchLibrary(userId: $userId) {
+      _id
       userId
       fileName
       fileUrl
@@ -31,6 +52,10 @@ export async function fetchLibrary(userId, connection) {
       isPrivate
       libraryType
       inCentralLibrary
+      portfolioReference{
+        portfolioId
+        isPrivate
+      }
   }
 }`,
     variables:{
@@ -42,10 +67,34 @@ export async function fetchLibrary(userId, connection) {
   return id
 }
 
+export async function fetchDataFromCentralLibrary(connection) {
+  const result = await connection.query({
+    query: gql`
+    query{
+  fetchDataFromCentralLibrary{
+      _id
+      userId
+      fileName
+      fileUrl
+      fileType
+      isPrivate
+      libraryType
+      inCentralLibrary
+      portfolioReference{
+        portfolioId
+        isPrivate
+      }
+  }
+}`, forceFetch:true
+  })
+  const id = result.data.fetchDataFromCentralLibrary;
+  return id
+}
+
 export async function updateLibraryData(files, connection) {
   const result = await connection.mutate({
     mutation: gql`
-   mutation ($files: String) {
+   mutation ($files: privateData) {
   updateLibraryData(files:$files) {
     success
     code

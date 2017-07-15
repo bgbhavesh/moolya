@@ -111,6 +111,7 @@ let myOfficeSchema = `
        _id: String
        name: String,
        userId: String
+       profileId: String
        profileImage: String
     }
     
@@ -144,6 +145,8 @@ let myOfficeSchema = `
        isFreeUser:Boolean,
        isPaidUser:Boolean,
        isAdminUser:Boolean
+       registrationId: String
+       profileId : String
     }
 
     input availableCommunities{
@@ -211,6 +214,7 @@ let myOfficeSchema = `
         updateOffice(myOffice:myOffice, myOfficeId:String):response
         updateOfficeStatus(id:String):response
         getMyOfficeRole(officeId: String!): response
+        updateOfficeMemberOnReg(registrationId: String, officeMember:officeMembers):response
     }
 `
 
@@ -235,6 +239,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], myOfficeSchema]);
   {api: 'fetchOfficeMembers', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
   {api: 'fetchOfficeMember', actionName: 'READ', moduleName: "OFFICE"},
   {api: 'fetchAllOfficeMembersWithUserId', actionName: 'READ', moduleName: "OFFICE"},
+  {api: 'updateOfficeMemberOnReg', actionName: 'UPDATE', moduleName: "OFFICE"},
 
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -248,11 +248,18 @@ export async function documentTypesActionHandler() {
 
 export async function fetchPendingRegistration() {
   const result = await appClient.query({
-    query: gql`query{  
+    query: gql`
+      query{
       findUserPendingRegistration{
-        registrationId : _id 
-      }  
-    }`,
+        registrationId : _id,
+        registrationInfo{
+          email
+          communityName
+          clusterName
+          }
+        }
+      }
+     `,
     forceFetch: true
   });
   const id = result.data.findUserPendingRegistration;

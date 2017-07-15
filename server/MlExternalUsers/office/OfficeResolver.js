@@ -98,7 +98,9 @@ MlResolver.MlQueryResolver['fetchOfficeMembers'] = (obj, args, context, info) =>
 
 MlResolver.MlQueryResolver['fetchAllOfficeMembersWithUserId'] = (obj, args, context, info) => {
   let pipeline = [
-    { $match: { userId: context.userId } },
+    // { $match: { userId: context.userId } },
+    { $lookup: { from: "mlOffice", localField: "officeId", foreignField: "_id", as: "office" } },
+    { $match: { 'office.userId': context.userId } },
     { $lookup:
       {
         from: "users",
@@ -109,7 +111,7 @@ MlResolver.MlQueryResolver['fetchAllOfficeMembersWithUserId'] = (obj, args, cont
     },
     { $unwind:"$user"},
     { $match: { 'user.profile.isActive':true } },
-    { $project: {name:1, userId: '$user._id' , profileImage:'$user.profile.profileImage'} }
+    { $project: {name:1, profileId:1, userId: '$user._id' , profileImage:'$user.profile.profileImage'} }
   ];
   let response = mlDBController.aggregate('MlOfficeMembers', pipeline);
   return response;
@@ -150,7 +152,7 @@ MlResolver.MlQueryResolver['fetchOfficeMember'] = (obj, args, context, info) => 
         name: "$name",
         joiningDate: "$joiningDate",
         role: "$role",
-        isActive: "$users.profile.isActive",
+        isActive: "$isActive",
         isIndependent: "$isIndependent",
         isInternalUserInteraction: "$isInternalUserInteraction",
         isExternalUserInteraction: "$isExternalUserInteraction",
@@ -181,7 +183,7 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
     let scDefId = "";
     let scId = "";
     let officeDetails = args.myOffice;
-    let profile = new MlUserContext(userId).userProfileDetails(userId)
+    let profile = new MlUserContext(userId).userProfileDetails(userId);
     let isFunder = _.isMatch(profile, {communityDefCode: 'FUN'})
     if(isFunder){
       // office record creation
@@ -205,7 +207,8 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
         lastName: profile.lastName,
         name: profile.firstName + ' ' + profile.lastName,
         emailId: profile.email,
-        isPrincipal: true
+        isPrincipal: true,
+        isActive: true
       };
       let ret = mlDBController.insert('MlOfficeMembers', officeMemberData, context)
       // office Transaction record creation
@@ -336,6 +339,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
     args.officeMember.joiningDate = new Date();
   try {
 
+    /**checking if user already present in the users collectio*/
     let isUserExist = mlDBController.findOne('users', {username: args.officeMember.emailId})
     if (isUserExist) {
       console.log('user already present')
@@ -343,9 +347,11 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
     }
     else {
       // Soft Registration has to be done to new user
+      /**generating random password for the users and saving in the registration*/
       var emails = [{address: args.officeMember.emailId, verified: false}];
       let randomPassword = orderNumberGenService.generateRandomPassword()
 
+      /**user details who is creating the office member*/
       var adminUser = mlDBController.findOne('users', {_id: context.userId}) || {}
 
       var registrationData = {
@@ -364,7 +370,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
       }
 
 
-
+      /**attaching creator details to the office member details in the registration*/
       let profile = new MlUserContext(context.userId).userProfileDetails(context.userId)
       let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName']);
       let finalRegData = _.extend(registrationData, extendObj)
@@ -376,7 +382,9 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
         emails: emails,
         transactionId :finalRegData.registrationId
       }, context)
-      if (registrationId) { //for generating verfication token
+
+      /**sending email verification token to the created office member*/
+      if (registrationId) {
         MlAccounts.sendVerificationEmail(registrationId,{emailContentType:"html",subject:"Email Verification",context:context});
       }
       if (registrationId) { //for creating new user
@@ -389,56 +397,61 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
         // let officeTransaction = _.extend(officeTrans, extendObj)
         // MlResolver.MlMutationResolver['createOfficeTransaction'](obj, {officeTransaction}, context, info)
 
-        var userProfileTemp = {
-          registrationId: registrationId,
-          mobileNumber: args.officeMember.mobileNumber,
-          communityName: "Office Bearer",
-          communityDefCode : "OFB",
-          isDefault: false,
-          isActive: true,
-          isApprove: false,
-          isTypeOfficeBearer: true
-        }
-        let userProfile = _.extend(userProfileTemp, extendObj)
-        let profile = {
-          isInternaluser: false,
-          isExternaluser: true,
-          email: args.officeMember.emailId,
-          mobileNumber: args.officeMember.mobileNumber,
-          isActive: false,
-          firstName: args.officeMember.firstName,
-          lastName: args.officeMember.lastName,
-          displayName: args.officeMember.firstName + ' ' + args.officeMember.lastName,
-          externalUserProfiles: [userProfile]
-        }
-        let userObject = {
-          username: args.officeMember.emailId,
-          profile: profile,
-          emails: emails ? emails : []
-        }
-        orderNumberGenService.createUserProfileId(userProfile);
-        let userId = mlDBController.insert('users', userObject, context)
-        console.log('userId' + userId);
-        if (userId) {
-          //Email & MobileNumber verification updates to user
-          let registerDetails = mlDBController.findOne('MlRegistration', registrationId, context) || {};
-          mlDBController.update('users', {username: userObject.username},
-            {
-              $set: {
-                'services.email': registerDetails && registerDetails.services ? registerDetails.services.email : {},
-                'emails': userObject.emails
-              }
-            }, {'blackbox': true}, context);
-          let salted = passwordUtil.hashPassword(registerDetails.registrationInfo.password);
-          let res = mlDBController.update('users', {username: userObject.username}, {'services.password.bcrypt': salted}, {$set: true}, context);
+        /**
+         * commenting and moving the user creation in registration when the admin approves the office brearer
+         * */
+        // var userProfileTemp = {
+        //   registrationId: registrationId,
+        //   mobileNumber: args.officeMember.mobileNumber,
+        //   communityName: "Office Bearer",
+        //   communityDefCode : "OFB",
+        //   isDefault: false,
+        //   isActive: true,
+        //   isApprove: false,
+        //   isTypeOfficeBearer: true
+        // }
+        // let userProfile = _.extend(userProfileTemp, extendObj)
+        // let profile = {
+        //   isInternaluser: false,
+        //   isExternaluser: true,
+        //   email: args.officeMember.emailId,
+        //   mobileNumber: args.officeMember.mobileNumber,
+        //   isActive: false,
+        //   firstName: args.officeMember.firstName,
+        //   lastName: args.officeMember.lastName,
+        //   displayName: args.officeMember.firstName + ' ' + args.officeMember.lastName,
+        //   externalUserProfiles: [userProfile]
+        // }
+        // let userObject = {
+        //   username: args.officeMember.emailId,
+        //   profile: profile,
+        //   emails: emails ? emails : []
+        // }
+        // orderNumberGenService.createUserProfileId(userProfile);
+        // let userId = mlDBController.insert('users', userObject, context)
+        // console.log('userId' + userId);
+        // if (userId) {
+        //   //Email & MobileNumber verification updates to user
+        //   let registerDetails = mlDBController.findOne('MlRegistration', registrationId, context) || {};
+        //   mlDBController.update('users', {username: userObject.username},
+        //     {
+        //       $set: {
+        //         'services.email': registerDetails && registerDetails.services ? registerDetails.services.email : {},
+        //         'emails': userObject.emails
+        //       }
+        //     }, {'blackbox': true}, context);
+        //   let salted = passwordUtil.hashPassword(registerDetails.registrationInfo.password);
+        //   let res = mlDBController.update('users', {username: userObject.username}, {'services.password.bcrypt': salted}, {$set: true}, context);
+        // }
 
-        }
-
+        /**finally saving the user to the office member collection*/
         var officeMember = args.officeMember;
         officeMember.officeId = args.myOfficeId;
         officeMember.name = officeMember.firstName + ' ' + officeMember.lastName;
         officeMember['registrationId'] = registrationId
-        officeMember['userId'] = userId
+
+        /**no user is created at this step user will be created after admin approval*/
+        // officeMember['userId'] = userId
         officeMember['createdDate'] = new Date()
         let ret = mlDBController.insert('MlOfficeMembers', officeMember, context)
 
@@ -559,4 +572,29 @@ MlResolver.MlMutationResolver['getMyOfficeRole'] = (obj, args, context, info) =>
   let code = 200;
   let response = new MlRespPayload().successPayload(role, code);
   return response;
+}
+
+/**
+ * update the office member after registration Approval
+ * */
+MlResolver.MlMutationResolver['updateOfficeMemberOnReg'] = (obj, args, context, info) => {
+  try{
+    if(args.officeMember){
+      var officeMember =  mlDBController.findOne('MlOfficeMembers', {registrationId : args.registrationId}, context);
+      if(officeMember){
+        let ret = mlDBController.update('MlOfficeMembers', {registrationId: args.registrationId}, args.officeMember, {$set: true}, context);
+      }else {
+        let code = 400;
+        let response = new MlRespPayload().successPayload("user not found", code);
+        return response;
+      }
+      let code = 400;
+      let response = new MlRespPayload().successPayload("Successfully Updated user", code);
+      return response;
+    }
+  }catch(e){
+    let code = 400;
+    let response = new MlRespPayload().errorPayload(e.message, code);
+    return response;
+  }
 }

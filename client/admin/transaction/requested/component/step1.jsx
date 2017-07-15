@@ -173,14 +173,12 @@ export default class step1 extends React.Component{
   }
   optionBySelectinstitutionAssociation(val){
     this.setState({institutionAssociation:val.value})
-    return resp;
   }
   optionsBySelectTypeOfIndustry(value){
     this.setState({selectedTypeOfIndustry:value})
   }
   optionsBySelectTypeOfAccounts(value){
     this.setState({selectedAccountsType:value})
-    console.log(value);
   }
 
   optionsBySelectProfession(val){
@@ -278,12 +276,14 @@ export default class step1 extends React.Component{
 
   async updateRegistration(){
     const response= await this.updateregistrationInfo();
-    console.log(response);
-    if(response.success){
-      this.props.refetchRegistrationAndTemplates();
-      toastr.success("Saved Successfully")
-    }else{
-      toastr.error(response.result);
+    /**response should be there for success*/
+    if(response){
+      if(response.success){
+        this.props.refetchRegistrationAndTemplates();
+        toastr.success("Saved Successfully")
+      }else{
+        toastr.error(response.result);
+      }
     }
     return response;
   }

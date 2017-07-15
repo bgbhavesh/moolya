@@ -38,11 +38,19 @@ export default class MlCreateDiscussInternalTask extends React.Component {
       toastr.error("Select at least one user");
       return false;
     }
-
+    let members = this.state.members;
     let dataToInsert = {
       name : this.props.config.actionName,
       stage : this.props.data.props.currentStage.stageId,
-      attendees: this.state.selectedUser,
+      attendees: this.state.selectedUser.map(function (userId) {
+        let user = members.find(function (user) {
+          return user.userId == userId;
+        });
+        return {
+          userId: userId,
+          profileId: user.profileId
+        }
+      }),
       resourceId: this.props.data.state.selected.resourceId,
       community: {
         code: this.props.data.state.selected.portfolio.communityCode,

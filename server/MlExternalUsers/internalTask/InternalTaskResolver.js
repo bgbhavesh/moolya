@@ -3,6 +3,7 @@
  */
 import MlResolver from "../../commons/mlResolverDef";
 import MlRespPayload from "../../commons/mlPayload";
+import MlUserContext from "../../MlExternalUsers/mlUserContext";
 
 MlResolver.MlQueryResolver['fetchInternalTask'] = (obj, args, context, info) => {
   let internalTask = [];
@@ -19,12 +20,14 @@ MlResolver.MlQueryResolver['fetchInternalTask'] = (obj, args, context, info) => 
 MlResolver.MlQueryResolver['fetchMyInternalTask'] = (obj, args, context, info) => {
   let internalTask = [];
   if (context.userId) {
-    let query = {attendee: context.userId};
+    let userId = context.userId;
+    let profile = new MlUserContext(userId).userProfileDetails(userId);
+    let query = {attendee: userId, attendeeProfileId: profile.profileId};
     if(args.status && args.status.length) {
       query['status']= {
         '$in': args.status
       }
-    };
+    }
     internalTask = mlDBController.find('MlInternalTask', query).fetch();
     return internalTask
   } else {
@@ -36,10 +39,13 @@ MlResolver.MlQueryResolver['fetchMyInternalTask'] = (obj, args, context, info) =
 
 MlResolver.MlQueryResolver['fetchSelfCreatedInternalTask'] = (obj, args, context, info) => {
   let internalTask = [];
+  let userId = context.userId;
+  let profile = new MlUserContext(userId).userProfileDetails(userId);
   if (context.userId) {
     let query = {
       isSelfAssigned: true,
-      userId: context.userId
+      userId: context.userId,
+      attendeeProfileId: profile.profileId
     };
     if(args.status && args.status.length) {
       query['status']= {
@@ -63,7 +69,10 @@ MlResolver.MlQueryResolver['fetchInternalTaskById'] = (obj, args, context, info)
     if(internalTask.community.code == "IDE"){
       internalTask.client = mlDBController.findOne('MlIdeas', {portfolioId: internalTask.resourceId}).title;
     }
-    internalTask.userInfo = mlDBController.find('users', {_id: { $in:internalTask.attendees }}).fetch().map(function(user){
+    let attendees = internalTask.attendees.map(function (attendee) {
+      return attendee.userId
+    });
+    internalTask.userInfo = mlDBController.find('users', {_id: { $in: attendees }}).fetch().map(function(user){
       return {
         id: user._id,
         name: user.profile.displayName,
@@ -87,7 +96,8 @@ MlResolver.MlMutationResolver['createInternalTask'] = (obj, args, context, info)
         args.internalTask.attendees.forEach(function (attendee) {
           let dataToInsert = args.internalTask;
           dataToInsert.userId = context.userId;
-          dataToInsert.attendee = attendee;
+          dataToInsert.attendee = attendee.userId;
+          dataToInsert.attendeeProfileId = attendee.profileId;
           dataToInsert.isSelfAssigned = false;
           dataToInsert.status = 'pending';
           mlDBController.insert('MlInternalTask', dataToInsert , context);
@@ -108,9 +118,13 @@ MlResolver.MlMutationResolver['createInternalTask'] = (obj, args, context, info)
 };
 
 MlResolver.MlMutationResolver['createSelfInternalTask'] = (obj, args, context, info) => {
+  let userId = context.userId;
+  let profile = new MlUserContext(userId).userProfileDetails(userId);
   if(args.selfInternalTask){
       let dataToInsert = args.selfInternalTask;
       dataToInsert.userId = context.userId;
+      dataToInsert.attendee = context.userId;
+      dataToInsert.attendeeProfileId = profile.profileId;
       dataToInsert.createdAt = new Date();
       dataToInsert.status = 'pending';
       dataToInsert.isSelfAssigned = true;

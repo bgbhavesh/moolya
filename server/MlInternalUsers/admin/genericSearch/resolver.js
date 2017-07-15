@@ -824,6 +824,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
 
   if (args.module == "userTransaction") {
+    console.log(query, findOptions);
     let pipeline = [{
       '$match': {_id: context.userId}},
       {'$lookup': {from: 'mlRegistration',localField: '_id',foreignField: 'registrationInfo.userId',as: 'registration'}},
@@ -856,12 +857,30 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
         },
       }},
       {'$project': {data: { "$concatArrays" : [ "$registration", "$portfolio", "$office", "$transactionLog" ] } }},
+      {'$addFields': { 'data.totalRecords': { $size: "$data" } } },
       {"$unwind" : "$data"},
-      {"$replaceRoot": { newRoot: "$data" }}
-    ]
+      {"$replaceRoot": { newRoot: "$data"}}
+    ];
+
+    if(Object.keys(query).length) {
+      pipeline.push({$match: query});
+    }
+
+    if(findOptions.sort) {
+      pipeline.push({$sort:findOptions.sort});
+    }
+
+    if(findOptions.skip) {
+      pipeline.push({$skip:findOptions.skip});
+    }
+
+    if(findOptions.limit) {
+      pipeline.push({$limit:findOptions.limit});
+    }
+
     data = mlDBController.aggregate('users', pipeline, context);
     // data = _lodash.concat(response[0].R, response[0].P, response[0].O, response[0].T)
-    totalRecords = data.length
+    totalRecords = data && data[0] && data[0].totalRecords ? data[0].totalRecords : 0;
   }
   return {'totalRecords':totalRecords,'data':data};
 };

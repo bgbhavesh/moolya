@@ -3,8 +3,14 @@
  */
 import {MlViewer, MlViewerTypes} from "../../../../lib/common/mlViewer/mlViewer";
 import React from "react";
+import moment from "moment";
 import gql from "graphql-tag";
 import MlGenericTransactionAccordion from '../../commons/components/transactionAccordion/MlGenericTransactionAccordion'
+
+function dateFormatter (data){
+  let createdDateTime=data&&data.data&&data.data.createdAt?data.data.createdAt:null;
+  return <div>{createdDateTime&&moment(createdDateTime).format(Meteor.settings.public.dateFormat)}</div>;
+}
 
 const mlMyTransactionTableConfig = new MlViewer.View({
   name: "MyTransactionTable",
@@ -24,10 +30,10 @@ const mlMyTransactionTableConfig = new MlViewer.View({
     {dataField: "transactionId", title: "transactionId", 'isKey': true, isHidden: true},
     // {dataField: "transactionId", title: "Transaction Id", dataSort: true},
     {dataField: "transactionType", title: "Transaction Type", dataSort: true},
-    {dataField: "Created At", title: "createdAt", dataSort: true},
-    {dataField: "firstName", title: "firstName", dataSort: true},
-    {dataField: "lastName", title: "lastName", dataSort: true},
-    {dataField: "username", title: "username", dataSort: true}
+    {dataField: "createdAt", title: "Created At", dataSort: true, customComponent:dateFormatter},
+    {dataField: "firstName", title: "First Name", dataSort: true},
+    {dataField: "lastName", title: "Last Name", dataSort: true},
+    {dataField: "username", title: "Username", dataSort: true}
   ],
   tableHeaderClass: 'react_table_head',
   showActionComponent: false,

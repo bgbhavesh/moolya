@@ -1,18 +1,21 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import {logout} from "../../../../client/admin/layouts/header/actions/logoutAction";
+// import {fetchUserDetailsHandler} from "../../commons/actions/fetchUserDetails";
 var FontAwesome = require('react-fontawesome');
 
 
 export default class MlAppHeader extends Component {
   constructor(props, context) {
     super(props, context);
-    this.state = {}
+    this.regStatus = false;
+    // this.fetchUserDetails = this.fetchUserDetails.bind(this);
+    this.state = {loading: false,data: {}}
     return this;
   }
   componentDidUpdate(){
     var WinWidth = $(window).width();
-    if(WinWidth > 768){
+     if(WinWidth > 768){
     $(".app_menu,.app_main_wrap").mCustomScrollbar({theme:"minimal-dark"});
   }
   }
@@ -40,14 +43,42 @@ export default class MlAppHeader extends Component {
 
   }
 
+  /**fetching user details from registration*/
+  // componentWillMount(){
+  //   const resp = this.fetchUserDetails();
+  //   return resp
+  // }
+
+  /**this is having issues*/
+  // async fetchUserDetails() {
+  //   console.log('need to make server call')
+    // let response = await fetchUserDetailsHandler()
+    // console.log(response)
+    // if (response)
+    //   this.setState({data: response, loading:false})
+  // }
+
+  /**user logout function*/
   logoutUser() {
     logout();
   }
 
+  /**
+   * redirect to registration page
+   * */
+  registrationRedirect() {
+    FlowRouter.go("/app/register/");
+    // let pendingRegId = this.state.data ? this.state.data.pendingRegId : ''
+    // FlowRouter.go("/app/register/" + pendingRegId);
+  }
+
   render() {
+    // console.log(this.regStatus)
+    // const showLoader=this.state.loading;
     return (
       <div>
         <div className="overlay"></div>
+        {/*{showLoader===true?(<MlLoader/>):(*/}
         <div className="app_header">
           <a href="/app/dashboard" className="pull-left"><FontAwesome name='home'/></a>
           <a href="/app/dashboard"> <img className="moolya_app_logo" src="/images/logo.png"/></a>
@@ -61,12 +92,6 @@ export default class MlAppHeader extends Component {
               <li>
                 <a href="#">Thanks for the registration</a>
               </li>
-              {/*<li>*/}
-                {/*<a href="#">Messaggio di notifica 2 un po più lungo del normale</a>*/}
-              {/*</li>*/}
-              {/*<li>*/}
-                {/*<a href="#">Messaggio di notifica un po più lungo del normale</a>*/}
-              {/*</li>*/}
             </ul>
           </div>
           <div className="ml_app_profile" role="navigation">
@@ -76,9 +101,11 @@ export default class MlAppHeader extends Component {
               <li data-toggle="tooltip" title="My Profile" data-placement="right">
                 <a href="/app/myprofile"><img className="profile-img" src="/images/1.png"/></a>
               </li>
-              <li data-toggle="tooltip" title="Log as" data-placement="right">
-                <a href="#"><img className="profile-img" src="/images/2.png"/></a>
-              </li>
+              {/*{(this.state.data && !this.state.data.isAllowRegisterAs) ?*/}
+                {/*<li data-toggle="tooltip" title="Registration" data-placement="right">*/}
+                  {/*<a href="" onClick={this.registrationRedirect.bind(this)}><img className="profile-img"*/}
+                                                                                 {/*src="/images/2.png"/></a>*/}
+                {/*</li> : <div></div>}*/}
               <li data-toggle="tooltip" title="Switch Profile" data-placement="right">
                 <a href="/app/appSwitchProfile"><img className="profile-img" src="/images/3.png"/></a>
               </li>
@@ -100,7 +127,7 @@ export default class MlAppHeader extends Component {
             </ol>
           </div>
         </div>
-
+          {/*)}*/}
       </div>
     )
   }

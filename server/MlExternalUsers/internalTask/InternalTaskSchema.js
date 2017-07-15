@@ -20,15 +20,21 @@ let internalTaskSchema = `
       profileUrl: String
     }
     
+    type InternalTaskAttendees {
+      userId:String
+      profileId:String
+    }
+    
     type InternalTask {
         _id: String
         userId:String
         attendee: String
+        attendeeProfileId: String
         name: String
         stage: String
         resourceId: String
         community: InternalTaskCommunity
-        attendees: [String]
+        attendees: [InternalTaskAttendees]
         docs: [String]
         status: String
         note: String
@@ -44,19 +50,25 @@ let internalTaskSchema = `
       name: String
     }
     
+    input internalTaskAttendees {
+      userId:String
+      profileId:String
+    }
+    
     input internalTask {
-        _id: String
-        userId:String
-        attendee: String
-        name: String
-        stage: String
-        resourceId: String
-        community: internalTaskCommunity
-        attendees: [String]
-        docs: [String]
-        status: String
-        note: String
-        mode: String
+      _id: String
+      userId:String
+      attendee: String
+      attendeeProfileId: String
+      name: String
+      stage: String
+      resourceId: String
+      community: internalTaskCommunity
+      attendees: [internalTaskAttendees]
+      docs: [String]
+      status: String
+      note: String
+      mode: String
     }
     
     input selfInternalTask {

@@ -450,6 +450,7 @@ Accounts.validateLoginAttempt(function (user)
     //     user.allowed = false
     //     throw new Meteor.Error(403, "User account is inactive!");
     // }
+  //todo://need to show the notification of the verified email also in this condition
   if (user && !user.allowed) {
     let username = user.methodArguments[0].user ? user.methodArguments[0].user.username : ''
     let regData = MlRegistration.findOne({'registrationInfo.email': username, emails: {$elemMatch: {verified: false}}})

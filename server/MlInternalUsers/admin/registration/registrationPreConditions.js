@@ -19,7 +19,8 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
       chapterId=regRecord&&regRecord.registrationInfo?regRecord.registrationInfo.chapterId:null;
     }
 
-    if(!registrationType||registrationType&&registrationType==="BRW"){
+    /**validating true if community is BROWSER or OFFICE BEARER*/
+    if(!registrationType||registrationType&&(registrationType==="BRW" || registrationType==="OFB")){
       return {'isValid':true};
     }
 
@@ -189,5 +190,29 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
       return {'isValid':false,'validationResponse':response};
     }
     return {'isValid':true};
+  }
+
+  /**
+   * Method :: validateEmailVerification
+   * Desc   :: checks if email is verified
+   * @param registerDetails :: Object ::Registration Object
+   * @returns  {Object}
+   */
+  static validateEmailVerification(registerDetails) {
+    if (registerDetails && registerDetails.emails && registerDetails.emails.length > 0) {
+      let email = registerDetails.emails;
+      let emailVerified = _.find(email, function (mail) {
+        return mail.verified == true
+      });
+
+      if(emailVerified){
+            return {'isValid':true};
+      }
+      let response = new MlRespPayload().errorPayload("End user email verification not done", 556);
+      return {'isValid':false,'validationResponse':response};
+    }else{/** if email does not exist,return response*/
+    let response = new MlRespPayload().errorPayload("Atleast one email is required for registration",556);
+      return {'isValid':false,'validationResponse':response};
+    }
   }
 }

@@ -13,8 +13,8 @@ export default class MlPieChart extends React.Component {
   render() {
     let title = this.props.title?this.props.title:""
     let chartData = this.props.data?this.props.data:[]
-    let chartWidth = this.props.width?this.props.width:null
-    let chartHeight = this.props.height?this.props.height:null
+    let chartWidth = this.props.width?this.props.width:0
+    let chartHeight = this.props.height?this.props.height:0
     let chartSeries = this.props.chartSeries?this.props.chartSeries:[]
     let value = this.props.value?this.props.value:""
     let name = this.props.name?this.props.name:""

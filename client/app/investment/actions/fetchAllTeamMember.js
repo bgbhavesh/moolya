@@ -12,6 +12,7 @@ export async function fetchAllOfficeMembers(resourceType) {
           _id
           name
           userId
+          profileId
           profileImage
         }
       }

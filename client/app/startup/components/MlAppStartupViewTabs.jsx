@@ -12,6 +12,7 @@ import MlStartupViewTechnologies from "../../../admin/transaction/portfolio/comp
 import MlStartupViewAssets from "../../../admin/transaction/portfolio/component/StartupView/MlStartupViewAssets";
 import MlTabComponent from "../../../commons/components/tabcomponent/MlTabComponent";
 import PortfolioLibrary from "../../../commons/components/portfolioLibrary/PortfolioLibrary";
+import MlStartupViewCharts from "../../../admin/transaction/portfolio/component/StartupView/MlStartupViewCharts";
 import {appClient} from "../../core/appConnection";
 
 /**
@@ -102,7 +103,9 @@ export default class MlAppStartupViewTabs extends Component {
         component: <MlStartupViewInvestor key="3" portfolioDetailsId={this.props.portfolioDetailsId}
                                           getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
-      // {tabClassName: 'tab', panelClassName: 'panel', title:"Charts" , component:<MlIdeatorDetails key="5" getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab',
+        panelClassName: 'panel', title:"Charts" ,
+        component:<MlStartupViewCharts key="5" portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {
         tabClassName: 'tab',
         panelClassName: 'panel',

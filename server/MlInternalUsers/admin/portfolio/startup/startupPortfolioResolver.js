@@ -89,15 +89,15 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioAboutUs'] = (obj, args, context
   if (args.portfoliodetailsId) {
     let startAboutUsArray = {}
     let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-    startAboutUsArray["aboutUs"] = portfolio.aboutUs;
-    startAboutUsArray["clients"] = portfolio.clients;
-    startAboutUsArray["serviceProducts"] = portfolio.serviceProducts;
-    startAboutUsArray["information"] = portfolio.information;
-    startAboutUsArray["branches"] = portfolio.branches;
-    startAboutUsArray["technologies"] = portfolio.technologies;
-    startAboutUsArray["legalIssue"] = portfolio.legalIssue;
-    startAboutUsArray["rating"] = portfolio.rating;
-    startAboutUsArray["assets"] = portfolio.assets;
+    startAboutUsArray["aboutUs"] = portfolio&&portfolio.aboutUs?portfolio.aboutUs:{};
+    startAboutUsArray["clients"] = portfolio&&portfolio.clients?portfolio.clients:[];
+    startAboutUsArray["serviceProducts"] = portfolio&&portfolio.serviceProducts?portfolio.serviceProducts:{};
+    startAboutUsArray["information"] = portfolio&&portfolio.information?portfolio.information:{};
+    startAboutUsArray["branches"] = portfolio&&portfolio.branches?portfolio.branches:[];
+    startAboutUsArray["technologies"] = portfolio&&portfolio.technologies?portfolio.technologies:[];
+    startAboutUsArray["legalIssue"] = portfolio&&portfolio.legalIssue?portfolio.legalIssue:{};
+    startAboutUsArray["rating"] = portfolio&&portfolio.rating?portfolio.rating:null;
+    startAboutUsArray["assets"] = portfolio&& portfolio.assets?portfolio.assets:[];
 
     // if(startAboutUsArray && startAboutUsArray.clients){
     //   startAboutUsArray.clients.map(function(client,index) {
@@ -226,15 +226,15 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioCharts'] = (obj, args, context,
     startChartsArray["profitRevenueLiabilityChart"] = portfolio&&portfolio.profitRevenueLiabilityChart?portfolio.profitRevenueLiabilityChart:[];
     startChartsArray["reviewOfCompanyChart"] = portfolio&&portfolio.reviewOfCompanyChart?portfolio.reviewOfCompanyChart:[];
     startChartsArray["employeeBreakupDepartmentChart"] = portfolio&&portfolio.employeeBreakupDepartmentChart?portfolio.employeeBreakupDepartmentChart:[];
-   /* if(startChartsArray && startChartsArray.profitRevenueLiabilityChart){
-      startChartsArray.profitRevenueLiabilityChart.map(function(data,index) {
-        if(startChartsArray.profitRevenueLiabilityChart[index]){
-          let entityData = MlEntity.findOne({"_id":data.prlEntityType}) || "";
-          startChartsArray.profitRevenueLiabilityChart[index].prlEntityName = entityData.entityDisplayName || "";
+    if(startChartsArray && startChartsArray.employeeBreakupDepartmentChart){
+      startChartsArray.employeeBreakupDepartmentChart.map(function(data,index) {
+        if(startChartsArray.employeeBreakupDepartmentChart[index]){
+          let entityData = MlDepartments.findOne({"_id":data.ebdDepartment}) || {};
+          startChartsArray.employeeBreakupDepartmentChart[index].ebdDepartmentName = entityData.displayName || "";
         }
 
       })
-    }*/
+    }
     if (startChartsArray) {
       return startChartsArray
     }

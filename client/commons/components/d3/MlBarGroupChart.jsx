@@ -12,7 +12,7 @@ export default class MlBarGroupChart extends React.Component {
 
   render() {
     let title = this.props.title?this.props.title:""
-    let chartData = this.props.data?this.props.data:[]
+    let chartData = this.props.data&&this.props.data.length>0?this.props.data:[]
     let chartWidth = this.props.width
     let chartHeight = this.props.height
     let chartSeries = this.props.chartSeries?this.props.chartSeries:[]

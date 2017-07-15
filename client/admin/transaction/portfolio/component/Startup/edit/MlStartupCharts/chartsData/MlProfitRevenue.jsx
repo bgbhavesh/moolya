@@ -1,10 +1,11 @@
-import React from "react";
+import React, { Component, PropTypes }  from "react";
 import {render} from "react-dom";
 import Datetime from "react-datetime";
 import _ from 'lodash';
 import gql from "graphql-tag";
 import Moolyaselect from "../../../../../../../commons/components/MlAdminSelectWrapper";
 var Select = require('react-select');
+import ScrollArea from "react-scrollbar";
 
 export default class MlProfitRevenue extends React.Component{
   constructor(props, context){
@@ -17,6 +18,11 @@ export default class MlProfitRevenue extends React.Component{
       selectedObject:"default",
       revenuList : this.props.revenueDetails || []
     }
+  }
+
+  componentDidMount(){
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
   }
 
 
@@ -115,10 +121,14 @@ export default class MlProfitRevenue extends React.Component{
     }else{
       this.setState({selectedIndex:0})
     }
-   /* this.refs["prlFromYear"+index].val(" ")
-    this.refs["prlFromMonth"+index].val(" ")
-    this.refs["prlToYear"+index].val(" ")
-    this.refs["prlToMonth"+index].val(" ")*/
+    this.refs["prlFromMonth"+index].state.inputValue = ""
+    this.refs["prlFromYear"+index].state.inputValue = ""
+    this.refs["prlToMonth"+index].state.inputValue = ""
+    this.refs["prlToYear"+index].state.inputValue = ""
+    this.refs["prlValue"+index].value = ""
+    this.refs["prlabout"+index].value = ""
+    this.refs["pelValueType"+index].value = ""
+    this.refs["prlValue"+index].value = ""
 
   }
   onUpdateAction(){
@@ -128,6 +138,14 @@ export default class MlProfitRevenue extends React.Component{
       this.setState({selectedIndex:0})
     }
   }
+
+  componentWillMount(){
+    let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.profitRevenueLiabilityChart)
+    if(!empty){
+      this.setState({loading: false, startupCompanyRevenue: this.context.startupPortfolio.profitRevenueLiabilityChart, revenuList:this.context.startupPortfolio.profitRevenueLiabilityChart});
+    }
+  }
+
   /*onRemoveAction(index,e){
     let updatedData = this.state.startupCompanyRevenue || [];
     updatedData.splice(updatedData.indexOf(index), 1);
@@ -173,6 +191,13 @@ export default class MlProfitRevenue extends React.Component{
       {value: 'Amount', label: 'Amount'}
     ];
     return(<div>
+      <div className="main_wrap_scroll">
+        <ScrollArea
+          speed={0.8}
+          className="main_wrap_scroll"
+          smoothScrolling={true}
+          default={true}
+        >
       <div className="office-members-detail">
 
         <div className="form_inner_block">
@@ -306,7 +331,15 @@ export default class MlProfitRevenue extends React.Component{
 
         })}
       </div>
+        </ScrollArea>
+      </div>
 
     </div>)
   }
 }
+
+
+MlProfitRevenue.contextTypes = {
+  startupPortfolio: PropTypes.object,
+};
+

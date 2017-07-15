@@ -1,7 +1,8 @@
-import React from "react";
+import React, { Component, PropTypes }  from "react";
 import {render} from "react-dom";
 import Datetime from "react-datetime";
 import _ from 'lodash';
+import ScrollArea from "react-scrollbar";
 
 export default class MlCompanyReview extends React.Component{
   constructor(props, context){
@@ -14,6 +15,11 @@ export default class MlCompanyReview extends React.Component{
       selectedObject:"default",
       reviewList : this.props.reviewDetails || []
     }
+  }
+
+  componentDidMount(){
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
   }
 
 
@@ -81,7 +87,9 @@ export default class MlCompanyReview extends React.Component{
     }else{
       this.setState({selectedIndex:0})
     }
-
+    this.refs["rofYear"+index].state.inputValue = ""
+    this.refs["rofValue"+index].value = ""
+    this.refs["rofAbout"+index].value = ""
 
   }
   onUpdateAction(){
@@ -89,6 +97,13 @@ export default class MlCompanyReview extends React.Component{
       this.setState({selectedIndex:this.state.startupCompanyReview.length})
     }else{
       this.setState({selectedIndex:0})
+    }
+  }
+
+  componentWillMount(){
+    let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.reviewOfCompanyChart)
+    if(!empty){
+      this.setState({loading: false, startupCompanyReview: this.context.startupPortfolio.reviewOfCompanyChart, reviewList:this.context.startupPortfolio.reviewOfCompanyChart});
     }
   }
   /*onRemoveAction(index,e){
@@ -104,6 +119,13 @@ export default class MlCompanyReview extends React.Component{
     let employemntArray = this.state.reviewList&&this.state.reviewList.length>0?this.state.reviewList:[]
     let defaultIndex = employemntArray&&employemntArray.length>0?employemntArray.length:0
     return(<div>
+      <div className="main_wrap_scroll">
+        <ScrollArea
+          speed={0.8}
+          className="main_wrap_scroll"
+          smoothScrolling={true}
+          default={true}
+        >
       <div className="office-members-detail">
 
         <div className="form_inner_block">
@@ -166,7 +188,14 @@ export default class MlCompanyReview extends React.Component{
 
         })}
       </div>
+        </ScrollArea>
+      </div>
 
     </div>)
   }
 }
+
+MlCompanyReview.contextTypes = {
+  startupPortfolio: PropTypes.object,
+};
+

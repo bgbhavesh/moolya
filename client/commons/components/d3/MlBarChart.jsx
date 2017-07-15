@@ -12,10 +12,10 @@ export default class MlBarChart extends React.Component {
 
   render() {
     let title = this.props.title?this.props.title:""
-    let chartData = this.props.data?this.props.data:[]
+    let chartData = this.props.data&&this.props.data.length>0?this.props.data:[{year:null,number:null}]
     let chartWidth = this.props.width?this.props.width:null
     let chartHeight = this.props.height?this.props.height:null
-    let chartSeries = this.props.chartSeries?this.props.chartSeries:[]
+    let chartSeries = this.props.chartSeries&&this.props.chartSeries.length>0?this.props.chartSeries:[]
     let xScale = this.props.xScale?this.props.xScale:""
     let  employmentDataX = function(d) {
       return d.year;

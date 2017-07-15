@@ -219,11 +219,6 @@ let startupPortfolioSchema = `
         description:String, 
         isDescriptionPrivate :Boolean
     }
-   type chartsOutput{
-        fileType:String,
-        portfolioId:String,
-        isActive:Boolean
-    }
     type ratingOutput{,
         rating:String
         isRatingPrivate:Boolean

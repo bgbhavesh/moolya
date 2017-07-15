@@ -131,7 +131,7 @@ export default class MlAppMyProfile extends Component {
     console.log(resp);
     if(resp.success){
       this.setState({passwordState: 'Passwords match!'})
-      this.setState({passwordState: 'Passwords match!'})
+      /**comment of one state*/// this.setState({passwordState: 'Passwords match!'})
     }else{
       this.setState({passwordState: 'Passwords do not match'})
     }

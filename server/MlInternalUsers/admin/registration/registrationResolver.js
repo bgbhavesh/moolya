@@ -337,12 +337,12 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         return validationCheck.validationResponse;
       }
       /**
-       *Community Details are captured
+       *Community Details are captured or else for getting def code for (Browser and Office Bearer)
        */
       details.communityId = communityDetails._id;
       details.communityName = communityDetails.communityName || communityDef.name;
-      details.communityDefName = communityDetails.communityDefName;
-      details.communityDefCode = communityDetails.communityDefCode;
+      details.communityDefName = communityDetails.communityDefName || communityDef.name;
+      details.communityDefCode = communityDetails.communityDefCode || communityDef.code;
 
       details.identityType = details.identityType || null;
       details.transactionType = "registration";
@@ -355,20 +355,21 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
       //validate the registrationInfo for mandatory fields such as cluster chapter etc
       // updatedResponse= MlRegistration.update(id, {$set:  {registrationInfo:details,"registrationDetails.identityType":details.identityType,"registrationDetails.userType":details.userType }});
       /** Update the registration details like - registraionInfo and firstName,lastName,identityType,userType*/
-      updatedResponse = mlDBController.update('MlRegistration', id, {
+      let updateObj = {
         registrationInfo: details,
         "registrationDetails.firstName": details.firstName,
         "registrationDetails.lastName": details.lastName,
         "registrationDetails.identityType": details.identityType,
         "registrationDetails.userType": details.userType
-      }, {$set: true}, context)
+      }
+      if(_lodash.isMatch(details, {communityDefCode: 'OFB'}))
+        updateObj.status= 'Approved'
+      updatedResponse = mlDBController.update('MlRegistration', id, updateObj, {$set: true}, context)
 
       /** External User Profile Object*/
       var userProfile = {
         registrationId: id,
-        countryName: '',
         countryId: details.countryId,
-        cityName: '',
         cityId: details.cityId,
         mobileNumber: details.contactNumber,
         clusterId: details.clusterId,
@@ -381,22 +382,24 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         communityName: details.communityName,
         communityDefCode: details.communityDefCode,
         communityDefName: details.communityDefName,
+        accountType: details.accountType,
+        userType: details.userType || null,
+        identityType: details.identityType || null,
+        countryName: '',
+        cityName: '',
         communityType: '',
         isDefault: false,
         isActive: true,
         isApprove: false,
-        accountType: details.accountType,
-        optional: false,
-        userType: details.userType || null,
-        identityType: details.identityType || null
+        optional: false
       }
-      /** External User Profile Object*/
+      /** External User Profile Object if community is office breare make user default active*/
       let profile = {
         isInternaluser: false,
         isExternaluser: true,
         email: details.email,
         mobileNumber: details.contactNumber,
-        isActive: false,
+        isActive: (userProfile.communityDefCode=='OFB')?true:false,
         firstName: details.firstName,
         lastName: details.lastName,
         displayName: details.firstName + ' ' + details.lastName,
@@ -458,6 +461,15 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
                 'emails': userObject.emails
               }
             }, {'blackbox': true}, context);
+
+          /**if user is type Office brearer then update office members also*/
+          if(_lodash.isMatch(details, {communityDefCode: 'OFB'})){
+            let officeObj = {
+              registrationId: id,
+              officeMember: {userId: userId, profileId: userProfile.profileId}
+            }
+            MlResolver.MlMutationResolver['updateOfficeMemberOnReg'](obj, officeObj, context, info);
+          }
         }
       }
       /** This condition check is to update the userId in the registration record once the External User Profile is created*/

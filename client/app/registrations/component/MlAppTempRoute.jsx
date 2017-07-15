@@ -26,7 +26,7 @@ export default class MlAppTempRoute extends Component {
       this.setState({loading:false, register:response})
     }
   }
-  viewIdeatorDetails(regId, e){
+  fillRegistration(regId, e){
       FlowRouter.go('/app/register/'+regId)
   }
   render() {
@@ -40,14 +40,14 @@ export default class MlAppTempRoute extends Component {
                 return (
                   <div className="col-md-3 col-sx-3 col-sm-4 col-lg-3" key={idx}>
                     {/*<a href={ideatorListRoutes.ideatorDetailsRoute("ideator",ideator.ideas[0].portfolioId)}>*/}
-                    <a href='' onClick={that.viewIdeatorDetails.bind(that, reg.registrationId)}>
+                    <a href='' onClick={that.fillRegistration.bind(that, reg.registrationId)}>
                       <div className="ideators_list_block">
                         <div className="premium">
-                          <span>Click to enter</span>
+                          <span>{reg.registrationInfo?reg.registrationInfo.communityName:''}</span>
                         </div>
                       </div>
                       <div className="block_footer">
-                        <span>{reg.registrationId}</span>
+                        <span>{reg.registrationInfo?reg.registrationInfo.email:''}</span>
                       </div>
                     </a>
                   </div>

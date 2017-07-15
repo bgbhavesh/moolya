@@ -466,7 +466,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
           if(_lodash.isMatch(details, {communityDefCode: 'OFB'})){
             let officeObj = {
               registrationId: id,
-              officeMember: {userId: userId, profileId: userProfile.profileId}
+              officeMember: {userId: userId, profileId: userProfile.profileId, isActive:true}
             }
             MlResolver.MlMutationResolver['updateOfficeMemberOnReg'](obj, officeObj, context, info);
           }

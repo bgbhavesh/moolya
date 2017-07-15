@@ -150,7 +150,7 @@ MlResolver.MlQueryResolver['fetchOfficeMember'] = (obj, args, context, info) => 
         name: "$name",
         joiningDate: "$joiningDate",
         role: "$role",
-        isActive: "$users.profile.isActive",
+        isActive: "$isActive",
         isIndependent: "$isIndependent",
         isInternalUserInteraction: "$isInternalUserInteraction",
         isExternalUserInteraction: "$isExternalUserInteraction",
@@ -205,7 +205,8 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
         lastName: profile.lastName,
         name: profile.firstName + ' ' + profile.lastName,
         emailId: profile.email,
-        isPrincipal: true
+        isPrincipal: true,
+        isActive: true
       };
       let ret = mlDBController.insert('MlOfficeMembers', officeMemberData, context)
       // office Transaction record creation

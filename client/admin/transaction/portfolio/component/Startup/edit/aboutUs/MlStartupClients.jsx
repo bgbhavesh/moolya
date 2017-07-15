@@ -21,10 +21,10 @@ export default class MlStartupClients extends React.Component{
     this.state={
       loading: false,
       data:{},
-      startupClients:this.props.clientsDetails || [],
+      startupClients:this.props.employmentDetails || [],
       popoverOpen:false,
       selectedIndex:-1,
-      startupClientsList:this.props.clientsDetails || [],
+      startupClientsList:this.props.employmentDetails || [],
       selectedVal:null,
       selectedObject:"default"
     }

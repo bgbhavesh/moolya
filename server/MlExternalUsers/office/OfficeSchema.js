@@ -111,7 +111,16 @@ let myOfficeSchema = `
        _id: String
        name: String,
        userId: String
+       profileId: String
        profileImage: String
+    }
+    
+    type OfficeUserTypes{
+        _id:String,
+        name:String,
+        code: String,
+        displayName:String,
+        isActive:Boolean
     }
     
     input officeMembers{
@@ -136,6 +145,8 @@ let myOfficeSchema = `
        isFreeUser:Boolean,
        isPaidUser:Boolean,
        isAdminUser:Boolean
+       registrationId: String
+       profileId : String
     }
 
     input availableCommunities{
@@ -193,6 +204,7 @@ let myOfficeSchema = `
         getTeamUsers(officeId: String):[TeamMembersDetails]
         getTeamMembers:[AvailableCommunities]
         getBranchDetails:[BranchType]
+        getOfficeUserTypes:[OfficeUserTypes]
     }
     
     type Mutation{       
@@ -201,6 +213,8 @@ let myOfficeSchema = `
         updateOfficeMember(officeId:String,memberId:String, officeMember:officeMembers):response
         updateOffice(myOffice:myOffice, myOfficeId:String):response
         updateOfficeStatus(id:String):response
+        getMyOfficeRole(officeId: String!): response
+        updateOfficeMemberOnReg(registrationId: String, officeMember:officeMembers):response
     }
 `
 
@@ -211,9 +225,12 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], myOfficeSchema]);
   {api: 'fetchOffice', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
   {api: 'fetchOfficeSC', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
   {api: 'fetchOfficeById', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
-    {api:'getBranchDetails', actionName:'READ', moduleName:"OFFICE"},
-    {api:'getTeamMembers', actionName:'READ', moduleName:"OFFICE"},
-    {api:'getTeamUsers', actionName:'READ', moduleName:"OFFICE"},
+  {api: 'getMyOfficeRole', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
+  {api:'getBranchDetails', actionName:'READ', moduleName:"OFFICE"},
+  {api:'getTeamMembers', actionName:'READ', moduleName:"OFFICE"},
+  {api:'getTeamUsers', actionName:'READ', moduleName:"OFFICE"},
+  {api:'getOfficeUserTypes', actionName:'READ', moduleName:"OFFICE", isAppWhiteList:true},
+
   // {api: 'updateOfficeMembers', actionName: 'UPDATE', moduleName: "OFFICE"},
   {api: 'updateOffice', actionName: 'UPDATE', moduleName: "OFFICE"},
   {api: 'updateOfficeMember', actionName: 'UPDATE', moduleName: "OFFICE"},
@@ -222,6 +239,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], myOfficeSchema]);
   {api: 'fetchOfficeMembers', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
   {api: 'fetchOfficeMember', actionName: 'READ', moduleName: "OFFICE"},
   {api: 'fetchAllOfficeMembersWithUserId', actionName: 'READ', moduleName: "OFFICE"},
+  {api: 'updateOfficeMemberOnReg', actionName: 'UPDATE', moduleName: "OFFICE"},
 
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

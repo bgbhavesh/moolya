@@ -431,6 +431,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
         }
         const resp = await createLibrary(Details, this.props.client)
         this.refetchData();
+        this.getCentralLibrary();
         return resp;
   }
 
@@ -578,7 +579,8 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
         });
         let imageDelete = {
           index:index,
-          type:initialImageData.fileUrl
+          type:initialImageData.fileUrl,
+          libraryType:"image"
         }
         this.updateLibrary(imageDelete)
         break;
@@ -591,7 +593,8 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
         });
         let videoDelete = {
           index:index,
-          type:initialVideoData.fileUrl
+          type:initialVideoData.fileUrl,
+          libraryType:"video"
         }
         this.updateLibrary(videoDelete)
         break;
@@ -604,7 +607,8 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
         });
         let tempDelete = {
           index:index,
-          type:initialTemplateData.fileUrl
+          type:initialTemplateData.fileUrl,
+          libraryType:"template"
         }
         this.updateLibrary(tempDelete)
         break;
@@ -617,7 +621,8 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
         });
         let docDelete = {
           index:index,
-          type:initialDocumentData.fileUrl
+          type:initialDocumentData.fileUrl,
+          libraryType:"document"
         }
         this.updateLibrary(docDelete)
         break;
@@ -626,6 +631,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 
   async updateLibrary(files) {
     const  response = await updateLibraryData(files, this.props.client)
+    this.getCentralLibrary()
     return response;
   }
 

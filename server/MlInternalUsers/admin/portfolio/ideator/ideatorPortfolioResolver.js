@@ -561,19 +561,27 @@ MlResolver.MlQueryResolver['fetchLibrary'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['updateLibraryData'] = (obj, args, context, info) => {
-  let currentProfile = context.url.split("/")
-  let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: currentProfile [6]}, context)
-  var libraryData = mlDBController.find('MlLibrary', {userId: context.userId, isActive: true, 'portfolioReference.portfolioId': portfolio._id}, context).fetch();
-if(libraryData[args.files.index]){
-  libraryData[args.files.index].portfolioReference.map(function(data, id){
-    if(data.portfolioId === currentProfile[6]){
-      libraryData[args.files.index].portfolioReference.splice(id,1)
+  if(context.url.indexOf("transactions") > 0) {
+    let currentProfile = context.url.split("/")
+    let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: currentProfile [7]}, context)
+    var libraryData = mlDBController.find('MlLibrary', { isActive: true,userId:portfolio.userId, 'portfolioReference.portfolioId': portfolio._id}, context).fetch();
+    if(libraryData[args.files.index]){
+      libraryData[args.files.index].portfolioReference.map(function(data, id){
+        if(data.portfolioId === currentProfile[7]){
+          libraryData[args.files.index].portfolioReference.splice(id,1)
+        }
+      })
+      var updateTemplateCollection1 = mlDBController.update('MlLibrary', {_id: libraryData[args.files.index]._id},libraryData[args.files.index], {$set: 1}, context)
+      return updateTemplateCollection1
     }
-  })
-
-  var updateTemplateCollection1 = mlDBController.update('MlLibrary', {_id: libraryData[args.files.index]._id},libraryData[args.files.index], {$set: 1}, context)
-  return updateTemplateCollection1
-}
+  }else {
+    let libraryData = mlDBController.find('MlLibrary', {userId: context.userId, inCentralLibrary:true, libraryType:args.files.libraryType}, context).fetch()
+    if (libraryData[args.files.index]) {
+      libraryData[args.files.index].inCentralLibrary = false
+      var updateTemplateCollection1 = mlDBController.update('MlLibrary', {_id: libraryData[args.files.index]._id}, libraryData[args.files.index], {$set: 1}, context)
+      return updateTemplateCollection1
+    }
+  }
 }
 
 MlResolver.MlMutationResolver['putDataIntoTheLibrary'] = (obj, args, context, info) => {

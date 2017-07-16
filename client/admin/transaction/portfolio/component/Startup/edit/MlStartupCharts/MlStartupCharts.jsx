@@ -29,6 +29,8 @@ export default class MlStartupCharts extends React.Component{
 
   componentDidMount(){
     this.fetchPortfolioStartupChartDetails();
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
   }
 
   async fetchPortfolioStartupChartDetails() {
@@ -237,13 +239,11 @@ export default class MlStartupCharts extends React.Component{
     ]
 */
     let companyData = response&&response.employeeBreakupDepartmentChart?response.employeeBreakupDepartmentChart:[]
-    console.log("''''''''''''''''''''''''''''''''''");
-    console.log(companyData);
     var actualData = companyData&&companyData.length>0?companyData:[]
     var barChartData = [];
     actualData.map(function (data) {
       var cData = {}
-      cData['department'] = "Management"
+      cData['department'] = data&&data.ebdDepartmentName?data.ebdDepartmentName:""
       cData['employmentNumber'] = data&&data.ebdNumberOfEmployment?data.ebdNumberOfEmployment:""
       barChartData.push(cData)
     })
@@ -269,10 +269,14 @@ export default class MlStartupCharts extends React.Component{
       height = 400,
       margins = {left: 100, right: 100, top: 50, bottom: 50},
       employmentDataTitle = "Bar Chart with tooltip",
+      showXAxis = true,
+      showYAxis = true,
       employmentDataChartSeries = [
         {
           field: 'number',
-          name: 'Employment Of Company'
+          name: 'Employment Of Company',
+
+
         }
       ],
       employmentDataX = function(d) {
@@ -297,6 +301,10 @@ export default class MlStartupCharts extends React.Component{
       prlX = function(d) {
         return d.year;
       },
+        prlY = function(d) {
+          return d / 100;
+        },
+
       xScale = 'ordinal',
       yTicks = [1, "%"],
       prlXLabel = "Profit, Revenue & Liablity",
@@ -313,6 +321,9 @@ export default class MlStartupCharts extends React.Component{
       reviewX = function(d) {
         return d.year;
       },
+      reviewY = function(d) {
+        return d;
+      },
 
       title = "Pie Chart With Tooltip",
       // value accessor
@@ -322,9 +333,13 @@ export default class MlStartupCharts extends React.Component{
       // name accessor
       name = function(d) {
         return d && d.department;
-      },
+      };
+    let chartSeries = []
+      _.map(this.state.empBreakUpData, function (details,idx) {
+        chartSeries.push({"field" : details.department, "name":details.department})
+    });
 
-      chartSeries = [
+     /* chartSeries = [
         {
           "field":"Management",
           "name":"Management"
@@ -341,34 +356,63 @@ export default class MlStartupCharts extends React.Component{
           "field":"Support",
           "name":"Support"
         }
-      ]
+      ]*/
     return(
       <div>
-        <div className="ml_btn">
-          <a className="save_btn" onClick={this.selectedGraph.bind(this)}>Edit</a>
-        </div>
+
         {this.state.graphSelected===false?(<div>
-            <div><MlBarChart
+          <div className="main_wrap_scroll">
+            <ScrollArea
+              speed={0.8}
+              className="main_wrap_scroll"
+              smoothScrolling={true}
+              default={true}
+            >
+{/*
+            <div className="ml_btn">
+              <a className="save_btn" onClick={this.selectedGraph.bind(this)}>Edit</a>
+            </div>
+*/}
+
+            <div className="col-md-6">
+              <div className="chart_bg">
+                <a  onClick={this.selectedGraph.bind(this)}>Edit</a>
+                <MlBarChart
           title= {employmentDataTitle}
           data= {this.state.employmentData}
           width= {width}
           height= {height}
           xScale= {xScale}
           chartSeries = {employmentDataChartSeries}
+          showXAxis= {showXAxis}
+          showYAxis= {showYAxis}
         /></div>
-        <div>
-        <BarGroupTooltip
-          title= {prlTitle}
-          data= {this.state.prlData}
-          width= {width}
-          height= {height}
-          chartSeries = {prlChartSeries}
-          xScale= {xScale}
-          x= {prlX}
-          xLabel = {prlXLabel}
-          yLabel = {prlYLabel}
-        /></div>
-            <div><LineTooltip
+            </div>
+
+            <div className="col-md-6">
+              <div className="chart_bg">
+                <a  onClick={this.selectedGraph.bind(this)}>Edit</a>
+              <BarGroupTooltip
+                title= {prlTitle}
+                data= {this.state.prlData}
+                width= {width}
+                height= {height}
+                chartSeries = {prlChartSeries}
+                xScale= {xScale}
+                x= {prlX}
+                 y={prlY}
+                xLabel = {prlXLabel}
+                yLabel = {prlYLabel}
+                showXAxis= {showXAxis}
+                showYAxis= {showYAxis}
+              />
+            </div>
+            </div>
+              <br className="brclear"/>
+            <div className="col-md-6">
+              <div className="chart_bg">
+                <a  onClick={this.selectedGraph.bind(this)}>Edit</a>
+                <LineTooltip
               title= {reviewTitle}
               data= {this.state.reviewData}
               width= {width}
@@ -377,8 +421,14 @@ export default class MlStartupCharts extends React.Component{
               chartSeries= {reviewChartSeries}
               xScale= {xScale}
               x= {reviewX}
-            /></div>
-            <div><PieTooltip
+              y={reviewY}
+            />
+              </div></div>
+
+            <div className="col-md-6">
+              <div className="chart_bg">
+                <a  onClick={this.selectedGraph.bind(this)}>Edit</a>
+                <PieTooltip
               title= {title}
               data= {this.state.empBreakUpData}
               width= {width}
@@ -386,7 +436,10 @@ export default class MlStartupCharts extends React.Component{
               chartSeries= {chartSeries}
               value = {value}
               name = {name}
-            /></div>
+            />
+              </div></div>
+            </ScrollArea>
+          </div>
         </div>
           /*<MlLineChart
           title= {reviewTitle}

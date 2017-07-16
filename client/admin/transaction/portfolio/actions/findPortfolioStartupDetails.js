@@ -394,6 +394,7 @@ export async function fetchDetailsStartupChartsActionHandler(portfoliodetailsId)
                     ebdDepartment
                     ebdNumberOfEmployment
                     ebdAbout
+                    ebdDepartmentName
                     index
                 }
             }

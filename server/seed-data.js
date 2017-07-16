@@ -445,36 +445,38 @@ Accounts.validateLoginAttempt(function (user)
 {
 
     let isValid=false;
-
-    // if(user && user.user && user.user.profile && !user.user.profile.isActive){
-    //     user.allowed = false
-    //     throw new Meteor.Error(403, "User account is inactive!");
-    // }
-  //todo://need to show the notification of the verified email also in this condition
-  if (user && !user.allowed) {
+  /**checking possible condition of login attempt*/
+  if (user && !user.allowed && (user.error.reason == 'Incorrect password'))
+    throw new Meteor.Error(403, "Username or password incorrect");
+  else if (user && !user.allowed) {
+    /**if user is not present but available in registrations*/
     let username = user.methodArguments[0].user ? user.methodArguments[0].user.username : ''
-    let regData = MlRegistration.findOne({'registrationInfo.email': username, emails: {$elemMatch: {verified: false}}})
-    if (regData)
-      throw new Meteor.Error(403, "Email verification is pending");
-    else
-      throw new Meteor.Error(403, "User not found!");
+    let regData = MlRegistration.findOne({'registrationInfo.email': username})
+    if (regData) {
+      if (_.find(regData.emails, {verified: false}))
+        throw new Meteor.Error(403, "Email verification is pending");
+      else
+        throw new Meteor.Error(403, "Registration review in process, please contact moolya admin for any quaries");
+    }
   }
 
-    else if(user && user.user && user.user.profile && user.user.profile.isExternaluser){
-      let isAllowed= validateExternalUserLoginAttempt(user);
-      if(!isAllowed)throw new Meteor.Error(403, "User account is inactive!");
-      return true;
-    }
-    else if(user && user.user && user.user.profile && user.user.profile.isInternaluser){
-        if(user && user.user && user.user.profile && !user.user.profile.isActive){               //temporary moving here for external user
-          user.allowed = false
-          throw new Meteor.Error(403, "User account is inactive!");
-        }
-        return validateinternalUserLoginAttempt(user)
-    }
-
-
+  /**external user login attempt*/
+  else if (user && user.user && user.user.profile && user.user.profile.isExternaluser) {
+    let isAllowed = validateExternalUserLoginAttempt(user);
+    if (!isAllowed)throw new Meteor.Error(403, "User account is inactive!");
     return true;
+  }
+
+  /**internal user login attempt*/
+  else if (user && user.user && user.user.profile && user.user.profile.isInternaluser) {
+    if (user && user.user && user.user.profile && !user.user.profile.isActive) {
+      user.allowed = false
+      throw new Meteor.Error(403, "User account is inactive!");
+    }
+    return validateinternalUserLoginAttempt(user)
+  }
+
+  return true;
 });
 
 validateExternalUserLoginAttempt=(user)=>{

@@ -22,7 +22,11 @@ MlResolver.MlQueryResolver['fetchMyInternalTask'] = (obj, args, context, info) =
   if (context.userId) {
     let userId = context.userId;
     let profile = new MlUserContext(userId).userProfileDetails(userId);
-    let query = {attendee: userId, attendeeProfileId: profile.profileId};
+    let query = {
+      attendee: userId,
+      attendeeProfileId: profile.profileId,
+      isSelfAssigned: false
+    };
     if(args.status && args.status.length) {
       query['status']= {
         '$in': args.status

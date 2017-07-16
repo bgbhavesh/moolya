@@ -98,7 +98,9 @@ MlResolver.MlQueryResolver['fetchOfficeMembers'] = (obj, args, context, info) =>
 
 MlResolver.MlQueryResolver['fetchAllOfficeMembersWithUserId'] = (obj, args, context, info) => {
   let pipeline = [
-    { $match: { userId: context.userId } },
+    // { $match: { userId: context.userId } },
+    { $lookup: { from: "mlOffice", localField: "officeId", foreignField: "_id", as: "office" } },
+    { $match: { 'office.userId': context.userId } },
     { $lookup:
       {
         from: "users",
@@ -109,7 +111,7 @@ MlResolver.MlQueryResolver['fetchAllOfficeMembersWithUserId'] = (obj, args, cont
     },
     { $unwind:"$user"},
     { $match: { 'user.profile.isActive':true } },
-    { $project: {name:1, userId: '$user._id' , profileImage:'$user.profile.profileImage'} }
+    { $project: {name:1, profileId:1, userId: '$user._id' , profileImage:'$user.profile.profileImage'} }
   ];
   let response = mlDBController.aggregate('MlOfficeMembers', pipeline);
   return response;
@@ -150,7 +152,7 @@ MlResolver.MlQueryResolver['fetchOfficeMember'] = (obj, args, context, info) => 
         name: "$name",
         joiningDate: "$joiningDate",
         role: "$role",
-        isActive: "$users.profile.isActive",
+        isActive: "$isActive",
         isIndependent: "$isIndependent",
         isInternalUserInteraction: "$isInternalUserInteraction",
         isExternalUserInteraction: "$isExternalUserInteraction",
@@ -181,7 +183,7 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
     let scDefId = "";
     let scId = "";
     let officeDetails = args.myOffice;
-    let profile = new MlUserContext(userId).userProfileDetails(userId)
+    let profile = new MlUserContext(userId).userProfileDetails(userId);
     let isFunder = _.isMatch(profile, {communityDefCode: 'FUN'})
     if(isFunder){
       // office record creation
@@ -205,7 +207,8 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
         lastName: profile.lastName,
         name: profile.firstName + ' ' + profile.lastName,
         emailId: profile.email,
-        isPrincipal: true
+        isPrincipal: true,
+        isActive: true
       };
       let ret = mlDBController.insert('MlOfficeMembers', officeMemberData, context)
       // office Transaction record creation

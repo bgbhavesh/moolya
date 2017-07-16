@@ -1459,3 +1459,5 @@ button.close {
   position: fixed;
   top: 111px;
 }
+
+.chart_bg{background: #fff;border: 1px solid #ccc;margin-bottom: 29px;}

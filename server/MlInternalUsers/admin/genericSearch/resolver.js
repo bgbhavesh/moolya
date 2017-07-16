@@ -824,7 +824,6 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
 
   if (args.module == "userTransaction") {
-    console.log(query, findOptions);
     let pipeline = [{
       '$match': {_id: context.userId}},
       {'$lookup': {from: 'mlRegistration',localField: '_id',foreignField: 'registrationInfo.userId',as: 'registration'}},

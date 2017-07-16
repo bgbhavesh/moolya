@@ -3,6 +3,7 @@ import {render} from "react-dom";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../utils/formElemUtil";
 import {findServiceProviderAboutActionHandler} from "../../../actions/findPortfolioServiceProviderDetails";
 import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFormAction";
+import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 import _ from "lodash";
 import MlLoader from "../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
@@ -20,6 +21,7 @@ export default class MlServiceProviderAbout extends Component {
     this.onAboutImageFileUpload.bind(this)
     this.fetchPortfolioInfo.bind(this);
     this.fetchOnlyImages.bind(this);
+    this.libraryAction.bind(this);
   }
 
   componentWillMount() {
@@ -113,7 +115,7 @@ export default class MlServiceProviderAbout extends Component {
       portfolioDetailsId: this.props.portfolioDetailsId,
       portfolio: {about: {aboutImages: [{fileUrl: '', fileName: fileName}]}}
     };
-    let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, name, fileName));
+    let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, name, file));
   }
 
   async fetchOnlyImages() {
@@ -125,14 +127,30 @@ export default class MlServiceProviderAbout extends Component {
     }
   }
 
-  onFileUploadCallBack(name, fileName, resp) {
+  onFileUploadCallBack(name, file, resp) {
     if (resp) {
       let result = JSON.parse(resp)
+      let userOption = confirm("Do you want to add the file into the library")
+      if(userOption){
+        let fileObjectStructure = {
+          fileName: file.name,
+          fileType: file.type,
+          fileUrl: result.result,
+          libraryType: "image"
+        }
+        this.libraryAction(fileObjectStructure)
+      }
       if (result.success) {
         this.fetchOnlyImages();
       }
     }
   }
+
+    async libraryAction(file) {
+      let portfolioDetailsId = this.props.portfolioDetailsId;
+      const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
+      return resp;
+    }
 
   render() {
     const showLoader = this.state.loading;

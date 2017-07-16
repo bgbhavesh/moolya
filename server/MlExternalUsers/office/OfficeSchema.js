@@ -111,6 +111,7 @@ let myOfficeSchema = `
        _id: String
        name: String,
        userId: String
+       profileId: String
        profileImage: String
     }
     

@@ -271,6 +271,7 @@ let startupPortfolioSchema = `
       ebdNumberOfEmployment: Int
       ebdAbout: String
       index : Int
+      ebdDepartmentName:String
     }
         
    type chartsOutput{

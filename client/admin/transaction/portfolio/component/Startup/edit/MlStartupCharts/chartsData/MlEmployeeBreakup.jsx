@@ -1,9 +1,10 @@
-import React from "react";
+import React, { Component, PropTypes }  from "react";
 import {render} from "react-dom";
 import gql from "graphql-tag";
 import Moolyaselect from "../../../../../../../commons/components/MlAdminSelectWrapper";
 import Datetime from "react-datetime";
 import _ from 'lodash';
+import ScrollArea from "react-scrollbar";
 
 export default class MlEmployeeBreakup extends React.Component{
   constructor(props, context){
@@ -79,6 +80,20 @@ export default class MlEmployeeBreakup extends React.Component{
     })
   }
 
+  componentDidMount(){
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+  }
+
+
+  componentWillMount(){
+    let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.employeeBreakupDepartmentChart)
+    if(!empty){
+      this.setState({loading: false, startupCompanyData: this.context.startupPortfolio.employeeBreakupDepartmentChart, dataList:this.context.startupPortfolio.employeeBreakupDepartmentChart});
+    }
+  }
+
+
   sendDataToParent(index){
     if(index == null){
       this.setState({startupCompanyData:this.state.startupCompanyData})
@@ -98,6 +113,7 @@ export default class MlEmployeeBreakup extends React.Component{
           }
         }
         let newItem = _.omit(item, "__typename");
+         newItem = _.omit(item, "ebdDepartmentName");
         arr.push(newItem)
       })
       startupCompanyData = arr;
@@ -114,6 +130,14 @@ export default class MlEmployeeBreakup extends React.Component{
     }else{
       this.setState({selectedIndex:0})
     }
+    this.refs["ebdFromMonth"+index].state.inputValue = ""
+    this.refs["ebdFromYear"+index].state.inputValue = ""
+    this.refs["ebdToMonth"+index].state.inputValue = ""
+    this.refs["ebdToYear"+index].state.inputValue = ""
+    this.refs["ebdNumberOfEmployment"+index].value = ""
+    this.refs["ebdAbout"+index].value = ""
+    this.setState({"selectedVal" : ""})
+
     /* this.refs["prlFromYear"+index].val(" ")
      this.refs["prlFromMonth"+index].val(" ")
      this.refs["prlToYear"+index].val(" ")
@@ -148,6 +172,13 @@ export default class MlEmployeeBreakup extends React.Component{
     let departmentQuery=gql`query{ data:fetchDepartments{value:_id,label:departmentName}}`;
 
     return(<div>
+      <div className="main_wrap_scroll">
+        <ScrollArea
+          speed={0.8}
+          className="main_wrap_scroll"
+          smoothScrolling={true}
+          default={true}
+        >
       <div className="office-members-detail">
 
         <div className="form_inner_block">
@@ -220,13 +251,13 @@ export default class MlEmployeeBreakup extends React.Component{
                 </div>
                 <div className="form-group col-lg-6">
                   <div className="form-group col-md-6 col-sm-6">
-                    <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
+                    <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years" defaultValue={details.ebdFromYear}
                               inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
 
                               closeOnSelect={true} ref={"ebdFromYear"+idx} onBlur={that.handleFromYearChange.bind(that, idx)}/>
                   </div>
                   <div className="form-group col-md-6 col-sm-6">
-                    <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
+                    <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months" defaultValue={details.ebdFromMonth}
                               inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
 
                               closeOnSelect={true} ref={"ebdFromMonth"+idx} onBlur={that.handleFromMonthChange.bind(that, idx)}/>
@@ -237,13 +268,13 @@ export default class MlEmployeeBreakup extends React.Component{
 
                 <div className="form-group col-lg-6">
                   <div className="form-group col-md-6 col-sm-6">
-                    <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
+                    <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years" defaultValue={details.ebdToYear}
                               inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
 
                               closeOnSelect={true} ref={"ebdToYear"+idx} onBlur={that.handleToYearChange.bind(that, idx)}/>
                   </div>
                   <div className="form-group col-md-6 col-sm-6">
-                    <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
+                    <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months" defaultValue={details.ebdToMonth}
                               inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
 
                               closeOnSelect={true} ref={"ebdToMonth"+idx} onBlur={that.handleToMonthChange.bind(that, idx)}/>
@@ -266,6 +297,13 @@ export default class MlEmployeeBreakup extends React.Component{
         })}
       </div>
 
+        </ScrollArea>
+      </div>
+
     </div>)
   }
 }
+
+MlEmployeeBreakup.contextTypes = {
+  startupPortfolio: PropTypes.object,
+};

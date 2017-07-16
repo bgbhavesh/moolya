@@ -14,7 +14,7 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import { Modal, ModalHeader, ModalBody} from 'reactstrap';
 import {multipartASyncFormHandler} from '../../MlMultipartFormAction'
-import {createLibrary, fetchLibrary, updateLibraryData, updatePrivacyDetails} from '../../actions/mlLibraryActionHandler'
+import {createLibrary, fetchLibrary, updateLibraryData, updatePrivacyDetails, updateLibrary, fetchDataFromCentralLibrary} from '../../actions/mlLibraryActionHandler'
 import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 
@@ -49,6 +49,9 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
       explore: false,
       hideLock: false,
       popoverOpen:false,
+      popoverOpen2: false,
+      popoverOpen3: false,
+      popoverOpen4: false,
       myPortfolio: false
     };
 
@@ -66,25 +69,49 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
    */
 
   componentWillMount(){
+    this.getCentralLibrary()
     let portfolioId = FlowRouter.getRouteName();
     let path = FlowRouter.current().path
     if(path.indexOf("view")>0){
-      this.setState({explore : false, myPortfolio: true})
+      this.setState({explore : false})
     }
-    if(portfolioId !== "portfolio"){
-      this.setState({explore : true})
+    if(portfolioId !== "portfolio" || path.indexOf("view")>0){
+      this.setState({explore : true, myPortfolio: true})
     }
     if(portfolioId === "library"){
-      this.setState({explore : false})
-      this.setState({hideLock: true})
+      this.setState({explore : false, isLibrary: true, hideLock: true})
     }
     if(portfolioId === "transaction_portfolio_EditRequests"){
-      this.setState({explore : false})
+      this.setState({explore : false, isAdminEdit: true})
       this.setState({hideLock: true})
     }
     userId =  this.props.portfolioDetailsId?this.props.portfolioDetailsId: "";
     this.getLibraryDetails(userId);
   }
+
+    async getCentralLibrary(){
+    let that = this;
+    const resp =  await fetchDataFromCentralLibrary(this.props.client)
+      let images = [];
+      let videos = [];
+      let templates = [];
+      let documents = [];
+      resp.map(function (data) {
+        if (data.libraryType === "image") {
+          images.push(data)
+          that.setState({imageDetails: images})
+        } else if (data.libraryType === "video") {
+          videos.push(data)
+          that.setState({videoDetails: videos})
+        } else if (data.libraryType === "template") {
+          templates.push(data)
+          that.setState({templateDetails: templates})
+        } else if (data.libraryType === "document") {
+          documents.push(data)
+          that.setState({documentDetails: documents})
+        }
+      })
+    }
 
   /**
    * Method :: toggle
@@ -124,8 +151,8 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
    * @returns Void
    */
 
-  videoUpload() {
-    let file = document.getElementById("video_upload").files[0];
+  videoUpload(e) {
+    let file = e.target.files[0];
     this.setState({fileType:file.type,fileName:file.name });
     let fileType = file.type
     let typeShouldBe = _.compact(fileType.split('/'));
@@ -143,8 +170,8 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
    * @returns Void
    */
 
-  TemplateUpload(){
-    let file = document.getElementById("template_upload").files[0];
+  TemplateUpload(e){
+    let file = e.target.files[0];
     this.setState({fileType:file.type,fileName:file.name });
     let fileType = file.type
     let typeShouldBe = _.compact(fileType.split('/'));
@@ -162,8 +189,8 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
    * @returns Void
    */
 
-  documentUpload() {
-    let file = document.getElementById("document_upload").files[0];
+  documentUpload(e) {
+    let file = e.target.files[0];
     this.setState({fileType:file.type,fileName:file.name });
     let fileType = file.type
     let typeShouldBe = _.compact(fileType.split('/'));
@@ -193,19 +220,40 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
    * @returns Void
    */
 
-  toggleImageLock(id){
+  toggleImageLock(id) {
+    let currentPath = FlowRouter.current().path.split("/")
+    let currentPortfolioId = currentPath[4]
     let images = this.state.imageSpecifications;
-    let imageDetails = {
+    if (images[id].portfolioReference) {
+      let privacyState;
+      images[id].portfolioReference.map(function (data) {
+        if (data.portfolioId === currentPortfolioId) {
+          privacyState = data.isPrivate ? false : true
+        }
+      })
+      let imageDetails = {
         index: id,
-        element: images[id].isPrivate? false : true,
+        element: privacyState,
         type: "image"
+      }
+      this.dataPrivacyHandler(imageDetails)
+      this.refetchData();
+
+    }else{
+      let imageDetails = {
+        index: id,
+        element: true,
+        type: "image"
+      }
+      this.dataPrivacyHandler(imageDetails)
+      this.refetchData();
     }
-    this.dataPrivacyHandler(imageDetails)
-    let imageLock = this.state.imagesLock;
-    imageLock[id] = imageLock[id]? false : true;
-    this.setState({
-         imagesLock: imageLock
-    });
+      let imageLock = this.state.imagesLock;
+      imageLock[id] = imageLock[id] ? false : true;
+      this.setState({
+        imagesLock: imageLock
+      });
+
   }
 
   /**
@@ -216,14 +264,33 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
    */
 
   toggleTemplateLock(id){
+    let currentPath = FlowRouter.current().path.split("/")
+    let currentPortfolioId = currentPath[4]
     let templates = this.state.templateSpecifications;
-    let templatesLock = this.state.templatesLock;
-    let templateDetails = {
+    if (templates[id].portfolioReference) {
+      let privacyState;
+      templates[id].portfolioReference.map(function (data) {
+        if (data.portfolioId === currentPortfolioId) {
+          privacyState = data.isPrivate ? false : true
+        }
+      })
+      let templateDetails = {
         index: id,
-        element: templates[id].isPrivate? false : true,
+        element: privacyState,
         type: "template"
+      }
+      this.dataPrivacyHandler(templateDetails)
+      this.refetchData();
+    }else{
+      let templateDetails = {
+        index: id,
+        element: true,
+        type: "template"
+      }
+      this.dataPrivacyHandler(templateDetails)
+      this.refetchData();
     }
-    this.dataPrivacyHandler(templateDetails)
+    let templatesLock = this.state.templatesLock;
     templateLock[id] = templateLock [id] ? false : true;
     this.setState({
       templatesLock :templatesLock
@@ -238,14 +305,33 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 
 
   toggleVideoLock(id){
+    let currentPath = FlowRouter.current().path.split("/")
+    let currentPortfolioId = currentPath[4]
     let videos = this.state.videoSpecifications;
-    let videoLock = this.state.videosLock;
-    let videoDetails = {
+    if (videos[id].portfolioReference) {
+      let privacyState;
+      videos[id].portfolioReference.map(function (data) {
+        if (data.portfolioId === currentPortfolioId) {
+          privacyState = data.isPrivate ? false : true
+        }
+      })
+      let videoDetails = {
         index: id,
-        element: videos[id].isPrivate? false : true,
+        element: privacyState,
         type: "video"
+      }
+      this.dataPrivacyHandler(videoDetails)
+      this.refetchData();
+    }else{
+      let videoDetails = {
+        index: id,
+        element: true,
+        type: "video"
+      }
+      this.dataPrivacyHandler(videoDetails)
+      this.refetchData();
     }
-    this.dataPrivacyHandler(videoDetails)
+    let videoLock = this.state.videosLock;
     videoLock[id] = videoLock [id] ? false : true;
     this.setState({
          videosLock:videoLock
@@ -261,14 +347,33 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 
 
   toggleDocumentLock(id){
+    let currentPath = FlowRouter.current().path.split("/")
+    let currentPortfolioId = currentPath[4]
     let documents = this.state.documentSpecifications;
-    let documentsLock = this.state.documentsLock;
-    let documentDetails = {
+    if (documents[id].portfolioReference) {
+      let privacyState;
+      documents[id].portfolioReference.map(function (data) {
+        if (data.portfolioId === currentPortfolioId) {
+          privacyState = data.isPrivate ? false : true
+        }
+      })
+      let documentDetails = {
         index: id,
-        element: documents[id].isPrivate? false : true,
+        element: privacyState,
         type: "document"
+      }
+      this.dataPrivacyHandler(documentDetails)
+      this.refetchData();
+    }else{
+      let documentDetails = {
+        index: id,
+        element: true,
+        type: "document"
+      }
+      this.dataPrivacyHandler(documentDetails)
+      this.refetchData();
     }
-    this.dataPrivacyHandler(documentDetails)
+    let documentsLock = this.state.documentsLock;
     documentsLock[id] = documentsLock[id] ? false : true;
     this.setState({
          documentsLock:documentsLock
@@ -292,14 +397,19 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
       this.setState({uploadedData: resp});
       var link = $.parseJSON(this.state.uploadedData).result;
       this.setState({uploadedData: link});
+      if(!this.state.isLibrary) {
         let userOption = confirm("Do you want to add the file into the library")
         if (userOption) {
-          let addToCentralLibrary = true
-          this.storeData(link, type ,addToCentralLibrary )
-      }else{
-          let addToCentralLibrary = false
-          this.storeData(link, type ,addToCentralLibrary )
+          let addToCentralLibrary = true;
+          this.storeData(link, type, addToCentralLibrary)
+        } else {
+          let addToCentralLibrary = false;
+          this.storeData(link, type, addToCentralLibrary)
         }
+      }else {
+        let addToCentralLibrary = true ;
+        this.storeData(link, type, addToCentralLibrary)
+      }
     }
   }
 
@@ -317,7 +427,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
           fileUrl: link,
           fileType: this.state.fileType,
           libraryType: dataType,
-          inCentralLibrary: addToCentralLibrary
+          inCentralLibrary: addToCentralLibrary,
         }
         const resp = await createLibrary(Details, this.props.client)
         this.refetchData();
@@ -334,6 +444,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
   async getLibraryDetails(userId) {
     let that = this;
     const resp = await fetchLibrary(userId, this.props.client)
+    console.log(resp)
     let images = [];
     let videos = [];
     let templates = [];
@@ -341,7 +452,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
     resp.map(function (data) {
       if (data.libraryType === "image") {
         images.push(data)
-        that.setState({imageSpecifications: images})
+        that.setState({imageSpecifications: images, popImagesSpecifications: images})
       } else if (data.libraryType === "video") {
         videos.push(data)
         that.setState({videoSpecifications: videos})
@@ -388,6 +499,58 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
         popoverOpen: !this.state.popoverOpen
       });
     }
+    toggle2() {
+      this.setState({
+        popoverOpen: !this.state.popoverOpen1
+      });
+    }
+    toggle3() {
+      this.setState({
+        popoverOpen: !this.state.popoverOpen2
+      });
+    }
+    toggle4() {
+      this.setState({
+        popoverOpen: !this.state.popoverOpen3
+      });
+    }
+
+    sendDataToPortfolioLibrary(dataDetail, e) {
+    let tempObject = Object.assign({}, dataDetail);
+      if(dataDetail.libraryType === "image") {
+        let data = this.state.imageSpecifications || [];
+        data.push(tempObject);
+        this.setState({imageSpecifications: data})
+      }else if(dataDetail.libraryType === "video"){
+        let data = this.state.videoSpecifications || [];
+        data.push(tempObject);
+        this.setState({videoSpecifications : data})
+      }else if(dataDetail.libraryType === "template"){
+        let data = this.state.templateSpecifications || [];
+        data.push(tempObject);
+        this.setState({templateSpecifications : data})
+      }else if(dataDetail.libraryType === "document"){
+        let data = this.state.documentSpecifications || [];
+        data.push(tempObject);
+        this.setState({documentSpecifications  : data})
+      }
+      newItem = _.omit(tempObject, "__typename","_id")
+      let temp = newItem
+      if(newItem.portfolioReference){
+        let y = newItem.portfolioReference.map(function(data){
+          return _.omit(data,'__typename')
+        })
+        newItem.portfolioReference = y;
+        this.updateLibraryPortfolioLibrary(tempObject._id,newItem)
+      }else{
+        this.updateLibraryPortfolioLibrary(tempObject._id,newItem)
+      }
+    }
+
+    async updateLibraryPortfolioLibrary(id,data){
+      const resp = await updateLibrary(id,data, this.props.client)
+      return resp;
+    }
 
   componentDidMount(){
 
@@ -404,7 +567,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
     });
   }
 
-  delete(index, type) {
+  delete(index, type , location) {
     switch(type){
       case "image":
         let imageData = this.state.imageSpecifications;
@@ -413,7 +576,11 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
         this.setState({
              imageSpecifications: imageData
         });
-        this.updateLibrary(initialImageData.fileUrl)
+        let imageDelete = {
+          index:index,
+          type:initialImageData.fileUrl
+        }
+        this.updateLibrary(imageDelete)
         break;
       case "video":
         let videoData = this.state.videoSpecifications;
@@ -422,7 +589,11 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
         this.setState({
              videoSpecifications: videoData
         });
-        this.updateLibrary(initialVideoData.fileUrl)
+        let videoDelete = {
+          index:index,
+          type:initialVideoData.fileUrl
+        }
+        this.updateLibrary(videoDelete)
         break;
       case "template":
         let templateData = this.state.templateSpecifications;
@@ -431,7 +602,11 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
         this.setState({
              templateSpecifications: templateData
         });
-        this.updateLibrary(initialTemplateData.fileUrl)
+        let tempDelete = {
+          index:index,
+          type:initialTemplateData.fileUrl
+        }
+        this.updateLibrary(tempDelete)
         break;
       case "document":
         let documentData = this.state.documentSpecifications;
@@ -440,7 +615,11 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
         this.setState({
              documentSpecifications: documentData
         });
-        this.updateLibrary(initialDocumentData.fileUrl)
+        let docDelete = {
+          index:index,
+          type:initialDocumentData.fileUrl
+        }
+        this.updateLibrary(docDelete)
         break;
     }
   }
@@ -453,6 +632,15 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
     PopOverAction(){
       this.setState({popoverOpen : !(this.state.popoverOpen)})
     }
+    PopOverAction2(){
+      this.setState({popoverOpen2 : !(this.state.popoverOpen2)})
+    }
+    PopOverAction3(){
+      this.setState({popoverOpen3 : !(this.state.popoverOpen3)})
+    }
+    PopOverAction4(){
+      this.setState({popoverOpen4 : !(this.state.popoverOpen4)})
+    }
 
   render(){
     var videoJsOptions = [{
@@ -461,48 +649,58 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
       sources: [{src: this.state.previewVideo, type: 'video/mp4'}]
     }]
     let that = this;
-    let   imageData = this.state.imageSpecifications||[];
+    let   imageData = this.state.isLibrary?this.state.imageDetails || [] : this.state.imageSpecifications||[];
     const Images = imageData.map(function(show,id) {
       return(
         <div className="thumbnail"key={id}>
-          {that.state.explore ||that.props.isAdmin?" ":that.state.imagesLock[id] || show.isPrivate? !that.state.hideLock?<FontAwesome onClick={()=>that.toggleImageLock(id)} name='lock' />:"" :!that.state.hideLock? <FontAwesome onClick={()=>that.toggleImageLock(id)} name='unlock'/>:"" }
-          {that.state.explore ||that.props.isAdmin?"": <FontAwesome name='trash-o' onClick={()=>that.delete(id, "image")} />}
+          {that.state.explore ?" ":that.state.imagesLock[id]? !that.state.hideLock?<FontAwesome onClick={()=>that.toggleImageLock(id)} name='lock' />:"" :!that.state.hideLock? <FontAwesome onClick={()=>that.toggleImageLock(id)} name='unlock'/>:"" }
+          {that.state.explore ?"": <FontAwesome name='trash-o' onClick={()=>that.delete(id, "image", "portfolio")} />}
           <a href="#" data-toggle="modal" data-target=".imagepop" onClick={that.random.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
           <div id="images" className="title">{show.fileName}</div>
         </div>
       )
     });
-    let   popImageData = this.state.imageSpecifications||[];
+    let   popImageData = this.state.imageDetails||[];
     const popImages = popImageData.map(function(show,id) {
       if(show.inCentralLibrary){
       return(
         <div className="thumbnail"key={id}>
-          {that.state.explore ||that.props.isAdmin?" ":that.state.imagesLock[id] || show.isPrivate? !that.state.hideLock?<FontAwesome onClick={()=>that.toggleImageLock(id)} name='lock' />:"" :!that.state.hideLock? <FontAwesome onClick={()=>that.toggleImageLock(id)} name='unlock'/>:"" }
-          {that.state.explore ||that.props.isAdmin?"": <FontAwesome name='trash-o' onClick={()=>that.delete(id, "image")} />}
-          <a href="#" data-toggle="modal" data-target=".imagepop" onClick={that.random.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
+          {that.state.explore ?"": <FontAwesome name='trash-o' onClick={()=>that.delete(id, "image")} />}
+          <a href="#" data-toggle="modal"  onClick={that.sendDataToPortfolioLibrary.bind(that,show)} ><img src={show.fileUrl}/></a>
           <div id="images" className="title">{show.fileName}</div>
         </div>
       )}
     });
 
-    let   templateData =  this.state.templateSpecifications || [];
+    let   templateData =  this.state.isLibrary?this.state.templateDetails || [] : this.state.templateSpecifications || [];
     const Templates = templateData.map(function(show,id) {
-      return(
+        return(
         <div className="thumbnail"key={id}>
-          {that.state.explore || that.props.isAdmin?"":that.state.templatesLock[id] || show.isPrivate ?!that.state.hideLock? <FontAwesome onClick={()=>that.toggleTemplateLock(id)} name='lock' />:"" : !that.state.hideLock?<FontAwesome onClick={()=>that.toggleTemplateLock(id)} name='unlock'/>:"" }
-          {that.state.explore || that.props.isAdmin?"":  <FontAwesome name='trash-o' onClick={()=>that.delete(id, "template")} />}
+          {that.state.explore ?"":that.state.templatesLock[id] || show.isPrivate ?!that.state.hideLock? <FontAwesome onClick={()=>that.toggleTemplateLock(id)} name='lock' />:"" : !that.state.hideLock?<FontAwesome onClick={()=>that.toggleTemplateLock(id)} name='unlock'/>:"" }
+          {that.state.explore ?"":  <FontAwesome name='trash-o' onClick={()=>that.delete(id, "template")} />}
           <a href="#" data-toggle="modal" data-target=".templatepop" onClick={that.randomTemplate.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
           <div id="templates" className="title">{show.fileName}</div>
         </div>
       )
     });
 
-    let   videodata= this.state.videoSpecifications || [];
+    let   popTemplateData = this.state.templateDetails||[];
+    const popTemplates = popTemplateData.map(function(show,id) {
+      if(show.inCentralLibrary){
+        return(
+          <div className="thumbnail"key={id}>
+            <a href="#" data-toggle="modal"  onClick={that.sendDataToPortfolioLibrary.bind(that,show)} ><img src={show.fileUrl}/></a>
+            <div id="templates" className="title">{show.fileName}</div>
+          </div>
+        )}
+    });
+
+    let   videodata= this.state.isLibrary?this.state.videoDetails || [] : this.state.videoSpecifications || [];
     const videos = videodata.map(function(show,id){
       return(
         <div className="thumbnail" key={id}>
-          {that.state.explore || that.props.isAdmin?"":that.state.videosLock[id] || show.isPrivate ? !that.state.hideLock?<FontAwesome onClick={()=>that.toggleVideoLock(id)} name='lock' />:"" : !that.state.hideLock?<FontAwesome onClick={()=>that.toggleVideoLock(id)} name='unlock'/>:"" }
-          {that.state.explore || that.props.isAdmin?"": <FontAwesome name='trash-o' onClick={()=>that.delete(id, "video")} />}
+          {that.state.explore ?"":that.state.videosLock[id] || show.isPrivate ? !that.state.hideLock?<FontAwesome onClick={()=>that.toggleVideoLock(id)} name='lock' />:"" : !that.state.hideLock?<FontAwesome onClick={()=>that.toggleVideoLock(id)} name='unlock'/>:"" }
+          {that.state.explore ?"": <FontAwesome name='trash-o' onClick={()=>that.delete(id, "video")} />}
           <a href="" data-toggle="modal" data-target=".videopop" onClick={that.randomVideo.bind(that,show.fileUrl,id)}>
             <video width="120" height="100" controls>
               <source src={show.fileUrl}type="video/mp4"></source>
@@ -513,16 +711,38 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
       )
     });
 
-    let   documentData= this.state.documentSpecifications || [];
+    let   popVideoData = this.state.videoDetails||[];
+    const popVideos = popVideoData.map(function(show,id) {
+      if(show.inCentralLibrary){
+        return(
+          <div className="thumbnail"key={id}>
+            <a href="#" data-toggle="modal"  onClick={that.sendDataToPortfolioLibrary.bind(that,show)} ><img src={show.fileUrl}/></a>
+            <div id="templates" className="title">{show.fileName}</div>
+          </div>
+        )}
+    });
+
+    let   documentData= this.state.isLibrary?this.state.documentDetails || [] :  this.state.documentSpecifications || [];
     const Documents = documentData.map(function(show,id){
-      return(
+        return(
         <div className="thumbnail"key={id}>
-          {that.state.explore || that.props.isAdmin?" ":that.state.documentsLock[id] || show.isPrivate ?!that.state.hideLock? <FontAwesome onClick={()=>that.toggleDocumentLock(id)} name='lock' />:"" :!that.state.hideLock? <FontAwesome onClick={()=>that.toggleDocumentLock(id)} name='unlock'/>:"" }
-          {that.state.explore || that.props.isAdmin?"": <FontAwesome name='trash-o' onClick={()=>that.delete(id, "document")} />}
+          {that.state.explore ?" ":that.state.documentsLock[id] || show.isPrivate ?!that.state.hideLock? <FontAwesome onClick={()=>that.toggleDocumentLock(id)} name='lock' />:"" :!that.state.hideLock? <FontAwesome onClick={()=>that.toggleDocumentLock(id)} name='unlock'/>:"" }
+          {that.state.explore ?"": <FontAwesome name='trash-o' onClick={()=>that.delete(id, "document")} />}
           <a href="#" data-toggle="modal" data-target=".documentpop" onClick={that.randomDocument.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
           <div id="images" className="title">{show.fileName}</div>
         </div>
       )
+    });
+
+    let   popDocumentData = this.state.documentDetails||[];
+    const popDocuments= popDocumentData.map(function(show,id) {
+      if(show.inCentralLibrary){
+        return(
+          <div className="thumbnail"key={id}>
+            <a href="#" data-toggle="modal"  onClick={that.sendDataToPortfolioLibrary.bind(that,show)} ><img src={show.fileUrl}/></a>
+            <div id="templates" className="title">{show.fileName}</div>
+          </div>
+        )}
     });
     return (
       <div>
@@ -590,12 +810,12 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
               Images
               <div className="fileUpload upload_file_mask pull-right" id="create_client">
                 <a href="javascript:void(0);">
-                  {that.state.explore || that.props.isAdmin?"":<span className="ml ml-upload" onClick={that.PopOverAction.bind(that)}></span>}
+                  {that.state.explore ?"":this.state.isLibrary || this.state.isAdminEdit  ?<span className="ml ml-upload"><input type="file" className="upload_file upload" name="video_source" id="video_upload" onChange={that.ImageUpload.bind(that)}/></span>:<span className="ml ml-upload" onClick={that.PopOverAction.bind(that)}></span>}
                 </a>
               </div>
             </div>
                 <div className="panel-body">
-                  {Images}
+                  {this.state.isLibrary?popImages:Images}
                 </div>
           </div>
         </div>
@@ -603,16 +823,16 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
           <div className="panel panel-default">
             <div className="panel-heading">
               Videos
-              <div className="fileUpload upload_file_mask pull-right">
-                <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-                  {that.state.explore || that.props.isAdmin?"":<input type="file" className="upload_file upload" name="video_source" id="video_upload" onChange={that.videoUpload.bind(that)} />}
+              <div className="fileUpload upload_file_mask pull-right" id="create_video">
+                <a href="javascript:void(0);">
+                  {that.state.explore ?"":this.state.isLibrary || this.state.isAdminEdit  ?<span className="ml ml-upload"><input type="file" className="upload_file upload" name="video_source" id="video_upload" onChange={that.videoUpload.bind(that)}/></span>:<span className="ml ml-upload" onClick={that.PopOverAction2.bind(that)}></span>}
                 </a>
               </div>
             </div>
             <ul>
               <li>
                 <div className="panel-body">
-                  {videos}
+                  {this.state.isLibrary?popVideos:videos}
                 </div>
               </li>
             </ul>
@@ -623,29 +843,29 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
           <div className="panel panel-default">
             <div className="panel-heading">
               Templates
-              <div className="fileUpload upload_file_mask pull-right">
-                <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-                  {that.state.explore || that.props.isAdmin?"":<input type="file" className="upload_file upload" name="image_source" id="template_upload" onChange={that.TemplateUpload.bind(that)} />}
+              <div className="fileUpload upload_file_mask pull-right" id="create_template">
+                <a href="javascript:void(0);">
+                  {that.state.explore ?"":this.state.isLibrary || this.state.isAdminEdit ?<span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="template_upload" onChange={that.TemplateUpload.bind(that)}/></span>:<span className="ml ml-upload" onClick={that.PopOverAction3.bind(that)}></span>}
                 </a>
               </div>
             </div>
               <div className="panel-body">
-                {Templates}
+                {this.state.isLibrary?popTemplates:Templates}
               </div>
-        </div>
+          </div>
         </div>
         <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-right">
           <div className="panel panel-default">
             <div className="panel-heading">
               Documents
-              <div className="fileUpload upload_file_mask pull-right">
-                <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-                  {that.state.explore || that.props.isAdmin?"":<input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={that.documentUpload.bind(that)} />}
+              <div className="fileUpload upload_file_mask pull-right" id="create_document">
+                <a href="javascript:void(0);">
+                  {that.state.explore ?"":this.state.isLibrary || this.state.isAdminEdit ?<span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={that.documentUpload.bind(that)} /></span>:<span className="ml ml-upload" onClick={that.PopOverAction4.bind(that)}></span>}
                 </a>
               </div>
             </div>
                 <div className="panel-body">
-                  {Documents}
+                  {this.state.isLibrary?popDocuments:Documents}
                 </div>
           </div>
         </div>
@@ -665,6 +885,65 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
                   </div>
                 </div>
               </div>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
+        <Popover placement="bottom" isOpen={this.state.popoverOpen2} target={"create_video"} toggle2={this.toggle2}>
+          <PopoverTitle>Library</PopoverTitle>
+          <PopoverContent>
+            <div  className="ml_create_client">
+              <div className="medium-popover">
+                <div className="row">
+                  <div className="col-md-12">
+                    <div className="form-group">
+                      {popVideos}
+                      <div className="fileUpload mlUpload_btn">
+                        <span>Upload</span>
+                        <input type="file" className="upload_file upload" name="video_source" id="video_upload" onChange={that.videoUpload.bind(that)} />                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
+        <Popover placement="left" isOpen={this.state.popoverOpen3} target={"create_template"} toggle3={this.toggle3}>
+          <PopoverTitle>Library</PopoverTitle>
+          <PopoverContent>
+            <div  className="ml_create_client">
+              <div className="medium-popover">
+                <div className="row">
+                  <div className="col-md-12">
+                    <div className="form-group">
+                      {popTemplates}
+                      <div className="fileUpload mlUpload_btn">
+                        <span>Upload</span>
+                        <input type="file" className="upload" ref="upload" onChange={this.TemplateUpload.bind(this)}/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
+        <Popover placement="left" isOpen={this.state.popoverOpen4} target={"create_document"} toggle4={this.toggle4}>
+          <PopoverTitle>Library</PopoverTitle>
+          <PopoverContent>
+            <div  className="ml_create_client">
+              <div className="medium-popover">
+                <div className="row">
+                  <div className="col-md-12">
+                    <div className="form-group">
+                      {popDocuments}
+                      <div className="fileUpload mlUpload_btn">
+                        <span>Upload</span>
+                        <input type="file" className="upload" ref="upload" onChange={this.documentUpload.bind(this)}/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </PopoverContent>

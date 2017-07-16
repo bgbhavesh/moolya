@@ -340,9 +340,13 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
   try {
 
     /**checking if user already present in the users collectio*/
-    let isUserExist = mlDBController.findOne('users', {username: args.officeMember.emailId})
-    if (isUserExist) {
-      console.log('user already present')
+    let isUserRegExist = mlDBController.findOne('MlRegistration', { 'registrationInfo.email': args.officeMember.emailId});
+    let isUserExist = mlDBController.findOne('users', {username: args.officeMember.emailId});
+    if (isUserExist || isUserRegExist) {
+      console.log('user already present');
+      let code = 400;
+      let response = new MlRespPayload().errorPayload("User already present", code);
+      return response;
       // Send an invite to the Existing User
     }
     else {
@@ -372,7 +376,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
 
       /**attaching creator details to the office member details in the registration*/
       let profile = new MlUserContext(context.userId).userProfileDetails(context.userId)
-      let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName']);
+      let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'countryId']);
       let finalRegData = _.extend(registrationData, extendObj)
       orderNumberGenService.assignRegistrationId(finalRegData)
 

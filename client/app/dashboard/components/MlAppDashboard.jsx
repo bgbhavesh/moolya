@@ -2,9 +2,13 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import MapView from './MlMapView';
+// import {fetchPendingRegistration} from '../../registrations/actions/findRegistration'
 var FontAwesome = require('react-fontawesome');
-// import ActionButtons from '../../admin/views/actionButtons';
 export default class MlAppDashboard extends React.Component{
+  constructor(props){
+    super(props);
+    // this.fetchPendingReg.bind(this)
+  }
   componentDidMount()
   {
     $('.view_switch').click(function(){
@@ -36,6 +40,20 @@ export default class MlAppDashboard extends React.Component{
       }
     });
   }
+
+  /**registration mounting for the first login only*/
+  // componentWillMount(){
+  //   const resp = this.fetchPendingReg()
+  //   return resp
+  // }
+  //
+  // async fetchPendingReg() {
+  //   const response = await fetchPendingRegistration();
+  //   if(response && response.length>0){
+  //     FlowRouter.go('/app/register/'+response[0].registrationId)
+  //   }
+  // }
+
   render(){
     return (
       <div className="app_main_wrap">
@@ -195,7 +213,6 @@ export default class MlAppDashboard extends React.Component{
                 </div>
               </div>
             </div>
-            {/*<ActionButtons/>*/}
           </div>
         </div>
       </div>

@@ -336,6 +336,7 @@ let ideatorPortfolioSchema = `
       index: Int
       element: Boolean
       type: String
+      libraryType: String
     }
     
       input file{

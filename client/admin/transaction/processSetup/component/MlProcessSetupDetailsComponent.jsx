@@ -210,7 +210,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="User Id" value={that.state.data.userId} className="form-control float-label" readOnly="true"/>
+                  <input type="text" placeholder="User Id" value={that.state.data.profileId} className="form-control float-label" readOnly="true"/>
                 </div>
                 <div className="form-group ">
                   <input type="text" placeholder="Transaction Id" value={that.state.data.transactionId} className="form-control float-label"  readOnly="true"/>

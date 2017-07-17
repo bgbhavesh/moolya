@@ -21,24 +21,8 @@ export default class MlMapFooter extends React.Component {
     this.findAllUsers.bind(this);
     return this;
   }
-  componentWillReceiveProps(nextProp){
-    // let data = this.props.data;
-    // let activeData=[];
-    // if(data && this.props.mapContext.module=="users"){
-    //     activeData = _.filter(this.props.data, function(user) {
-    //       if(user.profile.isActive)
-    //         return user
-    //     });
-    //     this.setState({activeCount:activeData.length})
-    // }
-  }
 
   componentWillMount() {
-    // let data = this.props.data;
-    // if(data){
-    //   let activeData = _.filter(this.props.data,  {'isActive': true});
-    //   this.setState({activeCount:activeData.length,})
-    // }
 
     if(this.props.mapContext && this.props.mapContext.module!="users"){
       this.setState({loading:true})
@@ -60,7 +44,6 @@ export default class MlMapFooter extends React.Component {
     }
     if(response){
       let users = response ? response : []
-      // activeUsers = _.filter(users,  {'isActive': true});
       let activeUsers = _.filter(users, function(user) {
 
         if(user.profile.isActive)
@@ -73,10 +56,6 @@ export default class MlMapFooter extends React.Component {
 
   render() {
     let that = this;
-    // let context = true;
-    // if(that.state.module == "users"){
-    //   context = false;
-    // }
     let activeData=[];
     let data = that.props.data||[];
     if(data && that.props.mapContext.module=="users"){

@@ -32,7 +32,7 @@ let service=`
   }
   type TermsAndCondition {
      isCancelable: Boolean
-     isRefundable: Boolean
+     noOfDaysBeforeCancelation: Int
      isReschedulable: Boolean
      noOfReschedulable: Int
   }
@@ -71,12 +71,12 @@ let service=`
   
   type ServiceTaskSessions {
     id : String
-    sequence: Int 
+    sequence: String 
   }
   
   type ServiceTask {
     id : String
-    sequence: Int
+    sequence: String
     sessions: [ServiceTaskSessions]
   }
   
@@ -204,7 +204,7 @@ let service=`
 
    input termsAndCondition {
        isCancelable: Boolean
-       isRefundable: Boolean
+       noOfDaysBeforeCancelation: Int
        isReschedulable: Boolean
        noOfReschedulable: Int
    }
@@ -234,18 +234,18 @@ let service=`
   }
     
   input states{
-   id:String
+    id:String
     name:String
   }
   
   input serviceTaskSessions {
     id : String
-    sequence: Int 
+    sequence: String 
   }
   
   input serviceTask {
     id : String
-    sequence: Int
+    sequence: String
     sessions: [serviceTaskSessions]
   }
 

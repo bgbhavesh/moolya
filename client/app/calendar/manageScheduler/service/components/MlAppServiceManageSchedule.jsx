@@ -457,10 +457,10 @@ export default class MlAppServiceManageSchedule extends Component {
       if (serviceTask.selectedTaskDetails.session && serviceTask.selectedTaskDetails.session.length > 0) {
         let seqData = '';
         if (serviceDetails && serviceDetails.length > 0) {
-          seqData = serviceDetails[0]['sessions'][index].sequence;
           taskSequence = serviceDetails[0].sequence;
         }
         serviceTask.selectedTaskDetails.session.forEach((session, index) => {
+          seqData = serviceDetails[0]['sessions'][index].sequence;
           sessions.push({id: session.sessionId, sequence: (session.sequence || seqData)})
         });
       }

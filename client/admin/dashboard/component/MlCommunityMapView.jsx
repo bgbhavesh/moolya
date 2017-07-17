@@ -69,7 +69,7 @@ export default class MlCommunityMapView extends Component {
     // const data = this.state.data;
     if (userType) {
       //this.setState({userType: userType});
-      console.log(this.props);
+      // console.log(this.props);
       let variables={};
       let hasQueryOptions = this.props.config&&this.props.config.queryOptions ? true : false;
       if (hasQueryOptions) {

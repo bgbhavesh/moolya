@@ -52,11 +52,10 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
       popoverOpen2: false,
       popoverOpen3: false,
       popoverOpen4: false,
-      myPortfolio: false
+      myPortfolio: false,
     };
 
     this.toggle = this.toggle.bind(this);
-    this.toggle1 = this.toggle1.bind(this);
     this.refetchData.bind(this);
     this.updateLibrary.bind(this);
     this.dataPrivacyHandler.bind(this);
@@ -495,27 +494,6 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
     this.setState({previewTemplate:templatePreviewUrl});
   }
 
-    toggle1() {
-      this.setState({
-        popoverOpen: !this.state.popoverOpen
-      });
-    }
-    toggle2() {
-      this.setState({
-        popoverOpen: !this.state.popoverOpen1
-      });
-    }
-    toggle3() {
-      this.setState({
-        popoverOpen: !this.state.popoverOpen2
-      });
-    }
-    toggle4() {
-      this.setState({
-        popoverOpen: !this.state.popoverOpen3
-      });
-    }
-
     sendDataToPortfolioLibrary(dataDetail, e) {
     let tempObject = Object.assign({}, dataDetail);
       if(dataDetail.libraryType === "image") {
@@ -568,7 +546,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
     });
   }
 
-  delete(index, type , location) {
+  delete(index, type) {
     switch(type){
       case "image":
         let imageData = this.state.imageSpecifications;
@@ -635,48 +613,51 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
     return response;
   }
 
-    PopOverAction(){
-      this.setState({popoverOpen : !(this.state.popoverOpen)})
-    }
-    PopOverAction2(){
-      this.setState({popoverOpen2 : !(this.state.popoverOpen2)})
-    }
-    PopOverAction3(){
-      this.setState({popoverOpen3 : !(this.state.popoverOpen3)})
-    }
-    PopOverAction4(){
-      this.setState({popoverOpen4 : !(this.state.popoverOpen4)})
-    }
+    PopOverAction(type,e){
+      this.setState({popoverOpen : !(this.state.popoverOpen), target:type.id, toDisplay:type.toDisplay, placement:type.placement,title:type.title, file:type.title})
+      }
 
-  render(){
+  render() {
     var videoJsOptions = [{
       autoplay: true,
       controls: true,
       sources: [{src: this.state.previewVideo, type: 'video/mp4'}]
     }]
     let that = this;
-    let   imageData = this.state.isLibrary?this.state.imageDetails || [] : this.state.imageSpecifications||[];
-    const Images = imageData.map(function(show,id) {
-      return(
-        <div className="thumbnail"key={id}>
-          {that.state.explore ?" ":that.state.imagesLock[id]? !that.state.hideLock?<FontAwesome onClick={()=>that.toggleImageLock(id)} name='lock' />:"" :!that.state.hideLock? <FontAwesome onClick={()=>that.toggleImageLock(id)} name='unlock'/>:"" }
-          {that.state.explore ?"": <FontAwesome name='trash-o' onClick={()=>that.delete(id, "image", "portfolio")} />}
-          <a href="#" data-toggle="modal" data-target=".imagepop" onClick={that.random.bind(that,show.fileUrl,id)} ><img src={show.fileUrl}/></a>
+    let imageData = this.state.isLibrary ? this.state.imageDetails || [] : this.state.imageSpecifications || [];
+    const Images = imageData.map(function (show, id) {
+      return (
+        <div className="thumbnail" key={id}>
+          {that.state.explore ? " " : that.state.imagesLock[id] ? !that.state.hideLock ?
+            <FontAwesome onClick={() => that.toggleImageLock(id)} name='lock'/> : "" : !that.state.hideLock ?
+            <FontAwesome onClick={() => that.toggleImageLock(id)} name='unlock'/> : "" }
+          {that.state.explore ? "" :
+            <FontAwesome name='trash-o' onClick={() => that.delete(id, "image", "portfolio")}/>}
+          <a href="#" data-toggle="modal" data-target=".imagepop"
+             onClick={that.random.bind(that, show.fileUrl, id)}><img src={show.fileUrl}/></a>
           <div id="images" className="title">{show.fileName}</div>
         </div>
       )
     });
-    let   popImageData = this.state.imageDetails||[];
-    const popImages = popImageData.map(function(show,id) {
-      if(show.inCentralLibrary){
-      return(
-        <div className="thumbnail"key={id}>
-          {that.state.explore ?"": <FontAwesome name='trash-o' onClick={()=>that.delete(id, "image")} />}
-          <a href="#" data-toggle="modal"  onClick={that.sendDataToPortfolioLibrary.bind(that,show)} ><img src={show.fileUrl}/></a>
-          <div id="images" className="title">{show.fileName}</div>
-        </div>
-      )}
+    let popImageData = this.state.imageDetails || [];
+    const popImages = popImageData.map(function (show, id) {
+      if (show.inCentralLibrary) {
+        return (
+          <div className="thumbnail" key={id}>
+            {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "image")}/>}
+            <a href="#" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show)}><img
+              src={show.fileUrl}/></a>
+            <div id="images" className="title">{show.fileName}</div>
+          </div>
+        )
+      }
     });
+    let ImageDetails = {
+      id: "create_client",
+      toDisplay: popImages,
+      placement: "bottom",
+      title: "Images"
+    }
 
     let   templateData =  this.state.isLibrary?this.state.templateDetails || [] : this.state.templateSpecifications || [];
     const Templates = templateData.map(function(show,id) {
@@ -700,6 +681,13 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
           </div>
         )}
     });
+
+    let TemplateDetails = {
+      id: "create_template",
+      toDisplay: popTemplates,
+      placement: "left",
+      title: "Templates"
+    }
 
     let   videodata= this.state.isLibrary?this.state.videoDetails || [] : this.state.videoSpecifications || [];
     const videos = videodata.map(function(show,id){
@@ -728,6 +716,13 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
         )}
     });
 
+    let VideoDetails = {
+      id: "create_video",
+      toDisplay: popVideos,
+      placement: "bottom",
+      title: "Videos"
+    }
+
     let   documentData= this.state.isLibrary?this.state.documentDetails || [] :  this.state.documentSpecifications || [];
     const Documents = documentData.map(function(show,id){
         return(
@@ -750,6 +745,14 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
           </div>
         )}
     });
+
+    let DocumentDetails = {
+      id: "create_document",
+      toDisplay: popDocuments,
+      placement: "left",
+      title: "Documents"
+    }
+
     return (
       <div>
         <h2>Library</h2>
@@ -816,7 +819,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
               Images
               <div className="fileUpload upload_file_mask pull-right" id="create_client">
                 <a href="javascript:void(0);">
-                  {that.state.explore ?"":this.state.isLibrary || this.state.isAdminEdit  ?<span className="ml ml-upload"><input type="file" className="upload_file upload" name="video_source" id="video_upload" onChange={that.ImageUpload.bind(that)}/></span>:<span className="ml ml-upload" onClick={that.PopOverAction.bind(that)}></span>}
+                  {that.state.explore ?"":this.state.isLibrary || this.state.isAdminEdit  ?<span className="ml ml-upload"><input type="file" className="upload_file upload" name="video_source" id="video_upload" onChange={that.ImageUpload.bind(that)}/></span>:<span className="ml ml-upload" onClick={that.PopOverAction.bind(that, ImageDetails)}></span>}
                 </a>
               </div>
             </div>
@@ -831,7 +834,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
               Videos
               <div className="fileUpload upload_file_mask pull-right" id="create_video">
                 <a href="javascript:void(0);">
-                  {that.state.explore ?"":this.state.isLibrary || this.state.isAdminEdit  ?<span className="ml ml-upload"><input type="file" className="upload_file upload" name="video_source" id="video_upload" onChange={that.videoUpload.bind(that)}/></span>:<span className="ml ml-upload" onClick={that.PopOverAction2.bind(that)}></span>}
+                  {that.state.explore ?"":this.state.isLibrary || this.state.isAdminEdit  ?<span className="ml ml-upload"><input type="file" className="upload_file upload" name="video_source" id="video_upload" onChange={that.videoUpload.bind(that)}/></span>:<span className="ml ml-upload" onClick={that.PopOverAction.bind(that, VideoDetails)}></span>}
                 </a>
               </div>
             </div>
@@ -851,7 +854,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
               Templates
               <div className="fileUpload upload_file_mask pull-right" id="create_template">
                 <a href="javascript:void(0);">
-                  {that.state.explore ?"":this.state.isLibrary || this.state.isAdminEdit ?<span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="template_upload" onChange={that.TemplateUpload.bind(that)}/></span>:<span className="ml ml-upload" onClick={that.PopOverAction3.bind(that)}></span>}
+                  {that.state.explore ?"":this.state.isLibrary || this.state.isAdminEdit ?<span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="template_upload" onChange={that.TemplateUpload.bind(that)}/></span>:<span className="ml ml-upload" onClick={that.PopOverAction.bind(that, TemplateDetails)}></span>}
                 </a>
               </div>
             </div>
@@ -866,7 +869,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
               Documents
               <div className="fileUpload upload_file_mask pull-right" id="create_document">
                 <a href="javascript:void(0);">
-                  {that.state.explore ?"":this.state.isLibrary || this.state.isAdminEdit ?<span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={that.documentUpload.bind(that)} /></span>:<span className="ml ml-upload" onClick={that.PopOverAction4.bind(that)}></span>}
+                  {that.state.explore ?"":this.state.isLibrary || this.state.isAdminEdit ?<span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={that.documentUpload.bind(that)} /></span>:<span className="ml ml-upload" onClick={that.PopOverAction.bind(that,DocumentDetails)}></span>}
                 </a>
               </div>
             </div>
@@ -875,81 +878,25 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
                 </div>
           </div>
         </div>
-        <Popover placement="bottom" isOpen={this.state.popoverOpen} target={"create_client"} toggle1={this.toggle1}>
-          <PopoverTitle>Library</PopoverTitle>
+        <Popover placement={this.state.placement} isOpen={this.state.popoverOpen} target={this.state.target} >
+          <PopoverTitle>{this.state.title}</PopoverTitle>
           <PopoverContent>
             <div  className="ml_create_client">
               <div className="medium-popover">
                 <div className="row">
                  <div className="col-md-12">
                   <div className="form-group">
-                    {popImages}
+                    {this.state.toDisplay}
                     <div className="fileUpload mlUpload_btn">
                       <span>Upload</span>
-                      <input type="file" className="upload" ref="upload" onChange={this.ImageUpload.bind(this)}/>
+                      {this.state.file==="Images"?<input type="file" className="upload" ref="upload" onChange={this.ImageUpload.bind(this)}/>:
+                        this.state.file==="Videos"?<input type="file" className="upload_file upload" name="video_source" id="video_upload" onChange={that.videoUpload.bind(that)}/>:
+                          this.state.file==="Documents"?<input type="file" className="upload" ref="upload" onChange={this.documentUpload.bind(this)}/>:
+                            this.state.file==="Templates"?<input type="file" className="upload" ref="upload" onChange={this.TemplateUpload.bind(this)}/>:""}
                     </div>
                   </div>
                 </div>
               </div>
-              </div>
-            </div>
-          </PopoverContent>
-        </Popover>
-        <Popover placement="bottom" isOpen={this.state.popoverOpen2} target={"create_video"} toggle2={this.toggle2}>
-          <PopoverTitle>Library</PopoverTitle>
-          <PopoverContent>
-            <div  className="ml_create_client">
-              <div className="medium-popover">
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="form-group">
-                      {popVideos}
-                      <div className="fileUpload mlUpload_btn">
-                        <span>Upload</span>
-                        <input type="file" className="upload_file upload" name="video_source" id="video_upload" onChange={that.videoUpload.bind(that)} />                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </PopoverContent>
-        </Popover>
-        <Popover placement="left" isOpen={this.state.popoverOpen3} target={"create_template"} toggle3={this.toggle3}>
-          <PopoverTitle>Library</PopoverTitle>
-          <PopoverContent>
-            <div  className="ml_create_client">
-              <div className="medium-popover">
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="form-group">
-                      {popTemplates}
-                      <div className="fileUpload mlUpload_btn">
-                        <span>Upload</span>
-                        <input type="file" className="upload" ref="upload" onChange={this.TemplateUpload.bind(this)}/>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </PopoverContent>
-        </Popover>
-        <Popover placement="left" isOpen={this.state.popoverOpen4} target={"create_document"} toggle4={this.toggle4}>
-          <PopoverTitle>Library</PopoverTitle>
-          <PopoverContent>
-            <div  className="ml_create_client">
-              <div className="medium-popover">
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="form-group">
-                      {popDocuments}
-                      <div className="fileUpload mlUpload_btn">
-                        <span>Upload</span>
-                        <input type="file" className="upload" ref="upload" onChange={this.documentUpload.bind(this)}/>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </PopoverContent>

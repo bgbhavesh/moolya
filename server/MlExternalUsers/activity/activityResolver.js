@@ -163,11 +163,13 @@ MlResolver.MlQueryResolver['fetchActivitiesForTask'] = (obj, args, context, info
     userId:context.userId,
     profileId: task.profileId,
     isActive: true,
-    $or: [
-      {_id: {'$in': sessionQuery}},
-      {isCurrentVersion: true}
-    ]
-  };
+    $and:[{
+      $or: [
+        {_id: {'$in': sessionQuery}},
+        {isCurrentVersion: true}
+      ]
+    }]
+  }
 
   if( task.isInternal && !task.isExternal && !task.isServiceCardEligible ) {
     query.isInternal = true;
@@ -176,15 +178,23 @@ MlResolver.MlQueryResolver['fetchActivitiesForTask'] = (obj, args, context, info
     query.isExternal = true;
     query.isServiceCardEligible = false;
   } else if ( task.isInternal && task.isExternal && !task.isServiceCardEligible ) {
-    query["$or"].push({isInternal: true});
-    query["$or"].push({isExternal: true});
+    query["$and"].push({
+      $or: [
+        {isInternal: true},
+        {isExternal: true}
+      ]
+    });
     query.isServiceCardEligible = false;
   } else if ( !task.isInternal && task.isExternal && task.isServiceCardEligible ) {
     query.isExternal = true;
     query.isServiceCardEligible = true;
   } else if ( task.isInternal && task.isExternal && task.isServiceCardEligible ) {
-    query["$or"].push({isInternal: true});
-    query["$or"].push({isExternal: true});
+    query["$and"].push({
+      $or: [
+        {isInternal: true},
+        {isExternal: true}
+      ]
+    });
     query.isServiceCardEligible = true;
   }
 

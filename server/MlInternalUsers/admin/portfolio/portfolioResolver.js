@@ -239,6 +239,9 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
     return response;
 }
 
+/**
+ * portfolio approval to go live
+ * */
 MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {
     let updatedResponse;
@@ -250,7 +253,7 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
       updatedResponse = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {"status": "gone live"}, {$set: true}, context)
       if (updatedResponse) {
         let user = mlDBController.findOne('users', {_id: regRecord.userId}, context) || {};
-        let portfolioObject = _.pick(regRecord, ['userId','communityCode', 'clusterId', 'chapterId', 'subChapterId', 'communityId', 'clusterName', 'chapterName', 'subChapterName', 'communityName'])
+        let portfolioObject = _.pick(regRecord, ['userId','communityCode', 'clusterId', 'chapterId', 'subChapterId', 'communityId', 'clusterName', 'chapterName', 'subChapterName', 'communityName', 'profileId'])
         let extendObj = {
           "transactionType": "processSetup",
           "dateTime": new Date(),
@@ -263,6 +266,7 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
         let portfolioDetails = _.extend(portfolioObject, extendObj)
         // orderNumberGenService.assignPortfolioId(portfolioDetails)
 
+        /**if community is funder create process transaction by getting portfolio details*/
         if(_.isMatch(regRecord, {communityCode: 'FUN'})){
           MlResolver.MlMutationResolver['createProcessTransaction'](obj, {
             'portfoliodetails': portfolioDetails,

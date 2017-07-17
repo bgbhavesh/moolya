@@ -77,6 +77,7 @@ let investments = `
         chapterName     : String,
         subChapterName  : String,
         communityName   : String
+        profileId       : String
     }
     
     type PaymentDetails{
@@ -177,6 +178,7 @@ let investments = `
         communityName   : String
         username:String,
         name:String
+        profileId       : String
     }
     
     

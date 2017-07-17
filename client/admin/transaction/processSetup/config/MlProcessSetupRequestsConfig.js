@@ -10,8 +10,8 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   module:"processSetup",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["dateTime","userId","name", "clusterName", "chapterName", "subChapterName", "communityId", "status"],
-  searchFields:["dateTime","userId" ,"name" , "clusterName", "chapterName", "subChapterName", "communityId", "status"],
+  fields:["dateTime","profileId","name", "clusterName", "chapterName", "subChapterName", "communityId", "status"],
+  searchFields:["dateTime","profileId" ,"name" , "clusterName", "chapterName", "subChapterName", "communityId", "status"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   filter:false,
@@ -19,7 +19,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},
     {dataField: "dateTime", title: "Created Date",dataSort:true,selectRow:true},
-    {dataField: "userId", title: "UserId",dataSort:true,selectRow:true},
+    {dataField: "profileId", title: "UserId",dataSort:true,selectRow:true},
     {dataField: "name", title: "Name",dataSort:true,selectRow:true},
     {dataField: "transactionId", title: "Transaction Id",dataSort:true,selectRow:true},
     {dataField: "clusterName", title: "Cluster",dataSort:true,selectRow:true},
@@ -52,6 +52,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
                           name
                           username
                           userId
+                          profileId
                           status
                           transactionId
                           transactionType

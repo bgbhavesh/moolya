@@ -240,7 +240,7 @@ class MlAppServiceBasicInfo extends Component {
           </div>
         </ScrollArea>
         {!this.props.viewMode?<div className="ml_btn" style={{'textAlign':'center'}}>
-          <div className="save_btn" onClick={saveService}>Save</div>
+          <div className="save_btn" onClick={() => saveService(false)}>Save</div>
           <div className="cancel_btn">Cancel</div>
         </div>:""}
       </div>

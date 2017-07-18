@@ -17,6 +17,10 @@ export default class MlAppServicePayment extends React.Component{
     super(props);
   }
 
+  componentDidMount() {
+    this.props.getServiceDetails();
+  }
+
   componentDidUpdate() {
     MoolyaToggleSwitch(true, true);
   }

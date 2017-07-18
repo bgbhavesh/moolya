@@ -40,8 +40,9 @@ export default class MlStartupAboutUs extends React.Component{
 
   getStartUpState() {
     this.setState({aboutStartup: false})
-    $('.last-item').removeClass('menunone');
-    this.props.backClickHandler()
+    //$('.last-item').removeClass('menunone');
+    this.props.backClickHandler();
+
   }
 
   render(){

@@ -5,7 +5,6 @@ import AppLayout from "../../app/layouts/appLayout";
 import MlAppIdeatorTabs from "../../../client/app/ideators/components/MlAppIdeatorTabs";
 import MlAppCommunitiesList from "../../../client/app/commons/components/MlAppCommunitiesList";
 import MlAdminProfileHeader from "../../admin/layouts/header/MlAdminProfileHeader";
-import MlAppDashboard from "../../app/dashboard/components/MlAppDashboard";
 import MlPortfolioLanding from "../../app/commons/components/MlPortfolioLanding";
 import MlAppIdeatorAddIdea from "../../app/ideators/components/MlAppIdeatorAddIdea";
 import MlAppPortfolio from "../../app/commons/components/MlAppPortfolio";
@@ -24,6 +23,9 @@ import MlAppPayOfficeSubscription from "../../app/profile/office/components/MlAp
 import MlAppInvestment from "../../app/investment/components/MlAppInvestment";
 import MlAppMyTransaction from "../../app/myTransaction/component/MlAppMyTransaction";
 import {appClient} from '../../app/core/appConnection'
+import MlViews from '../../app/commons/view/MlAppViews'
+import {mlDashboardListConfig, mlDashboardMapConfig} from '../../app/dashboard/config/mlAppDashboardConfig'
+
 // import RegistrationWizard from "../../admin/transaction/requested/component/RegistrationWizard";
 import MlAppRegistrationWizard from "../../../client/app/registrations/component/MlAppRegistrationWizard";
 import MlAppTempRoute from "../../../client/app/registrations/component/MlAppTempRoute";
@@ -104,8 +106,8 @@ appSection.route('/dashboard/:isFirst', {
 appSection.route('/dashboard', {
   name: 'dashboard',
   action(){
-    // mount(AppLayout,{appContent:<MlViews showInfinity={true} mapConfig={mlBrowserDashboardMapConfig}/>})
-    mount(AppLayout,{appContent:<MlAppDashboard/>})
+    mount(AppLayout,{appContent:<MlViews showInfinity={true} mapConfig={mlDashboardMapConfig} listConfig={mlDashboardListConfig}/>})
+    // mount(AppLayout,{appContent:<MlAppDashboard/>})
   }
 });
 

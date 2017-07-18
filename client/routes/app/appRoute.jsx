@@ -89,9 +89,17 @@ export const appSection = FlowRouter.group({
 appSection.route('/', {
     triggersEnter: [function(context, redirect) {
         console.log('running /app trigger');
-        redirect("/app/dashboard");
+        redirect("/app/dashboard/"+ true);
     }]
 })
+
+/**if user login first time then passing content from URL*/
+appSection.route('/dashboard/:isFirst', {
+  name: 'dashboard',
+  action(params){
+    mount(AppLayout,{appContent:<MlAppDashboard/>, isFirst:(params.isFirst=='true'?true:false) })
+  }
+});
 
 appSection.route('/dashboard', {
   name: 'dashboard',

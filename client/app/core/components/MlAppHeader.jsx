@@ -51,11 +51,10 @@ export default class MlAppHeader extends Component {
 
   /**this is having issues*/
   async fetchUserDetails() {
-    console.log('need to make server call')
     let response = await fetchUserDetailsHandler()
-    console.log(response)
-    if (response)
+    if (response){
       this.setState({data: response, loading:false})
+    }
   }
 
   /**user logout function*/

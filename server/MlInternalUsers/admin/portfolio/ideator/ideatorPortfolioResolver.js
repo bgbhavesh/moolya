@@ -564,7 +564,7 @@ MlResolver.MlQueryResolver['fetchLibrary'] = (obj, args, context, info) => {
   if(context.url.indexOf("transactions") > 0) {
     let currentProfile = context.url.split("/")
     let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: currentProfile [7]}, context)
-    var libraryData = mlDBController.find('MlLibrary', { isActive: true,userId:portfolio.userId, 'portfolioReference.portfolioId': portfolio._id}, context).fetch();
+    var libraryData = mlDBController.find('MlLibrary', { isActive: true,userId:portfolio.userId, 'portfolioReference.portfolioId': portfolio._id, libraryType:args.files.libraryType}, context).fetch();
     if(libraryData[args.files.index]){
       libraryData[args.files.index].portfolioReference.map(function(data, id){
         if(data.portfolioId === currentProfile[7]){
@@ -584,7 +584,7 @@ MlResolver.MlQueryResolver['fetchLibrary'] = (obj, args, context, info) => {
   }else{
     let currentProfile = context.url.split("/")
     let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: currentProfile [6]}, context)
-    let libraryData = mlDBController.find('MlLibrary', { isActive: true,userId:portfolio.userId, 'portfolioReference.portfolioId': portfolio._id}, context).fetch();
+    let libraryData = mlDBController.find('MlLibrary', { isActive: true,userId:portfolio.userId, 'portfolioReference.portfolioId': portfolio._id, libraryType:args.files.libraryType}, context).fetch();
     if(libraryData[args.files.index]){
       libraryData[args.files.index].portfolioReference.map(function(data, id){
         if(data.portfolioId === currentProfile[6]){

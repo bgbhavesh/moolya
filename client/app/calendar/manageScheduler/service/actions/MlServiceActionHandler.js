@@ -42,7 +42,7 @@ export async function fetchServiceActionHandler (serviceId) {
         status
         termsAndCondition{
           isCancelable
-          isRefundable
+          noOfDaysBeforeCancelation
           isReschedulable
           noOfReschedulable
         }
@@ -97,7 +97,35 @@ export async function fetchServiceActionHandler (serviceId) {
     },
     forceFetch:true
   });
-  const service = result.data.findService;
+  const response = result.data.findService;
+  let service = _.omit(response, '__typename');
+  service.duration = _.omit(service.duration, '__typename');
+  service.payment = _.omit(service.payment, '__typename');
+  service.facilitationCharge = _.omit(service.facilitationCharge, '__typename');
+  let stateArray = [];
+  _.each(service.state, (item, say) => {
+    let value = _.omit(item, '__typename')
+    stateArray.push(value);
+  });
+  service.state = stateArray;
+  let cityArray = [];
+  _.each(service.city, (item, say) => {
+    let value = _.omit(item, '__typename')
+    cityArray.push(value)
+  });
+  service.city = cityArray;
+  let communityArray = [];
+  _.each(service.community, (item, say) => {
+    let value = _.omit(item, '__typename')
+    communityArray.push(value)
+  });
+  service.community = communityArray;
+  let taskArray = [];
+  _.each(service.tasks, (item, say) => {
+    let value = _.omit(item, '__typename')
+    taskArray.push(value)
+  });
+  service.tasks = taskArray;
   return service
 }
 
@@ -129,6 +157,7 @@ export async function fetchServicesActionHandler (profileId) {
     query($profileId:String) {
       fetchUserServices(profileId: $profileId) {
         displayName
+        profileId
         _id
       }
     }
@@ -201,11 +230,13 @@ query ($portfolioId: String) {
 }
 
 
-export async function fetchTaskDetailsForServiceCard (profileId) {
+export async function fetchTaskDetailsForServiceCard (profileId, serviceId) {
   const result = await appClient.query({
     query: gql`
-      query($profileId:String) {
-        fetchTaskDetailsForServiceCard(profileId: $profileId) {
+      query($profileId: String, $serviceId: String) {
+        fetchTaskDetailsForServiceCard(profileId: $profileId, serviceId: $serviceId) {
+          id: _id
+          name
           displayName
           noOfSession
           sessionFrequency
@@ -221,13 +252,20 @@ export async function fetchTaskDetailsForServiceCard (profileId) {
             }
             activities
           }
+          attachments {
+             name
+             info
+             isMandatory
+          }
         }
       }
     `,
     variables: {
-      profileId:profileId
+      profileId,
+      serviceId
     },
+    forceFetch: true
   });
   const taskDetails = result.data.fetchTaskDetailsForServiceCard;
-  return taskDetails
+  return taskDetails;
 }

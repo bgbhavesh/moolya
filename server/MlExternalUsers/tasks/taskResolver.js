@@ -163,7 +163,7 @@ MlResolver.MlQueryResolver['fetchTaskDetailsForServiceCard'] = (obj, args, conte
     let taskQuery = [];
     if (service.tasks && service.tasks.length > 0) {
       taskQuery = service.tasks.reduce(function(result, task) {
-        return result.concat(task._id);
+        return result.concat(task.id);
       }, []);
       taskQuery = _.uniq(taskQuery);
     }

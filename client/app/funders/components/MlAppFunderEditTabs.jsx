@@ -13,6 +13,7 @@ import MlFunderPrincipalTeam from '../../../admin/transaction/portfolio/componen
 import MlFunderSuccessStories from '../../../admin/transaction/portfolio/component/Funder/MlFunderSuccessStories'
 import MlFunderServices from '../../../admin/transaction/portfolio/component/Funder/MlFunderServices'
 import FunderCreateServicesView from '../../../admin/transaction/portfolio/component/Funder/funderCreateServicesView'
+import MlBeSpokeListView from '../../../admin/transaction/portfolio/component/Funder/MlFunderBeSpokeCreation'
 import {appClient} from '../../core/appConnection'
 
 export default class MlAppFunderEditTabs extends React.Component{
@@ -56,7 +57,7 @@ export default class MlAppFunderEditTabs extends React.Component{
       {tabClassName: 'tab', panelClassName: 'panel', title:"Success Stories" , component:<MlFunderSuccessStories client={appClient} isAdmin={false} key="7" getSuccessStoriesDetails={this.getSuccessStoriesDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<PortfolioLibrary client={appClient} isAdmin={false} key="8" getFunderLibrary={this.getFunderLibrary.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"News" , component:<MlFunderNews client={appClient} isAdmin={false} key="9" getFunderNewsDetails={this.getFunderNewsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Services" , component:<FunderCreateServicesView client={appClient} isAdmin={false} key="10" getServiceDetails={this.getServiceDetails.bind(this)}  portfolioDetailsId={this.props.portfolioDetailsId}/>} //getFunderServicesDetails={this.getFunderServicesDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Services" , component:<MlBeSpokeListView client={appClient} isAdmin={false} key="10" getServiceDetails={this.getServiceDetails.bind(this)}  portfolioDetailsId={this.props.portfolioDetailsId}/>} //getFunderServicesDetails={this.getFunderServicesDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}
     ]
     return tabs;
   }

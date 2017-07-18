@@ -449,7 +449,8 @@ const mapClusterHOC =compose(
     ),
     // describe events
     withHandlers({
-      onChange: ({setMapProps}) => ({center, zoom, bounds}) => {
+      onChange: ({setMapProps, getBounds}) => ({center, zoom, bounds}) => {
+        getBounds({ center, zoom, bounds });
         setMapProps({ center, zoom, bounds });
       },
       onChildMouseEnter: ({setHoveredMarkerId}) => (hoverKey, {id}) => {

@@ -9,25 +9,36 @@ var extendify = require('extendify');
 var _ = require('lodash');
 
 MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => {
-  let query = {
-    userId: context.userId,
-    profileId:args.profileId,
-    isCurrentVersion: true
-  };
-  let result = mlDBController.find('MlService', query , context).fetch()
-  return result;
+  let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: args.profileId}, context)
+  if(portfolio){
+    let query = {
+      userId: portfolio.userId,
+      profileId:portfolio.profileId,
+    };
+    let result = mlDBController.find('MlService', query , context).fetch()
+    return result;
+  }else {
+    let query = {
+      userId: context.userId,
+      profileId: args.profileId,
+      isCurrentVersion: true
+    };
+    let result = mlDBController.find('MlService', query, context).fetch()
+    return result;
+  }
 }
 
 MlResolver.MlQueryResolver['findService'] = (obj, args, context, info) => {
   let result = mlDBController.findOne('MlService', {_id: args.serviceId} , context);
   if (result) {
-    let query = {
-      transactionId: result.transactionId,
-      isCurrentVersion: true
-    };
-    let service = mlDBController.findOne('MlService', query, context);
-    return service;
-  } else  {
+    // let query = {
+    //   transactionId: result.transactionId,
+    //   isCurrentVersion: true
+    // };
+    // let service = mlDBController.findOne('MlService', query, context);
+    return result;
+  }
+  else  {
     let code = 404;
     let response = new MlRespPayload().successPayload('Service not found', code);
     return response;
@@ -64,11 +75,25 @@ MlResolver.MlMutationResolver['updateService'] = (obj, args, context, info) => {
         let taskIds = args.Services.tasks.map(function (task) { return task.id; });
         let tasks = mlDBController.find('MlTask', {_id: { $in : taskIds } }, context).fetch();
         let taskAmount = 0;
+        let noOfSession = 0;
         let taskDerivedAmount = 0;
         tasks.forEach(function (task) {
+          noOfSession += task.noOfSession ? task.noOfSession : 0;
           taskAmount += task.payment && task.payment.amount ? task.payment.amount : 0;
           taskDerivedAmount += task.payment && task.payment.derivedAmount ? task.payment.derivedAmount : 0;
         });
+        let totalMinutes = tasks.reduce((sum, value) => {
+          let duration = value.duration ? value.duration : {};
+          return sum + (duration.hours ? duration.hours : 0)*60 + ( duration.minutes ? duration.minutes : 0 ) ;
+        }, 0);
+        let duration = {
+          hours: parseInt(totalMinutes/60),
+          minutes: totalMinutes % 60
+        };
+        args.Services.duration = args.Services.duration ? args.Services.duration : {};
+        args.Services.duration['hours'] = duration.hours;
+        args.Services.duration['minutes'] = duration.minutes;
+        args.Services.noOfSession = noOfSession;
         args.Services.payment = args.Services.payment ? args.Services.payment : {};
         args.Services.payment["tasksAmount"] = taskAmount;
         args.Services.payment["tasksDiscount"] = taskAmount - taskDerivedAmount;

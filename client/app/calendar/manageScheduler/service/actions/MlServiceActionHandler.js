@@ -97,7 +97,7 @@ export async function fetchServiceActionHandler (serviceId) {
     },
     forceFetch:true
   });
-  const response = result.data.findService;
+  var response = result.data.findService;
   let service = _.omit(response, '__typename');
   service.duration = _.omit(service.duration, '__typename');
   service.payment = _.omit(service.payment, '__typename');
@@ -266,6 +266,19 @@ export async function fetchTaskDetailsForServiceCard (profileId, serviceId) {
     },
     forceFetch: true
   });
-  const taskDetails = result.data.fetchTaskDetailsForServiceCard;
-  return taskDetails;
+  var taskDetails = result.data.fetchTaskDetailsForServiceCard;
+  let tasks = [];
+  let taskArray = [];
+  _.each(taskDetails, (task, say) => {
+    let sessionArray = [];
+    let taskInfo =  _.omit(task, '__typename');
+    _.each(taskInfo.session, (item, say) => {
+      let value = _.omit(item, '__typename');
+      sessionArray.push(value)
+    });
+    taskInfo.session = sessionArray;
+    taskArray.push(taskInfo);
+  });
+  tasks = taskArray;
+  return tasks;
 }

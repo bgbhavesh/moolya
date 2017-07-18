@@ -63,8 +63,8 @@ export default class MlAppServiceManageSchedule extends Component {
       {value: 'Daily', label: 'Daily'},
       {value: 'Monthly', label: 'Monthly'}
     ];
-    this.profileId = FlowRouter.getParam('profileId');
-    this.serviceId = FlowRouter.getQueryParam('id');
+    this.profileId = FlowRouter.getParam('profileId') || this.props.profileId;
+    this.serviceId = FlowRouter.getQueryParam('id')|| this.props.serviceId;
     this.getServiceDetails = this.getServiceDetails.bind(this);
     this.saveService = this.saveService.bind(this);
     this.onChangeFormField = this.onChangeFormField.bind(this);
@@ -120,7 +120,7 @@ export default class MlAppServiceManageSchedule extends Component {
     } = this.state;
     let steps = [
       {
-        name: 'Create',
+        name: !this.props.viewMode?'Create':'View',
         component: <MlAppServiceBasicInfo data={serviceBasicInfo}
                                           clusterCode={clusterCode}
                                           clusterName={clusterName}
@@ -135,17 +135,19 @@ export default class MlAppServiceManageSchedule extends Component {
                                           options={this.options}
                                           checkBoxHandler={this.checkBoxHandler}
                                           validTill={this.validTill}
+                                          viewMode={this.props.viewMode}
                                           setSessionFrequency={this.setSessionFrequency}
                                           onChangeFormField={this.onChangeFormField}/>,
         icon: <span className="ml fa fa-plus-square-o"></span>
       },
       {
-        name: 'Select Tasks',
+        name: !this.props.viewMode?'Select Tasks':'Tasks',
         component: <MlAppServiceSelectTask serviceTask={serviceTask}
                                            profileId={this.profileId}
                                            serviceId={this.serviceId}
                                            getServiceDetails={this.getServiceDetails}
                                            saveService={this.saveService}
+                                           viewMode={this.props.viewMode}
                                            optionsBySelectService={this.optionsBySelectService}
                                            updateSessionSequence={this.updateSessionSequence}
         />,
@@ -155,6 +157,7 @@ export default class MlAppServiceManageSchedule extends Component {
         name: 'Terms & Conditions',
         component: <MlAppServiceTermsAndConditions serviceTermAndCondition={serviceTermAndCondition}
                                                    attachments={attachments}
+                                                   viewMode={this.props.viewMode}
                                                    onChangeCheckBox={this.onChangeCheckBox}
                                                    onChangeValue={this.onChangeValue}
                                                    getServiceDetails={this.getServiceDetails}
@@ -165,6 +168,7 @@ export default class MlAppServiceManageSchedule extends Component {
         name: 'Payment',
         component: <MlAppServicePayment servicePayment={servicePayment}
                                         taxStatus={taxStatus}
+                                        viewMode={this.props.viewMode}
                                         facilitationCharge={facilitationCharge}
                                         checkDiscountEligibility={this.checkDiscountEligibility}
                                         calculateDiscounts={this.calculateDiscounts}
@@ -174,11 +178,7 @@ export default class MlAppServiceManageSchedule extends Component {
                                         saveService={this.saveService}/>,
         icon: <span className="ml ml-payments"></span>
       },
-      {
-        name: 'History',
-        component: <MlAppServiceHistory />,
-        icon: <span className="ml ml-moolya-symbol"></span>
-      }
+
     ];
     return steps;
   }
@@ -261,6 +261,7 @@ export default class MlAppServiceManageSchedule extends Component {
     if (this.serviceId) {
       service = await fetchServiceActionHandler(this.serviceId);
       if (service) {
+        console.log(service)
         let {state, city, community} = service;
         serviceBasicInfo = {
           duration: service.duration,
@@ -355,6 +356,7 @@ export default class MlAppServiceManageSchedule extends Component {
    * Desc :: Get the current user profile
    */
   async getUserProfile() {
+    console.log('----getUserProfile--', this.profileId);
     const resp = await fetchProfileActionHandler(this.profileId);
     if (resp) {
       this.setState({
@@ -720,7 +722,7 @@ export default class MlAppServiceManageSchedule extends Component {
   }
 
   /**
-   * Method :: optionsBySelectCommunities
+   * Method :: opttionsBySelectCommunities
    * Desc :: set the current community details
    */
   optionsBySelectCommunities(value, calback, selObject) {
@@ -753,7 +755,7 @@ export default class MlAppServiceManageSchedule extends Component {
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
-          <MlAppScheduleHead type="service"/>
+          {!this.props.viewMode?<MlAppScheduleHead type="service" />:""}
           <div className="clearfix"/>
           <div className="col-md-12">
             <div className='step-progress'>

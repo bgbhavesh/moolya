@@ -345,7 +345,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
     if (isUserExist || isUserRegExist) {
       console.log('user already present');
       let code = 400;
-      let response = new MlRespPayload().errorPayload("User already present", code);
+      let response = new MlRespPayload().errorPayload("User is not allowed to be associated to this office. Please contact administrator", code);
       return response;
       // Send an invite to the Existing User
     }

@@ -130,9 +130,9 @@ export default class MlAppServiceTermsAndConditions extends Component{
           <br className="brclear"/>
           {this.getAttachmentsList()}
         </ScrollArea>
-        <div className="ml_btn" style={{'textAlign':'center'}}>
+        {!this.props.viewMode?<div className="ml_btn" style={{'textAlign':'center'}}>
           <div className="save_btn" onClick={() => saveService()}>Save</div> <div className="cancel_btn">Cancel</div>
-        </div>
+        </div>:""}
       </div>
     )
   }

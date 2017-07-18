@@ -3,6 +3,7 @@
  */
 import React, {Component} from "react";
 import FunderCreateServicesView from "./funderCreateServicesView";
+import MlBeSpokeListView from './MlFunderBeSpokeCreation'
 import FunderOrderServicesView from "./funderOrderServicesView";
 
 export default class MlFunderServices extends Component {
@@ -24,7 +25,7 @@ export default class MlFunderServices extends Component {
       <div>
         {/*<FunderOrderServicesView/>*/}
         <div className="clearfix"/>
-        <FunderCreateServicesView getServiceDetails={this.props.getServiceDetails} portfolioDetailsId={this.props.portfolioDetailsId} />
+        <MlBeSpokeListView getServiceDetails={this.props.getServiceDetails} portfolioDetailsId={this.props.portfolioDetailsId} />
       </div>
     )
   }

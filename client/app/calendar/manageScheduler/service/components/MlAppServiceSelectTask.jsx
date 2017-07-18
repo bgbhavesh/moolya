@@ -229,10 +229,10 @@ class MlAppServiceSelectTask extends Component{
                     </div>
                     <br className="brclear"/>
                       {this.getSessionList()}
-                    <div className="ml_icon_btn">
+                    {!this.props.viewMode? <div className="ml_icon_btn">
                       <div className="save_btn" onClick={() => saveService()}><span className="ml ml-save"></span></div>
                       <a href="" className="cancel_btn"><span className="ml ml-delete"></span></a>
-                    </div>
+                    </div>:""}
                   </div>
                   <div className="tab-pane" id="2a">
                     2

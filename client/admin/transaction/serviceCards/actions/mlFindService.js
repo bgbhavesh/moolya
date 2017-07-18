@@ -30,7 +30,6 @@ query ($profileId: String) {
         status
         termsAndCondition{
           isCancelable
-          isRefundable
           isReschedulable
           noOfReschedulable
         }
@@ -133,7 +132,6 @@ export async function getTaskFromService (serviceId) {
         status
         termsAndCondition{
           isCancelable
-          isRefundable
           isReschedulable
           noOfReschedulable
         }

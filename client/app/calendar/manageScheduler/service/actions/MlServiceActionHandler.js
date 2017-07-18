@@ -157,6 +157,7 @@ export async function fetchServicesActionHandler (profileId) {
     query($profileId:String) {
       fetchUserServices(profileId: $profileId) {
         displayName
+        profileId
         _id
       }
     }

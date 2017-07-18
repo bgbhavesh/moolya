@@ -719,7 +719,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
     let VideoDetails = {
       id: "create_video",
       toDisplay: popVideos,
-      placement: "bottom",
+      placement: "left",
       title: "Videos"
     }
 
@@ -883,7 +883,6 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
           <PopoverContent>
             <div  className="ml_create_client">
               <div className="medium-popover">
-                <div className="row">
                  <div className="col-md-12">
                   <div className="form-group">
                     {this.state.toDisplay}
@@ -896,7 +895,6 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
                     </div>
                   </div>
                 </div>
-              </div>
               </div>
             </div>
           </PopoverContent>

@@ -274,13 +274,14 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
     var validationCheck = null;
     var result = null;
     var registerDetails = null;
+    var registrationInfo=null;
     var subChapterDetails = null;
     var id = args.registrationId;
     if (args.registrationDetails) {
       let details = args.registrationDetails || {};
       /**Get the registration Details*/
       registerDetails = mlDBController.findOne('MlRegistration', id, context) || {};
-      let registrationInfo = registerDetails.registrationInfo ? registerDetails.registrationInfo : {};
+       registrationInfo = registerDetails.registrationInfo ? registerDetails.registrationInfo : {};
       /**
        *Validate email verification of registration
        *return the error if email is not verified
@@ -507,7 +508,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
        * Updating the User profile details(DateOfBirth an GenderType)
        * Check why user profile is updated here??. User may have multiple registrations
        */
-      let email = registrationRecord.registrationInfo.email
+      let email = registrationInfo.email
       var existingUser = mlDBController.findOne('users', {"username": email}, context)
       if (existingUser) {
         let dob = args.details.dateOfBirth ? moment(args.details.dateOfBirth).startOf("day").toDate() : null

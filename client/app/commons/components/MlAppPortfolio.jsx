@@ -313,7 +313,7 @@ class MlAppPortfolio extends Component{
                 {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
             </div></div>)}
         <div className="overlay"></div>
-          <Popover placement="bottom" isOpen={this.state.popoverOpen} target="comment" toggle={this.toggle}>
+          <Popover placement="top" isOpen={this.state.popoverOpen} target="comment" toggle={this.toggle}>
             <PopoverTitle>Portfolio Annotations</PopoverTitle>
             <PopoverContent>
               <div className="ml_annotations">

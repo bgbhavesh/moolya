@@ -9,25 +9,36 @@ var extendify = require('extendify');
 var _ = require('lodash');
 
 MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => {
-  let query = {
-    userId: context.userId,
-    profileId:args.profileId,
-    isCurrentVersion: true
-  };
-  let result = mlDBController.find('MlService', query , context).fetch()
-  return result;
+  let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: args.profileId}, context)
+  if(portfolio){
+    let query = {
+      userId: portfolio.userId,
+      profileId:portfolio.profileId,
+    };
+    let result = mlDBController.find('MlService', query , context).fetch()
+    return result;
+  }else {
+    let query = {
+      userId: context.userId,
+      profileId: args.profileId,
+      isCurrentVersion: true
+    };
+    let result = mlDBController.find('MlService', query, context).fetch()
+    return result;
+  }
 }
 
 MlResolver.MlQueryResolver['findService'] = (obj, args, context, info) => {
   let result = mlDBController.findOne('MlService', {_id: args.serviceId} , context);
   if (result) {
-    let query = {
-      transactionId: result.transactionId,
-      isCurrentVersion: true
-    };
-    let service = mlDBController.findOne('MlService', query, context);
-    return service;
-  } else  {
+    // let query = {
+    //   transactionId: result.transactionId,
+    //   isCurrentVersion: true
+    // };
+    // let service = mlDBController.findOne('MlService', query, context);
+    return result;
+  }
+  else  {
     let code = 404;
     let response = new MlRespPayload().successPayload('Service not found', code);
     return response;

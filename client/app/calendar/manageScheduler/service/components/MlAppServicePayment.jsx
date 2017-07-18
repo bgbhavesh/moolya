@@ -17,13 +17,6 @@ export default class MlAppServicePayment extends React.Component{
     super(props);
   }
 
-  // componentDidMount() {
-  //   $('.float-label').jvFloat();
-  //   var WinHeight = $(window).height();
-  //   $('.step_form_wrap').height(WinHeight-(310+$('.admin_header').outerHeight(true)));
-  //
-  // }
-
   componentDidUpdate() {
     MoolyaToggleSwitch(true, true);
   }
@@ -150,9 +143,9 @@ export default class MlAppServicePayment extends React.Component{
             </form>
           </div>
         </ScrollArea>
-        <div className="ml_btn" style={{'textAlign':'center'}}>
+        {!this.props.viewMode?<div className="ml_btn" style={{'textAlign':'center'}}>
           <div className="save_btn" onClick={() => saveService(true)}>Save</div> <div className="cancel_btn">Cancel</div>
-        </div>
+        </div>:""}
       </div>
     )
   }

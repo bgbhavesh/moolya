@@ -157,6 +157,7 @@ export async function fetchServicesActionHandler (profileId) {
     query($profileId:String) {
       fetchUserServices(profileId: $profileId) {
         displayName
+        profileId
         _id
       }
     }
@@ -229,11 +230,11 @@ query ($portfolioId: String) {
 }
 
 
-export async function fetchTaskDetailsForServiceCard (profileId) {
+export async function fetchTaskDetailsForServiceCard (profileId, serviceId) {
   const result = await appClient.query({
     query: gql`
-      query($profileId: String) {
-        fetchTaskDetailsForServiceCard(profileId: $profileId) {
+      query($profileId: String, $serviceId: String) {
+        fetchTaskDetailsForServiceCard(profileId: $profileId, serviceId: $serviceId) {
           id: _id
           name
           displayName
@@ -260,8 +261,10 @@ export async function fetchTaskDetailsForServiceCard (profileId) {
       }
     `,
     variables: {
-      profileId
+      profileId,
+      serviceId
     },
+    forceFetch: true
   });
   const taskDetails = result.data.fetchTaskDetailsForServiceCard;
   return taskDetails;

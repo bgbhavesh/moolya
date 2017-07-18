@@ -30,7 +30,7 @@ export async function fetchTaskDetailsActionHandler (name) {
       name
     },
   });
-  const taskDetails = result.data.fetchTaskDetails;
+  var taskDetails = result.data.fetchTaskDetails;
   let task = _.omit(taskDetails, '__typename')
   task.duration = _.omit(task.duration, '__typename')
   task.payment = _.omit(task.payment, '__typename')

@@ -99,7 +99,8 @@ appSection.route('/', {
 appSection.route('/dashboard/:isFirst', {
   name: 'dashboard',
   action(params){
-    mount(AppLayout,{appContent:<MlAppDashboard/>, isFirst:(params.isFirst=='true'?true:false) })
+    mount(AppLayout,{appContent:<MlViews showInfinity={true} mapConfig={mlDashboardMapConfig} listConfig={mlDashboardListConfig}/>, isFirst:(params.isFirst=='true'?true:false)})
+    // mount(AppLayout,{appContent:<MlAppDashboard/>, isFirst:(params.isFirst=='true'?true:false) })
   }
 });
 

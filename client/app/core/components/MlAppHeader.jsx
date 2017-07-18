@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import {logout} from "../../../../client/admin/layouts/header/actions/logoutAction";
 import {fetchUserDetailsHandler} from "../../commons/actions/fetchUserDetails";
+import BugReport from '../../../commons/components/bugReport/BugReport';
 var FontAwesome = require('react-fontawesome');
 
 
@@ -74,6 +75,9 @@ export default class MlAppHeader extends Component {
     // const showLoader=this.state.loading;
     return (
       <div>
+        /**Bug Report*/
+        <BugReport />
+
         <div className="overlay"></div>
         {/*{showLoader===true?(<MlLoader/>):(*/}
         <div className="app_header">

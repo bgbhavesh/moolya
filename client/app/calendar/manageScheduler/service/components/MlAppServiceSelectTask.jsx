@@ -102,6 +102,7 @@ class MlAppServiceSelectTask extends Component{
                     <input className="form-control inline_input"
                            type="number"
                            min="0"
+                           value={data.sequence}
                            onChange={(event)=> updateSessionSequence(event, data.sessionId)} />
                   </label>
                 </div>
@@ -230,7 +231,7 @@ class MlAppServiceSelectTask extends Component{
                     <br className="brclear"/>
                       {this.getSessionList()}
                     {!this.props.viewMode? <div className="ml_icon_btn">
-                      <div className="save_btn" onClick={() => saveService()}><span className="ml ml-save"></span></div>
+                      <div className="save_btn" onClick={() => saveService(false)}><span className="ml ml-save"></span></div>
                       <a href="" className="cancel_btn"><span className="ml ml-delete"></span></a>
                     </div>:""}
                   </div>

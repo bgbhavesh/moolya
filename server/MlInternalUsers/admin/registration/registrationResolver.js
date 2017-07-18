@@ -277,11 +277,14 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
     var registrationInfo=null;
     var subChapterDetails = null;
     var id = args.registrationId;
+
+    /**Get the registration Details*/
+    registerDetails = mlDBController.findOne('MlRegistration', id, context) || {};
+    registrationInfo = registerDetails.registrationInfo ? registerDetails.registrationInfo : {};
+
+
     if (args.registrationDetails) {
       let details = args.registrationDetails || {};
-      /**Get the registration Details*/
-      registerDetails = mlDBController.findOne('MlRegistration', id, context) || {};
-       registrationInfo = registerDetails.registrationInfo ? registerDetails.registrationInfo : {};
       /**
        *Validate email verification of registration
        *return the error if email is not verified

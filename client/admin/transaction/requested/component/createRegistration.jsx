@@ -111,9 +111,10 @@ export default class MlCreateRegistration extends React.Component{
     this.setState({chapter:value})
   }
   optionBySelectRegistrationType(value, calback, selObject){
-    this.setState({registrationType:value});
-    this.setState({identityType:null});
-    this.setState({coummunityName:selObject.label})
+    /**mering the states*/
+    // this.setState({registrationType:value});
+    // this.setState({identityType:null});
+    this.setState({registrationType:value,identityType:null, coummunityName:selObject.label})
   }
   optionBySelectSubscription(val){
     if(val){
@@ -137,9 +138,13 @@ export default class MlCreateRegistration extends React.Component{
     }
   }
 
-
-  enteredUserName(){
-     this.setState({"userName" : this.refs.email.value});
+  /**
+   * changing all emailId to the Lowercase only
+   * */
+  enteredUserName(e){
+    let lowerCase = e.target.value.toLowerCase()
+    this.refs.email.value = lowerCase
+     this.setState({"userName" : lowerCase});
   }
 
   render(){
@@ -251,13 +256,13 @@ export default class MlCreateRegistration extends React.Component{
                   <input type="text" ref="lastName" placeholder="Last Name" className="form-control float-label" id="" data-required={true} data-errMsg="LastName is required"/>
                 </div>
                 <div className="form-group">
-                  <Moolyaselect multiSelect={false} ref="country"mandatory={true} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Your Country"  selectedValue={this.state.country} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={this.optionsBySelectCountry.bind(this)} data-required={true} data-errMsg="Country is required" />
+                  <Moolyaselect multiSelect={false} ref="country" mandatory={true} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Your Country"  selectedValue={this.state.country} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={this.optionsBySelectCountry.bind(this)} data-required={true} data-errMsg="Country is required" />
                 </div>
                 <div className="form-group mandatory">
                   <input type="text" ref="contactNumber"   placeholder="Contact number" className="form-control float-label" id="" data-required={true} data-errMsg="Contact Number is required"/>
                 </div>
                 <div className="form-group mandatory">
-                  <input type="text" ref="email"   placeholder="Email ID" className="form-control float-label" id="" onChange={this.enteredUserName.bind(this)} data-required={true} data-errMsg="Email Id is required"/>
+                  <input type="text" ref="email" placeholder="Email ID" className="form-control float-label" onChange={this.enteredUserName.bind(this)} data-required={true} data-errMsg="Email Id is required"/>
                 </div>
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} mandatory={true} ref="registrationType" placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={this.optionBySelectRegistrationType.bind(this)} isDynamic={true} data-required={true} data-errMsg="Registration Type is required"/>

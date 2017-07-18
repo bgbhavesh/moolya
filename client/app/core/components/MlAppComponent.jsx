@@ -5,6 +5,7 @@ import MlAppContextProvider from "../../../commons/components/appContext/MlAppCo
 import MlAppHeader from "../components/MlAppHeader";
 import MlAppLeftNav from "../components/MlAppLeftNav";
 import MlLoader from "../../../commons/components/loader/loader";
+import MlAppContextHandler from './MlAppContextHandler'
 import {withApollo} from "react-apollo";
 
 @withApollo
@@ -63,7 +64,8 @@ class MlAppComponent extends Component{
                 <MlAppContextProvider theme={props.theme} menu={props.menu} language={props.language} userType={props.userType}>
                     <MlAppHeader/>
                     <MlAppLeftNav/>
-                    {props.appContent}
+                    <MlAppContextHandler context={props.appContent} isFirst={props.isFirst}/>
+                    {/*{props.appContent}*/}
                 </MlAppContextProvider>
             );
         }

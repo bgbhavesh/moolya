@@ -20,9 +20,7 @@ class MlAppServiceSelectTask extends Component{
   constructor(props) {
     super(props);
   }
-  componentWillMount() {
-    // this.props.getServiceDetails();
-  }
+
   componentDidMount() {
     let mySwiper = new Swiper('.manage_tasks', {
       speed: 400,
@@ -31,72 +29,13 @@ class MlAppServiceSelectTask extends Component{
       pagination: '.swiper-pagination',
       paginationClickable: true
     });
-    $('.float-label').jvFloat();
-    var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(220+$('.app_header').outerHeight(true)));
   }
 
   /**
-   * Method :: saveDetails
-   * Desc :: Save the current details
+   * Method :: getSelectTaskOptions
+   * Desc :: List out the task for service
+   * @return {Array} :: list of task
    */
-  saveDetails() {
-    let task = this.state.selectedTask;
-    let tab = this.state.selectedTab;
-    let taskData = this.state.taskData;
-    let sessions = this.state.activities;
-    console.log('sessions', sessions);
-    if(!task) {
-      return false;
-    }
-    let taskIndex = taskData.findIndex(function (data) {
-      return data.id == task;
-    });
-    if(taskIndex == -1) {
-      let taskInfo = {
-        id: task,
-        sessions : sessions.map(function (session) {
-          let response = { id : session.sessionId };
-          return response;
-        })
-      };
-      taskData.push(taskInfo);
-    }
-    let temp = this.state.taskNames;
-    console.log(task, temp, tab, taskData);
-    temp.push(task);
-    this.setState({
-      taskNames: temp,
-      selectedTask: temp,
-      taskData: taskData
-    });
-    this.storeData();
-    this.setState({
-      selectedTask:"",
-      selectedActivity:" ",
-      displayName:"",
-      noOfSession:"",
-      sessionFrequency:"",
-      activities:[],
-      hours:"",
-      minutes:""
-    });
-
-  }
-
-  /**
-   * Method :: storeData
-   * Desc :: Update the current details
-   */
-  async storeData() {
-    let serviceId = FlowRouter.getQueryParam('id')
-    let task = {
-      tasks :this.state.taskData
-    };
-    const resp = await updateServiceActionHandler(serviceId,task)
-    return resp
-  }
-
   getSelectTaskOptions() {
     const { serviceOptionTasks } = this.props.serviceTask;
     let options = [];
@@ -106,22 +45,6 @@ class MlAppServiceSelectTask extends Component{
       });
     }
     return options;
-  }
-  /**
-   * Method :: newTask
-   * Desc :: Reset the current details for new task
-   */
-  newTask() {
-    this.setState({
-      selectedTab:"",
-      selectedTask:"",
-      selectedActivity:" ",
-      displayName:"",
-      noOfSession:"",
-      sessionFrequency:"",
-      activities:[],
-      hours:"",
-      minutes:""})
   }
 
   /**
@@ -134,8 +57,11 @@ class MlAppServiceSelectTask extends Component{
     const { serviceTask, optionsBySelectService } = this.props;
     const tabs = serviceTask.tasks ? serviceTask.tasks.map((tab, index) => {
       return (
-        <li key={index}>
-          <a href="" data-toggle="tab" onClick={() => optionsBySelectService(tab.id)}><FontAwesome name='minus-square'/>{tab.displayName}</a>
+        <li className={serviceTask.selectedTaskId === tab.id ? 'active' : ''} key={index}>
+          <a href="#newTask" data-toggle="tab"
+             onClick={() => optionsBySelectService(tab.id)}>
+             <FontAwesome name='minus-square'/>{tab.displayName}
+          </a>
         </li>
       )
     }) : [];
@@ -151,7 +77,6 @@ class MlAppServiceSelectTask extends Component{
   getSessionList() {
     let { session } = this.props.serviceTask.selectedTaskDetails;
     const { updateSessionSequence } = this.props;
-
     const sessionsList = session ? session.map((data, index) => {
       if(data) {
         return(
@@ -218,7 +143,6 @@ class MlAppServiceSelectTask extends Component{
    */
   render() {
     let that = this;
-    console.log('-----props--', this.props);
     const {
       profileId,
       serviceId,
@@ -228,7 +152,6 @@ class MlAppServiceSelectTask extends Component{
       respectiveTab,
       serviceTask} = this.props;
     const tasks = serviceTask.selectedTaskDetails || {};
-    console.log('---selectedTaskId--', serviceTask.selectedTaskDetails);
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
@@ -240,7 +163,7 @@ class MlAppServiceSelectTask extends Component{
             <div className="panel-body">
               <div className="ml_tabs ml_tabs_large">
                 <ul  className="nav nav-pills">
-                  <li className="active" key={-1}>
+                  <li className={serviceTask.selectedTaskId ? '' : 'active'} key={-1}>
                     <a href="#newTask" data-toggle="tab"
                        className="add-contact"
                        onClick={() => optionsBySelectService()}>

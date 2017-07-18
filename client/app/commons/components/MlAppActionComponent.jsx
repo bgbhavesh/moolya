@@ -208,6 +208,7 @@ export default class MlAppActionComponent extends React.Component {
 
     let actionView = actionOptions.map(function (option, id) {
       let activeClass = '';
+      let actionTarget=option.target||null;
       option.anchorClass='';
       if(option.isDisabled&&option.isDisabled===true){
           option.handler=null;
@@ -228,9 +229,12 @@ export default class MlAppActionComponent extends React.Component {
       }else{
       return (
         <li key={id} className={activeClass}>
+          {actionTarget&&actionTarget!==null?<a id={actionTarget} className={option.anchorClass} onClick={option.handler && option.handler.bind(this, option,null)}> <span
+            className={action['iconClass']}></span>
+            <br />{option.actionName}</a>:
           <a className={option.anchorClass} onClick={option.handler && option.handler.bind(this, option,null)}> <span
             className={action['iconClass']}></span>
-            <br />{option.actionName}</a>
+            <br />{option.actionName}</a>}
         </li>
       )
       }

@@ -17,13 +17,6 @@ export default class MlAppServicePayment extends React.Component{
     super(props);
   }
 
-  // componentDidMount() {
-  //   $('.float-label').jvFloat();
-  //   var WinHeight = $(window).height();
-  //   $('.step_form_wrap').height(WinHeight-(310+$('.admin_header').outerHeight(true)));
-  //
-  // }
-
   componentDidUpdate() {
     MoolyaToggleSwitch(true, true);
   }

@@ -105,7 +105,7 @@ export default class MoolyaMapView extends Component {
     let MapFooterComponent=null;
     // Fix me
     var path = window.location.pathname;
-    if(path.indexOf("communities") !== -1){
+    if(path.indexOf("communities") !== -1 || path.indexOf("app") !== -1){
       MapComponent=React.cloneElement(this.props.viewComponent,{data:data,config:this.props});
     }
 

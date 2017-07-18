@@ -250,7 +250,7 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
         status: 'Go Live',
       }, context) || {}
     if (!_.isEmpty(regRecord)) {
-      updatedResponse = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {"status": "gone live"}, {$set: true}, context)
+      updatedResponse = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {"status": "gone live", transactionUpdatedDate: new Date()}, {$set: true}, context)
       if (updatedResponse) {
         let user = mlDBController.findOne('users', {_id: regRecord.userId}, context) || {};
         let portfolioObject = _.pick(regRecord, ['userId','communityCode', 'clusterId', 'chapterId', 'subChapterId', 'communityId', 'clusterName', 'chapterName', 'subChapterName', 'communityName', 'profileId'])

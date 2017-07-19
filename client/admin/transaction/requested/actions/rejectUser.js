@@ -21,6 +21,5 @@ export async function rejectStatusForUser(registration) {
   })
 
   const id = result.data.RejectedStatusForUser;
-
   return id
 }

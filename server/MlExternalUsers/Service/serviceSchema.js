@@ -87,6 +87,7 @@ let service=`
   type Service {
     userId: String
     _id: String
+    about: String
     profileId: String
     name: String
     displayName: String
@@ -109,6 +110,8 @@ let service=`
     cluster: Clusters
     isBeSpoke : Boolean
     mode : String
+    beSpokeCreatorProfileId: String
+    beSpokeCreatorUserId: String
     industryId : [String]
     conversation : [String]
     expectedInput : String
@@ -148,6 +151,7 @@ let service=`
     userId: String
     email: String
     _id: String
+    about: String
     profileId: String
     name: String
     displayName: String
@@ -171,6 +175,8 @@ let service=`
     isBeSpoke : Boolean
     mode : String
     industryId : [String]
+    beSpokeCreatorProfileId: String
+    beSpokeCreatorUserId: String
     conversation : [String]
     expectedInput : String
     expectedOutput : String
@@ -252,6 +258,7 @@ let service=`
    input service {
         userId: String
         profileId: String
+        about: String
         name: String
         displayName: String
         noOfSession: Int
@@ -273,6 +280,8 @@ let service=`
         cluster: clusters
         isBeSpoke : Boolean
         mode : String
+        beSpokeCreatorProfileId: String
+        beSpokeCreatorUserId: String
         industryId : [String]
         conversation : [String]
         expectedInput : String
@@ -282,6 +291,7 @@ let service=`
 
     type Query {
         fetchUserServices(profileId:String):[Service]
+        fetchBeSpokeServices(portfolioId:String):[Service]
         findService(serviceId:String):Service
         fetchTasksAmount(profileId:String):[TotalTaskAmount]
         getProfileBasedOnPortfolio(portfolioId:String): PortfolioDetails
@@ -306,6 +316,7 @@ let supportedApi = [
   {api:'getProfileBasedOnPortfolio', actionName:'READ', moduleName:"OFFICE"},
   {api:'getServiceBasedOnProfileId', actionName:'READ', moduleName:"OFFICE"},
   {api:'getTaskFromService', actionName:'READ', moduleName:"OFFICE"},
+  {api:'fetchBeSpokeServices', actionName:'READ', moduleName:"OFFICE"},
   {api:'createService', actionName:'CREATE', moduleName:"OFFICE"},
   {api:'updateService', actionName:'UPDATE', moduleName:"OFFICE"},
   {api:'updateServiceAdmin', actionName:'UPDATE', moduleName:"OFFICE"}

@@ -171,6 +171,36 @@ export async function fetchServicesActionHandler (profileId) {
   return services;
 }
 
+export async function fetchBeSpokeServicesActionHandler (portfolioId) {
+  const result = await appClient.query({
+    query: gql`
+    query($portfolioId:String) {
+      fetchBeSpokeServices(portfolioId: $portfolioId) {
+        profileId
+        _id
+        about
+        profileId
+        noOfSession
+        expectedInput
+        expectedOutput
+        conversation
+        industryId
+        mode
+        isBeSpoke
+        attachments{
+          fileUrl
+        }
+      }
+    }
+    `,
+    forceFetch:true,
+    variables: {
+      portfolioId:portfolioId
+    }
+  });
+  const services = result.data.fetchBeSpokeServices;
+  return services;
+}
 
 
 export async function fetchProfileActionHandler (profileId) {

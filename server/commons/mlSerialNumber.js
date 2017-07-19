@@ -50,6 +50,12 @@ var serviceNumber = MlSerialNumbers.findOne({_id: "serviceNumber"});
 if (!serviceNumber) {
   MlSerialNumbers.insert({_id: "serviceNumber", seq: 0});
 }
+
+let userServiceOrderNumber = MlSerialNumbers.findOne({_id: "userServiceOrderNumber"});
+if (!userServiceOrderNumber) {
+  MlSerialNumbers.insert({_id: "userServiceOrderNumber", seq: 0});
+}
+
 orderNumberGenService = (function(){
   function getNextSequence(name) {
     var ret = MlSerialNumbers.update(
@@ -75,7 +81,7 @@ orderNumberGenService = (function(){
       portfolio.portfolioId=portfolioId
       portfolio.transactionId= portfolioId
     },
-      assignTransationRequest:function(transaction){
+    assignTransationRequest:function(transaction){
       transaction.transactionTypeId="MLTR"+FormatUtil.leadingZeros(getNextSequence("transactionNumber"),8);
     },
     assignRequests:function(requests){
@@ -87,7 +93,6 @@ orderNumberGenService = (function(){
     assignProcessSetupTransaction: function (officeTransaction) {
       officeTransaction.transactionId = "MLPS" + FormatUtil.leadingZeros(getNextSequence("officeTransaction"), 8);
     },
-
     createUserProfileId: function (userProfile) {
       userProfile.profileId = "MLPRO" + FormatUtil.leadingZeros(getNextSequence("profileNumber"), 8);
     },
@@ -111,6 +116,9 @@ orderNumberGenService = (function(){
     },
     createServiceId: function (userService) {
       userService.transactionId = "MLSER"+ FormatUtil.leadingZeros(getNextSequence("serviceNumber"), 8);
+    },
+    createUserServiceOrderId: function (data) {
+      data.transactionId = "MLUSO" + FormatUtil.leadingZeros(getNextSequence("userServiceOrderNumber"), 8);
     },
     generateRandomPassword:function(){
       var randomId = function makeid(){

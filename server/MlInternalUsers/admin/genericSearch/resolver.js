@@ -839,7 +839,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
         "portfolio":{
           '$map':
           { "input":"$portfolio", "as":"port", 'in':
-          { "createdAt" :"$$port.timeStamp", "transactionId":"$$port._id" ,"transactionType":"$$port.transactionType", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+          { "createdAt" :"$$port.createdAt", "transactionId":"$$port._id" ,"transactionType":"$$port.transactionType", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
           }
         },
         "office":{

@@ -12,7 +12,8 @@ let appointment=`
   }
   
   type Mutation {
-     
+     bookUserServiceCard(serviceId: String!):response
+     userServiceCardPayment(orderId: String!): response
   }
 `;
 

@@ -14,6 +14,8 @@ MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => 
     let query = {
       userId: portfolio.userId,
       profileId:portfolio.profileId,
+      isCurrentVersion: true,
+      isBeSpoke: false
     };
     let result = mlDBController.find('MlService', query , context).fetch()
     return result;
@@ -21,7 +23,35 @@ MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => 
     let query = {
       userId: context.userId,
       profileId: args.profileId,
-      isCurrentVersion: true
+      isCurrentVersion: true,
+      isBeSpoke: false
+    };
+    let result = mlDBController.find('MlService', query, context).fetch()
+    return result;
+  }
+}
+
+MlResolver.MlQueryResolver['fetchBeSpokeServices'] = (obj, args, context, info) => {
+  if (context.url.indexOf("explore") > 0) {
+    let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfolioId}, context)
+  if(portfolio) {
+    let query = {
+      userId: portfolio.userId,
+      profileId: portfolio.profileId,
+      isCurrentVersion: true,
+      isBeSpoke: true,
+      beSpokeCreatorUserId: context.userId,
+      beSpokeCreatorProfileId: new MlUserContext().userProfileDetails(context.userId).profileId
+    };
+    let result = mlDBController.find('MlService', query, context).fetch()
+    return result;
+    }
+  }else {
+    let query = {
+      userId: context.userId,
+      profileId: new MlUserContext().userProfileDetails(context.userId).profileId,
+      isCurrentVersion: true,
+      isBeSpoke: true
     };
     let result = mlDBController.find('MlService', query, context).fetch()
     return result;
@@ -31,31 +61,52 @@ MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => 
 MlResolver.MlQueryResolver['findService'] = (obj, args, context, info) => {
   let result = mlDBController.findOne('MlService', {_id: args.serviceId} , context);
   if (result) {
-    // let query = {
-    //   transactionId: result.transactionId,
-    //   isCurrentVersion: true
-    // };
-    // let service = mlDBController.findOne('MlService', query, context);
-    return result;
+    let query = {
+      transactionId: result.transactionId,
+      isCurrentVersion: true
+    };
+    let service = mlDBController.findOne('MlService', query, context);
+    return service;
   }
   else  {
     let code = 404;
-    let response = new MlRespPayload().successPayload('Service not found', code);
+    let response = new MlRespPayload().errorPayload('Service not found', code);
     return response;
   }
 }
 
 MlResolver.MlMutationResolver['createService'] = (obj, args, context, info) => {
-  args.Services.createdAt = new Date();
-  args.Services.userId = context.userId;
-  orderNumberGenService.createServiceId(args.Services);
-  args.Services.isCurrentVersion = true;
-  args.Services.versions = 0.001;
-  let  result = mlDBController.insert('MlService' ,args.Services, context)
-  if(result){
-    let code = 200;
-    let response = new MlRespPayload().successPayload(result, code);
-    return response
+  if (context.url.indexOf("explore") > 0) {
+    args.Services.createdAt = new Date();
+    args.Services.beSpokeCreatorUserId = context.userId;
+    args.Services.isBeSpoke =  true
+    orderNumberGenService.createServiceId(args.Services);
+    args.Services.isCurrentVersion = true;
+    args.Services.versions = 0.001;
+    args.Services.beSpokeCreatorProfileId = new MlUserContext().userProfileDetails(context.userId).profileId;
+    var portfolioDetailsTransactions = mlDBController.findOne('MlPortfolioDetails', {_id: args.Services.profileId}, context)
+    if(portfolioDetailsTransactions){
+      args.Services.userId = portfolioDetailsTransactions.userId
+      args.Services.profileId = portfolioDetailsTransactions.profileId
+    }
+    let  result = mlDBController.insert('MlService' ,args.Services, context)
+    if(result){
+      let code = 200;
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }
+  }else{
+    args.Services.createdAt = new Date();
+    args.Services.userId = context.userId;
+    orderNumberGenService.createServiceId(args.Services);
+    args.Services.isCurrentVersion = true;
+    args.Services.versions = 0.001;
+    let  result = mlDBController.insert('MlService' ,args.Services, context)
+    if(result){
+      let code = 200;
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }
   }
 }
 

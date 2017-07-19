@@ -97,7 +97,7 @@ export async function fetchServiceActionHandler (serviceId) {
     },
     forceFetch:true
   });
-  const response = result.data.findService;
+  var response = result.data.findService;
   let service = _.omit(response, '__typename');
   service.duration = _.omit(service.duration, '__typename');
   service.payment = _.omit(service.payment, '__typename');
@@ -171,6 +171,36 @@ export async function fetchServicesActionHandler (profileId) {
   return services;
 }
 
+export async function fetchBeSpokeServicesActionHandler (portfolioId) {
+  const result = await appClient.query({
+    query: gql`
+    query($portfolioId:String) {
+      fetchBeSpokeServices(portfolioId: $portfolioId) {
+        profileId
+        _id
+        about
+        profileId
+        noOfSession
+        expectedInput
+        expectedOutput
+        conversation
+        industryId
+        mode
+        isBeSpoke
+        attachments{
+          fileUrl
+        }
+      }
+    }
+    `,
+    forceFetch:true,
+    variables: {
+      portfolioId:portfolioId
+    }
+  });
+  const services = result.data.fetchBeSpokeServices;
+  return services;
+}
 
 
 export async function fetchProfileActionHandler (profileId) {
@@ -266,6 +296,19 @@ export async function fetchTaskDetailsForServiceCard (profileId, serviceId) {
     },
     forceFetch: true
   });
-  const taskDetails = result.data.fetchTaskDetailsForServiceCard;
-  return taskDetails;
+  var taskDetails = result.data.fetchTaskDetailsForServiceCard;
+  let tasks = [];
+  let taskArray = [];
+  _.each(taskDetails, (task, say) => {
+    let sessionArray = [];
+    let taskInfo =  _.omit(task, '__typename');
+    _.each(taskInfo.session, (item, say) => {
+      let value = _.omit(item, '__typename');
+      sessionArray.push(value)
+    });
+    taskInfo.session = sessionArray;
+    taskArray.push(taskInfo);
+  });
+  tasks = taskArray;
+  return tasks;
 }

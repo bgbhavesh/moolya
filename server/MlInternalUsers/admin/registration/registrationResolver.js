@@ -11,14 +11,9 @@ import _ from "underscore";
 import moment from "moment";
 var fs = Npm.require('fs');
 var Future = Npm.require('fibers/future');
+
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
   var validationCheck = null;
-  // let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
-  // if (!isValidAuth) {
-  //   let code = 401;
-  //   let response = new MlRespPayload().errorPayload("Not Authorized", code);
-  //   return response;
-  // }
   if (!args.registration.registrationType) {
     let code = 409;
     let response = new MlRespPayload().errorPayload("Registration Type is mandatory!!!!", code);
@@ -77,17 +72,18 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
   var user = mlDBController.findOne('users', {_id: context.userId}) || {}
   var firstName = '';
   var lastName = '';
+
+  //todo:// make it same for internal and external user for first and last name according to new schema
   if (user) {
     if (user && user.profile && user.profile.isInternaluser && user.profile.InternalUprofile) {
-
       firstName = (user.profile.InternalUprofile.moolyaProfile || {}).firstName || '';
       lastName = (user.profile.InternalUprofile.moolyaProfile || {}).lastName || '';
     } else if (user && user.profile && user.profile.isExternaluser) { //resolve external user context based on default profile
       firstName = (user.profile || {}).firstName || '';
       lastName = (user.profile || {}).lastName || '';
     }
-
   }
+
   let createdBy = firstName + ' ' + lastName
   args.registration.createdBy = createdBy ? createdBy : user.username;
   let id = mlDBController.insert('MlRegistration', {
@@ -754,15 +750,24 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
     }
   }
 }
+
+/**user rejection from registration*/
 MlResolver.MlMutationResolver['RejectedStatusForUser'] = (obj, args, context, info) => {
-  // TODO : Authorization
   if (args.registrationId) {
-    let updatedResponse = mlDBController.update('MlRegistration', args.registrationId, {"status": "Rejected"}, {$set: true}, context)
-    if (updatedResponse) {
-      var resp = mlDBController.update('users', {'profile.externalUserProfiles.registrationId': args.registrationId}, {"profile.externalUserProfiles.$.isApprove": false}, {$set: true}, context);
-      return resp
+    let isRejected = mlDBController.findOne('MlRegistration', {_id:args.registrationId, status: "Rejected"}, context)
+    if(!isRejected){
+      let updatedResponse = mlDBController.update('MlRegistration', args.registrationId, {"status": "Rejected"}, {$set: true}, context)
+      if (updatedResponse) {
+        var resp = mlDBController.update('users', {'profile.externalUserProfiles.registrationId': args.registrationId}, {"profile.externalUserProfiles.$.isApprove": false}, {$set: true}, context);
+        let code = 200;
+        let response = new MlRespPayload().successPayload("Registration Rejected Successfully", code);
+        return response
+      }
+    }else {
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("Registration already rejected", code);
+      return response;
     }
-    return updatedResponse;
   }
 }
 

@@ -16,6 +16,7 @@ const MlAppViewer = class {
     this.name = options.name;
     this.module=options.module;
     this.moduleName=options.moduleName;
+    this.buildQueryOptions = options.buildQueryOptions;
     this.viewComponent = options.viewComponent;
     this.graphQlQuery = options.graphQlQuery;
     this.queryOptions=options.queryOptions;

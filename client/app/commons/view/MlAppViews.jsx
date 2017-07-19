@@ -24,8 +24,8 @@ export default class MlViews extends React.Component {
 
 
   render() {
-    let specificViewMode = _.has(this.props, 'viewMode');
-    let viewMode = null;
+    var specificViewMode = _.has(this.props, 'viewMode');
+    var viewMode = null;
     if (specificViewMode) {
       if (this.props.viewMode == true && this.state.viewMode == true) {
         viewMode = true;
@@ -40,11 +40,11 @@ export default class MlViews extends React.Component {
       viewMode = this.state.viewMode;
     }
     //let viewMode = this.state.viewMode;
-    let showInfinity = _.has(this.props, 'showInfinity') ? this.props.showInfinity : true;
-    let infinityViewProps = {viewMode: this.state.viewMode, viewModeParams: this.props.viewMode, onViewModeChange: this.viewModeChange.bind(this)};
-    let config = this.props;
-    let listConfig = this.props.listConfig;
-    let params = this.props.params ? this.props.params : null;
+    var showInfinity = _.has(this.props, 'showInfinity') ? this.props.showInfinity : true;
+    var infinityViewProps = {viewMode: this.state.viewMode, viewModeParams: this.props.viewMode, onViewModeChange: this.viewModeChange.bind(this)};
+    var config = this.props;
+    var listConfig = this.props.listConfig;
+    var params = this.props.params ? this.props.params : null;
     return (
       <div className="app_main_wrap">
         {viewMode ? <MlMapViewContainer params={params} {...config.mapConfig} /> :

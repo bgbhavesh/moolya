@@ -17,8 +17,16 @@ export default class MlAppServicePayment extends React.Component{
     super(props);
   }
 
+  componentDidMount() {
+    this.props.getServiceDetails();
+  }
+
   componentDidUpdate() {
     MoolyaToggleSwitch(true, true);
+  }
+
+  bookService(){
+    this.props.bookService(true)
   }
 
   render(){
@@ -145,7 +153,7 @@ export default class MlAppServicePayment extends React.Component{
         </ScrollArea>
         {!this.props.viewMode?<div className="ml_btn" style={{'textAlign':'center'}}>
           <div className="save_btn" onClick={() => saveService(true)}>Save</div> <div className="cancel_btn">Cancel</div>
-        </div>:""}
+        </div>:<div className="ml_btn" style={{'textAlign':'center'}}><div className="save_btn" onClick={() => this.bookService()}>Book</div> </div>}
       </div>
     )
   }

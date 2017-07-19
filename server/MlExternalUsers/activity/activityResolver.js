@@ -143,26 +143,14 @@ MlResolver.MlQueryResolver['fetchActivitiesForTask'] = (obj, args, context, info
     return response;
   }
 
-  let task = mlDBController.findOne('MlTask', args.taskId , context)
+  let oldVersionTask = mlDBController.findOne('MlTask', {_id: args.taskId}, context);
 
-  let query = {
-    userId:context.userId,
-    profileId: task.profileId,
-    isActive: true
+  let taskQuery = {
+    transactionId: oldVersionTask.transactionId,
+    isCurrentVersion: true
   };
-  if(task.isInternal && task.isExternal){
-      query["$or"] = [
-        {isInternal: true},
-        {isExternal: true}
-      ];
-  } else if (task.isExternal && task.isServiceCardEligible) {
-    query.isExternal = true;
-    query.isServiceCardEligible = true;
-  } else {
-    query.isExternal = task.isExternal;
-    query.isInternal = task.isInternal;
-    query.isServiceCardEligible = task.isServiceCardEligible;
-  }
+  let task = mlDBController.findOne('MlTask', taskQuery, context);
+
   let sessionQuery = [];
   if (task.session && task.session.length > 0) {
     sessionQuery = task.session.reduce(function(result, session) {
@@ -170,10 +158,46 @@ MlResolver.MlQueryResolver['fetchActivitiesForTask'] = (obj, args, context, info
     }, []);
   }
   sessionQuery = _.uniq(sessionQuery);
-  query["$or"] = [
-    {_id: {'$in': sessionQuery}},
-    {isCurrentVersion: true}
-  ];
+
+  let query = {
+    userId:context.userId,
+    profileId: task.profileId,
+    isActive: true,
+    $and:[{
+      $or: [
+        {_id: {'$in': sessionQuery}},
+        {isCurrentVersion: true}
+      ]
+    }]
+  }
+
+  if( task.isInternal && !task.isExternal && !task.isServiceCardEligible ) {
+    query.isInternal = true;
+    query.isServiceCardEligible = false;
+  } else if ( !task.isInternal && task.isExternal && !task.isServiceCardEligible ) {
+    query.isExternal = true;
+    query.isServiceCardEligible = false;
+  } else if ( task.isInternal && task.isExternal && !task.isServiceCardEligible ) {
+    query["$and"].push({
+      $or: [
+        {isInternal: true},
+        {isExternal: true}
+      ]
+    });
+    query.isServiceCardEligible = false;
+  } else if ( !task.isInternal && task.isExternal && task.isServiceCardEligible ) {
+    query.isExternal = true;
+    query.isServiceCardEligible = true;
+  } else if ( task.isInternal && task.isExternal && task.isServiceCardEligible ) {
+    query["$and"].push({
+      $or: [
+        {isInternal: true},
+        {isExternal: true}
+      ]
+    });
+    query.isServiceCardEligible = true;
+  }
+
   let result = mlDBController.find('MlActivity', query , context).fetch()
 
   return result;

@@ -63,15 +63,18 @@ export default class MlAppMyOffice extends Component {
     FlowRouter.go("/app/addOffice")
   }
 
-  async selectOffice(officeId, evt) {
+  async selectOffice(officeId, evt)
+  {
     let response = await findOfficeAction(officeId);
     if (response && response.success) {
       let data = JSON.parse(response.result)
-      console.log(data[0])
-      if (data[0].officeTransaction.status == "Approved") {
+      if(data[0].office.isExpired){
+        toastr.error('Office Expired');
+      }
+      else if(data[0].office.isActivated){
         FlowRouter.go('/app/editOffice/' + officeId);
       } else if (data[0].officeTransaction && data[0].officeTransaction.paymentDetails && data[0].officeTransaction.paymentDetails.isPaid) {
-        toastr.success('Office amount Paid wait for admin approval');   //redirect to member details
+        toastr.success('Office amount Paid wait for admin approval');
       } else if (data[0].officeTransaction && data[0].officeTransaction.orderSubscriptionDetails && data[0].officeTransaction.orderSubscriptionDetails.cost) {
         FlowRouter.go('/app/payOfficeSubscription/' + officeId)
       } else
@@ -105,7 +108,7 @@ export default class MlAppMyOffice extends Component {
                     <div className="col-md-6">
                     </div>
                     <div className="col-md-6">
-                      <a onClick={this.addNewOffice.bind(this)} className="ideabtn">Add new office</a>
+                      <a href="" onClick={this.addNewOffice.bind(this)} className="ideabtn">Add new office</a>
                     </div>
                   </div>
                 </div> : <div>

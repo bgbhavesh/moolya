@@ -8,13 +8,11 @@ export async function fetchCommunitiesHandler() {
     const result = await appClient.query({
         query: gql`
            query {
-            data: fetchCommunitiesFromDef {
+            data: getOfficeUserTypes {
+                _id,
                 name,
-                communityName,
-                displayName,
                 code,
-                communityImageLink,
-                aboutCommunity,
+                displayName,
                 isActive,
             }
           }
@@ -24,4 +22,24 @@ export async function fetchCommunitiesHandler() {
 
     const communities = result.data.data;
     return communities;
+}
+
+export async function fetchAllCommunitiesHandler() {
+  const result = await appClient.query({
+    query: gql`
+           query {
+            data: getOfficeUserTypes {
+                _id
+                name,
+                code,
+                displayName,
+                isActive,
+            }
+          }
+        `,
+    forceFetch:true
+  })
+
+  const communities = result.data.data;
+  return communities;
 }

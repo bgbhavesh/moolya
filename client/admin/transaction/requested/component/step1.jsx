@@ -11,7 +11,6 @@ import {updateRegistrationActionHandler,emailVerificationActionHandler,smsVerifi
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import {fetchIdentityTypes} from "../actions/findRegistration";
 import {findRegistrationActionHandler} from "../actions/findRegistration";
-
 import _ from 'lodash';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import MlLoader from '../../../../commons/components/loader/loader'
@@ -87,13 +86,13 @@ export default class step1 extends React.Component{
   }
 
 
-  async checkEmailVerify() {
-    const response = await findRegistrationActionHandler(this.props.registrationInfo.registrationId);
-    if(response.emails){
-      this.setState({emailVerified: response.emails[0].verified});
-    }
-    return response;
-  }
+  // async checkEmailVerify() {
+  //   const response = await findRegistrationActionHandler(this.props.registrationInfo.registrationId);
+  //   if(response.emails){
+  //     this.setState({emailVerified: response.emails[0].verified});
+  //   }
+  //   return response;
+  // }
 
   componentWillMount() {
     console.log(this.props)
@@ -158,13 +157,14 @@ export default class step1 extends React.Component{
     this.setState({selectedCity:value})
   }
   optionBySelectRegistrationType(value, calback, selObject){
-    this.setState({registrationType:value});
-    this.setState({identityType:null});
-    this.setState({coummunityName:selObject.label})
-    this.setState({cluster:null});
-    this.setState({chapter:null});
-    this.setState({subchapter:null});
-    this.setState({userType:null});
+    /**merging all states in one*/
+    // this.setState({registrationType:value});
+    // this.setState({identityType:null});
+    // this.setState({coummunityName:selObject.label})
+    // this.setState({cluster:null});
+    // this.setState({chapter:null});
+    // this.setState({subchapter:null});
+    this.setState({registrationType:value,identityType:null,coummunityName:selObject.label,cluster:null, chapter:null, subchapter:null, userType:null});
   }
   optionBySelectSubscription(val){
     this.setState({subscription:val.value})
@@ -174,14 +174,12 @@ export default class step1 extends React.Component{
   }
   optionBySelectinstitutionAssociation(val){
     this.setState({institutionAssociation:val.value})
-    return resp;
   }
   optionsBySelectTypeOfIndustry(value){
     this.setState({selectedTypeOfIndustry:value})
   }
   optionsBySelectTypeOfAccounts(value){
     this.setState({selectedAccountsType:value})
-    console.log(value);
   }
 
   optionsBySelectProfession(val){
@@ -279,19 +277,21 @@ export default class step1 extends React.Component{
 
   async updateRegistration(){
     const response= await this.updateregistrationInfo();
-    console.log(response);
-    if(response.success){
-      this.props.refetchRegistrationAndTemplates();
-      toastr.success("Saved Successfully")
-    }else{
-      toastr.error(response.result);
+    /**response should be there for success*/
+    if(response){
+      if(response.success){
+        this.props.refetchRegistrationAndTemplates();
+        toastr.success("Saved Successfully")
+      }else{
+        toastr.error(response.result);
+      }
     }
     return response;
   }
 
   async sendEmailVerification(){
     const response= await emailVerificationActionHandler(this.props.registrationId);
-    if(response.success){
+    if(response && response.success){
       toastr.success("email verification link send successfully");
     }else{
       // toastr.error(response.result);
@@ -313,11 +313,18 @@ export default class step1 extends React.Component{
   }
 
   async updateRejectUser(){
-    let registrationId = this.props.registrationData._id
-    const response = await rejectStatusForUser(registrationId);
-    if (response) {
-      toastr.success("Registration Rejected Successfully")
+    if(!_.find(this.props.emailDetails, {verified : true})){
+      let registrationId = this.props.registrationData._id
+      const response = await rejectStatusForUser(registrationId);
+      if (response && response.success) {
+        toastr.success(response.result)
+      }else if (response && !response.success){
+        toastr.error(response.result)
+      }
+    }else {
+      toastr.error("Email already verified, can not reject the user")
     }
+
   }
 
   rejectUser(){
@@ -331,29 +338,23 @@ export default class step1 extends React.Component{
     let hours = moment().diff(registrationDate, 'hours')
     console.log(registrationDate)
     console.log(hours)
-    if(hours>=48 && this.state.emailVerified === false) {
+    let showReject = (this.props.emailDetails && this.props.emailDetails.length>0 && !this.props.emailDetails[0].verified)?true:false
+    // if(hours>=72 && this.state.emailVerified === false) {
+    if(hours>=72 && this.props.emailDetails && this.props.emailDetails.length>0 && !this.props.emailDetails[0].verified) {
       MlActionConfig = [
-      /*  {
-          actionName: 'save',
-          showAction: true,
-          handler: this.updateRegistration.bind(this)
-        },
-        {
-          showAction: true,
-          actionName: 'cancel',
-          handler: async(event) => {
-            FlowRouter.go("/admin/transactions/registrationRequested")
-          }
-        },*/
         {
           actionName: 'rejectUser',
           showAction: true,
           handler: this.rejectUser.bind(this)
         }
-
       ];
     }else{
       MlActionConfig = [
+        {
+          actionName: 'rejectUser',
+          showAction: showReject,
+          handler: this.rejectUser.bind(this)
+        },
         {
           actionName: 'save',
           showAction: true,
@@ -363,7 +364,12 @@ export default class step1 extends React.Component{
           showAction: true,
           actionName: 'cancel',
           handler: async(event) => {
-            FlowRouter.go("/admin/transactions/registrationRequested")
+            let routeName=FlowRouter.getRouteName();
+            if(routeName==="transaction_registration_approved_edit"){
+              FlowRouter.go("/admin/transactions/registrationApprovedList")
+            }else if(routeName==="transaction_registration_requested_edit"){
+              FlowRouter.go("/admin/transactions/registrationRequested")
+            }
           }
         }
       ];
@@ -540,7 +546,7 @@ export default class step1 extends React.Component{
                          }*/}
                         {canSelectIdentity &&
                         <div className="form-group nomarginbot">
-                          {identityTypez.map((i) => {
+                          {identityTypez.map((i, idx) => {
                             let checked=null,showRadioChecked=false
                             let identity=this.state.identityType
                             if(identity=="Individual"&&i._id=='individual'){
@@ -554,7 +560,7 @@ export default class step1 extends React.Component{
                               checked=false
                             }
                             return (
-                              <div>{showRadioChecked&&<div key={i._id}>
+                              <div>{showRadioChecked&&<div key={idx}>
                                 <div id={`${i._id}Id`}  className="input_types">
 
                                   <input type="checkbox" name={i.identityTypeName} value={i._id}

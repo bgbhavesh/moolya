@@ -1,10 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import MlTabView from  './MlAdminTabView'
 import MlAdminSearch from  './MlAdminSearch'
 import  MlAdminProfile from './MlAdminProfile'
 import VerticalBreadCrum from "../breadcrum/VerticalBreadCrum";
+import BugReport from "../../../commons/components/bugReport/BugReport";
 export default class MlAdminHeader extends Component {
   constructor(props,context){
     super(props,context);
@@ -24,6 +23,8 @@ export default class MlAdminHeader extends Component {
 
     return (
       <div className="admin_header">
+        <BugReport />
+
         <MlAdminProfile/>
 
         <VerticalBreadCrum {...this.props}/>

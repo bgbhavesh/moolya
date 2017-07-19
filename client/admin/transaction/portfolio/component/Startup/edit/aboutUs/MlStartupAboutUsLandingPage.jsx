@@ -40,13 +40,13 @@ export default class MlStartupAboutUs extends React.Component{
 
   getStartUpState() {
     this.setState({aboutStartup: false})
-    $('.last-item').removeClass('menunone');
-    this.props.backClickHandler()
+    //$('.last-item').removeClass('menunone');
+    this.props.backClickHandler();
+
   }
 
   render(){
     let aboutUsImages=null;
-    console.log(this.state.startupAboutUs.aboutUs);
     let startupAboutUs=this.state.startupAboutUs;
     if(startupAboutUs){
       let clients=startupAboutUs.clients;
@@ -63,10 +63,6 @@ export default class MlStartupAboutUs extends React.Component{
 
               })
         }
-        /* let clients=aboutUs.clients
-         var logos = underscore.pluck(clients, 'logo') || []
-         var image= <img src={`${logos}`}/>
-         console.log(logos)*/
       }
     }
     return (
@@ -107,9 +103,6 @@ export default class MlStartupAboutUs extends React.Component{
               <div className="panel-heading">Clients <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
               <div className="panel-body text-center panel-body-scroll">
                 {aboutUsImages}
-                {/*<img src="/images/logo.png"/>*/}
-                {/*<img src="/images/idea_hub_logo.png"/>*/}
-                {/*<img src="/images/nari_preneur_logo.png"/>*/}
               </div>
             </div></div>
             <div className="col-md-12 nopadding"><div className="panel panel-default panel-form-view">

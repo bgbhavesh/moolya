@@ -18,6 +18,10 @@ class MlUserContext{
             if(!default_User_Profile ){
                 default_User_Profile = user_profiles[0];
             }
+          default_User_Profile.email = user.profile.email;
+          default_User_Profile.mobileNumber = user.profile.mobileNumber;
+          default_User_Profile.firstName = user.profile.firstName;
+          default_User_Profile.lastName = user.profile.lastName;
         }
         return default_User_Profile;
     }

@@ -353,3 +353,67 @@ export async function fetchStartupPortfolioLicenses(portfoliodetailsId) {
   return data
   // return id
 }
+
+export async function fetchDetailsStartupChartsActionHandler(portfoliodetailsId) {
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            fetchStartupPortfolioCharts(portfoliodetailsId: $portfoliodetailsId) {
+               
+                employmentOfCompanyChart{
+                    eofAbout
+                    eofFromMonth
+                    eofFromYear
+                    eofToMonth
+                    eofToYear
+                    eofNumberOfEmployment
+                    index
+                }
+                profitRevenueLiabilityChart{
+                    prlEntityType
+                    prlFromMonth
+                    prlFromYear
+                    prlToMonth
+                    prlToYear
+                    pelValueType
+                    prlValue
+                    prlabout
+                    index
+                }
+                reviewOfCompanyChart{
+                    rofYear
+                    rofValue
+                    rofAbout
+                    index
+                }
+                employeeBreakupDepartmentChart{
+                    ebdFromMonth
+                    ebdFromYear
+                    ebdToMonth
+                    ebdToYear
+                    ebdDepartment
+                    ebdNumberOfEmployment
+                    ebdAbout
+                    ebdDepartmentName
+                    index
+                }
+            }
+          }
+
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+
+  const data = result.data.fetchStartupPortfolioCharts;
+  /*let data = _.omit(id,'__typename');*/
+  let chartsArray = {}
+  chartsArray["employmentOfCompanyChart"]=_.map(data.employmentOfCompanyChart, function (row) {return _.omit(row, ['__typename'])});
+  chartsArray["profitRevenueLiabilityChart"]=_.map(data.profitRevenueLiabilityChart, function (row) {return _.omit(row, ['__typename'])});
+  chartsArray["reviewOfCompanyChart"]=_.map(data.reviewOfCompanyChart, function (row) {return _.omit(row, ['__typename'])});
+  chartsArray["employeeBreakupDepartmentChart"]=_.map(data.employeeBreakupDepartmentChart, function (row) {return _.omit(row, ['__typename'])});
+
+  return chartsArray
+}

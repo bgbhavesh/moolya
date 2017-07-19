@@ -11,10 +11,14 @@ export async function fetchInternalTaskInfo(taskId) {
         fetchInternalTaskById(internalTaskId:$internalTaskId) {
           _id
           attendee
+          attendeeProfileId
           name
           stage
           resourceId
-          attendees
+          attendees {
+            userId
+            profileId
+          }
           docs
           status
           note

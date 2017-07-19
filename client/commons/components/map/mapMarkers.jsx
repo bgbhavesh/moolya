@@ -1,7 +1,5 @@
 import React, {Component, PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
-import controllable from 'react-controllables';
-import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 
 import _ from 'lodash';
 
@@ -40,7 +38,7 @@ export default class MapMarkers extends Component {
   constructor(props) {
     super(props);
     this.state = {loading: true, data: {}, isHover: false};
-    this.markerClickHandler.bind(this);
+    //this.markerClickHandler.bind(this);
     this.onMouseEnterHandlerCallback.bind(this);
   }
 
@@ -61,7 +59,7 @@ export default class MapMarkers extends Component {
     this.setState({isHover: false});
   }
 
-  markerClickHandler(data)
+ /* markerClickHandler(data)
   {
     // console.log(data);
     if(data.module == 'cluster')
@@ -82,7 +80,7 @@ export default class MapMarkers extends Component {
 
     if(data.module == 'subChapter')
       FlowRouter.go('/admin/dashboard/'+this.props.params.clusterId+'/'+this.props.params.chapterId+'/'+data.markerId+'/communities?viewMode=true');
-  }
+  }*/
 
   /*async findModuleDetails() {
     let json = {
@@ -100,6 +98,8 @@ export default class MapMarkers extends Component {
     let actionConfig = this.props.actionConfiguration|| [];
     let hoverInConfig = _.find(actionConfig, {actionName: 'onMouseEnter'});
     let hoverActionHandler=hoverInConfig&&hoverInConfig.handler?hoverInConfig.handler:null;
+    let markerClickConfig = _.find(actionConfig, {actionName: 'onMarkerClick'});
+    let markerClickActionHandler=markerClickConfig&&markerClickConfig.handler?markerClickConfig.handler:null;
     let hoverComp = hoverInConfig&&hoverInConfig.hoverComponent?hoverInConfig.hoverComponent:"";
     let data = this.state.data && this.state.data ? this.state.data : [];
     let HoverComponent = React.cloneElement(hoverComp, {data: data});
@@ -123,7 +123,7 @@ export default class MapMarkers extends Component {
       <div>{this.props.status?
         <div style={{'width': '200px'}} className={`cluster_map ${status}`} id={this.props.markerId}
                           onMouseOver={this.onMouseEnterContent.bind(this,hoverActionHandler)} onMouseOut={this.onMouseLeaveContent.bind(this)}
-                          onClick={this.markerClickHandler.bind(this, this.props)}>
+                          onClick={markerClickActionHandler&&markerClickActionHandler.bind(this, this.props)}>
           <div className="hex_btn hex_btn_in">
             <span>
               {this.props.showImage && this.props.showImage===true?<img src={this.props.text}/>:<b>{this.props.text}</b>}</span>
@@ -135,7 +135,7 @@ export default class MapMarkers extends Component {
         :
         <div style={{'width': '200px'}} className={`cluster_map ${this.props.isActive?"active":"inactive"}`} id={this.props.markerId}
                           onMouseOver={this.onMouseEnterContent.bind(this,hoverActionHandler)} onMouseOut={this.onMouseLeaveContent.bind(this)}
-                          onClick={this.markerClickHandler.bind(this, this.props)}>
+                          onClick={markerClickActionHandler&&markerClickActionHandler.bind(this, this.props)}>
         <div className="hex_btn hex_btn_in">
           <span>
            {this.props.showImage && this.props.showImage===true?<img src={this.props.text}/>:<b>{this.props.text}</b>}</span>

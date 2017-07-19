@@ -307,7 +307,9 @@ class MlAuthorization
         return false;
       }
 
-      findCommunity(communityArray, chapterId, subChapterId, communityId) {
+      /**code change sending 2 parameter and reciving 4 paraments */
+      // findCommunity(communityArray, chapterId, subChapterId, communityId) {
+      findCommunity(communityArray, communityId) {
         for (var i = 0; i < communityArray.length; i++) {
           var index = _.isMatch(communityArray[i], {communityCode: 'all'})
           if (index)

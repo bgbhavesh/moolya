@@ -99,8 +99,8 @@ export default class RegistrationWizard extends React.Component{
         }
       }
     }
-    this.setState({loading : false,kycDocumentList: kycDocumentsArray })
-    this.setState({loading: false, registrationDetails: response});
+    // this.setState({loading : false,kycDocumentList: kycDocumentsArray })
+    this.setState({loading: false, kycDocumentList: kycDocumentsArray, registrationDetails: response});
     return response;
   }
 
@@ -131,21 +131,27 @@ export default class RegistrationWizard extends React.Component{
     let registrationConfig={
       registrationId:registrationId,
       userType:this.context.userType,
+      /**step1 props*/
       getRegistrationDetails:this.getRegistrationDetails.bind(this),
       registrationInfo:this.state.registrationDetails.registrationInfo,
+      emailDetails:this.state.registrationDetails.emails,
       refetchRegistrationAndTemplates:this.refetchRegistrationAndTemplates.bind(this),
 
+      /**step2 props*/
       registrationDetails:this.state.registrationDetails.registrationDetails,
       community:this.state.registrationDetails.registrationInfo?this.state.registrationDetails.registrationInfo.communityName:null,
 
+      /**step3 props*/
       getRegistrationContactDetails:this.getRegistrationContactDetails.bind(this),
       registrationData:this.state.registrationDetails,
       clusterId:this.state.registrationDetails.registrationInfo?this.state.registrationDetails.registrationInfo.clusterId:null,
 
+      /**step4 props*/
       getRegistrationSocialLinks:this.getRegistrationSocialLinks.bind(this),
       registrationData:this.state.registrationDetails,
       uploadedProfileImg:this.state.registrationDetails.registrationInfo?this.state.registrationDetails.registrationInfo.profileImage:null,
 
+      /**step5 props*/
       getRegistrationKYCDetails:this.getRegistrationKYCDetails.bind(this),
       registrationData:this.state.registrationDetails,
       kycDocuments : this.state.kycDocumentList,

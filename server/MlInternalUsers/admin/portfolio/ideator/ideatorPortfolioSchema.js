@@ -311,29 +311,56 @@ let ideatorPortfolioSchema = `
         fileType:String
         isPrivate:Boolean
     }
+     type PortfolioDetails{
+      portfolioId: String
+      isPrivate: Boolean
+    }
+    input portfolioDetails{
+      portfolioId: String
+      isPrivate: Boolean
+    }
     
     input libraryInput{
+      _id: String
       userId: String
       fileName: String
       fileUrl: String
       fileType: String
       isPrivate: Boolean
       libraryType: String
+      inCentralLibrary: Boolean
+      portfolioReference: [portfolioDetails]
     }
     
     input privateData{
       index: Int
       element: Boolean
       type: String
+      libraryType: String
+    }
+    
+      input file{
+      userId: String
+      fileName: String
+      fileUrl: String
+      fileType: String
+      libraryType: String 
+      inCentralLibrary: Boolean
+      inPortfolioLibrary: Boolean
+      
+
     }
     
      type Details{
+      _id: String
       userId: String
       fileName: String
       fileUrl: String
       fileType: String
       isPrivate: Boolean
       libraryType: String
+      inCentralLibrary: Boolean
+      portfolioReference: [PortfolioDetails]
     }
     
     
@@ -353,10 +380,9 @@ let ideatorPortfolioSchema = `
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
         fetchIdeas(portfolioId:String):[Idea]
         fetchLibrary(userId:String):[Details]
-        fetchAllowableFormats:Boolean
+        fetchDataFromCentralLibrary:[Details]
         validateUserForAnnotation(portfoliodetailsId:String!):Boolean
     }
-    
     type Mutation{
         createIdeatorPortfolio(portfolio:ideatorPortfolio):response
         createAnnotation(portfoliodetailsId:String, docId:String, quote:String): response
@@ -368,8 +394,10 @@ let ideatorPortfolioSchema = `
         createIdea(idea:idea):response
         createLibrary(detailsInput:libraryInput):response
         updatePrivacyDetails(detailsInput:privateData): response
-        updateIdea(ideaId:String, idea:idea):response
-        updateLibraryData(files: String): response
+        updateIdea(ideaId:String, idea:idea, clusterId: String, chapterId: String, subChapterId: String, communityId: String):response
+        updateLibraryData(files: privateData): response
+        putDataIntoTheLibrary(portfoliodetailsId:String,files:file): response
+        updateLibrary(id: String,files:libraryInput): response
     }
 `
 
@@ -393,6 +421,9 @@ let supportedApi = [
   {api:'fetchIdeas', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchAllowableFormats', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchLibrary', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
+  {api:'putDataIntoTheLibrary', actionName:'CREATE', moduleName:"PORTFOLIO",isWhiteList:true},
+  {api:'fetchDataFromCentralLibrary', actionName:'CREATE', moduleName:"PORTFOLIO",isWhiteList:true},
+
 
 
 
@@ -403,11 +434,12 @@ let supportedApi = [
   {api:'createLibrary', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'updateAnnotation', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'updateIdeatorPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
-  {api:'updateIdea', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+  {api:'updateIdea', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
   {api:'resolveComment', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'reopenComment', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'updatePrivacyDetails', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
-  {api:'updateLibraryData', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true}
+  {api:'updateLibraryData', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
+  {api:'updateLibrary', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true}
 
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

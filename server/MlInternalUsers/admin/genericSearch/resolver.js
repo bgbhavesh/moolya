@@ -707,7 +707,6 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
   if(args.module == "Portfoliodetails"){
       data = MlPortfolioDetails.find(query,findOptions).fetch();
-      // totalRecords = data.length;
       totalRecords = MlPortfolioDetails.find(query,findOptions).count();
   }
   if(args.module=="templates"){
@@ -741,13 +740,20 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords = MlFunderPortfolio.find(finalQuery, findOptions).count();
   }
 
-  if (args.module == "serviceProviderPortfolioDetails") {
-    let value = mlDBController.find('MlPortfolioDetails', {status: 'gone live', communityCode: "SPS"}, context).fetch()
-    let portId = _lodash.map(value, '_id')
-    let finalQuery = mergeQueries(query, {portfolioDetailsId: {$in: portId}});
-    data = MlServiceProviderPortfolio.find(finalQuery, findOptions).fetch();
-    totalRecords = MlServiceProviderPortfolio.find(finalQuery, findOptions).count();
-  }
+  // if (args.module == "serviceProviderPortfolioDetails") {
+  //   let value = mlDBController.find('MlPortfolioDetails', {status: 'gone live', communityCode: "SPS"}, context).fetch()
+  //   let portId = _lodash.map(value, '_id')
+  //   let finalQuery = mergeQueries(query, {portfolioDetailsId: {$in: portId}});
+  //   data = MlServiceProviderPortfolio.find(finalQuery, findOptions).fetch();
+  //   totalRecords = MlServiceProviderPortfolio.find(finalQuery, findOptions).count();
+  // }
+  // if (args.module == "startupPortfolioDetails") {
+  //   let value = mlDBController.find('MlPortfolioDetails', {status: 'gone live', communityCode: "STU"}, context).fetch()
+  //   let portId = _lodash.map(value, '_id')
+  //   let finalQuery = mergeQueries(query, {portfolioDetailsId: {$in: portId}});
+  //   data = MlStartupPortfolio.find(finalQuery, findOptions).fetch();
+  //   totalRecords = MlStartupPortfolio.find(finalQuery, findOptions).count();
+  // }
 
   if(args.module=="SubDomain"){
     var domain= MlSubDomain.find(query,findOptions).fetch();
@@ -824,38 +830,59 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       {'$lookup':{from:'mlPortfolioDetails',localField:'_id',foreignField:'userId', as:'portfolio'}},
       {'$lookup':{from:'mlOfficeTransaction',localField:'_id',foreignField:'userId', as:'office'}},
       {'$lookup':{from:'mlTransactionsLog',localField:'_id',foreignField:'userId', as:'transactionLog'}},
-      {'$project':{"R":{
+      {'$project':{"registration":{
         '$map':
         { "input":"$registration", "as":"reg", 'in':
         { "createdAt" :"$$reg.registrationInfo.registrationDate", "transactionId":"$$reg._id" ,"transactionType":"$$reg.registrationInfo.transactionType",username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
         }
       },
-        "P":{
+        "portfolio":{
           '$map':
           { "input":"$portfolio", "as":"port", 'in':
-          { "createdAt" :"$$port.timeStamp", "transactionId":"$$port._id" ,"transactionType":"$$port.transactionType", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+          { "createdAt" :"$$port.createdAt", "transactionId":"$$port._id" ,"transactionType":"$$port.transactionType", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
           }
         },
-        "O":{
+        "office":{
           '$map':
           { "input":"$office", "as":"off", 'in':
           { "createdAt" :"$$off.dateTime", "transactionId":"$$off._id" ,"transactionType":"$$off.transactionType", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName' , userId:'$_id'}
           }
         },
-        "T":{
+        "transactionLog":{
           '$map':
           { "input":"$transactionLog", "as":"trans", 'in':
           { "createdAt" :"$$trans.createdAt", "transactionId":"$$trans._id" ,"transactionType":"$$trans.transactionTypeName", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
           }
-        }
-      }}
-    ]
-    let response = mlDBController.aggregate('users', pipeline, context);
-    data = _lodash.concat(response[0].R, response[0].P, response[0].O, response[0].T)
-    totalRecords = data.length
+        },
+      }},
+      {'$project': {data: { "$concatArrays" : [ "$registration", "$portfolio", "$office", "$transactionLog" ] } }},
+      {'$addFields': { 'data.totalRecords': { $size: "$data" } } },
+      {"$unwind" : "$data"},
+      {"$replaceRoot": { newRoot: "$data"}}
+    ];
+
+    if(Object.keys(query).length) {
+      pipeline.push({$match: query});
+    }
+
+    if(findOptions.sort) {
+      pipeline.push({$sort:findOptions.sort});
+    }
+
+    if(findOptions.skip) {
+      pipeline.push({$skip:findOptions.skip});
+    }
+
+    if(findOptions.limit) {
+      pipeline.push({$limit:findOptions.limit});
+    }
+
+    data = mlDBController.aggregate('users', pipeline, context);
+    // data = _lodash.concat(response[0].R, response[0].P, response[0].O, response[0].T)
+    totalRecords = data && data[0] && data[0].totalRecords ? data[0].totalRecords : 0;
   }
   return {'totalRecords':totalRecords,'data':data};
-}
+};
 
 MlResolver.MlUnionResolver['SearchResult']= {
   __resolveType(data, context, info){
@@ -881,7 +908,8 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "registrationInfo":resolveType= 'RegistrationInfo';break;
       case "registrationApprovedInfo":resolveType= 'RegistrationInfo';break;
       case "FunderPortfolio":resolveType= 'FunderPortfolio';break;
-      case "serviceProviderPortfolioDetails":resolveType= 'serviceProviderPortfolioDetails';break;
+      // case "serviceProviderPortfolioDetails":resolveType= 'serviceProviderPortfolioDetails';break;
+      // case "startupPortfolioDetails":resolveType= 'startupPortfolioOutput';break;
       case "Portfoliodetails":resolveType= 'Portfoliodetails';break;
       case "documentType":resolveType= 'DocumentTypes';break;
       case "documentFormat":resolveType= 'DocumentFormats';break;

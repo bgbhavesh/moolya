@@ -239,6 +239,9 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
     return response;
 }
 
+/**
+ * portfolio approval to go live
+ * */
 MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {
     let updatedResponse;
@@ -247,10 +250,10 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
         status: 'Go Live',
       }, context) || {}
     if (!_.isEmpty(regRecord)) {
-      updatedResponse = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {"status": "gone live"}, {$set: true}, context)
+      updatedResponse = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {"status": "gone live", transactionUpdatedDate: new Date()}, {$set: true}, context)
       if (updatedResponse) {
         let user = mlDBController.findOne('users', {_id: regRecord.userId}, context) || {};
-        let portfolioObject = _.pick(regRecord, ['userId','communityCode', 'clusterId', 'chapterId', 'subChapterId', 'communityId', 'clusterName', 'chapterName', 'subChapterName', 'communityName'])
+        let portfolioObject = _.pick(regRecord, ['userId','communityCode', 'clusterId', 'chapterId', 'subChapterId', 'communityId', 'clusterName', 'chapterName', 'subChapterName', 'communityName', 'profileId'])
         let extendObj = {
           "transactionType": "processSetup",
           "dateTime": new Date(),
@@ -263,6 +266,7 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
         let portfolioDetails = _.extend(portfolioObject, extendObj)
         // orderNumberGenService.assignPortfolioId(portfolioDetails)
 
+        /**if community is funder create process transaction by getting portfolio details*/
         if(_.isMatch(regRecord, {communityCode: 'FUN'})){
           MlResolver.MlMutationResolver['createProcessTransaction'](obj, {
             'portfoliodetails': portfolioDetails,
@@ -342,17 +346,7 @@ MlResolver.MlMutationResolver['removeIdetaorProfilePic'] = (obj, args, context, 
   return response;
 }
 
-MlResolver.MlMutationResolver['putDataIntoTheLibrary'] = (obj, args, context, info) => {
-  let response;
-  var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfoliodetailsId}, context)
-  if (portfolioDetails) {
-    args.files.userId = context.userId;
-    if (args.portfoliodetailsId) {
-      response = mlDBController.insert('MlLibrary', args.files, context)
-    }
-    return response;
-  }
-}
+
 
 
 

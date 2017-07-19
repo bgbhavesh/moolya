@@ -341,10 +341,16 @@ let CoreModules = {
       //custom restriction for registration
       case 'requested':
         serverQuery = {'status': {'$in': ['WIP', 'Yet To Start', 'Go Live']}};
+        if (!fieldsProj.sort) {
+          fieldsProj.sort = {'createdAt': -1}
+        }
         break;
       case 'approved':
-        // serverQuery={'status':"Approved"};
         serverQuery = {'status': "gone live"};
+        if (!fieldsProj.sort) {
+          fieldsProj.sort = {'transactionUpdatedDate': -1}
+        }
+        break;
     }
     //todo: internal filter query should be constructed.
     //resultant query with $and operator

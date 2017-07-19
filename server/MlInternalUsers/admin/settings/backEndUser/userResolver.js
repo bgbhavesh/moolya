@@ -15,6 +15,11 @@ MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, in
     return user&&user.profile&&user.profile.isInternaluser?"internal":"external";
 }
 
+MlResolver.MlQueryResolver['fetchExternalUserDetails'] = (obj, args, context, info) => {
+  let user= mlDBController.findOne('users', {'_id':context.userId}, context)
+  return user;
+}
+
 MlResolver.MlQueryResolver['fetchMapCenterCordsForUser'] = (obj, args, context, info) => {
   //Resolve the context of the User and hierarchy
   //todo: check internal /external user
@@ -1337,7 +1342,7 @@ MlResolver.MlMutationResolver['setAdminDefaultProfile'] = (obj, args, context, i
   if(user&&args&&args.clusterId){
     var hasSwitchedProfile=user.profile.hasSwitchedProfile;
 
-    /*switch profile/make default- if user has makes a profile as default,check for profile switch flag and set switchedProfileDefaultId to selected id
+    /**switch profile/make default- if user has makes a profile as default,check for profile switch flag and set switchedProfileDefaultId to selected id
      * if user has switched his profile, then switchedProfileDefaultId value has the default profile Id.
      *Once user logs in again, default profile Id will be retained and switchProfile details will be cleared.
      * */
@@ -1348,7 +1353,8 @@ MlResolver.MlMutationResolver['setAdminDefaultProfile'] = (obj, args, context, i
       result= mlDBController.update('users', {'_id':userId,'profile.InternalUprofile.moolyaProfile.userProfiles':{$elemMatch: {'isDefault': true}}},
         {"profile.InternalUprofile.moolyaProfile.userProfiles.$.isDefault": false}, {$set: true,multi:true}, context);
 
-      result= mlDBController.update('users',{'_id':userId,"profile.hasSwitchedProfile": false,'profile.InternalUprofile.moolyaProfile.userProfiles':{$elemMatch: {'clusterId': args.clusterId}}},
+      /**check if hasSwitchedProfile value is false/null/undefined/not exists*/
+      result= mlDBController.update('users',{'_id':userId,$or:[{"profile.hasSwitchedProfile":false},{"profile.hasSwitchedProfile" : { $type: 10 }},{"profile.hasSwitchedProfile":{ $exists: false } }],'profile.InternalUprofile.moolyaProfile.userProfiles':{$elemMatch: {'clusterId': args.clusterId}}},
         {"profile.InternalUprofile.moolyaProfile.userProfiles.$.isDefault": true,
           "profile.switchedProfileDefaultId":null}, {$set: true}, context);
     }
@@ -1508,15 +1514,15 @@ MlResolver.MlMutationResolver['switchProfile'] = (obj, args, context, info) => {
   if(user&&args&&args.clusterId){
     var defaultUserProfile=_.find(user.profile.InternalUprofile.moolyaProfile.userProfiles, {'isDefault':true })||user.profile.InternalUprofile.moolyaProfile.userProfiles[0];
     var defaultUserProfileId=defaultUserProfile?defaultUserProfile.clusterId:null;
-    //Check if switchedProfileDefaultId exists for the first time and update defaultUserProfileId
+    /**Check if switchedProfileDefaultId exists for the first time and update defaultUserProfileId*/
     result= mlDBController.update('users',{'_id':userId,$or:[{"profile.switchedProfileDefaultId" : { $type: 10 }},{"profile.switchedProfileDefaultId":{ $exists: false } }]},
       {"profile.switchedProfileDefaultId":defaultUserProfileId}, {$set: true,multi:false}, context);
 
-    /*clear the default flag of all profiles*/
+    /**clear the default flag of all profiles*/
     result= mlDBController.update('users', {'_id':userId,'profile.InternalUprofile.moolyaProfile.userProfiles':{$elemMatch: {'isDefault': true}}},
       {"profile.InternalUprofile.moolyaProfile.userProfiles.$.isDefault": false}, {$set: true,multi:true}, context);
 
-    /*switch profile - if user has switched profile,make the profile as default */
+    /**switch profile - if user has switched profile,make the profile as default */
       result= mlDBController.update('users',{'_id':userId,'profile.InternalUprofile.moolyaProfile.userProfiles':{$elemMatch: {'clusterId': args.clusterId}}},
         {"profile.hasSwitchedProfile": true,
          "profile.InternalUprofile.moolyaProfile.userProfiles.$.isDefault": true}, {$set: true}, context);

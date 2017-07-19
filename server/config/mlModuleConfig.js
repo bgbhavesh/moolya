@@ -47,7 +47,6 @@ let modules = [
     "subProcess",
     "Technologies",
     "SubDomain",
-    "portfolioLibrary",
     "communityAccess",
     "templates",
     "services" ,
@@ -72,7 +71,6 @@ let modules = [
     'interaction',
     'actions',
     'serviceCards',
-    'serviceProviderPortfolioDetails'
   ];
 
 // Meteor.startup(function () {

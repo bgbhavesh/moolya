@@ -55,35 +55,35 @@ export default class MlAppServiceProviderEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "About",
-        component: <MlServiceProviderAbout key="1" getAboutus={this.getAboutus.bind(this)}
+        component: <MlServiceProviderAbout client={appClient} isAdmin={false} key="1" getAboutus={this.getAboutus.bind(this)}
                                            portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Awards and Rewards",
-        component: <MlServiceProviderAwards key="2" getAwardsDetails={this.getAwardsDetails.bind(this)}
+        component: <MlServiceProviderAwards client={appClient} isAdmin={false} key="2" getAwardsDetails={this.getAwardsDetails.bind(this)}
                                             portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Library",
-        component: <PortfolioLibrary isAdmin={true} client={appClient} key="3" getFunderLibrary={this.getFunderLibrary.bind(this)}
+        component: <PortfolioLibrary isAdmin={false} client={appClient} key="3" getFunderLibrary={this.getFunderLibrary.bind(this)}
                                      portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "MCL",
-        component: <MlServiceProviderMCL key="4" getServiceProviderMCL={this.getServiceProviderMCL.bind(this)}
+        component: <MlServiceProviderMCL isAdmin={false} client={appClient} key="4" getServiceProviderMCL={this.getServiceProviderMCL.bind(this)}
                                          portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Services",
-        component: <MlServiceProviderServices key="5"
+        component: <MlServiceProviderServices key="5" client={appClient} isAdmin={false}
                                               getServiceProviderServices={this.getServiceProviderServices.bind(this)}
                                               portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
@@ -91,7 +91,7 @@ export default class MlAppServiceProviderEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Clients",
-        component: <MlServiceProviderClients key="6"
+        component: <MlServiceProviderClients key="6" client={appClient} isAdmin={false}
                                              getServiceProviderClients={this.getServiceProviderClients.bind(this)}
                                              portfolioDetailsId={this.props.portfolioDetailsId}/>
       }

@@ -6,13 +6,13 @@ import MlStartupAboutUs from "../../../admin/transaction/portfolio/component/Sta
 import MlStartupManagement from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupManagement"
 import MlStartupInvestor from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupInvestor";
 import MlStartupData from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupData";
-import MlStartupCharts from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupCharts";
+import MlStartupCharts from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupCharts/MlStartupCharts";
 import MlStartupAwards from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupAwards";
 import MlStartupMCL from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupMCL";
 import MlStartupLookingFor from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupLookingFor";
 import PortfolioLibrary from '../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import {appClient} from '../../core/appConnection'
-import MlVerticalTabComponent from '../../../commons/components/tabcomponent/MlVerticalTabComponent'
+// import MlVerticalTabComponent from '../../../commons/components/tabcomponent/MlVerticalTabComponent'
 
 export default class MlAppStartupEditTabs extends React.Component{
 
@@ -33,16 +33,18 @@ export default class MlAppStartupEditTabs extends React.Component{
   }
 
   componentDidMount(){
-    setTimeout(function(){
-      $('div[role="tab"]').each(function( index ) {
-        var test = $(this).text();
-        $(this).empty();
-        $(this).html('<div class="moolya_btn moolya_btn_in">'+test+'</div>');
-      });
-      $('.RRT__tabs').addClass('horizon-swiper');
-      $('.RRT__tab').addClass('horizon-item');
-      $('.horizon-swiper').horizonSwiper();
-    },200);
+    // setTimeout(function(){
+    //   $('div[role="tab"]').each(function( index ) {
+    //     var test = $(this).text();
+    //     $(this).empty();
+    //     $(this).html('<div class="moolya_btn moolya_btn_in">'+test+'</div>');
+    //   });
+    //   $('.RRT__tabs').addClass('horizon-swiper');
+    //   $('.RRT__tab').addClass('horizon-item');
+    //   $('.horizon-swiper').horizonSwiper();
+    // },200);
+    // alert(1);
+    // $('.RRT__tabs').removeClass('menunone');
   }
 
   backClickHandler(){
@@ -52,6 +54,7 @@ export default class MlAppStartupEditTabs extends React.Component{
 
   setBackHandler(backMethod){
     this.props.setBackHandler(backMethod);
+    $('.RRT__tabs').removeClass('menunone');
   }
 
   getTabComponents(){
@@ -61,7 +64,7 @@ export default class MlAppStartupEditTabs extends React.Component{
       {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , component:<MlStartupManagement  key="2" isAdmin={false} client={appClient}   getManagementDetails={this.getManagementDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Investor" , component:<MlStartupInvestor client={appClient} isAdmin={false} key="3" getInvestorDetails={this.getInvestorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Data" , component:<MlStartupData client={appClient} isAdmin={false} key="4" portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Charts" , component:<MlStartupCharts key="5" client={appClient} isAdmin={false}  getStartupCharts={this.getStartupCharts.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Charts" , component:<MlStartupCharts key="5" client={appClient} isAdmin={false}  getChartDetails={this.getChartDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}  backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Awards" , component:<MlStartupAwards client={appClient} isAdmin={false} key="6" getAwardsDetails={this.getAwardsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<PortfolioLibrary key="7" isAdmin={false} client={appClient}  portfolioDetailsId={this.props.portfolioDetailsId}/>}, //
       {tabClassName: 'tab', panelClassName: 'panel', title:"M C & L" , component:<MlStartupMCL key="8" getStartupMCL={this.getStartupMCL.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
@@ -129,8 +132,10 @@ export default class MlAppStartupEditTabs extends React.Component{
     this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio});
   }
 
-  getStartupCharts(details){
-
+  getChartDetails(details,tabName){
+    let data = this.state.startupPortfolio;
+    data[tabName] = details;
+    this.props.getPortfolioDetails({startupPortfolio : data});
   }
 
   getStartupMCL(details){

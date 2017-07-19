@@ -3,6 +3,7 @@
  */
 
 import MoolyaCustomDateType from '../commons/graphQLScalar/Date';
+import GraphQLJSON from 'graphql-type-json';
 import MlSchemaDef from '../commons/mlSchemaDef';
 import {mergeStrings} from 'gql-merge';
 
@@ -18,7 +19,7 @@ const MlResolver = {MlQueryResolver, MlMutationResolver,MlUnionResolver, MlScala
 const MoolyaDateScalar = `scalar Date`;
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],MoolyaDateScalar]);
 MlResolver.MlScalarResolver['Date']= MoolyaCustomDateType;
-
+MlResolver.MlScalarResolver['JSON']= {JSON: GraphQLJSON};
 
 module.exports = MlResolver;
 

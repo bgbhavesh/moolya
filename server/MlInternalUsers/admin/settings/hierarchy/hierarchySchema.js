@@ -17,6 +17,7 @@ let HierarchySchema = `
       subDepartmentName   : String
       isMoolya            : Boolean
       isActive            : Boolean
+      clusterId           : String
     }    
     input FinalApprovalInput{
       parentDepartment    : String

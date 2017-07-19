@@ -750,15 +750,24 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
     }
   }
 }
+
+/**user rejection from registration*/
 MlResolver.MlMutationResolver['RejectedStatusForUser'] = (obj, args, context, info) => {
-  // TODO : Authorization
   if (args.registrationId) {
-    let updatedResponse = mlDBController.update('MlRegistration', args.registrationId, {"status": "Rejected"}, {$set: true}, context)
-    if (updatedResponse) {
-      var resp = mlDBController.update('users', {'profile.externalUserProfiles.registrationId': args.registrationId}, {"profile.externalUserProfiles.$.isApprove": false}, {$set: true}, context);
-      return resp
+    let isRejected = mlDBController.findOne('MlRegistration', {_id:args.registrationId, status: "Rejected"}, context)
+    if(!isRejected){
+      let updatedResponse = mlDBController.update('MlRegistration', args.registrationId, {"status": "Rejected"}, {$set: true}, context)
+      if (updatedResponse) {
+        var resp = mlDBController.update('users', {'profile.externalUserProfiles.registrationId': args.registrationId}, {"profile.externalUserProfiles.$.isApprove": false}, {$set: true}, context);
+        let code = 200;
+        let response = new MlRespPayload().successPayload("Registration Rejected Successfully", code);
+        return response
+      }
+    }else {
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("Registration already rejected", code);
+      return response;
     }
-    return updatedResponse;
   }
 }
 

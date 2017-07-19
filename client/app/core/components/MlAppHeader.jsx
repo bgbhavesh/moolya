@@ -75,7 +75,6 @@ export default class MlAppHeader extends Component {
     // const showLoader=this.state.loading;
     return (
       <div>
-        /**Bug Report*/
         <BugReport />
 
         <div className="overlay"></div>

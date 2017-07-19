@@ -178,9 +178,9 @@ MlResolver.MlQueryResolver['fetchNonMoolyaBasedDepartment'] = (obj, args, contex
   //   query = {subChapter: args.subChapter}
   // else
   //   query = {subChapter:{$in:['all', args.subChapter]}}
-  /**fetching all and specific departments based on cluster or subchapter*/
+  /**fetching all and specific departments based on cluster and subchapter*/
   let resp = mlDBController.find('MlDepartments', {
-    $or: [
+    $and: [
       {"depatmentAvailable.cluster": {$in: ["all", args.clusterId]},isActive:true},
       {
         "depatmentAvailable": {

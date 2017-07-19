@@ -7,6 +7,7 @@ import _ from "lodash";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../client/admin/utils/formElemUtil";
 import {multipartASyncFormHandler} from "../../../../../../client/commons/MlMultipartFormAction";
 import {fetchfunderPortfolioSuccess} from "../../actions/findPortfolioFunderDetails";
+import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from '../../../../../commons/components/loader/loader'
 var FontAwesome = require('react-fontawesome');
 
@@ -155,18 +156,35 @@ export default class MlFunderSuccessStories extends React.Component {
       portfolioDetailsId: this.props.portfolioDetailsId,
       portfolio: {successStories: [{logo: {fileUrl: '', fileName: fileName}, index: this.state.selectedIndex}]}
     };
-    let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
+    let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file));
   }
 
-  onFileUploadCallBack(resp) {
+  onFileUploadCallBack(file,resp) {
     if (resp) {
       let result = JSON.parse(resp)
-      if (result.success) {
+      let userOption = confirm("Do you want to add the file into the library")
+      if(userOption) {
+        let fileObjectStructure = {
+          fileName: file.name,
+          fileType: file.type,
+          fileUrl: result.result,
+          libraryType: "image"
+        }
+        this.libraryAction(fileObjectStructure)
+      }
+        if (result.success) {
         this.setState({loading: true})
         this.fetchOnlyImages();
       }
     }
   }
+
+  async libraryAction(file) {
+    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
+    return resp;
+  }
+
 
   async fetchOnlyImages() {
     const response = await fetchfunderPortfolioSuccess(this.props.portfolioDetailsId);

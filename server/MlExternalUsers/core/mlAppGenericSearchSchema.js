@@ -16,7 +16,7 @@ let appGenericSearch = `
     
     scalar JSON
 
-    union AppGenericSearchUnion = Activity | FunderPortfolio | serviceProviderPortfolioDetails | startupPortfolioOutput | Ideator
+    union AppGenericSearchUnion = Activity | FunderPortfolio | serviceProviderPortfolioDetails | startupPortfolioOutput | Ideator | Users
    
     type AppGenericSearchResponse {
       count:Int,
@@ -29,9 +29,12 @@ let appGenericSearch = `
       skip : Int,
       query : String
     }
+    input content {
+      userType :String
+    }
     
     type Query {
-      AppGenericSearch(module: String!, queryProperty: appGenericSearchQueryProperty): AppGenericSearchResponse!
+      AppGenericSearch(module: String!, content: content queryProperty: appGenericSearchQueryProperty): AppGenericSearchResponse!
     }
   `;
 

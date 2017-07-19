@@ -13,6 +13,7 @@ export default class  MlMapViewComposer extends Component {
     let queryOptions={
       forceFetch: true,
       variables: {
+        module:config.module,
         offset: 0,
         limit: config.sizePerPage||50,   //config.sizePerPage|| 10
         context:null,

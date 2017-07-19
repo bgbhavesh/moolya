@@ -10,6 +10,21 @@ let externalUser = `
         username: String,
         profile:  profile
     }
+    type Users{
+        _id: String,
+        password: String,
+        username: String,
+        latitude:Float,
+        longitude:Float,
+        name: String,
+        clusterName:String,
+        communityCode : String,
+        profile:Profile
+    }
+    type Profile{
+      isExternaluser:Boolean,
+      isActive:Boolean,
+    }
 
     input profile{
         isExternaluser:Boolean,
@@ -49,7 +64,7 @@ let externalUser = `
         profileId:String
     }
     
-    type ContactInfoSchema{
+    type ContactInfoSchema{ 
       numberType        : String
       numberTypeName    : String
       countryCode       : String

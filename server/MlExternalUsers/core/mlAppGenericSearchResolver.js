@@ -109,11 +109,11 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
     var totalRecords=0;
 
     if(args.offset && args.offset >0){   // `offset` may be `null`
-      findOptions.skip=args.offset;
+      findOptions.skip=args.queryProperty.offset;
     };
 
     if (args.limit&&args.limit > 0) { // `limit` may be `null`
-      findOptions.limit = args.limit;
+      findOptions.limit = args.queryProperty.limit;
     }
 
     let userFilterQuery={}; //'filter' applied by user
@@ -121,7 +121,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       userFilterQuery = getQuery.searchFunction(args);
     }
 
-    var userType = args.content.userType; // Funder, Ideator, Startup, etc.
+    var userType = args.queryProperty.query; // Funder, Ideator, Startup, etc.
 
     let loggedInUser = mlDBController.findOne('users', {'_id':context.userId}, context);
     var externalProfile = _.find(loggedInUser.profile.externalUserProfiles, {'isDefault':true});
@@ -131,7 +131,6 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
 
       // TODO: Add Browser condition
 
-    // If selecting Cluster, Chapter And Subachapter and then coming to Community Priming
     var clusterId = externalProfile.clusterId;
     var chapterId = externalProfile.chapterId;
     var subChapterId = externalProfile.subChapterId;
@@ -157,7 +156,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
 
               queryObj.communityDefName=userType;
 
-              let allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true}, {'profile.externalUserProfiles':{$elemMatch: queryObj}}]}, context, findOptions).fetch();
+              var allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true}, {'profile.externalUserProfiles':{$elemMatch: queryObj}}]}, context, findOptions).fetch();
 
               _.each(allUsers, function (user){
                   let userProfiles = user.profile.externalUserProfiles;
@@ -191,7 +190,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
 
         // FOR All
         else{
-            let externalUsers = mlDBController.find('users', {"$and": [{"profile.isSystemDefined": {$exists: false}}, {"profile.isExternaluser": true}, {'profile.externalUserProfiles': {$elemMatch: queryObj}}]}, context, findOptions).fetch();
+            var externalUsers = mlDBController.find('users', {"$and": [{"profile.isSystemDefined": {$exists: false}}, {"profile.isExternaluser": true}, {'profile.externalUserProfiles': {$elemMatch: queryObj}}]}, context, findOptions).fetch();
 
             if (externalUsers && externalUsers.length > 0) {
                 _.each(externalUsers, function (user) {

@@ -21,19 +21,20 @@ export const mlDashboardMapConfig=new MlAppViewer({
   fetchCenter:true,
   queryOptions:true,
   buildQueryOptions:(config)=>{
-    if(!config.params){
+
+    // if(!config.params){
       return {
         // clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,
         // chapterId:config.params&&config.params.chapterId?config.params.chapterId:null,
         // subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null,
-        content:{userType:config.params&&config.params.userType?config.params.userType:"All"}}
-    }
-    else
-      return {
-        // clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,
-        // chapterId:config.params&&config.params.chapterId?config.params.chapterId:null,
-        // subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null,
-        content:{userType:config.params&&config.params.userType?config.params.userType:"All"}}
+        queryProperty:{query:config.params&&config.params.userType?config.params.userType:"All"}}
+    // }
+    // else
+    //   return {
+    //     // clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,
+    //     // chapterId:config.params&&config.params.chapterId?config.params.chapterId:null,
+    //     // subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null,
+    //     content:{userType:config.params&&config.params.userType?config.params.userType:"All"}}
   },
   // fetchCenterHandler:async function(config){
   //   // let userDefaultObj = getAdminUserContext();
@@ -104,8 +105,8 @@ export const mlDashboardMapConfig=new MlAppViewer({
   //   }
   // ],
   graphQlQuery:gql`
-    query ($module: String!, $content: content, $queryProperty: appGenericSearchQueryProperty) {
-                data:AppGenericSearch(module: $module, content: $content, queryProperty: $queryProperty) {
+    query ($module: String!, $queryProperty: appGenericSearchQueryProperty) {
+                data:AppGenericSearch(module: $module, queryProperty: $queryProperty) {
                   count
                   data{
                    ...on Users{
@@ -134,24 +135,24 @@ export const mlDashboardListConfig=new MlAppViewer({
   sort:true,
   queryOptions:true,
   buildQueryOptions:(config)=>{
-    if(!config.params){
+    // if(!config.params){
       return {
         // clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,
         // chapterId:config.params&&config.params.chapterId?config.params.chapterId:null,
         // subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null,
-        content:{userType:config.params&&config.params.userType?config.params.userType:"All"}}
-    }
-    else
-      return {
-        // clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,
-        // chapterId:config.params&&config.params.chapterId?config.params.chapterId:null,
-        // subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null,
-        content:{userType:config.params&&config.params.userType?config.params.userType:"All"}}
+        queryProperty:{query:config.params&&config.params.userType?config.params.userType:"All"}}
+    // }
+    // else
+    //   return {
+    //     // clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,
+    //     // chapterId:config.params&&config.params.chapterId?config.params.chapterId:null,
+    //     // subChapterId:config.params&&config.params.subChapterId?config.params.subChapterId:null,
+    //     content:{userType:config.params&&config.params.userType?config.params.userType:"All"}}
   },
   viewComponent:<MlDashboardListView params={this.params}/>,
   graphQlQuery:gql`
-      query ($module: String!, $content: content, $queryProperty: appGenericSearchQueryProperty) {
-                data:AppGenericSearch(module: $module, content: $content, queryProperty: $queryProperty) {
+      query ($module: String!, $queryProperty: appGenericSearchQueryProperty) {
+                data:AppGenericSearch(module: $module, queryProperty: $queryProperty) {
                   count
                   data{
                    ...on Users{

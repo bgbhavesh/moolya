@@ -34,7 +34,7 @@ let appGenericSearch = `
     }
     
     type Query {
-      AppGenericSearch(module: String!, content: content queryProperty: appGenericSearchQueryProperty): AppGenericSearchResponse!
+      AppGenericSearch(module: String!, queryProperty: appGenericSearchQueryProperty): AppGenericSearchResponse!
     }
   `;
 

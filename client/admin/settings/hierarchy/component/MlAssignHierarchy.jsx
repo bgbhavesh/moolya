@@ -10,6 +10,7 @@ import {findDeptRolesActionHandler} from '../actions/findDepartmentRolesAction'
 import {findAssignedRolesActionHandler} from '../actions/findAssignedRolesAction'
 import {updateFinalApprovalActionHandler} from '../actions/updateFinalApprovalAction'
 import {findFinalApprovalRoleActionHandler} from '../actions/findFinalApprovalRoleAction'
+import {updateHierarchyAssignmentsActionHandler} from "../actions/updateFinalApprovalAction";
 import _ from 'lodash'
 var assignedParent = [
   {
@@ -60,23 +61,23 @@ export default class MlAssignHierarchy extends React.Component {
   }
 
   async findHierarchyDetails(){
-    let parentDepartmentInfo = this.props.departmentInfo;
+    let parentDepartmentInfo = this.props.data;
     let departmnetId = parentDepartmentInfo.departmentId;
     let subDepartmentId = parentDepartmentInfo.subDepartmentId;
-    let clusterId = this.props.clusterId;
+    let clusterId = this.props.data.clusterId;
     const response = await findFinalApprovalRoleActionHandler(departmnetId,subDepartmentId,clusterId);
     if(response){
-      this.props.getFinalApprovalDetails(response.finalApproval);
+      //this.props.getFinalApprovalDetails(response.finalApproval);
       let unassignedRoles = this.state.unAssignedRoles
       this.setState({unAssignedRoles:{id:response._id,teamStructureAssignment:unassignedRoles.teamStructureAssignment}})
-      this.props.getHierarchyId(response._id);
+      //this.props.getHierarchyId(response._id);
       this.setState({loading:false,finalApproval:response.finalApproval})
     }
     return response
   }
   async findUnAssignedDeptRoles(){
-    let departmentInfo=this.props.departmentInfo
-    let clusterId = this.props.clusterId
+    let departmentInfo=this.props.data
+    let clusterId = this.props.data.clusterId
     if(departmentInfo!=undefined){
       let departmentId=departmentInfo.departmentId
       let subDepartmentId = departmentInfo.subDepartmentId;
@@ -103,24 +104,64 @@ export default class MlAssignHierarchy extends React.Component {
       return response
     }
   }
+
+  async  updatehierarchyAssignments() {
+    let finalApproval = null,hierarchyInfo = null;
+    let unassignRoles = this.state.unAssignedRoles.teamStructureAssignment
+    let assignRoles = this.state.assignedRoles.teamStructureAssignment
+    let allRoles = []
+    if(assignRoles&&assignRoles.length>0){
+      allRoles = assignRoles
+    }
+    if(unassignRoles&&unassignRoles.length>0){
+      Array.prototype.push.apply(allRoles, unassignRoles)
+    }
+    let assignments  = _.map(allRoles, function (row) {
+      return _.omit(row, ['__typename']);
+    });
+    if(this.state.finalApproval&&this.state.finalApproval.isChecked){
+      finalApproval = {
+        department          : this.state.finalApproval.department,
+        subDepartment       : this.state.finalApproval.subDepartment,
+        role                : this.state.finalApproval.role,
+        isChecked           : this.state.finalApproval.isChecked
+      };
+      hierarchyInfo={
+        id                  : this.state.hierarchyId,//unassignedRoles.id?this.state.unassignedRoles.id:this.state.assignedRoles.id,
+        parentDepartment    : this.state.finalApproval.parentDepartment,
+        parentSubDepartment : this.state.finalApproval.parentSubDepartment,
+        clusterId           : this.props.data.clusterId,
+        teamStructureAssignment :assignments,
+        finalApproval         : finalApproval
+      }
+      console.log(hierarchyInfo);
+      const response = await updateHierarchyAssignmentsActionHandler(hierarchyInfo);
+      if(response && response.result){
+        FlowRouter.reload();
+        toastr.success(response.result);
+      }
+      return response;
+    }
+  }
+
   optionsBySelectDepartment(val){
     let finalApproval = this.state.finalApproval
     finalApproval.department = val;
     this.setState({finalApproval:finalApproval})
-    this.props.getFinalApprovalDetails(finalApproval);
+    //this.props.getFinalApprovalDetails(finalApproval);
 
   }
   optionsBySelectSubDepartment(val){
     let finalApproval = this.state.finalApproval
     finalApproval.subDepartment = val;
     this.setState({finalApproval:finalApproval})
-    this.props.getFinalApprovalDetails(finalApproval);
+    //this.props.getFinalApprovalDetails(finalApproval);
   }
   optionsBySelectFinalApprovalRole(val){
     let finalApproval = this.state.finalApproval
     finalApproval.role = val;
     this.setState({finalApproval:finalApproval})
-    this.props.getFinalApprovalDetails(finalApproval);
+    //this.props.getFinalApprovalDetails(finalApproval);
   }
   optionsBySelectParentNode(index, value){
 
@@ -137,7 +178,7 @@ export default class MlAssignHierarchy extends React.Component {
         roles.teamStructureAssignment[index].isAssigned = true
       }
       this.setState({unAssignedRoles: roles})
-      this.props.getUnAssignRoleDetails(roles)
+      //this.props.getUnAssignRoleDetails(roles)
     }
   }
   optionsBySelectReportingRole(index, selectedIndex){
@@ -145,36 +186,36 @@ export default class MlAssignHierarchy extends React.Component {
     roles.teamStructureAssignment[index].reportingRole = selectedIndex
     roles.teamStructureAssignment[index].isAssigned = true
     this.setState({unAssignedRoles:roles})
-    this.props.getUnAssignRoleDetails(roles)
+    //this.props.getUnAssignRoleDetails(roles)
   }
   optionsBySelectAssignedParentNode(index, value){
     let roles = _.cloneDeep(this.state.assignedRoles);
     //  let roles=this.state.assignedRoles
 
     if( value.value=="unassign"){
-         let allRoles = _.cloneDeep(this.state.allAssignedRoles);
-         let currentRole = roles.teamStructureAssignment[index]
-         let reportingRoleAvailableCurrentLayer = _.find(roles, {reportingRole:currentRole.roleId,isAssigned:true})
-         let reportingRoleAvailableAllLayer = _.find(allRoles, {reportingRole:currentRole.roleId,isAssigned:true})
-         if(reportingRoleAvailableCurrentLayer){
-               toastr.error("Cannot unassign as reporting role has hierarchy");
-         }else if(reportingRoleAvailableAllLayer){
-               toastr.error("Cannot unassign as reporting role has hierarchy");
-         }else{
-               roles.teamStructureAssignment[index].assignedLevel = value.value
-               roles.teamStructureAssignment[index].isAssigned = false
-         }
+      let allRoles = _.cloneDeep(this.state.allAssignedRoles);
+      let currentRole = roles.teamStructureAssignment[index]
+      let reportingRoleAvailableCurrentLayer = _.find(roles, {reportingRole:currentRole.roleId,isAssigned:true})
+      let reportingRoleAvailableAllLayer = _.find(allRoles, {reportingRole:currentRole.roleId,isAssigned:true})
+      if(reportingRoleAvailableCurrentLayer){
+        toastr.error("Cannot unassign as reporting role has hierarchy");
+      }else if(reportingRoleAvailableAllLayer){
+        toastr.error("Cannot unassign as reporting role has hierarchy");
+      }else{
+        roles.teamStructureAssignment[index].assignedLevel = value.value
+        roles.teamStructureAssignment[index].isAssigned = false
+      }
     }else{
       roles.teamStructureAssignment[index].assignedLevel = value.value
     }
     this.setState({assignedRoles:roles})
-    this.props.getAssignRoleDetails(roles)
+    // this.props.getAssignRoleDetails(roles)
   }
   optionsBySelectAssignedReportingRole(index, selectedIndex){
     let roles=this.state.assignedRoles
     roles.teamStructureAssignment[index].reportingRole = selectedIndex
     this.setState({assignedRoles:roles})
-    this.props.getAssignRoleDetails(roles)
+    //this.props.getAssignRoleDetails(roles)
   }
   updateFinalApproval(){
     const resp=this.updateFinalApprovalRoles();
@@ -183,7 +224,7 @@ export default class MlAssignHierarchy extends React.Component {
   }
 
   async  updateFinalApprovalRoles() {
-    let parentDepartmentInfo = this.props.departmentInfo;
+    let parentDepartmentInfo = this.props.data;
     let departmnetId = parentDepartmentInfo.departmentId;
     let subDepartmentId = parentDepartmentInfo.subDepartmentId
     let roles = {
@@ -193,7 +234,7 @@ export default class MlAssignHierarchy extends React.Component {
       department            : this.state.finalApproval.department,
       subDepartment         : this.state.finalApproval.subDepartment,
       role                  : this.state.finalApproval.role,
-      clusterId             : this.props.clusterId
+      clusterId             : this.props.data.clusterId
     }
     const response = await updateFinalApprovalActionHandler(roles);
     return response;
@@ -201,19 +242,19 @@ export default class MlAssignHierarchy extends React.Component {
   async findRoles(type) {
     //get deptId
 
-    let parentDepartment = this.props.departmentInfo;
+    let parentDepartment = this.props.data;
     let departmnetId = parentDepartment.departmentId;
     let subDepartmentId = parentDepartment.subDepartmentId
     const response = await findAssignedRolesActionHandler(departmnetId,subDepartmentId,type);
     if(response){
-     /* console.log(response._id)
-      let teamAssignment=response.teamStructureAssignment
-      this.setState({loading:false,assignedRoles:{id : response._id,teamStructureAssignment:teamAssignment}})*/
+      /* console.log(response._id)
+       let teamAssignment=response.teamStructureAssignment
+       this.setState({loading:false,assignedRoles:{id : response._id,teamStructureAssignment:teamAssignment}})*/
       let allAssignedRoles = response.teamStructureAssignment;
       let filteredRoles=[]
       allAssignedRoles.map(function (step, key){
         if(step.assignedLevel==type){
-           filteredRoles.push(step)
+          filteredRoles.push(step)
         }
       })
       this.setState({loading:false,dataAvailable:true,allAssignedRoles:allAssignedRoles,assignedRoles:{id : response._id,teamStructureAssignment:filteredRoles}})
@@ -226,7 +267,7 @@ export default class MlAssignHierarchy extends React.Component {
     let finalRole = this.state.finalApproval
     if(event.target.checked) {
       finalRole.isChecked = true
-      let parentDepartmentInfo = this.props.departmentInfo;
+      let parentDepartmentInfo = this.props.data;
       let departmnetId = parentDepartmentInfo.departmentId;
       let subDepartmentId = parentDepartmentInfo.subDepartmentId
       finalRole.parentDepartment=departmnetId;
@@ -235,7 +276,7 @@ export default class MlAssignHierarchy extends React.Component {
       finalRole.isChecked = false
     }
     this.setState({finalApproval: finalRole})
-    this.props.getFinalApprovalRole(this.state.finalApproval)
+    //this.props.getFinalApprovalRole(this.state.finalApproval)
   }
 
 
@@ -248,7 +289,7 @@ export default class MlAssignHierarchy extends React.Component {
   render() {
 
     let that = this;
-    let departmentInfo=this.props.departmentInfo
+    let departmentInfo=this.props.data
     let isMoolya=departmentInfo.isMoolya
     let departmentqueryOptions = {options: {variables: {isMoolya:isMoolya }}};
     let departmentQuery = gql` query($isMoolya:Boolean){
@@ -268,13 +309,13 @@ export default class MlAssignHierarchy extends React.Component {
         label:roleName
       }
     }`
-   /* let reportingRolequery=gql`query($departmentId:String,$subDepartmentId:String,$clusterId:String, $chapterId:String, $subChapterId:String, $communityId:String,$levelCode:String,$currentRoleId:String,$roles:teamStructureAssignmentInput){
-      data:fetchRolesForHierarchy(departmentId:$departmentId,subDepartmentId:$subDepartmentId,clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId, communityId:$communityId,levelCode:$levelCode,currentRoleId:$currentRoleId,roles:$roles) {
-        value:_id
-        label:roleName
-      }
-    }`*/
-    let finalApprovalOptions = {options: { variables: {departmentId:this.state.finalApproval.department,subDepartmentId:this.state.finalApproval.subDepartment,clusterId:this.props.clusterId}}};
+    /* let reportingRolequery=gql`query($departmentId:String,$subDepartmentId:String,$clusterId:String, $chapterId:String, $subChapterId:String, $communityId:String,$levelCode:String,$currentRoleId:String,$roles:teamStructureAssignmentInput){
+     data:fetchRolesForHierarchy(departmentId:$departmentId,subDepartmentId:$subDepartmentId,clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId, communityId:$communityId,levelCode:$levelCode,currentRoleId:$currentRoleId,roles:$roles) {
+     value:_id
+     label:roleName
+     }
+     }`*/
+    let finalApprovalOptions = {options: { variables: {departmentId:this.state.finalApproval.department,subDepartmentId:this.state.finalApproval.subDepartment,clusterId:this.props.data.clusterId}}};
     let finalApprovalQuery=gql`query($departmentId:String,$subDepartmentId:String,$clusterId:String){
       data:fetchRolesForFinalApprovalHierarchy(departmentId:$departmentId,subDepartmentId:$subDepartmentId,clusterId:$clusterId) {
         value:roleId
@@ -309,8 +350,8 @@ export default class MlAssignHierarchy extends React.Component {
           <div className="panel-heading">Un Assigned Role</div>
           <div className="panel-body">
             {that.state.unAssignedRoles.teamStructureAssignment.map(function (roles,id) {
-              let parentDepartment = that.props.departmentInfo;
-              let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId,roles:that.state.unAssignedRoles.teamStructureAssignment}}};
+              let parentDepartment = that.props.data;
+              let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.data.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId,roles:that.state.unAssignedRoles.teamStructureAssignment}}};
 
               return(
                 <div className="row" key={roles.roleId}>
@@ -371,8 +412,8 @@ export default class MlAssignHierarchy extends React.Component {
                         return _.omit(row, ['__typename']);
                       });
                     }
-                    let parentDepartment = that.props.departmentInfo;
-                    let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId,roles:assignments}}};
+                    let parentDepartment = that.props.data;
+                    let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.data.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId,roles:assignments}}};
                     //let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
 
                     return(
@@ -431,8 +472,8 @@ export default class MlAssignHierarchy extends React.Component {
                         return _.omit(row, ['__typename']);
                       });
                     }
-                    let parentDepartment = that.props.departmentInfo;
-                    let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId,roles:assignments}}};
+                    let parentDepartment = that.props.data;
+                    let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.data.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId,roles:assignments}}};
                     //let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
 
                     return(
@@ -492,8 +533,8 @@ export default class MlAssignHierarchy extends React.Component {
                       });
                     }
 
-                    let parentDepartment = that.props.departmentInfo;
-                    let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId,roles:assignments}}};
+                    let parentDepartment = that.props.data;
+                    let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.data.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId,roles:assignments}}};
                     //let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
 
                     return(
@@ -531,6 +572,10 @@ export default class MlAssignHierarchy extends React.Component {
                 </div>):(<div className="panel-body">No Assignments</div>)}
             </div>
           </div>
+        </div>
+        <div className="ml_icon_btn" style={{'textAlign':'center'}}>
+          <a href="#" onClick={that.updatehierarchyAssignments.bind(that)} className="save_btn"><span
+            className="ml ml-save"></span></a>
         </div>
       </div>
 

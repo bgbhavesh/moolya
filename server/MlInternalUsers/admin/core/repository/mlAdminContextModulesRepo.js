@@ -643,14 +643,36 @@ let CoreModules = {
       })
       const data = activeCluster;
       const totalRecords = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).count();
-      return {totalRecords: totalRecords, data: data};
+      return {totalRecords: totalRecords+1, data: data};
     }else{
       let clusterIds = userProfile && userProfile.defaultCluster ? userProfile.defaultCluster : [];
       resultantQuery = {_id: {$in: [clusterIds]}}
       var data = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).fetch();
       var totalRecords = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).count();
-      return {totalRecords: totalRecords + 1, data: data};
+      return {totalRecords: totalRecords , data: data};
     }
+  },
+  MlHierarchyDepartmentsRepo: (requestParams, userFilterQuery, contextQuery, fieldsProj, context) => {
+    let list = [];
+    let resp = mlDBController.find('MlDepartments', {
+      $and: [
+        {isMoolya:true},
+        {"depatmentAvailable.cluster": {$in: ["all", requestParams.clusterId]}}
+      ]
+    }, context).fetch()
+    resp.map(function (department) {
+      let subDepartments = MlSubDepartments.find({"departmentId": department._id}).fetch();
+      subDepartments.map(function (subDepartment) {
+        let deptAndSubDepartment = null
+        deptAndSubDepartment ={departmentId:department._id,departmentName:department.departmentName,subDepartmentId:subDepartment._id,subDepartmentName:subDepartment.subDepartmentName,isMoolya:department.isMoolya,isActive:department.isActive,clusterId:requestParams.clusterId}
+        list.push(deptAndSubDepartment)
+      })
+    })
+
+    data = list
+   // var totalRecords = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).count();
+    return {totalRecords: 0, data: data};
+
   }
 }
 

@@ -7,13 +7,21 @@ import MlResolver from "../../commons/mlResolverDef";
 
 let appointment=`
   
+  input userServiceCardPaymentInfo {
+    orderId: String!,
+    paymentId: String,
+    paymentMethod: String,
+    amount: Int,
+    currencyCode: String
+  }
+  
   type Query {   
      
   }
   
   type Mutation {
      bookUserServiceCard(serviceId: String!):response
-     userServiceCardPayment(orderId: String!): response
+     userServiceCardPayment(userServiceCardPaymentInfo: userServiceCardPaymentInfo): response
   }
 `;
 

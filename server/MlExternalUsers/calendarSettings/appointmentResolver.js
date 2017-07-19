@@ -49,5 +49,35 @@ MlResolver.MlMutationResolver["bookUserServiceCard"] = (obj, args, context, info
 };
 
 MlResolver.MlMutationResolver["userServiceCardPayment"] = (obj, args, context, info) => {
-  console.log(args);
+  let orderId = args.userServiceCardPaymentInfo.orderId;
+  let userId = context.userId;
+  let service = mlDBController.findOne('MlUserServiceCardOrder', {transactionId: orderId}, context);
+  let dataToInsert = {
+    paymentId: args.userServiceCardPaymentInfo.paymentId,
+    paymentMethod: args.userServiceCardPaymentInfo.paymentMethod,
+    amount: args.userServiceCardPaymentInfo.amount,
+    currencyId: args.userServiceCardPaymentInfo.currencyCode,
+    resourceId: orderId,
+    resourceType: "UserServiceCard",
+    userId: userId,
+    createdAt: new Date()
+  };
+  let paymentResponse = mlDBController.insert('MlPayment', dataToInsert, context);
+  if(typeof paymentResponse === "string" ) {
+    let serviceResponse = mlDBController.update('MlUserServiceCardOrder', service._id, {paymentStatus: 'paid'}, {$set: 1}, context);
+    if(serviceResponse) {
+      //Add leader balance
+      let code = 200;
+      let response = new MlRespPayload().errorPayload("Payment Updated", code);
+      return response;
+    } else {
+      let code = 400;
+      let response = new MlRespPayload().errorPayload(paymentResponse, code);
+      return response;
+    }
+  } else {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload(paymentResponse, code);
+    return response;
+  }
 };

@@ -13,7 +13,7 @@ var options = [
   {value: 'Video', label: 'Video'},
   {value: 'MeetUp', label: 'MeetUp'}
 ];
-export default class FunderCreateServicesView extends Component {
+export default class  FunderCreateServicesView extends Component {
   constructor(props){
     super(props)
     this.state={
@@ -23,11 +23,13 @@ export default class FunderCreateServicesView extends Component {
       uploadedProfilePic:"",
       data:{},
       selectedIndex: 0,
-      funderService: []
+      funderService: [],
+      saveData: false
     }
     this.handleBlur.bind(this);
     this.sendDataToParent.bind(this);
     this.onOptionSelected.bind(this);
+    this.saveBeSpoke.bind(this);
   }
 
   componentDidMount() {
@@ -98,11 +100,6 @@ export default class FunderCreateServicesView extends Component {
       }
     }
       details = _.extend(duration, duration1);
-      console.log(details)
-      //     details = _.omit(details, [name]);
-      //   details = _.extend(details, {duration{name: e.target.value}};
-      // }
-
   }
 
   /**
@@ -112,28 +109,6 @@ export default class FunderCreateServicesView extends Component {
    * returns ::  this.props.getServiceDetails(funderService)
    **/
 
-  //
-  // sendDataToParent() {
-  //   let data = this.state.data;
-  //   let service = this.state.funderService;
-  //   let funderService = _.cloneDeep(service);
-  //   data.index = this.state.selectedIndex;
-  //   funderService[this.state.selectedIndex] = data;
-  //   let arr = [];
-  //   _.each(funderService, function (item) {
-  //     for (var propName in item) {
-  //       if (item[propName] === null || item[propName] === undefined) {
-  //         delete item[propName];
-  //       }
-  //     }
-  //     let newItem = _.omit(item, "__typename");
-  //     let updateItem = _.omit(newItem, 'logo');
-  //     arr.push(updateItem)
-  //   })
-  //   funderService = arr;
-  //   this.setState({funderService: funderService})
-  //   this.props.getServiceDetails(funderService);
-  // }
   sendDataToParent() {
     let data = this.state.data;
     for (var propName in data) {
@@ -141,7 +116,7 @@ export default class FunderCreateServicesView extends Component {
         delete data[propName];
       }
     }
-    this.props.getServiceDetails(data)
+    this.props.saveServiceDetails(data)
   }
 
   /**
@@ -153,11 +128,8 @@ export default class FunderCreateServicesView extends Component {
 
   onOptionSelected(selectedIndustry) {
     let details = this.state.data;
-    console.log(selectedIndustry)
-    details = _.omit(details, ["industryType"]);
-    console.log(details)
-    details = _.extend(details, {["industryType"]: selectedIndustry});
-    console.log(details)
+    details = _.omit(details, ["industryId"]);
+    details = _.extend(details, {["industryId"]: selectedIndustry});
     this.setState({data: details}, function () {
       this.setState({selectedIndustryType: selectedIndustry})
       this.sendDataToParent()
@@ -180,8 +152,8 @@ export default class FunderCreateServicesView extends Component {
     let details = this.state.data;
     // let details = this.state.data;
     console.log(selectedConversation)
-    details = _.omit(details, ["conversationType"]);
-    details = _.extend(details, {["conversationType"]: temp});
+    details = _.omit(details, ["conversation"]);
+    details = _.extend(details, {["conversation"]: temp});
     console.log(details)
     this.setState({data: details}, function () {
       this.setState({selectedConversationType: temp})
@@ -200,7 +172,7 @@ export default class FunderCreateServicesView extends Component {
     let details = this.state.data;
     let name = e.target.name;
     details = _.omit(details, [name]);
-    details = _.extend(details, {[name]: e.target.checked});
+    details = _.extend(details, {[name]: e.target.checked?"offline":"online"});
     this.setState({data: details}, function () {
       this.sendDataToParent()
     })
@@ -233,13 +205,12 @@ export default class FunderCreateServicesView extends Component {
     if (resp) {
       this.setState({uploadedProfilePic: resp});
       var temp = $.parseJSON(this.state.uploadedProfilePic).result;
-
-      if(attach[index].images){
-        attach[index].images.push(temp)
+      if(attach[index].fileUrl){
+        attach[index].fileUrl.push(temp)
         // attach[index].images = tempObject
       }else {
         tempObject.push(temp)
-        attach[index].images = tempObject
+        attach[index].fileUrl = tempObject
       }
       details = _.omit(details, ["attachments"]);
       details = _.extend(details, {["attachments"]: attach});
@@ -253,9 +224,6 @@ export default class FunderCreateServicesView extends Component {
 
   addComponent(index) {
     let attach = this.state.attachmentDocs;
-    // let temp = [{}];
-    //   temp[index].documentName = "",
-    //   temp[index].images = []
     attach.push({})
     this.setState({attachmentDocs: attach})
   }
@@ -263,21 +231,99 @@ export default class FunderCreateServicesView extends Component {
   documentName(index, e) {
     let attach = this.state.attachmentDocs;
     let temp = e.target.value;
-    // let temp = "";
-    // temp = value;
     attach[index].documentName = temp;
     this.setState({attachmentDocs: attach})
+  }
+
+  saveBeSpoke(){
+    let details = this.state.data;
+    details = _.omit(details, ["saveData"]);
+    details = _.extend(details, {["saveData"]: !this.state.saveData});
+    this.setState({data: details}, function () {
+      this.sendDataToParent()
+    })
   }
 
   render() {
     let that = this;
     let industryTypeQuery = gql`
     query{
-    data:fetchIndustries{label:industryName,value:industryName}
+    data:fetchIndustries{label:industryName,value:_id}
     }
     `
 
     let picsArray = this.state.responsePic || []
+    return (
+      <div>
+        <div className="tab_wrap_scroll">
+          <div className="col-md-6 nopadding-left">
+            <div className="form_bg">
+              <form>
+                <div className="form-group switch_wrap switch_names">
+                  <span className="state_label">Online
+                  </span>
+                  <label className="switch nocolor-switch">
+                    <input type="checkbox" name="mode" onChange={this.modeSwitchHandler.bind(this)} value={this.state.mode} checked={this.props.beSpokeDetails?this.props.beSpokeDetails[0].mode==="offline"?true:false:false}/>
+                    <div className="slider">
+                    </div>
+                  </label>
+                  <span className="state_label acLabel">Offline</span>
+                </div>
+                <div className="clearfix"/>
+                <div className="form-group">
+                  <textarea className="form-control float-label" placeholder="About" name="about" onBlur={this.handleBlur.bind(this)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].about:""}></textarea>
+                </div>
+                <div className="form-group">
+                  <label>Required number of Sessions <input type="text" name="noOfSession" onChange={(e)=>this.handleBlur(e)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].noOfSessions?this.props.beSpokeDetails[0].noOfSessions: this.state.data.session?parseInt(this.state.data.session):this.state.data.session:""}  className="form-control inline_input medium_in"/> </label>
+                </div>
+                <div className="form-group">
+                  <label>Duration &nbsp; <input type="text" name="hour" onBlur={(e)=>this.handleDuration(e)} value={this.state.data.hour?parseInt(this.state.data.hour):this.state.data.hour} className="form-control inline_input"/> Hours
+                    <input  name="minute" onBlur={(e)=>this.handleDuration(e)} value={this.state.data.minute?parseInt(this.state.data.minute):this.state.data.minute} type="text" className="form-control inline_input"/> Mins </label>
+                </div>
+                {/*<div className="form-group">*/}
+                {/*<textarea className="form-control float-label" placeholder="Expected input"></textarea>*/}
+                {/*</div>*/}
+              </form>
+            </div>
+          </div>
+          <div className="col-md-6 nopadding-right">
+            <div className="form_bg">
+              <form>
+                <div className="form-group">
+                  <Moolyaselect multiSelect={true} className="form-control float-label" valueKey={'value'}
+                                labelKey={'label'} queryType={"graphql"} query={industryTypeQuery}
+                                isDynamic={true} placeholder="Select Industry Type"
+                                onSelect={that.onOptionSelected.bind(that)}
+                                selectedValue={that.state.selectedIndustryType} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].industryId:"" || that.state.selectedIndustryType}/>
+                </div>
+                <div className="form-group">
+                  <textarea className="form-control float-label" placeholder="Expected input" name="expectedInput" onBlur={this.handleBlur.bind(this)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].expectedInput:""}></textarea>
+                </div>
+                <div className="form-group">
+                  <div className="form-group">
+                    <Select name="form-field-name"  multi={true} options={options} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].conversation:"" || that.state.selectedConversationType} placeholder='Conversation Type' onChange={that.onConversationSelected.bind(that)} />
+                  </div>
+                </div>
+                <div className="ml_btn" style={{'textAlign':'center'}}>
+                  <div className="save_btn" onClick={this.saveBeSpoke.bind(this)}>Save</div>
+                  <div className="cancel_btn">Cancel</div>
+                </div>
+                {/*<div className="form-group">*/}
+                {/*<select className="form-control float-label" placeholder="Frequency">*/}
+                {/*<option>Video</option>*/}
+                {/*</select>*/}
+                {/*</div>*/}
+                <div className="form-group">
+                  <textarea className="form-control float-label" placeholder="Expected Output" name="expectedOutput" onBlur={this.handleBlur.bind(this)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].expectedOutput:""}></textarea>
+                </div>
+                <div className="clearfix"/>
+                {attachments}
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
     const pictures = picsArray.map(function(image){
       return (
       <div className="upload-image">
@@ -286,7 +332,7 @@ export default class FunderCreateServicesView extends Component {
       )
     })
 
-    let attach = this.state.attachmentDocs || [{}];
+    let attach = this.props.beSpokeDetails?this.props.beSpokeDetails[0].attachments:[{}] || this.state.attachmentDocs || [{}];
     const attachments = attach.map(function(details, index){
       return(
         <div className="panel panel-default step5">
@@ -314,7 +360,7 @@ export default class FunderCreateServicesView extends Component {
                 </figure>
               </label>
             </div>
-            {details.images ? details.images.map(function(image){
+            {details.fileUrl ? details.fileUrl.map(function(image){
               return(
               <div className="upload-image">
                 <img src={image} id="output"/>
@@ -326,72 +372,5 @@ export default class FunderCreateServicesView extends Component {
         </div>
       )
     })
-    return (
-      <div>
-        <div className="tab_wrap_scroll">
-          <div className="col-md-6 nopadding-left">
-            <div className="form_bg">
-              <form>
-                <div className="form-group switch_wrap switch_names">
-                  <span className="state_label">Online
-                  </span>
-                  <label className="switch nocolor-switch">
-                   <input type="checkbox" name="mode" onChange={this.modeSwitchHandler.bind(this)} value={this.state.mode}/>
-                   <div className="slider">
-                   </div>
-                  </label>
-                  <span className="state_label acLabel">Offline</span>
-                </div>
-                <div className="clearfix"/>
-                 <div className="form-group">
-                  <textarea className="form-control float-label" placeholder="About" name="about" onBlur={this.handleBlur.bind(this)}></textarea>
-                 </div>
-                <div className="form-group">
-                  <label>Required number of Sessions <input type="text" name="session" onChange={(e)=>this.handleBlur(e)} value={this.state.data.session?parseInt(this.state.data.session):this.state.data.session}  className="form-control inline_input medium_in"/> </label>
-                </div>
-                <div className="form-group">
-                  <label>Duration &nbsp; <input type="text" name="hour" onBlur={(e)=>this.handleDuration(e)} value={this.state.data.hour?parseInt(this.state.data.hour):this.state.data.hour} className="form-control inline_input"/> Hours
-                    <input  name="minute" onBlur={(e)=>this.handleDuration(e)} value={this.state.data.minute?parseInt(this.state.data.minute):this.state.data.minute} type="text" className="form-control inline_input"/> Mins </label>
-                </div>
-                {/*<div className="form-group">*/}
-                  {/*<textarea className="form-control float-label" placeholder="Expected input"></textarea>*/}
-                {/*</div>*/}
-              </form>
-            </div>
-          </div>
-          <div className="col-md-6 nopadding-right">
-            <div className="form_bg">
-              <form>
-                <div className="form-group">
-                <Moolyaselect multiSelect={true} className="form-control float-label" valueKey={'value'}
-                              labelKey={'label'} queryType={"graphql"} query={industryTypeQuery}
-                              isDynamic={true} placeholder="Select Industry Type"
-                              onSelect={that.onOptionSelected.bind(that)}
-                              selectedValue={that.state.selectedIndustryType} value={that.state.selectedIndustryType}/>
-                </div>
-                <div className="form-group">
-                  <textarea className="form-control float-label" placeholder="Expected input" name="expectedInput" onBlur={this.handleBlur.bind(this)}></textarea>
-                </div>
-                <div className="form-group">
-                  <div className="form-group">
-                    <Select name="form-field-name"  multi={true} options={options} value={that.state.selectedConversationType} placeholder='Conversation Type' onChange={that.onConversationSelected.bind(that)} />
-                  </div>
-                </div>
-                {/*<div className="form-group">*/}
-                  {/*<select className="form-control float-label" placeholder="Frequency">*/}
-                    {/*<option>Video</option>*/}
-                  {/*</select>*/}
-                {/*</div>*/}
-                <div className="form-group">
-                  <textarea className="form-control float-label" placeholder="Expected Output" name="expectedOutput" onBlur={this.handleBlur.bind(this)} ></textarea>
-                </div>
-                <div className="clearfix"/>
-                {attachments}
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
   }
 };

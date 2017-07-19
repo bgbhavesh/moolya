@@ -101,6 +101,10 @@ export default class MlAppServiceManageSchedule extends Component {
     });
   }
 
+  componentWillReceiveProps(newProps){
+    console.log(newProps)
+  }
+
   /**
    * Method :: setServiceSteps
    * Desc :: Sets components steps for stepzila to create and update service data
@@ -177,7 +181,9 @@ export default class MlAppServiceManageSchedule extends Component {
                                         checkTaxStatus={this.checkTaxStatus}
                                         checkPromoStatus={this.checkPromoStatus}
                                         checkDiscountStatus={this.checkDiscountStatus}
-                                        saveService={this.saveService}/>,
+                                        saveService={this.saveService}
+                                        bookService={this.props.bookService}/>,
+
         icon: <span className="ml ml-payments"></span>
       },
 

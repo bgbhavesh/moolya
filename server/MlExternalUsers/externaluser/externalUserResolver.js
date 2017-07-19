@@ -396,3 +396,21 @@ MlResolver.MlMutationResolver['switchExternalProfile'] = (obj, args, context, in
   }
   return response;
 }
+
+MlResolver.MlQueryResolver['fetchMapCenterCordsForExternalUser'] = (obj, args, context, info) => {
+  var clusterId=args.id||null;
+
+  if(!clusterId){
+    let user= mlDBController.findOne('users',{_id:context.userId});
+    var externalProfile = _.find(user.profile.externalUserProfiles, {'isDefault':true});
+    if(!externalProfile){
+      externalProfile = user.profile.externalUserProfiles[0];
+    }
+    clusterId=externalProfile.clusterId;
+  }
+
+  let clusterDetails = MlClusters.findOne(clusterId);
+  if (clusterDetails && clusterDetails.latitude && clusterDetails.longitude) {
+    return {lat: clusterDetails.latitude, lng: clusterDetails.longitude};
+  }
+}

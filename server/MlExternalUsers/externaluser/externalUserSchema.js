@@ -203,6 +203,11 @@ let externalUser = `
         contactInfo:[ContactInfo]
     }
     
+    type mapCenterCords{
+        lat:Float,
+        lng:Float
+    }
+    
     type Mutation{
       updateContactNumber(contactDetails:contactObj):response
       createUserGeneralInfo(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,profileId:String!,type:String!):response
@@ -217,12 +222,14 @@ let externalUser = `
         fetchIdeatorUsers:response
         findAddressBook:externalUserAdditionalInfoSchema
         fetchUserProfiles:[externalUserProfiles]
+        fetchMapCenterCordsForExternalUser(module:String, id:String):mapCenterCords
     }
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],externalUser]);
 
 let supportedApi = [
+    {api:'fetchMapCenterCordsForExternalUser', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
     {api:'fetchUserProfiles', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
     {api:'findAddressBook', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
     {api:'fetchUserProfiles', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},

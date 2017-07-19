@@ -71,6 +71,10 @@ class MlAuthorization
                       if(moduleName == 'CLUSTERHIERARCHY'){
                         moduleName = 'CLUSTER';
                       }
+                      if(moduleName == 'HIERARCHYDEPARTMENTS'){
+                        moduleName = 'HIERARCHY';
+                      }
+
 
 
 

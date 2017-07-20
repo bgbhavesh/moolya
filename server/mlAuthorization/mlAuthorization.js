@@ -78,7 +78,7 @@ class MlAuthorization
 
 
 
-                      if(moduleName == 'AUDIT_LOG')
+                      if(moduleName == 'AUDIT_LOG' ||moduleName == "BUG_REPORT")
                           return true
                       isContextSpecSearch = true;
                       break;

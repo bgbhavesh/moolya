@@ -10,7 +10,6 @@
  */
 
 import React, {Component, PropTypes} from 'react';
-import {render} from 'react-dom';
 import MlTableViewContainer from "../../../core/containers/MlTableViewContainer";
 import {mlProcessSetupRequestsTableConfig} from "../config/MlserviceCardsConfig";
 import _ from 'lodash';

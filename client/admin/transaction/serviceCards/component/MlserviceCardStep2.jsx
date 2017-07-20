@@ -12,20 +12,7 @@ import {getTaskFromService, fetchTaskDetails} from '../actions/mlFindService'
 
 export default class MlAppServiceStep2 extends React.Component{
   constructor(props) {
-    super(props)
-    this.state = {
-      selectedTab: "",
-      selectedTask: [],
-      selectedActivity:" ",
-      displayName:"",
-      noOfSession:"",
-      sessionFrequency:"",
-      activities:[],
-      hours:"",
-      minutes:"",
-      taskNames: [],
-      taskData: []
-    }
+    super(props);
   }
   componentDidMount() {
     let mySwiper = new Swiper('.manage_tasks', {
@@ -39,129 +26,65 @@ export default class MlAppServiceStep2 extends React.Component{
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(220+$('.app_header').outerHeight(true)));
   }
-  componentWillMount() {
-    this.getInitialData()
-  }
 
-  async getInitialData() {
-    let serviceId = this.props.data._id;
-    const resp = await getTaskFromService(serviceId);
-    if(resp) {
-      let taskNames = resp.tasks.map(function (task) {
-        return task.id;
-      });
-      this.setState({
-        taskNames: taskNames
-      });
-    }
-  }
+  /**
+   * Method :: getTabs
+   * Desc :: Get the tab for task
+   * @return XML
+   */
 
-  respectiveTab(name) {
-    let that = this;
-    that.setState({
-      selectedTask:name,
-      selectedTab:name
-    },function() {
-      that.getTaskDetails();
-    });
-  }
-
-  async getTaskDetails() {
-    let tasks = this.state.selectedTask;
-    if(!tasks) {
-      this.setState({displayName:" ",noOfSession:" ",sessionFrequency:" ",
-        hours:" ",minutes:" ",activities:" "})
-    }else {
-      const resp = await fetchTaskDetails(tasks);
-      console.log(resp)
-      this.setState({
-        displayName: resp.displayName, noOfSession: resp.noOfSession, sessionFrequency: resp.sessionFrequency,
-        hours: resp.duration.hours, minutes: resp.duration.minutes, activities: resp.session
-      })
-      return resp
-    }
-  }
-
-  // updateSessionSequence(evt, sessionId) {
-  //   const that = this;
-  //   let taskId = that.state.selectedTask;
-  //   let taskData = that.state.taskData;
-  //   let taskIndex = taskData.findIndex(function (task) {
-  //     return task.id == taskId;
-  //   });
-  //   if(taskIndex != -1){
-  //     let sessionIndex = taskData[taskIndex].sessions.findIndex(function (session) {
-  //       return session.id == sessionId;
-  //     });
-  //     if( sessionIndex != -1 ) {
-  //       taskData[taskIndex].sessions[sessionIndex].sequence = evt.target.value ;
-  //     } else {
-  //       taskData[taskIndex].sessions.push({
-  //         id : sessionId,
-  //         sequence: evt.target.value
-  //       });
-  //     }
-  //   } else {
-  //     let task = {
-  //       id: taskId,
-  //       sessions : [
-  //         {
-  //           id : sessionId,
-  //           sequence: evt.target.value
-  //         }
-  //       ]
-  //     };
-  //     taskData.push(task);
-  //   }
-  //   console.log(taskData);
-  //   that.setState({
-  //     taskData: taskData
-  //   });
-  // };
-
-  render() {
-    let that = this;
-    const {displayName, noOfSession, sessionFrequency, hours, minutes, activities,taskNames} = that.state;
-    const sessions = activities || []
-    let temp = [{}];
-    const taskTabs = taskNames || []
-    let toggleTabs = []
-    const tabs = taskTabs.map(function(tab, index){
+  getTabs() {
+    const { serviceTask } = this.props.data;
+    const {optionsBySelectService} = this.props;
+    console.log('-----serviceTask--', serviceTask.tasks);
+    const tabs = serviceTask.tasks ? serviceTask.tasks.map((tab, index) => {
       return (
-        <li >
-          <a href="" data-toggle="tab" onClick={that.respectiveTab.bind(that, tab)}><FontAwesome name='minus-square'/> {tab}</a>
+        <li className={serviceTask.selectedTaskId === tab.id ? 'active' : ''} key={index}>
+          <a href="#newTask" data-toggle="tab"
+             onClick={() => optionsBySelectService(tab.id)}>
+            <FontAwesome name='minus-square'/>{tab.displayName}
+          </a>
         </li>
       )
-    });
+    }) : [];
+    return tabs;
+  }
 
-    const sessionsList = sessions.map(function(data,index) {
+  /**
+   * Method :: getSessionList
+   * Desc :: List of task session
+   * @return XML
+   */
+
+  getSessionList() {
+    let { session } = this.props.data.serviceTask.selectedTaskDetails;
+    // const { updateSessionSequence } = this.props;
+    const sessionsList = session ? session.map((data, index) => {
       if(data) {
-        temp.push({
-          duration :{
-            hours:data.duration.hours?data.duration.hours:0,
-            minutes:data.duration.minutes?data.duration.minutes:0
-          },
-          activities: data.activities[0]?data.activities[0]:"activity"
-        })
-        let tempActivity = []
-        let activitiesArray = data.activities;
-        let activity = activitiesArray.map(function(data) {
-          tempActivity.push(data)
-        });
         return(
           <div className="panel panel-info" key={index}>
             <div className="panel-heading">
               <div className="col-md-2 nopadding-left">Session {index+1}</div>
               <div className="col-md-4">
                 <div  style={{'marginTop':'-4px'}}>
-                  <label>Duration: &nbsp; <input type="text" className="form-control inline_input" value={data.duration.hours}/> Hours <input type="text" className="form-control inline_input" value={data.duration.minutes}/> Mins </label>
+                  <label>Duration: &nbsp;
+                    <input type="text"
+                           className="form-control inline_input"
+                           value={data.duration.hours || 0} disabled/> Hours
+                    <input type="text"
+                           className="form-control inline_input"
+                           value={data.duration.minutes || 0} disabled/> Mins
+                  </label>
                 </div>
               </div>
               <div className="col-md-offset-2 col-md-3">
                 <div  style={{'marginTop':'-4px'}}>
                   <label>
                     Sequence: &nbsp;
-                    <input className="form-control inline_input" type="number" disabled />
+                    <input className="form-control inline_input"
+                           type="number"
+                           min="0"
+                           value={data.sequence} disabled />
                   </label>
                 </div>
               </div>
@@ -170,65 +93,101 @@ export default class MlAppServiceStep2 extends React.Component{
             <div className="panel-body">
               <div className="swiper-container manage_tasks">
                 <div className="swiper-wrapper">
-                  { tempActivity.map(function(details, index) {
+                  { data.activities && data.activities.map((activity, index) => {
                     return (
                       <div className="swiper-slide funding_list list_block notrans" key={index}>
                         <p className="online">Online</p>
                         <span>Duration: <FontAwesome name='pencil'/></span><br />
                         <div className="form-group">
-                          <label><input type="text" className="form-control inline_input" value={data.duration.hours}/> Hours <input type="text" className="form-control inline_input" value={data.duration.minutes}/> Mins </label>
+                          <label><input type="text" className="form-control inline_input"
+                                        value={data.duration.hours || 0} disabled/> Hours
+                            <input type="text" className="form-control inline_input"
+                                   value={data.duration.minutes || 0} disabled/> Mins
+                          </label>
                         </div>
-                        <h3>{details}</h3>
+                        <h3>{activity}</h3>
                       </div>
-                    )})}
+                    )
+                  })}
                 </div>
               </div>
             </div>
           </div>
         )
       }
-    })
-    // that.setState({activities:temp})
-    let profileId = FlowRouter.getParam('profileId')
+    }) : [];
+    return sessionsList;
+  }
+  render() {
+    const {
+      optionsBySelectService,
+      respectiveTab,
+      serviceTask} = this.props.data;
+    const tasks = serviceTask.selectedTaskDetails || {};
+    const {
+      profileId,
+      serviceId } = this.props;
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} ><br/>
           <div className="panel panel-default new_profile_tabs">
             <div className="panel-heading">
-              Add the tasks to the services created
+              View the tasks to the created services
             </div>
             <div className="panel-body">
               <div className="ml_tabs ml_tabs_large">
                 <ul  className="nav nav-pills">
-                  {tabs}
+                  {this.getTabs()}
                 </ul>
               </div>
               <div className="tab-content clearfix">
                 <div className="tab-pane active" id="newTask">
                   <div className="col-md-6 nopadding-left">
                     <form>
-                      <div className="form-group"><input type="text" className="form-control float-label" value={this.state.selectedTask} disabled />
-                      </div>
-                      <div className="form-group"><label>Total number of Sessions Rs. <input className="form-control inline_input"  value={noOfSession}  /> </label>
+                      <div className="form-group">
+                        <input type="text"
+                               className="form-control float-label"
+                               value={tasks.name} disabled />
                       </div>
                       <div className="form-group">
-                        <label>Duration: &nbsp; <input type="text" className="form-control inline_input"  value={hours} disabled /> Hours <input type="text" className="form-control inline_input" value={minutes} disabled /> Mins </label>
+                        <label>Total number of Sessions Rs.
+                          <input className="form-control inline_input"
+                                 value={tasks.noOfSession} disabled />
+                        </label>
+                      </div>
+                      <div className="form-group">
+                        <label>Duration: &nbsp;
+                          <input type="text"
+                                 className="form-control inline_input"
+                                 value={tasks.duration.hours} disabled /> Hours
+                          <input type="text"
+                                 className="form-control inline_input"
+                                 value={tasks.duration.hours} disabled /> Mins </label>
                       </div>
                     </form>
                   </div>
                   <div className="col-md-6 nopadding-right">
                     <form>
                       <div className="form-group">
-                        <input type="text" className="form-control" placeholder="Display Name" value={displayName}/>
-                      </div>
-                      <div className="form-group"><span className="placeHolder active">Frequency</span><input className="form-control" value={sessionFrequency}></input>
+                        <input type="text"
+                               className="form-control"
+                               placeholder="Display Name"
+                               value={tasks.displayName}disabled />
                       </div>
                       <div className="form-group">
-                        <label>Sequence<input className="form-control inline_input" type="number" min="0"/></label>
+                        <span className="placeHolder active">Frequency</span>
+                        <input className="form-control" value={tasks.sessionFrequency} disabled />
+                      </div>
+                      <div className="form-group">
+                        <label>Sequence
+                          <input className="form-control inline_input"
+                                 type="number" min="0"
+                                 value={tasks.sequence} disabled />
+                        </label>
                       </div>
                     </form>
                   </div><br className="brclear"/>
-                  {sessionsList}
+                  {this.getSessionList()}
                 </div>
               </div>
             </div>

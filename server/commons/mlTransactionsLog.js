@@ -92,7 +92,7 @@ class MlTransactionsHandler {
   resolveUserAgent(context){
     var context=context||{};
     let userAgent = {
-      OS: context.os?context.os:" ",
+      OS: context.os?context.os:"-",
       ipAddress: context.ip?context.ip:" ",
       browser:context.browser?context.browser:" ",
       userId:context.userId?context.userId:" ",

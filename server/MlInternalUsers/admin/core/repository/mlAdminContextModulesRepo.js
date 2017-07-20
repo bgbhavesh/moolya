@@ -152,15 +152,47 @@ let CoreModules = {
     let reqArray = requestParams.moduleName.split(',');
     serverQuery = {moduleName: {$in: reqArray}}
     let userProfile = new MlAdminUserContext().userProfileDetails(context.userId) || {};
-    if (userProfile.hierarchyLevel == 4) {
+
+
+
+    //construct context query with $in operator for each fields
+    let resultantQuery = MlAdminContextQueryConstructor.constructQuery(contextQuery, '$in');
+
+    //resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery, serverQuery), '$and');
+
+
+    if (!fieldsProj.sort) {
+      fieldsProj.sort = {'createdDate': -1}
+    }
+
+    _.each(resultantQuery, function (r) {
+      if (_.isArray(r)) {
+        r.push('all');
+      }
+    });
+
+    //todo: internal filter query should be constructed.
+    //resultant query with $and operator
+    resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery,serverQuery), '$and');
+/*    if (userProfile.hierarchyLevel == 4) {
       userContextQuery = {}
     } else if (userProfile.hierarchyLevel == 3) {
       let clusterIds = userProfile && userProfile.defaultProfileHierarchyRefId ? userProfile.defaultProfileHierarchyRefId : [];
       userContextQuery = {clusterId: {$in: [clusterIds]}}
+    } else if (userProfile.hierarchyLevel == 2) {
+      let chapterIds = userProfile && userProfile.defaultChapters ? userProfile.defaultChapters : [];
+      userContextQuery = {chapterId: {$in: [chapterIds]}}
+    } else if (userProfile.hierarchyLevel == 1) {
+      let subChapterIds = userProfile && userProfile.defaultSubChapters ? userProfile.defaultSubChapters : [];
+      userContextQuery = {subChapterId: {$in: [subChapterIds]}}
+    }else if (userProfile.hierarchyLevel == 0) {
+      let communityIds = userProfile && userProfile.defaultProfileHierarchyRefId ? userProfile.defaultProfileHierarchyRefId : [];
+      userContextQuery = {clusterId: {$in: [communityIds]}}
     }
     query = mergeQueries( userFilterQuery, serverQuery);
+    resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(query, userContextQuery), '$and');*/
 
-    const data = MlAudit.find(query, userContextQuery,fieldsProj).fetch();
+    const data = MlAudit.find(resultantQuery,fieldsProj).fetch();
     data.map(function (doc, index) {
       let userObj;
       if (doc && doc.userId) {

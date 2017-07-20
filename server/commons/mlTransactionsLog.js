@@ -89,6 +89,21 @@ class MlTransactionsHandler {
     return contextData;
   }
 
+  resolveUserAgent(context){
+    var context=context||{};
+    let userAgent = {
+      OS: context.os?context.os:" ",
+      ipAddress: context.ip?context.ip:" ",
+      browser:context.browser?context.browser:" ",
+      userId:context.userId?context.userId:" ",
+      deviceModel:context.deviceModel?context.deviceModel:"-",
+      deviceType: context.deviceType?context.deviceType:"-",
+      deviceVendor: context.deviceVendor?context.deviceVendor:"-"
+    };
+
+    return userAgent;
+  }
+
   recordTransaction(transactionsParams) {
 
     var context=transactionsParams.context?transactionsParams.context:{};

@@ -9,9 +9,8 @@ import MlResolver from "../../commons/mlResolverDef";
 
 let service=`
   type FacilitationCharge {
+     type: String
      amount: Int
-     percentage: Int
-     derivedAmount: Int
   }
   type Attachments {
      name: String
@@ -20,7 +19,6 @@ let service=`
      fileUrl : [String]
   }
   type ServicePayment {
-     amount: Int
      tasksAmount: Int
      tasksDiscount: Int
      tasksDerived: Int
@@ -109,6 +107,7 @@ let service=`
     state: [States]
     cluster: Clusters
     isBeSpoke : Boolean
+    finalAmount: Int
     mode : String
     beSpokeCreatorProfileId: String
     beSpokeCreatorUserId: String
@@ -162,11 +161,12 @@ let service=`
     termsAndCondition: TermsAndCondition
     attachments: [Attachments]
     payment: ServicePayment
-    tasks: [String]
+    tasks: [ServiceTask]
     facilitationCharge : FacilitationCharge
     createdAt: Date
     updatedAt: Date
     validTill: Date
+    finalAmount: Int
     community: [Communities]
     subChapter: [SubChapters]
     city: [Cities]
@@ -180,13 +180,13 @@ let service=`
     conversation : [String]
     expectedInput : String
     expectedOutput : String
+    isApproved: Boolean
     userDetails: UserDetails
   }
 
    input facilitationCharge {
+       type: String
        amount: Int
-       percentage: Int
-       derivedAmount: Int
    }
 
    input attachments {
@@ -197,7 +197,6 @@ let service=`
    }
 
    input servicepayment {
-       amount: Int
        tasksAmount: Int
        tasksDiscount: Int
        tasksDerived: Int
@@ -273,6 +272,7 @@ let service=`
         createdAt: Date
         updatedAt: Date
         validTill: Date
+        finalAmount: Int
         community: [communities]
         subChapter: [subChapters]
         city: [cities]

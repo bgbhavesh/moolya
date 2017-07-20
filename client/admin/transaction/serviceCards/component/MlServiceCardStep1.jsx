@@ -17,6 +17,7 @@ import moment from "moment";
 import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
 var Select = require('react-select');
+import Moolyaselect from '../../../commons/components/MlAdminSelectWrapper';
 
 
 /**
@@ -37,17 +38,7 @@ export default class MlServiceCardStep1 extends React.Component{
    */
 
   constructor(props){
-    super(props)
-    this.state = {
-      displayName:"",serviceName:"",frequencyType:"",validTillDate:"",status:"",clusterCode:"",
-      chapterObject:[{id:"",name:""}],
-      subChapterObject:[{}],
-      communityObject:[{}],
-      chapters:[],chapterName:[],
-      states:[],subChapterName:[],
-      communities:[],communitiesName:[],
-      daysRemaining:""
-    }
+    super(props);
   }
 
   /**
@@ -64,43 +55,22 @@ export default class MlServiceCardStep1 extends React.Component{
   }
 
   /**
-   * componentWillMount
-   * Desc :: Uses the props to set the various initial values
-   */
-  componentWillMount() {
-    console.log(this.props.data)
-    let statess = []
-    let citiess = []
-    let communitiess = []
-    this.props.data.state.map(function (data) {
-      statess.push(data.name)
-    })
-    this.setState({states: statess})
-    this.props.data.city.map(function(data){
-      citiess.push(data.name)
-    })
-    this.setState({chapters:citiess})
-    this.props.data.community.map(function(data){
-      communitiess.push(data.name)
-    })
-    this.setState({communities:communitiess});
-
-    var validTillDate = Date.parse(this.props.data.validTill);
-    var currentDate = new Date();
-    var remainingDate =  Math.floor((validTillDate - currentDate) / (1000*60*60*24));
-    this.setState({
-      daysRemaining: remainingDate
-    })
-    console.log(this.state.daysRemaining)
-  }
-
-  /**
    * Render
    * Desc   :: Render the HTML for this component
    * @returns {HTML}
    */
 
   render(){
+    const {serviceBasicInfo, userDetails, daysRemaining } = this.props.data;
+    const stateOptions = serviceBasicInfo.state && serviceBasicInfo.state.reduce((result, data) => {
+                           return result.concat({ value: data.id, label: data.name });
+                         }, []);
+    const cityOptions = serviceBasicInfo.city && serviceBasicInfo.city.reduce((result, data) => {
+                           return result.concat({ value: data.id, label: data.name });
+                         }, []);
+    const communityOptions = serviceBasicInfo.community && serviceBasicInfo.community.reduce((result, data) => {
+                           return result.concat({ value: data.id, label: data.name });
+                         }, []);
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
@@ -108,16 +78,16 @@ export default class MlServiceCardStep1 extends React.Component{
             <div className="form_bg">
               <form>
                 <div className="form-group">
-                  <input type="text" placeholder="Service Name" className="form-control float-label" id="" value={this.props.data.name} disabled/>
+                  <input type="text" placeholder="Service Name" className="form-control float-label" id="" value={serviceBasicInfo.name} disabled/>
                 </div>
                 <div className="form-group">
-                  <label>Total number of Sessions Rs. <input type="text"className="form-control inline_input" value={this.props.data.noOfSession} disabled /> </label>
+                  <label>Total number of Sessions Rs. <input type="text"className="form-control inline_input" value={serviceBasicInfo.noOfSession} disabled /> </label>
                 </div>
                 <div className="form-group">
-                  <label>Duration: &nbsp; <input type="text" className="form-control inline_input" value={this.props.data.duration.hours} disabled /> Hours <input type="text" className="form-control inline_input"  value={this.props.data.duration.minutes} disabled /> Mins </label>
+                  <label>Duration: &nbsp; <input type="text" className="form-control inline_input" value={serviceBasicInfo.duration.hours} disabled /> Hours <input type="text" className="form-control inline_input"  value={serviceBasicInfo.duration.minutes} disabled /> Mins </label>
                 </div>
                 <div className="form-group" id="date-time">
-                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Valid Till"}}  value={moment(this.props.data.validTill).format('DD-MM-YY')} />
+                  <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Valid Till"}}  value={serviceBasicInfo.validTill ? moment(serviceBasicInfo.validTill).format('DD-MM-YY') : ''} />
                   <FontAwesome name="calendar" className="password_icon" />
                 </div>
               </form>
@@ -127,34 +97,48 @@ export default class MlServiceCardStep1 extends React.Component{
             <div className="form_bg">
               <form>
                 <div className="form-group">
-                  <input type="text" placeholder="Display Name" className="form-control float-label" value={this.props.data.displayName} disabled id=""/>
+                  <input type="text" placeholder="Display Name" className="form-control float-label" value={serviceBasicInfo.displayName} disabled id=""/>
                 </div>
                 <span className="placeHolder active">Frequency type</span>
                 <div className="form-group">
-                  <Select name="form-field-name"   options={options} value={this.props.data.sessionFrequency} placeholder='Frequency Type' disabled />
+                  <Select name="form-field-name" options={options} value={serviceBasicInfo.sessionFrequency} placeholder='Frequency Type' disabled />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Cluster" className="form-control float-label" value={this.props.data.cluster.name} disabled/>
+                  <input type="text" placeholder="Cluster" className="form-control float-label" value={userDetails.clusterName} disabled/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="States" className="form-control float-label" value={this.state.states} disabled id=""/>
+                  <Select multi={true}
+                          placeholder="States"
+                          className="form-control float-label"
+                          options={stateOptions}
+                          value={stateOptions} disabled />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Cities" className="form-control float-label" value={this.state.chapters} disabled id=""/>
+                  <Select multi={true}
+                          type="text"
+                          placeholder="States"
+                          className="form-control float-label"
+                          options={cityOptions}
+                          value={cityOptions} disabled />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Communities" className="form-control float-label" value={this.state.communities} disabled id=""/>
+                  <Select multi={true}
+                          type="text"
+                          placeholder="States"
+                          className="form-control float-label"
+                          options={communityOptions}
+                          value={communityOptions} disabled />
                 </div>
                 <div className="form-group switch_wrap inline_switch">
                   <label>Status</label>
                   <label className="switch">
-                    <input type="checkbox" checked={this.props.data.status} />
+                    <input type="checkbox" checked={serviceBasicInfo.status} />
                     <div className="slider"></div>
                   </label>
                 </div>
                 <br className="brclear"/>
                 <div className="form-group">
-                  <label>Service expires &nbsp; <input type="text" className="form-control inline_input" value={this.state.daysRemaining} disabled /> days from the date of purchase</label>
+                  <label>Service expires &nbsp; <input type="text" className="form-control inline_input" value={daysRemaining || ''} disabled /> days from the date of purchase</label>
                 </div>
               </form>
             </div>

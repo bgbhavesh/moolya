@@ -149,7 +149,6 @@ MlResolver.MlMutationResolver['updateService'] = (obj, args, context, info) => {
         args.Services.payment["tasksAmount"] = taskAmount;
         args.Services.payment["tasksDiscount"] = taskAmount - taskDerivedAmount;
         args.Services.payment["tasksDerived"] = taskDerivedAmount;
-        args.Services.payment["amount"] = taskDerivedAmount;
       }
       args.Services.userId = service.userId;
       args.Services.updatedAt = new Date();
@@ -207,7 +206,6 @@ MlResolver.MlMutationResolver['updateServiceAdmin'] = (obj, args, context, info)
         args.Services.payment["tasksAmount"] = taskAmount;
         args.Services.payment["tasksDiscount"] = taskAmount - taskDerivedAmount;
         args.Services.payment["tasksDerived"] = taskDerivedAmount;
-        args.Services.payment["amount"] = taskDerivedAmount;
       }
       args.Services.userId = service.userId;
       args.Services.updatedAt = new Date();
@@ -257,7 +255,7 @@ MlResolver.MlQueryResolver['fetchTasksAmount'] = (obj, args, context, info) => {
       totalAmountOfTasks.push({
         totalAmount:data.payment.derivedAmount
         })
-    })
+    });
   return totalAmountOfTasks;
 }
 
@@ -271,9 +269,10 @@ MlResolver.MlQueryResolver['getProfileBasedOnPortfolio'] = (obj, args, context, 
 
 MlResolver.MlQueryResolver['getServiceBasedOnProfileId'] = (obj, args, context, info) => {
   let query = {
-    profileId: args.profileId
+    profileId: args.profileId,
+    isCurrentVersion: true
   };
-  let result = mlDBController.findOne('MlService', query , context)
+  let result = mlDBController.findOne('MlService', query , context);
   return result;
 }
 

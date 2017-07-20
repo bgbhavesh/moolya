@@ -29,6 +29,8 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
     super(props);
     this.state = {
       data: {
+        finalAmount: 0,
+        prevFinalAmount: 0,
         serviceBasicInfo: {
           duration: {}
         },
@@ -112,7 +114,7 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
    * @returns Void
    */
   async constructServiceData(serviceDeatails) {
-    let {serviceBasicInfo, clusterData, serviceTask, service, tasks, serviceTermAndCondition, attachments, servicePayment, taxStatus, facilitationCharge} = this.state.data;
+    let {serviceBasicInfo, finalAmount, prevFinalAmount, clusterData, serviceTask, service, tasks, serviceTermAndCondition, attachments, servicePayment, taxStatus, facilitationCharge} = this.state.data;
     let {data} = this.state;
     const resp = await fetchTaskDetailsForAdminServiceCard(this.profileId, this.serviceId);
     serviceTask.serviceTaskDetails = resp;
@@ -120,6 +122,8 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
       service = serviceDeatails;
       tasks = [];
       let {state, city, community} = service;
+      finalAmount = service.finalAmount || 0;
+      prevFinalAmount = service.finalAmount || 0;
       serviceBasicInfo = {
         duration: service.duration,
         profileId: service.profileId,
@@ -207,6 +211,8 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
       servicePayment: servicePayment,
       taxStatus: taxStatus,
       isLoding: true,
+      finalAmount: finalAmount,
+      prevFinalAmount: prevFinalAmount,
       userDetails: _.cloneDeep(this.props.data.userDetails)
     };
     this.setState({data: data});

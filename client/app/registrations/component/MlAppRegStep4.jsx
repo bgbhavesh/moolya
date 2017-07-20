@@ -35,7 +35,7 @@ export default class MlAppRegStep4 extends React.Component {
   componentDidMount() {
     this.setState({loading: false, socialLinkArray: this.props.registrationData.socialLinksInfo || []});
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight - (160 + $('.admin_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight - (150 + $('.app_header').outerHeight(true)));
     let registrationRecord = this.props.registrationData
     let addressDetails = registrationRecord&&registrationRecord.addressInfo?registrationRecord.addressInfo:[]
     /**
@@ -309,11 +309,12 @@ export default class MlAppRegStep4 extends React.Component {
      `;
     let socialLinkTypeOption = {options: {variables: {type: "SOCIALLINKS", hierarchyRefId: this.props.clusterId}}};
     return (
-      <div className="step_form_wrap step2">
+      <div className="step_form_wrap step4">
         {showLoader === true ? ( <MlLoader/>) : (<div>
           <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
             <div className="col-md-6 nopadding-left">
-
+              <form>
+<div className="panel panel-default">
               <div className="panel-heading">
                 Social Link Type
               </div>
@@ -391,6 +392,9 @@ export default class MlAppRegStep4 extends React.Component {
 
                 </div>
               </div>
+</div>
+              </form>
+
             </div>
             <div className="col-md-6 nopadding-right">
               <div className="form_bg">

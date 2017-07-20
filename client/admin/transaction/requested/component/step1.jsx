@@ -644,9 +644,9 @@ export default class step1 extends React.Component{
                     <div className="form-group">
                       <input type="text" ref="remarks" placeholder="Remarks"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.remarks}  className="form-control float-label" id="" />
                     </div>
-                    <div className="form-group mandatory">
+                    <div className="form-group">
                       <span className={`placeHolder ${referedActive}`}>How Did You Know About Us</span>
-                      <Select name="form-field-name" ref="refered" placeholder="How Did You Know About Us" value={this.state.refered} options={referedOption} className="float-label" onChange={this.optionBySelectRefered.bind(this)} data-required={true} data-errMsg="How Did You Know About Us is required" />
+                      <Select name="form-field-name" ref="refered" placeholder="How Did You Know About Us" value={this.state.refered} options={referedOption} className="float-label" onChange={this.optionBySelectRefered.bind(this)}  />
                      <br className="clearfix"/>                      <br className="clearfix"/>
 
                     </div>

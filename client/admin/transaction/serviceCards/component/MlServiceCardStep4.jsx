@@ -24,170 +24,8 @@ export default class MlServiceCardStep4 extends React.Component{
    */
 
   constructor(props){
-    super(props)
-    this.state={
-      minute:"",
-      discount:false,
-      discountAmountR:false,
-      discountPercentageR:false,
-      status:"",
-      promo:false,
-      chargesAmount:0,
-      chargesPercentage:"",
-      derivedValue:0,
-      discountAmountField:true,
-      discountType:"",
-      discountValue:"",
-      initialAmount:""
-    }
-    this.getDetails.bind(this)
+    super(props);
   }
-
-  /**
-   * componentWillMount
-   * Desc :: Calls the function getDetails
-   */
-
-  componentWillMount() {
-    this.getDetails()
-  }
-
-  /**
-   * Method :: getDetails
-   * Desc   :: getTaskFromService() is called and respective states are set
-   * @returns :: void
-   */
-
-  async getDetails() {
-    let id = this.props.data._id
-    const resp = await getTaskFromService(id)
-    console.log(resp)
-    if (resp.payment) {
-      this.setState({
-        initialAmount: resp.payment.amount,
-        derivedValue: resp.payment.amount,
-        discountAmount: resp.payment.discountValue,
-        discountType:resp.payment.discountType,
-        discountPercentage: resp.payment.discountValue,
-        status: resp.payment.isTaxInclusive,
-        promo: resp.payment.isPromoCodeApplicable,
-        tasks: resp.tasks,
-        tasksAmount: resp.payment.tasksAmount,
-        tasksDerived: resp.payment.tasksDerived,
-        tasksDiscount: resp.payment.tasksDiscount,
-        facilitationAmount: resp.facilitationCharge.amount,
-        facilitationPercentage: resp.facilitationCharge.percentage
-      })
-    }
-    if (this.state.discountType === 'amount') {
-        this.setState({discountAmountR: true, discountPercentageR: false, discountPercentage: 0})
-    }else {
-        this.setState({discountAmountR: false, discountPercentageR: true, discountAmount: 0})
-    }
-    let amount = this.state.amountToPay;
-    if (this.state.derivedValue === 0) {
-    if (this.state.discountType === 'amount') {
-      let discount = this.state.discountAmount;
-      let value = amount - discount
-      this.setState({derivedValue: value})
-    } else {
-      let discount = this.state.discountPercentage;
-      let value = amount * discount / 100
-      this.setState({derivedValue: value})
-    }
-  }
-  if(this.state.facilitationAmount !== 0) {
-    this.setState({chargesAmount: true})
-  }else if(this.state.facilitationPercentage !== 0){
-      this.setState({chargesPercentage: true})
-    }
-  }
-
-  /**
-   * Method :: facilitationAmount
-   * Desc   :: Calculation for facilitation amount is done
-   * @params :: event handler
-   * @returns :: void
-   */
-
-  facilitationAmount(e){
-    let initialAmount = this.state.initialAmount;
-    if(e.currentTarget.value ==="") {
-      this.setState({derivedValue: initialAmount})
-      e.currentTarget.value = 0;
-    }
-    if (e.currentTarget.value >= 0) {
-      this.setState({"facilitationAmount": e.currentTarget.value}, function() {
-        if(this.state.chargesAmount){
-          let facilitationAmount = parseInt(this.state.facilitationAmount)
-          let derivedAmount = parseInt(this.state.derivedValue)
-          let total = derivedAmount + facilitationAmount;
-          this.setState({derivedValue:total})
-        }
-      }).bind(this);
-    } else {
-      this.setState({"facilitationAmount": 0});
-    }
-  }
-
-  /**
-   * Method :: facilitationPercentage
-   * Desc   :: Calculation for facilitation percentage is done
-   * @params :: event handler
-   * @returns :: void
-   */
-
-  facilitationPercentage(e){
-    let initialAmount = this.state.initialAmount;
-    if(e.currentTarget.value ==="") {
-      this.setState({derivedValue : initialAmount})
-      e.currentTarget.value = 0.0;
-    }
-    if(this.state.chargesPercentage) {
-      if (e.currentTarget.value >= 0.0) {
-        this.setState({"facilitationPercentage": e.currentTarget.value}, function(){
-          let facilitationPercentage = parseInt(this.state.facilitationPercentage)
-          let derivedAmount = parseInt(this.state.derivedValue)
-          let total = (derivedAmount * facilitationPercentage)/100;
-          this.setState({derivedValue:total})
-        }).bind(this);
-      } else {
-        this.setState({"facilitationPercentage": 0.0});
-      }
-    }
-  }
-
-  /**
-   * Method :: facilitationChargesPercentage
-   * Desc   :: Radio button for facilitation charges percentage
-   * @params :: event handler
-   * @returns :: void
-   */
-
-
-  facilitationChargesPercentage(e) {
-    let charges = e.target.checked;
-    this.setState({chargesPercentage: charges})
-  }
-
-
-  /**
-   * Method :: facilitationChargesAmount
-   * Desc   :: Radio button for facilitation charges amount
-   * @params :: event handler
-   * @returns :: void
-   */
-
-  facilitationChargesAmount(e) {
-    let charges = e.target.checked
-    this.setState({chargesAmount: charges})
-  }
-
-  /**
-   * Method :: saveDetails
-   * Desc   :: Performs the saving action
-   * @returns :: response - type :: number
-   */
 
   async saveDetails(){
     let amount = this.state.discountAmount;
@@ -264,8 +102,7 @@ export default class MlServiceCardStep4 extends React.Component{
    * Desc :: Initializing the float labels
    */
 
-  componentDidMount()
-  {
+  componentDidMount() {
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(310+$('.admin_header').outerHeight(true)));
@@ -287,85 +124,134 @@ export default class MlServiceCardStep4 extends React.Component{
    */
 
   render(){
+    console.log('----data-step4--', this.props.data);
+    const {
+      servicePayment,
+      facilitationCharge,
+      checkDiscountEligibility,
+      checkDiscountStatus,
+      calculateDiscounts,
+      checkTaxStatus,
+      checkPromoStatus,
+      taxStatus,
+      saveService} = this.props.data;
+    const {chargeType, checkChargeStatus, calculateCharges} = this.props;
     return (
       <div className="step_form_wrap step1">
-        <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
+        <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
           <div className="centered_form">
             <form>
               <div className="form-group">
                 <label>
                   Tasks actual amount
-                  <input type="number" disabled value={this.state.tasksAmount}  className="form-control "/>
+                  <input type="number" disabled value={servicePayment.tasksAmount}  className="form-control" />
                 </label>
               </div>
               <div className="form-group">
                 <label>
                   Task discount amount
-                  <input type="number" disabled value={this.state.tasksDiscount}  className="form-control "/>
+                  <input type="number" disabled value={servicePayment.tasksDiscount}  className="form-control" />
                 </label>
               </div>
               <div className="form-group">
                 <label>
                   Task derived amount
-                  <input type="number" disabled value={this.state.tasksDerived}  className="form-control "/>
+                  <input type="number" disabled value={servicePayment.tasksDerived}  className="form-control "/>
                 </label>
               </div>
               <div className="form-group switch_wrap switch_names inline_switch">
-                <label>Is Eligible for discount
-                </label>
-                <span className="state_label">Yes
-                </span>
-                <label className="switch nocolor-switch">
-                  {this.state.discount}
-                  <input type="checkbox" checked={this.state.discount} disabled/>
-                  <div className="slider">
-                  </div>
-                </label>
-                <span className="state_label acLabel">No
-                </span>
+                <label htmlFor="discount">Is Eligible for discount</label>
+                <span className={servicePayment.isDiscount ? 'state_label acLabel' : 'state_label'}>Yes</span><label htmlFor="discount" className="switch nocolor-switch">
+                <input type="checkbox" id="discount"
+                       checked={!servicePayment.isDiscount}
+                       value={servicePayment.isDiscount} disabled />
+                <div className="slider"></div>
+              </label>
+                <span className={servicePayment.isDiscount ? 'state_label' : 'state_label acLabel'}>No</span>
               </div>
               <br className="brclear"/>
               <div className="form-group">
                 <div className="input_types">
-                  <input id="radio1" type="radio" name="radio1" value="Amount" checked={this.state.discountAmountR} disabled /><label htmlFor="radio1"><span><span></span></span>Amount Rs {this.state.discountType === 'amount'?<input className="form-control inline_input" disabled value={this.state.discountAmount}/>:<div></div>}</label>
+                  <input id="amount" type="radio" name="amount"
+                         value="Amount" checked={servicePayment.discountType === 'amount' ? true : false}
+                         disabled />
+                  <label htmlFor="amount"><span><span></span></span>Amount Rs
+                    {servicePayment.discountType === 'amount' ?
+                      <input className="form-control inline_input"
+                             disabled
+                             value={servicePayment.discountValue}/> : <div></div>}
+                  </label>
                 </div>
                 <div className="input_types">
-                  <input id="radio2" type="radio" name="radio1" value="Percentage" checked={this.state.discountPercentageR} disabled /><label htmlFor="radio2"><span><span></span></span>Percentage{this.state.discountType === 'percent'?<input className="form-control inline_input" disabled value={this.state.discountPercentage}/>:<div></div>}</label>
+                  <input id="percent" type="radio" name="percent"
+                         value="Percentage" checked={servicePayment.discountType === 'percent' ? true : false}
+                         disabled />
+                  <label htmlFor="percent"><span><span></span></span>
+                    Percentage{servicePayment.discountType === 'percent'?
+                      <input className="form-control inline_input" disabled
+                             value={servicePayment.discountValue}/>:<div></div>}
+                  </label>
                 </div>
                 <br className="brclear"/>
               </div>
               <div className="form-group">
                 <div className="input_types">
-                  <input id="radio1" type="radio" name="radio2" value="TaxInclusive" checked={this.state.status} disabled/><label htmlFor="radio1"><span><span></span></span>Tax Inclusive</label>
+                  <input id="taxinclusive" type="radio" name="taxinclusive"
+                         value="taxinclusive" checked={taxStatus === 'taxinclusive' ? true : false}
+                         disabled />
+                  <label htmlFor="taxinclusive"><span><span></span></span>Tax Inclusive</label>
                 </div>
                 <div className="input_types">
-                  <input id="radio2" type="radio" name="radio2" value="TaxExclusive" checked={!this.state.status} disabled/><label htmlFor="radio2"><span><span></span></span>Tax Exclusive </label>
+                  <input id="taxexclusive" type="radio" name="taxexclusive"
+                         value="taxexclusive" checked={taxStatus === 'taxexclusive' ? true : false}
+                         disabled />
+                  <label htmlFor="taxexclusive"><span><span></span></span>Tax Exclusive </label>
                 </div>
                 <br className="brclear"/>
               </div>
               <div className="form-group switch_wrap switch_names inline_switch">
-                <label>Is Applicable for PROMOCODE</label>
-                <span className="state_label">Yes</span>
-                <label className="switch nocolor-switch">
-                  <input type="checkbox" defaultChecked={this.state.promo} disabled/>
-                  <div className="slider"></div>
+                <label htmlFor="promo">Is Applicable for PROMOCODE</label>
+                <span className={servicePayment.isPromoCodeApplicable ? 'state_label acLabel' : 'state_label'}>Yes</span><label htmlFor="promo" className="switch nocolor-switch">
+                <input id="promo" type="checkbox" checked={!servicePayment.isPromoCodeApplicable}
+                       value={servicePayment.isPromoCodeApplicable} disabled />
+                <div className="slider"></div>
               </label>
-                <span className="state_label acLabel">No</span>
+                <span className={servicePayment.isPromoCodeApplicable ? 'state_label' : 'state_label acLabel'}>No</span>
               </div>
-              <br className="clearfix"/>
-              <br className="clearfix"/><br className="clearfix"/>
+              <br className="brclear"/>
               <div className="form-group">
-                <label>Enter facilitation charges &nbsp; &nbsp; &nbsp; &nbsp; </label>
+                <label>Enter facilitation charges &nbsp; &nbsp;</label>
                 <div className="input_types">
-                  <input id="radio1" type="radio" name="radio3" value="Amount" onChange={this.facilitationChargesAmount.bind(this)} /><label htmlFor="radio1"><span><span></span></span>Amount Rs <input className="form-control inline_input" onChange={this.facilitationAmount.bind(this)}   value={this.state.facilitationAmount} /></label>
+                  <input id="facilitationamount" type="radio"
+                         name="facilitationamount"
+                         checked={chargeType === 'facilitationamount' ? true : false}
+                         onChange={(event) => checkChargeStatus(event)}
+                         value="Amount" />
+                  <label htmlFor="facilitationamount"><span><span></span></span>Amount Rs
+                    <input className="form-control inline_input"
+                           id="amount"
+                           value={facilitationCharge.amount}
+                           onChange={(event) => calculateCharges(event)} />
+                  </label>
                 </div>
                 <div className="input_types">
-                  <input id="radio2" type="radio" name="radio3" value="Percentage" onChange={this.facilitationChargesPercentage.bind(this)} /><label htmlFor="radio2"><span><span></span></span>Percentage <input className="form-control inline_input" onChange={this.facilitationPercentage.bind(this)}  value={this.state.facilitationPercentage} /></label>
+                  <input id="facilitationpercent" type="radio"
+                         name="facilitationpercent"
+                         checked={chargeType === 'facilitationpercent' ? true : false}
+                         onChange={(event) => checkChargeStatus(event)}
+                         value="Percentage"/>
+                  <label htmlFor="radio2"><span><span></span></span>Percentage
+                    <input className="form-control inline_input"
+                           id="percentage"
+                           value={facilitationCharge.percentage}
+                           onChange={(event) => calculateCharges(event)}/>
+                  </label>
                 </div>
-                <br className="brclear"/>
               </div>
               <div className="form-group">
-                <label>Derived amount Rs. <input className="form-control inline_input medium_in" value={this.state.derivedValue} readOnly="readOnly"/> </label>
+                <label>Derived amount Rs. <input className="form-control inline_input medium_in"
+                                                 value={facilitationCharge.derivedAmount} readOnly="readOnly"/>
+                </label>
               </div>
             </form>
           </div>

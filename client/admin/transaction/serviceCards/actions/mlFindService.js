@@ -22,6 +22,7 @@ query ($profileId: String) {
         name
         displayName
         noOfSession
+        validTill
         sessionFrequency
         duration{
          hours
@@ -30,6 +31,7 @@ query ($profileId: String) {
         status
         termsAndCondition{
           isCancelable
+          noOfDaysBeforeCancelation
           isReschedulable
           noOfReschedulable
         }
@@ -38,29 +40,82 @@ query ($profileId: String) {
           info
           isMandatory
         }
-        payment{
+        payment {
           amount
           isDiscount
           discountType
           discountValue
           isTaxInclusive
           isPromoCodeApplicable
-
-       }
+          tasksAmount
+          tasksDiscount
+          tasksDerived
+        }
+        tasks {
+          id
+          sequence
+          sessions{
+            id
+            sequence
+          }
+        }
+        facilitationCharge{
+          amount
+          percentage
+          derivedAmount
+        }
+        state{
+          id
+          name
+        }
+        city{
+          id
+          name
+        }
+        community{
+          id
+          name
+        }
         createdAt
         updatedAt
-      
-      
-  }
-}
+      }
+      }
     `,
-    forceFetch:true,
     variables: {
       profileId
-    }
+    },
+    forceFetch:true
   });
-  const services = result.data.getServiceBasedOnProfileId;
-  return services;
+  var response = result.data.getServiceBasedOnProfileId;
+  let service = _.omit(response, '__typename');
+  service.duration = _.omit(service.duration, '__typename');
+  service.payment = _.omit(service.payment, '__typename');
+  service.facilitationCharge = _.omit(service.facilitationCharge, '__typename');
+  let stateArray = [];
+  _.each(service.state, (item, say) => {
+    let value = _.omit(item, '__typename')
+    stateArray.push(value);
+  });
+  service.state = stateArray;
+  let cityArray = [];
+  _.each(service.city, (item, say) => {
+    let value = _.omit(item, '__typename')
+    cityArray.push(value)
+  });
+  service.city = cityArray;
+  let communityArray = [];
+  _.each(service.community, (item, say) => {
+    let value = _.omit(item, '__typename')
+    communityArray.push(value)
+  });
+  service.community = communityArray;
+  let taskArray = [];
+  _.each(service.tasks, (item, say) => {
+    let value = _.omit(item, '__typename')
+    taskArray.push(value)
+  });
+  service.tasks = taskArray;
+  return service
 }
 
 
@@ -217,5 +272,66 @@ export async function updateServiceActionHandler(serviceId,Services) {
   });
   const response = result.data.updateServiceAdmin;
   return response
+}
+
+/**
+ * Method :: fetchTaskDetailsForAdminServiceCard
+ * Description :: This function used to update the service collection
+ * @params :: serviceId : type :: String
+ * @params :: profileId  : type :: String
+ * returns ::  response : type :: Object
+ **/
+
+export async function fetchTaskDetailsForAdminServiceCard (profileId, serviceId) {
+  const result = await client.query({
+    query: gql`
+      query($profileId: String, $serviceId: String) {
+        fetchTaskDetailsForAdminServiceCard(profileId: $profileId, serviceId: $serviceId) {
+          id: _id
+          name
+          displayName
+          noOfSession
+          sessionFrequency
+          duration {
+            hours
+            minutes
+          }
+          session {
+            sessionId
+            duration {
+              hours
+              minutes
+            }
+            activities
+          }
+          attachments {
+             name
+             info
+             isMandatory
+          }
+        }
+      }
+    `,
+    variables: {
+      profileId,
+      serviceId
+    },
+    forceFetch: true
+  });
+  var taskDetails = result.data.fetchTaskDetailsForAdminServiceCard;
+  let tasks = [];
+  let taskArray = [];
+  _.each(taskDetails, (task, say) => {
+    let sessionArray = [];
+    let taskInfo =  _.omit(task, '__typename');
+    _.each(taskInfo.session, (item, say) => {
+      let value = _.omit(item, '__typename');
+      sessionArray.push(value)
+    });
+    taskInfo.session = sessionArray;
+    taskArray.push(taskInfo);
+  });
+  tasks = taskArray;
+  return tasks;
 }
 

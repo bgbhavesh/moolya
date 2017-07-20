@@ -17,7 +17,9 @@ let HierarchySchema = `
       subDepartmentName   : String
       isMoolya            : Boolean
       isActive            : Boolean
-      clusterId           : String
+      clusterId           : String,
+      subChapterId        : String,
+      isDefaultSubChapter : Boolean
     }    
     input FinalApprovalInput{
       parentDepartment    : String
@@ -39,7 +41,7 @@ let HierarchySchema = `
         fetchMoolyaBasedDepartmentAndSubDepartment(clusterId:String):[DepartmentAndSubDepartmentDetails]
         fetchNonMoolyaBasedDepartmentAndSubDepartments(clusterId:String,subChapterId:String):[DepartmentAndSubDepartmentDetails]
         fetchNonMoolyaBasedDepartmentAndSubDepartment(subChapterId:String):[Department]
-        fetchRolesForDepartment(departmentId:String,subDepartmentId:String,clusterId:String):[Roles]
+        fetchRolesForDepartment(departmentId:String,subDepartmentId:String,clusterId:String, subChapterId:String, isDefaultSubChapter: Boolean):[Roles]
         fetchRolesForHierarchy(departmentId:String,subDepartmentId:String, clusterId:String, chapterId:String, subChapterId:String, communityId:String,levelCode:String,currentRoleId:String,roles:[teamStructureAssignmentInput]): [Roles]
         fetchRolesForFinalApprovalHierarchy(departmentId:String,subDepartmentId:String, clusterId:String): [teamStructureAssignment]
     }

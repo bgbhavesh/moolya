@@ -178,7 +178,7 @@ import {mlClusterSubChaptersListConfig} from '../../admin/settings/hierarchy/con
 import MlViews from '../../admin/core/components/MlViews';
 import MlHierarchyList from '../../admin/settings/hierarchy/component/MlHierarchyList'
 import MlAdminHierarchyHeader from '../../admin/layouts/header/MlAdminHierarchyHeader'
-import MlHierarchyDetails from '../../admin/settings/hierarchy/component/MlHierarchyDetails'
+// import MlHierarchyDetails from '../../admin/settings/hierarchy/component/absolute'
 import MlFiltersList from '../../admin/settings/filters/components/MlFiltersList'
 import MlEditFilter from '../../admin/settings/filters/components/MlAddFilter'
 /*import MlEditFilter from '../../admin/settings/filters/components/MlEditFilter'*/

@@ -65,8 +65,10 @@ export default class MlAssignHierarchy extends React.Component {
     let parentDepartmentInfo = this.props.data;
     let departmnetId = parentDepartmentInfo.departmentId;
     let subDepartmentId = parentDepartmentInfo.subDepartmentId;
+    let subChapterId =  this.props.data.subChapterId;
+    let isDefaultSubChapter =  this.props.data.isDefaultSubChapter
     let clusterId = this.props.data.clusterId;
-    const response = await findFinalApprovalRoleActionHandler(departmnetId,subDepartmentId,clusterId);
+    const response = await findFinalApprovalRoleActionHandler(departmnetId,subDepartmentId,clusterId, subChapterId, isDefaultSubChapter);
     if(response){
       //this.props.getFinalApprovalDetails(response.finalApproval);
       let unassignedRoles = this.state.unAssignedRoles
@@ -82,10 +84,12 @@ export default class MlAssignHierarchy extends React.Component {
   async findUnAssignedDeptRoles(){
     let departmentInfo=this.props.data
     let clusterId = this.props.data.clusterId
+    let subChapterId =  this.props.data.subChapterId;
+    let isDefaultSubChapter =  this.props.data.isDefaultSubChapter
     if(departmentInfo){
       let departmentId=departmentInfo.departmentId
       let subDepartmentId = departmentInfo.subDepartmentId;
-      const response = await findDeptRolesActionHandler(departmentId,subDepartmentId,clusterId);
+      const response = await findDeptRolesActionHandler(departmentId,subDepartmentId,clusterId, subChapterId, isDefaultSubChapter);
       if(response){
         let roleDetails=[]
         for(let i=0;i<response.length;i++){
@@ -138,6 +142,8 @@ export default class MlAssignHierarchy extends React.Component {
         parentDepartment    : this.props.data.departmentId,
         parentSubDepartment : this.props.data.subDepartmentId,
         clusterId           : this.props.data.clusterId,
+        subChapterId        : this.props.data.subChapterId,
+        isDefaultSubChapter :  this.props.data.isDefaultSubChapter,
         teamStructureAssignment :assignments,
         finalApproval         : finalApproval
       }
@@ -427,22 +433,22 @@ export default class MlAssignHierarchy extends React.Component {
                       <div className="row" key={roles.roleId}>
                         <div className="col-md-4">
                           <div className="form-group">
-                            <input type="text"  placeholder="Role Name" value={roles.roleName} className="form-control float-label" />
+                            <input type="text"  placeholder="Role Name" defaultValue={roles.roleName} className="form-control float-label" />
                           </div>
                         </div>
                         <div className="col-md-4">
                           <div className="form-group">
-                            <input type="text"  placeholder="Display Name" value={roles.displayName}className="form-control float-label" />
+                            <input type="text"  placeholder="Display Name" defaultValue={roles.displayName} className="form-control float-label" />
                           </div>
                         </div>
                         <div className="col-md-4">
                           <div className="form-group">
-                            <input type="text"  placeholder="Role Type" value={roles.roleType} className="form-control float-label"/>
+                            <input type="text"  placeholder="Role Type" defaultValue={roles.roleType} className="form-control float-label"/>
                           </div>
                         </div>
                         <div className="col-md-4">
                           <div className="form-group">
-                            <Select name="form-field-name"   options={assignedParent} value={roles.assignedLevel} onChange={that.optionsBySelectAssignedParentNode.bind(that,id)} placeholder="Parent Node" className="float-label" />
+                            <Select name="form-field-name"   options={assignedParent} defaultValue={roles.assignedLevel} onChange={that.optionsBySelectAssignedParentNode.bind(that,id)} placeholder="Parent Node" className="float-label" />
                           </div>
                         </div>
                         <div className="col-md-4">
@@ -488,22 +494,22 @@ export default class MlAssignHierarchy extends React.Component {
                       <div className="row" key={roles.roleId}>
                         <div className="col-md-4">
                           <div className="form-group">
-                            <input type="text"  placeholder="Role Name" value={roles.roleName} className="form-control float-label" />
+                            <input type="text"  placeholder="Role Name" defaultValue={roles.roleName} className="form-control float-label" />
                           </div>
                         </div>
                         <div className="col-md-4">
                           <div className="form-group">
-                            <input type="text"  placeholder="Display Name" value={roles.displayName}className="form-control float-label" />
+                            <input type="text"  placeholder="Display Name" defaultValue={roles.displayName} className="form-control float-label" />
                           </div>
                         </div>
                         <div className="col-md-4">
                           <div className="form-group">
-                            <input type="text"  placeholder="Role Type" value={roles.roleType} className="form-control float-label"/>
+                            <input type="text"  placeholder="Role Type" defaultValue={roles.roleType} className="form-control float-label"/>
                           </div>
                         </div>
                         <div className="col-md-4">
                           <div className="form-group">
-                            <Select name="form-field-name"   options={assignedParent} value={roles.assignedLevel} onChange={that.optionsBySelectAssignedParentNode.bind(that,id)} placeholder="Parent Node" className="float-label" />
+                            <Select name="form-field-name"   options={assignedParent} defaultValue={roles.assignedLevel} onChange={that.optionsBySelectAssignedParentNode.bind(that,id)} placeholder="Parent Node" className="float-label" />
                           </div>
                         </div>
                         <div className="col-md-4">
@@ -548,22 +554,22 @@ export default class MlAssignHierarchy extends React.Component {
                       <div className="row" key={roles.roleId}>
                         <div className="col-md-4">
                           <div className="form-group">
-                            <input type="text"  placeholder="Role Name" value={roles.roleName} className="form-control float-label" />
+                            <input type="text"  placeholder="Role Name" defaultValue={roles.roleName} className="form-control float-label" />
                           </div>
                         </div>
                         <div className="col-md-4">
                           <div className="form-group">
-                            <input type="text"  placeholder="Display Name" value={roles.displayName}className="form-control float-label" />
+                            <input type="text"  placeholder="Display Name" defaultValue={roles.displayName}className="form-control float-label" />
                           </div>
                         </div>
                         <div className="col-md-4">
                           <div className="form-group">
-                            <input type="text"  placeholder="Role Type" value={roles.roleType} className="form-control float-label"/>
+                            <input type="text"  placeholder="Role Type" defaultValue={roles.roleType} className="form-control float-label"/>
                           </div>
                         </div>
                         <div className="col-md-4">
                           <div className="form-group">
-                            <Select name="form-field-name"   options={assignedParent} value={roles.assignedLevel} onChange={that.optionsBySelectAssignedParentNode.bind(that,id)} placeholder="Parent Node" className="float-label" />
+                            <Select name="form-field-name"   options={assignedParent} defaultValue={roles.assignedLevel} onChange={that.optionsBySelectAssignedParentNode.bind(that,id)} placeholder="Parent Node" className="float-label" />
                           </div>
                         </div>
                         <div className="col-md-4">

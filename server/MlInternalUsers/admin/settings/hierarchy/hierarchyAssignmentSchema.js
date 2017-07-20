@@ -63,7 +63,7 @@ let HierarchyAssignmentSchema = `
     }
     type Query{
       fetchAssignedRolesHierarchy(hierarchyId:String,departmentId:String,subDepartmentId:String,type:String):HierarchyAssignment      
-      fetchFinalApprovalRole(departmentId:String,subDepartmentId:String,clusterId:String):HierarchyAssignment
+      fetchFinalApprovalRole(departmentId:String,subDepartmentId:String,clusterId:String, subChapterId:String, isDefaultSubChapter: Boolean):HierarchyAssignment
       fetchHierarchyRoles(clusterId:String,departmentId:String,subDepartmentId:String):[teamStructureAssignment]
       fetchHierarchyUsers(clusterId:String,departmentId:String,subDepartmentId:String,roleId:String):[BackendUsers]
     }

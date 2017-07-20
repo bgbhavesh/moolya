@@ -658,7 +658,7 @@ let CoreModules = {
    * */
   MlHierarchyDepartmentsRepo: (requestParams, userFilterQuery, contextQuery, fieldsProj, context) => {
     let list = [];
-    let subChapter = mlDBController.findOne('MlSubChapters', {_id: requestParams.subChapterId}, context) || {}
+    var subChapter = mlDBController.findOne('MlSubChapters', {_id: requestParams.subChapterId}, context) || {}
     var depQuery = {}
     if (subChapter.isDefaultSubChapter)
       depQuery = {$and: [{isMoolya: true}, {"depatmentAvailable.cluster": {$in: ["all", requestParams.clusterId]}}]}
@@ -669,6 +669,7 @@ let CoreModules = {
     resp.map(function (department) {
       let subDepartments = MlSubDepartments.find({"departmentId": department._id}).fetch();
       subDepartments.map(function (subDepartment) {
+        let defaultSubChapter = JSON.parse(requestParams.defaultSubChapter);
         let deptAndSubDepartment = {
           departmentId: department._id,
           departmentName: department.departmentName,
@@ -676,7 +677,9 @@ let CoreModules = {
           subDepartmentName: subDepartment.subDepartmentName,
           isMoolya: department.isMoolya,
           isActive: department.isActive,
-          clusterId: requestParams.clusterId
+          clusterId: requestParams.clusterId,
+          subChapterId:requestParams.subChapterId,
+          isDefaultSubChapter:defaultSubChapter
         }
         list.push(deptAndSubDepartment)
       })

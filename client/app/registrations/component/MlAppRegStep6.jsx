@@ -1,5 +1,7 @@
 import React from "react";
 import {render} from "react-dom";
+import ScrollArea from "react-scrollbar";
+
 
 export default class MlAppRegStep6 extends React.Component {
   componentDidMount() {

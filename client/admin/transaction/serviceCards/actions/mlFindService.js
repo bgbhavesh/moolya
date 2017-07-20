@@ -24,6 +24,7 @@ query ($profileId: String) {
         noOfSession
         validTill
         sessionFrequency
+        finalAmount
         duration{
          hours
          minutes
@@ -41,7 +42,6 @@ query ($profileId: String) {
           isMandatory
         }
         payment {
-          amount
           isDiscount
           discountType
           discountValue
@@ -60,9 +60,8 @@ query ($profileId: String) {
           }
         }
         facilitationCharge{
+          type
           amount
-          percentage
-          derivedAmount
         }
         state{
           id
@@ -179,6 +178,7 @@ export async function getTaskFromService (serviceId) {
         name
         displayName
         noOfSession
+        finalAmount
         sessionFrequency
         duration{
          hours
@@ -187,6 +187,7 @@ export async function getTaskFromService (serviceId) {
         status
         termsAndCondition{
           isCancelable
+          noOfDaysBeforeCancelation
           isReschedulable
           noOfReschedulable
         }
@@ -196,7 +197,6 @@ export async function getTaskFromService (serviceId) {
           isMandatory
         }
         payment {
-          amount
           isDiscount
           discountType
           discountValue
@@ -215,9 +215,8 @@ export async function getTaskFromService (serviceId) {
           }
         }
         facilitationCharge{
+          type
           amount
-          percentage
-          derivedAmount
         }
         state{
           id

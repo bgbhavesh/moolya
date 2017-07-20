@@ -130,15 +130,24 @@ export default class MlAppServicePayment extends React.Component{
                 <label>Enter facilitation charges &nbsp; &nbsp; &nbsp; &nbsp; </label>
                 <div className="input_types">
                   <input id="facilitationamount" type="radio" name="facilitationamount"
+                         checked={facilitationCharge.type === 'amount' ? true : false}
                          value="Amount" disabled/>
                   <label htmlFor="facilitationamount"><span><span></span></span>Amount Rs
-                    <input className="form-control inline_input" disabled value={facilitationCharge.amount} />
+                    <input className="form-control inline_input"
+                           disabled
+                           value={facilitationCharge.type === 'amount' ? facilitationCharge.amount : ''} />
                   </label>
                 </div>
                 <div className="input_types">
-                  <input id="facilitationpercent" type="radio" name="facilitationpercent" value="Percentage" disabled/>
+                  <input id="facilitationpercent"
+                         type="radio"
+                         name="facilitationpercent"
+                         checked={facilitationCharge.type === 'percent' ? true : false}
+                         value="Percentage" disabled/>
                   <label htmlFor="radio2"><span><span></span></span>Percentage
-                    <input className="form-control inline_input" disabled value={facilitationCharge.percentage} />
+                    <input className="form-control inline_input"
+                           disabled
+                           value={facilitationCharge.type === 'percent' ? facilitationCharge.amount : ''} />
                   </label>
                 </div>
                 <br className="brclear"/>

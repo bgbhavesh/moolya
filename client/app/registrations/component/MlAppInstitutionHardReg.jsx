@@ -22,7 +22,7 @@ export default class MlAppInstitutionHardReg extends React.Component {
       },
       {
         name: 'Contact Details',
-        'icon': <span className="ml ml-address-book"></span>,
+        'icon': <span className="ml flaticon-ml-agenda"></span>,
         component: <MlAppRegStep3 {...props} />
       },
       {

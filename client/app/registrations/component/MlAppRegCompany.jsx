@@ -63,7 +63,7 @@ export default class MlAppRegCompany extends React.Component {
   componentDidMount() {
     initalizeFloatLabel();
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight - (160 + $('.admin_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight - (150 + $('.app_header').outerHeight(true)));
   }
 
   optionsBySelectUserType(value) {
@@ -444,8 +444,8 @@ export default class MlAppRegCompany extends React.Component {
                   </form>
                 </div>
               </div>
-            </ScrollArea>
             <MlAccordion accordionOptions={genericAccordionConfig} {...this.props} />
+            </ScrollArea>
             {/*<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>*/}
           </div> )}
       </div>

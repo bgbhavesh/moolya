@@ -19,7 +19,7 @@ export default class MlAppFunderIndividualHardReg extends React.Component {
         'icon': <span className="ml ml-additional-Information"></span>,
         component: <MlAppFunderIndividualComponent {...props} />
       },
-      {name: 'Contact Details', 'icon': <span className="ml ml-address-book"></span>, component: <MlAppRegStep3 {...props} />},
+      {name: 'Contact Details', 'icon': <span className="ml flaticon-ml-agenda"></span>, component: <MlAppRegStep3 {...props} />},
       {name: 'Social Links', 'icon': <span className="ml ml-social-Links"></span>, component: <MlAppRegStep4 {...props} />},
       {name: 'KYC\'s Documents', 'icon': <span className="ml ml-kyc-document"></span>, component: <MlAppRegStep5 {...props} />},
       {name: 'Payment Gateway', 'icon': <span className="ml ml-payments"></span>, component: <MlAppRegStep6 {...props} />},

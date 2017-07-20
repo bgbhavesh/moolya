@@ -16,6 +16,6 @@ let BugReportSchema = `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],BugReportSchema]);
 let supportedApi = [
-  {api:'createBugReport', actionName:'CREATE', moduleName:"BUG_REPORT"}
+  {api:'createBugReport', actionName:'CREATE', moduleName:"BUG_REPORT",isWhiteList:true}
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

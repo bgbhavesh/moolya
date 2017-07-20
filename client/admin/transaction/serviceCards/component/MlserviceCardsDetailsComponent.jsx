@@ -9,12 +9,13 @@
  * Imports libs and components
  */
 import React from "react";
-import {render} from "react-dom";
 import {initalizeFloatLabel,OnToggleSwitch} from "../../../utils/formElemUtil";
 import MlServiceManageSchedule from '../component/MlServicesComponent'
 import _ from "lodash";
 import moment from "moment";
-import {getServiceBasedOnProfileId} from '../actions/mlFindService'
+import {
+  getServiceBasedOnProfileId,
+  fetchTaskDetailsForAdminServiceCard} from '../actions/mlFindService'
 var FontAwesome = require('react-fontawesome');
 
 export default class MlServiceCardsDetailsComponent extends React.Component {
@@ -26,11 +27,42 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
 
   constructor(props){
     super(props);
-    this.state= {
-      data: {}
-    }
-    this.getServiceDetails.bind(this);
-    return this;
+    this.state = {
+      data: {
+        serviceBasicInfo: {
+          duration: {}
+        },
+        serviceTask: {
+          selectedTaskDetails: {
+            displayName: '',
+            noOfSession: '',
+            sessionFrequency: '',
+            duration: {
+              hours: 0,
+              minutes: 0
+            }
+          }
+        },
+        service: {},
+        serviceTermAndCondition: {},
+        attachments: [],
+        servicePayment: {},
+        facilitationCharge: {},
+        tasks: [],
+        taxStatus: 'taxexclusive',
+        clusterData: {},
+        isLoding: false
+      }
+    };
+    this.options = [
+      {value: 'Weekly', label: 'Weekly'},
+      {value: 'Daily', label: 'Daily'},
+      {value: 'Monthly', label: 'Monthly'}
+    ];
+    this.profileId = this.props.data.profileId;
+    this.serviceId = this.props.data._id;
+    this.getServiceDetails = this.getServiceDetails.bind(this);
+    this.constructServiceData = this.constructServiceData.bind(this);
   }
   /**
    * ComponentDidMount
@@ -55,8 +87,7 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
    * Desc :: Calls getServiceDetails with profileId as param
    */
   componentWillMount() {
-    let profileId = this.props.data.profileId;
-    this.getServiceDetails(profileId)
+    this.getServiceDetails();
   }
 
   /**
@@ -66,14 +97,120 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
    * @returns resp
    */
 
- async getServiceDetails(profileId) {
-    console.log(profileId)
-    const resp = await getServiceBasedOnProfileId(profileId)
-   console.log(resp);
-    this.setState({
-      data: resp
-    })
-   return resp;
+ async getServiceDetails() {
+    console.log(this.profileId);
+    let resp = await getServiceBasedOnProfileId(this.profileId);
+    console.log('---res--', resp);
+    if (resp) {
+      this.constructServiceData(resp);
+    }
+  }
+
+  /**
+   * Method :: constructServiceData
+   * Desc   :: construct the current service details from server and set in state
+   * @returns Void
+   */
+  async constructServiceData(serviceDeatails) {
+    let {serviceBasicInfo, clusterData, serviceTask, service, tasks, serviceTermAndCondition, attachments, servicePayment, taxStatus, facilitationCharge} = this.state.data;
+    let {data} = this.state;
+    const resp = await fetchTaskDetailsForAdminServiceCard(this.profileId, this.serviceId);
+    serviceTask.serviceTaskDetails = resp;
+    if (this.serviceId && serviceDeatails) {
+      service = serviceDeatails;
+      tasks = [];
+      let {state, city, community} = service;
+      serviceBasicInfo = {
+        duration: service.duration,
+        profileId: service.profileId,
+        name: service.name,
+        displayName: service.displayName,
+        noOfSession: service.noOfSession,
+        sessionFrequency: service.sessionFrequency,
+        status: service.status,
+        validTill: service.validTill,
+        cluster: service.cluster,
+        isBeSpoke: service.isBeSpoke,
+        isApproved: service.isApproved,
+        city: service.city,
+        state: service.state,
+        community: service.community
+      };
+      tasks = _.cloneDeep(service.tasks) || [];
+      tasks.sessions = _.cloneDeep(service.tasks.sessions) || [];
+      serviceTask.serviceOptionTasks = [];
+      let attachmentDetails = [];
+      serviceTask.tasks = service.tasks || [];
+      if (serviceTask.serviceTaskDetails && serviceTask.serviceTaskDetails.length > 0) {
+        serviceTask.tasks = _.intersectionBy(serviceTask.serviceTaskDetails, service.tasks, 'id');
+        serviceTask.serviceTaskDetails.forEach((task, key) => {
+          if (service.tasks.map((data) => data.id).indexOf(task.id) === -1) {
+            serviceTask.serviceOptionTasks.push(task);
+          }
+        });
+        serviceTask.tasks.forEach((task) => {
+          if (task.attachments && task.attachments.length > 0) {
+            task.attachments.forEach((attachment) => {
+              attachmentDetails.push(attachment)
+            });
+          }
+        });
+      }
+      if (service.termsAndCondition) {
+        serviceTermAndCondition = _.omit(service.termsAndCondition, '__typename');
+      }
+      if (service.facilitationCharge) {
+        facilitationCharge = _.cloneDeep(service.facilitationCharge);
+      }
+      if (service.payment) {
+        servicePayment = _.cloneDeep(service.payment);
+        servicePayment.isTaxInclusive = servicePayment.isTaxInclusive ? true : false;
+        taxStatus = servicePayment.isTaxInclusive ? 'taxinclusive' : 'taxexclusive';
+      }
+      attachments = _.cloneDeep(attachmentDetails);
+      if (state && state.length > 0) {
+        let states = [];
+        state.forEach((data) => {
+          states.push(data.id);
+        });
+        clusterData.state = states;
+      }
+      if (city && city.length > 0) {
+        let cities = [];
+        city.forEach((data) => {
+          cities.push(data.id);
+        });
+        clusterData.chapters = cities;
+      }
+      if (community && community.length > 0) {
+        let communities = [];
+        community.forEach((data) => {
+          communities.push(data.id);
+        });
+        clusterData.community = communities;
+      }
+    }
+    var validTillDate = Date.parse(serviceBasicInfo.validTill);
+    var currentDate = new Date();
+    let remainingDate = Math.floor((validTillDate - currentDate) / (1000 * 60 * 60 * 24));
+    remainingDate = isNaN(remainingDate) ? '' : remainingDate;
+    data = {
+      serviceBasicInfo: serviceBasicInfo,
+      daysRemaining: remainingDate,
+      clusterData: clusterData,
+      serviceTask: serviceTask,
+      serviceTermAndCondition: serviceTermAndCondition,
+      attachments: attachments,
+      service: service,
+      tasks: tasks,
+      facilitationCharge: facilitationCharge,
+      servicePayment: servicePayment,
+      taxStatus: taxStatus,
+      isLoding: true,
+      userDetails: _.cloneDeep(this.props.data.userDetails)
+    };
+    this.setState({data: data});
+    return;
   }
 
   /**
@@ -84,6 +221,9 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
 
   render() {
     let that = this;
+    if (!this.state.data.isLoding) {
+      return null;
+    }
     return (
       <div className="ml_tabs">
         <ul  className="nav nav-pills">
@@ -108,7 +248,7 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="User Id" value={that.state.data.userId} className="form-control float-label" readOnly="true"/>
+                  <input type="text" placeholder="User Id" value={that.props.data.userId} className="form-control float-label" readOnly="true"/>
                 </div>
                 <div className="form-group ">
                   <input type="text" placeholder="Transaction Id" value={that.props.data._id} className="form-control float-label"  readOnly="true"/>
@@ -146,7 +286,9 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
           </div>
           <div className="tab-pane" id={`processSetup${that.props.data._id}`}>
             <div className="panel panel-default">
-              <MlServiceManageSchedule data={this.props.data}/>
+              <MlServiceManageSchedule data={this.state.data}
+                                       profileId={this.profileId}
+                                       serviceId={this.serviceId} />
             </div>
           </div>
           <div className="tab-pane" id={`deviceDetails${that.props.data._id}`}>

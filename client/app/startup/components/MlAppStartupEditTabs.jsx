@@ -12,7 +12,7 @@ import MlStartupMCL from "../../../admin/transaction/portfolio/component/Startup
 import MlStartupLookingFor from "../../../admin/transaction/portfolio/component/Startup/edit/MlStartupLookingFor";
 import PortfolioLibrary from '../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import {appClient} from '../../core/appConnection'
-import MlVerticalTabComponent from '../../../commons/components/tabcomponent/MlVerticalTabComponent'
+// import MlVerticalTabComponent from '../../../commons/components/tabcomponent/MlVerticalTabComponent'
 
 export default class MlAppStartupEditTabs extends React.Component{
 
@@ -33,16 +33,18 @@ export default class MlAppStartupEditTabs extends React.Component{
   }
 
   componentDidMount(){
-    setTimeout(function(){
-      $('div[role="tab"]').each(function( index ) {
-        var test = $(this).text();
-        $(this).empty();
-        $(this).html('<div class="moolya_btn moolya_btn_in">'+test+'</div>');
-      });
-      $('.RRT__tabs').addClass('horizon-swiper');
-      $('.RRT__tab').addClass('horizon-item');
-      $('.horizon-swiper').horizonSwiper();
-    },200);
+    // setTimeout(function(){
+    //   $('div[role="tab"]').each(function( index ) {
+    //     var test = $(this).text();
+    //     $(this).empty();
+    //     $(this).html('<div class="moolya_btn moolya_btn_in">'+test+'</div>');
+    //   });
+    //   $('.RRT__tabs').addClass('horizon-swiper');
+    //   $('.RRT__tab').addClass('horizon-item');
+    //   $('.horizon-swiper').horizonSwiper();
+    // },200);
+    // alert(1);
+    // $('.RRT__tabs').removeClass('menunone');
   }
 
   backClickHandler(){
@@ -52,6 +54,7 @@ export default class MlAppStartupEditTabs extends React.Component{
 
   setBackHandler(backMethod){
     this.props.setBackHandler(backMethod);
+    $('.RRT__tabs').removeClass('menunone');
   }
 
   getTabComponents(){

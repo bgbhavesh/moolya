@@ -16,6 +16,9 @@ MlResolver.MlQueryResolver['fetchGlobalSettings'] = (obj, args, context, info) =
   if(cluster){
     let countryCode = cluster.clusterCode
     let countryCapital = mlDBController.findOne("MlCapital", {"countryCode": countryCode}, context)
+    if(!result[0].regionalInfo){
+      result[0].regionalInfo={};
+    }
     result[0].regionalInfo.capitalName = countryCapital.capital
     result[0].regionalInfo.regionalFlag = cluster.countryFlag
   }

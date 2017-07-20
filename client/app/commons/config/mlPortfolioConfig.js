@@ -18,7 +18,7 @@ export const GenericPortfolioActionsConfig= [
   {actionName: 'follow',actionType:'view',handleCallBack:handleFollowAction},
   {actionName: 'enquire',actionType:'view',hasPopOver:true,popOverTitle:'Enquire',placement:'top',target:'enquireRequest',popOverComponent:<Inquiry />,actionComponent:PopoverActionIcon},
   {actionName: 'review',actionType:'view',isDisabled:true,hasPopOver:true,popOverTitle:'Review',placement:'top',target:'reviewRequest',popOverComponent:<Review />,actionComponent:PopoverActionIcon},
-  {actionName: 'comment',actionType:'view',hasPopOver:true,popOverTitle:'Review',placement:'top',target:'commentRequest',popOverComponent:<Review />,actionComponent:PopoverActionIcon},
+  {actionName: 'comment',actionType:'view',target:"comment"},
   {actionName: 'partner',actionType:'view',isDisabled:true},
   {actionName: 'collaborate',actionType:'view',isDisabled:true},
   {actionName: 'save',actionType:'edit'},

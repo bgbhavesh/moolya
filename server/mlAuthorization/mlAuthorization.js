@@ -71,10 +71,14 @@ class MlAuthorization
                       if(moduleName == 'CLUSTERHIERARCHY'){
                         moduleName = 'CLUSTER';
                       }
+                      if(moduleName == 'HIERARCHYDEPARTMENTS'){
+                        moduleName = 'HIERARCHY';
+                      }
 
 
 
-                      if(moduleName == 'AUDIT_LOG')
+
+                      if(moduleName == 'AUDIT_LOG' ||moduleName == "BUG_REPORT")
                           return true
                       isContextSpecSearch = true;
                       break;

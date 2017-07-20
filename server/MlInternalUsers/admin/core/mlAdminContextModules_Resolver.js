@@ -160,6 +160,10 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
     case 'clusterHierarchy':
       result=CoreModulesRepo.MlHierarchyClusterRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
+    case 'hierarchyDepartments':
+      requestParams=args.context||{};
+      result=CoreModulesRepo.MlHierarchyDepartmentsRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
   }
 
   return {totalRecords:result.totalRecords||0,data:result.data||[]};
@@ -195,6 +199,7 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "documents":resolveType='ProcessType';break;
       case "serviceCards":resolveType='AdminService';break;
       case "clusterHierarchy":resolveType='Cluster';break;
+      case "hierarchyDepartments":resolveType='DepartmentAndSubDepartmentDetails';break;
     }
 
     if(resolveType){

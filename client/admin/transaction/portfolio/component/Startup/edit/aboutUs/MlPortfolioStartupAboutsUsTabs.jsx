@@ -24,6 +24,9 @@ export default class MlStartupTab extends React.Component{
     ;
   }
 
+  /**
+   * handling different condition for app and admin
+   * */
   componentDidMount(){
     var props = this.props
     setTimeout(function(){
@@ -39,6 +42,9 @@ export default class MlStartupTab extends React.Component{
         $('.RRT__panel').addClass('nomargintop');
         $('.RRT__panel .RRT__panel').removeClass('nomargintop');
         $('.horizon-swiper').horizonSwiper();
+      }else {
+        $('.RRT__tabs').addClass('menunone');
+        $('.RRT__container .RRT__container .RRT__tabs').removeClass('menunone');
       }
     },10);
     let path = FlowRouter._current.path;

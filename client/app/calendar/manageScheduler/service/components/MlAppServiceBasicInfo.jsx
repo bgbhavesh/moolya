@@ -105,7 +105,8 @@ class MlAppServiceBasicInfo extends Component {
                          className="form-control float-label"
                          id="name"
                          value={data.name}
-                         onChange={(event) => onChangeFormField(event)} />
+                         onChange={(event) => onChangeFormField(event)}
+                         disabled={this.props.viewMode} />
                 </div>
                 <div className="form-group">
                   <label>
@@ -135,10 +136,12 @@ class MlAppServiceBasicInfo extends Component {
                             inputProps={{placeholder: "Valid Till"}}
                             closeOnSelect={true}
                             value={data.validTill? new Moment(data.validTill).format('DD-MM-YY') : null}
-                            onChange={(event) => validTill(event)} />
+                            onChange={(event) => validTill(event)}
+                            disabled={this.props.viewMode}/>
                   <FontAwesome name="calendar"
                                className="password_icon"
-                               onClick={this.validTillToggle.bind(this)} />
+                               onClick={this.validTillToggle.bind(this)}
+                               disabled={this.props.viewMode}/>
                 </div>
               </form>
             </div>
@@ -152,7 +155,8 @@ class MlAppServiceBasicInfo extends Component {
                          className="form-control float-label"
                          id="displayName"
                          value={data.displayName}
-                         onChange={(event) => onChangeFormField(event)} />
+                         onChange={(event) => onChangeFormField(event)}
+                         disabled={this.props.viewMode}/>
                 </div>
                 <span className="placeHolder active">Renewal Frequency</span>
                 <div className="form-group">
@@ -160,7 +164,8 @@ class MlAppServiceBasicInfo extends Component {
                           options={options}
                           value={data.sessionFrequency}
                           placeholder='Frequency Type'
-                          onChange={(value) => setSessionFrequency(value.value)} />
+                          onChange={(value) => setSessionFrequency(value.value)}
+                          disabled={this.props.viewMode}/>
                 </div>
                 <div className="form-group">
                   <input type="text"
@@ -183,7 +188,8 @@ class MlAppServiceBasicInfo extends Component {
                                 query={statesQuery}
                                 queryOptions={statesOption}
                                 isDynamic={true} id={'query'}
-                                onSelect={(value, calback, selObject) => optionsBySelectstates(value, calback, selObject)} />
+                                onSelect={(value, calback, selObject) => optionsBySelectstates(value, calback, selObject)}
+                                disabled={this.props.viewMode}/>
                 </div>
                 <div className="form-group">
                   <Moolyaselect multiSelect={true}
@@ -196,7 +202,8 @@ class MlAppServiceBasicInfo extends Component {
                                 query={citiesQuery}
                                 queryOptions={citiesOption}
                                 isDynamic={true} id={'query'}
-                                onSelect={(value, calback, selObject) => optionsBySelectChapters(value, calback, selObject)} />
+                                onSelect={(value, calback, selObject) => optionsBySelectChapters(value, calback, selObject)}
+                                disabled={this.props.viewMode}/>
                 </div>
                 <div className="form-group">
                   <Moolyaselect multiSelect={true}
@@ -208,12 +215,13 @@ class MlAppServiceBasicInfo extends Component {
                                 queryType={"graphql"} query={fetchcommunities}
                                 isDynamic={true}
                                 id={'fetchcommunities'}
-                                onSelect={(value, calback, selObject) => optionsBySelectCommunities(value, calback, selObject)} />
+                                onSelect={(value, calback, selObject) => optionsBySelectCommunities(value, calback, selObject)}
+                                disabled={this.props.viewMode}/>
                 </div>
                 <div className="form-group switch_wrap inline_switch">
                   <label>Status</label>
                   <label className="switch">
-                    <input type="checkbox" checked={data.status} onChange={(event) => checkBoxHandler(event)} />
+                    <input type="checkbox" checked={data.status} onChange={(event) => checkBoxHandler(event)}  disabled={this.props.viewMode}/>
                     <div className="slider"></div>
                   </label>
                 </div>
@@ -231,10 +239,10 @@ class MlAppServiceBasicInfo extends Component {
             </div>
           </div>
         </ScrollArea>
-        <div className="ml_btn" style={{'textAlign':'center'}}>
-          <div className="save_btn" onClick={saveService}>Save</div>
+        {!this.props.viewMode?<div className="ml_btn" style={{'textAlign':'center'}}>
+          <div className="save_btn" onClick={() => saveService(false)}>Save</div>
           <div className="cancel_btn">Cancel</div>
-        </div>
+        </div>:""}
       </div>
     )
   }

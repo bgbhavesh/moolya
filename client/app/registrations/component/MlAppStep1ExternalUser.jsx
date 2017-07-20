@@ -91,7 +91,7 @@ export default class MlAppStep1ExternalUser extends Component {
 
   componentDidMount() {
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight - (160 + $('.admin_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight - (150 + $('.app_header').outerHeight(true)));
     initalizeFloatLabel();
     if (this.state.defaultIdentityIndividual == true) {
       $('#companyId').hide();
@@ -316,9 +316,9 @@ export default class MlAppStep1ExternalUser extends Component {
         {showLoader === true ? (<MlLoader/>) : (
           <div className="step_form_wrap step1">
 
-            {/*<ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >*/}
+            <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
             <div className="col-md-6 nopadding-left">
-              <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
+
 
                 <div className="form_bg">
                   <form>
@@ -494,10 +494,9 @@ export default class MlAppStep1ExternalUser extends Component {
                     </div>
                   </form>
                 </div>
-              </ScrollArea>
+
             </div>
             <div className="col-md-6 nopadding-right">
-              <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
 
                 <div className="form_bg">
                   <form>
@@ -544,19 +543,18 @@ export default class MlAppStep1ExternalUser extends Component {
                              defaultValue={that.state.registrationDetails && that.state.registrationDetails.remarks}
                              className="form-control float-label"  disabled="true"/>
                     </div>
-                    <div className="form-group mandatory">
+                    <div className="form-group">
                       <span className={`placeHolder ${referedActive}`}>How Did You Know About Us</span>
                       <Select name="form-field-name" ref="refered" placeholder="How Did You Know About Us"
                               value={this.state.refered} options={referedOption} className="float-label"
-                              onChange={this.optionBySelectRefered.bind(this)} data-required={true}
-                              data-errMsg="How Did You Know About Us is required" overflow="scroll" disabled={true}/>
+                              onChange={this.optionBySelectRefered.bind(this)} overflow="scroll" disabled={true}/>
                     </div>
 
                   </form>
                 </div>
-              </ScrollArea>
-            </div>
 
+            </div>
+            </ScrollArea>
             {/*<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>*/}
           </div>
         )}

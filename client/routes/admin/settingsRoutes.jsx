@@ -178,18 +178,21 @@ import {mlClusterSubChaptersListConfig} from '../../admin/settings/hierarchy/con
 import MlViews from '../../admin/core/components/MlViews';
 import MlHierarchyList from '../../admin/settings/hierarchy/component/MlHierarchyList'
 import MlAdminHierarchyHeader from '../../admin/layouts/header/MlAdminHierarchyHeader'
-import MlHierarchyDetails from '../../admin/settings/hierarchy/component/MlHierarchyDetails'
+// import MlHierarchyDetails from '../../admin/settings/hierarchy/component/absolute'
 import MlFiltersList from '../../admin/settings/filters/components/MlFiltersList'
 import MlEditFilter from '../../admin/settings/filters/components/MlAddFilter'
 /*import MlEditFilter from '../../admin/settings/filters/components/MlEditFilter'*/
 import MlHierarchyTabHistoryList from '../../admin/settings/hierarchy/hierarchyAuditLog/components/MlHierarchyTabHistoryList'
-
+import MlHierarchyDepartmentsList from '../../admin/settings/hierarchy/component/MlHierarchyDepartmentsList'
 // @End
 
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 import MlSettingsTabHistoryList from '../../admin/settings/settingsAuditLog/components/MlSettingsTabHistoryList'
 import MlClusterSettingsTabHistoryList from '../../admin/settings/clusterSettingsAuditLog/components/MlClusterSettingsTabHistoryList'
-
+import  MlChapterSettingsTabHistoryList from '../../admin/settings/chapterSettingsAuditLog/components/MlChapterSettingsTabHistory'
+import MlCommunitySettingsTabHistoryList from '../../admin/settings/communitySettingsAuditLog/components/MlCommunitySettingsTabHistory'
+import MlsubChapterSettingsTabHistoryList from '../../admin/settings/subChapterSettingsAuditLog/components/MlsubChapterSettingsTabHistory'
+import MlsubChapterNonMoolyaTabHistoryList from '../../admin/settings/subChapterNon-MoolyaSettingsAuditLog/components/MlsubChapterNon-MoolyaSettingsTabHistory'
 adminSection.route('/settings/departmentsList', {
   name: 'settings_DepartmentList',
   action(){
@@ -284,7 +287,8 @@ adminSection.route('/settings/hierarchy/clusterhierarchy/:clusterId/chapters', {
 adminSection.route('/settings/hierarchy/clusterhierarchy/:clusterId/:subChapterId/:defaultSubChapter/hierarchyDetails', {
   name: 'hierarchy_details',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader clusterId={params.clusterId}/>,adminContent:< MlHierarchyDetails clusterId={params.clusterId} subChapterId={params.subChapterId} defaultSubChapter={params.defaultSubChapter}/>} )
+    //mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader clusterId={params.clusterId}/>,adminContent:< MlHierarchyDetails clusterId={params.clusterId} subChapterId={params.subChapterId} defaultSubChapter={params.defaultSubChapter}/>} )
+    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader clusterId={params.clusterId}/>,adminContent:< MlHierarchyDepartmentsList clusterId={params.clusterId} subChapterId={params.subChapterId} defaultSubChapter={params.defaultSubChapter}/>} )
   }
 });
 
@@ -1141,7 +1145,29 @@ adminSection.route('/settings/history', {
     mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'history'}} />,adminContent:< MlSettingsTabHistoryList/>})
   }
 });
-
-
+adminSection.route('/settings/chapter/history', {
+  name: 'chapterSettings_historyList',
+  action(){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'history'}} />,adminContent:< MlChapterSettingsTabHistoryList/>})
+  }
+});
+adminSection.route('/settings/community/history', {
+  name: 'communitySettings_historyList',
+  action(){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'history'}} />,adminContent:< MlCommunitySettingsTabHistoryList/>})
+  }
+});
+adminSection.route('/settings/subChapter/history', {
+  name: 'subChapterSettings_historyList',
+  action(){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'history'}} />,adminContent:< MlsubChapterSettingsTabHistoryList/>})
+  }
+});
+adminSection.route('/settings/subChapterNonMoolya/history', {
+  name: 'subChapterNonMoolyaSettings_historyList',
+  action(){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'history'}} />,adminContent:< MlsubChapterNonMoolyaTabHistoryList/>})
+  }
+});
 
 //  @End

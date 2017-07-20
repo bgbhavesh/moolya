@@ -21,6 +21,7 @@ export default class MlAppServiceTermsAndConditions extends Component{
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(290+$('.admin_header').outerHeight(true)));
+    this.props.getServiceDetails();
   }
 
   /**
@@ -71,7 +72,6 @@ export default class MlAppServiceTermsAndConditions extends Component{
       saveService,
       onChangeCheckBox,
       onChangeValue } = this.props;
-    console.log('----step--3--props--', this.props.serviceTermAndCondition);
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
@@ -130,9 +130,9 @@ export default class MlAppServiceTermsAndConditions extends Component{
           <br className="brclear"/>
           {this.getAttachmentsList()}
         </ScrollArea>
-        <div className="ml_btn" style={{'textAlign':'center'}}>
-          <div className="save_btn" onClick={() => saveService()}>Save</div> <div className="cancel_btn">Cancel</div>
-        </div>
+        {!this.props.viewMode?<div className="ml_btn" style={{'textAlign':'center'}}>
+          <div className="save_btn" onClick={() => saveService(false)}>Save</div> <div className="cancel_btn">Cancel</div>
+        </div>:""}
       </div>
     )
   }

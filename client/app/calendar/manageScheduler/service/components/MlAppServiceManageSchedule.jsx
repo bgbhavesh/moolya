@@ -5,7 +5,7 @@
  */
 
 // import NPM module(s)
-import React, { Component } from "react";
+import React, {Component} from "react";
 import Moment from "moment";
 import _ from 'lodash';
 
@@ -23,7 +23,8 @@ import {
   fetchProfileActionHandler,
   updateServiceActionHandler,
   fetchTasksAmountActionHandler,
-  fetchTaskDetailsForServiceCard } from '../actions/MlServiceActionHandler';
+  fetchTaskDetailsForServiceCard
+} from '../actions/MlServiceActionHandler';
 import {fetchTaskDetailsActionHandler} from '../../task/actions/fetchTaskDetails';
 
 export default class MlAppServiceManageSchedule extends Component {
@@ -38,6 +39,7 @@ export default class MlAppServiceManageSchedule extends Component {
       serviceBasicInfo: {
         duration: {}
       },
+      finalAmount: 0,
       serviceTask: {
         selectedTaskDetails: {
           displayName: '',
@@ -54,6 +56,7 @@ export default class MlAppServiceManageSchedule extends Component {
       attachments: [],
       servicePayment: {},
       facilitationCharge: {},
+      tasks: [],
       taxStatus: 'taxexclusive',
       clusterData: {}
     };
@@ -62,8 +65,8 @@ export default class MlAppServiceManageSchedule extends Component {
       {value: 'Daily', label: 'Daily'},
       {value: 'Monthly', label: 'Monthly'}
     ];
-    this.profileId = FlowRouter.getParam('profileId');
-    this.serviceId = FlowRouter.getQueryParam('id');
+    this.profileId = FlowRouter.getParam('profileId') || this.props.profileId;
+    this.serviceId = FlowRouter.getQueryParam('id')|| this.props.serviceId;
     this.getServiceDetails = this.getServiceDetails.bind(this);
     this.saveService = this.saveService.bind(this);
     this.onChangeFormField = this.onChangeFormField.bind(this);
@@ -99,12 +102,17 @@ export default class MlAppServiceManageSchedule extends Component {
     });
   }
 
+  componentWillReceiveProps(newProps){
+    console.log(newProps)
+  }
+
   /**
    * Method :: setServiceSteps
    * Desc :: Sets components steps for stepzila to create and update service data
    */
   setServiceSteps() {
-    const { serviceBasicInfo,
+    const {
+      serviceBasicInfo,
       daysRemaining,
       clusterCode,
       clusters,
@@ -114,10 +122,12 @@ export default class MlAppServiceManageSchedule extends Component {
       servicePayment,
       facilitationCharge,
       taxStatus,
-      serviceTask } = this.state;
+      serviceTask,
+      finalAmount
+    } = this.state;
     let steps = [
       {
-        name: 'Create',
+        name: !this.props.viewMode?'Create':'View',
         component: <MlAppServiceBasicInfo data={serviceBasicInfo}
                                           clusterCode={clusterCode}
                                           clusterName={clusterName}
@@ -132,75 +142,95 @@ export default class MlAppServiceManageSchedule extends Component {
                                           options={this.options}
                                           checkBoxHandler={this.checkBoxHandler}
                                           validTill={this.validTill}
+                                          viewMode={this.props.viewMode}
                                           setSessionFrequency={this.setSessionFrequency}
-                                          onChangeFormField={this.onChangeFormField} />,
+                                          onChangeFormField={this.onChangeFormField}/>,
         icon: <span className="ml fa fa-plus-square-o"></span>
       },
       {
-        name: 'Select Tasks',
+        name: !this.props.viewMode?'Select Tasks':'Tasks',
         component: <MlAppServiceSelectTask serviceTask={serviceTask}
                                            profileId={this.profileId}
                                            serviceId={this.serviceId}
                                            getServiceDetails={this.getServiceDetails}
                                            saveService={this.saveService}
+                                           viewMode={this.props.viewMode}
                                            optionsBySelectService={this.optionsBySelectService}
                                            updateSessionSequence={this.updateSessionSequence}
-                                           />,
+        />,
         icon: <span className="ml fa fa-users"></span>
       },
       {
         name: 'Terms & Conditions',
         component: <MlAppServiceTermsAndConditions serviceTermAndCondition={serviceTermAndCondition}
                                                    attachments={attachments}
+                                                   viewMode={this.props.viewMode}
                                                    onChangeCheckBox={this.onChangeCheckBox}
                                                    onChangeValue={this.onChangeValue}
                                                    getServiceDetails={this.getServiceDetails}
-                                                   saveService={this.saveService} />,
+                                                   saveService={this.saveService}/>,
         icon: <span className="ml ml-payments"></span>
       },
       {
         name: 'Payment',
         component: <MlAppServicePayment servicePayment={servicePayment}
                                         taxStatus={taxStatus}
+                                        finalAmount={finalAmount}
+                                        viewMode={this.props.viewMode}
+                                        getServiceDetails={this.getServiceDetails}
                                         facilitationCharge={facilitationCharge}
                                         checkDiscountEligibility={this.checkDiscountEligibility}
                                         calculateDiscounts={this.calculateDiscounts}
                                         checkTaxStatus={this.checkTaxStatus}
                                         checkPromoStatus={this.checkPromoStatus}
                                         checkDiscountStatus={this.checkDiscountStatus}
-                                        saveService={this.saveService} />,
+                                        saveService={this.saveService}
+                                        bookService={this.props.bookService}/>,
+
         icon: <span className="ml ml-payments"></span>
       },
-      {name: 'History',
-        component: <MlAppServiceHistory />,
-        icon: <span className="ml ml-moolya-symbol"></span>
-      }
+
     ];
     return steps;
   }
 
   async getTaskDetailsForService() {
-    let { serviceTask } = this.state;
+    let {serviceTask} = this.state;
     if (this.profileId) {
-      const resp = await fetchTaskDetailsForServiceCard(this.profileId);
+      const resp = await fetchTaskDetailsForServiceCard(this.profileId, this.serviceId);
       serviceTask.serviceTaskDetails = resp;
-      console.log('-----resp---', resp);
-      this.setState({ serviceTask: serviceTask })
+      this.setState({serviceTask: serviceTask})
     }
   }
+
   /**
    * Method :: optionsBySelectService
    * Desc :: Set the current selected task and tab
    */
   optionsBySelectService(taskId) {
-    let { serviceTask } = this.state;
+    let {serviceTask, service, tasks } = this.state;
+    let task, sequence;
+    let session = [];
     if (taskId) {
       serviceTask.selectedTaskId = taskId;
-      let selectedTaskDetails = serviceTask.serviceTaskDetails.filter((task) => {return task.id === taskId});
+      let selectedTaskDetails = serviceTask.serviceTaskDetails.filter((task) => {
+        return task.id === taskId
+      });
       selectedTaskDetails = selectedTaskDetails[0];
+      if (tasks && tasks.length) {
+        task = tasks.filter((task) => {
+          return task.id === taskId;
+        });
+        if (task && task.length > 0) {
+          sequence = task[0].sequence;
+          task[0].sessions.map((session, index) => {
+            selectedTaskDetails.session[index]['sequence'] = selectedTaskDetails.session[index].sequence || _.cloneDeep(session.sequence);
+          });
+        }
+      }
       serviceTask.selectedTaskDetails = {
         id: selectedTaskDetails.id,
-        sequence: selectedTaskDetails.sequence,
+        sequence: selectedTaskDetails.sequence || sequence,
         displayName: selectedTaskDetails.displayName || '',
         noOfSession: selectedTaskDetails.noOfSession || '',
         sessionFrequency: selectedTaskDetails.sessionFrequency || '',
@@ -223,15 +253,16 @@ export default class MlAppServiceManageSchedule extends Component {
       serviceTask: serviceTask
     });
   }
+
   /**
    * Method :: updateSessionSequence
    * Desc :: Update the session sequence of task
    */
   updateSessionSequence(evt, sessionId) {
-    let { selectedTaskId, serviceTaskDetails, selectedTaskDetails } = this.state.serviceTask;
+    let {selectedTaskId, serviceTaskDetails, selectedTaskDetails} = this.state.serviceTask;
     if (evt.target.id === 'tasksequence') {
       selectedTaskDetails.sequence = evt.target.value;
-    } else{
+    } else {
       let sessionIndex = selectedTaskDetails.session.findIndex((session) => {
         return session.sessionId === sessionId;
       });
@@ -241,7 +272,7 @@ export default class MlAppServiceManageSchedule extends Component {
         selectedTaskDetails.session = sessionDetails;
       }
     }
-    this.setState({ selectedTaskDetails: selectedTaskDetails });
+    this.setState({selectedTaskDetails: selectedTaskDetails});
   }
 
   /**
@@ -250,10 +281,11 @@ export default class MlAppServiceManageSchedule extends Component {
    * @returns Void
    */
   async getServiceDetails() {
-    let {serviceBasicInfo, clusterData, serviceTask, service, serviceTermAndCondition, attachments, servicePayment, taxStatus, facilitationCharge} = this.state;
+    let {serviceBasicInfo, finalAmount, clusterData, serviceTask, service, tasks, serviceTermAndCondition, attachments, servicePayment, taxStatus, facilitationCharge} = this.state;
     if (this.serviceId) {
       service = await fetchServiceActionHandler(this.serviceId);
       if (service) {
+        tasks = [];
         let {state, city, community} = service;
         serviceBasicInfo = {
           duration: service.duration,
@@ -271,9 +303,13 @@ export default class MlAppServiceManageSchedule extends Component {
           state: service.state,
           community: service.community
         };
+        finalAmount = service.finalAmount;
+        tasks = _.cloneDeep(service.tasks) || [];
+        tasks.sessions = _.cloneDeep(service.tasks.sessions) || [];
         serviceTask.serviceOptionTasks = [];
         let attachmentDetails = [];
-        if (service.tasks && service.tasks.length > 0 && serviceTask.serviceTaskDetails && serviceTask.serviceTaskDetails.length > 0) {
+        serviceTask.tasks = service.tasks || [];
+        if (serviceTask.serviceTaskDetails && serviceTask.serviceTaskDetails.length > 0) {
           serviceTask.tasks = _.intersectionBy(serviceTask.serviceTaskDetails, service.tasks, 'id');
           serviceTask.serviceTaskDetails.forEach((task, key) => {
             if (service.tasks.map((data) => data.id).indexOf(task.id) === -1) {
@@ -282,11 +318,11 @@ export default class MlAppServiceManageSchedule extends Component {
           });
           serviceTask.tasks.forEach((task) => {
             if (task.attachments && task.attachments.length > 0) {
-              task.attachments.forEach((attachment) => {attachmentDetails.push(attachment)});
+              task.attachments.forEach((attachment) => {
+                attachmentDetails.push(attachment)
+              });
             }
           });
-        } else {
-          serviceTask.tasks = service.tasks || [];
         }
         if (service.termsAndCondition) {
           serviceTermAndCondition = _.omit(service.termsAndCondition, '__typename');
@@ -296,6 +332,7 @@ export default class MlAppServiceManageSchedule extends Component {
         }
         if (service.payment) {
           servicePayment = _.cloneDeep(service.payment);
+          servicePayment.isTaxInclusive = servicePayment.isTaxInclusive ? true : false;
           taxStatus = servicePayment.isTaxInclusive ? 'taxinclusive' : 'taxexclusive';
         }
         attachments = _.cloneDeep(attachmentDetails);
@@ -324,7 +361,7 @@ export default class MlAppServiceManageSchedule extends Component {
     }
     var validTillDate = Date.parse(serviceBasicInfo.validTill);
     var currentDate = new Date();
-    let remainingDate =  Math.floor((validTillDate - currentDate) / (1000*60*60*24));
+    let remainingDate = Math.floor((validTillDate - currentDate) / (1000 * 60 * 60 * 24));
     remainingDate = isNaN(remainingDate) ? '' : remainingDate;
     this.setState({
       serviceBasicInfo: serviceBasicInfo,
@@ -334,9 +371,11 @@ export default class MlAppServiceManageSchedule extends Component {
       serviceTermAndCondition: serviceTermAndCondition,
       attachments: attachments,
       service: service,
+      tasks: tasks,
       facilitationCharge: facilitationCharge,
       servicePayment: servicePayment,
-      taxStatus: taxStatus
+      taxStatus: taxStatus,
+      finalAmount: finalAmount
     }, () => {
       this.getUserProfile();
     });
@@ -363,7 +402,7 @@ export default class MlAppServiceManageSchedule extends Component {
    * @param response :: server response
    */
   showResponseMsg(response, msg) {
-    if(response.success){
+    if (response.success) {
       toastr.success(msg);
     } else {
       toastr.error(response.result);
@@ -381,7 +420,7 @@ export default class MlAppServiceManageSchedule extends Component {
     } else {
       serviceTermAndCondition.isCancelable = !event.target.checked;
     }
-    this.setState({ serviceTermAndCondition: serviceTermAndCondition });
+    this.setState({serviceTermAndCondition: serviceTermAndCondition});
   }
 
   /**
@@ -389,15 +428,16 @@ export default class MlAppServiceManageSchedule extends Component {
    * Desc :: Sets the current value in term and condition
    */
   onChangeValue(event) {
-    let { serviceTermAndCondition } = this.state;
-    let { id, value } = event.target;
+    let {serviceTermAndCondition} = this.state;
+    let {id, value} = event.target;
     if (event.target.id === 'rescheduler') {
       serviceTermAndCondition.noOfReschedulable = value;
     } else {
       serviceTermAndCondition.noOfDaysBeforeCancelation = value;
     }
-    this.setState({ serviceTermAndCondition: serviceTermAndCondition });
+    this.setState({serviceTermAndCondition: serviceTermAndCondition});
   }
+
   /**
    * Method :: saveService
    * Desc   :: Save service data on server
@@ -405,7 +445,7 @@ export default class MlAppServiceManageSchedule extends Component {
    * @returns Void
    */
   async saveService(isRedirectWithList) {
-    let { clusters, clusterName, chapterName, stateName, communitiesName, serviceBasicInfo, serviceTask, service, serviceTermAndCondition, servicePayment, facilitationCharge } = this.state;
+    let {clusters, tasks, finalAmount, clusterName, chapterName, stateName, communitiesName, serviceBasicInfo, serviceTask, service, serviceTermAndCondition, servicePayment, facilitationCharge} = this.state;
     if (chapterName) {
       let cities = [];
       chapterName.map((data) => {
@@ -452,15 +492,19 @@ export default class MlAppServiceManageSchedule extends Component {
     };
     if (serviceTask.selectedTaskDetails && serviceTask.selectedTaskId) {
       let sessions = [];
-      let serviceDetails = service.tasks && service.tasks.filter((task) => {return task.id === serviceTask.selectedTaskId});
+      let serviceDetails = service.tasks && service.tasks.filter((task) => {
+          return task.id === serviceTask.selectedTaskId
+        });
       let taskSequence;
       if (serviceTask.selectedTaskDetails.session && serviceTask.selectedTaskDetails.session.length > 0) {
-        let seqData = '';
         if (serviceDetails && serviceDetails.length > 0) {
           taskSequence = serviceDetails[0].sequence;
         }
         serviceTask.selectedTaskDetails.session.forEach((session, index) => {
-          seqData = serviceDetails[0]['sessions'][index].sequence;
+          let seqData = '';
+          if (taskSequence) {
+            seqData = serviceDetails[0]['sessions'][index].sequence;
+          }
           sessions.push({id: session.sessionId, sequence: (session.sequence || seqData)})
         });
       }
@@ -471,16 +515,20 @@ export default class MlAppServiceManageSchedule extends Component {
         sessions: sessions
       };
       services.tasks.push(task);
-      serviceTask.tasks.map((task) => {
-        if (task.id !== serviceTask.selectedTaskId) {
+      tasks = [];
+      tasks.push(task);
+      serviceTask.tasks.map((taskInfo) => {
+        if (taskInfo.id !== serviceTask.selectedTaskId) {
           let sessionDetails = [];
-          let serviceDetails = service.tasks && service.tasks.filter((taskData) => {return task.id === taskData.id});
+          let serviceDetails = service.tasks && service.tasks.filter((taskData) => {
+              return taskInfo.id === taskData.id
+            });
           let isServiceDetails = false;
           if (serviceDetails && serviceDetails.length > 0) {
             isServiceDetails = true
           }
-          if (task.session && task.session.length > 0) {
-            task.session.forEach((session, index) => {
+          if (taskInfo.session && taskInfo.session.length > 0) {
+            taskInfo.session.forEach((session, index) => {
               let seqData = '';
               if (isServiceDetails) {
                 seqData = serviceDetails[0]['sessions'][index].sequence;
@@ -488,37 +536,50 @@ export default class MlAppServiceManageSchedule extends Component {
               sessionDetails.push({id: session.sessionId, sequence: session.sequence || seqData})
             });
           }
-          services.tasks.push({id: task.id, sequence: task.sequence || serviceDetails[0].sequence, sessions: sessionDetails})
+          let task = {
+            id: taskInfo.id,
+            sequence: taskInfo.sequence || serviceDetails[0].sequence,
+            sessions: sessionDetails
+          };
+          services.tasks.push(task);
+          tasks.push(task);
         }
       });
+      this.setState({tasks: tasks});
     }
     if (!_.isEmpty(serviceTermAndCondition)) {
       services.termsAndCondition = _.cloneDeep(serviceTermAndCondition);
     }
     services.payment = servicePayment;
+    services.finalAmount = finalAmount || 0;
     services.facilitationCharge = facilitationCharge;
-    if(!this.serviceId){
+    if (!this.serviceId) {
       const resp = await createServiceActionHandler(services);
       this.showResponseMsg(resp, 'Created Successfully');
       if (resp.success) {
         this.serviceId = resp.result;
-        this.setState({ serviceTask: service });
+        this.setState({serviceTask: service});
         FlowRouter.setQueryParams({id: this.serviceId});
       }
     } else {
-      console.log('----service--', services);
       const resp = await updateServiceActionHandler(this.serviceId, services);
       if (resp.success && serviceTask.selectedTaskId) {
         serviceTask.tasks = _.intersectionBy(serviceTask.serviceTaskDetails, services.tasks, 'id');
         serviceTask.serviceOptionTasks = [];
+        let attachmentDetails = [];
         serviceTask.serviceTaskDetails.forEach((task) => {
           if (services.tasks.map((data) => data.id).indexOf(task.id) === -1) {
             serviceTask.serviceOptionTasks.push(task);
           }
         });
-        // serviceTask.selectedTaskId = '';
-        // serviceTask.selectedTaskDetails = {};
-        this.setState({ serviceTask: serviceTask });
+        serviceTask.tasks.forEach((task) => {
+          if (task.attachments && task.attachments.length > 0) {
+            task.attachments.forEach((attachment) => {
+              attachmentDetails.push(attachment)
+            });
+          }
+        });
+        this.setState({serviceTask: serviceTask, attachments: attachmentDetails});
       }
       this.showResponseMsg(resp, 'Updated Successfully');
       if (isRedirectWithList) {
@@ -532,12 +593,17 @@ export default class MlAppServiceManageSchedule extends Component {
    * Desc :: Check the eligibility
    */
   checkDiscountEligibility(event) {
-    let {servicePayment} = this.state;
+    let {servicePayment, finalAmount} = this.state;
+    servicePayment.discountValue = 0;
     servicePayment.isDiscount = !event.target.checked;
     if (!servicePayment.isDiscount) {
       servicePayment.discountType = '';
+      finalAmount = 0;
     }
-    this.setState({servicePayment: servicePayment});
+    this.setState({
+      servicePayment: servicePayment,
+      finalAmount: finalAmount
+    });
   }
 
   /**
@@ -545,62 +611,57 @@ export default class MlAppServiceManageSchedule extends Component {
    * Desc :: Calculate the discount as per discount status
    */
   calculateDiscounts(event) {
-    let {servicePayment, facilitationCharge } = this.state;
+    let {servicePayment, finalAmount} = this.state;
+    finalAmount = 0;
+    servicePayment.discountValue = 0;
     if (servicePayment.isDiscount) {
       switch (servicePayment.discountType) {
         case 'amount':
           if (parseFloat(event.target.value) >= 0) {
             servicePayment.discountValue = event.target.value;
-            if (facilitationCharge.amount) {
-              let facilitationAmount = facilitationCharge.amount ? parseFloat(facilitationCharge.amount) : 0;
-              if (facilitationAmount) {
-                facilitationCharge.derivedAmount = parseFloat(servicePayment.tasksDerived) + parseFloat(facilitationCharge.amount);
-              }
-            } else {
-              facilitationCharge.derivedAmount = parseFloat(servicePayment.tasksDerived) - parseFloat(servicePayment.discountValue);
-            }
+            finalAmount = parseInt(servicePayment.tasksDerived) - parseInt(servicePayment.discountValue);
             this.setState({
               servicePayment: servicePayment,
-              facilitationCharge: facilitationCharge
+              finalAmount: finalAmount
             });
           }
           break;
         case 'percent':
           if (parseFloat(event.target.value) >= 0) {
             servicePayment.discountValue = event.target.value;
-            if (facilitationCharge.percentage) {
-              let facilitationAmount = facilitationCharge.percentage ? parseFloat(facilitationCharge.percentage) : 0;
-              if (facilitationAmount) {
-                let percentageAmmount = (parseFloat(servicePayment.tasksDerived) * parseFloat(facilitationCharge.percentage)) / 100;
-                facilitationCharge.derivedAmount = percentageAmmount + parseFloat(servicePayment.tasksDerived);
-              }
-            } else {
-              let percentageAmmount = (parseFloat(servicePayment.tasksDerived) * parseFloat(servicePayment.discountValue)) / 100;
-              facilitationCharge.derivedAmount = parseFloat(servicePayment.tasksDerived) - percentageAmmount;
-            }
-            this.setState({
-              servicePayment: servicePayment,
-              facilitationCharge: facilitationCharge
-            });
+            let percentageAmmount = (parseInt(servicePayment.tasksDerived) * parseInt(servicePayment.discountValue)) / 100;
+            finalAmount = parseInt(servicePayment.tasksDerived) - percentageAmmount;
           }
+          this.setState({
+            servicePayment: servicePayment,
+            finalAmount: finalAmount
+          });
           break;
         default:
-          // do nothing
+        // do nothing
       }
+    } else {
+      this.setState({servicePayment: servicePayment, finalAmount: finalAmount});
     }
-    this.setState({servicePayment: servicePayment});
   }
+
   /**
    * Method :: checkDiscountStatus
    * Desc :: Check the discount as per discount eligibility
    */
   checkDiscountStatus(event) {
-    let {servicePayment} = this.state;
+    let {servicePayment, facilitationCharge, finalAmount } = this.state;
+    servicePayment.discountValue = 0;
+    finalAmount = 0;
     if (servicePayment.isDiscount) {
       servicePayment.discountType = event.target.id;
     }
-    this.setState({servicePayment: servicePayment});
+    this.setState({
+      servicePayment: servicePayment,
+      finalAmount: finalAmount
+    });
   }
+
   /**
    * Method :: checkTaxStatus
    * Desc :: Check the tax status
@@ -615,6 +676,7 @@ export default class MlAppServiceManageSchedule extends Component {
     }
     this.setState({servicePayment: servicePayment, taxStatus: taxStatus});
   }
+
   /**
    * Method :: checkPromoStatus
    * Desc :: Check the promo code status
@@ -624,16 +686,17 @@ export default class MlAppServiceManageSchedule extends Component {
     servicePayment.isPromoCodeApplicable = !event.target.checked;
     this.setState({servicePayment: servicePayment});
   }
+
   /**
    * Method :: onChangeFormField
    * Desc :: Set the current changed value in state
    * @return Void
    */
   onChangeFormField(event) {
-    const { id, value } = event.target;
-    let { serviceBasicInfo } = this.state;
+    const {id, value} = event.target;
+    let {serviceBasicInfo} = this.state;
     serviceBasicInfo[id] = value ? value.trim() : '';
-    this.setState({ serviceBasicInfo: serviceBasicInfo });
+    this.setState({serviceBasicInfo: serviceBasicInfo});
   }
 
   /**
@@ -641,10 +704,10 @@ export default class MlAppServiceManageSchedule extends Component {
    * Desc :: set the current status
    * @return Void
    */
-  checkBoxHandler(event){
-    let { serviceBasicInfo } = this.state;
+  checkBoxHandler(event) {
+    let {serviceBasicInfo} = this.state;
     serviceBasicInfo.status = event.target.checked;
-    this.setState({ serviceBasicInfo: serviceBasicInfo });
+    this.setState({serviceBasicInfo: serviceBasicInfo});
   }
 
   /**
@@ -654,9 +717,9 @@ export default class MlAppServiceManageSchedule extends Component {
   validTill(event) {
     if (event._d) {
       let value = new Moment(event._d);
-      let { serviceBasicInfo } = this.state;
+      let {serviceBasicInfo} = this.state;
       serviceBasicInfo.validTill = value;
-      this.setState({ serviceBasicInfo: serviceBasicInfo });
+      this.setState({serviceBasicInfo: serviceBasicInfo});
     }
   }
 
@@ -664,8 +727,8 @@ export default class MlAppServiceManageSchedule extends Component {
    * Method :: optionsBySelectChapters
    * Desc :: set the current chapter details
    */
-  optionsBySelectChapters(value, calback, selObject){
-    let {serviceBasicInfo, clusterData } = this.state;
+  optionsBySelectChapters(value, calback, selObject) {
+    let {serviceBasicInfo, clusterData} = this.state;
     serviceBasicInfo.chapters = value;
     clusterData.chapters = value;
     this.setState({
@@ -681,7 +744,7 @@ export default class MlAppServiceManageSchedule extends Component {
    * Desc :: set the current state details
    */
   optionsBySelectstates(value, calback, selObject) {
-    let {serviceBasicInfo, clusterData } = this.state;
+    let {serviceBasicInfo, clusterData} = this.state;
     serviceBasicInfo.state = value;
     clusterData.state = value;
     this.setState({
@@ -692,11 +755,11 @@ export default class MlAppServiceManageSchedule extends Component {
   }
 
   /**
-   * Method :: optionsBySelectCommunities
+   * Method :: opttionsBySelectCommunities
    * Desc :: set the current community details
    */
-  optionsBySelectCommunities(value, calback, selObject){
-    let {serviceBasicInfo, clusterData } = this.state;
+  optionsBySelectCommunities(value, calback, selObject) {
+    let {serviceBasicInfo, clusterData} = this.state;
     serviceBasicInfo.community = value;
     clusterData.community = value;
     this.setState({
@@ -705,6 +768,7 @@ export default class MlAppServiceManageSchedule extends Component {
       communitiesName: selObject
     });
   }
+
   /**
    * Method :: setSessionFrequency
    * Desc :: set the current frequency details
@@ -714,6 +778,7 @@ export default class MlAppServiceManageSchedule extends Component {
     serviceBasicInfo.sessionFrequency = value;
     this.setState({serviceBasicInfo: serviceBasicInfo})
   }
+
   /**
    * Method :: React render
    * Desc :: Showing html page
@@ -723,14 +788,14 @@ export default class MlAppServiceManageSchedule extends Component {
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
-          <MlAppScheduleHead type="service" />
+          {!this.props.viewMode?<MlAppScheduleHead type="service" />:""}
           <div className="clearfix"/>
           <div className="col-md-12">
             <div className='step-progress'>
               <div id="root">
                 <StepZilla steps={this.setServiceSteps()}
                            stepsNavigation={false}
-                           prevBtnOnLastStep={true} />
+                           prevBtnOnLastStep={true}/>
               </div>
             </div>
           </div>

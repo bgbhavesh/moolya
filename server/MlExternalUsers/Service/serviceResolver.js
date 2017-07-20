@@ -9,13 +9,53 @@ var extendify = require('extendify');
 var _ = require('lodash');
 
 MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => {
-  let query = {
-    userId: context.userId,
-    profileId:args.profileId,
-    isCurrentVersion: true
-  };
-  let result = mlDBController.find('MlService', query , context).fetch()
-  return result;
+  let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: args.profileId}, context)
+  if(portfolio){
+    let query = {
+      userId: portfolio.userId,
+      profileId:portfolio.profileId,
+      isCurrentVersion: true,
+      isBeSpoke: false
+    };
+    let result = mlDBController.find('MlService', query , context).fetch()
+    return result;
+  }else {
+    let query = {
+      userId: context.userId,
+      profileId: args.profileId,
+      isCurrentVersion: true,
+      isBeSpoke: false
+    };
+    let result = mlDBController.find('MlService', query, context).fetch()
+    return result;
+  }
+}
+
+MlResolver.MlQueryResolver['fetchBeSpokeServices'] = (obj, args, context, info) => {
+  if (context.url.indexOf("explore") > 0) {
+    let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfolioId}, context)
+  if(portfolio) {
+    let query = {
+      userId: portfolio.userId,
+      profileId: portfolio.profileId,
+      isCurrentVersion: true,
+      isBeSpoke: true,
+      beSpokeCreatorUserId: context.userId,
+      beSpokeCreatorProfileId: new MlUserContext().userProfileDetails(context.userId).profileId
+    };
+    let result = mlDBController.find('MlService', query, context).fetch()
+    return result;
+    }
+  }else {
+    let query = {
+      userId: context.userId,
+      profileId: new MlUserContext().userProfileDetails(context.userId).profileId,
+      isCurrentVersion: true,
+      isBeSpoke: true
+    };
+    let result = mlDBController.find('MlService', query, context).fetch()
+    return result;
+  }
 }
 
 MlResolver.MlQueryResolver['findService'] = (obj, args, context, info) => {
@@ -27,24 +67,46 @@ MlResolver.MlQueryResolver['findService'] = (obj, args, context, info) => {
     };
     let service = mlDBController.findOne('MlService', query, context);
     return service;
-  } else  {
+  }
+  else  {
     let code = 404;
-    let response = new MlRespPayload().successPayload('Service not found', code);
+    let response = new MlRespPayload().errorPayload('Service not found', code);
     return response;
   }
 }
 
 MlResolver.MlMutationResolver['createService'] = (obj, args, context, info) => {
-  args.Services.createdAt = new Date();
-  args.Services.userId = context.userId;
-  orderNumberGenService.createServiceId(args.Services);
-  args.Services.isCurrentVersion = true;
-  args.Services.versions = 0.001;
-  let  result = mlDBController.insert('MlService' ,args.Services, context)
-  if(result){
-    let code = 200;
-    let response = new MlRespPayload().successPayload(result, code);
-    return response
+  if (context.url.indexOf("explore") > 0) {
+    args.Services.createdAt = new Date();
+    args.Services.beSpokeCreatorUserId = context.userId;
+    args.Services.isBeSpoke =  true
+    orderNumberGenService.createServiceId(args.Services);
+    args.Services.isCurrentVersion = true;
+    args.Services.versions = 0.001;
+    args.Services.beSpokeCreatorProfileId = new MlUserContext().userProfileDetails(context.userId).profileId;
+    var portfolioDetailsTransactions = mlDBController.findOne('MlPortfolioDetails', {_id: args.Services.profileId}, context)
+    if(portfolioDetailsTransactions){
+      args.Services.userId = portfolioDetailsTransactions.userId
+      args.Services.profileId = portfolioDetailsTransactions.profileId
+    }
+    let  result = mlDBController.insert('MlService' ,args.Services, context)
+    if(result){
+      let code = 200;
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }
+  }else{
+    args.Services.createdAt = new Date();
+    args.Services.userId = context.userId;
+    orderNumberGenService.createServiceId(args.Services);
+    args.Services.isCurrentVersion = true;
+    args.Services.versions = 0.001;
+    let  result = mlDBController.insert('MlService' ,args.Services, context)
+    if(result){
+      let code = 200;
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }
   }
 }
 
@@ -87,7 +149,6 @@ MlResolver.MlMutationResolver['updateService'] = (obj, args, context, info) => {
         args.Services.payment["tasksAmount"] = taskAmount;
         args.Services.payment["tasksDiscount"] = taskAmount - taskDerivedAmount;
         args.Services.payment["tasksDerived"] = taskDerivedAmount;
-        args.Services.payment["amount"] = taskDerivedAmount;
       }
       args.Services.userId = service.userId;
       args.Services.updatedAt = new Date();
@@ -145,7 +206,6 @@ MlResolver.MlMutationResolver['updateServiceAdmin'] = (obj, args, context, info)
         args.Services.payment["tasksAmount"] = taskAmount;
         args.Services.payment["tasksDiscount"] = taskAmount - taskDerivedAmount;
         args.Services.payment["tasksDerived"] = taskDerivedAmount;
-        args.Services.payment["amount"] = taskDerivedAmount;
       }
       args.Services.userId = service.userId;
       args.Services.updatedAt = new Date();
@@ -195,7 +255,7 @@ MlResolver.MlQueryResolver['fetchTasksAmount'] = (obj, args, context, info) => {
       totalAmountOfTasks.push({
         totalAmount:data.payment.derivedAmount
         })
-    })
+    });
   return totalAmountOfTasks;
 }
 
@@ -209,9 +269,10 @@ MlResolver.MlQueryResolver['getProfileBasedOnPortfolio'] = (obj, args, context, 
 
 MlResolver.MlQueryResolver['getServiceBasedOnProfileId'] = (obj, args, context, info) => {
   let query = {
-    profileId: args.profileId
+    profileId: args.profileId,
+    isCurrentVersion: true
   };
-  let result = mlDBController.findOne('MlService', query , context)
+  let result = mlDBController.findOne('MlService', query , context);
   return result;
 }
 

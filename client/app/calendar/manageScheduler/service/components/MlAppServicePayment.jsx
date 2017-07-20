@@ -17,15 +17,16 @@ export default class MlAppServicePayment extends React.Component{
     super(props);
   }
 
-  // componentDidMount() {
-  //   $('.float-label').jvFloat();
-  //   var WinHeight = $(window).height();
-  //   $('.step_form_wrap').height(WinHeight-(310+$('.admin_header').outerHeight(true)));
-  //
-  // }
+  componentDidMount() {
+    this.props.getServiceDetails();
+  }
 
   componentDidUpdate() {
     MoolyaToggleSwitch(true, true);
+  }
+
+  bookService(){
+    this.props.bookService(true)
   }
 
   render(){
@@ -144,15 +145,15 @@ export default class MlAppServicePayment extends React.Component{
               </div>
               <div className="form-group">
                 <label>Derived amount Rs. <input className="form-control inline_input medium_in"
-                                                 value={facilitationCharge.derivedAmount} readOnly="readOnly"/>
+                                                 value={this.props.finalAmount} readOnly="readOnly"/>
                 </label>
               </div>
             </form>
           </div>
         </ScrollArea>
-        <div className="ml_btn" style={{'textAlign':'center'}}>
+        {!this.props.viewMode?<div className="ml_btn" style={{'textAlign':'center'}}>
           <div className="save_btn" onClick={() => saveService(true)}>Save</div> <div className="cancel_btn">Cancel</div>
-        </div>
+        </div>:<div className="ml_btn" style={{'textAlign':'center'}}><div className="save_btn" onClick={() => this.bookService()}>Book</div> </div>}
       </div>
     )
   }

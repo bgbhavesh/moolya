@@ -9,9 +9,8 @@ import MlResolver from "../../commons/mlResolverDef";
 
 let service=`
   type FacilitationCharge {
+     type: String
      amount: Int
-     percentage: Int
-     derivedAmount: Int
   }
   type Attachments {
      name: String
@@ -20,7 +19,6 @@ let service=`
      fileUrl : [String]
   }
   type ServicePayment {
-     amount: Int
      tasksAmount: Int
      tasksDiscount: Int
      tasksDerived: Int
@@ -87,6 +85,7 @@ let service=`
   type Service {
     userId: String
     _id: String
+    about: String
     profileId: String
     name: String
     displayName: String
@@ -108,7 +107,10 @@ let service=`
     state: [States]
     cluster: Clusters
     isBeSpoke : Boolean
+    finalAmount: Int
     mode : String
+    beSpokeCreatorProfileId: String
+    beSpokeCreatorUserId: String
     industryId : [String]
     conversation : [String]
     expectedInput : String
@@ -148,6 +150,7 @@ let service=`
     userId: String
     email: String
     _id: String
+    about: String
     profileId: String
     name: String
     displayName: String
@@ -158,11 +161,12 @@ let service=`
     termsAndCondition: TermsAndCondition
     attachments: [Attachments]
     payment: ServicePayment
-    tasks: [String]
+    tasks: [ServiceTask]
     facilitationCharge : FacilitationCharge
     createdAt: Date
     updatedAt: Date
     validTill: Date
+    finalAmount: Int
     community: [Communities]
     subChapter: [SubChapters]
     city: [Cities]
@@ -171,16 +175,18 @@ let service=`
     isBeSpoke : Boolean
     mode : String
     industryId : [String]
+    beSpokeCreatorProfileId: String
+    beSpokeCreatorUserId: String
     conversation : [String]
     expectedInput : String
     expectedOutput : String
+    isApproved: Boolean
     userDetails: UserDetails
   }
 
    input facilitationCharge {
+       type: String
        amount: Int
-       percentage: Int
-       derivedAmount: Int
    }
 
    input attachments {
@@ -191,7 +197,6 @@ let service=`
    }
 
    input servicepayment {
-       amount: Int
        tasksAmount: Int
        tasksDiscount: Int
        tasksDerived: Int
@@ -252,6 +257,7 @@ let service=`
    input service {
         userId: String
         profileId: String
+        about: String
         name: String
         displayName: String
         noOfSession: Int
@@ -266,6 +272,7 @@ let service=`
         createdAt: Date
         updatedAt: Date
         validTill: Date
+        finalAmount: Int
         community: [communities]
         subChapter: [subChapters]
         city: [cities]
@@ -273,6 +280,8 @@ let service=`
         cluster: clusters
         isBeSpoke : Boolean
         mode : String
+        beSpokeCreatorProfileId: String
+        beSpokeCreatorUserId: String
         industryId : [String]
         conversation : [String]
         expectedInput : String
@@ -282,6 +291,7 @@ let service=`
 
     type Query {
         fetchUserServices(profileId:String):[Service]
+        fetchBeSpokeServices(portfolioId:String):[Service]
         findService(serviceId:String):Service
         fetchTasksAmount(profileId:String):[TotalTaskAmount]
         getProfileBasedOnPortfolio(portfolioId:String): PortfolioDetails
@@ -306,6 +316,7 @@ let supportedApi = [
   {api:'getProfileBasedOnPortfolio', actionName:'READ', moduleName:"OFFICE"},
   {api:'getServiceBasedOnProfileId', actionName:'READ', moduleName:"OFFICE"},
   {api:'getTaskFromService', actionName:'READ', moduleName:"OFFICE"},
+  {api:'fetchBeSpokeServices', actionName:'READ', moduleName:"OFFICE"},
   {api:'createService', actionName:'CREATE', moduleName:"OFFICE"},
   {api:'updateService', actionName:'UPDATE', moduleName:"OFFICE"},
   {api:'updateServiceAdmin', actionName:'UPDATE', moduleName:"OFFICE"}

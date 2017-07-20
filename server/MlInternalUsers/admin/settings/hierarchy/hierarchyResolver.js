@@ -311,8 +311,14 @@ MlResolver.MlQueryResolver['fetchRolesForDepartment'] = (obj, args, context, inf
   let roles = [];
   let levelCode = "";
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
+  let hierarchy = mlDBController.findOne("MlHierarchyAssignments", {"clusterId": args.clusterId, "parentDepartment":args.departmentId, "parentSubDepartment":args.subDepartmentId}, context)
+  var roleIds = [];
+  if(hierarchy){
+    var teamStructure = _.filter(hierarchy.teamStructureAssignment, {isAssigned:true});
+    roleIds = _.map(teamStructure, "roleId");
+  }
   if (department && department.isActive) {
-    let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles": {
+    let valueGet = mlDBController.find('MlRoles', {"$and": [{'_id':{"$nin":roleIds}}, {"assignRoles": {
       $elemMatch: {
         cluster : {"$in": ["all",args.clusterId]},
         department: args.departmentId,

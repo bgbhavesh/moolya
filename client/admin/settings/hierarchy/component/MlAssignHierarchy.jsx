@@ -151,7 +151,7 @@ export default class MlAssignHierarchy extends React.Component {
     let assignments  = _.map(allRoles, function (row) {
       return _.omit(row, ['__typename']);
     });
-    // _.remove(assignments, {assignedLevel: ''})
+    _.remove(assignments, {assignedLevel: ''})
     if(this.state.finalApproval&&this.state.finalApproval.isChecked){
       finalApproval = {
         department          : this.state.finalApproval.department,

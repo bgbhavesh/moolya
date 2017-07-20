@@ -313,7 +313,7 @@ export default class MlCreateRegistration extends React.Component{
                   <input type="text" ref="remarks" placeholder="Remarks"    className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <Select name="form-field-name" ref="How did you know about us" placeholder="How did you know about us" value={this.state.refered} options={referedOption} className="float-label" onChange={this.optionBySelectRefered.bind(this)} data-required={true} data-errMsg="How did you know about us is required"/>
+                  <Select name="form-field-name" ref="How did you know about us" placeholder="How did you know about us" value={this.state.refered} options={referedOption} className="float-label" onChange={this.optionBySelectRefered.bind(this)}/>
 
                   <br className="brclear"/>
                   <br className="brclear"/>

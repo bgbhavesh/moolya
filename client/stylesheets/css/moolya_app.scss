@@ -879,7 +879,7 @@ $menuTrans:all 0.5s linear;
 }
 .team-block.details-add-block .ml{background: none; border-radius: 50%; padding: 0; color: #fff; text-shadow: none; font-size: 54px; display: inline-block; border: 0px solid #161e27; margin: 20px 0; }
 .office-members-detail{
-  .form_inner_block {width: 98%; position: relative; padding: 15px 0px 0px 0px;}
+  .form_inner_block {width: 100%; position: relative; padding: 15px 0px 0px 0px;}
   .team-block {min-height: 145px;line-height: 145px;
     img{width:100px; height: 100px;}
   }
@@ -1484,185 +1484,79 @@ $menuTrans:all 0.5s linear;
   .media-body{padding-top: 24px;}
 }
 
-
-
-
-
-
-
-.cd-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  visibility: hidden;
-  opacity: 0;
-  pointer-events: none;
-  -webkit-transition: visibility 0s 0.3s, opacity 0.3s 0s, z-index 0s 0.3s;
-  -moz-transition: visibility 0s 0.3s, opacity 0.3s 0s, z-index 0s 0.3s;
-  transition: visibility 0s 0.3s, opacity 0.3s 0s, z-index 0s 0.3s;
-
-  .ml_btn{
-    .cancel_btn{background: $mlGray;color: $mlBlue;
+.portfolio_main{
+  border-radius:10px;
+  img{
+    width: 45%;
+  }
+  p{
+    font-size: 22px;
+    text-shadow: none;
+    color: #fff;
+    text-align: center;
+    padding-top:30px;
+  }
+  &.view{
+    background:$mlRed;
+    padding:20px 20px 20px 0px;
+    display: inline-block;
+    width: 100%;
+    img{
+      float: left;
+    }
+    a{display: inline-block; background: $mlBlue; border: 0px; line-height: 28px; position: relative; text-decoration: none; font-size: 14px; height: 30px; margin: 5px 0px 0px 0px; color: $mlWhite; text-shadow: none; text-align: center; padding: 0px 10px;}
+    a:after{position: absolute; right: -10px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 15px 0 15px 10px; border-color: transparent transparent transparent $mlBlue; top: 0px;}
+    a:before{position: absolute; left: -10px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 15px 10px 15px 0px; border-color: transparent $mlBlue transparent transparent; top: 0px;}
+  }
+  &.edit{
+    background:$mlBlue;
+    padding:20px 0px 20px 20px;
+    display: inline-block;
+    width: 100%;
+    img{
+      float: right;
+    }
+    a{display: inline-block; background: $mlYellow; border: 0px; line-height: 28px; position: relative; text-decoration: none; font-size: 14px; height: 30px; margin: 5px 0px 0px 0px; color: $mlBlue; text-shadow: none; text-align: center; padding: 0px 10px;}
+    a:after{position: absolute; right: -10px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 15px 0 15px 10px; border-color: transparent transparent transparent $mlYellow; top: 0px;}
+    a:before{position: absolute; left: -10px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 15px 10px 15px 0px; border-color: transparent $mlYellow transparent transparent; top: 0px;}
+  }
+}
+.bugReport{
+  right: -250px; position: fixed; z-index: 9999; transition: .5s linear; top: 37%;
+  &.open{
+    right: 0;
+    .bug_button:hover{color:$mlBlack;right:244px;}
+  }
+  h3{
+    font-size: 16px; text-align: center; color: #fff; border-radius: 4px; padding: 15px 5px; text-shadow: none;
+  }
+  .ml_btn{text-align: center;margin-top: 10px;
+    .save_btn{background: $mlGray;color: $mlBlue;
       &:after{border-color: transparent transparent transparent $mlGray;}
       &:before{border-color: transparent $mlGray transparent transparent;}
     }
-
-
   }
-
-
-}
-
-.cd-modal h3{
-  color: #fff;
-  text-shadow: 0px 1px 1px #000;
-  text-align: center;
-  margin-bottom: 20px;
-  font-size: 18px;
-  line-height: 30px;
-}
-.cd-section .cd-modal .form-control{
-  border-bottom: 2px solid $mlRed;
-  color: $mlWhite;
-  margin-bottom: 20px;
-  height: 120px;
-}
-.cd-modal::after {
-  /* gradient overlay at bottom of modal window */
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  height: 60px;
-  pointer-events: none;
-  background: transparent;
-  background: -webkit-linear-gradient( bottom , #34383c, rgba(52, 56, 60, 0));
-  background: linear-gradient(to top, #34383c, rgba(52, 56, 60, 0));
-}
-.cd-modal .cd-modal-content {
-  height: 100%;
-  width: 100%;
-  padding: 3em 5%;
-  text-align: left;
-  overflow-y: auto;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-.cd-modal p {
-  color: #ffffff;
-  line-height: 1.6;
-  margin: 2em 0;
-}
-.modal-is-visible .cd-modal {
-  z-index: 4;
-  visibility: visible;
-  opacity: 1;
-  pointer-events: auto;
-  -webkit-transition: visibility 0s 0s, opacity 0.3s 0s, z-index 0s 0s;
-  -moz-transition: visibility 0s 0s, opacity 0.3s 0s, z-index 0s 0s;
-  transition: visibility 0s 0s, opacity 0.3s 0s, z-index 0s 0s;
-}
-.modal-is-visible .cd-modal .cd-modal-content {
-  -webkit-overflow-scrolling: touch;
-}
-@media only screen and (min-width: 768px) {
-  .cd-modal .cd-modal-content {
-    padding: 4em 10%;
-  }
-}
-@media only screen and (min-width: 1170px) {
-  .cd-modal .cd-modal-content {
-    padding: 6em 30%;
-  }
-  .cd-modal p {
-    font-size: 2rem;
-    line-height: 2;
-  }
-}
-
-.cd-modal-action {
-  position: relative;
-}
-
-.bug_button{display: inline-block; background: $mlRed !important; border: 0px; line-height: 27px; position: fixed; text-decoration: none; font-size: 18px; height: 30px !important; min-width: 30px; margin: 0px 6px 0px 21px; color: #fff; text-shadow: none; text-align: center; z-index:2;bottom:50%;right:-6px;}
-.bug_button:hover{color:$mlWhite;}
-.bug_button:focus{color:$mlWhite;}
-.bug_button:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent $mlRed transparent transparent;top: 0px;}
-
-.cd-modal-action .bug_button, .cd-modal-action .cd-modal-bg {
-  display: inline-block;
-  height: 4em;
-  background-color: $mlBlue;
-}
-.cd-modal-action .bug_button {
-  /*   position: fixed;
-      z-index: 2;
-      right: 0;
-      bottom: 0;
-      font-size: 14px;
-      background: $mlRed;
-      width: 25px;
-      height: 25px;
-      text-align: center;
-      border-radius: 50%;
+  .form-control{
+    &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
       color: $mlWhite;
-      vertical-align: middle;
-      line-height: 23px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-transition: color 0.2s 0.3s, width 0.3s 0s;
-    -moz-transition: color 0.2s 0.3s, width 0.3s 0s;
-    transition: color 0.2s 0.3s, width 0.3s 0s; */
-}
-.cd-modal-action .btn.to-circle {
-  width: 4em;
-  color: transparent;
-  -webkit-transition: color 0.2s 0s, width 0.3s 0.2s;
-  -moz-transition: color 0.2s 0s, width 0.3s 0.2s;
-  transition: color 0.2s 0s, width 0.3s 0.2s;
-}
-.cd-modal-action .cd-modal-bg {
-  position: absolute;
-  z-index: 3;
-  left: 50%;
-  top: 0;
-  width: 4em;
-  border-radius: 50%;
-  opacity: 0;
-  visibility: hidden;
-  -webkit-transform: translateZ(0);
-  -moz-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  -o-transform: translateZ(0);
-  transform: translateZ(0);
-  -webkit-transform: translateX(-2em);
-  -moz-transform: translateX(-2em);
-  -ms-transform: translateX(-2em);
-  -o-transform: translateX(-2em);
-  transform: translateX(-2em);
-  -webkit-transition: visibility 0s 0.5s;
-  -moz-transition: visibility 0s 0.5s;
-  transition: visibility 0s 0.5s;
-}
-.cd-modal-action .cd-modal-bg.is-visible {
-  opacity: 1;
-  visibility: visible;
-}
-
-.cd-modal-close {
-
-}
-.no-touch .cd-modal-close:hover {
-  background-color: rgba(0, 0, 0, 0.5);
-}
-.modal-is-visible .cd-modal-close {
-
-}
-@media only screen and (min-width: 768px) {
-  .cd-modal-close {
-
+    }
+    &::-moz-placeholder { /* Firefox 19+ */
+      color: $mlWhite;
+    }
+    &:-ms-input-placeholder { /* IE 10+ */
+      color: $mlWhite;
+    }
+    &:-moz-placeholder { /* Firefox 18- */
+      color: $mlWhite;
+    }
   }
+  .bug_body{
+    width: 250px; background: $mlRed; padding: 10px; z-index: 999; float: right;
+  }
+  .bug_button{display: inline-block; background: $mlRed !important; border: 0px; line-height: 27px; position: absolute; text-decoration: none; font-size: 18px; height: 30px !important; min-width: 30px; margin: 0px 6px 0px 21px; color: $mlBlack; text-shadow: none; text-align: center; z-index:2;right:244px;}
+  .bug_button:hover{color:$mlBlack;right:240px;}
+  .bug_button:focus{color:$mlBlack;}
+  .bug_button:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent $mlRed transparent transparent;top: 0px;}
+
 }
+

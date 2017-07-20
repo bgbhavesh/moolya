@@ -44,7 +44,9 @@ const mlHierarchyDepartmentsTableConfig=new MlViewer.View({
                             subDepartmentName   
                             isMoolya           
                             isActive     
-                            clusterId
+                            clusterId,
+                            isDefaultSubChapter,
+                            subChapterId
                       }
                     }
               }

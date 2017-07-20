@@ -183,7 +183,7 @@ import MlFiltersList from '../../admin/settings/filters/components/MlFiltersList
 import MlEditFilter from '../../admin/settings/filters/components/MlAddFilter'
 /*import MlEditFilter from '../../admin/settings/filters/components/MlEditFilter'*/
 import MlHierarchyTabHistoryList from '../../admin/settings/hierarchy/hierarchyAuditLog/components/MlHierarchyTabHistoryList'
-
+import MlHierarchyDepartmentsList from '../../admin/settings/hierarchy/component/MlHierarchyDepartmentsList'
 // @End
 
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
@@ -284,7 +284,8 @@ adminSection.route('/settings/hierarchy/clusterhierarchy/:clusterId/chapters', {
 adminSection.route('/settings/hierarchy/clusterhierarchy/:clusterId/:subChapterId/:defaultSubChapter/hierarchyDetails', {
   name: 'hierarchy_details',
   action(params){
-    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader clusterId={params.clusterId}/>,adminContent:< MlHierarchyDetails clusterId={params.clusterId} subChapterId={params.subChapterId} defaultSubChapter={params.defaultSubChapter}/>} )
+    //mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader clusterId={params.clusterId}/>,adminContent:< MlHierarchyDetails clusterId={params.clusterId} subChapterId={params.subChapterId} defaultSubChapter={params.defaultSubChapter}/>} )
+    mount(AdminLayout,{headerContent:<MlAdminHierarchyHeader clusterId={params.clusterId}/>,adminContent:< MlHierarchyDepartmentsList clusterId={params.clusterId} subChapterId={params.subChapterId} defaultSubChapter={params.defaultSubChapter}/>} )
   }
 });
 

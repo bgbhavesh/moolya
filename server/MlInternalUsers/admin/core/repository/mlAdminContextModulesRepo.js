@@ -684,28 +684,46 @@ let CoreModules = {
       return {totalRecords: totalRecords , data: data};
     }
   },
+
+  /**
+   * hierarcy department fetch repo
+   * */
   MlHierarchyDepartmentsRepo: (requestParams, userFilterQuery, contextQuery, fieldsProj, context) => {
     let list = [];
-    let resp = mlDBController.find('MlDepartments', {
-      $and: [
-        {isMoolya:true},
-        {"depatmentAvailable.cluster": {$in: ["all", requestParams.clusterId]}}
-      ]
-    }, context).fetch()
+    let subChapter = mlDBController.findOne('MlSubChapters', {_id: requestParams.subChapterId}, context) || {}
+    var depQuery = {}
+    if (subChapter.isDefaultSubChapter)
+      depQuery = {$and: [{isMoolya: true}, {"depatmentAvailable.cluster": {$in: ["all", requestParams.clusterId]}}]}
+    else if (!subChapter.isDefaultSubChapter)
+      depQuery = {$and: [{"depatmentAvailable.cluster": {$in: ["all", requestParams.clusterId]}}, {"depatmentAvailable": {$elemMatch: {subChapter: {$in: ['all', requestParams.subChapterId]}}}}]}
+    let resp = mlDBController.find('MlDepartments', depQuery, context).fetch()
+
     resp.map(function (department) {
       let subDepartments = MlSubDepartments.find({"departmentId": department._id}).fetch();
       subDepartments.map(function (subDepartment) {
-        let deptAndSubDepartment = null
-        deptAndSubDepartment ={departmentId:department._id,departmentName:department.departmentName,subDepartmentId:subDepartment._id,subDepartmentName:subDepartment.subDepartmentName,isMoolya:department.isMoolya,isActive:department.isActive,clusterId:requestParams.clusterId}
+        let deptAndSubDepartment = {
+          departmentId: department._id,
+          departmentName: department.departmentName,
+          subDepartmentId: subDepartment._id,
+          subDepartmentName: subDepartment.subDepartmentName,
+          isMoolya: department.isMoolya,
+          isActive: department.isActive,
+          clusterId: requestParams.clusterId
+        }
         list.push(deptAndSubDepartment)
       })
     })
 
     data = list
-   // var totalRecords = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).count();
-    return {totalRecords: 0, data: data};
-
+    //todo: pagination need to be taken.
+    return {totalRecords: data.length, data: data};
   }
+  // let resp = mlDBController.find('MlDepartments', {
+  //   $and: [
+  //     {isMoolya:true},
+  //     {"depatmentAvailable.cluster": {$in: ["all", requestParams.clusterId]}}
+  //   ]
+  // }, context).fetch()
 }
 
 

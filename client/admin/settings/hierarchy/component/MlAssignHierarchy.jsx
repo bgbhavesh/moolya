@@ -1,17 +1,18 @@
-import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-var Select = require('react-select');
-var FontAwesome = require('react-fontawesome');
+import React from "react";
+import {render} from "react-dom";
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import Moolyaselect from "../../../commons/components/MlAdminSelectWrapper";
-import {findDeptRolesActionHandler} from '../actions/findDepartmentRolesAction'
-import {findAssignedRolesActionHandler} from '../actions/findAssignedRolesAction'
-import {updateFinalApprovalActionHandler} from '../actions/updateFinalApprovalAction'
-import {findFinalApprovalRoleActionHandler} from '../actions/findFinalApprovalRoleAction'
-import {updateHierarchyAssignmentsActionHandler} from "../actions/updateFinalApprovalAction";
-import _ from 'lodash'
+import {findDeptRolesActionHandler} from "../actions/findDepartmentRolesAction";
+import {findAssignedRolesActionHandler} from "../actions/findAssignedRolesAction";
+import {
+  updateFinalApprovalActionHandler,
+  updateHierarchyAssignmentsActionHandler
+} from "../actions/updateFinalApprovalAction";
+import {findFinalApprovalRoleActionHandler} from "../actions/findFinalApprovalRoleAction";
+import _ from "lodash";
+var Select = require('react-select');
+var FontAwesome = require('react-fontawesome');
 var assignedParent = [
   {
     value: 'cluster',    label: 'cluster'
@@ -69,16 +70,19 @@ export default class MlAssignHierarchy extends React.Component {
     if(response){
       //this.props.getFinalApprovalDetails(response.finalApproval);
       let unassignedRoles = this.state.unAssignedRoles
-      this.setState({unAssignedRoles:{id:response._id,teamStructureAssignment:unassignedRoles.teamStructureAssignment}})
-      //this.props.getHierarchyId(response._id);
-      this.setState({loading:false,finalApproval:response.finalApproval})
+      this.setState({
+        loading: false,
+        unAssignedRoles: {id: response._id, teamStructureAssignment: unassignedRoles.teamStructureAssignment},
+        finalApproval: response.finalApproval,
+        hierarchyId : response._id
+      })
     }
     return response
   }
   async findUnAssignedDeptRoles(){
     let departmentInfo=this.props.data
     let clusterId = this.props.data.clusterId
-    if(departmentInfo!=undefined){
+    if(departmentInfo){
       let departmentId=departmentInfo.departmentId
       let subDepartmentId = departmentInfo.subDepartmentId;
       const response = await findDeptRolesActionHandler(departmentId,subDepartmentId,clusterId);
@@ -105,6 +109,9 @@ export default class MlAssignHierarchy extends React.Component {
     }
   }
 
+  /**
+   * on save click
+   * */
   async  updatehierarchyAssignments() {
     let finalApproval = null,hierarchyInfo = null;
     let unassignRoles = this.state.unAssignedRoles.teamStructureAssignment
@@ -128,8 +135,8 @@ export default class MlAssignHierarchy extends React.Component {
       };
       hierarchyInfo={
         id                  : this.state.hierarchyId,//unassignedRoles.id?this.state.unassignedRoles.id:this.state.assignedRoles.id,
-        parentDepartment    : this.state.finalApproval.parentDepartment,
-        parentSubDepartment : this.state.finalApproval.parentSubDepartment,
+        parentDepartment    : this.props.data.departmentId,
+        parentSubDepartment : this.props.data.subDepartmentId,
         clusterId           : this.props.data.clusterId,
         teamStructureAssignment :assignments,
         finalApproval         : finalApproval

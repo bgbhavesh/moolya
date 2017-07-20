@@ -35,6 +35,7 @@ export async function fetchServiceActionHandler (serviceId) {
         noOfSession
         validTill
         sessionFrequency
+        finalAmount
         duration{
          hours
          minutes
@@ -52,7 +53,6 @@ export async function fetchServiceActionHandler (serviceId) {
           isMandatory
         }
         payment {
-          amount
           isDiscount
           discountType
           discountValue
@@ -71,9 +71,8 @@ export async function fetchServiceActionHandler (serviceId) {
           }
         }
         facilitationCharge{
+          type
           amount
-          percentage
-          derivedAmount
         }
         state{
           id

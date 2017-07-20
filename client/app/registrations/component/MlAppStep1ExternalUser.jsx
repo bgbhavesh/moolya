@@ -544,12 +544,11 @@ export default class MlAppStep1ExternalUser extends Component {
                              defaultValue={that.state.registrationDetails && that.state.registrationDetails.remarks}
                              className="form-control float-label"  disabled="true"/>
                     </div>
-                    <div className="form-group mandatory">
+                    <div className="form-group">
                       <span className={`placeHolder ${referedActive}`}>How Did You Know About Us</span>
                       <Select name="form-field-name" ref="refered" placeholder="How Did You Know About Us"
                               value={this.state.refered} options={referedOption} className="float-label"
-                              onChange={this.optionBySelectRefered.bind(this)} data-required={true}
-                              data-errMsg="How Did You Know About Us is required" overflow="scroll" disabled={true}/>
+                              onChange={this.optionBySelectRefered.bind(this)} overflow="scroll" disabled={true}/>
                     </div>
 
                   </form>

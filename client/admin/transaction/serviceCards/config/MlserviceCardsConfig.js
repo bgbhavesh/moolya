@@ -89,7 +89,14 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
                             noOfSession
                             sessionFrequency
                             status
-                            tasks
+                            tasks{
+                              id
+                              sequence
+                              sessions{
+                                id
+                                sequence
+                              }
+                            }
                             createdAt
                             updatedAt
                             validTill

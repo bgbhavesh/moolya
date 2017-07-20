@@ -88,6 +88,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
                             displayName
                             noOfSession
                             sessionFrequency
+                            finalAmount
                             status
                             tasks{
                               id
@@ -96,6 +97,31 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
                                 id
                                 sequence
                               }
+                            }
+                            facilitationCharge{
+                              type
+                              amount
+                            }
+                            termsAndCondition{
+                              isCancelable
+                              noOfDaysBeforeCancelation
+                              isReschedulable
+                              noOfReschedulable
+                            }
+                            attachments{
+                              name
+                              info
+                              isMandatory
+                            }
+                            payment {
+                              isDiscount
+                              discountType
+                              discountValue
+                              isTaxInclusive
+                              isPromoCodeApplicable
+                              tasksAmount
+                              tasksDiscount
+                              tasksDerived
                             }
                             createdAt
                             updatedAt

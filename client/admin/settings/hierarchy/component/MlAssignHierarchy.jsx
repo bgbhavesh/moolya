@@ -148,6 +148,8 @@ export default class MlAssignHierarchy extends React.Component {
         toastr.success(response.result);
       }
       return response;
+    } else if (this.state.finalApproval && !this.state.finalApproval.isChecked) {
+      toastr.error("Please check the final approval");
     }
   }
 
@@ -195,29 +197,34 @@ export default class MlAssignHierarchy extends React.Component {
     this.setState({unAssignedRoles:roles})
     //this.props.getUnAssignRoleDetails(roles)
   }
-  optionsBySelectAssignedParentNode(index, value){
+
+  optionsBySelectAssignedParentNode(index, value) {
     let roles = _.cloneDeep(this.state.assignedRoles);
     //  let roles=this.state.assignedRoles
-
-    if( value.value=="unassign"){
+    if (value.value == "unassign") {
       let allRoles = _.cloneDeep(this.state.allAssignedRoles);
       let currentRole = roles.teamStructureAssignment[index]
-      let reportingRoleAvailableCurrentLayer = _.find(roles, {reportingRole:currentRole.roleId,isAssigned:true})
-      let reportingRoleAvailableAllLayer = _.find(allRoles, {reportingRole:currentRole.roleId,isAssigned:true})
-      if(reportingRoleAvailableCurrentLayer){
+      let reportingRoleAvailableCurrentLayer = _.find(roles, {reportingRole: currentRole.roleId, isAssigned: true})
+      let reportingRoleAvailableAllLayer = _.find(allRoles, {reportingRole: currentRole.roleId, isAssigned: true})
+      if (reportingRoleAvailableCurrentLayer) {
         toastr.error("Cannot unassign as reporting role has hierarchy");
-      }else if(reportingRoleAvailableAllLayer){
+      } else if (reportingRoleAvailableAllLayer) {
         toastr.error("Cannot unassign as reporting role has hierarchy");
-      }else{
+      } else {
         roles.teamStructureAssignment[index].assignedLevel = value.value
         roles.teamStructureAssignment[index].isAssigned = false
       }
-    }else{
-      roles.teamStructureAssignment[index].assignedLevel = value.value
-    }
-    this.setState({assignedRoles:roles})
+      this.setState({assignedRoles: roles})
+    } else
+        toastr.error("Cannot change parent node, please unassign the role, to make changes");
+
+    // else{
+    //   roles.teamStructureAssignment[index].assignedLevel = value.value
+    // }
+    // this.setState({assignedRoles:roles})
     // this.props.getAssignRoleDetails(roles)
   }
+
   optionsBySelectAssignedReportingRole(index, selectedIndex){
     let roles=this.state.assignedRoles
     roles.teamStructureAssignment[index].reportingRole = selectedIndex

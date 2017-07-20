@@ -1,5 +1,6 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
+import  _ from 'lodash'
 
 export async function findFinalApprovalRoleActionHandler(department,subDepartment,cluster) {
   const result = await client.query({
@@ -23,6 +24,8 @@ export async function findFinalApprovalRoleActionHandler(department,subDepartmen
     },
     forceFetch:true
   })
-  const id = result.data.fetchFinalApprovalRole;
-  return id
+  var id = result.data.fetchFinalApprovalRole;
+  var data = _.omit(id, '__typename')
+  data.finalApproval = _.omit(data.finalApproval, '__typename')
+  return data
 }

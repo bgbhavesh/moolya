@@ -4,7 +4,7 @@
   "description": "Application description.",
   "scripts": {
     "start": "meteor --settings settings-dev.json",
-    "test": "meteor test --driver-package practicalmeteor:mocha --port 5000",
+    "test": "meteor --settings settings-dev.json test --driver-package practicalmeteor:mocha --port 5000",
     "chimp-watch": "chimp --ddp=http://localhost:3000 --watch --mocha --path=tests",
     "chimp-test": "chimp --ddp=http://localhost:3000 --mocha --path=tests",
     "staging": "meteor deploy staging.meteor.com --settings settings-dev.json",
@@ -103,6 +103,7 @@
     "lodash": "^4.17.4",
     "malihu-custom-scrollbar-plugin": "^3.1.5",
     "meteor-node-stubs": "^0.2.5",
+    "mocha": "^3.4.2",
     "points-cluster": "^0.1.4",
     "prop-types": "^15.5.10",
     "q": "^1.4.1",

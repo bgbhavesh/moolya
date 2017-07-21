@@ -757,6 +757,9 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 
     async updateLibraryPortfolioLibrary(id,data){
       const resp = await updateLibrary(id,data, this.props.client)
+      if(!resp.success){
+        toastr.error("Image already Exists in library")
+      }
       return resp;
     }
 

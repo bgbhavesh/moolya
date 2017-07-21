@@ -252,8 +252,54 @@ export default class  FunderCreateServicesView extends Component {
     }
     `
 
-    let picsArray = this.state.responsePic || []
-    return (
+    // const pictures = picsArray.map(function(image){
+    //   return (
+    //     <div className="upload-image">
+    //       <img src={image} id="output"/>
+    //     </div>
+    //   )
+    // })
+
+    let attach = this.props.beSpokeDetails?this.props.beSpokeDetails[0].attachments:[{}] || this.state.attachmentDocs || [{}];
+    const attachments = attach.map(function(details, index){
+      return(
+          <div className="panel panel-default step5">
+            <div className="panel-heading">Attachments if any ?
+              <div className="pull-right block_action">
+                <div className="fileUpload upload_file_mask">
+                  &nbsp;&nbsp;<span className="ml ml-plus" onClick={that.addComponent.bind(that, index)} ></span>
+                </div>
+              </div>
+              <div className="pull-right">
+                {/*style={{'marginTop': '-15px'}}*/}
+                <input type="text" placeholder="Document Name" value={details.documentName?details.documentName:" "} onChange={that.documentName.bind(that, index)}/>
+              </div>
+            </div>
+            <div className="panel-body nopadding">
+              <div className="upload-file-wrap">
+                <input type="file"   id="fileinput"  onChange={that.onFileUpload.bind(that, index)} multiple/>
+                {/*<input type="file" name="fileinput[]" id="fileinput" className="inputfile inputfile-upload"*/}
+                {/*data-multiple-caption="{count} files selected" accept="image/*" onchange="loadFile(event)"*/}
+                {/*multiple/>*/}
+
+                <label for="fileinput">
+                  <figure>
+                    <i className="fa fa-upload" aria-hidden="true"></i>
+                  </figure>
+                </label>
+              </div>
+              {details.fileUrl ? details.fileUrl.map(function(image){
+                return(
+                  <div className="upload-image">
+                    <img src={image} id="output"/>
+                  </div>
+                )
+              }): [] }
+              <div className="upload-image"></div>
+            </div>
+          </div>
+        )
+          return(
       <div>
         <div className="tab_wrap_scroll">
           <div className="col-md-6 nopadding-left">
@@ -324,53 +370,6 @@ export default class  FunderCreateServicesView extends Component {
         </div>
       </div>
     )
-    const pictures = picsArray.map(function(image){
-      return (
-      <div className="upload-image">
-        <img src={image} id="output"/>
-      </div>
-      )
-    })
-
-    let attach = this.props.beSpokeDetails?this.props.beSpokeDetails[0].attachments:[{}] || this.state.attachmentDocs || [{}];
-    const attachments = attach.map(function(details, index){
-      return(
-        <div className="panel panel-default step5">
-          <div className="panel-heading">Attachments if any ?
-            <div className="pull-right block_action">
-              <div className="fileUpload upload_file_mask">
-                &nbsp;&nbsp;<span className="ml ml-plus" onClick={that.addComponent.bind(that, index)} ></span>
-              </div>
-            </div>
-            <div className="pull-right">
-              {/*style={{'marginTop': '-15px'}}*/}
-              <input type="text" placeholder="Document Name" value={details.documentName?details.documentName:" "} onChange={that.documentName.bind(that, index)}/>
-            </div>
-          </div>
-          <div className="panel-body nopadding">
-            <div className="upload-file-wrap">
-              <input type="file"   id="fileinput"  onChange={that.onFileUpload.bind(that, index)} multiple/>
-              {/*<input type="file" name="fileinput[]" id="fileinput" className="inputfile inputfile-upload"*/}
-                     {/*data-multiple-caption="{count} files selected" accept="image/*" onchange="loadFile(event)"*/}
-                     {/*multiple/>*/}
-
-              <label for="fileinput">
-                <figure>
-                  <i className="fa fa-upload" aria-hidden="true"></i>
-                </figure>
-              </label>
-            </div>
-            {details.fileUrl ? details.fileUrl.map(function(image){
-              return(
-              <div className="upload-image">
-                <img src={image} id="output"/>
-              </div>
-              )
-            }): [] }
-            <div className="upload-image"></div>
-          </div>
-        </div>
-      )
     })
   }
 };

@@ -365,6 +365,7 @@ export default class MlAppServiceManageSchedule extends Component {
           });
           clusterData.community = communities;
         }
+        this.props.serviceDetails(service)
       }
     }
     var validTillDate = Date.parse(serviceBasicInfo.validTill);

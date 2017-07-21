@@ -48,3 +48,34 @@ export async function fetchTaskDetailsActionHandler (name) {
   task.attachments = attachmentsArray;
   return task;
 }
+
+export async function fetchTasksInBookingActionHandler (id) {
+  const result = await appClient.query({
+    query: gql` query ($id: [String]) {
+      fetchTasksInBooking(id: $id) {
+        _id
+        displayName
+        noOfSession
+        sessionFrequency
+        duration {
+          hours
+          minutes
+        }
+        session {
+          sessionId
+          duration {
+            hours
+            minutes
+          }
+          activities
+        }
+      }
+    }
+    `,
+    variables: {
+      id
+    },
+  });
+  var tasks = result.data.fetchTasksInBooking;
+  return tasks;
+}

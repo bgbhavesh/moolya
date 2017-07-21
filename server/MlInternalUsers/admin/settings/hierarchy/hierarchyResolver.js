@@ -297,25 +297,6 @@ MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info
       }
 
     }
-    //removing roles whose reporting role is selected for current role
-    let teamStructureAssignment = args.roles
-    /*teamStructure.map(function (selectedRole) {
-     if(selectedRole.reportingRole==args.currentRoleId){
-     filteredRole = _.reject(filteredRole, {_id: selectedRole.roleId});
-     }
-     })*/
-
-    let currentRole = args.currentRoleId;
-    for (i = 0; i < teamStructureAssignment.length; i++) {
-      for (j = 0; j < teamStructureAssignment.length; j++) {
-        let role = teamStructureAssignment[j];
-        if (role.reportingRole == currentRole && role.isAssigned === true) {
-          filteredRole = _.reject(filteredRole, {_id: role.roleId});
-          currentRole = role.roleId
-          break;
-        }
-      }
-    }
   }else{
 
     if (levelCode == 'subchapter'){
@@ -330,6 +311,24 @@ MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info
     }
   }
 
+  /*
+      Removing roles whose reporting role is selected for current role
+      To take care of cyclic reporting role
+   */
+
+  let teamStructureAssignment = args.roles;
+
+  let currentRole = args.currentRoleId;
+  for (i = 0; i < teamStructureAssignment.length; i++) {
+    for (j = 0; j < teamStructureAssignment.length; j++) {
+      let role = teamStructureAssignment[j];
+      if (role.reportingRole == currentRole && role.isAssigned === true) {
+        filteredRole = _.reject(filteredRole, {_id: role.roleId});
+        currentRole = role.roleId
+        break;
+      }
+    }
+  }
 
   return filteredRole;
 }
@@ -363,17 +362,24 @@ MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info
   return roles;
 }*/
 
+/**
+ * fetching final approval hirarchy for departments
+ * */
 MlResolver.MlQueryResolver['fetchRolesForFinalApprovalHierarchy'] = (obj, args, context, info) => {
   let response;
-  let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
-  if (department && department.isActive && department.isSystemDefined===false) {
-      response = mlDBController.findOne('MlHierarchyAssignments', {
-        parentDepartment: args.departmentId,
-        parentSubDepartment: args.subDepartmentId,
-        clusterId:department.isSystemDefined?"All":args.clusterId
-      }, context)
+  let subChapterDetails = mlDBController.findOne("MlSubChapters", {_id: args.subChapterId}, context) || {}
+  let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId, isActive:true}, context)
+  if (department && department.isSystemDefined===false) {
 
-  if(response){
+    let hirarchyQuery = {}
+    if(subChapterDetails.isDefaultSubChapter)
+      hirarchyQuery= {parentDepartment: args.departmentId,parentSubDepartment: args.subDepartmentId,clusterId:department.isSystemDefined?"All":args.clusterId}
+    else if (!subChapterDetails.isDefaultSubChapter)
+      hirarchyQuery= {parentDepartment: args.departmentId,parentSubDepartment: args.subDepartmentId,clusterId:department.isSystemDefined?"All":args.clusterId, subChapterId: department.isSystemDefined?"all":args.subChapterId}
+
+    response = mlDBController.findOne('MlHierarchyAssignments', hirarchyQuery, context)
+
+    if(response){
     let teamStructureAssignment = response.teamStructureAssignment;
     let filteredSteps = [];
      teamStructureAssignment.map(function (step, key){
@@ -381,10 +387,9 @@ MlResolver.MlQueryResolver['fetchRolesForFinalApprovalHierarchy'] = (obj, args, 
      filteredSteps.push(step)
      }
      })
-     //response.teamStructureAssignment = filteredSteps;
     return filteredSteps;
    }
-  }else if (department && department.isActive && department.isSystemDefined===true){
+  }else if (department && department.isSystemDefined===true){
     let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles.department": {"$in": [args.departmentId]}}, {"isActive": true}]}, context).fetch()
     _.each(valueGet, function (item, say) {
       let ary = []
@@ -408,6 +413,10 @@ MlResolver.MlQueryResolver['fetchRolesForFinalApprovalHierarchy'] = (obj, args, 
     response.map(function (role) {
       role.roleId = role._id
     })
+    if (!subChapterDetails.isDefaultSubChapter) {
+      _.remove(response, {roleName: 'platformadmin'})
+      _.remove(response, {roleName: 'clusteradmin'})
+    }
   }
   return response;
 }

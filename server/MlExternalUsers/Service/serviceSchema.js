@@ -255,6 +255,7 @@ let service=`
   }
 
    input service {
+        _id: String
         userId: String
         profileId: String
         about: String

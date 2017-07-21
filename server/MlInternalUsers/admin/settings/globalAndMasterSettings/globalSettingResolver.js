@@ -10,19 +10,19 @@ MlResolver.MlQueryResolver['fetchGlobalSettings'] = (obj, args, context, info) =
   // TODO : Authorization
   let userProfile = new MlAdminUserContext().userProfileDetails(context.userId) || {};
   let clusterId = userProfile && userProfile.defaultProfileHierarchyRefId ? userProfile.defaultProfileHierarchyRefId : '';
-   let result = mlDBController.find('MlGlobalSettings', {hierarchyRefId:clusterId}, context).fetch();
+   let result = mlDBController.findOne('MlGlobalSettings', {hierarchyRefId:clusterId}, context)||{};
    // return MlGlobalSettings.find({}).fetch();
   let cluster = mlDBController.findOne("MlClusters", {"_id": clusterId}, context)
   if(cluster){
     let countryCode = cluster.clusterCode
-    let countryCapital = mlDBController.findOne("MlCapital", {"countryCode": countryCode}, context)
-    if(!result[0].regionalInfo){
-      result[0].regionalInfo={};
+    let countryCapital = mlDBController.findOne("MlCapital", {"countryCode": countryCode}, context) || {}
+    if(!result.regionalInfo){
+      result.regionalInfo={};
     }
-    result[0].regionalInfo.capitalName = countryCapital.capital
-    result[0].regionalInfo.regionalFlag = cluster.countryFlag
+    result.regionalInfo.capitalName = countryCapital.capital
+    result.regionalInfo.regionalFlag = cluster.countryFlag
   }
-     return result;
+     return [result];
 }
 
 

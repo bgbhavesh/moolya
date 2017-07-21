@@ -160,11 +160,12 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
 
               _.each(allUsers, function (user){
                   let userProfiles = user.profile.externalUserProfiles;
-                  userProfiles = _.filter(userProfiles,  {'clusterId': cluster._id});
-                  _.each(userProfiles, function (profile) {
+                  let profile = _.find(userProfiles,  {'clusterId': cluster._id, 'communityDefCode': userType});
+                  // _.each(userProfiles, function (profile) {
                       let userObj = {};
-                      if (profile.communityId && profile.communityId != "") {
+                      if (profile && profile.communityDefCode) {
                           if (profile.communityDefName == userType) {
+                              userObj._id= user._id;
                               userObj.profile = user.profile;
                               userObj.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
                               userObj.communityCode = profile.communityDefCode;
@@ -184,7 +185,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                               users.push(userObj);
                           }
                       }
-                  })
+                  // })
               })
           }
 
@@ -195,12 +196,13 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
             if (externalUsers && externalUsers.length > 0) {
                 _.each(externalUsers, function (user) {
                     let userProfiles = user.profile.externalUserProfiles;
-                    userProfiles = _.filter(userProfiles, {
+                    let profile = _.find(userProfiles, {
                       'clusterId': clusterId
                     });
-                    if (userProfiles && userProfiles.length > 0) {
-                        _.each(userProfiles, function (profile) {
+                    if (profile && profile.communityDefCode) {
+                    //     _.each(userProfiles, function (profile) {
                             let userObj = {};
+                            userObj._id= user._id;
                             userObj.profile = user.profile;
                             userObj.name = (user.profile.firstName ? user.profile.firstName : "") + " " + (user.profile.lastName ? user.profile.lastName : "");
                             userObj.communityCode = profile.communityDefCode ? profile.communityDefCode : " ";
@@ -220,7 +222,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                                 userObj.longitude = longitude;
                                 users.push(userObj);
                             }
-                        })
+                    //     })
                     }
                 })
             }

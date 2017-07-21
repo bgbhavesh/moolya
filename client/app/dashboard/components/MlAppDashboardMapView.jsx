@@ -7,7 +7,8 @@
 import React, { Component, PropTypes } from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import controllable from 'react-controllables';
-import MapCommunity from '../../../commons/components/map/MapCommunity';
+// import MapCommunity from '../../../commons/components/map/MapCommunity';
+import MapCluster from '../../../commons/components/map/MapCluster';
 import MlLoader from '../../../commons/components/loader/loader'
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 
@@ -96,6 +97,9 @@ export default class MlDashboardMapView extends Component {
 
     }
   }
+  getBounds(obj){
+    // TODO: Context based List View
+  }
 
   render()
   {
@@ -135,7 +139,8 @@ export default class MlDashboardMapView extends Component {
     return (
       <span>
         {communityIconList}
-        <MapCommunity data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />
+        {/*<MapCommunity data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} />*/}
+        <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props.config} module={this.props.config.module} showImage={this.props.config.showImage} getBounds={this.getBounds.bind(this)}/>
       </span>
     );
   }

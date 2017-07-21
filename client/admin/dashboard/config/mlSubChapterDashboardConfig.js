@@ -7,6 +7,7 @@ import React from 'react';
 import gql from 'graphql-tag'
 import MlMapFooter from '../component/MlMapFooter';
 import {getAdminUserContext} from '../../../commons/getAdminUserContext';
+import MlMapMarkerComponent from '../component/MlAdminMapMarker'
 const mlSubChapterDashboardMapConfig=new MlViewer.View({
   name:"subChapterDashBoardMap",
   viewType:MlViewerTypes.MAP,
@@ -31,6 +32,7 @@ const mlSubChapterDashboardMapConfig=new MlViewer.View({
     return zoom;
   },
   viewComponent:<MlMapViewContainer />,
+  mapMarkerComponent:<MlMapMarkerComponent/>,
   mapFooterComponent:<MlMapFooter />,
   queryOptions:true,
   buildQueryOptions:(config)=>{

@@ -384,9 +384,9 @@ export default class MlAssignHierarchy extends React.Component {
      label:roleName
      }
      }`*/
-    let finalApprovalOptions = {options: { variables: {departmentId:this.state.finalApproval.department,subDepartmentId:this.state.finalApproval.subDepartment,clusterId:this.props.data.clusterId}}};
-    let finalApprovalQuery=gql`query($departmentId:String,$subDepartmentId:String,$clusterId:String){
-      data:fetchRolesForFinalApprovalHierarchy(departmentId:$departmentId,subDepartmentId:$subDepartmentId,clusterId:$clusterId) {
+    let finalApprovalOptions = {options: { variables: {departmentId:this.state.finalApproval.department,subDepartmentId:this.state.finalApproval.subDepartment,clusterId:this.props.data.clusterId, subChapterId: this.props.data.subChapterId}}};
+    let finalApprovalQuery=gql`query($departmentId:String,$subDepartmentId:String,$clusterId:String, $subChapterId: String){
+      data:fetchRolesForFinalApprovalHierarchy(departmentId:$departmentId,subDepartmentId:$subDepartmentId,clusterId:$clusterId, subChapterId: $subChapterId) {
         value:roleId
         label:roleName
       }

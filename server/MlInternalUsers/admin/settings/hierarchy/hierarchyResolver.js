@@ -297,25 +297,6 @@ MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info
       }
 
     }
-    //removing roles whose reporting role is selected for current role
-    let teamStructureAssignment = args.roles
-    /*teamStructure.map(function (selectedRole) {
-     if(selectedRole.reportingRole==args.currentRoleId){
-     filteredRole = _.reject(filteredRole, {_id: selectedRole.roleId});
-     }
-     })*/
-
-    let currentRole = args.currentRoleId;
-    for (i = 0; i < teamStructureAssignment.length; i++) {
-      for (j = 0; j < teamStructureAssignment.length; j++) {
-        let role = teamStructureAssignment[j];
-        if (role.reportingRole == currentRole && role.isAssigned === true) {
-          filteredRole = _.reject(filteredRole, {_id: role.roleId});
-          currentRole = role.roleId
-          break;
-        }
-      }
-    }
   }else{
 
     if (levelCode == 'subchapter'){
@@ -330,6 +311,24 @@ MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info
     }
   }
 
+  /*
+      Removing roles whose reporting role is selected for current role
+      To take care of cyclic reporting role
+   */
+
+  let teamStructureAssignment = args.roles;
+
+  let currentRole = args.currentRoleId;
+  for (i = 0; i < teamStructureAssignment.length; i++) {
+    for (j = 0; j < teamStructureAssignment.length; j++) {
+      let role = teamStructureAssignment[j];
+      if (role.reportingRole == currentRole && role.isAssigned === true) {
+        filteredRole = _.reject(filteredRole, {_id: role.roleId});
+        currentRole = role.roleId
+        break;
+      }
+    }
+  }
 
   return filteredRole;
 }

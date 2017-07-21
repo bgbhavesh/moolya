@@ -44,8 +44,8 @@ export default class MlAppRegStep3 extends React.Component {
 
   componentDidMount() {
     var WinHeight = $(window).height();
-    //$('.step_form_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
-    $('.left_wrap').height(WinHeight - (160 + $('.admin_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight-(150+$('.app_header').outerHeight(true)));
+
     this.props.getRegistrationContactDetails();
     initalizeFloatLabel();
 
@@ -132,15 +132,10 @@ export default class MlAppRegStep3 extends React.Component {
 
     return (
       <div className="step_form_wrap step3">
-
+        <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
         <div className="col-lg-6 nopadding-left">
-          <div className="form_bg left_wrap">
-            <ScrollArea
-              speed={0.8}
-              className="left_wrap"
-              smoothScrolling={true}
-              default={true}
-            >
+
+
               <form>
                 <div className="panel panel-default new_profile_tabs">
                   <div className="panel-heading">
@@ -162,19 +157,14 @@ export default class MlAppRegStep3 extends React.Component {
                                         clusterId={this.props.clusterId}/>
                 </div>
               </form>
-            </ScrollArea>
-          </div>
+
+
         </div>
 
 
         <div className="col-lg-6 nopadding-right">
-          <div className="form_bg left_wrap">
-            <ScrollArea
-              speed={0.8}
-              className="left_wrap"
-              smoothScrolling={true}
-              default={true}
-            >
+
+
               <form>
                 <div className="panel panel-default new_profile_tabs">
                   <div className="panel-heading">
@@ -187,14 +177,14 @@ export default class MlAppRegStep3 extends React.Component {
                                           clusterId={this.props.clusterId}/>
                 </div>
               </form>
-            </ScrollArea>
 
-          </div>
+
+
         </div>
 
         {/*<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>*/}
         <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
-
+        </ScrollArea>
       </div>
     )
   }

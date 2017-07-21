@@ -35,42 +35,42 @@ export default class MlAppRegStep4 extends React.Component {
   componentDidMount() {
     this.setState({loading: false, socialLinkArray: this.props.registrationData.socialLinksInfo || []});
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight - (160 + $('.admin_header').outerHeight(true)));
-    let registrationRecord = this.props.registrationData
-    let addressDetails = registrationRecord&&registrationRecord.addressInfo?registrationRecord.addressInfo:[]
-    /**
-     * Check whether registration contains address array
-     */
-    if(addressDetails&&addressDetails.length<1){
-      toastr.error("Default Address is manditory")
-    }else if(addressDetails&&addressDetails.length>0){
-      /**
-       * If registration contains address array
-       * Check isDefault Address Exist or Not
-       */
-      var found = addressDetails.some(function (el) {
-        return el.isDefaultAddress == true;
-      });
-      if (!found) {
-        /**
-         * If registration contains address array
-         * If default address not found throw an error
-         */
-
-        toastr.error("Default Address is manditory")
-
-      }else if(found){
-        /**
-         * If registration contains address array
-         * If default address exist
-         * Check whether default address is active for single or multiple address
-         */
-        let addressData =  _.filter(addressDetails, {'isDefaultAddress': true});
-        if(addressData&&addressData.length>1){
-          toastr.error("Only one default address should exist")
-        }
-      }
-    }
+    $('.step_form_wrap').height(WinHeight - (150 + $('.app_header').outerHeight(true)));
+    // let registrationRecord = this.props.registrationData
+    // let addressDetails = registrationRecord&&registrationRecord.addressInfo?registrationRecord.addressInfo:[]
+    // /**
+    //  * Check whether registration contains address array
+    //  */
+    // if(addressDetails&&addressDetails.length<1){
+    //   toastr.error("Default Address is manditory")
+    // }else if(addressDetails&&addressDetails.length>0){
+    //   /**
+    //    * If registration contains address array
+    //    * Check isDefault Address Exist or Not
+    //    */
+    //   var found = addressDetails.some(function (el) {
+    //     return el.isDefaultAddress == true;
+    //   });
+    //   if (!found) {
+    //     /**
+    //      * If registration contains address array
+    //      * If default address not found throw an error
+    //      */
+    //
+    //     toastr.error("Default Address is manditory")
+    //
+    //   }else if(found){
+    //     /**
+    //      * If registration contains address array
+    //      * If default address exist
+    //      * Check whether default address is active for single or multiple address
+    //      */
+    //     let addressData =  _.filter(addressDetails, {'isDefaultAddress': true});
+    //     if(addressData&&addressData.length>1){
+    //       toastr.error("Only one default address should exist")
+    //     }
+    //   }
+    // }
   }
 
   optionsBySelectSocialLinkType(selectedIndex, handler, selectedObj) {
@@ -309,11 +309,12 @@ export default class MlAppRegStep4 extends React.Component {
      `;
     let socialLinkTypeOption = {options: {variables: {type: "SOCIALLINKS", hierarchyRefId: this.props.clusterId}}};
     return (
-      <div className="step_form_wrap step2">
+      <div className="step_form_wrap step4">
         {showLoader === true ? ( <MlLoader/>) : (<div>
           <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
             <div className="col-md-6 nopadding-left">
-
+              <form>
+<div className="panel panel-default">
               <div className="panel-heading">
                 Social Link Type
               </div>
@@ -391,6 +392,9 @@ export default class MlAppRegStep4 extends React.Component {
 
                 </div>
               </div>
+</div>
+              </form>
+
             </div>
             <div className="col-md-6 nopadding-right">
               <div className="form_bg">

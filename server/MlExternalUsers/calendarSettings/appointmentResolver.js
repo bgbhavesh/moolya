@@ -34,7 +34,8 @@ MlResolver.MlMutationResolver["bookUserServiceCard"] = (obj, args, context, info
     isActive: false,
     isExpired: false,
     paymentStatus: 'unpaid',
-    createdAt: new Date()
+    createdAt: new Date(),
+    taskDetails:args.taskDetails
   };
   orderNumberGenService.createUserServiceOrderId(dataToInsert);
   let result = mlDBController.insert('MlUserServiceCardOrder', dataToInsert , context);
@@ -48,7 +49,7 @@ MlResolver.MlMutationResolver["bookUserServiceCard"] = (obj, args, context, info
   return response;
 };
 
-MlResolver.MlMutationResolver["userServiceCardPayment"] = (obj, args, context, info) => {
+  MlResolver.MlMutationResolver["userServiceCardPayment"] = (obj, args, context, info) => {
   let orderId = args.userServiceCardPaymentInfo.orderId;
   let userId = context.userId;
   let service = mlDBController.findOne('MlUserServiceCardOrder', {transactionId: orderId}, context);

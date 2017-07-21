@@ -309,12 +309,18 @@ var clusterAdminHierarchy = MlRoles.findOne({roleName:"clusteradmin"})
 var chapterAdminHierarchy = MlRoles.findOne({roleName:"chapteradmin"})
 var subchapterAdminHierarchy = MlRoles.findOne({roleName:"subchapteradmin"})
 var communityAdminHierarchy = MlRoles.findOne({roleName:"communityadmin"})
-var hierarchyAssignment = MlHierarchyAssignments.findOne({clusterId:"All"})
-if(!hierarchyAssignment) {
-  var hierarchy = {
+var hierarchyAssignmentMoolya = MlHierarchyAssignments.findOne({clusterId:"All", isDefaultSubChapter: true})
+var hierarchyAssignmentNonMoolya = MlHierarchyAssignments.findOne({clusterId:"All", isDefaultSubChapter: false})
+if(!hierarchyAssignmentMoolya) {
+  /**
+   * moolya hirarchy seed-data
+   * */
+  var hierarchyMoolya = {
     parentDepartment: depHierarchy._id,
     parentSubDepartment: subDepHierarchy._id,
     clusterId: "All",
+    subChapterId: 'all',
+    isDefaultSubChapter: true,
     teamStructureAssignment: [{
       roleId: clusterAdminHierarchy._id,
       roleName: clusterAdminHierarchy.roleName,
@@ -358,7 +364,45 @@ if(!hierarchyAssignment) {
       isChecked: true
     }
   };
-  MlHierarchyAssignments.insert(hierarchy);
+  MlHierarchyAssignments.insert(hierarchyMoolya);
+}
+  /**
+   * non-moolya hirarchy seed data
+   * */
+if (!hierarchyAssignmentNonMoolya) {
+  var hierarchyNonMoolya = {
+    parentDepartment: depHierarchy._id,
+    parentSubDepartment: subDepHierarchy._id,
+    clusterId: "All",
+    subChapterId: 'all',
+    isDefaultSubChapter: false,
+    teamStructureAssignment: [
+      {
+        roleId: subchapterAdminHierarchy._id,
+        roleName: subchapterAdminHierarchy.roleName,
+        displayName: subchapterAdminHierarchy.displayName,
+        roleType: "Internal User",
+        isAssigned: true,
+        assignedLevel: "subchapter",
+        reportingRole: ''
+      },
+      {
+        roleId: communityAdminHierarchy._id,
+        roleName: communityAdminHierarchy.roleName,
+        displayName: communityAdminHierarchy.displayName,
+        roleType: "Internal User",
+        isAssigned: true,
+        assignedLevel: "community",
+        reportingRole: subchapterAdminHierarchy._id
+      }],
+    finalApproval: {
+      department: depHierarchy._id,
+      subDepartment: subDepHierarchy._id,
+      role: chapterAdminHierarchy._id,
+      isChecked: true
+    }
+  };
+  MlHierarchyAssignments.insert(hierarchyNonMoolya);
 }
 
 
@@ -456,7 +500,7 @@ Accounts.validateLoginAttempt(function (user)
       if (_.find(regData.emails, {verified: false}))
         throw new Meteor.Error(403, "Email verification is pending");
       else
-        throw new Meteor.Error(403, "Registration review in process, please contact moolya admin for any quaries");
+        throw new Meteor.Error(403, "Registration review in process, please contact moolya admin for any Queries ");
     }
   }
 

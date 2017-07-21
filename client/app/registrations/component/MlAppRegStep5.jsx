@@ -52,7 +52,7 @@ export default class MlAppRegStep5 extends React.Component {
 
   componentDidMount() {
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight - (160 + $('.admin_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight - (150 + $('.app_header').outerHeight(true)));
     // this.props.getRegistrationKYCDetails()
     let communityType = this.props.registrationData && this.props.registrationData.registrationInfo && this.props.registrationData.registrationInfo.registrationType ? this.props.registrationData.registrationInfo.registrationType : ""
     this.setState({"communities": communityType})

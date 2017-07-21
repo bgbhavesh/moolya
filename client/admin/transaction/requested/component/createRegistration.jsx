@@ -13,7 +13,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import {createRegistrationInfo} from '../actions/createRegistrationInfo'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import formHandler from '../../../../commons/containers/MlFormHandler'
-import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+import {mlFieldValidations, validatedPhoneNumber} from '../../../../commons/validations/mlfieldValidation';
 export default class MlCreateRegistration extends React.Component{
 
   constructor(props){
@@ -33,7 +33,8 @@ export default class MlCreateRegistration extends React.Component{
       institutionAssociation:'',
       coummunityName:'',
       userName : '',
-      selectedAccountsType:" "
+      selectedAccountsType:" ",
+      countryCode: ''
     }
     this.createRegistration.bind(this);
     return this;
@@ -46,9 +47,14 @@ export default class MlCreateRegistration extends React.Component{
   }
 
   async  createRegistration() {
-    let ret = mlFieldValidations(this.refs)
+    let ret = mlFieldValidations(this.refs);
+    let {countryCode} = this.state;
+    let contactNumber = this.refs.contactNumber && this.refs.contactNumber.value;
+    let isValidPhoneNumber = validatedPhoneNumber(countryCode, contactNumber);
     if (ret) {
       toastr.error(ret);
+    } else if (!isValidPhoneNumber) {
+      toastr.error('Please enter a valid contact number');
     } else {
       let Details = {
 
@@ -92,8 +98,11 @@ export default class MlCreateRegistration extends React.Component{
     this.setState({selectedAccountsType:value})
   }
 
-  optionsBySelectCountry(value){
-    this.setState({country:value})
+  optionsBySelectCountry(value,callback, label){
+    this.setState({
+      country:value,
+      countryCode: label.code
+    });
   }
 
   optionsBySelectCity(value){
@@ -167,6 +176,7 @@ export default class MlCreateRegistration extends React.Component{
      data:fetchCountries {
         value:_id
         label:country
+        code: countryCode
       }
     }`
 

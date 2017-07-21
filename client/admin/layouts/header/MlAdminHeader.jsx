@@ -3,7 +3,7 @@ import MlTabView from  './MlAdminTabView'
 import MlAdminSearch from  './MlAdminSearch'
 import  MlAdminProfile from './MlAdminProfile'
 import VerticalBreadCrum from "../breadcrum/VerticalBreadCrum";
-import BugReport from "../../../commons/components/bugReport/BugReport";
+import BugReportWrapper from "../../commons/components/MlAdminBugReportWrapper";
 export default class MlAdminHeader extends Component {
   constructor(props,context){
     super(props,context);
@@ -23,7 +23,7 @@ export default class MlAdminHeader extends Component {
 
     return (
       <div className="admin_header">
-        <BugReport />
+        <BugReportWrapper />
 
         <MlAdminProfile/>
 

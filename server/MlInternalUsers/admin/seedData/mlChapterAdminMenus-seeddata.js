@@ -174,7 +174,19 @@ if(Meteor.isServer){
                     "dynamicLinkHandler" : "",
                     "subMenusId":"chapter_chapters",
                     "subMenuMappingId":"chapter_assignusers"
-                  }
+                  },
+              {
+                "link": "/admin/chapters/history",
+                "name": "History",
+                "uniqueId": "chapter_history",
+                "isLink": true,
+                "isMenu": true,
+                "image": "",
+                "dynamicLink": true,
+                "dynamicLinkHandler": "",
+                "subMenusId": "chapter_chapters",
+                "subMenuMappingId": "chapter_history"
+              }
                 ]
             //   }
             // ]
@@ -252,7 +264,19 @@ if(Meteor.isServer){
                     "dynamicLinkHandler" : "",
                     "subMenusId":"communities_subChapters",
                     "subMenuMappingId":"communities_subChapters_assignUsers",
-                  }
+                  },
+                  {
+                    "link": "/admin/community/history",
+                    "name": "History",
+                    "uniqueId": "community_Histroy_Details",
+                    "isLink": true,
+                    "isMenu": true,
+                    "image": "",
+                    "dynamicLink": true,
+                    "dynamicLinkHandler": "",
+                    "subMenusId": "communities_subChapters",
+                    "subMenuMappingId": "community_Histroy_Details"
+                  },
                 ]
                 //   }
                 // ]
@@ -371,7 +395,27 @@ if(Meteor.isServer){
                 "image": ""
               }
             ]
-          }
+          },
+          {
+            "link": "/admin/documents/history",
+            "name": "History",
+            "uniqueId": "documents_History",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenu": [
+              {
+                "link": "/admin/documents/history",
+                "name": "List Clusters",
+                "uniqueId": "documents_HistoryList",
+                "subMenuMappingId": "documents_History",
+                "subMenusId": "documents",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              }
+            ]
+          },
         ]
 
       },
@@ -417,7 +461,27 @@ if(Meteor.isServer){
                 ]
               },
             ]
-          }
+          },
+          {
+            "link": "/admin/templates/history",
+            "name": "History",
+            "uniqueId": "templates_History",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenu": [
+              {
+                "link": "/admin/templates/history",
+                "name": "Templates History",
+                "uniqueId": "templates_HistoryList",
+                "subMenuMappingId": "templates_History",
+                "subMenusId": "templates",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              }
+            ]
+          },
         ]
       },
       {
@@ -591,6 +655,16 @@ if(Meteor.isServer){
                 "isMenu" : true,
                 "image" : "",
                 "subMenusId":"transaction_Registration",
+                //"subMenuMappingId":"transaction_registration_create"
+              },
+              {
+                "link": "/admin/transactions/registrationHistory",
+                "name": "History",
+                "uniqueId": "transaction_registration_history",
+                "isLink": true,
+                "isMenu": true,
+                "image": "",
+                "subMenusId": "transaction_Registration",
                 //"subMenuMappingId":"transaction_registration_create"
               }
             ]
@@ -777,7 +851,17 @@ if(Meteor.isServer){
             "image": "",
             "subMenusId": "transaction"
             // "subMenuMappingId":"Transactions_Log"
-          }
+          },
+          {
+            "link": "/admin/transactions/history",
+            "name": "History",
+            "uniqueId": "History_Log",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenusId": "transaction"
+            // "subMenuMappingId":"Transactions_Log"
+          },
         ]
       },
       {
@@ -1366,6 +1450,26 @@ if(Meteor.isServer){
 
             ]
           },  // @End
+          {
+            "link": "/admin/settings/chapter/history",
+            "name": "History",
+            "uniqueId": "chapterSettings_history",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            subMenu: [
+              {
+                "link": "/admin/settings/chapter/history",
+                "name": "History List",
+                "uniqueId": "chapterSettings_historyList",
+                "subMenuMappingId": "chapterSettings_history",
+                "subMenusId": "settings",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              },
+            ]
+          },
         ]
       },
     ]

@@ -86,7 +86,7 @@ export default class MlAppFunderIndividualComponent extends React.Component {
   componentDidMount() {
     initalizeFloatLabel();
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight - (160 + $('.admin_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight - (150 + $('.app_header').outerHeight(true)));
   }
 
   /* optionsBySelectUserType(value){
@@ -324,10 +324,9 @@ export default class MlAppFunderIndividualComponent extends React.Component {
     const showLoader = this.state.loading;
     return (
 
-      <div>
-        {/*<ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >*/}
+      <div className="step_form_wrap step2">
+        <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
         <div className="col-md-6 nopadding-left">
-          <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
 
             <div className="form_bg">
               <form>
@@ -418,10 +417,8 @@ export default class MlAppFunderIndividualComponent extends React.Component {
 
               </form>
             </div>
-          </ScrollArea>
         </div>
         <div className="col-md-6 nopadding-right">
-          <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
 
             <div className="form_bg">
               <form>
@@ -477,10 +474,9 @@ export default class MlAppFunderIndividualComponent extends React.Component {
                 </div>
               </form>
             </div>
-          </ScrollArea>
         </div>
-        {/*</ScrollArea>*/}
         <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
+        </ScrollArea>
         {/*<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>*/}
       </div>
     )

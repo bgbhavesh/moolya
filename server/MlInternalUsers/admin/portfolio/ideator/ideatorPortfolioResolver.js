@@ -488,11 +488,17 @@ MlResolver.MlMutationResolver['updateLibrary'] = (obj, args, context, info) => {
   let currentProfile = context.url.split("/")
   let portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: currentProfile[6]}, context)
   if(args.files.portfolioReference){
-    let tempObject = {
-      portfolioId:portfolioDetails._id,
-      isPrivate: false
+    if(args.files.portfolioReference.portfolioId ===portfolioDetails._id){
+      let code = 20
+      let response = new MlRespPayload().errorPayload(ret, code);
+      return response;
+    }else{
+      let tempObject = {
+        portfolioId:portfolioDetails._id,
+        isPrivate: false
+      }
+      args.files.portfolioReference.push(tempObject)
     }
-    args.files.portfolioReference.push(tempObject)
   }else {
     let tempObject = {
       portfolioId: portfolioDetails._id,
@@ -509,16 +515,19 @@ MlResolver.MlMutationResolver['updateLibrary'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['fetchLibrary'] = (obj, args, context, info) => {
   if(context.url.indexOf("transactions") > 0) {
-
     let currentProfile = context.url.split("/")
     let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: currentProfile [7]}, context)
     var libraryData = mlDBController.find('MlLibrary', { isActive: true, 'portfolioReference.portfolioId': portfolio._id}, context).fetch();
     return libraryData;
     }
   else if(context.url.indexOf("portfolio") > 0){
-    let currentProfile = context.url.split("/")
-    let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: currentProfile [6]}, context)
-    var libraryData = mlDBController.find('MlLibrary', {userId: context.userId, isActive: true, 'portfolioReference.portfolioId': portfolio._id}, context).fetch();
+    let currentProfile = context.url;
+    let splitArray = [];
+    if (currentProfile) {
+      splitArray = currentProfile.split("/");
+    }
+    let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: splitArray[6]}, context)
+    var libraryData = mlDBController.find('MlLibrary', {userId: context.userId, isActive: true, 'portfolioReference.portfolioId': splitArray[6]}, context).fetch();
     return libraryData;
   }
   else if (!args.userId) {

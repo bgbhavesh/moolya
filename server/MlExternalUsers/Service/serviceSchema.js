@@ -9,9 +9,8 @@ import MlResolver from "../../commons/mlResolverDef";
 
 let service=`
   type FacilitationCharge {
+     type: String
      amount: Int
-     percentage: Int
-     derivedAmount: Int
   }
   type Attachments {
      name: String
@@ -20,7 +19,6 @@ let service=`
      fileUrl : [String]
   }
   type ServicePayment {
-     amount: Int
      tasksAmount: Int
      tasksDiscount: Int
      tasksDerived: Int
@@ -109,6 +107,7 @@ let service=`
     state: [States]
     cluster: Clusters
     isBeSpoke : Boolean
+    finalAmount: Int
     mode : String
     beSpokeCreatorProfileId: String
     beSpokeCreatorUserId: String
@@ -117,6 +116,7 @@ let service=`
     expectedInput : String
     expectedOutput : String
     isApproved: Boolean
+    finalAmount:Int
   }
   
   type UserDetails{
@@ -162,11 +162,12 @@ let service=`
     termsAndCondition: TermsAndCondition
     attachments: [Attachments]
     payment: ServicePayment
-    tasks: [String]
+    tasks: [ServiceTask]
     facilitationCharge : FacilitationCharge
     createdAt: Date
     updatedAt: Date
     validTill: Date
+    finalAmount: Int
     community: [Communities]
     subChapter: [SubChapters]
     city: [Cities]
@@ -180,13 +181,14 @@ let service=`
     conversation : [String]
     expectedInput : String
     expectedOutput : String
+    isApproved: Boolean
     userDetails: UserDetails
+    finalAmount:Int
   }
 
    input facilitationCharge {
+       type: String
        amount: Int
-       percentage: Int
-       derivedAmount: Int
    }
 
    input attachments {
@@ -197,7 +199,6 @@ let service=`
    }
 
    input servicepayment {
-       amount: Int
        tasksAmount: Int
        tasksDiscount: Int
        tasksDerived: Int
@@ -256,6 +257,7 @@ let service=`
   }
 
    input service {
+        _id: String
         userId: String
         profileId: String
         about: String
@@ -273,6 +275,7 @@ let service=`
         createdAt: Date
         updatedAt: Date
         validTill: Date
+        finalAmount: Int
         community: [communities]
         subChapter: [subChapters]
         city: [cities]
@@ -287,9 +290,10 @@ let service=`
         expectedInput : String
         expectedOutput : String
         isApproved: Boolean
-    }
+        finalAmount:Int
+   }
 
-    type Query {
+   type Query {
         fetchUserServices(profileId:String):[Service]
         fetchBeSpokeServices(portfolioId:String):[Service]
         findService(serviceId:String):Service
@@ -297,29 +301,30 @@ let service=`
         getProfileBasedOnPortfolio(portfolioId:String): PortfolioDetails
         getServiceBasedOnProfileId(profileId:String): AdminService
         getTaskFromService(serviceId:String):Service
-    }
+   }
 
-    type Mutation {
+   type Mutation {
         createService(Services:service):response
+        createBeSpokeService(Services:service):response
         updateService(serviceId:String,Services:service):response
         updateServiceAdmin(serviceId:String,Services:service):response
-    }
+   }
 `;
 
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], service]);
 
 let supportedApi = [
-  {api:'fetchUserServices', actionName:'READ', moduleName:"OFFICE"},
-  {api:'findService', actionName:'READ', moduleName:"OFFICE"},
-  {api:'fetchTasksAmount', actionName:'READ', moduleName:"OFFICE"},
-  {api:'getProfileBasedOnPortfolio', actionName:'READ', moduleName:"OFFICE"},
-  {api:'getServiceBasedOnProfileId', actionName:'READ', moduleName:"OFFICE"},
-  {api:'getTaskFromService', actionName:'READ', moduleName:"OFFICE"},
-  {api:'fetchBeSpokeServices', actionName:'READ', moduleName:"OFFICE"},
-  {api:'createService', actionName:'CREATE', moduleName:"OFFICE"},
-  {api:'updateService', actionName:'UPDATE', moduleName:"OFFICE"},
-  {api:'updateServiceAdmin', actionName:'UPDATE', moduleName:"OFFICE"}
+  {api:'fetchUserServices',           actionName:'READ',    moduleName:"SERVICECARD", isAppWhiteList:true},
+  {api:'findService',                 actionName:'READ',    moduleName:"SERVICECARD", isAppWhiteList:true},
+  {api:'fetchTasksAmount',            actionName:'READ',    moduleName:"SERVICECARD", isAppWhiteList:true},
+  {api:'getProfileBasedOnPortfolio',  actionName:'READ',    moduleName:"SERVICECARD", isAppWhiteList:true},
+  {api:'getServiceBasedOnProfileId',  actionName:'READ',    moduleName:"SERVICECARD", isAppWhiteList:true},
+  {api:'getTaskFromService',          actionName:'READ',    moduleName:"SERVICECARD", isAppWhiteList:true},
+  {api:'fetchBeSpokeServices',        actionName:'READ',    moduleName:"SERVICECARD", isAppWhiteList:true},
+  {api:'createService',               userAction:"CREATESERVICE", actionName:'CREATE',  resourceName:"SERVICECARD"},
+  {api:'updateService',               userAction:"UPDATESERVICE", actionName:'UPDATE',  resourceName:"SERVICECARD"},
+  {api:'updateServiceAdmin',          actionName:'UPDATE',  moduleName:"SERVICECARD"}
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

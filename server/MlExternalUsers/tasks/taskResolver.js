@@ -151,9 +151,44 @@ MlResolver.MlQueryResolver['fetchTaskDetails'] = (obj, args, context, info) => {
   return result;
 };
 
+
+MlResolver.MlQueryResolver['fetchTasksInBooking'] = (obj, args, context, info) => {
+  let result = mlDBController.find('MlTask', {_id:{$in:args.id}}, context).fetch()
+  return result;
+};
+
+
 MlResolver.MlQueryResolver['fetchTaskDetailsForServiceCard'] = (obj, args, context, info) => {
   let query = {
     userId: context.userId,
+    isExternal: true,
+    isActive: true,
+    isServiceCardEligible: true
+  };
+  if (args.serviceId) {
+    let service = mlDBController.findOne('MlServiceCardDefinition', args.serviceId , context);
+    let taskQuery = [];
+    if (service.tasks && service.tasks.length > 0) {
+      taskQuery = service.tasks.reduce(function(result, task) {
+        return result.concat(task.id);
+      }, []);
+      taskQuery = _.uniq(taskQuery);
+    }
+    query["$or"] = [
+      {_id: {'$in': taskQuery}},
+      {isCurrentVersion: true}
+    ];
+  }
+  if(args.profileId){
+    query.profileId = args.profileId;
+  };
+  let result = mlDBController.find('MlTask', query, context).fetch()
+  return result;
+};
+
+MlResolver.MlQueryResolver['fetchTaskDetailsForAdminServiceCard'] = (obj, args, context, info) => {
+  let query = {
+    // userId: context.userId,
     isExternal: true,
     isActive: true,
     isServiceCardEligible: true

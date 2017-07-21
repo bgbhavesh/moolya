@@ -98,40 +98,53 @@ export default class MlServiceCardStep3 extends React.Component{
   }
 
   /**
+   * Method :: getAttachmentsList
+   * Desc :: Get the attachmentlist for a service
+   * @return {XML}
+   */
+  getAttachmentsList() {
+    const {attachments} = this.props.data;
+    const attachmentDetails = attachments && attachments.length > 0 ?
+      attachments.map(function(value , index){
+        return(
+          <div className="col-md-6 nopadding-left" key={index}>
+            <div className="panel panel-default">
+              <div className="panel-heading">
+                Attachment {index + 1}
+              </div>
+              <div className="panel-body">
+                <form>
+                  <div className="form-group">
+                    <input placeholder="Document name" className="form-control float-label" value={value.name} disabled />
+                  </div>
+                  <div className="form-group">
+                    <textarea className="form-control float-label" placeholder="Info" value={value.info} disabled></textarea>
+                  </div>
+                  <div className="input_types">
+                    <input id="checkbox" type="checkbox" name="checkbox" checked={value.isMandatory}disabled /><label htmlFor="checkbox"><span><span></span></span>Is Mandatory</label>
+                  </div>
+                  <br className="brclear"/>
+                </form>
+              </div>
+            </div>
+          </div>
+        )
+      }) : [];
+    return attachmentDetails;
+  }
+  /**
    * Render
    * Desc   :: Render the HTML for this component
    * @returns {HTML}
    */
 
   render(){
-    let that = this;
-    let attachmentsArray = that.state.attachment || []
-    const attachments = attachmentsArray.map(function(value , index){
-      return(
-        <div className="col-md-6 nopadding-left">
-          <div className="panel panel-default">
-            <div className="panel-heading">
-              Attachment 1
-              <span className="see-more pull-right"><a href=""><FontAwesome name='plus' disabled /><span></span></a></span>
-            </div>
-            <div className="panel-body">
-              <form>
-                <div className="form-group">
-                  <input placeholder="Document name" className="form-control float-label" value={value.name} disabled/>
-                </div>
-                <div className="form-group">
-                  <textarea className="form-control float-label" placeholder="Info" value={value.info} disabled></textarea>
-                </div>
-                <div className="input_types">
-                  <input id="checkbox" type="checkbox" name="checkbox" value={value.isMandatory} disabled/><label htmlFor="checkbox"><span><span></span></span>Is Mandatory</label>
-                </div>
-                <br className="brclear"/>
-              </form>
-            </div>
-          </div>
-        </div>
-      )
-    })
+    const {
+      serviceTermAndCondition,
+      attachments,
+      saveService,
+      onChangeCheckBox,
+      onChangeValue } = this.props.data;
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
@@ -139,21 +152,26 @@ export default class MlServiceCardStep3 extends React.Component{
             <div className="form_bg">
               <form>
                 <div className="form-group switch_wrap switch_names inline_switch">
-                  <label>Cancelation is Applicable</label>
-                  <span className="state_label">Yes</span><label className="switch nocolor-switch">
-                  <input type="checkbox" value={that.state.cancellation} disabled/>
+                  <label htmlFor="cancelable">Cancelation is Applicable</label>
+                  <span className={serviceTermAndCondition.isCancelable ? 'state_label acLabel' : 'state_label'}>Yes</span><label className="switch nocolor-switch">
+                  <input id="cancelable" type="checkbox"
+                         checked={!serviceTermAndCondition.isCancelable}
+                         value={serviceTermAndCondition.isCancelable} disabled />
                   <div className="slider"></div>
                 </label>
-                  <span className="state_label acLabel">No</span>
+                  <span className={serviceTermAndCondition.isCancelable ? 'state_label' : 'state_label acLabel'}>No</span>
                 </div>
                 <br className="clearfix"/><br className="clearfix"/>
+                <br className="clearfix"/>
                 <div className="form-group switch_wrap switch_names inline_switch">
-                  <label>Is Reschedule allowable</label>
-                  <span className="state_label">Yes</span><label className="switch nocolor-switch">
-                  <input type="checkbox" value={that.state.reschedule} disabled/>
+                  <label htmlFor="schedulable">Is Reschedule allowable</label>
+                  <span className={serviceTermAndCondition.isReschedulable ? 'state_label acLabel' : 'state_label'}>Yes</span><label className="switch nocolor-switch">
+                  <input id="schedulable" type="checkbox"
+                         checked={!serviceTermAndCondition.isReschedulable}
+                         value={serviceTermAndCondition.isReschedulable} disabled />
                   <div className="slider"></div>
                 </label>
-                  <span className="state_label acLabel">No</span>
+                  <span className={serviceTermAndCondition.isReschedulable ? 'state_label' : 'state_label acLabel'}>No</span>
                 </div>
                 <br className="clearfix"/><br className="clearfix"/>
               </form>
@@ -162,25 +180,26 @@ export default class MlServiceCardStep3 extends React.Component{
           <div className="col-md-6 nopadding-right">
             <div className="form_bg">
               <form>
-                <div className="form-group switch_wrap switch_names inline_switch">
-                  <label>Refund of Amount</label>
-                  <span className="state_label">Yes</span><label className="switch nocolor-switch">
-                  <input type="checkbox" value={that.state.refund} disabled/>
-                  <div className="slider"></div>
-                </label>
-                  <span className="state_label acLabel">No</span>
+                <div className="form-group">
+                  <label>Days before cancelation
+                    <input className="form-control inline_input medium_in"
+                           id="cancelationday" disabled
+                           value={serviceTermAndCondition.noOfDaysBeforeCancelation} />
+                  </label>
                 </div>
                 <br className="clearfix"/>
-                <br className="clearfix"/>
                 <div className="form-group">
-                  <label>How many times <input className="form-control inline_input medium_in" disabled value={that.state.time}  /> </label>
+                  <label>How many times <input className="form-control inline_input medium_in"
+                                               id="rescheduler" disabled
+                                               value={serviceTermAndCondition.noOfReschedulable} />
+                  </label>
                 </div>
                 <br className="clearfix"/><br className="clearfix"/>
               </form>
             </div>
           </div>
           <br className="brclear"/>
-          {attachments}
+          {this.getAttachmentsList()}
         </ScrollArea>
       </div>
     )

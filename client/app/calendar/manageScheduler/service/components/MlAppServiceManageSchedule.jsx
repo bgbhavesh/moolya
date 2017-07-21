@@ -365,7 +365,7 @@ export default class MlAppServiceManageSchedule extends Component {
           });
           clusterData.community = communities;
         }
-        this.props.serviceDetails(service)
+        // this.props.serviceDetails(service)
       }
     }
     var validTillDate = Date.parse(serviceBasicInfo.validTill);
@@ -613,11 +613,11 @@ export default class MlAppServiceManageSchedule extends Component {
       } else {
         finalAmount = 0;
       }
+      this.setState({
+        servicePayment: servicePayment,
+        finalAmount: finalAmount
+      });
     }
-    this.setState({
-      servicePayment: servicePayment,
-      finalAmount: finalAmount
-    });
   }
 
   /**

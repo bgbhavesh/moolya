@@ -335,7 +335,7 @@ export default class MlAssignChapterBackendUserRoles extends React.Component {
                         <input type="text" placeholder="Sub Department" className="form-control float-label" id="sDept"
                                value={department.subDepartmentName} disabled/>
                       </div>
-                      {(department.departmentName == "operations" && (that.state.showIsChapterAdmin)) ?
+                      {((that.state.showIsChapterAdmin)) ?
                         <div className="input_types"><input id="chapter_admin_check" type="checkbox"
                                                             checked={chapterAdmin}
                                                             onChange={that.isChapterAdmin.bind(that, id)}

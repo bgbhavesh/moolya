@@ -26,8 +26,9 @@ export async function createServiceActionHandler (Services) {
 export async function fetchServiceActionHandler (serviceId) {
   const result = await appClient.query({
     query: gql`
-    query($serviceId:String){
+    query($serviceId:String){       
         findService(serviceId:$serviceId){
+        _id
         userId
         profileId
         name
@@ -311,3 +312,43 @@ export async function fetchTaskDetailsForServiceCard (profileId, serviceId) {
   tasks = taskArray;
   return tasks;
 }
+
+export async function bookUserServiceCardActionHandler(serviceId, taskDetails) {
+  const result = await appClient.mutate({
+    mutation: gql`
+    mutation($serviceId:String!,$taskDetails: [tasks]){
+        bookUserServiceCard(serviceId:$serviceId,taskDetails:$taskDetails){
+        success
+        code
+        result
+      }
+      }
+    `,
+    variables: {
+      serviceId,
+      taskDetails
+    }
+  });
+  const teamMembers = result.data.bookUserServiceCard;
+}
+
+export async function userServiceCardPaymentActionHandler(serviceId, taskDetails) {
+  const result = await appClient.mutate({
+    mutation: gql`
+    mutation($serviceId:String!,$taskDetails: [tasks]){
+        userServiceCardPayment(serviceId:$serviceId,taskDetails:$taskDetails){
+        success
+        code
+        result
+      }
+      }
+    `,
+    variables: {
+      serviceId,
+      taskDetails
+    }
+  });
+  const teamMembers = result.data.userServiceCardPayment;
+}
+
+

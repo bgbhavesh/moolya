@@ -11,6 +11,18 @@ class MlserviceCardHandler{
   constructor(){
   }
 
+
+  //-----------------------------------------------------------------------------
+  /* FUNCTION		    :	validateResource
+   * DESCRIPTION	  :	This function is used to validate end user resource(eg:office, interactions)
+   * PROTOTYPE	    :	boolean mlserviceCardHandler.validateResource(query, context, bodyVariables)
+   * PARAMETERS     : query:String (graphql query("createOffice"))
+                      context:Object (Logged in User Context)
+                      bodyVariables: Object (Related to that query)
+   * RETURN VALUE	  :	boolean
+   * CREATED BY	    :	Srinag
+   */
+//-----------------------------------------------------------------------------
   validateResource(query, context, bodyVariables)
   {
       let resourceName,
@@ -42,6 +54,10 @@ class MlserviceCardHandler{
         break;
         case 'INTERACTION':{
           return mlActionValidationService.validateUserActions(context.userId, resourceName, userAction, interactionType);
+        }
+        break;
+        case 'SERVICECARD':{
+          return true;
         }
         break;
       }

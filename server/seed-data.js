@@ -500,7 +500,7 @@ Accounts.validateLoginAttempt(function (user)
       if (_.find(regData.emails, {verified: false}))
         throw new Meteor.Error(403, "Email verification is pending");
       else
-        throw new Meteor.Error(403, "Registration review in process, please contact moolya admin for any quaries");
+        throw new Meteor.Error(403, "Registration review in process, please contact moolya admin for any Queries ");
     }
   }
 

@@ -317,7 +317,7 @@ export async function bookUserServiceCardActionHandler(serviceId, taskDetails) {
   const result = await appClient.mutate({
     mutation: gql`
     mutation($serviceId:String!,$taskDetails: [tasks]){
-        bookUserServiceCard(serviceId:$serviceId,taskDetails:$taskDetails){
+        createServiceCardOrder(serviceId:$serviceId,taskDetails:$taskDetails){
         success
         code
         result
@@ -329,14 +329,14 @@ export async function bookUserServiceCardActionHandler(serviceId, taskDetails) {
       taskDetails
     }
   });
-  const teamMembers = result.data.bookUserServiceCard;
+  const teamMembers = result.data.createServiceCardOrder;
 }
 
 export async function userServiceCardPaymentActionHandler(serviceId, taskDetails) {
   const result = await appClient.mutate({
     mutation: gql`
     mutation($serviceId:String!,$taskDetails: [tasks]){
-        userServiceCardPayment(serviceId:$serviceId,taskDetails:$taskDetails){
+        updateServiceCardOrder(serviceId:$serviceId,taskDetails:$taskDetails){
         success
         code
         result
@@ -348,7 +348,7 @@ export async function userServiceCardPaymentActionHandler(serviceId, taskDetails
       taskDetails
     }
   });
-  const teamMembers = result.data.userServiceCardPayment;
+  const teamMembers = result.data.updateServiceCardOrder;
 }
 
 

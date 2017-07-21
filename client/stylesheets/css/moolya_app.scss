@@ -97,6 +97,15 @@ $menuTrans:all 0.5s linear;
   .ml_app_profile li:active a, .ml_app_profile li:focus a, .ml_app_profile li.focus a {background-color: #fff;box-shadow: 0 0 10px rgba(0, 0, 0, 1);outline: none;position: relative;left: 0;top: auto;/*z-index: 25;*/}
   .ml_app_profile>ol>li:active, nav>ol>li:focus, .ml_app_profile>ol>li.focus { /* Keep this to make sure only the current item appears above the disc. */z-index: 25;}
 
+  .map_profiles{
+    position: absolute; top: 40%; left: 20%;
+  img{
+    position: absolute; width: 25px; border-radius: 50%; float: left; border: #333 solid 1px; height: 25px;
+  }
+    .ml{
+      position: absolute; z-index: 2; background: #333; color: #FFF; text-shadow: none; border-radius: 50%; right: -29px; font-size: 12px; width: 10px; height: 10px; border: #333 solid 1px;
+    }
+  }
 
   .ml_app_profile.profile_open>ol>li:nth-of-type(1) {right: 203px;top: 7px;}
   .ml_app_profile.profile_open>ol>li:nth-of-type(2) {right: 187px;top: 47px;}

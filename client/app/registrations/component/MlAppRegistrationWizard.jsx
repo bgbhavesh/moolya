@@ -182,9 +182,9 @@ export default class MlAppRegistrationWizard extends Component {
     }
     const showLoader = this.state.loading;
     return (
-      <div className="admin_main_wrap">
+      <div className="app_main_wrap">
         {showLoader === true ? (<MlLoader/>) : (
-          <div className="admin_padding_wrap">
+          <div className="app_padding_wrap">
             {/*<h2>Registration Process</h2>*/}
             <div className='step-progress'>
               <div >

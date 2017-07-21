@@ -91,7 +91,7 @@ export default class MlAppStep1ExternalUser extends Component {
 
   componentDidMount() {
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight - (160 + $('.admin_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight - (150 + $('.app_header').outerHeight(true)));
     initalizeFloatLabel();
     if (this.state.defaultIdentityIndividual == true) {
       $('#companyId').hide();
@@ -316,9 +316,9 @@ export default class MlAppStep1ExternalUser extends Component {
         {showLoader === true ? (<MlLoader/>) : (
           <div className="step_form_wrap step1">
 
-            {/*<ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >*/}
+            <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
             <div className="col-md-6 nopadding-left">
-              <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
+
 
                 <div className="form_bg">
                   <form>
@@ -494,10 +494,9 @@ export default class MlAppStep1ExternalUser extends Component {
                     </div>
                   </form>
                 </div>
-              </ScrollArea>
+
             </div>
             <div className="col-md-6 nopadding-right">
-              <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
 
                 <div className="form_bg">
                   <form>
@@ -553,9 +552,9 @@ export default class MlAppStep1ExternalUser extends Component {
 
                   </form>
                 </div>
-              </ScrollArea>
-            </div>
 
+            </div>
+            </ScrollArea>
             {/*<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>*/}
           </div>
         )}

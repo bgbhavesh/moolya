@@ -14,9 +14,11 @@ export async function createBugReport(details, connection) {
     `,
     variables: {
       details
-    },
-    forceFetch: true
+    }
   });
-  const id = result.data.createBugReport;
-  return id;
+  const resultData = result.data.createBugReport;
+  if(resultData&&resultData.success){
+    return resultData;
+  }
+
 }

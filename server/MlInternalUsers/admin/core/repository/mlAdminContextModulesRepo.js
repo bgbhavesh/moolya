@@ -152,15 +152,47 @@ let CoreModules = {
     let reqArray = requestParams.moduleName.split(',');
     serverQuery = {moduleName: {$in: reqArray}}
     let userProfile = new MlAdminUserContext().userProfileDetails(context.userId) || {};
-    if (userProfile.hierarchyLevel == 4) {
+
+
+
+    //construct context query with $in operator for each fields
+    let resultantQuery = MlAdminContextQueryConstructor.constructQuery(contextQuery, '$in');
+
+    //resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery, serverQuery), '$and');
+
+
+    if (!fieldsProj.sort) {
+      fieldsProj.sort = {'createdDate': -1}
+    }
+
+    _.each(resultantQuery, function (r) {
+      if (_.isArray(r)) {
+        r.push('all');
+      }
+    });
+
+    //todo: internal filter query should be constructed.
+    //resultant query with $and operator
+    resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery,serverQuery), '$and');
+/*    if (userProfile.hierarchyLevel == 4) {
       userContextQuery = {}
     } else if (userProfile.hierarchyLevel == 3) {
       let clusterIds = userProfile && userProfile.defaultProfileHierarchyRefId ? userProfile.defaultProfileHierarchyRefId : [];
       userContextQuery = {clusterId: {$in: [clusterIds]}}
+    } else if (userProfile.hierarchyLevel == 2) {
+      let chapterIds = userProfile && userProfile.defaultChapters ? userProfile.defaultChapters : [];
+      userContextQuery = {chapterId: {$in: [chapterIds]}}
+    } else if (userProfile.hierarchyLevel == 1) {
+      let subChapterIds = userProfile && userProfile.defaultSubChapters ? userProfile.defaultSubChapters : [];
+      userContextQuery = {subChapterId: {$in: [subChapterIds]}}
+    }else if (userProfile.hierarchyLevel == 0) {
+      let communityIds = userProfile && userProfile.defaultProfileHierarchyRefId ? userProfile.defaultProfileHierarchyRefId : [];
+      userContextQuery = {clusterId: {$in: [communityIds]}}
     }
     query = mergeQueries( userFilterQuery, serverQuery);
+    resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(query, userContextQuery), '$and');*/
 
-    const data = MlAudit.find(query, userContextQuery,fieldsProj).fetch();
+    const data = MlAudit.find(resultantQuery,fieldsProj).fetch();
     data.map(function (doc, index) {
       let userObj;
       if (doc && doc.userId) {
@@ -602,7 +634,7 @@ let CoreModules = {
     return {totalRecords: totalRecords, data: data};
   },
   MlServiceCardsTransactionRepo: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
-    var service = MlService.find({}).fetch()
+    var service = MlService.find({'isCurrentVersion': true}).fetch()
     var data = [];
     var profileIds = []
     service.map(function(details) {
@@ -652,28 +684,49 @@ let CoreModules = {
       return {totalRecords: totalRecords , data: data};
     }
   },
+
+  /**
+   * hierarcy department fetch repo
+   * */
   MlHierarchyDepartmentsRepo: (requestParams, userFilterQuery, contextQuery, fieldsProj, context) => {
     let list = [];
-    let resp = mlDBController.find('MlDepartments', {
-      $and: [
-        {isMoolya:true},
-        {"depatmentAvailable.cluster": {$in: ["all", requestParams.clusterId]}}
-      ]
-    }, context).fetch()
+    var subChapter = mlDBController.findOne('MlSubChapters', {_id: requestParams.subChapterId}, context) || {}
+    var depQuery = {}
+    if (subChapter.isDefaultSubChapter)
+      depQuery = {$and: [{isMoolya: true}, {"depatmentAvailable.cluster": {$in: ["all", requestParams.clusterId]}}]}
+    else if (!subChapter.isDefaultSubChapter)
+      depQuery = {$and: [{"depatmentAvailable.cluster": {$in: ["all", requestParams.clusterId]}}, {"depatmentAvailable": {$elemMatch: {subChapter: {$in: ['all', requestParams.subChapterId]}}}}]}
+    let resp = mlDBController.find('MlDepartments', depQuery, context).fetch()
+
     resp.map(function (department) {
       let subDepartments = MlSubDepartments.find({"departmentId": department._id}).fetch();
       subDepartments.map(function (subDepartment) {
-        let deptAndSubDepartment = null
-        deptAndSubDepartment ={departmentId:department._id,departmentName:department.departmentName,subDepartmentId:subDepartment._id,subDepartmentName:subDepartment.subDepartmentName,isMoolya:department.isMoolya,isActive:department.isActive,clusterId:requestParams.clusterId}
+        let defaultSubChapter = JSON.parse(requestParams.defaultSubChapter);
+        let deptAndSubDepartment = {
+          departmentId: department._id,
+          departmentName: department.departmentName,
+          subDepartmentId: subDepartment._id,
+          subDepartmentName: subDepartment.subDepartmentName,
+          isMoolya: department.isMoolya,
+          isActive: department.isActive,
+          clusterId: requestParams.clusterId,
+          subChapterId:requestParams.subChapterId,
+          isDefaultSubChapter:defaultSubChapter
+        }
         list.push(deptAndSubDepartment)
       })
     })
 
     data = list
-   // var totalRecords = mlDBController.find('MlClusters', resultantQuery, context, fieldsProj).count();
-    return {totalRecords: 0, data: data};
-
+    //todo: pagination need to be taken.
+    return {totalRecords: data.length, data: data};
   }
+  // let resp = mlDBController.find('MlDepartments', {
+  //   $and: [
+  //     {isMoolya:true},
+  //     {"depatmentAvailable.cluster": {$in: ["all", requestParams.clusterId]}}
+  //   ]
+  // }, context).fetch()
 }
 
 

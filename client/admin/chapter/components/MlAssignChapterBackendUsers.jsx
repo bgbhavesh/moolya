@@ -110,6 +110,7 @@ class MlAssignChapterBackendUsers extends React.Component {
   }
 
   isChapterAdmin(admin) {
+    console.log('clicked on ischapteradmin checkbox')
     this.setState({'chapterAdmin': admin})
   }
 

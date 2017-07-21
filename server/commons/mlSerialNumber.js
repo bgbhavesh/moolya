@@ -118,7 +118,7 @@ orderNumberGenService = (function(){
       userService.transactionId = "MLSER"+ FormatUtil.leadingZeros(getNextSequence("serviceNumber"), 8);
     },
     createUserServiceOrderId: function (data) {
-      data.transactionId = "MLUSO" + FormatUtil.leadingZeros(getNextSequence("userServiceOrderNumber"), 8);
+      data.orderId = "MLUSO" + FormatUtil.leadingZeros(getNextSequence("userServiceOrderNumber"), 8);
     },
     generateRandomPassword:function(){
       var randomId = function makeid(){

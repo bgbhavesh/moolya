@@ -4,26 +4,33 @@
 import gql from 'graphql-tag'
 import {appClient} from '../../../app/core/appConnection';
 
-export async function fetchCommunitiesHandler() {
-    const result = await appClient.query({
-        query: gql`
-           query {
-            data: getOfficeUserTypes {
-                _id,
-                name,
-                code,
-                displayName,
-                isActive,
-            }
-          }
-        `,
-        forceFetch:true
-    })
+//todo://this may be of no use have to remove it
+/**
+ * used this code two times removed onces
+ * */
+// export async function fetchCommunitiesHandler() {
+//     const result = await appClient.query({
+//         query: gql`
+//            query {
+//             data: getOfficeUserTypes {
+//                 _id,
+//                 name,
+//                 code,
+//                 displayName,
+//                 isActive,
+//             }
+//           }
+//         `,
+//         forceFetch:true
+//     })
+//
+//     const communities = result.data.data;
+//     return communities;
+// }
 
-    const communities = result.data.data;
-    return communities;
-}
-
+/**
+ * fetching office user types for office module
+ * */
 export async function fetchAllCommunitiesHandler() {
   const result = await appClient.query({
     query: gql`
@@ -33,6 +40,31 @@ export async function fetchAllCommunitiesHandler() {
                 name,
                 code,
                 displayName,
+                isActive,
+            }
+          }
+        `,
+    forceFetch:true
+  })
+
+  const communities = result.data.data;
+  return communities;
+}
+
+/**
+ * fetching registerAs communityDef
+ * */
+export async function fetchCommunitiesHandlerReg() {
+  const result = await appClient.query({
+    query: gql`
+           query {
+            data: fetchCommunitiesFromDef {
+                name,
+                communityName,
+                displayName,
+                code,
+                communityImageLink,
+                aboutCommunity,
                 isActive,
             }
           }

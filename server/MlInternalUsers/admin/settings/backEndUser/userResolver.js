@@ -128,15 +128,7 @@ MlResolver.MlMutationResolver['resetPassword'] = (obj, args, context, info) => {
 };
 
 MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
-  //TODO: Auth to be here with roles and permission
-  // let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
-  // if (!isValidAuth) {
-  //   let code = 401;
-  //   let response = new MlRespPayload().errorPayload("Not Authorized", code);
-  //   return response;
-  // }
-
-  // let user = Meteor.users.findOne({_id: args.userId});
+   // let user = Meteor.users.findOne({_id: args.userId});
   let user = mlDBController.findOne('users', {_id: args.userId}, context)
   if (user) {
     if (user.profile.isSystemDefined) {
@@ -589,8 +581,8 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
           //chapter Admin
           else if ((role.clusterId && role.clusterId != "all") && (role.chapterId && role.chapterId != "all") && (role.subChapterId && role.subChapterId != "all") &&
             args.user.isChapterAdmin) {
-            if (role.departmentName == "operations") {
-              // let chapterAdminRole = MlRoles.findOne({roleName: 'chapteradmin'})
+            // if (role.departmentName == "operations"){
+            if (role.isChapterAdmin){
               let chapterAdminRole = mlDBController.findOne('MlRoles', {roleName: 'chapteradmin'}, context)
               levelCode = "CHAPTER"
               role.roleId = chapterAdminRole._id
@@ -626,9 +618,7 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
           }
 
           if (levelCode) {
-            // role.roleName = MlRoles.findOne({_id: role.roleId}).roleName;
             role.roleName = mlDBController.findOne('MlRoles', {_id: role.roleId}, context).roleName;
-            // hierarchy = MlHierarchy.findOne({code: levelCode})
             hierarchy = mlDBController.findOne('MlHierarchy', {code: levelCode}, context)
             role.hierarchyLevel = hierarchy.level;
             role.hierarchyCode = hierarchy.code;
@@ -637,6 +627,10 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
 
   })
 
+  roles  = _.map(roles, function (row) {
+    return _.omit(row, ['isChapterAdmin']);
+  });
+  
   let userProfile = {
       clusterId:  data.profile.InternalUprofile.moolyaProfile.userProfiles.clusterId,
       userRoles:  roles,

@@ -7,6 +7,7 @@ import React from 'react';
 import gql from 'graphql-tag'
 import MlMapFooter from '../component/MlMapFooter';
 import {getAdminUserContext} from '../../../commons/getAdminUserContext';
+import MlMapMarkerComponent from '../component/MlAdminMapMarker'
 const mlClusterDashboardListConfig=new MlViewer.View({
   name:"clusterDashBoardList",
   viewType:MlViewerTypes.LIST,
@@ -64,6 +65,7 @@ const mlClusterDashboardMapConfig=new MlViewer.View({
     return zoom;
   },
   viewComponent:<MlMapViewContainer />,
+  mapMarkerComponent:<MlMapMarkerComponent/>,
   mapFooterComponent:<MlMapFooter />,
   actionConfiguration:[
     {
@@ -86,7 +88,7 @@ const mlClusterDashboardMapConfig=new MlViewer.View({
       // hoverComponent:<MapDetails />,
       handler:  (data)=>{
         if(data&&data.id){
-          console.log('on leave called')
+          // console.log('on leave called')
         }
       }
     },

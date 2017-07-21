@@ -7,6 +7,7 @@ import MapDetails from "../../../../client/commons/components/map/mapDetails"
 import maphandler from "../actions/findMapDetailsTypeAction"
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 import MlMapFooter from '../component/MlMapFooter';
+import MlMapMarkerComponent from '../component/MlAdminMapMarker'
 const mlChapterDashboardListConfig=new MlViewer.View({
   name:"chapterDashBoardList",
   module:"chapter",
@@ -91,6 +92,7 @@ const mlChapterDashboardMapConfig=new MlViewer.View({
     return zoom;
   },
   viewComponent:<MlMapViewContainer />,
+  mapMarkerComponent:<MlMapMarkerComponent/>,
   mapFooterComponent:<MlMapFooter />,
   actionConfiguration:[
     {

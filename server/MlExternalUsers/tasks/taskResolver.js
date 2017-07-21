@@ -151,6 +151,13 @@ MlResolver.MlQueryResolver['fetchTaskDetails'] = (obj, args, context, info) => {
   return result;
 };
 
+
+MlResolver.MlQueryResolver['fetchTasksInBooking'] = (obj, args, context, info) => {
+  let result = mlDBController.find('MlTask', {_id:{$in:args.id}}, context).fetch()
+  return result;
+};
+
+
 MlResolver.MlQueryResolver['fetchTaskDetailsForServiceCard'] = (obj, args, context, info) => {
   let query = {
     userId: context.userId,

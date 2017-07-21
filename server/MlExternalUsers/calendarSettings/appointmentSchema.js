@@ -15,12 +15,23 @@ let appointment=`
     currencyCode: String
   }
   
+  input Documents{
+    fileName: String
+    fileUrl: String
+  }
+
+  
+  input tasks{
+    taskId: String
+    documents:[Documents] 
+  }
+  
   type Query {   
      
   }
   
   type Mutation {
-     bookUserServiceCard(serviceId: String!):response
+     bookUserServiceCard(serviceId: String!, taskDetails: [tasks]):response
      userServiceCardPayment(userServiceCardPaymentInfo: userServiceCardPaymentInfo): response
   }
 `;
@@ -28,6 +39,7 @@ let appointment=`
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], appointment]);
 let supportedApi = [
-  // {api:'fetchMyCalendarSetting', actionName:'READ', moduleName:"OFFICE"}
+  {api:'bookUserServiceCard', actionName:'CREATE', moduleName:"OFFICE"},
+  {api:'userServiceCardPayment', actionName:'CREATE', moduleName:"OFFICE"},
 ];
 MlResolver.MlModuleResolver.push(supportedApi);

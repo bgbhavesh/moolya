@@ -123,6 +123,7 @@
           fetchTaskDetailsAdmin(name: [String]): [Task]
           fetchTaskDetailsForServiceCard(profileId:String, serviceId: String):[Task]
           fetchTaskDetailsForAdminServiceCard(profileId:String, serviceId: String):[Task]
+          fetchTasksInBooking(id: [String]): [Task]
    }
 
    type Mutation {
@@ -141,6 +142,7 @@
     {api:'fetchTaskDetailsForServiceCard', actionName:'READ', moduleName:"OFFICE"},
     {api:'fetchTaskDetailsForAdminServiceCard', actionName:'READ', moduleName:"OFFICE"},
     {api:'fetchTaskDetailsAdmin', actionName:'READ', moduleName:"OFFICE"},
+    {api:'fetchTasksInBooking', actionName:'READ', moduleName:"OFFICE"},
     {api:'createTask', actionName:'CREATE', moduleName:"OFFICE"},
     {api:'updateTask', actionName:'UPDATE', moduleName:"OFFICE"},
   ]

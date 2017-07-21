@@ -18,10 +18,12 @@ export default class MlBeSpokeListView extends Component {
       createNewBeSpoke: false,
       showService: false,
       services:[],
+      serviceDetails:{},
       serviceId:"",
       profileId:"",
       beSpokeServices:[],
-      bookStatus: false
+      bookingStatus: false,
+
     }
     this.getServiceDetails.bind(this);
 }
@@ -32,12 +34,14 @@ export default class MlBeSpokeListView extends Component {
 
   async getServiceDetails(){
     const response  =  await fetchServicesActionHandler(this.props.portfolioDetailsId)
+    console.log(response)
     this.setState({services:response})
     return response
   }
 
   async getBeSpokeServiceDetails(){
     const response  =  await fetchBeSpokeServicesActionHandler(this.props.portfolioDetailsId)
+    console.log(response)
     this.setState({beSpokeServices:response})
     return response
   }
@@ -50,9 +54,6 @@ export default class MlBeSpokeListView extends Component {
       return res
     }
   }
-  componentWillReceiveProps(newProps){
-    console.log(newProps)
-  }
 
   bookService(bookingStatus){
     console.log(bookingStatus)
@@ -61,11 +62,17 @@ export default class MlBeSpokeListView extends Component {
     }
   }
 
+  serviceDetails(details){
+    console.log(details)
+    this.setState({serviceDetails:details})
+  }
+
 
   addBeSpoke(){
     this.setState({createNewBeSpoke: true, showBeSpoke:true})
   }
   viewMode(index,serviceId,profileId){
+    console.log("---service---",serviceId, "----profile---", profileId)
     this.setState({createNewBeSpoke: true, showBeSpoke:false,showService:true, serviceId:serviceId, profileId:profileId})
   }
   viewModeBeSpoke(index,serviceId,profileId){
@@ -104,9 +111,9 @@ render(){
               </div>)})}
         </div> :""}
           {this.state.showBeSpoke?<FunderCreateServicesView saveServiceDetails={this.saveServiceDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>:""}
-          {this.state.showService?<MlAppServiceManageSchedule viewMode={true} serviceId={this.state.serviceId} profileId={this.state.profileId} bookService={this.bookService.bind(this)}/>:""}
+          {this.state.showService?<MlAppServiceManageSchedule viewMode={true} serviceId={this.state.serviceId} profileId={this.state.profileId} serviceDetails={this.serviceDetails.bind(this)} bookService={this.bookService.bind(this)}/>:""}
           {this.state.showBeSpokeService?<FunderCreateServicesView beSpokeDetails={this.state.beSpokeServices}/> :""}
-          {this.state.bookingStatus?<FunderAboutView/>:""}
+          {this.state.bookingStatus?<FunderAboutView serviceDetails={this.state.serviceDetails}/>:""}
           </div>
         </div>
     )

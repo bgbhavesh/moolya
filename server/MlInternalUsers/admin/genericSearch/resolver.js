@@ -442,74 +442,68 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlStageOfCompany.find(query,findOptions).fetch();
     totalRecords=MlStageOfCompany.find(query,findOptions).count();
   }
-  if(args.module=="processmapping"){
-    data= MlProcessMapping.find(query,findOptions).fetch();
-    data.map(function (doc,index) {
-      let industryIds=[];
-      let communityIds=[];
-      let clusterIds=[];
-      let stateIds=[];
-      let chapterIds=[];
-      let professionIds=[];
-      let processTypes=MlprocessTypes.findOne({_id:doc.process});
-      doc.communities.map(function (ids) {
-        communityIds.push(ids)
-      });
-      const communityData =  MlCommunityDefinition.find( { code: { $in: communityIds } } ).fetch() || [];
-      let communityNames = [];  //@array of strings
-      communityData.map(function (doc) {
-        communityNames.push(doc.name)
-      });
-      doc.industries.map(function (ids) {
-        industryIds.push(ids)
-      });
-      const industryData =  MlIndustries.find( { _id: { $in: industryIds } } ).fetch() || [];
-      let industryNames = [];  //@array of strings
-      industryData.map(function (doc) {
-        industryNames.push(doc.industryName)
-      });
-      doc.professions.map(function (ids) {
-        professionIds.push(ids)
-      });
-      const professionData =  MlProfessions.find( { _id: { $in: professionIds } } ).fetch() || [];
-      let professionNames = [];  //@array of strings
-      professionData.map(function (doc) {
-        professionNames.push(doc.professionName)
-      });
-      doc.clusters.map(function (ids) {
-        clusterIds.push(ids)
-      });
-      const clusterData =  MlClusters.find( { _id: { $in: clusterIds } } ).fetch() || [];
-      let clusterNames = [];  //@array of strings
-      clusterData.map(function (doc) {
-        clusterNames.push(doc.clusterName)
-      });
-      doc.states.map(function (ids) {
-        stateIds.push(ids)
-      });
-      const stateData =  MlStates.find( { _id: { $in: stateIds } } ).fetch() || [];
-      let stateNames = [];  //@array of strings
-      stateData.map(function (doc) {
-        stateNames.push(doc.name)
-      });
-      doc.chapters.map(function (ids) {
-        chapterIds.push(ids)
-      });
-      const chapterData =  MlChapters.find( { _id: { $in: chapterIds } } ).fetch() || [];
-      let chapterNames = [];  //@array of strings
-      chapterData.map(function (doc) {
-        chapterNames.push(doc.chapterName)
-      });
-      data[index].communities= communityNames || [];
-      data[index].professions= professionNames || [];
-      data[index].industries= industryNames || [];
+
+  //todo: need to include aggreate query in this
+  if (args.module == "processmapping") {
+    data = MlProcessMapping.find(query, findOptions).fetch();
+    data.map(function (doc, index) {
+
+      let processTypes = MlprocessTypes.findOne({_id: doc.process}) || {}
+
+      var communityIds = doc.communities || []
+      const communityData = MlCommunityDefinition.find({code: {$in: communityIds}}).fetch() || [];
+      let communityNames = _lodash.map(communityData, 'name') || []
+
+      var industryIds = doc.industries || []
+      const industryData = MlIndustries.find({_id: {$in: industryIds}}).fetch() || [];
+      let industryNames = _lodash.map(industryData, 'industryName') || []
+
+      var professionIds = doc.professions || []
+      const professionData = MlProfessions.find({_id: {$in: professionIds}}).fetch() || [];
+      let professionNames = _lodash.map(professionData, 'professionName') || []
+
+      var clusterIds = doc.clusters || []
+      const clusterData = MlClusters.find({_id: {$in: clusterIds}}).fetch() || [];
+      let clusterNames = _lodash.map(clusterData, 'clusterName') || []
+
+      var stateIds = doc.states
+      const stateData = MlStates.find({_id: {$in: stateIds}}).fetch() || [];
+      let stateNames = _lodash.map(stateData, 'name') || []
+
+      var chapterIds = doc.chapters
+      const chapterData = MlChapters.find({_id: {$in: chapterIds}}).fetch() || [];
+      let chapterNames = _lodash.map(chapterData, 'chapterName') || []
+
+      var userTypeIds = doc.userTypes
+      var userTypeNamesString = ''
+      if(userTypeIds.indexOf("all") < 0){
+        const userTypeData = MlUserTypes.find({_id: {$in: userTypeIds}}).fetch() || [];
+        userTypeNamesString = _lodash.map(userTypeData, 'userTypeName') || []
+      }else {
+        userTypeNamesString = 'All'
+      }
+
+      var subChaptersIds = doc.subChapters
+      var subChapterNamesString = ''
+      if(subChaptersIds.indexOf("all") < 0){
+        const subChaptersData = MlSubChapters.find({_id: {$in: subChaptersIds}}).fetch();
+        subChapterNamesString = _lodash.map(subChaptersData, 'subChapterName') || []
+      }else {
+        subChapterNamesString = 'All'
+      }
+
+
+      data[index].communities = communityNames || [];
+      data[index].professions = professionNames || [];
+      data[index].industries = industryNames || [];
       data[index].clusters = clusterNames || [];
       data[index].states = stateNames || [];
       data[index].chapters = chapterNames || [];
-      data[index].processName=processTypes.processName;
-
+      data[index].processName = processTypes.processName;
+      data[index].userTypeNamesString = userTypeNamesString=='All'?'All':userTypeNamesString.join()
+      data[index].subChapterNamesString = subChapterNamesString=='All'?'All':subChapterNamesString.join()
     });
-    totalRecords=MlProcessMapping.find(query,findOptions).count();
+    totalRecords = MlProcessMapping.find(query, findOptions).count();
   }
   if(args.module=="documents"){
 
@@ -610,7 +604,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
 
       data[index].communityNames= communityNames || [];
       data[index].professionNames= professionNames || [];
-      data[index].industrieNames= industryNames || [];
+      data[index].industryNames= industryNames || [];
       data[index].clusterNames = clusterNames || [];
       data[index].stateNames = stateNames || [];
       data[index].chapterNames = chapterNames || [];

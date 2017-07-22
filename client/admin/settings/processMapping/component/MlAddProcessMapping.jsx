@@ -342,7 +342,7 @@ class MlAddProcessMapping extends React.Component{
 
   <Moolyaselect ref="chapter" multiSelect={true}mandatory={true}   placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)}  data-required={true} data-errMsg="Chapter is required"/>
 
-  <Moolyaselect  ref="subChapter"multiSelect={true} mandatory={true}   placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters} queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)}  data-required={true} data-errMsg="subChapter is required" />
+  <Moolyaselect  ref="subChapter" multiSelect={true} mandatory={true}   placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters} queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)}  data-required={true} data-errMsg="subChapter is required" />
   <MlAssignDocument getAssignedDocuments={this.getAssignedDocuments.bind(this)} clusterId={this.state.clusters} chapterId={this.state.chapters} subChapterId={this.state.subChapters}/>
                 </form>
                 </ScrollArea>

@@ -190,7 +190,7 @@ MlResolver.MlMutationResolver['updateServiceCardOrder'] = (obj, args, context, i
       return ret;
     }
 
-    let serviceOrder = mlDBController.findOne('MlScOrder', {transactionId: userServiceCardPaymentInfo.orderId}, context);
+    let serviceOrder = mlDBController.findOne('MlScOrder', {orderId: args.userServiceCardPaymentInfo.orderId}, context);
     if(!serviceOrder || (serviceOrder && !serviceOrder.serviceId))
       return new MlRespPayload().errorPayload("Error In Fetching Service Order", 400);
 
@@ -198,7 +198,7 @@ MlResolver.MlMutationResolver['updateServiceCardOrder'] = (obj, args, context, i
     if(!ret.success)
       return ret;
 
-    ret = mlServiceCardRepo.createServiceLedger(context)
+    ret = mlServiceCardRepo.createServiceLedger(serviceOrder.serviceId, context)
     if(!ret.success)
       return ret;
 

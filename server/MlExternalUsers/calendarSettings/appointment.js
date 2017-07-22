@@ -425,7 +425,7 @@ class MlAppointment {
        * push the date information to response
        */
       let dayResponse = {
-        date: date.getDate(),
+        date: new Date(date),//.getDate(),
         status: status
       };
 

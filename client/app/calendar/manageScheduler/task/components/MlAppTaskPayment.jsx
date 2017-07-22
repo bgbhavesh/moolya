@@ -69,6 +69,13 @@ export default class MlAppTaskPayment extends Component {
     let name = e.target.name;
     details['payment'] = _.omit(details['payment'], [name]);
     details['payment'] = _.extend(details['payment'], {[name]: !e.currentTarget.checked});
+    if (!details.payment.isDiscount) {
+      details['payment'] = _.extend(details['payment'], {
+        discountType: '',
+        discountValue: 0,
+        derivedAmount: details.payment.activitiesDerived
+      });
+    }
     this.setState({data: details}, function () {
       this.sendTaskPaymentToParent()
     })
@@ -100,7 +107,33 @@ export default class MlAppTaskPayment extends Component {
 
   sendTaskPaymentToParent() {
     let data = this.state.data;
-    this.props.getPaymentDetails(data);
+    this.errorMsg = '';
+    if (data.payment && data.payment.isDiscount) {
+      if(data.payment.amount === '' || typeof data.payment.amount === 'undefined' || data.payment.amount === null ){
+        this.errorMsg = 'Payable amount is required';
+        toastr.error(this.errorMsg);
+        return false;
+      }
+      switch (data.payment.discountType) {
+        case 'amount':
+          if (parseFloat(data.payment.discountValue) > parseFloat(data.payment.amount)) {
+            this.errorMsg = 'Amount must be equal or less than the payable amount'
+          }
+          break;
+        case 'percent':
+          if (parseFloat(data.payment.discountValue) > 100) {
+            this.errorMsg = 'Percent must be equal or less than 100'
+          }
+          break;
+        default:
+          this.errorMsg = '';
+      }
+    }
+    if (!this.errorMsg) {
+     this.props.getPaymentDetails(data);
+    } else {
+      toastr.error(this.errorMsg);
+    }
   }
   handleNull(){
     console.log('null')
@@ -137,28 +170,37 @@ export default class MlAppTaskPayment extends Component {
                 </div>
                 <div className="form-group switch_wrap switch_names inline_switch">
                   <label>Is Eligible for discount</label>
-                  <span className="state_label">Yes</span><label className="switch nocolor-switch">
-                  <input type="checkbox" name="isDiscount" checked={this.state.data.isDiscount}
+                  <span  htmlFor="discount" className={this.state.data.payment.isDiscount ? 'state_label acLabel' : 'state_label'}>Yes</span><label className="switch nocolor-switch">
+                  <input id="discount" type="checkbox" name="isDiscount"
                          onChange={this.onStatusChange.bind(this)}/>
                   <div className="slider"></div>
                 </label>
-                  <span className="state_label acLabel">No</span>
+                  <span className={this.state.data.payment.isDiscount ? 'state_label' : 'state_label acLabel'}>No</span>
                 </div>
                 <br className="brclear"/>
                 <div className="form-group">
                   <div className="input_types">
                     <input id="radio1" type="radio" name="radio1" value="1"
+                           disabled={!this.state.data.payment.isDiscount}
+                           checked={(this.state.data.payment && this.state.data.payment.discountType == 'amount') ? true : false}
                            onChange={this.discountAmount.bind(this)}/><label
                     htmlFor="radio1"><span><span></span></span>Amount
                     Rs {(this.state.data.payment && this.state.data.payment.discountType == 'amount') ? <input
                       className="form-control inline_input"
-                      onBlur={this.handleBlurAmount.bind(this)}/> : ''}</label>
+                      disabled={!this.state.data.payment.isDiscount}
+                      defaultValue={this.state.data.payment.discountValue}
+                      onChange={this.handleBlurAmount.bind(this)}/> : ''}</label>
                   </div>
                   <div className="input_types">
-                    <input id="radio2" type="radio" name="radio1" value="2" onChange={this.discountPercent.bind(this)}/><label
+                    <input id="radio2" type="radio" name="radio1" value="2"
+                           checked={(this.state.data.payment && this.state.data.payment.discountType == 'percent') ? true : false}
+                           disabled={!this.state.data.payment.isDiscount}
+                           onChange={this.discountPercent.bind(this)}/><label
                     htmlFor="radio2"><span><span></span></span>Percentage {(this.state.data.payment && this.state.data.payment.discountType == 'percent') ?
                     <input className="form-control inline_input"
-                           onBlur={this.handleBlurPercent.bind(this)}/> : ''}
+                           disabled={!this.state.data.payment.isDiscount}
+                           defaultValue={this.state.data.payment.discountValue}
+                           onChange={this.handleBlurPercent.bind(this)}/> : ''}
                     %
                   </label>
                   </div>

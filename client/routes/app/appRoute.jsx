@@ -386,14 +386,14 @@ appSection.route('/calendar/manageSchedule/:profileId/createActivity', {
 appSection.route('/calendar/manageSchedule/:profileId/createService', {
   name: 'calendar_manageSchedule',
   action(){
-    mount(AppLayout, {appContent:<MlAppServiceManageSchedule />, isCalenderMenu: true})
+    mount(AppLayout, {appContent:<MlAppServiceManageSchedule viewMode={false} />, isCalenderMenu: true})
   }
 });
 
 appSection.route('/calendar/manageSchedule/:profileId/editService', {
   name: 'calendar_manageSchedule',
   action(){
-    mount(AppLayout, {appContent:<MlAppServiceManageSchedule />, isCalenderMenu: true})
+    mount(AppLayout, {appContent:<MlAppServiceManageSchedule viewMode={false} />, isCalenderMenu: true})
   }
 });
 

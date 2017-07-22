@@ -320,6 +320,8 @@ export default class MlAppBasicInfo extends React.Component{
                   <input className="form-control float-label" placeholder="Activity Name" value={( that.state.basicData.name ? that.state.basicData.name : '' )} onChange={this.textFieldSaves.bind(that,"name")}/>
                 </div>
                 <div className="form-group">
+                  <label>Activity type</label>
+                  <br className="brclear"/>
                   <div className="input_types">
                     <input id="internalCheckbox" name="internalCheckbox" type="checkbox"  onChange={that.checkBoxHandler.bind(that, "isInternal")} checked={this.state.basicData.isInternal} value="Internal"/>
                     <label htmlFor="internalCheckbox">

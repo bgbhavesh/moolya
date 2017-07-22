@@ -154,7 +154,7 @@ export default class MlAppServicePayment extends React.Component{
               </div>
               <div className="form-group">
                 <label>Derived amount Rs. <input className="form-control inline_input medium_in"
-                                                 value={this.props.finalAmount} readOnly="readOnly"/>
+                                                 value={this.props.finalAmount} disabled />
                 </label>
               </div>
             </form>

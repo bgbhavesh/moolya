@@ -292,6 +292,14 @@ let service=`
         isApproved: Boolean
         finalAmount:Int
    }
+   
+   input userServiceCardPaymentInfo {
+        orderId: String
+        amount: Int
+        paymentId: String
+        paymentMethod: String
+        curencyCode: String
+   }
 
    type Query {
         fetchUserServices(profileId:String):[Service]

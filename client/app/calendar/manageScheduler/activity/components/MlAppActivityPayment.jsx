@@ -81,6 +81,13 @@ export default class Step4 extends React.Component{
       }, function () {
         this.calculateDerivedAmount();
       }.bind(this));
+    } else {
+      let paymentData = this.state.paymentData;
+      paymentData.derivedAmount = paymentData.amount || 0;
+      paymentData.discountValue = 0;
+      this.setState({
+        paymentData: paymentData
+      });
     }
   }
 
@@ -100,6 +107,13 @@ export default class Step4 extends React.Component{
       }, function () {
         this.calculateDerivedAmount();
       }.bind(this));
+    } else {
+      let paymentData = this.state.paymentData;
+      paymentData.derivedAmount = paymentData.amount || 0;
+      paymentData.discountValue = 0;
+      this.setState({
+        paymentData: paymentData
+      });
     }
   }
 
@@ -205,17 +219,27 @@ export default class Step4 extends React.Component{
               <br className="brclear"/>
               <div className="form-group">
                 <div className="input_types">
-                  <input id="amountDiscount" type="radio" name="amountDiscount" value="amount" checked={ this.state.paymentData.discountType == "amount" ? true : false } onChange={this.updateDiscountType.bind(this)}/>
+                  <input id="amountDiscount" type="radio"
+                         name="amountDiscount"
+                         value="amount"
+                         disabled={!this.state.paymentData.isDiscount}
+                         checked={ this.state.paymentData.discountType == "amount" ? true : false } onChange={this.updateDiscountType.bind(this)}/>
                   <label htmlFor="amountDiscount"><span><span></span></span>
                     Amount Rs
-                    {this.state.paymentData.discountType === 'amount'? <input className="form-control inline_input" onChange={(evt)=>this.discountedAmount(evt)} value={ this.state.paymentData.discountValue }/>:<div></div>}
+                    {this.state.paymentData.discountType === 'amount'?
+                      <input className="form-control inline_input"
+                             onChange={(evt)=>this.discountedAmount(evt)}
+                             defaultValue={ this.state.paymentData.discountValue }/>:<div></div>}
                   </label>
                 </div>
                 <div className="input_types">
-                  <input id="percentDiscount" type="radio" name="percentDiscount" value="percent" checked={ this.state.paymentData.discountType == "percent" ? true : false }  onChange={this.updateDiscountType.bind(this)}/>
+                  <input id="percentDiscount" type="radio"
+                         name="percentDiscount" value="percent"
+                         disabled={!this.state.paymentData.isDiscount}
+                         checked={ this.state.paymentData.discountType == "percent" ? true : false }  onChange={this.updateDiscountType.bind(this)}/>
                   <label htmlFor="percentDiscount"><span><span></span></span>
                     Percentage
-                    {this.state.paymentData.discountType === 'percent'? <input className="form-control inline_input" onChange={(evt)=>this.discountedAmount(evt)} value={ this.state.paymentData.discountValue } /> :<div></div>}
+                    {this.state.paymentData.discountType === 'percent'? <input className="form-control inline_input" onChange={(evt)=>this.discountedAmount(evt)} defaultValue={ this.state.paymentData.discountValue } /> :<div></div>}
                   </label>
                 </div>
                 <br className="brclear"/>
@@ -223,7 +247,7 @@ export default class Step4 extends React.Component{
               <div className="form-group">
                 <label>
                   Derived amount Rs.
-                  <input className="form-control inline_input medium_in" value={this.state.paymentData.derivedAmount} readOnly="readOnly" />
+                  <input className="form-control inline_input medium_in" value={this.state.paymentData.derivedAmount} disabled />
                 </label>
               </div>
             </form>

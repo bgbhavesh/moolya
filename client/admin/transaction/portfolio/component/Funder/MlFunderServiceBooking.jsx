@@ -7,7 +7,11 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import {fetchTasksInBookingActionHandler} from '../../../../../app/calendar/manageScheduler/task/actions/fetchTaskDetails'
 import {multipartASyncFormHandler} from "../../../../../commons/MlMultipartFormAction";
+import MlAppMyCalendarDayComponent from '../../../../../app/calendar/myCalendar/components/dayComponent'
 var _ = require('lodash');
+import Calender from '../../../../../commons/calendar/calendar'
+
+
 
 // import StepZilla from '../../../../common/components/stepzilla/StepZilla';
 // import Step1 from '../../../../app/views/myprofile/funderProfile/MyAppointment/service';
@@ -21,11 +25,13 @@ export default class FunderAboutView extends React.Component{
     this.state={
       showPaymentDetails: false,
       tasks:[],
-      imagePreview:""
+      imagePreview:"",
+      payment: false
     }
     this.getTasks.bind(this);
     this.imageUpload.bind(this)
     this.imagesDisplay.bind(this);
+    this.paymentDetails.bind(this);
   }
   componentDidMount()
   {
@@ -66,25 +72,35 @@ export default class FunderAboutView extends React.Component{
     console.log(this.state.taskDetails)
     let taskDetails = this.state.taskDetails
     const response =  await bookUserServiceCardActionHandler(this.props.serviceDetails._id, taskDetails)
-    this.setState({orderId: response.transactionId})
-    this.payment(this.state.orderId)
+    console.log(response)
+    this.setState({orderId: response.result})
+    // this.payment(this.state.orderId)
     return response;
   }
 
-  async payment(orderId){
+  payment(){
+    this.setState({payment: true})
     let paymentDetails={
-      orderId:orderId,
-      amount:this.props.serviceDetails.payment?this.props.serviceDetails.payment.tasksDerived:0
+      orderId:this.state.orderId,
+      amount:this.props.serviceDetails.payment?this.props.serviceDetails.payment.tasksDerived:0,
+      // data to be populated
+      paymentId: "",
+      paymentMethod:"",
+      currencyCode:""
     }
+    this.paymentDetails(paymentDetails)
+  }
+
+  async  paymentDetails(paymentDetails){
     const response  = await userServiceCardPaymentActionHandler(paymentDetails)
     return response
   }
 
   componentWillMount(){
     let totalIds = [];
-    this.props.serviceDetails.tasks.map(function(ids){
-      totalIds.push(ids.id)
-    })
+    // this.props.serviceDetails.tasks.map(function(ids){
+    //   totalIds.push(ids.id)
+    // })
     this.getTasks(totalIds)
   }
 
@@ -186,24 +202,20 @@ export default class FunderAboutView extends React.Component{
                 </div>
               </div>
             </div>
-
             <div className="panel-body uploaded_files_swiper" key={id}>
               <ul className="swiper-wrapper">
                 <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name">
                   {task.images?task.images.map(function(image, id) {
-                    return (
-
-                      <img src={image} style={{maxWidth: 150}}/>
-                    )
+                    return (<img src={image} style={{maxWidth: 150}}/>)
                   }):""}
                 </li>
               </ul>
             </div>
           </div>
         </div>
-
       )})
     return (
+      !this.state.payment?
       <div>
         <div className="col-md-6 nopadding-left">
           <div className="left_wrap">
@@ -258,8 +270,7 @@ export default class FunderAboutView extends React.Component{
                       <td>&nbsp;</td>
                       <td>
                         <div className="ml_btn" style={{'textAlign': 'left'}}>
-                            <a href="#" className="save_btn" onClick={that.bookUserServiceCard.bind(that)}>Book</a>
-                          <a href="#" className="cancel_btn">Cancel</a>
+                            <a href="#" className="save_btn" onClick={that.bookUserServiceCard.bind(that)}>Book</a><a href="#" className="cancel_btn">Cancel</a>
                         </div>
                       </td>
                     </tr>
@@ -276,27 +287,38 @@ export default class FunderAboutView extends React.Component{
               speed={0.8}
               className="left_wrap"
               smoothScrolling={true}
-              default={true}
-            >
+              default={true}>
               <div className="form_bg">
                 <form>
                   <div className="panel panel-default uploaded_files">
                     <div className="panel-heading">
                       Payment Mode
                     </div>
-
                   </div>
                   <h1>
                     Payment Gateway Here
-                    <div className="ml_btn" style={{'textAlign':'center'}}><div className="save_btn">Proceed</div> <div className="cancel_btn">Cancel</div> </div>
+                    <div className="ml_btn" style={{'textAlign':'center'}}><a href="#" className="save_btn" onClick={this.payment.bind(this)}>Proceed</a> <a href="#" className="cancel_btn">Cancel</a> </div>
                   </h1>
                 </form>
               </div>
             </ScrollArea>
           </div>
         </div>:""}
-
+      </div>:
+        <div>
+          <div className="col-md-6 nopadding-left">
+        <div className="app_main_wrap" style={{'overflow':'auto'}}>
+        <div className="app_padding_wrap">
+          <Calender
+            dayBackgroundComponent={<MlAppMyCalendarDayComponent /> }
+            dayData=""
+            onNavigate=""
+            date=""
+          />
+        </div>
       </div>
+          </div>
+        </div>
     )
   }
 };

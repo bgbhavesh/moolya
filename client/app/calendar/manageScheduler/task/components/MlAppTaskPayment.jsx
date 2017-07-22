@@ -40,7 +40,7 @@ export default class MlAppTaskPayment extends Component {
     let details = this.state.data
     let name = 'discountValue';
     let value = e.target.value;
-    let amount = this.state.data.payment ? this.state.data.payment.amount : ''
+    let amount = this.state.data.payment ? this.state.data.payment.activitiesDerived : ''
     let derivedAmount = Number(amount) - Number(value)
     details['payment'] = _.omit(details['payment'], [name]);
     details['payment'] = _.omit(details['payment'], ['derivedAmount']);
@@ -54,7 +54,7 @@ export default class MlAppTaskPayment extends Component {
     let details = this.state.data
     let name = 'discountValue';
     let value = e.target.value;
-    let amount = this.state.data.payment ? this.state.data.payment.amount : ''
+    let amount = this.state.data.payment ? this.state.data.payment.activitiesDerived : ''
     let derivedAmount = Number(amount) - Number((Number(value)/100)*Number(amount))
     details['payment'] = _.omit(details['payment'], [name]);
     details['payment'] = _.omit(details['payment'], ['derivedAmount']);
@@ -109,14 +109,14 @@ export default class MlAppTaskPayment extends Component {
     let data = this.state.data;
     this.errorMsg = '';
     if (data.payment && data.payment.isDiscount) {
-      if(data.payment.amount === '' || typeof data.payment.amount === 'undefined' || data.payment.amount === null ){
+      if(data.payment.activitiesDerived === '' || typeof data.payment.activitiesDerived === 'undefined' || data.payment.activitiesDerived === null ){
         this.errorMsg = 'Payable amount is required';
         toastr.error(this.errorMsg);
         return false;
       }
       switch (data.payment.discountType) {
         case 'amount':
-          if (parseFloat(data.payment.discountValue) > parseFloat(data.payment.amount)) {
+          if (parseFloat(data.payment.discountValue) > parseFloat(data.payment.activitiesDerived)) {
             this.errorMsg = 'Amount must be equal or less than the payable amount'
           }
           break;
@@ -210,7 +210,7 @@ export default class MlAppTaskPayment extends Component {
                   <label>Derived amount Rs. <input className="form-control inline_input medium_in"
                                                    onChange={this.handleNull.bind(this)}
                                                    value={this.state.data.payment.derivedAmount}
-                                                   readOnly="readOnly"/>
+                                                   disabled />
                   </label>
                 </div>
               </form>

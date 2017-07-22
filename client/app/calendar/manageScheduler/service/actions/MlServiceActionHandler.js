@@ -334,14 +334,15 @@ export async function bookUserServiceCardActionHandler(serviceId, taskDetails) {
       taskDetails
     }
   });
-  const teamMembers = result.data.createServiceCardOrder;
+  const teamMembers = result.data.createServiceCardOrder
+  return teamMembers;
 }
 
-export async function userServiceCardPaymentActionHandler(serviceId, taskDetails) {
+export async function userServiceCardPaymentActionHandler(userServiceCardPaymentInfo) {
   const result = await appClient.mutate({
     mutation: gql`
-    mutation($serviceId:String!,$taskDetails: [tasks]){
-        updateServiceCardOrder(serviceId:$serviceId,taskDetails:$taskDetails){
+    mutation($userServiceCardPaymentInfo:userServiceCardPaymentInfo){
+        updateServiceCardOrder(userServiceCardPaymentInfo:$userServiceCardPaymentInfo){
         success
         code
         result
@@ -349,8 +350,7 @@ export async function userServiceCardPaymentActionHandler(serviceId, taskDetails
       }
     `,
     variables: {
-      serviceId,
-      taskDetails
+      userServiceCardPaymentInfo
     }
   });
   const teamMembers = result.data.updateServiceCardOrder;

@@ -174,6 +174,7 @@ export default class MlAppTaskSession extends Component {
                     <div style={{'marginTop': '-12px'}}>
                       <Select
                         name="activity-list"
+                        placeholder={'Select activity'}
                         options={options.filter(function (activity) {
                           console.log(session.activities.indexOf(activity.value));
                           return session.activities.indexOf(activity.value) == -1;

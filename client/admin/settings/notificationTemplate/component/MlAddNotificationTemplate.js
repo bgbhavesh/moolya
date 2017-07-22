@@ -95,18 +95,6 @@ class MlAddNotificationTemplate extends React.Component {
             <div className="col-md-6 nopadding-left">
               <div className="form_bg">
                 <form>
-                  <div className="form-group">
-                    <input type="text" ref="title" placeholder="Title" className="form-control float-label"/>
-                  </div>
-                  <div className="form-group mandatory">
-                    <textarea ref="content" placeholder="content" className="form-control float-label" data-required={true} data-errMsg="Content is Required"></textarea>
-                  </div>
-                </form>
-              </div>
-            </div>
-            <div className="col-md-6 nopadding-right">
-              <div className="form_bg">
-                <form>
                   <div className="form-group mandatory">
                     <input type="text" ref="tempCode" placeholder="Template Code" className="form-control float-label"/>
                   </div>
@@ -117,6 +105,10 @@ class MlAddNotificationTemplate extends React.Component {
 
                   <div className="form-group mandatory">
                     <Select name="form-field-name" placeholder="Type"  ref="type"  className="float-label" options={types} value={this.state.type} onChange={this.optionsBySelectTypes.bind(this)} />
+                  </div>
+
+                  <div className="form-group">
+                    <input type="text" ref="title" placeholder="Title" className="form-control float-label"/>
                   </div>
 
                   <br />
@@ -136,6 +128,16 @@ class MlAddNotificationTemplate extends React.Component {
                       <input type="checkbox" ref="isHtmlContent" />
                       <div className="slider"></div>
                     </label>
+                  </div>
+                </form>
+              </div>
+
+            </div>
+            <div className="col-md-6 nopadding-right">
+              <div className="form_bg">
+                <form>
+                  <div className="form-group mandatory">
+                    <textarea style={{'height':'200px'}} ref="content" placeholder="content" className="form-control float-label" data-required={true} data-errMsg="Content is Required"></textarea>
                   </div>
                 </form>
               </div>

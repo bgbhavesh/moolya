@@ -188,6 +188,7 @@ export default class MlAppServiceManageSchedule extends Component {
                                         checkPromoStatus={this.checkPromoStatus}
                                         checkDiscountStatus={this.checkDiscountStatus}
                                         saveService={this.saveService}
+                                        serviceId={this.props.serviceId}
                                         bookService={this.props.bookService}/>,
 
         icon: <span className="ml ml-payments"></span>
@@ -365,7 +366,7 @@ export default class MlAppServiceManageSchedule extends Component {
           });
           clusterData.community = communities;
         }
-        // this.props.serviceDetails(service)
+        this.props.serviceDetails(service)
       }
     }
     var validTillDate = Date.parse(serviceBasicInfo.validTill);

@@ -2934,6 +2934,44 @@ if (Meteor.isServer) {
                 },
               ]
             },
+            {
+              "link": "/admin/settings/notificationTemplateList",
+              "name": "Notification Template",
+              "uniqueId": "settings_NotificationTemplate",
+              "isLink": true,
+              "isMenu": true,
+              "image": "",
+              subMenu: [{
+                "link": "/admin/settings/addNotificationTemplate",
+                "name": "Add Notification Template",
+                "uniqueId": "settings_AddNotificationTemplate",
+                "subMenuMappingId": "settings_NotificationTemplate",
+                "subMenusId": "settings",
+                "isLink": true,
+                "isMenu": true,
+                "image": ""
+              },
+                {
+                  "link": "/admin/settings/notificationTemplateList",
+                  "name": "List Notification Templates",
+                  "uniqueId": "settings_NotificationTemplateList",
+                  "subMenuMappingId": "settings_NotificationTemplate",
+                  "subMenusId": "settings",
+                  "isLink": true,
+                  "isMenu": true,
+                  "image": ""
+                },
+                {
+                  "link": "/admin/settings/editNotificationTemplate",
+                  "name": "Edit Notification Template",
+                  "uniqueId": "settings_EditNotificationTemplate",
+                  "subMenuMappingId": "settings_NotificationTemplate",
+                  "subMenusId": "settings",
+                  "isLink": true,
+                  "isMenu": true,
+                  "image": ""
+                }]
+            }
 
               // subMenu: [
               //   {

@@ -11,6 +11,7 @@ import MlAppServiceList from '../../../../../app/calendar/manageScheduler/servic
 import FunderAboutView from './MlFunderServiceBooking'
 import MlAppServiceManageSchedule from '../../../../../app/calendar/manageScheduler/service/components/MlAppServiceManageSchedule'
 
+
 export default class MlBeSpokeListView extends Component {
   constructor(props) {
   super(props)
@@ -34,14 +35,12 @@ export default class MlBeSpokeListView extends Component {
 
   async getServiceDetails(){
     const response  =  await fetchServicesActionHandler(this.props.portfolioDetailsId)
-    console.log(response)
     this.setState({services:response})
     return response
   }
 
   async getBeSpokeServiceDetails(){
     const response  =  await fetchBeSpokeServicesActionHandler(this.props.portfolioDetailsId)
-    console.log(response)
     this.setState({beSpokeServices:response})
     return response
   }
@@ -56,20 +55,19 @@ export default class MlBeSpokeListView extends Component {
   }
 
   bookService(bookingStatus){
-    console.log(bookingStatus)
     if(bookingStatus){
       this.setState({createNewBeSpoke: true, showBeSpoke:false,showService:false,showBeSpokeService:false, bookingStatus: true})
     }
   }
 
-  serviceDetails(details){
+  serviceInfo(details){
     console.log(details)
     this.setState({serviceDetails:details})
   }
 
 
   addBeSpoke(){
-    this.setState({createNewBeSpoke: true, showBeSpoke:true})
+    this.setState({createNewBeSpoke: true, showBeSpoke:true, showService: false, showBeSpokeService: false})
   }
   viewMode(index,serviceId,profileId){
     console.log("---service---",serviceId, "----profile---", profileId)
@@ -85,14 +83,14 @@ render(){
         <div className="app_padding_wrap">
           {!this.state.createNewBeSpoke?
               <div className="col-lg-12" id="show">
-          <div className="col-lg-2 col-md-4 col-sm-4">
+                {this.props.viewingMode || this.props.editingMode? <div className="col-lg-2 col-md-4 col-sm-4">
             <a href=" " onClick={() => that.addBeSpoke()}>
               <div className="list_block notrans">
                 <div className="hex_outer"><span className="ml ml-plus "></span></div>
                 <h3>Create a BeSpoke</h3>
               </div>
             </a>
-          </div>
+          </div>:<div></div>}
             {this.state.services.map(function (services, index) {
               return (
               <div className="col-lg-2 col-md-4 col-sm-4" key={index}>
@@ -111,7 +109,7 @@ render(){
               </div>)})}
         </div> :""}
           {this.state.showBeSpoke?<FunderCreateServicesView saveServiceDetails={this.saveServiceDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>:""}
-          {this.state.showService?<MlAppServiceManageSchedule viewMode={true} serviceId={this.state.serviceId} profileId={this.state.profileId} serviceDetails={this.serviceDetails.bind(this)} bookService={this.bookService.bind(this)}/>:""}
+          {this.state.showService?<MlAppServiceManageSchedule viewMode={true} viewingMode={this.props.viewingMode?this.props.viewingMode: false} editingMode={this.props.editingMode?this.props.editingMode:false} serviceId={this.state.serviceId} profileId={this.state.profileId} serviceInfo={this.serviceInfo.bind(this)} bookService={this.bookService.bind(this)}/>:""}
           {this.state.showBeSpokeService?<FunderCreateServicesView beSpokeDetails={this.state.beSpokeServices}/> :""}
           {this.state.bookingStatus?<FunderAboutView serviceDetails={this.state.serviceDetails}/>:""}
           </div>

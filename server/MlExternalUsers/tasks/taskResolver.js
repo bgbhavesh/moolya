@@ -182,7 +182,23 @@ MlResolver.MlQueryResolver['fetchTaskDetailsForServiceCard'] = (obj, args, conte
   if(args.profileId){
     query.profileId = args.profileId;
   };
-  let result = mlDBController.find('MlTask', query, context).fetch()
+  let result = mlDBController.find('MlTask', query, context).fetch();
+  if (result && result.length > 0) {
+    result.map((task, taskIndex) => {
+      if (task.session && task.session.length > 0) {
+        task.session.map((taskSession, sessionIndex) => {
+          if (taskSession.activities && taskSession.activities.length > 0) {
+            taskSession.activities.map((activityId, index) => {
+              if (activityId) {
+                let activity = mlDBController.findOne('MlActivity', activityId , context);
+                result[taskIndex]['session'][sessionIndex]['activities'][index] = activity;
+              }
+            })
+          }
+        });
+      }
+    });
+  }
   return result;
 };
 

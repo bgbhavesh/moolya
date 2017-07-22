@@ -20,15 +20,18 @@ class MlServiceCardRepo{
         this.profile = defaultProfile;
 
         switch (userAction){
-            case 'CREATESERVICE':{
+            case 'CREATESERVICEDEF':{
               return true;
             }
             break;
-
-          case 'UPDATESERVICE':{
-            return true
-          }
-          break;
+            case 'UPDATESERVICEDEF':{
+              return true
+            }
+            break;
+            case 'CREATESERVICEORDER':{
+              return true
+            }
+            break
         }
         return false
     }
@@ -206,16 +209,145 @@ class MlServiceCardRepo{
       return new MlRespPayload().successPayload("Service Card Updated Successfully", 200);
     }
 
-    createServiceCardOrder(){
+    createServiceCardOrder(payload, context) {
+      var defaultProfile = new MlUserContext().userProfileDetails(context.userId);
+      var serviceId = payload.serviceId;
+      var tax = 0; // Need to update later
+      var discountAmount = 0; // Need to update later
+      var result;
+
+      /**
+       * Define data to insert in service card order
+       * Note :: start date and end data will update when user create payment
+       */
+
+      try {
+        var service = mlDBController.findOne('MlServiceCardDefinition', serviceId, context);
+        if (!service) {
+          return new MlRespPayload().errorPayload("Invalid Service", 400);
+        }
+
+        var dataToInsert = {
+          userId: context.userId,
+          profileId: defaultProfile.profileId,
+          serviceId: serviceId,
+          serviceName: service.name,
+          amount: service.finalAmount,
+          tax: tax,
+          promoCode: "", // Need to update later
+          discountedAmount: discountAmount,
+          totalAmount: service.finalAmount + tax - discountAmount,
+          isActive: false,
+          isExpired: false,
+          paymentStatus: 'unpaid',
+          createdAt: new Date(),
+          tasks: service.tasks
+        }
+        orderNumberGenService.createUserServiceOrderId(dataToInsert);
+        result = mlDBController.insert('MlScOrder', dataToInsert, context);
+        if (!result) {
+          return new MlRespPayload().errorPayload('Error In Booking Service Card', 400);
+        }
+
+      } catch (e) {
+        return new MlRespPayload().errorPayload(e.message, 400);
+      }
+      return new MlRespPayload().successPayload(dataToInsert.orderId, 200);
     }
 
-    updateServiceCardOrder(){
+    updateServiceCardOrder(payload, context)
+    {
+      let orderId = payload.userServiceCardPaymentInfo.orderId;
+      let userId = context.userId;
+
+      try {
+        let service = mlDBController.findOne('MlScOrder', {transactionId: orderId}, context);
+        let dataToInsert = {
+          paymentId         : payload.userServiceCardPaymentInfo.paymentId,
+          paymentMethod     : payload.userServiceCardPaymentInfo.paymentMethod,
+          amount            : payload.userServiceCardPaymentInfo.amount,
+          currencyId        : payload.userServiceCardPaymentInfo.currencyCode,
+          resourceId        : orderId,
+          resourceType      : "UserServiceCard",
+          userId            : userId,
+          createdAt         : new Date()
+        };
+        let paymentResponse = mlDBController.insert('MlPayment', dataToInsert, context);
+        if(!paymentResponse){
+          return new MlRespPayload().errorPayload(paymentResponse, 400);
+        }
+        let serviceResponse = mlDBController.update('MlScOrder', service._id, {paymentStatus: 'paid'}, {$set: 1}, context);
+        if(!serviceResponse){
+          return new MlRespPayload().errorPayload("Error In Payment", 400);
+        }
+      }catch (e){
+        return new MlRespPayload().errorPayload(e.message, 400)
+      }
+      return new MlRespPayload().successPayload("Payment Updated", 200);
     }
 
-    createServiceLedger(){
+    createServiceCard(serviceDefId, context){
+        try {
+          var defaultProfile = new MlUserContext().userProfileDetails(context.userId);
+          var serviceDef = mlDBController.find('MlServiceCardDefinition', {_id:serviceDefId}, context)
+          if(!serviceDef)
+            return new MlRespPayload().errorPayload("Error In Fetching Service Card Definition", 400)
+
+          var serviceCard = {};
+          serviceCard["userId"] = context.userId
+          serviceCard["profileId"] = defaultProfile.profileId
+          serviceCard["serviceDefId"] = serviceDefId
+          serviceCard["isActive"] = true
+          serviceCard["tasks"] = serviceDef.tasks
+          serviceCard["isExpired"] = false;
+          serviceCard["startDate"] = new Date();
+
+          // Need to add these three fields
+          //serviceCard["expiryDate"] = new Date();
+          //serviceCard["transactionId"] = new Date();
+          //serviceCard["serviceName"] = new Date();
+          result = mlDBController.insert('MlServiceCards' , serviceCard, context)
+          if(!result)
+            return new MlRespPayload().errorPayload(e.message, 400)
+
+        }catch (e){
+          return new MlRespPayload().errorPayload(e.message, 400)
+        }
+
+        return new MlRespPayload().successPayload(result, 200);
     }
 
-    updateServiceLedger(){
+    updateServiceCard(context){
+
+    }
+
+    createServiceLedger(serviceId, context){
+      try {
+        var defaultProfile = new MlUserContext().userProfileDetails(context.userId);
+        var service = mlDBController.find('MlServiceCards', {_id:serviceId}, context)
+        if(!service)
+          return new MlRespPayload().errorPayload("Error In Updating Ledger Balance", 400)
+
+        var serviceCard = {};
+        serviceCard["userId"]         = context.userId
+        serviceCard["profileId"]      = defaultProfile.profileId
+        serviceCard["serviceId"]      = serviceId
+        serviceCard["serviceCard"]    = service.tasks
+        // Need to Update
+        // serviceCard["serviceType"]      = serviceType
+
+        result = mlDBController.insert('MlServiceLedger' , serviceCard, context)
+        if(!result)
+          return new MlRespPayload().errorPayload(e.message, 400)
+
+      }catch (e){
+        return new MlRespPayload().errorPayload(e.message, 400)
+      }
+
+      return new MlRespPayload().successPayload("Service Card Created Successfully", 200);
+    }
+
+    updateServiceLedger(serviceId, context){
     }
 }
 

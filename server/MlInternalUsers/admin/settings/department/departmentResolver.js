@@ -170,25 +170,37 @@ MlResolver.MlQueryResolver['fetchMoolyaBasedDepartmentRoles'] = (obj, args, cont
     return resp;
 }
 
+/**
+ * fetching all and specific departments based on cluster and subchapter for both
+ * @moduleRoles and
+ * @moduleBackedusers
+ * */
 MlResolver.MlQueryResolver['fetchNonMoolyaBasedDepartment'] = (obj, args, context, info) => {
-  // /**data population based on login showing */
-  // let userDetails = mlDBController.findOne('users', {_id:context.userId}, context)
-  // let query= {};
-  // if(userDetails && userDetails.profile && userDetails.profile.isMoolya)
-  //   query = {subChapter: args.subChapter}
-  // else
-  //   query = {subChapter:{$in:['all', args.subChapter]}}
-  /**fetching all and specific departments based on cluster and subchapter*/
-  let resp = mlDBController.find('MlDepartments', {
-    $and: [
-      {"depatmentAvailable.cluster": {$in: ["all", args.clusterId]},isActive:true},
-      {
+  let query = {}
+  if (args.clusterId) {
+    query = {
+      $and: [
+        {"depatmentAvailable.cluster": {$in: ["all", args.clusterId]}, isActive: true},
+        {"depatmentAvailable": {$elemMatch: {subChapter: {$in: ['all', args.subChapter]}}}},
+      ]
+    }
+  }
+  else{
+    let subChapter = mlDBController.findOne('MlSubChapters', {_id: args.subChapter}, context) || {}
+    //todo://need to check isActive condition in elem-match also   after writing the ETL in all instances
+    query = {
+      $and: [{isActive: true}, {
         "depatmentAvailable": {
-          $elemMatch: {subChapter:{$in:['all', args.subChapter]}}
+          $elemMatch: {
+            subChapter: {$in: ['all', args.subChapter]},
+            cluster: {$in: ["all", subChapter.clusterId]}         //, isActive: true
+          }
         }
-      },
-    ]
-  }, context).fetch()
+      }]
+    }
+  }
+
+  let resp = mlDBController.find('MlDepartments', query, context).fetch()
   return resp;
 }
 

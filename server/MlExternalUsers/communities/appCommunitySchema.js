@@ -18,7 +18,7 @@ let appCommunitySchema = `
     
     type Query{
         fetchCommunitiesFromDef:[appCommunities]
-        fetchAllCommunitiesFromDef: [appCommunities]
+        
     }
 `
 
@@ -27,7 +27,13 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], appCommunitySchema]
 
 let supportedApi = [
   {api: 'fetchCommunitiesFromDef', userAction:"READ", actionName:'READ', resource: "COMMUNITY", isAppWhiteList:true},
-  {api: 'fetchAllCommunitiesFromDef', userAction:"READ", actionName:'READ', resource: "COMMUNITY", isAppWhiteList:true},
+
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)
+
+/**
+ * removed dependency
+ * */
+// fetchAllCommunitiesFromDef: [appCommunities]
+// {api: 'fetchAllCommunitiesFromDef', userAction:"READ", actionName:'READ', resource: "COMMUNITY", isAppWhiteList:true},

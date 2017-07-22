@@ -128,7 +128,12 @@ export default class MlActionComponent extends Component {
         imagefield:'/images/act_select_icon.png',
         actionName:'view',
         iconClass:'fa fa-eye'
-      }
+      },
+      {
+        actionName: 'preview',
+        displayName:'Preview',
+        iconClass: 'fa fa-window-maximize'
+      },
     ]
 
 

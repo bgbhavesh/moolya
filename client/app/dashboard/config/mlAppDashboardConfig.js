@@ -97,10 +97,11 @@ export const mlDashboardMapConfig=new MlAppViewer({
                   data{
                    ...on Users{
                           _id,
-                          profile:profile{isActive}                      
                           lat:latitude
                           lng:longitude
                           text:communityCode
+                          isActive:isActive
+                          name:name
                       }
                    }                                                                                                     
                 }
@@ -138,6 +139,7 @@ export const mlDashboardListConfig=new MlAppViewer({
                           profile{
                             isActive,
                           }
+                          isActive
                       }
                    }                                                                                                     
                 }

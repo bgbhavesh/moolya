@@ -60,7 +60,7 @@ export default class MlBeSpokeListView extends Component {
     }
   }
 
-  serviceDetails(details){
+  serviceInfo(details){
     console.log(details)
     this.setState({serviceDetails:details})
   }
@@ -109,7 +109,7 @@ render(){
               </div>)})}
         </div> :""}
           {this.state.showBeSpoke?<FunderCreateServicesView saveServiceDetails={this.saveServiceDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>:""}
-          {this.state.showService?<MlAppServiceManageSchedule viewMode={true} viewingMode={this.props.viewingMode?this.props.viewingMode: false} editingMode={this.props.editingMode?this.props.editingMode:false} serviceId={this.state.serviceId} profileId={this.state.profileId} serviceDetails={this.serviceDetails.bind(this)} bookService={this.bookService.bind(this)}/>:""}
+          {this.state.showService?<MlAppServiceManageSchedule viewMode={true} viewingMode={this.props.viewingMode?this.props.viewingMode: false} editingMode={this.props.editingMode?this.props.editingMode:false} serviceId={this.state.serviceId} profileId={this.state.profileId} serviceInfo={this.serviceInfo.bind(this)} bookService={this.bookService.bind(this)}/>:""}
           {this.state.showBeSpokeService?<FunderCreateServicesView beSpokeDetails={this.state.beSpokeServices}/> :""}
           {this.state.bookingStatus?<FunderAboutView serviceDetails={this.state.serviceDetails}/>:""}
           </div>

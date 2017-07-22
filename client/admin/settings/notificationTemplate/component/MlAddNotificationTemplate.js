@@ -10,6 +10,7 @@ import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidat
 import MlLoader from '../../../../commons/components/loader/loader'
 import _ from 'underscore';
 import Select from 'react-select';
+import Preview from '../component/Preview';
 class MlAddNotificationTemplate extends React.Component {
   constructor(props) {
     super(props);
@@ -62,6 +63,13 @@ class MlAddNotificationTemplate extends React.Component {
     this.setState({type:val.value})
   }
 
+  templateContent(actionConfig,handlerCallback){
+    var tempContent=this.refs.content.value||'';
+    if(handlerCallback) {//to handle the popover
+      handlerCallback({content:tempContent});
+    }
+  }
+
   render() {
     let types=[
       {value: 'email', label: 'Email'},
@@ -81,6 +89,24 @@ class MlAddNotificationTemplate extends React.Component {
         handler: async(event) => {
           this.props.handler(" ");
           FlowRouter.go("/admin/settings/notificationTemplateList")
+        }
+      },
+      {
+        showAction: true,
+        actionName: 'preview',
+        hasPopOver: true,
+        popOverTitle: 'Preview',
+        placement: 'top',
+        target: 'preview',
+        popOverComponent: <Preview />,
+        handler: this.templateContent.bind(this),
+        actionComponent: function (props) {
+          return <div className={props.activeClass} id={props.actionName}>
+            <div onClick={props.onClickHandler} className={props.activesubclass} data-toggle="tooltip"
+                 title={props.actionName} data-placement="top" id={props.target}>
+              <span className={props.iconClass}></span>
+            </div>
+          </div>;
         }
       }
     ]

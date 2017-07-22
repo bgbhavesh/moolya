@@ -19,7 +19,8 @@ let externalUser = `
         name: String,
         clusterName:String,
         communityCode : String,
-        profile:Profile
+        profile:Profile,
+        isActive:Boolean
     }
     type Profile{
       isExternaluser:Boolean,

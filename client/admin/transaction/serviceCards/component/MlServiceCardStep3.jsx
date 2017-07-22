@@ -103,7 +103,7 @@ export default class MlServiceCardStep3 extends React.Component{
    * @return {XML}
    */
   getAttachmentsList() {
-    const {serviceTermAndCondition, attachments, saveDetails} = this.props;
+    const {attachments} = this.props.data;
     const attachmentDetails = attachments && attachments.length > 0 ?
       attachments.map(function(value , index){
         return(
@@ -145,7 +145,6 @@ export default class MlServiceCardStep3 extends React.Component{
       saveService,
       onChangeCheckBox,
       onChangeValue } = this.props.data;
-    let that = this;
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >

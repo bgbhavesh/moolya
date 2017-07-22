@@ -19,6 +19,7 @@ const MlAppViewer = class {
     this.buildQueryOptions = options.buildQueryOptions;
     this.fetchCenter = options.fetchCenter;
     this.fetchCenterHandler = options.fetchCenterHandler;
+    this.mapMarkerComponent = options.mapMarkerComponent;
     this.viewComponent = options.viewComponent;
     this.graphQlQuery = options.graphQlQuery;
     this.queryOptions=options.queryOptions;

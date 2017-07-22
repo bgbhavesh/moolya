@@ -115,16 +115,16 @@ class MlAppServiceSelectTask extends Component{
                   { data.activities && data.activities.map((activity, index) => {
                     return (
                       <div className="swiper-slide funding_list list_block notrans" key={index}>
-                        <p className="online">Online</p>
-                        <span>Duration: <FontAwesome name='pencil'/></span><br />
+                        <p className="online">{activity.mode}</p>
+                        <span>Duration:</span><br />
                         <div className="form-group">
                           <label><input type="text" className="form-control inline_input"
-                                        value={data.duration.hours || 0}/> Hours
+                                        value={data.duration.hours || 0} disabled /> Hours
                                  <input type="text" className="form-control inline_input"
-                                        value={data.duration.minutes || 0}/> Mins
+                                        value={data.duration.minutes || 0} disabled /> Mins
                           </label>
                         </div>
-                        <h3>{activity}</h3>
+                        <h3>{activity.displayName}</h3>
                       </div>
                     )
                   })}
@@ -199,7 +199,7 @@ class MlAppServiceSelectTask extends Component{
                                         onSelect={(value) => optionsBySelectService(value)} />*/}
                         </div>
                         <div className="form-group">
-                          <label>Total number of Sessions <input className="form-control inline_input"  value={tasks.noOfSession || ''}  /> </label>
+                          <label>Total number of Sessions <input className="form-control inline_input"  value={tasks.noOfSession || ''} disabled /> </label>
                         </div>
                         <div className="form-group">
                           <label>Duration: &nbsp; <input type="text" className="form-control inline_input"  value={tasks.duration.hours || 0} disabled /> Hours <input type="text" className="form-control inline_input" value={tasks.duration.minutes || 0} disabled /> Mins </label>

@@ -107,7 +107,7 @@ const mlProcessTableConfig=new MlViewer.View({
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "processName", title: "Process",dataSort:true},
-    {dataField: "industrieNames", title:"Industry",dataSort:true},
+    {dataField: "industryNames", title:"Industry",dataSort:true},
     {dataField: "professionNames", title:"Profession",dataSort:true,customComponent:professionFormatter},
     {dataField: "clusterNames", title: "Cluster",dataSort:true,customComponent:clusterFormatter},
     {dataField: "stateNames", title: "State",dataSort:true,customComponent:stateFormatter},
@@ -162,7 +162,7 @@ const mlProcessTableConfig=new MlViewer.View({
                         communities
                         communityNames
                         industries
-                        industrieNames
+                        industryNames
                         professions
                         professionNames
                         clusters

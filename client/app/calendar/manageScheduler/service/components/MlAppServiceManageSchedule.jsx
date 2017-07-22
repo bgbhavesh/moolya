@@ -40,6 +40,7 @@ export default class MlAppServiceManageSchedule extends Component {
         duration: {}
       },
       finalAmount: 0,
+      prevFinalAmount: 0,
       serviceTask: {
         selectedTaskDetails: {
           displayName: '',
@@ -65,8 +66,8 @@ export default class MlAppServiceManageSchedule extends Component {
       {value: 'Daily', label: 'Daily'},
       {value: 'Monthly', label: 'Monthly'}
     ];
-    this.profileId = FlowRouter.getParam('profileId') || this.props.profileId;
-    this.serviceId = FlowRouter.getQueryParam('id')|| this.props.serviceId;
+    this.profileId = this.props.profileId?this.props.profileId:FlowRouter.getParam('profileId');
+    this.serviceId = this.props.serviceId?this.props.serviceId:FlowRouter.getQueryParam('id');
     this.getServiceDetails = this.getServiceDetails.bind(this);
     this.saveService = this.saveService.bind(this);
     this.onChangeFormField = this.onChangeFormField.bind(this);
@@ -123,7 +124,8 @@ export default class MlAppServiceManageSchedule extends Component {
       facilitationCharge,
       taxStatus,
       serviceTask,
-      finalAmount
+      finalAmount,
+      prevFinalAmount
     } = this.state;
     let steps = [
       {
@@ -176,6 +178,7 @@ export default class MlAppServiceManageSchedule extends Component {
         component: <MlAppServicePayment servicePayment={servicePayment}
                                         taxStatus={taxStatus}
                                         finalAmount={finalAmount}
+                                        prevFinalAmount={prevFinalAmount}
                                         viewMode={this.props.viewMode}
                                         getServiceDetails={this.getServiceDetails}
                                         facilitationCharge={facilitationCharge}
@@ -185,6 +188,7 @@ export default class MlAppServiceManageSchedule extends Component {
                                         checkPromoStatus={this.checkPromoStatus}
                                         checkDiscountStatus={this.checkDiscountStatus}
                                         saveService={this.saveService}
+                                        serviceId={this.props.serviceId}
                                         bookService={this.props.bookService}/>,
 
         icon: <span className="ml ml-payments"></span>
@@ -194,6 +198,10 @@ export default class MlAppServiceManageSchedule extends Component {
     return steps;
   }
 
+  /**
+   * Method :: getTaskDetailsForService
+   * Desc :: Get the tasks for service card eligibility
+   */
   async getTaskDetailsForService() {
     let {serviceTask} = this.state;
     if (this.profileId) {
@@ -281,7 +289,7 @@ export default class MlAppServiceManageSchedule extends Component {
    * @returns Void
    */
   async getServiceDetails() {
-    let {serviceBasicInfo, finalAmount, clusterData, serviceTask, service, tasks, serviceTermAndCondition, attachments, servicePayment, taxStatus, facilitationCharge} = this.state;
+    let {serviceBasicInfo, finalAmount, prevFinalAmount, clusterData, serviceTask, service, tasks, serviceTermAndCondition, attachments, servicePayment, taxStatus, facilitationCharge} = this.state;
     if (this.serviceId) {
       service = await fetchServiceActionHandler(this.serviceId);
       if (service) {
@@ -304,6 +312,7 @@ export default class MlAppServiceManageSchedule extends Component {
           community: service.community
         };
         finalAmount = service.finalAmount;
+        prevFinalAmount = service.finalAmount;
         tasks = _.cloneDeep(service.tasks) || [];
         tasks.sessions = _.cloneDeep(service.tasks.sessions) || [];
         serviceTask.serviceOptionTasks = [];
@@ -375,7 +384,8 @@ export default class MlAppServiceManageSchedule extends Component {
       facilitationCharge: facilitationCharge,
       servicePayment: servicePayment,
       taxStatus: taxStatus,
-      finalAmount: finalAmount
+      finalAmount: finalAmount,
+      prevFinalAmount: prevFinalAmount
     }, () => {
       this.getUserProfile();
     });
@@ -445,7 +455,14 @@ export default class MlAppServiceManageSchedule extends Component {
    * @returns Void
    */
   async saveService(isRedirectWithList) {
-    let {clusters, tasks, finalAmount, clusterName, chapterName, stateName, communitiesName, serviceBasicInfo, serviceTask, service, serviceTermAndCondition, servicePayment, facilitationCharge} = this.state;
+    let {clusters, tasks, finalAmount, prevFinalAmount, clusterName, chapterName, stateName, communitiesName, serviceBasicInfo, serviceTask, service, serviceTermAndCondition, servicePayment, facilitationCharge} = this.state;
+    if (servicePayment.isDiscount && isRedirectWithList) {
+      this.errorMsg = '';
+      this.paymentValidate();
+      if (this.errorMsg) {
+        return false;
+      }
+    }
     if (chapterName) {
       let cities = [];
       chapterName.map((data) => {
@@ -551,7 +568,7 @@ export default class MlAppServiceManageSchedule extends Component {
       services.termsAndCondition = _.cloneDeep(serviceTermAndCondition);
     }
     services.payment = servicePayment;
-    services.finalAmount = finalAmount || 0;
+    services.finalAmount = finalAmount || servicePayment.tasksDerived;
     services.facilitationCharge = facilitationCharge;
     if (!this.serviceId) {
       const resp = await createServiceActionHandler(services);
@@ -593,12 +610,16 @@ export default class MlAppServiceManageSchedule extends Component {
    * Desc :: Check the eligibility
    */
   checkDiscountEligibility(event) {
-    let {servicePayment, finalAmount} = this.state;
+    let {servicePayment, finalAmount, facilitationCharge, prevFinalAmount} = this.state;
     servicePayment.discountValue = 0;
     servicePayment.isDiscount = !event.target.checked;
     if (!servicePayment.isDiscount) {
       servicePayment.discountType = '';
-      finalAmount = 0;
+      if (facilitationCharge.amount > 0) {
+        finalAmount = prevFinalAmount;
+      } else {
+        finalAmount = servicePayment.tasksDerived;
+      }
     }
     this.setState({
       servicePayment: servicePayment,
@@ -607,39 +628,74 @@ export default class MlAppServiceManageSchedule extends Component {
   }
 
   /**
+   * Validate the payment based on discount
+   * @return {boolean}
+   */
+  paymentValidate() {
+    let {servicePayment, finalAmount, prevFinalAmount, facilitationCharge} = this.state;
+    this.errorMsg = '';
+    if(servicePayment.tasksDerived === '' || servicePayment.tasksDerived === 'undefined' || servicePayment.tasksDerived === null ){
+      this.errorMsg = 'Task derived amount is required';
+      toastr.error(this.errorMsg);
+      return false;
+    }
+    switch (servicePayment.discountType) {
+      case 'amount':
+        if (parseFloat(servicePayment.discountValue) > parseFloat(servicePayment.tasksDerived)) {
+          this.errorMsg = 'Amount must be equal or less than the task derived amount'
+        }
+        break;
+      case 'percent':
+        if (parseFloat(servicePayment.discountValue) > 100) {
+          this.errorMsg = 'Percent must be equal or less than 100'
+        }
+        break;
+      default:
+      // do nothing
+    }
+    if (this.errorMsg) {
+      toastr.error(this.errorMsg);
+      return false;
+    }
+  }
+  /**
    * Method :: calculateDiscounts
    * Desc :: Calculate the discount as per discount status
    */
   calculateDiscounts(event) {
-    let {servicePayment, finalAmount} = this.state;
-    finalAmount = 0;
-    servicePayment.discountValue = 0;
+    let {servicePayment, finalAmount, prevFinalAmount, facilitationCharge} = this.state;
+    finalAmount = prevFinalAmount;
     if (servicePayment.isDiscount) {
+      servicePayment.discountValue = event.target.value;
       switch (servicePayment.discountType) {
         case 'amount':
-          if (parseFloat(event.target.value) >= 0) {
-            servicePayment.discountValue = event.target.value;
+          if (parseInt(event.target.value) >= 0) {
             finalAmount = parseInt(servicePayment.tasksDerived) - parseInt(servicePayment.discountValue);
-            this.setState({
-              servicePayment: servicePayment,
-              finalAmount: finalAmount
-            });
+            if (facilitationCharge.amount > 0) {
+              let prevAmount = parseInt(facilitationCharge.amount) + parseInt(servicePayment.tasksDerived);
+              finalAmount += prevAmount;
+            }
           }
           break;
         case 'percent':
           if (parseFloat(event.target.value) >= 0) {
-            servicePayment.discountValue = event.target.value;
             let percentageAmmount = (parseInt(servicePayment.tasksDerived) * parseInt(servicePayment.discountValue)) / 100;
             finalAmount = parseInt(servicePayment.tasksDerived) - percentageAmmount;
           }
-          this.setState({
-            servicePayment: servicePayment,
-            finalAmount: finalAmount
-          });
+          if (facilitationCharge.amount > 0) {
+            let prevAmount = parseInt(servicePayment.tasksDerived) + (parseInt(facilitationCharge.amount) * parseInt(servicePayment.tasksDerived) / 100);
+            finalAmount += prevAmount;
+          }
           break;
         default:
         // do nothing
       }
+      this.setState({
+        servicePayment: servicePayment,
+        finalAmount: finalAmount
+      }, () => {
+        this.paymentValidate(); // check for payment validation
+      });
     } else {
       this.setState({servicePayment: servicePayment, finalAmount: finalAmount});
     }
@@ -650,9 +706,13 @@ export default class MlAppServiceManageSchedule extends Component {
    * Desc :: Check the discount as per discount eligibility
    */
   checkDiscountStatus(event) {
-    let {servicePayment, facilitationCharge, finalAmount } = this.state;
+    let {servicePayment, facilitationCharge, finalAmount, prevFinalAmount } = this.state;
     servicePayment.discountValue = 0;
-    finalAmount = 0;
+    if (facilitationCharge.amount > 0) {
+      finalAmount = prevFinalAmount;
+    } else {
+      finalAmount = servicePayment.tasksDerived;
+    }
     if (servicePayment.isDiscount) {
       servicePayment.discountType = event.target.id;
     }

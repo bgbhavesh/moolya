@@ -6,6 +6,7 @@ import mlSms from './mlSms';
 import MlDBController from './mlDBController';
 import MlTransactionsHandler from '../../server/commons/mlTransactionsLog';
 import passwordUtil from "./passwordUtil";
+import NotificationTemplateEngine from "../commons/mlTemplateEngine"
 
 var fromEmail = Meteor.settings.private.fromEmailAddr;
 export default MlAccounts=class MlAccounts {
@@ -82,8 +83,15 @@ export default MlAccounts=class MlAccounts {
     emailOptions.from=fromEmail;
     emailOptions.to=address;
     emailOptions.subject="Welcome to moolya !";
+    let regObj = {
+      "path" : verificationLink,
+      "firstName" : user&&user.registrationInfo&&user.registrationInfo.firstName?user.registrationInfo.firstName:"",
+      "contactNumber" : "+91-40-4672 5725 /Ext",
+      "hours" : 48,
+    }
+    let notificationEmailContent = NotificationTemplateEngine.fetchTemplateContent("EML_User_activation_mailer","email",regObj)
     if (emailOptions&&emailOptions.emailContentType==="html") {
-      emailOptions.html=emailContent;
+      emailOptions.html=notificationEmailContent&&notificationEmailContent.content?notificationEmailContent.content:"";
       Meteor.setTimeout(function () {
         mlEmail.sendHtml(emailOptions);
       }, 2 * 1000);
@@ -333,13 +341,18 @@ export default MlAccounts=class MlAccounts {
     context.url="https://mymoolya.com";
     let token = Random.secret();
     let res = mlDBController.update('users', user._id, { 'services.password.reset.token': token }, {$set:true}, context);
+    let regObj = {
+      "firstName" : user&&user.profile&&user.profile.firstName?user.profile.firstName:"",
+      "path" : Meteor.absoluteUrl('reset')+'/'+token
+    }
+    let notificationEmailContent = NotificationTemplateEngine.fetchTemplateContent("EML_forgot__reset_password_mailer","email",regObj)
     if(res){
       var emailOptions={};
       //emailContent= MlAccounts.greet("To verify your account email,",user,Meteor.absoluteUrl('reset')+'/'+token);
       emailOptions.from=fromEmail;
       emailOptions.to=email;
       emailOptions.subject="Forgot Password !";
-      emailOptions.html=Meteor.absoluteUrl('reset')+'/'+token;
+      emailOptions.html=notificationEmailContent&&notificationEmailContent.content?notificationEmailContent.content:"";
       Meteor.setTimeout(function () {
         mlEmail.sendHtml(emailOptions);
       }, 2 * 1000);

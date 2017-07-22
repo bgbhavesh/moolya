@@ -1,6 +1,7 @@
 import MlResolver from '../../../../commons/mlResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 import _ from 'lodash';
+import _underscore from 'underscore'
 
 MlResolver.MlMutationResolver['createDocument'] = (obj, args, context, info) => {
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
@@ -105,7 +106,179 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
     args.document.updatedBy = createdBy;
     args.document.updatedDate = new Date();
 
+    let existingDoc = MlDocumentMapping.findOne({documentId:args.documentId});
+
     let result= MlDocumentMapping.update({documentId:args.documentId}, {$set: args.document});
+    if(result){
+
+      /**
+      * @ if allowableformat is changed when updating Document Mapping
+      * @ Allowbale format in process documents need to be updated with reference to document id
+      * @ DocumentId-Primary key
+       * @ Model-ProcessMapping
+      */
+      let allowableFormatNewArray = args.document&&args.document.allowableFormat?args.document.allowableFormat:[]
+      let allowableFormatExistingArray = existingDoc&&existingDoc.allowableFormat?existingDoc.allowableFormat:[]
+      var isAllowableFormat_same = allowableFormatExistingArray.length == allowableFormatNewArray.length && allowableFormatExistingArray.every(function(element, index) {
+          return element === allowableFormatNewArray[index];
+      });
+      let updatedAllowableFormat;let updatedKYC;let updatedDocTypes;let updateStatus
+      if(!isAllowableFormat_same){
+        updatedAllowableFormat = mlDBController.update('MlProcessMapping', {
+          'processDocuments': {
+            $exists: true,
+            $elemMatch: {
+               'documentId': existingDoc._id&&existingDoc._id
+            }
+          }
+        }, {
+          "processDocuments.$.allowableFormat": args.document.allowableFormat,
+        }, {$set: true}, context)
+      }
+
+
+      /**
+       * @ if kyc Category is removed when updating Document Mapping
+       * @ Particular kyc category need to be dropped from process documents with reference to document id
+       * @ DocumentId-Primary key
+       * @ Model-ProcessMapping
+       */
+      let kycCategoryNewArray = args.document&&args.document.kycCategory?args.document.kycCategory:[]
+      let kycCategoryExistingArray = existingDoc&&existingDoc.kycCategory?existingDoc.kycCategory:[]
+      var isKYC_same = kycCategoryExistingArray.length == allowableFormatNewArray.length && kycCategoryExistingArray.every(function(element, index) {
+        return element === kycCategoryNewArray[index];
+      });
+
+      if(!isKYC_same){
+
+        let updatedKYCDocs;
+
+       /* if(kycCategoryNewArray&&kycCategoryExistingArray&&kycCategoryNewArray.length>kycCategoryExistingArray.length){
+          updatedKYCDocs = _underscore.difference(kycCategoryNewArray,kycCategoryExistingArray)
+        }else */
+        if(kycCategoryNewArray&&kycCategoryExistingArray&&kycCategoryNewArray.length<kycCategoryExistingArray.length){
+          updatedKYCDocs = _underscore.difference(kycCategoryExistingArray,kycCategoryNewArray)
+        }else{
+          updatedKYCDocs = _underscore.difference(kycCategoryExistingArray,kycCategoryNewArray)
+        }
+        if(updatedKYCDocs && updatedKYCDocs.length>0){
+          updatedKYC = mlDBController.update('MlProcessMapping', {
+            'processDocuments': {
+              $exists: true,
+              $elemMatch: {
+                'documentId': existingDoc._id&&existingDoc._id
+              },
+            }
+          }, {
+            'processDocuments': {'kycCategoryId' : {$in: updatedKYCDocs }}
+          }, {$pull: true}, context)
+        }
+/*
+        if(!updatedKYC){
+          console.log("////////////////////////////////////")
+        }*/
+
+      }
+
+      /**
+       * @ if document type is removed when updating Document Mapping
+       * @ Particular document type need to be dropped from process documents with reference to document id
+       * @ DocumentId-Primary key
+       * @ Model-ProcessMapping
+       */
+      let documentTypeNewArray = args.document&&args.document.documentType?args.document.documentType:[]
+      let documentTypeExistingArray = existingDoc&&existingDoc.documentType?existingDoc.documentType:[]
+      var isDocType_same = documentTypeExistingArray.length == documentTypeNewArray.length && documentTypeExistingArray.every(function(element, index) {
+          return element === documentTypeNewArray[index];
+      });
+
+      if(!isDocType_same){
+        let updatedDocTypes = [];
+        if(documentTypeNewArray&&documentTypeExistingArray&&documentTypeNewArray.length<documentTypeExistingArray.length){
+          updatedDocTypes = _underscore.difference(documentTypeExistingArray,documentTypeNewArray)
+        }else if(documentTypeNewArray&&documentTypeExistingArray&&documentTypeNewArray.length==documentTypeExistingArray.length){
+          updatedDocTypes = _underscore.difference(documentTypeExistingArray,documentTypeNewArray)
+        }
+        if(updatedDocTypes && updatedDocTypes.length>0){
+          updatedDocTypes = mlDBController.update('MlProcessMapping', {
+            'processDocuments': {
+              $exists: true,
+              $elemMatch: {
+                'documentId': existingDoc._id&&existingDoc._id,
+                'isMandatory':false,
+                'isActive':false,
+              }
+            }
+          }, {
+            'processDocuments': {'docTypeId' : {$in: updatedDocTypes }}
+          }, {$pull: true}, context)
+        }
+
+        if(!updatedDocTypes){
+          let updateFail = MlDocumentMapping.update({documentId:args.documentId}, {$set: existingDoc})
+          if(updateFail){
+            let code = 401;
+            let response = new MlRespPayload().errorPayload("Cannot update as existing processdocuments are mandatory ", code);
+            return response;
+          }
+
+        }
+      }
+
+      /**
+       * @ if current document mapping status is changed
+       * @ Status of process document need to be changed wrt documentid
+       * @ DocumentId-Primary key
+       * @ Model-ProcessMapping
+       */
+
+      let documentStatusNewArray = args.document&&args.document.isActive
+      let documentStatusExistingArray = existingDoc.isActive
+
+      if(documentStatusNewArray != documentStatusExistingArray){
+
+        updateStatus = mlDBController.update('MlProcessMapping', {
+          'processDocuments': {
+            $exists: true,
+            $elemMatch: {
+              'documentId': existingDoc._id&&existingDoc._id
+            }
+          }
+        }, {
+          "processDocuments.$.isActive": args.document.isActive,
+        }, {$set: true}, context)
+
+      }
+
+
+      /**
+       * @ if current document mapping allowable size is changed
+       * @ Allowable size of process documents need to be changed wrt documentid
+       * @ DocumentId-Primary key
+       * @ Model-ProcessMapping
+       */
+
+      let documentSizeNewArray = args.document&&args.document.allowableMaxSize || ""
+      let documentSizeExistingArray = existingDoc.allowableMaxSize || ""
+
+      if(documentSizeNewArray != documentSizeExistingArray){
+
+        updateStatus = mlDBController.update('MlProcessMapping', {
+          'processDocuments': {
+            $exists: true,
+            $elemMatch: {
+              'documentId': existingDoc._id&&existingDoc._id
+            }
+          }
+        }, {
+          "processDocuments.$.allowableMaxSize": args.document.allowableMaxSize,
+        }, {$set: true}, context)
+
+      }
+
+
+
+    }
     let code = 200;
     let response = new MlRespPayload().successPayload(result, code);
     return response

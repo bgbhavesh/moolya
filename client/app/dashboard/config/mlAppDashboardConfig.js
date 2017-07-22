@@ -7,6 +7,7 @@ import gql from 'graphql-tag'
 // import MlMapFooter from '../../../admin/dashboard/component/MlMapFooter';
 import MlDashboardMapView from '../components/MlAppDashboardMapView'
 import MlDashboardListView from '../components/MlAppDashboardListView'
+import MlAppMapMarker from '../components/MlAppMapMarker'
 // import {getExternalUserContext} from '../../../commons/getExternalUserContext';
 
 export const mlDashboardMapConfig=new MlAppViewer({
@@ -37,6 +38,7 @@ export const mlDashboardMapConfig=new MlAppViewer({
   //   return zoom;
   // },
   viewComponent:<MlDashboardMapView params={this.params}/>,
+    mapMarkerComponent:<MlAppMapMarker/>,
 
   // actionConfiguration:[
   //   {
@@ -95,10 +97,11 @@ export const mlDashboardMapConfig=new MlAppViewer({
                   data{
                    ...on Users{
                           _id,
-                          profile:profile{isActive}                      
                           lat:latitude
                           lng:longitude
                           text:communityCode
+                          isActive:isActive
+                          name:name
                       }
                    }                                                                                                     
                 }
@@ -136,6 +139,7 @@ export const mlDashboardListConfig=new MlAppViewer({
                           profile{
                             isActive,
                           }
+                          isActive
                       }
                    }                                                                                                     
                 }

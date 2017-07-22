@@ -620,7 +620,7 @@ let CoreModules = {
 
       data[index].communityNames = communityNames || [];
       data[index].professionNames = professionNames || [];
-      data[index].industrieNames = industryNames || [];
+      data[index].industryNames = industryNames || [];
       data[index].clusterNames = clusterNames || [];
       data[index].stateNames = stateNames || [];
       data[index].chapterNames = chapterNames || [];
@@ -634,7 +634,7 @@ let CoreModules = {
     return {totalRecords: totalRecords, data: data};
   },
   MlServiceCardsTransactionRepo: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
-    var service = MlService.find({}).fetch()
+    var service = MlService.find({'isCurrentVersion': true}).fetch()
     var data = [];
     var profileIds = []
     service.map(function(details) {

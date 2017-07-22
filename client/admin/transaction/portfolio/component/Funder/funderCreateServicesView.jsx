@@ -8,11 +8,7 @@ import _ from "lodash";
 
 
 var Select = require('react-select');
-var options = [
-  {value: 'Audio', label: 'Audio'},
-  {value: 'Video', label: 'Video'},
-  {value: 'MeetUp', label: 'MeetUp'}
-];
+
 export default class  FunderCreateServicesView extends Component {
   constructor(props){
     super(props)
@@ -84,6 +80,19 @@ export default class  FunderCreateServicesView extends Component {
     this.setState({data: details}, function () {
       this.sendDataToParent()
     })
+    if(name === "expectedInput"){
+      this.setState({expectedInput: e.target.value})
+    }else if(name === "about"){
+      this.setState({about: e.target.value})
+    }else if(name === "expectedOutput"){
+      this.setState({expectedOutput: e.target.value})
+    }else if(name === "noOfSession"){
+      this.setState({session: e.target.value})
+    }else if(name === "hour"){
+      this.setState({hour: e.target.value})
+    }else if(name === "minute"){
+      this.setState({minute: e.target.value})
+    }
   }
 
   handleDuration(e) {
@@ -157,6 +166,22 @@ export default class  FunderCreateServicesView extends Component {
     console.log(details)
     this.setState({data: details}, function () {
       this.setState({selectedConversationType: temp})
+      this.sendDataToParent()
+    })
+  }
+
+
+
+
+
+  onFrequencySelected(selectedFrequency) {
+    let details = this.state.data;
+    // let details = this.state.data;
+    details = _.omit(details, ["sessionFrequency"]);
+    details = _.extend(details, {["sessionFrequency"]: selectedFrequency.value});
+    console.log(details)
+    this.setState({data: details}, function () {
+      this.setState({selectedFrequencyType: selectedFrequency})
       this.sendDataToParent()
     })
   }
@@ -245,6 +270,19 @@ export default class  FunderCreateServicesView extends Component {
   }
 
   render() {
+
+    var options = [
+      {value: 'Audio', label: 'Audio'},
+      {value: 'Video', label: 'Video'},
+      {value: 'MeetUp', label: 'MeetUp'}
+    ];
+
+    let frequencyOptions=[
+      {value: 'Daily', label: 'Daily'},
+      {value: 'Weekly', label: 'Weekly'},
+      {value: 'Monthly', label: 'Monthly'}
+    ];
+
     let that = this;
     let industryTypeQuery = gql`
     query{
@@ -252,8 +290,8 @@ export default class  FunderCreateServicesView extends Component {
     }
     `
 
-    let picsArray = this.state.responsePic || []
-    return (
+    let attach = this.props.beSpokeDetails?this.props.beSpokeDetails[0].attachments:[{}] || this.state.attachmentDocs || [{}];
+    return(
       <div>
         <div className="tab_wrap_scroll">
           <div className="col-md-6 nopadding-left">
@@ -271,14 +309,14 @@ export default class  FunderCreateServicesView extends Component {
                 </div>
                 <div className="clearfix"/>
                 <div className="form-group">
-                  <textarea className="form-control float-label" placeholder="About" name="about" onBlur={this.handleBlur.bind(this)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].about:""}></textarea>
+                  <textarea className="form-control float-label" placeholder="About" name="about" onBlur={this.handleBlur.bind(this)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].about:this.state.about}></textarea>
                 </div>
                 <div className="form-group">
-                  <label>Required number of Sessions <input type="text" name="noOfSession" onChange={(e)=>this.handleBlur(e)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].noOfSessions?this.props.beSpokeDetails[0].noOfSessions: this.state.data.session?parseInt(this.state.data.session):this.state.data.session:""}  className="form-control inline_input medium_in"/> </label>
+                  <label>Required number of Sessions <input type="number" min="0"  name="noOfSession" onChange={(e)=>this.handleBlur(e)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].noOfSessions: this.state.session}  className="form-control inline_input medium_in"/> </label>
                 </div>
                 <div className="form-group">
-                  <label>Duration &nbsp; <input type="text" name="hour" onBlur={(e)=>this.handleDuration(e)} value={this.state.data.hour?parseInt(this.state.data.hour):this.state.data.hour} className="form-control inline_input"/> Hours
-                    <input  name="minute" onBlur={(e)=>this.handleDuration(e)} value={this.state.data.minute?parseInt(this.state.data.minute):this.state.data.minute} type="text" className="form-control inline_input"/> Mins </label>
+                  <label>Duration &nbsp; <input type="number"  min="0"  name="hour" onChange={(e)=>this.handleBlur(e)} value={this.state.hour?parseInt(this.state.hour):this.state.data.hour} className="form-control inline_input"/> Hours
+                    <input type="number" name="minute" min="0"  onChange={(e)=>this.handleBlur(e)} value={this.state.minute?parseInt(this.state.minute):this.state.minute} className="form-control inline_input"/> Mins </label>
                 </div>
                 {/*<div className="form-group">*/}
                 {/*<textarea className="form-control float-label" placeholder="Expected input"></textarea>*/}
@@ -297,24 +335,22 @@ export default class  FunderCreateServicesView extends Component {
                                 selectedValue={that.state.selectedIndustryType} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].industryId:"" || that.state.selectedIndustryType}/>
                 </div>
                 <div className="form-group">
-                  <textarea className="form-control float-label" placeholder="Expected input" name="expectedInput" onBlur={this.handleBlur.bind(this)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].expectedInput:""}></textarea>
+                  <textarea className="form-control float-label" placeholder="Expected input" name="expectedInput" onChange={this.handleBlur.bind(this)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].expectedInput:this.state.expectedInput}></textarea>
                 </div>
                 <div className="form-group">
-                  <div className="form-group">
-                    <Select name="form-field-name"  multi={true} options={options} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].conversation:"" || that.state.selectedConversationType} placeholder='Conversation Type' onChange={that.onConversationSelected.bind(that)} />
-                  </div>
+                  <Select name="form-field-name"  multi={true} options={options} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].conversation:"" || that.state.selectedConversationType} placeholder='Conversation Type' onChange={that.onConversationSelected.bind(that)} />
                 </div>
                 <div className="ml_btn" style={{'textAlign':'center'}}>
                   <div className="save_btn" onClick={this.saveBeSpoke.bind(this)}>Save</div>
                   <div className="cancel_btn">Cancel</div>
                 </div>
-                {/*<div className="form-group">*/}
-                {/*<select className="form-control float-label" placeholder="Frequency">*/}
-                {/*<option>Video</option>*/}
-                {/*</select>*/}
-                {/*</div>*/}
                 <div className="form-group">
-                  <textarea className="form-control float-label" placeholder="Expected Output" name="expectedOutput" onBlur={this.handleBlur.bind(this)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].expectedOutput:""}></textarea>
+                  <div className="form-group">
+                    <Select className="form-field-name" options={frequencyOptions} placeholder="Frequency" value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].sessionFrequency:"" || that.state.selectedFrequencyType} onChange={that.onFrequencySelected.bind(that)}></Select>
+                  </div>
+                </div>
+                <div className="form-group">
+                  <textarea className="form-control float-label" placeholder="Expected Output" name="expectedOutput" onChange={this.handleBlur.bind(this)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].expectedOutput:this.state.expectedOutput}></textarea>
                 </div>
                 <div className="clearfix"/>
                 {attachments}
@@ -324,53 +360,44 @@ export default class  FunderCreateServicesView extends Component {
         </div>
       </div>
     )
-    const pictures = picsArray.map(function(image){
-      return (
-      <div className="upload-image">
-        <img src={image} id="output"/>
-      </div>
-      )
-    })
-
-    let attach = this.props.beSpokeDetails?this.props.beSpokeDetails[0].attachments:[{}] || this.state.attachmentDocs || [{}];
     const attachments = attach.map(function(details, index){
       return(
-        <div className="panel panel-default step5">
-          <div className="panel-heading">Attachments if any ?
-            <div className="pull-right block_action">
-              <div className="fileUpload upload_file_mask">
-                &nbsp;&nbsp;<span className="ml ml-plus" onClick={that.addComponent.bind(that, index)} ></span>
+          <div className="panel panel-default step5">
+            <div className="panel-heading">Attachments if any ?
+              <div className="pull-right block_action">
+                <div className="fileUpload upload_file_mask">
+                  &nbsp;&nbsp;<span className="ml ml-plus" onClick={that.addComponent.bind(that, index)} ></span>
+                </div>
+              </div>
+              <div className="pull-right">
+                {/*style={{'marginTop': '-15px'}}*/}
+                <input type="text" placeholder="Document Name" value={details.documentName?details.documentName:" "} onChange={that.documentName.bind(that, index)}/>
               </div>
             </div>
-            <div className="pull-right">
-              {/*style={{'marginTop': '-15px'}}*/}
-              <input type="text" placeholder="Document Name" value={details.documentName?details.documentName:" "} onChange={that.documentName.bind(that, index)}/>
-            </div>
-          </div>
-          <div className="panel-body nopadding">
-            <div className="upload-file-wrap">
-              <input type="file"   id="fileinput"  onChange={that.onFileUpload.bind(that, index)} multiple/>
-              {/*<input type="file" name="fileinput[]" id="fileinput" className="inputfile inputfile-upload"*/}
-                     {/*data-multiple-caption="{count} files selected" accept="image/*" onchange="loadFile(event)"*/}
-                     {/*multiple/>*/}
+            <div className="panel-body nopadding">
+              <div className="upload-file-wrap">
+                <input type="file"   id="fileinput"  onChange={that.onFileUpload.bind(that, index)} multiple/>
+                {/*<input type="file" name="fileinput[]" id="fileinput" className="inputfile inputfile-upload"*/}
+                {/*data-multiple-caption="{count} files selected" accept="image/*" onchange="loadFile(event)"*/}
+                {/*multiple/>*/}
 
-              <label for="fileinput">
-                <figure>
-                  <i className="fa fa-upload" aria-hidden="true"></i>
-                </figure>
-              </label>
-            </div>
-            {details.fileUrl ? details.fileUrl.map(function(image){
-              return(
-              <div className="upload-image">
-                <img src={image} id="output"/>
+                <label for="fileinput">
+                  <figure>
+                    <i className="fa fa-upload" aria-hidden="true"></i>
+                  </figure>
+                </label>
               </div>
-              )
-            }): [] }
-            <div className="upload-image"></div>
+              {details.fileUrl ? details.fileUrl.map(function(image){
+                return(
+                  <div className="upload-image">
+                    <img src={image} id="output"/>
+                  </div>
+                )
+              }): [] }
+              <div className="upload-image"></div>
+            </div>
           </div>
-        </div>
-      )
-    })
+        )})
+
   }
 };

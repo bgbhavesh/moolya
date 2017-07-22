@@ -26,22 +26,23 @@ MlResolver.MlQueryResolver['fetchPortfolioDetailsByUserId'] = (obj, args, contex
   }
 }
 
+/**
+ * request for portfolio creation
+ * */
 MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, info) => {
   let user;
   let portfolioDetails = args.portfoliodetails
   let ret;
   try {
       if (portfolioDetails && portfolioDetails.userId && portfolioDetails.communityType) {
-          user = MlPortfolioDetails.findOne({"$and": [{'userId': portfolioDetails.userId}, {'communityType': portfolioDetails.communityType}]})
+        /** introducing profile Id based on registration in portfolio from users and creating portfolio based on profileId*/
+        let userDetails = mlDBController.findOne('users', {_id: portfolioDetails.userId}, context)
+        if(userDetails && userDetails.profile && userDetails.profile.externalUserProfiles){
+          let reqProfile = _.find(userDetails.profile.externalUserProfiles, {registrationId: portfolioDetails.registrationId})
+          portfolioDetails['profileId'] = reqProfile.profileId || ''
+        }
+          user = MlPortfolioDetails.findOne({"$and": [{'userId': portfolioDetails.userId}, {'communityType': portfolioDetails.communityType}, {profileId:portfolioDetails.profileId}]})
           if (!user || portfolioDetails.communityType == 'Ideators') {
-              // ret = MlPortfolioDetails.insert({...portfolioDetails})
-            let user = mlDBController.findOne('users', {_id: portfolioDetails.userId}, context)
-
-            /** introducing profile Id based on registration in portfolio from users*/
-            if(user && user.profile && user.profile.externalUserProfiles){
-              let reqProfile = _.find(user.profile.externalUserProfiles, {registrationId: portfolioDetails.registrationId})
-              portfolioDetails['profileId'] = reqProfile.profileId || ''
-            }
               ret = mlDBController.insert('MlPortfolioDetails', portfolioDetails, context)
               if(ret){
                   switch (portfolioDetails.communityType){

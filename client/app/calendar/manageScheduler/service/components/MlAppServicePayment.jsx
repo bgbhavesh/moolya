@@ -85,7 +85,7 @@ export default class MlAppServicePayment extends React.Component{
                     {servicePayment.discountType === 'amount' ?
                       <input className="form-control inline_input"
                              onChange={(event) => calculateDiscounts(event)}
-                             value={servicePayment.discountValue}/> : <div></div>}
+                             defaultValue={servicePayment.discountValue}/> : <div></div>}
                   </label>
                 </div>
                 <div className="input_types">
@@ -96,7 +96,7 @@ export default class MlAppServicePayment extends React.Component{
                   <label htmlFor="percent"><span><span></span></span>
                     Percentage{servicePayment.discountType === 'percent'?
                       <input className="form-control inline_input" onChange={(event) => calculateDiscounts(event)}
-                             value={servicePayment.discountValue}/>:<div></div>}
+                             defaultValue={servicePayment.discountValue}/>:<div></div>}
                   </label>
                 </div>
                 <br className="brclear"/>
@@ -130,22 +130,31 @@ export default class MlAppServicePayment extends React.Component{
                 <label>Enter facilitation charges &nbsp; &nbsp; &nbsp; &nbsp; </label>
                 <div className="input_types">
                   <input id="facilitationamount" type="radio" name="facilitationamount"
+                         checked={facilitationCharge.type === 'amount' ? true : false}
                          value="Amount" disabled/>
                   <label htmlFor="facilitationamount"><span><span></span></span>Amount Rs
-                    <input className="form-control inline_input" disabled value={facilitationCharge.amount} />
+                    <input className="form-control inline_input"
+                           disabled
+                           value={facilitationCharge.type === 'amount' ? facilitationCharge.amount : ''} />
                   </label>
                 </div>
                 <div className="input_types">
-                  <input id="facilitationpercent" type="radio" name="facilitationpercent" value="Percentage" disabled/>
+                  <input id="facilitationpercent"
+                         type="radio"
+                         name="facilitationpercent"
+                         checked={facilitationCharge.type === 'percent' ? true : false}
+                         value="Percentage" disabled/>
                   <label htmlFor="radio2"><span><span></span></span>Percentage
-                    <input className="form-control inline_input" disabled value={facilitationCharge.percentage} />
+                    <input className="form-control inline_input"
+                           disabled
+                           value={facilitationCharge.type === 'percent' ? facilitationCharge.amount : ''} />
                   </label>
                 </div>
                 <br className="brclear"/>
               </div>
               <div className="form-group">
                 <label>Derived amount Rs. <input className="form-control inline_input medium_in"
-                                                 value={this.props.finalAmount} readOnly="readOnly"/>
+                                                 value={this.props.finalAmount} disabled />
                 </label>
               </div>
             </form>

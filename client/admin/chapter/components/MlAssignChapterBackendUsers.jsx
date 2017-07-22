@@ -162,7 +162,7 @@ class MlAssignChapterBackendUsers extends React.Component {
     let roles = [];
     let clusterId = this.props.params.clusterId;
     let allRoles = this.state.mlroleDetails;
-    _.each(allRoles, function (item, key) {
+    _.each(allRoles, function (item, key) {   //same cluster content passed to server
       if (item.roleId && item.clusterId == clusterId) {
         roles.push(item)
       }

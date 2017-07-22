@@ -5,11 +5,34 @@ import ScrollArea from 'react-scrollbar';
 // import InlineCalender from '../../../../app/views/inlineCalender';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
+import {fetchTasksInBookingActionHandler} from '../../../../../app/calendar/manageScheduler/task/actions/fetchTaskDetails'
+import {multipartASyncFormHandler} from "../../../../../commons/MlMultipartFormAction";
+import MlAppMyCalendarDayComponent from '../../../../../app/calendar/myCalendar/components/dayComponent'
+var _ = require('lodash');
+import Calender from '../../../../../commons/calendar/calendar'
+
+
+
 // import StepZilla from '../../../../common/components/stepzilla/StepZilla';
 // import Step1 from '../../../../app/views/myprofile/funderProfile/MyAppointment/service';
 // import Step2 from './secondSetp'
+import {bookUserServiceCardActionHandler, userServiceCardPaymentActionHandler} from '../../../../../app/calendar/manageScheduler/service/actions/MlServiceActionHandler'
+
 ;
 export default class FunderAboutView extends React.Component{
+  constructor(props){
+    super(props)
+    this.state={
+      showPaymentDetails: false,
+      tasks:[],
+      imagePreview:"",
+      payment: false
+    }
+    this.getTasks.bind(this);
+    this.imageUpload.bind(this)
+    this.imagesDisplay.bind(this);
+    this.paymentDetails.bind(this);
+  }
   componentDidMount()
   {
     var WinWidth = $(window).width();
@@ -42,15 +65,157 @@ export default class FunderAboutView extends React.Component{
       $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
     }
   }
+
+
+  async bookUserServiceCard() {
+    this.setState({showPaymentDetails: true})
+    console.log(this.state.taskDetails)
+    let taskDetails = this.state.taskDetails
+    const response =  await bookUserServiceCardActionHandler(this.props.serviceDetails._id, taskDetails)
+    console.log(response)
+    this.setState({orderId: response.result})
+    // this.payment(this.state.orderId)
+    return response;
+  }
+
+  payment(){
+    this.setState({payment: true})
+    let paymentDetails={
+      orderId:this.state.orderId,
+      amount:this.props.serviceDetails.payment?this.props.serviceDetails.payment.tasksDerived:0,
+      // data to be populated
+      paymentId: "",
+      paymentMethod:"",
+      currencyCode:""
+    }
+    this.paymentDetails(paymentDetails)
+  }
+
+  async  paymentDetails(paymentDetails){
+    const response  = await userServiceCardPaymentActionHandler(paymentDetails)
+    return response
+  }
+
+  componentWillMount(){
+    let totalIds = [];
+    // this.props.serviceDetails.tasks.map(function(ids){
+    //   totalIds.push(ids.id)
+    // })
+    this.getTasks(totalIds)
+  }
+
+  async getTasks(data){
+    const resp =  await fetchTasksInBookingActionHandler(data)
+    console.log(resp)
+    this.setState({tasks: resp})
+    return resp;
+  }
+
+  imageUpload(id,e){
+    console.log(id)
+    let user = {
+      profile: {
+        InternalUprofile: {moolyaProfile: {profileImage: " "}}
+      }
+    };
+    let file = e.target.files[0];
+    let name = e.target.name;
+    let fileName = e.target.files[0].name;
+    let data ={moduleName: "PROFILE", actionName: "UPDATE", user: user};
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, id, file));
+    return response;
+  }
+
+
+  onFileUploadCallBack(id,file,resp){
+    console.log(resp)
+    if (resp) {
+      let result = JSON.parse(resp)
+        if (result.success) {
+          this.setState({imagePreview: result.result})
+          let ImageObject={
+            fileName: file.name,
+            fileUrl: result.result
+          }
+          this.imagesDisplay(id,this.state.imagePreview,ImageObject);
+        }
+      }
+    }
+
+  imagesDisplay(index, fileUrl, imageObject){
+    let tempTaskImages = this.state.tasks || []
+    let taskImages = _.cloneDeep(tempTaskImages);
+    taskImages.map(function(data, id){
+        if(id === index){
+          if(data.images){
+            data.images.push(fileUrl)
+          }else{
+            let image = []
+            image.push(fileUrl)
+            data.images = image
+          }
+        }
+
+    })
+    let taskDetails = []
+    let images= []
+    this.setState({tasks:taskImages})
+    taskImages.map(function(data, index){
+      images.push(imageObject)
+      let taskObject = {
+        taskId: data._id,
+        documents: images
+      }
+      taskDetails[index] = taskObject;
+    })
+    this.setState({taskDetails:taskDetails})
+    this.assignTaskDetails(taskDetails)
+  }
+
+  assignTaskDetails(taskImages){
+    console.log(taskImages)
+    this.setState({taskDetails: taskImages})
+  }
+
   render(){
-
-    // const steps =
-    //   [
-    //     {name: 'Step1', component: <Step1 />},
-    //     {name: 'Step2', component: <Step2 />}
-    //   ]
-
+    let tasks = this.state.tasks || []
+    let that = this;
+    let totalTasks = tasks.map(function(task, id){
+      return(
+        <div>
+          <div className="panel panel-default uploaded_files">
+            <div className="panel-heading">
+              {task.displayName}
+              <div className="pull-right block_action">
+                <div className="fileUpload upload_file_mask">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="panel panel-default uploaded_files">
+            <div className="panel-heading">
+              {task.displayName}
+              <div className="pull-right block_action">
+                <div className="fileUpload upload_file_mask">
+                  <span className="ml ml-upload"></span>
+                  <input type="file" className="upload_file upload" name="file_source" onChange={that.imageUpload.bind(that, id)}/>
+                </div>
+              </div>
+            </div>
+            <div className="panel-body uploaded_files_swiper" key={id}>
+              <ul className="swiper-wrapper">
+                <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name">
+                  {task.images?task.images.map(function(image, id) {
+                    return (<img src={image} style={{maxWidth: 150}}/>)
+                  }):""}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      )})
     return (
+      !this.state.payment?
       <div>
         <div className="col-md-6 nopadding-left">
           <div className="left_wrap">
@@ -58,8 +223,7 @@ export default class FunderAboutView extends React.Component{
               speed={0.8}
               className="left_wrap"
               smoothScrolling={true}
-              default={true}
-            >
+              default={true}>
               <div className="form_bg">
                 <form>
                   <div className="panel panel-default uploaded_files">
@@ -67,58 +231,16 @@ export default class FunderAboutView extends React.Component{
                       Order Summary
                     </div>
                   </div>
-                  <div className="col-md-3 nopadding-right">
-                    <div className="ml_btn" style={{'textAlign': 'left'}}>
-                      <a href="#" className="save_btn"><FontAwesome name='pencil'/> &nbsp; Change</a>
-                    </div>
-                  </div>
                   <div className="clearfix" />
                   <br />
                   <div className="panel panel-default uploaded_files">
                     <div className="panel-heading">
-                      <label>Service Name : Premium vacation service &nbsp;<span className="ml ml-information"></span></label><br />
-                      <label>Validity : 1Month till 17/08/2017 11:59:26 [IST]</label>
+                      <label>Service Name : {that.props.serviceDetails.displayName}<span className="ml ml-information"></span></label><br />
+                      <label>Validity : {that.props.serviceDetails.validTill}</label>
                     </div>
                   </div>
-
-
                   <br />
-                  <div className="panel panel-default uploaded_files">
-                    <div className="panel-heading">
-                      Introduction Task
-                      <div className="pull-right block_action">
-                        <div className="fileUpload upload_file_mask">
-                          <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-                            <input type="file" className="upload_file upload" name="file_source" /></a>
-                        </div>
-                      </div>
-
-                    </div>
-                    <div className="panel-body uploaded_files_swiper">
-                      <ul className="swiper-wrapper">
-                        <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img src="/images/sub_default.jpg"/></li>
-                      </ul>
-                      <p className="show-information" style={{'display':'none'}}>text</p>
-                    </div>
-                  </div>
-                  <div className="panel panel-default uploaded_files">
-                    <div className="panel-heading">
-                      Company Registration Task
-                      <div className="pull-right block_action">
-                        <div className="fileUpload upload_file_mask">
-                          <a href="javascript:void(0);"><span className="ml ml-upload"></span>
-                            <input type="file" className="upload_file upload" name="file_source" /></a>
-                        </div>
-                      </div>
-
-                    </div>
-                    <div className="panel-body uploaded_files_swiper">
-                      <ul className="swiper-wrapper">
-                        <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img src="/images/sub_default.jpg"/></li>
-                      </ul>
-                      <p className="show-information" style={{'display':'none'}}>text</p>
-                    </div>
-                  </div>
+                    {totalTasks}
                   <table className="table">
                     <thead>
                     <tr>
@@ -128,68 +250,72 @@ export default class FunderAboutView extends React.Component{
                     </tr>
                     </thead>
                     <tbody>
-
                     <tr>
                       <td>Actual Amount</td>
-                      <td>: 5,000 INR</td>
+                      <td>: {that.props.serviceDetails.payment?that.props.serviceDetails.payment.tasksAmount:0}</td>
                     </tr>
                     <tr>
-                      <td>Offer Amount</td>
-                      <td>: 500 INR</td>
+                      <td>Discount Amount</td>
+                      <td>: {that.props.serviceDetails.payment?that.props.serviceDetails.payment.tasksDiscount:0}</td>
                     </tr>
-                    <tr>
-                      <td>Tax</td>
-                      <td>: 200 INR</td>
-                    </tr>
+                    {/*<tr>*/}
+                      {/*<td>Tax</td>*/}
+                      {/*<td>: 200 INR</td>*/}
+                    {/*</tr>*/}
                     <tr>
                       <td>Total Amount</td>
-                      <td>: 5,700 INR</td>
+                      <td>{that.props.serviceDetails.payment?that.props.serviceDetails.payment.tasksDerived:0}</td>
                     </tr>
                     <tr>
                       <td>&nbsp;</td>
                       <td>
                         <div className="ml_btn" style={{'textAlign': 'left'}}>
-                          <a href="#" className="save_btn">Book</a>
-                          <a href="#" className="cancel_btn">Cancel</a>
+                            <a href="#" className="save_btn" onClick={that.bookUserServiceCard.bind(that)}>Book</a><a href="#" className="cancel_btn">Cancel</a>
                         </div>
                       </td>
                     </tr>
-
                     </tbody>
                   </table>
-
                 </form>
               </div>
             </ScrollArea>
           </div>
         </div>
-        <div className="col-md-6 nopadding-right">
+        {this.state.showPaymentDetails?<div className="col-md-6 nopadding-right">
           <div className="left_wrap">
             <ScrollArea
               speed={0.8}
               className="left_wrap"
               smoothScrolling={true}
-              default={true}
-            >
+              default={true}>
               <div className="form_bg">
                 <form>
                   <div className="panel panel-default uploaded_files">
                     <div className="panel-heading">
                       Payment Mode
                     </div>
-
                   </div>
                   <h1>
                     Payment Gateway Here
-                    <div className="ml_btn" style={{'textAlign':'center'}}><div className="save_btn">Proceed</div> <div className="cancel_btn">Cancel</div> </div>
+                    <div className="ml_btn" style={{'textAlign':'center'}}><a href="#" className="save_btn" onClick={this.payment.bind(this)}>Proceed</a> <a href="#" className="cancel_btn">Cancel</a> </div>
                   </h1>
                 </form>
               </div>
             </ScrollArea>
           </div>
-        </div>
-
+        </div>:""}
+      </div>:
+        <div className="app_main_wrap" style={{'overflow':'auto'}}>
+          <div className="app_padding_wrap">
+          <Calender
+            dayBackgroundComponent={<MlAppMyCalendarDayComponent /> }
+            dayData=""
+            onNavigate=""
+            date=""
+          />
       </div>
+          </div>
+
     )
   }
 };

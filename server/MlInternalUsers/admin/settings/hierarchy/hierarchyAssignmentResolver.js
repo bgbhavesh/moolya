@@ -64,7 +64,7 @@ MlResolver.MlMutationResolver['updateHierarchyAssignment'] = (obj, args, context
     if (hierarchyRoles.length >= 1) {
       let oldAssignments = hierarchyAssignment.teamStructureAssignment;  //db
       /**if old assigment then update of the team structure assigment*/
-      if (oldAssignments) {
+      if (!_.isEmpty(oldAssignments)) {
         oldAssignments.map(function (role, oldkey) {
           hierarchyRoles.map(function (newRole, key) {
             if ((newRole.roleId == role.roleId) && newRole.isAssigned) {

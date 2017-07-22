@@ -5,6 +5,8 @@ import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewe
 import React from 'react';
 import gql from 'graphql-tag'
 import moment from 'moment'
+import Preview from '../component/Preview';
+import _ from 'underscore';
 function createdateFormatter (data){
   let createdDate=data&&data.data&&data.data.createdDate;
   if(createdDate){
@@ -23,6 +25,13 @@ function updatedateFormatter (data){
     return <div></div>
   }
 }
+
+function unescapeContent(data){
+  let contentData=data&&data.data&&data.data.content?data.data.content:'';
+      contentData=_.unescape(contentData);
+    return <div>{contentData}</div>;
+}
+
 const mlNotificationTemplateTableConfig=new MlViewer.View({
   name:"notificationTemplate",
   module:"notificationTemplate",//Module name for filter.
@@ -40,7 +49,7 @@ const mlNotificationTemplateTableConfig=new MlViewer.View({
     {dataField: "type", title: "Type",dataSort:true},
     {dataField: "title", title: "Title",dataSort:true},
     {dataField: "isHtmlContent", title: "Html Content",dataSort:true},
-    {dataField: "content", title: "Content",dataSort:true},
+    {dataField: "content", title: "Content",dataSort:true,customComponent:unescapeContent},
     {dataField: "updatedBy", title: "Updated By",dataSort:true},
     {dataField: "updatedAt", title: "UpdatedDate And Time",dataSort:true,customComponent:updatedateFormatter},
     {dataField: "isActive", title: "Status",dataSort:true}
@@ -70,6 +79,23 @@ const mlNotificationTemplateTableConfig=new MlViewer.View({
         }else {
           FlowRouter.go("/admin/settings/addNotificationTemplate")
         }
+      }
+    },
+    {
+      showAction: true,
+      actionName: 'preview',
+      hasPopOver: true,
+      popOverTitle: 'Preview',
+      placement: 'top',
+      target: 'preview',
+      popOverComponent: <Preview />,
+      actionComponent: function (props) {
+        return <div className={props.activeClass} id={props.actionName}>
+          <div onClick={props.onClickHandler} className={props.activesubclass} data-toggle="tooltip"
+               title={props.actionName} data-placement="top" id={props.target}>
+            <span className={props.iconClass}></span>
+          </div>
+        </div>;
       }
     }
   ],

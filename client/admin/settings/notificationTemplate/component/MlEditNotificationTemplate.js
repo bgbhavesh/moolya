@@ -99,7 +99,7 @@ class MlEditNotificationTemplate extends React.Component{
   templateContent(actionConfig,handlerCallback){
     var tempContent=this.refs.content.value||'';
     if(handlerCallback) {//to handle the popover
-      handlerCallback(tempContent);
+      handlerCallback({content:tempContent});
     }
   }
   render(){

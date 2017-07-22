@@ -10,7 +10,7 @@ export default class Preview extends React.Component {
 
 
   render() {
-    var src=this.props.data||'';
+    var src=this.props.data&&this.props.data.content?this.props.data.content:'';
     src=_.unescape(src);
     return (
       <form>

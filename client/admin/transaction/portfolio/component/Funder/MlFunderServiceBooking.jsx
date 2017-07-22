@@ -305,20 +305,17 @@ export default class FunderAboutView extends React.Component{
           </div>
         </div>:""}
       </div>:
-        <div>
-          <div className="col-md-6 nopadding-left">
         <div className="app_main_wrap" style={{'overflow':'auto'}}>
-        <div className="app_padding_wrap">
+          <div className="app_padding_wrap">
           <Calender
             dayBackgroundComponent={<MlAppMyCalendarDayComponent /> }
             dayData=""
             onNavigate=""
             date=""
           />
-        </div>
       </div>
           </div>
-        </div>
+
     )
   }
 };

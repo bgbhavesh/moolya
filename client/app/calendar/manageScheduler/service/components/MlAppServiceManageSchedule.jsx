@@ -66,8 +66,8 @@ export default class MlAppServiceManageSchedule extends Component {
       {value: 'Daily', label: 'Daily'},
       {value: 'Monthly', label: 'Monthly'}
     ];
-    this.profileId = FlowRouter.getParam('profileId') || this.props.profileId;
-    this.serviceId = FlowRouter.getQueryParam('id')|| this.props.serviceId;
+    this.profileId = this.props.profileId?this.props.profileId:FlowRouter.getParam('profileId');
+    this.serviceId = this.props.serviceId?this.props.serviceId:FlowRouter.getQueryParam('id');
     this.getServiceDetails = this.getServiceDetails.bind(this);
     this.saveService = this.saveService.bind(this);
     this.onChangeFormField = this.onChangeFormField.bind(this);
@@ -366,7 +366,6 @@ export default class MlAppServiceManageSchedule extends Component {
           });
           clusterData.community = communities;
         }
-        this.props.serviceDetails(service)
       }
     }
     var validTillDate = Date.parse(serviceBasicInfo.validTill);

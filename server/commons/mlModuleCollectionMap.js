@@ -89,6 +89,7 @@ MlModuleCollectionMap['MlUserServiceCards'] = 'SUBSCRIPTIONS';
 MlModuleCollectionMap['MlActivity'] = 'OFFICE'; //need to clarify the module name
 MlModuleCollectionMap['MlService'] = 'OFFICE'; //need to clarify the module name
 MlModuleCollectionMap['MlTask'] = 'OFFICE'; //need to clarify the module name
+MlModuleCollectionMap['MlNotificationTemplates'] = 'NOTIFICATIONTEMPLATE';
 
 module.exports=  MlModuleCollectionMap;
 

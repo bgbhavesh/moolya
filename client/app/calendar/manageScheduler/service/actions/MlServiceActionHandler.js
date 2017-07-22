@@ -280,7 +280,12 @@ export async function fetchTaskDetailsForServiceCard (profileId, serviceId) {
               hours
               minutes
             }
-            activities
+            activities {
+              id: _id
+              mode
+              name
+              displayName
+            }
           }
           attachments {
              name

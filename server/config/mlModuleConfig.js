@@ -71,6 +71,7 @@ let modules = [
     'interaction',
     'actions',
     'serviceCards',
+    'notificationtemplate'
   ];
 
 // Meteor.startup(function () {

@@ -193,6 +193,12 @@ import  MlChapterSettingsTabHistoryList from '../../admin/settings/chapterSettin
 import MlCommunitySettingsTabHistoryList from '../../admin/settings/communitySettingsAuditLog/components/MlCommunitySettingsTabHistory'
 import MlsubChapterSettingsTabHistoryList from '../../admin/settings/subChapterSettingsAuditLog/components/MlsubChapterSettingsTabHistory'
 import MlsubChapterNonMoolyaTabHistoryList from '../../admin/settings/subChapterNon-MoolyaSettingsAuditLog/components/MlsubChapterNon-MoolyaSettingsTabHistory'
+
+
+import MlNotificationTemplateList from '../../admin/settings/notificationTemplate/component/MlNotificationTemplateList';
+import MlAddNotificationTemplate from '../../admin/settings/notificationTemplate/component/MlAddNotificationTemplate';
+import MlEditNotificationTemplate from '../../admin/settings/notificationTemplate/component/MlEditNotificationTemplate';
+
 adminSection.route('/settings/departmentsList', {
   name: 'settings_DepartmentList',
   action(){
@@ -1170,4 +1176,26 @@ adminSection.route('/settings/subChapterNonMoolya/history', {
   }
 });
 
+/** Notification Template routes Start*/
+adminSection.route('/settings/notificationTemplateList', {
+  name: 'settings_NotificationTemplateList',
+  action(){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'notificationTemplate'}} />, adminContent:<MlNotificationTemplateList/>})
+  }
+})
+
+adminSection.route('/settings/addNotificationTemplate', {
+  name: 'settings_AddNotificationTemplate',
+  action(){
+    mount(AdminLayout,{adminContent:< MlAddNotificationTemplate />})
+  }
+});
+adminSection.route('/settings/editNotificationTemplate/:id', {
+  name: 'settings_EditNotificationTemplate',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditNotificationTemplate config={params.id} />})
+  }
+});
+
+/** Notification Template routes End*/
 //  @End

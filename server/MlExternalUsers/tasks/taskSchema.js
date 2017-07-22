@@ -62,7 +62,40 @@
       isActive: Boolean
    }
 
-
+   type TaskSession{
+       sessionId : String
+       duration : Duration
+       activities: [TaskActivity]
+   }
+ 
+   type TaskActivity {
+     _id: String
+     mode: String
+     name: String
+     displayName: String
+   }
+   type ServiceTask {
+      _id: String
+      userId: String
+      profileId: String
+      name: String
+      displayName: String
+      isInternal: Boolean
+      isExternal: Boolean
+      note: String
+      noOfSession: Int
+      sessionFrequency: String
+      duration: Duration
+      isServiceCardEligible: Boolean
+      session: [TaskSession]
+      attachments: [Attachments]
+      payment: Payment
+      facilitationCharge: FacilitationCharge
+      createdAt: Date
+      updatedAt: Date
+      isActive: Boolean
+   }
+   
    input session{
        sessionId : String
        duration : duration
@@ -121,7 +154,7 @@
           fetchTask(taskId:String):Task
           fetchTaskDetails(name: String):Task
           fetchTaskDetailsAdmin(name: [String]): [Task]
-          fetchTaskDetailsForServiceCard(profileId:String, serviceId: String):[Task]
+          fetchTaskDetailsForServiceCard(profileId:String, serviceId: String):[ServiceTask]
           fetchTaskDetailsForAdminServiceCard(profileId:String, serviceId: String):[Task]
           fetchTasksInBooking(id: [String]): [Task]
    }

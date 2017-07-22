@@ -9,7 +9,10 @@ MlResolver.MlQueryResolver['fetchCommunitiesFromDef'] = (obj, args, context, inf
     return appCommunities;
 }
 
-MlResolver.MlQueryResolver['fetchAllCommunitiesFromDef'] = (obj, args, context, info) =>{
-  let appCommunities = mlDBController.find('MlCommunityDefinition', {}, context).fetch();
-  return appCommunities;
-}
+/**
+ * removed this code dependency
+ * */
+// MlResolver.MlQueryResolver['fetchAllCommunitiesFromDef'] = (obj, args, context, info) =>{
+//   let appCommunities = mlDBController.find('MlCommunityDefinition', {}, context).fetch();
+//   return appCommunities;
+// }

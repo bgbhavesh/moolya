@@ -85,7 +85,7 @@ export default class MlAppServicePayment extends React.Component{
                     {servicePayment.discountType === 'amount' ?
                       <input className="form-control inline_input"
                              onChange={(event) => calculateDiscounts(event)}
-                             value={servicePayment.discountValue}/> : <div></div>}
+                             defaultValue={servicePayment.discountValue}/> : <div></div>}
                   </label>
                 </div>
                 <div className="input_types">
@@ -96,7 +96,7 @@ export default class MlAppServicePayment extends React.Component{
                   <label htmlFor="percent"><span><span></span></span>
                     Percentage{servicePayment.discountType === 'percent'?
                       <input className="form-control inline_input" onChange={(event) => calculateDiscounts(event)}
-                             value={servicePayment.discountValue}/>:<div></div>}
+                             defaultValue={servicePayment.discountValue}/>:<div></div>}
                   </label>
                 </div>
                 <br className="brclear"/>

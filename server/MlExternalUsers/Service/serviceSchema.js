@@ -308,6 +308,8 @@ let service=`
         createBeSpokeService(Services:service):response
         updateService(serviceId:String,Services:service):response
         updateServiceAdmin(serviceId:String,Services:service):response
+        createServiceCardOrder(serviceId: String!, taskDetails: [tasks]):response
+        updateServiceCardOrder(userServiceCardPaymentInfo: userServiceCardPaymentInfo):response
    }
 `;
 
@@ -322,9 +324,12 @@ let supportedApi = [
   {api:'getServiceBasedOnProfileId',  actionName:'READ',    moduleName:"SERVICECARD", isAppWhiteList:true},
   {api:'getTaskFromService',          actionName:'READ',    moduleName:"SERVICECARD", isAppWhiteList:true},
   {api:'fetchBeSpokeServices',        actionName:'READ',    moduleName:"SERVICECARD", isAppWhiteList:true},
-  {api:'createService',               userAction:"CREATESERVICE", actionName:'CREATE',  resourceName:"SERVICECARD"},
-  {api:'updateService',               userAction:"UPDATESERVICE", actionName:'UPDATE',  resourceName:"SERVICECARD"},
-  {api:'updateServiceAdmin',          actionName:'UPDATE',  moduleName:"SERVICECARD"}
+  {api:'createService',               userAction:"CREATESERVICEDEF", actionName:'CREATE',  resourceName:"SERVICECARD"},
+  {api:'updateService',               userAction:"UPDATESERVICEDEF", actionName:'UPDATE',  resourceName:"SERVICECARD"},
+  {api:'updateServiceAdmin',          actionName:'UPDATE',  moduleName:"SERVICECARD"},
+  {api:'createServiceCardOrder',      userAction:"CREATESERVICEORDER", actionName:'CREATE',  resourceName:"SERVICECARD"},
+  {api:'updateServiceCardOrder',      userAction:"UPDATESERVICEORDER", actionName:'UPDATE',  resourceName:"SERVICECARD"}
+
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

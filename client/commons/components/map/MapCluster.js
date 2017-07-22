@@ -53,7 +53,7 @@ const markerDataConfig = lifecycle({
     this.setState({markers:this.props.data||[],mapProps:{center:this.props.center,zoom:this.props.zoom}});
   },
   componentWillUpdate(nextProps) {
-    console.log(nextProps);
+    // console.log(nextProps);
     if(!compareQueryOptions(this.props.data,nextProps.data)){
       this.setState({markers:nextProps.data,mapProps:{center:nextProps.center,zoom:nextProps.zoom}});
     }

@@ -179,6 +179,32 @@ MlResolver.MlMutationResolver['updateService'] = (obj, args, context, info) => {
   // }
 }
 
+MlResolver.MlMutationResolver['createServiceCardOrder'] = (obj, args, context, info) => {
+  return mlServiceCardRepo.createServiceCardOrder(args, context)
+}
+
+MlResolver.MlMutationResolver['updateServiceCardOrder'] = (obj, args, context, info) =>
+{
+    var ret = mlServiceCardRepo.updateServiceCardOrder(args, context)
+    if(!ret.success){
+      return ret;
+    }
+
+    let serviceOrder = mlDBController.findOne('MlScOrder', {transactionId: userServiceCardPaymentInfo.orderId}, context);
+    if(!serviceOrder || (serviceOrder && !serviceOrder.serviceId))
+      return new MlRespPayload().errorPayload("Error In Fetching Service Order", 400);
+
+    ret = mlServiceCardRepo.createServiceCard(serviceOrder.serviceId, context)
+    if(!ret.success)
+      return ret;
+
+    ret = mlServiceCardRepo.createServiceLedger(context)
+    if(!ret.success)
+      return ret;
+
+    return;
+}
+
 // This Resolver need to move to internal users as it should undergo to authorization
 MlResolver.MlMutationResolver['updateServiceAdmin'] = (obj, args, context, info) => {
   if (!_.isEmpty(args.Services)) {

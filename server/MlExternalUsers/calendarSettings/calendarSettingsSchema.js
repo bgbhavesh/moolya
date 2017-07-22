@@ -52,7 +52,7 @@ let calendarSettingSlot=`
   }
   
   type DayCalendar {
-    date:Int,
+    date:Date,
     status: Int
   }
   

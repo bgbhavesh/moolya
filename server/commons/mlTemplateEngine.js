@@ -21,7 +21,8 @@ export default NotificationTemplateEngine= class NotificationTemplateEngine{
       content=template(obj);
     }catch(e){
     }
-
+    //unescape the content
+     content= _.unescape(content);
     return content;
   }
 

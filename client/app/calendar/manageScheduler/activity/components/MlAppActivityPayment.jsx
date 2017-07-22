@@ -104,25 +104,55 @@ export default class Step4 extends React.Component{
   }
 
   /**
+   * Validate the payment based on discount
+   * @return {boolean}
+   */
+  paymentValidate() {
+    let paymentData = this.state.paymentData;
+    this.errorMsg = '';
+    if(paymentData.amount === '' || typeof paymentData.amount === 'undefined' || paymentData.amount === null ){
+      this.errorMsg = 'Payable amount is required';
+      toastr.error(this.errorMsg);
+      return false;
+    }
+    switch (paymentData.discountType) {
+      case 'amount':
+        if (parseFloat(paymentData.discountValue) > parseFloat(paymentData.amount)) {
+          this.errorMsg = 'Amount must be equal or less than the payable amount'
+        }
+        break;
+      case 'percent':
+        if (parseFloat(paymentData.discountValue) > 100) {
+          this.errorMsg = 'Percent must be equal or less than 100'
+        }
+        break;
+      default:
+      // do nothing
+    }
+  }
+  /**
    * Method :: calculateDerivedAmount
    * Desc   :: calculate derived amount for activity
    * @returns Void
    */
   calculateDerivedAmount(){
     let paymentData = this.state.paymentData;
-    if(typeof paymentData.amount == undefined ){
-      return false;
+    this.paymentValidate();
+    if (this.errorMsg) {
+      toastr.error(this.errorMsg);
+    } else {
+      this.errorMsg = '';
+      let derivedAmount = this.state.paymentData.amount ? this.state.paymentData.amount : 0;
+      if(paymentData.isDiscount && paymentData.discountType == "amount") {
+        derivedAmount -= paymentData.discountValue ? paymentData.discountValue : 0 ;
+      } else if (paymentData.isDiscount && paymentData.discountType == "percent") {
+        derivedAmount -= paymentData.discountValue ? ( paymentData.amount / 100 )*paymentData.discountValue : 0 ;
+      }
+      paymentData.derivedAmount = derivedAmount;
+      this.setState({
+        paymentData: paymentData
+      });
     }
-    let derivedAmount = this.state.paymentData.amount ? this.state.paymentData.amount : 0;
-    if(paymentData.isDiscount && paymentData.discountType == "amount") {
-      derivedAmount -= paymentData.discountValue ? paymentData.discountValue : 0 ;
-    } else if (paymentData.isDiscount && paymentData.discountType == "percent") {
-      derivedAmount -= paymentData.discountValue ? ( paymentData.amount / 100 )*paymentData.discountValue : 0 ;
-    }
-    paymentData.derivedAmount = derivedAmount;
-    this.setState({
-      paymentData: paymentData
-    });
   }
 
   /**
@@ -135,8 +165,12 @@ export default class Step4 extends React.Component{
     if(!paymentData.isDiscount){
       delete  paymentData.discountType;
       delete  paymentData.discountValue;
+    } else {
+      this.paymentValidate();
     }
-    this.props.saveActivity({payment:paymentData});
+    if (!this.errorMsg) {
+      this.props.saveActivity({payment:paymentData});
+    }
   }
 
   /**
@@ -162,11 +196,11 @@ export default class Step4 extends React.Component{
               </div>
               <div className="form-group switch_wrap switch_names inline_switch">
                 <label>Is Eligible for discount</label>
-                <span className="state_label">Yes</span><label className="switch nocolor-switch">
+                <span className={this.state.paymentData.isDiscount ? 'state_label acLabel' : 'state_label'}>Yes</span><label className="switch nocolor-switch">
                 <input type="checkbox" checked={ !this.state.paymentData.isDiscount } onChange={this.discountEligibility.bind(this)} />
                 <div className="slider"></div>
               </label>
-                <span className="state_label acLabel">No</span>
+                <span className={this.state.paymentData.isDiscount ? 'state_label' : 'state_label acLabel'}>No</span>
               </div>
               <br className="brclear"/>
               <div className="form-group">

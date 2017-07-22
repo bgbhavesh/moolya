@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from "react";
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import {render} from "react-dom";
-import {fetchCommunitiesHandler} from "../actions/fetchCommunitiesActionHandler";
+import {fetchCommunitiesHandlerReg} from "../actions/fetchCommunitiesActionHandler";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import Moolyaselect from "../../commons/components/MlAppSelectWrapper";
 import {fetchUserDetailsHandler} from "../actions/fetchUserDetails";
@@ -98,7 +98,8 @@ export default class MlAppCommunitiesList extends Component {
   }
 
     async fetchCommunities() {
-        let communities = await fetchCommunitiesHandler();
+        // let communities = await fetchCommunitiesHandler();
+      let communities = await fetchCommunitiesHandlerReg();
         let userCommunity=this.state.communityId
       let status=this.state.status
       if(status=="Approved"){

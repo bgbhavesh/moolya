@@ -12,11 +12,29 @@ export default class MlAppMapMarker extends Component {
 
 
   render() {
-
+    let status = "";
+    if(this.props.text == "IDE"){
+      status = "id"
+    }
+    if(this.props.text == "FUN"){
+      status = "fu"
+    }
+    if(this.props.text == "CMP"){
+      status = "co"
+    }
+    if(this.props.text == "STU"){
+      status = "st"
+    }
+    if(this.props.text == "SPS"){
+      status = "pr"
+    }
+    if(this.props.text == "INS"){
+      status = "in"
+    }
     return (
       <div>
         <div className="map_profiles">
-          <span className="ml fu"></span>
+          <span className={`ml ${status}`}></span>
           <img src="/images/def_profile.png" />
         </div>
       </div>

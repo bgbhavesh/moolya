@@ -227,7 +227,7 @@ class MlServiceCardRepo{
           return new MlRespPayload().errorPayload("Invalid Service", 400);
         }
 
-        let dataToInsert = {
+        var dataToInsert = {
           userId: context.userId,
           profileId: defaultProfile.profileId,
           serviceId: serviceId,
@@ -241,7 +241,7 @@ class MlServiceCardRepo{
           isExpired: false,
           paymentStatus: 'unpaid',
           createdAt: new Date(),
-          taskDetails: payload.taskDetails
+          tasks: service.tasks
         }
         orderNumberGenService.createUserServiceOrderId(dataToInsert);
         result = mlDBController.insert('MlScOrder', dataToInsert, context);

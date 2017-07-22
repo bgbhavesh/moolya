@@ -119,9 +119,9 @@ class MlAppServiceSelectTask extends Component{
                         <span>Duration:</span><br />
                         <div className="form-group">
                           <label><input type="text" className="form-control inline_input"
-                                        value={data.duration.hours || 0}/> Hours
+                                        value={data.duration.hours || 0} disabled /> Hours
                                  <input type="text" className="form-control inline_input"
-                                        value={data.duration.minutes || 0}/> Mins
+                                        value={data.duration.minutes || 0} disabled /> Mins
                           </label>
                         </div>
                         <h3>{activity.displayName}</h3>
@@ -199,7 +199,7 @@ class MlAppServiceSelectTask extends Component{
                                         onSelect={(value) => optionsBySelectService(value)} />*/}
                         </div>
                         <div className="form-group">
-                          <label>Total number of Sessions <input className="form-control inline_input"  value={tasks.noOfSession || ''}  /> </label>
+                          <label>Total number of Sessions <input className="form-control inline_input"  value={tasks.noOfSession || ''} disabled /> </label>
                         </div>
                         <div className="form-group">
                           <label>Duration: &nbsp; <input type="text" className="form-control inline_input"  value={tasks.duration.hours || 0} disabled /> Hours <input type="text" className="form-control inline_input" value={tasks.duration.minutes || 0} disabled /> Mins </label>

@@ -210,7 +210,7 @@ export default class MlAppTaskPayment extends Component {
                   <label>Derived amount Rs. <input className="form-control inline_input medium_in"
                                                    onChange={this.handleNull.bind(this)}
                                                    value={this.state.data.payment.derivedAmount}
-                                                   readOnly="readOnly"/>
+                                                   disabled />
                   </label>
                 </div>
               </form>

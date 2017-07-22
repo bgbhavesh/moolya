@@ -456,6 +456,13 @@ export default class MlAppServiceManageSchedule extends Component {
    */
   async saveService(isRedirectWithList) {
     let {clusters, tasks, finalAmount, prevFinalAmount, clusterName, chapterName, stateName, communitiesName, serviceBasicInfo, serviceTask, service, serviceTermAndCondition, servicePayment, facilitationCharge} = this.state;
+    if (servicePayment.isDiscount && isRedirectWithList) {
+      this.errorMsg = '';
+      this.paymentValidate();
+      if (this.errorMsg) {
+        return false;
+      }
+    }
     if (chapterName) {
       let cities = [];
       chapterName.map((data) => {
@@ -561,7 +568,7 @@ export default class MlAppServiceManageSchedule extends Component {
       services.termsAndCondition = _.cloneDeep(serviceTermAndCondition);
     }
     services.payment = servicePayment;
-    services.finalAmount = finalAmount || 0;
+    services.finalAmount = finalAmount || servicePayment.tasksDerived;
     services.facilitationCharge = facilitationCharge;
     if (!this.serviceId) {
       const resp = await createServiceActionHandler(services);
@@ -611,15 +618,46 @@ export default class MlAppServiceManageSchedule extends Component {
       if (facilitationCharge.amount > 0) {
         finalAmount = prevFinalAmount;
       } else {
-        finalAmount = 0;
+        finalAmount = servicePayment.tasksDerived;
       }
-      this.setState({
-        servicePayment: servicePayment,
-        finalAmount: finalAmount
-      });
     }
+    this.setState({
+      servicePayment: servicePayment,
+      finalAmount: finalAmount
+    });
   }
 
+  /**
+   * Validate the payment based on discount
+   * @return {boolean}
+   */
+  paymentValidate() {
+    let {servicePayment, finalAmount, prevFinalAmount, facilitationCharge} = this.state;
+    this.errorMsg = '';
+    if(servicePayment.tasksDerived === '' || servicePayment.tasksDerived === 'undefined' || servicePayment.tasksDerived === null ){
+      this.errorMsg = 'Task derived amount is required';
+      toastr.error(this.errorMsg);
+      return false;
+    }
+    switch (servicePayment.discountType) {
+      case 'amount':
+        if (parseFloat(servicePayment.discountValue) > parseFloat(servicePayment.tasksDerived)) {
+          this.errorMsg = 'Amount must be equal or less than the task derived amount'
+        }
+        break;
+      case 'percent':
+        if (parseFloat(servicePayment.discountValue) > 100) {
+          this.errorMsg = 'Percent must be equal or less than 100'
+        }
+        break;
+      default:
+      // do nothing
+    }
+    if (this.errorMsg) {
+      toastr.error(this.errorMsg);
+      return false;
+    }
+  }
   /**
    * Method :: calculateDiscounts
    * Desc :: Calculate the discount as per discount status
@@ -628,24 +666,19 @@ export default class MlAppServiceManageSchedule extends Component {
     let {servicePayment, finalAmount, prevFinalAmount, facilitationCharge} = this.state;
     finalAmount = prevFinalAmount;
     if (servicePayment.isDiscount) {
+      servicePayment.discountValue = event.target.value;
       switch (servicePayment.discountType) {
         case 'amount':
           if (parseInt(event.target.value) >= 0) {
-            servicePayment.discountValue = event.target.value;
             finalAmount = parseInt(servicePayment.tasksDerived) - parseInt(servicePayment.discountValue);
             if (facilitationCharge.amount > 0) {
               let prevAmount = parseInt(facilitationCharge.amount) + parseInt(servicePayment.tasksDerived);
               finalAmount += prevAmount;
             }
-            this.setState({
-              servicePayment: servicePayment,
-              finalAmount: finalAmount
-            });
           }
           break;
         case 'percent':
           if (parseFloat(event.target.value) >= 0) {
-            servicePayment.discountValue = event.target.value;
             let percentageAmmount = (parseInt(servicePayment.tasksDerived) * parseInt(servicePayment.discountValue)) / 100;
             finalAmount = parseInt(servicePayment.tasksDerived) - percentageAmmount;
           }
@@ -653,14 +686,16 @@ export default class MlAppServiceManageSchedule extends Component {
             let prevAmount = parseInt(servicePayment.tasksDerived) + (parseInt(facilitationCharge.amount) * parseInt(servicePayment.tasksDerived) / 100);
             finalAmount += prevAmount;
           }
-          this.setState({
-            servicePayment: servicePayment,
-            finalAmount: finalAmount
-          });
           break;
         default:
         // do nothing
       }
+      this.setState({
+        servicePayment: servicePayment,
+        finalAmount: finalAmount
+      }, () => {
+        this.paymentValidate(); // check for payment validation
+      });
     } else {
       this.setState({servicePayment: servicePayment, finalAmount: finalAmount});
     }
@@ -676,7 +711,7 @@ export default class MlAppServiceManageSchedule extends Component {
     if (facilitationCharge.amount > 0) {
       finalAmount = prevFinalAmount;
     } else {
-      finalAmount = 0;
+      finalAmount = servicePayment.tasksDerived;
     }
     if (servicePayment.isDiscount) {
       servicePayment.discountType = event.target.id;

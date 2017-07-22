@@ -115,8 +115,8 @@ class MlAppServiceSelectTask extends Component{
                   { data.activities && data.activities.map((activity, index) => {
                     return (
                       <div className="swiper-slide funding_list list_block notrans" key={index}>
-                        <p className="online">Online</p>
-                        <span>Duration: <FontAwesome name='pencil'/></span><br />
+                        <p className="online">{activity.mode}</p>
+                        <span>Duration:</span><br />
                         <div className="form-group">
                           <label><input type="text" className="form-control inline_input"
                                         value={data.duration.hours || 0}/> Hours
@@ -124,7 +124,7 @@ class MlAppServiceSelectTask extends Component{
                                         value={data.duration.minutes || 0}/> Mins
                           </label>
                         </div>
-                        <h3>{activity}</h3>
+                        <h3>{activity.displayName}</h3>
                       </div>
                     )
                   })}

@@ -11,6 +11,7 @@ import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidat
 import MlLoader from '../../../../commons/components/loader/loader'
 import _ from 'underscore';
 import Select from 'react-select';
+import Preview from '../component/Preview';
 class MlEditNotificationTemplate extends React.Component{
   constructor(props) {
     super(props);
@@ -94,6 +95,13 @@ class MlEditNotificationTemplate extends React.Component{
   optionsBySelectTypes(val){
     this.setState({type:val.value})
   }
+
+  templateContent(actionConfig,handlerCallback){
+    var tempContent=this.refs.content.value||'';
+    if(handlerCallback) {//to handle the popover
+      handlerCallback(tempContent);
+    }
+  }
   render(){
     let types=[
       {value: 'email', label: 'Email'},
@@ -115,6 +123,24 @@ class MlEditNotificationTemplate extends React.Component{
           this.props.handler(" ");
           FlowRouter.go("/admin/settings/notificationTemplateList")
         }
+      },
+      {
+        showAction: true,
+        actionName: 'preview',
+        hasPopOver: true,
+        popOverTitle: 'Preview',
+        placement: 'top',
+        target: 'preview',
+        popOverComponent: <Preview />,
+        handler: this.templateContent.bind(this),
+        actionComponent: function (props) {
+          return <div className={props.activeClass} id={props.actionName}>
+            <div onClick={props.onClickHandler} className={props.activesubclass} data-toggle="tooltip"
+                 title={props.actionName} data-placement="top" id={props.target}>
+              <span className={props.iconClass}></span>
+            </div>
+          </div>;
+        }
       }
     ];
 
@@ -129,6 +155,10 @@ class MlEditNotificationTemplate extends React.Component{
             <div className="col-md-6 nopadding-left">
               <div className="form_bg">
                 <form>
+                  <div className="form-group mandatory">
+                    <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
+                  </div>
+
                   <div className="form-group mandatory">
                     <input type="text" ref="tempCode" readOnly="readOnly" placeholder="Template Code" className="form-control float-label" defaultValue={this.state.data.tempCode}/>
                   </div>
@@ -170,13 +200,13 @@ class MlEditNotificationTemplate extends React.Component{
               <div className="form_bg">
                 <form>
                   <div className="form-group mandatory">
-                    <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
-                  </div>
-
-                  <div className="form-group mandatory">
-                    <textarea style={{'height':'200px'}} ref="content" placeholder="content" className="form-control float-label" defaultValue={contentValue} data-required={true} data-errMsg="Content is Required"></textarea>
+                    <textarea style={{'height':'200px'}} ref="content" placeholder="Content" className="form-control float-label" defaultValue={contentValue} data-required={true} data-errMsg="Content is Required"></textarea>
                   </div>
                 </form>
+                {/* <form>
+                  <iframe srcDoc={contentValue} style={{'width':'100%'}} id="iframeResult" name="iframeResult">
+                  </iframe>
+                </form>*/}
               </div>
             </div>
             <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"

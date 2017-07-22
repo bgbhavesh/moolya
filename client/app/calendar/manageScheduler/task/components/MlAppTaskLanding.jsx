@@ -25,25 +25,51 @@ class MlAppTaskLanding extends Component {
 
   async saveTaskDetails() {
     let sendData = this.state.createData
-    console.log(sendData)
     let taskId = this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id')
     var response;
-    switch (this.state.saveType) {
-      case 'taskCreate': {
-        response = await createTaskActionHandler(sendData)
-        return response
+    this.errorMsg = '';
+    if (sendData.payment && sendData.payment.isDiscount) {
+      if(sendData.payment.amount === '' || typeof sendData.payment.amount === 'undefined' || sendData.payment.amount === null ){
+        this.errorMsg = 'Payable amount is required';
+        toastr.error(this.errorMsg);
+        return false;
       }
-        break;
-      case 'taskUpdate': {
-        if (taskId)
-          response = await updateTaskActionHandler(taskId, sendData)
-        else
-          toastr.error("Invalid Request");
-        return response
+      switch (sendData.payment.discountType) {
+        case 'amount':
+          if (parseFloat(sendData.payment.discountValue) > parseFloat(sendData.payment.amount)) {
+            this.errorMsg = 'Amount must be equal or less than the payable amount'
+          }
+          break;
+        case 'percent':
+          if (parseFloat(sendData.payment.discountValue) > 100) {
+            this.errorMsg = 'Percent must be equal or less than 100'
+          }
+          break;
+        default:
+          this.errorMsg = '';
       }
-        break;
-      default :
-        console.log('save type required')
+    }
+    if (!this.errorMsg) {
+      switch (this.state.saveType) {
+        case 'taskCreate': {
+          response = await createTaskActionHandler(sendData)
+          return response
+        }
+          break;
+        case 'taskUpdate': {
+          if (taskId)
+            response = await updateTaskActionHandler(taskId, sendData)
+          else
+            toastr.error("Invalid Request");
+          return response
+        }
+          break;
+        default :
+          console.log('save type required')
+      }
+    } else {
+      toastr.error(this.errorMsg);
+      return false;
     }
   }
 

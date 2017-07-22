@@ -881,6 +881,12 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     // data = _lodash.concat(response[0].R, response[0].P, response[0].O, response[0].T)
     totalRecords = data && data[0] && data[0].totalRecords ? data[0].totalRecords : 0;
   }
+
+  if(args.module=="NotificationTemplate"){
+    data= MlNotificationTemplates.find(query,findOptions).fetch();
+    totalRecords=MlNotificationTemplates.find(query,findOptions).count();
+  }
+
   return {'totalRecords':totalRecords,'data':data};
 };
 
@@ -954,6 +960,7 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case 'TransactionsLog':resolveType='TransactionsLog';break
       case 'officeTransaction':resolveType='officeTransactionType';break
       case 'userTransaction':resolveType='myTransaction';break
+      case 'NotificationTemplate':resolveType='NotificationTemplate';break
     }
 
     if(resolveType){

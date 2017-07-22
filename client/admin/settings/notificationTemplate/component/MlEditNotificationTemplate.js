@@ -130,22 +130,6 @@ class MlEditNotificationTemplate extends React.Component{
               <div className="form_bg">
                 <form>
                   <div className="form-group mandatory">
-                    <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
-                  </div>
-
-                  <div className="form-group">
-                    <input type="text" ref="title" placeholder="Title" className="form-control float-label" defaultValue={this.state.data.title}/>
-                  </div>
-                  <div className="form-group mandatory">
-                    <textarea ref="content" placeholder="content" className="form-control float-label" defaultValue={contentValue} data-required={true} data-errMsg="Content is Required"></textarea>
-                  </div>
-                </form>
-              </div>
-            </div>
-            <div className="col-md-6 nopadding-right">
-              <div className="form_bg">
-                <form>
-                  <div className="form-group mandatory">
                     <input type="text" ref="tempCode" readOnly="readOnly" placeholder="Template Code" className="form-control float-label" defaultValue={this.state.data.tempCode}/>
                   </div>
 
@@ -157,6 +141,9 @@ class MlEditNotificationTemplate extends React.Component{
                     <Select name="form-field-name" placeholder="Type"  ref="type" className="float-label" data-required={true} data-errMsg="Type is Required"  options={types} value={this.state.type} onChange={this.optionsBySelectTypes.bind(this)}/>
                   </div>
 
+                  <div className="form-group">
+                    <input type="text" ref="title" placeholder="Title" className="form-control float-label" defaultValue={this.state.data.title}/>
+                  </div>
 
                   <br />
                   <br />
@@ -174,6 +161,20 @@ class MlEditNotificationTemplate extends React.Component{
                       <input type="checkbox" ref="isHtmlContent" checked={this.state.data.isHtmlContent} onChange={this.onHtmlContentChange.bind(this)}/>
                       <div className="slider"></div>
                     </label>
+                  </div>
+                </form>
+              </div>
+
+            </div>
+            <div className="col-md-6 nopadding-right">
+              <div className="form_bg">
+                <form>
+                  <div className="form-group mandatory">
+                    <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
+                  </div>
+
+                  <div className="form-group mandatory">
+                    <textarea style={{'height':'200px'}} ref="content" placeholder="content" className="form-control float-label" defaultValue={contentValue} data-required={true} data-errMsg="Content is Required"></textarea>
                   </div>
                 </form>
               </div>

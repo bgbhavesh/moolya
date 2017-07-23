@@ -634,7 +634,7 @@ let CoreModules = {
     return {totalRecords: totalRecords, data: data};
   },
   MlServiceCardsTransactionRepo: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
-    var service = MlService.find({'isCurrentVersion': true}).fetch()
+    var service = MlServiceCardDefinition.find({'isCurrentVersion': true}).fetch()
     var data = [];
     var profileIds = []
     service.map(function(details) {
@@ -652,7 +652,7 @@ let CoreModules = {
         })
       })
     })
-    var totalRecords = MlService.find({}).count();
+    var totalRecords = MlServiceCardDefinition.find({}).count();
     return {totalRecords: totalRecords, data: data};
   },
   MlHierarchyClusterRepo: (requestParams, userFilterQuery, contextQuery, fieldsProj, context) => {

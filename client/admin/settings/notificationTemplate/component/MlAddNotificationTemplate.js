@@ -11,6 +11,7 @@ import MlLoader from '../../../../commons/components/loader/loader'
 import _ from 'underscore';
 import Select from 'react-select';
 import Preview from '../component/Preview';
+import { toast } from 'react-toastify';
 class MlAddNotificationTemplate extends React.Component {
   constructor(props) {
     super(props);
@@ -28,14 +29,16 @@ class MlAddNotificationTemplate extends React.Component {
       if(response.success)
         FlowRouter.go("/admin/settings/notificationTemplateList");
       else
-        toastr.error(response.result);
+        //toastr.error(response.result);
+        toast.success(response.result)
     }
   };
 
   async createNotificationTemplate() {
     let ret = mlFieldValidations(this.refs)
     if (ret) {
-      toastr.error(ret);
+      //toastr.error(ret);
+       toast.error(ret);
     } else {
       let notificationTemplate = {
         title: this.refs.title.value,
@@ -49,7 +52,8 @@ class MlAddNotificationTemplate extends React.Component {
 
       const response = await addNotificationTemplate(notificationTemplate);
       if(response&&response.success){
-        toastr.success("Notification Template Created Successfully");
+        //toastr.success("Notification Template Created Successfully");
+        toast.success("Notification Template Created Successfully");
       }
       return response;
     }

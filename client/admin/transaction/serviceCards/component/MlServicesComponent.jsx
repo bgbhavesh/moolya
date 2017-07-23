@@ -145,8 +145,12 @@ export default class MlServiceManageSchedule extends Component {
           let facilitationAmount = data.facilitationCharge.amount ? parseInt(data.facilitationCharge.amount) : 0;
           data.finalAmount = parseInt(data.servicePayment.tasksDerived) + parseInt(facilitationAmount);
           if (data.servicePayment.discountValue > 0 ) {
-            let prevAmount = parseInt(data.servicePayment.tasksDerived) - parseInt(data.servicePayment.discountValue);
-            data.finalAmount += prevAmount;
+            if (data.servicePayment.discountType === 'amount') {
+              data.finalAmount -= parseInt(data.servicePayment.discountValue);
+            } else if (data.servicePayment.discountType === 'percent') {
+              let prevAmount =  (parseInt(data.servicePayment.tasksDerived) * parseInt(data.servicePayment.discountValue) / 100);
+              data.finalAmount -= prevAmount;
+            }
           }
         }
         break;
@@ -157,8 +161,12 @@ export default class MlServiceManageSchedule extends Component {
           let percentageAmmount = (parseInt(data.servicePayment.tasksDerived) * parseInt(facilitationAmount)) / 100;
           data.finalAmount = percentageAmmount + parseInt(data.servicePayment.tasksDerived);
           if (data.servicePayment.discountValue > 0 ) {
-            let prevAmount =  parseInt(data.servicePayment.tasksDerived) - (parseInt(data.servicePayment.tasksDerived) * parseInt(data.servicePayment.discountValue) / 100);
-            data.finalAmount += prevAmount;
+            if (data.servicePayment.discountType === 'amount') {
+              data.finalAmount -= parseInt(data.servicePayment.discountValue);
+            } else if (data.servicePayment.discountType === 'percent') {
+              let prevAmount =  (parseInt(data.servicePayment.tasksDerived) * parseInt(data.servicePayment.discountValue) / 100);
+              data.finalAmount -= prevAmount;
+            }
           }
         }
         break;

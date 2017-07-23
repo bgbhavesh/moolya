@@ -89,6 +89,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
                             noOfSession
                             sessionFrequency
                             finalAmount
+                            transactionId
                             status
                             tasks{
                               id

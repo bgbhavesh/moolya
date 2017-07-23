@@ -42,7 +42,7 @@ export default class MlAppServiceStep2 extends React.Component{
         <li className={serviceTask.selectedTaskId === tab.id ? 'active' : ''} key={index}>
           <a href="#newTask" data-toggle="tab"
              onClick={() => optionsBySelectService(tab.id)}>
-            <FontAwesome name='minus-square'/>{tab.displayName}
+             {tab.displayName}
           </a>
         </li>
       )
@@ -97,7 +97,7 @@ export default class MlAppServiceStep2 extends React.Component{
                     return (
                       <div className="swiper-slide funding_list list_block notrans" key={index}>
                         <p className="online">Online</p>
-                        <span>Duration: <FontAwesome name='pencil'/></span><br />
+                        <span>Duration:</span><br />
                         <div className="form-group">
                           <label><input type="text" className="form-control inline_input"
                                         value={data.duration.hours || 0} disabled/> Hours

@@ -151,7 +151,7 @@ export default class MlServiceCardStep4 extends React.Component{
                   <label htmlFor="facilitationamount"><span><span></span></span>Amount Rs
                     <input className="form-control inline_input"
                            disabled={(facilitationCharge.type && facilitationCharge.type === 'amount') ? false : true}
-                           value={facilitationCharge.type === 'amount' ? facilitationCharge.amount : ''}
+                           defaultValue={facilitationCharge.type === 'amount' ? facilitationCharge.amount : ''}
                            onChange={(event) => calculateCharges(event)} />
                   </label>
                 </div>
@@ -164,14 +164,14 @@ export default class MlServiceCardStep4 extends React.Component{
                   <label htmlFor="radio2"><span><span></span></span>Percentage
                     <input className="form-control inline_input"
                            disabled={(facilitationCharge.type && facilitationCharge.type === 'percent') ? false : true}
-                           value={facilitationCharge.type === 'percent' ? facilitationCharge.amount : ''}
+                           defaultValue={facilitationCharge.type === 'percent' ? facilitationCharge.amount : ''}
                            onChange={(event) => calculateCharges(event)}/>
                   </label>
                 </div>
               </div>
               <div className="form-group">
                 <label>Derived amount Rs. <input className="form-control inline_input medium_in"
-                                                 value={finalAmount} readOnly="readOnly"/>
+                                                 value={finalAmount} disabled />
                 </label>
               </div>
             </form>

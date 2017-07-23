@@ -8,6 +8,7 @@
 import MlResolver from '../../commons/mlResolverDef';
 import MlRespPayload from '../../commons/mlPayload';
 import MlUserContext from '../../MlExternalUsers/mlUserContext';
+import MlAppointment from './appointment';
 
 MlResolver.MlMutationResolver["bookUserServiceCard"] = (obj, args, context, info) => {
   let userId = context.userId;
@@ -49,7 +50,7 @@ MlResolver.MlMutationResolver["bookUserServiceCard"] = (obj, args, context, info
   return response;
 };
 
-  MlResolver.MlMutationResolver["userServiceCardPayment"] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver["userServiceCardPayment"] = (obj, args, context, info) => {
   let orderId = args.userServiceCardPaymentInfo.orderId;
   let userId = context.userId;
   let service = mlDBController.findOne('MlUserServiceCardOrder', {transactionId: orderId}, context);
@@ -80,5 +81,76 @@ MlResolver.MlMutationResolver["bookUserServiceCard"] = (obj, args, context, info
     let code = 400;
     let response = new MlRespPayload().errorPayload(paymentResponse, code);
     return response;
+  }
+};
+
+MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, context, info) => {
+  let orderId = args.userServiceCardAppointmentInfo.orderId;
+  let sessionId = args.userServiceCardAppointmentInfo.sessionId;
+  let SCOrderDetails = mlDBController.findOne('MlScOrder', {orderId: orderId}, context);
+
+  if(!SCOrderDetails) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload("Order is not valid", code);
+    return response;
+  }
+
+  let serviceId = SCOrderDetails.serviceId;
+  if(!serviceId) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload("Service id is not attached in order", code);
+    return response;
+  }
+
+  let serviceLedgerBalance = mlDBController.findOne('MlServiceLedger', {serviceId: serviceId}, context);
+  let taskInfo = serviceLedgerBalance.serviceCard.tasks; // Update task fetch info in case serviceLedgerBalance schema update
+  let task = taskInfo.filter(function (data) {
+    data.sessions = data.sessions ? data.sessions : [];
+    return data.sessions.some(function (session) {
+      return session.id == sessionId;
+    });
+  });
+
+  if(!task.length){
+    let code = 400;
+    let response = new MlRespPayload().errorPayload("Session id is not attached in order", code);
+    return response;
+  }
+
+  let date = new Date();
+  let day = date.getDate();
+  let month = date.getMonth();
+  let year = date.getFullYear();
+  let appointment = MlAppointment.bookAppointment('appointmentId', sessionId, 9, 0, day, month, year);
+  if(appointment.success){
+    let userId = context.userId;
+    let profileId = new MlUserContext().userProfileDetails(userId).profileId;
+    let service = mlDBController.findOne('MlServiceCardDefinition', serviceId, context);
+    let appointmentData = {
+      seeker: {
+        userId: userId,
+        profileId: profileId
+      },
+      provider: {
+        userId: service.userId,
+        profileId: service.profileId
+      },
+      serviceId: SCOrderDetails.serviceId,
+      serviceName: SCOrderDetails.serviceName,
+      sessionId: sessionId,
+      startDate: appointment.start,
+      endDate: appointment.end,
+      isActive: true,
+      isInternal: false,
+      createdAt: new Date()
+    };
+    let result = mlDBController.insert('MlAppointments', appointmentData, context);
+    if(result){
+      let code = 200;
+      let response = new MlRespPayload().successPayload("Appointment book successfully", code);
+      return response;
+    }
+  } else {
+    console.log('MlAppointment', appointment);
   }
 };

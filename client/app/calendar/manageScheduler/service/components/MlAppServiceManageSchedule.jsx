@@ -103,10 +103,6 @@ export default class MlAppServiceManageSchedule extends Component {
     });
   }
 
-  componentWillReceiveProps(newProps){
-    console.log(newProps)
-  }
-
   /**
    * Method :: setServiceSteps
    * Desc :: Sets components steps for stepzila to create and update service data
@@ -367,6 +363,7 @@ export default class MlAppServiceManageSchedule extends Component {
           clusterData.community = communities;
         }
       }
+      this.props.serviceInfo(service);
     }
     var validTillDate = Date.parse(serviceBasicInfo.validTill);
     var currentDate = new Date();
@@ -387,7 +384,8 @@ export default class MlAppServiceManageSchedule extends Component {
       finalAmount: finalAmount,
       prevFinalAmount: prevFinalAmount
     }, () => {
-      this.getUserProfile();
+      this.getUserProfile()
+
     });
   }
 

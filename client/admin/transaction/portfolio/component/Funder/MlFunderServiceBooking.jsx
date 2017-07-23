@@ -10,6 +10,7 @@ import {multipartASyncFormHandler} from "../../../../../commons/MlMultipartFormA
 import MlAppMyCalendarDayComponent from '../../../../../app/calendar/myCalendar/components/dayComponent'
 var _ = require('lodash');
 import Calender from '../../../../../commons/calendar/calendar'
+import MlAppMyCalendar from './MlFunderServiceCalendar'
 
 
 
@@ -304,17 +305,7 @@ export default class FunderAboutView extends React.Component{
             </ScrollArea>
           </div>
         </div>:""}
-      </div>:
-        <div className="app_main_wrap" style={{'overflow':'auto'}}>
-          <div className="app_padding_wrap">
-          <Calender
-            dayBackgroundComponent={<MlAppMyCalendarDayComponent /> }
-            dayData=""
-            onNavigate=""
-            date=""
-          />
-      </div>
-          </div>
+      </div>:<MlAppMyCalendar/>
 
     )
   }

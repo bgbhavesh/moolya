@@ -24,8 +24,8 @@ export default class MlBeSpokeListView extends Component {
       profileId:"",
       beSpokeServices:[],
       bookingStatus: false,
-
     }
+
     this.getServiceDetails.bind(this);
 }
   componentWillMount(){
@@ -61,21 +61,23 @@ export default class MlBeSpokeListView extends Component {
   }
 
   serviceInfo(details){
-    console.log(details)
+    console.log('---', details)
     this.setState({serviceDetails:details})
   }
-
 
   addBeSpoke(){
     this.setState({createNewBeSpoke: true, showBeSpoke:true, showService: false, showBeSpokeService: false})
   }
+
   viewMode(index,serviceId,profileId){
     console.log("---service---",serviceId, "----profile---", profileId)
     this.setState({createNewBeSpoke: true, showBeSpoke:false,showService:true, serviceId:serviceId, profileId:profileId})
   }
+
   viewModeBeSpoke(index,serviceId,profileId){
     this.setState({createNewBeSpoke: true, showBeSpoke:false,showService:false,showBeSpokeService:true, serviceId:serviceId, profileId:profileId})
   }
+
 render(){
     let that = this;
     return(

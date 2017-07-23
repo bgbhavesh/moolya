@@ -86,6 +86,7 @@ export default class MlAppServiceManageSchedule extends Component {
     this.checkTaxStatus = this.checkTaxStatus.bind(this);
     this.checkPromoStatus = this.checkPromoStatus.bind(this);
     this.checkDiscountStatus = this.checkDiscountStatus.bind(this);
+    this.deleteSelectedTask = this.deleteSelectedTask.bind(this);
   }
 
   componentWillMount() {
@@ -150,6 +151,7 @@ export default class MlAppServiceManageSchedule extends Component {
         component: <MlAppServiceSelectTask serviceTask={serviceTask}
                                            profileId={this.profileId}
                                            serviceId={this.serviceId}
+                                           deleteSelectedTask={this.deleteSelectedTask}
                                            getServiceDetails={this.getServiceDetails}
                                            saveService={this.saveService}
                                            viewMode={this.props.viewMode}
@@ -194,6 +196,49 @@ export default class MlAppServiceManageSchedule extends Component {
     return steps;
   }
 
+  /**
+   * Delete the selected task
+   * @param taskId :: String
+   */
+  async deleteSelectedTask(taskId) {
+    let {serviceTask, tasks } = this.state;
+    let services = {tasks: []};
+    serviceTask.tasks.map((taskInfo) => {
+      if (taskInfo.id !== taskId) {
+        let sessionDetails = [];
+        let serviceDetails = tasks && tasks.filter((taskData) => {
+          return taskInfo.id === taskData.id
+        });
+        let isServiceDetails = false;
+        if (serviceDetails && serviceDetails.length > 0) {
+          isServiceDetails = true
+        }
+        if (taskInfo.session && taskInfo.session.length > 0 && isServiceDetails) {
+          taskInfo.session.forEach((session, index) => {
+            let seqData = '';
+            if (isServiceDetails && serviceDetails[0]['sessions'] && serviceDetails[0]['sessions'].length > 0) {
+              seqData = serviceDetails[0]['sessions'][index].sequence;
+            }
+            sessionDetails.push({id: session.sessionId, sequence: session.sequence || seqData})
+          });
+          let task = {
+            id: taskInfo.id,
+            sequence: taskInfo.sequence || serviceDetails[0].sequence,
+            sessions: sessionDetails
+          };
+          services.tasks.push(task);
+        }
+      }
+    });
+    serviceTask.selectedTaskId = '';
+    this.setState({
+      tasks: tasks,
+      serviceTask: serviceTask
+    });
+    const resp = await updateServiceActionHandler(this.serviceId, services);
+    this.getServiceDetails();
+    this.optionsBySelectService();
+  }
   /**
    * Method :: getTaskDetailsForService
    * Desc :: Get the tasks for service card eligibility
@@ -461,6 +506,8 @@ export default class MlAppServiceManageSchedule extends Component {
         return false;
       }
     }
+
+    // Service basic info construct
     if (chapterName) {
       let cities = [];
       chapterName.map((data) => {
@@ -505,6 +552,8 @@ export default class MlAppServiceManageSchedule extends Component {
       state: serviceBasicInfo.state,
       community: serviceBasicInfo.community
     };
+
+    // Service selected task construct
     if (serviceTask.selectedTaskDetails && serviceTask.selectedTaskId) {
       let sessions = [];
       let serviceDetails = service.tasks && service.tasks.filter((task) => {

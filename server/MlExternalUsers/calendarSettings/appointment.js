@@ -139,7 +139,7 @@ class MlAppointment {
    * @param month
    * @param year
    */
-  getSessionTimeSlots(sessionId, day, month, year){
+  getSessionTimeSlots(taskId, sessionId, day, month, year){
     const that = this;
     /**
      * Initialize the date object and set date month and year
@@ -154,7 +154,7 @@ class MlAppointment {
     /**
      * Fetch user task info and calendar setting
      */
-    let task = mlDBController.findOne('MlTask',{'session.sessionId':sessionId});
+    let task = mlDBController.findOne('MlTask', taskId );
     let calendarSetting = mlDBController.findOne('MlCalendarSettings',{userId: task.userId, profileId: task.profileId});
     calendarSetting.vacations = calendarSetting.vacations ? calendarSetting.vacations : [];
 

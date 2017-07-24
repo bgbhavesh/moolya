@@ -12,8 +12,8 @@ class MlServiceCardRepo{
       this.profile = {};
     }
 
-    validateServiceCardActions(userId, resourceName, userAction, payload){
-        var defaultProfile = new MlUserContext().userProfileDetails(userId);
+    validateServiceCardActions(context, resourceName, userAction, payload){
+        var defaultProfile = new MlUserContext().userProfileDetails(context.userId);
         if(!defaultProfile)
             return {success:false, msg:"Invalid User Details"};
 
@@ -21,21 +21,28 @@ class MlServiceCardRepo{
 
         switch (userAction){
             case 'CREATESERVICEDEF':{
-              return true;
+              return this.isUserEligibleForServiceCard(context.userId);
             }
             break;
             case 'UPDATESERVICEDEF':{
-              return true
+              return {success:true}
             }
             break;
             case 'CREATESERVICEORDER':{
-              return true
+              return {success:true};
             }
             break
+          case 'CREATEAPPOINTMENT':{
+            return this.validateUserServicecard(payload, context, defaultProfile)
+          }
+          break;
         }
-        return false
+        return {success:false}
     }
 
+    isUserEligibleForServiceCard(userId){
+      return {success:true};
+    }
 
     createServiceCardDefinition(service, context){
         var result;
@@ -286,7 +293,7 @@ class MlServiceCardRepo{
       return new MlRespPayload().successPayload("Payment Updated", 200);
     }
 
-    createServiceCard(serviceDefId, context){
+    createServiceCard(serviceDefId, orderId, context){
         try {
           var defaultProfile = new MlUserContext().userProfileDetails(context.userId);
           var serviceDef = mlDBController.findOne('MlServiceCardDefinition', {_id:serviceDefId}, context)
@@ -301,9 +308,9 @@ class MlServiceCardRepo{
           serviceCard["tasks"] = serviceDef.tasks;
           serviceCard["isExpired"] = false;
           serviceCard["startDate"] = new Date();
-
-          // Need to add these three fields
-          //serviceCard["expiryDate"] = new Date();
+          serviceCard["orderId"] = orderId;
+          serviceCard["expiryDate"] = this.getServicecardExpiryDate(serviceDef.sessionFrequency)
+          // Need to add these two fields
           //serviceCard["transactionId"] = new Date();
           //serviceCard["serviceName"] = new Date();
           result = mlDBController.insert('MlServiceCards' , serviceCard, context)
@@ -319,6 +326,28 @@ class MlServiceCardRepo{
 
     updateServiceCard(context){
 
+    }
+
+    getServicecardExpiryDate(frequencyString){
+      var frequency;
+      switch (frequencyString.toUppercase()){
+        case 'WEEKELY':{
+          frequency = 7;
+        }
+        break;
+        case 'MONTHLY':{
+          frequency = 30;
+        }
+        break
+        case 'YEARLY':{
+          frequency = 365;
+        }
+        break;
+      }
+
+      var date = new Date().setDate(date.getDate() + frequency);;
+      var eDate = date.getDate()+'/'+ (date.getMonth()+1) +'/'+date.getFullYear();
+      return eDate;
     }
 
     createServiceLedger(serviceId, context){
@@ -348,6 +377,27 @@ class MlServiceCardRepo{
     }
 
     updateServiceLedger(serviceId, context){
+
+    }
+
+    validateUserServicecard(payload, context, profile){
+        var ret = {success:false, msg:"Session is Completed"}
+        var servicecard = mlDBController.findOne('MlServiceCards' ,  {orderId:payload.userServiceCardAppointmentInfo.orderId}, context)
+        if(!servicecard)
+          return {success:false, msg:"Invalid Order Id"};
+
+        var serviceLedger = MlServiceLedger.findOne({"$and":[{userId:context.userId}, {profileId:profile.profileId}, {serviceId:servicecard._id}]})
+        if(!serviceLedger)
+          return {success:false, msg:"Ledger Not Found"};
+
+        _.each(serviceLedger.serviceCard.tasks, function (task) {
+            var session =_.find(task.sessions, {id:payload.userServiceCardAppointmentInfo.sessionId})
+            if(session && !session.isCompleted){
+              ret = {success:true}
+              return;
+            }
+        })
+        return ret
     }
 }
 

@@ -194,7 +194,7 @@ MlResolver.MlMutationResolver['updateServiceCardOrder'] = (obj, args, context, i
     if(!serviceOrder || (serviceOrder && !serviceOrder.serviceId))
       return new MlRespPayload().errorPayload("Error In Fetching Service Order", 400);
 
-    ret = mlServiceCardRepo.createServiceCard(serviceOrder.serviceId, context)
+    ret = mlServiceCardRepo.createServiceCard(serviceOrder.serviceId, serviceOrder.orderId, context)
     if(!ret.success)
       return ret;
 

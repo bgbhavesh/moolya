@@ -97,7 +97,7 @@ export default class MlAppTaskSession extends Component {
 
   sendSessionDataToParent() {
     let data = _.cloneDeep(this.state.sessionData);
-    this.props.getSessionDetails(data);
+    this.props.getSessionDetails(data, this.state.activities, this.state.data.isExternal);
   }
 
   componentDidMount() {

@@ -154,47 +154,15 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           // FOR SPECIFIC COMMUNITY
           if (userType == "Ideators" || userType =="Investors" || userType =="Startups" || userType =="Service Providers" || userType =="Companies" || userType =="Institutions"){
 
-              // queryObj.communityDefName=userType;
-
-              // var allUsers = mlDBController.find('users', {"$and":[{"profile.isSystemDefined":{$exists:false}},{"profile.isExternaluser":true}, {'profile.externalUserProfiles':{$elemMatch: queryObj}}]}, context, findOptions).fetch();
-
-              // _.each(allUsers, function (user){
-              //     let userProfiles = user.profile.externalUserProfiles;
-              //     let profile = _.find(userProfiles,  {'clusterId': cluster._id, 'communityDefCode': userType});
-              //     // _.each(userProfiles, function (profile) {
-              //         let userObj = {};
-              //         if (profile && profile.communityDefCode) {
-              //             if (profile.communityDefName == userType) {
-              //                 userObj._id= user._id;
-              //                 userObj.profile = user.profile;
-              //                 userObj.name = (user.profile.firstName?user.profile.firstName:"")+" "+(user.profile.lastName?user.profile.lastName:"");
-              //                 userObj.communityCode = profile.communityDefCode;
-              //                 let externalAdditionalInfo = _.find(user.profile.externalUserAdditionalInfo, {profileId:profile.profileId});
-              //                 var latitude = null;
-              //                 var longitude = null;
-              //                 if(externalAdditionalInfo && externalAdditionalInfo.addressInfo && externalAdditionalInfo.addressInfo.length>0){   /*profile of the user should be there*/
-              //                     var address = _.find(externalAdditionalInfo.addressInfo, {isDefaultAddress:true});
-              //                     if(!address){
-              //                        address = externalAdditionalInfo.addressInfo[0]
-              //                     }
-              //                     latitude = address.latitude;
-              //                     longitude = address.longitude;
-              //                 }
-              //                 userObj.latitude = latitude;
-              //                 userObj.longitude = longitude;
-              //                 users.push(userObj);
-              //             }
-              //         }
-              //     // })
-              // })
+            queryObj.communityDefName=userType;
             var pipeline=[
               {
-                $match: {"profile.isSystemDefined":{$exists:false}, "profile.isExternaluser":true,'profile.externalUserProfiles':{$elemMatch:{'isActive':true}}}
+                $match: {"profile.isSystemDefined":{$exists:false}, "profile.isExternaluser":true,'profile.externalUserProfiles':{$elemMatch:queryObj}}
               },
               {
                 $unwind :"$profile.externalUserProfiles"
               },
-              {$match:{"profile.externalUserProfiles.clusterId":clusterId, "profile.externalUserProfiles.communityDefName":userType}},  // Filter out specific community
+              {$match:{"profile.externalUserProfiles.clusterId":clusterId, "profile.externalUserProfiles.communityDefName":userType, "profile.externalUserProfiles.isApprove":true,"profile.externalUserProfiles.isActive":true}},  // Filter out specific community
               {
                 $project:{
                   _id : 1,
@@ -251,49 +219,14 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
 
         // FOR All
         else{
-            // var externalUsers = mlDBController.find('users', {"$and": [{"profile.isSystemDefined": {$exists: false}}, {"profile.isExternaluser": true}, {'profile.externalUserProfiles': {$elemMatch: queryObj}}]}, context, findOptions).fetch();
-            //
-            // if (externalUsers && externalUsers.length > 0) {
-            //     _.each(externalUsers, function (user) {
-            //         let userProfiles = user.profile.externalUserProfiles;
-            //         let profile = _.find(userProfiles, {
-            //           'clusterId': clusterId
-            //         });
-            //         if (profile && profile.communityDefCode) {
-            //         //     _.each(userProfiles, function (profile) {
-            //                 let userObj = {};
-            //                 userObj._id= user._id;
-            //                 userObj.profile = user.profile;
-            //                 userObj.name = (user.profile.firstName ? user.profile.firstName : "") + " " + (user.profile.lastName ? user.profile.lastName : "");
-            //                 userObj.communityCode = profile.communityDefCode ? profile.communityDefCode : " ";
-            //                 if (user.profile.externalUserAdditionalInfo && user.profile.externalUserAdditionalInfo.length > 0) {
-            //                     let externalAdditionalInfo = _.find(user.profile.externalUserAdditionalInfo, {profileId:profile.profileId});
-            //                     var latitude = null;
-            //                     var longitude = null;
-            //                     if(externalAdditionalInfo && externalAdditionalInfo.addressInfo && externalAdditionalInfo.addressInfo.length>0){   /*profile of the user should be there*/
-            //                         var address = _.find(externalAdditionalInfo.addressInfo, {isDefaultAddress:true});
-            //                         if(!address){
-            //                             address = externalAdditionalInfo.addressInfo[0]
-            //                         }
-            //                         latitude = address.latitude;
-            //                         longitude = address.longitude;
-            //                     }
-            //                     userObj.latitude = latitude;
-            //                     userObj.longitude = longitude;
-            //                     users.push(userObj);
-            //                 }
-            //         //     })
-            //         }
-            //     })
-            // }
             var pipeline=[
               {
-                $match: {"profile.isSystemDefined":{$exists:false}, "profile.isExternaluser":true,'profile.externalUserProfiles':{$elemMatch:{'isActive':true}}}
+                $match: {"profile.isSystemDefined":{$exists:false}, "profile.isExternaluser":true,'profile.externalUserProfiles':{$elemMatch:queryObj}}
               },
               {
                 $unwind :"$profile.externalUserProfiles"
               },
-              {$match:{"profile.externalUserProfiles.clusterId":clusterId}},
+              {$match:{"profile.externalUserProfiles.clusterId":clusterId,"profile.externalUserProfiles.isApprove":true,"profile.externalUserProfiles.isActive":true}},
               {
                 $project:{
                   _id : 1,

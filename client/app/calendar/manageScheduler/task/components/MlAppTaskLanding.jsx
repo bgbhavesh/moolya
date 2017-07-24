@@ -29,19 +29,23 @@ class MlAppTaskLanding extends Component {
     var response;
     this.errorMsg = '';
     if (sendData.payment && sendData.payment.isDiscount) {
-      if(sendData.payment.amount === '' || typeof sendData.payment.amount === 'undefined' || sendData.payment.amount === null ){
+      if(sendData.payment.activitiesDerived === '' || typeof sendData.payment.activitiesDerived === 'undefined' || sendData.payment.activitiesDerived === null ){
         this.errorMsg = 'Payable amount is required';
         toastr.error(this.errorMsg);
         return false;
       }
       switch (sendData.payment.discountType) {
         case 'amount':
-          if (parseFloat(sendData.payment.discountValue) > parseFloat(sendData.payment.amount)) {
+          if(isNaN(sendData.payment.discountValue)) {
+            this.errorMsg = 'Please enter a valid number';
+          } else if (parseFloat(sendData.payment.discountValue) > parseFloat(sendData.payment.activitiesDerived)) {
             this.errorMsg = 'Amount must be equal or less than the payable amount'
           }
           break;
         case 'percent':
-          if (parseFloat(sendData.payment.discountValue) > 100) {
+          if(isNaN(sendData.payment.discountValue)) {
+            this.errorMsg = 'Please enter a valid number';
+          } else if (parseFloat(sendData.payment.discountValue) > 100) {
             this.errorMsg = 'Percent must be equal or less than 100'
           }
           break;

@@ -106,7 +106,6 @@ class MlAppointment {
           appointmentStartDate.setSeconds(0,0);
           let appointmentEndDate = new Date(appointment.endDate);
           appointmentStartDate.setSeconds(0,0);
-          console.log(slotStartTime >= appointmentStartDate, slotEndTime <= appointmentEndDate);
           return (slotStartTime >= appointmentStartDate && slotEndTime <= appointmentEndDate);
         }).length;
 
@@ -302,12 +301,10 @@ class MlAppointment {
         let slotDifference = slotEndTime - slotStartTime;
         let slotDurationInMinutes = Math.round((slotDifference % 86400000) / 60000);
         if(isStartTimeFind) {
-          console.log(slotStartTime, slotEndTime);
-          if(!availableSlot.isAvailable){
+          if(!availableSlot.isAvailable) {
             canAppoinmentBook =false;
           }
           totalSlotsDuration += slotDurationInMinutes;
-          console.log(totalSlotsDuration," :==:==: ", slotDurationInMinutes);
         }
       });
 
@@ -325,7 +322,6 @@ class MlAppointment {
           message: "Message"
         };
       }
-      // console.log(availableSlots, session, sessionDuration, sessionDurationInMinutes);
     } else {
       //Send error session duration not set
     }

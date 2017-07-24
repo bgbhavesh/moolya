@@ -8,7 +8,7 @@ export async function createServiceActionHandler (Services) {
   const result = await appClient.mutate({
     mutation: gql`
     mutation($Services: service){
-        createService(Services:$Services){
+        createBeSpokeService(Services:$Services){
         success
         code
         result

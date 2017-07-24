@@ -79,8 +79,9 @@ MlResolver.MlQueryResolver['findService'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['createBeSpokeService'] = (obj, args, context, info) => {
-  return mlServiceCardRepo.createBespokeServiceCardDefinition(args.Services, context);
-}
+  let portfolioId = args.Services.profileId;
+  return mlServiceCardRepo.createBespokeServiceCardDefinition(args.Services, portfolioId, context);
+};
 
 MlResolver.MlMutationResolver['createService'] = (obj, args, context, info) => {
   return mlServiceCardRepo.createServiceCardDefinition(args.Services, context);
@@ -194,7 +195,7 @@ MlResolver.MlMutationResolver['updateServiceCardOrder'] = (obj, args, context, i
     if(!serviceOrder || (serviceOrder && !serviceOrder.serviceId))
       return new MlRespPayload().errorPayload("Error In Fetching Service Order", 400);
 
-    ret = mlServiceCardRepo.createServiceCard(serviceOrder.serviceId, context)
+    ret = mlServiceCardRepo.createServiceCard(serviceOrder.serviceId, serviceOrder.orderId, context)
     if(!ret.success)
       return ret;
 

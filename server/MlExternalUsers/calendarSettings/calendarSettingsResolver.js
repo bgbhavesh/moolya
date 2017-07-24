@@ -54,15 +54,100 @@ MlResolver.MlQueryResolver['getMyCalendar'] = (obj, args, context, info) => {
   return MlAppointment.getUserCalendar(userId, profileId, month, year);
 };
 
-MlResolver.MlQueryResolver['getMyCalendarDayAvailable'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver['getServiceProviderCalendar'] = (obj, args, context, info) => {
+  let portfolioId = args.portfolioId;
+  let portfolioInfo = mlDBController.findOne('MlPortfolioDetails', portfolioId, context);
+
+  if(!portfolioInfo){
+    let code = 400;
+    let result = 'Portfolio is not defined for this user';
+    let response = new MlRespPayload().errorPayload(result, code);
+    return response;
+  }
+  let userId = portfolioInfo.userId;
+  let profileId = portfolioInfo.profileId?portfolioInfo.profileId:" ";
+  if(!userId){
+    let code = 400;
+    let result = 'User ID is not defined for this user';
+    let response = new MlRespPayload().errorPayload(result, code);
+    return response;
+  }
+  if(!profileId){
+    let code = 400;
+    let result = 'Profile ID is not defined for this user';
+    let response = new MlRespPayload().errorPayload(result, code);
+    return response;
+  }
   // let mlAppointment = new MlAppointment();
+  let date = new Date();
+  let month = args.month ? args.month : date.getMonth() ;
+  let year = args.year ? args.year : date.getFullYear() ;
+  return MlAppointment.getUserCalendar(userId, profileId, month, year);
+};
+
+MlResolver.MlQueryResolver['getMyCalendarDayAvailable'] = (obj, args, context, info) => {
   let date = new Date();
   let day = args.day ? args.day : date.getDate();
   let month = args.month ? args.month : date.getMonth() ;
   let year = args.year ? args.year : date.getFullYear() ;
   let sessionId = '123';
-  // return mlAppointment.getSessionTimeSlots(sessionId, day, month, year);
-  return MlAppointment.bookAppointment('appointmentId', sessionId, 9, 30, day, month, year);
+  return mlAppointment.getSessionTimeSlots(sessionId, day, month, year);
+};
+
+  MlResolver.MlQueryResolver['getSessionDayAvailable'] = (obj, args, context, info) => {
+  let date = new Date();
+  // let mlAppointment = new MlAppointment();
+  let day = args.day ? args.day : date.getDate();
+  let month = args.month ? args.month : date.getMonth() ;
+  let year = args.year ? args.year : date.getFullYear() ;
+  let sessionId = args.sessionId;
+  let orderId = args.orderId;
+
+  let SCOrderDetails = mlDBController.findOne('MlScOrder', {orderId: orderId}, context);
+
+  if(!SCOrderDetails) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload("Order is not valid", code);
+    return response;
+  }
+
+  let serviceId = SCOrderDetails.serviceId;
+  if(!serviceId) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload("Service id is not attached in order", code);
+    return response;
+  }
+
+  let serviceInfo = mlDBController.findOne('MlServiceCardDefinition', serviceId, context);
+
+  if(!serviceInfo){
+    let code = 400;
+    let response = new MlRespPayload().errorPayload("Service id is not attached in service card definition", code);
+    return response;
+  }
+
+  let tasks = serviceInfo.tasks ? serviceInfo.tasks : [];
+
+  let task = tasks.find(function (task) {
+    return task.sessions.some(function (session) {
+      return session.id == sessionId;
+    })
+  });
+  if(!task){
+    let code = 400;
+    let response = new MlRespPayload().errorPayload("Session id is not attached in service card definition", code);
+    return response;
+  }
+
+  let taskId = task.id;
+
+  if(!task.id) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload("Task id is not attached in service card definition", code);
+    return response;
+  }
+
+  return MlAppointment.getSessionTimeSlots(taskId, sessionId, day, month, year, );
 };
 
 MlResolver.MlMutationResolver['updateMyCalendarSetting'] = (obj, args, context, info) => {

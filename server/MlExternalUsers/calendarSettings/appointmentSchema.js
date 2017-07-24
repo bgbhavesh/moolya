@@ -36,8 +36,24 @@ let appointment=`
     year: Int!
   }
   
+  type AppointmentUser {
+    userId: String
+    profileId: String
+  }
+  
+  type Appointment {
+    _id: String
+    seeker: AppointmentUser
+    provider: AppointmentUser
+    serviceId: String
+    serviceName: String
+    sessionId: String
+    startDate: Date
+    endDate: Date
+  }
+  
   type Query {   
-     
+     fetchMyAppointment: [Appointment]
   }
   
   type Mutation {
@@ -52,6 +68,6 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], appointment]);
 let supportedApi = [
   {api:'bookUserServiceCard', actionName:'CREATE', moduleName:"OFFICE"},
   {api:'userServiceCardPayment', actionName:'CREATE', moduleName:"OFFICE"},
-  {api:'bookUserServiceCardAppointment', actionName:'CREATE', moduleName:"OFFICE"},
+  {api:'bookUserServiceCardAppointment', actionName:'CREATE', userAction:"CREATEAPPOINTMENT", resourceName:"SERVICECARD"},
 ];
 MlResolver.MlModuleResolver.push(supportedApi);

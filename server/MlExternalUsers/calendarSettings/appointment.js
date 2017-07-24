@@ -106,7 +106,6 @@ class MlAppointment {
           appointmentStartDate.setSeconds(0,0);
           let appointmentEndDate = new Date(appointment.endDate);
           appointmentStartDate.setSeconds(0,0);
-          console.log(slotStartTime >= appointmentStartDate, slotEndTime <= appointmentEndDate);
           return (slotStartTime >= appointmentStartDate && slotEndTime <= appointmentEndDate);
         }).length;
 
@@ -140,7 +139,7 @@ class MlAppointment {
    * @param month
    * @param year
    */
-  getSessionTimeSlots(sessionId, day, month, year){
+  getSessionTimeSlots(taskId, sessionId, day, month, year){
     const that = this;
     /**
      * Initialize the date object and set date month and year
@@ -155,7 +154,7 @@ class MlAppointment {
     /**
      * Fetch user task info and calendar setting
      */
-    let task = mlDBController.findOne('MlTask',{'session.sessionId':sessionId});
+    let task = mlDBController.findOne('MlTask', {_id:taskId} );
     let calendarSetting = mlDBController.findOne('MlCalendarSettings',{userId: task.userId, profileId: task.profileId});
     calendarSetting.vacations = calendarSetting.vacations ? calendarSetting.vacations : [];
 
@@ -256,7 +255,7 @@ class MlAppointment {
   }
 
   //Will book appointment if user is free
-  bookAppointment(appointmentId, sessionId, hour, minute, day, month, year){
+  bookAppointment(appointmentId, taskId, sessionId, hour, minute, day, month, year){
     const that = this;
     /**
      * Initialize the date object and set date month and year
@@ -271,7 +270,7 @@ class MlAppointment {
     /**
      * Fetch user task info and calendar setting
      */
-    let task = mlDBController.findOne('MlTask',{'session.sessionId':sessionId});
+    let task = mlDBController.findOne('MlTask', taskId);
     /**
      * Find the requested session
      */
@@ -283,7 +282,7 @@ class MlAppointment {
       let canAppoinmentBook = true;
       let isStartTimeFind = false;
       let totalSlotsDuration = 0;
-      let availableSlots = that.getSessionTimeSlots(sessionId, day, month, year);
+      let availableSlots = that.getSessionTimeSlots(taskId, sessionId, day, month, year);
       if(!availableSlots || !availableSlots.length) {
         canAppoinmentBook = false;
       }
@@ -302,12 +301,10 @@ class MlAppointment {
         let slotDifference = slotEndTime - slotStartTime;
         let slotDurationInMinutes = Math.round((slotDifference % 86400000) / 60000);
         if(isStartTimeFind) {
-          console.log(slotStartTime, slotEndTime);
-          if(!availableSlot.isAvailable){
+          if(!availableSlot.isAvailable) {
             canAppoinmentBook =false;
           }
           totalSlotsDuration += slotDurationInMinutes;
-          console.log(totalSlotsDuration," :==:==: ", slotDurationInMinutes);
         }
       });
 
@@ -325,7 +322,6 @@ class MlAppointment {
           message: "Message"
         };
       }
-      // console.log(availableSlots, session, sessionDuration, sessionDurationInMinutes);
     } else {
       //Send error session duration not set
     }
@@ -382,6 +378,11 @@ class MlAppointment {
      *  Get the user calendar setting
      */
     let calendarSetting = mlDBController.findOne('MlCalendarSettings',{userId:userId, profileId:profileId});
+
+    if(!calendarSetting){
+      return { days: [] };
+    }
+
     calendarSetting.vacations = calendarSetting.vacations ? calendarSetting.vacations : [];
 
     /**

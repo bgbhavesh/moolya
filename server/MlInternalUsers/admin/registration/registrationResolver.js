@@ -245,7 +245,7 @@ MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context,
       let registerId = profile.registrationId
       let username = mlDBController.findOne('users', {_id: userId}, context).username
       if (registerId) {
-        let response = MlRegistration.findOne({"_id": registerId});
+        var response = MlRegistration.findOne({"_id": registerId});
         /**getting if any registration is other than pending or approved state*/
         let isAllowRegisterAs = mlDBController.findOne('MlRegistration', {
           "registrationInfo.userName": username,

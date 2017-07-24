@@ -11,12 +11,7 @@ import MlAppMyCalendarDayComponent from '../../../../../app/calendar/myCalendar/
 var _ = require('lodash');
 import Calender from '../../../../../commons/calendar/calendar'
 import MlAppMyCalendar from './MlFunderServiceCalendar'
-
-
-
-// import StepZilla from '../../../../common/components/stepzilla/StepZilla';
-// import Step1 from '../../../../app/views/myprofile/funderProfile/MyAppointment/service';
-// import Step2 from './secondSetp'
+import {fetchServiceCalendarActionHandler} from '../../../../../app/calendar/myCalendar/actions/fetchMyCalendar';
 import {bookUserServiceCardActionHandler, userServiceCardPaymentActionHandler} from '../../../../../app/calendar/manageScheduler/service/actions/MlServiceActionHandler'
 
 ;
@@ -27,7 +22,8 @@ export default class FunderAboutView extends React.Component{
       showPaymentDetails: false,
       tasks:[],
       imagePreview:"",
-      payment: false
+      payment: false,calendarDetails:[]
+
     }
     this.getTasks.bind(this);
     this.imageUpload.bind(this)
@@ -89,6 +85,21 @@ export default class FunderAboutView extends React.Component{
       currencyCode:""
     }
     this.paymentDetails(paymentDetails)
+    this.getServiceProviderDetails()
+  }
+
+  getCalendarDetails(Details){
+    console.log(Details)
+    // this.getServiceProviderDetails(Details)
+  }
+
+
+  async getServiceProviderDetails(){
+    let portfolioId = FlowRouter.getParam('portfolioId');
+    const response = await fetchServiceCalendarActionHandler(portfolioId)
+    console.log(response)
+    this.setState({calendarDetails: response})
+    return response
   }
 
   async  paymentDetails(paymentDetails){
@@ -307,7 +318,7 @@ export default class FunderAboutView extends React.Component{
             </ScrollArea>
           </div>
         </div>:""}
-      </div>:<MlAppMyCalendar/>
+        </div>:<MlAppMyCalendar orderId={this.state.orderId} calendarDetails={this.state.calendarDetails} serviceDetails={this.props.serviceDetails}/>
 
     )
   }

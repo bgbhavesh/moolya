@@ -491,7 +491,7 @@ export default class MlAssignHierarchy extends React.Component {
                       });
                     }
                     let parentDepartment = that.props.data;
-                    let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.data.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId,roles:assignments}}};
+                    let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.data.clusterId,chapterId:'', subChapterId:that.props.data.subChapterId, communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId,roles:assignments}}};
                     //let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
 
                     return(
@@ -551,7 +551,7 @@ export default class MlAssignHierarchy extends React.Component {
                       });
                     }
                     let parentDepartment = that.props.data;
-                    let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.data.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId,roles:assignments}}};
+                    let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.data.clusterId,chapterId:'', subChapterId:that.props.data.subChapterId, communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId,roles:assignments}}};
                     //let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
 
                     return(

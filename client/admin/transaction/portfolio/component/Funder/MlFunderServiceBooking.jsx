@@ -80,7 +80,6 @@ export default class FunderAboutView extends React.Component{
   }
 
   payment(){
-    this.setState({payment: true})
     let paymentDetails={
       orderId:this.state.orderId,
       amount:this.props.serviceDetails.payment?this.props.serviceDetails.payment.tasksDerived:0,
@@ -94,7 +93,11 @@ export default class FunderAboutView extends React.Component{
 
   async  paymentDetails(paymentDetails){
     const response  = await userServiceCardPaymentActionHandler(paymentDetails)
-    return response
+    console.log(response)
+    if(response){
+      this.setState({payment: true})
+      return response
+    }
   }
 
   componentWillMount(){
@@ -113,7 +116,6 @@ export default class FunderAboutView extends React.Component{
   }
 
   imageUpload(id,e){
-    console.log(id)
     let user = {
       profile: {
         InternalUprofile: {moolyaProfile: {profileImage: " "}}

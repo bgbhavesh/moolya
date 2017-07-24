@@ -199,10 +199,8 @@ MlResolver.MlMutationResolver['updateServiceCardOrder'] = (obj, args, context, i
       return ret;
 
     ret = mlServiceCardRepo.createServiceLedger(serviceOrder.serviceId, context)
-    if(!ret.success)
+    if(ret.success)
       return ret;
-
-    return;
 }
 
 // This Resolver need to move to internal users as it should undergo to authorization

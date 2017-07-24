@@ -210,7 +210,7 @@ MlResolver.MlQueryResolver['fetchTaskDetailsForAdminServiceCard'] = (obj, args, 
     isServiceCardEligible: true
   };
   if (args.serviceId) {
-    let service = mlDBController.findOne('MlService', args.serviceId , context);
+    let service = mlDBController.findOne('MlServiceCardDefinition', args.serviceId , context);
     let taskQuery = [];
     if (service.tasks && service.tasks.length > 0) {
       taskQuery = service.tasks.reduce(function(result, task) {

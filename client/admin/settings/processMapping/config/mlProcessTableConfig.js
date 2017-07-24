@@ -1,7 +1,7 @@
-import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
-import React from 'react';
-import gql from 'graphql-tag'
-import moment from 'moment'
+import {MlViewer, MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
+import React from "react";
+import gql from "graphql-tag";
+import moment from "moment";
 function stateFormatter(data){
   let processmapping = [];
   processmapping=data&&data.data&&data.data.states?data.data.states:[];
@@ -88,9 +88,12 @@ const mlProcessTableConfig=new MlViewer.View({
      {dataField: "communities", title: "Community",dataSort:true,customComponent:communityFormatter},
     {dataField: "industries", title:"Industry",dataSort:true},
     {dataField: "professions", title:"Profession",dataSort:true,customComponent:professionFormatter},
+    {dataField: "identity", title: "Identity", dataSort: true},
+    {dataField: "userTypeNamesString", title: "User-Type", dataSort: true},
     {dataField: "clusters", title: "Cluster",dataSort:true,customComponent:clusterFormatter},
     {dataField: "states", title: "State",dataSort:true,customComponent:stateFormatter},
     {dataField:"chapters", title:"Chapter",dataSort:true,customComponent:chapterFormatter},
+    {dataField: "subChapterNamesString", title: "Sub-Chapter", dataSort: true},
     {dataField: "createdBy", title: "Created By",dataSort:true},
     {dataField: "createdDate", title: "CreatedDate And Time",dataSort:true,customComponent:createdateFormatter},
     {dataField: "updatedBy", title: "Updated By",dataSort:true},
@@ -117,20 +120,14 @@ const mlProcessTableConfig=new MlViewer.View({
       handler: (data)=>{
         if(data&&data.id){
           toastr.error("Please uncheck the record")
-          // FlowRouter.go("/admin/settings/processList")
         }else {
           FlowRouter.go("/admin/settings/documentProcess/addProcess")
         }
       }
-    },
-    // {
-    //   showAction: true,
-    //   actionName: 'logout',
-    //   handler: (data)=>{console.log(data);}
-    // }
+    }
   ],
   graphQlQuery:gql`
-                              query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
+               query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
                 data: SearchQuery(module: "processmapping", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData) {
                   totalRecords
                   data {
@@ -150,6 +147,9 @@ const mlProcessTableConfig=new MlViewer.View({
                       createdDate
                       updatedBy
                       updatedDate
+                      identity
+                      userTypeNamesString
+                      subChapterNamesString
                     }
                   }
                 }

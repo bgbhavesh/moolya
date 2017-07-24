@@ -10,6 +10,7 @@ import {multipartASyncFormHandler} from "../../../../../commons/MlMultipartFormA
 import MlAppMyCalendarDayComponent from '../../../../../app/calendar/myCalendar/components/dayComponent'
 var _ = require('lodash');
 import Calender from '../../../../../commons/calendar/calendar'
+import MlAppMyCalendar from './MlFunderServiceCalendar'
 
 
 
@@ -79,7 +80,6 @@ export default class FunderAboutView extends React.Component{
   }
 
   payment(){
-    this.setState({payment: true})
     let paymentDetails={
       orderId:this.state.orderId,
       amount:this.props.serviceDetails.payment?this.props.serviceDetails.payment.tasksDerived:0,
@@ -93,7 +93,11 @@ export default class FunderAboutView extends React.Component{
 
   async  paymentDetails(paymentDetails){
     const response  = await userServiceCardPaymentActionHandler(paymentDetails)
-    return response
+    console.log(response)
+    if(response){
+      this.setState({payment: true})
+      return response
+    }
   }
 
   componentWillMount(){
@@ -112,7 +116,6 @@ export default class FunderAboutView extends React.Component{
   }
 
   imageUpload(id,e){
-    console.log(id)
     let user = {
       profile: {
         InternalUprofile: {moolyaProfile: {profileImage: " "}}
@@ -304,17 +307,7 @@ export default class FunderAboutView extends React.Component{
             </ScrollArea>
           </div>
         </div>:""}
-      </div>:
-        <div className="app_main_wrap" style={{'overflow':'auto'}}>
-          <div className="app_padding_wrap">
-          <Calender
-            dayBackgroundComponent={<MlAppMyCalendarDayComponent /> }
-            dayData=""
-            onNavigate=""
-            date=""
-          />
-      </div>
-          </div>
+      </div>:<MlAppMyCalendar/>
 
     )
   }

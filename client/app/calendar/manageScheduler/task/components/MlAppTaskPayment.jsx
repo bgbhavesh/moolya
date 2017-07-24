@@ -41,7 +41,10 @@ export default class MlAppTaskPayment extends Component {
     let name = 'discountValue';
     let value = e.target.value;
     let amount = this.state.data.payment ? this.state.data.payment.activitiesDerived : ''
-    let derivedAmount = Number(amount) - Number(value)
+    let derivedAmount = '';
+    if (!isNaN(value)) {
+      derivedAmount = Number(amount) - Number(value)
+    }
     details['payment'] = _.omit(details['payment'], [name]);
     details['payment'] = _.omit(details['payment'], ['derivedAmount']);
     details['payment'] = _.extend(details['payment'], {[name]: value, 'derivedAmount': derivedAmount});
@@ -55,7 +58,10 @@ export default class MlAppTaskPayment extends Component {
     let name = 'discountValue';
     let value = e.target.value;
     let amount = this.state.data.payment ? this.state.data.payment.activitiesDerived : ''
-    let derivedAmount = Number(amount) - Number((Number(value)/100)*Number(amount))
+    let derivedAmount = '';
+    if (!isNaN(value)) {
+      derivedAmount = Number(amount) - Number((Number(value)/100)*Number(amount))
+    }
     details['payment'] = _.omit(details['payment'], [name]);
     details['payment'] = _.omit(details['payment'], ['derivedAmount']);
     details['payment'] = _.extend(details['payment'], {[name]: value, 'derivedAmount': derivedAmount});
@@ -116,12 +122,16 @@ export default class MlAppTaskPayment extends Component {
       }
       switch (data.payment.discountType) {
         case 'amount':
-          if (parseFloat(data.payment.discountValue) > parseFloat(data.payment.activitiesDerived)) {
+          if(isNaN(data.payment.discountValue)) {
+            this.errorMsg = 'Please enter a valid number';
+          } else if (parseFloat(data.payment.discountValue) > parseFloat(data.payment.activitiesDerived)) {
             this.errorMsg = 'Amount must be equal or less than the payable amount'
           }
           break;
         case 'percent':
-          if (parseFloat(data.payment.discountValue) > 100) {
+          if(isNaN(data.payment.discountValue)) {
+            this.errorMsg = 'Please enter a valid number';
+          } else if (parseFloat(data.payment.discountValue) > 100) {
             this.errorMsg = 'Percent must be equal or less than 100'
           }
           break;

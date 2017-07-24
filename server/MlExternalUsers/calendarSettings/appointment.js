@@ -58,6 +58,9 @@ class MlAppointment {
         return isWorkingDay;
       } else {
         //Handle if user calendar is not set up
+        return {
+          isActive: false
+        }
       }
     } else {
       //they are free
@@ -84,21 +87,26 @@ class MlAppointment {
        */
       let endDate = new Date(date);
       endDate.setDate(endDate.getDate()+1);
-      let appointments = mlDBController.find( 'MlAppointments', {'provider.userId':userId, 'provider.profileId':profileId, startDate: { gte:date } ,endDate: {lt:endDate} }).fetch();
+      let appointments = mlDBController.find( 'MlAppointments', {'provider.userId':userId, 'provider.profileId':profileId, startDate: { $gte:date } ,endDate: {$lt:endDate} }).fetch();
 
       /**
        * Create response
        */
       let response = slotsInfo.slotTimes.map(function (time) {
         let slotStartTime = getTimeDate(time.split('-')[0], date);
+        slotStartTime.setSeconds(0,0);
         let slotEndTime = getTimeDate(time.split('-')[1], date);
+        slotEndTime.setSeconds(0,0);
 
         /**
          * Filter the current slot appointment form current day appointment
          */
         let appoinmentsCountPerSlot = appointments.filter(function (appointment) {
           let appointmentStartDate = new Date(appointment.startDate);
+          appointmentStartDate.setSeconds(0,0);
           let appointmentEndDate = new Date(appointment.endDate);
+          appointmentStartDate.setSeconds(0,0);
+          console.log(slotStartTime >= appointmentStartDate, slotEndTime <= appointmentEndDate);
           return (slotStartTime >= appointmentStartDate && slotEndTime <= appointmentEndDate);
         }).length;
 
@@ -115,7 +123,7 @@ class MlAppointment {
         }
         return {
           slotTime : time,
-          isAvailable: appoinmentsCountPerSlot == slotsInfo.appointmentPerSlot ? false : true,
+          isAvailable: appoinmentsCountPerSlot >= slotsInfo.appointmentPerSlot ? false : true,
           status: status
         }
       });
@@ -155,6 +163,11 @@ class MlAppointment {
      * Get service provider available slots
      */
     let serviceProviderSlots = that.getUserSlot(calendarSetting, date);
+
+    if(!serviceProviderSlots || !serviceProviderSlots.isActive){
+      return []
+    }
+
     let serviceProviderSlotsAvailability = that.getUserAvailabilityOfDifferentSlotOnDay(date, serviceProviderSlots, task.userId, task.profileId);
     let teamSlotsAvailabilities = [];
 
@@ -267,13 +280,16 @@ class MlAppointment {
     });
     let sessionDuration = session.duration;
     if(sessionDuration){
-      let availableSlots = that.getSessionTimeSlots(sessionId, day, month, year);
-      session.duration.hours = session.duration.hours ? session.duration.hours : 0 ;
-      session.duration.minutes = session.duration.minutes ? session.duration.minutes : 0 ;
-      let sessionDurationInMinutes = session.duration.hours * 60 + session.duration.minutes;
       let canAppoinmentBook = true;
       let isStartTimeFind = false;
       let totalSlotsDuration = 0;
+      let availableSlots = that.getSessionTimeSlots(sessionId, day, month, year);
+      if(!availableSlots || !availableSlots.length) {
+        canAppoinmentBook = false;
+      }
+      session.duration.hours = session.duration.hours ? session.duration.hours : 0 ;
+      session.duration.minutes = session.duration.minutes ? session.duration.minutes : 0 ;
+      let sessionDurationInMinutes = session.duration.hours * 60 + session.duration.minutes;
       availableSlots.forEach(function (availableSlot) {
         if(!canAppoinmentBook || totalSlotsDuration >= sessionDurationInMinutes ){
           return ;
@@ -284,22 +300,30 @@ class MlAppointment {
         }
         let slotEndTime = getTimeDate(availableSlot.slotTime.split('-')[1], date);
         let slotDifference = slotEndTime - slotStartTime;
-        let slotDurationInMinutes = Math.round(((slotDifference % 86400000) % 3600000) / 60000);
+        let slotDurationInMinutes = Math.round((slotDifference % 86400000) / 60000);
         if(isStartTimeFind) {
           console.log(slotStartTime, slotEndTime);
           if(!availableSlot.isAvailable){
             canAppoinmentBook =false;
           }
           totalSlotsDuration += slotDurationInMinutes;
+          console.log(totalSlotsDuration," :==:==: ", slotDurationInMinutes);
         }
-        // console.log(availableSlot, slotDurationInMinutes);
       });
-      if(canAppoinmentBook){
+
+      if(canAppoinmentBook && (totalSlotsDuration >= sessionDurationInMinutes) ) {
+        let endDate = new Date(date);
+        endDate.setMinutes(endDate.getMinutes()+sessionDurationInMinutes);
         return {
-
-        }
+          success: true,
+          start: date,
+          end: endDate
+        };
       } else {
-
+        return {
+          success: false,
+          message: "Message"
+        };
       }
       // console.log(availableSlots, session, sessionDuration, sessionDurationInMinutes);
     } else {
@@ -475,4 +499,4 @@ function getTimeSlots(startDate, endDate, interval) {
   return slots;
 }
 
-module.exports = MlAppointment;
+module.exports = new MlAppointment();

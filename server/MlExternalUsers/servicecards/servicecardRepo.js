@@ -126,7 +126,9 @@ class MlServiceCardRepo{
           servicecard.payment["tasksDiscount"] = taskAmount - taskDerivedAmount;
           servicecard.payment["tasksDerived"] = taskDerivedAmount;
         }
-
+        if (servicecard.termsAndCondition) {
+          service.termsAndCondition = servicecard.termsAndCondition;
+        }
         service.tasks       = servicecard.tasks;
         service.duration    = servicecard.duration;
         service.noOfSession = servicecard.noOfSession;
@@ -261,7 +263,7 @@ class MlServiceCardRepo{
       let userId = context.userId;
 
       try {
-        let service = mlDBController.findOne('MlScOrder', {transactionId: orderId}, context);
+        let service = mlDBController.findOne('MlScOrder', {orderId: orderId}, context);
         let dataToInsert = {
           paymentId         : payload.userServiceCardPaymentInfo.paymentId,
           paymentMethod     : payload.userServiceCardPaymentInfo.paymentMethod,
@@ -289,16 +291,16 @@ class MlServiceCardRepo{
     createServiceCard(serviceDefId, context){
         try {
           var defaultProfile = new MlUserContext().userProfileDetails(context.userId);
-          var serviceDef = mlDBController.find('MlServiceCardDefinition', {_id:serviceDefId}, context)
+          var serviceDef = mlDBController.findOne('MlServiceCardDefinition', {_id:serviceDefId}, context)
           if(!serviceDef)
             return new MlRespPayload().errorPayload("Error In Fetching Service Card Definition", 400)
 
           var serviceCard = {};
-          serviceCard["userId"] = context.userId
-          serviceCard["profileId"] = defaultProfile.profileId
-          serviceCard["serviceDefId"] = serviceDefId
-          serviceCard["isActive"] = true
-          serviceCard["tasks"] = serviceDef.tasks
+          serviceCard["userId"] = context.userId;
+          serviceCard["profileId"] = defaultProfile.profileId;
+          serviceCard["serviceDefId"] = serviceDefId;
+          serviceCard["isActive"] = true;
+          serviceCard["tasks"] = serviceDef.tasks;
           serviceCard["isExpired"] = false;
           serviceCard["startDate"] = new Date();
 
@@ -324,15 +326,15 @@ class MlServiceCardRepo{
     createServiceLedger(serviceId, context){
       try {
         var defaultProfile = new MlUserContext().userProfileDetails(context.userId);
-        var service = mlDBController.find('MlServiceCards', {_id:serviceId}, context)
+        var service = mlDBController.findOne('MlServiceCards', {serviceDefId: serviceId}, context)
         if(!service)
           return new MlRespPayload().errorPayload("Error In Updating Ledger Balance", 400)
 
         var serviceCard = {};
-        serviceCard["userId"]         = context.userId
-        serviceCard["profileId"]      = defaultProfile.profileId
-        serviceCard["serviceId"]      = serviceId
-        serviceCard["serviceCard"]    = service.tasks
+        serviceCard["userId"]         = context.userId;
+        serviceCard["profileId"]      = defaultProfile.profileId;
+        serviceCard["serviceId"]      = serviceId;
+        serviceCard["serviceCard"]    = {tasks: service.tasks};
         // Need to Update
         // serviceCard["serviceType"]      = serviceType
 

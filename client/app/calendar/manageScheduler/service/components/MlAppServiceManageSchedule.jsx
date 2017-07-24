@@ -86,6 +86,7 @@ export default class MlAppServiceManageSchedule extends Component {
     this.checkTaxStatus = this.checkTaxStatus.bind(this);
     this.checkPromoStatus = this.checkPromoStatus.bind(this);
     this.checkDiscountStatus = this.checkDiscountStatus.bind(this);
+    this.deleteSelectedTask = this.deleteSelectedTask.bind(this);
   }
 
   componentWillMount() {
@@ -101,10 +102,6 @@ export default class MlAppServiceManageSchedule extends Component {
         $(this).parent('.switch').removeClass('on');
       }
     });
-  }
-
-  componentWillReceiveProps(newProps){
-    console.log(newProps)
   }
 
   /**
@@ -154,6 +151,7 @@ export default class MlAppServiceManageSchedule extends Component {
         component: <MlAppServiceSelectTask serviceTask={serviceTask}
                                            profileId={this.profileId}
                                            serviceId={this.serviceId}
+                                           deleteSelectedTask={this.deleteSelectedTask}
                                            getServiceDetails={this.getServiceDetails}
                                            saveService={this.saveService}
                                            viewMode={this.props.viewMode}
@@ -198,6 +196,49 @@ export default class MlAppServiceManageSchedule extends Component {
     return steps;
   }
 
+  /**
+   * Delete the selected task
+   * @param taskId :: String
+   */
+  async deleteSelectedTask(taskId) {
+    let {serviceTask, tasks } = this.state;
+    let services = {tasks: []};
+    serviceTask.tasks.map((taskInfo) => {
+      if (taskInfo.id !== taskId) {
+        let sessionDetails = [];
+        let serviceDetails = tasks && tasks.filter((taskData) => {
+          return taskInfo.id === taskData.id
+        });
+        let isServiceDetails = false;
+        if (serviceDetails && serviceDetails.length > 0) {
+          isServiceDetails = true
+        }
+        if (taskInfo.session && taskInfo.session.length > 0 && isServiceDetails) {
+          taskInfo.session.forEach((session, index) => {
+            let seqData = '';
+            if (isServiceDetails && serviceDetails[0]['sessions'] && serviceDetails[0]['sessions'].length > 0) {
+              seqData = serviceDetails[0]['sessions'][index].sequence;
+            }
+            sessionDetails.push({id: session.sessionId, sequence: session.sequence || seqData})
+          });
+          let task = {
+            id: taskInfo.id,
+            sequence: taskInfo.sequence || serviceDetails[0].sequence,
+            sessions: sessionDetails
+          };
+          services.tasks.push(task);
+        }
+      }
+    });
+    serviceTask.selectedTaskId = '';
+    this.setState({
+      tasks: tasks,
+      serviceTask: serviceTask
+    });
+    const resp = await updateServiceActionHandler(this.serviceId, services);
+    this.getServiceDetails();
+    this.optionsBySelectService();
+  }
   /**
    * Method :: getTaskDetailsForService
    * Desc :: Get the tasks for service card eligibility
@@ -367,6 +408,7 @@ export default class MlAppServiceManageSchedule extends Component {
           clusterData.community = communities;
         }
       }
+      this.props.serviceId?this.props.serviceInfo(service):"";
     }
     var validTillDate = Date.parse(serviceBasicInfo.validTill);
     var currentDate = new Date();
@@ -387,7 +429,8 @@ export default class MlAppServiceManageSchedule extends Component {
       finalAmount: finalAmount,
       prevFinalAmount: prevFinalAmount
     }, () => {
-      this.getUserProfile();
+      this.getUserProfile()
+
     });
   }
 
@@ -440,7 +483,9 @@ export default class MlAppServiceManageSchedule extends Component {
   onChangeValue(event) {
     let {serviceTermAndCondition} = this.state;
     let {id, value} = event.target;
-    if (event.target.id === 'rescheduler') {
+    if (isNaN(value)) {
+      toastr.error('Please enter a valid number');
+    } else if (event.target.id === 'rescheduler') {
       serviceTermAndCondition.noOfReschedulable = value;
     } else {
       serviceTermAndCondition.noOfDaysBeforeCancelation = value;
@@ -463,6 +508,15 @@ export default class MlAppServiceManageSchedule extends Component {
         return false;
       }
     }
+
+    // Check validation for a number in service Term And Condition
+    if ((serviceTermAndCondition.noOfReschedulable && isNaN(serviceTermAndCondition.noOfReschedulable)) ||
+      ( serviceTermAndCondition.noOfDaysBeforeCancelation && isNaN( serviceTermAndCondition.noOfDaysBeforeCancelation))) {
+      toastr.error('Please enter a valid number');
+      return false;
+    }
+
+    // Service basic info construct
     if (chapterName) {
       let cities = [];
       chapterName.map((data) => {
@@ -507,6 +561,8 @@ export default class MlAppServiceManageSchedule extends Component {
       state: serviceBasicInfo.state,
       community: serviceBasicInfo.community
     };
+
+    // Service selected task construct
     if (serviceTask.selectedTaskDetails && serviceTask.selectedTaskId) {
       let sessions = [];
       let serviceDetails = service.tasks && service.tasks.filter((task) => {
@@ -641,12 +697,16 @@ export default class MlAppServiceManageSchedule extends Component {
     }
     switch (servicePayment.discountType) {
       case 'amount':
-        if (parseFloat(servicePayment.discountValue) > parseFloat(servicePayment.tasksDerived)) {
+        if(isNaN(servicePayment.discountValue)) {
+          this.errorMsg = 'Please enter a valid number';
+        } else if (parseFloat(servicePayment.discountValue) > parseFloat(servicePayment.tasksDerived)) {
           this.errorMsg = 'Amount must be equal or less than the task derived amount'
         }
         break;
       case 'percent':
-        if (parseFloat(servicePayment.discountValue) > 100) {
+        if(isNaN(servicePayment.discountValue)) {
+          this.errorMsg = 'Please enter a valid number';
+        } else if (parseFloat(servicePayment.discountValue) > 100) {
           this.errorMsg = 'Percent must be equal or less than 100'
         }
         break;

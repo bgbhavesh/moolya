@@ -18,7 +18,7 @@ let Process = `
         userTypes   : [String],
         userTypeNames : [String],
         identity    : String,
-        industrieNames : [String],
+        industryNames : [String],
         industries  : [String],
         industries  : [String],
         industries  : [String],
@@ -35,6 +35,8 @@ let Process = `
         isActive    : Boolean,
         documents   : [documentOutput]  
         processDocuments : [processDocumentOutput]
+        userTypeNamesString : String
+        subChapterNamesString : String
     }
      type docFilesInputSchema{
        fileId:String,

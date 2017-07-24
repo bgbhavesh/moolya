@@ -378,6 +378,11 @@ class MlAppointment {
      *  Get the user calendar setting
      */
     let calendarSetting = mlDBController.findOne('MlCalendarSettings',{userId:userId, profileId:profileId});
+
+    if(!calendarSetting){
+      return { days: [] };
+    }
+
     calendarSetting.vacations = calendarSetting.vacations ? calendarSetting.vacations : [];
 
     /**

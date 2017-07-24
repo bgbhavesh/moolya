@@ -126,7 +126,9 @@ class MlServiceCardRepo{
           servicecard.payment["tasksDiscount"] = taskAmount - taskDerivedAmount;
           servicecard.payment["tasksDerived"] = taskDerivedAmount;
         }
-
+        if (servicecard.termsAndCondition) {
+          service.termsAndCondition = servicecard.termsAndCondition;
+        }
         service.tasks       = servicecard.tasks;
         service.duration    = servicecard.duration;
         service.noOfSession = servicecard.noOfSession;

@@ -25,10 +25,11 @@ class MlAppTaskLanding extends Component {
 
   async saveTaskDetails() {
     let sendData = this.state.createData
+    let isExternal = this.state.isExternal;
     let taskId = this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id')
     var response;
     this.errorMsg = '';
-    if (sendData.payment && sendData.payment.isDiscount) {
+    if (sendData && sendData.payment && sendData.payment.isDiscount) {
       if(sendData.payment.activitiesDerived === '' || typeof sendData.payment.activitiesDerived === 'undefined' || sendData.payment.activitiesDerived === null ){
         this.errorMsg = 'Payable amount is required';
         toastr.error(this.errorMsg);
@@ -51,6 +52,30 @@ class MlAppTaskLanding extends Component {
           break;
         default:
           this.errorMsg = '';
+      }
+    }
+    if (sendData && isExternal) {
+      let {activities} = this.state;
+      if (sendData.session && sendData.session.length > 0 && activities && activities.length> 0) {
+        sendData.session.map((sessionData, index) => {
+          let isOnline = false;
+          if (sessionData.activities && sessionData.activities.length > 0) {
+            sessionData.activities.map((activityId) => {
+              let activity = activities.filter((activityData) => { return activityData._id === activityId});
+              if (activity && activity.length > 0) {
+                if (activity[0].mode === 'online' && !isOnline) {
+                  isOnline = true;
+                }
+              }
+            })
+          } else {
+            isOnline = true;
+          }
+          if(!isOnline) {
+            this.errorMsg = 'Activity must be at least one online mode for external task in Session ' + (1 + index);
+            return false;
+          }
+        })
       }
     }
     if (!this.errorMsg) {
@@ -102,7 +127,7 @@ class MlAppTaskLanding extends Component {
     this.setState({createData: details, saveType: typeHandel});
   }
 
-  getSessionDetails(details) {
+  getSessionDetails(details, activities, isExternal) {
     let totalMinutes = details.reduce(function(sum, value) {
       let duration = value.duration ? value.duration : {};
       return sum + (duration.hours ? duration.hours : 0)*60 + ( duration.minutes ? duration.minutes : 0 ) ;
@@ -115,7 +140,7 @@ class MlAppTaskLanding extends Component {
       session: details
     }
     console.log(obj);
-    this.setState({createData: obj, saveType: 'taskUpdate'});
+    this.setState({createData: obj, saveType: 'taskUpdate', activities: activities, isExternal: isExternal});
   }
 
   getPaymentDetails(details) {

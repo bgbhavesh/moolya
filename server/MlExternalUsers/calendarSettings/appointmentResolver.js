@@ -104,26 +104,33 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
 
   let serviceLedgerBalance = mlDBController.findOne('MlServiceLedger', {serviceId: serviceId}, context);
   let taskInfo = serviceLedgerBalance.serviceCard.tasks; // Update task fetch info in case serviceLedgerBalance schema update
-  let task = taskInfo.filter(function (data) {
+  let task = taskInfo.find(function (data) {
     data.sessions = data.sessions ? data.sessions : [];
     return data.sessions.some(function (session) {
       return session.id == sessionId;
     });
   });
 
-  if(!task.length){
+  if(!task){
     let code = 400;
-    let response = new MlRespPayload().errorPayload("Session id is not attached in order", code);
+    let response = new MlRespPayload().errorPayload("Task id is not attached in order", code);
     return response;
   }
 
-  let date = new Date();
+  let taskId = task.id;
+
+  if(taskId) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload("Task id is not attached in service card definition", code);
+    return response;
+  }
+
   let day = args.userServiceCardAppointmentInfo.day; //date.getDate();
   let month = args.userServiceCardAppointmentInfo.month; //date.getMonth();
   let year = args.userServiceCardAppointmentInfo.year; //date.getFullYear();
   let hours = args.userServiceCardAppointmentInfo.hours; //9;
   let minutes = args.userServiceCardAppointmentInfo.minutes; // 0;
-  let appointment = MlAppointment.bookAppointment('appointmentId', sessionId, hours, minutes, day, month, year);
+  let appointment = MlAppointment.bookAppointment('appointmentId', taskId, sessionId, hours, minutes, day, month, year);
   if(appointment.success){
     let userId = context.userId;
     let profileId = new MlUserContext().userProfileDetails(userId).profileId;

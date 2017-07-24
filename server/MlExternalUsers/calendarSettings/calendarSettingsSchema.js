@@ -108,6 +108,7 @@ let calendarSettingSlot=`
      getMyCalendar(month:Int, year: Int): MonthCalendar
      getServiceProviderCalendar(portfolioId:String, month:Int, year: Int): MonthCalendar
      getMyCalendarDayAvailable:response
+     getSessionDayAvailable(orderId:String!, sessionId: String!, day: Int, month: Int, year: Int): response
   }
   
   type Mutation {

@@ -408,7 +408,7 @@ export default class MlAppServiceManageSchedule extends Component {
           clusterData.community = communities;
         }
       }
-      this.props.serviceInfo(service);
+      this.props.serviceId?this.props.serviceInfo(service):"";
     }
     var validTillDate = Date.parse(serviceBasicInfo.validTill);
     var currentDate = new Date();

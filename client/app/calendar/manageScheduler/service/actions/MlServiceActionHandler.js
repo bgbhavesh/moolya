@@ -354,6 +354,7 @@ export async function userServiceCardPaymentActionHandler(userServiceCardPayment
     }
   });
   const teamMembers = result.data.updateServiceCardOrder;
+  return teamMembers;
 }
 
 

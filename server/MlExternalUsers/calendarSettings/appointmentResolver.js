@@ -118,10 +118,12 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
   }
 
   let date = new Date();
-  let day = date.getDate();
-  let month = date.getMonth();
-  let year = date.getFullYear();
-  let appointment = MlAppointment.bookAppointment('appointmentId', sessionId, 9, 0, day, month, year);
+  let day = args.userServiceCardAppointmentInfo.day; //date.getDate();
+  let month = args.userServiceCardAppointmentInfo.month; //date.getMonth();
+  let year = args.userServiceCardAppointmentInfo.year; //date.getFullYear();
+  let hours = args.userServiceCardAppointmentInfo.hours; //9;
+  let minutes = args.userServiceCardAppointmentInfo.minutes; // 0;
+  let appointment = MlAppointment.bookAppointment('appointmentId', sessionId, hours, minutes, day, month, year);
   if(appointment.success){
     let userId = context.userId;
     let profileId = new MlUserContext().userProfileDetails(userId).profileId;
@@ -151,6 +153,8 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
       return response;
     }
   } else {
-    console.log('MlAppointment', appointment);
+    let code = 400;
+    let response = new MlRespPayload().errorPayload(appointment.message, code);
+    return response;
   }
 };

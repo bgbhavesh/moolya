@@ -29,7 +29,11 @@ let appointment=`
   input userServiceCardAppointmentInfo {
     orderId: String!
     sessionId: String!
-    date: Date
+    hours: Int!
+    minutes: Int!
+    day: Int!
+    month: Int!
+    year: Int!
   }
   
   type Query {   

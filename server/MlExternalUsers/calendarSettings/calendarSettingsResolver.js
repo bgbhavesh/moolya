@@ -146,7 +146,7 @@ MlResolver.MlQueryResolver['getSessionDayAvailable'] = (obj, args, context, info
     return response;
   }
 
-  return mlAppointment.getSessionTimeSlots(sessionId, day, month, year, taskId);
+  return mlAppointment.getSessionTimeSlots(taskId, sessionId, day, month, year);
 };
 
 MlResolver.MlMutationResolver['updateMyCalendarSetting'] = (obj, args, context, info) => {

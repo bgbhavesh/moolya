@@ -4,7 +4,7 @@
 import gql from "graphql-tag";
 import {appClient} from "../../../core/appConnection";
 
-export async function ongoingAppointmentActionHandler(selfInternalTask) {
+export async function ongoingAppointmentActionHandler() {
   const result = await appClient.query({
     query: gql`
       query {

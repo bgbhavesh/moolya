@@ -204,24 +204,12 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
             'processDocuments': {
               $exists: true,
               $elemMatch: {
-                'documentId': existingDoc._id&&existingDoc._id,
-                'isMandatory':false,
-                'isActive':false,
+                'documentId': existingDoc._id&&existingDoc._id
               }
             }
           }, {
             'processDocuments': {'docTypeId' : {$in: updatedDocTypes }}
           }, {$pull: true}, context)
-        }
-
-        if(!updatedDocTypes){
-          let updateFail = MlDocumentMapping.update({documentId:args.documentId}, {$set: existingDoc})
-          if(updateFail){
-            let code = 401;
-            let response = new MlRespPayload().errorPayload("Cannot update as existing processdocuments are mandatory ", code);
-            return response;
-          }
-
         }
       }
 
@@ -241,12 +229,24 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
           'processDocuments': {
             $exists: true,
             $elemMatch: {
-              'documentId': existingDoc._id&&existingDoc._id
+              'documentId': existingDoc._id&&existingDoc._id,
+              'isMandatory':false,
+              'isActive':false,
             }
           }
         }, {
           "processDocuments.$.isActive": args.document.isActive,
         }, {$set: true}, context)
+
+        if(!updateStatus){
+          let updateFail = MlDocumentMapping.update({documentId:args.documentId}, {$set: existingDoc})
+          if(updateFail){
+            let code = 401;
+            let response = new MlRespPayload().errorPayload("Cannot update as existing processdocuments are mandatory ", code);
+            return response;
+          }
+
+        }
 
       }
 

@@ -7,6 +7,7 @@ import MlDBController from './mlDBController';
 import MlTransactionsHandler from '../../server/commons/mlTransactionsLog';
 import passwordUtil from "./passwordUtil";
 import NotificationTemplateEngine from "../commons/mlTemplateEngine"
+import MlEmailNotification from "../mlNotifications/mlEmailNotifications/mlEMailNotification"
 
 var fromEmail = Meteor.settings.private.fromEmailAddr;
 export default MlAccounts=class MlAccounts {
@@ -127,8 +128,12 @@ export default MlAccounts=class MlAccounts {
       // By including the address in the query, we can use 'emails.$' in the
          // modifier to get a reference to the specific object in the emails
          // array.
-         MlRegistration.update({_id: user._id,'emails.address': tokenRecord.address},{$set: {'emails.$.verified': true },
+         let emailVerified = MlRegistration.update({_id: user._id,'emails.address': tokenRecord.address},{$set: {'emails.$.verified': true },
                              $pull: {'services.email.verificationTokens': {address: tokenRecord.address}}});
+
+         if(emailVerified){
+           let emailSent = MlEmailNotification.onEmailVerificationSuccess(context);
+         }
 
       return {
         email:tokenRecord.address,emailVerified:true,recordId:user._id,error: false

@@ -107,6 +107,7 @@ let NotificationTemplates = [
 
 ]
 
+/*
 Meteor.startup(function () {
 
   let count = MlNotificationTemplates.find().count()  // To find the no:of doc in Notifi Temp Collection.
@@ -120,3 +121,4 @@ Meteor.startup(function () {
     }
   }
 });
+*/

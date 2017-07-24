@@ -1,5 +1,6 @@
 var noData = "not mentioned";
 var fromEmail = Meteor.settings.private.fromEmailAddr;
+import NotificationTemplateEngine from "../../commons/mlTemplateEngine"
 const MlEmailNotification= class MlEmailNotification {
 
   static  mlUserRegistrationOtp(otpNum,regId) {
@@ -174,6 +175,120 @@ const MlEmailNotification= class MlEmailNotification {
       console.log("Failed to send inquiry email");
     }
   }
+
+  static onChangePassword(context){
+    try {
+
+
+      var userDetails = Meteor.users.findOne({_id: context.userId});
+      var currentdate = new Date();
+      let date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+      let time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+      let regObj = {
+        firstName : userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"",
+        time : time,
+        date : date
+      }
+      let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+      let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_change_of_password_confirmation_mailer","email",regObj)
+      Meteor.setTimeout(function () {
+        mlEmail.sendHtml({
+          from: fromEmail,
+          to: toEmail,
+          subject: "Moolya password changed!!!",
+          html : mail_body&&mail_body.content
+        });
+      }, 2 * 1000);
+
+    } catch (e) {
+      console.log("mlChangePassword:Error while sending the  Email Notification" + e);
+    }
+  }
+
+  static onEmailVerificationSuccess(context){
+    try {
+
+
+      var userDetails = Meteor.users.findOne({_id: context.userId});
+      let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+      let regObj = {"firstName" : userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:""}
+      let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_change_of_password_confirmation_mailer","email",regObj)
+      Meteor.setTimeout(function () {
+        mlEmail.sendHtml({
+          from: fromEmail,
+          to: toEmail,
+          subject: "Email Verified!!!",
+          html : mail_body&&mail_body.content
+        });
+      }, 2 * 1000);
+
+    } catch (e) {
+      console.log("onEmailVerificationSuccess:Error while sending the  Email Notification" + e);
+    }
+  }
+
+  static onDeactivateUser(context){
+    try {
+
+
+      var userDetails = Meteor.users.findOne({_id: context.userId});
+      var currentdate = new Date();
+      let date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+      let time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+      let firstName = userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"";
+      let lastName = userDetails&&userDetails.profile&&userDetails.profile.lastName?userDetails.profile.lastName:"";
+      let regObj = {
+        userName : firstName+" "+lastName,
+        time : time,
+        date : date
+      }
+      let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+      let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_Profile_Deactivated","email",regObj)
+      Meteor.setTimeout(function () {
+        mlEmail.sendHtml({
+          from: fromEmail,
+          to: toEmail,
+          subject: "Profile Deactivation!!!",
+          html : mail_body&&mail_body.content
+        });
+      }, 2 * 1000);
+
+    } catch (e) {
+      console.log("mlDeactivateUser:Error while sending the  Email Notification" + e);
+    }
+  }
+
+
+
+  static requestForProfileDeactivation(context){
+    try {
+      var userDetails = Meteor.users.findOne({_id: context.userId});
+      var currentdate = new Date();
+      let date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+      let time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+      let firstName = userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"";
+      let lastName = userDetails&&userDetails.profile&&userDetails.profile.lastName?userDetails.profile.lastName:"";
+      let regObj = {
+        userName : firstName+" "+lastName,
+        time : time,
+        date : date
+      }
+      let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+      let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_request_for_profile_deactivation","email",regObj)
+      Meteor.setTimeout(function () {
+        mlEmail.sendHtml({
+          from: fromEmail,
+          to: toEmail,
+          subject: "Profile Deactivation Request!!!",
+          html : mail_body&&mail_body.content
+        });
+      }, 2 * 1000);
+
+    } catch (e) {
+      console.log("mlRequestforDeactivateUser:Error while sending the  Email Notification" + e);
+    }
+  }
+
 
 }
 

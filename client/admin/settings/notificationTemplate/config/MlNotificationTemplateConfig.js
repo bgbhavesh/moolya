@@ -1,6 +1,4 @@
-/**
- * Created by mohammed.mohasin on 22/07/17.
- */
+
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'

@@ -158,3 +158,10 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
     return response;
   }
 };
+
+MlResolver.MlQueryResolver["fetchMyAppointment"] = (obj, args, context, info) => {
+  let userId = context.userId;
+  let profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  let response = mlDBController.find('MlAppointments', { 'provider.userId': userId, 'provider.profileId': profileId }, context).fetch();
+  return response;
+};

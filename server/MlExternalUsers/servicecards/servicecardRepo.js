@@ -5,6 +5,8 @@ import MlUserContext from '../mlUserContext'
 import MlRespPayload from '../../commons/mlPayload'
 import _ from 'lodash'
 
+import moment from "moment";
+
 const INITIAL_VERSION = 0.001;
 
 class MlServiceCardRepo{
@@ -347,8 +349,7 @@ class MlServiceCardRepo{
         break;
       }
 
-      var date = new Date().setDate(date.getDate() + frequency);;
-      var eDate = date.getDate()+'/'+ (date.getMonth()+1) +'/'+date.getFullYear();
+      var eDate = moment().add(frequency, 'day')
       return eDate;
     }
 

@@ -54,8 +54,38 @@ MlResolver.MlQueryResolver['getMyCalendar'] = (obj, args, context, info) => {
   return MlAppointment.getUserCalendar(userId, profileId, month, year);
 };
 
-MlResolver.MlQueryResolver['getMyCalendarDayAvailable'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver['getServiceProviderCalendar'] = (obj, args, context, info) => {
+  let portfolioId = args.portfolioId;
+  let portfolioInfo = mlDBController.findOne('MlPortfolioDetails', portfolioId, context);
+
+  if(!portfolioInfo){
+    let code = 400;
+    let result = 'Portfolio is not defined for this user';
+    let response = new MlRespPayload().errorPayload(result, code);
+    return response;
+  }
+  let userId = portfolioInfo.userId;
+  let profileId = portfolioInfo.profileId;
+  if(!userId){
+    let code = 400;
+    let result = 'User ID is not defined for this user';
+    let response = new MlRespPayload().errorPayload(result, code);
+    return response;
+  }
+  if(!profileId){
+    let code = 400;
+    let result = 'Profile ID is not defined for this user';
+    let response = new MlRespPayload().errorPayload(result, code);
+    return response;
+  }
   // let mlAppointment = new MlAppointment();
+  let date = new Date();
+  let month = args.month ? args.month : date.getMonth() ;
+  let year = args.year ? args.year : date.getFullYear() ;
+  return MlAppointment.getUserCalendar(userId, profileId, month, year);
+};
+
+MlResolver.MlQueryResolver['getMyCalendarDayAvailable'] = (obj, args, context, info) => {
   let date = new Date();
   let day = args.day ? args.day : date.getDate();
   let month = args.month ? args.month : date.getMonth() ;

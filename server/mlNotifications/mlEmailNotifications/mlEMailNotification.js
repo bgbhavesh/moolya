@@ -185,7 +185,7 @@ const MlEmailNotification= class MlEmailNotification {
       let date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
       let time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
       let regObj = {
-        firstName : userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"",
+        userName : userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"",
         time : time,
         date : date
       }
@@ -212,7 +212,7 @@ const MlEmailNotification= class MlEmailNotification {
       var userDetails = Meteor.users.findOne({_id: context.userId});
       let toEmail = userDetails&&userDetails.username?userDetails.username:"";
       let regObj = {"firstName" : userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:""}
-      let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_change_of_password_confirmation_mailer","email",regObj)
+      let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_email_verified_confirmation_mailer","email",regObj)
       Meteor.setTimeout(function () {
         mlEmail.sendHtml({
           from: fromEmail,
@@ -243,7 +243,7 @@ const MlEmailNotification= class MlEmailNotification {
         date : date
       }
       let toEmail = userDetails&&userDetails.username?userDetails.username:"";
-      let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_Profile_Deactivated","email",regObj)
+      let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_profile_deactivated","email",regObj)
       Meteor.setTimeout(function () {
         mlEmail.sendHtml({
           from: fromEmail,
@@ -287,6 +287,59 @@ const MlEmailNotification= class MlEmailNotification {
     } catch (e) {
       console.log("mlRequestforDeactivateUser:Error while sending the  Email Notification" + e);
     }
+  }
+
+  static forgotPassword(context,path){
+
+    var userDetails = Meteor.users.findOne({_id: context.userId});
+    let firstName = userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"";
+    let lastName = userDetails&&userDetails.profile&&userDetails.profile.lastName?userDetails.profile.lastName:"";
+    let regObj = {
+      userName : firstName+" "+lastName,
+      link : path
+    }
+    let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_forgot_reset_password_mailer","email",regObj)
+    var emailOptions={};
+   /* //emailContent= MlAccounts.greet("To verify your account email,",user,Meteor.absoluteUrl('reset')+'/'+token);
+    emailOptions.from=fromEmail;
+    emailOptions.to=toEmail;
+    emailOptions.subject="Forgot Password !";
+    emailOptions.html=mail_body;
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml(emailOptions);
+    }, 2 * 1000);
+    return {error: false,reason:"Reset link send successfully", code:200};*/
+
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "Forgot Password !",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+
+  }
+
+  static userVerficationLink(emailOptions){
+
+    let regObj = {
+      link : emailOptions&&emailOptions.path?emailOptions.path:"",
+      userName : emailOptions&&emailOptions.firstName?emailOptions.firstName:"",
+      contactNumber : "+91-40-4672 5725 /Ext",
+      hours : 48,
+    }
+    let toEmail = emailOptions&&emailOptions.toEmail?emailOptions.toEmail:"";
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_user_activation_mailer","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "Welcome to moolya !",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
   }
 
 

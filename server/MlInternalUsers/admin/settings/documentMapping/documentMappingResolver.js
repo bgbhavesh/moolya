@@ -126,14 +126,13 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
       if(!isAllowableFormat_same){
         updatedAllowableFormat = mlDBController.update('MlProcessMapping', {
           'processDocuments': {
-            $exists: true,
             $elemMatch: {
                'documentId': existingDoc._id&&existingDoc._id
             }
           }
         }, {
           "processDocuments.$.allowableFormat": args.document.allowableFormat,
-        }, {$set: true}, context)
+        }, {$set: true,multi:true}, context)
       }
 
 
@@ -171,7 +170,7 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
             }
           }, {
             'processDocuments': {'kycCategoryId' : {$in: updatedKYCDocs }}
-          }, {$pull: true}, context)
+          }, {$pull: true,multi:true}, context)
         }
 /*
         if(!updatedKYC){
@@ -209,7 +208,7 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
             }
           }, {
             'processDocuments': {'docTypeId' : {$in: updatedDocTypes }}
-          }, {$pull: true}, context)
+          }, {$pull: true,multi:true}, context)
         }
       }
 
@@ -236,7 +235,7 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
           }
         }, {
           "processDocuments.$.isActive": args.document.isActive,
-        }, {$set: true}, context)
+        }, {$set: true,multi:true}, context)
 
         if(!updateStatus){
           let updateFail = MlDocumentMapping.update({documentId:args.documentId}, {$set: existingDoc})
@@ -272,7 +271,7 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
           }
         }, {
           "processDocuments.$.allowableMaxSize": args.document.allowableMaxSize,
-        }, {$set: true}, context)
+        }, {$set: true,multi:true}, context)
 
       }
 

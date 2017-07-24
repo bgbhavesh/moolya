@@ -420,12 +420,8 @@ export default class MlAssignHierarchy extends React.Component {
           <div className="panel-body">
             {that.state.unAssignedRoles.teamStructureAssignment.map(function (roles,id) {
               let parentDepartment = that.props.data;
-              let reportingRoleOptions ={};
 
-              if(that.props.data.isDefaultSubChapter)
-                reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.data.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId,roles:that.state.unAssignedRoles.teamStructureAssignment}}};
-              else
-                reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.data.clusterId,chapterId:'', subChapterId:that.props.data.subChapterId, communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId,roles:that.state.unAssignedRoles.teamStructureAssignment}}};
+              let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.data.clusterId,chapterId:'', subChapterId:that.props.data.subChapterId, communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId,roles:that.state.unAssignedRoles.teamStructureAssignment}}};
 
               return(
                 <div className="row" key={id}>

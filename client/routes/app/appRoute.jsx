@@ -533,7 +533,7 @@ appSection.route('/explore/startup/:portfolioId', {
 appSection.route('/myAppointment', {
   name: 'myAppointment',
   action(params){
-    mount(AppLayout,{appContent:< MlAppMyAppointment />})
+    mount(AppLayout,{appContent:< MlAppMyAppointment />, isProfileMenu: true})
   }
   /**there is no need to send community type other than ideator*/
 });

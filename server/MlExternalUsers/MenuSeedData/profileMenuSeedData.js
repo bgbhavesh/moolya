@@ -87,6 +87,14 @@ if(Meteor.isServer){
               "uniqueId" : "mySubscriptions"
           },
           {
+            "image":"ml ml-moolya-symbol",
+            "link": "/app/myAppointment",
+            "isLink" : true,
+            "isMenu" : true,
+            "name" : "My Appointments",
+            "uniqueId" : "myAppointment"
+          },
+          {
               "image":"ml ml-settings",
               "link": "/app/settings",
               "isLink" : true,

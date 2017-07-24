@@ -106,6 +106,7 @@ let calendarSettingSlot=`
   type Query {   
      fetchMyCalendarSetting(profileId:String):CalendarSetting
      getMyCalendar(month:Int, year: Int): MonthCalendar
+     getServiceProviderCalendar(portfolioId:String, month:Int, year: Int): MonthCalendar
      getMyCalendarDayAvailable:response
   }
   

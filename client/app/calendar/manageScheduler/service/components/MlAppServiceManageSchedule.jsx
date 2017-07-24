@@ -483,7 +483,9 @@ export default class MlAppServiceManageSchedule extends Component {
   onChangeValue(event) {
     let {serviceTermAndCondition} = this.state;
     let {id, value} = event.target;
-    if (event.target.id === 'rescheduler') {
+    if (isNaN(value)) {
+      toastr.error('Please enter a valid number');
+    } else if (event.target.id === 'rescheduler') {
       serviceTermAndCondition.noOfReschedulable = value;
     } else {
       serviceTermAndCondition.noOfDaysBeforeCancelation = value;
@@ -505,6 +507,13 @@ export default class MlAppServiceManageSchedule extends Component {
       if (this.errorMsg) {
         return false;
       }
+    }
+
+    // Check validation for a number in service Term And Condition
+    if ((serviceTermAndCondition.noOfReschedulable && isNaN(serviceTermAndCondition.noOfReschedulable)) ||
+      ( serviceTermAndCondition.noOfDaysBeforeCancelation && isNaN( serviceTermAndCondition.noOfDaysBeforeCancelation))) {
+      toastr.error('Please enter a valid number');
+      return false;
     }
 
     // Service basic info construct
@@ -688,12 +697,16 @@ export default class MlAppServiceManageSchedule extends Component {
     }
     switch (servicePayment.discountType) {
       case 'amount':
-        if (parseFloat(servicePayment.discountValue) > parseFloat(servicePayment.tasksDerived)) {
+        if(isNaN(servicePayment.discountValue)) {
+          this.errorMsg = 'Please enter a valid number';
+        } else if (parseFloat(servicePayment.discountValue) > parseFloat(servicePayment.tasksDerived)) {
           this.errorMsg = 'Amount must be equal or less than the task derived amount'
         }
         break;
       case 'percent':
-        if (parseFloat(servicePayment.discountValue) > 100) {
+        if(isNaN(servicePayment.discountValue)) {
+          this.errorMsg = 'Please enter a valid number';
+        } else if (parseFloat(servicePayment.discountValue) > 100) {
           this.errorMsg = 'Percent must be equal or less than 100'
         }
         break;

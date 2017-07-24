@@ -36,8 +36,24 @@ let appointment=`
     year: Int!
   }
   
+  type AppointmentUser {
+    userId: String
+    profileId: String
+  }
+  
+  type Appointment {
+    _id: String
+    seeker: AppointmentUser
+    provider: AppointmentUser
+    serviceId: String
+    serviceName: String
+    sessionId: String
+    startDate: Date
+    endDate: Date
+  }
+  
   type Query {   
-     
+     fetchMyAppointment: [Appointment]
   }
   
   type Mutation {

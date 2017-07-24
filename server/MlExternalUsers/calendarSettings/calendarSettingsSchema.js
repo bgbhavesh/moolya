@@ -60,6 +60,12 @@ let calendarSettingSlot=`
     days: [DayCalendar]
   }
   
+  type TimeSlots{
+    isAvailable: Boolean
+    slotTime: String
+    status: Int
+  }
+  
   input calendarSettingSlotDuration {
     hours: Int
     minutes: Int
@@ -108,7 +114,7 @@ let calendarSettingSlot=`
      getMyCalendar(month:Int, year: Int): MonthCalendar
      getServiceProviderCalendar(portfolioId:String, month:Int, year: Int): MonthCalendar
      getMyCalendarDayAvailable:response
-     getSessionDayAvailable(orderId:String!, sessionId: String!, day: Int, month: Int, year: Int): response
+     getSessionDayAvailable(orderId:String!, sessionId: String!, day: Int, month: Int, year: Int): [TimeSlots]
   }
   
   type Mutation {

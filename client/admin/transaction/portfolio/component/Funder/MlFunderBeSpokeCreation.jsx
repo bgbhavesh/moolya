@@ -12,7 +12,7 @@ import FunderAboutView from './MlFunderServiceBooking'
 import MlAppServiceManageSchedule from '../../../../../app/calendar/manageScheduler/service/components/MlAppServiceManageSchedule'
 
 
-export default class MlBeSpokeListView extends Component {
+export default class  MlBeSpokeListView extends Component {
   constructor(props) {
   super(props)
     this.state={
@@ -83,7 +83,7 @@ render(){
     return(
       <div className="app_main_wrap" style={{'overflow':'auto'}}>
         <div className="app_padding_wrap">
-          {!this.state.createNewBeSpoke?
+          {!this.state.createNewBeSpoke ?
               <div className="col-lg-12" id="show">
                 {this.props.viewingMode || this.props.editingMode? <div className="col-lg-2 col-md-4 col-sm-4">
             <a href=" " onClick={() => that.addBeSpoke()}>

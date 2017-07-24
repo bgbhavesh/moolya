@@ -65,7 +65,7 @@ MlResolver.MlQueryResolver['getServiceProviderCalendar'] = (obj, args, context, 
     return response;
   }
   let userId = portfolioInfo.userId;
-  let profileId = portfolioInfo.profileId;
+  let profileId = portfolioInfo.profileId?portfolioInfo.profileId:" ";
   if(!userId){
     let code = 400;
     let result = 'User ID is not defined for this user';
@@ -94,8 +94,9 @@ MlResolver.MlQueryResolver['getMyCalendarDayAvailable'] = (obj, args, context, i
   return mlAppointment.getSessionTimeSlots(sessionId, day, month, year);
 };
 
-MlResolver.MlQueryResolver['getSessionDayAvailable'] = (obj, args, context, info) => {
+  MlResolver.MlQueryResolver['getSessionDayAvailable'] = (obj, args, context, info) => {
   let date = new Date();
+  // let mlAppointment = new MlAppointment();
   let day = args.day ? args.day : date.getDate();
   let month = args.month ? args.month : date.getMonth() ;
   let year = args.year ? args.year : date.getFullYear() ;
@@ -140,13 +141,13 @@ MlResolver.MlQueryResolver['getSessionDayAvailable'] = (obj, args, context, info
 
   let taskId = task.id;
 
-  if(task.id) {
+  if(!task.id) {
     let code = 400;
     let response = new MlRespPayload().errorPayload("Task id is not attached in service card definition", code);
     return response;
   }
 
-  return mlAppointment.getSessionTimeSlots(sessionId, day, month, year, taskId);
+  return MlAppointment.getSessionTimeSlots(taskId, sessionId, day, month, year, );
 };
 
 MlResolver.MlMutationResolver['updateMyCalendarSetting'] = (obj, args, context, info) => {

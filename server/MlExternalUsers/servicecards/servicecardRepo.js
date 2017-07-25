@@ -334,7 +334,7 @@ class MlServiceCardRepo{
 
     getServicecardExpiryDate(frequencyString){
       var frequency;
-      switch (frequencyString.toUppercase()){
+      switch (_.toUpper(frequencyString)){
         case 'WEEKELY':{
           frequency = 7;
         }

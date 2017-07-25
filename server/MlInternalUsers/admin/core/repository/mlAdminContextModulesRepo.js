@@ -382,6 +382,11 @@ let CoreModules = {
         if (!fieldsProj.sort) {
           fieldsProj.sort = {'transactionUpdatedDate': -1}
         }
+      case 'users':
+        serverQuery = {};
+        if (!fieldsProj.sort) {
+          fieldsProj.sort = {'createdAt': -1}
+        }
         break;
     }
     //todo: internal filter query should be constructed.
@@ -720,7 +725,7 @@ let CoreModules = {
     data = list
     //todo: pagination need to be taken.
     return {totalRecords: data.length, data: data};
-  }
+  },
   // let resp = mlDBController.find('MlDepartments', {
   //   $and: [
   //     {isMoolya:true},

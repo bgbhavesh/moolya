@@ -9,6 +9,7 @@ import geocoder from "geocoder";
 import _lodash from "lodash";
 import _ from "underscore";
 import moment from "moment";
+import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
 var fs = Npm.require('fs');
 var Future = Npm.require('fibers/future');
 
@@ -780,7 +781,7 @@ MlResolver.MlMutationResolver['ApprovedStatusOfDocuments'] = (obj, args, context
     if (documentList.length > 0) {
       for (let i = 0; i < documentList.length; i++) {
         // updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':documentList[i],'docTypeId':doctypeList[i]}}},{$set: {"kycDocuments.$.status":"Approved"}});
-        let user = MlRegistration.findOne({_id: args.registrationId})
+        let user = MlRegistration.findOne({_id: args.registrationId}) || {}
         let kyc = user.kycDocuments
         let kycDoc = _.find(kyc, function (item) {
           return item.documentId == documentList[i] && item.docTypeId == doctypeList[i];
@@ -791,6 +792,8 @@ MlResolver.MlMutationResolver['ApprovedStatusOfDocuments'] = (obj, args, context
             'kycDocuments': {$elemMatch: {'documentId': documentList[i], 'docTypeId': doctypeList[i]}}
           }, {"kycDocuments.$.status": "Approved"}, {$set: true}, context)
           if (response) {
+
+            MlEmailNotification.onKYCApprove(user);
             let code = 200;
             let result = {registrationId: response}
             updatedResponse = new MlRespPayload().successPayload(result, code);
@@ -830,6 +833,7 @@ MlResolver.MlMutationResolver['RejectedStatusOfDocuments'] = (obj, args, context
             'kycDocuments': {$elemMatch: {'documentId': documentList[i], 'docTypeId': doctypeList[i]}}
           }, {"kycDocuments.$.status": "Rejected"}, {$set: true}, context)
           if (response) {
+            MlEmailNotification.onKYCDecline(user);
             let code = 200;
             let result = {registrationId: response}
             updatedResponse = new MlRespPayload().successPayload(result, code);

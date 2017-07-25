@@ -342,6 +342,44 @@ const MlEmailNotification= class MlEmailNotification {
     }, 2 * 1000);
   }
 
+  static onKYCApprove(userDetails){
+    let user = userDetails || {}
+    let regObj = {
+      userName : user&&user.registrationInfo&&user.registrationInfo.firstName?user.registrationInfo.firstName:"",
+      path : Meteor.absoluteUrl('/')
+    }
+    let toEmail = user&&user.registrationInfo&&user.registrationInfo.email?user.registrationInfo.email:""
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_kyc_approved_by_admin","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "KYC Approved !",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+  }
+
+  static onKYCDecline(userDetails){
+    let user = userDetails || {}
+    let regObj = {
+      userName : user&&user.registrationInfo&&user.registrationInfo.firstName?user.registrationInfo.firstName:"",
+      contactNumber : "cm@moolya.global",
+      contactEmail : "+91-40-4672 5725",
+      path : Meteor.absoluteUrl('/')
+    }
+    let toEmail = user&&user.registrationInfo&&user.registrationInfo.email?user.registrationInfo.email:""
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_kyc_declined_by_admin","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "KYC Declined !",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+  }
+
 
 }
 

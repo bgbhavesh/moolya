@@ -154,7 +154,7 @@ class MlAppointment {
     /**
      * Fetch user task info and calendar setting
      */
-    let task = mlDBController.findOne('MlTask', taskId );
+    let task = mlDBController.findOne('MlTask', {_id:taskId} );
     let calendarSetting = mlDBController.findOne('MlCalendarSettings',{userId: task.userId, profileId: task.profileId});
     calendarSetting.vacations = calendarSetting.vacations ? calendarSetting.vacations : [];
 
@@ -378,6 +378,11 @@ class MlAppointment {
      *  Get the user calendar setting
      */
     let calendarSetting = mlDBController.findOne('MlCalendarSettings',{userId:userId, profileId:profileId});
+
+    if(!calendarSetting){
+      return { days: [] };
+    }
+
     calendarSetting.vacations = calendarSetting.vacations ? calendarSetting.vacations : [];
 
     /**

@@ -156,7 +156,7 @@ MlResolver.MlQueryResolver['fetchHierarchyRoles'] = (obj, args, context, info) =
           finalRoles.push(role);
           currentRole = role
           if (role.assignedLevel=='cluster' && role.reportingRole=='') {
-            teamStructureAssignment.splice(key,1)
+            // teamStructureAssignment.splice(key,1)                         // TO ALLOW SAME LEVEL ROLE TO ACCESS
             finalRoles = teamStructureAssignment;
             isParentRole = true;
           }

@@ -128,7 +128,8 @@ class MlHierarchyAssignment {
     let assignedRoleMapping = null;
     //disabled for same level user access
     if (userRole == assignedRole) {
-      return false;
+      // return false;                            // TO ALLOW SAME LEVEL USER TO ACCESS
+      return true;
     }
     let teamStructureAssignment = hierarchy.teamStructureAssignment;
     teamStructureAssignment.map(function (role, key) {
@@ -141,7 +142,6 @@ class MlHierarchyAssignment {
         assignedRoleMapping = role;
       }
     })
-
     if (userRoleMapping.reportingRole == assignedRoleMapping.roleId) {
       return false;
     }

@@ -61,7 +61,6 @@ export default class  FunderCreateServicesView extends Component {
   }
 
   componentWillMount(){
-    console.log(this.props)
 }
 
   /**
@@ -90,25 +89,26 @@ export default class  FunderCreateServicesView extends Component {
       this.setState({session: e.target.value})
     }else if(name === "hour"){
       this.setState({hour: e.target.value})
+      this.handleDuration()
     }else if(name === "minute"){
       this.setState({minute: e.target.value})
+      this.handleDuration();
+    }else if(name === "displayName"){
+      this.setState({displayName: e.target.value})
     }
   }
 
-  handleDuration(e) {
-    var details = this.state.data;
-    let name = e.target.name;
-    if (name === 'hour') {
-      var duration1 = {
-        name: e.target.name
-      }
+  handleDuration() {
+    let duration = {
+      hours: this.state.hour?parseInt(this.state.hour):0,
+      minutes: this.state.minute?parseInt(this.state.minute):0
     }
-    if (name === 'minute') {
-      var duration = {
-        name: e.target.name
-      }
-    }
-      details = _.extend(duration, duration1);
+    let details = this.state.data;
+    details = _.omit(details, ['duration']);
+    details = _.extend(details, {['duration']:duration});
+    this.setState({data: details}, function () {
+      this.sendDataToParent()
+    })
   }
 
   /**
@@ -160,10 +160,8 @@ export default class  FunderCreateServicesView extends Component {
     })
     let details = this.state.data;
     // let details = this.state.data;
-    console.log(selectedConversation)
     details = _.omit(details, ["conversation"]);
     details = _.extend(details, {["conversation"]: temp});
-    console.log(details)
     this.setState({data: details}, function () {
       this.setState({selectedConversationType: temp})
       this.sendDataToParent()
@@ -179,7 +177,6 @@ export default class  FunderCreateServicesView extends Component {
     // let details = this.state.data;
     details = _.omit(details, ["sessionFrequency"]);
     details = _.extend(details, {["sessionFrequency"]: selectedFrequency.value});
-    console.log(details)
     this.setState({data: details}, function () {
       this.setState({selectedFrequencyType: selectedFrequency})
       this.sendDataToParent()
@@ -290,7 +287,45 @@ export default class  FunderCreateServicesView extends Component {
     }
     `
 
-    let attach = this.props.beSpokeDetails?this.props.beSpokeDetails[0].attachments:[{}] || this.state.attachmentDocs || [{}];
+    let attach = this.props.beSpokeDetails && this.props.beSpokeDetails[this.props.beSpokeIndex].attachments ? this.props.beSpokeDetails[this.props.beSpokeIndex].attachments:this.state.attachmentDocs || [{}];
+    const attachments = attach.map(function(details, index){
+      return(
+        <div className="panel panel-default step5">
+          <div className="panel-heading">Attachments if any ?
+            <div className="pull-right block_action">
+              <div className="fileUpload upload_file_mask">
+                &nbsp;&nbsp;<span className="ml ml-plus" onClick={that.addComponent.bind(that, index)} ></span>
+              </div>
+            </div>
+            <div className="pull-right">
+              {/*style={{'marginTop': '-15px'}}*/}
+              <input type="text" placeholder="Document Name" value={details.documentName?details.documentName:" "} onChange={that.documentName.bind(that, index)}/>
+            </div>
+          </div>
+          <div className="panel-body nopadding">
+            <div className="upload-file-wrap">
+              <input type="file"  name="fileinput[]" id="fileinput"  onChange={that.onFileUpload.bind(that, index)}/>
+              {/*<input type="file" name="fileinput[]" id="fileinput" className="inputfile inputfile-upload"*/}
+              {/*data-multiple-caption="{count} files selected" accept="image/*" onchange="loadFile(event)"*/}
+              {/*multiple/>*/}
+
+              <label for="fileinput">
+                <figure>
+                  <i className="fa fa-upload" aria-hidden="true"></i>
+                </figure>
+              </label>
+            </div>
+            {details.fileUrl ? details.fileUrl.map(function(image){
+              return(
+                <div className="upload-image">
+                  <img src={image} id="output"/>
+                </div>
+              )
+            }): [] }
+            <div className="upload-image"></div>
+          </div>
+        </div>
+      )})
     return(
       <div>
         <div className="tab_wrap_scroll">
@@ -301,7 +336,7 @@ export default class  FunderCreateServicesView extends Component {
                   <span className="state_label">Online
                   </span>
                   <label className="switch nocolor-switch">
-                    <input type="checkbox" name="mode" onChange={this.modeSwitchHandler.bind(this)} value={this.state.mode} checked={this.props.beSpokeDetails?this.props.beSpokeDetails[0].mode==="offline"?true:false:false}/>
+                    <input type="checkbox" name="mode" onChange={this.modeSwitchHandler.bind(this)} value={this.state.mode} checked={this.props.beSpokeDetails?this.props.beSpokeDetails[this.props.beSpokeIndex].mode==="offline"?true:false:false}/>
                     <div className="slider">
                     </div>
                   </label>
@@ -309,18 +344,18 @@ export default class  FunderCreateServicesView extends Component {
                 </div>
                 <div className="clearfix"/>
                 <div className="form-group">
-                  <textarea className="form-control float-label" placeholder="About" name="about" onBlur={this.handleBlur.bind(this)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].about:this.state.about}></textarea>
+                  <textarea className="form-control float-label" placeholder="About" name="about" onBlur={this.handleBlur.bind(this)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[this.props.beSpokeIndex].about:this.state.about}></textarea>
                 </div>
                 <div className="form-group">
-                  <label>Required number of Sessions <input type="number" min="0"  name="noOfSession" onChange={(e)=>this.handleBlur(e)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].noOfSessions: this.state.session}  className="form-control inline_input medium_in"/> </label>
+                  <label>Required number of Sessions <input type="number" min="0"  name="noOfSession" onChange={(e)=>this.handleBlur(e)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[this.props.beSpokeIndex].noOfSessions: this.state.session}  className="form-control inline_input medium_in"/> </label>
                 </div>
                 <div className="form-group">
-                  <label>Duration &nbsp; <input type="number"  min="0"  name="hour" onChange={(e)=>this.handleBlur(e)} value={this.state.hour?parseInt(this.state.hour):this.state.data.hour} className="form-control inline_input"/> Hours
-                    <input type="number" name="minute" min="0"  onChange={(e)=>this.handleBlur(e)} value={this.state.minute?parseInt(this.state.minute):this.state.minute} className="form-control inline_input"/> Mins </label>
+                  <label>Duration &nbsp; <input type="number"  min="0"  name="hour" onChange={(e)=>this.handleBlur(e)} value={ this.props.beSpokeDetails && this.props.beSpokeDetails[this.props.beSpokeIndex] && this.props.beSpokeDetails[this.props.beSpokeIndex].duration?this.props.beSpokeDetails[this.props.beSpokeIndex].duration.hours:this.state.hour?parseInt(this.state.hour):0} className="form-control inline_input"/> Hours
+                    <input type="number" name="minute" min="0"  onChange={(e)=>this.handleBlur(e)} value={ this.props.beSpokeDetails && this.props.beSpokeDetails[this.props.beSpokeIndex] && this.props.beSpokeDetails[this.props.beSpokeIndex].duration?this.props.beSpokeDetails[this.props.beSpokeIndex].duration.minutes:this.state.minute?parseInt(this.state.minute):0} className="form-control inline_input"/> Mins </label>
                 </div>
-                {/*<div className="form-group">*/}
-                {/*<textarea className="form-control float-label" placeholder="Expected input"></textarea>*/}
-                {/*</div>*/}
+                <div className="form-group">
+                  <textarea className="form-control float-label" placeholder="Expected input" name="expectedInput" onChange={this.handleBlur.bind(this)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[this.props.beSpokeIndex].expectedInput:this.state.expectedInput}></textarea>
+                </div>
               </form>
             </div>
           </div>
@@ -332,72 +367,33 @@ export default class  FunderCreateServicesView extends Component {
                                 labelKey={'label'} queryType={"graphql"} query={industryTypeQuery}
                                 isDynamic={true} placeholder="Select Industry Type"
                                 onSelect={that.onOptionSelected.bind(that)}
-                                selectedValue={that.state.selectedIndustryType} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].industryId:"" || that.state.selectedIndustryType}/>
+                                selectedValue={that.state.selectedIndustryType} value={this.props.beSpokeDetails && this.props.beSpokeDetails.industryId?this.props.beSpokeDetails[this.props.beSpokeIndex].industryId.label:that.state.selectedIndustryType?that.state.selectedIndustryType:""}/>
                 </div>
                 <div className="form-group">
-                  <textarea className="form-control float-label" placeholder="Expected input" name="expectedInput" onChange={this.handleBlur.bind(this)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].expectedInput:this.state.expectedInput}></textarea>
+                  <input type="text" className="form-control float-label" placeholder="Display Name" name="displayName" onChange={this.handleBlur.bind(this)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[this.props.beSpokeIndex].displayName:this.state.displayName}></input>
                 </div>
                 <div className="form-group">
-                  <Select name="form-field-name"  multi={true} options={options} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].conversation:"" || that.state.selectedConversationType} placeholder='Conversation Type' onChange={that.onConversationSelected.bind(that)} />
-                </div>
-                <div className="ml_btn" style={{'textAlign':'center'}}>
-                  <div className="save_btn" onClick={this.saveBeSpoke.bind(this)}>Save</div>
-                  <div className="cancel_btn">Cancel</div>
+                  <Select name="form-field-name"  multi={true} options={options} value={this.props.beSpokeDetails?this.props.beSpokeDetails[this.props.beSpokeIndex].conversation:"" || that.state.selectedConversationType} placeholder='Conversation Type' onChange={that.onConversationSelected.bind(that)} />
                 </div>
                 <div className="form-group">
                   <div className="form-group">
-                    <Select className="form-field-name" options={frequencyOptions} placeholder="Frequency" value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].sessionFrequency:"" || that.state.selectedFrequencyType} onChange={that.onFrequencySelected.bind(that)}></Select>
+                    <Select className="form-field-name" options={frequencyOptions} placeholder="Frequency" value={this.props.beSpokeDetails?this.props.beSpokeDetails[this.props.beSpokeIndex].noOfSession:that.state.selectedFrequencyType?that.state.selectedFrequencyType:""} onChange={that.onFrequencySelected.bind(that)}></Select>
                   </div>
                 </div>
                 <div className="form-group">
-                  <textarea className="form-control float-label" placeholder="Expected Output" name="expectedOutput" onChange={this.handleBlur.bind(this)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[0].expectedOutput:this.state.expectedOutput}></textarea>
+                  <textarea className="form-control float-label" placeholder="Expected Output" name="expectedOutput" onChange={this.handleBlur.bind(this)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[this.props.beSpokeIndex].expectedOutput:this.state.expectedOutput}></textarea>
                 </div>
                 <div className="clearfix"/>
                 {attachments}
               </form>
             </div>
           </div>
+          <div className="ml_btn" style={{'textAlign':'center'}}>
+            <a href="#" className="save_btn" onClick={this.saveBeSpoke.bind(this)}>Save</a>
+            <a href="#" className="cancel_btn">Cancel</a>
+          </div>
         </div>
       </div>
     )
-    const attachments = attach.map(function(details, index){
-      return(
-          <div className="panel panel-default step5">
-            <div className="panel-heading">Attachments if any ?
-              <div className="pull-right block_action">
-                <div className="fileUpload upload_file_mask">
-                  &nbsp;&nbsp;<span className="ml ml-plus" onClick={that.addComponent.bind(that, index)} ></span>
-                </div>
-              </div>
-              <div className="pull-right">
-                {/*style={{'marginTop': '-15px'}}*/}
-                <input type="text" placeholder="Document Name" value={details.documentName?details.documentName:" "} onChange={that.documentName.bind(that, index)}/>
-              </div>
-            </div>
-            <div className="panel-body nopadding">
-              <div className="upload-file-wrap">
-                <input type="file"   id="fileinput"  onChange={that.onFileUpload.bind(that, index)} multiple/>
-                {/*<input type="file" name="fileinput[]" id="fileinput" className="inputfile inputfile-upload"*/}
-                {/*data-multiple-caption="{count} files selected" accept="image/*" onchange="loadFile(event)"*/}
-                {/*multiple/>*/}
-
-                <label for="fileinput">
-                  <figure>
-                    <i className="fa fa-upload" aria-hidden="true"></i>
-                  </figure>
-                </label>
-              </div>
-              {details.fileUrl ? details.fileUrl.map(function(image){
-                return(
-                  <div className="upload-image">
-                    <img src={image} id="output"/>
-                  </div>
-                )
-              }): [] }
-              <div className="upload-image"></div>
-            </div>
-          </div>
-        )})
-
   }
 };

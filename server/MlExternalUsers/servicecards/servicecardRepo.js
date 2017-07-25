@@ -68,18 +68,19 @@ class MlServiceCardRepo{
         return new MlRespPayload().successPayload(result, 200);
     }
 
-    createBespokeServiceCardDefinition(service, context){
+    createBespokeServiceCardDefinition(service, portfolioId, context){
       var result;
       var defaultProfile = new MlUserContext().userProfileDetails(context.userId);
       try {
         var serviceCard                     = service;
         serviceCard["createdAt"]            = new Date();
         serviceCard["beSpokeCreatorUserId"] = context.userId;
-        serviceCard["beSpokeCreatorProfileId"] = service.profileId;
+        serviceCard["beSpokeCreatorProfileId"] = defaultProfile.profileId;
         serviceCard['isBeSpoke']             = true;
         serviceCard["versions"]             =  INITIAL_VERSION;
+        serviceCard["isCurrentVersion"]     = true;
         orderNumberGenService.createServiceId(serviceCard);
-        var portfolioDetailsTransactions = mlDBController.findOne('MlPortfolioDetails', {_id: servicecard.profileId}, context)
+        var portfolioDetailsTransactions = mlDBController.findOne('MlPortfolioDetails', portfolioId, context)
         if(portfolioDetailsTransactions){
           serviceCard["userId"]     = portfolioDetailsTransactions.userId
           serviceCard["profileId"]  = portfolioDetailsTransactions.profileId
@@ -334,8 +335,8 @@ class MlServiceCardRepo{
 
     getServicecardExpiryDate(frequencyString){
       var frequency;
-      switch (frequencyString.toUppercase()){
-        case 'WEEKELY':{
+      switch (_.toUpper(frequencyString)){
+        case 'WEEKLY':{
           frequency = 7;
         }
         break;
@@ -349,7 +350,7 @@ class MlServiceCardRepo{
         break;
       }
 
-      var eDate = moment().add(frequency, 'day')
+      var eDate = moment().add(frequency, 'day').toDate();
       return eDate;
     }
 

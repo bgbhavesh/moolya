@@ -119,7 +119,7 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
 
   let taskId = task.id;
 
-  if(taskId) {
+  if(!taskId) {
     let code = 400;
     let response = new MlRespPayload().errorPayload("Task id is not attached in service card definition", code);
     return response;

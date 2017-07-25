@@ -35,21 +35,22 @@ MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => 
 }
 
 MlResolver.MlQueryResolver['fetchBeSpokeServices'] = (obj, args, context, info) => {
-  if (context.url.indexOf("explore") > 0) {
     let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfolioId}, context)
-  if(portfolio) {
-    let query = {
-      userId: portfolio.userId,
-      profileId: portfolio.profileId,
-      isCurrentVersion: true,
-      isBeSpoke: true,
-      beSpokeCreatorUserId: context.userId,
-      beSpokeCreatorProfileId: new MlUserContext().userProfileDetails(context.userId).profileId
-    };
-    let result = mlDBController.find('MlServiceCardDefinition', query, context).fetch()
-    return result;
+  if( portfolio && (context.userId !== portfolio.userId)){
+    if(portfolio) {
+      let query = {
+        userId: portfolio.userId,
+        profileId: portfolio.profileId,
+        isCurrentVersion: true,
+        isBeSpoke: true,
+        beSpokeCreatorUserId: context.userId,
+        beSpokeCreatorProfileId: new MlUserContext().userProfileDetails(context.userId).profileId
+      };
+      let result = mlDBController.find('MlServiceCardDefinition', query, context).fetch()
+      return result;
     }
-  }else {
+  }
+    else{
     let query = {
       userId: context.userId,
       profileId: new MlUserContext().userProfileDetails(context.userId).profileId,
@@ -79,8 +80,9 @@ MlResolver.MlQueryResolver['findService'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['createBeSpokeService'] = (obj, args, context, info) => {
-  return mlServiceCardRepo.createBespokeServiceCardDefinition(args.Services, context);
-}
+  let portfolioId = args.Services.profileId;
+  return mlServiceCardRepo.createBespokeServiceCardDefinition(args.Services, portfolioId, context);
+};
 
 MlResolver.MlMutationResolver['createService'] = (obj, args, context, info) => {
   return mlServiceCardRepo.createServiceCardDefinition(args.Services, context);

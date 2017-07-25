@@ -95,7 +95,6 @@ class MlAppServiceBasicInfo extends Component {
     `;
 
     let statesOption={options: { variables: {countryId: clusterCode}}};
-
     let citiesOption={options: { variables: {id: clusters}}};
     return (
       <div className="step_form_wrap step1">

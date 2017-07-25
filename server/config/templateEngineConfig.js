@@ -281,6 +281,7 @@ let NotificationTemplates = [
 
 ]
 
+/*
 Meteor.startup(function () {
 
   let count = MlNotificationTemplates.find({ type: "sms"  }).count()  // To find the no:of doc in Notifi Temp sms Collection.
@@ -294,3 +295,4 @@ Meteor.startup(function () {
     }
   }
 });
+*/

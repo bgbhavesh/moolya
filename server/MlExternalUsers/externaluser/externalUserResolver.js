@@ -9,6 +9,7 @@ import _underscore from 'underscore'
 var fs = Npm.require('fs');
 var Future = Npm.require('fibers/future');
 import geocoder from "geocoder";
+import MlEmailNotification from "../../mlNotifications/mlEmailNotifications/mlEMailNotification"
 
 MlResolver.MlQueryResolver['fetchIdeatorUsers'] = (obj, args, context, info) =>
 {
@@ -297,9 +298,14 @@ MlResolver.MlMutationResolver['deActivateUserProfile'] = (obj, args, context, in
   var response=null;
   const user = Meteor.users.findOne({_id:userId}) || {}
   if(user&&args&&args.profileId){
-    result = mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'profileId': args.profileId}}},
+    let result = mlDBController.update('users', {'profile.externalUserProfiles':{$elemMatch: {'profileId': args.profileId}}},
       {"profile.externalUserProfiles.$.isDefault": false}, {$set: true}, context);
     response = new MlRespPayload().successPayload({}, 200);
+    if(result){
+      let emailSent = MlEmailNotification.onDeactivateUser(context);
+      let verficationEmail = MlEmailNotification.requestForProfileDeactivation(context);
+
+    }
   }else {
     let code = 409;
     response = new MlRespPayload().errorPayload('Not a valid user', code);

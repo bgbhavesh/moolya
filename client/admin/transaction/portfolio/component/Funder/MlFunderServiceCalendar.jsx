@@ -35,14 +35,12 @@ export default class MlAppMyCalendar extends Component {
 
   async getMyCalendar(){
     let date = new Date(this.state.date);
-    // console.log(date.getFullYear());
     let data = await fetchMyCalendarActionHandler(date.getMonth(), date.getFullYear());
     if(data) {
       this.setState({
         data: data.days
       })
     }
-    console.log(data.days);
   }
 
   onNavigate(date){
@@ -58,7 +56,6 @@ export default class MlAppMyCalendar extends Component {
   }
 
   slots(response){
-    console.log(response)
     this.setState({slotDetails:response})
   }
 
@@ -94,6 +91,9 @@ export default class MlAppMyCalendar extends Component {
 
   async bookAppointment(userServiceCardAppointmentInfo){
     const resp = await bookUserServiceCardAppointmentActionHandler(userServiceCardAppointmentInfo)
+    if(resp){
+      toastr.success('Appointment Booked Successfully')
+    }
     return resp;
   }
 

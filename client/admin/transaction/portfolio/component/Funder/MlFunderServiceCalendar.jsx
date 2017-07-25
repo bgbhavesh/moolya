@@ -3,7 +3,7 @@
  */
 import React, {Component} from "react";
 import Calender from '../../../../../commons/calendar/calendar'
-import { fetchMyCalendarActionHandler, fetchSessionDayActionHandler, bookUserServiceCardAppointmentActionHandler } from '../../../../../app/calendar/myCalendar/actions/fetchMyCalendar';
+import { fetchServiceCalendarActionHandler, fetchMyCalendarActionHandler, fetchSessionDayActionHandler, bookUserServiceCardAppointmentActionHandler } from '../../../../../app/calendar/myCalendar/actions/fetchMyCalendar';
 import MlAppMyCalendarDayComponent from '../../../../../app/calendar/myCalendar/components/dayComponent';
 
 export default class MlAppMyCalendar extends Component {
@@ -35,7 +35,9 @@ export default class MlAppMyCalendar extends Component {
 
   async getMyCalendar(){
     let date = new Date(this.state.date);
-    let data = await fetchMyCalendarActionHandler(date.getMonth(), date.getFullYear());
+    let portfolioId = FlowRouter.getParam('portfolioId');
+    const data = await fetchServiceCalendarActionHandler(portfolioId, date.getMonth(), date.getFullYear())
+    // let data = await fetchMyCalendarActionHandler();
     if(data) {
       this.setState({
         data: data.days

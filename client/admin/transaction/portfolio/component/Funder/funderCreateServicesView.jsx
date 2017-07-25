@@ -287,7 +287,7 @@ export default class  FunderCreateServicesView extends Component {
     }
     `
 
-    let attach = this.props.beSpokeDetails?this.props.beSpokeDetails[this.props.beSpokeIndex].attachments:this.state.attachmentDocs || [{}];
+    let attach = this.props.beSpokeDetails && this.props.beSpokeDetails[this.props.beSpokeIndex].attachments ? this.props.beSpokeDetails[this.props.beSpokeIndex].attachments:this.state.attachmentDocs || [{}];
     const attachments = attach.map(function(details, index){
       return(
         <div className="panel panel-default step5">
@@ -350,8 +350,8 @@ export default class  FunderCreateServicesView extends Component {
                   <label>Required number of Sessions <input type="number" min="0"  name="noOfSession" onChange={(e)=>this.handleBlur(e)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[this.props.beSpokeIndex].noOfSessions: this.state.session}  className="form-control inline_input medium_in"/> </label>
                 </div>
                 <div className="form-group">
-                  <label>Duration &nbsp; <input type="number"  min="0"  name="hour" onChange={(e)=>this.handleBlur(e)} value={this.props.beSpokeDetails[this.props.beSpokeIndex].duration?this.props.beSpokeDetails[this.props.beSpokeIndex].duration.hours:this.state.hour?parseInt(this.state.hour):0} className="form-control inline_input"/> Hours
-                    <input type="number" name="minute" min="0"  onChange={(e)=>this.handleBlur(e)} value={this.props.beSpokeDetails[this.props.beSpokeIndex].duration?this.props.beSpokeDetails[this.props.beSpokeIndex].duration.minutes:this.state.minute?parseInt(this.state.minute):0} className="form-control inline_input"/> Mins </label>
+                  <label>Duration &nbsp; <input type="number"  min="0"  name="hour" onChange={(e)=>this.handleBlur(e)} value={ this.props.beSpokeDetails && this.props.beSpokeDetails[this.props.beSpokeIndex] && this.props.beSpokeDetails[this.props.beSpokeIndex].duration?this.props.beSpokeDetails[this.props.beSpokeIndex].duration.hours:this.state.hour?parseInt(this.state.hour):0} className="form-control inline_input"/> Hours
+                    <input type="number" name="minute" min="0"  onChange={(e)=>this.handleBlur(e)} value={ this.props.beSpokeDetails && this.props.beSpokeDetails[this.props.beSpokeIndex] && this.props.beSpokeDetails[this.props.beSpokeIndex].duration?this.props.beSpokeDetails[this.props.beSpokeIndex].duration.minutes:this.state.minute?parseInt(this.state.minute):0} className="form-control inline_input"/> Mins </label>
                 </div>
                 <div className="form-group">
                   <textarea className="form-control float-label" placeholder="Expected input" name="expectedInput" onChange={this.handleBlur.bind(this)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[this.props.beSpokeIndex].expectedInput:this.state.expectedInput}></textarea>
@@ -367,7 +367,7 @@ export default class  FunderCreateServicesView extends Component {
                                 labelKey={'label'} queryType={"graphql"} query={industryTypeQuery}
                                 isDynamic={true} placeholder="Select Industry Type"
                                 onSelect={that.onOptionSelected.bind(that)}
-                                selectedValue={that.state.selectedIndustryType} value={this.props.beSpokeDetails.industryId?this.props.beSpokeDetails[this.props.beSpokeIndex].industryId.label:that.state.selectedIndustryType?that.state.selectedIndustryType:""}/>
+                                selectedValue={that.state.selectedIndustryType} value={this.props.beSpokeDetails && this.props.beSpokeDetails.industryId?this.props.beSpokeDetails[this.props.beSpokeIndex].industryId.label:that.state.selectedIndustryType?that.state.selectedIndustryType:""}/>
                 </div>
                 <div className="form-group">
                   <input type="text" className="form-control float-label" placeholder="Display Name" name="displayName" onChange={this.handleBlur.bind(this)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[this.props.beSpokeIndex].displayName:this.state.displayName}></input>

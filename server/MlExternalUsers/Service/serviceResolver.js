@@ -36,7 +36,7 @@ MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => 
 
 MlResolver.MlQueryResolver['fetchBeSpokeServices'] = (obj, args, context, info) => {
     let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfolioId}, context)
-  if(context.userId !== portfolio.userId){
+  if( portfolio && (context.userId !== portfolio.userId)){
     if(portfolio) {
       let query = {
         userId: portfolio.userId,

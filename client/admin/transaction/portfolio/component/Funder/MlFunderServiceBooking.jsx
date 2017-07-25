@@ -66,10 +66,8 @@ export default class FunderAboutView extends React.Component{
 
   async bookUserServiceCard() {
     this.setState({showPaymentDetails: true})
-    console.log(this.state.taskDetails)
     let taskDetails = this.state.taskDetails
     const response =  await bookUserServiceCardActionHandler(this.props.serviceDetails._id, taskDetails)
-    console.log(response)
     this.setState({orderId: response.result})
     // this.payment(this.state.orderId)
     return response;
@@ -87,25 +85,17 @@ export default class FunderAboutView extends React.Component{
     this.paymentDetails(paymentDetails)
     this.getServiceProviderDetails()
   }
-
-  getCalendarDetails(Details){
-    console.log(Details)
-    // this.getServiceProviderDetails(Details)
-  }
-
-
   async getServiceProviderDetails(){
     let portfolioId = FlowRouter.getParam('portfolioId');
     const response = await fetchServiceCalendarActionHandler(portfolioId)
-    console.log(response)
     this.setState({calendarDetails: response})
     return response
   }
 
   async  paymentDetails(paymentDetails){
     const response  = await userServiceCardPaymentActionHandler(paymentDetails)
-    console.log(response)
     if(response){
+      toastr.success('Payment Done Successfully')
       this.setState({payment: true})
       return response
     }
@@ -121,7 +111,6 @@ export default class FunderAboutView extends React.Component{
 
   async getTasks(data){
     const resp =  await fetchTasksInBookingActionHandler(data)
-    console.log(resp)
     this.setState({tasks: resp})
     return resp;
   }
@@ -142,7 +131,6 @@ export default class FunderAboutView extends React.Component{
 
 
   onFileUploadCallBack(id,file,resp){
-    console.log(resp)
     if (resp) {
       let result = JSON.parse(resp)
         if (result.success) {
@@ -187,7 +175,6 @@ export default class FunderAboutView extends React.Component{
   }
 
   assignTaskDetails(taskImages){
-    console.log(taskImages)
     this.setState({taskDetails: taskImages})
   }
 

@@ -336,7 +336,7 @@ class MlServiceCardRepo{
     getServicecardExpiryDate(frequencyString){
       var frequency;
       switch (_.toUpper(frequencyString)){
-        case 'WEEKELY':{
+        case 'WEEKLY':{
           frequency = 7;
         }
         break;
@@ -350,7 +350,7 @@ class MlServiceCardRepo{
         break;
       }
 
-      var eDate = moment().add(frequency, 'day')
+      var eDate = moment().add(frequency, 'day').toDate();
       return eDate;
     }
 

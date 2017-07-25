@@ -163,13 +163,61 @@ MlResolver.MlQueryResolver['fetchHierarchyRoles'] = (obj, args, context, info) =
         }
       })
       if(isParentRole === false){
-        let reportingRole = userRole.roleId
-        //recursively follow reporting hierarchy
-        teamStructureAssignment.map(function (role, key){
-          if(role.reportingRole==reportingRole){
-            reportingRole = role.roleId
-            finalRoles.push(role)
-          }
+              // let reportingRole = userRole.roleId
+              // //recursively follow reporting hierarchy
+              // teamStructureAssignment.map(function (role, key){
+              //   if(role.reportingRole==reportingRole){
+              //     reportingRole = role.roleId
+              //     finalRoles.push(role)
+              //   }
+              // })
+
+
+        if(!currentRole.assignedLevel){
+            console.log("Not available in hierarchy");
+            return [];
+        }
+        /*
+            1) Finding Logged in User Role Hierarchy
+            2) Picking reporting role
+         */
+        var userHierarchy = mlDBController.findOne('MlHierarchy', {"code": (currentRole.assignedLevel).toUpperCase()}, context)
+
+        var reportingRole = currentRole.reportingRole;
+
+        /*    Looping through all the team assignment in the hierarchy    */
+        teamStructureAssignment.map(function (role, key) {
+
+            var hierarchy = mlDBController.findOne('MlHierarchy', {"code": (role.assignedLevel).toUpperCase()}, context)
+
+            /*    Comparing Hierarchy level    */
+            if (userHierarchy.level > hierarchy.level) {
+
+                /*    Pushing all lower hierarchy roles    */
+                finalRoles.push(role)
+
+            }else if(userHierarchy.level == hierarchy.level){
+
+                /*    Neglecting same role by comparing 'currentRole' with role    */
+                if(role.roleId != currentRole.roleId){
+
+                    /*    Comparing roleId with ReportingRoleId to check if 'currentRole' role reports to this role    */
+                    if(role.roleId!=reportingRole){
+
+                      finalRoles.push(role)
+
+                    }else if(role.roleId==reportingRole){
+
+                      /*
+                            'Current Role' reports to this role, hence not pushing the role.
+                            Updating reportingRole Id to check other roles.
+                       */
+                      reportingRole = role.reportingRole;
+
+                    }
+                }
+
+            }
         })
       }
     }

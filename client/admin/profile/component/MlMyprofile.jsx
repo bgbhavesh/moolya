@@ -252,9 +252,16 @@ export default class MlMyProfile extends React.Component {
   }
 
   onfoundationDateSelection(event) {
+    var ageDifMs = Date.now() - event._d.getTime();
+    var ageDate = new Date(ageDifMs);
     if (event._d) {
       let value = moment(event._d).format(Meteor.settings.public.dateFormat);
       this.setState({loading: false, dateOfBirth: value});
+    }
+    if((Math.abs(ageDate.getUTCFullYear() - 1970)>=18)){
+    }
+    else{
+      toastr.error("age limit exceeded")
     }
   }
 
@@ -399,6 +406,10 @@ export default class MlMyProfile extends React.Component {
   }
 
   render(){
+    var yesterday = Datetime.moment().subtract(0,'day');
+    var valid = function( current ){
+      return current.isBefore( yesterday );
+    };
     let userContext = getAdminUserContext();
     let route;
     if(userContext.hierarchyLevel >3){
@@ -492,7 +503,7 @@ export default class MlMyProfile extends React.Component {
 
 
                     <div className="form-group" id="date-of-birth">
-                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}  closeOnSelect={true} value={this.state.dateOfBirth?moment(this.state.dateOfBirth).format('DD-MM-YYYY'): null} onChange={this.onfoundationDateSelection.bind(this)} />
+                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}  closeOnSelect={true} value={this.state.dateOfBirth?moment(this.state.dateOfBirth).format('DD-MM-YYYY'): null} onChange={this.onfoundationDateSelection.bind(this)} isValidDate={ valid } />
                       <FontAwesome name="calendar" className="password_icon" onClick={this.openDatePickerDateOfBirth.bind(this)}/>
                     </div>
 

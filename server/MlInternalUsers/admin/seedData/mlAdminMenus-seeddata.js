@@ -498,6 +498,56 @@ if (Meteor.isServer) {
           ]
 
         },
+
+        /**
+         * admin left nav users routes
+         */
+        {
+          "image": "/images/cluster_icon.png",
+          "link": "/admin/users/clusters",
+          "name": "Users",
+          "uniqueId": "users",
+          "isLink": true,
+          "isMenu": true,
+          "subMenu": [
+            {
+              "link": "/admin/users/clusters",
+              "name": "Cluster",
+              "uniqueId": "users_cluster",
+              "isLink": true,
+              "isMenu": true,
+              "image": "",
+              "dynamicLink": true,
+              "dynamicLinkHandler": "",
+              "subMenusId": "users",
+              "subMenuMappingId": "users_clusterDetails"
+            },
+            {
+              "link": "/admin/users/chapter",
+              "name": "Chapter",
+              "uniqueId": "users_chapter",
+              "isLink": true,
+              "isMenu": true,
+              "image": "",
+              "dynamicLink": true,
+              "dynamicLinkHandler": "",
+              "subMenusId": "users",
+              "subMenuMappingId": "users_chapterDetails"
+            },
+            {
+              "link": "/admin/users/community",
+              "name": "Community",
+              "uniqueId": "users_community",
+              "isLink": true,
+              "isMenu": true,
+              "image": "",
+              "dynamicLink": true,
+              "dynamicLinkHandler": "",
+              "subMenusId": "users",
+              "subMenuMappingId": "users_communityDetails"
+            },
+          ]
+        },
         {
           "image": "/images/services_icon.png",
           "link": "/admin/templates/templateList",

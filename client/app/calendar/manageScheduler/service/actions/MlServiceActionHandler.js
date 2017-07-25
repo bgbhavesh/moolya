@@ -4,6 +4,26 @@
 import gql from 'graphql-tag'
 import {appClient} from '../../../../core/appConnection';
 
+export async function createBeSpokeServiceActionHandler (Services) {
+  const result = await appClient.mutate({
+    mutation: gql`
+    mutation($Services: service){
+        createBeSpokeService(Services:$Services){
+        success
+        code
+        result
+      }
+      }
+    `,
+    variables: {
+      Services
+    }
+  });
+  const services = result.data.createBeSpokeService;
+  return services
+}
+
+
 export async function createServiceActionHandler (Services) {
   const result = await appClient.mutate({
     mutation: gql`
@@ -22,6 +42,9 @@ export async function createServiceActionHandler (Services) {
   const services = result.data.createService;
   return services
 }
+
+
+
 
 export async function fetchServiceActionHandler (serviceId) {
   const result = await appClient.query({
@@ -185,6 +208,7 @@ export async function fetchBeSpokeServicesActionHandler (portfolioId) {
         expectedOutput
         conversation
         industryId
+        displayName
         mode
         isBeSpoke
         attachments{

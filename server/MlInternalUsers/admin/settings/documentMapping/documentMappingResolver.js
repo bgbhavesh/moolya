@@ -126,14 +126,13 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
       if(!isAllowableFormat_same){
         updatedAllowableFormat = mlDBController.update('MlProcessMapping', {
           'processDocuments': {
-            $exists: true,
             $elemMatch: {
                'documentId': existingDoc._id&&existingDoc._id
             }
           }
         }, {
           "processDocuments.$.allowableFormat": args.document.allowableFormat,
-        }, {$set: true}, context)
+        }, {$set: true,multi:true}, context)
       }
 
 
@@ -171,7 +170,7 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
             }
           }, {
             'processDocuments': {'kycCategoryId' : {$in: updatedKYCDocs }}
-          }, {$pull: true}, context)
+          }, {$pull: true,multi:true}, context)
         }
 /*
         if(!updatedKYC){
@@ -204,24 +203,12 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
             'processDocuments': {
               $exists: true,
               $elemMatch: {
-                'documentId': existingDoc._id&&existingDoc._id,
-                'isMandatory':false,
-                'isActive':false,
+                'documentId': existingDoc._id&&existingDoc._id
               }
             }
           }, {
             'processDocuments': {'docTypeId' : {$in: updatedDocTypes }}
-          }, {$pull: true}, context)
-        }
-
-        if(!updatedDocTypes){
-          let updateFail = MlDocumentMapping.update({documentId:args.documentId}, {$set: existingDoc})
-          if(updateFail){
-            let code = 401;
-            let response = new MlRespPayload().errorPayload("Cannot update as existing processdocuments are mandatory ", code);
-            return response;
-          }
-
+          }, {$pull: true,multi:true}, context)
         }
       }
 
@@ -241,12 +228,24 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
           'processDocuments': {
             $exists: true,
             $elemMatch: {
-              'documentId': existingDoc._id&&existingDoc._id
+              'documentId': existingDoc._id&&existingDoc._id,
+              'isMandatory':false,
+              'isActive':false,
             }
           }
         }, {
           "processDocuments.$.isActive": args.document.isActive,
-        }, {$set: true}, context)
+        }, {$set: true,multi:true}, context)
+
+        if(!updateStatus){
+          let updateFail = MlDocumentMapping.update({documentId:args.documentId}, {$set: existingDoc})
+          if(updateFail){
+            let code = 401;
+            let response = new MlRespPayload().errorPayload("Cannot update as existing processdocuments are mandatory ", code);
+            return response;
+          }
+
+        }
 
       }
 
@@ -272,7 +271,7 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
           }
         }, {
           "processDocuments.$.allowableMaxSize": args.document.allowableMaxSize,
-        }, {$set: true}, context)
+        }, {$set: true,multi:true}, context)
 
       }
 

@@ -1,5 +1,6 @@
 var noData = "not mentioned";
 var fromEmail = Meteor.settings.private.fromEmailAddr;
+import NotificationTemplateEngine from "../../commons/mlTemplateEngine"
 const MlEmailNotification= class MlEmailNotification {
 
   static  mlUserRegistrationOtp(otpNum,regId) {
@@ -174,6 +175,211 @@ const MlEmailNotification= class MlEmailNotification {
       console.log("Failed to send inquiry email");
     }
   }
+
+  static onChangePassword(context){
+    try {
+
+
+      var userDetails = Meteor.users.findOne({_id: context.userId});
+      var currentdate = new Date();
+      let date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+      let time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+      let regObj = {
+        userName : userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"",
+        time : time,
+        date : date
+      }
+      let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+      let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_change_of_password_confirmation_mailer","email",regObj)
+      Meteor.setTimeout(function () {
+        mlEmail.sendHtml({
+          from: fromEmail,
+          to: toEmail,
+          subject: "Moolya password changed!!!",
+          html : mail_body&&mail_body.content
+        });
+      }, 2 * 1000);
+
+    } catch (e) {
+      console.log("mlChangePassword:Error while sending the  Email Notification" + e);
+    }
+  }
+
+  static onEmailVerificationSuccess(context){
+    try {
+
+
+      var userDetails = Meteor.users.findOne({_id: context.userId});
+      let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+      let regObj = {"firstName" : userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:""}
+      let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_email_verified_confirmation_mailer","email",regObj)
+      Meteor.setTimeout(function () {
+        mlEmail.sendHtml({
+          from: fromEmail,
+          to: toEmail,
+          subject: "Email Verified!!!",
+          html : mail_body&&mail_body.content
+        });
+      }, 2 * 1000);
+
+    } catch (e) {
+      console.log("onEmailVerificationSuccess:Error while sending the  Email Notification" + e);
+    }
+  }
+
+  static onDeactivateUser(context){
+    try {
+
+
+      var userDetails = Meteor.users.findOne({_id: context.userId});
+      var currentdate = new Date();
+      let date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+      let time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+      let firstName = userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"";
+      let lastName = userDetails&&userDetails.profile&&userDetails.profile.lastName?userDetails.profile.lastName:"";
+      let regObj = {
+        userName : firstName+" "+lastName,
+        time : time,
+        date : date
+      }
+      let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+      let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_profile_deactivated","email",regObj)
+      Meteor.setTimeout(function () {
+        mlEmail.sendHtml({
+          from: fromEmail,
+          to: toEmail,
+          subject: "Profile Deactivation!!!",
+          html : mail_body&&mail_body.content
+        });
+      }, 2 * 1000);
+
+    } catch (e) {
+      console.log("mlDeactivateUser:Error while sending the  Email Notification" + e);
+    }
+  }
+
+
+
+  static requestForProfileDeactivation(context){
+    try {
+      var userDetails = Meteor.users.findOne({_id: context.userId});
+      var currentdate = new Date();
+      let date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+      let time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+      let firstName = userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"";
+      let lastName = userDetails&&userDetails.profile&&userDetails.profile.lastName?userDetails.profile.lastName:"";
+      let regObj = {
+        userName : firstName+" "+lastName,
+        time : time,
+        date : date
+      }
+      let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+      let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_request_for_profile_deactivation","email",regObj)
+      Meteor.setTimeout(function () {
+        mlEmail.sendHtml({
+          from: fromEmail,
+          to: toEmail,
+          subject: "Profile Deactivation Request!!!",
+          html : mail_body&&mail_body.content
+        });
+      }, 2 * 1000);
+
+    } catch (e) {
+      console.log("mlRequestforDeactivateUser:Error while sending the  Email Notification" + e);
+    }
+  }
+
+  static forgotPassword(context,path){
+
+    var userDetails = Meteor.users.findOne({_id: context.userId});
+    let firstName = userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"";
+    let lastName = userDetails&&userDetails.profile&&userDetails.profile.lastName?userDetails.profile.lastName:"";
+    let regObj = {
+      userName : firstName+" "+lastName,
+      link : path
+    }
+    let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_forgot_reset_password_mailer","email",regObj)
+    var emailOptions={};
+   /* //emailContent= MlAccounts.greet("To verify your account email,",user,Meteor.absoluteUrl('reset')+'/'+token);
+    emailOptions.from=fromEmail;
+    emailOptions.to=toEmail;
+    emailOptions.subject="Forgot Password !";
+    emailOptions.html=mail_body;
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml(emailOptions);
+    }, 2 * 1000);
+    return {error: false,reason:"Reset link send successfully", code:200};*/
+
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "Forgot Password !",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+
+  }
+
+  static userVerficationLink(emailOptions){
+
+    let regObj = {
+      link : emailOptions&&emailOptions.path?emailOptions.path:"",
+      userName : emailOptions&&emailOptions.firstName?emailOptions.firstName:"",
+      contactNumber : "+91-40-4672 5725 /Ext",
+      hours : 48,
+    }
+    let toEmail = emailOptions&&emailOptions.toEmail?emailOptions.toEmail:"";
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_user_activation_mailer","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "Welcome to moolya !",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+  }
+
+  static onKYCApprove(userDetails){
+    let user = userDetails || {}
+    let regObj = {
+      userName : user&&user.registrationInfo&&user.registrationInfo.firstName?user.registrationInfo.firstName:"",
+      path : Meteor.absoluteUrl('/')
+    }
+    let toEmail = user&&user.registrationInfo&&user.registrationInfo.email?user.registrationInfo.email:""
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_kyc_approved_by_admin","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "KYC Approved !",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+  }
+
+  static onKYCDecline(userDetails){
+    let user = userDetails || {}
+    let regObj = {
+      userName : user&&user.registrationInfo&&user.registrationInfo.firstName?user.registrationInfo.firstName:"",
+      contactNumber : "cm@moolya.global",
+      contactEmail : "+91-40-4672 5725",
+      path : Meteor.absoluteUrl('/')
+    }
+    let toEmail = user&&user.registrationInfo&&user.registrationInfo.email?user.registrationInfo.email:""
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_kyc_declined_by_admin","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "KYC Declined !",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+  }
+
 
 }
 

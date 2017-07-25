@@ -9,7 +9,7 @@ import getQuery from "../../genericSearch/queryConstructor";
 import _ from "lodash";
 import _underscore from "underscore";
 import geocoder from "geocoder";
-
+import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification"
 MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, info) => {
     let user=Meteor.users.findOne(context.userId);
     return user&&user.profile&&user.profile.isInternaluser?"internal":"external";
@@ -120,6 +120,7 @@ MlResolver.MlMutationResolver['resetPassword'] = (obj, args, context, info) => {
   let salted = passwordUtil.hashPassword(args.password);
     let resp = mlDBController.update('users', context.userId, {"services.password.bcrypt": salted}, {$set: true}, context)
     if (resp) {
+      let emailSent = MlEmailNotification.onChangePassword(context);
       let code = 200;
       let response = new MlRespPayload().successPayload("Password Reset complete", code);
       return response
@@ -630,7 +631,7 @@ MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {
   roles  = _.map(roles, function (row) {
     return _.omit(row, ['isChapterAdmin']);
   });
-  
+
   let userProfile = {
       clusterId:  data.profile.InternalUprofile.moolyaProfile.userProfiles.clusterId,
       userRoles:  roles,

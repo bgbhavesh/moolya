@@ -7,6 +7,7 @@ import MlDBController from './mlDBController';
 import MlTransactionsHandler from '../../server/commons/mlTransactionsLog';
 import passwordUtil from "./passwordUtil";
 import NotificationTemplateEngine from "../commons/mlTemplateEngine"
+import MlEmailNotification from "../mlNotifications/mlEmailNotifications/mlEMailNotification"
 
 var fromEmail = Meteor.settings.private.fromEmailAddr;
 export default MlAccounts=class MlAccounts {
@@ -84,17 +85,17 @@ export default MlAccounts=class MlAccounts {
     emailOptions.to=address;
     emailOptions.subject="Welcome to moolya !";
     let regObj = {
-      "path" : verificationLink,
-      "firstName" : user&&user.registrationInfo&&user.registrationInfo.firstName?user.registrationInfo.firstName:"",
-      "contactNumber" : "+91-40-4672 5725 /Ext",
-      "hours" : 48,
+      path : verificationLink,
+      firstName : user&&user.registrationInfo&&user.registrationInfo.firstName?user.registrationInfo.firstName:"",
+      contactNumber : "+91-40-4672 5725 /Ext",
+      hours : 48,
+      fromEmail : emailOptions&&emailOptions.from?emailOptions.from:"",
+      toEmail : emailOptions&&emailOptions.to?emailOptions.to:"",
     }
-    let notificationEmailContent = NotificationTemplateEngine.fetchTemplateContent("EML_User_activation_mailer","email",regObj)
+    //let notificationEmailContent = NotificationTemplateEngine.fetchTemplateContent("EML_User_activation_mailer","email",regObj)
     if (emailOptions&&emailOptions.emailContentType==="html") {
-      emailOptions.html=notificationEmailContent&&notificationEmailContent.content?notificationEmailContent.content:"";
-      Meteor.setTimeout(function () {
-        mlEmail.sendHtml(emailOptions);
-      }, 2 * 1000);
+
+      MlEmailNotification.userVerficationLink(regObj);
     }else if(emailOptions&&emailOptions.emailContentType==="text") {
       emailOptions.text=emailContent;
       Meteor.setTimeout(function () {
@@ -127,8 +128,12 @@ export default MlAccounts=class MlAccounts {
       // By including the address in the query, we can use 'emails.$' in the
          // modifier to get a reference to the specific object in the emails
          // array.
-         MlRegistration.update({_id: user._id,'emails.address': tokenRecord.address},{$set: {'emails.$.verified': true },
+         let emailVerified = MlRegistration.update({_id: user._id,'emails.address': tokenRecord.address},{$set: {'emails.$.verified': true },
                              $pull: {'services.email.verificationTokens': {address: tokenRecord.address}}});
+
+         if(emailVerified){
+           let emailSent = MlEmailNotification.onEmailVerificationSuccess(context);
+         }
 
       return {
         email:tokenRecord.address,emailVerified:true,recordId:user._id,error: false
@@ -341,13 +346,16 @@ export default MlAccounts=class MlAccounts {
     context.url="https://mymoolya.com";
     let token = Random.secret();
     let res = mlDBController.update('users', user._id, { 'services.password.reset.token': token }, {$set:true}, context);
-    let regObj = {
+   /* let regObj = {
       "firstName" : user&&user.profile&&user.profile.firstName?user.profile.firstName:"",
       "path" : Meteor.absoluteUrl('reset')+'/'+token
-    }
-    let notificationEmailContent = NotificationTemplateEngine.fetchTemplateContent("EML_forgot__reset_password_mailer","email",regObj)
+    }*/
+
+
+    /*let notificationEmailContent = NotificationTemplateEngine.fetchTemplateContent("EML_forgot_reset_password_mailer","email",regObj)*/
     if(res){
-      var emailOptions={};
+      let emailSent = MlEmailNotification.forgotPassword(context, Meteor.absoluteUrl('reset')+'/'+token);
+    /*  var emailOptions={};
       //emailContent= MlAccounts.greet("To verify your account email,",user,Meteor.absoluteUrl('reset')+'/'+token);
       emailOptions.from=fromEmail;
       emailOptions.to=email;
@@ -355,7 +363,7 @@ export default MlAccounts=class MlAccounts {
       emailOptions.html=notificationEmailContent&&notificationEmailContent.content?notificationEmailContent.content:"";
       Meteor.setTimeout(function () {
         mlEmail.sendHtml(emailOptions);
-      }, 2 * 1000);
+      }, 2 * 1000);*/
       return {error: false,reason:"Reset link send successfully", code:200};
     }
   }

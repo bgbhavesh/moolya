@@ -210,7 +210,7 @@ MlResolver.MlQueryResolver['fetchTaskDetailsForAdminServiceCard'] = (obj, args, 
     isServiceCardEligible: true
   };
   if (args.serviceId) {
-    let service = mlDBController.findOne('MlService', args.serviceId , context);
+    let service = mlDBController.findOne('MlServiceCardDefinition', args.serviceId , context);
     let taskQuery = [];
     if (service.tasks && service.tasks.length > 0) {
       taskQuery = service.tasks.reduce(function(result, task) {
@@ -230,3 +230,23 @@ MlResolver.MlQueryResolver['fetchTaskDetailsForAdminServiceCard'] = (obj, args, 
   return result;
 };
 
+MlResolver.MlQueryResolver['fetchTaskForApointment'] = (obj, args, context, info) => {
+  if (args.taskId) {
+    let result = mlDBController.findOne('MlTask', args.taskId, context);
+    if (result) {
+      if (result.session && result.session.length > 0) {
+        result.session.map((taskSession, sessionIndex) => {
+          if (taskSession.activities && taskSession.activities.length > 0) {
+            taskSession.activities.map((activityId, index) => {
+              if (activityId) {
+                let activity = mlDBController.findOne('MlActivity', activityId, context);
+                result['session'][sessionIndex]['activities'][index] = activity;
+              }
+            })
+          }
+        });
+      }
+    }
+    return result;
+  }
+};

@@ -46,6 +46,10 @@ class MlAppServiceBasicInfo extends Component {
     $('#date-time').toggleClass('rdtOpen');
   }
 
+  validDate(current) {
+    let yesterday = Datetime.moment().subtract(1, 'day');
+    return current.isAfter(yesterday);
+  }
   /**
    * Method :: React render
    * Desc :: Showing html page
@@ -91,7 +95,6 @@ class MlAppServiceBasicInfo extends Component {
     `;
 
     let statesOption={options: { variables: {countryId: clusterCode}}};
-
     let citiesOption={options: { variables: {id: clusters}}};
     return (
       <div className="step_form_wrap step1">
@@ -135,6 +138,7 @@ class MlAppServiceBasicInfo extends Component {
                             timeFormat={false}
                             inputProps={{placeholder: "Valid Till"}}
                             closeOnSelect={true}
+                            isValidDate={(current) => this.validDate(current)}
                             value={data.validTill? new Moment(data.validTill).format('DD-MM-YY') : null}
                             onChange={(event) => validTill(event)}
                             disabled={this.props.viewMode}/>

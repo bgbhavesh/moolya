@@ -5,6 +5,7 @@ import { parse } from 'graphql';
 import MlResolver from '../../commons/mlResolverDef';
 import _ from 'lodash'
 import mlOfficeValidationRepo from '../office/officeRepo'
+import mlServiceCardRepo from '../servicecards/servicecardRepo'
 
 
 class MlserviceCardHandler{
@@ -33,7 +34,7 @@ class MlserviceCardHandler{
           return {success:false};
 
       var details = this.getQueryDetails(query);
-      if(resourceName != "OFFICE")
+      if(resourceName != "OFFICE" || resourceName != 'SERVICECARD')
         return {success:true}
 
       if(details && details.isWhiteList)
@@ -53,13 +54,18 @@ class MlserviceCardHandler{
         }
         break;
         case 'INTERACTION':{
-          return mlActionValidationService.validateUserActions(context.userId, resourceName, userAction, interactionType);
+            return true;
+          // return mlActionValidationService.validateUserActions(context.userId, resourceName, userAction, interactionType);
         }
         break;
         case 'SERVICECARD':{
-          return true;
+          return mlServiceCardRepo.validateServiceCardActions(context, resourceName, userAction, interactionType);
         }
         break;
+
+        default:{
+          return {success:true}
+        }
       }
   }
 

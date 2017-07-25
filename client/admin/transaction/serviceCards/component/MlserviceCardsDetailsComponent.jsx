@@ -14,7 +14,7 @@ import MlServiceManageSchedule from '../component/MlServicesComponent'
 import _ from "lodash";
 import moment from "moment";
 import {
-  getServiceBasedOnProfileId,
+  getServiceBasedOnServiceId,
   fetchTaskDetailsForAdminServiceCard} from '../actions/mlFindService'
 var FontAwesome = require('react-fontawesome');
 
@@ -100,8 +100,8 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
    */
 
  async getServiceDetails() {
-    console.log(this.profileId);
-    let resp = await getServiceBasedOnProfileId(this.profileId);
+    console.log('----serviceId---', this.serviceId);
+    let resp = await getServiceBasedOnServiceId(this.serviceId);
     console.log('---res--', resp);
     if (resp) {
       this.constructServiceData(resp);
@@ -230,6 +230,7 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
     if (!this.state.data.isLoding) {
       return null;
     }
+    console.log('----render--', this.props.data);
     return (
       <div className="ml_tabs">
         <ul  className="nav nav-pills">
@@ -254,13 +255,13 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="User Id" value={that.props.data.userId} className="form-control float-label" readOnly="true"/>
+                  <input type="text" placeholder="User Id" value={that.props.data.profileId} className="form-control float-label" readOnly="true"/>
                 </div>
                 <div className="form-group ">
-                  <input type="text" placeholder="Transaction Id" value={that.props.data._id} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Transaction Id" value={that.props.data.transactionId} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Date & Time" value={moment(that.props.data.createdAt).format('DD-MM-YYYY')} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Date & Time" value={that.props.data.createdAt ? moment(that.props.data.createdAt).format('DD-MM-YYYY HH:mm:ss') : ''} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="clearfix"></div>
                 <div className="form-group">

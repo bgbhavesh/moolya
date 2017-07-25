@@ -12,11 +12,11 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function getServiceBasedOnProfileId (profileId) {
+export async function getServiceBasedOnServiceId (serviceId) {
   const result = await client.query({
     query: gql`
-query ($profileId: String) {
-  getServiceBasedOnProfileId(profileId: $profileId) {
+query ($serviceId: String) {
+  getServiceBasedOnServiceId(serviceId: $serviceId) {
         userId
         profileId
         name
@@ -25,6 +25,7 @@ query ($profileId: String) {
         validTill
         sessionFrequency
         finalAmount
+        transactionId
         duration{
          hours
          minutes
@@ -81,11 +82,11 @@ query ($profileId: String) {
       }
     `,
     variables: {
-      profileId
+      serviceId
     },
     forceFetch:true
   });
-  var response = result.data.getServiceBasedOnProfileId;
+  var response = result.data.getServiceBasedOnServiceId;
   let service = _.omit(response, '__typename');
   service.duration = _.omit(service.duration, '__typename');
   service.payment = _.omit(service.payment, '__typename');

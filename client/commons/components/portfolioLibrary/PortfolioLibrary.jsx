@@ -48,7 +48,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
       documentsLock:{},
       explore: false,
       hideLock: false,
-      popoverOpen:false,
+      popoverOpen:false,deleteOption: false
     };
     this.toggle = this.toggle.bind(this);
     this.refetchData.bind(this);
@@ -72,8 +72,11 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
     if(portfolioId !== "portfolio" || path.indexOf("view")>0){
       this.setState({explore : true})
     }
+    if(portfolioId !== "portfolio" || path.indexOf("edit")>0){
+      this.setState({deleteOption : true})
+    }
     if(portfolioId === "library"){
-      this.setState({explore : false, isLibrary: true, hideLock: true})
+      this.setState({explore : false, isLibrary: true, hideLock: true, deleteOption: false})
     }
     if(portfolioId === "transaction_portfolio_EditRequests"){
       this.setState({explore : false, isAdminEdit: true})
@@ -526,7 +529,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
         if (show.inCentralLibrary) {
           return (
             <div className="thumbnail" key={id}>
-              {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "image", "portfolio")}/>}
+              {that.state.explore || that.state.deleteOption? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "image", "portfolio")}/>}
               {that.state.isLibrary ? <a href="#" data-toggle="modal" data-target=".imagepop" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img src={show.fileUrl}/></a> :<a href="#" data-toggle="modal"  onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img src={show.fileUrl}/></a>}
               <div id="images" className="title">{show.fileName}</div>
             </div>
@@ -574,7 +577,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
         if(show.inCentralLibrary){
           return(
             <div className="thumbnail"key={id}>
-              {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "template", "portfolio")}/>}
+              {that.state.explore || that.state.deleteOption ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "template", "portfolio")}/>}
               {that.state.isLibrary ? <a href="#" data-toggle="modal" data-target=".templatepop" onClick={that.sendDataToPortfolioLibrary.bind(that,show, id)} ><img src={show.fileUrl}/></a>:<a href="#" data-toggle="modal"  onClick={that.sendDataToPortfolioLibrary.bind(that,show, id)} ><img src={show.fileUrl}/></a>}
               <div id="templates" className="title">{show.fileName}</div>
             </div>
@@ -622,7 +625,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
         if(show.inCentralLibrary){
           return(
             <div className="thumbnail"key={id}>
-              {that.state.explore ?"":  <FontAwesome name='trash-o' onClick={()=>that.delete(id, "video")} />}
+              {that.state.explore || that.state.deleteOption ?"":  <FontAwesome name='trash-o' onClick={()=>that.delete(id, "video")} />}
               {that.state.isLibrary ?  <a href="#" data-toggle="modal" data-target=".videopop" onClick={that.sendDataToPortfolioLibrary.bind(that,show, id)} ><video width="120" height="100" controls>
                 <source src={show.fileUrl}type="video/mp4"></source>
               </video>/></a>:<a href="#" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that,show, id)} ><video width="120" height="100" controls>
@@ -670,7 +673,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
         if(show.inCentralLibrary){
           return(
             <div className="thumbnail"key={id}>
-              {that.state.explore ?"":  <FontAwesome name='trash-o' onClick={()=>that.delete(id, "template")} />}
+              {that.state.explore || that.state.deleteOption?"":  <FontAwesome name='trash-o' onClick={()=>that.delete(id, "template")} />}
               {that.state.isLibrary ?<a href="#" data-toggle="modal" data-target=".documentpop" onClick={that.sendDataToPortfolioLibrary.bind(that,show, id)} ><img src={show.fileUrl}/></a>:<a href="#" data-toggle="modal"  onClick={that.sendDataToPortfolioLibrary.bind(that,show, id)} ><img src={show.fileUrl}/></a>}
               <div id="templates" className="title">{show.fileName}</div>
             </div>
@@ -757,9 +760,9 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 
     async updateLibraryPortfolioLibrary(id,data){
       const resp = await updateLibrary(id,data, this.props.client)
-      if(!resp.success){
-        toastr.error("Image already Exists in library")
-      }
+      // if(!resp.success){
+      //   toastr.error("Image already Exists in library")
+      // }
       return resp;
     }
 

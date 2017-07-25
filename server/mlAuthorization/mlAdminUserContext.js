@@ -180,7 +180,7 @@ class MlAdminUserContext
       latitude = address.latitude;
       longitude = address.longitude;
     }
-    return {lat: latitude, lng: longitude}
+    return {lat: latitude?latitude:0, lng: longitude?longitude:0}
   }
   getCommunityBasedExternalUser(userProfiles, user, userType, locationName){
     var users = [];

@@ -432,7 +432,8 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
     if (allKycDoc && allKycDoc.length > 0) {
       //getting uniq documents based on documentId
       allCombinationDoc = _underscore.uniq(allKycDoc, function (kyc) {
-        return kyc.documentId;
+        let docId = kyc&&kyc.documentId?kyc.documentId:""
+        return docId;
       });
       return allCombinationDoc
     }
@@ -471,7 +472,8 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
       if (combinationBasedDoc && combinationBasedDoc.length > 0) {
         //getting uniq documents based on documentId
         kycDoc = _underscore.uniq(combinationBasedDoc, function (kyc) {
-          return kyc.documentId;
+          let docId = kyc&&kyc.documentId?kyc.documentId:""
+          return docId;
         });
         return kycDoc
       }

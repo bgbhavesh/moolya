@@ -10,12 +10,8 @@ import {multipartASyncFormHandler} from "../../../../../commons/MlMultipartFormA
 import MlAppMyCalendarDayComponent from '../../../../../app/calendar/myCalendar/components/dayComponent'
 var _ = require('lodash');
 import Calender from '../../../../../commons/calendar/calendar'
-
-
-
-// import StepZilla from '../../../../common/components/stepzilla/StepZilla';
-// import Step1 from '../../../../app/views/myprofile/funderProfile/MyAppointment/service';
-// import Step2 from './secondSetp'
+import MlAppMyCalendar from './MlFunderServiceCalendar'
+import {fetchServiceCalendarActionHandler} from '../../../../../app/calendar/myCalendar/actions/fetchMyCalendar';
 import {bookUserServiceCardActionHandler, userServiceCardPaymentActionHandler} from '../../../../../app/calendar/manageScheduler/service/actions/MlServiceActionHandler'
 
 ;
@@ -26,7 +22,8 @@ export default class FunderAboutView extends React.Component{
       showPaymentDetails: false,
       tasks:[],
       imagePreview:"",
-      payment: false
+      payment: false,calendarDetails:[]
+
     }
     this.getTasks.bind(this);
     this.imageUpload.bind(this)
@@ -69,17 +66,14 @@ export default class FunderAboutView extends React.Component{
 
   async bookUserServiceCard() {
     this.setState({showPaymentDetails: true})
-    console.log(this.state.taskDetails)
     let taskDetails = this.state.taskDetails
     const response =  await bookUserServiceCardActionHandler(this.props.serviceDetails._id, taskDetails)
-    console.log(response)
     this.setState({orderId: response.result})
     // this.payment(this.state.orderId)
     return response;
   }
 
   payment(){
-    this.setState({payment: true})
     let paymentDetails={
       orderId:this.state.orderId,
       amount:this.props.serviceDetails.payment?this.props.serviceDetails.payment.tasksDerived:0,
@@ -89,11 +83,22 @@ export default class FunderAboutView extends React.Component{
       currencyCode:""
     }
     this.paymentDetails(paymentDetails)
+    this.getServiceProviderDetails()
+  }
+  async getServiceProviderDetails(){
+    let portfolioId = FlowRouter.getParam('portfolioId');
+    const response = await fetchServiceCalendarActionHandler(portfolioId)
+    this.setState({calendarDetails: response})
+    return response
   }
 
   async  paymentDetails(paymentDetails){
     const response  = await userServiceCardPaymentActionHandler(paymentDetails)
-    return response
+    if(response){
+      toastr.success('Payment Done Successfully')
+      this.setState({payment: true})
+      return response
+    }
   }
 
   componentWillMount(){
@@ -106,13 +111,11 @@ export default class FunderAboutView extends React.Component{
 
   async getTasks(data){
     const resp =  await fetchTasksInBookingActionHandler(data)
-    console.log(resp)
     this.setState({tasks: resp})
     return resp;
   }
 
   imageUpload(id,e){
-    console.log(id)
     let user = {
       profile: {
         InternalUprofile: {moolyaProfile: {profileImage: " "}}
@@ -128,7 +131,6 @@ export default class FunderAboutView extends React.Component{
 
 
   onFileUploadCallBack(id,file,resp){
-    console.log(resp)
     if (resp) {
       let result = JSON.parse(resp)
         if (result.success) {
@@ -173,7 +175,6 @@ export default class FunderAboutView extends React.Component{
   }
 
   assignTaskDetails(taskImages){
-    console.log(taskImages)
     this.setState({taskDetails: taskImages})
   }
 
@@ -304,17 +305,7 @@ export default class FunderAboutView extends React.Component{
             </ScrollArea>
           </div>
         </div>:""}
-      </div>:
-        <div className="app_main_wrap" style={{'overflow':'auto'}}>
-          <div className="app_padding_wrap">
-          <Calender
-            dayBackgroundComponent={<MlAppMyCalendarDayComponent /> }
-            dayData=""
-            onNavigate=""
-            date=""
-          />
-      </div>
-          </div>
+        </div>:<MlAppMyCalendar orderId={this.state.orderId} calendarDetails={this.state.calendarDetails} serviceDetails={this.props.serviceDetails}/>
 
     )
   }

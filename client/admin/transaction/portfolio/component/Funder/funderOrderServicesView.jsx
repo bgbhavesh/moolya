@@ -80,24 +80,59 @@ export default class FunderOrderServicesView extends Component {
             </li>
           </ul>
         </div>
+        <br className="brclear" />
+        <br />
+        <div className="row funders_list">
+          <div className="col-md-4 col-sm-4 col-lg-3">
+            <a href="#">
+              <div className="funders_list_block">
+                <h3>7:30 - 8:30</h3>
+                <div className="list_icon"><span className="ml ml-moolya-symbol"></span></div>
+                <div className="block_footer">
+                  <span>Filling fast</span>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div className="col-md-4 col-sm-4 col-lg-3">
+            <a href="#">
+              <div className="funders_list_block">
+                <h3>7:30 - 8:30</h3>
+                <div className="list_icon"><span className="ml ml-moolya-symbol"></span></div>
+                <div className="block_footer">
+                  <span>Busy</span>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div className="col-md-4 col-sm-4 col-lg-3">
+            <a href="#">
+              <div className="funders_list_block">
+                <h3>7:30 - 8:30</h3>
+                <div className="list_icon"><span className="ml ml-moolya-symbol"></span></div>
+                <div className="block_footer">
+                  <span>Available</span>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
         <div className="col-md-6 nopadding-left">
           <div className="left_wrap">
             <ScrollArea
               speed={0.8}
               className="left_wrap"
               smoothScrolling={true}
-              default={true}
-            >
+              default={true}>
               <div className="form_bg">
                 <form>
-
                   <div className="panel panel-default uploaded_files">
                     <div className="panel-heading">
                       Order Summary
                     </div>
-
                   </div>
-
                   <div className="col-md-4">
                     <FontAwesome name='calendar'/> &nbsp; 17/07/2017
                   </div>
@@ -120,7 +155,6 @@ export default class FunderOrderServicesView extends Component {
                             <input type="file" className="upload_file upload" name="file_source"/></a>
                         </div>
                       </div>
-
                     </div>
                     <div className="panel-body uploaded_files_swiper">
                       <ul className="swiper-wrapper">
@@ -139,7 +173,6 @@ export default class FunderOrderServicesView extends Component {
                             <input type="file" className="upload_file upload" name="file_source"/></a>
                         </div>
                       </div>
-
                     </div>
                     <div className="panel-body uploaded_files_swiper">
                       <ul className="swiper-wrapper">
@@ -158,7 +191,6 @@ export default class FunderOrderServicesView extends Component {
                     </tr>
                     </thead>
                     <tbody>
-
                     <tr>
                       <td>Actual Amount</td>
                       <td>: 5,000 INR</td>
@@ -184,10 +216,8 @@ export default class FunderOrderServicesView extends Component {
                         </div>
                       </td>
                     </tr>
-
                     </tbody>
                   </table>
-
                 </form>
               </div>
             </ScrollArea>
@@ -199,15 +229,13 @@ export default class FunderOrderServicesView extends Component {
               speed={0.8}
               className="left_wrap"
               smoothScrolling={true}
-              default={true}
-            >
+              default={true}>
               <div className="form_bg">
                 <form>
                   <div className="panel panel-default uploaded_files">
                     <div className="panel-heading">
                       Payment Mode
                     </div>
-
                   </div>
                   <h1>
                     Payment Gateway Here

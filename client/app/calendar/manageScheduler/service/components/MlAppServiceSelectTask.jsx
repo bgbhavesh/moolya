@@ -54,13 +54,13 @@ class MlAppServiceSelectTask extends Component{
    */
 
   getTabs() {
-    const { serviceTask, optionsBySelectService } = this.props;
+    const { serviceTask, optionsBySelectService, deleteSelectedTask } = this.props;
     const tabs = serviceTask.tasks ? serviceTask.tasks.map((tab, index) => {
       return (
         <li className={serviceTask.selectedTaskId === tab.id ? 'active' : ''} key={index}>
           <a href="#newTask" data-toggle="tab"
              onClick={() => optionsBySelectService(tab.id)}>
-             <FontAwesome name='minus-square'/>{tab.displayName}
+             <FontAwesome onClick={() => deleteSelectedTask(tab.id)} name='minus-square'/>{tab.displayName}
           </a>
         </li>
       )

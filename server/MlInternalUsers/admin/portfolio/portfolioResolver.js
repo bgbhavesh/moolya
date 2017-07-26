@@ -6,6 +6,7 @@ import MlRespPayload from "../../../commons/mlPayload";
 import MlUserContext from "../../../MlExternalUsers/mlUserContext";
 import _ from "lodash";
 import portfolioValidationRepo from "./portfolioValidation";
+import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification"
 
 MlResolver.MlQueryResolver['fetchPortfolioDetails'] = (obj, args, context, info) => {
 }
@@ -179,6 +180,9 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                     }
                       break;
                   }
+                //triggered on successfull portfolio creation
+                  MlEmailNotification.onPortfolioConfirmation(userDetails);
+
               }
 
           }

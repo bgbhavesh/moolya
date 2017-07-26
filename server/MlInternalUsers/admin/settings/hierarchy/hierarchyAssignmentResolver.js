@@ -237,7 +237,25 @@ MlResolver.MlQueryResolver['fetchHierarchyUsers'] = (obj, args, context, info) =
     //get all users associated with the hierarchy
     let usersList = []
     if(args.clusterId && args.departmentId && args.subDepartmentId && args.roleId){
-        usersList = mlDBController.find('users', {"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId":args.clusterId} ,{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.departmentId":args.departmentId},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.subDepartmentId":args.subDepartmentId},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.roleId":args.roleId},{"profile.isActive":true}]}, context).fetch()
+        // usersList = mlDBController.find('users', {"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId":args.clusterId} ,{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.departmentId":args.departmentId},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.subDepartmentId":args.subDepartmentId},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.roleId":args.roleId},{"profile.isActive":true}]}, context).fetch()
+
+      usersList =mlDBController.find('users', {"$and":
+        [
+          {"profile.isActive":true},
+          {"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles":
+            {
+              $elemMatch: {
+                clusterId:args.clusterId,
+                departmentId:args.departmentId,
+                subDepartmentId:args.subDepartmentId,
+                roleId:args.roleId,
+                isActive:true,
+              }
+            }
+          },
+        ]
+      }, context).fetch()
+
      }
     if(usersList){
       usersList.map(function (user,key) {

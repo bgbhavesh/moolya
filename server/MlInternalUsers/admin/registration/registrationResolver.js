@@ -613,7 +613,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       })
       if (emailVerified) {
         if (registrationRecord && registrationRecord.status != 'Approved') {
-          let kycDocuments = registrationRecord.kycDocuments
+          let kycDocuments = registrationRecord.kycDocuments&&registrationRecord.kycDocuments.length>0?registrationRecord.kycDocuments:[]
           if (kycDocuments && kycDocuments.length >= 1) {
             //mandatory doc exist or not
             mandatorykycDoc = kycDocuments.filter(function (item) {
@@ -782,7 +782,7 @@ MlResolver.MlMutationResolver['ApprovedStatusOfDocuments'] = (obj, args, context
       for (let i = 0; i < documentList.length; i++) {
         // updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':documentList[i],'docTypeId':doctypeList[i]}}},{$set: {"kycDocuments.$.status":"Approved"}});
         let user = MlRegistration.findOne({_id: args.registrationId}) || {}
-        let kyc = user.kycDocuments
+        let kyc = user.kycDocuments&&user.kycDocuments.length>0?user.kycDocuments:[]
         let kycDoc = _.find(kyc, function (item) {
           return item.documentId == documentList[i] && item.docTypeId == doctypeList[i];
         });

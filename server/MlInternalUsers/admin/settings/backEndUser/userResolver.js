@@ -1403,7 +1403,7 @@ MlResolver.MlQueryResolver['fetchUserRoleDetails'] = (obj, args, context, info) 
     });
     let defaultRole = {}
     for (let i = 0; i < userRolesData.length; i++) {
-      if (userRolesData[i].hierarchyLevel == hirarichyLevel[0]) {
+      if ((userRolesData[i].hierarchyLevel == hirarichyLevel[0]) && userRolesData[i].isActive) {
         defaultRole = userRolesData[i]
         break
       }

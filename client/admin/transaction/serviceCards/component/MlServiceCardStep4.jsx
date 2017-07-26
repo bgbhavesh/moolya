@@ -149,10 +149,12 @@ export default class MlServiceCardStep4 extends React.Component{
                          onChange={(event) => checkChargeStatus(event)}
                          value="amount" />
                   <label htmlFor="facilitationamount"><span><span></span></span>Amount Rs
-                    <input className="form-control inline_input"
-                           disabled={(facilitationCharge.type && facilitationCharge.type === 'amount') ? false : true}
-                           defaultValue={facilitationCharge.type === 'amount' ? facilitationCharge.amount : ''}
-                           onChange={(event) => calculateCharges(event)} />
+                    {facilitationCharge.type === 'amount' ?
+                      <input className="form-control inline_input"
+                             disabled={(facilitationCharge.type && facilitationCharge.type === 'amount') ? false : true}
+                             defaultValue={facilitationCharge.type === 'amount' ? facilitationCharge.amount : ''}
+                             onChange={(event) => calculateCharges(event)} /> : <div></div>
+                    }
                   </label>
                 </div>
                 <div className="input_types">
@@ -162,10 +164,12 @@ export default class MlServiceCardStep4 extends React.Component{
                          onChange={(event) => checkChargeStatus(event)}
                          value="percent"/>
                   <label htmlFor="radio2"><span><span></span></span>Percentage
-                    <input className="form-control inline_input"
-                           disabled={(facilitationCharge.type && facilitationCharge.type === 'percent') ? false : true}
-                           defaultValue={facilitationCharge.type === 'percent' ? facilitationCharge.amount : ''}
-                           onChange={(event) => calculateCharges(event)}/>
+                    {facilitationCharge.type === 'percent' ?
+                      <input className="form-control inline_input"
+                             disabled={(facilitationCharge.type && facilitationCharge.type === 'percent') ? false : true}
+                             defaultValue={facilitationCharge.type === 'percent' ? facilitationCharge.amount : ''}
+                             onChange={(event) => calculateCharges(event)}/> : <div></div>
+                    }
                   </label>
                 </div>
               </div>

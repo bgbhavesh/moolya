@@ -133,9 +133,12 @@ export default class MlAppServicePayment extends React.Component{
                          checked={facilitationCharge.type === 'amount' ? true : false}
                          value="Amount" disabled/>
                   <label htmlFor="facilitationamount"><span><span></span></span>Amount Rs
-                    <input className="form-control inline_input"
-                           disabled
-                           value={facilitationCharge.type === 'amount' ? facilitationCharge.amount : ''} />
+                    {facilitationCharge.type === 'amount' ?
+                      <input className="form-control inline_input"
+                             disabled
+                             value={facilitationCharge.type === 'amount' ? facilitationCharge.amount : ''} />
+                      :<div></div>
+                    }
                   </label>
                 </div>
                 <div className="input_types">
@@ -145,10 +148,13 @@ export default class MlAppServicePayment extends React.Component{
                          checked={facilitationCharge.type === 'percent' ? true : false}
                          value="Percentage" disabled/>
                   <label htmlFor="radio2"><span><span></span></span>Percentage
-                    <input className="form-control inline_input"
-                           disabled
-                           value={facilitationCharge.type === 'percent' ? facilitationCharge.amount : ''} />
-                  </label>
+                    {facilitationCharge.type === 'percent' ?
+                      <input className="form-control inline_input"
+                             disabled
+                             value={facilitationCharge.type === 'percent' ? facilitationCharge.amount : ''} />
+                      : <div></div>
+                    }
+                    </label>
                 </div>
                 <br className="brclear"/>
               </div>

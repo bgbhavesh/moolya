@@ -412,7 +412,9 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
               response.map(function (country, key){
                 let json={
                   id:country._id,
-                  name:country.country
+                  name:country.country,
+                  code:country.countryCode,
+                  phoneNumberCode:country.phoneNumberCode
                 }
                 countries.push(json)
               })
@@ -452,7 +454,8 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
           let response;
           if(data) {
             let cities = [];
-            response = MlResolver.MlQueryResolver['fetchCitiesPerCountryAPI'](null, {countryId:data.countryId}, context, null);
+            response = MlResolver.MlQueryResolver['fetchCitiesPerCountryAPI'](null, {countryId:data.countryId,cityName:data.cityName,limit:data.limit}, context, null);
+            /*response = MlResolver.MlQueryResolver['fetchCitiesPerCountryAPI'](null, {countryId:data.countryId}, context, null);
             if(response){
               response.map(function (city, key){
                     let json={
@@ -466,9 +469,9 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                       cities.push(json)
                     }
                 })
-            }
+            }*/
             //console.log(cities);
-            res.send(cities);
+            res.send(response);
           }
         }else{
           let code = 401;

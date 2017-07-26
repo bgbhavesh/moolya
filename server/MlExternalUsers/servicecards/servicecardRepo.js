@@ -135,16 +135,16 @@ class MlServiceCardRepo{
           servicecard.payment["tasksAmount"] = taskAmount;
           servicecard.payment["tasksDiscount"] = taskAmount - taskDerivedAmount;
           servicecard.payment["tasksDerived"] = taskDerivedAmount;
+          servicecard.finalAmount = servicecard.finalAmount || (servicecard.payment && servicecard.payment["tasksDerived"]);
         }
-        if (servicecard.termsAndCondition) {
-          service.termsAndCondition = servicecard.termsAndCondition;
+        servicecard.userId = service.userId;
+        servicecard.updatedAt = new Date();
+        for(key in service){
+          if ((typeof servicecard[key] === 'undefined' || servicecard[key] === null) && key !== 'createdAt' && key !== '_id') {
+            servicecard[key] = service[key];
+          }
         }
-        service.tasks       = servicecard.tasks;
-        service.duration    = servicecard.duration;
-        service.noOfSession = servicecard.noOfSession;
-        service.payment     = servicecard.payment;
-        service.finalAmount = servicecard.finalAmount
-        let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, service, {$set: 1}, context);
+        let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, servicecard, {$set: 1}, context);
         if(!result){
           return new MlRespPayload().errorPayload("Error In Updating The Service Card", 400);
         }
@@ -198,7 +198,7 @@ class MlServiceCardRepo{
           servicecard.payment["tasksAmount"] = taskAmount;
           servicecard.payment["tasksDiscount"] = taskAmount - taskDerivedAmount;
           servicecard.payment["tasksDerived"] = taskDerivedAmount;
-          servicecard.payment["finalAmount"] = taskDerivedAmount;
+          // servicecard.payment["finalAmount"] = taskDerivedAmount;
         }
         service.isCurrentVersion = false;
         servicecard.userId          = context.userId;
@@ -206,6 +206,7 @@ class MlServiceCardRepo{
         servicecard.transactionId   = service.transactionId;
         servicecard.versions        = service.versions + INITIAL_VERSION;
         servicecard.isCurrentVersion = true;
+        service.finalAmount = servicecard.finalAmount || servicecard.payment["tasksDerived"];
 
         // de activating older version service card def
         let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, service, {$set: 1}, context);

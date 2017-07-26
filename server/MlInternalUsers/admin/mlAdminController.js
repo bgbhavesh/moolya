@@ -412,7 +412,9 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
               response.map(function (country, key){
                 let json={
                   id:country._id,
-                  name:country.country
+                  name:country.country,
+                  code:country.countryCode,
+                  phoneNumberCode:country.phoneNumberCode
                 }
                 countries.push(json)
               })

@@ -119,9 +119,9 @@ class MlAppServiceSelectTask extends Component{
                         <span>Duration:</span><br />
                         <div className="form-group">
                           <label><input type="text" className="form-control inline_input"
-                                        value={data.duration.hours || 0} disabled /> Hours
+                                        value={activity.duration.hours || 0} disabled /> Hours
                                  <input type="text" className="form-control inline_input"
-                                        value={data.duration.minutes || 0} disabled /> Mins
+                                        value={activity.duration.minutes || 0} disabled /> Mins
                           </label>
                         </div>
                         <h3>{activity.displayName}</h3>

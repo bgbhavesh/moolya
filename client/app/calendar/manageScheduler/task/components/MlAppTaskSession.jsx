@@ -203,9 +203,9 @@ export default class MlAppTaskSession extends Component {
                                     {/*<FontAwesome name='pencil'/>*/}
                                 </span><br />
                                   <div className="form-group">
-                                    <label><input type="text" key={activity.duration ? 'notLoadedYetHrs' : 'loadedHrs'} disabled="true" className="form-control inline_input" defaultValue={activity.duration ? activity.duration.hours:0}/> Hours <input
+                                    <label><input type="text" key={activity.duration ? 'notLoadedYetHrs' : 'loadedHrs'} disabled="true" className="form-control inline_input" defaultValue={(activity.duration && activity.duration.hours) ? activity.duration.hours:0}/> Hours <input
                                       type="text" key={activity.duration ? 'notLoadedYetMin' : 'loadedMin'} disabled="true"
-                                      className="form-control inline_input" defaultValue={activity.duration ? activity.duration.minutes : 0 }/>
+                                      className="form-control inline_input" defaultValue={(activity.duration && activity.duration.minutes) ? activity.duration.minutes : 0 }/>
                                       Minutes</label>
                                   </div>
                                 </div>

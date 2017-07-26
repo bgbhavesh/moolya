@@ -231,7 +231,7 @@ export async function fetchProfileActionHandler (profileId) {
   const result = await appClient.query({
     query: gql`
     query ($profileId: String) {
-      getUserProfile(profileId: $profileId) {
+      getUserProfileForService(profileId: $profileId) {
         clusterName
         clusterId
         countryId
@@ -243,7 +243,7 @@ export async function fetchProfileActionHandler (profileId) {
       profileId
     }
   });
-  const profile = result.data.getUserProfile;
+  const profile = result.data.getUserProfileForService;
   return profile;
 }
 
@@ -309,6 +309,10 @@ export async function fetchTaskDetailsForServiceCard (profileId, serviceId) {
               mode
               name
               displayName
+              duration {
+                hours
+                minutes
+              }
             }
           }
           attachments {

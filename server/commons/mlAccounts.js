@@ -132,7 +132,7 @@ export default MlAccounts=class MlAccounts {
                              $pull: {'services.email.verificationTokens': {address: tokenRecord.address}}});
 
          if(emailVerified){
-           let emailSent = MlEmailNotification.onEmailVerificationSuccess(context);
+           let emailSent = MlEmailNotification.onEmailVerificationSuccess(user);
          }
 
       return {

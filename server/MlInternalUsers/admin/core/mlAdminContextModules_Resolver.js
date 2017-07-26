@@ -165,10 +165,11 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       result=CoreModulesRepo.MlHierarchyDepartmentsRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
     case 'users':
-      /**merging the user repo to the portfolio repo only with different case*/
+      /**merging the user repo to the users module*/
       requestParams = args.context || {};
-      requestParams.type = 'users';
-      result = CoreModulesRepo.MlPortfolioRepo(requestParams, userFilterQuery, contextQuery, findOptions, context);
+      /**type can be used for different list view config*/
+      // requestParams.type = 'users';
+      result = CoreModulesRepo.MlUsersRepo(requestParams, userFilterQuery, contextQuery, findOptions, context);
       break;
   }
 

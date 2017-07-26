@@ -116,7 +116,7 @@ export default class MlServiceCardStep1 extends React.Component{
                 <div className="form-group">
                   <Select multi={true}
                           type="text"
-                          placeholder="States"
+                          placeholder="Cities"
                           className="form-control float-label"
                           options={cityOptions}
                           value={cityOptions} disabled />
@@ -124,7 +124,7 @@ export default class MlServiceCardStep1 extends React.Component{
                 <div className="form-group">
                   <Select multi={true}
                           type="text"
-                          placeholder="States"
+                          placeholder="Communities"
                           className="form-control float-label"
                           options={communityOptions}
                           value={communityOptions} disabled />

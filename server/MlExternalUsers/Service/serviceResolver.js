@@ -220,18 +220,15 @@ MlResolver.MlMutationResolver['updateServiceAdmin'] = (obj, args, context, info)
     if (service) {
       args.Services.userId = service.userId;
       args.Services.updatedAt = new Date();
-      service.isCurrentVersion = false;
       args.Services.transactionId = service.transactionId;
       args.Services.versions = args.Services.isApproved ? Math.ceil(service.versions) : (service.versions + 0.001);
-      args.Services.isCurrentVersion = true;
-      let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, service, {$set: 1}, context);
       for(key in service){
         if ((typeof args.Services[key] === 'undefined' || args.Services[key] === null) && key !== 'createdAt' && key !== '_id') {
           args.Services[key] = service[key];
         }
       }
-      let newVersionServer = mlDBController.insert('MlServiceCardDefinition', args.Services , context);
-      if(newVersionServer){
+      let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, args.Services, {$set: 1}, context);
+      if(result){
         let code = 200;
         let response = new MlRespPayload().successPayload(result, code);
         return response

@@ -21,7 +21,6 @@ import { cloneDeep } from 'lodash';
 import {
   createServiceActionHandler,
   fetchServiceActionHandler,
-  fetchProfileActionHandler,
   updateServiceActionHandler } from '../actions/MlServiceActionHandler';
 import Moolyaselect from '../../../../commons/components/MlAppSelectWrapper';
 

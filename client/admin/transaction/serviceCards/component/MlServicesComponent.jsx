@@ -31,6 +31,7 @@ export default class MlServiceManageSchedule extends Component {
     this.state = {
       data: this.props.data || {}
     };
+    this.errorMsg = '';
     this.optionsBySelectService = this.optionsBySelectService.bind(this);
     this.saveServicePaymentDetails = this.saveServicePaymentDetails.bind(this);
     this.checkChargeStatus = this.checkChargeStatus.bind(this);
@@ -126,7 +127,17 @@ export default class MlServiceManageSchedule extends Component {
     let { data } = this.state;
     data.facilitationCharge.type = event.target.id;
     data.facilitationCharge.amount = 0;
-    data.finalAmount = data.prevFinalAmount;
+    if (data.facilitationCharge.type && data.facilitationCharge.amount <= 0) {
+      data.finalAmount = data.servicePayment.tasksDerived;
+      if (data.servicePayment.discountValue > 0 ) {
+        if (data.servicePayment.discountType === 'amount') {
+          data.finalAmount -= parseInt(data.servicePayment.discountValue);
+        } else if (data.servicePayment.discountType === 'percent') {
+          let prevAmount =  (parseInt(data.servicePayment.tasksDerived) * parseInt(data.servicePayment.discountValue) / 100);
+          data.finalAmount -= prevAmount;
+        }
+      }
+    }
     this.setState({data: data});
   }
 
@@ -136,42 +147,41 @@ export default class MlServiceManageSchedule extends Component {
    */
   calculateCharges(event) {
     let {data} = this.state;
-    data.finalAmount = data.prevFinalAmount;
+    data.finalAmount = data.servicePayment.tasksDerived;
     data.facilitationCharge.amount = 0;
+    this.errorMsg = '';
     switch (data.facilitationCharge.type) {
       case 'amount':
-        if (parseInt(event.target.value) >= 0) {
+        if (isNaN(event.target.value)) {
+          this.errorMsg = 'Please enter a valid number';
+          toastr.error(this.errorMsg);
+        } else if (parseInt(event.target.value) >= 0) {
           data.facilitationCharge.amount = event.target.value;
           let facilitationAmount = data.facilitationCharge.amount ? parseInt(data.facilitationCharge.amount) : 0;
           data.finalAmount = parseInt(data.servicePayment.tasksDerived) + parseInt(facilitationAmount);
-          if (data.servicePayment.discountValue > 0 ) {
-            if (data.servicePayment.discountType === 'amount') {
-              data.finalAmount -= parseInt(data.servicePayment.discountValue);
-            } else if (data.servicePayment.discountType === 'percent') {
-              let prevAmount =  (parseInt(data.servicePayment.tasksDerived) * parseInt(data.servicePayment.discountValue) / 100);
-              data.finalAmount -= prevAmount;
-            }
-          }
         }
         break;
       case 'percent':
-        if (parseFloat(event.target.value) >= 0) {
+        if (isNaN(event.target.value)) {
+          this.errorMsg = 'Please enter a valid number';
+          toastr.error(this.errorMsg);
+        } else if (parseFloat(event.target.value) >= 0) {
           data.facilitationCharge.amount = event.target.value;
           let facilitationAmount = data.facilitationCharge.amount ? parseInt(data.facilitationCharge.amount) : 0;
           let percentageAmmount = (parseInt(data.servicePayment.tasksDerived) * parseInt(facilitationAmount)) / 100;
           data.finalAmount = percentageAmmount + parseInt(data.servicePayment.tasksDerived);
-          if (data.servicePayment.discountValue > 0 ) {
-            if (data.servicePayment.discountType === 'amount') {
-              data.finalAmount -= parseInt(data.servicePayment.discountValue);
-            } else if (data.servicePayment.discountType === 'percent') {
-              let prevAmount =  (parseInt(data.servicePayment.tasksDerived) * parseInt(data.servicePayment.discountValue) / 100);
-              data.finalAmount -= prevAmount;
-            }
-          }
         }
         break;
       default:
       // do nothing
+    }
+    if (data.servicePayment.discountValue > 0 ) {
+      if (data.servicePayment.discountType === 'amount') {
+        data.finalAmount -= parseInt(data.servicePayment.discountValue);
+      } else if (data.servicePayment.discountType === 'percent') {
+        let prevAmount =  (parseInt(data.servicePayment.tasksDerived) * parseInt(data.servicePayment.discountValue) / 100);
+        data.finalAmount -= prevAmount;
+      }
     }
     this.setState({data: data});
   }
@@ -181,23 +191,39 @@ export default class MlServiceManageSchedule extends Component {
    * Desc :: Save the service
    */
   async saveServicePaymentDetails(type) {
-    let {data} = this.state;
-    let {servicePayment, finalAmount, facilitationCharge} = data;
-    let service = {};
-    if (type === 'approved') {
-      service.isApproved = true;
+    if (!this.errorMsg) {
+      this.errorMsg = '';
+      let {data} = this.state;
+      let {servicePayment, finalAmount, facilitationCharge} = data;
+      if ((facilitationCharge.type && facilitationCharge.amount <= 0) || !facilitationCharge.amount) {
+        if (servicePayment.discountValue > 0 ) {
+          finalAmount = servicePayment.tasksDerived;
+          if (servicePayment.discountType === 'amount') {
+            finalAmount -= parseInt(servicePayment.discountValue);
+          } else if (servicePayment.discountType === 'percent') {
+            let prevAmount =  (parseInt(servicePayment.tasksDerived) * parseInt(servicePayment.discountValue) / 100);
+            finalAmount -= prevAmount;
+          }
+        }
+      }
+      let service = {};
+      if (type === 'approved') {
+        service.isApproved = true;
+      } else {
+        service.isApproved = false;
+      }
+      service.payment = servicePayment;
+      service.finalAmount = finalAmount || 0;
+      service.facilitationCharge = facilitationCharge;
+      const response = await updateServiceActionHandler(this.props.serviceId, service);
+      if (response.success) {
+        data.prevFinalAmount = service.finalAmount;
+        this.setState({data: data});
+      }
+      this.showResponseMsg(response, type);
     } else {
-      service.isApproved = false;
+      toastr.error(this.errorMsg);
     }
-    service.payment = servicePayment;
-    service.finalAmount = finalAmount || 0;
-    service.facilitationCharge = facilitationCharge;
-    const response = await updateServiceActionHandler(this.props.serviceId, service);
-    if (response.success) {
-      data.prevFinalAmount = service.finalAmount;
-      this.setState({data: data});
-    }
-    this.showResponseMsg(response, type);
   };
 
   /**

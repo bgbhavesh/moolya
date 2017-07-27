@@ -720,13 +720,32 @@ let CoreModules = {
     data = list
     //todo: pagination need to be taken.
     return {totalRecords: data.length, data: data};
-  }
+  },
   // let resp = mlDBController.find('MlDepartments', {
   //   $and: [
   //     {isMoolya:true},
   //     {"depatmentAvailable.cluster": {$in: ["all", requestParams.clusterId]}}
   //   ]
   // }, context).fetch()
+
+  /**
+   * user module repo handler
+   * */
+  MlUsersRepo: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
+    /**type can be used to differ in the server query by using the same repo service*/
+    // var type = requestParams && requestParams.type ? requestParams.type : "";
+    /**construct context query with $in operator for each fields*/
+    var resultantQuery = MlAdminContextQueryConstructor.constructQuery(contextQuery, '$in');
+    if (!fieldsProj.sort) {
+      fieldsProj.sort = {'createdAt': -1}
+    }
+    var serverQuery = {};
+    resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery, serverQuery), '$and');
+    var data = MlPortfolioDetails.find(resultantQuery, fieldsProj).fetch() || [];
+    var totalRecords = MlPortfolioDetails.find(resultantQuery, fieldsProj).count();
+    return {totalRecords: totalRecords, data: data};
+  }
+
 }
 
 

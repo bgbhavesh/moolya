@@ -17,7 +17,7 @@ MlResolver.MlMutationResolver['updateGenericTransaction'] = (obj, args, context,
         return instance.unAssignTransaction(transactionType,transactionId);
         break;
       case 'selfAssignTransaction':
-        return instance.selfAssignTransaction(transactionType,transactionId);
+        return instance.selfAssignTransaction(transactionType,transactionId, context.userId);
         break;
       case 'updateTransactionStatus':
         return instance.updateTransactionStatus(transactionType,transactionId,args.parmas.status);

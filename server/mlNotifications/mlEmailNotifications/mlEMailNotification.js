@@ -205,13 +205,13 @@ const MlEmailNotification= class MlEmailNotification {
     }
   }
 
-  static onEmailVerificationSuccess(context){
+  static onEmailVerificationSuccess(userDetails){
     try {
 
-
-      var userDetails = Meteor.users.findOne({_id: context.userId});
-      let toEmail = userDetails&&userDetails.username?userDetails.username:"";
-      let regObj = {"firstName" : userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:""}
+      let regObj = {
+        userName : userDetails&&userDetails.registrationInfo&&userDetails.registrationInfo.firstName?userDetails.registrationInfo.firstName:""
+      }
+      let toEmail = userDetails&&userDetails.registrationInfo&&userDetails.registrationInfo.email?userDetails.registrationInfo.email:""
       let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_email_verified_confirmation_mailer","email",regObj)
       Meteor.setTimeout(function () {
         mlEmail.sendHtml({
@@ -340,6 +340,68 @@ const MlEmailNotification= class MlEmailNotification {
         html : mail_body&&mail_body.content
       });
     }, 2 * 1000);
+  }
+
+  static onKYCApprove(userDetails){
+    let user = userDetails || {}
+    let regObj = {
+      userName : user&&user.registrationInfo&&user.registrationInfo.firstName?user.registrationInfo.firstName:"",
+      path : Meteor.absoluteUrl('login')
+    }
+    let toEmail = user&&user.registrationInfo&&user.registrationInfo.email?user.registrationInfo.email:""
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_kyc_approved_by_admin","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "KYC Approved !",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+  }
+
+  static onKYCDecline(userDetails){
+    let user = userDetails || {}
+    let regObj = {
+      userName : user&&user.registrationInfo&&user.registrationInfo.firstName?user.registrationInfo.firstName:"",
+      contactNumber : "+91-40-4672 5725",
+      contactEmail : "cm@moolya.global",
+      path : Meteor.absoluteUrl('login')
+    }
+    let toEmail = user&&user.registrationInfo&&user.registrationInfo.email?user.registrationInfo.email:""
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_kyc_declined_by_admin","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "KYC Declined !",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+  }
+
+  static onPortfolioConfirmation(userDetails){
+    let user = userDetails || {}
+    let firstName = userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"";
+    let lastName = userDetails&&userDetails.profile&&userDetails.profile.lastName?userDetails.profile.lastName:"";
+    let regObj = {
+      userName : firstName+" "+lastName,
+      path : Meteor.absoluteUrl('login')
+    }
+    let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_portfolio_profile_confirmation_mailer","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "Portfolio Confirmation!!",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+  }
+
+  static onPortfolioUpdate(userDetails){
+
   }
 
 

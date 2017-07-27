@@ -13,7 +13,7 @@ import gql from "graphql-tag";
  * export of config file
  * */
 const mlUsersClusterListConfig = new MlViewer.View({
-  name: "clusterList",
+  name: "usersList",
   viewType: MlViewerTypes.LIST,
   extraFields: [],
   fields: ["registrationInfo.firstName","registrationInfo.lastName", "registrationInfo.chapterName"],

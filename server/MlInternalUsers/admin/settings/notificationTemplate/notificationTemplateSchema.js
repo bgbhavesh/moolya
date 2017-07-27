@@ -19,6 +19,7 @@ let NotificationTemplateSchema = `
         createdBy:String,
         updatedAt:Date,
         createdAt:Date,
+        dynamicKeys:[String],
         isActive:Boolean
     }
     
@@ -30,6 +31,7 @@ let NotificationTemplateSchema = `
         title:String,
         isHtmlContent:Boolean,
         content:String,
+        dynamicKeys:[String],
         isActive:Boolean
     }
     

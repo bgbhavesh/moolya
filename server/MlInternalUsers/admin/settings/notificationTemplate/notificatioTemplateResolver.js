@@ -8,7 +8,24 @@ import MlRespPayload from '../../../../commons/mlPayload'
 MlResolver.MlMutationResolver['createNotificationTemplate'] = (obj, args, context, info) => {
 
   if(args && args.notificationTemplate){
-    args.notificationTemplate.createdBy = context.userId;
+    // args.notificationTemplate.createdBy = context.userId;
+    // args.notificationTemplate.createdAt = new Date();
+    var firstName='';var lastName='';
+    // let id = MlDepartments.insert({...args.department});
+    if(Meteor.users.findOne({_id : context.userId}))
+    {
+      let user = Meteor.users.findOne({_id: context.userId}) || {}
+      if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+        firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+        lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+      }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+        firstName=(user.profile || {}).firstName||'';
+        lastName =(user.profile || {}).lastName||'';
+      }
+    }
+    let createdBy = firstName +' '+lastName
+    args.notificationTemplate.createdBy = createdBy;
     args.notificationTemplate.createdAt = new Date();
     try{
       let ret =mlDBController.insert('MlNotificationTemplates',{...args.notificationTemplate},context);
@@ -33,7 +50,24 @@ MlResolver.MlMutationResolver['createNotificationTemplate'] = (obj, args, contex
 MlResolver.MlMutationResolver['updateNotificationTemplate'] = (obj, args, context, info) => {
 
   if(context.userId&&args && args.notificationTemplateId && args.notificationTemplate){
-    args.notificationTemplate.updatedBy = context.userId;
+    // args.notificationTemplate.updatedBy = context.userId;
+    // args.notificationTemplate.updatedAt = new Date();
+    var firstName='';var lastName='';
+    // let id = MlDepartments.insert({...args.department});
+    if(Meteor.users.findOne({_id : context.userId}))
+    {
+      let user = Meteor.users.findOne({_id: context.userId}) || {}
+      if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+        firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+        lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+      }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+        firstName=(user.profile || {}).firstName||'';
+        lastName =(user.profile || {}).lastName||'';
+      }
+    }
+    let createdBy = firstName +' '+lastName
+    args.notificationTemplate.updatedBy = createdBy;
     args.notificationTemplate.updatedAt = new Date();
     try{
      // let resp = MlNotificationTemplates.update({_id: args.notificationTemplateId}, {$set: args.notificationTemplate});

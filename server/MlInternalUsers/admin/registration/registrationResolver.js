@@ -614,7 +614,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       if (emailVerified) {
         if (registrationRecord && registrationRecord.status != 'Approved') {
           let kycDocuments = registrationRecord.kycDocuments&&registrationRecord.kycDocuments.length>0?registrationRecord.kycDocuments:[]
-          if (kycDocuments && kycDocuments.length >= 1) {
+         if (kycDocuments && kycDocuments.length >= 1) {
             //mandatory doc exist or not
             mandatorykycDoc = kycDocuments.filter(function (item) {
               return item.isMandatory == true;
@@ -786,7 +786,7 @@ MlResolver.MlMutationResolver['ApprovedStatusOfDocuments'] = (obj, args, context
         let kycDoc = _.find(kyc, function (item) {
           return item.documentId == documentList[i] && item.docTypeId == doctypeList[i];
         });
-        if (kycDoc.docFiles.length > 0) {
+        if (kycDoc.docFiles && kycDoc.docFiles.length > 0) {
           let response = mlDBController.update('MlRegistration', {
             _id: args.registrationId,
             'kycDocuments': {$elemMatch: {'documentId': documentList[i], 'docTypeId': doctypeList[i]}}
@@ -1081,18 +1081,29 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
     }
     else if (args.type == "KYCDOCUMENT") {
       /*if(args.registration.addressInfo && args.registration.addressInfo[0]){*/
-      let registrationKYCDocs = args.registration&&args.registration.kycDocuments?args.registration.kycDocuments:[]
+      let newKYCDocs = args.registration&&args.registration.kycDocuments?args.registration.kycDocuments:[]
       if (registrationDetails.kycDocuments) {
-        // id = MlRegistration.update(
-        //   { _id : args.registrationId,kycDocuments:{ $exists:false } },
-        //   { $push: { 'kycDocuments': args.registration.kycDocuments } }
-        // )
+        let existisngKYCDocs  = registrationDetails&&registrationDetails.kycDocuments&&registrationDetails.kycDocuments.length>0?registrationDetails.kycDocuments:[]
+        let registrationKYCUpdatedDocs = []
+        _.map(existisngKYCDocs, function(arr2obj) {
+           _.find(newKYCDocs, function (arr1obj) {
+            if(arr1obj["kycCategoryId"] === arr2obj["kycCategoryId"]){
+              if(arr2obj && arr2obj.docFiles && arr2obj.docFiles .length>0){
+                registrationKYCUpdatedDocs.push(arr2obj)
+              }else if(arr2obj && _.isEmpty(arr2obj.docFiles)){
+                registrationKYCUpdatedDocs.push(arr1obj)
+              }
 
-        if(registrationKYCDocs&&registrationKYCDocs.length>0){
+            }
+
+          });
+        })
+
+        if(registrationKYCUpdatedDocs&&registrationKYCUpdatedDocs.length>0){
           id = mlDBController.update('MlRegistration', {
             _id: args.registrationId,
             kycDocuments: {$exists: true}
-          }, {'kycDocuments': args.registration.kycDocuments}, {$push: true}, context)
+          }, {'kycDocuments': registrationKYCUpdatedDocs}, {$set: true}, context)
         }
 
       } else {
@@ -1100,7 +1111,7 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
         //   { _id : args.registrationId,kycDocuments:{ $exists:false }},
         //   { $set: { 'kycDocuments': args.registration.kycDocuments } }
         // )
-        if(registrationKYCDocs&&registrationKYCDocs.length>0){
+        if(newKYCDocs&&newKYCDocs.length>0){
           id = mlDBController.update('MlRegistration', {
             _id: args.registrationId,
             kycDocuments: {$exists: false}

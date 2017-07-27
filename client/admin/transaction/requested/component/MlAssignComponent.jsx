@@ -153,7 +153,7 @@ export default class MlAssignComponent extends React.Component {
       FlowRouter.reload();
       //FlowRouter.go("/admin/transactions/registrationRequested");
     }else{
-      toastr.error("Wrong Hierarchy");
+      toastr.error("Hierarchy not available");
       this.props.closePopOver(false)
       FlowRouter.reload();
       //FlowRouter.go("/admin/transactions/registrationRequested");

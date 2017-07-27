@@ -39,9 +39,9 @@ export default class MlAppTaskPayment extends Component {
   handleBlurAmount(e) {
     let details = this.state.data
     let name = 'discountValue';
-    let value = e.target.value;
-    let amount = this.state.data.payment ? this.state.data.payment.activitiesDerived : ''
-    let derivedAmount = '';
+    let value = e.target.value || 0;
+    let amount = this.state.data.payment ? this.state.data.payment.activitiesDerived : 0;
+    let derivedAmount = 0;
     if (!isNaN(value)) {
       derivedAmount = Number(amount) - Number(value)
     }
@@ -56,9 +56,9 @@ export default class MlAppTaskPayment extends Component {
   handleBlurPercent(e) {
     let details = this.state.data
     let name = 'discountValue';
-    let value = e.target.value;
-    let amount = this.state.data.payment ? this.state.data.payment.activitiesDerived : ''
-    let derivedAmount = '';
+    let value = e.target.value || 0;
+    let amount = this.state.data.payment ? this.state.data.payment.activitiesDerived : 0;
+    let derivedAmount = 0;
     if (!isNaN(value)) {
       derivedAmount = Number(amount) - Number((Number(value)/100)*Number(amount))
     }
@@ -182,6 +182,8 @@ export default class MlAppTaskPayment extends Component {
                   <label>Is Eligible for discount</label>
                   <span  htmlFor="discount" className={this.state.data.payment.isDiscount ? 'state_label acLabel' : 'state_label'}>Yes</span><label className="switch nocolor-switch">
                   <input id="discount" type="checkbox" name="isDiscount"
+                         value={this.state.data.payment.isDiscount}
+                         checked={!this.state.data.payment.isDiscount}
                          onChange={this.onStatusChange.bind(this)}/>
                   <div className="slider"></div>
                 </label>

@@ -481,9 +481,6 @@ let BackEndUser = `
         kycDocuments       : [KycDocumentInfo]
     }
     
-    
-    
-   
     type Mutation{
         createUser(user:userObject!,clusterId:String, chapterId: String, subChapterId: String, communityId: String):response           
         updateUser(userId:String!, user:userObject!, clusterId: String, chapterId: String, subChapterId: String, communityId: String):response                                    
@@ -524,6 +521,7 @@ let BackEndUser = `
         getUserProfiles:[ExternalProfile]
         getUserProfile(profileId: String) : ExternalProfile
         fetchMyProfile(userId:String): BackendUsers
+        getUserProfileForService(profileId: String): ExternalProfile
     }
 `
 
@@ -550,6 +548,7 @@ let supportedApi = [
     {api:'passwordVerification', actionName:'READ', moduleName:"USERS", isWhiteList:true},
     {api:'getUserProfiles', actionName:'READ', moduleName:"USERS"},
     {api:'getUserProfile',actionName:'READ', moduleName:"USERS"},
+    {api:'getUserProfileForService',actionName:'READ', moduleName:"USERS"},
     {api:'fetchMyProfile',actionName:'READ', moduleName:"USERS", isWhiteList: true},
 
     {api:'createUser', actionName:'CREATE', moduleName:"USERS"},

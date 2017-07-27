@@ -161,6 +161,7 @@ export async function findUserRegistrationActionHandler(registrationId) {
             subChapterName
             accountType
             isActive
+            registrationId
           }
         }
       }
@@ -171,5 +172,23 @@ export async function findUserRegistrationActionHandler(registrationId) {
     forceFetch: true
   })
   const id = result.data.findRegistrationInfoUser;
+  return id
+}
+
+export async function findUserPortfolioActionHandler(registrationId) {
+  const result = await client.query({
+    query: gql`
+   query($registrationId: String){  
+        fetchPortfolioByReg(registrationId:$registrationId){          
+            portfolioId: _id
+        }
+      }
+    `,
+    variables: {
+      registrationId
+    },
+    forceFetch: true
+  })
+  const id = result.data.fetchPortfolioByReg;
   return id
 }

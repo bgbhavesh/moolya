@@ -5,12 +5,13 @@ import React, {Component} from "react";
 import ScrollArea from "react-scrollbar";
 import MlLoader from "../../../commons/components/loader/loader";
 import {initalizeFloatLabel} from "../../utils/formElemUtil";
-import {findUserRegistrationActionHandler} from "../actions/findUserRegistrationHandler";
+import {findUserRegistrationActionHandler, findUserPortfolioActionHandler} from "../actions/findUsersHandlers";
+import {isEmpty} from "lodash";
 export default class MlUsersAbout extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: true,swiper:null, data: {}
+      loading: true, data: {}
     }
     this.findRegistration.bind(this)
     this.initializeSwiper.bind(this);
@@ -29,31 +30,43 @@ export default class MlUsersAbout extends Component {
     this.setState({loading: false, data: response});
   }
 
+  handleSwiperClick(event, registrationId) {
+    console.log(registrationId);
+    const resp = this.changeUrl(registrationId)
+    return resp
+  }
+
+  async changeUrl(registrationId) {
+    const response = await findUserPortfolioActionHandler(registrationId);
+    console.log(response);
+    if(response && response.portfolioId){
+      toastr.success(response.portfolioId)
+      console.log('portfolioId', response)
+      FlowRouter.setParams({portfolioId: response.portfolioId})
+    }else {
+      toastr.info('Portfolio Not available')
+    }
+    return response
+  }
+
+
   componentDidMount() {
     initalizeFloatLabel();
-    // var mySwiper = new Swiper('.blocks_in_form', {
-    //   speed: 400,
-    //   spaceBetween: 25,
-    //   slidesPerView: 2,
-    //   pagination: '.swiper-pagination',
-    //   paginationClickable: true
-    // });
     this.initializeSwiper();
   }
 
-  initializeSwiper(){
-    if(!this.swiper){
-      this.swiper = new Swiper('.blocks_in_form', {
+  initializeSwiper() {
+    setTimeout(function () {
+      var mySwiper = new Swiper('.blocks_in_form', {
         speed: 400,
         spaceBetween: 25,
         slidesPerView: 2,
         pagination: '.swiper-pagination',
         paginationClickable: true
       });
-    }
+    }, 100)
   }
 
-  //todo:// initialize is not working need to fix
   componentDidUpdate() {
     initalizeFloatLabel();
     var WinHeight = $(window).height();
@@ -62,52 +75,10 @@ export default class MlUsersAbout extends Component {
   }
 
   render() {
+    let that = this
     let regInfo = this.state.data && this.state.data.registrationInfo ? this.state.data.registrationInfo : {}
     let regDetail = this.state.data && this.state.data.registrationDetails ? this.state.data.registrationDetails : {}
     let alsoRegisterAs = this.state.data && this.state.data.externalUserProfiles && this.state.data.externalUserProfiles.length > 0 ? this.state.data.externalUserProfiles : []
-    const alsoRegisterAsList = alsoRegisterAs.map(function (userProfile, id) {
-      return (
-        <div className="form_inner_block swiper-slide" key={id}>
-          <div className="form-group">
-            <input type="text" placeholder="Community" defaultValue={userProfile.communityName}
-                   className="form-control float-label" disabled="disabled"/>
-          </div>
-          <div className="form-group left_al">
-            <input type="text" placeholder="Identity" defaultValue={userProfile.identityType}
-                   className="form-control float-label" disabled="disabled"/>
-          </div>
-          <div className="form-group right_al">
-            <input type="text" placeholder="Type" className="form-control float-label" disabled="disabled"/>
-          </div>
-          <div className="form-group left_al">
-            <input type="text" placeholder="Cluster" className="form-control float-label"
-                   defaultValue={userProfile.clusterName} disabled="disabled"/>
-          </div>
-          <div className="form-group right_al">
-            <input type="text" placeholder="Chapter" className="form-control float-label"
-                   defaultValue={userProfile.chapterName} disabled="disabled"/>
-          </div>
-          <div className="form-group left_al">
-            <input type="text" placeholder="Sub-Chapter" className="form-control float-label"
-                   defaultValue={userProfile.subChapterName} disabled="disabled"/>
-          </div>
-          <div className="form-group right_al">
-            <input type="text" placeholder="Subscription Type" className="form-control float-label"
-                   defaultValue={userProfile.accountType}
-                   disabled="disabled"/>
-          </div>
-          <div className="form-group switch_wrap">
-            <label>Status : </label>
-            <label className="switch">
-              <input type="checkbox"/>
-              <div className="slider"></div>
-            </label>
-          </div>
-
-          <br className="brclear"/>
-        </div>
-      )
-    });
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">
@@ -303,40 +274,52 @@ export default class MlUsersAbout extends Component {
                       <div className="swiper-container blocks_in_form">
                         <label>Also Register As : </label>
                         <div className="swiper-wrapper">
-                          {alsoRegisterAsList}
-                          {/*<div className="form_inner_block swiper-slide">*/}
-                          {/*<div className="form-group">*/}
-                          {/*<input type="text" placeholder="Community"*/}
-                          {/*className="form-control float-label" disabled="disabled"/>*/}
-                          {/*</div>*/}
-                          {/*<div className="form-group left_al">*/}
-                          {/*<input type="text" placeholder="Identity" className="form-control float-label"/>*/}
-                          {/*</div>*/}
-                          {/*<div className="form-group right_al">*/}
-                          {/*<input type="text" placeholder="Type" className="form-control float-label"/>*/}
-                          {/*</div>*/}
-                          {/*<div className="form-group left_al">*/}
-                          {/*<input type="text" placeholder="Cluster" className="form-control float-label"/>*/}
-                          {/*</div>*/}
-                          {/*<div className="form-group right_al">*/}
-                          {/*<input type="text" placeholder="Chapter" className="form-control float-label"/>*/}
-                          {/*</div>*/}
-                          {/*<div className="form-group left_al">*/}
-                          {/*<input type="text" placeholder="Sub-Chapter" className="form-control float-label"/>*/}
-                          {/*</div>*/}
-                          {/*<div className="form-group right_al">*/}
-                          {/*<input type="text" placeholder="Subscription Type" className="form-control float-label"/>*/}
-                          {/*</div>*/}
-                          {/*<div className="form-group switch_wrap">*/}
-                          {/*<label>Status : </label>*/}
-                          {/*<label className="switch">*/}
-                          {/*<input type="checkbox"/>*/}
-                          {/*<div className="slider"></div>*/}
-                          {/*</label>*/}
-                          {/*</div>*/}
+                          {alsoRegisterAs.map(function (userProfile, id) {
+                            return (
+                              <div className="form_inner_block swiper-slide" key={id}
+                                   onClick={(e) => that.handleSwiperClick(e, userProfile.registrationId)}>
+                                <div className="form-group">
+                                  <input type="text" placeholder="Community" defaultValue={userProfile.communityName}
+                                         className="form-control float-label" disabled="disabled"/>
+                                </div>
+                                <div className="form-group left_al">
+                                  <input type="text" placeholder="Identity" defaultValue={userProfile.identityType}
+                                         className="form-control float-label" disabled="disabled"/>
+                                </div>
+                                <div className="form-group right_al">
+                                  <input type="text" placeholder="Type" className="form-control float-label"
+                                         disabled="disabled"/>
+                                </div>
+                                <div className="form-group left_al">
+                                  <input type="text" placeholder="Cluster" className="form-control float-label"
+                                         defaultValue={userProfile.clusterName} disabled="disabled"/>
+                                </div>
+                                <div className="form-group right_al">
+                                  <input type="text" placeholder="Chapter" className="form-control float-label"
+                                         defaultValue={userProfile.chapterName} disabled="disabled"/>
+                                </div>
+                                <div className="form-group left_al">
+                                  <input type="text" placeholder="Sub-Chapter" className="form-control float-label"
+                                         defaultValue={userProfile.subChapterName} disabled="disabled"/>
+                                </div>
+                                <div className="form-group right_al">
+                                  <input type="text" placeholder="Subscription Type"
+                                         className="form-control float-label"
+                                         defaultValue={userProfile.accountType}
+                                         disabled="disabled"/>
+                                </div>
+                                <div className="form-group switch_wrap">
+                                  <label>Status : </label>
+                                  <label className="switch">
+                                    <input type="checkbox"/>
+                                    <div className="slider"></div>
+                                  </label>
+                                </div>
 
-                          {/*<br className="brclear"/>*/}
-                          {/*</div>*/}
+                                <br className="brclear"/>
+                              </div>
+                            )
+                          })}
                         </div>
                         <br className="brclear"/>
                         <div className="swiper-pagination"></div>

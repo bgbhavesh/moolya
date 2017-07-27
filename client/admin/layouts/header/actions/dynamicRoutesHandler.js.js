@@ -194,38 +194,38 @@ export default function dynamicLinkHandler(path,params,queryParams){
 
     "users_about": function (params, queryParams) {
       let dynamicParams = params || {};
-      if (_.has(dynamicParams, "portfolioId")) {
-        return `/admin/users/${dynamicParams.portfolioId}/aboutuser`;
+      if (_.has(dynamicParams, "registrationId")) {
+        return `/admin/users/${dynamicParams.registrationId}/aboutuser`;
       }
     },
     "users_addressBook": function (params, queryParams) {
       let dynamicParams = params || {};
-      if (_.has(dynamicParams, "portfolioId")) {
-        return `/admin/users/${dynamicParams.portfolioId}/addressBook`;
+      if (_.has(dynamicParams, "registrationId")) {
+        return `/admin/users/${dynamicParams.registrationId}/addressBook`;
       }
     },
     "users_connections": function (params, queryParams) {
       let dynamicParams = params || {};
-      if (_.has(dynamicParams, "portfolioId")) {
-        return `/admin/users/${dynamicParams.portfolioId}/connections/ideator`;
+      if (_.has(dynamicParams, "registrationId")) {
+        return `/admin/users/${dynamicParams.registrationId}/connections/ideator`;
       }
     },
     "users_favourites": function (params, queryParams) {
       let dynamicParams = params || {};
-      if (_.has(dynamicParams, "portfolioId")) {
-        return `/admin/users/${dynamicParams.portfolioId}/favourites/ideator`;
+      if (_.has(dynamicParams, "registrationId")) {
+        return `/admin/users/${dynamicParams.registrationId}/favourites/ideator`;
       }
     },
     "users_wishlist": function (params, queryParams) {
       let dynamicParams = params || {};
-      if (_.has(dynamicParams, "portfolioId")) {
-        return `/admin/users/${dynamicParams.portfolioId}/wishlist/ideator`;
+      if (_.has(dynamicParams, "registrationId")) {
+        return `/admin/users/${dynamicParams.registrationId}/wishlist/ideator`;
       }
     },
     "users_transactions": function (params, queryParams) {
       let dynamicParams = params || {};
-      if (_.has(dynamicParams, "portfolioId")) {
-        return `/admin/users/${dynamicParams.portfolioId}/transactions`;
+      if (_.has(dynamicParams, "registrationId")) {
+        return `/admin/users/${dynamicParams.registrationId}/transactions`;
       }
     },
   }

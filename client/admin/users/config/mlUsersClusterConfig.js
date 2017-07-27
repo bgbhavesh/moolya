@@ -16,8 +16,8 @@ const mlUsersClusterListConfig = new MlViewer.View({
   name: "clusterList",
   viewType: MlViewerTypes.LIST,
   extraFields: [],
-  fields: ["portfolioUserName", "chapterName"],
-  searchFields: ["portfolioUserName", "chapterName"],
+  fields: ["registrationInfo.firstName","registrationInfo.lastName", "registrationInfo.chapterName"],
+  searchFields:["registrationInfo.firstName","registrationInfo.lastName", "registrationInfo.chapterName"],
   throttleRefresh: true,
   pagination: true,
   sort: true,
@@ -37,26 +37,19 @@ const mlUsersClusterListConfig = new MlViewer.View({
                 data: ContextSpecSearch(module: "users", offset: $offset, limit: $limit, searchSpec: $searchSpec, fieldsData: $fieldsData, sortData: $sortData) {
                   totalRecords
                   data {
-                    ... on Portfoliodetails {
-                    portfolioId : _id
-                    transactionType
-                    portfolioUserName
-                    contactNumber
-                    communityType
-                    clusterName
-                    chapterName
-                    subChapterName
-                    accountType
-                    source
-                    createdBy
-                    createdAt
-                    status
-                    assignedTo
-                    communityCode
+                    ...on RegistrationInfo{
+                        firstName
+                        lastName
+                        registrationId :_id
+                        clusterName
+                        chapterName
+                        registrationType
+                        subChapterName
+                        accountType
+                       }
                     }
                   }
                 }
-              }
               `
 });
 

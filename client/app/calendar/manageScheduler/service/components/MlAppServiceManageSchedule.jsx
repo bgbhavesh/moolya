@@ -611,7 +611,7 @@ export default class MlAppServiceManageSchedule extends Component {
           }
           let task = {
             id: taskInfo.id,
-            sequence: taskInfo.sequence || serviceDetails[0].sequence,
+            sequence: taskInfo.sequence || (isServiceDetails && serviceDetails[0].sequence),
             sessions: sessionDetails
           };
           services.tasks.push(task);
@@ -622,6 +622,18 @@ export default class MlAppServiceManageSchedule extends Component {
     }
     if (!_.isEmpty(serviceTermAndCondition)) {
       services.termsAndCondition = _.cloneDeep(serviceTermAndCondition);
+    }
+    if ((servicePayment.discountType && servicePayment.discountValue <= 0) || !servicePayment.discountValue) {
+      servicePayment.discountValue = 0;
+      if (facilitationCharge.amount > 0 ) {
+        finalAmount = servicePayment.tasksDerived;
+        if (facilitationCharge.type === 'amount') {
+          finalAmount += parseInt(facilitationCharge.amount);
+        } else if (facilitationCharge.type === 'percent') {
+          let prevAmount =  (parseInt(servicePayment.tasksDerived) * parseInt(facilitationCharge.amount) / 100);
+          finalAmount += prevAmount;
+        }
+      }
     }
     services.payment = servicePayment;
     services.finalAmount = finalAmount || servicePayment.tasksDerived;
@@ -637,23 +649,9 @@ export default class MlAppServiceManageSchedule extends Component {
     } else {
       const resp = await updateServiceActionHandler(this.serviceId, services);
       if (resp.success && serviceTask.selectedTaskId) {
-        serviceTask.tasks = _.intersectionBy(serviceTask.serviceTaskDetails, services.tasks, 'id');
-        serviceTask.serviceOptionTasks = [];
-        let attachmentDetails = [];
-        serviceTask.serviceTaskDetails.forEach((task) => {
-          if (services.tasks.map((data) => data.id).indexOf(task.id) === -1) {
-            serviceTask.serviceOptionTasks.push(task);
-          }
-        });
-        serviceTask.tasks.forEach((task) => {
-          if (task.attachments && task.attachments.length > 0) {
-            task.attachments.forEach((attachment) => {
-              attachmentDetails.push(attachment)
-            });
-          }
-        });
-        this.setState({serviceTask: serviceTask, attachments: attachmentDetails});
+        this.optionsBySelectService();
       }
+      this.getServiceDetails();
       this.showResponseMsg(resp, 'Updated Successfully');
       if (isRedirectWithList) {
         FlowRouter.go(`/app/calendar/manageSchedule/${this.profileId}/serviceList`);
@@ -671,10 +669,14 @@ export default class MlAppServiceManageSchedule extends Component {
     servicePayment.isDiscount = !event.target.checked;
     if (!servicePayment.isDiscount) {
       servicePayment.discountType = '';
-      if (facilitationCharge.amount > 0) {
-        finalAmount = prevFinalAmount;
-      } else {
+      if (facilitationCharge.amount > 0 ) {
         finalAmount = servicePayment.tasksDerived;
+        if (facilitationCharge.type === 'amount') {
+          finalAmount += parseInt(facilitationCharge.amount);
+        } else if (facilitationCharge.type === 'percent') {
+          let prevAmount =  (parseInt(servicePayment.tasksDerived) * parseInt(facilitationCharge.amount) / 100);
+          finalAmount += prevAmount;
+        }
       }
     }
     this.setState({
@@ -724,17 +726,14 @@ export default class MlAppServiceManageSchedule extends Component {
    */
   calculateDiscounts(event) {
     let {servicePayment, finalAmount, prevFinalAmount, facilitationCharge} = this.state;
-    finalAmount = prevFinalAmount;
+    finalAmount = servicePayment.tasksDerived;
+    servicePayment.discountValue = 0;
     if (servicePayment.isDiscount) {
       servicePayment.discountValue = event.target.value;
       switch (servicePayment.discountType) {
         case 'amount':
           if (parseInt(event.target.value) >= 0) {
             finalAmount = parseInt(servicePayment.tasksDerived) - parseInt(servicePayment.discountValue);
-            if (facilitationCharge.amount > 0) {
-              let prevAmount = parseInt(facilitationCharge.amount) + parseInt(servicePayment.tasksDerived);
-              finalAmount += prevAmount;
-            }
           }
           break;
         case 'percent':
@@ -742,13 +741,17 @@ export default class MlAppServiceManageSchedule extends Component {
             let percentageAmmount = (parseInt(servicePayment.tasksDerived) * parseInt(servicePayment.discountValue)) / 100;
             finalAmount = parseInt(servicePayment.tasksDerived) - percentageAmmount;
           }
-          if (facilitationCharge.amount > 0) {
-            let prevAmount = parseInt(servicePayment.tasksDerived) + (parseInt(facilitationCharge.amount) * parseInt(servicePayment.tasksDerived) / 100);
-            finalAmount += prevAmount;
-          }
           break;
         default:
         // do nothing
+      }
+      if (facilitationCharge.type && facilitationCharge.amount > 0) {
+        if (facilitationCharge.type === 'amount') {
+          finalAmount += facilitationCharge.amount;
+        } else if (facilitationCharge.type === 'percent') {
+          let prevAmount =  (parseInt(servicePayment.tasksDerived) * parseInt(facilitationCharge.amount) / 100);
+          finalAmount += prevAmount;
+        }
       }
       this.setState({
         servicePayment: servicePayment,

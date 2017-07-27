@@ -382,11 +382,6 @@ let CoreModules = {
         if (!fieldsProj.sort) {
           fieldsProj.sort = {'transactionUpdatedDate': -1}
         }
-      case 'users':
-        serverQuery = {};
-        if (!fieldsProj.sort) {
-          fieldsProj.sort = {'createdAt': -1}
-        }
         break;
     }
     //todo: internal filter query should be constructed.
@@ -732,6 +727,25 @@ let CoreModules = {
   //     {"depatmentAvailable.cluster": {$in: ["all", requestParams.clusterId]}}
   //   ]
   // }, context).fetch()
+
+  /**
+   * user module repo handler
+   * */
+  MlUsersRepo: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
+    /**type can be used to differ in the server query by using the same repo service*/
+    // var type = requestParams && requestParams.type ? requestParams.type : "";
+    /**construct context query with $in operator for each fields*/
+    var resultantQuery = MlAdminContextQueryConstructor.constructQuery(contextQuery, '$in');
+    if (!fieldsProj.sort) {
+      fieldsProj.sort = {'createdAt': -1}
+    }
+    var serverQuery = {};
+    resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery, serverQuery), '$and');
+    var data = MlPortfolioDetails.find(resultantQuery, fieldsProj).fetch() || [];
+    var totalRecords = MlPortfolioDetails.find(resultantQuery, fieldsProj).count();
+    return {totalRecords: totalRecords, data: data};
+  }
+
 }
 
 

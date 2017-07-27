@@ -11,6 +11,7 @@ export default class MlUsersCluster extends Component {
   }
 
   viewDetails(event, portfolioId) {
+    FlowRouter.go('/admin/users/' + portfolioId + '/aboutuser')
     console.log(portfolioId)
   }
 
@@ -34,27 +35,21 @@ export default class MlUsersCluster extends Component {
         icon = "ml ml-company";
       }
       return (
-        <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
-          <div className="list_block">
-            <a href='' onClick={(event) => that.viewDetails(event, prop.portfolioId)}>
-              <div className="ideators_list_block">
-                <div className="premium">
-                  <span>{prop.accountType}</span>
-                </div>
-                {/*<h3>{prop.portfolioUserName}</h3>*/}
-                <div className="list_icon"><span className={icon}></span></div>
-                <div className="block_footer">
-                  <span>{prop.chapterName}</span>
-                </div>
-              </div>
-            </a>
-          </div>
+        <div className="col-lg-3 col-md-3 col-sm-3" key={idx}>
+          <a href="" onClick={(event) => that.viewDetails(event, prop.portfolioId)}>
+            <div className="subscriptions_block">
+              <div className="premium"><span>{prop.accountType}</span></div>
+              <h3>&nbsp;</h3>
+              <div className="sub_icon"><span className={icon}></span><br />{prop.chapterName}</div>
+              <h4>{prop.portfolioUserName}</h4>
+            </div>
+          </a>
         </div>
-      );
+      )
     });
 
     return (
-      <div className="row">
+      <div className="row subscriptions">
         <h2> Users </h2>
         {list}
       </div>

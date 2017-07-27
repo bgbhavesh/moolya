@@ -302,7 +302,16 @@ export async function fetchTaskDetailsForAdminServiceCard (profileId, serviceId)
               hours
               minutes
             }
-            activities
+            activities {
+              id: _id
+              mode
+              name
+              displayName
+              duration {
+                hours
+                minutes
+              }
+            }
           }
           attachments {
              name

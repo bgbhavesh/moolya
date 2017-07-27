@@ -223,7 +223,7 @@ MlResolver.MlMutationResolver['updateServiceAdmin'] = (obj, args, context, info)
       args.Services.transactionId = service.transactionId;
       args.Services.versions = args.Services.isApproved ? Math.ceil(service.versions) : (service.versions + 0.001);
       for(key in service){
-        if ((typeof args.Services[key] === 'undefined' || args.Services[key] === null) && key !== 'createdAt' && key !== '_id') {
+        if ((typeof args.Services[key] === 'undefined' || args.Services[key] === null || !args.Services[key]) && key !== 'createdAt' && key !== '_id') {
           args.Services[key] = service[key];
         }
       }

@@ -16,7 +16,7 @@ MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => 
   if(portfolio){
     let query = {
       userId: portfolio.userId,
-      // profileId:portfolio.profileId,
+      profileId:portfolio.profileId,
       isCurrentVersion: true,
       isBeSpoke: false
     };

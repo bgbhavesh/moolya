@@ -50,6 +50,7 @@ const mlNotificationTemplateTableConfig=new MlViewer.View({
     {dataField: "content", title: "Content",dataSort:true,customComponent:unescapeContent},
     {dataField: "updatedBy", title: "Updated By",dataSort:true},
     {dataField: "updatedAt", title: "UpdatedDate And Time",dataSort:true,customComponent:updatedateFormatter},
+    {dataField: "dynamicKeys", title: "Dynamic Keys",dataSort:true},
     {dataField: "isActive", title: "Status",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
@@ -111,6 +112,7 @@ const mlNotificationTemplateTableConfig=new MlViewer.View({
                               type
                               isHtmlContent
                               content
+                              dynamicKeys
                               isActive
                               createdBy
                               createdAt  

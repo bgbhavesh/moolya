@@ -5,7 +5,7 @@ import MlResolver from '../../../commons/mlResolverDef'
 import MlRespPayload from '../../../commons/mlPayload'
 import _ from 'lodash'
 import mlInteractionService from '../mlInteractionRepoService';
-// import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
+ import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
 
 /*STATUS
  0 - Pending
@@ -112,6 +112,9 @@ MlResolver.MlMutationResolver['connectionRequest'] = (obj, args, context, info) 
       //create the transaction record and log
       if(resp){
            mlInteractionService.createTransactionRequest(toUser._id,'connectionRequest',resp);
+          if(toUser._id&&fromuser._id){
+            MlEmailNotification.endUserPortfolioConnect(fromuser._id,toUser._id);
+          }
       }
       return  new MlRespPayload().successPayload(resp,200);
     }
@@ -131,10 +134,7 @@ MlResolver.MlMutationResolver['connectionRequest'] = (obj, args, context, info) 
 
       return new MlRespPayload().successPayload(resp,200)
     };
-    // let connectionRec=mlDBController.findOne('MlConnections',{connectionCode:connectionCode},context)||{};
-    // if(toUser._id&&fromuser._id){
-    //   MlEmailNotification.endUserPortfolioConnect(fromuser._id,toUser._id);
-    // }
+
 
 
   } catch (e) {

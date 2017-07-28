@@ -404,37 +404,39 @@ const MlEmailNotification= class MlEmailNotification {
 
   }
 
-  // static endUserPortfolioConnect(fromUserId,toUserId){
-  //    fromUserId  = fromUserId?fromUserId:"";
-  //    toUserId = toUserId?toUserId:""
-  //   var fromUserDetails = Meteor.users.findOne({_id: fromUserId});
-  //   var toUserDetails = Meteor.users.findOne({_id: toUserId});
-  //   let fromUserFirstName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.firstName?fromUserDetails.profile.firstName:"";
-  //   let fromUserLastName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.lastName?fromUserDetails.profile.lastName:"";
-  //
-  //   let toUserFirstName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.firstName?toUserDetails.profile.firstName:"";
-  //   let toUserLastName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.lastName?toUserDetails.profile.lastName:"";
-  //
-  //   var currentdate = new Date();
-  //   let date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
-  //   let time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-  //   let regObj = {
-  //     userName : fromUserFirstName+" "+fromUserLastName,
-  //     connectionName : toUserFirstName+" "+toUserLastName,
-  //     date : date,
-  //     time : time
-  //   }
-  //   let toEmail =toUserDetails&&toUserDetails.username?toUserDetails.username:"";
-  //   let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_new_connection_request_sent","email",regObj)
-  //   Meteor.setTimeout(function () {
-  //     mlEmail.sendHtml({
-  //       from: fromEmail,
-  //       to: toEmail,
-  //       subject: "Portfolio Connection Request Sent !!",
-  //       html : mail_body&&mail_body.content
-  //     });
-  //   }, 2 * 1000);
-  // }
+  static endUserPortfolioConnect(fromUserId,toUserId){
+     fromUserId  = fromUserId?fromUserId:"";
+     toUserId = toUserId?toUserId:""
+    var fromUserDetails = Meteor.users.findOne({_id: fromUserId});
+    var toUserDetails = Meteor.users.findOne({_id: toUserId});
+    let fromUserFirstName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.firstName?fromUserDetails.profile.firstName:"";
+    let fromUserLastName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.lastName?fromUserDetails.profile.lastName:"";
+
+    let toUserFirstName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.firstName?toUserDetails.profile.firstName:"";
+    let toUserLastName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.lastName?toUserDetails.profile.lastName:"";
+
+    var currentdate = new Date();
+    let date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+    let time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+    let regObj = {
+      userName : fromUserFirstName+" "+fromUserLastName,
+      connectionName : toUserFirstName+" "+toUserLastName,
+      date : date,
+      time : time,
+      path : Meteor.absoluteUrl('login')
+    }
+    let toEmail =toUserDetails&&toUserDetails.username?toUserDetails.username:"";
+
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_new_connection_request_sent","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "Portfolio Connection Request Sent !!",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+  }
 
 
 

@@ -181,14 +181,14 @@ class MlEditCommunityFormComponent extends React.Component {
       }
     ]
 
-    let clusterquery = gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
-    let chapterOption = this.state.clusters.length>0?{options: {variables: {clusters: this.state.clusters}}}:{options: {variables: {clusters: []}}};
-    let chapterquery = gql`query($clusters:[String]){  
+      let clusterquery = gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
+      let chapterOption = this.state.clusters.length>0?{options: {variables: {clusters: this.state.clusters}}}:{options: {variables: {clusters: []}}};
+      let chapterquery = gql`query($clusters:[String]){  
         data:fetchActiveClusterChapters(clusters:$clusters) {
           value:_id
           label:chapterName
         }  
-    }`;
+      }`;
     let subChapterOption = this.state.chapters.length>0&&this.state.clusters.length>0?{options: {variables: {chapters: this.state.chapters,clusters: this.state.clusters}}}:{options: {variables: {chapters: [],clusters: []}}};
     let subChapterquery = gql`query($chapters:[String],$clusters:[String]){  
         data:fetchActiveChaptersSubChapters(chapters:$chapters,clusters:$clusters) {

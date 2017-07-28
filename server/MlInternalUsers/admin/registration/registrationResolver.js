@@ -235,9 +235,9 @@ MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) 
   if (args.registrationId) {
     var id = args.registrationId;
     response = MlRegistration.findOne({"_id": id});
-    if(response&&response.registrationInfo&&response.registrationInfo.clusterId&&response.registrationInfo.chapterId&&response.registrationInfo.subChapterId){
+    if (response && response.registrationInfo && response.registrationInfo.clusterId && response.registrationInfo.chapterId && response.registrationInfo.subChapterId) {
       return response;
-    }else(response&&response.registrationInfo&&!response.registrationInfo.clusterId&&!response.registrationInfo.chapterId&&response.registrationInfo.subChapterId)
+    } else(response && response.registrationInfo && !response.registrationInfo.clusterId && !response.registrationInfo.chapterId && response.registrationInfo.subChapterId)
     {
       let countryId = response.registrationInfo && response.registrationInfo.countryId ? response.registrationInfo.countryId : ""
       let cityId = response.registrationInfo && response.registrationInfo.cityId ? response.registrationInfo.cityId : ""
@@ -252,6 +252,7 @@ MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) 
 
 
     }
+  }
 }
 
 MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context, info) => {

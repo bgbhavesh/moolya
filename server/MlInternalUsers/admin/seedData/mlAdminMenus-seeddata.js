@@ -547,6 +547,18 @@ if (Meteor.isServer) {
                   "subMenuMappingId" : "users_addressBook"
                 },
                 {
+                  "link": "/admin/users/portfolio",
+                  "name": "Portfolio",
+                  "uniqueId": "users_portfolio",
+                  "isLink": true,
+                  "isMenu": true,
+                  "image": "",
+                  "dynamicLink": true,
+                  "dynamicLinkHandler": "",
+                  "subMenusId": "users_cluster",
+                  "subMenuMappingId": "users_portfolio"
+                },
+                {
                   "link" : "/admin/users/connections",
                   "name" : "Connections",
                   "uniqueId" : "users_connections",

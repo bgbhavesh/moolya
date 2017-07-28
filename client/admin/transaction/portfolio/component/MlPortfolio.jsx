@@ -1,7 +1,12 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import formHandler from "../../../../commons/containers/MlFormHandler";
-import {updatePortfolioActionHandler, updateIdeatorIdeaActionHandler, approvePortfolio, rejectPortfolio} from "../actions/updatePortfolioDetails";
+import {
+  updatePortfolioActionHandler,
+  updateIdeatorIdeaActionHandler,
+  approvePortfolio,
+  rejectPortfolio
+} from "../actions/updatePortfolioDetails";
 import {fetchTemplateHandler} from "../../../../commons/containers/templates/mltemplateActionHandler";
 import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
 import {findComments} from "../../../../commons/annotaterComments/findComments";
@@ -13,9 +18,9 @@ import {
 import moment from "moment";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import {fetchIdeaByPortfolioId} from "../../../../app/ideators/actions/IdeaActionHandler";
-import MlLoader from '../../../../commons/components/loader/loader'
-import _ from 'lodash'
-import {client} from '../../../core/apolloConnection';
+import MlLoader from "../../../../commons/components/loader/loader";
+import _ from "lodash";
+import {client} from "../../../core/apolloConnection";
 import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
 
 class MlPortfolio extends React.Component {
@@ -418,7 +423,8 @@ class MlPortfolio extends React.Component {
             <div className="overlay"></div>
           </PopoverContent>
         </Popover>
-        <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+        {this.props.isHideAction? <div></div> :
+          <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>}
       </div>
     )
   }

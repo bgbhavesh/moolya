@@ -14,6 +14,7 @@ import MlViews from "../../admin/core/components/MlViews";
 import {mlUsersClusterListConfig} from "../../admin/users/config/mlUsersClusterConfig";
 import MlUsersAbout from "../../admin/users/components/MlUsersAbout";
 import MlUsersAddressBook from "../../admin/users/components/MlUsersAddressBook";
+import MlUsersPortfolioLanding from "../../admin/users/components/MlUsersPortfolioLanding";
 import MlUsersConnections from "../../admin/users/components/MlUsersConnections";
 import MlUsersFavourites from "../../admin/users/components/MlUsersFavourites";
 import MlUsersWishlist from "../../admin/users/components/MlUsersWishlist";
@@ -49,6 +50,16 @@ adminSection.route('/users/:registrationId/:portfolioId/addressBook', {
     mount(AdminLayout, {
       headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'users'}}/>,
       adminContent: <MlUsersAddressBook config={params}/>
+    })
+  }
+})
+
+adminSection.route('/users/:registrationId/:portfolioId/portfolio', {
+  name: 'users_portfolio',
+  action(params){
+    mount(AdminLayout, {
+      headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'users'}}/>,
+      adminContent: <MlUsersPortfolioLanding config={params}/>
     })
   }
 })

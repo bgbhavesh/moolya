@@ -16,7 +16,7 @@ MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => 
   if(portfolio){
     let query = {
       userId: portfolio.userId,
-      // profileId:portfolio.profileId,
+      profileId:portfolio.profileId,
       isCurrentVersion: true,
       isBeSpoke: false
     };
@@ -35,21 +35,22 @@ MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => 
 }
 
 MlResolver.MlQueryResolver['fetchBeSpokeServices'] = (obj, args, context, info) => {
-  if (context.url.indexOf("explore") > 0) {
     let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfolioId}, context)
-  if(portfolio) {
-    let query = {
-      userId: portfolio.userId,
-      profileId: portfolio.profileId,
-      isCurrentVersion: true,
-      isBeSpoke: true,
-      beSpokeCreatorUserId: context.userId,
-      beSpokeCreatorProfileId: new MlUserContext().userProfileDetails(context.userId).profileId
-    };
-    let result = mlDBController.find('MlServiceCardDefinition', query, context).fetch()
-    return result;
+  if( portfolio && (context.userId !== portfolio.userId)){
+    if(portfolio) {
+      let query = {
+        userId: portfolio.userId,
+        profileId: portfolio.profileId,
+        isCurrentVersion: true,
+        isBeSpoke: true,
+        beSpokeCreatorUserId: context.userId,
+        beSpokeCreatorProfileId: new MlUserContext().userProfileDetails(context.userId).profileId
+      };
+      let result = mlDBController.find('MlServiceCardDefinition', query, context).fetch()
+      return result;
     }
-  }else {
+  }
+    else{
     let query = {
       userId: context.userId,
       profileId: new MlUserContext().userProfileDetails(context.userId).profileId,
@@ -219,18 +220,15 @@ MlResolver.MlMutationResolver['updateServiceAdmin'] = (obj, args, context, info)
     if (service) {
       args.Services.userId = service.userId;
       args.Services.updatedAt = new Date();
-      service.isCurrentVersion = false;
       args.Services.transactionId = service.transactionId;
       args.Services.versions = args.Services.isApproved ? Math.ceil(service.versions) : (service.versions + 0.001);
-      args.Services.isCurrentVersion = true;
-      let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, service, {$set: 1}, context);
       for(key in service){
-        if ((typeof args.Services[key] === 'undefined' || args.Services[key] === null) && key !== 'createdAt' && key !== '_id') {
+        if ((typeof args.Services[key] === 'undefined' || args.Services[key] === null || !args.Services[key]) && key !== 'createdAt' && key !== '_id') {
           args.Services[key] = service[key];
         }
       }
-      let newVersionServer = mlDBController.insert('MlServiceCardDefinition', args.Services , context);
-      if(newVersionServer){
+      let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, args.Services, {$set: 1}, context);
+      if(result){
         let code = 200;
         let response = new MlRespPayload().successPayload(result, code);
         return response

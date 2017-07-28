@@ -110,6 +110,7 @@ MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
           amount: finalActivitiesDerivedAmount
         };
         paymentAmount = _.extend(paymentAmount, pick)
+        paymentAmount.derivedAmount = (args.taskDetails.payment && args.taskDetails.payment.derivedAmount) || paymentAmount.activitiesDerived;
         args.taskDetails = _.extend(args.taskDetails, {payment:paymentAmount})
       }
       task.isCurrentVersion = false;
@@ -227,6 +228,42 @@ MlResolver.MlQueryResolver['fetchTaskDetailsForAdminServiceCard'] = (obj, args, 
     query.profileId = args.profileId;
   };
   let result = mlDBController.find('MlTask', query, context).fetch()
+  if (result && result.length > 0) {
+    result.map((task, taskIndex) => {
+      if (task.session && task.session.length > 0) {
+        task.session.map((taskSession, sessionIndex) => {
+          if (taskSession.activities && taskSession.activities.length > 0) {
+            taskSession.activities.map((activityId, index) => {
+              if (activityId) {
+                let activity = mlDBController.findOne('MlActivity', activityId , context);
+                result[taskIndex]['session'][sessionIndex]['activities'][index] = activity;
+              }
+            })
+          }
+        });
+      }
+    });
+  }
   return result;
 };
 
+MlResolver.MlQueryResolver['fetchTaskForApointment'] = (obj, args, context, info) => {
+  if (args.taskId) {
+    let result = mlDBController.findOne('MlTask', args.taskId, context);
+    if (result) {
+      if (result.session && result.session.length > 0) {
+        result.session.map((taskSession, sessionIndex) => {
+          if (taskSession.activities && taskSession.activities.length > 0) {
+            taskSession.activities.map((activityId, index) => {
+              if (activityId) {
+                let activity = mlDBController.findOne('MlActivity', activityId, context);
+                result['session'][sessionIndex]['activities'][index] = activity;
+              }
+            })
+          }
+        });
+      }
+    }
+    return result;
+  }
+};

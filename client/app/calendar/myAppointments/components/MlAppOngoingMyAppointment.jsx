@@ -2,6 +2,7 @@
  * Created by pankaj on 24/7/17.
  */
 import React from 'react';
+import MlAppOngoingSelectedMyAppointment from './MlAppOngoingSelectedMyAppointment';
 import {ongoingAppointmentActionHandler} from '../actions/fetchOngoingAppointments';
 
 export default class MlAppOngoingMyAppointment extends React.Component {
@@ -9,8 +10,10 @@ export default class MlAppOngoingMyAppointment extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      appointments:[]
-    }
+      appointments:[],
+      selectedAppointment: {},
+      isSelectedAppointment: false
+    };
     this.fetchAppointment();
   }
 
@@ -23,21 +26,40 @@ export default class MlAppOngoingMyAppointment extends React.Component {
     };
   }
 
+  /**
+   * Method :: viewAppointment
+   * Desc :: Redirect with view appointment component
+   * @param id :: current service id
+   */
+  viewAppointment(appointment) {
+    this.setState({
+      selectedAppointment: appointment,
+      isSelectedAppointment: true
+    });
+  }
+
   render() {
     const that = this;
+    const {selectedAppointment, isSelectedAppointment} = this.state;
     return (
       <div>
-        {that.state.appointments.map(function (appointment, index) {
-          return (
-            <div className="col-lg-2 col-md-4 col-sm-4" key={index} >
-              <div className="list_block list_block_intrests notrans">
-                <div className="hex_outer"><img src="/images/valuation.png"/></div>
-                <div className="task-status pending"></div>
-                <h3>{appointment.serviceName}</h3>
-              </div>
-            </div>
-          )
-        })}
+        {(selectedAppointment && isSelectedAppointment) ?
+          <MlAppOngoingSelectedMyAppointment appointment={selectedAppointment} />
+          :
+          <div>
+            {that.state.appointments.map(function (appointment, index) {
+              return (
+                <div className="col-lg-2 col-md-4 col-sm-4" key={index} >
+                  <div className="list_block list_block_intrests notrans" onClick={()=>that.viewAppointment(appointment)}>
+                    <div className="hex_outer"><img src="/images/valuation.png"/></div>
+                    <div className="task-status pending"></div>
+                    <h3>{appointment.serviceName}</h3>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        }
       </div>
     )
   }

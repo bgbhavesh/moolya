@@ -100,9 +100,7 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
    */
 
  async getServiceDetails() {
-    console.log('----serviceId---', this.serviceId);
     let resp = await getServiceBasedOnServiceId(this.serviceId);
-    console.log('---res--', resp);
     if (resp) {
       this.constructServiceData(resp);
     }
@@ -230,7 +228,6 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
     if (!this.state.data.isLoding) {
       return null;
     }
-    console.log('----render--', this.props.data);
     return (
       <div className="ml_tabs">
         <ul  className="nav nav-pills">

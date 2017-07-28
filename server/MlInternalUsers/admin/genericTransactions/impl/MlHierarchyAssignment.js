@@ -9,11 +9,19 @@ class MlHierarchyAssignment {
 
   findHierarchy(clusterId, departmentId, subDepartmentId, roleId) {
     let roleDetails = mlDBController.findOne('MlRoles', {_id: roleId})
-    let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
-      parentDepartment: departmentId,
-      parentSubDepartment: subDepartmentId,
-      clusterId: roleDetails.isSystemDefined ? "All" : clusterId
-    }, context, {teamStructureAssignment: {$elemMatch: {roleId: roleId}}})
+    // let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
+    //   parentDepartment: departmentId,
+    //   parentSubDepartment: subDepartmentId,
+    //   clusterId: roleDetails.isSystemDefined ? "All" : clusterId
+    // }, context, {teamStructureAssignment: {$elemMatch: {roleId: roleId}}})
+    let hierarchy = mlDBController.findOne('MlHierarchyAssignments',
+      {"$and":[
+        {parentDepartment: departmentId},
+        {parentSubDepartment: subDepartmentId},
+        {clusterId: roleDetails.isSystemDefined ? "All" : clusterId},
+        {teamStructureAssignment: {$elemMatch: {roleId: roleId}}}
+      ]
+      }, context)
     return hierarchy;
   }
 
@@ -71,6 +79,13 @@ class MlHierarchyAssignment {
   assignTransaction(transactionId, collection, userId, assignedUserId) {
     let userRole = this.getUserRoles(userId);
     let assignedRole = this.getUserRoles(assignedUserId);
+
+    var trans = {};
+    if(!_.isObject(transactionId))
+        trans = mlDBController.findOne(collection, {"transactionId": transactionId}, context);
+    else
+      trans = transactionId
+
     if (this.checkisPlatformAdmin(userRole)) {
       return true;
     }
@@ -88,6 +103,53 @@ class MlHierarchyAssignment {
       }
     } else if (!this.checkSystemSystemDefinedRole(userRole) && !this.checkSystemSystemDefinedRole(assignedRole)) {
       if (userhierarchy._id == assignedRolehierarchy._id) {
+          /*
+             For Parent most node (has no reporting role, reports only to Final approval)::
+              1) Parent node can assign transactions to same or below level roles
+              2) Parent node can only self assign an unassigned transaction.
+              3) Parent node can't assign an already assigned transaction if transaction belongs to same level.
+          */
+          let parentHierarchy = _.find(userhierarchy.teamStructureAssignment, {"assignedLevel":'cluster', "reportingRole":''});
+
+          /*    Checking if transaction is already assigned or not     */
+          if(!trans.allocation){
+
+              /*      Checking whether user role is equal parent most role      */
+              if(parentHierarchy.roleId == userRole.roleId){
+
+                  /*    Transaction Assignment at same role level     */
+                  if(userRole.roleId == assignedRole.roleId)
+                      return true;
+
+              }else{
+
+                  if(userRole.roleId == assignedRole.roleId)
+                      return true;
+              }
+
+          }else if(trans.allocation){
+
+              /*      Checking whether user role is equal parent most role      */
+              if(parentHierarchy.roleId == userRole.roleId) {
+
+                  /*    If a transaction is already assigned, then transaction assignment won't happen for same role level     */
+                  if (userRole.roleId == assignedRole.roleId){
+                      return false;
+                  }
+                  /*  If Parent Most Role, then transaction assignment can happen for any level as all role levels are below level roles  */
+                  else{
+                      return true
+                  }
+
+              }else{
+
+                  if(userRole.roleId == assignedRole.roleId)
+                      return false;
+
+              }
+
+          }
+
         let decision = this.hierarchyDecision(userhierarchy, userRole.roleId, assignedRole.roleId);
         return decision;
       } else {
@@ -128,8 +190,7 @@ class MlHierarchyAssignment {
     let assignedRoleMapping = null;
     //disabled for same level user access
     if (userRole == assignedRole) {
-      // return false;                            // TO ALLOW SAME LEVEL USER TO ACCESS
-      return true;
+      return false;
     }
     let teamStructureAssignment = hierarchy.teamStructureAssignment;
     teamStructureAssignment.map(function (role, key) {
@@ -204,6 +265,10 @@ class MlHierarchyAssignment {
     }
     let userhierarchy = this.findHierarchy(userRole.clusterId, userRole.departmentId, userRole.subDepartmentId, userRole.roleId);
     let assignedRolehierarchy = this.findHierarchy(requestRole.clusterId, requestRole.departmentId, requestRole.subDepartmentId, requestRole.roleId);
+
+    if(!userhierarchy){
+      return false;
+    }
 
     if (this.checkSystemSystemDefinedRole(userRole) && this.checkSystemSystemDefinedRole(requestRole)) {
       if (userhierarchy._id == assignedRolehierarchy._id) {

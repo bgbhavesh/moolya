@@ -21,7 +21,6 @@ import { cloneDeep } from 'lodash';
 import {
   createServiceActionHandler,
   fetchServiceActionHandler,
-  fetchProfileActionHandler,
   updateServiceActionHandler } from '../actions/MlServiceActionHandler';
 import Moolyaselect from '../../../../commons/components/MlAppSelectWrapper';
 
@@ -95,7 +94,6 @@ class MlAppServiceBasicInfo extends Component {
     `;
 
     let statesOption={options: { variables: {countryId: clusterCode}}};
-
     let citiesOption={options: { variables: {id: clusters}}};
     return (
       <div className="step_form_wrap step1">

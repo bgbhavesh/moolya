@@ -1,6 +1,6 @@
-import MlResolver from '../../../commons/mlResolverDef'
-import CoreModulesRepo from './repository/mlAdminContextModulesRepo';
-import MlAdminContextQueryConstructor from './repository/mlAdminContextQueryConstructor';
+import MlResolver from "../../../commons/mlResolverDef";
+import CoreModulesRepo from "./repository/mlAdminContextModulesRepo";
+import MlAdminContextQueryConstructor from "./repository/mlAdminContextQueryConstructor";
 import getQuery from "../genericSearch/queryConstructor";
 
 let mergeQueries=function(userFilter,serverFilter){
@@ -164,6 +164,13 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       requestParams=args.context||{};
       result=CoreModulesRepo.MlHierarchyDepartmentsRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
+    case 'users':
+      /**merging the user repo to the users module*/
+      requestParams = args.context || {};
+      /**type can be used for different list view config*/
+      // requestParams.type = 'users';
+      result = CoreModulesRepo.MlUsersRepo(requestParams, userFilterQuery, contextQuery, findOptions, context);
+      break;
   }
 
   return {totalRecords:result.totalRecords||0,data:result.data||[]};
@@ -188,6 +195,7 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "registrationRejectedInfo":resolveType= 'RegistrationInfo';break;
       case "portfolioRequests":resolveType= 'Portfoliodetails';break;
       case "portfolioApproved":resolveType= 'Portfoliodetails';break;
+      case "users":resolveType= 'RegistrationInfo';break;
       case "TransactionsLog":resolveType='TransactionsLog';break;
       case "InteractionsLog":resolveType='TransactionsLog';break;
       case "ConversationsLog":resolveType='TransactionsLog';break;

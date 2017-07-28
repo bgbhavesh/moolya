@@ -51,7 +51,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},
     {dataField: "createdAt", title: "Date & Time",dataSort:true,selectRow:true, customComponent:createdateFormatter},
-    {dataField: "userId", title: "UserId",dataSort:true,selectRow:true},
+    {dataField: "profileId", title: "UserId",dataSort:true,selectRow:true},
     {dataField: "profileId", title: "Profile Id",dataSort:true,selectRow:true},
     {dataField: "service", title: "Transaction Type",dataSort:true,selectRow:true},
     {dataField: "userDetails.chapterName", title: "Scope",dataSort:true,selectRow:true,customComponent:function(data){ return <div>{data.data.userDetails.chapterName}</div>}},

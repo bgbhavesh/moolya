@@ -156,10 +156,10 @@ export default class MlAppTaskCreate extends Component {
                   </div>
                   <div className="form-group">
                     <label>Duration: &nbsp; <input className="form-control inline_input" type="Number" disabled="true"
-                                                   defaultValue={this.state.data.duration ? this.state.data.duration.hours : 0}
+                                                   defaultValue={this.state.data.duration && this.state.data.duration.hours}
                                                   /> Hours <input
                       className="form-control inline_input" disabled="true" type="Number" min="0"
-                      defaultValue={this.state.data.duration ? this.state.data.duration.minutes : 0}/>
+                      defaultValue={this.state.data.duration && this.state.data.duration.minutes}/>
                       Mins </label>
                   </div>
                 </form>

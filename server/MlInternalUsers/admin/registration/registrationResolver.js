@@ -9,6 +9,7 @@ import geocoder from "geocoder";
 import _lodash from "lodash";
 import _ from "underscore";
 import moment from "moment";
+import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 var fs = Npm.require('fs');
 var Future = Npm.require('fibers/future');
 
@@ -225,14 +226,32 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
   }
   return response
 }
-
+/**
+ * @module [registration]
+ * getting user registration details
+ * */
 MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) => {
-  // TODO : Authorization
+  var response = null
   if (args.registrationId) {
     var id = args.registrationId;
-    let response = MlRegistration.findOne({"_id": id});
-    //response = response.registrationInfo;
-    return response;
+    response = MlRegistration.findOne({"_id": id});
+    if (response && response.registrationInfo && response.registrationInfo.clusterId && response.registrationInfo.chapterId && response.registrationInfo.subChapterId) {
+      return response;
+    } else(response && response.registrationInfo && !response.registrationInfo.clusterId && !response.registrationInfo.chapterId && response.registrationInfo.subChapterId)
+    {
+      let countryId = response.registrationInfo && response.registrationInfo.countryId ? response.registrationInfo.countryId : ""
+      let cityId = response.registrationInfo && response.registrationInfo.cityId ? response.registrationInfo.cityId : ""
+      let clusterData = mlDBController.findOne('MlClusters', {countryId: countryId, isActive: true}, context)
+      let chapterData = mlDBController.findOne('MlChapters', {cityId: cityId, isActive: true}, context)
+      let chapterId = chapterData && chapterData._id ? chapterData._id : ""
+      let subChapterData = mlDBController.findOne('MlSubChapters', {chapterId: chapterId, isActive: true}, context)
+      response.registrationInfo.clusterId = clusterData && clusterData._id ? clusterData._id : "";
+      response.registrationInfo.chapterId = chapterData && chapterData._id ? chapterData._id : "";
+      response.registrationInfo.subChapterId = subChapterData && subChapterData._id ? subChapterData._id : "";
+      return response
+
+
+    }
   }
 }
 
@@ -290,17 +309,15 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         return validationCheck.validationResponse;
       }
       /**country and operational area changes then making kyc null.*/
-      /*  if((registrationInfo.countryId!=details.countryId)||(registrationInfo.clusterId!=details.clusterId)||(registrationInfo.chapterId!=details.chapterId)||(registrationInfo.subChapterId!=details.subChapterId)||(registrationInfo.registrationType!=details.registrationType)||(registrationInfo.userType!=details.userType)||(registrationInfo.identityType!=details.identityType)||(registrationInfo.profession!=details.profession)||(registrationInfo.industry!=details.industry)){
-       let updatedResp= MlRegistration.update({_id:id},{$unset:{kycDocuments:""}})
-       }else if((registrationInfo.clusterId!=details.clusterId)||(registrationInfo.chapterId!=details.chapterId)||(registrationInfo.subChapterId!=details.subChapterId)||(registrationInfo.registrationType!=details.registrationType)||(registrationInfo.userType!=details.userType)||(registrationInfo.identityType!=details.identityType)||(registrationInfo.profession!=details.profession)||(registrationInfo.industry!=details.industry)){
-       let updatedResp= MlRegistration.update({_id:id},{$pull:{"kycDocuments.docTypeName":"process"}})
-       }*/
+      if((registrationInfo.countryId!=details.countryId)||(registrationInfo.clusterId!=details.clusterId)||(registrationInfo.chapterId!=details.chapterId)||(registrationInfo.subChapterId!=details.subChapterId)||(registrationInfo.registrationType!=details.registrationType)||(registrationInfo.userType!=details.userType)||(registrationInfo.identityType!=details.identityType)||(registrationInfo.profession!=details.profession)||(registrationInfo.industry!=details.industry)){
+          let updatedResp= MlRegistration.update({_id:id},{$unset:{kycDocuments:""}})
+     }
 
-      if ((registrationInfo.clusterId != details.clusterId) || (registrationInfo.chapterId != details.chapterId) || (registrationInfo.subChapterId != details.subChapterId) || (registrationInfo.registrationType != details.registrationType) || (registrationInfo.userType != details.userType) || (registrationInfo.identityType != details.identityType) || (registrationInfo.profession != details.profession) || (registrationInfo.industry != details.industry)) {
+   /*   if ((registrationInfo.clusterId != details.clusterId) || (registrationInfo.chapterId != details.chapterId) || (registrationInfo.subChapterId != details.subChapterId) || (registrationInfo.registrationType != details.registrationType) || (registrationInfo.userType != details.userType) || (registrationInfo.identityType != details.identityType) || (registrationInfo.profession != details.profession) || (registrationInfo.industry != details.industry)) {
         let updatedResp = MlRegistration.update({_id: id}, {$pull: {"kycDocuments": {$and: [{docTypeName: "process"}, {docTypeName: "chapter"}]}}})
       } else {
         let updatedResp = MlRegistration.update({_id: id}, {$unset: {kycDocuments: ""}})
-      }
+      }*/
       /**Fetch accountType from accountType collection */
       let accountTypeName = mlDBController.findOne('MlAccountTypes', {_id: args.registrationDetails.accountType}, context) || {};
       args.registrationDetails.accountType = accountTypeName.accountName;
@@ -612,8 +629,8 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       })
       if (emailVerified) {
         if (registrationRecord && registrationRecord.status != 'Approved') {
-          let kycDocuments = registrationRecord.kycDocuments
-          if (kycDocuments && kycDocuments.length >= 1) {
+          let kycDocuments = registrationRecord.kycDocuments&&registrationRecord.kycDocuments.length>0?registrationRecord.kycDocuments:[]
+         if (kycDocuments && kycDocuments.length >= 1) {
             //mandatory doc exist or not
             mandatorykycDoc = kycDocuments.filter(function (item) {
               return item.isMandatory == true;
@@ -780,17 +797,19 @@ MlResolver.MlMutationResolver['ApprovedStatusOfDocuments'] = (obj, args, context
     if (documentList.length > 0) {
       for (let i = 0; i < documentList.length; i++) {
         // updatedResponse=MlRegistration.update({_id:args.registrationId,'kycDocuments':{$elemMatch: {'documentId':documentList[i],'docTypeId':doctypeList[i]}}},{$set: {"kycDocuments.$.status":"Approved"}});
-        let user = MlRegistration.findOne({_id: args.registrationId})
-        let kyc = user.kycDocuments
+        let user = MlRegistration.findOne({_id: args.registrationId}) || {}
+        let kyc = user.kycDocuments&&user.kycDocuments.length>0?user.kycDocuments:[]
         let kycDoc = _.find(kyc, function (item) {
           return item.documentId == documentList[i] && item.docTypeId == doctypeList[i];
         });
-        if (kycDoc.docFiles.length > 0) {
+        if (kycDoc.docFiles && kycDoc.docFiles.length > 0) {
           let response = mlDBController.update('MlRegistration', {
             _id: args.registrationId,
             'kycDocuments': {$elemMatch: {'documentId': documentList[i], 'docTypeId': doctypeList[i]}}
           }, {"kycDocuments.$.status": "Approved"}, {$set: true}, context)
           if (response) {
+
+            MlEmailNotification.onKYCApprove(user);
             let code = 200;
             let result = {registrationId: response}
             updatedResponse = new MlRespPayload().successPayload(result, code);
@@ -830,6 +849,7 @@ MlResolver.MlMutationResolver['RejectedStatusOfDocuments'] = (obj, args, context
             'kycDocuments': {$elemMatch: {'documentId': documentList[i], 'docTypeId': doctypeList[i]}}
           }, {"kycDocuments.$.status": "Rejected"}, {$set: true}, context)
           if (response) {
+            MlEmailNotification.onKYCDecline(user);
             let code = 200;
             let result = {registrationId: response}
             updatedResponse = new MlRespPayload().successPayload(result, code);
@@ -1077,18 +1097,29 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
     }
     else if (args.type == "KYCDOCUMENT") {
       /*if(args.registration.addressInfo && args.registration.addressInfo[0]){*/
-      let registrationKYCDocs = args.registration&&args.registration.kycDocuments?args.registration.kycDocuments:[]
+      let newKYCDocs = args.registration&&args.registration.kycDocuments?args.registration.kycDocuments:[]
       if (registrationDetails.kycDocuments) {
-        // id = MlRegistration.update(
-        //   { _id : args.registrationId,kycDocuments:{ $exists:false } },
-        //   { $push: { 'kycDocuments': args.registration.kycDocuments } }
-        // )
+        let existisngKYCDocs  = registrationDetails&&registrationDetails.kycDocuments&&registrationDetails.kycDocuments.length>0?registrationDetails.kycDocuments:[]
+        let registrationKYCUpdatedDocs = []
+        _.map(existisngKYCDocs, function(arr2obj) {
+           _.find(newKYCDocs, function (arr1obj) {
+            if(arr1obj["kycCategoryId"] === arr2obj["kycCategoryId"]){
+              if(arr2obj && arr2obj.docFiles && arr2obj.docFiles .length>0){
+                registrationKYCUpdatedDocs.push(arr2obj)
+              }else if(arr2obj && _.isEmpty(arr2obj.docFiles)){
+                registrationKYCUpdatedDocs.push(arr1obj)
+              }
 
-        if(registrationKYCDocs&&registrationKYCDocs.length>0){
+            }
+
+          });
+        })
+
+        if(registrationKYCUpdatedDocs&&registrationKYCUpdatedDocs.length>0){
           id = mlDBController.update('MlRegistration', {
             _id: args.registrationId,
             kycDocuments: {$exists: true}
-          }, {'kycDocuments': args.registration.kycDocuments}, {$push: true}, context)
+          }, {'kycDocuments': registrationKYCUpdatedDocs}, {$set: true}, context)
         }
 
       } else {
@@ -1096,7 +1127,7 @@ MlResolver.MlMutationResolver['createGeneralInfoInRegistration'] = (obj, args, c
         //   { _id : args.registrationId,kycDocuments:{ $exists:false }},
         //   { $set: { 'kycDocuments': args.registration.kycDocuments } }
         // )
-        if(registrationKYCDocs&&registrationKYCDocs.length>0){
+        if(newKYCDocs&&newKYCDocs.length>0){
           id = mlDBController.update('MlRegistration', {
             _id: args.registrationId,
             kycDocuments: {$exists: false}
@@ -1517,4 +1548,22 @@ MlResolver.MlQueryResolver['findUserPendingRegistration'] = (obj, args, context,
   let user = mlDBController.findOne('users', {_id: context.userId}, context) || {}
   let resp = mlDBController.find('MlRegistration', {'registrationInfo.userName': user.username, status: { $nin: [ 'Approved', 'Rejected'] }}, context).fetch() || []
   return resp;
+}
+
+/**
+ * @module [users left nav] for fetching about
+ * getting user registration
+ * */
+MlResolver.MlQueryResolver['findRegistrationInfoUser'] = (obj, args, context, info) => {
+  if (args.registrationId) {
+    var id = args.registrationId;
+    let response = MlRegistration.findOne({_id: id}) || {}
+    let userId = response.registrationInfo && response.registrationInfo.userId ? response.registrationInfo.userId : ''
+    var users = ''
+    if(userId){
+      users = mlDBController.findOne('users', userId, context)
+      response.externalUserProfiles = users.profile.externalUserProfiles
+    }
+    return response;
+  }
 }

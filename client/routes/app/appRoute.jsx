@@ -30,7 +30,7 @@ import {mlDashboardListConfig, mlDashboardMapConfig} from '../../app/dashboard/c
 import MlAppRegistrationWizard from "../../../client/app/registrations/component/MlAppRegistrationWizard";
 import MlAppTempRoute from "../../../client/app/registrations/component/MlAppTempRoute";
 import {mlAppFunderConfig} from "../../app/funders/config/mlAppFunderConfig";
-import MlAppMyCalendar from "../../app/calendar/myCalendar/components/MlAppMyCalendar";
+import MLAppMyCalendar from "../../app/calendar/myCalendar/components/calendarParentComponent";
 
 /**
  * Activities Routes
@@ -355,7 +355,7 @@ appSection.route('/funder/:portfolioId', {
 appSection.route('/calendar', {
   name: 'calendar',
   action(){
-    mount(AppLayout, {appContent: <MlAppMyCalendar />, isCalenderMenu: true})
+    mount(AppLayout, {appContent: <MLAppMyCalendar />, isCalenderMenu: true})
   }
 });
 

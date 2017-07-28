@@ -6,9 +6,8 @@ import MlRespPayload from "../../../commons/mlPayload";
 import MlUserContext from "../../../MlExternalUsers/mlUserContext";
 import _ from "lodash";
 import portfolioValidationRepo from "./portfolioValidation";
+import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 
-MlResolver.MlQueryResolver['fetchPortfolioDetails'] = (obj, args, context, info) => {
-}
 
 MlResolver.MlQueryResolver['fetchPortfolioDetailsByUserId'] = (obj, args, context, info) => {
   if (context.userId) {
@@ -179,6 +178,9 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                     }
                       break;
                   }
+                //triggered on successfull portfolio creation
+                  MlEmailNotification.onPortfolioConfirmation(userDetails);
+
               }
 
           }
@@ -346,6 +348,21 @@ MlResolver.MlMutationResolver['removeIdetaorProfilePic'] = (obj, args, context, 
 
   return response;
 }
+
+/**
+ * @moduleUsers left nav
+ * @params registrationId
+ * @return portfolio details
+ * */
+
+MlResolver.MlQueryResolver['fetchPortfolioByReg'] = (obj, args, context, info) => {
+  var response = {}
+  if (args.registrationId) {
+    response = mlDBController.findOne('MlPortfolioDetails', {registrationId: args.registrationId}, context) || {}
+  }
+  return response
+}
+
 
 
 

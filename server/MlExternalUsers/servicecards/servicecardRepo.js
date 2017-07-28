@@ -99,6 +99,7 @@ class MlServiceCardRepo{
 
     updateServiceCardDefinition(servicecard, serviceId, context){
       var service;
+      var newFinalAmount = 0;
       if(_.isEmpty(servicecard) || _.isEmpty(serviceId)) {
         return new MlRespPayload().errorPayload("Invalid Service Card", 400);
       }
@@ -127,24 +128,41 @@ class MlServiceCardRepo{
             hours: parseInt(totalMinutes/60),
             minutes: totalMinutes % 60
           };
-          servicecard.duration = servicecard.duration ? servicecard.duration : {};
+          servicecard.duration = service.duration ? service.duration : {};
           servicecard.duration['hours'] = duration.hours;
           servicecard.duration['minutes'] = duration.minutes;
           servicecard.noOfSession = noOfSession;
-          servicecard.payment = servicecard.payment ? servicecard.payment : {};
+          servicecard.payment = service.payment ? service.payment : {};
           servicecard.payment["tasksAmount"] = taskAmount;
           servicecard.payment["tasksDiscount"] = taskAmount - taskDerivedAmount;
           servicecard.payment["tasksDerived"] = taskDerivedAmount;
+          newFinalAmount = taskDerivedAmount;
+          if (service.payment && service.payment.isDiscount && service.payment.discountValue > 0) {
+            if (service.payment.discountType === 'amount') {
+              newFinalAmount = parseInt(taskDerivedAmount) - parseInt(service.payment.discountValue);
+            } else {
+              var newAmount = (parseInt(taskDerivedAmount) * parseInt(service.payment.discountValue)/100);
+              newFinalAmount = parseInt(taskDerivedAmount) - parseInt(newAmount);
+            }
+          }
+          if (service.facilitationCharge && service.facilitationCharge.type && service.facilitationCharge.amount > 0) {
+            if (service.facilitationCharge.type === 'amount') {
+              newFinalAmount += parseInt(service.facilitationCharge.amount);
+            } else {
+              var newAmount = (parseInt(taskDerivedAmount) * parseInt(service.facilitationCharge.amount)/100);
+              newFinalAmount += parseInt(newAmount);
+            }
+          }
         }
-        if (servicecard.termsAndCondition) {
-          service.termsAndCondition = servicecard.termsAndCondition;
+        servicecard.userId = service.userId;
+        servicecard.updatedAt = new Date();
+        servicecard.finalAmount = servicecard.tasks ? newFinalAmount : servicecard.finalAmount;
+        for(key in service){
+          if ((typeof servicecard[key] === 'undefined' || servicecard[key] === null || !servicecard[key]) && key !== 'createdAt' && key !== '_id') {
+            servicecard[key] = service[key];
+          }
         }
-        service.tasks       = servicecard.tasks;
-        service.duration    = servicecard.duration;
-        service.noOfSession = servicecard.noOfSession;
-        service.payment     = servicecard.payment;
-        service.finalAmount = servicecard.finalAmount
-        let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, service, {$set: 1}, context);
+        let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, servicecard, {$set: 1}, context);
         if(!result){
           return new MlRespPayload().errorPayload("Error In Updating The Service Card", 400);
         }
@@ -157,6 +175,7 @@ class MlServiceCardRepo{
 
     updateServiceCardDefinitionForVersion(servicecard, serviceId, context){
       var service;
+      var newFinalAmount = 0;
       if(_.isEmpty(servicecard) || _.isEmpty(serviceId)) {
         return new MlRespPayload().errorPayload("Invalid Service Card", 400);
       }
@@ -190,15 +209,31 @@ class MlServiceCardRepo{
             hours: parseInt(totalMinutes/60),
             minutes: totalMinutes % 60
           };
-          servicecard.duration = servicecard.duration ? servicecard.duration : {};
+          servicecard.duration = service.duration ? service.duration : {};
           servicecard.duration['hours'] = duration.hours;
           servicecard.duration['minutes'] = duration.minutes;
           servicecard.noOfSession = noOfSession;
-          servicecard.payment = servicecard.payment ? servicecard.payment : {};
+          servicecard.payment = service.payment ? service.payment : {};
           servicecard.payment["tasksAmount"] = taskAmount;
           servicecard.payment["tasksDiscount"] = taskAmount - taskDerivedAmount;
           servicecard.payment["tasksDerived"] = taskDerivedAmount;
-          servicecard.payment["finalAmount"] = taskDerivedAmount;
+          newFinalAmount = taskDerivedAmount;
+          if (service.payment && service.payment.isDiscount && service.payment.discountValue > 0) {
+            if (service.payment.discountType === 'amount') {
+              newFinalAmount = parseInt(taskDerivedAmount) - parseInt(service.payment.discountValue);
+            } else {
+              var newAmount = (parseInt(taskDerivedAmount) * parseInt(service.payment.discountValue)/100);
+              newFinalAmount = parseInt(taskDerivedAmount) - parseInt(newAmount);
+            }
+          }
+          if (service.facilitationCharge && service.facilitationCharge.type && service.facilitationCharge.amount > 0) {
+            if (service.facilitationCharge.type === 'amount') {
+              newFinalAmount += parseInt(service.facilitationCharge.amount);
+            } else {
+              var newAmount = (parseInt(taskDerivedAmount) * parseInt(service.facilitationCharge.amount)/100);
+              newFinalAmount += parseInt(newAmount);
+            }
+          }
         }
         service.isCurrentVersion = false;
         servicecard.userId          = context.userId;
@@ -206,6 +241,7 @@ class MlServiceCardRepo{
         servicecard.transactionId   = service.transactionId;
         servicecard.versions        = service.versions + INITIAL_VERSION;
         servicecard.isCurrentVersion = true;
+        servicecard.finalAmount = servicecard.tasks ? newFinalAmount : servicecard.finalAmount;
 
         // de activating older version service card def
         let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, service, {$set: 1}, context);

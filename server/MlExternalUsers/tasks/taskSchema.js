@@ -73,6 +73,7 @@
      mode: String
      name: String
      displayName: String
+     duration : Duration
    }
    type ServiceTask {
       _id: String
@@ -155,8 +156,9 @@
           fetchTaskDetails(name: String):Task
           fetchTaskDetailsAdmin(name: [String]): [Task]
           fetchTaskDetailsForServiceCard(profileId:String, serviceId: String):[ServiceTask]
-          fetchTaskDetailsForAdminServiceCard(profileId:String, serviceId: String):[Task]
+          fetchTaskDetailsForAdminServiceCard(profileId:String, serviceId: String):[ServiceTask]
           fetchTasksInBooking(id: [String]): [Task]
+          fetchTaskForApointment(taskId: String): ServiceTask
    }
 
    type Mutation {
@@ -178,6 +180,7 @@
     {api:'fetchTasksInBooking', actionName:'READ', moduleName:"OFFICE"},
     {api:'createTask', actionName:'CREATE', moduleName:"OFFICE"},
     {api:'updateTask', actionName:'UPDATE', moduleName:"OFFICE"},
+    {api:'fetchTaskForApointment', actionName:'READ', moduleName:"OFFICE"},
   ]
   MlResolver.MlModuleResolver.push(supportedApi)
 // termsAndCondition: TermsAndCondition

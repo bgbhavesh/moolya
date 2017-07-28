@@ -1403,7 +1403,7 @@ MlResolver.MlQueryResolver['fetchUserRoleDetails'] = (obj, args, context, info) 
     });
     let defaultRole = {}
     for (let i = 0; i < userRolesData.length; i++) {
-      if (userRolesData[i].hierarchyLevel == hirarichyLevel[0]) {
+      if ((userRolesData[i].hierarchyLevel == hirarichyLevel[0]) && userRolesData[i].isActive) {
         defaultRole = userRolesData[i]
         break
       }
@@ -1531,4 +1531,20 @@ MlResolver.MlMutationResolver['switchProfile'] = (obj, args, context, info) => {
     return response;
   }
   return response;
+}
+
+MlResolver.MlQueryResolver['getUserProfileForService'] = (obj, args, context, info) => {
+  let result = mlDBController.findOne('users', {'profile.externalUserProfiles.profileId':args.profileId} , context)
+  let profile = [];
+  let temp = result.profile.externalUserProfiles;
+  temp.map(function(data) {
+    if(data.profileId === args.profileId) {
+      profile.push(data)
+    }
+  })
+  if (profile && profile.length > 0) {
+    let cluster = mlDBController.findOne('MlClusters', {_id: profile[0].clusterId} , context);
+    profile[0].countryId = cluster && cluster.countryId;
+  }
+  return profile[0];
 }

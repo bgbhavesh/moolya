@@ -118,8 +118,8 @@ export const mlDashboardListConfig=new MlAppViewer({
   searchFields:["username", 'profile.firstName'],
   throttleRefresh:true,
   perPageLimit: 20,
-  pagination:true,
-  sort:true,
+  // pagination:false,
+  // sort:true,
   queryOptions:true,
   buildQueryOptions:(config)=>{
       return {

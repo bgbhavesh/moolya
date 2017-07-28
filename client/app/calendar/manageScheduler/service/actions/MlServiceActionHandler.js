@@ -4,7 +4,7 @@
 import gql from 'graphql-tag'
 import {appClient} from '../../../../core/appConnection';
 
-export async function createServiceActionHandler (Services) {
+export async function createBeSpokeServiceActionHandler (Services) {
   const result = await appClient.mutate({
     mutation: gql`
     mutation($Services: service){
@@ -19,9 +19,32 @@ export async function createServiceActionHandler (Services) {
       Services
     }
   });
+  const services = result.data.createBeSpokeService;
+  return services
+}
+
+
+export async function createServiceActionHandler (Services) {
+  const result = await appClient.mutate({
+    mutation: gql`
+    mutation($Services: service){
+        createService(Services:$Services){
+        success
+        code
+        result
+      }
+      }
+    `,
+    variables: {
+      Services
+    }
+  });
   const services = result.data.createService;
   return services
 }
+
+
+
 
 export async function fetchServiceActionHandler (serviceId) {
   const result = await appClient.query({
@@ -185,6 +208,7 @@ export async function fetchBeSpokeServicesActionHandler (portfolioId) {
         expectedOutput
         conversation
         industryId
+        displayName
         mode
         isBeSpoke
         attachments{
@@ -207,7 +231,7 @@ export async function fetchProfileActionHandler (profileId) {
   const result = await appClient.query({
     query: gql`
     query ($profileId: String) {
-      getUserProfile(profileId: $profileId) {
+      getUserProfileForService(profileId: $profileId) {
         clusterName
         clusterId
         countryId
@@ -219,7 +243,7 @@ export async function fetchProfileActionHandler (profileId) {
       profileId
     }
   });
-  const profile = result.data.getUserProfile;
+  const profile = result.data.getUserProfileForService;
   return profile;
 }
 
@@ -285,6 +309,10 @@ export async function fetchTaskDetailsForServiceCard (profileId, serviceId) {
               mode
               name
               displayName
+              duration {
+                hours
+                minutes
+              }
             }
           }
           attachments {

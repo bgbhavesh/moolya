@@ -737,12 +737,21 @@ let CoreModules = {
     /**construct context query with $in operator for each fields*/
     var resultantQuery = MlAdminContextQueryConstructor.constructQuery(contextQuery, '$in');
     if (!fieldsProj.sort) {
-      fieldsProj.sort = {'createdAt': -1}
+      fieldsProj.sort = {'registrationInfo.registrationDate': -1}
     }
-    var serverQuery = {};
+    var serverQuery = {emails: {$elemMatch: {verified: true}}};
     resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery, serverQuery), '$and');
-    var data = MlPortfolioDetails.find(resultantQuery, fieldsProj).fetch() || [];
-    var totalRecords = MlPortfolioDetails.find(resultantQuery, fieldsProj).count();
+    var data = MlRegistration.find(resultantQuery, fieldsProj).fetch() || [];
+    var totalRecords = MlRegistration.find(resultantQuery, fieldsProj).count();
+    //todo://need to replace this loop by sending reponse of [Type: @RegistrationResponse] in place of [--RegistrationInfo]
+    var result = []
+    data.map(function (doc, index) {
+      let object;
+      object = doc.registrationInfo;
+      object._id = doc._id;
+      result.push(object);
+    });
+    data = result;
     return {totalRecords: totalRecords, data: data};
   }
 

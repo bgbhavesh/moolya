@@ -1,6 +1,6 @@
-import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../../../commons/mlSchemaDef';
-import MlResolver from '../../../commons/mlResolverDef'
+import {mergeStrings} from "gql-merge";
+import MlSchemaDef from "../../../commons/mlSchemaDef";
+import MlResolver from "../../../commons/mlResolverDef";
 
 let registrationSchema = `        
     
@@ -213,6 +213,7 @@ let registrationSchema = `
          emails  : [emailVerification]
          isAllowRegisterAs : Boolean
          pendingRegId : String
+         externalUserProfiles : [ExternalProfile]
     }
     
    
@@ -457,6 +458,7 @@ let registrationSchema = `
         fetchContextChapters(id:String): [Chapter]
         fetchContextSubChapters(id:String): [SubChapter]
         findUserPendingRegistration:[RegistrationResponse] 
+        findRegistrationInfoUser(registrationId:String):RegistrationResponse
     }
     
 `
@@ -489,6 +491,7 @@ let supportedApi = [
     {api:'fetchContextSubChapters', actionName:'READ', moduleName:"REGISTRATION", isWhiteList:true},
     {api:'forgotPassword', actionName:'READ', moduleName:"REGISTRATION"},
     {api:'createKYCDocument',actionName:'UPDATE',moduleName:"REGISTRATION"},
-    {api:'findUserPendingRegistration',actionName:'READ',moduleName:"REGISTRATION", isWhiteList:true}
+    {api:'findUserPendingRegistration',actionName:'READ',moduleName:"REGISTRATION", isWhiteList:true},
+    {api: 'findRegistrationInfoUser', actionName: 'READ', moduleName: "REGISTRATION", isWhiteList: true}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

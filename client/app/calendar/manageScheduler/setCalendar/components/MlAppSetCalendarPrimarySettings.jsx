@@ -81,16 +81,16 @@ export default class MlAppSetCalendarPrimarySettings extends React.Component{
       slotDuration: {},
       isOverlappingSchedule: this.state.isOverlappingSchedule
     };
-    if(this.state.slotBreakTime || this.state.slotBreakTime.length){
+    if(this.state.slotBreakTime || this.state.slotBreakTime.length) {
       dataToInsert.slotBreakTime= this.state.slotBreakTime;
     }
-    if(this.state.appointmentCountPerSlots || this.state.appointmentCountPerSlots.length){
+    if(this.state.appointmentCountPerSlots || this.state.appointmentCountPerSlots.length) {
       dataToInsert.appointmentCountPerSlots= this.state.appointmentCountPerSlots;
     }
-    if(this.state.slotDuration.hours || this.state.slotDuration.hours == 0 || this.state.slotDuration.hours.length){
+    if(this.state.slotDuration.hours || this.state.slotDuration.hours === 0 || this.state.slotDuration.hours.length) {
       dataToInsert.slotDuration.hours= this.state.slotDuration.hours;
     }
-    if(this.state.slotDuration.minutes || this.state.slotDuration.minutes == 0 || this.state.slotDuration.minutes.length){
+    if(this.state.slotDuration.minutes || this.state.slotDuration.minutes === 0 || this.state.slotDuration.minutes.length) {
       dataToInsert.slotDuration.minutes= this.state.slotDuration.minutes;
     }
     let profileId = FlowRouter.getParam('profileId');

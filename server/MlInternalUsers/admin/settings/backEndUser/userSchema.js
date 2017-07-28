@@ -237,6 +237,7 @@ let BackEndUser = `
         optional          : Boolean,
         displayName       : String,
         profileImage      : String
+        identityType      : String
     }
     
     

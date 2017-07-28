@@ -229,11 +229,29 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
 
 MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) => {
   // TODO : Authorization
+  var response = null
   if (args.registrationId) {
     var id = args.registrationId;
-    let response = MlRegistration.findOne({"_id": id});
+    response = MlRegistration.findOne({"_id": id});
+    if(response&&response.registrationInfo&&response.registrationInfo.clusterId&&response.registrationInfo.chapterId&&response.registrationInfo.subChapterId){
+      return response;
+    }else(response&&response.registrationInfo&&!response.registrationInfo.clusterId&&!response.registrationInfo.chapterId&&response.registrationInfo.subChapterId)
+    {
+      let countryId = response.registrationInfo && response.registrationInfo.countryId ? response.registrationInfo.countryId : ""
+      let cityId = response.registrationInfo && response.registrationInfo.cityId ? response.registrationInfo.cityId : ""
+      let clusterData = mlDBController.findOne('MlClusters', {countryId: countryId, isActive: true}, context)
+      let chapterData = mlDBController.findOne('MlChapters', {cityId: cityId, isActive: true}, context)
+      let chapterId = chapterData && chapterData._id ? chapterData._id : ""
+      let subChapterData = mlDBController.findOne('MlSubChapters', {chapterId: chapterId, isActive: true}, context)
+      response.registrationInfo.clusterId = clusterData && clusterData._id ? clusterData._id : "";
+      response.registrationInfo.chapterId = chapterData && chapterData._id ? chapterData._id : "";
+      response.registrationInfo.subChapterId = subChapterData && subChapterData._id ? subChapterData._id : "";
+      return response
+
+
+    }
     //response = response.registrationInfo;
-    return response;
+
   }
 }
 
@@ -291,17 +309,15 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         return validationCheck.validationResponse;
       }
       /**country and operational area changes then making kyc null.*/
-      /*  if((registrationInfo.countryId!=details.countryId)||(registrationInfo.clusterId!=details.clusterId)||(registrationInfo.chapterId!=details.chapterId)||(registrationInfo.subChapterId!=details.subChapterId)||(registrationInfo.registrationType!=details.registrationType)||(registrationInfo.userType!=details.userType)||(registrationInfo.identityType!=details.identityType)||(registrationInfo.profession!=details.profession)||(registrationInfo.industry!=details.industry)){
-       let updatedResp= MlRegistration.update({_id:id},{$unset:{kycDocuments:""}})
-       }else if((registrationInfo.clusterId!=details.clusterId)||(registrationInfo.chapterId!=details.chapterId)||(registrationInfo.subChapterId!=details.subChapterId)||(registrationInfo.registrationType!=details.registrationType)||(registrationInfo.userType!=details.userType)||(registrationInfo.identityType!=details.identityType)||(registrationInfo.profession!=details.profession)||(registrationInfo.industry!=details.industry)){
-       let updatedResp= MlRegistration.update({_id:id},{$pull:{"kycDocuments.docTypeName":"process"}})
-       }*/
+      if((registrationInfo.countryId!=details.countryId)||(registrationInfo.clusterId!=details.clusterId)||(registrationInfo.chapterId!=details.chapterId)||(registrationInfo.subChapterId!=details.subChapterId)||(registrationInfo.registrationType!=details.registrationType)||(registrationInfo.userType!=details.userType)||(registrationInfo.identityType!=details.identityType)||(registrationInfo.profession!=details.profession)||(registrationInfo.industry!=details.industry)){
+          let updatedResp= MlRegistration.update({_id:id},{$unset:{kycDocuments:""}})
+     }
 
-      if ((registrationInfo.clusterId != details.clusterId) || (registrationInfo.chapterId != details.chapterId) || (registrationInfo.subChapterId != details.subChapterId) || (registrationInfo.registrationType != details.registrationType) || (registrationInfo.userType != details.userType) || (registrationInfo.identityType != details.identityType) || (registrationInfo.profession != details.profession) || (registrationInfo.industry != details.industry)) {
+   /*   if ((registrationInfo.clusterId != details.clusterId) || (registrationInfo.chapterId != details.chapterId) || (registrationInfo.subChapterId != details.subChapterId) || (registrationInfo.registrationType != details.registrationType) || (registrationInfo.userType != details.userType) || (registrationInfo.identityType != details.identityType) || (registrationInfo.profession != details.profession) || (registrationInfo.industry != details.industry)) {
         let updatedResp = MlRegistration.update({_id: id}, {$pull: {"kycDocuments": {$and: [{docTypeName: "process"}, {docTypeName: "chapter"}]}}})
       } else {
         let updatedResp = MlRegistration.update({_id: id}, {$unset: {kycDocuments: ""}})
-      }
+      }*/
       /**Fetch accountType from accountType collection */
       let accountTypeName = mlDBController.findOne('MlAccountTypes', {_id: args.registrationDetails.accountType}, context) || {};
       args.registrationDetails.accountType = accountTypeName.accountName;

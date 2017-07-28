@@ -699,6 +699,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
     if (updatedResponse === 1) {
       // let regRecord = MlRegistration.findOne(args.registrationId)||{"registrationInfo":{}};
       let regRecord = mlDBController.findOne('MlRegistration', {_id: args.registrationId}, context) || {"registrationInfo": {}};
+      MlEmailNotification.onKYCApprove(regRecord);
 
       let portfolioDetails = {
         "transactionType": "portfolio",
@@ -776,6 +777,10 @@ MlResolver.MlMutationResolver['RejectedStatusForUser'] = (obj, args, context, in
       let updatedResponse = mlDBController.update('MlRegistration', args.registrationId, {"status": "Rejected"}, {$set: true}, context)
       if (updatedResponse) {
         var resp = mlDBController.update('users', {'profile.externalUserProfiles.registrationId': args.registrationId}, {"profile.externalUserProfiles.$.isApprove": false}, {$set: true}, context);
+        if(resp){
+          let user = mlDBController.findOne('MlRegistration', {_id:args.registrationId}, context)
+          MlEmailNotification.onKYCDecline(user);
+        }
         let code = 200;
         let response = new MlRespPayload().successPayload("Registration Rejected Successfully", code);
         return response
@@ -809,7 +814,7 @@ MlResolver.MlMutationResolver['ApprovedStatusOfDocuments'] = (obj, args, context
           }, {"kycDocuments.$.status": "Approved"}, {$set: true}, context)
           if (response) {
 
-            MlEmailNotification.onKYCApprove(user);
+
             let code = 200;
             let result = {registrationId: response}
             updatedResponse = new MlRespPayload().successPayload(result, code);
@@ -849,7 +854,6 @@ MlResolver.MlMutationResolver['RejectedStatusOfDocuments'] = (obj, args, context
             'kycDocuments': {$elemMatch: {'documentId': documentList[i], 'docTypeId': doctypeList[i]}}
           }, {"kycDocuments.$.status": "Rejected"}, {$set: true}, context)
           if (response) {
-            MlEmailNotification.onKYCDecline(user);
             let code = 200;
             let result = {registrationId: response}
             updatedResponse = new MlRespPayload().successPayload(result, code);

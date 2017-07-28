@@ -179,7 +179,7 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                       break;
                   }
                 //triggered on successfull portfolio creation
-                  MlEmailNotification.onPortfolioConfirmation(userDetails);
+                  //MlEmailNotification.onPortfolioConfirmation(userDetails);
 
               }
 

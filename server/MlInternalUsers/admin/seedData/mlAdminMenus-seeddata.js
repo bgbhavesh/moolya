@@ -1373,6 +1373,25 @@ if (Meteor.isServer) {
         },
         {
           "image": "/images/settings_icon.png",
+          "link": "/admin/packages/officeList",
+          "name": "Packages",
+          "uniqueId": "packages",
+          "isLink": true,
+          "isMenu": true,
+          "subMenu":[
+            {
+              "link": "/admin/packages/officeList",
+              "name":"Office Packages",
+              "uniqueId": "packages_office",
+              "isLink": true,
+              "isMenu": true,
+              "subMenu":[]
+
+            }
+          ]
+        },
+        {
+          "image": "/images/settings_icon.png",
           "link": "/admin/settings/departmentsList",
           "name": "settings",
           "uniqueId": "settings",

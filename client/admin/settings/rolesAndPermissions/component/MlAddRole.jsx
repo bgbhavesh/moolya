@@ -174,7 +174,7 @@ class MlAddRole extends React.Component{
             <ScrollArea
               speed={0.8}
               className="main_wrap_scroll"
-              smoothScrolling={true}
+                smoothScrolling={true}
               default={true}
             >
           <div className="col-md-6 nopadding-left">

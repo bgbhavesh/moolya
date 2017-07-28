@@ -57,16 +57,16 @@ class MlOfficeRepo{
       return officeId;
     }
 
-    // This Method Will create a office service card from the definition
+    // This Method Will create a office service card Instance from the definition
     createofficeServiceCard(officeDetails, profile, context, scDefId, officeId){
       let officeSC = {};
       officeSC["userId"]                = context.userId
       officeSC["profileId"]             = profile.profileId
       officeSC["officeId"]              = officeId
       officeSC["scDefId"]               = scDefId
-      officeSC["totalusercount"]            = officeDetails.totalCount
-      officeSC["principalcount"]    = officeDetails.principalUserCount
-      officeSC["teamMembercount"]         = officeDetails.teamUserCount
+      officeSC["totalusercount"]        = officeDetails.totalCount
+      officeSC["principalcount"]        = officeDetails.principalUserCount
+      officeSC["teamMembercount"]       = officeDetails.teamUserCount
       officeSC["availableCommunities"]  = officeDetails.availableCommunities
       officeSC["isReconciled"]          = false
       officeSC["isActive"]              = true
@@ -112,9 +112,9 @@ class MlOfficeRepo{
     }
 
     // This Method Will create be Spoke Service Card Definition
-    createBspokeSCDef(officeDetails, profile, context, officeId){
+    createBspokeSCDef(officeDetails, profile, context){
       let bSpokeOffice = {};
-      bSpokeOffice["officeId"]              = officeId
+      // bSpokeOffice["officeId"]              = ;
       bSpokeOffice["totalCount"]            = officeDetails.totalCount
       bSpokeOffice["principalUserCount"]    = officeDetails.principalUserCount
       bSpokeOffice["teamUserCount"]         = officeDetails.teamUserCount

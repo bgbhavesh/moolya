@@ -76,13 +76,14 @@ class MlEditNotificationTemplate extends React.Component{
     let ret = mlFieldValidations(this.refs)
     if (ret) {
       toastr.error(ret);
-    } else {
+    } else {;
+      let dynamicKeys=this.refs.dynamicKeys.value||'';
       let tempDetails = {
         title: this.refs.title.value,
         tempDesc: this.refs.tempDesc.value,
         tempCode: this.refs.tempCode.value,
         type: this.state.type,
-        dynamicKeys:this.refs.dynamicKeys.value,
+        dynamicKeys :dynamicKeys.split(','),
         isHtmlContent: this.refs.isHtmlContent.checked,
         content: _.escape(this.refs.content.value),
         isActive: this.refs.isActive.checked
@@ -176,7 +177,7 @@ class MlEditNotificationTemplate extends React.Component{
                     <input type="text" ref="title" placeholder="Title" className="form-control float-label" defaultValue={this.state.data.title}/>
                   </div>
                   <div className="form-group">
-                    <input type="text"  ref="dynamicKeys" placeholder="Dynamic Keys" className="form-control float-label" id="" disabled={true}  defaultValue={this.state.data.dynamicKeys}/>
+                    <input type="text"  ref="dynamicKeys" placeholder="Dynamic Keys" className="form-control float-label" id=""  defaultValue={this.state.data.dynamicKeys}/>
                   </div>
 
                   <br />

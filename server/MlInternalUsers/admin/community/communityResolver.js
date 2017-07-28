@@ -548,6 +548,11 @@ MlResolver.MlQueryResolver['fetchCommunitiesForRolesSelect'] = (obj, args, conte
   return communities;
 }
 
+MlResolver.MlQueryResolver['fetchCommunitiesDef'] = (obj, args, context, info) =>{
+  let appCommunities = mlDBController.find('MlCommunityDefinition', {isActive:true}, context).fetch();
+  return appCommunities;
+}
+
 updateDB = (collectionName, query, payload, options, context) =>{
     return mlDBController.update(collectionName, query, payload, options, context)
 }

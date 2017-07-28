@@ -9,7 +9,7 @@ import geocoder from "geocoder";
 import _lodash from "lodash";
 import _ from "underscore";
 import moment from "moment";
-import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
+import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 var fs = Npm.require('fs');
 var Future = Npm.require('fibers/future');
 
@@ -226,9 +226,11 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
   }
   return response
 }
-
+/**
+ * @module [registration]
+ * getting user registration details
+ * */
 MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) => {
-  // TODO : Authorization
   var response = null
   if (args.registrationId) {
     var id = args.registrationId;
@@ -250,9 +252,6 @@ MlResolver.MlQueryResolver['findRegistrationInfo'] = (obj, args, context, info) 
 
 
     }
-    //response = response.registrationInfo;
-
-  }
 }
 
 MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context, info) => {
@@ -1548,4 +1547,22 @@ MlResolver.MlQueryResolver['findUserPendingRegistration'] = (obj, args, context,
   let user = mlDBController.findOne('users', {_id: context.userId}, context) || {}
   let resp = mlDBController.find('MlRegistration', {'registrationInfo.userName': user.username, status: { $nin: [ 'Approved', 'Rejected'] }}, context).fetch() || []
   return resp;
+}
+
+/**
+ * @module [users left nav] for fetching about
+ * getting user registration
+ * */
+MlResolver.MlQueryResolver['findRegistrationInfoUser'] = (obj, args, context, info) => {
+  if (args.registrationId) {
+    var id = args.registrationId;
+    let response = MlRegistration.findOne({_id: id}) || {}
+    let userId = response.registrationInfo && response.registrationInfo.userId ? response.registrationInfo.userId : ''
+    var users = ''
+    if(userId){
+      users = mlDBController.findOne('users', userId, context)
+      response.externalUserProfiles = users.profile.externalUserProfiles
+    }
+    return response;
+  }
 }

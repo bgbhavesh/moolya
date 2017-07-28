@@ -44,6 +44,7 @@ class MlAddNotificationTemplate extends React.Component {
         title: this.refs.title.value,
         tempDesc: this.refs.tempDesc.value,
         tempCode: this.refs.tempCode.value,
+        dynamicKeys : this.refs.dynamicKeys.value,
         type: this.state.type,
         isHtmlContent: this.refs.isHtmlContent.checked,
         content: _.escape(this.refs.content.value),
@@ -139,6 +140,9 @@ class MlAddNotificationTemplate extends React.Component {
 
                   <div className="form-group">
                     <input type="text" ref="title" placeholder="Title" className="form-control float-label"/>
+                  </div>
+                  <div className="form-group mandatory">
+                    <input type="text" ref="dynamicKeys"  placeholder="Dynamic Keys" className="form-control float-label" id=""/>
                   </div>
 
                   <br />

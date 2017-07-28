@@ -35,6 +35,7 @@ class MlAddNotificationTemplate extends React.Component {
   };
 
   async createNotificationTemplate() {
+    var dynamicKeys=this.refs.dynamicKeys.value||'';
     let ret = mlFieldValidations(this.refs)
     if (ret) {
       //toastr.error(ret);
@@ -44,7 +45,7 @@ class MlAddNotificationTemplate extends React.Component {
         title: this.refs.title.value,
         tempDesc: this.refs.tempDesc.value,
         tempCode: this.refs.tempCode.value,
-        dynamicKeys : this.refs.dynamicKeys.value,
+        dynamicKeys :dynamicKeys.split(','),
         type: this.state.type,
         isHtmlContent: this.refs.isHtmlContent.checked,
         content: _.escape(this.refs.content.value),

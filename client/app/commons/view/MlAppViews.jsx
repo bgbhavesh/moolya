@@ -2,9 +2,10 @@ import React from 'react';
 import MlInfinity from "../../../commons/components/infinityView/MlInfinityView";
 import MlListViewContainer from "../../core/containers/MlAppListViewContainer";
 import MlMapViewContainer from "../../core/containers/MlAppMapViewContainer"
+import MlInfiniteScroll from '../../../commons/core/mlInfiniteScroll/components/MlInfiniteScroll'
 
 /*
- Created by mohammed.mohasin on 01/03/17.
+ Created by Rajat Shekhar
 
  Accepts viewMode,showInfinity as props to display the components
  //listConfig,mapConfig is configuration for the component
@@ -35,11 +36,11 @@ export default class MlViews extends React.Component {
         viewMode = false;
       } else if (this.props.viewMode == false && this.state.viewMode == false) {
         viewMode = true;
-      }   // viewMode=this.props.viewMode; 
+      } 
     } else {
       viewMode = this.state.viewMode;
     }
-    //let viewMode = this.state.viewMode;
+
     var showInfinity = _.has(this.props, 'showInfinity') ? this.props.showInfinity : true;
     var infinityViewProps = {viewMode: this.state.viewMode, viewModeParams: this.props.viewMode, onViewModeChange: this.viewModeChange.bind(this)};
     var config = this.props;
@@ -48,7 +49,7 @@ export default class MlViews extends React.Component {
     return (
       <div className="app_main_wrap">
         {viewMode ? <MlMapViewContainer params={params} {...config.mapConfig} /> :
-          <MlListViewContainer params={params} {...listConfig}/> }
+          <MlInfiniteScroll params={params} config={listConfig}/> }
         {showInfinity && (<MlInfinity {...infinityViewProps} />)}
       </div>
 

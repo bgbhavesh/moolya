@@ -3,13 +3,14 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findAssetActionHandler} from '../actions/findAssetsAction'
 import {updateSelectedAssetActionHandler} from '../actions/updateAssetsAction'
 import MlLoader from '../../../../commons/components/loader/loader'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 class MlEditAssets extends React.Component{
   constructor(props) {
     super(props);
@@ -61,15 +62,20 @@ class MlEditAssets extends React.Component{
   }
 
   async  updateSelectedAsset() {
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
       let assetDetails = {
-          assetName: this.refs.name.value,
-          displayName: this.refs.displayName.value,
-          about: this.refs.about.value,
-          isActive: this.refs.isActive.checked
+        assetName: this.refs.name.value,
+        displayName: this.refs.displayName.value,
+        about: this.refs.about.value,
+        isActive: this.refs.isActive.checked
       }
 
       const response = await updateSelectedAssetActionHandler(this.props.config, assetDetails)
       return response;
+    }
   }
 
   render(){
@@ -100,9 +106,9 @@ class MlEditAssets extends React.Component{
             <div className="col-md-6 nopadding-left">
               <div className="form_bg">
                 <form>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
-                    <input type="text" ref="name" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.assetName}/>
+                    <input type="text" ref="name" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.assetName} data-required={true} data-errMsg="Asset Name is required"/>
                   </div>
                   <div className="form-group">
                     <textarea ref="about" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.about}></textarea>
@@ -113,8 +119,8 @@ class MlEditAssets extends React.Component{
             <div className="col-md-6 nopadding-right">
               <div className="form_bg">
                 <form>
-                  <div className="form-group">
-                    <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" defaultValue={this.state.data.displayName}/>
+                  <div className="form-group mandatory">
+                    <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" defaultValue={this.state.data.displayName} data-required={true} data-errMsg="Display Name is required"/>
                   </div>
 
                   <div className="form-group">

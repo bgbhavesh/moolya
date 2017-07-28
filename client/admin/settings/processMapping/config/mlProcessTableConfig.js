@@ -1,7 +1,7 @@
-import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
-import React from 'react';
-import gql from 'graphql-tag'
-import moment from 'moment'
+import {MlViewer, MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
+import React from "react";
+import gql from "graphql-tag";
+import moment from "moment";
 function stateFormatter(data){
   let processmapping = [];
   processmapping=data&&data.data&&data.data.states?data.data.states:[];
@@ -52,9 +52,24 @@ function  communityFormatter(data) {
   }
 }
 
-function dateFormatter (data){
-  let createdDateTime=data&&data.data&&data.data.date;
-  return <div>{moment(createdDateTime).format('MM/DD/YYYY HH:mm:ss')}</div>;
+function updatedateFormatter (data){
+  let updateDate=data&&data.data&&data.data.updatedDate;
+  if(updateDate){
+    return <div>{moment(updateDate).format('MM-DD-YYYY HH:mm:ss')}</div>;
+  }
+  else {
+    return <div></div>
+  }
+}
+
+function createdateFormatter (data){
+  let createdDate=data&&data.data&&data.data.createdDate;
+  if(createdDate){
+    return <div>{moment(createdDate).format('MM-DD-YYYY HH:mm:ss')}</div>;
+  }
+  else {
+    return <div></div>
+  }
 }
 const mlProcessTableConfig=new MlViewer.View({
   name:"roleTypeTable",
@@ -73,11 +88,17 @@ const mlProcessTableConfig=new MlViewer.View({
      {dataField: "communities", title: "Community",dataSort:true,customComponent:communityFormatter},
     {dataField: "industries", title:"Industry",dataSort:true},
     {dataField: "professions", title:"Profession",dataSort:true,customComponent:professionFormatter},
+    {dataField: "identity", title: "Identity", dataSort: true},
+    {dataField: "userTypeNamesString", title: "User-Type", dataSort: true},
     {dataField: "clusters", title: "Cluster",dataSort:true,customComponent:clusterFormatter},
     {dataField: "states", title: "State",dataSort:true,customComponent:stateFormatter},
     {dataField:"chapters", title:"Chapter",dataSort:true,customComponent:chapterFormatter},
-    {dataField: "date", title: "Created Date",dataSort:true,customComponent:dateFormatter}
-
+    {dataField: "subChapterNamesString", title: "Sub-Chapter", dataSort: true},
+    {dataField: "createdBy", title: "Created By",dataSort:true},
+    {dataField: "createdDate", title: "CreatedDate And Time",dataSort:true,customComponent:createdateFormatter},
+    {dataField: "updatedBy", title: "Updated By",dataSort:true},
+    {dataField: "updatedDate", title: "Updated Date",dataSort:true,customComponent:updatedateFormatter},
+    {dataField: "isActive", title: "Status",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -87,7 +108,7 @@ const mlProcessTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
         if(data && data.id){
-          FlowRouter.go("/admin/settings/editProcess/"+data.id);
+          FlowRouter.go("/admin/settings/documentProcess/editProcess/"+data.id);
         } else{
           toastr.error("Please select a Process Type");
         }
@@ -99,40 +120,41 @@ const mlProcessTableConfig=new MlViewer.View({
       handler: (data)=>{
         if(data&&data.id){
           toastr.error("Please uncheck the record")
-          // FlowRouter.go("/admin/settings/processList")
         }else {
-          FlowRouter.go("/admin/settings/addProcess")
+          FlowRouter.go("/admin/settings/documentProcess/addProcess")
         }
       }
-    },
-    // {
-    //   showAction: true,
-    //   actionName: 'logout',
-    //   handler: (data)=>{console.log(data);}
-    // }
+    }
   ],
   graphQlQuery:gql`
-                query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
-                data:SearchQuery(module:"processmapping", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData){
-                      totalRecords
-                      data{
-                       ...on ProcessType{
-                             id:_id,
-                              processId, 
-                              process,
-                              processName,
-                              isActive,
-                              communities,
-                              industries,
-                              professions,
-                              clusters,
-                              states,
-                              chapters,
-                              date
-                            }
-                        }
+               query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
+                data: SearchQuery(module: "processmapping", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData) {
+                  totalRecords
+                  data {
+                    ... on ProcessType {
+                      id: _id
+                      processId
+                      process
+                      processName
+                      isActive
+                      communities
+                      industries
+                      professions
+                      clusters
+                      states
+                      chapters
+                      createdBy
+                      createdDate
+                      updatedBy
+                      updatedDate
+                      identity
+                      userTypeNamesString
+                      subChapterNamesString
+                    }
+                  }
                 }
-               }
+              }
+
               `
 });
 

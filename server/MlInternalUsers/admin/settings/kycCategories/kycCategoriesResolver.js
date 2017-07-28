@@ -33,12 +33,31 @@ MlResolver.MlMutationResolver['updateKycCategory'] = (obj, args, context, info) 
           }
         ]
       };
+
       let isFind = mlDBController.find('MlDocumentCategories', query, context).fetch();
       if(isFind.length) {
         let code = 409;
         let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
         return response;
       }
+      var firstName='';var lastName='';
+      // let id = MlDepartments.insert({...args.department});
+      if(Meteor.users.findOne({_id : context.userId}))
+      {
+        let user = Meteor.users.findOne({_id: context.userId}) || {}
+        if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+          firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+          lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+        }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+          firstName=(user.profile || {}).firstName||'';
+          lastName =(user.profile || {}).lastName||'';
+        }
+      }
+      let createdBy = firstName +' '+lastName
+      args.updatedBy = createdBy;
+      args.updatedDate = new Date();
+
       args=_.omit(args,'_id');
       // let result= MlDocumentCategories.update(id, {$set: args});
       let result= mlDBController.update('MlDocumentCategories', id, args, {$set:true}, context)
@@ -92,7 +111,23 @@ MlResolver.MlMutationResolver['createKycCategory'] = (obj, args, context, info) 
       let response = new MlRespPayload().errorPayload("Already Exists!!!!", code);
       return response;
     }
+    var firstName='';var lastName='';
+    // let id = MlDepartments.insert({...args.department});
+    if(Meteor.users.findOne({_id : context.userId}))
+    {
+      let user = Meteor.users.findOne({_id: context.userId}) || {}
+      if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
 
+        firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+        lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+      }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+        firstName=(user.profile || {}).firstName||'';
+        lastName =(user.profile || {}).lastName||'';
+      }
+    }
+    let createdBy = firstName +' '+lastName
+    args.kycCategory.createdBy = createdBy;
+    args.kycCategory.createdDate = new Date();
     // if(mlDBController.find('MlDocumentCategories', {docCategoryName:args.kycCategory.docCategoryName}, context).count() > 0){
     //   let code = 409;
     //   let response = new MlRespPayload().errorPayload("Already Exist", code);

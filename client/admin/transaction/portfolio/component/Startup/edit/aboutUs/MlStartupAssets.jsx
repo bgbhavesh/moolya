@@ -3,12 +3,13 @@ import {render} from "react-dom";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
 import ScrollArea from "react-scrollbar";
-import Moolyaselect from "../../../../../../../commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../../../../../commons/components/MlAdminSelectWrapper";
 import gql from "graphql-tag";
 import {graphql} from "react-apollo";
 import _ from "lodash";
 import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
 import {fetchDetailsStartupActionHandler} from "../../../../actions/findPortfolioStartupDetails";
+import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from "../../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
 
@@ -28,6 +29,7 @@ export default class MlStartupAssets extends React.Component{
     }
     this.handleBlur.bind(this);
     this.imagesDisplay.bind(this);
+    this.libraryAction.bind(this)
     return this;
   }
   componentDidUpdate(){
@@ -161,18 +163,35 @@ export default class MlStartupAssets extends React.Component{
     let name = e.target.name;
     let fileName = e.target.files[0].name;
     let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{assets:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
   }
-  onFileUploadCallBack(resp){
-    if(resp){
+  onFileUploadCallBack(file,resp) {
+    if (resp) {
       let result = JSON.parse(resp)
-      if(result.success){
-        this.setState({loading:true})
-        this.fetchOnlyImages();
-        this.imagesDisplay();
+      let userOption = confirm("Do you want to add the file into the library")
+      if (userOption) {
+        let fileObjectStructure = {
+          fileName: file.name,
+          fileType: file.type,
+          fileUrl: result.result,
+          libraryType: "image"
+        }
+        this.libraryAction(fileObjectStructure)
+        if (result.success) {
+          this.setState({loading: true})
+          this.fetchOnlyImages();
+          this.imagesDisplay();
+        }
       }
     }
   }
+
+  async libraryAction(file) {
+    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
+    return resp;
+  }
+
 
   async fetchOnlyImages(){
     const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);

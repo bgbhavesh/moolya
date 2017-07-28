@@ -1,6 +1,25 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+import moment from 'moment'
+function createdateFormatter (data){
+  let createdDate=data&&data.data&&data.data.createdDate;
+  if(createdDate){
+    return <div>{moment(createdDate).format('MM-DD-YYYY HH:mm:ss')}</div>;
+  }
+  else {
+    return <div></div>
+  }
+}
+function updatedateFormatter (data){
+  let updateDate=data&&data.data&&data.data.updatedDate;
+  if(updateDate){
+    return <div>{moment(updateDate).format('MM-DD-YYYY HH:mm:ss')}</div>;
+  }
+  else {
+    return <div></div>
+  }
+}
 const mlIndustryTypeTableConfig=new MlViewer.View({
   name:"industryTypeTable",
   module:"industry",//Module name for filter.
@@ -16,6 +35,10 @@ const mlIndustryTypeTableConfig=new MlViewer.View({
     {dataField: "industryName", title: "Industry",dataSort:true},
     {dataField: "industryDisplayName", title: "Display Name",dataSort:true},
     {dataField: "about", title: "About",dataSort:true},
+    {dataField: "createdBy", title: "Created By",dataSort:true},
+    {dataField: "createdDate", title: "CreatedDate And Time",dataSort:true,customComponent:createdateFormatter},
+    {dataField: "updatedBy", title: "Updated By",dataSort:true},
+    {dataField: "updatedDate", title: "UpdatedDate And Time",dataSort:true,customComponent:updatedateFormatter},
     {dataField: "isActive", title: "Active",dataSort:true}
   ],
   tableHeaderClass:'react_table_head',
@@ -26,7 +49,7 @@ const mlIndustryTypeTableConfig=new MlViewer.View({
       showAction: true,
       handler:  (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/editIndustry/"+data.id)
+          FlowRouter.go("/admin/settings/documentProcess/editIndustry/"+data.id)
         }
         else{
           toastr.error("Please select a Industry to Edit");
@@ -43,7 +66,7 @@ const mlIndustryTypeTableConfig=new MlViewer.View({
           // FlowRouter.go("/admin/settings/industryList")
         }
         else {
-          FlowRouter.go("/admin/settings/addIndustry")
+          FlowRouter.go("/admin/settings/documentProcess/addIndustry")
         }
       }
     },
@@ -65,6 +88,10 @@ const mlIndustryTypeTableConfig=new MlViewer.View({
                               about
                               isActive
                               id:_id
+                              createdBy
+                              createdDate  
+                              updatedBy     
+                              updatedDate  
                           }
                       }
               }

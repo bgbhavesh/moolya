@@ -89,15 +89,15 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioAboutUs'] = (obj, args, context
   if (args.portfoliodetailsId) {
     let startAboutUsArray = {}
     let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-    startAboutUsArray["aboutUs"] = portfolio.aboutUs;
-    startAboutUsArray["clients"] = portfolio.clients;
-    startAboutUsArray["serviceProducts"] = portfolio.serviceProducts;
-    startAboutUsArray["information"] = portfolio.information;
-    startAboutUsArray["branches"] = portfolio.branches;
-    startAboutUsArray["technologies"] = portfolio.technologies;
-    startAboutUsArray["legalIssue"] = portfolio.legalIssue;
-    startAboutUsArray["rating"] = portfolio.rating;
-    startAboutUsArray["assets"] = portfolio.assets;
+    startAboutUsArray["aboutUs"] = portfolio&&portfolio.aboutUs?portfolio.aboutUs:{};
+    startAboutUsArray["clients"] = portfolio&&portfolio.clients?portfolio.clients:[];
+    startAboutUsArray["serviceProducts"] = portfolio&&portfolio.serviceProducts?portfolio.serviceProducts:{};
+    startAboutUsArray["information"] = portfolio&&portfolio.information?portfolio.information:{};
+    startAboutUsArray["branches"] = portfolio&&portfolio.branches?portfolio.branches:[];
+    startAboutUsArray["technologies"] = portfolio&&portfolio.technologies?portfolio.technologies:[];
+    startAboutUsArray["legalIssue"] = portfolio&&portfolio.legalIssue?portfolio.legalIssue:{};
+    startAboutUsArray["rating"] = portfolio&&portfolio.rating?portfolio.rating:null;
+    startAboutUsArray["assets"] = portfolio&& portfolio.assets?portfolio.assets:[];
 
     // if(startAboutUsArray && startAboutUsArray.clients){
     //   startAboutUsArray.clients.map(function(client,index) {
@@ -125,6 +125,10 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioAboutUs'] = (obj, args, context
 
       })
     }
+
+    //for view action
+    MlResolver.MlMutationResolver['createView'](obj,{resourceId:args.portfoliodetailsId,resourceType:'portfolio'}, context, info);
+
     if (startAboutUsArray) {
       return startAboutUsArray
     }
@@ -213,6 +217,70 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioLicenses'] = (obj, args, contex
 
   return {};
 }
+
+MlResolver.MlQueryResolver['fetchStartupPortfolioCharts'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let startChartsArray = {}
+    let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    startChartsArray["employmentOfCompanyChart"] = portfolio&&portfolio.employmentOfCompanyChart?portfolio.employmentOfCompanyChart:[];
+    startChartsArray["profitRevenueLiabilityChart"] = portfolio&&portfolio.profitRevenueLiabilityChart?portfolio.profitRevenueLiabilityChart:[];
+    startChartsArray["reviewOfCompanyChart"] = portfolio&&portfolio.reviewOfCompanyChart?portfolio.reviewOfCompanyChart:[];
+    startChartsArray["employeeBreakupDepartmentChart"] = portfolio&&portfolio.employeeBreakupDepartmentChart?portfolio.employeeBreakupDepartmentChart:[];
+    if(startChartsArray && startChartsArray.employeeBreakupDepartmentChart){
+      startChartsArray.employeeBreakupDepartmentChart.map(function(data,index) {
+        if(startChartsArray.employeeBreakupDepartmentChart[index]){
+          let entityData = MlDepartments.findOne({"_id":data.ebdDepartment}) || {};
+          startChartsArray.employeeBreakupDepartmentChart[index].ebdDepartmentName = entityData.displayName || "";
+        }
+
+      })
+    }
+    if (startChartsArray) {
+      return startChartsArray
+    }
+  }
+ /* var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfolioDetailsId}, context)
+  if (portfolioDetails) {
+    args.userId = portfolioDetails.userId;
+    var query = {
+      userId: args.userId,
+    }
+    var startupChartDetails = mlDBController.findOne('MlStartupPortfolio', query, context);
+    return startupChartDetails.charts;
+  }*/
+}
+
+/*MlResolver.MlQueryResolver['fetchStartupPortfolioChart'] = (obj, args, context, info) => {
+  var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfolioDetailsId}, context)
+  if (portfolioDetails) {
+    args.userId = portfolioDetails.userId;
+    var query = {
+      userId: args.userId,
+    }
+    var startupChartDetails = mlDBController.findOne('MlStartupPortfolio', query, context);
+    let startUpChart = []
+    startupChartDetails.charts.map(function(data){
+      data.args.chartType.map(function(chart){
+        startUpChart = chart
+      })
+    })
+    return startUpChart;
+  }
+}*/
+
+/*MlResolver.MlMutationResolver['createStartupPortfolioChart'] = (obj, args, context, info) => {
+  var query = {
+    _id: args.startUpPortfolioId,
+  }
+  var startupChartDetails = mlDBController.findOne('MlStartupPortfolio', query, context);
+  if(startupChartDetails.charts){
+    var startupChartDetailsUpdate = mlDBController.update('MlStartupPortfolio',query,{'charts':args.chartDetails},{$set:1}, context);
+    return startupChartDetailsUpdate;
+  }else {
+    var startupChartDetailsInsert = mlDBController.insert('MlStartupPortfolio', query,{'charts':args.chartDetails}, context);
+    return startupChartDetailsInsert;
+  }
+}*/
 
 updateArrayofObjects = (updateFor, source) =>{
   if(_.isArray(updateFor) && _.isArray(source)){

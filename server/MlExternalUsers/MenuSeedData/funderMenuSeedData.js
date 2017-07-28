@@ -14,65 +14,40 @@ if(Meteor.isServer){
         "uniqueId" : "dashboard"
       },
       {
-        "image":"ml ml-ideator",
-        "link": "/app/ideator",
+        "image":"ml flaticon-ml-pc-search",
+        "link": "/app/explore",
         "isLink" : true,
         "isMenu" : true,
-        "name" : "Ideator",
-        "uniqueId" : "ideator"
-      },
-      {
-        "image":"ml ml-startup",
-        "link": "/app/startup",
-        "isLink" : true,
-        "isMenu" : true,
-        "name" : "Startup",
-        "uniqueId" : "startup"
+        "name" : "Explore",
+        "uniqueId" : "explore"
       },
 
-      {
-        "image":"ml ml-funder",
-        "link": "/app/funder",
-        "isLink" : true,
-        "isMenu" : true,
-        "name" : "Funder",
-        "uniqueId" : "funder"
-      },
+      // {
+      //   "image":"fa fa-calendar",
+      //   "link": "/app/calendar",
+      //   "isLink" : true,
+      //   "isMenu" : true,
+      //   "name" : "Calender",
+      //   "uniqueId" : "calender"
+      // },
+
 
       {
-        "image":"ml ml-provider",
-        "link": "provider",
-        "isLink" : true,
-        "isMenu" : true,
-        "name" : "Provider",
-        "uniqueId" : "provider"
-      },
-
-      {
-        "image":"ml ml-company",
-        "link": "company",
-        "isLink" : true,
-        "isMenu" : true,
-        "name" : "Company",
-        "uniqueId" : "company"
-      },
-
-      {
-        "image":"ml ml-institutions",
-        "link": "/app/institutions",
-        "isLink" : true,
-        "isMenu" : true,
-        "name" : "Institutions",
-        "uniqueId" : "institutions"
-      },
-
-      {
-        "image":"ml ml-institutions",
+        "image":"ml ml-investment",
         "link": "/app/investments",
         "isLink" : true,
         "isMenu" : true,
         "name" : "My Investments",
         "uniqueId" : "myInvestments"
+      },
+
+      {
+        "image":"ml ml-transaction",
+        "link": "/app/transaction",
+        "isLink" : true,
+        "isMenu" : true,
+        "name" : "My Transaction",
+        "uniqueId" : "myTransaction"
       },
 
       {
@@ -101,6 +76,22 @@ if(Meteor.isServer){
         "name" : "News",
         "uniqueId" : "news"
       },
+      {
+        "image":"ml ml-settings",
+        "link": "/app/news",
+        "isLink" : true,
+        "isMenu" : true,
+        "name" : "Settings",
+        "uniqueId" : "settings"
+      },
+      // {
+      //   "image":"fa fa-calendar-check-o",
+      //   "link": "/app/task",
+      //   "isLink" : true,
+      //   "isMenu" : true,
+      //   "name" : "Task",
+      //   "uniqueId" : "my_task"
+      // }
     ]
   }})
 }

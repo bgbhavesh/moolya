@@ -6,9 +6,9 @@ export default function dynamicLinkHandler(path,params,queryParams){
     "dashboard_chapters":function(params,queryParams){
       let dynamicParams=params||{};
       if(_.has(dynamicParams,"clusterId")&&_.has(dynamicParams,"chapterId")){
-        return `/admin/dashboard/${dynamicParams.clusterId}/${dynamicParams.chapterId}/subChapters`;
+        return `/admin/dashboard/${dynamicParams.clusterId}/${dynamicParams.chapterId}/subChapters?viewMode=${queryParams.viewMode}`; // View Mode added
       }else if(_.has(dynamicParams,"clusterId")){
-        return `/admin/dashboard/${dynamicParams.clusterId}/chapters`;
+        return `/admin/dashboard/${dynamicParams.clusterId}/chapters?viewMode=${queryParams.viewMode}`;  // View Mode added
       }else{
         return '/admin/dashboard/chapters';
       }
@@ -17,8 +17,17 @@ export default function dynamicLinkHandler(path,params,queryParams){
 
     "dashboard_communities":function(params,queryParams){
         let dynamicParams=params||{};
+        let otherParams = FlowRouter.current().params;
+        let otherQueryParams = FlowRouter.current().queryParams;
+        let viewMode = otherQueryParams.viewMode?otherQueryParams.viewMode:true
       if(_.has(dynamicParams,"clusterId")&&_.has(dynamicParams,"chapterId")&&_.has(dynamicParams,"subChapterId")){
         return `/admin/dashboard/${dynamicParams.clusterId}/${dynamicParams.chapterId}/${dynamicParams.subChapterId}/communities`;
+      }
+      else if(_.has(otherParams,"clusterId")&&_.has(otherParams,"chapterId")){
+        return `/admin/dashboard/${otherParams.clusterId}/${otherParams.chapterId}/communities?viewMode=${viewMode}`;
+      }
+      else if(_.has(otherParams,"clusterId")){
+        return `/admin/dashboard/${otherParams.clusterId}/communities?viewMode=${viewMode}`;
       }
       else{
         return '/admin/dashboard/communities';
@@ -179,7 +188,46 @@ export default function dynamicLinkHandler(path,params,queryParams){
         return `/admin/community/${dynamicParams.communityId}/history`;
       }
     },
+    /**
+     * users dynamic routes handler
+     * */
 
+    "users_about": function (params, queryParams) {
+      let dynamicParams = params || {};
+      if (_.has(dynamicParams, "registrationId") && _.has(dynamicParams, "portfolioId")) {
+        return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/aboutuser`;
+      }
+    },
+    "users_addressBook": function (params, queryParams) {
+      let dynamicParams = params || {};
+      if (_.has(dynamicParams, "registrationId") && _.has(dynamicParams, "portfolioId")) {
+        return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/addressBook`;
+      }
+    },
+    "users_connections": function (params, queryParams) {
+      let dynamicParams = params || {};
+      if (_.has(dynamicParams, "registrationId") && _.has(dynamicParams, "portfolioId")) {
+        return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/connections/ideator`;
+      }
+    },
+    "users_favourites": function (params, queryParams) {
+      let dynamicParams = params || {};
+      if (_.has(dynamicParams, "registrationId") && _.has(dynamicParams, "portfolioId")) {
+        return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/favourites/ideator`;
+      }
+    },
+    "users_wishlist": function (params, queryParams) {
+      let dynamicParams = params || {};
+      if (_.has(dynamicParams, "registrationId") && _.has(dynamicParams, "portfolioId")) {
+        return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/wishlist/ideator`;
+      }
+    },
+    "users_transactions": function (params, queryParams) {
+      let dynamicParams = params || {};
+      if (_.has(dynamicParams, "registrationId") && _.has(dynamicParams, "portfolioId")) {
+        return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/transactions`;
+      }
+    }
   }
   let menuLinkHandler=menuLinkHandlerConfig[path];
   if(menuLinkHandler){

@@ -6,7 +6,7 @@ import {findCommunityDefActionHandler} from '../actions/findCommunityDefAction'
 import MlActionComponent from '../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../commons/containers/MlFormHandler';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../commons/components/MlAdminSelectWrapper'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 import MlLoader from '../../../commons/components/loader/loader'
 import {getAdminUserContext} from "../../../commons/getAdminUserContext";
@@ -81,28 +81,18 @@ class MlEditCommunityFormComponent extends React.Component {
   }
 
   async handleSuccess(response) {
-    window.history.back()
-    // FlowRouter.go("/admin/community");
+    var resp = JSON.parse(response)
+    if(resp && resp.unAuthorized){
+      FlowRouter.go('/unauthorize')
+    }else
+      window.history.back()
   };
 
   async findComDef() {
     let Id = this.props.params;
     const response = await findCommunityDefActionHandler(Id);
-
     if (response) {
       this.setState({data: response});
-
-      // if (this.state.data.aboutCommunity) {
-      //   this.setState({"data":{"aboutCommunity":this.state.data.aboutCommunity}});
-      // }
-      //
-      // if (this.state.data.showOnMap) {
-      //   this.setState({"data":{"showOnMap":this.state.data.showOnMap}});
-      // }
-      //
-      // if (this.state.data.showOnMap) {
-      //   this.setState({"data":{"showOnMap":this.state.data.showOnMap}});
-      // }
 
       if (this.state.data.clusters) {
         this.setState({clusters: this.state.data.clusters});
@@ -139,18 +129,8 @@ class MlEditCommunityFormComponent extends React.Component {
       chapterId:this.props.params.chapterId?this.props.params.chapterId:"",
       subChapterId:this.props.params.subChapterId?this.props.params.subChapterId:"",
     }
-    let response;
-    // if(data.subchapters.length<1)
-    // {
-    //   toastr.error('Please select Sub-Chapter');
-    //   response = false;
-    // }
-    // else
-    // {
-      response = await multipartFormHandler(data, null);
-    // }
-    // this.setState({loading: false});
-    return response;
+    var resp = await multipartFormHandler(data, null);
+    return resp;
   }
 
   optionsBySelectClusters(val) {
@@ -201,14 +181,14 @@ class MlEditCommunityFormComponent extends React.Component {
       }
     ]
 
-    let clusterquery = gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
-    let chapterOption = this.state.clusters.length>0?{options: {variables: {clusters: this.state.clusters}}}:{options: {variables: {clusters: []}}};
-    let chapterquery = gql`query($clusters:[String]){  
+      let clusterquery = gql` query{data:fetchClustersForMap{label:displayName,value:_id}}`;
+      let chapterOption = this.state.clusters.length>0?{options: {variables: {clusters: this.state.clusters}}}:{options: {variables: {clusters: []}}};
+      let chapterquery = gql`query($clusters:[String]){  
         data:fetchActiveClusterChapters(clusters:$clusters) {
           value:_id
           label:chapterName
         }  
-    }`;
+      }`;
     let subChapterOption = this.state.chapters.length>0&&this.state.clusters.length>0?{options: {variables: {chapters: this.state.chapters,clusters: this.state.clusters}}}:{options: {variables: {chapters: [],clusters: []}}};
     let subChapterquery = gql`query($chapters:[String],$clusters:[String]){  
         data:fetchActiveChaptersSubChapters(chapters:$chapters,clusters:$clusters) {

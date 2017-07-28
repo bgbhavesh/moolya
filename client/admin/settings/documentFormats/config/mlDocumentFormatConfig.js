@@ -3,10 +3,29 @@ import React from 'react';
 import gql from 'graphql-tag'
 import moment from 'moment'
 
-function dateFormatter (data){
-  let createdDateTime=data&&data.data&&data.data.createdDateTime;
-  return <div>{moment(createdDateTime).format('MM-DD-YYYY, HH:mm:ss')}</div>
+function createdateFormatter (data){
+  let createdDate=data&&data.data&&data.data.createdDate;
+  if(createdDate){
+    return <div>{moment(createdDate).format('MM-DD-YYYY HH:mm:ss')}</div>;
+  }
+  else {
+    return <div></div>
+  }
 }
+function updatedateFormatter (data){
+  let updateDate=data&&data.data&&data.data.updatedDate;
+  if(updateDate){
+    return <div>{moment(updateDate).format('MM-DD-YYYY HH:mm:ss')}</div>;
+  }
+  else {
+    return <div></div>
+  }
+}
+// function dateFormatter (data){
+//   let createdDateTime=data&&data.data&&data.data.createdDateTime;
+//   return <div>{moment(createdDateTime).format('MM-DD-YYYY, HH:mm:ss')}</div>
+// }
+
 
 const mlDocumentFormatTableConfig=new MlViewer.View({
   name:"documentFormatTable",
@@ -22,8 +41,12 @@ const mlDocumentFormatTableConfig=new MlViewer.View({
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "docFormatName", title: "Name",dataSort:true},
     {dataField: "docFormatDisplayName", title: "Display Name",dataSort:true},
+    {dataField: "createdBy", title: "Created By",dataSort:true},
+    {dataField: "createdDate", title: "CreatedDate And Time",dataSort:true,customComponent:createdateFormatter},
+    {dataField: "updatedBy", title: "Updated By",dataSort:true},
+    {dataField: "updatedDate", title: "UpdatedDate And Time",dataSort:true,customComponent:updatedateFormatter},
     {dataField: "isActive", title: "Active",dataSort:true},
-    {dataField: "createdDateTime", title: "Created Date And Time",customComponent:dateFormatter},
+    // {dataField: "createdDateTime", title: "Created Date And Time",customComponent:dateFormatter},
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
@@ -33,7 +56,7 @@ const mlDocumentFormatTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
         if(data && data.id){
-          FlowRouter.go("/admin/settings/editDocumentFormat/"+data.id);
+          FlowRouter.go("/admin/settings/documentProcess/editDocumentFormat/"+data.id);
         } else{
           toastr.error("Please select a Document Format");
         }
@@ -47,7 +70,7 @@ const mlDocumentFormatTableConfig=new MlViewer.View({
           toastr.error("Please uncheck the record")
           // FlowRouter.go("/admin/settings/documentFormatList");
         }else{
-          FlowRouter.go("/admin/settings/addDocumentFormat")
+          FlowRouter.go("/admin/settings/documentProcess/addDocumentFormat")
 
         }
       }
@@ -68,8 +91,11 @@ const mlDocumentFormatTableConfig=new MlViewer.View({
                               docFormatDisplayName
                               isActive
                               about
-                              createdDateTime
                               id:_id
+                              createdBy
+                              createdDate  
+                              updatedBy     
+                              updatedDate  
                           }
                       }
               }

@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {createUserTypeActionHandler} from '../actions/createUsertypeAction'
@@ -44,7 +44,7 @@ class MlAddUserType extends React.Component {
   async handleSuccess(response) {
     if (response) {
       if (response.success)
-        FlowRouter.go("/admin/settings/UserTypeList");
+        FlowRouter.go("/admin/settings/documentProcess/UserTypeList");
       else
         toastr.error(response.result);
     }
@@ -65,7 +65,7 @@ class MlAddUserType extends React.Component {
         isActive: this.refs.isActive.checked
       }
       const response = await createUserTypeActionHandler(UserTypeDetails)
-
+      toastr.success("UserType Created Successfully");
       return response;
 
     }
@@ -99,7 +99,7 @@ class MlAddUserType extends React.Component {
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          FlowRouter.go("/admin/settings/userTypeList")
+          FlowRouter.go("/admin/settings/documentProcess/userTypeList")
         }
       }
     ];

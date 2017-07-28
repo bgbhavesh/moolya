@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { render } from 'react-dom';
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import {findClusterBasedStatesDeatilsActionHandler} from '../actions/findClusterBasedStatesAction'
@@ -102,7 +102,7 @@ export default class MlAssignTaxInformation extends Component {
                 <div className="col-md-3">
                   <div className="form-group">
                     {/*<Select name="form-field-name"value="select"options={options} className="float-label"/>*/}
-                    <Moolyaselect multiSelect={false} className="float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.taxId} queryType={"graphql"} query={taxQuery} isDynamic={true}  onSelect={this.onSelectTaxType.bind(this)}/>
+                    <Moolyaselect multiSelect={false} className="float-label" valueKey={'value'} labelKey={'label'} placeholder="Tax Name" selectedValue={this.state.taxId} queryType={"graphql"} query={taxQuery} isDynamic={true}  onSelect={this.onSelectTaxType.bind(this)}/>
                   </div>
                 </div>
                 <div className="col-md-9">

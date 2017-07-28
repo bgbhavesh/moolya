@@ -4,17 +4,19 @@ import { render } from 'react-dom';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 var Select = require('react-select');
-import Moolyaselect from '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from '../../../commons/components/MlAdminSelectWrapper'
 import ScrollArea from 'react-scrollbar';
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {updateRegistrationActionHandler,emailVerificationActionHandler,smsVerificationActionHandler} from '../actions/updateRegistration'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import {fetchIdentityTypes} from "../actions/findRegistration";
+import {findRegistrationActionHandler} from "../actions/findRegistration";
 import _ from 'lodash';
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import MlLoader from '../../../../commons/components/loader/loader'
 import {findAccountTypeActionHandler} from '../../../settings/accountType/actions/findAccountTypeAction'
 import moment from 'moment'
+import {rejectStatusForUser} from '../actions/rejectUser'
 var FontAwesome = require('react-fontawesome');
 var options3 = [
   {value: 'Yes', label: 'Yes'},
@@ -47,7 +49,9 @@ export default class step1 extends React.Component{
       defaultIdentityIndividual: false,
       defaultIdentityCompany:false,
       transactionId:'',
-      selectedAccountsType: " "
+      selectedAccountsType: " ",
+      registrationDate:'',
+      emailVerified:false
     }
 
     this.fetchIdentityTypesMaster.bind(this);
@@ -81,6 +85,15 @@ export default class step1 extends React.Component{
     return response;
   }
 
+
+  // async checkEmailVerify() {
+  //   const response = await findRegistrationActionHandler(this.props.registrationInfo.registrationId);
+  //   if(response.emails){
+  //     this.setState({emailVerified: response.emails[0].verified});
+  //   }
+  //   return response;
+  // }
+
   componentWillMount() {
     console.log(this.props)
     this.fetchIdentityTypesMaster();
@@ -103,8 +116,9 @@ export default class step1 extends React.Component{
       selectedTypeOfIndustry:details.industry,
       profession:details.profession,
       transactionId : this.props.registrationData.transactionId,
-      selectedAccountsType:details.accountType
-    });
+      selectedAccountsType:details.accountType,
+      registrationDate:details.registrationDate
+          });
     //this.settingIdentity(details.identityType);
 
   }
@@ -143,9 +157,14 @@ export default class step1 extends React.Component{
     this.setState({selectedCity:value})
   }
   optionBySelectRegistrationType(value, calback, selObject){
-    this.setState({registrationType:value});
-    this.setState({identityType:null});
-    this.setState({coummunityName:selObject.label})
+    /**merging all states in one*/
+    // this.setState({registrationType:value});
+    // this.setState({identityType:null});
+    // this.setState({coummunityName:selObject.label})
+    // this.setState({cluster:null});
+    // this.setState({chapter:null});
+    // this.setState({subchapter:null});
+    this.setState({registrationType:value,identityType:null,coummunityName:selObject.label,cluster:null, chapter:null, subchapter:null, userType:null});
   }
   optionBySelectSubscription(val){
     this.setState({subscription:val.value})
@@ -155,14 +174,12 @@ export default class step1 extends React.Component{
   }
   optionBySelectinstitutionAssociation(val){
     this.setState({institutionAssociation:val.value})
-    return resp;
   }
   optionsBySelectTypeOfIndustry(value){
     this.setState({selectedTypeOfIndustry:value})
   }
   optionsBySelectTypeOfAccounts(value){
     this.setState({selectedAccountsType:value})
-    console.log(value);
   }
 
   optionsBySelectProfession(val){
@@ -260,19 +277,21 @@ export default class step1 extends React.Component{
 
   async updateRegistration(){
     const response= await this.updateregistrationInfo();
-    console.log(response);
-    if(response.success){
-      this.props.refetchRegistrationAndTemplates();
-      toastr.success("Saved Successfully")
-    }else{
-      toastr.error(response.result);
+    /**response should be there for success*/
+    if(response){
+      if(response.success){
+        this.props.refetchRegistrationAndTemplates();
+        toastr.success("Saved Successfully")
+      }else{
+        toastr.error(response.result);
+      }
     }
     return response;
   }
 
   async sendEmailVerification(){
     const response= await emailVerificationActionHandler(this.props.registrationId);
-    if(response.success){
+    if(response && response.success){
       toastr.success("email verification link send successfully");
     }else{
       // toastr.error(response.result);
@@ -293,26 +312,68 @@ export default class step1 extends React.Component{
 
   }
 
-  render(){
-    let MlActionConfig = [
-      {
-        actionName: 'save',
-        showAction: true,
-        handler: this.updateRegistration.bind(this)
-      },
-      // {
-      //   actionName: 'comment',
-      //   showAction: true,
-      //   handler: this.updateRegistration.bind(this)
-      // },
-      {
-        showAction: true,
-        actionName: 'cancel',
-        handler: async (event) => {
-          FlowRouter.go("/admin/transactions/registrationRequested")
-        }
+  async updateRejectUser(){
+    if(!_.find(this.props.emailDetails, {verified : true})){
+      let registrationId = this.props.registrationData._id
+      const response = await rejectStatusForUser(registrationId);
+      if (response && response.success) {
+        toastr.success(response.result)
+      }else if (response && !response.success){
+        toastr.error(response.result)
       }
-    ];
+    }else {
+      toastr.error("Email already verified, can not reject the user")
+    }
+
+  }
+
+  rejectUser(){
+    const resp = this.updateRejectUser();
+    return resp;
+  }
+
+  render(){
+    let MlActionConfig
+    let registrationDate = this.state.registrationDate
+    let hours = moment().diff(registrationDate, 'hours')
+    console.log(registrationDate)
+    console.log(hours)
+    let showReject = (this.props.emailDetails && this.props.emailDetails.length>0 && !this.props.emailDetails[0].verified)?true:false
+    // if(hours>=72 && this.state.emailVerified === false) {
+    if(hours>=72 && this.props.emailDetails && this.props.emailDetails.length>0 && !this.props.emailDetails[0].verified) {
+      MlActionConfig = [
+        {
+          actionName: 'rejectUser',
+          showAction: true,
+          handler: this.rejectUser.bind(this)
+        }
+      ];
+    }else{
+      MlActionConfig = [
+        {
+          actionName: 'rejectUser',
+          showAction: showReject,
+          handler: this.rejectUser.bind(this)
+        },
+        {
+          actionName: 'save',
+          showAction: true,
+          handler: this.updateRegistration.bind(this)
+        },
+        {
+          showAction: true,
+          actionName: 'cancel',
+          handler: async(event) => {
+            let routeName=FlowRouter.getRouteName();
+            if(routeName==="transaction_registration_approved_edit"){
+              FlowRouter.go("/admin/transactions/registrationApprovedList")
+            }else if(routeName==="transaction_registration_requested_edit"){
+              FlowRouter.go("/admin/transactions/registrationRequested")
+            }
+          }
+        }
+      ];
+    }
 
 
     let countryQuery = gql`query{
@@ -444,7 +505,7 @@ export default class step1 extends React.Component{
                       <input type="text" ref="lastName" placeholder="Last Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.lastName} className="form-control float-label" id="" data-required={true} data-errMsg="Last Name is required" />
                     </div>
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Your Country"  selectedValue={this.state.country} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={this.optionsBySelectCountry.bind(this)}  />
+                      <Moolyaselect multiSelect={false} mandatory={true} ref="country" className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Your Country"  selectedValue={this.state.country} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={this.optionsBySelectCountry.bind(this)} data-required={true} data-errMsg="Country is required"  />
                     </div>
                     <div className="form-group mandatory">
                       <input type="text" ref="contactNumber" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.contactNumber}  placeholder="Contact number" className="form-control float-label" id=""data-required={true} data-errMsg="Contact Number is required" />
@@ -485,7 +546,7 @@ export default class step1 extends React.Component{
                          }*/}
                         {canSelectIdentity &&
                         <div className="form-group nomarginbot">
-                          {identityTypez.map((i) => {
+                          {identityTypez.map((i, idx) => {
                             let checked=null,showRadioChecked=false
                             let identity=this.state.identityType
                             if(identity=="Individual"&&i._id=='individual'){
@@ -499,7 +560,7 @@ export default class step1 extends React.Component{
                               checked=false
                             }
                             return (
-                              <div>{showRadioChecked&&<div key={i._id}>
+                              <div>{showRadioChecked&&<div key={idx}>
                                 <div id={`${i._id}Id`}  className="input_types">
 
                                   <input type="checkbox" name={i.identityTypeName} value={i._id}
@@ -583,9 +644,9 @@ export default class step1 extends React.Component{
                     <div className="form-group">
                       <input type="text" ref="remarks" placeholder="Remarks"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.remarks}  className="form-control float-label" id="" />
                     </div>
-                    <div className="form-group mandatory">
+                    <div className="form-group">
                       <span className={`placeHolder ${referedActive}`}>How Did You Know About Us</span>
-                      <Select name="form-field-name" ref="refered" placeholder="How Did You Know About Us" value={this.state.refered} options={referedOption} className="float-label" onChange={this.optionBySelectRefered.bind(this)} data-required={true} data-errMsg="How Did You Know About Us is required" />
+                      <Select name="form-field-name" ref="refered" placeholder="How Did You Know About Us" value={this.state.refered} options={referedOption} className="float-label" onChange={this.optionBySelectRefered.bind(this)}  />
                      <br className="clearfix"/>                      <br className="clearfix"/>
 
                     </div>

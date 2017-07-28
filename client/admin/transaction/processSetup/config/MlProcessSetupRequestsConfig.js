@@ -3,22 +3,23 @@ import React from 'react';
 import gql from 'graphql-tag'
 import MlProcessSetupDetailsComponent from '../../processSetup/component/MlProcessSetupDetailsComponent'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
+import {client} from '../../../core/apolloConnection';
 
 const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   name:"ProcessSetupTable",
   module:"processSetup",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["dateTime","userId","name", "clusterName", "chapterName", "subChapterName", "communityId", "status"],
-  searchFields:["dateTime","userId" ,"name" , "clusterName", "chapterName", "subChapterName", "communityId", "status"],
+  fields:["dateTime","profileId","name", "clusterName", "chapterName", "subChapterName", "communityId", "status"],
+  searchFields:["dateTime","profileId" ,"name" , "clusterName", "chapterName", "subChapterName", "communityId", "status"],
   throttleRefresh:false,
   pagination:true,//To display pagination
-  filter:true,
-  filterComponent: <MlCustomFilter module="processSetup" moduleName="processSetup" />,
+  filter:false,
+  filterComponent: <MlCustomFilter module="processSetup" moduleName="processSetup" client={client}/>,
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},
     {dataField: "dateTime", title: "Created Date",dataSort:true,selectRow:true},
-    {dataField: "userId", title: "UserId",dataSort:true,selectRow:true},
+    {dataField: "profileId", title: "UserId",dataSort:true,selectRow:true},
     {dataField: "name", title: "Name",dataSort:true,selectRow:true},
     {dataField: "transactionId", title: "Transaction Id",dataSort:true,selectRow:true},
     {dataField: "clusterName", title: "Cluster",dataSort:true,selectRow:true},
@@ -42,8 +43,8 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
     }
   ],
   graphQlQuery:
-  gql`query ContextSpecSearch($context:ContextParams $offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
-                    data:ContextSpecSearch(module:"processSetup",offset:$offset, context:$context, limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
+  gql`query ContextSpecSearch($offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
+                    data:ContextSpecSearch(module:"processSetup",offset:$offset, limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
                     totalRecords
                     data{
                       ...on ProcessTransactions{
@@ -51,6 +52,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
                           name
                           username
                           userId
+                          profileId
                           status
                           transactionId
                           transactionType
@@ -93,3 +95,5 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
 
 export {mlProcessSetupRequestsTableConfig};
 
+// $context:ContextParams
+// context:$context,

@@ -1,6 +1,6 @@
-import MlResolver from '../../../../commons/mlResolverDef'
-import MlRespPayload from '../../../../commons/mlPayload'
-import _ from 'lodash';
+import MlResolver from "../../../../commons/mlResolverDef";
+import MlRespPayload from "../../../../commons/mlPayload";
+import _ from "lodash";
 
 
 MlResolver.MlQueryResolver['fetchMoolyaBasedDepartmentAndSubDepartment'] = (obj, args, context, info) => {
@@ -9,6 +9,28 @@ MlResolver.MlQueryResolver['fetchMoolyaBasedDepartmentAndSubDepartment'] = (obj,
     $and: [
       {isMoolya:true},
       {"depatmentAvailable.cluster": {$in: ["all", args.clusterId]}}
+    ]
+  }, context).fetch()
+  resp.map(function (department) {
+    let subDepartments = MlSubDepartments.find({"departmentId": department._id}).fetch();
+    subDepartments.map(function (subDepartment) {
+      let deptAndSubDepartment = null
+      deptAndSubDepartment ={departmentId:department._id,departmentName:department.departmentName,subDepartmentId:subDepartment._id,subDepartmentName:subDepartment.subDepartmentName,isMoolya:department.isMoolya,isActive:department.isActive}
+      list.push(deptAndSubDepartment)
+    })
+  })
+
+  return list;
+}
+
+MlResolver.MlQueryResolver['fetchNonMoolyaBasedDepartmentAndSubDepartments'] = (obj, args, context, info) => {
+  console.log("fetchNonMoolyaBasedDepartmentAndSubDepartment")
+  let list = [];
+  let resp = mlDBController.find('MlDepartments', {
+    $and: [
+      {isMoolya:false},
+      {"depatmentAvailable.cluster": {$in: ["all", args.clusterId]}},
+      {"depatmentAvailable.subChapter": {$in: ["all", args.subChapterId]}}
     ]
   }, context).fetch()
   resp.map(function (department) {
@@ -47,6 +69,97 @@ MlResolver.MlMutationResolver['updateHierarchyRoles'] = (obj, args, context, inf
   }
 };
 
+/**fetching roles for department in hirarchy*/
+MlResolver.MlQueryResolver['fetchRolesForDepartment'] = (obj, args, context, info) => {
+  let roles = [];
+  var activeDepartments = mlDBController.findOne("MlDepartments", {"_id": args.departmentId, isActive: true}, context)
+  var subChapterDetails = mlDBController.findOne("MlSubChapters", {"_id": args.subChapterId}, context) || {}
+
+  var hirarchyQuery = {}
+  if (subChapterDetails.isDefaultSubChapter) {
+    hirarchyQuery = {
+      clusterId: args.clusterId,
+      parentDepartment: args.departmentId,
+      parentSubDepartment: args.subDepartmentId
+    }
+  } else if (!subChapterDetails.isDefaultSubChapter) {
+    hirarchyQuery = {
+      clusterId: args.clusterId,
+      parentDepartment: args.departmentId,
+      parentSubDepartment: args.subDepartmentId,
+      subChapterId: args.subChapterId,
+      isDefaultSubChapter: subChapterDetails.isDefaultSubChapter
+    }
+  }
+
+  let hierarchy = mlDBController.findOne("MlHierarchyAssignments", hirarchyQuery, context)
+  var roleIds = [];
+  if (hierarchy) {
+    var teamStructure = _.filter(hierarchy.teamStructureAssignment, {isAssigned: true});
+    roleIds = _.map(teamStructure, "roleId");
+  }
+  if (activeDepartments) {
+
+    var rolesQuery = {}
+    if (subChapterDetails.isDefaultSubChapter) {
+      rolesQuery = {
+        "$and": [{'_id': {"$nin": roleIds}}, {
+          "assignRoles": {
+            $elemMatch: {
+              cluster: {"$in": ["all", args.clusterId]},
+              department: args.departmentId,
+              subDepartment: args.subDepartmentId,
+            }
+          }
+        }, {"isActive": true}]
+      }
+    } else if (!subChapterDetails.isDefaultSubChapter) {
+      rolesQuery = {
+        "$and": [{'_id': {"$nin": roleIds}}, {
+          "assignRoles": {
+            $elemMatch: {
+              cluster: {"$in": ["all", args.clusterId]},
+              department: args.departmentId,
+              subDepartment: args.subDepartmentId,
+              subChapter: {"$in": ['all', args.subChapterId]}
+            }
+          }
+        }, {"isActive": true}]
+      }
+    }
+
+    let valueGet = mlDBController.find('MlRoles', rolesQuery, context).fetch()
+    _.each(valueGet, function (item, say) {
+      let ary = []
+      _.each(item.assignRoles, function (value, key) {
+        if (value.cluster == 'all' || value.cluster == args.clusterId) {
+          if (value.isActive) {
+            ary.push(value);
+          }
+        }
+      })
+      item.assignRoles = ary
+    })
+    _.each(valueGet, function (item, key) {
+      if (item) {
+        if (item.assignRoles.length < 1) {
+          valueGet.splice(key, 1)
+        }
+      }
+    })
+    roles = valueGet;
+    _.remove(roles, {roleName: 'platformadmin'})
+    _.remove(roles, {roleName: 'clusteradmin'})
+    _.remove(roles, {roleName: 'chapteradmin'})
+    _.remove(roles, {roleName: 'subchapteradmin'})
+    _.remove(roles, {roleName: 'communityadmin'})
+  }
+  return roles;
+}
+
+
+
+
 MlResolver.MlMutationResolver['updateFinalApprovalRoles'] = (obj, args, context, info) => {
   /* let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
    if (!isValidAuth) {
@@ -75,25 +188,26 @@ MlResolver.MlMutationResolver['updateFinalApprovalRoles'] = (obj, args, context,
   }
 };
 
-
-
-
 MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info) => { // reporting role
   let roles = [];
   var isChapterRole = false;
   let levelCode = args.levelCode
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
-  if (department && department.isActive) {
-    let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.subDepartment": {"$in": [args.subDepartmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"isActive": true}]}, context).fetch()
-    var filteredRole = []
-    if (department.isSystemDefined) {
-      _.each(valueGet, function (item, say) {
-              filteredRole.push(item)
-      })
-    }
-    else {
+  var subChapterDetails = mlDBController.findOne("MlSubChapters", {"_id": args.subChapterId}, context) || {};
 
-      //validate chapter or subchapter role
+  var filteredRole = [];
+
+  if (subChapterDetails.isDefaultSubChapter) {
+    if (department && department.isActive) {
+      let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.subDepartment": {"$in": [args.subDepartmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"isActive": true}]}, context).fetch()
+      if (department.isSystemDefined) {
+        _.each(valueGet, function (item, say) {
+          filteredRole.push(item)
+        })
+      }
+      else {
+
+        //validate chapter or subchapter role
         _.each(valueGet, function (item, say) {
           _.each(item.assignRoles, function (value, key) {
             if (value.chapter != "all" && value.subChapter == 'all' && value.community == "all") {
@@ -105,89 +219,121 @@ MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info
         })
 
 
-      if (levelCode == 'cluster') {
-        _.each(valueGet, function (item, say) {
-          _.each(item.assignRoles, function (value, key) {
-            if ((value.cluster == args.clusterId || value.cluster == 'all') && (value.chapter == "all") && (value.subChapter == "all") && (value.community == "all")) {
-              if (item._id!=args.currentRoleId && value.isActive) {
-                filteredRole.push(item)
+        if (levelCode == 'cluster') {
+          _.each(valueGet, function (item, say) {
+            _.each(item.assignRoles, function (value, key) {
+              if ((value.cluster == args.clusterId || value.cluster == 'all') && (value.chapter == "all") && (value.subChapter == "all") && (value.community == "all")) {
+                if (item._id!=args.currentRoleId && value.isActive) {
+                  filteredRole.push(item)
+                }
               }
-            }
+            })
           })
-        })
-      } else if (levelCode == 'chapter' && isChapterRole === true) {
-        _.each(valueGet, function (item, say) {
-          _.each(item.assignRoles, function (value, key) {
-            if (value.chapter != "all" && value.subChapter == 'all' && value.community == "all") {
-              if (item._id!=args.currentRoleId &&value.isActive) {
-                filteredRole.push(item)
+        } else if (levelCode == 'chapter' && isChapterRole === true) {
+          _.each(valueGet, function (item, say) {
+            _.each(item.assignRoles, function (value, key) {
+              if (value.chapter != "all" && value.subChapter == 'all' && value.community == "all") {
+                if (item._id!=args.currentRoleId &&value.isActive) {
+                  filteredRole.push(item)
+                }
               }
-            }
-            if ((value.cluster == args.clusterId || value.cluster == 'all') && (value.chapter == "all") && (value.subChapter == "all") && (value.community == "all")) {
-              if (item._id!=args.currentRoleId && value.isActive) {
-                filteredRole.push(item)
+              if ((value.cluster == args.clusterId || value.cluster == 'all') && (value.chapter == "all") && (value.subChapter == "all") && (value.community == "all")) {
+                if (item._id!=args.currentRoleId && value.isActive) {
+                  filteredRole.push(item)
+                }
               }
-            }
+            })
           })
-        })
-      }else if (levelCode == 'chapter' && isChapterRole === false) {
-        _.each(valueGet, function (item, say) {
-          _.each(item.assignRoles, function (value, key) {
-            if( value.subChapter != 'all' && value.community == "all"){
-              if (item._id!=args.currentRoleId &&value.isActive) {
-                filteredRole.push(item)
+        }else if (levelCode == 'chapter' && isChapterRole === false) {
+          _.each(valueGet, function (item, say) {
+            _.each(item.assignRoles, function (value, key) {
+              if( value.subChapter != 'all' && value.community == "all"){
+                if (item._id!=args.currentRoleId &&value.isActive) {
+                  filteredRole.push(item)
+                }
               }
-            }
-            if (value.chapter != "all" && value.subChapter == 'all' && value.community == "all") {
-              isChapterRole = true;
-              if (item._id!=args.currentRoleId &&value.isActive) {
-                filteredRole.push(item)
+              if (value.chapter != "all" && value.subChapter == 'all' && value.community == "all") {
+                isChapterRole = true;
+                if (item._id!=args.currentRoleId &&value.isActive) {
+                  filteredRole.push(item)
+                }
               }
-            }
-            if ((value.cluster == args.clusterId || value.cluster == 'all') && (value.chapter == "all") && (value.subChapter == "all") && (value.community == "all")) {
-              if (item._id!=args.currentRoleId && value.isActive) {
-                filteredRole.push(item)
+              if ((value.cluster == args.clusterId || value.cluster == 'all') && (value.chapter == "all") && (value.subChapter == "all") && (value.community == "all")) {
+                if (item._id!=args.currentRoleId && value.isActive) {
+                  filteredRole.push(item)
+                }
               }
-            }
-          })
+            })
 
-        })
-      } else if (levelCode == 'community') {
-        _.each(valueGet, function (item, say) {
-          _.each(item.assignRoles, function (value, key) {
-            if ( value.community != "all") {
-              if (item._id!=args.currentRoleId &&value.isActive) {
-                filteredRole.push(item)
-              }
-            }
-            if ((value.cluster == args.clusterId || value.cluster == 'all') && (value.chapter == "all") && (value.subChapter == "all") && (value.community == "all")) {
-              if (item._id!=args.currentRoleId && value.isActive) {
-                filteredRole.push(item)
-              }
-            }
-            if (value.chapter != "all" && value.subChapter == 'all' && value.community == "all") {
-              if (item._id!=args.currentRoleId &&value.isActive) {
-                filteredRole.push(item)
-              }
-            }
-            if(value.subChapter != 'all' && value.community == "all"){
-              if (item._id!=args.currentRoleId &&value.isActive) {
-                filteredRole.push(item)
-              }
-            }
           })
+        } else if (levelCode == 'community') {
+          _.each(valueGet, function (item, say) {
+            _.each(item.assignRoles, function (value, key) {
+              if ( value.community != "all") {
+                if (item._id!=args.currentRoleId &&value.isActive) {
+                  filteredRole.push(item)
+                }
+              }
+              if ((value.cluster == args.clusterId || value.cluster == 'all') && (value.chapter == "all") && (value.subChapter == "all") && (value.community == "all")) {
+                if (item._id!=args.currentRoleId && value.isActive) {
+                  filteredRole.push(item)
+                }
+              }
+              if (value.chapter != "all" && value.subChapter == 'all' && value.community == "all") {
+                if (item._id!=args.currentRoleId &&value.isActive) {
+                  filteredRole.push(item)
+                }
+              }
+              if(value.subChapter != 'all' && value.community == "all"){
+                if (item._id!=args.currentRoleId &&value.isActive) {
+                  filteredRole.push(item)
+                }
+              }
+            })
 
-        })
+          })
+        }
+
       }
 
     }
+  }else{
 
+    if (levelCode == 'subchapter'){
+      var valueGet = mlDBController.find('MlRoles', {"$and": [{'_id': {"$nin": [args.currentRoleId]}},{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.subDepartment": {"$in": [args.subDepartmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"assignRoles.subChapter": {"$in": ["all", args.subChapterId]}}, {"assignRoles.isActive": true}, {"isActive": true}]}, context).fetch()
+
+      filteredRole = valueGet
+
+    }else if(levelCode == 'community'){
+      var valueGet = mlDBController.find('MlRoles', {"$and": [{'_id': {"$nin": [args.currentRoleId]}},{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.subDepartment": {"$in": [args.subDepartmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"assignRoles.chapter": {$exists:true}}, {"assignRoles.subChapter": {"$in": ["all", args.subChapterId]}}, {"assignRoles.community": {"$nin": ["all"]}}, {"assignRoles.isActive": true}, {"isActive": true}]}, context).fetch()
+
+      filteredRole = valueGet
+    }
+  }
+
+  /*
+      Removing roles whose reporting role is selected for current role
+      To take care of cyclic reporting role
+   */
+
+  let teamStructureAssignment = args.roles;
+
+  let currentRole = args.currentRoleId;
+  for (i = 0; i < teamStructureAssignment.length; i++) {
+    for (j = 0; j < teamStructureAssignment.length; j++) {
+      let role = teamStructureAssignment[j];
+      if (role.reportingRole == currentRole && role.isAssigned === true) {
+        filteredRole = _.reject(filteredRole, {_id: role.roleId});
+        currentRole = role.roleId
+        break;
+      }
+    }
   }
 
   return filteredRole;
 }
 
-MlResolver.MlQueryResolver['fetchRolesForFinalApprovalHierarchy'] = (obj, args, context, info) => { //
+/*MlResolver.MlQueryResolver['fetchRolesForFinalApprovalHierarchy'] = (obj, args, context, info) => { //
   let roles = [];
   let levelCode = "";
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
@@ -214,20 +360,26 @@ MlResolver.MlQueryResolver['fetchRolesForFinalApprovalHierarchy'] = (obj, args, 
     roles = valueGet;
   }
   return roles;
-}
+}*/
 
+/**
+ * fetching final approval hirarchy for departments
+ * */
 MlResolver.MlQueryResolver['fetchRolesForFinalApprovalHierarchy'] = (obj, args, context, info) => {
   let response;
-  let levelCode = "";
-  let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
-  if (department && department.isActive) {
-      response = mlDBController.findOne('MlHierarchyAssignments', {
-        parentDepartment: args.departmentId,
-        parentSubDepartment: args.subDepartmentId,
-        clusterId:department.isSystemDefined?"All":args.clusterId
-      }, context)
+  let subChapterDetails = mlDBController.findOne("MlSubChapters", {_id: args.subChapterId}, context) || {}
+  let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId, isActive:true}, context)
+  if (department && department.isSystemDefined===false) {
 
-  if(response){
+    let hirarchyQuery = {}
+    if(subChapterDetails.isDefaultSubChapter)
+      hirarchyQuery= {parentDepartment: args.departmentId,parentSubDepartment: args.subDepartmentId,clusterId:department.isSystemDefined?"All":args.clusterId}
+    else if (!subChapterDetails.isDefaultSubChapter)
+      hirarchyQuery= {parentDepartment: args.departmentId,parentSubDepartment: args.subDepartmentId,clusterId:department.isSystemDefined?"All":args.clusterId, subChapterId: department.isSystemDefined?"all":args.subChapterId}
+
+    response = mlDBController.findOne('MlHierarchyAssignments', hirarchyQuery, context)
+
+    if(response){
     let teamStructureAssignment = response.teamStructureAssignment;
     let filteredSteps = [];
      teamStructureAssignment.map(function (step, key){
@@ -235,29 +387,14 @@ MlResolver.MlQueryResolver['fetchRolesForFinalApprovalHierarchy'] = (obj, args, 
      filteredSteps.push(step)
      }
      })
-     //response.teamStructureAssignment = filteredSteps;
     return filteredSteps;
    }
-  }
-  return response;
-}
-
-MlResolver.MlQueryResolver['fetchRolesForDepartment'] = (obj, args, context, info) => {
-  let roles = [];
-  let levelCode = "";
-  let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
-  if (department && department.isActive) {
-    let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles": {
-      $elemMatch: {
-        cluster : {"$in": ["all",args.clusterId]},
-        department: args.departmentId,
-        subDepartment: args.subDepartmentId,
-      }
-    }}, {"isActive": true}]}, context).fetch()
+  }else if (department && department.isSystemDefined===true){
+    let valueGet = mlDBController.find('MlRoles', {"$and": [{"assignRoles.department": {"$in": [args.departmentId]}}, {"isActive": true}]}, context).fetch()
     _.each(valueGet, function (item, say) {
       let ary = []
       _.each(item.assignRoles, function (value, key) {
-        if ( value.cluster == 'all' || value.cluster==args.clusterId) {
+        if ( value.cluster == 'all') {
           if (value.isActive) {
             ary.push(value);
           }
@@ -272,13 +409,15 @@ MlResolver.MlQueryResolver['fetchRolesForDepartment'] = (obj, args, context, inf
         }
       }
     })
-    roles = valueGet;
-    _.remove(roles, {roleName: 'platformadmin'})
-    _.remove(roles, {roleName: 'clusteradmin'})
-    _.remove(roles, {roleName: 'chapteradmin'})
-    _.remove(roles, {roleName: 'subchapteradmin'})
-    _.remove(roles, {roleName: 'communityadmin'})
+    response = valueGet;
+    response.map(function (role) {
+      role.roleId = role._id
+    })
+    if (!subChapterDetails.isDefaultSubChapter) {
+      _.remove(response, {roleName: 'platformadmin'})
+      _.remove(response, {roleName: 'clusteradmin'})
+    }
   }
-  return roles;
+  return response;
 }
 

@@ -47,9 +47,15 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
     const response = await findIdeatorDetailsActionHandler(portfoliodetailsId);
+    console.log("////////////////////////////////////////");
+    console.log(response);
     if (response) {
       this.setState({loading: false, data: response});
     }
+
+    _.each(response.privateFields, function (pf) {
+      $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
 
@@ -125,7 +131,7 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
 
                         <div className="form-group steps_pic_upload">
                           <div className="previewImg ProfileImg">
-                            <img src="/images/ideator_01.png"/>
+                            <img src={this.state.data.profilePic?this.state.data.profilePic:"/images/ideator_01.png"}/>
                           </div>
                         </div>
                         <br className="brclear"/>

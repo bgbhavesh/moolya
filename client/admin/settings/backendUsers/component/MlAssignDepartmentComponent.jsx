@@ -2,7 +2,7 @@ import React from "react";
 import {render} from "react-dom";
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
-import Moolyaselect from "../../../../commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../../commons/components/MlAdminSelectWrapper";
 
 export default class MlAssignDepartmentComponent extends React.Component {
   constructor(props){

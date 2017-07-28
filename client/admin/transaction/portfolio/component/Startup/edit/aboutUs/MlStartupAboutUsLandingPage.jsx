@@ -19,7 +19,8 @@ export default class MlStartupAboutUs extends React.Component{
     this.fetchPortfolioDetails.bind(this);
   }
   selectedTab(field,e){
-   this.setState({aboutStartup : true})
+    this.setState({aboutStartup : true})
+    this.props.backClickHandler(this.getStartUpState.bind(this))
   }
   getPortfolioStartupAboutUsDetails(details,tabName){
     this.props.getAboutus(details,tabName);
@@ -37,10 +38,15 @@ export default class MlStartupAboutUs extends React.Component{
 
   }
 
+  getStartUpState() {
+    this.setState({aboutStartup: false})
+    //$('.last-item').removeClass('menunone');
+    this.props.backClickHandler();
+
+  }
+
   render(){
     let aboutUsImages=null;
-    console.log("dsfsdfdsfsdfds")
-    console.log(this.state.startupAboutUs.aboutUs);
     let startupAboutUs=this.state.startupAboutUs;
     if(startupAboutUs){
       let clients=startupAboutUs.clients;
@@ -57,10 +63,6 @@ export default class MlStartupAboutUs extends React.Component{
 
               })
         }
-        /* let clients=aboutUs.clients
-         var logos = underscore.pluck(clients, 'logo') || []
-         var image= <img src={`${logos}`}/>
-         console.log(logos)*/
       }
     }
     return (
@@ -82,8 +84,8 @@ export default class MlStartupAboutUs extends React.Component{
         </div>
         <div className="col-md-6 col-sm-6 nopadding-right">
           <div className="panel panel-default panel-form-view">
-            <div className="panel-heading">Rating <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
-            <div className="panel-body">
+            <div className="panel-heading ">Rating <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
+            <div className="panel-body rating_small">
               <div className="star_ratings">
                 <Rating
                   empty="fa fa-star-o empty"
@@ -101,9 +103,6 @@ export default class MlStartupAboutUs extends React.Component{
               <div className="panel-heading">Clients <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
               <div className="panel-body text-center panel-body-scroll">
                 {aboutUsImages}
-                {/*<img src="/images/logo.png"/>*/}
-                {/*<img src="/images/idea_hub_logo.png"/>*/}
-                {/*<img src="/images/nari_preneur_logo.png"/>*/}
               </div>
             </div></div>
             <div className="col-md-12 nopadding"><div className="panel panel-default panel-form-view">
@@ -124,7 +123,7 @@ export default class MlStartupAboutUs extends React.Component{
 
         </div>
         </ScrollArea>
-      </div>):(<div>{<MlStartupTab getPortfolioStartupAboutUsDetails={this.getPortfolioStartupAboutUsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupAboutUsDetails={this.state.startupAboutUs}></MlStartupTab> }</div>)}
+      </div>):(<div>{<MlStartupTab getStartUpState={this.getStartUpState.bind(this)} getPortfolioStartupAboutUsDetails={this.getPortfolioStartupAboutUsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupAboutUsDetails={this.state.startupAboutUs} isApp={this.props.isApp}></MlStartupTab> }</div>)}
       </div>
 
     )

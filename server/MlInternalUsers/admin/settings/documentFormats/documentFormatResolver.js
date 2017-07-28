@@ -9,6 +9,26 @@ MlResolver.MlMutationResolver['updateDocumentFormat'] = (obj, args, context, inf
     let response = new MlRespPayload().errorPayload("Not Authorized", code);
     return response;
   }
+  // let department = MlDepartments.findOne({_id: args.departmentId});
+  let department = mlDBController.findOne('MlDepartments', {_id: args.departmentId}, context)
+  // let deactivate = args.department.isActive;
+  var firstName='';var lastName='';
+  // let id = MlDepartments.insert({...args.department});
+  if(Meteor.users.findOne({_id : context.userId}))
+  {
+    let user = Meteor.users.findOne({_id: context.userId}) || {}
+    if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+      firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+      lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+    }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+      firstName=(user.profile || {}).firstName||'';
+      lastName =(user.profile || {}).lastName||'';
+    }
+  }
+  let createdBy = firstName +' '+lastName
+  args.updatedBy = createdBy;
+  args.updatedDate = new Date();
 
   if (!args.docFormatName) {
     let code = 401;
@@ -54,7 +74,24 @@ MlResolver.MlMutationResolver['createDocumentFormat'] = (obj, args, context, inf
       let response = MlRespPayload().errorPayload("Already Exist", code);
       return response;
     }
-    args.documentFormat.createdDateTime=new Date();
+    var firstName='';var lastName='';
+    // let id = MlDepartments.insert({...args.department});
+    if(Meteor.users.findOne({_id : context.userId}))
+    {
+      let user = Meteor.users.findOne({_id: context.userId}) || {}
+      if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+        firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+        lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+      }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+        firstName=(user.profile || {}).firstName||'';
+        lastName =(user.profile || {}).lastName||'';
+      }
+    }
+    let createdBy = firstName +' '+lastName
+    args.documentFormat.createdBy = createdBy;
+    args.documentFormat.createdDate = new Date();
+    // args.documentFormat.createdDateTime=new Date();
     let id = MlDocumentFormats.insert({...args.documentFormat});
     if (id) {
       let code = 200;

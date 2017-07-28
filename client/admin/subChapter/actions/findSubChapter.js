@@ -1,12 +1,14 @@
 import gql from 'graphql-tag'
 import {client} from '../../core/apolloConnection';
 
-export async function findSubChapterActionHandler(subChapterId) {
+export async function findSubChapterActionHandler(ClusterId, ChapterId, subChapterId) {
+  let clusterId = ClusterId
+  let chapterId = ChapterId
   let did = subChapterId
   const result = await client.query({
     query: gql`
-    query  ($id: String){
-        fetchSubChapter(_id:$id){
+    query  ($clusterId: String, $chapterId: String, $subChapterId: String){
+        fetchSubChapter(clusterId:$clusterId, chapterId:$chapterId, subChapterId:$subChapterId){
         id:_id
         clusterName
         chapterName
@@ -29,34 +31,36 @@ export async function findSubChapterActionHandler(subChapterId) {
           backendUser {
             canView
             canSearch
-            canDiscover
+            canTransact
           }
           externalUser {
             canView
             canSearch
-            canDiscover
+            canTransact
           }
         }
         moolyaSubChapterAccess {
-          backendUser {
-            canView
-            canSearch
-            canDiscover
-          }
           externalUser {
             canView
             canSearch
-            canDiscover
+            canTransact
           }
     }
         }
       }
     `,
     variables: {
-      id: did
+      clusterId:clusterId,
+      chapterId:chapterId,
+      subChapterId: did
     },
     forceFetch: true
   })
   const id = result.data.fetchSubChapter;
   return id
 }
+// backendUser {
+//   canView
+//   canSearch
+//   canTransact
+// }

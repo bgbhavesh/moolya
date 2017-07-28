@@ -7,7 +7,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import {OnToggleSwitch} from '../../../utils/formElemUtil';
 import MlLoader from '../../../../commons/components/loader/loader'
 let Select = require('react-select');
@@ -90,6 +90,7 @@ class MlNumericalFormat extends React.Component{
       valueSeparator: this.state.valueSeparator,
     }
     const response = await upsertNumericalFormatActionHandler(Details);
+    toastr.success("Saved Successfully")
     return response;
 
   }

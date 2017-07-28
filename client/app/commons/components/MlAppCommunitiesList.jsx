@@ -2,9 +2,9 @@ import React, {Component, PropTypes} from "react";
 import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import {render} from "react-dom";
-import {fetchCommunitiesHandler} from "../actions/fetchCommunitiesActionHandler";
+import {fetchCommunitiesHandlerReg} from "../actions/fetchCommunitiesActionHandler";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../commons/components/MlAppSelectWrapper";
 import {fetchUserDetailsHandler} from "../actions/fetchUserDetails";
 import {registerAsInfo} from "../../../admin/transaction/requested/actions/registrationAs";
 let Select = require('react-select');
@@ -32,6 +32,14 @@ export default class MlAppCommunitiesList extends Component {
   async fetchUserDetails() {
     let response = await fetchUserDetailsHandler()
     if (response) {
+      this.isAllowRegisterAs = response.isAllowRegisterAs
+      if(response.isAllowRegisterAs)
+        toastr.success("user can set another registeras");
+      else{
+        FlowRouter.go("/app/register/"+response.pendingRegId);
+        toastr.error("Complete one or more profile hard registration");
+      }
+
       let registrationInfo = response.registrationInfo
       this.setState({
         status: response.status,
@@ -49,8 +57,9 @@ export default class MlAppCommunitiesList extends Component {
   }
 
     setSelectedCommunity(selCommunity,idx, e){
-        this.setState({selectedCommunity:selCommunity, popoverOpen : !(this.state.popoverOpen)})
-      this.setState({identity:null,registrationType:null,clusterId:null})
+      /**reducing one setState*/
+      // this.setState({selectedCommunity:selCommunity, popoverOpen : !(this.state.popoverOpen)})
+      this.setState({selectedCommunity:selCommunity, popoverOpen : !(this.state.popoverOpen), identity:null,registrationType:null,clusterId:null})
     }
 
     toggle() {
@@ -71,6 +80,7 @@ export default class MlAppCommunitiesList extends Component {
       identityType:this.state.identity,
       clusterId:this.state.clusterId,
       cityId:this.state.selectedCity,
+      countryId:this.state.country
 
     }
     let registrationId=this.state.registerId
@@ -88,7 +98,8 @@ export default class MlAppCommunitiesList extends Component {
   }
 
     async fetchCommunities() {
-        let communities = await fetchCommunitiesHandler();
+        // let communities = await fetchCommunitiesHandler();
+      let communities = await fetchCommunitiesHandlerReg();
         let userCommunity=this.state.communityId
       let status=this.state.status
       if(status=="Approved"){
@@ -103,7 +114,9 @@ export default class MlAppCommunitiesList extends Component {
           });
           this.setState({communities:communitilist})
         }else if(userCommunity=="BRW"){
-          let communitilist=[]
+          let communitilist= _.filter(communities, function(community) {
+            return community.code!="BRW"
+          });
           this.setState({communities:communitilist})
         }else{
           let communitilist= _.filter(communities, function(community) {
@@ -112,7 +125,9 @@ export default class MlAppCommunitiesList extends Component {
           this.setState({communities:communitilist})
         }
       }else{
-        let communitilist=[]
+        let communitilist= _.filter(communities, function(community) {
+          return community.code!="BRW"
+        });
         this.setState({communities:communitilist})
       }
 
@@ -148,12 +163,12 @@ export default class MlAppCommunitiesList extends Component {
         }
       }`
 
-            let chapterQuery = gql`query($id:String){  
-        data:fetchChaptersWithoutAll(id:$id) {
-          value:_id
-          label:chapterName
-        }  
-      }`;
+      //       let chapterQuery = gql`query($id:String){
+      //   data:fetchChaptersWithoutAll(id:$id) {
+      //     value:_id
+      //     label:chapterName
+      //   }
+      // }`;
       let fetchcommunities = gql` query{
   data:fetchCommunityDefinition{label:name,value:code}
 } 
@@ -165,34 +180,34 @@ export default class MlAppCommunitiesList extends Component {
         }
       }`;
 
-      let userTypequery = gql` query($communityCode:String){  
-    data:FetchUserType(communityCode:$communityCode) {
-      value:_id
-      label:userTypeName
-  }  }
-    `;
-      let industriesquery=gql` query{
-    data:fetchIndustries{label:industryName,value:_id}
-    }
-    `;
+  //     let userTypequery = gql` query($communityCode:String){
+  //   data:FetchUserType(communityCode:$communityCode) {
+  //     value:_id
+  //     label:userTypeName
+  // }  }
+  //   `;
+  //     let industriesquery=gql` query{
+  //   data:fetchIndustries{label:industryName,value:_id}
+  //   }
+  //   `;
 
-      let professionQuery=gql` query($industryId:String){
-      data:fetchIndustryBasedProfession(industryId:$industryId) {
-        label:professionName
-        value:_id
-      }
-    }`;
+    //   let professionQuery=gql` query($industryId:String){
+    //   data:fetchIndustryBasedProfession(industryId:$industryId) {
+    //     label:professionName
+    //     value:_id
+    //   }
+    // }`;
 
-      let citiesquery = gql`query($countryId:String){
-      data:fetchCitiesPerCountry(countryId:$countryId){label:name,value:_id}
-    }
-    `;
+    //   let citiesquery = gql`query($countryId:String){
+    //   data:fetchCitiesPerCountry(countryId:$countryId){label:name,value:_id}
+    // }
+    // `;
       let clusterQuery = gql`query{data:fetchClustersForMap{label:displayName,value:_id}}`;
 
       let identityOptions={options: {variables: {communityId:this.state.selectedCommunity}}};
-      let professionQueryOptions = {options: {variables: {industryId:this.state.selectedTypeOfIndustry}}};
-      let userTypeOption={options: { variables: {communityCode:this.state.registrationType}}};
-      let countryOption = {options: { variables: {countryId:this.state.country}}};
+      // let professionQueryOptions = {options: {variables: {industryId:this.state.selectedTypeOfIndustry}}};
+      // let userTypeOption={options: { variables: {communityCode:this.state.registrationType}}};
+      // let countryOption = {options: { variables: {countryId:this.state.country}}};
         const data = this.state.communities || [];
         const list=  data.map((prop, idx) =>
             <div className="col-lg-2 col-md-4 col-sm-4" key={prop.code}>

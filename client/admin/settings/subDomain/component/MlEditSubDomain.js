@@ -3,12 +3,13 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {findSubDomainActionHandler} from '../actions/findSubDomainAction'
 import {updateSelectedSubDomainActionHandler} from '../actions/updateSubDomainAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import MlLoader from '../../../../commons/components/loader/loader'
 class MlEditSubDomain extends React.Component{
   constructor(props) {
@@ -53,7 +54,7 @@ class MlEditSubDomain extends React.Component{
   async handleSuccess(response) {
     if (response){
       if(response.success)
-        FlowRouter.go("/admin/settings/subDomainList");
+        FlowRouter.go("/admin/settings/documentProcess/subDomainList");
       else
         toastr.error(response.result);
     }
@@ -68,17 +69,22 @@ class MlEditSubDomain extends React.Component{
   }
 
   async  updateSelectedSubDomain() {
-    let subDomainDetails = {
-      name: this.refs.name.value,
-      displayName: this.refs.displayName.value,
-      about: this.refs.about.value,
-      industryId:this.state.industryId,
-      isActive: this.refs.isActive.checked
-    }
-    console.log(this.props)
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let subDomainDetails = {
+        name: this.refs.name.value,
+        displayName: this.refs.displayName.value,
+        about: this.refs.about.value,
+        industryId: this.state.industryId,
+        isActive: this.refs.isActive.checked
+      }
+      console.log(this.props)
 
-    const response = await updateSelectedSubDomainActionHandler(this.props.config, subDomainDetails)
-    return response;
+      const response = await updateSelectedSubDomainActionHandler(this.props.config, subDomainDetails)
+      return response;
+    }
   }
 
   render(){
@@ -93,8 +99,7 @@ class MlEditSubDomain extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
-          FlowRouter.go("/admin/settings/subDomainList")
+          FlowRouter.go("/admin/settings/documentProcess/subDomainList")
         }
       }
     ];
@@ -113,13 +118,13 @@ class MlEditSubDomain extends React.Component{
             <div className="col-md-6 nopadding-left">
               <div className="form_bg">
                 <form>
-                  <div className="form-group">
+                  <div className="form-group mandatory">
                     {/*<input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>*/}
-                    <input type="text" ref="name" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.name}/>
+                    <input type="text" ref="name" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.name} data-required={true} data-errMsg="Name is required"/>
                   </div>
                   <br className="clearfix"/>
-                  <div className="form-group">
-                    <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" defaultValue={this.state.data.displayName}/>
+                  <div className="form-group mandatory">
+                    <input type="text" ref="displayName" placeholder="Display Name" className="form-control float-label" defaultValue={this.state.data.displayName} data-required={true} data-errMsg="Display Name is required"/>
                   </div>
 
                 </form>
@@ -130,11 +135,11 @@ class MlEditSubDomain extends React.Component{
                 <form>
 
                   <div className="form-group">
-                    <Moolyaselect multiSelect={false} ref="indutryType" placeholder="Select Industry"
+                    <Moolyaselect multiSelect={false} ref="indutryType" placeholder="Select Industry" mandatory={true}
                                   className="form-control float-label" selectedValue = {this.state.industryId}
                                   valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={industriesquery}
                                   onSelect={this.optionsBySelectTypeOfIndustry.bind(this)} defaultValue={this.state.industry}
-                                  isDynamic={true} />
+                                  isDynamic={true} data-required={true} data-errMsg="Industry Type is required"/>
                     {console.log(this.state.data)}
                   </div>
                   <div className="form-group">

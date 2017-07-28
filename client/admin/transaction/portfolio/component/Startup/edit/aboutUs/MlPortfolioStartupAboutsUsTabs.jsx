@@ -10,46 +10,64 @@ import MlStartupSP from "./MlStartupSP";
 import MlStartupTechnology from "./MlStartupTechnology";
 import MlStartupAssets from "./MlStartupAssets";
 import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent";
+import {client} from '../../../../../../core/apolloConnection'
+import {appClient} from '../../../../../../../app/core/appConnection'
+import MlStartupEditTemplate from '../MlStartupEditTemplate'
 
 export default class MlStartupTab extends React.Component{
   constructor(props){
     super(props)
     this.state =  {tabs: [], portfolioStartupAboutUs:{}, portfolioStartupAssets:[],portfolioStartupClients:[],
                     portfolioStartupSP:{}, portfolioStartupInfo:{},portfolioStartupBranches:[],
-                    portfolioStartupTechnologies:[],portfolioStartupLegal:{}, portfolioStartupRating:{}};
+                    portfolioStartupTechnologies:[],portfolioStartupLegal:{}, portfolioStartupRating:{}, admin: true,
+                    client:client}
+    ;
   }
 
+  /**
+   * handling different condition for app and admin
+   * */
   componentDidMount(){
+    var props = this.props
     setTimeout(function(){
-      $('div[role="tab"]').each(function( index ) {
-        var test = $(this).text();
-        $(this).empty();
-        $(this).html('<div class="moolya_btn moolya_btn_in">'+test+'</div>');
-      });
-      $('.RRT__tabs').addClass('horizon-swiper');
-      $('.RRT__tab').addClass('horizon-item');
-      $('.last-item').addClass('menunone');
-      $('.RRT__panel').addClass('nomargintop');
-      $('.RRT__panel .RRT__panel').removeClass('nomargintop');
-      $('.horizon-swiper').horizonSwiper();
-    },300);
+      if(!props.isApp) {
+        $('div[role="tab"]').each(function (index) {
+          var test = $(this).text();
+          $(this).empty();
+          $(this).html('<div class="moolya_btn moolya_btn_in">' + test + '</div>');
+        });
+        $('.first-item').addClass('menunone');
+        $('.RRT__tabs').addClass('horizon-swiper');
+        $('.RRT__tab').addClass('horizon-item');
+        $('.RRT__panel').addClass('nomargintop');
+        $('.RRT__panel .RRT__panel').removeClass('nomargintop');
+        $('.horizon-swiper').horizonSwiper();
+      }else {
+        $('.RRT__tabs').addClass('menunone');
+        $('.RRT__container .RRT__container .RRT__tabs').removeClass('menunone');
+      }
+    },10);
+    let path = FlowRouter._current.path;
+    if (path.indexOf("app") != -1){
+      this.setState({admin: false, client: appClient})
+    }
   }
 
   getTabComponents(){
     let tabs = [
-      {tabClassName: 'tab', panelClassName: 'panel', title:"About Us", component:<MlStartupAboutUs  key="1"  getStartupAboutUs={this.getStartupAboutUs.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} aboutUsDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.aboutUs}/> },
+      // {tabClassName: 'tab back_icon fa fa-hand-o-left', panelClassName: 'panel', title:""},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"About Us", component:<MlStartupAboutUs client={client} isAdmin={true} key="1"  getStartupAboutUs={this.getStartupAboutUs.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} aboutUsDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.aboutUs}/> },
       {tabClassName: 'tab', panelClassName: 'panel', title:"Rating" , component:<MlStartupRating key="2" getStartupRating={this.getStartupRating.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} ratingDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.rating}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Client", component:<MlStartupClients key="3" getStartupClients={this.getStartupClients.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} clientsDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.clients}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Client", component:<MlStartupClients client={client} isAdmin={true} key="3" getStartupClients={this.getStartupClients.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} clientsDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.clients}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Services & Products" , component:<MlStartupSP key="4"  getStartupSP={this.getStartupServiceProducts.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} serviceProductsDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.serviceProducts}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Information", component:<MlStartupInformation  key="5" getStartupInfo={this.getStartupInfo.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} informationDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.information}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Assets", component:<MlStartupAssets key="6"  getStartupAssets={this.getStartupAssets.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} assetsDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.assets}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Branches" , component:<MlStartupBranches key="7" getStartupBranches={this.getStartupBranches.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} branchDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.branches}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Technology", component:<MlStartupTechnology  key="8"  getStartupTechnology={this.getStartupTechnology.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} technologyDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.technologies}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Assets", component:<MlStartupAssets client={this.state.client} isAdmin={this.state.admin} key="6"  getStartupAssets={this.getStartupAssets.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} assetsDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.assets}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Branches" , component:<MlStartupBranches client={this.state.client} isAdmin={this.state.admin}  key="7" getStartupBranches={this.getStartupBranches.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} branchDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.branches}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Technology", component:<MlStartupTechnology client={this.state.client} isAdmin={this.state.admin}  key="8"  getStartupTechnology={this.getStartupTechnology.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} technologyDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.technologies}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Legal Issue", component:<MlStartupLegal  key="9" getStartupLegalIssue={this.getStartupLegalIssue.bind(this)}  portfolioDetailsId={this.props.portfolioDetailsId} legalIssueDetails={this.props.startupAboutUsDetails&&this.props.startupAboutUsDetails.legalIssue}/>}
     ]
     return tabs;
   }
-
 
   getStartupAboutUs(details){
     let data = this.state.portfolioStartupAboutUs;
@@ -138,12 +156,13 @@ export default class MlStartupTab extends React.Component{
       }));
     }
     this.setState({tabs:getTabs() ||[]});
+    /**UI changes for back button*/  //+tab.tabClassName?tab.tabClassName:""
   }
 
 
   render(){
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs}/>
+    return <MlTabComponent tabs={tabs} backClickHandler={this.props.getStartUpState}/>
   }
 }
 

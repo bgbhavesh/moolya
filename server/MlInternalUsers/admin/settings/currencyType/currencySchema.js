@@ -10,19 +10,22 @@ type currency{
   countryName:String,
   currencyName:String,
   currencyCode:String,
+  symbol_native:String,
+  currencyCode:String,
   isActive:Boolean
    
    }
    type Query {
         fetchCurrency: [currency]
+        fetchCurrencySymbol : [currency]
         }
         `
 
 MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'], currencySchema]);
 
-
 let supportedApi = [
 
-  {api:'fetchCurrency', actionName:'READ', moduleName:"GLOBALSETTINGS"}
+  {api:'fetchCurrency', actionName:'READ', moduleName:"GLOBALSETTINGS", isWhiteList:true},
+  {api:'fetchCurrencySymbol',actionName:'READ',moduleName:"GLOBALSETTINGS", isWhiteList:true}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

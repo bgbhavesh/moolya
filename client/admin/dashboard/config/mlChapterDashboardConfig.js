@@ -4,9 +4,10 @@ import MlChapterList from "../../dashboard/component/MlChapterList"
 import React from 'react';
 import gql from 'graphql-tag'
 import MapDetails from "../../../../client/commons/components/map/mapDetails"
-import maphandler from "../../../../client/commons/components/map/findMapDetailsTypeAction"
+import maphandler from "../actions/findMapDetailsTypeAction"
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
-
+import MlMapFooter from '../component/MlMapFooter';
+import MlMapMarkerComponent from '../component/MlAdminMapMarker'
 const mlChapterDashboardListConfig=new MlViewer.View({
   name:"chapterDashBoardList",
   module:"chapter",
@@ -81,7 +82,18 @@ const mlChapterDashboardMapConfig=new MlViewer.View({
     let center=await maphandler.fetchDefaultCenterOfUser(mapDetailsQuery);
     return center;
   },
+  fetchZoom:true,
+  fetchZoomHandler:async function(reqParams){
+    var zoom=1;
+    let loggedInUser = getAdminUserContext();
+    if(loggedInUser.hierarchyLevel != 4){
+      zoom = 4;
+    }
+    return zoom;
+  },
   viewComponent:<MlMapViewContainer />,
+  mapMarkerComponent:<MlMapMarkerComponent/>,
+  mapFooterComponent:<MlMapFooter />,
   actionConfiguration:[
     {
       actionName: 'onMouseEnter',
@@ -106,6 +118,30 @@ const mlChapterDashboardMapConfig=new MlViewer.View({
           console.log('on leave called')
         }
       }
+    },
+    {
+      actionName: 'onMarkerClick',
+      // hoverComponent:<MapDetails />,
+      handler:  (data)=>{
+        if(data.module == 'cluster')
+          FlowRouter.go('/admin/dashboard/'+data.markerId+'/chapters?viewMode=true');
+        if(data.module == 'chapter')
+        {
+          if(data&&data.params)
+          {
+            if(data.params.clusterId)
+              FlowRouter.go('/admin/dashboard/'+data.params.clusterId+'/'+data.markerId+'/subChapters?viewMode=true');
+          }
+          else
+          {
+            let loggedInUser = getAdminUserContext();
+            FlowRouter.go('/admin/dashboard/'+loggedInUser.clusterId+'/'+data.markerId+'/subChapters?viewMode=true');
+          }
+        }
+
+        if(data.module == 'subChapter')
+          FlowRouter.go('/admin/dashboard/'+data.params.clusterId+'/'+data.params.chapterId+'/'+data.markerId+'/communities?viewMode=true');
+      }
     }
   ],
   graphQlQuery:gql`
@@ -120,6 +156,7 @@ const mlChapterDashboardMapConfig=new MlViewer.View({
                              lat:latitude
                              lng:longitude
                              isActive:isActive
+                             showOnMap:showOnMap
                              status:status {
                                code
                                description

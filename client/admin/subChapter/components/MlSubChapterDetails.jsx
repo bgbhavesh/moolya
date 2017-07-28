@@ -11,7 +11,7 @@ import {multipartASyncFormHandler} from "../../../../client/commons/MlMultipartF
 import ScrollArea from "react-scrollbar";
 import MlInternalSubChapterAccess from "../components/MlInternalSubChapterAccess";
 import MlMoolyaSubChapterAccess from "../components/MlMoolyaSubChapterAccess";
-import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 import gql from "graphql-tag";
 // import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 var Select = require('react-select');
@@ -125,7 +125,7 @@ class MlSubChapterDetails extends React.Component {
       }
     }
     let detailsObj = _.extend(basicObj, subChapterDetailsExtend);
-    const response = await updateSubChapterActionHandler(detailsObj)
+    const response = await updateSubChapterActionHandler(this.props.clusterId, this.props.chapterId, detailsObj)
     return response;
   }
 
@@ -142,8 +142,10 @@ class MlSubChapterDetails extends React.Component {
     initalizeFloatLabel();
   }
   async findSubChapter() {
+    let clusterId = this.props.clusterId
+    let chapterId = this.props.chapterId
     let subChapterId = this.props.params;
-    const response = await findSubChapterActionHandler(subChapterId);
+    const response = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
     if(response && response.internalSubChapterAccess){
       this.setState({internalSubChapterAccess:response.internalSubChapterAccess});
     }
@@ -162,7 +164,7 @@ class MlSubChapterDetails extends React.Component {
 
   getMoolyaAccessStatus(details) {
     let moolyaSubChapterAccess = {
-      backendUser: details.backendUser ? details.backendUser : this.state.moolyaSubChapterAccess.backendUser,
+      // backendUser: details.backendUser ? details.backendUser : this.state.moolyaSubChapterAccess.backendUser,
       externalUser: details.externalUser ? details.externalUser : this.state.moolyaSubChapterAccess.externalUser
     }
     this.setState({moolyaSubChapterAccess: moolyaSubChapterAccess})
@@ -196,7 +198,9 @@ class MlSubChapterDetails extends React.Component {
       let result = JSON.parse(resp)
       if (result.success) {
         let subChapterId = this.props.params;
-        const response = await findSubChapterActionHandler(subChapterId);
+        let clusterId = this.props.clusterId
+        let chapterId = this.props.chpaterId
+        const response = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
         let dataDetails = this.state.data
         let cloneBackUp = _.cloneDeep(dataDetails);
         cloneBackUp['subChapterImageLink'] = response['subChapterImageLink']
@@ -257,7 +261,7 @@ class MlSubChapterDetails extends React.Component {
                     <input type="text" placeholder="Display Name" ref="subChapterDisplayName"
                            className="form-control float-label" defaultValue={this.state.data && this.state.data.subChapterDisplayName}/>
                   </div>
-                  {(this.state.data.isDefaultSubChapter) ? <div></div> : <div>
+                  {(this.state && this.state.data && this.state.data.isDefaultSubChapter) ? <div></div> : <div>
                     <div className="form-group">
                       <Moolyaselect multiSelect={true} placeholder="Related Sub-Chapters"
                                     className="form-control float-label" valueKey={'value'} labelKey={'label'}

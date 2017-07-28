@@ -4,9 +4,19 @@
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
 let AuditLogSchema = ` 
+      type userAgentDetails{
+           ipAddress:String
+           OS:String
+           browser:String
+           deviceModel:String
+           deviceType:String
+           deviceVendor:String
+      }
       type AuditLogs{
             _id: String
            collectionName:String
+           userId:String
+           userName:String
            moduleName:String
            collectionName:String
            previousValue:String
@@ -15,6 +25,16 @@ let AuditLogSchema = `
            field:String
            fieldName:String
            docId:String
+           clusterId:String
+           chapterId:String
+           subChapterId:String
+           clusterName:String
+           chapterName:String
+           subChapterName:String
+           communityId:String
+           communityCode:String
+           userAgent: userAgentDetails
+           timeStamp:String
       }
       
       type Query{

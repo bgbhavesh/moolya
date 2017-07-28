@@ -8,6 +8,10 @@ let Specification = `
       specificationDisplayName :String
       about: String
       _id:String
+      createdBy     : String
+      createdDate   : Date
+      updatedBy     : String
+      updatedDate   : Date
       isActive:Boolean
     }
     type Mutation{

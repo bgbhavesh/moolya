@@ -219,11 +219,6 @@ let startupPortfolioSchema = `
         description:String, 
         isDescriptionPrivate :Boolean
     }
-   type chartsOutput{
-        fileType:String,
-        portfolioId:String,
-        isActive:Boolean
-    }
     type ratingOutput{,
         rating:String
         isRatingPrivate:Boolean
@@ -240,6 +235,53 @@ let startupPortfolioSchema = `
         clients             : [clientsOutput]
         legalIssue          : legalIssueOutput
     }
+
+   type EmploymentOfCompany{
+      eofAbout: String
+      eofFromMonth: String
+      eofFromYear: String
+      eofToMonth: String
+      eofToYear: String
+      eofNumberOfEmployment: Int
+      index : Int
+   }
+    type ProfitRevenueLiability{
+      prlEntityType: String
+      prlFromMonth: String
+      prlFromYear: String
+      prlToMonth: String
+      prlToYear: String
+      pelValueType: String
+      prlValue: Int
+      prlabout:String
+      index : Int
+    }
+    type ReviewOfCompany{
+      rofYear: String
+      rofValue: Int
+      rofAbout: String
+      index : Int
+    }
+    type EmployeeBreakupDepartment{
+      ebdFromMonth: String
+      ebdFromYear: String
+      ebdToMonth: String
+      ebdToYear: String
+      ebdDepartment: String
+      ebdNumberOfEmployment: Int
+      ebdAbout: String
+      index : Int
+      ebdDepartmentName:String
+    }
+        
+   type chartsOutput{
+      employmentOfCompanyChart:[EmploymentOfCompany]
+      profitRevenueLiabilityChart:[ProfitRevenueLiability]
+      reviewOfCompanyChart:[ReviewOfCompany]
+      employeeBreakupDepartmentChart:[EmployeeBreakupDepartment]
+    }
+    
+    
     
     input logo{
       fileName : String,
@@ -315,7 +357,7 @@ let startupPortfolioSchema = `
         isCountryPrivate:Boolean,
         addressImage : String,
         isAddressImagePrivate:Boolean,
-          logo:logo,
+        logo:logo,
         makePrivate:Boolean,
         index:Int
     }
@@ -339,7 +381,7 @@ let startupPortfolioSchema = `
         description:String,
         isTechnologyPrivate:Boolean,
         isDescriptionPrivate:Boolean,
-          logo:logo,
+        logo:logo,
         makePrivate:Boolean,
         index:Int
     }
@@ -432,11 +474,43 @@ let startupPortfolioSchema = `
          description:String, 
         isDescriptionPrivate :Boolean
     }
-   input charts{
-        fileType:String,
-        portfolioId:String,
-        isActive:Boolean
+    input employmentOfCompany{
+      eofAbout: String
+      eofFromMonth: String
+      eofFromYear: String
+      eofToMonth: String
+      eofToYear: String
+      eofNumberOfEmployment: Int
+      index: Int
     }
+    input profitRevenueLiability{
+      prlEntityType: String
+      prlFromMonth: String
+      prlFromYear: String
+      prlToMonth: String
+      prlToYear: String
+      pelValueType: String
+      prlValue: Int
+      prlabout:String
+      index : Int
+    }
+    input reviewOfCompany{
+      rofYear: String
+      rofValue: Int
+      rofAbout: String
+      index : Int
+    }
+    input employeeBreakupDepartment{
+      ebdFromMonth: String
+      ebdFromYear: String
+      ebdToMonth: String
+      ebdToYear: String
+      ebdDepartment: String
+      ebdNumberOfEmployment: Int
+      ebdAbout: String
+      index : Int
+    }
+   
     input startupPortfolio{
         portfolioDetailsId  : String
         licenses            : licenses
@@ -454,8 +528,18 @@ let startupPortfolioSchema = `
         branches            : [branches]
         clients             : [clients]
         management          : [startupManagement]
-        charts              : charts
+        employmentOfCompanyChart: [employmentOfCompany]
+        reviewOfCompanyChart: [reviewOfCompany]
+        profitRevenueLiabilityChart:  [profitRevenueLiability]
+        employeeBreakupDepartmentChart: [employeeBreakupDepartment]
         legalIssue          : legalIssue
+    }
+    type startupPortfolioOutput{
+        _id                  : String
+        userId               : String
+        communityType        : String
+        portfolioDetailsId   : String
+        aboutUs              : aboutUsOutput
     }
     
     type Query{
@@ -467,12 +551,15 @@ let startupPortfolioSchema = `
         fetchStartupPortfolioInvestor(portfoliodetailsId:String!):[investorOutput]
         fetchStartupPortfolioLookingFor(portfoliodetailsId:String!):[lookingForOutput]
         fetchStartupPortfolioAwards(portfoliodetailsId:String!):[awardsRecognitionOutput]
+        fetchStartupPortfolioCharts(portfoliodetailsId:String):chartsOutput
+        
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
     }
     
     type Mutation{
         createStartupPortfolio(portfolio:startupPortfolio):response
         updateStartupPortfolio(portfoliodetailsId:String,portfolio:startupPortfolio):response
+        
     }
 `
 
@@ -487,9 +574,12 @@ let supportedApi = [
   {api:'fetchStartupPortfolioInvestor', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchStartupPortfolioLookingFor', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchStartupPortfolioAwards', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchStartupPortfolioCharts', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchStartupPortfolioChart', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchPortfolioMenu', actionName:'READ', moduleName:"PORTFOLIO"},
 
   {api:'createStartupPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
   {api:'updateStartupPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+  {api:'createStartupPortfolioChart', actionName:'UPDATE', moduleName:"PORTFOLIO"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

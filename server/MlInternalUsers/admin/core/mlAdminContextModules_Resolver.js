@@ -1,6 +1,6 @@
-import MlResolver from '../../../commons/mlResolverDef'
-import CoreModulesRepo from './repository/mlAdminContextModulesRepo';
-import MlAdminContextQueryConstructor from './repository/mlAdminContextQueryConstructor';
+import MlResolver from "../../../commons/mlResolverDef";
+import CoreModulesRepo from "./repository/mlAdminContextModulesRepo";
+import MlAdminContextQueryConstructor from "./repository/mlAdminContextQueryConstructor";
 import getQuery from "../genericSearch/queryConstructor";
 
 let mergeQueries=function(userFilter,serverFilter){
@@ -94,6 +94,11 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       requestParams.type='approved';
       result=CoreModulesRepo.MlRegistrationRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
+    case "registrationRejectedInfo":
+      requestParams=args.context||{};
+      requestParams.type='rejected';
+      result=CoreModulesRepo.MlRegistrationRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
     case "internalRequests":
       requestParams=args.context||{};
       requestParams.type='requested';
@@ -102,6 +107,11 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
     case "internalApprovedRequests":
       requestParams=args.context||{};
       requestParams.type='approved';
+      result=CoreModulesRepo.MlInternalRequestRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
+    case "internalRejectedRequests":
+      requestParams=args.context||{};
+      requestParams.type='rejected';
       result=CoreModulesRepo.MlInternalRequestRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
     case "portfolioRequests":
@@ -133,10 +143,33 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       result=CoreModulesRepo.MlTemplatesAssignmentRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
     case 'processSetup':
+      requestParams=args.context || {};
       result=CoreModulesRepo.MlProcessTransactionRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
       break;
     case 'officeTransaction':
       result=CoreModulesRepo.MlOfficeTransactionRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
+    case "documents":
+      requestParams=args.context||{};
+      result=CoreModulesRepo.MlDocumentRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
+    case 'serviceCards':
+      // requestParams=args.context || {};
+      result=CoreModulesRepo.MlServiceCardsTransactionRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
+    case 'clusterHierarchy':
+      result=CoreModulesRepo.MlHierarchyClusterRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
+    case 'hierarchyDepartments':
+      requestParams=args.context||{};
+      result=CoreModulesRepo.MlHierarchyDepartmentsRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break;
+    case 'users':
+      /**merging the user repo to the users module*/
+      requestParams = args.context || {};
+      /**type can be used for different list view config*/
+      // requestParams.type = 'users';
+      result = CoreModulesRepo.MlUsersRepo(requestParams, userFilterQuery, contextQuery, findOptions, context);
       break;
   }
 
@@ -159,15 +192,22 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "hierarchy":resolveType= 'SubChapter';break;
       case "registrationInfo":resolveType= 'RegistrationInfo';break;
       case "registrationApprovedInfo":resolveType= 'RegistrationInfo';break;
+      case "registrationRejectedInfo":resolveType= 'RegistrationInfo';break;
       case "portfolioRequests":resolveType= 'Portfoliodetails';break;
       case "portfolioApproved":resolveType= 'Portfoliodetails';break;
+      case "users":resolveType= 'RegistrationInfo';break;
       case "TransactionsLog":resolveType='TransactionsLog';break;
       case "InteractionsLog":resolveType='TransactionsLog';break;
       case "ConversationsLog":resolveType='TransactionsLog';break;
       case "internalRequests":resolveType='requests';break;
       case "internalApprovedRequests":resolveType='requests';break;
+      case "internalRejectedRequests":resolveType='requests';break;
       case "processSetup":resolveType='ProcessTransactions';break;
       case "officeTransaction":resolveType='officeTransactionType';break;
+      case "documents":resolveType='ProcessType';break;
+      case "serviceCards":resolveType='AdminService';break;
+      case "clusterHierarchy":resolveType='Cluster';break;
+      case "hierarchyDepartments":resolveType='DepartmentAndSubDepartmentDetails';break;
     }
 
     if(resolveType){

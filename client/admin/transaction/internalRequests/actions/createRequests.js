@@ -6,8 +6,8 @@ export async function createRequestsActionHandler(requestDetails) {
   requests = requestDetails;
   const result = await client.mutate({
     mutation: gql`
-    mutation ($requests: requestsInput) {
-     createRequestss(requests: $requests) {
+    mutation ($requests: requestsInput,$clusterId:String,$chapterId:String,$subChapterId:String,$communityId:String) {
+     createRequestss(requests: $requests,clusterId:$clusterId,chapterId:$chapterId,subChapterId:$subChapterId,communityId:$communityId) {
     success
     code
     result
@@ -16,7 +16,11 @@ export async function createRequestsActionHandler(requestDetails) {
 
     `,
     variables: {
-      requests
+      requests,
+      clusterId:requests.cluster,
+      chapterId:requests.chapter,
+      subChapterId:requests.subChapter,
+      communityId:requests.community
     }
   })
   const id = result.data.createRequestss;

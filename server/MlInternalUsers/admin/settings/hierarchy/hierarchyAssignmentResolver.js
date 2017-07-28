@@ -1,7 +1,7 @@
 import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
 import mlAssignHierarchy from "../../../admin/../admin/genericTransactions/impl/MlHierarchyAssignment";
-import _ from 'lodash'
+import _ from "lodash";
 
 MlResolver.MlQueryResolver['fetchAssignedRolesHierarchy'] = (obj, args, context, info) => {
   let response;
@@ -50,72 +50,62 @@ MlResolver.MlQueryResolver['fetchFinalApprovalRole'] = (obj, args, context, info
   return response;
 }
 
-
+/**
+ * create and update of hirarchy assignment
+ * */
 MlResolver.MlMutationResolver['updateHierarchyAssignment'] = (obj, args, context, info) => {
-  let response ;
+  let response;
   let hierarchy = args.hierarchy;
+  /**update of a hirarchy*/
   if (hierarchy.id) {
     let hierarchyAssignment = mlDBController.findOne("MlHierarchyAssignments", {"_id": hierarchy.id}, context)
-    let assignedRoles = hierarchyAssignment.teamStructureAssignment;
     let id = hierarchy.id
-    let hierarchyRoles = hierarchy.teamStructureAssignment;
-
-    if(hierarchyRoles.length>=1){
-      let oldHierarchyMapping= MlHierarchyAssignments.findOne({_id:id});
-      let oldAssignments = oldHierarchyMapping.teamStructureAssignment;
-      if(oldAssignments){
-        oldAssignments.map(function (role,oldkey) {
-          //let newvalue = _.find(hierarchyRoles, {roleId:role.roleId})
-          hierarchyRoles.map(function (newRole,key) {
-            if(newRole.roleId==role.roleId){
+    let hierarchyRoles = hierarchy.teamStructureAssignment;   //client
+    if (hierarchyRoles.length >= 1) {
+      let oldAssignments = hierarchyAssignment.teamStructureAssignment;  //db
+      /**if old assigment then update of the team structure assigment*/
+      if (!_.isEmpty(oldAssignments)) {
+        oldAssignments.map(function (role, oldkey) {
+          hierarchyRoles.map(function (newRole, key) {
+            if ((newRole.roleId == role.roleId) && newRole.isAssigned) {
               oldAssignments.splice(oldkey, 1)
               oldAssignments.push(newRole)
+            }else if((newRole.roleId == role.roleId) && !newRole.isAssigned && (newRole.assignedLevel == "unassign")){
+              oldAssignments.splice(oldkey, 1)
             }else {
-              if(newRole.isAssigned===true){
-                if(_.find(oldAssignments, {roleId:newRole.roleId})){
-                  //do nothing
-                }else{
+              if (newRole.isAssigned === true) {
+                if (!_.find(oldAssignments, {roleId: newRole.roleId})) {
                   oldAssignments.push(newRole)
                 }
               }
             }
           })
         })
-      }else{
+      } else {
         oldAssignments = hierarchyRoles
       }
-      /*let hierarchyRoles = oldAssignments
-      let roles = []
-      hierarchyRoles.map(function (role,key) {
-        if(role.isAssigned===true || (role.isAssigned===false && role.assignedLevel=="unassign")){
-          roles.push(role)
-        }
-      })*/
-      //MlHierarchyAssignments.update({_id:id}, {$unset: {teamStructureAssignment:null}},{$set:{finalApproval:hierarchy.finalApproval}});
       hierarchyAssignment.teamStructureAssignment = oldAssignments
       hierarchyAssignment.finalApproval = hierarchy.finalApproval
-      MlHierarchyAssignments.update({_id:id}, {$set: hierarchyAssignment});
-      //MlHierarchyAssignments.update({_id:id}, {$set: {teamStructureAssignment:oldAssignments,finalApproval:hierarchy.finalApproval}});
-        let code = 200;
-        response = new MlRespPayload().successPayload('Updated Successfully', code);
-        return response
-      //})
-    }else{
-       //MlHierarchyAssignments.update({_id:id}, {$set:{finalApproval:hierarchy.finalApproval}});
-       let code = 200;
-       response = new MlRespPayload().successPayload('No changes found to update', code);
-       return response
+      mlDBController.update('MlHierarchyAssignments', id, hierarchyAssignment, {$set: true}, context)
+      let code = 200;
+      response = new MlRespPayload().successPayload('Updated Successfully', code);
+      return response
+    } else {
+      let code = 200;
+      response = new MlRespPayload().successPayload('No changes found to update', code);
+      return response
     }
   } else {
+    /**update of an hirarchy*/
     let hierarchyRoles = hierarchy.teamStructureAssignment;
     let roles = []
-    hierarchyRoles.map(function (role,key) {
-      if(role.isAssigned===true){
+    hierarchyRoles.map(function (role, key) {
+      if (role.isAssigned === true) {
         roles.push(role)
       }
     })
     hierarchy.teamStructureAssignment = roles;
-    let id = MlHierarchyAssignments.insert({...hierarchy});
+    let id = mlDBController.insert('MlHierarchyAssignments', hierarchy, context)
     if (id) {
       let code = 200;
       let result = {appovalId: id}
@@ -166,20 +156,68 @@ MlResolver.MlQueryResolver['fetchHierarchyRoles'] = (obj, args, context, info) =
           finalRoles.push(role);
           currentRole = role
           if (role.assignedLevel=='cluster' && role.reportingRole=='') {
-            teamStructureAssignment.splice(key,1)
+            // teamStructureAssignment.splice(key,1)                         // TO ALLOW SAME LEVEL ROLE TO ACCESS
             finalRoles = teamStructureAssignment;
             isParentRole = true;
           }
         }
       })
       if(isParentRole === false){
-        let reportingRole = userRole.roleId
-        //recursively follow reporting hierarchy
-        teamStructureAssignment.map(function (role, key){
-          if(role.reportingRole==reportingRole){
-            reportingRole = role.roleId
-            finalRoles.push(role)
-          }
+              // let reportingRole = userRole.roleId
+              // //recursively follow reporting hierarchy
+              // teamStructureAssignment.map(function (role, key){
+              //   if(role.reportingRole==reportingRole){
+              //     reportingRole = role.roleId
+              //     finalRoles.push(role)
+              //   }
+              // })
+
+
+        if(!currentRole.assignedLevel){
+            console.log("Not available in hierarchy");
+            return [];
+        }
+        /*
+            1) Finding Logged in User Role Hierarchy
+            2) Picking reporting role
+         */
+        var userHierarchy = mlDBController.findOne('MlHierarchy', {"code": (currentRole.assignedLevel).toUpperCase()}, context)
+
+        var reportingRole = currentRole.reportingRole;
+
+        /*    Looping through all the team assignment in the hierarchy    */
+        teamStructureAssignment.map(function (role, key) {
+
+            var hierarchy = mlDBController.findOne('MlHierarchy', {"code": (role.assignedLevel).toUpperCase()}, context)
+
+            /*    Comparing Hierarchy level    */
+            if (userHierarchy.level > hierarchy.level) {
+
+                /*    Pushing all lower hierarchy roles    */
+                finalRoles.push(role)
+
+            }else if(userHierarchy.level == hierarchy.level){
+
+                /*    Neglecting same role by comparing 'currentRole' with role    */
+                if(role.roleId != currentRole.roleId){
+
+                    /*    Comparing roleId with ReportingRoleId to check if 'currentRole' role reports to this role    */
+                    if(role.roleId!=reportingRole){
+
+                      finalRoles.push(role)
+
+                    }else if(role.roleId==reportingRole){
+
+                      /*
+                            'Current Role' reports to this role, hence not pushing the role.
+                            Updating reportingRole Id to check other roles.
+                       */
+                      reportingRole = role.reportingRole;
+
+                    }
+                }
+
+            }
         })
       }
     }
@@ -199,7 +237,25 @@ MlResolver.MlQueryResolver['fetchHierarchyUsers'] = (obj, args, context, info) =
     //get all users associated with the hierarchy
     let usersList = []
     if(args.clusterId && args.departmentId && args.subDepartmentId && args.roleId){
-        usersList = mlDBController.find('users', {"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId":args.clusterId} ,{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.departmentId":args.departmentId},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.subDepartmentId":args.subDepartmentId},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.roleId":args.roleId},{"profile.isActive":true}]}, context).fetch()
+        // usersList = mlDBController.find('users', {"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId":args.clusterId} ,{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.departmentId":args.departmentId},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.subDepartmentId":args.subDepartmentId},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.roleId":args.roleId},{"profile.isActive":true}]}, context).fetch()
+
+      usersList =mlDBController.find('users', {"$and":
+        [
+          {"profile.isActive":true},
+          {"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles":
+            {
+              $elemMatch: {
+                clusterId:args.clusterId,
+                departmentId:args.departmentId,
+                subDepartmentId:args.subDepartmentId,
+                roleId:args.roleId,
+                isActive:true,
+              }
+            }
+          },
+        ]
+      }, context).fetch()
+
      }
     if(usersList){
       usersList.map(function (user,key) {

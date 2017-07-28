@@ -3,6 +3,18 @@ import MlSchemaDef from '../../../commons/mlSchemaDef'
 import MlResolver from '../../../commons/mlResolverDef'
 
 let communitySchema = `
+
+    type CommunityDef{
+        _id:String,
+        name:String,
+        communityName:String,
+        displayName:String,
+        code:String,
+        communityImageLink:String,
+        aboutCommunity:String,
+        isActive:Boolean
+    }
+    
     type Community{
         name:String,
         communityName:String,
@@ -48,6 +60,7 @@ let communitySchema = `
         fetchCommunitiesSelect(clusterId:String, chapterId:String, subChapterId:String):[Community]
         fetchCommunityDef(clusterId:String, chapterId:String, subChapterId:String, communityId:String):Community
         fetchCommunitiesForRolesSelect(clusterId:String, chapterId:String, subChapterId:String):[Community]
+        fetchCommunitiesDef:[CommunityDef]
     }
     
     type Mutation{
@@ -62,10 +75,12 @@ let supportedApi = [
     {api:'createCommunityAccess', actionName:'CREATE', moduleName:"COMMUNITY"},
     {api:'createCommunity', actionName:'CREATE', moduleName:"COMMUNITY"},
     {api:'updateCommunityDef', actionName:'UPDATE', moduleName:"COMMUNITY"},
-    {api:'FetchMapData', actionName:'READ', moduleName:"COMMUNITY"},
-    {api:'fetchCommunities', actionName:'READ', moduleName:"COMMUNITY"},
+    {api:'FetchMapData', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
+    {api:'fetchCommunities', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
     {api:'fetchCommunitiesSelect', actionName:'READ', moduleName:"COMMUNITY"},
-    {api:'fetchCommunityDef', actionName:'READ', moduleName:"COMMUNITY"},
-    {api:'fetchCommunitiesForRolesSelect', actionName:'READ', moduleName:"COMMUNITY"}
+    {api:'fetchCommunityDef', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
+    {api:'fetchCommunitiesForRolesSelect', actionName:'READ', moduleName:"COMMUNITY", isWhiteList:true},
+    // Need to think whether to make whitelist or not
+    {api:'fetchCommunitiesDef', actionName:'READ', moduleName:"COMMUNITY"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

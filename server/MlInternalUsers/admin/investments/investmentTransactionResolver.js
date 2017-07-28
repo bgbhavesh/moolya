@@ -1,7 +1,7 @@
 /**
  * Created by venkatsrinag on 6/6/17.
  */
-import MlResolver from '../../../commons/mlResolverDef'
+import MlResolver from "../../../commons/mlResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
 
 MlResolver.MlQueryResolver['fetchProcessTransactions'] = (obj, args, context, info) =>{
@@ -16,6 +16,8 @@ MlResolver.MlQueryResolver['fetchProcessStages'] = (obj, args, context, info) =>
 }
 
 MlResolver.MlQueryResolver['fetchProcessActions'] = (obj, args, context, info) =>{
+  let result = mlDBController.find('MlActions', {isActive: true}).fetch() || []
+  return result
 }
 
 MlResolver.MlQueryResolver['fetchProcessTransactionCustomerDetails'] = (obj, args, context, info) =>{
@@ -31,22 +33,60 @@ MlResolver.MlQueryResolver['fetchProcessSetup'] = (obj, args, context, info) =>{
   return {};
 }
 
-MlResolver.MlMutationResolver['createProcessTransaction'] = (obj, args, context, info) =>{
-    if(args.portfoliodetails){
-      let ret;
-      try{
+MlResolver.MlQueryResolver['fetchUserProcessSetup'] = (obj, args, context, info) => {
+  if (context.userId) {
+    let Actions = mlDBController.find('MlActions', {}, context).fetch();
+    let processSetup = mlDBController.findOne('MlProcessSetup', {userId: context.userId}, context)
+    if (processSetup) {
+      processSetup.processSteps.map(function (steps, index) {
+        if (processSetup.processSteps[index]) {
+          let stageData = MlProcessStages.findOne({"_id": steps.stageId}) || {};
+          processSetup.processSteps[index].stageName = stageData.displayName || "";
+          if(processSetup.processSteps[index].stageActions && processSetup.processSteps[index].stageActions.length ){
+            processSetup.processSteps[index].stageActions = processSetup.processSteps[index].stageActions.map(function (action) {
+              let isFind = Actions.find(function (mlAction) {
+                 return mlAction._id == action.actionId
+              });
+              if(isFind){
+                action.actionName = isFind.name;
+              }
+
+              return action;
+
+            });
+          }
+        }
+      })
+      return processSetup
+    }
+  }
+  return {};
+}
+
+MlResolver.MlMutationResolver['createProcessTransaction'] = (obj, args, context, info) => {
+  if (args.portfoliodetails) {
+    let ret;
+    try {
+      var trans = mlDBController.findOne('MlProcessTransactions', {
+        portfolioId: args.portfoliodetails.portfolioId
+      }, context)
+      if (!trans) {
         orderNumberGenService.assignProcessSetupTransaction(args.portfoliodetails)
         ret = mlDBController.insert('MlProcessTransactions', args.portfoliodetails, context)
-      }catch(e){
-        let code = 409;
-        let response = new MlRespPayload().errorPayload(e.message, code);
+      }else{
+        let code = 400;
+        let response = new MlRespPayload().errorPayload('Process setup already present', code);
         return response;
       }
-      let code = 200;
-      let response = new MlRespPayload().successPayload(ret, code);
+    } catch (e) {
+      let code = 409;
+      let response = new MlRespPayload().errorPayload(e.message, code);
       return response;
-
     }
+    let code = 200;
+    let response = new MlRespPayload().successPayload(ret, code);
+    return response;
+  }
 }
 
 MlResolver.MlMutationResolver['updateProcessSetup'] = (obj, args, context, info) =>{

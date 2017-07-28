@@ -1,16 +1,17 @@
 import React, { Component, PropTypes }  from "react";
 import {render} from "react-dom";
 import MlTabComponent from "../../../../.././commons/components/tabcomponent/MlTabComponent";
-import MlIdeatorDetails from "../Ideator/MlIdeatorDetails";
 import _ from 'lodash'
 import MlFunderAbout from './MlFunderAbout'
 import MlFunderAreaOfInterest from './MlFunderAreaOfInterest'
 import MlFunderEngagementMethod from './MlFunderEngagementMethod'
 import MlFunderInvestment from './MlFunderInvestment'
-import MlFunderLibrary from './MlFunderLibrary'
+import PortfolioLibrary from '../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import MlFunderNews from './MlFunderNews'
 import MlFunderPrincipalTeam from './MlFunderPrincipalTeam'
 import MlFunderSuccessStories from './MlFunderSuccessStories'
+import MlFunderServices from './MlFunderServices'
+import {client} from '../../../../core/apolloConnection'
 
 export default class MlFunderEditTemplate extends React.Component{
   constructor(props){
@@ -43,19 +44,20 @@ export default class MlFunderEditTemplate extends React.Component{
 
   getTabComponents(){
     let tabs = [
-      {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlFunderAbout key="1" getAboutus={this.getAboutus.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlFunderAbout client={client} isAdmin={true} key="1" getAboutus={this.getAboutus.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Investments" , component:<MlFunderInvestment key="2" getInvestmentsDetails={this.getInvestmentsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Principal & Team" , component:<MlFunderPrincipalTeam key="3" getPrincipalDetails={this.getPrincipalDetails.bind(this)} getTeamDetails={this.getTeamDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Principal & Team" , component:<MlFunderPrincipalTeam client={client} key="3" getPrincipalDetails={this.getPrincipalDetails.bind(this)} getTeamDetails={this.getTeamDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Engagement Methods" , component:<MlFunderEngagementMethod key="4" portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Area Of Interests" , component:<MlFunderAreaOfInterest key="6" getAreaOfInterestDetails={this.getAreaOfInterestDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Success Stories" , component:<MlFunderSuccessStories key="7" getSuccessStoriesDetails={this.getSuccessStoriesDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlFunderLibrary key="8" getFunderLibrary={this.getFunderLibrary.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"News" , component:<MlFunderNews key="9" getFunderNewsDetails={this.getFunderNewsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>}
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Success Stories" , component:<MlFunderSuccessStories key="7" client={client} isAdmin={true} getSuccessStoriesDetails={this.getSuccessStoriesDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<PortfolioLibrary key="8" client={client} isAdmin={true} getFunderLibrary={this.getFunderLibrary.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}  />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"News" , component:<MlFunderNews key="9" getFunderNewsDetails={this.getFunderNewsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Services" , component:<MlFunderServices key="10" portfolioDetailsId={this.props.portfolioDetailsId}/>} //getFunderServicesDetails={this.getFunderServicesDetails.bind(this)}
     ]
     return tabs;
   }
 
-  getSuccessStoriesDetails(details){
+  getSuccessStoriesDetails(details, privateKey){
     let data = this.state.funderPortfolio;
     data['successStories'] = details;
     this.setState({funderPortfolio : data})
@@ -65,24 +67,24 @@ export default class MlFunderEditTemplate extends React.Component{
       arr.push(updateItem)
     })
     data['successStories'] = arr;
-    this.props.getPortfolioDetails({funderPortfolio:data});
+    this.props.getPortfolioDetails({funderPortfolio:data}, privateKey);
   }
 
-  getAboutus(details){
+  getAboutus(details, privateKey){
     let data = this.state.funderPortfolio;
     data['funderAbout']=details;
     this.setState({funderPortfolio : data})
-    this.props.getPortfolioDetails({funderPortfolio : this.state.funderPortfolio});
+    this.props.getPortfolioDetails({funderPortfolio : this.state.funderPortfolio}, privateKey);
   }
 
-  getInvestmentsDetails(details){
+  getInvestmentsDetails(details, privateKey){
     let data = this.state.funderPortfolio;
     data['investments'] = details;
     this.setState({funderPortfolio : data})
-    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio});
+    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio}, privateKey);
   }
 
-  getPrincipalDetails(details){
+  getPrincipalDetails(details, privateKey){
     let data = this.state.funderPortfolio;
     if(data && !data.principal){
       data['principal']=[];
@@ -95,9 +97,9 @@ export default class MlFunderEditTemplate extends React.Component{
       arr.push(updateItem)
     })
     data['principal'] = arr;
-    this.props.getPortfolioDetails({funderPortfolio:data});
+    this.props.getPortfolioDetails({funderPortfolio:data}, privateKey);
   }
-  getTeamDetails(details){
+  getTeamDetails(details, privateKey){
     let data = this.state.funderPortfolio;
     if(data && !data.team){
       data['team']=[];
@@ -110,27 +112,27 @@ export default class MlFunderEditTemplate extends React.Component{
       arr.push(updateItem)
     })
     data['team'] = arr;
-    this.props.getPortfolioDetails({funderPortfolio:data});
+    this.props.getPortfolioDetails({funderPortfolio:data}, privateKey);
   }
 
-  getAreaOfInterestDetails(details){
+  getAreaOfInterestDetails(details, privateKey){
     let data = this.state.funderPortfolio;
     if(data && !data.areaOfInterest){
       data['areaOfInterest']=[];
     }
     data['areaOfInterest'] = details;
     this.setState({funderPortfolio : data})
-    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio});
+    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio}, privateKey);
   }
 
-  getFunderNewsDetails(details){
+  getFunderNewsDetails(details, privateKey){
     let data = this.state.funderPortfolio;
     if(data && !data.lookingFor){
       data['lookingFor']=[];
     }
     data['lookingFor'] = details;
     this.setState({funderPortfolio : data})
-    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio});
+    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio}, privateKey);
   }
 
   getFunderLibrary(details){

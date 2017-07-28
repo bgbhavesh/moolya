@@ -1,8 +1,8 @@
 import React from 'react';
 import { render } from 'react-dom';
-import {fetchExternalUserProfilesActionHandler,setDefaultProfileActionHandler,deActivateProfileProfileActionHandler,blockProfileActionHandler} from '../actions/switchUserProfilesActions';
+import {reloadPage,fetchExternalUserProfilesActionHandler,setDefaultProfileActionHandler,deActivateProfileProfileActionHandler,blockProfileActionHandler,switchProfileActionHandler} from '../actions/switchUserProfilesActions';
 import _ from 'lodash';
-import {initalizeFloatLabel} from '../../../admin/utils/formElemUtil';
+import {initalizeFloatLabel} from '../../../commons/utils/formElemUtil';
 export default class MlAppSwitchProfile extends React.Component{
 
   constructor(props, context){
@@ -10,6 +10,7 @@ export default class MlAppSwitchProfile extends React.Component{
       this.state= {loading: true,swiper:null,userProfiles:[],currentSlideIndex:0};
       this.fetchExternalUserProfiles.bind(this);
       this.setDefaultUserProfile.bind(this);
+      this.switchProfile.bind(this);
       this.deactivateUserProfile.bind(this);
       this.blockUserProfile.bind(this);
       this.onSlideIndexChange.bind(this);
@@ -69,20 +70,36 @@ componentDidUpdate(){
   async setDefaultUserProfile(){
 
     let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
-    const response = await setDefaultProfileActionHandler(profileDetails.registrationId);
+    const response = await setDefaultProfileActionHandler(profileDetails.profileId);
     if(response&&response.success){
       var resp=await this.fetchExternalUserProfiles();
       this.initializeSwiper();
       toastr.success("Default Profile set successfully");
+      reloadPage();
     }else{
       //throw error
       toastr.error("Failed to set the default profile");
     }
   }
 
+  async switchProfile(){
+
+    let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
+    const response = await switchProfileActionHandler(profileDetails.profileId);
+    if(response&&response.success){
+      var resp=await this.fetchExternalUserProfiles();
+      this.initializeSwiper();
+      toastr.success("Profile switched successfully");
+      reloadPage();
+    }else{
+      //throw error
+      toastr.error("Failed to switch the profile");
+    }
+  }
+
   async deactivateUserProfile(){
     let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
-    const response = await deActivateProfileProfileActionHandler(profileDetails.registrationId);
+    const response = await deActivateProfileProfileActionHandler(profileDetails.profileId);
     if(response&&response.success){
       var resp=await this.fetchExternalUserProfiles();
       this.initializeSwiper();
@@ -95,7 +112,7 @@ componentDidUpdate(){
 
   async blockUserProfile(){
     let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
-    const response = await blockProfileActionHandler(profileDetails.registrationId);
+    const response = await blockProfileActionHandler(profileDetails.profileId);
     if(response&&response.success){
       toastr.success("Profile blocked successfully");
     }else{
@@ -184,12 +201,17 @@ componentDidUpdate(){
               <div className="col-md-4" onClick={this.setDefaultUserProfile.bind(this)}>
                 <a href="#" className="fileUpload mlUpload_btn">Make Default</a>
               </div>
+
+              <div className="col-md-4" onClick={this.switchProfile.bind(this)}>
+                <a href="#" className="fileUpload mlUpload_btn">Switch Profile</a>
+              </div>
+
               <div className="col-md-4" onClick={this.deactivateUserProfile.bind(this)}>
                 <a href="#" className="fileUpload mlUpload_btn">Deactivate Profile</a>
               </div>
-              <div className="col-md-4" onClick={this.blockUserProfile.bind(this)}>
+             {/* <div className="col-md-4" onClick={this.blockUserProfile.bind(this)}>
                 <a href="#" className="fileUpload mlUpload_btn">Block Profile</a>
-              </div>
+              </div>*/}
             </div>
 
           </div>:<div>No Profiles Available</div>

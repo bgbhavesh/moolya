@@ -8,12 +8,13 @@ let _ = require('lodash'),
   platformAdminId,
   mlModules = MlModules.find().fetch(),
   actions = MlActions.find().fetch(),
-  permissions = [{actionId:"all", isActive:true}]
+  permissions = [{actionId:"all", actionCode:"ALL", isActive:true}],
+  readPermissions = [{actionId:(_.find(actions, {code:"READ"}))._id, actionCode:"READ", isActive:true}]
 
 /*********************************** Default Department/SubDepartment Creation <Start> ********************************************/
 let department = MlDepartments.findOne({departmentName:"operations"})
 if(!department) {
-    let departmentAvailiable = [{cluster: "all", chapter: "all", subChapter: "all"}]
+    let departmentAvailiable = [{cluster: "all", chapter: "all", subChapter: "all", isActive:true}]
   department = {
     departmentName: "operations",
     displayName: "Operations",
@@ -30,7 +31,7 @@ if(!department) {
 let subDepartment = MlSubDepartments.findOne({subDepartmentName:"systemadmin"})
 if(!subDepartment) {
   let dep = MlDepartments.findOne({"departmentName":"operations"});
-  let subDepatmentAvailable = [{cluster: "all", chapter: "all", subChapter: "all"}]
+  let subDepatmentAvailable = [{cluster: "all", chapter: "all", subChapter: "all", isActive:true}]
   subDepartment = {
     subDepartmentName: "systemadmin",
     displayName: "System Admin",
@@ -51,7 +52,7 @@ let subDep = MlSubDepartments.findOne({"subDepartmentName":"systemadmin"});
 
 var platformrole = MlRoles.findOne({roleName:"platformadmin"})
 if(!platformrole){
-  let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:dep._id, subDepartment:subDep._id, isActive:true}]
+  let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", "community" : "all", department:dep._id, subDepartment:subDep._id, isActive:true}]
   let modules = [{moduleId:"all", actions:permissions}]
   platformrole = {
     roleName:"platformadmin",
@@ -64,30 +65,31 @@ if(!platformrole){
   MlRoles.insert(platformrole);
 }
 
-var clusterAdmin = MlRoles.findOne({roleName:"clusteradmin"})
-if(!clusterAdmin){
-    let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:dep._id, subDepartment:subDep._id, isActive:true}]
-    let clusterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
+{
+    let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", community : "all", department:dep._id, subDepartment:subDep._id, isActive:true}]
     let modules = [
-                    {moduleId:(_.find(mlModules, {code:"CLUSTER"}))._id, actions:clusterPer},
-                    {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"USERS"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"PORTFOLIO"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"TEMPLATEASSIGNMENT"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"INTERNALREQUESTS"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"INTERNALAPPROVEDREQUESTS"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions},
-                    {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions}
+                    {moduleId:(_.find(mlModules, {code:"CLUSTER"}))._id, actions:readPermissions, isActive:true},
+                    {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:permissions, isActive:true},
+                    {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:permissions, isActive:true},
+                    // {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions, isActive:true},
+                    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:readPermissions, isActive:true},
+                    {moduleId:(_.find(mlModules, {code:"USERS"}))._id, actions:permissions, isActive:true},
+                    {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:permissions, isActive:true},
+                    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:permissions, isActive:true},
+                    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions, isActive:true},
+                    {moduleId:(_.find(mlModules, {code:"PORTFOLIO"}))._id, actions:permissions, isActive:true},
+                    {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:permissions, isActive:true},
+                    {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions, isActive:true},
+                    {moduleId:(_.find(mlModules, {code:"TEMPLATEASSIGNMENT"}))._id, actions:permissions, isActive:true},
+                    {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions, isActive:true},
+                    {moduleId:(_.find(mlModules, {code:"INTERNALREQUESTS"}))._id, actions:permissions, isActive:true},
+                    {moduleId:(_.find(mlModules, {code:"INTERNALAPPROVEDREQUESTS"}))._id, actions:permissions, isActive:true},
+                    {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions, isActive:true},
+                    {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions, isActive:true},
+                    {moduleId:(_.find(mlModules, {code:"PROCESSSETUP"}))._id, actions:permissions, isActive:true},
+                    {moduleId:(_.find(mlModules, {code:"OFFICE"}))._id, actions:permissions, isActive:true}   /*adding office module*/
                   ]
-    let role = {
+    var role = {
       roleName:"clusteradmin",
       displayName:"Cluster Admin",
       assignRoles: assignRoles,
@@ -95,30 +97,31 @@ if(!clusterAdmin){
       isActive:true,
       isSystemDefined: true
     }
-    MlRoles.insert(role);
+    MlRoles.update({roleName:"clusteradmin"}, {$set:role}, {upsert:true})
 }
 
-var chapterAdmin = MlRoles.findOne({roleName:"chapteradmin"})
-if(!chapterAdmin){
-  let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:dep._id, subDepartment:subDep._id, isActive:true}]
-  let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
+{
+  let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", community : "all", department:dep._id, subDepartment:subDep._id, isActive:true}]
   let modules = [
-    {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"USERS"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"PORTFOLIO"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"TEMPLATEASSIGNMENT"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"INTERNALREQUESTS"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"INTERNALAPPROVEDREQUESTS"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions}
+    {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:readPermissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:permissions, isActive:true},
+    // {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:readPermissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"USERS"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"PORTFOLIO"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:readPermissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:readPermissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:readPermissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"TEMPLATEASSIGNMENT"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"INTERNALREQUESTS"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"INTERNALAPPROVEDREQUESTS"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"PROCESSSETUP"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"OFFICE"}))._id, actions:permissions, isActive:true}   /*adding office module*/
   ]
   let role = {
     roleName:"chapteradmin",
@@ -128,34 +131,40 @@ if(!chapterAdmin){
     isActive:true,
     isSystemDefined: true
   }
-  MlRoles.insert(role);
+  MlRoles.update({roleName:"chapteradmin"}, {$set:role}, {upsert:true})
 }
 
 
-var subchapterAdmin = MlRoles.findOne({roleName:"subchapteradmin"})
-if(!subchapterAdmin){
-  let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:dep._id, subDepartment:subDep._id, isActive:true}]
-  let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
+// var subchapterAdmin = MlRoles.findOne({roleName:"subchapteradmin"})
+// if(!subchapterAdmin)
+{
+  let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", community : "all", department:dep._id, subDepartment:subDep._id, isActive:true}]
   let modules = [
-    {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"USERS"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"PORTFOLIO"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"TEMPLATEASSIGNMENT"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"INTERNALREQUESTS"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"INTERNALAPPROVEDREQUESTS"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"DEPARTMENT"}))._id, actions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"SUBDEPARTMENT"}))._id, actions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"TEMPLATE"}))._id, actions:chapterPer},
+    {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:readPermissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:readPermissions, isActive:true},
+    // {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:readPermissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"USERS"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"PORTFOLIO"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:readPermissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:readPermissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:readPermissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"TEMPLATEASSIGNMENT"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"INTERNALREQUESTS"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"INTERNALAPPROVEDREQUESTS"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"DEPARTMENT"}))._id, actions:readPermissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"SUBDEPARTMENT"}))._id, actions:readPermissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"TEMPLATES"}))._id, actions:readPermissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"ROLES"}))._id, actions:readPermissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"HIERARCHY"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"CLUSTER"}))._id, actions:readPermissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"PROCESSSETUP"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"OFFICE"}))._id, actions:permissions, isActive:true}   /*adding office module*/
   ]
   let role = {
     roleName:"subchapteradmin",
@@ -165,31 +174,33 @@ if(!subchapterAdmin){
     isActive:true,
     isSystemDefined: true
   }
-  MlRoles.insert(role);
+  MlRoles.update({roleName:"subchapteradmin"}, {$set:role}, {upsert:true})
 }
 
-var communityAdmin = MlRoles.findOne({roleName:"communityadmin"})
-if(!communityAdmin){
-  let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", department:dep._id, subDepartment:subDep._id, isActive:true}]
-  let communityPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
-  let chapterPer = [{actionId:(_.find(actions, {code:"READ"}))._id, isActive:true}]
+// var communityAdmin = MlRoles.findOne({roleName:"communityadmin"})
+// if(!communityAdmin)
+{
+  let assignRoles = [{cluster:"all", chapter:"all", subChapter:"all", community : "all", department:dep._id, subDepartment:subDep._id, isActive:true}]
+  let communityPer = [{actionId:(_.find(actions, {code:"READ"}))._id, actionCode:"READ", isActive:true}]
   let modules = [
-    {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"USERS"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:communityPer},
-    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:communityPer},
-    {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:chapterPer},
-    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"PORTFOLIO"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"TEMPLATEASSIGNMENT"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"INTERNALREQUESTS"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"INTERNALAPPROVEDREQUESTS"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions},
-    {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions}
+    {moduleId:(_.find(mlModules, {code:"CHAPTER"}))._id, actions:readPermissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"SUBCHAPTER"}))._id, actions:readPermissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"COMMUNITY"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"USERS"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"MASTERSETTINGS"}))._id, actions:readPermissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"GLOBALSETTINGS"}))._id, actions:readPermissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"TAXATION"}))._id, actions:readPermissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"REGISTRATION"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"PORTFOLIO"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"DOCUMENTS"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"TEMPLATEASSIGNMENT"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"REQUESTTYPE"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"INTERNALREQUESTS"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"INTERNALAPPROVEDREQUESTS"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"FILTERS"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"PROCESSMAPPING"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"PROCESSSETUP"}))._id, actions:permissions, isActive:true},
+    {moduleId:(_.find(mlModules, {code:"OFFICE"}))._id, actions:permissions, isActive:true}   /*adding office module*/
   ]
   let role = {
     roleName:"communityadmin",
@@ -199,7 +210,7 @@ if(!communityAdmin){
     isActive:true,
     isSystemDefined: true
   }
-  MlRoles.insert(role);
+  MlRoles.update({roleName:"communityadmin"}, {$set:role}, {upsert:true})
 }
 /*********************************** Default Moolya Roles Creation <End> **********************************************/
 
@@ -298,16 +309,23 @@ var clusterAdminHierarchy = MlRoles.findOne({roleName:"clusteradmin"})
 var chapterAdminHierarchy = MlRoles.findOne({roleName:"chapteradmin"})
 var subchapterAdminHierarchy = MlRoles.findOne({roleName:"subchapteradmin"})
 var communityAdminHierarchy = MlRoles.findOne({roleName:"communityadmin"})
-var hierarchyAssignment = MlHierarchyAssignments.findOne({clusterId:"All"})
-if(!hierarchyAssignment) {
-  var hierarchy = {
+var hierarchyAssignmentMoolya = MlHierarchyAssignments.findOne({clusterId:"All", isDefaultSubChapter: true})
+var hierarchyAssignmentNonMoolya = MlHierarchyAssignments.findOne({clusterId:"All", isDefaultSubChapter: false})
+if(!hierarchyAssignmentMoolya) {
+  /**
+   * moolya hirarchy seed-data
+   * */
+  var hierarchyMoolya = {
     parentDepartment: depHierarchy._id,
     parentSubDepartment: subDepHierarchy._id,
     clusterId: "All",
+    subChapterId: 'all',
+    isDefaultSubChapter: true,
     teamStructureAssignment: [{
       roleId: clusterAdminHierarchy._id,
       roleName: clusterAdminHierarchy.roleName,
       displayName: clusterAdminHierarchy.displayName,
+      roleType: "Internal User",
       isAssigned: true,
       assignedLevel: "cluster",
       reportingRole: ""
@@ -316,6 +334,7 @@ if(!hierarchyAssignment) {
         roleId: chapterAdminHierarchy._id,
         roleName: chapterAdminHierarchy.roleName,
         displayName: chapterAdminHierarchy.displayName,
+        roleType: "Internal User",
         isAssigned: true,
         assignedLevel: "chapter",
         reportingRole: clusterAdminHierarchy._id
@@ -324,6 +343,7 @@ if(!hierarchyAssignment) {
         roleId: subchapterAdminHierarchy._id,
         roleName: subchapterAdminHierarchy.roleName,
         displayName: subchapterAdminHierarchy.displayName,
+        roleType: "Internal User",
         isAssigned: true,
         assignedLevel: "chapter",
         reportingRole: chapterAdminHierarchy._id
@@ -332,6 +352,7 @@ if(!hierarchyAssignment) {
         roleId: communityAdminHierarchy._id,
         roleName: communityAdminHierarchy.roleName,
         displayName: communityAdminHierarchy.displayName,
+        roleType: "Internal User",
         isAssigned: true,
         assignedLevel: "community",
         reportingRole: subchapterAdminHierarchy._id
@@ -343,7 +364,45 @@ if(!hierarchyAssignment) {
       isChecked: true
     }
   };
-  MlHierarchyAssignments.insert(hierarchy);
+  MlHierarchyAssignments.insert(hierarchyMoolya);
+}
+  /**
+   * non-moolya hirarchy seed data
+   * */
+if (!hierarchyAssignmentNonMoolya) {
+  var hierarchyNonMoolya = {
+    parentDepartment: depHierarchy._id,
+    parentSubDepartment: subDepHierarchy._id,
+    clusterId: "All",
+    subChapterId: 'all',
+    isDefaultSubChapter: false,
+    teamStructureAssignment: [
+      {
+        roleId: subchapterAdminHierarchy._id,
+        roleName: subchapterAdminHierarchy.roleName,
+        displayName: subchapterAdminHierarchy.displayName,
+        roleType: "Internal User",
+        isAssigned: true,
+        assignedLevel: "subchapter",
+        reportingRole: ''
+      },
+      {
+        roleId: communityAdminHierarchy._id,
+        roleName: communityAdminHierarchy.roleName,
+        displayName: communityAdminHierarchy.displayName,
+        roleType: "Internal User",
+        isAssigned: true,
+        assignedLevel: "community",
+        reportingRole: subchapterAdminHierarchy._id
+      }],
+    finalApproval: {
+      department: depHierarchy._id,
+      subDepartment: subDepHierarchy._id,
+      role: chapterAdminHierarchy._id,
+      isChecked: true
+    }
+  };
+  MlHierarchyAssignments.insert(hierarchyNonMoolya);
 }
 
 
@@ -430,27 +489,38 @@ Accounts.validateLoginAttempt(function (user)
 {
 
     let isValid=false;
-
-    // if(user && user.user && user.user.profile && !user.user.profile.isActive){
-    //     user.allowed = false
-    //     throw new Meteor.Error(403, "User account is inactive!");
-    // }
-
-    if(user && user.user && user.user.profile && user.user.profile.isExternaluser){
-      let isAllowed= validateExternalUserLoginAttempt(user);
-      if(!isAllowed)throw new Meteor.Error(403, "User account is inactive!");
-      return true;
+  /**checking possible condition of login attempt*/
+  if (user && !user.allowed && (user.error.reason == 'Incorrect password'))
+    throw new Meteor.Error(403, "Username or password incorrect");
+  else if (user && !user.allowed) {
+    /**if user is not present but available in registrations*/
+    let username = user.methodArguments[0].user ? user.methodArguments[0].user.username : ''
+    let regData = MlRegistration.findOne({'registrationInfo.email': username})
+    if (regData) {
+      if (_.find(regData.emails, {verified: false}))
+        throw new Meteor.Error(403, "Email verification is pending");
+      else
+        throw new Meteor.Error(403, "Registration review in process, please contact moolya admin for any Queries ");
     }
-    else if(user && user.user && user.user.profile && user.user.profile.isInternaluser){
-        if(user && user.user && user.user.profile && !user.user.profile.isActive){               //temporary moving here for external user
-          user.allowed = false
-          throw new Meteor.Error(403, "User account is inactive!");
-        }
-        return validateinternalUserLoginAttempt(user)
-    }
+  }
 
-
+  /**external user login attempt*/
+  else if (user && user.user && user.user.profile && user.user.profile.isExternaluser) {
+    let isAllowed = validateExternalUserLoginAttempt(user);
+    if (!isAllowed)throw new Meteor.Error(403, "User account is inactive!");
     return true;
+  }
+
+  /**internal user login attempt*/
+  else if (user && user.user && user.user.profile && user.user.profile.isInternaluser) {
+    if (user && user.user && user.user.profile && !user.user.profile.isActive) {
+      user.allowed = false
+      throw new Meteor.Error(403, "User account is inactive!");
+    }
+    return validateinternalUserLoginAttempt(user)
+  }
+
+  return true;
 });
 
 validateExternalUserLoginAttempt=(user)=>{
@@ -531,7 +601,7 @@ validateinternalUserLoginAttempt=(user)=>{
 
     if(!chapterActive){
         user.allowed = false
-        throw new Meteor.Error(403, "None of the Chapters are active");
+        throw new Meteor.Error(403, "Default Chapter Is Not Active");
     }
 
     if(!subChapterActive){

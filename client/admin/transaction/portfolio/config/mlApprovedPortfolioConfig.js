@@ -2,6 +2,14 @@ import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewe
 import React from 'react';
 import gql from 'graphql-tag'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
+import moment from "moment";
+import {client} from '../../../core/apolloConnection';
+
+function dateFormatter (data){
+  let createdDateTime=data&&data.data&&data.data.createdAt?data.data.createdAt:null;
+  return <div>{createdDateTime&&moment(createdDateTime).format('MM-DD-YYYY hh:mm:ss')}</div>;
+}
+
 const mlApprovedPortfolioTableConfig=new MlViewer.View({
   name:"portfolioInfoTable",
   module:"portfolioDetails",//Module name for filter.
@@ -13,7 +21,7 @@ const mlApprovedPortfolioTableConfig=new MlViewer.View({
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   filter:true,
-  filterComponent: <MlCustomFilter module="portfolio" moduleName="portfolio" />,
+  filterComponent: <MlCustomFilter module="portfolio" moduleName="portfolio" client={client} />,
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
    /* {dataField: "firstName", title: "Date & Time",dataSort:true},
@@ -31,7 +39,7 @@ const mlApprovedPortfolioTableConfig=new MlViewer.View({
     {dataField: "lastName", title: "Status",dataSort:true},
     {dataField: "lastName", title: "Assign",dataSort:true},*/
     {dataField: "portfolioId", title: "Portfolio Id",dataSort:true},
-    {dataField: "createdAt", title: "Date & Time",dataSort:true},
+    {dataField: "createdAt", title: "Date & Time",dataSort:true,customComponent:dateFormatter},
     {dataField: "transactionType", title: "Transaction Type",dataSort:true},
     {dataField: "portfolioUserName", title: "Name",dataSort:true},
     {dataField: "contactNumber", title: "Contact No",dataSort:true},
@@ -54,7 +62,7 @@ const mlApprovedPortfolioTableConfig=new MlViewer.View({
       handler: (data)=>{
 
         if(data && data.id){
-          FlowRouter.go("/admin/transactions/editRequests/"+data.id);
+          FlowRouter.go("/admin/transactions/portfolio/editRequests/"+data.id+"/"+data.communityType);
         } else{
           toastr.error("Please select a record");
         }

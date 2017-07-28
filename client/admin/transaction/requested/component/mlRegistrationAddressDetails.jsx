@@ -6,7 +6,7 @@ import ScrollArea from 'react-scrollbar';
 import  Select from 'react-select';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect';
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper';
 import {addRegistrationStep3Details} from '../actions/addRegistrationStep3DetailsAction';
 import {findUserRegistartionActionHandler} from '../actions/findUserRegistrationDocument'
 import {findRegistrationActionHandler} from '../actions/findRegistration';
@@ -15,6 +15,7 @@ import update from 'immutability-helper';
 import _ from 'lodash'
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import _underscore from 'underscore'
+import {findClusterTypeActionHandler} from '../../../cluster/actions/findCluster'
 
 export default class AddressDetails extends React.Component{
   constructor(props){
@@ -26,11 +27,18 @@ export default class AddressDetails extends React.Component{
       loading:true,
       selectedTab : null,
       selectedAddressLabel : null,
+      countrySelectedValue:null,
+      countryId:null,
+      selectedStateValue:null,
+      stateId:null,
+      selectedCityValue:null,
+      cityId:null,
       selectedValue : null,
       /* selectedValuesList : [],*/
       addressInformation : addressInfoObject,
       addressDetails: this.props.registrationInfo.addressInfo || [],
-      activeTab : "active"
+      activeTab : "active",
+      isDefaultAddress:null
 
 
     }
@@ -43,6 +51,27 @@ export default class AddressDetails extends React.Component{
   optionsBySelectAddressType(selectedIndex,handler,selectedObj){
     this.setState({selectedValue : selectedIndex,selectedAddressLabel:selectedObj.label});
   }
+
+  /**
+   * Method :: optionsBySelectCountry,optionsBySelectState
+   * Desc   :: Set state on change of drop down
+   * @param selectedIndex  :: String - Selected dropdown value
+   * @param selectedObj  :: String -  Selected dropdown label
+
+   * @returns set New State
+   */
+  optionsBySelectCountry(selectedIndex,handler,selectedObj){
+    this.setState({countrySelectedValue:selectedObj.label,countryId:selectedIndex})
+  }
+
+  optionsBySelectState(selectedIndex,handler,selectedObj){
+    this.setState({selectedStateValue:selectedObj.label,stateId:selectedIndex})
+  }
+
+  optionsBySelectCity(selecselectedStateValuetedIndex,handler,selectedObj){
+    this.setState({selectedCityValue:selectedObj.label,cityId:selectedIndex})
+  }
+
   updateOptions(index, did, selectedValue, selObject,callback){
     /* let selectedSocialLinkArray =  this.state.socialLinkArray || []
      let selectedArrayObject = selectedSocialLinkArray[index] || {};
@@ -74,9 +103,86 @@ export default class AddressDetails extends React.Component{
     }
 
   }
+
+  /**
+   * Method :: countryUpdateOptions,stateUpdateOptions
+   * Desc   :: Set state on change of drop down
+   * @param selObject  :: Object - Contains Selected dropdown label
+   * @param selectedValue  :: String -  Selected dropdown value
+
+   * @returns set New State of address details
+   */
+
+  countryUpdateOptions(index, did, selectedValue, selObject,callback){
+
+    if (index !== -1) {
+      // do your stuff here
+
+      let updatedComment = update(this.state.addressDetails[index], {
+        addressTypeName : {$set: this.state.addressDetails[index].addressTypeName},
+        addressType : {$set: this.state.addressDetails[index].addressType},
+        name : {$set: this.refs["name"+index].value},
+        phoneNumber : {$set: this.refs["phoneNumber"+index].value},
+        addressFlat : {$set: this.refs["addressFlat"+index].value},
+        addressLocality : {$set: this.refs["addressLocality"+index].value},
+        addressLandmark : {$set: this.refs["addressLandmark"+index].value},
+        addressArea : {$set: this.refs["addressArea"+index].value},
+        addressCity : {$set: this.refs["addressCity"+index].value},
+        addressState :  {$set: this.state.addressDetails[index].addressState},
+        addressStateId :  {$set: this.state.addressDetails[index].addressStateId},
+        addressCountry : {$set: selObject.label},
+        addressCountryId :  {$set: did},
+        addressPinCode : {$set: this.refs["addressPinCode"+index].value}
+      });
+
+      let newData = update(this.state.addressDetails, {
+        $splice: [[index, 1, updatedComment]]
+      });
+
+      this.setState({addressDetails : newData,countrySelectedValue : selObject.label,countryId:did});
+
+    }
+
+
+  }
+
+  stateUpdateOptions(index, did, selectedValue, selObject,callback){
+
+    if (index !== -1) {
+      // do your stuff here
+
+      let updatedComment = update(this.state.addressDetails[index], {
+        addressTypeName : {$set: this.state.addressDetails[index].addressTypeName},
+        addressType : {$set: this.state.addressDetails[index].addressType},
+        name : {$set: this.refs["name"+index].value},
+        phoneNumber : {$set: this.refs["phoneNumber"+index].value},
+        addressFlat : {$set: this.refs["addressFlat"+index].value},
+        addressLocality : {$set: this.refs["addressLocality"+index].value},
+        addressLandmark : {$set: this.refs["addressLandmark"+index].value},
+        addressArea : {$set: this.refs["addressArea"+index].value},
+        addressCity : {$set: this.refs["addressCity"+index].value},
+        addressState : {$set: selObject.label},
+        addressStateId : {$set: did},
+        addressCountry :  {$set: this.state.addressDetails[index].addressCountry},
+        addressCountryId :  {$set: this.state.addressDetails[index].addressCountryId},
+        addressPinCode : {$set: this.refs["addressPinCode"+index].value}
+      });
+
+      let newData = update(this.state.addressDetails, {
+        $splice: [[index, 1, updatedComment]]
+      });
+
+      this.setState({addressDetails : newData,selectedStateValue : selObject.label,stateId:did});
+
+    }
+
+
+  }
   addressTabSelected(index,value){
     this.setState({selectedTab : true});
     this.setState({activeTab : ""});
+    let countryValue = this.state.countryId?this.state.countryId:this.state.addressDetails[index].addressCountryId;
+    this.setState({countryId:countryValue})
   }
 
 
@@ -116,53 +222,69 @@ export default class AddressDetails extends React.Component{
     refs.push(this.refs["addressPinCode"])
     let ret = mlFieldValidations(refs)
 
-    if (ret) {
-      toastr.error(ret);
-    }else {
-      let addressDetailsObject = this.state.addressInformation;
-      addressDetailsObject.addressType = this.state.selectedValue,
-        addressDetailsObject.addressTypeName = this.state.selectedAddressLabel,
-        addressDetailsObject.name = this.refs["name"].value,
-        addressDetailsObject.phoneNumber = this.refs["phoneNumber"].value,
-        addressDetailsObject.addressFlat = this.refs["addressFlat"].value,
-        addressDetailsObject.addressLocality = this.refs["addressLocality"].value,
-        addressDetailsObject.addressLandmark = this.refs["addressLandmark"].value,
-        addressDetailsObject.addressArea = this.refs["addressArea"].value,
-        addressDetailsObject.addressCity = this.refs["addressCity"].value,
-        addressDetailsObject.addressState = this.refs["addressState"].value,
-        addressDetailsObject.addressCountry = this.refs["addressCountry"].value,
-        addressDetailsObject.addressPinCode = this.refs["addressPinCode"].value;
-      const response = await addRegistrationStep3Details(addressDetailsObject, detailsType, registerid);
-      if (response) {
-        //this.props.getRegistrationContactInfo();
-        if (!response.success) {
-          toastr.error(response.result);
-          this.findRegistration();
-          this.props.registrationDetails();
-        } else {
-          this.findRegistration();
-          this.props.registrationDetails();
-          this.refs["name"].value = ""
-          this.refs["phoneNumber"].value = "";
-          this.refs["addressFlat"].value = "";
-          this.refs["addressLocality"].value = "";
-          this.refs["addressLandmark"].value = "";
-          this.refs["addressArea"].value = "";
-          this.refs["addressCity"].value = "";
-          this.refs["addressState"].value = "";
-          this.refs["addressCountry"].value = "";
-          this.refs["addressPinCode"].value = "";
-          this.setState({selectedValue: "", selectedAddressLabel: ""});
-          toastr.success("Address created successfully");
+
+    let clusterDetails = await findClusterTypeActionHandler(this.props.clusterId)
+    let clusterCountry = clusterDetails&&clusterDetails.countryName?clusterDetails.countryName:null;
+    let addressSelectedCountry = this.state.countrySelectedValue?this.state.countrySelectedValue:null;
+    let isDeafaultChecked = this.refs["defaultAddress"].checked;
+      if (ret) {
+        toastr.error(ret);
+      }else if(clusterCountry && addressSelectedCountry && isDeafaultChecked && clusterCountry != addressSelectedCountry) {
+        toastr.error("Selected cluster and default address country should be same");
+      }else{
+        let addressDetailsObject = this.state.addressInformation;
+          addressDetailsObject.addressType = this.state.selectedValue,
+            addressDetailsObject.addressTypeName = this.state.selectedAddressLabel,
+            addressDetailsObject.name = this.refs["name"].value,
+            addressDetailsObject.phoneNumber = this.refs["phoneNumber"].value,
+            addressDetailsObject.addressFlat = this.refs["addressFlat"].value,
+            addressDetailsObject.addressLocality = this.refs["addressLocality"].value,
+            addressDetailsObject.addressLandmark = this.refs["addressLandmark"].value,
+            addressDetailsObject.addressArea = this.refs["addressArea"].value,
+            addressDetailsObject.addressCity = this.refs["addressCity"].value,
+            addressDetailsObject.addressState = this.state.selectedStateValue,
+            addressDetailsObject.addressStateId = this.state.stateId,
+            //addressDetailsObject.addressCountry = this.refs["addressCountry"].value,
+            addressDetailsObject.addressCountry = this.state.countrySelectedValue,
+            addressDetailsObject.addressCountryId = this.state.countryId,
+            addressDetailsObject.addressPinCode = this.refs["addressPinCode"].value,
+            addressDetailsObject.isDefaultAddress = this.refs["defaultAddress"].checked
+          const response = await addRegistrationStep3Details(addressDetailsObject, detailsType, registerid);
+          if (response) {
+            //this.props.getRegistrationContactInfo();
+            if (!response.success) {
+              toastr.error(response.result);
+              this.findRegistration();
+              this.props.registrationDetails();
+            } else {
+
+              this.props.registrationDetails();
+              this.refs["name"].value = ""
+              this.refs["phoneNumber"].value = "";
+              this.refs["addressFlat"].value = "";
+              this.refs["addressLocality"].value = "";
+              this.refs["addressLandmark"].value = "";
+              this.refs["addressArea"].value = "";
+              this.refs["addressCity"].value = "";
+              //this.refs["addressState"].value = "";
+              //this.refs["addressCountry"].value = "";
+              this.refs["addressPinCode"].value = "";
+              this.refs["defaultAddress"].checked = false
+              this.setState({selectedValue: "", selectedAddressLabel: "",countrySelectedValue:"",selectedStateValue:"",countryId:"",stateId:""});
+              toastr.success("Address created successfully");
+              this.findRegistration();
+              this.props.registrationDetails();
+            }
+
+          }
         }
 
-      }
-    }
   }
 
   async onEditAddress(index,value) {
     const detailsType = "ADDRESSTYPE";
     const registerid = this.props.registerId;
+
     if (index !== -1) {
       // do your stuff here
       let registrationDetails = this.props.registrationInfo.addressInfo
@@ -171,6 +293,11 @@ export default class AddressDetails extends React.Component{
       if (this.state.selectedValue) {
         contactExist = _underscore.contains(dbData, this.state.selectedValue);
       }
+      let clusterDetails = await findClusterTypeActionHandler(this.props.clusterId)
+      let clusterCountry = clusterDetails&&clusterDetails.countryName?clusterDetails.countryName:null;
+      let addressSelectedCountry = this.state.countrySelectedValue?this.state.countrySelectedValue:this.state.addressDetails[index].addressCountry;
+
+      let isDeafaultChecked = this.refs["defaultAddress"+index].checked;
 
       if (contactExist) {
         toastr.error("Address Type Already Exists!!!!!");
@@ -193,9 +320,15 @@ export default class AddressDetails extends React.Component{
 
         if (ret) {
           toastr.error(ret);
+        }else if(clusterCountry && addressSelectedCountry && isDeafaultChecked && clusterCountry != addressSelectedCountry) {
+          toastr.error("Selected cluster and default address country should be same");
         } else {
           let labelValue = this.state.selectedAddressLabel ? this.state.selectedAddressLabel : this.state.addressDetails[index].addressTypeName;
           let valueSelected = this.state.selectedValue ? this.state.selectedValue : this.state.addressDetails[index].addressType;
+          let countryLabelValue = this.state.countrySelectedValue ? this.state.countrySelectedValue : this.state.addressDetails[index].addressCountry;
+          let countryIDValue = this.state.countryId ? this.state.countryId : this.state.addressDetails[index].addressCountryId;
+          let stateLabelValue = this.state.selectedStateValue ? this.state.selectedStateValue : this.state.addressDetails[index].addressState;
+          let stateIDValue = this.state.stateId ? this.state.stateId : this.state.addressDetails[index].addressStateId;
           let updatedComment = update(this.state.addressDetails[index], {
             addressTypeName: {$set: labelValue},
             addressType: {$set: valueSelected},
@@ -206,9 +339,12 @@ export default class AddressDetails extends React.Component{
             addressLandmark: {$set: this.refs["addressLandmark" + index].value},
             addressArea: {$set: this.refs["addressArea" + index].value},
             addressCity: {$set: this.refs["addressCity" + index].value},
-            addressState: {$set: this.refs["addressState" + index].value},
-            addressCountry: {$set: this.refs["addressCountry" + index].value},
-            addressPinCode: {$set: this.refs["addressPinCode" + index].value}
+            addressState: {$set: stateLabelValue},
+            addressStateId: {$set: stateIDValue},
+            addressCountry: {$set: countryLabelValue},
+            addressCountryId: {$set: countryIDValue},
+            addressPinCode: {$set: this.refs["addressPinCode" + index].value},
+            isDefaultAddress : {$set:this.refs["defaultAddress"+index].checked}
           });
 
           let newData = update(this.state.addressDetails, {
@@ -229,6 +365,7 @@ export default class AddressDetails extends React.Component{
       }
     }
   }
+
   async findRegistration(){
     let registrationId=this.props.registerId;
 
@@ -251,26 +388,13 @@ export default class AddressDetails extends React.Component{
     this.refs["addressCountry"+index].value = "";
     this.refs["addressPinCode"+index].value = "";
 
-
-/*
-
-    let updatedComment = update(this.state.addressDetails[index], {
-      addressType :   {$set: ""}
-    });
-
-    let newData = update(this.state.addressDetails, {
-      $splice: [[index, 1, updatedComment]]
-    });
-    this.setState({addressDetails : newData});
-    let registrationDetails = _.cloneDeep(this.state.defaultData);
-    let omitData = _.omit(registrationDetails["addressInfo"][index], 'addressType') || [];
-    registrationDetails["addressInfo"][index] = omitData
-    this.setState({defaultData : registrationDetails});
-
-*/
-
-
   }
+
+  checkBoxHandler(e){
+    let value = e.target.checked;
+    this.setState({"isDefaultAddress":value})
+  }
+
 
 
 
@@ -285,7 +409,23 @@ export default class AddressDetails extends React.Component{
      }
      }
      `;
+
+    let countryQuery = gql`query{
+       data:fetchCountries {
+          value:_id
+          label:country
+        }
+      }`
+
+    let statesQuery=gql`query ($countryId: String) {
+        data: fetchStatesPerCountry(countryId: $countryId) {
+        value: _id
+        label: name
+      }
+    }`;
+
     let addressTypeOption={options: { variables: {type : "ADDRESSTYPE",hierarchyRefId:this.props.clusterId}}};
+    let statesOption={options: { variables: {countryId:this.state.countryId}}};
 
     return (
       <div className="panel-body">
@@ -326,31 +466,57 @@ export default class AddressDetails extends React.Component{
                   <input type="text" ref={'phoneNumber'} placeholder="Phone Number" className="form-control float-label" id="" data-required={true} data-errMsg="Phone Number is required" />
                 </div>
                 <div className="form-group mandatory">
-                  <input type="text" ref={'addressFlat'} placeholder="Flat/House/Floor/Bulding No" className="form-control float-label" id="" a data-required={true} data-errMsg="Flat/House/Floor/Bulding No is required"/>
+                  <input type="text" ref={'addressFlat'} placeholder="Flat/House/Floor/Bulding No" className="form-control float-label" id="" data-required={true} data-errMsg="Flat/House/Floor/Bulding No is required"/>
                 </div>
                 <div className="form-group mandatory">
                   <input type="text" ref={'addressLocality'} placeholder="Colony/Street/Locality" className="form-control float-label" id=""  data-required={true} data-errMsg="Colony/Street/Locality is required"/>
                 </div>
-                <div className="form-group mandatory">
-                  <input type="text" ref={'addressLandmark'} placeholder="Landmark" className="form-control float-label" id="" data-required={true} data-errMsg="Landmark is required" />
+                <div className="form-group">
+                  <input type="text" ref={'addressLandmark'} placeholder="Landmark" className="form-control float-label" id=""/>
                 </div>
-                <div className="form-group mandatory">
-                  <input type="text" ref={'addressArea'} placeholder="Area" className="form-control float-label" id=""  data-required={true} data-errMsg="Area is required"/>
+                <div className="form-group">
+                  <input type="text" ref={'addressArea'} placeholder="Area" className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group mandatory">
                   <input type="text" ref={'addressCity'} placeholder="Town/City" className="form-control float-label" id=""  data-required={true} data-errMsg="Town/City is required"/>
                 </div>
-                <div className="form-group mandatory">
+               {/* <div className="form-group mandatory">
                   <input type="text" ref={'addressState'} placeholder="State" className="form-control float-label" id="" data-required={true} data-errMsg="State is required" />
-                </div>
-                <div className="form-group mandatory">
+                </div>*/}
+                {/*<div className="form-group mandatory">
                   <input type="text" ref={'addressCountry'} placeholder="Country" name ={'addressCountry'}
                          className="form-control float-label" id="" data-required={true} data-errMsg="Country is required" />
+                </div>*/}
+                <div className="form-group">
+                  <Moolyaselect multiSelect={false} ref={'addressCountry'}
+                              placeholder="Select Country" mandatory={true}
+                              className="form-control float-label" selectedValue={this.state.countryId}
+                              valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={countryQuery}
+                              onSelect={this.optionsBySelectCountry.bind(this)}
+                              isDynamic={true} data-required={true} data-errMsg="Country is required"/>
+                </div>
+                <div className="form-group">
+                  <Moolyaselect multiSelect={false} ref={'addressState'}
+                                placeholder="Select State" mandatory={true}
+                                className="form-control float-label" selectedValue={this.state.stateId}
+                                valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={statesQuery}
+                                onSelect={this.optionsBySelectState.bind(this)} queryOptions={statesOption}
+                                isDynamic={true} data-required={true} data-errMsg="State is required"/>
                 </div>
                 <div className="form-group mandatory">
                   <input type="text" ref={'addressPinCode'} placeholder="Pincode" name ={'addressPinCode'}
                          className="form-control float-label" id="" data-required={true} data-errMsg="PinCode is required" />
                 </div>
+                <div className="form-group switch_wrap inline_switch">
+                  <label>Is defaultAddress</label>
+                  <label className="switch">
+                    <input type="checkbox" ref={'defaultAddress'}/>
+                    <div className="slider"></div>
+                  </label>
+                </div>
+              {/*  <div className="form-group">
+                  <input type="checkbox" ref={'defaultAddress'}/>checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}
+                </div>*/}
                 <div className="ml_icon_btn">
                   <a href="#" className="save_btn" onClick={this.onSavingAddress.bind(this)}><span
                     className="ml ml-save"></span></a>
@@ -401,18 +567,50 @@ export default class AddressDetails extends React.Component{
                     <input type="text" ref={'addressCity' + key} placeholder="Town/City" name ={'addressCity'}
                            className="form-control float-label" id="" defaultValue={options.addressCity} data-required={true} data-errMsg="Town/City is required"/>
                   </div>
-                  <div className="form-group mandatory">
+                {/*  <div className="form-group mandatory">
                     <input type="text" ref={'addressState' + key} placeholder="State" name ={'addressState'}
                            className="form-control float-label" id="" defaultValue={options.addressState}  data-required={true} data-errMsg="State is required"/>
-                  </div>
-                  <div className="form-group mandatory">
+                  </div>*/}
+                {/*  <div className="form-group mandatory">
                     <input type="text" ref={'addressCountry' + key} placeholder="Country" name ={'addressCountry'}
                            className="form-control float-label" id="" defaultValue={options.addressCountry} data-required={true} data-errMsg="Country is required"/>
+                  </div>*/}
+                  <div className="form-group">
+                    <Moolyaselect multiSelect={false} ref={'addressCountry' + key} className="form-control float-label" valueKey={'value'}
+                                  labelKey={'label'} placeholder="Your Country"  selectedValue={options.addressCountryId} queryType={"graphql"}
+                                  query={countryQuery} isDynamic={true}  onSelect={that.countryUpdateOptions.bind(that,key)}
+                                  disabled={false}  data-errMsg="Country is required"/>
                   </div>
+                 {/* <div className="form-group">
+                    <Moolyaselect multiSelect={false} ref={'addressState' + key} className="form-control float-label" valueKey={'value'}
+                                  labelKey={'label'} placeholder="Your State"  selectedValue={options.addressStateId} queryType={"graphql"}
+                                  query={statesQuery} isDynamic={true}  onSelect={that.stateUpdateOptions.bind(that,key)}
+                                  disabled={false}  data-errMsg="State is required"/>
+                  </div>*/}
+                  <Moolyaselect multiSelect={false} ref={'addressState'+ key}
+                                placeholder="Select State" mandatory={true}
+                                className="form-control float-label" selectedValue={options.addressStateId}
+                                valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={statesQuery}
+                                onSelect={that.stateUpdateOptions.bind(that,key)} queryOptions={statesOption}
+                                isDynamic={true} data-required={true} data-errMsg="State is required"/>
                   <div className="form-group mandatory">
                     <input type="text" ref={'addressPinCode' + key} placeholder="Pincode" name ={'addressPinCode'}
                            className="form-control float-label" id="" defaultValue={options.addressPinCode} data-required={true} data-errMsg="PinCode is required"/>
                   </div>
+
+                  <div className="form-group switch_wrap inline_switch">
+                    <label>Is defaultAddress</label>
+                    <label className="switch">
+                      <input type="checkbox" ref={'defaultAddress'+key}
+                             defaultChecked={options.isDefaultAddress}  /*onChange={that.updateDeafultAddress.bind(that,key)}*//>
+                      <div className="slider"></div>
+                    </label>
+                  </div>
+
+               {/*   <div className="form-group">
+                    <label>isDefaultAddress</label>
+                    <input type="checkbox" ref="isActive" checked={options.isDefaultAddress}/>checked={this.state.data&&this.state.data.isActive} onChange={this.onStatusChange.bind(this)}
+                  </div>*/}
 
                   <div className="ml_icon_btn">
                     {/*<a href="#" className="save_btn">Save</a>*/}

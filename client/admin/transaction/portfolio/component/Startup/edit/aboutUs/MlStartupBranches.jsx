@@ -4,8 +4,9 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
+import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 var FontAwesome = require('react-fontawesome');
-import Moolyaselect from  '../../../../../../../commons/components/select/MoolyaSelect';
+import Moolyaselect from  '../../../../../../commons/components/MlAdminSelectWrapper';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import _ from 'lodash';
@@ -29,6 +30,7 @@ export default class MlStartupBranches extends React.Component{
     }
     this.handleBlur.bind(this);
     this.imagesDisplay.bind(this);
+    this.libraryAction.bind(this);
     return this;
   }
   componentDidUpdate(){
@@ -146,18 +148,35 @@ export default class MlStartupBranches extends React.Component{
     let name = e.target.name;
     let fileName = e.target.files[0].name;
     let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{branches:[{logo:{fileUrl:'', fileName : fileName}, index:this.state.selectedIndex}]}};
-    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this));
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
   }
-  onFileUploadCallBack(resp){
-    if(resp){
+  onFileUploadCallBack(file,resp) {
+    if (resp) {
       let result = JSON.parse(resp)
-      if(result.success){
-        this.setState({loading:true})
-        this.fetchOnlyImages();
-        this.imagesDisplay();
+      let userOption = confirm("Do you want to add the file into the library")
+      if (userOption) {
+        let fileObjectStructure = {
+          fileName: file.name,
+          fileType: file.type,
+          fileUrl: result.result,
+          libraryType: "image"
+        }
+        this.libraryAction(fileObjectStructure)
+        if (result.success) {
+          this.setState({loading: true})
+          this.fetchOnlyImages();
+          this.imagesDisplay();
+        }
       }
     }
   }
+
+  async libraryAction(file) {
+    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
+    return resp;
+  }
+
 
   async fetchOnlyImages(){
     const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
@@ -198,12 +217,15 @@ export default class MlStartupBranches extends React.Component{
   }
 
   render(){
-    let branchesQuery=gql`query{
-      data:fetchAssets {
-        label:displayName
-        value:_id
-      }
-    }`;
+    let branchesQuery=gql`query  {
+  data: fetchAddressTypes {
+    label: addressName
+    value: _id
+  }
+}
+
+
+`;
     let that = this;
     const showLoader = that.state.loading;
     let branchesArray = that.state.startupBranchesList || [];
@@ -272,7 +294,7 @@ export default class MlStartupBranches extends React.Component{
                         </div>
                         <div className="form-group">
                           <input type="text" name="name" placeholder="Name" className="form-control float-label" id="" defaultValue={this.state.data.name}  onBlur={this.handleBlur.bind(this)}/>
-                          <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isNamePrivate" defaultValue={this.state.data.isNamePrivate} onClick={this.onLockChange.bind(this, "isNamePrivate")}/>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isNamePrivate" defaultValue={this.state.data.isNamePrivate} onClick={this.onLockChange.bind(this, "isNamePrivate")}/>
                           <input type="checkbox" className="lock_input" id="isNamePrivate" checked={this.state.data.isNamePrivate}/>
                         </div>
 

@@ -6,7 +6,7 @@ import moment from "moment";
 import hierarchyValidations from "../../../../commons/containers/hierarchy/mlHierarchyValidations"
 import {validateTransaction} from '../actions/assignUserforTransactionAction'
 import MlAssignComponent from '../component/MlAssignComponent'
-
+import {client} from '../../../core/apolloConnection';
 
 function dateFormatter (data){
   let createdDateTime=data&&data.data&&data.data.registrationDate?data.data.registrationDate:null;
@@ -24,7 +24,8 @@ const mlUserTypeTableConfig=new MlViewer.View({
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
   filter:true,
-  filterComponent: <MlCustomFilter module="registration" moduleName="registration" />,
+  multiSelect:true,
+  filterComponent: <MlCustomFilter module="registration" moduleName="registration" client={client}/>,
   fieldsMap: {
     'registrationDate': 'registrationInfo.registrationDate',
     'firstName': 'registrationInfo.firstName',
@@ -34,36 +35,44 @@ const mlUserTypeTableConfig=new MlViewer.View({
     'chapterName': 'registrationInfo.chapterName',
     'accountType': 'registrationInfo.accountType',
     'assignedUser': 'registrationInfo.assignedUser',
-    'subChapterName': 'registrationInfo.subChapterName'
+    'subChapterName': 'registrationInfo.subChapterName',
+    'email':'registrationInfo.email',
+    'registrationId':'registrationInfo.registrationId'
   },
   columns:[
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
-    {dataField: "registrationDate", title: "Date",dataSort:true,customComponent:dateFormatter},
-    {dataField: "firstName", title: "Name",dataSort:true},
-    {dataField: "contactNumber", title: "ContactNo",dataSort:true},
-    {dataField: "communityName", title: "Community",dataSort:true},
+    {dataField: "registrationId",title:"Transaction ID",dataSort:true},
+    {dataField: "createdBy", title: "Created By",dataSort:true},
+    {dataField: "email", title: "Email ID",dataSort:true},
     {dataField: "clusterName", title: "Cluster",dataSort:true},
     {dataField: "chapterName", title: "Chapter",dataSort:true},
     {dataField: "subChapterName", title: "SubChapter",dataSort:true},
-    {dataField: "accountType", title: "Subscription Type",dataSort:true},
-    {dataField: "source", title: "Source",dataSort:true},
+    {dataField: "communityName", title: "Community",dataSort:true},
+    {dataField: "registrationDate", title: "Date",dataSort:true,customComponent:dateFormatter},
     {dataField: "registrationStatus", title: "Status",dataSort:true},
+    // {dataField: "contactNumber", title: "ContactNo",dataSort:true},
     {dataField: "assignedUser", title: "Assignto",dataSort:true},
   ],
   tableHeaderClass:'react_table_head',
   showActionComponent:true,
+
   actionConfiguration:[
     {
       actionName: 'edit',
       showAction: true,
       handler: async(data)=>{
-        let response =  await validateTransaction(data.registrationId,"MlRegistration",data.assignedUserId);
-        if(data && data.id && response.success === true){
-          FlowRouter.go("/admin/transactions/editRequests/"+data.id);
-        }else if(data && data.id){
-          toastr.error("User does not have access to edit record");
-        } else{
+        let list = data
+        if(!list || list.length==0 ){
           toastr.error("Please Select a record");
+        } else if(list && list.length>1){
+          toastr.error("Multiple records cannot be edited, Please select a record");
+        } else{
+          let response =  await validateTransaction(data.registrationId,"MlRegistration",data[0].assignedUserId);
+          if(response.success === true ){
+            FlowRouter.go("/admin/transactions/editRequests/"+data[0].id);
+          }else {
+            toastr.error("User does not have access to edit record");
+          }
         }
       }
     },
@@ -97,8 +106,12 @@ const mlUserTypeTableConfig=new MlViewer.View({
                               communityName
                       			  clusterName
                       			  clusterId
+                      			  chapterId
+                      			  subChapterId
+                      			  communityId
                       				chapterName
                               subChapterName
+                              email
                               accountType
                       				source
                               assignedUser
@@ -106,6 +119,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
                       				registrationDate
                               transactionId                              
                               assignedUserId
+                              createdBy
                           }
                       }
               }

@@ -4,142 +4,191 @@
 import MlResolver from '../../../commons/mlResolverDef'
 import MlRespPayload from '../../../commons/mlPayload'
 import _ from 'lodash'
+import mlInteractionService from '../mlInteractionRepoService';
+ import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
 
-MlResolver.MlQueryResolver['fetchConnections'] = (obj, args, context, info) =>{
-    let userConnections = [];
-    if(context && context.userId){
-        let connections = MlConnections.find({"users.userid":{"$in":[context.userId]}}).fetch();
-        _.each(connections, function (connection) {
-            _.remove(connection.users, {userid: context.userId})
-            let toUser = connection.users[0];
-            let conn = {
-                _id:connection._id,
-                toUser : connection.users[0],
-                requestedFrom:connection.requestedFrom,
-                createdBy:connection.createdBy,
-                updatedBy:connection.updatedBy,
-                isAccepted:connection.isAccepted,
-                isDenied:connection.isDenied,
-                resendCount:connection.resendCount
-            }
+/*STATUS
+ 0 - Pending
+ 1 - Accepted
+ 2 - Declined
+ 3 - Blocked*/
+var generateConnectionCode=function(u1,u2){
+  var connectionCode=u1+u2;
+  if(u1>u2)connectionCode=u2+u1;
+  if(u1===u2)connectionCode=null;
+  return connectionCode;
+}
 
-            userConnections.push(conn);
-        })
+MlResolver.MlQueryResolver['fetchConnections'] = (obj, args, context, info) => {
+  let userConnections = [];
+  if (context && context.userId) {
+    //todo: pagination based result
+    var pipeline=[{$match:{'users':{$elemMatch:{'userId':context.userId}},isAccepted:true}},
+      {$unwind :"$users" },
+      {$match:{'users.userId':{$ne:context.userId}}},
+      {$lookup:{from:'users',localField:'users.userId',foreignField:'_id',as:'userDetails'}},//join with user
+      {$unwind:'$userDetails'},{$unwind:'$userDetails.profile.externalUserProfiles'},
+      //match the default profile of user //'userDetails.profile.externalUserProfiles.isDefault':true
+      //todo:check with business to display multiple profiles for multiple users
+      {$match:{'userDetails.profile.isActive':true,'userDetails.profile.externalUserProfiles.isActive':true}},
+      {$group : {_id:'$connectionCode',// display first profile of user
+        'id':{ $first: '$_id'},//connection Object Id
+        'userId':{ $first: "$users.userId"},
+        'userName':{ $first: "$users.userName"},
+        'firstName':{ $first:'$userDetails.profile.firstName'},
+        'lastName':{ $first:'$userDetails.profile.lastName'},
+        'displayName':{ $first:'$userDetails.profile.displayName'},
+        'profileImage':{ $first:"$userDetails.profile.profileImage"},
+        'profileId':{ $first:"$userDetails.profile.profileId"},
+        'countryName':{ $first:'$userDetails.profile.externalUserProfiles.countryName'},
+        'communityName':{ $first:'$userDetails.profile.externalUserProfiles.communityName'},
+        'communityCode':{ $first:'$userDetails.profile.externalUserProfiles.communityDefCode'}
+      }}];
+    userConnections=mlDBController.aggregate('MlConnections',pipeline,context);
+  }
+
+  return userConnections
+}
+
+MlResolver.MlQueryResolver['fetchConnectionByTransaction'] = (obj, args, context, info) => {
+  try {
+    if(!args.transactionId&&!context.userId){
+      return null;
     }
+    var connectionId=mlInteractionService.fetchConnectionByTransaction(args.transactionId,'connectionRequest')||{};
+    var connection = mlDBController.findOne('MlConnections',{'_id':connectionId},context);
+    var requestedConnection=mlDBController.findOne('MlConnections',{_id:connection._id,isAccepted:false,isBlocked:false,isDenied:false,requestedFrom:{'$ne':context.userId}},context);
+    if(requestedConnection){connection.canAccept=true;connection.canReject=true;}
 
-    return userConnections
+    return connection;
+  } catch (e) {
+    return null;
+  }
 }
 
-MlResolver.MlQueryResolver['fetchConnection'] = (obj, args, context, info) =>{
 
-}
-
-MlResolver.MlMutationResolver['createConnection'] = (obj, args, context, info) =>{
-    if(args && args.connection && context && context.userId){
-        try {
-            let users = [];
-            let connection = {};
-            let fromuser = Meteor.users.findOne(context.userId);
-            if (!fromuser) {
-                let code = 400;
-                let response = new MlRespPayload().errorPayload('Invalid User', code);
-                return response;
-            }
-            let isValid = validateExternalUser(fromuser)
-            if(!isValid){
-                let code = 400;
-                let response = new MlRespPayload().errorPayload('Invalid User', code);
-                return response;
-            }
-
-            let toUser = Meteor.users.findOne(args.connection.toUser.userid)
-            if (!toUser) {
-                let code = 400;
-                let response = new MlRespPayload().errorPayload('Invalid User', code);
-                return response;
-            }
-            isValid = validateExternalUser(toUser)
-            if(!isValid){
-                let code = 400;
-                let response = new MlRespPayload().errorPayload('Invalid User', code);
-                return response;
-            }
-
-            let isAlreadyExist = MlConnections.findOne({"users.userid":{"$in":[context.userid, args.connection.toUser.userid]}})
-            if(isAlreadyExist){
-                let code = 400;
-                let response = new MlRespPayload().errorPayload('Connection Already Exists', code);
-                return response;
-            }
-
-            let fromUser = {
-              userid: context.userId,
-              userName: fromuser.username,
-              isFavourite: false,
-              isBlock: false
-            }
-            users.push(fromUser)
-            users.push(args.connection.toUser)
-            connection = {
-              users: users,
-              requestedFrom: context.userId,
-              createdBy: "",
-              updatedBy: "",
-              isAccepted: false,
-              isDenied: false,
-              resendCount: 0
-            }
-            ret = MlConnections.insert({...connection})
-        }catch (e){
-            let code = 400;
-            let response = new MlRespPayload().errorPayload(e.message, code);
-            return response;
-        }
-        let code = 200;
-        let response = new MlRespPayload().successPayload(ret, code);
-        return response;
+/*
+* This method returns creates the connection request.
+* @param resourceType and resourceId containing resource details
+* returns result if connection request is successuful
+*/
+MlResolver.MlMutationResolver['connectionRequest'] = (obj, args, context, info) => {
+  try {
+    var users = [];
+    var connection = {};
+    var resp=null;
+    var resourceDetails = mlInteractionService.fetchResourceBasedUserDetails(args.resourceType, args.resourceId, context);
+    var fromuser = resourceDetails.contextUser;
+    var toUser = resourceDetails.resourceOwner;
+    if (!toUser._id || !fromuser._id || fromuser._id===toUser._id) {
+      let code = 400;
+      let response = new MlRespPayload().errorPayload('Invalid User', code);
+      return response;
     }
-}
-
-MlResolver.MlMutationResolver['updateConnection'] = (obj, args, context, info) =>{
-    if(args && args.connection && args.connectionId){
-        let connection = MlConnections.findOne({"_id":args.connectionId})
-        if(!connection){
-            let code = 400;
-            let response = new MlRespPayload().errorPayload("Invalid Connection", code);
-            return response;
-        }
-        let updateFor = args.connection;
-        let fromIndex = _.findIndex(connection.users, {userid: context.userId})
-        let toIndex = _.findIndex(connection.users, {userid: updateFor.toUser.userid})
-
-        if(fromIndex > -1 && connection.users[toIndex].userid == updateFor.toUser.userid && connection.users[toIndex].userName == updateFor.toUser.userName){
-            _.mergeWith(connection.users[toIndex], updateFor['toUser'])
-            connection.updatedBy    = args.connection.updatedBy;
-            connection.isAccepted   = args.connection.isAccepted;
-            connection.isDenied     = args.connection.isDenied;
-            connection.resendCount  = args.connection.resendCount;
-
-            let ret = MlConnections.update({"_id": args.connectionId}, {$set: connection})
-            if (ret) {
-                let code = 200;
-                let response = new MlRespPayload().successPayload("Connection Updated Successfully", code);
-                return response;
-            }
-        }
-        let code = 400;
-        let response = new MlRespPayload().errorPayload("Invalid Connection", code);
-        return response;
-
+    let isValidFromUser = mlInteractionService.validateExternalUser(fromuser);
+    let isValidToUser = mlInteractionService.validateExternalUser(toUser);
+    if (!isValidToUser || !isValidFromUser) {
+      let code = 400;
+      let response = new MlRespPayload().errorPayload('Invalid User', code);
+      return response;
     }
+    var connectionCode=generateConnectionCode(fromuser._id,toUser._id);
+    //todo: index the connectionCode
+    let isAlreadyExist = mlDBController.findOne('MlConnections',{'connectionCode':connectionCode},context);
+    //if connection request does not exist
+    if (!isAlreadyExist) {
+      users.push({userId: fromuser._id,userName: fromuser.username,isFavourite: false});
+      users.push({userId:toUser._id,userName: toUser.username,isFavourite: false});
+      connection = {
+        users: users,
+        requestedFrom: context.userId,
+        connectionCode:connectionCode,
+        actionUserId:context.userId,
+        createdBy:fromuser.username,createdAt:new Date(),
+        isAccepted: false,isDenied: false,
+        isBlocked:false,resendCount: 0,status:0};
+
+      resp = mlDBController.insert('MlConnections',connection,context);
+      //create the transaction record and log
+      if(resp){
+           mlInteractionService.createTransactionRequest(toUser._id,'connectionRequest',resp);
+          if(toUser._id&&fromuser._id){
+            MlEmailNotification.endUserPortfolioConnect(fromuser._id,toUser._id);
+          }
+      }
+      return  new MlRespPayload().successPayload(resp,200);
+    }
+    /*other conditions for connection request
+    /*connection request is re-send only if
+     1- user rejects the connection request.same user can only send the request.
+     2- Note: if connection is blocked. then requestedFrom should be reset(or connection object should be deleted)
+     3-$0r condition 1)isDenied:false only if the connection is reset and requestedFrom is empty
+                     2)isDenied:true and requestFrom is not current user*/
+    resp=mlDBController.update('MlConnections',{connectionCode:connectionCode,isBlocked:false,isAccepted:false,$or:[{isDenied:false,requestedFrom:{'$type': 10}},{isDenied:true,requestedFrom:{$ne:fromuser._id}}]},
+                                         {updatedBy:fromuser.username,updatedAt:new Date(),actionUserId:fromuser._id,isDenied:false,requestedFrom:fromuser._id,status:0},
+                                         {$set:true},context);
+    if(resp===1){
+      ////create the transaction record and log
+      let connectionRec=mlDBController.findOne('MlConnections',{connectionCode:connectionCode},context)||{};
+      mlInteractionService.createTransactionRequest(toUser._id,'connectionRequest',connectionRec._id);
+
+      return new MlRespPayload().successPayload(resp,200)
+    };
+
+
+
+  } catch (e) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload(e.message, code);
+    return response;
+  }
+  let code = 200;
+  let response = new MlRespPayload().errorPayload('connection request failed', code);
+  return response;
 }
 
+/*
+ * This method returns success of accept connection request.
+ * @param connectionId containing connection details
+ * returns result if connection accepted
+ */
+MlResolver.MlMutationResolver['acceptConnection'] = (obj,args, context, info) => {
+  try {
+    var connectionId = args.connectionId;
+    var connection = mlDBController.findOne('MlConnections',{'_id':connectionId,"users.userId": context.userId},context)||{};
+    var contextUser =  mlInteractionService.getUserDetails(context.userId);
 
-validateExternalUser=(user)=>{
-    let userExternal = user.profile.isExternaluser;
-    //check if email is verified.
-    let emails=user&&user.emails?user.emails:[];
-    var email = _.find(emails || [], function (e) { return (e.verified&&e.address===user.username);});
-    if(!email){return false;}
-    return userExternal
+    var result=mlDBController.update('MlConnections',
+      //condition - accept the connection if requestFrom is from another user
+      {_id:connection._id,isAccepted:false,isBlocked:false,isDenied:false,requestedFrom:{'$ne':contextUser._id}},
+      {isAccepted:true,isBlocked:false,isDenied:false,updatedBy:contextUser.username,updatedAt:new Date(),actionUserId:contextUser._id,status:1},//update doc
+      {$set:true},context);
+
+    if(result===0){ return new MlRespPayload().errorPayload('Failed to accept the connection request', 400);}
+    return new MlRespPayload().successPayload('Connection Request Accepted', 200);
+  } catch (e) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload(e.message, code);
+    return response;
+  }
+}
+
+MlResolver.MlMutationResolver['rejectConnection'] = (obj,args, context, info) => {
+  try {
+    var connectionId = args.connectionId;
+    var connection = mlDBController.findOne('MlConnections',{'_id':connectionId,"users.userId": context.userId},context)||{};
+    var contextUser =  mlInteractionService.getUserDetails(context.userId);
+
+    var result=mlDBController.update('MlConnections',
+      //condition - reject of the connection happens only if requestFrom is from another user
+      {_id:connection._id,isAccepted:false,isBlocked:false,isDenied:false,requestedFrom:{'$ne':contextUser._id}},
+      {isAccepted:false,isBlocked:false,isDenied:true,updatedBy:contextUser.username,updatedAt:new Date(),actionUserId:contextUser._id,status:2},//update doc
+      {$set:true},context);
+    if(result===0){ return new MlRespPayload().errorPayload('Failed to reject the connection request', 400);}
+    return new MlRespPayload().successPayload('Connection Rejected', 200);
+  }catch (e) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload(e.message, code);
+    return response;
+  }
 }

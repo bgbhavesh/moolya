@@ -5,9 +5,9 @@ import MlResolver from "../../../commons/mlResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
 import MlUserContext from "../../../MlExternalUsers/mlUserContext";
 import _ from "lodash";
+import portfolioValidationRepo from "./portfolioValidation";
+import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 
-MlResolver.MlQueryResolver['fetchPortfolioDetails'] = (obj, args, context, info) => {
-}
 
 MlResolver.MlQueryResolver['fetchPortfolioDetailsByUserId'] = (obj, args, context, info) => {
   if (context.userId) {
@@ -25,15 +25,23 @@ MlResolver.MlQueryResolver['fetchPortfolioDetailsByUserId'] = (obj, args, contex
   }
 }
 
+/**
+ * request for portfolio creation
+ * */
 MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, info) => {
   let user;
   let portfolioDetails = args.portfoliodetails
   let ret;
   try {
       if (portfolioDetails && portfolioDetails.userId && portfolioDetails.communityType) {
-          user = MlPortfolioDetails.findOne({"$and": [{'userId': portfolioDetails.userId}, {'communityType': portfolioDetails.communityType}]})
+        /** introducing profile Id based on registration in portfolio from users and creating portfolio based on profileId*/
+        let userDetails = mlDBController.findOne('users', {_id: portfolioDetails.userId}, context)
+        if(userDetails && userDetails.profile && userDetails.profile.externalUserProfiles){
+          let reqProfile = _.find(userDetails.profile.externalUserProfiles, {registrationId: portfolioDetails.registrationId})
+          portfolioDetails['profileId'] = reqProfile.profileId || ''
+        }
+          user = MlPortfolioDetails.findOne({"$and": [{'userId': portfolioDetails.userId}, {'communityType': portfolioDetails.communityType}, {profileId:portfolioDetails.profileId}]})
           if (!user || portfolioDetails.communityType == 'Ideators') {
-              // ret = MlPortfolioDetails.insert({...portfolioDetails})
               ret = mlDBController.insert('MlPortfolioDetails', portfolioDetails, context)
               if(ret){
                   switch (portfolioDetails.communityType){
@@ -45,15 +53,15 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                           let googleplus="";
                           if(args.registrationInfo && args.registrationInfo.socialLinksInfo && args.registrationInfo.socialLinksInfo.length>0){
                               _.each(args.registrationInfo.socialLinksInfo,function(link) {
-                                  if(link.socialLinkType == "FACEBOOK"){
+                                  if(link.socialLinkTypeName == "Facebook"){
                                       fb = link.socialLinkUrl
-                                  }else if(link.socialLinkType == "LINKEDIN"){
+                                  }else if(link.socialLinkTypeName == "Linkedin"){
                                       linkedIn = link.socialLinkUrl
                                   }
-                                  else if(link.socialLinkType == "TWITTER"){
+                                  else if(link.socialLinkTypeName == "Twitter"){
                                       twitter = link.socialLinkUrl
                                   }
-                                  else if(link.socialLinkType == "GOOGLEPLUS"){
+                                  else if(link.socialLinkTypeName == "GooglePlus"){
                                       googleplus = link.socialLinkUrl
                                 }
                               })
@@ -100,7 +108,8 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                           MlResolver.MlMutationResolver['createStartupPortfolio'](obj, portfolio, context, info)
                       break;
 
-                      case "Funders": {
+                      case "Investors": {
+
                           let funderInfo = {}
                           let fb = "";
                           let linkedIn="";
@@ -108,15 +117,15 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                           let googleplus="";
                           if(args.registrationInfo && args.registrationInfo.socialLinksInfo && args.registrationInfo.socialLinksInfo.length>0){
                               _.each(args.registrationInfo.socialLinksInfo,function(link) {
-                                  if(link.socialLinkType == "FACEBOOK"){
+                                  if(link.socialLinkTypeName == "Facebook"){
                                     fb = link.socialLinkUrl
-                                  }else if(link.socialLinkType == "LINKEDIN"){
+                                  }else if(link.socialLinkTypeName == "Linkedin"){
                                     linkedIn = link.socialLinkUrl
                                   }
-                                  else if(link.socialLinkType == "TWITTER"){
+                                  else if(link.socialLinkTypeName == "Twitter"){
                                     twitter = link.socialLinkUrl
                                   }
-                                  else if(link.socialLinkType == "GOOGLEPLUS"){
+                                  else if(link.socialLinkTypeName == "GooglePlus"){
                                     googleplus = link.socialLinkUrl
                                   }
                               })
@@ -136,10 +145,16 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                                 profession: args.registrationInfo.profession ? args.registrationInfo.profession : "",
                                 // employerName: args.registrationInfo.employerName ? args.registrationInfo.employerName : "",
                                 mobileNumber: args.registrationInfo.contactNumber ? args.registrationInfo.contactNumber : "",
+                                investmentFrom:args.registrationInfo.investingFrom?args.registrationInfo.investingFrom:"",
+                                category:args.portfoliodetails.userType?args.portfoliodetails.userType:"",
+
                                 // facebookId: fb,
                                 // linkedInId: linkedIn,
                                 // twitterId: twitter,
                                 // gplusId: googleplus,
+                                facebookUrl: fb,
+                                linkedinUrl: linkedIn,
+                                profilePic: args.registrationInfo.profileImage ? args.registrationInfo.profileImage : "",
                                 logo:{fileUrl: args.registrationInfo.profileImage ? args.registrationInfo.profileImage : ""}
                               }
                           }
@@ -152,7 +167,20 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                           MlResolver.MlMutationResolver['createFunderPortfolio'](obj, portfolio, context, info)
                       }
                       break;
+                    case "Service Providers": {
+                      let portfolio = {
+                        userId: portfolioDetails.userId,
+                        communityType: portfolioDetails.communityType,
+                        portfolioDetailsId: ret
+                      }
+                      MlResolver.MlMutationResolver['createServiceProviderPortfolio'](obj, portfolio, context, info)
+                      console.log("creating service provider")
+                    }
+                      break;
                   }
+                //triggered on successfull portfolio creation
+                  //MlEmailNotification.onPortfolioConfirmation(userDetails);
+
               }
 
           }
@@ -174,9 +202,20 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
 
 MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) => {
     let response;
+    var privateFields = [];
     if(args.portfoliodetailsId){
         let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId});
-        if(details){
+        if(details && details.privateFields && details.privateFields.length){
+          privateFields = portfolioValidationRepo.updatePrivateKeys(args.privateFields, args.removeKeys, details.privateFields)
+        }
+        else{
+          privateFields = args.privateFields || [];
+        }
+        let detailsUpdate = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {status: 'WIP'}, {$set:true}, context)
+      if(privateFields){
+        detailsUpdate = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {privateFields:privateFields}, {$set:true}, context)
+      }
+        if(details && detailsUpdate){
             switch (details.communityType){
                 case 'Ideators':{
                     response = MlResolver.MlMutationResolver['updateIdeatorPortfolio'](obj, args, context, info)
@@ -188,8 +227,12 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
                 }
                 break;
 
-                case "Funders":{
+                case "Investors":{
                     response = MlResolver.MlMutationResolver['updateFunderPortfolio'](obj, args, context, info)
+                }
+                break;
+                case "Service Providers":{
+                  response = MlResolver.MlMutationResolver['updateServiceProviderPortfolio'](obj, args, context, info)
                 }
                 break;
             }
@@ -199,60 +242,54 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
     return response;
 }
 
+/**
+ * portfolio approval to go live
+ * */
 MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) => {
-  // TODO : Authorization
   if (args.portfoliodetailsId) {
     let updatedResponse;
-    let regRecord = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfoliodetailsId}, context) || {};
-    if(regRecord.status != "Approved"){
-      updatedResponse = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {"status": "Approved"}, {$set: true}, context)
-    }else{
-      let code = 401;
-      let response = new MlRespPayload().errorPayload("Portfolio already approved", code);
-      return response;
-    }
-    if(updatedResponse===1) {
-      let user = mlDBController.findOne('users', {_id: regRecord.userId}, context) || {};
-      let portfolioDetails = {
-        "transactionType": "processSetup",
-        "communityType": regRecord.communityName,
-        "communityCode": regRecord.communityCode,
-        "clusterId": regRecord.clusterId,
-        "chapterId": regRecord.chapterId,
-        "subChapterId": regRecord.subChapterId,
-        "communityId": regRecord.communityId,
-        clusterName: regRecord.clusterName,
-        chapterName: regRecord.chapterName,
-        subChapterName: regRecord.subChapterName,
-        communityName: regRecord.communityName,
-        "dateTime": new Date(),
-        "status": "Yet To Start",
-        "userId": regRecord.userId,
-        "username": regRecord.portfolioUserName,
-        "name": (user.profile&&user.profile.firstName?user.profile.firstName:"")+" "+(user.profile&&user.profile.lastName?user.profile.lastName:""),
-        mobileNumber: regRecord.contactNumber,
-      }
-      orderNumberGenService.assignPortfolioId(portfolioDetails)
+    let regRecord = mlDBController.findOne('MlPortfolioDetails', {
+        _id: args.portfoliodetailsId,
+        status: 'Go Live',
+      }, context) || {}
+    if (!_.isEmpty(regRecord)) {
+      updatedResponse = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {"status": "gone live", transactionUpdatedDate: new Date()}, {$set: true}, context)
+      if (updatedResponse) {
+        let user = mlDBController.findOne('users', {_id: regRecord.userId}, context) || {};
+        let portfolioObject = _.pick(regRecord, ['userId','communityCode', 'clusterId', 'chapterId', 'subChapterId', 'communityId', 'clusterName', 'chapterName', 'subChapterName', 'communityName', 'profileId'])
+        let extendObj = {
+          "transactionType": "processSetup",
+          "dateTime": new Date(),
+          "status": "Yet To Start",
+          portfolioId : args.portfoliodetailsId,
+          "username": regRecord.portfolioUserName,
+          "name": (user.profile && user.profile.firstName ? user.profile.firstName : "") + " " + (user.profile && user.profile.lastName ? user.profile.lastName : ""),
+          mobileNumber: regRecord.contactNumber,
+        }
+        let portfolioDetails = _.extend(portfolioObject, extendObj)
+        // orderNumberGenService.assignPortfolioId(portfolioDetails)
 
-      try {
-        MlResolver.MlMutationResolver['createProcessTransaction'](obj, {
-          'portfoliodetails': portfolioDetails,
-        }, context, info); //portfolio request
-      } catch (e) {
-        console.log(e);
-        //send error response;
-      }
-    }
-      if(updatedResponse===1){
+        /**if community is funder create process transaction by getting portfolio details*/
+        if(_.isMatch(regRecord, {communityCode: 'FUN'})){
+          MlResolver.MlMutationResolver['createProcessTransaction'](obj, {
+            'portfoliodetails': portfolioDetails,
+          }, context, info);
+        }
+
         let code = 200;
-        let result = {portfoliodetailsId : updatedResponse}
+        let result = {portfoliodetailsId: updatedResponse}
         let response = new MlRespPayload().successPayload(result, code);
         return response
-      }else{
+      } else {
         let code = 401;
         let response = new MlRespPayload().errorPayload("Please validate the user", code);
         return response;
       }
+    } else {
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("Portfolio not requested for go live", code);
+      return response;
+    }
   }
 }
 
@@ -268,7 +305,7 @@ MlResolver.MlMutationResolver["requestForGoLive"] = (obj, args, context, info) =
   if(details && details.userId == context.userId){
     try {
       let status = "Go Live";
-      let ret = mlDBController.update('MlPortfolioDetails', {"_id": args.portfoliodetailsId}, {status:status}, {$set: true}, context)
+      let ret = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {status:status}, {$set: true}, context)
       if (ret) {
         let code = 200;
         let response = new MlRespPayload().successPayload("Updated Successfully", code);
@@ -285,3 +322,55 @@ MlResolver.MlMutationResolver["requestForGoLive"] = (obj, args, context, info) =
   let response = new MlRespPayload().errorPayload("Not Found", code);
   return response;
 }
+
+
+MlResolver.MlMutationResolver['updatePortfolioProfilePic'] = (obj, args, context, info) => {
+  if (args.portfolioId && args.communityType) {
+    if( args.communityType == "IDE"){
+      let updatedResponse = mlDBController.update('MlIdeatorPortfolio', {portfolioDetailsId:args.portfolioId,}, {'portfolioIdeatorDetails.profilePic': args.docUrl}, {$set:true}, context)
+      return updatedResponse;
+    }else if(args.communityType == "FUN"){
+      let updatedResponse = mlDBController.update('MlFunderPortfolio', {portfolioDetailsId:args.portfolioId,}, {'portfolioIdeatorDetails.profilePic': args.docUrl}, {$set:true}, context)
+      return updatedResponse;
+    }else if(args.communityType == "STU"){
+      let updatedResponse = mlDBController.update('MlStartupPortfolio', {portfolioDetailsId:args.portfolioId,}, {'portfolioIdeatorDetails.profilePic': args.docUrl}, {$set:true}, context)
+      return updatedResponse;
+    }
+
+  }
+}
+
+MlResolver.MlMutationResolver['removeIdetaorProfilePic'] = (obj, args, context, info) => {
+  let response;
+  if(args.portfoliodetailsId){
+    response = MlIdeatorPortfolio.update({portfolioDetailsId:args.portfoliodetailsId}, {$unset: { "portfolioIdeatorDetails.profilePic": ""}}, context)
+  }
+
+  return response;
+}
+
+/**
+ * @moduleUsers left nav
+ * @params registrationId
+ * @return portfolio details
+ * */
+
+MlResolver.MlQueryResolver['fetchPortfolioByReg'] = (obj, args, context, info) => {
+  var response = {}
+  if (args.registrationId) {
+    response = mlDBController.findOne('MlPortfolioDetails', {registrationId: args.registrationId}, context) || {}
+  }
+  return response
+}
+
+
+
+
+
+
+
+
+
+
+
+

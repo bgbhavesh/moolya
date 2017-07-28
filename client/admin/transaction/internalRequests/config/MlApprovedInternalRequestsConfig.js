@@ -3,7 +3,7 @@ import React from 'react';
 import gql from 'graphql-tag'
 import MlInternalRequestDetailsComponent from '../../internalRequests/component/MlInternalRequestDetailsComponent'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
-
+import {client} from '../../../core/apolloConnection';
 const mlApprovedInternalRequestsTableConfig=new MlViewer.View({
   name:"TransactionsLogTable",
   module:"internalApprovedRequests",//Module name for filter.
@@ -14,20 +14,20 @@ const mlApprovedInternalRequestsTableConfig=new MlViewer.View({
   throttleRefresh:false,
   pagination:true,//To display pagination
   filter:true,
-  filterComponent: <MlCustomFilter module="internalApprovedRequests" moduleName="internalApprovedRequests" />,
+  filterComponent: <MlCustomFilter module="internalApprovedRequests" moduleName="internalApprovedRequests" client={client}/>,
   columns:[
     {dataField: "requestId",title:"Id",'isKey':true,isHidden:true,selectRow:true},
-    {dataField: "transactionCreatedDate", title: "Created At",dataSort:true,selectRow:true},
-    {dataField: "requestId", title: "User Name",dataSort:true,selectRow:true},
-    {dataField: "requestTypeName", title: "Activity",dataSort:true,selectRow:true},
-    {dataField: "clusterName", title: "Details",dataSort:true,selectRow:true},
-    {dataField: "chapterName", title: "TransactionTypeName",dataSort:true,selectRow:true},
+    {dataField: "requestId", title: "Transaction Id",dataSort:true,selectRow:true},
+    {dataField: "createdBy", title: "Created By",dataSort:true,selectRow:true},
+    {dataField: "emailId", title: "Email Id",dataSort:true,selectRow:true},
     {dataField: "clusterName", title: "Cluster",dataSort:true,selectRow:true},
     {dataField: "chapterName", title: "Chapter",dataSort:true,selectRow:true},
     {dataField: "subChapterName", title: "Sub Chapter",dataSort:true,selectRow:true},
     {dataField: "communityName", title: "Community",dataSort:true,selectRow:true},
+    {dataField: "transactionTypeName", title: "Transaction Type",dataSort:true,selectRow:true},
+    {dataField: "transactionCreatedDate", title: "Created Date",dataSort:true,selectRow:true},
     {dataField: "status", title: "status",dataSort:true,selectRow:true},
-    {dataField: "createdBy", title: "Created By",dataSort:true,selectRow:true}
+    {dataField: "requestTypeName", title: "Activity",dataSort:true,selectRow:true},
   ],
   tableHeaderClass:'react_table_head',
   isExpandableRow:(row)=>{return true;},
@@ -48,8 +48,10 @@ const mlApprovedInternalRequestsTableConfig=new MlViewer.View({
                           userId
                           status
                           requestId
+                          emailId
                           requestTypeName
                           transactionCreatedDate
+                          transactionTypeName
                           requestTypeId
                           requestDescription
                           clusterName

@@ -1,14 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
-import  $ from 'jquery'
 import shouldPureComponentUpdate from 'react-pure-render/function';
 import controllable from 'react-controllables';
-import GoogleMap from 'google-map-react';
-import MapMarkers from './mapMarkers'
+//import GoogleMap from 'google-map-react';
+//import MapMarkers from './mapMarkers'
 import MapCluster from './MapCluster';
 import MlLoader from '../../../commons/components/loader/loader'
-import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 
 let defaultCenter={lat: 17.1144718, lng: 5.7694891};
 @controllable(['center', 'zoom', 'hoverKey', 'clickKey'])
@@ -23,10 +19,14 @@ export default class MoolyaMapView extends Component {
   async componentWillMount() {
     let that = this;
     let zoom = 1;
-    let loggedInUser = getAdminUserContext();
+    let hasZoom=that.props.fetchZoom||false;
+    if(hasZoom){
+       zoom= await that.props.fetchZoomHandler(that.props)||zoom;
+    }
+    /*let loggedInUser = getAdminUserContext();
     if(loggedInUser.hierarchyLevel != 4){
       zoom = 4;
-    }
+    }*/
     let hasCenter=that.props.fetchCenter||false;
     if(hasCenter){
       let center= await that.props.fetchCenterHandler(that.props);
@@ -68,6 +68,31 @@ export default class MoolyaMapView extends Component {
       this.props.fetchMore(variables);
     }
   }
+  getBounds(obj){
+    // Receiving bounds and zoom here
+    // Need to implement logic for MOOLYA- 1770
+    // Extend the variables and call fetch More
+
+    // let variables={};
+    // let hasQueryOptions = this.props&&this.props.queryOptions ? true : false;
+    // if(obj.zoom>1){
+    //   if (hasQueryOptions) {
+    //     let config = this.props
+    //     if(config && config.params){
+    //       let bounds={bounds:obj.bounds}
+    //       _.extend(config.params,bounds)
+    //     }else{
+    //       let newParams = {params:{bounds:obj.bounds}}
+    //       data = _.omit(config, 'params')
+    //       config=_.extend(data,newParams);
+    //     }
+    //     let dynamicQueryOption = this.props&&this.props.buildQueryOptions ? this.props.buildQueryOptions(config) : {};
+    //     variables = _.extend(variables,dynamicQueryOption);
+    //
+    //   }
+    //   this.props.fetchMore(variables);
+    // }
+  }
 
   render()
   {
@@ -77,19 +102,31 @@ export default class MoolyaMapView extends Component {
     }
     const data=this.props.data&&this.props.data.data?this.props.data.data:[];
     let MapComponent = null;
+    let MapFooterComponent=null;
     // Fix me
     var path = window.location.pathname;
-    if(path.indexOf("communities") !== -1){
+    if(path.indexOf("communities") !== -1 || path.indexOf("app") !== -1){
       MapComponent=React.cloneElement(this.props.viewComponent,{data:data,config:this.props});
+    }
+
+    if(this.props.mapFooterComponent){
+      MapFooterComponent=React.cloneElement(this.props.mapFooterComponent,{data:data,mapContext:this.props});
     }
     return (
       <span>
         {MapComponent?MapComponent:
-          <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} showImage={this.props.showImage}/>
+          <MapCluster data={data} zoom={this.state.zoom} center={this.state.center} mapContext={this.props} module={this.props.module} showImage={this.props.showImage} getBounds={this.getBounds.bind(this)}/>
         }
+        {/*{data.length>0?<MlMapFooter data={data} mapContext={this.props}/>:
+          <div className="bottom_actions_block bottom_count">
+            <div><b>0</b> of <b>0</b> users are Active<br/></div>
+          </div>
+        }*/}
+        {MapFooterComponent}
+
       </span>
 
-      );
+    );
 
     /*
     const places = this.props.data&&this.props.data.data?this.props.data.data.map(place => {

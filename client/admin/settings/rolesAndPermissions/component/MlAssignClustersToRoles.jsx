@@ -1,7 +1,7 @@
 import React from 'react';
 import {Meteor} from 'meteor/meteor';
 import {render} from 'react-dom';
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import Select from 'react-select';
@@ -199,8 +199,8 @@ export default class MlAssignClustersToRoles extends React.Component {
 
     //&&selectedSubChapter!=''
     if(selectedUserType=='non-moolya'){
-      departmentQuery=gql` query($isMoolya:Boolean,$subChapter:String){
-      data:fetchNonMoolyaBasedDepartment(isMoolya:$isMoolya,subChapter:$subChapter){label:departmentName,value:_id}
+      departmentQuery=gql` query($isMoolya:Boolean,$clusterId:String,$subChapter:String){
+      data:fetchNonMoolyaBasedDepartment(isMoolya:$isMoolya,clusterId:$clusterId,subChapter:$subChapter){label:departmentName,value:_id}
     }
     `;
       subChapterquery=gql`query($chapterId:String,$clusterId:String){  
@@ -221,7 +221,7 @@ export default class MlAssignClustersToRoles extends React.Component {
             departmentqueryOptions = {options: {variables: {isMoolya: true, clusterId:assignCluster.cluster}}};
           }
           if(selectedUserType=='non-moolya'&& assignCluster.subChapter!=''){
-            departmentqueryOptions={options: { variables: {isMoolya:false,subChapter:assignCluster.subChapter}}};
+            departmentqueryOptions={options: { variables: {isMoolya:false,clusterId:assignCluster.cluster,subChapter:assignCluster.subChapter}}};
           }
 
           let chapterOption={options: { variables: {id:assignCluster.cluster}}};

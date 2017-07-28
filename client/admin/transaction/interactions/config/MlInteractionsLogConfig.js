@@ -3,6 +3,7 @@ import React from 'react';
 import gql from 'graphql-tag'
 import MlInteractionDetailsComponent from '../component/MlInteractionDetailsComponent'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
+import {client} from '../../../core/apolloConnection';
 
 const mlInteractionsLogTableConfig=new MlViewer.View({
   name:"TransactionsLogTable",
@@ -14,7 +15,7 @@ const mlInteractionsLogTableConfig=new MlViewer.View({
   throttleRefresh:false,
   pagination:true,//To display pagination
   filter:true,
-  filterComponent: <MlCustomFilter module="transactionLog" moduleName="transactionLog" />,
+  filterComponent: <MlCustomFilter module="transactionLog" moduleName="transactionLog" client={client} />,
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},
     {dataField: "createdAt", title: "Created At",dataSort:true,selectRow:true},

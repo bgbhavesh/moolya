@@ -2,6 +2,7 @@
   import getQuery from "../genericSearch/queryConstructor";
   import MlAdminUserContext from "../../../../server/mlAuthorization/mlAdminUserContext";
   import _ from "underscore";
+  import _lodash from "lodash";
 
   let mergeQueries=function(userFilter,serverFilter){
   let query=userFilter||{};
@@ -58,7 +59,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     var queryChange;
     if (userProfileDep.defaultSubChapters.indexOf("all") < 0) {
       userProfileDep.defaultSubChapters.push('all')
-      var serverQuery = {$and: [{isMoolya: false}, {isSystemDefined: false}, {depatmentAvailable: {$elemMatch: {subChapter: {$in: userProfileDep.defaultSubChapters}}}}]}
+      // var serverQuery = {$and: [{isMoolya: false}, {isSystemDefined: false}, {depatmentAvailable: {$elemMatch: {subChapter: {$in: userProfileDep.defaultSubChapters}}}}]}
+      var serverQuery = {depatmentAvailable: {$elemMatch: {subChapter: {$in: userProfileDep.defaultSubChapters},cluster:{$in:['all', userProfileDep.defaultCluster]}}}}
       queryChange = mergeQueries(query, serverQuery);
     }else {
       queryChange = query
@@ -104,7 +106,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     var queryChange;
     if (userProfileSub.defaultSubChapters.indexOf("all") < 0) {
       userProfileSub.defaultSubChapters.push('all')
-      var serverQuery ={$and: [{isMoolya: false}, {isSystemDefined: false},  {subDepatmentAvailable: {$elemMatch: {subChapter: {$in:userProfileSub.defaultSubChapters}}}}]}
+      // var serverQuery ={$and: [{isMoolya: false}, {isSystemDefined: false},  {subDepatmentAvailable: {$elemMatch: {subChapter: {$in:userProfileSub.defaultSubChapters}}}}]}
+      var serverQuery ={subDepatmentAvailable: {$elemMatch: {subChapter: {$in:userProfileSub.defaultSubChapters},cluster:{$in:['all', userProfileSub.defaultCluster]}}}}
       queryChange = mergeQueries(query, serverQuery);
     }else {
       queryChange = query
@@ -134,7 +137,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       const chapterData =  MlChapters.find( { _id: { $in: chapterIdsArray } } ).fetch() || [];
       const subchapterData =  MlSubChapters.find( { _id: { $in: subchapterIdsArray } } ).fetch() || [];
 
-      var clusterNames = _.pluck(clusterData, 'clusterNames') || [];
+      var clusterNames = _.pluck(clusterData, 'clusterName') || [];
       var chapterNamesArray = _.pluck(chapterData, 'chapterName') || [];
       var subchapterNamesArray = _.pluck(subchapterData, 'subChapterName') || [];
 
@@ -250,15 +253,33 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlDocumentMapping.find(query,findOptions).fetch();
     data.map(function (doc,index) {
       let clusterIds =[];
+      let chapterIds=[];
+      let subChapterIds=[];
       let kycCategoryIds = [];
       let allowableFormatIds = [];
       doc.clusters.map(function (ids) {
         clusterIds.push(ids)
       });
+      doc.chapters.map(function (ids) {
+        chapterIds.push(ids)
+      });
+      const chapterData =  MlChapters.find( { _id: { $in: chapterIds } } ).fetch() || [];
+      let chapterNames = [];  //@array of strings
+      chapterData.map(function (doc) {
+        chapterNames.push(doc.chapterName)
+      });
       const clusterData =  MlClusters.find( { _id: { $in: clusterIds } } ).fetch() || [];
       let clusterNames = [];  //@array of strings
       clusterData.map(function (doc) {
         clusterNames.push(doc.clusterName)
+      });
+      doc.subChapters.map(function (ids) {
+        subChapterIds.push(ids)
+      });
+      const subChapterData =  MlSubChapters.find( { _id: { $in: subChapterIds } } ).fetch() || [];
+      let subChapterNames = [];  //@array of strings
+      subChapterData.map(function (doc) {
+        subChapterNames.push(doc.subChapterName)
       });
 
       doc.kycCategory.map(function (ids) {
@@ -280,6 +301,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       });
 
       data[index].clusters = clusterNames || [];
+      data[index].chapters = chapterNames || [];
+      data[index].subChapters= subChapterNames || [];
       data[index].kycCategory = kycCategoryNames || [];
       data[index].allowableFormat = allowableFormatNames || [];
 
@@ -296,14 +319,15 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
 
   if(args.module == 'Users'){
-    var curUserProfile = new MlAdminUserContext().userProfileDetails(context.userId);
-    var queryChange;
-    if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {   //sub-chapter_admin non-moolya
-      queryChange = {$and: [{'profile.isMoolya': false}, {'profile.InternalUprofile.moolyaProfile.subChapter': {$in: curUserProfile.defaultSubChapters}}, {'profile.isExternaluser': false}]}
-    } else {
-      queryChange = {'profile.isExternaluser': false}   //platform_admin
-    }
-    let queryList = mergeQueries(query, queryChange);
+    // var curUserProfile = new MlAdminUserContext().userProfileDetails(context.userId);
+    // var queryChange;
+    // if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {   //sub-chapter_admin non-moolya
+    //   queryChange = {$and: [{'profile.isMoolya': false}, {'profile.InternalUprofile.moolyaProfile.subChapter': {$in: curUserProfile.defaultSubChapters}}, {'profile.isExternaluser': false}]}
+    // } else {
+    //   queryChange = {'profile.isExternaluser': false}   //platform_admin
+    // }
+    var queryChange = accessControlQuery(context.userId, context) || {}
+    var queryList = mergeQueries(query, queryChange);
     data = Meteor.users.find(queryList, findOptions).fetch();
 
     data.map(function (doc,index) {
@@ -331,7 +355,18 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=Meteor.users.find(queryList,findOptions).count();
   }
   if(args.module == 'roles'){
-    data= MlRoles.find(query,findOptions).fetch();
+    var userProfileMenu = new MlAdminUserContext().userProfileDetails(context.userId);
+    var queryChange;
+    if (userProfileMenu.defaultSubChapters.indexOf("all") < 0) {
+      userProfileMenu.defaultSubChapters.push('all')
+      var serverQuery ={assignRoles: {$elemMatch: {cluster:{$in:['all', userProfileMenu.defaultCluster]},subChapter: {$in:userProfileMenu.defaultSubChapters}}}}
+      queryChange = mergeQueries(query, serverQuery);
+    }else {
+      queryChange = query
+    }
+
+    data = MlRoles.find(queryChange, findOptions).fetch();
+    // data= MlRoles.find(query,findOptions).fetch();
     data.map(function (doc,index) {
       let departmentsIdsArray = [];
       let subdepartmentsIdsArray = [];
@@ -380,7 +415,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       data[index].chaptersList = chapterNamesArray || [];
       data[index].subChapterList = subchapterNamesArray || [];
     });
-    totalRecords=MlRoles.find(query,findOptions).count();
+    totalRecords = MlRoles.find(queryChange, findOptions).count();
   }
 
   if(args.module=="industry"){
@@ -407,74 +442,68 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlStageOfCompany.find(query,findOptions).fetch();
     totalRecords=MlStageOfCompany.find(query,findOptions).count();
   }
-  if(args.module=="processmapping"){
-    data= MlProcessMapping.find(query,findOptions).fetch();
-    data.map(function (doc,index) {
-      let industryIds=[];
-      let communityIds=[];
-      let clusterIds=[];
-      let stateIds=[];
-      let chapterIds=[];
-      let professionIds=[];
-      let processTypes=MlprocessTypes.findOne({_id:doc.process});
-      doc.communities.map(function (ids) {
-        communityIds.push(ids)
-      });
-      const communityData =  MlCommunityDefinition.find( { code: { $in: communityIds } } ).fetch() || [];
-      let communityNames = [];  //@array of strings
-      communityData.map(function (doc) {
-        communityNames.push(doc.name)
-      });
-      doc.industries.map(function (ids) {
-        industryIds.push(ids)
-      });
-      const industryData =  MlIndustries.find( { _id: { $in: industryIds } } ).fetch() || [];
-      let industryNames = [];  //@array of strings
-      industryData.map(function (doc) {
-        industryNames.push(doc.industryName)
-      });
-      doc.professions.map(function (ids) {
-        professionIds.push(ids)
-      });
-      const professionData =  MlProfessions.find( { _id: { $in: professionIds } } ).fetch() || [];
-      let professionNames = [];  //@array of strings
-      professionData.map(function (doc) {
-        professionNames.push(doc.professionName)
-      });
-      doc.clusters.map(function (ids) {
-        clusterIds.push(ids)
-      });
-      const clusterData =  MlClusters.find( { _id: { $in: clusterIds } } ).fetch() || [];
-      let clusterNames = [];  //@array of strings
-      clusterData.map(function (doc) {
-        clusterNames.push(doc.clusterName)
-      });
-      doc.states.map(function (ids) {
-        stateIds.push(ids)
-      });
-      const stateData =  MlStates.find( { _id: { $in: stateIds } } ).fetch() || [];
-      let stateNames = [];  //@array of strings
-      stateData.map(function (doc) {
-        stateNames.push(doc.name)
-      });
-      doc.chapters.map(function (ids) {
-        chapterIds.push(ids)
-      });
-      const chapterData =  MlChapters.find( { _id: { $in: chapterIds } } ).fetch() || [];
-      let chapterNames = [];  //@array of strings
-      chapterData.map(function (doc) {
-        chapterNames.push(doc.chapterName)
-      });
-      data[index].communities= communityNames || [];
-      data[index].professions= professionNames || [];
-      data[index].industries= industryNames || [];
+
+  //todo: need to include aggreate query in this
+  if (args.module == "processmapping") {
+    data = MlProcessMapping.find(query, findOptions).fetch();
+    data.map(function (doc, index) {
+
+      let processTypes = MlprocessTypes.findOne({_id: doc.process}) || {}
+
+      var communityIds = doc.communities || []
+      const communityData = MlCommunityDefinition.find({code: {$in: communityIds}}).fetch() || [];
+      let communityNames = _lodash.map(communityData, 'name') || []
+
+      var industryIds = doc.industries || []
+      const industryData = MlIndustries.find({_id: {$in: industryIds}}).fetch() || [];
+      let industryNames = _lodash.map(industryData, 'industryName') || []
+
+      var professionIds = doc.professions || []
+      const professionData = MlProfessions.find({_id: {$in: professionIds}}).fetch() || [];
+      let professionNames = _lodash.map(professionData, 'professionName') || []
+
+      var clusterIds = doc.clusters || []
+      const clusterData = MlClusters.find({_id: {$in: clusterIds}}).fetch() || [];
+      let clusterNames = _lodash.map(clusterData, 'clusterName') || []
+
+      var stateIds = doc.states
+      const stateData = MlStates.find({_id: {$in: stateIds}}).fetch() || [];
+      let stateNames = _lodash.map(stateData, 'name') || []
+
+      var chapterIds = doc.chapters
+      const chapterData = MlChapters.find({_id: {$in: chapterIds}}).fetch() || [];
+      let chapterNames = _lodash.map(chapterData, 'chapterName') || []
+
+      var userTypeIds = doc.userTypes
+      var userTypeNamesString = ''
+      if(userTypeIds.indexOf("all") < 0){
+        const userTypeData = MlUserTypes.find({_id: {$in: userTypeIds}}).fetch() || [];
+        userTypeNamesString = _lodash.map(userTypeData, 'userTypeName') || []
+      }else {
+        userTypeNamesString = 'All'
+      }
+
+      var subChaptersIds = doc.subChapters
+      var subChapterNamesString = ''
+      if(subChaptersIds.indexOf("all") < 0){
+        const subChaptersData = MlSubChapters.find({_id: {$in: subChaptersIds}}).fetch();
+        subChapterNamesString = _lodash.map(subChaptersData, 'subChapterName') || []
+      }else {
+        subChapterNamesString = 'All'
+      }
+
+
+      data[index].communities = communityNames || [];
+      data[index].professions = professionNames || [];
+      data[index].industries = industryNames || [];
       data[index].clusters = clusterNames || [];
       data[index].states = stateNames || [];
       data[index].chapters = chapterNames || [];
-      data[index].processName=processTypes.processName;
-
+      data[index].processName = processTypes.processName;
+      data[index].userTypeNamesString = userTypeNamesString=='All'?'All':userTypeNamesString.join()
+      data[index].subChapterNamesString = subChapterNamesString=='All'?'All':subChapterNamesString.join()
     });
-    totalRecords=MlProcessMapping.find(query,findOptions).count();
+    totalRecords = MlProcessMapping.find(query, findOptions).count();
   }
   if(args.module=="documents"){
 
@@ -575,7 +604,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
 
       data[index].communityNames= communityNames || [];
       data[index].professionNames= professionNames || [];
-      data[index].industrieNames= industryNames || [];
+      data[index].industryNames= industryNames || [];
       data[index].clusterNames = clusterNames || [];
       data[index].stateNames = stateNames || [];
       data[index].chapterNames = chapterNames || [];
@@ -672,7 +701,6 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
   if(args.module == "Portfoliodetails"){
       data = MlPortfolioDetails.find(query,findOptions).fetch();
-      // totalRecords = data.length;
       totalRecords = MlPortfolioDetails.find(query,findOptions).count();
   }
   if(args.module=="templates"){
@@ -697,10 +725,29 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data= MlFilters.find(query,findOptions).fetch();
     totalRecords=MlFilters.find(query,findOptions).count();
   }
-  if(args.module=="FunderPortfolio"){
-    data= MlFunderPortfolio.find(query,findOptions).fetch();
-    totalRecords=MlFunderPortfolio.find(query,findOptions).count();
+
+  if (args.module == "FunderPortfolio") {
+    let value = mlDBController.find('MlPortfolioDetails', {status: 'gone live', communityCode: "FUN"}, context).fetch()    //making dependency of funders on portfolio status
+    let portId = _lodash.map(value, '_id')
+    let finalQuery = mergeQueries(query, {portfolioDetailsId: {$in: portId}});
+    data = MlFunderPortfolio.find(finalQuery, findOptions).fetch();
+    totalRecords = MlFunderPortfolio.find(finalQuery, findOptions).count();
   }
+
+  // if (args.module == "serviceProviderPortfolioDetails") {
+  //   let value = mlDBController.find('MlPortfolioDetails', {status: 'gone live', communityCode: "SPS"}, context).fetch()
+  //   let portId = _lodash.map(value, '_id')
+  //   let finalQuery = mergeQueries(query, {portfolioDetailsId: {$in: portId}});
+  //   data = MlServiceProviderPortfolio.find(finalQuery, findOptions).fetch();
+  //   totalRecords = MlServiceProviderPortfolio.find(finalQuery, findOptions).count();
+  // }
+  // if (args.module == "startupPortfolioDetails") {
+  //   let value = mlDBController.find('MlPortfolioDetails', {status: 'gone live', communityCode: "STU"}, context).fetch()
+  //   let portId = _lodash.map(value, '_id')
+  //   let finalQuery = mergeQueries(query, {portfolioDetailsId: {$in: portId}});
+  //   data = MlStartupPortfolio.find(finalQuery, findOptions).fetch();
+  //   totalRecords = MlStartupPortfolio.find(finalQuery, findOptions).count();
+  // }
 
   if(args.module=="SubDomain"){
     var domain= MlSubDomain.find(query,findOptions).fetch();
@@ -763,14 +810,84 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     });
     totalRecords = mlDBController.find('MlActionAndStatus', query, context, findOptions).count();
   }
-
+  //internal user
   if (args.module == "officeTransaction") {
-    let finalQuery =mergeQueries({userId:context.userId}, query);
+    let finalQuery = mergeQueries(query, {userId: context.userId, officeId: args.customParams.docId});
     data = mlDBController.find('MlOfficeTransaction', finalQuery, context, findOptions).fetch();
     totalRecords = mlDBController.find('MlOfficeTransaction', finalQuery, context).count();
   }
+
+  if (args.module == "userTransaction") {
+    let pipeline = [{
+      '$match': {_id: context.userId}},
+      {'$lookup': {from: 'mlRegistration',localField: '_id',foreignField: 'registrationInfo.userId',as: 'registration'}},
+      {'$lookup':{from:'mlPortfolioDetails',localField:'_id',foreignField:'userId', as:'portfolio'}},
+      {'$lookup':{from:'mlOfficeTransaction',localField:'_id',foreignField:'userId', as:'office'}},
+      {'$lookup':{from:'mlTransactionsLog',localField:'_id',foreignField:'userId', as:'transactionLog'}},
+      {'$project':{"registration":{
+        '$map':
+        { "input":"$registration", "as":"reg", 'in':
+        { "createdAt" :"$$reg.registrationInfo.registrationDate", "transactionId":"$$reg._id" ,"transactionType":"$$reg.registrationInfo.transactionType",username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+        }
+      },
+        "portfolio":{
+          '$map':
+          { "input":"$portfolio", "as":"port", 'in':
+          { "createdAt" :"$$port.createdAt", "transactionId":"$$port._id" ,"transactionType":"$$port.transactionType", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+          }
+        },
+        "office":{
+          '$map':
+          { "input":"$office", "as":"off", 'in':
+          { "createdAt" :"$$off.dateTime", "transactionId":"$$off._id" ,"transactionType":"$$off.transactionType", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName' , userId:'$_id'}
+          }
+        },
+        "transactionLog":{
+          '$map':
+          { "input":"$transactionLog", "as":"trans", 'in':
+          { "createdAt" :"$$trans.createdAt", "transactionId":"$$trans._id" ,"transactionType":"$$trans.transactionTypeName", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+          }
+        },
+      }},
+      {'$project': {data: { "$concatArrays" : [ "$registration", "$portfolio", "$office", "$transactionLog" ] } }},
+      {'$addFields': { 'data.totalRecords': { $size: "$data" } } },
+      {"$unwind" : "$data"},
+      {"$replaceRoot": { newRoot: "$data"}}
+    ];
+
+    if(Object.keys(query).length) {
+      pipeline.push({$match: query});
+    }
+
+    if(findOptions.sort) {
+      pipeline.push({$sort:findOptions.sort});
+    }
+
+    if(findOptions.skip) {
+      pipeline.push({$skip:findOptions.skip});
+    }
+
+    if(findOptions.limit) {
+      pipeline.push({$limit:findOptions.limit});
+    }
+
+    data = mlDBController.aggregate('users', pipeline, context);
+    // data = _lodash.concat(response[0].R, response[0].P, response[0].O, response[0].T)
+    totalRecords = data && data[0] && data[0].totalRecords ? data[0].totalRecords : 0;
+  }
+
+  if(args.module=="NotificationTemplate"){
+    data= MlNotificationTemplates.find(query,findOptions).fetch();
+    totalRecords=MlNotificationTemplates.find(query,findOptions).count();
+  }
+
+  if(args.module == 'Packages'){
+    data = [];
+    totalRecords = data.length
+  }
+
   return {'totalRecords':totalRecords,'data':data};
-}
+};
 
 MlResolver.MlUnionResolver['SearchResult']= {
   __resolveType(data, context, info){
@@ -796,6 +913,8 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case "registrationInfo":resolveType= 'RegistrationInfo';break;
       case "registrationApprovedInfo":resolveType= 'RegistrationInfo';break;
       case "FunderPortfolio":resolveType= 'FunderPortfolio';break;
+      // case "serviceProviderPortfolioDetails":resolveType= 'serviceProviderPortfolioDetails';break;
+      // case "startupPortfolioDetails":resolveType= 'startupPortfolioOutput';break;
       case "Portfoliodetails":resolveType= 'Portfoliodetails';break;
       case "documentType":resolveType= 'DocumentTypes';break;
       case "documentFormat":resolveType= 'DocumentFormats';break;
@@ -839,6 +958,9 @@ MlResolver.MlUnionResolver['SearchResult']= {
       case 'actionAndStatus':resolveType='ActionAndStatusType';break
       case 'TransactionsLog':resolveType='TransactionsLog';break
       case 'officeTransaction':resolveType='officeTransactionType';break
+      case 'userTransaction':resolveType='myTransaction';break
+      case 'NotificationTemplate':resolveType='NotificationTemplate';break
+      case 'Packages':resolveType='Packages';break;
     }
 
     if(resolveType){
@@ -1021,3 +1143,23 @@ MlResolver.MlUnionResolver['SearchResult']= {
     return 'GenericType';
   }
 }
+
+  let accessControlQuery = function (userId, context) {
+    var curUserProfile = new MlAdminUserContext().userProfileDetails(userId);
+    var queryReturn;
+    if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {   //sub-chapter_admin non-moolya
+      let subChapterId = curUserProfile.defaultSubChapters ? curUserProfile.defaultSubChapters[0] : ''
+      // let subChapterDetails = MlResolver.MlQueryResolver['fetchSubChapter'](null, {_id: subChapterId}, context, null)
+      let subChapterDetails = mlDBController.findOne('MlSubChapters', {_id: subChapterId}, context)   /*not getting complete data so changing query*/
+      if(subChapterDetails && !_.isEmpty(subChapterDetails.internalSubChapterAccess)){
+        let canSearch = subChapterDetails.internalSubChapterAccess.backendUser?subChapterDetails.internalSubChapterAccess.backendUser.canSearch:false
+        var associated = subChapterDetails.associatedSubChapters ? subChapterDetails.associatedSubChapters : []
+        if(canSearch)
+          curUserProfile.defaultSubChapters = _lodash.concat(curUserProfile.defaultSubChapters, associated)
+      }
+      queryReturn = {$and: [{'_id':{$ne: userId}},{'profile.isMoolya': false}, {'profile.InternalUprofile.moolyaProfile.subChapter': {$in: curUserProfile.defaultSubChapters}}, {'profile.isExternaluser': false}]}
+    } else {
+      queryReturn = {'profile.isExternaluser': false}   //platform_admin
+    }
+    return queryReturn;
+  }

@@ -61,7 +61,10 @@ const mlClusterListConfig=new MlViewer.View({
                                 clusterCode
                                 about
                                 email
-                    	
+                    	          status{
+                    	            code
+                    	            description
+                    	          }
                           }
                       }
               }

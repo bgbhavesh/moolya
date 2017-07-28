@@ -9,7 +9,23 @@ MlResolver.MlMutationResolver['CreateRequestType'] = (obj, args, context, info) 
     let response = new MlRespPayload().errorPayload("Not Authorized", code);
     return response;
   }*/
+  var firstName='';var lastName='';
+  // let id = MlDepartments.insert({...args.department});
+  if(Meteor.users.findOne({_id : context.userId}))
+  {
+    let user = Meteor.users.findOne({_id: context.userId}) || {}
+    if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
 
+      firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+      lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+    }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+      firstName=(user.profile || {}).firstName||'';
+      lastName =(user.profile || {}).lastName||'';
+    }
+  }
+  let createdBy = firstName +' '+lastName
+  args.createdBy = createdBy;
+  args.createdDate = new Date();
   if (!args.requestName) {
     let code = 401;
     let response = new MlRespPayload().errorPayload("Request Name is Required", code);
@@ -27,6 +43,23 @@ MlResolver.MlMutationResolver['CreateRequestType'] = (obj, args, context, info) 
 
 MlResolver.MlMutationResolver['UpdateRequestType'] = (obj, args, context, info) => {
 
+  var firstName='';var lastName='';
+  // let id = MlDepartments.insert({...args.department});
+  if(Meteor.users.findOne({_id : context.userId}))
+  {
+    let user = Meteor.users.findOne({_id: context.userId}) || {}
+    if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+      firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+      lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+    }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+      firstName=(user.profile || {}).firstName||'';
+      lastName =(user.profile || {}).lastName||'';
+    }
+  }
+  let createdBy = firstName +' '+lastName
+  args.updatedBy = createdBy;
+  args.updatedDate = new Date();
 
   if (!args.requestName) {
     let code = 401;

@@ -26,6 +26,11 @@ let citiesSchema = `
         isActive    : Boolean
     }
     
+     type citiesSearchResult{
+      results:[Cities],
+      totalCount:Int
+     }
+    
     type Query {
         fetchCities: SearchResp
         fetchCity(cityId: String): Cities
@@ -33,7 +38,7 @@ let citiesSchema = `
         fetchCitiesPerState(stateId: String):[Cities]
         fetchCitiesPerCountry(countryId: String):[Cities]
         searchCities(searchQuery:String,displayAllOption:Boolean):[Cities]
-        fetchCitiesPerCountryAPI(countryId: String):[Cities]
+        fetchCitiesPerCountryAPI(countryId: String,cityName:String,limit:Int):citiesSearchResult
         
     }
     
@@ -47,8 +52,8 @@ let supportedApi = [
   {api:'fetchCities', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
   {api:'fetchCity', actionName:'READ', moduleName:"CITIES"},
   {api:'fetchCitiesPerState', actionName:'READ', moduleName:"CITIES"},
-  {api:'fetchCitiesPerCountry', actionName:'READ', moduleName:"CITIES"},
-  {api:'searchCities', actionName:'READ', moduleName:"CITIES"},
+  {api:'fetchCitiesPerCountry', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
+  {api:'searchCities', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
   {api:'updateCity', actionName:'UPDATE', moduleName:"CITIES"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

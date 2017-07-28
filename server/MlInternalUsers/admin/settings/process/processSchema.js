@@ -6,7 +6,10 @@ let Process = `
 
     type ProcessType{
         _id         : String,
-        date        : Date,
+        createdBy     : String,
+      createdDate   : Date,
+      updatedBy     : String,
+       updatedDate  : Date,
         processId   : String,
         processName : String,
         process     : String,
@@ -15,7 +18,7 @@ let Process = `
         userTypes   : [String],
         userTypeNames : [String],
         identity    : String,
-        industrieNames : [String],
+        industryNames : [String],
         industries  : [String],
         industries  : [String],
         industries  : [String],
@@ -32,6 +35,8 @@ let Process = `
         isActive    : Boolean,
         documents   : [documentOutput]  
         processDocuments : [processDocumentOutput]
+        userTypeNamesString : String
+        subChapterNamesString : String
     }
      type docFilesInputSchema{
        fileId:String,
@@ -59,7 +64,10 @@ let Process = `
    
     type processOutput{
         _id         : String,
-         date        : Date,
+      createdBy     : String
+      createdDate   : Date
+      updatedBy     : String
+       updatedDate  : Date
         processId   : String,
         process     : String,
         communities : [String],
@@ -161,7 +169,10 @@ let Process = `
         
     }
     input processInput{
-        date: Date,
+      createdBy     : String
+      createdDate   : Date
+      updatedBy     : String
+       updatedDate  : Date
         processId   : String,
         process     : String,
         communities : [String],
@@ -186,7 +197,8 @@ let Process = `
     
     type Query{
       findProcess(id:String):processOutput
-      findProcessDocumentForRegistration(clusterId:String,chapterId:String,subChapterId:String,userType:String,communityType:String,identityType:String,profession:String,industry:String,email:String):processOutput
+      fetchKYCDocuments(chapters:[String],clusters:[String],subChapters:[String],community:String,kyc:String,documentType:String,displayAllOption:Boolean):[processDocumentOutput]
+      findProcessDocumentForRegistration(countryId:String,clusterId:String,chapterId:String,subChapterId:String,userType:String,communityType:String,identityType:String,profession:String,industry:String,email:String):[processDocumentOutput]
     }
     
 `
@@ -196,7 +208,8 @@ let supportedApi = [
     {api:'createProcess', actionName:'CREATE', moduleName:"PROCESSMAPPING"},
     {api:'updateProcess', actionName:'UPDATE', moduleName:"PROCESSMAPPING"},
     {api:'upsertProcessDocument', actionName:'UPDATE', moduleName:"PROCESSMAPPING"},
-    {api:'findProcess', actionName:'READ', moduleName:"PROCESSMAPPING"},
+    {api:'findProcess', actionName:'READ', moduleName:"PROCESSMAPPING", isWhiteList:true},
     {api:'findProcessDocumentForRegistration', actionName:'READ', moduleName:"PROCESSMAPPING", isWhiteList:true},
+  {api:'fetchKYCDocuments', actionName:'READ', moduleName:"PROCESSMAPPING", isWhiteList:true},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

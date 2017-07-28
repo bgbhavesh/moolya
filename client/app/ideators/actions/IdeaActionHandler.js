@@ -100,3 +100,4 @@ export async function fetchIdeaByPortfolioId(portfolioId) {
   const ideas = result.data.fetchIdeaByPortfolioId;
   return ideas
 }
+

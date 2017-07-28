@@ -30,9 +30,15 @@ if(Meteor.isServer){
           isDynamic:true
         },
         {
-          name:"communityType",
+          name:"communityCode",
           type:'List',
           resolverName : "Gen_Community",
+          isDynamic:true
+        },
+        {
+          name:"transactionType",
+          type:'List',
+          resolverName : "Gen_TransactionType",
           isDynamic:true
         },
         {
@@ -98,9 +104,15 @@ if(Meteor.isServer){
           isDynamic:true
         },
         {
-          name:"registrationInfo.communityDefName",
+          name:"registrationInfo.communityDefCode",
           type:'List',
           resolverName : "Gen_Community",
+          isDynamic:true
+        },
+        {
+          name:"registrationInfo.transactionType",
+          type:'List',
+          resolverName : "Gen_TransactionType",
           isDynamic:true
         },
         {
@@ -150,9 +162,15 @@ if(Meteor.isServer){
           isDynamic:true
         },
         {
-          name:"communityType",
+          name:"communityCode",
           type:'List',
           resolverName : "Gen_Community",
+          isDynamic:true
+        },
+        {
+          name:"transactionTypeName",
+          type:'List',
+          resolverName : "Gen_TransactionType",
           isDynamic:true
         }
       ]
@@ -192,6 +210,12 @@ if(Meteor.isServer){
           isDynamic:true
         },
         {
+          name:"transactionTypeName",
+          type:'List',
+          resolverName : "Gen_TransactionType",
+          isDynamic:true
+        },
+        {
           name:"transactionCreatedDate",
           type:'Date',
           resolverName : " ",
@@ -202,6 +226,12 @@ if(Meteor.isServer){
           type:'String',
           resolverName : " "
         },
+        {
+          name:"emailId",
+          type:'String',
+          resolverName : " "
+        }
+
 
       ]
     }});
@@ -245,7 +275,18 @@ if(Meteor.isServer){
           isDynamic:true
         },
         {
+          name:"transactionTypeName",
+          type:'List',
+          resolverName : "Gen_TransactionType",
+          isDynamic:true
+        },
+        {
           name:"createdBy",
+          type:'String',
+          resolverName : " "
+        },
+        {
+          name:"emailId",
           type:'String',
           resolverName : " "
         },

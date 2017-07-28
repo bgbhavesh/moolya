@@ -9,6 +9,10 @@ let AccountType = `
       accountDescription: String
       _id:String
       isActive:Boolean
+      createdBy     : String
+      createdDate   : Date
+      updatedBy     : String
+      updatedDate   : Date
     }
     type Mutation{
         CreateAccount(_id:String,accountName:String,accountDisplayName:String,accountDescription:String,isActive:Boolean, moduleName:String, actionName:String):response

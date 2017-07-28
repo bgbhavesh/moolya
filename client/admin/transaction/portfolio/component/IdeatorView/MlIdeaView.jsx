@@ -4,6 +4,7 @@ import {initalizeFloatLabel} from "../../../../utils/formElemUtil";
 import {findAnnotations} from "../../../../../commons/annotator/findAnnotations";
 import {initializeMlAnnotator} from "../../../../../commons/annotator/mlAnnotator";
 import {createAnnotationActionHandler} from "../../actions/updatePortfolioDetails";
+import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
 import {fetchIdeaActionHandler} from "../../../../../app/ideators/actions/IdeaActionHandler";
 import _ from "lodash";
 var FontAwesome = require('react-fontawesome');
@@ -18,9 +19,10 @@ export default class MlIdeaView extends React.Component {
       portfolioIdeatorInfo: {},
     }
     this.fetchIdeatorIdeas.bind(this);
-    this.fetchAnnotations.bind(this);
+    //this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
+    this.validateUserForAnnotation(this)
   }
 
   initalizeAnnotaor() {
@@ -78,19 +80,34 @@ export default class MlIdeaView extends React.Component {
         "quote": value.quote.quote,
         "ranges": value.quote.ranges,
         "userName": value.userName,
+        "roleName" : value.roleName,
+        "profileImage" : value.profileImage,
         "createdAt": value.createdAt
       })
     })
     this.state.content.annotator('loadAnnotations', quotes);
     return response;
   }
-
+  componentWillMount() {
+    let resp = this.validateUserForAnnotation();
+    return resp
+  }
   componentDidMount() {
     $('.actions_switch').click();
-    this.initalizeAnnotaor()
+    $('.appCommentBox').addClass('in');
     this.fetchIdeatorIdeas();
-    this.fetchAnnotations();
     initalizeFloatLabel();
+  }
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response && !this.state.isUserValidForAnnotation) {
+      this.setState({isUserValidForAnnotation:response})
+
+      this.initalizeAnnotaor()
+
+      this.fetchAnnotations();
+    }
   }
 
   async fetchIdeatorIdeas() {

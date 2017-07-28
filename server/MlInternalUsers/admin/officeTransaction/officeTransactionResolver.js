@@ -5,6 +5,7 @@
 import MlResolver from "../../../commons/mlResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
 import moment from 'moment'
+import _ from 'lodash'
 
 MlResolver.MlMutationResolver['createOfficeTransaction'] = (obj, args, context, info) => {
   var ret = "";
@@ -44,7 +45,13 @@ MlResolver.MlMutationResolver['updateOfficeTransactionOrderSubscriptionDetail'] 
     let response = new MlRespPayload().successPayload("Office subscription detail id is required", code);
     return response;
   }
-  let result = mlDBController.update('MlOfficeTransaction', args.id, { orderSubscriptionDetails: args.orderSubscriptionDetail }, {$set:true}, context)
+  let dataToUpdate = {
+    orderSubscriptionDetails: args.orderSubscriptionDetail
+  };
+  if(args.orderSubscriptionDetail.cost){
+    dataToUpdate.status = "Payment Generated";
+  }
+  let result = mlDBController.update('MlOfficeTransaction', args.id, dataToUpdate, {$set:true}, context)
   if(result){
     let code = 200;
     let response = new MlRespPayload().successPayload('Payment link generated successfully', code);
@@ -63,14 +70,32 @@ MlResolver.MlQueryResolver['findOfficeTransaction'] = (obj, args, context, info)
     let response = new MlRespPayload().successPayload("Office transaction id is required", code);
     return response;
   }
+  // let pipeline = [
+  //   {'$match':{_id:args.officeTransactionId}},
+  //   {'$project' : { trans: '$$ROOT'}},
+  //   {'$lookup':{ from: 'users', localField: 'trans.userId', foreignField: '_id', as: 'user'}},
+  //   {'$unwind':'$user'},
+  //   {'$project':{ trans:1, user: { createdAt : "$user.createdAt", name : '$user.profile.displayName', email : '$user.username', mobile : '$user.profile.mobileNumber' } }},
+  //   {'$lookup':{ from: 'mlOffice', localField: 'trans.officeId', foreignField: '_id', as: 'office'}},
+  //   {'$unwind':'$office'}
+  // ];
   let pipeline = [
     {'$match':{_id:args.officeTransactionId}},
     {'$project' : { trans: '$$ROOT'}},
     {'$lookup':{ from: 'users', localField: 'trans.userId', foreignField: '_id', as: 'user'}},
     {'$unwind':'$user'},
-    {'$project':{ trans:1, user: { createdAt : "$user.createdAt", name : '$user.profile.displayName', email : '$user.username', mobile : '$user.profile.mobileNumber' } }},
+    {'$project':{ trans:1, user: { createdAt : "$user.createdAt", name : '$user.profile.displayName', email : '$user.username', mobile : '$user.profile.mobileNumber', profileId:'$user.profile.externalUserProfiles.profileId'}}},
     {'$lookup':{ from: 'mlOffice', localField: 'trans.officeId', foreignField: '_id', as: 'office'}},
-    {'$unwind':'$office'}
+    {'$unwind':'$office'},
+    {'$lookup':{ from: 'mlOfficeSCDef', localField: 'trans.officeId', foreignField: 'officeId', as: 'officeSCDef'}},
+    {'$unwind':'$officeSCDef'},
+    {'$lookup':{ from: 'mlOfficeSC', localField: 'trans.officeId', foreignField: 'officeId', as: 'officeSC'}},
+    {'$unwind':'$officeSC'}
+    // {'$lookup':{ from: 'mlUserSubscriptions', localField: '_id', foreignField: 'resId', as: 'subscriptions'}},
+    // {'$unwind':'$subscriptions'},
+    // {'$sort':{'subscriptions._id':-1}},
+    // {'$limit':1},
+    // {'$project':{ trans:1, user:1, office:1, subscription:{ start:'$subscriptions.subscriptionDate', end:'$subscriptions.subscriptionEndDate' }}}
   ];
   let result = mlDBController.aggregate('MlOfficeTransaction', pipeline);
   let code = 200;
@@ -85,7 +110,7 @@ MlResolver.MlMutationResolver['officeTransactionPayment'] = (obj, args, context,
     let curDate = new Date()
     if (args.officeId) {
       var obj = {
-        status: 'payment done',
+        status: 'Payment Received',
         'deviceDetails.ipAddress': context.ip,
         'deviceDetails.deviceName': context.browser,
         paymentDetails: {
@@ -116,7 +141,7 @@ MlResolver.MlMutationResolver['officeTransactionPayment'] = (obj, args, context,
         subscriptionEndDate : moment(curDate).add(365, 'day')._d
       }
 
-      mlDBController.insert('MlUserSubscriptions', subscriptionObj, context)
+      //mlDBController.insert('MlUserSubscriptions', subscriptionObj, context)
     }
   } catch (e) {
     let code = 400;
@@ -127,3 +152,42 @@ MlResolver.MlMutationResolver['officeTransactionPayment'] = (obj, args, context,
   let response = new MlRespPayload().successPayload('office transaction updated' + ret, code);
   return response;
 }
+
+// MlResolver.MlQueryResolver['findAllTransaction'] = (obj, args, context, info) => {  //using code in resolver.js
+//   let response = []
+//   let pipeline = [{
+//     '$match': {_id: context.userId}},
+//     {'$lookup': {from: 'mlRegistration',localField: '_id',foreignField: 'registrationInfo.userId',as: 'registration'}},
+//     {'$lookup':{from:'mlPortfolioDetails',localField:'_id',foreignField:'userId', as:'portfolio'}},
+//     {'$lookup':{from:'mlOfficeTransaction',localField:'_id',foreignField:'userId', as:'office'}},
+//     {'$lookup':{from:'mlTransactionsLog',localField:'_id',foreignField:'userId', as:'transactionLog'}},
+//     {'$project':{"R":{
+//       '$map':
+//       { "input":"$registration", "as":"reg", 'in':
+//       { "createdAt" :"$$reg.registrationInfo.registrationDate", "transactionId":"$$reg._id" ,"transactionType":"regisration",username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+//       }
+//     },
+//       "P":{
+//         '$map':
+//         { "input":"$portfolio", "as":"port", 'in':
+//         { "createdAt" :"$$port.timeStamp", "transactionId":"$$port._id" ,"transactionType":"portfolio", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+//         }
+//       },
+//       "O":{
+//         '$map':
+//         { "input":"$office", "as":"off", 'in':
+//         { "createdAt" :"$$off.dateTime", "transactionId":"$$off._id" ,"transactionType":"office", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName' , userId:'$_id'}
+//         }
+//       },
+//       "T":{
+//         '$map':
+//         { "input":"$transactionLog", "as":"trans", 'in':
+//         { "createdAt" :"$$trans.createdAt", "transactionId":"$$trans._id" ,"transactionType":"transaction", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+//         }
+//       }
+//     }}
+//   ]
+//   response = mlDBController.aggregate('users', pipeline);
+//   let res = _.concat(response[0].R, response[0].P, response[0].O, response[0].T)
+//   return res
+// }

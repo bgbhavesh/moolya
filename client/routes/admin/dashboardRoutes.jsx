@@ -48,7 +48,7 @@ adminSection.route('/dashboard/clusters', {
 adminSection.route('/dashboard/chapters', {
   name: 'dashboard_chapters',
   action(){
-    mount(AdminLayout, {
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'hierarchy','showBreadCrum':true,'module':'chapter'}} />,
       adminContent: <MlViews showInfinity={true} mapConfig={mlChapterDashboardMapConfig}
                              listConfig={mlChapterDashboardListConfig}/>
     })
@@ -112,7 +112,54 @@ adminSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/communities',
     })
   }
 });
+
+adminSection.route('/dashboard/:clusterId/communities', {
+  name: 'dashboard_communities',
+  action(params, queryParams){
+    let viewMode;
+    if (queryParams.viewMode == "false") {
+      viewMode = false;
+    } else if (queryParams.viewMode == "true") {
+      viewMode = true
+    }
+    mount(AdminLayout, {
+      headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,
+      adminContent: <MlViews viewMode={viewMode} showInfinity={true} mapConfig={mlCommunityDashboardMapConfig}
+                             listConfig={mlCommunityDashboardListConfig} params={params}/>
+    })
+  }
+});
+
+adminSection.route('/dashboard/:clusterId/:chapterId/communities', {
+  name: 'dashboard_communities',
+  action(params, queryParams){
+    let viewMode;
+    if (queryParams.viewMode == "false") {
+      viewMode = false;
+    } else if (queryParams.viewMode == "true") {
+      viewMode = true
+    }
+    mount(AdminLayout, {
+      headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'dashboard'}}/>,
+      adminContent: <MlViews viewMode={viewMode} showInfinity={true} mapConfig={mlCommunityDashboardMapConfig}
+                             listConfig={mlCommunityDashboardListConfig} params={params}/>
+    })
+  }
+});
+
 adminSection.route('/dashboard/:clusterId/:chapterId/:subChapterId/communities/:backendUserId/backendUserDetails', {
+  name: 'dashboard_backendUserDetails',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlEditBackendUser config={params.backendUserId}/>})
+  }
+});
+adminSection.route('/dashboard/:clusterId/:chapterId/communities/:backendUserId/backendUserDetails', {
+  name: 'dashboard_backendUserDetails',
+  action(params){
+    mount(AdminLayout,{adminContent:< MlEditBackendUser config={params.backendUserId}/>})
+  }
+});
+adminSection.route('/dashboard/:clusterId/communities/:backendUserId/backendUserDetails', {
   name: 'dashboard_backendUserDetails',
   action(params){
     mount(AdminLayout,{adminContent:< MlEditBackendUser config={params.backendUserId}/>})

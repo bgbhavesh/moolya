@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {render} from 'react-dom';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import {createRequestsActionHandler} from '../actions/createRequests'
 
 export default class CreateRequestComponent extends Component {
@@ -33,6 +33,7 @@ export default class CreateRequestComponent extends Component {
       subChapter:this.state.subChapter,
       community:this.state.community,
       communityName: " ",
+      emailId: " ",
       requestsStatus:{
         code: "1",
         description:"requested"
@@ -46,13 +47,15 @@ export default class CreateRequestComponent extends Component {
       this.setState({requestType:null})
       toastr.success("Request is created successfully");
       this.props.closePopOver(false)
-      FlowRouter.go("/admin/transactions/requestedList");
+      FlowRouter.reload();
+      //FlowRouter.go("/admin/transactions/requestedList");
     }else{
       this.setState({requestType:null})
       toastr.error(response.result);
       this.setState({requestType:null})
       this.props.closePopOver(false)
-      FlowRouter.go("/admin/transactions/requestedList");
+      FlowRouter.reload();
+      //FlowRouter.go("/admin/transactions/requestedList");
     }
 
   }

@@ -1,12 +1,12 @@
-import React, { Component, PropTypes } from 'react';
-import {appClient} from '../appConnection';
-import gql from 'graphql-tag'
-import MlAppContextProvider from '../../../commons/components/appContext/MlAppContextProvider';
-import MlAppHeader from '../components/MlAppHeader'
-import MlAppLeftNav from '../components/MlAppLeftNav'
-import MlLoader from '../../../commons/components/loader/loader'
-
-import { withApollo } from 'react-apollo';
+import React, {Component, PropTypes} from "react";
+import {appClient} from "../appConnection";
+import gql from "graphql-tag";
+import MlAppContextProvider from "../../../commons/components/appContext/MlAppContextProvider";
+import MlAppHeader from "../components/MlAppHeader";
+import MlAppLeftNav from "../components/MlAppLeftNav";
+import MlLoader from "../../../commons/components/loader/loader";
+import MlAppContextHandler from './MlAppContextHandler'
+import {withApollo} from "react-apollo";
 
 @withApollo
 
@@ -20,21 +20,32 @@ class MlAppComponent extends Component{
 
     componentDidMount(){
         let isProfileMenu = this.props.isProfileMenu || false;
-        // let isProfileMenu =  false;
-        this.fetchMenu(isProfileMenu)
+        let isExploreMenu = this.props.isExploreMenu || false;
+        let isCalenderMenu = this.props.isCalenderMenu || false;
+        this.fetchMenu(isProfileMenu, isExploreMenu, isCalenderMenu)
     }
 
     componentWillReceiveProps(nextProps, nextState) {
-       // let isProfileMenu = nextProps.isProfileMenu || false;
-      if(nextProps.isProfileMenu!==this.props.isProfileMenu){
-        this.fetchMenu(nextProps.isProfileMenu)
+      // let isProfileMenu = nextProps.isProfileMenu || false;
+      if (nextProps.isProfileMenu !== this.props.isProfileMenu) {
+        this.fetchMenu(nextProps.isProfileMenu, nextProps.isExploreMenu, nextProps.isCalenderMenu)
+      }
+      if (nextProps.isExploreMenu !== this.props.isExploreMenu) {
+        this.fetchMenu(nextProps.isProfileMenu, nextProps.isExploreMenu, nextProps.isCalenderMenu)
+      }
+      if (nextProps.isCalenderMenu !== this.props.isCalenderMenu) {
+        this.fetchMenu(nextProps.isProfileMenu, nextProps.isExploreMenu, nextProps.isCalenderMenu)
       }
     }
 
-    async fetchMenu(isProfileMenu){
+    async fetchMenu(isProfileMenu, isExploreMenu, isCalenderMenu){
         let query = "";
         if(isProfileMenu)
             query = profileMenuQuery
+        else if(isExploreMenu)
+            query = exploreMenuQuery
+        else if(isCalenderMenu)
+          query = calenderMenuQuery
         else
             query = defaultQuery;
 
@@ -53,7 +64,8 @@ class MlAppComponent extends Component{
                 <MlAppContextProvider theme={props.theme} menu={props.menu} language={props.language} userType={props.userType}>
                     <MlAppHeader/>
                     <MlAppLeftNav/>
-                    {props.appContent}
+                    <MlAppContextHandler context={props.appContent} isFirst={props.isFirst}/>
+                    {/*{props.appContent}*/}
                 </MlAppContextProvider>
             );
         }
@@ -111,6 +123,72 @@ const profileMenuQuery = gql`fragment subMenu on Menu{
 
               query LeftNavQuery($name: String!) {
                 data:fetchExternalUserProfileMenu(name: $name){
+                    name
+                    menu{
+                      ...subMenu
+                         subMenu{
+                          ...subMenu
+                            subMenu{
+                              ...subMenu
+                                  subMenu{
+                                     ...subMenu
+                                         }
+                                   }
+                              }
+                           }
+                    }
+      }`
+
+const exploreMenuQuery = gql`fragment subMenu on Menu{
+                  uniqueId
+                  isLink
+                  isMenu
+                  isDisabled
+                  name
+                  image
+                  link
+                  dynamicLink
+                  subMenuMappingId
+                  subMenusId
+                  hideSubMenu
+                  showInBreadCrum
+              }
+
+              query LeftNavQuery($name: String!) {
+                data:fetchExploreMenu(name: $name){
+                    name
+                    menu{
+                      ...subMenu
+                         subMenu{
+                          ...subMenu
+                            subMenu{
+                              ...subMenu
+                                  subMenu{
+                                     ...subMenu
+                                         }
+                                   }
+                              }
+                           }
+                    }
+      }`
+
+const calenderMenuQuery = gql`fragment subMenu on Menu{
+                  uniqueId
+                  isLink
+                  isMenu
+                  isDisabled
+                  name
+                  image
+                  link
+                  dynamicLink
+                  subMenuMappingId
+                  subMenusId
+                  hideSubMenu
+                  showInBreadCrum
+              }
+
+              query LeftNavQuery($name: String!) {
+                data:fetchCalendarMenu(name: $name){
                     name
                     menu{
                       ...subMenu

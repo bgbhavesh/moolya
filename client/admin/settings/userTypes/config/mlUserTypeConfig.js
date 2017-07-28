@@ -1,6 +1,25 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+import moment from 'moment'
+function createdateFormatter (data){
+  let createdDate=data&&data.data&&data.data.createdDate;
+  if(createdDate){
+    return <div>{moment(createdDate).format('MM-DD-YYYY HH:mm:ss')}</div>;
+  }
+  else {
+    return <div></div>
+  }
+}
+function updatedateFormatter (data){
+  let updateDate=data&&data.data&&data.data.updatedDate;
+  if(updateDate){
+    return <div>{moment(updateDate).format('MM-DD-YYYY HH:mm:ss')}</div>;
+  }
+  else {
+    return <div></div>
+  }
+}
 const mlUserTypeTableConfig=new MlViewer.View({
   name:"userTypeTable",
   module:"userType",//Module name for filter.
@@ -16,6 +35,10 @@ const mlUserTypeTableConfig=new MlViewer.View({
     {dataField: "userTypeName", title: "User Category Name",dataSort:true},
     {dataField: "displayName", title: "Display Name",dataSort:true},
     {dataField: "communityName", title: "Community Name",dataSort:true},
+    {dataField: "createdBy", title: "Created By",dataSort:true},
+    {dataField: "createdDate", title: "CreatedDate And Time",dataSort:true,customComponent:createdateFormatter},
+    {dataField: "updatedBy", title: "Updated By",dataSort:true},
+    {dataField: "updatedDate", title: "UpdatedDate And Time",dataSort:true,customComponent:updatedateFormatter},
     {dataField: "isActive", title: "Active",dataSort:true},
   ],
   tableHeaderClass:'react_table_head',
@@ -26,7 +49,7 @@ const mlUserTypeTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
         if(data && data.id){
-          FlowRouter.go("/admin/settings/editUserType/"+data.id);
+          FlowRouter.go("/admin/settings/documentProcess/editUserType/"+data.id);
         } else{
           toastr.error("Please select a User Category");
         }
@@ -40,15 +63,10 @@ const mlUserTypeTableConfig=new MlViewer.View({
             toastr.error("Please uncheck the record")
           // {FlowRouter.go("/admin/settings/userTypeList")}
           else {
-            FlowRouter.go("/admin/settings/addUserType")
+            FlowRouter.go("/admin/settings/documentProcess/addUserType")
           }
       }
     },
-    // {
-    //   showAction: true,
-    //   actionName: 'logout',
-    //   handler: (data)=>{console.log(data);}
-    // }
   ],
   graphQlQuery:gql`
               query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]){
@@ -60,8 +78,12 @@ const mlUserTypeTableConfig=new MlViewer.View({
                               displayName
                               userTypeDesc
                               communityName
-                              isActive
+                              isActive 
                               id:_id
+                              createdBy
+                              createdDate  
+                              updatedBy     
+                              updatedDate 
                           }
                       }
               }

@@ -5,6 +5,9 @@ import {client} from '../core/apolloConnection';
 import {ApolloProvider} from 'react-apollo';
 import MlAdminApp from '../core/components/MlAdminApp';
 import MetaTags from 'react-meta-tags';
+
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 export default class  AdminLayout extends Component {
   constructor(props,context){
     super(props,context);
@@ -25,6 +28,8 @@ export default class  AdminLayout extends Component {
         <ApolloProvider client={client}>
           <div className="moolya_admin">
             <MlAdminApp {...this.props}/>
+
+            <ToastContainer hideProgressBar={true} />
           </div>
         </ApolloProvider>
      </div>

@@ -1,0 +1,29 @@
+import React from 'react';
+import { render } from 'react-dom';
+import {mount} from 'react-mounter';
+import {adminSection} from "../admin/adminRoutes";
+import AdminLayout from '../../admin/layouts/AdminLayout'
+
+import MlOfficePackageList from '../../admin/packages/office/component/MlOfficePackageList'
+import MlAddOfficePackage from "../../admin/packages/office/component/MlAddOfficePackage";
+
+// adminSection.route('/packages', {
+//   name: 'packages',
+//   action(){
+//     mount(AdminLayout,{adminContent:<div>Srinag</div>})
+//   }
+// });
+
+adminSection.route('/packages/officeList', {
+  name: 'packages_office',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlOfficePackageList/>})
+  }
+});
+
+adminSection.route('/packages/addOffice', {
+  name: 'packages_office',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlAddOfficePackage/>})
+  }
+});

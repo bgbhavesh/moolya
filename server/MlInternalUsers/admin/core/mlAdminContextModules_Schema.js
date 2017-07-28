@@ -3,7 +3,7 @@ import MlSchemaDef from '../../../commons/mlSchemaDef'
 import MlResolver from '../../../commons/mlResolverDef'
 
 let contextSpecificSearch = `
-union ContextSpecSearchResult = GenericType| Cluster | Chapter | SubChapter  | Community | MasterSettings | AuditLogs | RegistrationInfo | Portfoliodetails | TransactionsLog | requests | TemplateAssignment | ProcessTransactions | officeTransactionType
+union ContextSpecSearchResult = GenericType| Cluster | Chapter | SubChapter  | Community | MasterSettings | AuditLogs | RegistrationInfo | Portfoliodetails | TransactionsLog | requests | TemplateAssignment | ProcessTransactions | officeTransactionType | ProcessType | AdminService | DepartmentAndSubDepartmentDetails 
 
 
 type ContextSpecSearchResp {
@@ -19,6 +19,7 @@ input ContextParams{
    settingsType:String,
    moduleName: String,
    transactionTypeName: String
+   defaultSubChapter:String
 }
 
 input SearchSpec{

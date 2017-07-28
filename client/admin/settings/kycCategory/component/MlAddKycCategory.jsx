@@ -32,7 +32,7 @@ class MlAddKycCategory extends React.Component{
   async handleSuccess(response) {
     if (response){
       if(response.success)
-        FlowRouter.go("/admin/settings/kycCategoryList");
+        FlowRouter.go("/admin/settings/documentProcess/kycCategoryList");
       else
         toastr.error(response.result);
     }
@@ -50,8 +50,12 @@ class MlAddKycCategory extends React.Component{
         isActive: this.refs.documentTypeStatus.checked,
       }
       const response = await addKycCategoryActionHandler(Details);
-      toastr.success("KYC created");
-      return response;
+      if (!response.success) {
+        toastr.error("Already Exists")
+      } else if(response.success) {
+        toastr.success("KYC Created Successfully");
+        FlowRouter.go("/admin/settings/documentProcess/kycCategoryList");
+      }
     }
 
     // getSubDepartmentAvailability(details){
@@ -75,8 +79,7 @@ class MlAddKycCategory extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
-          FlowRouter.go("/admin/settings/kycCategoryList")
+          FlowRouter.go("/admin/settings/documentProcess/kycCategoryList")
         }
       }
     ]

@@ -16,7 +16,6 @@ export async function findAddressBookActionHandler() {
           emailId
           emailIdType
           emailIdTypeName
-          index
         }
         addressInfo {
           addressType
@@ -29,16 +28,17 @@ export async function findAddressBookActionHandler() {
           addressArea
           addressCity
           addressState
+          addressStateId
           addressCountry
+          addressCountryId
           addressPinCode
-          index
+          isDefaultAddress
         }
         contactInfo {
           numberType
           numberTypeName
           countryCode
           contactNumber
-          index
         }
       }
     }
@@ -48,6 +48,8 @@ export async function findAddressBookActionHandler() {
   const id = result.data.findAddressBook;
   return id
 }
+
+
 // {
 //   findAddressBook{
 //   success,
@@ -55,3 +57,77 @@ export async function findAddressBookActionHandler() {
 //     result
 // }
 // }
+
+
+export async function fetchUserDetails() {
+  const result = await appClient.query({
+    query: gql`
+    query{
+      fetchExternalUserDetails {
+          _id
+          username
+          profile{
+              isInternaluser
+              isExternaluser
+              isActive
+              email
+              profileImage
+              dateOfBirth
+              genderType
+              firstName
+              middleName
+              lastName
+              externalUserProfiles{
+                  profileId 
+                  registrationId
+                  countryName
+                  countryId  
+                  cityName   
+                  cityId     
+                  mobileNumber
+                  clusterId   
+                  clusterName 
+                  chapterId   
+                  chapterName 
+                  subChapterId
+                  subChapterName
+                  communityId  
+                  communityName
+                  communityType
+                  isDefault    
+                  isActive     
+                  accountType  
+                  optional     
+                  displayName  
+                  profileImage 
+              }
+              externalUserAdditionalInfo{
+                  cluster           
+                  registrationId     
+                  profileId
+                  addressInfo{
+                      addressType
+                      addressTypeName        
+                      name           
+                      phoneNumber    
+                      addressFlat    
+                      addressLocality
+                      addressLandmark
+                      addressArea    
+                      addressCity    
+                      addressState   
+                      addressCountry 
+                      addressPinCode 
+                      latitude
+                      longitude
+                  }
+              }
+          }
+      }
+    }
+    `,
+    forceFetch:true
+  })
+  const id = result.data.fetchExternalUserDetails;
+  return id
+}

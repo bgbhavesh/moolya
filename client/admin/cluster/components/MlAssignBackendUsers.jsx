@@ -5,7 +5,7 @@ import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 import formHandler from "../../../commons/containers/MlFormHandler";
-import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 import MlAssignBackendUserList from "./MlAssignBackendUserList";
 import MlAssignBackednUserRoles from "./MlAssignBackendUserRoles";
 import {mlClusterConfig} from "../config/mlClusterConfig";
@@ -18,6 +18,7 @@ import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 import MlLoader from '../../../commons/components/loader/loader'
+import {client} from '../../core/apolloConnection';
 
 
 class MlAssignBackendUsers extends React.Component {
@@ -80,7 +81,7 @@ class MlAssignBackendUsers extends React.Component {
 
   async findUserDetails(userId)
   {
-      const userDetails = await findAdminUserDetails(userId);
+      const userDetails = await findAdminUserDetails(userId,client);
       if (userDetails){
           this.setState({selectedBackendUser:userId})
           this.setState({username:userDetails.userName})
@@ -101,7 +102,7 @@ class MlAssignBackendUsers extends React.Component {
   async find_Cluster_Roles(userId)
   {
       let roles = [];
-      const userRoles = await fetchAdminUserRoles(userId);
+      const userRoles = await fetchAdminUserRoles(userId,client);
       if (userRoles)
           roles = userRoles || [];
       this.setState({loading:false, user_Roles: roles, selectedBackendUser: userId, mlroleDetails: roles});
@@ -174,7 +175,21 @@ class MlAssignBackendUsers extends React.Component {
           {
             showAction: true,
             actionName: 'cancel',
-            handler: null
+            handler: async(event) => {
+              // let pararms = FlowRouter._current.params;
+              // FlowRouter.go("/admin/clusters/"+
+              //   pararms.clusterId+"/clusterDetails");
+              let pararms = FlowRouter._current.params;
+              let path = FlowRouter._current.path;
+              if (path.indexOf("clusters") != -1) {
+                FlowRouter.go("/admin/clusters/"+
+                  pararms.clusterId+"/clusterDetails");
+              } else {
+                FlowRouter.go("/admin/chapters/"+
+                  pararms.clusterId+"/"+pararms.chapterId+"/"+
+                  pararms.subChapterId+"/"+pararms.subChapterName+"/subChapterDetails");
+              }
+            }
           }
       ]
       let loggedInUser = getAdminUserContext();
@@ -228,7 +243,7 @@ class MlAssignBackendUsers extends React.Component {
                   <ScrollArea speed={0.8} className="left_wrap">
                     <div className="col-md-4 col-sm-4" onClick={this.resetBackendUers.bind(that)}>
                       <div className="list_block provider_block">
-                        <div className="cluster_status assign_cl"><span className="ml ml-assign"></span></div>
+                        <div className="cluster_status assign_cl">{/*<span className="ml ml-assign"></span>*/}</div>
                         <div className="provider_mask"><img src="/images/funder_bg.png"/> <img className="user_pic"
                                                                                                src="/images/def_profile.png"/>
                         </div>

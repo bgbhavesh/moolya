@@ -1,18 +1,20 @@
 import gql from "graphql-tag";
 import {client} from "../../../core/apolloConnection";
 
-export async function updateBackendUserActionHandler(updateUserObject) {
+export async function updateBackendUserActionHandler(updateUserObject, loginUserDetails) {
   let userId=updateUserObject.userId;
   let user=updateUserObject.userObject
-
+  const {clusterId, chapterId, subChapterId, communityId} = loginUserDetails
    const result = await client.mutate({
    mutation: gql`
-   mutation  ($userId:String!, $user: userObject!, $moduleName:String, $actionName:String){
+   mutation  ($userId:String!, $user: userObject!, $clusterId: String, $chapterId: String, $subChapterId: String, $communityId: String){
    updateUser(
    userId: $userId,
    user: $user,
-   moduleName:$moduleName,
-   actionName:$actionName
+   clusterId: $clusterId,
+   chapterId : $chapterId,
+   subChapterId : $subChapterId,
+   communityId : $communityId
    ){
       success,
       code,
@@ -23,10 +25,24 @@ export async function updateBackendUserActionHandler(updateUserObject) {
    variables: {
      userId,
      user,
-     moduleName:"USERS",
-     actionName:"UPDATE"
+     clusterId,
+     chapterId,
+     subChapterId,
+     communityId
    }
    })
   const id = result.data.updateUser;
   return id
 }
+
+// ,
+// moduleName:"USERS",
+//   actionName:"UPDATE"
+
+
+// , $moduleName:String, $actionName:String
+
+
+// ,
+// moduleName:$moduleName,
+//   actionName:$actionName

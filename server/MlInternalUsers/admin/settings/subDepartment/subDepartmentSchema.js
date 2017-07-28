@@ -13,6 +13,10 @@ let subDepartmentSchema = `
         isActive:Boolean,
         departmentId:String,
         isMoolya:Boolean,
+        createdBy     : String
+        createdDate   : Date
+        updatedBy     : String
+         updatedDate  : Date
         departmentAliasName : String,
         clustersList   : [String],
         chaptersList   : [String],
@@ -45,6 +49,10 @@ let subDepartmentSchema = `
         isActive:Boolean,
         departmentId:String,
         isMoolya:Boolean,
+        createdBy     : String
+        createdDate   : Date
+        updatedBy     : String
+        updatedDate  : Date
         subDepatmentAvailable:[SubDepatmentAvailable]
     }
     
@@ -66,7 +74,7 @@ let supportedApi = [
     {api:'createSubDepartment', actionName:'CREATE', moduleName:"SUBDEPARTMENT"},
     {api:'updateSubDepartment', actionName:'UPDATE', moduleName:"SUBDEPARTMENT"},
     {api:'findSubDepartment', actionName:'READ', moduleName:"SUBDEPARTMENT"},
-    {api:'fetchSubDepartments', actionName:'READ', moduleName:"SUBDEPARTMENT"},
+    {api:'fetchSubDepartments', actionName:'READ', moduleName:"SUBDEPARTMENT", isWhiteList:true},
     {api:'findSubDepartments', actionName:'READ', moduleName:"SUBDEPARTMENT"},
     {api:'fetchActiveSubDepartments', actionName:'READ', moduleName:"SUBDEPARTMENT"},
     {api:'fetchSubDepartmentsForRegistration', actionName:'READ', moduleName:"SUBDEPARTMENT", isWhiteList:true},

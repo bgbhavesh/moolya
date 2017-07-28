@@ -62,22 +62,22 @@ export default class MlFilterListRepo{
 
       case "Gen_Community":
 
-        if(listData.length < 1){
+        if(listData.length < 1){ //if isCustom false
           // let allCommuntities = _.contains(communityIds,"all");
-          let allCommuntities = _.contains(communityCode,"all") || [];
+          let allCommuntities = _.contains(communityCode,"all") || null;
           if(allCommuntities){
             result = MlCommunityDefinition.find({isActive : true}).fetch();
           }else{
-            result= MlCommunityDefinition.find({ _id: { $in: allCommuntities },isActive : true}).fetch();
+            result= MlCommunityDefinition.find({ code: { $in: communityCode },isActive : true}).fetch();
           }
 
-        }else{
+        }else{ //if isCustom true
 
           result= MlCommunityDefinition.find({ _id: { $in: listData },isActive : true}).fetch();
         }
 
         let communityResponse=_.each(result,function (option,id) {
-          options.push({"label":option.displayName,"value":option.name})
+          options.push({"label":option.displayName,"value":option.code})
         })
 
 
@@ -108,49 +108,70 @@ export default class MlFilterListRepo{
 
         break;
       case "Gen_Clusters":
-
-        if(listData.length < 1){
+        if(requestParams.fieldActive == "Cluster"){
+          if(listData.length < 1){ //if isCustom false
 
             clusterIds = [clusterIds]
 
-          let allclusterIds = _.contains(clusterIds,"all");
-          if(allclusterIds){
-            result = MlClusters.find({isActive : true}).fetch();
-          }else{
-            result= MlClusters.find({ _id: { $in: clusterIds },isActive : true}).fetch();
+            let allclusterIds = _.contains(clusterIds,"all") || null;
+            if(allclusterIds){
+              result = MlClusters.find({isActive : true}).fetch();
+            }else{
+              result= MlClusters.find({ _id: { $in: clusterIds },isActive : true}).fetch();
+            }
+
+          }else{ //if isCustom true
+
+            result= MlClusters.find({ _id: { $in: listData },isActive : true}).fetch();
           }
-
-        }else{
-
-          result= MlClusters.find({ _id: { $in: listData },isActive : true}).fetch();
         }
+
 
         let genClusterResponse=_.each(result,function (option,id) {
           options.push({"label":option.displayName,"value":option._id})
         })
 
+
         break;
       case "Gen_Chapters":
+        if(requestParams.fieldActive == "Cluster"){
 
-        if(listData.length < 1){
-          if(userProfile.hierarchyLevel == 4 || userProfile.hierarchyLevel == 3 || userProfile.hierarchyLevel == 0){
+          if(listData.length < 1){ //if isCustom false
+            if(userProfile.hierarchyLevel == 4 || userProfile.hierarchyLevel == 3 || userProfile.hierarchyLevel == 0){
+              let arrayOfChapters = _.pluck(requestParams.filteredListId, 'value') || [];
+              result= MlChapters.find({ clusterId: {$in : arrayOfChapters},isActive : true}).fetch();
+            }else{
+              let allchapterIds = _.contains(chapterIds,"all") || null;
+              if(allchapterIds){
+                result = MlChapters.find({isActive : true}).fetch();
+              }else{
+                result= MlChapters.find({ _id: { $in: chapterIds },isActive : true}).fetch();
+              }
+            }
+
+
+          }else{ //if isCustom true
             let arrayOfChapters = _.pluck(requestParams.filteredListId, 'value') || [];
             result= MlChapters.find({ clusterId: {$in : arrayOfChapters},isActive : true}).fetch();
-          }else{
-            let allchapterIds = _.contains(chapterIds,"all");
-            if(allchapterIds){
-              result = MlChapters.find({isActive : true}).fetch();
-            }else{
-              result= MlChapters.find({ _id: { $in: chapterIds },isActive : true}).fetch();
-            }
           }
+        }else if(requestParams.fieldActive == "Chapter"){ //display as per usercontext
+          if(listData.length < 1){ //if isCustom false
+            if(userProfile.hierarchyLevel == 4 || userProfile.hierarchyLevel == 3 || userProfile.hierarchyLevel == 0){
+              result=MlChapters.find({ clusterId : { $in: [clusterIds] },isActive : true}).fetch();
+            }else{
+              let allchapterIds = _.contains(chapterIds,"all") || null;
+              if(allchapterIds){
+                result = MlChapters.find({isActive : true}).fetch();
+              }else{
+                result= MlChapters.find({ _id: { $in: chapterIds },isActive : true}).fetch();
+              }
+            }
 
-
-        }else{
-          let arrayOfChapters = _.pluck(requestParams.filteredListId, 'value') || [];
-          result= MlChapters.find({ clusterId: {$in : arrayOfChapters},isActive : true}).fetch();
+          }else{ //if isCustom true
+            let arrayOfChapters = _.pluck(requestParams.filteredListId, 'value') || [];
+            result= MlChapters.find({ clusterId: {$in : arrayOfChapters},isActive : true}).fetch();
+          }
         }
-
         let genChapterResponse=_.each(result,function (option,id) {
           options.push({"label":option.displayName,"value":option._id})
         })
@@ -159,25 +180,47 @@ export default class MlFilterListRepo{
 
       case "Gen_SubChapters":
 
+         if(requestParams.fieldActive == "Cluster" || requestParams.fieldActive == "Chapter"){ //display subchapter as per selected chapter(if chapter or cluster is active)
+          if(listData.length < 1){
 
-        if(listData.length < 1){
+            if(userProfile.hierarchyLevel == 4 || userProfile.hierarchyLevel == 3 || userProfile.hierarchyLevel == 2 || userProfile.hierarchyLevel == 0){
+              let arrayOfGenSubChapter = _.pluck(requestParams.filteredListId, 'value') || [];
+              if(requestParams.fieldActive == "Cluster"){
+                result= MlSubChapters.find({clusterId: {$in : arrayOfGenSubChapter},isActive : true}).fetch();
+              }else if(requestParams.fieldActive == "Chapter"){
+                result= MlSubChapters.find({chapterId: {$in : arrayOfGenSubChapter},isActive : true}).fetch();
+              }else{
+                result= MlSubChapters.find({clusterId: {$in : arrayOfGenSubChapter}, chapterId: {$in : arrayOfGenSubChapter},isActive : true}).fetch();
+              }
 
-          if(userProfile.hierarchyLevel == 4 || userProfile.hierarchyLevel == 3 || userProfile.hierarchyLevel == 2 || userProfile.hierarchyLevel == 0){
+            }else{
+              let allsubChapterIds = _.contains(subChapterIds,"all") || null;
+              if(allsubChapterIds){
+                result = MlSubChapters.find({isActive : true}).fetch();
+              }else{
+                result= MlSubChapters.find({ _id: { $in: subChapterIds },isActive : true}).fetch();
+              }
+            }
+          }else{
             let arrayOfGenSubChapter = _.pluck(requestParams.filteredListId, 'value') || [];
             result= MlSubChapters.find({clusterId: {$in : arrayOfGenSubChapter}, chapterId: {$in : arrayOfGenSubChapter},isActive : true}).fetch();
-          }else{
-            let allsubChapterIds = _.contains(subChapterIds,"all");
-            if(allsubChapterIds){
-              result = MlSubChapters.find({isActive : true}).fetch();
-            }else{
-              result= MlSubChapters.find({ _id: { $in: subChapterIds },isActive : true}).fetch();
-            }
-          }
-        }else{
-          let arrayOfGenSubChapter = _.pluck(requestParams.filteredListId, 'value') || [];
-          result= MlSubChapters.find({clusterId: {$in : arrayOfGenSubChapter}, chapterId: {$in : arrayOfGenSubChapter},isActive : true}).fetch();
 
+          }
+        }else if(requestParams.fieldActive == "SubChapter"){
+          if(listData.length < 1){ //display as per usercontext
+              let allsubChapterIds = _.contains(subChapterIds,"all") || null;
+              if(allsubChapterIds){
+                result = MlSubChapters.find({isActive : true}).fetch();
+              }else{
+                result= MlSubChapters.find({ _id: { $in: subChapterIds },isActive : true}).fetch();
+              }
+          }else{
+            let arrayOfGenSubChapter = _.pluck(requestParams.filteredListId, 'value') || [];
+            result= MlSubChapters.find({clusterId: {$in : arrayOfGenSubChapter}, chapterId: {$in : arrayOfGenSubChapter},isActive : true}).fetch();
+
+          }
         }
+
 
 
 
@@ -202,6 +245,17 @@ export default class MlFilterListRepo{
         options.push({"label": "Un Assigned","value" : "Un Assigned"})
 
         break;
+
+      case "Gen_TransactionType":
+
+        result= MlTransactionTypes.find({"isActive" : true}).fetch()
+
+        let genTransactionResponse=_.each(result,function (option,id) {
+          options.push({"label":option.transactionDisplayName,"value":option._id})
+        })
+
+        break;
+
 
     }
 

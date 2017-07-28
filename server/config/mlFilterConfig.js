@@ -52,11 +52,19 @@ if(Meteor.isServer){
           "isActive":true
         },
         {
-          "fieldName" : "registrationInfo.communityDefName",
+          "fieldName" : "registrationInfo.communityDefCode",
           "displayName" : "Community",
           "isDynamic" : true,
           "fieldType" : "List",
           "fieldResolverName" : "Gen_Community",
+          "isActive":true
+        },
+        {
+          "fieldName" : "registrationInfo.transactionType",
+          "displayName" : "Transaction Type",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_TransactionType",
           "isActive":true
         },
         {
@@ -134,11 +142,19 @@ if(Meteor.isServer){
           "isActive":true
         },
         {
-          "fieldName" : "communityType",
+          "fieldName" : "communityCode",
           "displayName" : "Community",
           "isDynamic" : true,
           "fieldType" : "List",
           "fieldResolverName" : "Gen_Community",
+          "isActive":true
+        },
+        {
+          "fieldName" : "transactionType",
+          "displayName" : "Transaction Type",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_TransactionType",
           "isActive":true
         },
        /* {
@@ -205,11 +221,19 @@ if(Meteor.isServer){
           "isActive":true
         },
         {
-          "fieldName" : "communityId",
+          "fieldName" : "communityCode",
           "displayName" : "Community",
           "isDynamic" : true,
           "fieldType" : "List",
           "fieldResolverName" : "Gen_Community",
+          "isActive":true
+        },
+        {
+          "fieldName" : "transactionTypeName",
+          "displayName" : "Transaction Type",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_TransactionType",
           "isActive":true
         },
         {
@@ -269,6 +293,14 @@ if(Meteor.isServer){
           "isActive":true
         },
         {
+          "fieldName" : "transactionTypeName",
+          "displayName" : "Transaction Type",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_TransactionType",
+          "isActive":true
+        },
+        {
           "fieldName" : "transactionCreatedDate",
           "displayName" : "Created Date",
           "isDynamic" : null,
@@ -284,6 +316,14 @@ if(Meteor.isServer){
           "fieldType" : "String",
           "fieldResolverName" : null,
         },
+        {
+          "fieldName" : "emailId",
+          "displayName" : "Email",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        }
 
       ]
     }});
@@ -333,6 +373,14 @@ if(Meteor.isServer){
           "isActive":true
         },
         {
+          "fieldName" : "transactionTypeName",
+          "displayName" : "Transaction Type",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_TransactionType",
+          "isActive":true
+        },
+        {
           "fieldName" : "transactionCreatedDate",
           "displayName" : "Created Date",
           "isDynamic" : null,
@@ -348,6 +396,14 @@ if(Meteor.isServer){
           "fieldType" : "String",
           "fieldResolverName" : null,
         },
+        {
+          "fieldName" : "emailId",
+          "displayName" : "Email",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        }
 
       ]
     }});

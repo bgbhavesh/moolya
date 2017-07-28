@@ -1,5 +1,7 @@
 var Select = require('react-select');
-import Moolyaselect from '../../commons/components/select/MoolyaSelect'
+import {isValidNumber, format} from 'libphonenumber-js';
+
+//import Moolyaselect from '../../commons/containers/select/MlSelectComposer'
 export function mlFieldValidations(elements) {
 
   for (var  key in  elements) {
@@ -14,7 +16,7 @@ export function mlFieldValidations(elements) {
         }
 
       }
-    }else if(element instanceof Moolyaselect){
+    }else if(element instanceof Object &&  element['props'] instanceof Object && element['props']!==undefined){
       var selectObj = element;
       var isRequired = selectObj.props['data-required'];
        var value = selectObj.props['selectedValue']
@@ -33,4 +35,18 @@ export function mlFieldValidations(elements) {
       }
   }
 
+}
+
+/**
+ * Validate the phone number based on country code
+ * @param countryCode
+ * @param contactNumber
+ * @return {boolean}
+ */
+export function validatedPhoneNumber(countryCode, contactNumber){
+  let isValidPhoneNumber = true;
+  if (contactNumber) {
+    isValidPhoneNumber = isValidNumber(format({country: countryCode, phone: contactNumber }, 'International'));
+  }
+  return isValidPhoneNumber;
 }

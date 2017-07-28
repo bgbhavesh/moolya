@@ -4,7 +4,8 @@
 import React, {Component} from "react";
 import Calender from '../../../../commons/calendar/calendar'
 import { fetchMyCalendarActionHandler } from '../actions/fetchMyCalendar';
-import MlAppMyCalendarDayComponent from './dayComponent';
+import MlAppMyCalendarDayComponent from './dayComponent1';
+import AppCalendarDayView from './calendarDetailComponent'
 
 export default class MlAppMyCalendar extends Component {
 
@@ -12,7 +13,8 @@ export default class MlAppMyCalendar extends Component {
     super(props);
     this.state = {
       data:[],
-      date: new Date()
+      date: new Date(),
+      showCalendar: false
     };
     this.getMyCalendar();
     this.onNavigate = this.onNavigate.bind(this);
@@ -38,20 +40,31 @@ export default class MlAppMyCalendar extends Component {
     }.bind(this));
   }
 
+  statusChanges(response){
+    if(!response){
+      this.setState({showCalendar: true})
+    }
+    // switch(response){
+    //   case 'detailData':
+    //
+    // }
+
+  }
+
   render() {
     const that = this;
     const props = that.props;
     return (
-      <div className="app_main_wrap" style={{'overflow':'auto'}}>
+      !that.state.showCalendar?<div className="app_main_wrap" style={{'overflow':'auto'}}>
         <div className="app_padding_wrap">
           <Calender
-            dayBackgroundComponent={<MlAppMyCalendarDayComponent /> }
+            dayBackgroundComponent={<MlAppMyCalendarDayComponent statusChanges={this.statusChanges.bind(this)}/> }
             dayData={that.state.data}
             onNavigate={that.onNavigate}
             date={that.state.date}
           />
         </div>
-      </div>
+      </div>:<AppCalendarDayView/>
     )
   }
 }

@@ -33,62 +33,62 @@ adminSection.route('/users/clusters', {
   }
 });
 
-adminSection.route('/users/:registrationId/aboutuser', {
+adminSection.route('/users/:registrationId/:portfolioId/aboutuser', {
   name: 'users_about',
   action(params){
     mount(AdminLayout, {
       headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'users'}}/>,
-      adminContent: <MlUsersAbout registrationId={params.registrationId}/>
+      adminContent: <MlUsersAbout config={params}/>
     })
   }
 })
 
-adminSection.route('/users/:registrationId/addressBook', {
+adminSection.route('/users/:registrationId/:portfolioId/addressBook', {
   name: 'users_addressBook',
   action(params){
     mount(AdminLayout, {
       headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'users'}}/>,
-      adminContent: <MlUsersAddressBook registrationId={params.registrationId}/>
+      adminContent: <MlUsersAddressBook config={params}/>
     })
   }
 })
 
-adminSection.route('/users/:registrationId/connections/ideator', {
+adminSection.route('/users/:registrationId/:portfolioId/connections/ideator', {
   name: 'users_connectionsIdeator',
   action(params){
     mount(AdminLayout, {
       headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'users'}}/>,
-      adminContent: <MlUsersConnections registrationId={params.registrationId}/>
+      adminContent: <MlUsersConnections config={params}/>
     })
   }
 })
 
-adminSection.route('/users/:registrationId/favourites/ideator', {
+adminSection.route('/users/:registrationId/:portfolioId/favourites/ideator', {
   name: 'users_favouritesIdeator',
   action(params){
     mount(AdminLayout, {
       headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'users'}}/>,
-      adminContent: <MlUsersFavourites registrationId={params.registrationId}/>
+      adminContent: <MlUsersFavourites config={params}/>
     })
   }
 })
 
-adminSection.route('/users/:registrationId/wishlist/ideator', {
+adminSection.route('/users/:registrationId/:portfolioId/wishlist/ideator', {
   name: 'users_wishlistIdeator',
   action(params){
     mount(AdminLayout, {
       headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'users'}}/>,
-      adminContent: <MlUsersWishlist registrationId={params.registrationId}/>
+      adminContent: <MlUsersWishlist config={params}/>
     })
   }
 })
 
-adminSection.route('/users/:registrationId/transactions', {
+adminSection.route('/users/:registrationId/:portfolioId/transactions', {
   name: 'users_transactions',
   action(params){
     mount(AdminLayout, {
       headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'users'}}/>,
-      adminContent: <MlUsersTransactions registrationId={params.registrationId}/>
+      adminContent: <MlUsersTransactions config={params}/>
     })
   }
 })

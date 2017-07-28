@@ -45,28 +45,37 @@ export default class MlCommunityList extends Component {
   }
 
   onStatusChange(userType,e) {
-    // const data = this.state.data;
+
     if (userType) {
-      //this.setState({userType: userType});
-      console.log(this.props);
-      let variables={};
+      let config = this.props.config;
+      // config = _.omit(config, 'data')
+      let options = {
+          module: config.moduleName,
+          queryProperty: {
+            limit: config.perPageLimit,
+            skip: 0,
+            // loadMore:false
+          },
+      };
+      if(config.sort) {
+        options.queryProperty['sortBy'] = config.sortBy;
+      }
       let hasQueryOptions = this.props.config&&this.props.config.queryOptions ? true : false;
       if (hasQueryOptions) {
-        let config = this.props.config
-        if(config && config.params){
-          let usertype={userType:userType}
-          _.extend(config.params,usertype)
-        }else{
-          let newParams = {params:{userType:userType}}
+        if (config && config.params) {
+          let usertype = {userType: userType}
+          _.extend(config.params, usertype)
+        } else {
+          let newParams = {params: {userType: userType}}
           data = _.omit(config, 'params')
-          config=_.extend(data,newParams);
+          config = _.extend(data, newParams);
         }
-        let dynamicQueryOption = this.props.config&&this.props.config.buildQueryOptions ? this.props.config.buildQueryOptions(config) : {};
-        variables = _.extend(variables,dynamicQueryOption);
-
       }
-      this.props.config.fetchMore(variables);
 
+      let dynamicQueryOption = this.props.config&&this.props.config.buildQueryOptions ? this.props.config.buildQueryOptions(config) : {};
+      options = _.extend(options,dynamicQueryOption);
+
+      this.props.config.fetchMore(options);
     }
   }
 

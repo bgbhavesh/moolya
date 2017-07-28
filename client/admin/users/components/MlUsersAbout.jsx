@@ -6,7 +6,6 @@ import ScrollArea from "react-scrollbar";
 import MlLoader from "../../../commons/components/loader/loader";
 import {initalizeFloatLabel} from "../../utils/formElemUtil";
 import {findUserRegistrationActionHandler, findUserPortfolioActionHandler} from "../actions/findUsersHandlers";
-import {isEmpty} from "lodash";
 export default class MlUsersAbout extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +23,7 @@ export default class MlUsersAbout extends Component {
   }
 
   async findRegistration() {
-    let registrationId = this.props.registrationId;
+    let registrationId = this.props.config?this.props.config.registrationId:'';
     const response = await findUserRegistrationActionHandler(registrationId);
     console.log(response);
     this.setState({loading: false, data: response});
@@ -38,10 +37,8 @@ export default class MlUsersAbout extends Component {
 
   async changeUrl(registrationId) {
     const response = await findUserPortfolioActionHandler(registrationId);
-    console.log(response);
     if(response && response.portfolioId){
-      toastr.success(response.portfolioId)
-      console.log('portfolioId', response)
+      toastr.success('Portfolio Selected Successfully')
       FlowRouter.setParams({portfolioId: response.portfolioId})
     }else {
       toastr.info('Portfolio Not available')
@@ -78,7 +75,7 @@ export default class MlUsersAbout extends Component {
     let that = this
     let regInfo = this.state.data && this.state.data.registrationInfo ? this.state.data.registrationInfo : {}
     let regDetail = this.state.data && this.state.data.registrationDetails ? this.state.data.registrationDetails : {}
-    let alsoRegisterAs = this.state.data && this.state.data.externalUserProfiles && this.state.data.externalUserProfiles.length > 0 ? this.state.data.externalUserProfiles : []
+    let alsoRegisterAs = this.state.data && this.state.data.externalUserProfiles && this.state.data.externalUserProfiles.length > 0 ? this.state.data.externalUserProfiles : ['0']
     const showLoader = this.state.loading;
     return (
       <div className="admin_main_wrap">

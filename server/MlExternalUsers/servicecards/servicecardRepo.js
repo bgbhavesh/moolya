@@ -136,6 +136,7 @@ class MlServiceCardRepo{
           servicecard.payment["tasksAmount"] = taskAmount;
           servicecard.payment["tasksDiscount"] = taskAmount - taskDerivedAmount;
           servicecard.payment["tasksDerived"] = taskDerivedAmount;
+          newFinalAmount = taskDerivedAmount;
           if (service.payment && service.payment.isDiscount && service.payment.discountValue > 0) {
             if (service.payment.discountType === 'amount') {
               newFinalAmount = parseInt(taskDerivedAmount) - parseInt(service.payment.discountValue);
@@ -216,6 +217,7 @@ class MlServiceCardRepo{
           servicecard.payment["tasksAmount"] = taskAmount;
           servicecard.payment["tasksDiscount"] = taskAmount - taskDerivedAmount;
           servicecard.payment["tasksDerived"] = taskDerivedAmount;
+          newFinalAmount = taskDerivedAmount;
           if (service.payment && service.payment.isDiscount && service.payment.discountValue > 0) {
             if (service.payment.discountType === 'amount') {
               newFinalAmount = parseInt(taskDerivedAmount) - parseInt(service.payment.discountValue);

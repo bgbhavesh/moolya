@@ -5,6 +5,7 @@
  * import of libs
  * */
 import React, {Component} from "react";
+import {findUserPortfolioActionHandler} from "../actions/findUsersHandlers";
 
 /**
  * default class export
@@ -21,10 +22,22 @@ export default class MlUsersCluster extends Component {
    * */
   viewDetails(event, registrationId) {
     if(registrationId){
-      FlowRouter.go('/admin/users/' + registrationId + '/aboutuser')
+      const resp = this.changeUrl(registrationId)
+      return resp
     }else {
-      toastr.info('Invalid User')
+      toastr.error('Invalid User')
     }
+  }
+
+  /**
+   * attaching portfolioId to the route
+   * */
+  async changeUrl(registrationId) {
+    const response = await findUserPortfolioActionHandler(registrationId);
+    if (response && response.portfolioId) {
+      FlowRouter.go('/admin/users/' + registrationId + '/' + response.portfolioId + '/aboutuser')
+    } else
+      FlowRouter.go('/admin/users/' + registrationId + '/' + 0 + '/aboutuser')
   }
 
   /**

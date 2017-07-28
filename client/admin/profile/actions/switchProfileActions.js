@@ -6,7 +6,7 @@ export async function findUserActionHandler() {
   const result = await client.query({
     query: gql`
     
-          query($id: String){
+          query{
             fetchInternalUserProfiles{
                     isDefault,
                     clusterId,
@@ -60,6 +60,26 @@ export async function setAdminDefaultProfileActionHandler(clusterId) {
     }
   })
   const id = result.data.setAdminDefaultProfile;
+  return id;
+}
+
+export async function switchProfileActionHandler(clusterId) {
+
+  const result = await client.mutate({
+    mutation: gql`
+          mutation($clusterId:String!){
+              switchProfile(clusterId:$clusterId){
+                  success,
+                  code,
+                  result
+              }  
+          }
+      `,
+    variables: {
+      clusterId:clusterId
+    }
+  })
+  const id = result.data.switchProfile;
   return id;
 }
 
@@ -120,6 +140,10 @@ export async function fetchClusterDetails(clusterId) {
   const id = result.data.fetchUserRoleDetails;
   return id;
 
+}
+
+export function reloadPage(){
+  location.reload();
 }
 
 

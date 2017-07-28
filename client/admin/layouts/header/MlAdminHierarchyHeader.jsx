@@ -18,9 +18,6 @@ export default class MlAdminHierarchyHeader extends Component {
   }
   async findProcess() {
     let documentsList=[]
-    //let clusterId = this.props.clusterId
-    //if(clusterId){
-     // const response = await findTemplateStepsActionHandler(subProcessId);
       let response = [{"tabName":"platformhierarchy","tabCode":"platform hierarchy"},{"tabName":"clusterhierarchy","tabCode":"cluster hierarchy"},{"tabName":"history","tabCode":"history"}]
       if(response){
         let documents=response

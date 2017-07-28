@@ -9,6 +9,8 @@ export async function fetchUserDetailsHandler() {
         findRegistrationInfoForUser {
        _id
        status
+       isAllowRegisterAs
+       pendingRegId
           registrationInfo {
             firstName
             lastName
@@ -44,4 +46,24 @@ export async function fetchPortfolioDetails() {
 
   const user = result.data.fetchPortfolioDetailsByUserId;
   return user;
+}
+
+export async function requestPortfolioForGoLive(resId) {
+  let portfoliodetailsId  = resId
+  const result = await appClient.mutate({
+    mutation: gql`
+            mutation  ($portfoliodetailsId: String, ){
+                requestForGoLive(portfoliodetailsId:$portfoliodetailsId){
+                    success,
+                    code,
+                    result
+                }  
+            }
+        `,
+    variables: {
+      portfoliodetailsId
+    }
+  })
+  const response = result.data.requestForGoLive;
+  return response
 }

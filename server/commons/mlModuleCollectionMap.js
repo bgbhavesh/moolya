@@ -22,7 +22,7 @@ MlModuleCollectionMap['MlProcessMapping'] = 'PROCESSMAPPING';
 MlModuleCollectionMap['MlRequestType'] = 'REQUESTTYPE';
 MlModuleCollectionMap['MlRoles'] = 'ROLES';
 MlModuleCollectionMap['MlRoleTypes'] = 'ROLETYPE';
-MlModuleCollectionMap['MlServices'] = 'SERVICES';
+// MlModuleCollectionMap['MlServices'] = 'SERVICES';
 MlModuleCollectionMap['MlStates'] = 'STATES';
 MlModuleCollectionMap['MlStatus'] = 'Status';
 MlModuleCollectionMap['MlSubChapters'] = 'SUBCHAPTER';
@@ -61,12 +61,14 @@ MlModuleCollectionMap['MlIdeatorPortfolio'] = 'PORTFOLIO';   //IDEATORPORTFOLIO
 MlModuleCollectionMap['MlIdeas'] = 'PORTFOLIO';
 MlModuleCollectionMap['MlFunderPortfolio'] = 'PORTFOLIO';
 MlModuleCollectionMap['MlStartupPortfolio'] = 'PORTFOLIO';
+MlModuleCollectionMap['MlServiceProviderPortfolio'] = 'PORTFOLIO';
 MlModuleCollectionMap['MlPortfolioLibrary'] = 'PORTFOLIOLIBRARY';
 
 //hierarchy
 MlModuleCollectionMap['MlHierarchyAssignments'] = 'HIERARCHY';
 
 //Process Setup
+MlModuleCollectionMap['MlActions'] = 'MlActions';
 MlModuleCollectionMap['MlProcessSetup'] = 'PROCESSSETUP';
 MlModuleCollectionMap['MlProcessTransactions'] = 'PROCESSSETUP';
 //office
@@ -75,6 +77,19 @@ MlModuleCollectionMap['MlOfficeMembers'] = 'OFFICE';
 MlModuleCollectionMap['MlOfficeTransaction'] = 'OFFICE';
 MlModuleCollectionMap['MlOfficeInvite'] = 'OFFICE';
 MlModuleCollectionMap['MlUserSubscriptions'] = 'SUBSCRIPTIONS';
+MlModuleCollectionMap['MlLikes'] = 'INTERACTION';
+MlModuleCollectionMap['MlInquiries'] = 'INTERACTION';
+MlModuleCollectionMap['MlReviews'] = 'INTERACTION';
+MlModuleCollectionMap['MlViews'] = 'INTERACTION';
+MlModuleCollectionMap['MlComments'] = 'INTERACTION';
+MlModuleCollectionMap['MlFeedBacks'] = 'INTERACTION';
+MlModuleCollectionMap['MlConnections'] = 'INTERACTION';
+MlModuleCollectionMap['MlFollowings'] = 'INTERACTION';
+MlModuleCollectionMap['MlUserServiceCards'] = 'SUBSCRIPTIONS';
+MlModuleCollectionMap['MlActivity'] = 'OFFICE'; //need to clarify the module name
+MlModuleCollectionMap['MlService'] = 'OFFICE'; //need to clarify the module name
+MlModuleCollectionMap['MlTask'] = 'OFFICE'; //need to clarify the module name
+MlModuleCollectionMap['MlNotificationTemplates'] = 'NOTIFICATIONTEMPLATE';
 
 module.exports=  MlModuleCollectionMap;
 

@@ -5,7 +5,7 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {updateRegistrationActionHandler} from '../actions/updateRegistration'
 import Datetime from "react-datetime";
@@ -152,6 +152,7 @@ export default class Company extends React.Component{
         investors             :   this.refs.investors.value,
         lookingFor            :   this.state.selectedLookingFor,
         companyCEOName        :   this.refs.companyCEOName.value,
+        parentCompany         :   this.refs.parentCompany.value,
         companyManagement     :   this.refs.companyManagement.value,
         toatalEmployeeCount   :   this.refs.toatalEmployeeCount.value,
         associatedCompanies   :   this.refs.associatedCompanies.value,
@@ -212,7 +213,12 @@ export default class Company extends React.Component{
           showAction: true,
           actionName: 'cancel',
           handler: async(event) => {
-            FlowRouter.go("/admin/transactions/requestedList")
+            let routeName=FlowRouter.getRouteName();
+            if(routeName==="transaction_registration_approved_edit"){
+              FlowRouter.go("/admin/transactions/registrationApprovedList")
+            }else if(routeName==="transaction_registration_requested_edit"){
+              FlowRouter.go("/admin/transactions/registrationRequested")
+            }
           }
         }
       ]
@@ -248,10 +254,10 @@ export default class Company extends React.Component{
   }  }
     `;
     let userTypeOption={options: { variables: {communityCode:this.props.registrationInfo.registrationType}}};
-    let citiesquery = gql`query($countryId:String){
+   /* let citiesquery = gql`query($countryId:String){
       data:fetchCitiesPerCountry(countryId:$countryId){label:name,value:_id}
     }
-    `;
+    `;*/
     let entitiesquery = gql`query{
     data:fetchEntities {label:entityName,value:_id  }
     }
@@ -279,6 +285,11 @@ export default class Company extends React.Component{
     data:fetchStageOfCompany{label:stageOfCompanyName,value:_id}
     }
     `;
+    let citiesquery = gql`query($searchQuery:String){
+      data:searchCities(searchQuery:$searchQuery){label:name,value:_id}
+    }
+    `;
+
     let countryOption = {options: { variables: {countryId:this.props.clusterId}}};
     let that=this;
     const showLoader=this.state.loading;
@@ -318,10 +329,10 @@ export default class Company extends React.Component{
                 <FontAwesome name="calendar" className="password_icon"onClick={that.openDatePickerDateOfBirth.bind(that)}/>
               </div>
               <div className="form-group">
-                <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedHeadquarter} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={that.optionsBySelectHeadquarter.bind(this)} isDynamic={true}/>
+                <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedHeadquarter} queryType={"graphql"}  query={citiesquery} onSelect={that.optionsBySelectHeadquarter.bind(this)} isDynamic={true}/>
               </div>
               <div className="form-group">
-                <Moolyaselect multiSelect={true} placeholder="Branch Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedBranches} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={that.optionsBySelectBranch.bind(this)} isDynamic={true}/>
+                <Moolyaselect multiSelect={true} placeholder="Branch Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedBranches} queryType={"graphql"}  query={citiesquery} onSelect={that.optionsBySelectBranch.bind(this)} isDynamic={true}/>
               </div>
               <div className="form-group">
                 <input type="text" ref="isoAccrediationNumber" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.isoAccrediationNumber} placeholder="ISO certification number" className="form-control float-label" id=""/>

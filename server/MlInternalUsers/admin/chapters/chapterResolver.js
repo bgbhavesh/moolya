@@ -124,11 +124,9 @@ MlResolver.MlQueryResolver['fetchChapters'] = (obj, args, context, info) => {
     let id= args.id;
     let response = [];
     if(id == "all"){
-      // response = MlChapters.find({isActive:true}).fetch()||[];
       response = mlDBController.find('MlChapters', {isActive:true}, context).fetch()||[];
       response.push({"chapterName" : "All","_id" : "all"});
     }else{
-      // response = MlChapters.find({"clusterId":id, "isActive":true}).fetch()||[];
       response = mlDBController.find('MlChapters', {"clusterId":id, "isActive":true}, context).fetch()||[];
       if(response.length > 0){
         response.push({"chapterName" : "All","_id" : "all"});
@@ -144,12 +142,9 @@ MlResolver.MlQueryResolver['fetchChaptersForMap'] = (obj, args, context, info) =
 }
 
 MlResolver.MlQueryResolver['fetchSubChapter'] = (obj, args, context, info) => {
-  // TODO : Authorization
-  if (args._id) {
-    var id= args._id;
-    // let response= MlSubChapters.findOne({"_id":id});
+  if (args.subChapterId) {
+    var id= args.subChapterId;
     let response = mlDBController.findOne('MlSubChapters', {"_id":id}, context)
-    // let stateName = MlStates.findOne({_id: response.stateId}).name;
     let stateName = mlDBController.findOne('MlStates', {_id: response.stateId}, context).name;
     response.stateName=stateName;
     return response;
@@ -158,24 +153,18 @@ MlResolver.MlQueryResolver['fetchSubChapter'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['fetchSubChapters'] = (obj, args, context, info) => {
   // let result =  MlSubChapters.find({chapterId: args.id}).fetch()||[];
-  let result = mlDBController.find('MlSubChapters', {chapterId: args.id}, context).fetch()||[];
+  let result = mlDBController.find('MlSubChapters', {chapterId: args.chapterId}, context).fetch()||[];
   return {data:result};
 }
 
 MlResolver.MlQueryResolver['fetchSubChaptersSelect'] = (obj, args, context, info) => {
-  // let result = MlSubChapters.find({chapterId: args.id}).fetch()||[];
   let chapterId=args.id;
   if(args.id&&args.id==='all'){
-    //chapterId={$regex:'.*',$options:"i"};
   }
-
   let result = mlDBController.find('MlSubChapters', {chapterId:chapterId}, context).fetch()||[];
-
- // if(args&&args.id&&args.id.trim()!==""){
-    if(args&&args.displayAllOption&&args.id&&args.id.trim()!==""){
+  if(args&&args.displayAllOption&&args.id&&args.id.trim()!==""){
     result.push({"subChapterName" : "All","_id" : "all"});
   }
-
   return result
 }
 
@@ -316,13 +305,6 @@ MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) =
 
 
 MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) => {
-  let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args.subChapterDetails);
-  if (!isValidAuth) {
-    let code = 401;
-    let response = new MlRespPayload().errorPayload("Not Authorized", code);
-    return response;
-  }
-
     let subChapter = mlDBController.findOne('MlSubChapters', {_id: args.subChapterId}, context)
     if(subChapter){
         for(key in args.subChapterDetails){
@@ -336,16 +318,73 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
             }
           }
         }
-        if(resp){
-          if(subChapter && subChapter.chapterId){   //if(args.subChapterDetails && args.subChapterDetails.chapterId){
+
+      if (resp) {
+        if (subChapter && subChapter.chapterId && subChapter.isDefaultSubChapter===true) {   //if(args.subChapterDetails && args.subChapterDetails.chapterId){
+          MlResolver.MlMutationResolver['updateChapter'](obj, {
+            chapterId: subChapter.chapterId,
+            chapter: {isActive: subChapter.isActive, showOnMap: subChapter.showOnMap}
+          }, context, info)
+          // MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:args.subChapterDetails.chapterId, chapter:{isActive:subChapter.isActive, showOnMap:subChapter.showOnMap}}, context, info)
+        }
+        let code = 200;
+        let result = {subChapter: resp}
+        let response = new MlRespPayload().successPayload(result, code);
+        return response
+      }
+
+        // if(resp){
+          // let subChapters = mlDBController.find('MlSubChapters', {chapterId:subChapter.chapterId}, context).fetch()
+          // let status,activeCount=0,addCount=0,inactiveCount=0,inactiveCounts=0
+          // if(subChapters){
+          //   subChapters.map(function (subchapter) {
+          //     if(subchapter.isActive && subchapter.showOnMap){
+          //       status = "active";
+          //       activeCount++
+          //     } else if(subchapter.isActive && !subchapter.showOnMap){
+          //       status = "add";
+          //       addCount++
+          //     } else if(!subchapter.isActive && subchapter.showOnMap){
+          //       status = "inactive";
+          //       inactiveCount++
+          //     } else if(!subchapter.isActive && !subchapter.showOnMap){
+          //       status = "inactive";
+          //       inactiveCounts++
+          //     }
+          //   })
+          //   if(subChapters.length == activeCount){
+          //     MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:subChapter.chapterId, chapter:{isActive:true, showOnMap:true}}, context, info)
+          //     let code = 200;
+          //     let result = {subChapter: resp}
+          //     let response = new MlRespPayload().successPayload(result, code);
+          //     return response
+          //   }else if(subChapters.length == addCount){
+          //     MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:subChapter.chapterId, chapter:{isActive:true, showOnMap:false}}, context, info)
+          //     let code = 200;
+          //     let result = {subChapter: resp}
+          //     let response = new MlRespPayload().successPayload(result, code);
+          //     return response
+          //   }else if(subChapters.length == inactiveCount){
+          //     MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:subChapter.chapterId, chapter:{isActive:false, showOnMap:true}}, context, info)
+          //     let code = 200;
+          //     let result = {subChapter: resp}
+          //     let response = new MlRespPayload().successPayload(result, code);
+          //     return response
+          //   }else if(subChapters.length == inactiveCounts){
+          //     MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:subChapter.chapterId, chapter:{isActive:false, showOnMap:false}}, context, info)
+          //     let code = 200;
+          //     let result = {subChapter: resp}
+          //     let response = new MlRespPayload().successPayload(result, code);
+          //     return response
+          //   }
+          // }
+
+         /* if(subChapter && subChapter.chapterId){   //if(args.subChapterDetails && args.subChapterDetails.chapterId){
             MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:subChapter.chapterId, chapter:{isActive:subChapter.isActive, showOnMap:subChapter.showOnMap}}, context, info)
             // MlResolver.MlMutationResolver['updateChapter'] (obj, {chapterId:args.subChapterDetails.chapterId, chapter:{isActive:subChapter.isActive, showOnMap:subChapter.showOnMap}}, context, info)
-          }
-            let code = 200;
-            let result = {subChapter: resp}
-            let response = new MlRespPayload().successPayload(result, code);
-            return response
-        }
+          }*/
+
+        // }
     }
 }
 

@@ -35,7 +35,7 @@ FlowRouter.route('/', {
   triggersEnter: [function(context, redirect) {
     console.log('running / trigger');
     if (!userId) {
-      FlowRouter.go('/login');
+      redirect('/login');
     }
   }]
 });

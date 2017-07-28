@@ -1,7 +1,7 @@
 import React from 'react';
 import {Meteor} from 'meteor/meteor';
 import {render} from 'react-dom';
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 export default class MlMoolyaAssignDepartment extends React.Component {
@@ -9,8 +9,9 @@ export default class MlMoolyaAssignDepartment extends React.Component {
     super(props);
     this.state={
       selectedValue:null,
-      departmentAvailability:[{cluster: [],chapter:'all',subChapter:'all',email:'',isActive:false }]
+      departmentAvailability:[{cluster: [],chapter:'all',subChapter:'all',email:'',isActive:true }]
     }
+    /**making the status default active as no provision is there to activate the department when it is moolya*/
     return this;
   }
 

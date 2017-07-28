@@ -51,6 +51,8 @@ export default class MlAppProfileAddressBook extends React.Component {
     let contactInfo= this.state.data?this.state.data.contactInfo:''
     let emailInfo= this.state.data?this.state.data.emailInfo:''
     let addressInfo = this.state.data?this.state.data.addressInfo:''
+    let registerId = this.state.data?this.state.data.registrationId:''
+    let profileId = this.state.data?this.state.data.profileId:''
     return (
       <div className="admin_main_wrap">
         {showLoader === true ? (<MlLoader/>) : (
@@ -70,13 +72,13 @@ export default class MlAppProfileAddressBook extends React.Component {
                       <div className="panel-heading">
                         Contact Number
                       </div>
-                      <AppContactDetails clusterId={clusterId} contactInfoDetails={contactInfo}/>
+                      <AppContactDetails clusterId={clusterId} contactInfoDetails={contactInfo}  registerId = {registerId} profileId={profileId} registrationDetails={this.findAddressBook.bind(this)}/>
                     </div>
                     <div className="panel panel-default new_profile_tabs">
                       <div className="panel-heading">
                         Email ID
                       </div>
-                      <AppEmailDetails clusterId={clusterId} emailInfoDetails={emailInfo}/>
+                      <AppEmailDetails clusterId={clusterId} emailInfoDetails={emailInfo}  registerId = {registerId} profileId={profileId} registrationDetails={this.findAddressBook.bind(this)}/>
                     </div>
                   </form>
                 </div>
@@ -86,7 +88,7 @@ export default class MlAppProfileAddressBook extends React.Component {
                       <div className="panel-heading">
                         Address
                       </div>
-                      <AppAddressDetails clusterId={clusterId} addressInfoDetails={addressInfo}/>
+                      <AppAddressDetails clusterId={clusterId} addressInfoDetails={addressInfo} registerId = {registerId} profileId={profileId} registrationDetails={this.findAddressBook.bind(this)}/>
                     </div>
                   </form>
                 </div>

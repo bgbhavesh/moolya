@@ -1,6 +1,25 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+import moment from 'moment'
+function createdateFormatter (data){
+  let createdDate=data&&data.data&&data.data.createdDate;
+  if(createdDate){
+    return <div>{moment(createdDate).format('MM-DD-YYYY HH:mm:ss')}</div>;
+  }
+  else {
+    return <div></div>
+  }
+}
+function updatedateFormatter (data){
+  let updateDate=data&&data.data&&data.data.updatedDate;
+  if(updateDate){
+    return <div>{moment(updateDate).format('MM-DD-YYYY HH:mm:ss')}</div>;
+  }
+  else {
+    return <div></div>
+  }
+}
 const mlProfessionTableConfig=new MlViewer.View({
   name:"professionTable",
   module:"profession",//Module name for filter.
@@ -17,6 +36,10 @@ const mlProfessionTableConfig=new MlViewer.View({
     {dataField: "professionDisplayName", title: "Display Name",dataSort:true},
     {dataField: "industryName", title: "Industry",dataSort:true},
     {dataField: "about", title: "About",dataSort:true},
+    {dataField: "createdBy", title: "Created By",dataSort:true},
+    {dataField: "createdDate", title: "CreatedDate And Time",dataSort:true,customComponent:createdateFormatter},
+    {dataField: "updatedBy", title: "Updated By",dataSort:true},
+    {dataField: "updatedDate", title: "UpdatedDate And Time",dataSort:true,customComponent:updatedateFormatter},
     {dataField: "isActive", title: "Active",dataSort:true},
   ],
   tableHeaderClass:'react_table_head',
@@ -27,7 +50,7 @@ const mlProfessionTableConfig=new MlViewer.View({
       showAction: true,
       handler:  (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/editProfession/"+data.id)
+          FlowRouter.go("/admin/settings/documentProcess/editProfession/"+data.id)
         }
         else{
           toastr.error("Please select a Profession to edit")
@@ -44,7 +67,7 @@ const mlProfessionTableConfig=new MlViewer.View({
           // FlowRouter.go("/admin/settings/professionList")
         }
         else {
-          FlowRouter.go("/admin/settings/addProfession")
+          FlowRouter.go("/admin/settings/documentProcess/addProfession")
         }
       }
     },
@@ -65,8 +88,12 @@ const mlProfessionTableConfig=new MlViewer.View({
                               professionDisplayName
                               industryName
                               about
-                              isActive
+                              isActive  
                               id:_id
+                              createdBy
+                              createdDate  
+                              updatedBy     
+                              updatedDate
                           }
                       }
               }

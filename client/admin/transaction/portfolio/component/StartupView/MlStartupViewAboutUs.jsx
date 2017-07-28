@@ -24,7 +24,6 @@ export default class MlStartupViewAboutUs extends React.Component {
 
   componentDidMount(){
     this.initalizeAnnotaor()
-    this.fetchAnnotations();
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
 
@@ -40,6 +39,7 @@ export default class MlStartupViewAboutUs extends React.Component {
     const response = await fetchDetailsStartupActionHandler(portfoliodetailsId);
     if (response) {
       this.setState({loading: false,startupAboutUsList: response});
+      this.fetchAnnotations();
     }
 
   }
@@ -76,7 +76,7 @@ export default class MlStartupViewAboutUs extends React.Component {
   }
 
   async createAnnotations(annotation){
-    let details = {portfolioId:this.props.portfolioDetailsId, docId:"startupAboutUs", quote:JSON.stringify(annotation)}
+    let details = {portfolioId:this.props.portfolioDetailsId, docId:"serviceproviderServices", quote:JSON.stringify(annotation)}
     const response = await createAnnotationActionHandler(details);
     if(response && response.success){
       this.fetchAnnotations(true);
@@ -87,7 +87,7 @@ export default class MlStartupViewAboutUs extends React.Component {
 
 
   async fetchAnnotations(isCreate){
-    const response = await findAnnotations(this.props.portfolioDetailsId, "startupAboutUs");
+    const response = await findAnnotations(this.props.portfolioDetailsId, "serviceproviderServices");
     let resp = JSON.parse(response.result);
     let annotations = this.state.annotations;
     this.setState({annotations:JSON.parse(response.result)})
@@ -101,6 +101,8 @@ export default class MlStartupViewAboutUs extends React.Component {
         "quote" : value.quote.quote,
         "ranges" : value.quote.ranges,
         "userName" : value.userName,
+        "roleName" : value.roleName,
+        "profileImage" : value.profileImage,
         "createdAt" : value.createdAt
       })
     })

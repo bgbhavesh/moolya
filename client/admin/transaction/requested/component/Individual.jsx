@@ -5,7 +5,7 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {updateRegistrationActionHandler} from '../actions/updateRegistration'
 import Datetime from "react-datetime";
@@ -162,7 +162,7 @@ export default class Individual extends React.Component{
   }
   ondateOfBirthSelection(event) {
     if (event._d) {
-      let value = moment(event._d).format('DD-MM-YYYY');
+      let value = moment(event._d).format('MM/DD/YYYY');
       this.setState({loading: false, dateOfBirth: value});
     }
   }

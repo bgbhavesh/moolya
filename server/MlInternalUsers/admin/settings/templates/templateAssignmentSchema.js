@@ -105,10 +105,10 @@ let TemplateAssignment = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],TemplateAssignment]);
 
 let supportedApi = [
-  {api:'findTemplateSteps', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT"},
+  {api:'findTemplateSteps', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT", isWhiteList:true},
   {api:'fetchAssignedTemplate', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT", isWhiteList:true},
   {api:'fetchSubProcess', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT", isWhiteList:true},
-  {api:'findAssignedTemplates', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT"},
+  {api:'findAssignedTemplates', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT", isWhiteList:true},
   {api:'findTemplateStepsSelect', actionName:'READ', moduleName:"TEMPLATEASSIGNMENT", isWhiteList:true},
   {api:'createTemplateAssignment', actionName:'CREATE', moduleName:"TEMPLATEASSIGNMENT"},
   {api:'updateTemplateAssignment', actionName:'UPDATE', moduleName:"TEMPLATEASSIGNMENT"}

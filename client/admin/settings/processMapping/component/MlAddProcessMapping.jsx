@@ -11,7 +11,7 @@ import {updateProcessActionHandler} from '../actions/updateProcessMappingAction'
 import MlAssignDocument from './MlAssignDocument'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 let Select = require('react-select');
 
@@ -71,7 +71,7 @@ class MlAddProcessMapping extends React.Component{
   async handleSuccess(response) {
     if (response){
       if(response.success)
-        FlowRouter.go("/admin/settings/processList");
+        FlowRouter.go("/admin/settings/documentProcess/processList");
       else
         toastr.error(response.result);
     }
@@ -185,8 +185,7 @@ class MlAddProcessMapping extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
-          FlowRouter.go("/admin/settings/processList")
+          FlowRouter.go("/admin/settings/documentProcess/processList")
         }
       }
     ]
@@ -206,7 +205,7 @@ class MlAddProcessMapping extends React.Component{
 }
 `;
     let fetchcommunities = gql` query{
-  data:fetchCommunityDefinitionForSelect{label:name,value:code}
+  data:fetchCommunityDefinitionForProcessMapping{label:name,value:code}
 }
 `;
  /*   let fetchUsers = gql`query{
@@ -343,7 +342,7 @@ class MlAddProcessMapping extends React.Component{
 
   <Moolyaselect ref="chapter" multiSelect={true}mandatory={true}   placeholder={"Chapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapters} queryType={"graphql"} query={chapterquery} queryOptions={chapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectChapters.bind(this)}  data-required={true} data-errMsg="Chapter is required"/>
 
-  <Moolyaselect  ref="subChapter"multiSelect={true} mandatory={true}   placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters} queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)}  data-required={true} data-errMsg="subChapter is required" />
+  <Moolyaselect  ref="subChapter" multiSelect={true} mandatory={true}   placeholder={"SubChapter"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapters} queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption} isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)}  data-required={true} data-errMsg="subChapter is required" />
   <MlAssignDocument getAssignedDocuments={this.getAssignedDocuments.bind(this)} clusterId={this.state.clusters} chapterId={this.state.chapters} subChapterId={this.state.subChapters}/>
                 </form>
                 </ScrollArea>

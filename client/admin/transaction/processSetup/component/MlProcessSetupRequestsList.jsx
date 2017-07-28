@@ -12,16 +12,11 @@ export default class MlProcessSetupRequestsList extends Component {
     // this.refreshList = this.refreshList.bind(this);
 
   }
-  componentDidMount() {
-  }
+
   addRequestHandler(){
     this.setState({showCreateRequestComponent:true});
   }
-  // refreshList(){
-  //   this.setState({
-  //     time: new Date()
-  //   });
-  // }
+
   render() {
     let actions= mlProcessSetupRequestsTableConfig.actionConfiguration;
     let action = _.find(actions, {"actionName": "add"});
@@ -31,7 +26,7 @@ export default class MlProcessSetupRequestsList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Internal Requests </h2>
+          <h2>Process Setup </h2>
           <MlTableViewContainer {...mlProcessSetupRequestsTableConfig} forceFetch={false}/>
           {/*{showCreateRequestComponent?<CreateRequestComponent refreshList={refreshList} openPopUp={true}/>:<div></div>}*/}
         </div>

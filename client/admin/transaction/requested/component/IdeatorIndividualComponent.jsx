@@ -5,7 +5,7 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {updateRegistrationActionHandler} from '../actions/updateRegistration'
 import Datetime from "react-datetime";
@@ -161,7 +161,7 @@ export default class IdeatorIndividualComponent extends React.Component{
     var ageDifMs = Date.now() - event._d.getTime();
     var ageDate = new Date(ageDifMs);
     if (event._d) {
-      let value = moment(event._d).format('DD-MM-YYYY');
+      let value = moment(event._d).format('MM/DD/YYYY');
       this.setState({loading: false, dateOfBirth: value});
     }
     if((Math.abs(ageDate.getUTCFullYear() - 1970)>10)){
@@ -226,7 +226,13 @@ export default class IdeatorIndividualComponent extends React.Component{
           showAction: true,
           actionName: 'cancel',
           handler: async(event) => {
-            FlowRouter.go("/admin/transactions/registrationRequested")
+            let routeName=FlowRouter.getRouteName();
+            if(routeName==="transaction_registration_approved_edit"){
+                FlowRouter.go("/admin/transactions/registrationApprovedList")
+            }else if(routeName==="transaction_registration_requested_edit"){
+                FlowRouter.go("/admin/transactions/registrationRequested")
+            }
+
           }
         }
       ]

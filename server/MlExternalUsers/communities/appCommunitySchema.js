@@ -3,7 +3,7 @@
  */
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../commons/mlSchemaDef'
-
+import MlResolver from "../../commons/mlResolverDef";
 
 let appCommunitySchema = `
     type appCommunities{
@@ -18,8 +18,22 @@ let appCommunitySchema = `
     
     type Query{
         fetchCommunitiesFromDef:[appCommunities]
+        
     }
 `
 
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], appCommunitySchema]);
+
+let supportedApi = [
+  {api: 'fetchCommunitiesFromDef', userAction:"READ", actionName:'READ', resource: "COMMUNITY", isAppWhiteList:true},
+
+]
+
+MlResolver.MlModuleResolver.push(supportedApi)
+
+/**
+ * removed dependency
+ * */
+// fetchAllCommunitiesFromDef: [appCommunities]
+// {api: 'fetchAllCommunitiesFromDef', userAction:"READ", actionName:'READ', resource: "COMMUNITY", isAppWhiteList:true},

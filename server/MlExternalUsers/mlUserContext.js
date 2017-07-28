@@ -18,24 +18,59 @@ class MlUserContext{
             if(!default_User_Profile ){
                 default_User_Profile = user_profiles[0];
             }
+          default_User_Profile.email = user.profile.email;
+          default_User_Profile.mobileNumber = user.profile.mobileNumber;
+          default_User_Profile.firstName = user.profile.firstName;
+          default_User_Profile.lastName = user.profile.lastName;
         }
         return default_User_Profile;
     }
 
     getDefaultMenu(userId){
         check(userId,String);
+        var  menu = ''
         let userProfile = this.userProfileDetails(userId)||{};
-        if(userProfile){
+        if(userProfile && userProfile.communityDefCode){
+          menu =   MlAppMenuConfig.findOne({"$and":[{isProfileMenu: false}, {communityCode: userProfile.communityDefCode}, {isActive:true}]});
         }
-        return 'mlDefaultMenu';
+        else{
+          // commmunity type browser will not have any profile
+          menu =   MlAppMenuConfig.findOne({"$and":[{isProfileMenu: false}, {communityCode: 'BRW'}, {isActive:true}]});
+        }
+        if(menu)
+          return menu.menuName;
+        return menu;
     }
 
     getDefaultProfileMenu(userId){
+        var  menu = ''
+        let userProfile = this.userProfileDetails(userId)||{};
+        if(userProfile && userProfile.communityDefCode){
+          menu =   MlAppMenuConfig.findOne({"$and":[{isProfileMenu: true}, {communityCode: userProfile.communityDefCode}, {isActive:true}]});
+        }
+        else{
+          // commmunity type browser will not have any profile
+          menu =   MlAppMenuConfig.findOne({"$and":[{isProfileMenu: true}, {communityCode: 'BRW'}, {isActive:true}]});
+        }
+        if(menu)
+          return menu.menuName;
+        return menu;
+    }
+
+    getExploreMenu(userId){
         check(userId,String);
         let userProfile = this.userProfileDetails(userId)||{};
         if(userProfile){
         }
-        return 'mlDefaultProfileMenu';
+        return 'mlExploreMenu';
+    }
+
+    getCalendarMenu(userId) {
+      check(userId, String);
+      let userProfile = this.userProfileDetails(userId) || {};
+      if (userProfile) {
+      }
+      return 'mlCalendarMenu';
     }
 }
 

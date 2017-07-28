@@ -47,7 +47,6 @@ let modules = [
     "subProcess",
     "Technologies",
     "SubDomain",
-    "portfolioLibrary",
     "communityAccess",
     "templates",
     "services" ,
@@ -68,7 +67,11 @@ let modules = [
     "accountType",
     'office',
     "processSetup",
-    'subscriptions'
+    'subscriptions',
+    'interaction',
+    'actions',
+    'serviceCards',
+    'notificationtemplate'
   ];
 
 // Meteor.startup(function () {

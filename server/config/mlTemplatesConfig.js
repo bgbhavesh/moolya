@@ -38,8 +38,8 @@ let templates = [
 
   {stepName:"Hard",stepCode:"HARD",templateCode:"HRTIDECMP",templateName:"Hard-Reg-Ideator-Company",templateDescription:"Hard Registration Template for Ideator Company",isActive: true,createdDate: new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"},
   {stepName:"Hard",stepCode:"HARD",templateCode:"HRTIDEINV",templateName:"Hard-Reg-Ideator-Individual",templateDescription:"Hard Registration Template for Ideator Company",isActive: true,createdDate:  new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"},
-  {stepName:"Hard",stepCode:"HARD",templateCode:"HRTFUNCMP",templateName:"Hard-Reg-Funder-Company",templateDescription:"Hard Registration Template for Funder Company",isActive: true,createdDate:  new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-public-images/Templates/Additional-Info_Funder_Company.png"},
-  {stepName:"Hard",stepCode:"HARD",templateCode:"HRTFUNINV",templateName:"Hard-Reg-Funder-Individual",templateDescription:"Hard Registration Template for Funder Individual",isActive: true,createdDate: new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-public-images/Templates/Additional-Info_Funder_Individual.png"},
+  {stepName:"Hard",stepCode:"HARD",templateCode:"HRTFUNCMP",templateName:"Hard-Reg-Investor-Company",templateDescription:"Hard Registration Template for Investor Company",isActive: true,createdDate:  new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-public-images/Templates/Additional-Info_Funder_Company.png"},
+  {stepName:"Hard",stepCode:"HARD",templateCode:"HRTFUNINV",templateName:"Hard-Reg-Investor-Individual",templateDescription:"Hard Registration Template for Investor Individual",isActive: true,createdDate: new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-public-images/Templates/Additional-Info_Funder_Individual.png"},
   {stepName:"Hard",stepCode:"HARD",templateCode:"HRTSPSCMP",templateName:"Hard-Reg-ServiceProvider-Company",templateDescription:"Hard Registration Template for ServiceProvider Company",isActive: true,createdDate:  new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-public-images/Templates/Additional-Info_ServiceProvider_Company.png"},
   {stepName:"Hard",stepCode:"HARD",templateCode:"HRTSPSINV",templateName:"Hard-Reg-ServiceProvider-Individual",templateDescription:"Hard Registration Template for ServiceProvider Individual",isActive: true,createdDate:  new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-public-images/Templates/Additional-Info_ServiceProvider_Individual.png"},
   {stepName:"Hard",stepCode:"HARD",templateCode:"HRTCMP",templateName:"Hard-Reg-Company",templateDescription:"Hard Registration Template for Company",isActive: true,createdDate:  new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-public-images/Templates/Additional-Info_Companies_Company.png"},
@@ -49,8 +49,10 @@ let templates = [
   {stepName:"Portfolio",stepCode:"PORTFOLIO",templateCode:"PFTIDEVIW",templateName:"Portfolio-Template-Ideator-View",templateDescription:"Portfolio Template for Ideator View",isActive: true,createdDate:  new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"},
   {stepName:"Portfolio",stepCode:"PORTFOLIO",templateCode:"PFTSTUEDT",templateName:"Portfolio-Template-Startup-Edit",templateDescription:"Portfolio Template for Startup Edit",isActive: true,createdDate:  new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"},
   {stepName:"Portfolio",stepCode:"PORTFOLIO",templateCode:"PFTSTUVIW",templateName:"Portfolio-Template-Startup-View",templateDescription:"Portfolio Template for Startup View",isActive: true,createdDate:  new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"},
-  {stepName:"Portfolio",stepCode:"PORTFOLIO",templateCode:"PFTFUNEDT",templateName:"Portfolio-Template-Funder-Edit",templateDescription:"Portfolio Template for Funder Edit",isActive: true,createdDate:  new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"},
-  {stepName:"Portfolio",stepCode:"PORTFOLIO",templateCode:"PFTFUNVIW",templateName:"Portfolio-Template-Funder-View",templateDescription:"Portfolio Template for Funder View",isActive: true,createdDate:  new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"},
+  {stepName:"Portfolio",stepCode:"PORTFOLIO",templateCode:"PFTFUNEDT",templateName:"Portfolio-Template-Investor-Edit",templateDescription:"Portfolio Template for Investor Edit",isActive: true,createdDate:  new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"},
+  {stepName:"Portfolio",stepCode:"PORTFOLIO",templateCode:"PFTFUNVIW",templateName:"Portfolio-Template-Investor-View",templateDescription:"Portfolio Template for Investor View",isActive: true,createdDate:  new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"},
+  {stepName:"Portfolio",stepCode:"PORTFOLIO",templateCode:"PFTSPSEDT",templateName:"Portfolio-Template-ServiceProvider-Edit",templateDescription:"Portfolio Template for Service Provider View",isActive: true,createdDate:  new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"},
+  {stepName:"Portfolio",stepCode:"PORTFOLIO",templateCode:"PFTSPSVIW",templateName:"Portfolio-Template-ServiceProvider-View",templateDescription:"Portfolio Template for Service Provider Edit",isActive: true,createdDate:  new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"},
 ]
 
 let templateObject = {
@@ -95,9 +97,9 @@ if(mltemplateAssignment.length<=0){
 
   MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",
     "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
-    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "FUN", "templatecommunityName" : "Funders", "templateuserType" : "all",
+    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "FUN", "templatecommunityName" : "Investors", "templateuserType" : "all",
     "templateidentity" : "Company",
-    "assignedTemplates" : [{"stepName" : "Hard", "stepCode" : "HARD","templateCode":"HRTFUNCMP","templateName":"Hard-Reg-Funder-Company"}
+    "assignedTemplates" : [{"stepName" : "Hard", "stepCode" : "HARD","templateCode":"HRTFUNCMP","templateName":"Hard-Reg-Investor-Company"}
     ], createdDate: new Date(), createdBy: "systemadmin"
   });
 
@@ -105,9 +107,9 @@ if(mltemplateAssignment.length<=0){
 
   MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",
     "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
-    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "FUN", "templatecommunityName" : "Funders", "templateuserType" : "all",
+    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "FUN", "templatecommunityName" : "Investors", "templateuserType" : "all",
     "templateidentity" : "Individual",
-    "assignedTemplates" : [{"stepName" : "Hard", "stepCode" : "HARD","templateCode":"HRTFUNINV","templateName":"Hard-Reg-Funder-Individual"}
+    "assignedTemplates" : [{"stepName" : "Hard", "stepCode" : "HARD","templateCode":"HRTFUNINV","templateName":"Hard-Reg-Investor-Individual"}
     ], createdDate: new Date(), createdBy: "systemadmin"
   });
 
@@ -187,15 +189,30 @@ if(mltemplateAssignment.length<=0){
 
   MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",
     "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
-    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "FUN", "templatecommunityName" : "funders", "templateuserType" : "all",
-    "templateidentity" : "edit", "assignedTemplates" : [{"stepName" : "Portfolio", "stepCode" : "PORTFOLIO","templateCode":"PFTFUNEDT","templateName":"Portfolio-Template-Funder-Edit"}],
+    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "FUN", "templatecommunityName" : "Investors", "templateuserType" : "all",
+    "templateidentity" : "edit", "assignedTemplates" : [{"stepName" : "Portfolio", "stepCode" : "PORTFOLIO","templateCode":"PFTFUNEDT","templateName":"Portfolio-Template-Investor-Edit"}],
     createdDate: new Date(), createdBy: "systemadmin"
   });
 
   MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",
     "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
-    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "FUN", "templatecommunityName" : "Funders", "templateuserType" : "all",
-    "templateidentity" : "view", "assignedTemplates" : [{"stepName" : "Portfolio", "stepCode" : "PORTFOLIO","templateCode":"PFTFUNVIW","templateName":"Portfolio-Template-Funder-View"}],
+    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "FUN", "templatecommunityName" : "Investors", "templateuserType" : "all",
+    "templateidentity" : "view", "assignedTemplates" : [{"stepName" : "Portfolio", "stepCode" : "PORTFOLIO","templateCode":"PFTFUNVIW","templateName":"Portfolio-Template-Investor-View"}],
+    createdDate: new Date(), createdBy: "systemadmin"
+  });
+
+  /**Service provider templates*/
+  MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",
+    "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
+    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "SPS", "templatecommunityName" : "Service Providers", "templateuserType" : "all",
+    "templateidentity" : "edit", "assignedTemplates" : [{"stepName" : "Portfolio", "stepCode" : "PORTFOLIO","templateCode":"PFTSPSEDT","templateName":"Portfolio-Template-ServiceProvider-Edit"}],
+    createdDate: new Date(), createdBy: "systemadmin"
+  });
+
+  MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",
+    "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
+    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "SPS", "templatecommunityName" : "Service Providers", "templateuserType" : "all",
+    "templateidentity" : "view", "assignedTemplates" : [{"stepName" : "Portfolio", "stepCode" : "PORTFOLIO","templateCode":"PFTSPSVIW","templateName":"Portfolio-Template-ServiceProvider-View"}],
     createdDate: new Date(), createdBy: "systemadmin"
   });
 }

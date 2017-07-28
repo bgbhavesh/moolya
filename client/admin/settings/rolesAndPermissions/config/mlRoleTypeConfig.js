@@ -63,7 +63,7 @@ function dateFormatter(data){
   if(createdDateTime){
     return <div>{moment(createdDateTime).format('MM-DD-YYYY, HH:MM')}</div>;
   } else {
-    return <div>System Generated</div>;
+    return <div></div>;
   }
 }
 function createdByFormatter(data){
@@ -71,10 +71,37 @@ function createdByFormatter(data){
   if(createdBy){
     return <div>{createdBy}</div>;
   } else {
-    return <div>System Generated</div>;
+    return <div></div>;
   }
 }
-
+function updateddateFormatter(data){
+  let updatedDateTime=data&&data.data&&data.data.updatedDateTime;
+  if(updatedDateTime){
+    return <div>{moment(updatedDateTime).format('MM-DD-YYYY, HH:MM')}</div>;
+  } else {
+    return <div></div>;
+  }
+}
+function updatedByFormatter(data){
+  let updatedBy=data&&data.data&&data.data.updatedBy;
+  if(updatedBy){
+    return <div>{updatedBy}</div>;
+  } else {
+    return <div></div>;
+  }
+}
+//@for displaying roleTypes as EcoSystem and SubChapter
+function roleType(data){
+  let roleType = data&&data.data && data.data.roleType;
+   if(roleType == "moolya"){
+     return <div>EcoSystem</div>
+   }
+   else if(roleType == "non-moolya"){
+       return <div>subChapter</div>
+   }else{
+     return <div></div>
+   }
+}
 const mlRoleTypeTableConfig=new MlViewer.View({
   name:"roleTypeTable",
   module:"roles",//Module name for filter.
@@ -89,7 +116,7 @@ const mlRoleTypeTableConfig=new MlViewer.View({
     {dataField: "id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "roleName", title: "Role Name",dataSort:true},
     {dataField: "displayName", title: "Display Name",dataSort:true},
-    {dataField: "roleType", title: "Role Type",dataSort:true},
+    {dataField: "roleType", title: "Role Type",dataSort:true,customComponent:roleType},
     {dataField: "departmentsList", title: "Departments",dataSort:true,customComponent:departmentsFormatter},
     {dataField: "subdepartmentsList", title: "SubDepartments",dataSort:true,customComponent:subdepartmentsFormatter},
     {dataField: "clustersList", title: "Cluster",dataSort:true,customComponent:clustersFormatter},
@@ -97,6 +124,8 @@ const mlRoleTypeTableConfig=new MlViewer.View({
     {dataField: "subChapterList", title: "Sub-Chapter",dataSort:true,customComponent:subChapterFormatter},
     {dataField: "createdDateTime", title: "Created Date and Time",dataSort:true,customComponent:dateFormatter},
     {dataField: "createdBy", title: "Created By",dataSort:true,customComponent:createdByFormatter},
+    {dataField: "updatedDateTime", title: "Updated Date and Time",dataSort:true,customComponent:updateddateFormatter},
+    {dataField: "updatedBy", title: "Updated By",dataSort:true,customComponent: updatedByFormatter},
 
   ],
   tableHeaderClass:'react_table_head',
@@ -138,6 +167,8 @@ const mlRoleTypeTableConfig=new MlViewer.View({
                               roleType,
                               createdDateTime,
                               createdBy,
+                              updatedDateTime,
+                              updatedBy,
                               departmentsList,
                               subdepartmentsList,
                               clustersList,

@@ -3,7 +3,7 @@ import {Meteor} from 'meteor/meteor';
 import {render} from 'react-dom';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 export default class MlContactFormComponent extends React.Component {
   constructor(props){
     super(props);

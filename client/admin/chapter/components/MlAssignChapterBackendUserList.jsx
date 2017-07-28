@@ -1,13 +1,6 @@
 import React from 'react';
-import {Meteor} from 'meteor/meteor';
-import {render} from 'react-dom';
-import ScrollArea from 'react-scrollbar';
-import { graphql } from 'react-apollo';
-import gql from 'graphql-tag'
 import {fetchAssignUsersActionHandler} from '../../../commons/fetchAssignUsers'
-
-let FontAwesome = require('react-fontawesome');
-let Select = require('react-select');
+import {client} from '../../core/apolloConnection';
 
 export default class MlAssignChapterBackendUserList extends React.Component{
     constructor(props){
@@ -31,7 +24,7 @@ export default class MlAssignChapterBackendUserList extends React.Component{
       let subChapterId = this.props.subChapterId;
       let subChapterName = this.props.subChapterName;
       let communityId = this.props.communityId?this.props.communityId:"";
-      const response = await fetchAssignUsersActionHandler(clusterId, chapterId, subChapterId, communityId,subChapterName);
+      const response = await fetchAssignUsersActionHandler(clusterId, chapterId, subChapterId, communityId,subChapterName,client);
       let data = response ? response : []
       this.setState({loading:false, backendUsers:data});
     }
@@ -57,7 +50,7 @@ export default class MlAssignChapterBackendUserList extends React.Component{
               return (
                 <div className="col-lg-4 col-md-6 col-sm-4" key={ids} onClick={that.onBackEndUserClick.bind(that, user)}>
                   <div className="list_block provider_block">
-                    <div className={`cluster_status ${status}_cl`}><span className={`ml ml-${icon}`}></span></div>
+                    <div className={`cluster_status ${status}_cl`}>{/*<span className={`ml ml-${icon}`}></span>*/}</div>
                     <div className="provider_mask"><img src="/images/funder_bg.png"/>
                       <img className="user_pic" src="/images/def_profile.png"/>
                     </div>

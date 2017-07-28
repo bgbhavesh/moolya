@@ -9,7 +9,7 @@ import {addDocumentMappingActionHandler} from '../actions/addDocumentMappingActi
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 // import MlAssignDocument from './MlAssignDocument'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 
 let Select = require('react-select');
@@ -56,7 +56,7 @@ class MlAddDocumentMapping extends React.Component{
   async handleSuccess(response) {
     if (response){
       if(response.success)
-        FlowRouter.go("/admin/settings/documentMappingList");
+        FlowRouter.go("/admin/settings/documentProcess/documentMappingList");
       else
         toastr.error(response.result);
     }
@@ -95,6 +95,7 @@ class MlAddDocumentMapping extends React.Component{
         isActive: this.refs.status.checked,
       }
       const response = await addDocumentMappingActionHandler(documentDetails)
+      toastr.success("Document Created Successfully");
       return response;
     }
   }
@@ -150,8 +151,7 @@ class MlAddDocumentMapping extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
-          FlowRouter.go("/admin/settings/documentMappingList")
+          FlowRouter.go("/admin/settings/documentProcess/documentMappingList")
         }
       }
     ]

@@ -1,7 +1,5 @@
 import React, {Component, PropTypes} from 'react';
 import shouldPureComponentUpdate from 'react-pure-render/function';
-import controllable from 'react-controllables';
-import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 
 import _ from 'lodash';
 
@@ -40,7 +38,7 @@ export default class MapMarkers extends Component {
   constructor(props) {
     super(props);
     this.state = {loading: true, data: {}, isHover: false};
-    this.markerClickHandler.bind(this);
+    //this.markerClickHandler.bind(this);
     this.onMouseEnterHandlerCallback.bind(this);
   }
 
@@ -61,9 +59,9 @@ export default class MapMarkers extends Component {
     this.setState({isHover: false});
   }
 
-  markerClickHandler(data)
+ /* markerClickHandler(data)
   {
-    console.log(data);
+    // console.log(data);
     if(data.module == 'cluster')
       FlowRouter.go('/admin/dashboard/'+data.markerId+'/chapters?viewMode=true');
     if(data.module == 'chapter')
@@ -82,7 +80,7 @@ export default class MapMarkers extends Component {
 
     if(data.module == 'subChapter')
       FlowRouter.go('/admin/dashboard/'+this.props.params.clusterId+'/'+this.props.params.chapterId+'/'+data.markerId+'/communities?viewMode=true');
-  }
+  }*/
 
   /*async findModuleDetails() {
     let json = {
@@ -100,51 +98,37 @@ export default class MapMarkers extends Component {
     let actionConfig = this.props.actionConfiguration|| [];
     let hoverInConfig = _.find(actionConfig, {actionName: 'onMouseEnter'});
     let hoverActionHandler=hoverInConfig&&hoverInConfig.handler?hoverInConfig.handler:null;
+    let markerClickConfig = _.find(actionConfig, {actionName: 'onMarkerClick'});
+    let markerClickActionHandler=markerClickConfig&&markerClickConfig.handler?markerClickConfig.handler:null;
     let hoverComp = hoverInConfig&&hoverInConfig.hoverComponent?hoverInConfig.hoverComponent:"";
     let data = this.state.data && this.state.data ? this.state.data : [];
     let HoverComponent = React.cloneElement(hoverComp, {data: data});
+    let mapMarkerComponent=null;
+    if(this.props.mapMarkerComponent){
+      mapMarkerComponent=React.cloneElement(this.props.mapMarkerComponent,
+        {
+          data:this.props,
+          status:this.props.status,
+          markerId:this.props.markerId,
+          showImage:this.props.showImage,
+          text:this.props.text,
+          isActive:this.props.isActive,
+          isHover:this.state.isHover,
+          hoverActionHandler:hoverActionHandler,
+          markerClickActionHandler:markerClickActionHandler,
+          HoverComponent:HoverComponent,
+          onMouseEnterContent:this.onMouseEnterContent.bind(this),
+          // onMouseEnterHandlerCallback:this.onMouseEnterHandlerCallback.bind(this),
+          onMouseLeaveContent:this.onMouseLeaveContent.bind(this),
 
-    let status = "";
-    if(this.props.status && (this.props.status.code == 100)){
-      status = "tobeassign"
+        });
     }
-    if(this.props.status && (this.props.status.code == 101)){
-      status = "workinprogress"
-    }
-    if(this.props.status && (this.props.status.code == 110)){
-      status = "inactive"
-    }
-    if(this.props.status && (this.props.status.code == 111)){
-      status = "active"
-    }
-    console.log(this.props.flag);
-    console.log(this.props.text);
+    // console.log(this.props.flag);
+    // console.log(this.props.text);
     return (
-      <div>{this.props.status?
-        <div style={{'width': '200px'}} className={`cluster_map ${status}`} id={this.props.markerId}
-                          onMouseOver={this.onMouseEnterContent.bind(this,hoverActionHandler)} onMouseOut={this.onMouseLeaveContent.bind(this)}
-                          onClick={this.markerClickHandler.bind(this, this.props)}>
-          <div className="hex_btn hex_btn_in">
-            <span>
-              {this.props.showImage && this.props.showImage===true?<img src={this.props.text}/>:<b>{this.props.text}</b>}</span>
-            <div className="indec"></div>
-          </div>
-          {/*{this.state.isHover ? (<div><MapDetails data={this.state.data}/></div>) : ""}*/}
-          {this.state.isHover ? (<div>{HoverComponent}</div>) : ""}
-        </div>
-        :
-        <div style={{'width': '200px'}} className={`cluster_map ${this.props.isActive?"active":"inactive"}`} id={this.props.markerId}
-                          onMouseOver={this.onMouseEnterContent.bind(this,hoverActionHandler)} onMouseOut={this.onMouseLeaveContent.bind(this)}
-                          onClick={this.markerClickHandler.bind(this, this.props.flag)}>
-        <div className="hex_btn hex_btn_in">
-          <span>
-           {this.props.showImage && this.props.showImage===true?<img src={this.props.text}/>:<b>{this.props.text}</b>}</span>
-          <div className="indec"></div>
-        </div>
-        {/*{this.state.isHover ? (<div><MapDetails data={this.state.data}/></div>) : ""}*/}
-        {this.state.isHover ? (<div>{HoverComponent}</div>) : ""}
+      <div>
+        {mapMarkerComponent}
       </div>
-      }</div>
     );
   }
 }

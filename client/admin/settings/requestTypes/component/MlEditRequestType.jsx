@@ -7,9 +7,9 @@ import {findRequestTypeActionHandler} from '../actions/findRequestTypeAction'
 import {updateRequestTypeActionHandler} from '../actions/updateRequestTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import MlLoader from '../../../../commons/components/loader/loader'
-
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 class MlEditRequestType extends React.Component{
   constructor(props) {
     super(props);
@@ -67,18 +67,22 @@ class MlEditRequestType extends React.Component{
   }
 
   async  updateRequestType() {
-    let RequestTypeDetails = {
-      id: this.refs.id.value,
-      requestName: this.refs.requestName.value,
-      displayName: this.refs.displayName.value,
-      requestDesc: this.refs.requestDesc.value,
-      isActive: this.refs.isActive.checked,
-      transactionType: this.state.transactionType
-    };
-    const response = await updateRequestTypeActionHandler(RequestTypeDetails)
-    return response;
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let RequestTypeDetails = {
+        id: this.refs.id.value,
+        requestName: this.refs.requestName.value,
+        displayName: this.refs.displayName.value,
+        requestDesc: this.refs.requestDesc.value,
+        isActive: this.refs.isActive.checked,
+        transactionType: this.state.transactionType
+      };
+      const response = await updateRequestTypeActionHandler(RequestTypeDetails)
+      return response;
+    }
   }
-
   onStatusChange(e){
     const data=this.state.data;
     if(e.currentTarget.checked){
@@ -128,9 +132,9 @@ class MlEditRequestType extends React.Component{
           <div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
-                <div className="form-group">
+                <div className="form-group mandatory">
                   <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
-                  <input type="text" ref="requestName" placeholder="Request Name" defaultValue={this.state.data&&this.state.data.requestName} className="form-control float-label" id=""/>
+                  <input type="text" ref="requestName" placeholder="Request Name" defaultValue={this.state.data&&this.state.data.requestName} className="form-control float-label" id="" data-required={true} data-errMsg="Request Name is required"/>
 
                 </div>
                 <div className="form-group">
@@ -143,11 +147,11 @@ class MlEditRequestType extends React.Component{
           <div className="col-md-6 nopadding-right">
             <div className="form_bg">
               <form>
-                <div className="form-group">
-                  <input type="text" ref="displayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.displayName} className="form-control float-label" id=""/>
+                <div className="form-group mandatory">
+                  <input type="text" ref="displayName" placeholder="Display Name" defaultValue={this.state.data&&this.state.data.displayName} className="form-control float-label" id="" data-required={true} data-errMsg="Display Name is required"/>
                 </div>
                 <div className="form-group">
-                  <Moolyaselect multiSelect={false} placeholder="Transaction Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.transactionType} queryType={"graphql"}  query={transactionType} onSelect={this.optionBySelectTransactionType.bind(this)} isDynamic={true}/>
+                  <Moolyaselect multiSelect={false} mandatory={true} ref="transactionType" placeholder="Transaction Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.transactionType} queryType={"graphql"}  query={transactionType} onSelect={this.optionBySelectTransactionType.bind(this)} isDynamic={true} data-required={true} data-errMsg="Transaction Type is required"/>
                 </div>
                <div className="form-group switch_wrap inline_switch">
                   <label>Status</label>

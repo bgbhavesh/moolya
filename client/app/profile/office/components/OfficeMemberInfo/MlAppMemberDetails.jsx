@@ -54,19 +54,36 @@ export default class MlAppMemberDetails extends React.Component{
     let update = {};
     update[type] = true;
     let id = FlowRouter.getParam('memberId');
-    let response = await updateOfficeMemberActionHandler(id, update);
+    let officeId = FlowRouter.getParam('officeId');
+    let response = await updateOfficeMemberActionHandler(officeId, id, update);
     if(response.success){
       toastr.success(response.result);
     } else {
       toastr.error(response.result);
     }
   }
+
+  async updateIsIndependent(e){
+    let update = {
+      isIndependent:e.target.checked
+    };
+    let id = FlowRouter.getParam('memberId');
+    let officeId = FlowRouter.getParam('officeId');
+    let response = await updateOfficeMemberActionHandler(officeId, id, update);
+    if(response.success){
+      toastr.success(response.result);
+    } else {
+      toastr.error(response.result);
+    }
+  }
+
   render(){
     const that = this;
     let community = this.state.office.availableCommunities.find(function (item) {
       return item.communityId == that.state.memberInfo.communityType;
     });
     let communityName = community ?  community.communityName : '';
+    communityName = communityName ? communityName : ( this.state.memberInfo.isPrincipal ? 'Principal':' ' ) ;
     return (
       <div>
         <div className="investement-view-content">
@@ -75,22 +92,22 @@ export default class MlAppMemberDetails extends React.Component{
               <div className="form_bg">
                 <form>
                   <div className="form-group">
-                    <input type="text" placeholder="Name" value={this.state.memberInfo.name} disabled={true} className="form-control float-label" id="cluster_name" />
+                    <input type="text" placeholder="Name" defaultValue=" " value={this.state.memberInfo.name} disabled={true} className="form-control float-label" id="cluster_name" />
                   </div>
 
                   <div className="form-group">
-                    <input type="text" placeholder="Phone Number" value={this.state.memberInfo.mobileNumber} disabled={true} className="form-control float-label" id="cluster_name"/>
+                    <input type="text" placeholder="Phone Number" defaultValue=" " value={this.state.memberInfo.mobileNumber} disabled={true} className="form-control float-label" id="cluster_name"/>
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Joining Date" value={this.state.memberInfo.joiningDate ? moment(this.state.memberInfo.joiningDate).format('MM/DD/YYYY HH:mm:ss') : ''} disabled={true} className="form-control float-label" id="cluster_name"/>
-                  </div>
-
-                  <div className="form-group">
-                    <input type="text" placeholder="Email-ID" value={this.state.memberInfo.emailId} disabled={true} className="form-control float-label" id="cluster_name" />
+                    <input type="text" placeholder="Joining Date" defaultValue=" " value={this.state.memberInfo.joiningDate ? moment(this.state.memberInfo.joiningDate).format('MM/DD/YYYY HH:mm:ss') : ' '} disabled={true} className="form-control float-label" id="cluster_name"/>
                   </div>
 
                   <div className="form-group">
-                    <input type="text" placeholder="Role" value={communityName} className="form-control float-label" id="cluster_name" />
+                    <input type="text" placeholder="Email-ID" defaultValue=" " value={this.state.memberInfo.emailId} disabled={true} className="form-control float-label" id="cluster_name" />
+                  </div>
+
+                  <div className="form-group">
+                    <input type="text" placeholder="Role" defaultValue=" " value={communityName} className="form-control float-label" id="cluster_name" />
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Status" value={this.state.memberInfo.isActive ? 'Active' : 'Not Active'} disabled={true}  className="form-control float-label" id="cluster_name" />
@@ -105,7 +122,7 @@ export default class MlAppMemberDetails extends React.Component{
               <div className="form-group switch_wrap inline_switch">
                 <label>Show Independent</label>
                 <label className="switch">
-                  <input type="checkbox" disabled={true} checked={this.state.memberInfo.isIndependent} />
+                  <input type="checkbox" onClick={(e)=>this.updateIsIndependent(e)} defaultChecked={this.state.memberInfo.isIndependent} />
                   <div className="slider"></div>
                 </label>
               </div>

@@ -4,7 +4,7 @@ import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
-import StarRatings from '../../commons/components/starRatings';
+import StarRatings from '../../commons/components/StarRatings';
 import 'react-responsive-tabs/styles.css'
 import {fetchIdeaActionHandler} from '../actions/IdeaActionHandler'
 import MlLoader from '../../../commons/components/loader/loader'
@@ -71,7 +71,8 @@ export default class MlAppIdeatorIdeas extends React.Component {
     let that = this
     const showLoader = this.state.loading;
     return (
-      <div>
+      <div className="app_main_wrap">
+        <div className="app_padding_wrap">
         <h2>Ideas</h2>
         {showLoader === true ? (<MlLoader/>) : (
           <div className="main_wrap_scroll idea_details">
@@ -128,6 +129,7 @@ export default class MlAppIdeatorIdeas extends React.Component {
               }
             </ScrollArea>
           </div>)}
+      </div>
       </div>
     )
   }

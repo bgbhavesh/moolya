@@ -11,6 +11,7 @@ import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotato
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
 import _ from 'lodash'
+import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
 
 export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Component {
   constructor(props, context) {
@@ -26,9 +27,10 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
 
       this.createAnnotations.bind(this);
       this.fetchPortfolioInfo.bind(this);
-      this.fetchAnnotations.bind(this);
+      //this.fetchAnnotations.bind(this);
       this.initalizeAnnotaor.bind(this);
       this.annotatorEvents.bind(this);
+    this.validateUserForAnnotation(this)
     }
 
   initalizeAnnotaor(){
@@ -92,6 +94,8 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
                   "quote" : value.quote.quote,
                   "ranges" : value.quote.ranges,
                   "userName" : value.userName,
+                  "roleName" : value.roleName,
+                  "profileImage" : value.profileImage,
                   "createdAt" : value.createdAt
               })
           })
@@ -99,13 +103,27 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
 
       return response;
   }
+  componentWillMount() {
+    let resp = this.validateUserForAnnotation();
+    return resp
+  }
 
   componentDidMount(){
     $('.actions_switch').click();
-    this.initalizeAnnotaor()
+
     this.fetchPortfolioInfo();
-    this.fetchAnnotations();
+
+    //this.fetchAnnotations();
     initalizeFloatLabel();
+  }
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response && !this.state.isUserValidForAnnotation) {
+      this.setState({isUserValidForAnnotation:response})
+      this.initalizeAnnotaor()
+      this.fetchAnnotations()
+    }
   }
 
   async fetchPortfolioInfo(){
@@ -113,6 +131,9 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
       response.problemImage ? response.problemImage : response.problemImage =[];
       response.solutionImage ? response.solutionImage : response.solutionImage =[];
       this.setState({portfolioIdeatorInfo : response});
+      _.each(response.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
   }
 
   render(){

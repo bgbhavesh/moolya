@@ -5,7 +5,7 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import {updateRegistrationActionHandler} from '../actions/updateRegistration'
 import Datetime from "react-datetime";
@@ -167,10 +167,10 @@ export default class institution extends React.Component{
   }  }
     `;
     let userTypeOption={options: { variables: {communityCode:this.props.registrationInfo.registrationType}}};
-    let citiesquery = gql`query($countryId:String){
+   /* let citiesquery = gql`query($countryId:String){
       data:fetchCitiesPerCountry(countryId:$countryId){label:name,value:_id}
     }
-    `;
+    `;*/
     let entitiesquery = gql`query{
     data:fetchEntities {label:entityName,value:_id  }
     }
@@ -185,6 +185,10 @@ export default class institution extends React.Component{
     `;
     let stageofcompquery=gql` query{
     data:fetchStageOfCompany{label:stageOfCompanyName,value:_id}
+    }
+    `;
+    let citiesquery = gql`query($searchQuery:String){
+      data:searchCities(searchQuery:$searchQuery){label:name,value:_id}
     }
     `;
     const showLoader=this.state.loading;
@@ -248,10 +252,10 @@ export default class institution extends React.Component{
               <input type="text" ref="dean" placeholder="Dean Name" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.dean} className="form-control float-label" id=""/>
             </div>
             <div className="form-group">
-              <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedHeadquarter} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={that.optionsBySelectHeadquarter.bind(this)} isDynamic={true}/>
+              <Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedHeadquarter} queryType={"graphql"}  query={citiesquery} onSelect={that.optionsBySelectHeadquarter.bind(this)} isDynamic={true}/>
             </div>
             <div className="form-group">
-              <Moolyaselect multiSelect={true} placeholder="Branch Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedBranches} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={that.optionsBySelectBranch.bind(this)} isDynamic={true}/>
+              <Moolyaselect multiSelect={true} placeholder="Branch Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedBranches} queryType={"graphql"}  query={citiesquery} onSelect={that.optionsBySelectBranch.bind(this)} isDynamic={true}/>
               <br/><br/><br/><br/><br/><br/><br/>
             </div>
 

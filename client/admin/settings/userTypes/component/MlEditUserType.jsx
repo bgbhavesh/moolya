@@ -3,7 +3,7 @@ import {render} from "react-dom";
 import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper';
 import formHandler from "../../../../commons/containers/MlFormHandler";
 import {findUserTypeActionHandler} from "../actions/findUserTypeAction";
 import {updateUserTypeActionHandler} from "../actions/updateUserTypeAction";
@@ -53,7 +53,7 @@ class MlEditUserType extends React.Component{
   async handleSuccess(response) {
     if (response){
       if(response.success)
-        FlowRouter.go("/admin/settings/UserTypeList");
+        FlowRouter.go("/admin/settings/documentProcess/UserTypeList");
       else
         toastr.error(response.result);
     }
@@ -103,7 +103,7 @@ class MlEditUserType extends React.Component{
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          FlowRouter.go("/admin/settings/userTypeList")
+          FlowRouter.go("/admin/settings/documentProcess/userTypeList")
         }
       }
     ];

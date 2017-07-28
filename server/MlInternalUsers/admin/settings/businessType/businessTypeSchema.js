@@ -8,6 +8,10 @@ let BusinessType = `
       businessTypeDisplayName :String
       about: String
       _id:String
+       createdBy     : String
+       createdDate   : Date
+       updatedBy     : String
+       updatedDate   : Date
       isActive:Boolean
     }
         
@@ -24,7 +28,7 @@ let BusinessType = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], BusinessType]);
 let supportedApi = [
   {api:'FindBusinessType', actionName:'READ', moduleName:"BUSINESSTYPE"},
-  {api:'fetchBusinessTypes', actionName:'READ', moduleName:"BUSINESSTYPE"},
+  {api:'fetchBusinessTypes', actionName:'READ', moduleName:"BUSINESSTYPE", isWhiteList:true},
 
   {api:'CreateBusinessType', actionName:'CREATE', moduleName:"BUSINESSTYPE"},
   {api:'UpdateBusinessType', actionName:'UPDATE', moduleName:"BUSINESSTYPE"}

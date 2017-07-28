@@ -113,6 +113,7 @@ export default class MlTaxTable extends Component {
                        expandComponent={ this.expandComponent.bind(this) }
                        selectRow={ selectRow }
                        pagination
+                       hover={true}
       >
         <TableHeaderColumn dataField="taxId" isKey={true} dataSort={true} width='62px' dataAlign='center'>Id</TableHeaderColumn>
         <TableHeaderColumn dataField="taxName">Tax Name</TableHeaderColumn>

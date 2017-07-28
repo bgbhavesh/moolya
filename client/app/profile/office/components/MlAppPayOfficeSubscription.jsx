@@ -94,12 +94,14 @@ export default class MlAppPayOfficeSubscription extends Component {
                     <li>Includes</li>
                     <li>:</li>
                     <li>Principal</li>
-                    <li>: {this.state.office && this.state.office.principalUserCount?this.state.office.principalUserCount:"00"}</li>
+                    <li>: {this.state.office && this.state.office.principalcount?this.state.office.principalcount:"00"}</li>
                     <li>Team</li>
-                    <li>: {this.state.office && this.state.office.teamUserCount?this.state.office.teamUserCount:"00"}</li>
+                    <li>: {this.state.office && this.state.office.teamMembercount?this.state.office.teamMembercount:"00"}</li>
                     <li>Cost</li>
                     <li>
-                      : {this.state.transaction && this.state.transaction.orderSubscriptionDetails && this.state.transaction.orderSubscriptionDetails.cost ? this.state.transaction.orderSubscriptionDetails.cost : "00"}<b>tax inclusive</b></li>
+                      : {this.state.transaction && this.state.transaction.orderSubscriptionDetails && this.state.transaction.orderSubscriptionDetails.cost ? this.state.transaction.orderSubscriptionDetails.cost : "00"}
+                      {this.state.transaction && this.state.transaction.orderSubscriptionDetails && this.state.transaction.orderSubscriptionDetails.isTaxInclusive?<b> tax inclusive</b>:<b> tax exclusive</b>}
+                    </li>
                   </ul>
 
                   <br />

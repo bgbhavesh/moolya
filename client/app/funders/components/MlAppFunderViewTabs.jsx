@@ -10,6 +10,9 @@ import MlFunderLibraryView from '../../../admin/transaction/portfolio/component/
 import MlFunderNewsView from '../../../admin/transaction/portfolio/component/FunderView/MlFunderNewsView'
 import MlFunderPrincipalTeamView from '../../../admin/transaction/portfolio/component/FunderView/MlFunderPrincipalTeamView'
 import MlFunderSuccessStoriesView from '../../../admin/transaction/portfolio/component/FunderView/MlFunderSuccessStoriesView'
+import MlBeSpokeListView from '../../../admin/transaction/portfolio/component/Funder/MlFunderBeSpokeCreation'
+import {appClient} from '../../core/appConnection'
+import PortfolioLibrary from '../../../commons/components/portfolioLibrary/PortfolioLibrary';
 
 export default class MlAppFunderViewTabs extends React.Component{
   constructor(props){
@@ -38,8 +41,9 @@ export default class MlAppFunderViewTabs extends React.Component{
       {tabClassName: 'tab', panelClassName: 'panel', title:"Engagement Methods" , component:<MlFunderEngagementMethodView key="4" portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Area Of Interests" , component:<MlFunderAreaOfInterestView key="6" portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Success Stories" , component:<MlFunderSuccessStoriesView key="7" portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlFunderLibraryView key="8" portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"News" , component:<MlFunderNewsView key="9" portfolioDetailsId={this.props.portfolioDetailsId}/>}
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<PortfolioLibrary  client={appClient} key="8" portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"News" , component:<MlFunderNewsView key="9" portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Services" , component:<MlBeSpokeListView viewingMode={true} key="10" portfolioDetailsId={this.props.portfolioDetailsId}/>} //getFunderServicesDetails={this.getFunderServicesDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}
     ]
     return tabs;
   }

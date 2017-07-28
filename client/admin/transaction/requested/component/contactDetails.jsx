@@ -6,7 +6,7 @@ import ScrollArea from 'react-scrollbar';
 import  Select from 'react-select';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import {addRegistrationStep3Details} from '../actions/addRegistrationStep3DetailsAction';
 import {findUserRegistartionActionHandler} from '../actions/findUserRegistrationDocument'
 import {findRegistrationActionHandler} from '../actions/findRegistration';
@@ -96,7 +96,7 @@ export default class ContactDetails extends React.Component{
          } else {
            this.findRegistration();
            this.props.registrationDetails();
-           this.refs.countryCode.value = "";
+           // this.refs.countryCode.value = "";
            this.refs["contactNumber"].value = "";
            this.setState({selectedNumberTypeValue: "", selectedNumberTypeLabel: ""});
            toastr.success("Contact is created successfully");

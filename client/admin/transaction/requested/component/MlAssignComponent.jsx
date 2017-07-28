@@ -3,14 +3,19 @@ import {render} from 'react-dom';
 import  Select from 'react-select';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
-import {assignUserForTransactionAction,selfAssignUserForTransactionAction,unAssignUserForTransactionAction} from '../actions/assignUserforTransactionAction'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
+import {assignUserForTransactionAction,selfAssignUserForTransactionAction,unAssignUserForTransactionAction,validateAssignmentsDataContext} from '../actions/assignUserforTransactionAction'
 import hierarchyValidations from "../../../../commons/containers/hierarchy/mlHierarchyValidations"
 
 export default class MlAssignComponent extends React.Component {
 
   constructor(props){
     super(props);
+    let list = this.props.data
+    if(!list || list.length==0 ){
+      toastr.error("Please Select a record");
+      this.props.closePopOver(false)
+    }
     this.state={
                   selectedValue:false,
                   selectedCluster:null,
@@ -61,12 +66,36 @@ export default class MlAssignComponent extends React.Component {
     this.setState({selectedRole:value})
   }
   optionsBySelectUser(value){
-
     this.setState({selectedUser:value})
+    this.validateAssignmentsDataContext(value)
   }
+
   cancel(){
     this.props.refreshList();
   }
+
+  async validateAssignmentsDataContext(user){
+    let data = this.props.data
+    let selectedData = []
+    data.map(function (transaction) {
+      let json = {
+        clusterId : transaction.clusterId,
+        chapterId : transaction.chapterId,
+        subChapterId : transaction.subChapterId,
+        communityId : transaction.communityId,
+        transactionId : transaction.registrationId
+      }
+      selectedData.push(json)
+    })
+    let userId = user
+    const response = await validateAssignmentsDataContext(selectedData,userId);
+    if(response && response.success){
+      toastr.error("Selected transactions not availble in user context");
+      this.props.closePopOver(false)
+      //FlowRouter.reload();
+    }
+  }
+
   async assignUser(){
     let params={
       "cluster": this.state.selectedCluster,
@@ -78,50 +107,76 @@ export default class MlAssignComponent extends React.Component {
       "role": this.state.selectedRole,
       "user": this.state.selectedUser
     }
-    if(hierarchyValidations.validateAssignAction(this.props.data.clusterId,this.state.selectedCluster)){
-      const response = await assignUserForTransactionAction("Registration",params,this.props.data.registrationId,"Registration","assignTransaction");
-      if(response.success){
-        this.setState({selectedCluster:null,selectedChapter:null,selectedSubChapter:null,selectedCommunity:null,selectedDepartment:null,selectedSubDepartment:null,selectedRole:null,selectedUser:null})
+    //if(hierarchyValidations.validateAssignAction(this.props.data.clusterId,this.state.selectedCluster)){
+    let data = this.props.data
+    let transactionIds = []
+    data.map(function (transaction) {
+      transactionIds.push(transaction.registrationId)
+    })
+
+      const response = await assignUserForTransactionAction("Registration", params, transactionIds, "Registration", "assignTransaction");
+      if (response.success) {
+        this.setState({
+          selectedCluster: null,
+          selectedChapter: null,
+          selectedSubChapter: null,
+          selectedCommunity: null,
+          selectedDepartment: null,
+          selectedSubDepartment: null,
+          selectedRole: null,
+          selectedUser: null
+        })
         toastr.success("Transaction assigned to user successfully");
         this.props.closePopOver(false)
-        FlowRouter.go("/admin/transactions/registrationRequested");
-      }else{
+        FlowRouter.reload();
+      } else {
         toastr.error("Wrong Hierarchy");
         this.props.closePopOver(false)
-        FlowRouter.go("/admin/transactions/registrationRequested");
+        FlowRouter.reload();
       }
-    }else{
-      toastr.error("Wrong assignment");
-      this.props.closePopOver(false)
-      FlowRouter.go("/admin/transactions/registrationRequested");
-    }
-
   }
 
+
+
   async selfAssignTransaction(){
+    let data = this.props.data
+    let transactionIds = []
+    data.map(function (transaction) {
+      transactionIds.push(transaction.registrationId)
+    })
+
     let transactionType=this.props.data.transactionType
-    const response = await selfAssignUserForTransactionAction("Registration",this.props.data.registrationId,"Registration","selfAssignTransaction");
+    const response = await selfAssignUserForTransactionAction("Registration",transactionIds,"Registration","selfAssignTransaction");
     if(response.success){
       toastr.success("Self Assignment successfull");
       this.props.closePopOver(false)
-      FlowRouter.go("/admin/transactions/registrationRequested");
+      FlowRouter.reload();
+      //FlowRouter.go("/admin/transactions/registrationRequested");
     }else{
-      toastr.error("Wrong Hierarchy");
+      toastr.error("Hierarchy not available for user, contact Administrator");
       this.props.closePopOver(false)
-      FlowRouter.go("/admin/transactions/registrationRequested");
+      FlowRouter.reload();
+      //FlowRouter.go("/admin/transactions/registrationRequested");
     }
   }
 
   async unAssignTransaction(){
-    const response = await unAssignUserForTransactionAction("Registration",this.props.data.registrationId,"Registration","unAssignTransaction");
+    let data = this.props.data
+    let transactionIds = []
+    data.map(function (transaction) {
+      transactionIds.push(transaction.registrationId)
+    })
+    const response = await unAssignUserForTransactionAction("Registration",transactionIds,"Registration","unAssignTransaction");
     if(response.success){
       toastr.success("UnAssignment successfull");
       this.props.closePopOver(false)
-      FlowRouter.go("/admin/transactions/registrationRequested");
+      FlowRouter.reload();
+      //FlowRouter.go("/admin/transactions/registrationRequested");
     }else{
       toastr.error("Wrong Hierarchy");
       this.props.closePopOver(false)
-      FlowRouter.go("/admin/transactions/registrationRequested");
+      FlowRouter.reload();
+      //FlowRouter.go("/admin/transactions/registrationRequested");
     }
   }
 

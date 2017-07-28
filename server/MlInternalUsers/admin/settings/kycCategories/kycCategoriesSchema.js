@@ -9,6 +9,10 @@ let KycCategoriesSchema = `
       docCategoryDisplayName :String
       about :String
       _id :String
+      createdBy     :  String
+      createdDate   :  Date
+      updatedBy     :  String
+      updatedDate   :  Date
       isActive :Boolean
     }
     input kycCategoryObject{
@@ -16,7 +20,11 @@ let KycCategoriesSchema = `
         docCategoryDisplayName :String,
         about :String,
         _id :String,
-        isActive :Boolean
+        createdBy     : String
+        createdDate   : Date
+        updatedBy     : String
+        updatedDate   : Date
+        isActive      : Boolean
     }
     
    type Mutation 
@@ -33,7 +41,7 @@ let KycCategoriesSchema = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],KycCategoriesSchema]);
 let supportedApi = [
   {api:'findKycCategory', actionName:'READ', moduleName:"DOCUMENTS"},
-  {api:'fetchKYCCategories', actionName:'READ', moduleName:"DOCUMENTS"},
+  {api:'fetchKYCCategories', actionName:'READ', moduleName:"DOCUMENTS",isWhiteList: true}, //made whitelist as per srinag word
   {api:'createKycCategory', actionName:'CREATE', moduleName:"DOCUMENTS"},
   {api:'updateKycCategory', actionName:'UPDATE', moduleName:"DOCUMENTS"}
 ]

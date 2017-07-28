@@ -1,6 +1,25 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+import moment from 'moment'
+function createdateFormatter (data){
+  let createdDate=data&&data.data&&data.data.createdDate;
+  if(createdDate){
+    return <div>{moment(createdDate).format('MM-DD-YYYY HH:mm:ss')}</div>;
+  }
+  else {
+    return <div></div>
+  }
+}
+function updatedateFormatter (data){
+  let updateDate=data&&data.data&&data.data.updatedDate;
+  if(updateDate){
+    return <div>{moment(updateDate).format('MM-DD-YYYY HH:mm:ss')}</div>;
+  }
+  else {
+    return <div></div>
+  }
+}
 const mlLookingForTableConfig=new MlViewer.View({
   name:"lookingForTable",
   module:"lookingFor",//Module name for filter.
@@ -17,6 +36,10 @@ const mlLookingForTableConfig=new MlViewer.View({
     {dataField: "lookingForDisplayName", title: "Display Name",dataSort:true},
     {dataField: "communityName", title: "Community",dataSort:true},
     {dataField: "about", title: "About",dataSort:true},
+    {dataField: "createdBy", title: "Created By",dataSort:true},
+    {dataField: "createdDate", title: "CreatedDate And Time",dataSort:true,customComponent:createdateFormatter},
+    {dataField: "updatedBy", title: "Updated By",dataSort:true},
+    {dataField: "updatedDate", title: "UpdatedDate And Time",dataSort:true,customComponent:updatedateFormatter},
     {dataField: "isActive", title: "Active",dataSort:true},
   ],
   tableHeaderClass:'react_table_head',
@@ -27,7 +50,7 @@ const mlLookingForTableConfig=new MlViewer.View({
       showAction: true,
       handler:  (data)=>{
         if(data&&data.id){
-          FlowRouter.go("/admin/settings/editLookingFor/"+data.id)
+          FlowRouter.go("/admin/settings/registration/editLookingFor/"+data.id)
         }
         else{
           toastr.error("Please select a Looking For to edit")
@@ -43,15 +66,10 @@ const mlLookingForTableConfig=new MlViewer.View({
           toastr.error("Please uncheck the record")
           // FlowRouter.go("/admin/settings/lookingForList")
         }else {
-          FlowRouter.go("/admin/settings/addLookingFor")
+          FlowRouter.go("/admin/settings/registration/addLookingFor")
         }
       }
-    },
-    // {
-    //   showAction: true,
-    //   actionName: 'logout',
-    //   handler: (data)=>{console.log(data);}
-    // }
+    }
   ],
   sizePerPage:5,
   graphQlQuery:gql`
@@ -66,6 +84,10 @@ const mlLookingForTableConfig=new MlViewer.View({
                               about
                               isActive
                               id:_id
+                              createdBy
+                              createdDate  
+                              updatedBy     
+                              updatedDate 
                           }
                       }
               }

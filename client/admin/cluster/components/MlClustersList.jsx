@@ -10,18 +10,18 @@ export default class MlClustersList extends Component {
     const list=  data.map( function(prop, idx) {
       let icon, status;
 
-      if(prop.isActive && prop.showOnMap){
-        status = "active";
-        // icon = "active-User"
-      } else if(prop.isActive && !prop.showOnMap){
-        status = "add";
-        // icon ="add";
-      } else if(!prop.isActive && prop.showOnMap){
-        status = "inactive";
-        // icon = "inactive-user"
+      if(prop.status.description == "Active"){
+          status = "active";
+          // icon = "active-User"
+      } else if(prop.status.description == "Work In Progress"){
+          status = "add";
+          // icon ="add";
+      } else if(prop.status.description == "Inactive"){
+          status = "inactive";
+          // icon = "inactive-user"
       } else {
-        status = "assign";
-        // icon = "assign";
+          status = "assign";
+          // icon = "assign";
       }
       return (
         <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
@@ -39,7 +39,7 @@ export default class MlClustersList extends Component {
 
     return (
     <div className="row">
-      {/*<h2> Cluster </h2>*/}
+      <h2> Cluster </h2>
           {list}
       </div>
     );

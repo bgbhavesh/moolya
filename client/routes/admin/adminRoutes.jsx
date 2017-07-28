@@ -20,15 +20,16 @@ import MlTransactionRequested from '../../admin/transaction/requests/components/
 import MlRequestedList from '../../admin/transaction/requested/component/MlRequestedList'
 import MlSystemsLogList from '../../admin/transaction/systemsLog/component/MlSystemsLogList'
 import MlRegistrtionApprovedList from '../../admin/transaction/requested/component/MlRegistrtionApprovedList'
+import MlRegistrtaionRejectedList from '../../admin/transaction/requested/component/MlRegistrationRejectedList'
 import  RegistrationWizard from  '../../admin/transaction/requested/component/RegistrationWizard'
 import MlProcessDocumentList from '../../admin/processDocument/cluster/components/MlProcessDocumentList'
 import MlProcessDocMapping from '../../admin/processDocument/cluster/components/MlProcessDocMapping'
 import {mlCommunityListConfig} from '../../admin/community/config/mlCommunityConfig'
 import MlAdminProcessDocHeader from '../../admin/layouts/header/MlAdminProcessDocHeader';
 import MlCreateRegistration from '../../admin/transaction/requested/component/createRegistration'
-import MlAssignedTemplatesList from '../../templates/component/MlAssignedTemplatesList'
-import MlAssignTemplate from '../../templates/component/MlAssignTemplate'
-import MlEditAssignTemplate from '../../templates/component/MlEditAssignTemplate'
+import MlAssignedTemplatesList from '../../admin/templates/component/MlAssignedTemplatesList'
+import MlAssignTemplate from '../../admin/templates/component/MlAssignTemplate'
+import MlEditAssignTemplate from '../../admin/templates/component/MlEditAssignTemplate'
 import MlRequestedPortfolioList from '../../admin/transaction/portfolio/component/MlRequestedProtfolioList'
 import MlApprovedPortfolioList from '../../admin/transaction/portfolio/component/MlApprovedPortfolioList'
 import MlCreatePortfolio from '../../admin/transaction/portfolio/component/MlCreatePortfolio'
@@ -49,17 +50,20 @@ import MlConversationsLogList from '../../admin/transaction/conversations/compon
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 
 import MlProcessSetupRequestsList from '../../admin/transaction/processSetup/component/MlProcessSetupRequestsList'
+import MlserviceCardsList from  '../../admin/transaction/serviceCards/component/MlserviceCardsList'
 
 import MlInternalRequestsList from '../../admin/transaction/internalRequests/component/MlInternalRequestsList'
 import MlApprovedInternalRequestsList from '../../admin/transaction/internalRequests/component/MlApprovedInternalRequestsList'
 
 import MlCommunityTabHistoryList from '../../admin/community/communityAuditLog/components/MlCommunityTabHistoryList'
 import MlDocumentsTabHistoryList from '../../admin/processDocument/documentsAuditLog/components/MlDocumentsTabHistoryList'
-import MlTemplatesTabHistoryList from '../../templates/templatesAuditLog/components/MlTemplatesTabHistoryList'
+import MlTemplatesTabHistoryList from '../../admin/templates/templatesAuditLog/components/MlTemplatesTabHistoryList'
 import MlTransactionTabHistoryList from '../../admin/transaction/transactionAuditLog/components/MlTransactionTabHistoryList'
 import MlRegistrationTabHistoryList from '../../admin/transaction/requested/registrationAuditLog/components/MlRegistrationTabHistoryList'
 import MlPotfolioTabHistoryList from '../../admin/transaction/portfolio/portfolioAuditLog/components/MlPotfolioTabHistoryList'
 import EditTaxation from '../../admin/transaction/office/component/MlOfficeList'
+import MlRegistrationRejectedList from '../../admin/transaction/requested/component/MlRegistrationRejectedList'
+import MlRejectedInternalRequestsList from '../../admin/transaction/internalRequests/component/MlRejectedInternalRequestsList'
 
 const localStorageLoginToken = Meteor.isClient && Accounts._storedLoginToken();
 if(localStorageLoginToken){
@@ -78,7 +82,7 @@ export const adminSection = FlowRouter.group({
     console.log('running /adminPrefix trigger');
      userId = Meteor.userId();
     if (!userId) {
-      FlowRouter.go('/login')
+      redirect('/login')
     }
   }]
 });
@@ -221,12 +225,30 @@ adminSection.route('/transactions/approvedList', {
   }
 });
 
+adminSection.route('/transactions/rejectList', {
+  name: 'transaction_RejectedList',
+  action(){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'reject'}} />, adminContent:<MlRejectedInternalRequestsList/>})
+    //mount(AdminLayout,{adminContent:<MlTransactionApprovals/>})
+  }
+});
+
 adminSection.route('/transactions/registrationApprovedList', {
   name: 'transaction_registration_approved',
   action(){
     mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'approved'}} />,  adminContent:<MlRegistrtionApprovedList/>})
   }
 });
+
+/*
+adminSection.route('/transactions/registrationRejectedList', {
+  name: 'transaction_registration_rejected',
+  action(){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'reject'}} />,  adminContent:<MlRegistrtaionRejectedList/>})
+  }
+});
+*/
+
 
 
 adminSection.route('/transactions/registrationRequested/edit', {
@@ -313,11 +335,25 @@ adminSection.route('/transactions/editRequests/:id', {
     mount(AdminLayout,{adminContent:<RegistrationWizard config={params.id}/>})
   }
 });
+adminSection.route('/transactions/editApprovedRequests/:id', {
+  name: 'transaction_registration_approved_edit',
+  action(params){
+    mount(AdminLayout,{adminContent:<RegistrationWizard config={params.id}/>})
+  }
+});
 
 adminSection.route('/transactions/createRegistration', {
   name: 'transaction_registration_create',
   action(params){
     mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'create'}} />, adminContent:<MlCreateRegistration/>})
+  }
+});
+
+
+adminSection.route('/transactions/rejectedRegistrations', {
+  name: 'transaction_registration_reject',
+  action(params){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'registration', subModule:'reject'}} />, adminContent:<MlRegistrationRejectedList/>})
   }
 });
 
@@ -425,5 +461,13 @@ adminSection.route('/transactions/processSetupList', {
   name: 'transaction_ProcessSetupList',
   action(){
     mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'requests'}} />, adminContent:<MlProcessSetupRequestsList/>})
+  }
+});
+
+
+adminSection.route('/transactions/serviceCardsList', {
+  name: 'Service_Cards',
+  action(params){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'conversations'}} />, adminContent:<MlserviceCardsList/>})
   }
 });

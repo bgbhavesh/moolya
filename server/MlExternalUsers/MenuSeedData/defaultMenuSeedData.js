@@ -39,19 +39,26 @@ if(Meteor.isServer){
                 "name" : "Funder",
                 "uniqueId" : "funder"
             },
-
+            // {
+            //   "image":"fa fa-calendar",
+            //   "link": "/app/calendar",
+            //   "isLink" : true,
+            //   "isMenu" : true,
+            //   "name" : "Calender",
+            //   "uniqueId" : "calender"
+            // },
             {
                 "image":"ml ml-provider",
-                "link": "provider",
+                "link": "/app/serviceProvider",
                 "isLink" : true,
                 "isMenu" : true,
-                "name" : "Provider",
+                "name" : "Service Provider",
                 "uniqueId" : "provider"
             },
 
             {
                 "image":"ml ml-company",
-                "link": "company",
+                "link": "/app/company",
                 "isLink" : true,
                 "isMenu" : true,
                 "name" : "Company",
@@ -93,6 +100,22 @@ if(Meteor.isServer){
                 "name" : "News",
                 "uniqueId" : "news"
             },
+            {
+              "image":"ml ml-transaction",
+              "link": "/app/transaction",
+              "isLink" : true,
+              "isMenu" : true,
+              "name" : "My Transaction",
+              "uniqueId" : "myTransaction"
+            },
+            // {
+            //   "image":"fa fa-calendar-check-o",
+            //   "link": "/app/task",
+            //   "isLink" : true,
+            //   "isMenu" : true,
+            //   "name" : "Task",
+            //   "uniqueId" : "my_task"
+            // }
         ]
     }})
 }

@@ -41,7 +41,7 @@ export default class MlMasterSettingRepo{
     return options;
   }
 
-  updateMasterSetting(requestParams){
+  updateMasterSetting(requestParams, context){
     check(requestParams.type,String);
     check(requestParams.actionName,String);
     //fetch the User context
@@ -102,7 +102,8 @@ export default class MlMasterSettingRepo{
         result= MlMasterSettings.insert({...settingsObj});
       }else if(actionName==="UPDATE"){
         query={_id:requestParams.masterData._id};
-        MlMasterSettings.update(query,{$set:settingsObj});
+        //MlMasterSettings.update(query,{$set:settingsObj});
+        mlDBController.update('MlMasterSettings', query, settingsObj, {$set:true}, context)
         result= MlMasterSettings.findOne(query)._id;
       }
       return result;

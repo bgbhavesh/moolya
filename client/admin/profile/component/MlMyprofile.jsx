@@ -5,6 +5,7 @@ var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar'
 import {updateBackendUserActionHandler} from '../../settings/backendUsers/actions/findBackendUserAction';
 import {initalizeFloatLabel, passwordVisibilityHandler} from '../../utils/formElemUtil';
+import {passwordVerification} from '../actions/addProfilePicAction'
 //import {addProfilePicAction} from "../actions/addProfilePicAction"
 import {multipartASyncFormHandler} from '../../../commons/MlMultipartFormAction'
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
@@ -16,7 +17,8 @@ import MlLoader from '../../../commons/components/loader/loader'
 import {resetPasswordActionHandler} from "../../settings/backendUsers/actions/resetPasswordAction";
 import passwordSAS_validate from '../../../../lib/common/validations/passwordSASValidator';
 import {MlAdminProfile} from '../../../admin/layouts/header/MlAdminHeader'
-
+import {getAdminUserContext} from '../../../commons/getAdminUserContext'
+import {findMyProfileActionHandler} from '../actions/getProfileDetails'
 
 export default class MlMyProfile extends React.Component {
 
@@ -43,7 +45,9 @@ export default class MlMyProfile extends React.Component {
       confirmPassword: '',
       showPasswordFields: true,
       passwordState: " ",
-      passwordValidation: false
+      passwordValidation: false,
+      PasswordReset:false,
+      showChangePassword:true
 
       // Details:{
       //   firstName: " ",
@@ -63,6 +67,7 @@ export default class MlMyProfile extends React.Component {
     this.genderSelect = this.genderSelect.bind(this);
     this.onfoundationDateSelection.bind(this);
     this.checkExistingPassword.bind(this);
+    this.passwordCheck.bind(this);
     // this.showImage.bind(this);
     //this.fileUpdation.bind(this);
     // this.firstNameUpdation.bind(this);
@@ -77,19 +82,23 @@ export default class MlMyProfile extends React.Component {
   }
 
   async checkExistingPassword() {
-    const that = this;
-    this.setState({"pwdValidationMsg": ''})
     let pwd = this.refs.existingPassword.value;
-    var digest = Package.sha.SHA256(pwd);
-    Meteor.call('checkPassword', digest, function (err, result) {
-      if (result) {
-        that.setState({passwordState: 'Passwords match!'})
-      } else {
-        that.setState({passwordState: 'Passwords do not match!'})
-      }
-    });
+    var digest = CryptoJS.SHA256(pwd).toString()
+    console.log(digest);
+    this.passwordCheck(digest);
   }
 
+    async passwordCheck(digest)
+    {
+      const resp = await passwordVerification(digest)
+      console.log(resp);
+      if(resp.success){
+        this.setState({passwordState: 'Passwords match!'})
+      }else{
+        this.setState({passwordState: 'Invalid Password'})
+      }
+      return resp;
+    }
 
   componentDidMount() {
     $(function () {
@@ -155,6 +164,13 @@ export default class MlMyProfile extends React.Component {
     this.setState({responsePic: temp})
   }
 
+
+  /**
+   * Method :: storeImage
+   * Description :: All the data is updated here calling the updateDataEntry()
+   * which gets an object as a param containing all the data
+   * returns ::  dataresponse
+   **/
   async storeImage() {
     let Details = {
       profileImage: this.state.uploadedProfilePic,
@@ -163,14 +179,23 @@ export default class MlMyProfile extends React.Component {
       lastName: this.state.lastName,
       userName: this.state.userName,
       genderType: this.state.genderSelect,
-      dateOfBirth: this.state.dateOfBirth,
+      dateOfBirth: this.state.dateOfBirth?this.state.dateOfBirth : null
     }
 
     const dataresponse = await updateDataEntry(Details);
     console.log(dataresponse);
-    toastr.success("Update Successful")
+    if(dataresponse){
+      toastr.success("Update Successful")
+    }
     return dataresponse;
   }
+
+  /**
+   * Method :: getValue
+   * Description :: This function is called when the componentWillMount
+   * It gets all the details from the db and auto-populates the respective fields
+   * returns ::  dataresponse
+   **/
 
   async getValue() {
     let userType = Meteor.userId();
@@ -183,20 +208,20 @@ export default class MlMyProfile extends React.Component {
         lastName: user.profile.lastName,
         userName: user.profile.displayName,
         // uploadedProfilePic: response.profile.profileImage,
-        genderSelect: "Male", //response.profile.genderType
-        dateOfBirth: moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat)
+        genderSelect: response.profile.genderType,
+        dateOfBirth: response.profile.dateOfBirth?response.profile.dateOfBirth: null
       });
     } else {
-      let response = await findBackendUserActionHandler(userType);
+      let response = await findMyProfileActionHandler(userType);
       console.log(response);
       this.setState({
         loading: false, firstName: response.profile.InternalUprofile.moolyaProfile.firstName,
         middleName: response.profile.InternalUprofile.moolyaProfile.middleName,
         lastName: response.profile.InternalUprofile.moolyaProfile.lastName,
-        userName: response.profile.InternalUprofile.moolyaProfile.displayName,
+        userName: response.profile.InternalUprofile.moolyaProfile.email,
         uploadedProfilePic: response.profile.profileImage,
         genderSelect: response.profile.genderType,
-        dateOfBirth: moment(response.profile.dateOfBirth).format(Meteor.settings.public.dateFormat)
+        dateOfBirth: response.profile.dateOfBirth?response.profile.dateOfBirth: null
       });
     }
     this.genderSelect();
@@ -216,20 +241,27 @@ export default class MlMyProfile extends React.Component {
   async genderSelect() {
     //this.setState({genderSelect: e.target.value})
     if (this.state.genderSelect === "Others") {
-      this.setState({genderStateMale: false, genderStateFemale: false, genderStateOthers: true})
+      this.setState({genderStateMale: false, genderStateFemale: false, genderStateOthers: "checked"})
     }
     else if (this.state.genderSelect === "Female") {
-      this.setState({genderStateFemale: true, genderStateMale: false, genderStateOthers: false})
+      this.setState({genderStateFemale: "checked", genderStateMale: false, genderStateOthers: false})
     }
     else {
-      this.setState({genderStateOthers: false, genderStateFemale: false, genderStateMale: true})
+      this.setState({genderStateOthers: false, genderStateFemale: false, genderStateMale: "checked"})
     }
   }
 
   onfoundationDateSelection(event) {
+    var ageDifMs = Date.now() - event._d.getTime();
+    var ageDate = new Date(ageDifMs);
     if (event._d) {
       let value = moment(event._d).format(Meteor.settings.public.dateFormat);
       this.setState({loading: false, dateOfBirth: value});
+    }
+    if((Math.abs(ageDate.getUTCFullYear() - 1970)>=18)){
+    }
+    else{
+      toastr.error("age limit exceeded")
     }
   }
 
@@ -237,30 +269,39 @@ export default class MlMyProfile extends React.Component {
     this.resetBackendUers();
   }
 
+  /**
+   * Method :: resetPassword
+   * Description :: Resetting Password
+   * @params ::  No params
+   * returns ::  Validation of password
+   **/
+
   async resetPassword() {
     if (this.state.showPasswordFields) {
       let userDetails = {
         userId: Meteor.userId(),
         password: this.refs.confirmPassword.value
       }
-      this.onCheckPassword();
-      if (this.state.pwdErrorMsg)
-        toastr.error("Confirm Password does not match with Password");
-      else {
-        const response = await resetPasswordActionHandler(userDetails);
-        // this.refs.id.value='';
-        this.refs.confirmPassword.value = '';
-        this.refs.password.value = '';
-        this.setState({"pwdErrorMsg": 'Password reset complete'})
-        toastr.success(response.result);
+      if (this.state.passwordState === 'Passwords match!') {
+        this.onCheckPassword();
+        if (this.state.pwdErrorMsg)
+          toastr.error("Confirm Password does not match with  New Password");
+        else {
+          const response = await resetPasswordActionHandler(userDetails);
+          // this.refs.id.value='';
+          this.refs.confirmPassword.value = '';
+          this.refs.password.value = '';
+          this.setState({"pwdErrorMsg": 'Password reset complete'})
+          toastr.success(response.result);
+          $('#password').val("");
+          this.setState({PasswordReset: false, showChangePassword: true})
+          const resp = this.onFileUpload();
+          return resp;
+        }
+      }else {
+        toastr.error("Please enter a valid password")
       }
-    } else {
-      this.setState({
-        showPasswordFields: true
-      })
     }
-    const resp = this.onFileUpload();
-    return resp;
   }
 
 
@@ -268,6 +309,14 @@ export default class MlMyProfile extends React.Component {
     console.log('error handle');
     console.log(response);
   }
+
+  /**
+   * Method :: updateProfile
+   * Description :: Checking password fields
+   * Based on password fields resetPassword() is called
+   * otherwise updation of other data is carried on by calling onFileUpload().
+   * returns :: void
+   * **/
 
   async updateProfile() {
     let existingPwdField = this.refs.existingPassword.value;
@@ -278,9 +327,15 @@ export default class MlMyProfile extends React.Component {
       this.resetPassword();
     } else {
       const resp = this.onFileUpload();
-      return resp;
     }
   }
+
+  /**
+   * Method :: onCheckPassword
+   * Description :: Check the new password entered and the confirmation of the
+   * new password matches.
+   * returns :: this.state.pwdErrorMsg
+   * **/
 
   onCheckPassword() {
     let password = this.refs.password.value;
@@ -291,6 +346,12 @@ export default class MlMyProfile extends React.Component {
       this.setState({"pwdErrorMsg": ''})
     }
   }
+
+  /**
+   * Method :: passwordValidation
+   * Description :: Check the new password for SAS validation
+   * returns :: this.state.pwdValidationMsg
+   * **/
 
   passwordValidation() {
     let password = this.refs.password.value;
@@ -309,6 +370,13 @@ export default class MlMyProfile extends React.Component {
   }
 }
 
+  /**
+   * Method :: onFileUpload
+   * Description :: File uploading action is done here. Once uploaded it hits onFileUploadCallBack()
+   * and the return to current function and call storeImage()
+   * returns :: Hits storeImage()
+   * **/
+
   async onFileUpload(){
     let user = {
       profile: {
@@ -319,7 +387,6 @@ export default class MlMyProfile extends React.Component {
     if(file) {
       let data = {moduleName: "PROFILE", actionName: "UPDATE", userId: this.state.selectedBackendUser, user: user}
       let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
-      // this.showImage();
       this.storeImage();
 
       return response;
@@ -329,7 +396,28 @@ export default class MlMyProfile extends React.Component {
     }
   }
 
+  OnChangePassword(){
+    this.setState({PasswordReset:true,showChangePassword:false})
+  }
+
+  cancelResetPassword(){
+    $('#password').val("");
+    this.setState({PasswordReset:false,showChangePassword:true})
+  }
+
   render(){
+    var yesterday = Datetime.moment().subtract(0,'day');
+    var valid = function( current ){
+      return current.isBefore( yesterday );
+    };
+    let userContext = getAdminUserContext();
+    let route;
+    if(userContext.hierarchyLevel >3){
+      route = "clusters"
+    }else {
+      route = "chapters"
+    }
+
     let MlActionConfig = [
       {
         showAction: true,
@@ -339,7 +427,7 @@ export default class MlMyProfile extends React.Component {
       {
         showAction: true,
         actionName: 'cancel',
-        handler: async(event) => FlowRouter.go('/admin/dashboard/clusters')
+        handler: async(event) => FlowRouter.go('/admin/dashboard/'+route)
       }
     ];
     const showLoader=this.state.loading;
@@ -395,29 +483,27 @@ export default class MlMyProfile extends React.Component {
                     {this.state.showPasswordFields ?
                       <div className="form-group">
                         <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.passwordState}</text>
-                        <input type="Password" ref="existingPassword"  placeholder="Existing Password" className="form-control float-label" onBlur={this.checkExistingPassword.bind(this)}id="password"/>
+                        <input type="Password" ref="existingPassword"  placeholder="Password" className="form-control float-label" onBlur={this.checkExistingPassword.bind(this)}id="password" data-required={true} data-errMsg="Existing password is required"/>
                         <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
                       </div> : <div></div>}
-                    {this.state.showPasswordFields ?
-                      <div className="form-group">
-                        <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdValidationMsg}</text>
-                        <input type="Password" ref="password" defaultValue={this.state.password} onBlur={this.passwordValidation.bind(this)} placeholder="New Password" className="form-control float-label" id="password"/>
-                        <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
-                      </div> : <div></div>}
-                    {this.state.showPasswordFields ?
-                      <div className="form-group">
-                        <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdErrorMsg}</text>
-                        <input type="Password" ref="confirmPassword" defaultValue={this.state.confirmPassword} placeholder="Confirm New Password" className="form-control float-label" onBlur={this.onCheckPassword.bind(this)} id="confirmPassword"/>
-                        <FontAwesome name='eye-slash' className="password_icon ConfirmPassword hide_p"/>
-                      </div> : <div></div>}
-                    {/*<div className="form-group">*/}
-                      {/*<input type="text" ref="dob" placeholder="Date Of Birth" className="form-control float-label"  disabled="true" />*/}
-                      {/*<FontAwesome name='calendar' className="password_icon" />*/}
+                    {this.state.showChangePassword?(<div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.OnChangePassword.bind(this)}>Change Password</a></div>):""}
+                    {this.state.PasswordReset?(
+                      <div>
+                        <div className="form-group">
+                          <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdValidationMsg}</text>
+                          <input type="Password" ref="password" defaultValue={this.state.password} onBlur={this.passwordValidation.bind(this)} placeholder="New Password" className="form-control float-label" id="password" data-required={true} data-errMsg="New Password is required"/>
+                          <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
+                        </div>
+                        <div className="form-group">
+                          <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdErrorMsg}</text>
+                          <input type="Password" ref="confirmPassword" defaultValue={this.state.confirmPassword} placeholder="Confirm New Password" className="form-control float-label" onBlur={this.onCheckPassword.bind(this)} id="confirmPassword" data-errMsg="Confirm Password is required"/>
+                          <FontAwesome name='eye-slash' className="password_icon ConfirmPassword hide_p"/>
+                        </div>
+                        <div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.resetPassword.bind(this)}>Save</a> <a href="#" className="mlUpload_btn" onClick={this.cancelResetPassword.bind(this)}>Cancel</a> </div></div>):""}
 
-                    {/*</div>*/}
 
                     <div className="form-group" id="date-of-birth">
-                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}  closeOnSelect={true} value={moment(this.state.dateOfBirth).format('DD-MM-YYYY')} onChange={this.onfoundationDateSelection.bind(this)} />
+                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}  closeOnSelect={true} value={this.state.dateOfBirth?moment(this.state.dateOfBirth).format('DD-MM-YYYY'): null} onChange={this.onfoundationDateSelection.bind(this)} isValidDate={ valid } />
                       <FontAwesome name="calendar" className="password_icon" onClick={this.openDatePickerDateOfBirth.bind(this)}/>
                     </div>
 

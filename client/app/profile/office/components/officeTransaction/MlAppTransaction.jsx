@@ -1,11 +1,11 @@
 /**
  * Created by vishwadeep on 9/6/17.
  */
-import React from 'react';
+import React, {Component} from 'react';
 import StepZilla from '../../../../../../client/commons/components/stepzilla/StepZilla'
 import MlAppUserBasicInfo from './MlAppUserBasicInfo';
 
-export default class MlAppTransaction extends React.Component{
+export default class MlAppTransaction extends Component{
   constructor(props){
     super(props);
     return this
@@ -22,7 +22,7 @@ export default class MlAppTransaction extends React.Component{
             <StepZilla steps={steps} stepsNavigation={false} prevBtnOnLastStep={true} />
           </div>
         </div>
-        this is a test id :- {this.props.data.id}
+        this is a test id :- {this.props.config.id}
       </div>
     )
   }

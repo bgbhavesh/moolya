@@ -5,18 +5,20 @@
 import React from "react";
 import {render} from "react-dom";
 import _ from "lodash";
-import {fetchCommunitiesHandler} from "../../../../app/commons/actions/fetchCommunitiesActionHandler";
+import {fetchAllCommunitiesHandler} from "../../../../app/commons/actions/fetchCommunitiesActionHandler";
 import {createOfficeActionHandler} from "../actions/createOfficeAction";
+import {initalizeFloatLabel} from "../../../../../client/commons/utils/formElemUtil";
 
 export default class MlAppNewSpokePerson extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {showCommunityBlock: [{displayName: 'Office Bearer', code: 'OFB'}], availableCommunities: []};
+    this.state = {showCommunityBlock: [], availableCommunities: []};
     this.handleBlur.bind(this)
     return this;
   }
 
   componentDidUpdate() {
+    initalizeFloatLabel();
     var mySwiper = new Swiper('.blocks_in_form', {
       speed: 400,
       spaceBetween: 20,
@@ -30,10 +32,14 @@ export default class MlAppNewSpokePerson extends React.Component {
 
   submitDetails() {
     let community = _.uniqBy(this.state.availableCommunities, 'communityId');
+    community = community.filter(function (data) {
+      return typeof data.userCount !== undefined && data.userCount !== 0;
+    });
     let myOffice = {
       totalCount: this.refs.totalCount.value,
       principalUserCount: this.refs.principalUserCount.value,
       teamUserCount: this.refs.teamUserCount.value,
+      officeName: this.refs.officeName.value,
       branchType: this.refs.branchType.value,
       officeLocation: this.refs.officeLocation.value,
       streetLocality: this.refs.streetLocality.value,
@@ -44,7 +50,8 @@ export default class MlAppNewSpokePerson extends React.Component {
       country: this.refs.country.value,
       zipCode: this.refs.zipCode.value,
       about: this.refs.about.value,
-      availableCommunities: community
+      availableCommunities: community,
+      isBeSpoke:true
     }
     let data = myOffice;
     for (var propName in data) {
@@ -52,31 +59,34 @@ export default class MlAppNewSpokePerson extends React.Component {
         delete data[propName];
       }
     }
-    console.log(data)
     if (data.availableCommunities.length < 1) {
       data = _.omit(data, 'availableCommunities')
     }
     let isValid = this.validateUserData(data)
-    if (isValid && isValid.success){
+    if (isValid && isValid.success) {
       const resp = this.createMyOfficeAction(data)
       // toastr.success(isValid.result);
-    }else
+    } else
       toastr.error(isValid.result);
   }
 
   validateUserData(usersData) {
     if (usersData && usersData.principalUserCount && usersData.teamUserCount && usersData.totalCount) {
-      let PUC = usersData.principalUserCount?Number(usersData.principalUserCount):0
-      let TUC = usersData.teamUserCount?Number(usersData.teamUserCount):0
-      let TC = usersData.totalCount?Number(usersData.totalCount):0
-      if ((PUC + TUC) > TC)
-        return {success: false, result: 'Total count can not be greator than Principle and user'}
+      let PUC = usersData.principalUserCount ? Number(usersData.principalUserCount) : 0
+      let TUC = usersData.teamUserCount ? Number(usersData.teamUserCount) : 0
+      let TC = usersData.totalCount ? Number(usersData.totalCount) : 0
+      // if ((PUC + TUC) > TC)  MOOLYA-2378
+      if ((PUC + TUC) != TC)
+        // return {success: false, result: 'Total user count cannot be less than principal and team'}
+        return {success: false, result: 'Total user count should be equal to principal and team'}
       else if (!_.isEmpty(usersData.availableCommunities)) {
         let communities = usersData.availableCommunities
         let arrayCount = _.map(communities, 'userCount')
         let addArray = _.sum(arrayCount)
-        if (Number(addArray) > TUC)
-          return {success: false, result: 'Communities Users count can not be greater than Team user count'}
+        // if (Number(addArray) > TUC) MOOLYA-2378
+        if (Number(addArray) != TUC)
+          // return {success: false, result: 'Communities Users count can not be greater than Team user count'}
+          return {success: false, result: 'Communities Users count should be equal to Team user count'}
         else
           return {success: true, result: 'Validation done'}
       } else
@@ -88,7 +98,6 @@ export default class MlAppNewSpokePerson extends React.Component {
   async createMyOfficeAction(myOffice) {
     const response = await createOfficeActionHandler(myOffice)
     if (response && response.success) {
-      // FlowRouter.go('/app/officeMembersDetails/' + response.result)
       FlowRouter.go('/app/myOffice/')
       toastr.success('Office Successfully Created');
     } else {
@@ -97,28 +106,36 @@ export default class MlAppNewSpokePerson extends React.Component {
     return response;
   }
 
+  componentWillMount() {
+    const resp = this.fetchCommunities({code: 'OFB'});
+    return resp;
+  }
 
   communityType(e) {
     if (e.target.checked) {
       const communityList = this.fetchCommunities();
     } else {
-      let communityExtend = [{displayName: 'Office Bearer', code: 'OFB'}]
-      this.setState({showCommunityBlock: communityExtend})
+      const communityList = this.fetchCommunities({code: 'OFB'});
     }
   }
 
-  async fetchCommunities() {
-    let communities = await fetchCommunitiesHandler();
+  async fetchCommunities(specCode) {
+    let communities = await fetchAllCommunitiesHandler();
     if (communities) {
       let communityList = []
-      _.each(communities, function (say, item) {
-        let value = _.omit(say, '__typename')
-        communityList.push(value);
-      })
-      let communityExtend = {displayName: 'Office Bearer', code: 'OFB'}
-      communityList.push(communityExtend)
-      this.setState({showCommunityBlock: communityList})
-      return communityList;
+      if (!specCode) {
+        _.each(communities, function (say, item) {
+          let value = _.omit(say, '__typename')
+          communityList.push(value);
+        })
+        this.setState({showCommunityBlock: communityList})
+        return communityList;
+      } else {
+        let action = _.find(communities, specCode)
+        action = _.omit(action, '__typename')
+        communityList.push(action)
+        this.setState({showCommunityBlock: communityList})
+      }
     }
   }
 
@@ -128,13 +145,13 @@ export default class MlAppNewSpokePerson extends React.Component {
       let dataBackUp = _.cloneDeep(data);
       let specificData = dataBackUp[id];
       let block = this.state.showCommunityBlock;
-      if(_.isEmpty(specificData)){
+      if (_.isEmpty(specificData)) {
         specificData = {}
         specificData.communityName = block[id].displayName
         specificData.communityId = block[id].code
         specificData.userCount = Number(e.target.value)
         data.push(specificData)
-      }else {
+      } else {
         specificData.communityName = block[id].displayName
         specificData.communityId = block[id].code
         specificData.userCount = Number(e.target.value)
@@ -143,6 +160,10 @@ export default class MlAppNewSpokePerson extends React.Component {
       data.splice(id, 0, specificData);
       this.setState({availableCommunities: data})
     }
+  }
+
+  backUserRoute() {
+    FlowRouter.go('/app/myOffice/')
   }
 
   render() {
@@ -155,7 +176,7 @@ export default class MlAppNewSpokePerson extends React.Component {
               <div className="form_bg">
                 <form>
                   <div className="panel panel-default">
-                    <div className="panel-heading">  Subscription: Bespoke Office</div>
+                    <div className="panel-heading"> Subscription: Bespoke Office</div>
 
                     <div className="panel-body">
 
@@ -173,7 +194,6 @@ export default class MlAppNewSpokePerson extends React.Component {
                                ref="teamUserCount" min="0"/>
                       </div>
                       <div className="form-group switch_wrap switch_names">
-
                         <span className="state_label acLabel">Specific</span><label className="switch">
                         <input type="checkbox" onChange={this.communityType.bind(this)}/>
                         <div className="slider"></div>
@@ -223,6 +243,10 @@ export default class MlAppNewSpokePerson extends React.Component {
               <div className="form_bg">
                 <form>
                   <div className="form-group">
+                    <input type="text" placeholder="Office Name" className="form-control float-label" ref="officeName"/>
+                  </div>
+
+                  <div className="form-group">
                     <input type="text" placeholder="Branch Type" className="form-control float-label" ref="branchType"/>
                   </div>
 
@@ -257,7 +281,7 @@ export default class MlAppNewSpokePerson extends React.Component {
                            ref="country"/>
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Zip Code" className="form-control float-label"
+                    <input type="number" placeholder="Zip Code" className="form-control float-label" min="0"
                            ref="zipCode"/>
                   </div>
                   {/*<div className="form-group switch_wrap inline_switch">*/}
@@ -269,7 +293,7 @@ export default class MlAppNewSpokePerson extends React.Component {
                   {/*</div>*/}
                   <div className="form-group">
                     <a className="mlUpload_btn" onClick={this.submitDetails.bind(this)}>Submit</a>
-                    <a href="#" className="mlUpload_btn">Cancel</a>
+                    <a className="mlUpload_btn" onClick={this.backUserRoute.bind(this)}>Cancel</a>
                   </div>
                 </form>
               </div>

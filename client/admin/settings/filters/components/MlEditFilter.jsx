@@ -5,7 +5,7 @@ import { render } from 'react-dom';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
 import {fetchSelectedFilterDataActionHandler} from '../actions/fetchSelectedFilterDataActionHandler'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/component/MlAdminSelectWrapper'
 import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
 import ScrollArea from 'react-scrollbar';
 export default class MlEditFilter extends React.Component{

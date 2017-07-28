@@ -38,6 +38,10 @@ const mlClusterChapterListConfig=new MlViewer.View({
                               longitude
                               showOnMap
                               isActive
+                              status{
+                                code
+                                description
+                              }
                           }
                       }
               }

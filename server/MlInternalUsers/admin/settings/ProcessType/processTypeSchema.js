@@ -18,6 +18,6 @@ let ProcessTypesSchema = `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],ProcessTypesSchema]);
 let supportedApi = [
-    {api:'FetchProcessType', actionName:'READ', moduleName:"PROCESSTYPES"},
+    {api:'FetchProcessType', actionName:'READ', moduleName:"PROCESSTYPES", isWhiteList:true},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

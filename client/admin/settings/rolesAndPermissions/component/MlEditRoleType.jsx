@@ -1,22 +1,20 @@
-  import React from 'react';
-import {Meteor} from 'meteor/meteor';
-import {render} from 'react-dom';
-import ScrollArea from 'react-scrollbar';
-import {graphql} from 'react-apollo';
-import gql from 'graphql-tag'
-import _ from 'lodash'
-import formHandler from '../../../../commons/containers/MlFormHandler'
-import {updateRoleActionHandler} from '../actions/updateRoleAction'
-import {findRoleActionHandler} from '../actions/findRoleAction'
-import MlAssignClustersToRoles from './MlAssignClustersToRoles'
-import MlAssignModulesToRoles from './MlAssignModulesToRoles'
-import MlActionComponent from '../../../../commons/components/actions/ActionComponent'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
-let Select = require('react-select');
-import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
-  import MlLoader from '../../../../commons/components/loader/loader'
+  import React from "react";
+  import {render} from "react-dom";
+  import ScrollArea from "react-scrollbar";
+  import {graphql} from "react-apollo";
+  import gql from "graphql-tag";
+  import _ from "lodash";
+  import formHandler from "../../../../commons/containers/MlFormHandler";
+  import {updateRoleActionHandler} from "../actions/updateRoleAction";
+  import {findRoleActionHandler} from "../actions/findRoleAction";
+  import MlAssignClustersToRoles from "./MlAssignClustersToRoles";
+  import MlAssignModulesToRoles from "./MlAssignModulesToRoles";
+  import MlActionComponent from "../../../../commons/components/actions/ActionComponent";
+  import {OnToggleSwitch, initalizeFloatLabel} from "../../../utils/formElemUtil";
+  import MlLoader from "../../../../commons/components/loader/loader";
+  let Select = require('react-select');
 
-class MlEditRole extends React.Component {
+  class MlEditRole extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,6 +28,7 @@ class MlEditRole extends React.Component {
     }
     this.onStatusChange.bind(this);
     this.addEventHandler.bind(this);
+    this.handleAvailability.bind(this);
     return this;
   }
 
@@ -69,10 +68,6 @@ class MlEditRole extends React.Component {
     this.setState({'assignModulesToRoles': details})
   }
 
-  onSubmit() {
-    console.log(this.state.assignRoleToClusters)
-  }
-
   onStatusChange(e) {
     if (e.currentTarget.checked) {
       this.setState({"isActive": true})
@@ -81,7 +76,29 @@ class MlEditRole extends React.Component {
     }
   }
 
+    /**
+     * handler for giving the availabilty to the non-moolya subchapters
+     * */
+    handleAvailability(e) {
+      this.setState({"isNonMoolyaAvailable": e.currentTarget.checked})
+    }
+
   async  updateRole() {
+
+    var modules = _.cloneDeep(this.state.assignModulesToRoles);
+    for(var i = 0; i < modules.length; i++){
+      if(modules[i].actions.length == 0){
+        toastr.error("Please Select Action");
+        return;
+      }
+    }
+
+    let uniqModule = _.uniqBy(modules, 'moduleId');
+    if (modules && uniqModule && uniqModule.length !== modules.length) {
+      toastr.error('Please select different module');
+      return;
+    }
+
     let roleObject = {
       roleName: this.refs.roleName.value,
       displayName: this.refs.diplayName.value,
@@ -89,8 +106,9 @@ class MlEditRole extends React.Component {
       userType: this.state.selectedBackendUser,
       about: this.refs.about.value,
       assignRoles: this.state.assignRoleToClusters,
-      modules: this.state.assignModulesToRoles,
-      isActive: this.refs.isActive.checked
+      modules: modules,
+      isActive: this.refs.isActive.checked,
+      isNonMoolyaAvailable : this.refs.isNonMoolyaAvailable.checked
     }
     let roleDetails = {
       id: this.props.config,
@@ -106,6 +124,9 @@ class MlEditRole extends React.Component {
 
     if (_.isEmpty(emptyCluster) && _.isEmpty(emptyChapter) && _.isEmpty(emptySubChapter) && _.isEmpty(emptyCommunity) && _.isEmpty(emptyDepartment) && _.isEmpty(emptySubDepartment)) {
       const response = await updateRoleActionHandler(roleDetails)
+      if(response.success === false){
+       // toastr.error("Hierarchy associated for this role");
+      }
       return response;
     } else {
       toastr.error("All Assign role fields Required");
@@ -137,10 +158,13 @@ class MlEditRole extends React.Component {
     const response = await findRoleActionHandler(roleid);
     this.setState({loading: false, data: response});
     if (response) {
-      this.setState({isActive: this.state.data.isActive})
-      this.setState({selectedUserType: this.state.data.roleType})
-      this.setState({selectedBackendUser: this.state.data.userType})
-      this.setState({selectedSubChapter: this.state.data.subChapter})
+      this.setState({
+        isActive: this.state.data.isActive,
+        selectedUserType: this.state.data.roleType,
+        selectedBackendUser: this.state.data.userType,
+        selectedSubChapter: this.state.data.subChapter,
+        isNonMoolyaAvailable : this.state.data&&this.state.data.isNonMoolyaAvailable?this.state.data.isNonMoolyaAvailable:false
+      })
     }
   }
 
@@ -156,11 +180,6 @@ class MlEditRole extends React.Component {
         showAction: true,
         handler: async(event) => this.props.handler(this.updateRole.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
       },
-      // {
-      //   showAction: true,
-      //   actionName: 'add',
-      //   handler: null
-      // },
       {
         showAction: true,
         actionName: 'cancel',
@@ -170,8 +189,8 @@ class MlEditRole extends React.Component {
       }
     ]
     let UserTypeOptions = [
-      {value: 'moolya', label: 'moolya', clearableValue: true},
-      {value: 'non-moolya', label: 'non-moolya', clearableValue: true}
+      {value: 'moolya', label: 'EcoSystem', clearableValue: true},
+      {value: 'non-moolya', label: 'non-moolya subchapter', clearableValue: true}
     ];
     let BackendUserOptions = [
       {value: 'Internal User', label: 'Internal User'},
@@ -260,6 +279,16 @@ class MlEditRole extends React.Component {
                                    onChange={this.onStatusChange.bind(this)}/>
                             <div className="slider"></div>
                           </label>
+                        </div>
+
+                        <div className="form-group">
+                          <div className="input_types">
+                            <div className="input_types"><input id="checkbox1" type="checkbox" ref="isNonMoolyaAvailable"
+                                                                onChange={this.handleAvailability.bind(this)}
+                                                                checked={this.state.isNonMoolyaAvailable}
+                                                                value="1"/><label
+                              htmlFor="checkbox1"><span></span>Is Available for non-moolya ?</label></div>
+                          </div>
                         </div>
                         <br className="brclear"/>
                       </form>

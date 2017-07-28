@@ -3,13 +3,13 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler, OnLockSwitch} from '../../../admin/utils/formElemUtil';
+import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../commons/utils/formElemUtil';
 import _ from 'lodash';
 import MlActionComponent from '../../../commons/components/actions/ActionComponent';
 import formHandler from '../../../commons/containers/MlFormHandler';
 import {createIdeaActionHandler} from '../actions/IdeaActionHandler'
 import MlLoader from '../../../commons/components/loader/loader'
-
+import {mlFieldValidations} from '../../../commons/validations/mlfieldValidation'
 class MlAppIdeatorAddIdea extends React.Component{
   constructor(props, context){
       super(props);
@@ -23,32 +23,39 @@ class MlAppIdeatorAddIdea extends React.Component{
   {
       OnLockSwitch();
       dataVisibilityHandler();
+    initalizeFloatLabel();
   }
   componentDidUpdate()
   {
       OnLockSwitch();
       dataVisibilityHandler();
+    initalizeFloatLabel();
   }
 
   async handleSuccess(response){
       FlowRouter.go('/app/portfolio')
   }
 
-  async createIdea(){
+  async createIdea() {
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
       let idea = {
-          title:this.refs.title.value,
-          description:this.refs.description.value,
-          isIdeaTitlePrivate:false,
-          isIdeaPrivate:false,
-          isActive:true
+        title: this.refs.title.value,
+        description: this.refs.description.value,
+        isIdeaTitlePrivate: false,
+        isIdeaPrivate: false,
+        isActive: true
       };
       const response = await createIdeaActionHandler(idea)
-      if(response && !response.success){
+      if (response && !response.success) {
         toastr.error(response.result);
-      }else if (response && response.success){
+      } else if (response && response.success) {
         toastr.success(response.result);
       }
       return response;
+    }
   }
 
   render(){
@@ -66,14 +73,11 @@ class MlAppIdeatorAddIdea extends React.Component{
           {
               showAction: true,
               actionName: 'cancel',
-              handler: null
-          },
-          {
-              showAction: true,
-              actionName: 'comment',
-              handler: null,
-             iconID:'Popover1'
+              handler:  async(event) => {
+                FlowRouter.go("/app/portfolio")
+              }
           }
+
       ]
       const showLoader = this.state.loading;
       return (
@@ -93,12 +97,12 @@ class MlAppIdeatorAddIdea extends React.Component{
                           </div>
                           <div className="form_bg col-lg-8 col-lg-offset-2">
                               <form>
-                                  <div className="form-group">
-                                      <input type="text" placeholder="Title" ref="title" className="form-control float-label" id="cluster_name" name="title"/>
+                                  <div className="form-group mandatory">
+                                      <input type="text" placeholder="Title" ref="title" className="form-control float-label" id="cluster_name" name="title" data-required={true} data-errMsg="Title is required"/>
                                       <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeaTitlePrivate"/><input type="checkbox" className="lock_input" id="makePrivate"/>
                                   </div>
-                                  <div className="form-group">
-                                      <textarea placeholder="Describe..." className="form-control" ref="description" id="cl_about" name="description" ></textarea>
+                                  <div className="form-group mandatory">
+                                      <textarea placeholder="Describe..." className="form-control float-label" ref="description" id="cl_about" name="description" data-required={true} data-errMsg="Description is required" ></textarea>
                                       <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeaDescriptionPrivate"/><input type="checkbox" className="lock_input" id="makePrivate" />
                                   </div>
                               </form>

@@ -9,8 +9,25 @@ MlResolver.MlMutationResolver['UpdateUserType'] = (obj, args, context, info) => 
     let response = new MlRespPayload().errorPayload("Not Authorized", code);
     return response;
   }
+  var firstName='';var lastName='';
+  // let id = MlDepartments.insert({...args.department});
+  if(Meteor.users.findOne({_id : context.userId}))
+  {
+    let user = Meteor.users.findOne({_id: context.userId}) || {}
+    if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
 
+      firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+      lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+    }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+      firstName=(user.profile || {}).firstName||'';
+      lastName =(user.profile || {}).lastName||'';
+    }
+  }
+  let createdBy = firstName +' '+lastName
+  args.updatedBy = createdBy;
+  args.updatedDate = new Date();
   if (args._id) {
+
     var id= args._id;
       args=_.omit(args,'_id');
     let result=  mlDBController.update('MlUserTypes', id, args, {$set:true}, context)
@@ -29,6 +46,23 @@ MlResolver.MlMutationResolver['createUserType'] = (obj, args, context, info) => 
     return response;
   }
 if(args.userType.communityCode) {
+  var firstName='';var lastName='';
+  // let id = MlDepartments.insert({...args.department});
+  if(Meteor.users.findOne({_id : context.userId}))
+  {
+    let user = Meteor.users.findOne({_id: context.userId}) || {}
+    if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
+
+      firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
+      lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';
+    }else if(user&&user.profile&&user.profile.isExternaluser) { //resolve external user context based on default profile
+      firstName=(user.profile || {}).firstName||'';
+      lastName =(user.profile || {}).lastName||'';
+    }
+  }
+  let createdBy = firstName +' '+lastName
+  args.userType.createdBy = createdBy;
+  args.userType.createdDate = new Date();
   // let result= MlUserTypes.insert({...args.userType})
   let result = mlDBController.insert('MlUserTypes', args.userType, context)
   if (result) {

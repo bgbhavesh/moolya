@@ -24,6 +24,11 @@ let chapterSchema = `
         status:status
     }
     
+    type status{
+      code: String
+      description: String
+    }
+    
     input chapterObject{
         _id:String,
         clusterId:String,
@@ -54,13 +59,13 @@ let chapterSchema = `
       externalUser:UserObject
     }
     type moolyaSubChapterAccess{
-      backendUser:UserObject
+      
       externalUser:UserObject
     }
     type UserObject{
       canSearch:Boolean,
       canView:Boolean,
-      canDiscover:Boolean
+      canTransact:Boolean
     }
     type SubChapter{
         _id:String
@@ -95,13 +100,13 @@ let chapterSchema = `
       externalUser:UserInputObject,
     }
     input moolyaSubChapterAccessObject{
-      backendUser:UserInputObject,
+      
       externalUser:UserInputObject,
     }
     input UserInputObject{
       canSearch:Boolean,
       canView:Boolean,
-      canDiscover:Boolean
+      canTransact:Boolean
     }
     
     input subChapterObject{
@@ -141,12 +146,12 @@ let chapterSchema = `
         fetchChapter(clusterId:String, chapterId: String): Chapter
         fetchChapters(id:String):[Chapter]
         fetchChaptersWithoutAll(id:String):[Chapter]
-        fetchSubChapter(_id: String):SubChapter
-        fetchSubChapters(id: String):SubChapterResponse
+        fetchSubChapter(clusterId: String, chapterId: String, subChapterId: String):SubChapter
+        fetchSubChapters(clusterId: String, chapterId: String):SubChapterResponse
         fetchChaptersForMap:[Chapter]
         fetchSubChaptersSelect(id: String,displayAllOption:Boolean):[SubChapter]
         fetchActiveSubChapters:[SubChapter]
-        fetchSubChaptersSelectNonMoolya(chapterId: String,clusterId:String, subChapterId : String):[SubChapter] 
+        fetchSubChaptersSelectNonMoolya(chapterId: String,clusterId:String, subChapterId : String):[SubChapter]
         fetchActiveClusterChapters(clusters:[String],displayAllOption:Boolean):[Chapter]
         fetchActiveStatesChapters(states:[String],clusters:[String]):[Chapter]
         fetchActiveChaptersSubChapters(chapters:[String],clusters:[String],displayAllOption:Boolean):[SubChapter],
@@ -157,8 +162,9 @@ let chapterSchema = `
      type Mutation {
         createChapter(chapter:chapterObject):String
         updateChapter(chapterId:String, chapter:chapterObject):String
-        createSubChapter(subChapter:subChapterObject, moduleName:String, actionName:String):response
-        updateSubChapter(subChapterId:String, subChapterDetails:subChapterObject, moduleName:String, actionName:String):response
+        
+        createSubChapter(clusterId:String, chapterId:String, subChapterId:String, subChapter:subChapterObject, moduleName:String, actionName:String):response        
+        updateSubChapter(clusterId:String, chapterId:String, subChapterId:String, subChapterDetails:subChapterObject, moduleName:String, actionName:String):response
      }
 `
 
@@ -170,9 +176,9 @@ let supportedApi = [
     {api:'updateSubChapter', actionName:'UPDATE', moduleName:"SUBCHAPTER"},
     {api:'fetchChapter', actionName:'READ', moduleName:"CHAPTER"},
     {api:'fetchChaptersWithoutAll', actionName:'READ', moduleName:"CHAPTER", isWhiteList:true},
-    {api:'fetchChapters', actionName:'READ', moduleName:"CHAPTER"},
+    {api:'fetchChapters', actionName:'READ', moduleName:"CHAPTER", isWhiteList:true},
     {api:'fetchSubChapter', actionName:'READ', moduleName:"SUBCHAPTER"},
-    {api:'fetchSubChaptersSelect', actionName:'READ', moduleName:"SUBCHAPTER"},
+    {api:'fetchSubChaptersSelect', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
     {api:'fetchActiveSubChapters', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
     {api:'fetchSubChaptersSelectNonMoolya', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
     {api:'fetchActiveClusterChapters', actionName:'READ', moduleName:"CHAPTER", isWhiteList:true},
@@ -183,3 +189,5 @@ let supportedApi = [
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 
+// backendUser:UserInputObject,
+// backendUser:UserObject

@@ -2,10 +2,12 @@ import {MlViewer,MlViewerTypes} from "../../../../lib/common/mlViewer/mlViewer";
 import MlSubChapterList from "../../dashboard/component/MlSubChapterList"
 import MlMapViewContainer from "../../core/containers/MlMapViewContainer"
 import MapDetails from "../../../../client/commons/components/map/mapDetails"
-import maphandler from "../../../../client/commons/components/map/findMapDetailsTypeAction"
+import maphandler from "../actions/findMapDetailsTypeAction"
 import React from 'react';
 import gql from 'graphql-tag'
-
+import MlMapFooter from '../component/MlMapFooter';
+import {getAdminUserContext} from '../../../commons/getAdminUserContext';
+import MlMapMarkerComponent from '../component/MlAdminMapMarker'
 const mlSubChapterDashboardMapConfig=new MlViewer.View({
   name:"subChapterDashBoardMap",
   viewType:MlViewerTypes.MAP,
@@ -20,7 +22,18 @@ const mlSubChapterDashboardMapConfig=new MlViewer.View({
     let center=await maphandler.fetchDefaultCenterOfUser(mapDetailsQuery);
     return center;
   },
+  fetchZoom:true,
+  fetchZoomHandler:async function(reqParams){
+    var zoom=1;
+    let loggedInUser = getAdminUserContext();
+    if(loggedInUser.hierarchyLevel != 4){
+      zoom = 4;
+    }
+    return zoom;
+  },
   viewComponent:<MlMapViewContainer />,
+  mapMarkerComponent:<MlMapMarkerComponent/>,
+  mapFooterComponent:<MlMapFooter />,
   queryOptions:true,
   buildQueryOptions:(config)=>{
     return {context:{clusterId:config.params&&config.params.clusterId?config.params.clusterId:null,chapterId:config.params&&config.params.chapterId?config.params.chapterId:null}}
@@ -49,6 +62,30 @@ const mlSubChapterDashboardMapConfig=new MlViewer.View({
           console.log('on leave called')
         }
       }
+    },
+    {
+      actionName: 'onMarkerClick',
+      // hoverComponent:<MapDetails />,
+      handler:  (data)=>{
+        if(data.module == 'cluster')
+          FlowRouter.go('/admin/dashboard/'+data.markerId+'/chapters?viewMode=true');
+        if(data.module == 'chapter')
+        {
+          if(data&&data.params)
+          {
+            if(data.params.clusterId)
+              FlowRouter.go('/admin/dashboard/'+data.params.clusterId+'/'+data.markerId+'/subChapters?viewMode=true');
+          }
+          else
+          {
+            let loggedInUser = getAdminUserContext();
+            FlowRouter.go('/admin/dashboard/'+loggedInUser.clusterId+'/'+data.markerId+'/subChapters?viewMode=true');
+          }
+        }
+
+        if(data.module == 'subChapter')
+          FlowRouter.go('/admin/dashboard/'+data.params.clusterId+'/'+data.params.chapterId+'/'+data.markerId+'/communities?viewMode=true');
+      }
     }
   ],
   graphQlQuery:gql`
@@ -63,6 +100,7 @@ const mlSubChapterDashboardMapConfig=new MlViewer.View({
                                    lat:latitude
                                    lng:longitude
                                    isActive:isActive
+                                   showOnMap:showOnMap
                           }
                       }
               }

@@ -5,6 +5,7 @@ import {MlViewer, MlViewerTypes} from "../../../../../lib/common/mlViewer/mlView
 import React from "react";
 import gql from "graphql-tag";
 import MlAppTransaction from "../components/officeTransaction/MlAppTransaction";
+import MlGenericTransactionAccordion from '../../../commons/components/transactionAccordion/MlGenericTransactionAccordion'
 
 const mlOfficeTransactionConfig = new MlViewer.View({
   name: "officeTransactionTable",
@@ -19,7 +20,8 @@ const mlOfficeTransactionConfig = new MlViewer.View({
   isExpandableRow: (row)=> {
     return true;
   },
-  expandComponent: MlAppTransaction,
+  // expandComponent: MlAppTransaction,
+  expandComponent: MlGenericTransactionAccordion,
   columns: [
     {dataField: "id", title: "Id", 'isKey': true, isHidden: true},
     {dataField: "transactionId", title: "Transaction Id", dataSort: true},
@@ -32,9 +34,12 @@ const mlOfficeTransactionConfig = new MlViewer.View({
   tableHeaderClass: 'react_table_head',
   showActionComponent: false,
   actionConfiguration: [],
-  //temp query to view data need to change
-  graphQlQuery: gql` query SearchQuery($offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
-                        data: SearchQuery(module: "officeTransaction", offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData) {
+  queryOptions:true,
+  buildQueryOptions:(config)=>{
+    return {customParams: {docId: config && config.params ? config.params : null}}
+  },
+  graphQlQuery: gql` query SearchQuery($customParams:CustomParams, $offset: Int, $limit: Int, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {
+                        data: SearchQuery(module: "officeTransaction", customParams:$customParams, offset: $offset, limit: $limit, fieldsData: $fieldsData, sortData: $sortData) {
                           totalRecords
                           data {
                             ... on officeTransactionType {

@@ -46,6 +46,7 @@ class MlAddTemplate extends React.Component{
       isActive: this.refs.isActive.checked
     }
     const response = await addAccountActionHandler(AccountDetails)
+    toastr.success("AccountType Created Successfully")
     return response;
 
   }

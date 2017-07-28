@@ -24,15 +24,20 @@ MlResolver.MlMutationResolver['createRequestss'] = (obj, args, context, info) =>
     let communityDetails = MlCommunityDefinition.findOne({"code":args.requests.community})|| {};
     args.requests.communityName = communityDetails.name;
 
-    if(Meteor.users.findOne({_id : context.userId}))
-    {
-      args.requests.createdBy = Meteor.users.findOne({_id: context.userId}).username
+    let user = mlDBController.findOne('users', {_id: context.userId}, context)
+    if(user){
+      args.requests.createdBy =user.profile.InternalUprofile.moolyaProfile.firstName?user.profile.InternalUprofile.moolyaProfile.firstName:""+" "+user.profile.InternalUprofile.moolyaProfile.lastName?user.profile.InternalUprofile.moolyaProfile.lastName:"";
+      args.requests.emailId = user.profile.email;
     }
 
   let requestDetails = MlRequestType.findOne({"_id":args.requests.requestTypeId})|| {};
+  let transactionTypeName = requestDetails.transactionType?requestDetails.transactionType:"";
+  let transactionTypeId = requestDetails.transactionId?requestDetails.transactionId:"";
   if(requestDetails.requestName) {
     args.requests.requestTypeName = requestDetails.requestName;
     args.requests.userId = context.userId;
+    args.requests.transactionTypeName = transactionTypeName;
+    args.requests.transactionTypeId = transactionTypeId;
     if(mlHierarchyAssignment.checkHierarchyExist(context.userId) === true){
       orderNumberGenService.assignRequests(args.requests)
       let id = mlDBController.insert('MlRequests', args.requests, context)
@@ -64,7 +69,7 @@ MlResolver.MlMutationResolver['updateRequestsStatus'] = (obj, args, context, inf
   let requestId = args.requestsId;
   let transaction = mlDBController.findOne("MlRequests", {requestId: requestId});
   let decision = false;
-  if(args.status == "WIP" || args.status == "Approved"){
+  if(args.status == "WIP" || args.status == "Approved" || args.status == "Rejected"){
     decision = mlHierarchyAssignment.canWorkOnInternalRequest(requestId,"MlRequests",context.userId)
   }
   if( decision === false ){

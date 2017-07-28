@@ -8,16 +8,18 @@ import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormA
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
 import MlLoader from '../../../../../commons/components/loader/loader'
 import {findIdeatorProblemsAndSolutionsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
+import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler'
 
 
 export default class MlIdeatorProblemsAndSolutions extends React.Component{
   constructor(props, context) {
     super(props);
-    this.state =  {loading: true, data:{}};
+    this.state =  {loading: true, data:{}, privateKey:{}};
     this.onProblemImageFileUpload.bind(this);
     this.onSolutionImageFileUpload.bind(this);
     this.fetchPortfolioInfo.bind(this);
     this.fetchOnlyImages.bind(this);
+    this.libraryAction.bind(this);
     return this;
   }
 
@@ -32,6 +34,10 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
       if (response) {
         this.setState({loading: false, data: response});
       }
+      _.each(response.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+
     }else{
       this.fetchOnlyImages();
       this.setState({loading: true, data: this.context.ideatorPortfolio.problemSolution});
@@ -59,16 +65,21 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
       })
   }
 
-  onLockChange(field, e){
+  onLockChange(fieldName, field, e){
       let details = this.state.data||{};
       let key = e.target.id;
+      var isPrivate = false;
       details=_.omit(details,[key]);
       let className = e.target.className;
       if(className.indexOf("fa-lock") != -1){
         details=_.extend(details,{[key]:true});
+        isPrivate = true;
       }else{
         details=_.extend(details,{[key]:false});
       }
+
+      var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
+      this.setState({privateKey:privateKey})
       this.setState({data:details}, function () {
         this.sendDataToParent()
       })
@@ -81,7 +92,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
       let name = e.target.name;
       let fileName = e.target.files[0].name;
       let data ={moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{problemSolution:{problemImage:[{fileUrl:'', fileName : fileName}]}}};
-      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, file));
   }
 
   onSolutionImageFileUpload(e){
@@ -91,7 +102,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
       let name = e.target.name;
       let fileName = e.target.files[0].name;
       let data= {moduleName: "PORTFOLIO", actionName: "UPLOAD", portfolioDetailsId:this.props.portfolioDetailsId, portfolio:{problemSolution:{solutionImage:[{fileUrl:'', fileName : fileName}]}}};
-      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, fileName));
+      let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, file));
   }
 
   sendDataToParent() {
@@ -103,7 +114,9 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
         delete data[propName];
       }
     }
-    this.props.getProblemSolution(data);
+
+    data=_.omit(data,["privateFields"]);
+    this.props.getProblemSolution(data, this.state.privateKey);
   }
 
   componentDidUpdate(){
@@ -116,13 +129,30 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     dataVisibilityHandler();
   }
 
-  onFileUploadCallBack(name,fileName, resp){
+  onFileUploadCallBack(file,name, resp){
       if(resp){
           let result = JSON.parse(resp)
+        let userOption = confirm("Do you want to add the file into the library")
+        if(userOption){
+          let fileObjectStructure = {
+            fileName: file.name,
+            fileType: file.type,
+            fileUrl: result.result,
+            libraryType: "image"
+          }
+          this.libraryAction(fileObjectStructure)
+        }
           if(result.success){
               this.fetchOnlyImages();
           }
       }
+  }
+
+
+  async libraryAction(file) {
+    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
+    return resp;
   }
 
   render(){
@@ -160,7 +190,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     <div className="panel-body">
                       <div className="form-group nomargin-bottom">
                         <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="problems" onBlur={this.onInputChange.bind(this)} name="problemStatement" defaultValue={problemStatement}></textarea>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isProblemPrivate" onClick={this.onLockChange.bind(this, "isProblemPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={problemLockStatus}/>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isProblemPrivate" onClick={this.onLockChange.bind(this, "problemStatement", "isProblemPrivate")}/>
                       </div>
                     </div>
                   </div>
@@ -189,7 +219,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
                     <div className="panel-body">
                       <div className="form-group nomargin-bottom">
                         <textarea placeholder="Describe..." className="form-control" id="cl_about" ref="solution" onBlur={this.onInputChange.bind(this)} name="solutionStatement" defaultValue={solutionStatement}></textarea>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isSolutionPrivate" onClick={this.onLockChange.bind(this, "isSolutionPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={solutionLockStatus}/>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isSolutionPrivate" onClick={this.onLockChange.bind(this, "solutionStatement", "isSolutionPrivate")}/>
                       </div>
                     </div>
                   </div>

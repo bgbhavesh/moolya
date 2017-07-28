@@ -6,7 +6,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag'
-import Moolyaselect from  '../../../../commons/components/select/MoolyaSelect'
+import Moolyaselect from  '../../../commons/components/MlAdminSelectWrapper'
 import {findDateAndTimeActionHandler} from '../actions/findDateAndTimeAction'
 import {initalizeFloatLabel,OnToggleSwitch} from '../../../utils/formElemUtil';
 let Select = require('react-select');
@@ -21,7 +21,8 @@ class MlAddDateAndTime extends React.Component{
       dateFormat: '',
       numberOfDaysInWeek: '',
       firstDayOfWeek: '',
-      hoursFormat:''
+      hoursFormat:'',
+      timeZone:''
     }
     this.addEventHandler.bind(this);
     this.createDT.bind(this);
@@ -73,6 +74,7 @@ class MlAddDateAndTime extends React.Component{
       this.setState({loading:false,data:response[0].dateAndTimeInfo});
       // this.setState({documentId: this.state.data.documentId});
       // this.setState({id: this.state.data._id});
+
       if (this.state.data.timeFormat) {
         this.setState({timeFormat: this.state.data.timeFormat});
       }
@@ -94,6 +96,9 @@ class MlAddDateAndTime extends React.Component{
       if (this.state.data.hoursFormat) {
         this.setState({hoursFormat: this.state.data.hoursFormat});
       }
+      if (this.state.data.timeZone) {
+        this.setState({timeZone: this.state.data.timeZone});
+      }
     }
     this.setState({loading:false,data:response});
   }
@@ -107,8 +112,10 @@ class MlAddDateAndTime extends React.Component{
       numberOfDaysInWeek: this.state.numberOfDaysInWeek,
       firstDayOfWeek: this.state.firstDayOfWeek,
       hoursFormat: this.state.hoursFormat,
+      timeZone:this.state.timeZone
     }
     const response = await upsertDateAndTimeActionHandler(Details);
+    toastr.success("Saved Successfully")
     return response;
 
   }
@@ -129,6 +136,9 @@ class MlAddDateAndTime extends React.Component{
   }
   optionsBySelectFirstDayOfWeek(val){
     this.setState({firstDayOfWeek:val})
+  }
+  optionsBySelectTimeZone(val){
+    this.setState({timeZone:val})
   }
 
   render(){
@@ -163,6 +173,12 @@ class MlAddDateAndTime extends React.Component{
       data:findWeekDays{
         value:_id
         label:displayName
+      }  
+    }`;
+    let timeZonequery=gql` query($clusterId:String){  
+      data:findTimeZones(clusterId:$clusterId){
+        value:_id
+        label:timeZone
       }  
     }`;
 
@@ -207,6 +223,7 @@ class MlAddDateAndTime extends React.Component{
     if(this.state.numberOfDaysInWeek){
       numberOfDaysInWeekActive='active'
     }
+    let timeZoneOptions = {options: { variables: {clusterId:this.props.clusterId}}};
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
@@ -236,6 +253,9 @@ class MlAddDateAndTime extends React.Component{
                 {/*<div className="form-group">*/}
                   {/*<textarea ref="about" placeholder="About" className="form-control float-label" id=""></textarea>*/}
                 {/*</div>*/}
+                <div className="form-group">
+                  <Moolyaselect multiSelect={false}  placeholder={"Time zone"}  className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.timeZone} queryType={"graphql"} query={timeZonequery} queryOptions={timeZoneOptions} isDynamic={true} id={'tzquery'}  onSelect={this.optionsBySelectTimeZone.bind(this)} />
+                </div>
               </form>
             </div>
           </div>

@@ -1,6 +1,25 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
+import moment from 'moment'
+function createdateFormatter (data){
+  let createdDate=data&&data.data&&data.data.createdDate;
+  if(createdDate){
+    return <div>{moment(createdDate).format('MM-DD-YYYY HH:mm:ss')}</div>;
+  }
+  else {
+    return <div></div>
+  }
+}
+function updatedateFormatter (data){
+  let updateDate=data&&data.data&&data.data.updatedDate;
+  if(updateDate){
+    return <div>{moment(updateDate).format('MM-DD-YYYY HH:mm:ss')}</div>;
+  }
+  else {
+    return <div></div>
+  }
+}
 function categoriesformatter (data){
     let categories=data&&data.data&&data.data.kycCategory?data.data.kycCategory:[];
   //   let ids =[];
@@ -68,7 +87,11 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
     {dataField: "allowableMaxSize", title: "Allowable Size",dataSort:true},
     {dataField: "clusters", title: "Jurisdiction",dataSort:true, customComponent:clustersformatter},
     {dataField: "chapters", title: "Chapter",dataSort:true, customComponent:chaptersformatter},
-    {dataField: "subChapters", title: "Sub Chapter",dataSort:true, customComponent:subChaptersformatter}
+    {dataField: "subChapters", title: "Sub Chapter",dataSort:true, customComponent:subChaptersformatter},
+    {dataField: "createdBy", title: "Created By",dataSort:true},
+    {dataField: "createdDate", title: "Created Date",dataSort:true,customComponent:createdateFormatter},
+    {dataField: "updatedBy", title: "Updated By",dataSort:true},
+    {dataField: "updatedDate", title: "Updated Date",dataSort:true,customComponent:updatedateFormatter},
 
   ],
   tableHeaderClass:'react_table_head',
@@ -79,7 +102,7 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
       showAction: true,
       handler: (data)=>{
         if(data && data.documentId){
-          FlowRouter.go("/admin/settings/editDocumentMapping/"+data.documentId);
+          FlowRouter.go("/admin/settings/documentProcess/editDocumentMapping/"+data.documentId);
         } else{
           toastr.error("Please select a Document");
         }
@@ -93,7 +116,7 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
           toastr.error("Please uncheck the record")
         // {FlowRouter.go("/admin/settings/documentMappingList")}
         else {
-          FlowRouter.go("/admin/settings/addDocumentMapping")
+          FlowRouter.go("/admin/settings/documentProcess/addDocumentMapping")
         }
       }
     },
@@ -145,6 +168,10 @@ const mlDocumentMappingTableConfig=new MlViewer.View({
                               subChapters
                               kycCategory
                               isActive
+                              createdBy
+                              createdDate  
+                              updatedBy     
+                              updatedDate 
                           }
                       }
               }

@@ -3,6 +3,7 @@
  */
 import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
+import portfolioValidationRepo from '../portfolioValidation'
 
 var _ = require('lodash')
 
@@ -85,7 +86,21 @@ MlResolver.MlQueryResolver['fetchFunderAbout'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {
     let portfolio = MlFunderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
     if (portfolio && portfolio.hasOwnProperty('funderAbout')) {
-      return portfolio['funderAbout'];
+      let details = portfolio.funderAbout
+      let extendData = MlProfessions.findOne({_id: details.profession, industryId: details.industry})|| {};
+      details.industry = extendData.industryName || details.industry;
+      details.profession = extendData.professionName || details.profession;
+      /*let userPersonal = MlMasterSettings.findOne({_id:details.gender}) || {}
+      details.gender = userPersonal.genderInfo ? userPersonal.genderInfo.genderName : ''*/
+      let userEmp = MlMasterSettings.findOne({_id:details.employmentStatus}) || {}
+      details.employmentStatus = userEmp.employmentTypeInfo ? userEmp.employmentTypeInfo.employmentName : details.employmentStatus;
+
+      var object = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, details, context)
+
+      //for view action
+      MlResolver.MlMutationResolver['createView'](obj,{resourceId:args.portfoliodetailsId,resourceType:'portfolio'}, context, info);
+
+      return object;
     }
   }
 
@@ -106,6 +121,26 @@ MlResolver.MlQueryResolver['fetchfunderPortfolioInvestor'] = (obj, args, context
         })
       }
       return portfolio['investments'];
+    }
+  }
+
+  return [];
+}
+
+MlResolver.MlQueryResolver['fetchfunderPortfolioService'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let portfolio = MlFunderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('services')) {
+      // if(portfolio && portfolio['services']){
+      //   portfolio.services.map(function(service,index) {
+      //     if(portfolio.investments[index]){
+      //       let investmentData = MlFundingTypes.findOne({"_id" : service.typeOfFundingId}) || {};
+      //       portfolio.investments[index].typeOfFundingName = investmentData.displayName || "";
+      //     }
+      //
+      //   })
+      // }
+      return portfolio['services'];
     }
   }
 
@@ -181,4 +216,30 @@ updateArrayofObjects = (updateFor, source) =>{
       })
   }
   return source;
+}
+
+MlResolver.MlQueryResolver['fetchPortfolioClusterId'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let portfolio = MlPortfolioDetails.findOne({"_id": args.portfoliodetailsId})
+    if (portfolio.clusterId) {
+      return portfolio;
+    }
+  }
+  return {};
+}
+
+MlResolver.MlQueryResolver['fetchFunderDetails'] = (obj, args, context, info) => {
+  if(_.isEmpty(args))
+    return;
+
+  var key = args.key;
+  var portfoliodetailsId = args.portfoliodetailsId
+  var funderPortfolio = MlFunderPortfolio.findOne({"portfolioDetailsId": portfoliodetailsId})
+  if (funderPortfolio && funderPortfolio.hasOwnProperty(key)) {
+    var object = funderPortfolio[key];
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    funderPortfolio[key] = filteredObject
+    return funderPortfolio;
+  }
+
 }

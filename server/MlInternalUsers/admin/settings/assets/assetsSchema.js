@@ -14,7 +14,11 @@ let AssetsSchema = `
         displayName :String,
         about: String,
         icon:String,
-        isActive:Boolean
+        createdBy     : String
+        createdDate   : Date
+        updatedBy     : String
+        updatedDate   : Date
+        isActive      :Boolean
     }
     
     input assetsMasterData
@@ -23,6 +27,10 @@ let AssetsSchema = `
         displayName :String,
         about: String,
         icon:String,
+        createdBy     : String
+        createdDate   : Date
+        updatedBy     : String
+        updatedDate   : Date
         isActive:Boolean
     }
     
@@ -43,7 +51,7 @@ let supportedApi = [
   {api:'createAssets', actionName:'CREATE', moduleName:"ASSETS"},
   {api:'updateSelectedAsset', actionName:'UPDATE', moduleName:"ASSETS"},
 
-  {api:'fetchAssets', actionName:'READ', moduleName:"ASSETS"},
+  {api:'fetchAssets', actionName:'READ', moduleName:"ASSETS",isWhiteList:true},
   {api:'findAsset', actionName:'READ', moduleName:"ASSETS"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

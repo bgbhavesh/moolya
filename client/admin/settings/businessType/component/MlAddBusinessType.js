@@ -5,6 +5,7 @@ import MlActionComponent from '../../../../commons/components/actions/ActionComp
 import formHandler from '../../../../commons/containers/MlFormHandler';
 import {addBusinessTypeActionHandler} from '../actions/addBusinessTypeAction'
 import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 class MlAddBusinessType extends React.Component {
   constructor(props) {
     super(props);
@@ -32,15 +33,25 @@ class MlAddBusinessType extends React.Component {
   };
 
   async  createBusinessType() {
-    let BusinessTypeDetails = {
-      businessTypeName: this.refs.businessTypeName.value,
-      businessTypeDisplayName: this.refs.businessTypeDisplayName.value,
-      about: this.refs.about.value,
-      isActive: this.refs.isActive.checked
-    }
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      toastr.error(ret);
+    } else {
+      let BusinessTypeDetails = {
+        businessTypeName: this.refs.businessTypeName.value,
+        businessTypeDisplayName: this.refs.businessTypeDisplayName.value,
+        about: this.refs.about.value,
+        isActive: this.refs.isActive.checked
+      }
 
-    const response = await addBusinessTypeActionHandler(BusinessTypeDetails)
-    return response;
+      const response = await addBusinessTypeActionHandler(BusinessTypeDetails)
+      if (!response.success) {
+        toastr.error("Already Exists")
+      } else if (response.success) {
+        toastr.success("BusinessType Created Successfully");
+        FlowRouter.go("/admin/settings/businessList");
+      }
+    }
   }
 
   componentDidMount() {
@@ -79,8 +90,8 @@ class MlAddBusinessType extends React.Component {
           <div className="col-md-6 nopadding-left">
           <div className="form_bg">
           <form>
-          <div className="form-group">
-          <input type="text" ref="businessTypeName" placeholder="Business Name" className="form-control float-label"/>
+          <div className="form-group mandatory">
+          <input type="text" ref="businessTypeName" placeholder="Business Name" className="form-control float-label" data-required={true} data-errMsg="Business Name is required"/>
           </div>
           <div className="form-group">
           <textarea ref="about" placeholder="About" className="form-control float-label"></textarea>
@@ -91,8 +102,8 @@ class MlAddBusinessType extends React.Component {
           <div className="col-md-6 nopadding-right">
           <div className="form_bg">
           <form>
-          <div className="form-group">
-          <input type="text" ref="businessTypeDisplayName" placeholder="Display Name"  className="form-control float-label"/>
+          <div className="form-group mandatory">
+          <input type="text" ref="businessTypeDisplayName" placeholder="Display Name"  className="form-control float-label" data-required={true} data-errMsg="Display Name is required"/>
           </div>
           <div className="form-group switch_wrap inline_switch">
           <label>Status</label>

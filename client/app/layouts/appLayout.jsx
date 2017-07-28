@@ -8,8 +8,8 @@ import MetaTags from 'react-meta-tags';
 import MlAppLayout from '../core/components/MlAppComponent'
 
 export default class AppLayout extends Component{
-    constructor(props,context){
-        super(props,context);
+    constructor(props,AppLayoutcontext){
+        super(props, AppLayoutcontext);
     }
 
     render(){

@@ -5,17 +5,17 @@ import {graphql} from "react-apollo";
 import gql from "graphql-tag";
 import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 import formHandler from "../../../commons/containers/MlFormHandler";
-import Moolyaselect from "../../../commons/components/select/MoolyaSelect";
+import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 import MlAssignChapterBackendUserList from "./MlAssignChapterBackendUserList";
 import MlAssignChapterBackendUserRoles from "./MlAssignChapterBackendUserRoles";
 import {multipartFormHandler} from "../../../commons/MlMultipartFormAction";
-// import {findSubChapterActionHandler} from "../actions/findSubChapter";
 import {findSubChapterActionHandler} from "../../../../client/admin/subChapter/actions/findSubChapter";
 import {findAdminUserDetails} from "../../../commons/findAdminUserDetails";
 import {fetchAdminUserRoles} from "../../../commons/fetchAdminUserRoles";
 import {OnToggleSwitch} from "../../utils/formElemUtil";
 import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 import MlLoader from "../../../commons/components/loader/loader";
+import {client} from '../../core/apolloConnection';
 var _ = require('lodash');
 
 
@@ -54,13 +54,15 @@ class MlAssignChapterBackendUsers extends React.Component {
     OnToggleSwitch(true, true);
   }
 
-  async findSubChapterDetails() {
-    let subChapterId = this.props.params.subChapterId;
-    const response = await findSubChapterActionHandler(subChapterId);   //findSubChapterActionHandler
-    if(response){
-      let isDefaultSubChapter= response.isDefaultSubChapter
-      this.setState({isDefaultSubChapter: isDefaultSubChapter});
-    }
+    async findSubChapterDetails() {
+      let clusterId = this.props.params.clusterId;
+      let chapterId = this.props.params.chapterId;
+      let subChapterId = this.props.params.subChapterId;
+      const response = await findSubChapterActionHandler(clusterId, chapterId, subChapterId);
+      if(response){
+        let isDefaultSubChapter= response.isDefaultSubChapter
+        this.setState({isDefaultSubChapter: isDefaultSubChapter});
+      }
   }
 
   optionsBySelectUser(index, selectedIndex) {
@@ -69,7 +71,7 @@ class MlAssignChapterBackendUsers extends React.Component {
   }
 
   async findUserDetails(userId) {
-    const userDetails = await findAdminUserDetails(userId);
+    const userDetails = await findAdminUserDetails(userId,client);
     if (userDetails) {
       this.setState({
         selectedBackendUser: userId,
@@ -91,7 +93,7 @@ class MlAssignChapterBackendUsers extends React.Component {
   }
 
   async find_Chapter_Roles(userId) {
-      const userRoles = await fetchAdminUserRoles(userId);
+      const userRoles = await fetchAdminUserRoles(userId,client);
       var roles = userRoles && userRoles.length > 0 ? userRoles : [];
       this.setState({
           loading: false,
@@ -108,6 +110,7 @@ class MlAssignChapterBackendUsers extends React.Component {
   }
 
   isChapterAdmin(admin) {
+    console.log('clicked on ischapteradmin checkbox')
     this.setState({'chapterAdmin': admin})
   }
 
@@ -159,7 +162,7 @@ class MlAssignChapterBackendUsers extends React.Component {
     let roles = [];
     let clusterId = this.props.params.clusterId;
     let allRoles = this.state.mlroleDetails;
-    _.each(allRoles, function (item, key) {
+    _.each(allRoles, function (item, key) {   //same cluster content passed to server
       if (item.roleId && item.clusterId == clusterId) {
         roles.push(item)
       }
@@ -183,7 +186,17 @@ class MlAssignChapterBackendUsers extends React.Component {
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          FlowRouter.go("/admin/chapters/HaZyQ8f9fQEi3g2vx/NDQLFpJBiF2DSXDzy/2LYT6orx2Xh4JBE43/Moolya-Bagalkot/subChapterDetails");
+          let pararms = FlowRouter._current.params;
+          let path = FlowRouter._current.path;
+          if (path.indexOf("clusters") != -1) {
+            FlowRouter.go("/admin/clusters/"+
+              pararms.clusterId+"/"+pararms.chapterId+"/"+
+              pararms.subChapterId+"/"+pararms.subChapterName+"/subChapterDetails");
+          } else {
+            FlowRouter.go("/admin/chapters/"+
+            pararms.clusterId+"/"+pararms.chapterId+"/"+
+            pararms.subChapterId+"/"+pararms.subChapterName+"/subChapterDetails");
+          }
         }
       }
     ]
@@ -232,7 +245,7 @@ class MlAssignChapterBackendUsers extends React.Component {
                         <ScrollArea speed={0.8} className="left_wrap">
                           <div className="col-lg-4 col-md-6 col-sm-4" onClick={this.resetBackendUsers.bind(that)}>
                             <div className="list_block provider_block">
-                              <div className="cluster_status assign_cl"><span className="ml ml-assign"></span></div>
+                              <div className="cluster_status assign_cl">{/*<span className="ml ml-assign"></span>*/}</div>
                               <div className="provider_mask"><img src="/images/funder_bg.png"/> <img
                                 className="user_pic" src="/images/def_profile.png"/></div>
                               <h3>Assign <br/> Backend Users</h3>

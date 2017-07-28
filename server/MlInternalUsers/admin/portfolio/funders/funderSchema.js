@@ -19,6 +19,7 @@ let FunderPortfolioSchema = `
         isActive:Boolean
         index: Int
         logo:imagesTypeSchema,
+        privateFields:[PrivateKeys]
     }
     
      type imagesTypeSchema{
@@ -35,6 +36,7 @@ let FunderPortfolioSchema = `
         subDomainId : String
         subDomainName :String
         index: Int
+        privateFields:[PrivateKeys]
     }
     
     type SocialLinks{
@@ -51,7 +53,8 @@ let FunderPortfolioSchema = `
         isLastNamePrivate:Boolean,
         designation:String,
         isDesignationPrivate:Boolean,
-        companyName:String,
+        teamcompanyName:String,
+        isCompanyNamePrivate:Boolean,
         duration:String,
         isDurationPrivate:Boolean,
         yearsOfExperience:String,
@@ -63,6 +66,7 @@ let FunderPortfolioSchema = `
         socialLinks:[SocialLinks]
         index: Int,
         logo:imagesTypeSchema,
+        privateFields:[PrivateKeys]
     }
 
     type Principal{
@@ -73,7 +77,8 @@ let FunderPortfolioSchema = `
         isLastNamePrivate:Boolean,
         designation:String,
         isDesignationPrivate:Boolean,
-        companyName:String,
+        principalcompanyName:String,
+        isCompanyNamePrivate:Boolean,
         duration:String,
         isDurationPrivate:Boolean,
         yearsOfExperience:String,
@@ -85,12 +90,13 @@ let FunderPortfolioSchema = `
         socialLinks:[SocialLinks],
         index:Int,
         logo:imagesTypeSchema,
+        privateFields:[PrivateKeys]
     }
     
     type Investments{
         dateOfInvestment:String,
         isDateOfInvestmentPrivate :Boolean
-        companyName:String,
+        investmentcompanyName:String,
         isCompanyNamePrivate:Boolean,
         typeOfFundingId:String,
         typeOfFundingName : String,
@@ -101,7 +107,34 @@ let FunderPortfolioSchema = `
         investmentAmount :String,
         isInvestmentAmountPrivate :Boolean
         index: Int
+        privateFields:[PrivateKeys]
     }
+    type Duration{
+        hours: String
+        minutes: String
+    }
+    
+    type Attachments {
+        documentName: String
+        images: [String]
+    }
+    
+    type Services{
+        dateOfService:String
+        isDateOfServicePrivate :Boolean
+        industryType:[String]
+        conversationType:[String]
+        about:String
+        expectedInput : String
+        expectedOutput:String
+        mode:Boolean
+        session:String
+        duration:Duration
+        attachments :[Attachments]
+        isPrivate :Boolean
+        index: Int
+  }
+    
     
     type Investmentbudget{
         from:String
@@ -143,6 +176,7 @@ let FunderPortfolioSchema = `
         isFacebookUrlPrivate:Boolean
         investmentBudget:Investmentbudget,
         profilePic: String
+        privateFields:[PrivateKeys]
     }
     
     type FunderPortfolio{
@@ -153,6 +187,7 @@ let FunderPortfolioSchema = `
         team                : [Team],
         areaOfInterest      : [AreaOfInterest],
         successStories      : [SuccessStories]
+        services            : Services
     }
   
     input successStories{
@@ -193,7 +228,8 @@ let FunderPortfolioSchema = `
         isLastNamePrivate:Boolean,
         designation:String,
         isDesignationPrivate:Boolean,
-        companyName:String,
+        teamcompanyName:String,
+        isCompanyNamePrivate:Boolean,
         duration:String,
         isDurationPrivate:Boolean,
         yearsOfExperience:String,
@@ -214,7 +250,8 @@ let FunderPortfolioSchema = `
         isLastNamePrivate:Boolean,
         designation:String,
         isDesignationPrivate:Boolean,
-        companyName:String,
+        principalcompanyName:String,
+        isCompanyNamePrivate:Boolean,
         duration:String,
         isDurationPrivate:Boolean,
         yearsOfExperience:String,
@@ -230,7 +267,7 @@ let FunderPortfolioSchema = `
     input investments{
         dateOfInvestment:String,
         isDateOfInvestmentPrivate :Boolean
-        companyName:String,
+        investmentcompanyName:String,
         isCompanyNamePrivate:Boolean,
         typeOfFundingId:String,
         typeOfFundingName : String,
@@ -285,6 +322,33 @@ let FunderPortfolioSchema = `
         profilePic: String
     }
     
+    
+    input duration{
+        hours: String
+        minutes: String
+    }
+    
+    input attachments {
+        documentName: String
+        images: [String]
+    }
+    
+    input services{
+        dateOfService:String
+        isDateOfServicePrivate :Boolean
+        industryType:[String]
+        conversationType:[String]
+        about:String
+        expectedInput : String
+        expectedOutput:String
+        mode:Boolean
+        session:String
+        duration:duration
+        attachments :[attachments]
+        isPrivate :Boolean
+        index: Int
+  }
+    
     input funderPortfolio{
         portfolioDetailsId  : String,
         funderAbout         : funderAbout,
@@ -293,15 +357,19 @@ let FunderPortfolioSchema = `
         team                : [team],
         areaOfInterest      : [areaOfInterest],
         successStories      : [successStories]
+        services            : services
     }
     
     type Query{
+        fetchFunderDetails(portfoliodetailsId:String!, key:String): FunderPortfolio
         fetchFunderAbout(portfoliodetailsId:String!):FunderAbout
         fetchfunderPortfolioInvestor(portfoliodetailsId:String!):[Investments]
         fetchFunderPrincipal(portfoliodetailsId:String!):[Principal]
         fetchFunderTeam(portfoliodetailsId:String!):[Team]
         fetchFunderAreaOfInterest(portfoliodetailsId:String!):[AreaOfInterest]
         fetchFunderSuccessStories(portfoliodetailsId:String!):[SuccessStories]
+        fetchPortfolioClusterId(portfoliodetailsId:String):Portfoliodetails
+        fetchfunderPortfolioService(portfoliodetailsId:String!):Services
     }
     
     type Mutation{
@@ -313,14 +381,18 @@ let FunderPortfolioSchema = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], FunderPortfolioSchema]);
 
 let supportedApi = [
+  {api:'fetchFunderDetails', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchFunderAbout', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchfunderPortfolioInvestor', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchFunderPrincipal', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchFunderTeam', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchFunderAreaOfInterest', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchFunderSuccessStories', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api: 'fetchfunderPortfolioService',actionName:'READ', moduleName:"PORTFOLIO" },
 
   {api:'createFunderPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
   {api:'updateFunderPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+  {api:'fetchPortfolioClusterId', actionName:'READ', moduleName:"PORTFOLIO"},
+
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -194,40 +194,40 @@ export default function dynamicLinkHandler(path,params,queryParams){
 
     "users_about": function (params, queryParams) {
       let dynamicParams = params || {};
-      if (_.has(dynamicParams, "portfolioId")) {
-        return `/admin/users/${dynamicParams.portfolioId}/aboutuser`;
+      if (_.has(dynamicParams, "registrationId") && _.has(dynamicParams, "portfolioId")) {
+        return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/aboutuser`;
       }
     },
     "users_addressBook": function (params, queryParams) {
       let dynamicParams = params || {};
-      if (_.has(dynamicParams, "portfolioId")) {
-        return `/admin/users/${dynamicParams.portfolioId}/addressBook`;
+      if (_.has(dynamicParams, "registrationId") && _.has(dynamicParams, "portfolioId")) {
+        return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/addressBook`;
       }
     },
     "users_connections": function (params, queryParams) {
       let dynamicParams = params || {};
-      if (_.has(dynamicParams, "portfolioId")) {
-        return `/admin/users/${dynamicParams.portfolioId}/connections/ideator`;
+      if (_.has(dynamicParams, "registrationId") && _.has(dynamicParams, "portfolioId")) {
+        return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/connections/ideator`;
       }
     },
     "users_favourites": function (params, queryParams) {
       let dynamicParams = params || {};
-      if (_.has(dynamicParams, "portfolioId")) {
-        return `/admin/users/${dynamicParams.portfolioId}/favourites/ideator`;
+      if (_.has(dynamicParams, "registrationId") && _.has(dynamicParams, "portfolioId")) {
+        return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/favourites/ideator`;
       }
     },
     "users_wishlist": function (params, queryParams) {
       let dynamicParams = params || {};
-      if (_.has(dynamicParams, "portfolioId")) {
-        return `/admin/users/${dynamicParams.portfolioId}/wishlist/ideator`;
+      if (_.has(dynamicParams, "registrationId") && _.has(dynamicParams, "portfolioId")) {
+        return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/wishlist/ideator`;
       }
     },
     "users_transactions": function (params, queryParams) {
       let dynamicParams = params || {};
-      if (_.has(dynamicParams, "portfolioId")) {
-        return `/admin/users/${dynamicParams.portfolioId}/transactions`;
+      if (_.has(dynamicParams, "registrationId") && _.has(dynamicParams, "portfolioId")) {
+        return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/transactions`;
       }
-    },
+    }
   }
   let menuLinkHandler=menuLinkHandlerConfig[path];
   if(menuLinkHandler){

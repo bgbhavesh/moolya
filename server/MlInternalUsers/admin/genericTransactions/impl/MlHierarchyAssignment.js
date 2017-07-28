@@ -9,11 +9,19 @@ class MlHierarchyAssignment {
 
   findHierarchy(clusterId, departmentId, subDepartmentId, roleId) {
     let roleDetails = mlDBController.findOne('MlRoles', {_id: roleId})
-    let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
-      parentDepartment: departmentId,
-      parentSubDepartment: subDepartmentId,
-      clusterId: roleDetails.isSystemDefined ? "All" : clusterId
-    }, context, {teamStructureAssignment: {$elemMatch: {roleId: roleId}}})
+    // let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
+    //   parentDepartment: departmentId,
+    //   parentSubDepartment: subDepartmentId,
+    //   clusterId: roleDetails.isSystemDefined ? "All" : clusterId
+    // }, context, {teamStructureAssignment: {$elemMatch: {roleId: roleId}}})
+    let hierarchy = mlDBController.findOne('MlHierarchyAssignments',
+      {"$and":[
+        {parentDepartment: departmentId},
+        {parentSubDepartment: subDepartmentId},
+        {clusterId: roleDetails.isSystemDefined ? "All" : clusterId},
+        {teamStructureAssignment: {$elemMatch: {roleId: roleId}}}
+      ]
+      }, context)
     return hierarchy;
   }
 
@@ -257,6 +265,10 @@ class MlHierarchyAssignment {
     }
     let userhierarchy = this.findHierarchy(userRole.clusterId, userRole.departmentId, userRole.subDepartmentId, userRole.roleId);
     let assignedRolehierarchy = this.findHierarchy(requestRole.clusterId, requestRole.departmentId, requestRole.subDepartmentId, requestRole.roleId);
+
+    if(!userhierarchy){
+      return false;
+    }
 
     if (this.checkSystemSystemDefinedRole(userRole) && this.checkSystemSystemDefinedRole(requestRole)) {
       if (userhierarchy._id == assignedRolehierarchy._id) {

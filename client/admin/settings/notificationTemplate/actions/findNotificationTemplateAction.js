@@ -14,6 +14,7 @@ export async function findNotificationTemplateActionHandler(fid) {
                   tempCode,
                   tempDesc,
                   title,
+                  dynamicKeys,
                   isHtmlContent,
                   content,
                   isActive

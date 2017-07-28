@@ -108,18 +108,18 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   else if (args.module == "externalUsers"){
     var totalRecords=0;
 
-    if(args.offset && args.offset >0){   // `offset` may be `null`
-      findOptions.skip=args.queryProperty.offset;
-    };
-
-    if (args.limit&&args.limit > 0) { // `limit` may be `null`
-      findOptions.limit = args.queryProperty.limit;
-    }
-
-    let userFilterQuery={}; //'filter' applied by user
-    if (args.fieldsData){
-      userFilterQuery = getQuery.searchFunction(args);
-    }
+    // if(args.offset && args.offset >0){   // `offset` may be `null`
+    //   findOptions.skip=args.queryProperty.offset;
+    // };
+    //
+    // if (args.limit&&args.limit > 0) { // `limit` may be `null`
+    //   findOptions.limit = args.queryProperty.limit;
+    // }
+    //
+    // let userFilterQuery={}; //'filter' applied by user
+    // if (args.fieldsData){
+    //   userFilterQuery = getQuery.searchFunction(args);
+    // }
 
     var userType = args.queryProperty.query; // Funder, Ideator, Startup, etc.
 

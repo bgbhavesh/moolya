@@ -65,7 +65,7 @@ export default class MlInfiniteScrollComposer extends Component {
         props: ({data: {loading, data, fetchMore}}) => ({
           loading,
           data,
-          fetchMore: (variables) => fetchMore({
+          fetchMore: (variables, pagination) => fetchMore({
             variables: variables?variables:{
               module: "activity"
             },
@@ -76,7 +76,7 @@ export default class MlInfiniteScrollComposer extends Component {
               }
               let response = {
                 count: fetchMoreResult.data.count,
-                data : prev.data.data.concat(fetchMoreResult.data.data.data)
+                data : pagination ? fetchMoreResult.data.data.data : prev.data.data.concat(fetchMoreResult.data.data.data)
               };
               // console.log(response);
               return {

@@ -185,10 +185,18 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
     let officeDetails = args.myOffice;
     let profile = new MlUserContext(userId).userProfileDetails(userId);
     let isFunder = _.isMatch(profile, {communityDefCode: 'FUN'})
-    if(isFunder){
+    if(isFunder)
+    {
+
+      // office beSpoke Service Card Definition
+      if(officeDetails.isBeSpoke)
+        scDefId = mlOfficeValidationRepo.createBspokeSCDef(officeDetails, profile, context);
+      else{
+        // search for office id from MLOfficeSCDef
+      }
+
       // office record creation
       officeId = mlOfficeValidationRepo.createOffice(officeDetails, profile, context);
-
       if (!officeId) {
         let code = 400;
         let response = new MlRespPayload().successPayload("Failed To Create Office", code);
@@ -223,14 +231,6 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
       let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'communityId', 'communityName']);
       let officeTransaction = _.extend(details, extendObj)
       MlResolver.MlMutationResolver['createOfficeTransaction'](obj, {officeTransaction}, context, info)
-
-      // office beSpoke Service Card Definition
-      if(officeDetails.isBeSpoke)
-        scDefId = mlOfficeValidationRepo.createBspokeSCDef(officeDetails, profile, context, officeId);
-      else{
-          // search for office id from MLOfficeSCDef
-      }
-
       scId = mlOfficeValidationRepo.createofficeServiceCard(officeDetails, profile, context, scDefId, officeId)
     }
   }catch (e){

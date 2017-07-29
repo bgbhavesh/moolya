@@ -16,8 +16,8 @@ const mlUsersClusterListConfig = new MlViewer.View({
   name: "usersList",
   viewType: MlViewerTypes.LIST,
   extraFields: [],
-  fields: ["registrationInfo.firstName","registrationInfo.lastName", "registrationInfo.chapterName"],
-  searchFields:["registrationInfo.firstName","registrationInfo.lastName", "registrationInfo.chapterName"],
+  fields: ["registrationInfo.firstName","registrationInfo.lastName", "registrationInfo.chapterName", "registrationInfo.userName"],
+  searchFields:["registrationInfo.firstName","registrationInfo.lastName", "registrationInfo.chapterName", "registrationInfo.userName"],
   throttleRefresh: true,
   pagination: true,
   sort: true,
@@ -46,6 +46,7 @@ const mlUsersClusterListConfig = new MlViewer.View({
                         registrationType
                         subChapterName
                         accountType
+                        userName
                        }
                     }
                   }

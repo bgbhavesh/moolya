@@ -204,10 +204,16 @@ export default function dynamicLinkHandler(path,params,queryParams){
         return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/addressBook`;
       }
     },
-    "users_connections": function (params, queryParams) {
+    users_portfolio: function (params, queryParams) {
       let dynamicParams = params || {};
       if (_.has(dynamicParams, "registrationId") && _.has(dynamicParams, "portfolioId")) {
-        return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/connections/ideator`;
+        return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/portfolio`;
+      }
+    },
+    users_connections: function (params, queryParams) {
+      let dynamicParams = params || {};
+      if (_.has(dynamicParams, "registrationId") && _.has(dynamicParams, "portfolioId")) {
+        return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/connections`;
       }
     },
     "users_favourites": function (params, queryParams) {

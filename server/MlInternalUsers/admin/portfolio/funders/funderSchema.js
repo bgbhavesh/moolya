@@ -368,7 +368,6 @@ let FunderPortfolioSchema = `
         fetchFunderTeam(portfoliodetailsId:String!):[Team]
         fetchFunderAreaOfInterest(portfoliodetailsId:String!):[AreaOfInterest]
         fetchFunderSuccessStories(portfoliodetailsId:String!):[SuccessStories]
-        fetchPortfolioClusterId(portfoliodetailsId:String):Portfoliodetails
         fetchfunderPortfolioService(portfoliodetailsId:String!):Services
     }
     
@@ -392,7 +391,7 @@ let supportedApi = [
 
   {api:'createFunderPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
   {api:'updateFunderPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
-  {api:'fetchPortfolioClusterId', actionName:'READ', moduleName:"PORTFOLIO"},
+
 
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

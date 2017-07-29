@@ -192,3 +192,8 @@ MlResolver.MlMutationResolver['rejectConnection'] = (obj,args, context, info) =>
     return response;
   }
 }
+
+MlResolver.MlQueryResolver['fetchConnectionsByPortfolio'] = (obj, args, context, info) => {
+  console.log(args)
+  return []
+}

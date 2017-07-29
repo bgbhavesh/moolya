@@ -184,8 +184,10 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
   }
 }
 
+/**
+ * @module [PHP website]
+ * */
 MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, info) => {
-
   var response = null;
   var registrationExist = MlRegistration.findOne({
     "registrationInfo.email": args.registration.email,
@@ -207,6 +209,28 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
     var emails = [{address: args.registration.userName, verified: false}];
     orderNumberGenService.assignRegistrationId(args.registration);
     args.registration.registrationDate = new Date();
+
+    /**
+     * attaching "clusterId, chapterId, subChapterId" if they are active
+     * @else giving null value to them
+     * */
+    let countryId = args.registration && args.registration.countryId ? args.registration.countryId : ""
+    let cityId = args.registration && args.registration.cityId ? args.registration.cityId : ""
+    let clusterData = mlDBController.findOne('MlClusters', {countryId: countryId, isActive: true}, context) || {}
+    let chapterData = mlDBController.findOne('MlChapters', {cityId: cityId, isActive: true}, context) || {}
+    let chapterId = chapterData && chapterData._id ? chapterData._id : ""
+    let subChapterData = mlDBController.findOne('MlSubChapters', {chapterId: chapterId, isActive: true}, context) || {}
+    args.registration.clusterId = clusterData && clusterData._id ? clusterData._id : "";
+    args.registration.clusterName = clusterData && clusterData.clusterName ? clusterData.clusterName : "";
+    args.registration.chapterId = chapterData && chapterData._id ? chapterData._id : "";
+    args.registration.chapterName = chapterData && chapterData.chapterName ? chapterData.chapterName : "";
+    args.registration.subChapterId = subChapterData && subChapterData._id ? subChapterData._id : "";
+    args.registration.subChapterName = subChapterData && subChapterData.subChapterName ? subChapterData.subChapterName : "";
+    args.registration.createdBy = args.registration.firstName + ' ' + args.registration.lastName
+
+    /**
+     * creating record in registration
+     * */
     response = mlDBController.insert('MlRegistration', {
       registrationInfo: args.registration,
       transactionId: args.registration.registrationId,

@@ -123,7 +123,9 @@ export default class MlServiceProviderViewAbout extends React.Component {
       this.setState({loading: false, data: response});
       this.fetchAnnotations();
     }
-    _.each(response.privateFields, function (pf) {
+    /** condition if private fields are not there*/
+    var fields = response?response.privateFields:[]
+    _.each(fields, function (pf) {
       $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }

@@ -59,7 +59,7 @@ class Step1 extends Component {
     // fetch states graphql query
 
     // fetch cities graphql query
-
+    const {onChangeSteps, isTaskComponent} = this.props;
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
@@ -68,7 +68,10 @@ class Step1 extends Component {
               <div className="form-group switch_wrap switch_names">
                 <span className="state_label">Service Card</span>
                 <label className="switch nocolor-switch">
-                  <input type="checkbox" defaultChecked />
+                  <input type="checkbox"
+                         value="1"
+                         checked={isTaskComponent}
+                         onChange={() => onChangeSteps()} />
                   <div className="slider"></div>
                 </label>
                 <span className="state_label acLabel">Task</span>

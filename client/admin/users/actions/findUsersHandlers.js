@@ -192,3 +192,28 @@ export async function findUserPortfolioActionHandler(registrationId) {
   const id = result.data.fetchPortfolioByReg;
   return id
 }
+
+export async function fetchIdeaActionHandler(portfolioId) {
+  const result = await client.query({
+    query: gql `
+            query($portfolioId:String){
+                fetchIdeas(portfolioId:$portfolioId) {
+                    _id
+                    portfolioId
+                    title
+                    isIdeaTitlePrivate
+                    description
+                    isIdeaPrivate
+                    userId
+                    isActive
+                }
+            }
+        `,
+    variables: {
+      portfolioId: portfolioId
+    },
+    forceFetch: true
+  })
+  const ideas = result.data.fetchIdeas;
+  return ideas
+}

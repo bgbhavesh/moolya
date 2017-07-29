@@ -36,6 +36,6 @@
     "googleApiKey": "AIzaSyAd7VZpzSCdkOrkgdhCbMm3JYqwGap0Pa4",
     "fromEmailAddr":"noreply@moolya.in",
     "isEmailDomainCheckEnabled":true,
-    "isAuditEnabled":false
+    "isAuditEnabled":true
   }
 }

@@ -547,6 +547,18 @@ if (Meteor.isServer) {
                   "subMenuMappingId" : "users_addressBook"
                 },
                 {
+                  "link": "/admin/users/portfolio",
+                  "name": "Portfolio",
+                  "uniqueId": "users_portfolio",
+                  "isLink": true,
+                  "isMenu": true,
+                  "image": "",
+                  "dynamicLink": true,
+                  "dynamicLinkHandler": "",
+                  "subMenusId": "users_cluster",
+                  "subMenuMappingId": "users_portfolio"
+                },
+                {
                   "link" : "/admin/users/connections",
                   "name" : "Connections",
                   "uniqueId" : "users_connections",
@@ -556,81 +568,84 @@ if (Meteor.isServer) {
                   "dynamicLink" : true,
                   "dynamicLinkHandler" : "",
                   "subMenusId" : "users_cluster",
-                  "subMenuMappingId" : "users_connections",
-                  "subMenu" : [
-                    {
-                      "link" : "/admin/users/connections/ideator",
-                      "name" : "Ideator",
-                      "uniqueId" : "users_connectionsIdeator",
-                      "isLink" : true,
-                      "isMenu" : true,
-                      "image" : "",
-                      "dynamicLink" : true,
-                      "dynamicLinkHandler" : "",
-                      "subMenuMappingId" : "users_connectionsIdeator",
-                      "subMenusId" : "users_connections"
-                    },
-                    {
-                      "link" : "/admin/users/connections/startup",
-                      "name" : "Startup",
-                      "uniqueId" : "users_connectionsStartup",
-                      "isLink" : true,
-                      "isMenu" : true,
-                      "image" : "",
-                      "dynamicLink" : true,
-                      "dynamicLinkHandler" : "",
-                      "subMenuMappingId" : "users_connectionsStartup",
-                      "subMenusId" : "users_connections"
-                    },
-                    {
-                      "link" : "/admin/users/connections/investor",
-                      "name" : "Investor",
-                      "uniqueId" : "users_connectionsinvestor",
-                      "isLink" : true,
-                      "isMenu" : true,
-                      "image" : "",
-                      "dynamicLink" : true,
-                      "dynamicLinkHandler" : "",
-                      "subMenuMappingId" : "users_connectionsInvestor",
-                      "subMenusId" : "users_connections"
-                    },
-                    {
-                      "link" : "/admin/users/connections/serviceProvider",
-                      "name" : "Service Provider",
-                      "uniqueId" : "users_connectionsServiceProvider",
-                      "isLink" : true,
-                      "isMenu" : true,
-                      "image" : "",
-                      "dynamicLink" : true,
-                      "dynamicLinkHandler" : "",
-                      "subMenuMappingId" : "users_connectionsServiceProvider",
-                      "subMenusId" : "users_connections"
-                    },
-                    {
-                      "link" : "/admin/users/connections/company",
-                      "name" : "Company",
-                      "uniqueId" : "users_connectionsCompany",
-                      "isLink" : true,
-                      "isMenu" : true,
-                      "image" : "",
-                      "dynamicLink" : true,
-                      "dynamicLinkHandler" : "",
-                      "subMenuMappingId" : "users_connectionsCompany",
-                      "subMenusId" : "users_connections"
-                    },
-                    {
-                      "link" : "/admin/users/connections/institution",
-                      "name" : "Institution",
-                      "uniqueId" : "users_connectionsInstitution",
-                      "isLink" : true,
-                      "isMenu" : true,
-                      "image" : "",
-                      "dynamicLink" : true,
-                      "dynamicLinkHandler" : "",
-                      "subMenuMappingId" : "users_connectionsInstitution",
-                      "subMenusId" : "users_connections"
-                    }
-                  ]
+                  "subMenuMappingId" : "users_connections"
+
+                  /**moving the static menus to the tabs*/
+
+                  // "subMenu" : [
+                  //   {
+                  //     "link" : "/admin/users/connections/ideator",
+                  //     "name" : "Ideator",
+                  //     "uniqueId" : "users_connectionsIdeator",
+                  //     "isLink" : true,
+                  //     "isMenu" : true,
+                  //     "image" : "",
+                  //     "dynamicLink" : true,
+                  //     "dynamicLinkHandler" : "",
+                  //     "subMenuMappingId" : "users_connectionsIdeator",
+                  //     "subMenusId" : "users_connections"
+                  //   },
+                  //   {
+                  //     "link" : "/admin/users/connections/startup",
+                  //     "name" : "Startup",
+                  //     "uniqueId" : "users_connectionsStartup",
+                  //     "isLink" : true,
+                  //     "isMenu" : true,
+                  //     "image" : "",
+                  //     "dynamicLink" : true,
+                  //     "dynamicLinkHandler" : "",
+                  //     "subMenuMappingId" : "users_connectionsStartup",
+                  //     "subMenusId" : "users_connections"
+                  //   },
+                  //   {
+                  //     "link" : "/admin/users/connections/investor",
+                  //     "name" : "Investor",
+                  //     "uniqueId" : "users_connectionsinvestor",
+                  //     "isLink" : true,
+                  //     "isMenu" : true,
+                  //     "image" : "",
+                  //     "dynamicLink" : true,
+                  //     "dynamicLinkHandler" : "",
+                  //     "subMenuMappingId" : "users_connectionsInvestor",
+                  //     "subMenusId" : "users_connections"
+                  //   },
+                  //   {
+                  //     "link" : "/admin/users/connections/serviceProvider",
+                  //     "name" : "Service Provider",
+                  //     "uniqueId" : "users_connectionsServiceProvider",
+                  //     "isLink" : true,
+                  //     "isMenu" : true,
+                  //     "image" : "",
+                  //     "dynamicLink" : true,
+                  //     "dynamicLinkHandler" : "",
+                  //     "subMenuMappingId" : "users_connectionsServiceProvider",
+                  //     "subMenusId" : "users_connections"
+                  //   },
+                  //   {
+                  //     "link" : "/admin/users/connections/company",
+                  //     "name" : "Company",
+                  //     "uniqueId" : "users_connectionsCompany",
+                  //     "isLink" : true,
+                  //     "isMenu" : true,
+                  //     "image" : "",
+                  //     "dynamicLink" : true,
+                  //     "dynamicLinkHandler" : "",
+                  //     "subMenuMappingId" : "users_connectionsCompany",
+                  //     "subMenusId" : "users_connections"
+                  //   },
+                  //   {
+                  //     "link" : "/admin/users/connections/institution",
+                  //     "name" : "Institution",
+                  //     "uniqueId" : "users_connectionsInstitution",
+                  //     "isLink" : true,
+                  //     "isMenu" : true,
+                  //     "image" : "",
+                  //     "dynamicLink" : true,
+                  //     "dynamicLinkHandler" : "",
+                  //     "subMenuMappingId" : "users_connectionsInstitution",
+                  //     "subMenusId" : "users_connections"
+                  //   }
+                  // ]
                 },
                 {
                   "link" : "/admin/users/favourites/ideator",
@@ -1369,6 +1384,25 @@ if (Meteor.isServer) {
             },
             //       "subMenu":[
             //
+          ]
+        },
+        {
+          "image": "/images/settings_icon.png",
+          "link": "/admin/packages/officeList",
+          "name": "Packages",
+          "uniqueId": "packages",
+          "isLink": true,
+          "isMenu": true,
+          "subMenu":[
+            {
+              "link": "/admin/packages/officeList",
+              "name":"Office Packages",
+              "uniqueId": "packages_office",
+              "isLink": true,
+              "isMenu": true,
+              "subMenu":[]
+
+            }
           ]
         },
         {

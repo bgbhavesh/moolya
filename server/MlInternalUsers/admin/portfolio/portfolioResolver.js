@@ -179,7 +179,7 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                       break;
                   }
                 //triggered on successfull portfolio creation
-                  MlEmailNotification.onPortfolioConfirmation(userDetails);
+                  //MlEmailNotification.onPortfolioConfirmation(userDetails);
 
               }
 
@@ -361,6 +361,17 @@ MlResolver.MlQueryResolver['fetchPortfolioByReg'] = (obj, args, context, info) =
     response = mlDBController.findOne('MlPortfolioDetails', {registrationId: args.registrationId}, context) || {}
   }
   return response
+}
+
+/**
+ * @params portfolioId
+ * @moduleUsage[PORTFOLIO && principleTeam in funder portfolio]
+ * */
+MlResolver.MlQueryResolver['fetchPortfolioClusterId'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let portfolio = MlPortfolioDetails.findOne({"_id": args.portfoliodetailsId}) || {}
+      return portfolio;
+  }
 }
 
 

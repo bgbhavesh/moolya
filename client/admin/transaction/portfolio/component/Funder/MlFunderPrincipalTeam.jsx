@@ -6,7 +6,7 @@ import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../client/admi
 import _ from "lodash";
 import {multipartASyncFormHandler} from "../../../../../../client/commons/MlMultipartFormAction";
 import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../actions/findPortfolioFunderDetails";
-import {fetchClusterIdActionHandler} from '../../actions/findClusterIdForPortfolio'
+import {fetchPortfolioActionHandler} from '../../actions/findClusterIdForPortfolio'
 import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
@@ -61,7 +61,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
     this.fetchClusterId();
   }
   async fetchClusterId() {
-    const response = await fetchClusterIdActionHandler(this.props.portfolioDetailsId);
+    const response = await fetchPortfolioActionHandler(this.props.portfolioDetailsId);
     if (response) {
       this.setState({loading: false, clusterId: response.clusterId});
     }

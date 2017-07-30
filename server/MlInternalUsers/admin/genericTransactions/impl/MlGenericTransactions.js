@@ -83,7 +83,12 @@ class MlGenericTransactions{
           /*
            Checking if roleId of highest role has hierarchy
            */
-          hierarchyAssignment = mlDBController.find('MlHierarchyAssignments',{'clusterId':clusterId,'teamStructureAssignment':{$elemMatch: {roleId:defaultRole.roleId}}}).fetch();
+          hierarchyAssignment = mlDBController.find('MlHierarchyAssignments',{
+            "$and":[
+              {'clusterId':clusterId},
+              {'teamStructureAssignment':{$elemMatch: {roleId:defaultRole.roleId}}}
+            ]
+          }).fetch();
       }
 
       /*

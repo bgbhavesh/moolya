@@ -267,6 +267,17 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
 MlResolver.MlQueryResolver["fetchMyAppointment"] = (obj, args, context, info) => {
   let userId = context.userId;
   let profileId = new MlUserContext().userProfileDetails(userId).profileId;
-  let response = mlDBController.find('MlAppointments', { 'provider.userId': userId, 'provider.profileId': profileId }, context).fetch();
-  return response;
+  let appointments = mlDBController.aggregate( 'MlAppointments', [
+    {
+      $lookup: {
+        from: "mlAppointmentMembers",
+        localField: "appointmentId",
+        foreignField: "appointmentId",
+        as: "members"
+      }
+    },
+    { "$unwind": "$members" },
+    { "$match": {'members.userId':userId, 'members.profileId':profileId } }
+  ]);
+  return appointments;
 };

@@ -84,6 +84,11 @@ MlResolver.MlMutationResolver['createBeSpokeService'] = (obj, args, context, inf
   return mlServiceCardRepo.createBespokeServiceCardDefinition(args.Services, portfolioId, context);
 };
 
+MlResolver.MlMutationResolver['updateBeSpokeService'] = (obj, args, context, info) => {
+  return mlServiceCardRepo.updateBespokeServiceCardDefinition(args.Services, context);
+};
+
+
 MlResolver.MlMutationResolver['createService'] = (obj, args, context, info) => {
   return mlServiceCardRepo.createServiceCardDefinition(args.Services, context);
   // if (context.url.indexOf("explore") > 0)
@@ -111,82 +116,13 @@ MlResolver.MlMutationResolver['createService'] = (obj, args, context, info) => {
 
 MlResolver.MlMutationResolver['updateService'] = (obj, args, context, info) => {
   return mlServiceCardRepo.updateServiceCardDefinition(args.Services, args.serviceId, context)
-  // if(!_.isEmpty(args.Services)) {
-  //   let oldService = mlDBController.findOne('MlService', {_id: args.serviceId}, context);
-  //   let service;
-  //   if (oldService) {
-  //     let query = {
-  //       transactionId: oldService.transactionId,
-  //       isCurrentVersion: true
-  //     };
-  //     service = mlDBController.findOne('MlService', query, context);
-  //   }
-  //   if (service) {
-  //     if(args.Services.tasks){
-  //       let taskIds = args.Services.tasks.map(function (task) { return task.id; });
-  //       let tasks = mlDBController.find('MlTask', {_id: { $in : taskIds } }, context).fetch();
-  //       let taskAmount = 0;
-  //       let noOfSession = 0;
-  //       let taskDerivedAmount = 0;
-  //       tasks.forEach(function (task) {
-  //         noOfSession += task.noOfSession ? task.noOfSession : 0;
-  //         taskAmount += task.payment && task.payment.amount ? task.payment.amount : 0;
-  //         taskDerivedAmount += task.payment && task.payment.derivedAmount ? task.payment.derivedAmount : 0;
-  //       });
-  //       let totalMinutes = tasks.reduce((sum, value) => {
-  //         let duration = value.duration ? value.duration : {};
-  //         return sum + (duration.hours ? duration.hours : 0)*60 + ( duration.minutes ? duration.minutes : 0 ) ;
-  //       }, 0);
-  //       let duration = {
-  //         hours: parseInt(totalMinutes/60),
-  //         minutes: totalMinutes % 60
-  //       };
-  //       args.Services.duration = args.Services.duration ? args.Services.duration : {};
-  //       args.Services.duration['hours'] = duration.hours;
-  //       args.Services.duration['minutes'] = duration.minutes;
-  //       args.Services.noOfSession = noOfSession;
-  //       args.Services.payment = args.Services.payment ? args.Services.payment : {};
-  //       args.Services.payment["tasksAmount"] = taskAmount;
-  //       args.Services.payment["tasksDiscount"] = taskAmount - taskDerivedAmount;
-  //       args.Services.payment["tasksDerived"] = taskDerivedAmount;
-  //       args.Services.payment["amount"] = taskDerivedAmount;
-  //     }
-  //     args.Services.userId = service.userId;
-  //     args.Services.updatedAt = new Date();
-  //     service.isCurrentVersion = false;
-  //     args.Services.transactionId = service.transactionId;
-  //     args.Services.versions = service.versions + 0.001;
-  //     args.Services.isCurrentVersion = true;
-  //     let result = mlDBController.update('MlService', {_id: service._id}, service, {$set: 1}, context);
-  //     for(key in service){
-  //       if ((typeof args.Services[key] === 'undefined' || args.Services[key] === null) && key !== 'createdAt' && key !== '_id') {
-  //         args.Services[key] = service[key];
-  //       }
-  //     }
-  //     let newVersionServer = mlDBController.insert('MlService', args.Services , context);
-  //     if(newVersionServer){
-  //       let code = 200;
-  //       let response = new MlRespPayload().successPayload(result, code);
-  //       return response
-  //     }
-  //   } else {
-  //     let code = 404;
-  //     let response = new MlRespPayload().successPayload('Service not found', code);
-  //     return response
-  //   }
-  // } else {
-  //   let code = 400;
-  //   let response = new MlRespPayload().successPayload('Data are required', code);
-  //   return response
-  // }
 }
 
 MlResolver.MlMutationResolver['createServiceCardOrder'] = (obj, args, context, info) => {
   return mlServiceCardRepo.createServiceCardOrder(args, context)
 }
 
-MlResolver.MlMutationResolver['updateServiceCardOrder'] = (obj, args, context, info) =>
-{
+MlResolver.MlMutationResolver['updateServiceCardOrder'] = (obj, args, context, info) => {
     var ret = mlServiceCardRepo.updateServiceCardOrder(args, context)
     if(!ret.success){
       return ret;
@@ -249,7 +185,6 @@ MlResolver.MlQueryResolver['fetchTasksAmount'] = (obj, args, context, info) => {
   // let profileId = args.profileId
   let temp = [];
   let details = mlDBController.find('MlService', {'userId':context.userId, 'profileId': args.profileId}, context).fetch()
-
   details.map(function(val){
   if (val.tasks) {
     val.tasks.map(function(data) {

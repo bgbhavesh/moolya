@@ -315,6 +315,7 @@ let service=`
    type Mutation {
         createService(Services:service):response
         createBeSpokeService(Services:service):response
+        updateBeSpokeService(Services:service):response
         updateService(serviceId:String,Services:service):response
         updateServiceAdmin(serviceId:String,Services:service):response
         createServiceCardOrder(serviceId: String!, taskDetails: [tasks]):response

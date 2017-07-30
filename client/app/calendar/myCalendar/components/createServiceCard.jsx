@@ -23,6 +23,7 @@ import _ from 'lodash';
 // import custom method(s) and component(s)
 import StepZilla from '../../../../commons/components/stepzilla/StepZilla';
 import Step1 from './Step1';
+import Step3 from './Step3'
 import CalenderHead from './calendarHead';
 
 // import MlAppServiceSelectTask from './MlAppServiceSelectTask';
@@ -97,7 +98,7 @@ export default class MlAppServiceManageSchedule extends Component {
       },
       {
         name: 'Terms & Conditions',
-        // component: <MlAppServiceTermsAndConditions />,
+        component: <Step3/>,
         icon: <span className="ml ml-payments"></span>
       },
       {

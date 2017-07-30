@@ -34,6 +34,7 @@ export default class AppCalendarDayView extends React.Component{
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
+        <InlineCalender/>
           <div className="col-md-12">
             <ul className="cal_tabs act_tab">
               <li className="col-md-4 nopadding-left">

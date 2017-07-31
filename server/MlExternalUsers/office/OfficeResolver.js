@@ -181,6 +181,7 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
   try {
     let userId = context.userId;
     let scDefId = "";
+    let frequencyType = "";
     let scId = "";
     let officeDetails = args.myOffice;
     let profile = new MlUserContext(userId).userProfileDetails(userId);
@@ -189,8 +190,11 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
     {
 
       // office beSpoke Service Card Definition
-      if(officeDetails.isBeSpoke)
-        scDefId = mlOfficeValidationRepo.createBspokeSCDef(officeDetails, profile, context);
+      if(officeDetails.isBeSpoke){
+        var ret = mlOfficeValidationRepo.createBspokeSCDef(officeDetails, profile, context);
+        scDefId = ret.officeDefId;
+        frequencyType = ret.frequencyType;
+      }
       else{
         // search for office id from MLOfficeSCDef
       }
@@ -231,7 +235,7 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
       let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'communityId', 'communityName']);
       let officeTransaction = _.extend(details, extendObj)
       MlResolver.MlMutationResolver['createOfficeTransaction'](obj, {officeTransaction}, context, info)
-      scId = mlOfficeValidationRepo.createofficeServiceCard(officeDetails, profile, context, scDefId, officeId)
+      scId = mlOfficeValidationRepo.createofficeServiceCard(officeDetails, profile, context, scDefId, officeId, frequencyType)
     }
   }catch (e){
     let code = 400;

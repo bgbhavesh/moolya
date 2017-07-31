@@ -34,7 +34,6 @@ export default class MlOfficePackageList extends Component{
     ]
     return(
       <div className="admin_main_wrap">
-        <h2>BackendUsers</h2>
         <MlListViewContainer {...mlOfficePackageListConfig} />
       </div>
     )

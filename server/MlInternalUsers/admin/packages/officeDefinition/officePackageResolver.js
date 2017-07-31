@@ -7,13 +7,74 @@ import moment from 'moment'
 import _ from 'lodash'
 
 MlResolver.MlMutationResolver['createOfficePackage'] = (obj, args, context, info) => {
+  if(_.isEmpty(args.package)){
+    return new MlRespPayload().errorPayload('Error in creating office package', 400)
+  }
+  try {
+    var office = args.package
+    orderNumberGenService.createOfficeSCcode(office)
+    mlDBController.insert('MlOfficeSCDef', office, context)
+  }catch (e){
+    return new MlRespPayload().errorPayload(e.message, 400)
+  }
+  return new MlRespPayload().successPayload('Office Package Created Successfully', 200)
 }
 
 MlResolver.MlMutationResolver['updateOfficePackage'] = (obj, args, context, info) => {
+  if(_.isEmpty(args.packageId) || _.isEmpty(args.package)){
+    return new MlRespPayload().errorPayload('Invalid Office', 400)
+  }
+
+  try {
+    var isOffice = mlDBController.findOne('MlOfficeSCDef', {_id:args.packageId}, context)
+    if(!isOffice){
+      return new MlRespPayload().errorPayload('Invalid Office', 400)
+    }
+
+    var office = args.package;
+
+    //office['_id'] = args.packageId;
+
+    var result = mlDBController.update('MlOfficeSCDef', args.packageId, office, {$set:true, upsert:true}, context)
+    if(!result){
+      return new MlRespPayload().errorPayload('Error in updating office package', 400)
+    }
+  }catch (e){
+    return new MlRespPayload().errorPayload(e.message, 400)
+  }
+
+  return new MlRespPayload().successPayload('Office Package Updated Successfully', 200)
 }
 
 MlResolver.MlQueryResolver['fetchOfficePackages'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchOfficePackageById'] = (obj, args, context, info) => {
+  var office;
+  if(!args.officePackageId){
+    return office
+  }
+
+  try {
+    office = mlDBController.findOne('MlOfficeSCDef', {_id:args.officePackageId}, context)
+    // var frequencyType = mlDBController.findOne('MlFrequencyType', {_id:office.frequencyType}, context)
+    // if(!frequencyType)
+    //   return;
+    // office.frequencyType = frequencyType.displayName
+    //
+    // var cardType = mlDBController.findOne('MlServiceCardType', {_id:office.cardType}, context)
+    // if(!cardType)
+    //   return;
+    // office.cardType = cardType.displayName
+    //
+    // var accountType = mlDBController.findOne('MlAccountTypes', {_id:office.accountType}, context)
+    // if(!accountType)
+    //   return;
+    // office.accountType = accountType.accountName
+
+  }catch (e){
+    return office
+  }
+
+  return office
 }

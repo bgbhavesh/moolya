@@ -32,8 +32,18 @@ export default class MlAppOngoingMyAppointment extends React.Component {
    * @param id :: current service id
    */
   viewAppointment(appointment) {
+    let data = {
+      _id: appointment._id,
+      seeker: appointment.client,
+      provider: appointment.provider,
+      serviceId: appointment.appointmentInfo.resourceId,
+      serviceName: appointment.appointmentInfo.serviceName,
+      sessionId: appointment.appointmentInfo.sessionId,
+      startDate: appointment.startDate,
+      endDate: appointment.endDate
+    };
     this.setState({
-      selectedAppointment: appointment,
+      selectedAppointment: data,
       isSelectedAppointment: true
     });
   }
@@ -53,7 +63,7 @@ export default class MlAppOngoingMyAppointment extends React.Component {
                   <div className="list_block list_block_intrests notrans" onClick={()=>that.viewAppointment(appointment)}>
                     <div className="hex_outer"><img src="/images/valuation.png"/></div>
                     <div className="task-status pending"></div>
-                    <h3>{appointment.serviceName}</h3>
+                    <h3>{ appointment.appointmentInfo ?  appointment.appointmentInfo.serviceName : ''}</h3>
                   </div>
                 </div>
               )

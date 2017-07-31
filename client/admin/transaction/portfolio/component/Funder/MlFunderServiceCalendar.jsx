@@ -5,6 +5,7 @@ import React, {Component} from "react";
 import Calender from '../../../../../commons/calendar/calendar'
 import { fetchServiceCalendarActionHandler, fetchMyCalendarActionHandler, fetchSessionDayActionHandler, bookUserServiceCardAppointmentActionHandler } from '../../../../../app/calendar/myCalendar/actions/fetchMyCalendar';
 import MlAppMyCalendarDayComponent from '../../../../../app/calendar/myCalendar/components/dayComponent';
+import _ from "lodash";
 
 export default class MlAppMyCalendar extends Component {
 
@@ -57,8 +58,16 @@ export default class MlAppMyCalendar extends Component {
     this.setState({showDetailView:response})
   }
 
-  slots(response){
-    this.setState({slotDetails:response})
+  slots(response, date){
+    //console.log('--date--', date)
+    let temp = _.clone(response);
+    let x = temp.map(function(addDate){
+      delete addDate['__typename'];
+      addDate.currentDate = date;
+      return addDate;
+    });
+    //console.log('--slotTimings--', x);
+    this.setState({slotDetails:x})
   }
 
   bookSlot(timeSlot, index){
@@ -112,6 +121,7 @@ export default class MlAppMyCalendar extends Component {
               <h3>{slot.slotTime}</h3>
               <div className="list_icon"><span className="ml ml-moolya-symbol"></span></div>
               <div className="block_footer">
+                <span>{slot.currentDate}</span>
                 <span>{slot.status === 0?"Available":slot.status===1?"Filling Fast":slot.status===2?"Busy":""}</span>
               </div>
             </div>

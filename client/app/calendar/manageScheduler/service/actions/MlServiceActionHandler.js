@@ -23,6 +23,25 @@ export async function createBeSpokeServiceActionHandler (Services) {
   return services
 }
 
+export async function updateBeSpokeServiceActionHandler (Services) {
+  const result = await appClient.mutate({
+    mutation: gql`
+    mutation($Services: service){
+        updateBeSpokeService(Services:$Services){
+        success
+        code
+        result
+      }
+      }
+    `,
+    variables: {
+      Services
+    }
+  });
+  const services = result.data.updateBeSpokeService;
+  return services
+}
+
 
 export async function createServiceActionHandler (Services) {
   const result = await appClient.mutate({

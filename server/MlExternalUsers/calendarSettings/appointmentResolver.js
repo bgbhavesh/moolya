@@ -131,30 +131,128 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
   let hours = args.userServiceCardAppointmentInfo.hours; //9;
   let minutes = args.userServiceCardAppointmentInfo.minutes; // 0;
   let appointment = MlAppointment.bookAppointment('appointmentId', taskId, sessionId, hours, minutes, day, month, year);
-  if(appointment.success){
+  if(appointment.success) {
+    let taskDoc = mlDBController.findOne('MlTask', taskId, context);
+    let session = taskDoc.session.find(function (data) {
+        return data.sessionId == sessionId;
+    });
+
+    session.activities = session.activities ? session.activities : [];
+
+    let activities = mlDBController.find('MlActivity', { _id : { $in : session.activities } }, context).fetch();
+
+    let attendees = activities.reduce(function(attendee, data) {
+      data.teams = data.teams ? data.teams : [];
+      data.teams.forEach(function (team) {
+        team.users = team.users ? team.users : [];
+        team.users = team.users.filter(function (user) {
+          let isFind = attendee.find(function (data) {
+            return user.profileId == data.profileId && user.userId == user.profileId;
+          });
+          if (isFind) {
+            return false;
+          } else {
+            return true;
+          }
+        });
+        attendee = attendee.concat(team.users);
+      });
+      return attendee;
+    }, []);
+
     let userId = context.userId;
     let profileId = new MlUserContext().userProfileDetails(userId).profileId;
     let service = mlDBController.findOne('MlServiceCardDefinition', serviceId, context);
     let appointmentData = {
-      seeker: {
-        userId: userId,
-        profileId: profileId
-      },
+      appointmentType: 'SERVICE-TASK',
+      startDate: appointment.start,
+      endDate: appointment.end,
+      duration: session.duration ? session.duration : {},
+      timeZone: '+05:30', //to do
       provider: {
         userId: service.userId,
         profileId: service.profileId
       },
-      serviceId: SCOrderDetails.serviceId,
-      serviceName: SCOrderDetails.serviceName,
-      sessionId: sessionId,
-      startDate: appointment.start,
-      endDate: appointment.end,
-      isActive: true,
+      client: {
+        userId: userId,
+        profileId: profileId
+      },
+      appointmentInfo: {
+        resourceType: 'ServiceCard',
+        resourceId: SCOrderDetails.serviceId,
+        serviceCardId: SCOrderDetails.serviceId,
+        serviceName: SCOrderDetails.serviceName,
+        taskId: taskId,
+        sessionId: sessionId,
+        serviceOrderId: orderId
+      },
+      status: 'Pending',
+      isCancelled: false,
+      isSelf: false,
+      isRescheduled: false,
       isInternal: false,
       createdAt: new Date()
     };
+
+    orderNumberGenService.createAppointmentId(appointmentData);
+
     let result = mlDBController.insert('MlAppointments', appointmentData, context);
+
     if(result){
+
+      /**
+       * Insert appointment member info
+       */
+      attendees.forEach(function (attendee) {
+        let attendeeData = {
+          appointmentId: appointmentData.appointmentId,
+          appointmentUniqueId: result,
+          userId: attendee.userId,
+          profileId: attendee.profileId,
+          status: attendee.isMandatory ? 'Accepted' : 'Pending',
+          isProvider: false,
+          isClient: false,
+          isAttendee: true,
+          createdAt: new Date(),
+          createdBy: userId
+        };
+        let resp = mlDBController.insert('MlAppointmentMembers', attendeeData, context);
+      });
+
+      /**
+       * Insert client data as appointment member
+       */
+      let clientData = {
+        appointmentId: appointmentData.appointmentId,
+        appointmentUniqueId: result,
+        userId: service.userId,
+        profileId: service.profileId,
+        status: 'Accepted',
+        isProvider: false,
+        isClient: true,
+        isAttendee: false,
+        createdAt: new Date(),
+        createdBy: userId
+      };
+      let resp = mlDBController.insert('MlAppointmentMembers', clientData, context);
+
+      /**
+       * Insert provider data as appointment member
+       */
+      let providerData = {
+        appointmentId: appointmentData.appointmentId,
+        appointmentUniqueId: result,
+        userId: userId,
+        profileId: profileId,
+        status: 'Accepted',
+        isProvider: true,
+        isClient: false,
+        isAttendee: false,
+        createdAt: new Date(),
+        createdBy: userId
+      };
+      resp = mlDBController.insert('MlAppointmentMembers', providerData, context);
+
       let code = 200;
       let response = new MlRespPayload().successPayload("Appointment book successfully", code);
       return response;
@@ -169,6 +267,17 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
 MlResolver.MlQueryResolver["fetchMyAppointment"] = (obj, args, context, info) => {
   let userId = context.userId;
   let profileId = new MlUserContext().userProfileDetails(userId).profileId;
-  let response = mlDBController.find('MlAppointments', { 'provider.userId': userId, 'provider.profileId': profileId }, context).fetch();
-  return response;
+  let appointments = mlDBController.aggregate( 'MlAppointments', [
+    {
+      $lookup: {
+        from: "mlAppointmentMembers",
+        localField: "appointmentId",
+        foreignField: "appointmentId",
+        as: "members"
+      }
+    },
+    { "$unwind": "$members" },
+    { "$match": {'members.userId':userId, 'members.profileId':profileId } }
+  ]);
+  return appointments;
 };

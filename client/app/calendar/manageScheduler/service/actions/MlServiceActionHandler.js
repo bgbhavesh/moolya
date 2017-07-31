@@ -425,3 +425,22 @@ export async function updateGoLiveServiceActionHandler (serviceId) {
   const services = result.data.updateServiceGoLive;
   return services
 }
+
+export async function updateReviewServiceActionHandler (serviceId) {
+  const result = await appClient.mutate({
+    mutation: gql`
+    mutation($serviceId: String!){
+        updateServiceSendReview(serviceId:$serviceId){
+        success
+        code
+        result
+      }
+      }
+    `,
+    variables: {
+      serviceId
+    }
+  });
+  const services = result.data.updateServiceSendReview;
+  return services
+}

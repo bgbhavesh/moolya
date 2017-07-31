@@ -28,7 +28,8 @@ import {
   updateServiceActionHandler,
   fetchTasksAmountActionHandler,
   updateGoLiveServiceActionHandler,
-  fetchTaskDetailsForServiceCard
+  fetchTaskDetailsForServiceCard,
+  updateReviewServiceActionHandler
 } from '../actions/MlServiceActionHandler';
 import {fetchTaskDetailsActionHandler} from '../../task/actions/fetchTaskDetails';
 
@@ -952,6 +953,15 @@ class MlAppServiceManageSchedule extends Component {
     const resp = await updateGoLiveServiceActionHandler(this.serviceId);
     this.showResponseMsg(resp, 'Updated Successfully');
   }
+
+  /**
+   * Method :: sendReviewService
+   * Desc :: Send to admin for review
+   */
+  async sendReviewService() {
+    const resp = await updateReviewServiceActionHandler(this.serviceId);
+    this.showResponseMsg(resp, 'Updated Successfully');
+  }
   /**
    * Method :: React render
    * Desc :: Showing html page
@@ -960,23 +970,29 @@ class MlAppServiceManageSchedule extends Component {
   render() {
     const isViewMode = this.props.viewMode;
     let {serviceBasicInfo} = this.state;
+    const isApproved = serviceBasicInfo.isApproved;
     let _this = this;
     let appActionConfig = [
       {
         showAction: true,
-        actionName: isViewMode ? 'book' : 'save',
-        handler: async(event) => this.props.handler(isViewMode ? _this.props.bookService.bind(this, true) : this.saveService.bind(this))
+        actionName: 'save',
+        handler: async(event) => _this.props.handler(isViewMode ? _this.props.bookService.bind(this, true) : _this.saveService.bind(this))
       },
       {
-        showAction: serviceBasicInfo.isApproved ? true : false,
+        showAction: true,
+        actionName: 'review',
+        handler: async(event) => _this.props.handler(_this.sendReviewService.bind(this))
+      },
+      {
+        showAction: isApproved ? true : false,
         actionName: 'golive',
-        handler: async(event) => this.props.handler(_this.setGoLiveService.bind(this))
+        handler: async(event) => _this.props.handler(_this.setGoLiveService.bind(this))
       },
       {
         showAction: true,
         actionName: 'exit',
         handler: async(event) => {
-          FlowRouter.go('/app/calendar/manageSchedule/' + this.profileId + '/serviceList')
+          FlowRouter.go('/app/calendar/manageSchedule/' + _this.profileId + '/serviceList')
         }
       }
     ];

@@ -51,6 +51,13 @@ let appointment=`
     serviceOrderId: String
   }
   
+  type AllProfileAppointment {
+    date: String
+    userId: String
+    profileId: String
+    count: String
+  }
+  
   type Appointment {
     _id: String
     client: AppointmentUser
@@ -62,6 +69,7 @@ let appointment=`
   
   type Query {   
      fetchMyAppointment: [Appointment]
+     fetchAllProfileAppointmentCounts: [AllProfileAppointment]
   }
   
   type Mutation {

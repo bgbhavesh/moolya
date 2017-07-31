@@ -116,6 +116,7 @@ let service=`
     expectedInput : String
     expectedOutput : String
     isApproved: Boolean
+    isLive: Boolean
     finalAmount:Int
   }
   

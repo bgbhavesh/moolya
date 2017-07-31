@@ -59,13 +59,14 @@ export default class MlAppMyCalendar extends Component {
   }
 
   slots(response, date){
-    console.log('--date--', date)
+    //console.log('--date--', date)
     let temp = _.clone(response);
     let x = temp.map(function(addDate){
-      delete addDate['__typename']
+      delete addDate['__typename'];
       addDate.currentDate = date;
-    })
-    console.log('--slotTimings--', x)
+      return addDate;
+    });
+    //console.log('--slotTimings--', x);
     this.setState({slotDetails:x})
   }
 

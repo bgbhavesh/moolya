@@ -3,6 +3,7 @@
  */
 import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
+import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 // import _ from "lodash";
 var _ = require('lodash')
 // import MlUserContext from "../../../../MlExternalUsers/mlUserContext";
@@ -54,6 +55,8 @@ MlResolver.MlMutationResolver['updateServiceProviderPortfolio'] = (obj, args, co
 
         let ret = mlDBController.update('MlServiceProviderPortfolio', {"portfolioDetailsId": args.portfoliodetailsId}, serviceProviderPortfolio, {$set: true}, context)
         if (ret) {
+          let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId})
+          MlEmailNotification.onPortfolioUpdate(details);
           let code = 200;
           let response = new MlRespPayload().successPayload("Updated Successfully", code);
           return response;

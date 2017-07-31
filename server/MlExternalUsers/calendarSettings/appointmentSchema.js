@@ -41,13 +41,21 @@ let appointment=`
     profileId: String
   }
   
+  type AppointmentInfo {
+    resourceType: String
+    resourceId: String
+    serviceCardId: String
+    serviceName: String
+    taskId: String
+    sessionId: String
+    serviceOrderId: String
+  }
+  
   type Appointment {
     _id: String
-    seeker: AppointmentUser
+    client: AppointmentUser
     provider: AppointmentUser
-    serviceId: String
-    serviceName: String
-    sessionId: String
+    appointmentInfo: AppointmentInfo
     startDate: Date
     endDate: Date
   }

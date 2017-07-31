@@ -400,7 +400,25 @@ const MlEmailNotification= class MlEmailNotification {
     }, 2 * 1000);
   }
 
-
+  static onPortfolioUpdate(details){
+    var userDetails =   mlDBController.findOne('users', {_id: details.userId})
+    let firstName =userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"";
+    let lastName = userDetails&&userDetails.profile&&userDetails.profile.lastName?userDetails.profile.lastName:"";
+    let regObj = {
+      userName : firstName+" "+lastName,
+      path : Meteor.absoluteUrl('login')
+    }
+    let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_portfolio_updated","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "Portfolio Updated!!",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+  }
   static endUserPortfolioConnect(fromUserId,toUserId){
      fromUserId  = fromUserId?fromUserId:"";
      toUserId = toUserId?toUserId:""

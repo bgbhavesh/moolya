@@ -1386,22 +1386,75 @@ if (Meteor.isServer) {
             //
           ]
         },
+        /**
+         * routes for packages left nav
+         * */
         {
-          "image": "/images/settings_icon.png",
-          "link": "/admin/packages/officeList",
-          "name": "Packages",
-          "uniqueId": "packages",
-          "isLink": true,
-          "isMenu": true,
-          "subMenu":[
+          "image" : "/images/settings_icon.png",
+          "link" : "/admin/packages/officeList",
+          "name" : "Packages",
+          "uniqueId" : "packages",
+          "isLink" : true,
+          "isMenu" : true,
+          "subMenu" : [
             {
-              "link": "/admin/packages/officeList",
-              "name":"Office Packages",
-              "uniqueId": "packages_office",
-              "isLink": true,
-              "isMenu": true,
-              "subMenu":[]
-
+              "link" : "/admin/packages/officeList",
+              "name" : "Office Packages",
+              "uniqueId" : "packages_office",
+              "isLink" : true,
+              "isMenu" : true,
+              "subMenu" : [
+                {
+                  "link" : "/admin/packages/addOffice",
+                  "name" : "Add Package",
+                  "uniqueId" : "packages_AddOffice",
+                  "subMenuMappingId" : "packages_office",
+                  "subMenusId" : "packages",
+                  "isLink" : true,
+                  "isMenu" : false,
+                  "image" : ""
+                },
+                {
+                  "link" : "/admin/packages/officeList",
+                  "name" : "List Packages",
+                  "uniqueId" : "packages_ListOffice",
+                  "subMenuMappingId" : "packages_office",
+                  "subMenusId" : "packages",
+                  "isLink" : true,
+                  "isMenu" : false,
+                  "image" : ""
+                },
+                {
+                  "link" : "/admin/packages/editOffice",
+                  "name" : "Edit Packages",
+                  "uniqueId" : "packages_EditOffice",
+                  "subMenuMappingId" : "packages_office",
+                  "subMenusId" : "packages",
+                  "isLink" : true,
+                  "isMenu" : true,
+                  "image" : ""
+                }
+              ]
+            },
+            {
+              "link" : "/admin/packages/history",
+              "name" : "History",
+              "uniqueId" : "packages_history",
+              "isLink" : true,
+              "isMenu" : true,
+              "image" : "",
+              "subMenu" : [
+                {
+                  "link" : "/admin/packages/history",
+                  "name" : "History List",
+                  "uniqueId" : "packages_historyList",
+                  "subMenuMappingId" : "packages_history",
+                  "subMenusId" : "packages",
+                  "isLink" : true,
+                  "isMenu" : false,
+                  "image" : ""
+                }
+              ]
             }
           ]
         },

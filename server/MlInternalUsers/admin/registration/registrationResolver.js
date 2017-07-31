@@ -108,6 +108,7 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
     let response = new MlRespPayload().successPayload(result, code);
     return response
   }
+
 }
 MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
   var validationCheck = null;

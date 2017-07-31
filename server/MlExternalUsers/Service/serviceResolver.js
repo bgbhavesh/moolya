@@ -152,6 +152,32 @@ MlResolver.MlMutationResolver['updateServiceAdmin'] = (obj, args, context, info)
   }
 };
 
+MlResolver.MlMutationResolver['updateServiceSendReview'] = (obj, args, context, info) => {
+  let serviceId = args.serviceId;
+  if(!serviceId) {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('Data are required', code);
+    return response
+  }
+  let service = mlDBController.findOne('MlServiceCardDefinition', serviceId, context);
+  if (!service) {
+    let code = 404;
+    let response = new MlRespPayload().errorPayload('Service not found', code);
+    return response
+  }
+  if(!service.isApproved){
+    let code = 404;
+    let response = new MlRespPayload().errorPayload('Service not activated, Please send for review', code);
+    return response
+  }
+  let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, {isLive: false, isReview: true}, {$set: 1}, context);
+  if(result){
+    let code = 200;
+    let response = new MlRespPayload().successPayload(result, code);
+    return response
+  }
+};
+
 MlResolver.MlMutationResolver['updateServiceGoLive'] = (obj, args, context, info) => {
   let serviceId = args.serviceId;
   if(!serviceId) {

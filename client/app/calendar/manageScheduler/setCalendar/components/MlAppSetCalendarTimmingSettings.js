@@ -18,36 +18,36 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
     super(props);
     props.timingInfo = props.timingInfo ? props.timingInfo : {};
     this.state = {
-      dayName: 0,
+      dayName: 1,
       isActive: (typeof props.timingInfo.isActive == undefined) ? props.timingInfo.isActive : true,
       isCloneDisabled: true,
       slots: [],
       lunch: [],
       weeksName: [{
-        name: 'Mon', daysNumber: 0, isActiveWeekDay: false
+        name: 'Mon', daysNumber: 1, isActiveWeekDay: false
       }, {
-        name: 'Tue', daysNumber: 1, isActiveWeekDay: false
+        name: 'Tue', daysNumber: 2, isActiveWeekDay: false
       }, {
-        name: 'Wed', daysNumber: 2, isActiveWeekDay: false
+        name: 'Wed', daysNumber: 3, isActiveWeekDay: false
       }, {
-        name: 'Thu', daysNumber: 3, isActiveWeekDay: false
+        name: 'Thu', daysNumber: 4, isActiveWeekDay: false
       }, {
-        name: 'Fri', daysNumber: 4, isActiveWeekDay: false
+        name: 'Fri', daysNumber: 5, isActiveWeekDay: false
       }, {
-        name: 'Sat', daysNumber: 5, isActiveWeekDay: false
+        name: 'Sat', daysNumber: 6, isActiveWeekDay: false
       }, {
-        name: 'Sun', daysNumber: 6, isActiveWeekDay: false
-      }]
-    };
-    this.weekDays = {
-      monday: false,
-      tuesday: false,
-      wednesday: false,
-      thursday: false,
-      friday: false,
-      saturday: false,
-      sunday: false,
-      all: false
+        name: 'Sun', daysNumber: 0, isActiveWeekDay: false
+      }],
+      weekDays: {
+        monday: false,
+        tuesday: false,
+        wednesday: false,
+        thursday: false,
+        friday: false,
+        saturday: false,
+        sunday: false,
+        all: false
+      }
     };
   }
 
@@ -347,7 +347,7 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
    */
   async updateCalendarSetting(event) {
     event.preventDefault();
-    const { lunch, slots, isActive, dayName } = this.state;
+    const { lunch, slots, isActive, dayName, weekDays } = this.state;
     this.isValidSlotsTime = true;
     this.isValidBreakTime = true;
     if (isEmpty(slots[0])) {
@@ -359,7 +359,7 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
       }
       if (this.isValidSlotsTime && this.isValidBreakTime) {
         let workingTimeInfo = [];
-        if (this.weekDays.all) {
+        if (weekDays.all) {
           [0, 1, 2, 3, 4, 5, 6].forEach((field, index) => {
             let timingInfo = {};
             timingInfo.dayName = index;
@@ -370,30 +370,30 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
           });
 
         } else {
-          Object.keys(this.weekDays).forEach((field) => {
+          Object.keys(weekDays).forEach((field) => {
             let timingInfo = {};
-            if (this.weekDays[field] && field !== 'all') {
+            if (weekDays[field] && field !== 'all') {
               switch(field) {
                 case 'monday':
-                  timingInfo.dayName = 0;
-                  break;
-                case 'tuesday':
                   timingInfo.dayName = 1;
                   break;
-                case 'wednesday':
+                case 'tuesday':
                   timingInfo.dayName = 2;
                   break;
-                case 'thursday':
+                case 'wednesday':
                   timingInfo.dayName = 3;
                   break;
-                case 'friday':
+                case 'thursday':
                   timingInfo.dayName = 4;
                   break;
-                case 'saturday':
+                case 'friday':
                   timingInfo.dayName = 5;
                   break;
-                case 'sunday':
+                case 'saturday':
                   timingInfo.dayName = 6;
+                  break;
+                case 'sunday':
+                  timingInfo.dayName = 0;
                   break;
                 default:
                 // do nothing
@@ -434,6 +434,7 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
    */
   showResponseMsg(response) {
     if(response.success){
+      // this.resetEnabledClone();
       toastr.success(response.result);
     } else {
       toastr.error(response.result);
@@ -441,17 +442,34 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
   }
 
   /**
+   * Reset the selected clone days after cloning
+   */
+  resetEnabledClone() {
+    let {isCloneDisabled, weekDays} = this.state;
+    Object.keys(weekDays).forEach((field) => {
+      if (weekDays[field]) {
+        weekDays[field] = false;
+      }
+    });
+    this.setState({
+      isCloneDisabled: true,
+      weekDays: weekDays
+    });
+  }
+  /**
    * selectWeekDays() --> set the week days to show working and break time duration
    * @param event --> set the checked w.r.t id
    */
   selectWeekDays(event) {
+    let {weekDays} = this.state;
     const { id, checked } = event.target;
-    this.weekDays[id] = checked;
+    weekDays[id] = checked;
+    this.setState({weekDays: weekDays});
   }
 
   render(){
     const that = this;
-    const { slots, lunch, isCloneDisabled, workEndTime } = this.state;
+    const { slots, lunch, isCloneDisabled, workEndTime, weekDays } = this.state;
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true} >
@@ -522,6 +540,7 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
                 <div className="form-group pull-left nomargin-bottom">
                   <div className="input_types">
                     <input id="clone" type="checkbox" name="clone" value="1"
+                           checked={!isCloneDisabled}
                            onClick={() => this.setCloneActive()}/>
                     <label htmlFor="clone"><span><span></span></span>Clone the work timings</label>
                   </div>
@@ -534,6 +553,7 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
                     <label htmlFor="fancy-checkbox-default" className="btn btn-default cus_btn">
                       <div className="input_types">
                         <input id="monday" type="checkbox" name="monday" value="1" disabled={isCloneDisabled}
+                               checked={weekDays.monday}
                                onClick={(event) => this.selectWeekDays(event)}/>
                         <label htmlFor="monday"><span><span></span></span></label>
                       </div>
@@ -548,6 +568,7 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
                     <label htmlFor="fancy-checkbox-default" className="btn btn-default cus_btn">
                       <div className="input_types">
                         <input id="tuesday" type="checkbox" name="tuesday" value="1" disabled={isCloneDisabled}
+                               checked={weekDays.tuesday}
                                onClick={(event) => this.selectWeekDays(event)}/>
                         <label htmlFor="tuesday"><span><span></span></span></label>
                       </div>
@@ -562,6 +583,7 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
                     <label htmlFor="fancy-checkbox-default" className="btn btn-default cus_btn">
                       <div className="input_types">
                         <input id="wednesday" type="checkbox" name="wednesday" value="1" disabled={isCloneDisabled}
+                               checked={weekDays.wednesday}
                                onClick={(event) => this.selectWeekDays(event)}/>
                         <label htmlFor="wednesday"><span><span></span></span></label>
                       </div>
@@ -576,6 +598,7 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
                     <label htmlFor="fancy-checkbox-default" className="btn btn-default cus_btn">
                       <div className="input_types">
                         <input id="thursday" type="checkbox" name="thursday" value="1" disabled={isCloneDisabled}
+                               checked={weekDays.thursday}
                                onClick={(event) => this.selectWeekDays(event)}/>
                         <label htmlFor="thursday"><span><span></span></span></label>
                       </div>
@@ -590,6 +613,7 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
                     <label htmlFor="fancy-checkbox-default" className="btn btn-default cus_btn">
                       <div className="input_types">
                         <input id="friday" type="checkbox" name="friday" value="1" disabled={isCloneDisabled}
+                               checked={weekDays.friday}
                                onClick={(event) => this.selectWeekDays(event)}/>
                         <label htmlFor="friday"><span><span></span></span></label>
                       </div>
@@ -604,6 +628,7 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
                     <label htmlFor="fancy-checkbox-default" className="btn btn-default cus_btn">
                       <div className="input_types">
                         <input id="saturday" type="checkbox" name="saturday" value="1" disabled={isCloneDisabled}
+                               checked={weekDays.saturday}
                                onClick={(event) => this.selectWeekDays(event)}/>
                         <label htmlFor="saturday"><span><span></span></span></label>
                       </div>
@@ -618,6 +643,7 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
                     <label htmlFor="fancy-checkbox-default" className="btn btn-default cus_btn">
                       <div className="input_types">
                         <input id="sunday" type="checkbox" name="sunday" value="1" disabled={isCloneDisabled}
+                               checked={weekDays.sunday}
                                onClick={(event) => this.selectWeekDays(event)}/>
                         <label htmlFor="sunday"><span><span></span></span></label>
                       </div>
@@ -632,6 +658,7 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
                     <label htmlFor="fancy-checkbox-default" className="btn btn-default cus_btn">
                       <div className="input_types">
                         <input id="all" type="checkbox" name="all" value="1" disabled={isCloneDisabled}
+                               checked={weekDays.all}
                                onClick={(event) => this.selectWeekDays(event)}/>
                         <label htmlFor="all"><span><span></span></span></label>
                       </div>

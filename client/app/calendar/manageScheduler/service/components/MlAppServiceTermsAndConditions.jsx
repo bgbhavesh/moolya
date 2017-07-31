@@ -22,6 +22,7 @@ export default class MlAppServiceTermsAndConditions extends Component{
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(290+$('.admin_header').outerHeight(true)));
     this.props.getServiceDetails();
+    this.props.getRedirectServiceList(false);
   }
 
   /**
@@ -69,7 +70,6 @@ export default class MlAppServiceTermsAndConditions extends Component{
     const {
       serviceTermAndCondition,
       attachments,
-      saveService,
       onChangeCheckBox,
       onChangeValue } = this.props;
     return (
@@ -130,9 +130,6 @@ export default class MlAppServiceTermsAndConditions extends Component{
           <br className="brclear"/>
           {this.getAttachmentsList()}
         </ScrollArea>
-        {!this.props.viewMode?<div className="ml_btn" style={{'textAlign':'center'}}>
-          <div className="save_btn" onClick={() => saveService(false)}>Save</div> <div className="cancel_btn">Cancel</div>
-        </div>:""}
       </div>
     )
   }

@@ -5,6 +5,8 @@
 import MlUserContext from '../mlUserContext'
 import _ from 'lodash'
 
+var DEFAULT_FREQUENCY_BSPOKE = "YEARLY";
+
 class MlOfficeRepo{
     constructor(){
     }
@@ -58,7 +60,7 @@ class MlOfficeRepo{
     }
 
     // This Method Will create a office service card Instance from the definition
-    createofficeServiceCard(officeDetails, profile, context, scDefId, officeId){
+    createofficeServiceCard(officeDetails, profile, context, scDefId, officeId, frequencyType){
       let officeSC = {};
       officeSC["userId"]                = context.userId
       officeSC["profileId"]             = profile.profileId
@@ -72,6 +74,7 @@ class MlOfficeRepo{
       officeSC["isActive"]              = true
       officeSC["isActivated"]           = false
       officeSC["isExpired"]             = false
+      // officeSC["expiryDate"]            = this.getExpiryDate(frequencyType)
       var scId = mlDBController.insert('MlOfficeSC', officeSC, context)
       return scId;
     }
@@ -114,7 +117,12 @@ class MlOfficeRepo{
     // This Method Will create be Spoke Service Card Definition
     createBspokeSCDef(officeDetails, profile, context){
       let bSpokeOffice = {};
+      let clusters = [{clusterId:profile.clusterId, clusterName:profile.clusterName}];
+      let chapters = [{chapterId:profile.chapterId, chapterName:profile.chapterName}];
+      let subChapters = [{subChapterId:profile.subChapterId, subChapterName:profile.subChapterName}];
+
       // bSpokeOffice["officeId"]              = ;
+      bSpokeOffice["profileId"]             = profile.profileId;
       bSpokeOffice["totalCount"]            = officeDetails.totalCount
       bSpokeOffice["principalUserCount"]    = officeDetails.principalUserCount
       bSpokeOffice["teamUserCount"]         = officeDetails.teamUserCount
@@ -124,10 +132,17 @@ class MlOfficeRepo{
       bSpokeOffice["isSystemDefined"]       = false
       bSpokeOffice["createdBy"]             = context.userId
       bSpokeOffice["createdOn"]             = new Date();
-      bSpokeOffice["isActive"]              = true
+      bSpokeOffice["isActive"]              = true;
+      bSpokeOffice['clusters']              = clusters;
+      bSpokeOffice['chapters']              = chapters;
+      bSpokeOffice['subChapters']           = subChapters;
+      var frequency                         = MlFrequencyType.findOne({code:DEFAULT_FREQUENCY_BSPOKE})
+      bSpokeOffice['frequencyType']         = frequency._id;
+      var cardType                          = MlServiceCardType.findOne({code:"OFFICECARD"})
+      bSpokeOffice['cardType']              = cardType._id;
       orderNumberGenService.createBspokeOfficeSCcode(bSpokeOffice)
       var beSpokeId = mlDBController.insert('MlOfficeSCDef', bSpokeOffice, context)
-      return beSpokeId;
+      return {officeDefId:beSpokeId, frequencyType:frequency._id};
     }
 
     // Ledger Entry will be created
@@ -209,6 +224,10 @@ class MlOfficeRepo{
       // office journal entry should create
 
       return true;
+    }
+
+    getExpiryDate(frequencyId){
+
     }
 
     // This Method Validates office expiry date

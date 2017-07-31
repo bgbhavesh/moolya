@@ -11,7 +11,7 @@
 /*--------------------------------------------
  * Include internal and external modules.
  ---------------------------------------------*/
-import MlNotificationsServices from '../mlAppNotifications/mlNotificationsServices'
+import MlNotificationsServices from './mlNotificationsServices'
 
 var mlNotificationsServices=new MlNotificationsServices();
 class MlNotificationControllerClass{

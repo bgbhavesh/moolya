@@ -39,7 +39,7 @@ let connections = `
         countryName:String,
         communityName:String,
         communityCode:String,
-        
+        chapterName :  String
     }
     
     

@@ -97,7 +97,9 @@ export default class MlUsersConnectionsTabs extends React.Component {
 
   render() {
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs}/>
+    return <div className="admin_main_wrap">
+      <div className="admin_padding_wrap"><MlTabComponent tabs={tabs}/></div>
+    </div>
   }
 }
 

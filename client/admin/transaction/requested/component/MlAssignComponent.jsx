@@ -227,8 +227,8 @@ export default class MlAssignComponent extends React.Component {
         label:subDepartmentName
       }  
     }`;
-    let roleQuery=gql`query($clusterId:String,$departmentId:String,$subDepartmentId:String){  
-      data:fetchHierarchyRoles(clusterId:$clusterId,departmentId:$departmentId,subDepartmentId:$subDepartmentId) {
+    let roleQuery=gql`query($clusterId:String,$departmentId:String,$subDepartmentId:String, $subChapterId:String){  
+      data:fetchHierarchyRoles(clusterId:$clusterId,departmentId:$departmentId,subDepartmentId:$subDepartmentId, subChapterId:$subChapterId) {
         value:roleId
         label:roleName
       }  
@@ -249,7 +249,9 @@ export default class MlAssignComponent extends React.Component {
                       variables: {
                         clusterId:this.state.selectedCluster,
                         departmentId:this.state.selectedDepartment,
-                        subDepartmentId:this.state.selectedSubDepartment
+                        subDepartmentId:this.state.selectedSubDepartment,
+                        subChapterId:this.state.selectedSubChapter?this.state.selectedSubChapter:null,
+
                     }}};
     let usersOption = {
                   options: {

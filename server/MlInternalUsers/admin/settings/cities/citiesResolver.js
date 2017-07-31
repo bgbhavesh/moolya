@@ -1,5 +1,5 @@
-import MlResolver from '../../../../commons/mlResolverDef'
-import MlRespPayload from '../../../../commons/mlPayload'
+import MlResolver from "../../../../commons/mlResolverDef";
+import MlRespPayload from "../../../../commons/mlPayload";
 
 let _ = require('lodash');
 
@@ -125,11 +125,14 @@ MlResolver.MlQueryResolver['searchCities'] = (obj, args, context, info) => {
   return result;
 }
 
+/**
+ * returning cities for the API
+ * */
 MlResolver.MlQueryResolver['fetchCitiesPerCountryAPI'] = (obj, args, context, info) => {
-
   if(args.countryId){
     let countryId = args.countryId;
-    let cityName=args.cityName;
+    let cityName=args&&args.cityName?args.cityName.trim():null;
+    let stateName=args&&args.stateName?args.stateName.trim():null;
     let limit=args.limit;
     if(args.countryId.length>5){
       let resp = mlDBController.findOne('MlClusters', {"_id":countryId}, context);
@@ -142,6 +145,18 @@ MlResolver.MlQueryResolver['fetchCitiesPerCountryAPI'] = (obj, args, context, in
         "name": { $regex: '.*' + cityName + '.*',$options: "si"},
         "countryId":countryId
       };
+    }
+
+    /**
+     * for the first time API with the geo-Location
+     * */
+    if (stateName&&stateName.trim()!=="") {
+      let queryState = {
+        "name": {$regex: '.*' + stateName.trim() + '.*', $options: "si"},
+        "countryId": countryId
+      };
+      let stateId = MlStates.findOne(queryState) || {}
+      query.stateId = stateId._id || {}
     }
     if(!limit){
       limit=100;

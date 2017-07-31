@@ -5,6 +5,7 @@ import MlResolver from '../../../commons/mlResolverDef'
 import MlRespPayload from '../../../commons/mlPayload'
 import _ from 'lodash';
 import mlInteractionService from '../mlInteractionRepoService';
+import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
 
 MlResolver.MlMutationResolver['createReview'] = (obj, args, context, info) => {
   if (args && context && context.userId) {
@@ -35,7 +36,7 @@ MlResolver.MlMutationResolver['createReview'] = (obj, args, context, info) => {
 
       if (resp) {
         //create transaction and transaction Log
-
+        MlEmailNotification.reviewRecieved(fromuser,toUser)
       }
 
     } catch (e) {

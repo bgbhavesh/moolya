@@ -733,92 +733,92 @@ if (Meteor.isServer) {
                     }
                   ]
                 },
-                {
-                  "link" : "/admin/users/wishlist/ideator",
-                  "name" : "Wishlist",
-                  "uniqueId" : "users_wishlist",
-                  "isLink" : true,
-                  "isMenu" : true,
-                  "image" : "",
-                  "dynamicLink" : true,
-                  "dynamicLinkHandler" : "",
-                  "subMenusId" : "users_cluster",
-                  "subMenuMappingId" : "users_wishlist",
-                  "subMenu" : [
-                    {
-                      "link" : "/admin/users/wishlist/ideator",
-                      "name" : "Ideator",
-                      "uniqueId" : "users_wishlistIdeator",
-                      "isLink" : true,
-                      "isMenu" : true,
-                      "image" : "",
-                      "dynamicLink" : true,
-                      "dynamicLinkHandler" : "",
-                      "subMenuMappingId" : "users_wishlistIdeator",
-                      "subMenusId" : "users_wishlist"
-                    },
-                    {
-                      "link" : "/admin/users/wishlist/startup",
-                      "name" : "Startup",
-                      "uniqueId" : "users_wishlistStartup",
-                      "isLink" : true,
-                      "isMenu" : true,
-                      "image" : "",
-                      "dynamicLink" : true,
-                      "dynamicLinkHandler" : "",
-                      "subMenuMappingId" : "users_wishlistStartup",
-                      "subMenusId" : "users_wishlist"
-                    },
-                    {
-                      "link" : "/admin/users/wishlist/investor",
-                      "name" : "Investor",
-                      "uniqueId" : "users_wishlistinvestor",
-                      "isLink" : true,
-                      "isMenu" : true,
-                      "image" : "",
-                      "dynamicLink" : true,
-                      "dynamicLinkHandler" : "",
-                      "subMenuMappingId" : "users_wishlistInvestor",
-                      "subMenusId" : "users_wishlist"
-                    },
-                    {
-                      "link" : "/admin/users/wishlist/serviceProvider",
-                      "name" : "Service Provider",
-                      "uniqueId" : "users_wishlistServiceProvider",
-                      "isLink" : true,
-                      "isMenu" : true,
-                      "image" : "",
-                      "dynamicLink" : true,
-                      "dynamicLinkHandler" : "",
-                      "subMenuMappingId" : "users_wishlistServiceProvider",
-                      "subMenusId" : "users_wishlist"
-                    },
-                    {
-                      "link" : "/admin/users/wishlist/company",
-                      "name" : "Company",
-                      "uniqueId" : "users_wishlistCompany",
-                      "isLink" : true,
-                      "isMenu" : true,
-                      "image" : "",
-                      "dynamicLink" : true,
-                      "dynamicLinkHandler" : "",
-                      "subMenuMappingId" : "users_wishlistCompany",
-                      "subMenusId" : "users_wishlist"
-                    },
-                    {
-                      "link" : "/admin/users/wishlist/institution",
-                      "name" : "Institution",
-                      "uniqueId" : "users_wishlistInstitution",
-                      "isLink" : true,
-                      "isMenu" : true,
-                      "image" : "",
-                      "dynamicLink" : true,
-                      "dynamicLinkHandler" : "",
-                      "subMenuMappingId" : "users_wishlistInstitution",
-                      "subMenusId" : "users_wishlist"
-                    }
-                  ]
-                },
+                // {
+                //   "link" : "/admin/users/wishlist/ideator",
+                //   "name" : "Wishlist",
+                //   "uniqueId" : "users_wishlist",
+                //   "isLink" : true,
+                //   "isMenu" : true,
+                //   "image" : "",
+                //   "dynamicLink" : true,
+                //   "dynamicLinkHandler" : "",
+                //   "subMenusId" : "users_cluster",
+                //   "subMenuMappingId" : "users_wishlist",
+                //   "subMenu" : [
+                //     {
+                //       "link" : "/admin/users/wishlist/ideator",
+                //       "name" : "Ideator",
+                //       "uniqueId" : "users_wishlistIdeator",
+                //       "isLink" : true,
+                //       "isMenu" : true,
+                //       "image" : "",
+                //       "dynamicLink" : true,
+                //       "dynamicLinkHandler" : "",
+                //       "subMenuMappingId" : "users_wishlistIdeator",
+                //       "subMenusId" : "users_wishlist"
+                //     },
+                //     {
+                //       "link" : "/admin/users/wishlist/startup",
+                //       "name" : "Startup",
+                //       "uniqueId" : "users_wishlistStartup",
+                //       "isLink" : true,
+                //       "isMenu" : true,
+                //       "image" : "",
+                //       "dynamicLink" : true,
+                //       "dynamicLinkHandler" : "",
+                //       "subMenuMappingId" : "users_wishlistStartup",
+                //       "subMenusId" : "users_wishlist"
+                //     },
+                //     {
+                //       "link" : "/admin/users/wishlist/investor",
+                //       "name" : "Investor",
+                //       "uniqueId" : "users_wishlistinvestor",
+                //       "isLink" : true,
+                //       "isMenu" : true,
+                //       "image" : "",
+                //       "dynamicLink" : true,
+                //       "dynamicLinkHandler" : "",
+                //       "subMenuMappingId" : "users_wishlistInvestor",
+                //       "subMenusId" : "users_wishlist"
+                //     },
+                //     {
+                //       "link" : "/admin/users/wishlist/serviceProvider",
+                //       "name" : "Service Provider",
+                //       "uniqueId" : "users_wishlistServiceProvider",
+                //       "isLink" : true,
+                //       "isMenu" : true,
+                //       "image" : "",
+                //       "dynamicLink" : true,
+                //       "dynamicLinkHandler" : "",
+                //       "subMenuMappingId" : "users_wishlistServiceProvider",
+                //       "subMenusId" : "users_wishlist"
+                //     },
+                //     {
+                //       "link" : "/admin/users/wishlist/company",
+                //       "name" : "Company",
+                //       "uniqueId" : "users_wishlistCompany",
+                //       "isLink" : true,
+                //       "isMenu" : true,
+                //       "image" : "",
+                //       "dynamicLink" : true,
+                //       "dynamicLinkHandler" : "",
+                //       "subMenuMappingId" : "users_wishlistCompany",
+                //       "subMenusId" : "users_wishlist"
+                //     },
+                //     {
+                //       "link" : "/admin/users/wishlist/institution",
+                //       "name" : "Institution",
+                //       "uniqueId" : "users_wishlistInstitution",
+                //       "isLink" : true,
+                //       "isMenu" : true,
+                //       "image" : "",
+                //       "dynamicLink" : true,
+                //       "dynamicLinkHandler" : "",
+                //       "subMenuMappingId" : "users_wishlistInstitution",
+                //       "subMenusId" : "users_wishlist"
+                //     }
+                //   ]
+                // },
                 {
                   "link" : "/admin/users/transactions",
                   "name" : "Transactions",

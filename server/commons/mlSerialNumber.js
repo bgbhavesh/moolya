@@ -111,6 +111,10 @@ orderNumberGenService = (function(){
     createBspokeOfficeSCcode: function (scDef) {
       scDef.code = "ML-OFF-"+ FormatUtil.leadingZeros(getNextSequence("bspoke"), 8);
     },
+    createOfficeSCcode: function (scDef) {
+      scDef.code = "ML-OFF-"+ FormatUtil.leadingZeros(getNextSequence("office"), 8);
+    },
+
     createActivityId: function (userActivity) {
       userActivity.transactionId = "MLACT"+ FormatUtil.leadingZeros(getNextSequence("activityNumber"), 8);
     },

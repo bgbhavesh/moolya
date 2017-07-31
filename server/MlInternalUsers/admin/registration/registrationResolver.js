@@ -12,7 +12,7 @@ import moment from "moment";
 import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 var fs = Npm.require('fs');
 var Future = Npm.require('fibers/future');
-import MlNotificationController from '../../../mlNotifications/mlNotificationsController';
+
 MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info) => {
   var validationCheck = null;
   if (!args.registration.registrationType) {
@@ -94,7 +94,6 @@ MlResolver.MlMutationResolver['createRegistration'] = (obj, args, context, info)
     transactionId: args.registration.registrationId,
     transactionCreatedDate: transactionCreatedDate
   }, context)
-  MlNotificationController.createNewAlert({text:"ddd","notif_type":"registration","from_userId":"zzz","to_userId":"dddd"},{});
   if (id) {
     MlResolver.MlMutationResolver['sendEmailVerification'](obj, {registrationId: id}, context, info);
     validationCheck = MlRegistrationPreCondition.validateActiveCommunity(id, args.registration);

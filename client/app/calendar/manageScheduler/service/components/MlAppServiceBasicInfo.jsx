@@ -32,6 +32,7 @@ class MlAppServiceBasicInfo extends Component {
 
   componentDidMount() {
     this.props.getServiceDetails();
+    this.props.getRedirectServiceList(false);
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(310+$('.admin_header').outerHeight(true)));
@@ -69,7 +70,6 @@ class MlAppServiceBasicInfo extends Component {
       optionsBySelectstates,
       optionsBySelectCommunities,
       checkBoxHandler,
-      saveService,
       options,
       setSessionFrequency,
       clusterData } = this.props;
@@ -244,10 +244,6 @@ class MlAppServiceBasicInfo extends Component {
             </div>
           </div>
         </ScrollArea>
-        {!this.props.viewMode?<div className="ml_btn" style={{'textAlign':'center'}}>
-          <div className="save_btn" onClick={() => saveService(false)}>Save</div>
-          <div className="cancel_btn">Cancel</div>
-        </div>:""}
       </div>
     )
   }
@@ -260,7 +256,6 @@ MlAppServiceBasicInfo.propTypes = {
                   PropTypes.string,
                   PropTypes.number ]),
   getServiceDetails: PropTypes.func,
-  saveService: PropTypes.func,
   checkBoxHandler: PropTypes.func,
   onChangeFormField: PropTypes.func
 };

@@ -13,6 +13,8 @@ MlResolver.MlMutationResolver['createOfficePackage'] = (obj, args, context, info
   try {
     var office = args.package
     orderNumberGenService.createOfficeSCcode(office)
+    office['createdBy'] = context.userId;
+    office['createdOn'] = new Date();
     mlDBController.insert('MlOfficeSCDef', office, context)
   }catch (e){
     return new MlRespPayload().errorPayload(e.message, 400)

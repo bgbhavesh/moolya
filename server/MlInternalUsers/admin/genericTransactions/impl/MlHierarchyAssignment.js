@@ -9,19 +9,28 @@ class MlHierarchyAssignment {
 
   findHierarchy(clusterId, departmentId, subDepartmentId, roleId) {
     let roleDetails = mlDBController.findOne('MlRoles', {_id: roleId})
-    // let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
-    //   parentDepartment: departmentId,
-    //   parentSubDepartment: subDepartmentId,
-    //   clusterId: roleDetails.isSystemDefined ? "All" : clusterId
-    // }, context, {teamStructureAssignment: {$elemMatch: {roleId: roleId}}})
-    let hierarchy = mlDBController.findOne('MlHierarchyAssignments',
-      {"$and":[
-        {parentDepartment: departmentId},
-        {parentSubDepartment: subDepartmentId},
-        {clusterId: roleDetails.isSystemDefined ? "All" : clusterId},
-        {teamStructureAssignment: {$elemMatch: {roleId: roleId}}}
-      ]
-      }, context)
+    /*
+        Coded by - Murali
+        Works for Platform admin self assignment of a transaction
+      */
+    let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
+      parentDepartment: departmentId,
+      parentSubDepartment: subDepartmentId,
+      clusterId: roleDetails.isSystemDefined ? "All" : clusterId
+    }, context, {teamStructureAssignment: {$elemMatch: {roleId: roleId}}})
+
+    /*
+        Coded by - Rajat
+    */
+
+    // let hierarchy = mlDBController.findOne('MlHierarchyAssignments',
+    //   {"$and":[
+    //     {parentDepartment: departmentId},
+    //     {parentSubDepartment: subDepartmentId},
+    //     {clusterId: roleDetails.isSystemDefined ? "All" : clusterId},
+    //     {teamStructureAssignment: {$elemMatch: {roleId: roleId}}}
+    //   ]
+    //   }, context)
     return hierarchy;
   }
 

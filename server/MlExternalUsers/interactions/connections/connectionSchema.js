@@ -3,7 +3,7 @@
  */
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
-
+import MlResolver from '../../../commons/mlResolverDef'
 
 let connections = `
     type User{
@@ -39,7 +39,7 @@ let connections = `
         countryName:String,
         communityName:String,
         communityCode:String,
-        
+        chapterName :  String
     }
     
     
@@ -69,7 +69,14 @@ let connections = `
     type Query{
         fetchConnections:[ConnectedUser]
         fetchConnectionByTransaction(transactionId:String!):Connection
+        fetchConnectionsByPortfolio(portfolioId: String, communityCode: String): [ConnectedUser]
     }
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],connections]);
+
+/**admin API data*/
+let supportedApi = [
+  {api:'fetchConnectionsByPortfolio', actionName:'READ', moduleName:"INTERACTION"}
+];
+MlResolver.MlModuleResolver.push(supportedApi)

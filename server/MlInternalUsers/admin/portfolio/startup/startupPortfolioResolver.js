@@ -1,6 +1,7 @@
 import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
-
+import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
+var _ = require('lodash')
 var extendify = require('extendify');
 var _ = require('lodash')
 
@@ -54,6 +55,8 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
               // let ret = MlStartupPortfolio.update({"portfolioDetailsId": args.portfoliodetailsId}, {$set: startupPortfolio})
             let ret = mlDBController.update('MlStartupPortfolio', {"portfolioDetailsId": args.portfoliodetailsId}, startupPortfolio, {$set: true}, context)
             if (ret) {
+              let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId})
+              MlEmailNotification.onPortfolioUpdate(details);
                 let code = 200;
                 let response = new MlRespPayload().successPayload("Updated Successfully", code);
                 return response;

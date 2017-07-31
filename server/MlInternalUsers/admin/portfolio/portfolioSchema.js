@@ -110,6 +110,7 @@ let portfolioSchema = `
     type Query{
           fetchPortfolioDetailsByUserId:Portfoliodetails
           fetchPortfolioByReg(registrationId: String): Portfoliodetails
+          fetchPortfolioClusterId(portfoliodetailsId: String): Portfoliodetails
     }
     
     type Mutation{
@@ -135,6 +136,7 @@ let supportedApi = [
   {api:'rejectPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'requestForGoLive', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
   {api:'removeIdetaorProfilePic', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
+  {api: 'fetchPortfolioClusterId', actionName: 'READ', moduleName: "PORTFOLIO"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

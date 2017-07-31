@@ -26,3 +26,98 @@ export async function fetchCommunitiesHandler() {
   const communities = result.data.data;
   return communities;
 }
+
+
+export async function createOfficePackageHandler(officePackage) {
+  const result = await client.mutate({
+    mutation : gql`
+       mutation($package:officePackage)  {
+          data: createOfficePackage(package:$package) {
+            success,
+            code,
+            result
+          }
+       }
+    `,
+    variables:{
+      package:officePackage
+    },
+    forceFetch:true
+  })
+
+  const communities = result.data.data;
+  return communities;
+}
+
+export async function updateOfficePackageHandler(officePackageId, officePackage) {
+  const result = await client.mutate({
+    mutation : gql`
+       mutation($package:officePackage, $packageId:String)  {
+          data: updateOfficePackage(package:$package, packageId:$packageId) {
+            success,
+            code,
+            result
+          }
+       }
+    `,
+    variables:{
+      packageId:officePackageId,
+      package:officePackage
+    },
+    forceFetch:true
+  })
+
+  const communities = result.data.data;
+  return communities;
+}
+
+
+export async function fetchOfficePackageHandler(officeId) {
+  const result = await client.query({
+    query : gql`
+       query($officePackageId:String){
+          fetchOfficePackageById(officePackageId:$officePackageId){
+              serviceCardName,
+              displayName,
+              cardType,
+              frequencyType,
+              accountType,
+              isMoolya,
+              isOthers,
+              isActive,
+              applicableCommunity{
+                communityName,
+                communityId
+              },
+              availableCommunities{
+                communityName,
+                communityId,
+                userCount
+              },
+              clusters{
+                clusterId,
+                clusterName
+              },
+              chapters{
+                chapterId,
+                chapterName
+              },
+              subChapters{
+                subChapterId,
+                subChapterName
+              }
+              totalCount,
+              principalUserCount,
+              teamUserCount
+          }
+       }
+    `,
+    variables:{
+      officePackageId:officeId
+    },
+    forceFetch:true
+  })
+
+  const communities = result.data.fetchOfficePackageById;
+  return communities;
+}

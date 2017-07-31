@@ -14,9 +14,10 @@ import MlViews from "../../admin/core/components/MlViews";
 import {mlUsersClusterListConfig} from "../../admin/users/config/mlUsersClusterConfig";
 import MlUsersAbout from "../../admin/users/components/MlUsersAbout";
 import MlUsersAddressBook from "../../admin/users/components/MlUsersAddressBook";
-import MlUsersConnections from "../../admin/users/components/MlUsersConnections";
+import MlUsersPortfolioLanding from "../../admin/users/components/MlUsersPortfolioLanding";
+import MlUsersConnectionsTabs from "../../admin/users/components/MlUsersConnectionsTabs";
 import MlUsersFavourites from "../../admin/users/components/MlUsersFavourites";
-import MlUsersWishlist from "../../admin/users/components/MlUsersWishlist";
+// import MlUsersWishlist from "../../admin/users/components/MlUsersWishlist";
 import MlUsersTransactions from "../../admin/users/components/MlUsersTransactions";
 
 /**
@@ -53,12 +54,22 @@ adminSection.route('/users/:registrationId/:portfolioId/addressBook', {
   }
 })
 
-adminSection.route('/users/:registrationId/:portfolioId/connections/ideator', {
-  name: 'users_connectionsIdeator',
+adminSection.route('/users/:registrationId/:portfolioId/portfolio', {
+  name: 'users_portfolio',
   action(params){
     mount(AdminLayout, {
       headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'users'}}/>,
-      adminContent: <MlUsersConnections config={params}/>
+      adminContent: <MlUsersPortfolioLanding config={params}/>
+    })
+  }
+})
+
+adminSection.route('/users/:registrationId/:portfolioId/connections', {
+  name: 'users_connections',
+  action(params){
+    mount(AdminLayout, {
+      headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'users'}}/>,
+      adminContent: <MlUsersConnectionsTabs config={params}/>
     })
   }
 })
@@ -73,15 +84,15 @@ adminSection.route('/users/:registrationId/:portfolioId/favourites/ideator', {
   }
 })
 
-adminSection.route('/users/:registrationId/:portfolioId/wishlist/ideator', {
-  name: 'users_wishlistIdeator',
-  action(params){
-    mount(AdminLayout, {
-      headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'users'}}/>,
-      adminContent: <MlUsersWishlist config={params}/>
-    })
-  }
-})
+// adminSection.route('/users/:registrationId/:portfolioId/wishlist/ideator', {
+//   name: 'users_wishlistIdeator',
+//   action(params){
+//     mount(AdminLayout, {
+//       headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'users'}}/>,
+//       adminContent: <MlUsersWishlist config={params}/>
+//     })
+//   }
+// })
 
 adminSection.route('/users/:registrationId/:portfolioId/transactions', {
   name: 'users_transactions',

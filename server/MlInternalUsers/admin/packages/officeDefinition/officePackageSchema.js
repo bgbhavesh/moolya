@@ -11,9 +11,25 @@ let officePackage = `
     communityName:String,
     communityId:String
   }
+  
+  type Cluster{
+    clusterId:String,
+    clusterName:String,
+  }
+  
+  type Chapter{
+    chapterId:String,
+    chapterName:String,
+  }
+  
+  type SubChapter{
+    subChapterId:String,
+    subChapterName:String,
+  }
 
   type OfficePackage{
-    officeName:String,
+    _id:String,
+    serviceCardName:String,
     displayName:String,
     cardType:String,
     frequencyType:String,
@@ -31,9 +47,9 @@ let officePackage = `
     principalUserCount:Int,
     teamUserCount:Int,
     availableCommunities:[AvailableCommunities]
-    clusterId : String,
-    chapterId : String,
-    communityId: String,
+    clusters : [Cluster],
+    chapters : [Chapter],
+    subChapters: [SubChapter],
     barerCount:Int
   }
   
@@ -41,9 +57,24 @@ let officePackage = `
     communityName:String,
     communityId:String
   }
+  
+  input cluster{
+    clusterId:String,
+    clusterName:String,
+  }
+  
+  input chapter{
+    chapterId:String,
+    chapterName:String,
+  }
+  
+  input subChapter{
+    subChapterId:String,
+    subChapterName:String,
+  }
 
   input officePackage{
-    officeName:String,
+    serviceCardName:String,
     displayName:String,
     cardType:String,
     frequencyType:String,
@@ -61,9 +92,9 @@ let officePackage = `
     principalUserCount:Int,
     teamUserCount:Int,
     availableCommunities:[availableCommunities]
-    clusterId : String,
-    chapterId : String,
-    communityId: String,
+    clusters     : [cluster],
+    chapters     : [chapter],
+    subChapters  : [subChapter],
     barerCount:Int
   }
   
@@ -80,10 +111,10 @@ let officePackage = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], officePackage]);
 
 let supportedApi = [
-    {api: 'createOfficePackage', actionName:'CREATE', MODULE: "OFFICEPACKAGE"},
-    {api: 'updateOfficePackage', actionName:'UPDATE', MODULE: "OFFICEPACKAGE"},
-    {api: 'fetchOfficePackages', actionName:'READ', MODULE: "OFFICEPACKAGE", isWhiteList:true},
-    {api: 'fetchOfficePackageById', actionName:'READ', MODULE: "OFFICEPACKAGE", isWhiteList:true},
+    {api: 'createOfficePackage', actionName:'CREATE', moduleName: "OFFICEPACKAGE"},
+    {api: 'updateOfficePackage', actionName:'UPDATE', moduleName: "OFFICEPACKAGE"},
+    {api: 'fetchOfficePackages', actionName:'READ', moduleName: "OFFICEPACKAGE", isWhiteList:true},
+    {api: 'fetchOfficePackageById', actionName:'READ', moduleName: "OFFICEPACKAGE", isWhiteList:true},
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -454,7 +454,12 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
           let response;
           if(data) {
             let cities = [];
-            response = MlResolver.MlQueryResolver['fetchCitiesPerCountryAPI'](null, {countryId:data.countryId,cityName:data.cityName,limit:data.limit}, context, null);
+            response = MlResolver.MlQueryResolver['fetchCitiesPerCountryAPI'](null, {
+              countryId: data.countryId,
+              cityName: data.cityName,
+              stateName: data.stateName,
+              limit: data.limit
+            }, context, null);
             /*response = MlResolver.MlQueryResolver['fetchCitiesPerCountryAPI'](null, {countryId:data.countryId}, context, null);
             if(response){
               response.map(function (city, key){

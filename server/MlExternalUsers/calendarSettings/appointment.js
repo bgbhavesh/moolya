@@ -19,6 +19,8 @@ class MlAppointment {
    */
   buildSlotTimes(duration, lunch, slots){
     let response = [];
+    duration.hours = duration.hours ? duration.hours : 0;
+    duration.minutes = duration.minutes ? duration.minutes : 0;
     let internal = duration.hours*60 + duration.minutes;
     slots = slots ? slots : [];
     slots.forEach(function (slot) {
@@ -87,7 +89,18 @@ class MlAppointment {
        */
       let endDate = new Date(date);
       endDate.setDate(endDate.getDate()+1);
-      let appointments = mlDBController.find( 'MlAppointments', {'provider.userId':userId, 'provider.profileId':profileId, startDate: { $gte:date } ,endDate: {$lt:endDate} }).fetch();
+      let appointments = mlDBController.aggregate( 'MlAppointments', [
+        {
+          $lookup: {
+            from: "mlAppointmentMembers",
+            localField: "appointmentId",
+            foreignField: "appointmentId",
+            as: "members"
+          }
+        },
+        { "$unwind": "$members" },
+        { "$match": {'members.userId':userId, 'members.profileId':profileId, startDate: { $gte:date } ,endDate: {$lt:endDate} } }
+      ]);
 
       /**
        * Create response
@@ -120,10 +133,11 @@ class MlAppointment {
         } else if (appoinmentsCountPerSlot == slotsInfo.appointmentPerSlot){
           status = 2;
         }
+
         return {
           slotTime : time,
           isAvailable: appoinmentsCountPerSlot >= slotsInfo.appointmentPerSlot ? false : true,
-          status: status
+          status: appoinmentsCountPerSlot >= slotsInfo.appointmentPerSlot ? 2 : status
         }
       });
         return response;
@@ -188,10 +202,19 @@ class MlAppointment {
       activity.teams.forEach(function (team) {
         team.users = team.users ? team.users : [];
         team.users.forEach(function (user) {
+          if ( !user.isMandatory ) {
+            return
+          }
           let calendarSetting = mlDBController.findOne('MlCalendarSettings',{userId: user.userId, profileId: user.profileId});
-          calendarSetting.vacations = calendarSetting.vacations ? calendarSetting.vacations : [];
-          let serviceProviderSlots = that.getUserSlot(calendarSetting, date);
-          let serviceProviderSlotsAvailability = that.getUserAvailabilityOfDifferentSlotOnDay(date, serviceProviderSlots, task.userId, task.profileId);
+          let teamSlots;
+          if(calendarSetting){
+            calendarSetting.vacations = calendarSetting.vacations ? calendarSetting.vacations : [];
+            teamSlots = that.getUserSlot(calendarSetting, date);
+          } else {
+            teamSlots = serviceProviderSlots;
+            teamSlots.appointmentPerSlot = 1;
+          }
+          let serviceProviderSlotsAvailability = that.getUserAvailabilityOfDifferentSlotOnDay(date, teamSlots, task.userId, task.profileId);
           user.slotsAvailability = serviceProviderSlotsAvailability;
           teamSlotsAvailabilities.push(user);
         });
@@ -209,6 +232,7 @@ class MlAppointment {
       teamSlotsAvailabilities.forEach(function (teamSlotsAvailability) {
         teamSlotsAvailability.slotsAvailability.forEach(function (slotAvailability) {
           if(!serviceProviderSlotAvailabily.isAvailable){
+            serviceProviderSlotAvailabily.status = 2;
             return;
           }
           let teamSlotStartTime = getTimeDate(slotAvailability.slotTime.split('-')[0], date);
@@ -319,7 +343,7 @@ class MlAppointment {
       } else {
         return {
           success: false,
-          message: "Message"
+          message: "Service Provide is not available, Please select a different time slot"
         };
       }
     } else {

@@ -10,9 +10,15 @@ export async function ongoingAppointmentActionHandler() {
       query {
         fetchMyAppointment{
           _id
-          serviceName
-          serviceId
-          sessionId
+          appointmentInfo {
+            resourceType
+            resourceId
+            serviceCardId
+            serviceName
+            taskId
+            sessionId
+            serviceOrderId
+          }
           startDate
           endDate
         }

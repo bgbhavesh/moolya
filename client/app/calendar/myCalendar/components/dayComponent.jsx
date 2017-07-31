@@ -52,7 +52,7 @@ export default class MlAppMyCalendarDayComponent extends Component {
     let year=  dates.getFullYear();
     const response = await fetchSessionDayActionHandler(orderId,sessionId, date, month, year)
     console.log(response)
-    this.props.slots(response)
+    this.props.slots(response, date)
     return response
 
   }

@@ -365,8 +365,24 @@ class MlServiceCardRepo{
         return new MlRespPayload().successPayload(result, 200);
     }
 
-    updateServiceCard(context){
-
+  updateBespokeServiceCardDefinition(service, context){
+    var result;
+    try {
+      var serviceCard                 = service;
+      serviceCard["updatedAt"]        = new Date();
+      serviceCard["isApproved"]       =  false;
+      serviceCard["isCurrentVersion"] =  true;
+      let id = service._id
+      delete service['_id']
+      result = mlDBController.update('MlServiceCardDefinition' , {_id:id},serviceCard,{$set:1}, context)
+      if(!result){
+        let code = 400;
+        return new MlRespPayload().errorPayload(result, code);
+      }
+    }catch (e){
+      return new MlRespPayload().errorPayload(e.message, 400);
+    }
+    return new MlRespPayload().successPayload(result, 200);
     }
 
     getServicecardExpiryDate(frequencyString){

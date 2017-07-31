@@ -279,6 +279,9 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
         let code = 200;
         let result = {portfoliodetailsId: updatedResponse}
         let response = new MlRespPayload().successPayload(result, code);
+        if(response){
+          MlEmailNotification.portfolioSuccessfullGoLive(user);
+        }
         return response
       } else {
         let code = 401;
@@ -296,6 +299,13 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
 MlResolver.MlMutationResolver['rejectPortfolio'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {
     let updatedResponse = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {"status": "Rejected"}, {$set: true}, context)
+    if(updatedResponse){
+      let regRecord = mlDBController.findOne('MlPortfolioDetails', {
+          _id: args.portfoliodetailsId,
+          }, context) || {}
+      let user = mlDBController.findOne('users', {_id: regRecord.userId}, context) || {};
+      //MlEmailNotification.portfolioGoLiveDecline(user);
+    }
     return updatedResponse;
   }
 }

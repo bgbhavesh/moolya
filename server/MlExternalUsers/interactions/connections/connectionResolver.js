@@ -1,10 +1,11 @@
 /**
  * Created by venkatsrinag on 6/5/17.
  */
-import MlResolver from "../../../commons/mlResolverDef";
-import MlRespPayload from "../../../commons/mlPayload";
-import mlInteractionService from "../mlInteractionRepoService";
-import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
+import MlResolver from '../../../commons/mlResolverDef'
+import MlRespPayload from '../../../commons/mlPayload'
+import _ from 'lodash'
+import mlInteractionService from '../mlInteractionRepoService';
+import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
 
 /*STATUS
  0 - Pending
@@ -113,6 +114,7 @@ MlResolver.MlMutationResolver['connectionRequest'] = (obj, args, context, info) 
            mlInteractionService.createTransactionRequest(toUser._id,'connectionRequest',resp);
           if(toUser._id&&fromuser._id){
             MlEmailNotification.endUserPortfolioConnect(fromuser._id,toUser._id);
+            MlEmailNotification.portfolioConnectRequestReceived(fromuser._id,toUser._id);
           }
       }
       return  new MlRespPayload().successPayload(resp,200);
@@ -184,6 +186,11 @@ MlResolver.MlMutationResolver['rejectConnection'] = (obj,args, context, info) =>
       {isAccepted:false,isBlocked:false,isDenied:true,updatedBy:contextUser.username,updatedAt:new Date(),actionUserId:contextUser._id,status:2},//update doc
       {$set:true},context);
     if(result===0){ return new MlRespPayload().errorPayload('Failed to reject the connection request', 400);}
+    if(result){
+      let fromUser = connection&&connection.users&&connection.users.length>0&&connection.users[0]&&connection.users[0].userId?connection.users[0].userId:""
+      let toUser = connection&&connection.users&&connection.users.length>0&&connection.users[1]&&connection.users[1].userId?connection.users[1].userId:""
+      MlEmailNotification.portfolioConnectRequestDecline(fromUser,toUser);
+    }
     return new MlRespPayload().successPayload('Connection Rejected', 200);
   }catch (e) {
     let code = 400;

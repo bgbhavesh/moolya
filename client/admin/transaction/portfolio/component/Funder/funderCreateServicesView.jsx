@@ -20,7 +20,11 @@ export default class  FunderCreateServicesView extends Component {
       data:{},
       selectedIndex: 0,
       funderService: [],
-      saveData: false
+      selectedFrequencyType:[],
+      saveData: false,
+      updateData: false,
+      mode: false,
+      details:{expectedInput:""}
     }
     this.handleBlur.bind(this);
     this.sendDataToParent.bind(this);
@@ -61,7 +65,19 @@ export default class  FunderCreateServicesView extends Component {
   }
 
   componentWillMount(){
-}
+    if(this.props.beSpokeDetails){
+      let data = this.state.data;
+      data.updateData =  true;
+      let details = this.props.beSpokeDetails[this.props.beSpokeIndex];
+      this.setState({details:details})
+      console.log(this.state.details)
+      let mode = this.props.beSpokeDetails[this.props.beSpokeIndex].mode;
+      if(mode === 'offline')
+        this.setState({mode: true})
+        else
+          this.setState({mode: false})
+      }
+    }
 
   /**
    * Method :: handleBlur
@@ -80,14 +96,22 @@ export default class  FunderCreateServicesView extends Component {
       this.sendDataToParent()
     })
     if(name === "expectedInput"){
-      this.setState({expectedInput: e.target.value})
+      let temp = this.state.details;
+      temp.expectedInput = e.target.value;
+      this.setState({details: temp})
     }else if(name === "about"){
-      this.setState({about: e.target.value})
+      let temp = this.state.details;
+      temp.about = e.target.value;
+      this.setState({details: temp})
     }else if(name === "expectedOutput"){
-      this.setState({expectedOutput: e.target.value})
+      let temp = this.state.details;
+      temp.expectedOutput = e.target.value;
+      this.setState({details: temp})
     }else if(name === "noOfSession"){
-      this.setState({session: e.target.value})
-    }else if(name === "hour"){
+      let temp = this.state.details;
+      temp.noOfSession = e.target.value;
+      this.setState({details: temp})    }
+      else if(name === "hour"){
       this.setState({hour: e.target.value})
       this.handleDuration()
     }else if(name === "minute"){
@@ -125,6 +149,9 @@ export default class  FunderCreateServicesView extends Component {
         delete data[propName];
       }
     }
+    if(data.updateData) {
+      this.props.updateBeSpokeData(data)
+    }else
     this.props.saveServiceDetails(data)
   }
 
@@ -139,8 +166,13 @@ export default class  FunderCreateServicesView extends Component {
     let details = this.state.data;
     details = _.omit(details, ["industryId"]);
     details = _.extend(details, {["industryId"]: selectedIndustry});
+    let tempArray = []
+    tempArray.push(selectedIndustry.value)
+    let temp = {
+      industryId: tempArray
+    }
+    this.setState({details: temp})
     this.setState({data: details}, function () {
-      this.setState({selectedIndustryType: selectedIndustry})
       this.sendDataToParent()
     })
   }
@@ -154,22 +186,21 @@ export default class  FunderCreateServicesView extends Component {
 
 
   onConversationSelected(selectedConversation) {
-    let temp = [];
+    let temp = []
     selectedConversation.map(function(data){
       temp.push(data.label)
     })
     let details = this.state.data;
     // let details = this.state.data;
+    let tempObject={}
+    tempObject.conversation = temp
+    this.setState({details: tempObject})
     details = _.omit(details, ["conversation"]);
     details = _.extend(details, {["conversation"]: temp});
     this.setState({data: details}, function () {
-      this.setState({selectedConversationType: temp})
       this.sendDataToParent()
     })
   }
-
-
-
 
 
   onFrequencySelected(selectedFrequency) {
@@ -177,8 +208,10 @@ export default class  FunderCreateServicesView extends Component {
     // let details = this.state.data;
     details = _.omit(details, ["sessionFrequency"]);
     details = _.extend(details, {["sessionFrequency"]: selectedFrequency.value});
+    let temp = {}
+      temp.sessionFrequency =  selectedFrequency.value
+    this.setState({details: temp})
     this.setState({data: details}, function () {
-      this.setState({selectedFrequencyType: selectedFrequency})
       this.sendDataToParent()
     })
   }
@@ -259,11 +292,19 @@ export default class  FunderCreateServicesView extends Component {
 
   saveBeSpoke(){
     let details = this.state.data;
-    details = _.omit(details, ["saveData"]);
-    details = _.extend(details, {["saveData"]: !this.state.saveData});
-    this.setState({data: details}, function () {
-      this.sendDataToParent()
-    })
+    if(details.updateData){
+      details = _.omit(details, ["update"]);
+      details = _.extend(details, {["update"]: !this.state.updateData});
+      this.setState({data: details}, function () {
+        this.sendDataToParent()
+      })
+    }else{
+      details = _.omit(details, ["saveData"]);
+      details = _.extend(details, {["saveData"]: !this.state.saveData});
+      this.setState({data: details}, function () {
+        this.sendDataToParent()
+      })
+    }
   }
 
   render() {
@@ -299,7 +340,7 @@ export default class  FunderCreateServicesView extends Component {
             </div>
             <div className="pull-right">
               {/*style={{'marginTop': '-15px'}}*/}
-              <input type="text" placeholder="Document Name" value={details.documentName?details.documentName:" "} onChange={that.documentName.bind(that, index)}/>
+              <input type="text" placeholder="Document Name" defaultValue={details.documentName?details.documentName:" "} onChange={that.documentName.bind(that, index)}/>
             </div>
           </div>
           <div className="panel-body nopadding">
@@ -336,25 +377,25 @@ export default class  FunderCreateServicesView extends Component {
                   <span className="state_label">Online
                   </span>
                   <label className="switch nocolor-switch">
-                    <input type="checkbox" name="mode" onChange={this.modeSwitchHandler.bind(this)} value={this.state.mode} checked={this.props.beSpokeDetails?this.props.beSpokeDetails[this.props.beSpokeIndex].mode==="offline"?true:false:false}/>
+                    <input type="checkbox" name="mode" onChange={this.modeSwitchHandler.bind(this)}  defaultChecked={this.state.mode}/>
                     <div className="slider">
-                    </div>
+                    </div>l
                   </label>
                   <span className="state_label acLabel">Offline</span>
                 </div>
                 <div className="clearfix"/>
                 <div className="form-group">
-                  <textarea className="form-control float-label" placeholder="About" name="about" onBlur={this.handleBlur.bind(this)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[this.props.beSpokeIndex].about:this.state.about}></textarea>
+                  <textarea className="form-control float-label" placeholder="About" name="about" onBlur={this.handleBlur.bind(this)} defaultValue={this.state.details.about}></textarea>
                 </div>
                 <div className="form-group">
-                  <label>Required number of Sessions <input type="number" min="0"  name="noOfSession" onChange={(e)=>this.handleBlur(e)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[this.props.beSpokeIndex].noOfSessions: this.state.session}  className="form-control inline_input medium_in"/> </label>
+                  <label>Required number of Sessions <input type="number" min="0"  name="noOfSession" onChange={(e)=>this.handleBlur(e)} defaultValue={this.state.details.noOfSessions}  className="form-control inline_input medium_in"/> </label>
                 </div>
                 <div className="form-group">
-                  <label>Duration &nbsp; <input type="number"  min="0"  name="hour" onChange={(e)=>this.handleBlur(e)} value={ this.props.beSpokeDetails && this.props.beSpokeDetails[this.props.beSpokeIndex] && this.props.beSpokeDetails[this.props.beSpokeIndex].duration?this.props.beSpokeDetails[this.props.beSpokeIndex].duration.hours:this.state.hour?parseInt(this.state.hour):0} className="form-control inline_input"/> Hours
-                    <input type="number" name="minute" min="0"  onChange={(e)=>this.handleBlur(e)} value={ this.props.beSpokeDetails && this.props.beSpokeDetails[this.props.beSpokeIndex] && this.props.beSpokeDetails[this.props.beSpokeIndex].duration?this.props.beSpokeDetails[this.props.beSpokeIndex].duration.minutes:this.state.minute?parseInt(this.state.minute):0} className="form-control inline_input"/> Mins </label>
+                  <label>Duration &nbsp; <input type="number"  min="0"  name="hour" onChange={(e)=>this.handleBlur(e)} defaultValue={ this.props.beSpokeDetails && this.props.beSpokeDetails[this.props.beSpokeIndex] && this.props.beSpokeDetails[this.props.beSpokeIndex].duration?this.props.beSpokeDetails[this.props.beSpokeIndex].duration.hours:this.state.hour?parseInt(this.state.hour):0} className="form-control inline_input"/> Hours
+                    <input type="number" name="minute" min="0"  onChange={(e)=>this.handleBlur(e)} defaultValue={ this.props.beSpokeDetails && this.props.beSpokeDetails[this.props.beSpokeIndex] && this.props.beSpokeDetails[this.props.beSpokeIndex].duration?this.props.beSpokeDetails[this.props.beSpokeIndex].duration.minutes:this.state.minute?parseInt(this.state.minute):0} className="form-control inline_input"/> Mins </label>
                 </div>
                 <div className="form-group">
-                  <textarea className="form-control float-label" placeholder="Expected input" name="expectedInput" onChange={this.handleBlur.bind(this)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[this.props.beSpokeIndex].expectedInput:this.state.expectedInput}></textarea>
+                  <textarea className="form-control float-label" placeholder="Expected input" name="expectedInput" onChange={this.handleBlur.bind(this)} defaultValue={that.state.details.expectedInput}></textarea>
                 </div>
               </form>
             </div>
@@ -367,21 +408,21 @@ export default class  FunderCreateServicesView extends Component {
                                 labelKey={'label'} queryType={"graphql"} query={industryTypeQuery}
                                 isDynamic={true} placeholder="Select Industry Type"
                                 onSelect={that.onOptionSelected.bind(that)}
-                                selectedValue={that.state.selectedIndustryType} value={this.props.beSpokeDetails && this.props.beSpokeDetails.industryId?this.props.beSpokeDetails[this.props.beSpokeIndex].industryId.label:that.state.selectedIndustryType?that.state.selectedIndustryType:""}/>
+                                selectedValue={that.state.details.industryId} defaultValue={that.state.details.industryId}/>
                 </div>
                 <div className="form-group">
-                  <input type="text" className="form-control float-label" placeholder="Display Name" name="displayName" onChange={this.handleBlur.bind(this)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[this.props.beSpokeIndex].displayName:this.state.displayName}></input>
+                  <input type="text" className="form-control float-label" placeholder="Display Name" name="displayName" onChange={this.handleBlur.bind(this)} defaultValue={that.state.details.displayName} value={that.state.details.displayName} ></input>
                 </div>
                 <div className="form-group">
-                  <Select name="form-field-name"  multi={true} options={options} value={this.props.beSpokeDetails?this.props.beSpokeDetails[this.props.beSpokeIndex].conversation:"" || that.state.selectedConversationType} placeholder='Conversation Type' onChange={that.onConversationSelected.bind(that)} />
+                  <Select name="form-field-name" multi options={options} defaultValue={that.state.details.conversation} value={that.state.details.conversation} placeholder='Conversation Type' onChange={that.onConversationSelected.bind(that)} />
                 </div>
                 <div className="form-group">
                   <div className="form-group">
-                    <Select className="form-field-name" options={frequencyOptions} placeholder="Frequency" value={this.props.beSpokeDetails?this.props.beSpokeDetails[this.props.beSpokeIndex].noOfSession:that.state.selectedFrequencyType?that.state.selectedFrequencyType:""} onChange={that.onFrequencySelected.bind(that)}></Select>
+                    <Select className="form-field-name" options={frequencyOptions} placeholder="Frequency" defaultValue={this.state.details.sessionFrequency} value={this.state.details.sessionFrequency}  onChange={that.onFrequencySelected.bind(that)}></Select>
                   </div>
                 </div>
                 <div className="form-group">
-                  <textarea className="form-control float-label" placeholder="Expected Output" name="expectedOutput" onChange={this.handleBlur.bind(this)} value={this.props.beSpokeDetails?this.props.beSpokeDetails[this.props.beSpokeIndex].expectedOutput:this.state.expectedOutput}></textarea>
+                  <textarea className="form-control float-label" placeholder="Expected Output" name="expectedOutput" onChange={this.handleBlur.bind(this)} defaultValue={this.state.details.expectedOutput}></textarea>
                 </div>
                 <div className="clearfix"/>
                 {attachments}

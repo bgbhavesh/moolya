@@ -165,11 +165,7 @@ MlResolver.MlMutationResolver['updateServiceSendReview'] = (obj, args, context, 
     let response = new MlRespPayload().errorPayload('Service not found', code);
     return response
   }
-  if(!service.isApproved){
-    let code = 404;
-    let response = new MlRespPayload().errorPayload('Service not activated, Please send for review', code);
-    return response
-  }
+
   let result = mlDBController.update('MlServiceCardDefinition', {_id: service._id}, {isLive: false, isReview: true}, {$set: 1}, context);
   if(result){
     let code = 200;

@@ -166,6 +166,7 @@ export default class MlAppServicePayment extends React.Component{
             </form>
           </div>
         </ScrollArea>
+        {!this.props.viewMode?'':<div className="ml_btn" style={{'textAlign':'center'}}><div className="save_btn" onClick={() => this.bookService()}>Book</div> </div>}
       </div>
     )
   }

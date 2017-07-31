@@ -5,6 +5,10 @@ $mlGray:#B9C5CC;
 $mlWhite:#ffffff;
 $mlBlack:#000000;
 $menuTrans:all 0.5s linear;
+@media only screen and ( min-width: 768px )  and ( max-width:1024px ) {
+.img_block{width:24%;margin-right:1%;float:left;}.img_block img{ width: 100%; }
+.moolya_app .list_style li{width: 15%;}
+}
 @media only screen and ( min-width: 768px )  and ( max-width: 900px ) {
 	.app_header{
 		.fa-home{display: none;}
@@ -33,6 +37,14 @@ $menuTrans:all 0.5s linear;
 		.app_menu ul .menu_item .menu_in b.menu_title {font-weight: normal; position: relative; top: -6px; left: 15px;font-size:16px;}
 		.app_menu ul li.menu_item:last-child{display: none;}
 	}
+	.moolya_app .startup-logo {border-radius: 4px; float: left; width: 19%; padding: 8px 10px; position: relative; top: inherit; left: inherit; box-shadow: none; }
+	.moolya_app .header-action-buttons {margin: 0; float: right; width: 80%; }
+	.moolya_app .startup-logo img {height:38px; border-radius: 4px; width: 100%; }
+	.moolya_app .header-action-buttons li{width: 84px;}
+
+	ol.progtrckr li span.step_name {left: 50%; transform: translateX(-50%);}
+	ol.progtrckr li span.step_name b {font-size: 11px;   padding: 0px 4px 2px 4px; font-weight: normal;}
+	ol.progtrckr li {     margin: 0px 34px 40px; width: 32px; height: 58px; }
 
 }
 @media only screen and ( max-width: 768px ){
@@ -40,6 +52,9 @@ $menuTrans:all 0.5s linear;
   .moolya_app .RRT__tab{margin-right: 0px;}
   .moolya_app .RRT__tab{margin-top: 2px;border-radius: 4px;}
   .moolya_app .RRT__tab--selected{border-radius: 4px 4px 0px 0px;}
+  .moolya_app .header-action-buttons {width: 630px;position: relative;float: right; }
+  .moolya_app .startup-logo img {height: auto;width: 80px; }
+  .moolya_app .startup-logo{width: auto;}
 }
 @media only screen and ( min-width: 768px ){
 	.moolya_app{
@@ -51,4 +66,18 @@ $menuTrans:all 0.5s linear;
     padding-right: 0 !important;
     padding-left: 0 !important;
     }
+}
+@media only screen and (width: 768px ){
+	.moolya_app .ml_app_tabs .nav-pills > li > a {
+    padding: 10px 11px;
+}
+
+
+}
+
+@media only screen and (width: 1024px ){
+.startup-logo{
+  position:absolute;left:7px;top:7px;height: 26px !important;border-radius: 4px;box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
+  img{height: 26px !important;border-radius: 4px;}
+}
 }

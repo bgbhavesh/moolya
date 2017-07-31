@@ -634,11 +634,11 @@ let CoreModules = {
     return {totalRecords: totalRecords, data: data};
   },
   MlServiceCardsTransactionRepo: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
-    var service = MlServiceCardDefinition.find({'isCurrentVersion': true}).fetch()
+    var service = MlServiceCardDefinition.find({'isBeSpoke': false, 'isCurrentVersion': true, 'isReview': true}).fetch();
     var data = [];
     service.map(function(details, index) {
       data.push(details)
-      var userData = mlDBController.find('users', {'profile.externalUserProfiles.profileId': details.profileId}).fetch()
+      var userData = mlDBController.find('users', {'profile.externalUserProfiles.profileId': details.profileId}).fetch();
       userData.map(function (list) {
         data[index].email = list.username;
         list.profile.externalUserProfiles.map(function (user) {

@@ -123,15 +123,7 @@ MlResolver.MlMutationResolver['updateServiceCardOrder'] = (obj, args, context, i
 // This Resolver need to move to internal users as it should undergo to authorization
 MlResolver.MlMutationResolver['updateServiceAdmin'] = (obj, args, context, info) => {
   if (!_.isEmpty(args.Services)) {
-    let oldService = mlDBController.findOne('MlServiceCardDefinition', {_id: args.serviceId}, context);
-    let service;
-    if (oldService) {
-      let query = {
-        transactionId: oldService.transactionId,
-        isCurrentVersion: true
-      };
-      service = mlDBController.findOne('MlServiceCardDefinition', query, context);
-    }
+    var service = mlDBController.findOne('MlServiceCardDefinition', {_id: args.serviceId}, context);
     if (service) {
       args.Services.userId = service.userId;
       args.Services.updatedAt = new Date();

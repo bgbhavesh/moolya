@@ -154,6 +154,20 @@ class MlServiceCardRepo{
             }
           }
         }
+        var isError = false;
+        if (service.tasks && service.tasks.length > 0 && servicecard.tasks && servicecard.tasks.length > 0) {
+          service.tasks.map((task)=> {
+            servicecard.tasks.map((currentTask) => {
+              if (task.id !== currentTask.id && task.sequence === currentTask.sequence) {
+                isError = true;
+                return false;
+              }
+            })
+          });
+        }
+        if (isError) {
+          return new MlRespPayload().errorPayload("Task sequence already exist", 400);
+        }
         servicecard.userId = service.userId;
         servicecard.updatedAt = new Date();
         servicecard.finalAmount = servicecard.tasks ? newFinalAmount : servicecard.finalAmount;

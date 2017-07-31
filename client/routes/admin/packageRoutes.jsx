@@ -16,21 +16,21 @@ import MlEditOfficePackage from "../../admin/packages/office/component/MlEditOff
 // });
 
 adminSection.route('/packages/officeList', {
-  name: 'packages_office',
+  name:'packages_ListOffice',
   action(params){
     mount(AdminLayout,{adminContent:<MlOfficePackageList/>})
   }
 });
 
 adminSection.route('/packages/addOffice', {
-  name: 'packages_office',
+  name: 'packages_AddOffice',
   action(params){
     mount(AdminLayout,{adminContent:<MlAddOfficePackage/>})
   }
 });
 
 adminSection.route('/packages/editOffice/:officeId', {
-  name: 'packages_office',
+  name: 'packages_EditOffice',
   action(params){
     mount(AdminLayout,{adminContent:<MlEditOfficePackage config={params}/>})
   }

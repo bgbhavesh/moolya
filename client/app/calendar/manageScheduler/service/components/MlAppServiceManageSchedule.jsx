@@ -501,6 +501,7 @@ export default class MlAppServiceManageSchedule extends Component {
    */
   async saveService(isRedirectWithList) {
     let {clusters, tasks, finalAmount, prevFinalAmount, clusterName, chapterName, stateName, communitiesName, serviceBasicInfo, serviceTask, service, serviceTermAndCondition, servicePayment, facilitationCharge} = this.state;
+    let isError = false;
     if (servicePayment.isDiscount && isRedirectWithList) {
       this.errorMsg = '';
       this.paymentValidate();
@@ -570,6 +571,11 @@ export default class MlAppServiceManageSchedule extends Component {
         });
       let taskSequence;
       if (serviceTask.selectedTaskDetails.session && serviceTask.selectedTaskDetails.session.length > 0) {
+        if (!serviceTask.selectedTaskDetails.sequence) {
+          toastr.error('Task sequence is required');
+          isError = true;
+          return false;
+        }
         if (serviceDetails && serviceDetails.length > 0) {
           taskSequence = serviceDetails[0].sequence;
         }
@@ -578,8 +584,30 @@ export default class MlAppServiceManageSchedule extends Component {
           if (taskSequence) {
             seqData = serviceDetails[0]['sessions'][index].sequence;
           }
+          if (!session.sequence) {
+            isError = true;
+            return false;
+          }
           sessions.push({id: session.sessionId, sequence: (session.sequence || seqData)})
         });
+        if (isError) {
+          toastr.error('Session sequence is required');
+        } else {
+          if (sessions && sessions.length > 0) {
+            let sequenceArr = sessions.map((session) => { return session.sequence });
+            let isDuplicate = sequenceArr.some((sequence, index) => {
+              return sequenceArr.indexOf(sequence) !== index
+            });
+            if (isDuplicate) {
+              toastr.error('Session sequence should be different');
+              isError = true;
+              return false;
+            }
+          }
+        }
+      }
+      if (isError) {
+        return false;
       }
       services.tasks = [];
       let task = {
@@ -604,7 +632,7 @@ export default class MlAppServiceManageSchedule extends Component {
             taskInfo.session.forEach((session, index) => {
               let seqData = '';
               if (isServiceDetails) {
-                seqData = serviceDetails[0]['sessions'][index].sequence;
+                seqData = serviceDetails[0]['sessions'][index] && serviceDetails[0]['sessions'][index].sequence;
               }
               sessionDetails.push({id: session.sessionId, sequence: session.sequence || seqData})
             });

@@ -33,7 +33,8 @@ export default MlNotificationsServices = class MlNotificationsServices {
           createdAt: new Date()
         };
         //MlNotifications(saveObj).save((err, res) => cb(err, { statusCode: 200, status: 'success', message: 'Notification saved successfully' }));
-        mlDBController.insert('MlNotifications', saveObj, context||{});
+        //mlDBController.insert('MlNotifications', saveObj, context||{});
+        MlNotifications.insert(saveObj);
       }
 
     ]);
@@ -52,8 +53,8 @@ export default MlNotificationsServices = class MlNotificationsServices {
           updateObj.isDeleted = true;
         }
         ;
-
-        mlDBController.update('MlNotifications', queryObj, updateObj, {$set: true}, context||{});
+        MlNotifications.update(queryObj, {$set:updateObj});
+       // mlDBController.update('MlNotifications', queryObj, updateObj, {$set: true}, context||{});
         //MlNotifications.findOneAndUpdate(queryObj, updateObj, { new: true }, (err, res) => cb(err, { statusCode: 200, status: 'success', message: 'Notification Updated successfully', data: res }));
       }
 

@@ -389,7 +389,7 @@ const MlEmailNotification= class MlEmailNotification {
       path : Meteor.absoluteUrl('login')
     }
     let toEmail = userDetails&&userDetails.username?userDetails.username:"";
-    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_portfolio_profile_confirmation_mailer","email",regObj)
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_go_live_successful_mailer","email",regObj)
     Meteor.setTimeout(function () {
       mlEmail.sendHtml({
         from: fromEmail,
@@ -400,9 +400,6 @@ const MlEmailNotification= class MlEmailNotification {
     }, 2 * 1000);
   }
 
-  static onPortfolioUpdate(userDetails){
-
-  }
 
   static endUserPortfolioConnect(fromUserId,toUserId){
      fromUserId  = fromUserId?fromUserId:"";
@@ -425,7 +422,7 @@ const MlEmailNotification= class MlEmailNotification {
       time : time,
       path : Meteor.absoluteUrl('login')
     }
-    let toEmail =toUserDetails&&toUserDetails.username?toUserDetails.username:"";
+    let toEmail =fromUserDetails&&fromUserDetails.username?fromUserDetails.username:"";
 
     let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_new_connection_request_sent","email",regObj)
     Meteor.setTimeout(function () {
@@ -438,6 +435,163 @@ const MlEmailNotification= class MlEmailNotification {
     }, 2 * 1000);
   }
 
+  static portfolioConnectRequestReceived(fromUserId,toUserId){
+    fromUserId  = fromUserId?fromUserId:"";
+    toUserId = toUserId?toUserId:""
+    var fromUserDetails = Meteor.users.findOne({_id: fromUserId});
+    var toUserDetails = Meteor.users.findOne({_id: toUserId});
+    let fromUserFirstName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.firstName?fromUserDetails.profile.firstName:"";
+    let fromUserLastName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.lastName?fromUserDetails.profile.lastName:"";
+
+    let toUserFirstName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.firstName?toUserDetails.profile.firstName:"";
+    let toUserLastName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.lastName?toUserDetails.profile.lastName:"";
+
+    var currentdate = new Date();
+    let date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+    let time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+    let regObj = {
+      userName : toUserFirstName+" "+toUserLastName,
+      recieverName : fromUserFirstName+" "+fromUserLastName,
+      path : Meteor.absoluteUrl('login')
+    }
+    let toEmail =toUserDetails&&toUserDetails.username?toUserDetails.username:"";
+    console.log(toUserDetails.username);
+    //let toEmail = "siri.dhavala@gmail.com"
+
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_new_connection_request_received","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "Portfolio Connection Request Received !!",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+  }
+
+
+  static portfolioConnectRequestDecline(fromUserId,toUserId){
+    fromUserId  = fromUserId?fromUserId:"";
+    toUserId = toUserId?toUserId:""
+    var fromUserDetails = Meteor.users.findOne({_id: fromUserId});
+    var toUserDetails = Meteor.users.findOne({_id: toUserId});
+    let fromUserFirstName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.firstName?fromUserDetails.profile.firstName:"";
+    let fromUserLastName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.lastName?fromUserDetails.profile.lastName:"";
+
+    let toUserFirstName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.firstName?toUserDetails.profile.firstName:"";
+    let toUserLastName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.lastName?toUserDetails.profile.lastName:"";
+
+    var currentdate = new Date();
+    let date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+    let time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+    let regObj = {
+      userName : fromUserFirstName+" "+fromUserLastName,
+      recieverName : toUserFirstName+" "+toUserLastName,
+      path : Meteor.absoluteUrl('login')
+    }
+    let toEmail =fromUserDetails&&fromUserDetails.username?fromUserDetails.username:"";
+
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_new_connection_request_sent","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "Portfolio Connection Request Decline !!",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+  }
+
+  static enquireRequest(fromUserDetails,toUserDetails){
+    let fromUserFirstName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.firstName?fromUserDetails.profile.firstName:"";
+    let fromUserLastName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.lastName?fromUserDetails.profile.lastName:"";
+
+    let toUserFirstName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.firstName?toUserDetails.profile.firstName:"";
+    let toUserLastName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.lastName?toUserDetails.profile.lastName:"";
+
+    let regObj = {
+      userName : toUserFirstName+" "+toUserLastName,
+      recieverName : fromUserFirstName+" "+fromUserLastName,
+      path : Meteor.absoluteUrl('login')
+    }
+    let toEmail =toUserDetails&&toUserDetails.username?toUserDetails.username:"";
+
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_new_enquire_request","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "Portfolio Enquiry Request !!",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+  }
+
+  static reviewRecieved(fromUserDetails,toUserDetails){
+    let fromUserFirstName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.firstName?fromUserDetails.profile.firstName:"";
+    let fromUserLastName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.lastName?fromUserDetails.profile.lastName:"";
+
+    let toUserFirstName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.firstName?toUserDetails.profile.firstName:"";
+    let toUserLastName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.lastName?toUserDetails.profile.lastName:"";
+
+    let regObj = {
+      userName : toUserFirstName+" "+toUserLastName,
+      recieverName : fromUserFirstName+" "+fromUserLastName,
+      path : Meteor.absoluteUrl('login')
+    }
+    let toEmail =toUserDetails&&toUserDetails.username?toUserDetails.username:"";
+
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_new_review_received","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "Portfolio New Review !!",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+
+  }
+
+  static portfolioSuccessfullGoLive(userDetails){
+    let user = userDetails || {}
+    let firstName = userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"";
+    let lastName = userDetails&&userDetails.profile&&userDetails.profile.lastName?userDetails.profile.lastName:"";
+    let regObj = {
+      userName : firstName+" "+lastName,
+      path : Meteor.absoluteUrl('login')
+    }
+    let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_go_live_successful_mailer","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "Live on Moolya!!",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+  }
+
+  static portfolioGoLiveDecline(userDetails){
+    let user = userDetails || {}
+    let firstName = userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"";
+    let lastName = userDetails&&userDetails.profile&&userDetails.profile.lastName?userDetails.profile.lastName:"";
+    let regObj = {
+      userName : firstName+" "+lastName,
+      path : Meteor.absoluteUrl('login')
+    }
+    let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_go_live_declined","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "Go Live Declined!!",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+  }
 
 
 }

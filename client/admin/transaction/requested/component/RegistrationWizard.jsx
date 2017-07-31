@@ -194,7 +194,7 @@ export default class RegistrationWizard extends React.Component{
               <div >
                 {hasSoftRegTemplate&&<SoftRegComponent {...registrationConfig}/>}
                 {hasHardRegTemplate&&<HardRegComponent {...registrationConfig}/>}
-                {hasSteps&&<StepZilla steps={steps} stepsNavigation={true} prevBtnOnLastStep={true} />}
+                {hasSteps&&<StepZilla steps={steps} stepsNavigation={true} prevBtnOnLastStep={true} dontValidate={true}/>}
               </div>
             </div>
           </div>)}

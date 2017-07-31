@@ -118,16 +118,39 @@ MlResolver.MlMutationResolver['updateHierarchyAssignment'] = (obj, args, context
 MlResolver.MlQueryResolver['fetchHierarchyRoles'] = (obj, args, context, info) => {
   let response;
   let levelCode = "";
-  let finalRoles = []
+  var finalRoles = []
+  var hierarchyQuery = {};
+  var subChapter = {};
+
+  if(args.subChapterId){
+    subChapter =  mlDBController.findOne("MlSubChapters", {"_id": args.subChapterId}, context)
+  }
+
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
   if (department && department.isActive) {
-    response= mlDBController.findOne('MlHierarchyAssignments', {
-      $and: [
-        {parentDepartment:args.departmentId},
-        {parentSubDepartment:args.subDepartmentId},
-        {clusterId:department.isSystemDefined?"All":args.clusterId}
-      ]},context)
+
+    if(subChapter.isDefaultSubChapter || !args.subChapterId){
+      hierarchyQuery = {
+        $and: [
+          {parentDepartment:args.departmentId},
+          {parentSubDepartment:args.subDepartmentId},
+          {clusterId:department.isSystemDefined?"All":args.clusterId},
+          {isDefaultSubChapter : true}
+        ]
+      }
+    } else{
+      hierarchyQuery = {
+        $and: [
+          {parentDepartment:args.departmentId},
+          {parentSubDepartment:args.subDepartmentId},
+          {clusterId:department.isSystemDefined?"All":args.clusterId},
+          {isDefaultSubChapter : false}
+        ]
+      }
+    }
+    response= mlDBController.findOne('MlHierarchyAssignments', hierarchyQuery, context)
   }
+
   if(response){
     let teamStructureAssignment = response.teamStructureAssignment;
     let userRole = mlAssignHierarchy.getUserRoles(context.userId)
@@ -173,8 +196,8 @@ MlResolver.MlQueryResolver['fetchHierarchyRoles'] = (obj, args, context, info) =
               // })
 
 
-        if(!currentRole.assignedLevel){
-            console.log("Not available in hierarchy");
+        if(!currentRole || !currentRole.assignedLevel){
+            console.log("Role not available in hierarchy");
             return [];
         }
         /*
@@ -184,7 +207,7 @@ MlResolver.MlQueryResolver['fetchHierarchyRoles'] = (obj, args, context, info) =
         var userHierarchy = mlDBController.findOne('MlHierarchy', {"code": (currentRole.assignedLevel).toUpperCase()}, context)
 
         var reportingRole = currentRole.reportingRole;
-
+        var sameLevelRoles = []
         /*    Looping through all the team assignment in the hierarchy    */
         teamStructureAssignment.map(function (role, key) {
 
@@ -202,23 +225,36 @@ MlResolver.MlQueryResolver['fetchHierarchyRoles'] = (obj, args, context, info) =
                 if(role.roleId != currentRole.roleId){
 
                     /*    Comparing roleId with ReportingRoleId to check if 'currentRole' role reports to this role    */
-                    if(role.roleId!=reportingRole){
+                    // if(role.roleId!=reportingRole){
 
-                      finalRoles.push(role)
+                  sameLevelRoles.push(role)
 
-                    }else if(role.roleId==reportingRole){
-
-                      /*
-                            'Current Role' reports to this role, hence not pushing the role.
-                            Updating reportingRole Id to check other roles.
-                       */
-                      reportingRole = role.reportingRole;
-
-                    }
+                    // }
+                    // else if(role.roleId==reportingRole){
+                    //
+                    //   /*
+                    //         'Current Role' reports to this role, hence not pushing the role.
+                    //         Updating reportingRole Id to check other roles.
+                    //    */
+                    //   reportingRole = role.reportingRole;
+                    //
+                    // }
                 }
 
             }
         })
+        var finalArr = sameLevelRoles;
+
+        for (let i = 0; i < sameLevelRoles.length; i++) {
+            var role = _.find(sameLevelRoles, {roleId:reportingRole});
+            if(role){
+                reportingRole = role.reportingRole;
+                finalArr = _.reject(finalArr, {roleId:role.roleId})
+            }else{
+                break;
+            }
+        }
+        finalRoles = finalRoles.concat(finalArr);
       }
     }
     return finalRoles;

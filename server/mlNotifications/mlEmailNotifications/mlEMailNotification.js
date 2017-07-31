@@ -435,7 +435,7 @@ const MlEmailNotification= class MlEmailNotification {
     let time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
     let regObj = {
       userName : fromUserFirstName+" "+fromUserLastName,
-      connectionName : toUserFirstName+" "+toUserLastName,
+      recieverName : toUserFirstName+" "+toUserLastName,
       date : date,
       time : time,
       path : Meteor.absoluteUrl('login')
@@ -509,7 +509,7 @@ const MlEmailNotification= class MlEmailNotification {
     }
     let toEmail =fromUserDetails&&fromUserDetails.username?fromUserDetails.username:"";
 
-    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_new_connection_request_sent","email",regObj)
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_connection_declined","email",regObj)
     Meteor.setTimeout(function () {
       mlEmail.sendHtml({
         from: fromEmail,

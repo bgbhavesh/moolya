@@ -316,6 +316,7 @@ let service=`
         createService(Services:service):response
         createBeSpokeService(Services:service):response
         updateBeSpokeService(Services:service):response
+        updateServiceGoLive(serviceId:String!):response
         updateService(serviceId:String,Services:service):response
         updateServiceAdmin(serviceId:String,Services:service):response
         createServiceCardOrder(serviceId: String!, taskDetails: [tasks]):response
@@ -335,6 +336,7 @@ let supportedApi = [
   {api:'fetchBeSpokeServices',        actionName:'READ',    moduleName:"SERVICECARD", isAppWhiteList:true},
   {api:'createService',               userAction:"CREATESERVICEDEF", actionName:'CREATE',  resourceName:"SERVICECARD"},
   {api:'updateService',               userAction:"UPDATESERVICEDEF", actionName:'UPDATE',  resourceName:"SERVICECARD"},
+  {api:'updateServiceGoLive',               userAction:"UPDATESERVICEDEF", actionName:'UPDATE',  resourceName:"SERVICECARD"},
   {api:'updateServiceAdmin',          actionName:'UPDATE',  moduleName:"SERVICECARD", isWhiteList:true},
   {api:'createServiceCardOrder',      userAction:"CREATESERVICEORDER", actionName:'CREATE',  resourceName:"SERVICECARD"},
   {api:'updateServiceCardOrder',      userAction:"UPDATESERVICEORDER", actionName:'UPDATE',  resourceName:"SERVICECARD"},

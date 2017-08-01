@@ -117,6 +117,13 @@ MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
             var newAmount = (parseInt(finalActivitiesDerivedAmount) * parseInt(args.taskDetails.payment.discountValue)/100);
             newFinalAmount = parseInt(finalActivitiesDerivedAmount) - parseInt(newAmount);
           }
+        } else if (task.payment && task.payment.isDiscount && task.payment.discountValue > 0) {
+          if (task.payment.discountType === 'amount') {
+            newFinalAmount = parseInt(finalActivitiesDerivedAmount) - parseInt(task.payment.discountValue);
+          } else {
+            var newAmount = (parseInt(finalActivitiesDerivedAmount) * parseInt(task.payment.discountValue)/100);
+            newFinalAmount = parseInt(finalActivitiesDerivedAmount) - parseInt(newAmount);
+          }
         }
         paymentAmount = _.extend(paymentAmount, pick);
         paymentAmount['derivedAmount'] = newFinalAmount;

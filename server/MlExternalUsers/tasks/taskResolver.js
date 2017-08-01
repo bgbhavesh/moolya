@@ -176,12 +176,19 @@ MlResolver.MlQueryResolver['fetchTasksInBooking'] = (obj, args, context, info) =
 
 
 MlResolver.MlQueryResolver['fetchTaskDetailsForServiceCard'] = (obj, args, context, info) => {
-  let query = {
-    userId: context.userId,
-    isExternal: true,
-    isActive: true,
-    isServiceCardEligible: true
-  };
+  let query;
+  if(args.profileId) {
+    query = {
+      userId: context.userId,
+      profileId: args.profileId,
+      isExternal: true,
+      isActive: true,
+      isServiceCardEligible: true
+    };
+  } else {
+    query = {};
+  }
+
   if (args.serviceId) {
     let service = mlDBController.findOne('MlServiceCardDefinition', args.serviceId , context);
     let taskQuery = [];
@@ -196,9 +203,6 @@ MlResolver.MlQueryResolver['fetchTaskDetailsForServiceCard'] = (obj, args, conte
       {isCurrentVersion: true}
     ];
   }
-  if(args.profileId){
-    query.profileId = args.profileId;
-  };
   let result = mlDBController.find('MlTask', query, context).fetch();
   if (result && result.length > 0) {
     result.map((task, taskIndex) => {

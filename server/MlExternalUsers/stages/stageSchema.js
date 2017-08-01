@@ -41,8 +41,8 @@ let supportedApi = [
   {api:'fetchStages', actionName:'READ', moduleName:"OFFICE", isWhiteList:true},
   {api:'fetchStage', actionName:'READ', moduleName:"OFFICE", isWhiteList:true},
 
-  {api:'createStage', actionName:'CREATE', moduleName:"OFFICE", isWhiteList:true},
-  {api:'updateStage', actionName:'UPDATE', moduleName:"OFFICE", isWhiteList:true},
+  {api:'createStage', actionName:'CREATE', moduleName:"OFFICE", isAppWhiteList:true},
+  {api:'updateStage', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList:true},
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

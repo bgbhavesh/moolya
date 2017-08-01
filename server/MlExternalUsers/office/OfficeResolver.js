@@ -207,6 +207,7 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
 
       let officeMemberData = {
         officeId: officeId,
+        profileId: profile.profileId,
         userId: userId,
         isFreeUser:false,
         isPaidUser: false,

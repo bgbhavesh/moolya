@@ -726,6 +726,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     totalRecords=MlFilters.find(query,findOptions).count();
   }
 
+  /**check its dependency required or not*/
   if (args.module == "FunderPortfolio") {
     let value = mlDBController.find('MlPortfolioDetails', {status: 'gone live', communityCode: "FUN"}, context).fetch()    //making dependency of funders on portfolio status
     let portId = _lodash.map(value, '_id')

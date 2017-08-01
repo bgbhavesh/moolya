@@ -56,6 +56,11 @@ class MlGenericTransactions{
               if(reg)
                   clusterId = reg.registrationInfo.clusterId;
           }
+          if(transactionType == "Portfolio"){
+            var reg = mlDBController.findOne('MlPortfolioDetails',{transactionId:transactionId[0]});
+            if(reg)
+              clusterId = reg.clusterId;
+          }
 
           if(clusterId){
               /*

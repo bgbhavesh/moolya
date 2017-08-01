@@ -205,12 +205,16 @@ export default class MlStartupClients extends React.Component{
   async imagesDisplay(){
     const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
     if (response) {
-      let detailsArray = response&&response.clients?response.clients:[]
-      let dataDetails =this.state.startupClients
+      let dataDetails =this.state.startupClients;
+      if(!dataDetails || dataDetails.length<1){
+        dataDetails = response&&response.clients?response.clients:[]
+      }
       let cloneBackUp = _.cloneDeep(dataDetails);
-      _.each(detailsArray, function (obj,key) {
-        cloneBackUp[key]["logo"] = obj.logo;
-      })
+      if(cloneBackUp && cloneBackUp.length>0) {
+        _.each(dataDetails, function (obj, key) {
+          cloneBackUp[key]["logo"] = obj.logo;
+        })
+      }
       let listDetails = this.state.startupClientsList || [];
       listDetails = cloneBackUp
       let cloneBackUpList = _.cloneDeep(listDetails);

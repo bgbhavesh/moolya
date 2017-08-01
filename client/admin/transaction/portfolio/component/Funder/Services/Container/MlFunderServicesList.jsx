@@ -93,6 +93,7 @@ export default class  MlFunderServicesList extends Component {
         serviceId={this.state.serviceId}
         profileId={this.state.profileId}
         serviceInfo={this.serviceInfo.bind(this)}
+        portfolioDetailsId={this.props.portfolioDetailsId}
         bookService={this.bookService.bind(this)}
         serviceDetails={this.state.serviceDetails}
     />

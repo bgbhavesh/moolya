@@ -8,12 +8,21 @@ export default class  MlFunderServicesListView extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      componentToView: 'landingPage'
+      componentToView: 'landingPage',
+      myPortfolio: false
     }
     this.servicesListView.bind(this);
   }
   componentWillMount(){
-    console.log(this.props.beSpokeService[this.props.beSpokeIndex])
+    let path = FlowRouter._current.path
+    console.log(path,path.indexOf('edit'), path.indexOf('view'))
+    if(path.indexOf('edit') > 0 || path.indexOf('view') > 0){
+      console.log('edit or view');
+      this.setState({myPortfolio: true})
+    }else{
+      console.log('Not edit or view');
+      this.setState({myPortfolio: false})
+    }
   }
 
   servicesListView(){
@@ -22,7 +31,7 @@ export default class  MlFunderServicesListView extends Component {
       <div className="app_main_wrap" style={{'overflow':'auto'}}>
         <div className="app_padding_wrap">
           <div className="col-lg-12" id="show">
-            {this.props.myPortfolio? <div className="col-lg-2 col-md-4 col-sm-4">
+            {!this.state.myPortfolio? <div className="col-lg-2 col-md-4 col-sm-4">
               <a href=" " onClick={() => that.props.componentToView('createBeSpoke')}>
                 <div className="list_block notrans">
                   <div className="hex_outer"><span className="ml ml-plus "></span></div>
@@ -53,7 +62,6 @@ export default class  MlFunderServicesListView extends Component {
   }
 
   render(){
-    console.log(this.props.viewComponent);
     switch(this.props.viewComponent){
       case 'createBeSpoke':
         return(<BeSpokeHandler portfolioDetailsId={this.props.portfolioDetailsId}/>)

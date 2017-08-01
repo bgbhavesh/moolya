@@ -538,12 +538,18 @@ MlResolver.MlQueryResolver['fetchLibrary'] = (obj, args, context, info) => {
   }else {
         var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.userId}, context)
         if (portfolioDetails) {
+          let portfolioId ;
           let currentProfile = context.url.split("/")
+          if(context.url.split("/")[4] === 'explore'){
+            portfolioId = context.url.split("/")[6];
+          }else{
+            portfolioId = context.url.split("/")[5];
+          }
           args.userId = portfolioDetails.userId;
           var query = {
             userId: args.userId,
             isActive: true,
-            'portfolioReference.portfolioId': currentProfile[5],
+            'portfolioReference.portfolioId': portfolioId,
             'portfolioReference.isPrivate': false
           }
           var libraryDataOthers = mlDBController.find('MlLibrary', query, context).fetch();

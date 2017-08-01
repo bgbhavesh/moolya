@@ -43,9 +43,9 @@ export default class MlFunderAreaOfInterest extends React.Component {
       const response = await fetchfunderPortfolioAreaInterest(portfolioDetailsId);
       if (response) {
         this.setState({loading: false, funderAreaOfInterest: response, funderAreaOfInterestList: response});
-        _.each(response.privateFields, function (pf) {
-          $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-        })
+        // _.each(response.privateFields, function (pf) {
+        //   $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+        // })
       }
 
     } else {
@@ -172,6 +172,7 @@ export default class MlFunderAreaOfInterest extends React.Component {
       }
       let newItem = _.omit(item, "__typename");
       let updateItem = _.omit(newItem, 'logo');
+      updateItem =_.omit(updateItem,"privateFields");
       arr.push(updateItem)
     })
     funderAreaOfInterest = arr;

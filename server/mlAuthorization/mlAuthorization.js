@@ -283,7 +283,7 @@ class MlAuthorization
         isSubChapter = this.findChapterSubChapter(roleDetails.defaultSubChapters, variables['subChapterId'])
         if(!isSubChapter)
           return false
-        isCommunity = this.findCommunity(roleDetails.defaultCommunities, variables['communityId'])
+        isCommunity = this.findCommunity(roleDetails.defaultCommunities, variables['communityId'], variables['subChapterId'], variables['chapterId'])
         if(!isCommunity)
           return false
 
@@ -305,7 +305,7 @@ class MlAuthorization
 
       /**code change sending 2 parameter and reciving 4 paraments */
       // findCommunity(communityArray, chapterId, subChapterId, communityId) {
-      findCommunity(communityArray, communityId) {
+      findCommunity(communityArray, communityId, subChapterId, chapterId) {
         for (var i = 0; i < communityArray.length; i++) {
           var index = _.isMatch(communityArray[i], {communityCode: 'all'})
           if (index)
@@ -317,7 +317,7 @@ class MlAuthorization
 
           var community = MlCommunity.findOne({_id: communityId});
           if (!community) {
-            community = MlCommunity.findOne({communityDefCode: communityId});
+            community = MlCommunity.findOne({communityDefCode: communityId, chapterId:chapterId, subChapterId:subChapterId});
           }
           if (community) {
             index = _.isMatch(communityArray[i], {communityId: community._id})
@@ -343,7 +343,8 @@ class MlAuthorization
 
       getInternalRequestContextDetails(variables, actionName){
         if(actionName == 'CREATE'){
-          return {clusterId:variables['clusterId'], chapterId:variables['chapterId'], subChapterId:variables['subChapterId'], communityId:variables['community']};
+          // return {clusterId:variables['clusterId'], chapterId:variables['chapterId'], subChapterId:variables['subChapterId'], communityId:variables['community']};
+          return {clusterId:variables['clusterId'], chapterId:variables['chapterId'], subChapterId:variables['subChapterId'], communityId:variables['communityId']};
         }
         let request = MlRequests.findOne({requestId:variables.requestsId})
         if(!request)

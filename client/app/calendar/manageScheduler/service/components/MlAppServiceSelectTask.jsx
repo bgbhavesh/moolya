@@ -21,8 +21,8 @@ class MlAppServiceSelectTask extends Component{
     super(props);
   }
 
-  componentDidMount() {
-    this.props.getServiceDetails();
+  async componentDidMount() {
+    await this.props.getServiceDetails();
     this.props.getRedirectServiceList(false);
     if(this.props.viewMode && this.props.serviceTask.tasks[0] ){
       let taskId =this.props.serviceTask.tasks[0].id;

@@ -15,12 +15,9 @@ export default class  MlFunderServicesListView extends Component {
   }
   componentWillMount(){
     let path = FlowRouter._current.path
-    console.log(path,path.indexOf('edit'), path.indexOf('view'))
     if(path.indexOf('edit') > 0 || path.indexOf('view') > 0){
-      console.log('edit or view');
       this.setState({myPortfolio: true})
     }else{
-      console.log('Not edit or view');
       this.setState({myPortfolio: false})
     }
   }
@@ -64,7 +61,7 @@ export default class  MlFunderServicesListView extends Component {
   render(){
     switch(this.props.viewComponent){
       case 'createBeSpoke':
-        return(<BeSpokeHandler portfolioDetailsId={this.props.portfolioDetailsId}/>)
+        return(<BeSpokeHandler portfolioDetailsId={this.props.portfolioDetailsId} componentToView={this.props.componentToView}/>)
         break;
       case 'landingPage':
         return(this.servicesListView())
@@ -73,7 +70,7 @@ export default class  MlFunderServicesListView extends Component {
         return(
           <div className="app_main_wrap" style={{'overflow':'auto'}}>
             <div className="app_padding_wrap">
-              <BeSpokeHandler beSpokeDetails={this.props.beSpokeService} beSpokeIndex={this.props.beSpokeIndex}/>
+              <BeSpokeHandler beSpokeDetails={this.props.beSpokeService} componentToView={this.props.componentToView} beSpokeIndex={this.props.beSpokeIndex}/>
             </div>
           </div>
         )

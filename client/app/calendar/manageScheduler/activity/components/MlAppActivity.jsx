@@ -40,6 +40,7 @@ export default class MlAppActivity extends Component {
       },
     };
     this.getActivityDetails = this.getActivityDetails.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
   }
 
   /**
@@ -159,6 +160,14 @@ export default class MlAppActivity extends Component {
   }
 
   /**
+   * Method :: handleCancel
+   * Desc :: Redirect with activity list page
+   */
+  handleCancel() {
+    let profileId = FlowRouter.getParam('profileId');
+    FlowRouter.go('/app/calendar/manageSchedule/' + profileId + '/activityList');
+  }
+  /**
    * Render
    * Desc   :: Render the HTML for this component
    * @returns {HTML}
@@ -172,17 +181,28 @@ export default class MlAppActivity extends Component {
     const steps = [
         {
           name: 'Create',
-          component: <MlAppBasicInfo getActivityDetails={this.getActivityDetails} saveActivity={that.saveActivity} data={that.state.basicInfo} />,
+          component: <MlAppBasicInfo getActivityDetails={this.getActivityDetails}
+                                     saveActivity={that.saveActivity}
+                                     data={that.state.basicInfo}
+                                     handleCancel={this.handleCancel} />,
           icon: <span className="ml fa fa-plus-square-o"></span>
         },
         {
           name: 'Choose team',
-          component: <MlAppChooseTeam getActivityDetails={this.getActivityDetails} saveActivity={that.saveActivity} isInternal={this.state.isInternal} isExternal={this.state.isExternal} data={this.state.teamInfo}/>,
+          component: <MlAppChooseTeam getActivityDetails={this.getActivityDetails}
+                                      saveActivity={that.saveActivity}
+                                      isInternal={this.state.isInternal}
+                                      isExternal={this.state.isExternal}
+                                      data={this.state.teamInfo}
+                                      handleCancel={this.handleCancel} />,
           icon: <span className="ml fa fa-users"></span>
         },
         {
           name: 'Payment', component:
-          <MlAppActivityPayment getActivityDetails={this.getActivityDetails} saveActivity={that.saveActivity} data={this.state.paymentInfo} />,
+          <MlAppActivityPayment getActivityDetails={this.getActivityDetails}
+                                saveActivity={that.saveActivity}
+                                data={this.state.paymentInfo}
+                                handleCancel={this.handleCancel} />,
           icon: <span className="ml ml-payments"></span>
         },
         {

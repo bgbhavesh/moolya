@@ -256,7 +256,8 @@ export default class Step4 extends React.Component{
           </div>
         </ScrollArea>
         <div className="ml_btn" style={{'textAlign':'center'}}>
-          <div className="save_btn" onClick={this.saveDetails.bind(this)}>Save</div> <div className="cancel_btn">Cancel</div>
+          <div className="save_btn" onClick={this.saveDetails.bind(this)}>Save</div>
+          <div onClick={() => this.props.handleCancel()} className="cancel_btn">Cancel</div>
         </div>
       </div>
     )

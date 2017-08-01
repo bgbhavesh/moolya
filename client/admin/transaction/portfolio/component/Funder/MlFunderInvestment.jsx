@@ -7,6 +7,7 @@ import _ from "lodash";
 import Datetime from "react-datetime";
 import gql from "graphql-tag";
 import {graphql} from "react-apollo";
+import moment from "moment";
 import Moolyaselect from "../../../../commons/components/MlAdminSelectWrapper";
 import MlLoader from "../../../../../commons/components/loader/loader";
 import {fetchfunderPortfolioInvestor} from "../../actions/findPortfolioFunderDetails";
@@ -97,11 +98,12 @@ export default class MlFunderInvestment extends React.Component {
     })
   }
 
-  dateChange(e) {
+  dateChange(event) {
+    let value = event && event._d ? moment(event._d).format('DD-MM-YYYY') : ''
     let details = this.state.data;
     let name = 'dateOfInvestment';
     details = _.omit(details, [name]);
-    details = _.extend(details, {[name]: this.refs.dateOfInvestment.state.inputValue});
+    details = _.extend(details, {[name]: value});
     this.setState({data: details}, function () {
       this.sendDataToParent()
     })
@@ -266,7 +268,7 @@ export default class MlFunderInvestment extends React.Component {
                             <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
                                       inputProps={{placeholder: "Enter Date of Investment"}} ref="dateOfInvestment"
                                       defaultValue={this.state.data.dateOfInvestment ? this.state.data.dateOfInvestment : ''}
-                                      onBlur={this.dateChange.bind(this)} closeOnSelect={true} isValidDate={ valid }/>
+                                      onChange={this.dateChange.bind(this)} closeOnSelect={true} isValidDate={ valid }/>
                             <FontAwesome name='unlock' className="input_icon un_lock" id="isDateOfInvestmentPrivate"
                                          onClick={this.onLockChange.bind(this, "dateOfInvestment", "isDateOfInvestmentPrivate")}/>
                           </div>

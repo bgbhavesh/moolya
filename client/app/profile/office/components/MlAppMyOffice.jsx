@@ -13,7 +13,7 @@ import {fetchExternalUserProfilesActionHandler} from "../../../profile/actions/s
 export default class MlAppMyOffice extends Component {
   constructor(props) {
     super(props);
-    this.state = {loading: true, data: []};
+    this.state = {loading: true, data: [], showButton:false};
     this.findUserOffice.bind(this);
     return this;
   }
@@ -67,18 +67,21 @@ export default class MlAppMyOffice extends Component {
       if (!default_User_Profile) {
         default_User_Profile = response[0];
       }
-      this.isFunder = _.isMatch(default_User_Profile, {communityDefCode: 'FUN'})
-      if(!this.isFunder){
-        $('.addOffice').addClass('disabled')
-      }
+      let isFunder = _.isMatch(default_User_Profile, {communityDefCode: 'FUN'})
+      this.setState({showButton: isFunder})
+      // if(!this.isFunder){
+      //   $('.addOletffice').addClass('disabled')
+      // }
     }
   }
 
   addNewOffice() {
-    if (this.isFunder)
+    if (this.state.showButton){
       FlowRouter.go("/app/addOffice")
-    else
+    }else{
       toastr.error('Not Authorised');
+    }
+
   }
 
   async selectOffice(officeId, evt) {
@@ -140,7 +143,7 @@ export default class MlAppMyOffice extends Component {
                         <div className="swiper-pagination"></div>
                       </div>
                       <div className="col-md-12 text-center well mart20">
-                        {this.isFunder?<div className="col-md-4 nopadding">
+                        {this.state.showButton?<div className="col-md-4 nopadding">
                           <a className="fileUpload mlUpload_btn addOffice" onClick={this.addNewOffice.bind(this)}>Add New
                             Office</a>
                         </div>:<div></div>}

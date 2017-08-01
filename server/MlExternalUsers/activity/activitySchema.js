@@ -30,17 +30,17 @@ branchType: String
 _id: String
 }
     type FacilitationCharge {
-      amount: Int
-      percentage: Int
-      derivedAmount: Int
+      amount: Float
+      percentage: Float
+      derivedAmount: Float
     }
 
     type ActivityPayment {
-      amount: Int
+      amount: Float
       isDiscount: Boolean
       discountType: String
-      discountValue: Int
-      derivedAmount: Int
+      discountValue: Float
+      derivedAmount: Float
     }
     
     type UserProfileDetails{
@@ -94,17 +94,17 @@ _id: String
     }
 
      input facilitationCharge {
-      amount: Int
-      percentage: Int
-      derivedAmount: Int
+      amount: Float
+      percentage: Float
+      derivedAmount: Float
     }
     
     input activityPayment {
-      amount: Int
+      amount: Float
       isDiscount: Boolean
       discountType: String
-      discountValue: Int
-      derivedAmount: Int
+      discountValue: Float
+      derivedAmount: Float
     }
     input userProfileDetails{
       userId: String

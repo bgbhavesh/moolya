@@ -302,7 +302,7 @@ export default class MlAppChooseTeam extends React.Component{
                         return (
                          <li key={userIndex}>
                             <a href="">
-                              <img src="/images/def_profile.png" /><br />
+                              <img src={user.profileImage ? user.profileImage : "/images/def_profile.png"} /><br />
                               <div className="tooltiprefer">
                                 <span>{user.name}</span>
                               </div>

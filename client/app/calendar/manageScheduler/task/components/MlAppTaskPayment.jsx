@@ -165,17 +165,17 @@ export default class MlAppTaskPayment extends Component {
               <form>
                 <div className="form-group">
                   <label>Activity actual amount <input className="form-control inline_input medium_in"
-                                                         defaultValue={this.state.data.payment.activitiesAmount} disabled="true"/>
+                                                         defaultValue={this.state.data.payment.activitiesAmount ? parseFloat(this.state.data.payment.activitiesAmount).toFixed(2) : '' } disabled="true"/>
                   </label>
                 </div>
                 <div className="form-group">
                   <label>Activity discount amount <input className="form-control inline_input medium_in"
-                                                         defaultValue={this.state.data.payment.activitiesDiscount} disabled="true"/>
+                                                         defaultValue={this.state.data.payment.activitiesDiscount ? parseFloat(this.state.data.payment.activitiesDiscount).toFixed(2) : '' } disabled="true"/>
                   </label>
                 </div>
                 <div className="form-group">
                   <label>Activity derived amount <input className="form-control inline_input medium_in"
-                                                         defaultValue={this.state.data.payment.activitiesDerived} disabled="true"/>
+                                                         defaultValue={this.state.data.payment.activitiesDerived ? parseFloat(this.state.data.payment.activitiesDerived).toFixed(2) : '' } disabled="true"/>
                   </label>
                 </div>
                 <div className="form-group switch_wrap switch_names inline_switch">
@@ -220,7 +220,7 @@ export default class MlAppTaskPayment extends Component {
                 <div className="form-group">
                   <label>Derived amount Rs. <input className="form-control inline_input medium_in"
                                                    onChange={this.handleNull.bind(this)}
-                                                   value={this.state.data.payment.derivedAmount}
+                                                   value={this.state.data.payment.derivedAmount ? parseInt(this.state.data.payment.derivedAmount).toFixed(2) :''}
                                                    disabled />
                   </label>
                 </div>

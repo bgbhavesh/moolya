@@ -27,7 +27,8 @@ let myOfficeSchema = `
        isRetire:Boolean,
        isFreeUser:Boolean,
        isPaidUser:Boolean,
-       isAdminUser:Boolean
+       isAdminUser:Boolean,
+       profileImage: String
     }
 
     type AvailableCommunities{

@@ -13,14 +13,14 @@
    }
 
    type Payment {
-     amount: Int
+     amount: Float
      isDiscount: Boolean
      discountType : String
-     discountValue : Int
-     activitiesDerived: Int
-     activitiesDiscount: Int
-     activitiesAmount: Int
-     derivedAmount :Int
+     discountValue : Float
+     activitiesDerived: Float
+     activitiesDiscount: Float
+     activitiesAmount: Float
+     derivedAmount :Float
    }
 
    type FacilitationCharge {
@@ -110,14 +110,14 @@
    }
    
    input payment {
-       amount: Int
+       amount: Float
        isDiscount: Boolean
        discountType : String
-       discountValue : Int
-       activitiesDerived: Int
-       activitiesDiscount: Int
-       activitiesAmount: Int
-       derivedAmount :Int
+       discountValue : Float
+       activitiesDerived: Float
+       activitiesDiscount: Float
+       activitiesAmount: Float
+       derivedAmount :Float
    }
    
    input facilitationCharge {

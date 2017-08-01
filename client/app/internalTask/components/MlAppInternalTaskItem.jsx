@@ -122,7 +122,7 @@ export default class MlAppInternalTaskItem extends React.Component {
                             <li key={index}>
                               <a href="#">
                                 <span></span>
-                                  <img src={ user.profileUrl ? user.profileUrl : "/images/p_5.jpg"} /><br />
+                                  <img src={ user.profileUrl ? user.profileUrl : "/images/def_profile.png"} /><br />
                                     <div className="tooltiprefer">
                                   <span>{user.name}</span>
                                 </div>

@@ -22,6 +22,13 @@ class MlAppServiceSelectTask extends Component{
   }
 
   componentDidMount() {
+    this.props.getServiceDetails();
+    this.props.getRedirectServiceList(false);
+    if(this.props.viewMode && this.props.serviceTask.tasks[0] ){
+      let taskId =this.props.serviceTask.tasks[0].id;
+      this.props.optionsBySelectService(taskId);
+    }
+
     let mySwiper = new Swiper('.manage_tasks', {
       speed: 400,
       spaceBetween:20,
@@ -54,13 +61,13 @@ class MlAppServiceSelectTask extends Component{
    */
 
   getTabs() {
-    const { serviceTask, optionsBySelectService, deleteSelectedTask } = this.props;
+    const { serviceTask, optionsBySelectService, deleteSelectedTask, viewMode } = this.props;
     const tabs = serviceTask.tasks ? serviceTask.tasks.map((tab, index) => {
       return (
         <li className={serviceTask.selectedTaskId === tab.id ? 'active' : ''} key={index}>
           <a href="#newTask" data-toggle="tab"
              onClick={() => optionsBySelectService(tab.id)}>
-             <FontAwesome onClick={() => deleteSelectedTask(tab.id)} name='minus-square'/>{tab.displayName}
+            {viewMode ? <FontAwesome onClick={() => deleteSelectedTask(tab.id)} name='minus-square'/> : ''} {tab.displayName}
           </a>
         </li>
       )
@@ -149,7 +156,6 @@ class MlAppServiceSelectTask extends Component{
       serviceId,
       optionsBySelectService,
       updateSessionSequence,
-      saveService,
       respectiveTab,
       serviceTask} = this.props;
     const tasks = serviceTask.selectedTaskDetails || {};
@@ -164,13 +170,16 @@ class MlAppServiceSelectTask extends Component{
             <div className="panel-body">
               <div className="ml_tabs ml_tabs_large">
                 <ul  className="nav nav-pills">
-                  <li className={serviceTask.selectedTaskId ? '' : 'active'} key={-1}>
-                    <a href="#newTask" data-toggle="tab"
-                       className="add-contact"
-                       onClick={() => optionsBySelectService()}>
-                       <FontAwesome name='plus-square'/> Add new task
-                    </a>
-                  </li>
+                  {
+                    this.props.viewMode ? '' :
+                      <li className={serviceTask.selectedTaskId ? '' : 'active'} key={-1}>
+                        <a href="#newTask" data-toggle="tab"
+                           className="add-contact"
+                           onClick={() => optionsBySelectService()}>
+                           <FontAwesome name='plus-square'/> Add new task
+                        </a>
+                      </li>
+                  }
                   {this.getTabs()}
                 </ul>
               </div>
@@ -230,10 +239,6 @@ class MlAppServiceSelectTask extends Component{
                     </div>
                     <br className="brclear"/>
                       {this.getSessionList()}
-                    {!this.props.viewMode? <div className="ml_icon_btn">
-                      <div className="save_btn" onClick={() => saveService(false)}><span className="ml ml-save"></span></div>
-                      <a href="" className="cancel_btn"><span className="ml ml-delete"></span></a>
-                    </div>:""}
                   </div>
                   <div className="tab-pane" id="2a">
                     2

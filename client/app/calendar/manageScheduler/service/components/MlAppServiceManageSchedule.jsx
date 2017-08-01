@@ -17,17 +17,23 @@ import MlAppServiceSelectTask from './MlAppServiceSelectTask';
 import MlAppServiceTermsAndConditions from './MlAppServiceTermsAndConditions';
 import MlAppServicePayment from './MlAppServicePayment';
 import MlAppServiceHistory from "./MlAppServiceHistory";
+import MlAppActionComponent from "../../../../commons/components/MlAppActionComponent";
+import MlAccordion from "../../../../commons/components/MlAccordion";
+import formHandler from "../../../../../commons/containers/MlFormHandler";
+
 import {
   createServiceActionHandler,
   fetchServiceActionHandler,
   fetchProfileActionHandler,
   updateServiceActionHandler,
   fetchTasksAmountActionHandler,
-  fetchTaskDetailsForServiceCard
+  updateGoLiveServiceActionHandler,
+  fetchTaskDetailsForServiceCard,
+  updateReviewServiceActionHandler
 } from '../actions/MlServiceActionHandler';
 import {fetchTaskDetailsActionHandler} from '../../task/actions/fetchTaskDetails';
 
-export default class MlAppServiceManageSchedule extends Component {
+class MlAppServiceManageSchedule extends Component {
 
   /**
    * Constructor
@@ -56,6 +62,7 @@ export default class MlAppServiceManageSchedule extends Component {
       serviceTermAndCondition: {},
       attachments: [],
       servicePayment: {},
+      isRedirect: false,
       facilitationCharge: {},
       tasks: [],
       taxStatus: 'taxexclusive',
@@ -87,6 +94,7 @@ export default class MlAppServiceManageSchedule extends Component {
     this.checkPromoStatus = this.checkPromoStatus.bind(this);
     this.checkDiscountStatus = this.checkDiscountStatus.bind(this);
     this.deleteSelectedTask = this.deleteSelectedTask.bind(this);
+    this.getRedirectServiceList = this.getRedirectServiceList.bind(this);
   }
 
   componentWillMount() {
@@ -104,6 +112,13 @@ export default class MlAppServiceManageSchedule extends Component {
     });
   }
 
+  /**
+   * Method :: getRedirectServiceList
+   * Desc :: Set the redirect with service list component
+   */
+  getRedirectServiceList(isRedirect) {
+    this.setState({ isRedirect: isRedirect});
+  }
   /**
    * Method :: setServiceSteps
    * Desc :: Sets components steps for stepzila to create and update service data
@@ -131,13 +146,13 @@ export default class MlAppServiceManageSchedule extends Component {
                                           clusterCode={clusterCode}
                                           clusterName={clusterName}
                                           clusters={clusters}
+                                          getRedirectServiceList={this.getRedirectServiceList}
                                           clusterData={this.state.clusterData}
                                           daysRemaining={daysRemaining}
                                           optionsBySelectstates={this.optionsBySelectstates}
                                           optionsBySelectChapters={this.optionsBySelectChapters}
                                           optionsBySelectCommunities={this.optionsBySelectCommunities}
                                           getServiceDetails={this.getServiceDetails}
-                                          saveService={this.saveService}
                                           options={this.options}
                                           checkBoxHandler={this.checkBoxHandler}
                                           validTill={this.validTill}
@@ -151,9 +166,9 @@ export default class MlAppServiceManageSchedule extends Component {
         component: <MlAppServiceSelectTask serviceTask={serviceTask}
                                            profileId={this.profileId}
                                            serviceId={this.serviceId}
+                                           getRedirectServiceList={this.getRedirectServiceList}
                                            deleteSelectedTask={this.deleteSelectedTask}
                                            getServiceDetails={this.getServiceDetails}
-                                           saveService={this.saveService}
                                            viewMode={this.props.viewMode}
                                            optionsBySelectService={this.optionsBySelectService}
                                            updateSessionSequence={this.updateSessionSequence}
@@ -165,10 +180,10 @@ export default class MlAppServiceManageSchedule extends Component {
         component: <MlAppServiceTermsAndConditions serviceTermAndCondition={serviceTermAndCondition}
                                                    attachments={attachments}
                                                    viewMode={this.props.viewMode}
+                                                   getRedirectServiceList={this.getRedirectServiceList}
                                                    onChangeCheckBox={this.onChangeCheckBox}
                                                    onChangeValue={this.onChangeValue}
-                                                   getServiceDetails={this.getServiceDetails}
-                                                   saveService={this.saveService}/>,
+                                                   getServiceDetails={this.getServiceDetails} />,
         icon: <span className="ml ml-payments"></span>
       },
       {
@@ -178,6 +193,7 @@ export default class MlAppServiceManageSchedule extends Component {
                                         finalAmount={finalAmount}
                                         prevFinalAmount={prevFinalAmount}
                                         viewMode={this.props.viewMode}
+                                        getRedirectServiceList={this.getRedirectServiceList}
                                         getServiceDetails={this.getServiceDetails}
                                         facilitationCharge={facilitationCharge}
                                         checkDiscountEligibility={this.checkDiscountEligibility}
@@ -185,9 +201,8 @@ export default class MlAppServiceManageSchedule extends Component {
                                         checkTaxStatus={this.checkTaxStatus}
                                         checkPromoStatus={this.checkPromoStatus}
                                         checkDiscountStatus={this.checkDiscountStatus}
-                                        saveService={this.saveService}
-                                        serviceId={this.props.serviceId}
-                                        bookService={this.props.bookService}/>,
+                                        bookService={this.props.bookService}
+                                        serviceId={this.props.serviceId}/>,
 
         icon: <span className="ml ml-payments"></span>
       },
@@ -348,6 +363,7 @@ export default class MlAppServiceManageSchedule extends Component {
           cluster: service.cluster,
           isBeSpoke: service.isBeSpoke,
           isApproved: service.isApproved,
+          isLive: service.isLive,
           city: service.city,
           state: service.state,
           community: service.community
@@ -499,9 +515,10 @@ export default class MlAppServiceManageSchedule extends Component {
    * @param data :: Object :: Service data
    * @returns Void
    */
-  async saveService(isRedirectWithList) {
-    let {clusters, tasks, finalAmount, prevFinalAmount, clusterName, chapterName, stateName, communitiesName, serviceBasicInfo, serviceTask, service, serviceTermAndCondition, servicePayment, facilitationCharge} = this.state;
-    if (servicePayment.isDiscount && isRedirectWithList) {
+  async saveService() {
+    let {clusters, isRedirect, tasks, finalAmount, prevFinalAmount, clusterName, chapterName, stateName, communitiesName, serviceBasicInfo, serviceTask, service, serviceTermAndCondition, servicePayment, facilitationCharge} = this.state;
+    let isError = false;
+    if (servicePayment.isDiscount && isRedirect) {
       this.errorMsg = '';
       this.paymentValidate();
       if (this.errorMsg) {
@@ -563,13 +580,18 @@ export default class MlAppServiceManageSchedule extends Component {
     };
 
     // Service selected task construct
-    if (serviceTask.selectedTaskDetails && serviceTask.selectedTaskId) {
+    if (serviceTask.selectedTaskDetails && serviceTask.selectedTaskId && !isRedirect) {
       let sessions = [];
       let serviceDetails = service.tasks && service.tasks.filter((task) => {
           return task.id === serviceTask.selectedTaskId
         });
       let taskSequence;
       if (serviceTask.selectedTaskDetails.session && serviceTask.selectedTaskDetails.session.length > 0) {
+        if (!serviceTask.selectedTaskDetails.sequence) {
+          toastr.error('Task sequence is required');
+          isError = true;
+          return false;
+        }
         if (serviceDetails && serviceDetails.length > 0) {
           taskSequence = serviceDetails[0].sequence;
         }
@@ -578,8 +600,30 @@ export default class MlAppServiceManageSchedule extends Component {
           if (taskSequence) {
             seqData = serviceDetails[0]['sessions'][index].sequence;
           }
+          if (!session.sequence) {
+            isError = true;
+            return false;
+          }
           sessions.push({id: session.sessionId, sequence: (session.sequence || seqData)})
         });
+        if (isError) {
+          toastr.error('Session sequence is required');
+        } else {
+          if (sessions && sessions.length > 0) {
+            let sequenceArr = sessions.map((session) => { return session.sequence });
+            let isDuplicate = sequenceArr.some((sequence, index) => {
+              return sequenceArr.indexOf(sequence) !== index
+            });
+            if (isDuplicate) {
+              toastr.error('Session sequence can not be duplicated');
+              isError = true;
+              return false;
+            }
+          }
+        }
+      }
+      if (isError) {
+        return false;
       }
       services.tasks = [];
       let task = {
@@ -604,7 +648,7 @@ export default class MlAppServiceManageSchedule extends Component {
             taskInfo.session.forEach((session, index) => {
               let seqData = '';
               if (isServiceDetails) {
-                seqData = serviceDetails[0]['sessions'][index].sequence;
+                seqData = serviceDetails[0]['sessions'][index] && serviceDetails[0]['sessions'][index].sequence;
               }
               sessionDetails.push({id: session.sessionId, sequence: session.sequence || seqData})
             });
@@ -653,7 +697,7 @@ export default class MlAppServiceManageSchedule extends Component {
       }
       this.getServiceDetails();
       this.showResponseMsg(resp, 'Updated Successfully');
-      if (isRedirectWithList) {
+      if (isRedirect) {
         FlowRouter.go(`/app/calendar/manageSchedule/${this.profileId}/serviceList`);
       }
     }
@@ -903,11 +947,68 @@ export default class MlAppServiceManageSchedule extends Component {
   }
 
   /**
+   * Method :: setGoLiveService
+   * Desc :: Set the service go live
+   */
+  async setGoLiveService() {
+    const resp = await updateGoLiveServiceActionHandler(this.serviceId);
+    this.showResponseMsg(resp, 'Updated Successfully');
+  }
+
+  /**
+   * Method :: sendReviewService
+   * Desc :: Send to admin for review
+   */
+  async sendReviewService() {
+    const resp = await updateReviewServiceActionHandler(this.serviceId);
+    this.showResponseMsg(resp, 'Updated Successfully');
+  }
+  /**
    * Method :: React render
    * Desc :: Showing html page
    * @returns {XML}
    */
   render() {
+    const isViewMode = this.props.viewMode;
+    let {serviceBasicInfo} = this.state;
+    const isApproved = serviceBasicInfo.isApproved;
+    let _this = this;
+    let appActionConfig = [
+      {
+        showAction: true,
+        actionName: 'save',
+        handler: async(event) => _this.props.handler(isViewMode ? _this.props.bookService.bind(this, true) : _this.saveService.bind(this))
+      },
+      {
+        showAction: true,
+        actionName: 'review',
+        handler: async(event) => _this.props.handler(_this.sendReviewService.bind(this))
+      },
+      {
+        showAction: isApproved ? true : false,
+        actionName: 'golive',
+        handler: async(event) => _this.props.handler(_this.setGoLiveService.bind(this))
+      },
+      {
+        showAction: true,
+        actionName: 'exit',
+        handler: async(event) => {
+          FlowRouter.go('/app/calendar/manageSchedule/' + _this.profileId + '/serviceList')
+        }
+      }
+    ];
+    export const genericPortfolioAccordionConfig = {
+      id: 'portfolioAccordion',
+      panelItems: [
+        {
+          'title': 'Actions',
+          isText: false,
+          style: {'background': '#ef4647'},
+          contentComponent: <MlAppActionComponent
+            resourceDetails={{resourceId: 'service', resourceType: 'service'}}   //resource id need to be given
+            actionOptions={appActionConfig}/>
+        }]
+    };
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
@@ -922,9 +1023,11 @@ export default class MlAppServiceManageSchedule extends Component {
               </div>
             </div>
           </div>
-
+          <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
         </div>
       </div>
     )
   }
 };
+
+export default MlAppServiceManageSchedule = formHandler()(MlAppServiceManageSchedule);

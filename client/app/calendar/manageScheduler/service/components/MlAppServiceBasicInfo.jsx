@@ -31,10 +31,12 @@ class MlAppServiceBasicInfo extends Component {
   }
 
   componentDidMount() {
+    this.props.getServiceDetails();
+    this.props.getRedirectServiceList(false);
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(310+$('.admin_header').outerHeight(true)));
-    this.props.getServiceDetails();
+
   }
 
   /**
@@ -42,7 +44,8 @@ class MlAppServiceBasicInfo extends Component {
    * Desc :: set the toggle date time picker
    */
   validTillToggle(){
-    $('#date-time').toggleClass('rdtOpen');
+    if(!this.props.viewMode)
+      $('#date-time').toggleClass('rdtOpen');
   }
 
   validDate(current) {
@@ -67,7 +70,6 @@ class MlAppServiceBasicInfo extends Component {
       optionsBySelectstates,
       optionsBySelectCommunities,
       checkBoxHandler,
-      saveService,
       options,
       setSessionFrequency,
       clusterData } = this.props;
@@ -133,9 +135,9 @@ class MlAppServiceBasicInfo extends Component {
                   </label>
                 </div>
                 <div className="form-group" id="date-time">
-                  <Datetime dateFormat="DD-MM-YYYY"
+                  <Datetime dateFormat={"DD-MM-YYYY"}
                             timeFormat={false}
-                            inputProps={{placeholder: "Valid Till"}}
+                            inputProps={{placeholder: "Valid Till", disabled: this.props.viewMode}}
                             closeOnSelect={true}
                             isValidDate={(current) => this.validDate(current)}
                             value={data.validTill? new Moment(data.validTill).format('DD-MM-YY') : null}
@@ -242,10 +244,6 @@ class MlAppServiceBasicInfo extends Component {
             </div>
           </div>
         </ScrollArea>
-        {!this.props.viewMode?<div className="ml_btn" style={{'textAlign':'center'}}>
-          <div className="save_btn" onClick={() => saveService(false)}>Save</div>
-          <div className="cancel_btn">Cancel</div>
-        </div>:""}
       </div>
     )
   }
@@ -258,7 +256,6 @@ MlAppServiceBasicInfo.propTypes = {
                   PropTypes.string,
                   PropTypes.number ]),
   getServiceDetails: PropTypes.func,
-  saveService: PropTypes.func,
   checkBoxHandler: PropTypes.func,
   onChangeFormField: PropTypes.func
 };

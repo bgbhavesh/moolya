@@ -16,6 +16,7 @@ export async function fetchConnectionHandler(portfolioId, communityCode) {
                     firstName
                     lastName
                     displayName
+                    chapterName
                 }
             }
         `,

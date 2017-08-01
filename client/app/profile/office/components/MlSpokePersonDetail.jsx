@@ -1,19 +1,23 @@
 /**
  * Created by viswhadeep on 13/5/17.
  */
-import React from "react";
+/**
+ * import of libs and routes
+ * */
+import React, {Component} from "react";
 import {render} from "react-dom";
-import ScrollArea from "react-scrollbar";
-var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
-import {initalizeFloatLabel} from '../../../../../client/commons/utils/formElemUtil';
-export default class MlSpokePersonDetail extends React.Component {
-  componentDidMount(){
+import {initalizeFloatLabel} from "../../../../../client/commons/utils/formElemUtil";
+// import ScrollArea from "react-scrollbar";
+
+export default class MlSpokePersonDetail extends Component {
+  componentDidMount() {
     initalizeFloatLabel();
   }
-  componentDidUpdate(){
+
+  componentDidUpdate() {
     initalizeFloatLabel();
   }
+
   render() {
     return (
       <div className="col-lg-12">
@@ -64,7 +68,7 @@ export default class MlSpokePersonDetail extends React.Component {
                   </div>
                   <div className="clearfix"></div>
                   <div className="form-group">
-                    <textarea rows="4" placeholder="About" className="form-control float-label"  ></textarea>
+                    <textarea rows="4" placeholder="About" className="form-control float-label"></textarea>
 
                   </div>
                 </form>

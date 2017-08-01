@@ -154,6 +154,20 @@ class MlServiceCardRepo{
             }
           }
         }
+        var isError = false;
+        if (service.tasks && service.tasks.length > 0 && servicecard.tasks && servicecard.tasks.length > 0) {
+          service.tasks.map((task)=> {
+            servicecard.tasks.map((currentTask) => {
+              if (task.id !== currentTask.id && task.sequence === currentTask.sequence) {
+                isError = true;
+                return false;
+              }
+            })
+          });
+        }
+        if (isError) {
+          return new MlRespPayload().errorPayload("Task sequence already exist", 400);
+        }
         servicecard.userId = service.userId;
         servicecard.updatedAt = new Date();
         servicecard.finalAmount = servicecard.tasks ? newFinalAmount : servicecard.finalAmount;
@@ -365,8 +379,24 @@ class MlServiceCardRepo{
         return new MlRespPayload().successPayload(result, 200);
     }
 
-    updateServiceCard(context){
-
+  updateBespokeServiceCardDefinition(service, context){
+    var result;
+    try {
+      var serviceCard                 = service;
+      serviceCard["updatedAt"]        = new Date();
+      serviceCard["isApproved"]       =  false;
+      serviceCard["isCurrentVersion"] =  true;
+      let id = service._id
+      delete service['_id']
+      result = mlDBController.update('MlServiceCardDefinition' , {_id:id},serviceCard,{$set:1}, context)
+      if(!result){
+        let code = 400;
+        return new MlRespPayload().errorPayload(result, code);
+      }
+    }catch (e){
+      return new MlRespPayload().errorPayload(e.message, 400);
+    }
+    return new MlRespPayload().successPayload(result, 200);
     }
 
     getServicecardExpiryDate(frequencyString){

@@ -23,9 +23,9 @@ import _ from 'lodash';
 // import custom method(s) and component(s)
 import StepZilla from '../../../../commons/components/stepzilla/StepZilla';
 import Step1 from './Step1';
+import Step3 from './Step3'
 import CalenderHead from './calendarHead';
 import MlAppTaskAppointmentBasicInfo from './MlAppTaskAppointmentBasicInfo';
-import MlAppTaskAppointmentSlots from './MlAppTaskAppointmentSlots';
 import MlAppTaskAppointmentSessions from './MlAppTaskAppointmentSessions';
 import MlAppTaskAppointmentTermAndCondition from './MlAppTaskAppointmentTermAndCondition';
 
@@ -99,7 +99,7 @@ export default class MlAppServiceManageSchedule extends Component {
       },
       {
         name: 'Terms & Conditions',
-        // component: <MlAppServiceTermsAndConditions />,
+        component: <Step3/>,
         icon: <span className="ml ml-payments"></span>
       },
       {
@@ -126,12 +126,6 @@ export default class MlAppServiceManageSchedule extends Component {
         icon: <span className="ml fa fa-plus-square-o"></span>
       },
       {
-        name:'Slots',
-        component: <MlAppTaskAppointmentSlots isTaskComponent={isTaskComponent}
-                                              onChangeSteps={this.onChangeSteps} />,
-        icon: <span className="ml fa fa-users"></span>
-      },
-      {
         name: 'Sessions',
         component: <MlAppTaskAppointmentSessions isTaskComponent={isTaskComponent}
                                               onChangeSteps={this.onChangeSteps} />,
@@ -141,6 +135,16 @@ export default class MlAppServiceManageSchedule extends Component {
         name: 'Terms and conditions',
         component: <MlAppTaskAppointmentTermAndCondition isTaskComponent={isTaskComponent}
                                               onChangeSteps={this.onChangeSteps} />,
+        icon: <span className="ml ml-payments"></span>
+      },
+      {
+        name: '',
+        //component: <MlAppTaskAppointmentSessions isTaskComponent={isTaskComponent} onChangeSteps={this.onChangeSteps} />,
+        icon: <span className="ml ml-payments"></span>
+      },
+      {
+        name: '',
+        //component: <MlAppTaskAppointmentTermAndCondition isTaskComponent={isTaskComponent} onChangeSteps={this.onChangeSteps} />,
         icon: <span className="ml ml-payments"></span>
       }
 

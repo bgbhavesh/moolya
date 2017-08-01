@@ -29,8 +29,9 @@ MlResolver.MlMutationResolver['createInquiry'] = (obj, args, context, info) =>{
           if(resp){
             //todo: create a repo for inquiry
             //send Email and transaction Log
-            MlEmailNotification.sendInquiryEmail({message:inquiry.message,subject:inquiry.subject,fromEmail:fromuser.username,toEmail:toUser.username},context);
+            //MlEmailNotification.sendInquiryEmail({message:inquiry.message,subject:inquiry.subject,fromEmail:fromuser.username,toEmail:toUser.username},context);
             //Transaction Log
+            MlEmailNotification.enquireRequest(fromuser,toUser)
           }
 
         }catch (e){

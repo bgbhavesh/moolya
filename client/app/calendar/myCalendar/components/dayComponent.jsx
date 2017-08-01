@@ -38,9 +38,10 @@ export default class MlAppMyCalendarDayComponent extends Component {
   dayClick(){
     let portfolioId = FlowRouter.getParam('portfolioId')
     console.log(this.props)
-    this.props.dayDetailView(true)
+    this.props.slots('', this.props.calendar.value);
+    this.props.dayDetailView(true);
     this.props.cellValue(this.props.calendar.value)
-    this.getSessionDetails(this.props.calendar.value)
+    // this.getSessionDetails(this.props.calendar.value)
   }
 
   async getSessionDetails(currentDate){
@@ -52,7 +53,7 @@ export default class MlAppMyCalendarDayComponent extends Component {
     let year=  dates.getFullYear();
     const response = await fetchSessionDayActionHandler(orderId,sessionId, date, month, year)
     console.log(response)
-    this.props.slots(response)
+    this.props.slots(response, date)
     return response
 
   }

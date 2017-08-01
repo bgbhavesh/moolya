@@ -56,6 +56,12 @@ if (!userServiceOrderNumber) {
   MlSerialNumbers.insert({_id: "userServiceOrderNumber", seq: 0});
 }
 
+let appointmentNumber = MlSerialNumbers.findOne({_id: "appointmentNumber"});
+if (!appointmentNumber) {
+  MlSerialNumbers.insert({_id: "appointmentNumber", seq: 0});
+}
+
+
 orderNumberGenService = (function(){
   function getNextSequence(name) {
     var ret = MlSerialNumbers.update(
@@ -105,6 +111,10 @@ orderNumberGenService = (function(){
     createBspokeOfficeSCcode: function (scDef) {
       scDef.code = "ML-OFF-"+ FormatUtil.leadingZeros(getNextSequence("bspoke"), 8);
     },
+    createOfficeSCcode: function (scDef) {
+      scDef.code = "ML-OFF-"+ FormatUtil.leadingZeros(getNextSequence("office"), 8);
+    },
+
     createActivityId: function (userActivity) {
       userActivity.transactionId = "MLACT"+ FormatUtil.leadingZeros(getNextSequence("activityNumber"), 8);
     },
@@ -119,6 +129,9 @@ orderNumberGenService = (function(){
     },
     createUserServiceOrderId: function (data) {
       data.orderId = "MLUSO" + FormatUtil.leadingZeros(getNextSequence("userServiceOrderNumber"), 8);
+    },
+    createAppointmentId: function (appointmentData) {
+      appointmentData.appointmentId = "MLAPT"+ FormatUtil.leadingZeros(getNextSequence("appointmentNumber"), 8);
     },
     generateRandomPassword:function(){
       var randomId = function makeid(){

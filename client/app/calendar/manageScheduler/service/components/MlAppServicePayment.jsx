@@ -19,6 +19,7 @@ export default class MlAppServicePayment extends React.Component{
 
   componentDidMount() {
     this.props.getServiceDetails();
+    this.props.getRedirectServiceList(true);
   }
 
   componentDidUpdate() {
@@ -38,8 +39,7 @@ export default class MlAppServicePayment extends React.Component{
       calculateDiscounts,
       checkTaxStatus,
       checkPromoStatus,
-      taxStatus,
-      saveService} = this.props;
+      taxStatus} = this.props;
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
@@ -166,9 +166,7 @@ export default class MlAppServicePayment extends React.Component{
             </form>
           </div>
         </ScrollArea>
-        {!this.props.viewMode?<div className="ml_btn" style={{'textAlign':'center'}}>
-          <div className="save_btn" onClick={() => saveService(true)}>Save</div> <div className="cancel_btn">Cancel</div>
-        </div>:<div className="ml_btn" style={{'textAlign':'center'}}><div className="save_btn" onClick={() => this.bookService()}>Book</div> </div>}
+        {!this.props.viewMode?'':<div className="ml_btn" style={{'textAlign':'center'}}><div className="save_btn" onClick={() => this.bookService()}>Book</div> </div>}
       </div>
     )
   }

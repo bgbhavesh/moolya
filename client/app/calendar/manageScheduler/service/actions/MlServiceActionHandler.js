@@ -23,6 +23,25 @@ export async function createBeSpokeServiceActionHandler (Services) {
   return services
 }
 
+export async function updateBeSpokeServiceActionHandler (Services) {
+  const result = await appClient.mutate({
+    mutation: gql`
+    mutation($Services: service){
+        updateBeSpokeService(Services:$Services){
+        success
+        code
+        result
+      }
+      }
+    `,
+    variables: {
+      Services
+    }
+  });
+  const services = result.data.updateBeSpokeService;
+  return services
+}
+
 
 export async function createServiceActionHandler (Services) {
   const result = await appClient.mutate({
@@ -60,6 +79,9 @@ export async function fetchServiceActionHandler (serviceId) {
         validTill
         sessionFrequency
         finalAmount
+        isBeSpoke
+        isApproved
+        isLive
         duration{
          hours
          minutes
@@ -385,4 +407,40 @@ export async function userServiceCardPaymentActionHandler(userServiceCardPayment
   return teamMembers;
 }
 
+export async function updateGoLiveServiceActionHandler (serviceId) {
+  const result = await appClient.mutate({
+    mutation: gql`
+    mutation($serviceId: String!){
+        updateServiceGoLive(serviceId:$serviceId){
+        success
+        code
+        result
+      }
+      }
+    `,
+    variables: {
+      serviceId
+    }
+  });
+  const services = result.data.updateServiceGoLive;
+  return services
+}
 
+export async function updateReviewServiceActionHandler (serviceId) {
+  const result = await appClient.mutate({
+    mutation: gql`
+    mutation($serviceId: String!){
+        updateServiceSendReview(serviceId:$serviceId){
+        success
+        code
+        result
+      }
+      }
+    `,
+    variables: {
+      serviceId
+    }
+  });
+  const services = result.data.updateServiceSendReview;
+  return services
+}

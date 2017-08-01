@@ -202,7 +202,7 @@ export default class MlAppTaskSession extends Component {
                     return(
                       <div className="swiper-slide funding_list list_block notrans funding_list" key={idx}>
 
-                        <span className="block_del"><FontAwesome name='minus'/></span>
+                        <span className="block_del"><FontAwesome onClick={()=>that.removeActivity(id, idx)} name='minus'/></span>
                             <p className="online">{activity.mode}</p>
                             <span>Duration:
                             </span><br />

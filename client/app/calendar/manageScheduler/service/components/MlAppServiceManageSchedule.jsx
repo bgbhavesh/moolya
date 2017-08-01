@@ -201,6 +201,7 @@ class MlAppServiceManageSchedule extends Component {
                                         checkTaxStatus={this.checkTaxStatus}
                                         checkPromoStatus={this.checkPromoStatus}
                                         checkDiscountStatus={this.checkDiscountStatus}
+                                        bookService={this.props.bookService}
                                         serviceId={this.props.serviceId}/>,
 
         icon: <span className="ml ml-payments"></span>

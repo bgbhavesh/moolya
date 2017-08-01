@@ -34,7 +34,7 @@ class MlserviceCardHandler{
           return {success:false};
 
       var details = this.getQueryDetails(query);
-      if(resourceName != "OFFICE" || resourceName != 'SERVICECARD')
+      if(details.resourceName != "OFFICE" && details.resourceName != 'SERVICECARD')
         return {success:true}
 
       if(details && details.isWhiteList)

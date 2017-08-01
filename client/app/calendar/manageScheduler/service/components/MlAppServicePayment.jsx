@@ -20,6 +20,8 @@ export default class MlAppServicePayment extends React.Component{
   componentDidMount() {
     this.props.getServiceDetails();
     this.props.getRedirectServiceList(true);
+    var WinHeight = $(window).height();
+    $('.step_form_wrap').height(WinHeight - (310 + $('.admin_header').outerHeight(true)));
   }
 
   componentDidUpdate() {
@@ -48,19 +50,19 @@ export default class MlAppServicePayment extends React.Component{
               <div className="form-group">
                 <label>
                   Tasks actual amount
-                  <input type="number" disabled value={servicePayment.tasksAmount}  className="form-control" />
+                  <input type="number" disabled value={servicePayment.tasksAmount}  className="form-control inline_input medium_in" />
                 </label>
               </div>
               <div className="form-group">
                 <label>
                   Task discount amount
-                  <input type="number" disabled value={servicePayment.tasksDiscount}  className="form-control" />
+                  <input type="number" disabled value={servicePayment.tasksDiscount}  className="form-control inline_input medium_in"/>
                 </label>
               </div>
               <div className="form-group">
                 <label>
                   Task derived amount
-                  <input type="number" disabled value={servicePayment.tasksDerived}  className="form-control "/>
+                  <input type="number" disabled value={servicePayment.tasksDerived}  className="form-control inline_input medium_in"/>
                 </label>
               </div>
               <div className="form-group switch_wrap switch_names inline_switch">

@@ -1,5 +1,5 @@
-import React from 'react';
-import ScrollArea from 'react-scrollbar';
+import React from "react";
+import ScrollArea from "react-scrollbar";
 
 export default class Step4 extends React.Component{
 
@@ -205,7 +205,9 @@ export default class Step4 extends React.Component{
               <div className="form-group">
                 <label>
                   Enter payable amount Rs.
-                  <input type="number" onChange={(e)=>this.payableAmount(e)} value={ this.state.paymentData.amount ? this.state.paymentData.amount : '' } className="form-control " />
+                  <input type="Number" onChange={(e)=>this.payableAmount(e)}
+                         value={ this.state.paymentData.amount ? this.state.paymentData.amount : '' }
+                         className="form-control inline_input medium_in"/>
                 </label>
               </div>
               <div className="form-group switch_wrap switch_names inline_switch">

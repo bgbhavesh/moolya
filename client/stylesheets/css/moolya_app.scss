@@ -1427,7 +1427,7 @@ p{margin-top:10px;}
         line-height: 0px;
       }
     }
-   
+
   }
 }
 .wrap_left{width: calc(100% - 86px);float: left;}
@@ -1686,3 +1686,15 @@ p{margin-top:10px;}
       }
   }
 }
+
+.block_del{position: absolute;
+  right: -6px;
+  top: -6px;
+  color: #FFF;
+  background: #EF4647;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  line-height: 25px;
+  border-radius: 50%;
+  cursor: pointer;}

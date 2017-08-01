@@ -12,7 +12,6 @@ import React, {Component} from 'react';
 import MlInfiniteScrollHeader from './MlInfiniteScrollHeader';
 import MlInfiniteScrollFooter from "./MlInfiniteScrollFooter";
 import MlInfiniteScrollView from "./MlInfiniteScrollView";
-import ScrollArea from 'react-scrollbar';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
@@ -27,6 +26,12 @@ export default class MlInfiniteScrollContainer extends Component {
     this.loadMore = this.loadMore.bind(this);
     this.updateSearchValue = this.updateSearchValue.bind(this);
   }
+
+  componentWillMount() {
+    let WinHeight = $(window).height();
+    $('.infinite_scroll').height(WinHeight-(210+$('.app_header').outerHeight(true)));
+  }
+
 
   componentWillReceiveProps(props) {
     console.log('props',props);
@@ -64,17 +69,9 @@ export default class MlInfiniteScrollContainer extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <div className="infinite_scroll">
-            <ScrollArea
-              speed={0.8}
-              className="infinite_scroll"
-              smoothScrolling={true}
-            >
-              { props.header ? <MlInfiniteScrollHeader config={props.header} updateSearchValue={this.updateSearchValue} /> : '' }
-              <MlInfiniteScrollView viewComponent={viewComponent} data={data} config={props} />
-              <MlInfiniteScrollFooter hasMore={hasMore} loadMore={this.loadMore} />
-            </ScrollArea>
-          </div>
+          { props.header ? <MlInfiniteScrollHeader config={props.header} updateSearchValue={this.updateSearchValue} /> : '' }
+          <MlInfiniteScrollView viewComponent={viewComponent} data={data} config={props} />
+          <MlInfiniteScrollFooter hasMore={hasMore} loadMore={this.loadMore} />
         </div>
       </div>
       )

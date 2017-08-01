@@ -97,11 +97,10 @@ let internalTaskSchema = `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], internalTaskSchema]);
 let supportedApi = [
-  {api: 'fetchInternalTask', actionName: 'READ', moduleName: "OFFICE"},
-  {api: 'fetchInternalTaskById', actionName: 'READ', moduleName: "OFFICE"},
-  {api: 'fetchMyInternalTask', actionName: 'READ', moduleName: "OFFICE"},
-  {api: 'createInternalTask', actionName: 'CREATE', moduleName: "OFFICE"},
-  {api: 'updateInternalTask', actionName: 'UPDATE', moduleName: "OFFICE"},
-]
-MlResolver.MlModuleResolver.push(supportedApi)
-
+  {api: 'fetchInternalTask', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList: true},
+  {api: 'fetchInternalTaskById', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList: true},
+  {api: 'fetchMyInternalTask', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList: true},
+  {api: 'createInternalTask', actionName: 'CREATE', moduleName: "OFFICE", isAppWhiteList: true},
+  {api: 'updateInternalTask', actionName: 'UPDATE', moduleName: "OFFICE", isAppWhiteList: true},
+];
+MlResolver.MlModuleResolver.push(supportedApi);

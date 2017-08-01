@@ -81,7 +81,7 @@ MlResolver.MlQueryResolver['findService'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['createBeSpokeService'] = (obj, args, context, info) => {
-  let portfolioId = args.Services.profileId;
+  let portfolioId =  args.portfolioId;
   return mlServiceCardRepo.createBespokeServiceCardDefinition(args.Services, portfolioId, context);
 };
 

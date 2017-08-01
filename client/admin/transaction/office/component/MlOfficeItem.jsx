@@ -99,7 +99,7 @@ export default class MlOfficeItem extends React.Component {
           userInfo: result.user,
           officeInfo: result.office,
           officeSC: result.officeSC,
-          officeSCDef: result.officeSCDef,
+          officeSCDef: result.officeSCDef ? result.officeSCDef : {},
           currentSlideIndex:0,
           tax: result.trans.orderSubscriptionDetails && result.trans.orderSubscriptionDetails.isTaxInclusive ? result.trans.orderSubscriptionDetails.isTaxInclusive : false,
           cost: result.trans.orderSubscriptionDetails && result.trans.orderSubscriptionDetails.cost ? result.trans.orderSubscriptionDetails.cost : '',

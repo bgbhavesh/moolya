@@ -28,7 +28,7 @@ export default class MlAppIdeatorListView extends Component {
     let that = this
     const data = this.props.data || [];
     return (
-      <div className="app_main_wrap">
+      <div>
         <div className="app_padding_wrap">
           <div className="col-md-12 ideators_list">
             <div className="row">

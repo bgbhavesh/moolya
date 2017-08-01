@@ -54,7 +54,7 @@ export default class MlAppServicePayment extends React.Component{
               <div className="form-group">
                 <label>
                   Task discount amount
-                  <input type="number" disabled value={servicePayment.tasksDiscount ? parseFloat(servicePayment.tasksAmount).toFixed(2):''}  className="form-control" />
+                  <input type="number" disabled value={servicePayment.tasksDiscount ? parseFloat(servicePayment.tasksDiscount).toFixed(2):''}  className="form-control" />
                 </label>
               </div>
               <div className="form-group">

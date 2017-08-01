@@ -188,6 +188,8 @@ let FunderPortfolioSchema = `
         areaOfInterest      : [AreaOfInterest],
         successStories      : [SuccessStories]
         services            : Services
+        chapterName         : String
+        accountType         : String
     }
   
     input successStories{

@@ -8,7 +8,7 @@ import {findUserOfficeActionHandler} from "../actions/findUserOffice";
 import {findOfficeAction} from "../actions/findOfficeAction";
 import MlLoader from "../../../../commons/components/loader/loader";
 import _ from "lodash";
-// import {findOfficeTransactionHandler} from '../../../../../client/admin/transaction/office/actions/findOfficeTranscation'
+import {fetchExternalUserProfilesActionHandler} from "../../../profile/actions/switchUserProfilesActions";
 
 export default class MlAppMyOffice extends Component {
   constructor(props) {
@@ -38,6 +38,7 @@ export default class MlAppMyOffice extends Component {
 
   componentWillMount() {
     const resp = this.findUserOffice();
+    var getExt = this.fetchExternalUserProfiles()
     return resp;
   }
 
@@ -59,8 +60,25 @@ export default class MlAppMyOffice extends Component {
       this.setState({loading: false});
   }
 
+  async fetchExternalUserProfiles() {
+    const response = await fetchExternalUserProfilesActionHandler();
+    if (response && response.length > 0) {
+      let default_User_Profile = _.find(response, {isDefault: true})
+      if (!default_User_Profile) {
+        default_User_Profile = response[0];
+      }
+      this.isFunder = _.isMatch(default_User_Profile, {communityDefCode: 'FUN'})
+      if(!this.isFunder){
+        $('.addOffice').addClass('disabled')
+      }
+    }
+  }
+
   addNewOffice() {
-    FlowRouter.go("/app/addOffice")
+    if (this.isFunder)
+      FlowRouter.go("/app/addOffice")
+    else
+      toastr.error('Not Authorised');
   }
 
   async selectOffice(officeId, evt) {
@@ -107,7 +125,7 @@ export default class MlAppMyOffice extends Component {
                     <div className="col-md-6">
                     </div>
                     <div className="col-md-6">
-                      <a href="" onClick={this.addNewOffice.bind(this)} className="ideabtn">Add new office</a>
+                      <a href="" onClick={this.addNewOffice.bind(this)} className="ideabtn addOffice">Add new office</a>
                     </div>
                   </div>
                 </div> : <div>
@@ -122,10 +140,10 @@ export default class MlAppMyOffice extends Component {
                         <div className="swiper-pagination"></div>
                       </div>
                       <div className="col-md-12 text-center well mart20">
-                        <div className="col-md-4 nopadding">
-                          <a className="fileUpload mlUpload_btn" onClick={this.addNewOffice.bind(this)}>Add New
+                        {this.isFunder?<div className="col-md-4 nopadding">
+                          <a className="fileUpload mlUpload_btn addOffice" onClick={this.addNewOffice.bind(this)}>Add New
                             Office</a>
-                        </div>
+                        </div>:<div></div>}
                         <div className="col-md-4 nopadding">
                           <a href="#" className="fileUpload mlUpload_btn disabled">Enter into Office</a>
                         </div>

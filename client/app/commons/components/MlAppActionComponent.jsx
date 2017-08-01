@@ -181,6 +181,11 @@ export default class MlAppActionComponent extends React.Component {
         iconClass: 'ml ml-save'
       },
       {
+        actionName: 'handover',
+        displayName:'Handover',
+        iconClass: 'ml ml-save'
+      },
+      {
         actionName: 'term sheet',
         displayName:'Term Sheet',
         iconClass: 'ml ml-save'

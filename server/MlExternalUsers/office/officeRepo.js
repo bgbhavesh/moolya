@@ -3,6 +3,7 @@
  */
 
 import MlUserContext from '../mlUserContext'
+import moment from 'moment'
 import _ from 'lodash'
 
 var DEFAULT_FREQUENCY_BSPOKE = "YEARLY";
@@ -228,6 +229,12 @@ class MlOfficeRepo{
 
     getExpiryDate(frequencyId){
 
+        var frequency = MlFrequencyType.findOne({_id:frequencyId});
+        if(!frequency)
+          throw new Error('Invalid Frequency');
+
+        var expiryDate = moment().add(frequency.value, 'months')
+        return expiryDate;
     }
 
     // This Method Validates office expiry date

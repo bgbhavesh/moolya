@@ -116,7 +116,7 @@ let officeTransaction = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], officeTransaction]);
 let supportedApi = [
   {api: 'createOfficeTransaction', actionName: 'CREATE', moduleName: "OFFICE"},
-  {api: 'findOfficeTransaction', actionName: 'READ', moduleName: "OFFICE"},
+  {api: 'findOfficeTransaction', actionName: 'READ', moduleName: "OFFICE", isWhiteList:true},
   {api: 'updateOfficeTransactionOrderSubscriptionDetail', actionName: 'UPDATE', moduleName: "OFFICE"},
   {api: 'officeTransactionPayment', actionName: 'UPDATE', moduleName: "OFFICE"},
   {api: 'findAllTransaction', actionName: 'READ', moduleName: "OFFICE"},

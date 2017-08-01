@@ -171,8 +171,8 @@ export default class MlAppActionComponent extends React.Component {
         iconClass: 'ml ml-save'
       },
       {
-        actionName: 'deport card',
-        displayName:'Deport Card',
+        actionName: 'report card',
+        displayName:'Report Card',
         iconClass: 'ml ml-save'
       },
       {

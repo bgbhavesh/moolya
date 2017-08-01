@@ -1023,7 +1023,9 @@ class MlAppServiceManageSchedule extends Component {
               </div>
             </div>
           </div>
-          <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
+          {!isViewMode &&
+            <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
+          }
         </div>
       </div>
     )

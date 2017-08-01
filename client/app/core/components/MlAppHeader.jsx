@@ -69,7 +69,7 @@ class MlAppProfileHeader extends Component {
   }
 
   componentWillReceiveProps(user){
-    console.log(user);
+    console.log(user)
     this.setState({profilePic:user.user.profile.profileImage});
   }
 
@@ -104,8 +104,8 @@ class MlAppProfileHeader extends Component {
               </li>
             </ul>
           </div>
-          <div className="ml_profile" role="navigation">
-          <h1 id="NavLbl" className="" style={{'background':`url(${this.state.profilePic}) center center`}}></h1>
+          <div className="ml_app_profile" role="navigation">
+          <h1 id="NavLbl" className="" style={{'background-image':`url(${this.state.profilePic})`, 'background-position': 'center center'}}></h1>
             <ol>
               <li data-toggle="tooltip" title="My Profile" data-placement="right">
                 <a href="/app/myprofile"><img className="profile-img" src="/images/1.png"/></a>

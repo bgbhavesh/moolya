@@ -611,6 +611,31 @@ const MlEmailNotification= class MlEmailNotification {
     }, 2 * 1000);
   }
 
+  static newOfficeRequestSent(){
+    var userDetails = Meteor.users.findOne({_id: context.userId});
+    var currentdate = new Date();
+    let date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+    let firstName = userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"";
+    let lastName = userDetails&&userDetails.profile&&userDetails.profile.lastName?userDetails.profile.lastName:"";
+    let regObj = {
+      userName : firstName+" "+lastName,
+      date : date
+    }
+    let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_new_Office_request_sent","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "Office request sent!!!",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+
+  } catch (e) {
+    console.log("mlDeactivateUser:Error while sending the  Email Notification" + e);
+  }
+
 
 }
 

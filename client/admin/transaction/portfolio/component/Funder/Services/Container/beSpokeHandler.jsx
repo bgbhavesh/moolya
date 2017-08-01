@@ -286,6 +286,7 @@ export default class  BeSpokeHandler extends Component {
           duration={this.handleBlur.bind(this)}
           fileUpload={this.onFileUpload.bind(this)}
           modeSwitchHandler={this.modeSwitchHandler.bind(this)}
+          componentToView={this.props.componentToView}
     />
     )
   }

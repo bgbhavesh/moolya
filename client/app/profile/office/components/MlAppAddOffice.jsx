@@ -65,6 +65,7 @@ export default class MlAppAddOffice extends React.Component {
   showDetails(value, event) {
     this.initializeMount()
     console.log(value)
+    this.detailData = value
     this.setState({showNewSpokePerson: false})
   }
 
@@ -131,7 +132,7 @@ export default class MlAppAddOffice extends React.Component {
                       {this.state.data.map(function (item, say) {
                         return (
                           <li key={say}>
-                            <div className="team-block" onClick={that.showDetails.bind(that)}>
+                            <div className="team-block" onClick={that.showDetails.bind(that, item)}>
                               <h2>{item.serviceCardName}</h2>
                               <h3>
                                 <p className="fund">{item.totalCount} Mem</p><p>Principal
@@ -140,14 +141,13 @@ export default class MlAppAddOffice extends React.Component {
                             </div>
                           </li>
                         )
-                      })
-                      }
+                      })}
                     </ul>
                   </div>
                 </div>
               </div>
 
-              {isShowNewSpoke ? <MlAppNewSpokePerson/> : <MlSpokePersonDetail/>}
+              {isShowNewSpoke ? <MlAppNewSpokePerson/> : <MlSpokePersonDetail officeData={this.detailData}/>}
 
             </div>
           </ScrollArea>

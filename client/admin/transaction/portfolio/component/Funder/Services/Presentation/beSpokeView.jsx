@@ -16,8 +16,8 @@ export default class  BeSpokeView extends Component {
   }
 
     saveData() {
-      this.props.saveBeSpokeServiceDetails(true)
-
+      this.props.componentToView('landingPage')
+      this.props.saveBeSpokeServiceDetails(true);
   }
 
   componentWillMount(){

@@ -187,25 +187,31 @@ class MlAppTaskLanding extends Component {
         {
           name: 'Create Task',
           component: <MlAppTaskCreate getCreateDetails={this.getCreateDetails.bind(this)}
-                                      taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id')}/>
+                                      taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id')}/>,
+          icon:<span className="ml fa fa-plus-square-o"></span>
         },
         {
           name: 'Create Session',
           component: <MlAppTaskSession getSessionDetails={this.getSessionDetails.bind(this)}
                                        taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id') }
                                        editMode={this.props.editMode}
-                                       profileId={this.props.profileId}/>
+                                       profileId={this.props.profileId}/>,
+          icon:<span className="ml flaticon-ml-file-1"></span>
         },
         {
           name: 'T&C',
           component: <MlAppTaskConditions getConditionDetails={this.getConditionDetails.bind(this) }
-                                          taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id') }/>
+                                          taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id') }/>,
+          icon:<span className="ml flaticon-ml-interface-2"></span>
         },
         {name: 'Payment',
           component: <MlAppTaskPayment getPaymentDetails={this.getPaymentDetails.bind(this)}
-                                       taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id') }/>
+                                       taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id') }/>,
+          icon:<span className="ml ml-payments"></span>
         },
-        {name: 'History', component: <MlAppTaskStep5 />}
+        {name: 'History', component: <MlAppTaskStep5 />,
+          icon:<span className="ml ml-moolya-symbol"></span>
+        }
       ]
 
     return (

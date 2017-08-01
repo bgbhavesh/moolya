@@ -28,14 +28,21 @@ class MlAppServiceSelectTask extends Component{
       let taskId =this.props.serviceTask.tasks[0].id;
       this.props.optionsBySelectService(taskId);
     }
+    // this.initilizeSwiper()
+    var WinHeight = $(window).height();
+    $('.step_form_wrap').height(WinHeight - (310 + $('.admin_header').outerHeight(true)));
+  }
 
-    let mySwiper = new Swiper('.manage_tasks', {
-      speed: 400,
-      spaceBetween:20,
-      slidesPerView:'auto',
-      pagination: '.swiper-pagination',
-      paginationClickable: true
-    });
+  componentWillUpdate() {
+    setTimeout(function () {
+      let mySwiper = new Swiper('.manage_tasks', {
+        speed: 400,
+        spaceBetween:20,
+        slidesPerView:'auto',
+        pagination: '.swiper-pagination',
+        paginationClickable: true
+      });
+    }, 100);
   }
 
   /**

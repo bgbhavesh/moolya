@@ -4,11 +4,13 @@ import {logout} from "../../../../client/admin/layouts/header/actions/logoutActi
 import {fetchUserDetailsHandler} from "../../commons/actions/fetchUserDetails";
 import BugReportWrapper from '../../commons/components/MlAppBugReportWrapper';
 var FontAwesome = require('react-fontawesome');
+import { createContainer } from 'meteor/react-meteor-data';
 
 
-export default class MlAppHeader extends Component {
+class MlAppProfileHeader extends Component {
   constructor(props, context) {
     super(props, context);
+    this.state={profilePic:""}
     this.regStatus = false;
     // this.fetchUserDetails = this.fetchUserDetails.bind(this);
     this.state = {loading: false,data: {}}
@@ -46,6 +48,9 @@ export default class MlAppHeader extends Component {
 
   /**fetching user details from registration*/
   componentWillMount(){
+    let user = Meteor.user();
+    this.setState({profilePic:user.profile.profileImage})
+    console.log(user)
     const resp = this.fetchUserDetails();
     return resp
   }
@@ -61,6 +66,11 @@ export default class MlAppHeader extends Component {
   /**user logout function*/
   logoutUser() {
     logout();
+  }
+
+  componentWillReceiveProps(user){
+    console.log(user)
+    this.setState({profilePic:user.user.profile.profileImage});
   }
 
   /**
@@ -95,9 +105,8 @@ export default class MlAppHeader extends Component {
             </ul>
           </div>
           <div className="ml_app_profile" role="navigation">
-            <h1 id="NavLbl" className="" style={{'backgroundImage':'url(/images/img2.png)'}}></h1>
+          <h1 id="NavLbl" className="" style={{'background-image':`url(${this.state.profilePic})`, 'background-position': 'center center'}}></h1>
             <ol>
-
               <li data-toggle="tooltip" title="My Profile" data-placement="right">
                 <a href="/app/myprofile"><img className="profile-img" src="/images/1.png"/></a>
               </li>
@@ -132,4 +141,10 @@ export default class MlAppHeader extends Component {
     )
   }
 }
+
+export default MlAppHeader = createContainer(props => {
+  return {
+    user: Meteor.user(),
+  };
+}, MlAppProfileHeader);
 

@@ -75,7 +75,7 @@ export default class MlInfiniteScrollComposer extends Component {
                 return prev;
               }
               let response = {
-                count: fetchMoreResult.data.count,
+                count: fetchMoreResult.data.data.count,
                 data : pagination ? fetchMoreResult.data.data.data : prev.data.data.concat(fetchMoreResult.data.data.data)
               };
               // console.log(response);

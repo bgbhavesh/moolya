@@ -281,3 +281,36 @@ MlResolver.MlQueryResolver["fetchMyAppointment"] = (obj, args, context, info) =>
   ]);
   return appointments;
 };
+
+MlResolver.MlQueryResolver["fetchAllProfileAppointmentCounts"] = (obj, args, context, info) => {
+  let userId = context.userId;
+  let pipeLine = [
+      { $lookup: { from: "mlAppointmentMembers", localField: "appointmentId", foreignField: "appointmentId", as: "members"}},
+      { $unwind: "$members"},
+      { $match : { "members.userId" : userId } },
+      { $project: { yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$startDate" } },
+        time: { $dateToString: { format: "%H:%M:%S:%L", date: "$Date" } },
+        appointmentInfo: 1,
+          members: 1,
+          userId: "$members.userId",
+          profileId: "$members.profileId",
+          appointmentId: 1 } },
+      {
+        $group : {
+          _id : { date : "$yearMonthDay", "userId":"$userId", "profileId": "$profileId" },
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $project : {
+          _id:0,
+          date: "$_id.date",
+          userId: "$_id.userId",
+          profileId: "$_id.profileId",
+          count: "$count"
+        }
+      }
+    ];
+  let result = mlDBController.aggregate('MlAppointments', pipeLine);
+  return result;
+};

@@ -63,15 +63,14 @@ export default class MlAppMyOffice extends Component {
     FlowRouter.go("/app/addOffice")
   }
 
-  async selectOffice(officeId, evt)
-  {
+  async selectOffice(officeId, evt) {
     let response = await findOfficeAction(officeId);
     if (response && response.success) {
       let data = JSON.parse(response.result)
-      if(data[0].office.isExpired){
+      if (data[0].office.isExpired) {
         toastr.error('Office Expired');
       }
-      else if(data[0].office.isActivated){
+      else if (data[0].office.isActivated) {
         FlowRouter.go('/app/editOffice/' + officeId);
       } else if (data[0].officeTransaction && data[0].officeTransaction.paymentDetails && data[0].officeTransaction.paymentDetails.isPaid) {
         toastr.success('Office amount Paid wait for admin approval');
@@ -113,7 +112,7 @@ export default class MlAppMyOffice extends Component {
                   </div>
                 </div> : <div>
                   <div className="col-md-12 text-center">
-                    <div className="col-md-offset-3 col-md-6 col-sm-6 col-xs-6">
+                    <div className="col-md-offset-2 col-md-8 col-sm-8 col-xs-8">
                       <div className="swiper-container profile_container">
                         <div className="swiper-wrapper">
 
@@ -122,19 +121,21 @@ export default class MlAppMyOffice extends Component {
                         </div>
                         <div className="swiper-pagination"></div>
                       </div>
+                      <div className="col-md-12 text-center well mart20">
+                        <div className="col-md-4 nopadding">
+                          <a className="fileUpload mlUpload_btn" onClick={this.addNewOffice.bind(this)}>Add New
+                            Office</a>
+                        </div>
+                        <div className="col-md-4 nopadding">
+                          <a href="#" className="fileUpload mlUpload_btn disabled">Enter into Office</a>
+                        </div>
+                        <div className="col-md-4 nopadding">
+                          <a href="#" className="fileUpload mlUpload_btn disabled">Deactivate Office</a>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="col-md-12 text-center well mart100">
-                    <div className="col-md-4">
-                      <a className="fileUpload mlUpload_btn" onClick={this.addNewOffice.bind(this)}>Add New Office</a>
-                    </div>
-                    <div className="col-md-4">
-                      <a href="#" className="fileUpload mlUpload_btn disabled">Enter into Office</a>
-                    </div>
-                    <div className="col-md-4">
-                      <a href="#" className="fileUpload mlUpload_btn disabled">Deactivate Office</a>
-                    </div>
-                  </div>
+
                 </div>}
 
               </div> : <h3>Please complete Hard registration</h3>}

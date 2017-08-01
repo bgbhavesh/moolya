@@ -48,8 +48,8 @@
 }
 
 .react-bs-table .table-bordered {
-  border: 0;
-  outline: none !important;
+    border: 0;
+    outline: none !important;
 }
 
 .react-bs-table .table-bordered > thead > tr > th,
@@ -228,7 +228,7 @@
 }
 
 td.react-bs-table-expand-cell {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 @keyframes shake {

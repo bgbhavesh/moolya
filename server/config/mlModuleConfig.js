@@ -66,6 +66,7 @@ let modules = [
     "actionAndStatus",
     "accountType",
     'office',
+    'officepackage',
     "processSetup",
     'subscriptions',
     'interaction',

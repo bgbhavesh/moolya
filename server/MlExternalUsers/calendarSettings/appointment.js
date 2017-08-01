@@ -343,7 +343,7 @@ class MlAppointment {
       } else {
         return {
           success: false,
-          message: "Message"
+          message: "Service Provide is not available, Please select a different time slot"
         };
       }
     } else {

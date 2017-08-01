@@ -11,7 +11,7 @@ if(Meteor.isServer){
         "isLink" : true,
         "isMenu" : true,
         "name" : "My Calendar",
-        "uniqueId" : "calendar"
+        "uniqueId" : "mycalendar"
       },
       {
         "image":"fa fa-calendar",

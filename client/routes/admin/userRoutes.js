@@ -17,7 +17,7 @@ import MlUsersAddressBook from "../../admin/users/components/MlUsersAddressBook"
 import MlUsersPortfolioLanding from "../../admin/users/components/MlUsersPortfolioLanding";
 import MlUsersConnectionsTabs from "../../admin/users/components/MlUsersConnectionsTabs";
 import MlUsersFavourites from "../../admin/users/components/MlUsersFavourites";
-import MlUsersWishlist from "../../admin/users/components/MlUsersWishlist";
+// import MlUsersWishlist from "../../admin/users/components/MlUsersWishlist";
 import MlUsersTransactions from "../../admin/users/components/MlUsersTransactions";
 
 /**
@@ -84,15 +84,15 @@ adminSection.route('/users/:registrationId/:portfolioId/favourites/ideator', {
   }
 })
 
-adminSection.route('/users/:registrationId/:portfolioId/wishlist/ideator', {
-  name: 'users_wishlistIdeator',
-  action(params){
-    mount(AdminLayout, {
-      headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'users'}}/>,
-      adminContent: <MlUsersWishlist config={params}/>
-    })
-  }
-})
+// adminSection.route('/users/:registrationId/:portfolioId/wishlist/ideator', {
+//   name: 'users_wishlistIdeator',
+//   action(params){
+//     mount(AdminLayout, {
+//       headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'users'}}/>,
+//       adminContent: <MlUsersWishlist config={params}/>
+//     })
+//   }
+// })
 
 adminSection.route('/users/:registrationId/:portfolioId/transactions', {
   name: 'users_transactions',

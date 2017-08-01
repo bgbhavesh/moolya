@@ -6,6 +6,7 @@ import AdminLayout from '../../admin/layouts/AdminLayout'
 
 import MlOfficePackageList from '../../admin/packages/office/component/MlOfficePackageList'
 import MlAddOfficePackage from "../../admin/packages/office/component/MlAddOfficePackage";
+import MlEditOfficePackage from "../../admin/packages/office/component/MlEditOfficePackage";
 
 // adminSection.route('/packages', {
 //   name: 'packages',
@@ -15,15 +16,22 @@ import MlAddOfficePackage from "../../admin/packages/office/component/MlAddOffic
 // });
 
 adminSection.route('/packages/officeList', {
-  name: 'packages_office',
+  name:'packages_ListOffice',
   action(params){
     mount(AdminLayout,{adminContent:<MlOfficePackageList/>})
   }
 });
 
 adminSection.route('/packages/addOffice', {
-  name: 'packages_office',
+  name: 'packages_AddOffice',
   action(params){
     mount(AdminLayout,{adminContent:<MlAddOfficePackage/>})
+  }
+});
+
+adminSection.route('/packages/editOffice/:officeId', {
+  name: 'packages_EditOffice',
+  action(params){
+    mount(AdminLayout,{adminContent:<MlEditOfficePackage config={params}/>})
   }
 });

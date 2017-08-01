@@ -200,6 +200,36 @@ MlResolver.MlMutationResolver['rejectConnection'] = (obj,args, context, info) =>
 }
 
 MlResolver.MlQueryResolver['fetchConnectionsByPortfolio'] = (obj, args, context, info) => {
-  console.log(args)
-  return []
+  var response = []
+  if (args && args.portfolioId && args.communityCode) {
+    var query = [
+      {$match:{_id:args.portfolioId}},
+      {$lookup:{from:'mlConnections',localField:'userId', foreignField:'users.userId',as:'connections'}},
+      {$unwind :"$connections"},
+      {$unwind :"$connections.users"},
+      {$project : { isEqual:  { "$cmp": [ "$connections.users.userId", "$userId" ] },
+        "connections":1, userId:1 }},
+      {$match: {'isEqual': 1 } },
+      {$replaceRoot:{newRoot:"$connections"}},
+      {$lookup:{from:'users',localField:'users.userId',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails.profile.externalUserProfiles'},
+      {$match:{'userDetails.profile.isActive':true,
+        'userDetails.profile.externalUserProfiles.isActive':true,
+        'userDetails.profile.externalUserProfiles.communityDefCode':args.communityCode}},
+         {$group : {_id:'$connectionCode',
+        'id':{ $first: '$_id'},
+        'userId':{ $first: "$users.userId"},
+        'userName':{ $first: "$users.userName"},
+        'firstName':{ $first:'$userDetails.profile.firstName'},
+        'lastName':{ $first:'$userDetails.profile.lastName'},
+        'displayName':{ $first:'$userDetails.profile.displayName'},
+        'profileImage':{ $first:"$userDetails.profile.profileImage"},
+        'profileId':{ $first:"$userDetails.profile.profileId"},
+        'countryName':{ $first:'$userDetails.profile.externalUserProfiles.countryName'},
+        'chapterName':{ $first:'$userDetails.profile.externalUserProfiles.chapterName'},
+      }}
+    ]
+    response = mlDBController.aggregate('MlPortfolioDetails', query, context);
+  }
+  return response
 }

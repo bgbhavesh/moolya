@@ -11,7 +11,16 @@ export async function findDeptRolesActionHandler(department,subDepartmentId,clus
            displayName
            roleType           
            isActive     
-           isHierarchyAssigned       
+           isHierarchyAssigned
+           assignRoles{
+              cluster
+              chapter
+              subChapter
+              community
+              department 
+              subDepartment 
+              isActive
+           }
          } 
         }
     `,

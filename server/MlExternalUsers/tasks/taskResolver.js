@@ -102,15 +102,24 @@ MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
         if(args.taskDetails.payment)   //picking up the last details without amount
           pick = _.pick(args.taskDetails.payment, ['activitiesDerived', 'activitiesDiscount', 'activitiesAmount', 'isDiscount','discountType','discountValue', 'derivedAmount'])
         else
-          pick = _.pick(task.payment, ['activitiesDerived', 'activitiesDiscount', 'activitiesAmount', 'isDiscount','discountType','discountValue', 'derivedAmount'])
+          pick = _.pick(task.payment, ['isDiscount','discountType','discountValue', 'derivedAmount'])
         let paymentAmount = {
           activitiesAmount: finalActivitiesAmount,
           activitiesDiscount: finalActivitiesAmount - finalActivitiesDerivedAmount,
           activitiesDerived: finalActivitiesDerivedAmount,
           amount: finalActivitiesDerivedAmount
         };
-        paymentAmount = _.extend(paymentAmount, pick)
-        paymentAmount.derivedAmount = (args.taskDetails.payment && args.taskDetails.payment.derivedAmount) || paymentAmount.activitiesDerived;
+        let newFinalAmount = finalActivitiesDerivedAmount;
+        if (args.taskDetails.payment && args.taskDetails.payment.isDiscount && args.taskDetails.payment.discountValue > 0) {
+          if (args.taskDetails.payment.discountType === 'amount') {
+            newFinalAmount = parseInt(finalActivitiesDerivedAmount) - parseInt(args.taskDetails.payment.discountValue);
+          } else {
+            var newAmount = (parseInt(finalActivitiesDerivedAmount) * parseInt(args.taskDetails.payment.discountValue)/100);
+            newFinalAmount = parseInt(finalActivitiesDerivedAmount) - parseInt(newAmount);
+          }
+        }
+        paymentAmount = _.extend(paymentAmount, pick);
+        paymentAmount['derivedAmount'] = newFinalAmount;
         args.taskDetails = _.extend(args.taskDetails, {payment:paymentAmount})
       }
       task.isCurrentVersion = false;

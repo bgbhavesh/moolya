@@ -6,21 +6,12 @@ import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import MlAppNewSpokePerson from "./MlAppNewSpokePerson";
 import MlSpokePersonDetail from "./MlSpokePersonDetail";
-var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
-var options = [
-  {value: 'Type of Funding', label: 'Type of Funding'},
-  {value: '2', label: '2'}
-];
-function logChange(val) {
-  console.log("Selected: " + val);
-}
-
+import {fetchOfficePackages} from "../actions/findOfficeAction";
 
 export default class MlAppAddOffice extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {showNewSpokePerson: true};
+    this.state = {showNewSpokePerson: true, data: []};
     return this;
   }
 
@@ -29,14 +20,6 @@ export default class MlAppAddOffice extends React.Component {
       $('.float-label').jvFloat();
     });
 
-
-    $("#create_client").popover({
-      'title': 'Add Investments',
-      'html': true,
-      'placement': 'right',
-      'container': '.admin_main_wrap',
-      'content': $(".ml_create_client").html()
-    });
     $('.list_block').click(function () {
       $('#details-div').show();
       $('.requested_input').hide();
@@ -66,6 +49,17 @@ export default class MlAppAddOffice extends React.Component {
     });
   }
 
+  componentWillMount() {
+    const resp = this.getUserPackages()
+    return resp
+  }
+
+  async getUserPackages() {
+    var response = await fetchOfficePackages()
+    console.log(response)
+    this.setState({data: response})
+  }
+
   nextDetailPage() {
     FlowRouter.go('/app/officeMembersDetails');
   }
@@ -79,7 +73,21 @@ export default class MlAppAddOffice extends React.Component {
   }
 
   render() {
+    let that = this
     let isShowNewSpoke = this.state.showNewSpokePerson ? true : false
+    const data = this.state.data && this.state.data.length > 0 ? this.state.data : []
+    const list = data.map(function (value, idx) {
+      return (
+        <div className="col-lg-2 col-md-4 col-sm-4" onClick={that.showDetails.bind(that, idx)} key={idx}>
+          <div className="list_block notrans funding_list">
+            <div><p className="fund">{value.totalCount} Members</p>
+              <span>Principal: {value.principalUserCount}</span><span>Team: {value.teamUserCount}</span><span>(Limited Community)</span>
+            </div>
+            <h3>{value.serviceCardName}</h3>
+          </div>
+        </div>
+      )
+    })
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap portfolio-main-wrap">
@@ -93,100 +101,29 @@ export default class MlAppAddOffice extends React.Component {
             >
               <div className="col-lg-12">
                 <div className="row">
-                  <div className="col-lg-2 col-md-4 col-sm-4">
-                    <a id="create_client" data-placement="top" data-class="large_popover">
-                      <div className="list_block notrans">
-                        <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                        <h3>Bespoke Members</h3>
-                      </div>
-                    </a>
-                  </div>
-                  <div className="col-lg-2 col-md-4 col-sm-4">
-                    <div className="list_block notrans funding_list">
-                      <div><p className="fund">10 Members</p><span>Principal: 2</span><span>Team: 2</span><span>(Limited Community)</span>
-                      </div>
-                      <h3>Basic Office</h3>
+                  <div className="col-lg-2 col-md-4 col-sm-4" onClick={this.showNewSpokePerson.bind(this)}>
+                    <div className="list_block notrans">
+                      <div className="hex_outer"><span className="ml ml-plus "></span></div>
+                      <h3>Bespoke Members</h3>
                     </div>
                   </div>
-                  <div className="col-lg-2 col-md-4 col-sm-4">
-                    <div className="list_block notrans funding_list">
-                      <div><p className="fund">15 Members</p><span>Principal: 2</span><span>Team: 13</span><span>(All Community)</span>
-                      </div>
-                      <h3>Advance Office</h3>
-                    </div>
-                  </div>
-                  <div className="col-lg-2 col-md-4 col-sm-4">
-                    <div className="list_block notrans funding_list">
-                      <div><p className="fund">20 Members</p><span>Principal: 5</span><span>Team: 15</span><span>(All Community)</span>
-                      </div>
-                      <h3>Pro Office</h3>
-                    </div>
-                  </div>
-                  <div className="col-lg-2 col-md-4 col-sm-4">
-                    <div className="list_block notrans funding_list">
-                      <div><p className="fund">10 Members</p><span>Principal: 2</span><span>Team: 2</span><span>(Limited Community)</span>
-                      </div>
-                      <h3>Basic Office</h3>
-                    </div>
-                  </div>
-                  <div className="col-lg-2 col-md-4 col-sm-4">
-                    <div className="list_block notrans funding_list">
-                      <div><p className="fund">15 Members</p><span>Principal: 2</span><span>Team: 13</span><span>(All Community)</span>
-                      </div>
-                      <h3>Advance Office</h3>
-                    </div>
-                  </div>
+                  {/*<div className="col-lg-2 col-md-4 col-sm-4" onClick={this.showDetails.bind(this)}>*/}
+                  {/*<div className="list_block notrans funding_list">*/}
+                  {/*<div><p className="fund">10 Members</p><span>Principal: 2</span><span>Team: 2</span><span>(Limited Community)</span>*/}
+                  {/*</div>*/}
+                  {/*<h3>Basic Office</h3>*/}
+                  {/*</div>*/}
+                  {/*</div>*/}
+                  {list}
+
                 </div>
               </div>
             </ScrollArea>
-
-
-            <div style={{'display': 'none'}} className="ml_create_client">
-              <div className="medium-popover">
-                <div className="row">
-                  <div className="col-md-12">
-                    <div className="form-group">
-                      <input type="text" placeholder="Enter Date of Investment" className="form-control float-label"
-                      />
-                      <FontAwesome name='unlock' className="input_icon"/>
-                    </div>
-
-                    <div className="form-group">
-                      <input type="text" placeholder="Company Name" className="form-control float-label"/>
-                      <FontAwesome name='unlock' className="input_icon"/>
-                    </div>
-                    <div className="form-group">
-                      <input type="text" placeholder="Investment Amount" className="form-control float-label"/>
-                      <FontAwesome name='unlock' className="input_icon"/>
-                    </div>
-                    <div className="form-group">
-                      <Select
-                        name="form-field-name"
-                        options={options}
-                        value='Type of Funding'
-                        onChange={logChange}
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <input type="text" placeholder="About" className="form-control float-label"/>
-                      <FontAwesome name='unlock' className="input_icon"/>
-                    </div>
-                    <div className="form-group">
-                      <div className="input_types"><input id="checkbox1" type="checkbox" name="checkbox"
-                                                          value="1"/><label htmlFor="checkbox1"><span></span>Make
-                        Default</label></div>
-                    </div>
-                    <div className="ml_btn" style={{'textAlign': 'center'}}>
-                      <a href="#" className="save_btn">Save</a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
 
-
+          {/**
+           *if onces Options are clicked UI
+           * */}
           <div id="details-div" style={{'display': 'none'}}>
             <div className="col-lg-12">
               <div className="row">

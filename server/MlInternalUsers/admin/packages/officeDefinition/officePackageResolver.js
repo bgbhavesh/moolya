@@ -3,8 +3,8 @@
  */
 import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
-import moment from 'moment'
-import _ from 'lodash'
+import MlUserContext from "../../../../MlExternalUsers/mlUserContext";
+import _ from "lodash";
 
 MlResolver.MlMutationResolver['createOfficePackage'] = (obj, args, context, info) => {
   if(_.isEmpty(args.package)){
@@ -13,6 +13,8 @@ MlResolver.MlMutationResolver['createOfficePackage'] = (obj, args, context, info
   try {
     var office = args.package
     orderNumberGenService.createOfficeSCcode(office)
+    office['createdBy'] = context.userId;
+    office['createdOn'] = new Date();
     mlDBController.insert('MlOfficeSCDef', office, context)
   }catch (e){
     return new MlRespPayload().errorPayload(e.message, 400)
@@ -46,7 +48,31 @@ MlResolver.MlMutationResolver['updateOfficePackage'] = (obj, args, context, info
   return new MlRespPayload().successPayload('Office Package Updated Successfully', 200)
 }
 
+/**
+ * @module ['OfficePackage']
+ * @params [context.userId]
+ * @returns *Array* [officePackages]
+ * */
 MlResolver.MlQueryResolver['fetchOfficePackages'] = (obj, args, context, info) => {
+  let extProfile = new MlUserContext(context.userId).userProfileDetails(context.userId)
+  let query = [
+    {'$lookup': {from: 'mlOfficeSC', localField: '_id', foreignField: 'scDefId', as: 'def'}},
+    {'$unwind': {"path": "$def", "preserveNullAndEmptyArrays": true}},
+    {
+      '$match': {
+        "$or": [
+          {"def.profileId": extProfile.profileId},
+          {
+            isBSpoke: false,
+            clusters: {$elemMatch: {clusterId: extProfile.clusterId}},
+            chapters: {$elemMatch: {chapterId: extProfile.chapterId}},
+            subChapters: {$elemMatch: {subChapterId: extProfile.subChapterId}}
+          }]
+      }
+    }
+  ]
+  var response = mlDBController.aggregate('MlOfficeSCDef', query, context)
+  return response
 }
 
 MlResolver.MlQueryResolver['fetchOfficePackageById'] = (obj, args, context, info) => {

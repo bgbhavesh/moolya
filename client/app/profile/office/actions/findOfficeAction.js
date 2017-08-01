@@ -23,3 +23,49 @@ export async function findOfficeAction(officeId) {
   const id = result.data.findOfficeDetail;
   return id
 }
+
+export async function fetchOfficePackages() {
+  const result = await appClient.query({
+    query: gql `
+      query{
+            fetchOfficePackages{
+              serviceCardName,
+              displayName,
+              cardType,
+              frequencyType,
+              accountType,
+              isMoolya,
+              isOthers,
+              isActive,
+              applicableCommunity{
+                communityName,
+                communityId
+              },
+              availableCommunities{
+                communityName,
+                communityId,
+                userCount
+              },
+              clusters{
+                clusterId,
+                clusterName
+              },
+              chapters{
+                chapterId,
+                chapterName
+              },
+              subChapters{
+                subChapterId,
+                subChapterName
+              }
+              totalCount,
+              principalUserCount,
+              teamUserCount
+            }
+          }
+          `,
+    forceFetch:true
+  })
+  const data = result.data.fetchOfficePackages
+  return data
+}

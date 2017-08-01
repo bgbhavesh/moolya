@@ -23,6 +23,7 @@ export async function fetchOfficeMember(memberId) {
                  isExternalUserInteraction
                  isFreeze
                  isRetire
+                 profileImage
               }
           }
       `,

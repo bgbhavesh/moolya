@@ -186,9 +186,7 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
     let officeDetails = args.myOffice;
     let profile = new MlUserContext(userId).userProfileDetails(userId);
     let isFunder = _.isMatch(profile, {communityDefCode: 'FUN'})
-    if(isFunder)
-    {
-
+    if(isFunder){
       // office beSpoke Service Card Definition
       if(officeDetails.isBeSpoke){
         var ret = mlOfficeValidationRepo.createBspokeSCDef(officeDetails, profile, context);
@@ -236,6 +234,10 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
       let officeTransaction = _.extend(details, extendObj)
       MlResolver.MlMutationResolver['createOfficeTransaction'](obj, {officeTransaction}, context, info)
       scId = mlOfficeValidationRepo.createofficeServiceCard(officeDetails, profile, context, scDefId, officeId, frequencyType)
+    }else {
+      let code = 200;
+      let response = new MlRespPayload().errorPayload("Not Allowed to create Office", code);
+      return response;
     }
   }catch (e){
     let code = 400;

@@ -90,36 +90,30 @@ export default class MlAppAddOffice extends React.Component {
     })
     return (
       <div className="app_main_wrap">
-        <div className="app_padding_wrap portfolio-main-wrap">
+        <div className="app_padding_wrap portfolio-main-wrap main_wrap_scroll">
+          <ScrollArea
+            speed={0.8}
+            className="main_wrap_scroll"
+            smoothScrolling={true}
+            default={true}
+          >
+          <div className="requested_input">
 
-          <div className="requested_input main_wrap_scroll">
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
               <div className="col-lg-12">
                 <div className="row">
                   <div className="col-lg-2 col-md-4 col-sm-4" onClick={this.showNewSpokePerson.bind(this)}>
                     <div className="list_block notrans">
                       <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                      <h3>Bespoke Members</h3>
+                      <h3>Add Bespoke Office</h3>
                     </div>
                   </div>
-                  {/*<div className="col-lg-2 col-md-4 col-sm-4" onClick={this.showDetails.bind(this)}>*/}
-                  {/*<div className="list_block notrans funding_list">*/}
-                  {/*<div><p className="fund">10 Members</p><span>Principal: 2</span><span>Team: 2</span><span>(Limited Community)</span>*/}
-                  {/*</div>*/}
-                  {/*<h3>Basic Office</h3>*/}
-                  {/*</div>*/}
-                  {/*</div>*/}
+
                   {list}
 
                 </div>
               </div>
-            </ScrollArea>
           </div>
+
 
           {/**
            *if onces Options are clicked UI
@@ -178,6 +172,7 @@ export default class MlAppAddOffice extends React.Component {
             {isShowNewSpoke ? <MlAppNewSpokePerson/> : <MlSpokePersonDetail/>}
 
           </div>
+          </ScrollArea>
         </div>
       </div>
     )

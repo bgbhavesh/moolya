@@ -353,7 +353,7 @@ appSection.route('/funder/:portfolioId', {
 
 //Calendar
 appSection.route('/calendar', {
-  name: 'calendar',
+  name: 'mycalendar',
   action(){
     mount(AppLayout, {appContent: <MLAppMyCalendar />, isCalenderMenu: true})
   }

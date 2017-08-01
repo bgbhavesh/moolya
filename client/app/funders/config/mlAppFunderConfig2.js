@@ -26,6 +26,8 @@ export const mlAppFunderConfig2=new MlAppViewer({
                       funderAbout {
                         firstName
                       }
+                      chapterName
+                      accountType
                     }
                   }
                 }

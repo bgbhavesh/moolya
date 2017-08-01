@@ -90,7 +90,13 @@ export default class MlAppFunderEditTabs extends React.Component{
     }
     data['principal'] = details;
     this.setState({funderPortfolio : data})
-    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio});
+    let arr = [];
+    _.each(details, function (obj) {
+      let updateItem = _.omit(obj, 'logo');
+      arr.push(updateItem)
+    })
+    data['principal'] = arr;
+    this.props.getPortfolioDetails({funderPortfolio:data});
   }
   getTeamDetails(details){
     let data = this.state.funderPortfolio;
@@ -99,7 +105,13 @@ export default class MlAppFunderEditTabs extends React.Component{
     }
     data['team'] = details;
     this.setState({funderPortfolio : data})
-    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio});
+    let arr = [];
+    _.each(details, function (obj) {
+      let updateItem = _.omit(obj, 'logo');
+      arr.push(updateItem)
+    })
+    data['team'] = arr;
+    this.props.getPortfolioDetails({funderPortfolio:data});
   }
 
   getAreaOfInterestDetails(details){

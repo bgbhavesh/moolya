@@ -203,7 +203,7 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
       officeId = mlOfficeValidationRepo.createOffice(officeDetails, profile, context);
       if (!officeId) {
         let code = 400;
-        let response = new MlRespPayload().successPayload("Failed To Create Office", code);
+        let response = new MlRespPayload().errorPayload("Failed To Create Office", code);
         return response;
       }
 
@@ -239,7 +239,7 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
     }
   }catch (e){
     let code = 400;
-    return new MlRespPayload().successPayload("Failed To Create Office", code);
+    return new MlRespPayload().errorPayload("Failed To Create Office", code);
   }
   let code = 200;
   let response = new MlRespPayload().successPayload(officeId, code);
@@ -253,7 +253,7 @@ MlResolver.MlMutationResolver['updateOfficeStatus'] = (obj, args, context, info)
   let result;
   if(!args.id){
     let code = 400;
-    let response = new MlRespPayload().successPayload('Office id is required', code);
+    let response = new MlRespPayload().errorPayload('Office id is required', code);
     return response;
   }
   try{
@@ -261,18 +261,18 @@ MlResolver.MlMutationResolver['updateOfficeStatus'] = (obj, args, context, info)
     result = mlDBController.update('MlOfficeTransaction', { officeId: args.id }, { status:"Approved" }, {$set: true}, context);
     if(!result) {
       let code = 400;
-      return new MlRespPayload().successPayload('Error in Activating the office', code);
+      return new MlRespPayload().errorPayload('Error in Activating the office', code);
     }
 
     result = mlDBController.update('MlOffice', args.id, {isActive:true}, {$set:true},  context);
     if(!result){
       let code = 400;
-      return new MlRespPayload().successPayload('Error in Activating the office', code);
+      return new MlRespPayload().errorPayload('Error in Activating the office', code);
     }
     result = mlDBController.update('MlOfficeSC', {officeId:args.id, isActive:true}, {isActivated:true, isReconciled:true}, {$set:true}, context)
     if(!result){
       let code = 400;
-      return new MlRespPayload().successPayload('Error in Activating the Office Service Card', code);
+      return new MlRespPayload().errorPayload('Error in Activating the Office Service Card', code);
     }
 
     // create a ledger balance entry

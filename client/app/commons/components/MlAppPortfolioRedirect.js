@@ -31,15 +31,26 @@ export default class MlAppPortfolioRedirect extends React.Component {
    * */
   render() {
     return (
-      <div>
-        <div className="panel panel-default panel-form-view">
-          <div className="panel-heading">Portfolio Mode</div>
-          <div className="panel-body">
-            <a className="mlUpload_btn pull-left"
-               onClick={this.viewPortfolio.bind(this)}>View Portfolio</a>
-            <a className="mlUpload_btn pull-left"
-               onClick={this.editPortfolio.bind(this)}>Edit Portfolio</a>
+      <div className="app_main_wrap">
+        <div className="app_padding_wrap">
+          <div className="col-md-2"/>
+          <div className="col-md-4">
+            <div className="portfolio_main view">
+              <img src="/images/portfolio_view.png"/>
+              <p>View your portfolio here<br />
+                <a href="" onClick={this.viewPortfolio.bind(this)}>View Here</a>
+              </p>
+            </div>
           </div>
+          <div className="col-md-4">
+            <div className="portfolio_main edit">
+              <img src="/images/portfolio_edit.png"/>
+              <p>Edit your portfolio here<br />
+                <a href="" onClick={this.editPortfolio.bind(this)}>Edit Here</a>
+              </p>
+            </div>
+          </div>
+          <div className="col-md-2"/>
         </div>
       </div>
     )

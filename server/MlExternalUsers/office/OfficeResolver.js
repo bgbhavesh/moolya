@@ -162,7 +162,8 @@ MlResolver.MlQueryResolver['fetchOfficeMember'] = (obj, args, context, info) => 
         isPrincipal: "$isPrincipal",
         isFreeUser: "$isFreeUser",
         isPaidUser: "$isPaidUser",
-        isAdminUser: "$isAdminUser"
+        isAdminUser: "$isAdminUser",
+        profileImage: "$users.profile.profileImage"
       }
     }
   ]

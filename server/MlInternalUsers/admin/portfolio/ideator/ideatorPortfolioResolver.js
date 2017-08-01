@@ -487,8 +487,28 @@ MlResolver.MlMutationResolver['createLibrary'] = (obj, args, context, info) => {
 
 
 MlResolver.MlMutationResolver['updateLibrary'] = (obj, args, context, info) => {
-  let currentProfile = context.url.split("/")
-  let portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: currentProfile[6]}, context)
+  let currentProfile = context.url.split("/");
+  let dataExists = false;
+  let portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: context.url.split("/")[6]}, context)
+  var existingCollection = mlDBController.findOne('MlLibrary', {_id:args.id}, context)
+  if(existingCollection) {
+    if(Array.isArray(existingCollection.portfolioReference)) {
+      existingCollection.portfolioReference.map(function (data) {
+        if (Array.isArray(args.files.portfolioReference)) {
+          args.files.portfolioReference.map(function (incoming) {
+            if (data.portfolioId === incoming.portfolioId) {
+              dataExists = true;
+            }
+          })
+        }
+      })
+    }
+    if(dataExists){
+      let code = 20
+      let response = new MlRespPayload().errorPayload('File already exists', code);
+      return response
+    }
+  }
   if(args.files.portfolioReference){
     if(args.files.portfolioReference.portfolioId ===portfolioDetails._id){
       let code = 20
@@ -510,8 +530,17 @@ MlResolver.MlMutationResolver['updateLibrary'] = (obj, args, context, info) => {
     tempArray.push(tempObject)
     args.files.portfolioReference = tempArray;
   }
-  var newCollection = mlDBController.update('MlLibrary', {_id:args.id},args.files,{$set:1}, context)
-  return newCollection
+  // var existingCollection = mlDBController.findOne('MlLibrary', {_id:args.id}, context)
+  // if(existingCollection){
+  //   existingCollection.portfolioReference.map(function(data){
+  //     if(data.portfolioId){
+  //
+  //     }
+  //   })
+    if(!dataExists){
+      var newCollection = mlDBController.update('MlLibrary', {_id:args.id},args.files,{$set:1}, context)
+      return newCollection
+    }
 }
 
 

@@ -139,18 +139,18 @@ class MlServiceCardRepo{
           newFinalAmount = taskDerivedAmount;
           if (service.payment && service.payment.isDiscount && service.payment.discountValue > 0) {
             if (service.payment.discountType === 'amount') {
-              newFinalAmount = parseInt(taskDerivedAmount) - parseInt(service.payment.discountValue);
+              newFinalAmount = parseFloat(taskDerivedAmount).round(2) - parseFloat(service.payment.discountValue).round(2);
             } else {
-              var newAmount = (parseInt(taskDerivedAmount) * parseInt(service.payment.discountValue)/100);
-              newFinalAmount = parseInt(taskDerivedAmount) - parseInt(newAmount);
+              var newAmount = (parseFloat(taskDerivedAmount).round(2) * parseFloat(service.payment.discountValue)/100).round(2);
+              newFinalAmount = parseFloat(taskDerivedAmount).round(2) - parseFloat(newAmount).round(2);
             }
           }
           if (service.facilitationCharge && service.facilitationCharge.type && service.facilitationCharge.amount > 0) {
             if (service.facilitationCharge.type === 'amount') {
-              newFinalAmount += parseInt(service.facilitationCharge.amount);
+              newFinalAmount += parseFloat(service.facilitationCharge.amount);
             } else {
-              var newAmount = (parseInt(taskDerivedAmount) * parseInt(service.facilitationCharge.amount)/100);
-              newFinalAmount += parseInt(newAmount);
+              var newAmount = (parseFloat(taskDerivedAmount).round(2) * parseFloat(service.facilitationCharge.amount)/100).round(2);
+              newFinalAmount += parseFloat(newAmount).round(2);
             }
           }
         }
@@ -170,7 +170,7 @@ class MlServiceCardRepo{
         }
         servicecard.userId = service.userId;
         servicecard.updatedAt = new Date();
-        servicecard.finalAmount = servicecard.tasks ? newFinalAmount : servicecard.finalAmount;
+        servicecard.finalAmount = parseFloat(servicecard.tasks ? newFinalAmount : servicecard.finalAmount ).round(2);
         for(key in service){
           if ((typeof servicecard[key] === 'undefined' || servicecard[key] === null || !servicecard[key]) && key !== 'createdAt' && key !== '_id') {
             servicecard[key] = service[key];

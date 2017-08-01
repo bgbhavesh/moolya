@@ -105,24 +105,24 @@ MlResolver.MlMutationResolver['updateTask'] = (obj, args, context, info) => {
           pick = _.pick(task.payment, ['isDiscount','discountType','discountValue', 'derivedAmount'])
         let paymentAmount = {
           activitiesAmount: finalActivitiesAmount,
-          activitiesDiscount: finalActivitiesAmount - finalActivitiesDerivedAmount,
+          activitiesDiscount: parseFloat(finalActivitiesAmount - finalActivitiesDerivedAmount).round(2),
           activitiesDerived: finalActivitiesDerivedAmount,
           amount: finalActivitiesDerivedAmount
         };
         let newFinalAmount = finalActivitiesDerivedAmount;
         if (args.taskDetails.payment && args.taskDetails.payment.isDiscount && args.taskDetails.payment.discountValue > 0) {
           if (args.taskDetails.payment.discountType === 'amount') {
-            newFinalAmount = parseInt(finalActivitiesDerivedAmount) - parseInt(args.taskDetails.payment.discountValue);
+            newFinalAmount = parseFloat(finalActivitiesDerivedAmount).round(2) - parseFloat(args.taskDetails.payment.discountValue).round(2);
           } else {
-            var newAmount = (parseInt(finalActivitiesDerivedAmount) * parseInt(args.taskDetails.payment.discountValue)/100);
-            newFinalAmount = parseInt(finalActivitiesDerivedAmount) - parseInt(newAmount);
+            var newAmount = (parseFloat(finalActivitiesDerivedAmount).round(2) * parseFloat(args.taskDetails.payment.discountValue)/100).round(2);
+            newFinalAmount = parseFloat(finalActivitiesDerivedAmount).round(2) - parseFloat(newAmount).round(2);
           }
         } else if (task.payment && task.payment.isDiscount && task.payment.discountValue > 0) {
           if (task.payment.discountType === 'amount') {
-            newFinalAmount = parseInt(finalActivitiesDerivedAmount) - parseInt(task.payment.discountValue);
+            newFinalAmount = parseFloat(finalActivitiesDerivedAmount).round(2) - parseFloat(task.payment.discountValue).round(2);
           } else {
-            var newAmount = (parseInt(finalActivitiesDerivedAmount) * parseInt(task.payment.discountValue)/100);
-            newFinalAmount = parseInt(finalActivitiesDerivedAmount) - parseInt(newAmount);
+            var newAmount = (parseFloat(finalActivitiesDerivedAmount).round(2) * parseFloat(task.payment.discountValue)/100).round(2);
+            newFinalAmount = parseFloat(finalActivitiesDerivedAmount).round(2) - parseFloat(newAmount).round(2);
           }
         }
         paymentAmount = _.extend(paymentAmount, pick);

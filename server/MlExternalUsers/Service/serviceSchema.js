@@ -10,7 +10,7 @@ import MlResolver from "../../commons/mlResolverDef";
 let service=`
   type FacilitationCharge {
      type: String
-     amount: Int
+     amount: Float
   }
   type Attachments {
      name: String
@@ -19,12 +19,12 @@ let service=`
      fileUrl : [String]
   }
   type ServicePayment {
-     tasksAmount: Int
-     tasksDiscount: Int
-     tasksDerived: Int
+     tasksAmount: Float
+     tasksDiscount: Float
+     tasksDerived: Float
      isDiscount: Boolean
      discountType: String
-     discountValue: Int
+     discountValue: Float
      isTaxInclusive: Boolean
      isPromoCodeApplicable: Boolean
   }
@@ -64,7 +64,7 @@ let service=`
   }
   
   type TotalTaskAmount{
-    totalAmount: Int
+    totalAmount: Float
   }
   
   type ServiceTaskSessions {
@@ -107,7 +107,7 @@ let service=`
     state: [States]
     cluster: Clusters
     isBeSpoke : Boolean
-    finalAmount: Int
+    finalAmount: Float
     mode : String
     beSpokeCreatorProfileId: String
     beSpokeCreatorUserId: String
@@ -117,7 +117,7 @@ let service=`
     expectedOutput : String
     isApproved: Boolean
     isLive: Boolean
-    finalAmount:Int
+    finalAmount:Float
   }
   
   type UserDetails{
@@ -169,7 +169,7 @@ let service=`
     createdAt: Date
     updatedAt: Date
     validTill: Date
-    finalAmount: Int
+    finalAmount: Float
     community: [Communities]
     subChapter: [SubChapters]
     city: [Cities]
@@ -185,12 +185,12 @@ let service=`
     expectedOutput : String
     isApproved: Boolean
     userDetails: UserDetails
-    finalAmount:Int
+    finalAmount:Float
   }
 
    input facilitationCharge {
        type: String
-       amount: Int
+       amount: Float
    }
 
    input attachments {
@@ -201,12 +201,12 @@ let service=`
    }
 
    input servicepayment {
-       tasksAmount: Int
-       tasksDiscount: Int
-       tasksDerived: Int
+       tasksAmount: Float
+       tasksDiscount: Float
+       tasksDerived: Float
        isDiscount: Boolean
        discountType: String
-       discountValue: Int
+       discountValue: Float
        isTaxInclusive: Boolean
        isPromoCodeApplicable: Boolean
    }
@@ -277,7 +277,7 @@ let service=`
         createdAt: Date
         updatedAt: Date
         validTill: Date
-        finalAmount: Int
+        finalAmount: Float
         community: [communities]
         subChapter: [subChapters]
         city: [cities]
@@ -292,12 +292,12 @@ let service=`
         expectedInput : String
         expectedOutput : String
         isApproved: Boolean
-        finalAmount:Int
+        finalAmount:Float
    }
    
    input userServiceCardPaymentInfo {
         orderId: String
-        amount: Int
+        amount: Float
         paymentId: String
         paymentMethod: String
         curencyCode: String

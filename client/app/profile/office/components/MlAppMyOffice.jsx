@@ -76,10 +76,12 @@ export default class MlAppMyOffice extends Component {
   }
 
   addNewOffice() {
-    if (this.isFunder)
+    if (this.state.showButton){
       FlowRouter.go("/app/addOffice")
-    else
+    }else{
       toastr.error('Not Authorised');
+    }
+
   }
 
   async selectOffice(officeId, evt) {

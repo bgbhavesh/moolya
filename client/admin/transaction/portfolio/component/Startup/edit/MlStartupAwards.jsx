@@ -241,12 +241,16 @@ export default class MlStartupAwards extends React.Component{
   async imagesDisplay(){
     const response = await fetchStartupPortfolioAwards(this.props.portfolioDetailsId);
     if (response) {
-      let detailsArray = response?response:[]
       let dataDetails =this.state.startupAwards
+      if(!dataDetails || dataDetails.length<1){
+        dataDetails = response?response:[]
+      }
       let cloneBackUp = _.cloneDeep(dataDetails);
-      _.each(detailsArray, function (obj,key) {
-        cloneBackUp[key]["logo"] = obj.logo;
-      })
+      if(cloneBackUp && cloneBackUp.length>0){
+        _.each(dataDetails, function (obj,key) {
+          cloneBackUp[key]["logo"] = obj.logo;
+        })
+      }
       let listDetails = this.state.startupAwardsList || [];
       listDetails = cloneBackUp
       let cloneBackUpList = _.cloneDeep(listDetails);

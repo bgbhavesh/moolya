@@ -315,8 +315,8 @@ let service=`
 
    type Mutation {
         createService(Services:service):response
-        createBeSpokeService(Services:service):response
-        updateBeSpokeService(Services:service):response
+        createBeSpokeService(Services:service, portfolioId: String):response
+        updateBeSpokeService(Services:service, portfolioId: String):response
         updateServiceGoLive(serviceId:String!):response
         updateServiceSendReview(serviceId:String!):response
         updateService(serviceId:String,Services:service):response

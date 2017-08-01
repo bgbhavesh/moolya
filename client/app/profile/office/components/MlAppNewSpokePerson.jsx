@@ -100,7 +100,7 @@ export default class MlAppNewSpokePerson extends React.Component {
     if (response && response.success) {
       FlowRouter.go('/app/myOffice/')
       toastr.success('Office Successfully Created');
-    } else {
+    } else if(response && !response.success){
       toastr.error(response.result);
     }
     return response;

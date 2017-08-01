@@ -171,16 +171,16 @@
   MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], task])
 
   let supportedApi = [
-    {api:'fetchTasks', actionName:'READ', moduleName:"OFFICE"},
-    {api:'fetchTaskDetails', actionName:'READ', moduleName:"OFFICE"},
-    {api:'fetchTask', actionName:'READ', moduleName:"OFFICE"},
-    {api:'fetchTaskDetailsForServiceCard', actionName:'READ', moduleName:"OFFICE"},
-    {api:'fetchTaskDetailsForAdminServiceCard', actionName:'READ', moduleName:"OFFICE"},
-    {api:'fetchTaskDetailsAdmin', actionName:'READ', moduleName:"OFFICE"},
-    {api:'fetchTasksInBooking', actionName:'READ', moduleName:"OFFICE"},
-    {api:'createTask', actionName:'CREATE', moduleName:"OFFICE"},
-    {api:'updateTask', actionName:'UPDATE', moduleName:"OFFICE"},
-    {api:'fetchTaskForApointment', actionName:'READ', moduleName:"OFFICE"},
+    {api:'fetchTasks', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
+    {api:'fetchTaskDetails', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
+    {api:'fetchTask', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
+    {api:'fetchTaskDetailsForServiceCard', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
+    {api:'fetchTaskDetailsForAdminServiceCard', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
+    {api:'fetchTaskDetailsAdmin', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
+    {api:'fetchTasksInBooking', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
+    {api:'createTask', actionName:'CREATE', moduleName:"OFFICE", isAppWhiteList: true},
+    {api:'updateTask', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList: true},
+    {api:'fetchTaskForApointment', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
   ]
   MlResolver.MlModuleResolver.push(supportedApi)
 // termsAndCondition: TermsAndCondition

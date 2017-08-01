@@ -18,7 +18,8 @@ MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => 
       userId: portfolio.userId,
       profileId:portfolio.profileId,
       isCurrentVersion: true,
-      isBeSpoke: false
+      isBeSpoke: false,
+      isLive: true
     };
     let result = mlDBController.find('MlServiceCardDefinition', query , context).fetch();
     return result;
@@ -80,7 +81,7 @@ MlResolver.MlQueryResolver['findService'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlMutationResolver['createBeSpokeService'] = (obj, args, context, info) => {
-  let portfolioId = args.Services.profileId;
+  let portfolioId =  args.portfolioId;
   return mlServiceCardRepo.createBespokeServiceCardDefinition(args.Services, portfolioId, context);
 };
 

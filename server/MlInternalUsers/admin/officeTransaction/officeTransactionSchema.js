@@ -115,11 +115,11 @@ let officeTransaction = `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], officeTransaction]);
 let supportedApi = [
-  {api: 'createOfficeTransaction', actionName: 'CREATE', moduleName: "OFFICE"},
+  {api: 'createOfficeTransaction', actionName: 'CREATE', moduleName: "OFFICE", isWhiteList:true},
   {api: 'findOfficeTransaction', actionName: 'READ', moduleName: "OFFICE", isWhiteList:true},
-  {api: 'updateOfficeTransactionOrderSubscriptionDetail', actionName: 'UPDATE', moduleName: "OFFICE"},
-  {api: 'officeTransactionPayment', actionName: 'UPDATE', moduleName: "OFFICE"},
-  {api: 'findAllTransaction', actionName: 'READ', moduleName: "OFFICE"},
-]
+  {api: 'updateOfficeTransactionOrderSubscriptionDetail', actionName: 'UPDATE', moduleName: "OFFICE", isWhiteList:true},
+  {api: 'officeTransactionPayment', actionName: 'UPDATE', moduleName: "OFFICE", isWhiteList:true},
+  {api: 'findAllTransaction', actionName: 'READ', moduleName: "OFFICE", isWhiteList:true}
+];
 MlResolver.MlModuleResolver.push(supportedApi)
 // findOfficeTransaction(officeTransactionId:String):response    /* updated with all admin data context*/

@@ -198,12 +198,16 @@ export default class MlStartupBranches extends React.Component{
   async imagesDisplay(){
     const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
     if (response) {
-      let detailsArray = response&&response.branches?response.branches:[]
       let dataDetails =this.state.startupBranches
+      if(!dataDetails || dataDetails.length<1){
+        dataDetails = response&&response.branches?response.branches:[]
+      }
       let cloneBackUp = _.cloneDeep(dataDetails);
-      _.each(detailsArray, function (obj,key) {
-        cloneBackUp[key]["logo"] = obj.logo;
-      })
+      if(cloneBackUp && cloneBackUp.length>0){
+        _.each(detailsArray, function (obj,key) {
+          cloneBackUp[key]["logo"] = obj.logo;
+        })
+      }
       let listDetails = this.state.startupBranchesList || [];
       listDetails = cloneBackUp
       let cloneBackUpList = _.cloneDeep(listDetails);

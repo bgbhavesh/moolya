@@ -8,7 +8,7 @@ import {findUserOfficeActionHandler} from "../actions/findUserOffice";
 import {findOfficeAction} from "../actions/findOfficeAction";
 import MlLoader from "../../../../commons/components/loader/loader";
 import _ from "lodash";
-// import {findOfficeTransactionHandler} from '../../../../../client/admin/transaction/office/actions/findOfficeTranscation'
+import {fetchExternalUserProfilesActionHandler} from "../../../profile/actions/switchUserProfilesActions";
 
 export default class MlAppMyOffice extends Component {
   constructor(props) {
@@ -38,6 +38,7 @@ export default class MlAppMyOffice extends Component {
 
   componentWillMount() {
     const resp = this.findUserOffice();
+    var getExt = this.fetchExternalUserProfiles()
     return resp;
   }
 
@@ -59,19 +60,35 @@ export default class MlAppMyOffice extends Component {
       this.setState({loading: false});
   }
 
-  addNewOffice() {
-    FlowRouter.go("/app/addOffice")
+  async fetchExternalUserProfiles() {
+    const response = await fetchExternalUserProfilesActionHandler();
+    if (response && response.length > 0) {
+      let default_User_Profile = _.find(response, {isDefault: true})
+      if (!default_User_Profile) {
+        default_User_Profile = response[0];
+      }
+      this.isFunder = _.isMatch(default_User_Profile, {communityDefCode: 'FUN'})
+      if(!this.isFunder){
+        $('.addOffice').attr('disabled', 'disabled')
+      }
+    }
   }
 
-  async selectOffice(officeId, evt)
-  {
+  addNewOffice() {
+    if (this.isFunder)
+      FlowRouter.go("/app/addOffice")
+    else
+      toastr.error('Not Authorised');
+  }
+
+  async selectOffice(officeId, evt) {
     let response = await findOfficeAction(officeId);
     if (response && response.success) {
       let data = JSON.parse(response.result)
-      if(data[0].office.isExpired){
+      if (data[0].office.isExpired) {
         toastr.error('Office Expired');
       }
-      else if(data[0].office.isActivated){
+      else if (data[0].office.isActivated) {
         FlowRouter.go('/app/editOffice/' + officeId);
       } else if (data[0].officeTransaction && data[0].officeTransaction.paymentDetails && data[0].officeTransaction.paymentDetails.isPaid) {
         toastr.success('Office amount Paid wait for admin approval');
@@ -108,12 +125,12 @@ export default class MlAppMyOffice extends Component {
                     <div className="col-md-6">
                     </div>
                     <div className="col-md-6">
-                      <a href="" onClick={this.addNewOffice.bind(this)} className="ideabtn">Add new office</a>
+                      <a href="" onClick={this.addNewOffice.bind(this)} className="ideabtn addOffice">Add new office</a>
                     </div>
                   </div>
                 </div> : <div>
                   <div className="col-md-12 text-center">
-                    <div className="col-md-offset-3 col-md-6 col-sm-6 col-xs-6">
+                    <div className="col-md-offset-2 col-md-8 col-sm-8 col-xs-8">
                       <div className="swiper-container profile_container">
                         <div className="swiper-wrapper">
 
@@ -122,19 +139,21 @@ export default class MlAppMyOffice extends Component {
                         </div>
                         <div className="swiper-pagination"></div>
                       </div>
+                      <div className="col-md-12 text-center well mart20">
+                        <div className="col-md-4 nopadding">
+                          <a className="fileUpload mlUpload_btn addOffice" onClick={this.addNewOffice.bind(this)}>Add New
+                            Office</a>
+                        </div>
+                        <div className="col-md-4 nopadding">
+                          <a href="#" className="fileUpload mlUpload_btn disabled">Enter into Office</a>
+                        </div>
+                        <div className="col-md-4 nopadding">
+                          <a href="#" className="fileUpload mlUpload_btn disabled">Deactivate Office</a>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div className="col-md-12 text-center well mart100">
-                    <div className="col-md-4">
-                      <a className="fileUpload mlUpload_btn" onClick={this.addNewOffice.bind(this)}>Add New Office</a>
-                    </div>
-                    <div className="col-md-4">
-                      <a href="#" className="fileUpload mlUpload_btn disabled">Enter into Office</a>
-                    </div>
-                    <div className="col-md-4">
-                      <a href="#" className="fileUpload mlUpload_btn disabled">Deactivate Office</a>
-                    </div>
-                  </div>
+
                 </div>}
 
               </div> : <h3>Please complete Hard registration</h3>}

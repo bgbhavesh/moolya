@@ -4,11 +4,11 @@
 import gql from 'graphql-tag'
 import {appClient} from '../../../../core/appConnection';
 
-export async function createBeSpokeServiceActionHandler (Services) {
+export async function createBeSpokeServiceActionHandler (Services, portfolioId) {
   const result = await appClient.mutate({
     mutation: gql`
-    mutation($Services: service){
-        createBeSpokeService(Services:$Services){
+    mutation($Services: service, $portfolioId: String){
+        createBeSpokeService(Services:$Services, portfolioId: $portfolioId){
         success
         code
         result
@@ -16,18 +16,19 @@ export async function createBeSpokeServiceActionHandler (Services) {
       }
     `,
     variables: {
-      Services
+      Services,
+      portfolioId
     }
   });
   const services = result.data.createBeSpokeService;
   return services
 }
 
-export async function updateBeSpokeServiceActionHandler (Services) {
+export async function updateBeSpokeServiceActionHandler (Services, portfolioId) {
   const result = await appClient.mutate({
     mutation: gql`
-    mutation($Services: service){
-        updateBeSpokeService(Services:$Services){
+    mutation($Services: service, $portfolioId: String){
+        updateBeSpokeService(Services:$Services, portfolioId: $portfolioId){
         success
         code
         result
@@ -35,7 +36,8 @@ export async function updateBeSpokeServiceActionHandler (Services) {
       }
     `,
     variables: {
-      Services
+      Services,
+      portfolioId
     }
   });
   const services = result.data.updateBeSpokeService;
@@ -233,6 +235,11 @@ export async function fetchBeSpokeServicesActionHandler (portfolioId) {
         displayName
         mode
         isBeSpoke
+        sessionFrequency
+        duration {
+          hours
+          minutes
+        }
         attachments{
           fileUrl
         }

@@ -7,9 +7,11 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
 import {initalizeFloatLabel} from "../../../../../client/commons/utils/formElemUtil";
-// import ScrollArea from "react-scrollbar";
 
 export default class MlSpokePersonDetail extends Component {
+  /**
+   * Initialize labels
+   * */
   componentDidMount() {
     initalizeFloatLabel();
   }
@@ -18,6 +20,9 @@ export default class MlSpokePersonDetail extends Component {
     initalizeFloatLabel();
   }
 
+  /**
+   * UI to be render
+   * */
   render() {
     return (
       <div className="col-lg-12">

@@ -28,7 +28,7 @@ export default class MlAppTaskPayment extends Component {
       var response = await findTaskActionHandler(taskId);
       if (!_.isEmpty(response)) {
         console.log(response)
-        this.setState({loading: false, data: response});
+        this.setState({loading: false, data: response, prevDerivedAmount: response.payment && response.payment.derivedAmount});
       }
       return response
     } else {
@@ -92,7 +92,7 @@ export default class MlAppTaskPayment extends Component {
     let name = 'discountType';
     details['payment'] = _.omit(details['payment'], [name]);
     details['payment'] = _.omit(details['payment'], ['derivedAmount']);
-    details['payment'] = _.extend(details['payment'], {[name]: 'amount', 'derivedAmount': 0});
+    details['payment'] = _.extend(details['payment'], {[name]: 'amount', 'derivedAmount': this.state.prevDerivedAmount, discountValue: 0});
     this.setState({data: details}, function () {
       this.sendTaskPaymentToParent()
     })
@@ -104,7 +104,7 @@ export default class MlAppTaskPayment extends Component {
     let name = 'discountType';
     details['payment'] = _.omit(details['payment'], [name]);
     details['payment'] = _.omit(details['payment'], ['derivedAmount']);
-    details['payment'] = _.extend(details['payment'], {[name]: 'percent', 'derivedAmount': 0});
+    details['payment'] = _.extend(details['payment'], {[name]: 'percent', 'derivedAmount': this.state.prevDerivedAmount, discountValue: 0});
     this.setState({data: details}, function () {
       this.sendTaskPaymentToParent()
     })
@@ -182,7 +182,6 @@ export default class MlAppTaskPayment extends Component {
                   <label>Is Eligible for discount</label>
                   <span  htmlFor="discount" className={this.state.data.payment.isDiscount ? 'state_label acLabel' : 'state_label'}>Yes</span><label className="switch nocolor-switch">
                   <input id="discount" type="checkbox" name="isDiscount"
-                         value={this.state.data.payment.isDiscount}
                          checked={!this.state.data.payment.isDiscount}
                          onChange={this.onStatusChange.bind(this)}/>
                   <div className="slider"></div>

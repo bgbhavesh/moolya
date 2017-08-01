@@ -23,6 +23,7 @@ class MlAppServiceSelectTask extends Component{
 
   componentDidMount() {
     this.props.getServiceDetails();
+    this.props.getRedirectServiceList(false);
     if(this.props.viewMode && this.props.serviceTask.tasks[0] ){
       let taskId =this.props.serviceTask.tasks[0].id;
       this.props.optionsBySelectService(taskId);
@@ -155,7 +156,6 @@ class MlAppServiceSelectTask extends Component{
       serviceId,
       optionsBySelectService,
       updateSessionSequence,
-      saveService,
       respectiveTab,
       serviceTask} = this.props;
     const tasks = serviceTask.selectedTaskDetails || {};
@@ -239,10 +239,6 @@ class MlAppServiceSelectTask extends Component{
                     </div>
                     <br className="brclear"/>
                       {this.getSessionList()}
-                    {!this.props.viewMode? <div className="ml_icon_btn">
-                      <div className="save_btn" onClick={() => saveService(false)}><span className="ml ml-save"></span></div>
-                      <a href="" className="cancel_btn"><span className="ml ml-delete"></span></a>
-                    </div>:""}
                   </div>
                   <div className="tab-pane" id="2a">
                     2

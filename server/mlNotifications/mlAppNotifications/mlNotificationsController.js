@@ -11,13 +11,27 @@
 /*--------------------------------------------
  * Include internal and external modules.
  ---------------------------------------------*/
-import MlNotificationsServices from './mlNotificationsServices'
-
+import MlNotificationsServices from './mlNotificationsServices';
+import NotificationTemplateEngine from "../../commons/mlTemplateEngine";
 var mlNotificationsServices=new MlNotificationsServices();
 class MlNotificationControllerClass{
 
   // create new Notification.
   createNewAlert(request, context){
+
+    //fetch the notification template
+    var isNotifTemp=request.isNotifTemp||false;
+
+    if(isNotifTemp){
+
+      let templateCode=request.tempCode||'';
+      let reqObj=request.reqObj||{};
+
+      var notifContext=NotificationTemplateEngine.fetchTemplateContent(templateCode,"notif",reqObj);
+
+      request.text=notifContext.content;
+    }
+
     mlNotificationsServices.createNewAlert(request, context);
   }
 

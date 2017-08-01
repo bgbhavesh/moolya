@@ -19,7 +19,7 @@ export default class MlAppMyCalendarDayComponent extends Component {
     const that = this;
     // console.log('MLDay',this.props);
     return (
-      <div className="rbc-slot-travel-status" onClick={()=>that.dayClick()}>
+      <div onClick={()=>that.dayClick()}>
       </div>
     )
   }

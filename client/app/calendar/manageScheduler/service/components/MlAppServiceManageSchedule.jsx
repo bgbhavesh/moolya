@@ -862,7 +862,7 @@ class MlAppServiceManageSchedule extends Component {
   onChangeFormField(event) {
     const {id, value} = event.target;
     let {serviceBasicInfo} = this.state;
-    serviceBasicInfo[id] = value ? value.trim() : '';
+    serviceBasicInfo[id] = value;
     this.setState({serviceBasicInfo: serviceBasicInfo});
   }
 

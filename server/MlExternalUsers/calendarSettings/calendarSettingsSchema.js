@@ -128,12 +128,12 @@ let calendarSettingSlot=`
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], calendarSettingSlot]);
 let supportedApi = [
-  {api:'fetchMyCalendarSetting', actionName:'READ', moduleName:"OFFICE", isWhiteList:true},
-  {api:'getMyCalendar', actionName:'READ', moduleName:"OFFICE", isWhiteList:true},
-  {api:'getMyCalendarDayAvailable', actionName:'READ', moduleName:"OFFICE", isWhiteList:true},
-  {api:'updateMyCalendarSetting', actionName:'UPDATE', moduleName:"OFFICE", isWhiteList:true},
-  {api:'updateMyCalendarWorkingDay', actionName:'UPDATE', moduleName:"OFFICE", isWhiteList:true},
-  {api:'updateMyCalendarWorkingDays', actionName:'UPDATE', moduleName:"OFFICE", isWhiteList:true},
-  {api:'updateMyCalendarVacation', actionName:'UPDATE', moduleName:"OFFICE", isWhiteList:true},
+  {api:'fetchMyCalendarSetting', actionName:'READ', moduleName:"OFFICE", isAppWhiteList:true},
+  {api:'getMyCalendar', actionName:'READ', moduleName:"OFFICE", isAppWhiteList:true},
+  {api:'getMyCalendarDayAvailable', actionName:'READ', moduleName:"OFFICE", isAppWhiteList:true},
+  {api:'updateMyCalendarSetting', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList:true},
+  {api:'updateMyCalendarWorkingDay', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList:true},
+  {api:'updateMyCalendarWorkingDays', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList:true},
+  {api:'updateMyCalendarVacation', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList:true},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -69,7 +69,7 @@ export default class MlAppMyOffice extends Component {
       }
       this.isFunder = _.isMatch(default_User_Profile, {communityDefCode: 'FUN'})
       if(!this.isFunder){
-        $('.addOffice').attr('disabled', 'disabled')
+        $('.addOffice').addClass('disabled')
       }
     }
   }
@@ -140,10 +140,10 @@ export default class MlAppMyOffice extends Component {
                         <div className="swiper-pagination"></div>
                       </div>
                       <div className="col-md-12 text-center well mart20">
-                        <div className="col-md-4 nopadding">
+                        {this.isFunder?<div className="col-md-4 nopadding">
                           <a className="fileUpload mlUpload_btn addOffice" onClick={this.addNewOffice.bind(this)}>Add New
                             Office</a>
-                        </div>
+                        </div>:<div></div>}
                         <div className="col-md-4 nopadding">
                           <a href="#" className="fileUpload mlUpload_btn disabled">Enter into Office</a>
                         </div>

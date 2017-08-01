@@ -238,7 +238,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], myOfficeSchema]);
   {api: 'findOfficeDetail', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
   {api: 'fetchOfficeMembers', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
   {api: 'fetchOfficeMember', actionName: 'READ', moduleName: "OFFICE"},
-  {api: 'fetchAllOfficeMembersWithUserId', actionName: 'READ', moduleName: "OFFICE"},
+  {api: 'fetchAllOfficeMembersWithUserId', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
   {api: 'updateOfficeMemberOnReg', actionName: 'UPDATE', moduleName: "OFFICE"},
 
 ]

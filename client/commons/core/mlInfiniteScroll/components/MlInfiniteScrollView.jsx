@@ -9,6 +9,7 @@
  * Imports libs and components
  */
 import React, {Component} from 'react';
+import ScrollArea from 'react-scrollbar';
 
 export default class MlInfiniteScrollView extends Component {
 
@@ -20,13 +21,25 @@ export default class MlInfiniteScrollView extends Component {
     super(props);
   }
 
+  componentDidMount() {
+    var WinHeight = $(window).height();
+    $('.infinite_scroll').height(WinHeight - (20 + $('.app_header').outerHeight(true)));
+  }
+
   render() {
     const {data, viewComponent}= this.props;
     let pConfig=_.extend(this.props.config);
     let ListComponent =React.cloneElement(viewComponent,{data:data, config:pConfig});
     return (
-      <div>
-        {ListComponent}
+      <div className="infinite_scroll">
+        <ScrollArea
+        speed={0.8}
+        className="infinite_scroll"
+        smoothScrolling={true}
+        default={true}
+        >
+          {ListComponent}
+        </ScrollArea>
       </div>
       )
   }

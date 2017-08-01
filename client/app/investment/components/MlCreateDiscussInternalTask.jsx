@@ -65,6 +65,7 @@ export default class MlCreateDiscussInternalTask extends React.Component {
     let response = await createInternalTaskActionHandler(dataToInsert);
     if(response.success) {
       toastr.success('Internal Task Created');
+      this.props.toggle();
     } else {
       toastr.error(response.result);
     }

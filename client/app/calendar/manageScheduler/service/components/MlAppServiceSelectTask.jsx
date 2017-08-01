@@ -67,7 +67,7 @@ class MlAppServiceSelectTask extends Component{
         <li className={serviceTask.selectedTaskId === tab.id ? 'active' : ''} key={index}>
           <a href="#newTask" data-toggle="tab"
              onClick={() => optionsBySelectService(tab.id)}>
-            {viewMode ? <FontAwesome onClick={() => deleteSelectedTask(tab.id)} name='minus-square'/> : ''} {tab.displayName}
+            {viewMode ? '' : <FontAwesome onClick={() => deleteSelectedTask(tab.id)} name='minus-square'/>} {tab.displayName}
           </a>
         </li>
       )

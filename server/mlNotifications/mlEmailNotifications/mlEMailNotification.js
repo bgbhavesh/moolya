@@ -716,12 +716,12 @@ const MlEmailNotification= class MlEmailNotification {
         communityName : "Investors"
       }
       let toEmail = userDetails&&userDetails.emailId?userDetails.emailId:"";
-      let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_bespoke_customized_office_activated","email",regObj)
+      let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_office_bearer_request_approved_by_admin","email",regObj)
       Meteor.setTimeout(function () {
         mlEmail.sendHtml({
           from: fromEmail,
           to: toEmail,
-          subject: "Office Activated!!!",
+          subject: "Office Bearer Approved!!!",
           html : mail_body&&mail_body.content
         });
       }, 2 * 1000);
@@ -736,7 +736,7 @@ const MlEmailNotification= class MlEmailNotification {
       path : Meteor.absoluteUrl('login')
     }
     let toEmail = userDetails&&userDetails.username?userDetails.username:"";
-    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_bespoke_customized_office_activated","email",regObj)
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_investor_process_setup_completed","email",regObj)
     Meteor.setTimeout(function () {
       mlEmail.sendHtml({
         from: fromEmail,

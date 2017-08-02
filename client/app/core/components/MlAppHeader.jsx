@@ -49,8 +49,10 @@ class MlAppProfileHeader extends Component {
   /**fetching user details from registration*/
   componentWillMount(){
     let user = Meteor.user();
-    this.setState({profilePic:user.profile.profileImage})
-    console.log(user)
+    if(user.profile && user.profile.profileImage) {
+      this.setState({profilePic:user.profile.profileImage});
+    }
+    console.log(user);
     const resp = this.fetchUserDetails();
     return resp
   }
@@ -69,8 +71,11 @@ class MlAppProfileHeader extends Component {
   }
 
   componentWillReceiveProps(user){
-    console.log(user)
-    this.setState({profilePic:user.user.profile.profileImage});
+    console.log(user);
+    if( user && user.user && user.user.profile &&  user.user.profile.profileImage) {
+      this.setState({profilePic:user.user.profile.profileImage});
+    }
+
   }
 
   /**

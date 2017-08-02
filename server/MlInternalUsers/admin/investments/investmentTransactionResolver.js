@@ -3,6 +3,7 @@
  */
 import MlResolver from "../../../commons/mlResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
+import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 
 MlResolver.MlQueryResolver['fetchProcessTransactions'] = (obj, args, context, info) =>{
 }
@@ -117,6 +118,11 @@ MlResolver.MlMutationResolver['updateProcessSetup'] = (obj, args, context, info)
         }
     }
 
+    if(ret){
+      var userDetails = mlDBController.findOne('users', {_id:processSetup.userId}, context)
+      MlEmailNotification.processSetupCompletedByAdmin(userDetails)
+    }
+
     let code = 200;
     let response = new MlRespPayload().successPayload(ret, code);
     return response;
@@ -148,6 +154,9 @@ MlResolver.MlMutationResolver['updateProcessTransaction'] = (obj, args, context,
     let response = new MlRespPayload().errorPayload(e.message, code);
     return response;
   }
+  /*if(ret){
+    MlEmailNotification.officePaymentLink()
+  }*/
   let code = 200;
   let response = new MlRespPayload().successPayload('Payment link generated successfully'+ret, code);
   return response;

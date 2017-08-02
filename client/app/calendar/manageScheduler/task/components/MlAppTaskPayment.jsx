@@ -18,6 +18,8 @@ export default class MlAppTaskPayment extends Component {
   }
 
   componentWillMount() {
+    let WinHeight = $(window).height();
+    $('.step_form_wrap').height(WinHeight - (240 + $('.app_header').outerHeight(true)));
     const resp = this.findTaskDetails();
     return resp;
   }
@@ -151,8 +153,11 @@ export default class MlAppTaskPayment extends Component {
 
   componentDidMount() {
     $('.float-label').jvFloat();
-    var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight - (310 + $('.admin_header').outerHeight(true)));
+    setTimeout(function () {
+      let WinHeight = $(window).height();
+      $('.step_form_wrap').height(WinHeight - (240 + $('.app_header').outerHeight(true)));
+    },100);
+
   }
 
   render() {

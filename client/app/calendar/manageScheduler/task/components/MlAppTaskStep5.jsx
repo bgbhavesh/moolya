@@ -15,7 +15,7 @@ export default class MlAppTaskStep5 extends React.Component {
     });
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight - (310 + $('.admin_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight - (240 + $('.app_header').outerHeight(true)));
   }
 
   render() {

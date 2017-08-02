@@ -8,6 +8,7 @@ import MlUserContext from "../../MlExternalUsers/mlUserContext";
 import mlOfficeValidationRepo from "./officeRepo";
 import passwordUtil from "../../commons/passwordUtil";
 import _ from "lodash";
+import MlEmailNotification from "../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 
 MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
   let officeSC = [];
@@ -232,6 +233,9 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
           years:1
         }
       }
+      if(ret){
+        MlEmailNotification.newOfficeRequestSent(context);
+      }
       let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'communityId', 'communityName']);
       let officeTransaction = _.extend(details, extendObj)
       MlResolver.MlMutationResolver['createOfficeTransaction'](obj, {officeTransaction}, context, info)
@@ -268,6 +272,8 @@ MlResolver.MlMutationResolver['updateOfficeStatus'] = (obj, args, context, info)
     if(!result){
       let code = 400;
       return new MlRespPayload().errorPayload('Error in Activating the office', code);
+    }else if(result){
+      MlEmailNotification.bespokeOfficeActivated( args.id);
     }
     result = mlDBController.update('MlOfficeSC', {officeId:args.id, isActive:true}, {isActivated:true, isReconciled:true}, {$set:true}, context)
     if(!result){
@@ -393,7 +399,8 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
 
       /**sending email verification token to the created office member*/
       if (registrationId) {
-        MlAccounts.sendVerificationEmail(registrationId,{emailContentType:"html",subject:"Email Verification",context:context});
+        //MlAccounts.sendVerificationEmail(registrationId,{emailContentType:"html",subject:"Email Verification",context:context});
+        MlEmailNotification.officeInvitationEmail(context,registrationData)
       }
       if (registrationId) { //for creating new user
         // let officeTrans = {
@@ -591,6 +598,9 @@ MlResolver.MlMutationResolver['updateOfficeMemberOnReg'] = (obj, args, context, 
       var officeMember =  mlDBController.findOne('MlOfficeMembers', {registrationId : args.registrationId}, context);
       if(officeMember){
         let ret = mlDBController.update('MlOfficeMembers', {registrationId: args.registrationId}, args.officeMember, {$set: true}, context);
+        if(ret){
+          MlEmailNotification.officeBearerApprovedByAdmin(officeMember)
+        }
       }else {
         let code = 400;
         let response = new MlRespPayload().successPayload("user not found", code);

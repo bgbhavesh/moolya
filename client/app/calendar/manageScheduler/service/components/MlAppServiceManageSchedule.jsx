@@ -261,7 +261,12 @@ class MlAppServiceManageSchedule extends Component {
   async getTaskDetailsForService() {
     let {serviceTask} = this.state;
     if (this.profileId) {
-      const resp = await fetchTaskDetailsForServiceCard(this.profileId, this.serviceId);
+      let resp;
+      if(this.props.viewMode){
+        resp = await fetchTaskDetailsForServiceCard('', this.serviceId);
+      } else {
+        resp = await fetchTaskDetailsForServiceCard(this.profileId, this.serviceId);
+      }
       serviceTask.serviceTaskDetails = resp;
       this.setState({serviceTask: serviceTask})
     }
@@ -277,6 +282,7 @@ class MlAppServiceManageSchedule extends Component {
     let session = [];
     if (taskId) {
       serviceTask.selectedTaskId = taskId;
+      console.log(service, serviceTask);
       let selectedTaskDetails = serviceTask.serviceTaskDetails.filter((task) => {
         return task.id === taskId
       });
@@ -862,7 +868,7 @@ class MlAppServiceManageSchedule extends Component {
   onChangeFormField(event) {
     const {id, value} = event.target;
     let {serviceBasicInfo} = this.state;
-    serviceBasicInfo[id] = value ? value.trim() : '';
+    serviceBasicInfo[id] = value;
     this.setState({serviceBasicInfo: serviceBasicInfo});
   }
 
@@ -1023,7 +1029,9 @@ class MlAppServiceManageSchedule extends Component {
               </div>
             </div>
           </div>
-          <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
+          {!isViewMode &&
+            <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
+          }
         </div>
       </div>
     )

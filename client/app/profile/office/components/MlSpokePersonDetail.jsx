@@ -24,6 +24,8 @@ export default class MlSpokePersonDetail extends Component {
    * UI to be render
    * */
   render() {
+    console.log(this.props)
+    var props = this.props.officeData?this.props.officeData:{}
     return (
       <div className="col-lg-12">
         <div className="row">
@@ -35,14 +37,14 @@ export default class MlSpokePersonDetail extends Component {
                     <div className="panel-heading"> Subscription: Basic Office</div>
                     <div className="panel-body">
                       <div className="col-lg-6 col-md-6 col-sm-12 nopadding-left">
-                        <p>Total Users: 10</p>
+                        <p>Total Users: {props.teamUserCount}</p>
                       </div>
                       <div className="clearfix"></div>
                       <div className="col-lg-6 col-md-6 col-sm-12 nopadding-left">
-                        <p>Principal Users: 2</p>
+                        <p>Principal Users: {props.principalUserCount}</p>
                       </div>
                       <div className="col-lg-6 col-md-6 col-sm-12 nopadding-right">
-                        <p>Team Users: 8</p>
+                        <p>Team Users: {props.teamUserCount}</p>
                       </div>
 
                     </div>
@@ -52,23 +54,22 @@ export default class MlSpokePersonDetail extends Component {
                     <div className="panel-heading"> User Type</div>
 
                     <div className="panel-body">
-                      <div className="col-lg-4 col-md-4 col-sm-4">
-                        <div className="team-block marb0">
-                          <span className="ml ml-moolya-symbol"></span>
-                          <h3>
-                            Office Barer
-                          </h3>
-                        </div>
-                      </div>
-                      <div className="col-lg-4 col-md-4 col-sm-4">
-                        <div className="team-block marb0">
-                          <span className="ml ml-moolya-symbol"></span>
-                          <h3>
-                            Service Provider
-                          </h3>
-                        </div>
-                      </div>
-
+                      {props.availableCommunities.map(function (item, say) {
+                        return (
+                          <div className="col-lg-4 col-md-4 col-sm-4" key={say}>
+                            <div className="team-block marb0">
+                              <span className="ml ml-moolya-symbol"></span>
+                              <h3>
+                                {item.communityName}
+                              </h3>
+                            </div>
+                            <div className="form-group mart20">
+                              <input type="text" placeholder="User Count" defaultValue={item.userCount}
+                                     className="form-control float-label" disabled={true}/>
+                            </div>
+                          </div>
+                        )
+                      })}
                     </div>
                   </div>
                   <div className="clearfix"></div>
@@ -84,42 +85,43 @@ export default class MlSpokePersonDetail extends Component {
                 <form>
                   <div className="form-group">
                     <input type="text" placeholder="Branch Type" className="form-control float-label"
-                           id="cluster_name"/>
+                           defaultValue={props.branchType}/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Office Location" className="form-control float-label"
-                           id="cluster_name"/>
+                           defaultValue={props.officeLocation}/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Street No/Locality" className="form-control float-label"
-                           id="cluster_name"/>
+                           defaultValue={props.streetLocality}/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Landmark" className="form-control float-label"
-                           id="cluster_name"/>
+                           defaultValue={props.landmark}/>
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="Area" className="form-control float-label" id="cluster_name"/>
+                    <input type="text" placeholder="Area" className="form-control float-label"
+                           defaultValue={props.area}/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Town/City" className="form-control float-label"
-                           id="cluster_name"/>
+                           defaultValue={props.city}/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="State" className="form-control float-label"
-                           id="cluster_name"/>
+                           defaultValue={props.state}/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Country" className="form-control float-label"
-                           id="cluster_name"/>
+                           defaultValue={props.country}/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Zip Code" className="form-control float-label"
-                           id="cluster_name"/>
+                           defaultValue={props.zipCode}/>
                   </div>
                   <div className="form-group">
-                    <a className="mlUpload_btn" href="/app/officeMembersDetails">Next</a> <a
-                    href="#" className="mlUpload_btn">Cancel</a>
+                    <a className="mlUpload_btn" href="/app/officeMembersDetails">Next</a>
+                    <a href="#" className="mlUpload_btn">Cancel</a>
                   </div>
                 </form>
               </div>

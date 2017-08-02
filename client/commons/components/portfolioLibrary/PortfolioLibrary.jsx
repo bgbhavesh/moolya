@@ -501,7 +501,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
       let imageData = this.state.isLibrary ? this.state.imageDetails || [] : this.state.imageSpecifications || [];
       const Images = imageData.map(function (show, id) {
         return (
-          <div className="thumbnail" key={id}>
+          <div className="thumbnail" key={id} >
             {that.state.explore ? " " : that.state.imagesLock[id] ? !that.state.hideLock ?
               <FontAwesome onClick={() => that.toggleImageLock(id)} name='lock'/> : "" : !that.state.hideLock ?
               <FontAwesome onClick={() => that.toggleImageLock(id)} name='unlock'/> : "" }
@@ -760,6 +760,10 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 
     async updateLibraryPortfolioLibrary(id,data){
       const resp = await updateLibrary(id,data, this.props.client)
+      console.log(resp)
+      if(resp.code == 20){
+        toastr.error('File Already Exists')
+      }
       // if(!resp.success){
       //   toastr.error("Image already Exists in library")
       // }
@@ -912,7 +916,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
               <img src="/images/video_1.jpg"/>
             </ModalBody>
           </Modal>
-          <div className="modal fade bs-example-modal-sm library-popup imagepop" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+          <div className="modal fade bs-example-modal-sm library-popup imagepop" onContextMenu={(e)=>e.preventDefault()} tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
             <div className="modal-dialog" role="document">
               <div className="modal-content">
                 <div className="modal-header">
@@ -924,7 +928,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
               </div>
             </div>
           </div>
-          <div className="modal fade bs-example-modal-sm library-popup templatepop" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+          <div className="modal fade bs-example-modal-sm library-popup templatepop" onContextMenu={(e)=>e.preventDefault()} tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
             <div className="modal-dialog" role="document">
               <div className="modal-content">
                 <div className="modal-header">
@@ -936,7 +940,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
               </div>
             </div>
           </div>
-          <div className="modal fade bs-example-modal-sm library-popup documentpop" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+          <div className="modal fade bs-example-modal-sm library-popup documentpop" onContextMenu={(e)=>e.preventDefault()} tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
             <div className="modal-dialog" role="document">
               <div className="modal-content">
                 <div className="modal-header">
@@ -951,7 +955,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
               </div>
             </div>
           </div>
-          <div className="modal fade bs-example-modal-sm library-popup videopop" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+          <div className="modal fade bs-example-modal-sm library-popup videopop" onContextMenu={(e)=>e.preventDefault()} tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
             <div className="modal-dialog" role="document">
               <div className="modal-content">
                 <div className="modal-header">
@@ -973,7 +977,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
                   </a>
                 </div>
               </div>
-              <div className="panel-body">
+              <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                 {this.state.isLibrary?this.popImages():this.images()}
               </div>
             </div>
@@ -990,7 +994,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
               </div>
               <ul>
                 <li>
-                  <div className="panel-body">
+                  <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                     {this.state.isLibrary?this.popVideos():this.videos()}
                   </div>
                 </li>
@@ -1008,7 +1012,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
                   </a>
                 </div>
               </div>
-              <div className="panel-body">
+              <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                 {this.state.isLibrary?this.popTemplates():this.templates()}
               </div>
             </div>
@@ -1023,7 +1027,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
                   </a>
                 </div>
               </div>
-              <div className="panel-body">
+              <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                 {this.state.isLibrary?this.popDocuments():this.documents()}
               </div>
             </div>

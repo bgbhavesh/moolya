@@ -302,7 +302,7 @@ export default class MlAppChooseTeam extends React.Component{
                         return (
                          <li key={userIndex}>
                             <a href="">
-                              <img src="/images/p_3.jpg" /><br />
+                              <img src={user.profileImage ? user.profileImage : "/images/def_profile.png"} /><br />
                               <div className="tooltiprefer">
                                 <span>{user.name}</span>
                               </div>
@@ -330,7 +330,8 @@ export default class MlAppChooseTeam extends React.Component{
         })}
       </ScrollArea>
       <div className="ml_btn" style={{'textAlign':'center'}}>
-        <div className="save_btn" onClick={this.saveDetails.bind(this)}>Save</div> <div className="cancel_btn">Cancel</div>
+        <div className="save_btn" onClick={this.saveDetails.bind(this)}>Save</div>
+        <div onClick={() => this.props.handleCancel()} className="cancel_btn">Cancel</div>
       </div>
     </div>
     )

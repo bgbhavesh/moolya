@@ -38,11 +38,11 @@ let stage=`
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], stage]);
 
 let supportedApi = [
-  {api:'fetchStages', actionName:'READ', moduleName:"OFFICE"},
-  {api:'fetchStage', actionName:'READ', moduleName:"OFFICE"},
+  {api:'fetchStages', actionName:'READ', moduleName:"OFFICE", isWhiteList:true},
+  {api:'fetchStage', actionName:'READ', moduleName:"OFFICE", isWhiteList:true},
 
-  {api:'createStage', actionName:'CREATE', moduleName:"OFFICE"},
-  {api:'updateStage', actionName:'UPDATE', moduleName:"OFFICE"},
+  {api:'createStage', actionName:'CREATE', moduleName:"OFFICE", isAppWhiteList:true},
+  {api:'updateStage', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList:true},
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

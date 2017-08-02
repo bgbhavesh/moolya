@@ -21,21 +21,28 @@ class MlAppServiceSelectTask extends Component{
     super(props);
   }
 
-  componentDidMount() {
-    this.props.getServiceDetails();
+  async componentDidMount() {
+    await this.props.getServiceDetails();
     this.props.getRedirectServiceList(false);
     if(this.props.viewMode && this.props.serviceTask.tasks[0] ){
       let taskId =this.props.serviceTask.tasks[0].id;
       this.props.optionsBySelectService(taskId);
     }
+    // this.initilizeSwiper()
+    var WinHeight = $(window).height();
+    $('.step_form_wrap').height(WinHeight - (310 + $('.admin_header').outerHeight(true)));
+  }
 
-    let mySwiper = new Swiper('.manage_tasks', {
-      speed: 400,
-      spaceBetween:20,
-      slidesPerView:'auto',
-      pagination: '.swiper-pagination',
-      paginationClickable: true
-    });
+  componentWillUpdate() {
+    setTimeout(function () {
+      let mySwiper = new Swiper('.manage_tasks', {
+        speed: 400,
+        spaceBetween:20,
+        slidesPerView:'auto',
+        pagination: '.swiper-pagination',
+        paginationClickable: true
+      });
+    }, 100);
   }
 
   /**
@@ -67,7 +74,7 @@ class MlAppServiceSelectTask extends Component{
         <li className={serviceTask.selectedTaskId === tab.id ? 'active' : ''} key={index}>
           <a href="#newTask" data-toggle="tab"
              onClick={() => optionsBySelectService(tab.id)}>
-            {viewMode ? <FontAwesome onClick={() => deleteSelectedTask(tab.id)} name='minus-square'/> : ''} {tab.displayName}
+            {viewMode ? '' : <FontAwesome onClick={() => deleteSelectedTask(tab.id)} name='minus-square'/>} {tab.displayName}
           </a>
         </li>
       )

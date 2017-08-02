@@ -51,12 +51,30 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
     skip: args.queryProperty&&args.queryProperty.skip,
     limit: args.queryProperty&&args.queryProperty.limit
   };
+
+  /**
+   * @module ["portfolio"]
+   * changed query for adding [chapter and accountType]
+   * */
   if (moduleName == "FUNDERPORTFOLIO") {
-      let value = mlDBController.find('MlPortfolioDetails', {status: 'gone live', communityCode: "FUN"}, context).fetch()    //making dependency of funders on portfolio status
-      let portId = _.map(value, '_id');
-      let finalQuery = {portfolioDetailsId: {$in: portId}};
-      data = MlFunderPortfolio.find(finalQuery, findOptions).fetch();
-      count = MlFunderPortfolio.find(finalQuery).count();
+    // let value = mlDBController.find('MlPortfolioDetails', {status: 'gone live', communityCode: "FUN"}, context).fetch()    //making dependency of funders on portfolio status
+    // let portId = _.map(value, '_id');
+    // let finalQuery = {portfolioDetailsId: {$in: portId}};
+    // data = MlFunderPortfolio.find(finalQuery, findOptions).fetch();
+    // count = MlFunderPortfolio.find(finalQuery).count();
+    let query = [
+      {
+        '$lookup': {
+          from: 'mlPortfolioDetails', localField: 'portfolioDetailsId', foreignField: '_id',
+          as: 'port'
+        }
+      },
+      {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
+      {'$match': {"port.status": "gone live", 'port.communityCode': "FUN"}},
+      {'$project': {portfolioDetailsId: 1, funderAbout: 1, chapterName: '$port.chapterName', accountType: '$port.accountType'}}
+    ]
+    data = mlDBController.aggregate('MlFunderPortfolio', query, context);
+    count = data.length
   }
 
   else if (args.module == "serviceProviderPortfolioDetails") {

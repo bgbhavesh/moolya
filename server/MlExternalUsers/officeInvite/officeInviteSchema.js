@@ -39,9 +39,9 @@ let officeInviteSchema = `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], officeInviteSchema]);
 let supportedApi = [
-  {api: 'createOfficeInvite', actionName: 'CREATE', moduleName: "OFFICE"},
-  {api: 'fetchAllOfficeInvite', actionName: 'READ', moduleName: "OFFICE"},
-  {api: 'fetchUserOfficeInvite', actionName: 'READ', moduleName: "OFFICE"},
-  {api: 'updateOfficeInvite', actionName: 'UPDATE', moduleName: "OFFICE"}
+  {api: 'createOfficeInvite', actionName: 'CREATE', moduleName: "OFFICE", isWhiteList:true},
+  {api: 'fetchAllOfficeInvite', actionName: 'READ', moduleName: "OFFICE", isWhiteList:true},
+  {api: 'fetchUserOfficeInvite', actionName: 'READ', moduleName: "OFFICE", isWhiteList:true},
+  {api: 'updateOfficeInvite', actionName: 'UPDATE', moduleName: "OFFICE", isWhiteList:true}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -3,6 +3,7 @@
  */
 
 import MlUserContext from '../mlUserContext'
+import moment from 'moment'
 import _ from 'lodash'
 
 var DEFAULT_FREQUENCY_BSPOKE = "YEARLY";
@@ -228,14 +229,20 @@ class MlOfficeRepo{
 
     getExpiryDate(frequencyId){
 
+        var frequency = MlFrequencyType.findOne({_id:frequencyId});
+        if(!frequency)
+          throw new Error('Invalid Frequency');
+
+        var expiryDate = moment().add(frequency.value, 'months')
+        return expiryDate;
     }
 
     // This Method Validates office expiry date
     validateOfficeExpiryDate(officeId, userId){
-        var myOffice = mlDBController.findOne('MlOffice', {_id: officeId});
-        if(!myOffice || (myOffice && myOffice.userId != context.userId)){
-            return {success:false, msg:'Invalid Office'}
-        }
+        // var myOffice = mlDBController.findOne('MlOffice', {_id: officeId});
+        // if(!myOffice || (myOffice && myOffice.userId != context.userId)){
+        //     return {success:false, msg:'Invalid Office'}
+        // }
         // let offices = MlUserSubscriptions.find({resId:officeId}).fetch();
         return {success:true}
     }
@@ -250,9 +257,12 @@ class MlOfficeRepo{
 
     // This Method Validates office members count
     officeMemeberValidations(userId, profile, payload){
-        var userOffices = mlDBController.find('MlOffice', {profileId:profile.profileId, userId:userId}).fetch();
+        // var userOffices = mlDBController.find('MlOffice', {profileId:profile.profileId, userId:userId}).fetch();
+        var officeMember = mlDBController.findOne('MlOfficeMembers', {officeId:payload.myOfficeId, userId:userId});
+        if(!officeMember || !officeMember.isPrincipal)
+          throw new Error('Invalid Office Member');
 
-        var myOffice = _.find(userOffices, {_id:payload.myOfficeId})
+        var myOffice = mlDBController.findOne('MlOffice', {_id:payload.myOfficeId, isActive:true});
         if(!myOffice)
           throw new Error('Invalid Office Id');
 

@@ -48,19 +48,19 @@ export default class MlAppServicePayment extends React.Component{
               <div className="form-group">
                 <label>
                   Tasks actual amount
-                  <input type="number" disabled value={servicePayment.tasksAmount}  className="form-control" />
+                  <input type="number" disabled value={servicePayment.tasksAmount ? parseFloat(servicePayment.tasksAmount).toFixed(2):''}  className="form-control" />
                 </label>
               </div>
               <div className="form-group">
                 <label>
                   Task discount amount
-                  <input type="number" disabled value={servicePayment.tasksDiscount}  className="form-control" />
+                  <input type="number" disabled value={servicePayment.tasksDiscount ? parseFloat(servicePayment.tasksDiscount).toFixed(2):''}  className="form-control" />
                 </label>
               </div>
               <div className="form-group">
                 <label>
                   Task derived amount
-                  <input type="number" disabled value={servicePayment.tasksDerived}  className="form-control "/>
+                  <input type="number" disabled value={servicePayment.tasksDerived ? parseFloat(servicePayment.tasksAmount).toFixed(2):''}  className="form-control "/>
                 </label>
               </div>
               <div className="form-group switch_wrap switch_names inline_switch">
@@ -160,7 +160,7 @@ export default class MlAppServicePayment extends React.Component{
               </div>
               <div className="form-group">
                 <label>Derived amount Rs. <input className="form-control inline_input medium_in"
-                                                 value={this.props.finalAmount} disabled />
+                                                 value={this.props.finalAmount ? parseFloat(this.props.finalAmount).toFixed(2) : ''} disabled />
                 </label>
               </div>
             </form>

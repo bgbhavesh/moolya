@@ -15,37 +15,30 @@ export default class MlAppAddOffice extends React.Component {
     return this;
   }
 
-  componentDidMount() {
-    $(function () {
-      $('.float-label').jvFloat();
-    });
+  initializeMount() {
+    $('#details-div').show();
+    $('.requested_input').hide();
+    var $frame = $('#forcecentered');
+    var $wrap = $frame.parent();
 
-    $('.list_block').click(function () {
-      $('#details-div').show();
-      $('.requested_input').hide();
-      var $frame = $('#forcecentered');
-      var $wrap = $frame.parent();
-
-      // Call Sly on frame
-      $frame.sly({
-        horizontal: 1,
-        itemNav: 'forceCentered',
-        smart: 1,
-        activateOn: 'click',
-        mouseDragging: 1,
-        touchDragging: 1,
-        releaseSwing: 1,
-        startAt: 0,
-        scrollBar: $wrap.find('.scrollbar'),
-        scrollBy: 1,
-        speed: 300,
-        elasticBounds: 1,
-        easing: 'easeOutExpo',
-        dragHandle: 1,
-        dynamicHandle: 1,
-        clickBar: 1,
-
-      });
+    // Call Sly on frame
+    $frame.sly({
+      horizontal: 1,
+      itemNav: 'forceCentered',
+      smart: 1,
+      activateOn: 'click',
+      mouseDragging: 1,
+      touchDragging: 1,
+      releaseSwing: 1,
+      startAt: 0,
+      scrollBar: $wrap.find('.scrollbar'),
+      scrollBy: 1,
+      speed: 300,
+      elasticBounds: 1,
+      easing: 'easeOutExpo',
+      dragHandle: 1,
+      dynamicHandle: 1,
+      clickBar: 1,
     });
   }
 
@@ -65,10 +58,14 @@ export default class MlAppAddOffice extends React.Component {
   }
 
   showNewSpokePerson() {
+    this.initializeMount()
     this.setState({showNewSpokePerson: true})
   }
 
-  showDetails() {
+  showDetails(value, event) {
+    this.initializeMount()
+    console.log(value)
+    this.detailData = value
     this.setState({showNewSpokePerson: false})
   }
 
@@ -78,7 +75,7 @@ export default class MlAppAddOffice extends React.Component {
     const data = this.state.data && this.state.data.length > 0 ? this.state.data : []
     const list = data.map(function (value, idx) {
       return (
-        <div className="col-lg-2 col-md-4 col-sm-4" onClick={that.showDetails.bind(that, idx)} key={idx}>
+        <div className="col-lg-2 col-md-4 col-sm-4" onClick={that.showDetails.bind(that, value)} key={idx}>
           <div className="list_block notrans funding_list">
             <div><p className="fund">{value.totalCount} Members</p>
               <span>Principal: {value.principalUserCount}</span><span>Team: {value.teamUserCount}</span><span>(Limited Community)</span>
@@ -97,7 +94,7 @@ export default class MlAppAddOffice extends React.Component {
             smoothScrolling={true}
             default={true}
           >
-          <div className="requested_input">
+            <div className="requested_input">
 
               <div className="col-lg-12">
                 <div className="row">
@@ -112,66 +109,47 @@ export default class MlAppAddOffice extends React.Component {
 
                 </div>
               </div>
-          </div>
-
-
-          {/**
-           *if onces Options are clicked UI
-           * */}
-          <div id="details-div" style={{'display': 'none'}}>
-            <div className="col-lg-12">
-              <div className="row">
-
-                <div className="top_block_scroller" id="forcecentered">
-                  <ul>
-                    <li>
-                      <a onClick={this.showNewSpokePerson.bind(this)}>
-                        <div className="team-block details-add-block">
-                          <h2>Bespoke Memb</h2>
-                          <span className="ml ml-plus "></span>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <div className="team-block" onClick={this.showDetails.bind(this)}>
-                        <h2>Basic Office</h2>
-                        <h3>
-                          <p className="fund">10 Mem</p><p>Principal : 2</p><p>Team : 2</p>
-                        </h3>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="team-block" onClick={this.showDetails.bind(this)}>
-                        <h2>Advance Office</h2>
-                        <h3>
-                          <p className="fund">15 Mem</p><p>Principal : 2</p><p>Team : 13</p>
-                        </h3>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="team-block" onClick={this.showDetails.bind(this)}>
-                        <h2>Pro Office</h2>
-                        <h3>
-                          <p className="fund">20 Mem</p><p>Principal : 5</p><p>Team : 15</p>
-                        </h3>
-                      </div>
-                    </li>
-                    <li>
-                      <div className="team-block" onClick={this.showDetails.bind(this)}>
-                        <h2>Advance Office</h2>
-                        <h3>
-                          <p className="fund">15 Mem</p><p>Principal : 2</p><p>Team : 13</p>
-                        </h3>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
             </div>
 
-            {isShowNewSpoke ? <MlAppNewSpokePerson/> : <MlSpokePersonDetail/>}
 
-          </div>
+            {/**
+             *if onces Options are clicked UI
+             * */}
+            <div id="details-div" style={{'display': 'none'}}>
+              <div className="col-lg-12">
+                <div className="row">
+
+                  <div className="top_block_scroller" id="forcecentered">
+                    <ul>
+                      <li>
+                        <a onClick={this.showNewSpokePerson.bind(this)}>
+                          <div className="team-block details-add-block">
+                            <h2>Bespoke Office</h2>
+                            <span className="ml ml-plus "></span>
+                          </div>
+                        </a>
+                      </li>
+                      {this.state.data.map(function (item, say) {
+                        return (
+                          <li key={say}>
+                            <div className="team-block" onClick={that.showDetails.bind(that, item)}>
+                              <h2>{item.serviceCardName}</h2>
+                              <h3>
+                                <p className="fund">{item.totalCount} Mem</p><p>Principal
+                                : {item.principalUserCount}</p><p>Team : {item.teamUserCount}</p>
+                              </h3>
+                            </div>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {isShowNewSpoke ? <MlAppNewSpokePerson/> : <MlSpokePersonDetail officeData={this.detailData}/>}
+
+            </div>
           </ScrollArea>
         </div>
       </div>

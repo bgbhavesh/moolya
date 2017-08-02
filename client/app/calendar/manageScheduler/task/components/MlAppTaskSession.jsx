@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import gql from "graphql-tag";
 import {findTaskActionHandler} from "../actions/saveCalanderTask";
 import MoolyaSelect from "../../../../commons/components/MlAppSelectWrapper";
 import {fetchActivitiesActionHandler, fetchActivitiesForTaskActionHandler} from '../../activity/actions/activityActionHandler';
@@ -101,16 +100,21 @@ export default class MlAppTaskSession extends Component {
   }
 
   componentDidMount() {
-    var mySwiper = new Swiper('.blocks_in_form', {
-      speed: 400,
-      spaceBetween: 20,
-      slidesPerView: 5,
-      pagination: '.swiper-pagination',
-      paginationClickable: true
-    });
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight - (310 + $('.admin_header').outerHeight(true)));
+  }
+
+  initilizeSwiper() {
+    setTimeout(function () {
+      var mySwiper = new Swiper('.manage_tasks', {
+        speed: 400,
+        spaceBetween: 20,
+        slidesPerView: 5,
+        pagination: '.swiper-pagination',
+        paginationClickable: true
+      });
+    }, 100);
   }
 
   addActivity(activity, index) {
@@ -133,6 +137,7 @@ export default class MlAppTaskSession extends Component {
     this.setState({
       sessionData: sessionData
     }, function () {
+      this.initilizeSwiper()
       this.sendSessionDataToParent();
     }.bind(this));
   }
@@ -187,38 +192,37 @@ export default class MlAppTaskSession extends Component {
                   &nbsp;
                   {/*<span className="see-more pull-right"><a href=""><FontAwesome name='plus'/>Add</a></span>*/}
                 </div>
+                <div className="panel-body" >
+                  <div className="swiper-container manage_tasks">
+                    <div className="swiper-wrapper">
                 {session.activities.map(function (ss,idx) {
                   let activity = that.state.activities.find(function (activity) { return ss == activity._id; });
                   console.log(activity);
                   if (activity) {
                     return(
-                      <div className="panel-body" key={idx}>
-                        <div className="swiper-container blocks_in_form">
-                          <div className="swiper-wrapper">
-                            <div className="swiper-slide">
-                              <div className="list_block notrans funding_list">
-                                <div>
-                                  <p className="online">{activity.mode}</p>
-                                  <span>Duration:
-                                    {/*<FontAwesome name='pencil'/>*/}
-                                </span><br />
-                                  <div className="form-group">
-                                    <label><input type="text" key={activity.duration ? 'notLoadedYetHrs' : 'loadedHrs'} disabled="true" className="form-control inline_input" defaultValue={(activity.duration && activity.duration.hours) ? activity.duration.hours:0}/> Hours <input
-                                      type="text" key={activity.duration ? 'notLoadedYetMin' : 'loadedMin'} disabled="true"
-                                      className="form-control inline_input" defaultValue={(activity.duration && activity.duration.minutes) ? activity.duration.minutes : 0 }/>
-                                      Minutes</label>
-                                  </div>
-                                </div>
-                                <h3>{activity.displayName}</h3>
-                                {/*<span onClick={()=>that.removeActivity(id, idx)} aria-hidden="true" className="fa fa-lock"></span>*/}
-                              </div>
+                      <div className="swiper-slide funding_list list_block notrans funding_list" key={idx}>
+
+                        <span className="block_del"><FontAwesome onClick={()=>that.removeActivity(id, idx)} name='minus'/></span>
+                            <p className="online">{activity.mode}</p>
+                            <span>Duration:
+                            </span><br />
+                            <div className="form-group">
+                              <label><input type="text" key={activity.duration ? 'notLoadedYetHrs' : 'loadedHrs'} disabled="true" className="form-control inline_input" defaultValue={(activity.duration && activity.duration.hours) ? activity.duration.hours:0}/> Hours <input
+                                type="text" key={activity.duration ? 'notLoadedYetMin' : 'loadedMin'} disabled="true"
+                                className="form-control inline_input" defaultValue={(activity.duration && activity.duration.minutes) ? activity.duration.minutes : 0 }/>
+                                Mins</label>
                             </div>
-                          </div>
-                        </div>
+
+                          <h3>{activity.displayName}</h3>
+                          {/*<span onClick={()=>that.removeActivity(id, idx)} aria-hidden="true" className="fa fa-lock"></span>*/}
+
                       </div>
-                    );
+                    )
                   }
                 })}
+              </div>
+              </div>
+              </div>
               </div>
             )
           })}

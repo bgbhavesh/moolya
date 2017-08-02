@@ -184,8 +184,8 @@ span.actions_switch.show_act{bottom: 0px;}
 .form_inner_block .form-group.switch_wrap{margin-bottom: 0px;}
 /*.form_inner_block .form-group.switch_wrap label:first-of-type{position: relative;top: -18px;margin-right: 10px;}*/
 .add_form_block{position: absolute;right: -16px;top: calc(50% - 16px);z-index: 1;}
-.form-group.left_al{width: 48%;margin-right: 4%;float: left;}
-.form-group.left_al:nth-of-type(4){margin-right: 0px;}
+.form-group.left_al{width: 48%;margin-right: 2%;float: left;}
+.form-group.right_al{width: 48%;margin-left: 2%;float: left;}
 /*.form-group.left_al:nth-of-type(5), .form-group.left_al:nth-of-type(3),.form-group.left_al:nth-of-type(7){margin-right: 0px;}*/
 .switch {position: relative;display: inline-block;width: 60px;height: 34px;margin-left: 10px;margin-bottom: 0px;}
 .switch:after{position:absolute;right:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 17px 0 17px 10px;border-color: transparent transparent transparent #c9302c;top: 0px;}
@@ -936,7 +936,7 @@ button:focus{outline: 0;}
 
 .comment-btn-group{margin:20px 0px 40px; position: relative; text-align: center;}
 
-.comments-container {/*margin: 60px auto 15px; width: 100%;*/max-height: 320px;overflow-y: auto;overflow-x: hidden; padding-right: 10px;}
+.comments-container {/*margin: 60px auto 15px; width: 100%;*/height: 320px;overflow-y: auto;overflow-x: hidden; padding-right: 10px;}
 .comments-container h1 {font-size: 36px; color: #283035; font-weight: 400; }
 .comments-container h1 a {font-size: 18px; font-weight: 700; }
 

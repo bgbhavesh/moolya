@@ -357,15 +357,13 @@ export default class MlAppBasicInfo extends React.Component{
                 </div>
                 <div className="form-group">
                   <label>Duration: &nbsp;
-                    <div className="clearfix"></div>
+                      <input type="Number" onChange={(evt)=>that.updateDuration(evt , 'hours')} value={that.state.basicData.duration.hours ? that.state.basicData.duration.hours : '' }  className="form-control inline_input"/>
                     Hours
-                    <div className="form-group ">
-                      <input type="number" onChange={(evt)=>that.updateDuration(evt , 'hours')} value={that.state.basicData.duration.hours ? that.state.basicData.duration.hours : '' }  className="form-control "/>
-                    </div>
+
+
+
+                      <input type="Number" onChange={(evt)=>that.updateDuration(evt , 'minutes')} value={that.state.basicData.duration.minutes ? that.state.basicData.duration.minutes : '' }  className="form-control inline_input"/>
                     Mins
-                    <div className="form-group ">
-                      <input type="number" onChange={(evt)=>that.updateDuration(evt , 'minutes')} value={that.state.basicData.duration.minutes ? that.state.basicData.duration.minutes : '' }  className="form-control "/>
-                    </div>
                   </label>
                 </div>
               </form>
@@ -451,7 +449,8 @@ export default class MlAppBasicInfo extends React.Component{
           </div>
         </ScrollArea>
         <div className="ml_btn" style={{'textAlign':'center'}}>
-          <div className="save_btn" onClick={this.saveDetails.bind(this)}>Save</div> <div className="cancel_btn">Cancel</div>
+          <div className="save_btn" onClick={this.saveDetails.bind(this)}>Save</div>
+          <div onClick={() => this.props.handleCancel()} className="cancel_btn">Cancel</div>
         </div>
       </div>
     )

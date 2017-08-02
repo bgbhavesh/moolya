@@ -70,14 +70,14 @@ module.exports = {
       console.log('Here',zz, this, ref);
     }
   },
-  "deport card": {
+  "report card": {
     config:{
       showAction: true,
-      actionName: "deport card",
+      actionName: "report card",
       hasPopOver:true,
-      popOverTitle:'Deport Card',
+      popOverTitle:'Report Card',
       placement:'top',
-      target:'deportCardTask',
+      target:'reportCardTask',
       popOverComponent: <MlAssignTask />,
       actionComponent: PopoverActionIcon
     },

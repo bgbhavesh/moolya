@@ -163,7 +163,7 @@ export default class MlCreateDiscussInternalTask extends React.Component {
               });
               return (
                 <li key={index}>
-                  <FontAwesome onClick={()=>that.removeUser(userId)} name='minus'/><img src="/images/img2.png"/><span>{user.name}</span>
+                  <FontAwesome onClick={()=>that.removeUser(userId)} name='minus'/><img src={user.profileImage ? user.profileImage : "/images/def_profile.png"}/><span>{user.name}</span>
                 </li>
               )
             })}

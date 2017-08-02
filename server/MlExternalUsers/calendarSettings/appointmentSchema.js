@@ -82,8 +82,8 @@ let appointment=`
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], appointment]);
 let supportedApi = [
-  {api:'bookUserServiceCard', actionName:'CREATE', moduleName:"OFFICE"},
-  {api:'userServiceCardPayment', actionName:'CREATE', moduleName:"OFFICE"},
-  {api:'bookUserServiceCardAppointment', actionName:'CREATE', userAction:"CREATEAPPOINTMENT", resourceName:"SERVICECARD"},
+  {api:'bookUserServiceCard', actionName:'CREATE', moduleName:"OFFICE", isWhiteList:true},
+  {api:'userServiceCardPayment', actionName:'CREATE', moduleName:"OFFICE", isWhiteList:true},
+  {api:'bookUserServiceCardAppointment', actionName:'CREATE', userAction:"CREATEAPPOINTMENT", resourceName:"SERVICECARD", isWhiteList:true},
 ];
 MlResolver.MlModuleResolver.push(supportedApi);

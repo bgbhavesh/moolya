@@ -30,17 +30,17 @@ branchType: String
 _id: String
 }
     type FacilitationCharge {
-      amount: Int
-      percentage: Int
-      derivedAmount: Int
+      amount: Float
+      percentage: Float
+      derivedAmount: Float
     }
 
     type ActivityPayment {
-      amount: Int
+      amount: Float
       isDiscount: Boolean
       discountType: String
-      discountValue: Int
-      derivedAmount: Int
+      discountValue: Float
+      derivedAmount: Float
     }
     
     type UserProfileDetails{
@@ -94,17 +94,17 @@ _id: String
     }
 
      input facilitationCharge {
-      amount: Int
-      percentage: Int
-      derivedAmount: Int
+      amount: Float
+      percentage: Float
+      derivedAmount: Float
     }
     
     input activityPayment {
-      amount: Int
+      amount: Float
       isDiscount: Boolean
       discountType: String
-      discountValue: Int
-      derivedAmount: Int
+      discountValue: Float
+      derivedAmount: Float
     }
     input userProfileDetails{
       userId: String
@@ -167,11 +167,11 @@ _id: String
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], activity]);
 let supportedApi = [
-  {api:'fetchActivities', actionName:'READ', moduleName:"OFFICE"},
-  {api:'fetchActivitiesForTask', actionName:'READ', moduleName:"OFFICE"},
-  {api:'fetchActivity', actionName:'READ', moduleName:"OFFICE"},
-  {api:'createActivity', actionName:'CREATE', moduleName:"OFFICE"},
-  {api:'updateActivity', actionName:'UPDATE', moduleName:"OFFICE"}
+  {api:'fetchActivities', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
+  {api:'fetchActivitiesForTask', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
+  {api:'fetchActivity', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
+  {api:'createActivity', actionName:'CREATE', moduleName:"OFFICE", isAppWhiteList: true},
+  {api:'updateActivity', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList: true}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 // fetchActivities:[Activity]

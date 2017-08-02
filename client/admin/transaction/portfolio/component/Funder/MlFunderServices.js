@@ -2,8 +2,9 @@
  * Created by vishwadeep on 23/6/17.
  */
 import React, {Component} from "react";
-import FunderCreateServicesView from "./funderCreateServicesView";
-import MlBeSpokeListView from './MlFunderBeSpokeCreation'
+import FunderCreateServicesView from "./beSpokeHandler";
+import BeSpokeHandler from './Services/Container/beSpokeHandler'
+import MlFunderServicesList from './Services/Container/MlFunderServicesList'
 import FunderOrderServicesView from "./funderOrderServicesView";
 
 export default class MlFunderServices extends Component {
@@ -25,7 +26,7 @@ export default class MlFunderServices extends Component {
       <div>
         {/*<FunderOrderServicesView/>*/}
         <div className="clearfix"/>
-        <MlBeSpokeListView createServiceMode={this.props.createServiceMode?this.props.createServiceMode:""} getServiceDetails={this.props.getServiceDetails} portfolioDetailsId={this.props.portfolioDetailsId} />
+        <MlFunderServicesList myPortfolio={this.props.myPortfolio} createServiceMode={this.props.createServiceMode?this.props.createServiceMode:""} portfolioDetailsId={this.props.portfolioDetailsId} />
       </div>
     )
   }

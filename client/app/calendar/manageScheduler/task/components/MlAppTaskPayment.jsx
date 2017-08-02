@@ -28,7 +28,7 @@ export default class MlAppTaskPayment extends Component {
       var response = await findTaskActionHandler(taskId);
       if (!_.isEmpty(response)) {
         console.log(response)
-        this.setState({loading: false, data: response});
+        this.setState({loading: false, data: response, prevDerivedAmount: response.payment && response.payment.derivedAmount});
       }
       return response
     } else {
@@ -92,7 +92,7 @@ export default class MlAppTaskPayment extends Component {
     let name = 'discountType';
     details['payment'] = _.omit(details['payment'], [name]);
     details['payment'] = _.omit(details['payment'], ['derivedAmount']);
-    details['payment'] = _.extend(details['payment'], {[name]: 'amount', 'derivedAmount': 0});
+    details['payment'] = _.extend(details['payment'], {[name]: 'amount', 'derivedAmount': this.state.prevDerivedAmount, discountValue: 0});
     this.setState({data: details}, function () {
       this.sendTaskPaymentToParent()
     })
@@ -104,7 +104,7 @@ export default class MlAppTaskPayment extends Component {
     let name = 'discountType';
     details['payment'] = _.omit(details['payment'], [name]);
     details['payment'] = _.omit(details['payment'], ['derivedAmount']);
-    details['payment'] = _.extend(details['payment'], {[name]: 'percent', 'derivedAmount': 0});
+    details['payment'] = _.extend(details['payment'], {[name]: 'percent', 'derivedAmount': this.state.prevDerivedAmount, discountValue: 0});
     this.setState({data: details}, function () {
       this.sendTaskPaymentToParent()
     })
@@ -165,24 +165,23 @@ export default class MlAppTaskPayment extends Component {
               <form>
                 <div className="form-group">
                   <label>Activity actual amount <input className="form-control inline_input medium_in"
-                                                         defaultValue={this.state.data.payment.activitiesAmount} disabled="true"/>
+                                                         defaultValue={this.state.data.payment.activitiesAmount ? parseFloat(this.state.data.payment.activitiesAmount).toFixed(2) : '' } disabled="true"/>
                   </label>
                 </div>
                 <div className="form-group">
                   <label>Activity discount amount <input className="form-control inline_input medium_in"
-                                                         defaultValue={this.state.data.payment.activitiesDiscount} disabled="true"/>
+                                                         defaultValue={this.state.data.payment.activitiesDiscount ? parseFloat(this.state.data.payment.activitiesDiscount).toFixed(2) : '' } disabled="true"/>
                   </label>
                 </div>
                 <div className="form-group">
                   <label>Activity derived amount <input className="form-control inline_input medium_in"
-                                                         defaultValue={this.state.data.payment.activitiesDerived} disabled="true"/>
+                                                         defaultValue={this.state.data.payment.activitiesDerived ? parseFloat(this.state.data.payment.activitiesDerived).toFixed(2) : '' } disabled="true"/>
                   </label>
                 </div>
                 <div className="form-group switch_wrap switch_names inline_switch">
                   <label>Is Eligible for discount</label>
                   <span  htmlFor="discount" className={this.state.data.payment.isDiscount ? 'state_label acLabel' : 'state_label'}>Yes</span><label className="switch nocolor-switch">
                   <input id="discount" type="checkbox" name="isDiscount"
-                         value={this.state.data.payment.isDiscount}
                          checked={!this.state.data.payment.isDiscount}
                          onChange={this.onStatusChange.bind(this)}/>
                   <div className="slider"></div>
@@ -221,7 +220,7 @@ export default class MlAppTaskPayment extends Component {
                 <div className="form-group">
                   <label>Derived amount Rs. <input className="form-control inline_input medium_in"
                                                    onChange={this.handleNull.bind(this)}
-                                                   value={this.state.data.payment.derivedAmount}
+                                                   value={this.state.data.payment.derivedAmount ? parseInt(this.state.data.payment.derivedAmount).toFixed(2) :''}
                                                    disabled />
                   </label>
                 </div>

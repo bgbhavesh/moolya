@@ -27,7 +27,8 @@ let myOfficeSchema = `
        isRetire:Boolean,
        isFreeUser:Boolean,
        isPaidUser:Boolean,
-       isAdminUser:Boolean
+       isAdminUser:Boolean,
+       profileImage: String
     }
 
     type AvailableCommunities{
@@ -226,20 +227,20 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], myOfficeSchema]);
   {api: 'fetchOfficeSC', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
   {api: 'fetchOfficeById', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
   {api: 'getMyOfficeRole', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
-  {api:'getBranchDetails', actionName:'READ', moduleName:"OFFICE"},
-  {api:'getTeamMembers', actionName:'READ', moduleName:"OFFICE"},
-  {api:'getTeamUsers', actionName:'READ', moduleName:"OFFICE"},
+  {api:'getBranchDetails', actionName:'READ', moduleName:"OFFICE", isAppWhiteList:true},
+  {api:'getTeamMembers', actionName:'READ', moduleName:"OFFICE", isAppWhiteList:true},
+  {api:'getTeamUsers', actionName:'READ', moduleName:"OFFICE", isAppWhiteList:true},
   {api:'getOfficeUserTypes', actionName:'READ', moduleName:"OFFICE", isAppWhiteList:true},
 
   // {api: 'updateOfficeMembers', actionName: 'UPDATE', moduleName: "OFFICE"},
-  {api: 'updateOffice', actionName: 'UPDATE', moduleName: "OFFICE"},
-  {api: 'updateOfficeMember', actionName: 'UPDATE', moduleName: "OFFICE"},
-  {api: 'updateOfficeStatus', actionName: 'UPDATE', moduleName: "OFFICE"},
+  {api: 'updateOffice', actionName: 'UPDATE', moduleName: "OFFICE", isAppWhiteList:true},
+  {api: 'updateOfficeMember', actionName: 'UPDATE', moduleName: "OFFICE", isAppWhiteList:true},
+  {api: 'updateOfficeStatus', actionName: 'UPDATE', moduleName: "OFFICE", isAppWhiteList:true},
   {api: 'findOfficeDetail', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
   {api: 'fetchOfficeMembers', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
-  {api: 'fetchOfficeMember', actionName: 'READ', moduleName: "OFFICE"},
+  {api: 'fetchOfficeMember', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
   {api: 'fetchAllOfficeMembersWithUserId', actionName: 'READ', moduleName: "OFFICE", isAppWhiteList:true},
-  {api: 'updateOfficeMemberOnReg', actionName: 'UPDATE', moduleName: "OFFICE"},
+  {api: 'updateOfficeMemberOnReg', actionName: 'UPDATE', moduleName: "OFFICE", isAppWhiteList:true},
 
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

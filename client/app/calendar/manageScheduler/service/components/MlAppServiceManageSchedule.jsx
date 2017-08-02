@@ -958,7 +958,7 @@ class MlAppServiceManageSchedule extends Component {
    */
   async setGoLiveService() {
     const resp = await updateGoLiveServiceActionHandler(this.serviceId);
-    this.showResponseMsg(resp, 'Updated Successfully');
+    this.showResponseMsg(resp, 'Your service is now live');
   }
 
   /**
@@ -967,7 +967,7 @@ class MlAppServiceManageSchedule extends Component {
    */
   async sendReviewService() {
     const resp = await updateReviewServiceActionHandler(this.serviceId);
-    this.showResponseMsg(resp, 'Updated Successfully');
+    this.showResponseMsg(resp, 'Sent for review successfully');
   }
   /**
    * Method :: React render
@@ -987,7 +987,7 @@ class MlAppServiceManageSchedule extends Component {
       },
       {
         showAction: true,
-        actionName: 'review',
+        actionName: 'send for review',
         handler: async(event) => _this.props.handler(_this.sendReviewService.bind(this))
       },
       {

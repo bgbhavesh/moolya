@@ -22,7 +22,7 @@ export default class Step4 extends React.Component{
   componentDidMount() {
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(220+$('.admin_app').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight-(250+$('.admin_app').outerHeight(true)));
     this.props.getActivityDetails();
   }
 

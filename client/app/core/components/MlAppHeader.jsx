@@ -49,7 +49,7 @@ class MlAppProfileHeader extends Component {
   /**fetching user details from registration*/
   componentWillMount(){
     let user = Meteor.user();
-    if(user.profile && user.profile.profileImage) {
+    if( user && user.profile && user.profile.profileImage) {
       this.setState({profilePic:user.profile.profileImage});
     }
     console.log(user);

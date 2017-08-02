@@ -34,7 +34,8 @@ export default class MlAppMyProfile extends Component {
     });
     // this.initializeSwiper();
   }
-  componentDidUpdate(){
+  // componentDidUpdate(){
+  genderSelect(){
     if (this.state.gender === "others") {
       this.setState({genderStateMale: false, genderStateFemale: false, genderStateOthers: "checked"})
     }
@@ -46,7 +47,7 @@ export default class MlAppMyProfile extends Component {
     }
   }
   componentWillMount(){
-    let resp = this.findUserDetails();
+    const resp = this.findUserDetails();
     return resp
   }
 
@@ -64,6 +65,7 @@ export default class MlAppMyProfile extends Component {
         gender:response.profile.genderType,
         userId:response._id
       });
+      this.genderSelect()
     }else {
       this.setState({loading:false});
     }
@@ -125,8 +127,7 @@ export default class MlAppMyProfile extends Component {
     }
   }
 
-  async passwordCheck(digest)
-  {
+  async passwordCheck(digest){
     const resp = await passwordVerification(digest)
     console.log(resp);
     if(resp.success){
@@ -145,13 +146,10 @@ export default class MlAppMyProfile extends Component {
     } else {
       let validate = passwordSAS_validate(password)
       if (validate.isValid) {
-        this.setState({"pwdValidationMsg": ''})
-        this.setState({passwordValidation: true})
-      }
-      else if (typeof (validate) == 'object') {
+        this.setState({"pwdValidationMsg": '', passwordValidation: true})
+      }else if (typeof (validate) == 'object') {
         this.setState({"pwdValidationMsg": validate.errorMsg})
       }
-
     }
   }
 
@@ -159,8 +157,6 @@ export default class MlAppMyProfile extends Component {
     if(e.target.files[0].length ==  0)
       return;
     let file = e.target.files[0];
-    let name = e.target.name;
-    let fileName = e.target.files[0].name;
     let user = {profile: {profileImage:" "}}
     if(file) {
       let data = {moduleName: "PROFILE", actionName: "UPDATE", userId:this.state.userId, user: user}

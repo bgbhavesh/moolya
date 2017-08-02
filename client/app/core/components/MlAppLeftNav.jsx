@@ -28,12 +28,6 @@ export default class MlAppLeftNav extends Component {
             $('.overlay').fadeToggle( );
             $(this).toggleClass('open');
         });
-        $(document).on('click', '.menu_in a', function(e){
-          //e.preventDefault();
-          $(this).parents('li').addClass('active_menu');
-          $('.admin_menu ul li').not($(this).parents('li')).removeClass('active_menu');
-          return false;
-        });
 
         if(WinWidth > 768){
             $(".app_menu").mCustomScrollbar({theme:"minimal-dark"});

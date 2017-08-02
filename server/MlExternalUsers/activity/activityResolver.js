@@ -100,7 +100,7 @@ MlResolver.MlMutationResolver['updateActivity'] = (obj, args, context, info) => 
     oldActiveActivity = mlDBController.findOne('MlActivity', query, context);
   }
   if (oldActiveActivity) {
-    let activity = _.omit(oldActiveActivity, 'payment');
+    /*let activity = _.omit(oldActiveActivity, 'payment');
     if (!args.Details.teams) {
       args.Details.teams = _.cloneDeep(oldActiveActivity.teams)
     } else if (args.Details.teams) {
@@ -115,15 +115,19 @@ MlResolver.MlMutationResolver['updateActivity'] = (obj, args, context, info) => 
       activity.payment = args.Details.payment;
       //args.Details = _.cloneDeep(activity);
     }
-    args.Details = _.cloneDeep(activity);
+    args.Details = _.cloneDeep(activity); */
     oldActiveActivity.isCurrentVersion = false;
     let updatedOldVersionActivity = mlDBController.update('MlActivity', {_id: oldActiveActivity._id}, oldActiveActivity, {'$set':1}, context);
-    args.Details = _.omit(args.Details, '_id');
     args.Details.isCurrentVersion = true;
     args.Details.userId = oldActiveActivity.userId
     args.Details.updatedAt = new Date();
     args.Details.transactionId = oldActiveActivity.transactionId;
     args.Details.versions = oldActiveActivity.versions + 0.001;
+    for(key in oldActiveActivity){
+      if ((typeof args.Details[key] === 'undefined' || args.Details[key] === null || !args.Details[key]) && key !== 'createdAt' && key !== '_id') {
+        args.Details[key] = oldActiveActivity[key];
+      }
+    }
     let newVersionActivity = mlDBController.insert('MlActivity', args.Details , context);
     if(newVersionActivity){
       let code = 200;

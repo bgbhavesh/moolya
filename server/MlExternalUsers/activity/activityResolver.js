@@ -100,20 +100,22 @@ MlResolver.MlMutationResolver['updateActivity'] = (obj, args, context, info) => 
     oldActiveActivity = mlDBController.findOne('MlActivity', query, context);
   }
   if (oldActiveActivity) {
+    let activity = _.omit(oldActiveActivity, 'payment');
     if (!args.Details.teams) {
       args.Details.teams = _.cloneDeep(oldActiveActivity.teams)
     } else if (args.Details.teams) {
-      let activity = _.omit(oldActiveActivity, 'teams');
+      //activity = _.omit(oldActiveActivity, 'teams');
       activity.teams = args.Details.teams;
-      args.Details = _.cloneDeep(activity);
+      //args.Details = _.cloneDeep(activity);
     }
     if (!args.Details.payment) {
       args.Details.payment = _.cloneDeep(oldActiveActivity.payment)
     } else if (args.Details.payment) {
-      let activity = _.omit(oldActiveActivity, 'payment');
+      //activity = _.omit(oldActiveActivity, 'payment');
       activity.payment = args.Details.payment;
-      args.Details = _.cloneDeep(activity);
+      //args.Details = _.cloneDeep(activity);
     }
+    args.Details = _.cloneDeep(activity);
     oldActiveActivity.isCurrentVersion = false;
     let updatedOldVersionActivity = mlDBController.update('MlActivity', {_id: oldActiveActivity._id}, oldActiveActivity, {'$set':1}, context);
     args.Details = _.omit(args.Details, '_id');

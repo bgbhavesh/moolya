@@ -42,7 +42,9 @@ export default class MlAppChooseTeam extends React.Component{
         teamData: props.data ? props.data : [{users: []}],
         isExternal: props.isExternal ? props.isExternal : false,
         isInternal: props.isInternal ? props.isInternal : false
-      });
+      }, function(){
+        this.getUsers();
+      }.bind(this));
     }
   }
 

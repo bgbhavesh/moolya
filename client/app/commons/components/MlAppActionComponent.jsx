@@ -141,6 +141,12 @@ export default class MlAppActionComponent extends React.Component {
         iconClass: 'ml flaticon-ml-note'
       },
       {
+        actionName: 'send for review',
+        displayName:'Send For Review',
+        iconClass: 'ml flaticon-ml-note'
+      },
+
+      {
         actionName: 'review',
         displayName:'Review',
         iconClass: 'ml ml-save'

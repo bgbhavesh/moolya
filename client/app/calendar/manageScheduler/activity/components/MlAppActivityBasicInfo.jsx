@@ -282,7 +282,7 @@ export default class MlAppBasicInfo extends React.Component{
 
     $('.float-label').jvFloat();
     let WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(220+$('.app_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight-(250+$('.app_header').outerHeight(true)));
     $('.switch input').change(function () {
       if ($(this).is(':checked')) {
         $(this).parent('.switch').addClass('on');

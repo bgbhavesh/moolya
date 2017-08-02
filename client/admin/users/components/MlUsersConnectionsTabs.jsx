@@ -23,6 +23,7 @@ export default class MlUsersConnectionsTabs extends React.Component {
    * */
   componentDidMount() {
     setTimeout(function () {
+      $('.swiper-menu').addClass('hide');
       $('div[role="tab"]').each(function (index) {
         var test = $(this).text();
         $(this).empty();
@@ -31,7 +32,6 @@ export default class MlUsersConnectionsTabs extends React.Component {
       $('.RRT__tabs').addClass('horizon-swiper');
       $('.RRT__tab').addClass('horizon-item');
       $('.horizon-swiper').horizonSwiper();
-      $('.swiper-menu').addClass('hide');
     }, 300);
   }
 

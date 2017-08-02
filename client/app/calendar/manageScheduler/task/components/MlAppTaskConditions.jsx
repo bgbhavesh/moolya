@@ -41,7 +41,7 @@ export default class MlAppTaskConditions extends Component {
   componentDidMount() {
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight - (310 + $('.admin_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight - (240 + $('.app_header').outerHeight(true)));
   }
 
   handleBlur(id, e) {
@@ -63,7 +63,14 @@ export default class MlAppTaskConditions extends Component {
     let data = this.state.data
     let attach = data['attachments'];
     attach.push(emptyObj);
-    this.setState({data: data})
+    this.setState({
+      data: data
+    }, function () {
+      setTimeout(function () {
+        let WinHeight = $(window).height();
+        $('.step_form_wrap').height(WinHeight - (240 + $('.app_header').outerHeight(true)));
+      }, 100);
+    })
   }
 
   handleMandatory(id, e) {

@@ -42,7 +42,9 @@ export default class MlAppChooseTeam extends React.Component{
         teamData: props.data ? props.data : [{users: []}],
         isExternal: props.isExternal ? props.isExternal : false,
         isInternal: props.isInternal ? props.isInternal : false
-      });
+      }, function(){
+        this.getUsers();
+      }.bind(this));
     }
   }
 
@@ -118,7 +120,7 @@ export default class MlAppChooseTeam extends React.Component{
   componentDidMount() {
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(220+$('.app_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight-(250+$('.app_header').outerHeight(true)));
     this.props.getActivityDetails();
   }
 

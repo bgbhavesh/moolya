@@ -6,7 +6,7 @@ let actions = [ "create", "read", "update", "delete", "like","connect",
                 "conversation","feedback","compare","share","download","upload",
                 "wishlist","favourite","edit","save","golive","comment","onboard",
                 "shortlist","review","assess","discuss","promote","negotiate","valuation",
-                "handover", "report card", "invest", "term sheet", "exit", "remove","comment"];
+                "handover", "report card", "invest", "term sheet", "exit", "remove","comment", "sendForReview"];
 
 // Meteor.startup(function () {
   for(i = 0; i < actions.length; i++){

@@ -120,7 +120,7 @@ export default class MlAppChooseTeam extends React.Component{
   componentDidMount() {
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(220+$('.app_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight-(250+$('.app_header').outerHeight(true)));
     this.props.getActivityDetails();
   }
 

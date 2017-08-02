@@ -18,6 +18,8 @@ export default class MlAppServicePayment extends React.Component{
   }
 
   componentDidMount() {
+    let WinHeight = $(window).height();
+    $('.step_form_wrap').height(WinHeight-(250+$('.app_header').outerHeight(true)));
     this.props.getServiceDetails();
     this.props.getRedirectServiceList(true);
   }

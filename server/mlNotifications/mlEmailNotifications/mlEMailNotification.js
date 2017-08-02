@@ -1,6 +1,7 @@
 var noData = "not mentioned";
 var fromEmail = Meteor.settings.private.fromEmailAddr;
 import NotificationTemplateEngine from "../../commons/mlTemplateEngine"
+import MlAccounts from "../../commons/mlAccounts"
 const MlEmailNotification= class MlEmailNotification {
 
   static  mlUserRegistrationOtp(otpNum,regId) {
@@ -611,6 +612,149 @@ const MlEmailNotification= class MlEmailNotification {
     }, 2 * 1000);
   }
 
+  static newOfficeRequestSent(){
+    var userDetails = Meteor.users.findOne({_id: context.userId});
+    var currentdate = new Date();
+    let date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+    let time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+    let firstName = userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"";
+    let lastName = userDetails&&userDetails.profile&&userDetails.profile.lastName?userDetails.profile.lastName:"";
+    let regObj = {
+      userName : firstName+" "+lastName,
+      date : date,
+      time : time
+    }
+    let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_new_office_request_sent","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "Office request sent!!!",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+
+  } catch (e) {
+    console.log("mlDeactivateUser:Error while sending the  Email Notification" + e);
+  }
+
+  static bespokeOfficeActivated(officeId){
+    if(officeId){
+      let officeDetails = mlDBController.findOne('MlOffice', {_id: officeId}) || {}
+      let officeUserId = officeDetails&&officeDetails.userId?officeDetails.userId:""
+      let userDetails =  mlDBController.findOne('users', {_id: officeUserId}) || {}
+      let firstName = userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"";
+      let lastName = userDetails&&userDetails.profile&&userDetails.profile.lastName?userDetails.profile.lastName:"";
+      let regObj = {
+        userName : firstName+" "+lastName,
+        path : Meteor.absoluteUrl('login')
+      }
+      let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+      let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_bespoke_customized_office_activated","email",regObj)
+      Meteor.setTimeout(function () {
+        mlEmail.sendHtml({
+          from: fromEmail,
+          to: toEmail,
+          subject: "Office Activated!!!",
+          html : mail_body&&mail_body.content
+        });
+      }, 2 * 1000);
+    }
+  }
+
+  static officeInvitationEmail(context,registrationData) {
+    let address
+
+    let userDetails = mlDBController.findOne('users', {_id: context.userId}) || {}
+    var email = _.find(userDetails.emails || [], function (e) {
+      return !e.verified;
+    });
+
+    address = (email || {}).address;
+    var tokenRecord = {
+      token: Random.secret(),
+      address: address,
+      when: new Date()
+    };
+    var verificationLink = MlAccounts.verifyEmailLink(tokenRecord.token);
+    let firstName = userDetails && userDetails.profile && userDetails.profile.firstName ? userDetails.profile.firstName : "";
+    let lastName = userDetails && userDetails.profile && userDetails.profile.lastName ? userDetails.profile.lastName : "";
+    let userEmail = userDetails && userDetails.username ? userDetails.username : "";
+    let contactNumber = userDetails && userDetails.profile && userDetails.profile.mobileNumber ? userDetails.profile.mobileNumber : "";
+    let regObj = {
+      userName: registrationData && registrationData.firstName && registrationData.lastName ? registrationData.firstName + " " + registrationData.lastName : "",
+      investorName: firstName + " " + lastName,
+      path: verificationLink,
+      investorEmail: userEmail,
+      investorContactNumber: contactNumber,
+      hours: 48
+    }
+    let toEmail = registrationData && registrationData.email ? registrationData.email : "";
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_office_member_invitation_email", "email", regObj);
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "Office Bearer Invitation!!!",
+        html: mail_body && mail_body.content
+      });
+    }, 2 * 1000);
+
+  }
+
+  static officeBearerApprovedByAdmin(userDetails){
+
+      /*let officeDetails = mlDBController.findOne('MlOffice', {_id: officeId}) || {}
+      let officeUserId = officeDetails&&officeDetails.userId?officeDetails.userId:""
+      let userDetails =  mlDBController.findOne('users', {_id: officeUserId}) || {}*/
+      let firstName = userDetails&&userDetails.firstName?userDetails.firstName:"";
+      let lastName = userDetails&&userDetails.lastName?userDetails.lastName:"";
+      let regObj = {
+        userName : firstName+" "+lastName,
+        path : Meteor.absoluteUrl('login'),
+        communityName : "Investors"
+      }
+      let toEmail = userDetails&&userDetails.emailId?userDetails.emailId:"";
+      let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_office_bearer_request_approved_by_admin","email",regObj)
+      Meteor.setTimeout(function () {
+        mlEmail.sendHtml({
+          from: fromEmail,
+          to: toEmail,
+          subject: "Office Bearer Approved!!!",
+          html : mail_body&&mail_body.content
+        });
+      }, 2 * 1000);
+
+  }
+
+  static processSetupCompletedByAdmin(userDetails){
+    let firstName = userDetails && userDetails.profile && userDetails.profile.firstName ? userDetails.profile.firstName : "";
+    let lastName = userDetails && userDetails.profile && userDetails.profile.lastName ? userDetails.profile.lastName : "";
+    let regObj = {
+      userName : firstName+" "+lastName,
+      path : Meteor.absoluteUrl('login')
+    }
+    let toEmail = userDetails&&userDetails.username?userDetails.username:"";
+    let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_investor_process_setup_completed","email",regObj)
+    Meteor.setTimeout(function () {
+      mlEmail.sendHtml({
+        from: fromEmail,
+        to: toEmail,
+        subject: "Process Setup Completed!!!",
+        html : mail_body&&mail_body.content
+      });
+    }, 2 * 1000);
+
+  }
+
+  static officePaymentLink(){
+
+  }
+
+  static onOfficeUpgrade(){
+
+  }
 
 }
 

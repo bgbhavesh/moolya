@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import Confirm from '../../../commons/components/confirmcomponent/Confirm';
 
 export default class StepZilla extends Component {
     constructor(props) {
@@ -163,6 +164,20 @@ export default class StepZilla extends Component {
         ));
     }
 
+  /*
+  * Triggered in registration step wizard
+  * custom prompt will be thrown if user want to stay in that page
+  * */
+  onConfirm() { //on click of okay
+    // Preform your action.
+    this._setNavState(this.state.compState+1);
+
+  }
+  onCancel() {  //on click of cancel
+    // Preform your action.
+    this._setNavState(this.state.compState);
+  }
+
     render() {
         // clone the step component dynamically and tag it as activeComponent so we can validate it on next. also bind the jumpToStep piping method
         const compToRender = React.cloneElement(this.props.steps[this.state.compState].component, {
@@ -187,17 +202,36 @@ export default class StepZilla extends Component {
                 {compToRender}
 
                 <div style={this.props.showNavigation ? {} : this.hidden} className="footer-buttons">
-
-                    <button style={this.state.showPreviousBtn ? {} : this.hidden}
-                            className="step_form_btn pull-left"
-                            onClick={this.previous}>Prev</button>
-
+                  {this.props.showConfirm?<div>
+                    <Confirm
+                    onConfirm={this.onConfirm.bind(this)}
+                    onCancel = {this.onCancel.bind(this)}
+                    cancel = {true}
+                    body="Changes made won't save.Do you want to continue??"
+                    confirmText="Ok"
+                    title="Alert">
                     <button style={this.state.showNextBtn ? {} : this.hidden}
                             className="step_form_btn pull-right"
                             onClick={this.next}>{this.state.nextStepText}</button>
+                    </Confirm>
+                    <button style={this.state.showPreviousBtn ? {} : this.hidden}
+                                     className="step_form_btn pull-left"
+                                     onClick={this.previous}>Prev</button>
                     <button style={this.state.showFinishBtn ? {} : this.hidden}
                             className="step_form_btn pull-right"
-                            onClick={this.finish}>{this.state.finishStepText}</button>
+                            onClick={this.finish}>{this.state.finishStepText}</button></div>:<div>
+                    <button style={this.state.showNextBtn ? {} : this.hidden}
+                                      className="step_form_btn pull-right"
+                                      onClick={this.next}>{this.state.nextStepText}</button>
+                    <button style={this.state.showPreviousBtn ? {} : this.hidden}
+                    className="step_form_btn pull-left"
+                    onClick={this.previous}>Prev</button>
+                    <button style={this.state.showFinishBtn ? {} : this.hidden}
+                    className="step_form_btn pull-right"
+                            onClick={this.finish}>{this.state.finishStepText}</button></div>}
+
+
+
                 </div>
             </div>
         );

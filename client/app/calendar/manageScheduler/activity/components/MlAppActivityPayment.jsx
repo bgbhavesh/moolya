@@ -189,7 +189,7 @@ export default class Step4 extends React.Component{
       this.paymentValidate();
     }
     if (!this.errorMsg) {
-      this.props.setActivityDetails({payment:paymentData});
+      this.props.setActivityDetails({payment:paymentData}, false);
     }
   }
 

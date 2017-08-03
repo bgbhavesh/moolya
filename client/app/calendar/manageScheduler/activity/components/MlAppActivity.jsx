@@ -16,8 +16,11 @@ import MlAppChooseTeam from "./MlAppChooseTeam";
 import MlAppActivityPayment from "./MlAppActivityPayment";
 import MlAppActivityHistory from "./MlAppActivityHistory";
 import { createActivityActionHandler , getActivityActionHandler, updateActivityActionHandler }  from './../actions/activityActionHandler';
+import MlAccordion from "../../../../commons/components/MlAccordion";
+import formHandler from "../../../../../commons/containers/MlFormHandler";
+import MlAppActionComponent from "../../../../commons/components/MlAppActionComponent";
 
-export default class MlAppActivity extends Component {
+class MlAppActivity extends Component {
 
   /**
    * Constructor
@@ -40,7 +43,8 @@ export default class MlAppActivity extends Component {
       },
     };
     this.getActivityDetails = this.getActivityDetails.bind(this);
-    this.handleCancel = this.handleCancel.bind(this);
+    this.setActivityDetails = this.setActivityDetails.bind(this);
+    this.profileId =  FlowRouter.getParam('profileId');
   }
 
   /**
@@ -132,40 +136,118 @@ export default class MlAppActivity extends Component {
   }
 
   /**
+   * Method :: setActivityDetails
+   * Desc :: Set the current update activity details
+   * @param data :: activity object
+   */
+  setActivityDetails(data, isBasicData) {
+    this.activityDetails = data;
+    this.isBasicData = isBasicData || false;
+  }
+  /**
    * Method :: saveActivity
    * Desc   :: Save activity data on server
    * @param data :: Object :: Activity data
    * @returns Void
    */
-  async saveActivity(data) {
+  async saveActivity() {
     let id = FlowRouter.getQueryParam('id');
-    let profileId = FlowRouter.getParam('profileId');
-    if(!profileId) {
+    let activityDetails = this.activityDetails;
+    if(!this.profileId) {
       toastr.error("Please a profile");
       return false;
     }
-    data.profileId = profileId;
+    if (this.isBasicData) {
+      let duration = activityDetails.duration;
+
+      /**
+       * Remove duration key if they are not in int format
+       */
+      if(!parseInt(duration.hours)){
+        delete duration.hours;
+      }
+      if(!parseInt(duration.minutes)){
+        delete duration.minutes;
+      }
+
+      if(!duration.hours && !duration.minutes){
+        toastr.error("Enter a valid duration");
+        return false;
+      }
+
+      if(activityDetails.mode !== 'online') {
+        delete activityDetails.conversation;
+      }
+      activityDetails.isServiceCardEligible = activityDetails.isExternal ? activityDetails.isServiceCardEligible : false;
+      activityDetails.duration = duration ;
+    }
+    activityDetails.profileId = this.profileId;
+    if (activityDetails && activityDetails.teams) {
+      let data = activityDetails.teams && activityDetails.teams.map(function (team) {
+        team.users = team.users.filter(function (user) {
+          return user.isAdded;
+        }).map(function (user) {
+          return {
+            profileId: user.profileId,
+            userId: user.userId,
+            isMandatory: user.isMandatory ? true : false
+          }
+        });
+        return team;
+      });
+      activityDetails.teams = data;
+    }
     if(id){
-      const res = await updateActivityActionHandler(id, data);
+      const res = await updateActivityActionHandler(id, activityDetails);
       if(res){
         toastr.success("Updated Successfully");
       }
+      this.getActivityDetails();
     } else {
-      const res = await createActivityActionHandler(data);
+      const res = await createActivityActionHandler(activityDetails);
       if(res) {
         toastr.success("Created Successfully");
         FlowRouter.setQueryParams({id:res.result});
       }
     }
   }
-
   /**
-   * Method :: handleCancel
-   * Desc :: Redirect with activity list page
+   * Method :: setActivitySteps
+   * Desc :: Setting up steps for activity different step
    */
-  handleCancel() {
-    let profileId = FlowRouter.getParam('profileId');
-    FlowRouter.go('/app/calendar/manageSchedule/' + profileId + '/activityList');
+  setActivitySteps() {
+    const that = this;
+    const steps = [
+      {
+        name: 'Create',
+        component: <MlAppBasicInfo getActivityDetails={this.getActivityDetails}
+                                   setActivityDetails={that.setActivityDetails}
+                                   data={that.state.basicInfo} />,
+        icon: <span className="ml fa fa-plus-square-o"></span>
+      },
+      {
+        name: 'Choose team',
+        component: <MlAppChooseTeam getActivityDetails={this.getActivityDetails}
+                                    setActivityDetails={that.setActivityDetails}
+                                    isInternal={this.state.isInternal}
+                                    isExternal={this.state.isExternal}
+                                    data={this.state.teamInfo} />,
+        icon: <span className="ml fa fa-users"></span>
+      },
+      {
+        name: 'Payment', component:
+        <MlAppActivityPayment getActivityDetails={this.getActivityDetails}
+                              setActivityDetails={that.setActivityDetails}
+                              data={this.state.paymentInfo} />,
+        icon: <span className="ml ml-payments"></span>
+      },
+      {
+        name: 'History',
+        component: <MlAppActivityHistory />,
+        icon: <span className="ml ml-moolya-symbol"></span>
+      }
+    ];
+    return steps;
   }
   /**
    * Render
@@ -174,44 +256,35 @@ export default class MlAppActivity extends Component {
    */
   render() {
     const that = this;
-
     /**
-     * Setting up steps for activity different step
+     * Setting up action handler for activity different event
      */
-    const steps = [
-        {
-          name: 'Create',
-          component: <MlAppBasicInfo getActivityDetails={this.getActivityDetails}
-                                     saveActivity={that.saveActivity}
-                                     data={that.state.basicInfo}
-                                     handleCancel={this.handleCancel} />,
-          icon: <span className="ml fa fa-plus-square-o"></span>
-        },
-        {
-          name: 'Choose team',
-          component: <MlAppChooseTeam getActivityDetails={this.getActivityDetails}
-                                      saveActivity={that.saveActivity}
-                                      isInternal={this.state.isInternal}
-                                      isExternal={this.state.isExternal}
-                                      data={this.state.teamInfo}
-                                      handleCancel={this.handleCancel} />,
-          icon: <span className="ml fa fa-users"></span>
-        },
-        {
-          name: 'Payment', component:
-          <MlAppActivityPayment getActivityDetails={this.getActivityDetails}
-                                saveActivity={that.saveActivity}
-                                data={this.state.paymentInfo}
-                                handleCancel={this.handleCancel} />,
-          icon: <span className="ml ml-payments"></span>
-        },
-        {
-          name: 'History',
-          component: <MlAppActivityHistory />,
-          icon: <span className="ml ml-moolya-symbol"></span>
+    let appActionConfig = [
+      {
+        showAction: true,
+        actionName: 'save',
+        handler: async(event) => that.props.handler(that.saveActivity.bind(this))
+      },
+      {
+        showAction: true,
+        actionName: 'exit',
+        handler: async(event) => {
+          FlowRouter.go('/app/calendar/manageSchedule/' + this.profileId + '/activityList')
         }
-      ];
-
+      }
+    ];
+    export const genericPortfolioAccordionConfig = {
+      id: 'portfolioAccordion',
+      panelItems: [
+        {
+          'title': 'Actions',
+          isText: false,
+          style: {'background': '#ef4647'},
+          contentComponent: <MlAppActionComponent
+            resourceDetails={{resourceId: 'activity', resourceType: 'activity'}}   //resource id need to be given
+            actionOptions={appActionConfig}/>
+        }]
+    };
     /**
      * Return the html to render
      */
@@ -223,12 +296,15 @@ export default class MlAppActivity extends Component {
           <div className="col-md-12">
             <div className='step-progress'>
               <div id="root">
-                <StepZilla steps={steps} stepsNavigation={false} prevBtnOnLastStep={true}/>
+                <StepZilla steps={this.setActivitySteps()} stepsNavigation={false} prevBtnOnLastStep={true}/>
               </div>
             </div>
           </div>
+          <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
         </div>
       </div>
     )
   }
 };
+
+export default MlAppActivity = formHandler()(MlAppActivity);

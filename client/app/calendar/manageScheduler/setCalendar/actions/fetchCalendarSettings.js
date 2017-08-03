@@ -32,6 +32,7 @@ export async function fetchCalendarSettingsActionHandler (profileId) {
           }
         }
         vacations{
+          vacationId
           isActive
           start
           end

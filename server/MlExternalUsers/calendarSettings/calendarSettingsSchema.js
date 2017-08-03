@@ -27,11 +27,12 @@ let calendarSettingSlot=`
   }
   
   type CalendarSettingVacation {
-    isActive: Boolean
-    start   : Date
-    end     : Date
-    type    : String
-    note    : String
+    vacationId: String
+    isActive  : Boolean
+    start     : Date
+    end       : Date
+    type      : String
+    note      : String
   }
   
   type CalendarSettingWorkingDays {
@@ -86,11 +87,12 @@ let calendarSettingSlot=`
   }
   
   input calendarSettingVacation {
-    isActive: Boolean
-    start   : String
-    end     : String
-    type    : String
-    note    : String
+    vacationId: String
+    isActive  : Boolean
+    start     : String
+    end       : String
+    type      : String
+    note      : String
   }
   
   input calendarSettingWorkingDays {

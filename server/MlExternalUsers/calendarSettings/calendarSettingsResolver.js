@@ -309,6 +309,7 @@ MlResolver.MlMutationResolver['updateMyCalendarVacation'] = (obj, args, context,
       let response = new MlRespPayload().errorPayload('Vacation Overlapping', code);
       return response;
     } else {
+      orderNumberGenService.createVactionId(vacation);
       isAlreadyExist.vacations.push(vacation);
       let result = mlDBController.update('MlCalendarSettings', isAlreadyExist._id, { vacations: isAlreadyExist.vacations ,updatedAt: new Date()}, {$set:true}, context);
       if(result){

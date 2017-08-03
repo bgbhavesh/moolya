@@ -63,6 +63,8 @@ export default class MlAppBasicInfo extends React.Component{
     if(id) {
       this.setState({
         basicData: props.data
+      }, () => {
+        this.saveDetails();
       });
     }
   }
@@ -78,6 +80,8 @@ export default class MlAppBasicInfo extends React.Component{
     data.industryTypes = value;
     this.setState({
       basicData: data
+    }, () => {
+      this.saveDetails();
     });
   }
 
@@ -94,6 +98,8 @@ export default class MlAppBasicInfo extends React.Component{
     });
     this.setState({
       basicData: data
+    }, () => {
+      this.saveDetails();
     });
   }
 
@@ -110,6 +116,8 @@ export default class MlAppBasicInfo extends React.Component{
       data.duration[type] = evt.target.value;
       this.setState({
         basicData: data
+      }, () => {
+        this.saveDetails();
       });
     }
   }
@@ -126,6 +134,8 @@ export default class MlAppBasicInfo extends React.Component{
     data[type] = evt.target.value;
     this.setState({
       basicData: data
+    }, () => {
+      this.saveDetails();
     });
   }
 
@@ -141,6 +151,8 @@ export default class MlAppBasicInfo extends React.Component{
     data[type] = evt.target.checked;
     this.setState({
       basicData: data
+    }, () => {
+      this.saveDetails();
     });
   }
 
@@ -159,6 +171,8 @@ export default class MlAppBasicInfo extends React.Component{
     }
     this.setState({
       basicData: data
+    }, () => {
+      this.saveDetails();
     });
   }
 
@@ -188,6 +202,8 @@ export default class MlAppBasicInfo extends React.Component{
           data.imageLink = res.result;
           that.setState({
             basicData : data
+          }, () => {
+            this.saveDetails();
           });
         }
       });
@@ -200,33 +216,10 @@ export default class MlAppBasicInfo extends React.Component{
    * Desc   :: save activity details
    * @returns Void
    */
-  async saveDetails(){
+  saveDetails(){
     const that = this;
-    let profileId = FlowRouter.getParam('profileId');
     let data = that.state.basicData;
-    let duration = data.duration;
-
-    /**
-     * Remove duration key if they are not in int format
-     */
-    if(!parseInt(duration.hours)){
-      delete duration.hours;
-    }
-    if(!parseInt(duration.minutes)){
-      delete duration.minutes;
-    }
-
-    if(!duration.hours && !duration.minutes){
-      toastr.error("Enter a valid duration");
-      return false;
-    }
-
-    if(data.mode !== 'online') {
-      delete data.conversation;
-    }
-    data.isServiceCardEligible = data.isExternal ? data.isServiceCardEligible : false;
-    data.duration = duration ;
-    that.props.saveActivity(data);
+    that.props.setActivityDetails(data, true);
   }
 
   /**
@@ -241,6 +234,8 @@ export default class MlAppBasicInfo extends React.Component{
     data.deliverable.splice(index+1, 0, '');
     this.setState({
       basicData: data
+    }, () => {
+      this.saveDetails();
     });
   }
 
@@ -256,6 +251,8 @@ export default class MlAppBasicInfo extends React.Component{
     data.deliverable.splice(index, 1);
     this.setState({
       basicData: data
+    }, () => {
+      this.saveDetails();
     });
   }
 
@@ -271,6 +268,8 @@ export default class MlAppBasicInfo extends React.Component{
     data.deliverable[index] = evt.target.value;
     this.setState({
       basicData: data
+    }, () => {
+      this.saveDetails();
     });
   }
 
@@ -448,10 +447,6 @@ export default class MlAppBasicInfo extends React.Component{
             </label>
           </div>
         </ScrollArea>
-        <div className="ml_btn" style={{'textAlign':'center'}}>
-          <div className="save_btn" onClick={this.saveDetails.bind(this)}>Save</div>
-          <div onClick={() => this.props.handleCancel()} className="cancel_btn">Cancel</div>
-        </div>
       </div>
     )
   }

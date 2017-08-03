@@ -16,7 +16,7 @@ import MlUsersAbout from "../../admin/users/components/MlUsersAbout";
 import MlUsersAddressBook from "../../admin/users/components/MlUsersAddressBook";
 import MlUsersPortfolioLanding from "../../admin/users/components/MlUsersPortfolioLanding";
 import MlUsersConnectionsTabs from "../../admin/users/components/MlUsersConnectionsTabs";
-import MlUsersFavourites from "../../admin/users/components/MlUsersFavourites";
+import MlUsersFavouriteTabs from "../../admin/users/components/MlUsersFavouriteTabs";
 // import MlUsersWishlist from "../../admin/users/components/MlUsersWishlist";
 import MlUsersTransactions from "../../admin/users/components/MlUsersTransactions";
 
@@ -74,12 +74,12 @@ adminSection.route('/users/:registrationId/:portfolioId/connections', {
   }
 })
 
-adminSection.route('/users/:registrationId/:portfolioId/favourites/ideator', {
-  name: 'users_favouritesIdeator',
+adminSection.route('/users/:registrationId/:portfolioId/favourites', {
+  name: 'users_favourites',
   action(params){
     mount(AdminLayout, {
       headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'users'}}/>,
-      adminContent: <MlUsersFavourites config={params}/>
+      adminContent: <MlUsersFavouriteTabs config={params}/>
     })
   }
 })

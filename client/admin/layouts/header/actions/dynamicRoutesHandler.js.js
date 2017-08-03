@@ -216,10 +216,10 @@ export default function dynamicLinkHandler(path,params,queryParams){
         return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/connections`;
       }
     },
-    "users_favourites": function (params, queryParams) {
+    users_favourites: function (params, queryParams) {
       let dynamicParams = params || {};
       if (_.has(dynamicParams, "registrationId") && _.has(dynamicParams, "portfolioId")) {
-        return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/favourites/ideator`;
+        return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/favourites`;
       }
     },
     // "users_wishlist": function (params, queryParams) {

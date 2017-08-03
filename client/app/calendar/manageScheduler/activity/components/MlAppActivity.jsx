@@ -140,8 +140,9 @@ class MlAppActivity extends Component {
    * Desc :: Set the current update activity details
    * @param data :: activity object
    */
-  setActivityDetails(data) {
+  setActivityDetails(data, isBasicData) {
     this.activityDetails = data;
+    this.isBasicData = isBasicData || false;
   }
   /**
    * Method :: saveActivity
@@ -156,8 +157,32 @@ class MlAppActivity extends Component {
       toastr.error("Please a profile");
       return false;
     }
+    if (this.isBasicData) {
+      let duration = activityDetails.duration;
+
+      /**
+       * Remove duration key if they are not in int format
+       */
+      if(!parseInt(duration.hours)){
+        delete duration.hours;
+      }
+      if(!parseInt(duration.minutes)){
+        delete duration.minutes;
+      }
+
+      if(!duration.hours && !duration.minutes){
+        toastr.error("Enter a valid duration");
+        return false;
+      }
+
+      if(activityDetails.mode !== 'online') {
+        delete activityDetails.conversation;
+      }
+      activityDetails.isServiceCardEligible = activityDetails.isExternal ? activityDetails.isServiceCardEligible : false;
+      activityDetails.duration = duration ;
+    }
     activityDetails.profileId = this.profileId;
-    if (activityDetails.teams) {
+    if (activityDetails && activityDetails.teams) {
       let data = activityDetails.teams && activityDetails.teams.map(function (team) {
         team.users = team.users.filter(function (user) {
           return user.isAdded;

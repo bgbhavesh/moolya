@@ -30,7 +30,8 @@ const MlEmailNotification= class MlEmailNotification {
   static  clusterVerficationEmail(clusterId,context) {
     try{
       var clusterDetails = mlDBController.findOne('MlClusters', {_id: clusterId}, context);
-      var userDetails = Meteor.users.findOne({_id:context.userId});
+      //var userDetails = Meteor.users.findOne({_id:context.userId});
+      var userDetails =   mlDBController.findOne('users', {_id: context.userId})
       var mail_body = '<html><body><div style="max-width:900px;margin:0 auto;min-height:350px;font-family:arial;font-size:14px;background:#fff;width:90%;color:#000">' +
         'Cluster'+ clusterDetails.clusterName +' is created.'+
         '</div></body></html>';
@@ -59,7 +60,8 @@ const MlEmailNotification= class MlEmailNotification {
   static  chapterVerficationEmail(chapterId,context) {
     try{
       var chapterDetails = mlDBController.findOne('MlSubChapters', {_id: chapterId}, context)
-      var userDetails = Meteor.users.findOne({_id:context.userId});
+      //var userDetails = Meteor.users.findOne({_id:context.userId});
+      var userDetails = mlDBController.findOne('users', {_id: context.userId})
       var mail_body = '<html><body><div style="max-width:900px;margin:0 auto;min-height:350px;font-family:arial;font-size:14px;background:#fff;width:90%;color:#000">' +
         'Sub chapter '+ chapterDetails.subChapterDisplayName +'is created for a chapter '+ chapterDetails.subChapterName+
         '</div></body></html>';
@@ -88,7 +90,8 @@ const MlEmailNotification= class MlEmailNotification {
   static  departmentVerficationEmail(departmentId,context) {
     try{
       var departmentDetails = mlDBController.findOne('MlDepartments', {_id: departmentId}, context)
-      var userDetails = Meteor.users.findOne({_id:context.userId});
+      //var userDetails = Meteor.users.findOne({_id:context.userId});
+      var userDetails = mlDBController.findOne('users', {_id: context.userId})
       var mail_body = '<html><body><div style="max-width:900px;margin:0 auto;min-height:350px;font-family:arial;font-size:14px;background:#fff;width:90%;color:#000">' +
         'Department with name '+ departmentDetails.departmentName +' is created successfully'
         '</div></body></html>';
@@ -129,7 +132,8 @@ const MlEmailNotification= class MlEmailNotification {
         var departmentDetails = mlDBController.findOne('MlSubDepartments', {departmentId: departmentId}, context)
       }
 
-      var userDetails = Meteor.users.findOne({_id: context.userId});
+      //var userDetails = Meteor.users.findOne({_id: context.userId});
+      var userDetails = mlDBController.findOne('users', {_id: context.userId})
       var mail_body = '<html><body><div style="max-width:900px;margin:0 auto;min-height:350px;font-family:arial;font-size:14px;background:#fff;width:90%;color:#000">' +
         'Sub Department with name ' + departmentDetails.subDepartmentName + ' is created successfully'
       '</div></body></html>';
@@ -181,7 +185,8 @@ const MlEmailNotification= class MlEmailNotification {
     try {
 
 
-      var userDetails = Meteor.users.findOne({_id: context.userId});
+      //var userDetails = Meteor.users.findOne({_id: context.userId});
+      var userDetails = mlDBController.findOne('users', {_id: context.userId})
       var currentdate = new Date();
       let date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
       let time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
@@ -232,7 +237,8 @@ const MlEmailNotification= class MlEmailNotification {
     try {
 
 
-      var userDetails = Meteor.users.findOne({_id: context.userId});
+      //var userDetails = Meteor.users.findOne({_id: context.userId});
+      var userDetails = mlDBController.findOne('users', {_id: context.userId})
       var currentdate = new Date();
       let date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
       let time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
@@ -263,7 +269,8 @@ const MlEmailNotification= class MlEmailNotification {
 
   static requestForProfileDeactivation(context){
     try {
-      var userDetails = Meteor.users.findOne({_id: context.userId});
+      //var userDetails = Meteor.users.findOne({_id: context.userId});
+      var userDetails = mlDBController.findOne('users', {_id: context.userId})
       var currentdate = new Date();
       let date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
       let time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
@@ -292,7 +299,8 @@ const MlEmailNotification= class MlEmailNotification {
 
   static forgotPassword(context,path){
 
-    var userDetails = Meteor.users.findOne({_id: context.userId});
+    //var userDetails = Meteor.users.findOne({_id: context.userId});
+    var userDetails = mlDBController.findOne('users', {_id: context.userId})
     let firstName = userDetails&&userDetails.profile&&userDetails.profile.firstName?userDetails.profile.firstName:"";
     let lastName = userDetails&&userDetails.profile&&userDetails.profile.lastName?userDetails.profile.lastName:"";
     let regObj = {
@@ -423,8 +431,8 @@ const MlEmailNotification= class MlEmailNotification {
   static endUserPortfolioConnect(fromUserId,toUserId){
      fromUserId  = fromUserId?fromUserId:"";
      toUserId = toUserId?toUserId:""
-    var fromUserDetails = Meteor.users.findOne({_id: fromUserId});
-    var toUserDetails = Meteor.users.findOne({_id: toUserId});
+    var fromUserDetails =  mlDBController.findOne('users', {_id: fromUserId})
+    var toUserDetails =  mlDBController.findOne('users', {_id: toUserId})
     let fromUserFirstName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.firstName?fromUserDetails.profile.firstName:"";
     let fromUserLastName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.lastName?fromUserDetails.profile.lastName:"";
 
@@ -457,8 +465,8 @@ const MlEmailNotification= class MlEmailNotification {
   static portfolioConnectRequestReceived(fromUserId,toUserId){
     fromUserId  = fromUserId?fromUserId:"";
     toUserId = toUserId?toUserId:""
-    var fromUserDetails = Meteor.users.findOne({_id: fromUserId});
-    var toUserDetails = Meteor.users.findOne({_id: toUserId});
+    var fromUserDetails =  mlDBController.findOne('users', {_id: fromUserId})
+    var toUserDetails =  mlDBController.findOne('users', {_id: toUserId})
     let fromUserFirstName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.firstName?fromUserDetails.profile.firstName:"";
     let fromUserLastName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.lastName?fromUserDetails.profile.lastName:"";
 
@@ -492,8 +500,8 @@ const MlEmailNotification= class MlEmailNotification {
   static portfolioConnectRequestDecline(fromUserId,toUserId){
     fromUserId  = fromUserId?fromUserId:"";
     toUserId = toUserId?toUserId:""
-    var fromUserDetails = Meteor.users.findOne({_id: fromUserId});
-    var toUserDetails = Meteor.users.findOne({_id: toUserId});
+    var fromUserDetails =  mlDBController.findOne('users', {_id: fromUserId})
+    var toUserDetails =  mlDBController.findOne('users', {_id: toUserId})
     let fromUserFirstName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.firstName?fromUserDetails.profile.firstName:"";
     let fromUserLastName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.lastName?fromUserDetails.profile.lastName:"";
 
@@ -612,8 +620,10 @@ const MlEmailNotification= class MlEmailNotification {
     }, 2 * 1000);
   }
 
-  static newOfficeRequestSent(){
-    var userDetails = Meteor.users.findOne({_id: context.userId});
+  static newOfficeRequestSent(context){
+
+    var userDetails =  mlDBController.findOne('users', {_id: context.userId})
+
     var currentdate = new Date();
     let date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
     let time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();

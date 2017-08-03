@@ -47,8 +47,6 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
     const response = await findIdeatorDetailsActionHandler(portfoliodetailsId);
-    console.log("////////////////////////////////////////");
-    console.log(response);
     if (response) {
       this.setState({loading: false, data: response});
     }

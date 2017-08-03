@@ -88,3 +88,41 @@ MlResolver.MlMutationResolver['markFavourite'] = (obj, args, context, info) => {
     return new MlRespPayload().errorPayload('Failed to mark the user as favourite',400);
   }
 }
+
+/**
+ * @module ['users']
+ * @params [portfolioId, communityCode]
+ * fetching users for Favourites
+ * */
+MlResolver.MlQueryResolver['fetchFavouritesByPortfolio'] = (obj, args, context, info) => {
+  let userFavourites = [];
+  let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfolioId}, context) || {}
+  if (portfolio && portfolio.userId && args.communityCode) {
+    var pipeline = [{$match: {'isAccepted': true, 'users': {$elemMatch: {'userId': portfolio.userId}}}},
+      {$unwind: "$users"},
+      {$match: {'users.userId': {$ne: portfolio.userId}, 'users.isFavourite': true}},
+      {$lookup: {from: 'users', localField: 'users.userId', foreignField: '_id', as: 'userDetails'}},
+      {$unwind: '$userDetails'}, {$unwind: '$userDetails.profile.externalUserProfiles'},
+      {
+        $match: {
+          'userDetails.profile.isActive': true, 'userDetails.profile.externalUserProfiles.isActive': true,
+          'userDetails.profile.externalUserProfiles.communityDefCode': args.communityCode
+        }
+      },
+      {
+        $group: {
+          _id: '$connectionCode',// display first profile of user
+          'id': {$first: '$_id'},//connection Object Id
+          'userId': {$first: "$users.userId"},
+          'userName': {$first: "$users.userName"},
+          'firstName': {$first: '$userDetails.profile.firstName'},
+          'lastName': {$first: '$userDetails.profile.lastName'},
+          'displayName': {$first: '$userDetails.profile.displayName'},
+          'profileImage': {$first: "$userDetails.profile.profileImage"},
+          'chapterName': {$first: '$userDetails.profile.externalUserProfiles.chapterName'}
+        }
+      }];
+    userFavourites = mlDBController.aggregate('MlConnections', pipeline, context);
+  }
+  return userFavourites;
+}

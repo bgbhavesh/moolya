@@ -28,7 +28,7 @@ export default class MlAppMyProfile extends Component {
     this.passwordCheck.bind(this);
     this.findUserDetails.bind(this)
   }
-  componentDidMount() {
+  componentDidUpdate() {
     $(function () {
       $('.float-label').jvFloat();
     });
@@ -249,7 +249,7 @@ export default class MlAppMyProfile extends Component {
                         <input type="file" className="upload" id="profilePic" name="profileImage" accept="image/*" onChange={this.onImageFileUpload.bind(this)}/>
                       </div>
                       <div className="previewImg ProfileImg">
-                        <img src={this.state.profileImage}/>
+                        <img src={this.state.profileImage?this.state.profileImage:"/images/def_profile.png"}/>
                       </div>
                     </div>
                     <br className="brclear"/>

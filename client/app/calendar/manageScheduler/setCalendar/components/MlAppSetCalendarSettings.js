@@ -21,7 +21,8 @@ export default class MlAppSetCalendarSettings extends React.Component {
       timingInfo : {
         lunch:[],
         slots:[]
-      }
+      },
+      vacations:[]
     }
     this.fetchCalendarSettings = this.fetchCalendarSettings.bind(this);
   }
@@ -46,10 +47,12 @@ export default class MlAppSetCalendarSettings extends React.Component {
         isOverlappingSchedule: response.isOverlappingSchedule
       };
       let timingInfo = response.workingDays;
-      console.log(timingInfo);
+      let vacations = response.vacations ? response.vacations : [];
+      console.log(vacations);
       this.setState({
         primarySettings : primarySettings,
-        timingInfo      : timingInfo
+        timingInfo      : timingInfo,
+        vacations       : vacations
       });
 
     }
@@ -59,7 +62,7 @@ export default class MlAppSetCalendarSettings extends React.Component {
     const steps = [
         {name: 'Primary', component: <MlAppSetCalendarPrimarySettings primarySettings={this.state.primarySettings} />,icon:<span className="ml fa fa-file-text-o "></span>},
         {name: 'Manage', component: <MlAppSetCalendarTimmingSettings timingInfo={this.state.timingInfo} fetchCalendarSettings={this.fetchCalendarSettings}/>,icon:<span className="ml fa fa-calendar-plus-o"></span>},
-        {name: 'Vacation', component: <MlAppSetCalendarVacation />,icon:<span className="ml fa fa-plane"></span>},
+        {name: 'Vacation', component: <MlAppSetCalendarVacation vacations={this.state.vacations} fetchCalendarSettings={this.fetchCalendarSettings} />,icon:<span className="ml fa fa-plane"></span>},
       ]
     return (
       <div className="app_main_wrap">

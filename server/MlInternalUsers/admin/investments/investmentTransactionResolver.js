@@ -118,10 +118,10 @@ MlResolver.MlMutationResolver['updateProcessSetup'] = (obj, args, context, info)
         }
     }
 
-    // if(ret){
-    //   var userDetails = mlDBController.findOne('users', {_id:processSetup.userId}, context)
-    //   MlEmailNotification.processSetupCompletedByAdmin(userDetails)
-    // }
+     if(ret){
+       var userDetails = mlDBController.findOne('users', {_id:processSetup.userId}, context)
+       MlEmailNotification.processSetupCompletedByAdmin(userDetails)
+     }
 
     let code = 200;
     let response = new MlRespPayload().successPayload(ret, code);

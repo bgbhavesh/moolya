@@ -170,6 +170,8 @@ class MlAppServiceManageSchedule extends Component {
                                            deleteSelectedTask={this.deleteSelectedTask}
                                            getServiceDetails={this.getServiceDetails}
                                            viewMode={this.props.viewMode}
+                                           saveService={this.saveService}
+                                           selectedTaskId={serviceTask.selectedTaskId}
                                            optionsBySelectService={this.optionsBySelectService}
                                            updateSessionSequence={this.updateSessionSequence}
         />,
@@ -218,41 +220,47 @@ class MlAppServiceManageSchedule extends Component {
   async deleteSelectedTask(taskId) {
     let {serviceTask, tasks } = this.state;
     let services = {tasks: []};
-    serviceTask.tasks.map((taskInfo) => {
-      if (taskInfo.id !== taskId) {
-        let sessionDetails = [];
-        let serviceDetails = tasks && tasks.filter((taskData) => {
-          return taskInfo.id === taskData.id
-        });
-        let isServiceDetails = false;
-        if (serviceDetails && serviceDetails.length > 0) {
-          isServiceDetails = true
-        }
-        if (taskInfo.session && taskInfo.session.length > 0 && isServiceDetails) {
-          taskInfo.session.forEach((session, index) => {
-            let seqData = '';
-            if (isServiceDetails && serviceDetails[0]['sessions'] && serviceDetails[0]['sessions'].length > 0) {
-              seqData = serviceDetails[0]['sessions'][index].sequence;
-            }
-            sessionDetails.push({id: session.sessionId, sequence: session.sequence || seqData})
+    if (taskId) {
+      serviceTask.tasks.map((taskInfo) => {
+        if (taskInfo.id !== taskId) {
+          let sessionDetails = [];
+          let serviceDetails = tasks && tasks.filter((taskData) => {
+            return taskInfo.id === taskData.id
           });
-          let task = {
-            id: taskInfo.id,
-            sequence: taskInfo.sequence || serviceDetails[0].sequence,
-            sessions: sessionDetails
-          };
-          services.tasks.push(task);
+          let isServiceDetails = false;
+          if (serviceDetails && serviceDetails.length > 0) {
+            isServiceDetails = true
+          }
+          if (taskInfo.session && taskInfo.session.length > 0 && isServiceDetails) {
+            taskInfo.session.forEach((session, index) => {
+              let seqData = '';
+              if (isServiceDetails && serviceDetails[0]['sessions'] && serviceDetails[0]['sessions'].length > 0) {
+                seqData = serviceDetails[0]['sessions'][index].sequence;
+              }
+              sessionDetails.push({id: session.sessionId, sequence: session.sequence || seqData})
+            });
+            let task = {
+              id: taskInfo.id,
+              sequence: taskInfo.sequence || serviceDetails[0].sequence,
+              sessions: sessionDetails
+            };
+            services.tasks.push(task);
+          }
         }
-      }
-    });
-    serviceTask.selectedTaskId = '';
-    this.setState({
-      tasks: tasks,
-      serviceTask: serviceTask
-    });
-    const resp = await updateServiceActionHandler(this.serviceId, services);
-    this.getServiceDetails();
-    this.optionsBySelectService();
+      });
+      serviceTask.selectedTaskId = '';
+      this.setState({
+        tasks: tasks,
+        serviceTask: serviceTask
+      });
+      const resp = await updateServiceActionHandler(this.serviceId, services);
+      this.getServiceDetails();
+      this.optionsBySelectService();
+      this.showResponseMsg(resp, 'Task deleted Successfully');
+    } else {
+      toastr.error('Please select a task to delete');
+      return;
+    }
   }
   /**
    * Method :: getTaskDetailsForService

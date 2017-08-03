@@ -14,6 +14,8 @@ export default class MlAppSetCalendarVacation extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      vacations: props.vacations,
+      selectedVacation: '',
       vacationData: {
         startTime: '',
         startDate: '',
@@ -40,7 +42,7 @@ export default class MlAppSetCalendarVacation extends Component {
   componentDidMount() {
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(290+$('.admin_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight-(250+$('.app_header').outerHeight(true)));
   }
 
   /**
@@ -80,6 +82,7 @@ export default class MlAppSetCalendarVacation extends Component {
   showResponseMsg(response) {
     if(response.success){
       toastr.success(response.result);
+      this.props.fetchCalendarSettings();
     } else {
       toastr.error(response.result);
     }
@@ -177,12 +180,31 @@ export default class MlAppSetCalendarVacation extends Component {
       this.showResponseMsg(response);
     }
   }
+
+  selectVacation(vacationData){
+    let vacation = vacationData ? vacationData : {};
+    let data ={
+      startTime: vacation.start ? new Date(vacation.start) : '',
+      startDate: vacation.start ? new Date(vacation.start) : '',
+      endTime: vacation.end ? new Date(vacation.end) : '',
+      endDate: vacation.end ? new Date(vacation.end) : '',
+      note: vacation.note ? vacation.note : '',
+      type: vacation.type ? vacation.type : 'holiday'
+    };
+    this.setState({
+      vacationData: data,
+      selectedVacation: vacation.vacationId
+    });
+  }
+
   render(){
     const { vacationData } = this.state;
+    const that = this;
     return (
       <div className="step_form_wrap step3">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true} >
-          <div className="col-md-6 nopadding-left">
+          <div className="wrap_left">
+            <div className="col-md-6 nopadding-left">
             <form>
               <div className="form-group">
                 <span className="placeHolder active">Choose break type</span>
@@ -210,7 +232,7 @@ export default class MlAppSetCalendarVacation extends Component {
               </div>
             </form>
           </div>
-          <div className="col-md-6 nopadding-right">
+            <div className="col-md-6 nopadding-right">
             <form>
               <div className="form-group">
                 <input className="form-control float-label"
@@ -239,9 +261,24 @@ export default class MlAppSetCalendarVacation extends Component {
               </div>
             </form>
           </div>
+          </div>
+          <div className="wrap_right">
+            <ul className="list_with_icon">
+              <li className={ this.state.selectedVacation ? '' : "active" } onClick={() => that.selectVacation()} >
+                <FontAwesome name='plus-circle' /><b>Add</b>
+              </li>
+              {this.state.vacations.map(function (vacation, index) {
+                return (
+                  <li className={ that.state.selectedVacation == vacation.vacationId ? 'active' : '' } key={index} onClick={() => that.selectVacation(vacation)}>
+                    <FontAwesome name='plane'/><b>Vacation..</b>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
         </ScrollArea>
         <div className="form-group">
-          <div className="ml_btn" style={{'textAlign':'center'}}>
+          <div className="ml_btn" style={{'textAlign':'center'}} hidden={ this.state.selectedVacation ? true : false } >
             <button onClick={(event)=>this.updateCalendarVacation(event)} className="save_btn" >Save</button>
           </div>
         </div>

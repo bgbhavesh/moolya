@@ -87,6 +87,8 @@ export default class Step4 extends React.Component{
       paymentData.discountValue = 0;
       this.setState({
         paymentData: paymentData
+      }, () => {
+        this.saveDetails();
       });
     }
   }
@@ -113,6 +115,8 @@ export default class Step4 extends React.Component{
       paymentData.discountValue = 0;
       this.setState({
         paymentData: paymentData
+      }, () => {
+        this.saveDetails();
       });
     }
   }
@@ -165,6 +169,8 @@ export default class Step4 extends React.Component{
       paymentData.derivedAmount = derivedAmount;
       this.setState({
         paymentData: paymentData
+      }, () => {
+        this.saveDetails();
       });
     }
   }
@@ -183,7 +189,7 @@ export default class Step4 extends React.Component{
       this.paymentValidate();
     }
     if (!this.errorMsg) {
-      this.props.saveActivity({payment:paymentData});
+      this.props.setActivityDetails({payment:paymentData});
     }
   }
 
@@ -255,10 +261,6 @@ export default class Step4 extends React.Component{
             </form>
           </div>
         </ScrollArea>
-        <div className="ml_btn" style={{'textAlign':'center'}}>
-          <div className="save_btn" onClick={this.saveDetails.bind(this)}>Save</div>
-          <div onClick={() => this.props.handleCancel()} className="cancel_btn">Cancel</div>
-        </div>
       </div>
     )
   }

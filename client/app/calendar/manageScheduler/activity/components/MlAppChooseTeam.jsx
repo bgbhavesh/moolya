@@ -94,6 +94,8 @@ export default class MlAppChooseTeam extends React.Component{
     Promise.all(teamData).then(function(value) {
       that.setState({
         teamData : value
+      }, () => {
+        that.saveDetails();
       });
     });
 
@@ -129,20 +131,9 @@ export default class MlAppChooseTeam extends React.Component{
    * Desc   :: save team details in activity
    * @returns Void
    */
-  async saveDetails(){
-    let data = this.state.teamData.map(function (team) {
-      team.users = team.users.filter(function (user) {
-        return user.isAdded;
-      }).map(function (user) {
-        return {
-          profileId: user.profileId,
-          userId: user.userId,
-          isMandatory: user.isMandatory ? true : false
-        }
-      });
-      return team;
-    });
-    this.props.saveActivity({teams: data});
+  saveDetails() {
+    let data = this.state.teamData;
+    this.props.setActivityDetails({teams: data});
   }
 
   /**
@@ -155,6 +146,8 @@ export default class MlAppChooseTeam extends React.Component{
     teamData.push({users:[]});
     this.setState({
       teamData : teamData
+    }, () => {
+      this.saveDetails()
     });
   }
 
@@ -168,6 +161,8 @@ export default class MlAppChooseTeam extends React.Component{
     teamData.splice(index , 1);
     this.setState({
       teamData : teamData
+    }, () => {
+      this.saveDetails()
     });
   }
 
@@ -208,6 +203,8 @@ export default class MlAppChooseTeam extends React.Component{
     }
     this.setState({
       teamData:teamData
+    }, () => {
+      this.saveDetails()
     });
   }
 
@@ -223,6 +220,8 @@ export default class MlAppChooseTeam extends React.Component{
     teamData[teamIndex].users[userIndex].isAdded = true;
     this.setState({
       teamData: teamData
+    }, () => {
+      this.saveDetails()
     });
   }
 
@@ -240,6 +239,8 @@ export default class MlAppChooseTeam extends React.Component{
     teamData[teamIndex].users[userIndex].isMandatory = evt.target.checked;
     this.setState({
       teamData: teamData
+    }, () => {
+      this.saveDetails()
     });
   }
 
@@ -331,10 +332,6 @@ export default class MlAppChooseTeam extends React.Component{
           )
         })}
       </ScrollArea>
-      <div className="ml_btn" style={{'textAlign':'center'}}>
-        <div className="save_btn" onClick={this.saveDetails.bind(this)}>Save</div>
-        <div onClick={() => this.props.handleCancel()} className="cancel_btn">Cancel</div>
-      </div>
     </div>
     )
   }

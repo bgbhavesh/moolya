@@ -67,9 +67,29 @@ let appointment=`
     endDate: Date
   }
   
+  type appointmentEvents {
+    date: String
+    userId: String
+    profileId: String
+    count: String
+  }
+  
+  type appointmentHolidays {
+    isActive: Boolean
+    start: String
+    end: String
+    type: String  
+  }
+  
+  type profileAppointment {
+    events: [appointmentEvents]
+    days: [appointmentHolidays]
+  }
+  
   type Query {   
      fetchMyAppointment: [Appointment]
-     fetchAllProfileAppointmentCounts: [AllProfileAppointment]
+     fetchAllProfileAppointmentCounts: profileAppointment
+     fetchProfileAppointmentCounts( profileId: String ): profileAppointment
   }
   
   type Mutation {

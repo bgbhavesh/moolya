@@ -3,8 +3,8 @@
  */
 import React, {Component} from "react";
 import Calender from '../../../../../commons/calendar/calendar'
-import { fetchServiceCalendarActionHandler } from '../../../../../app/calendar/myCalendar/actions/fetchMyCalendar';
-import MlAppMyCalendarDayComponent from '../../../../../app/calendar/myCalendar/components/dayComponent';
+import { fetchServiceCalendarActionHandler } from './../../actions/fetchServiceCalendarActionHandler';
+import MlFunderDayComponent from './MlFunderdayComponent';
 import _ from "lodash";
 import MlAppFunderCalendarSlots from './MlAppFunderCalendarSlots';
 
@@ -89,7 +89,7 @@ export default class MlAppMyCalendar extends Component {
       !that.state.showDetailView?<div className="app_main_wrap" style={{'overflow':'auto'}}>
         <div className="app_padding_wrap">
           <Calender
-            dayBackgroundComponent={<MlAppMyCalendarDayComponent cellValue={this.cellValue.bind(this)} slots={this.slots.bind(this)} orderId={this.props.orderId} sessionId={this.state.sessionIds} dayDetailView={this.dayDetail.bind(this)}/> }
+            dayBackgroundComponent={<MlFunderDayComponent cellValue={this.cellValue.bind(this)} slots={this.slots.bind(this)} orderId={this.props.orderId} sessionId={this.state.sessionIds} dayDetailView={this.dayDetail.bind(this)}/> }
             dayData={this.props.calendarDetails}
             onNavigate={that.onNavigate}
             date={that.state.date}/>

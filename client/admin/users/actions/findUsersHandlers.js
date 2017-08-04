@@ -163,6 +163,7 @@ export async function findUserRegistrationActionHandler(registrationId) {
             isActive
             registrationId
           }
+          isActive
         }
       }
     `,

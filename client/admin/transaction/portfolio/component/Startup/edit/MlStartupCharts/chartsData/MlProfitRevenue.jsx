@@ -198,139 +198,147 @@ export default class MlProfitRevenue extends React.Component{
           smoothScrolling={true}
           default={true}
         >
-      <div className="office-members-detail">
+        <div className="panel panel-default">
+          <div className="panel-heading">Profit Revenue{
+            <div className="pull-right block_action" onClick={this.onSaveAction.bind(this,defaultIndex)}><img
+              src="/images/add.png"/></div>}
+          </div>
+          <div className="panel-body">
+            <div className="office-members-detail">
 
-        <div className="form_inner_block">
-          <div className="add_form_block" onClick={this.onSaveAction.bind(this,defaultIndex)}><img src="/images/add.png"/></div>
+              <div className="form_inner_block">
+                {/*<div className="add_form_block" onClick={this.onSaveAction.bind(this,defaultIndex)}><img src="/images/add.png"/></div>*/}
 
-          <div className="col-lg-12 col-md-12 col-sm-10">
-            <div className="row">
-              <div className="form-group col-lg-6 col-md-6 col-sm-6">
-            {/*    <Moolyaselect multiSelect={false} placeholder="Select Type Of Entity"
-                              className="form-control float-label" valueKey={'value'} labelKey={'label'}
-                              selectedValue={this.state.selectedVal} queryType={"graphql"}
-                              query={entitiesquery} onSelect={that.optionsBySelectTypeOfEntity.bind(this,defaultIndex)}
-                              isDynamic={true}/>*/}
-                <Select name="form-field-name" placeholder="Select Value Type" options={entityTypes}
-                        value={this.state.selectedVal}
-                        onChange={this.optionsBySelectTypeOfEntity.bind(this,defaultIndex)}  className="float-label"/>
-              </div>
-              <div className="form-group col-lg-6">
-                <div className="form-group col-md-6 col-sm-6">
-                  <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                            inputProps={{placeholder: "Select From Year", className:"float-label form-control"}} defaultValue={this.state.data.year}
-                            closeOnSelect={true} ref={"prlFromYear"+defaultIndex} onBlur={this.handleFromYearChange.bind(this,defaultIndex)}/>
+                <div className="col-lg-12 col-md-12 col-sm-10">
+                  <div className="row">
+                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
+                  {/*    <Moolyaselect multiSelect={false} placeholder="Select Type Of Entity"
+                                    className="form-control float-label" valueKey={'value'} labelKey={'label'}
+                                    selectedValue={this.state.selectedVal} queryType={"graphql"}
+                                    query={entitiesquery} onSelect={that.optionsBySelectTypeOfEntity.bind(this,defaultIndex)}
+                                    isDynamic={true}/>*/}
+                      <Select name="form-field-name" placeholder="Select Value Type" options={entityTypes}
+                              value={this.state.selectedVal}
+                              onChange={this.optionsBySelectTypeOfEntity.bind(this,defaultIndex)}  className="float-label"/>
+                    </div>
+                    <div className="form-group col-lg-6">
+                      <div className="form-group col-md-6 col-sm-6">
+                        <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
+                                  inputProps={{placeholder: "Select From Year", className:"float-label form-control"}} defaultValue={this.state.data.year}
+                                  closeOnSelect={true} ref={"prlFromYear"+defaultIndex} onBlur={this.handleFromYearChange.bind(this,defaultIndex)}/>
+                      </div>
+                      <div className="form-group col-md-6 col-sm-6">
+                        <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
+                                  inputProps={{placeholder: "Select From Month", className:"float-label form-control"}} defaultValue={this.state.data.year}
+                                  closeOnSelect={true} ref={"prlFromMonth"+defaultIndex} onBlur={this.handleFromMonthChange.bind(this,defaultIndex)}/>
+                      </div>
+
+                    </div>
+
+                    <div className="form-group col-lg-6">
+                      <div className="form-group col-md-6 col-sm-6">
+                        <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
+                                  inputProps={{placeholder: "Select To Year", className:"float-label form-control"}} defaultValue={this.state.data.year}
+                                  closeOnSelect={true} ref={"prlToYear"+defaultIndex} onBlur={this.handleToYearChange.bind(this,defaultIndex)}/>
+                      </div>
+                      <div className="form-group col-md-6 col-sm-6">
+                        <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
+                                  inputProps={{placeholder: "Select To Month", className:"float-label form-control"}} defaultValue={this.state.data.year}
+                                  closeOnSelect={true} ref={"prlToMonth"+defaultIndex} onBlur={this.handleToMonthChange.bind(this,defaultIndex)}/>
+                      </div>
+                    </div>
+
+                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
+                      <Select name="form-field-name" placeholder="Select Value Type" options={valueTypes}
+                              value={this.state.selectedValType}
+                              onChange={this.optionsBySelectTypeOfValue.bind(this,defaultIndex)}  className="float-label"/>
+                    </div>
+
+                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
+                      <input type="text" placeholder="Value" ref={"prlValue"+defaultIndex} className="form-control float-label"
+                             id="" name="prlValue" onBlur={this.valueHandleBlur.bind(this,defaultIndex)}/>
+                    </div>
+
+                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
+                    <textarea rows="1" placeholder="About" ref={"prlabout"+defaultIndex} className="form-control float-label"
+                              id="" name="prlabout" onBlur={this.aboutHandleBlur.bind(this,defaultIndex)}></textarea>
+                    </div>
+                  </div>
                 </div>
-                <div className="form-group col-md-6 col-sm-6">
-                  <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
-                            inputProps={{placeholder: "Select From Month", className:"float-label form-control"}} defaultValue={this.state.data.year}
-                            closeOnSelect={true} ref={"prlFromMonth"+defaultIndex} onBlur={this.handleFromMonthChange.bind(this,defaultIndex)}/>
-                </div>
-
               </div>
+              {that.state.revenuList.map(function (details, idx) {
 
-              <div className="form-group col-lg-6">
-                <div className="form-group col-md-6 col-sm-6">
-                  <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                            inputProps={{placeholder: "Select To Year", className:"float-label form-control"}} defaultValue={this.state.data.year}
-                            closeOnSelect={true} ref={"prlToYear"+defaultIndex} onBlur={this.handleToYearChange.bind(this,defaultIndex)}/>
-                </div>
-                <div className="form-group col-md-6 col-sm-6">
-                  <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
-                            inputProps={{placeholder: "Select To Month", className:"float-label form-control"}} defaultValue={this.state.data.year}
-                            closeOnSelect={true} ref={"prlToMonth"+defaultIndex} onBlur={this.handleToMonthChange.bind(this,defaultIndex)}/>
-                </div>
-              </div>
 
-              <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                <Select name="form-field-name" placeholder="Select Value Type" options={valueTypes}
-                        value={this.state.selectedValType}
-                        onChange={this.optionsBySelectTypeOfValue.bind(this,defaultIndex)}  className="float-label"/>
-              </div>
+                return(<div className="form_inner_block">
 
-              <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                <input type="text" placeholder="Value" ref={"prlValue"+defaultIndex} className="form-control float-label"
-                       id="" name="prlValue" onBlur={this.valueHandleBlur.bind(this,defaultIndex)}/>
-              </div>
+                  {/*<div className="add_form_block" onClick={that.onRemoveAction.bind(that,idx)}><img src="/images/remove.png"/></div>*/}
+                  <div className="col-lg-12 col-md-12 col-sm-10">
+                    <div className="row">
+                      <div className="form-group col-lg-6 col-md-6 col-sm-6">
+                        {/*<Moolyaselect multiSelect={false} placeholder="Select Type Of Entity"
+                                      className="form-control float-label" valueKey={'value'} labelKey={'label'}
+                                      selectedValue={details.prlEntityType} queryType={"graphql"}
+                                      query={entitiesquery} onSelect={that.optionsBySelectTypeOfEntity.bind(this,idx)}
+                                      isDynamic={true}/>*/}
+                        <Select name="form-field-name" placeholder="Select Value Type" options={entityTypes}
+                                value={details.prlEntityType}
+                                onChange={that.optionsBySelectTypeOfEntity.bind(that,idx)}  className="float-label"/>
+                      </div>
+                      <div className="form-group col-lg-6">
+                        <div className="form-group col-md-6 col-sm-6">
+                          <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
+                                    inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
+                                    defaultValue={details.prlFromYear}
+                                    closeOnSelect={true} ref={"eofFromYear"+idx} onBlur={that.handleFromYearChange.bind(that, idx)}/>
+                        </div>
+                        <div className="form-group col-md-6 col-sm-6">
+                          <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
+                                    inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
+                                    defaultValue={details.prlFromMonth}
+                                    closeOnSelect={true} ref={"eofFromMonth"+idx} onBlur={that.handleFromMonthChange.bind(that, idx)}/>
+                        </div>
 
-              <div className="form-group col-lg-6 col-md-6 col-sm-6">
-              <textarea rows="1" placeholder="About" ref={"prlabout"+defaultIndex} className="form-control float-label"
-                        id="" name="prlabout" onBlur={this.aboutHandleBlur.bind(this,defaultIndex)}></textarea>
-              </div>
+                      </div>
+
+
+                      <div className="form-group col-lg-6">
+                        <div className="form-group col-md-6 col-sm-6">
+                          <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
+                                    inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
+                                    defaultValue={details.prlToYear}
+                                    closeOnSelect={true} ref={"prlToYear"+idx} onBlur={that.handleToYearChange.bind(that, idx)}/>
+                        </div>
+                        <div className="form-group col-md-6 col-sm-6">
+                          <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
+                                    inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
+                                    defaultValue={details.prlToMonth}
+                                    closeOnSelect={true} ref={"prlToMonth"+idx} onBlur={that.handleToMonthChange.bind(that, idx)}/>
+                        </div>
+                      </div>
+                      <div className="form-group col-lg-6 col-md-6 col-sm-6">
+                        <Select name="form-field-name" placeholder="Select Value Type" options={valueTypes}
+                                value={details.pelValueType}
+                                onChange={that.optionsBySelectTypeOfValue.bind(that,idx)}  className="float-label"/>
+                      </div>
+
+                      <div className="form-group col-lg-6 col-md-6 col-sm-6">
+                        <input type="text" placeholder="Value" ref={"prlValue"+idx} className="form-control float-label"
+                               id="" defaultValue={details.prlValue} name="prlValue" onBlur={that.valueHandleBlur.bind(that,idx)}/>
+                      </div>
+
+                      <div className="form-group col-lg-6 col-md-6 col-sm-6">
+                        <textarea rows="1" placeholder="About" ref={"prlabout"+idx} className="form-control float-label"
+                              id="" name="prlabout" defaultValue={details.prlabout} onBlur={that.aboutHandleBlur.bind(that,idx)}></textarea>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>)
+
+              })}
             </div>
           </div>
         </div>
-        {that.state.revenuList.map(function (details, idx) {
-
-
-          return(<div className="form_inner_block">
-
-            {/*<div className="add_form_block" onClick={that.onRemoveAction.bind(that,idx)}><img src="/images/remove.png"/></div>*/}
-            <div className="col-lg-12 col-md-12 col-sm-10">
-              <div className="row">
-                <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                  {/*<Moolyaselect multiSelect={false} placeholder="Select Type Of Entity"
-                                className="form-control float-label" valueKey={'value'} labelKey={'label'}
-                                selectedValue={details.prlEntityType} queryType={"graphql"}
-                                query={entitiesquery} onSelect={that.optionsBySelectTypeOfEntity.bind(this,idx)}
-                                isDynamic={true}/>*/}
-                  <Select name="form-field-name" placeholder="Select Value Type" options={entityTypes}
-                          value={details.prlEntityType}
-                          onChange={that.optionsBySelectTypeOfEntity.bind(that,idx)}  className="float-label"/>
-                </div>
-                <div className="form-group col-lg-6">
-                  <div className="form-group col-md-6 col-sm-6">
-                    <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                              inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
-                              defaultValue={details.prlFromYear}
-                              closeOnSelect={true} ref={"eofFromYear"+idx} onBlur={that.handleFromYearChange.bind(that, idx)}/>
-                  </div>
-                  <div className="form-group col-md-6 col-sm-6">
-                    <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
-                              inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
-                              defaultValue={details.prlFromMonth}
-                              closeOnSelect={true} ref={"eofFromMonth"+idx} onBlur={that.handleFromMonthChange.bind(that, idx)}/>
-                  </div>
-
-                </div>
-
-
-                <div className="form-group col-lg-6">
-                  <div className="form-group col-md-6 col-sm-6">
-                    <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                              inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
-                              defaultValue={details.prlToYear}
-                              closeOnSelect={true} ref={"prlToYear"+idx} onBlur={that.handleToYearChange.bind(that, idx)}/>
-                  </div>
-                  <div className="form-group col-md-6 col-sm-6">
-                    <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
-                              inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
-                              defaultValue={details.prlToMonth}
-                              closeOnSelect={true} ref={"prlToMonth"+idx} onBlur={that.handleToMonthChange.bind(that, idx)}/>
-                  </div>
-                </div>
-                <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                  <Select name="form-field-name" placeholder="Select Value Type" options={valueTypes}
-                          value={details.pelValueType}
-                          onChange={that.optionsBySelectTypeOfValue.bind(that,idx)}  className="float-label"/>
-                </div>
-
-                <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                  <input type="text" placeholder="Value" ref={"prlValue"+idx} className="form-control float-label"
-                         id="" defaultValue={details.prlValue} name="prlValue" onBlur={that.valueHandleBlur.bind(that,idx)}/>
-                </div>
-
-                <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                  <textarea rows="1" placeholder="About" ref={"prlabout"+idx} className="form-control float-label"
-                        id="" name="prlabout" defaultValue={details.prlabout} onBlur={that.aboutHandleBlur.bind(that,idx)}></textarea>
-                </div>
-              </div>
-            </div>
-
-          </div>)
-
-        })}
-      </div>
         </ScrollArea>
       </div>
 

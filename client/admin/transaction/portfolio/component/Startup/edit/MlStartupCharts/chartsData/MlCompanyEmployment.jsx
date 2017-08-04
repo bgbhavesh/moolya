@@ -159,107 +159,115 @@ export default class MlCompanyEmployment extends React.Component{
           smoothScrolling={true}
           default={true}
         >
-      <div className="office-members-detail">
+        <div className="panel panel-default">
+          <div className="panel-heading">Company Employment{
+            <div className="pull-right block_action" onClick={this.onSaveAction.bind(this,defaultIndex)}><img
+              src="/images/add.png"/></div>}
+          </div>
+          <div className="panel-body">
+            <div className="office-members-detail">
 
-      <div className="form_inner_block">
-        <div className="add_form_block" onClick={this.onSaveAction.bind(this,defaultIndex)}><img src="/images/add.png"/></div>
+            <div className="form_inner_block">
+              {/*<div className="add_form_block" onClick={this.onSaveAction.bind(this,defaultIndex)}><img src="/images/add.png"/></div>*/}
 
-        <div className="col-lg-12 col-md-12 col-sm-10">
-          <div className="row">
-            <div className="form-group col-lg-6">
-              <div className="form-group col-md-6 col-sm-6">
-                <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                          inputProps={{placeholder: "Select From Year", className:"float-label form-control"}} defaultValue={this.state.data.year}
-                          closeOnSelect={true} ref={"eofFromYear"+defaultIndex} onBlur={this.handleFromYearChange.bind(this,defaultIndex)}/>
+              <div className="col-lg-12 col-md-12 col-sm-10">
+                <div className="row">
+                  <div className="form-group col-lg-6">
+                    <div className="form-group col-md-6 col-sm-6">
+                      <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
+                                inputProps={{placeholder: "Select From Year", className:"float-label form-control"}} defaultValue={this.state.data.year}
+                                closeOnSelect={true} ref={"eofFromYear"+defaultIndex} onBlur={this.handleFromYearChange.bind(this,defaultIndex)}/>
+                    </div>
+                    <div className="form-group col-md-6 col-sm-6">
+                      <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
+                                inputProps={{placeholder: "Select From Month", className:"float-label form-control"}} defaultValue={this.state.data.year}
+                                closeOnSelect={true} ref={"eofFromMonth"+defaultIndex} onBlur={this.handleFromMonthChange.bind(this,defaultIndex)}/>
+                    </div>
+
+                  </div>
+
+
+                  <div className="form-group col-lg-6">
+                    <div className="form-group col-md-6 col-sm-6">
+                      <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
+                                inputProps={{placeholder: "Select To Year", className:"float-label form-control"}} defaultValue={this.state.data.year}
+                                closeOnSelect={true} ref={"eofToYear"+defaultIndex} onBlur={this.handleToYearChange.bind(this,defaultIndex)}/>
+                    </div>
+                    <div className="form-group col-md-6 col-sm-6">
+                      <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
+                                inputProps={{placeholder: "Select To Month", className:"float-label form-control"}} defaultValue={this.state.data.year}
+                                closeOnSelect={true} ref={"eofToMonth"+defaultIndex} onBlur={this.handleToMonthChange.bind(this,defaultIndex)}/>
+                    </div>
+                  </div>
+                  <div className="form-group col-lg-6 col-md-6 col-sm-6">
+                    <input type="text" placeholder="Number of Employment" ref={"eofNumberOfEmployment"+defaultIndex} className="form-control float-label"
+                           id="" name="eofNumberOfEmployment" onBlur={this.employeementHandleBlur.bind(this,defaultIndex)}/>
+                  </div>
+
+                  <div className="form-group col-lg-6 col-md-6 col-sm-6">
+                    <textarea rows="1" placeholder="About" ref={"eofAbout"+defaultIndex} className="form-control float-label"
+                              id="" name="eofAbout" onBlur={this.aboutHandleBlur.bind(this,defaultIndex)}></textarea>
+                  </div>
+                </div>
               </div>
-              <div className="form-group col-md-6 col-sm-6">
-                <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
-                          inputProps={{placeholder: "Select From Month", className:"float-label form-control"}} defaultValue={this.state.data.year}
-                          closeOnSelect={true} ref={"eofFromMonth"+defaultIndex} onBlur={this.handleFromMonthChange.bind(this,defaultIndex)}/>
-              </div>
-
             </div>
+              {that.state.employmentList.map(function (details, idx) {
 
 
-            <div className="form-group col-lg-6">
-              <div className="form-group col-md-6 col-sm-6">
-                <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                          inputProps={{placeholder: "Select To Year", className:"float-label form-control"}} defaultValue={this.state.data.year}
-                          closeOnSelect={true} ref={"eofToYear"+defaultIndex} onBlur={this.handleToYearChange.bind(this,defaultIndex)}/>
-              </div>
-              <div className="form-group col-md-6 col-sm-6">
-                <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
-                          inputProps={{placeholder: "Select To Month", className:"float-label form-control"}} defaultValue={this.state.data.year}
-                          closeOnSelect={true} ref={"eofToMonth"+defaultIndex} onBlur={this.handleToMonthChange.bind(this,defaultIndex)}/>
-              </div>
-            </div>
-            <div className="form-group col-lg-6 col-md-6 col-sm-6">
-              <input type="text" placeholder="Number of Employment" ref={"eofNumberOfEmployment"+defaultIndex} className="form-control float-label"
-                     id="" name="eofNumberOfEmployment" onBlur={this.employeementHandleBlur.bind(this,defaultIndex)}/>
-            </div>
+                return(<div className="form_inner_block">
 
-            <div className="form-group col-lg-6 col-md-6 col-sm-6">
-              <textarea rows="1" placeholder="About" ref={"eofAbout"+defaultIndex} className="form-control float-label"
-                        id="" name="eofAbout" onBlur={this.aboutHandleBlur.bind(this,defaultIndex)}></textarea>
+                  {/*<div className="add_form_block" onClick={that.onRemoveAction.bind(that,idx)}><img src="/images/remove.png"/></div>*/}
+                <div className="col-lg-12 col-md-12 col-sm-10">
+                  <div className="row">
+                    <div className="form-group col-lg-6">
+                      <div className="form-group col-md-6 col-sm-6">
+                        <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
+                                  inputProps={{placeholder: "Select From Year", className: "float-label form-control"}}
+                                  defaultValue={details.eofFromYear}
+                                  closeOnSelect={true} ref={"eofFromYear"+idx} onBlur={that.handleFromYearChange.bind(that, idx)}/>
+                      </div>
+                      <div className="form-group col-md-6 col-sm-6">
+                        <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
+                                  inputProps={{placeholder: "Select From Month", className: "float-label form-control"}}
+                                  defaultValue={details.eofFromMonth}
+                                  closeOnSelect={true} ref={"eofFromMonth"+idx} onBlur={that.handleFromMonthChange.bind(that, idx)}/>
+                      </div>
+
+                    </div>
+
+
+                    <div className="form-group col-lg-6">
+                      <div className="form-group col-md-6 col-sm-6">
+                        <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
+                                  inputProps={{placeholder: "Select To Year", className: "float-label form-control"}}
+                                  defaultValue={details.eofToYear}
+                                  closeOnSelect={true} ref={"eofToYear"+idx} onBlur={that.handleToYearChange.bind(that, idx)}/>
+                      </div>
+                      <div className="form-group col-md-6 col-sm-6">
+                        <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
+                                  inputProps={{placeholder: "Select To Month", className: "float-label form-control"}}
+                                  defaultValue={details.eofToMonth}
+                                  closeOnSelect={true} ref={"eofToMonth"+idx} onBlur={that.handleToMonthChange.bind(that, idx)}/>
+                      </div>
+                    </div>
+                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
+                      <input type="text" placeholder="Number of Employment" ref={"eofNumberOfEmployment"+idx}
+                             className="form-control float-label" id="" defaultValue={details.eofNumberOfEmployment} name="eofNumberOfEmployment" onBlur={that.employeementHandleBlur.bind(that,idx)}/>
+                    </div>
+
+                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
+                      <textarea rows="1" placeholder="About" ref={"eofAbout"+idx} className="form-control float-label"
+                                id="" name="eofAbout"   defaultValue={details.eofAbout} onBlur={that.aboutHandleBlur.bind(that,idx)}></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                </div>)
+
+              })}
             </div>
           </div>
         </div>
-      </div>
-        {that.state.employmentList.map(function (details, idx) {
-
-
-          return(<div className="form_inner_block">
-
-            {/*<div className="add_form_block" onClick={that.onRemoveAction.bind(that,idx)}><img src="/images/remove.png"/></div>*/}
-          <div className="col-lg-12 col-md-12 col-sm-10">
-            <div className="row">
-              <div className="form-group col-lg-6">
-                <div className="form-group col-md-6 col-sm-6">
-                  <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                            inputProps={{placeholder: "Select From Year", className: "float-label form-control"}}
-                            defaultValue={details.eofFromYear}
-                            closeOnSelect={true} ref={"eofFromYear"+idx} onBlur={that.handleFromYearChange.bind(that, idx)}/>
-                </div>
-                <div className="form-group col-md-6 col-sm-6">
-                  <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
-                            inputProps={{placeholder: "Select From Month", className: "float-label form-control"}}
-                            defaultValue={details.eofFromMonth}
-                            closeOnSelect={true} ref={"eofFromMonth"+idx} onBlur={that.handleFromMonthChange.bind(that, idx)}/>
-                </div>
-
-              </div>
-
-
-              <div className="form-group col-lg-6">
-                <div className="form-group col-md-6 col-sm-6">
-                  <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                            inputProps={{placeholder: "Select To Year", className: "float-label form-control"}}
-                            defaultValue={details.eofToYear}
-                            closeOnSelect={true} ref={"eofToYear"+idx} onBlur={that.handleToYearChange.bind(that, idx)}/>
-                </div>
-                <div className="form-group col-md-6 col-sm-6">
-                  <Datetime dateFormat="MMMM" timeFormat={false} viewMode="months"
-                            inputProps={{placeholder: "Select To Month", className: "float-label form-control"}}
-                            defaultValue={details.eofToMonth}
-                            closeOnSelect={true} ref={"eofToMonth"+idx} onBlur={that.handleToMonthChange.bind(that, idx)}/>
-                </div>
-              </div>
-              <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                <input type="text" placeholder="Number of Employment" ref={"eofNumberOfEmployment"+idx}
-                       className="form-control float-label" id="" defaultValue={details.eofNumberOfEmployment} name="eofNumberOfEmployment" onBlur={that.employeementHandleBlur.bind(that,idx)}/>
-              </div>
-
-              <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                <textarea rows="1" placeholder="About" ref={"eofAbout"+idx} className="form-control float-label"
-                          id="" name="eofAbout"   defaultValue={details.eofAbout} onBlur={that.aboutHandleBlur.bind(that,idx)}></textarea>
-              </div>
-            </div>
-          </div>
-
-          </div>)
-
-        })}
-      </div>
         </ScrollArea>
       </div>
     </div>)

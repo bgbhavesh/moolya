@@ -36,6 +36,22 @@ let appointment=`
     year: Int!
   }
   
+  input appointmentExtraUser {
+    userId: String
+    profileId: String
+  }
+  
+  input taskInternalAppointmentInfo {
+    taskId: String!
+    sessionId: String!
+    hours: Int!
+    minutes: Int!
+    day: Int!
+    month: Int!
+    year: Int!
+    extraUsers: [appointmentExtraUser] 
+  }
+  
   type AppointmentUser {
     userId: String
     profileId: String
@@ -96,6 +112,7 @@ let appointment=`
      bookUserServiceCard(serviceId: String!, taskDetails: [tasks]):response
      userServiceCardPayment(userServiceCardPaymentInfo: userServiceCardPaymentInfo): response
      bookUserServiceCardAppointment(userServiceCardAppointmentInfo: userServiceCardAppointmentInfo!): response
+     bookTaskInternalAppointment( taskInternalAppointmentInfo: taskInternalAppointmentInfo ) : response
   }
 `;
 

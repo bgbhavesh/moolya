@@ -191,7 +191,8 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
       isSelf: false,
       isRescheduled: false,
       isInternal: false,
-      createdAt: new Date()
+      createdAt: new Date(),
+      createdBy: userId
     };
 
     orderNumberGenService.createAppointmentId(appointmentData);
@@ -323,7 +324,6 @@ MlResolver.MlQueryResolver["fetchAllProfileAppointmentCounts"] = (obj, args, con
   return result;
 };
 
-
 MlResolver.MlQueryResolver["fetchProfileAppointmentCounts"] = (obj, args, context, info) => {
   let userId = context.userId;
   let profileId = args.profileId;
@@ -397,4 +397,117 @@ MlResolver.MlQueryResolver["fetchProfileAppointmentCounts"] = (obj, args, contex
   result = result && result[0] ? result[0] : [];
   return result;
 
+};
+
+MlResolver.MlMutationResolver["bookTaskInternalAppointment"] = (obj, args, context, info) => {
+  let taskId = args.taskInternalAppointmentInfo.taskId;
+  let sessionId = args.taskInternalAppointmentInfo.sessionId;
+  let day = args.taskInternalAppointmentInfo.day; //date.getDate();
+  let month = args.taskInternalAppointmentInfo.month; //date.getMonth();
+  let year = args.taskInternalAppointmentInfo.year; //date.getFullYear();
+  let hours = args.taskInternalAppointmentInfo.hours; //9;
+  let minutes = args.taskInternalAppointmentInfo.minutes; // 0;
+
+  let startDate = new Date();
+  date.setDate(day);
+  date.setMonth(month);
+  date.setYear(year);
+  date.setHours(hours);
+  date.setMinutes(minutes);
+  date.setSeconds(0,0);
+
+  let taskDoc = mlDBController.findOne('MlTask', taskId, context);
+  let session = taskDoc.session.find(function (data) {
+    return data.sessionId == sessionId;
+  });
+
+  session.activities = session.activities ? session.activities : [];
+
+  let activities = mlDBController.find('MlActivity', { _id : { $in : session.activities } }, context).fetch();
+
+  let attendees = activities.reduce(function(attendee, data) {
+    data.teams = data.teams ? data.teams : [];
+    data.teams.forEach(function (team) {
+      team.users = team.users ? team.users : [];
+      team.users = team.users.filter(function (user) {
+        let isFind = attendee.find(function (data) {
+          return user.profileId == data.profileId && user.userId == user.profileId;
+        });
+        if (isFind) {
+          return false;
+        } else {
+          return true;
+        }
+      });
+      attendee = attendee.concat(team.users);
+    });
+    return attendee;
+  }, []);
+
+  let userId = context.userId;
+  let profileId = new MlUserContext().userProfileDetails(userId).profileId;
+
+  session.duration = session.duration ? session.duration : {}
+  let sessionHours = session.duration.hours ? session.duration.hours : 0;
+  let sessionMinutes = session.duration.minutes ? session.duration.minutes : 0;
+  let endDate = new Date(startDate);
+  endDate.setHours(hours+sessionHours);
+  endDate.setMinutes(minutes+sessionMinutes);
+
+  let appointmentData = {
+    appointmentType: 'INTERNAL-TASK',
+    startDate: startDate,
+    endDate: endDate,
+    duration: session.duration ? session.duration : {},
+    timeZone: '+05:30', //to do
+    provider: {
+      userId: taskDoc.userId,
+      profileId: taskDoc.profileId
+    },
+    appointmentInfo: {
+      resourceType: 'Task',
+      resourceId: taskId,
+      taskId: taskId,
+      taskName: taskId.displayName,
+      sessionId: sessionId,
+      serviceOrderId: orderId
+    },
+    status: 'Pending',
+    isCancelled: false,
+    isSelf: false,
+    isRescheduled: false,
+    isInternal: true,
+    createdAt: new Date(),
+    createdBy: userId
+  };
+
+  orderNumberGenService.createAppointmentId(appointmentData);
+
+  let result = mlDBController.insert('MlAppointments', appointmentData, context);
+
+  if(result){
+
+    /**
+     * Insert appointment member info
+     */
+    attendees.forEach(function (attendee) {
+      let attendeeData = {
+        appointmentId: appointmentData.appointmentId,
+        appointmentUniqueId: result,
+        userId: attendee.userId,
+        profileId: attendee.profileId,
+        status: attendee.isMandatory ? 'Accepted' : 'Pending',
+        isProvider: false,
+        isClient: false,
+        isAttendee: true,
+        createdAt: new Date(),
+        createdBy: userId
+      };
+      let resp = mlDBController.insert('MlAppointmentMembers', attendeeData, context);
+    });
+
+    let code = 200;
+    let response = new MlRespPayload().successPayload("Appointment book successfully", code);
+    return response;
+  }
 };

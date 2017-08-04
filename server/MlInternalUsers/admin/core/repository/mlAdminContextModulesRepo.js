@@ -634,7 +634,17 @@ let CoreModules = {
     return {totalRecords: totalRecords, data: data};
   },
   MlServiceCardsTransactionRepo: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
-    var service = MlServiceCardDefinition.find({'isBeSpoke': false, 'isCurrentVersion': true, 'isReview': true}).fetch();
+    let resultantQuery = MlAdminContextQueryConstructor.constructQuery(contextQuery, '$in');
+    if (!fieldsProj.sort) {
+      fieldsProj.sort = {'createdDate': -1}
+    }
+    var serverQuery = {
+      'isBeSpoke': false,
+      'isCurrentVersion': true,
+      'isReview': true
+    };
+    resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery, serverQuery), '$and');
+    var service = MlServiceCardDefinition.find(resultantQuery, fieldsProj).fetch();
     var data = [];
     service.map(function(details, index) {
       data.push(details)

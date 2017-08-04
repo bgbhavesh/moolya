@@ -179,7 +179,8 @@ MlResolver.MlQueryResolver['fetchAnnotations'] = (obj, args, context, info) => {
             if(annotatorObj.length > 0){
                 _.each(annotatorObj, function (value) {
                       let quote = JSON.parse(value['quote'])
-                      var user = Meteor.users.findOne({_id:value.userId});
+                      //var user = Meteor.users.findOne({_id:value.userId});
+                      var user = mlDBController.findOne('users', {_id: value.userId})
                       if(user&&user.profile&&user.profile.isInternaluser&&user.profile.InternalUprofile) {
                         firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
                         lastName=(user.profile.InternalUprofile.moolyaProfile || {}).lastName||'';

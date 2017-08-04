@@ -3,7 +3,7 @@
  */
 import {mergeStrings} from 'gql-merge';
 import MlSchemaDef from '../../../commons/mlSchemaDef'
-
+import MlResolver from '../../../commons/mlResolverDef'
 
 let favourites = `  
     type Mutation{
@@ -22,12 +22,18 @@ let favourites = `
         countryName:String,
         communityName:String,
         communityCode:String,
-        
+        chapterName : String
     }
     
     type Query{
         fetchFavourites:[FavouriteUser]
+        fetchFavouritesByPortfolio(portfolioId: String, communityCode: String): [FavouriteUser]
     }
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],favourites]);
+/**admin API data*/
+let supportedApi = [
+  {api:'fetchFavouritesByPortfolio', actionName:'READ', moduleName:"INTERACTION"}
+];
+MlResolver.MlModuleResolver.push(supportedApi)

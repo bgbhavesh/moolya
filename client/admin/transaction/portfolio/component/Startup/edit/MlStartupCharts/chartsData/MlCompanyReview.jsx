@@ -126,68 +126,76 @@ export default class MlCompanyReview extends React.Component{
           smoothScrolling={true}
           default={true}
         >
-      <div className="office-members-detail">
+        <div className="panel panel-default">
+          <div className="panel-heading">Company Review{
+            <div className="pull-right block_action" onClick={this.onSaveAction.bind(this,defaultIndex)}><img
+              src="/images/add.png"/></div>}
+          </div>
+          <div className="panel-body">
+            <div className="office-members-detail">
 
-        <div className="form_inner_block">
-          <div className="add_form_block" onClick={this.onSaveAction.bind(this,defaultIndex)}><img src="/images/add.png"/></div>
+              <div className="form_inner_block">
+                {/*<div className="add_form_block" onClick={this.onSaveAction.bind(this,defaultIndex)}><img src="/images/add.png"/></div>*/}
 
-          <div className="col-lg-12 col-md-12 col-sm-10">
-            <div className="row">
-              <div className="form-group col-lg-6  col-md-6 col-sm-6">
+                <div className="col-lg-12 col-md-12 col-sm-10">
+                  <div className="row">
+                    <div className="form-group col-lg-6  col-md-6 col-sm-6">
 
-                <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                          inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
-                          closeOnSelect={true} ref={"rofYear"+defaultIndex} onBlur={this.handleFromYearChange.bind(this, defaultIndex)}/>
+                      <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
+                                inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
+                                closeOnSelect={true} ref={"rofYear"+defaultIndex} onBlur={this.handleFromYearChange.bind(this, defaultIndex)}/>
 
 
+                    </div>
+
+                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
+                      <input type="text" placeholder="Enter Value" ref={"rofValue"+defaultIndex}
+                             className="form-control float-label" id=""  name="rofValue" onBlur={this.valueHandleBlur.bind(this,defaultIndex)}/>
+                    </div>
+
+                    <div className="form-group col-lg-6 col-md-6 col-sm-6">
+                      <textarea rows="1" placeholder="About" ref={"rofAbout"+defaultIndex} className="form-control float-label"
+                                id="" name="rofAbout"   onBlur={this.aboutHandleBlur.bind(this,defaultIndex)}></textarea>
+                    </div>
+                  </div>
+                </div>
               </div>
+              {that.state.reviewList.map(function (details, idx) {
 
-              <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                <input type="text" placeholder="Enter Value" ref={"rofValue"+defaultIndex}
-                       className="form-control float-label" id=""  name="rofValue" onBlur={this.valueHandleBlur.bind(this,defaultIndex)}/>
-              </div>
 
-              <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                <textarea rows="1" placeholder="About" ref={"rofAbout"+defaultIndex} className="form-control float-label"
-                          id="" name="rofAbout"   onBlur={this.aboutHandleBlur.bind(this,defaultIndex)}></textarea>
-              </div>
+                return(<div className="form_inner_block">
+
+                  {/*<div className="add_form_block" onClick={that.onRemoveAction.bind(that,idx)}><img src="/images/remove.png"/></div>*/}
+                  <div className="col-lg-12 col-md-12 col-sm-10">
+                    <div className="row">
+                      <div className="form-group col-lg-6  col-md-6 col-sm-6">
+
+                          <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
+                                    inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
+                                    defaultValue={details.rofYear}
+                                    closeOnSelect={true} ref={"rofYear"+idx} onBlur={that.handleFromYearChange.bind(that, idx)}/>
+
+
+                      </div>
+
+                      <div className="form-group col-lg-6 col-md-6 col-sm-6">
+                        <input type="text" placeholder="Enter Value" ref={"rofValue"+idx}
+                               className="form-control float-label" id="" defaultValue={details.rofValue} name="rofValue" onBlur={that.valueHandleBlur.bind(that,idx)}/>
+                      </div>
+
+                      <div className="form-group col-lg-6 col-md-6 col-sm-6">
+                      <textarea rows="1" placeholder="About" ref={"rofAbout"+idx} className="form-control float-label"
+                                id="" name="rofAbout"   defaultValue={details.rofAbout} onBlur={that.aboutHandleBlur.bind(that,idx)}></textarea>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>)
+
+              })}
             </div>
           </div>
         </div>
-        {that.state.reviewList.map(function (details, idx) {
-
-
-          return(<div className="form_inner_block">
-
-            {/*<div className="add_form_block" onClick={that.onRemoveAction.bind(that,idx)}><img src="/images/remove.png"/></div>*/}
-            <div className="col-lg-12 col-md-12 col-sm-10">
-              <div className="row">
-                <div className="form-group col-lg-6  col-md-6 col-sm-6">
-
-                    <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                              inputProps={{placeholder: "Select Year", className: "float-label form-control"}}
-                              defaultValue={details.rofYear}
-                              closeOnSelect={true} ref={"rofYear"+idx} onBlur={that.handleFromYearChange.bind(that, idx)}/>
-
-
-                </div>
-
-                <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                  <input type="text" placeholder="Enter Value" ref={"rofValue"+idx}
-                         className="form-control float-label" id="" defaultValue={details.rofValue} name="rofValue" onBlur={that.valueHandleBlur.bind(that,idx)}/>
-                </div>
-
-                <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                <textarea rows="1" placeholder="About" ref={"rofAbout"+idx} className="form-control float-label"
-                          id="" name="rofAbout"   defaultValue={details.rofAbout} onBlur={that.aboutHandleBlur.bind(that,idx)}></textarea>
-                </div>
-              </div>
-            </div>
-
-          </div>)
-
-        })}
-      </div>
         </ScrollArea>
       </div>
 

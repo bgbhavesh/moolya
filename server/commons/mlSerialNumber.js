@@ -61,6 +61,11 @@ if (!appointmentNumber) {
   MlSerialNumbers.insert({_id: "appointmentNumber", seq: 0});
 }
 
+let vactionNumber = MlSerialNumbers.findOne({_id: "vactionNumber"});
+if (!vactionNumber) {
+  MlSerialNumbers.insert({_id: "vactionNumber", seq: 0});
+}
+
 
 orderNumberGenService = (function(){
   function getNextSequence(name) {
@@ -132,6 +137,9 @@ orderNumberGenService = (function(){
     },
     createAppointmentId: function (appointmentData) {
       appointmentData.appointmentId = "MLAPT"+ FormatUtil.leadingZeros(getNextSequence("appointmentNumber"), 8);
+    },
+    createVactionId: function (vactionData) {
+      vactionData.vacationId = "MLHLD"+ FormatUtil.leadingZeros(getNextSequence("vactionNumber"), 8);
     },
     generateRandomPassword:function(){
       var randomId = function makeid(){

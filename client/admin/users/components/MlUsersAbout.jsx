@@ -6,6 +6,8 @@ import ScrollArea from "react-scrollbar";
 import MlLoader from "../../../commons/components/loader/loader";
 import {initalizeFloatLabel} from "../../utils/formElemUtil";
 import {findUserRegistrationActionHandler, findUserPortfolioActionHandler} from "../actions/findUsersHandlers";
+import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
+import gql from "graphql-tag";
 export default class MlUsersAbout extends Component {
   constructor(props) {
     super(props);
@@ -23,7 +25,7 @@ export default class MlUsersAbout extends Component {
   }
 
   async findRegistration() {
-    let registrationId = this.props.config?this.props.config.registrationId:'';
+    let registrationId = this.props.config ? this.props.config.registrationId : '';
     const response = await findUserRegistrationActionHandler(registrationId);
     console.log(response);
     this.setState({loading: false, data: response});
@@ -37,16 +39,32 @@ export default class MlUsersAbout extends Component {
 
   async changeUrl(registrationId) {
     const response = await findUserPortfolioActionHandler(registrationId);
-    if(response && response.portfolioId){
+    if (response && response.portfolioId) {
       toastr.success('Portfolio Selected Successfully')
       FlowRouter.setParams({portfolioId: response.portfolioId})
-    }else {
+    } else {
       toastr.info('Portfolio Not available')
     }
     return response
   }
 
+  /**
+   * handler to change the status of user's specific profile
+   * @autosave
+   * */
+  onStatusChange(e) {
+    console.log(e.currentTarget.checked)
+    //write handler to save
+  }
 
+  /**
+   * handler to change the status of overall user
+   * @autosave
+   * */
+  overUserStatus(e) {
+    console.log(e.currentTarget.checked)
+    //write handler to save
+  }
   componentDidMount() {
     initalizeFloatLabel();
     this.initializeSwiper();
@@ -72,11 +90,62 @@ export default class MlUsersAbout extends Component {
   }
 
   render() {
+    let clusterQuery = gql`query{
+     data:fetchContextClusters {
+        value:_id
+        label:countryName
+      }
+    }
+    `;
+    let chapterQuery = gql`query($id:String){  
+      data:fetchContextChapters(id:$id) {
+        value:_id
+        label:chapterName
+      }  
+    }`;
+    let countryQuery = gql`query{
+     data:fetchCountries {
+        value:_id
+        label:country
+        code: countryCode
+      }
+    }`
+    let userTypequery = gql` query($communityCode:String){  
+    data:FetchUserType(communityCode:$communityCode) {
+      value:_id
+      label:userTypeName
+  }  }
+    `;
+    let professionQuery = gql` query($industryId:String){
+      data:fetchIndustryBasedProfession(industryId:$industryId) {
+        label:professionName
+        value:_id
+      }
+    }`;
+    let citizenshipsquery = gql`query{
+        data:FetchCitizenship {
+          label:citizenshipTypeName
+          value:_id
+        
+        }
+        }
+     `;
+    let employementquery = gql`query($type:String,$hierarchyRefId:String){
+     data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
+     label
+     value
+     }
+     }
+     `;
     let that = this
     let regInfo = this.state.data && this.state.data.registrationInfo ? this.state.data.registrationInfo : {}
     let regDetail = this.state.data && this.state.data.registrationDetails ? this.state.data.registrationDetails : {}
     let alsoRegisterAs = this.state.data && this.state.data.externalUserProfiles && this.state.data.externalUserProfiles.length > 0 ? this.state.data.externalUserProfiles : ['0']
     const showLoader = this.state.loading;
+    let userTypeOption = {options: {variables: {communityCode: regInfo.registrationType}}};
+    let professionQueryOptions = {options: {variables: {industryId: regInfo.industry}}};
+    let employmentOption = {options: {variables: {type: "EMPLOYMENTTYPE", hierarchyRefId: regInfo.clusterId}}};
+    let chapterOption = {options: {variables: {id: regInfo.clusterId}}};
     return (
       <div className="admin_main_wrap">
         {showLoader === true ? ( <MlLoader/>) : (
@@ -127,7 +196,7 @@ export default class MlUsersAbout extends Component {
                       </div>
 
                       <div className="form-group">
-                        <input type="text" placeholder="Password" name="password" defaultValue={regInfo.password}
+                        <input type="password" placeholder="Password" name="password" defaultValue={"passwordUnSeen"}
                                className="form-control float-label"
                                disabled="disabled"/>
                       </div>
@@ -144,14 +213,23 @@ export default class MlUsersAbout extends Component {
 
 
                       <div className="form-group">
-                        <input type="text" placeholder="Profession" defaultValue={regInfo.profession}
-                               className="form-control float-label"
-                               disabled="disabled"/>
+                        {/*<input type="text" placeholder="Profession" defaultValue={regInfo.profession}*/}
+                        {/*className="form-control float-label"*/}
+                        {/*disabled="disabled"/>*/}
+                        <Moolyaselect multiSelect={false} placeholder="Select Profession"
+                                      className="form-control float-label" valueKey={'value'} labelKey={'label'}
+                                      selectedValue={regInfo.profession} queryType={"graphql"} query={professionQuery}
+                                      queryOptions={professionQueryOptions} isDynamic={true} disabled={true}/>
                       </div>
                       <div className="form-group">
-                        <input type="text" placeholder="Employer Status" defaultValue={regDetail.employmentStatus}
-                               className="form-control float-label"
-                               disabled="disabled"/>
+                        {/*<input type="text" placeholder="Employer Status" defaultValue={regDetail.employmentStatus}*/}
+                        {/*className="form-control float-label"*/}
+                        {/*disabled="disabled"/>*/}
+                        <Moolyaselect multiSelect={false} placeholder="Employment Status"
+                                      className="form-control float-label" valueKey={'value'} labelKey={'label'}
+                                      selectedValue={regDetail.employmentStatus} queryType={"graphql"}
+                                      query={employementquery} queryOptions={employmentOption} isDynamic={true}
+                                      disabled={true}/>
                       </div>
                       <div className="form-group">
                         <input type="text" placeholder="Employer Name" defaultValue={regDetail.employerName}
@@ -184,10 +262,16 @@ export default class MlUsersAbout extends Component {
                                disabled="disabled"/>
                       </div>
                       <div className="form-group">
-                        <input type="text" placeholder="User Type" defaultValue={regInfo.userType}
-                               className="form-control float-label"
-                               disabled="disabled"/>
+                        {/*<input type="text" placeholder="User Type" defaultValue={regInfo.userType}*/}
+                        {/*className="form-control float-label"*/}
+                        {/*disabled="disabled"/>*/}
+                        <Moolyaselect multiSelect={false} placeholder="Select User Category"
+                                      className="form-control float-label" valueKey={'value'} labelKey={'label'}
+                                      selectedValue={regInfo.userType} queryType={"graphql"} query={userTypequery}
+                                      reExecuteQuery={true} queryOptions={userTypeOption} isDynamic={true}
+                                      disabled={true}/>
                       </div>
+                      <br className="clearfix"/> <br className="clearfix"/> <br className="clearfix"/>
                     </form>
                   </div>
                 </ScrollArea>
@@ -213,8 +297,11 @@ export default class MlUsersAbout extends Component {
                       <br className="brclear"/>
 
                       <div className="form-group">
-                        <input type="text" placeholder="Your Country" defaultValue={regInfo.countryId}
-                               className="form-control float-label" disabled="disabled"/>
+                        {/*<input type="text" placeholder="Your Country" defaultValue={regInfo.countryId}*/}
+                        {/*className="form-control float-label" disabled="disabled"/>*/}
+                        <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                                      labelKey={'label'} placeholder="Your Country" selectedValue={regInfo.countryId}
+                                      queryType={"graphql"} query={countryQuery} isDynamic={true} disabled={true}/>
                       </div>
 
                       <div className="form-group">
@@ -222,6 +309,7 @@ export default class MlUsersAbout extends Component {
                                defaultValue={regInfo.cityId}
                                disabled="disabled"/>
                       </div>
+
 
                       <div className="form-group">
                         <input type="text" placeholder="Email Id" defaultValue={regInfo.email}
@@ -248,8 +336,12 @@ export default class MlUsersAbout extends Component {
                       </div>
 
                       <div className="form-group">
-                        <input type="text" placeholder="Citizenship" defaultValue={regDetail.citizenships}
-                               className="form-control float-label" disabled="disabled"/>
+                        {/*<input type="text" placeholder="Citizenship" defaultValue={regDetail.citizenships}*/}
+                        {/*className="form-control float-label" disabled="disabled"/>*/}
+                        <Moolyaselect multiSelect={true} placeholder="Select Citizenship"
+                                      className="form-control float-label" valueKey={'value'} labelKey={'label'}
+                                      selectedValue={regDetail.citizenships} queryType={"graphql"}
+                                      query={citizenshipsquery} isDynamic={true} disabled={true}/>
                       </div>
 
                       <div className="form-group">
@@ -259,13 +351,23 @@ export default class MlUsersAbout extends Component {
 
                       <div className="form-group">
                         <label>Operation Area</label>
-                        <input type="text" placeholder="Cluster" defaultValue={regInfo.clusterId}
-                               className="form-control float-label" disabled="disabled"/>
+                        <br className="brclear"/> <br className="brclear"/> <br className="brclear"/>
+                        {/*<input type="text" placeholder="Cluster" defaultValue={regInfo.clusterId}*/}
+                        {/*className="form-control float-label" disabled="disabled"/>*/}
+                        <Moolyaselect multiSelect={false} placeholder="Select Cluster"
+                                      className="form-control float-label" valueKey={'value'} labelKey={'label'}
+                                      selectedValue={regInfo.clusterId} queryType={"graphql"} query={clusterQuery}
+                                      isDynamic={true} disabled={true}/>
                       </div>
 
                       <div className="form-group">
-                        <input type="text" placeholder="Chapter" defaultValue={regInfo.chapterId}
-                               className="form-control float-label" disabled="disabled"/>
+                        {/*<input type="text" placeholder="Chapter" defaultValue={regInfo.chapterId}*/}
+                        {/*className="form-control float-label" disabled="disabled"/>*/}
+                        <Moolyaselect multiSelect={false} placeholder="Select Chapter"
+                                      className="form-control float-label" valueKey={'value'} labelKey={'label'}
+                                      selectedValue={regInfo.chapterId} queryType={"graphql"} query={chapterQuery}
+                                      reExecuteQuery={true} queryOptions={chapterOption} isDynamic={true}
+                                      disabled={true}/>
                       </div>
 
                       <div className="swiper-container blocks_in_form">
@@ -273,42 +375,44 @@ export default class MlUsersAbout extends Component {
                         <div className="swiper-wrapper">
                           {alsoRegisterAs.map(function (userProfile, id) {
                             return (
-                              <div className="form_inner_block swiper-slide" key={id}
-                                   onClick={(e) => that.handleSwiperClick(e, userProfile.registrationId)}>
-                                <div className="form-group">
-                                  <input type="text" placeholder="Community" defaultValue={userProfile.communityName}
-                                         className="form-control float-label" disabled="disabled"/>
-                                </div>
-                                <div className="form-group left_al">
-                                  <input type="text" placeholder="Identity" defaultValue={userProfile.identityType}
-                                         className="form-control float-label" disabled="disabled"/>
-                                </div>
-                                <div className="form-group right_al">
-                                  <input type="text" placeholder="Type" className="form-control float-label"
-                                         disabled="disabled"/>
-                                </div>
-                                <div className="form-group left_al">
-                                  <input type="text" placeholder="Cluster" className="form-control float-label"
-                                         defaultValue={userProfile.clusterName} disabled="disabled"/>
-                                </div>
-                                <div className="form-group right_al">
-                                  <input type="text" placeholder="Chapter" className="form-control float-label"
-                                         defaultValue={userProfile.chapterName} disabled="disabled"/>
-                                </div>
-                                <div className="form-group left_al">
-                                  <input type="text" placeholder="Sub-Chapter" className="form-control float-label"
-                                         defaultValue={userProfile.subChapterName} disabled="disabled"/>
-                                </div>
-                                <div className="form-group right_al">
-                                  <input type="text" placeholder="Subscription Type"
-                                         className="form-control float-label"
-                                         defaultValue={userProfile.accountType}
-                                         disabled="disabled"/>
+                              <div className="form_inner_block swiper-slide" key={id}>
+                                <div onClick={(e) => that.handleSwiperClick(e, userProfile.registrationId)}>
+                                  <div className="form-group">
+                                    <input type="text" placeholder="Community" defaultValue={userProfile.communityName}
+                                           className="form-control float-label" disabled="disabled"/>
+                                  </div>
+                                  <div className="form-group left_al">
+                                    <input type="text" placeholder="Identity" defaultValue={userProfile.identityType}
+                                           className="form-control float-label" disabled="disabled"/>
+                                  </div>
+                                  <div className="form-group right_al">
+                                    <input type="text" placeholder="Type" className="form-control float-label"
+                                           disabled="disabled"/>
+                                  </div>
+                                  <div className="form-group left_al">
+                                    <input type="text" placeholder="Cluster" className="form-control float-label"
+                                           defaultValue={userProfile.clusterName} disabled="disabled"/>
+                                  </div>
+                                  <div className="form-group right_al">
+                                    <input type="text" placeholder="Chapter" className="form-control float-label"
+                                           defaultValue={userProfile.chapterName} disabled="disabled"/>
+                                  </div>
+                                  <div className="form-group left_al">
+                                    <input type="text" placeholder="Sub-Chapter" className="form-control float-label"
+                                           defaultValue={userProfile.subChapterName} disabled="disabled"/>
+                                  </div>
+                                  <div className="form-group right_al">
+                                    <input type="text" placeholder="Subscription Type"
+                                           className="form-control float-label"
+                                           defaultValue={userProfile.accountType}
+                                           disabled="disabled"/>
+                                  </div>
                                 </div>
                                 <div className="form-group switch_wrap">
                                   <label>Status : </label>
                                   <label className="switch">
-                                    <input type="checkbox"/>
+                                    <input type="checkbox" onChange={(e) => that.onStatusChange(e)}
+                                           defaultChecked={userProfile.isActive}/>
                                     <div className="slider"></div>
                                   </label>
                                 </div>
@@ -322,9 +426,10 @@ export default class MlUsersAbout extends Component {
                         <div className="swiper-pagination"></div>
                       </div>
                       <div className="form-group switch_wrap inline_switch">
-                        <label className="">Overall Deactivate User</label>
+                        <label>Overall Active User</label>
                         <label className="switch">
-                          <input type="checkbox" ref="isActive"/>
+                          <input type="checkbox" onChange={(e) => that.overUserStatus(e)}
+                                 defaultChecked={this.state.data ? this.state.data.isActive : false}/>
                           <div className="slider"></div>
                         </label>
                       </div>

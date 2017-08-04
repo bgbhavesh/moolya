@@ -21,6 +21,14 @@ export default class MlFunderAboutView extends React.Component{
     const resp = this.fetchPortfolioDetails();
     return resp;
   }
+
+  /**
+   * inializing float label
+   * */
+  componentDidUpdate(){
+    initalizeFloatLabel();
+  }
+
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;

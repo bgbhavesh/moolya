@@ -365,7 +365,7 @@ class MlAppPortfolio extends Component{
                             </div>
                             <div className="comment-box">
                               <div className="comment-head">
-                                <h6 className="comment-name">{options.userName}</h6>
+                                <h6 className="comment-name">{options.firstName} {options.lastName}</h6>
                                 <span>{moment(options.createdAt).format('DD MM YYYY,HH:MM:SS')}</span>
                               </div>
                               <div className="comment-content">

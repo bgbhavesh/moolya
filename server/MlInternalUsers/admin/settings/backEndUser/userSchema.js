@@ -523,6 +523,7 @@ let BackEndUser = `
         getUserProfile(profileId: String) : ExternalProfile
         fetchMyProfile(userId:String): BackendUsers
         getUserProfileForService(profileId: String): ExternalProfile
+        findExternalUserAddressBook(registrationId:String): externalUserAdditionalInfoSchema
     }
 `
 
@@ -551,6 +552,7 @@ let supportedApi = [
     {api:'getUserProfile',actionName:'READ', moduleName:"USERS"},
     {api:'getUserProfileForService',actionName:'READ', moduleName:"USERS"},
     {api:'fetchMyProfile',actionName:'READ', moduleName:"USERS", isWhiteList: true},
+    {api:'findExternalUserAddressBook',actionName:'READ', moduleName:"USERS", isWhiteList: true},
 
     {api:'createUser', actionName:'CREATE', moduleName:"USERS"},
     {api:'updateUser', actionName:'UPDATE', moduleName:"USERS"},

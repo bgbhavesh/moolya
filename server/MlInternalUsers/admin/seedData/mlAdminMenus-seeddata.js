@@ -648,7 +648,7 @@ if (Meteor.isServer) {
                   // ]
                 },
                 {
-                  "link" : "/admin/users/favourites/ideator",
+                  "link" : "/admin/users/favourites",
                   "name" : "Favourites",
                   "uniqueId" : "users_favourites",
                   "isLink" : true,
@@ -658,80 +658,81 @@ if (Meteor.isServer) {
                   "dynamicLinkHandler" : "",
                   "subMenusId" : "users_cluster",
                   "subMenuMappingId" : "users_favourites",
-                  "subMenu" : [
-                    {
-                      "link" : "/admin/users/favourites/ideator",
-                      "name" : "Ideator",
-                      "uniqueId" : "users_favouritesIdeator",
-                      "isLink" : true,
-                      "isMenu" : true,
-                      "image" : "",
-                      "dynamicLink" : true,
-                      "dynamicLinkHandler" : "",
-                      "subMenuMappingId" : "users_favouritesIdeator",
-                      "subMenusId" : "users_favourites"
-                    },
-                    {
-                      "link" : "/admin/users/favourites/startup",
-                      "name" : "Startup",
-                      "uniqueId" : "users_favouritesStartup",
-                      "isLink" : true,
-                      "isMenu" : true,
-                      "image" : "",
-                      "dynamicLink" : true,
-                      "dynamicLinkHandler" : "",
-                      "subMenuMappingId" : "users_favouritesStartup",
-                      "subMenusId" : "users_favourites"
-                    },
-                    {
-                      "link" : "/admin/users/favourites/investor",
-                      "name" : "Investor",
-                      "uniqueId" : "users_favouritesinvestor",
-                      "isLink" : true,
-                      "isMenu" : true,
-                      "image" : "",
-                      "dynamicLink" : true,
-                      "dynamicLinkHandler" : "",
-                      "subMenuMappingId" : "users_favouritesInvestor",
-                      "subMenusId" : "users_favourites"
-                    },
-                    {
-                      "link" : "/admin/users/favourites/serviceProvider",
-                      "name" : "Service Provider",
-                      "uniqueId" : "users_favouritesServiceProvider",
-                      "isLink" : true,
-                      "isMenu" : true,
-                      "image" : "",
-                      "dynamicLink" : true,
-                      "dynamicLinkHandler" : "",
-                      "subMenuMappingId" : "users_favouritesServiceProvider",
-                      "subMenusId" : "users_favourites"
-                    },
-                    {
-                      "link" : "/admin/users/favourites/company",
-                      "name" : "Company",
-                      "uniqueId" : "users_favouritesCompany",
-                      "isLink" : true,
-                      "isMenu" : true,
-                      "image" : "",
-                      "dynamicLink" : true,
-                      "dynamicLinkHandler" : "",
-                      "subMenuMappingId" : "users_favouritesCompany",
-                      "subMenusId" : "users_favourites"
-                    },
-                    {
-                      "link" : "/admin/users/favourites/institution",
-                      "name" : "Institution",
-                      "uniqueId" : "users_favouritesInstitution",
-                      "isLink" : true,
-                      "isMenu" : true,
-                      "image" : "",
-                      "dynamicLink" : true,
-                      "dynamicLinkHandler" : "",
-                      "subMenuMappingId" : "users_favouritesInstitution",
-                      "subMenusId" : "users_favourites"
-                    }
-                  ]
+
+                  // "subMenu" : [
+                  //   {
+                  //     "link" : "/admin/users/favourites/ideator",
+                  //     "name" : "Ideator",
+                  //     "uniqueId" : "users_favouritesIdeator",
+                  //     "isLink" : true,
+                  //     "isMenu" : true,
+                  //     "image" : "",
+                  //     "dynamicLink" : true,
+                  //     "dynamicLinkHandler" : "",
+                  //     "subMenuMappingId" : "users_favouritesIdeator",
+                  //     "subMenusId" : "users_favourites"
+                  //   },
+                  //   {
+                  //     "link" : "/admin/users/favourites/startup",
+                  //     "name" : "Startup",
+                  //     "uniqueId" : "users_favouritesStartup",
+                  //     "isLink" : true,
+                  //     "isMenu" : true,
+                  //     "image" : "",
+                  //     "dynamicLink" : true,
+                  //     "dynamicLinkHandler" : "",
+                  //     "subMenuMappingId" : "users_favouritesStartup",
+                  //     "subMenusId" : "users_favourites"
+                  //   },
+                  //   {
+                  //     "link" : "/admin/users/favourites/investor",
+                  //     "name" : "Investor",
+                  //     "uniqueId" : "users_favouritesinvestor",
+                  //     "isLink" : true,
+                  //     "isMenu" : true,
+                  //     "image" : "",
+                  //     "dynamicLink" : true,
+                  //     "dynamicLinkHandler" : "",
+                  //     "subMenuMappingId" : "users_favouritesInvestor",
+                  //     "subMenusId" : "users_favourites"
+                  //   },
+                  //   {
+                  //     "link" : "/admin/users/favourites/serviceProvider",
+                  //     "name" : "Service Provider",
+                  //     "uniqueId" : "users_favouritesServiceProvider",
+                  //     "isLink" : true,
+                  //     "isMenu" : true,
+                  //     "image" : "",
+                  //     "dynamicLink" : true,
+                  //     "dynamicLinkHandler" : "",
+                  //     "subMenuMappingId" : "users_favouritesServiceProvider",
+                  //     "subMenusId" : "users_favourites"
+                  //   },
+                  //   {
+                  //     "link" : "/admin/users/favourites/company",
+                  //     "name" : "Company",
+                  //     "uniqueId" : "users_favouritesCompany",
+                  //     "isLink" : true,
+                  //     "isMenu" : true,
+                  //     "image" : "",
+                  //     "dynamicLink" : true,
+                  //     "dynamicLinkHandler" : "",
+                  //     "subMenuMappingId" : "users_favouritesCompany",
+                  //     "subMenusId" : "users_favourites"
+                  //   },
+                  //   {
+                  //     "link" : "/admin/users/favourites/institution",
+                  //     "name" : "Institution",
+                  //     "uniqueId" : "users_favouritesInstitution",
+                  //     "isLink" : true,
+                  //     "isMenu" : true,
+                  //     "image" : "",
+                  //     "dynamicLink" : true,
+                  //     "dynamicLinkHandler" : "",
+                  //     "subMenuMappingId" : "users_favouritesInstitution",
+                  //     "subMenusId" : "users_favourites"
+                  //   }
+                  // ]
                 },
                 // {
                 //   "link" : "/admin/users/wishlist/ideator",

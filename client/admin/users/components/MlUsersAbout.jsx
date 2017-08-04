@@ -61,7 +61,7 @@ export default class MlUsersAbout extends Component {
    * handler to change the status of overall user
    * @autosave
    * */
-  onDeactivateUser(e) {
+  overUserStatus(e) {
     console.log(e.currentTarget.checked)
     //write handler to save
   }
@@ -411,7 +411,8 @@ export default class MlUsersAbout extends Component {
                                 <div className="form-group switch_wrap">
                                   <label>Status : </label>
                                   <label className="switch">
-                                    <input type="checkbox" onChange={(e) => that.onStatusChange(e)}/>
+                                    <input type="checkbox" onChange={(e) => that.onStatusChange(e)}
+                                           defaultChecked={userProfile.isActive}/>
                                     <div className="slider"></div>
                                   </label>
                                 </div>
@@ -425,9 +426,10 @@ export default class MlUsersAbout extends Component {
                         <div className="swiper-pagination"></div>
                       </div>
                       <div className="form-group switch_wrap inline_switch">
-                        <label>Overall Deactivate User</label>
+                        <label>Overall Active User</label>
                         <label className="switch">
-                          <input type="checkbox" onChange={(e) => that.onDeactivateUser(e)}/>
+                          <input type="checkbox" onChange={(e) => that.overUserStatus(e)}
+                                 defaultChecked={this.state.data ? this.state.data.isActive : false}/>
                           <div className="slider"></div>
                         </label>
                       </div>

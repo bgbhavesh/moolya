@@ -42,6 +42,7 @@ class MlGenericTransactions{
         2) If not, throw error.
        */
       var clusterId = null;
+      var subChapterId = null;
       var defaultRole = {};
       var hierarchyAssignment = [];
 
@@ -55,11 +56,13 @@ class MlGenericTransactions{
               var reg = mlDBController.findOne('MlRegistration',{transactionId:transactionId[0]});
               if(reg)
                   clusterId = reg.registrationInfo.clusterId;
+                  subChapterId = reg.registrationInfo.subChapterId;
           }
           if(transactionType == "Portfolio"){
             var reg = mlDBController.findOne('MlPortfolioDetails',{transactionId:transactionId[0]});
             if(reg)
               clusterId = reg.clusterId;
+              subChapterId = reg.subChapterId;
           }
 
           if(clusterId){
@@ -88,9 +91,12 @@ class MlGenericTransactions{
           /*
            Checking if roleId of highest role has hierarchy
            */
+          var isDefaultSubChapter = mlDBController.findOne('MlSubChapters',{_id:subChapterId}).isDefaultSubChapter;
+
           hierarchyAssignment = mlDBController.find('MlHierarchyAssignments',{
             "$and":[
-              {'clusterId':clusterId},
+              {'clusterId':{"$in":[clusterId, "All"]}},
+              {'isDefaultSubChapter':isDefaultSubChapter},
               {'teamStructureAssignment':{$elemMatch: {roleId:defaultRole.roleId}}}
             ]
           }).fetch();

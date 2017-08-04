@@ -10,6 +10,9 @@ import _ from "lodash";
 import _underscore from "underscore";
 import geocoder from "geocoder";
 import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification"
+import MlUserContext from '../../../../../server/MlExternalUsers/mlUserContext'
+
+
 MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, info) => {
     let user=Meteor.users.findOne(context.userId);
     return user&&user.profile&&user.profile.isInternaluser?"internal":"external";
@@ -1547,4 +1550,34 @@ MlResolver.MlQueryResolver['getUserProfileForService'] = (obj, args, context, in
     profile[0].countryId = cluster && cluster.countryId;
   }
   return profile[0];
+}
+
+MlResolver.MlQueryResolver['findExternalUserAddressBook'] = (obj, args, context, info) => {
+  // TODO : Authorization
+  let registrationId=args.registrationId;
+  var  reg= mlDBController.findOne('MlRegistration',{_id:registrationId},context) || {};
+
+  var userId = reg.registrationInfo.userId
+
+  var  user= mlDBController.findOne('users',{_id:userId},context) || {};
+  if(user){
+    var clusterId;
+    let profile = new MlUserContext(userId).userProfileDetails(userId)
+
+    // registrationId = profile.registrationId;
+    clusterId = profile.clusterId;
+    const addInfo = user.profile.externalUserAdditionalInfo?user.profile.externalUserAdditionalInfo:[]
+    var infoDetails;
+    /* _.each(addInfo,function (say,value) {
+     if(say.registrationId == registrationId && say.clusterId == clusterId){
+     infoDetails = say
+     }
+     })*/
+    infoDetails = _underscore.find(addInfo, {'profileId': profile.profileId}) || {};
+    return infoDetails;
+  }else {
+    let code = 409;
+    let response = new MlRespPayload().errorPayload('Not a valid user', code);
+    return response;
+  }
 }

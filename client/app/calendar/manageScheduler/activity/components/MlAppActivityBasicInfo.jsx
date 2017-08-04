@@ -218,31 +218,8 @@ export default class MlAppBasicInfo extends React.Component{
    */
   saveDetails(){
     const that = this;
-    let profileId = FlowRouter.getParam('profileId');
     let data = that.state.basicData;
-    let duration = data.duration;
-
-    /**
-     * Remove duration key if they are not in int format
-     */
-    if(!parseInt(duration.hours)){
-      delete duration.hours;
-    }
-    if(!parseInt(duration.minutes)){
-      delete duration.minutes;
-    }
-
-    if(!duration.hours && !duration.minutes){
-      toastr.error("Enter a valid duration");
-      return false;
-    }
-
-    if(data.mode !== 'online') {
-      delete data.conversation;
-    }
-    data.isServiceCardEligible = data.isExternal ? data.isServiceCardEligible : false;
-    data.duration = duration ;
-    that.props.setActivityDetails(data);
+    that.props.setActivityDetails(data, true);
   }
 
   /**

@@ -164,6 +164,9 @@ class MlAppServiceSelectTask extends Component{
       optionsBySelectService,
       updateSessionSequence,
       respectiveTab,
+      saveService,
+      selectedTaskId,
+      deleteSelectedTask,
       serviceTask} = this.props;
     const tasks = serviceTask.selectedTaskDetails || {};
     return (
@@ -246,6 +249,10 @@ class MlAppServiceSelectTask extends Component{
                     </div>
                     <br className="brclear"/>
                       {this.getSessionList()}
+                    {!this.props.viewMode? <div className="ml_icon_btn">
+                      <div className="save_btn" onClick={() => saveService()}><span className="ml ml-save"></span></div>
+                      <div className="cancel_btn" onClick={() => deleteSelectedTask(selectedTaskId)}><span className="ml ml-delete"></span></div>
+                    </div>:""}
                   </div>
                   <div className="tab-pane" id="2a">
                     2

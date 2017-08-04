@@ -133,7 +133,7 @@ export default class MlAppChooseTeam extends React.Component{
    */
   saveDetails() {
     let data = this.state.teamData;
-    this.props.setActivityDetails({teams: data});
+    this.props.setActivityDetails({teams: data}, false);
   }
 
   /**

@@ -75,6 +75,7 @@ export default class MlStepDetails extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
+          <h2>Details</h2>
           <BootstrapTable  data={ this.state.templateInfo }
                            options={ options }
                            selectRow={ selectRow }

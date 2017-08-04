@@ -38,7 +38,6 @@ export default class MlEditFilter extends Component {
     var WinHeight = $(window).height();
     $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
     OnToggleSwitch(true,true);
-    initalizeFloatLabel();
   }
 
 /*  getassignFilterToClusters(details){

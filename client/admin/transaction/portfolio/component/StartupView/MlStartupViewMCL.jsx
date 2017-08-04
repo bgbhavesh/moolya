@@ -135,16 +135,9 @@ export default class MlStartupViewAboutUs extends React.Component {
   render(){
 
     return (
-      <div className="admin_main_wrap">
-        <div className="admin_padding_wrap portfolio-main-wrap" id="annotatorContent">
+        <div className="portfolio-main-wrap" id="annotatorContent">
           <h2>MCL</h2>
-          <div className="main_wrap_scroll" id="annotatorContent">
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
+
               <div className="col-md-6 col-sm-6 nopadding-left">
                 <div className="panel panel-default panel-form-view">
                   <div className="panel-heading">Membership </div>
@@ -180,13 +173,10 @@ export default class MlStartupViewAboutUs extends React.Component {
                 </div>
 
 
-              </div>
-            </ScrollArea>
           </div>
         </div>
 
 
-      </div>
     )
   }
 }

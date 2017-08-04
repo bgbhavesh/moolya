@@ -44,6 +44,14 @@ export default class MlIdeatorDetails extends React.Component{
     var WinHeight = $(window).height();
     $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
     initalizeFloatLabel();
+
+
+    var WinWidth = $(window).width();
+    var WinHeight = $(window).height();
+    $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
+    if(WinWidth > 768){
+      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    }
   }
   componentWillMount(){
     this.fetchPortfolioDetails();
@@ -172,15 +180,9 @@ export default class MlIdeatorDetails extends React.Component{
 
         <div>
           <h2>Ideator</h2>
-
+          <div className="tab_wrap_scroll">
           <div className="col-md-6 nopadding-left">
-            <div className="left_wrap">
-              <ScrollArea
-                speed={0.8}
-                className="left_wrap"
-                smoothScrolling={true}
-                default={true}
-              >
+
                 <div className="form_bg">
                   <form id="ideatorDetails">
                     <div className="form-group">
@@ -218,18 +220,10 @@ export default class MlIdeatorDetails extends React.Component{
                     </div>
                   </form>
                 </div>
-              </ScrollArea>
-            </div>
           </div>
 
           <div className="col-md-6 nopadding-right">
-            <div className="left_wrap">
-              <ScrollArea
-                speed={0.8}
-                className="left_wrap"
-                smoothScrolling={true}
-                default={true}
-              >
+
                 <div className="form_bg">
                   <form>
 
@@ -273,10 +267,8 @@ export default class MlIdeatorDetails extends React.Component{
 
                   </form>
                 </div>
-              </ScrollArea>
-            </div>
           </div>
-
+        </div>
       </div>)}
       </div>
     )

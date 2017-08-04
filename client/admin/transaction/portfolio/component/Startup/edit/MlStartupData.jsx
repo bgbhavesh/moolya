@@ -20,20 +20,22 @@ export default class MlStartupData extends React.Component{
       }
     });
 
+    var WinWidth = $(window).width();
+    var WinHeight = $(window).height();
+
+    $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
+    if(WinWidth > 768){
+      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    }
 
   }
   render(){
     return (
       <div>
-        <div className="admin_padding_wrap portfolio-main-wrap">
+        <div className="portfolio-main-wrap">
           <h2>Data</h2>
-          <div className="main_wrap_scroll">
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
+          <div className="tab_wrap_scroll">
+
               <div className="col-md-6 col-sm-6 nopadding-left">
                 <div className="panel panel-default panel-form-view">
                   <div className="panel-heading">Balance Sheet <span className="triangle-topright"><FontAwesome name='minus'/></span></div>
@@ -175,7 +177,6 @@ export default class MlStartupData extends React.Component{
 
                 </div>
               </div>
-            </ScrollArea>
           </div>
         </div>
 

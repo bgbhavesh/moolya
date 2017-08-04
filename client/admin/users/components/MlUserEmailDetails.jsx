@@ -7,7 +7,7 @@ import {findAddressBookActionHandler} from '../actions/findUserAddressBookHandle
 var FontAwesome = require('react-fontawesome');
 import gql from 'graphql-tag';
 
-export default class AppEmailDetails extends React.Component {
+export default class MlUserEmailDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

@@ -9,7 +9,7 @@ import Moolyaselect from  '../../commons/components/MlAdminSelectWrapper'
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import {findAddressBookActionHandler} from '../actions/findUserAddressBookHandler'
-export default class AppAddressDetails extends React.Component {
+export default class MlUserAddressDetails extends React.Component {
   constructor(props) {
     super(props);
     let addressInfoObject = {
@@ -19,7 +19,6 @@ export default class AppAddressDetails extends React.Component {
     }
     this.state = {
       loading: false,
-      activeTab : "active",
       details:this.props.addressInfoDetails,
       selectedValue: null,
       selectedTab: null,

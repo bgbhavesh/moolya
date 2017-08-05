@@ -86,7 +86,6 @@ export default class MlAppFunderCalendarSlots extends Component {
               <h3>{slot.slotTime}</h3>
               <div className="list_icon"><span className="ml ml-moolya-symbol"></span></div>
               <div className="block_footer">
-                <span>{slot.currentDate}</span>
                 <span>{slot.status === 0?"Available":slot.status===1?"Filling Fast":slot.status===2?"Busy":""}</span>
               </div>
             </div>

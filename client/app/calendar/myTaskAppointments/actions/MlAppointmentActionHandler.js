@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import _ from 'lodash';
 import {appClient} from '../../../core/appConnection';
 
 export async function fetchAllTaskActionHandler(profileId) {
@@ -104,6 +105,11 @@ export async function fetchActivitiesTeamsActionHandler(taskId, sessionId) {
     query: gql`
     query($taskId: String, $sessionId: String) {
       fetchActivitiesTeams(taskId: $taskId, sessionId: $sessionId) {
+        name
+        duration {
+          hours
+          minutes
+        }
         teams {
           resourceId
           resourceType
@@ -122,6 +128,61 @@ export async function fetchActivitiesTeamsActionHandler(taskId, sessionId) {
     },
     forceFetch: true
   });
-  const teams = result.data.fetchActivitiesTeams;
-  return teams;
+  const resp = result.data.fetchActivitiesTeams;
+  let data = _.omit(resp, '__typename')
+  let teamsArray = [];
+  let activities = [];
+  _.each(data,(activity) => {
+    let activityData = _.omit(activity, '__typename');
+    if (activity.teams && activity.teams.length > 0) {
+      _.each(activity.teams,function (item,say) {
+        let value = _.omit(item, '__typename')
+        teamsArray.push(value)
+      });
+    }
+    activityData.teams = teamsArray;
+    activities.push(activityData);
+  });
+  return activities;
 }
+
+export async function getTeamUsersActionHandler(officeId) {
+  const result = await appClient.query({
+    query: gql`
+      query ($officeId: String) {
+        getTeamUsers(officeId: $officeId) {
+          _id
+          name
+          userId
+          profileId
+          profileImage
+        }
+      }
+    `,
+    forceFetch:true,
+    variables: {
+      officeId:officeId
+    }
+  });
+  const teamMembers = result.data.getTeamUsers;
+  return teamMembers
+}
+
+export async function fetchOfficeActionHandler (Details) {
+  const result = await appClient.query({
+    query: gql`
+    query{
+      fetchOffice {
+        _id
+        officeName
+        branchType
+      }
+    }`,
+    variables: {
+      Details
+    }
+  });
+  const offices = result.data.fetchOffice;
+  return offices
+}
+

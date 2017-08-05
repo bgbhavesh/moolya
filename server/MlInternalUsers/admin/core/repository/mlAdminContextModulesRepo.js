@@ -643,6 +643,7 @@ let CoreModules = {
       'isCurrentVersion': true,
       'isReview': true
     };
+    let query = {};
     resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery, serverQuery), '$and');
     var service = MlServiceCardDefinition.find(resultantQuery, fieldsProj).fetch();
     var data = [];
@@ -656,7 +657,7 @@ let CoreModules = {
         });
       });
     });
-    var totalRecords = MlServiceCardDefinition.find({}).count();
+    var totalRecords = mlDBController.find('MlServiceCardDefinition', serverQuery, context, fieldsProj).count();
     return {totalRecords: totalRecords, data: data};
   },
   MlHierarchyClusterRepo: (requestParams, userFilterQuery, contextQuery, fieldsProj, context) => {

@@ -60,19 +60,6 @@ let transactionsSchema = `
       community                 : String
     }
     
-    type UserTransactions{
-            _id : String
-            status : String         
-            transactionId : String          
-            transactionType : String   
-            createdAt : Date
-            updatedBy : String
-            cluster: String               
-            chapter: String               
-            subChapter: String            
-            community: String
-    }
-    
     type TransactionsLog{
        _id                      : String
       userId                    : String
@@ -204,7 +191,6 @@ let transactionsSchema = `
       fetchTransactionsLog(userId:String,transactionTypeName:String):[TransactionsLog]
       validateTransaction(transactionId:String,collection:String,assignedUserId:String):response
       validateAssignmentsDataContext(data:[transactionData],userId:String):response
-      findUserTransactionLogs(registrationId:String, portfolioId:String):[UserTransactions]
     }
 `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], transactionsSchema]);
@@ -213,7 +199,6 @@ let supportedApi = [
   {api:'fetchTransactionsByUser', actionName:'READ', moduleName:"TRANSACTIONSLOG"},
   {api:'fetchTransactions', actionName:'READ', moduleName:"TRANSACTIONSLOG"},
   {api:'fetchTransactionsLog', actionName:'READ', moduleName:"TRANSACTIONSLOG"},
-  {api:'findUserTransactionLogs', actionName:'READ', moduleName:"TRANSACTIONSLOG"},
 
   {api:'createTransactionLog', actionName:'CREATE', moduleName:"TRANSACTIONSLOG"},
   {api:'createTransaction', actionName:'CREATE', moduleName:"TRANSACTIONSLOG"},

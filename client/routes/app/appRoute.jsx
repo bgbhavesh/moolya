@@ -80,6 +80,7 @@ import {mlAppFunderConfig2} from "../../app/funders/config/mlAppFunderConfig2";
  * Import My Appointment routes
  */
 import MlAppMyAppointment from '../../app/calendar/myAppointments/components/MlAppMyAppointment';
+import MlAppMyTaskAppointment from '../../app/calendar/myTaskAppointments/containers/MlAppMyTaskAppointments';
 
 export const appSection = FlowRouter.group({
   prefix: "/app",
@@ -534,6 +535,14 @@ appSection.route('/myAppointment', {
   name: 'myAppointment',
   action(params){
     mount(AppLayout,{appContent:< MlAppMyAppointment />, isProfileMenu: true})
+  }
+  /**there is no need to send community type other than ideator*/
+});
+
+appSection.route('/myTaskAppointment', {
+  name: 'myTaskAppointment',
+  action(params){
+    mount(AppLayout,{appContent:< MlAppMyTaskAppointment />, isProfileMenu: true})
   }
   /**there is no need to send community type other than ideator*/
 });

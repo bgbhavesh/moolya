@@ -374,43 +374,43 @@ MlResolver.MlQueryResolver['validateAssignmentsDataContext'] = (obj, args, conte
 }
 
 
-MlResolver.MlQueryResolver['findUserTransactionLogs'] = (obj, args, context, info) => {
-  var result = [];
-  var reg = mlDBController.findOne('MlRegistration', {'_id':args.registrationId} , context)
-
-  let pipeline = [{
-    '$match': {_id: reg.registrationInfo.userId}},
-    {'$lookup': {from: 'mlRegistration',localField: '_id',foreignField: 'registrationInfo.userId',as: 'registration'}},
-    {'$lookup':{from:'mlPortfolioDetails',localField:'_id',foreignField:'userId', as:'portfolio'}},
-    {'$lookup':{from:'mlTransactionsLog',localField:'_id',foreignField:'userId', as:'transactionLog'}},
-    {'$project':{"registration":{
-      '$map':
-        { "input":"$registration", "as":"reg", 'in':
-          { "createdAt" :"$$reg.registrationInfo.registrationDate", "transactionId":"$$reg._id" ,"transactionType":"$$reg.registrationInfo.transactionType", "cluster":'$$reg.registrationInfo.clusterName', "chapter":'$$reg.registrationInfo.chapterName', "community":'$$reg.registrationInfo.communityName', "status":'$$reg.status'}
-        }
-    },
-      "portfolio":{
-        '$map':
-          { "input":"$portfolio", "as":"port", 'in':
-            { "createdAt" :"$$port.createdAt", "transactionId":"$$port._id" ,"transactionType":"$$port.transactionType", "cluster":'$$port.clusterName', "chapter":'$$port.chapterName', "community":'$$port.communityName', "status":'$$port.status'}
-          }
-      },
-      "transactionLog":{
-        '$map':
-          { "input":"$transactionLog", "as":"trans", 'in':
-            { "createdAt" :"$$trans.createdAt", "transactionId":"$$trans._id" ,"transactionType":"$$trans.transactionTypeName", "cluster":'$$trans.clusterName', "chapter":'$$trans.chapterName', "community":'$$trans.communityName', "status":'$$trans.activity'}
-          }
-      },
-    }},
-    {'$project': {data: { "$concatArrays" : [ "$registration", "$portfolio", "$transactionLog" ] } }},
-    // {'$addFields': { 'data.totalRecords': { $size: "$data" } } },
-    {"$unwind" : "$data"},
-    {"$replaceRoot": { newRoot: "$data"}}
-  ];
-
-  result = mlDBController.aggregate('users', pipeline, context);
-  // if(reg.registrationInfo.userId)
-  //   result = mlDBController.find('MlTransactionsLog', {'userId':reg.registrationInfo.userId} , context).fetch();
-
-  return result;
-}
+// MlResolver.MlQueryResolver['findUserTransactionLogs'] = (obj, args, context, info) => {
+//   var result = [];
+//   var reg = mlDBController.findOne('MlRegistration', {'_id':args.registrationId} , context)
+//
+//   let pipeline = [{
+//     '$match': {_id: reg.registrationInfo.userId}},
+//     {'$lookup': {from: 'mlRegistration',localField: '_id',foreignField: 'registrationInfo.userId',as: 'registration'}},
+//     {'$lookup':{from:'mlPortfolioDetails',localField:'_id',foreignField:'userId', as:'portfolio'}},
+//     {'$lookup':{from:'mlTransactionsLog',localField:'_id',foreignField:'userId', as:'transactionLog'}},
+//     {'$project':{"registration":{
+//       '$map':
+//         { "input":"$registration", "as":"reg", 'in':
+//           { "createdAt" :"$$reg.registrationInfo.registrationDate", "transactionId":"$$reg._id" ,"transactionType":"$$reg.registrationInfo.transactionType", "cluster":'$$reg.registrationInfo.clusterName', "chapter":'$$reg.registrationInfo.chapterName', "community":'$$reg.registrationInfo.communityName', "status":'$$reg.status'}
+//         }
+//     },
+//       "portfolio":{
+//         '$map':
+//           { "input":"$portfolio", "as":"port", 'in':
+//             { "createdAt" :"$$port.createdAt", "transactionId":"$$port._id" ,"transactionType":"$$port.transactionType", "cluster":'$$port.clusterName', "chapter":'$$port.chapterName', "community":'$$port.communityName', "status":'$$port.status'}
+//           }
+//       },
+//       "transactionLog":{
+//         '$map':
+//           { "input":"$transactionLog", "as":"trans", 'in':
+//             { "createdAt" :"$$trans.createdAt", "transactionId":"$$trans._id" ,"transactionType":"$$trans.transactionTypeName", "cluster":'$$trans.clusterName', "chapter":'$$trans.chapterName', "community":'$$trans.communityName', "status":'$$trans.activity'}
+//           }
+//       },
+//     }},
+//     {'$project': {data: { "$concatArrays" : [ "$registration", "$portfolio", "$transactionLog" ] } }},
+//     // {'$addFields': { 'data.totalRecords': { $size: "$data" } } },
+//     {"$unwind" : "$data"},
+//     {"$replaceRoot": { newRoot: "$data"}}
+//   ];
+//
+//   result = mlDBController.aggregate('users', pipeline, context);
+//   // if(reg.registrationInfo.userId)
+//   //   result = mlDBController.find('MlTransactionsLog', {'userId':reg.registrationInfo.userId} , context).fetch();
+//
+//   return result;
+// }

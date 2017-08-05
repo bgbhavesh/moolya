@@ -469,8 +469,7 @@ MlResolver.MlMutationResolver["bookTaskInternalAppointment"] = (obj, args, conte
       resourceId: taskId,
       taskId: taskId,
       taskName: taskId.displayName,
-      sessionId: sessionId,
-      serviceOrderId: orderId
+      sessionId: sessionId
     },
     status: 'Pending',
     isCancelled: false,
@@ -505,6 +504,92 @@ MlResolver.MlMutationResolver["bookTaskInternalAppointment"] = (obj, args, conte
       };
       let resp = mlDBController.insert('MlAppointmentMembers', attendeeData, context);
     });
+
+    let code = 200;
+    let response = new MlRespPayload().successPayload("Appointment book successfully", code);
+    return response;
+  }
+};
+
+MlResolver.MlMutationResolver["selfTaskInternalAppointment"] = (obj, args, context, info) => {
+  let day = args.selfInternalAppointmentInfo.day; //date.getDate();
+  let month = args.selfInternalAppointmentInfo.month; //date.getMonth();
+  let year = args.selfInternalAppointmentInfo.year; //date.getFullYear();
+  let hours = args.selfInternalAppointmentInfo.hours; //9;
+  let minutes = args.selfInternalAppointmentInfo.minutes; // 0;
+
+  let taskDetails = args.selfInternalAppointmentInfo.taskDetails;
+
+  let taskId = mlDBController.insert('MlAppointmentTask', taskDetails, context);
+
+  let startDate = new Date();
+  date.setDate(day);
+  date.setMonth(month);
+  date.setYear(year);
+  date.setHours(hours);
+  date.setMinutes(minutes);
+  date.setSeconds(0,0);
+
+  session.duration = taskDetails.duration ? taskDetails.duration : {}
+
+  let sessionHours = taskDetails.duration.hours ? taskDetails.duration.hours : 0;
+  let sessionMinutes = taskDetails.duration.minutes ? taskDetails.duration.minutes : 0;
+
+  let endDate = new Date(startDate);
+  endDate.setHours(hours+sessionHours);
+  endDate.setMinutes(minutes+sessionMinutes);
+
+  let userId = context.userId;
+  let profileId = new MlUserContext().userProfileDetails(userId).profileId;
+
+  let appointmentData = {
+    appointmentType: 'SELF-TASK',
+    startDate: startDate,
+    endDate: endDate,
+    duration: taskDetails.duration ? taskDetails.duration : {},
+    timeZone: '+05:30', //to do
+    provider: {
+      userId: userId,
+      profileId: profileId
+    },
+    appointmentInfo: {
+      resourceType: 'Task',
+      resourceId: taskId,
+      taskId: taskId,
+      taskName: taskDetails.name,
+    },
+    status: 'Pending',
+    isCancelled: false,
+    isSelf: true,
+    isRescheduled: false,
+    isInternal: true,
+    createdAt: new Date(),
+    createdBy: userId
+  };
+
+  orderNumberGenService.createAppointmentId(appointmentData);
+
+  let result = mlDBController.insert('MlAppointments', appointmentData, context);
+
+  if(result){
+
+    /**
+     * Insert provider data as appointment member
+     */
+    let providerData = {
+      appointmentId: appointmentData.appointmentId,
+      appointmentUniqueId: result,
+      userId: userId,
+      profileId: profileId,
+      status: 'Accepted',
+      isProvider: true,
+      isClient: false,
+      isAttendee: false,
+      createdAt: new Date(),
+      createdBy: userId
+    };
+    let resp = mlDBController.insert('MlAppointmentMembers', providerData, context);
+
 
     let code = 200;
     let response = new MlRespPayload().successPayload("Appointment book successfully", code);

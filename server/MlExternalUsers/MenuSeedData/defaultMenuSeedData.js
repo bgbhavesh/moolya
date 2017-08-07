@@ -19,7 +19,7 @@ if(Meteor.isServer){
                 "link": "/app/ideator",
                 "isLink" : true,
                 "isMenu" : true,
-                "name" : "Ideator",
+                "name" : "Ideators",
                 "uniqueId" : "ideator"
             },
             {
@@ -27,7 +27,7 @@ if(Meteor.isServer){
                 "link": "/app/startup",
                 "isLink" : true,
                 "isMenu" : true,
-                "name" : "Startup",
+                "name" : "Startups",
                 "uniqueId" : "startup"
             },
 
@@ -36,7 +36,7 @@ if(Meteor.isServer){
                 "link": "/app/funder",
                 "isLink" : true,
                 "isMenu" : true,
-                "name" : "Funder",
+                "name" : "Funders",
                 "uniqueId" : "funder"
             },
             // {
@@ -52,7 +52,7 @@ if(Meteor.isServer){
                 "link": "/app/serviceProvider",
                 "isLink" : true,
                 "isMenu" : true,
-                "name" : "Service Provider",
+                "name" : "Service Providers",
                 "uniqueId" : "provider"
             },
 
@@ -61,7 +61,7 @@ if(Meteor.isServer){
                 "link": "/app/company",
                 "isLink" : true,
                 "isMenu" : true,
-                "name" : "Company",
+                "name" : "Companies",
                 "uniqueId" : "company"
             },
 
@@ -105,7 +105,7 @@ if(Meteor.isServer){
               "link": "/app/transaction",
               "isLink" : true,
               "isMenu" : true,
-              "name" : "My Transaction",
+              "name" : "My Transactions",
               "uniqueId" : "myTransaction"
             },
             // {

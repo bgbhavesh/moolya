@@ -73,7 +73,7 @@ export default class MlUsersAddressBook extends React.Component {
                       </div>
                       <div className="panel panel-default new_profile_tabs">
                         <div className="panel-heading">
-                          Email ID
+                          Email Id
                         </div>
                         <AppEmailDetails clusterId={clusterId} emailInfoDetails={emailInfo}  registerId = {registerId} profileId={profileId} registrationDetails={this.findAddressBook.bind(this)}/>
                       </div>

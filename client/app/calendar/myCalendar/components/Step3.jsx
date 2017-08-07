@@ -73,7 +73,7 @@ export default class Step3 extends Component{
             <div className="form_bg">
               <form>
                 <div className="form-group switch_wrap switch_names inline_switch">
-                  <label htmlFor="cancelable">Cancelation is Applicable</label>
+                  <label htmlFor="cancelable">Can be cancelled</label>
                   <span className={'state_label'}>Yes</span><label className="switch nocolor-switch">
                   <input id="cancelable" type="checkbox"/>
                   <div className="slider"></div>
@@ -81,7 +81,7 @@ export default class Step3 extends Component{
                   <span className={'state_label acLabel'}>No</span>
                 </div>
                 <div className="form-group switch_wrap switch_names inline_switch">
-                  <label htmlFor="schedulable">Is Reschedule allowable</label>
+                  <label htmlFor="schedulable">Can be rescheduled</label>
                   <span className={'state_label'}>Yes</span><label className="switch nocolor-switch">
                   <input id="schedulable" type="checkbox"/>
                   <div className="slider"></div>
@@ -95,13 +95,12 @@ export default class Step3 extends Component{
             <div className="form_bg">
               <form>
                 <div className="form-group">
-                  <label>Days before cancelation
-                    <input className="form-control inline_input medium_in" id="cancelationday"/>
-                  </label>
+                  <label>Can be cancelled &nbsp;<input className="form-control inline_input medium_in" id="cancelationday"/> days
+                    </label>
                 </div>
                 <br className="brclear"/>
                 <div className="form-group">
-                  <label>How many times <input className="form-control inline_input medium_in" id="rescheduler"/>
+                  <label>Can be rescheduled &nbsp;<input className="form-control inline_input medium_in" id="rescheduler"/> times
                   </label>
                 </div>
               </form>

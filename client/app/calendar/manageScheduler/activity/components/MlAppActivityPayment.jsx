@@ -210,7 +210,7 @@ export default class Step4 extends React.Component{
             <form>
               <div className="form-group">
                 <label>
-                  Enter payable amount Rs.
+                  Gross payable amount
                   <input type="Number" onChange={(e)=>this.payableAmount(e)}
                          value={ this.state.paymentData.amount ? this.state.paymentData.amount : '' }
                          className="form-control inline_input medium_in"/>
@@ -233,7 +233,7 @@ export default class Step4 extends React.Component{
                          disabled={!this.state.paymentData.isDiscount}
                          checked={ this.state.paymentData.discountType == "amount" ? true : false } onChange={this.updateDiscountType.bind(this)}/>
                   <label htmlFor="amountDiscount"><span><span></span></span>
-                    Amount Rs
+                    Amount
                     {this.state.paymentData.discountType === 'amount'?
                       <input className="form-control inline_input"
                              onChange={(evt)=>this.discountedAmount(evt)}
@@ -254,7 +254,7 @@ export default class Step4 extends React.Component{
               </div>
               <div className="form-group">
                 <label>
-                  Derived amount Rs.
+                  Net payable amount
                   <input className="form-control inline_input medium_in" value={this.state.paymentData.derivedAmount} disabled />
                 </label>
               </div>

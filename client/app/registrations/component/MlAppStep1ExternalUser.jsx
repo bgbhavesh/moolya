@@ -358,7 +358,7 @@ export default class MlAppStep1ExternalUser extends Component {
                     <div className="form-group mandatory">
                       <input type="text" ref="email"
                              defaultValue={that.state.registrationDetails && that.state.registrationDetails.email}
-                             placeholder="Email ID" className="form-control float-label"  disabled="true"
+                             placeholder="Email Id" className="form-control float-label"  disabled="true"
                              data-required={true} data-errMsg="Email Id is required"/>
                     </div>
                     <div className="form-group">

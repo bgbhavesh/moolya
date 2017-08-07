@@ -151,7 +151,7 @@ export default class MlServiceProviderViewMCL extends Component {
             >
               <div className="col-md-6 col-sm-6 nopadding-left">
                 <div className="panel panel-default panel-form-view">
-                  <div className="panel-heading">Membership</div>
+                  <div className="panel-heading">Memberships</div>
                   <div className="panel-body ">
 
                     {this.state.memberships && this.state.memberships.membershipDescription ? this.state.memberships.membershipDescription : ""}

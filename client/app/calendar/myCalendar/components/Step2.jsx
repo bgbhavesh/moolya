@@ -143,7 +143,7 @@ class MlAppServiceSelectTask extends Component{
           <br/>
           <div className="panel panel-default new_profile_tabs">
             <div className="panel-heading">
-              Add the tasks to the services created
+              Add Tasks
             </div>
             <div className="panel-body">
               <div className="ml_tabs ml_tabs_large">

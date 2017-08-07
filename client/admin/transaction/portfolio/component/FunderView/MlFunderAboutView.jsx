@@ -154,7 +154,7 @@ export default class MlFunderAboutView extends React.Component{
                           </div>
                           <div className="clearfix"></div>
                           <div className="panel panel-default mart20">
-                            <div className="panel-heading"> Investment Budget Per Years:</div>
+                            <div className="panel-heading"> Investment Budget Per Year:</div>
 
                             <div className="panel-body">
                               <div className="form-group">
@@ -200,7 +200,7 @@ export default class MlFunderAboutView extends React.Component{
                           </div>
 
                           <div className="form-group">
-                            <input type="text" placeholder="Fcebook Id" name="facebookUrl" defaultValue={this.state.data.facebookUrl} className="form-control float-label" id="cluster_name" disabled='disabled'/>
+                            <input type="text" placeholder="Facebook Id" name="facebookUrl" defaultValue={this.state.data.facebookUrl} className="form-control float-label" id="cluster_name" disabled='disabled'/>
                             <FontAwesome name='unlock' className="input_icon un_lock" id="isFacebookUrlPrivate" /><input type="checkbox" className="lock_input" checked={this.state.data.isFacebookUrlPrivate}/>
                           </div>
 

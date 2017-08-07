@@ -5,6 +5,7 @@ import FontAwesome from 'react-fontawesome';
 import Datetime from "react-datetime";
 import Moment from "moment";
 import ScrollArea from 'react-scrollbar';
+import MlAppTaskAppointmentUser from './MlAppTaskAppointmentUser';
 import {
   fetchActivitiesTeamsActionHandler,
   getTeamUsersActionHandler,
@@ -27,7 +28,6 @@ export default class MlTaskAppointmentSessions extends Component{
       {value: 'Monthly', label: 'Monthly'}
     ];
     this.setSession = this.setSession.bind(this);
-    this.getSessionDetails = this.getSessionDetails.bind(this);
   }
 
   componentWillMount() {
@@ -35,13 +35,13 @@ export default class MlTaskAppointmentSessions extends Component{
   }
 
   componentDidMount() {
-    let mySwiper = new Swiper('.manage_tasks', {
-      speed: 400,
-      spaceBetween:20,
-      slidesPerView:'auto',
-      pagination: '.swiper-pagination',
-      paginationClickable: true
-    });
+    // let mySwiper = new Swiper('.manage_tasks', {
+    //   speed: 400,
+    //   spaceBetween:20,
+    //   slidesPerView:'auto',
+    //   pagination: '.swiper-pagination',
+    //   paginationClickable: true
+    // });
   }
 
   /**
@@ -49,16 +49,29 @@ export default class MlTaskAppointmentSessions extends Component{
    * Desc   :: fetch the users of current team
    * @returns Void
    */
-  async getUsers(){
+  async getUsers(resp, index){
+    let {isSessionExpand} = this.state;
     const that = this;
+    let activities = resp || [];
 
-    let activities = this.state.activities;
-    activities = activities.map(async (activity) => {
-      let teams = await activity.teams && activity.teams.map(async function (team) {
-        if(team.resourceType == "office") {
-          const resp = await getTeamUsersActionHandler(team.resourceId);
-          console.log('---user--', resp);
-          let users = resp.map(function (user) {
+    let activityTeams = activities.map((activity) => {
+      activity.teams = activity.teams ? activity.teams : [];
+      let teams = activity.teams.map(async function (team) {
+        let response ;
+          if(team.resourceType == "office") {
+            response = await getTeamUsersActionHandler(team.resourceId);
+          }
+          return response;
+      });
+      return teams;
+    });
+
+    Promise.all(activityTeams.map(Promise.all, Promise)).then(values => {
+      console.log(values);
+      values.forEach(function (teams, index) {
+        let teamsInfo = teams.map(function (users, userIndex) {
+          let team = activities[index].teams[userIndex];
+          let usersInfo = users.map(function (user) {
             let userInfo = {
               name: user.name,
               profileId: user.profileId,
@@ -72,24 +85,59 @@ export default class MlTaskAppointmentSessions extends Component{
             }
             return userInfo;
           });
-          team.users = users;
-        }
-        return team;
+          return usersInfo;
+        });
+        activities[index].teams =  teamsInfo;
       });
-      activity.teams = teams;
-      return activity;
+      console.log(activities);
+      that.setState({
+        activities : activities,
+        isSessionExpand: !isSessionExpand,
+        index: index
+      });
     });
+
+
+    // console.log('activityTeams', activityTeams);
+
+    //activities = activities.map(async (activity) => {
+    //   let teams = await activity.teams && activity.teams.map(async function (team) {
+    //     if(team.resourceType == "office") {
+    //       const resp = await getTeamUsersActionHandler(team.resourceId);
+    //       let users = resp.map(function (user) {
+    //         let userInfo = {
+    //           name: user.name,
+    //           profileId: user.profileId,
+    //           profileImage: user.profileImage,
+    //           userId: user.userId
+    //         };
+    //         let isFind = team.users.find(function (teamUser){ return teamUser.profileId == user.profileId && teamUser.userId == user.userId });
+    //         if(isFind) {
+    //           userInfo.isAdded = true;
+    //           userInfo.isMandatory = isFind.isMandatory;
+    //         }
+    //         return userInfo;
+    //       });
+    //       team.users = users;
+    //       return team;
+    //     } else {
+    //       return team;
+    //     }
+    //   });
+    //  return activity;
+    //});
 
     /**
      * Resolve the promise
      */
-    console.log('activities', activities);
-    Promise.all(activities).then(function(value) {
-      console.log('Values: ',value);
-      that.setState({
-        activities : value
-      });
-    });
+    // Promise.all(activities).then(function(value) {
+    //   console.log('----promise--', index);
+    //   that.setState({
+    //     activities : value,
+    //     isSessionExpand: !isSessionExpand,
+    //     index: index
+    //   });
+    // });
 
   }
 
@@ -115,149 +163,10 @@ export default class MlTaskAppointmentSessions extends Component{
     const {isSessionExpand} = this.state;
     let {selectedTaskId} = this.props;
     const resp = await fetchActivitiesTeamsActionHandler(selectedTaskId, sessionId);
-    if (resp) {
-      console.log('---resp--', resp);
-      this.setState({
-        activities: resp,
-        isSessionExpand: !isSessionExpand,
-        index: index
-      }, () => {
-        this.getUsers();
-      })
+    if(resp){
+      this.getUsers(resp, index);
     }
   }
-
-  getSessionDetails() {
-    const {activities} = this.state;
-    const that = this;
-    console.log('----activities--', activities);
-    return (
-      <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
-        <div className="col-md-12 nopadding-left">
-          <div className="form_bg">
-            <form>
-              <div className="form-group">
-                <label>{`Session ${this.state.index + 1}`}</label>
-              </div>
-            </form>
-          </div>
-        </div>
-        <div className="col-md-6 pull-right">
-          <div className="form_bg">
-            <form>
-              <div className="form-group">
-                <label>Time: &nbsp;
-                  <input type="text"
-                         className="form-control inline_input"
-                         disabled={true}
-                         value={1}  /> Hours
-                  <input type="text"
-                         className="form-control inline_input"
-                         disabled={true}
-                         value={2}  /> Mins
-                </label>
-              </div>
-            </form>
-          </div>
-        </div>
-        <div className="col-md-12 nopadding-right">
-          <div className="form_bg">
-            <form>
-              {activities && activities.map((activity) => {
-                return (
-                  <div>
-                    <div className="col-md-5">
-                      <div className="form-group">
-                        <label>Activity Name</label>
-                        <input type="text"
-                               placeholder="Activity Name"
-                               className="form-control float-label"
-                               id="name"
-                               defaultValue={activity.name} />
-                      </div>
-                    </div>
-                    <br/>
-                    <div className="form-group pull-right">
-                      <label>Time: &nbsp;
-                        <input type="text"
-                               className="form-control inline_input"
-                               disabled={true}
-                               defaultValue={activity.duration && activity.duration.hours} /> Hours
-                        <input type="text"
-                               className="form-control inline_input"
-                               disabled={true}
-                               defaultValue={activity.duration && activity.duration.minutes} /> Mins
-                      </label>
-                    </div>
-                    <br className="brclear" />Attendees<br className="brclear" />
-                    {
-                      activity.teams && activity.teams.map(function (team, index) {
-                        return (
-                          <div className="col-md-12 pull-left" key={index}>
-                            <div className="panel panel-default library-wrap">
-                              <div className="panel-body nopadding">
-                                <br className="brclear" />
-                                <form>
-                                  <div className="col-md-4">
-                                    <div className="form-group">
-                                      <span className="placeHolder active">Choose team Type</span>
-                                      <select defaultValue="chooseTeam" value={ team.resourceType == 'office' && team.resourceId ? team.resourceId : team.resourceType } className="form-control" onChange={(evt)=>that.chooseTeamType(evt, index)}>
-                                        <option value="chooseTeam" disabled="disabled">Choose team Type</option>
-                                        <option value="connections">My Connections</option>
-                                        <option hidden={!that.state.isExternal} disabled={!that.state.isExternal} value="moolyaAdmins">Moolya Admins</option>
-                                        {that.state.offices.map(function (office , index) {
-                                          return <option key={index} hidden={!that.state.isInternal} disabled={!that.state.isInternal} value={office._id}>{ office.officeName + " - " + office.branchType }</option>
-                                        })}
-                                      </select>
-                                    </div>
-                                  </div>
-                                  <div className="col-md-8 att_members">
-                                    <ul className="users_list">
-                                      {team.users.map(function (user, userIndex) {
-                                        return (
-                                          <li key={userIndex}>
-                                            <a href="">
-                                              <img src={user.profileImage ? user.profileImage : "/images/def_profile.png"} /><br />
-                                              <div className="tooltiprefer">
-                                                <span>{user.name}</span>
-                                              </div>
-                                              <span className="member_status" onClick={() => that.addUser(index, userIndex)}>
-                      { user.isAdded ? <FontAwesome name="check" /> : <FontAwesome name="plus" /> }
-                    </span>
-                                            </a>
-                                            <div className="input_types">
-                                              <br />
-                                              <input id={"mandatory"+index+userIndex} checked={ user.isMandatory ? true : false } name="Mandatory" type="checkbox" value="Mandatory" onChange={(evt)=>that.updateIsMandatory(evt, index, userIndex)} />
-                                              <label htmlFor={"mandatory"+index+userIndex}>
-                                                <span><span></span></span>
-                                                Mandatory
-                                              </label>
-                                            </div>
-                                          </li>
-                                        )
-                                      })}
-                                    </ul>
-                                  </div>
-                                </form>
-                              </div>
-                            </div>
-                          </div>
-                        )
-                      })
-                    }
-                  </div>
-                )
-              })
-              }
-            </form>
-            {/* Attandees*/}
-          </div>
-        </div>
-        <br className="brclear"/>
-      </ScrollArea>
-    )
-  }
-
   /**
    * Method :: getSessionList
    * Desc :: List of task session
@@ -332,6 +241,8 @@ export default class MlTaskAppointmentSessions extends Component{
    */
   render() {
     let isSessionExpand = this.state.isSessionExpand;
+    const {activities, index, isExternal, isInternal, offices} = this.state;
+    console.log('-----123--', activities, index, isSessionExpand);
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
@@ -343,7 +254,11 @@ export default class MlTaskAppointmentSessions extends Component{
               </div>
             </div>
             :
-            <div>{this.getSessionDetails()}</div>
+            <MlAppTaskAppointmentUser activities={activities}
+                                      index={index}
+                                      isExternal={isExternal}
+                                      isInternal={isInternal}
+                                      offices={offices}/>
           }
         </ScrollArea>
       </div>

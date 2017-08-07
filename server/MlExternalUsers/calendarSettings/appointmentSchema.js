@@ -146,7 +146,7 @@ let appointment=`
   type Mutation {
      bookUserServiceCard(serviceId: String!, taskDetails: [tasks]):response
      bookTaskInternalAppointment( taskInternalAppointmentInfo: taskInternalAppointmentInfo ) : response
-     selfTaskInternalAppointment( selfInternalAppointmentInfo: selfInternalAppointmentInfo ) : response
+     bookSelfTaskInternalAppointment( selfInternalAppointmentInfo: selfInternalAppointmentInfo ) : response
      userServiceCardPayment(userServiceCardPaymentInfo: userServiceCardPaymentInfo): response
      bookUserServiceCardAppointment(userServiceCardAppointmentInfo: userServiceCardAppointmentInfo!): response
   }

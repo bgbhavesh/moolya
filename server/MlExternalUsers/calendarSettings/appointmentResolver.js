@@ -511,7 +511,7 @@ MlResolver.MlMutationResolver["bookTaskInternalAppointment"] = (obj, args, conte
   }
 };
 
-MlResolver.MlMutationResolver["selfTaskInternalAppointment"] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver["bookSelfTaskInternalAppointment"] = (obj, args, context, info) => {
   let day = args.selfInternalAppointmentInfo.day; //date.getDate();
   let month = args.selfInternalAppointmentInfo.month; //date.getMonth();
   let year = args.selfInternalAppointmentInfo.year; //date.getFullYear();

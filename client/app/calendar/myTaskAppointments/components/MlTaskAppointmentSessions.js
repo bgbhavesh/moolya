@@ -53,11 +53,25 @@ export default class MlTaskAppointmentSessions extends Component{
     let {isSessionExpand} = this.state;
     const that = this;
     let activities = resp || [];
-    activities = activities.map(async (activity) => {
-      let teams = await activity.teams && activity.teams.map(async function (team) {
-        if(team.resourceType == "office") {
-          const resp = await getTeamUsersActionHandler(team.resourceId);
-          let users = resp.map(function (user) {
+
+    let activityTeams = activities.map((activity) => {
+      activity.teams = activity.teams ? activity.teams : [];
+      let teams = activity.teams.map(async function (team) {
+        let response ;
+          if(team.resourceType == "office") {
+            response = await getTeamUsersActionHandler(team.resourceId);
+          }
+          return response;
+      });
+      return teams;
+    });
+
+    Promise.all(activityTeams.map(Promise.all, Promise)).then(values => {
+      console.log(values);
+      values.forEach(function (teams, index) {
+        let teamsInfo = teams.map(function (users, userIndex) {
+          let team = activities[index].teams[userIndex];
+          let usersInfo = users.map(function (user) {
             let userInfo = {
               name: user.name,
               profileId: user.profileId,
@@ -71,26 +85,59 @@ export default class MlTaskAppointmentSessions extends Component{
             }
             return userInfo;
           });
-          team.users = users;
-          return team;
-        } else {
-          return team;
-        }
+          return usersInfo;
+        });
+        activities[index].teams =  teamsInfo;
       });
-      return activity;
-    });
-
-    /**
-     * Resolve the promise
-     */
-    Promise.all(activities).then(function(value) {
-      console.log('----promise--', index);
+      console.log(activities);
       that.setState({
-        activities : value,
+        activities : activities,
         isSessionExpand: !isSessionExpand,
         index: index
       });
     });
+
+
+    // console.log('activityTeams', activityTeams);
+
+    //activities = activities.map(async (activity) => {
+    //   let teams = await activity.teams && activity.teams.map(async function (team) {
+    //     if(team.resourceType == "office") {
+    //       const resp = await getTeamUsersActionHandler(team.resourceId);
+    //       let users = resp.map(function (user) {
+    //         let userInfo = {
+    //           name: user.name,
+    //           profileId: user.profileId,
+    //           profileImage: user.profileImage,
+    //           userId: user.userId
+    //         };
+    //         let isFind = team.users.find(function (teamUser){ return teamUser.profileId == user.profileId && teamUser.userId == user.userId });
+    //         if(isFind) {
+    //           userInfo.isAdded = true;
+    //           userInfo.isMandatory = isFind.isMandatory;
+    //         }
+    //         return userInfo;
+    //       });
+    //       team.users = users;
+    //       return team;
+    //     } else {
+    //       return team;
+    //     }
+    //   });
+    //  return activity;
+    //});
+
+    /**
+     * Resolve the promise
+     */
+    // Promise.all(activities).then(function(value) {
+    //   console.log('----promise--', index);
+    //   that.setState({
+    //     activities : value,
+    //     isSessionExpand: !isSessionExpand,
+    //     index: index
+    //   });
+    // });
 
   }
 
@@ -116,7 +163,9 @@ export default class MlTaskAppointmentSessions extends Component{
     const {isSessionExpand} = this.state;
     let {selectedTaskId} = this.props;
     const resp = await fetchActivitiesTeamsActionHandler(selectedTaskId, sessionId);
-    await this.getUsers(resp, index);
+    if(resp){
+      this.getUsers(resp, index);
+    }
   }
   /**
    * Method :: getSessionList

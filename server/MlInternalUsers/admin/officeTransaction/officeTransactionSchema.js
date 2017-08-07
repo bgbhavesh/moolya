@@ -94,10 +94,16 @@ let officeTransaction = `
       userId: String
       createdAt: String
       transactionId: String
+      transactionType: String,
       username: String
       firstName: String
       lastName: String
-      transactionType: String
+      updatedBy : String
+      cluster: String               
+      chapter: String               
+      subChapter: String            
+      community: String
+      status : String
     }
 
     

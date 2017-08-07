@@ -171,6 +171,13 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       // requestParams.type = 'users';
       result = CoreModulesRepo.MlUsersRepo(requestParams, userFilterQuery, contextQuery, findOptions, context);
       break;
+    case 'userTransaction':
+      /**merging the user repo to the users module*/
+      requestParams = args.context || {};
+      /**type can be used for different list view config*/
+      // requestParams.type = 'users';
+      result = CoreModulesRepo.MlUsersTransaction(requestParams, userFilterQuery, contextQuery, findOptions, context);
+      break;
   }
 
   return {totalRecords:result.totalRecords||0,data:result.data||[]};
@@ -208,6 +215,7 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "serviceCards":resolveType='AdminService';break;
       case "clusterHierarchy":resolveType='Cluster';break;
       case "hierarchyDepartments":resolveType='DepartmentAndSubDepartmentDetails';break;
+      case "userTransaction":resolveType='myTransaction';break;
     }
 
     if(resolveType){

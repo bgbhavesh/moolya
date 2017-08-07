@@ -36,6 +36,49 @@ let appointment=`
     year: Int!
   }
   
+  input appointmentExtraUser {
+    userId: String
+    profileId: String
+  }
+  
+  input taskInternalAppointmentInfo {
+    taskId: String!
+    sessionId: String!
+    hours: Int!
+    minutes: Int!
+    day: Int!
+    month: Int!
+    year: Int!
+    extraUsers: [appointmentExtraUser] 
+  }
+  
+  input appointmentDuration {
+    hours: String
+    minutes: String
+  }
+  
+  input appointmentTaskInfo {
+    profileId: String!
+    name: String!
+    mode: String
+    about: String
+    industries: [String]
+    conversation: [String]
+    duration: appointmentDuration!
+    frequency: String
+    expectedInput: String
+    expectedOutput: String
+  }
+  
+  input selfInternalAppointmentInfo {
+    hours: Int!
+    minutes: Int!
+    day: Int!
+    month: Int!
+    year: Int!
+    taskDetails: appointmentTaskInfo!
+  }
+  
   type AppointmentUser {
     userId: String
     profileId: String
@@ -94,6 +137,8 @@ let appointment=`
   
   type Mutation {
      bookUserServiceCard(serviceId: String!, taskDetails: [tasks]):response
+     bookTaskInternalAppointment( taskInternalAppointmentInfo: taskInternalAppointmentInfo ) : response
+     selfTaskInternalAppointment( selfInternalAppointmentInfo: selfInternalAppointmentInfo ) : response
      userServiceCardPayment(userServiceCardPaymentInfo: userServiceCardPaymentInfo): response
      bookUserServiceCardAppointment(userServiceCardAppointmentInfo: userServiceCardAppointmentInfo!): response
   }

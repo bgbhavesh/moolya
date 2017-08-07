@@ -75,6 +75,21 @@
      displayName: String
      duration : Duration
    }
+   type Activity {
+     name: String
+     duration : Duration
+     teams: [ActivityTeams]
+   }
+   type ActivityTeams {
+      resourceType: String
+      resourceId: String
+      users: [UserProfileDetails]
+   }
+   type UserProfileDetails{
+      userId: String
+      profileId: String
+      isMandatory: Boolean
+   }
    type ServiceTask {
       _id: String
       userId: String
@@ -159,6 +174,7 @@
           fetchTaskDetailsForAdminServiceCard(profileId:String, serviceId: String):[ServiceTask]
           fetchTasksInBooking(id: [String]): [Task]
           fetchTaskForApointment(taskId: String): ServiceTask
+          fetchActivitiesTeams(taskId: String, sessionId: String): [Activity]
    }
 
    type Mutation {
@@ -181,6 +197,7 @@
     {api:'createTask', actionName:'CREATE', moduleName:"OFFICE", isAppWhiteList: true},
     {api:'updateTask', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList: true},
     {api:'fetchTaskForApointment', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
+    {api:'fetchActivitiesTeams', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
   ]
   MlResolver.MlModuleResolver.push(supportedApi)
 // termsAndCondition: TermsAndCondition

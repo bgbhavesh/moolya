@@ -94,8 +94,8 @@ export async function fetchTaskActionHandler(taskId) {
   let attachmentArray = []
   _.each(data.attachments,function (item,say) {
     let value = _.omit(item, '__typename')
-    attachmentArray.push(value)
-  })
+    attachmentArray.push(value);
+  });
   data.attachments = attachmentArray
   return data;
 }
@@ -133,9 +133,9 @@ export async function fetchActivitiesTeamsActionHandler(taskId, sessionId) {
   let activities = [];
   _.each(data,(activity) => {
     let activityData = _.omit(activity, '__typename');
+    let teamsArray = [];
     if (activity.teams && activity.teams.length > 0) {
       _.each(activity.teams,function (item,say) {
-        let teamsArray = [];
         let value = _.omit(item, '__typename');
         let userArray = [];
         if (item.users && item.users.length > 0) {
@@ -146,8 +146,8 @@ export async function fetchActivitiesTeamsActionHandler(taskId, sessionId) {
         }
         value.users = userArray;
         teamsArray.push(value)
-        activityData.teams = teamsArray;
       });
+      activityData.teams = teamsArray;
     }
     activities.push(activityData);
   });
@@ -192,5 +192,23 @@ export async function fetchOfficeActionHandler (Details) {
   });
   const offices = result.data.fetchOffice;
   return offices
+}
+
+export async function bookTaskInternalAppointment(taskInternalAppointmentInfo) {
+  const result = await appClient.mutate({
+    mutation: gql`
+    mutation($taskInternalAppointmentInfo: taskInternalAppointmentInfo){
+        bookTaskInternalAppointment(taskInternalAppointmentInfo: $taskInternalAppointmentInfo) {
+        success
+        code
+        result
+      }
+    }`,
+    variables: {
+      taskInternalAppointmentInfo
+    }
+  });
+  const task = result.data.bookTaskInternalAppointment;
+  return task;
 }
 

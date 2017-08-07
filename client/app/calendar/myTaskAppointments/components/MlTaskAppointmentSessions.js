@@ -18,6 +18,7 @@ export default class MlTaskAppointmentSessions extends Component{
     this.state = {
       isSessionExpand: true,
       activities: [],
+      selectedSessionId: '',
       isExternal: props.selectedTask.isExternal || false,
       isInternal: props.selectedTask.isInternal || false,
       offices : []
@@ -28,20 +29,12 @@ export default class MlTaskAppointmentSessions extends Component{
       {value: 'Monthly', label: 'Monthly'}
     ];
     this.setSession = this.setSession.bind(this);
+    this.chooseTeamType = this.chooseTeamType.bind(this);
+    this.addUser = this.addUser.bind(this);
   }
 
   componentWillMount() {
     this.getOffices();
-  }
-
-  componentDidMount() {
-    // let mySwiper = new Swiper('.manage_tasks', {
-    //   speed: 400,
-    //   spaceBetween:20,
-    //   slidesPerView:'auto',
-    //   pagination: '.swiper-pagination',
-    //   paginationClickable: true
-    // });
   }
 
   /**
@@ -49,7 +42,7 @@ export default class MlTaskAppointmentSessions extends Component{
    * Desc   :: fetch the users of current team
    * @returns Void
    */
-  async getUsers(resp, index){
+  async getUsers(resp, index, duration){
     let {isSessionExpand} = this.state;
     const that = this;
     let activities = resp || [];
@@ -93,7 +86,8 @@ export default class MlTaskAppointmentSessions extends Component{
       that.setState({
         activities : activities,
         isSessionExpand: !isSessionExpand,
-        index: index
+        index: index,
+        duration: duration
       });
     });
 
@@ -142,6 +136,63 @@ export default class MlTaskAppointmentSessions extends Component{
   }
 
   /**
+   * Method :: chooseTeamType
+   * Desc   :: update team type in specific team
+   * @param evt   :: Object  :: javascript event object
+   * @param index :: Integer :: Index of specific team
+   * @returns Void
+   */
+  async chooseTeamType(evt, activityIdx, teamIdx){
+    console.log('----evt---', evt.target.value);
+    let activities = this.state.activities;
+    if(evt.target.value == "connections") {
+      activities[activityIdx].teams[teamIdx].resourceType="connections";
+      delete activities[activityIdx].teams[teamIdx].resourceId;
+      activities[activityIdx].teams[teamIdx].users = [];
+    } else if (evt.target.value == "moolyaAdmins") {
+      activities[activityIdx].teams[teamIdx].resourceType="moolyaAdmins";
+      delete activities[activityIdx].teams[teamIdx].resourceId;
+      activities[activityIdx].teams[teamIdx].users = [];
+    } else {
+      let officeId = evt.target.value;
+      activities[activityIdx].teams[teamIdx].resourceType="office";
+      activities[activityIdx].teams[teamIdx].resourceId=evt.target.value;
+      const resp = await getTeamUsersActionHandler(officeId);
+      if(resp){
+        activities[activityIdx].teams[teamIdx].users = resp.map(function (user) {
+          return {
+            name: user.name,
+            profileId: user.profileId,
+            profileImage: user.profileImage,
+            userId: user.userId
+          }
+        });
+
+      }
+    }
+    this.setState({
+      activities: activities
+    });
+  }
+
+  /**
+   * Method :: addUser
+   * Desc   :: add user in team
+   * @param teamIndex :: Integer :: Index of specific team
+   * @param userIndex :: Integer :: Index of specific user
+   * @returns Void
+   */
+  addUser(activityIdx, teamIdx, userIdx){
+    let {activities, extraUsers} = this.state;
+    activities[activityIdx].teams[teamIdx].users[userIdx].isAdded = true;
+    let userId = activities[activityIdx].teams[teamIdx].users[userIdx].userId;
+    let profileId = activities[activityIdx].teams[teamIdx].users[userIdx].profileId;
+    this.setState({
+      activities: activities
+    });
+    this.props.saveDetails('user', {userId: userId, profileId: profileId});
+  }
+  /**
    * Method :: getOffices
    * Desc   :: fetch the offices of user
    * @returns Void
@@ -151,7 +202,7 @@ export default class MlTaskAppointmentSessions extends Component{
     if(response){
       this.setState({
         offices:response
-      })
+      });
     }
   }
 
@@ -159,14 +210,17 @@ export default class MlTaskAppointmentSessions extends Component{
    * Method :: setSession
    * Desc :: expand the session for appointment
    */
-  async setSession(index, sessionId) {
+  async setSession(index, sessionId, duration) {
     const {isSessionExpand} = this.state;
     let {selectedTaskId} = this.props;
     const resp = await fetchActivitiesTeamsActionHandler(selectedTaskId, sessionId);
     if(resp){
       this.getUsers(resp, index);
     }
+    await this.getUsers(resp, index, duration);
+    this.props.saveDetails('session', sessionId);
   }
+
   /**
    * Method :: getSessionList
    * Desc :: List of task session
@@ -178,7 +232,7 @@ export default class MlTaskAppointmentSessions extends Component{
     const sessionsList = session ? session.map((data, index) => {
       if(data) {
         return(
-          <div onClick={() => this.setSession(index, data.sessionId)} className="panel panel-info" key={index}>
+          <div onClick={() => this.setSession(index, data.sessionId, data.duration)} className="panel panel-info" key={index}>
             <div className="panel-heading" style={{'paddingBottom': '30px'}}>
               <div className="col-md-2 nopadding-left">Session {index+1}</div>
               <div className="col-md-4">
@@ -197,7 +251,7 @@ export default class MlTaskAppointmentSessions extends Component{
                 <div  style={{'marginTop':'-4px'}}>
                   <div className="input_types">
                     <input id="slottime" type="checkbox" slottime="clone" value="1"
-                           onClick={''} checked />
+                           checked />
                     <label htmlFor="slottime"><span><span></span></span></label>
                   </div>
                   <label style={{'marginTop':'5px'}} htmlFor="fancy-checkbox-default">
@@ -241,7 +295,7 @@ export default class MlTaskAppointmentSessions extends Component{
    */
   render() {
     let isSessionExpand = this.state.isSessionExpand;
-    const {activities, index, isExternal, isInternal, offices} = this.state;
+    const {activities, index, isExternal, isInternal, offices, duration} = this.state;
     console.log('-----123--', activities, index, isSessionExpand);
     return (
       <div className="step_form_wrap step1">
@@ -258,6 +312,9 @@ export default class MlTaskAppointmentSessions extends Component{
                                       index={index}
                                       isExternal={isExternal}
                                       isInternal={isInternal}
+                                      duration={duration}
+                                      addUser={this.addUser}
+                                      chooseTeamType={this.chooseTeamType}
                                       offices={offices}/>
           }
         </ScrollArea>

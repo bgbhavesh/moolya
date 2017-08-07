@@ -56,7 +56,6 @@ export default class MlTaskAppointmentBasicInfo extends Component {
       isTaskComponent,
       onChangeTask,
       selectedTask } = this.props;
-    console.log('---render--', selectedTask);
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>

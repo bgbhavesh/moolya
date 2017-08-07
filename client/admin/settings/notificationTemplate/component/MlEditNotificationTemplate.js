@@ -157,7 +157,7 @@ class MlEditNotificationTemplate extends React.Component{
             <div className="col-md-6 nopadding-left">
               <div className="form_bg">
                 <form>
-                  <div className="form-group mandatory">
+                  <div className="form-group">
                     <input type="text" ref="id" defaultValue={this.state.data&&this.state.data.id} hidden="true"/>
                   </div>
 

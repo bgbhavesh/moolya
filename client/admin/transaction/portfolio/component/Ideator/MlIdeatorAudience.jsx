@@ -155,7 +155,7 @@ export default class MlIdeatorAudience extends React.Component{
     let description =this.state.data.audienceDescription?this.state.data.audienceDescription:''
     let isAudiencePrivate = this.state.data.isAudiencePrivate?this.state.data.isAudiencePrivate:false
     return (
-      <div className="admin_main_wrap">
+      <div>
         {showLoader === true ? ( <MlLoader/>) : (
       <div className="requested_input">
         <h2>Audience</h2>
@@ -169,7 +169,7 @@ export default class MlIdeatorAudience extends React.Component{
 
                 <div className="form-group nomargin-bottom">
                   <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description } name="audienceDescription" onBlur={this.handleBlur.bind(this)}></textarea>
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAudiencePrivate" onClick={this.onClick.bind(this, "audienceDescription", "isAudiencePrivate")}/>>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAudiencePrivate" onClick={this.onClick.bind(this, "audienceDescription", "isAudiencePrivate")}/>
                 </div>
 
               </div>

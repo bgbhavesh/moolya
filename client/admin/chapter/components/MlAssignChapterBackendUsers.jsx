@@ -262,9 +262,10 @@ class MlAssignChapterBackendUsers extends React.Component {
                     </div>
                   </div>
                   <div className="col-md-6 nopadding-right">
-                    <h2>Details</h2>
+
                     <div className="left_wrap">
                       <ScrollArea speed={0.8} className="left_wrap">
+                        <h2>Details</h2>
                         <form>
                           <div className="form-group">
                             <div className="fileUpload mlUpload_btn">

@@ -30,8 +30,12 @@ export default class MlStartupViewCharts extends React.Component{
 
   componentWillMount(){
     this.fetchPortfolioStartupChartDetails();
+    var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+    $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
+    if(WinWidth > 768){
+      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    }
   }
 
   async fetchPortfolioStartupChartDetails() {
@@ -368,13 +372,7 @@ export default class MlStartupViewCharts extends React.Component{
       <div>
 
 
-            <div className="main_wrap_scroll">
-              <ScrollArea
-                speed={0.8}
-                className="main_wrap_scroll"
-                smoothScrolling={true}
-                default={true}
-              >
+            <div className="tab_wrap_scroll ">
 
 
                 <div className="col-md-6">
@@ -437,7 +435,6 @@ export default class MlStartupViewCharts extends React.Component{
                       name = {name}
                     />
                   </div></div>
-              </ScrollArea>
             </div>
           </div>
 

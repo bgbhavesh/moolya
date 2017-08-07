@@ -24,8 +24,12 @@ export default class MlStartupViewAboutUs extends React.Component {
 
   componentDidMount(){
     this.initalizeAnnotaor()
+    var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+    $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
+    if(WinWidth > 768){
+      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    }
 
   }
   componentWillMount(){
@@ -117,8 +121,7 @@ export default class MlStartupViewAboutUs extends React.Component {
     return (
       <div>
           <h2>About</h2>
-          <div className="main_wrap_scroll" id="annotatorContent" >
-            <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true} >
+          <div id="annotatorContent" className="tab_wrap_scroll">
               <div className="col-lg-12 col-sm-12" >
                 <div className="row">
 
@@ -143,7 +146,7 @@ export default class MlStartupViewAboutUs extends React.Component {
                         </div>)
                       })}*/}
                       <h4>Service & Products</h4>
-                      <p>{this.state.startupAboutUsList&&this.state.startupAboutUsList.serviceProducts&&this.state.startupAboutUsList.serviceProducts.description}.</p>
+                      <p>{this.state.startupAboutUsList&&this.state.startupAboutUsList.serviceProducts&&this.state.startupAboutUsList.serviceProducts.description}. </p>
                       <h4>Information</h4>
                       <p>{this.state.startupAboutUsList&&this.state.startupAboutUsList.serviceProducts&&this.state.startupAboutUsList.information.description}.</p>
 
@@ -152,7 +155,6 @@ export default class MlStartupViewAboutUs extends React.Component {
                   </div>
 
                 </div>    </div>
-            </ScrollArea>
           </div>
 
 

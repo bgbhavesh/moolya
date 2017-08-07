@@ -64,19 +64,19 @@ export default class MlServiceCardStep4 extends React.Component{
             <form>
               <div className="form-group">
                 <label>
-                  Tasks actual amount
+                  Tasks gross payable amount
                   <input type="number" disabled value={servicePayment.tasksAmount}  className="form-control" />
                 </label>
               </div>
               <div className="form-group">
                 <label>
-                  Task discount amount
+                  Task discount payable amount
                   <input type="number" disabled value={servicePayment.tasksDiscount}  className="form-control" />
                 </label>
               </div>
               <div className="form-group">
                 <label>
-                  Task derived amount
+                  Task net payable amount
                   <input type="number" disabled value={servicePayment.tasksDerived}  className="form-control "/>
                 </label>
               </div>
@@ -96,7 +96,7 @@ export default class MlServiceCardStep4 extends React.Component{
                   <input id="amount" type="radio" name="amount"
                          value="Amount" checked={servicePayment.discountType === 'amount' ? true : false}
                          disabled />
-                  <label htmlFor="amount"><span><span></span></span>Amount Rs
+                  <label htmlFor="amount"><span><span></span></span>Amount
                     {servicePayment.discountType === 'amount' ?
                       <input className="form-control inline_input"
                              disabled
@@ -148,7 +148,7 @@ export default class MlServiceCardStep4 extends React.Component{
                          checked={facilitationCharge.type === 'amount' ? true : false}
                          onChange={(event) => checkChargeStatus(event)}
                          value="amount" />
-                  <label htmlFor="facilitationamount"><span><span></span></span>Amount Rs
+                  <label htmlFor="facilitationamount"><span><span></span></span>Amount
                     {facilitationCharge.type === 'amount' ?
                       <input className="form-control inline_input"
                              disabled={(facilitationCharge.type && facilitationCharge.type === 'amount') ? false : true}
@@ -174,7 +174,7 @@ export default class MlServiceCardStep4 extends React.Component{
                 </div>
               </div>
               <div className="form-group">
-                <label>Derived amount Rs. <input className="form-control inline_input medium_in"
+                <label>Net payable amount<input className="form-control inline_input medium_in"
                                                  value={finalAmount} disabled />
                 </label>
               </div>

@@ -76,7 +76,7 @@ export default class MlStartupAboutUs extends React.Component{
         >        <h2>Portfolio</h2>
         <div className="col-md-6 col-sm-6 nopadding">
           <div className="panel panel-default panel-form-view">
-            <div className="panel-heading">About Us <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
+            <div className="panel-heading">About Us<a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
             <div className="panel-body panel-body-scroll" style={{'height':'384px'}}>
               <p>{this.state.startupAboutUs.aboutUs&&this.state.startupAboutUs.aboutUs.description}</p>
             </div>

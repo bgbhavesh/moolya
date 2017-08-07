@@ -12,8 +12,7 @@ export default class MlOfficePackageListView extends Component {
         {
           data.map(function (prop, id) {
             return (
-              <div className="row" key={id}>
-                <div className="col-lg-2 col-md-3 col-sm-3">
+                <div className="col-lg-2 col-md-3 col-sm-3"  key={id}>
                   <a href={officePackageRoute.editOfficePackage(prop._id)}>
                     <div className="list_block content_block">
                       <div className="hex_outer"><span className="ml ml-moolya-symbol"></span></div>
@@ -28,7 +27,6 @@ export default class MlOfficePackageListView extends Component {
                     </div>
                   </a>
                 </div>
-              </div>
             )
           })
         }

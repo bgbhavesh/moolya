@@ -199,7 +199,7 @@ class MlAppTaskLanding extends Component {
           icon:<span className="ml flaticon-ml-file-1"></span>
         },
         {
-          name: 'T&C',
+          name: 'Terms and Conditions',
           component: <MlAppTaskConditions getConditionDetails={this.getConditionDetails.bind(this) }
                                           taskId={this.props.editMode ? this.props.taskId : FlowRouter.getQueryParam('id') }/>,
           icon:<span className="ml flaticon-ml-interface-2"></span>

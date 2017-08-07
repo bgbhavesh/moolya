@@ -47,7 +47,7 @@ class MyTaskAppointments extends Component {
    * @return {Promise.<void>}
    */
   async getAllTaskByProfile() {
-    const resp = await fetchAllTaskActionHandler('MLPRO00000064');
+    const resp = await fetchAllTaskActionHandler();
     if (resp) {
       this.setState({ tasks: resp });
     }

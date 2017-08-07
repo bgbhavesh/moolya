@@ -129,10 +129,18 @@ let appointment=`
     days: [appointmentHolidays]
   }
   
-  type Query {   
+  type serviceSeekerList {
+    name: String
+    userId: String
+    profileId: String
+    transId: String
+  }
+  
+  type Query {
      fetchMyAppointment: [Appointment]
      fetchAllProfileAppointmentCounts: profileAppointment
      fetchProfileAppointmentCounts( profileId: String ): profileAppointment
+     fetchServiceSeekerList(profileId: String!, serviceId: String): [serviceSeekerList]
   }
   
   type Mutation {

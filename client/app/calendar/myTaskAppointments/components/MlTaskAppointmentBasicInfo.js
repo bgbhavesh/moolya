@@ -110,7 +110,7 @@ export default class MlTaskAppointmentBasicInfo extends Component {
                 </div>
               </form>
                 {/* Mapping for slot*/}
-                <div className="row funders_list">
+                {/*<div className="row funders_list">
                   <div className="col-md-6 col-sm-6 col-lg-5" >
                     <a href="#">
                       <div className="funders_list_block" onClick={''}>
@@ -122,7 +122,7 @@ export default class MlTaskAppointmentBasicInfo extends Component {
                       </div>
                     </a>
                   </div>
-                </div>
+                </div>*/}
                 <form>
                 <div className="form-group">
                   <label>Duration: &nbsp;

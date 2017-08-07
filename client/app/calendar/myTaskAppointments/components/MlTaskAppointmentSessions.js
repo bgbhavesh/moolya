@@ -143,7 +143,6 @@ export default class MlTaskAppointmentSessions extends Component{
    * @returns Void
    */
   async chooseTeamType(evt, activityIdx, teamIdx){
-    console.log('----evt---', evt.target.value);
     let activities = this.state.activities;
     if(evt.target.value == "connections") {
       activities[activityIdx].teams[teamIdx].resourceType="connections";
@@ -296,7 +295,6 @@ export default class MlTaskAppointmentSessions extends Component{
   render() {
     let isSessionExpand = this.state.isSessionExpand;
     const {activities, index, isExternal, isInternal, offices, duration} = this.state;
-    console.log('-----123--', activities, index, isSessionExpand);
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>

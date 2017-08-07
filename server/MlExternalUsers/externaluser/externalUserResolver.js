@@ -1,15 +1,16 @@
 /**
  * Created by venkatsrinag on 28/4/17.
  */
-import MlResolver from '../../commons/mlResolverDef'
-import MlRespPayload from '../../commons/mlPayload'
-import MlUserContext from '../../MlExternalUsers/mlUserContext'
-import _ from 'lodash'
-import _underscore from 'underscore'
+import MlResolver from "../../commons/mlResolverDef";
+import MlRespPayload from "../../commons/mlPayload";
+import MlUserContext from "../../MlExternalUsers/mlUserContext";
+import _ from "lodash";
+import _underscore from "underscore";
+import geocoder from "geocoder";
+import MlEmailNotification from "../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 var fs = Npm.require('fs');
 var Future = Npm.require('fibers/future');
-import geocoder from "geocoder";
-import MlEmailNotification from "../../mlNotifications/mlEmailNotifications/mlEMailNotification"
+var request = require('request');
 
 MlResolver.MlQueryResolver['fetchIdeatorUsers'] = (obj, args, context, info) =>
 {
@@ -419,4 +420,54 @@ MlResolver.MlQueryResolver['fetchMapCenterCordsForExternalUser'] = (obj, args, c
   if (clusterDetails && clusterDetails.latitude && clusterDetails.longitude) {
     return {lat: clusterDetails.latitude, lng: clusterDetails.longitude};
   }
+}
+
+/**
+ * @module ['conversation']
+ * */
+
+/**
+ * first application Create
+ * */
+MlResolver.MlMutationResolver['createApplicationAPI'] = (obj, args, context, info) => {
+  var userId = "qwerty" //need to be send with args
+  request.post('http://localhost:8081/createApplication', {form: args.applicationDetailsAPI}, function (error, response, body) {
+    console.log('error:', error); // Print the error if one occurred
+    console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+    console.log('body:', body); // Print the HTML for the Google homepage.
+    var responseData = JSON.parse(body)
+    console.log(responseData)
+    var obj = _.extend({userId: userId}, responseData)
+    // MlConversations.insert(obj)
+  });
+}
+
+/**
+ * creating the user wrt application
+ * */
+MlResolver.MlMutationResolver['createUserAPI'] = (obj, args, context, info) => {
+  var userId = "qwerty"  //need to be send with the args
+  var conversation = MlConversations.findOne({userId:userId}) || {}
+  // conversation.apiKey ||
+  var options = {
+    url: 'http://localhost:8081/createUser',
+    headers: {'x-api-key': Meteor.settings.private.apiKey},
+    method: 'POST',
+    form: args.userDetailsAPI
+  };
+
+  request(options, function (error, response, body) {
+    // console.log('error:', error); // Print the error if one occurred
+    // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+    // console.log('body:', body); // Print the HTML for the Google homepage.
+    if (error)
+      return new MlRespPayload().errorPayload('error in creating user', 409);
+    else {
+      var responseData = JSON.parse(body)
+      if (responseData && responseData.success)
+        return new MlRespPayload().successPayload(responseData.result, 200);
+      else
+        return new MlRespPayload().errorPayload('Can not create user', 409);
+    }
+  });
 }

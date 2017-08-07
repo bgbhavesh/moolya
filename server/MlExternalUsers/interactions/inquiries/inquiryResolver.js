@@ -6,7 +6,7 @@ import MlRespPayload from '../../../commons/mlPayload'
 import _ from 'lodash';
 import mlInteractionService from '../mlInteractionRepoService';
 import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
-
+import MlAlertNotification from '../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 MlResolver.MlMutationResolver['createInquiry'] = (obj, args, context, info) =>{
     if(args && context && context.userId){
       var resp=null;
@@ -33,14 +33,14 @@ MlResolver.MlMutationResolver['createInquiry'] = (obj, args, context, info) =>{
             //Transaction Log
             MlEmailNotification.enquireRequest(fromuser,toUser)
           }
-
         }catch (e){
             let code = 400;
             let response = new MlRespPayload().errorPayload(e.message, code);
             return response;
         }
-        let code = 200;
-        let response = new MlRespPayload().successPayload(resp, code);
+        // let code = 200;
+        let enquire =  MlAlertNotification. onEnquireRequestSent(toUser)
+        let response = new MlRespPayload().successPayload(enquire,200);
         return response;
     }
 }

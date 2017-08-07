@@ -7,9 +7,9 @@ import {Meteor} from "meteor/meteor";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 
-import AppContactDetails from "./MlUserContactDetails";
-import AppAddressDetails from "./MlUserAddressDetails";
-import AppEmailDetails from "./MlUserEmailDetails";
+import MlUserContactDetails from "./MlUserContactDetails";
+import MlUserAddressDetails from "./MlUserAddressDetails";
+import MlUserEmailDetails from "./MlUserEmailDetails";
 import {findAddressBookActionHandler} from '../actions/findUserAddressBookHandler'
 import MlLoader from '../../../commons/components/loader/loader'
 
@@ -37,9 +37,9 @@ export default class MlUsersAddressBook extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
     var WinHeight = $(window).height();
-    $('.left_wrap').height(WinHeight - (160 + $('.admin_header').outerHeight(true)));
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
   }
 
   render() {
@@ -69,13 +69,13 @@ export default class MlUsersAddressBook extends React.Component {
                         <div className="panel-heading">
                           Contact Number
                         </div>
-                        <AppContactDetails clusterId={clusterId} contactInfoDetails={contactInfo}  registerId = {registerId} profileId={profileId} registrationDetails={this.findAddressBook.bind(this)}/>
+                        <MlUserContactDetails clusterId={clusterId} contactInfoDetails={contactInfo}  registerId = {registerId} profileId={profileId} registrationDetails={this.findAddressBook.bind(this)}/>
                       </div>
                       <div className="panel panel-default new_profile_tabs">
                         <div className="panel-heading">
                           Email Id
                         </div>
-                        <AppEmailDetails clusterId={clusterId} emailInfoDetails={emailInfo}  registerId = {registerId} profileId={profileId} registrationDetails={this.findAddressBook.bind(this)}/>
+                        <MlUserEmailDetails clusterId={clusterId} emailInfoDetails={emailInfo}  registerId = {registerId} profileId={profileId} registrationDetails={this.findAddressBook.bind(this)}/>
                       </div>
                     </form>
                   </div>
@@ -85,7 +85,7 @@ export default class MlUsersAddressBook extends React.Component {
                         <div className="panel-heading">
                           Address
                         </div>
-                        <AppAddressDetails clusterId={clusterId} addressInfoDetails={addressInfo} registerId = {registerId} profileId={profileId} registrationDetails={this.findAddressBook.bind(this)}/>
+                        <MlUserAddressDetails clusterId={clusterId} addressInfoDetails={addressInfo} registerId = {registerId} profileId={profileId} registrationDetails={this.findAddressBook.bind(this)}/>
                       </div>
                     </form>
                   </div>

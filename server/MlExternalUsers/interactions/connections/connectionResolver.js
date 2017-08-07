@@ -6,7 +6,7 @@ import MlRespPayload from '../../../commons/mlPayload'
 import _ from 'lodash'
 import mlInteractionService from '../mlInteractionRepoService';
 import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
-
+import MlAlertNotification from '../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 /*STATUS
  0 - Pending
  1 - Accepted
@@ -117,7 +117,8 @@ MlResolver.MlMutationResolver['connectionRequest'] = (obj, args, context, info) 
             MlEmailNotification.portfolioConnectRequestReceived(fromuser._id,toUser._id);
           }
       }
-      return  new MlRespPayload().successPayload(resp,200);
+      let connectRequest = MlAlertNotification.onConnectionRequestSent(toUser._id)
+      return  new MlRespPayload().successPayload(connectRequest, 200);
     }
     /*other conditions for connection request
     /*connection request is re-send only if

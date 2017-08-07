@@ -10,7 +10,7 @@ import {findAddressBookActionHandler} from '../actions/findUserAddressBookHandle
 import {findCountryCode} from '../actions/findUserAddressBookHandler'
 import MlLoader from '../../../commons/components/loader/loader'
 
-export default class AppContactDetails extends React.Component {
+export default class MlUserContactDetails extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

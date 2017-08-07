@@ -99,7 +99,7 @@ class MlAppointment {
           }
         },
         { "$unwind": "$members" },
-        { "$match": {'members.userId':userId, 'members.profileId':profileId, startDate: { $gte:date } ,endDate: {$lt:endDate} } }
+        { "$match": {'members.userId':userId, 'isInternal':false, 'members.profileId':profileId, startDate: { $gte:date } ,endDate: {$lt:endDate} } }
       ]);
 
       /**
@@ -417,7 +417,20 @@ class MlAppointment {
     /**
      *  Get all the appointment of the month
      */
-    let appoinments = mlDBController.find( 'MlAppointments', {'provider.userId':userId, 'provider.profileId':profileId, startDate: { gte:date } ,endDate: {lt:monthEnd} }).fetch();
+    let appointments = mlDBController.aggregate( 'MlAppointments', [
+      {
+        $lookup: {
+          from: "mlAppointmentMembers",
+          localField: "appointmentId",
+          foreignField: "appointmentId",
+          as: "members"
+        }
+      },
+      { "$unwind": "$members" },
+      { "$match": {'members.userId':userId, 'members.profileId':profileId, startDate: { $gte:date } ,endDate: {$lt:endDate} } }
+    ]);
+
+    //mlDBController.find( 'MlAppointments', {'provider.userId':userId, 'provider.profileId':profileId, startDate: { gte:date } ,endDate: {lt:monthEnd} }).fetch();
 
     /**
      *  loop the all days in request month
@@ -426,7 +439,7 @@ class MlAppointment {
       /**
        * Calculate the total booked appoint on current day
        */
-      let bookAppoinmentsCount = appoinments.filter(function (appoinment) {
+      let bookAppoinmentsCount = appointments.filter(function (appoinment) {
         let startDate = new Date(appoinment.startDate);
         return startDate.getDate() == date.getDate();
       }).length;

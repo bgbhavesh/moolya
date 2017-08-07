@@ -215,9 +215,8 @@ export default class MlIdeatorAudience extends React.Component{
     });
     let description =this.state.data.audienceDescription?this.state.data.audienceDescription:''
     return (
-      <div className="admin_main_wrap">
-        <div className="col-lg-12 col-sm-12">
-          <div className="row">
+      <div>
+
             <h2>Audience</h2>
             <div id="psContent" className="panel panel-default panel-form-view">
 
@@ -226,8 +225,7 @@ export default class MlIdeatorAudience extends React.Component{
               </div>
             </div>
 
-          </div>
-        </div>
+
         {/*{showLoader === true ? ( <MlLoader/>) : (*/}
           {/*<div className="requested_input">*/}
             {/*<h2>Audience</h2>*/}

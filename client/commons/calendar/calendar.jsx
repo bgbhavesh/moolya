@@ -23,11 +23,16 @@ export default class Calender extends Component {
   eventComponent(event, element) {
     let component = this.props.eventComponent;
     if(component){
+      let data = {
+        dayData: this.props.dayData ? this.props.dayData : [],
+        calendar: event
+      };
+      let dayComponent = React.cloneElement(component);
       return (
-        <span>
-          <component />
-        </span>
-      )
+        <div style={{flexBasis: "14.2857%", maxWidth: "14.2857%"}}>
+          {dayComponent}
+        </div>
+      );
     } else {
       return (
         <span>

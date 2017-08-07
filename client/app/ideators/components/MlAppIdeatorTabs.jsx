@@ -98,7 +98,7 @@ componentWillMount()
 render(){
   let tabs = this.state.tabs;
   return (
-    <div className="col-md-12">
+    <div className="col-md-12 nopadding">
       <MlTabComponent tabs={tabs}/>
     </div>
   )

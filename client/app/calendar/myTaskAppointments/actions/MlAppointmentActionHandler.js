@@ -130,17 +130,25 @@ export async function fetchActivitiesTeamsActionHandler(taskId, sessionId) {
   });
   const resp = result.data.fetchActivitiesTeams;
   let data = _.omit(resp, '__typename')
-  let teamsArray = [];
   let activities = [];
   _.each(data,(activity) => {
     let activityData = _.omit(activity, '__typename');
     if (activity.teams && activity.teams.length > 0) {
       _.each(activity.teams,function (item,say) {
-        let value = _.omit(item, '__typename')
+        let teamsArray = [];
+        let value = _.omit(item, '__typename');
+        let userArray = [];
+        if (item.users && item.users.length > 0) {
+          _.each(item.users,function (user,say) {
+            let value = _.omit(user, '__typename')
+            userArray.push(value)
+          });
+        }
+        value.users = userArray;
         teamsArray.push(value)
+        activityData.teams = teamsArray;
       });
     }
-    activityData.teams = teamsArray;
     activities.push(activityData);
   });
   return activities;

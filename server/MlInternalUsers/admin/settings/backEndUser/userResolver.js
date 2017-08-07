@@ -11,7 +11,7 @@ import _underscore from "underscore";
 import geocoder from "geocoder";
 import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification"
 import MlUserContext from '../../../../../server/MlExternalUsers/mlUserContext'
-
+import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 
 MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, info) => {
     let user=Meteor.users.findOne(context.userId);
@@ -125,7 +125,8 @@ MlResolver.MlMutationResolver['resetPassword'] = (obj, args, context, info) => {
     if (resp) {
       let emailSent = MlEmailNotification.onChangePassword(context);
       let code = 200;
-      let response = new MlRespPayload().successPayload("Password Reset complete", code);
+      let passwordalert =  MlAlertNotification. onPasswordAlert()
+      let response = new MlRespPayload().successPayload(passwordalert, code);
       return response
 
   }

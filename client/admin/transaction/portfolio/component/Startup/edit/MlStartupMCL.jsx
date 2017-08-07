@@ -148,16 +148,9 @@ export default class MlStartupMCL extends React.Component{
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
-      <div className="admin_main_wrap">
-        <div className="admin_padding_wrap portfolio-main-wrap">
+        <div className="portfolio-main-wrap">
           <h2>MCL</h2>
-          <div className="main_wrap_scroll">
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
+
               <div className="col-md-6 col-sm-6 nopadding-left">
                 <div className="panel panel-default panel-form-view">
                   <div className="panel-heading">Membership </div>
@@ -191,12 +184,9 @@ export default class MlStartupMCL extends React.Component{
                   </div>
                 </div>
               </div>
-            </ScrollArea>
-          </div>
         </div>
 
-
-      </div>)}
+)}
       </div>
     )
   }

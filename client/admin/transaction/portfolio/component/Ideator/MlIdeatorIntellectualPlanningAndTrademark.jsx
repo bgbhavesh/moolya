@@ -95,10 +95,8 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
 
     const showLoader = this.state.loading;
     return (
-      <div className="admin_main_wrap">
+      <div>
         {showLoader === true ? (<MlLoader/>) : (
-      <div className="admin_main_wrap">
-        <div className="admin_padding_wrap">
           <div className="main_wrap_scroll">
             <ScrollArea
               speed={0.8}
@@ -125,9 +123,7 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
                 </div>
               </div>
             </ScrollArea>
-          </div>
-        </div>
-      </div>)}
+          </div>)}
       </div>
     )
   }

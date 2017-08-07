@@ -6,6 +6,8 @@ import {findCommunityDefActionHandler} from '../actions/findCommunityDefAction'
 import MlActionComponent from '../../../commons/components/actions/ActionComponent'
 import formHandler from '../../../commons/containers/MlFormHandler';
 import gql from 'graphql-tag'
+import {OnToggleSwitch} from "../../utils/formElemUtil";
+import ScrollArea from "react-scrollbar"
 import Moolyaselect from  '../../commons/components/MlAdminSelectWrapper'
 import {multipartFormHandler} from '../../../commons/MlMultipartFormAction'
 import MlLoader from '../../../commons/components/loader/loader'
@@ -47,6 +49,12 @@ class MlEditCommunityFormComponent extends React.Component {
   }
 
   componentDidUpdate() {
+
+    var WinHeight = $(window).height();
+    $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
+    OnToggleSwitch(true, true);
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+
     $(function () {
       $('.float-label').jvFloat();
     });
@@ -67,6 +75,7 @@ class MlEditCommunityFormComponent extends React.Component {
       }
     });
     $('.Select-control').css({'height':'auto'});
+
 
   }
 
@@ -212,6 +221,13 @@ class MlEditCommunityFormComponent extends React.Component {
 
           <div className="admin_padding_wrap">
             <h2>Edit Community Details</h2>
+            <div className="main_wrap_scroll">
+              <ScrollArea
+                speed={0.8}
+                className="main_wrap_scroll"
+                smoothScrolling={true}
+                default={true}
+              >
             <div className="col-md-6 nopadding-left">
               <div className="form_bg">
                 <form>
@@ -272,6 +288,8 @@ class MlEditCommunityFormComponent extends React.Component {
                   </div>
                 </form>
               </div>
+            </div>
+              </ScrollArea>
             </div>
             <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
           </div>)}

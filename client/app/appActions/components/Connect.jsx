@@ -16,8 +16,8 @@ export default class Connect extends React.Component {
     var resourceDetails=this.props.data||{};
     console.log(resourceDetails);
     var response=await connectActionHandler({'resourceId':resourceDetails.resourceId,'resourceType':resourceDetails.resourceType});
-    if(response){
-      toastr.success("connect request sent");
+    if(response && response.success){
+      toastr.success(response.result);
     }else{
       toastr.error("Failed to send the connect request");
     }

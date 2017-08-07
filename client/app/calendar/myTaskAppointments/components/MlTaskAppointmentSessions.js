@@ -85,9 +85,9 @@ export default class MlTaskAppointmentSessions extends Component{
             }
             return userInfo;
           });
+          activities[index].teams[userIndex].users = usersInfo;
           return usersInfo;
         });
-        activities[index].teams =  teamsInfo;
       });
       console.log(activities);
       that.setState({

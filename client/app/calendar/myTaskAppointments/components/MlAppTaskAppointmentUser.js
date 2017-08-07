@@ -9,9 +9,9 @@ export default class MlAppTaskAppointmentUser extends Component {
     super(props);
   }
 
-  getUserList(team, index) {
+  getUserList(team, activityIdx, teamIdx) {
+    const that = this;
     let userList = [];
-    console.log('--team--', team.users.length);
     team.users ? team.users.map((user, userIndex) => {
       userList.push(
         <li key={user.userId}>
@@ -20,14 +20,14 @@ export default class MlAppTaskAppointmentUser extends Component {
             <div className="tooltiprefer">
               <span>{user.name}</span>
             </div>
-            <span className="member_status" onClick={() => that.addUser(index, userIndex)}>
-                      { user.isAdded ? <FontAwesome name="check" /> : <FontAwesome name="plus" /> }
-                    </span>
+            <span className="member_status" onClick={() => that.props.addUser(activityIdx, teamIdx, userIndex)}>
+              { user.isAdded ? <FontAwesome name="check" /> : <FontAwesome name="plus" /> }
+            </span>
           </a>
           <div className="input_types">
-            <br />
-            <input id={"mandatory"+index+userIndex} checked={ user.isMandatory ? true : false } name="Mandatory" type="checkbox" value="Mandatory" onChange={(evt)=>that.updateIsMandatory(evt, index, userIndex)} />
-            <label htmlFor={"mandatory"+index+userIndex}>
+            <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input id={"mandatory"+teamIdx+userIndex} disabled checked={ user.isMandatory ? true : false } name="Mandatory" type="checkbox" value="Mandatory" onChange={(evt)=>that.updateIsMandatory(evt, index, userIndex)} />
+            <label htmlFor={"mandatory"+teamIdx+userIndex}>
               <span><span></span></span>
               Mandatory
             </label>
@@ -44,9 +44,8 @@ export default class MlAppTaskAppointmentUser extends Component {
    * @return XML
    */
   render() {
-    const {activities, index, isExternal, isInternal, offices} = this.props;
+    const {activities, index, isExternal, isInternal, offices, duration} = this.props;
     const that = this;
-    console.log('----act--', activities);
     return (
       <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
         <div className="col-md-6 nopadding-left">
@@ -66,11 +65,11 @@ export default class MlAppTaskAppointmentUser extends Component {
                   <input type="text"
                          className="form-control inline_input"
                          disabled={true}
-                         value={1}  /> Hours
+                         value={duration && duration.hours}  /> Hours
                   <input type="text"
                          className="form-control inline_input"
                          disabled={true}
-                         value={2}  /> Mins
+                         value={duration && duration.minutes}  /> Mins
                 </label>
               </div>
             </form>
@@ -92,8 +91,8 @@ export default class MlAppTaskAppointmentUser extends Component {
                                defaultValue={activity.name} />
                       </div>
                     </div>
-                    <br/>
-                    <div className="form-group pull-right">
+                    <br/><br/>
+                    <div className="form-group col-md-7">
                       <label>Time: &nbsp;
                         <input type="text"
                                className="form-control inline_input"
@@ -105,7 +104,7 @@ export default class MlAppTaskAppointmentUser extends Component {
                                defaultValue={activity.duration && activity.duration.minutes} /> Mins
                       </label>
                     </div>
-                    <br className="brclear" />Attendees<br className="brclear" />
+                    <br className="brclear" /><span></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Attendees<br className="brclear" /><br className="brclear" />
                     {
                       activity.teams && activity.teams.map(function (team, indexAct) {
                         return (
@@ -114,9 +113,10 @@ export default class MlAppTaskAppointmentUser extends Component {
                               <div className="panel-body nopadding">
                                 <br className="brclear" />
                                 <div className="col-md-4">
+                                  <br className="brclear" />
                                   <div className="form-group">
-                                    <span className="placeHolder active">Choose team Type</span>
-                                    <select defaultValue="chooseTeam" value={ team.resourceType == 'office' && team.resourceId ? team.resourceId : team.resourceType } className="form-control" onChange={(evt)=>that.chooseTeamType(evt, index)}>
+                                    <span className="placeHolder active">Select team</span>
+                                    <select defaultValue="chooseTeam" value={ team.resourceType == 'office' && team.resourceId ? team.resourceId : team.resourceType } className="form-control" onChange={(evt)=>that.props.chooseTeamType(evt, activityIndex, indexAct)}>
                                       <option value="chooseTeam" disabled="disabled">Choose team Type</option>
                                       <option value="connections">My Connections</option>
                                       <option hidden={!isExternal} disabled={!isExternal} value="moolyaAdmins">Moolya Admins</option>
@@ -128,7 +128,7 @@ export default class MlAppTaskAppointmentUser extends Component {
                                 </div>
                                 <div className="col-md-8 att_members">
                                   <ul className="users_list">
-                                    {that.getUserList(team, indexAct)}
+                                    {that.getUserList(team, activityIndex, indexAct)}
                                   </ul>
                                 </div>
                               </div>
@@ -142,7 +142,6 @@ export default class MlAppTaskAppointmentUser extends Component {
               })
               }
             </form>
-            {/* Attandees*/}
           </div>
         </div>
         <br className="brclear"/>

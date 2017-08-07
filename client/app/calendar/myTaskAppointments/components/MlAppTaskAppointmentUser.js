@@ -48,20 +48,21 @@ export default class MlAppTaskAppointmentUser extends Component {
     const that = this;
     return (
       <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
-        <div className="col-md-6 nopadding-left">
+        <div className="col-md-5 nopadding-left">
           <div className="form_bg">
             <form>
               <div className="form-group">
-                <label>{`Session ${index + 1}`}</label>
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  {`Session ${index + 1}`}</label>
               </div>
             </form>
           </div>
         </div>
-        <div className="col-md-6 pull-right">
+        <div className="col-md-6">
           <div className="form_bg">
             <form>
               <div className="form-group">
-                <label>Time: &nbsp;
+                &nbsp;&nbsp;<label>Time: &nbsp;
                   <input type="text"
                          className="form-control inline_input"
                          disabled={true}

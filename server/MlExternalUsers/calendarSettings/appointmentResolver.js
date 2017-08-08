@@ -523,14 +523,14 @@ MlResolver.MlMutationResolver["bookSelfTaskInternalAppointment"] = (obj, args, c
   let taskId = mlDBController.insert('MlAppointmentTask', taskDetails, context);
 
   let startDate = new Date();
-  date.setDate(day);
-  date.setMonth(month);
-  date.setYear(year);
-  date.setHours(hours);
-  date.setMinutes(minutes);
-  date.setSeconds(0,0);
+  startDate.setDate(day);
+  startDate.setMonth(month);
+  startDate.setYear(year);
+  startDate.setHours(hours);
+  startDate.setMinutes(minutes);
+  startDate.setSeconds(0,0);
 
-  session.duration = taskDetails.duration ? taskDetails.duration : {}
+  taskDetails.duration = taskDetails.duration ? taskDetails.duration : {};
 
   let sessionHours = taskDetails.duration.hours ? taskDetails.duration.hours : 0;
   let sessionMinutes = taskDetails.duration.minutes ? taskDetails.duration.minutes : 0;

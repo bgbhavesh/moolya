@@ -53,8 +53,8 @@ let appointment=`
   }
   
   input appointmentDuration {
-    hours: String
-    minutes: String
+    hours: Int
+    minutes: Int
   }
   
   input appointmentTaskInfo {

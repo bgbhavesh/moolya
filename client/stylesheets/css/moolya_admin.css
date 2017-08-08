@@ -1219,7 +1219,7 @@ ol.progtrckr li{ margin-bottom: 40px}}
     .nopadding-right, .nopadding-left{padding-right: 0 !important; padding-left: 0 !important; }
 }
 
-/*.close {
+.close {
     float: right;
     font-size: 1.5rem;
     font-weight: 700;
@@ -1257,12 +1257,12 @@ button.close {
     outline: 0
 }
 .modal.fade .modal-dialog {
-    -webkit-transition: -webkit-transform .3s ease-out;
+/*    -webkit-transition: -webkit-transform .3s ease-out;
     transition: -webkit-transform .3s ease-out;
     transition: transform .3s ease-out;
     transition: transform .3s ease-out, -webkit-transform .3s ease-out;
     -webkit-transform: translateY(-25%);
-    transform: translateY(-25%)
+    transform: translateY(-25%)*/
 }
 .modal.show .modal-dialog {
     -webkit-transform: translate(0);
@@ -1378,7 +1378,7 @@ button.close {
 }
 .fade.show {
     opacity: 1;
-}*/
+}
 
 .iframe-container {
     padding-bottom: 60%;

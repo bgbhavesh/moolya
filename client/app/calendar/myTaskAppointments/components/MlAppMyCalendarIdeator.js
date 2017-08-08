@@ -82,7 +82,7 @@ export default class MlAppMyCalendarIdeator extends Component {
    */
   selectIndustry(value) {
     let appointmentTaskInfo = this.state.appointmentTaskInfo;
-    appointmentTaskInfo.industryTypes = value;
+    appointmentTaskInfo.industries = value;
     this.setState({
       appointmentTaskInfo: appointmentTaskInfo
     });
@@ -140,6 +140,7 @@ export default class MlAppMyCalendarIdeator extends Component {
 
   async saveInternalAppointmentInfo() {
     let {selfInternalAppointmentInfo, appointmentTaskInfo} = this.state;
+    appointmentTaskInfo.profileId = 'MLPRO00000064';
     selfInternalAppointmentInfo = {
       hours: 1,
       minutes: 2,
@@ -156,10 +157,6 @@ export default class MlAppMyCalendarIdeator extends Component {
   render() {
     const that = this;
     const {appointmentTaskInfo} = this.state;
-    let sessionFrequencyActive=''
-    if(!sessionFrequencyActive){
-      sessionFrequencyActive='active'
-    }
     /**
      * fetch industries graphql query
      */
@@ -212,9 +209,9 @@ export default class MlAppMyCalendarIdeator extends Component {
                 </div>
                 <div className="form-group">
                   <label>Expected intput<textarea className="form-control float-label"
-                                                  id="expectedIntput"
+                                                  id="expectedInput"
                                                   onChange={(event) => this.onChangeFormField(event)}
-                                                  value={appointmentTaskInfo.expectedIntput}></textarea>
+                                                  value={appointmentTaskInfo.expectedInput}></textarea>
                   </label>
                 </div>
               </form>
@@ -233,7 +230,7 @@ export default class MlAppMyCalendarIdeator extends Component {
                               query={industryTypeQuery}
                               isDynamic={true} placeholder="Select Industry Type"
                               onSelect={that.selectIndustry.bind(that)}
-                              selectedValue={appointmentTaskInfo.industryTypes}
+                              selectedValue={appointmentTaskInfo.industries}
                 />
                 <br className="brclear" />
                 <div className="form-group">

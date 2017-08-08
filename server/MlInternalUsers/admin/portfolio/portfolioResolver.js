@@ -7,7 +7,7 @@ import MlUserContext from "../../../MlExternalUsers/mlUserContext";
 import _ from "lodash";
 import portfolioValidationRepo from "./portfolioValidation";
 import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
-
+import MlAlertNotification from '../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 /**
  * @module [externaluser portfolio Landing]
  * @params [context.userId]
@@ -321,7 +321,8 @@ MlResolver.MlMutationResolver["requestForGoLive"] = (obj, args, context, info) =
       let ret = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {status:status}, {$set: true}, context)
       if (ret) {
         let code = 200;
-        let response = new MlRespPayload().successPayload("Updated Successfully", code);
+        let alert =  MlAlertNotification.onGoLiveRequestAdmin()
+        let response = new MlRespPayload().successPayload(alert, code);
         return response;
       }
     }catch (e){

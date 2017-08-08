@@ -23,7 +23,7 @@ export async function likeActionHandler(details) {
   })
   const resp = result.data.likeRequest;
   if (resp.success) {
-    toastr.success("You have successfully Liked a resource");
+    toastr.success(resp.result);
     return resp;
   }
   return null;

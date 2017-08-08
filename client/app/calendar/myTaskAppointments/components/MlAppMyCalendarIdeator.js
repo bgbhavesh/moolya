@@ -70,6 +70,9 @@ export default class MlAppMyCalendarIdeator extends Component {
     } else {
       appointmentTaskInfo.mode = 'online';
     }
+    if (appointmentTaskInfo.mode === 'offline') {
+      appointmentTaskInfo.conversation = [];
+    }
     this.setState({
       appointmentTaskInfo: appointmentTaskInfo
     });
@@ -96,12 +99,14 @@ export default class MlAppMyCalendarIdeator extends Component {
    */
   selectConversation(value) {
     let appointmentTaskInfo = this.state.appointmentTaskInfo;
-    appointmentTaskInfo.conversation = value.map((data) => {
-      return data.value;
-    });
-    this.setState({
-      appointmentTaskInfo: appointmentTaskInfo
-    });
+    if (appointmentTaskInfo.mode === 'online') {
+      appointmentTaskInfo.conversation = value.map((data) => {
+        return data.value;
+      });
+      this.setState({
+        appointmentTaskInfo: appointmentTaskInfo
+      });
+    }
   }
 
   /**
@@ -139,6 +144,8 @@ export default class MlAppMyCalendarIdeator extends Component {
   }
 
   async saveInternalAppointmentInfo() {
+    this.isError = '';
+    let mandatoryFields = ['hours', 'minutes', 'day', 'month', 'year', 'taskDetails'];
     let {selfInternalAppointmentInfo, appointmentTaskInfo} = this.state;
     appointmentTaskInfo.profileId = 'MLPRO00000064';
     selfInternalAppointmentInfo = {
@@ -149,9 +156,34 @@ export default class MlAppMyCalendarIdeator extends Component {
       year: 2017,
       taskDetails: appointmentTaskInfo
     };
-    const resp = await createInternalAppointmentInfo(selfInternalAppointmentInfo);
-    if (resp && resp.success) {
-      toastr.success('Created successfully');
+    mandatoryFields.forEach((field) => {
+      if (field === 'taskDetails') {
+        if (!selfInternalAppointmentInfo[field].duration.hours && !selfInternalAppointmentInfo[field].duration.minutes) {
+          this.isError = 'duration is required';
+          return;
+        } else if (!selfInternalAppointmentInfo[field].duration.hours && selfInternalAppointmentInfo[field].duration.minutes) {
+          delete selfInternalAppointmentInfo[field].duration.hours;
+        } else if (selfInternalAppointmentInfo[field].duration.hours && !selfInternalAppointmentInfo[field].duration.minutes) {
+          delete selfInternalAppointmentInfo[field].duration.minutes;
+        }
+        if (!selfInternalAppointmentInfo[field].profileId) {
+          this.isError = 'profileId is required';
+        }
+        if (!selfInternalAppointmentInfo[field].name) {
+          this.isError = 'name is required';
+        }
+      } else if (!selfInternalAppointmentInfo[field]) {
+        this.isError = `${field} is required`;
+        return;
+      }
+    });
+    if(!this.isError) {
+      const resp = await createInternalAppointmentInfo(selfInternalAppointmentInfo);
+      if (resp && resp.success) {
+        toastr.success('Created successfully');
+      }
+    } else {
+      toastr.error(this.isError);
     }
   }
   render() {
@@ -174,7 +206,6 @@ export default class MlAppMyCalendarIdeator extends Component {
                   <span className={appointmentTaskInfo.mode === 'online' ? 'state_label acLabel' : 'state_label'}>Online</span>
                   <label className="switch nocolor-switch">
                     <input type="checkbox"
-                           value={appointmentTaskInfo.mode}
                            checked={appointmentTaskInfo.mode !== 'online'}
                            onChange={(event) => this.onChangeSlider(event)} />
                     <div className="slider"></div>
@@ -234,11 +265,13 @@ export default class MlAppMyCalendarIdeator extends Component {
                 />
                 <br className="brclear" />
                 <div className="form-group">
-                  <span className="placeHolder active">Conversation type</span>
+                  {(appointmentTaskInfo.conversation && appointmentTaskInfo.conversation.length > 0) &&
+                    <span className="placeHolder active">Conversation type</span>
+                  }
                   <div className="form-group">
                     <Select name="form-field-name"
                             multi={true}
-                            disabled={false}
+                            disabled={appointmentTaskInfo.mode === 'offline' ? true : false}
                             valueKey={'value'}
                             labelKey={'label'}
                             options={this.options}
@@ -248,7 +281,10 @@ export default class MlAppMyCalendarIdeator extends Component {
                   </div>
                 </div>
                 <br className="brclear" />
-                <div className="form-group">
+                  {appointmentTaskInfo.frequency &&
+                    <span className="placeHolder active">Frequency</span>
+                  }
+                  <div className="form-group">
                   <Select className="form-field-name" options={this.sessionFrequencyOptions} placeholder="Frequency"
                           value={appointmentTaskInfo.frequency} onChange={this.onFrequencySelect.bind(this)}/>
                 </div>

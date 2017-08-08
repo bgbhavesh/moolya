@@ -395,7 +395,7 @@ MlResolver.MlQueryResolver["fetchProfileAppointmentCounts"] = (obj, args, contex
 
   let result = mlDBController.aggregate('MlAppointments', pipeLine);
   result = result && result[0] ? result[0] : [];
-  return result;
+    return result;
 
 };
 

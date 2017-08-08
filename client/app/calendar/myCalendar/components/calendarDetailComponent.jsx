@@ -6,6 +6,8 @@ import InlineCalender from './inlineCalendar';
 import CalenderHead from './calendarHead';
 import CalCreateAppointment from './calSettings'
 import CalCreateTask from './calCreateTask'
+import { fetchSessionDayActionHandler, bookUserServiceCardAppointmentActionHandler } from '../../../../app/calendar/myCalendar/actions/fetchMyCalendar';
+
 export default class AppCalendarDayView extends React.Component{
 
 
@@ -53,71 +55,6 @@ export default class AppCalendarDayView extends React.Component{
                 <div className="day_app_list">
                   <div className="app_list_head">
                     12:00 - 01:00 <span className="pull-right"><a href=""><FontAwesome name='plus' onClick={this.showCreateComponent.bind(this, 'createTask')}/></a><a href=""><FontAwesome name='ellipsis-h' onClick={this.showCreateComponent.bind(this, 'viewTask')}/></a></span>
-                  </div>
-                  <ul className="list-group">
-                    <li className="list-group-item"><span className="task_with"><span className="ml ml-funder"></span></span>Task name here<span className="task_status act_task"><FontAwesome name='check'/></span></li>
-                    <li className="list-group-item"><span className="task_with"><span className="ml ml-funder"></span></span>Task name here<span className="task_status act_task"><FontAwesome name='check'/></span></li>
-                    <li className="list-group-item"><span className="task_with"><span className="ml ml-funder"></span></span>Task name here<span className="task_status can_task"><FontAwesome name='times'/></span></li>
-                    <li className="list-group-item"><span className="task_with"><span className="ml ml-funder"></span></span>Task name here<span className="task_status res_task"><FontAwesome name='refresh'/></span></li>
-                  </ul>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="day_app_list">
-                  <div className="app_list_head">
-                    01:00 - 02:00 <span className="pull-right"><FontAwesome name='plus'/><FontAwesome name='ellipsis-h'/></span>
-                  </div>
-                  <ul className="list-group">
-                    <li className="list-group-item"><span className="task_with"><span className="ml ml-funder"></span></span>Task name here<span className="task_status act_task"><FontAwesome name='check'/></span></li>
-                    <li className="list-group-item"><span className="task_with"><span className="ml ml-funder"></span></span>Task name here<span className="task_status act_task"><FontAwesome name='check'/></span></li>
-                    <li className="list-group-item"><span className="task_with"><span className="ml ml-funder"></span></span>Task name here<span className="task_status can_task"><FontAwesome name='times'/></span></li>
-                    <li className="list-group-item"><span className="task_with"><span className="ml ml-funder"></span></span>Task name here<span className="task_status res_task"><FontAwesome name='refresh'/></span></li>
-                  </ul>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="day_app_list">
-                  <div className="app_list_head">
-                    02:00 - 03:00 <span className="pull-right"><FontAwesome name='plus'/><FontAwesome name='ellipsis-h'/></span>
-                  </div>
-                  <ul className="list-group">
-                    <li className="list-group-item"><span className="task_with"><span className="ml ml-funder"></span></span>Task name here<span className="task_status act_task"><FontAwesome name='check'/></span></li>
-                    <li className="list-group-item"><span className="task_with"><span className="ml ml-funder"></span></span>Task name here<span className="task_status act_task"><FontAwesome name='check'/></span></li>
-                    <li className="list-group-item"><span className="task_with"><span className="ml ml-funder"></span></span>Task name here<span className="task_status can_task"><FontAwesome name='times'/></span></li>
-                    <li className="list-group-item"><span className="task_with"><span className="ml ml-funder"></span></span>Task name here<span className="task_status res_task"><FontAwesome name='refresh'/></span></li>
-                  </ul>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="day_app_list">
-                  <div className="app_list_head">
-                    03:00 - 04:00 <span className="pull-right"><FontAwesome name='plus'/><FontAwesome name='ellipsis-h'/></span>
-                  </div>
-                  <ul className="list-group">
-                    <li className="list-group-item"><span className="task_with"><span className="ml ml-funder"></span></span>Task name here<span className="task_status act_task"><FontAwesome name='check'/></span></li>
-                    <li className="list-group-item"><span className="task_with"><span className="ml ml-funder"></span></span>Task name here<span className="task_status act_task"><FontAwesome name='check'/></span></li>
-                    <li className="list-group-item"><span className="task_with"><span className="ml ml-funder"></span></span>Task name here<span className="task_status can_task"><FontAwesome name='times'/></span></li>
-                    <li className="list-group-item"><span className="task_with"><span className="ml ml-funder"></span></span>Task name here<span className="task_status res_task"><FontAwesome name='refresh'/></span></li>
-                  </ul>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="day_app_list">
-                  <div className="app_list_head">
-                    04:00 - 05:00 <span className="pull-right"><FontAwesome name='plus'/><FontAwesome name='ellipsis-h'/></span>
-                  </div>
-                  <ul className="list-group">
-                    <li className="list-group-item"><span className="task_with"><span className="ml ml-funder"></span></span>Task name here<span className="task_status act_task"><FontAwesome name='check'/></span></li>
-                    <li className="list-group-item"><span className="task_with"><span className="ml ml-funder"></span></span>Task name here<span className="task_status act_task"><FontAwesome name='check'/></span></li>
-                    <li className="list-group-item"><span className="task_with"><span className="ml ml-funder"></span></span>Task name here<span className="task_status can_task"><FontAwesome name='times'/></span></li>
-                    <li className="list-group-item"><span className="task_with"><span className="ml ml-funder"></span></span>Task name here<span className="task_status res_task"><FontAwesome name='refresh'/></span></li>
-                  </ul>
-                </div>
-              </div>
-              <div className="col-md-3">
-                <div className="day_app_list">
-                  <div className="app_list_head">
-                    05:00 - 06:00 <span className="pull-right"><FontAwesome name='plus'/><FontAwesome name='ellipsis-h'/></span>
                   </div>
                   <ul className="list-group">
                     <li className="list-group-item"><span className="task_with"><span className="ml ml-funder"></span></span>Task name here<span className="task_status act_task"><FontAwesome name='check'/></span></li>

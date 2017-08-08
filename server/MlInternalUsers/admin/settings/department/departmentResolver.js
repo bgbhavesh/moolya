@@ -280,17 +280,23 @@ MlResolver.MlQueryResolver['fetchClusterChapterSubChapterBasedDepartmentRoles'] 
 }
 
 MlResolver.MlQueryResolver['fetchHierarchyMoolyaDepartment'] = (obj, args, context, info) => {
-  var isMoolya = args.isMoolya;
+  var resp = null;
+
   if(args.subChapterId){
     var subChapter = mlDBController.findOne('MlSubChapters', {_id: args.subChapterId}, context) || {};
-    if(subChapter)
-      isMoolya = subChapter.isDefaultSubChapter;
-  }
 
-  let resp = mlDBController.find('MlDepartments', {
-      isMoolya: isMoolya,
+    resp = mlDBController.find('MlDepartments', {
+      isActive: true,
+      "depatmentAvailable.subChapter":{$in:['all', args.subChapterId]},
+      "depatmentAvailable.cluster": {$in: [ 'all', args.clusterId ]}
+    }, context).fetch();
+  }else{
+    resp = mlDBController.find('MlDepartments', {
+      isMoolya: args.isMoolya,
       isActive: true,
       "depatmentAvailable.cluster": {$in: [ 'all', args.clusterId ]}
-  }, context).fetch();
+    }, context).fetch();
+  }
+
   return resp;
 }

@@ -1,13 +1,14 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function findAssignedRolesActionHandler(departmentId,subDepartmentId,type) {
+export async function findAssignedRolesActionHandler(clusterId, departmentId,subDepartmentId,type) {
+  let cluster = clusterId
   let did=departmentId
   let subdid = subDepartmentId
   const result = await client.query({
     query: gql`
-       query ($hierarchyId:String,$departmentId: String,$subDepartmentId:String,$type:String){
-         fetchAssignedRolesHierarchy(hierarchyId:$hierarchyId,departmentId:$departmentId,subDepartmentId:$subDepartmentId,type:$type) {
+       query ($clusterId:String, $hierarchyId:String,$departmentId: String,$subDepartmentId:String,$type:String){
+         fetchAssignedRolesHierarchy(clusterId:$clusterId, hierarchyId:$hierarchyId,departmentId:$departmentId,subDepartmentId:$subDepartmentId,type:$type) {
              _id
              teamStructureAssignment{
                  roleId
@@ -22,6 +23,7 @@ export async function findAssignedRolesActionHandler(departmentId,subDepartmentI
         }
     `,
     variables: {
+      clusterId:cluster,
       hierarchyId:'',
       departmentId:did,
       subDepartmentId:subdid,

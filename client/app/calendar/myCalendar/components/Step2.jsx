@@ -14,20 +14,37 @@ import gql from 'graphql-tag'
 
 // import custom method(s) and component(s)
 
+
 class MlAppServiceSelectTask extends Component{
 
   constructor(props) {
     super(props);
   }
 
-  componentDidMount() {
-    let mySwiper = new Swiper('.manage_tasks', {
-      speed: 400,
-      spaceBetween:20,
-      slidesPerView:'auto',
-      pagination: '.swiper-pagination',
-      paginationClickable: true
-    });
+
+  componentWillMount() {
+  }
+
+  async componentDidMount() {
+    // if(this.props.viewMode && this.props.serviceTask.tasks[0] ){
+    //   let taskId =this.props.serviceTask.tasks[0].id;
+    //   this.props.optionsBySelectService(taskId);
+    // }
+    // this.initilizeSwiper()
+    let WinHeight = $(window).height();
+    $('.step_form_wrap').height(WinHeight-(250+$('.app_header').outerHeight(true)));
+  }
+
+  componentWillUpdate() {
+    setTimeout(function () {
+      let mySwiper = new Swiper('.manage_tasks', {
+        speed: 400,
+        spaceBetween:20,
+        slidesPerView:'auto',
+        pagination: '.swiper-pagination',
+        paginationClickable: true
+      });
+    }, 100);
   }
 
   /**
@@ -35,15 +52,19 @@ class MlAppServiceSelectTask extends Component{
    * Desc :: List out the task for service
    * @return {Array} :: list of task
    */
-  // getSelectTaskOptions() {
-  //   const { serviceOptionTasks } = this.props.serviceTask;
-  //   let options = [];
-  //   if (serviceOptionTasks && serviceOptionTasks.length > 0) {
-  //     serviceOptionTasks.map((data) => {
-  //       options.push({value: data.id, label: data.name});
-  //     });
-  //   }
-  //   return options;
+  getSelectTaskOptions() {
+    const { serviceOptionTasks } = this.props.serviceTask;
+    let options = [];
+    if (serviceOptionTasks && serviceOptionTasks.length > 0) {
+      serviceOptionTasks.map((data) => {
+        options.push({value: data.id, label: data.name});
+      });
+    }
+    return options;
+  }
+
+  // optionsBySelectService(id) {
+  //   this.props.optionsBySelectService(id)
   // }
 
   /**
@@ -52,20 +73,20 @@ class MlAppServiceSelectTask extends Component{
    * @return XML
    */
 
-  // getTabs() {
-  //   const { serviceTask, optionsBySelectService, deleteSelectedTask } = this.props;
-  //   const tabs = serviceTask.tasks ? serviceTask.tasks.map((tab, index) => {
-  //     return (
-  //       <li className={serviceTask.selectedTaskId === tab.id ? 'active' : ''} key={index}>
-  //         <a href="#newTask" data-toggle="tab"
-  //            onClick={() => optionsBySelectService(tab.id)}>
-  //           <FontAwesome onClick={() => deleteSelectedTask(tab.id)} name='minus-square'/>{tab.displayName}
-  //         </a>
-  //       </li>
-  //     )
-  //   }) : [];
-  //   return tabs;
-  // }
+  getTabs() {
+    const { taskDetails, optionsBySelectService } = this.props;
+    const tabs = taskDetails ? taskDetails.map((tab, index) => {
+      return (
+        <li className='active' key={index}>
+          <a href="#newTask" data-toggle="tab"
+             onClick={optionsBySelectService(tab.id)}>
+            {tab.displayName}
+          </a>
+        </li>
+      )
+    }) : [];
+    return tabs;
+  }
 
   /**
    * Method :: getSessionList
@@ -86,8 +107,11 @@ class MlAppServiceSelectTask extends Component{
   //               <div  style={{'marginTop':'-4px'}}>
   //                 <label>Duration: &nbsp;
   //                   <input type="text"
-  //                          className="form-control inline_input"/> Hours
-  //                   <input type="text" className="form-control inline_input"/> Mins
+  //                          className="form-control inline_input"
+  //                          value={data.duration.hours || 0}/> Hours
+  //                   <input type="text"
+  //                          className="form-control inline_input"
+  //                          value={data.duration.minutes || 0}/> Mins
   //                 </label>
   //               </div>
   //             </div>
@@ -95,34 +119,38 @@ class MlAppServiceSelectTask extends Component{
   //               <div  style={{'marginTop':'-4px'}}>
   //                 <label>
   //                   Sequence: &nbsp;
-  //                   <input className="form-control inline_input" type="number" min="0"/>
+  //                   <input className="form-control inline_input"
+  //                          type="number"
+  //                          min="0"
+  //                          value={data.sequence}
+  //                          onChange={(event)=> updateSessionSequence(event, data.sessionId)} />
   //                 </label>
   //               </div>
   //             </div>
   //             &nbsp;
   //           </div>
-  //           {/*<div className="panel-body">*/}
-  //             {/*<div className="swiper-container manage_tasks">*/}
-  //               {/*<div className="swiper-wrapper">*/}
-  //                 {/*{ data.activities && data.activities.map((activity, index) => {*/}
-  //                   {/*return (*/}
-  //                     {/*<div className="swiper-slide funding_list list_block notrans" key={index}>*/}
-  //                       {/*<p className="online">{activity.mode}</p>*/}
-  //                       {/*<span>Duration:</span><br />*/}
-  //                       {/*<div className="form-group">*/}
-  //                         {/*<label><input type="text" className="form-control inline_input"*/}
-  //                                       {/*value={activity.duration.hours || 0} disabled /> Hours*/}
-  //                           {/*<input type="text" className="form-control inline_input"*/}
-  //                                  {/*value={activity.duration.minutes || 0} disabled /> Mins*/}
-  //                         {/*</label>*/}
-  //                       {/*</div>*/}
-  //                       {/*<h3>{activity.displayName}</h3>*/}
-  //                     {/*</div>*/}
-  //                   {/*)*/}
-  //                 {/*})}*/}
-  //               {/*</div>*/}
-  //             {/*</div>*/}
-  //           {/*</div>*/}
+  //           <div className="panel-body">
+  //             <div className="swiper-container manage_tasks">
+  //               <div className="swiper-wrapper">
+  //                 { data.activities && data.activities.map((activity, index) => {
+  //                   return (
+  //                     <div className="swiper-slide funding_list list_block notrans" key={index}>
+  //                       <p className="online">{activity.mode}</p>
+  //                       <span>Duration:</span><br />
+  //                       <div className="form-group">
+  //                         <label><input type="text" className="form-control inline_input"
+  //                                       value={activity.duration.hours || 0} disabled /> Hours
+  //                           <input type="text" className="form-control inline_input"
+  //                                  value={activity.duration.minutes || 0} disabled /> Mins
+  //                         </label>
+  //                       </div>
+  //                       <h3>{activity.displayName}</h3>
+  //                     </div>
+  //                   )
+  //                 })}
+  //               </div>
+  //             </div>
+  //           </div>
   //         </div>
   //       )
   //     }
@@ -136,7 +164,17 @@ class MlAppServiceSelectTask extends Component{
    */
   render() {
     let that = this;
-
+    const {
+      profileId,
+      serviceId,
+      optionsBySelectService,
+      updateSessionSequence,
+      respectiveTab,
+      saveService,
+      selectedTaskId,
+      deleteSelectedTask,
+      serviceTask} = this.props;
+    // const tasks = serviceTask.selectedTaskDetails || {};
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
@@ -148,10 +186,15 @@ class MlAppServiceSelectTask extends Component{
             <div className="panel-body">
               <div className="ml_tabs ml_tabs_large">
                 <ul  className="nav nav-pills">
-                  <li className={'active'} >
-                    <a href="#newTask" data-toggle="tab" className="add-contact">
-                      <FontAwesome name='plus-square'/> Add new task</a>
-                  </li>
+                      {/*<li className={'active'} key={-1}>*/}
+                        {/*<a href="#newTask" data-toggle="tab"*/}
+                           {/*className="add-contact"*/}
+                           {/*>*/}
+                          {/*/!*onClick={() => optionsBySelectService()}*!/*/}
+                          {/*/!*<FontAwesome name='plus-square'/> Add new task*!/*/}
+                        {/*</a>*/}
+                      {/*</li>*/}
+                  {that.getTabs()}
                 </ul>
               </div>
 
@@ -161,7 +204,12 @@ class MlAppServiceSelectTask extends Component{
                     <form>
                       <div className="form-group">
                         {/*<select className="form-control"><option>Select task</option></select>*/}
-                        <Select name="form-field-name" placeholder="Select Tasks"/>
+                        <Select name="form-field-name"
+                                // options={this.getSelectTaskOptions()}
+                                // value={serviceTask.selectedTaskId}
+                                // placeholder="Select Tasks"
+                                // onChange={(option) => optionsBySelectService(option.value)}
+                          />
                         {/*<Moolyaselect multiSelect={false}
                          placeholder="Select Tasks"
                          className="form-control float-label"
@@ -175,10 +223,10 @@ class MlAppServiceSelectTask extends Component{
                          onSelect={(value) => optionsBySelectService(value)} />*/}
                       </div>
                       <div className="form-group">
-                        <label>Total number of Sessions <input className="form-control inline_input"  /> </label>
+                        <label>Total number of Sessions <input className="form-control inline_input"  disabled /> </label>
                       </div>
                       <div className="form-group">
-                        <label>Duration: &nbsp; <input type="text" className="form-control inline_input"  /> Hours <input type="text" className="form-control inline_input" /> Mins </label>
+                        <label>Duration: &nbsp; <input type="text" className="form-control inline_input"  disabled /> Hours <input type="text" className="form-control inline_input" disabled /> Mins </label>
                       </div>
                     </form>
                   </div>
@@ -194,16 +242,21 @@ class MlAppServiceSelectTask extends Component{
                       <div className="form-group">
                         <label>
                           Sequence
-                          <input className="form-control inline_input" type="number" min="0" id="tasksequence"/>
+                          <input className="form-control inline_input"
+                                 type="number"
+                                 min="0"
+                                 id="tasksequence"
+                                />
                         </label>
                       </div>
                     </form>
                   </div>
                   <br className="brclear"/>
-                  <div className="ml_icon_btn">
-                    <div className="save_btn" ><span className="ml ml-save"></span></div>
-                    <a href="" className="cancel_btn"><span className="ml ml-delete"></span></a>
-                  </div>
+                  {/*{this.getSessionList()}*/}
+                   {/*<div className="ml_icon_btn">*/}
+                    {/*<div className="save_btn" ><span className="ml ml-save"></span></div>*/}
+                    {/*<div className="cancel_btn" ><span className="ml ml-delete"></span></div>*/}
+                  {/*</div>*/}
                 </div>
                 <div className="tab-pane" id="2a">
                 </div>
@@ -216,15 +269,14 @@ class MlAppServiceSelectTask extends Component{
   }
 };
 
-// MlAppServiceSelectTask.propTypes = {
-//   serviceTask: PropTypes.PropTypes.oneOfType([
-//     React.PropTypes.object,
-//     React.PropTypes.array ]),
-//   getServiceDetails: PropTypes.func,
-//   saveService: PropTypes.func,
-//   optionsBySelectService: PropTypes.func,
-//   respectiveTab: PropTypes.func,
-//   updateSessionSequence: PropTypes.func
-// };
+MlAppServiceSelectTask.propTypes = {
+  serviceTask: PropTypes.PropTypes.oneOfType([
+    React.PropTypes.object,
+    React.PropTypes.array ]),
+  saveService: PropTypes.func,
+  optionsBySelectService: PropTypes.func,
+  respectiveTab: PropTypes.func,
+  updateSessionSequence: PropTypes.func
+};
 export default MlAppServiceSelectTask;
 

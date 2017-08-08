@@ -10,6 +10,7 @@ MlResolver.MlQueryResolver['fetchAssignedRolesHierarchy'] = (obj, args, context,
   if (department && department.isActive) {
     response= mlDBController.findOne('MlHierarchyAssignments', {
       $and: [
+        {clusterId:args.clusterId},
         {parentDepartment:args.departmentId},
         {parentSubDepartment:args.subDepartmentId},
         {"teamStructureAssignment.assignedLevel": {$in: [args.type]}}

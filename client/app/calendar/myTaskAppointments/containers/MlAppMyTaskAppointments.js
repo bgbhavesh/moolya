@@ -128,7 +128,7 @@ class MyTaskAppointments extends Component {
    */
   setMyTaskAppointmentSteps() {
     const { tasks, selectedTaskId, selectedTask } = this.state;
-    const {isTaskComponent} = this.props;
+    const {isTaskComponent, appointmentDate} = this.props;
     const steps = [
       {
         name: 'Info',
@@ -154,7 +154,7 @@ class MyTaskAppointments extends Component {
       },
       {
         name: 'Temp',
-        component: <MlAppMyCalendarIdeator />,
+        component: <MlAppMyCalendarIdeator appointmentDate={appointmentDate} />,
         icon: <span className=""></span>
       }
 

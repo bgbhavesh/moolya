@@ -169,7 +169,7 @@ export default class MLAppMyCalendar extends Component {
           <div className="app_main_wrap" style={{'overflow': 'auto'}}>
             <div className="app_padding_wrap">
               <MlCalendarHeader componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
-              <AppCalendarDayView componentToLoad={this.componentToLoad.bind(this)} appointmentDate={this.state.appointmentDate} />
+              <AppCalendarDayView   profileId={this.state.profileId} componentToLoad={this.componentToLoad.bind(this)} appointmentDate={this.state.appointmentDate} />
             </div>
           </div>
         )

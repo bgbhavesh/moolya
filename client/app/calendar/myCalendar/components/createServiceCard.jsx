@@ -231,10 +231,13 @@ export default class MlAppServiceManageSchedule extends Component {
         name: 'View',
         component: <Step1
           profileId={this.props.profileId}
+          serviceId={this.state.serviceId}
           isTaskComponent={isTaskComponent}
+          bookDetails={this.bookDetails.bind(this)}
           onChangeSteps={this.onChangeSteps}
           selectedService={this.selectedService.bind(this)}
           serviceBasicInfo={serviceBasicInfo}
+          appointmentDate={this.props.appointmentDate}
         />,
         icon: <span className="ml fa fa-plus-square-o"></span>
       },

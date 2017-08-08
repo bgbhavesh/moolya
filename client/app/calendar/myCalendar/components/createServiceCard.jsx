@@ -30,6 +30,7 @@ import CalenderHead from './calendarHead';
 import MlAppTaskAppointmentBasicInfo from './MlAppTaskAppointmentBasicInfo';
 import MlAppTaskAppointmentSessions from './MlAppTaskAppointmentSessions';
 import MlAppTaskAppointmentTermAndCondition from './MlAppTaskAppointmentTermAndCondition';
+import MlAppMyTaskAppointments from '../../myTaskAppointments/containers/MlAppMyTaskAppointments';
 export default class MlAppServiceManageSchedule extends Component {
 
   /**
@@ -263,49 +264,50 @@ export default class MlAppServiceManageSchedule extends Component {
    * Method :: setTaskSteps
    * Desc :: Sets components steps for stepzila to create and update task data
    */
-  setTaskSteps() {
-    const {isTaskComponent} = this.state;
-    const steps = [
-      {
-        name: 'Service',
-        component: <MlAppTaskAppointmentBasicInfo
-          isTaskComponent={isTaskComponent}
-          onChangeSteps={this.onChangeSteps}
-        />,
-        icon: <span className="ml fa fa-plus-square-o"></span>
-      },
-      {
-        name: 'Sessions',
-        component: <MlAppTaskAppointmentSessions isTaskComponent={isTaskComponent}
-                                              onChangeSteps={this.onChangeSteps} />,
-        icon: <span className="ml ml-payments"></span>
-      },
-      {
-        name: 'Terms and conditions',
-        component: <MlAppTaskAppointmentTermAndCondition isTaskComponent={isTaskComponent}
-                                              onChangeSteps={this.onChangeSteps} />,
-        icon: <span className="ml ml-payments"></span>
-      },
-      {
-        name: '',
-        //component: <MlAppTaskAppointmentSessions isTaskComponent={isTaskComponent} onChangeSteps={this.onChangeSteps} />,
-        icon: <span className="ml ml-payments"></span>
-      },
-      {
-        name: '',
-        //component: <MlAppTaskAppointmentTermAndCondition isTaskComponent={isTaskComponent} onChangeSteps={this.onChangeSteps} />,
-        icon: <span className="ml ml-payments"></span>
-      }
-
-    ];
-    return steps;
-  }
+  // setTaskSteps() {
+  //   const {isTaskComponent} = this.state;
+  //   const steps = [
+  //     {
+  //       name: 'Service',
+  //       component: <MlAppTaskAppointmentBasicInfo
+  //         isTaskComponent={isTaskComponent}
+  //         onChangeSteps={this.onChangeSteps}
+  //       />,
+  //       icon: <span className="ml fa fa-plus-square-o"></span>
+  //     },
+  //     {
+  //       name: 'Sessions',
+  //       component: <MlAppTaskAppointmentSessions isTaskComponent={isTaskComponent}
+  //                                             onChangeSteps={this.onChangeSteps} />,
+  //       icon: <span className="ml ml-payments"></span>
+  //     },
+  //     {
+  //       name: 'Terms and conditions',
+  //       component: <MlAppTaskAppointmentTermAndCondition isTaskComponent={isTaskComponent}
+  //                                             onChangeSteps={this.onChangeSteps} />,
+  //       icon: <span className="ml ml-payments"></span>
+  //     },
+  //     {
+  //       name: '',
+  //       //component: <MlAppTaskAppointmentSessions isTaskComponent={isTaskComponent} onChangeSteps={this.onChangeSteps} />,
+  //       icon: <span className="ml ml-payments"></span>
+  //     },
+  //     {
+  //       name: '',
+  //       //component: <MlAppTaskAppointmentTermAndCondition isTaskComponent={isTaskComponent} onChangeSteps={this.onChangeSteps} />,
+  //       icon: <span className="ml ml-payments"></span>
+  //     }
+  //
+  //   ];
+  //   return steps;
+  // }
   /**
    * Method :: React render
    * Desc :: Showing html page
    * @returns {XML}
    */
   render() {
+    const {appointmentDate, profileId} = this.props;
     const {isTaskComponent} = this.state;
     return (
       <div className="app_main_wrap">
@@ -314,9 +316,18 @@ export default class MlAppServiceManageSchedule extends Component {
           <div className="col-md-12">
             <div className='step-progress'>
               <div id="root">
-                <StepZilla steps={isTaskComponent ? this.setTaskSteps() : this.setServiceSteps()}
-                           stepsNavigation={false}
-                           prevBtnOnLastStep={true}/>
+                {!isTaskComponent ?
+                  <StepZilla steps={this.setServiceSteps()}
+                             stepsNavigation={false}
+                             prevBtnOnLastStep={true}/>
+                  :
+                  <MlAppMyTaskAppointments isTaskComponent={isTaskComponent}
+                                           appointmentDate={appointmentDate}
+                                           onChangeSteps={this.onChangeSteps}
+                                           profileId={profileId}
+                  />
+                }
+
               </div>
             </div>
           </div>

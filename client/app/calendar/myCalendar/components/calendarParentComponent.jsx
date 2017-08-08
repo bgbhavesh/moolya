@@ -144,6 +144,7 @@ export default class MLAppMyCalendar extends Component {
 
 
   render() {
+    const {appointmentDate} = this.state;
     const that = this;
     // let eventsData = [{ title: '3', 'start': new Date(2017, 7, 7), 'end': new Date(2017, 7, 10) }];
     switch(that.state.componentToLoad) {
@@ -177,8 +178,8 @@ export default class MLAppMyCalendar extends Component {
         return(
         <div className="app_main_wrap" style={{'overflow': 'auto'}}>
           <div className="app_padding_wrap">
-            <MlCalendarHeader headerManagement={that.headerManagement.bind(that)}  componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
-            <MlAppServiceManageSchedule profileId={this.state.profileId} componentToLoad={this.componentToLoad.bind(this)}/>
+            <MlCalendarHeader componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
+            <MlAppServiceManageSchedule profileId={this.state.profileId} appointmentDate={appointmentDate} componentToLoad={this.componentToLoad.bind(this)}/>
           </div>
         </div>
         )

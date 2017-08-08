@@ -6,9 +6,6 @@
 
 // import NPM module(s)
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import  Select from 'react-select';
-import FontAwesome from 'react-fontawesome';
 import ScrollArea from 'react-scrollbar';
 import SessionDetails from './sessionDetails'
 import {
@@ -41,6 +38,7 @@ class MlAppServiceSelectTask extends Component{
 
   componentWillMount() {
     // console.log(this.props.task)
+    this.getOffices();
   }
 
   // componentWillReceiveProps(newProps) {
@@ -76,6 +74,19 @@ class MlAppServiceSelectTask extends Component{
     this.setState({task: newProps.task})
   }
 
+  /**
+   * Method :: getOffices
+   * Desc   :: fetch the offices of user
+   * @returns Void
+   */
+  async getOffices () {
+    let response = await fetchOfficeActionHandler();
+    if(response){
+      this.setState({
+        offices:response
+      });
+    }
+  }
   /**
    * Method :: getSelectTaskOptions
    * Desc :: List out the task for service
@@ -126,9 +137,10 @@ class MlAppServiceSelectTask extends Component{
   getTabs() {
     let that = this;
     const { taskDetails, selectedTab } = that.props;
+    const {selectedTaskId} = this.state;
     const tabs = taskDetails ? taskDetails.map((tab, index) => {
       return (
-        <li className={'active'} key={index}>
+        <li className={selectedTaskId === tab.id ? 'active' : ''} key={tab.id}>
           <a href="" data-toggle="tab"
              onClick={ that.sendTaskId.bind(that,tab.id, tab.isExternal, tab.isInternal)}>
             {tab.displayName}
@@ -317,17 +329,6 @@ class MlAppServiceSelectTask extends Component{
   render() {
     let that = this;
     const {activities, index, isExternal, isInternal, offices, duration} = this.state;
-    // const {
-    //   profileId,
-    //   serviceId,
-    //   optionsBySelectService,
-    //   updateSessionSequence,
-    //   respectiveTab,
-    //   saveService,
-    //   selectedTaskId,
-    //   deleteSelectedTask,
-    //   serviceTask} = this.props;
-    // const tasks = serviceTask.selectedTaskDetails || {};
     return (!this.state.sessionExpanded?
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>

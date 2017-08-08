@@ -7,16 +7,11 @@
 // import NPM module(s)
 import React, { Component } from 'react';
 import Moolyaselect from "../../../commons/components/MlAppSelectWrapper";
-import PropTypes from 'prop-types';
-import { Meteor } from 'meteor/meteor';
 import FontAwesome from 'react-fontawesome';
-import Datetime from "react-datetime";
-import Moment from "moment";
-import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag';
-import Select from 'react-select';
-import { cloneDeep } from 'lodash';
+var Select = require('react-select');
 import { graphql } from 'react-apollo';
+ import { fetchServiceSeekerHandler } from '../../../calendar/myCalendar/actions/appointmentCount.js'
 
 
 
@@ -60,11 +55,17 @@ class Step1 extends Component {
   /**
    * Method :: React render
    * Desc :: Showing html page
-   * @returns {XML}
+   * @returns {XML}`
    */
 
+  serviceSeeker() {
+    // const resp = fetchServiceSeekerHandler(this.props.profileId)
+    return([{
+      value: 'irender', label: 'hi'
+    }])
+  }
+
   selectedService(value) {
-    console.log(value)
     this.setState({
       service: value
     })
@@ -100,7 +101,7 @@ class Step1 extends Component {
               </div><br className="brclear"/>
 
               <div className="form-group">
-                <input type="text" className="form-control" placeholder="Choose Service Seeker"/>
+                <Select name="form-field-name" className="float-label" options={this.serviceSeeker()} placeholder="Choose Service Seeker"/>
               </div>
               <div className="form-group">
                 <label>Total number of Sessions Rs.
@@ -165,19 +166,19 @@ class Step1 extends Component {
                   onSelect={this.selectedService.bind(this)}
                               />
               </div>
-              <div className="form-group">
-                <div className="input_types">
-                  <label>Set Priority</label>
-                  <input id="radio3" type="radio" name="radio2" value="1"/><label htmlFor="radio3"><span><span></span></span>Low</label>
-                </div>
-                <div className="input_types">
-                  <input id="radio4" type="radio" name="radio2" value="2"/><label htmlFor="radio4"><span><span></span></span>Medium</label>
-                </div>
-                <div className="input_types">
-                  <input id="radio5" type="radio" name="radio2" value="2"/><label htmlFor="radio5"><span><span></span></span>High</label>
-                </div>
-                <br className="brclear"/>
-              </div>
+              {/*<div className="form-group">*/}
+                {/*<div className="input_types">*/}
+                  {/*<label>Set Priority</label>*/}
+                  {/*<input id="radio3" type="radio" name="radio2" value="1"/><label htmlFor="radio3"><span><span></span></span>Low</label>*/}
+                {/*</div>*/}
+                {/*<div className="input_types">*/}
+                  {/*<input id="radio4" type="radio" name="radio2" value="2"/><label htmlFor="radio4"><span><span></span></span>Medium</label>*/}
+                {/*</div>*/}
+                {/*<div className="input_types">*/}
+                  {/*<input id="radio5" type="radio" name="radio2" value="2"/><label htmlFor="radio5"><span><span></span></span>High</label>*/}
+                {/*</div>*/}
+                {/*<br className="brclear"/>*/}
+              {/*</div>*/}
               <div className="form-group">
                 <label>
                   Service expires &nbsp;
@@ -230,15 +231,15 @@ class Step1 extends Component {
                 {/*</div>*/}
               {/*</div>*/}
             {/*</div>*/}
-            <div className="form-group pull-left">
-              <div className="input_types">
-                <input id="radio6" type="radio" name="radio3" value="1"/><label htmlFor="radio6"><span><span></span></span>Make Public</label>
-              </div>
-              <div className="input_types">
-                <input id="radio7" type="radio" name="radio3" value="2"/><label htmlFor="radio7"><span><span></span></span>Make Private</label>
-              </div>
-              <br className="brclear"/>
-            </div>
+            {/*<div className="form-group pull-left">*/}
+              {/*<div className="input_types">*/}
+                {/*<input id="radio6" type="radio" name="radio3" value="1"/><label htmlFor="radio6"><span><span></span></span>Make Public</label>*/}
+              {/*</div>*/}
+              {/*<div className="input_types">*/}
+                {/*<input id="radio7" type="radio" name="radio3" value="2"/><label htmlFor="radio7"><span><span></span></span>Make Private</label>*/}
+              {/*</div>*/}
+              {/*<br className="brclear"/>*/}
+            {/*</div>*/}
             <div className="pull-right">
               <div className="ml_btn large_btn">
                 <a href="#" className="save_btn" style={{'width': 'auto'}}>Total Amount Rs.{this.props.serviceBasicInfo.totalAmount}/-</a>

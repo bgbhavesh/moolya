@@ -122,7 +122,6 @@ export default class MlAppServiceManageSchedule extends Component {
 
         this.setState({
           serviceBasicInfo: serviceInfo,
-          profileId: service.profileId,
           serviceTermAndCondition: TermAndCondition,
           attachments: attachmentDetails
         })
@@ -230,6 +229,7 @@ export default class MlAppServiceManageSchedule extends Component {
       {
         name: 'View',
         component: <Step1
+          profileId={this.props.profileId}
           isTaskComponent={isTaskComponent}
           onChangeSteps={this.onChangeSteps}
           selectedService={this.selectedService.bind(this)}

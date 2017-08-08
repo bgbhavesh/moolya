@@ -496,6 +496,88 @@ class MlAppointment {
     }
     return { days: response };
   }
+
+  /**
+   *
+   */
+  getUserAppointments( userId, profileId, day, month, year) {
+    const that = this;
+    /**
+     * Initialize the date object and set date month and year
+     */
+    let date = new Date();
+    date.setDate(day);
+    date.setMonth(month);
+    date.setYear(year);
+    date.setHours(0);
+    date.setMinutes(0);
+    date.setSeconds(0);
+
+    let endDate = new Date(date);
+    endDate.setDate(endDate.getDate()+1);
+    /**
+     * Fetch user task info and calendar setting
+     */
+    let calendarSetting = mlDBController.findOne('MlCalendarSettings',{userId: userId, profileId: profileId});
+    calendarSetting.vacations = calendarSetting.vacations ? calendarSetting.vacations : [];
+
+    /**
+     * Get service provider available slots
+     */
+    let userSlotsInfo = that.getUserSlot(calendarSetting, date);
+    let userSlots = userSlotsInfo.slotTimes ? userSlotsInfo.slotTimes : [];
+
+    let appointments = mlDBController.aggregate( 'MlAppointments', [
+      {
+        $lookup: {
+          from: "mlAppointmentMembers",
+          localField: "appointmentId",
+          foreignField: "appointmentId",
+          as: "members"
+        }
+      },
+      { "$unwind": "$members" },
+      { "$match": {'members.userId':userId, 'members.profileId':profileId, startDate: { $gte:date } ,endDate: {$lt:endDate} } }
+    ]);
+
+    /**
+     * Intersection service provider available slots with assignees available slots
+     */
+
+    let response= [];
+
+    userSlots.forEach(function(userSlots){
+      let userSlotStart = getTimeDate(userSlots.split('-')[0], date);
+      let userSlotEnd = getTimeDate(userSlots.split('-')[1], date);
+      let userAppointments = appointments.filter(function (appointment) {
+        let appointmentStartDate = new Date(appointment.startDate);
+        return userSlotStart.getTime() < appointmentStartDate.getTime() && userSlotEnd.getTime() > appointmentStartDate.getTime();
+      }).map(function (appointment) {
+        appointment.appointmentInfo = appointment.appointmentInfo ? appointment.appointmentInfo : {};
+        let name;
+        if(appointment.appointmentType == 'SERVICE-TASK' && appointment.appointmentInfo.resourceType == 'ServiceCard' ) {
+          name = appointment.appointmentInfo.serviceName + ' ' + appointment.appointmentInfo.sessionId;
+
+        } else if(appointment.appointmentType == 'INTERNAL-TASK' && appointment.appointmentInfo.resourceType == 'Task' ) {
+          name = appointment.appointmentInfo.taskName + ' ' + appointment.appointmentInfo.sessionId;
+
+        } else if(appointment.appointmentType == 'SELF-TASK' && appointment.appointmentInfo.resourceType == 'Task' ) {
+          name = appointment.appointmentInfo.taskName;
+        }
+
+        return {
+          id: appointment.appointmentId,
+          type: appointment.appointmentType,
+          name: name
+        }
+      });
+      response.push({
+        slot: userSlots,
+        appointments: userAppointments
+      });
+    });
+    return response;
+  }
 }
 
 /**

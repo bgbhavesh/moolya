@@ -137,6 +137,8 @@ export default class step1 extends React.Component{
 
     }
 
+    this.props.showPromptAlert(true)
+
 
 
     //this.props.getRegistrationDetails(this.state)
@@ -281,6 +283,7 @@ export default class step1 extends React.Component{
     if(response){
       if(response.success){
         this.props.refetchRegistrationAndTemplates();
+        this.props.showPromptAlert(false)
         toastr.success("Saved Successfully")
       }else{
         toastr.error(response.result);

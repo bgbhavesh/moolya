@@ -39,8 +39,6 @@ export default class Step3 extends React.Component{
     $('.left_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
     this.props.getRegistrationContactDetails();
     initalizeFloatLabel();
-
-
   }
  /* componentWillReceiveProps(nextProps){
     this.getRegistrationContactInfo();

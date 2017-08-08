@@ -136,11 +136,23 @@ let appointment=`
     transId: String
   }
   
+  type myAppointmentData {
+    id: String
+    type: String
+    name: String
+  }
+  
+  type myAppointmentsResponse {
+    slot: String,
+    appointments: [myAppointmentData]
+  }
+  
   type Query {
      fetchMyAppointment: [Appointment]
      fetchAllProfileAppointmentCounts: profileAppointment
      fetchProfileAppointmentCounts( profileId: String ): profileAppointment
      fetchServiceSeekerList(profileId: String!, serviceId: String): [serviceSeekerList]
+     fetchMyAppointment(profileId: String, day: Int, month: Int): [myAppointmentsResponse]
   }
   
   type Mutation {

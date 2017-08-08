@@ -212,3 +212,21 @@ export async function bookTaskInternalAppointment(taskInternalAppointmentInfo) {
   return task;
 }
 
+export async function createInternalAppointmentInfo(selfInternalAppointmentInfo) {
+  const result = await appClient.mutate({
+    mutation: gql`
+    mutation($selfInternalAppointmentInfo: selfInternalAppointmentInfo){
+        bookSelfTaskInternalAppointment(selfInternalAppointmentInfo: $selfInternalAppointmentInfo) {
+        success
+        code
+        result
+      }
+    }`,
+    variables: {
+      selfInternalAppointmentInfo
+    }
+  });
+  const task = result.data.bookSelfTaskInternalAppointment;
+  return task;
+}
+

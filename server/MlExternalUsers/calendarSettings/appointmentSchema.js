@@ -134,6 +134,7 @@ let appointment=`
     userId: String
     profileId: String
     transId: String
+    orderId: String
   }
   
   type myAppointmentData {

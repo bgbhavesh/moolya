@@ -3,7 +3,7 @@
  */
 import _ from 'lodash'
 import MlAdminUserContext from '../../../../../server/mlAuthorization/mlAdminUserContext'
-
+import MlUserContext from '../../../../MlExternalUsers/mlUserContext'
 class MlNonMoolyaAccess {
   constructor() {
   }
@@ -28,6 +28,31 @@ class MlNonMoolyaAccess {
       return matchSubChapter
     } else
       return true
+  }
+
+  /**
+   * checking the condition for the external user only
+   * */
+  canExternalUserView(payload, context) {
+    var success = true
+    var userType = mlDBController.findOne('users', {_id: context.userId}) || {}
+    if (userType && userType.profile && !userType.profile.isInternaluser) {
+      var curUserProfile = new MlUserContext().userProfileDetails(context.userId);
+      let accessPortfolio = mlDBController.findOne('MlPortfolioDetails', {_id: payload}) || {}
+      if (accessPortfolio && (accessPortfolio.subChapterId == curUserProfile.subChapterId)) {
+        success = true
+      } else {
+        let subChapter = mlDBController.findOne('MlSubChapters', {
+          _id: curUserProfile.subChapterId,
+          isDefaultSubChapter: false
+        }, context)
+        if (subChapter.internalSubChapterAccess && subChapter.internalSubChapterAccess.externalUser && subChapter.internalSubChapterAccess.externalUser.canView)
+          success =  true
+        else
+          success =  false
+      }
+    }
+    return success
   }
 }
 

@@ -41,6 +41,7 @@ class MlAppServiceSelectTask extends Component{
 
   componentWillMount() {
     // console.log(this.props.task)
+    this.getOffices();
   }
 
   // componentWillReceiveProps(newProps) {
@@ -76,6 +77,19 @@ class MlAppServiceSelectTask extends Component{
     this.setState({task: newProps.task})
   }
 
+  /**
+   * Method :: getOffices
+   * Desc   :: fetch the offices of user
+   * @returns Void
+   */
+  async getOffices () {
+    let response = await fetchOfficeActionHandler();
+    if(response){
+      this.setState({
+        offices:response
+      });
+    }
+  }
   /**
    * Method :: getSelectTaskOptions
    * Desc :: List out the task for service
@@ -126,9 +140,10 @@ class MlAppServiceSelectTask extends Component{
   getTabs() {
     let that = this;
     const { taskDetails, selectedTab } = that.props;
+    const {selectedTaskId} = this.state;
     const tabs = taskDetails ? taskDetails.map((tab, index) => {
       return (
-        <li className={'active'} key={index}>
+        <li className={selectedTaskId === tab.id ? 'active' : ''} key={tab.id}>
           <a href="" data-toggle="tab"
              onClick={ that.sendTaskId.bind(that,tab.id, tab.isExternal, tab.isInternal)}>
             {tab.displayName}
@@ -210,7 +225,7 @@ class MlAppServiceSelectTask extends Component{
    */
 
   getSessionList() {
-    let { session, _id } = this.state.task;
+    let { session } = this.state.task;
     console.log( session );
     if( session ) {
       const sessionsList = session ? session.map((data, index) => {

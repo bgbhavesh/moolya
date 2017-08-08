@@ -27,7 +27,8 @@ export default class RegistrationWizard extends React.Component{
       softRegComponent:'',
       hardRegComponent:'',
       registrationDetails:{},
-      kycDocumentList:[]
+      kycDocumentList:[],
+      alertDisplay:true
     }
     this.findRegistration.bind(this);
     this.fetchHardRegistrationTemplate.bind(this);
@@ -126,6 +127,10 @@ export default class RegistrationWizard extends React.Component{
     this.setState({softRegSteps:steps||[]});
   }
 
+  showPromptAlert(value){
+    this.setState({"alertDisplay" : value})
+  }
+
   render(){
     let registrationId = this.props.config;
     let registrationConfig={
@@ -136,6 +141,7 @@ export default class RegistrationWizard extends React.Component{
       registrationInfo:this.state.registrationDetails.registrationInfo,
       emailDetails:this.state.registrationDetails.emails,
       refetchRegistrationAndTemplates:this.refetchRegistrationAndTemplates.bind(this),
+      showPromptAlert:this.showPromptAlert.bind(this),
 
       /**step2 props*/
       registrationDetails:this.state.registrationDetails.registrationDetails,
@@ -194,7 +200,9 @@ export default class RegistrationWizard extends React.Component{
               <div >
                 {hasSoftRegTemplate&&<SoftRegComponent {...registrationConfig}/>}
                 {hasHardRegTemplate&&<HardRegComponent {...registrationConfig}/>}
-                {hasSteps&&<StepZilla steps={steps} stepsNavigation={true} prevBtnOnLastStep={true} dontValidate={false} showConfirm={true}/>}
+                {hasSteps&&<StepZilla steps={steps} stepsNavigation={true} prevBtnOnLastStep={true}
+                                      dontValidate={false} showConfirm={this.state.alertDisplay}
+                                      />}
               </div>
             </div>
           </div>)}

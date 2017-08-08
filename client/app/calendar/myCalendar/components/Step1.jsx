@@ -187,49 +187,49 @@ class Step1 extends Component {
               </div>
             </div>
             <br className="brclear"/>
-            <div className="panel panel-default library-wrap">
-              <div className="panel-heading"> Attendees <span className="pull-right"><input type="text"/> </span></div>
-              <div className="panel-body nopadding">
-                <div className="col-md-4 att_groups nopadding">
-                </div>
-                <div className="col-md-8 att_members">
-                  <ul className="users_list">
-                    <li>
-                      <a href="#">
-                        <img src="/images/p_3.jpg" /><br />
-                        <div className="tooltiprefer">
-                          <span>Venu<br/>Rs.3000</span>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <img src="/images/p_34.jpg" /><br />
-                        <div className="tooltiprefer">
-                          <span>Ramya<br/>Rs.5000</span>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <img src="/images/p_13.jpg" /><br />
-                        <div className="tooltiprefer">
-                          <span>Sameer<br/>Rs.8000</span>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <img src="/images/p_1.jpg" /><br />
-                        <div className="tooltiprefer">
-                          <span>Usha<br/>Rs.6000</span>
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+            {/*<div className="panel panel-default library-wrap">*/}
+              {/*<div className="panel-heading"> Attendees <span className="pull-right"><input type="text"/> </span></div>*/}
+              {/*<div className="panel-body nopadding">*/}
+                {/*<div className="col-md-4 att_groups nopadding">*/}
+                {/*</div>*/}
+                {/*<div className="col-md-8 att_members">*/}
+                  {/*<ul className="users_list">*/}
+                    {/*<li>*/}
+                      {/*<a href="#">*/}
+                        {/*<img src="/images/p_3.jpg" /><br />*/}
+                        {/*<div className="tooltiprefer">*/}
+                          {/*<span>Venu<br/>Rs.3000</span>*/}
+                        {/*</div>*/}
+                      {/*</a>*/}
+                    {/*</li>*/}
+                    {/*<li>*/}
+                      {/*<a href="#">*/}
+                        {/*<img src="/images/p_34.jpg" /><br />*/}
+                        {/*<div className="tooltiprefer">*/}
+                          {/*<span>Ramya<br/>Rs.5000</span>*/}
+                        {/*</div>*/}
+                      {/*</a>*/}
+                    {/*</li>*/}
+                    {/*<li>*/}
+                      {/*<a href="#">*/}
+                        {/*<img src="/images/p_13.jpg" /><br />*/}
+                        {/*<div className="tooltiprefer">*/}
+                          {/*<span>Sameer<br/>Rs.8000</span>*/}
+                        {/*</div>*/}
+                      {/*</a>*/}
+                    {/*</li>*/}
+                    {/*<li>*/}
+                      {/*<a href="#">*/}
+                        {/*<img src="/images/p_1.jpg" /><br />*/}
+                        {/*<div className="tooltiprefer">*/}
+                          {/*<span>Usha<br/>Rs.6000</span>*/}
+                        {/*</div>*/}
+                      {/*</a>*/}
+                    {/*</li>*/}
+                  {/*</ul>*/}
+                {/*</div>*/}
+              {/*</div>*/}
+            {/*</div>*/}
             <div className="form-group pull-left">
               <div className="input_types">
                 <input id="radio6" type="radio" name="radio3" value="1"/><label htmlFor="radio6"><span><span></span></span>Make Public</label>

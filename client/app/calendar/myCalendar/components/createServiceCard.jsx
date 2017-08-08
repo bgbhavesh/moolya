@@ -112,9 +112,19 @@ export default class MlAppServiceManageSchedule extends Component {
           totalAmount: service.payment.tasksAmount
         };
 
+        if (service.termsAndCondition) {
+           var TermAndCondition = _.omit(service.termsAndCondition, '__typename');
+        }
+
+        if(service.attachments) {
+            var attachmentDetails = _.omit(service.attachments, '__typename');
+        }
+
         this.setState({
           serviceBasicInfo: serviceInfo,
-          profileId: service.profileId
+          profileId: service.profileId,
+          serviceTermAndCondition: TermAndCondition,
+          attachments: attachmentDetails
         })
       }
       //     finalAmount = service.finalAmount;
@@ -139,9 +149,9 @@ export default class MlAppServiceManageSchedule extends Component {
       //         }
       //       });
       //     }
-      //     if (service.termsAndCondition) {
-      //       serviceTermAndCondition = _.omit(service.termsAndCondition, '__typename');
-      //     }
+      //
+
+
       //     if (service.facilitationCharge) {
       //       facilitationCharge = _.cloneDeep(service.facilitationCharge);
       //     }
@@ -164,7 +174,7 @@ export default class MlAppServiceManageSchedule extends Component {
         // clusterData: clusterData,
         // serviceTask: serviceTask,
         // serviceTermAndCondition: serviceTermAndCondition,
-        // attachments: attachments,
+        // attachments: attachments
         // service: service,
         // tasks: tasks,
         // facilitationCharge: facilitationCharge,
@@ -181,10 +191,10 @@ export default class MlAppServiceManageSchedule extends Component {
   async getTaskDetails() {
     const resp = await fetchTaskDetailsForServiceCard(this.state.profileId, this.state.serviceId)
     this.setState({TaskDetails: resp})
+    console.log(resp)
   }
 
   selectService(taskId) {
-    console.log(taskId)
     this.getTask(taskId)
   }
 
@@ -239,15 +249,12 @@ export default class MlAppServiceManageSchedule extends Component {
       },
       {
         name: 'Terms & Conditions',
-        component: <Step3/>,
+        component: <Step3
+          serviceTermAndCondition={this.state.serviceTermAndCondition}
+          attachments={this.state.attachments}
+        />,
         icon: <span className="ml ml-payments"></span>
       },
-      {
-        name: 'Payment',
-        // component: <MlAppServicePayment/>,
-        icon: <span className="ml ml-payments"></span>
-      },
-
     ];
     return steps;
   }

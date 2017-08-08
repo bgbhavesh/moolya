@@ -6,7 +6,7 @@ import MlRespPayload from '../../../commons/mlPayload'
 import _ from 'lodash';
 import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
 import mlInteractionService from '../mlInteractionRepoService';
-
+import MlAlertNotification from '../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 MlResolver.MlMutationResolver['likeRequest'] = (obj, args, context, info) =>{
     if(args && context && context.userId){
       var resp=null;
@@ -31,7 +31,8 @@ MlResolver.MlMutationResolver['likeRequest'] = (obj, args, context, info) =>{
             return response;
         }
         let code = 200;
-        let response = new MlRespPayload().successPayload(resp, code);
+        let likeRequest = MlAlertNotification.onLikeRequest()
+        let response = new MlRespPayload().successPayload(likeRequest, code);
         return response;
     }
 }

@@ -11,7 +11,7 @@ import _underscore from "underscore";
 import geocoder from "geocoder";
 import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification"
 import MlUserContext from '../../../../../server/MlExternalUsers/mlUserContext'
-
+import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 
 MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, info) => {
     let user=Meteor.users.findOne(context.userId);
@@ -125,7 +125,8 @@ MlResolver.MlMutationResolver['resetPassword'] = (obj, args, context, info) => {
     if (resp) {
       let emailSent = MlEmailNotification.onChangePassword(context);
       let code = 200;
-      let response = new MlRespPayload().successPayload("Password Reset complete", code);
+      let passwordalert =  MlAlertNotification. onPasswordAlert()
+      let response = new MlRespPayload().successPayload(passwordalert, code);
       return response
 
   }
@@ -1561,20 +1562,22 @@ MlResolver.MlQueryResolver['findExternalUserAddressBook'] = (obj, args, context,
 
   var  user= mlDBController.findOne('users',{_id:userId},context) || {};
   if(user){
-    var clusterId;
-    let profile = new MlUserContext(userId).userProfileDetails(userId)
-
+    // var clusterId;
+    // let profile = new MlUserContext(userId).userProfileDetails(userId)
     // registrationId = profile.registrationId;
-    clusterId = profile.clusterId;
-    const addInfo = user.profile.externalUserAdditionalInfo?user.profile.externalUserAdditionalInfo:[]
-    var infoDetails;
-    /* _.each(addInfo,function (say,value) {
-     if(say.registrationId == registrationId && say.clusterId == clusterId){
-     infoDetails = say
-     }
-     })*/
-    infoDetails = _underscore.find(addInfo, {'profileId': profile.profileId}) || {};
-    return infoDetails;
+
+    var profile = _.find(user.profile.externalUserProfiles, {registrationId:registrationId})
+    var profileId = profile.profileId;
+
+    var additionalInfo = _.find(user.profile.externalUserAdditionalInfo, {'profileId': profileId});
+
+    return additionalInfo;
+
+    // clusterId = profile.clusterId;
+    // const addInfo = user.profile.externalUserAdditionalInfo?user.profile.externalUserAdditionalInfo:[]
+    // var infoDetails;
+    // infoDetails = _underscore.find(addInfo, {'profileId': profile.profileId}) || {};
+    // return infoDetails;
   }else {
     let code = 409;
     let response = new MlRespPayload().errorPayload('Not a valid user', code);

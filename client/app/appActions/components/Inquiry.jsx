@@ -17,8 +17,8 @@ export default class Inquiry extends React.Component {
     var message=this.refs.message.value&&this.refs.message.value.trim()!==""?this.refs.message.value.trim():null;
     var response=await inquiryActionHandler({'resourceId':resourceDetails.resourceId,'resourceType':resourceDetails.resourceType,'subject':subject,'message':message});
 
-    if(response){
-      toastr.success("enquiry send successfully");
+    if(response && response.success){
+      toastr.success(response.result);
     }else{
       toastr.error("Failed to send the enquiry");
     }

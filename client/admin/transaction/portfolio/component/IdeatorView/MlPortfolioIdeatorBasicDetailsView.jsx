@@ -34,8 +34,16 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
     initalizeFloatLabel();
     OnLockSwitch();
     dataVisibilityHandler();
+
+
+    var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-    $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
+
+    $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
+    if(WinWidth > 768){
+      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    }
+
   }
 
   componentWillMount(){
@@ -64,20 +72,14 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
         {showLoader === true ? ( <MlLoader />) : (
             <div>
               <h2>Ideator</h2>
-
+        <div className="tab_wrap_scroll">
               <div className="col-md-6 nopadding-left">
-                <div className="left_wrap">
-                  <ScrollArea
-                    speed={0.8}
-                    className="left_wrap"
-                    smoothScrolling={true}
-                    default={true}
-                  >
+
                     <div className="form_bg">
                       <form>
 
                         <div className="form-group">
-                          <input type="text" placeholder="First Name" name="firstName" defaultValue={this.state.data.firstName} className="form-control float-label"  disabled="disabled"/>
+                          <input type="text" placeholder="First Name 10" name="firstName" defaultValue={this.state.data.firstName} className="form-control float-label"  disabled="disabled"/>
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isfirstNamePrivate"/>
                         </div>
                         <div className="form-group">
@@ -111,19 +113,11 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
                           <FontAwesome name='unlock' className="input_icon un_lock" id="isYoePrivate"/>
                         </div>
                       </form>
-                    </div>
-                  </ScrollArea>
+
                 </div>
               </div>
-
               <div className="col-md-6 nopadding-right">
-                <div className="left_wrap">
-                  <ScrollArea
-                    speed={0.8}
-                    className="left_wrap"
-                    smoothScrolling={true}
-                    default={true}
-                  >
+
                     <div className="form_bg">
                       <form>
 
@@ -162,11 +156,10 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
                         </div>
 
                       </form>
-                    </div>
-                  </ScrollArea>
+
                 </div>
               </div>
-
+        </div>
 
           </div>)}
       </div>

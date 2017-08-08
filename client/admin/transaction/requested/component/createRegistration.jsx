@@ -272,7 +272,7 @@ export default class MlCreateRegistration extends React.Component{
                   <input type="text" ref="contactNumber"   placeholder="Contact number" className="form-control float-label" id="" data-required={true} data-errMsg="Contact Number is required"/>
                 </div>
                 <div className="form-group mandatory">
-                  <input type="text" ref="email" placeholder="Email ID" className="form-control float-label" onChange={this.enteredUserName.bind(this)} data-required={true} data-errMsg="Email Id is required"/>
+                  <input type="text" ref="email" placeholder="Email Id" className="form-control float-label" onChange={this.enteredUserName.bind(this)} data-required={true} data-errMsg="Email Id is required"/>
                 </div>
                 <div className="form-group">
                   <Moolyaselect multiSelect={false} mandatory={true} ref="registrationType" placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={this.optionBySelectRegistrationType.bind(this)} isDynamic={true} data-required={true} data-errMsg="Registration Type is required"/>

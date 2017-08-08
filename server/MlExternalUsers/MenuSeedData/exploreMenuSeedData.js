@@ -10,7 +10,7 @@ if(Meteor.isServer){
               "link": "/app/explore/ideator",
               "isLink" : true,
               "isMenu" : true,
-              "name" : "Ideator",
+              "name" : "Ideators",
               "uniqueId" : "explore"
             },
             {
@@ -18,7 +18,7 @@ if(Meteor.isServer){
               "link": "/app/explore/startup",
               "isLink" : true,
               "isMenu" : true,
-              "name" : "Startup",
+              "name" : "Startups",
               "uniqueId" : "explore_startup"
             },
 
@@ -27,7 +27,7 @@ if(Meteor.isServer){
               "link": "/app/explore/investor",
               "isLink" : true,
               "isMenu" : true,
-              "name" : "Investor",
+              "name" : "Investors",
               "uniqueId" : "explore"
             },
 
@@ -36,7 +36,7 @@ if(Meteor.isServer){
               "link": "/app/explore/serviceProvider",
               "isLink" : true,
               "isMenu" : true,
-              "name" : "Service Provider",
+              "name" : "Service Providers",
               "uniqueId" : "explore"
             },
 
@@ -45,7 +45,7 @@ if(Meteor.isServer){
               "link": "/app/explore/company",
               "isLink" : true,
               "isMenu" : true,
-              "name" : "Company",
+              "name" : "Companies",
               "uniqueId" : "explore"
             },
 

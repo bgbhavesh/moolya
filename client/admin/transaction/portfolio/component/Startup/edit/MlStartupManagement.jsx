@@ -44,12 +44,22 @@ export default class MlStartupManagement extends React.Component{
     $('#testing').click(function(){
       $('#management-form').slideDown();
     });
+
+
   }
   componentDidUpdate()
   {
     initalizeFloatLabel();
     OnLockSwitch();
     dataVisibilityHandler();
+
+    var WinWidth = $(window).width();
+    var WinHeight = $(window).height();
+
+    $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
+    if(WinWidth > 768){
+      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    }
   }
   componentWillMount(){
     this.fetchPortfolioDetails();
@@ -241,13 +251,8 @@ export default class MlStartupManagement extends React.Component{
         {showLoader === true ? (<MlLoader/>) : (
       <div>
           <h2>Management</h2>
-          <div className="main_wrap_scroll">
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
+          <div className="tab_wrap_scroll">
+
               <div className="col-lg-12">
                 <div className="row">
                   <div className="col-lg-2 col-md-3 col-sm-3">
@@ -385,7 +390,6 @@ export default class MlStartupManagement extends React.Component{
                   </div>
                   <br className="brclear"/>
                 </div>
-            </ScrollArea>
           </div>
       </div>)}
       </div>

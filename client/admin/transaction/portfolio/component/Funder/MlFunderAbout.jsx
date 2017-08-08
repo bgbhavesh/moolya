@@ -315,7 +315,7 @@ export default class MlFunderAbout extends React.Component {
                       </div>
                       <div className="clearfix"></div>
                       <div className="panel panel-default mart20">
-                        <div className="panel-heading"> Investment Budget Per Years:</div>
+                        <div className="panel-heading"> Investment Budget Per Year:</div>
 
                         <div className="panel-body">
                           <div className="form-group">
@@ -361,7 +361,7 @@ export default class MlFunderAbout extends React.Component {
                       </div>
 
                       <div className="form-group">
-                        <input type="text" placeholder="Fcebook Id" name="facebookUrl" defaultValue={this.state.data.facebookUrl} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" placeholder="Facebook Id" name="facebookUrl" defaultValue={this.state.data.facebookUrl} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isFacebookUrlPrivate" onClick={this.onClick.bind(this,"facebookUrl", "isFacebookUrlPrivate")}/>
                       </div>
 

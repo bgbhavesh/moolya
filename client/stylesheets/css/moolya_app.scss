@@ -789,10 +789,10 @@ h3{font-size:40px; text-shadow:none;font-weight: bold;}
 .save_btn:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 15px 10px 15px 0px;border-color: transparent $mlRed transparent transparent;top: 0px;}
 }
 .idea_details .portfolio-main-wrap .panel{display: none;}
-.library-popup{
+
   .modal-body{padding:2px;
-    .img_scroll{max-height:300px; overflow-y:auto;overflow-x:hidden;
-      img{width:100%;}
+    .img_scroll{max-height:300px; overflow-y:auto;overflow-x:auto;
+      img{min-width:100%;}
     }
   }
   .modal-header{border:none;padding:0px;
@@ -804,7 +804,6 @@ h3{font-size:40px; text-shadow:none;font-weight: bold;}
   }
   }
   // img{width:100%;}
-}
 .funding-investers h3{color: #fff;
     font-size: 16px;
     margin-bottom: 8px;

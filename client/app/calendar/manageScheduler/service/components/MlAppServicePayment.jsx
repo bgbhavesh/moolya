@@ -49,19 +49,19 @@ export default class MlAppServicePayment extends React.Component{
             <form>
               <div className="form-group">
                 <label>
-                  Tasks actual amount
+                  Tasks gross payable amount
                   <input type="number" disabled value={servicePayment.tasksAmount ? parseFloat(servicePayment.tasksAmount).toFixed(2):''}  className="form-control" />
                 </label>
               </div>
               <div className="form-group">
                 <label>
-                  Task discount amount
+                  Task discount payable amount
                   <input type="number" disabled value={servicePayment.tasksDiscount ? parseFloat(servicePayment.tasksDiscount).toFixed(2):''}  className="form-control" />
                 </label>
               </div>
               <div className="form-group">
                 <label>
-                  Task derived amount
+                  Task net payable amount
                   <input type="number" disabled value={servicePayment.tasksDerived ? parseFloat(servicePayment.tasksAmount).toFixed(2):''}  className="form-control "/>
                 </label>
               </div>
@@ -83,7 +83,7 @@ export default class MlAppServicePayment extends React.Component{
                          value="Amount" checked={servicePayment.discountType === 'amount' ? true : false}
                          disabled={!servicePayment.isDiscount}
                          onChange={(event) => checkDiscountStatus(event)}/>
-                  <label htmlFor="amount"><span><span></span></span>Amount Rs
+                  <label htmlFor="amount"><span><span></span></span>Amount
                     {servicePayment.discountType === 'amount' ?
                       <input className="form-control inline_input"
                              onChange={(event) => calculateDiscounts(event)}
@@ -129,12 +129,12 @@ export default class MlAppServicePayment extends React.Component{
                 <span className={servicePayment.isPromoCodeApplicable ? 'state_label' : 'state_label acLabel'}>No</span>
               </div>
               <div className="form-group">
-                <label>Enter facilitation charges &nbsp; &nbsp; &nbsp; &nbsp; </label>
+                <label>Moolya facilitation charges &nbsp; &nbsp; &nbsp; &nbsp; </label>
                 <div className="input_types">
                   <input id="facilitationamount" type="radio" name="facilitationamount"
                          checked={facilitationCharge.type === 'amount' ? true : false}
                          value="Amount" disabled/>
-                  <label htmlFor="facilitationamount"><span><span></span></span>Amount Rs
+                  <label htmlFor="facilitationamount"><span><span></span></span>Amount
                     {facilitationCharge.type === 'amount' ?
                       <input className="form-control inline_input"
                              disabled
@@ -161,7 +161,7 @@ export default class MlAppServicePayment extends React.Component{
                 <br className="brclear"/>
               </div>
               <div className="form-group">
-                <label>Derived amount Rs. <input className="form-control inline_input medium_in"
+                <label>Net payable amount<input className="form-control inline_input medium_in"
                                                  value={this.props.finalAmount ? parseFloat(this.props.finalAmount).toFixed(2) : ''} disabled />
                 </label>
               </div>

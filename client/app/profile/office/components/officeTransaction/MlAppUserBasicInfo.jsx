@@ -72,7 +72,7 @@ export default class MlAppUserBasicInfo extends React.Component {
                   <input type="text" placeholder="Contact number" className="form-control float-label" />
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Email ID" className="form-control float-label" />
+                  <input type="text" placeholder="Email Id" className="form-control float-label" />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="City" className="form-control float-label" />

@@ -287,3 +287,17 @@ MlResolver.MlQueryResolver['fetchTaskForApointment'] = (obj, args, context, info
     return result;
   }
 };
+
+MlResolver.MlQueryResolver['fetchActivitiesTeams'] = (obj, args, context, info) => {
+  let result = mlDBController.findOne('MlTask', {_id: args.taskId} , context);
+  if (result) {
+    let session = result.session && result.session.filter((session) => { return session.sessionId === args.sessionId});
+    let activityIds = session && session[0].activities;
+    let activity = mlDBController.find('MlActivity', {_id: {$in: activityIds}}, context).fetch();
+    return activity;
+  } else  {
+    let code = 404;
+    let response = new MlRespPayload().errorPayload('Task not found', code);
+    return response;
+  }
+};

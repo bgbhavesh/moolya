@@ -8,13 +8,16 @@ import _ from "lodash";
 import portfolioValidationRepo from "./portfolioValidation";
 import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 
-
+/**
+ * @module [externaluser portfolio Landing]
+ * @params [context.userId]
+ * */
 MlResolver.MlQueryResolver['fetchPortfolioDetailsByUserId'] = (obj, args, context, info) => {
   if (context.userId) {
     let defaultProfile = new MlUserContext(context.userId).userProfileDetails(context.userId)
     if (defaultProfile) {
       var defaultCommunity = defaultProfile.communityDefCode || {};
-      var portfolio = MlPortfolioDetails.findOne({$and: [{userId: context.userId}, {communityCode: defaultCommunity}]})
+      var portfolio = MlPortfolioDetails.findOne({$and: [{userId: context.userId}, {communityCode: defaultCommunity}, {profileId: defaultProfile.profileId}]})
       if (portfolio)
         return portfolio;
       else

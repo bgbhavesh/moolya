@@ -1,9 +1,9 @@
 /**
  * Created by venkatsrinag on 28/4/17.
  */
-import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../../commons/mlSchemaDef'
-import MlResolver from '../../commons/mlResolverDef'
+import {mergeStrings} from "gql-merge";
+import MlSchemaDef from "../../commons/mlSchemaDef";
+import MlResolver from "../../commons/mlResolverDef";
 
 let externalUser = `
     input externalUser{
@@ -209,6 +209,23 @@ let externalUser = `
         lng:Float
     }
     
+    input usersObjAPI{
+        appId        : String
+        username     : String
+        password     : String
+        picurl       : String
+        firstname    : String
+        lastname     : String
+        email        : String
+        mobile      : String
+        status       : String
+        description  : String
+    }
+    
+    input applicationObjAPI{
+      appName: String
+    }
+    
     type Mutation{
       updateContactNumber(contactDetails:contactObj):response
       createUserGeneralInfo(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,profileId:String!,type:String!):response
@@ -217,6 +234,8 @@ let externalUser = `
       setDefaultProfile(profileId:String!):response
       switchExternalProfile(profileId:String!):response
       updateUserGeneralInfo(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,profileId:String!,type:String!):response
+      createUserAPI(userDetailsAPI:usersObjAPI):response
+      createApplicationAPI(applicationDetailsAPI:applicationObjAPI):response
     }
     
     type Query{
@@ -240,7 +259,9 @@ let supportedApi = [
     {api:'setDefaultProfile', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
     {api:'createUserAddressInfo', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
     {api:'updateUserGeneralInfo', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
-
+    {api:'createUserAPI', actionName:'CREATE', moduleName:"USERS", isWhiteList:true},
+    {api:'createApplicationAPI', actionName:'CREATE', moduleName:"USERS", isWhiteList:true},
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)
+

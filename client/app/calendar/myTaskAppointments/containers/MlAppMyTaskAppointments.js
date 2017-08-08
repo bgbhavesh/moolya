@@ -152,11 +152,11 @@ class MyTaskAppointments extends Component {
         component: <MlTaskAppointmentTermAndCondition selectedTask={selectedTask} />,
         icon: <span className="ml ml-payments"></span>
       },
-      {
-        name: 'Temp',
-        component: <MlAppMyCalendarIdeator appointmentDate={appointmentDate} />,
-        icon: <span className=""></span>
-      }
+      // {
+      //   name: 'Temp',
+      //   component: <MlAppMyCalendarIdeator appointmentDate={appointmentDate} />,
+      //   icon: <span className=""></span>
+      // }
 
     ];
     return steps;

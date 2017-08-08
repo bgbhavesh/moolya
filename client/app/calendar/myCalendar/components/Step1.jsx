@@ -212,9 +212,6 @@ this.bookDetails(data)
                 <label>New</label>
               </div>
               <div className="form-group">
-                <input type="text" className="form-control"  placeholder= "Frequency" value={this.props.serviceBasicInfo.sessionFrequency} />
-              </div>
-              <div className="form-group">
                 <Moolyaselect
                   multiSelect={false}
                   placeholder="Select Service"
@@ -225,7 +222,10 @@ this.bookDetails(data)
                   queryType={'graphql'}
                   query={getServiceQuery}
                   onSelect={this.selectedService.bind(this)}
-                              />
+                />
+              </div>
+              <div className="form-group">
+                <input type="text" className="form-control"  placeholder= "Frequency" value={this.props.serviceBasicInfo.sessionFrequency} />
               </div>
               {/*<div className="form-group">*/}
                 {/*<div className="input_types">*/}

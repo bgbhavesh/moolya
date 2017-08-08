@@ -98,11 +98,12 @@ export default class MLAppMyCalendar extends Component {
 
 
   componentToLoad(response, date){
-    console.log(response, date);
-   this.setState({
-     componentToLoad: response,
-     appointmentDate: date
-   });
+   if(this.state.profileId) {
+     this.setState({
+       componentToLoad: response,
+       appointmentDate: date
+     });
+   }
   }
 
   headerManagement(profileId, profileName) {
@@ -195,6 +196,17 @@ export default class MLAppMyCalendar extends Component {
         )
         break;
       case 'appointmentDetails':
+        return(
+          <div className="app_main_wrap" style={{'overflow': 'auto'}}>
+            <div className="app_padding_wrap">
+              <MlCalendarHeader componentToLoad={that.componentToLoad.bind(that)}/>
+              <CalCreateAppointmentView/>
+            </div>
+          </div>
+        )
+        break;
+
+      case 'selfAppointment':
         return(
           <div className="app_main_wrap" style={{'overflow': 'auto'}}>
             <div className="app_padding_wrap">

@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {render} from "react-dom";
 import {getUserProfileActionHandler} from "../../manageScheduler/activity/actions/activityActionHandler";
 
-export default class MlAppScheduleHead extends Component {
+export default class MlCalendarHead extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -33,15 +33,7 @@ export default class MlAppScheduleHead extends Component {
   changeProfile(profileId, communityName){
     this.props.headerManagement(profileId, communityName)
   };
-  changeType(type){
-    let selectedProfileId = FlowRouter.getParam('profileId');
-    FlowRouter.go("/app/calendar/manageSchedule/"+selectedProfileId+"/"+type+"List")
-  }
 
-  changeToCalendarSettings(){
-    let selectedProfileId = FlowRouter.getParam('profileId');
-    FlowRouter.go("/app/calendar/manageSchedule/"+selectedProfileId+"/setCalendar");
-  }
 
   async getUserProfiles() {
     const resp = await getUserProfileActionHandler();

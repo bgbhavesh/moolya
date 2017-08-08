@@ -36,6 +36,8 @@
     "smtpMailUrl":"smtp://qasmtp%40moolya.in:Moolya123@10.0.2.20:25",
     "fromEmailAddr":"qasmtp@moolya.in",
     "isEmailDomainCheckEnabled":true,
-    "isAuditEnabled":true
+    "isAuditEnabled":true,
+    "appId": "59887368690da64b7adfe12d",
+    "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBOYW1lIjoia2Fwb29yQGdtYWlsLmNvbSIsImFwcElkIjoiNTk4ODczNjg2OTBkYTY0YjdhZGZlMTJkIiwiaWF0IjoxNTAyMTE0NjY0fQ.6unnvf6BucthTdT9G9z25IFwG8-bYAQzDb9hSrE3WKY"
   }
 }

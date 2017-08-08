@@ -12,6 +12,7 @@ import {
   fetchTasksAmountActionHandler,
   fetchTaskDetailsForServiceCard
 } from '../../manageScheduler/service/actions/MlServiceActionHandler';
+import { findTaskActionHandler } from '../../manageScheduler/task/actions/saveCalanderTask'
 import Step2 from './Step2'
 
 
@@ -24,11 +25,11 @@ import _ from 'lodash';
 import StepZilla from '../../../../commons/components/stepzilla/StepZilla';
 import Step1 from './Step1';
 import Step3 from './Step3'
+import {servicesForAppointmentsActionHandler} from  '../../myAppointments/actions/fetchRequestedAppointments'
 import CalenderHead from './calendarHead';
 import MlAppTaskAppointmentBasicInfo from './MlAppTaskAppointmentBasicInfo';
 import MlAppTaskAppointmentSessions from './MlAppTaskAppointmentSessions';
 import MlAppTaskAppointmentTermAndCondition from './MlAppTaskAppointmentTermAndCondition';
-
 export default class MlAppServiceManageSchedule extends Component {
 
   /**
@@ -38,12 +39,23 @@ export default class MlAppServiceManageSchedule extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isTaskComponent: false
+      isTaskComponent: false,
+      serviceBasicInfo: {
+        duration:{}
+      },
+      TaskDetails:[{}],
+      task:{}
     };
     this.onChangeSteps = this.onChangeSteps.bind(this);
   }
 
   componentWillMount() {
+    this.getServiceList()
+  }
+
+  async getServiceList() {
+    const resp = await servicesForAppointmentsActionHandler();
+    console.log(resp)
   }
 
   componentDidMount() {
@@ -56,6 +68,8 @@ export default class MlAppServiceManageSchedule extends Component {
     });
   }
 
+
+
   /**
    * Method :: onChangeSteps
    * Desc :: Changed stepzila based on select service or task
@@ -64,6 +78,119 @@ export default class MlAppServiceManageSchedule extends Component {
     const {isTaskComponent} = this.state;
     this.setState({isTaskComponent: !isTaskComponent })
   }
+
+  selectedService(response) {
+    this.setState({serviceId: response})
+    this.getServiceDetails(response)
+  }
+
+  async getServiceDetails(serviceId) {
+    let {finalAmount, prevFinalAmount, serviceTask, tasks, serviceTermAndCondition, attachments, servicePayment, taxStatus, facilitationCharge} = this.state;
+    if (serviceId) {
+      let service = await fetchServiceActionHandler(serviceId);
+      if (service) {
+        let tasks = [];
+        let currentDate = new Date()
+        let expiryDate = Date.parse(service.validTill);
+        let remainingDate = Math.floor((expiryDate - currentDate) / (1000 * 60 * 60 * 24));
+        remainingDate = isNaN(remainingDate) ? '' : remainingDate;
+        let duration = {
+          hours: service.duration.hours,
+          minutes: service.duration.minutes
+        }
+        let serviceInfo = {
+          duration: duration,
+          name: service.name,
+          noOfSession: service.noOfSession,
+          sessionFrequency: service.sessionFrequency,
+          status: service.status,
+          validTill: service.validTill,
+          daysToExpire: remainingDate,
+          totalAmount: service.payment.tasksAmount
+        };
+
+        this.setState({
+          serviceBasicInfo: serviceInfo,
+          profileId: service.profileId
+        })
+      }
+      //     finalAmount = service.finalAmount;
+      //     prevFinalAmount = service.finalAmount;
+      //     tasks = _.cloneDeep(service.tasks) || [];
+      //     tasks.sessions = _.cloneDeep(service.tasks.sessions) || [];
+      //     serviceTask.serviceOptionTasks = [];
+      //     let attachmentDetails = [];
+      //     serviceTask.tasks = service.tasks || [];
+      //     if (serviceTask.serviceTaskDetails && serviceTask.serviceTaskDetails.length > 0) {
+      //       serviceTask.tasks = _.intersectionBy(serviceTask.serviceTaskDetails, service.tasks, 'id');
+      //       serviceTask.serviceTaskDetails.forEach((task, key) => {
+      //         if (service.tasks.map((data) => data.id).indexOf(task.id) === -1) {
+      //           serviceTask.serviceOptionTasks.push(task);
+      //         }
+      //       });
+      //       serviceTask.tasks.forEach((task) => {
+      //         if (task.attachments && task.attachments.length > 0) {
+      //           task.attachments.forEach((attachment) => {
+      //             attachmentDetails.push(attachment)
+      //           });
+      //         }
+      //       });
+      //     }
+      //     if (service.termsAndCondition) {
+      //       serviceTermAndCondition = _.omit(service.termsAndCondition, '__typename');
+      //     }
+      //     if (service.facilitationCharge) {
+      //       facilitationCharge = _.cloneDeep(service.facilitationCharge);
+      //     }
+      // /     if (service.payment) {
+      //       servicePayment = _.cloneDeep(service.payment);
+      //       servicePayment.isTaxInclusive = servicePayment.isTaxInclusive ? true : false;
+      //       taxStatus = servicePayment.isTaxInclusive ? 'taxinclusive' : 'taxexclusive';
+      //     }
+      //     attachments = _.cloneDeep(attachmentDetails);
+      //   }
+      //   // this.props.serviceId?this.props.serviceInfo(service):"";
+      // }
+      // var validTillDate = Date.parse(serviceBasicInfo.validTill);
+      // var currentDate = new Date();
+      // let remainingDate = Math.floor((validTillDate - currentDate) / (1000 * 60 * 60 * 24));
+      // remainingDate = isNaN(remainingDate) ? '' : remainingDate;
+      // this.setState({
+        // serviceBasicInfo: serviceInfo
+        // daysRemaining: remainingDate,
+        // clusterData: clusterData,
+        // serviceTask: serviceTask,
+        // serviceTermAndCondition: serviceTermAndCondition,
+        // attachments: attachments,
+        // service: service,
+        // tasks: tasks,
+        // facilitationCharge: facilitationCharge,
+        // servicePayment: servicePayment,
+        // taxStatus: taxStatus,
+        // finalAmount: finalAmount,
+        // prevFinalAmount: prevFinalAmount
+      // });
+    }
+    this.getTaskDetails()
+  }
+
+
+  async getTaskDetails() {
+    const resp = await fetchTaskDetailsForServiceCard(this.state.profileId, this.state.serviceId)
+    this.setState({TaskDetails: resp})
+    console.log(resp)
+  }
+
+  optionsBySelectService(taskId) {
+    this.getTask(taskId)
+  }
+
+  async getTask(taskId) {
+    const resp = await findTaskActionHandler(taskId)
+    this.setState({task: resp})
+  }
+
+
   /**
    * Method :: setServiceSteps
    * Desc :: Sets components steps for stepzila to create and update service data
@@ -89,12 +216,21 @@ export default class MlAppServiceManageSchedule extends Component {
     let steps = [
       {
         name: 'View',
-        component: <Step1 isTaskComponent={isTaskComponent} onChangeSteps={this.onChangeSteps} />,
+        component: <Step1
+          isTaskComponent={isTaskComponent}
+          onChangeSteps={this.onChangeSteps}
+          selectedService={this.selectedService.bind(this)}
+          serviceBasicInfo={serviceBasicInfo}
+        />,
         icon: <span className="ml fa fa-plus-square-o"></span>
       },
       {
         name:'Tasks',
-        component: <Step2/>,
+        component: <Step2
+          taskDetails={this.state.TaskDetails}
+          optionsBySelectService={this.optionsBySelectService.bind(this)}
+          task={this.state.task}
+        />,
         icon: <span className="ml fa fa-users"></span>
       },
       {
@@ -121,8 +257,10 @@ export default class MlAppServiceManageSchedule extends Component {
     const steps = [
       {
         name: 'Service',
-        component: <MlAppTaskAppointmentBasicInfo isTaskComponent={isTaskComponent}
-                                                  onChangeSteps={this.onChangeSteps} />,
+        component: <MlAppTaskAppointmentBasicInfo
+          isTaskComponent={isTaskComponent}
+          onChangeSteps={this.onChangeSteps}
+        />,
         icon: <span className="ml fa fa-plus-square-o"></span>
       },
       {
@@ -161,7 +299,6 @@ export default class MlAppServiceManageSchedule extends Component {
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
-          <CalenderHead/>
           <div className="clearfix"/>
           <div className="col-md-12">
             <div className='step-progress'>

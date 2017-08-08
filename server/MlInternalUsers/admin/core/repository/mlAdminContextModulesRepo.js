@@ -773,13 +773,13 @@ let CoreModules = {
       {'$project':{"registration":{
         '$map':
           { "input":"$registration", "as":"reg", 'in':
-            { "createdAt" :"$$reg.registrationInfo.registrationDate", "transactionId":"$$reg._id" ,"transactionType":"$$reg.registrationInfo.transactionType", "cluster":'$$reg.registrationInfo.clusterName', "chapter":'$$reg.registrationInfo.chapterName', "community":'$$reg.registrationInfo.communityName', "status":'$$reg.status'}
+            { "createdAt" :"$$reg.registrationInfo.registrationDate", "transactionId":"$$reg.transactionId" ,"transactionType":"$$reg.registrationInfo.transactionType", "cluster":'$$reg.registrationInfo.clusterName', "chapter":'$$reg.registrationInfo.chapterName', "community":'$$reg.registrationInfo.communityName', "status":'$$reg.status'}
           }
       },
         "portfolio":{
           '$map':
             { "input":"$portfolio", "as":"port", 'in':
-              { "createdAt" :"$$port.createdAt", "transactionId":"$$port._id" ,"transactionType":"$$port.transactionType", "cluster":'$$port.clusterName', "chapter":'$$port.chapterName', "community":'$$port.communityName', "status":'$$port.status'}
+              { "createdAt" :"$$port.createdAt", "transactionId":"$$port.transactionId" ,"transactionType":"$$port.transactionType", "cluster":'$$port.clusterName', "chapter":'$$port.chapterName', "community":'$$port.communityName', "status":'$$port.status'}
             }
         },
         "transactionLog":{

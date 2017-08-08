@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {render} from "react-dom";
 import {getUserProfileActionHandler} from "../../activity/actions/activityActionHandler";
 
-export default class MlAppScheduleHead extends Component {
+export default class MlCalendarHeader extends Component {
   constructor(props) {
     super(props)
     this.state = {

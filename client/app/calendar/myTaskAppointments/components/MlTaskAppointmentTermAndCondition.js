@@ -15,9 +15,6 @@ import ScrollArea from 'react-scrollbar';
 export default class MlTaskAppointmentTermAndCondition extends Component{
   constructor(props) {
     super(props);
-    this.state = {
-      task: {}
-    };
   }
 
   componentWillMount() {
@@ -35,17 +32,10 @@ export default class MlTaskAppointmentTermAndCondition extends Component{
    * @return {XML}
    */
   getAttachmentsList() {
-    let task = {
-      attachments: [
-        {
-          name: 'Doc v0.0.1',
-          info: 'Agjh jh jkhfjks djkshdf sjkf',
-          isMandatory: true
-        }
-      ]
-    };
-    const attachmentDetails = task.attachments && task.attachments.length > 0 ?
-      task.attachments.map(function (value, index) {
+    let attachments = this.props.selectedTask && this.props.selectedTask.attachments;
+
+    const attachmentDetails = (attachments && attachments.length > 0) ?
+      attachments.map(function (value, index) {
         return (
           <div className="col-md-6 nopadding-left" key={index}>
             <div className="panel panel-default">

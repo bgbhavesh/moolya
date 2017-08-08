@@ -6,6 +6,7 @@
 
 // import NPM module(s)
 import React, { Component } from 'react';
+import Moolyaselect from "../../../commons/components/MlAppSelectWrapper";
 import PropTypes from 'prop-types';
 import { Meteor } from 'meteor/meteor';
 import FontAwesome from 'react-fontawesome';
@@ -15,6 +16,8 @@ import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag';
 import Select from 'react-select';
 import { cloneDeep } from 'lodash';
+import { graphql } from 'react-apollo';
+
 
 
 // import custom method(s) and component(s)
@@ -28,13 +31,19 @@ class Step1 extends Component {
 
   constructor(props) {
     super(props);
+    this.state={service:""}
   }
 
+  componentWillMount() {}
+
   componentDidMount() {
+    console.log(this.props.serviceBasicInfo)
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(310+$('.admin_header').outerHeight(true)));
   }
+
+
 
   /**
    * Method :: validTillToggle
@@ -53,12 +62,29 @@ class Step1 extends Component {
    * Desc :: Showing html page
    * @returns {XML}
    */
+
+  selectedService(value) {
+    console.log(value)
+    this.setState({
+      service: value
+    })
+    this.props.selectedService(value)
+  }
+
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps)
+  }
+
   render(){
-
-
-    // fetch states graphql query
-
-    // fetch cities graphql query
+    let getServiceQuery = gql`
+      query {
+        data:fetchServicesForAppointments {
+          value:_id
+          label:name
+        }
+      }
+    `;
     const {onChangeSteps, isTaskComponent} = this.props;
     return (
       <div className="app_main_wrap">
@@ -82,23 +108,20 @@ class Step1 extends Component {
               </div>
               <div className="form-group">
                 <label>Total number of Sessions Rs.
-                  <input className="form-control inline_input"/>
+                  <input className="form-control inline_input" value={this.props.serviceBasicInfo.noOfSession}/>
                 </label>
               </div>
               <div className="form-group" id="date-time">
-                <Datetime dateFormat="DD-MM-YYYY"
-                          timeFormat={false}
-                          inputProps={{placeholder: "Valid Till"}}
-                          closeOnSelect={true}/>
+                <input  type="text" className="form-control" placeholder= "Valid Till" value={this.props.serviceBasicInfo.validTill}/>
                 <FontAwesome name="calendar" className="password_icon"/>
               </div>
               <div className="form-group">
                 <label>Duration: &nbsp;
                   <input type="text"
-                         className="form-control inline_input"
+                         className="form-control inline_input" value={this.props.serviceBasicInfo.duration.hours}
                          disabled={true}/> Hours
                   <input type="text"
-                         className="form-control inline_input"
+                         className="form-control inline_input" value={this.props.serviceBasicInfo.duration.minutes}
                          disabled={true}/> Mins
                 </label>
               </div>
@@ -131,10 +154,20 @@ class Step1 extends Component {
                 <label>New</label>
               </div>
               <div className="form-group">
-                <select className="form-control"><option> Renewal Frequency</option></select>
+                <input type="text" className="form-control"  placeholder= "Frequency" value={this.props.serviceBasicInfo.sessionFrequency} />
               </div>
               <div className="form-group">
-                <input type="text" className="form-control" placeholder="Choose Service"/>
+                <Moolyaselect
+                  multiSelect={false}
+                  placeholder="Select Service"
+                  className="form-control float-label"
+                  valueKey={'value'} labelKey={'label'}
+                  selectedValue={this.state.service}
+                  isDynamic={true}
+                  queryType={'graphql'}
+                  query={getServiceQuery}
+                  onSelect={this.selectedService.bind(this)}
+                              />
               </div>
               <div className="form-group">
                 <div className="input_types">
@@ -152,7 +185,7 @@ class Step1 extends Component {
               <div className="form-group">
                 <label>
                   Service expires &nbsp;
-                  <input type="text" className="form-control inline_input"/>
+                  <input type="text" className="form-control inline_input" value={this.props.serviceBasicInfo.daysToExpire}/>
                   days from the date of purchase
                 </label>
               </div>
@@ -212,12 +245,12 @@ class Step1 extends Component {
             </div>
             <div className="pull-right">
               <div className="ml_btn large_btn">
-                <a href="#" className="save_btn" style={{'width': 'auto'}}>Total Amount Rs.18,950.00/-</a>
+                <a href="#" className="save_btn" style={{'width': 'auto'}}>Total Amount Rs.{this.props.serviceBasicInfo.totalAmount}/-</a>
               </div>
             </div>
             <br className="brclear"/>
             <div className="ml_btn btn_wrap">
-              <a href="/app/calCreateTask" className="save_btn">Book</a> <a href="#" className="cancel_btn">Cancel</a>
+              <a href="" className="save_btn">Book</a> <a href="" className="cancel_btn">Cancel</a>
             </div>
           </div>
         </div>

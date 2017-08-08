@@ -210,7 +210,7 @@ class MlAppServiceSelectTask extends Component{
    */
 
   getSessionList() {
-    let { session, _id } = this.state.task;
+    let { session } = this.state.task;
     console.log( session );
     if( session ) {
       const sessionsList = session ? session.map((data, index) => {

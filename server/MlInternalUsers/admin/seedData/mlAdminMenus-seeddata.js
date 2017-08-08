@@ -846,30 +846,30 @@ if (Meteor.isServer) {
                 }
               ]
             },
-            {
-              "link": "/admin/users/chapter",
-              "name": "Chapter",
-              "uniqueId": "users_chapter",
-              "isLink": true,
-              "isMenu": true,
-              "image": "",
-              "dynamicLink": true,
-              "dynamicLinkHandler": "",
-              "subMenusId": "users",
-              "subMenuMappingId": "users_chapterDetails"
-            },
-            {
-              "link": "/admin/users/community",
-              "name": "Community",
-              "uniqueId": "users_community",
-              "isLink": true,
-              "isMenu": true,
-              "image": "",
-              "dynamicLink": true,
-              "dynamicLinkHandler": "",
-              "subMenusId": "users",
-              "subMenuMappingId": "users_communityDetails"
-            },
+            // {
+            //   "link": "/admin/users/chapter",
+            //   "name": "Chapter",
+            //   "uniqueId": "users_chapter",
+            //   "isLink": true,
+            //   "isMenu": true,
+            //   "image": "",
+            //   "dynamicLink": true,
+            //   "dynamicLinkHandler": "",
+            //   "subMenusId": "users",
+            //   "subMenuMappingId": "users_chapterDetails"
+            // },
+            // {
+            //   "link": "/admin/users/community",
+            //   "name": "Community",
+            //   "uniqueId": "users_community",
+            //   "isLink": true,
+            //   "isMenu": true,
+            //   "image": "",
+            //   "dynamicLink": true,
+            //   "dynamicLinkHandler": "",
+            //   "subMenusId": "users",
+            //   "subMenuMappingId": "users_communityDetails"
+            // },
           ]
         },
         {

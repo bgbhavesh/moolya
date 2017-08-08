@@ -13,6 +13,7 @@ import StepZilla from '../../../../commons/components/stepzilla/StepZilla';
 import MlTaskAppointmentBasicInfo from "../components/MlTaskAppointmentBasicInfo";
 import MlTaskAppointmentSession from "../components/MlTaskAppointmentSessions";
 import MlTaskAppointmentTermAndCondition from "../components/MlTaskAppointmentTermAndCondition";
+import MlAppMyCalendarIdeator from "../components/MlAppMyCalendarIdeator";
 import MlAppActionComponent from "../../../commons/components/MlAppActionComponent";
 import MlAccordion from "../../../commons/components/MlAccordion";
 import formHandler from "../../../../commons/containers/MlFormHandler";
@@ -47,7 +48,7 @@ class MyTaskAppointments extends Component {
    * @return {Promise.<void>}
    */
   async getAllTaskByProfile() {
-    const resp = await fetchAllTaskActionHandler('MLPRO00000064');
+    const resp = await fetchAllTaskActionHandler();
     if (resp) {
       this.setState({ tasks: resp });
     }
@@ -107,9 +108,8 @@ class MyTaskAppointments extends Component {
         extraUsers: extraUsers
       };
       const resp = await bookTaskInternalAppointment(data);
-      console.log('---response--', resp);
       if (resp && resp.success) {
-        toastr.success('Booked task internal appointment successfully');
+        toastr.success('Task internal appointment booked successfully');
       }
     } else {
       toastr.error('Please select a session and task');
@@ -140,8 +140,13 @@ class MyTaskAppointments extends Component {
       },
       {
         name: 'Terms & Conditions',
-        component: <MlTaskAppointmentTermAndCondition />,
+        component: <MlTaskAppointmentTermAndCondition selectedTask={selectedTask} />,
         icon: <span className="ml ml-payments"></span>
+      },
+      {
+        name: 'Temp',
+        component: <MlAppMyCalendarIdeator />,
+        icon: <span className=""></span>
       }
 
     ];

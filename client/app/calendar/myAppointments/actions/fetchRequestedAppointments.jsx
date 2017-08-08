@@ -19,3 +19,22 @@ export async function requestedAppointmentActionHandler() {
   const data = result.data.fetchBeSpokeServices;
   return data;
 }
+
+
+export async function servicesForAppointmentsActionHandler() {
+  const result = await appClient.query({
+    query: gql`
+      query {
+        fetchServicesForAppointments {
+        _id
+        name        
+      }
+      }
+    `,
+    forceFetch: true
+  });
+  const data = result.data.fetchServicesForAppointments;
+  return data;
+}
+
+

@@ -261,6 +261,7 @@ class MlPortfolio extends React.Component {
       removeKeys: this.state.removePrivateKeys
     }
     const response = await updatePortfolioActionHandler(jsonData)
+    toastr.success(response.result)
     if (response) {
       if (this.props.communityType == "Ideators") {
         let idea = this.state.idea

@@ -4,7 +4,7 @@ import  Select from 'react-select';
 import ScrollArea from 'react-scrollbar';
 import FontAwesome from 'react-fontawesome';
 
-export default class MlAppTaskAppointmentUser extends Component {
+export default class SessionDetails extends Component {
   constructor(props) {
     super(props);
   }
@@ -63,15 +63,15 @@ export default class MlAppTaskAppointmentUser extends Component {
             <form>
               <div className="form-group">
                 &nbsp;&nbsp;<label>Time: &nbsp;
-                  <input type="text"
-                         className="form-control inline_input"
-                         disabled={true}
-                         value={duration && duration.hours}  /> Hours
-                  <input type="text"
-                         className="form-control inline_input"
-                         disabled={true}
-                         value={duration && duration.minutes}  /> Mins
-                </label>
+                <input type="text"
+                       className="form-control inline_input"
+                       disabled={true}
+                       value={duration && duration.hours}  /> Hours
+                <input type="text"
+                       className="form-control inline_input"
+                       disabled={true}
+                       value={duration && duration.minutes}  /> Mins
+              </label>
               </div>
             </form>
           </div>
@@ -115,9 +115,9 @@ export default class MlAppTaskAppointmentUser extends Component {
                                 <br className="brclear" />
                                 <div className="col-md-4">
                                   <br className="brclear" />
-                                  <div className="form-group">
+                                  <div className="form-group" >
                                     <span className="placeHolder active">Select team</span>
-                                    <select disabled defaultValue="chooseTeam" value={ team.resourceType == 'office' && team.resourceId ? team.resourceId : team.resourceType } className="form-control" onChange={(evt)=>that.props.chooseTeamType(evt, activityIndex, indexAct)}>
+                                    <select defaultValue="chooseTeam" disabled value={ team.resourceType == 'office' && team.resourceId ? team.resourceId : team.resourceType } className="form-control" onChange={(evt)=>that.props.chooseTeamType(evt, activityIndex, indexAct)}>
                                       <option value="chooseTeam" disabled="disabled">Choose team Type</option>
                                       <option value="connections">My Connections</option>
                                       <option hidden={!isExternal} disabled={!isExternal} value="moolyaAdmins">Moolya Admins</option>

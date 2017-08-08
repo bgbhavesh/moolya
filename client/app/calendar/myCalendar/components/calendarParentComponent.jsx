@@ -13,6 +13,7 @@ import MlCalendarHeader from './calendarHeader'
 import CalCreateTask from './calCreateTask'
 import CalCreateAppointmentView from './calAppointmentDetails'
 import MlAppServiceManageSchedule from './createServiceCard'
+var _ = require('lodash')
 
 export default class MLAppMyCalendar extends Component {
 
@@ -21,6 +22,7 @@ export default class MLAppMyCalendar extends Component {
     this.state = {
       data: [],
       date: new Date(),
+      appointmentDate: new Date(),
       showCalendar: false,
       componentToLoad: 'calendar',
       events: []
@@ -61,13 +63,18 @@ export default class MLAppMyCalendar extends Component {
     const resp = await fetchAllProfileAppointmentCountsHandler();
     let dates = [];
     let counts = [];
-    console.log(resp)
     resp.events.map(function( data ) {
       dates.push(data.date);
       counts.push(data.count);
     });
     let params = 'events' in resp ? resp.events : [];
-    this.eventsData(params)
+    if(_.isEmpty(params)) {
+      this.setState({
+        events: []
+      });
+    } else {
+      this.eventsData(params)
+    }
     return resp;
   }
 
@@ -90,13 +97,16 @@ export default class MLAppMyCalendar extends Component {
   }
 
 
-  componentToLoad(response){
-    console.log(response)
-   this.setState({componentToLoad: response})
+  componentToLoad(response, date){
+    console.log(response, date);
+   this.setState({
+     componentToLoad: response,
+     appointmentDate: date
+   });
   }
 
   headerManagement(profileId, profileName) {
-    console.log('--profileId--', profileId , '--communityName--', profileName )
+    this.setState({ profileId: profileId })
     this.getProfileBasedAppointments(profileId);
   }
 
@@ -105,25 +115,36 @@ export default class MLAppMyCalendar extends Component {
     let that = this;
     let details = [];
     let events = 'events' in resp ? resp.events : [];
-    events.map(function(data){
-      if(profileId === data.profileId){
-        let temp = {
-          title: data.count  ,
-          start: new Date(data.date),
-          end: new Date(data.date)
+    if(_.isEmpty(events)) {
+      this.setState({
+        events: []
+      });
+    } else {
+      events.map( function( data ) {
+        if( profileId === data.profileId ) {
+          let temp = {
+            title: data.count  ,
+            start: new Date( data.date ),
+            end: new Date( data.date )
+          }
+          details.push( temp )
         }
-        details.push(temp)
-      }
-    })
-    that.setState({
-      events: details
-    });
+      })
+      that.setState({
+        events: details
+      });
+    }
       return resp;
+  }
+
+  userDetails(response) {
+    this.setState({userInfo: response})
   }
 
 
 
   render() {
+    const {appointmentDate} = this.state;
     const that = this;
     // let eventsData = [{ title: '3', 'start': new Date(2017, 7, 7), 'end': new Date(2017, 7, 10) }];
     switch(that.state.componentToLoad) {
@@ -131,14 +152,13 @@ export default class MLAppMyCalendar extends Component {
         return (
           <div className="app_main_wrap" style={{'overflow': 'auto'}}>
             <div className="app_padding_wrap">
-              <MlCalendarHeader headerManagement={that.headerManagement.bind(that)}/>
+              <MlCalendarHeader headerManagement={that.headerManagement.bind(that)} userDetails={that.userDetails.bind(that)}/>
               <Calender
                 events={ that.state.events }
                 dayBackgroundComponent={<MlAppMyCalendarDayComponent componentToLoad={that.componentToLoad.bind(that)}/> }
                 dayData={that.state.data}
                 onNavigate={that.onNavigate}
                 date={that.state.date}
-                eventComponent={<IconComponent/>  }
               />
             </div>
           </div>
@@ -148,8 +168,8 @@ export default class MLAppMyCalendar extends Component {
         return (
           <div className="app_main_wrap" style={{'overflow': 'auto'}}>
             <div className="app_padding_wrap">
-              <MlCalendarHeader componentToLoad={that.componentToLoad.bind(that)}/>
-              <AppCalendarDayView componentToLoad={this.componentToLoad.bind(this)}/>
+              <MlCalendarHeader componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
+              <AppCalendarDayView componentToLoad={this.componentToLoad.bind(this)} appointmentDate={this.state.appointmentDate} />
             </div>
           </div>
         )
@@ -158,7 +178,8 @@ export default class MLAppMyCalendar extends Component {
         return(
         <div className="app_main_wrap" style={{'overflow': 'auto'}}>
           <div className="app_padding_wrap">
-            <MlAppServiceManageSchedule componentToLoad={this.componentToLoad.bind(this)}/>
+            <MlCalendarHeader componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
+            <MlAppServiceManageSchedule profileId={this.state.profileId} appointmentDate={appointmentDate} componentToLoad={this.componentToLoad.bind(this)}/>
           </div>
         </div>
         )
@@ -167,6 +188,7 @@ export default class MLAppMyCalendar extends Component {
         return(
           <div className="app_main_wrap" style={{'overflow': 'auto'}}>
             <div className="app_padding_wrap">
+              <MlCalendarHeader componentToLoad={that.componentToLoad.bind(that)}/>
               <CalCreateTask/>
             </div>
           </div>
@@ -176,25 +198,12 @@ export default class MLAppMyCalendar extends Component {
         return(
           <div className="app_main_wrap" style={{'overflow': 'auto'}}>
             <div className="app_padding_wrap">
+              <MlCalendarHeader componentToLoad={that.componentToLoad.bind(that)}/>
               <CalCreateAppointmentView/>
             </div>
           </div>
         )
         break;
     }
-  }
-}
-
-class IconComponent extends Component {
-  render() {
-    console.log('HELLO')
-    return(
-      <span>
-        <span className="ml ml-funder">
-        </span>
-        <span> 25
-        </span>
-      </span>
-    )
   }
 }

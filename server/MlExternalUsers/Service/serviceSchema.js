@@ -311,6 +311,7 @@ let service=`
         getProfileBasedOnPortfolio(portfolioId:String): PortfolioDetails
         getServiceBasedOnServiceId(serviceId:String): AdminService
         getTaskFromService(serviceId:String):Service
+        fetchServicesForAppointments: [Service]
    }
 
    type Mutation {
@@ -344,7 +345,8 @@ let supportedApi = [
   {api:'createServiceCardOrder',      userAction:"CREATESERVICEORDER", actionName:'CREATE',  resourceName:"SERVICECARD"},
   {api:'updateServiceCardOrder',      userAction:"UPDATESERVICEORDER", actionName:'UPDATE',  resourceName:"SERVICECARD"},
 
-  {api:'getServiceBasedOnServiceId',  actionName:'READ',    moduleName:"SERVICECARD", isWhiteList:true}
+  {api:'getServiceBasedOnServiceId',  actionName:'READ',    moduleName:"SERVICECARD", isWhiteList:true},
+  {api:'fetchServicesForAppointments',  actionName:'READ',    resourceName:"SERVICECARD", isWhiteList:true}
 
 ]
 

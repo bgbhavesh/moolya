@@ -35,6 +35,12 @@ MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => 
   }
 }
 
+MlResolver.MlQueryResolver['fetchServicesForAppointments'] = (obj, args, context, info) => {
+    let result = mlDBController.find('MlServiceCardDefinition', {userId: context.userId}, context).fetch();
+    return result;
+}
+
+
 MlResolver.MlQueryResolver['fetchBeSpokeServices'] = (obj, args, context, info) => {
     let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfolioId}, context)
   if( portfolio && (context.userId !== portfolio.userId)){

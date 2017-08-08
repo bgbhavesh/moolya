@@ -395,7 +395,7 @@ MlResolver.MlQueryResolver["fetchProfileAppointmentCounts"] = (obj, args, contex
 
   let result = mlDBController.aggregate('MlAppointments', pipeLine);
   result = result && result[0] ? result[0] : [];
-  return result;
+    return result;
 
 };
 
@@ -523,14 +523,14 @@ MlResolver.MlMutationResolver["bookSelfTaskInternalAppointment"] = (obj, args, c
   let taskId = mlDBController.insert('MlAppointmentTask', taskDetails, context);
 
   let startDate = new Date();
-  date.setDate(day);
-  date.setMonth(month);
-  date.setYear(year);
-  date.setHours(hours);
-  date.setMinutes(minutes);
-  date.setSeconds(0,0);
+  startDate.setDate(day);
+  startDate.setMonth(month);
+  startDate.setYear(year);
+  startDate.setHours(hours);
+  startDate.setMinutes(minutes);
+  startDate.setSeconds(0,0);
 
-  session.duration = taskDetails.duration ? taskDetails.duration : {}
+  taskDetails.duration = taskDetails.duration ? taskDetails.duration : {};
 
   let sessionHours = taskDetails.duration.hours ? taskDetails.duration.hours : 0;
   let sessionMinutes = taskDetails.duration.minutes ? taskDetails.duration.minutes : 0;
@@ -632,7 +632,8 @@ MlResolver.MlQueryResolver["fetchServiceSeekerList"] = (obj, args, context, info
         "name": "$users.profile.displayName",
         "userId": "$orders.userId",
         "profileId": "$orders.profileId",
-        "transId": "$orders.orderId"
+        "transId": "$orders.orderId",
+        "orderId": "$orders.orderId"
       }
   });
 
@@ -640,4 +641,15 @@ MlResolver.MlQueryResolver["fetchServiceSeekerList"] = (obj, args, context, info
 
   return result;
 
+};
+
+MlResolver.MlQueryResolver["fetchMyAppointment"] = (obj, args, context, info) => {
+  let userId = context.userId;
+  let profileId = args.profileId;
+  let date = new Date();
+  let day = args.day ? args.day : date.getDate();
+  let month = args.month ? args.month : date.getMonth();
+  let year = args.year ? args.year : date.getFullYear();
+  let response = MlAppointment.getUserAppointments(userId, profileId, day, month, year);
+  return response;
 };

@@ -9,7 +9,7 @@ import mlOfficeValidationRepo from "./officeRepo";
 import passwordUtil from "../../commons/passwordUtil";
 import _ from "lodash";
 import MlEmailNotification from "../../mlNotifications/mlEmailNotifications/mlEMailNotification";
-
+import MlAlertNotification from '../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
   let officeSC = [];
   if (context.userId) {
@@ -250,7 +250,8 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
     return new MlRespPayload().errorPayload("Failed To Create Office", code);
   }
   let code = 200;
-  let response = new MlRespPayload().successPayload(officeId, code);
+  let officeRequest = MlAlertNotification.onOfficeRequestSent()
+  let response = new MlRespPayload().successPayload(officeRequest, code);
   return response;
 };
 

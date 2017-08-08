@@ -3,14 +3,19 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 import _ from 'lodash';
+import {  Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+
 
 
 export default class DocumentViewer extends React.Component{
   constructor(props){
     super(props);
-  /*  this.state={
-      popoverOpen:false,
-    }*/
+    this.state={
+      displayModal:false,
+      previewImage:"",
+      modal: false,
+      previewId:"",
+     }
     return this;
   }
 
@@ -73,6 +78,39 @@ export default class DocumentViewer extends React.Component{
   OnFileRemove(docTypeId,documentId,fileId){
     this.props.onDocumentRemove(docTypeId,documentId,fileId)
   }
+ /* random(link,index,docName){
+    alert("fdsfasdfsdfsd")
+
+    let data = this.props.doc&&this.props.doc.docFiles?this.props.doc.docFiles:[]
+    let imagePreviewUrl;
+    imagePreviewUrl = data[index].fileUrl;
+    this.setState({previewId:docName+index},function () {
+      this.setState({previewImage:imagePreviewUrl,modal: !this.state.modal})
+    });
+
+  }
+  toggle() {
+      alert("sdfsdfsdfsdfsdfsdfsdfdfsdf")
+      this.setState({
+        modal: !this.state.modal
+
+      })
+  }*/
+  showModal(index) {
+    let data = this.props.doc&&this.props.doc.docFiles?this.props.doc.docFiles:[]
+    let imagePreviewUrl;
+    imagePreviewUrl = data[index].fileUrl;
+
+    this.setState({previewImage:imagePreviewUrl,modal: !this.state.modal})
+
+
+  }
+
+  closeModal(tabId) {
+    this.setState({
+      [tabId]: false
+    });
+  }
 
   render(){
     let selectedDocs=this.props.selectedDocuments
@@ -86,11 +124,19 @@ export default class DocumentViewer extends React.Component{
     if(isMandatory){
       mandatory='*'
     }
-  /*  let allowFormat  = doc&&doc.allowableFormat&&doc.allowableFormat.toString();*/
+    /*  let allowFormat  = doc&&doc.allowableFormat&&doc.allowableFormat.toString();*/
     return (
 
       <div className="col-lg-4">
-           <div className="panel panel-default uploaded_files">
+        <Modal isOpen={this.state.modal} toggle={this.closeModal.bind(this, 'modal')}>
+         {/* <ModalHeader toggle={this.closeModal.bind(this, 'modal')}>
+
+          </ModalHeader>*/}
+          <ModalBody>
+            <div className="img_scroll"><img src={this.state.previewImage}/></div>
+          </ModalBody>
+        </Modal>
+        <div className="panel panel-default uploaded_files">
            <div className="panel-heading">
              <div className="input_types"><input id={`check${doc.documentId}`} type="checkbox" className="DocCheckBox" name="checkbox" value="1" onChange={this.onDocSelect.bind(this,doc.documentId,doc.docTypeId)}/><label htmlFor="chapter_admin_check"><span></span>{doc.documentName}<text style={{'color':'red'}}>{mandatory}</text></label></div>
            <div className="pull-right block_action">
@@ -108,7 +154,8 @@ export default class DocumentViewer extends React.Component{
            <ul className="swiper-wrapper">
            <li className="doc_card" data-toggle="tooltip" data-placement="bottom" title="File name"><img src="/images/sub_default.jpg"/></li>
              {docFiles.map((file,fIndex)=>{
-                     return (<li key={file.fileId} className="doc_card" data-toggle="tooltip" data-placement="bottom" title={file.fileName}>
+                     return (<li key={file.fileId} className="doc_card" data-toggle="modal"  data-placement="bottom" title={file.fileName}
+                                 onClick={this.showModal.bind(this,fIndex)}>
                                 <span className="ml ml-minus" onClick={this.OnFileRemove.bind(this,doc.docTypeId,doc.documentId,file.fileId)}></span>
                                 <img id={file.fileId} src={file.fileUrl} />
                             </li>);

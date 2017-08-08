@@ -10,6 +10,11 @@ import PropTypes from 'prop-types';
 import  Select from 'react-select';
 import FontAwesome from 'react-fontawesome';
 import ScrollArea from 'react-scrollbar';
+import SessionDetails from './sessionDetails'
+import {
+  fetchActivitiesTeamsActionHandler,
+  getTeamUsersActionHandler,
+  fetchOfficeActionHandler } from '../../myTaskAppointments/actions/MlAppointmentActionHandler';
 import gql from 'graphql-tag'
 
 // import custom method(s) and component(s)
@@ -19,16 +24,35 @@ class MlAppServiceSelectTask extends Component{
 
   constructor(props) {
     super(props);
+    this.state={task:{},
+      sessionExpanded: false,
+      activities: [],
+      selectedSessionId: '',
+      offices : [],
+      isExternal:"",
+      isInternal:""
+    }
+    this.sendTaskId.bind(this);
+    this.setSession = this.setSession.bind(this);
+    this.chooseTeamType = this.chooseTeamType.bind(this);
+    this.addUser = this.addUser.bind(this);
   }
 
 
   componentWillMount() {
+    // console.log(this.props.task)
   }
+
+  // componentWillReceiveProps(newProps) {
+  //   console.log(newProps.task)
+  // }
 
   async componentDidMount() {
     // if(this.props.viewMode && this.props.serviceTask.tasks[0] ){
-    //   let taskId =this.props.serviceTask.tasks[0].id;
-    //   this.props.optionsBySelectService(taskId);
+    // if(this.props.taskDetails[0]) {
+    //   let taskId = this.props.taskDetails[0]._id;
+    //   this.props.selectService(taskId);
+    // }
     // }
     // this.initilizeSwiper()
     let WinHeight = $(window).height();
@@ -47,6 +71,11 @@ class MlAppServiceSelectTask extends Component{
     }, 100);
   }
 
+  componentWillReceiveProps(newProps) {
+    // console.log(newProps);
+    this.setState({task: newProps.task})
+  }
+
   /**
    * Method :: getSelectTaskOptions
    * Desc :: List out the task for service
@@ -63,6 +92,17 @@ class MlAppServiceSelectTask extends Component{
     return options;
   }
 
+  addUser(activityIdx, teamIdx, userIdx){
+    let {activities, extraUsers} = this.state;
+    activities[activityIdx].teams[teamIdx].users[userIdx].isAdded = true;
+    let userId = activities[activityIdx].teams[teamIdx].users[userIdx].userId;
+    let profileId = activities[activityIdx].teams[teamIdx].users[userIdx].profileId;
+    this.setState({
+      activities: activities
+    });
+    // this.props.saveDetails('user', {userId: userId, profileId: profileId});
+  }
+
   // optionsBySelectService(id) {
   //   this.props.optionsBySelectService(id)
   // }
@@ -73,13 +113,24 @@ class MlAppServiceSelectTask extends Component{
    * @return XML
    */
 
+  sendTaskId(taskId, external, internal) {
+    console.log(taskId)
+    this.setState({
+      selectedTaskId: taskId,
+      isExternal: external,
+      isInternal: internal
+    });
+    this.props.selectService(taskId)
+  }
+
   getTabs() {
-    const { taskDetails, optionsBySelectService } = this.props;
+    let that = this;
+    const { taskDetails, selectedTab } = that.props;
     const tabs = taskDetails ? taskDetails.map((tab, index) => {
       return (
-        <li className='active' key={index}>
-          <a href="#newTask" data-toggle="tab"
-             onClick={optionsBySelectService(tab.id)}>
+        <li className={'active'} key={index}>
+          <a href="" data-toggle="tab"
+             onClick={ that.sendTaskId.bind(that,tab.id, tab.isExternal, tab.isInternal)}>
             {tab.displayName}
           </a>
         </li>
@@ -88,75 +139,176 @@ class MlAppServiceSelectTask extends Component{
     return tabs;
   }
 
+
+  async setSession(index, sessionId, duration) {
+    console.log('--index--', index,'--sessionId--', sessionId, '--duration--',duration, )
+    const {selectedTaskId} = this.state;
+    // let {selectedTaskId} = this.props;
+    const resp = await fetchActivitiesTeamsActionHandler(selectedTaskId, sessionId);
+    if(resp){
+      this.getUsers(resp, index);
+    }
+    await this.getUsers(resp, index, duration);
+
+    // this.props.saveDetails('session', sessionId);
+  }
+
+  async getUsers(resp, index, duration) {
+    let {isSessionExpand} = this.state;
+    const that = this;
+    let activities = resp || [];
+    let activityTeams = activities.map((activity) => {
+      activity.teams = activity.teams ? activity.teams : [];
+      let teams = activity.teams.map(async function (team) {
+        let response;
+        if (team.resourceType == "office") {
+          response = await getTeamUsersActionHandler(team.resourceId);
+        }
+        return response;
+      });
+      return teams;
+    });
+
+    Promise.all(activityTeams.map(Promise.all, Promise)).then(values => {
+      console.log(values);
+      values.forEach(function (teams, index) {
+        let teamsInfo = teams.map(function (users, userIndex) {
+          let team = activities[index].teams[userIndex];
+          let usersInfo = users.map(function (user) {
+            let userInfo = {
+              name: user.name,
+              profileId: user.profileId,
+              profileImage: user.profileImage,
+              userId: user.userId
+            };
+            let isFind = team.users.find(function (teamUser) {
+              return teamUser.profileId == user.profileId && teamUser.userId == user.userId
+            });
+            if (isFind) {
+              userInfo.isAdded = true;
+              userInfo.isMandatory = isFind.isMandatory;
+            }
+            return userInfo;
+          });
+          activities[index].teams[userIndex].users = usersInfo;
+          return usersInfo;
+        });
+      });
+      that.setState({
+        activities: activities,
+        index: index,
+        duration: duration,
+        sessionExpanded: true
+      });
+    });
+  }
+
   /**
    * Method :: getSessionList
    * Desc :: List of task session
    * @return XML
    */
 
-  // getSessionList() {
-  //   let { session } = this.props.serviceTask.selectedTaskDetails;
-  //   const { updateSessionSequence } = this.props;
-  //   const sessionsList = session ? session.map((data, index) => {
-  //     if(data) {
-  //       return(
-  //         <div className="panel panel-info" key={index}>
-  //           <div className="panel-heading">
-  //             <div className="col-md-2 nopadding-left">Session {index+1}</div>
-  //             <div className="col-md-4">
-  //               <div  style={{'marginTop':'-4px'}}>
-  //                 <label>Duration: &nbsp;
-  //                   <input type="text"
-  //                          className="form-control inline_input"
-  //                          value={data.duration.hours || 0}/> Hours
-  //                   <input type="text"
-  //                          className="form-control inline_input"
-  //                          value={data.duration.minutes || 0}/> Mins
-  //                 </label>
-  //               </div>
-  //             </div>
-  //             <div className="col-md-offset-2 col-md-3">
-  //               <div  style={{'marginTop':'-4px'}}>
-  //                 <label>
-  //                   Sequence: &nbsp;
-  //                   <input className="form-control inline_input"
-  //                          type="number"
-  //                          min="0"
-  //                          value={data.sequence}
-  //                          onChange={(event)=> updateSessionSequence(event, data.sessionId)} />
-  //                 </label>
-  //               </div>
-  //             </div>
-  //             &nbsp;
-  //           </div>
-  //           <div className="panel-body">
-  //             <div className="swiper-container manage_tasks">
-  //               <div className="swiper-wrapper">
-  //                 { data.activities && data.activities.map((activity, index) => {
-  //                   return (
-  //                     <div className="swiper-slide funding_list list_block notrans" key={index}>
-  //                       <p className="online">{activity.mode}</p>
-  //                       <span>Duration:</span><br />
-  //                       <div className="form-group">
-  //                         <label><input type="text" className="form-control inline_input"
-  //                                       value={activity.duration.hours || 0} disabled /> Hours
-  //                           <input type="text" className="form-control inline_input"
-  //                                  value={activity.duration.minutes || 0} disabled /> Mins
-  //                         </label>
-  //                       </div>
-  //                       <h3>{activity.displayName}</h3>
-  //                     </div>
-  //                   )
-  //                 })}
-  //               </div>
-  //             </div>
-  //           </div>
-  //         </div>
-  //       )
-  //     }
-  //   }) : [];
-  //   return sessionsList;
-  // }
+  getSessionList() {
+    let { session, _id } = this.state.task;
+    console.log( session );
+    if( session ) {
+      const sessionsList = session ? session.map((data, index) => {
+        if(data) {
+          return(
+            <div onClick={() => this.setSession(index, data.sessionId, data.duration )}  className="panel panel-info" key={index}>
+              <div className="panel-heading">
+                <div className="col-md-2 nopadding-left">Session {index+1}</div>
+                <div className="col-md-4">
+                  <div  style={{'marginTop':'-4px'}}>
+                    <label>Duration: &nbsp;
+                      <input type="text"
+                             className="form-control inline_input"
+                             value={data.duration ? data.duration.hours: 0}/> Hours
+                      <input type="text"
+                             className="form-control inline_input"
+                             value={data.duration ? data.duration.minutes: 0}/> Mins
+                    </label>
+                  </div>
+                </div>
+                <div className="col-md-offset-2 col-md-3">
+                  <div  style={{'marginTop':'-4px'}}>
+                    {/*<label>*/}
+                    {/*Sequence: &nbsp;*/}
+                    {/*<input className="form-control inline_input"*/}
+                    {/*type="number"*/}
+                    {/*min="0"*/}
+                    {/*value={data.sequence}*/}
+                    {/*onChange={(event)=> updateSessionSequence(event, data.sessionId)} />*/}
+                    {/*</label>*/}
+                  </div>
+                </div>
+                &nbsp;
+              </div>
+              <div className="panel-body">
+                <div className="swiper-container manage_tasks">
+                  <div className="swiper-wrapper">
+                    { data.activities && data.activities.map((activity, index) => {
+                      return (
+                        <div className="swiper-slide funding_list list_block notrans" key={index}>
+                          <p className="online">{activity.mode}</p>
+                          <span>Duration:</span><br />
+                          <div className="form-group">
+                            <label><input type="text" className="form-control inline_input"
+                                          value={activity.duration.hours || 0} disabled /> Hours
+                              <input type="text" className="form-control inline_input"
+                                     value={activity.duration.minutes || 0} disabled /> Mins
+                            </label>
+                          </div>
+                          <h3>{activity.displayName}</h3>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
+        }
+      }) : [];
+      return sessionsList;
+    }
+    // const { updateSessionSequence } = this.props;
+  }
+
+  async chooseTeamType(evt, activityIdx, teamIdx){
+    let activities = this.state.activities;
+    if(evt.target.value == "connections") {
+      activities[activityIdx].teams[teamIdx].resourceType="connections";
+      delete activities[activityIdx].teams[teamIdx].resourceId;
+      activities[activityIdx].teams[teamIdx].users = [];
+    } else if (evt.target.value == "moolyaAdmins") {
+      activities[activityIdx].teams[teamIdx].resourceType="moolyaAdmins";
+      delete activities[activityIdx].teams[teamIdx].resourceId;
+      activities[activityIdx].teams[teamIdx].users = [];
+    } else {
+      let officeId = evt.target.value;
+      activities[activityIdx].teams[teamIdx].resourceType="office";
+      activities[activityIdx].teams[teamIdx].resourceId=evt.target.value;
+      const resp = await getTeamUsersActionHandler(officeId);
+      if(resp){
+        activities[activityIdx].teams[teamIdx].users = resp.map(function (user) {
+          return {
+            name: user.name,
+            profileId: user.profileId,
+            profileImage: user.profileImage,
+            userId: user.userId
+          }
+        });
+
+      }
+    }
+    this.setState({
+      activities: activities
+    });
+  }
+
+
   /**
    * Method :: React render
    * Desc :: Showing html page
@@ -164,18 +316,19 @@ class MlAppServiceSelectTask extends Component{
    */
   render() {
     let that = this;
-    const {
-      profileId,
-      serviceId,
-      optionsBySelectService,
-      updateSessionSequence,
-      respectiveTab,
-      saveService,
-      selectedTaskId,
-      deleteSelectedTask,
-      serviceTask} = this.props;
+    const {activities, index, isExternal, isInternal, offices, duration} = this.state;
+    // const {
+    //   profileId,
+    //   serviceId,
+    //   optionsBySelectService,
+    //   updateSessionSequence,
+    //   respectiveTab,
+    //   saveService,
+    //   selectedTaskId,
+    //   deleteSelectedTask,
+    //   serviceTask} = this.props;
     // const tasks = serviceTask.selectedTaskDetails || {};
-    return (
+    return (!this.state.sessionExpanded?
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
           <br/>
@@ -197,30 +350,12 @@ class MlAppServiceSelectTask extends Component{
                   {that.getTabs()}
                 </ul>
               </div>
-
               <div className="tab-content clearfix">
                 <div className="tab-pane active" id="newTask">
                   <div className="col-md-6 nopadding-left">
                     <form>
                       <div className="form-group">
-                        {/*<select className="form-control"><option>Select task</option></select>*/}
-                        <Select name="form-field-name"
-                                // options={this.getSelectTaskOptions()}
-                                // value={serviceTask.selectedTaskId}
-                                // placeholder="Select Tasks"
-                                // onChange={(option) => optionsBySelectService(option.value)}
-                          />
-                        {/*<Moolyaselect multiSelect={false}
-                         placeholder="Select Tasks"
-                         className="form-control float-label"
-                         valueKey={'value'} labelKey={'label'}
-                         selectedValue={serviceTask.selectedTask}
-                         queryType={"graphql"}
-                         query={serviceQuery}
-                         reExecuteQuery={true}
-                         queryOptions={serviceOption}
-                         isDynamic={true}
-                         onSelect={(value) => optionsBySelectService(value)} />*/}
+                        <input type="text" className="form-control" placeholder="Select Tasks" value={this.props.task.name} disabled/>
                       </div>
                       <div className="form-group">
                         <label>Total number of Sessions <input className="form-control inline_input"  disabled /> </label>
@@ -233,7 +368,7 @@ class MlAppServiceSelectTask extends Component{
                   <div className="col-md-6 nopadding-right">
                     <form>
                       <div className="form-group">
-                        <input type="text" className="form-control" placeholder="Display Name" />
+                        <input type="text" className="form-control" placeholder="Display Name" value={this.state.task.displayName} disabled />
                       </div>
                       <div className="form-group">
                         <span className="placeHolder active">Frequency</span>
@@ -252,7 +387,7 @@ class MlAppServiceSelectTask extends Component{
                     </form>
                   </div>
                   <br className="brclear"/>
-                  {/*{this.getSessionList()}*/}
+                  {'session' in that.props.task?that.getSessionList():""}
                    {/*<div className="ml_icon_btn">*/}
                     {/*<div className="save_btn" ><span className="ml ml-save"></span></div>*/}
                     {/*<div className="cancel_btn" ><span className="ml ml-delete"></span></div>*/}
@@ -264,19 +399,19 @@ class MlAppServiceSelectTask extends Component{
             </div>
           </div>
         </ScrollArea>
-      </div>
+      </div>:<SessionDetails  activities={activities}
+                              index={index}
+                              isExternal={isExternal}
+                              isInternal={isInternal}
+                              duration={duration}
+                              addUser={this.addUser}
+                              chooseTeamType={this.chooseTeamType}
+                              offices={offices}
+
+        />
     )
   }
 };
 
-MlAppServiceSelectTask.propTypes = {
-  serviceTask: PropTypes.PropTypes.oneOfType([
-    React.PropTypes.object,
-    React.PropTypes.array ]),
-  saveService: PropTypes.func,
-  optionsBySelectService: PropTypes.func,
-  respectiveTab: PropTypes.func,
-  updateSessionSequence: PropTypes.func
-};
 export default MlAppServiceSelectTask;
 

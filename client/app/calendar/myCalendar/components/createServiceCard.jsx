@@ -12,7 +12,7 @@ import {
   fetchTasksAmountActionHandler,
   fetchTaskDetailsForServiceCard
 } from '../../manageScheduler/service/actions/MlServiceActionHandler';
-import { findTaskActionHandler } from '../../manageScheduler/task/actions/saveCalanderTask'
+import { fetchTaskActionHandler } from '../../../calendar/myTaskAppointments/actions/MlAppointmentActionHandler'
 import Step2 from './Step2'
 
 
@@ -44,9 +44,12 @@ export default class MlAppServiceManageSchedule extends Component {
         duration:{}
       },
       TaskDetails:[{}],
-      task:{}
+      task:{},
+      selectedTab:""
     };
     this.onChangeSteps = this.onChangeSteps.bind(this);
+    this.selectService.bind(this);
+
   }
 
   componentWillMount() {
@@ -178,16 +181,16 @@ export default class MlAppServiceManageSchedule extends Component {
   async getTaskDetails() {
     const resp = await fetchTaskDetailsForServiceCard(this.state.profileId, this.state.serviceId)
     this.setState({TaskDetails: resp})
-    console.log(resp)
   }
 
-  optionsBySelectService(taskId) {
+  selectService(taskId) {
+    console.log(taskId)
     this.getTask(taskId)
   }
 
   async getTask(taskId) {
-    const resp = await findTaskActionHandler(taskId)
-    this.setState({task: resp})
+    const resp = await fetchTaskActionHandler(taskId)
+    this.setState({task: resp, selectedTab: taskId})
   }
 
 
@@ -228,8 +231,9 @@ export default class MlAppServiceManageSchedule extends Component {
         name:'Tasks',
         component: <Step2
           taskDetails={this.state.TaskDetails}
-          optionsBySelectService={this.optionsBySelectService.bind(this)}
+          selectService={this.selectService.bind(this)}
           task={this.state.task}
+          selectedTab={this.state.selectedTab}
         />,
         icon: <span className="ml fa fa-users"></span>
       },

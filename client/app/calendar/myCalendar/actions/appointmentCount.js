@@ -61,12 +61,13 @@ export async function fetchProfileAppointmentCountsHandler (profileId) {
 export async function fetchServiceSeekerHandler (profileId, day, month) {
   const result = await appClient.query({
     query: gql`
-    query($profileId: String, $day: Int, $month: Int){ 
-      fetchServiceSeekerList(profileId: $profileId, day: $day, month: $month){
+    query($profileId: String!, $serviceId: String){ 
+      fetchServiceSeekerList(profileId: $profileId, serviceId: $serviceId){
         name
         userId
         profileId
         transId
+        orderId
       }
     }
     `,

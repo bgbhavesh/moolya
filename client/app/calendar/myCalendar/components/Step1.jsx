@@ -11,7 +11,8 @@ import FontAwesome from 'react-fontawesome';
 import gql from 'graphql-tag';
 var Select = require('react-select');
 import { graphql } from 'react-apollo';
- import { fetchServiceSeekerHandler } from '../../../calendar/myCalendar/actions/appointmentCount.js'
+ import { fetchServiceSeekerHandler } from '../../../calendar/myCalendar/actions/appointmentCount'
+import { bookUserServiceCardAppointmentActionHandler } from '../../../calendar/myCalendar/actions/fetchMyCalendar'
 
 
 
@@ -26,10 +27,15 @@ class Step1 extends Component {
 
   constructor(props) {
     super(props);
-    this.state={service:""}
+    this.state={service:"", serviceSeeker:[], seeker: ""}
+    this.testQuery.bind(this);
+    this.saveData.bind(this);
   }
 
-  componentWillMount() {}
+  componentWillMount() {
+
+
+  }
 
   componentDidMount() {
     console.log(this.props.serviceBasicInfo)
@@ -38,6 +44,31 @@ class Step1 extends Component {
     $('.step_form_wrap').height(WinHeight-(310+$('.admin_header').outerHeight(true)));
   }
 
+  saveData() {
+    let date = this.props.appointmentDate;
+    let day = date.getDate();
+    let month = date.getMonth();
+    let year = date.getFullYear();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    console.log(this.state.orderId)
+    let data = {
+        orderId: this.state.orderId?this.state.orderId:"dd ",
+        sessionId: "ddd ",
+        hours: hours,
+        minutes: minutes,
+        day: day,
+        month: month,
+        year: year
+}
+this.bookDetails(data)
+
+  }
+
+  async bookDetails(data) {
+    const resp = await bookUserServiceCardAppointmentActionHandler(data);
+    console.log(resp)
+  }
 
 
   /**
@@ -58,11 +89,41 @@ class Step1 extends Component {
    * @returns {XML}`
    */
 
+  componentWillReceiveProps(newProps) {
+    this.setState({serviceId: newProps.serviceId})
+    if(newProps.serviceId) {
+      this.testQuery()
+    }
+  }
+
+ async testQuery() {
+    if(this.props.serviceId) {
+      const resp = await fetchServiceSeekerHandler(this.props.profileId, this.props.serviceId)
+      this.setState({ serviceSeeker: resp})
+    }
+  }
+
   serviceSeeker() {
-    // const resp = fetchServiceSeekerHandler(this.props.profileId)
-    return([{
-      value: 'irender', label: 'hi'
-    }])
+    let seekers =  this.state.serviceSeeker || []
+    let seekerList = [];
+    seekers.map(function(data){
+      seekerList.push({value: data.transId, label: data.name})
+      })
+    return seekerList;
+  }
+
+  onSelectSeeker (selectedSeeker) {
+    console.log(selectedSeeker)
+    let that = this;
+    let seekers =  this.state.serviceSeeker || []
+    seekers.map(function(data, index){
+      if(selectedSeeker === {value: data.transId, label: data.name}){
+        that.setState({
+          orderId:  data.orderId,
+        })
+      }
+    })
+    this.setState({seeker: selectedSeeker})
   }
 
   selectedService(value) {
@@ -101,7 +162,7 @@ class Step1 extends Component {
               </div><br className="brclear"/>
 
               <div className="form-group">
-                <Select name="form-field-name" className="float-label" options={this.serviceSeeker()} placeholder="Choose Service Seeker"/>
+                <Select name="form-field-name" className="float-label" options={this.serviceSeeker()} placeholder="Choose Service Seeker" onChange={this.onSelectSeeker.bind(this)} value={this.state.seeker}/>
               </div>
               <div className="form-group">
                 <label>Total number of Sessions Rs.
@@ -247,7 +308,7 @@ class Step1 extends Component {
             </div>
             <br className="brclear"/>
             <div className="ml_btn btn_wrap">
-              <a href="" className="save_btn">Book</a> <a href="" className="cancel_btn">Cancel</a>
+              <div href="" className="save_btn" onClick={this.saveData.bind(this)}>Book</div> <a href="" className="cancel_btn">Cancel</a>
             </div>
           </div>
         </div>

@@ -76,7 +76,7 @@ export default class Calender extends Component {
         <BigCalendar
           selectable
           views={['month', 'week', 'day']}
-          events={that.state.events}
+          events={that.props.events}
           defaultView='month'
           defaultDate={that.state.date}
           onNavigate={that.onNavigate.bind(that)}

@@ -57,8 +57,9 @@ MlResolver.MlMutationResolver['updateServiceProviderPortfolio'] = (obj, args, co
         if (ret) {
           let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId})
           MlEmailNotification.onPortfolioUpdate(details);
+          let serviceprovideralert =  MlAlertNotification.onPortfolioUpdates()
           let code = 200;
-          let response = new MlRespPayload().successPayload("Updated Successfully", code);
+          let response = new MlRespPayload().successPayload(serviceprovideralert, code);
           return response;
         }
       }

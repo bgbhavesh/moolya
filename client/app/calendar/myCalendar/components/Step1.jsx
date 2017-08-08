@@ -72,10 +72,6 @@ class Step1 extends Component {
   }
 
 
-  componentWillReceiveProps(nextProps) {
-    console.log(nextProps)
-  }
-
   render(){
     let getServiceQuery = gql`
       query {

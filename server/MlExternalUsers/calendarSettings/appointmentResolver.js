@@ -641,3 +641,14 @@ MlResolver.MlQueryResolver["fetchServiceSeekerList"] = (obj, args, context, info
   return result;
 
 };
+
+MlResolver.MlQueryResolver["fetchMyAppointment"] = (obj, args, context, info) => {
+  let userId = context.userId;
+  let profileId = args.profileId;
+  let date = new Date();
+  let day = args.day ? args.day : date.getDate();
+  let month = args.month ? args.month : date.getMonth();
+  let year = args.year ? args.year : date.getFullYear();
+  let response = MlAppointment.getUserAppointments(userId, profileId, day, month, year);
+  return response;
+};

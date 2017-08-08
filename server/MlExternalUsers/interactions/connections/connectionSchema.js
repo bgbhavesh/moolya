@@ -77,6 +77,6 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],connections]);
 
 /**admin API data*/
 let supportedApi = [
-  {api:'fetchConnectionsByPortfolio', actionName:'READ', moduleName:"INTERACTION"}
+  {api:'fetchConnectionsByPortfolio', actionName:'READ', moduleName:"INTERACTION", isWhiteList:true}  //temp making white list
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

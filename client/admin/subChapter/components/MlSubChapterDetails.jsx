@@ -275,7 +275,7 @@ class MlSubChapterDetails extends React.Component {
                              {/*defaultValue={this.state.data && this.state.data.stateName} readOnly="true"/>*/}
                     {/*</div>*/}
                     <div className="form-group">
-                      <input type="text" ref="subChapterEmail" placeholder="Sub-Chapter Email ID"
+                      <input type="text" ref="subChapterEmail" placeholder="Sub-Chapter Email Id"
                              defaultValue={this.state.data && this.state.data.subChapterEmail}
                              className="form-control float-label"/>
                       <div className="email_notify">
@@ -328,7 +328,7 @@ class MlSubChapterDetails extends React.Component {
                                defaultValue={this.state.data && this.state.data.stateName} readOnly="true"/>
                       </div>
                       <div className="form-group">
-                        <input type="text" ref="subChapterEmail" placeholder="Sub-Chapter Email ID"
+                        <input type="text" ref="subChapterEmail" placeholder="Sub-Chapter Email Id"
                                defaultValue={this.state.data && this.state.data.subChapterEmail}
                                className="form-control float-label"/>
                         <div className="email_notify">

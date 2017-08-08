@@ -395,7 +395,7 @@ MlResolver.MlQueryResolver["fetchProfileAppointmentCounts"] = (obj, args, contex
 
   let result = mlDBController.aggregate('MlAppointments', pipeLine);
   result = result && result[0] ? result[0] : [];
-  return result;
+    return result;
 
 };
 
@@ -409,12 +409,12 @@ MlResolver.MlMutationResolver["bookTaskInternalAppointment"] = (obj, args, conte
   let minutes = args.taskInternalAppointmentInfo.minutes; // 0;
 
   let startDate = new Date();
-  date.setDate(day);
-  date.setMonth(month);
-  date.setYear(year);
-  date.setHours(hours);
-  date.setMinutes(minutes);
-  date.setSeconds(0,0);
+  startDate.setDate(day);
+  startDate.setMonth(month);
+  startDate.setYear(year);
+  startDate.setHours(hours);
+  startDate.setMinutes(minutes);
+  startDate.setSeconds(0,0);
 
   let taskDoc = mlDBController.findOne('MlTask', taskId, context);
   let session = taskDoc.session.find(function (data) {
@@ -511,7 +511,7 @@ MlResolver.MlMutationResolver["bookTaskInternalAppointment"] = (obj, args, conte
   }
 };
 
-MlResolver.MlMutationResolver["selfTaskInternalAppointment"] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver["bookSelfTaskInternalAppointment"] = (obj, args, context, info) => {
   let day = args.selfInternalAppointmentInfo.day; //date.getDate();
   let month = args.selfInternalAppointmentInfo.month; //date.getMonth();
   let year = args.selfInternalAppointmentInfo.year; //date.getFullYear();
@@ -523,14 +523,14 @@ MlResolver.MlMutationResolver["selfTaskInternalAppointment"] = (obj, args, conte
   let taskId = mlDBController.insert('MlAppointmentTask', taskDetails, context);
 
   let startDate = new Date();
-  date.setDate(day);
-  date.setMonth(month);
-  date.setYear(year);
-  date.setHours(hours);
-  date.setMinutes(minutes);
-  date.setSeconds(0,0);
+  startDate.setDate(day);
+  startDate.setMonth(month);
+  startDate.setYear(year);
+  startDate.setHours(hours);
+  startDate.setMinutes(minutes);
+  startDate.setSeconds(0,0);
 
-  session.duration = taskDetails.duration ? taskDetails.duration : {}
+  taskDetails.duration = taskDetails.duration ? taskDetails.duration : {};
 
   let sessionHours = taskDetails.duration.hours ? taskDetails.duration.hours : 0;
   let sessionMinutes = taskDetails.duration.minutes ? taskDetails.duration.minutes : 0;
@@ -595,4 +595,60 @@ MlResolver.MlMutationResolver["selfTaskInternalAppointment"] = (obj, args, conte
     let response = new MlRespPayload().successPayload("Appointment book successfully", code);
     return response;
   }
+};
+
+MlResolver.MlQueryResolver["fetchServiceSeekerList"] = (obj, args, context, info) => {
+
+  let userId = context.userId;
+  let profileId = args.profileId;
+
+  let pipeLine = [
+    {"$match":{"profileId": userId, "profileId": profileId}}
+  ];
+
+  if(args.serviceId) {
+    pipeLine.push({
+      "$match" : { "serviceId": args.serviceId }
+    });
+  }
+
+  pipeLine.push({
+    "$lookup": { from: "mlScOrder", localField: "_id", foreignField: "serviceId", as: "orders" }
+  });
+
+  pipeLine.push({
+    "$unwind" : "$orders"
+  });
+
+  pipeLine.push({
+    "$lookup": { from: "users", localField: "orders.userId", foreignField: "_id", as: "users" }
+  });
+
+  pipeLine.push({ "$unwind" : "$users" });
+
+  pipeLine.push({
+    "$project" :
+      {
+        "name": "$users.profile.displayName",
+        "userId": "$orders.userId",
+        "profileId": "$orders.profileId",
+        "transId": "$orders.orderId"
+      }
+  });
+
+  let result = mlDBController.aggregate('MlServiceCardDefinition', pipeLine );
+
+  return result;
+
+};
+
+MlResolver.MlQueryResolver["fetchMyAppointment"] = (obj, args, context, info) => {
+  let userId = context.userId;
+  let profileId = args.profileId;
+  let date = new Date();
+  let day = args.day ? args.day : date.getDate();
+  let month = args.month ? args.month : date.getMonth();
+  let year = args.year ? args.year : date.getFullYear();
+  let response = MlAppointment.getUserAppointments(userId, profileId, day, month, year);
+  return response;
 };

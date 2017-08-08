@@ -39,8 +39,6 @@ export default class Step3 extends React.Component{
     $('.left_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
     this.props.getRegistrationContactDetails();
     initalizeFloatLabel();
-
-
   }
  /* componentWillReceiveProps(nextProps){
     this.getRegistrationContactInfo();
@@ -89,7 +87,7 @@ export default class Step3 extends React.Component{
                   </div>
                   <div className="panel panel-default new_profile_tabs">
                     <div className="panel-heading">
-                      Email ID
+                      Email Id
                     </div>
                     <EmailDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails} registrationDetails={this.props.getRegistrationContactDetails} clusterId={this.props.clusterId}/>
                   </div>

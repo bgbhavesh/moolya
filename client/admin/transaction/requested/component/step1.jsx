@@ -137,6 +137,8 @@ export default class step1 extends React.Component{
 
     }
 
+    this.props.showPromptAlert(true)
+
 
 
     //this.props.getRegistrationDetails(this.state)
@@ -281,6 +283,7 @@ export default class step1 extends React.Component{
     if(response){
       if(response.success){
         this.props.refetchRegistrationAndTemplates();
+        this.props.showPromptAlert(false)
         toastr.success("Saved Successfully")
       }else{
         toastr.error(response.result);
@@ -511,7 +514,7 @@ export default class step1 extends React.Component{
                       <input type="text" ref="contactNumber" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.contactNumber}  placeholder="Contact number" className="form-control float-label" id=""data-required={true} data-errMsg="Contact Number is required" />
                     </div>
                     <div className="form-group mandatory">
-                      <input type="text" ref="email" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.email}  placeholder="Email ID" className="form-control float-label" id="" disabled="true" data-required={true} data-errMsg="Email Id is required"/>
+                      <input type="text" ref="email" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.email}  placeholder="Email Id" className="form-control float-label" id="" disabled="true" data-required={true} data-errMsg="Email Id is required"/>
                     </div>
                     <div className="form-group">
                       <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={that.optionBySelectRegistrationType.bind(this)} isDynamic={true} />

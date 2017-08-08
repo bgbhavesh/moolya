@@ -67,7 +67,7 @@ if(Meteor.isServer){
               "link": "/app/referalInvities",
               "isLink" : true,
               "isMenu" : true,
-              "name" : "Referal & Invities",
+              "name" : "Referral & Invites",
               "uniqueId" : "referalInvities"
           },
           {

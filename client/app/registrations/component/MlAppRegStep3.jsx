@@ -149,7 +149,7 @@ export default class MlAppRegStep3 extends React.Component {
                 </div>
                 <div className="panel panel-default new_profile_tabs">
                   <div className="panel-heading">
-                    Email ID
+                    Email Id
                   </div>
                   <MlAppRegEmailDetails registerId={this.state.registerId}
                                         registrationInfo={this.state.registrationDetails}

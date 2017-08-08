@@ -34,11 +34,7 @@ export default class  BeSpokeView extends Component {
       {value: 'MeetUp', label: 'MeetUp'}
     ];
 
-    let frequencyOptions=[
-      {value: 'Daily', label: 'Daily'},
-      {value: 'Weekly', label: 'Weekly'},
-      {value: 'Monthly', label: 'Monthly'}
-    ];
+
 
     let that = this;
     let attach = this.props.data && this.props.data.attachments? this.props.data.attachments : [{}];

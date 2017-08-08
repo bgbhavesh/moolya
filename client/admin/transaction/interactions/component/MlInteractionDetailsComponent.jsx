@@ -49,7 +49,7 @@ export default class MlInteractionDetailsComponent extends React.Component {
                   <input type="text" placeholder="Name"  defaultValue = {this.props.data.userName} disabled={true} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Email ID"  defaultValue = {this.props.data.emailId}  disabled={true} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Email Id"  defaultValue = {this.props.data.emailId}  disabled={true} className="form-control float-label" id=""/>
                 </div>
               </div>
               <div className="col-md-6">

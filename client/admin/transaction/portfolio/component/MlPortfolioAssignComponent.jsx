@@ -269,8 +269,8 @@ export default class MlPortfolioAssignComponent extends React.Component {
     }
     `;
 
-    let departmentQuery=gql`query($isMoolya:Boolean,$clusterId:String){  
-      data:fetchHierarchyMoolyaDepartment(isMoolya:$isMoolya,clusterId:$clusterId) {
+    let departmentQuery=gql`query($isMoolya:Boolean,$clusterId:String, $subChapterId:String){  
+      data:fetchHierarchyMoolyaDepartment(isMoolya:$isMoolya,clusterId:$clusterId, subChapterId:$subChapterId) {
         value:_id
         label:departmentName
       }  
@@ -297,7 +297,7 @@ export default class MlPortfolioAssignComponent extends React.Component {
 
     let chapterOption={options: { variables: {id:this.state.selectedCluster}}};
     let subChapterOption={options: { variables: {id:this.state.selectedChapter}}}
-    let departmentOption={options: { variables: {isMoolya:true,clusterId:this.state.selectedCluster}}}
+    let departmentOption={options: { variables: {isMoolya:true, clusterId:this.state.selectedCluster, subChapterId:this.state.selectedSubChapter}}}
     let subDepartmentOption={options: { variables: {id:this.state.selectedDepartment}}};
     let roleOption={
                     options: {

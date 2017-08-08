@@ -79,7 +79,7 @@ export default class MlAppServiceTermsAndConditions extends Component{
             <div className="form_bg">
               <form>
                 <div className="form-group switch_wrap switch_names inline_switch">
-                  <label htmlFor="cancelable">Cancelation is Applicable</label>
+                  <label htmlFor="cancelable">Can be cancelled</label>
                   <span className={serviceTermAndCondition.isCancelable ? 'state_label acLabel' : 'state_label'}>Yes</span><label className="switch nocolor-switch">
                   <input id="cancelable" type="checkbox"
                          checked={!serviceTermAndCondition.isCancelable}
@@ -90,7 +90,7 @@ export default class MlAppServiceTermsAndConditions extends Component{
                   <span className={serviceTermAndCondition.isCancelable ? 'state_label' : 'state_label acLabel'}>No</span>
                 </div>
                 <div className="form-group switch_wrap switch_names inline_switch">
-                  <label htmlFor="schedulable">Is Reschedule allowable</label>
+                  <label htmlFor="schedulable">Can be Rescheduled</label>
                   <span className={serviceTermAndCondition.isReschedulable ? 'state_label acLabel' : 'state_label'}>Yes</span><label className="switch nocolor-switch">
                   <input id="schedulable" type="checkbox"
                          checked={!serviceTermAndCondition.isReschedulable}
@@ -107,21 +107,21 @@ export default class MlAppServiceTermsAndConditions extends Component{
             <div className="form_bg">
               <form>
                 <div className="form-group">
-                  <label>Days before cancelation
+                  <label>Can be cancelled &nbsp;
                     <input className="form-control inline_input medium_in"
                            id="cancelationday"
                            disabled={!serviceTermAndCondition.isCancelable}
                            value={serviceTermAndCondition.noOfDaysBeforeCancelation}
-                           onChange={(event) => onChangeValue(event)} />
+                           onChange={(event) => onChangeValue(event)} /> days
                   </label>
                 </div>
                 <br className="brclear"/>
                 <div className="form-group">
-                  <label>How many times <input className="form-control inline_input medium_in"
+                  <label>Can be rescheduled  &nbsp;<input className="form-control inline_input medium_in"
                                                id="rescheduler"
                                                disabled={!serviceTermAndCondition.isReschedulable}
                                                onChange={(event) => onChangeValue(event)}
-                                               value={serviceTermAndCondition.noOfReschedulable}  />
+                                               value={serviceTermAndCondition.noOfReschedulable}  /> times
                   </label>
                 </div>
               </form>

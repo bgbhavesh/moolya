@@ -6,18 +6,21 @@
 
 // import NPM module(s)
 import React, {Component} from 'react';
+import _ from 'lodash';
 
 // import custom modules
 import StepZilla from '../../../../commons/components/stepzilla/StepZilla';
 import MlTaskAppointmentBasicInfo from "../components/MlTaskAppointmentBasicInfo";
 import MlTaskAppointmentSession from "../components/MlTaskAppointmentSessions";
 import MlTaskAppointmentTermAndCondition from "../components/MlTaskAppointmentTermAndCondition";
+import MlAppMyCalendarIdeator from "../components/MlAppMyCalendarIdeator";
 import MlAppActionComponent from "../../../commons/components/MlAppActionComponent";
 import MlAccordion from "../../../commons/components/MlAccordion";
 import formHandler from "../../../../commons/containers/MlFormHandler";
 import {
   fetchAllTaskActionHandler,
-  fetchTaskActionHandler
+  fetchTaskActionHandler,
+  bookTaskInternalAppointment
 } from '../actions/MlAppointmentActionHandler';
 
 class MyTaskAppointments extends Component {
@@ -26,10 +29,13 @@ class MyTaskAppointments extends Component {
     this.state = {
       selectedTask: {},
       tasks: [],
-      selectedTaskId: ''
+      selectedTaskId: '',
+      selectedSessionId: '',
+      extraUsers: []
     };
     this.getAllTaskByProfile = this.getAllTaskByProfile.bind(this);
     this.onChangeTask = this.onChangeTask.bind(this);
+    this.saveDetails = this.saveDetails.bind(this);
   }
 
   componentWillMount() {
@@ -42,12 +48,33 @@ class MyTaskAppointments extends Component {
    * @return {Promise.<void>}
    */
   async getAllTaskByProfile() {
-    const resp = await fetchAllTaskActionHandler('MLPRO00000002');
+    const resp = await fetchAllTaskActionHandler();
     if (resp) {
       this.setState({ tasks: resp });
     }
   }
 
+  /**
+   * Method :: saveDetails
+   * Desc: set the current selected value
+   */
+  saveDetails(id, data) {
+    let {extraUsers, selectedSessionId} = this.state;
+    switch (id) {
+      case 'session':
+        selectedSessionId = data;
+        break;
+      case 'user':
+        extraUsers.push(data);
+        break;
+      default:
+        // do nothing
+    }
+    this.setState({
+      selectedSessionId: selectedSessionId,
+      extraUsers: extraUsers
+    })
+  }
   /**
    * Method :: onSelectTask
    * Desc :: Sets the selected task
@@ -67,8 +94,26 @@ class MyTaskAppointments extends Component {
    * Method :: updateTask
    * Desc :: Update the selected task
    */
-  updateTask() {
-    console.log('----Hi--');
+  async updateTask() {
+    const {selectedTaskId, selectedSessionId, extraUsers} = this.state;
+    if (selectedSessionId && selectedTaskId) {
+      let data = {
+        taskId: selectedTaskId,
+        sessionId: selectedSessionId,
+        hours: 1,
+        minutes: 2,
+        day: 1,
+        month: 3,
+        year: 2017,
+        extraUsers: extraUsers
+      };
+      const resp = await bookTaskInternalAppointment(data);
+      if (resp && resp.success) {
+        toastr.success('Task internal appointment booked successfully');
+      }
+    } else {
+      toastr.error('Please select a session and task');
+    }
   }
 
   /**
@@ -89,13 +134,19 @@ class MyTaskAppointments extends Component {
       {
         name: 'Session',
         component: <MlTaskAppointmentSession selectedTask={selectedTask}
+                                             saveDetails={this.saveDetails}
                                              selectedTaskId={selectedTaskId} />,
         icon: <span className="ml fa fa-users"></span>
       },
       {
         name: 'Terms & Conditions',
-        component: <MlTaskAppointmentTermAndCondition />,
+        component: <MlTaskAppointmentTermAndCondition selectedTask={selectedTask} />,
         icon: <span className="ml ml-payments"></span>
+      },
+      {
+        name: 'Temp',
+        component: <MlAppMyCalendarIdeator />,
+        icon: <span className=""></span>
       }
 
     ];
@@ -118,7 +169,7 @@ class MyTaskAppointments extends Component {
         showAction: true,
         actionName: 'exit',
         handler: async(event) => {
-          FlowRouter.go('/app/calendar/manageSchedule/' + _this.profileId + '/serviceList')
+         // FlowRouter.go('/app/calendar/manageSchedule/' + _this.profileId + '/serviceList')
         }
       }
     ];

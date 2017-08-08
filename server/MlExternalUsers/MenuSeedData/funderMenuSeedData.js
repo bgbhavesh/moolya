@@ -46,7 +46,7 @@ if(Meteor.isServer){
         "link": "/app/transaction",
         "isLink" : true,
         "isMenu" : true,
-        "name" : "My Transaction",
+        "name" : "My Transactions",
         "uniqueId" : "myTransaction"
       },
 

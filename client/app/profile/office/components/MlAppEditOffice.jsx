@@ -55,9 +55,9 @@ export default class MlAppEditOffice extends React.Component{
     const that = this;
     const isAddNewMember = that.state.role == "Principal" || that.state.role == "AdminUser";
     let MlTabs = [
-      {name: 'Principal', tabContent: <MlAppAddOfficeMember isAdd={isAddNewMember} />},
-      {name: 'Team Member', tabContent: <MlAppAddOfficeMember isAdd={isAddNewMember} availableCommunities={this.state.availableCommunities} />},
-      {name: 'Office Transaction', tabContent: <MlTableViewContainer params={this.props.config} {...mlOfficeTransactionConfig}/>},
+      {name: 'Principals', tabContent: <MlAppAddOfficeMember isAdd={isAddNewMember} />},
+      {name: 'Team Members', tabContent: <MlAppAddOfficeMember isAdd={isAddNewMember} availableCommunities={this.state.availableCommunities} />},
+      {name: 'Office Transactions', tabContent: <MlTableViewContainer params={this.props.config} {...mlOfficeTransactionConfig}/>},
       {name: 'Upgrade Office', tabContent: <MlUpgradeOffice/>}
     ];
 

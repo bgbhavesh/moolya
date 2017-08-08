@@ -222,7 +222,7 @@ export default class MlOfficeItem extends React.Component {
                   <input type="text" placeholder="Name" defaultValue=" " value={this.state.userInfo.name} className="form-control float-label" id=""/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Email ID" defaultValue=" " value={this.state.userInfo.email} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Email Id" defaultValue=" " value={this.state.userInfo.email} className="form-control float-label" id=""/>
                 </div>
               </div>
               <div className="col-md-6">

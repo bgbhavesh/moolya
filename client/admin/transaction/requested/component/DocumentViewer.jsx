@@ -14,8 +14,7 @@ export default class DocumentViewer extends React.Component{
       displayModal:false,
       previewImage:"",
       modal: false,
-      previewId:"",
-     }
+    }
     return this;
   }
 
@@ -78,24 +77,7 @@ export default class DocumentViewer extends React.Component{
   OnFileRemove(docTypeId,documentId,fileId){
     this.props.onDocumentRemove(docTypeId,documentId,fileId)
   }
- /* random(link,index,docName){
-    alert("fdsfasdfsdfsd")
 
-    let data = this.props.doc&&this.props.doc.docFiles?this.props.doc.docFiles:[]
-    let imagePreviewUrl;
-    imagePreviewUrl = data[index].fileUrl;
-    this.setState({previewId:docName+index},function () {
-      this.setState({previewImage:imagePreviewUrl,modal: !this.state.modal})
-    });
-
-  }
-  toggle() {
-      alert("sdfsdfsdfsdfsdfsdfsdfdfsdf")
-      this.setState({
-        modal: !this.state.modal
-
-      })
-  }*/
   showModal(index) {
     let data = this.props.doc&&this.props.doc.docFiles?this.props.doc.docFiles:[]
     let imagePreviewUrl;

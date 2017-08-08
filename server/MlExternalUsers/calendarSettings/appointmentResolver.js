@@ -530,7 +530,7 @@ MlResolver.MlMutationResolver["bookSelfTaskInternalAppointment"] = (obj, args, c
   startDate.setMinutes(minutes);
   startDate.setSeconds(0,0);
 
-  session.duration = taskDetails.duration ? taskDetails.duration : {}
+  taskDetails.duration = taskDetails.duration ? taskDetails.duration : {};
 
   let sessionHours = taskDetails.duration.hours ? taskDetails.duration.hours : 0;
   let sessionMinutes = taskDetails.duration.minutes ? taskDetails.duration.minutes : 0;

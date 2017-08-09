@@ -117,7 +117,7 @@ this.bookDetails(data)
     let that = this;
     let seekers =  this.state.serviceSeeker || []
     seekers.map(function(data, index){
-      if(selectedSeeker === {value: data.transId, label: data.name}){
+      if(selectedSeeker.value === data.transId){
         that.setState({
           orderId:  data.orderId,
         })

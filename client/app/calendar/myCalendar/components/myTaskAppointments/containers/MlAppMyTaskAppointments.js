@@ -177,9 +177,7 @@ class MyTaskAppointments extends Component {
       {
         showAction: true,
         actionName: 'exit',
-        handler: async(event) => {
-         // FlowRouter.go('/app/calendar/manageSchedule/' + _this.profileId + '/serviceList')
-        }
+        handler: async(event) => _this.props.handler(_this.props.redirectWithCalendar.bind(this, 'calendar'))
       }
     ];
     export const genericPortfolioAccordionConfig = {

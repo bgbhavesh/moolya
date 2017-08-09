@@ -50,6 +50,7 @@ export default class MlAppServiceManageSchedule extends Component {
     };
     this.onChangeSteps = this.onChangeSteps.bind(this);
     this.selectService.bind(this);
+    this.redirectWithCalendar = this.redirectWithCalendar.bind(this);
 
   }
 
@@ -72,7 +73,9 @@ export default class MlAppServiceManageSchedule extends Component {
     });
   }
 
-
+  redirectWithCalendar(componentToLoad) {
+    this.props.componentToLoad(componentToLoad);
+  }
 
   /**
    * Method :: onChangeSteps
@@ -331,6 +334,7 @@ export default class MlAppServiceManageSchedule extends Component {
                   :
                   <MlAppMyTaskAppointments isTaskComponent={isTaskComponent}
                                            appointmentDate={appointmentDate}
+                                           redirectWithCalendar={this.redirectWithCalendar}
                                            onChangeSteps={this.onChangeSteps}
                                            profileId={profileId}
                   />

@@ -48,7 +48,11 @@ export default class SessionDetails extends Component {
 
   async saveInfo( details ) {
     const resp = await bookUserServiceCardAppointmentActionHandler(details);
-    console.log(resp)
+    if(resp.code === 200) {
+      toastr.success(resp.result)
+    }else{
+      toastr.error(resp.result)
+    }
     // console.log(resp)  }
 
   }

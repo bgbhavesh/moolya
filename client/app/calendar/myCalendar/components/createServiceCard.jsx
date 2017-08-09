@@ -12,7 +12,7 @@ import {
   fetchTasksAmountActionHandler,
   fetchTaskDetailsForServiceCard
 } from '../../manageScheduler/service/actions/MlServiceActionHandler';
-import { fetchTaskActionHandler } from '../../../calendar/myTaskAppointments/actions/MlAppointmentActionHandler'
+import { fetchTaskActionHandler } from './myTaskAppointments/actions/MlAppointmentActionHandler'
 import Step2 from './Step2'
 
 
@@ -30,7 +30,7 @@ import CalenderHead from './calendarHead';
 import MlAppTaskAppointmentBasicInfo from './MlAppTaskAppointmentBasicInfo';
 import MlAppTaskAppointmentSessions from './MlAppTaskAppointmentSessions';
 import MlAppTaskAppointmentTermAndCondition from './MlAppTaskAppointmentTermAndCondition';
-import MlAppMyTaskAppointments from '../../myTaskAppointments/containers/MlAppMyTaskAppointments';
+import MlAppMyTaskAppointments from './myTaskAppointments/containers/MlAppMyTaskAppointments';
 export default class MlAppServiceManageSchedule extends Component {
 
   /**
@@ -50,6 +50,7 @@ export default class MlAppServiceManageSchedule extends Component {
     };
     this.onChangeSteps = this.onChangeSteps.bind(this);
     this.selectService.bind(this);
+    this.redirectWithCalendar = this.redirectWithCalendar.bind(this);
 
   }
 
@@ -72,7 +73,9 @@ export default class MlAppServiceManageSchedule extends Component {
     });
   }
 
-
+  redirectWithCalendar(componentToLoad) {
+    this.props.componentToLoad(componentToLoad);
+  }
 
   /**
    * Method :: onChangeSteps
@@ -203,6 +206,10 @@ export default class MlAppServiceManageSchedule extends Component {
     this.setState({task: resp, selectedTab: taskId})
   }
 
+  bookDetails(response) {
+    this.setState({details: response})
+  }
+
 
   /**
    * Method :: setServiceSteps
@@ -233,7 +240,7 @@ export default class MlAppServiceManageSchedule extends Component {
           profileId={this.props.profileId}
           serviceId={this.state.serviceId}
           isTaskComponent={isTaskComponent}
-          // bookDetails={this.bookDetails.bind(this)}
+          bookDetails={this.bookDetails.bind(this)}
           onChangeSteps={this.onChangeSteps}
           selectedService={this.selectedService.bind(this)}
           serviceBasicInfo={serviceBasicInfo}
@@ -248,6 +255,7 @@ export default class MlAppServiceManageSchedule extends Component {
           selectService={this.selectService.bind(this)}
           task={this.state.task}
           selectedTab={this.state.selectedTab}
+          details={this.state.details}
         />,
         icon: <span className="ml fa fa-users"></span>
       },
@@ -326,6 +334,7 @@ export default class MlAppServiceManageSchedule extends Component {
                   :
                   <MlAppMyTaskAppointments isTaskComponent={isTaskComponent}
                                            appointmentDate={appointmentDate}
+                                           redirectWithCalendar={this.redirectWithCalendar}
                                            onChangeSteps={this.onChangeSteps}
                                            profileId={profileId}
                   />

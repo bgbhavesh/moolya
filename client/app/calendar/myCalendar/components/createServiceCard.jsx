@@ -321,10 +321,10 @@ export default class MlAppServiceManageSchedule extends Component {
     const {appointmentDate, profileId} = this.props;
     const {isTaskComponent} = this.state;
     return (
-      <div className="app_main_wrap">
+      <div className="col-lg-12">
         <div className="app_padding_wrap">
           <div className="clearfix"/>
-          <div className="col-md-12">
+          <div className="">
             <div className='step-progress'>
               <div id="root">
                 {!isTaskComponent ?

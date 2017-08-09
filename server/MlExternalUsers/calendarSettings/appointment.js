@@ -427,7 +427,7 @@ class MlAppointment {
         }
       },
       { "$unwind": "$members" },
-      { "$match": {'members.userId':userId, 'members.profileId':profileId, startDate: { $gte:date } ,endDate: {$lt:endDate} } }
+      { "$match": {'members.userId':userId, 'members.profileId':profileId, startDate: { $gte:date } ,endDate: {$lt:monthEnd} } }
     ]);
 
     //mlDBController.find( 'MlAppointments', {'provider.userId':userId, 'provider.profileId':profileId, startDate: { gte:date } ,endDate: {lt:monthEnd} }).fetch();

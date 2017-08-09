@@ -80,7 +80,7 @@ import {mlAppFunderConfig2} from "../../app/funders/config/mlAppFunderConfig2";
  * Import My Appointment routes
  */
 import MlAppMyAppointment from '../../app/calendar/myAppointments/components/MlAppMyAppointment';
-import MlAppMyTaskAppointment from '../../app/calendar/myTaskAppointments/containers/MlAppMyTaskAppointments';
+import MlAppMyTaskAppointment from '../../app/calendar/myCalendar/components/myTaskAppointments/containers/MlAppMyTaskAppointments';
 
 export const appSection = FlowRouter.group({
   prefix: "/app",

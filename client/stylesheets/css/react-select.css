@@ -4,6 +4,7 @@
 */
 .Select {
   position: relative;
+  text-align: left;
 }
 .Select,
 .Select div,

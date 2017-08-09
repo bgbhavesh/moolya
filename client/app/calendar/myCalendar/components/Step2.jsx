@@ -11,7 +11,7 @@ import SessionDetails from './sessionDetails'
 import {
   fetchActivitiesTeamsActionHandler,
   getTeamUsersActionHandler,
-  fetchOfficeActionHandler } from '../../myTaskAppointments/actions/MlAppointmentActionHandler';
+  fetchOfficeActionHandler } from './myTaskAppointments/actions/MlAppointmentActionHandler';
 import gql from 'graphql-tag'
 
 // import custom method(s) and component(s)
@@ -156,6 +156,7 @@ class MlAppServiceSelectTask extends Component{
     console.log('--index--', index,'--sessionId--', sessionId, '--duration--',duration, )
     const {selectedTaskId} = this.state;
     // let {selectedTaskId} = this.props;
+    this.setState({sessionId: sessionId})
     const resp = await fetchActivitiesTeamsActionHandler(selectedTaskId, sessionId);
     if(resp){
       this.getUsers(resp, index);
@@ -408,6 +409,8 @@ class MlAppServiceSelectTask extends Component{
                               addUser={this.addUser}
                               chooseTeamType={this.chooseTeamType}
                               offices={offices}
+                              sessionId={this.state.sessionId}
+                              details={this.props.details}
 
         />
     )

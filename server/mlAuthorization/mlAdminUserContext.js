@@ -72,7 +72,6 @@ class MlAdminUserContext
                 roleId = userRole.roleId
               }
           })
-
       }
     }
         return {hierarchyLevel:hierarchyLevel,hierarchyCode:hierarchyCode,

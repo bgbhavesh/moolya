@@ -47,12 +47,27 @@ class MlNonMoolyaAccess {
           isDefaultSubChapter: false
         }, context)
         if (subChapter.internalSubChapterAccess && subChapter.internalSubChapterAccess.externalUser && subChapter.internalSubChapterAccess.externalUser.canView)
-          success =  true
+          success = true
         else
-          success =  false
+          success = false
       }
     }
     return success
+  }
+
+  attachAssociatedSubChaptersContext(defaultSubChapters) {
+    var subChapters = mlDBController.find('MlSubChapters', {_id: {$in: defaultSubChapters}}).fetch()
+    var associatedSubChaptersAry = _.map(subChapters, 'associatedSubChapters')
+    defaultSubChapters = _.concat(defaultSubChapters, associatedSubChaptersAry[0])
+    return defaultSubChapters
+  }
+
+  attachAssociatedChaptersContext(defaultChapters, defaultSubChapters) {
+    var subChapters = mlDBController.find('MlSubChapters', {_id: {$in: defaultSubChapters}}).fetch()
+    var associatedChaptersAry = _.map(subChapters, 'chapterId')
+    defaultChapters = _.concat(defaultChapters, associatedChaptersAry)
+    defaultChapters = _.uniq(defaultChapters)
+    return defaultChapters
   }
 }
 

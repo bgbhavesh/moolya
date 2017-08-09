@@ -1033,6 +1033,56 @@ if (Meteor.isServer) {
               ]
             },
             {
+              "link" : "/admin/transactions/office",
+              "name" : "Office",
+              "uniqueId" : "transaction_office_list",
+              "isLink" : true,
+              "isMenu" : true,
+              "image" : "",
+              "subMenu" : [
+                {
+                  "link" : "/admin/transactions/office",
+                  "name" : "Office",
+                  "uniqueId" : "transaction_office",
+                  "subMenuMappingId" : "transaction_office_list",
+                  "subMenusId" : "transaction",
+                  "isLink" : true,
+                  "isMenu" : false,
+                  "image" : ""
+                }
+              ]
+            },
+            {
+              "link" : "/admin/transactions/processSetupList",
+              "name" : "ProcessSetUp",
+              "uniqueId" : "transaction_ProcessSetup",
+              "isLink" : true,
+              "isMenu" : true,
+              "image" : "",
+              "subMenu": [
+                {
+                  "link": "/admin/transactions/processSetupList",
+                  "name": "List Process Setup",
+                  "uniqueId": "transaction_ProcessSetupList",
+                  "subMenuMappingId":"transaction_ProcessSetup",
+                  "subMenusId":"transaction",
+                  "isLink": true,
+                  "isMenu": false,
+                  "image": ""
+                },
+                {
+                  "link": "/admin/transactions/editProcessSetup",
+                  "name": "Edit Process Setup",
+                  "uniqueId": "transaction_EditProcessSetup",
+                  "subMenuMappingId":"transaction_ProcessSetup",
+                  "subMenusId":"transaction",
+                  "isLink": true,
+                  "isMenu": true,
+                  "image": ""
+                }
+              ]
+            },
+            {
               "link": "/admin/transactions/history",
               "name": "History",
               "uniqueId": "History_Log",

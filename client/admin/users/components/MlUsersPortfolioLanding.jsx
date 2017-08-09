@@ -36,7 +36,6 @@ export default class MlUsersPortfolioLanding extends Component {
   async fetchPortfolioDetails() {
     let portfolioId = this.props.config ? this.props.config.portfolioId : ''
     const response = await fetchPortfolioActionHandler(portfolioId);
-    console.log(response)
     if (response && response.communityCode) {
       if (response.communityCode != 'IDE')
         $('.swiper-menu').addClass('hide');

@@ -9,14 +9,14 @@ import React, {Component} from 'react';
 import _ from 'lodash';
 
 // import custom modules
-import StepZilla from '../../../../commons/components/stepzilla/StepZilla';
+import StepZilla from '../../../../../../commons/components/stepzilla/StepZilla';
 import MlTaskAppointmentBasicInfo from "../components/MlTaskAppointmentBasicInfo";
 import MlTaskAppointmentSession from "../components/MlTaskAppointmentSessions";
 import MlTaskAppointmentTermAndCondition from "../components/MlTaskAppointmentTermAndCondition";
 import MlAppMyCalendarIdeator from "../components/MlAppMyCalendarIdeator";
-import MlAppActionComponent from "../../../commons/components/MlAppActionComponent";
-import MlAccordion from "../../../commons/components/MlAccordion";
-import formHandler from "../../../../commons/containers/MlFormHandler";
+import MlAppActionComponent from "../../../../../commons/components/MlAppActionComponent";
+import MlAccordion from "../../../../../commons/components/MlAccordion";
+import formHandler from "../../../../../../commons/containers/MlFormHandler";
 import {
   fetchAllTaskActionHandler,
   fetchTaskActionHandler,
@@ -177,9 +177,7 @@ class MyTaskAppointments extends Component {
       {
         showAction: true,
         actionName: 'exit',
-        handler: async(event) => {
-         // FlowRouter.go('/app/calendar/manageSchedule/' + _this.profileId + '/serviceList')
-        }
+        handler: async(event) => _this.props.handler(_this.props.redirectWithCalendar.bind(this, 'calendar'))
       }
     ];
     export const genericPortfolioAccordionConfig = {

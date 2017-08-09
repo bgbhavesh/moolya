@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 import _ from 'lodash';
-import {appClient} from '../../../core/appConnection';
+import {appClient} from '../../../../../core/appConnection';
 
 export async function fetchAllTaskActionHandler(profileId) {
   const result = await appClient.query({

@@ -10,7 +10,8 @@ export default class MlCalendarHead extends Component {
       profilePic: "",
       displayName: "",
       profileDisplay: false,
-      subMenu: false
+      subMenu: false,
+      isAll: true
     }
     this.getUserProfiles.bind(this)
   }
@@ -30,8 +31,15 @@ export default class MlCalendarHead extends Component {
     return resp
   }
 
+  resetWithAll() {
+    this.setState({selectedProfileId: '', isAll: true});
+    this.props.componentToLoad('calendar');
+    this.props.getAppointmentCounts();
+  }
+
   changeProfile(profileId, communityName){
-    this.props.headerManagement(profileId, communityName)
+    this.props.headerManagement(profileId, communityName);
+    this.setState({selectedProfileId: profileId, isAll: false});
   };
 
 
@@ -47,15 +55,14 @@ export default class MlCalendarHead extends Component {
 
   render() {
     let profiles = this.state.profile || [];
-    let selectedProfileId = FlowRouter.getParam('profileId');
+    let selectedProfileId = this.state.selectedProfileId || FlowRouter.getParam('profileId');
     let that = this;
     let type = this.props.type;
-
     return (
       <div className="col-lg-12">
         <ul className="users_list well well-sm">
-          <li>
-            <a href="#">
+          <li className={that.state.isAll ? 'active_user' : ''}>
+            <a href="#" onClick={()=>that.resetWithAll()}>
               <img src={that.state.profilePic ? that.state.profilePic : "/images/def_profile.png"}/><br />
               <div className="tooltiprefer">
                 <span>{that.state.displayName ? that.state.displayName : "All"}</span>
@@ -65,8 +72,8 @@ export default class MlCalendarHead extends Component {
           {profiles.map(function (profile, idx) {
             return (
               <span key={idx}>
-                < li>
-                  <div >
+                <li className={selectedProfileId === profile.profileId ? 'active_user' : ''}>
+                  <div>
                     <a href="" onClick={()=>that.changeProfile(profile.profileId, profile.communityName)}>
                       <span className="icon_bg"> <span className="icon_lg ml ml-funder"></span></span><br />
                       <div className="tooltiprefer">

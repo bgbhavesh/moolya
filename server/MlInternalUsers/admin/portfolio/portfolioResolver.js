@@ -8,6 +8,7 @@ import _ from "lodash";
 import portfolioValidationRepo from "./portfolioValidation";
 import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlAlertNotification from '../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
+import mlNonMoolyaAccess from "../core/non-moolyaAccessControl/mlNonMoolyaAccess"
 /**
  * @module [externaluser portfolio Landing]
  * @params [context.userId]
@@ -373,6 +374,7 @@ MlResolver.MlQueryResolver['fetchPortfolioByReg'] = (obj, args, context, info) =
   var response = {}
   if (args.registrationId) {
     response = mlDBController.findOne('MlPortfolioDetails', {registrationId: args.registrationId}, context) || {}
+    response.canAccess = mlNonMoolyaAccess.canExternalUserViewReg(args.registrationId, context)
   }
   return response
 }

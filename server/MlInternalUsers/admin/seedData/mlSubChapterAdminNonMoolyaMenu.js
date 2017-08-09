@@ -259,7 +259,7 @@ if (Meteor.isServer) {
          * admin left nav users routes
          */
         {
-          "image": "/images/cluster_icon.png",
+          "image": "/images/users_icon.png",
           "link": "/admin/users/clusters",
           "name": "Users",
           "uniqueId": "users",

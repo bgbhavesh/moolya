@@ -12,7 +12,7 @@ import {
   fetchTasksAmountActionHandler,
   fetchTaskDetailsForServiceCard
 } from '../../manageScheduler/service/actions/MlServiceActionHandler';
-import { fetchTaskActionHandler } from '../../../calendar/myTaskAppointments/actions/MlAppointmentActionHandler'
+import { fetchTaskActionHandler } from './myTaskAppointments/actions/MlAppointmentActionHandler'
 import Step2 from './Step2'
 
 
@@ -30,7 +30,7 @@ import CalenderHead from './calendarHead';
 import MlAppTaskAppointmentBasicInfo from './MlAppTaskAppointmentBasicInfo';
 import MlAppTaskAppointmentSessions from './MlAppTaskAppointmentSessions';
 import MlAppTaskAppointmentTermAndCondition from './MlAppTaskAppointmentTermAndCondition';
-import MlAppMyTaskAppointments from '../../myTaskAppointments/containers/MlAppMyTaskAppointments';
+import MlAppMyTaskAppointments from './myTaskAppointments/containers/MlAppMyTaskAppointments';
 export default class MlAppServiceManageSchedule extends Component {
 
   /**

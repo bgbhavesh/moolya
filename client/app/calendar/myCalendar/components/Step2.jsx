@@ -11,7 +11,7 @@ import SessionDetails from './sessionDetails'
 import {
   fetchActivitiesTeamsActionHandler,
   getTeamUsersActionHandler,
-  fetchOfficeActionHandler } from '../../myTaskAppointments/actions/MlAppointmentActionHandler';
+  fetchOfficeActionHandler } from './myTaskAppointments/actions/MlAppointmentActionHandler';
 import gql from 'graphql-tag'
 
 // import custom method(s) and component(s)

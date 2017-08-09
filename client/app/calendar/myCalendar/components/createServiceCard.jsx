@@ -12,7 +12,7 @@ import {
   fetchTasksAmountActionHandler,
   fetchTaskDetailsForServiceCard
 } from '../../manageScheduler/service/actions/MlServiceActionHandler';
-import { findTaskActionHandler } from '../../manageScheduler/task/actions/saveCalanderTask'
+import { fetchTaskActionHandler } from '../../../calendar/myTaskAppointments/actions/MlAppointmentActionHandler'
 import Step2 from './Step2'
 
 
@@ -30,6 +30,7 @@ import CalenderHead from './calendarHead';
 import MlAppTaskAppointmentBasicInfo from './MlAppTaskAppointmentBasicInfo';
 import MlAppTaskAppointmentSessions from './MlAppTaskAppointmentSessions';
 import MlAppTaskAppointmentTermAndCondition from './MlAppTaskAppointmentTermAndCondition';
+import MlAppMyTaskAppointments from '../../myTaskAppointments/containers/MlAppMyTaskAppointments';
 export default class MlAppServiceManageSchedule extends Component {
 
   /**
@@ -44,9 +45,12 @@ export default class MlAppServiceManageSchedule extends Component {
         duration:{}
       },
       TaskDetails:[{}],
-      task:{}
+      task:{},
+      selectedTab:""
     };
     this.onChangeSteps = this.onChangeSteps.bind(this);
+    this.selectService.bind(this);
+
   }
 
   componentWillMount() {
@@ -109,9 +113,18 @@ export default class MlAppServiceManageSchedule extends Component {
           totalAmount: service.payment.tasksAmount
         };
 
+        if (service.termsAndCondition) {
+           var TermAndCondition = _.omit(service.termsAndCondition, '__typename');
+        }
+
+        if(service.attachments) {
+            var attachmentDetails = _.omit(service.attachments, '__typename');
+        }
+
         this.setState({
           serviceBasicInfo: serviceInfo,
-          profileId: service.profileId
+          serviceTermAndCondition: TermAndCondition,
+          attachments: attachmentDetails
         })
       }
       //     finalAmount = service.finalAmount;
@@ -136,9 +149,9 @@ export default class MlAppServiceManageSchedule extends Component {
       //         }
       //       });
       //     }
-      //     if (service.termsAndCondition) {
-      //       serviceTermAndCondition = _.omit(service.termsAndCondition, '__typename');
-      //     }
+      //
+
+
       //     if (service.facilitationCharge) {
       //       facilitationCharge = _.cloneDeep(service.facilitationCharge);
       //     }
@@ -161,7 +174,7 @@ export default class MlAppServiceManageSchedule extends Component {
         // clusterData: clusterData,
         // serviceTask: serviceTask,
         // serviceTermAndCondition: serviceTermAndCondition,
-        // attachments: attachments,
+        // attachments: attachments
         // service: service,
         // tasks: tasks,
         // facilitationCharge: facilitationCharge,
@@ -181,13 +194,13 @@ export default class MlAppServiceManageSchedule extends Component {
     console.log(resp)
   }
 
-  optionsBySelectService(taskId) {
+  selectService(taskId) {
     this.getTask(taskId)
   }
 
   async getTask(taskId) {
-    const resp = await findTaskActionHandler(taskId)
-    this.setState({task: resp})
+    const resp = await fetchTaskActionHandler(taskId)
+    this.setState({task: resp, selectedTab: taskId})
   }
 
 
@@ -217,10 +230,14 @@ export default class MlAppServiceManageSchedule extends Component {
       {
         name: 'View',
         component: <Step1
+          profileId={this.props.profileId}
+          serviceId={this.state.serviceId}
           isTaskComponent={isTaskComponent}
+          // bookDetails={this.bookDetails.bind(this)}
           onChangeSteps={this.onChangeSteps}
           selectedService={this.selectedService.bind(this)}
           serviceBasicInfo={serviceBasicInfo}
+          appointmentDate={this.props.appointmentDate}
         />,
         icon: <span className="ml fa fa-plus-square-o"></span>
       },
@@ -228,22 +245,20 @@ export default class MlAppServiceManageSchedule extends Component {
         name:'Tasks',
         component: <Step2
           taskDetails={this.state.TaskDetails}
-          optionsBySelectService={this.optionsBySelectService.bind(this)}
+          selectService={this.selectService.bind(this)}
           task={this.state.task}
+          selectedTab={this.state.selectedTab}
         />,
         icon: <span className="ml fa fa-users"></span>
       },
       {
         name: 'Terms & Conditions',
-        component: <Step3/>,
+        component: <Step3
+          serviceTermAndCondition={this.state.serviceTermAndCondition}
+          attachments={this.state.attachments}
+        />,
         icon: <span className="ml ml-payments"></span>
       },
-      {
-        name: 'Payment',
-        // component: <MlAppServicePayment/>,
-        icon: <span className="ml ml-payments"></span>
-      },
-
     ];
     return steps;
   }
@@ -252,49 +267,50 @@ export default class MlAppServiceManageSchedule extends Component {
    * Method :: setTaskSteps
    * Desc :: Sets components steps for stepzila to create and update task data
    */
-  setTaskSteps() {
-    const {isTaskComponent} = this.state;
-    const steps = [
-      {
-        name: 'Service',
-        component: <MlAppTaskAppointmentBasicInfo
-          isTaskComponent={isTaskComponent}
-          onChangeSteps={this.onChangeSteps}
-        />,
-        icon: <span className="ml fa fa-plus-square-o"></span>
-      },
-      {
-        name: 'Sessions',
-        component: <MlAppTaskAppointmentSessions isTaskComponent={isTaskComponent}
-                                              onChangeSteps={this.onChangeSteps} />,
-        icon: <span className="ml ml-payments"></span>
-      },
-      {
-        name: 'Terms and conditions',
-        component: <MlAppTaskAppointmentTermAndCondition isTaskComponent={isTaskComponent}
-                                              onChangeSteps={this.onChangeSteps} />,
-        icon: <span className="ml ml-payments"></span>
-      },
-      {
-        name: '',
-        //component: <MlAppTaskAppointmentSessions isTaskComponent={isTaskComponent} onChangeSteps={this.onChangeSteps} />,
-        icon: <span className="ml ml-payments"></span>
-      },
-      {
-        name: '',
-        //component: <MlAppTaskAppointmentTermAndCondition isTaskComponent={isTaskComponent} onChangeSteps={this.onChangeSteps} />,
-        icon: <span className="ml ml-payments"></span>
-      }
-
-    ];
-    return steps;
-  }
+  // setTaskSteps() {
+  //   const {isTaskComponent} = this.state;
+  //   const steps = [
+  //     {
+  //       name: 'Service',
+  //       component: <MlAppTaskAppointmentBasicInfo
+  //         isTaskComponent={isTaskComponent}
+  //         onChangeSteps={this.onChangeSteps}
+  //       />,
+  //       icon: <span className="ml fa fa-plus-square-o"></span>
+  //     },
+  //     {
+  //       name: 'Sessions',
+  //       component: <MlAppTaskAppointmentSessions isTaskComponent={isTaskComponent}
+  //                                             onChangeSteps={this.onChangeSteps} />,
+  //       icon: <span className="ml ml-payments"></span>
+  //     },
+  //     {
+  //       name: 'Terms and conditions',
+  //       component: <MlAppTaskAppointmentTermAndCondition isTaskComponent={isTaskComponent}
+  //                                             onChangeSteps={this.onChangeSteps} />,
+  //       icon: <span className="ml ml-payments"></span>
+  //     },
+  //     {
+  //       name: '',
+  //       //component: <MlAppTaskAppointmentSessions isTaskComponent={isTaskComponent} onChangeSteps={this.onChangeSteps} />,
+  //       icon: <span className="ml ml-payments"></span>
+  //     },
+  //     {
+  //       name: '',
+  //       //component: <MlAppTaskAppointmentTermAndCondition isTaskComponent={isTaskComponent} onChangeSteps={this.onChangeSteps} />,
+  //       icon: <span className="ml ml-payments"></span>
+  //     }
+  //
+  //   ];
+  //   return steps;
+  // }
   /**
    * Method :: React render
    * Desc :: Showing html page
    * @returns {XML}
    */
   render() {
+    const {appointmentDate, profileId} = this.props;
     const {isTaskComponent} = this.state;
     return (
       <div className="app_main_wrap">
@@ -303,9 +319,18 @@ export default class MlAppServiceManageSchedule extends Component {
           <div className="col-md-12">
             <div className='step-progress'>
               <div id="root">
-                <StepZilla steps={isTaskComponent ? this.setTaskSteps() : this.setServiceSteps()}
-                           stepsNavigation={false}
-                           prevBtnOnLastStep={true}/>
+                {!isTaskComponent ?
+                  <StepZilla steps={this.setServiceSteps()}
+                             stepsNavigation={false}
+                             prevBtnOnLastStep={true}/>
+                  :
+                  <MlAppMyTaskAppointments isTaskComponent={isTaskComponent}
+                                           appointmentDate={appointmentDate}
+                                           onChangeSteps={this.onChangeSteps}
+                                           profileId={profileId}
+                  />
+                }
+
               </div>
             </div>
           </div>

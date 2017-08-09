@@ -70,6 +70,7 @@ export default class Company extends React.Component{
     initalizeFloatLabel();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
+    this.props.showPromptAlert(true)
   }
   optionsBySelectUserType(value){
     this.setState({selectedUserType:value})
@@ -165,6 +166,7 @@ export default class Company extends React.Component{
     const response = await updateRegistrationActionHandler(Details);
     if(response.success){
       this.props.getRegistrationDetails();
+      this.props.showPromptAlert(false)
       toastr.success("Saved Successfully");
     }else{
       toastr.error(response.result);

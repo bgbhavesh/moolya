@@ -7,6 +7,7 @@ import MlUserContext from "../../../../MlExternalUsers/mlUserContext";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 import portfolioValidationRepo from '../portfolioValidation'
 import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
+import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 var _ = require('lodash')
 
 MlResolver.MlMutationResolver['createIdeatorPortfolio'] = (obj, args, context, info) => {
@@ -59,8 +60,9 @@ MlResolver.MlMutationResolver['updateIdeatorPortfolio'] = (obj, args, context, i
               if (ret) {
                      let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId})
                       MlEmailNotification.onPortfolioUpdate(details);
+                    let ideatoralert =  MlAlertNotification.onPortfolioUpdates()
                     let code = 200;
-                    let response = new MlRespPayload().successPayload("Updated Successfully", code);
+                    let response = new MlRespPayload().successPayload(ideatoralert, code);
                     return response;
               }
             }

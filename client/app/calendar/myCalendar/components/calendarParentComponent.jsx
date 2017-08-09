@@ -22,6 +22,7 @@ export default class MLAppMyCalendar extends Component {
     this.state = {
       data: [],
       date: new Date(),
+      appointmentDate: new Date(),
       showCalendar: false,
       componentToLoad: 'calendar',
       events: []
@@ -96,9 +97,13 @@ export default class MLAppMyCalendar extends Component {
   }
 
 
-  componentToLoad(response){
-    console.log(response)
-   this.setState({componentToLoad: response})
+  componentToLoad(response, date){
+   if(this.state.profileId) {
+     this.setState({
+       componentToLoad: response,
+       appointmentDate: date
+     });
+   }
   }
 
   headerManagement(profileId, profileName) {
@@ -140,6 +145,7 @@ export default class MLAppMyCalendar extends Component {
 
 
   render() {
+    const {appointmentDate} = this.state;
     const that = this;
     // let eventsData = [{ title: '3', 'start': new Date(2017, 7, 7), 'end': new Date(2017, 7, 10) }];
     switch(that.state.componentToLoad) {
@@ -164,7 +170,7 @@ export default class MLAppMyCalendar extends Component {
           <div className="app_main_wrap" style={{'overflow': 'auto'}}>
             <div className="app_padding_wrap">
               <MlCalendarHeader componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
-              <AppCalendarDayView componentToLoad={this.componentToLoad.bind(this)}/>
+              <AppCalendarDayView   profileId={this.state.profileId} componentToLoad={this.componentToLoad.bind(this)} appointmentDate={this.state.appointmentDate} />
             </div>
           </div>
         )
@@ -174,7 +180,7 @@ export default class MLAppMyCalendar extends Component {
         <div className="app_main_wrap" style={{'overflow': 'auto'}}>
           <div className="app_padding_wrap">
             <MlCalendarHeader componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
-            <MlAppServiceManageSchedule componentToLoad={this.componentToLoad.bind(this)}/>
+            <MlAppServiceManageSchedule profileId={this.state.profileId} appointmentDate={appointmentDate} componentToLoad={this.componentToLoad.bind(this)}/>
           </div>
         </div>
         )
@@ -190,6 +196,17 @@ export default class MLAppMyCalendar extends Component {
         )
         break;
       case 'appointmentDetails':
+        return(
+          <div className="app_main_wrap" style={{'overflow': 'auto'}}>
+            <div className="app_padding_wrap">
+              <MlCalendarHeader componentToLoad={that.componentToLoad.bind(that)}/>
+              <CalCreateAppointmentView/>
+            </div>
+          </div>
+        )
+        break;
+
+      case 'selfAppointment':
         return(
           <div className="app_main_wrap" style={{'overflow': 'auto'}}>
             <div className="app_padding_wrap">

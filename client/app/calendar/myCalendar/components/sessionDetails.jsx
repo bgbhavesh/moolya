@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import  Select from 'react-select';
 import ScrollArea from 'react-scrollbar';
 import FontAwesome from 'react-fontawesome';
+import { bookUserServiceCardAppointmentActionHandler } from '../../../calendar/myCalendar/actions/fetchMyCalendar'
 
 export default class SessionDetails extends Component {
   constructor(props) {
@@ -36,6 +37,20 @@ export default class SessionDetails extends Component {
       )
     }) : [];
     return userList;
+  }
+
+  saveDetails() {
+    let sessionId = this.props.sessionId;
+    let details =  this.props.details;
+    details.sessionId =  sessionId;
+    this.saveInfo(details)
+  }
+
+  async saveInfo( details ) {
+    const resp = await bookUserServiceCardAppointmentActionHandler(details);
+    console.log(resp)
+    // console.log(resp)  }
+
   }
 
   /**
@@ -146,6 +161,10 @@ export default class SessionDetails extends Component {
           </div>
         </div>
         <br className="brclear"/>
+        <br className="brclear"/>
+        <div className="ml_btn btn_wrap">
+          <div href="" className="save_btn" onClick={this.saveDetails.bind(this)}>Book</div> <a href="" className="cancel_btn">Cancel</a>
+        </div>
       </ScrollArea>
     )
   }

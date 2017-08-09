@@ -203,6 +203,10 @@ export default class MlAppServiceManageSchedule extends Component {
     this.setState({task: resp, selectedTab: taskId})
   }
 
+  bookDetails(response) {
+    this.setState({details: response})
+  }
+
 
   /**
    * Method :: setServiceSteps
@@ -233,7 +237,7 @@ export default class MlAppServiceManageSchedule extends Component {
           profileId={this.props.profileId}
           serviceId={this.state.serviceId}
           isTaskComponent={isTaskComponent}
-          // bookDetails={this.bookDetails.bind(this)}
+          bookDetails={this.bookDetails.bind(this)}
           onChangeSteps={this.onChangeSteps}
           selectedService={this.selectedService.bind(this)}
           serviceBasicInfo={serviceBasicInfo}
@@ -248,6 +252,7 @@ export default class MlAppServiceManageSchedule extends Component {
           selectService={this.selectService.bind(this)}
           task={this.state.task}
           selectedTab={this.state.selectedTab}
+          details={this.state.details}
         />,
         icon: <span className="ml fa fa-users"></span>
       },

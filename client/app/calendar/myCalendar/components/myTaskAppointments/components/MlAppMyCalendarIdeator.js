@@ -12,7 +12,7 @@ import React, {Component} from "react";
 import ScrollArea from "react-scrollbar";
 import gql from 'graphql-tag'
 import _ from "lodash";
-import Moolyaselect from  '../../../commons/components/MlAppSelectWrapper'
+import Moolyaselect from '../../../../../commons/components/MlAppSelectWrapper'
 let Select = require('react-select');
 import {
   createInternalAppointmentInfo

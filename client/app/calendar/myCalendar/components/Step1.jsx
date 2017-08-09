@@ -51,7 +51,6 @@ class Step1 extends Component {
     let year = date.getFullYear();
     let hours = date.getHours();
     let minutes = date.getMinutes();
-    console.log(this.state.orderId)
     let data = {
         orderId: this.state.orderId?this.state.orderId:"dd ",
         sessionId: "ddd ",
@@ -65,9 +64,14 @@ this.bookDetails(data)
 
   }
 
-  async bookDetails(data) {
-    const resp = await bookUserServiceCardAppointmentActionHandler(data);
-    console.log(resp)
+   bookDetails(data) {
+    this.props.bookDetails(data)
+     if(data) {
+      toastr.success('Data saved successfully')
+     }
+
+    // const resp = await bookUserServiceCardAppointmentActionHandler(data);
+    // console.log(resp)
   }
 
 
@@ -117,7 +121,7 @@ this.bookDetails(data)
     let that = this;
     let seekers =  this.state.serviceSeeker || []
     seekers.map(function(data, index){
-      if(selectedSeeker === {value: data.transId, label: data.name}){
+      if(selectedSeeker.value === data.transId){
         that.setState({
           orderId:  data.orderId,
         })
@@ -308,7 +312,7 @@ this.bookDetails(data)
             </div>
             <br className="brclear"/>
             <div className="ml_btn btn_wrap">
-              <div href="" className="save_btn" onClick={this.saveData.bind(this)}>Book</div> <a href="" className="cancel_btn">Cancel</a>
+              <div href="" className="save_btn" onClick={this.saveData.bind(this)}>Save</div> <a href="" className="cancel_btn">Cancel</a>
             </div>
           </div>
         </div>

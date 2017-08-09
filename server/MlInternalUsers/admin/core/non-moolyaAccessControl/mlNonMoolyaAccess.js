@@ -46,10 +46,10 @@ class MlNonMoolyaAccess {
           _id: curUserProfile.subChapterId,
           isDefaultSubChapter: false
         }, context)
-        if (subChapter.internalSubChapterAccess && subChapter.internalSubChapterAccess.externalUser && subChapter.internalSubChapterAccess.externalUser.canView)
-          success = true
+        if (subChapter && subChapter.internalSubChapterAccess && subChapter.internalSubChapterAccess.externalUser && subChapter.internalSubChapterAccess.externalUser.canView)
+          success =  true
         else
-          success = false
+          success =  false
       }
     }
     return success

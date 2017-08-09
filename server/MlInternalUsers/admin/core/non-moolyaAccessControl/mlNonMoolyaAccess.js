@@ -54,6 +54,21 @@ class MlNonMoolyaAccess {
     }
     return success
   }
+
+  attachAssociatedSubChaptersContext(defaultSubChapters) {
+    var subChapters = mlDBController.find('MlSubChapters', {_id: {$in: defaultSubChapters}}).fetch()
+    var associatedSubChaptersAry = _.map(subChapters, 'associatedSubChapters')
+    defaultSubChapters = _.concat(defaultSubChapters, associatedSubChaptersAry[0])
+    return defaultSubChapters
+  }
+
+  attachAssociatedChaptersContext(defaultChapters, defaultSubChapters) {
+    var subChapters = mlDBController.find('MlSubChapters', {_id: {$in: defaultSubChapters}}).fetch()
+    var associatedChaptersAry = _.map(subChapters, 'chapterId')
+    defaultChapters = _.concat(defaultChapters, associatedChaptersAry)
+    defaultChapters = _.uniq(defaultChapters)
+    return defaultChapters
+  }
 }
 
 const mlNonMoolyaAccess = new MlNonMoolyaAccess();

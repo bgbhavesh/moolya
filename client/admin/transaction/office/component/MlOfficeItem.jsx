@@ -171,7 +171,7 @@ export default class MlOfficeItem extends React.Component {
       toastr.error('Office already activated');
       return false;
     }
-    let response = await updateOfficeStatus(this.state.officeInfo._id);
+    let response = await updateOfficeStatus(this.state.officeInfo._id, this.loggedUserDetails);
     if(response.success){
       toastr.success(response.result);
     } else {

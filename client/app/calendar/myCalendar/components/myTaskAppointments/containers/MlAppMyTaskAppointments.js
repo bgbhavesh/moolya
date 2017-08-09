@@ -193,20 +193,12 @@ class MyTaskAppointments extends Component {
         }]
     };
     return (
-      <div className="app_main_wrap">
-        <div className="app_padding_wrap">
-          <div className="clearfix"/>
-          <div className="col-md-12">
-            <div className='step-progress'>
-              <div id="root">
-                <StepZilla steps={this.setMyTaskAppointmentSteps()}
-                           stepsNavigation={false}
-                           prevBtnOnLastStep={true}/>
-              </div>
-            </div>
-          </div>
-          <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
-        </div>
+      <div>
+        <StepZilla steps={this.setMyTaskAppointmentSteps()}
+                   stepsNavigation={false}
+                   prevBtnOnLastStep={true}/>
+
+        <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
       </div>
     )
   }

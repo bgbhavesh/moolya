@@ -749,8 +749,10 @@ let CoreModules = {
     /**construct context query with $in operator for each fields*/
     resultantQuery = MlAdminContextQueryConstructor.constructQuery(resultantQuery, '$in');
     var nonMoolyaContext = mlNonMoolyaAccess.getExternalUserCanSearch(context)
-    if (!_.isBoolean(nonMoolyaContext))
-      resultantQuery['registrationInfo.subChapterId'] = {$in: nonMoolyaContext}
+    if (!_.isBoolean(nonMoolyaContext)){
+      resultantQuery['registrationInfo.subChapterId'] = {$in: nonMoolyaContext.subChapters}
+      resultantQuery['registrationInfo.chapterId'] = {$in: nonMoolyaContext.chapters}
+    }
     // resultantQuery = MlAdminContextQueryConstructor.constructQuery(contextQuery, '$in');
     if (!fieldsProj.sort) {
       fieldsProj.sort = {'registrationInfo.registrationDate': -1}

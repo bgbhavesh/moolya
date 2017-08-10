@@ -237,7 +237,13 @@ class MlSubChapterDetails extends React.Component {
           <div className="admin_padding_wrap">
             <h2>Sub-Chapter Details</h2>
             <div className="col-md-6 nopadding-left">
-              <div className="form_bg">
+              <div className="form_bg left_wrap">
+                <ScrollArea
+                  speed={0.8}
+                  className="left_wrap"
+                  smoothScrollling={true}
+                  default={true}
+                >
                 <form>
                   <div className="form-group ">
                     <input type="text" ref="id" defaultValue={this.state.data && this.state.data.id} hidden="true"/>
@@ -300,6 +306,7 @@ class MlSubChapterDetails extends React.Component {
                   </textarea>
                   </div>
                 </form>
+                </ScrollArea>
               </div>
             </div>
             {(this.state.data.isDefaultSubChapter)?

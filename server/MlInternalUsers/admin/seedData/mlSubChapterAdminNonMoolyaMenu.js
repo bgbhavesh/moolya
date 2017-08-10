@@ -1010,17 +1010,6 @@ if (Meteor.isServer) {
                   "subMenusId": "portfolio",
                   "subMenuMappingId": "portfolio_approved"
                 },
-
-                {
-                  "link": "/admin/transactions/portfolio/createPortfolio",
-                  "name": "Create",
-                  "uniqueId": "portfolio_create",
-                  "isLink": true,
-                  "isMenu": true,
-                  "image": "",
-                  "subMenusId": "portfolio",
-                  //"subMenuMappingId":"transaction_registration_create"
-                },
                 {
                   "link": "/admin/transactions/portfolio/history",
                   "name": "History",

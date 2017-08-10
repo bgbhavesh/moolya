@@ -317,9 +317,10 @@ export default class MlAssignHierarchy extends React.Component {
   async findRoles(type) {
     let parentDepartment = this.props.data;
     let departmnetId = parentDepartment.departmentId;
-    let subDepartmentId = parentDepartment.subDepartmentId
+    let subDepartmentId = parentDepartment.subDepartmentId;
+    let subChapterId =  this.props.data.subChapterId;
     let clusterId = parentDepartment.clusterId
-    const response = await findAssignedRolesActionHandler(clusterId, departmnetId,subDepartmentId,type);
+    const response = await findAssignedRolesActionHandler(clusterId, departmnetId,subDepartmentId,subChapterId,type);
     if(response){
       let allAssignedRoles = response.teamStructureAssignment;
       let filteredRoles=[]

@@ -74,7 +74,7 @@ MlResolver.MlQueryResolver['fetchRolesForDepartment'] = (obj, args, context, inf
   let roles = [];
   var activeDepartments = mlDBController.findOne("MlDepartments", {"_id": args.departmentId, isActive: true}, context)
   var subChapterDetails = mlDBController.findOne("MlSubChapters", {"_id": args.subChapterId}, context) || {}
-
+  var chapterId= subChapterDetails.chapterId;
   var hirarchyQuery = {}
   if (subChapterDetails.isDefaultSubChapter) {
     hirarchyQuery = {
@@ -135,7 +135,20 @@ MlResolver.MlQueryResolver['fetchRolesForDepartment'] = (obj, args, context, inf
                   cluster: {"$in": ["all", args.clusterId]},
                   department: args.departmentId,
                   subDepartment: args.subDepartmentId,
+                  chapter: chapterId,
                   subChapter: {"$in": ['all']}
+                }
+              }
+            },{"isNonMoolyaAvailable":true}, {"isActive": true}]
+          },
+          {
+            "$and": [{'_id': {"$nin": roleIds}}, {
+              "assignRoles": {
+                $elemMatch: {
+                  cluster: {"$in": ["all", args.clusterId]},
+                  department: args.departmentId,
+                  subDepartment: args.subDepartmentId,
+                  chapter: {"$in": ['all']},
                 }
               }
             },{"isNonMoolyaAvailable":true}, {"isActive": true}]

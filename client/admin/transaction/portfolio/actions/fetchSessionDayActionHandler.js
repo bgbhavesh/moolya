@@ -1,6 +1,8 @@
 /**
  * Created by pankaj on 4/8/17.
  */
+import gql from "graphql-tag";
+import {appClient} from "../../../../app/core/appConnection";
 export async function fetchSessionDayActionHandler (orderId,sessionId, day, month, year ) {
   const result = await appClient.query({
     query: gql`

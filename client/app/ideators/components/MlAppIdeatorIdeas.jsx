@@ -6,7 +6,7 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import StarRatings from '../../commons/components/StarRatings';
 import 'react-responsive-tabs/styles.css'
-import {fetchIdeaActionHandler} from '../actions/IdeaActionHandler'
+import {fetchIdeaActionHandler} from '../actions/ideatorActionHandler'
 import MlLoader from '../../../commons/components/loader/loader'
 
 export default class MlAppIdeatorIdeas extends React.Component {

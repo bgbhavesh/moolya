@@ -386,7 +386,8 @@ MlResolver.MlQueryResolver['fetchPortfolioByReg'] = (obj, args, context, info) =
 MlResolver.MlQueryResolver['fetchPortfolioClusterId'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {
     let portfolio = MlPortfolioDetails.findOne({"_id": args.portfoliodetailsId}) || {}
-      return portfolio;
+    portfolio.canAccess = mlNonMoolyaAccess.canExternalUserView(args.portfoliodetailsId, context)
+    return portfolio;
   }
 }
 

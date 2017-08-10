@@ -6,7 +6,7 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
-import {createLibrary, fetchLibrary, getAllowableDocumentFormats} from '../../../../../app/ideators/actions/IdeaActionHandler'
+import {createLibrary, fetchLibrary, getAllowableDocumentFormats} from '../../../../../app/ideators/actions/ideatorActionHandler'
 import MlVideoPlayer from  '../../../../../commons/videoPlayer/MlVideoPlayer'
 
 

@@ -1081,6 +1081,15 @@ if (Meteor.isServer) {
               "subMenusId": "transaction"
               // "subMenuMappingId":"Transactions_Log"
             },
+            {
+              "link": "/admin/transactions/serviceCardsList",
+              "name": "ServiceCards",
+              "uniqueId": "Service_Cards",
+              "subMenusId": "transaction",
+              "isLink": true,
+              "isMenu": true,
+              "image": ""
+            },
           ]
         },
         {

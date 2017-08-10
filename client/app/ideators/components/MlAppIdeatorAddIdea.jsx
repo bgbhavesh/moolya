@@ -7,7 +7,7 @@ import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../
 import _ from 'lodash';
 import MlActionComponent from '../../../commons/components/actions/ActionComponent';
 import formHandler from '../../../commons/containers/MlFormHandler';
-import {createIdeaActionHandler} from '../actions/IdeaActionHandler'
+import {createIdeaActionHandler} from '../actions/ideatorActionHandler'
 import MlLoader from '../../../commons/components/loader/loader'
 import {mlFieldValidations} from '../../../commons/validations/mlfieldValidation'
 class MlAppIdeatorAddIdea extends React.Component{

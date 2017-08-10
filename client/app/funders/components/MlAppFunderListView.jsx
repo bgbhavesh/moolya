@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
+import {fetchPortfolioActionHandler} from '../../ideators/actions/ideatorActionHandler'
 
 /**
  * import of libs and routes
@@ -8,13 +9,17 @@ export default class MlAppFunderListView extends Component {
 
   /**
    * @props isExplore
-   * Note: routes [deciding] based on isExpolre
+   * Note: routes [deciding] based on isExplore
+   * cheking [permissions to view the portfolio]
    * */
-  viewFunderDetails(portfolioId, e) {
-    if (this.props.config.isExplore)
+  async viewFunderDetails(portfolioId, e) {
+    const response = await fetchPortfolioActionHandler(portfolioId);
+    if (this.props.config.isExplore && response && response.canAccess)
       FlowRouter.go('/app/explore/investor/' + portfolioId)
-    else
+    else if (response && response.canAccess)
       FlowRouter.go('/app/funder/' + portfolioId)
+    else if(response && !response.canAccess)
+      toastr.error('Portfolio not available for view')
   }
 
   render() {

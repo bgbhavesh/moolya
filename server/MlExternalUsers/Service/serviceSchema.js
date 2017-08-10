@@ -309,7 +309,7 @@ let service=`
         findService(serviceId:String):Service
         fetchTasksAmount(profileId:String):[TotalTaskAmount]
         getProfileBasedOnPortfolio(portfolioId:String): PortfolioDetails
-        getServiceBasedOnServiceId(serviceId:String): AdminService
+        getServiceBasedOnServiceId(serviceId:String, clusterId: String, chapterId: String, subChapterId: String, communityId: String): AdminService
         getTaskFromService(serviceId:String):Service
         fetchServicesForAppointments: [Service]
    }
@@ -341,7 +341,7 @@ let supportedApi = [
   {api:'updateService',               userAction:"UPDATESERVICEDEF", actionName:'UPDATE',  resourceName:"SERVICECARD"},
   {api:'updateServiceGoLive',         userAction:"UPDATESERVICEDEF", actionName:'UPDATE',  resourceName:"SERVICECARD"},
   {api:'updateServiceSendReview',     userAction:"UPDATESERVICEDEF", actionName:'UPDATE',  resourceName:"SERVICECARD"},
-  {api:'updateServiceAdmin',          actionName:'UPDATE',  moduleName:"SERVICECARD", isWhiteList:true},
+  {api:'updateServiceAdmin',          actionName:'UPDATE',  moduleName:"SERVICECARD"},
   {api:'createServiceCardOrder',      userAction:"CREATESERVICEORDER", actionName:'CREATE',  resourceName:"SERVICECARD"},
   {api:'updateServiceCardOrder',      userAction:"UPDATESERVICEORDER", actionName:'UPDATE',  resourceName:"SERVICECARD"},
 
@@ -351,3 +351,5 @@ let supportedApi = [
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)
+/**note: removed white list from UPDATE*/
+  // , isWhiteList:true

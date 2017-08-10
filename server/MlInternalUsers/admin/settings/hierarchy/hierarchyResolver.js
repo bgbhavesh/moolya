@@ -74,7 +74,7 @@ MlResolver.MlQueryResolver['fetchRolesForDepartment'] = (obj, args, context, inf
   let roles = [];
   var activeDepartments = mlDBController.findOne("MlDepartments", {"_id": args.departmentId, isActive: true}, context)
   var subChapterDetails = mlDBController.findOne("MlSubChapters", {"_id": args.subChapterId}, context) || {}
-
+  var chapterId= subChapterDetails.chapterId;
   var hirarchyQuery = {}
   if (subChapterDetails.isDefaultSubChapter) {
     hirarchyQuery = {
@@ -135,7 +135,20 @@ MlResolver.MlQueryResolver['fetchRolesForDepartment'] = (obj, args, context, inf
                   cluster: {"$in": ["all", args.clusterId]},
                   department: args.departmentId,
                   subDepartment: args.subDepartmentId,
+                  chapter: chapterId,
                   subChapter: {"$in": ['all']}
+                }
+              }
+            },{"isNonMoolyaAvailable":true}, {"isActive": true}]
+          },
+          {
+            "$and": [{'_id': {"$nin": roleIds}}, {
+              "assignRoles": {
+                $elemMatch: {
+                  cluster: {"$in": ["all", args.clusterId]},
+                  department: args.departmentId,
+                  subDepartment: args.subDepartmentId,
+                  chapter: {"$in": ['all']},
                 }
               }
             },{"isNonMoolyaAvailable":true}, {"isActive": true}]
@@ -347,8 +360,9 @@ MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info
     }
   }else{
 
+    var valueGet = mlDBController.find('MlRoles', {"$and": [{'_id': {"$nin": [args.currentRoleId]}},{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.subDepartment": {"$in": [args.subDepartmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"assignRoles.isActive": true}, {"isActive": true}]}, context).fetch()
+
     if (levelCode == 'subChapter'){
-      var valueGet = mlDBController.find('MlRoles', {"$and": [{'_id': {"$nin": [args.currentRoleId]}},{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.subDepartment": {"$in": [args.subDepartmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"assignRoles.isActive": true}, {"isActive": true}]}, context).fetch()
       // filteredRole = valueGet
       _.each(valueGet, function (item, say) {
         _.each(item.assignRoles, function (value, key) {
@@ -374,7 +388,7 @@ MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info
       })
 
     }else if(levelCode == 'community'){
-      // var valueGet = mlDBController.find('MlRoles', {"$and": [{'_id': {"$nin": [args.currentRoleId]}},{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.subDepartment": {"$in": [args.subDepartmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"assignRoles.chapter": {$exists:true}}, {"assignRoles.subChapter": {"$in": ["all", args.subChapterId]}}, {"assignRoles.community": {"$nin": ["all"]}}, {"assignRoles.isActive": true}, {"isActive": true}]}, context).fetch()
+      // var valueGet = mlDBController.find('MlRoles', {"$and": [{'_id': {"$nin": [args.currentRoleId]}},{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.subDepartment": {"$in": [args.subDepartmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"assignRoles.isActive": true}, {"isActive": true}]}, context).fetch()
       // filteredRole = valueGet
       _.each(valueGet, function (item, say) {
         _.each(item.assignRoles, function (value, key) {

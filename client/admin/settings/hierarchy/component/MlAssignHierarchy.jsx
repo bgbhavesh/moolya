@@ -174,14 +174,15 @@ export default class MlAssignHierarchy extends React.Component {
     if(assignRoles&&assignRoles.length>0){
       allRoles = assignRoles
     }
-    if(unassignRoles&&unassignRoles.length>0){
-      Array.prototype.push.apply(allRoles, unassignRoles)
-    }
-    let assignments  = _.map(allRoles, function (row) {
-      return _.omit(row, ['__typename']);
-    });
-    _.remove(assignments, {assignedLevel: ''})
     if(this.state.finalApproval&&this.state.finalApproval.isChecked){
+      if(unassignRoles&&unassignRoles.length>0){
+        Array.prototype.push.apply(allRoles, unassignRoles)
+      }
+      let assignments  = _.map(allRoles, function (row) {
+        return _.omit(row, ['__typename']);
+      });
+      _.remove(assignments, {assignedLevel: ''})
+
       finalApproval = {
         department          : this.state.finalApproval.department,
         subDepartment       : this.state.finalApproval.subDepartment,
@@ -241,6 +242,9 @@ export default class MlAssignHierarchy extends React.Component {
     }else {
       roles.teamStructureAssignment[index].assignedLevel = value.value
       if (value.value == "cluster") {
+        roles.teamStructureAssignment[index].isAssigned = true
+      }
+      if (value.value == "subChapter" && !this.props.data.isDefaultSubChapter) {
         roles.teamStructureAssignment[index].isAssigned = true
       }
       this.setState({unAssignedRoles: roles})
@@ -313,9 +317,10 @@ export default class MlAssignHierarchy extends React.Component {
   async findRoles(type) {
     let parentDepartment = this.props.data;
     let departmnetId = parentDepartment.departmentId;
-    let subDepartmentId = parentDepartment.subDepartmentId
+    let subDepartmentId = parentDepartment.subDepartmentId;
+    let subChapterId =  this.props.data.subChapterId;
     let clusterId = parentDepartment.clusterId
-    const response = await findAssignedRolesActionHandler(clusterId, departmnetId,subDepartmentId,type);
+    const response = await findAssignedRolesActionHandler(clusterId, departmnetId,subDepartmentId,subChapterId,type);
     if(response){
       let allAssignedRoles = response.teamStructureAssignment;
       let filteredRoles=[]
@@ -758,7 +763,7 @@ export default class MlAssignHierarchy extends React.Component {
                     let parentDepartment = that.props.data;
                     let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.data.clusterId,chapterId:'', subChapterId:that.props.data.subChapterId, communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId,roles:assignments}}};
                     //let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,clusterId:that.props.clusterId,chapterId:'', subChapterId:'', communityId:'',levelCode:roles.assignedLevel}}};
-
+                    let options = that.props.data&&that.props.data.isDefaultSubChapter?assignedParent:assignedParentNonMoolya;
                     return(
                       <div className="row" key={id}>
                         <div className="col-md-4">
@@ -778,7 +783,7 @@ export default class MlAssignHierarchy extends React.Component {
                         </div>
                         <div className="col-md-4">
                           <div className="form-group">
-                            <Select name="form-field-name"   options={assignedParent} value={roles.assignedLevel} onChange={that.optionsBySelectAssignedParentNode.bind(that,id)} placeholder="Parent Node" className="float-label" />
+                            <Select name="form-field-name"   options={options} value={roles.assignedLevel} onChange={that.optionsBySelectAssignedParentNode.bind(that,id)} placeholder="Parent Node" className="float-label" />
                           </div>
                         </div>
                         <div className="col-md-4">

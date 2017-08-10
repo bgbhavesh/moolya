@@ -10,6 +10,13 @@ export default class SessionDetails extends Component {
     super(props);
   }
 
+  componentWillMount() {
+    let sessionId = this.props.sessionId;
+    let details =  this.props.details;
+    details.sessionId =  sessionId;
+    this.props.saveAction(details);
+  }
+
   getUserList(team, activityIdx, teamIdx) {
     const that = this;
     let userList = [];
@@ -39,23 +46,14 @@ export default class SessionDetails extends Component {
     return userList;
   }
 
-  saveDetails() {
-    let sessionId = this.props.sessionId;
-    let details =  this.props.details;
-    details.sessionId =  sessionId;
-    this.saveInfo(details)
-  }
+  // saveDetails() {
+  //   let sessionId = this.props.sessionId;
+  //   let details =  this.props.details;
+  //   details.sessionId =  sessionId;
+  //   this.props.saveAction(details);
+  //   // this.saveInfo(details)
+  // }
 
-  async saveInfo( details ) {
-    const resp = await bookUserServiceCardAppointmentActionHandler(details);
-    if(resp.code === 200) {
-      toastr.success(resp.result)
-    }else{
-      toastr.error(resp.result)
-    }
-    // console.log(resp)  }
-
-  }
 
   /**
    * Method :: getSessionList
@@ -166,9 +164,9 @@ export default class SessionDetails extends Component {
         </div>
         <br className="brclear"/>
         <br className="brclear"/>
-        <div className="ml_btn btn_wrap">
-          <div href="" className="save_btn" onClick={this.saveDetails.bind(this)}>Book</div> <a href="" className="cancel_btn">Cancel</a>
-        </div>
+        {/*<div className="ml_btn btn_wrap">*/}
+          {/*<div href="" className="save_btn" onClick={this.saveDetails.bind(this)}>Book</div> <a href="" className="cancel_btn">Cancel</a>*/}
+        {/*</div>*/}
       </ScrollArea>
     )
   }

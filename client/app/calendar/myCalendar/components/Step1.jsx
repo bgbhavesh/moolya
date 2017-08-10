@@ -27,15 +27,35 @@ class Step1 extends Component {
 
   constructor(props) {
     super(props);
-    this.state={service:"", serviceSeeker:[], seeker: ""}
+    this.state={service:"", serviceSeeker:[], seeker: "", orderId:""}
     this.testQuery.bind(this);
     this.saveData.bind(this);
   }
 
   componentWillMount() {
-
+    this.props.activeComponent('BasicInfo');
 
   }
+  //
+  // componentWillUpdate() {
+  //   if(this.state.orderId)
+  //   let date = this.props.appointmentDate;
+  //   let day = date.getDate();
+  //   let month = date.getMonth();
+  //   let year = date.getFullYear();
+  //   let hours = date.getHours();
+  //   let minutes = date.getMinutes();
+  //   let data = {
+  //     orderId: this.state.orderId?this.state.orderId:"dd ",
+  //     sessionId: "ddd ",
+  //     hours: hours,
+  //     minutes: minutes,
+  //     day: day,
+  //     month: month,
+  //     year: year
+  //   }
+  //   this.bookDetails(data)
+  // }
 
   componentDidMount() {
     console.log(this.props.serviceBasicInfo)
@@ -52,7 +72,7 @@ class Step1 extends Component {
     let hours = date.getHours();
     let minutes = date.getMinutes();
     let data = {
-        orderId: this.state.orderId?this.state.orderId:"dd ",
+        orderId: this.state.orderId,
         sessionId: "ddd ",
         hours: hours,
         minutes: minutes,
@@ -66,9 +86,7 @@ this.bookDetails(data)
 
    bookDetails(data) {
     this.props.bookDetails(data)
-     if(data) {
-      toastr.success('Data saved successfully')
-     }
+
 
     // const resp = await bookUserServiceCardAppointmentActionHandler(data);
     // console.log(resp)
@@ -128,6 +146,23 @@ this.bookDetails(data)
       }
     })
     this.setState({seeker: selectedSeeker})
+    let date = this.props.appointmentDate;
+    let day = date.getDate();
+    let month = date.getMonth();
+    let year = date.getFullYear();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let data = {
+      orderId: this.state.orderId,
+      sessionId: "ddd ",
+      hours: hours,
+      minutes: minutes,
+      day: day,
+      month: month,
+      year: year
+    }
+    this.bookDetails(data)
+    // this.saveData()
   }
 
   selectedService(value) {
@@ -311,9 +346,9 @@ this.bookDetails(data)
               </div>
             </div>
             <br className="brclear"/>
-            <div className="ml_btn btn_wrap">
-              <div href="" className="save_btn" onClick={this.saveData.bind(this)}>Save</div> <a href="" className="cancel_btn">Cancel</a>
-            </div>
+            {/*<div className="ml_btn btn_wrap">*/}
+              {/*<div href="" className="save_btn" onClick={this.saveData.bind(this)}>Save</div> <a href="" className="cancel_btn">Cancel</a>*/}
+            {/*</div>*/}
           </div>
         </div>
       </div>

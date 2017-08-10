@@ -4,11 +4,19 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function updateOfficeStatus(officeId) {
+/**
+ * Note: {Attaching the user context for admins}
+ * */
+export async function updateOfficeStatus(officeId, loggedUserDetails) {
+  const {clusterId, chapterId, subChapterId, communityId} = loggedUserDetails;
   const result = await client.mutate({
     mutation: gql`
-        mutation ($id:String) {
-        updateOfficeStatus(id:$id) {
+        mutation ($id:String, $clusterId: String, $chapterId: String, $subChapterId: String, $communityId: String) {
+        updateOfficeStatus(id:$id,
+          clusterId: $clusterId,
+          chapterId: $chapterId,
+          subChapterId: $subChapterId,
+          communityId: $communityId) {
           success
           code
           result
@@ -16,9 +24,13 @@ export async function updateOfficeStatus(officeId) {
       }
     `,
     variables: {
-      id: officeId
+      id: officeId,
+      clusterId,
+      chapterId,
+      subChapterId,
+      communityId
     },
-    forceFetch:true
+    forceFetch: true
   });
   console.log(result);
   const id = result.data.updateOfficeStatus;

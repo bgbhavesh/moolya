@@ -9,14 +9,14 @@ import React, {Component} from 'react';
 import _ from 'lodash';
 
 // import custom modules
-import StepZilla from '../../../../commons/components/stepzilla/StepZilla';
+import StepZilla from '../../../../../../commons/components/stepzilla/StepZilla';
 import MlTaskAppointmentBasicInfo from "../components/MlTaskAppointmentBasicInfo";
 import MlTaskAppointmentSession from "../components/MlTaskAppointmentSessions";
 import MlTaskAppointmentTermAndCondition from "../components/MlTaskAppointmentTermAndCondition";
 import MlAppMyCalendarIdeator from "../components/MlAppMyCalendarIdeator";
-import MlAppActionComponent from "../../../commons/components/MlAppActionComponent";
-import MlAccordion from "../../../commons/components/MlAccordion";
-import formHandler from "../../../../commons/containers/MlFormHandler";
+import MlAppActionComponent from "../../../../../commons/components/MlAppActionComponent";
+import MlAccordion from "../../../../../commons/components/MlAccordion";
+import formHandler from "../../../../../../commons/containers/MlFormHandler";
 import {
   fetchAllTaskActionHandler,
   fetchTaskActionHandler,
@@ -177,9 +177,7 @@ class MyTaskAppointments extends Component {
       {
         showAction: true,
         actionName: 'exit',
-        handler: async(event) => {
-         // FlowRouter.go('/app/calendar/manageSchedule/' + _this.profileId + '/serviceList')
-        }
+        handler: async(event) => _this.props.handler(_this.props.redirectWithCalendar.bind(this, 'calendar'))
       }
     ];
     export const genericPortfolioAccordionConfig = {
@@ -195,20 +193,12 @@ class MyTaskAppointments extends Component {
         }]
     };
     return (
-      <div className="app_main_wrap">
-        <div className="app_padding_wrap">
-          <div className="clearfix"/>
-          <div className="col-md-12">
-            <div className='step-progress'>
-              <div id="root">
-                <StepZilla steps={this.setMyTaskAppointmentSteps()}
-                           stepsNavigation={false}
-                           prevBtnOnLastStep={true}/>
-              </div>
-            </div>
-          </div>
-          <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
-        </div>
+      <div>
+        <StepZilla steps={this.setMyTaskAppointmentSteps()}
+                   stepsNavigation={false}
+                   prevBtnOnLastStep={true}/>
+
+        <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
       </div>
     )
   }

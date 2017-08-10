@@ -348,7 +348,7 @@ MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info
   }else{
 
     if (levelCode == 'subChapter'){
-      // var valueGet = mlDBController.find('MlRoles', {"$and": [{'_id': {"$nin": [args.currentRoleId]}},{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.subDepartment": {"$in": [args.subDepartmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"assignRoles.subChapter": {"$in": ["all", args.subChapterId]}}, {"assignRoles.community": {"$in": ["all"]}}, {"assignRoles.isActive": true}, {"isActive": true}]}, context).fetch()
+      var valueGet = mlDBController.find('MlRoles', {"$and": [{'_id': {"$nin": [args.currentRoleId]}},{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.subDepartment": {"$in": [args.subDepartmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"assignRoles.isActive": true}, {"isActive": true}]}, context).fetch()
       // filteredRole = valueGet
       _.each(valueGet, function (item, say) {
         _.each(item.assignRoles, function (value, key) {
@@ -356,6 +356,16 @@ MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info
             if (value.subChapter != 'all' && value.community == "all") {
               if (item._id != args.currentRoleId && value.isActive) {
                 filteredRole.push(item)
+              }
+              if (value.chapter != "all" && value.subChapter == 'all' && value.community == "all" && item.isNonMoolyaAvailable) {
+                if (item._id!=args.currentRoleId &&value.isActive) {
+                  filteredRole.push(item)
+                }
+              }
+              if ((value.cluster == args.clusterId || value.cluster == 'all') && (value.chapter == "all") && (value.subChapter == "all") && (value.community == "all") && item.isNonMoolyaAvailable) {
+                if (item._id!=args.currentRoleId && value.isActive) {
+                  filteredRole.push(item)
+                }
               }
             }
           }
@@ -376,6 +386,16 @@ MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info
             }
             if (value.subChapter != 'all' && value.community == "all") {
               if (item._id != args.currentRoleId && value.isActive) {
+                filteredRole.push(item)
+              }
+            }
+            if (value.chapter != "all" && value.subChapter == 'all' && value.community == "all" && item.isNonMoolyaAvailable) {
+              if (item._id!=args.currentRoleId &&value.isActive) {
+                filteredRole.push(item)
+              }
+            }
+            if ((value.cluster == args.clusterId || value.cluster == 'all') && (value.chapter == "all") && (value.subChapter == "all") && (value.community == "all") && item.isNonMoolyaAvailable) {
+              if (item._id!=args.currentRoleId && value.isActive) {
                 filteredRole.push(item)
               }
             }

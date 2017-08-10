@@ -992,13 +992,11 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
                   </a>
                 </div>
               </div>
-              <ul>
-                <li>
+
                   <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                     {this.state.isLibrary?this.popVideos():this.videos()}
                   </div>
-                </li>
-              </ul>
+
             </div>
           </div>
           <br className="brclear"/>
@@ -1037,17 +1035,15 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
             <PopoverContent>
               <div  className="ml_create_client">
                 <div className="medium-popover">
-                  <div className="col-md-12">
-                    <div className="form-group">
+                    <div className="form-group popover_thumbnail">
                       {this.state.toDisplay}
-                      <div className="fileUpload mlUpload_btn">
-                        <span>Upload</span>
-                        {this.state.file==="Images"?<input type="file" className="upload" ref="upload" onChange={this.ImageUpload.bind(this)}/>:
-                          this.state.file==="Videos"?<input type="file" className="upload_file upload" name="video_source" id="video_upload" onChange={that.videoUpload.bind(that)}/>:
-                            this.state.file==="Documents"?<input type="file" className="upload" ref="upload" onChange={this.documentUpload.bind(this)}/>:
-                              this.state.file==="Templates"?<input type="file" className="upload" ref="upload" onChange={this.TemplateUpload.bind(this)}/>:""}
-                      </div>
                     </div>
+                  <div className="fileUpload mlUpload_btn">
+                    <span>Upload</span>
+                    {this.state.file==="Images"?<input type="file" className="upload" ref="upload" onChange={this.ImageUpload.bind(this)}/>:
+                      this.state.file==="Videos"?<input type="file" className="upload_file upload" name="video_source" id="video_upload" onChange={that.videoUpload.bind(that)}/>:
+                        this.state.file==="Documents"?<input type="file" className="upload" ref="upload" onChange={this.documentUpload.bind(this)}/>:
+                          this.state.file==="Templates"?<input type="file" className="upload" ref="upload" onChange={this.TemplateUpload.bind(this)}/>:""}
                   </div>
                 </div>
               </div>

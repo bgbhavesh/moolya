@@ -11,7 +11,7 @@ import SessionDetails from './sessionDetails'
 import {
   fetchActivitiesTeamsActionHandler,
   getTeamUsersActionHandler,
-  fetchOfficeActionHandler } from '../../myTaskAppointments/actions/MlAppointmentActionHandler';
+  fetchOfficeActionHandler } from './myTaskAppointments/actions/MlAppointmentActionHandler';
 import gql from 'graphql-tag'
 
 // import custom method(s) and component(s)
@@ -37,6 +37,7 @@ class MlAppServiceSelectTask extends Component{
 
 
   componentWillMount() {
+    this.props.activeComponent('SessionDetails')
     // console.log(this.props.task)
     this.getOffices();
   }
@@ -411,6 +412,7 @@ class MlAppServiceSelectTask extends Component{
                               offices={offices}
                               sessionId={this.state.sessionId}
                               details={this.props.details}
+                              saveAction={this.props.saveAction}
 
         />
     )

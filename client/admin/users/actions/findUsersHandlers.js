@@ -182,6 +182,7 @@ export async function findUserPortfolioActionHandler(registrationId) {
    query($registrationId: String){  
         fetchPortfolioByReg(registrationId:$registrationId){          
             portfolioId: _id
+            canAccess
         }
       }
     `,

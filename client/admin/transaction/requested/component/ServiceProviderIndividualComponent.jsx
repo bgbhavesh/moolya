@@ -82,6 +82,7 @@ export default class ServiceProviderIndividualComponent extends React.Component{
     initalizeFloatLabel();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
+    this.props.showPromptAlert(true)
   }
   /* optionsBySelectUserType(value){
    this.setState({selectedUserType:value})
@@ -152,8 +153,15 @@ export default class ServiceProviderIndividualComponent extends React.Component{
       }
       //this.props.getRegistrationDetails();
       const response = await updateRegistrationActionHandler(Details);
-      this.props.getRegistrationDetails();
-      toastr.success("Saved Successfully");
+      if(response.success){
+        toastr.success("Saved Successfully");
+        this.props.getRegistrationDetails();
+        this.props.showPromptAlert(false)
+      }else{
+        toastr.error(response.result);
+      }
+      /*this.props.getRegistrationDetails();
+      toastr.success("Saved Successfully");*/
       return response;
     }
   }

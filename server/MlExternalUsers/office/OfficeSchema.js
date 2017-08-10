@@ -213,7 +213,7 @@ let myOfficeSchema = `
         createOfficeMembers(myOfficeId:String, officeMember:officeMembers):response
         updateOfficeMember(officeId:String,memberId:String, officeMember:officeMembers):response
         updateOffice(myOffice:myOffice, myOfficeId:String):response
-        updateOfficeStatus(id:String):response
+        updateOfficeStatus(id:String, clusterId: String, chapterId: String, subChapterId: String, communityId: String):response
         getMyOfficeRole(officeId: String!): response
         updateOfficeMemberOnReg(registrationId: String, officeMember:officeMembers):response
     }

@@ -138,9 +138,9 @@ export default class MlListView extends Component {
 
 
           <AlphaSearch onAlphaSearchChange={this.onAlphaSearchChange.bind(this)} />
-
+          <div className="col-md-12">
               {ListComponent}
-
+          </div>
           <Pagination onPageChange={this.onPageChange.bind(this)} totalRecords={totalRecords}/>
         </div>
         </ScrollArea>

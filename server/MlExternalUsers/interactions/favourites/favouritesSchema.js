@@ -34,6 +34,6 @@ let favourites = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],favourites]);
 /**admin API data*/
 let supportedApi = [
-  {api:'fetchFavouritesByPortfolio', actionName:'READ', moduleName:"INTERACTION"}
+  {api:'fetchFavouritesByPortfolio', actionName:'READ', moduleName:"INTERACTION", isWhiteList:true} //temp making white list
 ];
 MlResolver.MlModuleResolver.push(supportedApi)

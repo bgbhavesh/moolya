@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 import _ from 'lodash';
-import {appClient} from '../../../core/appConnection';
+import {appClient} from '../../../../../core/appConnection';
 
 export async function fetchAllTaskActionHandler(profileId) {
   const result = await appClient.query({
@@ -209,6 +209,24 @@ export async function bookTaskInternalAppointment(taskInternalAppointmentInfo) {
     }
   });
   const task = result.data.bookTaskInternalAppointment;
+  return task;
+}
+
+export async function createInternalAppointmentInfo(selfInternalAppointmentInfo) {
+  const result = await appClient.mutate({
+    mutation: gql`
+    mutation($selfInternalAppointmentInfo: selfInternalAppointmentInfo){
+        bookSelfTaskInternalAppointment(selfInternalAppointmentInfo: $selfInternalAppointmentInfo) {
+        success
+        code
+        result
+      }
+    }`,
+    variables: {
+      selfInternalAppointmentInfo
+    }
+  });
+  const task = result.data.bookSelfTaskInternalAppointment;
   return task;
 }
 

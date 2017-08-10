@@ -9,14 +9,14 @@ import React, {Component} from 'react';
 import _ from 'lodash';
 
 // import custom modules
-import StepZilla from '../../../../commons/components/stepzilla/StepZilla';
+import StepZilla from '../../../../../../commons/components/stepzilla/StepZilla';
 import MlTaskAppointmentBasicInfo from "../components/MlTaskAppointmentBasicInfo";
 import MlTaskAppointmentSession from "../components/MlTaskAppointmentSessions";
 import MlTaskAppointmentTermAndCondition from "../components/MlTaskAppointmentTermAndCondition";
 import MlAppMyCalendarIdeator from "../components/MlAppMyCalendarIdeator";
-import MlAppActionComponent from "../../../commons/components/MlAppActionComponent";
-import MlAccordion from "../../../commons/components/MlAccordion";
-import formHandler from "../../../../commons/containers/MlFormHandler";
+import MlAppActionComponent from "../../../../../commons/components/MlAppActionComponent";
+import MlAccordion from "../../../../../commons/components/MlAccordion";
+import formHandler from "../../../../../../commons/containers/MlFormHandler";
 import {
   fetchAllTaskActionHandler,
   fetchTaskActionHandler,
@@ -36,6 +36,7 @@ class MyTaskAppointments extends Component {
     this.getAllTaskByProfile = this.getAllTaskByProfile.bind(this);
     this.onChangeTask = this.onChangeTask.bind(this);
     this.saveDetails = this.saveDetails.bind(this);
+    this.onChangeType = this.onChangeType.bind(this);
   }
 
   componentWillMount() {
@@ -48,7 +49,7 @@ class MyTaskAppointments extends Component {
    * @return {Promise.<void>}
    */
   async getAllTaskByProfile() {
-    const resp = await fetchAllTaskActionHandler();
+    const resp = await fetchAllTaskActionHandler(this.props.profileId);
     if (resp) {
       this.setState({ tasks: resp });
     }
@@ -96,15 +97,17 @@ class MyTaskAppointments extends Component {
    */
   async updateTask() {
     const {selectedTaskId, selectedSessionId, extraUsers} = this.state;
+    let {appointmentDate} = this.props;
+    let date = new Date(appointmentDate);
     if (selectedSessionId && selectedTaskId) {
       let data = {
         taskId: selectedTaskId,
         sessionId: selectedSessionId,
-        hours: 1,
-        minutes: 2,
-        day: 1,
-        month: 3,
-        year: 2017,
+        hours: date && date.getHours(),
+        minutes: date && date.getMinutes(),
+        day: date && date.getDate(),
+        month: date && date.getMonth(),
+        year: date && date.getFullYear(),
         extraUsers: extraUsers
       };
       const resp = await bookTaskInternalAppointment(data);
@@ -116,16 +119,22 @@ class MyTaskAppointments extends Component {
     }
   }
 
+  onChangeType() {
+    this.props.onChangeSteps();
+  }
   /**
    * Method :: setMyTaskAppointmentSteps
    * Desc :: Sets the step for different components
    */
   setMyTaskAppointmentSteps() {
     const { tasks, selectedTaskId, selectedTask } = this.state;
+    const {isTaskComponent, appointmentDate} = this.props;
     const steps = [
       {
         name: 'Info',
         component: <MlTaskAppointmentBasicInfo tasks={tasks}
+                                               isTaskComponent={isTaskComponent}
+                                               onChangeType={this.onChangeType}
                                                onChangeTask={this.onChangeTask}
                                                selectedTask={selectedTask}
                                                selectedTaskId={selectedTaskId} />,
@@ -143,11 +152,11 @@ class MyTaskAppointments extends Component {
         component: <MlTaskAppointmentTermAndCondition selectedTask={selectedTask} />,
         icon: <span className="ml ml-payments"></span>
       },
-      {
-        name: 'Temp',
-        component: <MlAppMyCalendarIdeator />,
-        icon: <span className=""></span>
-      }
+      // {
+      //   name: 'Temp',
+      //   component: <MlAppMyCalendarIdeator appointmentDate={appointmentDate} />,
+      //   icon: <span className=""></span>
+      // }
 
     ];
     return steps;
@@ -168,9 +177,7 @@ class MyTaskAppointments extends Component {
       {
         showAction: true,
         actionName: 'exit',
-        handler: async(event) => {
-         // FlowRouter.go('/app/calendar/manageSchedule/' + _this.profileId + '/serviceList')
-        }
+        handler: async(event) => _this.props.handler(_this.props.redirectWithCalendar.bind(this, 'calendar'))
       }
     ];
     export const genericPortfolioAccordionConfig = {
@@ -186,20 +193,12 @@ class MyTaskAppointments extends Component {
         }]
     };
     return (
-      <div className="app_main_wrap">
-        <div className="app_padding_wrap">
-          <div className="clearfix"/>
-          <div className="col-md-12">
-            <div className='step-progress'>
-              <div id="root">
-                <StepZilla steps={this.setMyTaskAppointmentSteps()}
-                           stepsNavigation={false}
-                           prevBtnOnLastStep={true}/>
-              </div>
-            </div>
-          </div>
-          <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
-        </div>
+      <div>
+        <StepZilla steps={this.setMyTaskAppointmentSteps()}
+                   stepsNavigation={false}
+                   prevBtnOnLastStep={true}/>
+
+        <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
       </div>
     )
   }

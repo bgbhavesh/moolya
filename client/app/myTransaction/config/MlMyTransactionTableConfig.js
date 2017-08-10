@@ -27,13 +27,16 @@ const mlMyTransactionTableConfig = new MlViewer.View({
   },
   expandComponent: MlGenericTransactionAccordion,
   columns: [
-    {dataField: "transactionId", title: "transactionId", 'isKey': true, isHidden: true},
-    // {dataField: "transactionId", title: "Transaction Id", dataSort: true},
+    {dataField: "_id", title: "_id", 'isKey': true, isHidden: true},
+    {dataField: "transactionId", title: "Transaction Id", dataSort: true},
+    {dataField: "email", title: "Email", dataSort: true},
     {dataField: "transactionType", title: "Transaction Type", dataSort: true},
-    {dataField: "createdAt", title: "Created At", dataSort: true, customComponent:dateFormatter},
-    {dataField: "firstName", title: "First Name", dataSort: true},
-    {dataField: "lastName", title: "Last Name", dataSort: true},
-    {dataField: "username", title: "Username", dataSort: true}
+    {dataField: "cluster", title: "Cluster", dataSort: true},
+    {dataField: "chapter", title: "Chapter", dataSort: true},
+    {dataField: "subChapter", title: "Sub Chapter", dataSort: true},
+    {dataField: "community", title: "Community", dataSort: true},
+    {dataField: "createdAt", title: "Date Time", dataSort: true, customComponent:dateFormatter},
+    {dataField: "status", title: "status", dataSort: true}
   ],
   tableHeaderClass: 'react_table_head',
   showActionComponent: false,
@@ -43,13 +46,18 @@ const mlMyTransactionTableConfig = new MlViewer.View({
                           totalRecords
                           data {
                             ... on myTransaction {
+                                _id
+                                transactionId
+                                cluster
+                                chapter
+                                subChapter
+                                community
+                                transactionType
+                                createdby
+                                email
                                 userId
                                 createdAt
-                                transactionId
-                                username
-                                firstName
-                                lastName
-                                transactionType
+                                status
                             }
                           }
                         }

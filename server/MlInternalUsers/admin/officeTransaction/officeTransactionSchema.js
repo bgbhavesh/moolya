@@ -91,19 +91,22 @@ let officeTransaction = `
     }
     
     type myTransaction {
-      userId: String
-      createdAt: String
+      _id: String
       transactionId: String
-      transactionType: String,
+      cluster: String
+      chapter: String
+      subChapter: String
+      community: String
+      transactionType: String
+      createdby: String
+      email: String
+      userId: String
+      status : String
+      createdAt: String
       username: String
       firstName: String
       lastName: String
       updatedBy : String
-      cluster: String               
-      chapter: String               
-      subChapter: String            
-      community: String
-      status : String
     }
 
     

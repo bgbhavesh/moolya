@@ -101,3 +101,27 @@ export async function fetchIdeaByPortfolioId(portfolioId) {
   return ideas
 }
 
+/**
+ * Note: handler user to get the access of all the portfolio's view access
+ * @module [all portfolio action handler]
+ * */
+export async function fetchPortfolioActionHandler(portfoliodetailsId) {
+  const result = await appClient.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            fetchPortfolioClusterId(portfoliodetailsId: $portfoliodetailsId) {
+                  clusterId
+                  communityType
+                  communityCode
+                  canAccess
+            }
+          }
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.fetchPortfolioClusterId;
+  return id
+}

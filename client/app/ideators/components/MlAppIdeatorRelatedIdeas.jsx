@@ -1,7 +1,7 @@
 import React from "react";
 import {render} from "react-dom";
 import _ from 'lodash'
-import {fetchIdeaActionHandler} from '../actions/IdeaActionHandler'
+import {fetchIdeaActionHandler} from '../actions/ideatorActionHandler'
 
 export default class MlIdeatorRelatedIdeas extends React.Component {
 

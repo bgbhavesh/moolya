@@ -76,7 +76,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   ],
   graphQlQuery:
     gql`query ContextSpecSearch($offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
-                    data:ContextSpecSearch(module:"serviceCards",offset:$offset, limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
+                    data:ContextSpecSearch(module:"serviceCard",offset:$offset, limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
                     totalRecords
                     data{
                       ...on AdminService{

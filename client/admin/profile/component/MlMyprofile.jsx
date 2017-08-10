@@ -422,7 +422,7 @@ export default class MlMyProfile extends React.Component {
       {
         showAction: true,
         actionName: 'save',
-        handler: this.updateProfile.bind(this)
+        handler: this.storeImage.bind(this)
       },
       {
         showAction: true,
@@ -478,7 +478,7 @@ export default class MlMyProfile extends React.Component {
                 <div className="form_bg">
                   <form>
                     <div className="form-group">
-                      <input type="text" placeholder="User Name" className="form-control float-label" id="" defaultValue={this.state.userName} onBlur={this.displayNameUpdation.bind(this)} />
+                      <input type="text" placeholder="User Name" className="form-control float-label" id="" defaultValue={this.state.userName} onBlur={this.displayNameUpdation.bind(this)} disabled={true}/>
                     </div>
                     {this.state.showPasswordFields ?
                       <div className="form-group">

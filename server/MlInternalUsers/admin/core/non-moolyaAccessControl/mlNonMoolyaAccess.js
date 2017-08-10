@@ -12,6 +12,7 @@ class MlNonMoolyaAccess {
     var curUserProfile = new MlAdminUserContext().userProfileDetails(context.userId);
     if (!curUserProfile.isMoolya) {
       var matchSubChapter = []
+      var matchChapter = []
       if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {
         let subChapterId = curUserProfile.defaultSubChapters ? curUserProfile.defaultSubChapters[0] : ''
         let subChapterDetails = mlDBController.findOne('MlSubChapters', {
@@ -21,11 +22,14 @@ class MlNonMoolyaAccess {
         if (subChapterDetails && subChapterDetails.internalSubChapterAccess && subChapterDetails.internalSubChapterAccess.externalUser && subChapterDetails.internalSubChapterAccess.externalUser.canSearch) {
           matchSubChapter = subChapterDetails.associatedSubChapters ? subChapterDetails.associatedSubChapters : []
           matchSubChapter = _.concat(curUserProfile.defaultSubChapters, matchSubChapter)
+          matchChapter = this.attachAssociatedChaptersContext(curUserProfile.defaultChapters, matchSubChapter)
         } else {
           matchSubChapter = _.concat(curUserProfile.defaultSubChapters)
+          matchChapter = _.concat(curUserProfile.defaultChapters)
         }
       }
-      return matchSubChapter
+      var matchObj= {chapters:matchChapter,subChapters:matchSubChapter}
+      return matchObj
     } else
       return true
   }

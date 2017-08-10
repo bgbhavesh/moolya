@@ -1,13 +1,25 @@
+/**
+ * import of libs and routes
+ * */
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
+import {fetchPortfolioActionHandler} from '../../ideators/actions/ideatorActionHandler'
 
 export default class MlAppStartupListView extends Component {
 
-  viewDetails(portfolioId, e){
-    if(this.props.config.isExplore)
-      FlowRouter.go('/app/explore/startup/'+portfolioId)
-    else
-      FlowRouter.go('/app/startup/'+portfolioId)
+  /**
+   * @props isExplore
+   * Note: routes [deciding] based on isExplore
+   * cheking [permissions to view the portfolio]
+   * */
+  async viewDetails(portfolioId, e) {
+    const response = await fetchPortfolioActionHandler(portfolioId);
+    if (this.props.config.isExplore && response && response.canAccess)
+      FlowRouter.go('/app/explore/startup/' + portfolioId)
+    else if (response && response.canAccess)
+      FlowRouter.go('/app/startup/' + portfolioId)
+    else if(response && !response.canAccess)
+      toastr.error('Portfolio not available for view')
   }
 
   render(){

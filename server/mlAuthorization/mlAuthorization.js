@@ -231,6 +231,7 @@ class MlAuthorization
           case 'REGISTRATION':
           case 'TEMPLATEASSIGNMENT':
           case "INTERNALREQUESTS":
+          case "SERVICECARD":
           case "OFFICE":              /*adding office for others five admin */
           case "PROCESSSETUP":{
             return this.validateChapterSubChapterCommunity(userProfileDetails, variables);

@@ -825,31 +825,132 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       {'$lookup':{from:'mlPortfolioDetails',localField:'_id',foreignField:'userId', as:'portfolio'}},
       {'$lookup':{from:'mlOfficeTransaction',localField:'_id',foreignField:'userId', as:'office'}},
       {'$lookup':{from:'mlTransactionsLog',localField:'_id',foreignField:'userId', as:'transactionLog'}},
+
       {'$project':{"registration":{
         '$map':
-        { "input":"$registration", "as":"reg", 'in':
-        { "createdAt" :"$$reg.registrationInfo.registrationDate", "transactionId":"$$reg._id" ,"transactionType":"$$reg.registrationInfo.transactionType",username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+          { "input":"$registration",
+            "as":"reg",
+            'in': {
+                "_id":"$$reg._id",
+                "transactionId": "$$reg.transactionId",
+                "cluster": "$$reg.registrationInfo.clusterName",
+                "chapter": "$$reg.registrationInfo.chapterName",
+                "subChapter": "$$reg.registrationInfo.subChapterName",
+                "community" : "$$reg.registrationInfo.communityName",
+                "transactionType": "$$reg.registrationInfo.transactionType",
+                "createdby": "$$reg.registrationInfo.createdBy",
+                "email": "$$reg.registrationInfo.email",
+                "createdAt": "$$reg.registrationInfo.registrationDate",
+                "userId": '$_id',
+                "status": "$$reg.status"
+            }
+          }
+      },
+      // {'$project':{"registration":{
+      //   '$map':
+      //   { "input":"$registration", "as":"reg", 'in':
+      //   { "createdAt" :"$$reg.registrationInfo.registrationDate", "transactionId":"$$reg._id" ,"transactionType":"$$reg.registrationInfo.transactionType",username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+      //   }
+      // },
+      "portfolio":{
+        '$map':
+          { "input":"$portfolio", "as":"port", 'in':
+            {
+              "_id":"$$port._id",
+              "transactionId": "$$port.transactionId",
+              "cluster": "$$port.clusterName",
+              "chapter": "$$port.chapterName",
+              "subChapter": "$$port.subChapterName",
+              "community" : "$$port.communityName",
+              "transactionType": "$$port.transactionType",
+              "createdby": "$$port.createdBy",
+              "email": "$$port.portfolioUserName",
+              "createdAt": "$$port.createdAt",
+              "userId": '$_id',
+              "status": "$$port.status",
+            }
+          }
+      },
+      // "portfolio":{
+      //   '$map':
+      //   { "input":"$portfolio", "as":"port", 'in':
+      //   { "createdAt" :"$$port.createdAt", "transactionId":"$$port._id" ,"transactionType":"$$port.transactionType", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+      //   }
+      // },
+      "office":{
+        '$map':
+          { "input":"$office",
+            "as":"off",
+            'in': {
+              "_id":"$$off._id",
+              "transactionId": "$$off.transactionId",
+              "cluster": "$$off.clusterName",
+              "chapter": "$$off.chapterName",
+              "subChapter": "$$off.subChapterName",
+              "community" : "$$off.communityName",
+              "transactionType": "$$off.transactionType",
+              "createdby": "$profile.displayName",
+              "email": "$username",
+              "createdAt": "$$off.dateTime",
+              "userId": '$_id',
+              "status": "$$off.status",
+            }
+          }
+      },
+
+      // "office":{
+      //   '$map':
+      //   { "input":"$office", "as":"off", 'in':
+      //   { "createdAt" :"$$off.dateTime", "transactionId":"$$off._id" ,"transactionType":"$$off.transactionType", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName' , userId:'$_id'}
+      //   }
+      // },
+
+      "transactionLog": {
+        '$map':
+          {
+            "input": "$transactionLog",
+            "as": "trans",
+            'in': {
+              "_id": "$$trans._id",
+              "transactionId": "$$trans.transactionId",
+              "cluster": "$$trans.clusterName",
+              "chapter": "$$trans.chapterName",
+              "subChapter": "$$trans.subChapterName",
+              "community": "$$trans.communityName",
+              "transactionType": "$$trans.transactionTypeName",
+              "createdby": "$$trans.userName",
+              "email": "$$trans.emailId",
+              "createdAt": "$$trans.createdAt",
+              "userId": '$_id',
+              "status": "$$trans.status",
+              "activity": "$$trans.activity",
+              "activityDocId": "$$trans.activityDocId"
+            }
+          }
+      }
+
+        // "transactionLog":{
+        //   '$map':
+        //   { "input":"$transactionLog", "as":"trans", 'in':
+        //   { "createdAt" :"$$trans.createdAt", "transactionId":"$$trans._id" ,"transactionType":"$$trans.transactionTypeName", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
+        //   }
+        // },
+      }},
+      { '$project':
+        {
+          '_id':1,
+          'registration':1,
+          'portfolio':1,
+          'office':1,
+          'transactionLog': {
+            $filter: {
+              input: "$transactionLog",
+              as: "transaction",
+              cond: { $ne: [ "$$transaction.transactionType", 'system' ] }
+            }
+          }
         }
       },
-        "portfolio":{
-          '$map':
-          { "input":"$portfolio", "as":"port", 'in':
-          { "createdAt" :"$$port.createdAt", "transactionId":"$$port._id" ,"transactionType":"$$port.transactionType", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
-          }
-        },
-        "office":{
-          '$map':
-          { "input":"$office", "as":"off", 'in':
-          { "createdAt" :"$$off.dateTime", "transactionId":"$$off._id" ,"transactionType":"$$off.transactionType", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName' , userId:'$_id'}
-          }
-        },
-        "transactionLog":{
-          '$map':
-          { "input":"$transactionLog", "as":"trans", 'in':
-          { "createdAt" :"$$trans.createdAt", "transactionId":"$$trans._id" ,"transactionType":"$$trans.transactionTypeName", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
-          }
-        },
-      }},
       {'$project': {data: { "$concatArrays" : [ "$registration", "$portfolio", "$office", "$transactionLog" ] } }},
       {'$addFields': { 'data.totalRecords': { $size: "$data" } } },
       {"$unwind" : "$data"},
@@ -873,6 +974,22 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     }
 
     data = mlDBController.aggregate('users', pipeline, context);
+
+    data = data.map(function (doc) {
+      let transactionType = doc.transactionType;
+      if(transactionType == "connectionRequest") {
+        let activity = doc.activity;
+        let activityDocId = doc.activityDocId;
+        switch (activity){
+          case 'connection':
+            let data = mlDBController.findOne('MlConnections', activityDocId);
+            doc.email = data && data.createdBy ? data.createdBy : doc.email;
+            doc.transactionId = data && data.transactionId ? data.transactionId : doc.transactionId;
+            break;
+        }
+      }
+      return doc;
+    });
     // data = _lodash.concat(response[0].R, response[0].P, response[0].O, response[0].T)
     totalRecords = data && data[0] && data[0].totalRecords ? data[0].totalRecords : 0;
   }

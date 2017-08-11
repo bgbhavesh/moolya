@@ -413,6 +413,7 @@ class MlAppServiceSelectTask extends Component{
                               sessionId={this.state.sessionId}
                               details={this.props.details}
                               saveAction={this.props.saveAction}
+                              redirectWithCalendar={this.props.redirectWithCalendar}
 
         />
     )

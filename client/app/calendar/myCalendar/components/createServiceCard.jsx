@@ -164,9 +164,9 @@ class MlAppServiceManageSchedule extends Component {
   }
 
   async bookServiceCard() {
-    console.log('response',this.state.response);
     const resp = await bookUserServiceCardAppointmentActionHandler(this.state.response);
     if (resp.code === 200) {
+      this.redirectWithCalendar('calendar');
       toastr.success(resp.result)
     }else {
       toastr.error(resp.result)
@@ -174,18 +174,16 @@ class MlAppServiceManageSchedule extends Component {
   }
 
  async  saveActionHandler() {
-    switch(this.state.currentComponent){
+    switch(this.state.currentComponent) {
       case 'BasicInfo':
-        let firstStep =  this.state.details;
-        console.log('---firstStep---', this.state.details)
-        if(firstStep) {
+        let firstStep = this.state.details;
+        if (firstStep) {
           toastr.success('Data saved')
         }
         break;
       case 'SessionDetails':
         this.bookServiceCard();
     }
-    console.log(this.state.response)
   }
 
   activeComponent(Component) {
@@ -200,18 +198,6 @@ class MlAppServiceManageSchedule extends Component {
   setServiceSteps() {
     const {
       serviceBasicInfo,
-      daysRemaining,
-      clusterCode,
-      clusters,
-      clusterName,
-      serviceTermAndCondition,
-      attachments,
-      servicePayment,
-      facilitationCharge,
-      taxStatus,
-      serviceTask,
-      finalAmount,
-      prevFinalAmount,
       isTaskComponent
     } = this.state;
 
@@ -241,6 +227,7 @@ class MlAppServiceManageSchedule extends Component {
           details={this.state.details}
           saveAction={this.saveAction.bind(this)}
           activeComponent={this.activeComponent.bind(this)}
+          redirectWithCalendar={this.redirectWithCalendar}
         />,
         icon: <span className="ml fa fa-users"></span>
       },
@@ -275,9 +262,8 @@ class MlAppServiceManageSchedule extends Component {
       {
         showAction: true,
         actionName: 'exit',
-        handler: async(event) => {
+        handler: async(event) => this.redirectWithCalendar('calendar')
           // FlowRouter.go('/app/calendar/manageSchedule/' + _this.profileId + '/serviceList')
-        }
       }
     ];
     export const genericPortfolioAccordionConfig = {

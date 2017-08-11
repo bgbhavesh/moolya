@@ -33,6 +33,11 @@ export default class  BeSpokeView extends Component {
       {value: 'Video', label: 'Video'},
       {value: 'MeetUp', label: 'MeetUp'}
     ];
+    let frequencyOptions=[
+      {value: 'Daily', label: 'Daily'},
+      {value: 'Weekly', label: 'Weekly'},
+      {value: 'Monthly', label: 'Monthly'}
+    ];
 
 
 
@@ -107,6 +112,7 @@ export default class  BeSpokeView extends Component {
                   <div className="form-group">
                     <Select
                       className="form-field-name"
+                      options={frequencyOptions}
                       placeholder="Frequency"
                       defaultValue={ this.props.data ? this.props.data.sessionFrequency : "" }
                       value={ this.props.data ? this.props.data.sessionFrequency : "" }

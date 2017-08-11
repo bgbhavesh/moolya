@@ -17,7 +17,9 @@ import MlLoader from '../../../../commons/components/loader/loader'
 import {findAccountTypeActionHandler} from '../../../settings/accountType/actions/findAccountTypeAction'
 import moment from 'moment'
 import {rejectStatusForUser} from '../actions/rejectUser'
+import _underscore from 'underscore'
 var FontAwesome = require('react-fontawesome');
+var diff = require('deep-diff').diff;
 var options3 = [
   {value: 'Yes', label: 'Yes'},
   {value: 'No', label: 'No'}
@@ -29,27 +31,27 @@ export default class step1 extends React.Component{
     super(props);
     this.state={
       loading:true,
-      country:'',
-      cluster:'',
-      chapter:'',
-      subChapter:'',
-      selectedCity:'',
+      country:null,
+      cluster:null,
+      chapter:null,
+      subChapter:null,
+      selectedCity:"",
       registrationId:'',
       registrationDetails:'',
-      subscription:'',
-      registrationType:'',
-      refered:'',
-      institutionAssociation:'',
-      coummunityName:'',
-      identityType:'',
+      subscription:null,
+      registrationType:null,
+      refered:"",
+      institutionAssociation:"",
+      coummunityName:null,
+      identityType:null,
       userType:null,
       identityTypesData:[],
-      selectedTypeOfIndustry:'',
+      selectedTypeOfIndustry:null,
       profession:null,
       defaultIdentityIndividual: false,
       defaultIdentityCompany:false,
-      transactionId:'',
-      selectedAccountsType: " ",
+      transactionId:null,
+      selectedAccountsType: "",
       registrationDate:'',
       emailVerified:false
     }
@@ -95,9 +97,7 @@ export default class step1 extends React.Component{
   // }
 
   componentWillMount() {
-    console.log(this.props)
     this.fetchIdentityTypesMaster();
-
     let details=this.props.registrationInfo;
     this.setState({loading:false,
       registrationDetails:details,
@@ -136,12 +136,6 @@ export default class step1 extends React.Component{
       $('#individualId').hide();
 
     }
-
-    this.props.showPromptAlert(true)
-
-
-
-    //this.props.getRegistrationDetails(this.state)
   }
   optionsBySelectCountry(value){
     this.setState({country:value})
@@ -283,7 +277,6 @@ export default class step1 extends React.Component{
     if(response){
       if(response.success){
         this.props.refetchRegistrationAndTemplates();
-        this.props.showPromptAlert(false)
         toastr.success("Saved Successfully")
       }else{
         toastr.error(response.result);
@@ -334,13 +327,50 @@ export default class step1 extends React.Component{
     const resp = this.updateRejectUser();
     return resp;
   }
+  isValidated(){
+    let existingObject = this.props.registrationInfo || {}
+    let newObject = {
+      registrationId: this.state.registrationId?this.state.registrationId:null,
+      firstName: this.refs.firstName.value?this.refs.firstName.value:"",
+      lastName: this.refs.lastName.value?this.refs.lastName.value:"",
+      countryId: this.state.country?this.state.country:null,
+      contactNumber: this.refs.contactNumber.value?this.refs.contactNumber.value:"",
+      email: this.refs.email.value?this.refs.email.value:"",
+      cityId: this.state.selectedCity?this.state.selectedCity:"",
+      registrationType: this.state.registrationType?this.state.registrationType:null,
+      userName: this.refs.userName.value?this.refs.userName.value:"",
+      password: this.refs.password.value?this.refs.password.value:"",
+      //accountType: this.state.selectedAccountsType?this.state.selectedAccountsType:"",
+      institutionAssociation: this.state.institutionAssociation?this.state.institutionAssociation:"",
+      companyname: this.refs.companyName.value?this.refs.companyName.value:"",
+      companyUrl: this.refs.companyUrl.value?this.refs.companyUrl.value:"",
+      remarks: this.refs.remarks.value?this.refs.remarks.value:"",
+      referralType: this.state.refered?this.state.refered:"",
+      clusterId: this.state.cluster?this.state.cluster:null,
+      chapterId: this.state.chapter?this.state.chapter:null,
+      subChapterId: this.state.subChapter?this.state.subChapter:null,
+      //communityName: this.state.coummunityName?this.state.coummunityName:"",
+      identityType: this.state.identityType?this.state.identityType:null,
+      userType: this.state.userType?this.state.userType:null,
+      industry: this.state.selectedTypeOfIndustry?this.state.selectedTypeOfIndustry:null,
+      profession: this.state.profession?this.state.profession:null,
+    }
+    var differences = diff(existingObject, newObject);
+    var filteredObject = _underscore.where(differences, {kind: "E"});
+    if(filteredObject && filteredObject.length>0){
+      return false
+    }else{
+      return true
+    }
+
+
+  }
 
   render(){
     let MlActionConfig
     let registrationDate = this.state.registrationDate
     let hours = moment().diff(registrationDate, 'hours')
-    console.log(registrationDate)
-    console.log(hours)
+
     let showReject = (this.props.emailDetails && this.props.emailDetails.length>0 && !this.props.emailDetails[0].verified)?true:false
     // if(hours>=72 && this.state.emailVerified === false) {
     if(hours>=72 && this.props.emailDetails && this.props.emailDetails.length>0 && !this.props.emailDetails[0].verified) {

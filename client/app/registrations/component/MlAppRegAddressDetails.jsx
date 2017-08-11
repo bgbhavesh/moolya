@@ -11,6 +11,7 @@ import {mlFieldValidations} from "../../../commons/validations/mlfieldValidation
 import _underscore from "underscore";
 import {findClusterTypeActionHandler} from "../../../admin/cluster/actions/findCluster";
 var FontAwesome = require('react-fontawesome');
+var diff = require('deep-diff').diff;
 
 export default class MlAppRegAddressDetails extends React.Component {
   constructor(props) {
@@ -67,6 +68,48 @@ export default class MlAppRegAddressDetails extends React.Component {
 
   optionsBySelectCity(selecselectedStateValuetedIndex, handler, selectedObj) {
     this.setState({selectedCityValue: selectedObj.label, cityId: selectedIndex})
+  }
+
+  isValidate(){
+    if(this.refs["name"].value || this.refs["phoneNumber"].value || this.refs["addressFlat"].value
+      || this.refs["addressLocality"].value || this.refs["addressLandmark"].value || this.refs["addressArea"].value ||
+      this.refs["addressCity"].value || this.refs["addressPinCode"].value || this.refs["defaultAddress"].checked){
+      return false
+    }else if(this.state.selectedAddressLabel || this.state.stateId){
+      return false
+    }else{
+      let newArray = this.state.addressDetails || []
+      for (var i = 0, len = newArray.length; i < len; i++) {
+        let newObject = {
+          name:this.refs["name" + i].value,
+          phoneNumber:this.refs["phoneNumber" + i].value,
+          addressFlat:this.refs["addressFlat" + i].value,
+          addressLocality:this.refs["addressLocality" + i].value,
+          addressLandmark:this.refs["addressLandmark" + i].value,
+          addressArea:this.refs["addressArea" + i].value,
+          addressCity:this.refs["addressCity" + i].value,
+          addressPinCode:this.refs["addressPinCode" + i].value,
+          isDefaultAddress:this.refs["defaultAddress"+i].checked
+        }
+        let oldObject = {
+          name:newArray[i]&&newArray[i].name,
+          phoneNumber:newArray[i]&&newArray[i].phoneNumber,
+          addressFlat:newArray[i]&&newArray[i].addressFlat,
+          addressLocality:newArray[i]&&newArray[i].addressLocality,
+          addressLandmark:newArray[i]&&newArray[i].addressLandmark,
+          addressArea:newArray[i]&&newArray[i].addressArea,
+          addressCity:newArray[i]&&newArray[i].addressCity,
+          addressPinCode:newArray[i]&&newArray[i].addressPinCode,
+          isDefaultAddress:newArray[i]&&newArray[i].isDefaultAddress,
+        }
+        var differences = diff(oldObject, newObject);
+        var filteredObject = _underscore.where(differences, {kind: "E"});
+        if(filteredObject && filteredObject.length>0){
+          return false
+        }
+      }
+    }
+    return true
   }
 
   updateOptions(index, did, selectedValue, selObject, callback) {

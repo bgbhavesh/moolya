@@ -295,7 +295,7 @@ export async function fetchTaskDetailsForAdminServiceCard (profileId, serviceId,
   const {clusterId, chapterId, subChapterId, communityId} = loggedUserDetails;
   const result = await client.query({
     query: gql`
-      query($profileId: String, $serviceId: String, $clusterId: String, $chapterId: String, $subChapterId: String, $communityId: String) {) {
+      query($profileId: String, $serviceId: String, $clusterId: String, $chapterId: String, $subChapterId: String, $communityId: String) {
         fetchTaskDetailsForAdminServiceCard(profileId: $profileId, serviceId: $serviceId,
          clusterId: $clusterId,
           chapterId: $chapterId,

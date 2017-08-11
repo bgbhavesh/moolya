@@ -17,6 +17,7 @@ import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import MlLoader from '../../../../commons/components/loader/loader'
 import _ from 'lodash'
 import _underscore from 'underscore'
+var diff = require('deep-diff').diff;
 
 export default class Step4 extends React.Component{
   constructor(props) {
@@ -98,6 +99,30 @@ export default class Step4 extends React.Component{
       this.setState({loading:false,socialLinkArray:nextProps.registrationData.socialLinksInfo||[]});
     //}
   }
+  isValidated(){
+    if(this.refs["socialLinkTypeUrl"].value){
+      return false
+    }else if(this.state.selectedSocialLinkLabel){
+      return false
+    }else{
+      let newArray = this.state.socialLinkArray || []
+      for (var i = 0, len = newArray.length; i < len; i++) {
+        let newObject = {
+          socialLinkUrl : this.refs["socialLinkTypeUrl" + i].value,
+        }
+        let oldObject = {
+          socialLinkUrl : newArray[i]&&newArray[i].socialLinkUrl,
+        }
+        var differences = diff(oldObject, newObject);
+        var filteredObject = _underscore.where(differences, {kind: "E"});
+        if(filteredObject && filteredObject.length>0){
+          return false
+        }
+      }
+    }
+    return true
+  }
+
   async onSavingSocialLink(index,value){
     let detailsType = "SOCIALLINKS";
     let registerid = this.props.registrationId;

@@ -54,7 +54,7 @@ class MlAppTaskLanding extends Component {
           this.errorMsg = '';
       }
     }
-    if (sendData && isExternal) {
+    /*if (sendData && isExternal) {
       let {activities} = this.state;
       if (sendData.session && sendData.session.length > 0 && activities && activities.length> 0) {
         sendData.session.map((sessionData, index) => {
@@ -77,7 +77,7 @@ class MlAppTaskLanding extends Component {
           }
         })
       }
-    }
+    }*/
     if (!this.errorMsg) {
       switch (this.state.saveType) {
         case 'taskCreate': {

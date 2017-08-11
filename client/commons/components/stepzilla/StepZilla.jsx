@@ -115,7 +115,7 @@ export default class StepZilla extends Component {
 
                 return;
             }
-            let validate = this.refs.activeComponent.isValidated()
+            let validate = this.refs.activeComponent.isValidated?this.refs.activeComponent.isValidated():true;
             if (this.props.dontValidate || typeof this.refs.activeComponent.isValidated == 'undefined' || this.refs.activeComponent.isValidated() ) {
                 if (evt.currentTarget.value === (this.props.steps.length - 1) &&
                     this.state.compState === (this.props.steps.length - 1)) {
@@ -134,7 +134,7 @@ export default class StepZilla extends Component {
 
   _next() {
     // if its a form component, it should have implemeted a public isValidated class. If not then continue
-    let validate = this.refs.activeComponent.isValidated()
+    let validate = this.refs.activeComponent.isValidated?this.refs.activeComponent.isValidated():true;
 
     if(!validate){
       this.setState({
@@ -155,7 +155,7 @@ export default class StepZilla extends Component {
     }
 
     _previous() {
-      let validate = this.refs.activeComponent.isValidated()
+      let validate = this.refs.activeComponent.isValidated?this.refs.activeComponent.isValidated():true;
       if(!validate){
         this.setState({
           modalOpen: true,

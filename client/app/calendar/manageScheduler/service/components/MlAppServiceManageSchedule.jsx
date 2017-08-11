@@ -1032,7 +1032,7 @@ class MlAppServiceManageSchedule extends Component {
             <div className='step-progress'>
               <div id="root">
                 <StepZilla steps={this.setServiceSteps()}
-                           stepsNavigation={false}
+                           stepsNavigation={true}
                            prevBtnOnLastStep={true}/>
               </div>
             </div>

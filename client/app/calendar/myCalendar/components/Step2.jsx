@@ -188,7 +188,7 @@ class MlAppServiceSelectTask extends Component{
       values.forEach(function (teams, index) {
         let teamsInfo = teams.map(function (users, userIndex) {
           let team = activities[index].teams[userIndex];
-          let usersInfo = users.map(function (user) {
+          let usersInfo = (users && users.length > 0) ? users.map(function (user) {
             let userInfo = {
               name: user.name,
               profileId: user.profileId,
@@ -203,7 +203,7 @@ class MlAppServiceSelectTask extends Component{
               userInfo.isMandatory = isFind.isMandatory;
             }
             return userInfo;
-          });
+          }) : [];
           activities[index].teams[userIndex].users = usersInfo;
           return usersInfo;
         });

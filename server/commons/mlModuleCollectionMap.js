@@ -26,6 +26,7 @@ MlModuleCollectionMap['MlRoleTypes'] = 'ROLETYPE';
 MlModuleCollectionMap['MlStates'] = 'STATES';
 MlModuleCollectionMap['MlStatus'] = 'Status';
 MlModuleCollectionMap['MlSubChapters'] = 'SUBCHAPTER';
+MlModuleCollectionMap['MlRelatedSubChapters'] = 'SUBCHAPTER';
 MlModuleCollectionMap['MlSubDepartments'] = 'SUBDEPARTMENT';
 MlModuleCollectionMap['MlTaxation'] = 'TAXATION';
 MlModuleCollectionMap['MlAccountTypes'] = 'ACCOUNTTYPES';

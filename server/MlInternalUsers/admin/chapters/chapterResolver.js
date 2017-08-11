@@ -525,3 +525,13 @@ createSubChapter = (subChapter, context) =>{
     let id = mlDBController.insert('MlSubChapters', subChapter, context)
     return id
 }
+
+/********************************************related subChapter resolvers********************************************/
+
+MlResolver.MlQueryResolver['fetchRetatedSubChapters'] = (obj, args, context, info) => {
+  var matchSubchapters = []
+  if (args.subChapterId) {
+    matchSubchapters = mlDBController.find('MlRelatedSubChapters', {subChapters: {$in: {subChapterId: args.subChapterId}}}).fetch() || []
+  }
+  return matchSubchapters
+}

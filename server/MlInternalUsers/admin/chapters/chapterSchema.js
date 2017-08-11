@@ -156,7 +156,8 @@ let chapterSchema = `
         fetchActiveStatesChapters(states:[String],clusters:[String]):[Chapter]
         fetchActiveChaptersSubChapters(chapters:[String],clusters:[String],displayAllOption:Boolean):[SubChapter],
         fetchSubChaptersForRegistration(id: String):[SubChapter]
-        fetchSubChaptersSelectMoolya(chapterId: String,clusterId:String):[SubChapter]        
+        fetchSubChaptersSelectMoolya(chapterId: String,clusterId:String):[SubChapter]
+        fetchRetatedSubChapters(subChapterId: String):[SubChapter]
     }
     
      type Mutation {
@@ -185,7 +186,8 @@ let supportedApi = [
     {api:'fetchActiveStatesChapters', actionName:'READ', moduleName:"CHAPTER"},
     {api:'fetchActiveChaptersSubChapters', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
     {api:'fetchSubChaptersForRegistration', actionName:'READ', moduleName:"SUBCHAPTER"},
-    {api:'fetchSubChaptersSelectMoolya', actionName:'READ', moduleName:"SUBCHAPTER"}
+    {api:'fetchSubChaptersSelectMoolya', actionName:'READ', moduleName:"SUBCHAPTER"},
+    {api:'fetchRetatedSubChapters', actionName:'READ', moduleName:"SUBCHAPTER"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

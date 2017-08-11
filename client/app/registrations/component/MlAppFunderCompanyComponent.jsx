@@ -183,7 +183,7 @@ export default class MlAppFunderCompanyComponent extends React.Component {
       companyEmail          :   this.refs.companyEmail.value?this.refs.companyEmail.value:null,
       foundationDate        :   this.state.foundationDate?this.state.foundationDate:null,
       headQuarterLocation   :   this.state.selectedHeadquarter?this.state.selectedHeadquarter:null,
-      branchLocations       :   this.state.selectedBranches?this.state.selectedBranches:"",
+      branchLocations       :   this.state.selectedBranches?this.state.selectedBranches:null,
       companytyp            :   this.state.selectedTypeOfCompany?this.state.selectedTypeOfCompany:null,
       entityType            :   this.state.selectedTypeOfEntity?this.state.selectedTypeOfEntity:null,
       businessType          :   this.state.selectedTypeOfBusiness?this.state.selectedTypeOfBusiness:null,

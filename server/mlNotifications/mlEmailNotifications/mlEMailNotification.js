@@ -324,7 +324,7 @@ const MlEmailNotification= class MlEmailNotification {
       mlEmail.sendHtml({
         from: fromEmail,
         to: toEmail,
-        subject: "Forgot Password !",
+        subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
         html : mail_body&&mail_body.content
       });
     }, 2 * 1000);
@@ -345,7 +345,8 @@ const MlEmailNotification= class MlEmailNotification {
       mlEmail.sendHtml({
         from: fromEmail,
         to: toEmail,
-        subject: "Welcome to moolya !",
+        //subject: "Welcome to moolya !",
+        subject:mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
         html : mail_body&&mail_body.content
       });
     }, 2 * 1000);
@@ -363,7 +364,8 @@ const MlEmailNotification= class MlEmailNotification {
       mlEmail.sendHtml({
         from: fromEmail,
         to: toEmail,
-        subject: "KYC Approved !",
+        //subject: "KYC Approved !",
+        subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
         html : mail_body&&mail_body.content
       });
     }, 2 * 1000);
@@ -383,7 +385,8 @@ const MlEmailNotification= class MlEmailNotification {
       mlEmail.sendHtml({
         from: fromEmail,
         to: toEmail,
-        subject: "KYC Declined !",
+        //subject: "KYC Declined !",
+        subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
         html : mail_body&&mail_body.content
       });
     }, 2 * 1000);
@@ -403,7 +406,8 @@ const MlEmailNotification= class MlEmailNotification {
       mlEmail.sendHtml({
         from: fromEmail,
         to: toEmail,
-        subject: "Portfolio Confirmation!!",
+        //subject: "Portfolio Confirmation!!",
+        subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
         html : mail_body&&mail_body.content
       });
     }, 2 * 1000);
@@ -423,7 +427,8 @@ const MlEmailNotification= class MlEmailNotification {
       mlEmail.sendHtml({
         from: fromEmail,
         to: toEmail,
-        subject: "Portfolio Updated!!",
+        //subject: "Portfolio Updated!!",
+        subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
         html : mail_body&&mail_body.content
       });
     }, 2 * 1000);
@@ -456,7 +461,8 @@ const MlEmailNotification= class MlEmailNotification {
       mlEmail.sendHtml({
         from: fromEmail,
         to: toEmail,
-        subject: "Portfolio Connection Request Sent !!",
+        //subject: "Portfolio Connection Request Sent !!",
+        subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
         html : mail_body&&mail_body.content
       });
     }, 2 * 1000);
@@ -490,7 +496,8 @@ const MlEmailNotification= class MlEmailNotification {
       mlEmail.sendHtml({
         from: fromEmail,
         to: toEmail,
-        subject: "Portfolio Connection Request Received !!",
+        //subject: "Portfolio Connection Request Received !!",
+        subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
         html : mail_body&&mail_body.content
       });
     }, 2 * 1000);
@@ -523,7 +530,8 @@ const MlEmailNotification= class MlEmailNotification {
       mlEmail.sendHtml({
         from: fromEmail,
         to: toEmail,
-        subject: "Portfolio Connection Request Decline !!",
+        //subject: "Portfolio Connection Request Decline !!",
+        subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
         html : mail_body&&mail_body.content
       });
     }, 2 * 1000);
@@ -548,7 +556,8 @@ const MlEmailNotification= class MlEmailNotification {
       mlEmail.sendHtml({
         from: fromEmail,
         to: toEmail,
-        subject: "Portfolio Enquiry Request !!",
+        //subject: "Portfolio Enquiry Request !!",
+        subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
         html : mail_body&&mail_body.content
       });
     }, 2 * 1000);
@@ -573,7 +582,8 @@ const MlEmailNotification= class MlEmailNotification {
       mlEmail.sendHtml({
         from: fromEmail,
         to: toEmail,
-        subject: "Portfolio New Review !!",
+        //subject: "Portfolio New Review !!",
+        subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
         html : mail_body&&mail_body.content
       });
     }, 2 * 1000);
@@ -594,7 +604,8 @@ const MlEmailNotification= class MlEmailNotification {
       mlEmail.sendHtml({
         from: fromEmail,
         to: toEmail,
-        subject: "Live on Moolya!!",
+        //subject: "Live on Moolya!!",
+        subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
         html : mail_body&&mail_body.content
       });
     }, 2 * 1000);
@@ -614,7 +625,8 @@ const MlEmailNotification= class MlEmailNotification {
       mlEmail.sendHtml({
         from: fromEmail,
         to: toEmail,
-        subject: "Go Live Declined!!",
+        //subject: "Go Live Declined!!",
+        subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
         html : mail_body&&mail_body.content
       });
     }, 2 * 1000);
@@ -640,7 +652,8 @@ const MlEmailNotification= class MlEmailNotification {
       mlEmail.sendHtml({
         from: fromEmail,
         to: toEmail,
-        subject: "Office request sent!!!",
+        //subject: "Office request sent!!!",
+        subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
         html : mail_body&&mail_body.content
       });
     }, 2 * 1000);
@@ -666,7 +679,8 @@ const MlEmailNotification= class MlEmailNotification {
         mlEmail.sendHtml({
           from: fromEmail,
           to: toEmail,
-          subject: "Office Activated!!!",
+          //subject: "Office Activated!!!",
+          subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
           html : mail_body&&mail_body.content
         });
       }, 2 * 1000);
@@ -706,7 +720,8 @@ const MlEmailNotification= class MlEmailNotification {
       mlEmail.sendHtml({
         from: fromEmail,
         to: toEmail,
-        subject: "Office Bearer Invitation!!!",
+        //subject: "Office Bearer Invitation!!!",
+        subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
         html: mail_body && mail_body.content
       });
     }, 2 * 1000);
@@ -731,7 +746,8 @@ const MlEmailNotification= class MlEmailNotification {
         mlEmail.sendHtml({
           from: fromEmail,
           to: toEmail,
-          subject: "Office Bearer Approved!!!",
+          //subject: "Office Bearer Approved!!!",
+          subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
           html : mail_body&&mail_body.content
         });
       }, 2 * 1000);
@@ -751,7 +767,8 @@ const MlEmailNotification= class MlEmailNotification {
       mlEmail.sendHtml({
         from: fromEmail,
         to: toEmail,
-        subject: "Process Setup Completed!!!",
+        //subject: "Process Setup Completed!!!",
+        subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
         html : mail_body&&mail_body.content
       });
     }, 2 * 1000);

@@ -30,7 +30,7 @@ class MlAppServiceSelectTask extends Component{
     }
     // this.initilizeSwiper()
     let WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(250+$('.app_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight-(300+$('.app_header').outerHeight(true)));
   }
 
   componentWillUpdate() {

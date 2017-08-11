@@ -62,7 +62,8 @@ MlResolver.MlQueryResolver['fetchFinalApprovalRole'] = (obj, args, context, info
       response = mlDBController.findOne("MlHierarchyAssignments", {
         "parentDepartment": args.departmentId,
         "parentSubDepartment": args.subDepartmentId,
-        "clusterId":args.clusterId
+        "clusterId":args.clusterId,
+        "subChapterId":args.subChapterId
       }, context)
     }
   }

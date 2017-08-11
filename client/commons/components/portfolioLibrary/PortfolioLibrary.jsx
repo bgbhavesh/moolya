@@ -108,6 +108,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
           that.setState({documentDetails: documents})
         }
       })
+      console.log(this.state.imageDetails)
     }
 
   /**
@@ -122,7 +123,56 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
     });
   }
 
-  /**
+    checkIfFileAlreadyExists(fileName, fileType) {
+      switch(fileType){
+        case 'image':
+          let currentImages = this.state.imageDetails || [];
+          let imageStatus;
+          currentImages.map(function(data){
+            if(data.fileName === fileName){
+              imageStatus =  true;
+            }
+          })
+          return imageStatus;
+          break;
+        case 'video':
+          let currentVideos = this.state.videoDetails || [];
+          let videoStatus;
+          currentVideos.map(function(data){
+            if(data.fileName === fileName){
+              videoStatus =  true;
+            }
+          })
+          return videoStatus;
+          break;
+        case 'document':
+          let currentDocuments = this.state.documentDetails || [];
+          let documentStatus;
+          currentDocuments.map(function(data){
+            if(data.fileName === fileName){
+              documentStatus =  true;
+            }
+          })
+          return documentStatus;
+          break;
+        case 'template':
+          let currentTemplates = this.state.templateDetails || [];
+          let templateStatus;
+          currentTemplates.map(function(data){
+            if(data.fileName === fileName){
+              templateStatus =  true;
+            }
+          })
+          return templateStatus;
+          break
+
+
+      }
+    }
+
+
+
+    /**
    * Method :: ImageUpload
    * Desc   :: Handles the image uploading event
    * @param :: Event Handler
@@ -132,11 +182,18 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
   ImageUpload(e){
     let file = e.target.files[0];
     this.setState({fileType:file.type,fileName:file.name });
-    let fileType = file.type
+    let fileType = file.type;
+    // this.getCentralLibrary();
+    let fileExists = this.checkIfFileAlreadyExists(file.name, "image");
     let typeShouldBe = _.compact(fileType.split('/'));
-    if(file && typeShouldBe && typeShouldBe[0]=="image") {
-      let data = {moduleName: "PROFILE", actionName: "UPDATE"}
-      let response =  multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "image"));
+    if(file && typeShouldBe && typeShouldBe[0]=="image" ) {
+      console.log('--fileStatus--',fileExists)
+      if(!fileExists){
+        let data = {moduleName: "PROFILE", actionName: "UPDATE"}
+        let response =  multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "image"));
+      }else{
+        toastr.error("Image with the same file name already exists");
+      }
     }else{
       toastr.error("Please select a Image Format");
     }
@@ -151,11 +208,17 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
   videoUpload(e) {
     let file = e.target.files[0];
     this.setState({fileType:file.type,fileName:file.name });
-    let fileType = file.type
+    let fileType = file.type;
+    // this.getCentralLibrary();
+    let fileExists = this.checkIfFileAlreadyExists(file.name, "video");
     let typeShouldBe = _.compact(fileType.split('/'));
     if (file  && typeShouldBe && typeShouldBe[0]=="video") {
-      let data = {moduleName: "PROFILE", actionName: "UPDATE"}
-      let response =  multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this,"video"));
+      if(!fileExists){
+        let data = {moduleName: "PROFILE", actionName: "UPDATE"}
+        let response =  multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this,"video"));
+      }else{
+        toastr.error("Video with the same file name already exists");
+      }
     }else{
       toastr.error("Please select a Video Format");
     }
@@ -170,11 +233,17 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
   TemplateUpload(e){
     let file = e.target.files[0];
     this.setState({fileType:file.type,fileName:file.name });
-    let fileType = file.type
+    let fileType = file.type;
+    // this.getCentralLibrary();
+    let fileExists = this.checkIfFileAlreadyExists(file.name, "template");
     let typeShouldBe = _.compact(fileType.split('/'));
     if (file  && typeShouldBe && typeShouldBe[0]=="image") {
-      let data = {moduleName: "PROFILE", actionName: "UPDATE"}
-      let response =  multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this,"template"));
+      if(!fileExists){
+        let data = {moduleName: "PROFILE", actionName: "UPDATE"}
+        let response =  multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this,"template"));
+      }else{
+        toastr.error("Template with the same file name already exists");
+      }
     }else{
       toastr.error("Please select a Template Format");
     }
@@ -189,11 +258,17 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
   documentUpload(e) {
     let file = e.target.files[0];
     this.setState({fileType:file.type,fileName:file.name });
-    let fileType = file.type
+    let fileType = file.type;
+    // this.getCentralLibrary();
+    let fileExists = this.checkIfFileAlreadyExists(file.name, "document");
     let typeShouldBe = _.compact(fileType.split('/'));
     if (file  && typeShouldBe && typeShouldBe[1]==="pdf") {
-      let data = {moduleName: "PROFILE", actionName: "UPDATE"}
-      let response =  multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this,"document"));
+      if(!fileExists){
+        let data = {moduleName: "PROFILE", actionName: "UPDATE"}
+        let response =  multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this,"document"));
+      }else {
+        toastr.error("Document with the same file name already exists")
+      }
     }else{
       toastr.error("Please select a Document Format")
     }
@@ -628,9 +703,9 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
               {that.state.explore || that.state.deleteOption ?"":  <FontAwesome name='trash-o' onClick={()=>that.delete(id, "video")} />}
               {that.state.isLibrary ?  <a href="#" data-toggle="modal" data-target=".videopop" onClick={that.sendDataToPortfolioLibrary.bind(that,show, id)} ><video width="120" height="100" controls>
                 <source src={show.fileUrl}type="video/mp4"></source>
-              </video>/></a>:<a href="#" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that,show, id)} ><video width="120" height="100" controls>
+              </video></a>:<a href="#" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that,show, id)} ><video width="120" height="100" controls>
                 <source src={show.fileUrl}type="video/mp4"></source>
-              </video>/></a>}
+              </video></a>}
               <div id="templates" className="title">{show.fileName}</div>
             </div>
           )}
@@ -673,7 +748,7 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
         if(show.inCentralLibrary){
           return(
             <div className="thumbnail"key={id}>
-              {that.state.explore || that.state.deleteOption?"":  <FontAwesome name='trash-o' onClick={()=>that.delete(id, "template")} />}
+              {that.state.explore || that.state.deleteOption?"":  <FontAwesome name='trash-o' onClick={()=>that.delete(id, "document")} />}
               {that.state.isLibrary ?<a href="#" data-toggle="modal" data-target=".documentpop" onClick={that.sendDataToPortfolioLibrary.bind(that,show, id)} ><img src={show.fileUrl}/></a>:<a href="#" data-toggle="modal"  onClick={that.sendDataToPortfolioLibrary.bind(that,show, id)} ><img src={show.fileUrl}/></a>}
               <div id="templates" className="title">{show.fileName}</div>
             </div>
@@ -992,11 +1067,9 @@ import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
                   </a>
                 </div>
               </div>
-
                   <div className="panel-body" onContextMenu={(e)=>e.preventDefault()}>
                     {this.state.isLibrary?this.popVideos():this.videos()}
                   </div>
-
             </div>
           </div>
           <br className="brclear"/>

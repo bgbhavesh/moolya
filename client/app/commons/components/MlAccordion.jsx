@@ -31,9 +31,9 @@ export default class MlAccordion extends React.Component {
       let PanelComponent = React.cloneElement(option.contentComponent, propz);
 
       if(isText){
-           return  (<div id={accordionId + index} key={"panelContent"+index} className="panel-collapse collapse" style={option.style}>{option.contentComponent}</div>);
+           return  (<div id={accordionId + index} key={"panelContent"+index} className="panel-collapse collapse in" style={option.style}>{option.contentComponent}</div>);
       }else{
-      return (<div id={accordionId + index} key={"panelContent"+index} className="panel-collapse collapse" style={option.style}>
+      return (<div id={accordionId + index} key={"panelContent"+index} className="panel-collapse collapse in" style={option.style}>
               {PanelComponent}
               </div>)
      }

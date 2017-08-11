@@ -58,4 +58,34 @@ export async function fetchProfileAppointmentCountsHandler (profileId) {
   return profileAppointmentCounts;
 }
 
+export async function fetchServiceSeekerHandler (profileId, day, month) {
+  const result = await appClient.query({
+    query: gql`
+    query($profileId: String!, $serviceId: String){ 
+      fetchServiceSeekerList(profileId: $profileId, serviceId: $serviceId){
+        name
+        userId
+        profileId
+        transId
+        orderId
+      }
+    }
+    `,
+    variables:{
+      profileId,
+      day,
+      month
+    },
+    forceFetch:true
+  });
+  const serviceSeekers = result.data.fetchServiceSeekerList;
+  return serviceSeekers;
+}
+
+
+
+
+
+
+
 

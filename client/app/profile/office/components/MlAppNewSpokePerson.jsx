@@ -99,7 +99,7 @@ export default class MlAppNewSpokePerson extends React.Component {
     const response = await createOfficeActionHandler(myOffice)
     if (response && response.success) {
       FlowRouter.go('/app/myOffice/')
-      toastr.success('Office Successfully Created');
+      toastr.success(response.result);
     } else if(response && !response.success){
       toastr.error(response.result);
     }

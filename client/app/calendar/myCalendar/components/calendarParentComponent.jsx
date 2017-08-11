@@ -22,6 +22,7 @@ export default class MLAppMyCalendar extends Component {
     this.state = {
       data: [],
       date: new Date(),
+      appointmentDate: new Date(),
       showCalendar: false,
       componentToLoad: 'calendar',
       events: []
@@ -30,6 +31,7 @@ export default class MLAppMyCalendar extends Component {
     this.onNavigate = this.onNavigate.bind(this);
     this.componentToLoad.bind(this);
     this.eventsData.bind(this);
+    this.getAppointmentCounts = this.getAppointmentCounts.bind(this);
   }
 
   async getMyCalendar() {
@@ -96,9 +98,13 @@ export default class MLAppMyCalendar extends Component {
   }
 
 
-  componentToLoad(response){
-    console.log(response)
-   this.setState({componentToLoad: response})
+  componentToLoad(response, date){
+   if(this.state.profileId) {
+     this.setState({
+       componentToLoad: response,
+       appointmentDate: date
+     });
+   }
   }
 
   headerManagement(profileId, profileName) {
@@ -140,6 +146,7 @@ export default class MLAppMyCalendar extends Component {
 
 
   render() {
+    const {appointmentDate} = this.state;
     const that = this;
     // let eventsData = [{ title: '3', 'start': new Date(2017, 7, 7), 'end': new Date(2017, 7, 10) }];
     switch(that.state.componentToLoad) {
@@ -147,7 +154,7 @@ export default class MLAppMyCalendar extends Component {
         return (
           <div className="app_main_wrap" style={{'overflow': 'auto'}}>
             <div className="app_padding_wrap">
-              <MlCalendarHeader headerManagement={that.headerManagement.bind(that)} userDetails={that.userDetails.bind(that)}/>
+              <MlCalendarHeader getAppointmentCounts={this.getAppointmentCounts} headerManagement={that.headerManagement.bind(that)} userDetails={that.userDetails.bind(that)} componentToLoad={that.componentToLoad.bind(that)} />
               <Calender
                 events={ that.state.events }
                 dayBackgroundComponent={<MlAppMyCalendarDayComponent componentToLoad={that.componentToLoad.bind(that)}/> }
@@ -163,8 +170,8 @@ export default class MLAppMyCalendar extends Component {
         return (
           <div className="app_main_wrap" style={{'overflow': 'auto'}}>
             <div className="app_padding_wrap">
-              <MlCalendarHeader componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
-              <AppCalendarDayView componentToLoad={this.componentToLoad.bind(this)}/>
+              <MlCalendarHeader getAppointmentCounts={this.getAppointmentCounts} headerManagement={that.headerManagement.bind(that)} componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
+              <AppCalendarDayView profileId={this.state.profileId} componentToLoad={this.componentToLoad.bind(this)} appointmentDate={this.state.appointmentDate} />
             </div>
           </div>
         )
@@ -173,8 +180,8 @@ export default class MLAppMyCalendar extends Component {
         return(
         <div className="app_main_wrap" style={{'overflow': 'auto'}}>
           <div className="app_padding_wrap">
-            <MlCalendarHeader componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
-            <MlAppServiceManageSchedule componentToLoad={this.componentToLoad.bind(this)}/>
+            <MlCalendarHeader getAppointmentCounts={this.getAppointmentCounts} headerManagement={that.headerManagement.bind(that)} componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
+            <MlAppServiceManageSchedule profileId={this.state.profileId} appointmentDate={appointmentDate} componentToLoad={this.componentToLoad.bind(this)}/>
           </div>
         </div>
         )
@@ -183,7 +190,7 @@ export default class MLAppMyCalendar extends Component {
         return(
           <div className="app_main_wrap" style={{'overflow': 'auto'}}>
             <div className="app_padding_wrap">
-              <MlCalendarHeader componentToLoad={that.componentToLoad.bind(that)}/>
+              <MlCalendarHeader getAppointmentCounts={this.getAppointmentCounts} headerManagement={that.headerManagement.bind(that)} componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
               <CalCreateTask/>
             </div>
           </div>
@@ -193,7 +200,18 @@ export default class MLAppMyCalendar extends Component {
         return(
           <div className="app_main_wrap" style={{'overflow': 'auto'}}>
             <div className="app_padding_wrap">
-              <MlCalendarHeader componentToLoad={that.componentToLoad.bind(that)}/>
+              <MlCalendarHeader getAppointmentCounts={this.getAppointmentCounts} headerManagement={that.headerManagement.bind(that)} componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
+              <CalCreateAppointmentView/>
+            </div>
+          </div>
+        )
+        break;
+
+      case 'selfAppointment':
+        return(
+          <div className="app_main_wrap" style={{'overflow': 'auto'}}>
+            <div className="app_padding_wrap">
+              <MlCalendarHeader getAppointmentCounts={this.getAppointmentCounts} headerManagement={that.headerManagement.bind(that)} componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
               <CalCreateAppointmentView/>
             </div>
           </div>

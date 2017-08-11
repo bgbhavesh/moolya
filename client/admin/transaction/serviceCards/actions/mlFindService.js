@@ -12,11 +12,16 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function getServiceBasedOnServiceId (serviceId) {
+export async function getServiceBasedOnServiceId (serviceId, loggedUserDetails) {
+  const {clusterId, chapterId, subChapterId, communityId} = loggedUserDetails;
   const result = await client.query({
     query: gql`
-query ($serviceId: String) {
-  getServiceBasedOnServiceId(serviceId: $serviceId) {
+query ($serviceId: String, $clusterId: String, $chapterId: String, $subChapterId: String, $communityId: String) {
+  getServiceBasedOnServiceId(serviceId: $serviceId,
+          clusterId: $clusterId,
+          chapterId: $chapterId,
+          subChapterId: $subChapterId,
+          communityId: $communityId) {
         userId
         profileId
         name
@@ -82,7 +87,11 @@ query ($serviceId: String) {
       }
     `,
     variables: {
-      serviceId
+      serviceId,
+      clusterId,
+      chapterId,
+      subChapterId,
+      communityId
     },
     forceFetch:true
   });
@@ -282,11 +291,16 @@ export async function updateServiceActionHandler(serviceId,Services) {
  * returns ::  response : type :: Object
  **/
 
-export async function fetchTaskDetailsForAdminServiceCard (profileId, serviceId) {
+export async function fetchTaskDetailsForAdminServiceCard (profileId, serviceId, loggedUserDetails) {
+  const {clusterId, chapterId, subChapterId, communityId} = loggedUserDetails;
   const result = await client.query({
     query: gql`
-      query($profileId: String, $serviceId: String) {
-        fetchTaskDetailsForAdminServiceCard(profileId: $profileId, serviceId: $serviceId) {
+      query($profileId: String, $serviceId: String, $clusterId: String, $chapterId: String, $subChapterId: String, $communityId: String) {
+        fetchTaskDetailsForAdminServiceCard(profileId: $profileId, serviceId: $serviceId,
+         clusterId: $clusterId,
+          chapterId: $chapterId,
+          subChapterId: $subChapterId,
+          communityId: $communityId) {
           id: _id
           name
           displayName
@@ -323,7 +337,11 @@ export async function fetchTaskDetailsForAdminServiceCard (profileId, serviceId)
     `,
     variables: {
       profileId,
-      serviceId
+      serviceId,
+      clusterId,
+      chapterId,
+      subChapterId,
+      communityId
     },
     forceFetch: true
   });

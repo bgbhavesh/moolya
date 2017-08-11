@@ -12,7 +12,7 @@ import React, {Component} from "react";
 import ScrollArea from "react-scrollbar";
 import gql from 'graphql-tag'
 import _ from "lodash";
-import Moolyaselect from  '../../../commons/components/MlAppSelectWrapper'
+import Moolyaselect from '../../../../../commons/components/MlAppSelectWrapper'
 let Select = require('react-select');
 import {
   createInternalAppointmentInfo
@@ -148,12 +148,14 @@ export default class MlAppMyCalendarIdeator extends Component {
     let mandatoryFields = ['hours', 'minutes', 'day', 'month', 'year', 'taskDetails'];
     let {selfInternalAppointmentInfo, appointmentTaskInfo} = this.state;
     appointmentTaskInfo.profileId = 'MLPRO00000064';
+    let {appointmentDate} = this.props;
+    let date = new Date(appointmentDate);
     selfInternalAppointmentInfo = {
-      hours: 1,
-      minutes: 2,
-      day: 4,
-      month: 9,
-      year: 2017,
+      hours: date && date.getHours(),
+      minutes: date && date.getMinutes(),
+      day: date && date.getDate(),
+      month: date && date.getMonth(),
+      year: date && date.getFullYear(),
       taskDetails: appointmentTaskInfo
     };
     mandatoryFields.forEach((field) => {

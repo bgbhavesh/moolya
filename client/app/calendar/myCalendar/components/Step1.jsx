@@ -7,16 +7,12 @@
 // import NPM module(s)
 import React, { Component } from 'react';
 import Moolyaselect from "../../../commons/components/MlAppSelectWrapper";
-import PropTypes from 'prop-types';
-import { Meteor } from 'meteor/meteor';
 import FontAwesome from 'react-fontawesome';
-import Datetime from "react-datetime";
-import Moment from "moment";
-import ScrollArea from 'react-scrollbar';
 import gql from 'graphql-tag';
-import Select from 'react-select';
-import { cloneDeep } from 'lodash';
+var Select = require('react-select');
 import { graphql } from 'react-apollo';
+ import { fetchServiceSeekerHandler } from '../../../calendar/myCalendar/actions/appointmentCount'
+import { bookUserServiceCardAppointmentActionHandler } from '../../../calendar/myCalendar/actions/fetchMyCalendar'
 
 
 
@@ -31,10 +27,35 @@ class Step1 extends Component {
 
   constructor(props) {
     super(props);
-    this.state={service:""}
+    this.state={service:"", serviceSeeker:[], seeker: "", orderId:""}
+    this.testQuery.bind(this);
+    this.saveData.bind(this);
   }
 
-  componentWillMount() {}
+  componentWillMount() {
+    this.props.activeComponent('BasicInfo');
+
+  }
+  //
+  // componentWillUpdate() {
+  //   if(this.state.orderId)
+  //   let date = this.props.appointmentDate;
+  //   let day = date.getDate();
+  //   let month = date.getMonth();
+  //   let year = date.getFullYear();
+  //   let hours = date.getHours();
+  //   let minutes = date.getMinutes();
+  //   let data = {
+  //     orderId: this.state.orderId?this.state.orderId:"dd ",
+  //     sessionId: "ddd ",
+  //     hours: hours,
+  //     minutes: minutes,
+  //     day: day,
+  //     month: month,
+  //     year: year
+  //   }
+  //   this.bookDetails(data)
+  // }
 
   componentDidMount() {
     console.log(this.props.serviceBasicInfo)
@@ -43,6 +64,33 @@ class Step1 extends Component {
     $('.step_form_wrap').height(WinHeight-(310+$('.admin_header').outerHeight(true)));
   }
 
+  saveData() {
+    let date = this.props.appointmentDate;
+    let day = date.getDate();
+    let month = date.getMonth();
+    let year = date.getFullYear();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let data = {
+        orderId: this.state.orderId,
+        sessionId: "ddd ",
+        hours: hours,
+        minutes: minutes,
+        day: day,
+        month: month,
+        year: year
+}
+this.bookDetails(data)
+
+  }
+
+   bookDetails(data) {
+    this.props.bookDetails(data)
+
+
+    // const resp = await bookUserServiceCardAppointmentActionHandler(data);
+    // console.log(resp)
+  }
 
 
   /**
@@ -60,11 +108,64 @@ class Step1 extends Component {
   /**
    * Method :: React render
    * Desc :: Showing html page
-   * @returns {XML}
+   * @returns {XML}`
    */
 
+  componentWillReceiveProps(newProps) {
+    this.setState({serviceId: newProps.serviceId})
+    if(newProps.serviceId) {
+      this.testQuery()
+    }
+  }
+
+ async testQuery() {
+    if(this.props.serviceId) {
+      const resp = await fetchServiceSeekerHandler(this.props.profileId, this.props.serviceId)
+      this.setState({ serviceSeeker: resp})
+    }
+  }
+
+  serviceSeeker() {
+    let seekers =  this.state.serviceSeeker || []
+    let seekerList = [];
+    seekers.map(function(data){
+      seekerList.push({value: data.transId, label: data.name})
+      })
+    return seekerList;
+  }
+
+  onSelectSeeker (selectedSeeker) {
+    console.log(selectedSeeker)
+    let that = this;
+    let seekers =  this.state.serviceSeeker || []
+    seekers.map(function(data, index){
+      if(selectedSeeker.value === data.transId){
+        that.setState({
+          orderId:  data.orderId,
+        })
+      }
+    })
+    this.setState({seeker: selectedSeeker})
+    let date = this.props.appointmentDate;
+    let day = date.getDate();
+    let month = date.getMonth();
+    let year = date.getFullYear();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let data = {
+      orderId: this.state.orderId,
+      sessionId: "ddd ",
+      hours: hours,
+      minutes: minutes,
+      day: day,
+      month: month,
+      year: year
+    }
+    this.bookDetails(data)
+    // this.saveData()
+  }
+
   selectedService(value) {
-    console.log(value)
     this.setState({
       service: value
     })
@@ -100,7 +201,7 @@ class Step1 extends Component {
               </div><br className="brclear"/>
 
               <div className="form-group">
-                <input type="text" className="form-control" placeholder="Choose Service Seeker"/>
+                <Select name="form-field-name" className="float-label" options={this.serviceSeeker()} placeholder="Choose Service Seeker" onChange={this.onSelectSeeker.bind(this)} value={this.state.seeker}/>
               </div>
               <div className="form-group">
                 <label>Total number of Sessions Rs.
@@ -150,9 +251,6 @@ class Step1 extends Component {
                 <label>New</label>
               </div>
               <div className="form-group">
-                <input type="text" className="form-control"  placeholder= "Frequency" value={this.props.serviceBasicInfo.sessionFrequency} />
-              </div>
-              <div className="form-group">
                 <Moolyaselect
                   multiSelect={false}
                   placeholder="Select Service"
@@ -163,21 +261,24 @@ class Step1 extends Component {
                   queryType={'graphql'}
                   query={getServiceQuery}
                   onSelect={this.selectedService.bind(this)}
-                              />
+                />
               </div>
               <div className="form-group">
-                <div className="input_types">
-                  <label>Set Priority</label>
-                  <input id="radio3" type="radio" name="radio2" value="1"/><label htmlFor="radio3"><span><span></span></span>Low</label>
-                </div>
-                <div className="input_types">
-                  <input id="radio4" type="radio" name="radio2" value="2"/><label htmlFor="radio4"><span><span></span></span>Medium</label>
-                </div>
-                <div className="input_types">
-                  <input id="radio5" type="radio" name="radio2" value="2"/><label htmlFor="radio5"><span><span></span></span>High</label>
-                </div>
-                <br className="brclear"/>
+                <input type="text" className="form-control"  placeholder= "Frequency" value={this.props.serviceBasicInfo.sessionFrequency} />
               </div>
+              {/*<div className="form-group">*/}
+                {/*<div className="input_types">*/}
+                  {/*<label>Set Priority</label>*/}
+                  {/*<input id="radio3" type="radio" name="radio2" value="1"/><label htmlFor="radio3"><span><span></span></span>Low</label>*/}
+                {/*</div>*/}
+                {/*<div className="input_types">*/}
+                  {/*<input id="radio4" type="radio" name="radio2" value="2"/><label htmlFor="radio4"><span><span></span></span>Medium</label>*/}
+                {/*</div>*/}
+                {/*<div className="input_types">*/}
+                  {/*<input id="radio5" type="radio" name="radio2" value="2"/><label htmlFor="radio5"><span><span></span></span>High</label>*/}
+                {/*</div>*/}
+                {/*<br className="brclear"/>*/}
+              {/*</div>*/}
               <div className="form-group">
                 <label>
                   Service expires &nbsp;
@@ -187,67 +288,67 @@ class Step1 extends Component {
               </div>
             </div>
             <br className="brclear"/>
-            <div className="panel panel-default library-wrap">
-              <div className="panel-heading"> Attendees <span className="pull-right"><input type="text"/> </span></div>
-              <div className="panel-body nopadding">
-                <div className="col-md-4 att_groups nopadding">
-                </div>
-                <div className="col-md-8 att_members">
-                  <ul className="users_list">
-                    <li>
-                      <a href="#">
-                        <img src="/images/p_3.jpg" /><br />
-                        <div className="tooltiprefer">
-                          <span>Venu<br/>Rs.3000</span>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <img src="/images/p_34.jpg" /><br />
-                        <div className="tooltiprefer">
-                          <span>Ramya<br/>Rs.5000</span>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <img src="/images/p_13.jpg" /><br />
-                        <div className="tooltiprefer">
-                          <span>Sameer<br/>Rs.8000</span>
-                        </div>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <img src="/images/p_1.jpg" /><br />
-                        <div className="tooltiprefer">
-                          <span>Usha<br/>Rs.6000</span>
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className="form-group pull-left">
-              <div className="input_types">
-                <input id="radio6" type="radio" name="radio3" value="1"/><label htmlFor="radio6"><span><span></span></span>Make Public</label>
-              </div>
-              <div className="input_types">
-                <input id="radio7" type="radio" name="radio3" value="2"/><label htmlFor="radio7"><span><span></span></span>Make Private</label>
-              </div>
-              <br className="brclear"/>
-            </div>
+            {/*<div className="panel panel-default library-wrap">*/}
+              {/*<div className="panel-heading"> Attendees <span className="pull-right"><input type="text"/> </span></div>*/}
+              {/*<div className="panel-body nopadding">*/}
+                {/*<div className="col-md-4 att_groups nopadding">*/}
+                {/*</div>*/}
+                {/*<div className="col-md-8 att_members">*/}
+                  {/*<ul className="users_list">*/}
+                    {/*<li>*/}
+                      {/*<a href="#">*/}
+                        {/*<img src="/images/p_3.jpg" /><br />*/}
+                        {/*<div className="tooltiprefer">*/}
+                          {/*<span>Venu<br/>Rs.3000</span>*/}
+                        {/*</div>*/}
+                      {/*</a>*/}
+                    {/*</li>*/}
+                    {/*<li>*/}
+                      {/*<a href="#">*/}
+                        {/*<img src="/images/p_34.jpg" /><br />*/}
+                        {/*<div className="tooltiprefer">*/}
+                          {/*<span>Ramya<br/>Rs.5000</span>*/}
+                        {/*</div>*/}
+                      {/*</a>*/}
+                    {/*</li>*/}
+                    {/*<li>*/}
+                      {/*<a href="#">*/}
+                        {/*<img src="/images/p_13.jpg" /><br />*/}
+                        {/*<div className="tooltiprefer">*/}
+                          {/*<span>Sameer<br/>Rs.8000</span>*/}
+                        {/*</div>*/}
+                      {/*</a>*/}
+                    {/*</li>*/}
+                    {/*<li>*/}
+                      {/*<a href="#">*/}
+                        {/*<img src="/images/p_1.jpg" /><br />*/}
+                        {/*<div className="tooltiprefer">*/}
+                          {/*<span>Usha<br/>Rs.6000</span>*/}
+                        {/*</div>*/}
+                      {/*</a>*/}
+                    {/*</li>*/}
+                  {/*</ul>*/}
+                {/*</div>*/}
+              {/*</div>*/}
+            {/*</div>*/}
+            {/*<div className="form-group pull-left">*/}
+              {/*<div className="input_types">*/}
+                {/*<input id="radio6" type="radio" name="radio3" value="1"/><label htmlFor="radio6"><span><span></span></span>Make Public</label>*/}
+              {/*</div>*/}
+              {/*<div className="input_types">*/}
+                {/*<input id="radio7" type="radio" name="radio3" value="2"/><label htmlFor="radio7"><span><span></span></span>Make Private</label>*/}
+              {/*</div>*/}
+              {/*<br className="brclear"/>*/}
+            {/*</div>*/}
             <div className="pull-right">
               <div className="ml_btn large_btn">
                 <a href="#" className="save_btn" style={{'width': 'auto'}}>Total Amount Rs.{this.props.serviceBasicInfo.totalAmount}/-</a>
               </div>
             </div>
             <br className="brclear"/>
-            <div className="ml_btn btn_wrap">
-              <a href="" className="save_btn">Book</a> <a href="" className="cancel_btn">Cancel</a>
-            </div>
+            {/*<div className="ml_btn btn_wrap">*/}
+              {/*<div href="" className="save_btn" onClick={this.saveData.bind(this)}>Save</div> <a href="" className="cancel_btn">Cancel</a>*/}
+            {/*</div>*/}
           </div>
         </div>
       </div>

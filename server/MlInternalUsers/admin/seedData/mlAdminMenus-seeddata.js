@@ -503,7 +503,7 @@ if (Meteor.isServer) {
          * admin left nav users routes
          */
         {
-          "image": "/images/cluster_icon.png",
+          "image": "/images/users_icon.png",
           "link": "/admin/users/clusters",
           "name": "Users",
           "uniqueId": "users",
@@ -846,30 +846,30 @@ if (Meteor.isServer) {
                 }
               ]
             },
-            {
-              "link": "/admin/users/chapter",
-              "name": "Chapter",
-              "uniqueId": "users_chapter",
-              "isLink": true,
-              "isMenu": true,
-              "image": "",
-              "dynamicLink": true,
-              "dynamicLinkHandler": "",
-              "subMenusId": "users",
-              "subMenuMappingId": "users_chapterDetails"
-            },
-            {
-              "link": "/admin/users/community",
-              "name": "Community",
-              "uniqueId": "users_community",
-              "isLink": true,
-              "isMenu": true,
-              "image": "",
-              "dynamicLink": true,
-              "dynamicLinkHandler": "",
-              "subMenusId": "users",
-              "subMenuMappingId": "users_communityDetails"
-            },
+            // {
+            //   "link": "/admin/users/chapter",
+            //   "name": "Chapter",
+            //   "uniqueId": "users_chapter",
+            //   "isLink": true,
+            //   "isMenu": true,
+            //   "image": "",
+            //   "dynamicLink": true,
+            //   "dynamicLinkHandler": "",
+            //   "subMenusId": "users",
+            //   "subMenuMappingId": "users_chapterDetails"
+            // },
+            // {
+            //   "link": "/admin/users/community",
+            //   "name": "Community",
+            //   "uniqueId": "users_community",
+            //   "isLink": true,
+            //   "isMenu": true,
+            //   "image": "",
+            //   "dynamicLink": true,
+            //   "dynamicLinkHandler": "",
+            //   "subMenusId": "users",
+            //   "subMenuMappingId": "users_communityDetails"
+            // },
           ]
         },
         {
@@ -1391,7 +1391,7 @@ if (Meteor.isServer) {
          * routes for packages left nav
          * */
         {
-          "image" : "/images/settings_icon.png",
+          "image" : "/images/package-icon.png",
           "link" : "/admin/packages/officeList",
           "name" : "Packages",
           "uniqueId" : "packages",

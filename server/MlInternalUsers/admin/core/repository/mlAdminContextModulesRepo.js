@@ -1,6 +1,7 @@
 import _ from "lodash";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 import MlAdminContextQueryConstructor from "./mlAdminContextQueryConstructor";
+import mlNonMoolyaAccess from "../../../../../server/MlInternalUsers/admin/core/non-moolyaAccessControl/mlNonMoolyaAccess"
 MlChaptersTemp = new Mongo.Collection('mlChaptersTemp');
 
 let mergeQueries=function(userFilter,serverFilter)
@@ -737,10 +738,22 @@ let CoreModules = {
    * user module repo handler
    * */
   MlUsersRepo: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
-    /**type can be used to differ in the server query by using the same repo service*/
-    // var type = requestParams && requestParams.type ? requestParams.type : "";
+    var contextFieldMap = {
+        'clusterId': 'registrationInfo.clusterId',
+        'chapterId': 'registrationInfo.chapterId',
+        'subChapterId': 'registrationInfo.subChapterId',
+        'communityId': 'registrationInfo.communityId',
+        'communityCode': 'registrationInfo.registrationType'
+      };
+    var resultantQuery = MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery, contextFieldMap);
     /**construct context query with $in operator for each fields*/
-    var resultantQuery = MlAdminContextQueryConstructor.constructQuery(contextQuery, '$in');
+    resultantQuery = MlAdminContextQueryConstructor.constructQuery(resultantQuery, '$in');
+    var nonMoolyaContext = mlNonMoolyaAccess.getExternalUserCanSearch(context)
+    if (!_.isBoolean(nonMoolyaContext)){
+      resultantQuery['registrationInfo.subChapterId'] = {$in: nonMoolyaContext.subChapters}
+      resultantQuery['registrationInfo.chapterId'] = {$in: nonMoolyaContext.chapters}
+    }
+    // resultantQuery = MlAdminContextQueryConstructor.constructQuery(contextQuery, '$in');
     if (!fieldsProj.sort) {
       fieldsProj.sort = {'registrationInfo.registrationDate': -1}
     }

@@ -171,7 +171,7 @@
           fetchTaskDetails(name: String):Task
           fetchTaskDetailsAdmin(name: [String]): [Task]
           fetchTaskDetailsForServiceCard(profileId:String, serviceId: String):[ServiceTask]
-          fetchTaskDetailsForAdminServiceCard(profileId:String, serviceId: String):[ServiceTask]
+          fetchTaskDetailsForAdminServiceCard(profileId:String, serviceId: String, clusterId: String, chapterId: String, subChapterId: String, communityId: String):[ServiceTask]
           fetchTasksInBooking(id: [String]): [Task]
           fetchTaskForApointment(taskId: String): ServiceTask
           fetchActivitiesTeams(taskId: String, sessionId: String): [Activity]

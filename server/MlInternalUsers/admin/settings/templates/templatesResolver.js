@@ -58,7 +58,6 @@ MlResolver.MlQueryResolver['findTemplates'] = (obj, args, context, info) => {
   }
 }
 
-
 MlResolver.MlQueryResolver['fetchAssignedTemplate']=(obj, args, context, info) => {
   if (args.process&&args.subProcess&&args.stepCode) {
     //todo: conditions based on record id for steps like registration,portfolio

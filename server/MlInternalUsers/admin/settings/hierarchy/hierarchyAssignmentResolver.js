@@ -6,15 +6,33 @@ import _ from "lodash";
 MlResolver.MlQueryResolver['fetchAssignedRolesHierarchy'] = (obj, args, context, info) => {
   let response;
   let levelCode = "";
+  var subChapter = null;
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
   if (department && department.isActive) {
-    response= mlDBController.findOne('MlHierarchyAssignments', {
-      $and: [
-        {clusterId:args.clusterId},
-        {parentDepartment:args.departmentId},
-        {parentSubDepartment:args.subDepartmentId},
-        {"teamStructureAssignment.assignedLevel": {$in: [args.type]}}
-      ]},context)
+    if(args.subChapterId){
+      subChapter =  mlDBController.findOne("MlSubChapters", {"_id": args.subChapterId}, context)
+    }
+    if(!subChapter.isDefaultSubChapter){
+      response= mlDBController.findOne('MlHierarchyAssignments', {
+        $and: [
+          {clusterId:args.clusterId},
+          {parentDepartment:args.departmentId},
+          {parentSubDepartment:args.subDepartmentId},
+          {subChapterId:args.subChapterId},
+          {subChapterId:args.subChapterId},
+          {isDefaultSubChapter:false},
+          {"teamStructureAssignment.assignedLevel": {$in: [args.type]}}
+        ]},context)
+    }else{
+      response= mlDBController.findOne('MlHierarchyAssignments', {
+        $and: [
+          {clusterId:args.clusterId},
+          {parentDepartment:args.departmentId},
+          {parentSubDepartment:args.subDepartmentId},
+          {isDefaultSubChapter:true},
+          {"teamStructureAssignment.assignedLevel": {$in: [args.type]}}
+        ]},context)
+    }
      }
      if(response){
        let teamStructureAssignment = response.teamStructureAssignment;
@@ -44,7 +62,8 @@ MlResolver.MlQueryResolver['fetchFinalApprovalRole'] = (obj, args, context, info
       response = mlDBController.findOne("MlHierarchyAssignments", {
         "parentDepartment": args.departmentId,
         "parentSubDepartment": args.subDepartmentId,
-        "clusterId":args.clusterId
+        "clusterId":args.clusterId,
+        "subChapterId":args.subChapterId
       }, context)
     }
   }

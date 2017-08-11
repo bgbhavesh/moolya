@@ -5,6 +5,7 @@
 import MlAdminUserContext from './mlAdminUserContext'
 import { parse, buildASTSchema } from 'graphql';
 import MlResolver from '../commons/mlResolverDef';
+import mlNonMoolyaAccess from "../MlInternalUsers/admin/core/non-moolyaAccessControl/mlNonMoolyaAccess"
 
 var _ = require('lodash');
 
@@ -210,6 +211,16 @@ class MlAuthorization
           return false
 
         switch (moduleName){
+          case 'PORTFOLIO':{
+            if (userProfileDetails.isMoolya)
+              return this.validateChapterSubChapterCommunity(userProfileDetails, variables);
+            else if (!userProfileDetails.isMoolya) {
+              userProfileDetails.defaultSubChapters = mlNonMoolyaAccess.attachAssociatedSubChaptersContext(userProfileDetails.defaultSubChapters)
+              userProfileDetails.defaultChapters = mlNonMoolyaAccess.attachAssociatedChaptersContext(userProfileDetails.defaultChapters, userProfileDetails.defaultSubChapters)
+              return this.validateChapterSubChapterCommunity(userProfileDetails, variables);
+            }
+          }
+          break;
           case 'TAXATION':
           case 'CLUSTER':
             return true;
@@ -218,9 +229,9 @@ class MlAuthorization
           case 'COMMUNITY':
           case 'USERS':
           case 'REGISTRATION':
-          case 'PORTFOLIO':
           case 'TEMPLATEASSIGNMENT':
           case "INTERNALREQUESTS":
+          case "SERVICECARD":
           case "OFFICE":              /*adding office for others five admin */
           case "PROCESSSETUP":{
             return this.validateChapterSubChapterCommunity(userProfileDetails, variables);

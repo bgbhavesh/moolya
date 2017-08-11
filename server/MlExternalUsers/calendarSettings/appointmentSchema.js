@@ -134,6 +134,7 @@ let appointment=`
     userId: String
     profileId: String
     transId: String
+    orderId: String
   }
   
   type myAppointmentData {
@@ -152,7 +153,7 @@ let appointment=`
      fetchAllProfileAppointmentCounts: profileAppointment
      fetchProfileAppointmentCounts( profileId: String ): profileAppointment
      fetchServiceSeekerList(profileId: String!, serviceId: String): [serviceSeekerList]
-     fetchMyAppointment(profileId: String, day: Int, month: Int): [myAppointmentsResponse]
+     fetchMyAppointment(profileId: String!, day: Int, month: Int, year: Int): [myAppointmentsResponse]
   }
   
   type Mutation {

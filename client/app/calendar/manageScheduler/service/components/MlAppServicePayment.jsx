@@ -19,7 +19,7 @@ export default class MlAppServicePayment extends React.Component{
 
   componentDidMount() {
     let WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(250+$('.app_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight-(300+$('.app_header').outerHeight(true)));
     this.props.getServiceDetails();
     this.props.getRedirectServiceList(true);
   }
@@ -49,20 +49,20 @@ export default class MlAppServicePayment extends React.Component{
             <form>
               <div className="form-group">
                 <label>
-                  Tasks gross payable amount
-                  <input type="number" disabled value={servicePayment.tasksAmount ? parseFloat(servicePayment.tasksAmount).toFixed(2):''}  className="form-control" />
+                  Tasks gross payable amount&nbsp;<label>Rs</label>&nbsp;
+                  <input type="number" disabled value={servicePayment.tasksAmount ? parseFloat(servicePayment.tasksAmount).toFixed(2):''}  className="form-control inline_input medium_in" />
                 </label>
               </div>
               <div className="form-group">
                 <label>
-                  Task discount payable amount
-                  <input type="number" disabled value={servicePayment.tasksDiscount ? parseFloat(servicePayment.tasksDiscount).toFixed(2):''}  className="form-control" />
+                  Task discount payable amount&nbsp;<label>Rs</label>&nbsp;
+                  <input type="number" disabled value={servicePayment.tasksDiscount ? parseFloat(servicePayment.tasksDiscount).toFixed(2):''}  className="form-control inline_input medium_in" />
                 </label>
               </div>
               <div className="form-group">
                 <label>
-                  Task net payable amount
-                  <input type="number" disabled value={servicePayment.tasksDerived ? parseFloat(servicePayment.tasksAmount).toFixed(2):''}  className="form-control "/>
+                  Task net payable amount&nbsp;<label>Rs</label>&nbsp;
+                  <input type="number" disabled value={servicePayment.tasksDerived ? parseFloat(servicePayment.tasksAmount).toFixed(2):''}  className="form-control inline_input medium_in"/>
                 </label>
               </div>
               <div className="form-group switch_wrap switch_names inline_switch">
@@ -161,7 +161,7 @@ export default class MlAppServicePayment extends React.Component{
                 <br className="brclear"/>
               </div>
               <div className="form-group">
-                <label>Net payable amount<input className="form-control inline_input medium_in"
+                <label>Net payable amount&nbsp;<label>Rs</label>&nbsp;<input className="form-control inline_input medium_in"
                                                  value={this.props.finalAmount ? parseFloat(this.props.finalAmount).toFixed(2) : ''} disabled />
                 </label>
               </div>

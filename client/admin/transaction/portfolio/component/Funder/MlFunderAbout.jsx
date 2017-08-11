@@ -304,7 +304,6 @@ export default class MlFunderAbout extends React.Component {
                         {this.state.profilePic?<span className="triangle-topright"><FontAwesome name='minus-square' onClick={this.deleteProfilePic.bind(this)}/></span>: " "}
                       </div>
                       <div className="form-group">
-                        <div className="clearfix"></div>
                         <div className="fileUpload mlUpload_btn">
                           <span>Profile Pic</span>
                           <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />

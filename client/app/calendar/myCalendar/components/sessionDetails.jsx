@@ -3,10 +3,18 @@ import React, { Component } from 'react';
 import  Select from 'react-select';
 import ScrollArea from 'react-scrollbar';
 import FontAwesome from 'react-fontawesome';
+import { bookUserServiceCardAppointmentActionHandler } from '../../../calendar/myCalendar/actions/fetchMyCalendar'
 
 export default class SessionDetails extends Component {
   constructor(props) {
     super(props);
+  }
+
+  componentWillMount() {
+    let sessionId = this.props.sessionId;
+    let details =  this.props.details;
+    details.sessionId =  sessionId;
+    this.props.saveAction(details);
   }
 
   getUserList(team, activityIdx, teamIdx) {
@@ -37,6 +45,15 @@ export default class SessionDetails extends Component {
     }) : [];
     return userList;
   }
+
+  // saveDetails() {
+  //   let sessionId = this.props.sessionId;
+  //   let details =  this.props.details;
+  //   details.sessionId =  sessionId;
+  //   this.props.saveAction(details);
+  //   // this.saveInfo(details)
+  // }
+
 
   /**
    * Method :: getSessionList
@@ -115,9 +132,9 @@ export default class SessionDetails extends Component {
                                 <br className="brclear" />
                                 <div className="col-md-4">
                                   <br className="brclear" />
-                                  <div className="form-group">
+                                  <div className="form-group" >
                                     <span className="placeHolder active">Select team</span>
-                                    <select defaultValue="chooseTeam" value={ team.resourceType == 'office' && team.resourceId ? team.resourceId : team.resourceType } className="form-control" onChange={(evt)=>that.props.chooseTeamType(evt, activityIndex, indexAct)}>
+                                    <select defaultValue="chooseTeam" disabled value={ team.resourceType == 'office' && team.resourceId ? team.resourceId : team.resourceType } className="form-control" onChange={(evt)=>that.props.chooseTeamType(evt, activityIndex, indexAct)}>
                                       <option value="chooseTeam" disabled="disabled">Choose team Type</option>
                                       <option value="connections">My Connections</option>
                                       <option hidden={!isExternal} disabled={!isExternal} value="moolyaAdmins">Moolya Admins</option>
@@ -146,6 +163,10 @@ export default class SessionDetails extends Component {
           </div>
         </div>
         <br className="brclear"/>
+        <br className="brclear"/>
+        {/*<div className="ml_btn btn_wrap">*/}
+          {/*<div href="" className="save_btn" onClick={this.saveDetails.bind(this)}>Book</div> <a href="" className="cancel_btn">Cancel</a>*/}
+        {/*</div>*/}
       </ScrollArea>
     )
   }

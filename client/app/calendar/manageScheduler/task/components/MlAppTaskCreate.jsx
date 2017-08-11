@@ -37,7 +37,7 @@ export default class MlAppTaskCreate extends Component {
   componentDidMount() {
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight - (240 + $('.app_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight - (300 + $('.app_header').outerHeight(true)));
   }
 
   /**

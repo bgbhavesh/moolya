@@ -55,6 +55,7 @@ export default class MlTaskAppointmentBasicInfo extends Component {
       selectedTaskId,
       isTaskComponent,
       onChangeTask,
+      onChangeType,
       selectedTask } = this.props;
     return (
       <div className="step_form_wrap step1">
@@ -68,7 +69,7 @@ export default class MlTaskAppointmentBasicInfo extends Component {
                     <input type="checkbox"
                            value="1"
                            checked={isTaskComponent}
-                           onChange={() => onChangeSteps()} />
+                           onChange={() => onChangeType()} />
                     <div className="slider"></div>
                   </label>
                   <span className={isTaskComponent ? 'state_label acLabel' : 'state_label'}>Task</span>

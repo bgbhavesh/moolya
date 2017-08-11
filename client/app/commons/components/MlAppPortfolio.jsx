@@ -7,7 +7,7 @@ import {findComments} from "../../../commons/annotaterComments/findComments";
 import {createCommentActionHandler,resolveCommentActionHandler,reopenCommentActionHandler} from "../../../commons/annotaterComments/createComment";
 import moment from "moment";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-import {fetchIdeaByPortfolioId} from "../../ideators/actions/IdeaActionHandler";
+import {fetchIdeaByPortfolioId} from "../../ideators/actions/ideatorActionHandler";
 import MlLoader from "../../../commons/components/loader/loader";
 import InteractionsCounter from "../../commons/components/InteractionsCounter";
 import MlAppPortfolioAccordionContainer from "../components/MlAppPortfolioAccordion";
@@ -200,6 +200,7 @@ class MlAppPortfolio extends Component{
     }
     console.log(jsonData)
     const response = await updatePortfolioActionHandler(jsonData)
+    toastr.success(response.result)
     if(response){
       if(this.props.communityType == "Ideators" || this.props.communityType == "ideator"){
         let idea = this.state.idea
@@ -220,7 +221,7 @@ class MlAppPortfolio extends Component{
     let portfolioId = this.props.config;
     const response = await requestPortfolioForGoLive(portfolioId);
     if(response && response.success)
-      toastr.success("Go live requested to admin");
+      toastr.success(response.result);
     return response
   }
 

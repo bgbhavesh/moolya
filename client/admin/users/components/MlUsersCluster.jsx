@@ -34,10 +34,12 @@ export default class MlUsersCluster extends Component {
    * */
   async changeUrl(registrationId) {
     const response = await findUserPortfolioActionHandler(registrationId);
-    if (response && response.portfolioId) {
+    if (response && response.portfolioId && response.canAccess) {
       FlowRouter.go('/admin/users/' + registrationId + '/' + response.portfolioId + '/aboutuser')
-    } else
+    } else if (response && response.canAccess)
       FlowRouter.go('/admin/users/' + registrationId + '/' + 0 + '/aboutuser')
+    else
+      toastr.error('Not authorised')
   }
 
   /**

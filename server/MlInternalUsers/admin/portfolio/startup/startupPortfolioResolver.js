@@ -1,6 +1,7 @@
 import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
 import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
+import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 var _ = require('lodash')
 var extendify = require('extendify');
 var _ = require('lodash')
@@ -57,8 +58,9 @@ MlResolver.MlMutationResolver['updateStartupPortfolio'] = (obj, args, context, i
             if (ret) {
               let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId})
               MlEmailNotification.onPortfolioUpdate(details);
+              let startupalert =  MlAlertNotification.onPortfolioUpdates()
                 let code = 200;
-                let response = new MlRespPayload().successPayload("Updated Successfully", code);
+                let response = new MlRespPayload().successPayload(startupalert, code);
                 return response;
               }
           }
@@ -220,6 +222,20 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioLicenses'] = (obj, args, contex
 
   return {};
 }
+
+
+
+MlResolver.MlQueryResolver['fetchStartupPortfolioData'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('data')) {
+      return portfolio['data'];
+    }
+  }
+  return {};
+}
+
+
 
 MlResolver.MlQueryResolver['fetchStartupPortfolioCharts'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {

@@ -49,6 +49,7 @@ class MlServiceCardRepo{
     createServiceCardDefinition(service, context){
         var result;
         try {
+            var userDetails = ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'communityId', 'communityName'];
             var serviceCard                 = service;
             serviceCard["createdAt"]        = new Date();
             serviceCard['userId']           =  context.userId;
@@ -57,6 +58,12 @@ class MlServiceCardRepo{
             serviceCard["isApproved"]       =  false;
             serviceCard["isCurrentVersion"] =  true;
             orderNumberGenService.createServiceId(serviceCard);
+            var userExternalProfile = new MlUserContext().userProfileDetailsByProfileId(service.profileId);
+            if (userExternalProfile) {
+              userDetails.forEach((field) => {
+                serviceCard[field] = userExternalProfile[field] || null;
+              });
+            }
             result = mlDBController.insert('MlServiceCardDefinition' , serviceCard, context)
             if(!result){
               let code = 400;

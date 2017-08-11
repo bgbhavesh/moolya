@@ -16,6 +16,7 @@ import moment from "moment";
 import {
   getServiceBasedOnServiceId,
   fetchTaskDetailsForAdminServiceCard} from '../actions/mlFindService'
+import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
 var FontAwesome = require('react-fontawesome');
 
 export default class MlServiceCardsDetailsComponent extends React.Component {
@@ -89,6 +90,7 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
    * Desc :: Calls getServiceDetails with profileId as param
    */
   componentWillMount() {
+    this.loggedUserDetails = getAdminUserContext();
     this.getServiceDetails();
   }
 
@@ -100,7 +102,7 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
    */
 
  async getServiceDetails() {
-    let resp = await getServiceBasedOnServiceId(this.serviceId);
+    let resp = await getServiceBasedOnServiceId(this.serviceId, this.loggedUserDetails);
     if (resp) {
       this.constructServiceData(resp);
     }
@@ -114,7 +116,7 @@ export default class MlServiceCardsDetailsComponent extends React.Component {
   async constructServiceData(serviceDeatails) {
     let {serviceBasicInfo, finalAmount, prevFinalAmount, clusterData, serviceTask, service, tasks, serviceTermAndCondition, attachments, servicePayment, taxStatus, facilitationCharge} = this.state.data;
     let {data} = this.state;
-    const resp = await fetchTaskDetailsForAdminServiceCard(this.profileId, this.serviceId);
+    const resp = await fetchTaskDetailsForAdminServiceCard(this.profileId, this.serviceId, this.loggedUserDetails);
     serviceTask.serviceTaskDetails = resp;
     if (this.serviceId && serviceDeatails) {
       service = serviceDeatails;

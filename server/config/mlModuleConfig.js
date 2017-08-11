@@ -71,7 +71,7 @@ let modules = [
     'subscriptions',
     'interaction',
     'actions',
-    'serviceCards',
+    'serviceCard',
     'notificationtemplate'
   ];
 

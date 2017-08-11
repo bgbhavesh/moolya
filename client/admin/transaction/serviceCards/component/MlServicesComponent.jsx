@@ -10,13 +10,13 @@
  */
 import React, {Component} from "react";
 import _ from 'lodash';
-import MlAppScheduleHead from "../../../../app/calendar/manageScheduler/commons/components/MlAppScheduleHead";
 import StepZilla from "../../../../commons/components/stepzilla/StepZilla";
 import MlServiceCardStep1 from './MlServiceCardStep1';
 import MlServiceCardStep2 from './MlserviceCardStep2';
 import MlServiceCardStep3 from './MlServiceCardStep3';
 import MlServiceCardStep4 from './MlServiceCardStep4';
 import {updateServiceActionHandler} from '../actions/mlFindService';
+import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
 
 
 export default class MlServiceManageSchedule extends Component {

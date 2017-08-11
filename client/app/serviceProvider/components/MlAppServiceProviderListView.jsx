@@ -1,14 +1,17 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
-// import funderListRoutes from '../actions/funderListRoutes'
+import {fetchPortfolioActionHandler} from '../../ideators/actions/ideatorActionHandler'
 
 export default class MlAppServiceProviderListView extends Component {
 
-  viewDetails(portfolioId, e){
-    if(this.props.config.isExplore)
-      FlowRouter.go('/app/explore/serviceProvider/'+portfolioId)
-    else
-      FlowRouter.go('/app/serviceProvider/'+portfolioId)
+  async viewDetails(portfolioId, e) {
+    const response = await fetchPortfolioActionHandler(portfolioId);
+    if (this.props.config.isExplore && response && response.canAccess)
+      FlowRouter.go('/app/explore/serviceProvider/' + portfolioId)
+    else if (response && response.canAccess)
+      FlowRouter.go('/app/serviceProvider/' + portfolioId)
+    else if(response && !response.canAccess)
+      toastr.error('Portfolio not available for view')
   }
 
   render(){
@@ -16,7 +19,6 @@ export default class MlAppServiceProviderListView extends Component {
     const data=this.props.data||[];
     const list=  data.map((provider, idx) =>
       <div className="col-md-4 col-sm-4 col-lg-3" key={idx}>
-        {/*<a href={funderListRoutes.funderDetailsRoute("funder",funder.portfolioDetailsId)}>*/}
         <a href='' onClick={that.viewDetails.bind(that, provider.portfolioDetailsId)}>
           <div className="funders_list_block">
             {/*<div className="premium"><span>Starter</span></div>*/}

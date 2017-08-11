@@ -12,20 +12,24 @@ class MlNonMoolyaAccess {
     var curUserProfile = new MlAdminUserContext().userProfileDetails(context.userId);
     if (!curUserProfile.isMoolya) {
       var matchSubChapter = []
+      var matchChapter = []
       if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {
         let subChapterId = curUserProfile.defaultSubChapters ? curUserProfile.defaultSubChapters[0] : ''
         let subChapterDetails = mlDBController.findOne('MlSubChapters', {
           _id: subChapterId,
           isDefaultSubChapter: false
         }, context)
-        if (subChapterDetails && subChapterDetails.internalSubChapterAccess) {
+        if (subChapterDetails && subChapterDetails.internalSubChapterAccess && subChapterDetails.internalSubChapterAccess.externalUser && subChapterDetails.internalSubChapterAccess.externalUser.canSearch) {
           matchSubChapter = subChapterDetails.associatedSubChapters ? subChapterDetails.associatedSubChapters : []
-          let canSearch = subChapterDetails.internalSubChapterAccess.externalUser ? subChapterDetails.internalSubChapterAccess.externalUser.canSearch : false
-          if (canSearch)
-            matchSubChapter = _.concat(curUserProfile.defaultSubChapters, matchSubChapter)
+          matchSubChapter = _.concat(curUserProfile.defaultSubChapters, matchSubChapter)
+          matchChapter = this.attachAssociatedChaptersContext(curUserProfile.defaultChapters, matchSubChapter)
+        } else {
+          matchSubChapter = _.concat(curUserProfile.defaultSubChapters)
+          matchChapter = _.concat(curUserProfile.defaultChapters)
         }
       }
-      return matchSubChapter
+      var matchObj= {chapters:matchChapter,subChapters:matchSubChapter}
+      return matchObj
     } else
       return true
   }
@@ -33,6 +37,8 @@ class MlNonMoolyaAccess {
   /**
    * checking the condition for the external user only
    * */
+  //todo:// type merge in one function
+  /*****************merge the two ['registration && portfolio'] with registation **************************/
   canExternalUserView(payload, context) {
     var success = true
     var userType = mlDBController.findOne('users', {_id: context.userId}) || {}
@@ -47,13 +53,38 @@ class MlNonMoolyaAccess {
           isDefaultSubChapter: false
         }, context)
         if (subChapter && subChapter.internalSubChapterAccess && subChapter.internalSubChapterAccess.externalUser && subChapter.internalSubChapterAccess.externalUser.canView)
-          success =  true
+          success = true
         else
-          success =  false
+          success = false
       }
     }
     return success
   }
+
+  canExternalUserViewReg(payload, context) {
+    var success = true
+    var userType = mlDBController.findOne('users', {_id: context.userId}) || {}
+    if (userType && userType.profile && userType.profile.isInternaluser && !userType.profile.isMoolya) {
+      var curUserProfile = new MlAdminUserContext().userProfileDetails(context.userId);
+      let accessType = mlDBController.findOne('MlRegistration', {_id: payload}) || {}
+      let subChapterId = curUserProfile && curUserProfile.defaultSubChapters && curUserProfile.defaultSubChapters.length > 0 ? curUserProfile.defaultSubChapters[0] : ''
+      if (accessType && accessType.registrationInfo && (accessType.registrationInfo.subChapterId == subChapterId)) {
+        success = true
+      } else {
+        let subChapter = mlDBController.findOne('MlSubChapters', {
+          _id: subChapterId,
+          isDefaultSubChapter: false
+        }, context)
+        if (subChapter && subChapter.internalSubChapterAccess && subChapter.internalSubChapterAccess.externalUser && subChapter.internalSubChapterAccess.externalUser.canView)
+          success = true
+        else
+          success = false
+      }
+    }
+    return success
+  }
+
+  /*****************merge the two ['registration && portfolio'] with portfolio **************************/
 
   attachAssociatedSubChaptersContext(defaultSubChapters) {
     var subChapters = mlDBController.find('MlSubChapters', {_id: {$in: defaultSubChapters}}).fetch()

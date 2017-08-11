@@ -7,7 +7,7 @@ import {findComments} from "../../../commons/annotaterComments/findComments";
 import {createCommentActionHandler,resolveCommentActionHandler,reopenCommentActionHandler} from "../../../commons/annotaterComments/createComment";
 import moment from "moment";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-import {fetchIdeaByPortfolioId} from "../../ideators/actions/IdeaActionHandler";
+import {fetchIdeaByPortfolioId} from "../../ideators/actions/ideatorActionHandler";
 import MlLoader from "../../../commons/components/loader/loader";
 import InteractionsCounter from "../../commons/components/InteractionsCounter";
 import MlAppPortfolioAccordionContainer from "../components/MlAppPortfolioAccordion";

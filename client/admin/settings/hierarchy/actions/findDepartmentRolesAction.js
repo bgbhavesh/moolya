@@ -33,6 +33,6 @@ export async function findDeptRolesActionHandler(department,subDepartmentId,clus
     },
     forceFetch:true
   })
-  const id = result.data.fetchRolesForDepartment;
+  const id = result && result.data && result.data.fetchRolesForDepartment;
   return id
 }

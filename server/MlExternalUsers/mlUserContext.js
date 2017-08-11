@@ -26,6 +26,26 @@ class MlUserContext{
         return default_User_Profile;
     }
 
+    /**
+     * expecting ProfileId to be unique in External user profile Array
+     * */
+    userProfileDetailsByProfileId(profileId) {
+      let user_Profile = {};
+      check(profileId, String)
+      var user = Meteor.users.findOne({$and: [{'profile.isExternaluser': true}, {'profile.externalUserProfiles': {$elemMatch: {'profileId': profileId}}}]}) || {}
+      if (user && user.profile && user.profile.externalUserProfiles) {
+        let user_profiles = user.profile.externalUserProfiles;
+        user_Profile = _.find(user_profiles, {'profileId': profileId});
+        if (user_Profile) {
+          user_Profile.email = user.profile.email;
+          user_Profile.mobileNumber = user.profile.mobileNumber;
+          user_Profile.firstName = user.profile.firstName;
+          user_Profile.lastName = user.profile.lastName;
+        }
+      }
+      return user_Profile;
+    }
+
     getDefaultMenu(userId){
         check(userId,String);
         var  menu = ''

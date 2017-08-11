@@ -224,7 +224,7 @@ MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info
   let levelCode = args.levelCode
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
   var subChapterDetails = mlDBController.findOne("MlSubChapters", {"_id": args.subChapterId}, context) || {};
-
+  var chapterId = subChapterDetails.chapterId;
   var filteredRole = [];
 
   if (subChapterDetails.isDefaultSubChapter) {
@@ -360,64 +360,66 @@ MlResolver.MlQueryResolver['fetchRolesForHierarchy'] = (obj, args, context, info
     }
   }else{
 
-    var valueGet = mlDBController.find('MlRoles', {"$and": [{'_id': {"$nin": [args.currentRoleId]}},{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.subDepartment": {"$in": [args.subDepartmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"assignRoles.isActive": true}, {"isActive": true}]}, context).fetch()
+      var valueGet = mlDBController.find('MlRoles', {"$and": [{'_id': {"$nin": [args.currentRoleId]}},{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.subDepartment": {"$in": [args.subDepartmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"assignRoles.isActive": true}, {"isActive": true}]}, context).fetch()
 
-    if (levelCode == 'subChapter'){
-      // filteredRole = valueGet
-      _.each(valueGet, function (item, say) {
-        _.each(item.assignRoles, function (value, key) {
-          if((value.cluster == args.clusterId || value.cluster == 'all') && (value.subChapter == args.subChapterId)){                    // Added - Rajat
-            if (value.subChapter != 'all' && value.community == "all") {
-              if (item._id != args.currentRoleId && value.isActive) {
-                filteredRole.push(item)
-              }
-              if (value.chapter != "all" && value.subChapter == 'all' && value.community == "all" && item.isNonMoolyaAvailable) {
-                if (item._id!=args.currentRoleId &&value.isActive) {
-                  filteredRole.push(item)
-                }
-              }
-              if ((value.cluster == args.clusterId || value.cluster == 'all') && (value.chapter == "all") && (value.subChapter == "all") && (value.community == "all") && item.isNonMoolyaAvailable) {
-                if (item._id!=args.currentRoleId && value.isActive) {
-                  filteredRole.push(item)
-                }
-              }
-            }
-          }
-        })
+      if (levelCode == 'subChapter'){
+          _.each(valueGet, function (item, say) {
+              _.each(item.assignRoles, function (value, key) {
+                  if(value.cluster == args.clusterId || value.cluster == 'all'){
+                      if (value.subChapter != 'all' && value.community == "all" && value.subChapter == args.subChapterId) {
+                          if (item._id != args.currentRoleId && value.isActive) {
+                              filteredRole.push(item)
+                          }
+                      }
+                      if (value.chapter != "all" && value.subChapter == 'all' && value.community == "all") {
+                          if((value.chapter == chapterId) && item.isNonMoolyaAvailable) {
+                              if (item._id != args.currentRoleId && value.isActive) {
+                                  filteredRole.push(item)
+                              }
+                          }
+                      }
+                      if ((value.cluster == args.clusterId || value.cluster == 'all') && (value.chapter == "all") && (value.subChapter == "all") && (value.community == "all") && item.isNonMoolyaAvailable) {
+                          if (item._id!=args.currentRoleId && value.isActive) {
+                              filteredRole.push(item)
+                          }
+                      }
 
-      })
+                  }
+              })
 
-    }else if(levelCode == 'community'){
-      // var valueGet = mlDBController.find('MlRoles', {"$and": [{'_id': {"$nin": [args.currentRoleId]}},{"assignRoles.department": {"$in": [args.departmentId]}}, {"assignRoles.subDepartment": {"$in": [args.subDepartmentId]}}, {"assignRoles.cluster": {"$in": ["all", args.clusterId]}}, {"assignRoles.isActive": true}, {"isActive": true}]}, context).fetch()
-      // filteredRole = valueGet
-      _.each(valueGet, function (item, say) {
-        _.each(item.assignRoles, function (value, key) {
-          if((value.cluster == args.clusterId || value.cluster == 'all') && (value.subChapter == args.subChapterId)) {                    // Added - Rajat
-            if (value.community != "all") {
-              if (item._id != args.currentRoleId && value.isActive) {
-                filteredRole.push(item)
-              }
-            }
-            if (value.subChapter != 'all' && value.community == "all") {
-              if (item._id != args.currentRoleId && value.isActive) {
-                filteredRole.push(item)
-              }
-            }
-            if (value.chapter != "all" && value.subChapter == 'all' && value.community == "all" && item.isNonMoolyaAvailable) {
-              if (item._id!=args.currentRoleId &&value.isActive) {
-                filteredRole.push(item)
-              }
-            }
-            if ((value.cluster == args.clusterId || value.cluster == 'all') && (value.chapter == "all") && (value.subChapter == "all") && (value.community == "all") && item.isNonMoolyaAvailable) {
-              if (item._id!=args.currentRoleId && value.isActive) {
-                filteredRole.push(item)
-              }
-            }
-          }
-        })
+          })
 
-      })
-    }
+      }else if(levelCode == 'community'){
+          _.each(valueGet, function (item, say) {
+              _.each(item.assignRoles, function (value, key) {
+                  if(value.cluster == args.clusterId || value.cluster == 'all') {
+                      if (value.community != "all") {
+                          if (item._id != args.currentRoleId && value.isActive) {
+                              filteredRole.push(item)
+                          }
+                      }
+                      if (value.subChapter != 'all' && value.community == "all" && value.subChapter == args.subChapterId) {
+                          if (item._id != args.currentRoleId && value.isActive) {
+                              filteredRole.push(item)
+                          }
+                      }
+                      if (value.chapter != "all" && value.subChapter == 'all' && value.community == "all") {
+                          if((value.chapter == chapterId) && item.isNonMoolyaAvailable){
+                              if (item._id!=args.currentRoleId &&value.isActive) {
+                                  filteredRole.push(item)
+                              }
+                          }
+                      }
+                      if ((value.cluster == args.clusterId || value.cluster == 'all') && (value.chapter == "all") && (value.subChapter == "all") && (value.community == "all") && item.isNonMoolyaAvailable) {
+                          if (item._id!=args.currentRoleId && value.isActive) {
+                              filteredRole.push(item)
+                          }
+                      }
+                  }
+              })
+
+          })
+      }
   }
 
   /*

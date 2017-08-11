@@ -124,7 +124,7 @@ MlResolver.MlMutationResolver['updateActivity'] = (obj, args, context, info) => 
     args.Details.transactionId = oldActiveActivity.transactionId;
     args.Details.versions = oldActiveActivity.versions + 0.001;
     for(key in oldActiveActivity){
-      if ((typeof args.Details[key] === 'undefined' || args.Details[key] === null || !args.Details[key]) && key !== 'createdAt' && key !== '_id') {
+      if ((typeof args.Details[key] === 'undefined' || args.Details[key] === null) && key !== 'createdAt' && key !== '_id') {
         args.Details[key] = oldActiveActivity[key];
       }
     }

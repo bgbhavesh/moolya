@@ -12,6 +12,7 @@ import {initalizeFloatLabel} from "../../../commons/utils/formElemUtil";
 import {mlFieldValidations} from "../../../commons/validations/mlfieldValidation";
 import _underscore from "underscore";
 var FontAwesome = require('react-fontawesome');
+var diff = require('deep-diff').diff;
 
 export default class MlAppRegContactDetails extends React.Component {
   constructor(props) {
@@ -43,6 +44,29 @@ export default class MlAppRegContactDetails extends React.Component {
 
   componentWillUpdate(nextProps, nextState) {
 
+  }
+  isValidate(){
+    if(this.refs["contactNumber"].value){
+      return false
+    }else if(this.state.selectedNumberTypeLabel){
+      return false
+    }else{
+      let newArray = this.state.contactNumberArray || []
+      for (var i = 0, len = newArray.length; i < len; i++) {
+        let newObject = {
+          contactNumber : this.refs["contactNumber" + i].value,
+        }
+        let oldObject = {
+          contactNumber : newArray[i]&&newArray[i].contactNumber,
+        }
+        var differences = diff(oldObject, newObject);
+        var filteredObject = _underscore.where(differences, {kind: "E"});
+        if(filteredObject && filteredObject.length>0){
+          return false
+        }
+      }
+    }
+    return true
   }
 
   updateContactOptions(index, did, selectedValue, selObject, callback) {

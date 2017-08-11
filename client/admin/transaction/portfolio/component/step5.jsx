@@ -16,6 +16,7 @@ export default class Step5 extends React.Component{
       $('[data-toggle="tooltip"]').tooltip({container:'body'});
     });
   }
+
   render(){
     return (
       <div className="step_form_wrap step5">

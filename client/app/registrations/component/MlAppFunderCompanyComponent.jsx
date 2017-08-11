@@ -13,6 +13,8 @@ import MlAppActionComponent from "../../../app/commons/components/MlAppActionCom
 // import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
+var diff = require('deep-diff').diff;
+import _underscore from 'underscore'
 
 
 export default class MlAppFunderCompanyComponent extends React.Component {
@@ -139,6 +141,80 @@ export default class MlAppFunderCompanyComponent extends React.Component {
     $('#date-of-birth').toggleClass('rdtOpen')
   }
 
+  isValidated(){
+    let existingObject = this.props.registrationDetails || {}
+    let oldObject = {
+      userType              :   existingObject.userType?existingObject.userType:null,
+      companyName           :   existingObject.companyName?existingObject.companyName:null,
+      groupName             :   existingObject.groupName?existingObject.groupName:null,
+      companyWebsite        :   existingObject.companyWebsite?existingObject.companyWebsite:null,
+      companyEmail          :   existingObject.companyEmail?existingObject.companyEmail:null,
+      foundationDate        :   existingObject.foundationDate?existingObject.foundationDate:null,
+      headQuarterLocation   :   existingObject.headQuarterLocation?existingObject.headQuarterLocation:null,
+      branchLocations       :   existingObject.branchLocations?existingObject.branchLocations:null,
+      companytyp            :   existingObject.companytyp?existingObject.companytyp:null,
+      entityType            :   existingObject.entityType?existingObject.entityType:null,
+      businessType          :   existingObject.businessType?existingObject.businessType:null,
+      industry              :   existingObject.industry?existingObject.industry:null,
+      subDomain             :   existingObject.subDomain?existingObject.subDomain:null,
+      stageOfCompany        :   existingObject.stageOfCompany?existingObject.stageOfCompany:null,
+      subsidaryCompany      :   existingObject.selectedSubsidaryComapny?existingObject.selectedSubsidaryComapny:null,
+      registrationNumber    :   existingObject.registrationNumber?existingObject.registrationNumber:null,
+      isoAccrediationNumber :   existingObject.isoAccrediationNumber?existingObject.isoAccrediationNumber:null,
+      companyTurnOver       :   existingObject.companyTurnOver?existingObject.companyTurnOver:null,
+      partnerCompanies      :   existingObject.partnerCompanies?existingObject.partnerCompanies:null,
+      investors             :   existingObject.investors?existingObject.investors:null,
+      lookingFor            :   existingObject.lookingFor?existingObject.lookingFor:null,
+      companyCEOName        :   existingObject.companyCEOName?existingObject.companyCEOName:null,
+      //parentCompany         :   this.refs.parentCompany.value?this.refs.parentCompany.value:null,
+      companyManagement     :   existingObject.companyManagement?existingObject.companyManagement:null,
+      toatalEmployeeCount   :   existingObject.toatalEmployeeCount?existingObject.toatalEmployeeCount:null,
+      associatedCompanies   :   existingObject.associatedCompanies?existingObject.associatedCompanies:null,
+      investingFrom         :   existingObject.investingFrom?existingObject.investingFrom:null,
+      currency              :   existingObject.currency?existingObject.currency:null,
+      investmentAmount      :   existingObject.investmentAmount?existingObject.investmentAmount:null
+    }
+
+    let newObject = {
+      userType              :   this.state.selectedUserType?this.state.selectedUserType:null,
+      companyName           :   this.refs.companyName.value||null,
+      groupName             :   this.refs.groupName.value||null,
+      companyWebsite        :   this.refs.companyWebsite.value?this.refs.companyWebsite.value:null,
+      companyEmail          :   this.refs.companyEmail.value?this.refs.companyEmail.value:null,
+      foundationDate        :   this.state.foundationDate?this.state.foundationDate:null,
+      headQuarterLocation   :   this.state.selectedHeadquarter?this.state.selectedHeadquarter:null,
+      branchLocations       :   this.state.selectedBranches?this.state.selectedBranches:"",
+      companytyp            :   this.state.selectedTypeOfCompany?this.state.selectedTypeOfCompany:null,
+      entityType            :   this.state.selectedTypeOfEntity?this.state.selectedTypeOfEntity:null,
+      businessType          :   this.state.selectedTypeOfBusiness?this.state.selectedTypeOfBusiness:null,
+      industry              :   this.state.selectedTypeOfIndustry?this.state.selectedTypeOfIndustry:null,
+      subDomain             :   this.state.selectedSubDomain?this.state.selectedSubDomain:null,
+      stageOfCompany        :   this.state.selectedStageOfCompany?this.state.selectedStageOfCompany:null,
+      subsidaryCompany      :   this.state.selectedSubsidaryComapny?this.state.selectedSubsidaryComapny:null,
+      registrationNumber    :   this.refs.registrationNumber.value?this.refs.registrationNumber.value:null,
+      isoAccrediationNumber :   this.refs.isoAccrediationNumber.value?this.refs.isoAccrediationNumber.value:null,
+      companyTurnOver       :   this.refs.companyTurnOver.value?this.refs.companyTurnOver.value:null,
+      partnerCompanies      :   this.refs.partnerCompanies.value?this.refs.partnerCompanies.value:null,
+      investors             :   this.refs.investors.value?this.refs.investors.value:null,
+      lookingFor            :   this.state.selectedLookingFor?this.state.selectedLookingFor:null,
+      companyCEOName        :   this.refs.companyCEOName.value?this.refs.companyCEOName.value:null,
+      //parentCompany         :   this.refs.parentCompany.value?this.refs.parentCompany.value:null,
+      companyManagement     :   this.refs.companyManagement.value?this.refs.companyManagement.value:null,
+      toatalEmployeeCount   :   this.refs.toatalEmployeeCount.value?this.refs.toatalEmployeeCount.value:null,
+      associatedCompanies   :   this.refs.associatedCompanies.value?this.refs.associatedCompanies.value:null,
+      investingFrom         :   this.state.investingFrom?this.state.investingFrom:null,
+      currency              :   this.state.currency?this.state.currency:null,
+      investmentAmount      :   this.refs.investmentAmount.value?this.refs.investmentAmount.value:null
+    }
+    var differences = diff(oldObject, newObject);
+
+    var filteredObject = _underscore.where(differences, {kind: "E"});
+    if(filteredObject && filteredObject.length>0){
+      return false
+    }else{
+      return true
+    }
+  }
 
   async  updateregistration() {
     let Details = {

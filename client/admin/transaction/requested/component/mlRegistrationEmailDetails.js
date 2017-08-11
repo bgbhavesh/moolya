@@ -15,6 +15,7 @@ import update from 'immutability-helper';
 import _ from 'lodash'
 import _underscore from 'underscore'
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+var diff = require('deep-diff').diff;
 export default class EmailDetails extends React.Component{
   constructor(props){
     super(props);
@@ -54,6 +55,32 @@ export default class EmailDetails extends React.Component{
     this.findRegistration();
     this.setState({activeTab : ""});
   }
+
+
+  isValidate(){
+    if(this.refs["emailId"].value){
+      return false
+    }else if(this.state.selectedEmailTypeValue){
+      return false
+    }else{
+      let newArray = this.state.emailDetails || []
+      for (var i = 0, len = newArray.length; i < len; i++) {
+        let newObject = {
+          emailId : this.refs["emailId" + i].value,
+        }
+        let oldObject = {
+          emailId : newArray[i]&&newArray[i].emailId,
+        }
+        var differences = diff(oldObject, newObject);
+        var filteredObject = _underscore.where(differences, {kind: "E"});
+        if(filteredObject && filteredObject.length>0){
+          return false
+        }
+      }
+    }
+    return true
+  }
+
 
 
   async onSavingEmailDetails(index,value){

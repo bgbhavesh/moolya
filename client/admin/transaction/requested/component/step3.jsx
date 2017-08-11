@@ -22,8 +22,6 @@ export default class Step3 extends React.Component{
       contactNumber:[{numberType: '',countryCode:'',contactNumber:''},{numberType: 'Test',countryCode:'',contactNumber:''}],
       registerId : this.props.registrationId,
       registrationDetails:this.props.registrationData,
-
-
     }
 
     return this;
@@ -47,6 +45,16 @@ export default class Step3 extends React.Component{
 
     const resp=this.props.getRegistrationContactDetails();
     this.setState({'registrationDetails':this.props.registrationData});
+  }
+  isValidated(){
+    let contactDetailsValidate = this.refs.contactDetailsComponent.isValidate()
+    let emailDetailsValidate = this.refs.emailDetailsComponent.isValidate()
+    let addressDetailsValidate = this.refs.addressDetailsComponent.isValidate()
+    if(contactDetailsValidate&&emailDetailsValidate&&addressDetailsValidate){
+      return true
+    }else{
+      return false
+    }
   }
 
   render(){
@@ -83,13 +91,13 @@ export default class Step3 extends React.Component{
                       Contact Number
                     </div>
 
-                    <ContactDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails} registrationDetails={this.props.getRegistrationContactDetails} clusterId={this.props.clusterId}/>
+                    <ContactDetails ref={'contactDetailsComponent'} registerId={this.state.registerId} registrationInfo={this.state.registrationDetails} registrationDetails={this.props.getRegistrationContactDetails} clusterId={this.props.clusterId}/>
                   </div>
                   <div className="panel panel-default new_profile_tabs">
                     <div className="panel-heading">
                       Email Id
                     </div>
-                    <EmailDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails} registrationDetails={this.props.getRegistrationContactDetails} clusterId={this.props.clusterId}/>
+                    <EmailDetails ref={'emailDetailsComponent'} registerId={this.state.registerId} registrationInfo={this.state.registrationDetails} registrationDetails={this.props.getRegistrationContactDetails} clusterId={this.props.clusterId}/>
                   </div>
                 </form>
               </ScrollArea>
@@ -110,7 +118,7 @@ export default class Step3 extends React.Component{
                   <div className="panel-heading">
                     Address
                   </div>
-                  <AddressDetails registerId={this.state.registerId} getRegistrationContactInfo={this.getRegistrationContactInfo.bind(this)} registrationInfo={this.state.registrationDetails} registrationDetails={this.props.getRegistrationContactDetails} clusterId={this.props.clusterId}/>
+                  <AddressDetails ref={'addressDetailsComponent'} registerId={this.state.registerId} getRegistrationContactInfo={this.getRegistrationContactInfo.bind(this)} registrationInfo={this.state.registrationDetails} registrationDetails={this.props.getRegistrationContactDetails} clusterId={this.props.clusterId}/>
                 </div>
               </form>
               </ScrollArea>

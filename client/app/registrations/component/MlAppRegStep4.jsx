@@ -16,6 +16,8 @@ import MlLoader from "../../../commons/components/loader/loader";
 import _underscore from "underscore";
 // import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 var FontAwesome = require('react-fontawesome');
+var diff = require('deep-diff').diff;
+
 
 export default class MlAppRegStep4 extends React.Component {
   constructor(props) {
@@ -130,6 +132,30 @@ export default class MlAppRegStep4 extends React.Component {
     /*if(!this.compareQueryOptions(this.props.registrationData.socialLinksInfo,nextProps.registrationInfo.socialLinksInfo)){*/
     this.setState({loading: false, socialLinkArray: nextProps.registrationData.socialLinksInfo || []});
     //}
+  }
+
+  isValidated(){
+    if(this.refs["socialLinkTypeUrl"].value){
+      return false
+    }else if(this.state.selectedSocialLinkLabel){
+      return false
+    }else{
+      let newArray = this.state.socialLinkArray || []
+      for (var i = 0, len = newArray.length; i < len; i++) {
+        let newObject = {
+          socialLinkUrl : this.refs["socialLinkTypeUrl" + i].value,
+        }
+        let oldObject = {
+          socialLinkUrl : newArray[i]&&newArray[i].socialLinkUrl,
+        }
+        var differences = diff(oldObject, newObject);
+        var filteredObject = _underscore.where(differences, {kind: "E"});
+        if(filteredObject && filteredObject.length>0){
+          return false
+        }
+      }
+    }
+    return true
   }
 
   async onSavingSocialLink(index, value) {

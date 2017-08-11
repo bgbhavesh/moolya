@@ -11,6 +11,8 @@ import {updateRegistrationActionHandler} from '../actions/updateRegistration'
 import Datetime from "react-datetime";
 import moment from "moment";
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+var diff = require('deep-diff').diff;
+import _underscore from 'underscore'
 
 export default class Individual extends React.Component{
   constructor(props){
@@ -29,15 +31,15 @@ export default class Individual extends React.Component{
       employmentStatus:null,
       registrationId:'',
       registrationDetails:'',
-      foundationDate:'',
-      dateOfBirth:'',
-      employmentDate:'',
+      foundationDate:null,
+      dateOfBirth:null,
+      employmentDate:null,
       //identity:'',
-      title:'',
-      gender:'',
-      citizenships:'',
+      title:null,
+      gender:null,
+      citizenships:null,
       investingFrom:null,
-      investmentAmount:'',
+      investmentAmount:null,
       currency:null
       // profession:''
 
@@ -87,7 +89,6 @@ export default class Individual extends React.Component{
     initalizeFloatLabel();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
-    this.props.showPromptAlert(true)
   }
   /* optionsBySelectUserType(value){
    this.setState({selectedUserType:value})
@@ -119,6 +120,59 @@ export default class Individual extends React.Component{
 
   optionsBySelectInvestingFrom(val){
     this.setState({investingFrom:val.value})
+  }
+  isValidated(){
+    let existingObject = this.props.registrationDetails || {}
+    let oldObject = {
+      title: existingObject.title ? existingObject.title:null,
+      firstName: existingObject.firstName?existingObject.firstName:null,
+      middleName: existingObject.middleName?existingObject.middleName:null,
+      lastName: existingObject.lastName?existingObject.lastName:null,
+      displayName: existingObject.displayName?existingObject.displayName:null,
+      dateOfBirth: existingObject.dateOfBirth?existingObject.dateOfBirth:null,
+      gender: existingObject.gender?existingObject.gender:null,
+      citizenships: existingObject.citizenships?existingObject.citizenships:null,
+      qualification: existingObject.qualification?existingObject.qualification:null,
+      employmentStatus: existingObject.employmentStatus?existingObject.employmentStatus:null,
+      professionalTag: existingObject.professionalTag?existingObject.professionalTag:null,
+      industry:   existingObject.industry?existingObject.industry:null,
+      profession: existingObject.profession?existingObject.profession:null,
+      employerName: existingObject.employerName?existingObject.employerName:null,
+      employerWebsite: existingObject.employerWebsite?existingObject.employerWebsite:null,
+      employmentDate: existingObject.employmentDate?existingObject.employmentDate:null,
+      investingFrom : existingObject.investingFrom?existingObject.investingFrom:null,
+      currency : existingObject.currency?existingObject.currency:null,
+      investmentAmount : existingObject.investmentAmount?existingObject.investmentAmount:null
+    }
+    let newObject = {
+      title: this.state.title ? this.state.title:null,
+      firstName: this.refs.firstName.value?this.refs.firstName.value:null,
+      middleName: this.refs.middleName.value?this.refs.middleName.value:null,
+      lastName: this.refs.lastName.value?this.refs.lastName.value:null,
+      displayName: this.refs.displayName.value?this.refs.displayName.value:null,
+      dateOfBirth: this.state.dateOfBirth?this.state.dateOfBirth:null,
+      gender: this.state.gender?this.state.gender:null,
+      citizenships: this.state.citizenships?this.state.citizenships:null,
+      qualification: this.refs.qualification.value?this.refs.qualification.value:null,
+      employmentStatus: this.state.employmentStatus?this.state.employmentStatus:null,
+      professionalTag: this.refs.professionalTag.value?this.refs.professionalTag.value:null,
+      industry: this.state.selectedTypeOfIndustry?this.state.selectedTypeOfIndustry:null,
+      profession: this.state.profession?this.state.profession:null,
+      employerName: this.refs.employerName.value?this.refs.employerName.value:null,
+      employerWebsite: this.refs.employerWebsite.value?this.refs.employerWebsite.value:null,
+      employmentDate: this.state.employmentDate?this.state.employmentDate:null,
+      investingFrom : this.state.investingFrom?this.state.investingFrom:null,
+      currency : this.state.currency?this.state.currency:null,
+      investmentAmount : this.refs.investmentAmount.value?this.refs.investmentAmount.value:null
+    }
+    var differences = diff(oldObject, newObject);
+    var filteredObject = _underscore.where(differences, {kind: "E"});
+    //console.log(differences)
+    if(filteredObject && filteredObject.length>0){
+      return false
+    }else{
+      return true
+    }
   }
   async  updateregistration() {
     let Details=null;
@@ -152,7 +206,6 @@ export default class Individual extends React.Component{
     const response = await updateRegistrationActionHandler(Details);
     if(response.success){
       this.props.getRegistrationDetails();
-      this.props.showPromptAlert(false)
       toastr.success("Saved Successfully");
     }else{
       toastr.error(response.result);

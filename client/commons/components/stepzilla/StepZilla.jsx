@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Confirm from '../../../commons/components/confirmcomponent/Confirm';
+import {  Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 export default class StepZilla extends Component {
     constructor(props) {
@@ -12,7 +13,9 @@ export default class StepZilla extends Component {
             compState: this.props.startAtStep,
             navState: this._getNavStates(0, this.props.steps.length),
             nextStepText: 'Next',
-            finishStepText:'Save'
+            finishStepText:'Save',
+            modalOpen: false,
+            prevButton:false
         };
 
         this.hidden = {
@@ -77,13 +80,16 @@ export default class StepZilla extends Component {
     }
 
     _setNavState(next) {
+
         this.setState({navState: this._getNavStates(next, this.props.steps.length)});
 
         if (next < this.props.steps.length) {
-            this.setState({compState: next});
+          this.setState({compState: next});
         }
 
         this._checkNavState(next);
+
+
     }
 
     // handles keydown on enter being pressed in any Child component input area. in this case it goes to the next
@@ -109,7 +115,7 @@ export default class StepZilla extends Component {
 
                 return;
             }
-
+            let validate = this.refs.activeComponent.isValidated()
             if (this.props.dontValidate || typeof this.refs.activeComponent.isValidated == 'undefined' || this.refs.activeComponent.isValidated() ) {
                 if (evt.currentTarget.value === (this.props.steps.length - 1) &&
                     this.state.compState === (this.props.steps.length - 1)) {
@@ -118,14 +124,24 @@ export default class StepZilla extends Component {
                 else {
                     this._setNavState(evt.currentTarget.value);
                 }
+            }else if(!validate){
+              this.setState({
+                modalOpen: true,
+              });
             }
         }
     }
 
   _next() {
     // if its a form component, it should have implemeted a public isValidated class. If not then continue
+    let validate = this.refs.activeComponent.isValidated()
 
-    if (this.props.dontValidate || typeof this.refs.activeComponent.isValidated == 'undefined' || this.refs.activeComponent.isValidated()) {
+    if(!validate){
+      this.setState({
+        modalOpen: true,
+        prevButton:false
+      });
+    }else if (this.props.dontValidate || validate) {
       this._setNavState(this.state.compState + 1);
     }
   }
@@ -139,9 +155,18 @@ export default class StepZilla extends Component {
     }
 
     _previous() {
+      let validate = this.refs.activeComponent.isValidated()
+      if(!validate){
+        this.setState({
+          modalOpen: true,
+          prevButton:true
+        });
+      }else if (this.props.dontValidate || validate) {
         if (this.state.compState > 0) {
-            this._setNavState(this.state.compState - 1);
+          this._setNavState(this.state.compState - 1);
         }
+      }
+
     }
 
     _getClassName(className, i){
@@ -164,19 +189,35 @@ export default class StepZilla extends Component {
         ));
     }
 
-  /*
-  * Triggered in registration step wizard
-  * custom prompt will be thrown if user want to stay in that page
-  * */
-  onConfirm() { //on click of okay
-    // Preform your action.
-    this._setNavState(this.state.compState+1);
+    /*
+    * Triggered in registration step wizard
+    * custom prompt will be thrown if user want to stay in that page
+    * */
+    onConfirm() { //on click of okay
+      // Preform your action.
+      if(this.state.prevButton){
+        this._setNavState(this.state.compState-1);
+      }else{
+        this._setNavState(this.state.compState+1);
+      }
 
-  }
-  onCancel() {  //on click of cancel
-    // Preform your action.
-    this._setNavState(this.state.compState);
-  }
+      this.setState({
+        modalOpen: false
+      });
+
+    }
+    onCancel() {  //on click of cancel
+      // Preform your action.
+      //this._setNavState(this.state.compState);
+      this.setState({
+        modalOpen: false
+      });
+    }
+    onClose(){
+      this.setState({
+        modalOpen: false
+      });
+    }
 
     render() {
         // clone the step component dynamically and tag it as activeComponent so we can validate it on next. also bind the jumpToStep piping method
@@ -189,6 +230,17 @@ export default class StepZilla extends Component {
 
 
         return (
+          <div>
+            <Modal isOpen={this.state.modalOpen} onHide={this.onClose}>
+              <ModalHeader>Title</ModalHeader>
+              <ModalBody>
+                <div>Changes made won't save.Do you want to continue?</div>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="primary" onClick={this.onConfirm.bind(this)}>Ok</Button>{' '}
+                <Button color="secondary" onClick={this.onCancel.bind(this)}>Cancel</Button>
+              </ModalFooter>
+            </Modal>
             <div className="multi-step full-height" onKeyDown={this.handleKeyDown}>
 
                 {
@@ -202,24 +254,7 @@ export default class StepZilla extends Component {
                 {compToRender}
 
                 <div style={this.props.showNavigation ? {} : this.hidden} className="footer-buttons">
-                  {this.props.showConfirm?<div>
-                    <Confirm
-                    onConfirm={this.onConfirm.bind(this)}
-                    onCancel = {this.onCancel.bind(this)}
-                    cancel = {true}
-                    body="Changes made won't save.Do you want to continue??"
-                    confirmText="Ok"
-                    title="Alert">
-                    <button style={this.state.showNextBtn ? {} : this.hidden}
-                            className="step_form_btn pull-right"
-                            onClick={this.next}>{this.state.nextStepText}</button>
-                    </Confirm>
-                    <button style={this.state.showPreviousBtn ? {} : this.hidden}
-                                     className="step_form_btn pull-left"
-                                     onClick={this.previous}>Prev</button>
-                    <button style={this.state.showFinishBtn ? {} : this.hidden}
-                            className="step_form_btn pull-right"
-                            onClick={this.finish}>{this.state.finishStepText}</button></div>:<div>
+                 <div>
                     <button style={this.state.showNextBtn ? {} : this.hidden}
                                       className="step_form_btn pull-right"
                                       onClick={this.next}>{this.state.nextStepText}</button>
@@ -228,12 +263,13 @@ export default class StepZilla extends Component {
                     onClick={this.previous}>Prev</button>
                     <button style={this.state.showFinishBtn ? {} : this.hidden}
                     className="step_form_btn pull-right"
-                            onClick={this.finish}>{this.state.finishStepText}</button></div>}
+                            onClick={this.finish}>{this.state.finishStepText}</button></div>
 
 
 
                 </div>
             </div>
+          </div>
         );
     }
 }

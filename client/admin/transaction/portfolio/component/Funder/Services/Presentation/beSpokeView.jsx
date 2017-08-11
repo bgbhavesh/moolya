@@ -107,7 +107,6 @@ export default class  BeSpokeView extends Component {
                   <div className="form-group">
                     <Select
                       className="form-field-name"
-                      options={frequencyOptions}
                       placeholder="Frequency"
                       defaultValue={ this.props.data ? this.props.data.sessionFrequency : "" }
                       value={ this.props.data ? this.props.data.sessionFrequency : "" }

@@ -210,6 +210,10 @@ export default class MlAppStep1ExternalUser extends Component {
 
   }
 
+  isValidated(){
+    return true
+  }
+
   render() {
 
     let countryQuery = gql`query{

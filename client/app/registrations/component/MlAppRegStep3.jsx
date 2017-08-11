@@ -100,6 +100,17 @@ export default class MlAppRegStep3 extends React.Component {
     this.setState({'registrationDetails': this.props.registrationData});
   }
 
+  isValidated(){
+    let contactDetailsValidate = this.refs.contactDetailsComponent.isValidate()
+    let emailDetailsValidate = this.refs.emailDetailsComponent.isValidate()
+    let addressDetailsValidate = this.refs.addressDetailsComponent.isValidate()
+    if(contactDetailsValidate&&emailDetailsValidate&&addressDetailsValidate){
+      return true
+    }else{
+      return false
+    }
+  }
+
   render() {
     let MlActionConfig
     let userType = this.props.userType;
@@ -142,7 +153,7 @@ export default class MlAppRegStep3 extends React.Component {
                     Contact Number
                   </div>
 
-                  <MlAppRegContactDetails registerId={this.state.registerId}
+                  <MlAppRegContactDetails ref={"contactDetailsComponent"} registerId={this.state.registerId}
                                           registrationInfo={this.state.registrationDetails}
                                           registrationDetails={this.props.getRegistrationContactDetails}
                                           clusterId={this.props.clusterId}/>
@@ -151,7 +162,7 @@ export default class MlAppRegStep3 extends React.Component {
                   <div className="panel-heading">
                     Email Id
                   </div>
-                  <MlAppRegEmailDetails registerId={this.state.registerId}
+                  <MlAppRegEmailDetails ref={"emailDetailsComponent"} registerId={this.state.registerId}
                                         registrationInfo={this.state.registrationDetails}
                                         registrationDetails={this.props.getRegistrationContactDetails}
                                         clusterId={this.props.clusterId}/>
@@ -170,7 +181,7 @@ export default class MlAppRegStep3 extends React.Component {
                   <div className="panel-heading">
                     Address
                   </div>
-                  <MlAppRegAddressDetails registerId={this.state.registerId}
+                  <MlAppRegAddressDetails ref={"addressDetailsComponent"} registerId={this.state.registerId}
                                           getRegistrationContactInfo={this.getRegistrationContactInfo.bind(this)}
                                           registrationInfo={this.state.registrationDetails}
                                           registrationDetails={this.props.getRegistrationContactDetails}

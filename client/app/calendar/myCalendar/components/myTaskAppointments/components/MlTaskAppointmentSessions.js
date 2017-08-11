@@ -64,7 +64,7 @@ export default class MlTaskAppointmentSessions extends Component{
       values.forEach(function (teams, index) {
         let teamsInfo = teams.map(function (users, userIndex) {
           let team = activities[index].teams[userIndex];
-          let usersInfo = users.map(function (user) {
+          let usersInfo = (users && users.length > 0) ? users.map(function (user) {
             let userInfo = {
               name: user.name,
               profileId: user.profileId,
@@ -77,7 +77,7 @@ export default class MlTaskAppointmentSessions extends Component{
               userInfo.isMandatory = isFind.isMandatory;
             }
             return userInfo;
-          });
+          }): [];
           activities[index].teams[userIndex].users = usersInfo;
           return usersInfo;
         });
@@ -214,9 +214,8 @@ export default class MlTaskAppointmentSessions extends Component{
     let {selectedTaskId} = this.props;
     const resp = await fetchActivitiesTeamsActionHandler(selectedTaskId, sessionId);
     if(resp){
-      this.getUsers(resp, index);
+      await this.getUsers(resp, index, duration);
     }
-    await this.getUsers(resp, index, duration);
     this.props.saveDetails('session', sessionId);
   }
 

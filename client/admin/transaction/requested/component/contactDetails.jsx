@@ -18,6 +18,8 @@ import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import _ from 'lodash'
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import _underscore from 'underscore'
+var diff = require('deep-diff').diff;
+
 
 export default class ContactDetails extends React.Component{
   constructor(props){
@@ -30,7 +32,8 @@ export default class ContactDetails extends React.Component{
       contactNumberArray : this.props.registrationInfo.contactInfo|| [],
       activeTab : "active",
       countryDetails : null,
-      loading:true
+      loading:true,
+      changedData : []
 
     }
 
@@ -67,6 +70,7 @@ export default class ContactDetails extends React.Component{
     }
 
   }
+
    async onSavingContact(index,value){
      let detailsType = "CONTACTTYPE";
      let registerid = this.props.registerId;
@@ -222,6 +226,31 @@ export default class ContactDetails extends React.Component{
 
 
 
+  isValidate(){
+   if(this.refs["contactNumber"].value){
+     return false
+   }else if(this.state.selectedNumberTypeLabel){
+     return false
+   }else{
+     let newArray = this.state.contactNumberArray || []
+     for (var i = 0, len = newArray.length; i < len; i++) {
+       let newObject = {
+         contactNumber : this.refs["contactNumber" + i].value,
+       }
+       let oldObject = {
+         contactNumber : newArray[i]&&newArray[i].contactNumber,
+       }
+       var differences = diff(oldObject, newObject);
+       var filteredObject = _underscore.where(differences, {kind: "E"});
+       if(filteredObject && filteredObject.length>0){
+         return false
+       }
+     }
+   }
+   return true
+  }
+
+
 
 
   render(){
@@ -274,7 +303,9 @@ export default class ContactDetails extends React.Component{
                 <input type="text" placeholder="Enter Country Code" defaultValue={defaultCountryCode} ref={'countryCode'} className="form-control float-label" id="" disabled={true}/>
               </div>
               <div className="form-group mandatory">
-                <input type="text" ref={"contactNumber"} placeholder="Enter Number" id="phoneNumber" className="form-control float-label"data-required={true} data-errMsg="Phone Number is required"/>
+                <input type="text" ref={"contactNumber"} placeholder="Enter Number" id="phoneNumber"
+                      className="form-control float-label"data-required={true}
+                      data-errMsg="Phone Number is required"/>
               </div>
               <div className="ml_icon_btn">
                 <a href="#"  onClick={this.onSavingContact.bind(this)}  className="save_btn" ><span
@@ -289,15 +320,16 @@ export default class ContactDetails extends React.Component{
                                 className="form-control float-label" selectedValue={options.numberType}
                                 valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={numberTypeQuery}
                                 queryOptions={numberTypeOption} onSelect={that.updateContactOptions.bind(that,key)}
-                                isDynamic={true} data-required={true} data-errMsg="Number Type is required"/>
+                                isDynamic={true} data-required={true} data-errMsg="Number Type is required"
+                                />
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Enter Country Code" ref={'countryCode'+key} defaultValue={countryPhoneCode} valueKey={countryPhoneCode}
-                         className="form-control float-label" id="" disabled={true}/>
+                         className="form-control float-label" id="" disabled={true} />
                 </div>
                 <div className="form-group mandatory">
                   <input type="text" ref={'contactNumber'+key} placeholder="Enter Number"  id="phoneNumber" defaultValue={options.contactNumber}
-                         className="form-control float-label" data-required={true} data-errMsg="Number is required"/>
+                         className="form-control float-label" data-required={true} data-errMsg="Number is required" />
                 </div>
                 <div className="ml_icon_btn">
                   <a href="#" onClick={that.onEditingContact.bind(that,key)} className="save_btn"><span

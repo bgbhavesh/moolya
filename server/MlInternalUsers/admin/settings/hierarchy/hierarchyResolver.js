@@ -80,7 +80,8 @@ MlResolver.MlQueryResolver['fetchRolesForDepartment'] = (obj, args, context, inf
     hirarchyQuery = {
       clusterId: args.clusterId,
       parentDepartment: args.departmentId,
-      parentSubDepartment: args.subDepartmentId
+      parentSubDepartment: args.subDepartmentId,
+      isDefaultSubChapter: subChapterDetails.isDefaultSubChapter
     }
   } else if (!subChapterDetails.isDefaultSubChapter) {
     hirarchyQuery = {
@@ -111,7 +112,7 @@ MlResolver.MlQueryResolver['fetchRolesForDepartment'] = (obj, args, context, inf
               subDepartment: args.subDepartmentId,
             }
           }
-        }, {"isActive": true}]
+        }, {"isActive": true}, {"roleType" : "moolya"}]
       }
     } else if (!subChapterDetails.isDefaultSubChapter) {
       rolesQuery = {
@@ -160,7 +161,7 @@ MlResolver.MlQueryResolver['fetchRolesForDepartment'] = (obj, args, context, inf
 
     let valueGet = mlDBController.find('MlRoles', rolesQuery, context).fetch()
     _.each(valueGet, function (item, say) {
-      let ary = []
+      var ary = []
       _.each(item.assignRoles, function (value, key) {
         if (value.cluster == 'all' || value.cluster == args.clusterId) {
           if (value.isActive) {

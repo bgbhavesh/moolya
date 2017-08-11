@@ -72,6 +72,10 @@ export default class Step5 extends React.Component {
     this.props.getRegistrationKYCDetails();
   };
 
+  isValidated(){
+    return true
+  }
+
   async updateapprovedDocuments() {
     let registrationId = this.props.registrationData._id
     let selectedDocs = this.state.selectedFiles

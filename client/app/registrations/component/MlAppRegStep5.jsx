@@ -50,6 +50,10 @@ export default class MlAppRegStep5 extends React.Component {
     }
   }
 
+  isValidated(){
+    return true
+  }
+
   componentDidMount() {
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight - (150 + $('.app_header').outerHeight(true)));

@@ -12,6 +12,8 @@ import Datetime from "react-datetime";
 import moment from "moment";
 import MlLoader from '../../../../commons/components/loader/loader'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
+var diff = require('deep-diff').diff;
+import _underscore from 'underscore'
 
 
 export default class institution extends React.Component{
@@ -49,7 +51,6 @@ export default class institution extends React.Component{
     initalizeFloatLabel();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(160+$('.admin_header').outerHeight(true)));
-    this.props.showPromptAlert(true)
   }
   optionsBySelectUserType(value){
     this.setState({selectedUserType:value})
@@ -62,6 +63,53 @@ export default class institution extends React.Component{
   }
   optionsBySelectInstitutionType(val){
     this.setState({selectedInstitutionType:val.value})
+  }
+
+  isValidated(){
+    let existingObject = this.props.registrationDetails || {}
+    let oldObject = {
+      userType        : existingObject.userType?existingObject.userType:null,
+      institutionType     : existingObject.institutionType?existingObject.institutionType:null,
+      instituteName       : existingObject.instituteName?existingObject.instituteName:null,
+      instituteGroupName  : existingObject.instituteGroupName?existingObject.instituteGroupName:null,
+      foundationYear      : existingObject.foundationYear?existingObject.foundationYear:null,
+      website             : existingObject.website?existingObject.website:null,
+      registrationNumber  : existingObject.registrationNumber?existingObject.registrationNumber:null,
+      isoAccrediationNumber: existingObject.isoAccrediationNumber?existingObject.isoAccrediationNumber:null,
+      curriculamProvider  : existingObject.curriculamProvider?existingObject.curriculamProvider:null,
+      associatedUniversity: existingObject.associatedUniversity?existingObject.associatedUniversity:null,
+      studentCount        : existingObject.studentCount?existingObject.studentCount:null,
+      staffCount          : existingObject.staffCount?existingObject.staffCount:null,
+      chairman            : existingObject.chairman?existingObject.chairman:null,
+      dean                : existingObject.dean?existingObject.dean:null,
+      headQuarterLocation:  existingObject.headQuarterLocation?this.state.headQuarterLocation:null,
+      branchLocations:  existingObject.branchLocations?existingObject.branchLocations:null
+    }
+    let newObject = {
+      userType        : this.state.selectedUserType?this.state.selectedUserType:null,
+      institutionType     : this.state.selectedInstitutionType?this.state.selectedInstitutionType:null,
+      instituteName       : this.refs.instituteName.value?this.refs.instituteName.value:null,
+      instituteGroupName  : this.refs.instituteGroupName.value?this.refs.instituteGroupName.value:null,
+      foundationYear      : this.state.foundationDate?this.state.foundationDate:null,
+      website             : this.refs.website.value?this.refs.website.value:null,
+      registrationNumber  : this.refs.registrationNumber.value?this.refs.registrationNumber.value:null,
+      isoAccrediationNumber: this.refs.isoAccrediationNumber.value?this.refs.isoAccrediationNumber.value:null,
+      curriculamProvider  : this.refs.curriculamProvider.value?this.refs.curriculamProvider.value:null,
+      associatedUniversity: this.refs.associatedUniversity.value?this.refs.associatedUniversity.value:null,
+      studentCount        : this.refs.studentCount.value?this.refs.studentCount.value:null,
+      staffCount          : this.refs.staffCount.value?this.refs.staffCount.value:null,
+      chairman            : this.refs.chairman.value?this.refs.chairman.value:null,
+      dean                : this.refs.dean.value?this.refs.dean.value:null,
+      headQuarterLocation:  this.state.selectedHeadquarter?this.state.selectedHeadquarter:null,
+      branchLocations:  this.state.selectedBranches?this.state.selectedBranches:null
+    }
+    var differences = diff(oldObject, newObject);
+    var filteredObject = _underscore.where(differences, {kind: "E"});
+    if(filteredObject && filteredObject.length>0){
+      return false
+    }else{
+      return true
+    }
   }
 
   async  updateregistration() {
@@ -90,7 +138,6 @@ export default class institution extends React.Component{
     const response = await updateRegistrationActionHandler(Details);
     if(response.success){
       this.props.getRegistrationDetails();
-      this.props.showPromptAlert(false)
       toastr.success("Saved Successfully");
     }else{
       toastr.error(response.result);

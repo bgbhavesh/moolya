@@ -947,6 +947,15 @@ if (Meteor.isServer) {
                   "subMenusId": "transaction_Registration",
                 },
                 {
+                  "link": "/admin/transactions/rejectedRegistrations",
+                  "name": "Reject",
+                  "uniqueId": "transaction_registration_reject",
+                  "isLink": true,
+                  "isMenu": true,
+                  "image": "",
+                  "subMenusId": "transaction_Registration"
+                },
+                {
                   "link": "/admin/transactions/registrationHistory",
                   "name": "History",
                   "uniqueId": "transaction_registration_history",

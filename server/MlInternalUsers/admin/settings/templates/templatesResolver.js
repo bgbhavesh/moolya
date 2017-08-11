@@ -2,7 +2,6 @@ import MlResolver from '../../../../commons/mlResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 import _ from 'lodash';
 import mlTemplateAssignmentRepo from './mlTemplateAssignmentRepo';
-import mlNonMoolyaAccess from "../../../../../server/MlInternalUsers/admin/core/non-moolyaAccessControl/mlNonMoolyaAccess"
 
 MlResolver.MlQueryResolver['findTemplateSteps'] = (obj, args, context, info) => {
   // TODO : Authorization
@@ -59,10 +58,6 @@ MlResolver.MlQueryResolver['findTemplates'] = (obj, args, context, info) => {
   }
 }
 
-/**
- * @module ['template assigment']
- * Note: Giving the access layer for the non-moolya users
- * */
 MlResolver.MlQueryResolver['fetchAssignedTemplate']=(obj, args, context, info) => {
   if (args.process&&args.subProcess&&args.stepCode) {
     //todo: conditions based on record id for steps like registration,portfolio
@@ -73,16 +68,7 @@ MlResolver.MlQueryResolver['fetchAssignedTemplate']=(obj, args, context, info) =
     let stepCode=args.stepCode;
     let mode = args.mode;
     let template=mlTemplateAssignmentRepo.fetchTemplate(process,subProcess,stepCode,recordId, mode);
-    if(template){
-      var nonMoolyaContext = mlNonMoolyaAccess.canExternalUserView(recordId, context)
-      if (nonMoolyaContext){
-        return template
-      }else {
-        return null
-      }
-    }
-
-    // return template;
+    return template;
   }
       return null;
 }

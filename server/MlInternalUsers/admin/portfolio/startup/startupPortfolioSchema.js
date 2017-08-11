@@ -183,6 +183,19 @@ let startupPortfolioSchema = `
         isDescriptionPrivate:Boolean
     }
     
+    type dataOutput{
+      balanceSheet: [imagesTypeSchema]
+      profitAndLoss: [imagesTypeSchema]
+      quaterlyReport: [imagesTypeSchema]
+      yearlyReport: [imagesTypeSchema]
+      halfYearlyReport: [imagesTypeSchema]
+      annualReport: [imagesTypeSchema]
+      cashFlow: [imagesTypeSchema]
+      shareHoldings: [imagesTypeSchema]
+      capitalStructure: [imagesTypeSchema]
+      ratio: [imagesTypeSchema]
+    }
+    
     
     type aboutUsOutput{
         logo      : [imagesTypeSchema]
@@ -234,6 +247,7 @@ let startupPortfolioSchema = `
         branches            : [branchesOutput]
         clients             : [clientsOutput]
         legalIssue          : legalIssueOutput
+        data                : dataOutput
     }
 
    type EmploymentOfCompany{
@@ -429,6 +443,19 @@ let startupPortfolioSchema = `
         isDescriptionPrivate:Boolean
     }
     
+    input data{
+      balanceSheet: [imageFilesInputSchema]
+      profitAndLoss: [imageFilesInputSchema]
+      quaterlyReport: [imageFilesInputSchema]
+      yearlyReport: [imageFilesInputSchema]
+      halfYearlyReport: [imageFilesInputSchema]
+      annualReport: [imageFilesInputSchema]
+      cashFlow: [imageFilesInputSchema]
+      shareHoldings: [imageFilesInputSchema]
+      capitalStructure: [imageFilesInputSchema]
+      ratio: [imageFilesInputSchema]
+    }
+    
     input imageFilesInputSchema{
        fileUrl: String,
        fileName:String
@@ -533,6 +560,7 @@ let startupPortfolioSchema = `
         profitRevenueLiabilityChart:  [profitRevenueLiability]
         employeeBreakupDepartmentChart: [employeeBreakupDepartment]
         legalIssue          : legalIssue
+        data                : data
     }
     type startupPortfolioOutput{
         _id                  : String
@@ -552,6 +580,7 @@ let startupPortfolioSchema = `
         fetchStartupPortfolioLookingFor(portfoliodetailsId:String!):[lookingForOutput]
         fetchStartupPortfolioAwards(portfoliodetailsId:String!):[awardsRecognitionOutput]
         fetchStartupPortfolioCharts(portfoliodetailsId:String):chartsOutput
+        fetchStartupPortfolioData(portfoliodetailsId:String):dataOutput
         
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
     }
@@ -575,7 +604,7 @@ let supportedApi = [
   {api:'fetchStartupPortfolioLookingFor', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchStartupPortfolioAwards', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchStartupPortfolioCharts', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchStartupPortfolioChart', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchStartupPortfolioData', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchPortfolioMenu', actionName:'READ', moduleName:"PORTFOLIO"},
 
   {api:'createStartupPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},

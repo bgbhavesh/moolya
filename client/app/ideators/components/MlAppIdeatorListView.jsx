@@ -6,6 +6,7 @@
  * */
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
+import {fetchPortfolioActionHandler} from '../actions/ideatorActionHandler'
 
 /**
  * export of the default component
@@ -13,12 +14,17 @@ import {render} from "react-dom";
 export default class MlAppIdeatorListView extends Component {
   /**
    * redirect to get the details of the portfolio
+   * Note: routes [deciding] based on isExplore
+   * cheking [permissions to view the portfolio]
    * */
-  viewDetails(portfolioId, e) {
-    if (this.props.config.isExplore)
+  async viewDetails(portfolioId, e) {
+    const response = await fetchPortfolioActionHandler(portfolioId);
+    if (this.props.config.isExplore && response && response.canAccess)
       FlowRouter.go('/app/explore/ideator/' + portfolioId)
-    else
+    else if (response && response.canAccess)
       FlowRouter.go('/app/ideator/' + portfolioId)
+    else if(response && !response.canAccess)
+      toastr.error('Portfolio not available for view')
   }
 
   /**

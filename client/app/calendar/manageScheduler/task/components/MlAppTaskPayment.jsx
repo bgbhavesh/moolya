@@ -18,8 +18,6 @@ export default class MlAppTaskPayment extends Component {
   }
 
   componentWillMount() {
-    let WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight - (240 + $('.app_header').outerHeight(true)));
     const resp = this.findTaskDetails();
     return resp;
   }
@@ -155,7 +153,7 @@ export default class MlAppTaskPayment extends Component {
     $('.float-label').jvFloat();
     setTimeout(function () {
       let WinHeight = $(window).height();
-      $('.step_form_wrap').height(WinHeight - (240 + $('.app_header').outerHeight(true)));
+      $('.step_form_wrap').height(WinHeight - (300 + $('.app_header').outerHeight(true)));
     },100);
 
   }
@@ -169,17 +167,17 @@ export default class MlAppTaskPayment extends Component {
             <div className="centered_form">
               <form>
                 <div className="form-group">
-                  <label>Activity gross payable amount <input className="form-control inline_input medium_in"
+                  <label>Activity gross payable amount &nbsp;<label>Rs</label>&nbsp;<input className="form-control inline_input medium_in"
                                                          defaultValue={this.state.data.payment.activitiesAmount ? parseFloat(this.state.data.payment.activitiesAmount).toFixed(2) : '' } disabled="true"/>
                   </label>
                 </div>
                 <div className="form-group">
-                  <label>Activity discount payable amount <input className="form-control inline_input medium_in"
+                  <label>Activity discount payable amount &nbsp;<label>Rs</label>&nbsp;<input className="form-control inline_input medium_in"
                                                          defaultValue={this.state.data.payment.activitiesDiscount ? parseFloat(this.state.data.payment.activitiesDiscount).toFixed(2) : '' } disabled="true"/>
                   </label>
                 </div>
                 <div className="form-group">
-                  <label>Activity net payable amount <input className="form-control inline_input medium_in"
+                  <label>Activity net payable amount &nbsp;<label>Rs</label>&nbsp;<input className="form-control inline_input medium_in"
                                                          defaultValue={this.state.data.payment.activitiesDerived ? parseFloat(this.state.data.payment.activitiesDerived).toFixed(2) : '' } disabled="true"/>
                   </label>
                 </div>
@@ -223,7 +221,7 @@ export default class MlAppTaskPayment extends Component {
                   <br className="brclear"/>
                 </div>
                 <div className="form-group">
-                  <label>Net payable amount <input className="form-control inline_input medium_in"
+                  <label>Net payable amount &nbsp;<label>Rs</label>&nbsp;<input className="form-control inline_input medium_in"
                                                    onChange={this.handleNull.bind(this)}
                                                    value={this.state.data.payment.derivedAmount ? parseInt(this.state.data.payment.derivedAmount).toFixed(2) :''}
                                                    disabled />

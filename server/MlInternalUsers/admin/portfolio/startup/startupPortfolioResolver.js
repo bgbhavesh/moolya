@@ -223,6 +223,20 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioLicenses'] = (obj, args, contex
   return {};
 }
 
+
+
+MlResolver.MlQueryResolver['fetchStartupPortfolioData'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let portfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('data')) {
+      return portfolio['data'];
+    }
+  }
+  return {};
+}
+
+
+
 MlResolver.MlQueryResolver['fetchStartupPortfolioCharts'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {
     let startChartsArray = {}

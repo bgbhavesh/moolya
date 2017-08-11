@@ -9,8 +9,9 @@ export default class MlConnectionRequestPresentation extends React.Component {
   }
 
   render() {
+    console.log('MlPre: ',this.props);
     const { userDetails, activityLog, canAccept, canReject } = this.props;
-    let transId = userDetails.userId;
+    let transId = Math.random().toString(36).slice(2); //userDetails.userId;
     return (
       <div className="ml_tabs">
         <ul className="nav nav-pills">

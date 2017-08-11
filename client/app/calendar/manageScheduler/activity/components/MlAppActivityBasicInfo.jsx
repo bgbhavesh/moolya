@@ -281,7 +281,7 @@ export default class MlAppBasicInfo extends React.Component{
 
     $('.float-label').jvFloat();
     let WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(250+$('.app_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight-(290+$('.app_header').outerHeight(true)));
     $('.switch input').change(function () {
       if ($(this).is(':checked')) {
         $(this).parent('.switch').addClass('on');
@@ -442,7 +442,7 @@ export default class MlAppBasicInfo extends React.Component{
           <div className="form-group switch_wrap switch_names inline_switch">
             <label>Status</label>
             <label className="switch">
-              <input type="checkbox" onChange={that.checkBoxHandler.bind(that, "isActive")} checked={this.state.basicData.isActive} value="isActive" />
+              <input type="checkbox" onChange={that.checkBoxHandler.bind(that, "isActive")} checked={this.state.basicData.isActive} />
               <div className="slider"></div>
             </label>
           </div>

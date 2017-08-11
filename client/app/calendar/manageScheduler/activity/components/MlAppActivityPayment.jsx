@@ -22,7 +22,7 @@ export default class Step4 extends React.Component{
   componentDidMount() {
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(250+$('.admin_app').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight-(270+$('.admin_app').outerHeight(true)));
     this.props.getActivityDetails();
   }
 
@@ -210,7 +210,7 @@ export default class Step4 extends React.Component{
             <form>
               <div className="form-group">
                 <label>
-                  Gross payable amount
+                  Gross payable amount &nbsp;<label>Rs</label>&nbsp;
                   <input type="Number" onChange={(e)=>this.payableAmount(e)}
                          value={ this.state.paymentData.amount ? this.state.paymentData.amount : '' }
                          className="form-control inline_input medium_in"/>
@@ -254,7 +254,7 @@ export default class Step4 extends React.Component{
               </div>
               <div className="form-group">
                 <label>
-                  Net payable amount
+                  Net payable amount &nbsp;<label>Rs</label>&nbsp;
                   <input className="form-control inline_input medium_in" value={this.state.paymentData.derivedAmount} disabled />
                 </label>
               </div>

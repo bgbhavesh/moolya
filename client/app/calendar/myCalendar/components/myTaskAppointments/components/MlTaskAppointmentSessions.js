@@ -214,9 +214,8 @@ export default class MlTaskAppointmentSessions extends Component{
     let {selectedTaskId} = this.props;
     const resp = await fetchActivitiesTeamsActionHandler(selectedTaskId, sessionId);
     if(resp){
-      this.getUsers(resp, index);
+      await this.getUsers(resp, index, duration);
     }
-    await this.getUsers(resp, index, duration);
     this.props.saveDetails('session', sessionId);
   }
 

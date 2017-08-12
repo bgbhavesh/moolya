@@ -268,13 +268,13 @@ class MlSubChapterDetails extends React.Component {
                            className="form-control float-label" defaultValue={this.state.data && this.state.data.subChapterDisplayName}/>
                   </div>
                   {(this.state && this.state.data && this.state.data.isDefaultSubChapter) ? <div></div> : <div>
-                    <div className="form-group">
-                      <Moolyaselect multiSelect={true} placeholder="Related Sub-Chapters"
-                                    className="form-control float-label" valueKey={'value'} labelKey={'label'}
-                                    selectedValue={this.state.data.associatedSubChapters} queryType={"graphql"}
-                                    query={subChapterQuery} isDynamic={true} queryOptions={subChapterOption}
-                                    onSelect={this.selectAssociateChapter.bind(this)}/>
-                    </div>
+                    {/*<div className="form-group">*/}
+                      {/*<Moolyaselect multiSelect={true} placeholder="Related Sub-Chapters"*/}
+                                    {/*className="form-control float-label" valueKey={'value'} labelKey={'label'}*/}
+                                    {/*selectedValue={this.state.data.associatedSubChapters} queryType={"graphql"}*/}
+                                    {/*query={subChapterQuery} isDynamic={true} queryOptions={subChapterOption}*/}
+                                    {/*onSelect={this.selectAssociateChapter.bind(this)}/>*/}
+                    {/*</div>*/}
                     {/*<br className="brclear"/>*/}
                     {/*<div className="form-group">*/}
                       {/*<input type="text" ref="state" placeholder="State" className="form-control float-label"*/}
@@ -439,6 +439,15 @@ class MlSubChapterDetails extends React.Component {
                         </div>
                       </div>
                       <div className="panel panel-default">
+                        {(this.state && this.state.data && this.state.data.isDefaultSubChapter) ? <div></div> :
+                          <div className="form-group">
+                            <Moolyaselect multiSelect={false} placeholder="Related Sub-Chapters"
+                                          className="form-control float-label" valueKey={'value'} labelKey={'label'}
+                                          selectedValue={this.state.data.associatedSubChapters} queryType={"graphql"}
+                                          query={subChapterQuery} isDynamic={true} queryOptions={subChapterOption}
+                                          onSelect={this.selectAssociateChapter.bind(this)}/>
+                          </div>
+                        }
                         <div className="panel-heading">Internal Subchapter Access</div>
                         <MlInternalSubChapterAccess getInternalAccessStatus={this.getInternalAccessStatus.bind(this)}
                                                     assignedDetails={this.state.internalSubChapterAccess}/>

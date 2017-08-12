@@ -526,12 +526,57 @@ createSubChapter = (subChapter, context) =>{
     return id
 }
 
-/********************************************related subChapter resolvers********************************************/
+/******************************************** start related subChapter resolvers********************************************/
 
-MlResolver.MlQueryResolver['fetchRetatedSubChapters'] = (obj, args, context, info) => {
-  var matchSubchapters = []
-  if (args.subChapterId) {
-    matchSubchapters = mlDBController.find('MlRelatedSubChapters', {subChapters: {$in: {subChapterId: args.subChapterId}}}).fetch() || []
+MlResolver.MlMutationResolver['createRelatedSubChapters'] = (obj, args, context, info) => {
+  var response = null
+  if (args.associatedObj) {
+    _.each(args.associatedObj, function (item, say) {
+      response = mlDBController.insert('MlRelatedSubChapters', item, context)
+    })
+  } else {
+    let code = 400;
+    response = new MlRespPayload().errorPayload('Required fields not available', code);
+    return response
   }
-  return matchSubchapters
 }
+
+MlResolver.MlQueryResolver['fetchRelatedSubChapters'] = (obj, args, context, info) => {
+  var matchSubChapters = []
+  if (args.subChapterId) {
+    matchSubChapters = mlDBController.find('MlRelatedSubChapters', {subChapters: {$in: {subChapterId: args.subChapterId}}}).fetch() || []
+  }
+  return matchSubChapters
+}
+
+MlResolver.MlMutationResolver['updateRelatedSubChapters'] = (obj, args, context, info) => {
+  var response = ""
+  try {
+    if (args.associatedObj) {
+      _.each(args.associatedObj, function (item, say) {
+        let query = item.subChapters
+        var obj = {
+          backendUser: item.backendUser,
+          externalUser: item.externalUser
+        }
+        response = mlDBController.update('MlRelatedSubChapters', {subChapters: query}, obj, context)
+      })
+      if (response) {
+        let code = 200;
+        response = new MlRespPayload().successPayload('Related subChapters updated successful', code);
+        return response
+      }
+    } else {
+      let code = 400;
+      response = new MlRespPayload().errorPayload('Required fields not available', code);
+      return response
+    }
+  }
+  catch (e) {
+    let code = 400;
+    response = new MlRespPayload().errorPayload(e.message, code);
+    return response
+  }
+}
+
+/******************************************** end related subChapter resolvers********************************************/

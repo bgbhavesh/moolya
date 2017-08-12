@@ -100,7 +100,6 @@ let chapterSchema = `
       externalUser:UserInputObject,
     }
     input moolyaSubChapterAccessObject{
-      
       externalUser:UserInputObject,
     }
     input UserInputObject{
@@ -121,7 +120,6 @@ let chapterSchema = `
         subChapterCode:String,
         subChapterName:String,
         subChapterDisplayName:String,
-        associatedSubChapters:[String],   
         subChapterUrl:String,
         isUrlNotified:Boolean,
         subChapterEmail:String,
@@ -134,8 +132,32 @@ let chapterSchema = `
         latitude:Float,
         longitude:Float,
         isBespokeWorkFlow:Boolean,
-        internalSubChapterAccess:internalSubChapterAccessObject,
         moolyaSubChapterAccess:moolyaSubChapterAccessObject
+        associatedSubChapters:[String],   
+        internalSubChapterAccess:internalSubChapterAccessObject,
+        associatedObj : [relatedSubChaptersInput]
+    }
+    
+    input relatedSubChaptersInput {
+      subChapters: [subChaptersInput]
+      backendUser: UserInputObject,
+      externalUser: UserInputObject,
+    }
+
+    type relatedSubChaptersOutput {
+      subChapters : [subChaptersOutput]
+      backendUser : UserObject
+      externalUser: UserObject,
+    }
+    
+    input subChaptersInput {
+      subChapterId: String,
+      chapterId : String
+    }
+    
+    type subChaptersOutput {
+      subChapterId: String,
+      chapterId : String
     }
     
      type SubChapterResponse{
@@ -157,7 +179,7 @@ let chapterSchema = `
         fetchActiveChaptersSubChapters(chapters:[String],clusters:[String],displayAllOption:Boolean):[SubChapter],
         fetchSubChaptersForRegistration(id: String):[SubChapter]
         fetchSubChaptersSelectMoolya(chapterId: String,clusterId:String):[SubChapter]
-        fetchRetatedSubChapters(subChapterId: String):[SubChapter]
+        fetchRelatedSubChapters(subChapterId: String): [relatedSubChaptersOutput]
     }
     
      type Mutation {
@@ -166,6 +188,8 @@ let chapterSchema = `
         
         createSubChapter(clusterId:String, chapterId:String, subChapterId:String, subChapter:subChapterObject, moduleName:String, actionName:String):response        
         updateSubChapter(clusterId:String, chapterId:String, subChapterId:String, subChapterDetails:subChapterObject, moduleName:String, actionName:String):response
+        createRelatedSubChapters(associatedObj: relatedSubChaptersInput): response
+        updateRelatedSubChapters(associatedObj: relatedSubChaptersInput): response
      }
 `
 
@@ -187,7 +211,8 @@ let supportedApi = [
     {api:'fetchActiveChaptersSubChapters', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
     {api:'fetchSubChaptersForRegistration', actionName:'READ', moduleName:"SUBCHAPTER"},
     {api:'fetchSubChaptersSelectMoolya', actionName:'READ', moduleName:"SUBCHAPTER"},
-    {api:'fetchRetatedSubChapters', actionName:'READ', moduleName:"SUBCHAPTER"}
+    {api:'fetchRelatedSubChapters', actionName:'READ', moduleName:"SUBCHAPTER"},
+    {api:'updateRelatedSubChapters', actionName:'READ', moduleName:"SUBCHAPTER"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

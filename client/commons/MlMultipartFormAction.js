@@ -38,10 +38,10 @@ export async function multipartFormHandler(data, file,endPoint) {
 
     console.log(result)
     const id = result;
-    if(result.unAuthorized){
-        FlowRouter.go('/unauthorize')
-    }
-    return id
+    // if(result.unAuthorized){
+    //     FlowRouter.go('/unauthorize')
+    // } //no use of this handling this on the receiving page only
+    return JSON.parse(id)
 }
 
 export function multipartASyncFormHandler(data,file,endPoint,callback) {

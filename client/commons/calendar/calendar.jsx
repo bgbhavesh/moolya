@@ -20,6 +20,13 @@ export default class Calender extends Component {
     };
   }
 
+  componentWillReceiveProps(newPorps){
+    this.setState({
+      events: newPorps.events ? newPorps.events : [],
+      date : newPorps.date ? newPorps.date : new Date()
+    });
+  }
+
   eventComponent(event, element) {
     let component = this.props.eventComponent;
     if(component){

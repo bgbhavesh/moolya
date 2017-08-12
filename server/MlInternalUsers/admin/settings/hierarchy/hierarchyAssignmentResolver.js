@@ -19,7 +19,6 @@ MlResolver.MlQueryResolver['fetchAssignedRolesHierarchy'] = (obj, args, context,
           {parentDepartment:args.departmentId},
           {parentSubDepartment:args.subDepartmentId},
           {subChapterId:args.subChapterId},
-          {subChapterId:args.subChapterId},
           {isDefaultSubChapter:false},
           {"teamStructureAssignment.assignedLevel": {$in: [args.type]}}
         ]},context)

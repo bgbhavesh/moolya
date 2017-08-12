@@ -31,6 +31,8 @@ MlResolver.MlMutationResolver['createInquiry'] = (obj, args, context, info) =>{
             //send Email and transaction Log
             //MlEmailNotification.sendInquiryEmail({message:inquiry.message,subject:inquiry.subject,fromEmail:fromuser.username,toEmail:toUser.username},context);
             //Transaction Log
+            let fromUserType = 'user';
+            mlInteractionService.createTransactionRequest(toUser._id,'inquire', args.resourceId, resp, fromuser._id, fromUserType );
             MlEmailNotification.enquireRequest(fromuser,toUser)
           }
         }catch (e){

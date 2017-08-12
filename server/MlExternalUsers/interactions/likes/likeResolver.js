@@ -12,6 +12,9 @@ MlResolver.MlMutationResolver['likeRequest'] = (obj, args, context, info) =>{
       var resp=null;
         try {
             let user =mlDBController.findOne('users',{_id:context.userId}, context);
+            let resourceDetails = mlInteractionService.fetchResourceBasedUserDetails(args.resourceType, args.resourceId, context);
+            let fromuser = resourceDetails.contextUser;
+            let toUser = resourceDetails.resourceOwner;
             //let isValid = validateExternalUser(fromuser)
             /*if(!isValid){let code = 400;let response = new MlRespPayload().errorPayload('Invalid User', code);
              return response;}*/
@@ -21,6 +24,8 @@ MlResolver.MlMutationResolver['likeRequest'] = (obj, args, context, info) =>{
           resp = mlDBController.update('MlLikes',{'resourceId':args.resourceId,userId:user._id},likeRequest,{$set: true,upsert: true},context);
 
           if(resp){
+            let fromUserType = 'user';
+            mlInteractionService.createTransactionRequest(toUser._id,'like', args.resourceId, resp, fromuser._id, fromUserType );
             //todo: create a repo for like
             //transaction Log
           }

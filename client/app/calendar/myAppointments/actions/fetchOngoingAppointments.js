@@ -8,7 +8,7 @@ export async function ongoingAppointmentActionHandler() {
   const result = await appClient.query({
     query: gql`
       query {
-        fetchMyAppointment{
+        fetchMyAppointmentByStatus{
           _id
           appointmentInfo {
             resourceType
@@ -26,7 +26,7 @@ export async function ongoingAppointmentActionHandler() {
     `,
     forceFetch: true
   });
-  const data = result.data.fetchMyAppointment;
+  const data = result.data.fetchMyAppointmentByStatus;
   return data;
 }
 

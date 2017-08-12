@@ -128,13 +128,15 @@ export default class MlServiceManageSchedule extends Component {
     data.facilitationCharge.type = event.target.id;
     data.facilitationCharge.amount = 0;
     if (data.facilitationCharge.type && data.facilitationCharge.amount <= 0) {
-      data.finalAmount = data.servicePayment.tasksDerived;
+      data.finalAmount = parseFloat(data.servicePayment.tasksDerived);
       if (data.servicePayment.discountValue > 0 ) {
         if (data.servicePayment.discountType === 'amount') {
-          data.finalAmount -= parseInt(data.servicePayment.discountValue);
+          let value = data.finalAmount - parseFloat(data.servicePayment.discountValue);
+          data.finalAmount = value ? parseFloat(value).toFixed(2) : null;
         } else if (data.servicePayment.discountType === 'percent') {
-          let prevAmount =  (parseInt(data.servicePayment.tasksDerived) * parseInt(data.servicePayment.discountValue) / 100);
-          data.finalAmount -= prevAmount;
+          let prevAmount =  (parseFloat(data.servicePayment.tasksDerived) * parseFloat(data.servicePayment.discountValue) / 100);
+          let value = data.finalAmount - prevAmount;
+          data.finalAmount = value ? parseFloat(value).toFixed(2) : null;
         }
       }
     }
@@ -155,10 +157,11 @@ export default class MlServiceManageSchedule extends Component {
         if (isNaN(event.target.value)) {
           this.errorMsg = 'Please enter a valid number';
           toastr.error(this.errorMsg);
-        } else if (parseInt(event.target.value) >= 0) {
-          data.facilitationCharge.amount = event.target.value;
-          let facilitationAmount = data.facilitationCharge.amount ? parseInt(data.facilitationCharge.amount) : 0;
-          data.finalAmount = parseInt(data.servicePayment.tasksDerived) + parseInt(facilitationAmount);
+        } else if (parseFloat(event.target.value) >= 0) {
+          data.facilitationCharge.amount = parseFloat(event.target.value).toFixed(2);
+          let facilitationAmount = data.facilitationCharge.amount ? parseFloat(data.facilitationCharge.amount) : 0;
+          let value = parseFloat(data.servicePayment.tasksDerived) + parseFloat(facilitationAmount);
+          data.finalAmount = value ? parseFloat(value).toFixed(2) : null;
         }
         break;
       case 'percent':
@@ -166,10 +169,11 @@ export default class MlServiceManageSchedule extends Component {
           this.errorMsg = 'Please enter a valid number';
           toastr.error(this.errorMsg);
         } else if (parseFloat(event.target.value) >= 0) {
-          data.facilitationCharge.amount = event.target.value;
-          let facilitationAmount = data.facilitationCharge.amount ? parseInt(data.facilitationCharge.amount) : 0;
-          let percentageAmmount = (parseInt(data.servicePayment.tasksDerived) * parseInt(facilitationAmount)) / 100;
-          data.finalAmount = percentageAmmount + parseInt(data.servicePayment.tasksDerived);
+          data.facilitationCharge.amount = parseFloat(event.target.value).toFixed(2);
+          let facilitationAmount = data.facilitationCharge.amount ? parseFloat(data.facilitationCharge.amount) : 0;
+          let percentageAmmount = (parseFloat(data.servicePayment.tasksDerived) * parseFloat(facilitationAmount)) / 100;
+          let value = percentageAmmount + parseFloat(data.servicePayment.tasksDerived);
+          data.finalAmount = value ? parseFloat(value).toFixed(2) : null;
         }
         break;
       default:
@@ -177,10 +181,12 @@ export default class MlServiceManageSchedule extends Component {
     }
     if (data.servicePayment.discountValue > 0 ) {
       if (data.servicePayment.discountType === 'amount') {
-        data.finalAmount -= parseInt(data.servicePayment.discountValue);
+        let value = data.finalAmount - parseFloat(data.servicePayment.discountValue);
+        data.finalAmount = value ? parseFloat(value).toFixed(2) : null;
       } else if (data.servicePayment.discountType === 'percent') {
-        let prevAmount =  (parseInt(data.servicePayment.tasksDerived) * parseInt(data.servicePayment.discountValue) / 100);
-        data.finalAmount -= prevAmount;
+        let prevAmount =  (parseFloat(data.servicePayment.tasksDerived) * parseFloat(data.servicePayment.discountValue) / 100);
+        let value = data.finalAmount - prevAmount;
+        data.finalAmount = value ? parseFloat(value).toFixed(2) : null;
       }
     }
     this.setState({data: data});
@@ -197,12 +203,14 @@ export default class MlServiceManageSchedule extends Component {
       let {servicePayment, finalAmount, facilitationCharge} = data;
       if ((facilitationCharge.type && facilitationCharge.amount <= 0) || !facilitationCharge.amount) {
         if (servicePayment.discountValue > 0 ) {
-          finalAmount = servicePayment.tasksDerived;
+          finalAmount = parseFloat(servicePayment.tasksDerived);
           if (servicePayment.discountType === 'amount') {
-            finalAmount -= parseInt(servicePayment.discountValue);
+            let value = finalAmount - parseFloat(servicePayment.discountValue);
+            finalAmount = value ? parseFloat(value).toFixed(2) : null;
           } else if (servicePayment.discountType === 'percent') {
-            let prevAmount =  (parseInt(servicePayment.tasksDerived) * parseInt(servicePayment.discountValue) / 100);
-            finalAmount -= prevAmount;
+            let prevAmount =  (parseFloat(servicePayment.tasksDerived) * parseFloat(servicePayment.discountValue) / 100);
+            let value = finalAmount - prevAmount;
+            finalAmount = value ? parseFloat(value).toFixed(2) : null;
           }
         }
       }

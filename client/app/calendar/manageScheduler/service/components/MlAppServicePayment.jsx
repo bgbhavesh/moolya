@@ -71,6 +71,7 @@ export default class MlAppServicePayment extends React.Component{
                 <input type="checkbox" id="discount"
                        checked={!servicePayment.isDiscount}
                        value={servicePayment.isDiscount}
+                       disabled={this.props.viewMode}
                        onChange={(event) => checkDiscountEligibility(event)} />
                 <div className="slider"></div>
               </label>
@@ -81,24 +82,25 @@ export default class MlAppServicePayment extends React.Component{
                 <div className="input_types">
                   <input id="amount" type="radio" name="amount"
                          value="Amount" checked={servicePayment.discountType === 'amount' ? true : false}
-                         disabled={!servicePayment.isDiscount}
+                         disabled={!servicePayment.isDiscount || this.props.viewMode}
                          onChange={(event) => checkDiscountStatus(event)}/>
                   <label htmlFor="amount"><span><span></span></span>Amount
                     {servicePayment.discountType === 'amount' ?
                       <input className="form-control inline_input"
                              onChange={(event) => calculateDiscounts(event)}
+                             disabled={this.props.viewMode}
                              defaultValue={servicePayment.discountValue}/> : <div></div>}
                   </label>
                 </div>
                 <div className="input_types">
                   <input id="percent" type="radio" name="percent"
                          value="Percentage" checked={servicePayment.discountType === 'percent' ? true : false}
-                         disabled={!servicePayment.isDiscount}
+                         disabled={!servicePayment.isDiscount || this.props.viewMode}
                          onChange={(event) => checkDiscountStatus(event)}/>
                   <label htmlFor="percent"><span><span></span></span>
                     Percentage{servicePayment.discountType === 'percent'?
                       <input className="form-control inline_input" onChange={(event) => calculateDiscounts(event)}
-                             defaultValue={servicePayment.discountValue}/>:<div></div>}
+                             disabled={this.props.viewMode} defaultValue={servicePayment.discountValue}/>:<div></div>}
                   </label>
                 </div>
                 <br className="brclear"/>
@@ -107,12 +109,14 @@ export default class MlAppServicePayment extends React.Component{
                 <div className="input_types">
                   <input id="taxinclusive" type="radio" name="taxinclusive"
                          value="taxinclusive" checked={taxStatus === 'taxinclusive' ? true : false}
+                         disabled={this.props.viewMode}
                          onChange={(event) => checkTaxStatus(event)}/>
                   <label htmlFor="taxinclusive"><span><span></span></span>Tax Inclusive</label>
                 </div>
                 <div className="input_types">
                   <input id="taxexclusive" type="radio" name="taxexclusive"
                          value="taxexclusive" checked={taxStatus === 'taxexclusive' ? true : false}
+                         disabled={this.props.viewMode}
                          onChange={(event) => checkTaxStatus(event)}/>
                   <label htmlFor="taxexclusive"><span><span></span></span>Tax Exclusive </label>
                 </div>
@@ -123,6 +127,7 @@ export default class MlAppServicePayment extends React.Component{
                 <span className={servicePayment.isPromoCodeApplicable ? 'state_label acLabel' : 'state_label'}>Yes</span><label htmlFor="promo" className="switch nocolor-switch">
                 <input id="promo" type="checkbox" checked={!servicePayment.isPromoCodeApplicable}
                        value={servicePayment.isPromoCodeApplicable}
+                       disabled={this.props.viewMode}
                        onChange={(event) => checkPromoStatus(event)}/>
                 <div className="slider"></div>
               </label>

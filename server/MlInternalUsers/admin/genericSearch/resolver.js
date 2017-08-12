@@ -492,7 +492,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
         subChapterNamesString = 'All'
       }
 
-
+    if(data && data.length>0) {
       data[index].communities = communityNames || [];
       data[index].professions = professionNames || [];
       data[index].industries = industryNames || [];
@@ -500,8 +500,10 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       data[index].states = stateNames || [];
       data[index].chapters = chapterNames || [];
       data[index].processName = processTypes.processName;
-      data[index].userTypeNamesString = userTypeNamesString=='All'?'All':userTypeNamesString.join()
-      data[index].subChapterNamesString = subChapterNamesString=='All'?'All':subChapterNamesString.join()
+      data[index].userTypeNamesString = userTypeNamesString == 'All' ? 'All' : userTypeNamesString.join()
+      data[index].subChapterNamesString = subChapterNamesString == 'All' ? 'All' : subChapterNamesString.join()
+
+    }
     });
     totalRecords = MlProcessMapping.find(query, findOptions).count();
   }

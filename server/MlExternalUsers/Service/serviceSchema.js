@@ -8,7 +8,7 @@ import MlResolver from "../../commons/mlResolverDef";
 
 
 let service=`
-  type FacilitationCharge {
+  type ServiceFacilitationCharge {
      type: String
      amount: Float
   }
@@ -97,7 +97,7 @@ let service=`
     attachments: [Attachments]
     payment: ServicePayment
     tasks: [ServiceTask]
-    facilitationCharge : FacilitationCharge
+    facilitationCharge : ServiceFacilitationCharge
     createdAt: Date
     updatedAt: Date
     validTill: Date
@@ -165,7 +165,7 @@ let service=`
     attachments: [Attachments]
     payment: ServicePayment
     tasks: [ServiceTask]
-    facilitationCharge : FacilitationCharge
+    facilitationCharge : ServiceFacilitationCharge
     createdAt: Date
     updatedAt: Date
     validTill: Date
@@ -188,7 +188,7 @@ let service=`
     finalAmount:Float
   }
 
-   input facilitationCharge {
+   input serviceFacilitationCharge {
        type: String
        amount: Float
    }
@@ -273,7 +273,7 @@ let service=`
         attachments: [attachments]
         payment: servicepayment
         tasks: [serviceTask]
-        facilitationCharge : facilitationCharge
+        facilitationCharge : serviceFacilitationCharge
         createdAt: Date
         updatedAt: Date
         validTill: Date

@@ -64,20 +64,20 @@ export default class MlServiceCardStep4 extends React.Component{
             <form>
               <div className="form-group">
                 <label>
-                  Tasks gross payable amount
-                  <input type="number" disabled value={servicePayment.tasksAmount}  className="form-control" />
+                  Tasks gross payable amount &nbsp;<label>Rs</label>&nbsp;
+                  <input type="number" disabled value={servicePayment.tasksAmount}  className="form-control inline_input medium_in" />
                 </label>
               </div>
               <div className="form-group">
                 <label>
-                  Task discount payable amount
-                  <input type="number" disabled value={servicePayment.tasksDiscount}  className="form-control" />
+                  Task discount payable amount &nbsp;<label>Rs</label>&nbsp;
+                  <input type="number" disabled value={servicePayment.tasksDiscount}  className="form-control inline_input medium_in" />
                 </label>
               </div>
               <div className="form-group">
                 <label>
-                  Task net payable amount
-                  <input type="number" disabled value={servicePayment.tasksDerived}  className="form-control "/>
+                  Task net payable amount &nbsp;<label>Rs</label>&nbsp;
+                  <input type="number" disabled value={servicePayment.tasksDerived}  className="form-control inline_input medium_in"/>
                 </label>
               </div>
               <div className="form-group switch_wrap switch_names inline_switch">
@@ -174,7 +174,7 @@ export default class MlServiceCardStep4 extends React.Component{
                 </div>
               </div>
               <div className="form-group">
-                <label>Net payable amount<input className="form-control inline_input medium_in"
+                <label>Net payable amount &nbsp;<label>Rs</label>&nbsp;<input className="form-control inline_input medium_in"
                                                  value={finalAmount} disabled />
                 </label>
               </div>

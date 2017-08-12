@@ -16,9 +16,12 @@ export default class MlConnectionRequest extends Component{
   }
 
   async fetchConnectionDetails(){
-    var transactionId=this.props.data&&this.props.data.transactionId?this.props.data.transactionId:null;
-    var connection  = await fetchConnectionRequestHandler(transactionId);
-    this.setState({data:connection||{},connectionId:(connection||{})._id});
+
+    let transactionId=this.props.data&&this.props.data._id?this.props.data._id:null;
+    if( transactionId && this.props.data.transactionType == "connectionRequest" ){
+      let connection  = await fetchConnectionRequestHandler(transactionId);
+      this.setState({data:connection||{},connectionId:(connection||{})._id});
+    }
   };
 
   async componentWillMount(){
@@ -53,12 +56,12 @@ export default class MlConnectionRequest extends Component{
     console.log('Props:', data);
 
     let userDetails = {
-      userId: data && data.userId ? data.userId : '',
+      userId: data && data.fromProfileId ? data.fromProfileId : '',
       transactionId: data && data.transactionId ? data.transactionId : '',
       dateTime: data && data.createdAt ? data.createdAt : '',
       name: data && data.createdby ? data.createdby : '',
       email: data && data.email ? data.email : '',
-      phoneNo: data && data.phoneNo ? data.phoneNo : '',
+      phoneNo: data && data.mobileNumber ? data.mobileNumber : '',
       cluster: data && data.chapter ? data.chapter : '',
       chapter: data && data.cluster ? data.cluster : '',
       subChapter: data && data.subChapter ? data.subChapter : '',
@@ -67,7 +70,7 @@ export default class MlConnectionRequest extends Component{
 
     let activityLog = {
       dateTime: data && data.createdAt ? data.createdAt : '',
-      type: data && data.transactionType ? data.transactionType : '',
+      type: data && data.transactionType ? (data.transactionType == "interaction" ? data.activity : data.transactionType ): '',
       status: data && data.status ? data.status : ''
     };
 
@@ -76,8 +79,8 @@ export default class MlConnectionRequest extends Component{
         <MlConnectionRequestPresentation
           userDetails={userDetails}
           activityLog={activityLog}
-          canAccept={this.state.canAccept}
-          canReject={this.state.canReject}
+          canAccept={this.state.data.canAccept}
+          canReject={this.state.data.canReject}
           acceptConnectionHandler={this.acceptConnectionHandler}
           rejectConnectionHandler={this.rejectConnectionHandler}
         />

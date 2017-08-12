@@ -100,6 +100,9 @@ let officeTransaction = `
       transactionType: String
       createdby: String
       email: String
+      mobileNumber: String
+      fromProfileId: String
+      activity: String
       userId: String
       status : String
       createdAt: String

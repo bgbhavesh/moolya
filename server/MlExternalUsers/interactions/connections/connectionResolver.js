@@ -111,13 +111,14 @@ MlResolver.MlMutationResolver['connectionRequest'] = (obj, args, context, info) 
       resp = mlDBController.insert('MlConnections',connection,context);
       //create the transaction record and log
       if(resp){
-           mlInteractionService.createTransactionRequest(toUser._id,'connectionRequest',resp);
+        let fromUserType = 'user';
+        mlInteractionService.createTransactionRequest(toUser._id,'connectionRequest', args.resourceId, resp, fromuser._id, fromUserType );
           if(toUser._id&&fromuser._id){
             MlEmailNotification.endUserPortfolioConnect(fromuser._id,toUser._id);
             MlEmailNotification.portfolioConnectRequestReceived(fromuser._id,toUser._id);
           }
       }
-      let connectRequest = MlAlertNotification.onConnectionRequestSent(toUser._id)
+      let connectRequest = MlAlertNotification.onConnectionRequestSent(toUser._id);
       return  new MlRespPayload().successPayload(connectRequest, 200);
     }
     /*other conditions for connection request

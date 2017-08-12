@@ -38,6 +38,10 @@ MlResolver.MlMutationResolver['followUser'] = (obj, args, context, info) =>{
             return new MlRespPayload().errorPayload(resp, 400);
           }
 
+          let followData = mlDBController.findOne('MlFollowings',{followedBy:fromuser._id,followerId:toUser._id}, context);
+          let fromUserType = 'user';
+          mlInteractionService.createTransactionRequest(toUser._id,'follow', args.resourceId, followData._id, fromuser._id, fromUserType );
+
         }catch (e){
             let code = 400;
             let response = new MlRespPayload().errorPayload(e.message, code);

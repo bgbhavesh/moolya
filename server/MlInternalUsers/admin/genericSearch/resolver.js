@@ -1,6 +1,7 @@
   import MlResolver from "../../../commons/mlResolverDef";
   import getQuery from "../genericSearch/queryConstructor";
   import MlAdminUserContext from "../../../../server/mlAuthorization/mlAdminUserContext";
+  import MlUserContext from './../../../MlExternalUsers/mlUserContext';
   import _ from "underscore";
   import _lodash from "lodash";
 
@@ -926,7 +927,11 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
               "userId": '$_id',
               "status": "$$trans.status",
               "activity": "$$trans.activity",
-              "activityDocId": "$$trans.activityDocId"
+              "activityDocId": "$$trans.activityDocId",
+              "fromUserId": "$$trans.fromUserId",
+              "fromProfileId": "$$trans.fromProfileId",
+              "fromUserName": "$$trans.fromUserName",
+              "fromUserType": "$$trans.fromUserType",
             }
           }
       }
@@ -978,15 +983,27 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     data = mlDBController.aggregate('users', pipeline, context);
 
     data = data.map(function (doc) {
+
       let transactionType = doc.transactionType;
-      if(transactionType == "connectionRequest") {
+      if(transactionType == "connectionRequest" || transactionType == "interaction") {
+        if(doc.fromUserType === 'user') {
+          let fromUserProfile = new MlUserContext().userProfileDetailsByProfileId(doc.fromProfileId);
+          doc.cluster = fromUserProfile.clusterName;
+          doc.chapter = fromUserProfile.chapterName;
+          doc.subChapter = fromUserProfile.subChapterName;
+          doc.community = fromUserProfile.communityName;
+          doc.email = fromUserProfile.email;
+          doc.createdby = fromUserProfile.firstName + ' ' + fromUserProfile.lastName;
+          doc.mobileNumber = fromUserProfile.mobileNumber;
+        }
         let activity = doc.activity;
         let activityDocId = doc.activityDocId;
         switch (activity){
           case 'connection':
+            let status = [ "Pending", "Accepted", "Declined","Blocked"];
             let data = mlDBController.findOne('MlConnections', activityDocId);
-            doc.email = data && data.createdBy ? data.createdBy : doc.email;
             doc.transactionId = data && data.transactionId ? data.transactionId : doc.transactionId;
+            doc.status = status[data.status];
             break;
         }
       }

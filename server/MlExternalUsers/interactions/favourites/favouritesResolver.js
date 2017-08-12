@@ -76,7 +76,12 @@ MlResolver.MlMutationResolver['markFavourite'] = (obj, args, context, info) => {
         {connectionCode:connectionCode,"users.userId":fromuser._id,isBlocked:false,isDenied:false,isAccepted:true},
         {updatedBy:fromuser.username,updatedAt:new Date(),actionUserId:fromuser._id,"users.$.isFavourite":isFavourite},
         {$set:true},context);
-      if(resp===1){ return new MlRespPayload().successPayload(resp,200) };
+      if(resp===1){
+        let fromUserType = 'user';
+        let connectionData = mlDBController.findOne('MlConnections', {connectionCode:connectionCode,"users.userId":fromuser._id,isBlocked:false,isDenied:false,isAccepted:true}, context);
+        mlInteractionService.createTransactionRequest(toUser._id,'favorite', args.resourceId, connectionData._id, fromuser._id, fromUserType );
+        return new MlRespPayload().successPayload(resp,200);
+      };
 
       //todo: if user is not in his connection, return valud error message
 

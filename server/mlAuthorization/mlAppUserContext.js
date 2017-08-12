@@ -29,7 +29,9 @@ class MlAppUserContext
         return {defaultCluster:defaultProfile.clusterId,defaultClusterName:defaultProfile.clusterName,
                 defaultChapter:defaultProfile.chapterId,defaultChapterName:defaultProfile.chapterName,
                 defaultSubChapter:defaultProfile.subChapterId,defaultSubChapterName:defaultProfile.subChapterName,
-                defaultCommunity:defaultProfile.communityId,defaultCommunityName:defaultProfile.communityName};
+                defaultCommunity:defaultProfile.communityId,defaultCommunityName:defaultProfile.communityName,
+                profileId: defaultProfile.profileId
+                };
   }
 
 }

@@ -46,7 +46,7 @@ class MlAppServiceSelectTask extends Component{
   //   console.log(newProps.task)
   // }
 
-  async componentDidMount() {
+  componentDidMount() {
     // if(this.props.viewMode && this.props.serviceTask.tasks[0] ){
     // if(this.props.taskDetails[0]) {
     //   let taskId = this.props.taskDetails[0]._id;
@@ -56,6 +56,12 @@ class MlAppServiceSelectTask extends Component{
     // this.initilizeSwiper()
     let WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(250+$('.app_header').outerHeight(true)));
+
+    console.log(this.props.taskDetails);
+    if(this.props && this.props.taskDetails && this.props.taskDetails[0] ){
+      let tab = this.props.taskDetails[0];
+      this.sendTaskId(tab.id, tab.isExternal, tab.isInternal);
+    }
   }
 
   componentWillUpdate() {

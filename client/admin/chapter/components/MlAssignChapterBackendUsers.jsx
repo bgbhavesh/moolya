@@ -119,6 +119,9 @@ class MlAssignChapterBackendUsers extends React.Component {
     return resp;
   }
 
+  /**
+   * assign backed user with the context of data to assign
+   * */
   async assignBackendUsers() {
     let userProfile = {};
     if(this.state.mlroleDetails.length == 0)
@@ -128,24 +131,41 @@ class MlAssignChapterBackendUsers extends React.Component {
     }
 
     let roles = this.filterClusterBasedRoles();
-
+    var params = this.props.params || {}
     userProfile['userId'] = this.state.selectedBackendUser
-    userProfile['clusterId'] = this.props.params.clusterId;
+    userProfile['clusterId'] = params.clusterId;
     userProfile['userRoles'] = roles;
     userProfile['displayName'] = this.refs.displayName.value;
     let user = {
       profile: {InternalUprofile: {moolyaProfile: {userProfiles: userProfile}}},
       isChapterAdmin: this.state.chapterAdmin
     }
-    let data = {moduleName: "USERS", actionName: "UPDATE", userId: this.state.selectedBackendUser, user: user}
+    let data = {
+      moduleName: "USERS",
+      actionName: "UPDATE",
+      userId: this.state.selectedBackendUser,
+      user: user,
+      clusterId: params.clusterId,
+      chapterId: params.chapterId,
+      subChapterId : params.subChapterId,
+      communityId : params.communityId
+    }
     let response = await multipartFormHandler(data, this.refs.profilePic.files[0]);
     return response;
   }
 
+  /**
+   * @handlerSuccess under different conditions
+   * */
   handleSuccess(response) {
-      if (response) {
-         this.resetBackendUsers();
-      }
+    console.log(response)
+    if (response && response.unAuthorized)
+      toastr.error(response.message);
+    else if (response && response.success)
+      toastr.success(response.result);
+    else if (response && !response.success)
+      toastr.error(response.result);
+    this.resetBackendUsers();
   }
 
   handleError(response) {

@@ -168,10 +168,11 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
           }
           switch (moduleName) {
             case "USERS": {
-              var ret = mlAuthorization.valiateApi(MlResolver.MlModuleResolver, 'updateCommunityDef')
+              var ret = mlAuthorization.valiateApi(MlResolver.MlModuleResolver, 'assignUsers')
               var isAuth = false;
               if (!ret.isWhiteList) {
-                isAuth = mlAuthorization.validteAuthorization(context.userId, ret.moduleName, ret.actionName, req.body, false);
+                // isAuth = mlAuthorization.validteAuthorization(context.userId, ret.moduleName, ret.actionName, req.body, false);
+                isAuth = mlAuthorization.validteAuthorization(context.userId, ret.moduleName, ret.actionName, JSON.parse(req.body.data), false);
               }
               if (ret.isWhiteList || isAuth) {
                 response = MlResolver.MlMutationResolver['assignUsers'](null, {

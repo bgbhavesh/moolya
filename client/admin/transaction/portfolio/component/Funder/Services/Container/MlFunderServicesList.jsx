@@ -18,11 +18,17 @@ export default class  MlFunderServicesList extends Component {
       componentToView:'landingPage',
       serviceIndex:"",
       data: {}
-    }
+    };
+    this.fetchServices = this.fetchServices.bind(this);
     // this.servicesListView.bind(this);
     this.getServiceDetails.bind(this);
   }
   componentWillMount(){
+    this.getServiceDetails();
+    this.getBeSpokeServiceDetails();
+  }
+
+  fetchServices(){
     this.getServiceDetails();
     this.getBeSpokeServiceDetails();
   }
@@ -63,13 +69,15 @@ export default class  MlFunderServicesList extends Component {
   }
 
   componentView(view,index,serviceId, serviceProfileId){
-    this.setState({componentToView: view})
+    this.setState({componentToView: view}, function () {
+      this.fetchServices();
+    }.bind(this));
     if(index && serviceId && serviceProfileId){
       let details = {
         index: index,
         serviceId: serviceId,
         serviceProfileId: serviceProfileId
-      }
+      };
       this.setState({data: details})
     }
   }
@@ -96,6 +104,7 @@ export default class  MlFunderServicesList extends Component {
         portfolioDetailsId={this.props.portfolioDetailsId}
         bookService={this.bookService.bind(this)}
         serviceDetails={this.state.serviceDetails}
+        fetchServices={this.fetchServices.bind(this)}
     />
     )
   }

@@ -104,8 +104,7 @@ MlResolver.MlMutationResolver['addUserProfile'] = (obj, args, context, info) => 
 
     if(resp){
         let code = 200;
-        let result = {user: resp}
-        let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+        let response = new MlRespPayload().successPayload('User successfully assigned', code)
         return response
       }
   }

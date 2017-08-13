@@ -129,21 +129,113 @@ class MlInteractionService{
       }
     }
 
-    createTransactionRequest(userId,transType,resourceId,context) {
+    createTransactionRequest(userId, transType, portfolioId, resourceId, fromUserId, fromUserType, context) {
       try {
         var transactionType = transType;
         switch (transactionType) {
           case 'connectionRequest':
             new MlTransactionsHandler().recordTransaction({
+              'fromUserId': fromUserId,
               'moduleName': 'interaction',
               'activity': 'connection',
               'transactionType': 'connectionRequest',
               'userId': userId,
               'activityDocId': resourceId,
-              'docId': resourceId,
+              'docId': portfolioId,
               'transactionDetails': 'connection request',
               'context': context || {},
-              'transactionTypeId': "connectionRequest"
+              'transactionTypeId': "connectionRequest",
+              'fromUserType': fromUserType
+            });
+            break;
+          case 'like':
+            new MlTransactionsHandler().recordTransaction({
+              'fromUserId': fromUserId,
+              'moduleName': 'interaction',
+              'activity': 'like',
+              'transactionType': 'interaction',
+              'userId': userId,
+              'activityDocId': resourceId,
+              'docId': portfolioId,
+              'transactionDetails': 'like portfolio',
+              'context': context || {},
+              'transactionTypeId': "interaction",
+              'fromUserType': fromUserType
+            });
+            break;
+          case 'favorite':
+            new MlTransactionsHandler().recordTransaction({
+              'fromUserId': fromUserId,
+              'moduleName': 'interaction',
+              'activity': 'favorite',
+              'transactionType': 'interaction',
+              'userId': userId,
+              'activityDocId': resourceId,
+              'docId': portfolioId,
+              'transactionDetails': 'favorite portfolio',
+              'context': context || {},
+              'transactionTypeId': "interaction",
+              'fromUserType': fromUserType
+            });
+            break;
+          case 'follow':
+            new MlTransactionsHandler().recordTransaction({
+              'fromUserId': fromUserId,
+              'moduleName': 'interaction',
+              'activity': 'follow',
+              'transactionType': 'interaction',
+              'userId': userId,
+              'activityDocId': resourceId,
+              'docId': portfolioId,
+              'transactionDetails': 'follow portfolio',
+              'context': context || {},
+              'transactionTypeId': "interaction",
+              'fromUserType': fromUserType
+            });
+            break;
+          case 'inquire':
+            new MlTransactionsHandler().recordTransaction({
+              'fromUserId': fromUserId,
+              'moduleName': 'interaction',
+              'activity': 'inquire',
+              'transactionType': 'interaction',
+              'userId': userId,
+              'activityDocId': resourceId,
+              'docId': portfolioId,
+              'transactionDetails': 'inquire portfolio',
+              'context': context || {},
+              'transactionTypeId': "interaction",
+              'fromUserType': fromUserType
+            });
+            break;
+          case 'review':
+            new MlTransactionsHandler().recordTransaction({
+              'fromUserId': fromUserId,
+              'moduleName': 'interaction',
+              'activity': 'review',
+              'transactionType': 'interaction',
+              'userId': userId,
+              'activityDocId': resourceId,
+              'docId': portfolioId,
+              'transactionDetails': 'review portfolio',
+              'context': context || {},
+              'transactionTypeId': "interaction",
+              'fromUserType': fromUserType
+            });
+            break;
+          case 'view':
+            new MlTransactionsHandler().recordTransaction({
+              'fromUserId': fromUserId,
+              'moduleName': 'interaction',
+              'activity': 'view',
+              'transactionType': 'interaction',
+              'userId': userId,
+              'activityDocId': resourceId,
+              'docId': portfolioId,
+              'transactionDetails': 'view portfolio',
+              'context': context || {},
+              'transactionTypeId': "interaction",
+              'fromUserType': fromUserType
             });
             break;
         }
@@ -158,7 +250,7 @@ class MlInteractionService{
       switch (transactionType) {
         case 'connectionRequest':
           let transactionRec=new MlTransactionsHandler().readTransaction(transactionId);
-          return transactionRec.docId;
+          return transactionRec.activityDocId;
           break;
       }
     } catch (e) {

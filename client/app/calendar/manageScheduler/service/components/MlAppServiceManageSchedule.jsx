@@ -684,12 +684,12 @@ class MlAppServiceManageSchedule extends Component {
     if ((servicePayment.discountType && servicePayment.discountValue <= 0) || !servicePayment.discountValue) {
       servicePayment.discountValue = 0;
       if (facilitationCharge.amount > 0 ) {
-        finalAmount = servicePayment.tasksDerived;
+        finalAmount = parseFloat(servicePayment.tasksDerived);
         if (facilitationCharge.type === 'amount') {
-          finalAmount += parseInt(facilitationCharge.amount);
+          finalAmount = parseFloat(finalAmount + parseFloat(facilitationCharge.amount)).toFixed(2);
         } else if (facilitationCharge.type === 'percent') {
-          let prevAmount =  (parseInt(servicePayment.tasksDerived) * parseInt(facilitationCharge.amount) / 100);
-          finalAmount += prevAmount;
+          let prevAmount =  (parseFloat(servicePayment.tasksDerived) * parseFloat(facilitationCharge.amount) / 100);
+          finalAmount = parseFloat(finalAmount + prevAmount).toFixed(2);
         }
       }
     }
@@ -728,12 +728,12 @@ class MlAppServiceManageSchedule extends Component {
     if (!servicePayment.isDiscount) {
       servicePayment.discountType = '';
       if (facilitationCharge.amount > 0 ) {
-        finalAmount = servicePayment.tasksDerived;
+        finalAmount = parseFloat(servicePayment.tasksDerived);
         if (facilitationCharge.type === 'amount') {
-          finalAmount += parseInt(facilitationCharge.amount);
+          finalAmount = parseFloat(finalAmount + parseFloat(facilitationCharge.amount)).toFixed(2);
         } else if (facilitationCharge.type === 'percent') {
-          let prevAmount =  (parseInt(servicePayment.tasksDerived) * parseInt(facilitationCharge.amount) / 100);
-          finalAmount += prevAmount;
+          let prevAmount =  (parseFloat(servicePayment.tasksDerived) * parseFloat(facilitationCharge.amount) / 100);
+          finalAmount = parseFloat(finalAmount + prevAmount).toFixed(2);
         }
       }
     }
@@ -790,14 +790,16 @@ class MlAppServiceManageSchedule extends Component {
       servicePayment.discountValue = event.target.value;
       switch (servicePayment.discountType) {
         case 'amount':
-          if (parseInt(event.target.value) >= 0) {
-            finalAmount = parseInt(servicePayment.tasksDerived) - parseInt(servicePayment.discountValue);
+          if (parseFloat(event.target.value) >= 0) {
+            let value = parseFloat(servicePayment.tasksDerived) - parseFloat(servicePayment.discountValue);
+            finalAmount = value ? parseFloat(value).toFixed(2) : null;
           }
           break;
         case 'percent':
           if (parseFloat(event.target.value) >= 0) {
-            let percentageAmmount = (parseInt(servicePayment.tasksDerived) * parseInt(servicePayment.discountValue)) / 100;
-            finalAmount = parseInt(servicePayment.tasksDerived) - percentageAmmount;
+            let percentageAmmount = (parseFloat(servicePayment.tasksDerived) * parseFloat(servicePayment.discountValue)) / 100;
+            let value = parseFloat(servicePayment.tasksDerived) - percentageAmmount;
+            finalAmount = value ? parseFloat(value).toFixed(2) : null;
           }
           break;
         default:
@@ -805,10 +807,10 @@ class MlAppServiceManageSchedule extends Component {
       }
       if (facilitationCharge.type && facilitationCharge.amount > 0) {
         if (facilitationCharge.type === 'amount') {
-          finalAmount += facilitationCharge.amount;
+          finalAmount = parseFloat(finalAmount + facilitationCharge.amount).toFixed(2);
         } else if (facilitationCharge.type === 'percent') {
-          let prevAmount =  (parseInt(servicePayment.tasksDerived) * parseInt(facilitationCharge.amount) / 100);
-          finalAmount += prevAmount;
+          let prevAmount =  (parseFloat(servicePayment.tasksDerived) * parseFloat(facilitationCharge.amount) / 100);
+          finalAmount = parseFloat(finalAmount + prevAmount).toFixed(2);
         }
       }
       this.setState({
@@ -830,9 +832,9 @@ class MlAppServiceManageSchedule extends Component {
     let {servicePayment, facilitationCharge, finalAmount, prevFinalAmount } = this.state;
     servicePayment.discountValue = 0;
     if (facilitationCharge.amount > 0) {
-      finalAmount = prevFinalAmount;
+      finalAmount = prevFinalAmount ? parseFloat(prevFinalAmount).toFixed(2) : null;
     } else {
-      finalAmount = servicePayment.tasksDerived;
+      finalAmount = servicePayment.tasksDerived ? parseFloat(servicePayment.tasksDerived).toFixed(2) : null;
     }
     if (servicePayment.isDiscount) {
       servicePayment.discountType = event.target.id;

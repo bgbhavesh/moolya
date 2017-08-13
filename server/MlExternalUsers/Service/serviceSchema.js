@@ -311,7 +311,7 @@ let service=`
         getProfileBasedOnPortfolio(portfolioId:String): PortfolioDetails
         getServiceBasedOnServiceId(serviceId:String, clusterId: String, chapterId: String, subChapterId: String, communityId: String): AdminService
         getTaskFromService(serviceId:String):Service
-        fetchServicesForAppointments: [Service]
+        fetchServicesForAppointments(profileId:String): [Service]
    }
 
    type Mutation {

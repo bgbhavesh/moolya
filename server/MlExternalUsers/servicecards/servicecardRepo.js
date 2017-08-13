@@ -86,8 +86,16 @@ class MlServiceCardRepo{
         serviceCard['isBeSpoke']             = true;
         serviceCard["versions"]             =  INITIAL_VERSION;
         serviceCard["isCurrentVersion"]     = true;
+        serviceCard["clusterId"]            = defaultProfile.clusterId;
+        serviceCard["clusterName"]          = defaultProfile.clusterName;
+        serviceCard["chapterId"]            = defaultProfile.chapterId;
+        serviceCard["chapterName"]          = defaultProfile.chapterName;
+        serviceCard["subChapterId"]         = defaultProfile.subChapterId;
+        serviceCard["subChapterName"]       = defaultProfile.subChapterName;
+        serviceCard["communityId"]          = defaultProfile.communityId;
+        serviceCard["communityName"]        = defaultProfile.communityName;
         orderNumberGenService.createServiceId(serviceCard);
-        var portfolioDetailsTransactions = mlDBController.findOne('MlPortfolioDetails', portfolioId, context)
+        var portfolioDetailsTransactions = mlDBController.findOne('MlPortfolioDetails', portfolioId, context);
         if(portfolioDetailsTransactions){
           serviceCard["userId"]     = portfolioDetailsTransactions.userId
           serviceCard["profileId"]  = portfolioDetailsTransactions.profileId

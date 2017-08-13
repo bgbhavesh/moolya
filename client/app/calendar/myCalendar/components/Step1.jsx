@@ -27,7 +27,7 @@ class Step1 extends Component {
 
   constructor(props) {
     super(props);
-    this.state={service:"", serviceSeeker:[], seeker: "", orderId:""}
+    this.state={service:"", serviceSeeker:[], seeker: "", orderId:""};
     this.testQuery.bind(this);
     this.saveData.bind(this);
   }
@@ -58,7 +58,6 @@ class Step1 extends Component {
   // }
 
   componentDidMount() {
-    console.log(this.props.serviceBasicInfo)
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(310+$('.admin_header').outerHeight(true)));
@@ -120,7 +119,8 @@ this.bookDetails(data)
 
  async testQuery() {
     if(this.props.serviceId) {
-      const resp = await fetchServiceSeekerHandler(this.props.profileId, this.props.serviceId)
+      const resp = await fetchServiceSeekerHandler(this.props.profileId, this.props.serviceId);
+      console.log(resp);
       this.setState({ serviceSeeker: resp})
     }
   }
@@ -182,6 +182,14 @@ this.bookDetails(data)
         }
       }
     `;
+    let serviceOption = {
+      options: {
+        variables: {
+          profileId: this.props.profileId
+        }
+      }
+    };
+
     const {onChangeSteps, isTaskComponent} = this.props;
     return (
       <div className="app_main_wrap">
@@ -259,6 +267,7 @@ this.bookDetails(data)
                   selectedValue={this.state.service}
                   isDynamic={true}
                   queryType={'graphql'}
+                  queryOptions={serviceOption}
                   query={getServiceQuery}
                   onSelect={this.selectedService.bind(this)}
                 />

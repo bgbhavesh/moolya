@@ -68,21 +68,6 @@ export default class SharePopOver extends React.Component {
         });
     this.setState({teamData: tempArray})
       return tempArray;
-
-    // console.log('===Team Details===',this.state.teamData)
-
-    /**
-     * Resolve the promise
-     */
-    // Promise.all(teamData).then(function(value) {
-    //   console.log('==response==', value)
-    //   that.setState({
-    //     teamData : value
-    //   }, () => {
-    //     console.log('===Team Details===',that.state.teamData)
-    //   });
-    // });
-
   }
 
   toggle() {

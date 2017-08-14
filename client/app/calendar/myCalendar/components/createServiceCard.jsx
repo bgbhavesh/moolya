@@ -299,7 +299,7 @@ class MlAppServiceManageSchedule extends Component {
                 {!isTaskComponent ?
                   <div>
                   <StepZilla steps={this.setServiceSteps()}
-                             stepsNavigation={false}
+                             stepsNavigation={true}
                              prevBtnOnLastStep={true}/>
                     <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
                   </div>

@@ -173,6 +173,9 @@ this.bookDetails(data)
       };
       console.log('Data :',data);
       this.bookDetails(data)
+      if(currentSeeker.serviceId){
+        this.props.selectedService(currentSeeker.serviceId);
+      }
     }.bind(this));
 
     // this.saveData()

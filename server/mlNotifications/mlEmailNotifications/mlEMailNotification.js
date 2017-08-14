@@ -687,11 +687,12 @@ const MlEmailNotification= class MlEmailNotification {
     }
   }
 
-  static officeInvitationEmail(context,registrationData) {
+  static officeInvitationEmail(registrationId,context,registrationData) {
     let address
 
     let userDetails = mlDBController.findOne('users', {_id: context.userId}) || {}
-    var email = _.find(userDetails.emails || [], function (e) {
+    var user=mlDBController.findOne('MlRegistration', {_id:registrationId},context||{});
+    var email = _.find(user.emails || [], function (e) {
       return !e.verified;
     });
 

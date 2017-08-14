@@ -16,7 +16,7 @@ import gql from 'graphql-tag'
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
-
+import _ from 'lodash';
 /**
  * Initialize conversation types
  */
@@ -230,10 +230,12 @@ export default class MlAppBasicInfo extends React.Component{
    * @returns Void
    */
   addDeliverables(index, evt) {
-    let data = this.state.basicData;
-    data.deliverable.splice(index+1, 0, '');
+    let deliverable = _.cloneDeep(this.state.basicData.deliverable);
+    let basicData = _.cloneDeep(this.state.basicData);
+    deliverable.splice(index+1, 0, '');
+    basicData.deliverable = deliverable;
     this.setState({
-      basicData: data
+      basicData: basicData
     }, () => {
       this.saveDetails();
     });
@@ -247,10 +249,12 @@ export default class MlAppBasicInfo extends React.Component{
    * @returns Void
    */
   removeDeliverables(index,evt) {
-    let data = this.state.basicData;
-    data.deliverable.splice(index, 1);
+    let deliverable = _.cloneDeep(this.state.basicData.deliverable);
+    let basicData = _.cloneDeep(this.state.basicData);
+    deliverable.splice(index, 1);
+    basicData.deliverable = deliverable;
     this.setState({
-      basicData: data
+      basicData: basicData
     }, () => {
       this.saveDetails();
     });
@@ -264,10 +268,12 @@ export default class MlAppBasicInfo extends React.Component{
    * @returns Void
    */
   deliverableData(evt, index) {
-    let data = this.state.basicData;
-    data.deliverable[index] = evt.target.value;
+    let deliverable = _.cloneDeep(this.state.basicData.deliverable);
+    let basicData = _.cloneDeep(this.state.basicData);
+    deliverable[index] = evt.target.value;
+    basicData.deliverable = deliverable;
     this.setState({
-      basicData: data
+      basicData: basicData
     }, () => {
       this.saveDetails();
     });

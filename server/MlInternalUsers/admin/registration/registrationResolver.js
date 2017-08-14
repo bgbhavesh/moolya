@@ -794,14 +794,24 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
   }
 }
 
-/**user rejection from registration*/
+/**
+ * user rejection from registration
+ * @Note: 1) making user profile [isActive && isApprove : false]
+ *        2) registration status [rejected]
+ * */
 MlResolver.MlMutationResolver['RejectedStatusForUser'] = (obj, args, context, info) => {
   if (args.registrationId) {
     let isRejected = mlDBController.findOne('MlRegistration', {_id:args.registrationId, status: "Rejected"}, context)
     if(!isRejected){
       let updatedResponse = mlDBController.update('MlRegistration', args.registrationId, {"status": "Rejected"}, {$set: true}, context)
       if (updatedResponse) {
-        var resp = mlDBController.update('users', {'profile.externalUserProfiles.registrationId': args.registrationId}, {"profile.externalUserProfiles.$.isApprove": false}, {$set: true}, context);
+        var resp = mlDBController.update('users', {
+          'profile.isInternaluser': false,
+          'profile.externalUserProfiles.registrationId': args.registrationId
+        }, {
+          "profile.externalUserProfiles.$.isApprove": false,
+          "profile.externalUserProfiles.$.isActive": false
+        }, {$set: true}, context);
         /*if(resp){
           let user = mlDBController.findOne('MlRegistration', {_id:args.registrationId}, context)
           MlEmailNotification.onKYCDecline(user);

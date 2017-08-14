@@ -753,23 +753,58 @@ let CoreModules = {
       resultantQuery['registrationInfo.subChapterId'] = {$in: nonMoolyaContext.subChapters}
       resultantQuery['registrationInfo.chapterId'] = {$in: nonMoolyaContext.chapters}
     }
-    // resultantQuery = MlAdminContextQueryConstructor.constructQuery(contextQuery, '$in');
+    // if (!fieldsProj.sort) {
+    //   fieldsProj.sort = {'registrationInfo.registrationDate': -1}
+    // }
     if (!fieldsProj.sort) {
-      fieldsProj.sort = {'registrationInfo.registrationDate': -1}
+      fieldsProj.sort = {
+        'registrationInfo.registrationDate': -1
+      }
     }
     var serverQuery = {emails: {$elemMatch: {verified: true}}};
     resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery, serverQuery), '$and');
-    var data = MlRegistration.find(resultantQuery, fieldsProj).fetch() || [];
+    // var data = MlRegistration.find(resultantQuery, fieldsProj).fetch() || [];
+    let piplelineQuery = []
+    if (resultantQuery)
+      piplelineQuery.push({'$match': resultantQuery});
+
+    piplelineQuery.push({
+      $group: {
+        _id: '$registrationInfo.userName',
+        "registrationId": {"$first": "$_id"},
+        "firstName": {"$first": "$registrationInfo.firstName"},
+        "lastName": {"$first": "$registrationInfo.lastName"},
+        "clusterName": {"$first": "$registrationInfo.clusterName"},
+        "chapterName": {"$first": "$registrationInfo.chapterName"},
+        "registrationType": {"$first": "$registrationInfo.registrationType"},
+        "subChapterName": {"$first": "$registrationInfo.subChapterName"},
+        "accountType": {"$first": "$registrationInfo.accountType"},
+        "userName": {"$first": "$registrationInfo.userName"},
+      }
+    })
+
+    if (fieldsProj.sort) {
+      piplelineQuery.push({'$sort': fieldsProj.sort});
+    }
+    if (fieldsProj.skip) {
+      piplelineQuery.push({'$skip': parseInt(fieldsProj.skip)});
+    }
+    if (fieldsProj.limit) {
+      piplelineQuery.push({'$limit': parseInt(fieldsProj.limit)});
+    }
+    var data = mlDBController.aggregate('MlRegistration', piplelineQuery);
+
     var totalRecords = MlRegistration.find(resultantQuery, fieldsProj).count();
-    //todo://need to replace this loop by sending reponse of [Type: @RegistrationResponse] in place of [--RegistrationInfo]
-    var result = []
-    data.map(function (doc, index) {
-      let object;
-      object = doc.registrationInfo;
-      object._id = doc._id;
-      result.push(object);
-    });
-    data = result;
+
+    // var result = []
+    // data.map(function (doc, index) {
+    //   let object;
+    //   object = doc.registrationInfo;
+    //   object._id = doc._id;
+    //   result.push(object);
+    // });
+    // var a = _.uniqBy(result, 'userName');
+    // console.log(a.length)
     return {totalRecords: totalRecords, data: data};
   },
 

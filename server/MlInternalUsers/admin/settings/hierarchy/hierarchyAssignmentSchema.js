@@ -65,7 +65,7 @@ let HierarchyAssignmentSchema = `
       fetchAssignedRolesHierarchy(clusterId:String, hierarchyId:String,departmentId:String,subDepartmentId:String,subChapterId:String,type:String):HierarchyAssignment      
       fetchFinalApprovalRole(departmentId:String,subDepartmentId:String,clusterId:String, subChapterId:String, isDefaultSubChapter: Boolean):HierarchyAssignment
       fetchHierarchyRoles(clusterId:String,departmentId:String,subDepartmentId:String, subChapterId:String):[teamStructureAssignment]
-      fetchHierarchyUsers(clusterId:String,departmentId:String,subDepartmentId:String,roleId:String):[BackendUsers]
+      fetchHierarchyUsers(clusterId:String,departmentId:String,subDepartmentId:String,roleId:String, subChapterId:String):[BackendUsers]
     }
     type Mutation {
       updateHierarchyAssignment(hierarchy:HierarchyAssignmentInput):response

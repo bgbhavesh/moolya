@@ -1,5 +1,5 @@
-import MlResolver from "../../../commons/mlResolverDef";
-import MlRespPayload from "../../../commons/mlPayload";
+import MlResolver from "../../commons/mlResolverDef";
+import MlRespPayload from "../../commons/mlPayload";
 var _ = require('lodash')
 
 MlResolver.MlMutationResolver['createSharedLibrary'] = (obj, args, context, info) => {

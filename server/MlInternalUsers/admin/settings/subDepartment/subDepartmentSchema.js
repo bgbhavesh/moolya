@@ -78,7 +78,7 @@ let supportedApi = [
     {api:'findSubDepartments', actionName:'READ', moduleName:"SUBDEPARTMENT"},
     {api:'fetchActiveSubDepartments', actionName:'READ', moduleName:"SUBDEPARTMENT"},
     {api:'fetchSubDepartmentsForRegistration', actionName:'READ', moduleName:"SUBDEPARTMENT", isWhiteList:true},
-    {api:'fetchSubDepartmentsHierarchy', actionName:'READ', moduleName:"SUBDEPARTMENT"}
+    {api:'fetchSubDepartmentsHierarchy', actionName:'READ', moduleName:"SUBDEPARTMENT", isWhiteList:true}
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -288,8 +288,8 @@ export default class MlPortfolioAssignComponent extends React.Component {
         label:roleName
       }  
     }`;
-    let usersQuery=gql`query($clusterId:String,$departmentId:String,$subDepartmentId:String,$roleId:String){  
-      data:fetchHierarchyUsers(clusterId:$clusterId,departmentId:$departmentId,subDepartmentId:$subDepartmentId,roleId:$roleId) {
+    let usersQuery=gql`query($clusterId:String,$departmentId:String,$subDepartmentId:String,$roleId:String, $subChapterId:String){  
+      data:fetchHierarchyUsers(clusterId:$clusterId,departmentId:$departmentId,subDepartmentId:$subDepartmentId,roleId:$roleId, subChapterId:$subChapterId) {
         value:_id
         label:username
       }  

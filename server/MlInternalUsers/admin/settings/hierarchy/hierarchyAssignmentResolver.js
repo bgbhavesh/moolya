@@ -147,9 +147,9 @@ MlResolver.MlQueryResolver['fetchHierarchyRoles'] = (obj, args, context, info) =
   let levelCode = "";
   var finalRoles = []
   var hierarchyQuery = {};
-  var subChapter = {};
+  var subChapter = null;
 
-  if(args.subChapterId){
+  if(args.subChapterId != null){
     subChapter =  mlDBController.findOne("MlSubChapters", {"_id": args.subChapterId}, context)
   }
 
@@ -157,22 +157,27 @@ MlResolver.MlQueryResolver['fetchHierarchyRoles'] = (obj, args, context, info) =
   if (department && department.isActive) {
 
     // Show only moolya roles if subchpater(non-moolya) is not selected(!args.subChapterId).
-    if(subChapter.isDefaultSubChapter || !args.subChapterId){
+    if(subChapter){
       hierarchyQuery = {
         $and: [
           {parentDepartment:args.departmentId},
           {parentSubDepartment:args.subDepartmentId},
           {clusterId:department.isSystemDefined?"All":args.clusterId},
-          {isDefaultSubChapter : true}
+          {isDefaultSubChapter : subChapter.isDefaultSubChapter}
         ]
       }
     } else{
+      let userRole = mlAssignHierarchy.getUserRoles(context.userId);
+      let isDefaultSubChapter = true;
+      if(userRole && userRole.subChapterId != "all"){
+        isDefaultSubChapter = mlDBController.findOne('MlSubChapters', {_id:userRole.subChapterId}, context).isDefaultSubChapter;
+      }
       hierarchyQuery = {
         $and: [
           {parentDepartment:args.departmentId},
           {parentSubDepartment:args.subDepartmentId},
           {clusterId:department.isSystemDefined?"All":args.clusterId},
-          {isDefaultSubChapter : false}
+          {isDefaultSubChapter : isDefaultSubChapter}
         ]
       }
     }
@@ -300,7 +305,7 @@ MlResolver.MlQueryResolver['fetchHierarchyUsers'] = (obj, args, context, info) =
   if(hierarchy){
     //get all users associated with the hierarchy
     let usersList = []
-    if(args.clusterId && args.departmentId && args.subDepartmentId && args.roleId){
+    if(args.clusterId && args.departmentId && args.subDepartmentId && args.roleId && args.subChapterId){
         // usersList = mlDBController.find('users', {"$and":[{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.clusterId":args.clusterId} ,{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.departmentId":args.departmentId},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.subDepartmentId":args.subDepartmentId},{"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles.roleId":args.roleId},{"profile.isActive":true}]}, context).fetch()
 
       usersList =mlDBController.find('users', {"$and":
@@ -313,6 +318,7 @@ MlResolver.MlQueryResolver['fetchHierarchyUsers'] = (obj, args, context, info) =
                 departmentId:args.departmentId,
                 subDepartmentId:args.subDepartmentId,
                 roleId:args.roleId,
+                subChapterId:args.subChapterId,
                 isActive:true,
               }
             }
@@ -320,7 +326,46 @@ MlResolver.MlQueryResolver['fetchHierarchyUsers'] = (obj, args, context, info) =
         ]
       }, context).fetch()
 
-     }
+     }else if(args.clusterId && args.departmentId && args.subDepartmentId && args.roleId){
+      let userRole = mlAssignHierarchy.getUserRoles(context.userId);
+      if(userRole && userRole.subChapterId != "all"){
+        usersList =mlDBController.find('users', {"$and":
+          [
+            {"profile.isActive":true},
+            {"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles":
+              {
+                $elemMatch: {
+                  clusterId:args.clusterId,
+                  departmentId:args.departmentId,
+                  subDepartmentId:args.subDepartmentId,
+                  roleId:args.roleId,
+                  subChapterId:userRole.subChapterId,
+                  isActive:true,
+                }
+              }
+            },
+          ]
+        }, context).fetch()
+      } else{usersList =mlDBController.find('users', {"$and":
+          [
+            {"profile.isActive":true},
+            {"profile.InternalUprofile.moolyaProfile.userProfiles.userRoles":
+              {
+                $elemMatch: {
+                  clusterId:args.clusterId,
+                  departmentId:args.departmentId,
+                  subDepartmentId:args.subDepartmentId,
+                  roleId:args.roleId,
+                  isActive:true,
+                }
+              }
+            },
+          ]
+        }, context).fetch()
+      }
+
+
+    }
     if(usersList){
       usersList.map(function (user,key) {
         //remove self user

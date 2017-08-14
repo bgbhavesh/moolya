@@ -34,7 +34,7 @@ let sharedLibrarySchema = `
     
     input userInput{
       userId: String
-      profileId: Boolean
+      profileId: String
     }
     
     input fileInput{

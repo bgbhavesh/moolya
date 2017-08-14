@@ -30,6 +30,11 @@ export default class MlTaskAppointmentBasicInfo extends Component {
     this.props.setSessionStep(false, false);
   }
 
+  componentDidMount() {
+    // $('.float-label').jvFloat();
+    var WinHeight = $(window).height();
+    $('.step_form_wrap').height(WinHeight-(310+$('.app_header').outerHeight(true)));
+  }
   /**
    * Method :: loadTaskOptions
    * Desc :: Load the task options

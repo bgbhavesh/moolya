@@ -55,7 +55,7 @@ class MlAppServiceSelectTask extends Component{
     // }
     // this.initilizeSwiper()
     let WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(250+$('.app_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight-(310+$('.app_header').outerHeight(true)));
 
     console.log(this.props.taskDetails);
     if(this.props && this.props.taskDetails && this.props.taskDetails[0] ){
@@ -160,15 +160,13 @@ class MlAppServiceSelectTask extends Component{
 
 
   async setSession(index, sessionId, duration) {
-    console.log('--index--', index,'--sessionId--', sessionId, '--duration--',duration, )
     const {selectedTaskId} = this.state;
     // let {selectedTaskId} = this.props;
     this.setState({sessionId: sessionId})
     const resp = await fetchActivitiesTeamsActionHandler(selectedTaskId, sessionId);
     if(resp){
-      this.getUsers(resp, index);
+      await this.getUsers(resp, index, duration);
     }
-    await this.getUsers(resp, index, duration);
 
     // this.props.saveDetails('session', sessionId);
   }

@@ -17,6 +17,12 @@ export default class SessionDetails extends Component {
     this.props.saveAction(details);
   }
 
+  componentDidMount() {
+    // $('.float-label').jvFloat();
+    var WinHeight = $(window).height();
+    $('.step_form_wrap').height(WinHeight-(310+$('.app_header').outerHeight(true)));
+  }
+
   getUserList(team, activityIdx, teamIdx) {
     const that = this;
     let userList = [];

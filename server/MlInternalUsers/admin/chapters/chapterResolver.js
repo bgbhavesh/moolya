@@ -249,6 +249,13 @@ MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) =
     let subChapterId = createSubChapter(args.subChapter, context)
 
     if (subChapterId) {
+      if (args.subChapter && args.subChapter.associatedObj) {
+        _.each(args.subChapter.associatedObj, function (item, say) {
+          item.subChapters.push({subChapterId: subChapterId, chapterId: args.chapterId})
+        })
+        MlResolver.MlMutationResolver['createRelatedSubChapters'](obj, {associatedObj: args.subChapter.associatedObj}, context, info)
+      }
+
 
       MlResolver.MlMutationResolver['createCommunityAccess'](obj, {
         clusterId: args.subChapter.clusterId,
@@ -534,6 +541,9 @@ MlResolver.MlMutationResolver['createRelatedSubChapters'] = (obj, args, context,
     _.each(args.associatedObj, function (item, say) {
       response = mlDBController.insert('MlRelatedSubChapters', item, context)
     })
+    let code = 200;
+    response = new MlRespPayload().successPayload('Related subchapter successfully created', code);
+    return response
   } else {
     let code = 400;
     response = new MlRespPayload().errorPayload('Required fields not available', code);

@@ -13,7 +13,9 @@ MlResolver.MlMutationResolver['createView'] = (obj, args, context, info) =>{
       var resp=null;
         try {
           var contextDetails=mlInteractionService.fetchContextUserDetails(context);
-
+          let resourceDetails = mlInteractionService.fetchResourceBasedUserDetails(args.resourceType, args.resourceId, context);
+          let fromuser = resourceDetails.contextUser;
+          let toUser = resourceDetails.resourceOwner;
           let viewRequest={resourceId:args.resourceId,resourceType:args.resourceType,userId:contextDetails.contextUserId,
                        userEmail:contextDetails.username,updatedOn:new Date()};
 
@@ -21,6 +23,9 @@ MlResolver.MlMutationResolver['createView'] = (obj, args, context, info) =>{
 
           if(resp){
             //transaction Log
+            let fromUserType = 'user';
+            mlInteractionService.createTransactionRequest(toUser._id,'view', args.resourceId, resp, fromuser._id, fromUserType );
+            MlEmailNotification.reviewRecieved(fromuser,toUser)
           }
 
         }catch (e){

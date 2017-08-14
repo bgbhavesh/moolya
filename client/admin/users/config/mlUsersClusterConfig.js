@@ -40,13 +40,13 @@ const mlUsersClusterListConfig = new MlViewer.View({
                     ...on RegistrationInfo{
                         firstName
                         lastName
-                        registrationId :_id
-                        clusterName
+                        registrationId 
+                        clusterName 
                         chapterName
-                        registrationType
+                        registrationType  
                         subChapterName
                         accountType
-                        userName
+                        userName : _id
                        }
                     }
                   }

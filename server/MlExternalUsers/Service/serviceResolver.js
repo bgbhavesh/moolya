@@ -36,6 +36,7 @@ MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => 
 }
 
 MlResolver.MlQueryResolver['fetchServicesForAppointments'] = (obj, args, context, info) => {
+    console.log(args);
     let result = mlDBController.find('MlServiceCardDefinition', {userId: context.userId}, context).fetch();
     return result;
 }

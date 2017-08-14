@@ -36,6 +36,8 @@ MlResolver.MlMutationResolver['createReview'] = (obj, args, context, info) => {
 
       if (resp) {
         //create transaction and transaction Log
+        let fromUserType = 'user';
+        mlInteractionService.createTransactionRequest(toUser._id,'review', args.resourceId, resp, fromuser._id, fromUserType );
         MlEmailNotification.reviewRecieved(fromuser,toUser)
       }
 

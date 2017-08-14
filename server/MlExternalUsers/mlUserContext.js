@@ -16,7 +16,8 @@ class MlUserContext{
             let user_profiles = user.profile.externalUserProfiles;
             default_User_Profile = _.find(user_profiles, {'isDefault': true });
             if(!default_User_Profile ){
-                default_User_Profile = user_profiles[0];
+              //todo: retrieve the first approved profile(Admin may block the profile)
+                default_User_Profile = user_profiles[0]||{};
             }
           default_User_Profile.email = user.profile.email;
           default_User_Profile.mobileNumber = user.profile.mobileNumber;

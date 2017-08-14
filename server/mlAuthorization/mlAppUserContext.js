@@ -22,14 +22,17 @@ class MlAppUserContext
        defaultProfile=_.find(user_profiles, {'isDefault': true });
       //if default Profile is available then,
       if(!defaultProfile){//else pick the first profile
-        defaultProfile=user_profiles&&user_profiles[0]?user_profiles[0]:[];
+        //todo: retrieve the first approved profile(Admin may block the profile)
+        defaultProfile=user_profiles&&user_profiles[0]?user_profiles[0]:{};
       }
 
     }
         return {defaultCluster:defaultProfile.clusterId,defaultClusterName:defaultProfile.clusterName,
                 defaultChapter:defaultProfile.chapterId,defaultChapterName:defaultProfile.chapterName,
                 defaultSubChapter:defaultProfile.subChapterId,defaultSubChapterName:defaultProfile.subChapterName,
-                defaultCommunity:defaultProfile.communityId,defaultCommunityName:defaultProfile.communityName};
+                defaultCommunity:defaultProfile.communityId,defaultCommunityName:defaultProfile.communityName,
+                profileId: defaultProfile.profileId
+                };
   }
 
 }

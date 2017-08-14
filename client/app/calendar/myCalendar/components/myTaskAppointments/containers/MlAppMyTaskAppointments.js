@@ -31,12 +31,15 @@ class MyTaskAppointments extends Component {
       tasks: [],
       selectedTaskId: '',
       selectedSessionId: '',
-      extraUsers: []
+      extraUsers: [],
+      isSessionStep: false,
+      isTermAndCond: false
     };
     this.getAllTaskByProfile = this.getAllTaskByProfile.bind(this);
     this.onChangeTask = this.onChangeTask.bind(this);
     this.saveDetails = this.saveDetails.bind(this);
     this.onChangeType = this.onChangeType.bind(this);
+    this.setSessionStep = this.setSessionStep.bind(this);
   }
 
   componentWillMount() {
@@ -55,6 +58,12 @@ class MyTaskAppointments extends Component {
     }
   }
 
+  setSessionStep(isSessionStep, isTermAndCond) {
+    this.setState({
+      isSessionStep: isSessionStep,
+      isTermAndCond: isTermAndCond
+    });
+  }
   /**
    * Method :: saveDetails
    * Desc: set the current selected value
@@ -96,10 +105,16 @@ class MyTaskAppointments extends Component {
    * Desc :: Update the selected task
    */
   async updateTask() {
-    const {selectedTaskId, selectedSessionId, extraUsers} = this.state;
+    const {selectedTaskId, selectedSessionId, extraUsers, isSessionStep, isTermAndCond} = this.state;
     let {appointmentDate} = this.props;
     let date = new Date(appointmentDate);
-    if (selectedSessionId && selectedTaskId) {
+    if (!selectedTaskId && !isTermAndCond) {
+      toastr.error('Please select a task');
+    } else if (!isSessionStep && !isTermAndCond) {
+      toastr.success('Go to next step');
+    } else if ((!selectedSessionId && isSessionStep) || (!selectedSessionId && isTermAndCond)) {
+      toastr.error('Please select a session');
+    } else if ((selectedSessionId && selectedTaskId)) {
       let data = {
         taskId: selectedTaskId,
         sessionId: selectedSessionId,
@@ -114,8 +129,6 @@ class MyTaskAppointments extends Component {
       if (resp && resp.success) {
         toastr.success('Task internal appointment booked successfully');
       }
-    } else {
-      toastr.error('Please select a session and task');
     }
   }
 
@@ -137,6 +150,7 @@ class MyTaskAppointments extends Component {
                                                onChangeType={this.onChangeType}
                                                onChangeTask={this.onChangeTask}
                                                selectedTask={selectedTask}
+                                               setSessionStep={this.setSessionStep}
                                                selectedTaskId={selectedTaskId} />,
         icon: <span className="ml fa fa-plus-square-o"></span>
       },
@@ -144,12 +158,14 @@ class MyTaskAppointments extends Component {
         name: 'Session',
         component: <MlTaskAppointmentSession selectedTask={selectedTask}
                                              saveDetails={this.saveDetails}
+                                             setSessionStep={this.setSessionStep}
                                              selectedTaskId={selectedTaskId} />,
         icon: <span className="ml fa fa-users"></span>
       },
       {
         name: 'Terms & Conditions',
-        component: <MlTaskAppointmentTermAndCondition selectedTask={selectedTask} />,
+        component: <MlTaskAppointmentTermAndCondition setSessionStep={this.setSessionStep}
+                                                     selectedTask={selectedTask} />,
         icon: <span className="ml ml-payments"></span>
       },
       // {

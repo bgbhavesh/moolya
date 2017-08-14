@@ -29,7 +29,7 @@ class MlSubChapterAccessControl {
     var contextSubChapterId = context.contextSubChapterId;
 
     var isSelfUser = (_.isBoolean(requestSubChapterId) && _.isBoolean(contextSubChapterId) && contextSubChapterId == requestSubChapterId) ? true : false;
-    var accessControl = {hasAccess: false, allowedSubChapters: [], privateSubChapters: []};
+    var accessControl = {hasAccess: false, isInclusive:true,subChapters: []};
 
     /** Internal User - moolya(admin/team members)*/
     if (isInternalUser && isMoolya) {

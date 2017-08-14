@@ -61,6 +61,7 @@ class Step1 extends Component {
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(310+$('.admin_header').outerHeight(true)));
+    this.testQuery();
   }
 
   saveData() {
@@ -122,6 +123,10 @@ this.bookDetails(data)
       const resp = await fetchServiceSeekerHandler(this.props.profileId, this.props.serviceId);
       console.log(resp);
       this.setState({ serviceSeeker: resp})
+    } else {
+      const resp = await fetchServiceSeekerHandler(this.props.profileId);
+      console.log(resp);
+      this.setState({ serviceSeeker: resp})
     }
   }
 
@@ -129,54 +134,62 @@ this.bookDetails(data)
     let seekers =  this.state.serviceSeeker || []
     let seekerList = [];
     seekers.map(function(data){
-      seekerList.push({value: data.transId, label: data.name})
+      seekerList.push({value: data.orderId, label: data.name + ' ' + data.transId })
       })
     return seekerList;
   }
 
   onSelectSeeker (selectedSeeker) {
-    console.log(selectedSeeker)
     let that = this;
-    let seekers =  this.state.serviceSeeker || []
-    seekers.map(function(data, index){
-      if(selectedSeeker.value === data.transId){
-        that.setState({
-          orderId:  data.orderId,
-        })
-      }
-    })
-    this.setState({seeker: selectedSeeker})
-    let date = this.props.appointmentDate;
-    let day = date.getDate();
-    let month = date.getMonth();
-    let year = date.getFullYear();
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-    let data = {
-      orderId: this.state.orderId,
-      sessionId: "ddd ",
-      hours: hours,
-      minutes: minutes,
-      day: day,
-      month: month,
-      year: year
-    }
-    this.bookDetails(data)
+    let seekers =  this.state.serviceSeeker || [];
+    let currentSeeker = seekers.find(function (data) {
+      return data.orderId == selectedSeeker.value;
+    });
+    // seekers.map(function(data, index) {
+    //   if(selectedSeeker.value === data.transId){
+
+      // }
+    // })
+    that.setState({
+      orderId:  selectedSeeker.value,
+      seeker: selectedSeeker,
+      service: currentSeeker ? currentSeeker.serviceId : ''
+    }, function () {
+      let date = this.props.appointmentDate;
+      let day = date.getDate();
+      let month = date.getMonth();
+      let year = date.getFullYear();
+      let hours = date.getHours();
+      let minutes = date.getMinutes();
+      let data = {
+        orderId: this.state.orderId,
+        sessionId: "",
+        hours: hours,
+        minutes: minutes,
+        day: day,
+        month: month,
+        year: year
+      };
+      console.log('Data :',data);
+      this.bookDetails(data)
+    }.bind(this));
+
     // this.saveData()
   }
 
   selectedService(value) {
     this.setState({
-      service: value
-    })
+      service: value,
+      seeker:''
+    });
     this.props.selectedService(value)
   }
 
 
   render(){
     let getServiceQuery = gql`
-      query {
-        data:fetchServicesForAppointments {
+      query($profileId:String!) {
+        data:fetchServicesForAppointments(profileId: $profileId) {
           value:_id
           label:name
         }

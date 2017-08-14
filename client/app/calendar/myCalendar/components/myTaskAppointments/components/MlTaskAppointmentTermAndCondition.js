@@ -18,6 +18,7 @@ export default class MlTaskAppointmentTermAndCondition extends Component{
   }
 
   componentWillMount() {
+    this.props.setSessionStep(true, true);
   }
 
   componentDidMount() {

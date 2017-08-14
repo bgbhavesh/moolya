@@ -27,7 +27,7 @@ export default class MlTaskAppointmentBasicInfo extends Component {
   }
 
   componentWillMount() {
-    // this.getTask();
+    this.props.setSessionStep(false, false);
   }
 
   /**

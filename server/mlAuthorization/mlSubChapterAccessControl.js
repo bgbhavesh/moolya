@@ -16,7 +16,7 @@ class MlSubChapterAccessControl {
   constructor(context) {
   }
   /**
-   * This method constructs the query for the search
+   * This method returns the access control for sub chapter based on permission
    * @param permission(eg:Search/View/Transact)
    * @param context(eg:context of user)
    * returns result Object with the access control(hasAccess:true/false,privateSubChapters:[],allowedSubChapters:[])

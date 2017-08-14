@@ -304,7 +304,8 @@ export default class MlPortfolioAssignComponent extends React.Component {
                       variables: {
                         clusterId:this.state.selectedCluster,
                         departmentId:this.state.selectedDepartment,
-                        subDepartmentId:this.state.selectedSubDepartment
+                        subDepartmentId:this.state.selectedSubDepartment,
+                        subChapterId:this.state.selectedSubChapter?this.state.selectedSubChapter:null,
                     }}};
     let usersOption = {
                   options: {
@@ -312,7 +313,8 @@ export default class MlPortfolioAssignComponent extends React.Component {
                       clusterId:this.state.selectedCluster,
                       departmentId:this.state.selectedDepartment,
                       subDepartmentId:this.state.selectedSubDepartment,
-                      roleId:this.state.selectedRole
+                      roleId:this.state.selectedRole,
+                      subChapterId:this.state.selectedSubChapter?this.state.selectedSubChapter:null,
                     }}};
 
     return (

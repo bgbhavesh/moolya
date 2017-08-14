@@ -49,9 +49,13 @@ MlResolver.MlQueryResolver['fetchAssignedRolesHierarchy'] = (obj, args, context,
 
 MlResolver.MlQueryResolver['fetchFinalApprovalRole'] = (obj, args, context, info) => {
   let response;
-  if(args.subChapterId){
+  var subChapter = {};
+  var isDefaultSubChapter = true;
+  if(args.subChapterId && args.subChapterId != "all"){
     subChapter =  mlDBController.findOne("MlSubChapters", {"_id": args.subChapterId}, context)
+    isDefaultSubChapter = subChapter.isDefaultSubChapter;
   }
+
   if (args.departmentId && args.subDepartmentId) {
     let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
     if(department.isSystemDefined){
@@ -59,7 +63,7 @@ MlResolver.MlQueryResolver['fetchFinalApprovalRole'] = (obj, args, context, info
         "parentDepartment": args.departmentId,
         "parentSubDepartment": args.subDepartmentId,
         "clusterId":"All",
-        "isDefaultSubChapter" : subChapter.isDefaultSubChapter
+        "isDefaultSubChapter" : isDefaultSubChapter
       }, context)
     }else{
       response = mlDBController.findOne("MlHierarchyAssignments", {

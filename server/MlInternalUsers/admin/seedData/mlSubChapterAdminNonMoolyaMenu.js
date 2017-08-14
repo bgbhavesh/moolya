@@ -599,9 +599,32 @@ if (Meteor.isServer) {
                   "dynamicLinkHandler" : "",
                   "subMenusId" : "users_cluster",
                   "subMenuMappingId" : "users_library"
+                },
+                {
+                  "link": "/admin/users/history",
+                  "name": "History",
+                  "uniqueId": "users_History",
+                  "isLink": true,
+                  "isMenu": true,
+                  "image": "",
+                  "subMenu": [
+                    {
+                      "link": "/admin/users/history",
+                      "name": "History",
+                      "uniqueId": "users_History",
+                      "subMenuMappingId": "users_History",
+                      "subMenusId": "users_cluster",
+                      "dynamicLink" : true,
+                      "dynamicLinkHandler" : "",
+                      "isLink": true,
+                      "isMenu": true,
+                      "image": ""
+                    }
+                  ]
                 }
               ]
             },
+
             // {
             //   "link": "/admin/users/chapter",
             //   "name": "Chapter",

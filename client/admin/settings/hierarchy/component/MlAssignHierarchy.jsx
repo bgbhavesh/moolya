@@ -133,16 +133,17 @@ export default class MlAssignHierarchy extends React.Component {
       let subDepartmentId = departmentInfo.subDepartmentId;
       const response = await findDeptRolesActionHandler(departmentId,subDepartmentId,clusterId, subChapterId, isDefaultSubChapter);
       if(response){
-        let roleDetails=[]
+        let roleDetails=[];
+        let allAssignRoles = [];
         for(let i=0;i<response.length;i++){
           let role=response[i]
           if((role.isHierarchyAssigned==false||role.isHierarchyAssigned==null)) {
 
-            // let assignedRole = _.find(role.assignRoles, {cluster:clusterId, department:departmentId, subDepartment:subDepartmentId})
-            // if(!assignedRole)
-            //   assignedRole = _.find(role.assignRoles, {cluster:'all', department:departmentId, subDepartment:subDepartmentId})
-            //
-            // var parentNode = this.getParentNode(assignedRole.cluster, assignedRole.chapter, assignedRole.subChapter, assignedRole.community);
+            let assignedRole = _.find(role.assignRoles, {cluster:clusterId, department:departmentId, subDepartment:subDepartmentId})
+            if(!assignedRole)
+              assignedRole = _.find(role.assignRoles, {cluster:'all', department:departmentId, subDepartment:subDepartmentId})
+
+            allAssignRoles.push(assignedRole);
 
             let json = {
               roleId: role._id,
@@ -151,13 +152,13 @@ export default class MlAssignHierarchy extends React.Component {
               roleType: "Internal User",
               isAssigned:false,
               assignedLevel:"",
-              // assignedLevel:parentNode,
-              reportingRole:""
+              reportingRole:"",
+              // assignRoles:assignedRole?assignedRole:{},
             }
             roleDetails.push(json);
           }
         }
-        this.setState({loading:false,unAssignedRoles:{teamStructureAssignment:roleDetails}})
+        this.setState({loading:false,unAssignedRoles:{teamStructureAssignment:roleDetails},allAssignRoles:allAssignRoles})
       }
       return response
     }
@@ -237,6 +238,8 @@ export default class MlAssignHierarchy extends React.Component {
       setTimeout(function () {
         roles.assignedLevel = value
         roles.teamStructureAssignment[index].assignedLevel = value;
+        roles.teamStructureAssignment[index].reportingRole = ""
+        roles.teamStructureAssignment[index].isAssigned = false
         this.setState({unAssignedRoles: roles});
       }.bind(this));
     }else {
@@ -457,7 +460,31 @@ export default class MlAssignHierarchy extends React.Component {
               let parentDepartment = that.props.data;
 
               let reportingRoleOptions = {options: { variables: {departmentId:parentDepartment.departmentId,subDepartmentId:parentDepartment.subDepartmentId,clusterId:that.props.data.clusterId,chapterId:'', subChapterId:that.props.data.subChapterId, communityId:'',levelCode:roles.assignedLevel,currentRoleId:roles.roleId,roles:that.state.unAssignedRoles.teamStructureAssignment}}};
-
+              var selectNonMoolya = [];
+              var selectMoolya = [];
+              var allAssignRoles = that.state.allAssignRoles
+                if(allAssignRoles && allAssignRoles.length>0 && !that.props.data.isDefaultSubChapter){
+                  if(allAssignRoles[id] && allAssignRoles[id].chapter == "all" && allAssignRoles[id].subChapter == "all" && allAssignRoles[id].community == "all"){
+                    selectNonMoolya = [{value: 'subChapter',    label: 'subchapter'}]
+                  } else if(allAssignRoles[id] && allAssignRoles[id].subChapter == "all" && allAssignRoles[id].community == "all"){
+                    selectNonMoolya = [{value: 'subChapter',    label: 'subchapter'}]
+                  } else if(allAssignRoles[id] && allAssignRoles[id].community == "all"){
+                    selectNonMoolya = [{value: 'subChapter',    label: 'subchapter'}]
+                  } else if(allAssignRoles[id] && allAssignRoles[id].community != "all"){
+                    selectNonMoolya = [{value: 'community',    label: 'community'}]
+                  }
+                }
+                else if(allAssignRoles && allAssignRoles.length>0 && that.props.data.isDefaultSubChapter){
+                  if(allAssignRoles[id] && allAssignRoles[id].chapter == "all" && allAssignRoles[id].subChapter == "all" && allAssignRoles[id].community == "all"){
+                    selectMoolya = [{value: 'cluster',    label: 'cluster'}]
+                  } else if(allAssignRoles[id] && allAssignRoles[id].subChapter == "all" && allAssignRoles[id].community == "all"){
+                    selectMoolya = [{value: 'chapter',    label: 'chapter'}]
+                  } else if(allAssignRoles[id] && allAssignRoles[id].community == "all"){
+                    selectMoolya = [{value: 'subChapter',    label: 'subchapter'}]
+                  } else if(allAssignRoles[id] && allAssignRoles[id].community != "all"){
+                    selectMoolya = [{value: 'community',    label: 'community'}]
+                  }
+                }
               return(
                 <div className="row" key={id}>
                   <div className="col-md-4">
@@ -478,10 +505,10 @@ export default class MlAssignHierarchy extends React.Component {
                   <div className="col-md-4">
                     <div className="form-group" id="select-parent-node">
                       {that.props.data&&that.props.data.isDefaultSubChapter ?
-                        <Select name="form-field-name" options={unAssignedParent} value={roles.assignedLevel}
+                        <Select name="form-field-name" options={selectMoolya} value={roles.assignedLevel}
                                 onChange={that.optionsBySelectParentNode.bind(that, id)} placeholder="Parent Node"/>
                       :
-                        <Select name="form-field-name" options={unAssignedParentNonMoolya} value={roles.assignedLevel}
+                        <Select name="form-field-name" options={selectNonMoolya} value={roles.assignedLevel}
                                 onChange={that.optionsBySelectParentNode.bind(that, id)} placeholder="Parent Node"/>
                       }
                       </div>

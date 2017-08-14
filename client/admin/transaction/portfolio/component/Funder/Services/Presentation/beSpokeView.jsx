@@ -15,9 +15,12 @@ export default class  BeSpokeView extends Component {
     this.state = {updateMode: false}
   }
 
-    saveData() {
-      this.props.componentToView('landingPage')
-      this.props.saveBeSpokeServiceDetails(true);
+  saveData() {
+      let res = this.props.saveBeSpokeServiceDetails(true);
+  }
+
+  cancel(){
+    this.props.componentToView('landingPage');
   }
 
   componentWillMount(){
@@ -168,7 +171,7 @@ export default class  BeSpokeView extends Component {
           </div>
           <div className="ml_btn" style={{'textAlign':'center'}}>
             <a href="" className="save_btn" onClick={this.saveData.bind(this)} >Save</a>
-            <a href="" className="cancel_btn">Cancel</a>
+            <a href="" className="cancel_btn" onClick={this.cancel.bind(this)}>Cancel</a>
           </div>
         </div>
       </div>

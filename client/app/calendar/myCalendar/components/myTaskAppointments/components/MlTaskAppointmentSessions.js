@@ -34,9 +34,19 @@ export default class MlTaskAppointmentSessions extends Component{
   }
 
   componentWillMount() {
+    const {isSessionExpand} = this.state;
     this.getOffices();
+    this.props.setSessionStep(true, false);
+    if (isSessionExpand) {
+      this.props.saveDetails('session', '');
+    }
   }
 
+  componentDidMount() {
+    // $('.float-label').jvFloat();
+    var WinHeight = $(window).height();
+    $('.step_form_wrap').height(WinHeight-(310+$('.app_header').outerHeight(true)));
+  }
   /**
    * Method :: getUsers
    * Desc   :: fetch the users of current team
@@ -311,6 +321,7 @@ export default class MlTaskAppointmentSessions extends Component{
                                       isInternal={isInternal}
                                       duration={duration}
                                       addUser={this.addUser}
+                                      setSessionStep={this.props.setSessionStep.bind(this)}
                                       chooseTeamType={this.chooseTeamType}
                                       offices={offices}/>
           }

@@ -135,6 +135,7 @@ let appointment=`
     profileId: String
     transId: String
     orderId: String
+    serviceId: String
   }
   
   type myAppointmentData {
@@ -149,7 +150,7 @@ let appointment=`
   }
   
   type Query {
-     fetchMyAppointment: [Appointment]
+     fetchMyAppointmentByStatus: [Appointment]
      fetchAllProfileAppointmentCounts: profileAppointment
      fetchProfileAppointmentCounts( profileId: String ): profileAppointment
      fetchServiceSeekerList(profileId: String!, serviceId: String): [serviceSeekerList]

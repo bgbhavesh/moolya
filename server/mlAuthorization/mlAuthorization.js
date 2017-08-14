@@ -233,6 +233,7 @@ class MlAuthorization
           case "INTERNALREQUESTS":
           case "SERVICECARD":
           case "OFFICE":              /*adding office for others five admin */
+          case "HIERARCHY":
           case "PROCESSSETUP":{
             return this.validateChapterSubChapterCommunity(userProfileDetails, variables);
           }
@@ -292,8 +293,15 @@ class MlAuthorization
           return false
 
         isChapter = this.findChapterSubChapter(roleDetails.defaultChapters, variables['chapterId'])
-        if(!isChapter)
-          return false;
+        if(!isChapter) {
+          if (variables['subChapterId']) {
+            isSubChapter = this.findChapterSubChapter(roleDetails.defaultSubChapters, variables['subChapterId'])
+            if (!isSubChapter)
+              return false
+          } else {
+            return false;
+          }
+        }
         isSubChapter = this.findChapterSubChapter(roleDetails.defaultSubChapters, variables['subChapterId'])
         if(!isSubChapter)
           return false

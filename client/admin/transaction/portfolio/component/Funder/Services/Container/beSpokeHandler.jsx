@@ -132,8 +132,11 @@ export default class  BeSpokeHandler extends Component {
 
    async saveBeSpokeServiceDetails(data){
     if(data){
-      const res = await createBeSpokeServiceActionHandler(this.state.details, this.props.portfolioDetailsId)
-      return res
+      const res = await createBeSpokeServiceActionHandler(this.state.details, this.props.portfolioDetailsId);
+      if(res) {
+        toastr.success("Bespoke request created successfully");
+        this.props.componentToView('landingPage');
+      }
     }
   }
 

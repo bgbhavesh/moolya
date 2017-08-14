@@ -100,6 +100,7 @@ class MlAppServiceManageSchedule extends Component {
     if (serviceId) {
       let service = await fetchServiceActionHandler(serviceId);
       if (service) {
+        console.log('service', service);
         let tasks = [];
         let currentDate = new Date()
         let expiryDate = Date.parse(service.validTill);
@@ -131,7 +132,8 @@ class MlAppServiceManageSchedule extends Component {
         this.setState({
           serviceBasicInfo: serviceInfo,
           serviceTermAndCondition: TermAndCondition,
-          attachments: attachmentDetails
+          attachments: attachmentDetails,
+          serviceTask: service.tasks ? service.tasks : []
         })
       }
     }
@@ -140,9 +142,17 @@ class MlAppServiceManageSchedule extends Component {
 
 
   async getTaskDetails() {
-    const resp = await fetchTaskDetailsForServiceCard(this.state.profileId, this.state.serviceId)
-    this.setState({TaskDetails: resp})
-    console.log(resp)
+    const resp = await fetchTaskDetailsForServiceCard(this.state.profileId, this.state.serviceId);
+    if(resp){
+      let task = this.state.serviceTask.map(function (data) {
+        let taskInfo = resp.find(function (respTask) {
+          return respTask.id == data.id;
+        });
+        return taskInfo;
+      });
+      this.setState({TaskDetails: task});
+    }
+
   }
 
   selectService(taskId) {
@@ -166,8 +176,8 @@ class MlAppServiceManageSchedule extends Component {
   async bookServiceCard() {
     const resp = await bookUserServiceCardAppointmentActionHandler(this.state.response);
     if (resp.code === 200) {
+      toastr.success(resp.result);
       this.redirectWithCalendar('calendar');
-      toastr.success(resp.result)
     }else {
       toastr.error(resp.result)
     }
@@ -252,7 +262,6 @@ class MlAppServiceManageSchedule extends Component {
   render() {
 
     let _this = this;
-    console.log('---this.props--', this.props);
     let appActionConfig = [
       {
         showAction: true,
@@ -290,7 +299,7 @@ class MlAppServiceManageSchedule extends Component {
                 {!isTaskComponent ?
                   <div>
                   <StepZilla steps={this.setServiceSteps()}
-                             stepsNavigation={false}
+                             stepsNavigation={true}
                              prevBtnOnLastStep={true}/>
                     <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
                   </div>

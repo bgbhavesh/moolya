@@ -57,7 +57,6 @@ class MlTransactionsHandler {
           subChapterId: details.defaultSubChapters && details.defaultSubChapters[0] ? details.defaultSubChapters[0] : null,
           communityId: details.defaultCommunities && details.defaultCommunities[0] ? details.defaultCommunities[0].communityId : null,
           communityCode: details.defaultCommunities && details.defaultCommunities[0] ? details.defaultCommunities[0].communityCode : null
-
         };
 
            firstName=(user.profile.InternalUprofile.moolyaProfile || {}).firstName||'';
@@ -69,7 +68,9 @@ class MlTransactionsHandler {
           clusterId: externalUProfile.defaultCluster,
           chapterId: externalUProfile.defaultChapter,
           subChapterId: externalUProfile.defaultSubChapter,
-          communityId:externalUProfile.defaultCommunity};
+          communityId:externalUProfile.defaultCommunity,
+          profileId: externalUProfile.profileId
+        };
            firstName=(user.profile || {}).firstName||'';
            lastName =(user.profile || {}).lastName||'';
       }else{
@@ -119,6 +120,7 @@ class MlTransactionsHandler {
 
     //resolve the context of User
     var contextData=this.contextData(transactionsParams.userId);
+    var fromUserContextData=this.contextData(transactionsParams.fromUserId);
 
     let transactionRecord =
       { docId: transactionsParams.docId,
@@ -129,7 +131,11 @@ class MlTransactionsHandler {
         moduleName:transactionsParams.moduleName,
         userAgent: userAgent,
         createdAt: new Date(),
-        transactionDetails: transactionsParams.transactionDetails
+        transactionDetails: transactionsParams.transactionDetails,
+        fromUserId: fromUserContextData.userId || null,
+        fromUserName: fromUserContextData.userName || null,
+        fromProfileId: fromUserContextData.profileId || null,
+        fromUserType: transactionsParams.fromUserType || 'system'
       }
     //orderNumberGenService.assignTransationRequest(transactionRecord),
       transactionRecord=_.extend(transactionRecord,contextData);

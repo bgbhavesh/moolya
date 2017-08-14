@@ -104,8 +104,7 @@ MlResolver.MlMutationResolver['addUserProfile'] = (obj, args, context, info) => 
 
     if(resp){
         let code = 200;
-        let result = {user: resp}
-        let response = JSON.stringify(new MlRespPayload().successPayload(result, code));
+        let response = new MlRespPayload().successPayload('User successfully assigned', code)
         return response
       }
   }
@@ -1553,24 +1552,26 @@ MlResolver.MlQueryResolver['getUserProfileForService'] = (obj, args, context, in
   return profile[0];
 }
 
+/**
+ * @module ['left nav USERS']
+ * getting external user addition info
+ * */
 MlResolver.MlQueryResolver['findExternalUserAddressBook'] = (obj, args, context, info) => {
-  // TODO : Authorization
+  var additionalInfo = {}
   let registrationId=args.registrationId;
   var  reg= mlDBController.findOne('MlRegistration',{_id:registrationId},context) || {};
 
-  var userId = reg.registrationInfo.userId
-
+  // var userId = reg.registrationInfo.userId
+  var userId = reg.registrationInfo && reg.registrationInfo.userId?reg.registrationInfo.userId : ''
   var  user= mlDBController.findOne('users',{_id:userId},context) || {};
-  if(user){
+  if(user && user.profile && user.profile.externalUserProfiles && user.profile.externalUserAdditionalInfo){
     // var clusterId;
     // let profile = new MlUserContext(userId).userProfileDetails(userId)
     // registrationId = profile.registrationId;
 
     var profile = _.find(user.profile.externalUserProfiles, {registrationId:registrationId})
     var profileId = profile.profileId;
-
-    var additionalInfo = _.find(user.profile.externalUserAdditionalInfo, {'profileId': profileId});
-
+    additionalInfo = _.find(user.profile.externalUserAdditionalInfo, {'profileId': profileId});
     return additionalInfo;
 
     // clusterId = profile.clusterId;
@@ -1578,9 +1579,12 @@ MlResolver.MlQueryResolver['findExternalUserAddressBook'] = (obj, args, context,
     // var infoDetails;
     // infoDetails = _underscore.find(addInfo, {'profileId': profile.profileId}) || {};
     // return infoDetails;
-  }else {
-    let code = 409;
-    let response = new MlRespPayload().errorPayload('Not a valid user', code);
-    return response;
-  }
+  }else
+    return additionalInfo
+
+  // else {
+  //   let code = 409;
+  //   let response = new MlRespPayload().errorPayload('Not a valid user', code);
+  //   return response;
+  // }
 }

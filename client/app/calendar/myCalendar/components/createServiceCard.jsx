@@ -262,7 +262,6 @@ class MlAppServiceManageSchedule extends Component {
   render() {
 
     let _this = this;
-    console.log('---this.props--', this.props);
     let appActionConfig = [
       {
         showAction: true,

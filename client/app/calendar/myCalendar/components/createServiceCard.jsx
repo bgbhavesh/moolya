@@ -262,7 +262,6 @@ class MlAppServiceManageSchedule extends Component {
   render() {
 
     let _this = this;
-    console.log('---this.props--', this.props);
     let appActionConfig = [
       {
         showAction: true,
@@ -300,7 +299,7 @@ class MlAppServiceManageSchedule extends Component {
                 {!isTaskComponent ?
                   <div>
                   <StepZilla steps={this.setServiceSteps()}
-                             stepsNavigation={false}
+                             stepsNavigation={true}
                              prevBtnOnLastStep={true}/>
                     <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
                   </div>

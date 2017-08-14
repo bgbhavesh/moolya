@@ -24,7 +24,7 @@ export default class MlTaskAppointmentTermAndCondition extends Component{
   componentDidMount() {
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight - (290 + $('.admin_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight - (310 + $('.app_header').outerHeight(true)));
   }
 
   /**

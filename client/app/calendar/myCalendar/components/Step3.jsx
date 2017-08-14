@@ -20,8 +20,10 @@ export default class Step3 extends Component{
   componentDidMount() {
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(290+$('.admin_header').outerHeight(true)));
-    this.props.getServiceDetails();
+    $('.step_form_wrap').height(WinHeight-(310+$('.app_header').outerHeight(true)));
+    if(typeof this.props.getServiceDetails !== 'undefined') {
+      this.props.getServiceDetails();
+    }
   }
 
   /**
@@ -70,30 +72,30 @@ export default class Step3 extends Component{
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
-          <div className="col-md-6 nopadding-left">
+          <br/><div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
                 <div className="form-group switch_wrap switch_names inline_switch">
                   <label htmlFor="cancelable">Can be cancelled</label>
-                  <span className={serviceTermAndCondition.isCancelable ? 'state_label acLabel' : 'state_label'}>Yes</span><label className="switch nocolor-switch">
+                  <span className={(serviceTermAndCondition && serviceTermAndCondition.isCancelable) ? 'state_label acLabel' : 'state_label'}>Yes</span><label className="switch nocolor-switch">
                   <input id="cancelable" type="checkbox"
-                         checked={!serviceTermAndCondition.isCancelable}
-                         value={serviceTermAndCondition.isCancelable}
+                         checked={!(serviceTermAndCondition && serviceTermAndCondition.isCancelable)}
+                         value={(serviceTermAndCondition && serviceTermAndCondition.isCancelable)}
                          />
                   <div className="slider"></div>
                 </label>
-                  <span className={serviceTermAndCondition.isCancelable ? 'state_label' : 'state_label acLabel'}>No</span>
+                  <span className={(serviceTermAndCondition && serviceTermAndCondition.isCancelable) ? 'state_label' : 'state_label acLabel'}>No</span>
                 </div>
                 <div className="form-group switch_wrap switch_names inline_switch">
                   <label htmlFor="schedulable">Can be Rescheduled</label>
-                  <span className={serviceTermAndCondition.isReschedulable ? 'state_label acLabel' : 'state_label'}>Yes</span><label className="switch nocolor-switch">
+                  <span className={(serviceTermAndCondition && serviceTermAndCondition.isReschedulable) ? 'state_label acLabel' : 'state_label'}>Yes</span><label className="switch nocolor-switch">
                   <input id="schedulable" type="checkbox"
-                         checked={!serviceTermAndCondition.isReschedulable}
-                         value={serviceTermAndCondition.isReschedulable}
+                         checked={!(serviceTermAndCondition && serviceTermAndCondition.isReschedulable)}
+                         value={(serviceTermAndCondition && serviceTermAndCondition.isReschedulable)}
                   />
                   <div className="slider"></div>
                 </label>
-                  <span className={serviceTermAndCondition.isReschedulable ? 'state_label' : 'state_label acLabel'}>No</span>
+                  <span className={(serviceTermAndCondition && serviceTermAndCondition.isReschedulable) ? 'state_label' : 'state_label acLabel'}>No</span>
                 </div>
               </form>
             </div>
@@ -105,8 +107,8 @@ export default class Step3 extends Component{
                   <label>Can be cancelled &nbsp;
                     <input className="form-control inline_input medium_in"
                            id="cancelationday"
-                           disabled={!serviceTermAndCondition.isCancelable}
-                           value={serviceTermAndCondition.noOfDaysBeforeCancelation}
+                           disabled={!(serviceTermAndCondition && serviceTermAndCondition.isCancelable)}
+                           value={(serviceTermAndCondition && serviceTermAndCondition.noOfDaysBeforeCancelation)}
                            /> days
                     </label>
                 </div>
@@ -115,8 +117,8 @@ export default class Step3 extends Component{
                   <label>Can be rescheduled &nbsp;
                     <input className="form-control inline_input medium_in"
                            id="rescheduler"
-                           disabled={!serviceTermAndCondition.isReschedulable}
-                           value={serviceTermAndCondition.noOfReschedulable}  /> times
+                           disabled={!(serviceTermAndCondition && serviceTermAndCondition.isReschedulable)}
+                           value={(serviceTermAndCondition && serviceTermAndCondition.noOfReschedulable)}  /> times
                   </label>
                 </div>
               </form>

@@ -42,6 +42,11 @@ export default class MlTaskAppointmentSessions extends Component{
     }
   }
 
+  componentDidMount() {
+    // $('.float-label').jvFloat();
+    var WinHeight = $(window).height();
+    $('.step_form_wrap').height(WinHeight-(310+$('.app_header').outerHeight(true)));
+  }
   /**
    * Method :: getUsers
    * Desc   :: fetch the users of current team

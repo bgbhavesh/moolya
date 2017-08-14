@@ -68,6 +68,7 @@ export async function fetchServiceSeekerHandler (profileId, day, month) {
         profileId
         transId
         orderId
+        serviceId
       }
     }
     `,

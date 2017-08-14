@@ -633,7 +633,8 @@ MlResolver.MlQueryResolver["fetchServiceSeekerList"] = (obj, args, context, info
         "userId": "$orders.userId",
         "profileId": "$orders.profileId",
         "transId": "$orders.orderId",
-        "orderId": "$orders.orderId"
+        "orderId": "$orders.orderId",
+        "serviceId": "$orders.serviceId"
       }
   });
 

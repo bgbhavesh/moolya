@@ -66,6 +66,11 @@ if (!vactionNumber) {
   MlSerialNumbers.insert({_id: "vactionNumber", seq: 0});
 }
 
+let shareNumber = MlSerialNumbers.findOne({_id: "shareNumber"});
+if (!shareNumber) {
+  MlSerialNumbers.insert({_id: "shareNumber", seq: 0});
+}
+
 
 orderNumberGenService = (function(){
   function getNextSequence(name) {
@@ -140,6 +145,9 @@ orderNumberGenService = (function(){
     },
     createVactionId: function (vactionData) {
       vactionData.vacationId = "MLHLD"+ FormatUtil.leadingZeros(getNextSequence("vactionNumber"), 8);
+    },
+    createShareId: function (data) {
+      data.sharedId = "MLSHR"+ FormatUtil.leadingZeros(getNextSequence("shareNumber"), 8);
     },
     generateRandomPassword:function(){
       var randomId = function makeid(){

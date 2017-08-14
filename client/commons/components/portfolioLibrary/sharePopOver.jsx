@@ -162,16 +162,16 @@ export default class SharePopOver extends React.Component {
         url: value.fileUrl?value.fileUrl:"",
         fileName: value.fileName?value.fileName:"",
         fileType: value.fileType?value.fileType:""
-      }
+      };
       file.push(fileDetails)
-    })
+    });
       teamMembers.map(function(team) {
         let userDetails = {
           userId: team.userId ? team.userId : 'userId',
-          profileId: team.profileId ? team.profileId : 'profileId'
-        }
+          profileId: team.profileId ? team.profileId : ''
+        };
         user.push(userDetails)
-      })
+      });
     let Details = {
       files: file,
       users:user,

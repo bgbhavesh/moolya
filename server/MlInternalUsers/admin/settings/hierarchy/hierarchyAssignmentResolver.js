@@ -156,6 +156,7 @@ MlResolver.MlQueryResolver['fetchHierarchyRoles'] = (obj, args, context, info) =
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
   if (department && department.isActive) {
 
+    // Show only moolya roles if subchpater(non-moolya) is not selected(!args.subChapterId).
     if(subChapter.isDefaultSubChapter || !args.subChapterId){
       hierarchyQuery = {
         $and: [

@@ -49,13 +49,21 @@ MlResolver.MlQueryResolver['fetchAssignedRolesHierarchy'] = (obj, args, context,
 
 MlResolver.MlQueryResolver['fetchFinalApprovalRole'] = (obj, args, context, info) => {
   let response;
+  var subChapter = {};
+  var isDefaultSubChapter = true;
+  if(args.subChapterId && args.subChapterId != "all"){
+    subChapter =  mlDBController.findOne("MlSubChapters", {"_id": args.subChapterId}, context)
+    isDefaultSubChapter = subChapter.isDefaultSubChapter;
+  }
+
   if (args.departmentId && args.subDepartmentId) {
     let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
     if(department.isSystemDefined){
       response = mlDBController.findOne("MlHierarchyAssignments", {
         "parentDepartment": args.departmentId,
         "parentSubDepartment": args.subDepartmentId,
-        "clusterId":"All"
+        "clusterId":"All",
+        "isDefaultSubChapter" : isDefaultSubChapter
       }, context)
     }else{
       response = mlDBController.findOne("MlHierarchyAssignments", {
@@ -148,6 +156,7 @@ MlResolver.MlQueryResolver['fetchHierarchyRoles'] = (obj, args, context, info) =
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
   if (department && department.isActive) {
 
+    // Show only moolya roles if subchpater(non-moolya) is not selected(!args.subChapterId).
     if(subChapter.isDefaultSubChapter || !args.subChapterId){
       hierarchyQuery = {
         $and: [

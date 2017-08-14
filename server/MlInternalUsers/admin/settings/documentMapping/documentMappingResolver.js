@@ -46,6 +46,8 @@ MlResolver.MlMutationResolver['createDocument'] = (obj, args, context, info) => 
   let createdBy = firstName +' '+lastName
   args.document.createdBy = createdBy;
   args.document.createdDate = new Date();
+  var randomId = Math.floor(Math.random() * 90000) + 10000;
+  args.document.documentId = "DOC"+randomId
 
   let id = MlDocumentMapping.insert({...args.document});
   if (id) {

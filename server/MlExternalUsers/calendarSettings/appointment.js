@@ -551,7 +551,10 @@ class MlAppointment {
       let userSlotEnd = getTimeDate(userSlots.split('-')[1], date);
       let userAppointments = appointments.filter(function (appointment) {
         let appointmentStartDate = new Date(appointment.startDate);
-        return userSlotStart.getTime() < appointmentStartDate.getTime() && userSlotEnd.getTime() > appointmentStartDate.getTime();
+        appointmentStartDate.setSeconds(0,0);
+        let appointmentEndDate = new Date(appointment.endDate);
+        appointmentEndDate.setSeconds(0,0);
+        return appointmentStartDate.getTime() <= userSlotStart.getTime() && appointmentEndDate.getTime() > userSlotStart.getTime();
       }).map(function (appointment) {
         appointment.appointmentInfo = appointment.appointmentInfo ? appointment.appointmentInfo : {};
         let name;
@@ -591,6 +594,7 @@ function getTimeDate(time, date) {
   let d = date ? new Date(date) : new Date();
   d.setHours(timeParts[0]);
   d.setMinutes(timeParts[1]);
+  d.setSeconds(0,0);
   return d;
 }
 

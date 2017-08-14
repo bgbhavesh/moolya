@@ -468,7 +468,7 @@ MlResolver.MlMutationResolver["bookTaskInternalAppointment"] = (obj, args, conte
       resourceType: 'Task',
       resourceId: taskId,
       taskId: taskId,
-      taskName: taskId.displayName,
+      taskName: taskDoc.displayName,
       sessionId: sessionId
     },
     status: 'Pending',
@@ -485,6 +485,23 @@ MlResolver.MlMutationResolver["bookTaskInternalAppointment"] = (obj, args, conte
   let result = mlDBController.insert('MlAppointments', appointmentData, context);
 
   if(result){
+
+    /**
+     * Insert appointment creater data as appointment member
+     */
+    let providerData = {
+      appointmentId: appointmentData.appointmentId,
+      appointmentUniqueId: result,
+      userId: userId,
+      profileId: profileId,
+      status: 'Accepted',
+      isProvider: profileId == taskDoc.profileId ? true : false,
+      isClient: false,
+      isAttendee: false,
+      createdAt: new Date(),
+      createdBy: userId
+    };
+    resp = mlDBController.insert('MlAppointmentMembers', providerData, context);
 
     /**
      * Insert appointment member info
@@ -633,7 +650,8 @@ MlResolver.MlQueryResolver["fetchServiceSeekerList"] = (obj, args, context, info
         "userId": "$orders.userId",
         "profileId": "$orders.profileId",
         "transId": "$orders.orderId",
-        "orderId": "$orders.orderId"
+        "orderId": "$orders.orderId",
+        "serviceId": "$orders.serviceId"
       }
   });
 

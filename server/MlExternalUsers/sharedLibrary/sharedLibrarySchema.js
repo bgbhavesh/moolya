@@ -46,8 +46,8 @@ let sharedLibrarySchema = `
     
     
     input sharedInput {
-      user: [userInput]!
-      file: [fileInput]!
+      users: [userInput]!
+      files: [fileInput]!
       sharedEndDate: Date
       sharedStartDate: Date
       isSignedUrl: Boolean

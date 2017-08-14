@@ -60,8 +60,8 @@ let sharedLibrarySchema = `
  }
  
  type Mutation{
-      updateSharedLibrary(id: String,files:libraryInput): response
-      createSharedLibrary(detailsInput:libraryInput):response
+      updateSharedLibrary(id: String,files:sharedInput): response
+      createSharedLibrary(detailsInput:sharedInput):response
  }`;
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], sharedLibrarySchema ]);

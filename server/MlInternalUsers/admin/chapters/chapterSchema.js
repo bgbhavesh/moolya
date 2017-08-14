@@ -133,8 +133,6 @@ let chapterSchema = `
         longitude:Float,
         isBespokeWorkFlow:Boolean,
         moolyaSubChapterAccess:moolyaSubChapterAccessObject
-        associatedSubChapters:[String],   
-        internalSubChapterAccess:internalSubChapterAccessObject,
         associatedObj : [relatedSubChaptersInput]
     }
     
@@ -218,3 +216,5 @@ MlResolver.MlModuleResolver.push(supportedApi)
 
 // backendUser:UserInputObject,
 // backendUser:UserObject
+// associatedSubChapters:[String],
+//   internalSubChapterAccess:internalSubChapterAccessObject,

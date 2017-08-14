@@ -14,11 +14,11 @@ import ScrollArea from "react-scrollbar";
 import {addSubChapterActionHandler} from "../actions/addSubChapter";
 import MlInternalSubChapterAccess from "../components/MlInternalSubChapterAccess";
 import MlMoolyaSubChapterAccess from "../components/MlMoolyaSubChapterAccess";
-import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
+// import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 import {multipartASyncFormHandler} from "../../../../client/commons/MlMultipartFormAction";
-import gql from "graphql-tag";
-var Select = require('react-select');
-var FontAwesome = require('react-fontawesome');
+// import gql from "graphql-tag";
+// var Select = require('react-select');
+// var FontAwesome = require('react-fontawesome');
 
 
 class MlAddSubChapter extends React.Component {
@@ -26,7 +26,7 @@ class MlAddSubChapter extends React.Component {
     super(props);
     this.state = {
       loading: true,
-      internalSubChapterAccess: {},
+      associatedObj: {},
       moolyaSubChapterAccess: {},
       backendUser: {},
       externalUser: {},
@@ -122,14 +122,13 @@ class MlAddSubChapter extends React.Component {
     dataGet.subChapterName = this.refs.subChapterName.value
     dataGet.subChapterEmail = this.refs.subChapterEmail.value
     dataGet.subChapterUrl = this.refs.subChapterUrl.value
-    dataGet.subChapterImageLink= this.state.data.subChapterImageLink || ''
-    dataGet.associatedSubChapters = this.state.relatedSubChapter || []
+    dataGet.subChapterImageLink = this.state.data.subChapterImageLink || ''
     dataGet.showOnMap = this.refs.showOnMap.checked
     dataGet.isActive = this.refs.isActive.checked
     dataGet.isEmailNotified = this.state.data.isEmailNotified
     dataGet.isBespokeWorkFlow = this.refs.isBespokeWorkFlow.checked
     dataGet.isBespokeRegistration = this.refs.isBespokeRegistration.checked
-    dataGet.internalSubChapterAccess = this.state.internalSubChapterAccess
+    dataGet.associatedObj = this.state.associatedObj
     dataGet.moolyaSubChapterAccess = this.state.moolyaSubChapterAccess
 
     if (dataGet.subChapterName) {
@@ -140,11 +139,13 @@ class MlAddSubChapter extends React.Component {
         }
       }
 
-      if (_.isEmpty(data.associatedSubChapters) && data.associatedSubChapters.length < 1) {
-        data = _.omit(data, 'associatedSubChapters')
-      }
-      if (_.isEmpty(data.internalSubChapterAccess)) {
-        data = _.omit(data, 'internalSubChapterAccess')
+      if (!_.isEmpty(data.associatedObj)) {
+        let associatedObjAry = []
+        _.each(data.associatedObj, function (item, say) {
+          let value = _.omit(item, 'type')
+          associatedObjAry.push(value);
+        });
+        data.associatedObj = associatedObjAry
       }
       if (_.isEmpty(data.moolyaSubChapterAccess)) {
         data = _.omit(data, 'moolyaSubChapterAccess')
@@ -171,7 +172,7 @@ class MlAddSubChapter extends React.Component {
 
   async findChapterDetails() {
     console.log(this.props);
-    let clusterId = this.props ? this.props.clusterId: ''
+    let clusterId = this.props ? this.props.clusterId : ''
     let chapterId = this.props ? this.props.chapterId : ''
     if (chapterId) {
       const response = await findChapterActionHandler(clusterId, chapterId);
@@ -182,34 +183,29 @@ class MlAddSubChapter extends React.Component {
   }
 
   getInternalAccessStatus(details) {
-    let internalSubChapterAccess = {
-      backendUser: details.backendUser ? details.backendUser : this.state.internalSubChapterAccess.backendUser,
-      externalUser: details.externalUser ? details.externalUser : this.state.internalSubChapterAccess.externalUser
-    }
-    this.setState({internalSubChapterAccess: internalSubChapterAccess})
+    this.setState({associatedObj: details})
   }
 
   getMoolyaAccessStatus(details) {
     let moolyaSubChapterAccess = {
-      // backendUser: details.backendUser ? details.backendUser : this.state.moolyaSubChapterAccess.backendUser,
       externalUser: details.externalUser ? details.externalUser : this.state.moolyaSubChapterAccess.externalUser
     }
     this.setState({moolyaSubChapterAccess: moolyaSubChapterAccess})
   }
 
-  async onImageFileUpload(e){
-    if(e.target.files[0].length ==  0)
+  async onImageFileUpload(e) {
+    if (e.target.files[0].length == 0)
       return;
     let file = e.target.files[0];
-    if(file) {
-      let data = {moduleName: "SUBCHAPTER", actionName: "UPDATE", subChapterId:''}
+    if (file) {
+      let data = {moduleName: "SUBCHAPTER", actionName: "UPDATE", subChapterId: ''}
       let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
       return response;
     }
   }
 
-  async onFileUploadCallBack(resp){
-    if(resp){
+  async onFileUploadCallBack(resp) {
+    if (resp) {
       let result = JSON.parse(resp)
       if (result.success) {
         let dataDetails = this.state.data
@@ -220,17 +216,7 @@ class MlAddSubChapter extends React.Component {
     }
   }
 
-  selectAssociateChapter(val) {
-    if (val) {
-      this.setState({relatedSubChapter: val})
-    } else {
-      this.setState({relatedSubChapter: ''})
-    }
-  }
   render() {
-
-    let subChapterQuery=gql`query{data:fetchSubChaptersSelectNonMoolya { value:_id, label:subChapterName}}`;
-
     let MlActionConfig = [
       {
         actionName: 'save',
@@ -262,58 +248,54 @@ class MlAddSubChapter extends React.Component {
                   smoothScrollling={true}
                   default={true}
                 >
-                <form>
-                  <div className="form-group ">
-                    <input type="text" ref="id" defaultValue={this.state.data && this.state.data.id} hidden="true"/>
-                    <input type="text" placeholder="Cluster Name" ref="clusterName" readOnly
-                           defaultValue={this.state.data && this.state.data.clusterName}
-                           className="form-control float-label" disabled="disabled"/>
-                  </div>
-                  <div className="form-group">
-                    <input type="text" placeholder="State" className="form-control float-label"
-                           defaultValue={this.state.data && this.state.data.stateName} disabled="disabled"/>
-                  </div>
-                  <div className="form-group">
-                    <input type="text" placeholder="Chapter Name" ref="chapterName" className="form-control float-label"
-                           readOnly defaultValue={this.state.data && this.state.data.chapterName} disabled="disabled"/>
-                  </div>
-                  <div className="form-group">
-                    <input type="text" placeholder="Sub-Chapter Name" ref="subChapterName"
-                           className="form-control float-label"/>
-                  </div>
-                  <br className="brclear"/>
-                  <div className="form-group">
-                    <input type="text" placeholder="Display Name" ref="subChapterDisplayName"
-                           className="form-control float-label"/>
-                  </div>
-                  <div className="form-group">
-                    <Moolyaselect multiSelect={true} placeholder="Related Sub-Chapters"
-                                  className="form-control float-label" valueKey={'value'} labelKey={'label'}
-                                  selectedValue={this.state.relatedSubChapter} queryType={"graphql"}
-                                  query={subChapterQuery} isDynamic={true}
-                                  onSelect={this.selectAssociateChapter.bind(this)}/>
-                  </div>
-                  <div className="form-group">
-                    <input type="text" ref="subChapterUrl" placeholder="Sub-Chapter URL"
-                           className="form-control float-label"/>
-                  </div>
-                  <div className="form-group">
-                    <input type="text" ref="subChapterEmail" placeholder="Sub-Chapter Email Id"
-                           defaultValue={this.state.data && this.state.data.subChapterEmail}
-                           className="form-control float-label"/>
-                    <div className="email_notify">
-                      <div className="input_types">
-                        <input ref="isEmailNotified" type="checkbox" name="checkbox"
-                               checked={this.state.data.isEmailNotified}
-                               onChange={this.onStatusChangeNotify.bind(this)}/>
-                        <label htmlFor="checkbox1"><span> </span>Notify</label>
+                  <form>
+                    <div className="form-group ">
+                      <input type="text" ref="id" defaultValue={this.state.data && this.state.data.id} hidden="true"/>
+                      <input type="text" placeholder="Cluster Name" ref="clusterName" readOnly
+                             defaultValue={this.state.data && this.state.data.clusterName}
+                             className="form-control float-label" disabled="disabled"/>
+                    </div>
+                    <div className="form-group">
+                      <input type="text" placeholder="State" className="form-control float-label"
+                             defaultValue={this.state.data && this.state.data.stateName} disabled="disabled"/>
+                    </div>
+                    <div className="form-group">
+                      <input type="text" placeholder="Chapter Name" ref="chapterName"
+                             className="form-control float-label"
+                             readOnly defaultValue={this.state.data && this.state.data.chapterName}
+                             disabled="disabled"/>
+                    </div>
+                    <div className="form-group">
+                      <input type="text" placeholder="Sub-Chapter Name" ref="subChapterName"
+                             className="form-control float-label"/>
+                    </div>
+                    <br className="brclear"/>
+                    <div className="form-group">
+                      <input type="text" placeholder="Display Name" ref="subChapterDisplayName"
+                             className="form-control float-label"/>
+                    </div>
+                    <div className="form-group">
+                      <input type="text" ref="subChapterUrl" placeholder="Sub-Chapter URL"
+                             className="form-control float-label"/>
+                    </div>
+                    <div className="form-group">
+                      <input type="text" ref="subChapterEmail" placeholder="Sub-Chapter Email Id"
+                             defaultValue={this.state.data && this.state.data.subChapterEmail}
+                             className="form-control float-label"/>
+                      <div className="email_notify">
+                        <div className="input_types">
+                          <input ref="isEmailNotified" type="checkbox" name="checkbox"
+                                 checked={this.state.data.isEmailNotified}
+                                 onChange={this.onStatusChangeNotify.bind(this)}/>
+                          <label htmlFor="checkbox1"><span> </span>Notify</label>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="form-group">
-                    <textarea placeholder="About" ref="aboutSubChapter" className="form-control float-label"></textarea>
-                  </div>
-                </form>
+                    <div className="form-group">
+                      <textarea placeholder="About" ref="aboutSubChapter"
+                                className="form-control float-label"></textarea>
+                    </div>
+                  </form>
                 </ScrollArea>
               </div>
             </div>
@@ -387,11 +369,9 @@ class MlAddSubChapter extends React.Component {
                         </div>
                       </div>
                     </div>
-                    <div className="panel panel-default">
-                      <div className="panel-heading">Internal Subchapter Access</div>
-                      <MlInternalSubChapterAccess getInternalAccessStatus={this.getInternalAccessStatus.bind(this)}
-                                                  assignedDetails={this.state.internalSubChapterAccess}/>
-                    </div>
+                    <MlInternalSubChapterAccess getInternalAccessStatus={this.getInternalAccessStatus.bind(this)}
+                                                assignedDetails={this.state.associatedObj}/>
+
                     <div className="panel panel-default">
                       <div className="panel-heading">Moolya Subchapter Access</div>
                       <MlMoolyaSubChapterAccess getMoolyaAccessStatus={this.getMoolyaAccessStatus.bind(this)}

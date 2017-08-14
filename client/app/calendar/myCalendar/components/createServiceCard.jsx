@@ -233,6 +233,7 @@ class MlAppServiceManageSchedule extends Component {
           taskDetails={this.state.TaskDetails}
           selectService={this.selectService.bind(this)}
           task={this.state.task}
+          serviceTask={this.state.serviceTask}
           selectedTab={this.state.selectedTab}
           details={this.state.details}
           saveAction={this.saveAction.bind(this)}

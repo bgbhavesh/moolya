@@ -20,7 +20,7 @@ export default class Step3 extends Component{
   componentDidMount() {
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(290+$('.admin_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight-(310+$('.app_header').outerHeight(true)));
     if(typeof this.props.getServiceDetails !== 'undefined') {
       this.props.getServiceDetails();
     }
@@ -72,7 +72,7 @@ export default class Step3 extends Component{
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
-          <div className="col-md-6 nopadding-left">
+          <br/><div className="col-md-6 nopadding-left">
             <div className="form_bg">
               <form>
                 <div className="form-group switch_wrap switch_names inline_switch">

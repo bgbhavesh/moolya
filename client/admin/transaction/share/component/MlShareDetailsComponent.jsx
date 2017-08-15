@@ -39,29 +39,22 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
     OnToggleSwitch(true,true);
   }
 
-   componentWillMount() {
-    console.log('---propsInitially---', this.props)
-    // this.getShareDetails()
-
+  componentWillMount() {
+    let shareId= this.props && this.props.data ? this.props.data._id : '';
+    if(shareId){
+       this.setState({shareId: shareId}, function () {
+         const resp = this.getShareDetails()
+         return resp;
+       }.bind(this));
+    }
   }
 
   async getShareDetails() {
     const response  = await fetchShareDetails(this.state.shareId)
-    console.log('---response---', response)
+    // console.log('---response---', response)
     this.setState({data: response})
     return response;
   }
-
-  componentWillReceiveProps(newProps){
-    console.log('--newProps---', newProps);
-    let shareId=newProps._id;
-    this.setState({shareId: shareId})
-    if(shareId){
-      const resp = this.getShareDetails()
-      return resp;
-    }
-  }
-
 
 
   updateCost(e){
@@ -77,196 +70,132 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
   }
 
 
-  async acitvateOffice() {
-    if (this.state.officeInfo.isActive) {
-      toastr.error('Office already activated');
-      return false;
-    }
-  }
-
-
   render() {
     let that = this;
+    let ownerInfo = this.state && this.state.data && this.state.data.ownerInfo ? this.state.data.ownerInfo : {};
+    let users = this.state && this.state.data && this.state.data.users ? this.state.data.users : [];
+    let files = this.state && this.state.data && this.state.data.files ? this.state.data.files : [];
+    let transId = this.state && this.state.shareId ? this.state.shareId : '';
+    // console.log('this.state', this.state);
     return (
       <div className="ml_tabs">
         <ul  className="nav nav-pills">
           <li className="active">
-            <a  href={`#customerDetails${that.props.data._id}`} data-toggle="tab">Details</a>
+            <a  href={`#customerDetails${transId}`} data-toggle="tab">Details</a>
           </li>
           <li>
-            <a  href={`#share${that.props.data._id}`} data-toggle="tab">Activity Log</a>
-          </li>}
-          <li>
-            <a  href={`#deviceDetails${that.props.data._id}`} data-toggle="tab">Device Details</a>
+            <a  href={`#share${transId}`} data-toggle="tab">Activity Log</a>
           </li>
           <li>
-            <a  href={`#deviceDetails${that.props.data._id}`} data-toggle="tab">History</a>
+            <a  href={`#deviceDetails${transId}`} data-toggle="tab">Device Details</a>
+          </li>
+          <li>
+            <a  href={`#history${transId}`} data-toggle="tab">History</a>
           </li>
         </ul>
 
         <div className="tab-content clearfix">
-          <div className="tab-pane active" id={`customerDetails${that.props.data._id}`}>
+          <div className="tab-pane active" id={`customerDetails${transId}`}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="User Id" value={that.props.data.profileId} className="form-control float-label" readOnly="true"/>
+                  <input type="text" placeholder="User Id" value={ownerInfo.profileId} className="form-control float-label" readOnly="true"/>
                 </div>
                 <div className="form-group ">
-                  <input type="text" placeholder="Transaction Id" value={that.state.data.transactionId} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Transaction Id" value={transId} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Date & Time" value={that.state.data.dateTime} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Date & Time" value={ that.state.data ? that.state.data.createdAt: ''} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="clearfix"></div>
                 <div className="form-group">
-                  <input type="text" placeholder="Name" value={that.state.data.name} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Name" value={ownerInfo.name} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Email" value={that.props.email} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Email" value={ownerInfo.email} className="form-control float-label"  readOnly="true"/>
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Phone Number" value={that.props.mobileNumber} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Phone Number" value={ownerInfo.mobileNumber} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Cluster" value={that.props.cluster} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Cluster" value={ownerInfo.cluster} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Chapter" value={that.props.chapter} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Chapter" value={ownerInfo.chapter} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Sub Chapter" value={that.props.subChapter} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Sub Chapter" value={ownerInfo.subChapter} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Community" value={that.props.community} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Community" value={ownerInfo.community} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <br className="clearfix" />
               </div>
             </div>
           </div>
-          {/*<div className="tab-pane" id={`processSetup${that.props.data._id}`}>*/}
-            {/*<div className="panel panel-default">*/}
-              {/*<div className="panel-heading">Add Stages<img className="pull-right" src="/images/add.png" onClick={that.addStageComponent.bind(that)}/></div>*/}
-              {/*<div className="panel-body">*/}
-                {/*{that.state.stages.map(function (stage, sIdx) {*/}
-                  {/*return(*/}
-                    {/*<div className="row" key={sIdx}>*/}
-                      {/*<div className="col-md-6">*/}
-                        {/*<div className="form-group">*/}
-                          {/*<MoolyaSelect multiSelect={false} className="form-control float-label"*/}
-                                        {/*valueKey={'value'}*/}
-                                        {/*labelKey={'label'} queryType={"graphql"} query={stageQuery} isDynamic={true}*/}
-                                        {/*onSelect={that.optionsBySelectStage.bind(that, sIdx)}*/}
-                                        {/*placeholder="Select Stage"*/}
-                                        {/*selectedValue={stage.stageId}/>*/}
-                        {/*</div>*/}
-                      {/*</div>*/}
-                      {/*<div className="col-md-6">*/}
-                        {/*<div className="form-group switch_wrap inline_switch small_sw">*/}
-                          {/*<label>Status</label>*/}
-                          {/*<label className="switch">*/}
-                            {/*<input type="checkbox" checked={stage.isActive} onChange={that.onStageStatusChange.bind(that, sIdx)}/>*/}
-                            {/*<div className="slider"></div>*/}
-                          {/*</label>*/}
-                        {/*</div>*/}
-                      {/*</div>*/}
-                      {/*<div className="col-md-12">*/}
-                        {/*{stage.stageActions.map(function (action, aIdx) {*/}
-                          {/*return(*/}
-                            {/*<div className="form_inner_block col-md-4" key={aIdx}>*/}
-                              {/*<div className="add_form_block"><img src="/images/add.png" onClick={that.addActionComponent.bind(that, sIdx)}/></div>*/}
-                              {/*<div className="form-group">*/}
-                                {/*<MoolyaSelect multiSelect={false} className="form-control float-label"*/}
-                                              {/*valueKey={'value'}*/}
-                                              {/*labelKey={'label'} queryType={"graphql"} query={actionQuery} isDynamic={true}*/}
-                                              {/*onSelect={that.optionsBySelectAction.bind(that, sIdx, aIdx)}*/}
-                                              {/*placeholder="Select Action"*/}
-                                              {/*selectedValue={action.actionId}/>*/}
-                              {/*</div>*/}
-                              {/*<div className="form-group">*/}
-                                {/*<input type="text" placeholder="Type" className="form-control float-label" />*/}
-                              {/*</div>*/}
-                              {/*<div className="form-group switch_wrap inline_switch small_sw">*/}
-                                {/*<label>Status</label>*/}
-                                {/*<label className="switch">*/}
-                                  {/*<input type="checkbox" checked={action.isActive} onChange={that.onActionStatusChange.bind(that, sIdx, aIdx)}/>*/}
-                                  {/*<div className="slider"></div>*/}
-                                {/*</label>*/}
-                              {/*</div>*/}
-                            {/*</div>*/}
-                          {/*)*/}
-                        {/*})}*/}
-                      {/*</div>*/}
-                    {/*</div>*/}
-                  {/*)*/}
-                {/*})}*/}
-                {/*<hr/>*/}
-              {/*</div>*/}
-            {/*</div>*/}
-            {/*<a className="fileUpload mlUpload_btn" onClick={this.saveProcessSetup.bind(this)}>Save details</a>*/}
-          {/*</div>*/}
-          <div className="tab-pane" id={`paymentDetails${that.props.data._id}`}>
+          <div className="tab-pane" id={`share${transId}`}>
             <div className="row">
               <div className="col-md-6">
-                <div className="panel panel-default">
-                  <div className="panel-heading">Generate payment link</div>
-                  <div className="panel-body">
-                    <div className="form-group">
-                      <input type="text" placeholder="Subscription Name" className="form-control float-label"  ref="subscriptionName"/>
-                    </div>
-                    <br className="brclear"/>
-                    <div className="form-group ">
-                      <input type="Number" onChange={(e)=>this.updateCost(e)} value={this.state.cost} placeholder="Cost" min="0" className="form-control float-label"/>
-                      <div className="email_notify">
-                        <div className="input_types">
-                          <input id="checkbox1" onChange={(e)=>this.updateTax(e)} checked={this.state.tax} type="checkbox" name="checkbox" value="1" /><label htmlFor="checkbox1"><span></span>TAX inclusive</label>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <textarea onChange={(e)=>this.updateAbout(e)} defaultValue={this.state.about} placeholder="About" className="form-control float-label"></textarea>
-                    </div>
-                    {/*<a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.generateLink()}>Generate Link</a>*/}
-                    {/*<a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.acitvateOffice()}>Activate office</a>*/}
-                  </div>
+                <div className="form-group">
+                  <input type="text" placeholder="Shared Date & Time" value={ that.state.data ? that.state.data.createdAt: ''} className="form-control float-label" id=""/>
+                </div>
+                <h5>Shared with :</h5>
+                <ul className="img_upload ul-hide">
+                  {
+                    users.map(function (user, index) {
+                      return (
+                        <li key={index}>
+                          {/*<FontAwesome name='minus'/>*/}
+                          <img src={ user.profilePic ? user.profilePic : "/images/data_balance.jpg"}/>
+                          <span>{user.displayName}</span>
+                        </li>
+                      )
+                    })
+                  }
+                </ul>
+                <div className="clearfix" />
+                <br />
+                <div className="form-group">
+                  <input type="text" placeholder="Status" defaultValue="Completed" className="form-control float-label" id=""/>
                 </div>
               </div>
               <div className="col-md-6">
-                <div className="form-group">
-                  <input type="text" placeholder="Transaction Date & Time" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.dateTime?that.state.data.paymentDetails.dateTime:""} className="form-control float-label"  readOnly={true}/>
+                <h4>Shared Content</h4>
+                <ul className="doc_upload">
+                  {
+                    files.map(function (file, index) {
+                      return (
+                        <li key={index}>
+                          {/*<FontAwesome name='minus'/>*/}
+                          <img src={ file.url ? file.url : "/images/data_balance.jpg"}/>
+                        </li>
+                      )
+                    })
+                  }
+
+                </ul>
+                <div className="clearfix" />
+                <br/>
+                <div className="col-md-6 nopadding-left">
+                  <div className="form-group">
+                    <input type="text" placeholder="From" value={ this.state.data && this.state.data.sharedStartDate ? this.state.data.sharedStartDate : '' } disabled defaultValue="10.20.1.6" className="form-control float-label" id=""/>
+                  </div>
                 </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Transaction ID" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.transactionId?that.state.data.paymentDetails.transactionId:""} className="form-control float-label"  readOnly={true}/>
+                <div className="col-md-6 nopadding-right">
+                  <div className="form-group">
+                    <input type="text" placeholder="To" value={ this.state.data && this.state.data.sharedEndDate ? this.state.data.sharedEndDate : '' } disabled defaultValue="10.20.1.6" className="form-control float-label" id=""/>
+                  </div>
                 </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Total amount paid" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.totalAmountPaid?that.state.data.paymentDetails.totalAmountPaid:""} className="form-control float-label" />
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Payment mode" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.paymentMode?that.state.data.paymentDetails.paymentMode:""} className="form-control float-label" />
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Card number" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.cardNumber?that.state.data.paymentDetails.cardNumber:""} className="form-control float-label" />
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Card Holder name" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.cardHolderName?that.state.data.paymentDetails.cardHolderName:""} className="form-control float-label" />
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Promotion Code" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.promotionCode?that.state.data.paymentDetails.promotionCode:""} className="form-control float-label" />
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Code Amount" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.codeAmount?that.state.data.paymentDetails.codeAmount:""} className="form-control float-label" />
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Status" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.promotionStatus?that.state.data.paymentDetails.promotionStatus:""} className="form-control float-label" />
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Voucher Code" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.voucherCode?that.state.data.paymentDetails.voucherCode:""} className="form-control float-label" />
+                <div className="clearfix" />
+                <div className="input_types">
+                  <input id="checkbox1" type="checkbox" name="checkbox" checked={ this.state.data && this.state.data.isDownloadable ? this.state.data.isDownloadable : false } disabled value="1" /><label htmlFor="checkbox1"><span></span>Can Download this content</label>
                 </div>
               </div>
             </div>
           </div>
-          <div className="tab-pane" id={`deviceDetails${that.props.data._id}`}>
+          <div className="tab-pane" id={`deviceDetails${transId}`}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
@@ -287,46 +216,10 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
               </div>
             </div>
           </div>
-          <div className="table_tab" id={`share${that.props.data._id}`}>
-            <div className="row">
-              <div className="col-md-6">
-                <div className="form-group">
-                  <input type="text" placeholder="Shared Date & Time" className="form-control float-label" id=""/>
-                </div>
-                <h5>Shared with :</h5>
-                <ul className="img_upload ul-hide">
-                  <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/><span>test text here</span></li>
-                </ul>
-                <div className="clearfix" />
-                <br />
-                <div className="form-group">
-                  <input type="text" placeholder="Status" defaultValue="Completed" className="form-control float-label" id=""/>
-                </div>
-              </div>
-              <div className="col-md-6">
-                <h4>Shared Content</h4>
-                <ul className="doc_upload">
-                  <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/></li>
-                </ul>
-                <div className="clearfix" />
-                <br/>
-                <div className="col-md-6 nopadding-left">
-                  <div className="form-group">
-                    <input type="text" placeholder="From" defaultValue="10.20.1.6" className="form-control float-label" id=""/>
-                  </div>
-                </div>
-                <div className="col-md-6 nopadding-right">
-                  <div className="form-group">
-                    <input type="text" placeholder="To" defaultValue="10.20.1.6" className="form-control float-label" id=""/>
-                  </div>
-                </div>
-                <div className="clearfix" />
-                <div className="input_types">
-                  <input id="checkbox1" type="checkbox" name="checkbox" value="1" /><label htmlFor="checkbox1"><span></span>Can Download this content</label>
-                </div>
-              </div>
-            </div>
+          <div className="tab-pane" id={`history${transId}`}>
+
           </div>
+
         </div>
 
       </div>

@@ -12,7 +12,7 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 
-export async function fetchShareDetails (shareId) {
+export async function fetchShareDetails (sharedId) {
   const result = await client.query({
     query: gql`
 query ($sharedId: String) {
@@ -20,6 +20,8 @@ query ($sharedId: String) {
      users{
       userId
       profileId
+      displayName
+      profilePic
      }  
       files{
         url
@@ -29,13 +31,24 @@ query ($sharedId: String) {
      }
       sharedEndDate
       sharedStartDate
-      isSignedUrl
       isDownloadable
+      createdAt
+      ownerInfo {
+        userId
+        profileId
+        email
+        mobileNumber
+        cluster
+        chapter
+        subChapter
+        community
+        name
+      }
   }
 }
     `,
     variables: {
-      shareId
+      sharedId
     },
     forceFetch: true
   });

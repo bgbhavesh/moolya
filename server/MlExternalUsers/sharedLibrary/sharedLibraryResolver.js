@@ -180,7 +180,23 @@ MlResolver.MlQueryResolver['fetchSharedLibraryDetails'] = (obj, args, context, i
 
 }
 
-
+MlResolver.MlQueryResolver['getMySharedConnections'] = (obj, args, context, info) => {
+  let userId = context.userId;
+  let pipeline = [
+    {"$match": { "user.userId": userId } },
+    {"$group": { _id: "$owner.userId" } },
+    {"$lookup": { from: "users", localField: "_id", foreignField: "_id", as: "user" } },
+    {"$unwind": "$user"},
+    {"$replaceRoot": {newRoot:"$user"} },
+    {"$project": {
+      userId: "$_id",
+      profilePic: "$profile.profileImage",
+      displayName: "$profile.displayName"
+    } }
+  ];
+  let data = mlDBController.aggregate('MlSharedLibrary', pipeline);
+  return data;
+}
 
 MlResolver.MlMutationResolver['updateSharedLibrary'] = (obj, args, context, info) => {
 }

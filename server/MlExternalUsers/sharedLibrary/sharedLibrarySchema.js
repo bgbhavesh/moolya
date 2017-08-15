@@ -39,6 +39,12 @@ let sharedLibrarySchema = `
       isSignedUrl: Boolean
       isDownloadable: Boolean
     }
+    
+    type sharedConnections {
+      userId: String
+      profilePic: String
+      displayName: String
+    }
    
     
     
@@ -67,6 +73,7 @@ let sharedLibrarySchema = `
 
  type Query{
       fetchSharedLibraryDetails(sharedId:String):SharedOutput
+      getMySharedConnections: [sharedConnections]
  }
  
  type Mutation{

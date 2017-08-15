@@ -142,11 +142,20 @@ class MlAddSubChapter extends React.Component {
       if (!_.isEmpty(data.associatedObj)) {
         let associatedObjAry = []
         _.each(data.associatedObj, function (item, say) {
+          _.remove(item.subChapters, {subChapterId: null})
           let value = _.omit(item, 'type')
           associatedObjAry.push(value);
         });
-        data.associatedObj = associatedObjAry
+        var aryFinal = []
+        _.each(associatedObjAry, function (item, say) {
+          if (item && item.subChapters && item.subChapters.length > 0)
+            aryFinal.push(item)
+        })
+        data.associatedObj = aryFinal
+      } else {
+        data = _.omit(data, 'associatedObj')
       }
+
       if (_.isEmpty(data.moolyaSubChapterAccess)) {
         data = _.omit(data, 'moolyaSubChapterAccess')
       }

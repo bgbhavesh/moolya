@@ -453,6 +453,29 @@ let CoreModules = {
     var totalRecords = MlProcessTransactions.find(resultantQuery, fieldsProj).count();
     return {totalRecords: totalRecords, data: data};
   },
+
+  MlShareTransactionRepo: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
+
+    var contextFieldMap = {};
+    var resultantQuery = MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery, contextFieldMap);
+    var result = [];
+    var data = MlSharedLibrary.find(resultantQuery, fieldsProj).fetch() || [];
+    data.map(function(fileData) {
+      'files' in fileData && fileData.files.map(function(file){
+        let fileDetails = {
+          url: file.url,
+          fileName:file.fileName,
+          fileType:file.fileType
+        }
+
+        result.push({files:fileDetails})
+      })
+    })
+    var totalRecords = MlSharedLibrary.find(resultantQuery, fieldsProj).count();
+    return {totalRecords: totalRecords, data: result};
+  },
+
+
   MlOfficeTransactionRepo: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
     var contextFieldMap = {
       'clusterId': 'clusterId',

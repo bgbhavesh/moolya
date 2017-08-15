@@ -16,7 +16,7 @@ let sharedLibrarySchema = `
       libraryDocumentId: String
     }
     
-     type sharedOutput{
+     type Share{
       _id: String
       user: userDetails
       owner: userDetails

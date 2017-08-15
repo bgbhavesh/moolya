@@ -48,6 +48,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
   async getShareDetails() {
     const response  = await fetchShareDetails(this.state.shareId)
     console.log('---response---', response)
+    this.setState({data: response})
     return response;
   }
 
@@ -108,7 +109,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="User Id" value={that.state.data.profileId} className="form-control float-label" readOnly="true"/>
+                  <input type="text" placeholder="User Id" value={that.props.data.profileId} className="form-control float-label" readOnly="true"/>
                 </div>
                 <div className="form-group ">
                   <input type="text" placeholder="Transaction Id" value={that.state.data.transactionId} className="form-control float-label"  readOnly="true"/>
@@ -121,24 +122,24 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
                   <input type="text" placeholder="Name" value={that.state.data.name} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Email" value={that.state.data.username} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Email" value={that.props.email} className="form-control float-label"  readOnly="true"/>
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Phone Number" value={that.state.data.mobileNumber} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Phone Number" value={that.props.mobileNumber} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Cluster" value={that.state.data.clusterName} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Cluster" value={that.props.cluster} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Chapter" value={that.state.data.chapterName} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Chapter" value={that.props.chapter} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Sub Chapter" value={that.state.data.subChapterName} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Sub Chapter" value={that.props.subChapter} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Community" value={that.state.data.communityName} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Community" value={that.props.community} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <br className="clearfix" />
               </div>

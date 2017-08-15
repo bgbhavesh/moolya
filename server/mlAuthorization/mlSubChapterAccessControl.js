@@ -3,6 +3,7 @@
  */
 
 import MlAdminUserContext from "../mlAuthorization/mlAdminUserContext";
+import MlUserContext from "../MlExternalUsers/mlUserContext";
 var _ = require('lodash');
 /**
  * SubChapter Access Control returns the access control for sub chapter based on Permissions(SEARCH/VIEW/TRANSACT)
@@ -69,7 +70,7 @@ class MlSubChapterAccessControl {
     var accessControl = {hasAccess: false,isInclusive:true, subChapters: null};
     /**get all private sub Chapters.*/
     var privateSubChapters = [];
-    var subChapter = mlDBController.find('MlSubChapters', {_id: requestSubChapterId}) || {};
+    var subChapter = mlDBController.findOne('MlSubChapters', {_id: requestSubChapterId}) || {};
     switch (permission) {
       case 'SEARCH':
         privateSubChapters= MlSubChapterAccessControl.getPrivateEcoSystemSubChapters(permission);
@@ -91,7 +92,7 @@ class MlSubChapterAccessControl {
     var isInternalUser = context.isInternalUser;
     var contextSubChapterId = context.contextSubChapterId;
     var requestSubChapterId = context.requestSubChapterId;
-    var subChapter = mlDBController.find('MlSubChapters', {_id: contextSubChapterId});
+    var subChapter = mlDBController.findOne('MlSubChapters', {_id: contextSubChapterId});
     var ecoSystemAccessPermission = (subChapter.moolyaSubChapterAccess || {}).externalUser || {};
     /**check for ecosystem access permission for context user subChapter*/
     var scEcoSysSearch = _.isBoolean(ecoSystemAccessPermission.canSearch) ? ecoSystemAccessPermission.canSearch : false;
@@ -310,6 +311,11 @@ class MlSubChapterAccessControl {
     return matchQuery;
   }
 
+  static fetchSubChapterDetails(subChapterId){
+    var subChapter = mlDBController.findOne('MlSubChapters', {_id: subChapterId}) || {};
+    return subChapter;
+  }
+
   static setUserContext(context,requestSubChapterId){
     var userId=context.userId;
     context.requestSubChapterId=requestSubChapterId;
@@ -324,6 +330,13 @@ class MlSubChapterAccessControl {
     /**if its external user */
     else{
       context.isInternalUser=false;
+      userProfile=new MlUserContext().userProfileDetails(userId);
+      if(userProfile&&!userProfile.isInternaluser){
+        var contextSubChapterId=userProfile.subChapterId?userProfile.subChapterId:null;
+        context.contextSubChapterId=contextSubChapterId;
+        var subChapter=MlSubChapterAccessControl.fetchSubChapterDetails(contextSubChapterId);
+        context.isMoolya=_.isBoolean(subChapter.isDefaultSubChapter)?subChapter.isDefaultSubChapter:false;
+      }
     }
 
     return context;

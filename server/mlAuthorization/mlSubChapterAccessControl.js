@@ -202,15 +202,15 @@ class MlSubChapterAccessControl {
         accessCount = mlDBController.find('MlSubChapters', {
           isDefaultSubChapter: false,
           _id: requestSubChapterId,
-          "moolyaSubChapterAccess.externalUser.canView": false,
-          "moolyaSubChapterAccess.externalUser.canTransact": false
+          '$or':[{"moolyaSubChapterAccess.externalUser.canView": true},
+            {"moolyaSubChapterAccess.externalUser.canTransact": true}]
         }).count();
         break;
       case 'TRANSACT':
         accessCount = mlDBController.find('MlSubChapters', {
           isDefaultSubChapter: false,
           _id: requestSubChapterId,
-          "moolyaSubChapterAccess.externalUser.canTransact": false
+          "moolyaSubChapterAccess.externalUser.canTransact": true
         }).count();
     }
     if (accessCount > 0) {

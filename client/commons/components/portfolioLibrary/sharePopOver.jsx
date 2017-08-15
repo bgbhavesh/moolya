@@ -1,18 +1,12 @@
 import React from 'react';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
-import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 var Select = require('react-select');
 import Datetime from "react-datetime";
 import {fetchActivitiesTeamsActionHandler,getTeamUsersActionHandler,fetchOfficeActionHandler } from '../../../app/calendar/myCalendar/components/myTaskAppointments/actions/MlAppointmentActionHandler';
 import moment from "moment";
-import {storeSharedDetailsHandler} from '../../actions/mlLibraryActionHandler'
+import {storeSharedDetailsHandler, fetchConnections} from '../../actions/mlLibraryActionHandler'
 
-var options = [
-  { value: 'moolyaAdmin', label: 'Moolya Admin' },
-  { value: 'myConnections', label: 'My Connections' },
-  { value: 'officeTeamMembers', label: 'Office Team Members' }
-];
 
 export default class SharePopOver extends React.Component {
 
@@ -48,7 +42,7 @@ export default class SharePopOver extends React.Component {
     let temp = [];
     resp.map(function(data){
       temp.push({value:data._id, label: data.branchType+'-'+data.officeName})
-    })
+    });
     temp.push({value:'moolyaAdmin', label: 'MoolyaAdmin'},{value:'myConnections', label: 'My Connections'} );
     return temp
   }
@@ -87,7 +81,29 @@ export default class SharePopOver extends React.Component {
 
   selectUserType(selectedUserType) {
     let that = this;
-    that.setState({userType: selectedUserType}, () => {if(selectedUserType.value !== 'myConnections')that.getUsers(selectedUserType.value)})
+    that.setState({userType: selectedUserType}, () => {
+      if(selectedUserType.value == 'myConnections') {
+        that.getMyConnections();
+      } else if( selectedUserType.value == "moolyaAdmin" ){
+        // To do
+      } else {
+        that.getUsers(selectedUserType.value)
+      }
+    })
+  }
+
+  async getMyConnections(){
+    let resp = await fetchConnections();
+    let users = resp.map(function (user) {
+      let userInfo = {
+        name: user.displayName,
+        profileId: user.profileId,
+        profileImage: user.profileImage,
+        userId: user.userId
+      };
+      return userInfo;
+    });
+    this.setState({teamData: users});
   }
 
   validDate(current) {
@@ -186,6 +202,12 @@ export default class SharePopOver extends React.Component {
   async saveInfo(Details) {
 
     const response  = await storeSharedDetailsHandler(Details)
+    if(response.success){
+      toastr.success(response.result);
+      this.props.toggle();
+    } else {
+      toastr.error(response.result);
+    }
     console.log(response)
   }
 

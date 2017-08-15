@@ -170,3 +170,20 @@ export async function storeSharedDetailsHandler(detailsInput) {
   const id = result.data.createSharedLibrary;
   return id;
 }
+
+export async function fetchConnections() {
+  const result = await appClient.query({
+    query: gql`
+    query{
+      fetchConnections {
+        userId
+        profileId
+        displayName
+        profileImage
+      }
+    }`,
+    forceFetch:true
+  })
+  const id = result.data.fetchConnections;
+  return id
+}

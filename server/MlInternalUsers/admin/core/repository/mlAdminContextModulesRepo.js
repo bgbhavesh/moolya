@@ -466,7 +466,8 @@ let CoreModules = {
           _id: "$sharedId",
           userId: { "$first": "$owner.userId" },
           profileId: { "$first": "$owner.profileId" },
-          createdAt: { "$first": "$createdAt"}
+          createdAt: { "$first": "$createdAt"},
+          totalRecords: { "$sum":1 }
         }
       },
       { "$lookup": { from: "users", localField: "userId", foreignField: "_id", as: "contactInfo" } },
@@ -496,7 +497,8 @@ let CoreModules = {
           chapter: "$userProfiles.chapterName",
           subChapter: "$userProfiles.subChapterName",
           community: "$userProfiles.communityName",
-          transactionType: "Share"
+          transactionType: "Share",
+          totalRecords: 1
         }
       }
     ];
@@ -515,7 +517,7 @@ let CoreModules = {
     }
     let data = mlDBController.aggregate('MlSharedLibrary', pipleline);
 
-    let totalRecords = MlSharedLibrary.find(resultantQuery, fieldsProj).count();
+    let totalRecords = data && data[0] && data[0].totalRecords ? data[0].totalRecords : 0 ;
     return {totalRecords: totalRecords, data: data};
   },
 

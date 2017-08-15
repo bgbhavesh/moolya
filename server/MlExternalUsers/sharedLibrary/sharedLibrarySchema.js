@@ -1,6 +1,6 @@
 import {mergeStrings} from 'gql-merge';
-import MlSchemaDef from '../../../commons/mlSchemaDef';
-import MlResolver from '../../../commons/mlResolverDef'
+import MlSchemaDef from '../../commons/mlSchemaDef';
+import MlResolver from '../../commons/mlResolverDef'
 
 let sharedLibrarySchema = `
 
@@ -32,12 +32,12 @@ let sharedLibrarySchema = `
       isActive: Boolean
     }
     
-     input userInput{
+    input userInput{
       userId: String
-      profileId: Boolean
+      profileId: String
     }
     
-     input fileInput{
+    input fileInput{
       url: String
       fileName: String
       fileType: String
@@ -45,20 +45,13 @@ let sharedLibrarySchema = `
     }
     
     
-     input sharedInput{
-      _id: String
-      user: userInput
-      owner: userInput
-      file: fileInput
+    input sharedInput {
+      users: [userInput]!
+      files: [fileInput]!
       sharedEndDate: Date
       sharedStartDate: Date
       isSignedUrl: Boolean
       isDownloadable: Boolean
-      createdBy: String
-      createdAt: Date
-      updatedAt: Date
-      updatedBy: String
-      isActive: Boolean
     }
    
 
@@ -67,25 +60,16 @@ let sharedLibrarySchema = `
  }
  
  type Mutation{
-      updateSharedLibrary(id: String,files:libraryInput): response
-      createSharedLibrary(detailsInput:libraryInput):response
- }
-
-`
+      updateSharedLibrary(id: String,files:sharedInput): response
+      createSharedLibrary(detailsInput:sharedInput):response
+ }`;
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], sharedLibrarySchema ]);
 
 let supportedApi = [
-
-
-    {api:'fetchSharedLibrary', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
-
-
+  {api:'fetchSharedLibrary', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'createSharedLibrary', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'updateSharedLibrary', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true}
-]
+];
 
-MlResolver.MlModuleResolver.push(supportedApi)
-
-
-
+MlResolver.MlModuleResolver.push(supportedApi);

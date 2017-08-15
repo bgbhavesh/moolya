@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import {appClient} from "../../app/core/appConnection";
 
 export async function createLibrary(detailsInput, connection) {
   const result = await connection.mutate({
@@ -148,5 +149,24 @@ export async function updatePrivacyDetails(detailsInput, connection) {
     forceFetch: true
   });
   const id = result.data.updatePrivacyDetails;
+  return id;
+}
+
+export async function storeSharedDetailsHandler(detailsInput) {
+  const result = await appClient.mutate({
+    mutation: gql`
+      mutation($detailsInput: sharedInput){
+        createSharedLibrary(detailsInput:$detailsInput) {
+          success
+          code
+          result
+        }
+      }
+    `,
+    variables: {
+      detailsInput
+    }
+  });
+  const id = result.data.createSharedLibrary;
   return id;
 }

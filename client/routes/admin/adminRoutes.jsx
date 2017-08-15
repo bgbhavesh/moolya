@@ -50,6 +50,11 @@ import MlConversationsLogList from '../../admin/transaction/conversations/compon
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 
 import MlProcessSetupRequestsList from '../../admin/transaction/processSetup/component/MlProcessSetupRequestsList'
+
+
+import MlShareList from '../../admin/transaction/share/component/MlShareList'
+
+
 import MlserviceCardsList from  '../../admin/transaction/serviceCards/component/MlserviceCardsList'
 
 import MlInternalRequestsList from '../../admin/transaction/internalRequests/component/MlInternalRequestsList'
@@ -460,7 +465,15 @@ adminSection.route('/portfolio/about', {
 adminSection.route('/transactions/processSetupList', {
   name: 'transaction_ProcessSetupList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'requests'}} />, adminContent:<MlProcessSetupRequestsList/>})
+      mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'requests'}} />, adminContent:<MlProcessSetupRequestsList/>})
+  }
+});
+
+
+adminSection.route('/transactions/shareList', {
+  name: 'transaction_ShareList',
+  action(){
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'requests'}} />, adminContent:<MlShareList/>})
   }
 });
 

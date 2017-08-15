@@ -55,7 +55,7 @@ class MlAppServiceSelectTask extends Component{
     // }
     // this.initilizeSwiper()
     let WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(250+$('.app_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight-(310+$('.app_header').outerHeight(true)));
 
     console.log(this.props.taskDetails);
     if(this.props && this.props.taskDetails && this.props.taskDetails[0] ){
@@ -160,15 +160,13 @@ class MlAppServiceSelectTask extends Component{
 
 
   async setSession(index, sessionId, duration) {
-    console.log('--index--', index,'--sessionId--', sessionId, '--duration--',duration, )
     const {selectedTaskId} = this.state;
     // let {selectedTaskId} = this.props;
     this.setState({sessionId: sessionId})
     const resp = await fetchActivitiesTeamsActionHandler(selectedTaskId, sessionId);
     if(resp){
-      this.getUsers(resp, index);
+      await this.getUsers(resp, index, duration);
     }
-    await this.getUsers(resp, index, duration);
 
     // this.props.saveDetails('session', sessionId);
   }
@@ -336,6 +334,11 @@ class MlAppServiceSelectTask extends Component{
    */
   render() {
     let that = this;
+    console.log('This Props:',this.props);
+    let serviceTask = this.props.serviceTask ? this.props.serviceTask : [];
+    let currentTask = serviceTask.find(function (data) {
+      return data.id == that.props.selectedTab;
+    });
     const {activities, index, isExternal, isInternal, offices, duration} = this.state;
     return (!this.state.sessionExpanded?
       <div className="step_form_wrap step1">
@@ -367,10 +370,12 @@ class MlAppServiceSelectTask extends Component{
                         <input type="text" className="form-control" placeholder="Select Tasks" value={this.props.task.name} disabled/>
                       </div>
                       <div className="form-group">
-                        <label>Total number of Sessions <input className="form-control inline_input"  disabled /> </label>
+                        <label>Total number of Sessions <input className="form-control inline_input" value={ this.props.task ? this.props.task.noOfSession : ""} disabled /> </label>
                       </div>
                       <div className="form-group">
-                        <label>Duration: &nbsp; <input type="text" className="form-control inline_input"  disabled /> Hours <input type="text" className="form-control inline_input" disabled /> Mins </label>
+                        <label>Duration: &nbsp;
+                          <input type="text" className="form-control inline_input" value={ this.props.task && this.props.task.duration ? this.props.task.duration.hours : '' } disabled /> Hours
+                          <input type="text" className="form-control inline_input" value={ this.props.task && this.props.task.minutes ? this.props.task.duration.hours : '' } disabled /> Mins </label>
                       </div>
                     </form>
                   </div>
@@ -381,7 +386,7 @@ class MlAppServiceSelectTask extends Component{
                       </div>
                       <div className="form-group">
                         <span className="placeHolder active">Frequency</span>
-                        <input className="form-control" ></input>
+                        <input className="form-control" value={this.props.task ? this.props.task.sessionFrequency : ''} disabled></input>
                       </div>
                       <div className="form-group">
                         <label>
@@ -390,6 +395,8 @@ class MlAppServiceSelectTask extends Component{
                                  type="number"
                                  min="0"
                                  id="tasksequence"
+                                 value={ currentTask ? currentTask.sequence : '' }
+                                 disabled
                                 />
                         </label>
                       </div>

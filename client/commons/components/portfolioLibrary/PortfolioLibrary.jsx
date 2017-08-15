@@ -53,7 +53,8 @@ import SharePopOver from './sharePopOver'
         documentsLock: {},
         explore: false,
         hideLock: false,
-        popoverOpen: false, deleteOption: false
+        popoverOpen: false, deleteOption: false,
+        selectedData: []
       };
       this.toggle = this.toggle.bind(this);
       this.refetchData.bind(this);
@@ -572,6 +573,28 @@ import SharePopOver from './sharePopOver'
       this.setState({previewTemplate: templatePreviewUrl});
     }
 
+    ///================================================================================================================
+
+    onFileSelect(index,type, e ) {
+      console.log('--index--', index, '==type==', type, '--event--', e.target.checked)
+      if(e.target.checked) {
+        switch(type){
+          case 'image':
+            let imageArray = this.state.selectedData || [];
+            let images = this.state.imageDetails || [];
+            let selectedImage = images[index];
+            imageArray.push(selectedImage);
+            this.setState({selectedData: imageArray})
+                break;
+        }
+      }
+    }
+
+    // deletedData(response) {
+    //
+    // }
+
+
     /**
      * Method :: images
      * Desc   :: Handles all the image looping activities
@@ -593,9 +616,7 @@ import SharePopOver from './sharePopOver'
             <a href="#" data-toggle="modal" data-target=".imagepop"
                onClick={that.random.bind(that, show.fileUrl, id)}><img src={show.fileUrl}/></a>
             <div id="images" className="title">{show.fileName}</div>
-            <FontAwesome name='share-alt'/>
-            <FontAwesome name='times' style={{'display':'none'}}/>
-            <FontAwesome name='minus'/>
+
           </div>
         )
       });
@@ -615,8 +636,21 @@ import SharePopOver from './sharePopOver'
         if (show.inCentralLibrary) {
           return (
             <div className="thumbnail" key={id}>
+              <div className="input_types">
+                <input id="checkbox1" type="checkbox" name="checkbox" value="1" onChange={that.onFileSelect.bind(that, id, 'image')} /><label htmlFor="checkbox1"><span></span></label>
+              </div>
               {that.state.explore || that.state.deleteOption ? "" :
                 <FontAwesome name='trash-o' onClick={() => that.delete(id, "image", "portfolio")}/>}
+              <div className="icon_count"> <FontAwesome name='share-alt' />21 </div>
+              <FontAwesome name='times' style={{'display':'none'}}/>
+              <div className="show_details" style={{'display':'none'}}>
+                <ul className="list-group">
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                </ul>
+              </div>
               {that.state.isLibrary ? <a href="#" data-toggle="modal" data-target=".imagepop"
                                          onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
                 src={show.fileUrl}/></a> :
@@ -917,22 +951,26 @@ import SharePopOver from './sharePopOver'
         });
         return false;
       });
+    }
 
-      $(".fa-share-alt").click(function(){
+    componentDidUpdate() {
+      $(".icon_count").click(function(){
         $(this).parents('.thumbnail').find(".fa-times").show();
         $(this).parents('.thumbnail').find(".show_details").show();
-        $(this).parents('.thumbnail').find(".fa-share-alt").hide();
+        $(this).parents('.thumbnail').find(".icon_count").hide();
         $(this).parents('.thumbnail').find(".fa-lock").hide();
         $(this).parents('.thumbnail').find(".fa-unlock").hide();
+        $(this).parents('.thumbnail').find(".input_types").hide();
 
       });
 
       $(".fa-times").click(function(){
-        $(this).parents('.thumbnail').find(".fa-share-alt").show();
+        $(this).parents('.thumbnail').find(".icon_count").show();
         $(this).parents('.thumbnail').find(".fa-times").hide();
         $(this).parents('.thumbnail').find(".show_details").hide();
         $(this).parents('.thumbnail').find(".fa-lock").show();
         $(this).parents('.thumbnail').find(".fa-unlock").show();
+        $(this).parents('.thumbnail').find(".input_types").show();
 
       });
     }
@@ -1036,8 +1074,9 @@ import SharePopOver from './sharePopOver'
     }
 
     portfolioShareHandler(actionConfig,handlerCallback){
+      console.log('===handlerCallback===', handlerCallback)
       if(handlerCallback) {//to handle the popover
-        handlerCallback({});
+        handlerCallback({Details: this.state.selectedData});
       }
     }
 
@@ -1082,7 +1121,7 @@ import SharePopOver from './sharePopOver'
           popOverTitle:'Shared Details',
           placement:'top',
           target:'sharedLibrary',
-          popOverComponent: <SharePopOver />,
+          popOverComponent: <SharePopOver Details={this.state.selectedData} />,
           actionComponent: PopoverActionIcon,
           handler: this.portfolioShareHandler.bind(this),
         },

@@ -233,6 +233,7 @@ class MlAppServiceManageSchedule extends Component {
           taskDetails={this.state.TaskDetails}
           selectService={this.selectService.bind(this)}
           task={this.state.task}
+          serviceTask={this.state.serviceTask}
           selectedTab={this.state.selectedTab}
           details={this.state.details}
           saveAction={this.saveAction.bind(this)}
@@ -262,7 +263,6 @@ class MlAppServiceManageSchedule extends Component {
   render() {
 
     let _this = this;
-    console.log('---this.props--', this.props);
     let appActionConfig = [
       {
         showAction: true,
@@ -300,7 +300,7 @@ class MlAppServiceManageSchedule extends Component {
                 {!isTaskComponent ?
                   <div>
                   <StepZilla steps={this.setServiceSteps()}
-                             stepsNavigation={false}
+                             stepsNavigation={true}
                              prevBtnOnLastStep={true}/>
                     <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
                   </div>

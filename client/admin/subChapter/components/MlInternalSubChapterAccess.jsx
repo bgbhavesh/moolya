@@ -1,14 +1,22 @@
+/**
+ * @Note Changes on 14-aug-201
+ * */
 import React from "react";
 import {render} from "react-dom";
+import gql from "graphql-tag";
+import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 var FontAwesome = require('react-fontawesome');
 
 export default class MlInternalSubChapterAccess extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      type: "backendUser",
-      backendUser: {},
-      externalUser: {}
+      data: [{
+        type: "backendUser",
+        subChapters: [{subChapterId: null, chapterId: null}],   //second object is the context of subChapter
+        backendUser: {canSearch: false, canView: false, canTransact: false},
+        externalUser: {canSearch: false, canView: false, canTransact: false}
+      }],
     };
     this.onStatusChangeCanSearchB = this.onStatusChangeCanSearchB.bind(this);
     this.onStatusChangeCanViewB = this.onStatusChangeCanViewB.bind(this);
@@ -20,206 +28,240 @@ export default class MlInternalSubChapterAccess extends React.Component {
     return this;
   }
 
-  getToggleStatus(state) {
-    let details = {};
-    if (this.state.type == "backendUser") {
-      details = {backendUser: state}
-    } else if (this.state.type == "externalUser") {
-      details = {externalUser: state}
-    }
-    // this.props.userTypeAccess(details);
-    this.props.getInternalAccessStatus(details);
-  }
-
   componentWillMount() {
-    if (this.props.assignedDetails && this.props.assignedDetails.backendUser) {
-      let backendUserState = this.props.assignedDetails.backendUser;
-      this.setState({backendUser: backendUserState})
-    }
-    if (this.props.assignedDetails && this.props.assignedDetails.externalUser) {
-      let externalUserState = this.props.assignedDetails.externalUser;
-      this.setState({externalUser: externalUserState})
-    }
+    // if (this.props.assignedDetails && this.props.assignedDetails.backendUser) {
+    //   let backendUserState = this.props.assignedDetails.backendUser;
+    //   this.setState({backendUser: backendUserState})
+    // }
+    // if (this.props.assignedDetails && this.props.assignedDetails.externalUser) {
+    //   let externalUserState = this.props.assignedDetails.externalUser;
+    //   this.setState({externalUser: externalUserState})
+    // }
   }
 
-  getSelectedTab(type, e) {
-    this.setState({type: type})
+  addAccessControl(id) {
+    this.setState({
+      data: this.state.data.concat([{
+        type: "backendUser",
+        subChapters: [{subChapterId: null, chapterId: null}],   //second object is the context of subChapter
+        backendUser: {canSearch: false, canView: false, canTransact: false},
+        externalUser: {canSearch: false, canView: false, canTransact: false}
+      }])
+    });
   }
 
-  onStatusChangeCanSearchB(e) {
-    let status = this.refs.canSearchB.checked
-    var backendUser = {
-      canSearch: status,
-      canView: false,
-      canTransact: this.state.backendUser.canTransact ? this.state.backendUser.canTransact : false
-    }
-    // this.state.backendUser.canView ? this.state.backendUser.canView : false
-    this.setState({backendUser: backendUser});
-    this.props.getInternalAccessStatus({backendUser: backendUser})
+  removeAccessControl(id, event) {
+    let data;
+    data = this.state.data.filter(function (object, index) {
+      return id !== index;
+    });
+    this.setState({
+      data: data
+    })
   }
 
-  onStatusChangeCanViewB(e) {
-    let status = this.refs.canViewB.checked
-    var backendUser = {
-      canSearch: this.state.backendUser.canSearch ? this.state.backendUser.canSearch : false,
-      canView: status,
-      canTransact: this.state.backendUser.canTransact ? this.state.backendUser.canTransact : false
-    }
-    if(backendUser.canSearch){
-      this.setState({backendUser: backendUser});
-      this.props.getInternalAccessStatus({backendUser: backendUser})
-    }else {
-      toastr.error('Can-Search should be active for can-view active');
-    }
+  getSelectedTab(type, index, event) {
+    let availabilityDetails = this.state.data
+    availabilityDetails[index]['type'] = type
+    this.setState({data: availabilityDetails}, function () {
+      this.sendAccessDataToParent()
+    })
   }
 
-  onStatusChangeCanTransactB(e) {
-    let status = this.refs.canTransactB.checked
-    var backendUser = {
-      canSearch: this.state.backendUser.canSearch ? this.state.backendUser.canSearch : false,
-      canView: this.state.backendUser.canView ? this.state.backendUser.canView : false,
-      canTransact: status
-    }
-    this.setState({backendUser: backendUser});
-    this.props.getInternalAccessStatus({backendUser: backendUser})
+  onStatusChangeCanSearchB(index, event) {
+    let status = event.target.checked
+    let availabilityDetails = this.state.data
+    availabilityDetails[index]['backendUser']['canSearch'] = status
+    this.setState({data: availabilityDetails}, function () {
+      this.sendAccessDataToParent()
+    })
   }
 
-  onStatusChangeCanSearchE(e) {
-    let status = this.refs.canSearchE.checked
-    var externalUser = {
-      canSearch: status,
-      canView: false,
-      canTransact: this.state.externalUser.canTransact ? this.state.externalUser.canTransact : false
-    }
-    // this.state.externalUser.canView ? this.state.externalUser.canView : false
-    this.setState({externalUser: externalUser});
-    this.props.getInternalAccessStatus({externalUser: externalUser})
+  onStatusChangeCanViewB(index, event) {
+    let status = event.target.checked
+    let availabilityDetails = this.state.data
+    availabilityDetails[index]['backendUser']['canView'] = status
+    this.setState({data: availabilityDetails}, function () {
+      this.sendAccessDataToParent()
+    })
   }
 
-  onStatusChangeCanViewE(e) {
-    let status = this.refs.canViewE.checked
-    var externalUser = {
-      canSearch: this.state.externalUser.canSearch ? this.state.externalUser.canSearch : false,
-      canView: status,
-      canTransact: this.state.externalUser.canTransact ? this.state.externalUser.canSearch : false
-    }
-    if (externalUser.canSearch) {
-      this.setState({externalUser: externalUser});
-      this.props.getInternalAccessStatus({externalUser: externalUser})
-    } else {
-      toastr.error('Can-Search should be active for can-view active');
-    }
+  onStatusChangeCanTransactB(index, event) {
+    let status = event.target.checked
+    let availabilityDetails = this.state.data
+    availabilityDetails[index]['backendUser']['canTransact'] = status
+    this.setState({data: availabilityDetails}, function () {
+      this.sendAccessDataToParent()
+    })
   }
 
-  onStatusChangeCanTransactE(e) {
-    let status = this.refs.canTransactE.checked
-    var externalUser = {
-      canSearch: this.state.externalUser.canSearch ? this.state.externalUser.canSearch : false,
-      canView: this.state.externalUser.canView ? this.state.externalUser.canView : false,
-      canTransact: status
-    }
-    this.setState({externalUser: externalUser});
-    this.props.getInternalAccessStatus({externalUser: externalUser})
+  onStatusChangeCanSearchE(index, event) {
+    let status = event.target.checked
+    let availabilityDetails = this.state.data
+    availabilityDetails[index]['externalUser']['canSearch'] = status
+    this.setState({data: availabilityDetails}, function () {
+      this.sendAccessDataToParent()
+    })
+  }
+
+  onStatusChangeCanViewE(index, event) {
+    let status = event.target.checked
+    let availabilityDetails = this.state.data
+    availabilityDetails[index]['externalUser']['canView'] = status
+    this.setState({data: availabilityDetails}, function () {
+      this.sendAccessDataToParent()
+    })
+  }
+
+  onStatusChangeCanTransactE(index, event) {
+    let status = event.target.checked
+    let availabilityDetails = this.state.data
+    availabilityDetails[index]['externalUser']['canTransact'] = status
+    this.setState({data: availabilityDetails}, function () {
+      this.sendAccessDataToParent()
+    })
+  }
+
+  selectAssociateChapter(index, val, callback, label) {
+    let chapterId = label && label.chapterId ? label.chapterId : ''
+    let availabilityDetails = this.state.data
+    let obj = [{subChapterId: val, chapterId: chapterId}]
+    availabilityDetails[index]['subChapters'] = obj
+    this.setState({data: availabilityDetails}, function () {
+      this.sendAccessDataToParent()
+    })
+  }
+
+  sendAccessDataToParent() {
+    let dataToSend = this.state.data
+    console.log('parent................')
+    console.log(dataToSend)
+    this.props.getInternalAccessStatus(dataToSend)
   }
 
   render() {
     let that = this;
-    let userType = that.state.type;
-    // let backendUserState = that.state.backendUserState;
-    // let externalUserState = that.state.externalUserState;
+    let subChapterQuery = gql `query{data:fetchSubChaptersSelectNonMoolya { value:_id, label:subChapterName, chapterId:chapterId}}`;
     return (
+      <div >
+        {that.state.data.map(function (value, id) {
+          return (
+            <div className="panel panel-default" key={id}>
+              <div className="panel-heading">
+                Internal SubChapter Access{id == 0 ? (
+                <div className="pull-right block_action" onClick={that.addAccessControl.bind(that, id)}><img
+                  src="/images/add.png"/></div>) : (<div className="pull-right block_action"
+                                                         onClick={that.removeAccessControl.bind(that, id)}>
+                <img src="/images/remove.png"/></div>)}
+              </div>
+              <div className="panel-body">
+                <div className="ml_tabs">
+                  <div className="form-group">
+                    <Moolyaselect multiSelect={false} placeholder="Related Sub-Chapters"
+                                  className="form-control float-label" valueKey={'value'} labelKey={'label'}
+                                  selectedValue={value.subChapters[0].subChapterId} queryType={"graphql"}
+                                  query={subChapterQuery} isDynamic={true}
+                                  onSelect={that.selectAssociateChapter.bind(that, id)}/>
+                  </div>
 
-      <div className="panel-body">
-        <div className="ml_tabs">
-        <ul className="nav nav-pills" role="tablist">
-          <li role="presentation" className="active" onClick={this.getSelectedTab.bind(this, "backendUser")}><a
-            href="#home" aria-controls="home" role="tab" data-toggle="tab">Backend user Access</a></li>
-          <li role="presentation" onClick={this.getSelectedTab.bind(this, "externalUser")}>
-            <a href="#profile"
-               aria-controls="profile"
-               role="tab"
-               data-toggle="tab">External
-              user Access</a></li>
-        </ul>
-        {(userType == "backendUser") ?
-          <div className="tab-content">
-            <div role="tabpanel" className="tab-pane active" id="home">
-              <div className="row">
-                <div className="col-md-4">
-                  <div className="form-group switch_wrap inline_switch">
-                    <label className=""><FontAwesome name='search'/></label>
-                    <label className="switch">
-                      <input type="checkbox" ref="canSearchB" checked={that.state.backendUser.canSearch}
-                             onChange={this.onStatusChangeCanSearchB.bind(this)}/>
-                      <div className="slider"></div>
-                    </label>
-                  </div>
+                  <ul className="nav nav-pills" role="tablist">
+                    <li role="presentation" className="active"
+                        onClick={that.getSelectedTab.bind(this, "backendUser", id)}>
+                      <a
+                        href="#home" aria-controls="home" role="tab" data-toggle="tab">Backend user Access</a></li>
+                    <li role="presentation" onClick={that.getSelectedTab.bind(that, "externalUser", id)}>
+                      <a href="#profile"
+                         aria-controls="profile"
+                         role="tab"
+                         data-toggle="tab">External
+                        user Access</a></li>
+                  </ul>
+                  {(value.type == "backendUser") ?
+                    <div className="tab-content">
+                      <div role="tabpanel" className="tab-pane active" id="home">
+                        <div className="row">
+                          <div className="col-md-4">
+                            <div className="form-group switch_wrap inline_switch">
+                              <label className=""><FontAwesome name='search'/></label>
+                              <label className="switch">
+                                <input type="checkbox" ref="canSearchB" checked={value.backendUser.canSearch}
+                                       onChange={that.onStatusChangeCanSearchB.bind(that, id)}/>
+                                <div className="slider"></div>
+                              </label>
+                            </div>
+                          </div>
+                          <div className="col-md-4">
+                            <div className="form-group switch_wrap inline_switch">
+                              <label className=""><FontAwesome name='eye'/></label>
+                              <label className="switch">
+                                <input type="checkbox" ref="canViewB" checked={value.backendUser.canView}
+                                       onChange={that.onStatusChangeCanViewB.bind(that, id)}/>
+                                <div className="slider"></div>
+                              </label>
+                            </div>
+                          </div>
+                          <div className="col-md-4">
+                            <div className="form-group switch_wrap inline_switch">
+                              <label className=""><FontAwesome name='refresh'/></label>
+                              <label className="switch">
+                                <input type="checkbox" ref="canTransactB" checked={value.backendUser.canTransact}
+                                       onChange={that.onStatusChangeCanTransactB.bind(that, id)}/>
+                                <div className="slider"></div>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    :
+                    <div className="tab-content">
+                      <div role="tabpanel" className="tab-pane active" id="home">
+                        <div className="row">
+                          <div className="col-md-4">
+                            <div className="form-group switch_wrap inline_switch">
+                              <label className=""><FontAwesome name='search'/></label>
+                              <label className="switch">
+                                <input type="checkbox" ref="canSearchE"
+                                       checked={value.externalUser.canSearch}
+                                       onChange={that.onStatusChangeCanSearchE.bind(that, id)}/>
+                                <div className="slider"></div>
+                              </label>
+                            </div>
+                          </div>
+                          <div className="col-md-4">
+                            <div className="form-group switch_wrap inline_switch">
+                              <label className=""><FontAwesome name='eye'/></label>
+                              <label className="switch">
+                                <input type="checkbox" ref="canViewE"
+                                       checked={value.externalUser.canView}
+                                       onChange={that.onStatusChangeCanViewE.bind(that, id)}/>
+                                <div className="slider"></div>
+                              </label>
+                            </div>
+                          </div>
+                          <div className="col-md-4">
+                            <div className="form-group switch_wrap inline_switch">
+                              <label className=""><FontAwesome name='refresh'/></label>
+                              <label className="switch">
+                                <input type="checkbox" ref="canTransactE"
+                                       checked={value.externalUser.canTransact}
+                                       onChange={that.onStatusChangeCanTransactE.bind(that, id)}/>
+                                <div className="slider"></div>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  }
+
                 </div>
-                <div className="col-md-4">
-                  <div className="form-group switch_wrap inline_switch">
-                    <label className=""><FontAwesome name='eye'/></label>
-                    <label className="switch">
-                      <input type="checkbox" ref="canViewB" checked={that.state.backendUser.canView}
-                             onChange={this.onStatusChangeCanViewB.bind(this)}/>
-                      <div className="slider"></div>
-                    </label>
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group switch_wrap inline_switch">
-                    <label className=""><FontAwesome name='refresh'/></label>
-                    <label className="switch">
-                      <input type="checkbox" ref="canTransactB" checked={that.state.backendUser.canTransact}
-                             onChange={this.onStatusChangeCanTransactB.bind(this)}/>
-                      <div className="slider"></div>
-                    </label>
-                  </div>
-                </div>
+
               </div>
+
             </div>
-          </div>
-          :
-          <div className="tab-content">
-            <div role="tabpanel" className="tab-pane active" id="home">
-              <div className="row">
-                <div className="col-md-4">
-                  <div className="form-group switch_wrap inline_switch">
-                    <label className=""><FontAwesome name='search'/></label>
-                    <label className="switch">
-                      <input type="checkbox" ref="canSearchE"
-                             checked={that.state.externalUser.canSearch ? that.state.externalUser.canSearch : false}
-                             onChange={this.onStatusChangeCanSearchE.bind(this)}/>
-                      <div className="slider"></div>
-                    </label>
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group switch_wrap inline_switch">
-                    <label className=""><FontAwesome name='eye'/></label>
-                    <label className="switch">
-                      <input type="checkbox" ref="canViewE"
-                             checked={that.state.externalUser.canView ? that.state.externalUser.canView : false}
-                             onChange={this.onStatusChangeCanViewE.bind(this)}/>
-                      <div className="slider"></div>
-                    </label>
-                  </div>
-                </div>
-                <div className="col-md-4">
-                  <div className="form-group switch_wrap inline_switch">
-                    <label className=""><FontAwesome name='refresh'/></label>
-                    <label className="switch">
-                      <input type="checkbox" ref="canTransactE"
-                             checked={that.state.externalUser.canTransact ? that.state.externalUser.canTransact : false}
-                             onChange={this.onStatusChangeCanTransactE.bind(this)}/>
-                      <div className="slider"></div>
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        }
-        </div>
+          )
+        })}
       </div>
 
     )

@@ -4,6 +4,9 @@ var FontAwesome = require('react-fontawesome');
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
 var Select = require('react-select');
 import Datetime from "react-datetime";
+import {fetchActivitiesTeamsActionHandler,getTeamUsersActionHandler,fetchOfficeActionHandler } from '../../../app/calendar/myCalendar/components/myTaskAppointments/actions/MlAppointmentActionHandler';
+import moment from "moment";
+import {storeSharedDetailsHandler} from '../../actions/mlLibraryActionHandler'
 
 var options = [
   { value: 'moolyaAdmin', label: 'Moolya Admin' },
@@ -15,12 +18,56 @@ export default class SharePopOver extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state={isSessionExpand: true}
     this.toggle = this.toggle.bind(this);
     this.toggleButton = this.toggleButton.bind(this);
     this.state = {
       popoverOpen: false,
-      popoverTwoOpen: false
+      popoverTwoOpen: false,
+      selectedDatasToShare: props.Details?props.Details:[],
+      startDate: "",
+      endDate: "",
+      isDownloadable: false
     };
+  }
+
+  componentWillMount() {
+    this.fetchOffice()
+  }
+
+
+  async fetchOffice(resourceId) {
+    this.setState({resourceId: resourceId})
+    let that = this;
+    const resp = await fetchOfficeActionHandler()
+    this.setState({resp: resp})
+  }
+
+  getOffice() {
+    let resp = this.state.resp || [];
+    let temp = [];
+    resp.map(function(data){
+      temp.push({value:data._id, label: data.branchType+'-'+data.officeName})
+    })
+    temp.push({value:'moolyaAdmin', label: 'MoolyaAdmin'},{value:'myConnections', label: 'My Connections'} );
+    return temp
+  }
+
+  async getUsers(resourceId){
+    const that = this;
+    let tempArray = [];
+    const resp = await getTeamUsersActionHandler(resourceId);
+    let users = resp.map(function (user) {
+      let userInfo = {
+            name: user.name,
+            profileId: user.profileId,
+            profileImage: user.profileImage,
+            userId: user.userId
+          };
+          tempArray.push(userInfo)
+        });
+    this.setState({teamData: tempArray})
+      return tempArray;
   }
 
   toggle() {
@@ -39,7 +86,8 @@ export default class SharePopOver extends React.Component {
   }
 
   selectUserType(selectedUserType) {
-    this.setState({userType: selectedUserType})
+    let that = this;
+    that.setState({userType: selectedUserType}, () => {if(selectedUserType.value !== 'myConnections')that.getUsers(selectedUserType.value)})
   }
 
   validDate(current) {
@@ -55,26 +103,103 @@ export default class SharePopOver extends React.Component {
     this.setState({downloadable: e.target.checked})
   }
 
-  sharedStartDate(e) {
-    console.log(e)
+  sharedStartDate(event) {
+    if(event._d) {
+      let value = moment(event._d).format('DD-MM-YYYY');
+      this.setState({startDate: value})
+    }
   }
-  sharedEndDate(e) {
-    console.log(e)
+  sharedEndDate(event) {
+    if(event._d) {
+      let value = moment(event._d).format('DD-MM-YYYY');
+      this.setState({endDate: value})
+    }
   }
+
+  deleteSelectedDate(index) {
+    let data = this.state.selectedDatasToShare || [];
+    data.splice(index,1);
+    this.setState({selectedDatasToShare: data})
+    // this.props.deletedData(data)
+  }
+
+  selectedData() {
+    let that = this;
+    let data = that.state.selectedDatasToShare || [];
+    let datas = data.map(function(value, index) {
+      return (
+        <ul className="doc_upload" key={index}>
+        <li><FontAwesome name='minus' onClick={()=>that.deleteSelectedDate(index)}/><img src={value.fileUrl}/></li>
+        </ul>
+      )
+    })
+    return datas;
+  }
+
+  teamMembersData() {
+    let that = this;
+    let data = that.state.teamData || [];
+    console.log('---display members---',that.state.teamData);
+    let datas = data.map(function(value, index) {
+      console.log('Value', value);
+      return (
+        <ul className="img_upload ul-hide" key={index}>
+          <li ><FontAwesome name='minus'/><img src={value.profileImage?value.profileImage:""}/><span>{value.name}</span></li>
+        </ul>
+          )
+    })
+    return datas;
+  }
+
+  saveDetails() {
+    let that = this;
+    let data = that.state.selectedDatasToShare || [];
+    let teamMembers = that.state.teamData || [];
+    let file = [];
+    let user = [];
+    data.map(function (value) {
+      let fileDetails = {
+        url: value.fileUrl?value.fileUrl:"",
+        fileName: value.fileName?value.fileName:"",
+        fileType: value.fileType?value.fileType:""
+      };
+      file.push(fileDetails)
+    });
+      teamMembers.map(function(team) {
+        let userDetails = {
+          userId: team.userId ? team.userId : 'userId',
+          profileId: team.profileId ? team.profileId : ''
+        };
+        user.push(userDetails)
+      });
+    let Details = {
+      files: file,
+      users:user,
+      sharedStartDate: Date.parse(that.state.startDate),
+      sharedEndDate: Date.parse(that.state.endDate),
+      isDownloadable: that.state.downloadable
+    }
+    console.log('--RESULT--',Details)
+     this.saveInfo(Details);
+  }
+
+  async saveInfo(Details) {
+
+    const response  = await storeSharedDetailsHandler(Details)
+    console.log(response)
+  }
+
+
+
 
 render(){
     return(
-        <div>
-          {/*<h3>Share</h3>*/}
-          <ul className="doc_upload">
-            <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/></li>
-            <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/></li>
-            <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/></li>
-          </ul>
+        <div className="popover-lg">
+          {this.selectedData()}
           <div className="clearfix" />
           <div className="form-group">
-            <Select        name="form-field-name"
-                           options={options}
+            <Select        className="form-field-name"
+                           options={this.getOffice()}
                            value={this.state.userType}
                            onChange={this.selectUserType.bind(this)}
                            />
@@ -82,11 +207,7 @@ render(){
           <div className="form-group">
             <input type="text" placeholder="Search here" className="form-control float-label" id=""></input>
           </div>
-          <ul className="img_upload ul-hide">
-            <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/><span>test text here</span></li>
-            <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/><span>test text here</span></li>
-            <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/><span>test text here</span></li>
-          </ul>
+          {this.teamMembersData()}
           <div className="clearfix" />
           <div className="col-md-6 nopadding-left">
             <div className="form-group" id="date-time">
@@ -125,7 +246,7 @@ render(){
           </div>
           <div className="clearfix" />
           <div className="ml_btn">
-            <a href="#" className="save_btn">Send</a>
+            <a href="" className="save_btn" onClick={this.saveDetails.bind(this)}>Send</a>
             <a href="#" className="cancel_btn">Cancel</a>
           </div>
         </div>

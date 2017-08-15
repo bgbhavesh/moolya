@@ -7,7 +7,7 @@ import {client} from '../../../core/apolloConnection';
 
 const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   name:"ProcessSetupTable",
-  module:"processSetup",//Module name for filter.
+  module:"share",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
   fields:["dateTime","profileId","name", "clusterName", "chapterName", "subChapterName", "communityId", "status"],

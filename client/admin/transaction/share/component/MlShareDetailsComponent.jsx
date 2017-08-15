@@ -1,10 +1,9 @@
 import React from "react";
 import {render} from "react-dom";
 import {BootstrapTable, TableHeaderColumn} from "react-bootstrap-table";
-import {fetchProcessSetupHandler} from "../../processSetup/actions/fetchProcessSetupHandler";
-import {updateProcessSetupActionHandler, updateProcessTransaction} from "../../processSetup/actions/updateProcessSetupAction";
 import {initalizeFloatLabel,OnToggleSwitch} from "../../../utils/formElemUtil";
 import {graphql} from "react-apollo";
+import {fetchShareDetails} from '../actions/MlShareActionHandler'
 import gql from "graphql-tag";
 import MoolyaSelect from "../../../commons/components/MlAdminSelectWrapper";
 import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
@@ -38,92 +37,27 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
     OnToggleSwitch(true,true);
   }
 
-  componentWillReceiveProps(newProps){
-    let userId=newProps.data.userId
-    this.setState({"status":newProps.data.status, data:newProps.data})
-    if(userId){
-      const resp=this.findProcessSetupDetails()
-      return resp;
-    }
+   componentWillMount() {
+    this.getShareDetails()
+
   }
 
-  addStageComponent(e){
-    this.setState({
-      stages: this.state.stages.concat([{stageId: "", isActive:false, stageActions: [{actionId: "",actionType:"",isActive:false}]}])
-    })
-  }
-  addActionComponent(sIdx, e){
-    let stages = this.state.stages
-    let action = stages[sIdx].stageActions.concat([{actionId: "",actionType:"",isActive:false}]);
-    stages[sIdx].stageActions = action;
-    this.setState({stages:stages})
+  async getShareDetails(){
+    const response  = await fetchShareDetails(this.props._id)
+    return response;
   }
 
-  optionsBySelectStage(sIdx, selectedValue){
-    let stages = this.state.stages;
-    stages[sIdx]['stageId'] = selectedValue;
-    this.setState({stages: stages});
-  }
-  optionsBySelectAction(sIdx, aIdx, selectedValue){
-    let stages = this.state.stages
-    stages[sIdx].stageActions[aIdx]['actionId'] = selectedValue;
-    this.setState({stages:stages})
-  }
-  onStageStatusChange(sIdx, e){
-    let value = e.target.checked
-    let stages = this.state.stages;
-    let cloneBackUp = _.cloneDeep(stages);
-    let specificBackup = cloneBackUp[sIdx];
-    specificBackup['isActive'] = value;
-    stages.splice(sIdx, 1);
-    stages.splice(sIdx, 0, specificBackup);
-    this.setState({stages: stages});
-  }
-  onActionStatusChange(sIdx, aIdx, e){
-    let value = e.target.checked
-    let stages = this.state.stages
-    stages[sIdx].stageActions[aIdx]['isActive'] = value;
-    this.setState({stages:stages})
-  }
+  // componentWillReceiveProps(newProps){
+  //   let userId=newProps.data.userId
+  //   this.setState({"status":newProps.data.status, data:newProps.data})
+  //   if(userId){
+  //     const resp=this.findProcessSetupDetails()
+  //     return resp;
+  //   }
+  // }
 
-  async saveProcessSetup() {
-    let stages = this.state.stages;
-    let data = this.state.data;
-    this.loggedUserDetails = getAdminUserContext();
-    data = _.omit(data, '__typename')
-    let isValid = this.validateDetails(stages)
-    if(isValid && isValid.success){                               /*attaching login admin user context to query*/
-      let response = await updateProcessSetupActionHandler(data, isValid.result, this.loggedUserDetails);
-      if(response && response.success){
-        toastr.success("Saved Successfully");
-      }
-      return response;
-    }else{
-      toastr.error(isValid.result);
-    }
-  }
 
-  validateDetails(stages) {
-    let data = _.clone(stages)
-    if (!_.isEmpty(data)) {
-      _.remove(data, {stageId:''})
-      if(!_.isEmpty(data)){
-        console.log(data)
-        return {success: true, result: data}
-      }else
-        return {success: false, result: 'Select atleast one stage'}
-    } else
-      return {success: false, result: 'Please enter Details'}
-  }
-  async findProcessSetupDetails() {
-    let id = this.props.data._id
-    const response = await fetchProcessSetupHandler(id);
-    if(response){
-      if(response.processSteps && response.processSteps.length>0){
-        this.setState({stages:response.processSteps})
-      }
-    }
-  }
+
   updateCost(e){
     this.setState({"cost":e.currentTarget.value});
   }
@@ -135,45 +69,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
   updateAbout(e){
     this.setState({"about":e.currentTarget.value});
   }
-  async generateLink(){
-    if(this.state.isGenerateLinkDisable){
-      toastr.error('Payment Link is already generated');
-      return false;
-    }
-    this.setState({
-      isGenerateLinkDisable:true
-    })
-    if(!this.state.cost){
-      toastr.error('Cost is required');
-      this.setState({
-        isGenerateLinkDisable:false
-      })
-      return false;
-    }
-    if(this.state.cost < 1){
-      toastr.error('Enter tha valid cost');
-      this.setState({
-        isGenerateLinkDisable:false
-      })
-      return false;
-    }
-    let generateLinkInfo = {
-      subscriptionName: this.refs.subscriptionName.value,
-      cost: this.state.cost,
-      isTaxInclusive: this.state.tax,
-      about: this.state.about
-    }
-    let id = this.state.data._id;
-    let response = await updateProcessTransaction(id ,{paymentDetails: generateLinkInfo});
-    if(response.success){
-      toastr.success(response.result);
-    } else {
-      toastr.error(response.result);
-      this.setState({
-        isGenerateLinkDisable:false
-      })
-    }
-  }
+
 
   async acitvateOffice() {
     if (this.state.officeInfo.isActive) {
@@ -184,10 +80,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
 
 
   render() {
-    let stageQuery = gql`query{data:fetchProcessStages {value:_id, label:name}}`;
-    let actionQuery = gql`query{data:fetchProcessActions {value:_id, label:displayName}}`;
     let that = this;
-    let stages = that.state.stages;
     return (
       <div className="ml_tabs">
         <ul  className="nav nav-pills">
@@ -328,8 +221,8 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
                     <div className="form-group">
                       <textarea onChange={(e)=>this.updateAbout(e)} defaultValue={this.state.about} placeholder="About" className="form-control float-label"></textarea>
                     </div>
-                    <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.generateLink()}>Generate Link</a>
-                    <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.acitvateOffice()}>Activate office</a>
+                    {/*<a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.generateLink()}>Generate Link</a>*/}
+                    {/*<a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.acitvateOffice()}>Activate office</a>*/}
                   </div>
                 </div>
               </div>

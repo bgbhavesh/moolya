@@ -31,6 +31,17 @@ let sharedLibrarySchema = `
       transactionType : String
     }
     
+      type SharedOutput {
+      users: [userDetails]
+      files: [fileDetails]
+      sharedEndDate: Date
+      sharedStartDate: Date
+      isSignedUrl: Boolean
+      isDownloadable: Boolean
+    }
+   
+    
+    
     input userInput{
       userId: String
       profileId: String
@@ -55,7 +66,7 @@ let sharedLibrarySchema = `
    
 
  type Query{
-      fetchSharedLibrary(userId:String):[Details]
+      fetchSharedLibraryDetails(sharedId:String):SharedOutput
  }
  
  type Mutation{
@@ -66,7 +77,7 @@ let sharedLibrarySchema = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], sharedLibrarySchema ]);
 
 let supportedApi = [
-  {api:'fetchSharedLibrary', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
+  {api:'fetchSharedLibraryDetails', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'createSharedLibrary', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'updateSharedLibrary', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true}
 ];

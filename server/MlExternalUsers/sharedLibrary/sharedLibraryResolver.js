@@ -85,10 +85,16 @@ MlResolver.MlMutationResolver['createSharedLibrary'] = (obj, args, context, info
 
 }
 
+MlResolver.MlQueryResolver['fetchSharedLibraryDetails'] = (obj, args, context, info) => {
+
+}
+
+
+
 MlResolver.MlMutationResolver['updateSharedLibrary'] = (obj, args, context, info) => {
 }
 
-MlResolver.MlQueryResolver['fetchSharedLibrary'] = (obj, args, context, info) => {
-
-}
+// MlResolver.MlQueryResolver['fetchSharedLibrary'] = (obj, args, context, info) => {
+//
+// }
 

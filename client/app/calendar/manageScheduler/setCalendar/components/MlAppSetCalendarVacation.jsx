@@ -149,7 +149,7 @@ export default class MlAppSetCalendarVacation extends Component {
     if (this.isValid) {
       let start = new Moment(vacationData.startDate + ' ' + vacationData.startTime, 'DD-MM-YYYY HH:mm:ss');
       let end = new Moment(vacationData.endDate + ' ' + vacationData.endTime, 'DD-MM-YYYY HH:mm:ss');
-      this.isValidTime = new Moment(end, 'DD-MM-YYYY HH:mm:ss').isAfter(new Moment(start, 'DD-MM-YYYY HH:mm:ss'));
+      this.isValidTime = new Moment(end, 'DD-MM-YYYY HH:mm:ss').isSameOrAfter(new Moment(start, 'DD-MM-YYYY HH:mm:ss'));
       if (!this.isValidTime) {
         toastr.error('Start datetime must be less than end datetime');
         this.isValid = false;
@@ -179,6 +179,11 @@ export default class MlAppSetCalendarVacation extends Component {
       let response = await updateCalendarVacationActionHandler(this.validVacationData);
       this.showResponseMsg(response);
     }
+  }
+
+  validDate(current) {
+    let yesterday = Datetime.moment().subtract(1, 'day');
+    return current.isAfter(yesterday);
   }
 
   selectVacation(vacationData){
@@ -215,6 +220,7 @@ export default class MlAppSetCalendarVacation extends Component {
               <div className="form-group">
                 <Datetime dateFormat={'DD-MM-YYYY'} timeFormat={false}
                           value={vacationData.startDate}
+                          isValidDate={(current) => this.validDate(current)}
                           onChange={(event) => this.selectDate(event, true)}
                           inputProps={{ placeholder: 'Start date', className:"form-control float-label"}}/>
               </div>
@@ -244,6 +250,7 @@ export default class MlAppSetCalendarVacation extends Component {
               <div className="form-group">
                 <Datetime dateFormat={'DD-MM-YYYY'} timeFormat={false}
                           value={vacationData.endDate}
+                          isValidDate={(current) => this.validDate(current)}
                           onChange={(event) => this.selectDate(event, false)}
                           inputProps={{ placeholder: 'End date', className:"form-control float-label"}}/>
               </div>

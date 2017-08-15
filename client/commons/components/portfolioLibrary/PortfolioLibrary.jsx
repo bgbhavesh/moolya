@@ -22,6 +22,7 @@ import MlAccordion from "../../../app/commons/components/MlAccordion";
 import MlAppActionComponent from '../../../app/commons/components/MlAppActionComponent'
 import PopoverActionIcon from '../../../app/appActions/components/PopoverActionIcon';
 import SharePopOver from './sharePopOver'
+import MlConnectionHeader from './connectionHeader'
 
   class  Library extends React.Component {
 
@@ -1092,6 +1093,15 @@ import SharePopOver from './sharePopOver'
       }
     }
 
+    headerManagement(userId) {
+      this.setState({userId: userId})
+      this.getSharedFiles();
+    }
+
+    getSharedFiles() {
+
+    }
+
     render() {
       var videoJsOptions = [{
         autoplay: true,
@@ -1214,6 +1224,7 @@ import SharePopOver from './sharePopOver'
               </div>
             </div>
           </div>
+          {that.state.isLibrary?<MlConnectionHeader headerManagement={that.headerManagement.bind(that)}/>:""}
           <div className="modal fade bs-example-modal-sm library-popup videopop"
                onContextMenu={(e) => e.preventDefault()} tabindex="-1" role="dialog"
                aria-labelledby="mySmallModalLabel">

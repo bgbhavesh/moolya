@@ -201,7 +201,10 @@ MlResolver.MlQueryResolver['getMySharedConnections'] = (obj, args, context, info
 MlResolver.MlMutationResolver['updateSharedLibrary'] = (obj, args, context, info) => {
 }
 
-// MlResolver.MlQueryResolver['fetchSharedLibrary'] = (obj, args, context, info) => {
-//
-// }
+MlResolver.MlQueryResolver['fetchSharedLibrary'] = (obj, args, context, info) => {
+  let userId =  args.userId;
+  let data = mlDBController.find('MlSharedLibrary',{'user.userId':userId}, context).fetch();
+  return data;
+
+}
 

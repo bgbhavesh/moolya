@@ -74,6 +74,7 @@ let sharedLibrarySchema = `
  type Query{
       fetchSharedLibraryDetails(sharedId:String):SharedOutput
       getMySharedConnections: [sharedConnections]
+      fetchSharedLibrary(userId: String): SharedOutput
  }
  
  type Mutation{
@@ -85,6 +86,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], sharedLibrarySchema
 
 let supportedApi = [
   {api:'fetchSharedLibraryDetails', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
+  {api:'fetchSharedLibrary', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'createSharedLibrary', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'updateSharedLibrary', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true}
 ];

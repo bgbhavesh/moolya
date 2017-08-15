@@ -174,7 +174,7 @@ MlResolver.MlQueryResolver['fetchSharedLibraryDetails'] = (obj, args, context, i
     }
   ];
 
-  let data = mlDBController.aggregate('MlSharedLibrary', pipleline);
+  let data = mlDBController.aggregate('MlSharedLibrary', pipeline);
 
   return data && data[0] ? data[0] : {};
 

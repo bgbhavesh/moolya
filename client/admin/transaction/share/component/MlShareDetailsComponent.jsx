@@ -14,6 +14,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
   constructor(props){
     super(props);
     this.state= {
+      shareId: props._id?props._id:"",
       data: {},
       isGenerateLinkDisable: false,
       stages: [{
@@ -38,23 +39,26 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
   }
 
    componentWillMount() {
-    this.getShareDetails()
+    console.log('---propsInitially---', this.props)
+    // this.getShareDetails()
 
   }
 
-  async getShareDetails(){
-    const response  = await fetchShareDetails(this.props._id)
+  async getShareDetails() {
+    const response  = await fetchShareDetails(this.state.shareId)
+    console.log('---response---', response)
     return response;
   }
 
-  // componentWillReceiveProps(newProps){
-  //   let userId=newProps.data.userId
-  //   this.setState({"status":newProps.data.status, data:newProps.data})
-  //   if(userId){
-  //     const resp=this.findProcessSetupDetails()
-  //     return resp;
-  //   }
-  // }
+  componentWillReceiveProps(newProps){
+    console.log('--newProps---', newProps);
+    let shareId=newProps._id;
+    this.setState({shareId: shareId})
+    if(shareId){
+      const resp = this.getShareDetails()
+      return resp;
+    }
+  }
 
 
 

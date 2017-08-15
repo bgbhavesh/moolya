@@ -27,6 +27,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
         }]
       }]
     }
+    this.getShareDetails.bind(this);
     return this;
   }
 

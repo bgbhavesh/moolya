@@ -179,14 +179,18 @@ export default class SharePopOver extends React.Component {
       sharedEndDate: Date.parse(that.state.endDate),
       isDownloadable: that.state.downloadable
     }
-    console.log('--RESULT--',Details)
+    // console.log('--RESULT--',Details)
      this.saveInfo(Details);
   }
 
   async saveInfo(Details) {
 
     const response  = await storeSharedDetailsHandler(Details)
-    console.log(response)
+    if(response.success){
+      toastr.success(response.result)
+    } else {
+      toastr.error(response.result)
+    }
   }
 
 

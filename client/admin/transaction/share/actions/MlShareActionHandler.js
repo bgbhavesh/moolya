@@ -39,7 +39,7 @@ query ($sharedId: String) {
     },
     forceFetch: true
   });
-  const shareDetails = result.data.fetchTaskDetails;
+  const shareDetails = result.data.fetchSharedLibraryDetails;
   return shareDetails
 }
 

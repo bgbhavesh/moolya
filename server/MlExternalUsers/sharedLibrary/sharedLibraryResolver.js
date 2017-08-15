@@ -14,7 +14,7 @@ MlResolver.MlMutationResolver['createSharedLibrary'] = (obj, args, context, info
   }
 
   if(!libraryInput.files || !libraryInput.files.length ){
-    let code = 400;
+    let code = 404;
     let response = new MlRespPayload().errorPayload('Share files data required', code);
     return response;
   }

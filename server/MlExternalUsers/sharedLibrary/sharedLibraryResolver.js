@@ -164,6 +164,7 @@ MlResolver.MlQueryResolver['fetchSharedLibraryDetails'] = (obj, args, context, i
           userId: "$userId",
           profileId: "$profileId",
           email : "$contactInfo.profile.email",
+          name : "$contactInfo.profile.displayName",
           mobileNumber: "$contactInfo.profile.mobileNumber",
           cluster: "$userProfiles.clusterName",
           chapter: "$userProfiles.chapterName",

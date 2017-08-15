@@ -7,6 +7,8 @@ let sharedLibrarySchema = `
     type userDetails{
       userId: String
       profileId: Boolean
+      displayName: String
+      profilePic: String
     }
     
     type fileDetails{
@@ -31,13 +33,27 @@ let sharedLibrarySchema = `
       transactionType : String
     }
     
-      type SharedOutput {
+    type ShareOwnerInfo {
+      userId: String
+      profileId: String
+      name: String
+      email : String
+      mobileNumber: Int
+      cluster: String
+      chapter: String
+      subChapter: String
+      community: String
+    }
+    
+    type SharedOutput {
       users: [userDetails]
       files: [fileDetails]
       sharedEndDate: Date
       sharedStartDate: Date
       isSignedUrl: Boolean
       isDownloadable: Boolean
+      createdAt:Date
+      ownerInfo: ShareOwnerInfo
     }
     
     type sharedConnections {

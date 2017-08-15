@@ -9,30 +9,37 @@ MlResolver.MlQueryResolver['fetchAssignedRolesHierarchy'] = (obj, args, context,
   var subChapter = null;
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
   if (department && department.isActive) {
-    if(args.subChapterId){
-      subChapter =  mlDBController.findOne("MlSubChapters", {"_id": args.subChapterId}, context)
-    }
-    if(!subChapter.isDefaultSubChapter){
-      response= mlDBController.findOne('MlHierarchyAssignments', {
-        $and: [
-          {clusterId:args.clusterId},
-          {parentDepartment:args.departmentId},
-          {parentSubDepartment:args.subDepartmentId},
-          {subChapterId:args.subChapterId},
-          {isDefaultSubChapter:false},
-          {"teamStructureAssignment.assignedLevel": {$in: [args.type]}}
-        ]},context)
-    }else{
-      response= mlDBController.findOne('MlHierarchyAssignments', {
-        $and: [
-          {clusterId:args.clusterId},
-          {parentDepartment:args.departmentId},
-          {parentSubDepartment:args.subDepartmentId},
-          {isDefaultSubChapter:true},
-          {"teamStructureAssignment.assignedLevel": {$in: [args.type]}}
-        ]},context)
-    }
-     }
+      if(args.subChapterId){
+        subChapter =  mlDBController.findOne("MlSubChapters", {"_id": args.subChapterId}, context)
+      }
+      var isDefaultSubChapter = true;
+      if(subChapter){
+          isDefaultSubChapter = subChapter.isDefaultSubChapter
+      }
+      if(department.isSystemDefined){
+          response= mlDBController.findOne('MlHierarchyAssignments', {
+              $and: [
+                {clusterId:{$in:["All"]}},
+                {parentDepartment:args.departmentId},
+                {parentSubDepartment:args.subDepartmentId},
+                {subChapterId:{$in:["all"]}},
+                {isDefaultSubChapter:isDefaultSubChapter},
+                {"teamStructureAssignment.assignedLevel": {$in: [args.type]}}
+              ]},context)
+
+      } else{
+          response= mlDBController.findOne('MlHierarchyAssignments', {
+              $and: [
+                {clusterId:{$in:[args.clusterId]}},
+                {parentDepartment:args.departmentId},
+                {parentSubDepartment:args.subDepartmentId},
+                {subChapterId:{$in:[args.subChapterId]}},
+                {isDefaultSubChapter:isDefaultSubChapter},
+                {"teamStructureAssignment.assignedLevel": {$in: [args.type]}}
+              ]},context)
+      }
+
+  }
      if(response){
        let teamStructureAssignment = response.teamStructureAssignment;
        /*let filteredSteps = [];

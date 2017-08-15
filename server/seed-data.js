@@ -343,7 +343,7 @@ if(!hierarchyAssignmentMoolya) {
         displayName: subchapterAdminHierarchy.displayName,
         roleType: "Internal User",
         isAssigned: true,
-        assignedLevel: "chapter",
+        assignedLevel: "subChapter",
         reportingRole: chapterAdminHierarchy._id
       },
       {
@@ -381,7 +381,7 @@ if (!hierarchyAssignmentNonMoolya) {
         displayName: subchapterAdminHierarchy.displayName,
         roleType: "Internal User",
         isAssigned: true,
-        assignedLevel: "subchapter",
+        assignedLevel: "subChapter",
         reportingRole: ''
       },
       {

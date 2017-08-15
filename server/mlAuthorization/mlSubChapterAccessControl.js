@@ -326,23 +326,23 @@ class MlSubChapterAccessControl {
     /**Todo: change the 'subChapters' key(subChapters.externalUser.canSearch) is hardcoded in query constructor, make it parameterised*/
     switch (permission) {
       case 'SEARCH':
-        matchQuery = {$or: [{'subChapters.externalUser.canSearch': true}, {'subChapters.externalUser.canView': true}, {'subChapters.externalUser.canTransact': true}]};
+        matchQuery = {$or: [{'externalUser.canSearch': true}, {'externalUser.canView': true}, {'externalUser.canTransact': true}]};
         if (isInternalUser) {
-          matchQuery = {$or: [{'subChapters.backendUser.canSearch': true}, {'subChapters.backendUser.canView': true}, {'subChapters.backendUser.canTransact': true}]};
+          matchQuery = {$or: [{'backendUser.canSearch': true}, {'backendUser.canView': true}, {'backendUser.canTransact': true}]};
         }
         ;
         break;
       case 'VIEW':
-        matchQuery = {$or: [{'subChapters.externalUser.canView': true}, {'subChapters.externalUser.canTransact': true}]};
+        matchQuery = {$or: [{'externalUser.canView': true}, {'externalUser.canTransact': true}]};
         if (isInternalUser) {
-          matchQuery = {$or: [{'subChapters.backendUser.canView': true}, {'subChapters.backendUser.canTransact': true}]};
+          matchQuery = {$or: [{'backendUser.canView': true}, {'backendUser.canTransact': true}]};
         }
         ;
         break;
       case 'TRANSACT':
-        matchQuery = {'subChapters.externalUser.canTransact': true};
+        matchQuery = {'externalUser.canTransact': true};
         if (isInternalUser) {
-          matchQuery = {'subChapters.backendUser.canTransact': true};
+          matchQuery = {'backendUser.canTransact': true};
         }
         ;
     }

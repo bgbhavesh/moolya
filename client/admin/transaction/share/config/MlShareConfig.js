@@ -17,16 +17,16 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   filter:false,
   filterComponent: <MlCustomFilter module="share" moduleName="share" client={client}/>,
   columns:[
-    {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},
-    {dataField: "_id", title: "Created Date",dataSort:true,selectRow:true},
-    {dataField: "user.profileId", title: "UserId",dataSort:true,selectRow:true},
-    {dataField: "user.userId", title: "Name",dataSort:true,selectRow:true},
-    {dataField: "_id", title: "Transaction Id",dataSort:true,selectRow:true},
-    {dataField: "_id", title: "Cluster",dataSort:true,selectRow:true},
-    {dataField: "_id", title: "Chapter",dataSort:true,selectRow:true},
-    {dataField: "_id", title: "Sub Chapter",dataSort:true,selectRow:true},
-    {dataField: "_id", title: "Community",dataSort:true,selectRow:true},
-    {dataField: "_id", title: "Payment",dataSort:true,selectRow:true},
+    {dataField: "_id",title:"Id",'isKey':true,selectRow:true},
+    {dataField: "createdBy", title: "Created By",dataSort:true,selectRow:true},
+    {dataField: "email", title: "Email",dataSort:true,selectRow:true},
+    {dataField: "transactionType", title: "Transaction Type",dataSort:true,selectRow:true},
+    {dataField: "cluster", title: "Cluster",dataSort:true,selectRow:true},
+    {dataField: "chapter", title: "Chapter",dataSort:true,selectRow:true},
+    {dataField: "subChapter", title: "Sub Chapter",dataSort:true,selectRow:true},
+    {dataField: "community", title: "Community",dataSort:true,selectRow:true},
+    {dataField: "createdAt", title: "Created Date",dataSort:true,selectRow:true},
+    // {dataField: "profileId", title: "UserId",dataSort:true,selectRow:true},
     {dataField: "_id", title: "Status",dataSort:true,selectRow:true}
   ],
   tableHeaderClass:'react_table_head',
@@ -47,30 +47,19 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
                     data:ContextSpecSearch(module:"share",offset:$offset, limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
                     totalRecords
                     data{
-                      ...on Share{
-                          _id   
-                          user{
-                            userId
-                            profileId
-                          }
-                          owner{
-                            userId
-                            profileId
-                          }
-                          file{
-                            url
-                            fileName
-                            fileType
-                          }
-                          sharedEndDate
-                          sharedStartDate
-                          isSignedUrl
-                          isDownloadable
-                          createdBy
+                      ...on AdminShareList{
+                          _id
                           createdAt
-                          updatedAt
-                          updatedBy
-                          isActive
+                          createdBy
+                          userId
+                          profileId
+                          email
+                          mobileNumber
+                          cluster
+                          chapter
+                          subChapter
+                          community
+                          transactionType
                         }
                      }        
                    }

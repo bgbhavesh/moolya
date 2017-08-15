@@ -459,20 +459,64 @@ let CoreModules = {
     var contextFieldMap = {};
     var resultantQuery = MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery, contextFieldMap);
     var result = [];
-    var data = MlSharedLibrary.find(resultantQuery, fieldsProj).fetch() || [];
-    data.map(function(fileData) {
-      'files' in fileData && fileData.files.map(function(file){
-        let fileDetails = {
-          url: file.url,
-          fileName:file.fileName,
-          fileType:file.fileType
-        }
 
-        result.push({files:fileDetails})
-      })
-    })
-    var totalRecords = MlSharedLibrary.find(resultantQuery, fieldsProj).count();
-    return {totalRecords: totalRecords, data: result};
+    let pipleline = [
+      {
+        "$group": {
+          _id: "$sharedId",
+          userId: { "$first": "$owner.userId" },
+          profileId: { "$first": "$owner.profileId" },
+          createdAt: { "$first": "$createdAt"}
+        }
+      },
+      { "$lookup": { from: "users", localField: "userId", foreignField: "_id", as: "contactInfo" } },
+      { "$unwind" : "$contactInfo" },
+      { "$addFields": { "userProfiles": {"$cond": [{ "$isArray": "$contactInfo.profile.externalUserProfiles" }, "$contactInfo.profile.externalUserProfiles" , [{}] ] } } },
+      { "$addFields": {
+        "userProfiles": {
+          "$filter": {
+            input: "$userProfiles",
+            as: "userProfile",
+            cond: { $eq: [ "$$userProfile.profileId", "$profileId" ] }
+          }
+        }
+      }
+      },
+      { "$unwind" : "$userProfiles" },
+      {
+        "$project": {
+          _id: 1,
+          createdAt:1,
+          createdBy: "$contactInfo.profile.displayName",
+          userId: "$userId",
+          profileId: "$profileId",
+          email : "$contactInfo.profile.email",
+          mobileNumber: "$contactInfo.profile.mobileNumber",
+          cluster: "$userProfiles.clusterName",
+          chapter: "$userProfiles.chapterName",
+          subChapter: "$userProfiles.subChapterName",
+          community: "$userProfiles.communityName",
+          transactionType: "Share"
+        }
+      }
+    ];
+
+    if (Object.keys(resultantQuery).length) {
+      pipleline.push({'$match': resultantQuery});
+    }
+    if (fieldsProj.sort) {
+      pipleline.push({'$sort': fieldsProj.sort});
+    }
+    if (fieldsProj.skip) {
+      pipleline.push({'$skip': parseInt(fieldsProj.skip)});
+    }
+    if (fieldsProj.limit) {
+      pipleline.push({'$limit': parseInt(fieldsProj.limit)});
+    }
+    let data = mlDBController.aggregate('MlSharedLibrary', pipleline);
+
+    let totalRecords = MlSharedLibrary.find(resultantQuery, fieldsProj).count();
+    return {totalRecords: totalRecords, data: data};
   },
 
 

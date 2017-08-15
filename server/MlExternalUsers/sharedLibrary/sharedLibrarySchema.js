@@ -16,20 +16,19 @@ let sharedLibrarySchema = `
       libraryDocumentId: String
     }
     
-     type Share{
-      _id: String
-      user: userDetails
-      owner: userDetails
-      file: fileDetails
-      sharedEndDate: Date
-      sharedStartDate: Date
-      isSignedUrl: Boolean
-      isDownloadable: Boolean
-      createdBy: String
-      createdAt: Date
-      updatedAt: Date
-      updatedBy: String
-      isActive: Boolean
+     type AdminShareList {
+      _id : String
+      createdAt : Date
+      createdBy : String
+      userId : String
+      profileId : String
+      email : String
+      mobileNumber : String
+      cluster : String
+      chapter : String
+      subChapter : String
+      community : String
+      transactionType : String
     }
     
     input userInput{

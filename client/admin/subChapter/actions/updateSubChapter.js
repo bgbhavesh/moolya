@@ -8,12 +8,7 @@ export async function updateSubChapterActionHandler(ClusterId, ChapterId, subCha
   let subChapter = subChapterDetails;
 
   subChapter.moolyaSubChapterAccess = _.omit(subChapter.moolyaSubChapterAccess,'__typename');
-  // subChapter.moolyaSubChapterAccess.backendUser=_.omit(subChapter.moolyaSubChapterAccess.backendUser,'__typename');
   subChapter.moolyaSubChapterAccess.externalUser=_.omit(subChapter.moolyaSubChapterAccess.externalUser,'__typename');
-
-  subChapter.internalSubChapterAccess = _.omit(subChapter.internalSubChapterAccess,'__typename');
-  subChapter.internalSubChapterAccess.backendUser=_.omit(subChapter.internalSubChapterAccess.backendUser,'__typename');
-  subChapter.internalSubChapterAccess.externalUser=_.omit(subChapter.internalSubChapterAccess.externalUser,'__typename');
 
   const result = await client.mutate({
     mutation: gql`

@@ -342,6 +342,7 @@ export async function fetchTaskDetailsForServiceCard (profileId, serviceId) {
                 hours
                 minutes
               }
+              deliverable
             }
           }
           attachments {

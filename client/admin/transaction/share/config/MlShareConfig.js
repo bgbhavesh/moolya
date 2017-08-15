@@ -15,19 +15,19 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   throttleRefresh:false,
   pagination:true,//To display pagination
   filter:false,
-  filterComponent: <MlCustomFilter module="processSetup" moduleName="processSetup" client={client}/>,
+  filterComponent: <MlCustomFilter module="share" moduleName="share" client={client}/>,
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},
-    {dataField: "dateTime", title: "Created Date",dataSort:true,selectRow:true},
-    {dataField: "profileId", title: "UserId",dataSort:true,selectRow:true},
-    {dataField: "name", title: "Name",dataSort:true,selectRow:true},
-    {dataField: "transactionId", title: "Transaction Id",dataSort:true,selectRow:true},
-    {dataField: "clusterName", title: "Cluster",dataSort:true,selectRow:true},
-    {dataField: "chapterName", title: "Chapter",dataSort:true,selectRow:true},
-    {dataField: "subChapterName", title: "Sub Chapter",dataSort:true,selectRow:true},
-    {dataField: "communityName", title: "Community",dataSort:true,selectRow:true},
-    {dataField: "paymentDetails.paymentStatus", title: "Payment",dataSort:true,selectRow:true},
-    {dataField: "status", title: "Status",dataSort:true,selectRow:true}
+    {dataField: "_id", title: "Created Date",dataSort:true,selectRow:true},
+    {dataField: "user.profileId", title: "UserId",dataSort:true,selectRow:true},
+    {dataField: "user.userId", title: "Name",dataSort:true,selectRow:true},
+    {dataField: "_id", title: "Transaction Id",dataSort:true,selectRow:true},
+    {dataField: "_id", title: "Cluster",dataSort:true,selectRow:true},
+    {dataField: "_id", title: "Chapter",dataSort:true,selectRow:true},
+    {dataField: "_id", title: "Sub Chapter",dataSort:true,selectRow:true},
+    {dataField: "_id", title: "Community",dataSort:true,selectRow:true},
+    {dataField: "_id", title: "Payment",dataSort:true,selectRow:true},
+    {dataField: "_id", title: "Status",dataSort:true,selectRow:true}
   ],
   tableHeaderClass:'react_table_head',
   isExpandableRow:(row)=>{return true;},
@@ -44,53 +44,37 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   ],
   graphQlQuery:
     gql`query ContextSpecSearch($offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
-                    data:ContextSpecSearch(module:"processSetup",offset:$offset, limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
+                    data:ContextSpecSearch(module:"share",offset:$offset, limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
                     totalRecords
                     data{
-                      ...on ProcessTransactions{
-                          _id
-                          name
-                          username
-                          userId
-                          profileId
-                          status
-                          transactionId
-                          transactionType
-                          clusterName
-                          chapterName
-                          subChapterName
-                          communityName
-                          dateTime
-                          mobileNumber
-                          paymentDetails{
-                            subscriptionName
-                            cost
-                            isTaxInclusive
-                            about
-                            dateTime
-                            
-                            totalAmountPaid
-                            paymentMode
-                            cardNumber
-                            cardHolderName
-                            promotionCode
-                            codeAmount
-                            promotionStatus
-                            voucherCode
-                            voucherAmount
-                            voucherStatus
-                            paymentStatus
+                      ...on Share{
+                          _id   
+                          user{
+                            userId
+                            profileId
                           }
-                          deviceDetails{
-                            deviceName
-                            deviceId
-                            ipAddress
-                            location
+                          owner{
+                            userId
+                            profileId
                           }
-                      }
-                    }
-              }
-              }`
+                          file{
+                            url
+                            fileName
+                            fileType
+                          }
+                          sharedEndDate
+                          sharedStartDate
+                          isSignedUrl
+                          isDownloadable
+                          createdBy
+                          createdAt
+                          updatedAt
+                          updatedBy
+                          isActive
+                        }
+                     }        
+                   }
+             }`
 });
 
 export {mlProcessSetupRequestsTableConfig};

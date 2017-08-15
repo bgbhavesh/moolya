@@ -178,6 +178,10 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
       // requestParams.type = 'users';
       result = CoreModulesRepo.MlUsersTransaction(requestParams, userFilterQuery, contextQuery, findOptions, context);
       break;
+    case 'share':
+      requestParams=args.context || {};
+      result=CoreModulesRepo.MlShareTransactionRepo(requestParams,userFilterQuery,contextQuery,findOptions, context);
+      break
   }
 
   return {totalRecords:result.totalRecords||0,data:result.data||[]};
@@ -210,6 +214,7 @@ MlResolver.MlUnionResolver['ContextSpecSearchResult']= {
       case "internalApprovedRequests":resolveType='requests';break;
       case "internalRejectedRequests":resolveType='requests';break;
       case "processSetup":resolveType='ProcessTransactions';break;
+      case "share":resolveType='Share';break;
       case "officeTransaction":resolveType='officeTransactionType';break;
       case "documents":resolveType='ProcessType';break;
       case "serviceCard":resolveType='AdminService';break;

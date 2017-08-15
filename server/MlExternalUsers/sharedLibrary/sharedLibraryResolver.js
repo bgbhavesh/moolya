@@ -87,6 +87,97 @@ MlResolver.MlMutationResolver['createSharedLibrary'] = (obj, args, context, info
 
 MlResolver.MlQueryResolver['fetchSharedLibraryDetails'] = (obj, args, context, info) => {
 
+  let sharedId = args.sharedId;
+
+  let pipeline = [
+    { "$match": { "sharedId": sharedId } },
+    {
+      "$group": {
+        _id: "$sharedId",
+        users: {"$addToSet": "$user"},
+        files: {"$addToSet": "$file"},
+        userId: { "$first": "$owner.userId" },
+        profileId: { "$first": "$owner.profileId" },
+        shareStartDate: { "$first": "$sharedStartDate"},
+        shareEndDate: { "$first": "$sharedEndDate"},
+        isDownloadable: { "$first": "$isDownloadable"},
+        createdAt: { "$first": "$createdAt"}
+      }
+    },
+    { "$unwind": "$users" },
+    { "$lookup": { from: "users", localField: "users.userId", foreignField: "_id", as: "usersInfo" } },
+    { "$unwind": "$usersInfo" },
+    { "$project": {
+      "_id": 1,
+      "files": 1,
+      "userId": 1,
+      "profileId": 1,
+      "shareStartDate": 1,
+      "shareEndDate": 1,
+      "isDownloadable": 1,
+      "createdAt": 1,
+      "users": {
+        "userId": 1,
+        "profileId":1,
+        "displayName": "$usersInfo.profile.displayName",
+        "profilePic": "$usersInfo.profile.profileImage"
+      }
+    }
+    },
+    {
+      "$group":{
+        _id: "$_id",
+        users: {"$addToSet": "$users"},
+        files: {"$first": "$files"},
+        userId: { "$first": "$userId" },
+        profileId: { "$first": "$profileId" },
+        shareStartDate: { "$first": "$sharedStartDate"},
+        shareEndDate: { "$first": "$sharedEndDate"},
+        isDownloadable: { "$first": "$isDownloadable"},
+        createdAt: { "$first": "$createdAt"}
+      }
+    },
+    { "$lookup": { from: "users", localField: "userId", foreignField: "_id", as: "contactInfo" } },
+    { "$unwind" : "$contactInfo" },
+    { "$addFields": { "userProfiles": {"$cond": [{ "$isArray": "$contactInfo.profile.externalUserProfiles" }, "$contactInfo.profile.externalUserProfiles" , [{}] ] } } },
+    { "$addFields": {
+      "userProfiles": {
+        "$filter": {
+          input: "$userProfiles",
+          as: "userProfile",
+          cond: { $eq: [ "$$userProfile.profileId", "$profileId" ] }
+        }
+      }
+    }
+    },
+    { "$unwind" : "$userProfiles" },
+    {
+      "$project": {
+        _id: 1,
+        users: 1,
+        files: 1,
+        shareStartDate: 1,
+        shareEndDate: 1,
+        isDownloadable: 1,
+        createdAt:1,
+        ownerInfo: {
+          userId: "$userId",
+          profileId: "$profileId",
+          email : "$contactInfo.profile.email",
+          mobileNumber: "$contactInfo.profile.mobileNumber",
+          cluster: "$userProfiles.clusterName",
+          chapter: "$userProfiles.chapterName",
+          subChapter: "$userProfiles.subChapterName",
+          community: "$userProfiles.communityName",
+        }
+      }
+    }
+  ];
+
+  let data = mlDBController.aggregate('MlSharedLibrary', pipleline);
+
+  return data && data[0] ? data[0] : {};
+
 }
 
 

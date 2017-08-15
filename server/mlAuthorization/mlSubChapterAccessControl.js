@@ -33,7 +33,7 @@ class MlSubChapterAccessControl {
     var requestSubChapterId = context.requestSubChapterId;
     var contextSubChapterId = context.contextSubChapterId;
 
-    var isSelfUser = (_.isBoolean(requestSubChapterId) && _.isBoolean(contextSubChapterId) && contextSubChapterId == requestSubChapterId) ? true : false;
+    var isSelfUser = (_.isString(requestSubChapterId) && _.isString(contextSubChapterId) && contextSubChapterId == requestSubChapterId) ? true : false;
     var accessControl = {hasAccess: false, isInclusive: true, subChapters: []};
 
     /** Internal User - moolya(admin/team members)*/
@@ -358,9 +358,9 @@ class MlSubChapterAccessControl {
     var userId = context.userId;
     context.requestSubChapterId = requestSubChapterId;
     var userProfile = new MlAdminUserContext().userProfileDetails(userId);
-    /if its internal user */
+    /**if its internal user */
     if (userProfile && userProfile.isInternaluser) {
-      context.isInternalUser = userProfile.isInternalUser;
+      context.isInternalUser = userProfile.isInternaluser;
       context.isMoolya = _.isBoolean(userProfile.isMoolya) ? userProfile.isMoolya : false;
       /**todo:Provision for multi subchapter access control*/
       context.contextSubChapterId = _.isArray(userProfile.defaultSubChapters) ? userProfile.defaultSubChapters[0] : null;

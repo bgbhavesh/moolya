@@ -2,7 +2,7 @@
  * Created by mohammed. mohasin on 13/04/17.
  */
 
-
+import MlAdminUserContext from "../mlAuthorization/mlAdminUserContext";
 var _ = require('lodash');
 /**
  * SubChapter Access Control returns the access control for sub chapter based on Permissions(SEARCH/VIEW/TRANSACT)
@@ -21,7 +21,9 @@ class MlSubChapterAccessControl {
    * @param context(eg:context of user)
    * returns result Object with the access control(hasAccess:true/false,privateSubChapters:[],allowedSubChapters:[])
    */
-  static getAccessControl(permission, context) {
+  static getAccessControl(permission,context,requestSubChapterId) {
+    /**set the user context*/
+    var context=MlSubChapterAccessControl.setUserContext(context,requestSubChapterId);
     /**fetch context details isInternal,isMoolya*/
     var isInternalUser = context.isInternalUser;
     var isMoolya = context.isMoolya;
@@ -240,6 +242,7 @@ class MlSubChapterAccessControl {
    if(accessCount<0){
     switch (permission) {
       case 'VIEW':
+        /**conditions 1)moolya sub chapter check 2)non-moolya sub chapter+view/transact access check*/
         accessCount = mlDBController.find('MlSubChapters', {$or:[{isDefaultSubChapter: true,_id:requestSubChapterId},
           {isDefaultSubChapter: false,"moolyaSubChapterAccess.externalUser.canView": true,_id:requestSubChapterId},
           {isDefaultSubChapter: false,"moolyaSubChapterAccess.externalUser.canTransact": true,_id:requestSubChapterId}
@@ -247,6 +250,7 @@ class MlSubChapterAccessControl {
         }).count();
         break;
       case 'TRANSACT':
+        /**conditions 1)moolya sub chapter check 2)non-moolya sub chapter+transact access check*/
         accessCount = mlDBController.find('MlSubChapters', {$or:[{isDefaultSubChapter: true,_id:requestSubChapterId},
           {isDefaultSubChapter: false,"moolyaSubChapterAccess.externalUser.canTransact": true,_id:requestSubChapterId}
           ]
@@ -306,5 +310,23 @@ class MlSubChapterAccessControl {
     return matchQuery;
   }
 
+  static setUserContext(context,requestSubChapterId){
+    var userId=context.userId;
+    context.requestSubChapterId=requestSubChapterId;
+    var userProfile=new MlAdminUserContext().userProfileDetails(userId);
+    /if its internal user */
+    if(userProfile&&userProfile.isInternaluser){
+       context.isInternalUser=userProfile.isInternalUser;
+       context.isMoolya=_.isBoolean(userProfile.isMoolya)?userProfile.isMoolya:false;
+    /**todo:Provision for multi subchapter access control*/
+    context.contextSubChapterId=_.isArray(userProfile.defaultSubChapters)?userProfile.defaultSubChapters[0]:null;
+    }
+    /**if its external user */
+    else{
+      context.isInternalUser=false;
+    }
+
+    return context;
+  }
 }
 module.exports = MlSubChapterAccessControl;

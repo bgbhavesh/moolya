@@ -92,7 +92,7 @@ class MlSubChapterAccessControl {
     var isInternalUser = context.isInternalUser;
     var contextSubChapterId = context.contextSubChapterId;
     var requestSubChapterId = context.requestSubChapterId;
-    var subChapter = mlDBController.findOne('MlSubChapters', {_id: contextSubChapterId});
+    var subChapter = mlDBController.findOne('MlSubChapters', {_id: contextSubChapterId})||{};
     var ecoSystemAccessPermission = (subChapter.moolyaSubChapterAccess || {}).externalUser || {};
     /**check for ecosystem access permission for context user subChapter*/
     var scEcoSysSearch = _.isBoolean(ecoSystemAccessPermission.canSearch) ? ecoSystemAccessPermission.canSearch : false;

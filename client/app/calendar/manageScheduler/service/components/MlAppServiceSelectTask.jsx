@@ -29,8 +29,10 @@ class MlAppServiceSelectTask extends Component{
       this.props.optionsBySelectService(taskId);
     }
     // this.initilizeSwiper()
+    let viewMode = this.props.viewMode;
+    const hight = viewMode ? 320 : 300;
     let WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(300+$('.app_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight-(hight+$('.app_header').outerHeight(true)));
   }
 
   componentWillUpdate() {

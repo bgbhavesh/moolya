@@ -269,7 +269,7 @@ render(){
           <div className="clearfix" />
           <div className="ml_btn">
             <a href="" className="save_btn" onClick={this.saveDetails.bind(this)}>Send</a>
-            <a href="#" className="cancel_btn">Cancel</a>
+            <a href="#" className="cancel_btn" onClick={this.props.toggle.bind(this)} >Cancel</a>
           </div>
         </div>
       )

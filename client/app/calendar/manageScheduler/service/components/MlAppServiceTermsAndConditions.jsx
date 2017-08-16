@@ -18,9 +18,11 @@ export default class MlAppServiceTermsAndConditions extends Component{
   }
 
   componentDidMount() {
+    let viewMode = this.props.viewMode;
+    const hight = viewMode ? 325 : 300;
     $('.float-label').jvFloat();
     let WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(300+$('.app_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight-(hight+$('.app_header').outerHeight(true)));
     this.props.getServiceDetails();
     this.props.getRedirectServiceList(false);
   }

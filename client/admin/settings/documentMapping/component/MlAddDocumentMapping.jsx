@@ -78,7 +78,6 @@ class MlAddDocumentMapping extends React.Component{
       toastr.error(ret);
     } else {
       let documentDetails = {
-        documentId: this.refs.documentId.value,
         documentDisplayName: this.refs.displayName.value,
         allowableFormat: this.state.allowableFormat,
         clusters: this.state.clusters,

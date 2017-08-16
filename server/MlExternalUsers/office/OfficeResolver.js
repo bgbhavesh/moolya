@@ -405,6 +405,13 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
 
       /**sending email verification token to the created office member*/
       if (registrationId) {
+        let address
+        var user=mlDBController.findOne('MlRegistration', {_id:registrationId},context||{});
+        var email = _.find(user.emails || [], function (e) {
+          return !e.verified;
+        });
+
+        address = (email || {}).address;
         var tokenRecord = {
           token: Random.secret(),
           address: address,
@@ -416,7 +423,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
 
         var verificationLink = MlAccounts.verifyEmailLink(tokenRecord.token);
         //MlAccounts.sendVerificationEmail(registrationId,{emailContentType:"html",subject:"Email Verification",context:context});
-         MlEmailNotification.officeInvitationEmail(registrationId,context,registrationData)
+         MlEmailNotification.officeInvitationEmail(verificationLink,registrationId,context,registrationData)
       }
       if (registrationId) { //for creating new user
         // let officeTrans = {

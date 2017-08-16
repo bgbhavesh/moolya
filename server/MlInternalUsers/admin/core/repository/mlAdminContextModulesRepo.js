@@ -1,7 +1,8 @@
 import _ from "lodash";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 import MlAdminContextQueryConstructor from "./mlAdminContextQueryConstructor";
-import mlNonMoolyaAccess from "../../../../../server/MlInternalUsers/admin/core/non-moolyaAccessControl/mlNonMoolyaAccess"
+// import mlNonMoolyaAccess from "../../../../../server/MlInternalUsers/admin/core/non-moolyaAccessControl/mlNonMoolyaAccess"
+import MlSubChapterAccessControl from '../../../../../server/mlAuthorization/mlSubChapterAccessControl'
 MlChaptersTemp = new Mongo.Collection('mlChaptersTemp');
 
 let mergeQueries=function(userFilter,serverFilter)
@@ -453,6 +454,75 @@ let CoreModules = {
     var totalRecords = MlProcessTransactions.find(resultantQuery, fieldsProj).count();
     return {totalRecords: totalRecords, data: data};
   },
+
+  MlShareTransactionRepo: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
+
+    var contextFieldMap = {};
+    var resultantQuery = MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery, contextFieldMap);
+    var result = [];
+
+    let pipleline = [
+      {
+        "$group": {
+          _id: "$sharedId",
+          userId: { "$first": "$owner.userId" },
+          profileId: { "$first": "$owner.profileId" },
+          createdAt: { "$first": "$createdAt"},
+          totalRecords: { "$sum":1 }
+        }
+      },
+      { "$lookup": { from: "users", localField: "userId", foreignField: "_id", as: "contactInfo" } },
+      { "$unwind" : "$contactInfo" },
+      { "$addFields": { "userProfiles": {"$cond": [{ "$isArray": "$contactInfo.profile.externalUserProfiles" }, "$contactInfo.profile.externalUserProfiles" , [{}] ] } } },
+      { "$addFields": {
+        "userProfiles": {
+          "$filter": {
+            input: "$userProfiles",
+            as: "userProfile",
+            cond: { $eq: [ "$$userProfile.profileId", "$profileId" ] }
+          }
+        }
+      }
+      },
+      { "$unwind" : "$userProfiles" },
+      {
+        "$project": {
+          _id: 1,
+          createdAt:1,
+          createdBy: "$contactInfo.profile.displayName",
+          userId: "$userId",
+          profileId: "$profileId",
+          email : "$contactInfo.profile.email",
+          mobileNumber: "$contactInfo.profile.mobileNumber",
+          cluster: "$userProfiles.clusterName",
+          chapter: "$userProfiles.chapterName",
+          subChapter: "$userProfiles.subChapterName",
+          community: "$userProfiles.communityName",
+          transactionType: "Share",
+          totalRecords: 1
+        }
+      }
+    ];
+
+    if (Object.keys(resultantQuery).length) {
+      pipleline.push({'$match': resultantQuery});
+    }
+    if (fieldsProj.sort) {
+      pipleline.push({'$sort': fieldsProj.sort});
+    }
+    if (fieldsProj.skip) {
+      pipleline.push({'$skip': parseInt(fieldsProj.skip)});
+    }
+    if (fieldsProj.limit) {
+      pipleline.push({'$limit': parseInt(fieldsProj.limit)});
+    }
+    let data = mlDBController.aggregate('MlSharedLibrary', pipleline);
+
+    let totalRecords = data && data[0] && data[0].totalRecords ? data[0].totalRecords : 0 ;
+    return {totalRecords: totalRecords, data: data};
+  },
+
+
   MlOfficeTransactionRepo: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
     var contextFieldMap = {
       'clusterId': 'clusterId',
@@ -748,14 +818,16 @@ let CoreModules = {
     var resultantQuery = MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery, contextFieldMap);
     /**construct context query with $in operator for each fields*/
     resultantQuery = MlAdminContextQueryConstructor.constructQuery(resultantQuery, '$in');
-    var nonMoolyaContext = mlNonMoolyaAccess.getExternalUserCanSearch(context)
-    if (!_.isBoolean(nonMoolyaContext)){
-      resultantQuery['registrationInfo.subChapterId'] = {$in: nonMoolyaContext.subChapters}
-      resultantQuery['registrationInfo.chapterId'] = {$in: nonMoolyaContext.chapters}
-    }
-    // if (!fieldsProj.sort) {
-    //   fieldsProj.sort = {'registrationInfo.registrationDate': -1}
+    // var nonMoolyaContext = mlNonMoolyaAccess.getExternalUserCanSearch(context)
+    // if (!_.isBoolean(nonMoolyaContext)){
+    //   resultantQuery['registrationInfo.subChapterId'] = {$in: nonMoolyaContext.subChapters}
+    //   resultantQuery['registrationInfo.chapterId'] = {$in: nonMoolyaContext.chapters}
     // }
+    var dataContext = MlSubChapterAccessControl.getAccessControl('SEARCH', context, null, false)
+    if (dataContext && dataContext.hasAccess && dataContext.subChapters && dataContext.subChapters.length > 0) {
+      resultantQuery['registrationInfo.subChapterId'] = {$in: dataContext.subChapters}
+      resultantQuery['registrationInfo.chapterId'] = {$in: dataContext.chapters}
+    }
     if (!fieldsProj.sort) {
       fieldsProj.sort = {
         'registrationInfo.registrationDate': -1

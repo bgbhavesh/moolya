@@ -14,7 +14,7 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import { Modal, ModalHeader, ModalBody} from 'reactstrap';
 import {multipartASyncFormHandler} from '../../MlMultipartFormAction'
-import {createLibrary, fetchLibrary, updateLibraryData, updatePrivacyDetails, updateLibrary, fetchDataFromCentralLibrary} from '../../actions/mlLibraryActionHandler'
+import {createLibrary, fetchLibrary, updateLibraryData, updatePrivacyDetails, updateLibrary, fetchDataFromCentralLibrary, fetchSharedLibraryHandler} from '../../actions/mlLibraryActionHandler'
 import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import formHandler from "../../../commons/containers/MlFormHandler";
@@ -22,6 +22,8 @@ import MlAccordion from "../../../app/commons/components/MlAccordion";
 import MlAppActionComponent from '../../../app/commons/components/MlAppActionComponent'
 import PopoverActionIcon from '../../../app/appActions/components/PopoverActionIcon';
 import SharePopOver from './sharePopOver'
+import MlConnectionHeader from './connectionHeader'
+import SharedLibrary from './sharedLibrary'
 
   class  Library extends React.Component {
 
@@ -53,13 +55,18 @@ import SharePopOver from './sharePopOver'
         documentsLock: {},
         explore: false,
         hideLock: false,
-        popoverOpen: false, deleteOption: false
+        popoverOpen: false, deleteOption: false,
+        selectedData: [],
+        showSharedFiles: false,
+        sharedFiles: []
       };
       this.toggle = this.toggle.bind(this);
       this.refetchData.bind(this);
       this.updateLibrary.bind(this);
       this.dataPrivacyHandler.bind(this);
       this.portfolioShareHandler.bind(this);
+      this.getSharedFiles.bind(this);
+      this.showSharedFiles.bind(this);
     }
 
     /**
@@ -572,6 +579,88 @@ import SharePopOver from './sharePopOver'
       this.setState({previewTemplate: templatePreviewUrl});
     }
 
+    ///================================================================================================================
+
+    onFileSelect(index,type, e ) {
+      console.log('--index--', index, '==type==', type, '--event--', e.target.checked)
+      if(e.target.checked) {
+        switch(type){
+          case 'image':
+            let imageArray = this.state.selectedData || [];
+            let images = this.state.imageDetails || [];
+            let selectedImage = images[index];
+            selectedImage['fileType'] = 'image';
+            imageArray.push(selectedImage);
+            this.setState({selectedData: imageArray})
+                break;
+          case 'template':
+            let templateArray = this.state.selectedData || [];
+            let templates = this.state.templateDetails || [];
+            let selectedTemplate = templates[index];
+            selectedTemplate.fileType = 'template';
+            templateArray.push(selectedTemplate);
+            this.setState({selectedData: templateArray})
+                break;
+          case 'video':
+            let videoArray = this.state.selectedData || [];
+            let videos = this.state.videoDetails || [];
+            let selectedVideo = videos[index];
+            selectedVideo.fileType = 'video';
+            videoArray.push(selectedVideo);
+            this.setState({selectedData: videoArray})
+            break;
+          case 'document':
+            let documentArray = this.state.selectedData || [];
+            let documents = this.state.documentDetails || [];
+            let selectedDocument = documents[index];
+            selectedDocument.fileType = 'document';
+            documentArray.push(selectedDocument);
+            this.setState({selectedData: documentArray})
+            break;
+        }
+      } else {
+        switch(type){
+          case 'image':
+            let imageArray = this.state.selectedData || [];
+            let images = this.state.imageDetails || [];
+            let selectedImage = images[index];
+            selectedImage.fileType = 'image';
+            imageArray.splice( imageArray.indexOf(selectedImage), 1 );
+            this.setState({selectedData: imageArray})
+            break;
+          case 'template':
+            let templateArray = this.state.selectedData || [];
+            let templates = this.state.templateDetails || [];
+            let selectedTemplate = templates[index];
+            selectedTemplate.fileType = 'template';
+            templateArray.splice( templateArray.indexOf(selectedTemplate), 1 );
+            this.setState({selectedData: templateArray})
+            break;
+          case 'video':
+            let videoArray = this.state.selectedData || [];
+            let videos = this.state.videoDetails || [];
+            let selectedVideo = videos[index];
+            selectedVideo.fileType = 'video';
+            videoArray.splice( videoArray.indexOf(selectedVideo), 1 );
+            this.setState({selectedData: videoArray})
+            break;
+          case 'document':
+            let documentArray = this.state.selectedData || [];
+            let documents = this.state.documentDetails || [];
+            let selectedDocument = documents[index];
+            selectedDocument.fileType = 'document';
+            documentArray.splice( documentArray.indexOf(selectedDocument), 1 );
+            this.setState({selectedData: documentArray})
+            break;
+        }
+      }
+    }
+
+    // deletedData(response) {
+    //
+    // }
+
+
     /**
      * Method :: images
      * Desc   :: Handles all the image looping activities
@@ -593,9 +682,7 @@ import SharePopOver from './sharePopOver'
             <a href="#" data-toggle="modal" data-target=".imagepop"
                onClick={that.random.bind(that, show.fileUrl, id)}><img src={show.fileUrl}/></a>
             <div id="images" className="title">{show.fileName}</div>
-            <FontAwesome name='share-alt'/>
-            <FontAwesome name='times' style={{'display':'none'}}/>
-            <FontAwesome name='minus'/>
+
           </div>
         )
       });
@@ -615,8 +702,22 @@ import SharePopOver from './sharePopOver'
         if (show.inCentralLibrary) {
           return (
             <div className="thumbnail" key={id}>
+              <div className="input_types">
+                <input id={"checkboxImg"+id} type="checkbox" name={"checkboxImg"+id} value="1" onChange={that.onFileSelect.bind(that, id, 'image')} />
+                <label htmlFor={"checkboxImg"+id} ><span></span></label>
+              </div>
               {that.state.explore || that.state.deleteOption ? "" :
                 <FontAwesome name='trash-o' onClick={() => that.delete(id, "image", "portfolio")}/>}
+              <div className="icon_count"> <FontAwesome name='share-alt' /></div>
+              <FontAwesome name='times' style={{'display':'none'}}/>
+              <div className="show_details" style={{'display':'none'}}>
+                <ul className="list-group">
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                </ul>
+              </div>
               {that.state.isLibrary ? <a href="#" data-toggle="modal" data-target=".imagepop"
                                          onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
                 src={show.fileUrl}/></a> :
@@ -629,6 +730,22 @@ import SharePopOver from './sharePopOver'
       });
       return popImages
     }
+
+    showSharedFiles() {
+    let that = this;
+    let popImageData = that.state.sharedFiles || [];
+    // console.log('==shared files==',that.state.sharedFiles);
+    const popImages = popImageData.map(function (show, id) {
+      // console.log('urls', show.files.url)
+      return (
+        <div className="thumbnail" key={id}>
+          <img src={show.file.url} style={{'width':'200px', 'height':'150px'}}/>
+          <div id="images" className="title">{show.file.fileName}</div>
+        </div>
+      )
+  });
+    return popImages
+  }
 
     /**
      * Method :: templates
@@ -668,8 +785,22 @@ import SharePopOver from './sharePopOver'
         if (show.inCentralLibrary) {
           return (
             <div className="thumbnail" key={id}>
+              <div className="input_types">
+                <input id={"checkboxTemp"+id} type="checkbox" name={"checkboxTemp"+id} value="1" onChange={that.onFileSelect.bind(that, id, 'template')} />
+                <label htmlFor={"checkboxImg"+id} ><span></span></label>
+              </div>
               {that.state.explore || that.state.deleteOption ? "" :
                 <FontAwesome name='trash-o' onClick={() => that.delete(id, "template", "portfolio")}/>}
+              <div className="icon_count"> <FontAwesome name='share-alt' />21 </div>
+              <FontAwesome name='times' style={{'display':'none'}}/>
+              <div className="show_details" style={{'display':'none'}}>
+                <ul className="list-group">
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                </ul>
+              </div>
               {that.state.isLibrary ? <a href="#" data-toggle="modal" data-target=".templatepop"
                                          onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
                 src={show.fileUrl}/></a> :
@@ -725,8 +856,22 @@ import SharePopOver from './sharePopOver'
         if (show.inCentralLibrary) {
           return (
             <div className="thumbnail" key={id}>
+              <div className="input_types">
+                <input id={"checkboxTemp"+id} type="checkbox" name={"checkboxTemp"+id} value="1" onChange={that.onFileSelect.bind(that, id, 'video')} />
+                <label htmlFor={"checkboxImg"+id} ><span></span></label>
+              </div>
               {that.state.explore || that.state.deleteOption ? "" :
                 <FontAwesome name='trash-o' onClick={() => that.delete(id, "video")}/>}
+              <div className="icon_count"> <FontAwesome name='share-alt' />21 </div>
+              <FontAwesome name='times' style={{'display':'none'}}/>
+              <div className="show_details" style={{'display':'none'}}>
+                <ul className="list-group">
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                </ul>
+              </div>
               {that.state.isLibrary ? <a href="#" data-toggle="modal" data-target=".videopop"
                                          onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
                 <video width="120" height="100" controls>
@@ -783,8 +928,22 @@ import SharePopOver from './sharePopOver'
         if (show.inCentralLibrary) {
           return (
             <div className="thumbnail" key={id}>
+              <div className="input_types">
+                <input id={"checkboxTemp"+id} type="checkbox" name={"checkboxTemp"+id} value="1" onChange={that.onFileSelect.bind(that, id, 'document')} />
+                <label htmlFor={"checkboxImg"+id} ><span></span></label>
+              </div>
               {that.state.explore || that.state.deleteOption ? "" :
                 <FontAwesome name='trash-o' onClick={() => that.delete(id, "document")}/>}
+              <div className="icon_count"> <FontAwesome name='share-alt' />21 </div>
+              <FontAwesome name='times' style={{'display':'none'}}/>
+              <div className="show_details" style={{'display':'none'}}>
+                <ul className="list-group">
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                </ul>
+              </div>
               {that.state.isLibrary ? <a href="#" data-toggle="modal" data-target=".documentpop"
                                          onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
                 src={show.fileUrl}/></a> :
@@ -917,22 +1076,26 @@ import SharePopOver from './sharePopOver'
         });
         return false;
       });
+    }
 
-      $(".fa-share-alt").click(function(){
+    componentDidUpdate() {
+      $(".icon_count").click(function(){
         $(this).parents('.thumbnail').find(".fa-times").show();
         $(this).parents('.thumbnail').find(".show_details").show();
-        $(this).parents('.thumbnail').find(".fa-share-alt").hide();
+        $(this).parents('.thumbnail').find(".icon_count").hide();
         $(this).parents('.thumbnail').find(".fa-lock").hide();
         $(this).parents('.thumbnail').find(".fa-unlock").hide();
+        $(this).parents('.thumbnail').find(".input_types").hide();
 
       });
 
       $(".fa-times").click(function(){
-        $(this).parents('.thumbnail').find(".fa-share-alt").show();
+        $(this).parents('.thumbnail').find(".icon_count").show();
         $(this).parents('.thumbnail').find(".fa-times").hide();
         $(this).parents('.thumbnail').find(".show_details").hide();
         $(this).parents('.thumbnail').find(".fa-lock").show();
         $(this).parents('.thumbnail').find(".fa-unlock").show();
+        $(this).parents('.thumbnail').find(".input_types").show();
 
       });
     }
@@ -1036,9 +1199,24 @@ import SharePopOver from './sharePopOver'
     }
 
     portfolioShareHandler(actionConfig,handlerCallback){
+      console.log('===handlerCallback===', handlerCallback)
       if(handlerCallback) {//to handle the popover
-        handlerCallback({});
+        handlerCallback({Details: this.state.selectedData});
       }
+    }
+
+    connectionManagement(userId) {
+      this.getSharedFiles(userId);
+    }
+
+    async getSharedFiles(userId) {
+      const resp = await fetchSharedLibraryHandler(userId)
+      console.log('response from server',resp)
+      this.setState({sharedFiles: resp, showSharedFiles: !this.state.showSharedFiles})
+    }
+
+    showLibrary(response) {
+      this.setState({showSharedFiles: response})
     }
 
     render() {
@@ -1082,7 +1260,7 @@ import SharePopOver from './sharePopOver'
           popOverTitle:'Shared Details',
           placement:'top',
           target:'sharedLibrary',
-          popOverComponent: <SharePopOver />,
+          popOverComponent: <SharePopOver Details={this.state.selectedData} />,
           actionComponent: PopoverActionIcon,
           handler: this.portfolioShareHandler.bind(this),
         },
@@ -1163,6 +1341,7 @@ import SharePopOver from './sharePopOver'
               </div>
             </div>
           </div>
+          {that.state.isLibrary?<MlConnectionHeader showLibrary={that.showLibrary.bind(that)} connectionManagement={that.connectionManagement.bind(that)}/>:""}
           <div className="modal fade bs-example-modal-sm library-popup videopop"
                onContextMenu={(e) => e.preventDefault()} tabindex="-1" role="dialog"
                aria-labelledby="mySmallModalLabel">
@@ -1178,6 +1357,7 @@ import SharePopOver from './sharePopOver'
               </div>
             </div>
           </div>
+          {!that.state.showSharedFiles?<div>
           <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
             <div className="panel panel-default">
               <div className="panel-heading">
@@ -1255,6 +1435,7 @@ import SharePopOver from './sharePopOver'
               </div>
             </div>
           </div>
+          </div>:<SharedLibrary data={this.state.sharedFiles}/>}
           <Popover placement={this.state.placement} isOpen={this.state.popoverOpen} target={this.state.target}>
             <PopoverTitle>{this.state.title}</PopoverTitle>
             <PopoverContent>

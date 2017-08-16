@@ -54,10 +54,6 @@ let chapterSchema = `
         subChapterId:String
     }
     
-    type internalSubChapterAccess{
-      backendUser:UserObject
-      externalUser:UserObject
-    }
     type moolyaSubChapterAccess{
       
       externalUser:UserObject
@@ -90,15 +86,10 @@ let chapterSchema = `
         longitude:Float
         isBespokeRegistration:Boolean
         isBespokeWorkFlow:Boolean
-        internalSubChapterAccess:internalSubChapterAccess
         moolyaSubChapterAccess:moolyaSubChapterAccess
-        associatedSubChapters : [String]
+        associatedObj : [relatedSubChaptersOutput]
     }
     
-    input internalSubChapterAccessObject{
-      backendUser:UserInputObject,
-      externalUser:UserInputObject,
-    }
     input moolyaSubChapterAccessObject{
       externalUser:UserInputObject,
     }
@@ -133,8 +124,6 @@ let chapterSchema = `
         longitude:Float,
         isBespokeWorkFlow:Boolean,
         moolyaSubChapterAccess:moolyaSubChapterAccessObject
-        associatedSubChapters:[String],   
-        internalSubChapterAccess:internalSubChapterAccessObject,
         associatedObj : [relatedSubChaptersInput]
     }
     
@@ -142,12 +131,14 @@ let chapterSchema = `
       subChapters: [subChaptersInput]
       backendUser: UserInputObject,
       externalUser: UserInputObject,
+      isActive : Boolean
     }
 
     type relatedSubChaptersOutput {
       subChapters : [subChaptersOutput]
       backendUser : UserObject
-      externalUser: UserObject,
+      externalUser: UserObject
+      isActive : Boolean
     }
     
     input subChaptersInput {

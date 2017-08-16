@@ -6,7 +6,7 @@ if(Meteor.isServer){
     "name":"mlOfficeBarrerProfileMenu",
     "menu" : [
       {
-        "image":"fa fa-user-circle-o",
+        "image":"ml my-ml-blank_Profile_3",
         "link": "/app/myProfile",
         "isLink" : true,
         "isMenu" : true,
@@ -14,7 +14,7 @@ if(Meteor.isServer){
         "uniqueId" : "myProfile"
       },
       {
-        "image":"ml ml-address-book",
+        "image":"ml flaticon-ml-agenda",
         "link": "/app/addressBook",
         "isLink" : true,
         "isMenu" : true,
@@ -39,7 +39,7 @@ if(Meteor.isServer){
         }]
       },
       {
-        "image":"ml ml-subscribe",
+        "image":"ml my-ml-subscriptions",
         "link": "/app/mySubscriptions",
         "isLink" : true,
         "isMenu" : true,
@@ -47,7 +47,7 @@ if(Meteor.isServer){
         "uniqueId" : "mySubscriptions"
       },
       {
-        "image":"ml ml-settings",
+        "image":"ml my-ml-settings1",
         "link": "/app/settings",
         "isLink" : true,
         "isMenu" : true,
@@ -55,7 +55,7 @@ if(Meteor.isServer){
         "uniqueId" : "settings"
       },
       {
-        "image":"ml ml-moolya-symbol",
+        "image":"ml my-ml-terms_and_conditions",
         "link": "/app/termsConditions",
         "isLink" : true,
         "isMenu" : true,
@@ -63,7 +63,7 @@ if(Meteor.isServer){
         "uniqueId" : "termsConditions"
       },
       {
-        "image":"ml ml-moolya-symbol",
+        "image":"ml my-ml-privacy",
         "link": "/app/privacy",
         "isLink" : true,
         "isMenu" : true,

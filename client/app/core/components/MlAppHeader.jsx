@@ -105,7 +105,7 @@ class MlAppProfileHeader extends Component {
           <div style={{'display': 'none'}} className="ml_app_notification">
             <ul className="unstyled">
               <li>
-                <a href="#">Thanks for the registration</a>
+                <a href="#"><span className="ml ml-moolya-symbol"/>Thanks for the registration </a>
               </li>
             </ul>
           </div>

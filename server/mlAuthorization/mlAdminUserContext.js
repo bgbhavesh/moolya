@@ -23,10 +23,12 @@ class MlAdminUserContext
     let defaultCommunities = [];
     let defaultCommunityHierarchyLevel;
     let roleName = null;
-    let roleId = null
+    let roleId = null;
+    var isInternaluser=false;
     var user = Meteor.users.findOne({_id:userId});
     if(user && user.profile && user.profile.isInternaluser == true)
     {
+      isInternaluser=true;
       let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
       isMoolya = user.profile.isMoolya
       let user_roles;
@@ -83,6 +85,7 @@ class MlAdminUserContext
                 defaultCommunities:defaultCommunities,
                 defaultCommunityHierarchyLevel:defaultCommunityHierarchyLevel,
                 isMoolya:isMoolya,
+                isInternaluser:isInternaluser,
                 roleName:roleName,
                 roleId: roleId
         };
@@ -118,55 +121,55 @@ class MlAdminUserContext
     return {};
   }
 
-  nonMoolyaBackedUserAccess(checkUser, userId) {
-    check(checkUser, String)
-    check(userId, String)
-    var curUserProfile = new MlAdminUserContext().userProfileDetails(userId);
-    if (!curUserProfile.isMoolya) { //data access by non-moolya users
-      if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {
-        let subChapterId = curUserProfile.defaultSubChapters ? curUserProfile.defaultSubChapters[0] : ''
-        var subChapterInternal = mlDBController.findOne('users', {
-          _id: checkUser,
-          'profile.isExternaluser': false,
-          'profile.InternalUprofile.moolyaProfile.subChapter': subChapterId
-        }, context)
+  // nonMoolyaBackedUserAccess(checkUser, userId) {
+  //   check(checkUser, String)
+  //   check(userId, String)
+  //   var curUserProfile = new MlAdminUserContext().userProfileDetails(userId);
+  //   if (!curUserProfile.isMoolya) { //data access by non-moolya users
+  //     if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {
+  //       let subChapterId = curUserProfile.defaultSubChapters ? curUserProfile.defaultSubChapters[0] : ''
+  //       var subChapterInternal = mlDBController.findOne('users', {
+  //         _id: checkUser,
+  //         'profile.isExternaluser': false,
+  //         'profile.InternalUprofile.moolyaProfile.subChapter': subChapterId
+  //       }, context)
+  //
+  //       if(subChapterInternal)
+  //         return true
+  //
+  //       let isExcess = this.userAccessForOtherUsers(curUserProfile, checkUser, subChapterId)
+  //       if(isExcess)
+  //         return true
+  //       else
+  //         return false
+  //     }
+  //   } else {
+  //     return true
+  //   }
+  // }
 
-        if(subChapterInternal)
-          return true
-
-        let isExcess = this.userAccessForOtherUsers(curUserProfile, checkUser, subChapterId)
-        if(isExcess)
-          return true
-        else
-          return false
-      }
-    } else {
-      return true
-    }
-  }
-
-  userAccessForOtherUsers(curUserProfile, checkUser, subChapterId) {
-    let subChapterDetails = MlSubChapters.findOne({
-      _id: subChapterId
-    })
-    if (!_.isEmpty(subChapterDetails.internalSubChapterAccess)) {
-      let canSearch = subChapterDetails.internalSubChapterAccess.backendUser ? subChapterDetails.internalSubChapterAccess.backendUser.canSearch : false
-      let canView = subChapterDetails.internalSubChapterAccess.backendUser ? subChapterDetails.internalSubChapterAccess.backendUser.canView : false
-      var associated = subChapterDetails.associatedSubChapters ? subChapterDetails.associatedSubChapters : []
-      if (canSearch && canView) {
-        curUserProfile.defaultSubChapters = _.concat(curUserProfile.defaultSubChapters, associated)
-        let availableUser = Meteor.users.findOne({
-          _id: checkUser,
-          'profile.isExternaluser': false,
-          'profile.InternalUprofile.moolyaProfile.subChapter': {$in: curUserProfile.defaultSubChapters}
-        })
-        if (!_.isEmpty(availableUser)) {
-          return true
-        }
-      }
-    }else
-      return false
-  }
+  // userAccessForOtherUsers(curUserProfile, checkUser, subChapterId) {
+  //   let subChapterDetails = MlSubChapters.findOne({
+  //     _id: subChapterId
+  //   })
+  //   if (!_.isEmpty(subChapterDetails.internalSubChapterAccess)) {
+  //     let canSearch = subChapterDetails.internalSubChapterAccess.backendUser ? subChapterDetails.internalSubChapterAccess.backendUser.canSearch : false
+  //     let canView = subChapterDetails.internalSubChapterAccess.backendUser ? subChapterDetails.internalSubChapterAccess.backendUser.canView : false
+  //     var associated = subChapterDetails.associatedSubChapters ? subChapterDetails.associatedSubChapters : []
+  //     if (canSearch && canView) {
+  //       curUserProfile.defaultSubChapters = _.concat(curUserProfile.defaultSubChapters, associated)
+  //       let availableUser = Meteor.users.findOne({
+  //         _id: checkUser,
+  //         'profile.isExternaluser': false,
+  //         'profile.InternalUprofile.moolyaProfile.subChapter': {$in: curUserProfile.defaultSubChapters}
+  //       })
+  //       if (!_.isEmpty(availableUser)) {
+  //         return true
+  //       }
+  //     }
+  //   }else
+  //     return false
+  // }
 
   getUserLatLng(profile){
     var latitude = null;

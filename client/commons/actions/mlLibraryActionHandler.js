@@ -1,4 +1,5 @@
 import gql from 'graphql-tag'
+import {appClient} from "../../app/core/appConnection";
 
 export async function createLibrary(detailsInput, connection) {
   const result = await connection.mutate({
@@ -150,3 +151,77 @@ export async function updatePrivacyDetails(detailsInput, connection) {
   const id = result.data.updatePrivacyDetails;
   return id;
 }
+
+export async function storeSharedDetailsHandler(detailsInput) {
+  const result = await appClient.mutate({
+    mutation: gql`
+      mutation($detailsInput: sharedInput){
+        createSharedLibrary(detailsInput:$detailsInput) {
+          success
+          code
+          result
+        }
+      }
+    `,
+    variables: {
+      detailsInput
+    }
+  });
+  const id = result.data.createSharedLibrary;
+  return id;
+}
+
+export async function fetchConnections() {
+  const result = await appClient.query({
+    query: gql`
+    query{
+      fetchConnections {
+        userId
+        profileId
+        displayName
+        profileImage
+      }
+    }`,
+    forceFetch:true
+  })
+  const id = result.data.fetchConnections;
+  return id
+}
+
+
+export async function getSharedConnectionsActionHandler() {
+  const result = await appClient.query({
+    query: gql`
+    query{
+      getMySharedConnections {
+        userId
+        displayName
+        profilePic
+    }
+  }`,
+    forceFetch:true
+  })
+  const id = result.data.getMySharedConnections;
+  return id
+}
+export async function fetchSharedLibraryHandler(userId) {
+  const result = await appClient.query({
+    query: gql`
+    query{
+  fetchSharedLibrary{
+      file{
+      url
+      fileName
+      fileType
+      }
+  }
+}`,
+    variables: {
+      userId
+    }, forceFetch: true
+  });
+  const id = result.data.fetchSharedLibrary;
+  return id
+}
+
+

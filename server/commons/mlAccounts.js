@@ -8,6 +8,8 @@ import MlTransactionsHandler from '../../server/commons/mlTransactionsLog';
 import passwordUtil from "./passwordUtil";
 import NotificationTemplateEngine from "../commons/mlTemplateEngine"
 import MlEmailNotification from "../mlNotifications/mlEmailNotifications/mlEMailNotification"
+import _ from 'underscore'
+import moment from "moment";
 
 var fromEmail = Meteor.settings.private.fromEmailAddr;
 export default MlAccounts=class MlAccounts {
@@ -128,16 +130,31 @@ export default MlAccounts=class MlAccounts {
       // By including the address in the query, we can use 'emails.$' in the
          // modifier to get a reference to the specific object in the emails
          // array.
-         let emailVerified = MlRegistration.update({_id: user._id,'emails.address': tokenRecord.address},{$set: {'emails.$.verified': true },
-                             $pull: {'services.email.verificationTokens': {address: tokenRecord.address}}});
 
-         if(emailVerified){
-           let emailSent = MlEmailNotification.onEmailVerificationSuccess(user);
-         }
 
-      return {
-        email:tokenRecord.address,emailVerified:true,recordId:user._id,error: false
-      };
+    let verficationTokensArray = user&&user.services&&user.services.email&&user.services.email.verificationTokens?user.services.email.verificationTokens:[]
+    let verficationTokenObject = _.findWhere(verficationTokensArray, {token: token});
+    let linkGenerateDate = verficationTokenObject&&verficationTokenObject.when?verficationTokenObject.when:null
+    let hours = moment().diff(linkGenerateDate, 'hours')
+    let registrationCommunityName = user&&user.registrationInfo&&user.registrationInfo.communityDefCode&&
+                                          user.registrationInfo.communityDefCode? user.registrationInfo.communityDefCode:""
+
+    //Expiring token for office memeber if link generated is more than 72hours
+    if(registrationCommunityName=="OFB"&&hours>72){
+      return  MlRegistration.update({_id: user._id,'emails.address': tokenRecord.address},{$set: {'emails.$.verified': true },
+        $pull: {'services.email.verificationTokens': {address: tokenRecord.address}}});
+    }
+
+    let emailVerified = MlRegistration.update({_id: user._id,'emails.address': tokenRecord.address},{$set: {'emails.$.verified': true },
+                         $pull: {'services.email.verificationTokens': {address: tokenRecord.address}}});
+
+    if(emailVerified){
+       let emailSent = MlEmailNotification.onEmailVerificationSuccess(user);
+    }
+
+    return {
+      email:tokenRecord.address,emailVerified:true,recordId:user._id,error: false
+    };
   }
 
   static sendVerificationSmsOtp(regId,numbr,customEmailComponent){

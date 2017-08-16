@@ -9,7 +9,8 @@ import mlOfficeValidationRepo from "./officeRepo";
 import passwordUtil from "../../commons/passwordUtil";
 import _ from "lodash";
 import MlEmailNotification from "../../mlNotifications/mlEmailNotifications/mlEMailNotification";
-import MlAlertNotification from '../../mlNotifications/mlAlertNotifications/mlAlertNotification'
+import MlAlertNotification from '../../mlNotifications/mlAlertNotifications/mlAlertNotification';
+import MlAccounts from '../../commons/mlAccounts'
 MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
   let officeSC = [];
   if (context.userId) {
@@ -404,8 +405,18 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
 
       /**sending email verification token to the created office member*/
       if (registrationId) {
+        var tokenRecord = {
+          token: Random.secret(),
+          address: address,
+          when: new Date()
+        };
+        MlRegistration.update({_id: registrationId},
+          {$push: {'services.email.verificationTokens': tokenRecord}});
+        //Meteor.users.update({_id: userId }, {$push: {'services.email.verificationTokens': tokenRecord}});
+
+        var verificationLink = MlAccounts.verifyEmailLink(tokenRecord.token);
         //MlAccounts.sendVerificationEmail(registrationId,{emailContentType:"html",subject:"Email Verification",context:context});
-         MlEmailNotification.officeInvitationEmail(context,registrationData)
+         MlEmailNotification.officeInvitationEmail(registrationId,context,registrationData)
       }
       if (registrationId) { //for creating new user
         // let officeTrans = {

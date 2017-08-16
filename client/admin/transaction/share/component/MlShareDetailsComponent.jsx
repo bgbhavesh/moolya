@@ -136,7 +136,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
             </div>
           </div>
           <div className="tab-pane" id={`share${transId}`}>
-            <div className="row">
+            <div className="row table_tab">
               <div className="col-md-6">
                 <div className="form-group">
                   <input type="text" placeholder="Shared Date & Time" value={ that.state.data ? that.state.data.createdAt: ''} className="form-control float-label" id=""/>

@@ -189,18 +189,11 @@ class MlSubChapterAccessControl {
     switch (permission) {
       case 'SEARCH':
         privateSubChapters = mlDBController.find('MlSubChapters', {
-          isDefaultSubChapter: false,
-          'moolyaSubChapterAccess.externalUser': {
-            $elemMatch: {
-              'canSearch': false,
-              'canView': false,
-              'canTransact': false
-            }
-          }
+          isDefaultSubChapter: false,'moolyaSubChapterAccess.externalUser.canSearch':false,'moolyaSubChapterAccess.externalUser.canView':false,'moolyaSubChapterAccess.externalUser.canTransact':false
         }).fetch();
     }
-    privateSubChapters = _.filter(privateSubChapters, '_id');
-    return privateSubChapters;
+    var privateSubChaptersList = _.map(privateSubChapters, '_id');
+    return privateSubChaptersList;
   }
 
   /**get private ecosystem non-moolya subChapters*/
@@ -244,17 +237,11 @@ class MlSubChapterAccessControl {
         privateSubChapters = mlDBController.find('MlSubChapters', {
           isDefaultSubChapter: false,
           '_id': {'$nin': relatedSubChapters},
-          'moolyaSubChapterAccess.externalUser': {
-            $elemMatch: {
-              'canSearch': false,
-              'canView': false,
-              'canTransact': false
-            }
-          }
+          'moolyaSubChapterAccess.externalUser.canSearch':false,'moolyaSubChapterAccess.externalUser.canView':false,'moolyaSubChapterAccess.externalUser.canTransact':false
         }).fetch();
     }
-    privateSubChapters = _.filter(privateSubChapters, '_id');
-    return privateSubChapters;
+    var privateSubChaptersList = _.map(privateSubChapters, '_id');
+    return privateSubChaptersList;
   }
 
   /**check for view/transact access for nonMoolyaSubChapter Access*/

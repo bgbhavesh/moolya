@@ -177,7 +177,7 @@ export default class SharePopOver extends React.Component {
       let fileDetails = {
         url: value.fileUrl?value.fileUrl:"",
         fileName: value.fileName?value.fileName:"",
-        fileType: value.fileType?value.fileType:""
+        fileType: value.libraryType?value.libraryType:""
       };
       file.push(fileDetails)
     });

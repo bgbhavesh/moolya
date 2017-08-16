@@ -204,19 +204,22 @@ export async function getSharedConnectionsActionHandler() {
   const id = result.data.getMySharedConnections;
   return id
 }
-export async function fetchSharedLibrary(userId) {
+export async function fetchSharedLibraryHandler(userId) {
   const result = await appClient.query({
     query: gql`
     query{
   fetchSharedLibrary{
-      files
+      file{
+      url
+      fileName
+      fileType
+      }
   }
 }`,
     variables: {
       userId
-    },
-    forceFetch: true
-  })
+    }, forceFetch: true
+  });
   const id = result.data.fetchSharedLibrary;
   return id
 }

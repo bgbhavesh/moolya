@@ -296,7 +296,7 @@ class MlAppActivity extends Component {
           <div className="col-md-12">
             <div className='step-progress'>
               <div id="root">
-                <StepZilla steps={this.setActivitySteps()} stepsNavigation={false} prevBtnOnLastStep={true}/>
+                <StepZilla steps={this.setActivitySteps()} stepsNavigation={true} prevBtnOnLastStep={true}/>
               </div>
             </div>
           </div>

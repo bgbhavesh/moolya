@@ -14,7 +14,7 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import { Modal, ModalHeader, ModalBody} from 'reactstrap';
 import {multipartASyncFormHandler} from '../../MlMultipartFormAction'
-import {createLibrary, fetchLibrary, updateLibraryData, updatePrivacyDetails, updateLibrary, fetchDataFromCentralLibrary} from '../../actions/mlLibraryActionHandler'
+import {createLibrary, fetchLibrary, updateLibraryData, updatePrivacyDetails, updateLibrary, fetchDataFromCentralLibrary, fetchSharedLibraryHandler} from '../../actions/mlLibraryActionHandler'
 import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import formHandler from "../../../commons/containers/MlFormHandler";
@@ -23,6 +23,7 @@ import MlAppActionComponent from '../../../app/commons/components/MlAppActionCom
 import PopoverActionIcon from '../../../app/appActions/components/PopoverActionIcon';
 import SharePopOver from './sharePopOver'
 import MlConnectionHeader from './connectionHeader'
+import SharedLibrary from './sharedLibrary'
 
   class  Library extends React.Component {
 
@@ -55,13 +56,17 @@ import MlConnectionHeader from './connectionHeader'
         explore: false,
         hideLock: false,
         popoverOpen: false, deleteOption: false,
-        selectedData: []
+        selectedData: [],
+        showSharedFiles: false,
+        sharedFiles: []
       };
       this.toggle = this.toggle.bind(this);
       this.refetchData.bind(this);
       this.updateLibrary.bind(this);
       this.dataPrivacyHandler.bind(this);
       this.portfolioShareHandler.bind(this);
+      this.getSharedFiles.bind(this);
+      this.showSharedFiles.bind(this);
     }
 
     /**
@@ -584,9 +589,34 @@ import MlConnectionHeader from './connectionHeader'
             let imageArray = this.state.selectedData || [];
             let images = this.state.imageDetails || [];
             let selectedImage = images[index];
+            selectedImage['fileType'] = 'image';
             imageArray.push(selectedImage);
             this.setState({selectedData: imageArray})
                 break;
+          case 'template':
+            let templateArray = this.state.selectedData || [];
+            let templates = this.state.templateDetails || [];
+            let selectedTemplate = templates[index];
+            selectedTemplate.fileType = 'template';
+            templateArray.push(selectedTemplate);
+            this.setState({selectedData: templateArray})
+                break;
+          case 'video':
+            let videoArray = this.state.selectedData || [];
+            let videos = this.state.videoDetails || [];
+            let selectedVideo = videos[index];
+            selectedVideo.fileType = 'video';
+            videoArray.push(selectedVideo);
+            this.setState({selectedData: videoArray})
+            break;
+          case 'document':
+            let documentArray = this.state.selectedData || [];
+            let documents = this.state.documentDetails || [];
+            let selectedDocument = documents[index];
+            selectedDocument.fileType = 'document';
+            documentArray.push(selectedDocument);
+            this.setState({selectedData: documentArray})
+            break;
         }
       } else {
         switch(type){
@@ -594,9 +624,33 @@ import MlConnectionHeader from './connectionHeader'
             let imageArray = this.state.selectedData || [];
             let images = this.state.imageDetails || [];
             let selectedImage = images[index];
+            selectedImage.fileType = 'image';
             imageArray.splice( imageArray.indexOf(selectedImage), 1 );
-            // imageArray.push(selectedImage);
             this.setState({selectedData: imageArray})
+            break;
+          case 'template':
+            let templateArray = this.state.selectedData || [];
+            let templates = this.state.templateDetails || [];
+            let selectedTemplate = templates[index];
+            selectedTemplate.fileType = 'template';
+            templateArray.splice( templateArray.indexOf(selectedTemplate), 1 );
+            this.setState({selectedData: templateArray})
+            break;
+          case 'video':
+            let videoArray = this.state.selectedData || [];
+            let videos = this.state.videoDetails || [];
+            let selectedVideo = videos[index];
+            selectedVideo.fileType = 'video';
+            videoArray.splice( videoArray.indexOf(selectedVideo), 1 );
+            this.setState({selectedData: videoArray})
+            break;
+          case 'document':
+            let documentArray = this.state.selectedData || [];
+            let documents = this.state.documentDetails || [];
+            let selectedDocument = documents[index];
+            selectedDocument.fileType = 'document';
+            documentArray.splice( documentArray.indexOf(selectedDocument), 1 );
+            this.setState({selectedData: documentArray})
             break;
         }
       }
@@ -654,7 +708,7 @@ import MlConnectionHeader from './connectionHeader'
               </div>
               {that.state.explore || that.state.deleteOption ? "" :
                 <FontAwesome name='trash-o' onClick={() => that.delete(id, "image", "portfolio")}/>}
-              <div className="icon_count"> <FontAwesome name='share-alt' />21 </div>
+              <div className="icon_count"> <FontAwesome name='share-alt' /></div>
               <FontAwesome name='times' style={{'display':'none'}}/>
               <div className="show_details" style={{'display':'none'}}>
                 <ul className="list-group">
@@ -676,6 +730,22 @@ import MlConnectionHeader from './connectionHeader'
       });
       return popImages
     }
+
+    showSharedFiles() {
+    let that = this;
+    let popImageData = that.state.sharedFiles || [];
+    // console.log('==shared files==',that.state.sharedFiles);
+    const popImages = popImageData.map(function (show, id) {
+      // console.log('urls', show.files.url)
+      return (
+        <div className="thumbnail" key={id}>
+          <img src={show.file.url} style={{'width':'200px', 'height':'150px'}}/>
+          <div id="images" className="title">{show.file.fileName}</div>
+        </div>
+      )
+  });
+    return popImages
+  }
 
     /**
      * Method :: templates
@@ -715,8 +785,22 @@ import MlConnectionHeader from './connectionHeader'
         if (show.inCentralLibrary) {
           return (
             <div className="thumbnail" key={id}>
+              <div className="input_types">
+                <input id={"checkboxTemp"+id} type="checkbox" name={"checkboxTemp"+id} value="1" onChange={that.onFileSelect.bind(that, id, 'template')} />
+                <label htmlFor={"checkboxImg"+id} ><span></span></label>
+              </div>
               {that.state.explore || that.state.deleteOption ? "" :
                 <FontAwesome name='trash-o' onClick={() => that.delete(id, "template", "portfolio")}/>}
+              <div className="icon_count"> <FontAwesome name='share-alt' />21 </div>
+              <FontAwesome name='times' style={{'display':'none'}}/>
+              <div className="show_details" style={{'display':'none'}}>
+                <ul className="list-group">
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                </ul>
+              </div>
               {that.state.isLibrary ? <a href="#" data-toggle="modal" data-target=".templatepop"
                                          onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
                 src={show.fileUrl}/></a> :
@@ -772,8 +856,22 @@ import MlConnectionHeader from './connectionHeader'
         if (show.inCentralLibrary) {
           return (
             <div className="thumbnail" key={id}>
+              <div className="input_types">
+                <input id={"checkboxTemp"+id} type="checkbox" name={"checkboxTemp"+id} value="1" onChange={that.onFileSelect.bind(that, id, 'video')} />
+                <label htmlFor={"checkboxImg"+id} ><span></span></label>
+              </div>
               {that.state.explore || that.state.deleteOption ? "" :
                 <FontAwesome name='trash-o' onClick={() => that.delete(id, "video")}/>}
+              <div className="icon_count"> <FontAwesome name='share-alt' />21 </div>
+              <FontAwesome name='times' style={{'display':'none'}}/>
+              <div className="show_details" style={{'display':'none'}}>
+                <ul className="list-group">
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                </ul>
+              </div>
               {that.state.isLibrary ? <a href="#" data-toggle="modal" data-target=".videopop"
                                          onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
                 <video width="120" height="100" controls>
@@ -830,8 +928,22 @@ import MlConnectionHeader from './connectionHeader'
         if (show.inCentralLibrary) {
           return (
             <div className="thumbnail" key={id}>
+              <div className="input_types">
+                <input id={"checkboxTemp"+id} type="checkbox" name={"checkboxTemp"+id} value="1" onChange={that.onFileSelect.bind(that, id, 'document')} />
+                <label htmlFor={"checkboxImg"+id} ><span></span></label>
+              </div>
               {that.state.explore || that.state.deleteOption ? "" :
                 <FontAwesome name='trash-o' onClick={() => that.delete(id, "document")}/>}
+              <div className="icon_count"> <FontAwesome name='share-alt' />21 </div>
+              <FontAwesome name='times' style={{'display':'none'}}/>
+              <div className="show_details" style={{'display':'none'}}>
+                <ul className="list-group">
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_5.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_4.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_9.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                  <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
+                </ul>
+              </div>
               {that.state.isLibrary ? <a href="#" data-toggle="modal" data-target=".documentpop"
                                          onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
                 src={show.fileUrl}/></a> :
@@ -1093,13 +1205,18 @@ import MlConnectionHeader from './connectionHeader'
       }
     }
 
-    headerManagement(userId) {
-      this.setState({userId: userId})
-      this.getSharedFiles();
+    connectionManagement(userId) {
+      this.getSharedFiles(userId);
     }
 
-    getSharedFiles() {
+    async getSharedFiles(userId) {
+      const resp = await fetchSharedLibraryHandler(userId)
+      console.log('response from server',resp)
+      this.setState({sharedFiles: resp, showSharedFiles: !this.state.showSharedFiles})
+    }
 
+    showLibrary(response) {
+      this.setState({showSharedFiles: response})
     }
 
     render() {
@@ -1224,7 +1341,7 @@ import MlConnectionHeader from './connectionHeader'
               </div>
             </div>
           </div>
-          {that.state.isLibrary?<MlConnectionHeader headerManagement={that.headerManagement.bind(that)}/>:""}
+          {that.state.isLibrary?<MlConnectionHeader showLibrary={that.showLibrary.bind(that)} connectionManagement={that.connectionManagement.bind(that)}/>:""}
           <div className="modal fade bs-example-modal-sm library-popup videopop"
                onContextMenu={(e) => e.preventDefault()} tabindex="-1" role="dialog"
                aria-labelledby="mySmallModalLabel">
@@ -1240,6 +1357,7 @@ import MlConnectionHeader from './connectionHeader'
               </div>
             </div>
           </div>
+          {!that.state.showSharedFiles?<div>
           <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
             <div className="panel panel-default">
               <div className="panel-heading">
@@ -1317,6 +1435,7 @@ import MlConnectionHeader from './connectionHeader'
               </div>
             </div>
           </div>
+          </div>:<SharedLibrary data={this.state.sharedFiles}/>}
           <Popover placement={this.state.placement} isOpen={this.state.popoverOpen} target={this.state.target}>
             <PopoverTitle>{this.state.title}</PopoverTitle>
             <PopoverContent>

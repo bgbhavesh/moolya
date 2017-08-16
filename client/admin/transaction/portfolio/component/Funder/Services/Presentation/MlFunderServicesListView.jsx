@@ -77,19 +77,15 @@ export default class  MlFunderServicesListView extends Component {
         break;
       case 'services':
         return(
-          <div className="app_main_wrap" style={{'overflow':'auto'}}>
-            <div className="app_padding_wrap">
-              <MlAppServiceManageSchedule
-                viewMode={true}
-                viewingMode={this.props.viewingMode?this.props.viewingMode: false}
-                editingMode={this.props.editingMode?this.props.editingMode:false}
-                serviceId={this.props.serviceId}
-                profileId={this.props.profileId}
-                serviceInfo={this.props.serviceInfo}
-                bookService={this.props.bookService}
-              />
-            </div>
-          </div>
+          <MlAppServiceManageSchedule
+            viewMode={true}
+            viewingMode={this.props.viewingMode?this.props.viewingMode: false}
+            editingMode={this.props.editingMode?this.props.editingMode:false}
+            serviceId={this.props.serviceId}
+            profileId={this.props.profileId}
+            serviceInfo={this.props.serviceInfo}
+            bookService={this.props.bookService}
+          />
         )
       break;
       case 'bookService':

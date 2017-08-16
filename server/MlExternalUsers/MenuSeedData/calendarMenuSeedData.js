@@ -32,7 +32,7 @@ if(Meteor.isServer){
       },
 
       {
-        "image":"fa fa-cogs",
+        "image":"ml my-ml-settings1",
         "link": "/app/calendar/settings",
         "isLink" : true,
         "isMenu" : true,

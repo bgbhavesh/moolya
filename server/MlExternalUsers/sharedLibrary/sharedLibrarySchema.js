@@ -38,7 +38,7 @@ let sharedLibrarySchema = `
       profileId: String
       name: String
       email : String
-      mobileNumber: Int
+      mobileNumber: String
       cluster: String
       chapter: String
       subChapter: String
@@ -46,6 +46,17 @@ let sharedLibrarySchema = `
     }
     
     type SharedOutput {
+      user: userDetails
+      file: fileDetails
+      sharedEndDate: Date
+      sharedStartDate: Date
+      isSignedUrl: Boolean
+      isDownloadable: Boolean
+      createdAt:Date
+      ownerInfo: ShareOwnerInfo
+    }
+    
+    type SharedOutputAdmin {
       users: [userDetails]
       files: [fileDetails]
       sharedEndDate: Date
@@ -88,9 +99,9 @@ let sharedLibrarySchema = `
    
 
  type Query{
-      fetchSharedLibraryDetails(sharedId:String):SharedOutput
+      fetchSharedLibraryDetails(sharedId:String):SharedOutputAdmin
       getMySharedConnections: [sharedConnections]
-      fetchSharedLibrary(userId: String): SharedOutput
+      fetchSharedLibrary(userId: String): [SharedOutput]
  }
  
  type Mutation{

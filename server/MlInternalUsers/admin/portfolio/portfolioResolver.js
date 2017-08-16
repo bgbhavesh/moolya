@@ -9,6 +9,7 @@ import portfolioValidationRepo from "./portfolioValidation";
 import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlAlertNotification from '../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 import mlNonMoolyaAccess from "../core/non-moolyaAccessControl/mlNonMoolyaAccess"
+import MlSubChapterAccessControl from '../../../mlAuthorization/mlSubChapterAccessControl'
 /**
  * @module [externaluser portfolio Landing]
  * @params [context.userId]
@@ -374,7 +375,10 @@ MlResolver.MlQueryResolver['fetchPortfolioByReg'] = (obj, args, context, info) =
   var response = {}
   if (args.registrationId) {
     response = mlDBController.findOne('MlPortfolioDetails', {registrationId: args.registrationId}, context) || {}
-    response.canAccess = mlNonMoolyaAccess.canExternalUserViewReg(args.registrationId, context)
+    var subChapterId = response?response.subChapterId:''
+    var dataContext = MlSubChapterAccessControl.getAccessControl('VIEW', context, subChapterId, false)
+    // response.canAccess = mlNonMoolyaAccess.canExternalUserViewReg(args.registrationId, context)
+    response.canAccess = dataContext.hasAccess
   }
   return response
 }
@@ -386,7 +390,10 @@ MlResolver.MlQueryResolver['fetchPortfolioByReg'] = (obj, args, context, info) =
 MlResolver.MlQueryResolver['fetchPortfolioClusterId'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {
     let portfolio = MlPortfolioDetails.findOne({"_id": args.portfoliodetailsId}) || {}
-    portfolio.canAccess = mlNonMoolyaAccess.canExternalUserView(args.portfoliodetailsId, context)
+    var subChapterId = portfolio?portfolio.subChapterId:''
+    // portfolio.canAccess = mlNonMoolyaAccess.canExternalUserView(args.portfoliodetailsId, context)
+    var dataContext = MlSubChapterAccessControl.getAccessControl('VIEW', context, subChapterId, false)
+    portfolio.canAccess = dataContext.hasAccess
     return portfolio;
   }
 }

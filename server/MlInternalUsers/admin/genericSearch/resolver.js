@@ -2,6 +2,7 @@
   import getQuery from "../genericSearch/queryConstructor";
   import MlAdminUserContext from "../../../../server/mlAuthorization/mlAdminUserContext";
   import MlUserContext from './../../../MlExternalUsers/mlUserContext';
+  import MlSubChapterAccessControl from '../../../../server/mlAuthorization/mlSubChapterAccessControl'
   import _ from "underscore";
   import _lodash from "lodash";
 
@@ -320,14 +321,15 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
 
   if(args.module == 'Users'){
-    // var curUserProfile = new MlAdminUserContext().userProfileDetails(context.userId);
-    // var queryChange;
-    // if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {   //sub-chapter_admin non-moolya
-    //   queryChange = {$and: [{'profile.isMoolya': false}, {'profile.InternalUprofile.moolyaProfile.subChapter': {$in: curUserProfile.defaultSubChapters}}, {'profile.isExternaluser': false}]}
-    // } else {
-    //   queryChange = {'profile.isExternaluser': false}   //platform_admin
-    // }
-    var queryChange = accessControlQuery(context.userId, context) || {}
+    // queryChange = accessControlQuery(context.userId, context) || {}
+    // console.log(queryChange)
+    var queryChange = {}
+    var dataContext = MlSubChapterAccessControl.getAccessControl('SEARCH', context, null)
+    if (dataContext && dataContext.hasAccess && dataContext.subChapters && dataContext.subChapters.length > 0) {
+      queryChange = {$and: [{'_id':{$ne: context.userId}},{'profile.isMoolya': false}, {'profile.isInternaluser': true}, {'profile.InternalUprofile.moolyaProfile.subChapter': {$in: dataContext.subChapters}}]}
+    }else if (dataContext && dataContext.hasAccess){
+      queryChange = {'profile.isInternaluser': true}
+    }
     var queryList = mergeQueries(query, queryChange);
     data = Meteor.users.find(queryList, findOptions).fetch();
 
@@ -1281,22 +1283,22 @@ MlResolver.MlUnionResolver['SearchResult']= {
   }
 }
 
-  let accessControlQuery = function (userId, context) {
-    var curUserProfile = new MlAdminUserContext().userProfileDetails(userId);
-    var queryReturn;
-    if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {   //sub-chapter_admin non-moolya
-      let subChapterId = curUserProfile.defaultSubChapters ? curUserProfile.defaultSubChapters[0] : ''
-      // let subChapterDetails = MlResolver.MlQueryResolver['fetchSubChapter'](null, {_id: subChapterId}, context, null)
-      let subChapterDetails = mlDBController.findOne('MlSubChapters', {_id: subChapterId}, context)   /*not getting complete data so changing query*/
-      if(subChapterDetails && !_.isEmpty(subChapterDetails.internalSubChapterAccess)){
-        let canSearch = subChapterDetails.internalSubChapterAccess.backendUser?subChapterDetails.internalSubChapterAccess.backendUser.canSearch:false
-        var associated = subChapterDetails.associatedSubChapters ? subChapterDetails.associatedSubChapters : []
-        if(canSearch)
-          curUserProfile.defaultSubChapters = _lodash.concat(curUserProfile.defaultSubChapters, associated)
-      }
-      queryReturn = {$and: [{'_id':{$ne: userId}},{'profile.isMoolya': false}, {'profile.InternalUprofile.moolyaProfile.subChapter': {$in: curUserProfile.defaultSubChapters}}, {'profile.isExternaluser': false}]}
-    } else {
-      queryReturn = {'profile.isExternaluser': false}   //platform_admin
-    }
-    return queryReturn;
-  }
+  // let accessControlQuery = function (userId, context) {
+  //   var curUserProfile = new MlAdminUserContext().userProfileDetails(userId);
+  //   var queryReturn;
+  //   if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {   //sub-chapter_admin non-moolya
+  //     let subChapterId = curUserProfile.defaultSubChapters ? curUserProfile.defaultSubChapters[0] : ''
+  //     // let subChapterDetails = MlResolver.MlQueryResolver['fetchSubChapter'](null, {_id: subChapterId}, context, null)
+  //     let subChapterDetails = mlDBController.findOne('MlSubChapters', {_id: subChapterId}, context)   /*not getting complete data so changing query*/
+  //     if(subChapterDetails && !_.isEmpty(subChapterDetails.internalSubChapterAccess)){
+  //       let canSearch = subChapterDetails.internalSubChapterAccess.backendUser?subChapterDetails.internalSubChapterAccess.backendUser.canSearch:false
+  //       var associated = subChapterDetails.associatedSubChapters ? subChapterDetails.associatedSubChapters : []
+  //       if(canSearch)
+  //         curUserProfile.defaultSubChapters = _lodash.concat(curUserProfile.defaultSubChapters, associated)
+  //     }
+  //     queryReturn = {$and: [{'_id':{$ne: userId}},{'profile.isMoolya': false}, {'profile.InternalUprofile.moolyaProfile.subChapter': {$in: curUserProfile.defaultSubChapters}}, {'profile.isExternaluser': false}]}
+  //   } else {
+  //     queryReturn = {'profile.isExternaluser': false}   //platform_admin
+  //   }
+  //   return queryReturn;
+  // }

@@ -48,7 +48,7 @@ if(Meteor.isServer){
             //   "uniqueId" : "calender"
             // },
             {
-                "image":"ml ml-provider",
+                "image":"ml my-ml-Service-Providers",
                 "link": "/app/serviceProvider",
                 "isLink" : true,
                 "isMenu" : true,
@@ -84,7 +84,7 @@ if(Meteor.isServer){
             },
 
             {
-                "image":"ml ml-subscribe",
+                "image":"ml my-ml-subscriptions",
                 "link": "/app/subscriptions",
                 "isLink" : true,
                 "isMenu" : true,
@@ -101,7 +101,7 @@ if(Meteor.isServer){
                 "uniqueId" : "news"
             },
             {
-              "image":"ml ml-transaction",
+              "image":"ml my-ml-transactions",
               "link": "/app/transaction",
               "isLink" : true,
               "isMenu" : true,

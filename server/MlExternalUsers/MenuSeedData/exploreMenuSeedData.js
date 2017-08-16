@@ -32,7 +32,7 @@ if(Meteor.isServer){
             },
 
             {
-              "image":"ml ml-provider",
+              "image":"ml my-ml-Service-Providers",
               "link": "/app/explore/serviceProvider",
               "isLink" : true,
               "isMenu" : true,

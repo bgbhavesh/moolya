@@ -10,8 +10,9 @@ import _ from "lodash";
 import _underscore from "underscore";
 import geocoder from "geocoder";
 import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification"
-import MlUserContext from '../../../../../server/MlExternalUsers/mlUserContext'
+// import MlUserContext from '../../../../../server/MlExternalUsers/mlUserContext'
 import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
+import MlSubChapterAccessControl from '../../../../../server/mlAuthorization/mlSubChapterAccessControl'
 
 MlResolver.MlQueryResolver['fetchUserTypeFromProfile'] = (obj, args, context, info) => {
     let user=Meteor.users.findOne(context.userId);
@@ -169,8 +170,17 @@ MlResolver.MlMutationResolver['updateUser'] = (obj, args, context, info) => {
 };
 
 MlResolver.MlQueryResolver['fetchUser'] = (obj, args, context, info) => {
-  let checkAccess = new MlAdminUserContext().nonMoolyaBackedUserAccess(args.userId, context.userId);
-  if (checkAccess) {
+  var dataContext = {}
+  var userProfile = new MlAdminUserContext().userProfileDetails(args.userId);
+  if (userProfile && !userProfile.isMoolya) {
+    let subChapterId = userProfile.defaultSubChapters ? userProfile.defaultSubChapters[0] : ''
+    dataContext = MlSubChapterAccessControl.getAccessControl('VIEW', context, subChapterId)
+  }else {
+    dataContext.hasAccess = true
+  }
+
+  // let checkAccess = new MlAdminUserContext().nonMoolyaBackedUserAccess(args.userId, context.userId);
+  if (dataContext && dataContext.hasAccess) {
     let user = mlDBController.findOne('users', {_id: args.userId}, context)
     let userProfiles = user && user.profile.InternalUprofile.moolyaProfile.userProfiles ? user.profile.InternalUprofile.moolyaProfile.userProfiles : [];
     userProfiles.map(function (doc, index) {

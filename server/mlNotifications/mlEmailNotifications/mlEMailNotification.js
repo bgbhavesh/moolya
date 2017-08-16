@@ -687,11 +687,10 @@ const MlEmailNotification= class MlEmailNotification {
     }
   }
 
-  static officeInvitationEmail(registrationId,context,registrationData) {
-    let address
-
-    let userDetails = mlDBController.findOne('users', {_id: context.userId}) || {}
-    var user=mlDBController.findOne('MlRegistration', {_id:registrationId},context||{});
+  static officeInvitationEmail(verificationLink,registrationId,context,registrationData) {
+    var address;
+    var userDetails = mlDBController.findOne('users', {_id: context.userId}) || {}
+   /* var user=mlDBController.findOne('MlRegistration', {_id:registrationId},context||{});
     var email = _.find(user.emails || [], function (e) {
       return !e.verified;
     });
@@ -702,7 +701,7 @@ const MlEmailNotification= class MlEmailNotification {
       address: address,
       when: new Date()
     };
-    var verificationLink = MlAccounts.verifyEmailLink(tokenRecord.token);
+    var verificationLink = MlAccounts.verifyEmailLink(tokenRecord.token);*/
     let firstName = userDetails && userDetails.profile && userDetails.profile.firstName ? userDetails.profile.firstName : "";
     let lastName = userDetails && userDetails.profile && userDetails.profile.lastName ? userDetails.profile.lastName : "";
     let userEmail = userDetails && userDetails.username ? userDetails.username : "";

@@ -22,7 +22,7 @@ if(Meteor.isServer){
         "uniqueId" : "explore"
       },
       {
-        "image":"ml ml-transaction",
+        "image":"ml my-ml-transactions",
         "link": "/app/transaction",
         "isLink" : true,
         "isMenu" : true,
@@ -38,7 +38,7 @@ if(Meteor.isServer){
         "uniqueId" : "conversations"
       },
       {
-        "image":"ml ml-subscribe",
+        "image":"ml my-ml-subscriptions",
         "link": "/app/subscriptions",
         "isLink" : true,
         "isMenu" : true,
@@ -54,7 +54,7 @@ if(Meteor.isServer){
         "uniqueId" : "news"
       },
       {
-        "image":"ml ml-settings",
+        "image":"ml my-ml-settings1",
         "link": "/app/news",
         "isLink" : true,
         "isMenu" : true,

@@ -222,7 +222,7 @@ class MlAppTaskLanding extends Component {
           <div className="col-md-12">
             <div className='step-progress'>
               <div id="root">
-                <StepZilla steps={steps} stepsNavigation={false} prevBtnOnLastStep={true}/>
+                <StepZilla steps={steps} stepsNavigation={true} prevBtnOnLastStep={true}/>
               </div>
             </div>
           </div>

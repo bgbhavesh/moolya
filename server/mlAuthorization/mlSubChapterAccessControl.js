@@ -141,20 +141,23 @@ class MlSubChapterAccessControl {
   static resolveNonMoolyaInternalAccess(permission, context) {
     var isInternalUser = context.isInternalUser;
     var contextSubChapterId = context.contextSubChapterId;
+    var contextChapterId= context.contextChapterId;
     var requestSubChapterId = context.requestSubChapterId;
     var accessControl = {hasAccess: false, isInclusive: true, subChapters: []};
     /** Add context user specific subChapter*/
     var allowedSubChapters = [contextSubChapterId];
+    var allowedChapters=[contextChapterId];
     /**get all related sub Chapters.*/
     var relatedObj = MlSubChapterAccessControl.getRelatedSubChapters(isInternalUser, contextSubChapterId, permission);
     allowedSubChapters = allowedSubChapters.concat(relatedObj.relatedSubChapters);
+    allowedChapters= allowedChapters.concat(relatedObj.relatedChapters);
     switch (permission) {
       case 'SEARCH':
         accessControl = {
           hasAccess: true,
           isInclusive: true,
           subChapters: allowedSubChapters,
-          chapters: relatedObj.relatedChapters
+          chapters: allowedChapters
         };
         break;
       case 'VIEW':
@@ -364,6 +367,7 @@ class MlSubChapterAccessControl {
       context.isMoolya = _.isBoolean(userProfile.isMoolya) ? userProfile.isMoolya : false;
       /**todo:Provision for multi subchapter access control*/
       context.contextSubChapterId = _.isArray(userProfile.defaultSubChapters) ? userProfile.defaultSubChapters[0] : null;
+      context.contextChapterId = _.isArray(userProfile.defaultChapters) ? userProfile.defaultChapters[0] : null;
     }
     /**if its external user */
     else {
@@ -371,7 +375,9 @@ class MlSubChapterAccessControl {
       userProfile = new MlUserContext().userProfileDetails(userId);
       if (userProfile && !userProfile.isInternaluser) {
         var contextSubChapterId = userProfile.subChapterId ? userProfile.subChapterId : null;
+        var contextChapterId = userProfile.chapterId ? userProfile.chapterId : null;
         context.contextSubChapterId = contextSubChapterId;
+        context.contextChapterId = contextChapterId;
         var subChapter = MlSubChapterAccessControl.fetchSubChapterDetails(contextSubChapterId);
         context.isMoolya = _.isBoolean(subChapter.isDefaultSubChapter) ? subChapter.isDefaultSubChapter : false;
       }

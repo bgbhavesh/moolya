@@ -4,6 +4,7 @@
 import React from "react";
 import {render} from "react-dom";
 import gql from "graphql-tag";
+import {isEmpty} from 'lodash'
 import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 var FontAwesome = require('react-fontawesome');
 
@@ -15,7 +16,8 @@ export default class MlInternalSubChapterAccess extends React.Component {
         type: "backendUser",
         subChapters: [{subChapterId: null, chapterId: null}],   //second object is the context of subChapter
         backendUser: {canSearch: false, canView: false, canTransact: false},
-        externalUser: {canSearch: false, canView: false, canTransact: false}
+        externalUser: {canSearch: false, canView: false, canTransact: false},
+        isActive: true
       }],
     };
     this.onStatusChangeCanSearchB = this.onStatusChangeCanSearchB.bind(this);
@@ -29,14 +31,10 @@ export default class MlInternalSubChapterAccess extends React.Component {
   }
 
   componentWillMount() {
-    // if (this.props.assignedDetails && this.props.assignedDetails.backendUser) {
-    //   let backendUserState = this.props.assignedDetails.backendUser;
-    //   this.setState({backendUser: backendUserState})
-    // }
-    // if (this.props.assignedDetails && this.props.assignedDetails.externalUser) {
-    //   let externalUserState = this.props.assignedDetails.externalUser;
-    //   this.setState({externalUser: externalUserState})
-    // }
+    if (!isEmpty(this.props.assignedDetails)) {
+      let userState = this.props.assignedDetails
+      this.setState({data: userState})
+    }
   }
 
   addAccessControl(id) {
@@ -45,20 +43,21 @@ export default class MlInternalSubChapterAccess extends React.Component {
         type: "backendUser",
         subChapters: [{subChapterId: null, chapterId: null}],   //second object is the context of subChapter
         backendUser: {canSearch: false, canView: false, canTransact: false},
-        externalUser: {canSearch: false, canView: false, canTransact: false}
+        externalUser: {canSearch: false, canView: false, canTransact: false},
+        isActive : true
       }])
     });
   }
 
-  removeAccessControl(id, event) {
-    let data;
-    data = this.state.data.filter(function (object, index) {
-      return id !== index;
-    });
-    this.setState({
-      data: data
-    })
-  }
+  // removeAccessControl(id, event) {
+  //   let data;
+  //   data = this.state.data.filter(function (object, index) {
+  //     return id !== index;
+  //   });
+  //   this.setState({
+  //     data: data
+  //   })
+  // }
 
   getSelectedTab(type, index, event) {
     let availabilityDetails = this.state.data
@@ -123,10 +122,20 @@ export default class MlInternalSubChapterAccess extends React.Component {
   }
 
   selectAssociateChapter(index, val, callback, label) {
-    let chapterId = label && label.chapterId ? label.chapterId : ''
+    let chapterId = label && label.chapterId ? label.chapterId : null
     let availabilityDetails = this.state.data
-    let obj = [{subChapterId: val, chapterId: chapterId}]
+    var value = val ? val : null
+    let obj = [{subChapterId: value, chapterId: chapterId}]
     availabilityDetails[index]['subChapters'] = obj
+    this.setState({data: availabilityDetails}, function () {
+      this.sendAccessDataToParent()
+    })
+  }
+
+  onStatusChange(index, event) {
+    let availabilityDetails = this.state.data
+    let statusValue = event.target.checked
+    availabilityDetails[index]['isActive']= statusValue
     this.setState({data: availabilityDetails}, function () {
       this.sendAccessDataToParent()
     })
@@ -141,26 +150,34 @@ export default class MlInternalSubChapterAccess extends React.Component {
 
   render() {
     let that = this;
-    let subChapterQuery = gql `query{data:fetchSubChaptersSelectNonMoolya { value:_id, label:subChapterName, chapterId:chapterId}}`;
+    // let subChapterQuery = gql `query{data:fetchSubChaptersSelectNonMoolya { value:_id, label:subChapterName, chapterId:chapterId}}`;
+    var subChapterQuery = gql`query($subChapterId:String){data:fetchSubChaptersSelectNonMoolya(subChapterId:$subChapterId) { value:_id, label:subChapterName, chapterId:chapterId}}`;
+    var subChapterOption = {options: {variables: {subChapterId: this.props.curSubChapter}}};
     return (
       <div >
         {that.state.data.map(function (value, id) {
           return (
             <div className="panel panel-default" key={id}>
+              {/*<div className="panel-heading">*/}
+              {/*Internal SubChapter Access{id == 0 ? (*/}
+              {/*<div className="pull-right block_action" onClick={that.addAccessControl.bind(that, id)}><img*/}
+              {/*src="/images/add.png"/></div>) : (<div className="pull-right block_action"*/}
+              {/*onClick={that.removeAccessControl.bind(that, id)}>*/}
+              {/*<img src="/images/remove.png"/></div>)}*/}
+              {/*</div>*/}
               <div className="panel-heading">
-                Internal SubChapter Access{id == 0 ? (
+                Internal SubChapter Access
                 <div className="pull-right block_action" onClick={that.addAccessControl.bind(that, id)}><img
-                  src="/images/add.png"/></div>) : (<div className="pull-right block_action"
-                                                         onClick={that.removeAccessControl.bind(that, id)}>
-                <img src="/images/remove.png"/></div>)}
+                  src="/images/add.png"/></div>
               </div>
               <div className="panel-body">
                 <div className="ml_tabs">
                   <div className="form-group">
-                    <Moolyaselect multiSelect={false} placeholder="Related Sub-Chapters"
+                    <Moolyaselect multiSelect={false} placeholder="Related Sub-Chapters" disabled={value.disabled}
                                   className="form-control float-label" valueKey={'value'} labelKey={'label'}
-                                  selectedValue={value.subChapters[0].subChapterId} queryType={"graphql"}
-                                  query={subChapterQuery} isDynamic={true}
+                                  selectedValue={value && value.subChapters && value.subChapters.length > 0 ? value.subChapters[0].subChapterId : null}
+                                  queryType={"graphql"}
+                                  query={subChapterQuery} isDynamic={true} queryOptions={subChapterOption}
                                   onSelect={that.selectAssociateChapter.bind(that, id)}/>
                   </div>
 
@@ -254,11 +271,16 @@ export default class MlInternalSubChapterAccess extends React.Component {
                       </div>
                     </div>
                   }
-
+                  <div className="form-group switch_wrap inline_switch">
+                    <label>Status</label>
+                    <label className="switch">
+                      <input type="checkbox" checked={value.isActive}
+                             onChange={that.onStatusChange.bind(that, id)}/>
+                      <div className="slider"></div>
+                    </label>
+                  </div>
                 </div>
-
               </div>
-
             </div>
           )
         })}

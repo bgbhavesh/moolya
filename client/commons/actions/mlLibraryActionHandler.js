@@ -170,3 +170,55 @@ export async function storeSharedDetailsHandler(detailsInput) {
   const id = result.data.createSharedLibrary;
   return id;
 }
+
+export async function fetchConnections() {
+  const result = await appClient.query({
+    query: gql`
+    query{
+      fetchConnections {
+        userId
+        profileId
+        displayName
+        profileImage
+      }
+    }`,
+    forceFetch:true
+  })
+  const id = result.data.fetchConnections;
+  return id
+}
+
+
+export async function getSharedConnectionsActionHandler() {
+  const result = await appClient.query({
+    query: gql`
+    query{
+      getMySharedConnections {
+        userId
+        displayName
+        profilePic
+    }
+  }`,
+    forceFetch:true
+  })
+  const id = result.data.getMySharedConnections;
+  return id
+}
+export async function fetchSharedLibrary(userId) {
+  const result = await appClient.query({
+    query: gql`
+    query{
+  fetchSharedLibrary{
+      files
+  }
+}`,
+    variables: {
+      userId
+    },
+    forceFetch: true
+  })
+  const id = result.data.fetchSharedLibrary;
+  return id
+}
+
+

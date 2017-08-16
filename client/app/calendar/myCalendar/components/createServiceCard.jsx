@@ -48,6 +48,8 @@ class MlAppServiceManageSchedule extends Component {
         duration:{}
       },
       TaskDetails:[{}],
+      activities: [],
+      attachments: [],
       task:{},
       selectedTab:""
     };
@@ -125,14 +127,14 @@ class MlAppServiceManageSchedule extends Component {
            var TermAndCondition = _.omit(service.termsAndCondition, '__typename');
         }
 
-        if(service.attachments) {
-            var attachmentDetails = _.omit(service.attachments, '__typename');
-        }
+        // if(service.attachments) {
+        //     var attachmentDetails = _.omit(service.attachments, '__typename');
+        // }
 
         this.setState({
           serviceBasicInfo: serviceInfo,
           serviceTermAndCondition: TermAndCondition,
-          attachments: attachmentDetails,
+          //attachments: attachmentDetails,
           serviceTask: service.tasks ? service.tasks : []
         })
       }
@@ -150,7 +152,37 @@ class MlAppServiceManageSchedule extends Component {
         });
         return taskInfo;
       });
-      this.setState({TaskDetails: task});
+      let attachmentDetails = [];
+      let activities = [];
+      if (task && task.length > 0) {
+        task.forEach((taskData) => {
+          if (taskData.attachments && taskData.attachments.length > 0) {
+            taskData.attachments.forEach((attachment) => {
+              attachmentDetails.push(attachment)
+            });
+          }
+          if (taskData.session && taskData.session.length > 0) {
+            taskData.session.forEach((session) => {
+              if (session.activities && session.activities.length > 0) {
+                session.activities.forEach((activity) => {
+                  let deliverables = [];
+                  if (activity.deliverable && activity.deliverable.length > 0) {
+                    activity.deliverable.forEach((deliverable) => {
+                      deliverables.push(deliverable)
+                    });
+                  }
+                  activities.push({name: activity.name, id: activity.id, deliverables: deliverables});
+                });
+              }
+            });
+          }
+        });
+      }
+      this.setState({
+        TaskDetails: task,
+        attachments: attachmentDetails,
+        activities: activities
+      });
     }
 
   }
@@ -210,7 +242,6 @@ class MlAppServiceManageSchedule extends Component {
       serviceBasicInfo,
       isTaskComponent
     } = this.state;
-
     let steps = [
       {
         name: 'View',
@@ -246,7 +277,9 @@ class MlAppServiceManageSchedule extends Component {
         name: 'Terms & Conditions',
         component: <Step3
           serviceTermAndCondition={this.state.serviceTermAndCondition}
+          taskDetails={this.state.TaskDetails}
           attachments={this.state.attachments}
+          activities={this.state.activities}
         />,
         icon: <span className="ml ml-payments"></span>
       },

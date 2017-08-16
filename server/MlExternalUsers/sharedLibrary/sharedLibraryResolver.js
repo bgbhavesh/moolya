@@ -14,7 +14,7 @@ MlResolver.MlMutationResolver['createSharedLibrary'] = (obj, args, context, info
   }
 
   if(!libraryInput.files || !libraryInput.files.length ){
-    let code = 400;
+    let code = 404;
     let response = new MlRespPayload().errorPayload('Share files data required', code);
     return response;
   }
@@ -85,10 +85,127 @@ MlResolver.MlMutationResolver['createSharedLibrary'] = (obj, args, context, info
 
 }
 
+MlResolver.MlQueryResolver['fetchSharedLibraryDetails'] = (obj, args, context, info) => {
+
+  let sharedId = args.sharedId;
+
+  let pipeline = [
+    { "$match": { "sharedId": sharedId } },
+    {
+      "$group": {
+        _id: "$sharedId",
+        users: {"$addToSet": "$user"},
+        files: {"$addToSet": "$file"},
+        userId: { "$first": "$owner.userId" },
+        profileId: { "$first": "$owner.profileId" },
+        shareStartDate: { "$first": "$sharedStartDate"},
+        shareEndDate: { "$first": "$sharedEndDate"},
+        isDownloadable: { "$first": "$isDownloadable"},
+        createdAt: { "$first": "$createdAt"}
+      }
+    },
+    { "$unwind": "$users" },
+    { "$lookup": { from: "users", localField: "users.userId", foreignField: "_id", as: "usersInfo" } },
+    { "$unwind": "$usersInfo" },
+    { "$project": {
+      "_id": 1,
+      "files": 1,
+      "userId": 1,
+      "profileId": 1,
+      "shareStartDate": 1,
+      "shareEndDate": 1,
+      "isDownloadable": 1,
+      "createdAt": 1,
+      "users": {
+        "userId": 1,
+        "profileId":1,
+        "displayName": "$usersInfo.profile.displayName",
+        "profilePic": "$usersInfo.profile.profileImage"
+      }
+    }
+    },
+    {
+      "$group":{
+        _id: "$_id",
+        users: {"$addToSet": "$users"},
+        files: {"$first": "$files"},
+        userId: { "$first": "$userId" },
+        profileId: { "$first": "$profileId" },
+        shareStartDate: { "$first": "$sharedStartDate"},
+        shareEndDate: { "$first": "$sharedEndDate"},
+        isDownloadable: { "$first": "$isDownloadable"},
+        createdAt: { "$first": "$createdAt"}
+      }
+    },
+    { "$lookup": { from: "users", localField: "userId", foreignField: "_id", as: "contactInfo" } },
+    { "$unwind" : "$contactInfo" },
+    { "$addFields": { "userProfiles": {"$cond": [{ "$isArray": "$contactInfo.profile.externalUserProfiles" }, "$contactInfo.profile.externalUserProfiles" , [{}] ] } } },
+    { "$addFields": {
+      "userProfiles": {
+        "$filter": {
+          input: "$userProfiles",
+          as: "userProfile",
+          cond: { $eq: [ "$$userProfile.profileId", "$profileId" ] }
+        }
+      }
+    }
+    },
+    { "$unwind" : "$userProfiles" },
+    {
+      "$project": {
+        _id: 1,
+        users: 1,
+        files: 1,
+        shareStartDate: 1,
+        shareEndDate: 1,
+        isDownloadable: 1,
+        createdAt:1,
+        ownerInfo: {
+          userId: "$userId",
+          profileId: "$profileId",
+          email : "$contactInfo.profile.email",
+          name : "$contactInfo.profile.displayName",
+          mobileNumber: "$contactInfo.profile.mobileNumber",
+          cluster: "$userProfiles.clusterName",
+          chapter: "$userProfiles.chapterName",
+          subChapter: "$userProfiles.subChapterName",
+          community: "$userProfiles.communityName",
+        }
+      }
+    }
+  ];
+
+  let data = mlDBController.aggregate('MlSharedLibrary', pipeline);
+
+  return data && data[0] ? data[0] : {};
+
+}
+
+MlResolver.MlQueryResolver['getMySharedConnections'] = (obj, args, context, info) => {
+  let userId = context.userId;
+  let pipeline = [
+    {"$match": { "user.userId": userId } },
+    {"$group": { _id: "$owner.userId" } },
+    {"$lookup": { from: "users", localField: "_id", foreignField: "_id", as: "user" } },
+    {"$unwind": "$user"},
+    {"$replaceRoot": {newRoot:"$user"} },
+    {"$project": {
+      userId: "$_id",
+      profilePic: "$profile.profileImage",
+      displayName: "$profile.displayName"
+    } }
+  ];
+  let data = mlDBController.aggregate('MlSharedLibrary', pipeline);
+  return data;
+}
+
 MlResolver.MlMutationResolver['updateSharedLibrary'] = (obj, args, context, info) => {
 }
 
 MlResolver.MlQueryResolver['fetchSharedLibrary'] = (obj, args, context, info) => {
+  let userId =  args.userId;
+  let data = mlDBController.find('MlSharedLibrary',{'user.userId':userId}, context).fetch();
+  return data;
 
 }
 

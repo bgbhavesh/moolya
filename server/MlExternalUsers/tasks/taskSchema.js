@@ -74,6 +74,7 @@
      name: String
      displayName: String
      duration : Duration
+     deliverable: [String]
    }
    type Activity {
      name: String

@@ -22,6 +22,7 @@ import MlAccordion from "../../../app/commons/components/MlAccordion";
 import MlAppActionComponent from '../../../app/commons/components/MlAppActionComponent'
 import PopoverActionIcon from '../../../app/appActions/components/PopoverActionIcon';
 import SharePopOver from './sharePopOver'
+import MlConnectionHeader from './connectionHeader'
 
   class  Library extends React.Component {
 
@@ -587,6 +588,17 @@ import SharePopOver from './sharePopOver'
             this.setState({selectedData: imageArray})
                 break;
         }
+      } else {
+        switch(type){
+          case 'image':
+            let imageArray = this.state.selectedData || [];
+            let images = this.state.imageDetails || [];
+            let selectedImage = images[index];
+            imageArray.splice( imageArray.indexOf(selectedImage), 1 );
+            // imageArray.push(selectedImage);
+            this.setState({selectedData: imageArray})
+            break;
+        }
       }
     }
 
@@ -637,7 +649,8 @@ import SharePopOver from './sharePopOver'
           return (
             <div className="thumbnail" key={id}>
               <div className="input_types">
-                <input id="checkbox1" type="checkbox" name="checkbox" value="1" onChange={that.onFileSelect.bind(that, id, 'image')} /><label htmlFor="checkbox1"><span></span></label>
+                <input id={"checkboxImg"+id} type="checkbox" name={"checkboxImg"+id} value="1" onChange={that.onFileSelect.bind(that, id, 'image')} />
+                <label htmlFor={"checkboxImg"+id} ><span></span></label>
               </div>
               {that.state.explore || that.state.deleteOption ? "" :
                 <FontAwesome name='trash-o' onClick={() => that.delete(id, "image", "portfolio")}/>}
@@ -1080,6 +1093,15 @@ import SharePopOver from './sharePopOver'
       }
     }
 
+    headerManagement(userId) {
+      this.setState({userId: userId})
+      this.getSharedFiles();
+    }
+
+    getSharedFiles() {
+
+    }
+
     render() {
       var videoJsOptions = [{
         autoplay: true,
@@ -1202,6 +1224,7 @@ import SharePopOver from './sharePopOver'
               </div>
             </div>
           </div>
+          {that.state.isLibrary?<MlConnectionHeader headerManagement={that.headerManagement.bind(that)}/>:""}
           <div className="modal fade bs-example-modal-sm library-popup videopop"
                onContextMenu={(e) => e.preventDefault()} tabindex="-1" role="dialog"
                aria-labelledby="mySmallModalLabel">

@@ -72,6 +72,7 @@ let modules = [
     'interaction',
     'actions',
     'serviceCard',
+    'share',
     'notificationtemplate'
   ];
 

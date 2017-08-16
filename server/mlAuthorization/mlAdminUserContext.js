@@ -23,10 +23,12 @@ class MlAdminUserContext
     let defaultCommunities = [];
     let defaultCommunityHierarchyLevel;
     let roleName = null;
-    let roleId = null
+    let roleId = null;
+    var isInternalUser=false;
     var user = Meteor.users.findOne({_id:userId});
     if(user && user.profile && user.profile.isInternaluser == true)
     {
+      isInternalUser=true;
       let user_profiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
       isMoolya = user.profile.isMoolya
       let user_roles;
@@ -83,6 +85,7 @@ class MlAdminUserContext
                 defaultCommunities:defaultCommunities,
                 defaultCommunityHierarchyLevel:defaultCommunityHierarchyLevel,
                 isMoolya:isMoolya,
+                isInternalUser:isInternalUser,
                 roleName:roleName,
                 roleId: roleId
         };

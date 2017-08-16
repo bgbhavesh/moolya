@@ -453,6 +453,75 @@ let CoreModules = {
     var totalRecords = MlProcessTransactions.find(resultantQuery, fieldsProj).count();
     return {totalRecords: totalRecords, data: data};
   },
+
+  MlShareTransactionRepo: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
+
+    var contextFieldMap = {};
+    var resultantQuery = MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery, contextFieldMap);
+    var result = [];
+
+    let pipleline = [
+      {
+        "$group": {
+          _id: "$sharedId",
+          userId: { "$first": "$owner.userId" },
+          profileId: { "$first": "$owner.profileId" },
+          createdAt: { "$first": "$createdAt"},
+          totalRecords: { "$sum":1 }
+        }
+      },
+      { "$lookup": { from: "users", localField: "userId", foreignField: "_id", as: "contactInfo" } },
+      { "$unwind" : "$contactInfo" },
+      { "$addFields": { "userProfiles": {"$cond": [{ "$isArray": "$contactInfo.profile.externalUserProfiles" }, "$contactInfo.profile.externalUserProfiles" , [{}] ] } } },
+      { "$addFields": {
+        "userProfiles": {
+          "$filter": {
+            input: "$userProfiles",
+            as: "userProfile",
+            cond: { $eq: [ "$$userProfile.profileId", "$profileId" ] }
+          }
+        }
+      }
+      },
+      { "$unwind" : "$userProfiles" },
+      {
+        "$project": {
+          _id: 1,
+          createdAt:1,
+          createdBy: "$contactInfo.profile.displayName",
+          userId: "$userId",
+          profileId: "$profileId",
+          email : "$contactInfo.profile.email",
+          mobileNumber: "$contactInfo.profile.mobileNumber",
+          cluster: "$userProfiles.clusterName",
+          chapter: "$userProfiles.chapterName",
+          subChapter: "$userProfiles.subChapterName",
+          community: "$userProfiles.communityName",
+          transactionType: "Share",
+          totalRecords: 1
+        }
+      }
+    ];
+
+    if (Object.keys(resultantQuery).length) {
+      pipleline.push({'$match': resultantQuery});
+    }
+    if (fieldsProj.sort) {
+      pipleline.push({'$sort': fieldsProj.sort});
+    }
+    if (fieldsProj.skip) {
+      pipleline.push({'$skip': parseInt(fieldsProj.skip)});
+    }
+    if (fieldsProj.limit) {
+      pipleline.push({'$limit': parseInt(fieldsProj.limit)});
+    }
+    let data = mlDBController.aggregate('MlSharedLibrary', pipleline);
+
+    let totalRecords = data && data[0] && data[0].totalRecords ? data[0].totalRecords : 0 ;
+    return {totalRecords: totalRecords, data: data};
+  },
+
+
   MlOfficeTransactionRepo: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
     var contextFieldMap = {
       'clusterId': 'clusterId',

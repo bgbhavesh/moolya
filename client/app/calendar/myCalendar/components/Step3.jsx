@@ -34,8 +34,8 @@ export default class Step3 extends Component{
   getAttachmentsList() {
     const {serviceTermAndCondition, attachments, saveDetails} = this.props;
     const attachmentDetails = attachments && attachments.length > 0 ?
-      attachments.map(function(value , index){
-        return(
+      attachments.map(function (value, index) {
+        return (
           <div className="col-md-6 nopadding-left" key={index}>
             <div className="panel panel-default">
               <div className="panel-heading">
@@ -44,13 +44,16 @@ export default class Step3 extends Component{
               <div className="panel-body">
                 <form>
                   <div className="form-group">
-                    <input placeholder="Document name" className="form-control float-label" />
+                    <input placeholder="Document name" className="form-control float-label" value={value.name}
+                           disabled/>
                   </div>
                   <div className="form-group">
-                    <textarea className="form-control float-label" placeholder="Info" ></textarea>
+                    <textarea className="form-control float-label" placeholder="Info" value={value.info}
+                              disabled></textarea>
                   </div>
                   <div className="input_types">
-                    <input id="checkbox" type="checkbox" name="checkbox" /><label htmlFor="checkbox"><span><span></span></span>Is Mandatory</label>
+                    <input id="checkbox" type="checkbox" name="checkbox" checked={value.isMandatory} disabled/><label
+                    htmlFor="checkbox"><span><span></span></span>Is Mandatory</label>
                   </div>
                   <br className="brclear"/>
                 </form>
@@ -60,6 +63,37 @@ export default class Step3 extends Component{
         )
       }) : [];
     return attachmentDetails;
+  }
+
+  /**
+   * Method :: getDeliverableList
+   * Desc :: Get the deliverablelist for a activity
+   * @return {XML}
+   */
+  getDeliverableList() {
+    const {activities} = this.props;
+    const activityDetails = activities && activities.length > 0 ?
+      activities.map((activity, index) => {
+        return (
+          <div key={index}>
+            <h4>{activity.name}</h4>
+            <br className="brclear"/>
+            <label>Deliverables</label>
+            <br className="brclear"/>
+            {
+               activity.deliverables.map((data, index) => {
+                return (
+                  <div key={index}>
+                    <textarea className="form-control" defaultValue={data} disabled></textarea>
+                    <br className="brclear"/>
+                  </div>
+                )
+              })
+            }
+          </div>
+        )
+      }) : [];
+    return activityDetails;
   }
 
   /**
@@ -126,6 +160,8 @@ export default class Step3 extends Component{
           </div>
           <br className="brclear"/>
           {this.getAttachmentsList()}
+          <br className="brclear"/><br className="brclear"/>
+          {this.getDeliverableList()}
         </ScrollArea>
       </div>
     )

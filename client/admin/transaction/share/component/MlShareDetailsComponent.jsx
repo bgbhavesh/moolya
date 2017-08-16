@@ -1,10 +1,9 @@
 import React from "react";
 import {render} from "react-dom";
 import {BootstrapTable, TableHeaderColumn} from "react-bootstrap-table";
-import {fetchProcessSetupHandler} from "../../processSetup/actions/fetchProcessSetupHandler";
-import {updateProcessSetupActionHandler, updateProcessTransaction} from "../../processSetup/actions/updateProcessSetupAction";
 import {initalizeFloatLabel,OnToggleSwitch} from "../../../utils/formElemUtil";
 import {graphql} from "react-apollo";
+import {fetchShareDetails} from '../actions/MlShareActionHandler'
 import gql from "graphql-tag";
 import MoolyaSelect from "../../../commons/components/MlAdminSelectWrapper";
 import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
@@ -15,6 +14,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
   constructor(props){
     super(props);
     this.state= {
+      shareId: props._id?props._id:"",
       data: {},
       isGenerateLinkDisable: false,
       stages: [{
@@ -27,6 +27,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
         }]
       }]
     }
+    this.getShareDetails.bind(this);
     return this;
   }
 
@@ -38,92 +39,24 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
     OnToggleSwitch(true,true);
   }
 
-  componentWillReceiveProps(newProps){
-    let userId=newProps.data.userId
-    this.setState({"status":newProps.data.status, data:newProps.data})
-    if(userId){
-      const resp=this.findProcessSetupDetails()
-      return resp;
+  componentWillMount() {
+    let shareId= this.props && this.props.data ? this.props.data._id : '';
+    if(shareId){
+       this.setState({shareId: shareId}, function () {
+         const resp = this.getShareDetails()
+         return resp;
+       }.bind(this));
     }
   }
 
-  addStageComponent(e){
-    this.setState({
-      stages: this.state.stages.concat([{stageId: "", isActive:false, stageActions: [{actionId: "",actionType:"",isActive:false}]}])
-    })
-  }
-  addActionComponent(sIdx, e){
-    let stages = this.state.stages
-    let action = stages[sIdx].stageActions.concat([{actionId: "",actionType:"",isActive:false}]);
-    stages[sIdx].stageActions = action;
-    this.setState({stages:stages})
+  async getShareDetails() {
+    const response  = await fetchShareDetails(this.state.shareId)
+    // console.log('---response---', response)
+    this.setState({data: response})
+    return response;
   }
 
-  optionsBySelectStage(sIdx, selectedValue){
-    let stages = this.state.stages;
-    stages[sIdx]['stageId'] = selectedValue;
-    this.setState({stages: stages});
-  }
-  optionsBySelectAction(sIdx, aIdx, selectedValue){
-    let stages = this.state.stages
-    stages[sIdx].stageActions[aIdx]['actionId'] = selectedValue;
-    this.setState({stages:stages})
-  }
-  onStageStatusChange(sIdx, e){
-    let value = e.target.checked
-    let stages = this.state.stages;
-    let cloneBackUp = _.cloneDeep(stages);
-    let specificBackup = cloneBackUp[sIdx];
-    specificBackup['isActive'] = value;
-    stages.splice(sIdx, 1);
-    stages.splice(sIdx, 0, specificBackup);
-    this.setState({stages: stages});
-  }
-  onActionStatusChange(sIdx, aIdx, e){
-    let value = e.target.checked
-    let stages = this.state.stages
-    stages[sIdx].stageActions[aIdx]['isActive'] = value;
-    this.setState({stages:stages})
-  }
 
-  async saveProcessSetup() {
-    let stages = this.state.stages;
-    let data = this.state.data;
-    this.loggedUserDetails = getAdminUserContext();
-    data = _.omit(data, '__typename')
-    let isValid = this.validateDetails(stages)
-    if(isValid && isValid.success){                               /*attaching login admin user context to query*/
-      let response = await updateProcessSetupActionHandler(data, isValid.result, this.loggedUserDetails);
-      if(response && response.success){
-        toastr.success("Saved Successfully");
-      }
-      return response;
-    }else{
-      toastr.error(isValid.result);
-    }
-  }
-
-  validateDetails(stages) {
-    let data = _.clone(stages)
-    if (!_.isEmpty(data)) {
-      _.remove(data, {stageId:''})
-      if(!_.isEmpty(data)){
-        console.log(data)
-        return {success: true, result: data}
-      }else
-        return {success: false, result: 'Select atleast one stage'}
-    } else
-      return {success: false, result: 'Please enter Details'}
-  }
-  async findProcessSetupDetails() {
-    let id = this.props.data._id
-    const response = await fetchProcessSetupHandler(id);
-    if(response){
-      if(response.processSteps && response.processSteps.length>0){
-        this.setState({stages:response.processSteps})
-      }
-    }
-  }
   updateCost(e){
     this.setState({"cost":e.currentTarget.value});
   }
@@ -135,242 +68,134 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
   updateAbout(e){
     this.setState({"about":e.currentTarget.value});
   }
-  async generateLink(){
-    if(this.state.isGenerateLinkDisable){
-      toastr.error('Payment Link is already generated');
-      return false;
-    }
-    this.setState({
-      isGenerateLinkDisable:true
-    })
-    if(!this.state.cost){
-      toastr.error('Cost is required');
-      this.setState({
-        isGenerateLinkDisable:false
-      })
-      return false;
-    }
-    if(this.state.cost < 1){
-      toastr.error('Enter tha valid cost');
-      this.setState({
-        isGenerateLinkDisable:false
-      })
-      return false;
-    }
-    let generateLinkInfo = {
-      subscriptionName: this.refs.subscriptionName.value,
-      cost: this.state.cost,
-      isTaxInclusive: this.state.tax,
-      about: this.state.about
-    }
-    let id = this.state.data._id;
-    let response = await updateProcessTransaction(id ,{paymentDetails: generateLinkInfo});
-    if(response.success){
-      toastr.success(response.result);
-    } else {
-      toastr.error(response.result);
-      this.setState({
-        isGenerateLinkDisable:false
-      })
-    }
-  }
-
-  async acitvateOffice() {
-    if (this.state.officeInfo.isActive) {
-      toastr.error('Office already activated');
-      return false;
-    }
-  }
 
 
   render() {
-    let stageQuery = gql`query{data:fetchProcessStages {value:_id, label:name}}`;
-    let actionQuery = gql`query{data:fetchProcessActions {value:_id, label:displayName}}`;
     let that = this;
-    let stages = that.state.stages;
+    let ownerInfo = this.state && this.state.data && this.state.data.ownerInfo ? this.state.data.ownerInfo : {};
+    let users = this.state && this.state.data && this.state.data.users ? this.state.data.users : [];
+    let files = this.state && this.state.data && this.state.data.files ? this.state.data.files : [];
+    let transId = this.state && this.state.shareId ? this.state.shareId : '';
+    // console.log('this.state', this.state);
     return (
       <div className="ml_tabs">
         <ul  className="nav nav-pills">
           <li className="active">
-            <a  href={`#customerDetails${that.props.data._id}`} data-toggle="tab">Customer Details</a>
+            <a  href={`#customerDetails${transId}`} data-toggle="tab">Details</a>
           </li>
           <li>
-            <a href={`#processSetup${that.props.data._id}`} data-toggle="tab">Process Setup</a>
+            <a  href={`#share${transId}`} data-toggle="tab">Activity Log</a>
           </li>
           <li>
-            <a  href={`#paymentDetails${that.props.data._id}`} data-toggle="tab">Payment Details</a>
+            <a  href={`#deviceDetails${transId}`} data-toggle="tab">Device Details</a>
           </li>
           <li>
-            <a  href={`#deviceDetails${that.props.data._id}`} data-toggle="tab">Device Details</a>
-          </li>
-          <li>
-            <a  href={`#share${that.props.data._id}`} data-toggle="tab">Activity Log</a>
+            <a  href={`#history${transId}`} data-toggle="tab">History</a>
           </li>
         </ul>
 
         <div className="tab-content clearfix">
-          <div className="tab-pane active" id={`customerDetails${that.props.data._id}`}>
+          <div className="tab-pane active" id={`customerDetails${transId}`}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="User Id" value={that.state.data.profileId} className="form-control float-label" readOnly="true"/>
+                  <input type="text" placeholder="User Id" value={ownerInfo.profileId} className="form-control float-label" readOnly="true"/>
                 </div>
                 <div className="form-group ">
-                  <input type="text" placeholder="Transaction Id" value={that.state.data.transactionId} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Transaction Id" value={transId} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Date & Time" value={that.state.data.dateTime} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Date & Time" value={ that.state.data ? that.state.data.createdAt: ''} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="clearfix"></div>
                 <div className="form-group">
-                  <input type="text" placeholder="Name" value={that.state.data.name} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Name" value={ownerInfo.name} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Email" value={that.state.data.username} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Email" value={ownerInfo.email} className="form-control float-label"  readOnly="true"/>
                 </div>
               </div>
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Phone Number" value={that.state.data.mobileNumber} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Phone Number" value={ownerInfo.mobileNumber} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Cluster" value={that.state.data.clusterName} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Cluster" value={ownerInfo.cluster} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Chapter" value={that.state.data.chapterName} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Chapter" value={ownerInfo.chapter} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Sub Chapter" value={that.state.data.subChapterName} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Sub Chapter" value={ownerInfo.subChapter} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <div className="form-group">
-                  <input type="text" placeholder="Community" value={that.state.data.communityName} className="form-control float-label"  readOnly="true"/>
+                  <input type="text" placeholder="Community" value={ownerInfo.community} className="form-control float-label"  readOnly="true"/>
                 </div>
                 <br className="clearfix" />
               </div>
             </div>
           </div>
-          <div className="tab-pane" id={`processSetup${that.props.data._id}`}>
-            <div className="panel panel-default">
-              <div className="panel-heading">Add Stages<img className="pull-right" src="/images/add.png" onClick={that.addStageComponent.bind(that)}/></div>
-              <div className="panel-body">
-                {that.state.stages.map(function (stage, sIdx) {
-                  return(
-                    <div className="row" key={sIdx}>
-                      <div className="col-md-6">
-                        <div className="form-group">
-                          <MoolyaSelect multiSelect={false} className="form-control float-label"
-                                        valueKey={'value'}
-                                        labelKey={'label'} queryType={"graphql"} query={stageQuery} isDynamic={true}
-                                        onSelect={that.optionsBySelectStage.bind(that, sIdx)}
-                                        placeholder="Select Stage"
-                                        selectedValue={stage.stageId}/>
-                        </div>
-                      </div>
-                      <div className="col-md-6">
-                        <div className="form-group switch_wrap inline_switch small_sw">
-                          <label>Status</label>
-                          <label className="switch">
-                            <input type="checkbox" checked={stage.isActive} onChange={that.onStageStatusChange.bind(that, sIdx)}/>
-                            <div className="slider"></div>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="col-md-12">
-                        {stage.stageActions.map(function (action, aIdx) {
-                          return(
-                            <div className="form_inner_block col-md-4" key={aIdx}>
-                              <div className="add_form_block"><img src="/images/add.png" onClick={that.addActionComponent.bind(that, sIdx)}/></div>
-                              <div className="form-group">
-                                <MoolyaSelect multiSelect={false} className="form-control float-label"
-                                              valueKey={'value'}
-                                              labelKey={'label'} queryType={"graphql"} query={actionQuery} isDynamic={true}
-                                              onSelect={that.optionsBySelectAction.bind(that, sIdx, aIdx)}
-                                              placeholder="Select Action"
-                                              selectedValue={action.actionId}/>
-                              </div>
-                              <div className="form-group">
-                                <input type="text" placeholder="Type" className="form-control float-label" />
-                              </div>
-                              <div className="form-group switch_wrap inline_switch small_sw">
-                                <label>Status</label>
-                                <label className="switch">
-                                  <input type="checkbox" checked={action.isActive} onChange={that.onActionStatusChange.bind(that, sIdx, aIdx)}/>
-                                  <div className="slider"></div>
-                                </label>
-                              </div>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    </div>
-                  )
-                })}
-                <hr/>
-              </div>
-            </div>
-            <a className="fileUpload mlUpload_btn" onClick={this.saveProcessSetup.bind(this)}>Save details</a>
-          </div>
-          <div className="tab-pane" id={`paymentDetails${that.props.data._id}`}>
+          <div className="tab-pane" id={`share${transId}`}>
             <div className="row">
               <div className="col-md-6">
-                <div className="panel panel-default">
-                  <div className="panel-heading">Generate payment link</div>
-                  <div className="panel-body">
-                    <div className="form-group">
-                      <input type="text" placeholder="Subscription Name" className="form-control float-label"  ref="subscriptionName"/>
-                    </div>
-                    <br className="brclear"/>
-                    <div className="form-group ">
-                      <input type="Number" onChange={(e)=>this.updateCost(e)} value={this.state.cost} placeholder="Cost" min="0" className="form-control float-label"/>
-                      <div className="email_notify">
-                        <div className="input_types">
-                          <input id="checkbox1" onChange={(e)=>this.updateTax(e)} checked={this.state.tax} type="checkbox" name="checkbox" value="1" /><label htmlFor="checkbox1"><span></span>TAX inclusive</label>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <textarea onChange={(e)=>this.updateAbout(e)} defaultValue={this.state.about} placeholder="About" className="form-control float-label"></textarea>
-                    </div>
-                    <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.generateLink()}>Generate Link</a>
-                    <a href="#" className="fileUpload mlUpload_btn" onClick={()=>this.acitvateOffice()}>Activate office</a>
-                  </div>
+                <div className="form-group">
+                  <input type="text" placeholder="Shared Date & Time" value={ that.state.data ? that.state.data.createdAt: ''} className="form-control float-label" id=""/>
+                </div>
+                <h5>Shared with :</h5>
+                <ul className="img_upload ul-hide">
+                  {
+                    users.map(function (user, index) {
+                      return (
+                        <li key={index}>
+                          {/*<FontAwesome name='minus'/>*/}
+                          <img src={ user.profilePic ? user.profilePic : "/images/data_balance.jpg"}/>
+                          <span>{user.displayName}</span>
+                        </li>
+                      )
+                    })
+                  }
+                </ul>
+                <div className="clearfix" />
+                <br />
+                <div className="form-group">
+                  <input type="text" placeholder="Status" defaultValue="Completed" className="form-control float-label" id=""/>
                 </div>
               </div>
               <div className="col-md-6">
-                <div className="form-group">
-                  <input type="text" placeholder="Transaction Date & Time" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.dateTime?that.state.data.paymentDetails.dateTime:""} className="form-control float-label"  readOnly={true}/>
+                <h4>Shared Content</h4>
+                <ul className="doc_upload">
+                  {
+                    files.map(function (file, index) {
+                      return (
+                        <li key={index}>
+                          {/*<FontAwesome name='minus'/>*/}
+                          <img src={ file.url ? file.url : "/images/data_balance.jpg"}/>
+                        </li>
+                      )
+                    })
+                  }
+
+                </ul>
+                <div className="clearfix" />
+                <br/>
+                <div className="col-md-6 nopadding-left">
+                  <div className="form-group">
+                    <input type="text" placeholder="From" value={ this.state.data && this.state.data.sharedStartDate ? this.state.data.sharedStartDate : '' } disabled defaultValue="10.20.1.6" className="form-control float-label" id=""/>
+                  </div>
                 </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Transaction ID" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.transactionId?that.state.data.paymentDetails.transactionId:""} className="form-control float-label"  readOnly={true}/>
+                <div className="col-md-6 nopadding-right">
+                  <div className="form-group">
+                    <input type="text" placeholder="To" value={ this.state.data && this.state.data.sharedEndDate ? this.state.data.sharedEndDate : '' } disabled defaultValue="10.20.1.6" className="form-control float-label" id=""/>
+                  </div>
                 </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Total amount paid" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.totalAmountPaid?that.state.data.paymentDetails.totalAmountPaid:""} className="form-control float-label" />
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Payment mode" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.paymentMode?that.state.data.paymentDetails.paymentMode:""} className="form-control float-label" />
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Card number" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.cardNumber?that.state.data.paymentDetails.cardNumber:""} className="form-control float-label" />
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Card Holder name" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.cardHolderName?that.state.data.paymentDetails.cardHolderName:""} className="form-control float-label" />
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Promotion Code" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.promotionCode?that.state.data.paymentDetails.promotionCode:""} className="form-control float-label" />
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Code Amount" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.codeAmount?that.state.data.paymentDetails.codeAmount:""} className="form-control float-label" />
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Status" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.promotionStatus?that.state.data.paymentDetails.promotionStatus:""} className="form-control float-label" />
-                </div>
-                <div className="form-group">
-                  <input type="text" placeholder="Voucher Code" value={that.state.data.paymentDetails&&that.state.data.paymentDetails.voucherCode?that.state.data.paymentDetails.voucherCode:""} className="form-control float-label" />
+                <div className="clearfix" />
+                <div className="input_types">
+                  <input id="checkbox1" type="checkbox" name="checkbox" checked={ this.state.data && this.state.data.isDownloadable ? this.state.data.isDownloadable : false } disabled value="1" /><label htmlFor="checkbox1"><span></span>Can Download this content</label>
                 </div>
               </div>
             </div>
           </div>
-          <div className="tab-pane" id={`deviceDetails${that.props.data._id}`}>
+          <div className="tab-pane" id={`deviceDetails${transId}`}>
             <div className="row">
               <div className="col-md-6">
                 <div className="form-group">
@@ -391,52 +216,10 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
               </div>
             </div>
           </div>
-          <div className="tab-pane" id={`share${that.props.data._id}`}>
-            <div className="row">
-              <div className="col-md-6">
-                <div className="form-group">
-                  <input type="text" placeholder="Shared Date & Time" className="form-control float-label" id=""/>
-                </div>
-                <h4>Shared with :</h4>
-                <ul className="img_upload ul-hide">
-                  <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/><span>test text here</span></li>
-                  <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/><span>test text here</span></li>
-                  <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/><span>test text here</span></li>
-                </ul>
-                <div className="clearfix" />
-                <br />
-                <div className="form-group">
-                  <input type="text" placeholder="Status" defaultValue="Completed" className="form-control float-label" id=""/>
-                </div>
+          <div className="tab-pane" id={`history${transId}`}>
 
-              </div>
-              <div className="col-md-6">
-                <h4>Shared Content</h4>
-                <ul className="doc_upload">
-                  <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/></li>
-                  <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/></li>
-                  <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/></li>
-                </ul>
-                <div className="clearfix" />
-                <br />
-
-                <div className="col-md-6 nopadding-left">
-                  <div className="form-group">
-                    <input type="text" placeholder="From" defaultValue="10.20.1.6" className="form-control float-label" id=""/>
-                  </div>
-                </div>
-                <div className="col-md-6 nopadding-right">
-                  <div className="form-group">
-                    <input type="text" placeholder="To" defaultValue="10.20.1.6" className="form-control float-label" id=""/>
-                  </div>
-                </div>
-                <div className="clearfix" />
-                <div className="input_types">
-                  <input id="checkbox1" type="checkbox" name="checkbox" value="1" /><label htmlFor="checkbox1"><span></span>Can Download this content</label>
-                </div>
-              </div>
-            </div>
           </div>
+
         </div>
 
       </div>

@@ -7,6 +7,8 @@ let sharedLibrarySchema = `
     type userDetails{
       userId: String
       profileId: Boolean
+      displayName: String
+      profilePic: String
     }
     
     type fileDetails{
@@ -16,21 +18,51 @@ let sharedLibrarySchema = `
       libraryDocumentId: String
     }
     
-     type sharedOutput{
-      _id: String
-      user: userDetails
-      owner: userDetails
-      file: fileDetails
+     type AdminShareList {
+      _id : String
+      createdAt : Date
+      createdBy : String
+      userId : String
+      profileId : String
+      email : String
+      mobileNumber : String
+      cluster : String
+      chapter : String
+      subChapter : String
+      community : String
+      transactionType : String
+    }
+    
+    type ShareOwnerInfo {
+      userId: String
+      profileId: String
+      name: String
+      email : String
+      mobileNumber: Int
+      cluster: String
+      chapter: String
+      subChapter: String
+      community: String
+    }
+    
+    type SharedOutput {
+      users: [userDetails]
+      files: [fileDetails]
       sharedEndDate: Date
       sharedStartDate: Date
       isSignedUrl: Boolean
       isDownloadable: Boolean
-      createdBy: String
-      createdAt: Date
-      updatedAt: Date
-      updatedBy: String
-      isActive: Boolean
+      createdAt:Date
+      ownerInfo: ShareOwnerInfo
     }
+    
+    type sharedConnections {
+      userId: String
+      profilePic: String
+      displayName: String
+    }
+   
+    
     
     input userInput{
       userId: String
@@ -56,7 +88,9 @@ let sharedLibrarySchema = `
    
 
  type Query{
-      fetchSharedLibrary(userId:String):[Details]
+      fetchSharedLibraryDetails(sharedId:String):SharedOutput
+      getMySharedConnections: [sharedConnections]
+      fetchSharedLibrary(userId: String): SharedOutput
  }
  
  type Mutation{
@@ -67,6 +101,7 @@ let sharedLibrarySchema = `
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], sharedLibrarySchema ]);
 
 let supportedApi = [
+  {api:'fetchSharedLibraryDetails', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'fetchSharedLibrary', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'createSharedLibrary', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'updateSharedLibrary', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true}

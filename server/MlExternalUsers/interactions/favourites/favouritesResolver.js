@@ -5,6 +5,7 @@ import MlResolver from '../../../commons/mlResolverDef'
 import MlRespPayload from '../../../commons/mlPayload'
 import _ from 'lodash'
 import mlInteractionService from '../mlInteractionRepoService';
+import MlSubChapterAccessControl from './../../../mlAuthorization/mlSubChapterAccessControl';
 
 var generateConnectionCode=function(u1,u2){
   var connectionCode=u1+u2;
@@ -51,6 +52,19 @@ MlResolver.MlQueryResolver['fetchFavourites'] = (obj, args, context, info) => {
 */
 MlResolver.MlMutationResolver['markFavourite'] = (obj, args, context, info) => {
   if(args && context && context.userId){
+
+    /**
+     * Sub chapter access control
+     */
+    let portfolioDetails =mlDBController.findOne('MlPortfolioDetails',{_id:args.resourceId}, context);
+    let subChapterId = portfolioDetails && portfolioDetails.subChapterId ? portfolioDetails.subChapterId : '';
+    let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('TRANSACT', context, subChapterId);
+    if(!mlSubChapterAccessControl.hasAccess){
+      let code = 400;
+      let response = new MlRespPayload().errorPayload('You do not have access to transact', code);
+      return response;
+    }
+
     var resp=null;
     //follow flag checks for true/false. if its true:
     var isFavourite=args.isFavourite===true?args.isFavourite:(args.isFavourite===false?false:true);

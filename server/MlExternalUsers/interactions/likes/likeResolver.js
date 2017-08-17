@@ -6,11 +6,26 @@ import MlRespPayload from '../../../commons/mlPayload'
 import _ from 'lodash';
 import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
 import mlInteractionService from '../mlInteractionRepoService';
-import MlAlertNotification from '../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
+import MlAlertNotification from '../../../mlNotifications/mlAlertNotifications/mlAlertNotification';
+import MlSubChapterAccessControl from './../../../mlAuthorization/mlSubChapterAccessControl';
+
 MlResolver.MlMutationResolver['likeRequest'] = (obj, args, context, info) =>{
     if(args && context && context.userId){
       var resp=null;
         try {
+
+          /**
+           * Sub chapter access control
+           */
+          let portfolioDetails =mlDBController.findOne('MlPortfolioDetails',{_id:args.resourceId}, context);
+          let subChapterId = portfolioDetails && portfolioDetails.subChapterId ? portfolioDetails.subChapterId : '';
+          let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('TRANSACT', context, subChapterId);
+          if(!mlSubChapterAccessControl.hasAccess){
+            let code = 400;
+            let response = new MlRespPayload().errorPayload('You do not have access to transact', code);
+            return response;
+          }
+
             let user =mlDBController.findOne('users',{_id:context.userId}, context);
             let resourceDetails = mlInteractionService.fetchResourceBasedUserDetails(args.resourceType, args.resourceId, context);
             let fromuser = resourceDetails.contextUser;

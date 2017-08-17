@@ -252,7 +252,7 @@ class MlSubChapterAccessControl {
     if (_.isArray(relatedSubChapters)) {
       accessCount = _.indexOf(relatedSubChapters, requestSubChapterId) < 0 ? 0 : 1;
     }
-    if (accessCount < 0) {
+    if (accessCount <= 0) {
       switch (permission) {
         case 'VIEW':
           /**conditions 1)moolya sub chapter check 2)non-moolya sub chapter+view/transact access check*/

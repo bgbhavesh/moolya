@@ -1,7 +1,8 @@
 import _ from "lodash";
 import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 import MlAdminContextQueryConstructor from "./mlAdminContextQueryConstructor";
-import mlNonMoolyaAccess from "../../../../../server/MlInternalUsers/admin/core/non-moolyaAccessControl/mlNonMoolyaAccess"
+// import mlNonMoolyaAccess from "../../../../../server/MlInternalUsers/admin/core/non-moolyaAccessControl/mlNonMoolyaAccess"
+import MlSubChapterAccessControl from '../../../../../server/mlAuthorization/mlSubChapterAccessControl'
 MlChaptersTemp = new Mongo.Collection('mlChaptersTemp');
 
 let mergeQueries=function(userFilter,serverFilter)
@@ -817,14 +818,16 @@ let CoreModules = {
     var resultantQuery = MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery, contextFieldMap);
     /**construct context query with $in operator for each fields*/
     resultantQuery = MlAdminContextQueryConstructor.constructQuery(resultantQuery, '$in');
-    var nonMoolyaContext = mlNonMoolyaAccess.getExternalUserCanSearch(context)
-    if (!_.isBoolean(nonMoolyaContext)){
-      resultantQuery['registrationInfo.subChapterId'] = {$in: nonMoolyaContext.subChapters}
-      resultantQuery['registrationInfo.chapterId'] = {$in: nonMoolyaContext.chapters}
-    }
-    // if (!fieldsProj.sort) {
-    //   fieldsProj.sort = {'registrationInfo.registrationDate': -1}
+    // var nonMoolyaContext = mlNonMoolyaAccess.getExternalUserCanSearch(context)
+    // if (!_.isBoolean(nonMoolyaContext)){
+    //   resultantQuery['registrationInfo.subChapterId'] = {$in: nonMoolyaContext.subChapters}
+    //   resultantQuery['registrationInfo.chapterId'] = {$in: nonMoolyaContext.chapters}
     // }
+    var dataContext = MlSubChapterAccessControl.getAccessControl('SEARCH', context, null, false)
+    if (dataContext && dataContext.hasAccess && dataContext.subChapters && dataContext.subChapters.length > 0) {
+      resultantQuery['registrationInfo.subChapterId'] = {$in: dataContext.subChapters}
+      resultantQuery['registrationInfo.chapterId'] = {$in: dataContext.chapters}
+    }
     if (!fieldsProj.sort) {
       fieldsProj.sort = {
         'registrationInfo.registrationDate': -1

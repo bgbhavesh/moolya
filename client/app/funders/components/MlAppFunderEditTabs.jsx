@@ -62,28 +62,28 @@ export default class MlAppFunderEditTabs extends React.Component{
     return tabs;
   }
 
-  getSuccessStoriesDetails(details){
+  getSuccessStoriesDetails(details, privatekey){
     let data = this.state.funderPortfolio;
     data['successStories'] = details;
     this.setState({funderPortfolio : data})
-    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio});
+    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio}, privatekey);
   }
 
-  getAboutus(details){
+  getAboutus(details,privatekey){
     let data = this.state.funderPortfolio;
     data['funderAbout']=details;
     this.setState({funderPortfolio : data})
-    this.props.getPortfolioDetails({funderPortfolio : this.state.funderPortfolio});
+    this.props.getPortfolioDetails({funderPortfolio : this.state.funderPortfolio},privatekey);
   }
 
-  getInvestmentsDetails(details){
+  getInvestmentsDetails(details,privatekey){
     let data = this.state.funderPortfolio;
     data['investments'] = details;
     this.setState({funderPortfolio : data})
-    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio});
+    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio},privatekey);
   }
 
-  getPrincipalDetails(details){
+  getPrincipalDetails(details,privatekey){
     let data = this.state.funderPortfolio;
     if(data && !data.principal){
       data['principal']=[];
@@ -96,9 +96,9 @@ export default class MlAppFunderEditTabs extends React.Component{
       arr.push(updateItem)
     })
     data['principal'] = arr;
-    this.props.getPortfolioDetails({funderPortfolio:data});
+    this.props.getPortfolioDetails({funderPortfolio:data},privatekey);
   }
-  getTeamDetails(details){
+  getTeamDetails(details,privatekey){
     let data = this.state.funderPortfolio;
     if(data && !data.team){
       data['team']=[];
@@ -111,20 +111,20 @@ export default class MlAppFunderEditTabs extends React.Component{
       arr.push(updateItem)
     })
     data['team'] = arr;
-    this.props.getPortfolioDetails({funderPortfolio:data});
+    this.props.getPortfolioDetails({funderPortfolio:data},privatekey);
   }
 
-  getAreaOfInterestDetails(details){
+  getAreaOfInterestDetails(details,privatekey){
     let data = this.state.funderPortfolio;
     if(data && !data.areaOfInterest){
       data['areaOfInterest']=[];
     }
     data['areaOfInterest'] = details;
     this.setState({funderPortfolio : data})
-    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio});
+    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio},privatekey);
   }
 
-  getServiceDetails(details){
+  getServiceDetails(details,privatekey){
     if(details.services){
       let portfolioId = details.portfolioId;
       console.log()
@@ -134,7 +134,7 @@ export default class MlAppFunderEditTabs extends React.Component{
     let data = this.state.funderPortfolio;
     data['services'] = details;
     this.setState({funderPortfolio : data})
-    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio});
+    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio},privatekey);
   }
 
   async saveDataToServices(portfolioId){
@@ -143,14 +143,14 @@ export default class MlAppFunderEditTabs extends React.Component{
       return resp
   }
 
-  getFunderNewsDetails(details){
+  getFunderNewsDetails(details,privatekey){
     let data = this.state.funderPortfolio;
     if(data && !data.lookingFor){
       data['lookingFor']=[];
     }
     data['lookingFor'] = details;
     this.setState({funderPortfolio : data})
-    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio});
+    this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio},privatekey);
   }
 
   getFunderLibrary(details){

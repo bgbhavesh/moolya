@@ -121,6 +121,7 @@ $menuTrans:all 0.5s linear;
           }
           a{font-size: 12px; text-decoration: none; line-height: 16px; display: block; padding: 10px; border-bottom: #ccc solid 1px; margin: 0; color: $mlBlue;
             &:hover{text-decoration: none; color: $mlBlue; background:$mlGray;}
+            .ml{ width: 20px; height: 20px; background: $mlBlue; border-radius: 50%; color: $mlWhite; display: inline-block; text-align: center; line-height: 20px; margin-right: 5px; font-size: 11px; float: left; }
           }
         }
       }

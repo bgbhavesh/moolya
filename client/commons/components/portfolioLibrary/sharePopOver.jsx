@@ -213,10 +213,6 @@ export default class SharePopOver extends React.Component {
     console.log(response)
   }
 
-  cancelAction() {
-    this.props.toggle();
-  }
-
 
 
 
@@ -275,7 +271,7 @@ render(){
           <div className="clearfix" />
           <div className="ml_btn">
             <a href="" className="save_btn" onClick={this.saveDetails.bind(this)}>Send</a>
-            <a href="#" className="cancel_btn" onClick={this.cancelAction.bind(this)}>Cancel</a>
+            <a href="#" className="cancel_btn" onClick={this.props.toggle.bind(this)} >Cancel</a>
           </div>
         </div>
       )

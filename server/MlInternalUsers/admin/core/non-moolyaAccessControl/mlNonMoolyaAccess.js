@@ -61,28 +61,28 @@ class MlNonMoolyaAccess {
     return success
   }
 
-  canExternalUserViewReg(payload, context) {
-    var success = true
-    var userType = mlDBController.findOne('users', {_id: context.userId}) || {}
-    if (userType && userType.profile && userType.profile.isInternaluser && !userType.profile.isMoolya) {
-      var curUserProfile = new MlAdminUserContext().userProfileDetails(context.userId);
-      let accessType = mlDBController.findOne('MlRegistration', {_id: payload}) || {}
-      let subChapterId = curUserProfile && curUserProfile.defaultSubChapters && curUserProfile.defaultSubChapters.length > 0 ? curUserProfile.defaultSubChapters[0] : ''
-      if (accessType && accessType.registrationInfo && (accessType.registrationInfo.subChapterId == subChapterId)) {
-        success = true
-      } else {
-        let subChapter = mlDBController.findOne('MlSubChapters', {
-          _id: subChapterId,
-          isDefaultSubChapter: false
-        }, context)
-        if (subChapter && subChapter.internalSubChapterAccess && subChapter.internalSubChapterAccess.externalUser && subChapter.internalSubChapterAccess.externalUser.canView)
-          success = true
-        else
-          success = false
-      }
-    }
-    return success
-  }
+  // canExternalUserViewReg(payload, context) {
+  //   var success = true
+  //   var userType = mlDBController.findOne('users', {_id: context.userId}) || {}
+  //   if (userType && userType.profile && userType.profile.isInternaluser && !userType.profile.isMoolya) {
+  //     var curUserProfile = new MlAdminUserContext().userProfileDetails(context.userId);
+  //     let accessType = mlDBController.findOne('MlRegistration', {_id: payload}) || {}
+  //     let subChapterId = curUserProfile && curUserProfile.defaultSubChapters && curUserProfile.defaultSubChapters.length > 0 ? curUserProfile.defaultSubChapters[0] : ''
+  //     if (accessType && accessType.registrationInfo && (accessType.registrationInfo.subChapterId == subChapterId)) {
+  //       success = true
+  //     } else {
+  //       let subChapter = mlDBController.findOne('MlSubChapters', {
+  //         _id: subChapterId,
+  //         isDefaultSubChapter: false
+  //       }, context)
+  //       if (subChapter && subChapter.internalSubChapterAccess && subChapter.internalSubChapterAccess.externalUser && subChapter.internalSubChapterAccess.externalUser.canView)
+  //         success = true
+  //       else
+  //         success = false
+  //     }
+  //   }
+  //   return success
+  // }
 
   /*****************merge the two ['registration && portfolio'] with portfolio **************************/
 

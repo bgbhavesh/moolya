@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
+import  _ from "lodash";
 import formHandler from "../../../commons/containers/MlFormHandler";
 import {updatePortfolioActionHandler,updateIdeatorIdeaActionHandler} from "../../../../client/admin/transaction/portfolio/actions/updatePortfolioDetails";
 import {fetchTemplateHandler} from "../../../commons/containers/templates/mltemplateActionHandler";

@@ -57,51 +57,51 @@ getChildContext(){
     ]
     return tabs;
   }
-  getIdeatorDetails(details){
+  getIdeatorDetails(details,privatekey){
     let data = this.state.ideatorPortfolio;
     data['portfolioIdeatorDetails']=details;
     this.setState({ideatorPortfolio : data})
     // this.state.ideatorPortfolio['portfolioIdeatorDetails'] = details;
     // this.setState({ideatorDetails:details})
-    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio},privatekey);
   }
-  getIdeas(details) {
+  getIdeas(details,privatekey) {
     let data = this.state.idea;
     data=details;
     this.setState({idea : data})
-    this.props.getIdeatorIdeaDetails(data);
+    this.props.getIdeatorIdeaDetails(data,privatekey);
   }
-  getProblemSolution(details) {
+  getProblemSolution(details,privatekey) {
     let data = this.state.ideatorPortfolio;
     data['problemSolution']=details;
     this.setState({ideatorPortfolio : data}, function () {
-      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+      this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio},privatekey);
     })
 
   }
-  getStrategyAndPlanning(details) {
+  getStrategyAndPlanning(details,privatekey) {
     let data = this.state.ideatorPortfolio;
     data['strategyAndPlanning']=details;
     this.setState({ideatorPortfolio : data})
-    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio},privatekey);
   }
-  getIntellectualPlanning(details) {
+  getIntellectualPlanning(details,privatekey) {
     let data = this.state.ideatorPortfolio;
     data['intellectualPlanning']=details;
     this.setState({ideatorPortfolio : data})
-    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio},privatekey);
   }
-  getAudience(details) {
+  getAudience(details,privatekey) {
     let data = this.state.ideatorPortfolio;
     data['audience']=details;
     this.setState({ideatorPortfolio : data})
-    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio},privatekey);
   }
-  getLookingFor(details) {
+  getLookingFor(details,privatekey) {
     let data = this.state.ideatorPortfolio;
     data['lookingFor']=details;
     this.setState({ideatorPortfolio : data})
-    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
+    this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio},privatekey);
   }
 
   componentWillMount()

@@ -132,10 +132,13 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   area
                   isAreaPrivate
                   city
+                  cityId
                   isCityPrivate
                   state
+                  stateId
                   isStatePrivate
                   country
+                  countryId
                   isCountryPrivate
                   addressImage
                   makePrivate

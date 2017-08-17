@@ -351,7 +351,7 @@ class MlSubChapterAccessControl {
   static setUserContext(context, requestSubChapterId) {
     var userId = context.userId;
     context.requestSubChapterId = requestSubChapterId;
-    var userProfile = new MlAdminUserContext().userProfileDetails(userId);
+    var userProfile = new MlAdminUserContext()._userDefaultProfileDetails(userId);
     /**if its internal user */
     if (userProfile && userProfile.isInternaluser) {
       context.isInternalUser = userProfile.isInternaluser;

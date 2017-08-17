@@ -761,7 +761,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
       }
       let subChapter = mlDBController.findOne('MlSubChapters', {_id: subChapterId}, context)
 
-      if(cluster.isActive && chapter.isActive && subChapter.isActive){
+      if(cluster.isActive && chapter && chapter.isActive && subChapter && subChapter.isActive){
         queryObj.clusterId = cluster._id;
         queryObj.chapterId = chapterId;
         queryObj.subChapterId = subChapterId;

@@ -5,7 +5,7 @@ import MlResolver from '../../../commons/mlResolverDef'
 import MlRespPayload from '../../../commons/mlPayload'
 import _ from 'lodash';
 import mlInteractionService from '../mlInteractionRepoService'
-
+import MlSubChapterAccessControl from './../../../mlAuthorization/mlSubChapterAccessControl';
 
 var generateConnectionCode=function(u1,u2){
   var connectionCode=u1+u2;
@@ -60,25 +60,34 @@ MlResolver.MlQueryResolver['fetchInteractionActionAttributes'] = (obj, args, con
   var resourceId=args.resourceId;
   var resourceType=args.resourceType;
   var resourceDetails = mlInteractionService.fetchResourceBasedUserDetails(resourceType,resourceId, context);
+
+  /**
+   * Sub chapter access control
+   */
+  let portfolioDetails =mlDBController.findOne('MlPortfolioDetails',{_id:resourceId}, context);
+  let subChapterId = portfolioDetails && portfolioDetails.subChapterId ? portfolioDetails.subChapterId : '';
+  let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('TRANSACT', context, subChapterId);
+  let hasAccess = mlSubChapterAccessControl && mlSubChapterAccessControl.hasAccess ?  mlSubChapterAccessControl.hasAccess : false;
+
   if (context && context.userId) {
     var connectionCode=generateConnectionCode(context.userId,resourceDetails.resourceOwnerId);
     _.each(actionNames, function (action) {
       switch(action){
         case 'like':
           let likesCount=MlLikes.find({resourceType:resourceType,resourceId:resourceId,isActive:true,userId:context.userId}).count();
-          actionsList.push({'actionName':'like',isDisabled:likesCount==1?true:false,isHidden:false});
+          actionsList.push({'actionName':'like',isDisabled:!hasAccess || (likesCount==1 ?true:false),isHidden:false});
           break;
         case 'connect':
           let connectionCount=MlConnections.find({'isAccepted':true,'connectionCode':connectionCode}).count();
-          actionsList.push({'actionName':'connect',isDisabled:connectionCount==1?true:false,isHidden:false});
+          actionsList.push({'actionName':'connect',isDisabled:!hasAccess || (connectionCount==1 ?true:false),isHidden:false});
           break;
         case 'favourite':
           let favouriteCount=MlConnections.find({'isAccepted':true,'connectionCode':connectionCode,'users':{'$elemMatch':{'userId':context.userId,'isFavourite':true}}}).count();
-          actionsList.push({'actionName':'favourite',isDisabled:favouriteCount==1?true:false,isHidden:false});
+          actionsList.push({'actionName':'favourite',isDisabled:!hasAccess || (favouriteCount==1 ?true:false),isHidden:false});
           break;
         case 'follow':
           let followCount=MlFollowings.find({'isActive':true,'followerId':resourceDetails.resourceOwnerId,'followedBy':context.userId}).count();
-          actionsList.push({'actionName':'follow',isDisabled:followCount==1?true:false,isHidden:false});
+          actionsList.push({'actionName':'follow',isDisabled:!hasAccess || (followCount==1 ?true:false),isHidden:false});
           break;
       }
     });

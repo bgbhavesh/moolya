@@ -1482,3 +1482,19 @@ margin: 0px;
 .hanging_btn .ml{display: block; text-align: center; margin-bottom: -8px;}
 .hanging_btn:after{position:absolute;right:-14px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 18px 0 18px 14px;border-color: transparent transparent transparent #ef4647;top: 0px;}
 .hanging_btn:before{position:absolute;left:-14px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 18px 14px 18px 0px;border-color: transparent #ef4647 transparent transparent;top: 0px;}
+
+#toast-container > div {
+  color: #000;
+}
+.toast-success {
+  background-color: #a9f774;
+}
+.toast-error {
+  background-color: #f18c89;
+}
+.toast-info {
+  background-color: #2f96b4;
+}
+.toast-warning {
+  background-color: #f9ac49;
+}

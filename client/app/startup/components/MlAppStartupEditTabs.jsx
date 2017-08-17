@@ -75,23 +75,23 @@ export default class MlAppStartupEditTabs extends React.Component{
     return tabs;
   }
 
-  getAboutus(details,tabName){
+  getAboutus(details,tabName,privatekey){
     let data = this.state.startupPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({startupPortfolio : data});
+    this.props.getPortfolioDetails({startupPortfolio : data},privatekey);
   }
 
-  getManagementDetails(details){
+  getManagementDetails(details,privatekey){
     let data = this.state.startupPortfolio;
     if(data && !data.management){
       data['management']=[];
     }
     data['management'] = details;
     this.setState({startupPortfolio : data})
-    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio});
+    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio},privatekey);
   }
 
-  getInvestorDetails(details){
+  getInvestorDetails(details,privatekey){
     let data = this.state.startupPortfolio;
     data['investor'] = details;
     this.setState({startupPortfolio : data})
@@ -101,10 +101,10 @@ export default class MlAppStartupEditTabs extends React.Component{
       arr.push(updateItem)
     })
     data['investor'] = arr;
-    this.props.getPortfolioDetails({startupPortfolio: data});
+    this.props.getPortfolioDetails({startupPortfolio: data},privatekey);
   }
 
-  getAwardsDetails(details){
+  getAwardsDetails(details,privatekey){
 
     let data = this.state.startupPortfolio;
     if(data && !data.awardsRecognition){
@@ -118,10 +118,10 @@ export default class MlAppStartupEditTabs extends React.Component{
     })
     data['awardsRecognition'] = arr;
 
-    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio});
+    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio},privatekey);
   }
 
-  getLookingForDetails(details){
+  getLookingForDetails(details,privatekey){
 
     let data = this.state.startupPortfolio;
     if(data && !data.lookingFor){
@@ -129,7 +129,7 @@ export default class MlAppStartupEditTabs extends React.Component{
     }
     data['lookingFor'] = details;
     this.setState({startupPortfolio : data})
-    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio});
+    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio},privatekey);
   }
 
   getChartDetails(details,tabName){
@@ -138,13 +138,13 @@ export default class MlAppStartupEditTabs extends React.Component{
     this.props.getPortfolioDetails({startupPortfolio : data});
   }
 
-  getDataDetails(details,tabName){
+  getDataDetails(details,tabName,privatekey){
     let data = this.state.startupPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({startupPortfolio : data});
+    this.props.getPortfolioDetails({startupPortfolio : data},privatekey);
   }
 
-  getStartupMCL(details){
+  getStartupMCL(details,privatekey){
     let data = this.state.startupPortfolio;
     if(details.memberships){
       data['memberships'] = details.memberships;
@@ -156,7 +156,7 @@ export default class MlAppStartupEditTabs extends React.Component{
       data['licenses'] = details.licenses;
     }
     this.setState({startupPortfolio : data})
-    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio}, []);
+    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio}, [],privatekey);
   }
 
   componentWillMount()

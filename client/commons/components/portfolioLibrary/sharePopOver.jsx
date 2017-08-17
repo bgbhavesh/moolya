@@ -122,12 +122,14 @@ export default class SharePopOver extends React.Component {
   sharedStartDate(event) {
     if(event._d) {
       let value = moment(event._d).format('DD-MM-YYYY');
+      console.log('--startDate--', value )
       this.setState({startDate: value})
     }
   }
   sharedEndDate(event) {
     if(event._d) {
       let value = moment(event._d).format('DD-MM-YYYY');
+      console.log('--endDate--', value )
       this.setState({endDate: value})
     }
   }
@@ -191,12 +193,12 @@ export default class SharePopOver extends React.Component {
     let Details = {
       files: file,
       users:user,
-      sharedStartDate: Date.parse(that.state.startDate),
-      sharedEndDate: Date.parse(that.state.endDate),
-      isDownloadable: that.state.downloadable
+      sharedStartDate: Date.parse(this.state.startDate),
+      sharedEndDate: new Date(this.state.endDate),
+      isDownloadable: this.state.downloadable
     }
-    // console.log('--RESULT--',Details)
-     this.saveInfo(Details);
+    console.log('--Details--',Details)
+     // this.saveInfo(Details);
   }
 
   async saveInfo(Details) {
@@ -209,6 +211,10 @@ export default class SharePopOver extends React.Component {
       toastr.error(response.result);
     }
     console.log(response)
+  }
+
+  cancelAction() {
+    this.props.toggle();
   }
 
 
@@ -269,7 +275,7 @@ render(){
           <div className="clearfix" />
           <div className="ml_btn">
             <a href="" className="save_btn" onClick={this.saveDetails.bind(this)}>Send</a>
-            <a href="#" className="cancel_btn">Cancel</a>
+            <a href="#" className="cancel_btn" onClick={this.cancelAction.bind(this)}>Cancel</a>
           </div>
         </div>
       )

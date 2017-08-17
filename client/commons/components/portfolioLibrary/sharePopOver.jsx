@@ -122,14 +122,12 @@ export default class SharePopOver extends React.Component {
   sharedStartDate(event) {
     if(event._d) {
       let value = moment(event._d).format('DD-MM-YYYY');
-      console.log('--startDate--', value )
       this.setState({startDate: value})
     }
   }
   sharedEndDate(event) {
     if(event._d) {
       let value = moment(event._d).format('DD-MM-YYYY');
-      console.log('--endDate--', value )
       this.setState({endDate: value})
     }
   }
@@ -198,7 +196,7 @@ export default class SharePopOver extends React.Component {
       isDownloadable: this.state.downloadable
     }
     console.log('--Details--',Details)
-     // this.saveInfo(Details);
+     this.saveInfo(Details);
   }
 
   async saveInfo(Details) {

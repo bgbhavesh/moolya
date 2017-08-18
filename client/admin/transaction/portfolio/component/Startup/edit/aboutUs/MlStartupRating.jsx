@@ -7,11 +7,14 @@ var Select = require('react-select');
 var Rating = require('react-rating');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 
+const KEY = 'rating'
+
 export default class MlStartupRating extends React.Component{
   constructor(props, context){
     super(props);
     this.state={
       data:this.props.ratingDetails || {},
+      privateKey: {}
     }
     this.onRatingChange.bind(this);
   }
@@ -30,16 +33,27 @@ export default class MlStartupRating extends React.Component{
       this.setState({data: this.context.startupPortfolio.rating});
     }
   }
-  onClick(field,e){
+  onClick(fieldName, field, e){
+    var isPrivate = false;
     let details = this.state.data||{};
     let key = e.target.id;
     details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
       details=_.extend(details,{[key]:true});
+      isPrivate = true;
     }else{
       details=_.extend(details,{[key]:false});
     }
+
+    var privateKey = {
+      keyName: fieldName,
+      booleanKey: field,
+      isPrivate: isPrivate,
+      tabName: KEY
+    }
+    this.setState({privateKey: privateKey})
+
     this.setState({data:details}, function () {
       this.sendDataToParent()
     })
@@ -54,7 +68,8 @@ export default class MlStartupRating extends React.Component{
   }
   sendDataToParent(){
     let data = this.state.data
-    this.props.getStartupRating(data)
+
+    this.props.getStartupRating(data, this.state.privateKey)
   }
   render(){
     let rating = parseInt(this.state.data && this.state.data.rating?this.state.data.rating:0);
@@ -66,7 +81,7 @@ export default class MlStartupRating extends React.Component{
           <div className="panel panel-default panel-form">
             <div className="panel-body">
               <div className="form-group nomargin-bottom">
-                <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isRatingPrivate" onClick={this.onClick.bind(this, "isRatingPrivate")}/><input type="checkbox" className="lock_input" id="isRatingPrivate" checked={this.state.data.isRatingPrivate}/>
+                <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isRatingPrivate" onClick={this.onClick.bind(this, "rating", "isRatingPrivate")}/>
                 <div className="star_ratings">
                   <Rating
                     empty="fa fa-star-o empty"

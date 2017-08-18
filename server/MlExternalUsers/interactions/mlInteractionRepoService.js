@@ -238,6 +238,21 @@ class MlInteractionService{
               'fromUserType': fromUserType
             });
             break;
+          case 'share':
+            new MlTransactionsHandler().recordTransaction({
+              'fromUserId': fromUserId,
+              'moduleName': 'interaction',
+              'activity': 'share',
+              'transactionType': 'interaction',
+              'userId': userId,
+              'activityDocId': resourceId,
+              'docId': portfolioId,
+              'transactionDetails': 'share data',
+              'context': context || {},
+              'transactionTypeId': "interaction",
+              'fromUserType': fromUserType
+            });
+            break;
         }
       } catch (e) {
         //console

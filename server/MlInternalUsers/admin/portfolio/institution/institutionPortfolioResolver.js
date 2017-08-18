@@ -1,7 +1,8 @@
 import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
 import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
-import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
+import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification';
+import portfolioValidationRepo from '../portfolioValidation';
 var _ = require('lodash')
 var extendify = require('extendify');
 
@@ -71,7 +72,6 @@ MlResolver.MlMutationResolver['updateInstitutePortfolio'] = (obj, args, context,
     }
   }
 }
-
 
 MlResolver.MlQueryResolver['fetchInstitutePortfolioManagement'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {
@@ -192,6 +192,23 @@ MlResolver.MlQueryResolver['fetchInstitutePortfolioCharts'] = (obj, args, contex
   }
 }
 
+
+MlResolver.MlQueryResolver['fetchInstituteDetails'] = (obj, args, context, info) => {
+  if(_.isEmpty(args))
+    return;
+
+  var key = args.key;
+  var portfoliodetailsId = args.portfoliodetailsId
+  var institutePortfolio = MlInstitutionPortfolio.findOne({"portfolioDetailsId": portfoliodetailsId})
+  if (institutePortfolio && institutePortfolio.hasOwnProperty(key)) {
+    var object = institutePortfolio[key];
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    institutePortfolio[key] = filteredObject
+    return institutePortfolio;
+  }
+
+  return;
+}
 updateArrayofObjects = (updateFor, source) =>{
   if(_.isArray(updateFor) && _.isArray(source)){
     _.each(updateFor, function (obj) {

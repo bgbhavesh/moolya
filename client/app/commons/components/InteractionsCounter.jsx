@@ -39,11 +39,11 @@ export default class InteractionsCounter extends React.Component{
 
   render(){
     let config = [
-      {name: 'like',displayName:'Like',iconClass: 'ml fa fa-thumbs-o-up'},
+      {name: 'like',displayName:'Like',iconClass: 'ml my-ml-my_likes_2'},
       {name: 'connect', displayName:'Connections',iconClass: 'ml flaticon-ml-handshake'},
       {name: 'collaborate',displayName:'Collaborations',iconClass: 'ml flaticon-ml-networking'},
-      {name: 'favourite',displayName:'Favourites',iconClass: 'ml flaticon-ml-shapes'},
-      {name: 'view',displayName:'Views',iconClass: 'ml flaticon-ml-visibility'},
+      {name: 'favourite',displayName:'Favourites',iconClass: 'ml my-ml-favourites'},
+      {name: 'view',displayName:'Views',iconClass: 'ml my-ml-browser_3'},
       {name: 'partner', displayName:'Partners',iconClass: 'ml flaticon-ml-support'},
       {name: 'enquire',displayName:'Enquiries',iconClass: 'ml flaticon-ml-handshake-1'}
     ];

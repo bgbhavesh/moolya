@@ -6,11 +6,14 @@ export default class MlConnectionRequestPresentation extends React.Component {
 
   componentDidMount() {
     $('.float-label').jvFloat();
+
+  }
+  componentWillMount() {
+    console.log('---this.props---', this.props.data)
   }
 
   render() {
-    console.log('MlPre: ',this.props);
-    const { userDetails, activityLog, canAccept, canReject } = this.props;
+    const { userDetails, activityLog, data, canReject , showAcceptAndReject} = this.props;
     let transId = Math.random().toString(36).slice(2); //userDetails.userId;
     return (
       <div className="ml_tabs">
@@ -85,8 +88,8 @@ export default class MlConnectionRequestPresentation extends React.Component {
               </div>
               <div className="col-md-6">
                 <div className="ml_btn">
-                  <a href="" className="save_btn" onClick={this.props.acceptConnectionHandler.bind(this)}>Accept</a>
-                  <a href="" className="cancel_btn" onClick={this.props.rejectConnectionHandler.bind(this)}>Reject</a>
+                  {showAcceptAndReject?<a href="" className="save_btn" onClick={this.props.OnBoardHandler.bind(this, data._id, activityLog.type, 'accept')}>Accept</a>:""}
+                  {showAcceptAndReject?<a href="" className="cancel_btn" onClick={this.props.OnBoardHandler.bind(this, data._id, activityLog.type, 'reject')}>Reject</a>:""}
                 </div>
               </div>
             </div>

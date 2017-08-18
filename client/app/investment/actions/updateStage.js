@@ -23,3 +23,24 @@ export async function updateStageActionHandler(stageId,stage) {
   const id = result.data.updateStage;
   return id
 }
+
+
+export async function updateStageForOnBoardActionHandler(transactionLogId,transactionType, status) {
+  const result = await appClient.mutate({
+    mutation: gql`
+      mutation($transactionLogId:String,$transactionType:String,$status:String){
+        updateOnBoardStage(transactionLogId:$transactionLogId,transactionType:$transactionType, status:$status){
+          success
+          result
+        }
+      }
+    `,
+    variables: {
+      transactionLogId,
+      transactionType,
+      status
+    }
+  })
+  const id = result.data.updateOnBoardStage;
+  return id
+}

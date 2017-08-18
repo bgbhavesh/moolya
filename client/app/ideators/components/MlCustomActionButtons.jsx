@@ -121,12 +121,12 @@ export default class MlCustomActionButtons extends React.Component {
                 <ul>
                   <li><a href="#" id="pop_connect" onClick={this.actionClick.bind(this, "pop_connect")}><span
                     className="ml flaticon-ml-handshake"></span><br />Connect</a></li>
-                  <li><a href="#"><span className="ml flaticon-ml-shapes"></span><br />Favorites</a></li>
+                  <li><a href="#"><span className="ml my-ml-favourites"></span><br />Favorites</a></li>
                   <li><a href="#" id="pop_inquiry" onClick={this.actionClick.bind(this, "pop_inquiry")}><span
                     className="ml flaticon-ml-support"></span><br />Inquiry</a></li>
                   <li><a href="#" id="pop_review" onClick={this.actionClick.bind(this, "pop_review")}><span
                     className="ml flaticon-ml-note"></span><br />Review</a></li>
-                  <li><a href="#"><span className="ml flaticon-ml-interface"></span><br />Wishlist</a></li>
+                  <li><a href="#"><span className="ml my-ml-mywishlist"></span><br />Wishlist</a></li>
                   <li><a href="#"><span className="ml flaticon-ml-cloud-computing"></span><br />Upload</a></li>
                   <li><a href="#"><span className="ml flaticon-ml-cloud-computing-1"></span><br />Download</a></li>
                   <li><a href="#"><span className="ml flaticon-ml-share-arrow"></span><br />Share</a></li>

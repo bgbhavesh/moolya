@@ -63,7 +63,7 @@ if(Meteor.isServer){
           //   "uniqueId" : "myInvestment"
           // },
           {
-              "image":"fa fa-money",
+              "image":"ml my-ml-Referral_Invite",
               "link": "/app/referalInvities",
               "isLink" : true,
               "isMenu" : true,

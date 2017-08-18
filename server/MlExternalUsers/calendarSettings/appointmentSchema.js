@@ -152,12 +152,31 @@ let appointment=`
     appointments: [myAppointmentData]
   }
   
+  type AppointmentDuration {
+    hours: Int
+    minutes: Int
+  }
+  
+  type selfTask {
+    _id: String
+    profileId: String
+    name: String
+    mode: String
+    about: String
+    industries: [String]
+    conversation: [String]
+    duration: AppointmentDuration
+    frequency: String
+    expectedInput: String
+    expectedOutput: String
+  }
   type Query {
      fetchMyAppointmentByStatus(status: String): [Appointment]
      fetchAllProfileAppointmentCounts: profileAppointment
      fetchProfileAppointmentCounts( profileId: String ): profileAppointment
      fetchServiceSeekerList(profileId: String!, serviceId: String): [serviceSeekerList]
      fetchMyAppointment(profileId: String!, day: Int, month: Int, year: Int): [myAppointmentsResponse]
+     fetchSelfTask(selfTaskId: String): selfTask
   }
   
   type Mutation {

@@ -725,3 +725,14 @@ MlResolver.MlMutationResolver["updateAppointmentByStatus"] = (obj, args, context
   }
 
 };
+
+MlResolver.MlQueryResolver['fetchSelfTask'] = (obj, args, context, info) => {
+  let result = mlDBController.findOne('MlAppointmentTask', {_id: args.selfTaskId} , context);
+  if (result) {
+    return result;
+  } else  {
+    let code = 404;
+    let response = new MlRespPayload().errorPayload('Appointment self task not found', code);
+    return response;
+  }
+};

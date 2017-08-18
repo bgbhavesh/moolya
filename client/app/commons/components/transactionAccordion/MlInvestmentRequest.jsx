@@ -4,14 +4,16 @@
 import React, {Component} from 'react';
 import MlInvestmentRequestPresentation from './MlInvestmentRequestPresentation';
 import {fetchConnectionRequestHandler,acceptConnectionActionHandler,rejectConnectionActionHandler} from '../../../appActions/actions/connectActionHandler';
+import {updateStageForOnBoardActionHandler} from '../../../../app/investment/actions/updateStage';
+
 
 export default class MlInvestmentRequest extends Component{
   constructor(props){
     super(props);
     this.fetchConnectionDetails.bind(this);
-    this.state={'connectionId':null,'data':{}};
-    this.acceptConnectionHandler = this.acceptConnectionHandler.bind(this);
-    this.rejectConnectionHandler = this.rejectConnectionHandler.bind(this);
+    this.state={'connectionId':null,'data':{}, showAcceptAndReject: true};
+    // this.acceptConnectionHandler = this.acceptConnectionHandler.bind(this);
+    // this.rejectConnectionHandler = this.rejectConnectionHandler.bind(this);
     return this;
   }
 
@@ -28,13 +30,14 @@ export default class MlInvestmentRequest extends Component{
     await this.fetchConnectionDetails();
   }
 
-  async acceptConnectionHandler(){
-    var response=await acceptConnectionActionHandler({'connectionId':this.state.connectionId});
+  async OnBoardHandler(transactionLogId, transactionType, status, that){
+    var response=await updateStageForOnBoardActionHandler(transactionLogId, transactionType, status);
     if(response){
-      toastr.success("connection accepted");
+      toastr.success(`onBoard request ${status}ed successfully`);
+      this.setState({showAcceptAndReject : false})
       await this.fetchConnectionDetails();
     }else{
-      toastr.error("Failed to accept the connect request");
+      toastr.error("Failed to accept the onBoard request");
     }
   }
 
@@ -79,9 +82,9 @@ export default class MlInvestmentRequest extends Component{
         <MlInvestmentRequestPresentation
           userDetails={userDetails}
           activityLog={activityLog}
-          canAccept={this.state.data.canAccept}
-          canReject={this.state.data.canReject}
-          acceptConnectionHandler={this.acceptConnectionHandler}
+          data={data}
+          OnBoardHandler={this.OnBoardHandler}
+          showAcceptAndReject={this.state.showAcceptAndReject}
           rejectConnectionHandler={this.rejectConnectionHandler}/>
       </div>
     )

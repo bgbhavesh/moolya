@@ -33,6 +33,7 @@ let stage=`
     type Mutation {
         createStage(stage:stage):response
         updateStage(stageId:String, stage:stage):response
+        updateOnBoardStage(transactionLogId: String, transactionType: String, status: String):response
     }
 `;
 
@@ -45,6 +46,7 @@ let supportedApi = [
 
   {api:'createStage', actionName:'CREATE', moduleName:"OFFICE", isAppWhiteList:true},
   {api:'updateStage', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList:true},
+  {api:'updateOnBoardStage', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList:true}
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

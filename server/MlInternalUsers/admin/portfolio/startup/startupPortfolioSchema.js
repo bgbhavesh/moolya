@@ -64,10 +64,11 @@ let startupPortfolioSchema = `
        isAwardsPrivate : Boolean
        linkedInUrl : String
        isLinkedInUrlPrivate : Boolean
-       about : String
+       managmentAbout : String
        isAboutPrivate:Boolean
        logo:imagesTypeSchema,
-       index: Int
+       index: Int,
+       privateFields:[PrivateKeys]
     }
     
  
@@ -80,6 +81,7 @@ let startupPortfolioSchema = `
         isDescriptionPrivate:Boolean,
         makePrivate:Boolean,
         index:Int,
+        privateFields:[PrivateKeys]
     }
     
     type branchesOutput{
@@ -110,6 +112,7 @@ let startupPortfolioSchema = `
         logo:imagesTypeSchema,
         makePrivate:Boolean,
         index:Int
+        privateFields:[PrivateKeys]
         
     }
     
@@ -124,7 +127,7 @@ let startupPortfolioSchema = `
         logo:imagesTypeSchema,
         makePrivate:Boolean,
         index:Int
-        
+        privateFields:[PrivateKeys]
     }
     
     type technologiesOutput{
@@ -136,42 +139,47 @@ let startupPortfolioSchema = `
         logo:imagesTypeSchema,
         makePrivate:Boolean,
         index:Int
+        privateFields:[PrivateKeys]
     }
     
     type investorOutput{
-        name:String,
+        investorName:String,
         fundingType:String,
         fundingTypeId:String,
         investmentAmount:String,
-        description:String,
+        investorDescription:String,
         isNamePrivate:Boolean,
         isInvestmentAmountPrivate:Boolean,
         isDescriptionPrivate:Boolean,
         logo:imagesTypeSchema,
         makePrivate:Boolean
         index: Int
+        privateFields:[PrivateKeys]
     }
     
     type lookingForOutput{
         lookingForName:String,
         typeId:String,
         isTypePrivate:Boolean,
-        description:String,
+        lookingDescription:String,
         isDescriptionPrivate:Boolean,
         logo:imagesTypeSchema,
         makePrivate:Boolean
         index: Int
+        privateFields:[PrivateKeys]
     }
     
 
     type informationOutput{
        description:String,
        isDescriptionPrivate:Boolean
+       privateFields:[PrivateKeys]
     }
     
     type serviceProductsOutput{
         description:String,
         isDescriptionPrivate:Boolean
+        privateFields:[PrivateKeys]
     }
     
     type imageFilesInputSchemaOutput{
@@ -184,6 +192,7 @@ let startupPortfolioSchema = `
     type legalIssueOutput{
         description:String,
         isDescriptionPrivate:Boolean
+        privateFields:[PrivateKeys]
     }
     
     type dataOutput{
@@ -196,7 +205,8 @@ let startupPortfolioSchema = `
       cashFlow: [imagesTypeSchema]
       shareHoldings: [imagesTypeSchema]
       capitalStructure: [imagesTypeSchema]
-      ratio: [imagesTypeSchema]
+      ratio: [imagesTypeSchema],
+      privateFields:[PrivateKeys]
     }
     
     
@@ -205,7 +215,8 @@ let startupPortfolioSchema = `
         description : String
         annotatorId : String
         isLogoPrivate :Boolean
-        isDescriptionPrivate : Boolean
+        isDescriptionPrivate : Boolean,
+        privateFields:[PrivateKeys]
     }
     
     type awardsRecognitionOutput{
@@ -214,30 +225,35 @@ let startupPortfolioSchema = `
           isAwardPrivate:Boolean
           year:String
           isYearPrivate:Boolean
-          description:String
+          awardsDescription:String
           isDescriptionPrivate:Boolean
           logo:imagesTypeSchema,
           makePrivate:Boolean,
-          index: Int
+          index: Int,
+          privateFields:[PrivateKeys]
     }
 
     type membershipsOutput{
-        description:String, 
-        isDescriptionPrivate :Boolean
+        membershipDescription:String, 
+        isDescriptionPrivate :Boolean,
+        privateFields:[PrivateKeys]
     }
     
     type compliancesOutput{
-        description:String, 
-        isDescriptionPrivate :Boolean
+        complianceDescription:String, 
+        isDescriptionPrivate :Boolean,
+        privateFields:[PrivateKeys]
     }
     
     type licensesOutput{
-        description:String, 
-        isDescriptionPrivate :Boolean
+        licenseDescription:String, 
+        isDescriptionPrivate :Boolean,
+        privateFields:[PrivateKeys]
     }
     type ratingOutput{,
         rating:String
-        isRatingPrivate:Boolean
+        isRatingPrivate:Boolean,
+        privateFields:[PrivateKeys]
     }
     type startupPortfolioAboutUsOutput{
         portfolioDetailsId  : String
@@ -250,7 +266,8 @@ let startupPortfolioSchema = `
         branches            : [branchesOutput]
         clients             : [clientsOutput]
         legalIssue          : legalIssueOutput
-        data                : dataOutput
+        data                : dataOutput,
+        privateFields:[PrivateKeys]
     }
 
    type EmploymentOfCompany{
@@ -260,7 +277,8 @@ let startupPortfolioSchema = `
       eofToMonth: String
       eofToYear: String
       eofNumberOfEmployment: Int
-      index : Int
+      index : Int,
+      privateFields:[PrivateKeys]
    }
     type ProfitRevenueLiability{
       prlEntityType: String
@@ -271,13 +289,15 @@ let startupPortfolioSchema = `
       pelValueType: String
       prlValue: Int
       prlabout:String
-      index : Int
+      index : Int,
+      privateFields:[PrivateKeys]
     }
     type ReviewOfCompany{
       rofYear: String
       rofValue: Int
       rofAbout: String
-      index : Int
+      index : Int,
+      privateFields:[PrivateKeys]
     }
     type EmployeeBreakupDepartment{
       ebdFromMonth: String
@@ -288,7 +308,8 @@ let startupPortfolioSchema = `
       ebdNumberOfEmployment: Int
       ebdAbout: String
       index : Int
-      ebdDepartmentName:String
+      ebdDepartmentName:String,
+      privateFields:[PrivateKeys]
     }
         
    type chartsOutput{
@@ -296,7 +317,19 @@ let startupPortfolioSchema = `
       profitRevenueLiabilityChart:[ProfitRevenueLiability]
       reviewOfCompanyChart:[ReviewOfCompany]
       employeeBreakupDepartmentChart:[EmployeeBreakupDepartment]
-    }
+   }
+   
+   type StartupPortfolio{
+      management        : [startupManagementOutput],
+      investor          : [investorOutput],
+      data              : dataOutput,
+      charts            : chartsOutput,
+      awardsRecognition : [awardsRecognitionOutput],
+      memberships       : membershipsOutput,
+      compliances       : compliancesOutput,
+      licenses          : licensesOutput,
+      lookingFor        : [lookingForOutput]
+   }
     
     
     
@@ -336,7 +369,7 @@ let startupPortfolioSchema = `
        isAwardsPrivate : Boolean
        linkedInUrl : String
        isLinkedInUrlPrivate : Boolean
-       about : String
+       managmentAbout : String
        isAboutPrivate:Boolean
        logo:logo
        index: Int
@@ -407,12 +440,12 @@ let startupPortfolioSchema = `
     }
     
     input investor{
-        name:String,
+        investorName:String,
         fundingType:String,
         fundingTypeId:String,
         investmentAmount:String,
         investorImage:String,
-        description:String,
+        investorDescription:String,
         isNamePrivate:Boolean,
         isInvestorImagePrivate:Boolean,
         isInvestmentAmountPrivate:Boolean,
@@ -426,7 +459,7 @@ let startupPortfolioSchema = `
         lookingForName:String,
         typeId:String,
         isTypePrivate:Boolean,
-        description:String,
+        lookingDescription:String,
         isDescriptionPrivate:Boolean,
         logo:logo,
         makePrivate:Boolean
@@ -486,7 +519,7 @@ let startupPortfolioSchema = `
           isAwardPrivate:Boolean
           year:String
           isYearPrivate:Boolean
-          description:String
+          awardsDescription:String
           isDescriptionPrivate:Boolean
           makePrivate:Boolean
           logo : logo,
@@ -494,19 +527,20 @@ let startupPortfolioSchema = `
     }
 
     input memberships{
-        description:String, 
+        membershipDescription:String, 
         isDescriptionPrivate :Boolean
     }
     
     input compliances{
-         description:String, 
+        complianceDescription:String, 
         isDescriptionPrivate :Boolean
     }
     
     input licenses{
-         description:String, 
+        licenseDescription:String, 
         isDescriptionPrivate :Boolean
     }
+    
     input employmentOfCompany{
       eofAbout: String
       eofFromMonth: String
@@ -587,8 +621,8 @@ let startupPortfolioSchema = `
         fetchStartupPortfolioAwards(portfoliodetailsId:String!):[awardsRecognitionOutput]
         fetchStartupPortfolioCharts(portfoliodetailsId:String):chartsOutput
         fetchStartupPortfolioData(portfoliodetailsId:String):dataOutput
-        
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
+        fetchStartupDetails(portfoliodetailsId:String!, key:String):StartupPortfolio
     }
     
     type Mutation{
@@ -612,6 +646,7 @@ let supportedApi = [
   {api:'fetchStartupPortfolioCharts', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchStartupPortfolioData', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchPortfolioMenu', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchStartupDetails', actionName:'READ', moduleName:"PORTFOLIO"},
 
   {api:'createStartupPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
   {api:'updateStartupPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},

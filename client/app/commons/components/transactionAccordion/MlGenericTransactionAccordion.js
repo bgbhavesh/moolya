@@ -5,6 +5,7 @@
 import React, {Component} from "react";
 import MlAppTransaction from '../../../profile/office/components/officeTransaction/MlAppTransaction'
 import MlConnectionRequest from './MlConnectionRequest';
+import MlInvestmentRequest from './MlInvestmentRequest'
 
 export default function MlGenericTransactionAccordion(props) {
   let data = props.data || {}
@@ -20,6 +21,10 @@ export default function MlGenericTransactionAccordion(props) {
     case 'connectionRequest':
     case 'interaction': {
       return <MlConnectionRequest data={data}/>
+      break;
+    }
+    case 'investments': {
+      return <MlInvestmentRequest data={data}/>
       break;
     }
     default :

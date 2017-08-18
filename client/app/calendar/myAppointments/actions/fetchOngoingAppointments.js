@@ -4,18 +4,20 @@
 import gql from "graphql-tag";
 import {appClient} from "../../../core/appConnection";
 
-export async function ongoingAppointmentActionHandler() {
+export async function ongoingAppointmentActionHandler(status) {
   const result = await appClient.query({
     query: gql`
-      query {
-        fetchMyAppointmentByStatus{
+      query($status: String) {
+        fetchMyAppointmentByStatus(status: $status){
           _id
+          appointmentType
+          appointmentId
           appointmentInfo {
             resourceType
             resourceId
             serviceCardId
             serviceName
-            taskId
+            taskName
             sessionId
             serviceOrderId
           }
@@ -24,6 +26,9 @@ export async function ongoingAppointmentActionHandler() {
         }
       }
     `,
+    variables: {
+      status
+    },
     forceFetch: true
   });
   const data = result.data.fetchMyAppointmentByStatus;

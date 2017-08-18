@@ -1,5 +1,5 @@
 /**
- * Appointment completed component
+ * Appointment pending component
  * @Author :: Birendra Kumar
  * @Dated :: 17/08/2017
  */
@@ -8,8 +8,8 @@
 import React, {Component} from 'react';
 import MlAppMyAppointmentCommon from './MlAppMyAppointmentCommon';
 
-export default class MlAppCompletedMyAppointment extends Component{
+export default class MlAppPendingMyAppointment extends Component{
   render() {
-    return (<MlAppMyAppointmentCommon status="Completed" />);
+    return (<MlAppMyAppointmentCommon status="Pending" />);
   }
 };

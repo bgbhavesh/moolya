@@ -97,9 +97,9 @@ export default class MlIdeatorDetails extends React.Component{
         this.setState({loading: false, data: response,profilePic:response.profilePic});
       }
 
-      _.each(response.privateFields, function (pf) {
-          $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
+        _.each(response.privateFields, function (pf) {
+            $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+        })
 
     }else{
       this.setState({loading: false, data: that.context.ideatorPortfolio.portfolioIdeatorDetails});

@@ -488,7 +488,7 @@ let BackEndUser = `
         resetPassword (password: String!, moduleName:String, actionName:String):response
         addUserProfile(userId:String, user:userObject): String
         assignUsers(userId:String, user:userObject, moduleName:String, actionName:String): response
-        deActivateUser(userId:String, deActive:Boolean, moduleName:String, actionName:String): response
+        deActivateUser(userId:String, isActive:Boolean): response
         updateDataEntry(moduleName: String, actionName: String, attributes:attributesObject):response
         updateSettings(userId: String, moduleName: String, actionName: String, settingsAttributes:settingsAttributesObject): response
         updateAddressBookInfo(userId: String, moduleName: String, actionName: String,type:String, addressBook:addressBook): response

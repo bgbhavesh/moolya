@@ -533,21 +533,26 @@ MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context
 }
 
 MlResolver.MlMutationResolver['deActivateUser'] = (obj, args, context, info) => {
-    // let user = Meteor.users.findOne({_id: args.userId});
+  var loggedInUser = new MlAdminUserContext().userProfileDetails(context.userId);
+  if (loggedInUser && loggedInUser.hierarchyLevel == 4) {
     let user = mlDBController.findOne('users', {_id: args.userId}, context)
     let resp;
-    if(user){
-        // resp = Meteor.users.update({_id:args.userId}, {$set:{"profile.isActive":args.isActive}});
-        resp = mlDBController.update('users', args.userId, {"profile.isActive":args.isActive}, {$set:true}, context)
-    }
-
-    if(resp){
-        resp = new MlRespPayload().successPayload("User Deactivated Successfully", 200);
+    if (user) {
+      resp = mlDBController.update('users', args.userId, {"profile.isActive": args.isActive}, {$set: true}, context)
+      if (resp) {
+        resp = new MlRespPayload().successPayload("User Updated Successfully", 200);
         return resp
+      } else {
+        resp = new MlRespPayload().errorPayload("Error in update", 400);
+        return resp
+      }
+    }else {
+      return new MlRespPayload().errorPayload("Invalid user", 400);
     }
-
-    resp = new MlRespPayload().errorPayload("Unable to deactivate", 400);
+  } else {
+    let resp = new MlRespPayload().errorPayload("Not Authorised", 400);
     return resp
+  }
 }
 
 MlResolver.MlMutationResolver['assignUsers'] = (obj, args, context, info) => {

@@ -10,7 +10,7 @@ import FontAwesome from 'react-fontawesome';
 
 // import custom method(s) and component(s)
 import ScrollArea from 'react-scrollbar';
-import {findTaskActionHandler} from '../actions/fetchOngoingAppointments';
+import {findTaskActionHandler} from '../../actions/fetchOngoingAppointments';
 
 
 export default class MlAppOngoingMyAppointmentInfo extends Component{
@@ -29,7 +29,7 @@ export default class MlAppOngoingMyAppointmentInfo extends Component{
   componentDidMount() {
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight - (290 + $('.admin_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight - (290 + $('.app_header').outerHeight(true)));
   }
 
   /**

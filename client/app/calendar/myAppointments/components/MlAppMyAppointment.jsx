@@ -4,17 +4,22 @@
 import React from 'react';
 import Tabs from 'react-responsive-tabs';
 import 'react-responsive-tabs/styles.css';
-import MlAppOngoingMyAppointment from './MlAppOngoingMyAppointment';
+import MlAppOngoingMyAppointment from './mlAppServiceTaskAppointment/MlAppOngoingMyAppointment';
 import MlAppCompletedMyAppointment from './MlAppCompletedMyAppointment';
 import MlAppRequestedMyAppointment from './MlAppRequestedMyAppointment';
+import MlAppPendingMyAppointment from './MlAppPendingMyAppointment';
+import MlAppRejectedMyAppointment from './MlAppRejectedMyAppointment';
+import MlAppCurrentMyAppointment from './MlAppCurrentMyAppointment';
 
 export default class MlAppMyAppointment extends React.Component {
 
   render(){
     let MlTabs = [
-      { name: 'Ongoing', tabContent: <MlAppOngoingMyAppointment/> },
-      { name: 'Completed', tabContent: <MlAppCompletedMyAppointment/> },
-      { name: 'Requested', tabContent: <MlAppRequestedMyAppointment/> }
+      { name: 'Pending', tabContent: <MlAppPendingMyAppointment /> },
+      { name: 'Current', tabContent: <MlAppCurrentMyAppointment /> },
+      { name: 'Completed', tabContent: <MlAppCompletedMyAppointment /> },
+      { name: 'Rejected', tabContent: <MlAppRejectedMyAppointment /> },
+      { name: 'Requested', tabContent: <MlAppRequestedMyAppointment /> }
     ];
 
     function getTabs() {

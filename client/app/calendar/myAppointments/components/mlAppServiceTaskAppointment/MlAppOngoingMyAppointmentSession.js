@@ -6,7 +6,7 @@ import Datetime from "react-datetime";
 import Moment from "moment";
 import ScrollArea from 'react-scrollbar';
 
-import {findTaskActionHandler} from '../actions/fetchOngoingAppointments';
+import {findTaskActionHandler} from '../../actions/fetchOngoingAppointments';
 
 export default class MlAppOngoingMyAppointmentSession extends Component{
 
@@ -30,6 +30,9 @@ export default class MlAppOngoingMyAppointmentSession extends Component{
       pagination: '.swiper-pagination',
       paginationClickable: true
     });
+    //$('.float-label').jvFloat();
+    var WinHeight = $(window).height();
+    $('.step_form_wrap').height(WinHeight-(310+$('.app_header').outerHeight(true)));
   }
 
   /**

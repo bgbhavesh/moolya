@@ -210,6 +210,21 @@ export default class MlAppActionComponent extends React.Component {
         actionName: 'follow',
         displayName:'Follow',
         iconClass: 'ml flaticon-ml-shapes'
+      },
+      {
+        actionName: 'accept',
+        displayName:'Accept',
+        iconClass: 'ml ml-save'
+      },
+      {
+        actionName: 'reject',
+        displayName:'Reject',
+        iconClass: 'ml ml-save'
+      },
+      {
+        actionName: 'complete',
+        displayName:'Complete',
+        iconClass: 'ml ml-save'
       }
     ]
     let actionOptions= this.props.actionOptions|| [];

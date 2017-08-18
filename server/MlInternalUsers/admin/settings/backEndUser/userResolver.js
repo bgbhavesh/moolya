@@ -335,8 +335,8 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
       if (args.subChapterId) {
         let subChapter = mlDBController.findOne('MlSubChapters', {_id: args.subChapterId, isActive: true}, context)
         if (subChapter) {
-          var isMoolya = subChapter.isDefaultSubChapter
-          let departments = mlDBController.find('MlDepartments', {'$or':[{isSystemDefined: true, isActive : true}, {$and: [{isMoolya: isMoolya}, {"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}]}]}, context).fetch();
+          var isMoolya = subChapter.isDefaultSubChapter    //{isMoolya: isMoolya},
+          let departments = mlDBController.find('MlDepartments', {'$or':[{isSystemDefined: true, isActive : true}, {$and: [{"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}]}]}, context).fetch();
           if (departments && departments.length > 0) {
             departments.map(function (department) {
 
@@ -346,7 +346,6 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
                 depUsers.map(function (user) {
                   let userProfiles = user.profile.InternalUprofile.moolyaProfile.userProfiles;
                   if ((user.profile.InternalUprofile.moolyaProfile.globalAssignment || user.profile.InternalUprofile.moolyaProfile.userProfiles.length == 0) && (user.profile.isActive)) {
-                    // user.username = user.profile.InternalUprofile.moolyaProfile.firstName + " " + user.profile.InternalUprofile.moolyaProfile.lastName;
                     user.username = user.profile.InternalUprofile.moolyaProfile.displayName ? user.profile.InternalUprofile.moolyaProfile.displayName : user.profile.firstName + " " + user.profile.lastName;
                     if (_.isEmpty(_.find(users, user))) {
                       users.push(user)
@@ -355,7 +354,6 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
                   else if (!user.profile.InternalUprofile.moolyaProfile.globalAssignment && userProfiles.length > 0 && user.profile.isActive) {
                     userProfiles.map(function (profile) {
                       if (profile.clusterId == args.clusterId) {
-                        // user.username = user.profile.InternalUprofile.moolyaProfile.firstName + " " + user.profile.InternalUprofile.moolyaProfile.lastName;
                         user.username = user.profile.InternalUprofile.moolyaProfile.displayName ? user.profile.InternalUprofile.moolyaProfile.displayName : user.profile.firstName + " " + user.profile.lastName;
                         if (_.isEmpty(_.find(users, user))) {
                           users.push(user)
@@ -369,7 +367,6 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
                 let depUsersNon = mlDBController.find('users', nonMoolyaUsersQuery, context).fetch();
                 if (depUsersNon && depUsersNon.length > 0) {
                   _.each(depUsersNon, function (user, key) {
-                    // user.username = user.profile.InternalUprofile.moolyaProfile.firstName + " " + user.profile.InternalUprofile.moolyaProfile.lastName;
                     user.username = user.profile.InternalUprofile.moolyaProfile.displayName ? user.profile.InternalUprofile.moolyaProfile.displayName : user.profile.firstName + " " + user.profile.lastName;
                     users.push(user)
                   })
@@ -378,12 +375,10 @@ MlResolver.MlQueryResolver['fetchUsersByClusterDepSubDep'] = (obj, args, context
               }
             })
           }
-          // users = _.uniqBy(users, '_id')
         }
       } else {
         let departments = mlDBController.find('MlDepartments', {"$or": [{"depatmentAvailable.cluster": args.clusterId}, {"depatmentAvailable.cluster": "all"}]}, context).fetch();
         if (departments && departments.length > 0) {
-          // {"$or": [{"profile.InternalUprofile.moolyaProfile.assignedDepartment.department": department._id}, {"profile.InternalUprofile.moolyaProfile.globalAssignment": true}]
           departments.map(function (department) {
             let depUsers = mlDBController.find('users', {
               "$and": [{
@@ -761,7 +756,7 @@ MlResolver.MlQueryResolver['fetchUsersForDashboard'] = (obj, args, context, info
       }
       let subChapter = mlDBController.findOne('MlSubChapters', {_id: subChapterId}, context)
 
-      if(cluster.isActive && chapter.isActive && subChapter.isActive){
+      if(cluster.isActive && chapter && chapter.isActive && subChapter && subChapter.isActive){
         queryObj.clusterId = cluster._id;
         queryObj.chapterId = chapterId;
         queryObj.subChapterId = subChapterId;

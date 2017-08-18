@@ -252,7 +252,7 @@ class MlSubChapterAccessControl {
     if (_.isArray(relatedSubChapters)) {
       accessCount = _.indexOf(relatedSubChapters, requestSubChapterId) < 0 ? 0 : 1;
     }
-    if (accessCount < 0) {
+    if (accessCount <= 0) {
       switch (permission) {
         case 'VIEW':
           /**conditions 1)moolya sub chapter check 2)non-moolya sub chapter+view/transact access check*/
@@ -351,7 +351,7 @@ class MlSubChapterAccessControl {
   static setUserContext(context, requestSubChapterId) {
     var userId = context.userId;
     context.requestSubChapterId = requestSubChapterId;
-    var userProfile = new MlAdminUserContext().userProfileDetails(userId);
+    var userProfile = new MlAdminUserContext()._userDefaultProfileDetails(userId);
     /**if its internal user */
     if (userProfile && userProfile.isInternaluser) {
       context.isInternalUser = userProfile.isInternaluser;

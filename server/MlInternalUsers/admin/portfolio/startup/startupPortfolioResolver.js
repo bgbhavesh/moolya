@@ -2,6 +2,7 @@ import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
 import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
+import portfolioValidationRepo from '../portfolioValidation'
 var _ = require('lodash')
 var extendify = require('extendify');
 var _ = require('lodash')
@@ -300,6 +301,25 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioCharts'] = (obj, args, context,
     return startupChartDetailsInsert;
   }
 }*/
+
+MlResolver.MlQueryResolver['fetchStartupDetails'] = (obj, args, context, info) => {
+    if(_.isEmpty(args))
+      return;
+
+    var key = args.key;
+    var portfoliodetailsId = args.portfoliodetailsId
+    var startupPortfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": portfoliodetailsId})
+    if (startupPortfolio && startupPortfolio.hasOwnProperty(key)) {
+      var object = startupPortfolio[key];
+      var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+      startupPortfolio[key] = filteredObject
+      return startupPortfolio;
+    }
+
+    return;
+}
+
+
 
 updateArrayofObjects = (updateFor, source) =>{
   if(_.isArray(updateFor) && _.isArray(source)){

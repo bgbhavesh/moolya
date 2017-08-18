@@ -11,6 +11,7 @@ export async function fetchSelfCreatedInternalTask(status) {
         fetchSelfCreatedInternalTask(status:$status) {
           _id
           name
+          type
           status
         }
       }

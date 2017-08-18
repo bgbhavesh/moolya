@@ -14,6 +14,7 @@ import Datetime from "react-datetime";
 import moment from "moment";
 import {fetchMasterTasks} from '../../actions/fetchMasterInternalTask';
 import {createSelfInternalTask} from '../../actions/createSelfInternalTask';
+import { fetchOfficeActionHandler, getTeamUsersActionHandler } from '../../actions/fetchOffices';
 let FontAwesome = require('react-fontawesome');
 
 /**
@@ -34,7 +35,9 @@ export default class MlAppInternalMyTaskItem extends React.Component{
         dueDate: '',
         resourceId: ''
       },
-      taskList:[]
+      taskList:[],
+      offices:[],
+      users:[]
     };
   }
 
@@ -69,7 +72,71 @@ export default class MlAppInternalMyTaskItem extends React.Component{
         $(this).parent('.switch').removeClass('on');
       }
     });
-    this.fetchMasterTasks();
+    // this.fetchMasterTasks();
+    this.getOffices();
+  }
+
+
+  /**
+   * Method :: getOffices
+   * Desc   :: fetch the offices of user
+   * @returns Void
+   */
+  async getOffices () {
+    let response = await fetchOfficeActionHandler();
+    if(response){
+      this.setState({
+        offices:response
+      })
+    }
+  }
+
+  /**
+   * Method :: getUsers
+   * Desc   :: fetch the users of current team
+   * @returns Void
+   */
+  async getUsers(evt) {
+    const that = this;
+    console.log(evt);
+    let officeId = evt.target.value;
+    const resp = await getTeamUsersActionHandler(officeId);
+    console.log(resp);
+    let users = resp.map(function (user) {
+      let userInfo = {
+        name: user.name,
+        profileId: user.profileId,
+        profileImage: user.profileImage,
+        userId: user.userId
+      };
+      // let isFind = team.users.find(function (teamUser) {
+        // return teamUser.profileId == user.profileId && teamUser.userId == user.userId
+      // });
+      // if (isFind) {
+      //   userInfo.isAdded = true;
+      //   userInfo.isMandatory = isFind.isMandatory;
+      // }
+      return userInfo;
+    });
+    that.setState({
+      users: users
+    });
+    console.log(users);
+  }
+
+  /**
+   * Method :: addUser
+   * Desc   :: add user in team
+   * @param teamIndex :: Integer :: Index of specific team
+   * @param userIndex :: Integer :: Index of specific user
+   * @returns Void
+   */
+  addUser(userIndex){
+    let users = this.state.users;
+    users[userIndex].isAdded = true;
+    this.setState({
+      users: users
+    });
   }
 
   async fetchMasterTasks(){
@@ -91,6 +158,16 @@ export default class MlAppInternalMyTaskItem extends React.Component{
 
   async saveDetails(){
     let dataToInsert = this.state.basicData;
+    let users = this.state.users.filter( (user) => {
+     return user.isAdded
+    }).map( (user) => {
+      return { userId: user.userId, profileId: user.profileId }
+    });
+
+    if(users.length) {
+      dataToInsert.users = users;
+    }
+
     let response = await createSelfInternalTask(dataToInsert);
     if(response) {
       toastr.success(response.result);
@@ -185,6 +262,62 @@ export default class MlAppInternalMyTaskItem extends React.Component{
               </form>
             </div>
           </div>
+
+          <div className="col-md-12 nopadding-left" hidden={ that.state.offices && that.state.offices.length ? false : true } >
+            <div className="panel panel-default cal_view_task">
+              <div className="panel-heading">
+                Select Users
+              </div>
+              <div className="panel-body sug_teams">
+                <div className="col-md-12 nopadding">
+                  <div className="col-md-6 nopadding-right">
+                    <form>
+                      <div className="form-group">
+                        <span className="placeHolder active">Choose team Type</span>
+                        <select defaultValue="0" className="form-control" onChange={(evt)=>that.getUsers(evt)} >
+                          <option selected="true" disabled="disabled" value="0">Select Office Team</option>
+                          { that.state.offices.map(function (office , index) {
+                            return <option key={index} value={office._id}>{ office.officeName + " - " + office.branchType }</option>
+                          })}
+                        </select>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                {/*<div className="col-md-12">*/}
+                  {/*<input type="text" name="search" className="search_field" placeholder="Search.."/>*/}
+                {/*</div>*/}
+                <div className="col-md-12 nopadding att_members" >
+                  <ul className="users_list">
+                    {that.state.users.map(function (user, userIndex) {
+                      return (
+                        <li key={userIndex}>
+                          <a href="">
+                            <img src={user.profileImage ? user.profileImage : "/images/def_profile.png"} /><br />
+                            <div className="tooltiprefer">
+                              <span>{user.name}</span>
+                            </div>
+                            <span className="member_status" onClick={() => that.addUser(userIndex)}>
+                                { user.isAdded ? <FontAwesome name="check" /> : <FontAwesome name="plus" /> }
+                              </span>
+                          </a>
+                          {/*<div className="input_types">*/}
+                            {/*<br />*/}
+                            {/*<input id={"mandatory"+index+userIndex} checked={ user.isMandatory ? true : false } name="Mandatory" type="checkbox" value="Mandatory" onChange={(evt)=>that.updateIsMandatory(evt, index, userIndex)} />*/}
+                            {/*<label htmlFor={"mandatory"+index+userIndex}>*/}
+                              {/*<span><span></span></span>*/}
+                              {/*Mandatory*/}
+                            {/*</label>*/}
+                          {/*</div>*/}
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </ScrollArea>
         <div className="ml_btn" style={{'textAlign':'center'}}>
           <a href="" className="save_btn" onClick={this.saveDetails.bind(this)}>Save</a>

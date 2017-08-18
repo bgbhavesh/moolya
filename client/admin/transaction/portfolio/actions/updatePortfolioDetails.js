@@ -1,5 +1,6 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
+import _ from 'lodash'
 
 export async function updatePortfolioActionHandler(details) {
   let portfoliodetailsId  = details.portfolioId;

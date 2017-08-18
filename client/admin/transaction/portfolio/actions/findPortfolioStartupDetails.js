@@ -644,7 +644,7 @@ export async function fetchStartupDetailsHandler(portfoliodetailsId, key) {
     forceFetch: true
   })
 
-  const response = result.data.fetchStartupDetails;
+  var response = result.data.fetchStartupDetails;
   return response;
 
 }

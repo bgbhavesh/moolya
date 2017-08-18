@@ -186,7 +186,16 @@ let institutePortfolioSchema = `
       ratio: [imagesTypeSchema]
     }
     
-    
+    type InstitutePortfolio{
+      management        : [instituteManagementOutput],
+      data              : dataOutput,
+      charts            : chartsOutput,
+      awardsRecognition : [awardsRecognitionOutput],
+      memberships       : membershipsOutput,
+      compliances       : compliancesOutput,
+      licenses          : licensesOutput      
+   }
+   
     
     input logo{
       fileName : String,
@@ -406,6 +415,7 @@ let institutePortfolioSchema = `
         fetchInstitutePortfolioAwards(portfoliodetailsId:String!):[awardsRecognitionOutput]
         fetchInstitutePortfolioCharts(portfoliodetailsId:String):chartsOutput   
         fetchInstitutePortfolioData(portfoliodetailsId:String):dataOutput
+        fetchInstituteDetails(portfoliodetailsId:String!, key:String):InstitutePortfolio
     }
     
     type Mutation{
@@ -426,6 +436,7 @@ let supportedApi = [
   {api:'fetchInstitutePortfolioAwards', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchInstitutePortfolioCharts', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchInstitutePortfolioData', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchInstituteDetails', actionName:'READ', moduleName:"PORTFOLIO"},
 
   {api:'createInstitutePortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
   {api:'updateInstitutePortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},

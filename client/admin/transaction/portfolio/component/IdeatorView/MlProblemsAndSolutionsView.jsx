@@ -110,6 +110,14 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
 
   componentDidMount(){
     $('.actions_switch').click();
+// don't use it anywhere
+    var WinWidth = $(window).width();
+    var WinHeight = $(window).height();
+
+    $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+200));
+    if(WinWidth > 768){
+      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    }
 
     this.fetchPortfolioInfo();
 
@@ -143,7 +151,7 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
 
         <h2>Problems and Solutions </h2>
 
-
+        <div className="tab_wrap_scroll">
 
         <div id="psContent" className="ml_tabs">
           <ul  className="nav nav-pills">
@@ -188,6 +196,7 @@ export default class MlPortfolioIdeatorProblemsAndSolutionsView extends React.Co
 
           </div>
 
+        </div>
         </div>
           {/*<a href="#" id="annotationss">one</a>*/}
       </div>

@@ -47,7 +47,7 @@ export default class AppActionButtons extends React.Component {
       },
       {
         actionName: 'Share',
-        iconClass: 'ml flaticon-ml-share-arrow'
+        iconClass: 'ml my-ml-share'
       },
       {
         actionName: 'Download',
@@ -59,11 +59,11 @@ export default class AppActionButtons extends React.Component {
       },
       {
         actionName: 'Wishlist',
-        iconClass: 'ml flaticon-ml-interface'
+        iconClass: 'ml my-ml-mywishlist'
       },
       {
         actionName: 'Favorites',
-        iconName: 'ml flaticon-ml-shapes'
+        iconName: 'ml my-ml-favourites'
       },
       {
         actionName: 'edit',

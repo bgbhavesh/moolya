@@ -14,7 +14,7 @@ if(Meteor.isServer){
         "uniqueId" : "dashboard"
       },
       {
-        "image":"ml flaticon-ml-pc-search",
+        "image":"ml my-ml-explore",
         "link": "/app/explore",
         "isLink" : true,
         "isMenu" : true,

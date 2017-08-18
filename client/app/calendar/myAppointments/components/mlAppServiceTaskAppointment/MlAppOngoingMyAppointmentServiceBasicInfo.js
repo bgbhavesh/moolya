@@ -11,7 +11,7 @@ import Datetime from "react-datetime";
 import Moment from "moment";
 import ScrollArea from 'react-scrollbar';
 import { cloneDeep } from 'lodash';
-import {findTaskActionHandler} from '../actions/fetchOngoingAppointments';
+import {findTaskActionHandler} from '../../actions/fetchOngoingAppointments';
 
 
 export default class MlAppOngoingMyAppointmentServiceBasicInfo extends Component {
@@ -27,7 +27,7 @@ export default class MlAppOngoingMyAppointmentServiceBasicInfo extends Component
   componentDidMount() {
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(310+$('.admin_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight-(290+$('.app_header').outerHeight(true)));
   }
 
   async getTask() {

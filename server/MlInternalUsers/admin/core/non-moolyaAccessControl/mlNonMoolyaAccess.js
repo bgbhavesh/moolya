@@ -8,58 +8,57 @@ class MlNonMoolyaAccess {
   constructor() {
   }
 
-  getExternalUserCanSearch(context) {
-    var curUserProfile = new MlAdminUserContext().userProfileDetails(context.userId);
-    if (!curUserProfile.isMoolya) {
-      var matchSubChapter = []
-      var matchChapter = []
-      if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {
-        let subChapterId = curUserProfile.defaultSubChapters ? curUserProfile.defaultSubChapters[0] : ''
-        let subChapterDetails = mlDBController.findOne('MlSubChapters', {
-          _id: subChapterId,
-          isDefaultSubChapter: false
-        }, context)
-        if (subChapterDetails && subChapterDetails.internalSubChapterAccess && subChapterDetails.internalSubChapterAccess.externalUser && subChapterDetails.internalSubChapterAccess.externalUser.canSearch) {
-          matchSubChapter = subChapterDetails.associatedSubChapters ? subChapterDetails.associatedSubChapters : []
-          matchSubChapter = _.concat(curUserProfile.defaultSubChapters, matchSubChapter)
-          matchChapter = this.attachAssociatedChaptersContext(curUserProfile.defaultChapters, matchSubChapter)
-        } else {
-          matchSubChapter = _.concat(curUserProfile.defaultSubChapters)
-          matchChapter = _.concat(curUserProfile.defaultChapters)
-        }
-      }
-      var matchObj= {chapters:matchChapter,subChapters:matchSubChapter}
-      return matchObj
-    } else
-      return true
-  }
+  // getExternalUserCanSearch(context) {
+  //   var curUserProfile = new MlAdminUserContext().userProfileDetails(context.userId);
+  //   if (!curUserProfile.isMoolya) {
+  //     var matchSubChapter = []
+  //     var matchChapter = []
+  //     if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {
+  //       let subChapterId = curUserProfile.defaultSubChapters ? curUserProfile.defaultSubChapters[0] : ''
+  //       let subChapterDetails = mlDBController.findOne('MlSubChapters', {
+  //         _id: subChapterId,
+  //         isDefaultSubChapter: false
+  //       }, context)
+  //       if (subChapterDetails && subChapterDetails.internalSubChapterAccess && subChapterDetails.internalSubChapterAccess.externalUser && subChapterDetails.internalSubChapterAccess.externalUser.canSearch) {
+  //         matchSubChapter = subChapterDetails.associatedSubChapters ? subChapterDetails.associatedSubChapters : []
+  //         matchSubChapter = _.concat(curUserProfile.defaultSubChapters, matchSubChapter)
+  //         matchChapter = this.attachAssociatedChaptersContext(curUserProfile.defaultChapters, matchSubChapter)
+  //       } else {
+  //         matchSubChapter = _.concat(curUserProfile.defaultSubChapters)
+  //         matchChapter = _.concat(curUserProfile.defaultChapters)
+  //       }
+  //     }
+  //     var matchObj= {chapters:matchChapter,subChapters:matchSubChapter}
+  //     return matchObj
+  //   } else
+  //     return true
+  // }
 
   /**
    * checking the condition for the external user only
    * */
-  //todo:// type merge in one function
   /*****************merge the two ['registration && portfolio'] with registation **************************/
-  canExternalUserView(payload, context) {
-    var success = true
-    var userType = mlDBController.findOne('users', {_id: context.userId}) || {}
-    if (userType && userType.profile && !userType.profile.isInternaluser) {
-      var curUserProfile = new MlUserContext().userProfileDetails(context.userId);
-      let accessPortfolio = mlDBController.findOne('MlPortfolioDetails', {_id: payload}) || {}
-      if (accessPortfolio && (accessPortfolio.subChapterId == curUserProfile.subChapterId)) {
-        success = true
-      } else {
-        let subChapter = mlDBController.findOne('MlSubChapters', {
-          _id: curUserProfile.subChapterId,
-          isDefaultSubChapter: false
-        }, context)
-        if (subChapter && subChapter.internalSubChapterAccess && subChapter.internalSubChapterAccess.externalUser && subChapter.internalSubChapterAccess.externalUser.canView)
-          success = true
-        else
-          success = false
-      }
-    }
-    return success
-  }
+  // canExternalUserView(payload, context) {
+  //   var success = true
+  //   var userType = mlDBController.findOne('users', {_id: context.userId}) || {}
+  //   if (userType && userType.profile && !userType.profile.isInternaluser) {
+  //     var curUserProfile = new MlUserContext().userProfileDetails(context.userId);
+  //     let accessPortfolio = mlDBController.findOne('MlPortfolioDetails', {_id: payload}) || {}
+  //     if (accessPortfolio && (accessPortfolio.subChapterId == curUserProfile.subChapterId)) {
+  //       success = true
+  //     } else {
+  //       let subChapter = mlDBController.findOne('MlSubChapters', {
+  //         _id: curUserProfile.subChapterId,
+  //         isDefaultSubChapter: false
+  //       }, context)
+  //       if (subChapter && subChapter.internalSubChapterAccess && subChapter.internalSubChapterAccess.externalUser && subChapter.internalSubChapterAccess.externalUser.canView)
+  //         success = true
+  //       else
+  //         success = false
+  //     }
+  //   }
+  //   return success
+  // }
 
   // canExternalUserViewReg(payload, context) {
   //   var success = true

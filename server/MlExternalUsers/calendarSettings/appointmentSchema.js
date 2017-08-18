@@ -90,6 +90,7 @@ let appointment=`
     serviceCardId: String
     serviceName: String
     taskId: String
+    taskName: String
     sessionId: String
     serviceOrderId: String
   }
@@ -103,6 +104,8 @@ let appointment=`
   
   type Appointment {
     _id: String
+    appointmentType: String
+    appointmentId: String
     client: AppointmentUser
     provider: AppointmentUser
     appointmentInfo: AppointmentInfo
@@ -150,7 +153,7 @@ let appointment=`
   }
   
   type Query {
-     fetchMyAppointmentByStatus: [Appointment]
+     fetchMyAppointmentByStatus(status: String): [Appointment]
      fetchAllProfileAppointmentCounts: profileAppointment
      fetchProfileAppointmentCounts( profileId: String ): profileAppointment
      fetchServiceSeekerList(profileId: String!, serviceId: String): [serviceSeekerList]
@@ -163,6 +166,7 @@ let appointment=`
      bookSelfTaskInternalAppointment( selfInternalAppointmentInfo: selfInternalAppointmentInfo ) : response
      userServiceCardPayment(userServiceCardPaymentInfo: userServiceCardPaymentInfo): response
      bookUserServiceCardAppointment(userServiceCardAppointmentInfo: userServiceCardAppointmentInfo!): response
+     updateAppointmentByStatus(appointmentId: String, status: String): response
   }
 `;
 
@@ -172,5 +176,6 @@ let supportedApi = [
   {api:'bookUserServiceCard', actionName:'CREATE', moduleName:"OFFICE", isWhiteList:true},
   {api:'userServiceCardPayment', actionName:'CREATE', moduleName:"OFFICE", isWhiteList:true},
   {api:'bookUserServiceCardAppointment', actionName:'CREATE', userAction:"CREATEAPPOINTMENT", resourceName:"SERVICECARD", isWhiteList:true},
+  {api:'updateAppointmentByStatus', actionName:'UPDATE', resourceName:"SERVICECARD"},
 ];
 MlResolver.MlModuleResolver.push(supportedApi);

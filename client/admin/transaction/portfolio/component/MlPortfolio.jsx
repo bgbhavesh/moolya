@@ -224,7 +224,7 @@ class MlPortfolio extends React.Component {
     var tabName = ""
     if(privateKey.index >= 0){
       index = privateKey.index
-    }
+    }else index = 0;
     if(privateKey.tabName){
       tabName = privateKey.tabName
     }

@@ -6,6 +6,8 @@ import ScrollArea from "react-scrollbar";
 import MlLoader from "../../../commons/components/loader/loader";
 import {initalizeFloatLabel} from "../../utils/formElemUtil";
 import {findUserRegistrationActionHandler, findUserPortfolioActionHandler} from "../actions/findUsersHandlers";
+import {deActivateUser} from "../actions/updateUsersHandlers";
+import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 import gql from "graphql-tag";
 export default class MlUsersAbout extends Component {
@@ -20,6 +22,7 @@ export default class MlUsersAbout extends Component {
   }
 
   componentWillMount() {
+    this.loggedUserDetails = getAdminUserContext();
     const resp = this.findRegistration();
     return resp
   }
@@ -61,10 +64,18 @@ export default class MlUsersAbout extends Component {
    * handler to change the status of overall user
    * @autosave
    * */
-  overUserStatus(e) {
-    console.log(e.currentTarget.checked)
-    //write handler to save
+  async overUserStatus(e) {
+    let status = e.currentTarget.checked
+    let regInfo = this.state.data && this.state.data.registrationInfo ? this.state.data.registrationInfo : {}
+    var userId = regInfo.userId
+    const response = await deActivateUser(userId, status);
+    if (response && response.status)
+      toastr.success(response.result);
+    else if (response && !response.status)
+      toastr.error(response.result);
+    return response
   }
+
   componentDidMount() {
     initalizeFloatLabel();
     this.initializeSwiper();
@@ -87,6 +98,10 @@ export default class MlUsersAbout extends Component {
     var WinHeight = $(window).height();
     $('.left_wrap').height(WinHeight - (90 + $('.admin_header').outerHeight(true)));
     this.initializeSwiper();
+    let logedAdmin = this.loggedUserDetails
+    if (logedAdmin.hierarchyLevel < 4) {
+      $('#overAllStatus').attr('disabled', true)
+    }
   }
 
   render() {
@@ -428,7 +443,7 @@ export default class MlUsersAbout extends Component {
                       <div className="form-group switch_wrap inline_switch">
                         <label>Overall Active User</label>
                         <label className="switch">
-                          <input type="checkbox" onChange={(e) => that.overUserStatus(e)}
+                          <input type="checkbox" id="overAllStatus" onChange={(e) => that.overUserStatus(e)}
                                  defaultChecked={this.state.data ? this.state.data.isActive : false}/>
                           <div className="slider"></div>
                         </label>

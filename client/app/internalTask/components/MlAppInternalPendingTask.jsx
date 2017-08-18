@@ -5,6 +5,7 @@ import React from 'react';
 import ScrollArea from 'react-scrollbar';
 import {fetchInternalTask} from '../actions/fetchInternalTasks';
 import MlAppInternalTaskItem from './MlAppInternalTaskItem';
+import MlAppInternalAssignTaskItem from './MlAppInternalAssignTaskItem';
 
 export default class MlAppInternalPendingTask extends React.Component{
 
@@ -12,8 +13,9 @@ export default class MlAppInternalPendingTask extends React.Component{
     super(props);
     this.state={
       tasks:[],
-      selectTask:''
-    }
+      selectTask:'',
+      selectedTaskType: ''
+    };
     this.fetchTaskList = this.fetchTaskList.bind(this);
   }
 
@@ -78,9 +80,10 @@ export default class MlAppInternalPendingTask extends React.Component{
     };
   }
 
-  selectTask(id) {
+  selectTask(task) {
     this.setState({
-      selectTask:id
+      selectTask: task._id ? task._id : '',
+      selectedTaskType: task.type
     })
   }
 
@@ -100,7 +103,7 @@ export default class MlAppInternalPendingTask extends React.Component{
               <div className="row">
                 {that.state.tasks.map(function (task, index) {
                   return (
-                    <div className="col-lg-2 col-md-4 col-sm-4" key={index} onClick={()=>that.selectTask(task._id)}>
+                    <div className="col-lg-2 col-md-4 col-sm-4" key={index} onClick={()=>that.selectTask(task)}>
                       <div className="list_block list_block_intrests notrans">
                         <div className="hex_outer"><img src="/images/valuation.png"/></div>
                         <div className="task-status pending"></div>
@@ -132,7 +135,11 @@ export default class MlAppInternalPendingTask extends React.Component{
               </div>
             </div>
             <div>
-              <MlAppInternalTaskItem taskId={that.state.selectTask} fetchTaskList={this.fetchTaskList} />
+              {
+                (that.state.selectedTaskType === 'assign-task' || that.state.selectedTaskType === 'self-task')
+                  ? <MlAppInternalAssignTaskItem taskId={that.state.selectTask} fetchTaskList={this.fetchTaskList} />
+                  : <MlAppInternalTaskItem taskId={that.state.selectTask} fetchTaskList={this.fetchTaskList} />
+              }
             </div>
           </div>
         </ScrollArea>

@@ -33,6 +33,11 @@ export async function fetchInternalTaskInfo(taskId) {
             profileUrl
           }
           createdAt
+          note
+          dueDate
+          priority
+          expectedInput
+          expectedOutput
         }
       }
     `,

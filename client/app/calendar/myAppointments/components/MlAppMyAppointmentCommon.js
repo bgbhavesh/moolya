@@ -8,6 +8,7 @@
 import React, {Component} from 'react';
 import MlAppOngoingSelectedMyAppointment from './mlAppServiceTaskAppointment/MlAppOngoingSelectedMyAppointment';
 import MlAppSelectedTaskMyAppointment from './mlAppInternalTaskAppointment/MlAppSelectedTaskMyAppointment';
+import MlAppSelectedSelfTaskMyAppointment from './mlAppSelfTaskAppointment/MlAppSelectedSelfTaskMyAppointment';
 import {ongoingAppointmentActionHandler} from '../actions/fetchOngoingAppointments';
 
 export default class MlAppPendingMyAppointment extends Component{
@@ -19,6 +20,7 @@ export default class MlAppPendingMyAppointment extends Component{
       isSelectedAppointment: false
     };
     this.fetchAppointment();
+    this.resetSelectedAppointment = this.resetSelectedAppointment.bind(this);
   }
 
   async fetchAppointment(){
@@ -54,16 +56,21 @@ export default class MlAppPendingMyAppointment extends Component{
     });
   }
 
+  resetSelectedAppointment() {
+    this.setState({isSelectedAppointment: false}, () => this.fetchAppointment() );
+  }
+
   getAppointmentComponentToLoad() {
     const {selectedAppointment} = this.state;
     switch (selectedAppointment.appointmentType) {
       case 'SERVICE-TASK':
-        return (<MlAppOngoingSelectedMyAppointment status={this.props.status} appointment={selectedAppointment} />)
+        return (<MlAppOngoingSelectedMyAppointment resetSelectedAppointment={this.resetSelectedAppointment} status={this.props.status} appointment={selectedAppointment} />)
         break;
       case 'INTERNAL-TASK':
-        return (<MlAppSelectedTaskMyAppointment status={this.props.status} appointment={selectedAppointment} />)
+        return (<MlAppSelectedTaskMyAppointment resetSelectedAppointment={this.resetSelectedAppointment} status={this.props.status} appointment={selectedAppointment} />)
         break;
       case 'SELF-TASK':
+        return (<MlAppSelectedSelfTaskMyAppointment resetSelectedAppointment={this.resetSelectedAppointment} status={this.props.status} appointment={selectedAppointment} />)
         break;
       default:
       // do nothing

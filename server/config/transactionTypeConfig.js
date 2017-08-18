@@ -7,7 +7,9 @@ let transactionType = [
   {_id:'interaction',transactionName:"interaction",transactionDisplayName:"Interaction",transactionDescription:"","isActive":true,"createdDateTime": new Date},
   {_id:'conversation',transactionName:"conversation",transactionDisplayName:"Conversation",transactionDescription:"","isActive":true,"createdDateTime": new Date},
   {_id:'office',transactionName:"office",transactionDisplayName:"Office",transactionDescription:"","isActive":true,"createdDateTime": new Date()},
-  {_id:'connectionRequest',transactionName:"connectionRequest",transactionDisplayName:"Connection Request",transactionDescription:"","isActive":true,"createdDateTime": new Date()}
+  {_id:'connectionRequest',transactionName:"connectionRequest",transactionDisplayName:"Connection Request",transactionDescription:"","isActive":true,"createdDateTime": new Date()},
+  {_id:'investments',transactionName:"investments",transactionDisplayName:"Investments",transactionDescription:"","isActive":true,"createdDateTime": new Date()},
+  {_id:'officeRequest',transactionName:"officeRequest",transactionDisplayName:"officeRequest",transactionDescription:"","isActive":true,"createdDateTime": new Date()}
 ];
 Meteor.startup(function () {
   for(var i = 0; i < transactionType.length; i++){

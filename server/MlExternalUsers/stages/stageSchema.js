@@ -21,6 +21,8 @@ let stage=`
     resourceId: String
     resourceType: String
     resourceStage: String
+    hasInvested: Boolean
+    onBoardRequest: Boolean
   }
 
     type Query {

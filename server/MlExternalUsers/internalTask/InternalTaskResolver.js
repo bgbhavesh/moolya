@@ -69,8 +69,10 @@ MlResolver.MlQueryResolver['fetchInternalTaskById'] = (obj, args, context, info)
   let internalTask = [];
   if (args.internalTaskId) {
     internalTask = mlDBController.findOne('MlInternalTask', {_id: args.internalTaskId});
-    internalTask.stage = mlDBController.findOne('MlProcessStages', {_id: internalTask.stage}).displayName;
-    if(internalTask.community.code == "IDE"){
+    if(internalTask.stage){
+      internalTask.stage = mlDBController.findOne('MlProcessStages', {_id: internalTask.stage}).displayName;
+    }
+    if(internalTask.community && internalTask.community.code == "IDE"){
       internalTask.client = mlDBController.findOne('MlIdeas', {portfolioId: internalTask.resourceId}).title;
     }
     let attendees = internalTask.attendees.map(function (attendee) {
@@ -99,6 +101,7 @@ MlResolver.MlMutationResolver['createInternalTask'] = (obj, args, context, info)
         // Add task status time line
         args.internalTask.attendees.forEach(function (attendee) {
           let dataToInsert = args.internalTask;
+          dataToInsert.type = 'invest-task';
           dataToInsert.userId = context.userId;
           dataToInsert.attendee = attendee.userId;
           dataToInsert.attendeeProfileId = attendee.profileId;
@@ -125,17 +128,37 @@ MlResolver.MlMutationResolver['createSelfInternalTask'] = (obj, args, context, i
   let userId = context.userId;
   let profile = new MlUserContext(userId).userProfileDetails(userId);
   if(args.selfInternalTask){
+      let users = args.selfInternalTask.users;
       let dataToInsert = args.selfInternalTask;
       dataToInsert.userId = context.userId;
-      dataToInsert.attendee = context.userId;
-      dataToInsert.attendeeProfileId = profile.profileId;
       dataToInsert.createdAt = new Date();
       dataToInsert.status = 'pending';
-      dataToInsert.isSelfAssigned = true;
-      let result = mlDBController.insert('MlInternalTask', dataToInsert , context);
-      let code = 200;
-      let response = new MlRespPayload().successPayload("Internal task created", code);
-      return response;
+      orderNumberGenService.createinternalTaskId(dataToInsert);
+
+      if(users && users.length) {
+        dataToInsert.type = 'assign-task';
+        dataToInsert.attendees = users;
+        users.forEach((user) => {
+          dataToInsert.attendee = user.userId;
+          dataToInsert.attendeeProfileId = user.profileId;
+          dataToInsert.isSelfAssigned = false;
+          let result = mlDBController.insert('MlInternalTask', dataToInsert , context);
+        });
+        let code = 200;
+        let response = new MlRespPayload().successPayload("Internal task created", code);
+        return response;
+      } else {
+        dataToInsert.type ='self-task';
+        dataToInsert.attendee = context.userId;
+        dataToInsert.attendeeProfileId = profile.profileId;
+        dataToInsert.isSelfAssigned = true;
+        let result = mlDBController.insert('MlInternalTask', dataToInsert , context);
+        let code = 200;
+        let response = new MlRespPayload().successPayload("Internal task created", code);
+        return response;
+      }
+
+
   } else {
     let code = 400;
     let response = new MlRespPayload().errorPayload("Internal task data is required", code);

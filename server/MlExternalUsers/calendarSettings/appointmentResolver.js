@@ -278,7 +278,7 @@ MlResolver.MlQueryResolver["fetchMyAppointmentByStatus"] = (obj, args, context, 
       }
     },
     { "$unwind": "$members" },
-    { "$match": {'members.userId':userId, 'members.profileId':profileId } }
+    { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': args.status } }
   ]);
   return appointments;
 };
@@ -670,4 +670,69 @@ MlResolver.MlQueryResolver["fetchMyAppointment"] = (obj, args, context, info) =>
   let year = args.year ? args.year : date.getFullYear();
   let response = MlAppointment.getUserAppointments(userId, profileId, day, month, year);
   return response;
+};
+
+MlResolver.MlMutationResolver["updateAppointmentByStatus"] = (obj, args, context, info) => {
+  let userId = context.userId;
+  let profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  let query = {
+    userId: userId,
+    profileId: profileId,
+    appointmentId: args.appointmentId
+  };
+  if(!_.isEmpty(args.appointmentId)){
+    let appointmentMember = mlDBController.findOne('MlAppointmentMembers', query, context);
+    if(appointmentMember){
+      appointmentMember.status = args.status;
+      let updatedAppointmentMember = mlDBController.update('MlAppointmentMembers', {appointmentId: args.appointmentId}, appointmentMember, {'$set':1}, context);
+      if (appointmentMember.createdBy === userId) {
+        let status;
+        switch (args.status) {
+          case 'Pending':
+            status = 'Pending';
+            break;
+          case 'Accepted':
+            status = 'Started';
+            break;
+          case 'Completed':
+            status = 'Completed';
+            break;
+          default:
+            // do nothing
+        }
+        let updateData = {};
+        if (args.status === 'Rejected') {
+          updateData = {isCancelled: true};
+        } else {
+          updateData = {status: status}
+        }
+        let updatedAppointment = mlDBController.update('MlAppointments', {appointmentId: args.appointmentId}, updateData, {'$set': 1}, context);
+      }
+      if (updatedAppointmentMember) {
+        let code = 200;
+        let response = new MlRespPayload().successPayload('Successfully Updated', code);
+        return response
+      }
+    }else {
+      let code = 400;
+      let response = new MlRespPayload().errorPayload('Require a valid appointment', code);
+      return response
+    }
+  }else{
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('Cannot save empty appointment', code);
+    return response
+  }
+
+};
+
+MlResolver.MlQueryResolver['fetchSelfTask'] = (obj, args, context, info) => {
+  let result = mlDBController.findOne('MlAppointmentTask', {_id: args.selfTaskId} , context);
+  if (result) {
+    return result;
+  } else  {
+    let code = 404;
+    let response = new MlRespPayload().errorPayload('Appointment self task not found', code);
+    return response;
+  }
 };

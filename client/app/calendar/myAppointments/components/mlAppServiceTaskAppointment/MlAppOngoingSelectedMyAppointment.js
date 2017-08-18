@@ -10,14 +10,17 @@ import Moment from "moment";
 import _ from 'lodash';
 
 // import custom method(s) and component(s)
-import StepZilla from '../../../../commons/components/stepzilla/StepZilla';
+import StepZilla from '../../../../../commons/components/stepzilla/StepZilla';
 import MlAppOngoingMyAppointmentServiceBasicInfo from './MlAppOngoingMyAppointmentServiceBasicInfo';
 import MlAppOngoingMyAppointmentSession from './MlAppOngoingMyAppointmentSession';
 import MlAppOngoingMyAppointmentInfo from './MlAppOngoingMyAppointmentInfo';
-import {fetchServiceByServiceId} from '../actions/fetchOngoingAppointments';
+import {fetchServiceByServiceId} from '../../actions/fetchOngoingAppointments';
+import MlAccordion from "../../../../commons/components/MlAccordion";
+import formHandler from "../../../../../commons/containers/MlFormHandler";
+import MlAppActionComponent from "../../../../commons/components/MlAppActionComponent";
+import {updateAppointmentActionHandler} from '../../actions/appointmentActionHandler';
 
-
-export default class MlAppOngoingSelectedMyAppointment extends Component {
+class MlAppOngoingSelectedMyAppointment extends Component {
 
   /**
    * Constructor
@@ -28,7 +31,7 @@ export default class MlAppOngoingSelectedMyAppointment extends Component {
     this.state = {
       service: {}
     };
-    this.serviceId = this.props.appointment.serviceId;
+    this.serviceId = this.props.appointment.resourceId;
     this.getServiceDetails = this.getServiceDetails.bind(this);
     this.setServiceSteps = this.setServiceSteps.bind(this);
   }
@@ -88,7 +91,7 @@ export default class MlAppOngoingSelectedMyAppointment extends Component {
    * @returns Void
    */
   async getServiceDetails() {
-    if (this.props.appointment.serviceId) {
+    if (this.props.appointment.resourceId) {
       let service = await fetchServiceByServiceId(this.serviceId, this.props.appointment.sessionId);
       let validTillDate = Date.parse(service.validTill);
       let currentDate = new Date();
@@ -101,6 +104,10 @@ export default class MlAppOngoingSelectedMyAppointment extends Component {
     }
   }
 
+  async updateAppointment(status) {
+    const resp = await updateAppointmentActionHandler(this.props.appointment.appointmentId, status);
+    this.showResponseMsg(resp, `Appointment ${status} successfully`);
+  }
   /**
    * Method :: showResponseMsg
    * Desc :: Show to error(s) or success(es) msg
@@ -109,6 +116,7 @@ export default class MlAppOngoingSelectedMyAppointment extends Component {
   showResponseMsg(response, msg) {
     if (response.success) {
       toastr.success(msg);
+      this.props.resetSelectedAppointment();
     } else {
       toastr.error(response.result);
     }
@@ -120,21 +128,77 @@ export default class MlAppOngoingSelectedMyAppointment extends Component {
    * @returns {XML}
    */
   render() {
+    const status = this.props.status;
+    let appActionConfig = [];
+    const that = this;
+    switch (status) {
+      case 'Pending':
+        appActionConfig = [
+          {
+            showAction: true,
+            actionName: 'accept',
+            handler: async(event) => that.props.handler(that.updateAppointment.bind(this, 'Accepted'))
+          },
+          {
+            showAction: true,
+            actionName: 'reject',
+            handler: async(event) => that.props.handler(that.updateAppointment.bind(this, 'Rejected'))
+          }
+        ];
+        break;
+      case 'Accepted':
+        appActionConfig = [
+          {
+            showAction: true,
+            actionName: 'complete',
+            handler: async(event) => that.props.handler(that.updateAppointment.bind(this, 'Completed'))
+          }
+        ];
+        break;
+      case 'Rejected':
+        appActionConfig = [
+          {
+            showAction: true,
+            actionName: 'accept',
+            handler: async(event) => that.props.handler(that.updateAppointment.bind(this, 'Accepted'))
+          }
+        ];
+        break;
+      default:
+        // do nothing
+    }
+    export const genericPortfolioAccordionConfig = {
+      id: 'portfolioAccordion',
+      panelItems: [
+        {
+          'title': 'Actions',
+          isText: false,
+          style: {'background': '#ef4647'},
+          contentComponent: <MlAppActionComponent
+            resourceDetails={{resourceId: 'servicetask', resourceType: 'servicetask'}}   //resource id need to be given
+            actionOptions={appActionConfig}/>
+        }]
+    };
     return (
-      <div className="app_main_wrap">
+      <div className="col-lg-12">
         <div className="app_padding_wrap">
           <div className="clearfix"/>
           <div className="col-md-12">
             <div className='step-progress'>
               <div id="root">
                 <StepZilla steps={this.setServiceSteps()}
-                           stepsNavigation={false}
+                           stepsNavigation={true}
                            prevBtnOnLastStep={true}/>
               </div>
             </div>
           </div>
+          {status !== 'Completed' &&
+            <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
+          }
         </div>
       </div>
     )
   }
 };
+
+export default MlAppOngoingSelectedMyAppointment = formHandler()(MlAppOngoingSelectedMyAppointment);

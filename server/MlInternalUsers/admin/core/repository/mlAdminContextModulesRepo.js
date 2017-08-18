@@ -524,16 +524,17 @@ let CoreModules = {
 
 
   MlOfficeTransactionRepo: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
-    var contextFieldMap = {
-      'clusterId': 'clusterId',
-      'chapterId': 'chapterId',
-      'subChapterId': 'subChapterId',
-      'communityId': 'communityId'
-    };
-    var resultantQuery = MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery, contextFieldMap);
+    // var contextFieldMap = {
+    //   'clusterId': 'clusterId',
+    //   'chapterId': 'chapterId',
+    //   'subChapterId': 'subChapterId',
+    //   'communityId': 'communityId'
+    // };
+    // var resultantQuery = MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery, contextFieldMap);
+    // resultantQuery = MlAdminContextQueryConstructor.constructQuery(resultantQuery, '$in');
 
     //construct context query with $in operator for each fields
-    resultantQuery = MlAdminContextQueryConstructor.constructQuery(resultantQuery, '$in');
+    var resultantQuery = MlAdminContextQueryConstructor.constructQuery(contextQuery, '$in');
     var serverQuery = {};
     //To display the latest record based on date
     if (!fieldsProj.sort) {
@@ -543,9 +544,11 @@ let CoreModules = {
     //todo: internal filter query should be constructed.
     //resultant query with $and operator
     resultantQuery = MlAdminContextQueryConstructor.constructQuery(_.extend(userFilterQuery, resultantQuery, serverQuery), '$and');
-
-    let pipleline = [
-      {'$lookup': {from: 'users', localField: 'userId', 'foreignField': '_id', as: 'user'}},
+    let pipleline = []
+    if (Object.keys(resultantQuery).length) {
+      pipleline.push({'$match': resultantQuery});
+    }
+    pipleline.push({'$lookup': {from: 'users', localField: 'userId', 'foreignField': '_id', as: 'user'}},
       {'$unwind': '$user'},
       {
         '$project': {
@@ -561,11 +564,8 @@ let CoreModules = {
           'status': 1,
           'profileId': '$user.profile.externalUserProfiles.profileId'
         }
-      }
-    ];
-    if (Object.keys(resultantQuery).length) {
-      pipleline.push({'$match': resultantQuery});
-    }
+      })
+
     if (fieldsProj.sort) {
       pipleline.push({'$sort': fieldsProj.sort});
     }

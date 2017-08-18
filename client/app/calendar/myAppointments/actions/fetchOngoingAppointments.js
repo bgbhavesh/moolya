@@ -228,3 +228,34 @@ export async function findTaskActionHandler(taskId) {
   data.attachments = attachmentArray
   return data;
 }
+
+export async function fetchSelfTaskById (selfTaskId) {
+  const result = await appClient.query({
+    query: gql`
+    query($selfTaskId: String) {       
+      fetchSelfTask(selfTaskId: $selfTaskId) {
+        _id
+        profileId
+        name
+        mode
+        about
+        industries
+        conversation
+        duration {
+          hours
+          minutes
+        }
+        frequency
+        expectedInput
+        expectedOutput
+      }
+    }
+    `,
+    variables: {
+      selfTaskId
+    },
+    forceFetch:true
+  });
+  var response = result.data.fetchSelfTask;
+  return response;
+}

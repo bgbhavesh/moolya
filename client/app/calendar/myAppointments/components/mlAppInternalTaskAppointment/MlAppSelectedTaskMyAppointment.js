@@ -109,6 +109,7 @@ class MlAppSelectedTaskMyAppointment extends Component {
   showResponseMsg(response, msg) {
     if (response.success) {
       toastr.success(msg);
+      this.props.resetSelectedAppointment();
     } else {
       toastr.error(response.result);
     }
@@ -167,7 +168,7 @@ class MlAppSelectedTaskMyAppointment extends Component {
           isText: false,
           style: {'background': '#ef4647'},
           contentComponent: <MlAppActionComponent
-            resourceDetails={{resourceId: 'activity', resourceType: 'activity'}}   //resource id need to be given
+            resourceDetails={{resourceId: 'internaltask', resourceType: 'internaltask'}}   //resource id need to be given
             actionOptions={appActionConfig}/>
         }]
     };

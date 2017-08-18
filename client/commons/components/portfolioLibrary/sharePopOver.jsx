@@ -191,12 +191,12 @@ export default class SharePopOver extends React.Component {
     let Details = {
       files: file,
       users:user,
-      sharedStartDate: Date.parse(this.state.startDate),
+      sharedStartDate: moment(this.state.startDate, 'DD-MM-YYYY'),
       sharedEndDate: new Date(this.state.endDate),
       isDownloadable: this.state.downloadable
     }
     console.log('--Details--',Details)
-     this.saveInfo(Details);
+     // this.saveInfo(Details);
   }
 
   async saveInfo(Details) {

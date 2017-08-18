@@ -7,6 +7,7 @@ import _ from 'lodash'
 import mlInteractionService from '../mlInteractionRepoService';
 import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
 import MlAlertNotification from '../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
+import MlSubChapterAccessControl from './../../../mlAuthorization/mlSubChapterAccessControl';
 /*STATUS
  0 - Pending
  1 - Accepted
@@ -74,6 +75,19 @@ MlResolver.MlQueryResolver['fetchConnectionByTransaction'] = (obj, args, context
 */
 MlResolver.MlMutationResolver['connectionRequest'] = (obj, args, context, info) => {
   try {
+
+    /**
+     * Sub chapter access control
+     */
+    let portfolioDetails =mlDBController.findOne('MlPortfolioDetails',{_id:args.resourceId}, context);
+    let subChapterId = portfolioDetails && portfolioDetails.subChapterId ? portfolioDetails.subChapterId : '';
+    let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('TRANSACT', context, subChapterId);
+    if(!mlSubChapterAccessControl.hasAccess){
+      let code = 400;
+      let response = new MlRespPayload().errorPayload('You do not have access to transact', code);
+      return response;
+    }
+
     var users = [];
     var connection = {};
     var resp=null;

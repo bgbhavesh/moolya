@@ -10,6 +10,7 @@ import passwordUtil from "../../commons/passwordUtil";
 import _ from "lodash";
 import MlEmailNotification from "../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlAlertNotification from '../../mlNotifications/mlAlertNotifications/mlAlertNotification';
+import mlOfficeInteractionService from './mlOfficeInteractionRepo'
 import MlAccounts from '../../commons/mlAccounts'
 MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
   let officeSC = [];
@@ -228,7 +229,7 @@ MlResolver.MlMutationResolver['createOffice'] = (obj, args, context, info) => {
       // office Transaction record creation
       let details = {
         officeId: officeId,
-        transactionType:'office',
+        transactionType:'officeRequest',
         status: 'Pending',
         duration:{
           years:1
@@ -425,62 +426,7 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
         //MlAccounts.sendVerificationEmail(registrationId,{emailContentType:"html",subject:"Email Verification",context:context});
          MlEmailNotification.officeInvitationEmail(verificationLink,registrationId,context,registrationData)
       }
-      if (registrationId) { //for creating new user
-        // let officeTrans = {
-        //   officeId: args.myOfficeId,
-        //   transactionType: 'registration',
-        //   communityName: "Browsers",
-        //   status: 'done'
-        // }
-        // let officeTransaction = _.extend(officeTrans, extendObj)
-        // MlResolver.MlMutationResolver['createOfficeTransaction'](obj, {officeTransaction}, context, info)
-
-        /**
-         * commenting and moving the user creation in registration when the admin approves the office brearer
-         * */
-        // var userProfileTemp = {
-        //   registrationId: registrationId,
-        //   mobileNumber: args.officeMember.mobileNumber,
-        //   communityName: "Office Bearer",
-        //   communityDefCode : "OFB",
-        //   isDefault: false,
-        //   isActive: true,
-        //   isApprove: false,
-        //   isTypeOfficeBearer: true
-        // }
-        // let userProfile = _.extend(userProfileTemp, extendObj)
-        // let profile = {
-        //   isInternaluser: false,
-        //   isExternaluser: true,
-        //   email: args.officeMember.emailId,
-        //   mobileNumber: args.officeMember.mobileNumber,
-        //   isActive: false,
-        //   firstName: args.officeMember.firstName,
-        //   lastName: args.officeMember.lastName,
-        //   displayName: args.officeMember.firstName + ' ' + args.officeMember.lastName,
-        //   externalUserProfiles: [userProfile]
-        // }
-        // let userObject = {
-        //   username: args.officeMember.emailId,
-        //   profile: profile,
-        //   emails: emails ? emails : []
-        // }
-        // orderNumberGenService.createUserProfileId(userProfile);
-        // let userId = mlDBController.insert('users', userObject, context)
-        // console.log('userId' + userId);
-        // if (userId) {
-        //   //Email & MobileNumber verification updates to user
-        //   let registerDetails = mlDBController.findOne('MlRegistration', registrationId, context) || {};
-        //   mlDBController.update('users', {username: userObject.username},
-        //     {
-        //       $set: {
-        //         'services.email': registerDetails && registerDetails.services ? registerDetails.services.email : {},
-        //         'emails': userObject.emails
-        //       }
-        //     }, {'blackbox': true}, context);
-        //   let salted = passwordUtil.hashPassword(registerDetails.registrationInfo.password);
-        //   let res = mlDBController.update('users', {username: userObject.username}, {'services.password.bcrypt': salted}, {$set: true}, context);
-        // }
+      if (registrationId) {
 
         /**finally saving the user to the office member collection*/
         var officeMember = args.officeMember;
@@ -493,6 +439,8 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
         officeMember['createdDate'] = new Date()
         let ret = mlDBController.insert('MlOfficeMembers', officeMember, context)
 
+        let fromUserType = 'user';     //to userId is not available as user is not created till
+        mlOfficeInteractionService.createTransactionRequest(context.userId, 'officeBearerInvitation', officeMember.officeId, ret, context.userId, fromUserType, context);
         // update ledger balance and journal
         ret = mlOfficeValidationRepo.updateLedgerBalanceOfficeJournal(args.myOfficeId, officeMember, context)
         if(!ret)

@@ -6,14 +6,34 @@ import MlSchemaDef from '../../../../commons/mlSchemaDef';
 import MlResolver from '../../../../commons/mlResolverDef'
 
 
-let institutePortfolioSchema = `
+let startupPortfolioSchema = `
+
+    type PortfolioMenu{
+        image: String
+        link: String
+        name: String
+        uniqueId:String
+        isLink:Boolean
+        isMenu:Boolean
+        isDisabled:Boolean
+        subMenu:[Menu]
+        dynamicLink:Boolean
+        subMenuMappingId:String
+        subMenusId:String
+        hideSubMenu:Boolean
+        showInBreadCrum:Boolean
+    }
+    type portfolioMenu
+    {
+      name: String
+      id:String
+      menu:[PortfolioMenu]
+    }
     type imagesTypeSchema{
         fileUrl   : String,
-        fileName  : String,
-        isDefault : Boolean
+        fileName  : String
     }
-    
-    type instituteManagementOutput{
+    type managementOutput{
        title :String
        isTitlePrivate : Boolean
        firstName : String
@@ -49,7 +69,8 @@ let institutePortfolioSchema = `
        logo:imagesTypeSchema,
        index: Int
     }
-   
+    
+ 
     
     type clientsOutput{
         companyName:String,
@@ -59,7 +80,88 @@ let institutePortfolioSchema = `
         isDescriptionPrivate:Boolean,
         makePrivate:Boolean,
         index:Int,
-    }  
+    }
+    
+    type branchesOutput{
+        addressTypeId:String,
+        name:String,
+        isNamePrivate:Boolean,
+        phoneNumber:String,
+        isPhoneNumberPrivate:Boolean,
+        address1:String,
+        isAddressOnePrivate:String,
+        address2:String,
+        isAddressTwoPrivate:Boolean,
+        landmark:String,
+        isLandmarkPrivate:Boolean,
+        area:String,
+        isAreaPrivate:Boolean,
+        city:String,
+        cityId:String,
+        isCityPrivate:Boolean,
+        state:String,
+        stateId:String,
+        isStatePrivate:Boolean,
+        country:String,
+        countryId:String,
+        isCountryPrivate:Boolean,
+        addressImage : String,
+        isAddressImagePrivate:Boolean,
+        logo:imagesTypeSchema,
+        makePrivate:Boolean,
+        index:Int
+        
+    }
+    
+    type assetsOutput{
+        assetTypeId:String,
+        assetTypeName:String,
+        isAssetTypePrivate:Boolean,
+        quantity:String,
+        isQuantityTypePrivate:Boolean,
+        description:String,
+        isDescriptionPrivate:Boolean,
+        logo:imagesTypeSchema,
+        makePrivate:Boolean,
+        index:Int
+        
+    }
+    
+    type technologiesOutput{
+        technologyName:String,
+        technologyId:String,
+        description:String,
+        isTechnologyPrivate:Boolean,
+        isDescriptionPrivate:Boolean,
+        logo:imagesTypeSchema,
+        makePrivate:Boolean,
+        index:Int
+    }
+    
+    type investorOutput{
+        name:String,
+        fundingType:String,
+        fundingTypeId:String,
+        investmentAmount:String,
+        description:String,
+        isNamePrivate:Boolean,
+        isInvestmentAmountPrivate:Boolean,
+        isDescriptionPrivate:Boolean,
+        logo:imagesTypeSchema,
+        makePrivate:Boolean
+        index: Int
+    }
+    
+    type lookingForOutput{
+        lookingForName:String,
+        typeId:String,
+        isTypePrivate:Boolean,
+        description:String,
+        isDescriptionPrivate:Boolean,
+        logo:imagesTypeSchema,
+        makePrivate:Boolean
+        index: Int
+    }
     
 
     type informationOutput{
@@ -75,12 +177,32 @@ let institutePortfolioSchema = `
     type imageFilesInputSchemaOutput{
        fileUrl: String,
        fileName:String
-     }   
+     }
+     
+
+    
+    type legalIssueOutput{
+        description:String,
+        isDescriptionPrivate:Boolean
+    }
+    
+    type dataOutput{
+      balanceSheet: [imagesTypeSchema]
+      profitAndLoss: [imagesTypeSchema]
+      quaterlyReport: [imagesTypeSchema]
+      yearlyReport: [imagesTypeSchema]
+      halfYearlyReport: [imagesTypeSchema]
+      annualReport: [imagesTypeSchema]
+      cashFlow: [imagesTypeSchema]
+      shareHoldings: [imagesTypeSchema]
+      capitalStructure: [imagesTypeSchema]
+      ratio: [imagesTypeSchema]
+    }
+    
     
     type aboutUsOutput{
-        aboutImages      : [imagesTypeSchema]
-        aboutTitle : String
-        aboutDescription: String
+        logo      : [imagesTypeSchema]
+        description : String
         annotatorId : String
         isLogoPrivate :Boolean
         isDescriptionPrivate : Boolean
@@ -113,18 +235,21 @@ let institutePortfolioSchema = `
         description:String, 
         isDescriptionPrivate :Boolean
     }
-    
     type ratingOutput{,
         rating:String
         isRatingPrivate:Boolean
     }
-    type institutePortfolioAboutUsOutput{
+    type startupPortfolioAboutUsOutput{
         portfolioDetailsId  : String
         aboutUs             : aboutUsOutput
         rating              : ratingOutput
         serviceProducts     : serviceProductsOutput
         information         : informationOutput
+        technologies        : [technologiesOutput]
+        assets              : [assetsOutput]
+        branches            : [branchesOutput]
         clients             : [clientsOutput]
+        legalIssue          : legalIssueOutput
         data                : dataOutput
     }
 
@@ -173,37 +298,14 @@ let institutePortfolioSchema = `
       employeeBreakupDepartmentChart:[EmployeeBreakupDepartment]
     }
     
-    type dataOutput{
-      balanceSheet: [imagesTypeSchema]
-      profitAndLoss: [imagesTypeSchema]
-      quaterlyReport: [imagesTypeSchema]
-      yearlyReport: [imagesTypeSchema]
-      halfYearlyReport: [imagesTypeSchema]
-      annualReport: [imagesTypeSchema]
-      cashFlow: [imagesTypeSchema]
-      shareHoldings: [imagesTypeSchema]
-      capitalStructure: [imagesTypeSchema]
-      ratio: [imagesTypeSchema]
-    }
     
-    type InstitutePortfolio{
-      management        : [instituteManagementOutput],
-      data              : dataOutput,
-      charts            : chartsOutput,
-      awardsRecognition : [awardsRecognitionOutput],
-      memberships       : membershipsOutput,
-      compliances       : compliancesOutput,
-      licenses          : licensesOutput      
-   }
-   
     
     input logo{
       fileName : String,
-      fileUrl:String,
-      isDefault:Boolean
+      fileUrl:String
     }
     
-    input instituteManagement{
+    input management{
        title :String
        isTitlePrivate : Boolean
        firstName : String
@@ -249,7 +351,61 @@ let institutePortfolioSchema = `
         makePrivate:Boolean,
         index:Int
     }
-   
+    
+    input branches{
+        addressTypeId:String,
+        name:String,
+        isNamePrivate:Boolean,
+        phoneNumber:String,
+        isPhoneNumberPrivate:Boolean,
+        address1:String,
+        isAddressOnePrivate:String,
+        address2:String,
+        isAddressTwoPrivate:Boolean,
+        landmark:String,
+        isLandmarkPrivate:Boolean,
+        area:String,
+        isAreaPrivate:Boolean,
+        city:String,
+        cityId:String,
+        isCityPrivate:Boolean,
+        state:String,
+        stateId:String,
+        isStatePrivate:Boolean,
+        country:String
+        countryId:String,
+        isCountryPrivate:Boolean,
+        addressImage : String,
+        isAddressImagePrivate:Boolean,
+        logo:logo,
+        makePrivate:Boolean,
+        index:Int
+    }
+    
+    input assets{
+      assetTypeId:String,
+      assetTypeName:String
+      isAssetTypePrivate:Boolean,
+      quantity:String,
+      isQuantityTypePrivate:Boolean,
+      description:String,
+      isDescriptionPrivate:Boolean,
+      logo:logo,
+      makePrivate:Boolean,
+      index:Int
+    }
+    
+    input technologies{
+       technologyId:String,
+       technologyName:String,
+        description:String,
+        isTechnologyPrivate:Boolean,
+        isDescriptionPrivate:Boolean,
+        logo:logo,
+        makePrivate:Boolean,
+        index:Int
+    }
+    
     input investor{
         name:String,
         fundingType:String,
@@ -260,6 +416,17 @@ let institutePortfolioSchema = `
         isNamePrivate:Boolean,
         isInvestorImagePrivate:Boolean,
         isInvestmentAmountPrivate:Boolean,
+        isDescriptionPrivate:Boolean,
+        logo:logo,
+        makePrivate:Boolean
+        index: Int
+    }
+    
+    input lookingFor{
+        lookingForName:String,
+        typeId:String,
+        isTypePrivate:Boolean,
+        description:String,
         isDescriptionPrivate:Boolean,
         logo:logo,
         makePrivate:Boolean
@@ -306,9 +473,8 @@ let institutePortfolioSchema = `
     }
     
     input aboutUs{
-        aboutImages      : [imageFilesInputSchema]
-        aboutImages : String
-        aboutDescription : String
+        logo      : [imageFilesInputSchema]
+        description : String
         annotatorId : String
         isLogoPrivate :Boolean
         isDescriptionPrivate : Boolean
@@ -378,7 +544,7 @@ let institutePortfolioSchema = `
       index : Int
     }
    
-    input institutePortfolio{
+    input companyPortfolio{
         portfolioDetailsId  : String
         licenses            : licenses
         compliances         : compliances
@@ -388,9 +554,8 @@ let institutePortfolioSchema = `
         rating              : rating
         serviceProducts     : serviceProducts
         information         : information
-        investor            : [investor]
         clients             : [clients]
-        management          : [instituteManagement]
+        management          : [management]
         employmentOfCompanyChart: [employmentOfCompany]
         reviewOfCompanyChart: [reviewOfCompany]
         profitRevenueLiabilityChart:  [profitRevenueLiability]
@@ -398,7 +563,7 @@ let institutePortfolioSchema = `
         legalIssue          : legalIssue
         data                : data
     }
-    type institutePortfolioOutput{
+    type companyPortfolioOutput{
         _id                  : String
         userId               : String
         communityType        : String
@@ -407,39 +572,18 @@ let institutePortfolioSchema = `
     }
     
     type Query{
-        fetchInstitutePortfolioAboutUs(portfoliodetailsId:String!):institutePortfolioAboutUsOutput
-        fetchInstitutePortfolioLicenses(portfoliodetailsId:String!):licensesOutput
-        fetchInstitutePortfolioMemberships(portfoliodetailsId:String!):membershipsOutput
-        fetchInstitutePortfolioCompliances(portfoliodetailsId:String!):compliancesOutput
-        fetchInstitutePortfolioManagement(portfoliodetailsId:String!):[instituteManagementOutput]
-        fetchInstitutePortfolioAwards(portfoliodetailsId:String!):[awardsRecognitionOutput]
-        fetchInstitutePortfolioCharts(portfoliodetailsId:String):chartsOutput   
-        fetchInstitutePortfolioData(portfoliodetailsId:String):dataOutput
-        fetchInstituteDetails(portfoliodetailsId:String!, key:String):InstitutePortfolio
+      
     }
     
     type Mutation{
-        createInstitutionPortfolio(portfolio:institutePortfolio):response
-        updateInstitutePortfolio(portfoliodetailsId:String,portfolio:institutePortfolio):response
-        
+        createCompanyPortfolio(portfolio:companyPortfolio):response
     }
 `
 
-MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], institutePortfolioSchema]);
+MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], startupPortfolioSchema]);
 
 let supportedApi = [
-  {api:'fetchInstitutePortfolioAboutUs', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstitutePortfolioMemberships', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstitutePortfolioCompliances', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstitutePortfolioLicenses', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstitutePortfolioManagement', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstitutePortfolioAwards', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstitutePortfolioCharts', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstitutePortfolioData', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstituteDetails', actionName:'READ', moduleName:"PORTFOLIO"},
 
-  {api:'createInstitutionPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
-  {api:'updateInstitutePortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
-  {api:'createInstitutePortfolioChart', actionName:'UPDATE', moduleName:"PORTFOLIO"}
+  {api:'createCompanyPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

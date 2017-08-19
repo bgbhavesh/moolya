@@ -13,7 +13,7 @@ export default class MlConnectionRequestPresentation extends React.Component {
   }
 
   render() {
-    const { userDetails, activityLog, data, canReject , showAcceptAndReject} = this.props;
+    const { userDetails, activityLog, data, canAccept, canReject, showAcceptAndReject} = this.props;
     let transId = Math.random().toString(36).slice(2); //userDetails.userId;
     return (
       <div className="ml_tabs">
@@ -88,8 +88,8 @@ export default class MlConnectionRequestPresentation extends React.Component {
               </div>
               <div className="col-md-6">
                 <div className="ml_btn">
-                  {showAcceptAndReject?<a href="" className="save_btn" onClick={this.props.OnBoardHandler.bind(this, data._id, activityLog.type, 'accept')}>Accept</a>:""}
-                  {showAcceptAndReject?<a href="" className="cancel_btn" onClick={this.props.OnBoardHandler.bind(this, data._id, activityLog.type, 'reject')}>Reject</a>:""}
+                  {canAccept ? <a href="" className="save_btn" onClick={this.props.OnBoardHandler.bind(this, data._id, activityLog.type, 'accept')}>Accept</a>:""}
+                  {canReject ? <a href="" className="cancel_btn" onClick={this.props.OnBoardHandler.bind(this, data._id, activityLog.type, 'reject')}>Reject</a>:""}
                 </div>
               </div>
             </div>

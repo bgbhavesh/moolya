@@ -221,16 +221,17 @@ if(!platformrole){
 
 var options = {
   profile:{
-
     isInternaluser : true,
     isExternaluser : false,
-    email: 'platformadmin@mymoolya.com',
+    email: 'platformadmin@moolya.global',
     isMoolya:true,
     isActive:true,
+    firstName:'Platform',
+    lastName:'Admin',
     InternalUprofile:{
       moolyaProfile:{
         assignedDepartment:[{department:dep._id, subDepartment:subDep._id}],
-        email:"platformadmin@mymoolya.com",
+        email:"platformadmin@moolya.global",
         phoneNumber:"9999999999",
         userProfiles:[],
         isActive:true,
@@ -241,12 +242,12 @@ var options = {
     },
     isSystemDefined: true
   },
-  username: 'platformadmin@mymoolya.com',
+  username: 'platformadmin@moolya.global',
   password: adminPassword
 
 };
 
-var userObj = Meteor.users.findOne({username: "platformadmin@mymoolya.com"});
+var userObj = Meteor.users.findOne({username: "platformadmin@moolya.global"});
 if(!userObj){
   console.log("No Admin found, hence inserting a default Moolya Admin: ",options);
   platformAdminId = Accounts.createUser(options);
@@ -272,12 +273,12 @@ var systemAdminProfile = {
   profile:{
     isInternaluser : true,
     isExternaluser : false,
-    email: 'systemadmin@mymoolya.com',
+    email: 'systemadmin@moolya.global',
     isActive:true,
     InternalUprofile:{
       moolyaProfile:{
         assignedDepartment:[{department:dep._id, subDepartment:subDep._id}],
-        email:"systemadmin@mymoolya.com",
+        email:"systemadmin@moolya.global",
         phoneNumber:"9999999999",
         userProfiles:[],
         isActive:true,
@@ -288,11 +289,11 @@ var systemAdminProfile = {
     },
     isSystemDefined: true
   },
-  username: 'systemadmin@mymoolya.com',
+  username: 'systemadmin@moolya.global',
   password: adminPassword
 };
 
-var systemAdminUser = Meteor.users.findOne({username: "systemadmin@mymoolya.com"});
+var systemAdminUser = Meteor.users.findOne({username: "systemadmin@moolya.global"});
 if(!systemAdminUser){
   console.log("No Admin found, hence inserting a default Moolya System Admin: ",systemAdminProfile);
   Accounts.createUser(systemAdminProfile);

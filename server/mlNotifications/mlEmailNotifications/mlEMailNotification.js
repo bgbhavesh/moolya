@@ -782,7 +782,24 @@ const MlEmailNotification= class MlEmailNotification {
   static onOfficeUpgrade(){
 
   }
-
+  static UserRejectionByAdmin(userDetails){
+      let user = userDetails || {}
+      let regObj = {
+        userName : user&&user.registrationInfo&&user.registrationInfo.firstName?user.registrationInfo.firstName:"",
+        contactNumber : "+91-40-4672 5725",
+        contactEmail : "cm@moolya.global",
+      }
+      let toEmail = user&&user.registrationInfo&&user.registrationInfo.email?user.registrationInfo.email:""
+      let mail_body = NotificationTemplateEngine.fetchTemplateContent("EML_User_Rejected_By_Admin","email",regObj)
+      Meteor.setTimeout(function () {
+        mlEmail.sendHtml({
+          from: fromEmail,
+          to: toEmail,
+          subject: mail_body&&mail_body.tempConfig&&mail_body.tempConfig.title?mail_body.tempConfig.title:"",
+          html : mail_body&&mail_body.content
+        });
+      }, 2 * 1000);
+    }
 }
 
 export default MlEmailNotification;

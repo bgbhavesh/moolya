@@ -272,6 +272,11 @@ class MlAuthorization
             return this.getInternalRequestContextDetails(variables, actionName)
           }
           break;
+          case 'HIERARCHY':{
+            var hierarchy = variables.hierarchy;
+            return {clusterId:hierarchy.clusterId, subChapterId:hierarchy.subChapterId}
+          }
+            break;
         }
         return variables;
       }

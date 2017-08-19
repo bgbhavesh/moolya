@@ -3,15 +3,20 @@
  */
 import React, {Component} from 'react';
 import MlInvestmentRequestPresentation from './MlInvestmentRequestPresentation';
-import {fetchConnectionRequestHandler,acceptConnectionActionHandler,rejectConnectionActionHandler} from '../../../appActions/actions/connectActionHandler';
-import {updateStageForOnBoardActionHandler} from '../../../../app/investment/actions/updateStage';
+import {updateStageForOnBoardActionHandler, fetchOnBoardByTransaction} from '../../../../app/investment/actions/updateStage';
 
 
 export default class MlInvestmentRequest extends Component{
   constructor(props){
     super(props);
     this.fetchConnectionDetails.bind(this);
-    this.state={'connectionId':null,'data':{}, showAcceptAndReject: true};
+    this.state={
+      'connectionId':null,
+      'data':{},
+      showAcceptAndReject: true,
+      canAccept: false,
+      canReject: false
+    };
     // this.acceptConnectionHandler = this.acceptConnectionHandler.bind(this);
     // this.rejectConnectionHandler = this.rejectConnectionHandler.bind(this);
     return this;
@@ -20,8 +25,16 @@ export default class MlInvestmentRequest extends Component{
   async fetchConnectionDetails(){
 
     let transactionId=this.props.data&&this.props.data._id?this.props.data._id:null;
-    if( transactionId && this.props.data.transactionType == "connectionRequest" ){
-      let connection  = await fetchConnectionRequestHandler(transactionId);
+    if( transactionId){
+      let connection  = await fetchOnBoardByTransaction(transactionId);
+      if(connection.success){
+        let result = JSON.parse(connection.result);
+        this.setState({
+          canAccept: result.canAccept,
+          canReject: result.canReject
+        })
+      }
+      console.log(connection);
       this.setState({data:connection||{},connectionId:(connection||{})._id});
     }
   };
@@ -41,19 +54,10 @@ export default class MlInvestmentRequest extends Component{
     }
   }
 
-  async rejectConnectionHandler(){
-    var response=await rejectConnectionActionHandler({'connectionId':this.state.connectionId});
-    if(response){
-      toastr.success("connection rejected");
-      await this.fetchConnectionDetails();
-    }else{
-      toastr.error("Failed to reject the connection");
-    }
-  }
-
   render(){
 
     const {data} = this.props;
+    const {canAccept, canReject} = this.state;
     // var data=this.state.data;
     console.log('State:', data);
     console.log('Props:', data);
@@ -83,6 +87,8 @@ export default class MlInvestmentRequest extends Component{
           userDetails={userDetails}
           activityLog={activityLog}
           data={data}
+          canAccept={canAccept}
+          canReject={canReject}
           OnBoardHandler={this.OnBoardHandler}
           showAcceptAndReject={this.state.showAcceptAndReject}
           rejectConnectionHandler={this.rejectConnectionHandler}/>

@@ -44,3 +44,22 @@ export async function updateStageForOnBoardActionHandler(transactionLogId,transa
   const id = result.data.updateOnBoardStage;
   return id
 }
+
+export async function fetchOnBoardByTransaction(transactionLogId) {
+  const result = await appClient.mutate({
+    mutation: gql`
+      mutation($transactionLogId:String){
+        fetchOnBoardByTransaction(transactionId:$transactionLogId){
+          result
+          success
+          result
+        }
+      }
+    `,
+    variables: {
+      transactionLogId
+    }
+  })
+  const id = result.data.fetchOnBoardByTransaction;
+  return id
+}

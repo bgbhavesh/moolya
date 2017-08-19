@@ -69,14 +69,14 @@ export default class MlStartupTab extends React.Component{
     return tabs;
   }
 
-  getStartupAboutUs(details){
+  getStartupAboutUs(details, privateKey){
     let data = this.state.portfolioStartupAboutUs;
     data=details;
     this.setState({portfolioStartupAboutUs : data})
     let updateItem = _.omit(details, 'logo');
-    this.props.getPortfolioStartupAboutUsDetails(updateItem,"aboutUs");
+    this.props.getPortfolioStartupAboutUsDetails(updateItem,"aboutUs",privateKey);
   }
-  getStartupAssets(details){
+  getStartupAssets(details,privateKey){
     // let data = this.state.portfolioStartupAssets;
     // data = details;
     this.setState({portfolioStartupAssets : details})
@@ -86,28 +86,28 @@ export default class MlStartupTab extends React.Component{
       ary.push(updateItem)
     })
     var sendData = ary;
-    this.props.getPortfolioStartupAboutUsDetails(sendData,"assets");
+    this.props.getPortfolioStartupAboutUsDetails(sendData,"assets",privateKey);
   }
-  getStartupClients(details){
+  getStartupClients(details,privateKey){
     let data = this.state.portfolioStartupClients;
     data = details;
     this.setState({portfolioStartupClients : data})
-    this.props.getPortfolioStartupAboutUsDetails(data,"clients");
+    this.props.getPortfolioStartupAboutUsDetails(data,"clients",privateKey);
   }
-  getStartupServiceProducts(details){
+  getStartupServiceProducts(details,privateKey){
     let data = this.state.portfolioStartupSP;
     data = details;
     this.setState({portfolioStartupSP : data})
-    this.props.getPortfolioStartupAboutUsDetails(data,"serviceProducts");
+    this.props.getPortfolioStartupAboutUsDetails(data,"serviceProducts",privateKey);
   }
-  getStartupInfo(details){
+  getStartupInfo(details,privateKey){
     let data = this.state.portfolioStartupInfo;
     data = details;
     this.setState({portfolioStartupInfo : data})
-    this.props.getPortfolioStartupAboutUsDetails(data,"information");
+    this.props.getPortfolioStartupAboutUsDetails(data,"information",privateKey);
   }
 
-  getStartupBranches(details) {
+  getStartupBranches(details,privateKey) {
     // let data = this.state.portfolioStartupBranches;
     // data = details;
     this.setState({portfolioStartupBranches: details})
@@ -117,9 +117,9 @@ export default class MlStartupTab extends React.Component{
       ary.push(updateItem)
     })
     var sendData = ary;
-    this.props.getPortfolioStartupAboutUsDetails(sendData, "branches");
+    this.props.getPortfolioStartupAboutUsDetails(sendData, "branches",privateKey);
   }
-  getStartupTechnology(details){
+  getStartupTechnology(details,privateKey){
     // let data = this.state.portfolioStartupTechnologies;
     // data = details;
     this.setState({portfolioStartupTechnologies : details})
@@ -129,19 +129,19 @@ export default class MlStartupTab extends React.Component{
       ary.push(updateItem)
     })
     var sendData = ary;
-    this.props.getPortfolioStartupAboutUsDetails(sendData, "technologies");
+    this.props.getPortfolioStartupAboutUsDetails(sendData, "technologies",privateKey);
   }
-  getStartupLegalIssue(details){
+  getStartupLegalIssue(details,privateKey){
     let data = this.state.portfolioStartupLegal;
     data = details;
     this.setState({portfolioStartupLegal : data})
-    this.props.getPortfolioStartupAboutUsDetails(data,"legalIssue");
+    this.props.getPortfolioStartupAboutUsDetails(data,"legalIssue",privateKey);
   }
-  getStartupRating(details){
+  getStartupRating(details,privateKey){
     let data = this.state.portfolioStartupRating;
     data = details;
     this.setState({portfolioStartupRating : data})
-    this.props.getPortfolioStartupAboutUsDetails(data,"rating");
+    this.props.getPortfolioStartupAboutUsDetails(data,"rating",privateKey);
   }
 
   componentWillMount()

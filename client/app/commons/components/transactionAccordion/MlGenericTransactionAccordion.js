@@ -5,12 +5,17 @@
 import React, {Component} from "react";
 import MlAppTransaction from '../../../profile/office/components/officeTransaction/MlAppTransaction'
 import MlConnectionRequest from './MlConnectionRequest';
+import MlInvestmentRequest from './MlInvestmentRequest'
 
 export default function MlGenericTransactionAccordion(props) {
   let data = props.data || {}
   switch (data.transactionType) {
-    case 'office': {
+    case 'officeRequest': {
       return <MlOffice config={data}/>
+      break;
+    }
+    case 'office': {
+      return getOfficeActivity(data)
       break;
     }
     case 'registration': {
@@ -22,11 +27,44 @@ export default function MlGenericTransactionAccordion(props) {
       return <MlConnectionRequest data={data}/>
       break;
     }
+    case 'investments': {
+      return <MlInvestmentRequest data={data}/>
+      break;
+    }
     default :
       return <MlEmptyView/>
   }
-
 }
+
+function getOfficeActivity  (data) {
+  switch(data.activity){
+    case 'officeDeactivate':{
+      console.log('officeDeactivate')
+      return <MlEmptyView/>
+      break;
+    }
+    case 'officeBearerInvitation':{
+      console.log('officeBearerInvitation')
+      return <MlEmptyView/>
+      break;
+    }
+    case 'officeBearerRetire':{
+      console.log('officeBearerRetire')
+      break;
+    }
+    case 'principal':{
+      console.log('principal')
+      break;
+    }
+    case 'officeBearerGoIndependent':{
+      console.log('officeBearerGoIndependent')
+      break;
+    }
+    default :
+      return <MlEmptyView/>
+  }
+}
+
 export class MlOffice extends Component {
   render() {
     return (

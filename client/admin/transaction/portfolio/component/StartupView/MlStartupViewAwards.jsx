@@ -3,11 +3,12 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-import {fetchStartupPortfolioAwards} from '../../actions/findPortfolioStartupDetails'
+import {fetchStartupDetailsHandler} from '../../actions/findPortfolioStartupDetails'
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
 
+const KEY = 'awardsRecognition'
 
 export default class MlStartupViewAwards extends React.Component {
   constructor(props) {
@@ -101,11 +102,11 @@ export default class MlStartupViewAwards extends React.Component {
   async fetchPortfolioStartupDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await fetchStartupPortfolioAwards(portfoliodetailsId);
-    if (response) {
-      this.setState({loading: false,startupAwardsList: response});
+    const response = await fetchStartupDetailsHandler(portfoliodetailsId, KEY);
+    if (response && response.awardsRecognition) {
+      this.setState({startupAwardsList: response.awardsRecognition});
     }
-
+    this.setState({loading: false})
   }
 
   render(){
@@ -122,7 +123,7 @@ export default class MlStartupViewAwards extends React.Component {
                   <div className="team-block">
                     <img src={details.logo&&details.logo.fileUrl} className="team_img" />
                     <h3>
-                      {details.awardName&&details.awardName}
+                      {details&&details.awardName}
                     </h3>
                   </div>
                 </div>)

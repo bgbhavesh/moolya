@@ -75,14 +75,12 @@ class MlPortfolio extends React.Component {
   }
 
   commentClicked() {
-
     $('.comment_wrap').slideToggle();
     this.setState({"saveButton": true})
-
   }
 
   async componentWillMount() {
-
+    this.loggedUserDetails = getAdminUserContext();
     if (this.props.viewMode) {
       this.fetchViewPortfolioTemplate(this.props.config);
     } else {
@@ -94,11 +92,11 @@ class MlPortfolio extends React.Component {
     } else {
       this.setState({ideaId: " "})
     }
-
   }
+
   async updateApproveUser(){
     let portfolioId = this.props.config
-    const response = await approvePortfolio(portfolioId);
+    const response = await approvePortfolio(portfolioId, this.loggedUserDetails);
     if (response.success) {
       toastr.success("Portfolio Approved Successfully")
       FlowRouter.go('/admin/transactions/portfolio/requestedPortfolioList')
@@ -106,6 +104,7 @@ class MlPortfolio extends React.Component {
       toastr.error(response.result)
     }
   }
+
   approveUser(){
     const resp = this.updateApproveUser();
     return resp;
@@ -224,7 +223,7 @@ class MlPortfolio extends React.Component {
     var tabName = ""
     if(privateKey.index >= 0){
       index = privateKey.index
-    }
+    }else index = 0;
     if(privateKey.tabName){
       tabName = privateKey.tabName
     }
@@ -266,8 +265,8 @@ class MlPortfolio extends React.Component {
       if (this.props.communityType == "Ideators") {
         let idea = this.state.idea
         if (idea) {
-          const loggedInUser = getAdminUserContext();
-          const response1 = await updateIdeatorIdeaActionHandler(idea, loggedInUser)
+          // const loggedInUser = getAdminUserContext();
+          const response1 = await updateIdeatorIdeaActionHandler(idea, this.loggedUserDetails)
           return response1;
         }
       }

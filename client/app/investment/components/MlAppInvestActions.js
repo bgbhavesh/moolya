@@ -165,10 +165,34 @@ module.exports = {
         changeStage(ref, currentStage, "onboard");
       }
     }
+  },
+  invest: {
+    config: {
+      showAction: true,
+      actionName: "invest",
+      customHandler: async (ref) => {
+        const currentStage = ref.props.currentStage;
+        investmentHandler(ref, currentStage, "onboard");
+      }
+    }
   }
 }
 
+investmentHandler = async (that, currentStage, currentStageName) => {
+  if(that.state.selected.stage.length){
+    let dataToInsert = {
+      "hasInvested": true
+    }
+    let response = await updateStageActionHandler(that.state.selected.stage[0]._id, dataToInsert);
+    if(response) {
+      toastr.success('Investment done successfully')
+    }
+  }
+}
+
+
 async function changeStage(that, currentStage, currentStageName){
+  console.log('--that--', that , '--currentStage--', currentStage, '--currentStageName--')
   if(!that.state.selected.resourceId){
     toastr.error('Please select a portfolio');
     return false;
@@ -189,7 +213,9 @@ async function changeStage(that, currentStage, currentStageName){
     response = await createStageActionHandler(dataToInsert);
   }
   if(response.success){
-    toastr.success('Portfolio moved to '+ currentStageName + ' stage');
+    toastr.success(`Portfolio moved to ${currentStageName}  stage`);
     that.props.fetchPortfolio();
+  } else {
+    toastr.error(response.result)
   }
 }

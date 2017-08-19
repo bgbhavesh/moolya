@@ -57,7 +57,9 @@ export async function findStartupManagementActionHandler(portfoliodetailsId) {
   console.log(result)
   const id = result.data.fetchStartupPortfolioManagement;
   let managementArray = [];
-  managementArray=_.map(id, function (row) {return _.omit(row, ['__typename'])});
+  managementArray = _.map(id, function (row) {
+    return _.omit(row, ['__typename'])
+  });
   // let data = _.omit(id,'__typename')
   // return data
   return managementArray;
@@ -69,23 +71,27 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
           query ($portfoliodetailsId: String!) {
             fetchStartupPortfolioAboutUs(portfoliodetailsId: $portfoliodetailsId) {
                 aboutUs{
-                  description
+                  startupDescription,
                   logo{
-                    fileName
+                    fileName,
                     fileUrl
                   }
-                  isLogoPrivate
-                  isDescriptionPrivate
+                  isLogoPrivate,
+                  isDescriptionPrivate,
                   annotatorId
                 }
                 rating{
-                  rating
-                  isRatingPrivate
+                  rating,
+                  isRatingPrivate,
+                  privateFields{
+                      keyName,
+                      booleanKey
+                  }
                 }
                 clients{
                   companyName
                   isCompanyNamePrivate
-                  description
+                  clientDescription
                   isDescriptionPrivate
                   logo{
                     fileName
@@ -95,18 +101,18 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   index
                 }
                 serviceProducts{
-                  description
+                  spDescription
                   isDescriptionPrivate
                 }
                 information{
-                  description
+                  informationDescription
                   isDescriptionPrivate
                 }
                 assets{
                   assetTypeName
                   assetTypeId
                   quantity
-                  description
+                  assetDescription
                   isAssetTypePrivate
                   isQuantityTypePrivate
                   isDescriptionPrivate
@@ -119,27 +125,30 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                 }
                 branches{
                   addressTypeId
-                  name
+                  branchName
                   isNamePrivate
-                  phoneNumber
+                  branchPhoneNumber
                   isPhoneNumberPrivate
-                  address1
+                  branchAddress1
                   isAddressOnePrivate
-                  address2
+                  branchAddress2
                   isAddressTwoPrivate
-                  landmark
+                  branchLandmark
                   isLandmarkPrivate
-                  area
+                  branchArea
                   isAreaPrivate
-                  city
+                  branchCity
+                  cityId
                   isCityPrivate
-                  state
+                  branchState
+                  stateId
                   isStatePrivate
-                  country
+                  branchCountry
+                  countryId
                   isCountryPrivate
                   addressImage
                   makePrivate
-                  logo{
+                  branchLogo{
                     fileName
                     fileUrl
                   }
@@ -149,7 +158,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   technologyName
                   technologyId
                   isTechnologyPrivate
-                  description
+                  technologyDescription
                   isDescriptionPrivate
                   makePrivate
                   logo{
@@ -159,7 +168,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   index
                 }
                 legalIssue{
-                  description
+                  legalDescription
                   isDescriptionPrivate
                 }
                 rating{
@@ -178,15 +187,23 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
   const data = result.data.fetchStartupPortfolioAboutUs;
   /*let data = _.omit(id,'__typename');*/
   let aboutUsArray = {}
-  aboutUsArray["aboutUs"]=_.omit(data.aboutUs,'__typename');
-  aboutUsArray["clients"]=_.map(data.clients, function (row) {return _.omit(row, ['__typename'])});
-  aboutUsArray["serviceProducts"]=_.omit(data.serviceProducts,'__typename');
-  aboutUsArray["information"]=_.omit(data.information,'__typename');
-  aboutUsArray["branches"]=_.map(data.branches, function (row) {return _.omit(row, ['__typename'])});
-  aboutUsArray["technologies"]=_.map(data.technologies, function (row) {return _.omit(row, ['__typename'])});
-  aboutUsArray["legalIssue"]=_.omit(data.legalIssue,'__typename');
-  aboutUsArray["assets"]=_.map(data.assets, function (row) {return _.omit(row, ['__typename'])});
-  aboutUsArray["rating"]=_.omit(data.rating,'__typename');
+  aboutUsArray["aboutUs"] = _.omit(data.aboutUs, '__typename');
+  aboutUsArray["clients"] = _.map(data.clients, function (row) {
+    return _.omit(row, ['__typename'])
+  });
+  aboutUsArray["serviceProducts"] = _.omit(data.serviceProducts, '__typename');
+  aboutUsArray["information"] = _.omit(data.information, '__typename');
+  aboutUsArray["branches"] = _.map(data.branches, function (row) {
+    return _.omit(row, ['__typename'])
+  });
+  aboutUsArray["technologies"] = _.map(data.technologies, function (row) {
+    return _.omit(row, ['__typename'])
+  });
+  aboutUsArray["legalIssue"] = _.omit(data.legalIssue, '__typename');
+  aboutUsArray["assets"] = _.map(data.assets, function (row) {
+    return _.omit(row, ['__typename'])
+  });
+  aboutUsArray["rating"] = _.omit(data.rating, '__typename');
 
   return aboutUsArray
 }
@@ -305,7 +322,7 @@ export async function fetchStartupPortfolioMemberships(portfoliodetailsId) {
     forceFetch: true
   })
   const id = result.data.fetchStartupPortfolioMemberships;
-  let data = _.omit(id,'__typename')
+  let data = _.omit(id, '__typename')
   return data
   // return id
 }
@@ -327,7 +344,7 @@ export async function fetchStartupPortfolioCompliances(portfoliodetailsId) {
     forceFetch: true
   })
   const id = result.data.fetchStartupPortfolioCompliances;
-  let data = _.omit(id,'__typename')
+  let data = _.omit(id, '__typename')
   return data
   // return id
 }
@@ -349,7 +366,7 @@ export async function fetchStartupPortfolioLicenses(portfoliodetailsId) {
     forceFetch: true
   })
   const id = result.data.fetchStartupPortfolioLicenses;
-  let data = _.omit(id,'__typename')
+  let data = _.omit(id, '__typename')
   return data
   // return id
 }
@@ -410,7 +427,7 @@ export async function fetchStartupPortfolioData(portfoliodetailsId, connection) 
     forceFetch: true
   })
   const id = result.data.fetchStartupPortfolioData;
-  let data = _.omit(id,'__typename')
+  let data = _.omit(id, '__typename')
   return data
   // return id
 }
@@ -471,10 +488,301 @@ export async function fetchDetailsStartupChartsActionHandler(portfoliodetailsId)
   const data = result.data.fetchStartupPortfolioCharts;
   /*let data = _.omit(id,'__typename');*/
   let chartsArray = {}
-  chartsArray["employmentOfCompanyChart"]=_.map(data.employmentOfCompanyChart, function (row) {return _.omit(row, ['__typename'])});
-  chartsArray["profitRevenueLiabilityChart"]=_.map(data.profitRevenueLiabilityChart, function (row) {return _.omit(row, ['__typename'])});
-  chartsArray["reviewOfCompanyChart"]=_.map(data.reviewOfCompanyChart, function (row) {return _.omit(row, ['__typename'])});
-  chartsArray["employeeBreakupDepartmentChart"]=_.map(data.employeeBreakupDepartmentChart, function (row) {return _.omit(row, ['__typename'])});
+  chartsArray["employmentOfCompanyChart"] = _.map(data.employmentOfCompanyChart, function (row) {
+    return _.omit(row, ['__typename'])
+  });
+  chartsArray["profitRevenueLiabilityChart"] = _.map(data.profitRevenueLiabilityChart, function (row) {
+    return _.omit(row, ['__typename'])
+  });
+  chartsArray["reviewOfCompanyChart"] = _.map(data.reviewOfCompanyChart, function (row) {
+    return _.omit(row, ['__typename'])
+  });
+  chartsArray["employeeBreakupDepartmentChart"] = _.map(data.employeeBreakupDepartmentChart, function (row) {
+    return _.omit(row, ['__typename'])
+  });
 
   return chartsArray
+}
+
+
+export async function fetchStartupDetailsHandler(portfoliodetailsId, key) {
+
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!, $key:String) {
+              fetchStartupDetails(portfoliodetailsId:$portfoliodetailsId, key:$key){
+                  aboutUs{
+                      logo{
+                        fileName,
+                        fileUrl
+                      }
+                      startupDescription,
+                      annotatorId,
+                      isLogoPrivate,
+                      isDescriptionPrivate,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  rating{
+                      rating,
+                      isRatingPrivate,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  serviceProducts{
+                      spDescription,
+                      isDescriptionPrivate,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  information{
+                      informationDescription,
+                      isDescriptionPrivate,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  technologies{
+                      technologyName,
+                      technologyId,
+                      technologyDescription,
+                      isTechnologyPrivate,
+                      isDescriptionPrivate,
+                      logo{,
+                          fileName,
+                          fileUrl
+                      }
+                      makePrivate,
+                      index
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  branches{
+                      addressTypeId,
+                      branchName,
+                      isNamePrivate,
+                      branchPhoneNumber,
+                      isPhoneNumberPrivate,
+                      branchAddress1,
+                      isAddressOnePrivate,
+                      branchAddress2,
+                      isAddressTwoPrivate,
+                      branchLandmark,
+                      isLandmarkPrivate,
+                      branchArea,
+                      isAreaPrivate,
+                      branchCity,
+                      cityId,
+                      isCityPrivate,
+                      branchState,
+                      stateId,
+                      isStatePrivate,
+                      branchCountry,
+                      countryId,
+                      isCountryPrivate,
+                      addressImage,
+                      isAddressImagePrivate,
+                      branchLogo{
+                          fileName,
+                          fileUrl
+                      },
+                      makePrivate,
+                      index
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  clients{
+                      companyName,
+                      isCompanyNamePrivate,
+                      logo{
+                          fileName,
+                          fileUrl
+                      },
+                      clientDescription,
+                      isDescriptionPrivate,
+                      makePrivate,
+                      index,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  legalIssue{
+                      legalDescription,
+                      isDescriptionPrivate,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  assets{
+                      assetTypeId,
+                      assetTypeName,
+                      isAssetTypePrivate,
+                      quantity,
+                      isQuantityTypePrivate,
+                      assetDescription,
+                      isDescriptionPrivate,
+                      logo{,
+                          fileName,
+                          fileUrl
+                      }
+                      makePrivate,
+                      index
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  management{
+                     title
+                     isTitlePrivate
+                     firstName
+                     isFirstNamePrivate
+                     lastName
+                     isLastNamePrivate
+                     middleName
+                     isMiddleNamePrivate
+                     qualification
+                     isQualificationPrivate
+                     certification 
+                     isCertificationPrivate 
+                     profilePic 
+                     isProfilePicPrivate 
+                     gender 
+                     isGenderPrivate 
+                     designation 
+                     isDesignationPrivate
+                     yearsOfExperience 
+                     isYOEPrivate 
+                     joiningDate 
+                     isJoiningDatePrivate
+                     firstJobJoiningDate 
+                     isFJJDPrivate 
+                     universities 
+                     isUniversitiesPrivate
+                     awards 
+                     isAwardsPrivate
+                     linkedInUrl 
+                     isLinkedInUrlPrivate
+                     managmentAbout
+                     isAboutPrivate
+                      logo{
+                        fileName
+                        fileUrl
+                      }
+                      index
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  investor{
+                    investorName,
+                    fundingType,
+                    fundingTypeId,
+                    investmentAmount,
+                    investorDescription,
+                    isNamePrivate,
+                    isInvestmentAmountPrivate,
+                    isDescriptionPrivate,
+                    logo{
+                      fileName,
+                      fileUrl
+                    },
+                    makePrivate,
+                    index
+                    privateFields{
+                        keyName,
+                        booleanKey
+                    }
+                  },
+                  awardsRecognition{
+                      awardName
+                      awardId
+                      isAwardPrivate
+                      year
+                      isYearPrivate
+                      awardsDescription
+                      isDescriptionPrivate
+                      logo{
+                        fileName,
+                        fileUrl
+                      },
+                      makePrivate,
+                      index
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  
+                  lookingFor{
+                      lookingForName,
+                      typeId,
+                      isTypePrivate,
+                      lookingDescription,
+                      isDescriptionPrivate,
+                      logo{
+                        fileName,
+                        fileUrl
+                      },
+                      makePrivate,
+                      index
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  
+                  memberships{
+                    membershipDescription,
+                    isDescriptionPrivate,
+                    privateFields{
+                        keyName,
+                        booleanKey
+                    }
+                  },
+                  
+                  compliances{
+                     complianceDescription, 
+                     isDescriptionPrivate,
+                     privateFields{
+                        keyName,
+                        booleanKey
+                     }
+                  },
+                  
+                  licenses{
+                     licenseDescription, 
+                     isDescriptionPrivate,
+                     privateFields{
+                        keyName,
+                        booleanKey
+                     }
+                  }
+              }
+          }
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId,
+      key: key
+    },
+    forceFetch: true
+  })
+
+  var response = result.data.fetchStartupDetails;
+  return response;
+
 }

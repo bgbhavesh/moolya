@@ -32,6 +32,7 @@ let internalTaskSchema = `
         attendeeProfileId: String
         name: String
         stage: String
+        type: String
         resourceId: String
         community: InternalTaskCommunity
         attendees: [InternalTaskAttendees]
@@ -42,6 +43,11 @@ let internalTaskSchema = `
         client: String
         userInfo: [InternalTaskUserInfo]
         createdAt: String
+        note: String
+        dueDate: String
+        priority: String
+        expectedInput: String
+        expectedOutput: String
     }
     
     input internalTaskCommunity {
@@ -79,6 +85,7 @@ let internalTaskSchema = `
       resourceId: String
       expectedInput: String
       expectedOutput: String
+      users: [internalTaskAttendees]
     }
   
     type Query{

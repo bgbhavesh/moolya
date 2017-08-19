@@ -3,14 +3,14 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-import {fetchDetailsStartupActionHandler} from '../../actions/findPortfolioStartupDetails';
+import {fetchStartupDetailsHandler} from '../../actions/findPortfolioStartupDetails';
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
 import _ from 'lodash'
 var Rating = require('react-rating');
 
-
+var KEY = 'aboutUs'
 export default class MlStartupViewAboutUs extends React.Component {
   constructor(props) {
     super(props);
@@ -40,11 +40,13 @@ export default class MlStartupViewAboutUs extends React.Component {
   async fetchPortfolioStartupDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await fetchDetailsStartupActionHandler(portfoliodetailsId);
+    const response = await fetchStartupDetailsHandler(portfoliodetailsId, KEY);
     if (response) {
-      this.setState({loading: false,startupAboutUsList: response});
+      this.setState({startupAboutUsList: response});
       this.fetchAnnotations();
     }
+
+    this.setState({loading:false})
 
   }
   initalizeAnnotaor(){
@@ -124,12 +126,10 @@ export default class MlStartupViewAboutUs extends React.Component {
           <div id="annotatorContent" className="tab_wrap_scroll">
               <div className="col-lg-12 col-sm-12" >
                 <div className="row">
-
                   <div className="panel panel-default panel-form-view">
-
                     <div   className="panel-body">
                       <h4>About us</h4>
-                      <p>{this.state.startupAboutUsList&&this.state.startupAboutUsList.aboutUs&&this.state.startupAboutUsList.aboutUs.description}.</p>
+                      <p>{this.state.startupAboutUsList&&this.state.startupAboutUsList.aboutUs&&this.state.startupAboutUsList.aboutUs.startupDescription}.</p>
                       <h4>Rating</h4>
                       <p><Rating
                         empty="fa fa-star-o empty"
@@ -138,23 +138,14 @@ export default class MlStartupViewAboutUs extends React.Component {
                         readonly={true}
                         initialRate={rating}
                       /></p>
-                      {/*<h4>Clients</h4>
-
-                      {clientsArray.map(function (details, idx) {
-                        return(<div className="col-lg-2 col-md-3 col-sm-3">
-                          <p>{details.clients && details.clients.description}</p>
-                        </div>)
-                      })}*/}
                       <h4>Service & Products</h4>
-                      <p>{this.state.startupAboutUsList&&this.state.startupAboutUsList.serviceProducts&&this.state.startupAboutUsList.serviceProducts.description}. </p>
+                      <p>{this.state.startupAboutUsList&&this.state.startupAboutUsList.serviceProducts&&this.state.startupAboutUsList.serviceProducts.spDescription}. </p>
                       <h4>Information</h4>
-                      <p>{this.state.startupAboutUsList&&this.state.startupAboutUsList.serviceProducts&&this.state.startupAboutUsList.information.description}.</p>
-
-
+                      <p>{this.state.startupAboutUsList&&this.state.startupAboutUsList.serviceProducts&&this.state.startupAboutUsList.information.informationDescription}.</p>
                     </div>
                   </div>
-
-                </div>    </div>
+                </div>
+              </div>
           </div>
 
 

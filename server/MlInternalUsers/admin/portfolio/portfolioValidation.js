@@ -16,7 +16,6 @@ class portfolioValidation{
         var omittedFields = []
 
         if(_.isArray(object)){
-
           _.each(object, function (item, index) {
               var omittedfields = []
             _.each(praviteFields, function (praviteField){
@@ -29,17 +28,17 @@ class portfolioValidation{
                 omittedfields.push(praviteObject)
               }
             })
-
             item.privateFields = _.cloneDeep(omittedfields);
-
           })
+          if((user && user.profile && !user.profile.isInternaluser) && (context.userId != portfolioDetails.userId)){
+            _.remove(object, {makePrivate:true})
+          }
           return object;
-
         }
         _.each(praviteFields, function (praviteField)
         {
+            console.log(praviteField)
             if(object[praviteField.keyName] != undefined){
-
                 if((user && user.profile && !user.profile.isInternaluser) && (context.userId != portfolioDetails.userId)){
                   delete object[praviteField.keyName]
                 }

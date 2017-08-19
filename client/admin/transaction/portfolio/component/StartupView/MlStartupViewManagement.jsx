@@ -3,12 +3,12 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-import {findStartupManagementActionHandler} from '../../actions/findPortfolioStartupDetails'
+import {fetchStartupDetailsHandler} from '../../actions/findPortfolioStartupDetails'
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
 
-
+const KEY = 'management'
 export default class MlStartupViewManagement extends React.Component {
   constructor(props) {
     super(props);
@@ -100,10 +100,12 @@ export default class MlStartupViewManagement extends React.Component {
   async fetchPortfolioStartupDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await findStartupManagementActionHandler(portfoliodetailsId);
-    if (response) {
-      this.setState({loading: false,startupManagementList: response});
+    const response = await fetchStartupDetailsHandler(portfoliodetailsId, KEY);
+    if (response && response.management) {
+      this.setState({startupManagementList: response.management});
     }
+
+    this.setState({lodaing:false})
 
   }
 

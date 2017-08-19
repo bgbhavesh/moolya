@@ -211,16 +211,6 @@ class MlAuthorization
           return false
 
         switch (moduleName){
-          case 'PORTFOLIO':{
-            if (userProfileDetails.isMoolya)
-              return this.validateChapterSubChapterCommunity(userProfileDetails, variables);
-            else if (!userProfileDetails.isMoolya) {
-              userProfileDetails.defaultSubChapters = mlNonMoolyaAccess.attachAssociatedSubChaptersContext(userProfileDetails.defaultSubChapters)
-              userProfileDetails.defaultChapters = mlNonMoolyaAccess.attachAssociatedChaptersContext(userProfileDetails.defaultChapters, userProfileDetails.defaultSubChapters)
-              return this.validateChapterSubChapterCommunity(userProfileDetails, variables);
-            }
-          }
-          break;
           case 'TAXATION':
           case 'CLUSTER':
             return true;
@@ -229,13 +219,18 @@ class MlAuthorization
           case 'COMMUNITY':
           case 'USERS':
           case 'REGISTRATION':
+          case 'PORTFOLIO':
           case 'TEMPLATEASSIGNMENT':
           case "INTERNALREQUESTS":
           case "SERVICECARD":
           case "OFFICE":              /*adding office for others five admin */
           case "HIERARCHY":
-          case "PROCESSSETUP":{
-            return this.validateChapterSubChapterCommunity(userProfileDetails, variables);
+          case "PROCESSSETUP": {
+            if(!userProfileDetails.isMoolya){
+              return this.validateNonMoolyaChapterSubChapterCommunity(userProfileDetails, variables, actionName);
+            }else{
+              return this.validateChapterSubChapterCommunity(userProfileDetails, variables, actionName);
+            }
           }
           break;
         }
@@ -276,6 +271,11 @@ class MlAuthorization
             return this.getInternalRequestContextDetails(variables, actionName)
           }
           break;
+          case 'HIERARCHY':{
+            var hierarchy = variables.hierarchy;
+            return {clusterId:hierarchy.clusterId, subChapterId:hierarchy.subChapterId}
+          }
+            break;
         }
         return variables;
       }
@@ -307,6 +307,40 @@ class MlAuthorization
           return false
         isCommunity = this.findCommunity(roleDetails.defaultCommunities, variables['communityId'], variables['subChapterId'], variables['chapterId'])
         if(!isCommunity)
+          return false
+
+        return true;
+      }
+
+      /**
+       * condition added for non-moolya
+       * @params [if 1) actionName: READ [defaultSubChapters + defaultChapters] = roleChapter && roleSubChapter
+       *             2) actionName: UPDATE && CREATE [original Chapters + original subChapters] = roleChapter && roleSubChapter]
+       * */
+      validateNonMoolyaChapterSubChapterCommunity(roleDetails, variables, actionName) {
+        if (!variables)
+          return false
+        let roleChapters = roleDetails.orgChapters
+        let roleSubChapters = roleDetails.orgSubChapters
+        if (actionName == 'READ') {
+          roleChapters = roleDetails.defaultChapters
+          roleSubChapters = roleDetails.defaultSubChapters
+        }
+        isChapter = this.findChapterSubChapter(roleChapters, variables['chapterId'])
+        if (!isChapter) {
+          if (variables['subChapterId']) {
+            isSubChapter = this.findChapterSubChapter(roleSubChapters, variables['subChapterId'])
+            if (!isSubChapter)
+              return false
+          } else {
+            return false;
+          }
+        }
+        isSubChapter = this.findChapterSubChapter(roleSubChapters, variables['subChapterId'])
+        if (!isSubChapter)
+          return false
+        isCommunity = this.findCommunity(roleDetails.defaultCommunities, variables['communityId'], variables['subChapterId'], variables['chapterId'])
+        if (!isCommunity)
           return false
 
         return true;

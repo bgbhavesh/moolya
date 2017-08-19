@@ -1,5 +1,6 @@
 import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
+import _ from 'lodash'
 
 export async function updatePortfolioActionHandler(details) {
   let portfoliodetailsId  = details.portfolioId;
@@ -81,19 +82,29 @@ export async function createAnnotationActionHandler(details) {
   return id
 }
 
-export async function approvePortfolio(portfolioId) {
+export async function approvePortfolio(portfolioId, loggedUserDetails) {
+  const {clusterId, chapterId, subChapterId, communityId} = loggedUserDetails;
   const result = await client.mutate({
     mutation: gql`
-     mutation($portfoliodetailsId:String){
-      approvePortfolio(portfoliodetailsId:$portfoliodetailsId) {
-          success
-          code
-          result
-        }
+     mutation($portfoliodetailsId:String, $clusterId: String, $chapterId: String, $subChapterId: String, $communityId: String){
+      approvePortfolio(portfoliodetailsId:$portfoliodetailsId,
+              clusterId: $clusterId,
+              chapterId: $chapterId,
+              subChapterId: $subChapterId,
+              communityId: $communityId) 
+              {
+                success
+                code
+                result
+              }
       }
     `,
     variables: {
-      portfoliodetailsId:portfolioId
+      portfoliodetailsId:portfolioId,
+      clusterId,
+      chapterId,
+      subChapterId,
+      communityId
     }
   })
 
@@ -120,23 +131,3 @@ export async function rejectPortfolio(portfolioId) {
   const id = result.data.rejectPortfolio;
   return id
 }
-
-// export async function requestProtfolioForGoLive(resId) {
-//   let portfoliodetailsId  = resId
-//   const result = await client.mutate({
-//     mutation: gql`
-//             mutation  ($portfoliodetailsId: String, ){
-//                 requestForGoLive(portfoliodetailsId:$portfoliodetailsId){
-//                     success,
-//                     code,
-//                     result
-//                 }
-//             }
-//         `,
-//     variables: {
-//       portfoliodetailsId
-//     }
-//   })
-//   const response = result;
-//   return portfoliodetailsId
-// }

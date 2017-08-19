@@ -3,6 +3,7 @@
  */
 
 import _underscore from "underscore";
+import MlSubChapterAccessControl from './mlSubChapterAccessControl'
 var _ = require('lodash');
 
 class MlAdminUserContext
@@ -11,7 +12,7 @@ class MlAdminUserContext
     this.userId=userId;
   }
 
-  userProfileDetails(userId)
+  _userDefaultProfileDetails(userId)
   {
    check(userId, String)
     let hierarchyLevel =null;
@@ -89,6 +90,24 @@ class MlAdminUserContext
                 roleName:roleName,
                 roleId: roleId
         };
+  }
+
+  /**
+   * conditions added for non-moolya access control
+   * @params [on condition on 'userProfile.isMoolya': false]
+   * */
+  userProfileDetails(userId) {
+    var userDetails = this._userDefaultProfileDetails(userId);
+    if (userDetails && !userDetails.isMoolya) {
+      userDetails.orgSubChapters = userDetails.defaultSubChapters
+      userDetails.orgChapters = userDetails.defaultChapters
+      var dataContext = MlSubChapterAccessControl.getAccessControl('SEARCH', {userId: userId})
+      if (dataContext && dataContext.hasAccess && dataContext.subChapters && dataContext.subChapters.length > 0) {
+        userDetails.defaultSubChapters = dataContext.subChapters;
+        userDetails.defaultChapters = dataContext.chapters;
+      }
+    }
+    return userDetails;
   }
 
   getDefaultMenu(userId) {

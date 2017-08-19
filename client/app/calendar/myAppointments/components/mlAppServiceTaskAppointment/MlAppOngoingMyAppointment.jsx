@@ -1,9 +1,11 @@
-/**
+/*
+/!**
  * Created by pankaj on 24/7/17.
  */
+ /*
 import React from 'react';
 import MlAppOngoingSelectedMyAppointment from './MlAppOngoingSelectedMyAppointment';
-import {ongoingAppointmentActionHandler} from '../actions/fetchOngoingAppointments';
+import {ongoingAppointmentActionHandler} from '../../actions/fetchOngoingAppointments';
 
 export default class MlAppOngoingMyAppointment extends React.Component {
 
@@ -26,11 +28,11 @@ export default class MlAppOngoingMyAppointment extends React.Component {
     };
   }
 
-  /**
+  /!**
    * Method :: viewAppointment
    * Desc :: Redirect with view appointment component
    * @param id :: current service id
-   */
+   *!/
   viewAppointment(appointment) {
     let data = {
       _id: appointment._id,
@@ -76,3 +78,4 @@ export default class MlAppOngoingMyAppointment extends React.Component {
 
 }
 
+*/

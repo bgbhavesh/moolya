@@ -2,6 +2,7 @@ import MlResolver from "../../commons/mlResolverDef";
 import MlRespPayload from "../../commons/mlPayload";
 import MlUserContext from '../../MlExternalUsers/mlUserContext'
 var _ = require('lodash')
+import mlInteractionService from '../interactions/mlInteractionRepoService';
 
 MlResolver.MlMutationResolver['createSharedLibrary'] = (obj, args, context, info) => {
 
@@ -64,6 +65,8 @@ MlResolver.MlMutationResolver['createSharedLibrary'] = (obj, args, context, info
         }
       });
     });
+
+    // mlInteractionService.createTransactionRequest(toUser._id,'share', args.resourceId, connectionData._id, context.userId, 'user', context );
 
     if(isSharedFailed){
       let code = 400;

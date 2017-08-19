@@ -21,6 +21,8 @@ let stage=`
     resourceId: String
     resourceType: String
     resourceStage: String
+    hasInvested: Boolean
+    onBoardRequest: Boolean
   }
 
     type Query {
@@ -31,6 +33,8 @@ let stage=`
     type Mutation {
         createStage(stage:stage):response
         updateStage(stageId:String, stage:stage):response
+        updateOnBoardStage(transactionLogId: String, transactionType: String, status: String):response
+        fetchOnBoardByTransaction(transactionId:String): response
     }
 `;
 
@@ -43,6 +47,7 @@ let supportedApi = [
 
   {api:'createStage', actionName:'CREATE', moduleName:"OFFICE", isAppWhiteList:true},
   {api:'updateStage', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList:true},
+  {api:'updateOnBoardStage', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList:true}
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

@@ -5,7 +5,6 @@ import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 
-
 export default class MlStartupLegal extends React.Component{
   constructor(props, context){
     super(props);

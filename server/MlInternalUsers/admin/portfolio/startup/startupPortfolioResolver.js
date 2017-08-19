@@ -2,6 +2,7 @@ import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
 import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
+import portfolioValidationRepo from '../portfolioValidation'
 var _ = require('lodash')
 var extendify = require('extendify');
 var _ = require('lodash')
@@ -258,48 +259,26 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioCharts'] = (obj, args, context,
       return startChartsArray
     }
   }
- /* var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfolioDetailsId}, context)
-  if (portfolioDetails) {
-    args.userId = portfolioDetails.userId;
-    var query = {
-      userId: args.userId,
-    }
-    var startupChartDetails = mlDBController.findOne('MlStartupPortfolio', query, context);
-    return startupChartDetails.charts;
-  }*/
 }
 
-/*MlResolver.MlQueryResolver['fetchStartupPortfolioChart'] = (obj, args, context, info) => {
-  var portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfolioDetailsId}, context)
-  if (portfolioDetails) {
-    args.userId = portfolioDetails.userId;
-    var query = {
-      userId: args.userId,
-    }
-    var startupChartDetails = mlDBController.findOne('MlStartupPortfolio', query, context);
-    let startUpChart = []
-    startupChartDetails.charts.map(function(data){
-      data.args.chartType.map(function(chart){
-        startUpChart = chart
-      })
-    })
-    return startUpChart;
-  }
-}*/
+MlResolver.MlQueryResolver['fetchStartupDetails'] = (obj, args, context, info) => {
+    if(_.isEmpty(args))
+      return;
 
-/*MlResolver.MlMutationResolver['createStartupPortfolioChart'] = (obj, args, context, info) => {
-  var query = {
-    _id: args.startUpPortfolioId,
-  }
-  var startupChartDetails = mlDBController.findOne('MlStartupPortfolio', query, context);
-  if(startupChartDetails.charts){
-    var startupChartDetailsUpdate = mlDBController.update('MlStartupPortfolio',query,{'charts':args.chartDetails},{$set:1}, context);
-    return startupChartDetailsUpdate;
-  }else {
-    var startupChartDetailsInsert = mlDBController.insert('MlStartupPortfolio', query,{'charts':args.chartDetails}, context);
-    return startupChartDetailsInsert;
-  }
-}*/
+    var key = args.key;
+    var portfoliodetailsId = args.portfoliodetailsId
+    var startupPortfolio = MlStartupPortfolio.findOne({"portfolioDetailsId": portfoliodetailsId})
+    if (startupPortfolio && startupPortfolio.hasOwnProperty(key)) {
+      var object = startupPortfolio[key];
+      var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+      startupPortfolio[key] = filteredObject
+      return startupPortfolio;
+    }
+
+    return;
+}
+
+
 
 updateArrayofObjects = (updateFor, source) =>{
   if(_.isArray(updateFor) && _.isArray(source)){

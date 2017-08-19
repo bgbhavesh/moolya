@@ -90,6 +90,7 @@ let appointment=`
     serviceCardId: String
     serviceName: String
     taskId: String
+    taskName: String
     sessionId: String
     serviceOrderId: String
   }
@@ -103,6 +104,8 @@ let appointment=`
   
   type Appointment {
     _id: String
+    appointmentType: String
+    appointmentId: String
     client: AppointmentUser
     provider: AppointmentUser
     appointmentInfo: AppointmentInfo
@@ -149,12 +152,31 @@ let appointment=`
     appointments: [myAppointmentData]
   }
   
+  type AppointmentDuration {
+    hours: Int
+    minutes: Int
+  }
+  
+  type selfTask {
+    _id: String
+    profileId: String
+    name: String
+    mode: String
+    about: String
+    industries: [String]
+    conversation: [String]
+    duration: AppointmentDuration
+    frequency: String
+    expectedInput: String
+    expectedOutput: String
+  }
   type Query {
-     fetchMyAppointmentByStatus: [Appointment]
+     fetchMyAppointmentByStatus(status: String): [Appointment]
      fetchAllProfileAppointmentCounts: profileAppointment
      fetchProfileAppointmentCounts( profileId: String ): profileAppointment
      fetchServiceSeekerList(profileId: String!, serviceId: String): [serviceSeekerList]
      fetchMyAppointment(profileId: String!, day: Int, month: Int, year: Int): [myAppointmentsResponse]
+     fetchSelfTask(selfTaskId: String): selfTask
   }
   
   type Mutation {
@@ -163,6 +185,7 @@ let appointment=`
      bookSelfTaskInternalAppointment( selfInternalAppointmentInfo: selfInternalAppointmentInfo ) : response
      userServiceCardPayment(userServiceCardPaymentInfo: userServiceCardPaymentInfo): response
      bookUserServiceCardAppointment(userServiceCardAppointmentInfo: userServiceCardAppointmentInfo!): response
+     updateAppointmentByStatus(appointmentId: String, status: String): response
   }
 `;
 
@@ -172,5 +195,6 @@ let supportedApi = [
   {api:'bookUserServiceCard', actionName:'CREATE', moduleName:"OFFICE", isWhiteList:true},
   {api:'userServiceCardPayment', actionName:'CREATE', moduleName:"OFFICE", isWhiteList:true},
   {api:'bookUserServiceCardAppointment', actionName:'CREATE', userAction:"CREATEAPPOINTMENT", resourceName:"SERVICECARD", isWhiteList:true},
+  {api:'updateAppointmentByStatus', actionName:'UPDATE', resourceName:"SERVICECARD"},
 ];
 MlResolver.MlModuleResolver.push(supportedApi);

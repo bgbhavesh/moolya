@@ -824,8 +824,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
 
   if (args.module == "userTransaction") {
-    let pipeline = [{
-      '$match': {_id: context.userId}},
+    let pipeline = [
+      {'$match': {_id: context.userId}},
       {'$lookup': {from: 'mlRegistration',localField: '_id',foreignField: 'registrationInfo.userId',as: 'registration'}},
       {'$lookup':{from:'mlPortfolioDetails',localField:'_id',foreignField:'userId', as:'portfolio'}},
       {'$lookup':{from:'mlOfficeTransaction',localField:'_id',foreignField:'userId', as:'office'}},
@@ -836,121 +836,104 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
           { "input":"$registration",
             "as":"reg",
             'in': {
-                "_id":"$$reg._id",
-                "transactionId": "$$reg.transactionId",
-                "cluster": "$$reg.registrationInfo.clusterName",
-                "chapter": "$$reg.registrationInfo.chapterName",
-                "subChapter": "$$reg.registrationInfo.subChapterName",
-                "community" : "$$reg.registrationInfo.communityName",
-                "transactionType": "$$reg.registrationInfo.transactionType",
-                "createdby": "$$reg.registrationInfo.createdBy",
-                "email": "$$reg.registrationInfo.email",
-                "createdAt": "$$reg.registrationInfo.registrationDate",
+              "_id":"$$reg._id",
+              "transactionId": "$$reg.transactionId",
+              "cluster": "$$reg.registrationInfo.clusterName",
+              "chapter": "$$reg.registrationInfo.chapterName",
+              "subChapter": "$$reg.registrationInfo.subChapterName",
+              "community" : "$$reg.registrationInfo.communityName",
+              "transactionType": "$$reg.registrationInfo.transactionType",
+              "createdby": "$$reg.registrationInfo.createdBy",
+              "email": "$$reg.registrationInfo.email",
+              "createdAt": "$$reg.registrationInfo.registrationDate",
+              "userId": '$_id',
+              "status": "$$reg.status"
+            }
+          }
+      },
+        "portfolio":{
+          '$map':
+            { "input":"$portfolio", "as":"port", 'in':
+              {
+                "_id":"$$port._id",
+                "transactionId": "$$port.transactionId",
+                "cluster": "$$port.clusterName",
+                "chapter": "$$port.chapterName",
+                "subChapter": "$$port.subChapterName",
+                "community" : "$$port.communityName",
+                "transactionType": "$$port.transactionType",
+                "createdby": "$$port.createdBy",
+                "email": "$$port.portfolioUserName",
+                "createdAt": "$$port.createdAt",
                 "userId": '$_id',
-                "status": "$$reg.status"
+                "status": "$$port.status",
+              }
             }
-          }
-      },
-      // {'$project':{"registration":{
-      //   '$map':
-      //   { "input":"$registration", "as":"reg", 'in':
-      //   { "createdAt" :"$$reg.registrationInfo.registrationDate", "transactionId":"$$reg._id" ,"transactionType":"$$reg.registrationInfo.transactionType",username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
-      //   }
-      // },
-      "portfolio":{
-        '$map':
-          { "input":"$portfolio", "as":"port", 'in':
+        },
+        "office":{
+          '$map':
+            { "input":"$office",
+              "as":"off",
+              'in': {
+                "_id":"$$off._id",
+                "transactionId": "$$off.transactionId",
+                "cluster": "$$off.clusterName",
+                "chapter": "$$off.chapterName",
+                "subChapter": "$$off.subChapterName",
+                "community" : "$$off.communityName",
+                "transactionType": "$$off.transactionType",
+                "createdby": "$profile.displayName",
+                "email": "$username",
+                "createdAt": "$$off.dateTime",
+                "userId": '$_id',
+                "status": "$$off.status",
+              }
+            }
+        },
+        "transactionLog": {
+          '$map':
             {
-              "_id":"$$port._id",
-              "transactionId": "$$port.transactionId",
-              "cluster": "$$port.clusterName",
-              "chapter": "$$port.chapterName",
-              "subChapter": "$$port.subChapterName",
-              "community" : "$$port.communityName",
-              "transactionType": "$$port.transactionType",
-              "createdby": "$$port.createdBy",
-              "email": "$$port.portfolioUserName",
-              "createdAt": "$$port.createdAt",
-              "userId": '$_id',
-              "status": "$$port.status",
+              "input": "$transactionLog",
+              "as": "trans",
+              'in': {
+                "_id": "$$trans._id",
+                "transactionId": "$$trans.transactionId",
+                "cluster": "$$trans.clusterName",
+                "chapter": "$$trans.chapterName",
+                "subChapter": "$$trans.subChapterName",
+                "community": "$$trans.communityName",
+                "transactionType": "$$trans.transactionTypeName",
+                "createdby": "$$trans.userName",
+                "email": "$$trans.emailId",
+                "createdAt": "$$trans.createdAt",
+                "userId": '$_id',
+                "status": "$$trans.status",
+                "activity": "$$trans.activity",
+                "activityDocId": "$$trans.activityDocId",
+                "fromUserId": "$$trans.fromUserId",
+                "fromProfileId": "$$trans.fromProfileId",
+                "fromUserName": "$$trans.fromUserName",
+                "fromUserType": "$$trans.fromUserType",
+              }
             }
-          }
-      },
-      // "portfolio":{
-      //   '$map':
-      //   { "input":"$portfolio", "as":"port", 'in':
-      //   { "createdAt" :"$$port.createdAt", "transactionId":"$$port._id" ,"transactionType":"$$port.transactionType", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
-      //   }
-      // },
-      "office":{
-        '$map':
-          { "input":"$office",
-            "as":"off",
-            'in': {
-              "_id":"$$off._id",
-              "transactionId": "$$off.transactionId",
-              "cluster": "$$off.clusterName",
-              "chapter": "$$off.chapterName",
-              "subChapter": "$$off.subChapterName",
-              "community" : "$$off.communityName",
-              "transactionType": "$$off.transactionType",
-              "createdby": "$profile.displayName",
-              "email": "$username",
-              "createdAt": "$$off.dateTime",
-              "userId": '$_id',
-              "status": "$$off.status",
-            }
-          }
-      },
-
-      // "office":{
-      //   '$map':
-      //   { "input":"$office", "as":"off", 'in':
-      //   { "createdAt" :"$$off.dateTime", "transactionId":"$$off._id" ,"transactionType":"$$off.transactionType", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName' , userId:'$_id'}
-      //   }
-      // },
-
-      "transactionLog": {
-        '$map':
-          {
-            "input": "$transactionLog",
-            "as": "trans",
-            'in': {
-              "_id": "$$trans._id",
-              "transactionId": "$$trans.transactionId",
-              "cluster": "$$trans.clusterName",
-              "chapter": "$$trans.chapterName",
-              "subChapter": "$$trans.subChapterName",
-              "community": "$$trans.communityName",
-              "transactionType": "$$trans.transactionTypeName",
-              "createdby": "$$trans.userName",
-              "email": "$$trans.emailId",
-              "createdAt": "$$trans.createdAt",
-              "userId": '$_id',
-              "status": "$$trans.status",
-              "activity": "$$trans.activity",
-              "activityDocId": "$$trans.activityDocId",
-              "fromUserId": "$$trans.fromUserId",
-              "fromProfileId": "$$trans.fromProfileId",
-              "fromUserName": "$$trans.fromUserName",
-              "fromUserType": "$$trans.fromUserType",
-            }
-          }
-      }
-
-        // "transactionLog":{
-        //   '$map':
-        //   { "input":"$transactionLog", "as":"trans", 'in':
-        //   { "createdAt" :"$$trans.createdAt", "transactionId":"$$trans._id" ,"transactionType":"$$trans.transactionTypeName", username:'$username', firstName:'$profile.firstName', lastName:'$profile.lastName', userId:'$_id'}
-        //   }
-        // },
+        }
       }},
+
+      {'$lookup':{from:'mlTransactionsLog',localField:'_id',foreignField:'fromUserId', as:'investerTransactionLog'}},
+
       { '$project':
         {
           '_id':1,
           'registration':1,
           'portfolio':1,
           'office':1,
+          'investerTransactionLog': {
+            $filter: {
+              input: "$transactionLog",
+              as: "transaction",
+              cond: { $eq: [ "$$transaction.transactionType", 'investments' ] }
+            }
+          },
           'transactionLog': {
             $filter: {
               input: "$transactionLog",
@@ -960,7 +943,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
           }
         }
       },
-      {'$project': {data: { "$concatArrays" : [ "$registration", "$portfolio", "$office", "$transactionLog" ] } }},
+      {'$project': {data: { "$concatArrays" : [ "$registration", "$portfolio", "$office", "$transactionLog", "$investerTransactionLog" ] } }},
       {'$addFields': { 'data.totalRecords': { $size: "$data" } } },
       {"$unwind" : "$data"},
       {"$replaceRoot": { newRoot: "$data"}}

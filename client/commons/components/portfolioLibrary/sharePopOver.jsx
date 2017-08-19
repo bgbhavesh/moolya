@@ -191,12 +191,12 @@ export default class SharePopOver extends React.Component {
     let Details = {
       files: file,
       users:user,
-      sharedStartDate: Date.parse(that.state.startDate),
-      sharedEndDate: Date.parse(that.state.endDate),
-      isDownloadable: that.state.downloadable
+      sharedStartDate: moment(this.state.startDate, 'DD-MM-YYYY'),
+      sharedEndDate: new Date(this.state.endDate),
+      isDownloadable: this.state.downloadable
     }
-    // console.log('--RESULT--',Details)
-     this.saveInfo(Details);
+    console.log('--Details--',Details)
+     // this.saveInfo(Details);
   }
 
   async saveInfo(Details) {
@@ -269,7 +269,7 @@ render(){
           <div className="clearfix" />
           <div className="ml_btn">
             <a href="" className="save_btn" onClick={this.saveDetails.bind(this)}>Send</a>
-            <a href="#" className="cancel_btn">Cancel</a>
+            <a href="#" className="cancel_btn" onClick={this.props.toggle.bind(this)} >Cancel</a>
           </div>
         </div>
       )

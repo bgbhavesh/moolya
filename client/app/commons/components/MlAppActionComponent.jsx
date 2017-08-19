@@ -38,7 +38,7 @@ export default class MlAppActionComponent extends React.Component {
       {
         actionName: 'like',
         displayName:'Like',
-        iconClass: 'ml fa fa-thumbs-o-up'
+        iconClass: 'ml my-ml-my_likes_2'
       },
       {
         actionName: 'connect',
@@ -53,12 +53,12 @@ export default class MlAppActionComponent extends React.Component {
       {
         actionName: 'favourite',
         displayName:'Favourite',
-        iconClass: 'ml flaticon-ml-shapes'
+        iconClass: 'ml my-ml-favourites'
       },
       {
         actionName: 'view',
         displayName:'View',
-        iconClass: 'ml flaticon-ml-shapes'
+        iconClass: 'ml my-ml-browser_3'
       },
       {
         actionName: 'partner',
@@ -88,7 +88,7 @@ export default class MlAppActionComponent extends React.Component {
       {
         actionName: 'share',
         displayName:'Share',
-        iconClass: 'ml flaticon-ml-share-arrow'
+        iconClass: 'ml my-ml-share'
       },
       {
         actionName: 'download',
@@ -103,7 +103,7 @@ export default class MlAppActionComponent extends React.Component {
       {
         actionName: 'wishlist',
         displayName:'Wishlist',
-        iconClass: 'ml flaticon-ml-interface'
+        iconClass: 'ml my-ml-mywishlist'
       },
       {
         actionName: 'edit',
@@ -210,6 +210,21 @@ export default class MlAppActionComponent extends React.Component {
         actionName: 'follow',
         displayName:'Follow',
         iconClass: 'ml flaticon-ml-shapes'
+      },
+      {
+        actionName: 'accept',
+        displayName:'Accept',
+        iconClass: 'ml ml-save'
+      },
+      {
+        actionName: 'reject',
+        displayName:'Reject',
+        iconClass: 'ml ml-save'
+      },
+      {
+        actionName: 'complete',
+        displayName:'Complete',
+        iconClass: 'ml ml-save'
       }
     ]
     let actionOptions= this.props.actionOptions|| [];

@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
-import {fetchDetailsStartupActionHandler} from "../../../../actions/findPortfolioStartupDetails";
+import {fetchStartupDetailsHandler} from "../../../../actions/findPortfolioStartupDetails";
 import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
@@ -9,11 +9,14 @@ import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibr
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 
+const KEY = 'aboutUs'
+
 export default class MlStartupAboutUs extends React.Component{
   constructor(props, context){
     super(props);
     this.state={
       loading: true,
+      privateKey:{},
       data:this.props.aboutUsDetails || {},
     }
 
@@ -59,7 +62,9 @@ export default class MlStartupAboutUs extends React.Component{
         delete data[propName];
       }
     }
-    this.props.getStartupAboutUs(data)
+    data = _.omit(data, ["privateFields"])
+
+    this.props.getStartupAboutUs(data, this.state.privateKey)
     this.fetchOnlyImages()
   }
   onLogoFileUpload(e){
@@ -99,43 +104,40 @@ export default class MlStartupAboutUs extends React.Component{
   async fetchOnlyImages() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await fetchDetailsStartupActionHandler(portfoliodetailsId);
-    if (response) {
+    const response = await fetchStartupDetailsHandler(portfoliodetailsId, KEY);
+    if (response && response.aboutUs) {
       let dataDetails = this.state.data
       dataDetails['logo'] = response.aboutUs.logo
-      this.setState({loading: false, data: dataDetails});
+      this.setState({data: dataDetails});
+      setTimeout(function () {
+        _.each(response.aboutUs.privateFields, function (pf) {
+          $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+        })
+      }, 10)
     }
 
+    this.setState({loading:false})
   }
-  onLockChange(field, e){
+  onLockChange(fieldName, field, e){
+    var isPrivate = false;
     let details = this.state.data||{};
     let key = e.target.id;
     details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
       details=_.extend(details,{[key]:true});
+      isPrivate = true
     }else{
       details=_.extend(details,{[key]:false});
     }
+
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, tabName:KEY}
+    this.setState({privateKey:privateKey})
+
     this.setState({data:details}, function () {
       this.sendDataToParent()
     })
   }
-
-/*
-  async fetchPortfolioDetails() {
-    let that = this;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await fetchDetailsStartupActionHandler(portfoliodetailsId);
-    if (response) {
-      let dataDetails = this.state.data
-      dataDetails['logo'] = response.aboutUs.logo
-      this.setState({loading: false, data: dataDetails});
-    }
-
-  }
-*/
-
 
   render(){
     const aboutUsImages = (this.state.data.logo&&this.state.data.logo.map(function (m, id) {
@@ -157,8 +159,8 @@ export default class MlStartupAboutUs extends React.Component{
             <div className="panel panel-default panel-form">
               <div className="panel-body">
                 <div className="form-group nomargin-bottom">
-                  <textarea placeholder="Describe..." className="form-control"  name="description" id="description" defaultValue={this.state.data&&this.state.data.description} onBlur={this.handleBlur.bind(this)}></textarea>
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/>
+                  <textarea placeholder="Describe..." className="form-control"  name="startupDescription" id="description" defaultValue={this.state.data&&this.state.data.startupDescription} onBlur={this.handleBlur.bind(this)}></textarea>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" onClick={this.onLockChange.bind(this, "startupDescription", "isDescriptionPrivate")}/>
                 </div>
 
               </div>

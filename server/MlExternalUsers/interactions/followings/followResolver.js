@@ -5,12 +5,26 @@ import MlResolver from '../../../commons/mlResolverDef'
 import MlRespPayload from '../../../commons/mlPayload'
 import _ from 'lodash';
 import mlInteractionService from '../mlInteractionRepoService'
+import MlSubChapterAccessControl from './../../../mlAuthorization/mlSubChapterAccessControl';
 MlResolver.MlMutationResolver['followUser'] = (obj, args, context, info) =>{
     if(args && context && context.userId){
       var resp=null;
       //follow flag checks for true/false. if its true:
       var follow=args.follow===true?args.follow:(args.follow===false?false:true);
         try {
+
+          /**
+           * Sub chapter access control
+           */
+          let portfolioDetails =mlDBController.findOne('MlPortfolioDetails',{_id:args.resourceId}, context);
+          let subChapterId = portfolioDetails && portfolioDetails.subChapterId ? portfolioDetails.subChapterId : '';
+          let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('TRANSACT', context, subChapterId);
+          if(!mlSubChapterAccessControl.hasAccess){
+            let code = 400;
+            let response = new MlRespPayload().errorPayload('You do not have access to transact', code);
+            return response;
+          }
+
           var resourceDetails = mlInteractionService.fetchResourceBasedUserDetails(args.resourceType, args.resourceId, context);
           var fromuser = resourceDetails.contextUser;
           var toUser = resourceDetails.resourceOwner;

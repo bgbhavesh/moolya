@@ -3,16 +3,37 @@
  */
 
 import _ from 'lodash'
-
+import MlInvestmentsStageRepoService from '../../../MlExternalUsers/stages/mlInvestmentStagesRepoService';
 class portfolioValidation{
     constructor(){
 
     }
 
+  /**
+   * allowPrivateFields checks for conditions to restrict the fields for portfolio
+   * Returns Boolean for restricting the fields
+   **/
+  static allowPrivateFields(portfolioDetails,context){
+        var allowPrivateFields=false;
+        var user = mlDBController.findOne('users', {"_id":(context||{}).userId}, context) || {};
+        var portfolioDetailsId=(portfolioDetails||{})._id;
+
+       /** actual private fields condition : true if Internal User or if its portfolio owner*/
+       if((user && user.profile && user.profile.isInternaluser) || (user._id === (portfolioDetails||{}).userId)){
+           allowPrivateFields=true;
+           return true;
+       }
+
+        /** check for user onBoard condition and restrict the private fields*/
+        allowPrivateFields=MlInvestmentsStageRepoService.canViewCompletePortfolio((context||{}).userId,portfolioDetailsId)||false;
+        return allowPrivateFields;
+    }
+
     omitPrivateDetails(portfolioDetailsId, object, context){
-        var portfolioDetails = MlPortfolioDetails.findOne(portfolioDetailsId);
-        var user = Meteor.users.findOne({_id:context.userId});
-        var praviteFields = portfolioDetails.privateFields
+        var portfolioDetails = MlPortfolioDetails.findOne(portfolioDetailsId)||{};
+      //Pre Condition for restricting the private fields.
+      var allowPrivateFields=portfolioValidation.allowPrivateFields(portfolioDetails,context);
+      var praviteFields = portfolioDetails.privateFields
         var omittedFields = []
 
         if(_.isArray(object)){
@@ -21,7 +42,7 @@ class portfolioValidation{
             _.each(praviteFields, function (praviteField){
               if(item[praviteField.keyName] != undefined && praviteField.index == index){
 
-                if((user && user.profile && !user.profile.isInternaluser) && (context.userId != portfolioDetails.userId)){
+                if(!allowPrivateFields){
                   delete item[praviteField.keyName]
                 }
                 var praviteObject = _.find(praviteFields, {keyName:praviteField.keyName})
@@ -30,7 +51,7 @@ class portfolioValidation{
             })
             item.privateFields = _.cloneDeep(omittedfields);
           })
-          if((user && user.profile && !user.profile.isInternaluser) && (context.userId != portfolioDetails.userId)){
+          if(!allowPrivateFields){
             _.remove(object, {makePrivate:true})
           }
           return object;
@@ -39,7 +60,7 @@ class portfolioValidation{
         {
             console.log(praviteField)
             if(object[praviteField.keyName] != undefined){
-                if((user && user.profile && !user.profile.isInternaluser) && (context.userId != portfolioDetails.userId)){
+                if(!allowPrivateFields){
                   delete object[praviteField.keyName]
                 }
                 var praviteObject = _.find(praviteFields, {keyName:praviteField.keyName})
@@ -47,6 +68,8 @@ class portfolioValidation{
             }
         })
         object.privateFields = _.cloneDeep(omittedFields);
+
+        // if(!hasRestrictionOnPrivateFields) {object.privateFields=[]};
         return object;
     }
 

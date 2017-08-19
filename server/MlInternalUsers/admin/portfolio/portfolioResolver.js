@@ -402,6 +402,10 @@ MlResolver.MlQueryResolver['fetchPortfolioByReg'] = (obj, args, context, info) =
   if (args.registrationId) {
     response = mlDBController.findOne('MlPortfolioDetails', {registrationId: args.registrationId}, context) || {}
     var subChapterId = response?response.subChapterId:''
+    if(!subChapterId){
+      var registrationDetails = mlDBController.findOne('MlRegistration', {_id: args.registrationId}, context) || {}
+      subChapterId = registrationDetails && registrationDetails.registrationInfo && registrationDetails.registrationInfo.subChapterId ? registrationDetails && registrationDetails.registrationInfo && registrationDetails.registrationInfo.subChapterId : ''
+    }
     var dataContext = MlSubChapterAccessControl.getAccessControl('VIEW', context, subChapterId, false)
     // response.canAccess = mlNonMoolyaAccess.canExternalUserViewReg(args.registrationId, context)
     response.canAccess = dataContext.hasAccess

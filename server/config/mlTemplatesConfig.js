@@ -53,6 +53,8 @@ let templates = [
   {stepName:"Portfolio",stepCode:"PORTFOLIO",templateCode:"PFTFUNVIW",templateName:"Portfolio-Template-Investor-View",templateDescription:"Portfolio Template for Investor View",isActive: true,createdDate:  new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"},
   {stepName:"Portfolio",stepCode:"PORTFOLIO",templateCode:"PFTSPSEDT",templateName:"Portfolio-Template-ServiceProvider-Edit",templateDescription:"Portfolio Template for Service Provider View",isActive: true,createdDate:  new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"},
   {stepName:"Portfolio",stepCode:"PORTFOLIO",templateCode:"PFTSPSVIW",templateName:"Portfolio-Template-ServiceProvider-View",templateDescription:"Portfolio Template for Service Provider Edit",isActive: true,createdDate:  new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"},
+  {stepName:"Portfolio",stepCode:"PORTFOLIO",templateCode:"PFTINSEDT",templateName:"Portfolio-Template-Institution-Edit",templateDescription:"Portfolio Template for Institution View",isActive: true,createdDate:  new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"},
+  {stepName:"Portfolio",stepCode:"PORTFOLIO",templateCode:"PFTINSVIW",templateName:"Portfolio-Template-Institution-View",templateDescription:"Portfolio Template for Institution Edit",isActive: true,createdDate:  new Date(),templateImage:"https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"},
 ]
 
 let templateObject = {
@@ -213,6 +215,21 @@ if(mltemplateAssignment.length<=0){
     "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
     "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "SPS", "templatecommunityName" : "Service Providers", "templateuserType" : "all",
     "templateidentity" : "view", "assignedTemplates" : [{"stepName" : "Portfolio", "stepCode" : "PORTFOLIO","templateCode":"PFTSPSVIW","templateName":"Portfolio-Template-ServiceProvider-View"}],
+    createdDate: new Date(), createdBy: "systemadmin"
+  });
+
+  /**Institution templates*/
+  MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",
+    "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
+    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "INS", "templatecommunityName" : "Institution", "templateuserType" : "all",
+    "templateidentity" : "view", "assignedTemplates" : [{"stepName" : "Portfolio", "stepCode" : "PORTFOLIO","templateCode":"PFTINSVIW","templateName":"Portfolio-Template-Institution-View"}],
+    createdDate: new Date(), createdBy: "systemadmin"
+  });
+
+  MlTemplateAssignment.insert({"templateprocess" :proc._id,"templatesubProcess" :subProc._id,"templateProcessName" : "Registration",
+    "templateSubProcessName" : "Registration", "templateclusterId" : "all", "templateclusterName" : "All", "templatechapterId" : "all", "templatechapterName" : "All",
+    "templatesubChapterId" : "all", "templatesubChapterName" : "All", "templatecommunityCode" : "INS", "templatecommunityName" : "Institution", "templateuserType" : "all",
+    "templateidentity" : "edit", "assignedTemplates" : [{"stepName" : "Portfolio", "stepCode" : "PORTFOLIO","templateCode":"PFTINSEDT","templateName":"Portfolio-Template-Institution-Edit"}],
     createdDate: new Date(), createdBy: "systemadmin"
   });
 }

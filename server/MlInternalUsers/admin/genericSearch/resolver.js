@@ -825,7 +825,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
 
   if (args.module == "userTransaction") {
     let pipeline = [
-      {'$match': {_id: "M5Bo3pbWG6Wigq9j6"}},
+      {'$match': {_id: context.userId}},
       {'$lookup': {from: 'mlRegistration',localField: '_id',foreignField: 'registrationInfo.userId',as: 'registration'}},
       {'$lookup':{from:'mlPortfolioDetails',localField:'_id',foreignField:'userId', as:'portfolio'}},
       {'$lookup':{from:'mlOfficeTransaction',localField:'_id',foreignField:'userId', as:'office'}},
@@ -962,7 +962,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     }
 
     if(findOptions.limit) {
-      // pipeline.push({$limit:findOptions.limit});
+      pipeline.push({$limit:findOptions.limit});
     }
 
     data = mlDBController.aggregate('users', pipeline, context);
@@ -972,7 +972,12 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       let transactionType = doc.transactionType;
       if(transactionType == "connectionRequest" || transactionType == "interaction") {
         if(doc.fromUserType === 'user') {
-          let fromUserProfile = new MlUserContext().userProfileDetailsByProfileId(doc.fromProfileId);
+          let fromUserProfile;
+          if(doc.fromProfileId) {
+            fromUserProfile = new MlUserContext().userProfileDetailsByProfileId(doc.fromProfileId);
+          } else {
+            fromUserProfile = new MlUserContext().userProfileDetails(doc.fromUserId);
+          }
           doc.cluster = fromUserProfile.clusterName;
           doc.chapter = fromUserProfile.chapterName;
           doc.subChapter = fromUserProfile.subChapterName;

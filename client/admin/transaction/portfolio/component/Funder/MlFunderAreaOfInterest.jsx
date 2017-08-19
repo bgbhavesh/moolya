@@ -35,7 +35,7 @@ export default class MlFunderAreaOfInterest extends React.Component {
     this.fetchPortfolioDetails();
   }
 
-  async selectedIndexfetchPortfolioDetails() {
+  async fetchPortfolioDetails() {
     let that = this;
     let portfolioDetailsId = that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.funderPortfolio && that.context.funderPortfolio.areaOfInterest)

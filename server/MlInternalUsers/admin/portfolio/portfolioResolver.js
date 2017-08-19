@@ -248,7 +248,9 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
 }
 
 /**
- * portfolio approval to go live
+ * @params [portfolioId]
+ * @usage 1)portfolio approval to go live
+ *        2) process-setup if type funder
  * */
 MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {

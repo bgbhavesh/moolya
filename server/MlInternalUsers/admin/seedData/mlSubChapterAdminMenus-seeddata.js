@@ -819,6 +819,27 @@ if(Meteor.isServer){
             ]
           },
           {
+            "link": "/admin/transactions/shareList",
+            "name": "Share",
+            "uniqueId": "transaction_Share",
+            "isLink": true,
+            "isMenu": true,
+            "image": "",
+            "subMenu": [
+              {
+                "link": "/admin/transactions/shareList",
+                "name": "List Share",
+                "uniqueId": "transaction_ShareList",
+                "subMenuMappingId": "transaction_Share",
+                "subMenusId": "transaction",
+                "isLink": true,
+                "isMenu": false,
+                "image": ""
+              }
+            ]
+          },
+
+          {
             "link": "/admin/transactions/systemsLog  ",
             "name": "System",
             "uniqueId": "systems_Log",

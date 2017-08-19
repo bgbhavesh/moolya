@@ -11,7 +11,7 @@ export default class MlConnectionHeader extends Component {
       displayName: "",
       profileDisplay: false,
       subMenu: false,
-      isAll: true
+      isAll: false
     }
     this.getUserProfiles.bind(this)
   }
@@ -32,14 +32,14 @@ export default class MlConnectionHeader extends Component {
   }
 
   resetWithAll() {
-    this.setState({selectedProfileId: '', isAll: true});
+    this.setState({selectedProfileId: '', isAll: true, selectedProfile:""});
     this.props.showLibrary(false)
     // this.props.componentToLoad('calendar');
     // this.props.getAppointmentCounts();
   }
 
-  changeProfile(userId){
-    console.log('===connection Header===', userId)
+  changeProfile(userId, index){
+    this.setState({selectedProfile: index, isAll: false})
     this.props.connectionManagement(userId);
   };
 
@@ -70,50 +70,14 @@ export default class MlConnectionHeader extends Component {
           {profiles.map(function (profile, idx) {
             return (
               <span key={idx}>
-               <li className={that.state.isAll ? 'active_user' : ''}>
-            <a href="#" onClick={()=>that.changeProfile(profile.userId)}>
-              <img src={profile.profilePic ? profile.profilePic : "/images/def_profile.png"}/><br />
-              <div className="tooltiprefer">
-                <span>{profile.displayName ? profile.displayName : "All"}</span>
-              </div>
-            </a>
-          </li>
-                {/*<li className={"sub_list_wrap "+ ( selectedProfileId == profile.profileId ? "" :"hidden_list" )}>*/}
-                {/*<ul className="sub_list">*/}
-                {/*<li className={ type == "activity" ? "active_user" : ""}>*/}
-                {/*<a onClick={()=>that.changeType("activity")} href="">*/}
-                {/*<span className="icon_bg"><span className="icon_lg fa fa-file-text-o"></span></span><br />*/}
-                {/*<div className="tooltiprefer">*/}
-                {/*<span>Activity</span>*/}
-                {/*</div>*/}
-                {/*</a>*/}
-                {/*</li>*/}
-                {/*<li className={ type == "task" ? "active_user" : ""}>*/}
-                {/*<a onClick={()=>that.changeType("task")} href="">*/}
-                {/*<span className="icon_bg"><span className="icon_lg fa fa-list-alt"></span></span><br />*/}
-                {/*<div className="tooltiprefer">*/}
-                {/*<span>Task Master</span>*/}
-                {/*</div>*/}
-                {/*</a>*/}
-                {/*</li>*/}
-                {/*<li className={ type == "service" ? "active_user" : ""}>*/}
-                {/*<a onClick={()=>that.changeType("service")} href="">*/}
-                {/*<span className="icon_bg"><span className="icon_lg fa fa-puzzle-piece"></span></span><br />*/}
-                {/*<div className="tooltiprefer">*/}
-                {/*<span>Services</span>*/}
-                {/*</div>*/}
-                {/*</a>*/}
-                {/*</li>*/}
-                {/*<li className={ type == "calendar" ? "active_user" : ""}>*/}
-                {/*<a onClick={()=>that.changeToCalendarSettings()} href="">*/}
-                {/*<span className="icon_bg"><span className="icon_lg fa fa-calendar"></span></span><br />*/}
-                {/*<div className="tooltiprefer">*/}
-                {/*<span>Calendar</span>*/}
-                {/*</div>*/}
-                {/*</a>*/}
-                {/*</li>*/}
-                {/*</ul>*/}
-                {/*</li>*/}
+                <li className={that.state.selectedProfile === idx ? 'active_user' : ''}>
+                  <a href="#" onClick={()=>that.changeProfile(profile.userId, idx)}>
+                    <img src={profile.profilePic ? profile.profilePic : "/images/def_profile.png"}/><br />
+                    <div className="tooltiprefer">
+                      <span>{profile.displayName ? profile.displayName : "All"}</span>
+                    </div>
+                  </a>
+                </li>
               </span>
             )
           })}

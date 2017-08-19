@@ -31,6 +31,7 @@ const mlMyTransactionTableConfig = new MlViewer.View({
     {dataField: "transactionId", title: "Transaction Id", dataSort: true},
     {dataField: "email", title: "Email", dataSort: true},
     {dataField: "transactionType", title: "Transaction Type", dataSort: true},
+    {dataField: "activity", title: "Activity Type", dataSort: true},
     {dataField: "cluster", title: "Cluster", dataSort: true},
     {dataField: "chapter", title: "Chapter", dataSort: true},
     {dataField: "subChapter", title: "Sub Chapter", dataSort: true},

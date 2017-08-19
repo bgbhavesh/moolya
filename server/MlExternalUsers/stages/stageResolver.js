@@ -102,6 +102,29 @@ MlResolver.MlMutationResolver['updateOnBoardStage'] = (obj, args, context, info)
 
 
 MlResolver.MlMutationResolver['fetchOnBoardByTransaction'] = (obj, args, context, info) => {
-  console.log(args);
+  let transactionId = args.transactionId;
+  let userId = context.userId;
+  if(transactionId){
+    let transactionLogDetails = mlDBController.findOne('MlTransactionsLog', {_id: transactionId }, context);
+    let stageDetails = mlDBController.findOne('MlStage', {_id: transactionLogDetails.activityDocId} , context);
+    let result = {};
+    if( stageDetails.resourceStage == 'onboard' ){
+      result.canAccept = false;
+      result.canReject = false;
+    } else if ( userId == transactionLogDetails.userId ) {
+      result.canAccept = true;
+      result.canReject = true;
+    } else {
+      result.canAccept = false;
+      result.canReject = false;
+    }
+    let code = 200;
+    let response = new MlRespPayload().successPayload(result, code);
+    return response;
+  } else {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('TransactionId is missing', code);
+    return response
+  }
 };
 

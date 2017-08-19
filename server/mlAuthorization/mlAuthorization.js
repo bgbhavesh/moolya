@@ -224,6 +224,7 @@ class MlAuthorization
           case "INTERNALREQUESTS":
           case "SERVICECARD":
           case "OFFICE":              /*adding office for others five admin */
+          case "SHARE":
           case "HIERARCHY":
           case "PROCESSSETUP": {
             if(!userProfileDetails.isMoolya){

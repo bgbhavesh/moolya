@@ -4,13 +4,14 @@ import {BootstrapTable, TableHeaderColumn} from "react-bootstrap-table";
 import {initalizeFloatLabel,OnToggleSwitch} from "../../../utils/formElemUtil";
 import {graphql} from "react-apollo";
 import {fetchShareDetails} from '../actions/MlShareActionHandler'
+import moment from "moment";
 import gql from "graphql-tag";
 import MoolyaSelect from "../../../commons/components/MlAdminSelectWrapper";
 import {getAdminUserContext} from '../../../../commons/getAdminUserContext'
 import _ from "lodash";
 var FontAwesome = require('react-fontawesome');
 
-export default class MlProcessSetupDetailsComponent extends React.Component {
+export default class MlShareDetailsComponent extends React.Component {
   constructor(props){
     super(props);
     this.state= {
@@ -51,22 +52,9 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
 
   async getShareDetails() {
     const response  = await fetchShareDetails(this.state.shareId)
-    // console.log('---response---', response)
+    console.log('---response---', response)
     this.setState({data: response})
     return response;
-  }
-
-
-  updateCost(e){
-    this.setState({"cost":e.currentTarget.value});
-  }
-
-  updateTax(e){
-    this.setState({"tax":e.currentTarget.checked});
-  }
-
-  updateAbout(e){
-    this.setState({"about":e.currentTarget.value});
   }
 
 
@@ -76,6 +64,9 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
     let users = this.state && this.state.data && this.state.data.users ? this.state.data.users : [];
     let files = this.state && this.state.data && this.state.data.files ? this.state.data.files : [];
     let transId = this.state && this.state.shareId ? this.state.shareId : '';
+    let createdAt = that.state.data && that.state.data.createdAt ? moment(that.state.data.createdAt).format('DD-MM-YYYY hh:mm:ss'):"";
+    let sharedStartDate = that.state.data && that.state.data.sharedStartDate ? moment(that.state.data.sharedStartDate).format('DD-MM-YYYY hh:mm:ss'):"";
+    let sharedEndDate = that.state.data && that.state.data.sharedEndDate ? moment(that.state.data.sharedEndDate).format('DD-MM-YYYY hh:mm:ss'):"";
     // console.log('this.state', this.state);
     return (
       <div className="ml_tabs">
@@ -139,7 +130,7 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
             <div className="row table_tab">
               <div className="col-md-6">
                 <div className="form-group">
-                  <input type="text" placeholder="Shared Date & Time" value={ that.state.data ? that.state.data.createdAt: ''} className="form-control float-label" id=""/>
+                  <input type="text" placeholder="Shared Date & Time" value={ that.state.data && that.state.data.createdAt ? createdAt: ''} className="form-control float-label" id=""/>
                 </div>
                 <h5>Shared with :</h5>
                 <ul className="img_upload ul-hide">
@@ -180,12 +171,12 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
                 <br/>
                 <div className="col-md-6 nopadding-left">
                   <div className="form-group">
-                    <input type="text" placeholder="From" value={ this.state.data && this.state.data.sharedStartDate ? this.state.data.sharedStartDate : '' } disabled defaultValue="10.20.1.6" className="form-control float-label" id=""/>
+                    <input type="text" placeholder="From" value={ this.state.data && this.state.data.sharedStartDate ? sharedStartDate: '' } disabled defaultValue="10.20.1.6" className="form-control float-label" id=""/>
                   </div>
                 </div>
                 <div className="col-md-6 nopadding-right">
                   <div className="form-group">
-                    <input type="text" placeholder="To" value={ this.state.data && this.state.data.sharedEndDate ? this.state.data.sharedEndDate : '' } disabled defaultValue="10.20.1.6" className="form-control float-label" id=""/>
+                    <input type="text" placeholder="To" value={ this.state.data && this.state.data.sharedEndDate ? sharedEndDate : '' } disabled defaultValue="10.20.1.6" className="form-control float-label" id=""/>
                   </div>
                 </div>
                 <div className="clearfix" />

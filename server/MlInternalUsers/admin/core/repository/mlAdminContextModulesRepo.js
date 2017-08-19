@@ -456,13 +456,22 @@ let CoreModules = {
   },
 
   MlShareTransactionRepo: function (requestParams, userFilterQuery, contextQuery, fieldsProj, context) {
-
-    var contextFieldMap = {};
+    var contextFieldMap = {
+      'clusterId': 'owner.clusterId',
+      'chapterId': 'owner.chapterId',
+      'subChapterId': 'owner.subChapterId',
+      'communityId': 'owner.communityId'
+    };
     var resultantQuery = MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery, contextFieldMap);
-    var result = [];
 
-    let pipleline = [
-      {
+    resultantQuery = MlAdminContextQueryConstructor.constructQuery(resultantQuery, '$in');
+    var pipeline = [];
+
+    if (Object.keys(resultantQuery).length) {
+      pipeline.push({'$match': resultantQuery});
+    }
+
+    pipeline.push({
         "$group": {
           _id: "$sharedId",
           userId: { "$first": "$owner.userId" },
@@ -501,24 +510,20 @@ let CoreModules = {
           transactionType: "Share",
           totalRecords: 1
         }
-      }
-    ];
+      })
 
-    if (Object.keys(resultantQuery).length) {
-      pipleline.push({'$match': resultantQuery});
-    }
     if (fieldsProj.sort) {
-      pipleline.push({'$sort': fieldsProj.sort});
+      pipeline.push({'$sort': fieldsProj.sort});
     }
     if (fieldsProj.skip) {
-      pipleline.push({'$skip': parseInt(fieldsProj.skip)});
+      pipeline.push({'$skip': parseInt(fieldsProj.skip)});
     }
     if (fieldsProj.limit) {
-      pipleline.push({'$limit': parseInt(fieldsProj.limit)});
+      pipeline.push({'$limit': parseInt(fieldsProj.limit)});
     }
-    let data = mlDBController.aggregate('MlSharedLibrary', pipleline);
+    let data = mlDBController.aggregate('MlSharedLibrary', pipeline);
 
-    let totalRecords = data && data[0] && data[0].totalRecords ? data[0].totalRecords : 0 ;
+    let totalRecords = mlDBController.find('MlSharedLibrary', resultantQuery, fieldsProj).count();
     return {totalRecords: totalRecords, data: data};
   },
 

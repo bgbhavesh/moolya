@@ -3,6 +3,7 @@ import MlRespPayload from "../../../commons/mlPayload";
 import geocoder from "geocoder";
 import MlAdminUserContext from "../../../../server/mlAuthorization/mlAdminUserContext";
 import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
+import MlSubChapterPreConditions from './mlSubChapterPreConditions';
 import {GenerateUniqueCode} from '../../../commons/utils'
 import _ from 'lodash'
 
@@ -600,7 +601,11 @@ createSubChapter = (subChapter, context) => {
 /******************************************** start related subChapter resolvers********************************************/
 
 MlResolver.MlMutationResolver['createRelatedSubChapters'] = (obj, args, context, info) => {
-  var response = null
+  var response = null;
+  //pre-condition for related sub chapter updation
+  var hasPerm=MlSubChapterPreConditions.hasEditPermSubChapterAccessControl(context);
+  if(!hasPerm){return new MlRespPayload().errorPayload('Not Authorized to update Access control Permission', 400);};
+
   if (args.associatedObj) {
     _.each(args.associatedObj, function (item, say) {
       var generatedCode = GenerateUniqueCode(item.subChapters[0].subChapterId, item.subChapters[1].subChapterId)
@@ -631,6 +636,10 @@ MlResolver.MlQueryResolver['fetchRelatedSubChapters'] = (obj, args, context, inf
 MlResolver.MlMutationResolver['updateRelatedSubChapters'] = (obj, args, context, info) => {
   var response = ""
   try {
+    //pre-condition for related sub chapter updation
+    var hasPerm=MlSubChapterPreConditions.hasEditPermSubChapterAccessControl(context);
+    if(!hasPerm){return new MlRespPayload().errorPayload('Not Authorized to update Access control Permission', 400);};
+
     if (args.associatedObj) {
       _.each(args.associatedObj, function (item, say) {
         var generatedCode = GenerateUniqueCode(item.subChapters[0].subChapterId, item.subChapters[1].subChapterId)

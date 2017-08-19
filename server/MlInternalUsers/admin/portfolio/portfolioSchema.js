@@ -117,7 +117,7 @@ let portfolioSchema = `
     type Mutation{
           createPortfolioRequest(portfoliodetails:portfoliodetails):response
           updatePortfolio(portfoliodetailsId:String, portfolio:portfolio, privateFields:[privateKeys], removeKeys:[privateKeys]):response
-          approvePortfolio(portfoliodetailsId:String):response
+          approvePortfolio(portfoliodetailsId:String, clusterId: String, chapterId: String, subChapterId: String, communityId: String):response
           rejectPortfolio(portfoliodetailsId:String):response
           requestForGoLive(portfoliodetailsId:String):response
           updatePortfolioProfilePic(portfolioId:String,docUrl:String,communityType:String):response 
@@ -133,7 +133,7 @@ let supportedApi = [
   {api: 'fetchPortfolioByReg', actionName: 'READ', moduleName: "PORTFOLIO", isWhiteList: true},
   {api:'createPortfolioRequest', actionName:'CREATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
   {api:'updatePortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
-  {api:'approvePortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
+  {api:'approvePortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
   {api:'rejectPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'requestForGoLive', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
   {api:'removeIdetaorProfilePic', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},

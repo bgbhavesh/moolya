@@ -8,11 +8,12 @@ import gql from "graphql-tag";
 import {graphql} from "react-apollo";
 import _ from "lodash";
 import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
-import {fetchDetailsStartupActionHandler} from "../../../../actions/findPortfolioStartupDetails";
+import {fetchStartupDetailsHandler} from "../../../../actions/findPortfolioStartupDetails";
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from "../../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
 
+const KEY = "technologies"
 
 export default class MlStartupTechnology extends React.Component{
   constructor(props, context){
@@ -20,6 +21,7 @@ export default class MlStartupTechnology extends React.Component{
     this.state={
       loading: false,
       data:{},
+      privateKey:{},
       startupTechnologies:this.props.technologyDetails || [],
       popoverOpen:false,
       selectedIndex:-1,
@@ -68,18 +70,29 @@ export default class MlStartupTechnology extends React.Component{
       delete details.logo['__typename'];
     }
     this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.technologyId});
+    setTimeout(function () {
+      _.each(details.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+    }, 10)
   }
 
-  onLockChange(field, e){
+  onLockChange(fieldName, field, e){
+    var isPrivate = false
     let details = this.state.data||{};
     let key = field;
     details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
       details=_.extend(details,{[key]:true});
+      isPrivate = true
     }else{
       details=_.extend(details,{[key]:false});
     }
+
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
+    this.setState({privateKey:privateKey})
+
     this.setState({data:details}, function () {
       this.sendDataToParent()
     })
@@ -105,9 +118,9 @@ export default class MlStartupTechnology extends React.Component{
       let details = this.state.data;
       // this.setState({aboutShow:selObject.about})
       details = _.omit(details, ["technologyId"]);
-      details = _.extend(details, {["technologyId"]: selectedId, "technologyName": selObject.label, description: selObject.about});
+      details = _.extend(details, {["technologyId"]: selectedId, "technologyName": selObject.label, technologyDescription: selObject.about});
       this.setState({data: details}, function () {
-        this.setState({"selectedVal": selectedId, "technologyName": selObject.label, "description": selObject.about})
+        this.setState({"selectedVal": selectedId, "technologyName": selObject.label, "technologyDescription": selObject.about})
         this.sendDataToParent()
       })
     } else {
@@ -115,9 +128,9 @@ export default class MlStartupTechnology extends React.Component{
       // this.setState({aboutShow:''})
       details = _.omit(details, ["technologyId"]);
       details = _.omit(details, ["technologyName"]);
-      details = _.omit(details, ["description"]);
+      details = _.omit(details, ["technologyDescription"]);
       this.setState({data: details}, function () {
-        this.setState({"selectedVal": '', "technologyName": '', description:''})
+        this.setState({"selectedVal": '', "technologyName": '', technologyDescription:''})
         this.sendDataToParent()
       })
     }
@@ -147,12 +160,12 @@ export default class MlStartupTechnology extends React.Component{
         }
       }
       let newItem = _.omit(item, "__typename");
-      // let updateItem = _.omit(newItem, 'logo');
+      newItem = _.omit(item, "privateFields");
       arr.push(newItem)
     })
     startupTechnologies = arr;
     this.setState({startupTechnologies:startupTechnologies})
-    this.props.getStartupTechnology(startupTechnologies);
+    this.props.getStartupTechnology(startupTechnologies, this.state.privateKey);
 
   }
   onLogoFileUpload(e){
@@ -193,8 +206,8 @@ export default class MlStartupTechnology extends React.Component{
 
 
   async fetchOnlyImages(){
-    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
-    if (response) {
+    const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
+    if (response && response.technologies) {
       let thisState=this.state.selectedIndex;
       let dataDetails =this.state.startupTechnologies
       let cloneBackUp = _.cloneDeep(dataDetails);
@@ -210,13 +223,14 @@ export default class MlStartupTechnology extends React.Component{
   }
 
   async imagesDisplay(){
-    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
-    if (response) {
+    const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
+    if (response && response.technologies) {
       let detailsArray = response&&response.technologies?response.technologies:[]
       let dataDetails =this.state.startupTechnologies
       let cloneBackUp = _.cloneDeep(dataDetails);
       _.each(detailsArray, function (obj,key) {
         cloneBackUp[key]["logo"] = obj.logo;
+        cloneBackUp[key]["privateFields"] = obj.privateFields;
       })
       let listDetails = this.state.startupTechnologiesList || [];
       listDetails = cloneBackUp
@@ -274,9 +288,7 @@ export default class MlStartupTechnology extends React.Component{
                     <a href="#" id={"create_client"+idx}>
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
-                        {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
                         <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
-
                         <h3>{details.technologyName?details.technologyName:" "}</h3>
                       </div>
                     </a>
@@ -300,9 +312,8 @@ export default class MlStartupTechnology extends React.Component{
                     </div>
 
                     <div className="form-group">
-                      <input type="text" name="description" placeholder="About" className="form-control float-label" defaultValue={this.state.data.description} disabled="true"  onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/>
-                      <input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
+                      <input type="text" name="technologyDescription" placeholder="About" className="form-control float-label" defaultValue={this.state.data.technologyDescription}  onBlur={this.handleBlur.bind(this)}/>
+                      <FontAwesome id="isDescriptionPrivate" name='unlock' className="input_icon req_textarea_icon un_lock" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "technologyDescription", "isDescriptionPrivate")}/>
                     </div>
 
                     {displayUploadButton?<div className="form-group">

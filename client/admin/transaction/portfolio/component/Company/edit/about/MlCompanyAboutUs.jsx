@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
-import {fetchStartupDetailsHandler} from "../../../../actions/findPortfolioStartupDetails";
+import {fetchDetailsStartupActionHandler} from "../../../../actions/findPortfolioStartupDetails";
 import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
@@ -11,7 +11,7 @@ var Select = require('react-select');
 
 const KEY = 'aboutUs'
 
-export default class MlStartupAboutUs extends React.Component{
+export default class MlCompanyAboutUs extends React.Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -37,12 +37,12 @@ export default class MlStartupAboutUs extends React.Component{
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
     this.fetchOnlyImages()
-    this.props.getStartupAboutUs(this.state.data)
+    this.props.getAboutUs(this.state.data)
   }
   componentWillMount(){
-    let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.aboutUs)
+    let empty = _.isEmpty(this.context.companyPortfolio && this.context.companyPortfolio.aboutUs)
     if(!empty){
-      this.setState({loading: false, data: this.context.startupPortfolio.aboutUs});
+      this.setState({loading: false, data: this.context.companyPortfolio.aboutUs});
     }
   }
 
@@ -64,7 +64,7 @@ export default class MlStartupAboutUs extends React.Component{
     }
     data = _.omit(data, ["privateFields"])
 
-    this.props.getStartupAboutUs(data, this.state.privateKey)
+    this.props.getAboutUs(data, this.state.privateKey)
     this.fetchOnlyImages()
   }
   onLogoFileUpload(e){
@@ -115,12 +115,11 @@ export default class MlStartupAboutUs extends React.Component{
         })
       }, 10)
     }
-
     this.setState({loading:false})
   }
   onLockChange(fieldName, field, e){
-    var isPrivate = false;
     let details = this.state.data||{};
+    var isPrivate = false;
     let key = e.target.id;
     details=_.omit(details,[key]);
     let className = e.target.className;
@@ -138,6 +137,21 @@ export default class MlStartupAboutUs extends React.Component{
       this.sendDataToParent()
     })
   }
+
+/*
+  async fetchPortfolioDetails() {
+    let that = this;
+    let portfoliodetailsId=that.props.portfolioDetailsId;
+    const response = await fetchDetailsStartupActionHandler(portfoliodetailsId);
+    if (response) {
+      let dataDetails = this.state.data
+      dataDetails['logo'] = response.aboutUs.logo
+      this.setState({loading: false, data: dataDetails});
+    }
+
+  }
+*/
+
 
   render(){
     const aboutUsImages = (this.state.data.logo&&this.state.data.logo.map(function (m, id) {
@@ -159,8 +173,8 @@ export default class MlStartupAboutUs extends React.Component{
             <div className="panel panel-default panel-form">
               <div className="panel-body">
                 <div className="form-group nomargin-bottom">
-                  <textarea placeholder="Describe..." className="form-control"  name="startupDescription" id="description" defaultValue={this.state.data&&this.state.data.startupDescription} onBlur={this.handleBlur.bind(this)}></textarea>
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" onClick={this.onLockChange.bind(this, "startupDescription", "isDescriptionPrivate")}/>
+                  <textarea placeholder="Describe..." className="form-control"  name="description" id="description" defaultValue={this.state.data&&this.state.data.description} onBlur={this.handleBlur.bind(this)}></textarea>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/>
                 </div>
 
               </div>
@@ -186,6 +200,6 @@ export default class MlStartupAboutUs extends React.Component{
     )
   }
 }
-MlStartupAboutUs.contextTypes = {
-  startupPortfolio: PropTypes.object,
+MlCompanyAboutUs.contextTypes = {
+  companyPortfolio: PropTypes.object,
 };

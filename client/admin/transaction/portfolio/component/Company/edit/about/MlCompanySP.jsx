@@ -1,16 +1,17 @@
 import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar';
+import ScrollArea from 'react-scrollbar'
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 
-export default class MlStartupLegal extends React.Component{
+
+export default class MlCompanySP extends React.Component{
   constructor(props, context){
     super(props);
     this.state={
       loading: true,
-      data:this.props.legalIssueDetails || {}
+      data:this.props.serviceProductsDetails || {},
     }
     this.handleBlur.bind(this);
     return this;
@@ -25,11 +26,12 @@ export default class MlStartupLegal extends React.Component{
     dataVisibilityHandler();
   }
   componentWillMount(){
-    let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.legalIssue)
+    let empty = _.isEmpty(this.context.companyPortfolio && this.context.companyPortfolio.serviceProducts)
     if(!empty){
-      this.setState({loading: false, data: this.context.startupPortfolio.legalIssue});
+      this.setState({loading: false, data: this.context.companyPortfolio.serviceProducts});
     }
   }
+
   handleBlur(e){
     let details =this.state.data;
     let name  = e.target.name;
@@ -46,7 +48,7 @@ export default class MlStartupLegal extends React.Component{
         delete data[propName];
       }
     }
-    this.props.getStartupLegalIssue(data)
+    this.props.getStartupSP(data)
   }
   onLockChange(field, e){
     let details = this.state.data||{};
@@ -69,14 +71,14 @@ export default class MlStartupLegal extends React.Component{
       <div className="requested_input">
         <div className="col-lg-12">
           <div className="row">
-            <h2>Legal Issue</h2>
+            <h2>Service & Products</h2>
             <div className="panel panel-default panel-form">
 
               <div className="panel-body">
 
                 <div className="form-group nomargin-bottom">
                   <textarea placeholder="Describe..." name="description" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.description} onBlur={this.handleBlur.bind(this)}></textarea>
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate"  defaultValue={this.state.data&&this.state.data.isDescriptionPrivate} onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.data&&this.state.data.isDescriptionPrivate} onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
                 </div>
 
               </div>
@@ -96,6 +98,6 @@ export default class MlStartupLegal extends React.Component{
     )
   }
 }
-MlStartupLegal.contextTypes = {
-  startupPortfolio: PropTypes.object,
+MlCompanySP.contextTypes = {
+  companyPortfolio: PropTypes.object,
 };

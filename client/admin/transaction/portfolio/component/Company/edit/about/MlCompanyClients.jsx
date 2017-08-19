@@ -10,23 +10,21 @@ import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
-import {fetchStartupDetailsHandler} from '../../../../actions/findPortfolioStartupDetails';
+import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails';
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from '../../../../../../../commons/components/loader/loader'
 
-const KEY = 'clients'
 
-export default class MlStartupClients extends React.Component{
+export default class MlCompanyClients extends React.Component{
   constructor(props, context){
     super(props);
     this.state={
       loading: false,
       data:{},
-      privateKey:{},
-      startupClients:this.props.employmentDetails || [],
+      clients:this.props.employmentDetails || [],
       popoverOpen:false,
       selectedIndex:-1,
-      startupClientsList:this.props.employmentDetails || [],
+      clientsList:this.props.employmentDetails || [],
       selectedVal:null,
       selectedObject:"default"
     }
@@ -47,58 +45,47 @@ export default class MlStartupClients extends React.Component{
     this.imagesDisplay();
   }
   componentWillMount(){
-    let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.clients)
+    let empty = _.isEmpty(this.context.companyPortfolio && this.context.companyPortfolio.clients)
     if(!empty){
-      this.setState({loading: false, startupClients: this.context.startupPortfolio.clients, startupClientsList:this.context.startupPortfolio.clients});
+      this.setState({loading: false, clients: this.context.companyPortfolio.clients, clientsList:this.context.companyPortfolio.clients});
     }
   }
 
   addClient(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
-    if(this.state.startupClients){
-      this.setState({selectedIndex:this.state.startupClients.length})
+    if(this.state.clients){
+      this.setState({selectedIndex:this.state.clients.length})
     }else{
       this.setState({selectedIndex:0})
     }
   }
 
   onTileSelect(index, e){
-    let cloneArray = _.cloneDeep(this.state.startupClients);
+    let cloneArray = _.cloneDeep(this.state.clients);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
     if(details && details.logo){
       delete details.logo['__typename'];
     }
     this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.companyId});
-    setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
   }
 
-  onLockChange(fieldName, field, e){
-    var isPrivate = false
+  onLockChange(field, e){
     let details = this.state.data||{};
     let key = e.target.id;
     details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
       details=_.extend(details,{[key]:true});
-      isPrivate = true
     }else{
       details=_.extend(details,{[key]:false});
     }
-
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    this.setState({privateKey:privateKey})
-
     this.setState({data:details}, function () {
       this.sendDataToParent()
     })
   }
   onSaveAction(e){
-    this.setState({startupClientsList:this.state.startupClients,popoverOpen : false})
+    this.setState({clientsList:this.state.clients,popoverOpen : false})
   }
 
   onStatusChangeNotify(e)
@@ -116,6 +103,17 @@ export default class MlStartupClients extends React.Component{
     })
   }
 
+  // onOptionSelected(selectedId){
+  //   let details =this.state.data;
+  //   details=_.omit(details,["companyId"]);
+  //   details=_.extend(details,{["companyId"]: selectedId});
+  //   this.setState({data:details}, function () {
+  //     this.setState({"selectedVal" : selectedId})
+  //     this.sendDataToParent()
+  //   })
+  //
+  // }
+
   handleBlur(e){
     let details =this.state.data;
     let name  = e.target.name;
@@ -128,26 +126,25 @@ export default class MlStartupClients extends React.Component{
 
   sendDataToParent(){
     let data = this.state.data;
-    let clients = this.state.startupClients;
-    let startupClients = _.cloneDeep(clients);
+    let clients = this.state.clients;
+    clients = _.cloneDeep(clients);
     data.index = this.state.selectedIndex;
-    startupClients[this.state.selectedIndex] = data;
+    clients[this.state.selectedIndex] = data;
     let arr = [];
-    _.each(startupClients, function (item)
+    _.each(clients, function (item)
     {
       for (var propName in item) {
         if (item[propName] === null || item[propName] === undefined) {
           delete item[propName];
         }
       }
-      let newItem = _.omit(item, "__typename");
-      newItem = _.omit(newItem, ["privateFields"])
+      newItem = _.omit(item, "__typename");
       let updateItem = _.omit(newItem, 'logo');
       arr.push(updateItem)
     })
-    startupClients = arr;
-    this.setState({startupClients:startupClients})
-    this.props.getStartupClients(startupClients, this.state.privateKey);
+    clients = arr;
+    this.setState({clients:clients})
+    this.props.getClients(clients);
 
   }
 
@@ -189,16 +186,16 @@ export default class MlStartupClients extends React.Component{
   }
 
   async fetchOnlyImages(){
-    const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.clients) {
+    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
+    if (response) {
       let thisState=this.state.selectedIndex;
-      let dataDetails =this.state.startupClients
+      let dataDetails =this.state.clients
       let cloneBackUp = _.cloneDeep(dataDetails);
       let specificData = cloneBackUp[thisState];
       if(specificData){
         let curUpload=response.clients[thisState]
         specificData['logo']= curUpload['logo']
-        this.setState({loading: false, startupClients:cloneBackUp });
+        this.setState({loading: false, clients:cloneBackUp });
       }else {
         this.setState({loading: false})
       }
@@ -206,9 +203,9 @@ export default class MlStartupClients extends React.Component{
   }
 
   async imagesDisplay(){
-    const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
-    if (response && response.clients) {
-      let dataDetails =this.state.startupClients;
+    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
+    if (response) {
+      let dataDetails =this.state.clients;
       if(!dataDetails || dataDetails.length<1){
         dataDetails = response&&response.clients?response.clients:[]
       }
@@ -218,10 +215,10 @@ export default class MlStartupClients extends React.Component{
           cloneBackUp[key]["logo"] = obj.logo;
         })
       }
-      let listDetails = this.state.startupClientsList || [];
+      let listDetails = this.state.clientsList || [];
       listDetails = cloneBackUp
       let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, startupClients:cloneBackUp,startupClientsList:cloneBackUpList});
+      this.setState({loading: false, clients:cloneBackUp,clientsList:cloneBackUpList});
     }
   }
 
@@ -231,9 +228,15 @@ export default class MlStartupClients extends React.Component{
   }
 
   render(){
+    // let query=gql`query{
+    //   data:fetchStageOfCompany {
+    //     label:stageOfCompanyDisplayName
+    //     value:_id
+    //   }
+    // }`;
     let that = this;
     const showLoader = that.state.loading;
-    let clientsArray = that.state.startupClientsList || [];
+    let clientsArray = that.state.clientsList || [];
     let displayUploadButton = null;
     if(this.state.selectedObject != "default"){
       displayUploadButton = true
@@ -267,6 +270,7 @@ export default class MlStartupClients extends React.Component{
                       <div className="list_block">
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                         <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
+                        {/*<h3>{details.description} <span className="assets-list">50</span></h3>*/}
                         <h3>{details.companyName?details.companyName:""} </h3>
                       </div>
                     </a>
@@ -282,12 +286,19 @@ export default class MlStartupClients extends React.Component{
                 <div className="medium-popover"><div className="row">
                   <div className="col-md-12">
                     <div className="form-group">
+                      {/*<Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}*/}
+                                    {/*labelKey={'label'} queryType={"graphql"} query={query}*/}
+                                    {/*isDynamic={true}*/}
+                                    {/*onSelect={this.onOptionSelected.bind(this)}*/}
+                                    {/*selectedValue={this.state.selectedVal}/>*/}
                       <input type="text" name="companyName" placeholder="Company Name" className="form-control float-label" defaultValue={this.state.data.companyName} onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"  defaultValue={this.state.data.isCompanyNamePrivate}  onClick={this.onLockChange.bind(this, "companyName", "isCompanyNamePrivate")}/>
+                      <FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"  defaultValue={this.state.data.isCompanyNamePrivate}  onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>
+                      <input type="checkbox" className="lock_input" id="isCompanyNamePrivate" checked={this.state.data.isCompanyNamePrivate}/>
                     </div>
                     <div className="form-group">
-                      <input type="text" name="clientDescription" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.clientDescription} onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate"  defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "clientDescription", "isDescriptionPrivate")}/>
+                      <input type="text" name="description" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.description} onBlur={this.handleBlur.bind(this)}/>
+                      <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate"  defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/>
+                      <input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
                     </div>
                     {displayUploadButton?<div className="form-group">
                       <div className="fileUpload mlUpload_btn">
@@ -312,6 +323,6 @@ export default class MlStartupClients extends React.Component{
     )
   }
 }
-MlStartupClients.contextTypes = {
-  startupPortfolio: PropTypes.object,
+MlCompanyClients.contextTypes = {
+  companyPortfolio: PropTypes.object,
 };

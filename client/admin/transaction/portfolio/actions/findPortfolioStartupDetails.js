@@ -71,23 +71,27 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
           query ($portfoliodetailsId: String!) {
             fetchStartupPortfolioAboutUs(portfoliodetailsId: $portfoliodetailsId) {
                 aboutUs{
-                  description
+                  startupDescription,
                   logo{
-                    fileName
+                    fileName,
                     fileUrl
                   }
-                  isLogoPrivate
-                  isDescriptionPrivate
+                  isLogoPrivate,
+                  isDescriptionPrivate,
                   annotatorId
                 }
                 rating{
-                  rating
-                  isRatingPrivate
+                  rating,
+                  isRatingPrivate,
+                  privateFields{
+                      keyName,
+                      booleanKey
+                  }
                 }
                 clients{
                   companyName
                   isCompanyNamePrivate
-                  description
+                  clientDescription
                   isDescriptionPrivate
                   logo{
                     fileName
@@ -97,18 +101,18 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   index
                 }
                 serviceProducts{
-                  description
+                  spDescription
                   isDescriptionPrivate
                 }
                 information{
-                  description
+                  informationDescription
                   isDescriptionPrivate
                 }
                 assets{
                   assetTypeName
                   assetTypeId
                   quantity
-                  description
+                  assetDescription
                   isAssetTypePrivate
                   isQuantityTypePrivate
                   isDescriptionPrivate
@@ -121,30 +125,30 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                 }
                 branches{
                   addressTypeId
-                  name
+                  branchName
                   isNamePrivate
-                  phoneNumber
+                  branchPhoneNumber
                   isPhoneNumberPrivate
-                  address1
+                  branchAddress1
                   isAddressOnePrivate
-                  address2
+                  branchAddress2
                   isAddressTwoPrivate
-                  landmark
+                  branchLandmark
                   isLandmarkPrivate
-                  area
+                  branchArea
                   isAreaPrivate
-                  city
+                  branchCity
                   cityId
                   isCityPrivate
-                  state
+                  branchState
                   stateId
                   isStatePrivate
-                  country
+                  branchCountry
                   countryId
                   isCountryPrivate
                   addressImage
                   makePrivate
-                  logo{
+                  branchLogo{
                     fileName
                     fileUrl
                   }
@@ -154,7 +158,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   technologyName
                   technologyId
                   isTechnologyPrivate
-                  description
+                  technologyDescription
                   isDescriptionPrivate
                   makePrivate
                   logo{
@@ -164,7 +168,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   index
                 }
                 legalIssue{
-                  description
+                  legalDescription
                   isDescriptionPrivate
                 }
                 rating{
@@ -507,6 +511,140 @@ export async function fetchStartupDetailsHandler(portfoliodetailsId, key) {
     query: gql`
           query ($portfoliodetailsId: String!, $key:String) {
               fetchStartupDetails(portfoliodetailsId:$portfoliodetailsId, key:$key){
+                  aboutUs{
+                      logo{
+                        fileName,
+                        fileUrl
+                      }
+                      startupDescription,
+                      annotatorId,
+                      isLogoPrivate,
+                      isDescriptionPrivate,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  rating{
+                      rating,
+                      isRatingPrivate,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  serviceProducts{
+                      spDescription,
+                      isDescriptionPrivate,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  information{
+                      informationDescription,
+                      isDescriptionPrivate,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  technologies{
+                      technologyName,
+                      technologyId,
+                      technologyDescription,
+                      isTechnologyPrivate,
+                      isDescriptionPrivate,
+                      logo{,
+                          fileName,
+                          fileUrl
+                      }
+                      makePrivate,
+                      index
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  branches{
+                      addressTypeId,
+                      branchName,
+                      isNamePrivate,
+                      branchPhoneNumber,
+                      isPhoneNumberPrivate,
+                      branchAddress1,
+                      isAddressOnePrivate,
+                      branchAddress2,
+                      isAddressTwoPrivate,
+                      branchLandmark,
+                      isLandmarkPrivate,
+                      branchArea,
+                      isAreaPrivate,
+                      branchCity,
+                      cityId,
+                      isCityPrivate,
+                      branchState,
+                      stateId,
+                      isStatePrivate,
+                      branchCountry,
+                      countryId,
+                      isCountryPrivate,
+                      addressImage,
+                      isAddressImagePrivate,
+                      branchLogo{
+                          fileName,
+                          fileUrl
+                      },
+                      makePrivate,
+                      index
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  clients{
+                      companyName,
+                      isCompanyNamePrivate,
+                      logo{
+                          fileName,
+                          fileUrl
+                      },
+                      clientDescription,
+                      isDescriptionPrivate,
+                      makePrivate,
+                      index,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  legalIssue{
+                      legalDescription,
+                      isDescriptionPrivate,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  assets{
+                      assetTypeId,
+                      assetTypeName,
+                      isAssetTypePrivate,
+                      quantity,
+                      isQuantityTypePrivate,
+                      assetDescription,
+                      isDescriptionPrivate,
+                      logo{,
+                          fileName,
+                          fileUrl
+                      }
+                      makePrivate,
+                      index
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
                   management{
                      title
                      isTitlePrivate

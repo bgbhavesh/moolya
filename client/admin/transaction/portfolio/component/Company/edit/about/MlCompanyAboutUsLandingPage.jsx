@@ -7,23 +7,23 @@ import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 var Rating = require('react-rating');
-import MlStartupTab from './MlPortfolioStartupAboutsUsTabs'
+import MlCompanyTab from './MlPortfolioCompanyAboutsUsTabs'
 import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails'
 import underscore from "underscore";
 
 
-export default class MlStartupAboutUs extends React.Component{
+export default class MlCompanyAboutUsLandingPage extends React.Component{
   constructor(props){
     super(props)
-    this.state = {aboutStartup:false,startupAboutUs:[], startupAboutUsList:[]}
+    this.state = {about:false,aboutUs:[], aboutUsList:[]}
     this.fetchPortfolioDetails.bind(this);
   }
   selectedTab(field,e){
-    this.setState({aboutStartup : true})
-    this.props.backClickHandler(this.getStartUpState.bind(this))
+    this.setState({about: true})
+    this.props.backClickHandler(this.getState.bind(this))
   }
-  getPortfolioStartupAboutUsDetails(details,tabName, privateKey){
-    this.props.getAboutus(details,tabName,privateKey);
+  getPortfolioAboutUsDetails(details,tabName){
+    this.props.getAboutus(details,tabName);
   }
   componentWillMount(){
     this.fetchPortfolioDetails();
@@ -33,22 +33,23 @@ export default class MlStartupAboutUs extends React.Component{
     let portfoliodetailsId=that.props.portfolioDetailsId;
     const response = await fetchDetailsStartupActionHandler(portfoliodetailsId);
     if (response) {
-      this.setState({loading: false, startupAboutUs: response, startupAboutUsList: response});
+      this.setState({loading: false, aboutUs: response, aboutUsList: response});
     }
 
   }
 
-  getStartUpState() {
-    this.setState({aboutStartup: false})
+  getState() {
+    this.setState({about: false})
+    //$('.last-item').removeClass('menunone');
     this.props.backClickHandler();
 
   }
 
   render(){
     let aboutUsImages=null;
-    let startupAboutUs=this.state.startupAboutUs;
-    if(startupAboutUs){
-      let clients=startupAboutUs.clients;
+    let aboutUs=this.state.aboutUs;
+    if(aboutUs){
+      let clients=aboutUs.clients;
       if(clients){
         let logos=[]
         _.map(clients,function(client){
@@ -66,7 +67,7 @@ export default class MlStartupAboutUs extends React.Component{
     }
     return (
       <div>
-      {this.state.aboutStartup===false?(<div className=" portfolio-main-wrap">
+      {this.state.aboutUs===false?(<div className=" portfolio-main-wrap">
         <ScrollArea
           speed={0.8}
           className="main_wrap_scroll"
@@ -77,7 +78,7 @@ export default class MlStartupAboutUs extends React.Component{
           <div className="panel panel-default panel-form-view">
             <div className="panel-heading">About Us<a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
             <div className="panel-body panel-body-scroll" style={{'height':'384px'}}>
-              <p>{this.state.startupAboutUs.aboutUs&&this.state.startupAboutUs.aboutUs.startupDescription}</p>
+              <p>{this.state.aboutUs.aboutUs&&this.state.aboutUs.aboutUs.description}</p>
             </div>
           </div>
         </div>
@@ -90,7 +91,7 @@ export default class MlStartupAboutUs extends React.Component{
                   empty="fa fa-star-o empty"
                   full="fa fa-star fill"
                   fractions={2}
-                  initialRate={this.state.startupAboutUs.rating && this.state.startupAboutUs.rating.rating ? this.state.startupAboutUs.rating.rating : 0}
+                  initialRate={this.state.aboutUs.rating && this.state.aboutUs.rating.rating ? this.state.aboutUs.rating.rating : 0}
                   readonly={true}
                 />
               </div>
@@ -107,7 +108,7 @@ export default class MlStartupAboutUs extends React.Component{
             <div className="col-md-12 nopadding"><div className="panel panel-default panel-form-view">
               <div className="panel-heading">Service & Products <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
               <div className="panel-body panel-body-scroll">
-                <p>{this.state.startupAboutUs.serviceProducts&&this.state.startupAboutUs.serviceProducts.spDescription}</p>
+                <p>{this.state.aboutUs.serviceProducts&&this.state.aboutUs.serviceProducts.description}</p>
               </div>
             </div></div>
           </div>
@@ -115,14 +116,14 @@ export default class MlStartupAboutUs extends React.Component{
             <div className="panel-heading">Information <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
             <div className="panel-body">
               <ul className="list-info">
-                <li>{this.state.startupAboutUs.information&&this.state.startupAboutUs.information.informationDescription}</li>
+                <li>{this.state.aboutUs.information&&this.state.aboutUs.information.description}</li>
               </ul>
             </div>
           </div></div>
 
         </div>
         </ScrollArea>
-      </div>):(<div>{<MlStartupTab getStartUpState={this.getStartUpState.bind(this)} getPortfolioStartupAboutUsDetails={this.getPortfolioStartupAboutUsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupAboutUsDetails={this.state.startupAboutUs} isApp={this.props.isApp}></MlStartupTab> }</div>)}
+      </div>):(<div>{<MlCompanyTab getState={this.getState.bind(this)} getPortfolioAboutUsDetails={this.getPortfolioAboutUsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} aboutUsDetails={this.state.aboutUs} isApp={this.props.isApp}></MlCompanyTab> }</div>)}
       </div>
 
     )

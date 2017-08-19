@@ -818,9 +818,93 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
   }
   //internal user
   if (args.module == "officeTransaction") {
-    let finalQuery = mergeQueries(query, {userId: context.userId, officeId: args.customParams.docId});
-    data = mlDBController.find('MlOfficeTransaction', finalQuery, context, findOptions).fetch();
-    totalRecords = mlDBController.find('MlOfficeTransaction', finalQuery, context).count();
+    let finalQuery = mergeQueries(query, );
+
+    let pipeline = [
+      { "$match" : {userId: context.userId, officeId: args.customParams.docId} },
+      { "$group": {
+        _id : null,
+        officeId: {$first: "$officeId"},
+        officeTrans: { $push: "$$ROOT" }
+      }
+      },
+      {'$lookup':{from:'mlTransactionsLog',localField:'officeId',foreignField:'docId', as:'transactionLog'}},
+
+      {'$project': {
+        "officeTrans": {
+          '$map':
+            {
+              "input": "$officeTrans",
+              "as": "office",
+              'in': {
+                "_id": "$$office._id",
+                "transactionId": "$$office.transactionId",
+                "clusterName": "$$office.clusterName",
+                "chapterName": "$$office.chapterName",
+                "subChapter": "$$office.subChapterName",
+                "communityName": "$$office.communityName",
+                "transactionType": "$$office.transactionType",
+                "createdby": "$$office.createdBy",
+                "email": "$$office.email",
+                "createdAt": "$$office.registrationDate",
+                "status": "$$office.status"
+              }
+            }
+        },
+        "transactionLog": {
+          '$map':
+            {
+              "input": "$transactionLog",
+              "as": "trans",
+              'in': {
+                "_id": "$$trans._id",
+                "transactionId": "$$trans.transactionId",
+                "clusterName": "$$trans.clusterName",
+                "chapterName": "$$trans.chapterName",
+                "subChapterName": "$$trans.subChapterName",
+                "communityName": "$$trans.communityName",
+                "transactionType": "$$trans.transactionTypeName",
+                "createdby": "$$trans.userName",
+                "email": "$$trans.emailId",
+                "createdAt": "$$trans.createdAt",
+                "userId": '$_id',
+                "status": "$$trans.status",
+                "activity": "$$trans.activity",
+                "activityDocId": "$$trans.activityDocId"
+              }
+            }
+          }
+        }
+      },
+
+      {'$project': {data: { "$concatArrays" : ["$officeTrans", "$transactionLog"] } }},
+      {'$addFields': { 'data.totalRecords': { $size: "$data" } } },
+      {"$unwind" : "$data"},
+      {"$replaceRoot": { newRoot: "$data"}}
+    ];
+
+    if(Object.keys(query).length) {
+      pipeline.push({$match: query});
+    }
+
+    if(findOptions.sort) {
+      pipeline.push({$sort:findOptions.sort});
+    }
+
+    if(findOptions.skip) {
+      pipeline.push({$skip:findOptions.skip});
+    }
+
+    if(findOptions.limit) {
+      pipeline.push({$limit:findOptions.limit});
+    }
+
+    data = mlDBController.aggregate('MlOfficeTransaction', pipeline, context);
+
+    totalRecords = data && data[0] && data[0].totalRecords ? data[0].totalRecords : 0;
+
+    // data = mlDBController.find('MlOfficeTransaction', finalQuery, context, findOptions).fetch();
+    // totalRecords = mlDBController.find('MlOfficeTransaction', finalQuery, context).count();
   }
 
   if (args.module == "userTransaction") {

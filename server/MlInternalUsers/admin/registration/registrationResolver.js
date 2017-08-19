@@ -812,10 +812,8 @@ MlResolver.MlMutationResolver['RejectedStatusForUser'] = (obj, args, context, in
           "profile.externalUserProfiles.$.isApprove": false,
           "profile.externalUserProfiles.$.isActive": false
         }, {$set: true}, context);
-        /*if(resp){
           let user = mlDBController.findOne('MlRegistration', {_id:args.registrationId}, context)
-          MlEmailNotification.onKYCDecline(user);
-        }*/
+          MlEmailNotification.UserRejectionByAdmin(user);
         let code = 200;
         let response = new MlRespPayload().successPayload("Registration Rejected Successfully", code);
         return response

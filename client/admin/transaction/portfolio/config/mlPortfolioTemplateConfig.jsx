@@ -1,5 +1,4 @@
 import React from 'react';
-import gql from 'graphql-tag'
 import MlIdeatorPortfolioTemplate from '../component/Ideator/MlIdeatorPortfolio'
 import mlRegistrationTemplates from '../../../../commons/containers/templates/mlRegistrationTemplate';
 import MlViewIdeatorPortfolioTemplate from '../component/IdeatorView/MlViewIdeatorPortfolio'
@@ -7,6 +6,8 @@ import MlStartupEditTemplate from '../component/Startup/edit/MlStartupEditTempla
 import MlViewStartupPortfolioTemplate from '../component/StartupView/MlViewStartupPortfolioTemplate'
 import MlServiceProviderEditTabs from '../component/ServiceProvider/edit/MlServiceProviderEditTabs'
 import MlServiceProviderViewTabs from '../component/ServiceProvider/view/MlServiceProviderViewTabs'
+import MlInstitutionEditTabs from '../component/Institution/edit/MlInstitutionEditTabs'
+import MlInstitutionViewTabs from '../component/Institution/view/MlInstitutionViewTabs'
 import MlAppIdeatorEditTabs from '../../../../app/ideators/components/MlAppIdeatorEditTabs'
 import MlAppIdeatorTabs from '../../../../app/ideators/components/MlAppIdeatorTabs'
 import MlFunderEditTemplate from '../component/Funder/MlFunderEditTemplate'
@@ -104,6 +105,29 @@ const mlServiceProviderViewExternalUserPortfolioTemplateConfig = {
   stepName: 'Portfolio',
   component: MlServiceProviderViewTabs
 };
+
+const mlInstitutionEditInternalUserPortfolioTemplateConfig = {
+  templateName: "Portfolio-Template-Institution-Edit",
+  templateCode: "PFTINSEDT",
+  userType: 'internal',
+  process: 'Registration',
+  subProcess: 'Registration',
+  stepCode: 'PORTFOLIO',
+  stepName: 'Portfolio',
+  component: MlInstitutionEditTabs
+};
+
+const mlInstitutionViewInternalUserPortfolioTemplateConfig = {
+  templateName: "Portfolio-Template-Institution-View",
+  templateCode: "PFTINSVIW",
+  userType: 'internal',
+  process: 'Registration',
+  subProcess: 'Registration',
+  stepCode: 'PORTFOLIO',
+  stepName: 'Portfolio',
+  component: MlInstitutionViewTabs
+};
+
 mlRegistrationTemplates.setTemplate(mlIdeatorEditExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlIdeatorViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlStartupEditExternalUserPortfolioTemplateConfig);
@@ -112,6 +136,9 @@ mlRegistrationTemplates.setTemplate(mlFunderEditExternalUserPortfolioTemplateCon
 mlRegistrationTemplates.setTemplate(mlFunderViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlServiceProviderEditExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlServiceProviderViewExternalUserPortfolioTemplateConfig);
+
+mlRegistrationTemplates.setTemplate(mlInstitutionViewInternalUserPortfolioTemplateConfig);
+mlRegistrationTemplates.setTemplate(mlInstitutionEditInternalUserPortfolioTemplateConfig);
 
 /**
  * app config files for external users

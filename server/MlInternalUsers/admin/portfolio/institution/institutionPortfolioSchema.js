@@ -419,7 +419,7 @@ let institutePortfolioSchema = `
     }
     
     type Mutation{
-        createInstitutePortfolio(portfolio:institutePortfolio):response
+        createInstitutionPortfolio(portfolio:institutePortfolio):response
         updateInstitutePortfolio(portfoliodetailsId:String,portfolio:institutePortfolio):response
         
     }
@@ -438,7 +438,7 @@ let supportedApi = [
   {api:'fetchInstitutePortfolioData', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchInstituteDetails', actionName:'READ', moduleName:"PORTFOLIO"},
 
-  {api:'createInstitutePortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
+  {api:'createInstitutionPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
   {api:'updateInstitutePortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
   {api:'createInstitutePortfolioChart', actionName:'UPDATE', moduleName:"PORTFOLIO"}
 ]

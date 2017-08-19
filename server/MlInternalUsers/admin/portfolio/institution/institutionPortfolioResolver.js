@@ -4,9 +4,8 @@ import MlEmailNotification from "../../../../mlNotifications/mlEmailNotification
 import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification';
 import portfolioValidationRepo from '../portfolioValidation';
 var _ = require('lodash')
-var extendify = require('extendify');
 
-MlResolver.MlMutationResolver['createInstitutePortfolio'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver['createInstitutionPortfolio'] = (obj, args, context, info) => {
   try {
     if (args && args.userId && args.communityType) {
       user = MlInstitutionPortfolio.findOne({"$and": [{'userId': args.userId}, {'communityId': args.communityType}]})

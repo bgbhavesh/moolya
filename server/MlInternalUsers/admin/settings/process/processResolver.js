@@ -380,11 +380,11 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
   let specificQuery = [];
   let kycProcessDoc = null
 
-  function getTheKyc(email, subChapters) {
+  function getTheKyc(email, subChapters, nonMoolyaSubChapterId) {
       let allKycDoc=[],allCombinationDoc=[];
 
     //check for specific condition for all criteria fields of processmapping
-    if (clusters != null && chapters != null && subChapters != null && communities != null && professions != null && userTypes != null) {
+   /* if (clusters != null && chapters != null && subChapters != null && communities != null && professions != null && userTypes != null) {
       let val = {clusters, chapters, subChapters, communities, professions, userTypes}
       process = fetchProcessProxy(val);
       if (process) {
@@ -394,12 +394,18 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
           allKycDoc.push(doc);
         })
       }
-    }
+    }*/
     //check for all or specific condition for all criteria fields of processmapping
     let val = {clusters, chapters, subChapters, communities, professions, userTypes}
     for (var key in val) {
       let qu = {};
-      qu[key] = {$in: ['all', val[key]]};
+      if(key == "subChapters"){
+        let nonMoolyaSubChapId = nonMoolyaSubChapterId?nonMoolyaSubChapterId:"";
+        qu[key] = {$in: ['all', val[key],nonMoolyaSubChapId]};
+      }else{
+        qu[key] = {$in: ['all', val[key]]};
+      }
+
       specificQuery.push(qu);//console.log(qu);
     }
     let query = {$and: specificQuery}
@@ -429,15 +435,17 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
         allKycDoc.push(doc);
       })
     }
-    if (allKycDoc && allKycDoc.length > 0) {
+   /* if (allKycDoc && allKycDoc.length > 0) {
       //getting uniq documents based on documentId
       allCombinationDoc = _underscore.uniq(allKycDoc, function (kyc) {
         let docId = kyc&&kyc.documentId?kyc.documentId:""
         return docId;
       });
+      //llCombinationDoc = _underscore.uniq(allKycDoc, kyc => [kyc.docTypeId, kyc.documentId].join());
       return allCombinationDoc
     }
-
+*/
+    return allKycDoc
   }
 
   function fetchProcessProxy(query) {
@@ -469,15 +477,18 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
           })
         }
       })
-      if (combinationBasedDoc && combinationBasedDoc.length > 0) {
+      /*if (combinationBasedDoc && combinationBasedDoc.length > 0) {
         //getting uniq documents based on documentId
         kycDoc = _underscore.uniq(combinationBasedDoc, function (kyc) {
           let docId = kyc&&kyc.documentId?kyc.documentId:""
+          let docTypeId = kyc&&kyc.docTypeId?kyc.docTypeId:""
+          //let docId = kyc&&kyc.documentId?kyc.documentId:""
           return docId;
         });
-        return kycDoc
-      }
-      return kycDoc
+         /!*kycDoc = _underscore.uniq(combinationBasedDoc, kyc => [kyc.docTypeId, kyc.documentId].join());
+        return kycDoc*!/
+      }*/
+      return combinationBasedDoc
     }
 /*    if (document != undefined) {
       data = document.processDocuments;
@@ -498,7 +509,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
 
   function getCountryBasedDocuments(country) {
     let countryBasedDoc = [], kycDoc = []
-    let document = MlProcessMapping.find({$and: [{"clusters": {$in: [country]}}, {isActive: true}]}).fetch()
+    let document = MlProcessMapping.find({$and: [{"clusters": {$in: [country,"all"]}}, {isActive: true}]}).fetch()
     if (document && document.length > 0) {
       document.map(function (processDoc) {
         if (processDoc && processDoc.processDocuments) {
@@ -520,7 +531,8 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
       if (countryBasedDoc && countryBasedDoc.length > 0) {
         //getting uniq documents based on documentId
         kycDoc = _underscore.uniq(countryBasedDoc, function (kyc) {
-          return kyc.documentId;
+          let docId = kyc&&kyc.documentId?kyc.documentId:""
+          return docId;
         });
         return kycDoc
       }
@@ -545,7 +557,9 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
       }
     }
     kycDoc = _.uniqBy(ApprovedKyc, function (kyc) {
-      return kyc.documentId && kyc.docTypeId;
+      let docId = kyc&&kyc.documentId?kyc.documentId:""
+      let docTypeId = kyc&&kyc.docTypeId?kyc.docTypeId:""
+      return docId && docTypeId;
     });
 
 
@@ -647,7 +661,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
           if (moolysSubchapter && moolysSubchapter._id) {
             let processsChapterKYCDoc=[]
             //get the kyc based on moolya-subchapter
-            let processschapterDoc = getTheKyc(email, moolysSubchapter._id)
+            let processschapterDoc = getTheKyc(email, moolysSubchapter._id,isNonMoolyaSubChapter._id)
             if (processschapterDoc&&processschapterDoc.length>0) {
               processschapterDoc.map(function (doc) {
                 if (doc.docTypeId != 'self' && doc.isActive == true) {
@@ -667,9 +681,11 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
               finalKYC=subchapterKYC
             }
 
-            finalKYC = _underscore.uniq(finalKYC, function (kyc) {
-              return kyc.documentId;
-            });
+            /*finalKYC = _underscore.uniq(finalKYC, function (kyc) {
+              let docId = kyc&&kyc.documentId?kyc.documentId:""
+              return docId;
+            });*/
+            finalKYC = _underscore.uniq(finalKYC, kyc => [kyc.docTypeId, kyc.documentId].join());
             return finalKYC
           } else {
             let finalKYC=[]
@@ -683,9 +699,10 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
                 finalKYC= kyc
               }
               ///return the unique docuumnets
-              finalKYC = _underscore.uniq(finalKYC, function (kyc) {
+              /*finalKYC = _underscore.uniq(finalKYC, function (kyc) {
                 return kyc.documentId;
-              });
+              });*/
+              finalKYC = _underscore.uniq(finalKYC, kyc => [kyc.docTypeId, kyc.documentId].join());
               return finalKYC
             }else{
               return countryBasedDoc
@@ -704,9 +721,10 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
               finalKYC=kyc
             }
             ///return the unique docuumnets
-            finalKYC = _underscore.uniq(finalKYC, function (kyc) {
+            /*finalKYC = _underscore.uniq(finalKYC, function (kyc) {
               return kyc.documentId;
-            });
+            });*/
+            finalKYC = _underscore.uniq(finalKYC, kyc => [kyc.docTypeId, kyc.documentId].join());
             return finalKYC
           }else{
             return countryBasedDoc
@@ -720,7 +738,7 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
     }
     function selectedSubChapterKYC(){
       let processsChapterKYCDoc = []
-      let processschapterDoc = getTheKyc(email, selectedSubChapters)
+      let processschapterDoc = getTheKyc(email, selectedSubChapters,null)
       if (processschapterDoc && processschapterDoc.length>0) {
         //fetching the chapter and process based documents documents from processDocuments
         processschapterDoc.map(function (doc) {

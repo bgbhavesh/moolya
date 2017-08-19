@@ -33,6 +33,8 @@ MlResolver.MlQueryResolver['fetchPortfolioDetailsByUserId'] = (obj, args, contex
 /**
  * request for portfolio creation
  * */
+
+//todo://changing communitytype to communitycode
 MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, info) => {
   let user;
   let portfolioDetails = args.portfoliodetails
@@ -181,6 +183,24 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                       MlResolver.MlMutationResolver['createServiceProviderPortfolio'](obj, portfolio, context, info)
                       console.log("creating service provider")
                     }
+                    case "Companies": {
+                      let portfolio = {
+                        userId: portfolioDetails.userId,
+                        communityType: portfolioDetails.communityType,
+                        portfolioDetailsId: ret
+                      }
+                      MlResolver.MlMutationResolver['createCompanyPortfolio'](obj, portfolio, context, info)
+                    }
+                      break;
+                    case "Institutions": {
+                      let portfolio = {
+                        userId: portfolioDetails.userId,
+                        communityType: portfolioDetails.communityType,
+                        portfolioDetailsId: ret
+                      }
+                      MlResolver.MlMutationResolver['createInstitutionPortfolio'](obj, portfolio, context, info)
+                      console.log("creating Institutions")
+                    }
                       break;
                   }
                 //triggered on successfull portfolio creation
@@ -240,6 +260,10 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
                   response = MlResolver.MlMutationResolver['updateServiceProviderPortfolio'](obj, args, context, info)
                 }
                 break;
+              case "Institutions":{
+                response = MlResolver.MlMutationResolver['updateInstitutePortfolio'](obj, args, context, info)
+              }
+                break;
             }
         }
     }
@@ -248,7 +272,9 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
 }
 
 /**
- * portfolio approval to go live
+ * @params [portfolioId]
+ * @usage 1)portfolio approval to go live
+ *        2) process-setup if type funder
  * */
 MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {

@@ -3,11 +3,11 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-import {fetchStartupPortfolioLookingFor} from '../../actions/findPortfolioStartupDetails'
+import {fetchStartupDetailsHandler} from '../../actions/findPortfolioStartupDetails'
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
 
-
+const KEY = "lookingFor"
 export default class MlStartupViewLookingFor extends React.Component {
   constructor(props) {
     super(props);
@@ -99,10 +99,12 @@ export default class MlStartupViewLookingFor extends React.Component {
   async fetchPortfolioStartupDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await fetchStartupPortfolioLookingFor(portfoliodetailsId);
-    if (response) {
-      this.setState({loading: false,startupLookingforList: response});
+    const response = await fetchStartupDetailsHandler(portfoliodetailsId, KEY);
+    if (response && response.lookingFor) {
+      this.setState({startupLookingforList: response});
     }
+
+    this.setState({lodaing:false})
 
   }
   render(){

@@ -89,6 +89,21 @@ MlResolver.MlQueryResolver['fetchInteractionActionAttributes'] = (obj, args, con
           let followCount=MlFollowings.find({'isActive':true,'followerId':resourceDetails.resourceOwnerId,'followedBy':context.userId}).count();
           actionsList.push({'actionName':'follow',isDisabled:!hasAccess || (followCount==1 ?true:false),isHidden:false});
           break;
+        case 'enquire':
+          actionsList.push({'actionName':'enquire',isDisabled:!hasAccess,isHidden:false});
+          break;
+        case 'review':
+          actionsList.push({'actionName':'review',isDisabled:!hasAccess,isHidden:false});
+          break;
+        case 'comment':
+          actionsList.push({'actionName':'comment',isDisabled:!hasAccess,isHidden:false});
+          break;
+        case 'partner':
+          actionsList.push({'actionName':'partner',isDisabled:!hasAccess,isHidden:false});
+          break;
+        case 'collaborate':
+          actionsList.push({'actionName':'collaborate',isDisabled:!hasAccess,isHidden:false});
+          break;
       }
     });
   }

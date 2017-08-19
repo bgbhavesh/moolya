@@ -67,10 +67,10 @@ export default class MlStartupEditTemplate extends React.Component{
     return tabs;
   }
 
-  getAboutus(details,tabName){
+  getAboutus(details, tabName, privateKey){
     let data = this.state.startupPortfolio;
     data[tabName] = details;
-    this.props.getPortfolioDetails({startupPortfolio : data});
+    this.props.getPortfolioDetails({startupPortfolio : data}, privateKey);
   }
 
   getDataDetails(details,tabName){

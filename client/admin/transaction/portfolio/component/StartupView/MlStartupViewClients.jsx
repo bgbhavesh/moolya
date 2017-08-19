@@ -3,11 +3,12 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-import {fetchDetailsStartupActionHandler} from '../../actions/findPortfolioStartupDetails'
+import {fetchStartupDetailsHandler} from '../../actions/findPortfolioStartupDetails'
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
 
+const KEY = 'clients'
 
 export default class MlStartupViewClients extends React.Component {
   constructor(props) {
@@ -44,7 +45,7 @@ export default class MlStartupViewClients extends React.Component {
   async fetchPortfolioStartupDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await fetchDetailsStartupActionHandler(portfoliodetailsId);
+    const response = await fetchStartupDetailsHandler(portfoliodetailsId, KEY);
     if (response) {
       this.setState({loading: false,startupAboutUsList: response});
     }
@@ -120,7 +121,7 @@ export default class MlStartupViewClients extends React.Component {
   async fetchPortfolioStartupDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await fetchDetailsStartupActionHandler(portfoliodetailsId);
+    const response = await fetchStartupDetailsHandler(portfoliodetailsId, KEY);
     if (response) {
       this.setState({loading: false,startupBranchesList: response});
     }

@@ -113,30 +113,30 @@ class MlAppProfileHeader extends Component {
           <h1 id="NavLbl" className="" style={{'backgroundImage':`url(${this.state.profilePic})`, 'backgroundPosition': 'center center'}}></h1>
             <ol>
               <li data-toggle="tooltip" title="My Profile" data-placement="right">
-                <a href="/app/myprofile"><img className="profile-img" src="/images/1.png"/></a>
+                <a href="/app/myprofile"><span className="ml my-ml-blank_Profile_3"></span></a>
               </li>
               {(this.state.data && !this.state.data.isAllowRegisterAs) ?
                 <li data-toggle="tooltip" title="Registration" data-placement="right">
-                  <a href="" onClick={this.registrationRedirect.bind(this)}><img className="profile-img"
-                                                                                 src="/images/2.png"/></a>
+                  <a href="" onClick={this.registrationRedirect.bind(this)}><span className="ml my-ml-Switch_Profile_Log_As">
+                  </span></a>
                 </li> : <div></div>}
               <li data-toggle="tooltip" title="Switch Profile" data-placement="right">
-                <a href="/app/appSwitchProfile"><img className="profile-img" src="/images/3.png"/></a>
+                <a href="/app/appSwitchProfile"><span className="ml my-ml-switch_profile"></span></a>
               </li>
               <li data-toggle="tooltip" title="Register As" data-placement="right">
-                <a href="/app/myProfile/registerAs"><img className="profile-img" src="/images/2.png"/></a>
+                <a href="/app/myProfile/registerAs"><span className="ml my-ml-Switch_Profile_Log_As"></span></a>
               </li>
               {/*<li data-toggle="tooltip" title="Themes" data-placement="top">*/}
-              {/*<a href="#"><img className="profile-img" src="/images/4.png"/></a>*/}
+              {/*<a href="#"><span className="ml my-ml-themes_10-01"></span></a>*/}
               {/*</li>*/}
               <li data-toggle="tooltip" title="Calander" data-placement="top">
-                <a href="/app/calendar"><img className="profile-img" src="/images/6.png" /></a>
+                <a href="/app/calendar"><span className="ml my-ml-calendar"></span></a>
               </li>
               <li data-toggle="tooltip" title="My Tasks" data-placement="top">
                 <a href="/app/task"><img className="profile-img" src="/images/7.png" /></a>
               </li>
               <li data-toggle="tooltip" title="Logout" data-placement="top">
-                <a onClick={this.logoutUser.bind(this)}><img className="profile-img" src="/images/5.png"/></a>
+                <a onClick={this.logoutUser.bind(this)}><span className="ml my-ml-exit_or_logoff"></span></a>
               </li>
             </ol>
           </div>

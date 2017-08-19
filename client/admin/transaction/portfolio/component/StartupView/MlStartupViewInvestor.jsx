@@ -1,12 +1,12 @@
 import React from "react";
 import {render} from "react-dom";
-import {findStartupInvestorDetailsActionHandler} from "../../actions/findPortfolioStartupDetails";
+import {fetchStartupDetailsHandler} from "../../actions/findPortfolioStartupDetails";
 import {initializeMlAnnotator} from "../../../../../commons/annotator/mlAnnotator";
 import {createAnnotationActionHandler} from "../../actions/updatePortfolioDetails";
 import {findAnnotations} from "../../../../../commons/annotator/findAnnotations";
 var FontAwesome = require('react-fontawesome');
 
-
+const KEY = 'investor'
 export default class MlStartupViewInvestor extends React.Component {
   constructor(props) {
     super(props);
@@ -96,10 +96,12 @@ export default class MlStartupViewInvestor extends React.Component {
   async fetchPortfolioStartupDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await findStartupInvestorDetailsActionHandler(portfoliodetailsId);
-    if (response) {
-      this.setState({loading: false,startupInvestorList: response});
+    const response = await fetchStartupDetailsHandler(portfoliodetailsId, KEY);
+    if (response && response.investor) {
+      this.setState({startupInvestorList: response.investor});
     }
+
+    this.setState({lodaing:false})
 
   }
 
@@ -117,7 +119,7 @@ export default class MlStartupViewInvestor extends React.Component {
                   <div className="team-block">
                     <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"} className="team_img"/>
                     <h3>
-                      {details.name} <br /><b>Investor</b>
+                      {details.investorName} <br /><b>Investor</b>
                     </h3>
                   </div>
                 </div>)

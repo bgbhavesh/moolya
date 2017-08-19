@@ -3,12 +3,15 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-import {fetchStartupPortfolioMemberships,fetchStartupPortfolioCompliances,fetchStartupPortfolioLicenses} from '../../actions/findPortfolioStartupDetails'
+import {fetchStartupDetailsHandler} from '../../actions/findPortfolioStartupDetails'
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
 import _ from 'lodash'
 
+const MEMBERKEY = 'memberships'
+const LICENSEKEY = 'licenses'
+const COMPLIANCEKEY = 'compliances'
 
 export default class MlStartupViewAboutUs extends React.Component {
   constructor(props) {
@@ -43,17 +46,17 @@ export default class MlStartupViewAboutUs extends React.Component {
     let that = this;
     let data = {};
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const responseM = await fetchStartupPortfolioMemberships(portfoliodetailsId);
+    const responseM = await fetchStartupDetailsHandler(portfoliodetailsId, MEMBERKEY);
     if (responseM) {
-      this.setState({memberships: responseM});
+      this.setState({memberships: responseM.memberships});
     }
-    const responseC = await fetchStartupPortfolioCompliances(portfoliodetailsId);
+    const responseC = await fetchStartupDetailsHandler(portfoliodetailsId, COMPLIANCEKEY);
     if (responseC) {
-      this.setState({compliances: responseC});
+      this.setState({compliances: responseC.compliances});
     }
-    const responseL = await fetchStartupPortfolioLicenses(portfoliodetailsId);
+    const responseL = await fetchStartupDetailsHandler(portfoliodetailsId, LICENSEKEY);
     if (responseL) {
-      this.setState({licenses: responseL});
+      this.setState({licenses: responseL.licenses});
     }
 
     data = {
@@ -143,7 +146,7 @@ export default class MlStartupViewAboutUs extends React.Component {
                   <div className="panel-heading">Membership </div>
                   <div className="panel-body ">
 
-                    {this.state.memberships&&this.state.memberships.description?this.state.memberships.description:""}
+                    {this.state.memberships&&this.state.memberships.membershipDescription?this.state.memberships.membershipDescription:""}
 
                   </div>
                 </div>
@@ -158,7 +161,7 @@ export default class MlStartupViewAboutUs extends React.Component {
                   <div className="panel-heading">Compliances</div>
                   <div className="panel-body ">
 
-                    {this.state.compliances&&this.state.compliances.description?this.state.compliances.description:""}
+                    {this.state.compliances&&this.state.compliances.complianceDescription?this.state.compliances.complianceDescription:""}
 
                   </div>
                 </div>
@@ -167,7 +170,7 @@ export default class MlStartupViewAboutUs extends React.Component {
                   <div className="panel-heading">Licenses </div>
                   <div className="panel-body ">
 
-                    {this.state.licenses&&this.state.licenses.description?this.state.licenses.description:""}
+                    {this.state.licenses&&this.state.licenses.licenseDescription?this.state.licenses.licenseDescription:""}
 
                   </div>
                 </div>

@@ -38,7 +38,7 @@ if(Meteor.isServer){
         "uniqueId" : "myConnections"
       },
       {
-        "image":"fa fa-money",
+        "image":"ml my-ml-Referral_Invite",
         "link": "/app/referalInvities",
         "isLink" : true,
         "isMenu" : true,

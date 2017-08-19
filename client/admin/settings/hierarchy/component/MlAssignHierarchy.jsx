@@ -354,38 +354,12 @@ export default class MlAssignHierarchy extends React.Component {
     //this.props.getFinalApprovalRole(this.state.finalApproval)
   }
 
-  // componentDidUpdate(){
-  //   var type = this.contextType
-  //   let subDepartmentId = this.props.data?this.props.data.subDepartmentId:''
-  //   switch (type) {
-  //     case 'cluster': {
-  //       $('#collapseTwo'+subDepartmentId).hide();
-  //       $('#collapseThree'+subDepartmentId).hide();
-  //       //hidechapter
-  //       //hidecommunity
-  //     }
-  //       break;
-  //     case 'chapter': {
-  //       $('#collapseOne'+subDepartmentId).hide();
-  //       $('#collapseThree'+subDepartmentId).hide();
-  //       //hidecluster
-  //       //hidecommunity
-  //     }
-  //       break;
-  //     case 'community':{
-  //       $('#collapseOne'+subDepartmentId).hide();
-  //       $('#collapseTwo'+subDepartmentId).hide();
-  //       //hidecluster
-  //       //hidechapter
-  //     }
-  //       break;
-  //     default :{
-  //       //hidecluster
-  //       //hidechapter
-  //       //hidecommunity
-  //     }
-  //   }
-  // }
+  componentDidMount(){
+    $( ".accordion-toggle" ).click(function(e) {
+      $(".panel-collapse").removeClass("in")
+    });
+  }
+
   getAssignedRoles(type){
     console.log("context : "+type);
     this.contextType = type

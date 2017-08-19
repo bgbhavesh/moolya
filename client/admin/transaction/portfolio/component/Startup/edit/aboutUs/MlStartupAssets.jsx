@@ -8,18 +8,19 @@ import gql from "graphql-tag";
 import {graphql} from "react-apollo";
 import _ from "lodash";
 import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
-import {fetchDetailsStartupActionHandler} from "../../../../actions/findPortfolioStartupDetails";
+import {fetchStartupDetailsHandler} from "../../../../actions/findPortfolioStartupDetails";
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from "../../../../../../../commons/components/loader/loader";
 var FontAwesome = require('react-fontawesome');
 
-
+const KEY = 'assets'
 export default class MlStartupAssets extends React.Component{
   constructor(props, context){
     super(props);
     this.state={
       loading: false,
       data:{},
+      privateKey:{},
       startupAssets:this.props.assetsDetails || [],
       startupAssetsList:this.props.assetsDetails || [],
       popoverOpen:false,
@@ -70,18 +71,29 @@ export default class MlStartupAssets extends React.Component{
       delete details.logo['__typename'];
     }
     this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.assetTypeId});
+    setTimeout(function () {
+      _.each(details.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+    }, 10)
   }
 
-  onLockChange(field, e){
+  onLockChange(fieldName, field, e){
+    var isPrivate = false
     let details = this.state.data||{};
     let key = e.target.id;
     details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
       details=_.extend(details,{[key]:true});
+      isPrivate = true
     }else{
       details=_.extend(details,{[key]:false});
     }
+
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
+    this.setState({privateKey:privateKey})
+
     this.setState({data:details}, function () {
       this.sendDataToParent()
     })
@@ -101,16 +113,6 @@ export default class MlStartupAssets extends React.Component{
       this.sendDataToParent()
     })
   }
-  // onDeleteAsset(index,e){
-  //   let assetDetails = this.state.startupAssets[index];
-  //   assetDetails = _.omit(assetDetails, "__typename");
-  //   if(index != -1) {
-  //     assetDetails.splice(index, 1);
-  //   }
-  //   this.setState({data:assetDetails}, function () {
-  //     this.sendDataToParent()
-  //   })
-  // }
 
   handleBlur(e){
     let details =this.state.data;
@@ -147,12 +149,12 @@ export default class MlStartupAssets extends React.Component{
         }
       }
       let newItem = _.omit(item, "__typename");
-      // let updateItem = _.omit(newItem, 'logo');
+      newItem = _.omit(newItem, ["privateFields"])
       arr.push(newItem)
     })
     startupAssets = arr;
     this.setState({startupAssets:startupAssets})
-    this.props.getStartupAssets(startupAssets);
+    this.props.getStartupAssets(startupAssets, this.state.privateKey);
 
   }
 
@@ -194,8 +196,8 @@ export default class MlStartupAssets extends React.Component{
 
 
   async fetchOnlyImages(){
-    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
-    if (response) {
+    const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
+    if (response && response.assets) {
       let thisState=this.state.selectedIndex;
       let dataDetails =this.state.startupAssets
       let cloneBackUp = _.cloneDeep(dataDetails);
@@ -211,13 +213,14 @@ export default class MlStartupAssets extends React.Component{
   }
 
   async imagesDisplay(){
-    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
-    if (response) {
+    const response = await fetchStartupDetailsHandler(this.props.portfolioDetailsId, KEY);
+    if (response && response.assets) {
       let detailsArray = response&&response.assets?response.assets:[]
       let dataDetails =this.state.startupAssets
       let cloneBackUp = _.cloneDeep(dataDetails);
       _.each(detailsArray, function (obj,key) {
         cloneBackUp[key]["logo"] = obj.logo;
+        cloneBackUp[key]["privateFields"] = obj.privateFields;
       })
       let listDetails = this.state.startupAssetsList || [];
       listDetails = cloneBackUp
@@ -304,15 +307,13 @@ export default class MlStartupAssets extends React.Component{
                              className="form-control float-label" defaultValue={this.state.data.quantity}
                              onBlur={this.handleBlur.bind(this)}/>
                       <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
-                                   id="isAssetTypePrivate" defaultValue={this.state.data.isAssetTypePrivate}
-                                   onClick={this.onLockChange.bind(this, "isAssetTypePrivate")}/>
-                      <input type="checkbox" className="lock_input" id="isAssetTypePrivate"
-                             checked={this.state.data.isAssetTypePrivate}/>
+                                   id="isQuantityTypePrivate" defaultValue={this.state.data.isQuantityTypePrivate}
+                                   onClick={this.onLockChange.bind(this, "quantity", "isQuantityTypePrivate")}/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" name="description" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.description} onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
+                      <input type="text" name="assetDescription" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.assetDescription} onBlur={this.handleBlur.bind(this)}/>
+                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" onClick={this.onLockChange.bind(this, "assetDescription", "isDescriptionPrivate")}/>
                     </div>
                     {displayUploadButton?<div className="form-group">
                       <div className="fileUpload mlUpload_btn">

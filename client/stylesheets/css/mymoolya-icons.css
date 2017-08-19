@@ -13,7 +13,12 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+.my-ml-explore:before {
+  content: "\e9b6";
+}
+.my-ml-Referral_Invite:before {
+  content: "\e9b7";
+}
 .my-ml-account:before {
   content: "\e900";
 }

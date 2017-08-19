@@ -77,7 +77,7 @@ let startupPortfolioSchema = `
         companyName:String,
         isCompanyNamePrivate:Boolean,
         logo:imagesTypeSchema,
-        description:String,
+        clientDescription:String,
         isDescriptionPrivate:Boolean,
         makePrivate:Boolean,
         index:Int,
@@ -86,30 +86,30 @@ let startupPortfolioSchema = `
     
     type branchesOutput{
         addressTypeId:String,
-        name:String,
+        branchName:String,
         isNamePrivate:Boolean,
-        phoneNumber:String,
+        branchPhoneNumber:String,
         isPhoneNumberPrivate:Boolean,
-        address1:String,
+        branchAddress1:String,
         isAddressOnePrivate:String,
-        address2:String,
+        branchAddress2:String,
         isAddressTwoPrivate:Boolean,
-        landmark:String,
+        branchLandmark:String,
         isLandmarkPrivate:Boolean,
-        area:String,
+        branchArea:String,
         isAreaPrivate:Boolean,
-        city:String,
+        branchCity:String,
         cityId:String,
         isCityPrivate:Boolean,
-        state:String,
+        branchState:String,
         stateId:String,
         isStatePrivate:Boolean,
-        country:String,
+        branchCountry:String,
         countryId:String,
         isCountryPrivate:Boolean,
         addressImage : String,
         isAddressImagePrivate:Boolean,
-        logo:imagesTypeSchema,
+        branchLogo:imagesTypeSchema,
         makePrivate:Boolean,
         index:Int
         privateFields:[PrivateKeys]
@@ -122,7 +122,7 @@ let startupPortfolioSchema = `
         isAssetTypePrivate:Boolean,
         quantity:String,
         isQuantityTypePrivate:Boolean,
-        description:String,
+        assetDescription:String,
         isDescriptionPrivate:Boolean,
         logo:imagesTypeSchema,
         makePrivate:Boolean,
@@ -133,7 +133,7 @@ let startupPortfolioSchema = `
     type technologiesOutput{
         technologyName:String,
         technologyId:String,
-        description:String,
+        technologyDescription:String,
         isTechnologyPrivate:Boolean,
         isDescriptionPrivate:Boolean,
         logo:imagesTypeSchema,
@@ -171,13 +171,13 @@ let startupPortfolioSchema = `
     
 
     type informationOutput{
-       description:String,
+       informationDescription:String,
        isDescriptionPrivate:Boolean
        privateFields:[PrivateKeys]
     }
     
     type serviceProductsOutput{
-        description:String,
+        spDescription:String,
         isDescriptionPrivate:Boolean
         privateFields:[PrivateKeys]
     }
@@ -190,7 +190,7 @@ let startupPortfolioSchema = `
 
     
     type legalIssueOutput{
-        description:String,
+        legalDescription:String,
         isDescriptionPrivate:Boolean
         privateFields:[PrivateKeys]
     }
@@ -212,7 +212,7 @@ let startupPortfolioSchema = `
     
     type aboutUsOutput{
         logo      : [imagesTypeSchema]
-        description : String
+        startupDescription : String
         annotatorId : String
         isLogoPrivate :Boolean
         isDescriptionPrivate : Boolean,
@@ -320,6 +320,15 @@ let startupPortfolioSchema = `
    }
    
    type StartupPortfolio{
+      aboutUs           : aboutUsOutput
+      rating            : ratingOutput
+      serviceProducts   : serviceProductsOutput
+      information       : informationOutput
+      technologies      : [technologiesOutput]
+      assets            : [assetsOutput]
+      branches          : [branchesOutput]
+      clients           : [clientsOutput]
+      legalIssue        : legalIssueOutput
       management        : [startupManagementOutput],
       investor          : [investorOutput],
       data              : dataOutput,
@@ -379,7 +388,7 @@ let startupPortfolioSchema = `
         companyName:String,
         isCompanyNamePrivate:Boolean,
         logo:logo,
-        description:String,
+        clientDescription:String,
         isDescriptionPrivate:Boolean,
         makePrivate:Boolean,
         index:Int
@@ -387,30 +396,30 @@ let startupPortfolioSchema = `
     
     input branches{
         addressTypeId:String,
-        name:String,
+        branchName:String,
         isNamePrivate:Boolean,
-        phoneNumber:String,
+        branchPhoneNumber:String,
         isPhoneNumberPrivate:Boolean,
-        address1:String,
+        branchAddress1:String,
         isAddressOnePrivate:String,
-        address2:String,
+        branchAddress2:String,
         isAddressTwoPrivate:Boolean,
-        landmark:String,
+        branchLandmark:String,
         isLandmarkPrivate:Boolean,
-        area:String,
+        branchArea:String,
         isAreaPrivate:Boolean,
-        city:String,
+        branchCity:String,
         cityId:String,
         isCityPrivate:Boolean,
-        state:String,
+        branchState:String,
         stateId:String,
         isStatePrivate:Boolean,
-        country:String
+        branchCountry:String
         countryId:String,
         isCountryPrivate:Boolean,
         addressImage : String,
         isAddressImagePrivate:Boolean,
-        logo:logo,
+        branchLogo:logo,
         makePrivate:Boolean,
         index:Int
     }
@@ -421,7 +430,7 @@ let startupPortfolioSchema = `
       isAssetTypePrivate:Boolean,
       quantity:String,
       isQuantityTypePrivate:Boolean,
-      description:String,
+      assetDescription:String,
       isDescriptionPrivate:Boolean,
       logo:logo,
       makePrivate:Boolean,
@@ -429,9 +438,9 @@ let startupPortfolioSchema = `
     }
     
     input technologies{
-       technologyId:String,
-       technologyName:String,
-        description:String,
+        technologyId:String,
+        technologyName:String,
+        technologyDescription:String,
         isTechnologyPrivate:Boolean,
         isDescriptionPrivate:Boolean,
         logo:logo,
@@ -468,17 +477,17 @@ let startupPortfolioSchema = `
     
 
     input information{
-        description:String,
+        informationDescription:String,
         isDescriptionPrivate:Boolean
     }
     
     input serviceProducts{
-        description:String,
+        spDescription:String,
         isDescriptionPrivate:Boolean
     }
     
     input legalIssue{
-        description:String,
+        legalDescription:String,
         isDescriptionPrivate:Boolean
     }
     
@@ -507,7 +516,7 @@ let startupPortfolioSchema = `
     
     input aboutUs{
         logo      : [imageFilesInputSchema]
-        description : String
+        startupDescription : String
         annotatorId : String
         isLogoPrivate :Boolean
         isDescriptionPrivate : Boolean

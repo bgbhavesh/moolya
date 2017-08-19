@@ -22,8 +22,8 @@ export default class MlStartupAboutUs extends React.Component{
     this.setState({aboutStartup : true})
     this.props.backClickHandler(this.getStartUpState.bind(this))
   }
-  getPortfolioStartupAboutUsDetails(details,tabName){
-    this.props.getAboutus(details,tabName);
+  getPortfolioStartupAboutUsDetails(details,tabName, privateKey){
+    this.props.getAboutus(details,tabName,privateKey);
   }
   componentWillMount(){
     this.fetchPortfolioDetails();
@@ -40,7 +40,6 @@ export default class MlStartupAboutUs extends React.Component{
 
   getStartUpState() {
     this.setState({aboutStartup: false})
-    //$('.last-item').removeClass('menunone');
     this.props.backClickHandler();
 
   }
@@ -78,7 +77,7 @@ export default class MlStartupAboutUs extends React.Component{
           <div className="panel panel-default panel-form-view">
             <div className="panel-heading">About Us<a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
             <div className="panel-body panel-body-scroll" style={{'height':'384px'}}>
-              <p>{this.state.startupAboutUs.aboutUs&&this.state.startupAboutUs.aboutUs.description}</p>
+              <p>{this.state.startupAboutUs.aboutUs&&this.state.startupAboutUs.aboutUs.startupDescription}</p>
             </div>
           </div>
         </div>
@@ -108,7 +107,7 @@ export default class MlStartupAboutUs extends React.Component{
             <div className="col-md-12 nopadding"><div className="panel panel-default panel-form-view">
               <div className="panel-heading">Service & Products <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
               <div className="panel-body panel-body-scroll">
-                <p>{this.state.startupAboutUs.serviceProducts&&this.state.startupAboutUs.serviceProducts.description}</p>
+                <p>{this.state.startupAboutUs.serviceProducts&&this.state.startupAboutUs.serviceProducts.spDescription}</p>
               </div>
             </div></div>
           </div>
@@ -116,7 +115,7 @@ export default class MlStartupAboutUs extends React.Component{
             <div className="panel-heading">Information <a href="" className="pull-right ellipsis-menu"><FontAwesome name='ellipsis-h' onClick={this.selectedTab.bind(this)}/></a></div>
             <div className="panel-body">
               <ul className="list-info">
-                <li>{this.state.startupAboutUs.information&&this.state.startupAboutUs.information.description}</li>
+                <li>{this.state.startupAboutUs.information&&this.state.startupAboutUs.information.informationDescription}</li>
               </ul>
             </div>
           </div></div>

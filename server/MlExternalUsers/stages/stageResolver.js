@@ -14,11 +14,11 @@ MlResolver.MlQueryResolver['fetchStage'] = (obj, args, context, info) => {
   };
   let result = mlDBController.find('MlStage', query , context).fetch()
   return result;
-}
+};
 
 MlResolver.MlQueryResolver['fetchStage'] = (obj, args, context, info) => {
   let result = mlDBController.findOne('MlStage', {_id:args.StageId} , context)
-}
+};
 
 MlResolver.MlMutationResolver['createStage'] = (obj, args, context, info) => {
   let userId = context.userId;
@@ -38,7 +38,7 @@ MlResolver.MlMutationResolver['createStage'] = (obj, args, context, info) => {
     let response = new MlRespPayload().successPayload(result, code);
     return response
   }
-}
+};
 
 MlResolver.MlMutationResolver['updateStage'] = (obj, args, context, info) => {
   let stageDetails = mlDBController.findOne('MlStage', {_id:args.stageId} , context);
@@ -68,7 +68,7 @@ MlResolver.MlMutationResolver['updateStage'] = (obj, args, context, info) => {
       return response
     }
   }
-}
+};
 
 MlResolver.MlMutationResolver['updateOnBoardStage'] = (obj, args, context, info) => {
   let transactionLogDetails = mlDBController.findOne('MlTransactionsLog', {_id: args.transactionLogId}, context);
@@ -76,6 +76,7 @@ MlResolver.MlMutationResolver['updateOnBoardStage'] = (obj, args, context, info)
   if(stageDetails) {
       if (stageDetails && stageDetails.hasInvested &&  stageDetails.onBoardRequest) {
         stageDetails.onBoardStatus = args.status ;
+        stageDetails.resourceStage = 'onboard';
         result = mlDBController.update('MlStage', {_id:transactionLogDetails.activityDocId} , stageDetails, {$set:true}, context);
         // let user = mlDBController.findOne('MlPortfolioDetails', {_id: transactionLogDetails.docId}, context);
         // new mlOnBoard.createTransactionRequest(user.userId, 'investments', args.stage.resourceId, args.stageId, context.userId, 'user', context)
@@ -96,5 +97,11 @@ MlResolver.MlMutationResolver['updateOnBoardStage'] = (obj, args, context, info)
       return response
     }
   }
-}
+};
+
+
+
+MlResolver.MlMutationResolver['fetchOnBoardByTransaction'] = (obj, args, context, info) => {
+  console.log(args);
+};
 

@@ -3,7 +3,6 @@
  */
 import React, {Component} from 'react';
 import MlInvestmentRequestPresentation from './MlInvestmentRequestPresentation';
-import {fetchConnectionRequestHandler,acceptConnectionActionHandler,rejectConnectionActionHandler} from '../../../appActions/actions/connectActionHandler';
 import {updateStageForOnBoardActionHandler} from '../../../../app/investment/actions/updateStage';
 
 
@@ -38,16 +37,6 @@ export default class MlInvestmentRequest extends Component{
       await this.fetchConnectionDetails();
     }else{
       toastr.error("Failed to accept the onBoard request");
-    }
-  }
-
-  async rejectConnectionHandler(){
-    var response=await rejectConnectionActionHandler({'connectionId':this.state.connectionId});
-    if(response){
-      toastr.success("connection rejected");
-      await this.fetchConnectionDetails();
-    }else{
-      toastr.error("Failed to reject the connection");
     }
   }
 

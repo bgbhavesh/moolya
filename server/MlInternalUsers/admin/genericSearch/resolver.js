@@ -825,7 +825,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
 
   if (args.module == "userTransaction") {
     let pipeline = [
-      {'$match': {_id: "M5Bo3pbWG6Wigq9j6"}},
+      {'$match': {_id: context.userId}},
       {'$lookup': {from: 'mlRegistration',localField: '_id',foreignField: 'registrationInfo.userId',as: 'registration'}},
       {'$lookup':{from:'mlPortfolioDetails',localField:'_id',foreignField:'userId', as:'portfolio'}},
       {'$lookup':{from:'mlOfficeTransaction',localField:'_id',foreignField:'userId', as:'office'}},
@@ -962,7 +962,7 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
     }
 
     if(findOptions.limit) {
-      // pipeline.push({$limit:findOptions.limit});
+      pipeline.push({$limit:findOptions.limit});
     }
 
     data = mlDBController.aggregate('users', pipeline, context);

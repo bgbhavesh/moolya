@@ -18,6 +18,7 @@ import MlAppStartupEditTabs from '../../../../app/startup/components/MlAppStartu
 import MlAppStartupViewTabs from '../../../../app/startup/components/MlAppStartupViewTabs'
 import MlAppServiceProviderEditTabs from "../../../../app/serviceProvider/components/MlAppServiceProviderEditTabs";
 import MlAppServiceProviderViewTabs from "../../../../app/serviceProvider/components/MlAppServiceProviderViewTabs";
+import MlCompanyEditTabs from '../component/Company/edit/MlCompanyEditTabs'
 /**
  * admin config files for internal users
  * */
@@ -105,6 +106,17 @@ const mlServiceProviderViewExternalUserPortfolioTemplateConfig = {
   stepName: 'Portfolio',
   component: MlServiceProviderViewTabs
 };
+const mlCompanyEditExternalUserPortfolioTemplateConfig = {
+  templateName: "Portfolio-Template-Company-Edit",
+  templateCode: "PFTCMPEDT",
+  userType: 'internal',
+  process: 'Registration',
+  subProcess: 'Registration',
+  stepCode: 'PORTFOLIO',
+  stepName: 'Portfolio',
+  component: MlCompanyEditTabs
+};
+
 
 const mlInstitutionEditInternalUserPortfolioTemplateConfig = {
   templateName: "Portfolio-Template-Institution-Edit",
@@ -136,6 +148,7 @@ mlRegistrationTemplates.setTemplate(mlFunderEditExternalUserPortfolioTemplateCon
 mlRegistrationTemplates.setTemplate(mlFunderViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlServiceProviderEditExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlServiceProviderViewExternalUserPortfolioTemplateConfig);
+mlRegistrationTemplates.setTemplate(mlCompanyEditExternalUserPortfolioTemplateConfig);
 
 mlRegistrationTemplates.setTemplate(mlInstitutionViewInternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlInstitutionEditInternalUserPortfolioTemplateConfig);
@@ -230,6 +243,16 @@ const mlAppServiceProviderViewExternalUserPortfolioTemplateConfig = {
   stepName: 'Portfolio',
   component: MlAppServiceProviderViewTabs
 };
+const mlAppCompanyEditExternalUserPortfolioTemplateConfig = {
+  templateName: "Portfolio-Template-Company-Edit",
+  templateCode: "PFTCMPEDT",
+  userType: 'external',
+  process: 'Registration',
+  subProcess: 'Registration',
+  stepCode: 'PORTFOLIO',
+  stepName: 'Portfolio',
+  component: MlCompanyEditTabs
+};
 
 mlRegistrationTemplates.setTemplate(mlAppIdeatorEditExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppIdeatorViewExternalUserPortfolioTemplateConfig);
@@ -239,3 +262,4 @@ mlRegistrationTemplates.setTemplate(mlAppFunderViewExternalUserPortfolioTemplate
 mlRegistrationTemplates.setTemplate(mlAppFunderEditExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppServiceProviderEditExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppServiceProviderViewExternalUserPortfolioTemplateConfig);
+mlRegistrationTemplates.setTemplate(mlAppCompanyEditExternalUserPortfolioTemplateConfig);

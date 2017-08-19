@@ -183,6 +183,14 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                       MlResolver.MlMutationResolver['createServiceProviderPortfolio'](obj, portfolio, context, info)
                       console.log("creating service provider")
                     }
+                    case "Companies": {
+                      let portfolio = {
+                        userId: portfolioDetails.userId,
+                        communityType: portfolioDetails.communityType,
+                        portfolioDetailsId: ret
+                      }
+                      MlResolver.MlMutationResolver['createCompanyPortfolio'](obj, portfolio, context, info)
+                    }
                       break;
                     case "Institutions": {
                       let portfolio = {

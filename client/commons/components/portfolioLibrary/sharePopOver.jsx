@@ -48,10 +48,9 @@ export default class SharePopOver extends React.Component {
   }
 
   async getUsers(resourceId){
-    const that = this;
     let tempArray = [];
     const resp = await getTeamUsersActionHandler(resourceId);
-    let users = resp.map(function (user) {
+    resp.map(function (user) {
       let userInfo = {
             name: user.name,
             profileId: user.profileId,
@@ -121,13 +120,13 @@ export default class SharePopOver extends React.Component {
 
   sharedStartDate(event) {
     if(event._d) {
-      let value = moment(event._d).format('DD-MM-YYYY');
+      let value = moment(event._d);//.format('DD-MM-YYYY');
       this.setState({startDate: value})
     }
   }
   sharedEndDate(event) {
     if(event._d) {
-      let value = moment(event._d).format('DD-MM-YYYY');
+      let value = moment(event._d);//.format('DD-MM-YYYY');
       this.setState({endDate: value})
     }
   }
@@ -137,6 +136,12 @@ export default class SharePopOver extends React.Component {
     data.splice(index,1);
     this.setState({selectedDatasToShare: data})
     // this.props.deletedData(data)
+  }
+
+  deleteTeamMembers(index) {
+    let teamMembers = this.state.teamData || [];
+    teamMembers.splice(index,1);
+    this.setState({teamData: teamMembers})
   }
 
   selectedData() {
@@ -155,12 +160,10 @@ export default class SharePopOver extends React.Component {
   teamMembersData() {
     let that = this;
     let data = that.state.teamData || [];
-    console.log('---display members---',that.state.teamData);
     let datas = data.map(function(value, index) {
-      console.log('Value', value);
       return (
         <ul className="img_upload ul-hide" key={index}>
-          <li ><FontAwesome name='minus'/><img src={value.profileImage?value.profileImage:""}/><span>{value.name}</span></li>
+          <li ><FontAwesome name='minus' onClick={that.deleteTeamMembers.bind(that,index)}/><img src={value.profileImage?value.profileImage:""}/><span>{value.name}</span></li>
         </ul>
           )
     })
@@ -191,12 +194,17 @@ export default class SharePopOver extends React.Component {
     let Details = {
       files: file,
       users:user,
-      sharedStartDate: moment(this.state.startDate, 'DD-MM-YYYY'),
-      sharedEndDate: new Date(this.state.endDate),
       isDownloadable: this.state.downloadable
     }
+    if(this.state.startDate) {
+       Details.sharedStartDate =  this.state.startDate.format("MM-DD-YYYY hh:mm:ss");
+    }
+
+    if(this.state.endDate) {
+      Details.sharedEndDate = this.state.endDate.format("MM-DD-YYYY hh:mm:ss");
+    }
     console.log('--Details--',Details)
-     // this.saveInfo(Details);
+     this.saveInfo(Details);
   }
 
   async saveInfo(Details) {
@@ -226,9 +234,9 @@ render(){
                            onChange={this.selectUserType.bind(this)}
                            />
           </div>
-          <div className="form-group">
-            <input type="text" placeholder="Search here" className="form-control float-label" id=""></input>
-          </div>
+          {/*<div className="form-group">*/}
+            {/*<input type="text" placeholder="Search here" className="form-control float-label" id=""></input>*/}
+          {/*</div>*/}
           {this.teamMembersData()}
           <div className="clearfix" />
           <div className="col-md-6 nopadding-left">

@@ -972,7 +972,12 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
       let transactionType = doc.transactionType;
       if(transactionType == "connectionRequest" || transactionType == "interaction") {
         if(doc.fromUserType === 'user') {
-          let fromUserProfile = new MlUserContext().userProfileDetailsByProfileId(doc.fromProfileId);
+          let fromUserProfile;
+          if(doc.fromProfileId) {
+            fromUserProfile = new MlUserContext().userProfileDetailsByProfileId(doc.fromProfileId);
+          } else {
+            fromUserProfile = new MlUserContext().userProfileDetails(doc.fromUserId);
+          }
           doc.cluster = fromUserProfile.clusterName;
           doc.chapter = fromUserProfile.chapterName;
           doc.subChapter = fromUserProfile.subChapterName;

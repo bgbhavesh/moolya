@@ -2,6 +2,83 @@ import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 import _ from "underscore";
 
+
+
+export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!, $key:String) {
+              fetchInstitutionDetails(portfoliodetailsId:$portfoliodetailsId, key:$key){
+                  
+                  memberships{
+                    membershipDescription,
+                    privateFields{
+                        keyName,
+                        booleanKey
+                    }
+                  },
+                  
+                  compliances{
+                     complianceDescription, 
+                     privateFields{
+                        keyName,
+                        booleanKey
+                     }
+                  },
+                  
+                  licenses{
+                     licenseDescription, 
+                     privateFields{
+                        keyName,
+                        booleanKey
+                     }
+                  }
+                  
+                  lookingFor{
+                      lookingForName,
+                      typeId,
+                      lookingDescription,
+                      logo{
+                        fileName,
+                        fileUrl
+                      },
+                      index
+                      privateFields{
+                          keyName
+                          booleanKey
+                      }
+                  }
+                  
+                  awardsRecognition{
+                      awardName
+                      awardId
+                      year
+                      awardsDescription
+                      logo{
+                        fileName
+                        fileUrl
+                      }
+                      index
+                      privateFields{
+                          keyName
+                          booleanKey
+                      }
+                  }
+              }
+          }
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId,
+      key: key
+    },
+    forceFetch: true
+  })
+
+  var response = result.data.fetchInstitutionDetails;
+  return response;
+}
+
+
 export async function findStartupManagementActionHandler(portfoliodetailsId) {
 
   const result = await client.query({
@@ -208,169 +285,6 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
   return aboutUsArray
 }
 
-export async function findStartupInvestorDetailsActionHandler(portfoliodetailsId) {
-
-  const result = await client.query({
-    query: gql`
-          query ($portfoliodetailsId: String!) {
-            fetchStartupPortfolioInvestor(portfoliodetailsId: $portfoliodetailsId) {
-                name
-                fundingTypeId
-                investmentAmount
-                description
-                isNamePrivate
-                isInvestmentAmountPrivate
-                isDescriptionPrivate
-                logo{
-                    fileName
-                    fileUrl
-                  }
-                makePrivate
-                index
-            }
-          }
-
-      `,
-    variables: {
-      portfoliodetailsId: portfoliodetailsId
-    },
-    forceFetch: true
-  })
-  const id = result.data.fetchStartupPortfolioInvestor;
-  // let data = _.omit(id,'__typename')
-  // return data
-  return id
-}
-
-export async function fetchStartupPortfolioLookingFor(portfoliodetailsId) {
-
-  const result = await client.query({
-    query: gql`
-          query ($portfoliodetailsId: String!) {
-            fetchStartupPortfolioLookingFor(portfoliodetailsId: $portfoliodetailsId) {
-                lookingForName,
-                typeId,
-                isTypePrivate
-                description
-                isDescriptionPrivate
-                logo{
-                    fileName
-                    fileUrl
-                  }
-                index
-                makePrivate
-            }
-          }
-
-      `,
-    variables: {
-      portfoliodetailsId: portfoliodetailsId
-    },
-    forceFetch: true
-  })
-  const id = result.data.fetchStartupPortfolioLookingFor;
-  // let data = _.omit(id,'__typename')
-  // return data
-  return id
-}
-
-export async function fetchStartupPortfolioAwards(portfoliodetailsId) {
-  const result = await client.query({
-    query: gql`
-          query ($portfoliodetailsId: String!) {
-            fetchStartupPortfolioAwards(portfoliodetailsId: $portfoliodetailsId) {
-                  awardId
-                  awardName
-                  index
-                  isAwardPrivate
-                  year
-                  isYearPrivate
-                  description
-                  isDescriptionPrivate
-                  logo{
-                    fileName
-                    fileUrl
-                  }
-                  makePrivate
-            }
-          }
-
-      `,
-    variables: {
-      portfoliodetailsId: portfoliodetailsId
-    },
-    forceFetch: true
-  })
-  const id = result.data.fetchStartupPortfolioAwards;
-  return id
-}
-export async function fetchStartupPortfolioMemberships(portfoliodetailsId) {
-
-  const result = await client.query({
-    query: gql`
-          query ($portfoliodetailsId: String!) {
-            fetchStartupPortfolioMemberships(portfoliodetailsId: $portfoliodetailsId) {
-                  description
-                  isDescriptionPrivate
-            }
-          }
-
-      `,
-    variables: {
-      portfoliodetailsId: portfoliodetailsId
-    },
-    forceFetch: true
-  })
-  const id = result.data.fetchStartupPortfolioMemberships;
-  let data = _.omit(id, '__typename')
-  return data
-  // return id
-}
-export async function fetchStartupPortfolioCompliances(portfoliodetailsId) {
-
-  const result = await client.query({
-    query: gql`
-          query ($portfoliodetailsId: String!) {
-            fetchStartupPortfolioCompliances(portfoliodetailsId: $portfoliodetailsId) {
-                  description
-                  isDescriptionPrivate
-            }
-          }
-
-      `,
-    variables: {
-      portfoliodetailsId: portfoliodetailsId
-    },
-    forceFetch: true
-  })
-  const id = result.data.fetchStartupPortfolioCompliances;
-  let data = _.omit(id, '__typename')
-  return data
-  // return id
-}
-export async function fetchStartupPortfolioLicenses(portfoliodetailsId) {
-
-  const result = await client.query({
-    query: gql`
-          query ($portfoliodetailsId: String!) {
-            fetchStartupPortfolioLicenses(portfoliodetailsId: $portfoliodetailsId) {
-                  description
-                  isDescriptionPrivate
-            }
-          }
-
-      `,
-    variables: {
-      portfoliodetailsId: portfoliodetailsId
-    },
-    forceFetch: true
-  })
-  const id = result.data.fetchStartupPortfolioLicenses;
-  let data = _.omit(id, '__typename')
-  return data
-  // return id
-}
-
 export async function fetchStartupPortfolioData(portfoliodetailsId, connection) {
 
   const result = await connection.query({
@@ -502,287 +416,4 @@ export async function fetchDetailsStartupChartsActionHandler(portfoliodetailsId)
   });
 
   return chartsArray
-}
-
-
-export async function fetchStartupDetailsHandler(portfoliodetailsId, key) {
-
-  const result = await client.query({
-    query: gql`
-          query ($portfoliodetailsId: String!, $key:String) {
-              fetchStartupDetails(portfoliodetailsId:$portfoliodetailsId, key:$key){
-                  aboutUs{
-                      logo{
-                        fileName,
-                        fileUrl
-                      }
-                      startupDescription,
-                      annotatorId,
-                      isLogoPrivate,
-                      isDescriptionPrivate,
-                      privateFields{
-                          keyName,
-                          booleanKey
-                      }
-                  },
-                  rating{
-                      rating,
-                      isRatingPrivate,
-                      privateFields{
-                          keyName,
-                          booleanKey
-                      }
-                  },
-                  serviceProducts{
-                      spDescription,
-                      isDescriptionPrivate,
-                      privateFields{
-                          keyName,
-                          booleanKey
-                      }
-                  },
-                  information{
-                      informationDescription,
-                      isDescriptionPrivate,
-                      privateFields{
-                          keyName,
-                          booleanKey
-                      }
-                  },
-                  technologies{
-                      technologyName,
-                      technologyId,
-                      technologyDescription,
-                      isTechnologyPrivate,
-                      isDescriptionPrivate,
-                      logo{,
-                          fileName,
-                          fileUrl
-                      }
-                      makePrivate,
-                      index
-                      privateFields{
-                          keyName,
-                          booleanKey
-                      }
-                  },
-                  branches{
-                      addressTypeId,
-                      branchName,
-                      isNamePrivate,
-                      branchPhoneNumber,
-                      isPhoneNumberPrivate,
-                      branchAddress1,
-                      isAddressOnePrivate,
-                      branchAddress2,
-                      isAddressTwoPrivate,
-                      branchLandmark,
-                      isLandmarkPrivate,
-                      branchArea,
-                      isAreaPrivate,
-                      branchCity,
-                      cityId,
-                      isCityPrivate,
-                      branchState,
-                      stateId,
-                      isStatePrivate,
-                      branchCountry,
-                      countryId,
-                      isCountryPrivate,
-                      addressImage,
-                      isAddressImagePrivate,
-                      branchLogo{
-                          fileName,
-                          fileUrl
-                      },
-                      makePrivate,
-                      index
-                      privateFields{
-                          keyName,
-                          booleanKey
-                      }
-                  },
-                  clients{
-                      companyName,
-                      isCompanyNamePrivate,
-                      logo{
-                          fileName,
-                          fileUrl
-                      },
-                      clientDescription,
-                      isDescriptionPrivate,
-                      makePrivate,
-                      index,
-                      privateFields{
-                          keyName,
-                          booleanKey
-                      }
-                  },
-                  legalIssue{
-                      legalDescription,
-                      isDescriptionPrivate,
-                      privateFields{
-                          keyName,
-                          booleanKey
-                      }
-                  },
-                  assets{
-                      assetTypeId,
-                      assetTypeName,
-                      isAssetTypePrivate,
-                      quantity,
-                      isQuantityTypePrivate,
-                      assetDescription,
-                      isDescriptionPrivate,
-                      logo{,
-                          fileName,
-                          fileUrl
-                      }
-                      makePrivate,
-                      index
-                      privateFields{
-                          keyName,
-                          booleanKey
-                      }
-                  },
-                  management{
-                     title
-                     isTitlePrivate
-                     firstName
-                     isFirstNamePrivate
-                     lastName
-                     isLastNamePrivate
-                     middleName
-                     isMiddleNamePrivate
-                     qualification
-                     isQualificationPrivate
-                     certification 
-                     isCertificationPrivate 
-                     profilePic 
-                     isProfilePicPrivate 
-                     gender 
-                     isGenderPrivate 
-                     designation 
-                     isDesignationPrivate
-                     yearsOfExperience 
-                     isYOEPrivate 
-                     joiningDate 
-                     isJoiningDatePrivate
-                     firstJobJoiningDate 
-                     isFJJDPrivate 
-                     universities 
-                     isUniversitiesPrivate
-                     awards 
-                     isAwardsPrivate
-                     linkedInUrl 
-                     isLinkedInUrlPrivate
-                     managmentAbout
-                     isAboutPrivate
-                      logo{
-                        fileName
-                        fileUrl
-                      }
-                      index
-                      privateFields{
-                          keyName,
-                          booleanKey
-                      }
-                  },
-                  investor{
-                    investorName,
-                    fundingType,
-                    fundingTypeId,
-                    investmentAmount,
-                    investorDescription,
-                    isNamePrivate,
-                    isInvestmentAmountPrivate,
-                    isDescriptionPrivate,
-                    logo{
-                      fileName,
-                      fileUrl
-                    },
-                    makePrivate,
-                    index
-                    privateFields{
-                        keyName,
-                        booleanKey
-                    }
-                  },
-                  awardsRecognition{
-                      awardName
-                      awardId
-                      isAwardPrivate
-                      year
-                      isYearPrivate
-                      awardsDescription
-                      isDescriptionPrivate
-                      logo{
-                        fileName,
-                        fileUrl
-                      },
-                      makePrivate,
-                      index
-                      privateFields{
-                          keyName,
-                          booleanKey
-                      }
-                  },
-                  
-                  lookingFor{
-                      lookingForName,
-                      typeId,
-                      isTypePrivate,
-                      lookingDescription,
-                      isDescriptionPrivate,
-                      logo{
-                        fileName,
-                        fileUrl
-                      },
-                      makePrivate,
-                      index
-                      privateFields{
-                          keyName,
-                          booleanKey
-                      }
-                  },
-                  
-                  memberships{
-                    membershipDescription,
-                    isDescriptionPrivate,
-                    privateFields{
-                        keyName,
-                        booleanKey
-                    }
-                  },
-                  
-                  compliances{
-                     complianceDescription, 
-                     isDescriptionPrivate,
-                     privateFields{
-                        keyName,
-                        booleanKey
-                     }
-                  },
-                  
-                  licenses{
-                     licenseDescription, 
-                     isDescriptionPrivate,
-                     privateFields{
-                        keyName,
-                        booleanKey
-                     }
-                  }
-              }
-          }
-      `,
-    variables: {
-      portfoliodetailsId: portfoliodetailsId,
-      key: key
-    },
-    forceFetch: true
-  })
-
-  var response = result.data.fetchStartupDetails;
-  return response;
-
 }

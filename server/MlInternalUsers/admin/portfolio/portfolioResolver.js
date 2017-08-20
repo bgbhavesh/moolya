@@ -261,7 +261,7 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
                 }
                 break;
               case "Institutions":{
-                response = MlResolver.MlMutationResolver['updateInstitutePortfolio'](obj, args, context, info)
+                response = MlResolver.MlMutationResolver['updateInstitutionPortfolio'](obj, args, context, info)
               }
                 break;
             }

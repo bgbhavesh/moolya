@@ -8,7 +8,7 @@ var _ = require('lodash')
 MlResolver.MlMutationResolver['createInstitutionPortfolio'] = (obj, args, context, info) => {
   try {
     if (args && args.userId && args.communityType) {
-      user = MlInstitutionPortfolio.findOne({"$and": [{'userId': args.userId}, {'communityId': args.communityType}]})
+      var user = MlInstitutionPortfolio.findOne({"$and": [{'userId': args.userId}, {'communityId': args.communityType}]})
       if (!user) {
         mlDBController.insert('MlInstitutionPortfolio', {
           userId: args.userId,
@@ -22,21 +22,21 @@ MlResolver.MlMutationResolver['createInstitutionPortfolio'] = (obj, args, contex
   }
 }
 
-MlResolver.MlMutationResolver['updateInstitutePortfolio'] = (obj, args, context, info) => {
+MlResolver.MlMutationResolver['updateInstitutionPortfolio'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId)
   {
     try {
-      let institutePortfolio = MlInstitutionPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-      let updateFor = args.portfolio;
-      if (institutePortfolio){
+      let institutionPortfolio = MlInstitutionPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+      let updateFor = args.portfolio.institutionPortfolio;
+      if (institutionPortfolio){
         for (key in updateFor) {
-          if (institutePortfolio.hasOwnProperty(key)){
-            if(_.isArray(updateFor[key]) && _.isArray(institutePortfolio[key])){
-              institutePortfolio[key] = updateArrayofObjects(updateFor[key], institutePortfolio[key])
+          if (institutionPortfolio.hasOwnProperty(key)){
+            if(_.isArray(updateFor[key]) && _.isArray(institutionPortfolio[key])){
+              institutionPortfolio[key] = updateArrayofObjects(updateFor[key], institutionPortfolio[key])
             }
-            else if(_.isObject(updateFor[key]) && _.isObject(institutePortfolio[key]))
+            else if(_.isObject(updateFor[key]) && _.isObject(institutionPortfolio[key]))
             {
-              _.mergeWith(institutePortfolio[key], updateFor[key], function (objValue, srcValue) {
+              _.mergeWith(institutionPortfolio[key], updateFor[key], function (objValue, srcValue) {
                 if (_.isArray(objValue)) {
                   return objValue.concat(srcValue);
                 }
@@ -44,11 +44,11 @@ MlResolver.MlMutationResolver['updateInstitutePortfolio'] = (obj, args, context,
             }
           }
           else{
-            institutePortfolio[key] = updateFor[key]
+            institutionPortfolio[key] = updateFor[key]
           }
         }
 
-        let ret = mlDBController.update('MlInstitutionPortfolio', {"portfolioDetailsId": args.portfoliodetailsId}, institutePortfolio, {$set: true}, context)
+        let ret = mlDBController.update('MlInstitutionPortfolio', {"portfolioDetailsId": args.portfoliodetailsId}, institutionPortfolio, {$set: true}, context)
         if (ret) {
           let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId})
           MlEmailNotification.onPortfolioUpdate(details);
@@ -105,58 +105,25 @@ MlResolver.MlQueryResolver['fetchInstitutePortfolioAboutUs'] = (obj, args, conte
   return {};
 }
 
-MlResolver.MlQueryResolver['fetchInstitutePortfolioAwards'] = (obj, args, context, info) => {
-  if (args.portfoliodetailsId) {
-    let portfolio = MlInstitutionPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-    if (portfolio && portfolio.hasOwnProperty('awardsRecognition')) {
-      if(portfolio && portfolio['awardsRecognition']){
-        portfolio.awardsRecognition.map(function(awards,index) {
-          if(portfolio.awardsRecognition[index]){
-            let awardData = MlAwards.findOne({"_id" : awards.awardId}) || {};
-            portfolio.awardsRecognition[index].awardName = awardData.awardDisplayName || "";
-          }
-
-        })
-      }
-      return portfolio['awardsRecognition'];
-    }
-  }
-
-  return [];
-}
-
-MlResolver.MlQueryResolver['fetchInstitutePortfolioMemberships'] = (obj, args, context, info) => {
-  if (args.portfoliodetailsId) {
-    let portfolio = MlInstitutionPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-    if (portfolio && portfolio.hasOwnProperty('memberships')) {
-      return portfolio['memberships'];
-    }
-  }
-
-  return {};
-}
-
-MlResolver.MlQueryResolver['fetchInstitutePortfolioCompliances'] = (obj, args, context, info) => {
-  if (args.portfoliodetailsId) {
-    let portfolio = MlInstitutionPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-    if (portfolio && portfolio.hasOwnProperty('compliances')) {
-      return portfolio['compliances'];
-    }
-  }
-
-  return {};
-}
-
-MlResolver.MlQueryResolver['fetchInstitutePortfolioLicenses'] = (obj, args, context, info) => {
-  if (args.portfoliodetailsId) {
-    let portfolio = MlInstitutionPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-    if (portfolio && portfolio.hasOwnProperty('licenses')) {
-      return portfolio['licenses'];
-    }
-  }
-
-  return {};
-}
+// MlResolver.MlQueryResolver['fetchInstitutePortfolioAwards'] = (obj, args, context, info) => {
+//   if (args.portfoliodetailsId) {
+//     let portfolio = MlInstitutionPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+//     if (portfolio && portfolio.hasOwnProperty('awardsRecognition')) {
+//       if(portfolio && portfolio['awardsRecognition']){
+//         portfolio.awardsRecognition.map(function(awards,index) {
+//           if(portfolio.awardsRecognition[index]){
+//             let awardData = MlAwards.findOne({"_id" : awards.awardId}) || {};
+//             portfolio.awardsRecognition[index].awardName = awardData.awardDisplayName || "";
+//           }
+//
+//         })
+//       }
+//       return portfolio['awardsRecognition'];
+//     }
+//   }
+//
+//   return [];
+// }
 
 MlResolver.MlQueryResolver['fetchInstitutePortfolioData'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {
@@ -192,7 +159,7 @@ MlResolver.MlQueryResolver['fetchInstitutePortfolioCharts'] = (obj, args, contex
 }
 
 
-MlResolver.MlQueryResolver['fetchInstituteDetails'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver['fetchInstitutionDetails'] = (obj, args, context, info) => {
   if(_.isEmpty(args))
     return;
 
@@ -205,9 +172,9 @@ MlResolver.MlQueryResolver['fetchInstituteDetails'] = (obj, args, context, info)
     institutePortfolio[key] = filteredObject
     return institutePortfolio;
   }
-
   return;
 }
+
 updateArrayofObjects = (updateFor, source) =>{
   if(_.isArray(updateFor) && _.isArray(source)){
     _.each(updateFor, function (obj) {

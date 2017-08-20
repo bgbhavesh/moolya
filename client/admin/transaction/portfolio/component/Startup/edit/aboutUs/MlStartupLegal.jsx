@@ -10,7 +10,8 @@ export default class MlStartupLegal extends React.Component{
     super(props);
     this.state={
       loading: true,
-      data:this.props.legalIssueDetails || {}
+      data:this.props.legalIssueDetails || {},
+      privateKey:{}
     }
     this.handleBlur.bind(this);
     return this;
@@ -23,6 +24,7 @@ export default class MlStartupLegal extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+    this.updatePrivateKeys();
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.legalIssue)
@@ -48,18 +50,35 @@ export default class MlStartupLegal extends React.Component{
     }
     this.props.getStartupLegalIssue(data)
   }
-  onLockChange(field, e){
+
+  onLockChange(fieldName,field, e){
+
+
     let details = this.state.data||{};
     let key = e.target.id;
+    var isPrivate = false;
     details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
       details=_.extend(details,{[key]:true});
+      isPrivate = true
     }else{
       details=_.extend(details,{[key]:false});
     }
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
+    this.setState({privateKey:privateKey})
     this.setState({data:details}, function () {
       this.sendDataToParent()
+    })
+    /* this.setState({data:details}, function () {
+     this.sendDataToParent()
+     })*/
+  }
+
+  updatePrivateKeys(){
+    let response = this.props.legalIssueDetails
+    _.each(response.privateFields, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
   render(){
@@ -76,7 +95,7 @@ export default class MlStartupLegal extends React.Component{
 
                 <div className="form-group nomargin-bottom">
                   <textarea placeholder="Describe..." name="description" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.description} onBlur={this.handleBlur.bind(this)}></textarea>
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate"  defaultValue={this.state.data&&this.state.data.isDescriptionPrivate} onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate"   onClick={this.onLockChange.bind(this,"description","isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
                 </div>
 
               </div>

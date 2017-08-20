@@ -156,7 +156,7 @@ export default class MlAppStartupEditTabs extends React.Component{
       data['licenses'] = details.licenses;
     }
     this.setState({startupPortfolio : data})
-    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio}, [],privatekey);
+    this.props.getPortfolioDetails({startupPortfolio:this.state.startupPortfolio},privatekey);
   }
 
   componentWillMount()

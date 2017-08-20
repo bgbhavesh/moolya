@@ -44,10 +44,26 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                       },
                       index
                       privateFields{
-                          keyName,
+                          keyName
                           booleanKey
                       }
-                  },
+                  }
+                  
+                  awardsRecognition{
+                      awardName
+                      awardId
+                      year
+                      awardsDescription
+                      logo{
+                        fileName
+                        fileUrl
+                      }
+                      index
+                      privateFields{
+                          keyName
+                          booleanKey
+                      }
+                  }
               }
           }
       `,
@@ -267,101 +283,6 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
   aboutUsArray["rating"] = _.omit(data.rating, '__typename');
 
   return aboutUsArray
-}
-
-export async function findStartupInvestorDetailsActionHandler(portfoliodetailsId) {
-
-  const result = await client.query({
-    query: gql`
-          query ($portfoliodetailsId: String!) {
-            fetchStartupPortfolioInvestor(portfoliodetailsId: $portfoliodetailsId) {
-                name
-                fundingTypeId
-                investmentAmount
-                description
-                isNamePrivate
-                isInvestmentAmountPrivate
-                isDescriptionPrivate
-                logo{
-                    fileName
-                    fileUrl
-                  }
-                makePrivate
-                index
-            }
-          }
-
-      `,
-    variables: {
-      portfoliodetailsId: portfoliodetailsId
-    },
-    forceFetch: true
-  })
-  const id = result.data.fetchStartupPortfolioInvestor;
-  // let data = _.omit(id,'__typename')
-  // return data
-  return id
-}
-
-export async function fetchStartupPortfolioLookingFor(portfoliodetailsId) {
-
-  const result = await client.query({
-    query: gql`
-          query ($portfoliodetailsId: String!) {
-            fetchStartupPortfolioLookingFor(portfoliodetailsId: $portfoliodetailsId) {
-                lookingForName,
-                typeId,
-                isTypePrivate
-                description
-                isDescriptionPrivate
-                logo{
-                    fileName
-                    fileUrl
-                  }
-                index
-                makePrivate
-            }
-          }
-
-      `,
-    variables: {
-      portfoliodetailsId: portfoliodetailsId
-    },
-    forceFetch: true
-  })
-  const id = result.data.fetchStartupPortfolioLookingFor;
-  return id
-}
-
-export async function fetchStartupPortfolioAwards(portfoliodetailsId) {
-  const result = await client.query({
-    query: gql`
-          query ($portfoliodetailsId: String!) {
-            fetchStartupPortfolioAwards(portfoliodetailsId: $portfoliodetailsId) {
-                  awardId
-                  awardName
-                  index
-                  isAwardPrivate
-                  year
-                  isYearPrivate
-                  description
-                  isDescriptionPrivate
-                  logo{
-                    fileName
-                    fileUrl
-                  }
-                  makePrivate
-            }
-          }
-
-      `,
-    variables: {
-      portfoliodetailsId: portfoliodetailsId
-    },
-    forceFetch: true
-  })
-  const id = result.data.fetchStartupPortfolioAwards;
-  return id
 }
 
 export async function fetchStartupPortfolioData(portfoliodetailsId, connection) {

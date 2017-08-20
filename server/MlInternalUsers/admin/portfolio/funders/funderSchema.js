@@ -15,7 +15,6 @@ let FunderPortfolioSchema = `
         isStoryTitlePrivate:Boolean,
         description:String,
         isDescPrivate:Boolean,
-        isPrivate:Boolean,
         isActive:Boolean
         index: Int
         logo:imagesTypeSchema,
@@ -103,7 +102,7 @@ let FunderPortfolioSchema = `
         isTypeOfFundingPrivate:Boolean,
         aboutInvestment:String,
         isAboutInvestmentPrivate:Boolean,
-        isPrivate:Boolean,
+        makePrivate:Boolean,
         investmentAmount :String,
         isInvestmentAmountPrivate :Boolean
         index: Int
@@ -200,7 +199,6 @@ let FunderPortfolioSchema = `
         isStoryTitlePrivate:Boolean,
         description:String,
         isDescPrivate:Boolean,
-        isPrivate:Boolean,
         isActive:Boolean
         index: Int
     }
@@ -276,7 +274,7 @@ let FunderPortfolioSchema = `
         isTypeOfFundingPrivate:Boolean,
         aboutInvestment:String,
         isAboutInvestmentPrivate:Boolean,
-        isPrivate:Boolean,
+        makePrivate:Boolean,
         investmentAmount :String,
         isInvestmentAmountPrivate :Boolean
         index: Int

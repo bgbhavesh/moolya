@@ -19,6 +19,10 @@ import MlAppStartupViewTabs from '../../../../app/startup/components/MlAppStartu
 import MlAppServiceProviderEditTabs from "../../../../app/serviceProvider/components/MlAppServiceProviderEditTabs";
 import MlAppServiceProviderViewTabs from "../../../../app/serviceProvider/components/MlAppServiceProviderViewTabs";
 import MlCompanyEditTabs from '../component/Company/edit/MlCompanyEditTabs'
+import MlAppInstitutionsEditTabs from "../../../../app/portfolio/Institutions/components/MlAppInstitutionsEditTabs";
+import MlAppInstitutionsViewTabs from "../../../../app/portfolio/Institutions/components/MlAppInstitutionsViewTabs";
+import MlAppCompaniesEditTabs from "../../../../app/portfolio/Companies/components/MlAppCompaniesEditTabs";
+import MlAppCompaniesViewTabs from "../../../../app/portfolio/Companies/components/MlAppCompaniesViewTabs";
 /**
  * admin config files for internal users
  * */
@@ -251,7 +255,40 @@ const mlAppCompanyEditExternalUserPortfolioTemplateConfig = {
   subProcess: 'Registration',
   stepCode: 'PORTFOLIO',
   stepName: 'Portfolio',
-  component: MlCompanyEditTabs
+  component: MlAppCompaniesEditTabs
+};
+
+const mlAppCompanyViewExternalUserPortfolioTemplateConfig = {
+  templateName: "Portfolio-Template-Company-Edit",
+  templateCode: "PFTCMPEDT",
+  userType: 'external',
+  process: 'Registration',
+  subProcess: 'Registration',
+  stepCode: 'PORTFOLIO',
+  stepName: 'Portfolio',
+  component: MlAppCompaniesViewTabs
+};
+
+const mlAppInstitutionEditExternalUserPortfolioTemplateConfig = {
+  templateName: "Portfolio-Template-Institution-Edit",
+  templateCode: "PFTINSEDT",
+  userType: 'external',
+  process: 'Registration',
+  subProcess: 'Registration',
+  stepCode: 'PORTFOLIO',
+  stepName: 'Portfolio',
+  component: MlAppInstitutionsEditTabs
+};
+
+const mlAppInstitutionViewExternalUserPortfolioTemplateConfig = {
+  templateName: "Portfolio-Template-Institution-View",
+  templateCode: "PFTINSVIW",
+  userType: 'external',
+  process: 'Registration',
+  subProcess: 'Registration',
+  stepCode: 'PORTFOLIO',
+  stepName: 'Portfolio',
+  component: MlAppInstitutionsViewTabs
 };
 
 mlRegistrationTemplates.setTemplate(mlAppIdeatorEditExternalUserPortfolioTemplateConfig);
@@ -263,3 +300,6 @@ mlRegistrationTemplates.setTemplate(mlAppFunderEditExternalUserPortfolioTemplate
 mlRegistrationTemplates.setTemplate(mlAppServiceProviderEditExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppServiceProviderViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlAppCompanyEditExternalUserPortfolioTemplateConfig);
+mlRegistrationTemplates.setTemplate(mlAppCompanyViewExternalUserPortfolioTemplateConfig);
+mlRegistrationTemplates.setTemplate(mlAppInstitutionEditExternalUserPortfolioTemplateConfig);
+mlRegistrationTemplates.setTemplate(mlAppInstitutionViewExternalUserPortfolioTemplateConfig);

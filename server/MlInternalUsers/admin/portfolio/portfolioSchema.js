@@ -53,6 +53,7 @@ let portfolioSchema = `
     input privateKeys{
       keyName:String,
       booleanKey:String,
+      objectName:String,
       index:Int,
       tabName:String
     },
@@ -60,6 +61,7 @@ let portfolioSchema = `
     type PrivateKeys{
       keyName:String,
       booleanKey:String,
+      objectName:String,
       index:Int,
       tabName:String
     },

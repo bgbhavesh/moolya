@@ -1,17 +1,28 @@
 import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewer";
 import React from 'react';
 import gql from 'graphql-tag'
-import MlProcessSetupDetailsComponent from '../component/MlShareDetailsComponent'
+import MlShareDetailsComponent from '../component/MlShareDetailsComponent'
 import MlCustomFilter from '../../../../commons/customFilters/customFilter';
 import {client} from '../../../core/apolloConnection';
+import moment from "moment";
 
-const mlProcessSetupRequestsTableConfig=new MlViewer.View({
-  name:"ProcessSetupTable",
+function createdateFormatter (data){
+  let createdAt=data&&data.data&&data.data.createdAt;
+  if(createdAt){
+    return <div>{moment(createdAt).format('MM-DD-YYYY HH:mm:ss')}</div>;
+  }
+  else {
+    return <div></div>
+  }
+}
+
+const mlShareTableConfig=new MlViewer.View({
+  name:"ShareTable",
   module:"share",//Module name for filter.
   viewType:MlViewerTypes.TABLE,
   extraFields:[],
-  fields:["dateTime","profileId","name", "clusterName", "chapterName", "subChapterName", "communityId", "status"],
-  searchFields:["dateTime","profileId" ,"name" , "clusterName", "chapterName", "subChapterName", "communityId", "status"],
+  fields:["createdBy","email","transactionType", "cluster", "chapter", "subChapter", "community", "status"],
+  searchFields:["createdBy","email" ,"transactionType" , "cluster", "chapter", "subChapter", "community", "status"],
   throttleRefresh:false,
   pagination:true,//To display pagination
   filter:false,
@@ -25,23 +36,15 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
     {dataField: "chapter", title: "Chapter",dataSort:true,selectRow:true},
     {dataField: "subChapter", title: "Sub Chapter",dataSort:true,selectRow:true},
     {dataField: "community", title: "Community",dataSort:true,selectRow:true},
-    {dataField: "createdAt", title: "Created Date",dataSort:true,selectRow:true},
+    {dataField: "createdAt", title: "Created Date",selectRow:true,dataSort:true,customComponent:createdateFormatter},
     // {dataField: "profileId", title: "UserId",dataSort:true,selectRow:true},
-    {dataField: "_id", title: "Status",dataSort:true,selectRow:true}
+    {dataField: "", title: "Status",dataSort:true,selectRow:true}
   ],
   tableHeaderClass:'react_table_head',
   isExpandableRow:(row)=>{return true;},
-  expandComponent:MlProcessSetupDetailsComponent,
-  showActionComponent:true,
-  actionConfiguration:[
-    {
-      actionName: 'add',
-      showAction: true,
-      handler: (data)=>{
-
-      }
-    }
-  ],
+  expandComponent:MlShareDetailsComponent,
+  showActionComponent:false,
+  actionConfiguration:[],
   graphQlQuery:
     gql`query ContextSpecSearch($offset: Int, $limit: Int,$searchSpec:SearchSpec,$fieldsData:[GenericFilter],$sortData: [SortFilter]){
                     data:ContextSpecSearch(module:"share",offset:$offset, limit:$limit,searchSpec:$searchSpec,fieldsData:$fieldsData,sortData:$sortData){
@@ -66,7 +69,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
              }`
 });
 
-export {mlProcessSetupRequestsTableConfig};
+export {mlShareTableConfig};
 
 // $context:ContextParams
 // context:$context,

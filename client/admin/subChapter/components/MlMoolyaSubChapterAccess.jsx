@@ -80,7 +80,8 @@ export default class MlMoolyaSubChapterAccess extends React.Component {
     var externalUser={
       canSearch:status,
       canView: false,
-      canTransact:this.state.externalUser.canTransact?this.state.externalUser.canTransact:false
+    //canTransact:this.state.externalUser.canTransact?this.state.externalUser.canTransact:false
+      canTransact:false
     }
     // this.state.externalUser.canView?this.state.externalUser.canView:false
     this.setState({externalUser:externalUser});
@@ -88,25 +89,29 @@ export default class MlMoolyaSubChapterAccess extends React.Component {
   }
 
   onStatusChangeCanViewE(e) {
-    let status = this.refs.canViewE.checked
+    let status = this.refs.canViewE.checked;
     var externalUser = {
-      canSearch: this.state.externalUser.canSearch ? this.state.externalUser.canSearch : false,
+      //canSearch: this.state.externalUser.canSearch ? this.state.externalUser.canSearch : false,
+      canSearch:status,
       canView: status,
-      canTransact: this.state.externalUser.canTransact ? this.state.externalUser.canSearch : false
+      //canTransact: this.state.externalUser.canTransact ? this.state.externalUser.canSearch : false
+      canTransact:false
     }
-    if (externalUser.canSearch) {
+   // if (externalUser.canSearch) {
       this.setState({externalUser: externalUser});
       this.props.getMoolyaAccessStatus({externalUser: externalUser})
-    } else {
-      toastr.error('Can-Search should be active for can-view active');
-    }
+   // } else {
+   //   toastr.error('Can-Search should be active for can-view active');
+   // }
   }
 
   onStatusChangeCanTransactE(e) {
-    let status = this.refs.canTransactE.checked
+    let status = this.refs.canTransactE.checked;
     var externalUser={
-      canSearch:this.state.externalUser.canSearch?this.state.externalUser.canSearch:false,
-      canView: this.state.externalUser.canView?this.state.externalUser.canView:false,
+      //canSearch:this.state.externalUser.canSearch?this.state.externalUser.canSearch:false,
+      canSearch:status,
+      //canView: this.state.externalUser.canView?this.state.externalUser.canView:false,
+      canView: status,
       canTransact:status
     }
     this.setState({externalUser:externalUser});

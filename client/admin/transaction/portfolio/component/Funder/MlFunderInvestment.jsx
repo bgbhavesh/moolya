@@ -240,9 +240,9 @@ export default class MlFunderInvestment extends React.Component {
                             <div className="list_block notrans funding_list">
                               {/*<div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>*/}
                               <div className="cluster_status inactive_cl">
-                                <FontAwesome name='lock' id="isPrivate" defaultValue={details.isPrivate}/>
-                                <input type="checkbox" className="lock_input" id="isPrivate"
-                                       checked={details.isPrivate}/></div>
+                                <FontAwesome name='lock' id="makePrivate" defaultValue={details.makePrivate}/>
+                                <input type="checkbox" className="lock_input" id="makePrivate"
+                                       checked={details.makePrivate}/></div>
                               <div onClick={that.onTileClick.bind(that, idx)}>
                                 <p>{details.investmentcompanyName}</p>
                                 <p className="fund">{details.investmentAmount}</p>
@@ -302,8 +302,8 @@ export default class MlFunderInvestment extends React.Component {
                           </div>
                           <div className="form-group">
                             <div className="input_types">
-                              <input id="isPrivate" type="checkbox"
-                                     checked={this.state.data.isPrivate && this.state.data.isPrivate}
+                              <input id="makePrivate" type="checkbox"
+                                     checked={this.state.data.makePrivate&& this.state.data.makePrivate}
                                      name="checkbox"
                                      onChange={this.onStatusChangeNotify.bind(this)}/>
                               <label htmlFor="checkbox1"><span></span>Make Private</label></div>

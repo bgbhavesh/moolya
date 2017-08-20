@@ -96,7 +96,7 @@ export default class MlIdeatorIdeas extends React.Component{
 
     data=_.omit(data,["privateFields"]);
 
-    this.props.getIdeas(data)
+    this.props.getIdeas(data, this.state.privateKey)
   }
 
   render(){
@@ -112,7 +112,6 @@ export default class MlIdeatorIdeas extends React.Component{
           <a href="#" >
             <div className="list_block notrans">
               <FontAwesome name='lock'/>
-              {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
               <div className="hex_outer portfolio-font-icons"><span className="ml ml-idea"></span></div>
               <h3>Ideas</h3>
             </div>

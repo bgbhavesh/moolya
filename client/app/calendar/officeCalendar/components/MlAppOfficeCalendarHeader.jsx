@@ -31,7 +31,7 @@ export default class MlAppOfficeCalendarHeader extends Component {
       <div className="col-lg-12">
         <ul className="users_list well well-sm">
           <li>
-            <a href="#">
+            <a href="" onClick={() => selectUser()}>
               <img src="/images/def_profile.png" /><br />
               <div className="tooltiprefer">
                 <span>All</span>

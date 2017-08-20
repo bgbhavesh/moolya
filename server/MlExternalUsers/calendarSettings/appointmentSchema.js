@@ -174,6 +174,7 @@ let appointment=`
      fetchMyAppointmentByStatus(status: String): [Appointment]
      fetchAllProfileAppointmentCounts: profileAppointment
      fetchOfficeMemberAppointmentCounts(userId:String!, profileId:String!, month:Int, year: Int): profileAppointment
+     fetchAllOfficeMemberAppointmentCounts(month:Int, year: Int): profileAppointment
      fetchProfileAppointmentCounts( profileId: String ): profileAppointment
      fetchServiceSeekerList(profileId: String!, serviceId: String): [serviceSeekerList]
      fetchMyAppointment(profileId: String!, day: Int, month: Int, year: Int): [myAppointmentsResponse]

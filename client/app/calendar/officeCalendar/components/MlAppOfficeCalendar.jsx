@@ -6,6 +6,7 @@ import React, {Component} from "react";
 import Calender from '../../../../commons/calendar/calendar';
 import MlAppOfficeCalendarHeader from './MlAppOfficeCalendarHeader';
 import {fetchOfficeMemberCalendarActionHandler} from './../actions/fetchOfficeMemberCalendar';
+import {fetchAllOfficeMemberCalendarActionHandler} from './../actions/fetchAllOfficeMemberCalendar';
 export default class MlAppOfficeCalendar extends Component {
 
   constructor(props){
@@ -15,6 +16,9 @@ export default class MlAppOfficeCalendar extends Component {
       date: new Date(),
       selectedUser: ''
     };
+    let month = this.state.date ? this.state.date.getMonth() : '' ;
+    let year = this.state.date ? this.state.date.getFullYear() : '' ;
+    this.fetchAllOfficeMemberCalendar(month, year);
     this.onNavigate = this.onNavigate.bind(this);
     this.selectUser = this.selectUser.bind(this);
   }
@@ -43,11 +47,19 @@ export default class MlAppOfficeCalendar extends Component {
         let year = this.state.date ? this.state.date.getFullYear() : '' ;
         this.fetchOfficeMemberCalendar(user.userId, user.profileId, month, year)
       }.bind(this));
+    } else {
+      this.setState({
+        selectedUser: null
+      }, function () {
+        let month = this.state.date ? this.state.date.getMonth() : '' ;
+        let year = this.state.date ? this.state.date.getFullYear() : '' ;
+        this.fetchAllOfficeMemberCalendar(month, year);
+      }.bind(this));
     }
-    console.log(user);
+
   }
 
-  async fetchOfficeMemberCalendar(userId, profileId, month, year){
+  async fetchOfficeMemberCalendar(userId, profileId, month, year) {
     let data = await fetchOfficeMemberCalendarActionHandler(userId, profileId, month, year);
     if(data){
       let events = data.events ? data.events : [];
@@ -63,6 +75,23 @@ export default class MlAppOfficeCalendar extends Component {
       });
     }
     console.log('Data', data);
+  }
+
+  async fetchAllOfficeMemberCalendar(month, year) {
+    let data = await fetchAllOfficeMemberCalendarActionHandler( month, year );
+    if(data){
+      let events = data.events ? data.events : [];
+      let eventsData = events.map((data) => {
+        return {
+          title: data.count,
+          start: new Date(data.date),
+          end: new Date(data.date)
+        }
+      });
+      this.setState({
+        events: eventsData
+      });
+    }
   }
 
   render(){

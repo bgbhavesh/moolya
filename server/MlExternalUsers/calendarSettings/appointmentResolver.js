@@ -473,6 +473,57 @@ MlResolver.MlQueryResolver['fetchOfficeMemberAppointmentCounts'] = (obj, args, c
   return result;
 };
 
+MlResolver.MlQueryResolver['fetchAllOfficeMemberAppointmentCounts'] = (obj, args, context, info) => {
+  let pipeLine = [
+    { $lookup: { from: "mlOffice", localField: "officeId", foreignField: "_id", as: "office" } },
+    { $match: { 'office.userId': "uXu8P2Tpcb4AhesSq" } },
+    { $lookup:
+      {
+        from: "users",
+        localField: "emailId",
+        foreignField: "username",
+        as: "user"
+      }
+    },
+    { "$unwind":"$user"},
+    { "$match": { 'user.profile.isActive':true } },
+    { "$project": {name:1, profileId:1, userId: '$user._id' , profileImage:'$user.profile.profileImage'} },
+    { "$lookup": { from: "mlAppointmentMembers", localField: "profileId", foreignField: "profileId", as: "appointments" } },
+    { "$unwind" : "$appointments" },
+    { "$lookup": { from: "mlAppointments", localField: "appointments.appointmentId", foreignField: "appointmentId", as: "appointmentData" } },
+    { "$unwind": "$appointmentData" },
+    { "$replaceRoot": { newRoot: "$appointmentData" } },
+    { $project: { yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$startDate" } },
+      time: { $dateToString: { format: "%H:%M:%S:%L", date: "$Date" } },
+      appointmentInfo: 1,
+      appointmentId: 1 }
+    },
+    {
+      $group : {
+        _id : { date : "$yearMonthDay", "userId":"$userId", "profileId": "$profileId" },
+        count: { $sum: 1 }
+      }
+    },
+    {
+      $project : {
+        _id:0,
+        date: "$_id.date",
+        count: "$count"
+      }
+    },
+    {
+      $group: {
+        _id: null,
+        events: { $push: "$$ROOT" }
+      }
+    }
+  ];
+
+  let result = mlDBController.aggregate('MlOfficeMembers', pipeLine);
+  result = result && result[0] ? result[0] : [];
+  return result;
+};
+
 MlResolver.MlMutationResolver["bookTaskInternalAppointment"] = (obj, args, context, info) => {
   let taskId = args.taskInternalAppointmentInfo.taskId;
   let sessionId = args.taskInternalAppointmentInfo.sessionId;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-export default class MlInstitutionViewChart extends Component {
+export default class MlInstitutionViewData extends Component {
   render() {
-    return (<h2>View Chart</h2>);
+    return (<h2>View Data</h2>);
   }
 };

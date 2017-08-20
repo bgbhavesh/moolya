@@ -186,15 +186,17 @@ let institutePortfolioSchema = `
       ratio: [imagesTypeSchema]
     }
     
-    type InstitutePortfolio{
+    type InstitutionPortfolio{
+      memberships       : membershipsOutput,
+      compliances       : compliancesOutput,
+      licenses          : licensesOutput 
+      lookingFor        : [lookingForOutput]
+      
       management        : [instituteManagementOutput],
       data              : dataOutput,
       charts            : chartsOutput,
-      awardsRecognition : [awardsRecognitionOutput],
-      memberships       : membershipsOutput,
-      compliances       : compliancesOutput,
-      licenses          : licensesOutput      
-   }
+      awardsRecognition : [awardsRecognitionOutput],    
+    }
    
     
     input logo{
@@ -383,6 +385,8 @@ let institutePortfolioSchema = `
         licenses            : licenses
         compliances         : compliances
         memberships         : memberships
+        lookingFor          : [lookingFor]
+        
         awardsRecognition : [awardsRecognition]
         aboutUs             : aboutUs
         rating              : rating
@@ -412,7 +416,7 @@ let institutePortfolioSchema = `
         fetchInstitutePortfolioAwards(portfoliodetailsId:String!):[awardsRecognitionOutput]
         fetchInstitutePortfolioCharts(portfoliodetailsId:String):chartsOutput   
         fetchInstitutePortfolioData(portfoliodetailsId:String):dataOutput
-        fetchInstitutionDetails(portfoliodetailsId:String!, key:String):InstitutePortfolio
+        fetchInstitutionDetails(portfoliodetailsId:String!, key:String):InstitutionPortfolio
     }
     
     type Mutation{
@@ -436,3 +440,9 @@ let supportedApi = [
   {api:'createInstitutePortfolioChart', actionName:'UPDATE', moduleName:"PORTFOLIO"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
+
+/**
+ * Note: graphql schema to be used multiple times hence using only onces
+* @lookingFor  : startup
+ * @lookingForOutput : startup
+ * */

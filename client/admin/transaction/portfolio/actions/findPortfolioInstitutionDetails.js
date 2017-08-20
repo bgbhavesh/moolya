@@ -33,6 +33,21 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                         booleanKey
                      }
                   }
+                  
+                  lookingFor{
+                      lookingForName,
+                      typeId,
+                      lookingDescription,
+                      logo{
+                        fileName,
+                        fileUrl
+                      },
+                      index
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
               }
           }
       `,

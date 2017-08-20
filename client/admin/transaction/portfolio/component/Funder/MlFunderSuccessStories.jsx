@@ -218,7 +218,7 @@ export default class MlFunderSuccessStories extends React.Component {
       }
       let newItem = _.omit(item, "__typename");
       newItem =_.omit(newItem,"privateFields");
-      // let updateItem = _.omit(newItem, 'logo');
+      newItem = _.omit(newItem, 'logo');
       arr.push(newItem)
     })
     funderSuccess = arr;

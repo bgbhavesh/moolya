@@ -48,7 +48,7 @@ export default class MlStartupLegal extends React.Component{
         delete data[propName];
       }
     }
-    this.props.getStartupLegalIssue(data)
+    this.props.getStartupLegalIssue(data,this.state.privateKey)
   }
 
   onLockChange(fieldName,field, e){
@@ -94,8 +94,8 @@ export default class MlStartupLegal extends React.Component{
               <div className="panel-body">
 
                 <div className="form-group nomargin-bottom">
-                  <textarea placeholder="Describe..." name="description" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.description} onBlur={this.handleBlur.bind(this)}></textarea>
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate"   onClick={this.onLockChange.bind(this,"description","isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
+                  <textarea placeholder="Describe..." name="legalDescription" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.legalDescription} onBlur={this.handleBlur.bind(this)}></textarea>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate"   onClick={this.onLockChange.bind(this,"legalDescription","isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
                 </div>
 
               </div>

@@ -105,6 +105,13 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioAboutUs'] = (obj, args, context
     startAboutUsArray["rating"] = portfolio&&portfolio.rating?portfolio.rating:null;
     startAboutUsArray["assets"] = portfolio&& portfolio.assets?portfolio.assets:[];
 
+    //private keys for service products
+      var object = startAboutUsArray["serviceProducts"];
+      var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+      startAboutUsArray["serviceProducts"] = filteredObject
+
+
+
     // if(startAboutUsArray && startAboutUsArray.clients){
     //   startAboutUsArray.clients.map(function(client,index) {
     //     let clientData = MlStageOfCompany.findOne({"_id":client.companyId}) || {};

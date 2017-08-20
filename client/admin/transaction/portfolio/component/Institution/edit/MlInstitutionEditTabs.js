@@ -2,23 +2,21 @@ import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 import _ from "lodash";
+import MlInstitutionEditMCL from './MlInstitutionEditMCL';
 import MlInstitutionEditManagement from './MlInstitutionEditManagement';
 import MlInstitutionEditInvestor from './MlInstitutionEditInvestor';
 import MlInstitutionEditAwards from './MlInstitutionEditAwards';
-import MlInstitutionEditMCL from './MlInstitutionEditMCL';
 import MlInstitutionEditLookingFor from './MlInstitutionEditLookingFor';
 import MlInstitutionEditLibrary from './MlInstitutionEditLibrary';
 import MlInstitutionEditChart from './MlInstitutionEditChart';
 import MlInstitutionEditData from './MlInstitutionEditData';
-
-import PortfolioLibrary from '../../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import {client} from '../../../../../core/apolloConnection'
 
 
 export default class MlInstitutionEditTab extends Component{
   constructor(props){
     super(props)
-    this.state =  {tabs: [],aboutUs: {}, institutionPortfolio:{}};
+    this.state =  {tabs: [], institutionPortfolio:{}};
     this.getChildContext.bind(this)
     this.getManagementDetails.bind(this);
     this.getAwardsDetails.bind(this);
@@ -120,7 +118,6 @@ export default class MlInstitutionEditTab extends Component{
   }
 
   getLookingForDetails(details, privateKey){
-
     let data = this.state.institutionPortfolio;
     if(data && !data.lookingFor){
       data['lookingFor']=[];
@@ -129,6 +126,7 @@ export default class MlInstitutionEditTab extends Component{
     this.setState({institutionPortfolio : data})
     this.props.getPortfolioDetails({institutionPortfolio:this.state.institutionPortfolio}, privateKey);
   }
+
   getInstitutionMCL(details, privateKey){
     let data = this.state.institutionPortfolio;
     if(details.memberships){

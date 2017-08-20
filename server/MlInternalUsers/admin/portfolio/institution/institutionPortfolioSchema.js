@@ -378,7 +378,7 @@ let institutePortfolioSchema = `
       index : Int
     }
    
-    input institutePortfolio{
+    input institutionPortfolio{
         portfolioDetailsId  : String
         licenses            : licenses
         compliances         : compliances
@@ -408,38 +408,31 @@ let institutePortfolioSchema = `
     
     type Query{
         fetchInstitutePortfolioAboutUs(portfoliodetailsId:String!):institutePortfolioAboutUsOutput
-        fetchInstitutePortfolioLicenses(portfoliodetailsId:String!):licensesOutput
-        fetchInstitutePortfolioMemberships(portfoliodetailsId:String!):membershipsOutput
-        fetchInstitutePortfolioCompliances(portfoliodetailsId:String!):compliancesOutput
         fetchInstitutePortfolioManagement(portfoliodetailsId:String!):[instituteManagementOutput]
         fetchInstitutePortfolioAwards(portfoliodetailsId:String!):[awardsRecognitionOutput]
         fetchInstitutePortfolioCharts(portfoliodetailsId:String):chartsOutput   
         fetchInstitutePortfolioData(portfoliodetailsId:String):dataOutput
-        fetchInstituteDetails(portfoliodetailsId:String!, key:String):InstitutePortfolio
+        fetchInstitutionDetails(portfoliodetailsId:String!, key:String):InstitutePortfolio
     }
     
     type Mutation{
-        createInstitutionPortfolio(portfolio:institutePortfolio):response
-        updateInstitutePortfolio(portfoliodetailsId:String,portfolio:institutePortfolio):response
-        
+        createInstitutionPortfolio(portfolio:institutionPortfolio):response
+        updateInstitutionPortfolio(portfoliodetailsId:String,portfolio:institutionPortfolio):response
     }
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], institutePortfolioSchema]);
 
 let supportedApi = [
+  {api:'fetchInstitutionDetails', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchInstitutePortfolioAboutUs', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstitutePortfolioMemberships', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstitutePortfolioCompliances', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstitutePortfolioLicenses', actionName:'READ', moduleName:"PORTFOLIO"},
+
   {api:'fetchInstitutePortfolioManagement', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchInstitutePortfolioAwards', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchInstitutePortfolioCharts', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchInstitutePortfolioData', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstituteDetails', actionName:'READ', moduleName:"PORTFOLIO"},
-
   {api:'createInstitutionPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
-  {api:'updateInstitutePortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+  {api:'updateInstitutionPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
   {api:'createInstitutePortfolioChart', actionName:'UPDATE', moduleName:"PORTFOLIO"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

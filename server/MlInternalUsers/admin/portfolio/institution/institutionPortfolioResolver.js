@@ -105,25 +105,25 @@ MlResolver.MlQueryResolver['fetchInstitutePortfolioAboutUs'] = (obj, args, conte
   return {};
 }
 
-MlResolver.MlQueryResolver['fetchInstitutePortfolioAwards'] = (obj, args, context, info) => {
-  if (args.portfoliodetailsId) {
-    let portfolio = MlInstitutionPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-    if (portfolio && portfolio.hasOwnProperty('awardsRecognition')) {
-      if(portfolio && portfolio['awardsRecognition']){
-        portfolio.awardsRecognition.map(function(awards,index) {
-          if(portfolio.awardsRecognition[index]){
-            let awardData = MlAwards.findOne({"_id" : awards.awardId}) || {};
-            portfolio.awardsRecognition[index].awardName = awardData.awardDisplayName || "";
-          }
-
-        })
-      }
-      return portfolio['awardsRecognition'];
-    }
-  }
-
-  return [];
-}
+// MlResolver.MlQueryResolver['fetchInstitutePortfolioAwards'] = (obj, args, context, info) => {
+//   if (args.portfoliodetailsId) {
+//     let portfolio = MlInstitutionPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+//     if (portfolio && portfolio.hasOwnProperty('awardsRecognition')) {
+//       if(portfolio && portfolio['awardsRecognition']){
+//         portfolio.awardsRecognition.map(function(awards,index) {
+//           if(portfolio.awardsRecognition[index]){
+//             let awardData = MlAwards.findOne({"_id" : awards.awardId}) || {};
+//             portfolio.awardsRecognition[index].awardName = awardData.awardDisplayName || "";
+//           }
+//
+//         })
+//       }
+//       return portfolio['awardsRecognition'];
+//     }
+//   }
+//
+//   return [];
+// }
 
 MlResolver.MlQueryResolver['fetchInstitutePortfolioData'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {

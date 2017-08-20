@@ -187,7 +187,7 @@ export async function fetchfunderPortfolioInvestor(portfoliodetailsId) {
                   isTypeOfFundingPrivate
                   aboutInvestment
                   isAboutInvestmentPrivate
-                  isPrivate
+                  makePrivate
                   investmentAmount 
                   isInvestmentAmountPrivate 
                   index
@@ -223,7 +223,6 @@ export async function fetchfunderPortfolioSuccess(portfoliodetailsId) {
                 isStoryTitlePrivate
                 description
                 isDescPrivate
-                isPrivate
                 isActive
                 index
                 logo{

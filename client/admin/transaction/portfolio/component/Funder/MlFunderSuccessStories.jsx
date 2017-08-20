@@ -130,7 +130,7 @@ export default class MlFunderSuccessStories extends React.Component {
     } else {
       details = _.extend(details, {[key]: false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex}
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:"successStories"}
     this.setState({privateKey:privateKey})
     this.setState({data: details}, function () {
       this.sendDataToParent()

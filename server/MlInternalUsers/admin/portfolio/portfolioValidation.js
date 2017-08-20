@@ -36,12 +36,12 @@ class portfolioValidation {
     var praviteFields = portfolioDetails.privateFields
     var omittedFields = []
 
-    if (_.isArray(object)) {
+    if (!_.isArray(object)) {
+    } else {
       _.each(object, function (item, index) {
         var omittedfields = []
         _.each(praviteFields, function (praviteField) {
-          if (item[praviteField.keyName] != undefined && praviteField.index == index) {
-
+          if ((item[praviteField.keyName] != undefined || ((_.isEmpty(item[praviteField.objectName]) == false && item[praviteField.objectName][praviteField.keyName] != undefined))) && praviteField.index == index) {
             if (!allowPrivateFields) {
               delete item[praviteField.keyName]
             }
@@ -57,7 +57,7 @@ class portfolioValidation {
       return object;
     }
     _.each(praviteFields, function (praviteField) {
-      if (!(_.isEmpty(object[praviteField.objectName]) && object[praviteField.objectName][praviteField.keyName] != undefined) || object[praviteField.keyName] != undefined) {
+      if (object[praviteField.keyName] != undefined || ((_.isEmpty(object[praviteField.objectName]) == false && object[praviteField.objectName][praviteField.keyName] != undefined))) {
         if (!allowPrivateFields) {
           delete object[praviteField.keyName]
         }

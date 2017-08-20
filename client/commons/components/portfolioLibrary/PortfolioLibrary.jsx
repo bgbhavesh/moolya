@@ -908,7 +908,7 @@ import SharedLibrary from './sharedLibrary'
               <FontAwesome onClick={() => that.toggleDocumentLock(id)} name='unlock'/> : "" }
             {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "document")}/>}
             <a href="" data-toggle="modal" data-target=".documentpop"
-               onClick={that.randomDocument.bind(that, show.fileUrl, id)}><img src={show.fileUrl}/></a>
+               onClick={that.randomDocument.bind(that, show.fileUrl, id)}><img src="/images/doc.png"/></a>
             <div id="images" className="title">{show.fileName}</div>
           </div>
         )

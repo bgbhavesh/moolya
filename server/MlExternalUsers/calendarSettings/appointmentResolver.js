@@ -395,8 +395,82 @@ MlResolver.MlQueryResolver["fetchProfileAppointmentCounts"] = (obj, args, contex
 
   let result = mlDBController.aggregate('MlAppointments', pipeLine);
   result = result && result[0] ? result[0] : [];
-    return result;
+  return result;
 
+};
+
+MlResolver.MlQueryResolver['fetchOfficeMemberAppointmentCounts'] = (obj, args, context, info) => {
+  let userId = args.userId;
+  let profileId = args.profileId;
+  let pipeLine = [
+    { $lookup: { from: "mlAppointmentMembers", localField: "appointmentId", foreignField: "appointmentId", as: "members"}},
+    { $unwind: "$members"},
+    { $match : { "members.userId" : userId, "members.profileId" : profileId } },
+    { $project: { yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$startDate" } },
+      time: { $dateToString: { format: "%H:%M:%S:%L", date: "$Date" } },
+      appointmentInfo: 1,
+      members: 1,
+      userId: "$members.userId",
+      profileId: "$members.profileId",
+      appointmentId: 1 } },
+    {
+      $group : {
+        _id : { date : "$yearMonthDay", "userId":"$userId", "profileId": "$profileId" },
+        count: { $sum: 1 }
+      }
+    },
+    {
+      $project : {
+        _id:0,
+        date: "$_id.date",
+        userId: "$_id.userId",
+        profileId: "$_id.profileId",
+        count: "$count"
+      }
+    },
+    {
+      $group: {
+        _id: null,
+        profileId: { $first : "$profileId" },
+        events: { $push: "$$ROOT" }
+      }
+    },
+    {
+      $lookup:  { from: "mlCalendarSettings", localField: "profileId", foreignField: "profileId", as: "days"}
+    },
+    { "$unwind": {
+      "path": "$days",
+      "preserveNullAndEmptyArrays": true
+    }
+    },
+    {
+      "$addFields": { "days" : { $cond: [ { $isArray: "$days.vacations"}, "$days.vacations", [] ] } }
+    },
+    {
+      $project: {
+        events: 1,
+        days: {
+          "$filter" : {
+            "input": "$days",
+            "as": "day",
+            "cond": {
+              "$and":[
+                {"$or": [
+                  { "$cond": [ { "$eq" : [{ "$month":"$$day.start" }, 8 ] }, true, false ] },
+                  { "$cond": [ { "$eq" : [{ "$month":"$$day.end" }, 8 ] }, true, false ] }
+                ]},
+                { "$eq" : ["$$day.isActive", true] }
+              ]
+            }
+          }
+        }
+      }
+    }
+  ];
+
+  let result = mlDBController.aggregate('MlAppointments', pipeLine);
+  result = result && result[0] ? result[0] : [];
+  return result;
 };
 
 MlResolver.MlMutationResolver["bookTaskInternalAppointment"] = (obj, args, context, info) => {

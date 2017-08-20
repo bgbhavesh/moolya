@@ -219,6 +219,7 @@ class MlPortfolio extends React.Component {
     var keyName = privateKey.keyName
     var booleanKey = privateKey.booleanKey
     var isPrivate = privateKey.isPrivate
+    var objectName = ""
     var index = -1;
     var tabName = ""
     if(privateKey.index >= 0){
@@ -226,6 +227,9 @@ class MlPortfolio extends React.Component {
     }else index = 0;
     if(privateKey.tabName){
       tabName = privateKey.tabName
+    }
+    if(privateKey.objectName){
+      objectName = privateKey.objectName
     }
 
     var keyIndex = _.findIndex(this.state.privateKeys, {keyName:keyName})
@@ -237,7 +241,7 @@ class MlPortfolio extends React.Component {
     if(isPrivate && keyIndex < 0){
       var rIndex = _.findIndex(this.state.removePrivateKeys, {keyName:keyName})
       removePrivateKeys.splice(rIndex, 1);
-      privateKeys.push({keyName:keyName, booleanKey:booleanKey, index:index, tabName:tabName})
+      privateKeys.push({keyName:keyName, booleanKey:booleanKey, index:index, tabName:tabName, objectName : objectName})
       this.setState({privateKeys:privateKeys})
     }else if(!isPrivate){
       if(keyIndex >= 0){
@@ -245,7 +249,7 @@ class MlPortfolio extends React.Component {
         removePrivateKeys.push(keyObj)
         privateKeys.splice(keyIndex, 1);
       }else{
-        removePrivateKeys.push({keyName:keyName, booleanKey:booleanKey, index:index, tabName:tabName})
+        removePrivateKeys.push({keyName:keyName, booleanKey:booleanKey, index:index, tabName:tabName, objectName : objectName})
       }
 
     }

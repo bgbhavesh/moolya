@@ -61,23 +61,27 @@ export default class MlFunderAbout extends React.Component {
     }else{
       details=_.extend(details,{[key]:false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, tabName:"funderAbout"}
     this.setState({privateKey:privateKey})
     this.setState({data:details}, function () {
       this.sendDataToParent()
     })
 
   }
-  onBudgetClick(field,e){
+  onBudgetClick(fieldName,field,e){
+    var isPrivate = false;
     let details = this.state.data.investmentBudget||{};
     let key = e.target.id;
     details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
       details=_.extend(details,{[key]:true});
+      isPrivate = true;
     }else{
       details=_.extend(details,{[key]:false});
     }
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, objectName:"investmentBudget", tabName:"funderAbout"}
+    this.setState({privateKey:privateKey})
     let data = this.state.data;
     data['investmentBudget'] = details
     this.setState({data:data}, function () {
@@ -366,7 +370,7 @@ export default class MlFunderAbout extends React.Component {
 
                       <div className="form-group">
                         <input type="text" placeholder="Linkdin URL" name="linkedinUrl" defaultValue={this.state.data.linkedinUrl} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                        <FontAwesome name='unlock' className="input_icon un_lock" id="isLinkedInUrlPrivate" onClick={this.onClick.bind(this, "linkedinUrl", "isLinkedInUrlPrivate")}/>
+                        <FontAwesome name='unlock' className="input_icon un_lock" id="isLinkedinUrlPrivate" onClick={this.onClick.bind(this, "linkedinUrl", "isLinkedinUrlPrivate")}/>
                       </div>
 
                       {/*<div className="form-group">*/}

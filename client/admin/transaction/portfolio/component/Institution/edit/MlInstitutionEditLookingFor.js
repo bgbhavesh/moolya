@@ -207,7 +207,7 @@ export default class MlInstitutionEditLookingFor extends Component {
     let institutionLookingForList = that.state.institutionLookingForList || [];
     return (
       <div>
-        {showLoader === false ? ( <MlLoader/>) : (
+        {showLoader === true ? ( <MlLoader/>) : (
           <div className="portfolio-main-wrap">
             <h2>Looking For</h2>
             <div className="requested_input main_wrap_scroll">

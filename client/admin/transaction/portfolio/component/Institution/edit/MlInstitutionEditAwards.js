@@ -294,7 +294,7 @@ export default class MlInstitutionEditAwards extends React.Component{
     }
     return (
       <div>
-        {showLoader === false ? ( <MlLoader/>) : (
+        {showLoader === true ? ( <MlLoader/>) : (
           <div>
             <h2>Awards</h2>
             <div className="requested_input main_wrap_scroll">

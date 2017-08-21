@@ -20,8 +20,8 @@ export default class MlInstitutionEditManagement extends React.Component{
     this.state={
       loading: true,
       data:{},
-      privateKey:{}
-      ,      institutionManagement:[],
+      privateKey:{},
+      institutionManagement:[],
       institutionManagementList:[],
       // indexArray:[],
       selectedIndex:-1,
@@ -181,12 +181,12 @@ export default class MlInstitutionEditManagement extends React.Component{
     let managementArr = [];
     _.each(institutionManagement, function (item) {
       for (var propName in item) {
-        if (item[propName] === null || item[propName] === undefined) {
+        if (item[propName] === null || item[propName] === undefined || propName === 'privateFields') {
           delete item[propName];
         }
       }
-      let newItem = _.omit(item, "__typename")
-      newItem = _.omit(item, "privateFields")
+      let newItem = _.omit(item, "__typename");
+      newItem = _.omit(item, 'privateFields');
       if(item && item.logo){
         // delete item.logo['__typename'];
         newItem = _.omit(item, 'logo')

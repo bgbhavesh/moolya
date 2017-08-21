@@ -104,6 +104,7 @@
     "malihu-custom-scrollbar-plugin": "^3.1.5",
     "meteor-node-stubs": "^0.2.5",
     "mocha": "^3.4.2",
+    "moment": "^2.18.1",
     "points-cluster": "^0.1.4",
     "prop-types": "^15.5.10",
     "q": "^1.4.1",

@@ -27,10 +27,11 @@ MlResolver.MlMutationResolver['createStage'] = (obj, args, context, info) => {
   stage.userId = userId;
   stage.profileId = profile.profileId;
   stage.createdAt = new Date();
-  result = mlDBController.insert('MlStage' ,stage, context);
-  if(args.stage.resourceStage=== 'onboard') {
-    let user = mlDBController.findOne('MlPortfolioDetails', {_id:args.stage.resourceId} ,context);
-    new mlOnBoard.createTransactionRequest(user.userId, 'investments', args.stage.resourceId, result, context.userId, 'user', context)
+  if(args.stage.resourceStage!== 'onboard') {
+    result = mlDBController.insert('MlStage' ,stage, context);
+  } else {
+    let response = new MlRespPayload().errorPayload('Investment to be done prior to On-Boarding', 400);
+    return response;
   }
   //if onboard create trancaation record;
   if(true || result) {

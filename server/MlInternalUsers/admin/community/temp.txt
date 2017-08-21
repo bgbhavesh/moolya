@@ -1,0 +1,172 @@
+{
+    "_id" : "bDXMQsCihDQTpQpFk",
+    "procesId" : "Nzqg7g6MkkxbDavr5",
+    "subProcessId" : "Sx94QAtXbKs6AcFWY",
+    "processName" : "Registration",
+    "subProcessName" : "Registration",
+    "templates" : [
+        {
+            "stepName" : "Soft",
+            "stepCode" : "SOFT",
+            "templateCode" : "SRTALL",
+            "templateName" : "Soft-Reg-All",
+            "templateDescription" : "Soft Registration Template For All Communities",
+            "isActive" : true,
+            "createdDate" : ISODate("2017-06-11T11:32:33.597+0000"),
+            "templateImage" : "https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"
+        },
+        {
+            "stepName" : "Hard",
+            "stepCode" : "HARD",
+            "templateCode" : "HRTIDECMP",
+            "templateName" : "Hard-Reg-Ideator-Company",
+            "templateDescription" : "Hard Registration Template for Ideator Company",
+            "isActive" : true,
+            "createdDate" : ISODate("2017-06-11T11:32:33.597+0000"),
+            "templateImage" : "https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"
+        },
+        {
+            "stepName" : "Hard",
+            "stepCode" : "HARD",
+            "templateCode" : "HRTIDEINV",
+            "templateName" : "Hard-Reg-Ideator-Individual",
+            "templateDescription" : "Hard Registration Template for Ideator Company",
+            "isActive" : true,
+            "createdDate" : ISODate("2017-06-11T11:32:33.597+0000"),
+            "templateImage" : "https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"
+        },
+        {
+            "stepName" : "Hard",
+            "stepCode" : "HARD",
+            "templateCode" : "HRTFUNCMP",
+            "templateName" : "Hard-Reg-Investor-Company",
+            "templateDescription" : "Hard Registration Template for Investor Company",
+            "isActive" : true,
+            "createdDate" : ISODate("2017-06-11T11:32:33.597+0000"),
+            "templateImage" : "https://s3.ap-south-1.amazonaws.com/moolya-public-images/Templates/Additional-Info_Funder_Company.png"
+        },
+        {
+            "stepName" : "Hard",
+            "stepCode" : "HARD",
+            "templateCode" : "HRTFUNINV",
+            "templateName" : "Hard-Reg-Investor-Individual",
+            "templateDescription" : "Hard Registration Template for Investor Individual",
+            "isActive" : true,
+            "createdDate" : ISODate("2017-06-11T11:32:33.597+0000"),
+            "templateImage" : "https://s3.ap-south-1.amazonaws.com/moolya-public-images/Templates/Additional-Info_Funder_Individual.png"
+        },
+        {
+            "stepName" : "Hard",
+            "stepCode" : "HARD",
+            "templateCode" : "HRTSPSCMP",
+            "templateName" : "Hard-Reg-ServiceProvider-Company",
+            "templateDescription" : "Hard Registration Template for ServiceProvider Company",
+            "isActive" : true,
+            "createdDate" : ISODate("2017-06-11T11:32:33.597+0000"),
+            "templateImage" : "https://s3.ap-south-1.amazonaws.com/moolya-public-images/Templates/Additional-Info_ServiceProvider_Company.png"
+        },
+        {
+            "stepName" : "Hard",
+            "stepCode" : "HARD",
+            "templateCode" : "HRTSPSINV",
+            "templateName" : "Hard-Reg-ServiceProvider-Individual",
+            "templateDescription" : "Hard Registration Template for ServiceProvider Individual",
+            "isActive" : true,
+            "createdDate" : ISODate("2017-06-11T11:32:33.597+0000"),
+            "templateImage" : "https://s3.ap-south-1.amazonaws.com/moolya-public-images/Templates/Additional-Info_ServiceProvider_Individual.png"
+        },
+        {
+            "stepName" : "Hard",
+            "stepCode" : "HARD",
+            "templateCode" : "HRTCMP",
+            "templateName" : "Hard-Reg-Company",
+            "templateDescription" : "Hard Registration Template for Company",
+            "isActive" : true,
+            "createdDate" : ISODate("2017-06-11T11:32:33.597+0000"),
+            "templateImage" : "https://s3.ap-south-1.amazonaws.com/moolya-public-images/Templates/Additional-Info_Companies_Company.png"
+        },
+        {
+            "stepName" : "Hard",
+            "stepCode" : "HARD",
+            "templateCode" : "HRTSTU",
+            "templateName" : "Hard-Reg-Startup-Company",
+            "templateDescription" : "Hard Registration Template for Startup Company",
+            "isActive" : true,
+            "createdDate" : ISODate("2017-06-11T11:32:33.597+0000"),
+            "templateImage" : "https://s3.ap-south-1.amazonaws.com/moolya-public-images/Templates/Additional-Info_Startup_Company.png"
+        },
+        {
+            "stepName" : "Hard",
+            "stepCode" : "HARD",
+            "templateCode" : "HRTINS",
+            "templateName" : "Hard-Reg-Institution",
+            "templateDescription" : "Hard Registration Template for Institution",
+            "isActive" : true,
+            "createdDate" : ISODate("2017-03-03T18:30:00.000+0000"),
+            "templateImage" : "https://s3.ap-south-1.amazonaws.com/moolya-public-images/Templates/Additional-Info_Institution_Company.png"
+        },
+        {
+            "stepName" : "Portfolio",
+            "stepCode" : "PORTFOLIO",
+            "templateCode" : "PFTIDEEDT",
+            "templateName" : "Portfolio-Template-Ideator-Edit",
+            "templateDescription" : "Portfolio Template for Ideator Edit",
+            "isActive" : true,
+            "createdDate" : ISODate("2017-06-11T11:32:33.597+0000"),
+            "templateImage" : "https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"
+        },
+        {
+            "stepName" : "Portfolio",
+            "stepCode" : "PORTFOLIO",
+            "templateCode" : "PFTIDEVIW",
+            "templateName" : "Portfolio-Template-Ideator-View",
+            "templateDescription" : "Portfolio Template for Ideator View",
+            "isActive" : true,
+            "createdDate" : ISODate("2017-06-11T11:32:33.597+0000"),
+            "templateImage" : "https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"
+        },
+        {
+            "stepName" : "Portfolio",
+            "stepCode" : "PORTFOLIO",
+            "templateCode" : "PFTSTUEDT",
+            "templateName" : "Portfolio-Template-Startup-Edit",
+            "templateDescription" : "Portfolio Template for Startup Edit",
+            "isActive" : true,
+            "createdDate" : ISODate("2017-06-11T11:32:33.597+0000"),
+            "templateImage" : "https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"
+        },
+        {
+            "stepName" : "Portfolio",
+            "stepCode" : "PORTFOLIO",
+            "templateCode" : "PFTSTUVIW",
+            "templateName" : "Portfolio-Template-Startup-View",
+            "templateDescription" : "Portfolio Template for Startup View",
+            "isActive" : true,
+            "createdDate" : ISODate("2017-06-11T11:32:33.597+0000"),
+            "templateImage" : "https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"
+        },
+        {
+            "stepName" : "Portfolio",
+            "stepCode" : "PORTFOLIO",
+            "templateCode" : "PFTFUNEDT",
+            "templateName" : "Portfolio-Template-Investor-Edit",
+            "templateDescription" : "Portfolio Template for Investor Edit",
+            "isActive" : true,
+            "createdDate" : ISODate("2017-06-11T11:32:33.597+0000"),
+            "templateImage" : "https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"
+        },
+        {
+            "stepName" : "Portfolio",
+            "stepCode" : "PORTFOLIO",
+            "templateCode" : "PFTFUNVIW",
+            "templateName" : "Portfolio-Template-Investor-View",
+            "templateDescription" : "Portfolio Template for Investor View",
+            "isActive" : true,
+            "createdDate" : ISODate("2017-06-11T11:32:33.597+0000"),
+            "templateImage" : "https://s3.ap-south-1.amazonaws.com/moolya-users/registrationDocuments/images.png"
+        }
+    ],
+    "createdBy" : "System",
+    "createdDate" : ISODate("2017-03-03T18:30:00.000+0000"),
+    "isActive" : true
+}

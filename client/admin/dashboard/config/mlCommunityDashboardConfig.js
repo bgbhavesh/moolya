@@ -46,7 +46,8 @@ const mlCommunityDashboardListConfig=new MlViewer.View({
                           isInternaluser,
                           isExternaluser,
                           isActive,
-                          email
+                          email,
+                          profileImage
                       }
                       communityCode
                       roleNames

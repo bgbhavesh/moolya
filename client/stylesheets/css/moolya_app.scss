@@ -541,6 +541,41 @@ background:$mlGray; position: absolute; top: 0; z-index: 100; width: 100%;
 .ideators_list a:focus{text-decoration: none;}
 .ideators_list a:active{text-decoration: none;}
 
+.communities_block{padding-top: 25px;}
+.communities_block .ideators_list_block{height: 250px; background-color: #273545; box-shadow: 0px 0px 5px #888; border-radius: 10px; text-align: center; position: relative; margin-bottom: 15px; text-shadow: none;}
+.communities_block .ideators_list_block .inactive { position: absolute; right: -5px; top: -5px; z-index: 1; overflow: hidden; width: 75px; height: 75px; text-align: right; }
+.communities_block .ideators_list_block .inactive span {font-size: 10px; font-weight: bold; color: #FFF; text-transform: uppercase; text-align: center; line-height: 20px; transform: rotate(45deg); -webkit-transform: rotate(45deg); width: 100px; display: block; background: #EF4647; box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1); position: absolute; top: 19px; right: -21px; text-shadow: none}
+.communities_block .ideators_list_block .inactive span::before {content: ""; position: absolute; left: 0px; top: 100%; z-index: -1; border-left: 3px solid #A21E1F; border-right: 3px solid transparent; border-bottom: 3px solid transparent; border-top: 3px solid #A21E1F; }
+.communities_block .ideators_list_block .inactive span::after {content: ""; position: absolute; right: 0px; top: 100%; z-index: -1; border-left: 3px solid transparent; border-right: 3px solid #A21E1F; border-bottom: 3px solid transparent; border-top: 3px solid #A21E1F; }
+.communities_block .ideators_list_block .active {position: absolute; right: -5px; top: -5px; z-index: 1; overflow: hidden; width: 75px; height: 75px; text-align: right;
+  span {font-size: 10px; font-weight: bold; color: #000; text-transform: uppercase; text-align: center; line-height: 20px; transform: rotate(45deg); -webkit-transform: rotate(45deg); width: 100px; display: block; background: #FFC20E; box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1); position: absolute; top: 19px; right: -21px; text-shadow: none;
+    &:before{
+      content: ""; position: absolute; left: 0px; top: 100%; z-index: -1; border-left: 3px solid #AD840D; border-right: 3px solid transparent; border-bottom: 3px solid transparent; border-top: 3px solid #AD840D;
+    }
+    &:after{
+      content: ""; position: absolute; right: 0px; top: 100%; z-index: -1; border-left: 3px solid transparent; border-right: 3px solid #AD840D; border-bottom: 3px solid transparent; border-top: 3px solid #AD840D;
+    }
+  }
+}
+.communities_block .ideators_list_block h3{padding: 10px 45px; font-size: 20px; font-weight: normal; color: #FFE144; border-bottom: #161E27 solid 1px; margin-bottom: 0px;    height: 42px;
+  overflow: hidden;
+  width: 250px;
+  text-overflow: ellipsis;
+  white-space: nowrap;}
+.communities_block .ideators_list_block .list_icon{font-size: 22px; color: #FFF; border-top: #34404E solid 1px; padding: 20px 0px 0px; font-weight: normal;}
+.communities_block .ideators_list_block .ml{background: #B9C5CC; border-radius: 50%; padding: 20px; color: #273545; text-shadow: 0px 1px 1px #EEE;font-size: 70px;display: inline-block;border: 2px solid #161E27;}
+.communities_block .ideators_list_block .ml2{ position: absolute; right: 88px; top: 65px; background: #FFF; border-radius: 50%; padding: 5px;border: #273545 solid 1px;}
+.communities_block .ideators_list_block .c_image{background: #B9C5CC; border-radius: 50%; color: #273545; text-shadow: 0px 1px 1px #EEE;font-size: 70px;display: inline-block;border: 2px solid #161E27;width:114px;height:114px;margin-top: 22px;}
+.communities_block .ideators_list_block p{color: #FFF;}
+.communities_block {
+  .block_footer{
+    height:51px;}
+  }
+.communities_block a:hover{text-decoration: none;}
+.communities_block a:focus{text-decoration: none;}
+.communities_block a:active{text-decoration: none;}
+
+
 .funders_list .funders_list_block{height: 223px; background-color: #273545; box-shadow: 0px 0px 5px #888; border-radius: 10px; text-align: center; position: relative; margin-bottom: 15px; text-shadow: none;}
 .funders_list .funders_list_block .premium { position: absolute; right: -5px; top: -5px; z-index: 1; overflow: hidden; width: 75px; height: 75px; text-align: right; }
 .funders_list .funders_list_block .premium span {font-size: 10px; font-weight: bold; color: #FFF; text-transform: uppercase; text-align: center; line-height: 20px; transform: rotate(45deg); -webkit-transform: rotate(45deg); width: 100px; display: block; background: #ef4647; box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1); position: absolute; top: 19px; right: -21px; text-shadow: none}
@@ -556,7 +591,7 @@ background:$mlGray; position: absolute; top: 0; z-index: 100; width: 100%;
           }
         }
     }
-.funders_list .funders_list_block h3{padding: 10px 45px; font-size: 20px; font-weight: normal; color: #ffe144; border-bottom: #161e27 solid 1px; margin-bottom: 0px;}
+.funders_list .funders_list_block h3{padding: 10px; font-size: 20px; font-weight: normal; color: #ffe144; border-bottom: #161e27 solid 1px; margin-bottom: 0px; text-overflow: ellipsis; width: 200px; height: 45px; overflow: hidden; margin: 0 auto; white-space: nowrap;}
 .funders_list .funders_list_block .list_icon{font-size: 22px; color: #fff; border-top: #34404e solid 1px; padding: 12px 0px 0px; font-weight: normal;}
 .funders_list .funders_list_block .list_icon .ml{background: #B9C5CC; border-radius: 50%; padding: 14px; color: #273545; text-shadow: 0px 1px 1px #eee;font-size: 70px;display: inline-block;border: 2px solid #161e27;}
 .funders_list .funders_list_block .list_icon img{border-radius: 50%;display: inline-block;border: 2px solid #161e27;width:102px;height:102px;}
@@ -1848,3 +1883,11 @@ p{margin-top:10px;}
     }
   }
 }
+profile_context{position: relative;
+  background: #FFE144;
+  border-radius: 50%;
+  right: -14px;
+  top: -6px;
+  text-align: center;
+  font-size: 11px;
+  padding: 3px;}

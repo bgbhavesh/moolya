@@ -564,9 +564,13 @@ background:$mlGray; position: absolute; top: 0; z-index: 100; width: 100%;
   white-space: nowrap;}
 .communities_block .ideators_list_block .list_icon{font-size: 22px; color: #FFF; border-top: #34404E solid 1px; padding: 20px 0px 0px; font-weight: normal;}
 .communities_block .ideators_list_block .ml{background: #B9C5CC; border-radius: 50%; padding: 20px; color: #273545; text-shadow: 0px 1px 1px #EEE;font-size: 70px;display: inline-block;border: 2px solid #161E27;}
-.communities_block .ideators_list_block .ml2{ position: absolute; right: 88px; top: 65px; background: #FFF; border-radius: 50%; padding: 5px;}
+.communities_block .ideators_list_block .ml2{ position: absolute; right: 88px; top: 65px; background: #FFF; border-radius: 50%; padding: 5px;border: #273545 solid 1px;}
 .communities_block .ideators_list_block .c_image{background: #B9C5CC; border-radius: 50%; color: #273545; text-shadow: 0px 1px 1px #EEE;font-size: 70px;display: inline-block;border: 2px solid #161E27;width:114px;height:114px;margin-top: 22px;}
 .communities_block .ideators_list_block p{color: #FFF;}
+.communities_block {
+  .block_footer{
+    height:51px;}
+  }
 .communities_block a:hover{text-decoration: none;}
 .communities_block a:focus{text-decoration: none;}
 .communities_block a:active{text-decoration: none;}

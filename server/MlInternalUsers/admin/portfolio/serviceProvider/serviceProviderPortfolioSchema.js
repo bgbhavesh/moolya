@@ -39,7 +39,7 @@ let serviceProviderPortfolioSchema = `
         logo:imagesTypeSchema,
         clientDescription:String,
         isClientDescriptionPrivate:Boolean,
-        isPrivate :Boolean,
+        makePrivate :Boolean,
         index:Int,
         privateFields:[PrivateKeys]
     }
@@ -73,7 +73,7 @@ let serviceProviderPortfolioSchema = `
         awardDescription:String
         isAwardDescriptionPrivate:Boolean
         logo:imagesTypeSchema,
-        isPrivate:Boolean,
+        makePrivate:Boolean,
         index: Int
         privateFields:[PrivateKeys]
     }
@@ -121,7 +121,7 @@ let serviceProviderPortfolioSchema = `
         logo :logo,
         clientDescription :String,
         isClientDescriptionPrivate :Boolean,
-        isPrivate:Boolean,
+        makePrivate:Boolean,
         index:Int
     }
   
@@ -151,7 +151,7 @@ let serviceProviderPortfolioSchema = `
       isYearPrivate:Boolean
       awardDescription:String
       isAwardDescriptionPrivate:Boolean
-      isPrivate:Boolean
+      makePrivate:Boolean
       logo : logo,
       index: Int
     }

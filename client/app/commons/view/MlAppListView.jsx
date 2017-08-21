@@ -125,7 +125,7 @@ export default class MlListView extends Component {
       actionsProxyList.push(act);
     });
     }
-    return(<div className="admin_padding_wrap">
+    return(<div className="app_padding_wrap">
       { search ? <input type="text" className="form-control" id="btn-search" placeholder="Search..." onKeyUp={this.onKeyUp.bind(this)}/> : '' }
       {loading?(<div className="loader_wrap"></div>):(
       <div className="list_scroll">

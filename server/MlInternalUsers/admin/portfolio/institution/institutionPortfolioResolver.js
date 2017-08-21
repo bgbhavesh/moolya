@@ -72,15 +72,15 @@ MlResolver.MlMutationResolver['updateInstitutionPortfolio'] = (obj, args, contex
   }
 }
 
-MlResolver.MlQueryResolver['fetchInstitutePortfolioManagement'] = (obj, args, context, info) => {
-  if (args.portfoliodetailsId) {
-    let portfolio = MlInstitutionPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-    if (portfolio && portfolio.hasOwnProperty('management')) {
-      return portfolio['management'];
-    }
-  }
-  return [];
-}
+// MlResolver.MlQueryResolver['fetchInstitutePortfolioManagement'] = (obj, args, context, info) => {
+//   if (args.portfoliodetailsId) {
+//     let portfolio = MlInstitutionPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+//     if (portfolio && portfolio.hasOwnProperty('management')) {
+//       return portfolio['management'];
+//     }
+//   }
+//   return [];
+// }
 
 MlResolver.MlQueryResolver['fetchInstitutePortfolioAboutUs'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {

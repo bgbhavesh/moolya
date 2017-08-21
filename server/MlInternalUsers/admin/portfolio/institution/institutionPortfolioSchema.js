@@ -379,6 +379,7 @@ let institutePortfolioSchema = `
     type Mutation{
         createInstitutionPortfolio(portfolio:institutionPortfolio):response
         updateInstitutionPortfolio(portfoliodetailsId:String,portfolio:institutionPortfolio):response
+        
     }
 `
 

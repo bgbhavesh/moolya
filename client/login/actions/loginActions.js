@@ -2,7 +2,7 @@
  * Created by venkatasrinag on 9/1/17.
  */
 import MoolyaloginContainer from '../containers/loginContainer'
-import mlConversationUtils from '../../commons/conversations/utils/mlconversationUtils'
+// import mlConversationUtils from '../../commons/conversations/utils/mlconversationUtils'
 import {client} from '../../admin/core/apolloConnection';
 import {appClient} from '../../app/core/appConnection'
 
@@ -16,12 +16,12 @@ export let loginActionHandler = {
             }
             else if(result && result.profile && result.profile.isInternaluser == true){
                 FlowRouter.redirect("/admin");
-                mlConversationUtils.login(client)
+                // mlConversationUtils.login(client)
             }
 
             else if(result && result.profile && result.profile.isExternaluser == true){
                 FlowRouter.redirect("/app");
-                mlConversationUtils.login(appClient)
+                // mlConversationUtils.login(appClient)
 
             }
 

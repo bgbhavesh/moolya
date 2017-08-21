@@ -17,11 +17,15 @@ import {createSelfInternalTask} from '../../actions/createSelfInternalTask';
 import { fetchOfficeActionHandler, getTeamUsersActionHandler } from '../../actions/fetchOffices';
 let FontAwesome = require('react-fontawesome');
 
+
+let yesterday = Datetime.moment().subtract( 1, 'day' );
+let valid = function( current ){
+  return current.isAfter( yesterday );
+};
+
 /**
  * Initialize conversation types
  */
-
-
 export default class MlAppInternalMyTaskItem extends React.Component{
 
   /**
@@ -139,6 +143,14 @@ export default class MlAppInternalMyTaskItem extends React.Component{
     });
   }
 
+  toggleUser(userIndex) {
+    let users = this.state.users;
+    users[userIndex].isAdded =  users[userIndex].isAdded ? false : true;
+    this.setState({
+      users: users
+    });
+  }
+
   async fetchMasterTasks(){
     let response = await fetchMasterTasks();
     if(response) {
@@ -223,6 +235,7 @@ export default class MlAppInternalMyTaskItem extends React.Component{
 
                 <div className="form-group">
                   <Datetime dateFormat="DD-MM-YYYY"
+                            isValidDate={valid}
                             timeFormat={false}
                             inputProps={{placeholder: "Due Date"}}
                             closeOnSelect={true}
@@ -291,13 +304,13 @@ export default class MlAppInternalMyTaskItem extends React.Component{
                   <ul className="users_list">
                     {that.state.users.map(function (user, userIndex) {
                       return (
-                        <li key={userIndex}>
+                        <li key={userIndex} onClick={() => that.toggleUser(userIndex)} >
                           <a href="">
                             <img src={user.profileImage ? user.profileImage : "/images/def_profile.png"} /><br />
                             <div className="tooltiprefer">
                               <span>{user.name}</span>
                             </div>
-                            <span className="member_status" onClick={() => that.addUser(userIndex)}>
+                            <span className="member_status" >
                                 { user.isAdded ? <FontAwesome name="check" /> : <FontAwesome name="plus" /> }
                               </span>
                           </a>

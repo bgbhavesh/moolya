@@ -26,6 +26,7 @@ const mlOfficeTransactionConfig = new MlViewer.View({
     {dataField: "id", title: "Id", 'isKey': true, isHidden: true},
     {dataField: "transactionId", title: "Transaction Id", dataSort: true},
     {dataField: "transactionType", title: "Transaction Type", dataSort: true},
+    {dataField: "activity", title: "Activity Type", dataSort: true},
     {dataField: "clusterName", title: "Cluster Name", dataSort: true},
     {dataField: "chapterName", title: "Chapter Name", dataSort: true},
     {dataField: "communityName", title: "CommunityName", dataSort: true},
@@ -50,6 +51,7 @@ const mlOfficeTransactionConfig = new MlViewer.View({
                               status
                               communityName
                               transactionType
+                              activity
                             }
                           }
                         }

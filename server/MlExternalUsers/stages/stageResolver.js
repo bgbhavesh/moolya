@@ -14,11 +14,11 @@ MlResolver.MlQueryResolver['fetchStage'] = (obj, args, context, info) => {
   };
   let result = mlDBController.find('MlStage', query , context).fetch()
   return result;
-}
+};
 
 MlResolver.MlQueryResolver['fetchStage'] = (obj, args, context, info) => {
   let result = mlDBController.findOne('MlStage', {_id:args.StageId} , context)
-}
+};
 
 MlResolver.MlMutationResolver['createStage'] = (obj, args, context, info) => {
   let userId = context.userId;
@@ -38,7 +38,7 @@ MlResolver.MlMutationResolver['createStage'] = (obj, args, context, info) => {
     let response = new MlRespPayload().successPayload(result, code);
     return response
   }
-}
+};
 
 MlResolver.MlMutationResolver['updateStage'] = (obj, args, context, info) => {
   let stageDetails = mlDBController.findOne('MlStage', {_id:args.stageId} , context);
@@ -68,7 +68,7 @@ MlResolver.MlMutationResolver['updateStage'] = (obj, args, context, info) => {
       return response
     }
   }
-}
+};
 
 MlResolver.MlMutationResolver['updateOnBoardStage'] = (obj, args, context, info) => {
   let transactionLogDetails = mlDBController.findOne('MlTransactionsLog', {_id: args.transactionLogId}, context);
@@ -76,6 +76,9 @@ MlResolver.MlMutationResolver['updateOnBoardStage'] = (obj, args, context, info)
   if(stageDetails) {
       if (stageDetails && stageDetails.hasInvested &&  stageDetails.onBoardRequest) {
         stageDetails.onBoardStatus = args.status ;
+        if(stageDetails.onBoardStatus == "accept"){
+          stageDetails.resourceStage = 'onboard';
+        }
         result = mlDBController.update('MlStage', {_id:transactionLogDetails.activityDocId} , stageDetails, {$set:true}, context);
         // let user = mlDBController.findOne('MlPortfolioDetails', {_id: transactionLogDetails.docId}, context);
         // new mlOnBoard.createTransactionRequest(user.userId, 'investments', args.stage.resourceId, args.stageId, context.userId, 'user', context)
@@ -96,5 +99,34 @@ MlResolver.MlMutationResolver['updateOnBoardStage'] = (obj, args, context, info)
       return response
     }
   }
-}
+};
+
+
+
+MlResolver.MlMutationResolver['fetchOnBoardByTransaction'] = (obj, args, context, info) => {
+  let transactionId = args.transactionId;
+  let userId = context.userId;
+  if(transactionId){
+    let transactionLogDetails = mlDBController.findOne('MlTransactionsLog', {_id: transactionId }, context);
+    let stageDetails = mlDBController.findOne('MlStage', {_id: transactionLogDetails.activityDocId} , context);
+    let result = {};
+    if( stageDetails.resourceStage == 'onboard' ){
+      result.canAccept = false;
+      result.canReject = false;
+    } else if ( userId == transactionLogDetails.userId ) {
+      result.canAccept = true;
+      result.canReject = true;
+    } else {
+      result.canAccept = false;
+      result.canReject = false;
+    }
+    let code = 200;
+    let response = new MlRespPayload().successPayload(result, code);
+    return response;
+  } else {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('TransactionId is missing', code);
+    return response
+  }
+};
 

@@ -85,19 +85,6 @@ let institutePortfolioSchema = `
         isLogoPrivate :Boolean
         isDescriptionPrivate : Boolean
     }
-    
-    type awardsRecognitionOutput{
-          awardName:String
-          awardId:String
-          isAwardPrivate:Boolean
-          year:String
-          isYearPrivate:Boolean
-          description:String
-          isDescriptionPrivate:Boolean
-          logo:imagesTypeSchema,
-          makePrivate:Boolean,
-          index: Int
-    }
 
     type membershipsOutput{
         description:String, 
@@ -186,15 +173,17 @@ let institutePortfolioSchema = `
       ratio: [imagesTypeSchema]
     }
     
-    type InstitutePortfolio{
+    type InstitutionPortfolio{
+      memberships       : membershipsOutput,
+      compliances       : compliancesOutput,
+      licenses          : licensesOutput 
+      lookingFor        : [lookingForOutput]
+      
       management        : [instituteManagementOutput],
       data              : dataOutput,
       charts            : chartsOutput,
-      awardsRecognition : [awardsRecognitionOutput],
-      memberships       : membershipsOutput,
-      compliances       : compliancesOutput,
-      licenses          : licensesOutput      
-   }
+      awardsRecognition : [awardsRecognitionOutput],    
+    }
    
     
     input logo{
@@ -313,19 +302,6 @@ let institutePortfolioSchema = `
         isLogoPrivate :Boolean
         isDescriptionPrivate : Boolean
     }
-    
-    input awardsRecognition{
-          awardName:String
-          awardId:String
-          isAwardPrivate:Boolean
-          year:String
-          isYearPrivate:Boolean
-          description:String
-          isDescriptionPrivate:Boolean
-          makePrivate:Boolean
-          logo : logo,
-          index: Int
-    }
 
     input memberships{
         description:String, 
@@ -378,12 +354,14 @@ let institutePortfolioSchema = `
       index : Int
     }
    
-    input institutePortfolio{
+    input institutionPortfolio{
         portfolioDetailsId  : String
         licenses            : licenses
         compliances         : compliances
         memberships         : memberships
+        lookingFor          : [lookingFor]
         awardsRecognition : [awardsRecognition]
+        
         aboutUs             : aboutUs
         rating              : rating
         serviceProducts     : serviceProducts
@@ -408,38 +386,41 @@ let institutePortfolioSchema = `
     
     type Query{
         fetchInstitutePortfolioAboutUs(portfoliodetailsId:String!):institutePortfolioAboutUsOutput
-        fetchInstitutePortfolioLicenses(portfoliodetailsId:String!):licensesOutput
-        fetchInstitutePortfolioMemberships(portfoliodetailsId:String!):membershipsOutput
-        fetchInstitutePortfolioCompliances(portfoliodetailsId:String!):compliancesOutput
         fetchInstitutePortfolioManagement(portfoliodetailsId:String!):[instituteManagementOutput]
-        fetchInstitutePortfolioAwards(portfoliodetailsId:String!):[awardsRecognitionOutput]
+        
         fetchInstitutePortfolioCharts(portfoliodetailsId:String):chartsOutput   
         fetchInstitutePortfolioData(portfoliodetailsId:String):dataOutput
-        fetchInstituteDetails(portfoliodetailsId:String!, key:String):InstitutePortfolio
+        fetchInstitutionDetails(portfoliodetailsId:String!, key:String):InstitutionPortfolio
     }
     
     type Mutation{
-        createInstitutePortfolio(portfolio:institutePortfolio):response
-        updateInstitutePortfolio(portfoliodetailsId:String,portfolio:institutePortfolio):response
-        
+        createInstitutionPortfolio(portfolio:institutionPortfolio):response
+        updateInstitutionPortfolio(portfoliodetailsId:String,portfolio:institutionPortfolio):response
     }
 `
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], institutePortfolioSchema]);
 
 let supportedApi = [
+  {api:'fetchInstitutionDetails', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchInstitutePortfolioAboutUs', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstitutePortfolioMemberships', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstitutePortfolioCompliances', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstitutePortfolioLicenses', actionName:'READ', moduleName:"PORTFOLIO"},
+
   {api:'fetchInstitutePortfolioManagement', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstitutePortfolioAwards', actionName:'READ', moduleName:"PORTFOLIO"},
+
   {api:'fetchInstitutePortfolioCharts', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchInstitutePortfolioData', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstituteDetails', actionName:'READ', moduleName:"PORTFOLIO"},
-
-  {api:'createInstitutePortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
-  {api:'updateInstitutePortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
+  {api:'createInstitutionPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
+  {api:'updateInstitutionPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
   {api:'createInstitutePortfolioChart', actionName:'UPDATE', moduleName:"PORTFOLIO"}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
+
+/**
+ * Note: graphql schema to be used multiple times hence using only onces
+ * @lookingFor  : startup
+ * @lookingForOutput : startup
+ * @awardsRecognition : startup
+ * @awardsRecognitionOutput : startup
+ * */
+// {api:'fetchInstitutePortfolioAwards', actionName:'READ', moduleName:"PORTFOLIO"},
+// fetchInstitutePortfolioAwards(portfoliodetailsId:String!):[awardsRecognitionOutput]

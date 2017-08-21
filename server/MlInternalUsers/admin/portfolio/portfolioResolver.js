@@ -33,6 +33,8 @@ MlResolver.MlQueryResolver['fetchPortfolioDetailsByUserId'] = (obj, args, contex
 /**
  * request for portfolio creation
  * */
+
+//todo://changing communitytype to communitycode
 MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, info) => {
   let user;
   let portfolioDetails = args.portfoliodetails
@@ -190,6 +192,16 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                       MlResolver.MlMutationResolver['createCompanyPortfolio'](obj, portfolio, context, info)
                     }
                       break;
+                    case "Institutions": {
+                      let portfolio = {
+                        userId: portfolioDetails.userId,
+                        communityType: portfolioDetails.communityType,
+                        portfolioDetailsId: ret
+                      }
+                      MlResolver.MlMutationResolver['createInstitutionPortfolio'](obj, portfolio, context, info)
+                      console.log("creating Institutions")
+                    }
+                      break;
                   }
                 //triggered on successfull portfolio creation
                   //MlEmailNotification.onPortfolioConfirmation(userDetails);
@@ -247,6 +259,10 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
                 case "Service Providers":{
                   response = MlResolver.MlMutationResolver['updateServiceProviderPortfolio'](obj, args, context, info)
                 }
+                break;
+              case "Institutions":{
+                response = MlResolver.MlMutationResolver['updateInstitutionPortfolio'](obj, args, context, info)
+              }
                 break;
             }
         }
@@ -386,6 +402,10 @@ MlResolver.MlQueryResolver['fetchPortfolioByReg'] = (obj, args, context, info) =
   if (args.registrationId) {
     response = mlDBController.findOne('MlPortfolioDetails', {registrationId: args.registrationId}, context) || {}
     var subChapterId = response?response.subChapterId:''
+    if(!subChapterId){
+      var registrationDetails = mlDBController.findOne('MlRegistration', {_id: args.registrationId}, context) || {}
+      subChapterId = registrationDetails && registrationDetails.registrationInfo && registrationDetails.registrationInfo.subChapterId ? registrationDetails && registrationDetails.registrationInfo && registrationDetails.registrationInfo.subChapterId : ''
+    }
     var dataContext = MlSubChapterAccessControl.getAccessControl('VIEW', context, subChapterId, false)
     // response.canAccess = mlNonMoolyaAccess.canExternalUserViewReg(args.registrationId, context)
     response.canAccess = dataContext.hasAccess

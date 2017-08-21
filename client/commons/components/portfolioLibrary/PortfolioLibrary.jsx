@@ -274,7 +274,8 @@ import SharedLibrary from './sharedLibrary'
       // this.getCentralLibrary();
       let fileExists = this.checkIfFileAlreadyExists(file.name, "document");
       let typeShouldBe = _.compact(fileType.split('/'));
-      if (file && typeShouldBe && typeShouldBe[1] === "pdf") {
+      console.log("--doc format--",fileType)
+      if (file && typeShouldBe && typeShouldBe[1] !== "image" && typeShouldBe[1] !== "video") {
         if (!fileExists) {
           let data = {moduleName: "PROFILE", actionName: "UPDATE"}
           let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "document"));
@@ -708,7 +709,7 @@ import SharedLibrary from './sharedLibrary'
               </div>
               {that.state.explore || that.state.deleteOption ? "" :
                 <FontAwesome name='trash-o' onClick={() => that.delete(id, "image", "portfolio")}/>}
-              <div className="icon_count"> <FontAwesome name='share-alt' /></div>
+              {/*<div className="icon_count"> <FontAwesome name='share-alt' /></div>*/}
               <FontAwesome name='times' style={{'display':'none'}}/>
               <div className="show_details" style={{'display':'none'}}>
                 <ul className="list-group">
@@ -791,7 +792,7 @@ import SharedLibrary from './sharedLibrary'
               </div>
               {that.state.explore || that.state.deleteOption ? "" :
                 <FontAwesome name='trash-o' onClick={() => that.delete(id, "template", "portfolio")}/>}
-              <div className="icon_count"> <FontAwesome name='share-alt' />21 </div>
+              {/*<div className="icon_count"> <FontAwesome name='share-alt' /></div>*/}
               <FontAwesome name='times' style={{'display':'none'}}/>
               <div className="show_details" style={{'display':'none'}}>
                 <ul className="list-group">
@@ -862,7 +863,7 @@ import SharedLibrary from './sharedLibrary'
               </div>
               {that.state.explore || that.state.deleteOption ? "" :
                 <FontAwesome name='trash-o' onClick={() => that.delete(id, "video")}/>}
-              <div className="icon_count"> <FontAwesome name='share-alt' />21 </div>
+              {/*<div className="icon_count"> <FontAwesome name='share-alt' /> </div>*/}
               <FontAwesome name='times' style={{'display':'none'}}/>
               <div className="show_details" style={{'display':'none'}}>
                 <ul className="list-group">
@@ -906,8 +907,8 @@ import SharedLibrary from './sharedLibrary'
               <FontAwesome onClick={() => that.toggleDocumentLock(id)} name='lock'/> : "" : !that.state.hideLock ?
               <FontAwesome onClick={() => that.toggleDocumentLock(id)} name='unlock'/> : "" }
             {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "document")}/>}
-            <a href="#" data-toggle="modal" data-target=".documentpop"
-               onClick={that.randomDocument.bind(that, show.fileUrl, id)}><img src={show.fileUrl}/></a>
+            <a href="" data-toggle="modal" data-target=".documentpop"
+               onClick={that.randomDocument.bind(that, show.fileUrl, id)}><img src="/images/doc.png"/></a>
             <div id="images" className="title">{show.fileName}</div>
           </div>
         )
@@ -934,7 +935,7 @@ import SharedLibrary from './sharedLibrary'
               </div>
               {that.state.explore || that.state.deleteOption ? "" :
                 <FontAwesome name='trash-o' onClick={() => that.delete(id, "document")}/>}
-              <div className="icon_count"> <FontAwesome name='share-alt' />21 </div>
+              {/*<div className="icon_count"> <FontAwesome name='share-alt' /> </div>*/}
               <FontAwesome name='times' style={{'display':'none'}}/>
               <div className="show_details" style={{'display':'none'}}>
                 <ul className="list-group">
@@ -944,10 +945,10 @@ import SharedLibrary from './sharedLibrary'
                   <li className="list-group-item"><span className="task_with"><img src="/images/p_2.jpg" /></span><b>Task name here</b><span className="task_status act_task">10 Days</span></li>
                 </ul>
               </div>
-              {that.state.isLibrary ? <a href="#" data-toggle="modal" data-target=".documentpop"
-                                         onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
-                src={show.fileUrl}/></a> :
-                <a href="#" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
+              {that.state.isLibrary ? <a href="" data-toggle="modal" data-target=".documentpop"
+                                         onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}>
+                <img src="/images/doc.png"/></a> :
+                <a href="" data-toggle="modal" onClick={that.sendDataToPortfolioLibrary.bind(that, show, id)}><img
                   src={show.fileUrl}/></a>}
               <div id="templates" className="title">{show.fileName}</div>
             </div>
@@ -1199,7 +1200,6 @@ import SharedLibrary from './sharedLibrary'
     }
 
     portfolioShareHandler(actionConfig,handlerCallback){
-      console.log('===handlerCallback===', handlerCallback)
       if(handlerCallback) {//to handle the popover
         handlerCallback({Details: this.state.selectedData});
       }
@@ -1211,8 +1211,7 @@ import SharedLibrary from './sharedLibrary'
 
     async getSharedFiles(userId) {
       const resp = await fetchSharedLibraryHandler(userId)
-      console.log('response from server',resp)
-      this.setState({sharedFiles: resp, showSharedFiles: !this.state.showSharedFiles})
+      this.setState({sharedFiles: resp, showSharedFiles: true})
     }
 
     showLibrary(response) {

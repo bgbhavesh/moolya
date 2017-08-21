@@ -533,8 +533,34 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
             countryDoc[index].allowableFormat = allowableFormatNames || []
             let isNonMoolyaSubChapterSpecific;
             if (doc.docTypeId == 'self' && doc.isActive == true) {
+              let documentId = doc.documentId?doc.documentId:""
+              let documentMappingDef = mlDBController.findOne('MlDocumentMapping', documentId, context)
+              let documentMapSubChapters = documentMappingDef&&documentMappingDef.subChapters?documentMappingDef.subChapters:[]
+              if(documentMapSubChapters && documentMapSubChapters.length>0 && documentMapSubChapters.length == 1){
+                var latestdocs = documentMapSubChapters.join();
+                if(latestdocs == "all"){
+                  countryBasedDoc.push(doc)
+                }else{
+                  let selectedSubChapter = [selectedSubChapters]
+                  var subChapterSame = documentMapSubChapters.length == selectedSubChapter.length && documentMapSubChapters.every(function(element, index) {
+                      return element === selectedSubChapter[index];
+                    });
+                  isNonMoolyaSubChapterSpecific = mlDBController.findOne('MlSubChapters', {
+                    "_id": {$in: documentMapSubChapters},
+                    isDefaultSubChapter: false,
+                    isActive: true
+                  }, context)
 
+                  if(isNonMoolyaSubChapterSpecific && subChapterSame){
+                    countryBasedDoc.push(doc)
+                  }else{
+                    countryBasedDoc = countryBasedDoc
+                  }
+                }
+              }else{
                 countryBasedDoc.push(doc)
+              }
+
 
 
             }

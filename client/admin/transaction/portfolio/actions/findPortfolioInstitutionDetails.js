@@ -123,6 +123,10 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                         fileUrl
                       }
                       index
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
                   }
               }
           }

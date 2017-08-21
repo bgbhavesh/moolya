@@ -138,6 +138,7 @@ export const mlDashboardListConfig=new MlAppViewer({
                           communityCode
                           profile{
                             isActive,
+                            profileImage
                           }
                           isActive
                       }

@@ -90,18 +90,54 @@ export default class MlCommunityList extends Component {
     let chapterId = this.props.config.params&&this.props.config.params.chapterId?this.props.config.params.chapterId:"";
     let subChapterId = this.props.config.params&&this.props.config.params.subChapterId?this.props.config.params.subChapterId:"";
 
-    const list=  data.map((prop, idx) =>
-      <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
-        <div className="list_block provider_block">
-          <div className={`cluster_status ${prop.isActive?"active":"inactive"}_cl `}>{/*<FontAwesome name={prop.profile.isActive?"check":"times"}/>*/}</div>
-          {/*<div className={`cluster_status ${prop.statusField|| ""}_cl `}></div>*/}
-          {/*{prop.communityCode?<a></a>:<a href={dashboardRoutes.backendUserDetailRoute(clusterId,chapterId,subChapterId,prop._id)}> <div className={"hex_outer"}><img src={prop.countryFlag}/></div></a>}*/}
-          <h3>{prop.name}<br />
-            {prop.communityCode?prop.clusterName:prop.roleNames}
-          </h3>
+  //   const list=  data.map((prop, idx) =>
+  //     <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
+  //       <div className="list_block provider_block">
+  //         <div className={`cluster_status ${prop.isActive?"active":"inactive"}_cl `}>{/*<FontAwesome name={prop.profile.isActive?"check":"times"}/>*/}</div>
+  //         {/*<div className={`cluster_status ${prop.statusField|| ""}_cl `}></div>*/}
+  //         {/*{prop.communityCode?<a></a>:<a href={dashboardRoutes.backendUserDetailRoute(clusterId,chapterId,subChapterId,prop._id)}> <div className={"hex_outer"}><img src={prop.countryFlag}/></div></a>}*/}
+  //         <h3>{prop.name}<br />
+  //           {prop.communityCode?prop.clusterName:prop.roleNames}
+  //         </h3>
+  //       </div>
+  //     </div>
+  // );
+
+    const list=  data.map(function(prop, idx){
+
+      if(prop.communityCode == "IDE")
+        icon = "ideator"
+      else if(prop.communityCode == "FUN")
+        icon = "funder"
+      else if(prop.communityCode == "STU")
+        icon = "startup"
+      else if(prop.communityCode == "CMP")
+        icon = "company"
+      else if(prop.communityCode == "SPS")
+        icon = "users"
+      else if(prop.communityCode == "INS")
+        icon = "institutions"
+      else if(prop.profile.isInternaluser)
+        icon = "moolya-symbol"
+
+      return (
+        <div className="col-md-4 col-sm-4 col-lg-3" key={idx}>
+
+          <div className="ideators_list_block">
+            <div className={`${prop.isActive?"active":"inactive"}`}><span>Active</span></div>
+            <h3>{prop.name}</h3>
+            <span className={`ml2 ml-${icon}`}></span>
+            <img src={`${prop.profile.profileImage?prop.profile.profileImage:"/images/ideator_01.png"}`} className="c_image"/>
+            <div className="block_footer">
+              <span>{prop.communityCode?prop.clusterName:prop.roleNames}</span>
+            </div>
+          </div>
         </div>
-      </div>
-  );
+      )}
+    )
+
+
+
     return (
       <div>
           <div className="community_icons fixed_icon">

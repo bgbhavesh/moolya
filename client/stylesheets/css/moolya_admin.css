@@ -128,6 +128,7 @@ h1,h2,h3,h4,h5,h6{font-family: 'DINPro-Regular';font-weight:normal;margin: 0px;l
 .provider_mask{position: relative;width: 138px;height: 138px;top: 4px;left: 50%;transform: translateX(-50%);background: #ddd;}
 .provider_block img{border: 0px;top: 0px;left: 0px;width: 138px;height: 138px;z-index: 2;}
 .provider_block img.user_pic{z-index: 0;z-index: 1;}
+.provider_block .ml{font-size: 18px; line-height: normal; position: absolute; z-index: 2; left: 0; border-radius: 50%; color: #FFF; padding: 5px; text-shadow: none;margin: 5px;}
 /*.admin_main_wrap .list_block.ideator_block{height: 211px;}*/
 .list_block.ideator_block h3{border-radius: 0px 0px 4px 4px;padding: 5px 0px;line-height: 20px;font-size: 14px;padding: 4px 0px 6px 0px;}
 /*.admin_main_wrap .list_block.provider_block{height: 211px;}*/

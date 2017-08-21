@@ -179,17 +179,21 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
                 if(event.documentId == existingDoc._id){
                   if(!isAllowableFormat_same){
                     event.allowableFormat = allowableFormatNewArray;
-                  }else if(documentSizeNewArray != documentSizeExistingArray){
+                  }
+                  if(documentSizeNewArray != documentSizeExistingArray){
                     event.allowableMaxSize = args.document&&args.document.allowableMaxSize?args.document.allowableMaxSize:"";
-                  }else if(documentStatusNewArray != documentStatusExistingArray && event.isMandatory){
+                  }
+                  if(documentStatusNewArray != documentStatusExistingArray && event.isMandatory){
                     let updateFail = MlDocumentMapping.update({documentId:args.documentId}, {$set: existingDoc})
                     if(updateFail){
                       error = true
                     }
-                  }else if(documentStatusNewArray != documentStatusExistingArray && !event.isMandatory){
+                  }
+                  if(documentStatusNewArray != documentStatusExistingArray && !event.isMandatory){
                     event.isActive = args.document&&args.document.isActive?args.document.isActive:true;
                     error = false
-                  }else if(!isAllowableFormat_same && event.isMandatory){
+                  }
+                  if(!isAllowableFormat_same && event.isMandatory){
                     let updateFail = MlDocumentMapping.update({documentId:args.documentId}, {$set: existingDoc})
                     if(updateFail){
                       manditioryStatusError = true

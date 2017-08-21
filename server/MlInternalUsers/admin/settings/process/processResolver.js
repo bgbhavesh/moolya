@@ -152,17 +152,25 @@ MlResolver.MlMutationResolver['upsertProcessDocument'] = (obj, args, context, in
       //       'kycCategoryId': args.kycCategoryId,'docTypeId': args.docTypeId, 'documentId':args.documentId}
       //   }
       // }, {$set: {"processDocuments.$.isMandatory": args.isMandatory,"processDocuments.$.isActive": args.isActive}});
+      let result;
 
-      let result = mlDBController.update('MlProcessMapping', {
-        _id: id, 'processDocuments': {
-          $elemMatch: {
-            'kycCategoryId': args.kycCategoryId, 'docTypeId': args.docTypeId, 'documentId': args.documentId
+      if(args.isMandatory && !args.isActive){ //as per issue 2648
+        let code = 401;
+        let response = new MlRespPayload().errorPayload("Can't update status as document is inactive or maditory", code);
+        return response;
+      }else{
+         result = mlDBController.update('MlProcessMapping', {
+          _id: id, 'processDocuments': {
+            $elemMatch: {
+              'kycCategoryId': args.kycCategoryId, 'docTypeId': args.docTypeId, 'documentId': args.documentId
+            }
           }
-        }
-      }, {
-        "processDocuments.$.isMandatory": args.isMandatory,
-        "processDocuments.$.isActive": args.isActive
-      }, {$set: true}, context)
+        }, {
+          "processDocuments.$.isMandatory": args.isMandatory,
+          "processDocuments.$.isActive": args.isActive
+        }, {$set: true}, context)
+      }
+
 
       if(result!=1){
           console.log("insertion opertion");
@@ -181,6 +189,7 @@ MlResolver.MlMutationResolver['upsertProcessDocument'] = (obj, args, context, in
            processDocument.documentId=documentMappingDef._id;
            processDocument.isMandatory=args.isMandatory;
            processDocument.isActive=args.isActive;
+
         mlDBController.update('MlProcessMapping', id, {'processDocuments':processDocument}, {$push:true}, context)
         // MlProcessMapping.update({_id:id},{'$push':{'processDocuments':processDocument}});
       }
@@ -558,8 +567,8 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
     }
     kycDoc = _.uniqBy(ApprovedKyc, function (kyc) {
       let docId = kyc&&kyc.documentId?kyc.documentId:""
-      let docTypeId = kyc&&kyc.docTypeId?kyc.docTypeId:""
-      return docId && docTypeId;
+      //let docTypeId = kyc&&kyc.docTypeId?kyc.docTypeId:""
+      return docId;
     });
 
 

@@ -64,6 +64,66 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                           booleanKey
                       }
                   }
+                  investor{
+                    investorName,
+                    fundingType,
+                    fundingTypeId,
+                    investmentAmount,
+                    investorDescription,
+                    isNamePrivate,
+                    isInvestmentAmountPrivate,
+                    isDescriptionPrivate,
+                    logo{
+                      fileName,
+                      fileUrl
+                    },
+                    makePrivate,
+                    index
+                    privateFields{
+                        keyName,
+                        booleanKey
+                    }
+                  }
+                  
+                  management{
+                     title
+                     isTitlePrivate
+                     firstName
+                     isFirstNamePrivate
+                     lastName
+                     isLastNamePrivate
+                     middleName
+                     isMiddleNamePrivate
+                     qualification
+                     isQualificationPrivate
+                     certification 
+                     isCertificationPrivate 
+                     profilePic 
+                     isProfilePicPrivate 
+                     gender 
+                     isGenderPrivate 
+                     designation 
+                     isDesignationPrivate
+                     yearsOfExperience 
+                     isYOEPrivate 
+                     joiningDate 
+                     isJoiningDatePrivate
+                     firstJobJoiningDate 
+                     isFJJDPrivate 
+                     universities 
+                     isUniversitiesPrivate
+                     awards 
+                     isAwardsPrivate
+                     linkedInUrl 
+                     isLinkedInUrlPrivate
+                     managmentAbout
+                     isAboutPrivate
+                      logo{
+                        fileName
+                        fileUrl
+                      }
+                      index
+                  }
               }
           }
       `,

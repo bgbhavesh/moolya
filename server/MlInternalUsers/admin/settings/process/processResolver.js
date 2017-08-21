@@ -545,16 +545,11 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
                   var subChapterSame = documentMapSubChapters.length == selectedSubChapter.length && documentMapSubChapters.every(function(element, index) {
                       return element === selectedSubChapter[index];
                     });
-                  console.log(subChapterSame)
-
-
                   isNonMoolyaSubChapterSpecific = mlDBController.findOne('MlSubChapters', {
                     "_id": {$in: documentMapSubChapters},
                     isDefaultSubChapter: false,
                     isActive: true
                   }, context)
-
-                  console.log(isNonMoolyaSubChapterSpecific);
 
                   if(isNonMoolyaSubChapterSpecific && subChapterSame){
                     countryBasedDoc.push(doc)
@@ -562,9 +557,6 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
                     countryBasedDoc = countryBasedDoc
                   }
                 }
-
-
-
               }else{
                 countryBasedDoc.push(doc)
               }

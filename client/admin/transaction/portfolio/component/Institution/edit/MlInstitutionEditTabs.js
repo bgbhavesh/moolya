@@ -2,23 +2,22 @@ import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 import _ from "lodash";
+import MlInstitutionEditMCL from './MlInstitutionEditMCL';
 import MlInstitutionEditManagement from './MlInstitutionEditManagement';
 import MlInstitutionEditInvestor from './MlInstitutionEditInvestor';
 import MlInstitutionEditAwards from './MlInstitutionEditAwards';
-import MlInstitutionEditMCL from './MlInstitutionEditMCL';
 import MlInstitutionEditLookingFor from './MlInstitutionEditLookingFor';
 import MlInstitutionEditLibrary from './MlInstitutionEditLibrary';
 import MlInstitutionEditChart from './MlInstitutionEditChart';
 import MlInstitutionEditData from './MlInstitutionEditData';
-
-import PortfolioLibrary from '../../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
+import MlInstitutionAboutUs from "./aboutUs/MlInstitutionAboutUsLandingPage";
 import {client} from '../../../../../core/apolloConnection'
 
 
 export default class MlInstitutionEditTab extends Component{
   constructor(props){
     super(props)
-    this.state =  {tabs: [],aboutUs: {}, institutionPortfolio:{}};
+    this.state =  {tabs: [], institutionPortfolio:{}};
     this.getChildContext.bind(this)
     this.getManagementDetails.bind(this);
     this.getAwardsDetails.bind(this);
@@ -65,7 +64,7 @@ export default class MlInstitutionEditTab extends Component{
 
   getTabComponents(){
     let tabs = [
-
+      {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlInstitutionAboutUs key="1" getAboutus={this.getAboutus.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.backClickHandler.bind(this)}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , component:<MlInstitutionEditManagement  client={client} isAdmin={true} key="2" getManagementDetails={this.getManagementDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Investor" , component:<MlInstitutionEditInvestor key="3" getInvestorDetails={this.getInvestorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Data" , component:<MlInstitutionEditData key="4" getInvestorDetails={this.getInvestorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
@@ -77,6 +76,12 @@ export default class MlInstitutionEditTab extends Component{
 
     ]
     return tabs;
+  }
+
+  getAboutus(details, tabName, privateKey){
+    let data = this.state.institutionPortfolio;
+    data[tabName] = details;
+    this.props.getPortfolioDetails({institutionPortfolio : data}, privateKey);
   }
 
   getManagementDetails(details, privateKey){
@@ -120,7 +125,6 @@ export default class MlInstitutionEditTab extends Component{
   }
 
   getLookingForDetails(details, privateKey){
-
     let data = this.state.institutionPortfolio;
     if(data && !data.lookingFor){
       data['lookingFor']=[];
@@ -129,6 +133,7 @@ export default class MlInstitutionEditTab extends Component{
     this.setState({institutionPortfolio : data})
     this.props.getPortfolioDetails({institutionPortfolio:this.state.institutionPortfolio}, privateKey);
   }
+
   getInstitutionMCL(details, privateKey){
     let data = this.state.institutionPortfolio;
     if(details.memberships){

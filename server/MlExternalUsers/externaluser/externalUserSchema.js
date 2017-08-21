@@ -25,6 +25,7 @@ let externalUser = `
     type Profile{
       isExternaluser:Boolean,
       isActive:Boolean,
+      profileImage:String,
     }
 
     input profile{

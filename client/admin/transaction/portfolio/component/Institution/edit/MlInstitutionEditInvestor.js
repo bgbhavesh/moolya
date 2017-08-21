@@ -255,7 +255,7 @@ export default class MlInstitutionEditInvestor extends React.Component{
     }
     return (
       <div>
-        {showLoader === false ? ( <MlLoader/>) : (
+        {showLoader === true ? ( <MlLoader/>) : (
           <div>
             <h2>Investor</h2>
             <div className="requested_input main_wrap_scroll">

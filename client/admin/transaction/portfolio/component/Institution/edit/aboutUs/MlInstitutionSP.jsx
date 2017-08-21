@@ -1,17 +1,17 @@
 import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar';
+import ScrollArea from 'react-scrollbar'
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 
 
-export default class MlStartupInformation extends React.Component{
+export default class MlInstitutionSP extends React.Component{
   constructor(props, context){
     super(props);
     this.state={
       loading: true,
-      data:this.props.informationDetails || {},
+      data:this.props.serviceProductsDetails || {},
       privateKey:{}
     }
     this.handleBlur.bind(this);
@@ -28,9 +28,9 @@ export default class MlStartupInformation extends React.Component{
     this.updatePrivateKeys();
   }
   componentWillMount(){
-    let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.information)
+    let empty = _.isEmpty(this.context.institutionPortfolio && this.context.institutionPortfolio.serviceProducts)
     if(!empty){
-      this.setState({loading: false, data: this.context.startupPortfolio.information});
+      this.setState({loading: false, data: this.context.institutionPortfolio.serviceProducts});
     }
   }
 
@@ -50,10 +50,12 @@ export default class MlStartupInformation extends React.Component{
         delete data[propName];
       }
     }
-    this.props.getStartupInfo(data,this.state.privateKey)
+    data=_.omit(data,["privateFields"]);
+    this.props.getInstitutionSP(data,this.state.privateKey)
   }
-
   onLockChange(fieldName,field, e){
+
+
     let details = this.state.data||{};
     let key = e.target.id;
     var isPrivate = false;
@@ -70,17 +72,18 @@ export default class MlStartupInformation extends React.Component{
     this.setState({data:details}, function () {
       this.sendDataToParent()
     })
-    /* this.setState({data:details}, function () {
-     this.sendDataToParent()
-     })*/
+   /* this.setState({data:details}, function () {
+      this.sendDataToParent()
+    })*/
   }
 
   updatePrivateKeys(){
-    let response = this.props.informationDetails
+    let response = this.props.serviceProductsDetails
     _.each(response.privateFields, function (pf) {
       $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
   }
+
   render(){
     return (
 
@@ -88,14 +91,14 @@ export default class MlStartupInformation extends React.Component{
       <div className="requested_input">
         <div className="col-lg-12">
           <div className="row">
-            <h2>Information</h2>
+            <h2>Service & Products</h2>
             <div className="panel panel-default panel-form">
 
               <div className="panel-body">
 
                 <div className="form-group nomargin-bottom">
-                  <textarea placeholder="Describe..." name="informationDescription" className="form-control" id="cl_about" defaultValue={this.state.data&&this.state.data.informationDescription}  onBlur={this.handleBlur.bind(this)}></textarea>
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate"  onClick={this.onLockChange.bind(this,"informationDescription","isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
+                  <textarea placeholder="Describe..." name="spDescription" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.spDescription} onBlur={this.handleBlur.bind(this)}></textarea>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate"  onClick={this.onLockChange.bind(this, "spDescription", "isDescriptionPrivate")}/>
                 </div>
 
               </div>
@@ -115,6 +118,6 @@ export default class MlStartupInformation extends React.Component{
     )
   }
 }
-MlStartupInformation.contextTypes = {
-  startupPortfolio: PropTypes.object,
+MlInstitutionSP.contextTypes = {
+  institutionPortfolio: PropTypes.object,
 };

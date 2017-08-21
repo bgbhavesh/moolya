@@ -208,6 +208,8 @@ class MlPortfolio extends React.Component {
   }
 
   getPortfolioDetails(portfolioDetails, privateKey) {
+    console.log("portfolioDetails", portfolioDetails)
+    console.log("privateKey", privateKey)
     this.setState({portfolio: portfolioDetails});
     if(!_.isEmpty(privateKey)){
       this.updatePrivateKeys(privateKey)

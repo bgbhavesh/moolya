@@ -51,7 +51,7 @@ MlSchemaDef['schema']=mergeStrings([MlSchemaDef['schema'], citiesSchema]);
 let supportedApi = [
   {api:'fetchCities', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
   {api:'fetchCity', actionName:'READ', moduleName:"CITIES"},
-  {api:'fetchCitiesPerState', actionName:'READ', moduleName:"CITIES"},
+  {api:'fetchCitiesPerState', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
   {api:'fetchCitiesPerCountry', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
   {api:'searchCities', actionName:'READ', moduleName:"CITIES", isWhiteList:true},
   {api:'updateCity', actionName:'UPDATE', moduleName:"CITIES"}

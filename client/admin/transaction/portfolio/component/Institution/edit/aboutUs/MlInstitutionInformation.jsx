@@ -6,7 +6,7 @@ var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 
 
-export default class MlStartupInformation extends React.Component{
+export default class MlInstitutionInformation extends React.Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -28,9 +28,9 @@ export default class MlStartupInformation extends React.Component{
     this.updatePrivateKeys();
   }
   componentWillMount(){
-    let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.information)
+    let empty = _.isEmpty(this.context.institutionPortfolio && this.context.institutionPortfolio.information)
     if(!empty){
-      this.setState({loading: false, data: this.context.startupPortfolio.information});
+      this.setState({loading: false, data: this.context.institutionPortfolio.information});
     }
   }
 
@@ -50,7 +50,7 @@ export default class MlStartupInformation extends React.Component{
         delete data[propName];
       }
     }
-    this.props.getStartupInfo(data,this.state.privateKey)
+    this.props.getInstitutionInfo(data,this.state.privateKey)
   }
 
   onLockChange(fieldName,field, e){
@@ -115,6 +115,6 @@ export default class MlStartupInformation extends React.Component{
     )
   }
 }
-MlStartupInformation.contextTypes = {
-  startupPortfolio: PropTypes.object,
+MlInstitutionInformation.contextTypes = {
+  institutionPortfolio: PropTypes.object,
 };

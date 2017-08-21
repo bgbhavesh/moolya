@@ -103,6 +103,10 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                 serviceProducts{
                   spDescription
                   isDescriptionPrivate
+                  privateFields{
+                    keyName,
+                    booleanKey
+                  }
                 }
                 information{
                   informationDescription

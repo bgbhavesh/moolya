@@ -48,6 +48,7 @@ let institutePortfolioSchema = `
        isAboutPrivate:Boolean
        logo:imagesTypeSchema,
        index: Int
+       privateFields:[PrivateKeys]
     }
    
     

@@ -53,12 +53,15 @@ export default class MlAppEditOffice extends React.Component{
 
   render(){
     const that = this;
+    let noAccessMessage = <p className="text-danger">No access for team member. Only principle can have access to this tab.</p>
     const isAddNewMember = that.state.role == "Principal" || that.state.role == "AdminUser";
     let MlTabs = [
-      {name: 'Principals', tabContent: <MlAppAddOfficeMember isAdd={isAddNewMember} />},
-      {name: 'Team Members', tabContent: <MlAppAddOfficeMember isAdd={isAddNewMember} availableCommunities={this.state.availableCommunities} />},
-      {name: 'Office Transactions', tabContent: <MlTableViewContainer params={this.props.config} {...mlOfficeTransactionConfig}/>},
-      {name: 'Upgrade Office', tabContent: <MlUpgradeOffice/>}
+      {name: 'Principals', tabContent: <MlAppAddOfficeMember role={this.state.role} isAdd={isAddNewMember} />},
+      {name: 'Team Members', tabContent: <MlAppAddOfficeMember role={this.state.role} isAdd={isAddNewMember} availableCommunities={this.state.availableCommunities} />},
+      {name: 'Office Transactions',
+        tabContent: isAddNewMember ? <MlTableViewContainer role={this.state.role} params={this.props.config} {...mlOfficeTransactionConfig}/> : noAccessMessage },
+      {name: 'Upgrade Office',
+        tabContent: isAddNewMember ? <MlUpgradeOffice  role={this.state.role} /> : noAccessMessage }
     ];
 
     function getTabs() {

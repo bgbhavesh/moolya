@@ -101,7 +101,8 @@ export default class MlAppAddOfficeMember extends React.Component{
   render(){
     const that = this;
     const props = this.props;
-    // console.log(this.state.selected);
+    const canView = props.role == 'Principal' || props.role == 'AdminUser' ? true : false;
+    console.log('this.props:',props);
     return (
       <div>
         <div className="main_wrap_scroll">
@@ -124,7 +125,7 @@ export default class MlAppAddOfficeMember extends React.Component{
                 {that.state.members.map(function (data, i) {
                   return (
                     <div className="col-lg-2 col-md-4 col-sm-4" key={i}>
-                      <a href={'/app/officeMember/'+FlowRouter.getParam('officeId')+'/'+data._id} >
+                      <a href={ canView ? '/app/officeMember/'+FlowRouter.getParam('officeId')+'/'+data._id : ''} >
                         <div className="list_block notrans">
                           <div className="cluster_status active_cl"></div>
                           <div className="hex_outer"><span className="ml ml-funder"></span></div>

@@ -179,25 +179,24 @@ module.exports = {
 }
 
 investmentHandler = async (that, currentStage, currentStageName) => {
+  let dataToInsert = {
+    "hasInvested": true
+  };
+  let response;
   if(that.state.selected.stage.length){
-    let dataToInsert = {
-      "hasInvested": true
-    }
-    let response;
-    if(that.state.selected.stage.length){
-      response = await updateStageActionHandler(that.state.selected.stage[0]._id, dataToInsert);
-    } else {
-      dataToInsert.resourceId = that.state.selected.resourceId;
-      dataToInsert.resourceType= "portfolio";
-      dataToInsert.resourceStage= currentStage;
-      response = await createStageActionHandler(dataToInsert);
-    }
-    //await updateStageActionHandler(that.state.selected.stage[0]._id, dataToInsert);
-    if(response) {
-      toastr.success('Investment done successfully')
-    }
+    response = await updateStageActionHandler(that.state.selected.stage[0]._id, dataToInsert);
+  } else {
+    dataToInsert.resourceId = that.state.selected.resourceId;
+    dataToInsert.resourceType= "portfolio";
+    dataToInsert.resourceStage= currentStage.stageName;
+    response = await createStageActionHandler(dataToInsert);
   }
-}
+  //await updateStageActionHandler(that.state.selected.stage[0]._id, dataToInsert);
+  if(response) {
+    toastr.success('Investment done successfully');
+    that.props.fetchPortfolio();
+  }
+};
 
 
 async function changeStage(that, currentStage, currentStageName){

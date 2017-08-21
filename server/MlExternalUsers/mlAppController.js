@@ -10,6 +10,7 @@ import { Accounts } from 'meteor/accounts-base';
 import bodyParser from 'body-parser';
 import express from 'express';
 import _ from 'lodash';
+import mlConversationsRepo from '../commons/Conversations/mlConversationsRepo'
 
 import getContext from '../commons/mlAuthContext'
 import MlResolver from '../commons/mlResolverDef';
@@ -35,6 +36,7 @@ const defaultServerConfig = {
   configServer: graphQLServer => {},
   graphiql: Meteor.isDevelopment,
   graphiqlPath: '/graphiqlApp',
+  conversationPath: '/conversationlogin',
   paymentReturnUrlPath:'/moolyaPaymentStatus',
   graphiqlOptions : {
     passHeader : "'meteor-login-token': localStorage['Meteor.loginToken']"
@@ -128,6 +130,17 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>
             res.send(new MlRespPayload().errorPayload("Request Payload not provided", 400));
           }
         }))
+    }
+
+    if(config.conversationPath){
+      graphQLServer.options(config.conversationPath, cors());
+      graphQLServer.post(config.conversationPath, bodyParser.json(), Meteor.bindEnvironment(function (req, res){
+        var context = getContext({req});
+        mlConversationsRepo.login(context, function (ret) {
+          res.send(ret)
+        });
+
+      }))
     }
     WebApp.connectHandlers.use(Meteor.bindEnvironment(graphQLServer));
 }

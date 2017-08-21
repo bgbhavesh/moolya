@@ -2,6 +2,10 @@
  * Created by venkatasrinag on 9/1/17.
  */
 import MoolyaloginContainer from '../containers/loginContainer'
+import mlConversationUtils from '../../commons/conversations/utils/mlconversationUtils'
+import {client} from '../../admin/core/apolloConnection';
+import {appClient} from '../../app/core/appConnection'
+
 export let loginActionHandler = {
     onLoginFormSubmit(details,callback){
         let logincontainer=MoolyaloginContainer.loginContainer
@@ -12,17 +16,16 @@ export let loginActionHandler = {
             }
             else if(result && result.profile && result.profile.isInternaluser == true){
                 FlowRouter.redirect("/admin");
+                mlConversationUtils.login(client)
             }
 
             else if(result && result.profile && result.profile.isExternaluser == true){
                 FlowRouter.redirect("/app");
+                mlConversationUtils.login(appClient)
+
             }
-           /* else if(result && result.profile && result.profile.isInternaluser == true&&result.profile.InternalUprofile.moolyaProfile.isActive==true&&result.profile.InternalUprofile.moolyaProfile.assignedDepartment!=undefined&&result.profile.InternalUprofile.moolyaProfile.assignedDepartment[0].department!=null&&result.profile.InternalUprofile.moolyaProfile.userProfiles[0]!=undefined&&result.profile.InternalUprofile.moolyaProfile.userProfiles[0].userRoles!=undefined&&result.profile.InternalUprofile.moolyaProfile.userProfiles[0].userRoles[0].roleId!=null) {
-              FlowRouter.redirect("/admin");
-            }
-            else{
-              callback('login failed')
-            }*/
+
+
         });
     },
     onLogout(callback){

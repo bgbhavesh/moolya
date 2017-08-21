@@ -252,7 +252,7 @@ export default class MlIdeatorDetails extends React.Component{
 
                     <div className="form-group">
                       <input type="text" placeholder="Employer Name" ref="employerName" defaultValue={this.state.data.employerName} disabled="true" className="form-control float-label"/>
-                      <FontAwesome for="employerName" name='unlock' className="input_icon un_lock" id="isEmployerNamePrivate"/>
+                      <FontAwesome for="employerName" name='unlock' className="input_icon un_lock" id="isEmployerNamePrivate" onClick={this.onClick.bind(this, "employerName", "isEmployerNamePrivate")}/>
                     </div>
 
                     <div className="form-group">

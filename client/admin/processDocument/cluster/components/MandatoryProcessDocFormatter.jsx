@@ -65,14 +65,16 @@ class MandatoryProcessDocFormatter extends React.Component {
       docTypeId:this.props.data.DocType,
       documentId:this.props.data.Id,
       isMandatory:this.refs.status.checked,
-      isActive:this.state.isActve,
+      isActive:this.state.isActive,
     };
     const response= await upsertProcessDocActionHandler(processDocDetails);
     if (response){
       if(response.success) {
         FlowRouter.go("/admin/documents/" + this.props.processConfig + "/" + this.props.kycConfig + "/" + this.props.docTypeConfig);
-      }
-      else {
+      }else if(response.result == "Can't update status as document is inactive or maditory"){
+        //this.setState({"isMandatory" : false})
+        toastr.error(response.result);
+      }else{
         toastr.error(response.result);
       }
     }

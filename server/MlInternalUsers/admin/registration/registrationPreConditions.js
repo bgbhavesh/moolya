@@ -165,7 +165,7 @@ export default MlRegistrationPreCondition = class MlRegistrationPreCondition{
       registrationType=regDetails.registrationType;
       countryId=regDetails.countryId;
       let clusterObject = mlDBController.findOne('MlClusters', {"countryId":countryId,isActive:true}, context);
-      countryClusterId = clusterObject._id
+      countryClusterId = clusterObject&&clusterObject._id?clusterObject._id:""
     }
 
     //check community access is active at platform

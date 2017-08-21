@@ -154,11 +154,11 @@ MlResolver.MlMutationResolver['upsertProcessDocument'] = (obj, args, context, in
       // }, {$set: {"processDocuments.$.isMandatory": args.isMandatory,"processDocuments.$.isActive": args.isActive}});
       let result;
 
-      if(args.isMandatory && !args.isActive){ //as per issue 2648
+     /* if(args.isMandatory && !args.isActive){ //as per issue 2648
         let code = 401;
         let response = new MlRespPayload().errorPayload("Can't update status as document is inactive or maditory", code);
         return response;
-      }else{
+      }else{*/
          result = mlDBController.update('MlProcessMapping', {
           _id: id, 'processDocuments': {
             $elemMatch: {
@@ -169,7 +169,7 @@ MlResolver.MlMutationResolver['upsertProcessDocument'] = (obj, args, context, in
           "processDocuments.$.isMandatory": args.isMandatory,
           "processDocuments.$.isActive": args.isActive
         }, {$set: true}, context)
-      }
+      //}
 
 
       if(result!=1){
@@ -531,8 +531,12 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
               allowableFormatNames.push(doc.docFormatName)
             });
             countryDoc[index].allowableFormat = allowableFormatNames || []
+            let isNonMoolyaSubChapterSpecific;
             if (doc.docTypeId == 'self' && doc.isActive == true) {
-              countryBasedDoc.push(doc)
+
+                countryBasedDoc.push(doc)
+
+
             }
           })
         }

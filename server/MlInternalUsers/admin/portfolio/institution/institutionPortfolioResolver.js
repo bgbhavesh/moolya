@@ -82,7 +82,7 @@ MlResolver.MlMutationResolver['updateInstitutionPortfolio'] = (obj, args, contex
 //   return [];
 // }
 
-MlResolver.MlQueryResolver['fetchInstitutePortfolioAboutUs'] = (obj, args, context, info) => {
+MlResolver.MlQueryResolver['fetchInstitutionPortfolioAboutUs'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {
     let instituteAboutUsArray = {}
     let portfolio = MlInstitutionPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})

@@ -71,9 +71,6 @@ class MandatoryProcessDocFormatter extends React.Component {
     if (response){
       if(response.success) {
         FlowRouter.go("/admin/documents/" + this.props.processConfig + "/" + this.props.kycConfig + "/" + this.props.docTypeConfig);
-      }else if(response.result == "Can't update status as document is inactive or maditory"){
-        //this.setState({"isMandatory" : false})
-        toastr.error(response.result);
       }else{
         toastr.error(response.result);
       }

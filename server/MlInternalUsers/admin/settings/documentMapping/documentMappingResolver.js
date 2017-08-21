@@ -155,7 +155,7 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
        */
       let kycCategoryNewArray = args.document&&args.document.kycCategory?args.document.kycCategory:[]
       let kycCategoryExistingArray = existingDoc&&existingDoc.kycCategory?existingDoc.kycCategory:[]
-      var isKYC_same = kycCategoryExistingArray.length == allowableFormatNewArray.length && kycCategoryExistingArray.every(function(element, index) {
+      var isKYC_same = kycCategoryExistingArray.length == kycCategoryNewArray.length && kycCategoryExistingArray.every(function(element, index) {
           return element === kycCategoryNewArray[index];
         });
 
@@ -163,7 +163,7 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
       let updatedAllowableFormat;let updatedKYC;let updatedDocTypes;let updateStatus
 
 
-      if(!isAllowableFormat_same || (documentSizeNewArray != documentSizeExistingArray) || (documentStatusNewArray != documentStatusExistingArray)){
+      if(!isAllowableFormat_same || (documentSizeNewArray != documentSizeExistingArray) || (documentStatusNewArray != documentStatusExistingArray) || !isKYC_same){
         var resultData = MlProcessMapping.find({ 'processDocuments': {
           $elemMatch: {
             'documentId': existingDoc._id&&existingDoc._id
@@ -193,12 +193,13 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
                     event.isActive = args.document&&args.document.isActive?args.document.isActive:true;
                     error = false
                   }
-                  if(!isAllowableFormat_same && event.isMandatory){
+                  if(!isKYC_same && event.isMandatory){
                     let updateFail = MlDocumentMapping.update({documentId:args.documentId}, {$set: existingDoc})
                     if(updateFail){
                       manditioryStatusError = true
                     }
                   }
+
                 }
               });
             }

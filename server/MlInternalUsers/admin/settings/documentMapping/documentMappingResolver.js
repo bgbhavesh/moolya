@@ -111,6 +111,8 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
     let existingDoc = MlDocumentMapping.findOne({documentId:args.documentId});
 
     let result= MlDocumentMapping.update({documentId:args.documentId}, {$set: args.document});
+    let error = false;
+    let manditioryStatusError = false;
     if(result){
 
       /**
@@ -124,19 +126,26 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
       var isAllowableFormat_same = allowableFormatExistingArray.length == allowableFormatNewArray.length && allowableFormatExistingArray.every(function(element, index) {
           return element === allowableFormatNewArray[index];
       });
-      let updatedAllowableFormat;let updatedKYC;let updatedDocTypes;let updateStatus
-      if(!isAllowableFormat_same){
-        updatedAllowableFormat = mlDBController.update('MlProcessMapping', {
-          'processDocuments': {
-            $elemMatch: {
-               'documentId': existingDoc._id&&existingDoc._id
-            }
-          }
-        }, {
-          "processDocuments.$.allowableFormat": args.document.allowableFormat,
-        }, {$set: true,multi:true}, context)
-      }
 
+      /**
+       * @ if current document mapping allowable size is changed
+       * @ Allowable size of process documents need to be changed wrt documentid
+       * @ DocumentId-Primary key
+       * @ Model-ProcessMapping
+       */
+
+      let documentSizeNewArray = args.document&&args.document.allowableMaxSize || ""
+      let documentSizeExistingArray = existingDoc.allowableMaxSize || ""
+
+      /**
+       * @ if current document mapping status is changed
+       * @ Status of process document need to be changed wrt documentid
+       * @ DocumentId-Primary key
+       * @ Model-ProcessMapping
+       */
+
+      let documentStatusNewArray = args.document&&args.document.isActive
+      let documentStatusExistingArray = existingDoc.isActive
 
       /**
        * @ if kyc Category is removed when updating Document Mapping
@@ -147,10 +156,67 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
       let kycCategoryNewArray = args.document&&args.document.kycCategory?args.document.kycCategory:[]
       let kycCategoryExistingArray = existingDoc&&existingDoc.kycCategory?existingDoc.kycCategory:[]
       var isKYC_same = kycCategoryExistingArray.length == allowableFormatNewArray.length && kycCategoryExistingArray.every(function(element, index) {
-        return element === kycCategoryNewArray[index];
-      });
+          return element === kycCategoryNewArray[index];
+        });
 
-      if(!isKYC_same){
+
+      let updatedAllowableFormat;let updatedKYC;let updatedDocTypes;let updateStatus
+
+
+      if(!isAllowableFormat_same || (documentSizeNewArray != documentSizeExistingArray) || (documentStatusNewArray != documentStatusExistingArray)){
+        var resultData = MlProcessMapping.find({ 'processDocuments': {
+          $elemMatch: {
+            'documentId': existingDoc._id&&existingDoc._id
+          }
+        }}).fetch()
+
+
+        if(resultData && resultData.length>0){
+          for(var i=0;i < resultData.length;i++){
+            let kycDocs = resultData&&resultData[i].processDocuments&&resultData[i].processDocuments.length>0?resultData[i].processDocuments:[]
+            if(kycDocs&&kycDocs.length>0){
+              _.each(kycDocs, function(event, index){
+                if(event.documentId == existingDoc._id){
+                  if(!isAllowableFormat_same){
+                    event.allowableFormat = allowableFormatNewArray;
+                  }
+                  if(documentSizeNewArray != documentSizeExistingArray){
+                    event.allowableMaxSize = args.document&&args.document.allowableMaxSize?args.document.allowableMaxSize:"";
+                  }
+                  if(documentStatusNewArray != documentStatusExistingArray && event.isMandatory){
+                    let updateFail = MlDocumentMapping.update({documentId:args.documentId}, {$set: existingDoc})
+                    if(updateFail){
+                      error = true
+                    }
+                  }
+                  if(documentStatusNewArray != documentStatusExistingArray && !event.isMandatory){
+                    event.isActive = args.document&&args.document.isActive?args.document.isActive:true;
+                    error = false
+                  }
+                  if(!isAllowableFormat_same && event.isMandatory){
+                    let updateFail = MlDocumentMapping.update({documentId:args.documentId}, {$set: existingDoc})
+                    if(updateFail){
+                      manditioryStatusError = true
+                    }
+                  }
+                }
+              });
+            }
+            updatedAllowableFormat = mlDBController.update('MlProcessMapping', {
+             "_id" : resultData&&resultData[i]&&resultData[i]._id
+            }, {
+              "processDocuments": kycDocs,
+            }, {$set: true,multi:true}, context)
+          }
+        }
+
+
+      }
+
+
+
+
+      if(!manditioryStatusError){
 
         let updatedKYCDocs;
 
@@ -174,10 +240,7 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
             'processDocuments': {'kycCategoryId' : {$in: updatedKYCDocs }}
           }, {$pull: true,multi:true}, context)
         }
-/*
-        if(!updatedKYC){
-          console.log("////////////////////////////////////")
-        }*/
+
 
       }
 
@@ -214,75 +277,19 @@ MlResolver.MlMutationResolver['updateDocument'] = (obj, args, context, info) => 
         }
       }
 
-      /**
-       * @ if current document mapping status is changed
-       * @ Status of process document need to be changed wrt documentid
-       * @ DocumentId-Primary key
-       * @ Model-ProcessMapping
-       */
-
-      let documentStatusNewArray = args.document&&args.document.isActive
-      let documentStatusExistingArray = existingDoc.isActive
-
-      if(documentStatusNewArray != documentStatusExistingArray){
-
-        updateStatus = mlDBController.update('MlProcessMapping', {
-          'processDocuments': {
-            $exists: true,
-            $elemMatch: {
-              'documentId': existingDoc._id&&existingDoc._id,
-              'isMandatory':false,
-              'isActive':false,
-            }
-          }
-        }, {
-          "processDocuments.$.isActive": args.document.isActive,
-        }, {$set: true,multi:true}, context)
-
-        if(!updateStatus){
-          let updateFail = MlDocumentMapping.update({documentId:args.documentId}, {$set: existingDoc})
-          if(updateFail){
-            let code = 401;
-            let response = new MlRespPayload().errorPayload("Cannot update as existing processdocuments are mandatory ", code);
-            return response;
-          }
-
-        }
-
-      }
-
-
-      /**
-       * @ if current document mapping allowable size is changed
-       * @ Allowable size of process documents need to be changed wrt documentid
-       * @ DocumentId-Primary key
-       * @ Model-ProcessMapping
-       */
-
-      let documentSizeNewArray = args.document&&args.document.allowableMaxSize || ""
-      let documentSizeExistingArray = existingDoc.allowableMaxSize || ""
-
-      if(documentSizeNewArray != documentSizeExistingArray){
-
-        updateStatus = mlDBController.update('MlProcessMapping', {
-          'processDocuments': {
-            $exists: true,
-            $elemMatch: {
-              'documentId': existingDoc._id&&existingDoc._id
-            }
-          }
-        }, {
-          "processDocuments.$.allowableMaxSize": args.document.allowableMaxSize,
-        }, {$set: true,multi:true}, context)
-
-      }
-
 
 
     }
-    let code = 200;
-    let response = new MlRespPayload().successPayload(result, code);
-    return response
+    if(error || manditioryStatusError){
+      let code = 401;
+      let response = new MlRespPayload().errorPayload("Cannot update as existing processdocuments are mandatory ", code);
+      return response;
+    }else{
+      let code = 200;
+      let response = new MlRespPayload().successPayload(result, code);
+      return response
+    }
+
   }
 
 }
@@ -376,6 +383,9 @@ MlResolver.MlQueryResolver['fetchKycDocProcessMapping'] = (obj, args, context, i
     let clusterId=args.clusterId;
     let chapterId=args.chapterId;
     let subChapterId=args.subChapterId;
+    clusterId.push("all");
+    chapterId.push("all");
+    subChapterId.push("all");
     let data=[];
     if(clusterId.length==1&&clusterId[0]=="all"&&chapterId[0]=="all"&&subChapterId[0]=="all"){
        data = MlDocumentMapping.find({ documentType : { $in: [id] },isActive:true}).fetch();

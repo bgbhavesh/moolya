@@ -34,6 +34,7 @@ let stage=`
         createStage(stage:stage):response
         updateStage(stageId:String, stage:stage):response
         updateOnBoardStage(transactionLogId: String, transactionType: String, status: String):response
+        fetchOnBoardByTransaction(transactionId:String): response
     }
 `;
 

@@ -33,10 +33,15 @@ MlResolver.MlMutationResolver['createSharedLibrary'] = (obj, args, context, info
 
     let userId = context.userId;
     let profile = new MlUserContext(userId).userProfileDetails(userId);
+    console.log('---profile---', profile)
     let dataToInsert = {
       owner:{
         userId: userId,
-        profileId: profile ? profile.profileId : ''
+        profileId: profile ? profile.profileId : '',
+        clusterId: profile ? profile.clusterId : '',
+        chapterId: profile ? profile.chapterId : '',
+        subChapterId: profile ? profile.subChapterId : '',
+        communityId: profile ? profile.communityId : '',
       },
       isSignedUrl: false,
       isActive: true,
@@ -134,8 +139,8 @@ MlResolver.MlQueryResolver['fetchSharedLibraryDetails'] = (obj, args, context, i
         files: {"$first": "$files"},
         userId: { "$first": "$userId" },
         profileId: { "$first": "$profileId" },
-        shareStartDate: { "$first": "$sharedStartDate"},
-        shareEndDate: { "$first": "$sharedEndDate"},
+        sharedStartDate: { "$first": "$shareStartDate"},
+        sharedEndDate: { "$first": "$shareStartDate"},
         isDownloadable: { "$first": "$isDownloadable"},
         createdAt: { "$first": "$createdAt"}
       }
@@ -159,8 +164,8 @@ MlResolver.MlQueryResolver['fetchSharedLibraryDetails'] = (obj, args, context, i
         _id: 1,
         users: 1,
         files: 1,
-        shareStartDate: 1,
-        shareEndDate: 1,
+        sharedStartDate: 1,
+        sharedEndDate: 1,
         isDownloadable: 1,
         createdAt:1,
         ownerInfo: {

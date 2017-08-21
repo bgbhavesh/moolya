@@ -70,7 +70,9 @@ export default class MlInternalSubChapterAccess extends React.Component {
   onStatusChangeCanSearchB(index, event) {
     let status = event.target.checked
     let availabilityDetails = this.state.data
-    availabilityDetails[index]['backendUser']['canSearch'] = status
+    availabilityDetails[index]['backendUser']['canSearch'] = status;
+    availabilityDetails[index]['backendUser']['canView'] = false;
+    availabilityDetails[index]['backendUser']['canTransact'] =false;
     this.setState({data: availabilityDetails}, function () {
       this.sendAccessDataToParent()
     })
@@ -78,8 +80,10 @@ export default class MlInternalSubChapterAccess extends React.Component {
 
   onStatusChangeCanViewB(index, event) {
     let status = event.target.checked
-    let availabilityDetails = this.state.data
-    availabilityDetails[index]['backendUser']['canView'] = status
+    let availabilityDetails = this.state.data;
+    availabilityDetails[index]['backendUser']['canSearch'] = status;
+    availabilityDetails[index]['backendUser']['canView'] = status;
+    availabilityDetails[index]['backendUser']['canTransact'] =false;
     this.setState({data: availabilityDetails}, function () {
       this.sendAccessDataToParent()
     })
@@ -88,7 +92,9 @@ export default class MlInternalSubChapterAccess extends React.Component {
   onStatusChangeCanTransactB(index, event) {
     let status = event.target.checked
     let availabilityDetails = this.state.data
-    availabilityDetails[index]['backendUser']['canTransact'] = status
+    availabilityDetails[index]['backendUser']['canTransact'] = status;
+    availabilityDetails[index]['backendUser']['canSearch'] = status;
+    availabilityDetails[index]['backendUser']['canView'] = status;
     this.setState({data: availabilityDetails}, function () {
       this.sendAccessDataToParent()
     })
@@ -97,7 +103,9 @@ export default class MlInternalSubChapterAccess extends React.Component {
   onStatusChangeCanSearchE(index, event) {
     let status = event.target.checked
     let availabilityDetails = this.state.data
-    availabilityDetails[index]['externalUser']['canSearch'] = status
+    availabilityDetails[index]['externalUser']['canSearch'] = status;
+    availabilityDetails[index]['externalUser']['canView'] = false;
+    availabilityDetails[index]['externalUser']['canTransact'] =false;
     this.setState({data: availabilityDetails}, function () {
       this.sendAccessDataToParent()
     })
@@ -105,8 +113,10 @@ export default class MlInternalSubChapterAccess extends React.Component {
 
   onStatusChangeCanViewE(index, event) {
     let status = event.target.checked
-    let availabilityDetails = this.state.data
-    availabilityDetails[index]['externalUser']['canView'] = status
+    let availabilityDetails = this.state.data;
+    availabilityDetails[index]['externalUser']['canSearch'] = status;
+    availabilityDetails[index]['externalUser']['canView'] = status;
+    availabilityDetails[index]['externalUser']['canTransact'] =false;
     this.setState({data: availabilityDetails}, function () {
       this.sendAccessDataToParent()
     })
@@ -114,8 +124,10 @@ export default class MlInternalSubChapterAccess extends React.Component {
 
   onStatusChangeCanTransactE(index, event) {
     let status = event.target.checked
-    let availabilityDetails = this.state.data
-    availabilityDetails[index]['externalUser']['canTransact'] = status
+    let availabilityDetails = this.state.data;
+    availabilityDetails[index]['externalUser']['canSearch'] = status;
+    availabilityDetails[index]['externalUser']['canView'] = status;
+    availabilityDetails[index]['externalUser']['canTransact'] = status;
     this.setState({data: availabilityDetails}, function () {
       this.sendAccessDataToParent()
     })

@@ -224,6 +224,7 @@ class MlAuthorization
           case "INTERNALREQUESTS":
           case "SERVICECARD":
           case "OFFICE":              /*adding office for others five admin */
+          case "SHARE":
           case "HIERARCHY":
           case "PROCESSSETUP": {
             if(!userProfileDetails.isMoolya){
@@ -273,7 +274,9 @@ class MlAuthorization
           break;
           case 'HIERARCHY':{
             var hierarchy = variables.hierarchy;
-            return {clusterId:hierarchy.clusterId, subChapterId:hierarchy.subChapterId}
+            if(hierarchy){
+              return {clusterId:hierarchy.clusterId, subChapterId:hierarchy.subChapterId}
+            }
           }
             break;
         }

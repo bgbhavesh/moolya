@@ -144,8 +144,11 @@ class MlAppPortfolio extends Component{
       const response = await fetchIdeaByPortfolioId(portfolioId);
       this.setState({loading:false, ideaId : response._id});
   }
-  getIdeatorIdeaDetails(details){
+  getIdeatorIdeaDetails(details, privateKey){
     this.setState({idea:details});
+    if(!_.isEmpty(privateKey)){
+      this.updatePrivateKeys(privateKey)
+    }
   }
 
   getPortfolioDetails(details, privateKey){

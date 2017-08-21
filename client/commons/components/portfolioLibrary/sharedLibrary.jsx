@@ -61,14 +61,12 @@ export default class  SharedLibrary extends React.Component {
    */
 
   componentWillMount() {
-    console.log('--shared Library props--',this.props)
     let data = this.props.data;
     let that = this;
     let Image = [];
     let Video = [];
     let Template = [];
     let Document = [];
-    console.log('data', data)
     data.map(function(fileInfo){
       let type = fileInfo.file.fileType;
       if(type === 'image') {
@@ -86,12 +84,6 @@ export default class  SharedLibrary extends React.Component {
       }
     })
   }
-
-  componentWillReceiveProps(newProps) {
-    console.log('--Newprops--',newProps)
-  }
-
-
 
   /**
    * Method :: toggle
@@ -221,7 +213,7 @@ export default class  SharedLibrary extends React.Component {
         <div className="thumbnail" key={id}>
           <a href="" data-toggle="modal" data-target=".documentpop"
              onClick={that.randomDocument.bind(that, show.file.url, id)}>
-            <img src={show.file.url} /></a>
+            <img src="/images/doc.png"/></a>
           <div id="images" className="title">{show.file.fileName}</div>
         </div>
       )
@@ -268,8 +260,6 @@ export default class  SharedLibrary extends React.Component {
 
 
   connectionManagement(userId) {
-    console.log(userId);
-    // this.setState({userId: userId})
     this.getSharedFiles(userId);
   }
 

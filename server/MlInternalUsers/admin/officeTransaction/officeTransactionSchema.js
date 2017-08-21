@@ -66,6 +66,7 @@ let officeTransaction = `
       transactionType : String
       profileId      : String
       orderSubscriptionDetails : OrderSubscriptionDetail
+      activity       : String
     }
     
     type PaymentDetail {

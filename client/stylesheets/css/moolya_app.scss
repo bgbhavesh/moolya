@@ -556,7 +556,7 @@ background:$mlGray; position: absolute; top: 0; z-index: 100; width: 100%;
           }
         }
     }
-.funders_list .funders_list_block h3{padding: 10px 45px; font-size: 20px; font-weight: normal; color: #ffe144; border-bottom: #161e27 solid 1px; margin-bottom: 0px;}
+.funders_list .funders_list_block h3{padding: 10px; font-size: 20px; font-weight: normal; color: #ffe144; border-bottom: #161e27 solid 1px; margin-bottom: 0px; text-overflow: ellipsis; width: 200px; height: 45px; overflow: hidden; margin: 0 auto; white-space: nowrap;}
 .funders_list .funders_list_block .list_icon{font-size: 22px; color: #fff; border-top: #34404e solid 1px; padding: 12px 0px 0px; font-weight: normal;}
 .funders_list .funders_list_block .list_icon .ml{background: #B9C5CC; border-radius: 50%; padding: 14px; color: #273545; text-shadow: 0px 1px 1px #eee;font-size: 70px;display: inline-block;border: 2px solid #161e27;}
 .funders_list .funders_list_block .list_icon img{border-radius: 50%;display: inline-block;border: 2px solid #161e27;width:102px;height:102px;}

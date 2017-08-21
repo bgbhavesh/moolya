@@ -49,8 +49,8 @@ class MlAppProfileHeader extends Component {
   /**fetching user details from registration*/
   componentWillMount(){
     let user = Meteor.user();
-    if( user && user.profile && user.profile.profileImage) {
-      this.setState({profilePic:user.profile.profileImage});
+    if( user && user.profile && user.profile.profileImage && user.profile.firstName) {
+      this.setState({profilePic:user.profile.profileImage, firstName: user.profile.firstName});
     }
     console.log(user);
     const resp = this.fetchUserDetails();
@@ -110,8 +110,8 @@ class MlAppProfileHeader extends Component {
             </ul>
           </div>
           <div className="ml_app_profile" role="navigation">
-          <h1 id="NavLbl" className="" style={{'backgroundImage':`url(${this.state.profilePic})`, 'backgroundPosition': 'center center'}}></h1>
-            <ol>
+          <h1 id="NavLbl"  data-toggle="tooltip" title={`Welcome ${this.state.firstName}`} data-placement="left" className="" style={{'backgroundImage':`url(${this.state.profilePic})`, 'backgroundPosition': 'center center'}}><span className="profile_context ml ml-ideator"></span></h1>
+            <ol>`
               <li data-toggle="tooltip" title="My Profile" data-placement="right">
                 <a href="/app/myprofile"><span className="ml my-ml-blank_Profile_3"></span></a>
               </li>

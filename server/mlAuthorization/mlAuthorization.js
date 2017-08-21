@@ -273,7 +273,9 @@ class MlAuthorization
           break;
           case 'HIERARCHY':{
             var hierarchy = variables.hierarchy;
-            return {clusterId:hierarchy.clusterId, subChapterId:hierarchy.subChapterId}
+            if(hierarchy){
+              return {clusterId:hierarchy.clusterId, subChapterId:hierarchy.subChapterId}
+            }
           }
             break;
         }

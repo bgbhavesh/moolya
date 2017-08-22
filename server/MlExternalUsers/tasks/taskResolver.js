@@ -11,7 +11,7 @@ MlResolver.MlQueryResolver['fetchTasks'] = (obj, args, context, info) => {
     userId: context.userId,
     isCurrentVersion: true
   };
-  if(args.profileId){
+  if(args.profileId !== "all"){
     query.profileId = args.profileId;
   };
   let result = mlDBController.find('MlTask', query, context).fetch()

@@ -8,11 +8,12 @@ import MlUserContext from '../../MlExternalUsers/mlUserContext'
 var _ = require('lodash')
 
 MlResolver.MlQueryResolver['fetchActivities'] = (obj, args, context, info) => {
-  let query = {
-    userId:context.userId,
-    profileId: args.profileId,
-    isCurrentVersion: true
-  };
+  if(args.profileId === "all" ) {
+   var query = {userId: context.userId, isCurrentVersion: true};
+  } else {
+    var query = {userId:context.userId, profileId: args.profileId, isCurrentVersion: true
+    };
+  }
   if(args.isInternal || args.isExternal){
     let typeQuery = _.pickBy(args, _.isBoolean)
     query = _.extend(query, typeQuery)

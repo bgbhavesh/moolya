@@ -149,6 +149,7 @@ export async function fetchActivitiesActionHandler (profileId) {
     query($profileId:String) {
       fetchActivities(profileId: $profileId) {
         displayName
+        profileId
         imageLink
         mode
         _id

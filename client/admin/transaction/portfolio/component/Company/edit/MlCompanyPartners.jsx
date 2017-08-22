@@ -5,7 +5,7 @@ import {Popover, PopoverContent, PopoverTitle} from "reactstrap";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../../client/admin/utils/formElemUtil";
 import _ from "lodash";
 import {multipartASyncFormHandler} from "../../../../../../../client/commons/MlMultipartFormAction";
-import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../../actions/findPortfolioFunderDetails";
+import {fetchCompanyDetailsHandler} from "../../../actions/findCompanyPortfolioDetails";
 import {fetchPortfolioActionHandler} from '../../../actions/findClusterIdForPortfolio'
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler';
 var FontAwesome = require('react-fontawesome');
@@ -22,28 +22,19 @@ export default class MlCompanyPartners extends React.Component {
     this.state = {
       loading: false,
       data: {},
-      funderPrincipal: [],
-      funderTeam: [],
+      partners: [],
+      partnersList: [],
       popoverOpenP: false,
-      popoverOpenT: false,
       selectedIndex: -1,
-      funderPrincipalList: [],
-      funderTeamList: [],
       selectedVal: null,
       selectedObject: "default",
       title:'',
-      selectedTab: 'principal',
       clusterId:'',
       privateKeys:[],
       privateKey:{},
-      principalContext:'active',
-      teamContext:''
     }
     this.handleBlur.bind(this);
     this.onSavePrincipalAction.bind(this);
-    this.onSaveTeamAction.bind(this);
-    this.fetchPrincipalDetails.bind(this);
-    this.fetchTeamDetails.bind(this);
     this.libraryAction.bind(this);
     return this;
   }
@@ -59,8 +50,7 @@ export default class MlCompanyPartners extends React.Component {
   }
 
   componentWillMount() {
-    this.fetchPrincipalDetails();
-    this.fetchTeamDetails();
+    this.fetchPortfolioDetails();
     this.fetchClusterId();
   }
   async fetchClusterId() {
@@ -69,48 +59,19 @@ export default class MlCompanyPartners extends React.Component {
       this.setState({loading: false, clusterId: response.clusterId});
     }
   }
-  async fetchPrincipalDetails() {
+  async fetchPortfolioDetails() {
     let that = this;
-    let portfolioDetailsId = that.props.portfolioDetailsId;
-    let empty = _.isEmpty(that.context.funderPortfolio && that.context.funderPortfolio.principal)
-    if (empty) {
-      const response = await fetchfunderPortfolioPrincipal(portfolioDetailsId);
-      if (response) {
-        this.setState({loading: false, funderPrincipal: response, funderPrincipalList: response});
-        // this.setState({privateKeys:response.privateFields})
-        // _.each(response.privateFields, function (pf) {
-        //   $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-        // })
+    let portfolioDetailsId=that.props.portfolioDetailsId;
+    let empty = _.isEmpty(that.context.companyPortfolio && that.context.companyPortfolio.partners)
+    if(empty){
+      const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
+      if (response && response.partners) {
+        this.setState({loading: false, partners: response.partners, partnersList: response.partners});
+      }else{
+        this.setState({loading:false})
       }
-    } else {
-      // var funderPrincipalList = [];
-      // funderPrincipalList.push(that.context.funderPortfolio.principal)
-      this.setState({
-        loading: false,
-        funderPrincipal: that.context.funderPortfolio.principal,
-        funderPrincipalList: that.context.funderPortfolio.principal
-      });
-    }
-  }
-  async fetchTeamDetails() {
-    let that = this;
-    let portfolioDetailsId = that.props.portfolioDetailsId;
-    let empty = _.isEmpty(that.context.funderPortfolio && that.context.funderPortfolio.team)
-    if (empty) {
-      const response = await fetchfunderPortfolioTeam(portfolioDetailsId);
-      if (response) {
-        this.setState({loading: false, funderTeam: response, funderTeamList: response});
-        _.each(response.privateFields, function (pf) {
-          $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-        })
-      }
-
-    } else {
-      this.setState({
-        loading: false,
-        funderTeam: that.context.funderPortfolio.team,
-        funderTeamList: that.context.funderPortfolio.team
-      });
+    }else{
+      this.setState({loading: false, partners: that.context.companyPortfolio.partners, partnersList: that.context.companyPortfolio.partners});
     }
   }
 
@@ -144,29 +105,18 @@ export default class MlCompanyPartners extends React.Component {
     })
   }
   onSavePrincipalAction(e) {
-    this.setState({funderPrincipalList: this.state.funderPrincipal, popoverOpenP: false})
-  }
-  onSaveTeamAction(e) {
-    this.setState({funderTeamList: this.state.funderTeam, popoverOpenT: false})
+    this.setState({partnersList: this.state.partners, popoverOpenP: false})
   }
 
   addPrincipal() {
     this.setState({selectedObject: "default", popoverOpenP: !(this.state.popoverOpenP), data: {}})
-    if (this.state.funderPrincipal) {
-      this.setState({selectedIndex: this.state.funderPrincipal.length})
+    if (this.state.partners) {
+      this.setState({selectedIndex: this.state.partners.length})
     } else {
       this.setState({selectedIndex: 0})
     }
   }
 
-  addTeam() {
-    this.setState({selectedObject: "default", popoverOpenT: !(this.state.popoverOpenT), data: {}})
-    if (this.state.funderTeam) {
-      this.setState({selectedIndex: this.state.funderTeam.length})
-    } else {
-      this.setState({selectedIndex: 0})
-    }
-  }
   optionsBySelectTitle(val){
     let data = _.cloneDeep(this.state.data);
     data.title=val;
@@ -190,7 +140,7 @@ export default class MlCompanyPartners extends React.Component {
   }
 
   onPrincipalTileClick(index, e) {
-    let cloneArray = _.cloneDeep(this.state.funderPrincipal);
+    let cloneArray = _.cloneDeep(this.state.partners);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
     if (details && details.logo) {
@@ -212,38 +162,17 @@ export default class MlCompanyPartners extends React.Component {
 
 
   }
-  onTeamTileClick(index, e) {
-    let cloneArray = _.cloneDeep(this.state.funderTeam);
-    let details = cloneArray[index]
-    details = _.omit(details, "__typename");
-    if (details && details.logo) {
-      delete details.logo['__typename'];
-    }
-    this.setState({
-      selectedIndex: index,
-      data: details,
-      selectedObject: index,
-      popoverOpenT: !(this.state.popoverOpenT),
-      // "selectedVal": details.typeOfFundingId
-    });
-
-    setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
-  }
 
   sendDataToParent() {
     let data = this.state.data;
     selectedTab = this.state.selectedTab;
-    if (selectedTab == "principal") {
-      let fun = this.state.funderPrincipal;
-      let funderPrincipal = _.cloneDeep(fun);
+
+      let fun = this.state.partners;
+      let partners = _.cloneDeep(fun);
       data.index = this.state.selectedIndex;
-      funderPrincipal[this.state.selectedIndex] = data;
+    partners[this.state.selectedIndex] = data;
       let arr = [];
-      _.each(funderPrincipal, function (item) {
+      _.each(partners, function (item) {
         for (var propName in item) {
           if (item[propName] === null || item[propName] === undefined) {
             delete item[propName];
@@ -254,44 +183,14 @@ export default class MlCompanyPartners extends React.Component {
         // let updateItem = _.omit(newItem, 'logo');
         arr.push(newItem)
       })
-      funderPrincipal = arr;
+    partners = arr;
       // funderPrincipal=_.omit(funderPrincipal,["privateFields"]);
-      this.setState({funderPrincipal: funderPrincipal})
-      this.props.getPrincipalDetails(funderPrincipal, this.state.privateKey);
+      this.setState({partners: partners})
+      this.props.getPartnersDetails(partners, this.state.privateKey);
 
-    } else if (selectedTab == "team") {
-
-      let fun = this.state.funderTeam;
-      let funderTeam = _.cloneDeep(fun);
-      data.index = this.state.selectedIndex;
-      funderTeam[this.state.selectedIndex] = data;
-      let arr = [];
-      _.each(funderTeam, function (item) {
-        for (var propName in item) {
-          if (item[propName] === null || item[propName] === undefined) {
-            delete item[propName];
-          }
-        }
-        let newItem = _.omit(item, "__typename");
-        newItem =_.omit(newItem,"privateFields");
-        // let updateItem = _.omit(newItem, 'logo');
-        arr.push(newItem)
-      })
-      funderTeam = arr;
-      // funderTeam=_.omit(funderTeam,["privateFields"]);
-      this.setState({funderTeam: funderTeam})
-      this.props.getTeamDetails(funderTeam, this.state.privateKey);
-    }
 
   }
 
-  onTabSelect(tab, e) {
-    this.setState({
-      selectedTab: tab,
-      popoverOpenP: false,
-      popoverOpenT: false,
-    });
-  }
   onPrincipalLogoFileUpload(e) {
     if (e.target.files[0].length == 0)
       return;
@@ -301,20 +200,7 @@ export default class MlCompanyPartners extends React.Component {
       moduleName: "PORTFOLIO",
       actionName: "UPLOAD",
       portfolioDetailsId: this.props.portfolioDetailsId,
-      portfolio: {principal: [{logo: {fileUrl: '', fileName: fileName}, index: this.state.selectedIndex}]}
-    };
-    let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this,file));
-  }
-  onTeamLogoFileUpload(e) {
-    if (e.target.files[0].length == 0)
-      return;
-    let file = e.target.files[0];
-    let fileName = e.target.files[0].name;
-    let data = {
-      moduleName: "PORTFOLIO",
-      actionName: "UPLOAD",
-      portfolioDetailsId: this.props.portfolioDetailsId,
-      portfolio: {team: [{logo: {fileUrl: '', fileName: fileName}, index: this.state.selectedIndex}]}
+      portfolio: {partners: [{logo: {fileUrl: '', fileName: fileName}, index: this.state.selectedIndex}]}
     };
     let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this,file));
   }
@@ -348,38 +234,20 @@ export default class MlCompanyPartners extends React.Component {
 
   async fetchOnlyImages() {
 
-    if(this.state.selectedTab == "principal"){
-      const response = await fetchfunderPortfolioPrincipal(this.props.portfolioDetailsId);
-      if (response && !_.isEmpty(response)) {
+    const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
+      if (response && response.partners && !_.isEmpty(response.partners)) {
         let thisState = this.state.selectedIndex;
-        let dataDetails = this.state.funderPrincipal
+        let dataDetails = this.state.partners
         let cloneBackUp = _.cloneDeep(dataDetails);
         let specificData = cloneBackUp[thisState];
         if (specificData) {
-          let curUpload = response[thisState]
+          let curUpload = response.partners[thisState]
           specificData['logo'] = curUpload['logo']
-          this.setState({loading: false, funderPrincipal: cloneBackUp, principalContext:"active", teamContext:""});
+          this.setState({loading: false, partners: cloneBackUp, principalContext:"active", teamContext:""});
         } else {
           this.setState({loading: false, principalContext:"active", teamContext:""})
         }
       }
-    }else if(this.state.selectedTab == "team" ){
-      const response = await fetchfunderPortfolioTeam(this.props.portfolioDetailsId);
-      if (response && !_.isEmpty(response)) {
-        let thisState = this.state.selectedIndex;
-        let dataDetails = this.state.funderTeam
-        let cloneBackUp = _.cloneDeep(dataDetails);
-        let specificData = cloneBackUp[thisState];
-        if (specificData) {
-          let curUpload = response[thisState]
-          specificData['logo'] = curUpload['logo']
-          this.setState({loading: false, funderTeam: cloneBackUp, teamContext:"active", principalContext:""});
-        } else {
-          this.setState({loading: false, teamContext:"active", principalContext:""})
-        }
-      }
-    }
-
   }
 
   render() {
@@ -393,27 +261,13 @@ export default class MlCompanyPartners extends React.Component {
     let titleOption={options: { variables: {type : "TITLE",hierarchyRefId:this.state.clusterId}}};
     let that = this;
     const showLoader = that.state.loading;
-    let funderPrincipalList = that.state.funderPrincipal || [];
+
     return (
       <div>
         {showLoader === true ? (<MlLoader/>) : (
           <div className="portfolio-main-wrap">
             <div className="main_wrap_scroll">
               <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true}>
-                {/*<div className="ml_tabs ml_tabs_large">*/}
-                  {/*<ul className="nav nav-pills" id="myTabs">*/}
-                    {/*<li id="principal" className={that.state.principalContext} onClick={this.onTabSelect.bind(this, "principal")}>*/}
-                      {/*<a href="#1a" data-toggle="tab">Principal</a>*/}
-                    {/*</li>*/}
-                    {/*<li id="team" className={that.state.teamContext} onClick={this.onTabSelect.bind(this, "team")}>*/}
-                      {/*<a href="#2a" data-toggle="tab">Team</a>*/}
-                    {/*</li>*/}
-                  {/*</ul>*/}
-
-                  {/*principle list*/}
-                  <div className="tab-content clearfix requested_input">
-                    {/*<div className="tab-pane active" id="1a">*/}
-                    <div id="1a" className={`tab-pane ${that.state.principalContext}`}>
                       <div className="col-lg-12">
                         <div className="row">
                           <div className="col-lg-2 col-md-4 col-sm-4" onClick={this.addPrincipal.bind(this)}>
@@ -424,7 +278,7 @@ export default class MlCompanyPartners extends React.Component {
                               </div>
                             </a>
                           </div>
-                          {that.state.funderPrincipalList.map(function (principal, idx) {
+                          {that.state.partnersList.map(function (principal, idx) {
                             return (
                               <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
                                 <a href="#" id={"create_clientP" + idx}>
@@ -448,12 +302,8 @@ export default class MlCompanyPartners extends React.Component {
 
                         </div>
                       </div>
-                    </div>
-                  {/*</div>*/}
-                </div>
               </ScrollArea>
 
-              {/*principle popover*/}
               <Popover placement="right" isOpen={this.state.popoverOpenP}
                        target={"create_clientP" + this.state.selectedObject} toggle={this.toggle}>
                 <PopoverTitle> Add New Member </PopoverTitle>
@@ -500,11 +350,11 @@ export default class MlCompanyPartners extends React.Component {
                                          onClick={this.onLockChange.bind(this, "designation", "isDesignationPrivate")}/>
                           </div>
                           <div className="form-group">
-                            <input type="text" placeholder="Company Name" name="principalcompanyName"
-                                   defaultValue={this.state.data.principalcompanyName}
+                            <input type="text" placeholder="Company Name" name="partnerCompanyName"
+                                   defaultValue={this.state.data.partnerCompanyName}
                                    className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
                             <FontAwesome name='unlock' className="input_icon un_lock" id="isCompanyNamePrivate"
-                                         onClick={this.onLockChange.bind(this,"principalcompanyName", "isCompanyNamePrivate")}/>
+                                         onClick={this.onLockChange.bind(this,"partnerCompanyName", "isCompanyNamePrivate")}/>
 
                           </div>
 
@@ -533,11 +383,11 @@ export default class MlCompanyPartners extends React.Component {
 
                           </div>
                           <div className="form-group">
-                            <input type="text" placeholder="About" name="aboutPrincipal"
-                                   defaultValue={this.state.data.aboutPrincipal}
+                            <input type="text" placeholder="About" name="aboutPartner"
+                                   defaultValue={this.state.data.aboutPartner}
                                    className="form-control float-label" onBlur={this.handleBlur.bind(this)}/>
-                            <FontAwesome name='unlock' className="input_icon un_lock" id="isAboutPrincipalPrivate"
-                                         onClick={this.onLockChange.bind(this,"aboutPrincipal", "isAboutPrincipalPrivate")}/>
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isAboutPartnerPrivate"
+                                         onClick={this.onLockChange.bind(this,"aboutPartner", "isAboutPartnerPrivate")}/>
 
                           </div>
                           <div className="form-group">
@@ -576,5 +426,5 @@ export default class MlCompanyPartners extends React.Component {
   }
 };
 MlCompanyPartners.contextTypes = {
-  funderPortfolio: PropTypes.object,
+  companyPortfolio: PropTypes.object,
 };

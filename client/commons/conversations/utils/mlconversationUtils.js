@@ -28,12 +28,12 @@ class ConversationUtils{
   //   rkConversations.connect(url)
   // }
 
-  getUnreadNotifications(rkConversation, callback){
-    rkNotifications.getNotifications(rkConversation, callback)
+  getUnreadNotifications(callback){
+    rkNotifications.getNotifications(rkConversations, callback)
   }
 
   getNotifications(callback){
-    rkNotifications.listenForNotifications(rkConversation, callback)
+    rkNotifications.listenForNotifications(rkConversations, callback)
   }
 }
 

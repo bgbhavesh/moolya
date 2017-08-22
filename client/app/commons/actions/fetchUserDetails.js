@@ -1,6 +1,7 @@
 
 import gql from 'graphql-tag'
 import {appClient} from '../../../app/core/appConnection';
+import mlConversationUtils from '../../../commons/conversations/utils/mlconversationUtils'
 
 export async function fetchUserDetailsHandler() {
   const result = await appClient.query({
@@ -69,4 +70,10 @@ export async function requestPortfolioForGoLive(resId) {
   })
   const response = result.data.requestForGoLive;
   return response
+}
+
+
+export function getNotifications(cb) {
+  mlConversationUtils.getUnreadNotifications(cb)
+  mlConversationUtils.getNotifications(cb)
 }

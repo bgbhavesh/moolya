@@ -21,6 +21,7 @@ export async function fetchUserDetailsHandler() {
             userName
             countryId
             registrationType
+            communityName
           }
         }
       }

@@ -175,6 +175,30 @@ MlResolver.MlQueryResolver['fetchInstitutionDetails'] = (obj, args, context, inf
   return;
 }
 
+
+MlResolver.MlQueryResolver['fetchInstitutePortfolioCharts'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let startChartsArray = {}
+    let portfolio = MlInstitutionPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    startChartsArray["employmentOfCompanyChart"] = portfolio&&portfolio.employmentOfCompanyChart?portfolio.employmentOfCompanyChart:[];
+    startChartsArray["profitRevenueLiabilityChart"] = portfolio&&portfolio.profitRevenueLiabilityChart?portfolio.profitRevenueLiabilityChart:[];
+    startChartsArray["reviewOfCompanyChart"] = portfolio&&portfolio.reviewOfCompanyChart?portfolio.reviewOfCompanyChart:[];
+    startChartsArray["employeeBreakupDepartmentChart"] = portfolio&&portfolio.employeeBreakupDepartmentChart?portfolio.employeeBreakupDepartmentChart:[];
+    if(startChartsArray && startChartsArray.employeeBreakupDepartmentChart){
+      startChartsArray.employeeBreakupDepartmentChart.map(function(data,index) {
+        if(startChartsArray.employeeBreakupDepartmentChart[index]){
+          let entityData = MlDepartments.findOne({"_id":data.ebdDepartment}) || {};
+          startChartsArray.employeeBreakupDepartmentChart[index].ebdDepartmentName = entityData.displayName || "";
+        }
+
+      })
+    }
+    if (startChartsArray) {
+      return startChartsArray
+    }
+  }
+}
+
 updateArrayofObjects = (updateFor, source) =>{
   if(_.isArray(updateFor) && _.isArray(source)){
     _.each(updateFor, function (obj) {

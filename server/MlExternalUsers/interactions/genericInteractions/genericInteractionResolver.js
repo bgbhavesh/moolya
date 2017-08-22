@@ -14,6 +14,7 @@ var generateConnectionCode=function(u1,u2){
   return connectionCode;
 }
 MlResolver.MlQueryResolver['fetchInteractionsCount'] = (obj, args, context, info) => {
+  console.log("....................")
   var counterList = [];
   var actionsList=args.actionNames||[];
   var resourceId=args.resourceId;
@@ -39,6 +40,7 @@ MlResolver.MlQueryResolver['fetchInteractionsCount'] = (obj, args, context, info
               break;
         case 'view':
               let viewCount=MlViews.find({resourceType:resourceType,resourceId:resourceId}).count();
+              // let viewCount = mlDBController.find('MlViews', {resourceType: resourceType, resourceId: resourceId}).count();
               counterList.push({'actionName':'view',count:viewCount});
               break;
         case 'partner':

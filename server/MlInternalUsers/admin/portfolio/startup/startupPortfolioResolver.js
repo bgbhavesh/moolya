@@ -91,6 +91,9 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioManagement'] = (obj, args, cont
   return [];
 }
 
+/**
+ * Details of all Startup aboutUs Internal Tabs
+ * */
 MlResolver.MlQueryResolver['fetchStartupPortfolioAboutUs'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {
     let startAboutUsArray = {}

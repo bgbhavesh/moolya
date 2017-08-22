@@ -173,6 +173,7 @@ if(!platformrole){
     assignRoles: assignRoles,
     modules:modules,
     isActive:true,
+    isNonMoolyaAvailable : true,
     isSystemDefined: true
   }
   MlRoles.update({roleName:"subchapteradmin"}, {$set:role}, {upsert:true})
@@ -210,6 +211,7 @@ if(!platformrole){
     assignRoles: assignRoles,
     modules:modules,
     isActive:true,
+    isNonMoolyaAvailable : true,
     isSystemDefined: true
   }
   MlRoles.update({roleName:"communityadmin"}, {$set:role}, {upsert:true})

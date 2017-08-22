@@ -260,6 +260,10 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
                   response = MlResolver.MlMutationResolver['updateServiceProviderPortfolio'](obj, args, context, info)
                 }
                 break;
+                case "Companies":{
+                  response = MlResolver.MlMutationResolver['updateCompanyPortfolio'](obj, args, context, info)
+                }
+                break;
               case "Institutions":{
                 response = MlResolver.MlMutationResolver['updateInstitutionPortfolio'](obj, args, context, info)
               }

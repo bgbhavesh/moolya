@@ -10,10 +10,11 @@ import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
-import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails';
+import {fetchCompanyDetailsHandler} from "../../../../actions/findCompanyPortfolioDetails";
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from '../../../../../../../commons/components/loader/loader'
 
+const KEY = 'clients'
 
 export default class MlCompanyClients extends React.Component{
   constructor(props, context){
@@ -21,6 +22,7 @@ export default class MlCompanyClients extends React.Component{
     this.state={
       loading: false,
       data:{},
+      privateKey:{},
       clients:this.props.employmentDetails || [],
       popoverOpen:false,
       selectedIndex:-1,
@@ -68,18 +70,28 @@ export default class MlCompanyClients extends React.Component{
       delete details.logo['__typename'];
     }
     this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.companyId});
+    setTimeout(function () {
+      _.each(details.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+    }, 10)
   }
 
-  onLockChange(field, e){
+  onLockChange(fieldName, field, e){
+    var isPrivate = false
     let details = this.state.data||{};
     let key = e.target.id;
     details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
       details=_.extend(details,{[key]:true});
+      isPrivate = true
     }else{
       details=_.extend(details,{[key]:false});
     }
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
+    this.setState({privateKey:privateKey})
+
     this.setState({data:details}, function () {
       this.sendDataToParent()
     })
@@ -138,13 +150,14 @@ export default class MlCompanyClients extends React.Component{
           delete item[propName];
         }
       }
-      newItem = _.omit(item, "__typename");
+      let newItem = _.omit(item, "__typename");
+      newItem = _.omit(newItem, ["privateFields"])
       let updateItem = _.omit(newItem, 'logo');
       arr.push(updateItem)
     })
     clients = arr;
     this.setState({clients:clients})
-    this.props.getClients(clients);
+    this.props.getClients(clients, this.state.privateKey);
 
   }
 
@@ -186,8 +199,8 @@ export default class MlCompanyClients extends React.Component{
   }
 
   async fetchOnlyImages(){
-    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
-    if (response) {
+    const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId, KEY);
+    if (response && response.clients) {
       let thisState=this.state.selectedIndex;
       let dataDetails =this.state.clients
       let cloneBackUp = _.cloneDeep(dataDetails);
@@ -203,8 +216,8 @@ export default class MlCompanyClients extends React.Component{
   }
 
   async imagesDisplay(){
-    const response = await fetchDetailsStartupActionHandler(this.props.portfolioDetailsId);
-    if (response) {
+    const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId, KEY);
+    if (response && response.clients) {
       let dataDetails =this.state.clients;
       if(!dataDetails || dataDetails.length<1){
         dataDetails = response&&response.clients?response.clients:[]
@@ -286,19 +299,12 @@ export default class MlCompanyClients extends React.Component{
                 <div className="medium-popover"><div className="row">
                   <div className="col-md-12">
                     <div className="form-group">
-                      {/*<Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}*/}
-                                    {/*labelKey={'label'} queryType={"graphql"} query={query}*/}
-                                    {/*isDynamic={true}*/}
-                                    {/*onSelect={this.onOptionSelected.bind(this)}*/}
-                                    {/*selectedValue={this.state.selectedVal}/>*/}
-                      <input type="text" name="companyName" placeholder="Company Name" className="form-control float-label" defaultValue={this.state.data.companyName} onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon" id="isCompanyNamePrivate"  defaultValue={this.state.data.isCompanyNamePrivate}  onClick={this.onLockChange.bind(this, "isCompanyNamePrivate")}/>
-                      <input type="checkbox" className="lock_input" id="isCompanyNamePrivate" checked={this.state.data.isCompanyNamePrivate}/>
+                      <input type="text" name="clientName" placeholder="Client Name" className="form-control float-label" defaultValue={this.state.data.clientName} onBlur={this.handleBlur.bind(this)}/>
+                      <FontAwesome name='unlock' className="input_icon" id="isClientNamePrivate"  defaultValue={this.state.data.isClientNamePrivate}  onClick={this.onLockChange.bind(this, "isClientNamePrivate")}/>
                     </div>
                     <div className="form-group">
-                      <input type="text" name="description" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.description} onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate"  defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/>
-                      <input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
+                      <input type="text" name="clientDescription" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.clientDescription} onBlur={this.handleBlur.bind(this)}/>
+                      <FontAwesome name='unlock' className="input_icon" id="isClientDescriptionPrivate"  defaultValue={this.state.data.isClientDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isClientDescriptionPrivate")}/>
                     </div>
                     {displayUploadButton?<div className="form-group">
                       <div className="fileUpload mlUpload_btn">

@@ -9,10 +9,12 @@ import {graphql} from "react-apollo";
 import _ from "lodash";
 import Datetime from "react-datetime";
 import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFormAction";
-import {fetchStartupPortfolioAwards} from "../../../actions/findPortfolioStartupDetails";
+import {fetchCompanyDetailsHandler} from "../../../actions/findCompanyPortfolioDetails";
 import MlLoader from "../../../../../../commons/components/loader/loader";
 import {putDataIntoTheLibrary} from '../../../../../../commons/actions/mlLibraryActionHandler'
 var FontAwesome = require('react-fontawesome');
+
+const KEY = "awardsRecognition"
 
 export default class MlCompanyAwards extends React.Component{
   constructor(props, context){
@@ -20,6 +22,7 @@ export default class MlCompanyAwards extends React.Component{
     this.state={
       loading: true,
       data:{},
+      privateKey:{},
       awards: [],
       popoverOpen:false,
       selectedIndex:-1,
@@ -56,9 +59,11 @@ export default class MlCompanyAwards extends React.Component{
     let portfolioDetailsId=that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.companyPortfolio && that.context.companyPortfolio.awardsRecognition)
     if(empty){
-      const response = await fetchStartupPortfolioAwards(portfolioDetailsId);
-      if (response) {
-        this.setState({loading: false, awards: response, awardsList: response});
+      const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
+      if (response && response.awardsRecognition) {
+        this.setState({loading: false, awards: response.awardsRecognition, awardsList: response.awardsRecognition});
+      }else{
+        this.setState({loading:false})
       }
     }else{
       this.setState({loading: false, awards: that.context.companyPortfolio.awardsRecognition, awardsList: that.context.companyPortfolio.awardsRecognition});
@@ -85,18 +90,27 @@ export default class MlCompanyAwards extends React.Component{
       delete details.logo['__typename'];
     }
     this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.awardId});
+    setTimeout(function () {
+      _.each(details.privateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+    }, 10)
   }
 
-  onLockChange(field, e){
+  onLockChange(fiedName, field, e){
+    var isPrivate = false
     let details = this.state.data||{};
     let key = e.target.id;
     details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
       details=_.extend(details,{[key]:true});
+      isPrivate = true
     }else{
       details=_.extend(details,{[key]:false});
     }
+    var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
+    this.setState({privateKey:privateKey})
     this.setState({data:details}, function () {
       this.sendDataToParent()
     })
@@ -172,12 +186,13 @@ export default class MlCompanyAwards extends React.Component{
           }
         }
         newItem = _.omit(item, "__typename");
+        newItem = _.omit(newItem, ["privateFields"])
         //let updateItem = _.omit(newItem, 'logo');
         arr.push(newItem)
     })
     awards = arr;
     this.setState({awards:awards})
-    this.props.getAwardsDetails(awards);
+    this.props.getAwardsDetails(awards, this.state.privateKey);
   }
 
   onLogoFileUpload(e){
@@ -220,14 +235,14 @@ export default class MlCompanyAwards extends React.Component{
 
 
   async fetchOnlyImages(){
-    const response = await fetchStartupPortfolioAwards(this.props.portfolioDetailsId);
-    if (response) {
+    const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId, KEY);
+    if (response && response.awardsRecognition) {
       let thisState=this.state.selectedIndex;
       let dataDetails =this.state.awards
       let cloneBackUp = _.cloneDeep(dataDetails);
       let specificData = cloneBackUp[thisState];
       if(specificData){
-        let curUpload=response[thisState]
+        let curUpload=response.awardsRecognition[this.state.selectedIndex]
         specificData['logo']= curUpload['logo']
         this.setState({loading: false, awards:cloneBackUp });
 
@@ -239,11 +254,11 @@ export default class MlCompanyAwards extends React.Component{
 
 
   async imagesDisplay(){
-    const response = await fetchStartupPortfolioAwards(this.props.portfolioDetailsId);
-    if (response) {
+    const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId, KEY);
+    if (response && response.awardsRecognition) {
       let dataDetails =this.state.awards
       if(!dataDetails || dataDetails.length<1){
-        dataDetails = response?response:[]
+        dataDetails = response.awardsRecognition?response.awardsRecognition:[]
       }
       let cloneBackUp = _.cloneDeep(dataDetails);
       if(cloneBackUp && cloneBackUp.length>0){
@@ -335,8 +350,8 @@ export default class MlCompanyAwards extends React.Component{
                                   closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)} isValidDate={ valid }/>
                       </div>
                       <div className="form-group">
-                        <input type="text" name="description" placeholder="About" className="form-control float-label" defaultValue={this.state.data.description}  onBlur={this.handleBlur.bind(this)}/>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isDescriptionPrivate}/>
+                        <input type="text" name="awardsDescription" placeholder="About" className="form-control float-label" defaultValue={this.state.data.awardsDescription}  onBlur={this.handleBlur.bind(this)}/>
+                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAwardsDescriptionPrivate" defaultValue={this.state.data.isAwardsDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isAwardsDescriptionPrivate")}/>
                       </div>
                       {displayUploadButton?<div className="form-group">
                         <div className="fileUpload mlUpload_btn">

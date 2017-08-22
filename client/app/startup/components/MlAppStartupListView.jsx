@@ -33,7 +33,7 @@ export default class MlAppStartupListView extends Component {
             <h3>{startup.aboutUs&&startup.aboutUs.description?startup.aboutUs.description:""}</h3>
             <div className="list_icon"><span className="ml ml-startup"></span></div>
             <div className="block_footer">
-              <span>New York</span>
+              <span>{startup.chapterName}</span>
             </div>
           </div>
         </a>

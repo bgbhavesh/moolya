@@ -27,6 +27,8 @@ export const mlAppServiceProviderConfig = new MlAppViewer({
                         about{
                           aboutTitle
                         }
+                        chapterName
+                        accountType
                       }
                     }
                 }

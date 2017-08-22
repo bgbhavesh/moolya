@@ -231,6 +231,67 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
     //todo://need to include the search params in the query it self this is need to be change
     data = ideator;
     count = ideator.length;
+
+    // let pipeline = [
+    //   {"$match": {isActive: true} },
+    //   {
+    //     '$lookup': {
+    //       from: 'mlPortfolioDetails', localField: 'portfolioId', foreignField: '_id',
+    //       as: 'port'
+    //     }
+    //   },
+    //   {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
+    //   {'$match': {"port.status": "gone live", 'port.communityCode': "IDE", subChapterId: subChapterQuery } },
+    //   {
+    //     '$lookup': {
+    //       from: 'users', localField: 'userId', foreignField: '_id',
+    //       as: 'user'
+    //     }
+    //   },
+    //   {'$unwind': {"path": "$user", "preserveNullAndEmptyArrays": true}},
+    //   {
+    //     "$project": {
+    //       "userId": "$userId",
+    //       "ideas": {
+    //         "title": "$title",
+    //         "description": "$description"
+    //       },
+    //       "chapterName": "$port.chapterName",
+    //       "name": "$user.profile.firstName" + " " + "$user.profile.lastName",
+    //       "accountType": "$port.accountType"
+    //     }
+    //   }
+    // ];let pipeline = [
+    //   {"$match": {isActive: true} },
+    //   {
+    //     '$lookup': {
+    //       from: 'mlPortfolioDetails', localField: 'portfolioId', foreignField: '_id',
+    //       as: 'port'
+    //     }
+    //   },
+    //   {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
+    //   {'$match': {"port.status": "gone live", 'port.communityCode': "IDE", subChapterId: subChapterQuery } },
+    //   {
+    //     '$lookup': {
+    //       from: 'users', localField: 'userId', foreignField: '_id',
+    //       as: 'user'
+    //     }
+    //   },
+    //   {'$unwind': {"path": "$user", "preserveNullAndEmptyArrays": true}},
+    //   {
+    //     "$project": {
+    //       "userId": "$userId",
+    //       "ideas": {
+    //         "title": "$title",
+    //         "description": "$description"
+    //       },
+    //       "chapterName": "$port.chapterName",
+    //       "name": "$user.profile.firstName" + " " + "$user.profile.lastName",
+    //       "accountType": "$port.accountType"
+    //     }
+    //   }
+    // ];
+
   }
   /*********************************************end of all portfolio queries************************************/
   else if (args.module == "externalUsers"){

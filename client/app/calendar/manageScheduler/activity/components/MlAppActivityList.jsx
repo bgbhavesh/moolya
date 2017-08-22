@@ -27,38 +27,41 @@ export default class MlAppActivityList extends React.Component{
     }
   }
   addActivity() {
-    let profileId = FlowRouter.getParam('profileId');
-    console.log(profileId)
+    let profileId = FlowRouter.getParam('profileId') ;
     FlowRouter.go('/app/calendar/manageSchedule/'+profileId+'/createActivity');
   }
 
-  editMode(index, id) {
-    console.log(id)
-    let profileId = FlowRouter.getParam('profileId');
+  editMode(id, selectedProfileId) {
+    let profileId = FlowRouter.getParam('profileId')=== "all" ? selectedProfileId : FlowRouter.getParam('profileId')  ;
     FlowRouter.go('/app/calendar/manageSchedule/'+profileId+'/editActivity?id='+id);
   }
 
+  fetchAllActivity() {
+    this.fetchActivities();
+  }
+
   render(){
+    let profileId = FlowRouter.getParam('profileId')
     let that = this;
     return (
       <div className="app_main_wrap" style={{'overflow':'auto'}}>
         <div className="app_padding_wrap">
-          <MlAppScheduleHead type="activity"/>
+          <MlAppScheduleHead fetchAllActivity={that.fetchAllActivity.bind(that)}type="activity"/>
           <div className="col-lg-12" id="show">
             <div className="row">
-              <div className="col-lg-2 col-md-4 col-sm-4">
+              {profileId !== "all" ? <div className="col-lg-2 col-md-4 col-sm-4">
                 <a href=" " onClick={() => that.addActivity()}>
                   <div className="list_block notrans">
                     <div className="hex_outer"><span className="ml ml-plus "></span></div>
                     <h3>Create an activity</h3>
                   </div>
                 </a>
-              </div>
+              </div>: <div></div> }
 
               {this.state.activities.map(function (actvity, index) {
                 return (
                   <div className="col-lg-2 col-md-4 col-sm-4" key={index}>
-                    <div className="list_block img_list_block notrans" onClick={()=>that.editMode(index,actvity._id)}>
+                    <div className="list_block img_list_block notrans" onClick={()=>that.editMode(actvity._id, actvity.profileId)}>
                       <img src={actvity.imageLink ? actvity.imageLink : "/images/activity_1.jpg"}/>
                       <h3>{actvity.displayName}</h3>
                     </div>

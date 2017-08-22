@@ -28,8 +28,8 @@ export default class MlAppTaskList extends React.Component{
     }
   }
 
-  editTask(taskId){
-    let profileId = this.props.profileId
+  editTask(taskId, SelectedprofileId){
+    let profileId = this.props.profileId === "all" ? SelectedprofileId : this.props.profileId;
     FlowRouter.go('/app/calendar/manageSchedule/'+profileId+'/editTask/'+taskId)
   }
 
@@ -46,18 +46,18 @@ export default class MlAppTaskList extends React.Component{
           <MlAppScheduleHead type="task"/>
           <div className="col-lg-12">
             <div className="row">
-              <div className="col-lg-2 col-md-4 col-sm-4">
+              {that.props.profileId !== "all" ?<div className="col-lg-2 col-md-4 col-sm-4">
                 <a href="" onClick={()=>this.onClickAdd()}>
                   <div className="list_block notrans">
                     <div className="hex_outer"><span className="ml ml-plus "></span></div>
                     <h3>Create a task</h3>
                   </div>
                 </a>
-              </div>
+              </div>: <div></div>}
               { this.state.tasks.map(function (task, index) {
                 return (
                   <div className="col-lg-2 col-md-4 col-sm-4" key={index}>
-                    <div className="list_block img_list_block notrans" onClick={that.editTask.bind(that, task.taskId)}>
+                    <div className="list_block img_list_block notrans" onClick={that.editTask.bind(that, task.taskId, task.profileId)}>
                       <img src="/images/task_1.jpg"/>
                       <h3>{task.displayName}</h3>
                     </div>

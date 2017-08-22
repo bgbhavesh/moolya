@@ -28,8 +28,13 @@ export default class MlAppInternalTaskItem extends React.Component {
       }, function () {
         this.fetchTaskInfo();
       }.bind(this));
-
     }
+    let mySwiper = new Swiper('.conversation-slider', {
+      speed: 400,
+      spaceBetween:20,
+      slidesPerView:3
+    });
+
   }
 
   async fetchTaskInfo() {
@@ -39,6 +44,7 @@ export default class MlAppInternalTaskItem extends React.Component {
       if(response){
         response.attendees = response.attendees ? response.attendees : [];
         response.docs = response.docs ? response.docs : [];
+        console.log('response', response)
         this.setState({
           taskInfo:response
         })
@@ -96,8 +102,17 @@ export default class MlAppInternalTaskItem extends React.Component {
                       <div className="panel-body">
                         <div className="swiper-container conversation-slider blocks_in_form">
                           <div className="swiper-wrapper">
-                            {task.docs.map(function(doc){
-                              <div className="swiper-slide"><FontAwesome name='eye'/><FontAwesome name='download'/></div>
+                            {task.docs.map(function(doc) {
+                              return(
+                                <div className="swiper-slide">
+                                  <a href={doc.fileUrl} target="_blank">
+                                    <FontAwesome name='eye'/>
+                                  </a>
+                                  <a href={doc.fileUrl} download="FileName">
+                                    <FontAwesome name='download'/>
+                                  </a>
+                                </div>
+                              )
                             })}
                           </div>
                         </div>

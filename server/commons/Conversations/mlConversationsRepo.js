@@ -24,7 +24,7 @@ class ConversationsRepo{
     var ret = await this.sendRequest('/createApplication', body, 'post', true);
     console.log(ret)
     if(ret.success){
-      MlConversations.insert(ret.result.apiKey)
+      this.setApiKey(ret.result.apiKey)
     }
     return ret;
   }

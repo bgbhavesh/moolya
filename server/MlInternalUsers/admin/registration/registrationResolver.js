@@ -496,6 +496,12 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         /** create the profile of user*/
         userId = mlDBController.insert('users', userObject, context)
         if (userId) {
+
+
+          /** Creating user record in Conversations */
+
+
+
           /** Email & MobileNumber verification updates to user*/
           mlDBController.update('users', {username: userObject.username},
             {

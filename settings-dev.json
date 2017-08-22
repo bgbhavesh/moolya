@@ -37,7 +37,6 @@
     "fromEmailAddr":"qasmtp@moolya.in",
     "isEmailDomainCheckEnabled":true,
     "isAuditEnabled":true,
-    "appId": "59887368690da64b7adfe12d",
-    "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBOYW1lIjoia2Fwb29yQGdtYWlsLmNvbSIsImFwcElkIjoiNTk4ODczNjg2OTBkYTY0YjdhZGZlMTJkIiwiaWF0IjoxNTAyMTE0NjY0fQ.6unnvf6BucthTdT9G9z25IFwG8-bYAQzDb9hSrE3WKY"
+    "conversationsBaseURL":"http://localhost:8081"
   }
 }

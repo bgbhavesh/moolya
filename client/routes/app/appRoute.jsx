@@ -82,6 +82,7 @@ import {mlAppFunderConfig2} from "../../app/funders/config/mlAppFunderConfig2";
  */
 import MlAppMyAppointment from '../../app/calendar/myAppointments/components/MlAppMyAppointment';
 import MlAppMyTaskAppointment from '../../app/calendar/myCalendar/components/myTaskAppointments/containers/MlAppMyTaskAppointments';
+import mlConversationUtils from '../../commons/conversations/utils/mlconversationUtils'
 
 export const appSection = FlowRouter.group({
   prefix: "/app",
@@ -92,6 +93,7 @@ export const appSection = FlowRouter.group({
       if (!userId) {
         redirect('/login')
       }
+      mlConversationUtils.init();
   }]
 });
 

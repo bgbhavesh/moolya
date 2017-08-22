@@ -39,7 +39,7 @@ export default class InteractionsCounter extends React.Component{
 
   render(){
     let config = [
-      {name: 'like',displayName:'Like',iconClass: 'ml my-ml-my_likes_2'},
+      {name: 'like',displayName:'Like',iconClass: 'ml my-ml-like'},
       {name: 'connect', displayName:'Connections',iconClass: 'ml flaticon-ml-handshake'},
       {name: 'collaborate',displayName:'Collaborations',iconClass: 'ml flaticon-ml-networking'},
       {name: 'favourite',displayName:'Favourites',iconClass: 'ml my-ml-favourites'},

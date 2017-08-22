@@ -125,35 +125,32 @@ export default class MlAssignTask extends React.Component {
 
   onFileUploadCallBack( fileName, resp ) {
     if ( resp ) {
-      let docs = this.state.docs || [];
+      let documents = this.state.docs || [];
       let link = $.parseJSON(resp).result;
       let documentAttributes = {
         fileName: fileName,
         fileUrl: link
       };
-      docs.push(documentAttributes);
-      this.setState({uploadedDocument: documentAttributes});
+      documents.push(documentAttributes);
+      this.setState({docs: documents});
     }
   }
 
   deleteDocs(index) {
-    console.log(index)
     let docs = this.state.docs || []
     docs.splice(index, 1)
     this.setState({docs: docs})
   }
 
   attachedDocuments() {
-    let docs = this.state.docs || []
     let that = this;
-    let documents =  docs.map(function(docsToView, index){
+    let documents = that.state.docs || []
+    let documentsUploaded =  documents.map(function(docsToView, index){
       return(
-        <ul className="doc_upload">
         <li><a><FontAwesome name='minus'onClick={that.deleteDocs.bind(that, index)}/></a><img src="/images/pdf.png"/></li>
-        </ul>
       )
     })
-    return documents;
+    return documentsUploaded;
   }
 
 
@@ -161,8 +158,12 @@ export default class MlAssignTask extends React.Component {
     const that = this;
     return(
       <div className="popover-lg">
-        <h1>Attached Documents <a href="#" className="pull-right"><input type="file" className="pull-right attendes-btn"  onChange={this.documentUpload.bind(this)}/>Add</a></h1>
-          {this.attachedDocuments()}
+        <h1>Attached Documents <div className="fileUpload upload_file_mask pull-right" id="create_client">
+          <a href="javascript:void(0);">
+            <input type="file" className="upload_file upload" onChange={that.documentUpload.bind(that)}/>Add</a></div></h1>
+        <ul className="doc_upload">
+        {this.attachedDocuments()}
+      </ul>
         <div className="clearfix" />
         <h1>
            Set priority of attendes

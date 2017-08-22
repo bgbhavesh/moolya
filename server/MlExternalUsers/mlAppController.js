@@ -10,7 +10,7 @@ import { Accounts } from 'meteor/accounts-base';
 import bodyParser from 'body-parser';
 import express from 'express';
 import _ from 'lodash';
-// import mlConversationsRepo from '../commons/Conversations/mlConversationsRepo'
+import mlConversationsRepo from '../commons/Conversations/mlConversationsRepo'
 
 import getContext from '../commons/mlAuthContext'
 import MlResolver from '../commons/mlResolverDef';
@@ -132,16 +132,16 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>
         }))
     }
 
-    // if(config.conversationPath){
-    //   graphQLServer.options(config.conversationPath, cors());
-    //   graphQLServer.post(config.conversationPath, bodyParser.json(), Meteor.bindEnvironment(function (req, res){
-    //     var context = getContext({req});
-    //     mlConversationsRepo.login(context, function (ret) {
-    //       res.send(ret)
-    //     });
-    //
-    //   }))
-    // }
+    if(config.conversationPath){
+      graphQLServer.options(config.conversationPath, cors());
+      graphQLServer.post(config.conversationPath, bodyParser.json(), Meteor.bindEnvironment(function (req, res){
+        var context = getContext({req});
+        mlConversationsRepo.login(context, function (ret) {
+          res.send(ret)
+        });
+
+      }))
+    }
     WebApp.connectHandlers.use(Meteor.bindEnvironment(graphQLServer));
 }
 createApolloServer(defaultGraphQLOptions, defaultServerConfig);

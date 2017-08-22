@@ -130,7 +130,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
     // if (!isNonMoolyaSubChapter) {
       // query = {status: 'gone live', communityCode: "SPS"}
     // } else {
-      query = {status: 'gone live', communityCode: "SPS", subChapterId: subChapterQuery}
+    //   query = {status: 'gone live', communityCode: "SPS", subChapterId: subChapterQuery}
     // }
     // let value = mlDBController.find('MlPortfolioDetails', query, context).fetch()
     // let portId = _.map(value, '_id')

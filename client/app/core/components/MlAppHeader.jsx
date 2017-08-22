@@ -103,6 +103,7 @@ class MlAppProfileHeader extends Component {
             <div className="noti_count">1</div>
             <FontAwesome name='bell-o'/></a>
           <a href="#" className="pull-right header_search"><FontAwesome name='search'/></a>
+          <span className="pull-right context_name" style={{'padding':'1px 7px','backgroundColor':'#ef4647','color':'#fff','lineHeight':'18px','borderRadius':'2px','fontSize':'12px','marginTop':'17px'}}>{data && data.registrationInfo && data.registrationInfo.communityName?data.registrationInfo.communityName:''}</span>
           <div style={{'display': 'none'}} className="ml_app_notification">
             <ul className="unstyled">
               <li>
@@ -111,7 +112,7 @@ class MlAppProfileHeader extends Component {
             </ul>
           </div>
           <div className="ml_app_profile" role="navigation">
-          <h1 id="NavLbl"  data-toggle="tooltip" title={`Welcome ${data && data.firstName?data.firstName:"User"}`} data-placement="left" className="" style={{'backgroundImage':`url(${data && data.profileImage?data.profileImage:"/images/ideator_01.png"})`, 'backgroundPosition': 'center center'}}><span className="profile_context ml ml-ideator"></span></h1>
+          <h1 id="NavLbl"  data-toggle="tooltip" title={`Welcome ${data && data.firstName?data.firstName:"User"}`} data-placement="left" className="" style={{'backgroundImage':`url(${data && data.profileImage?data.profileImage:"/images/ideator_01.png"})`, 'backgroundPosition': 'center center'}}>{/*<span className="profile_context ml ml-ideator"></span>*/}</h1>
             <ol>`
               <li data-toggle="tooltip" title="My Profile" data-placement="right">
                 <a href="/app/myprofile"><span className="ml my-ml-blank_Profile_3"></span></a>

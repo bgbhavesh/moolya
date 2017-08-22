@@ -3,6 +3,7 @@ var FontAwesome = require('react-fontawesome');
 import {fetchInstitutionDetailsHandler} from '../../../actions/findPortfolioInstitutionDetails'
 import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnotator'
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
+import NoData from '../../../../../../commons/components/noData/noData';
 
 const KEY = "lookingFor";
 export default class MlInstitutionViewLookingFor extends React.Component {
@@ -107,6 +108,9 @@ export default class MlInstitutionViewLookingFor extends React.Component {
   render(){
     let that = this;
     let lookingforArray = that.state.institutionLookingforList || [];
+    if (lookingforArray && lookingforArray.length === 0) {
+      return (<NoData tabName="Looking For" />);
+    }
     return (
 
       <div id="annotatorContent">

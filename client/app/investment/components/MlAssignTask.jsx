@@ -6,6 +6,7 @@ var FontAwesome = require('react-fontawesome');
 import {fetchAllOfficeMembers} from '../actions/fetchAllTeamMember';
 let Select = require('react-select');
 import {createInternalTaskActionHandler} from '../actions/createInternalTask'
+import {multipartASyncFormHandler} from '../../../commons/MlMultipartFormAction'
 
 export default class MlAssignTask extends React.Component {
 
@@ -17,7 +18,8 @@ export default class MlAssignTask extends React.Component {
       users: [],
       members:[],
       selectedUser:[],
-      docs:[]
+      docs:[],
+      uploadedDocument:{}
     }
   }
   componentDidMount(){
@@ -108,17 +110,59 @@ export default class MlAssignTask extends React.Component {
     });
   }
 
+  documentUpload(e) {
+    let file = e.target.files[0];
+    this.setState({fileType:file.type,fileName:file.name });
+    let fileType = file.type
+    let typeShouldBe = _.compact(fileType.split('/'));
+    if (file  && typeShouldBe && typeShouldBe[1]==="pdf" ) {
+    let data = {moduleName: "PROFILE", actionName: "UPDATE"}
+    let response =  multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, file.name));
+    }else{
+      toastr.error("Please select a Document Format")
+    }
+  }
+
+  onFileUploadCallBack( fileName, resp ) {
+    if ( resp ) {
+      let docs = this.state.docs || [];
+      let link = $.parseJSON(resp).result;
+      let documentAttributes = {
+        fileName: fileName,
+        fileUrl: link
+      };
+      docs.push(documentAttributes);
+      this.setState({uploadedDocument: documentAttributes});
+    }
+  }
+
+  deleteDocs(index) {
+    console.log(index)
+    let docs = this.state.docs || []
+    docs.splice(index, 1)
+    this.setState({docs: docs})
+  }
+
+  attachedDocuments() {
+    let docs = this.state.docs || []
+    let that = this;
+    let documents =  docs.map(function(docsToView, index){
+      return(
+        <ul className="doc_upload">
+        <li><a><FontAwesome name='minus'onClick={that.deleteDocs.bind(that, index)}/></a><img src="/images/pdf.png"/></li>
+        </ul>
+      )
+    })
+    return documents;
+  }
+
+
   render(){
     const that = this;
     return(
       <div className="popover-lg">
-        <h1>Attached Documents <a href="#" className="pull-right">Add</a></h1>
-        <ul className="doc_upload">
-          <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/></li>
-          <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/></li>
-          <li><FontAwesome name='minus'/><img src="/images/data_balance.jpg"/></li>
-        </ul>
-
+        <h1>Attached Documents <a href="#" className="pull-right"><input type="file" className="pull-right attendes-btn"  onChange={this.documentUpload.bind(this)}/>Add</a></h1>
+          {this.attachedDocuments()}
         <div className="clearfix" />
         <h1>
            Set priority of attendes

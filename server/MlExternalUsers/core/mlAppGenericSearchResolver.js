@@ -125,34 +125,64 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   }
 
   else if (args.module == "serviceProviderPortfolioDetails") {
-    console.log(associatedSubChapters)
-    var query = {}
+    // console.log(associatedSubChapters)
+    // var query = {}
     // if (!isNonMoolyaSubChapter) {
       // query = {status: 'gone live', communityCode: "SPS"}
     // } else {
       query = {status: 'gone live', communityCode: "SPS", subChapterId: subChapterQuery}
     // }
-    let value = mlDBController.find('MlPortfolioDetails', query, context).fetch()
-    let portId = _.map(value, '_id')
-    let finalQuery = {portfolioDetailsId: {$in: portId}};
-    data = MlServiceProviderPortfolio.find(finalQuery, findOptions).fetch();
-    count = MlServiceProviderPortfolio.find(finalQuery, findOptions).count();
+    // let value = mlDBController.find('MlPortfolioDetails', query, context).fetch()
+    // let portId = _.map(value, '_id')
+    // let finalQuery = {portfolioDetailsId: {$in: portId}};
+    // data = MlServiceProviderPortfolio.find(finalQuery, findOptions).fetch();
+    // count = MlServiceProviderPortfolio.find(finalQuery, findOptions).count();
+
+
+    let pipleline = [
+      {
+        '$lookup': {
+          from: 'mlPortfolioDetails', localField: 'portfolioDetailsId', foreignField: '_id',
+          as: 'port'
+        }
+      },
+      {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
+      {'$match': {"port.status": "gone live", 'port.communityCode': "SPS",  'port.subChapterId': subChapterQuery} },
+      {'$project': {portfolioDetailsId: 1, about: 1, chapterName: '$port.chapterName', accountType: '$port.accountType'}}
+    ];
+    data = mlDBController.aggregate('MlServiceProviderPortfolio', pipleline, context);
+    count = data.length;
+
   }
 
   else if (args.module == "startupPortfolioDetails") {
-    console.log(associatedSubChapters)
-    var query = {}
+    // console.log(associatedSubChapters)
+    // var query = {}
     // if (!isNonMoolyaSubChapter) {
       // query = {status: 'gone live', communityCode: "STU"}
     // } else {
-      query = {status: 'gone live', communityCode: "STU", subChapterId: subChapterQuery };
+    //   query = {status: 'gone live', communityCode: "STU", subChapterId: subChapterQuery };
     // }
 
-    let value = mlDBController.find('MlPortfolioDetails', query, context).fetch()
-    let portId = _.map(value, '_id')
-    let finalQuery = {portfolioDetailsId: {$in: portId}};
-    data = MlStartupPortfolio.find(finalQuery, findOptions).fetch();
-    count = MlStartupPortfolio.find(finalQuery, findOptions).count();
+    // let value = mlDBController.find('MlPortfolioDetails', query, context).fetch()
+    // let portId = _.map(value, '_id')
+    // let finalQuery = {portfolioDetailsId: {$in: portId}};
+    // data = MlStartupPortfolio.find(finalQuery, findOptions).fetch();
+    // count = MlStartupPortfolio.find(finalQuery, findOptions).count();
+
+    let pipleline = [
+      {
+        '$lookup': {
+          from: 'mlPortfolioDetails', localField: 'portfolioDetailsId', foreignField: '_id',
+          as: 'port'
+        }
+      },
+      {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
+      {'$match': {"port.status": "gone live", 'port.communityCode': "STU",  'port.subChapterId': subChapterQuery} },
+      {'$project': {portfolioDetailsId: 1, aboutUs: 1, chapterName: '$port.chapterName', accountType: '$port.accountType'}}
+    ];
+    data = mlDBController.aggregate('MlStartupPortfolio', pipleline, context);
+    count = data.length;
   }
 
   else if (args.module == "ideatorPortfolioDetails") {
@@ -201,6 +231,67 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
     //todo://need to include the search params in the query it self this is need to be change
     data = ideator;
     count = ideator.length;
+
+    // let pipeline = [
+    //   {"$match": {isActive: true} },
+    //   {
+    //     '$lookup': {
+    //       from: 'mlPortfolioDetails', localField: 'portfolioId', foreignField: '_id',
+    //       as: 'port'
+    //     }
+    //   },
+    //   {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
+    //   {'$match': {"port.status": "gone live", 'port.communityCode': "IDE", subChapterId: subChapterQuery } },
+    //   {
+    //     '$lookup': {
+    //       from: 'users', localField: 'userId', foreignField: '_id',
+    //       as: 'user'
+    //     }
+    //   },
+    //   {'$unwind': {"path": "$user", "preserveNullAndEmptyArrays": true}},
+    //   {
+    //     "$project": {
+    //       "userId": "$userId",
+    //       "ideas": {
+    //         "title": "$title",
+    //         "description": "$description"
+    //       },
+    //       "chapterName": "$port.chapterName",
+    //       "name": "$user.profile.firstName" + " " + "$user.profile.lastName",
+    //       "accountType": "$port.accountType"
+    //     }
+    //   }
+    // ];let pipeline = [
+    //   {"$match": {isActive: true} },
+    //   {
+    //     '$lookup': {
+    //       from: 'mlPortfolioDetails', localField: 'portfolioId', foreignField: '_id',
+    //       as: 'port'
+    //     }
+    //   },
+    //   {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
+    //   {'$match': {"port.status": "gone live", 'port.communityCode': "IDE", subChapterId: subChapterQuery } },
+    //   {
+    //     '$lookup': {
+    //       from: 'users', localField: 'userId', foreignField: '_id',
+    //       as: 'user'
+    //     }
+    //   },
+    //   {'$unwind': {"path": "$user", "preserveNullAndEmptyArrays": true}},
+    //   {
+    //     "$project": {
+    //       "userId": "$userId",
+    //       "ideas": {
+    //         "title": "$title",
+    //         "description": "$description"
+    //       },
+    //       "chapterName": "$port.chapterName",
+    //       "name": "$user.profile.firstName" + " " + "$user.profile.lastName",
+    //       "accountType": "$port.accountType"
+    //     }
+    //   }
+    // ];
+
   }
   /*********************************************end of all portfolio queries************************************/
   else if (args.module == "externalUsers"){

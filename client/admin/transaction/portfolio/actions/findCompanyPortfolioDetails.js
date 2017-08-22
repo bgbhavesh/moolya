@@ -269,6 +269,39 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                         booleanKey
                      }
                   }
+                  partners {
+                    title
+                    firstName
+                    isFirstNamePrivate
+                    lastName
+                    isLastNamePrivate
+                    designation
+                    isDesignationPrivate
+                    partnerCompanyName
+                    isCompanyNamePrivate
+                    duration
+                    isDurationPrivate
+                    yearsOfExperience
+                    isYearsOfExperiencePrivate
+                    qualification
+                    aboutPartner
+                    isQualificationPrivate
+                    isAboutPartnerPrivate
+                    socialLinks{
+                      socialLinkType
+                      userId
+                      isUserIdPrivate
+                    }
+                    index
+                    logo{
+                      fileUrl,
+                      fileName
+                    }
+                    privateFields{
+                      keyName,
+                      booleanKey
+                    }
+                  }  
               }
           }
       `,

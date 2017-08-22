@@ -1712,7 +1712,7 @@ p{margin-top:10px;}
         a{text-decoration: none;
           /*span{background:$mlRed; position: absolute; border-radius: 50%; width: 12px; height: 12px; margin-left: 46px;color: $mlWhite;}*/
           span.icon{background: #ef4647; position: absolute; border-radius: 50%; width: 20px; height: 20px; margin-left: 46px; color: #fff; text-shadow: none; font-size: 13px; line-height: 20px;}
-          img{border-radius:100%; border:$mlRed solid 3px; width: 60px; height: 60px;}
+          img{border-radius:100%; border:$mlRed solid 3px; width: 44px; height: 45px;}
           span.icon_bg {background: $mlRed;color: $mlWhite;display: inline-block;height: 45px;width: 45px;border-radius: 50%;font-size: 28px;line-height: 45px;
             span.icon_lg {
               color: $mlWhite;text-shadow: none;
@@ -1891,3 +1891,21 @@ p{margin-top:10px;}
   text-align: center;
   font-size: 11px;
   padding: 3px;}
+
+.act-btn{
+  .up{display:none}
+  .down{display:inline-block;margin-left:5px;}
+  &.collapsed{
+    .up{display:inline-block;margin-left:5px;}
+    .down{display:none}
+  }
+}
+
+.re-btn{
+  .up{display:none}
+  .down{display:inline-block;margin-left:5px;}
+  &.collapsed{
+    .up{display:inline-block;margin-left:5px;}
+    .down{display:none}
+  }
+}

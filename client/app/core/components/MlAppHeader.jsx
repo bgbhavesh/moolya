@@ -49,10 +49,10 @@ class MlAppProfileHeader extends Component {
   /**fetching user details from registration*/
   componentWillMount(){
     let user = Meteor.user();
-    if( user && user.profile && user.profile.profileImage && user.profile.firstName) {
-      this.setState({profilePic:user.profile.profileImage, firstName: user.profile.firstName});
+    if( user && user.profile && user.profile.profileImage) {
+      console.log(user);
+      this.setState({profilePic:user.profile.profileImage});
     }
-    console.log(user);
     const resp = this.fetchUserDetails();
     return resp
   }
@@ -71,8 +71,8 @@ class MlAppProfileHeader extends Component {
   }
 
   componentWillReceiveProps(user){
-    console.log(user);
     if( user && user.user && user.user.profile &&  user.user.profile.profileImage) {
+      console.log(user);
       this.setState({profilePic:user.user.profile.profileImage});
     }
 
@@ -86,6 +86,7 @@ class MlAppProfileHeader extends Component {
   }
 
   render() {
+    const {data} = this.state
     // console.log(this.regStatus)
     // const showLoader=this.state.loading;
     return (
@@ -110,7 +111,7 @@ class MlAppProfileHeader extends Component {
             </ul>
           </div>
           <div className="ml_app_profile" role="navigation">
-          <h1 id="NavLbl"  data-toggle="tooltip" title={`Welcome ${this.state.firstName}`} data-placement="left" className="" style={{'backgroundImage':`url(${this.state.profilePic})`, 'backgroundPosition': 'center center'}}><span className="profile_context ml ml-ideator"></span></h1>
+          <h1 id="NavLbl"  data-toggle="tooltip" title={`Welcome ${data && data.firstName?data.firstName:"User"}`} data-placement="left" className="" style={{'backgroundImage':`url(${data && data.profileImage?data.profileImage:"/images/ideator_01.png"})`, 'backgroundPosition': 'center center'}}><span className="profile_context ml ml-ideator"></span></h1>
             <ol>`
               <li data-toggle="tooltip" title="My Profile" data-placement="right">
                 <a href="/app/myprofile"><span className="ml my-ml-blank_Profile_3"></span></a>

@@ -215,6 +215,8 @@ let registrationSchema = `
          pendingRegId : String
          externalUserProfiles : [ExternalProfile]
          isActive : Boolean
+         firstName : String
+         profileImage : String
     }
     
    

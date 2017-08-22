@@ -301,7 +301,8 @@ MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context,
           response.isAllowRegisterAs = false
           response.pendingRegId = isAllowRegisterAs._id
         }
-
+        response.profileImage = profile.profileImage
+        response.firstName = profile.firstName
         return response;
       }
     }

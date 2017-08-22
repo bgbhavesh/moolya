@@ -23,6 +23,7 @@ class MlUserContext{
           default_User_Profile.mobileNumber = user.profile.mobileNumber;
           default_User_Profile.firstName = user.profile.firstName;
           default_User_Profile.lastName = user.profile.lastName;
+          default_User_Profile.profileImage = user.profile.profileImage || '';
         }
         return default_User_Profile;
     }

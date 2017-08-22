@@ -152,7 +152,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   isCountryPrivate
                   addressImage
                   makePrivate
-                  branchLogo{
+                  logo{
                     fileName
                     fileUrl
                   }
@@ -595,7 +595,7 @@ export async function fetchStartupDetailsHandler(portfoliodetailsId, key) {
                       isCountryPrivate,
                       addressImage,
                       isAddressImagePrivate,
-                      branchLogo{
+                      logo{
                           fileName,
                           fileUrl
                       },

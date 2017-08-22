@@ -112,14 +112,22 @@ export default class MlStartupViewBranches extends React.Component {
           <div className="col-lg-12">
             <div className="row">
               {branchesArray.map(function (details, idx) {
-                return(<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
-                  <div className="team-block">
-                    <img src={details.logo&&details.logo.fileUrl} className="team_img"/>
-                    <h3>
-                      {details.name&&details.name} <br />
-                    </h3>
+                return(
+                  <div className="col-lg-4 col-md-6 col-sm-6" key={idx}>
+                    <div className="branch_block shadow_block">
+                      <img src={details.logo&&details.logo.fileUrl?details.logo.fileUrl:"/images/headquarters_img.png"}/>
+                      <h3>
+                        {details.branchName} <br />
+                      </h3>
+                      <p>
+                        {details.branchAddress1} <br />
+                      </p>
+                      <p>
+                        {details.branchAddress2} <br />
+                      </p>
+                    </div>
                   </div>
-                </div>)
+                )
               })}
             </div>
           </div>

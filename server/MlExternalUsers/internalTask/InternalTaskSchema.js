@@ -25,6 +25,11 @@ let internalTaskSchema = `
       profileId:String
     }
     
+    type InternalTaskFileAttributes {
+      fileName: String
+      fileUrl: String
+    }
+    
     type InternalTask {
         _id: String
         userId:String
@@ -36,7 +41,7 @@ let internalTaskSchema = `
         resourceId: String
         community: InternalTaskCommunity
         attendees: [InternalTaskAttendees]
-        docs: [String]
+        docs: [InternalTaskFileAttributes]
         status: String
         note: String
         mode: String
@@ -61,6 +66,11 @@ let internalTaskSchema = `
       profileId:String
     }
     
+    input internalTaskFileAttributes {
+      fileName: String
+      fileUrl: String
+    }
+    
     input internalTask {
       _id: String
       userId:String
@@ -71,7 +81,7 @@ let internalTaskSchema = `
       resourceId: String
       community: internalTaskCommunity
       attendees: [internalTaskAttendees]
-      docs: [String]
+      docs: [internalTaskFileAttributes]
       status: String
       note: String
       mode: String

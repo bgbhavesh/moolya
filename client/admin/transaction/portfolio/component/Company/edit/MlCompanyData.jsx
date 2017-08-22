@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
-import {fetchStartupPortfolioData} from '../../../actions/findPortfolioStartupDetails'
+import {fetchCompanyPortfolioData} from "../../../actions/findCompanyPortfolioDetails";
 
 
 export default class MlCompanyData extends React.Component{
@@ -15,7 +15,7 @@ export default class MlCompanyData extends React.Component{
   }
 
   async componentWillMount() {
-    const resp = await fetchStartupPortfolioData(this.props.portfolioDetailsId,this.props.client)
+    const resp = await fetchCompanyPortfolioData(this.props.portfolioDetailsId,this.props.client)
     this.setState({
       uploadedData: resp
     })

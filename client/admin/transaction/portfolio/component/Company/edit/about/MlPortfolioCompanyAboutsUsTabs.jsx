@@ -1,3 +1,4 @@
+
 import React from "react";
 import {render} from "react-dom";
 import MlCompanyAboutUs from "./MlCompanyAboutUs";
@@ -53,43 +54,43 @@ export default class MlPortfolioCompanyAboutsUsTabs extends React.Component{
       {tabClassName: 'tab', panelClassName: 'panel', title:"About Us", component:<MlCompanyAboutUs client={client} isAdmin={true} key="1"  getAboutUs={this.getAboutUs.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} aboutUsDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.aboutUs}/> },
       {tabClassName: 'tab', panelClassName: 'panel', title:"Rating" , component:<MlCompanyRating key="2" getRating={this.getRating.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} ratingDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.rating}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Client", component:<MlCompanyClients client={client} isAdmin={true} key="3" getClients={this.getClients.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} clientsDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.clients}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Services & Products" , component:<MlCompanySP key="4"  getSP={this.getServiceProducts.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} serviceProductsDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.serviceProducts}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Services & Products" , component:<MlCompanySP key="4"  getServiceProducts={this.getServiceProducts.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} serviceProductsDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.serviceProducts}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Information", component:<MlCompanyInformation  key="5" getInfo={this.getInfo.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} informationDetails={this.props.aboutUsDetails&&this.props.aboutUsDetails.information}/>},
     ]
     return tabs;
   }
 
-  getAboutUs(details){
+  getAboutUs(details, privateKey){
     let data = this.state.portfolioAboutUs;
     data=details;
     this.setState({portfolioAboutUs : data})
     let updateItem = _.omit(details, 'logo');
-    this.props.getPortfolioAboutUsDetails(updateItem,"aboutUs");
+    this.props.getPortfolioAboutUsDetails(updateItem,"aboutUs", privateKey);
   }
-  getClients(details){
+  getClients(details, privateKey){
     let data = this.state.portfolioClients;
     data = details;
     this.setState({portfolioClients : data})
-    this.props.getPortfolioAboutUsDetails(data,"clients");
+    this.props.getPortfolioAboutUsDetails(data,"clients", privateKey);
   }
-  getServiceProducts(details){
+  getServiceProducts(details, privateKey){
     let data = this.state.portfolioSP;
     data = details;
     this.setState({portfolioSP : data})
-    this.props.getPortfolioAboutUsDetails(data,"serviceProducts");
+    this.props.getPortfolioAboutUsDetails(data,"serviceProducts", privateKey);
   }
-  getInfo(details){
+  getInfo(details, privateKey){
     let data = this.state.portfolioInfo;
     data = details;
     this.setState({portfolioInfo : data})
-    this.props.getPortfolioAboutUsDetails(data,"information");
+    this.props.getPortfolioAboutUsDetails(data,"information", privateKey);
   }
 
-  getRating(details){
+  getRating(details, privateKey){
     let data = this.state.portfolioRating;
     data = details;
     this.setState({portfolioRating : data})
-    this.props.getPortfolioAboutUsDetails(data,"rating");
+    this.props.getPortfolioAboutUsDetails(data,"rating", privateKey);
   }
 
   componentWillMount()

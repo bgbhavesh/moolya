@@ -127,18 +127,6 @@ let institutePortfolioSchema = `
       employeeBreakupDepartmentChart:[EmployeeBreakupDepartment]
     }
     
-    type dataOutput{
-      balanceSheet: [imagesTypeSchema]
-      profitAndLoss: [imagesTypeSchema]
-      quaterlyReport: [imagesTypeSchema]
-      yearlyReport: [imagesTypeSchema]
-      halfYearlyReport: [imagesTypeSchema]
-      annualReport: [imagesTypeSchema]
-      cashFlow: [imagesTypeSchema]
-      shareHoldings: [imagesTypeSchema]
-      capitalStructure: [imagesTypeSchema]
-      ratio: [imagesTypeSchema]
-    }
     type AboutUs{
         logo      : [imagesTypeSchema]
         institutionDescription : String
@@ -211,19 +199,6 @@ let institutePortfolioSchema = `
     input legalIssue{
         description:String,
         isDescriptionPrivate:Boolean
-    }
-    
-    input data{
-      balanceSheet: [imageFilesInputSchema]
-      profitAndLoss: [imageFilesInputSchema]
-      quaterlyReport: [imageFilesInputSchema]
-      yearlyReport: [imageFilesInputSchema]
-      halfYearlyReport: [imageFilesInputSchema]
-      annualReport: [imageFilesInputSchema]
-      cashFlow: [imageFilesInputSchema]
-      shareHoldings: [imageFilesInputSchema]
-      capitalStructure: [imageFilesInputSchema]
-      ratio: [imageFilesInputSchema]
     }
     
     input imageFilesInputSchema{
@@ -328,13 +303,14 @@ let institutePortfolioSchema = `
         fetchInstitutionPortfolioAboutUs(portfoliodetailsId:String!):InstitutionPortfolioAboutUsOutput
         
         fetchInstitutePortfolioCharts(portfoliodetailsId:String):chartsOutput   
-        fetchInstitutePortfolioData(portfoliodetailsId:String):dataOutput
+        fetchInstitutionPortfolioData(portfoliodetailsId:String):dataOutput
         fetchInstitutionDetails(portfoliodetailsId:String!, key:String):InstitutionPortfolio
     }
     
     type Mutation{
         createInstitutionPortfolio(portfolio:institutionPortfolio):response
         updateInstitutionPortfolio(portfoliodetailsId:String,portfolio:institutionPortfolio):response
+        
     }
 `
 
@@ -345,7 +321,7 @@ let supportedApi = [
   {api:'fetchInstitutionPortfolioAboutUs', actionName:'READ', moduleName:"PORTFOLIO"},
 
   {api:'fetchInstitutePortfolioCharts', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstitutePortfolioData', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchInstitutionPortfolioData', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'createInstitutionPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
   {api:'updateInstitutionPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
   {api:'createInstitutePortfolioChart', actionName:'UPDATE', moduleName:"PORTFOLIO"}
@@ -359,6 +335,8 @@ MlResolver.MlModuleResolver.push(supportedApi)
  * @awardsRecognition : startup
  * @awardsRecognitionOutput : startup
  * @investor : startup
+ * dataOutput : startup
+ * data : startup
  * */
 // {api:'fetchInstitutePortfolioAwards', actionName:'READ', moduleName:"PORTFOLIO"},
 // fetchInstitutePortfolioAwards(portfoliodetailsId:String!):[awardsRecognitionOutput]

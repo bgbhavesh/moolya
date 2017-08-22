@@ -19,7 +19,10 @@ export async function fetchInternalTaskInfo(taskId) {
             userId
             profileId
           }
-          docs
+          docs {
+            fileName
+            fileUrl
+          }
           status
           note
           mode

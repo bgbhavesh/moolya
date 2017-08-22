@@ -5,6 +5,7 @@ import {initializeMlAnnotator} from "../../../../../../commons/annotator/mlAnnot
 import {createAnnotationActionHandler} from "../../../actions/updatePortfolioDetails";
 import {findAnnotations} from "../../../../../../commons/annotator/findAnnotations";
 var FontAwesome = require('react-fontawesome');
+import NoData from '../../../../../../commons/components/noData/noData';
 
 const KEY = 'investor'
 export default class MlInstitutionViewInvestor extends React.Component {
@@ -108,6 +109,9 @@ export default class MlInstitutionViewInvestor extends React.Component {
   render(){
     let that = this;
     let investorArray = that.state.institutionInvestorList || [];
+    if (investorArray && investorArray.length === 0) {
+      return (<NoData tabName="Investor" />);
+    }
     return (
 
       <div id="annotatorContent">

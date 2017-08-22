@@ -10,6 +10,8 @@ export async function fetchUserDetailsHandler() {
        _id
        status
        isAllowRegisterAs
+       firstName
+       profileImage
        pendingRegId
           registrationInfo {
             firstName
@@ -19,6 +21,7 @@ export async function fetchUserDetailsHandler() {
             userName
             countryId
             registrationType
+            communityName
           }
         }
       }

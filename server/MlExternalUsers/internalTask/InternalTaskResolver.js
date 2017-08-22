@@ -24,10 +24,15 @@ MlResolver.MlQueryResolver['fetchMyInternalTask'] = (obj, args, context, info) =
     let profile = new MlUserContext(userId).userProfileDetails(userId);
     let query = {
       attendee: userId,
-      attendeeProfileId: profile.profileId,
-      isSelfAssigned: false
+      attendeeProfileId: profile.profileId
     };
+
     if(args.status && args.status.length) {
+
+      if(args.status.indexOf('pending') >= 0){
+        query.isSelfAssigned = false;
+      }
+
       query['status']= {
         '$in': args.status
       }
@@ -75,6 +80,9 @@ MlResolver.MlQueryResolver['fetchInternalTaskById'] = (obj, args, context, info)
     if(internalTask.community && internalTask.community.code == "IDE"){
       internalTask.client = mlDBController.findOne('MlIdeas', {portfolioId: internalTask.resourceId}).title;
     }
+
+    internalTask.attendees = internalTask.attendees ? internalTask.attendees : [];
+
     let attendees = internalTask.attendees.map(function (attendee) {
       return attendee.userId
     });

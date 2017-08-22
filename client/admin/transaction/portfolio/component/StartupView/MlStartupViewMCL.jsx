@@ -13,7 +13,7 @@ const MEMBERKEY = 'memberships'
 const LICENSEKEY = 'licenses'
 const COMPLIANCEKEY = 'compliances'
 
-export default class MlStartupViewAboutUs extends React.Component {
+export default class MlStartupViewMCL extends React.Component {
   constructor(props) {
     super(props);
     this.state={

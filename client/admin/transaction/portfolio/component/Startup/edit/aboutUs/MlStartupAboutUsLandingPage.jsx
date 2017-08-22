@@ -2,15 +2,12 @@ import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 var Rating = require('react-rating');
 import MlStartupTab from './MlPortfolioStartupAboutsUsTabs'
 import {fetchDetailsStartupActionHandler} from '../../../../actions/findPortfolioStartupDetails'
-import underscore from "underscore";
-
 
 export default class MlStartupAboutUs extends React.Component{
   constructor(props){
@@ -41,7 +38,6 @@ export default class MlStartupAboutUs extends React.Component{
   getStartUpState() {
     this.setState({aboutStartup: false})
     this.props.backClickHandler();
-
   }
 
   render(){
@@ -90,7 +86,7 @@ export default class MlStartupAboutUs extends React.Component{
                   empty="fa fa-star-o empty"
                   full="fa fa-star fill"
                   fractions={2}
-                  initialRate={this.state.startupAboutUs.rating && this.state.startupAboutUs.rating.rating ? this.state.startupAboutUs.rating.rating : 0}
+                  initialRate={this.state.startupAboutUs.rating && this.state.startupAboutUs.rating.rating ? Number(this.state.startupAboutUs.rating.rating) : 0}
                   readonly={true}
                 />
               </div>

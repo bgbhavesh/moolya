@@ -29,6 +29,8 @@ export const mlAppStartupConfig = new MlAppViewer({
                         aboutUs{                                            
                             description
                         }
+                      chapterName
+                      accountType
                       }
                    }                                                                                                     
                 }

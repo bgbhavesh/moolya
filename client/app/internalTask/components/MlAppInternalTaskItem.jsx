@@ -17,16 +17,18 @@ export default class MlAppInternalTaskItem extends React.Component {
         userInfo:[],
         community:{}
       },
-      taskId:''
+      taskId: props.taskId
     }
   }
 
-  componentWillReceiveProps(){
-    if(this.state.taskId != this.props.taskId){
+  componentWillReceiveProps(newProps){
+    if(this.state.taskId != newProps.taskId){
       this.setState({
-        taskId: this.props.taskId
-      });
-      this.fetchTaskInfo();
+        taskId: newProps.taskId
+      }, function () {
+        this.fetchTaskInfo();
+      }.bind(this));
+
     }
   }
 

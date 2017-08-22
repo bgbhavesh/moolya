@@ -23,7 +23,7 @@ export async function fetchServiceProviderPortfolioAwards(portfoliodetailsId) {
                 fileName
                 fileUrl
               } 
-              isPrivate
+              makePrivate
               privateFields{
                   keyName,
                   booleanKey
@@ -57,7 +57,7 @@ export async function fetchServiceProviderPortfolioClients(portfoliodetailsId) {
                 fileName
                 fileUrl
               } 
-              isPrivate
+              makePrivate
               privateFields{
                   keyName,
                   booleanKey
@@ -400,7 +400,7 @@ export async function fetchServiceProviderClients(portfoliodetailsId) {
                       fileName
                       fileUrl
                     }
-                    isPrivate
+                    makePrivate
                     index
                     privateFields{
                       keyName,

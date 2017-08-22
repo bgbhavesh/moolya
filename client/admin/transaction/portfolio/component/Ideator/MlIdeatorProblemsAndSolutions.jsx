@@ -250,4 +250,5 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
 };
 MlIdeatorProblemsAndSolutions.contextTypes = {
   ideatorPortfolio: PropTypes.object,
+
 };

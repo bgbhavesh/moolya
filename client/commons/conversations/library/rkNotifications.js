@@ -5,7 +5,7 @@ class Notifications{
     constructor(){
     }
 
-    kgetNotifications(rkConversation, callback){
+    getNotifications(rkConversation, callback){
         rkConversation.socketUtils.emitMessage(rkConversation.socket, 'get_notification', {}, callback);
     }
 

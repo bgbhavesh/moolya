@@ -15,7 +15,6 @@ class MlAddUserType extends React.Component {
     this.state = {
       communityCode: ''
     }
-    this.addEventHandler.bind(this);
     this.createUserType.bind(this);
     this.onCommunitySelect.bind(this);
     return this;
@@ -30,11 +29,6 @@ class MlAddUserType extends React.Component {
     OnToggleSwitch(true, true);
     var WinHeight = $(window).height();
     $('.admin_main_wrap ').height(WinHeight - $('.admin_header').outerHeight(true));
-  }
-
-  async addEventHandler() {
-    /*const resp=await this.updateUserType()
-     return resp;*/
   }
 
   async handleError(response) {

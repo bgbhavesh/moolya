@@ -3,6 +3,7 @@ import {fetchInstitutionDetailsHandler} from '../../../actions/findPortfolioInst
 import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
+import NoData from '../../../../../../commons/components/noData/noData';
 
 const KEY = 'awardsRecognition'
 
@@ -108,6 +109,9 @@ export default class MlInstitutionViewAwards extends React.Component {
   render(){
     let that = this;
     let awardsArray = that.state.institutionAwardsList || [];
+    if (awardsArray && awardsArray.length === 0) {
+      return (<NoData tabName="Awards" />);
+    }
     return (
 
       <div id="annotatorContent">

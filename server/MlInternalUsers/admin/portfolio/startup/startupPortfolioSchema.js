@@ -617,6 +617,8 @@ let startupPortfolioSchema = `
         communityType        : String
         portfolioDetailsId   : String
         aboutUs              : aboutUsOutput
+        chapterName         : String
+        accountType         : String
     }
     
     type Query{

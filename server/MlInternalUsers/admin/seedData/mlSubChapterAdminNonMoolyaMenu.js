@@ -607,21 +607,12 @@ if (Meteor.isServer) {
                   "isLink": true,
                   "isMenu": true,
                   "image": "",
-                  "subMenu": [
-                    {
-                      "link": "/admin/users/history",
-                      "name": "History",
-                      "uniqueId": "users_History",
-                      "subMenuMappingId": "users_History",
-                      "subMenusId": "users_cluster",
-                      "dynamicLink" : true,
-                      "dynamicLinkHandler" : "",
-                      "isLink": true,
-                      "isMenu": true,
-                      "image": ""
-                    }
-                  ]
+                  "dynamicLink": true,
+                  "dynamicLinkHandler": "",
+                  "subMenusId": "users_cluster",
+                  "subMenuMappingId": "users_History"
                 }
+
               ]
             },
 

@@ -4,6 +4,7 @@ import {fetchInstitutionDetailsHandler} from '../../../actions/findPortfolioInst
 import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
+import NoData from '../../../../../../commons/components/noData/noData';
 
 const KEY = 'management'
 export default class MlInstitutionViewManagement extends React.Component {
@@ -109,6 +110,9 @@ export default class MlInstitutionViewManagement extends React.Component {
   render(){
     let that = this;
     let managementArray = that.state.institutionManagementList || [];
+    if (managementArray && managementArray.length === 0) {
+      return (<NoData tabName="Management" />);
+    }
     return (
 
       <div id="annotatorContent">

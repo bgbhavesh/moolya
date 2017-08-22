@@ -29,13 +29,6 @@ export default class MlAppInternalPendingTask extends React.Component{
     $("#show").click(function(){
       $("#details-div").show();
 
-      var mySwiper = new Swiper('.blocks_in_form', {
-        speed: 400,
-        spaceBetween:20,
-        slidesPerView:3,
-        pagination: '.swiper-pagination',
-        paginationClickable: true
-      });
       var $frame = $('#centered');
       var $wrap  = $frame.parent();
 
@@ -44,11 +37,9 @@ export default class MlAppInternalPendingTask extends React.Component{
         horizontal: 1,
         itemNav: 'centered',
         smart: 1,
-        activateOn: 'click',
         mouseDragging: 1,
         touchDragging: 1,
         releaseSwing: 1,
-        startAt:0,
         scrollBar: $wrap.find('.scrollbar'),
         scrollBy: 1,
         speed: 300,
@@ -56,9 +47,8 @@ export default class MlAppInternalPendingTask extends React.Component{
         easing: 'easeOutExpo',
         dragHandle: 1,
         dynamicHandle: 1,
-        clickBar: 1,
       });
-      $("#show").hide();
+      // $("#show").hide();
     });
 
     $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+20));
@@ -122,7 +112,7 @@ export default class MlAppInternalPendingTask extends React.Component{
                   <ul className="topscroll_listblock">
                     {that.state.tasks.map(function (task, index) {
                       return (
-                        <li key={index} onClick={()=>that.selectTask(task._id)}>
+                        <li key={index} onClick={()=>that.selectTask(task)} className={task._id == that.state.selectTask ? "active" : ''}>
                           <div className="list_block list_block_intrests notrans">
                             <div className="hex_outer"><img src="/images/valuation.png"/></div>
                             <h3>{task.name}</h3>

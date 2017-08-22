@@ -329,7 +329,7 @@ export async function fetchDetailsInstitutionActionHandler(portfoliodetailsId) {
   return aboutUsArray
 }
 
-export async function fetchStartupPortfolioData(portfoliodetailsId, connection) {
+export async function fetchInstitutionPortfolioData(portfoliodetailsId, connection) {
 
   const result = await connection.query({
     query: gql`
@@ -384,17 +384,17 @@ export async function fetchStartupPortfolioData(portfoliodetailsId, connection) 
     },
     forceFetch: true
   })
-  const id = result.data.fetchStartupPortfolioData;
+  const id = result.data.fetchInstitutionPortfolioData;
   let data = _.omit(id, '__typename')
   return data
   // return id
 }
 
-export async function fetchDetailsStartupChartsActionHandler(portfoliodetailsId) {
+export async function fetchInstitutionChartsDetailsActionHandler(portfoliodetailsId) {
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
-            fetchStartupPortfolioCharts(portfoliodetailsId: $portfoliodetailsId) {
+            fetchInstitutePortfolioCharts(portfoliodetailsId: $portfoliodetailsId) {
                
                 employmentOfCompanyChart{
                     eofAbout
@@ -443,7 +443,7 @@ export async function fetchDetailsStartupChartsActionHandler(portfoliodetailsId)
     forceFetch: true
   })
 
-  const data = result.data.fetchStartupPortfolioCharts;
+  const data = result.data.fetchInstitutePortfolioCharts;
   /*let data = _.omit(id,'__typename');*/
   let chartsArray = {}
   chartsArray["employmentOfCompanyChart"] = _.map(data.employmentOfCompanyChart, function (row) {

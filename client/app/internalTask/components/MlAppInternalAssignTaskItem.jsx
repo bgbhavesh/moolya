@@ -19,22 +19,27 @@ export default class MlAppInternalAssignTaskItem extends React.Component {
         community:{}
       },
       taskId:''
-    }
+    };
     console.log('Props:',props)
   }
 
-  componentWillReceiveProps(){
-    if(this.state.taskId != this.props.taskId){
+  componentWillReceiveProps(nextProps) {
+    console.log('nextProps', nextProps , this.state.taskId);
+    if(this.state.taskId !== nextProps.taskId){
+      console.log('Test');
       this.setState({
-        taskId: this.props.taskId
-      });
-      this.fetchTaskInfo();
+        taskId: nextProps.taskId
+      }, function () {
+        this.fetchTaskInfo();
+      }.bind(this));
+
     }
   }
 
   async fetchTaskInfo() {
-    if(this.props.taskId){
-      let response = await fetchInternalTaskInfo(this.props.taskId);
+    console.log(this.props.taskId, this.state.taskId);
+    if(this.state.taskId){
+      let response = await fetchInternalTaskInfo(this.state.taskId);
       console.log(response);
       if(response){
         response.attendees = response.attendees ? response.attendees : [];

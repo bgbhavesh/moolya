@@ -90,7 +90,8 @@ class MlEditCommunityFormComponent extends React.Component {
   }
 
   async handleSuccess(response) {
-    var resp = JSON.parse(response)
+    // var resp = JSON.parse(response)
+    var resp =response
     if(resp && resp.unAuthorized){
       FlowRouter.go('/unauthorize')
     }else

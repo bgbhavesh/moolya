@@ -19,7 +19,7 @@ import MlUsersConnectionsTabs from "../../admin/users/components/MlUsersConnecti
 import MlUsersFavouriteTabs from "../../admin/users/components/MlUsersFavouriteTabs";
 // import MlUsersWishlist from "../../admin/users/components/MlUsersWishlist";
 import MlUsersTransactions from "../../admin/users/components/MlUsersTransactions";
-import MlAuditHistory from '../../admin/auditHistory/components/MlHistoryList'
+import MlUsersHistoryList from '../../admin/users/components/MlUsersTabHistoryList'
 
 /**
  * routes config for users modules
@@ -104,11 +104,11 @@ adminSection.route('/users/:registrationId/:portfolioId/transactions', {
     })
   }
 })
-adminSection.route('/users/history', {
+adminSection.route('/users/:registrationId/:portfolioId/history', {
   name: 'users_History',
-  action(){
+  action(params){
     mount(AdminLayout,{
       headerContent: <MlAdminHeader breadcrum={{type: 'hierarchy', 'showBreadCrum': true, 'module': 'users'}}/>,
-      adminContent:<MlAuditHistory/>})
+      adminContent:<MlUsersHistoryList config={params}/> })
   }
 });

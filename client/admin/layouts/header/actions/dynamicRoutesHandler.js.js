@@ -233,6 +233,12 @@ export default function dynamicLinkHandler(path,params,queryParams){
       if (_.has(dynamicParams, "registrationId") && _.has(dynamicParams, "portfolioId")) {
         return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/transactions`;
       }
+    },
+    "users_History": function (params, queryParams) {
+      let dynamicParams = params || {};
+      if (_.has(dynamicParams, "registrationId") && _.has(dynamicParams, "portfolioId")) {
+        return `/admin/users/${dynamicParams.registrationId}/${dynamicParams.portfolioId}/history`;
+      }
     }
   }
   let menuLinkHandler=menuLinkHandlerConfig[path];

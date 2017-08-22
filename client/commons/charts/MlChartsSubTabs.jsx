@@ -1,14 +1,14 @@
 import React from "react";
 import {render} from "react-dom";
-import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent";
-import {client} from '../../../../../../core/apolloConnection'
-import {appClient} from '../../../../../../../app/core/appConnection'
-import MlCompanyEmployment from "./chartsData/MlCompanyEmployment";
-import MlProfitRevenue from "./chartsData/MlProfitRevenue";
-import MlCompanyReview from "./chartsData/MlCompanyReview";
-import MlEmployeeBreakup from "./chartsData/MlEmployeeBreakup";
+import MlTabComponent from "../components/tabcomponent/MlTabComponent";
+import {client} from '../../admin/core/apolloConnection'
+import {appClient} from '../../app/core/appConnection'
+import MlCompanyEmployment from "./subTabs/MlCompanyEmployment";
+import MlProfitRevenue from "./subTabs/MlProfitRevenue";
+import MlCompanyReview from "./subTabs/MlCompanyReview";
+import MlEmployeeBreakup from "./subTabs/MlEmployeeBreakup";
 
-export default class MlStartupChartSubTabs extends React.Component{
+export default class MlChartSubTabs extends React.Component{
   constructor(props){
     super(props)
     this.state =  {tabs: [],portfolioStartupEmployment:{},getStartupProfitRevenue:{},getStartupReview:{},getStartupEmployeeData:{}}
@@ -48,9 +48,9 @@ export default class MlStartupChartSubTabs extends React.Component{
         panelClassName: 'panel',
         title: "Employment Of Company",
         component: <MlCompanyEmployment client={client} isAdmin={true} key="1"
-                                         getStartupCompanyEmployment={this.getStartupCompanyEmployment.bind(this)}
-                                         portfolioDetailsId={this.props.portfolioDetailsId}
-                                         employmentDetails={this.props.startupChartsDetails&&this.props.startupChartsDetails.employmentOfCompanyChart}/>
+                                        getStartupCompanyEmployment={this.getStartupCompanyEmployment.bind(this)}
+                                        portfolioDetailsId={this.props.portfolioDetailsId}
+                                        employmentDetails={this.props.startupChartsDetails&&this.props.startupChartsDetails.employmentOfCompanyChart}/>
       },
       {
         tabClassName: 'tab',

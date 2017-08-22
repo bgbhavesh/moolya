@@ -1,15 +1,15 @@
+/**
+ * Created by vishwadeep on 21/8/17.
+ */
 import React from 'react';
-import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar';
-var FontAwesome = require('react-fontawesome');
-import {fetchDetailsStartupActionHandler} from '../../actions/findPortfolioStartupDetails'
-import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
-import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
-import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
+// import {fetchDetailsStartupActionHandler} from '../../actions/findPortfolioStartupDetails'
+import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnotator'
+import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDetails'
+import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
 
 
-export default class MlStartupViewBranches extends React.Component {
+export default class MlStartupViewTechnologies extends React.Component {
   constructor(props) {
     super(props);
     this.state = {startupBranchesList: []};
@@ -22,9 +22,9 @@ export default class MlStartupViewBranches extends React.Component {
     this.initalizeAnnotaor()
     this.fetchAnnotations();
   }
-  componentWillMount(){
-    this.fetchPortfolioStartupDetails();
-  }
+  // componentWillMount(){
+  //   this.fetchPortfolioStartupDetails();
+  // }
   initalizeAnnotaor(){
     initializeMlAnnotator(this.annotatorEvents.bind(this))
     this.state.content = jQuery("#annotatorContent").annotator();
@@ -58,7 +58,7 @@ export default class MlStartupViewBranches extends React.Component {
   }
 
   async createAnnotations(annotation){
-    let details = {portfolioId:this.props.portfolioDetailsId, docId:"startupBranches", quote:JSON.stringify(annotation)}
+    let details = {portfolioId:this.props.portfolioDetailsId, docId:"startupTechnologies", quote:JSON.stringify(annotation)}
     const response = await createAnnotationActionHandler(details);
     if(response && response.success){
       this.fetchAnnotations(true);
@@ -69,7 +69,7 @@ export default class MlStartupViewBranches extends React.Component {
 
 
   async fetchAnnotations(isCreate){
-    const response = await findAnnotations(this.props.portfolioDetailsId, "startupBranches");
+    const response = await findAnnotations(this.props.portfolioDetailsId, "startupTechnologies");
     let resp = JSON.parse(response.result);
     let annotations = this.state.annotations;
     this.setState({annotations:JSON.parse(response.result)})
@@ -92,32 +92,32 @@ export default class MlStartupViewBranches extends React.Component {
 
     return response;
   }
-
-  async fetchPortfolioStartupDetails() {
-    let that = this;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await fetchDetailsStartupActionHandler(portfoliodetailsId);
-    if (response) {
-      this.setState({loading: false,startupBranchesList: response});
-    }
-
-  }
+  // async fetchPortfolioStartupDetails() {
+  //   let that = this;
+  //   let portfoliodetailsId=that.props.portfolioDetailsId;
+  //   const response = await fetchDetailsStartupActionHandler(portfoliodetailsId);
+  //   if (response) {
+  //     this.setState({loading: false,startupBranchesList: response});
+  //   }
+  //
+  // }
 
   render(){
     let that = this;
-    let branchesArray = that.state.startupBranchesList || [];
+    // let branchesArray = that.state.startupBranchesList || [];
+    let technologiesArray = that.props.technologiesDetails || [];
     return (
 
         <div id="annotatorContent">
-          <h2>Branches</h2>
+          <h2>Technologies</h2>
           <div className="col-lg-12">
             <div className="row">
-              {branchesArray && branchesArray.branches && branchesArray.branches.map(function (details, idx) {
+              {technologiesArray.map(function (details, idx) {
                 return(<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
                   <div className="team-block">
                     <img src={details.logo&&details.logo.fileUrl} className="team_img"/>
                     <h3>
-                      {details.name&&details.name} <br />
+                      {details.technologyName&&details.technologyName} <br />
                     </h3>
                   </div>
                 </div>)
@@ -128,3 +128,4 @@ export default class MlStartupViewBranches extends React.Component {
     )
   }
 }
+// && branchesArray.technologies && branchesArray.technologies

@@ -4,26 +4,74 @@
 
 import React from 'react';
 import {fetchSelfCreatedInternalTask} from '../../actions/fetchMyInternalTask';
+import MlAppInternalAssignTaskItem from './../MlAppInternalAssignTaskItem';
 
 export default class MlAppInternalMyTaskList extends React.Component{
 
   constructor(props){
     super(props);
     this.state={
-      tasks:[]
-    }
+      tasks:[],
+      selectTask:'',
+      selectedTaskType: ''
+    };
+    this.fetchTaskList = this.fetchTaskList.bind(this);
   }
 
   componentDidMount() {
+    var WinWidth = $(window).width();
+    var WinHeight = $(window).height();
+    $(".swiper-slide .team-block").click(function(){
+      $(this).toggleClass("active");
+    });
+
+    $("#show").click(function(){
+      $("#details-div").show();
+
+      var $frame = $('#centered');
+      var $wrap  = $frame.parent();
+
+      // Call Sly on frame
+      $frame.sly({
+        horizontal: 1,
+        itemNav: 'centered',
+        smart: 1,
+        mouseDragging: 1,
+        touchDragging: 1,
+        releaseSwing: 1,
+        scrollBar: $wrap.find('.scrollbar'),
+        scrollBy: 1,
+        speed: 300,
+        elasticBounds: 1,
+        easing: 'easeOutExpo',
+        dragHandle: 1,
+        dynamicHandle: 1,
+      });
+    });
+    $(function() {
+      $('.float-label').jvFloat();
+    });
+    $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+20));
+    if(WinWidth > 768){
+      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    }
     this.fetchTaskList();
   }
   async fetchTaskList() {
     let response = await fetchSelfCreatedInternalTask(['pending']);
     if(response){
       this.setState({
-        tasks:response
+        tasks: response,
+        selectTask: null
       })
     }
+  }
+
+  selectTask(task) {
+    console.log(task);
+    this.setState({
+      selectTask: task._id ? task._id : '',
+    })
   }
 
   render(){
@@ -32,7 +80,7 @@ export default class MlAppInternalMyTaskList extends React.Component{
       <div>
         <div className="requested_input">
           <div className="col-lg-12" id="show">
-            <div className="row">
+            <div className="row" style={( that.state.selectTask ? {display:'none'} : {})}>
               <div className="col-lg-2 col-md-4 col-sm-4" >
                 <a href="" onClick={()=>that.props.updateType('new')} >
                   <div className="list_block notrans">
@@ -43,7 +91,7 @@ export default class MlAppInternalMyTaskList extends React.Component{
               </div>
               {that.state.tasks.map(function (task, index) {
                 return (
-                  <div className="col-lg-2 col-md-4 col-sm-4" key={index}>
+                  <div className="col-lg-2 col-md-4 col-sm-4" key={index} onClick={()=>that.selectTask(task)} >
                     <div className="list_block list_block_intrests notrans">
                       <div className="hex_outer"><img src="/images/valuation.png"/></div>
                       <div className="task-status pending"></div>
@@ -53,6 +101,30 @@ export default class MlAppInternalMyTaskList extends React.Component{
                 )
               })}
             </div>
+            <div id="details-div" style={( that.state.selectTask ? {} : {display:'none'})}>
+              <div className="col-lg-12">
+                <div className="row">
+                  <div className="top_block_scroller" id="centered">
+                    <ul className="topscroll_listblock">
+                      {that.state.tasks.map(function (task, index) {
+                        return (
+                          <li key={index} onClick={()=>that.selectTask(task)} className={task._id == that.state.selectTask ? "active" : ''}>
+                            <div className="list_block list_block_intrests notrans">
+                              <div className="hex_outer"><img src="/images/valuation.png"/></div>
+                              <h3>{task.name}</h3>
+                            </div>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <MlAppInternalAssignTaskItem taskId={that.state.selectTask} fetchTaskList={this.fetchTaskList} />
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

@@ -56,7 +56,6 @@ export default class MlMyProfile extends React.Component {
       // }
     };
     this.getValue.bind(this);
-    this.onFileUploadCallBack.bind(this);
     this.storeImage.bind(this);
     this.onFoundationDateSelection.bind(this);
     this.firstNameUpdation = this.firstNameUpdation.bind(this);
@@ -129,14 +128,11 @@ export default class MlMyProfile extends React.Component {
 
   onFileUploadCallBack(resp) {
     if (resp) {
-      console.log(resp);
-      this.setState({"uploadedProfilePic": resp});
-      var temp = $.parseJSON(this.state.uploadedProfilePic).result;
-      this.setState({"responsePic": temp});
-      this.setState({"uploadedProfilePic": temp});
-      console.log(temp);
-      this.showImage(temp);
-      return temp;
+      var link = $.parseJSON(resp).result;
+      console.log('--link--', link)
+      this.setState({responsePic: link, uploadedProfilePic: link});
+      this.showImage(link);
+      return link;
     }
   }
 
@@ -160,8 +156,8 @@ export default class MlMyProfile extends React.Component {
     this.setState({userName: e.target.value})
   }
 
-  async showImage(temp) {
-    this.setState({responsePic: temp})
+  async showImage(link) {
+    this.setState({responsePic: link})
   }
 
 
@@ -173,7 +169,7 @@ export default class MlMyProfile extends React.Component {
    **/
   async storeImage() {
     let Details = {
-      profileImage: this.state.uploadedProfilePic,
+      profileImage: this.state.responsePic,
       firstName: this.state.firstName,
       middleName: this.state.middleName,
       lastName: this.state.lastName,
@@ -181,9 +177,9 @@ export default class MlMyProfile extends React.Component {
       genderType: this.state.genderSelect,
       dateOfBirth: this.state.dateOfBirth?this.state.dateOfBirth : null
     }
-
+    console.log('--Details--',Details);
     const dataresponse = await updateDataEntry(Details);
-    console.log(dataresponse);
+    console.log('--dataresponse--',dataresponse);
     if(dataresponse){
       toastr.success("Update Successful")
     }
@@ -212,8 +208,7 @@ export default class MlMyProfile extends React.Component {
         dateOfBirth: response.profile.dateOfBirth?response.profile.dateOfBirth: null
       });
     } else {
-      let response = await findMyProfileActionHandler(userType);
-      console.log(response);
+      let response = await findMyProfileActionHandler(userType);;
       this.setState({
         loading: false, firstName: response.profile.InternalUprofile.moolyaProfile.firstName,
         middleName: response.profile.InternalUprofile.moolyaProfile.middleName,
@@ -295,8 +290,8 @@ export default class MlMyProfile extends React.Component {
           toastr.success(response.result);
           $('#password').val("");
           this.setState({PasswordReset: false, showChangePassword: true})
-          const resp = this.onFileUpload();
-          return resp;
+          // const resp = this.onFileUpload();
+          // return resp;
         }
       }else {
         toastr.error("Please enter a valid password")
@@ -387,8 +382,7 @@ export default class MlMyProfile extends React.Component {
     if(file) {
       let data = {moduleName: "PROFILE", actionName: "UPDATE", userId: this.state.selectedBackendUser, user: user}
       let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
-      this.storeImage();
-
+      // this.storeImage();
       return response;
     }
     else{

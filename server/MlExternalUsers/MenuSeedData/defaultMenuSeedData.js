@@ -36,7 +36,7 @@ if(Meteor.isServer){
                 "link": "/app/funder",
                 "isLink" : true,
                 "isMenu" : true,
-                "name" : "Funders",
+                "name" : "Investors",
                 "uniqueId" : "funder"
             },
             // {

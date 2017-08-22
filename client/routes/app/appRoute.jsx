@@ -61,6 +61,7 @@ import MlAppInternalTask from "../../app/internalTask/components/MlAppInternalTa
  * Set Calendars Routes
  */
 import MlAppSetCalendarSettings from '../../app/calendar/manageScheduler/setCalendar/components/MlAppSetCalendarSettings';
+import MlAppOfficeCalendar from '../../app/calendar/officeCalendar/components/MlAppOfficeCalendar';
 
 
 import _ from "lodash";
@@ -357,6 +358,13 @@ appSection.route('/calendar', {
   name: 'mycalendar',
   action(){
     mount(AppLayout, {appContent: <MLAppMyCalendar />, isCalenderMenu: true})
+  }
+});
+
+appSection.route('/calendar/officeCalendar', {
+  name: 'officeCalendar',
+  action(){
+    mount(AppLayout, {appContent: <MlAppOfficeCalendar />, isCalenderMenu: true})
   }
 });
 

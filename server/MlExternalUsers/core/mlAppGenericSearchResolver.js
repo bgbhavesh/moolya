@@ -327,6 +327,9 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                 $project:{
                   _id : 1,
                   name: "$profile.displayName",
+                  profile:{
+                    profileImage:"$profile.profileImage"
+                  },
                   communityCode: "$profile.externalUserProfiles.communityDefCode",
                   isActive: "$profile.isActive",
                   externalUserAdditionalInfo: {
@@ -348,6 +351,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                   _id : 1,
                   name: 1,
                   communityCode: 1,
+                  profile:1,
                   isActive: 1,
                   address: {
                     $filter: {
@@ -367,6 +371,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
                 $project:{
                   _id : 1,
                   name: 1,
+                  profile:1,
                   communityCode: 1,
                   isActive: 1,
                   latitude: "$address.latitude",

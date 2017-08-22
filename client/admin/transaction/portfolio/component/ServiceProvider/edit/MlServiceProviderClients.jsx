@@ -292,17 +292,17 @@ export default class MlServiceProviderClients extends Component {
                     </a>
                   </div>
                   {clientsArray.map(function (details, idx) {
-                    if(details.isPrivate){
-                      $("#isPrivate"+idx).removeClass('un_lock fa-unlock').addClass('fa-lock');
+                    if(details.makePrivate){
+                      $("#makePrivate"+idx).removeClass('un_lock fa-unlock').addClass('fa-lock');
                     }else{
-                      $("#isPrivate"+idx).removeClass('fa-lock').addClass('un_lock fa-unlock');
+                      $("#makePrivate"+idx).removeClass('fa-lock').addClass('un_lock fa-unlock');
                     }
                     return (<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
                       <a href="" id={"create_client" + idx}>
                         <div className="list_block">
                           {/*<FontAwesome name='unlock' id="makePrivate" defaultValue={}/>*/}
-                          <FontAwesome name='unlock' className="input_icon un_lock" id={"isPrivate" + idx}
-                                       defaultValue={details.isPrivate}/>
+                          <FontAwesome name='unlock' className="input_icon un_lock" id={"makePrivate" + idx}
+                                       defaultValue={details.makePrivate}/>
                           <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}>
                             <img src={details.logo && details.logo.fileUrl}/></div>
                           {/*<h3>{details.description} <span className="assets-list">50</span></h3>*/}
@@ -346,8 +346,8 @@ export default class MlServiceProviderClients extends Component {
                         </div> : ""}
                         <div className="clearfix"></div>
                         <div className="form-group">
-                          <div className="input_types"><input id="isPrivate" type="checkbox"
-                                                              checked={this.state.data && this.state.data.isPrivate}
+                          <div className="input_types"><input id="makePrivate" type="checkbox"
+                                                              checked={this.state.data && this.state.data.makePrivate}
                                                               name="checkbox"
                                                               onChange={this.onStatusChangeNotify.bind(this)}/><label
                             htmlFor="checkbox1"><span></span>Make Private</label></div>

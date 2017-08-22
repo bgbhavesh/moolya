@@ -61,8 +61,8 @@ export default class MlStartupMCL extends React.Component{
       });
       data = {
         memberships:that.context.startupPortfolio.memberships,
-        licenses: that.context.startupPortfolio.compliances,
-        compliances:that.context.startupPortfolio.licenses
+        compliances: that.context.startupPortfolio.compliances,
+        licenses:that.context.startupPortfolio.licenses
       }
     }else {
       var responseM = await fetchStartupDetailsHandler(portfoliodetailsId, MEMBERKEY);

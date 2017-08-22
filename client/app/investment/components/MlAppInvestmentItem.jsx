@@ -17,6 +17,11 @@ export default class MlAppInvestmentItem extends Component {
   }
 
   selectPortfolio(data){
+    if(data && data.stage.length > 0 && data.stage[0].resourceStage === 'onboard'){
+      let community = data.portfolio.communityCode === 'IDE'? 'ideator':data.portfolio.communityCode === 'STU'?'startup':data.portfolio.communityCode === 'FUN'? 'investor':"";
+      let portfolioId = data.portfolio._id;
+      FlowRouter.go(`/app/${community}/${portfolioId}`)
+    }
     let selected = this.state.selected;
     if(data._id == selected._id){
       data = {};

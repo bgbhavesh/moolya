@@ -79,8 +79,7 @@ class DocumentActiveComponent extends React.Component {
     if (response){
       if(response.success) {
         FlowRouter.go("/admin/documents/" + this.props.processConfig + "/" + this.props.kycConfig + "/" + this.props.docTypeConfig);
-      }
-        else {
+      }else {
         toastr.error(response.result);
       }
     }

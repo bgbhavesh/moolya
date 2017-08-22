@@ -9,7 +9,60 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
     query: gql`
           query ($portfoliodetailsId: String!, $key:String) {
               fetchInstitutionDetails(portfoliodetailsId:$portfoliodetailsId, key:$key){
-                  
+                  aboutUs{
+                      logo{
+                        fileName,
+                        fileUrl
+                      }
+                      institutionDescription,
+                      annotatorId,
+                      isLogoPrivate,
+                      isDescriptionPrivate,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  rating{
+                      rating,
+                      isRatingPrivate,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  serviceProducts{
+                      spDescription,
+                      isDescriptionPrivate,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  information{
+                      informationDescription,
+                      isDescriptionPrivate,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  clients{
+                      companyName,
+                      isCompanyNamePrivate,
+                      logo{
+                          fileName,
+                          fileUrl
+                      },
+                      clientDescription,
+                      isDescriptionPrivate,
+                      makePrivate,
+                      index,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
                   memberships{
                     membershipDescription,
                     privateFields{
@@ -61,6 +114,70 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                       index
                       privateFields{
                           keyName
+                          booleanKey
+                      }
+                  }
+                  investor{
+                    investorName,
+                    fundingType,
+                    fundingTypeId,
+                    investmentAmount,
+                    investorDescription,
+                    isNamePrivate,
+                    isInvestmentAmountPrivate,
+                    isDescriptionPrivate,
+                    logo{
+                      fileName,
+                      fileUrl
+                    },
+                    makePrivate,
+                    index
+                    privateFields{
+                        keyName,
+                        booleanKey
+                    }
+                  }
+                  
+                  management{
+                     title
+                     isTitlePrivate
+                     firstName
+                     isFirstNamePrivate
+                     lastName
+                     isLastNamePrivate
+                     middleName
+                     isMiddleNamePrivate
+                     qualification
+                     isQualificationPrivate
+                     certification 
+                     isCertificationPrivate 
+                     profilePic 
+                     isProfilePicPrivate 
+                     gender 
+                     isGenderPrivate 
+                     designation 
+                     isDesignationPrivate
+                     yearsOfExperience 
+                     isYOEPrivate 
+                     joiningDate 
+                     isJoiningDatePrivate
+                     firstJobJoiningDate 
+                     isFJJDPrivate 
+                     universities 
+                     isUniversitiesPrivate
+                     awards 
+                     isAwardsPrivate
+                     linkedInUrl 
+                     isLinkedInUrlPrivate
+                     managmentAbout
+                     isAboutPrivate
+                      logo{
+                        fileName
+                        fileUrl
+                      }
+                      index
+                      privateFields{
+                          keyName,
                           booleanKey
                       }
                   }
@@ -142,13 +259,13 @@ export async function findStartupManagementActionHandler(portfoliodetailsId) {
   return managementArray;
 }
 
-export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
+export async function fetchDetailsInstitutionActionHandler(portfoliodetailsId) {
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
-            fetchStartupPortfolioAboutUs(portfoliodetailsId: $portfoliodetailsId) {
+            fetchInstitutionPortfolioAboutUs(portfoliodetailsId: $portfoliodetailsId) {
                 aboutUs{
-                  startupDescription,
+                  institutionDescription,
                   logo{
                     fileName,
                     fileUrl
@@ -185,69 +302,6 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                   informationDescription
                   isDescriptionPrivate
                 }
-                assets{
-                  assetTypeName
-                  assetTypeId
-                  quantity
-                  assetDescription
-                  isAssetTypePrivate
-                  isQuantityTypePrivate
-                  isDescriptionPrivate
-                  makePrivate
-                  logo{
-                    fileName
-                    fileUrl
-                  }
-                  index
-                }
-                branches{
-                  addressTypeId
-                  branchName
-                  isNamePrivate
-                  branchPhoneNumber
-                  isPhoneNumberPrivate
-                  branchAddress1
-                  isAddressOnePrivate
-                  branchAddress2
-                  isAddressTwoPrivate
-                  branchLandmark
-                  isLandmarkPrivate
-                  branchArea
-                  isAreaPrivate
-                  branchCity
-                  cityId
-                  isCityPrivate
-                  branchState
-                  stateId
-                  isStatePrivate
-                  branchCountry
-                  countryId
-                  isCountryPrivate
-                  addressImage
-                  makePrivate
-                  branchLogo{
-                    fileName
-                    fileUrl
-                  }
-                  index
-                }
-                technologies{
-                  technologyName
-                  technologyId
-                  isTechnologyPrivate
-                  technologyDescription
-                  isDescriptionPrivate
-                  makePrivate
-                  logo{
-                    fileName
-                    fileUrl
-                  }
-                  index
-                }
-                legalIssue{
-                  legalDescription
-                  isDescriptionPrivate
-                }
                 rating{
                   rating
                 }
@@ -261,7 +315,7 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
     forceFetch: true
   })
 
-  const data = result.data.fetchStartupPortfolioAboutUs;
+  const data = result.data.fetchInstitutionPortfolioAboutUs;
   /*let data = _.omit(id,'__typename');*/
   let aboutUsArray = {}
   aboutUsArray["aboutUs"] = _.omit(data.aboutUs, '__typename');
@@ -270,16 +324,6 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
   });
   aboutUsArray["serviceProducts"] = _.omit(data.serviceProducts, '__typename');
   aboutUsArray["information"] = _.omit(data.information, '__typename');
-  aboutUsArray["branches"] = _.map(data.branches, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  aboutUsArray["technologies"] = _.map(data.technologies, function (row) {
-    return _.omit(row, ['__typename'])
-  });
-  aboutUsArray["legalIssue"] = _.omit(data.legalIssue, '__typename');
-  aboutUsArray["assets"] = _.map(data.assets, function (row) {
-    return _.omit(row, ['__typename'])
-  });
   aboutUsArray["rating"] = _.omit(data.rating, '__typename');
 
   return aboutUsArray
@@ -346,11 +390,11 @@ export async function fetchStartupPortfolioData(portfoliodetailsId, connection) 
   // return id
 }
 
-export async function fetchDetailsStartupChartsActionHandler(portfoliodetailsId) {
+export async function fetchInstitutionChartsDetailsActionHandler(portfoliodetailsId) {
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
-            fetchStartupPortfolioCharts(portfoliodetailsId: $portfoliodetailsId) {
+            fetchInstitutePortfolioCharts(portfoliodetailsId: $portfoliodetailsId) {
                
                 employmentOfCompanyChart{
                     eofAbout
@@ -399,7 +443,7 @@ export async function fetchDetailsStartupChartsActionHandler(portfoliodetailsId)
     forceFetch: true
   })
 
-  const data = result.data.fetchStartupPortfolioCharts;
+  const data = result.data.fetchInstitutePortfolioCharts;
   /*let data = _.omit(id,'__typename');*/
   let chartsArray = {}
   chartsArray["employmentOfCompanyChart"] = _.map(data.employmentOfCompanyChart, function (row) {

@@ -25,21 +25,21 @@ module.exports = {
       console.log('Here',zz, this, ref);
     }
   },
-  invest: {
-    config:{
-      showAction: true,
-      actionName: "invest",
-      hasPopOver:true,
-      popOverTitle:'Invest',
-      placement:'top',
-      target:'investTask',
-      popOverComponent: <MlAssignTask />,
-      actionComponent: PopoverActionIcon
-    },
-    handler: async (ref,zz,handlerCallback) => {
-      console.log('Here',zz, this, ref);
-    }
-  },
+  // invest: {
+  //   config:{
+  //     showAction: true,
+  //     actionName: "invest",
+  //     hasPopOver:true,
+  //     popOverTitle:'Invest',
+  //     placement:'top',
+  //     target:'investTask',
+  //     popOverComponent: <MlAssignTask />,
+  //     actionComponent: PopoverActionIcon
+  //   },
+  //   handler: async (ref,zz,handlerCallback) => {
+  //     console.log('Here',zz, this, ref);
+  //   }
+  // },
   "term sheet": {
     config:{
       showAction: true,
@@ -179,16 +179,24 @@ module.exports = {
 }
 
 investmentHandler = async (that, currentStage, currentStageName) => {
+  let dataToInsert = {
+    "hasInvested": true
+  };
+  let response;
   if(that.state.selected.stage.length){
-    let dataToInsert = {
-      "hasInvested": true
-    }
-    let response = await updateStageActionHandler(that.state.selected.stage[0]._id, dataToInsert);
-    if(response) {
-      toastr.success('Investment done successfully')
-    }
+    response = await updateStageActionHandler(that.state.selected.stage[0]._id, dataToInsert);
+  } else {
+    dataToInsert.resourceId = that.state.selected.resourceId;
+    dataToInsert.resourceType= "portfolio";
+    dataToInsert.resourceStage= currentStage.stageName;
+    response = await createStageActionHandler(dataToInsert);
   }
-}
+  //await updateStageActionHandler(that.state.selected.stage[0]._id, dataToInsert);
+  if(response) {
+    toastr.success('Investment done successfully');
+    that.props.fetchPortfolio();
+  }
+};
 
 
 async function changeStage(that, currentStage, currentStageName){

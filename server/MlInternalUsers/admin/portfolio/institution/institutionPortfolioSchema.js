@@ -13,7 +13,7 @@ let institutePortfolioSchema = `
         isDefault : Boolean
     }
     
-    type instituteManagementOutput{
+    type institutionManagementOutput{
        title :String
        isTitlePrivate : Boolean
        firstName : String
@@ -44,10 +44,11 @@ let institutePortfolioSchema = `
        isAwardsPrivate : Boolean
        linkedInUrl : String
        isLinkedInUrlPrivate : Boolean
-       about : String
+       managmentAbout : String
        isAboutPrivate:Boolean
        logo:imagesTypeSchema,
        index: Int
+       privateFields:[PrivateKeys]
     }
    
     
@@ -61,30 +62,10 @@ let institutePortfolioSchema = `
         index:Int,
     }  
     
-
-    type informationOutput{
-       description:String,
-       isDescriptionPrivate:Boolean
-    }
-    
-    type serviceProductsOutput{
-        description:String,
-        isDescriptionPrivate:Boolean
-    }
-    
     type imageFilesInputSchemaOutput{
        fileUrl: String,
        fileName:String
      }   
-    
-    type aboutUsOutput{
-        aboutImages      : [imagesTypeSchema]
-        aboutTitle : String
-        aboutDescription: String
-        annotatorId : String
-        isLogoPrivate :Boolean
-        isDescriptionPrivate : Boolean
-    }
 
     type membershipsOutput{
         description:String, 
@@ -101,20 +82,6 @@ let institutePortfolioSchema = `
         isDescriptionPrivate :Boolean
     }
     
-    type ratingOutput{,
-        rating:String
-        isRatingPrivate:Boolean
-    }
-    type institutePortfolioAboutUsOutput{
-        portfolioDetailsId  : String
-        aboutUs             : aboutUsOutput
-        rating              : ratingOutput
-        serviceProducts     : serviceProductsOutput
-        information         : informationOutput
-        clients             : [clientsOutput]
-        data                : dataOutput
-    }
-
    type EmploymentOfCompany{
       eofAbout: String
       eofFromMonth: String
@@ -172,17 +139,29 @@ let institutePortfolioSchema = `
       capitalStructure: [imagesTypeSchema]
       ratio: [imagesTypeSchema]
     }
-    
+    type AboutUs{
+        logo      : [imagesTypeSchema]
+        institutionDescription : String
+        annotatorId : String
+        isLogoPrivate :Boolean
+        isDescriptionPrivate : Boolean,
+        privateFields:[PrivateKeys]
+    }
     type InstitutionPortfolio{
       memberships       : membershipsOutput,
       compliances       : compliancesOutput,
       licenses          : licensesOutput 
       lookingFor        : [lookingForOutput]
-      
-      management        : [instituteManagementOutput],
+      aboutUs           : AboutUs
+      rating            : ratingOutput
+      serviceProducts   : serviceProductsOutput
+      information       : informationOutput
+      clients           : [clientsOutput]
+      management        : [institutionManagementOutput],
       data              : dataOutput,
       charts            : chartsOutput,
-      awardsRecognition : [awardsRecognitionOutput],    
+      awardsRecognition : [awardsRecognitionOutput],
+      investor          : [investorOutput]    
     }
    
     
@@ -192,7 +171,7 @@ let institutePortfolioSchema = `
       isDefault:Boolean
     }
     
-    input instituteManagement{
+    input institutionManagement{
        title :String
        isTitlePrivate : Boolean
        firstName : String
@@ -223,49 +202,12 @@ let institutePortfolioSchema = `
        isAwardsPrivate : Boolean
        linkedInUrl : String
        isLinkedInUrlPrivate : Boolean
-       about : String
+       managmentAbout : String
        isAboutPrivate:Boolean
        logo:logo
        index: Int
     }
-  
-    input clients{
-        companyName:String,
-        isCompanyNamePrivate:Boolean,
-        logo:logo,
-        description:String,
-        isDescriptionPrivate:Boolean,
-        makePrivate:Boolean,
-        index:Int
-    }
-   
-    input investor{
-        name:String,
-        fundingType:String,
-        fundingTypeId:String,
-        investmentAmount:String,
-        investorImage:String,
-        description:String,
-        isNamePrivate:Boolean,
-        isInvestorImagePrivate:Boolean,
-        isInvestmentAmountPrivate:Boolean,
-        isDescriptionPrivate:Boolean,
-        logo:logo,
-        makePrivate:Boolean
-        index: Int
-    }
-    
-
-    input information{
-        description:String,
-        isDescriptionPrivate:Boolean
-    }
-    
-    input serviceProducts{
-        description:String,
-        isDescriptionPrivate:Boolean
-    }
-    
+      
     input legalIssue{
         description:String,
         isDescriptionPrivate:Boolean
@@ -289,20 +231,6 @@ let institutePortfolioSchema = `
        fileName:String
      }
      
-    input rating{
-        rating:String
-        isRatingPrivate:Boolean
-    }
-    
-    input aboutUs{
-        aboutImages      : [imageFilesInputSchema]
-        aboutImages : String
-        aboutDescription : String
-        annotatorId : String
-        isLogoPrivate :Boolean
-        isDescriptionPrivate : Boolean
-    }
-
     input memberships{
         description:String, 
         isDescriptionPrivate :Boolean
@@ -353,7 +281,13 @@ let institutePortfolioSchema = `
       ebdAbout: String
       index : Int
     }
-   
+    input institutionAboutUs{
+        logo      : [imageFilesInputSchema]
+        institutionDescription : String
+        annotatorId : String
+        isLogoPrivate :Boolean
+        isDescriptionPrivate : Boolean
+    }
     input institutionPortfolio{
         portfolioDetailsId  : String
         licenses            : licenses
@@ -361,19 +295,17 @@ let institutePortfolioSchema = `
         memberships         : memberships
         lookingFor          : [lookingFor]
         awardsRecognition : [awardsRecognition]
-        
-        aboutUs             : aboutUs
+        aboutUs             : institutionAboutUs
         rating              : rating
         serviceProducts     : serviceProducts
         information         : information
         investor            : [investor]
         clients             : [clients]
-        management          : [instituteManagement]
+        management          : [institutionManagement]
         employmentOfCompanyChart: [employmentOfCompany]
         reviewOfCompanyChart: [reviewOfCompany]
         profitRevenueLiabilityChart:  [profitRevenueLiability]
         employeeBreakupDepartmentChart: [employeeBreakupDepartment]
-        legalIssue          : legalIssue
         data                : data
     }
     type institutePortfolioOutput{
@@ -383,10 +315,17 @@ let institutePortfolioSchema = `
         portfolioDetailsId   : String
         aboutUs              : aboutUsOutput
     }
-    
+    type InstitutionPortfolioAboutUsOutput{
+        portfolioDetailsId  : String
+        aboutUs             : AboutUs
+        rating              : ratingOutput
+        serviceProducts     : serviceProductsOutput
+        information         : informationOutput
+        clients             : [clientsOutput]
+        privateFields:[PrivateKeys]
+    }
     type Query{
-        fetchInstitutePortfolioAboutUs(portfoliodetailsId:String!):institutePortfolioAboutUsOutput
-        fetchInstitutePortfolioManagement(portfoliodetailsId:String!):[instituteManagementOutput]
+        fetchInstitutionPortfolioAboutUs(portfoliodetailsId:String!):InstitutionPortfolioAboutUsOutput
         
         fetchInstitutePortfolioCharts(portfoliodetailsId:String):chartsOutput   
         fetchInstitutePortfolioData(portfoliodetailsId:String):dataOutput
@@ -396,6 +335,7 @@ let institutePortfolioSchema = `
     type Mutation{
         createInstitutionPortfolio(portfolio:institutionPortfolio):response
         updateInstitutionPortfolio(portfoliodetailsId:String,portfolio:institutionPortfolio):response
+        
     }
 `
 
@@ -403,9 +343,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], institutePortfolioS
 
 let supportedApi = [
   {api:'fetchInstitutionDetails', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchInstitutePortfolioAboutUs', actionName:'READ', moduleName:"PORTFOLIO"},
-
-  {api:'fetchInstitutePortfolioManagement', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchInstitutionPortfolioAboutUs', actionName:'READ', moduleName:"PORTFOLIO"},
 
   {api:'fetchInstitutePortfolioCharts', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchInstitutePortfolioData', actionName:'READ', moduleName:"PORTFOLIO"},
@@ -421,6 +359,9 @@ MlResolver.MlModuleResolver.push(supportedApi)
  * @lookingForOutput : startup
  * @awardsRecognition : startup
  * @awardsRecognitionOutput : startup
+ * @investor : startup
  * */
 // {api:'fetchInstitutePortfolioAwards', actionName:'READ', moduleName:"PORTFOLIO"},
 // fetchInstitutePortfolioAwards(portfoliodetailsId:String!):[awardsRecognitionOutput]
+// fetchInstitutePortfolioManagement(portfoliodetailsId:String!):[instituteManagementOutput]
+// {api:'fetchInstitutePortfolioManagement', actionName:'READ', moduleName:"PORTFOLIO"},

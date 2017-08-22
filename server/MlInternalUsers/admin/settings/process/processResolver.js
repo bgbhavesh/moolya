@@ -152,17 +152,25 @@ MlResolver.MlMutationResolver['upsertProcessDocument'] = (obj, args, context, in
       //       'kycCategoryId': args.kycCategoryId,'docTypeId': args.docTypeId, 'documentId':args.documentId}
       //   }
       // }, {$set: {"processDocuments.$.isMandatory": args.isMandatory,"processDocuments.$.isActive": args.isActive}});
+      let result;
 
-      let result = mlDBController.update('MlProcessMapping', {
-        _id: id, 'processDocuments': {
-          $elemMatch: {
-            'kycCategoryId': args.kycCategoryId, 'docTypeId': args.docTypeId, 'documentId': args.documentId
+     /* if(args.isMandatory && !args.isActive){ //as per issue 2648
+        let code = 401;
+        let response = new MlRespPayload().errorPayload("Can't update status as document is inactive or maditory", code);
+        return response;
+      }else{*/
+         result = mlDBController.update('MlProcessMapping', {
+          _id: id, 'processDocuments': {
+            $elemMatch: {
+              'kycCategoryId': args.kycCategoryId, 'docTypeId': args.docTypeId, 'documentId': args.documentId
+            }
           }
-        }
-      }, {
-        "processDocuments.$.isMandatory": args.isMandatory,
-        "processDocuments.$.isActive": args.isActive
-      }, {$set: true}, context)
+        }, {
+          "processDocuments.$.isMandatory": args.isMandatory,
+          "processDocuments.$.isActive": args.isActive
+        }, {$set: true}, context)
+      //}
+
 
       if(result!=1){
           console.log("insertion opertion");
@@ -181,6 +189,7 @@ MlResolver.MlMutationResolver['upsertProcessDocument'] = (obj, args, context, in
            processDocument.documentId=documentMappingDef._id;
            processDocument.isMandatory=args.isMandatory;
            processDocument.isActive=args.isActive;
+
         mlDBController.update('MlProcessMapping', id, {'processDocuments':processDocument}, {$push:true}, context)
         // MlProcessMapping.update({_id:id},{'$push':{'processDocuments':processDocument}});
       }
@@ -522,8 +531,38 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
               allowableFormatNames.push(doc.docFormatName)
             });
             countryDoc[index].allowableFormat = allowableFormatNames || []
+            let isNonMoolyaSubChapterSpecific;
             if (doc.docTypeId == 'self' && doc.isActive == true) {
-              countryBasedDoc.push(doc)
+              let documentId = doc.documentId?doc.documentId:""
+              let documentMappingDef = mlDBController.findOne('MlDocumentMapping', documentId, context)
+              let documentMapSubChapters = documentMappingDef&&documentMappingDef.subChapters?documentMappingDef.subChapters:[]
+              if(documentMapSubChapters && documentMapSubChapters.length>0 && documentMapSubChapters.length == 1){
+                var latestdocs = documentMapSubChapters.join();
+                if(latestdocs == "all"){
+                  countryBasedDoc.push(doc)
+                }else{
+                  let selectedSubChapter = [selectedSubChapters]
+                  var subChapterSame = documentMapSubChapters.length == selectedSubChapter.length && documentMapSubChapters.every(function(element, index) {
+                      return element === selectedSubChapter[index];
+                    });
+                  isNonMoolyaSubChapterSpecific = mlDBController.findOne('MlSubChapters', {
+                    "_id": {$in: documentMapSubChapters},
+                    isDefaultSubChapter: false,
+                    isActive: true
+                  }, context)
+
+                  if(isNonMoolyaSubChapterSpecific && subChapterSame){
+                    countryBasedDoc.push(doc)
+                  }else{
+                    countryBasedDoc = countryBasedDoc
+                  }
+                }
+              }else{
+                countryBasedDoc.push(doc)
+              }
+
+
+
             }
           })
         }
@@ -558,8 +597,8 @@ MlResolver.MlQueryResolver['findProcessDocumentForRegistration'] = (obj, args, c
     }
     kycDoc = _.uniqBy(ApprovedKyc, function (kyc) {
       let docId = kyc&&kyc.documentId?kyc.documentId:""
-      let docTypeId = kyc&&kyc.docTypeId?kyc.docTypeId:""
-      return docId && docTypeId;
+      //let docTypeId = kyc&&kyc.docTypeId?kyc.docTypeId:""
+      return docId;
     });
 
 

@@ -181,6 +181,39 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                           booleanKey
                       }
                   }
+                  
+                  achievements{
+                      achievementName
+                      isAchievementNamePrivate
+                      achievementDescription
+                      isAchievementDescriptionPrivate
+                      logo{
+                          fileName
+                          fileUrl
+                        }
+                      index
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  }
+                  
+                  policy{
+                      institutionPolicyDescription,
+                      institutionPolicyDescriptionPrivate,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  }
+                  evolution{
+                      institutionEvolutionDescription,
+                      institutionEvolutionDescriptionPrivate,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
               }
           }
       `,

@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
-import {fetchDetailsStartupActionHandler} from "../../../../actions/findPortfolioStartupDetails";
+import {fetchCompanyDetailsHandler} from "../../../../actions/findCompanyPortfolioDetails";
 import {multipartASyncFormHandler} from "../../../../../../../commons/MlMultipartFormAction";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
@@ -104,7 +104,7 @@ export default class MlCompanyAboutUs extends React.Component{
   async fetchOnlyImages() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await fetchStartupDetailsHandler(portfoliodetailsId, KEY);
+    const response = await fetchCompanyDetailsHandler(portfoliodetailsId, KEY);
     if (response && response.aboutUs) {
       let dataDetails = this.state.data
       dataDetails['logo'] = response.aboutUs.logo
@@ -173,8 +173,8 @@ export default class MlCompanyAboutUs extends React.Component{
             <div className="panel panel-default panel-form">
               <div className="panel-body">
                 <div className="form-group nomargin-bottom">
-                  <textarea placeholder="Describe..." className="form-control"  name="description" id="description" defaultValue={this.state.data&&this.state.data.description} onBlur={this.handleBlur.bind(this)}></textarea>
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/>
+                  <textarea placeholder="Describe..." className="form-control"  name="companyDescription" id="companyDescription" defaultValue={this.state.data&&this.state.data.companyDescription} onBlur={this.handleBlur.bind(this)}></textarea>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isCompanyDescriptionPrivate" onClick={this.onLockChange.bind(this, "isCompanyDescriptionPrivate")}/>
                 </div>
 
               </div>

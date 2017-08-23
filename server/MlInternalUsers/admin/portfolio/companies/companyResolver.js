@@ -23,3 +23,160 @@ MlResolver.MlMutationResolver['createCompanyPortfolio'] = (obj, args, context, i
     console.log("Error: In creating company portfolio");
   }
 }
+
+MlResolver.MlMutationResolver['updateCompanyPortfolio'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId)
+  {
+    try {
+      let companyPortfolio = MlCompanyPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+      let updateFor = args.portfolio.companyPortfolio;
+      if (companyPortfolio){
+        for (key in updateFor) {
+          if (companyPortfolio.hasOwnProperty(key)){
+            if(_.isArray(updateFor[key]) && _.isArray(companyPortfolio[key])){
+              companyPortfolio[key] = updateArrayofObjects(updateFor[key], companyPortfolio[key])
+            }
+            else if(_.isObject(updateFor[key]) && _.isObject(companyPortfolio[key]))
+            {
+              _.mergeWith(companyPortfolio[key], updateFor[key], function (objValue, srcValue) {
+                if (_.isArray(objValue)) {
+                  return objValue.concat(srcValue);
+                }
+              });
+            }
+          }
+          else{
+            companyPortfolio[key] = updateFor[key]
+          }
+        }
+
+        // let ret = MlStartupPortfolio.update({"portfolioDetailsId": args.portfoliodetailsId}, {$set: startupPortfolio})
+        let ret = mlDBController.update('MlCompanyPortfolio', {"portfolioDetailsId": args.portfoliodetailsId}, companyPortfolio, {$set: true}, context)
+        if (ret) {
+          let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId})
+          MlEmailNotification.onPortfolioUpdate(details);
+          let startupalert =  MlAlertNotification.onPortfolioUpdates()
+          let code = 200;
+          let response = new MlRespPayload().successPayload(startupalert, code);
+          return response;
+        }
+      }
+      else{
+        let code = 400;
+        let response = new MlRespPayload().errorPayload("Invalid Portfolio Request", code);
+        return response;
+      }
+    }
+    catch (e) {
+      let code = 400;
+      let response = new MlRespPayload().errorPayload(e.message, code);
+      return response;
+    }
+  }
+}
+
+MlResolver.MlQueryResolver['fetchCompanyDetails'] = (obj, args, context, info) => {
+  if(_.isEmpty(args))
+    return;
+
+  var key = args.key;
+  var portfoliodetailsId = args.portfoliodetailsId
+  var companyPortfolio = MlCompanyPortfolio.findOne({"portfolioDetailsId": portfoliodetailsId})
+  if (companyPortfolio && companyPortfolio.hasOwnProperty(key)) {
+    var object = companyPortfolio[key];
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    companyPortfolio[key] = filteredObject
+    return companyPortfolio;
+  }
+
+  return;
+}
+
+
+
+updateArrayofObjects = (updateFor, source) =>{
+  if(_.isArray(updateFor) && _.isArray(source)){
+    _.each(updateFor, function (obj) {
+      let isObj = _.find(source, {index:obj.index})
+      let itemIndex = _.findIndex(source, {index:obj.index})
+      if(isObj &&  itemIndex >= 0){
+        _.mergeWith(source[itemIndex], obj)
+      }
+      else{
+        source.push(obj)
+      }
+    })
+  }
+  return source;
+}
+
+MlResolver.MlQueryResolver['fetchCompanyPortfolioData'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let portfolio = MlCompanyPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('data')) {
+      return portfolio['data'];
+    }
+  }
+  return {};
+}
+
+
+
+MlResolver.MlQueryResolver['fetchCompanyPortfolioCharts'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let startChartsArray = {}
+    let portfolio = MlCompanyPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    startChartsArray["employmentOfCompanyChart"] = portfolio&&portfolio.employmentOfCompanyChart?portfolio.employmentOfCompanyChart:[];
+    startChartsArray["profitRevenueLiabilityChart"] = portfolio&&portfolio.profitRevenueLiabilityChart?portfolio.profitRevenueLiabilityChart:[];
+    startChartsArray["reviewOfCompanyChart"] = portfolio&&portfolio.reviewOfCompanyChart?portfolio.reviewOfCompanyChart:[];
+    startChartsArray["employeeBreakupDepartmentChart"] = portfolio&&portfolio.employeeBreakupDepartmentChart?portfolio.employeeBreakupDepartmentChart:[];
+    if(startChartsArray && startChartsArray.employeeBreakupDepartmentChart){
+      startChartsArray.employeeBreakupDepartmentChart.map(function(data,index) {
+        if(startChartsArray.employeeBreakupDepartmentChart[index]){
+          let entityData = MlDepartments.findOne({"_id":data.ebdDepartment}) || {};
+          startChartsArray.employeeBreakupDepartmentChart[index].ebdDepartmentName = entityData.displayName || "";
+        }
+
+      })
+    }
+    if (startChartsArray) {
+      return startChartsArray
+    }
+  }
+}
+
+MlResolver.MlQueryResolver['fetchCompanyPortfolioAboutUs'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let startAboutUsArray = {}
+    let portfolio = MlCompanyPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    startAboutUsArray["aboutUs"] = portfolio&&portfolio.aboutUs?portfolio.aboutUs:{};
+    startAboutUsArray["clients"] = portfolio&&portfolio.clients?portfolio.clients:[];
+    startAboutUsArray["serviceProducts"] = portfolio&&portfolio.serviceProducts?portfolio.serviceProducts:{};
+    startAboutUsArray["information"] = portfolio&&portfolio.information?portfolio.information:{};
+    startAboutUsArray["rating"] = portfolio&&portfolio.rating?portfolio.rating:null;
+
+    //private keys for service products
+    var object = startAboutUsArray["serviceProducts"];
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    startAboutUsArray["serviceProducts"] = filteredObject
+
+    // if(startAboutUsArray && startAboutUsArray.clients){
+    //   startAboutUsArray.clients.map(function(client,index) {
+    //     let clientData = MlStageOfCompany.findOne({"_id":client.companyId}) || {};
+    //     if(startAboutUsArray.clients[index]){
+    //       startAboutUsArray.clients[index].companyName = clientData.stageOfCompanyDisplayName || "";
+    //     }
+    //   })
+    // }
+    //for view action
+    MlResolver.MlMutationResolver['createView'](obj,{resourceId:args.portfoliodetailsId,resourceType:'portfolio'}, context, info);
+
+    if (startAboutUsArray) {
+      return startAboutUsArray
+    }
+
+  }
+
+  return {};
+}
+

@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
 import {fetchPortfolioActionHandler} from '../../../ideators/actions/ideatorActionHandler'
 
 export default class MlAppServiceProviderListView extends Component {

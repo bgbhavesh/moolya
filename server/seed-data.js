@@ -2,6 +2,7 @@
  * Created by venkatasrinag on 19/12/16.
  */
 
+import mlConversationsRepo from './commons/Conversations/mlConversationsRepo'
 
 let _ = require('lodash'),
   adminPassword = "MoolyaAdmin@123",
@@ -621,6 +622,8 @@ validateinternalUserLoginAttempt=(user)=>{
 
     return true;
 }
+
+mlConversationsRepo.createApplication();
 
 /******************************************* User Login <End> *********************************************************/
 /******************************************* Teplates <Start> *******************************************************/

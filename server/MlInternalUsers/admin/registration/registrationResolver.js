@@ -10,6 +10,7 @@ import _lodash from "lodash";
 import _ from "underscore";
 import moment from "moment";
 import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
+import mlConversationsRepo from '../../../commons/Conversations/mlConversationsRepo'
 var fs = Npm.require('fs');
 var Future = Npm.require('fibers/future');
 
@@ -496,6 +497,26 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         /** create the profile of user*/
         userId = mlDBController.insert('users', userObject, context)
         if (userId) {
+          /** Creating user record in Conversations */
+
+          var user = {
+            userId:userId,
+            userName:userObject.username
+          }
+
+          mlConversationsRepo.createUser(user, function (ret) {
+            if(ret && ret.success){
+              let obj ={
+                "notificationType":"PUSHNOTIFICATION",
+                "message":"This is test first",
+                "fromUserId":"system",
+                "toUserId":userId
+              }
+              mlConversationsRepo.createNotifications(obj)
+            }
+          });
+
+
           /** Email & MobileNumber verification updates to user*/
           mlDBController.update('users', {username: userObject.username},
             {

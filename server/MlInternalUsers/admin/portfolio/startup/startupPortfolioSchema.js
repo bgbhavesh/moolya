@@ -109,7 +109,7 @@ let startupPortfolioSchema = `
         isCountryPrivate:Boolean,
         addressImage : String,
         isAddressImagePrivate:Boolean,
-        branchLogo:imagesTypeSchema,
+        logo:imagesTypeSchema,
         makePrivate:Boolean,
         index:Int
         privateFields:[PrivateKeys]
@@ -419,7 +419,7 @@ let startupPortfolioSchema = `
         isCountryPrivate:Boolean,
         addressImage : String,
         isAddressImagePrivate:Boolean,
-        branchLogo:logo,
+        logo:logo,
         makePrivate:Boolean,
         index:Int
     }

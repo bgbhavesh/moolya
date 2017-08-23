@@ -33,12 +33,12 @@ export default class MlAppActionComponent extends React.Component {
       {
         actionName: 'delete',
         displayName:'Delete',
-        iconClass: 'ml flaticon-ml-shapes'
+        iconClass: 'ml fa fa-trash-o'
       },
       {
         actionName: 'like',
         displayName:'Like',
-        iconClass: 'ml my-ml-my_likes_2'
+        iconClass: 'ml my-ml-like'
       },
       {
         actionName: 'connect',
@@ -83,7 +83,7 @@ export default class MlAppActionComponent extends React.Component {
       {
         actionName: 'compare',
         displayName:'Compare',
-        iconClass: 'ml flaticon-ml-share-files'
+        iconClass: 'ml my-ml-Compare'
       },
       {
         actionName: 'share',
@@ -103,7 +103,7 @@ export default class MlAppActionComponent extends React.Component {
       {
         actionName: 'wishlist',
         displayName:'Wishlist',
-        iconClass: 'ml my-ml-mywishlist'
+        iconClass: 'ml my-ml-wishlist'
       },
       {
         actionName: 'edit',
@@ -123,7 +123,7 @@ export default class MlAppActionComponent extends React.Component {
       {
         actionName: 'comment',
         displayName:'Comment',
-        iconClass: 'ml ml-save'
+        iconClass: 'ml my-ml-comment'
       },
       {
         actionName: 'shortlist',
@@ -133,7 +133,7 @@ export default class MlAppActionComponent extends React.Component {
       {
         actionName: 'onboard',
         displayName:'Onboard',
-        iconClass: 'ml ml-save'
+        iconClass: 'ml my-ml-Onboard'
       },
       {
         actionName: 'review',
@@ -149,32 +149,32 @@ export default class MlAppActionComponent extends React.Component {
       {
         actionName: 'review',
         displayName:'Review',
-        iconClass: 'ml ml-save'
+        iconClass: 'ml my-ml-review'
       },
       {
         actionName: 'assess',
         displayName:'Assess',
-        iconClass: 'ml ml-save'
+        iconClass: 'ml my-ml-Assess'
       },
       {
         actionName: 'discuss',
         displayName:'Discuss',
-        iconClass: 'ml ml-save'
+        iconClass: 'ml my-ml-discuss'
       },
       {
         actionName: 'promote',
         displayName:'Promote',
-        iconClass: 'ml ml-save'
+        iconClass: 'ml my-ml-promote'
       },
       {
         actionName: 'negotiate',
         displayName:'Negotiate',
-        iconClass: 'ml ml-save'
+        iconClass: 'ml my-ml-negotiate'
       },
       {
         actionName: 'valuation',
         displayName:'Valuation',
-        iconClass: 'ml ml-save'
+        iconClass: 'ml my-ml-Valuation'
       },
       {
         actionName: 'report card',
@@ -184,27 +184,27 @@ export default class MlAppActionComponent extends React.Component {
       {
         actionName: 'invest',
         displayName:'Invest',
-        iconClass: 'ml ml-save'
+        iconClass: 'ml my-ml-Invest'
       },
       {
         actionName: 'handover',
         displayName:'Handover',
-        iconClass: 'ml ml-save'
+        iconClass: 'ml my-ml-handover'
       },
       {
         actionName: 'term sheet',
         displayName:'Term Sheet',
-        iconClass: 'ml ml-save'
+        iconClass: 'ml my-ml-termsheet'
       },
       {
         actionName: 'exit',
         displayName:'Exit',
-        iconClass: 'ml ml-delete'
+        iconClass: 'ml my-ml-Exit'
       },
       {
         actionName: 'remove',
         displayName:'Remove',
-        iconClass: 'ml ml-save'
+        iconClass: 'ml my-ml-remove'
       },
       {
         actionName: 'follow',

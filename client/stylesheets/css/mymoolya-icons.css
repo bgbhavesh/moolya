@@ -13,6 +13,63 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.my-ml-Assess:before {
+  content: "\e9b8";
+}
+.my-ml-comment:before {
+  content: "\e9b9";
+}
+.my-ml-Compare:before {
+  content: "\e9ba";
+}
+.my-ml-discuss:before {
+  content: "\e9bb";
+}
+.my-ml-Evaluate:before {
+  content: "\e9bc";
+}
+.my-ml-Exit:before {
+  content: "\e9bd";
+}
+.my-ml-handover:before {
+  content: "\e9be";
+}
+.my-ml-Invest:before {
+  content: "\e9bf";
+}
+.my-ml-like:before {
+  content: "\e9c0";
+}
+.my-ml-negotiate:before {
+  content: "\e9c1";
+}
+.my-ml-Onboard:before {
+  content: "\e9c2";
+}
+.my-ml-Principal:before {
+  content: "\e9c3";
+}
+.my-ml-promote:before {
+  content: "\e9c4";
+}
+.my-ml-remove:before {
+  content: "\e9c5";
+}
+.my-ml-review:before {
+  content: "\e9c6";
+}
+.my-ml-team-members:before {
+  content: "\e9c7";
+}
+.my-ml-termsheet:before {
+  content: "\e9c8";
+}
+.my-ml-Valuation:before {
+  content: "\e9c9";
+}
+.my-ml-wishlist:before {
+  content: "\e9ca";
+}
 .my-ml-explore:before {
   content: "\e9b6";
 }

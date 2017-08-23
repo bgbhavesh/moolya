@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import {logout} from "../../../../client/admin/layouts/header/actions/logoutAction";
-import {fetchUserDetailsHandler} from "../../commons/actions/fetchUserDetails";
+import {fetchUserDetailsHandler, getNotifications} from "../../commons/actions/fetchUserDetails";
 import BugReportWrapper from '../../commons/components/MlAppBugReportWrapper';
 var FontAwesome = require('react-fontawesome');
 import { createContainer } from 'meteor/react-meteor-data';
@@ -13,7 +13,8 @@ class MlAppProfileHeader extends Component {
     this.state={profilePic:""}
     this.regStatus = false;
     // this.fetchUserDetails = this.fetchUserDetails.bind(this);
-    this.state = {loading: false,data: {}}
+    this.state = {loading: false,data: {}, notifications:[]}
+    this.appNotifications.bind(this)
     return this;
   }
   componentDidUpdate(){
@@ -53,8 +54,18 @@ class MlAppProfileHeader extends Component {
       console.log(user);
       this.setState({profilePic:user.profile.profileImage});
     }
+
+    getNotifications(this.appNotifications.bind(this))
     const resp = this.fetchUserDetails();
     return resp
+  }
+
+  appNotifications(response){
+    var that =this
+    if(response && response.success){
+      that.setState({notifications:response.result})
+    }
+    console.log(response)
   }
 
   /**this is having issues*/
@@ -86,9 +97,16 @@ class MlAppProfileHeader extends Component {
   }
 
   render() {
-    const {data} = this.state
+    const {data, notifications} = this.state
     // console.log(this.regStatus)
     // const showLoader=this.state.loading;
+    var notificationAry = notifications && notifications.length?notifications:[]
+    var notificationsList = notificationAry.map(function (options, key) {
+        return (
+          <li key={key}>
+            <a href="#"><span className="ml ml-moolya-symbol"/>{options.message}</a>
+          </li>)
+      })
     return (
       <div>
         <BugReportWrapper />
@@ -100,15 +118,12 @@ class MlAppProfileHeader extends Component {
           <a href="/app/dashboard"> <img className="moolya_app_logo" src="/images/logo.png"/></a>
           <a id="notification" data-placement="top" data-class="large_popover" href="#"
              className="pull-right notification ripple">
-            <div className="noti_count">1</div>
+            <div className="noti_count">{this.state.notifications && this.state.notifications.length?this.state.notifications.length:0}</div>
             <FontAwesome name='bell-o'/></a>
-          <a href="#" className="pull-right header_search"><FontAwesome name='search'/></a>
           <span className="pull-right context_name" style={{'padding':'1px 7px','backgroundColor':'#ef4647','color':'#fff','lineHeight':'18px','borderRadius':'2px','fontSize':'12px','marginTop':'17px'}}>{data && data.registrationInfo && data.registrationInfo.communityName?data.registrationInfo.communityName:''}</span>
           <div style={{'display': 'none'}} className="ml_app_notification">
             <ul className="unstyled">
-              <li>
-                <a href="#"><span className="ml ml-moolya-symbol"/>Thanks for the registration </a>
-              </li>
+              {notificationsList}
             </ul>
           </div>
           <div className="ml_app_profile" role="navigation">

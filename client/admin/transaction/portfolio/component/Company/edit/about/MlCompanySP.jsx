@@ -12,6 +12,7 @@ export default class MlCompanySP extends React.Component{
     this.state={
       loading: true,
       data:this.props.serviceProductsDetails || {},
+      privateKey:{}
     }
     this.handleBlur.bind(this);
     return this;
@@ -24,6 +25,7 @@ export default class MlCompanySP extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+    this.updatePrivateKeys();
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.companyPortfolio && this.context.companyPortfolio.serviceProducts)
@@ -48,22 +50,36 @@ export default class MlCompanySP extends React.Component{
         delete data[propName];
       }
     }
-    this.props.getStartupSP(data)
+    data=_.omit(data,["privateFields"]);
+    this.props.getServiceProducts(data, this.state.privateKey)
   }
-  onLockChange(field, e){
+  onLockChange(fieldName,field, e){
+    var isPrivate = false;
     let details = this.state.data||{};
     let key = e.target.id;
     details=_.omit(details,[key]);
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
       details=_.extend(details,{[key]:true});
+      isPrivate = true
     }else{
       details=_.extend(details,{[key]:false});
     }
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
+    this.setState({privateKey:privateKey})
     this.setState({data:details}, function () {
       this.sendDataToParent()
     })
   }
+
+  updatePrivateKeys(){
+    let response = this.props.serviceProductsDetails
+    _.each(response.privateFields, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
+
+
   render(){
     return (
 
@@ -77,8 +93,8 @@ export default class MlCompanySP extends React.Component{
               <div className="panel-body">
 
                 <div className="form-group nomargin-bottom">
-                  <textarea placeholder="Describe..." name="description" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.description} onBlur={this.handleBlur.bind(this)}></textarea>
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" defaultValue={this.state.data&&this.state.data.isDescriptionPrivate} onClick={this.onLockChange.bind(this, "isDescriptionPrivate")}/><input type="checkbox" className="lock_input" id="isDescriptionPrivate" checked={this.state.data.isDescriptionPrivate}/>
+                  <textarea placeholder="Describe..." name="spDescription" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.spDescription} onBlur={this.handleBlur.bind(this)}></textarea>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isSPDescriptionPrivate" defaultValue={this.state.data&&this.state.data.isSPDescriptionPrivate} onClick={this.onLockChange.bind(this, "isSPDescriptionPrivate")}/>
                 </div>
 
               </div>
@@ -87,13 +103,6 @@ export default class MlCompanySP extends React.Component{
 
           </div> </div>
       </div>
-
-
-
-
-
-
-
 
     )
   }

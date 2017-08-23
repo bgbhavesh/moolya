@@ -244,7 +244,7 @@ class MlAppActivity extends Component {
       {
         name: 'History',
         component: <MlAppActivityHistory />,
-        icon: <span className="ml ml-moolya-symbol"></span>
+        icon: <span className="ml my-ml-history"></span>
       }
     ];
     return steps;

@@ -131,7 +131,7 @@ export default class MlInstitutionEditTab extends Component{
 
   getRDDetails(details, privateKey){
     let data = this.state.institutionPortfolio;
-    if(data && !data.awardsRecognition){
+    if(data && !data.researchAndDevelopment){
       data['researchAndDevelopment']=[];
     }
     this.setState({institutionPortfolio : data})

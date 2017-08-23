@@ -27,30 +27,22 @@ export default class MLAppMyCalendar extends Component {
       componentToLoad: 'calendar',
       events: []
     }
-    //this.getMyCalendar();
     this.onNavigate = this.onNavigate.bind(this);
     this.componentToLoad.bind(this);
     this.eventsData.bind(this);
     this.getAppointmentCounts = this.getAppointmentCounts.bind(this);
   }
 
-  async getMyCalendar() {
-    let date = new Date(this.state.date);
-    // console.log(date.getFullYear());
-    let data = await fetchMyCalendarActionHandler(date.getMonth(), date.getFullYear());
-    if (data) {
-      this.setState({
-        data: data.days
-      })
-    }
-    console.log(data.days);
-  }
-
   onNavigate(date) {
     this.setState({
       date: new Date(date)
     }, function () {
-      this.getMyCalendar();
+      let profileId = this.state.profileId;
+      if(profileId){
+        this.getProfileBasedAppointments(profileId);
+      } else {
+        this.getAppointmentCounts()
+      }
     }.bind(this));
   }
 
@@ -62,12 +54,6 @@ export default class MLAppMyCalendar extends Component {
 
   async getAppointmentCounts() {
     const resp = await fetchAllProfileAppointmentCountsHandler();
-    let dates = [];
-    let counts = [];
-    resp.events.map(function( data ) {
-      dates.push(data.date);
-      counts.push(data.count);
-    });
     let params = 'events' in resp ? resp.events : [];
     if(_.isEmpty(params)) {
       this.setState({
@@ -113,13 +99,15 @@ export default class MLAppMyCalendar extends Component {
   }
 
   async getProfileBasedAppointments(profileId) {
-      const resp = await fetchProfileAppointmentCountsHandler(profileId)
+    const resp = await fetchProfileAppointmentCountsHandler(profileId)
     let that = this;
     let details = [];
     let events = 'events' in resp ? resp.events : [];
+    let data = 'days' in resp ? resp.days : [];
     if(_.isEmpty(events)) {
       this.setState({
-        events: []
+        events: [],
+        data: data
       });
     } else {
       events.map( function( data ) {
@@ -158,7 +146,7 @@ export default class MLAppMyCalendar extends Component {
               <Calender
                 events={ that.state.events }
                 dayBackgroundComponent={<MlAppMyCalendarDayComponent componentToLoad={that.componentToLoad.bind(that)}/> }
-                dayData={that.state.data}
+                dayData={{days:that.state.data}}
                 onNavigate={that.onNavigate}
                 date={that.state.date}
               />

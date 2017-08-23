@@ -41,7 +41,7 @@ export default class MlUsersPortfolioLanding extends Component {
         $('.swiper-menu').addClass('hide');
       this.setState({loading: false, data: response})
     } else {
-      toastr.info('Portfolio not available');
+      toastr.error('Portfolio not available');
       this.setState({loading: false});
     }
   }

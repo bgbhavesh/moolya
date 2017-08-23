@@ -124,7 +124,7 @@ let appointment=`
     isActive: Boolean
     start: String
     end: String
-    type: String  
+    type: String
   }
   
   type profileAppointment {
@@ -175,7 +175,7 @@ let appointment=`
      fetchAllProfileAppointmentCounts: profileAppointment
      fetchOfficeMemberAppointmentCounts(userId:String!, profileId:String!, month:Int, year: Int): profileAppointment
      fetchAllOfficeMemberAppointmentCounts(month:Int, year: Int): profileAppointment
-     fetchProfileAppointmentCounts( profileId: String ): profileAppointment
+     fetchProfileAppointmentCounts( profileId: String, month:Int, year: Int): profileAppointment
      fetchServiceSeekerList(profileId: String!, serviceId: String): [serviceSeekerList]
      fetchMyAppointment(profileId: String!, day: Int, month: Int, year: Int): [myAppointmentsResponse]
      fetchSelfTask(selfTaskId: String): selfTask

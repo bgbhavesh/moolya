@@ -395,6 +395,37 @@ MlResolver.MlQueryResolver["fetchProfileAppointmentCounts"] = (obj, args, contex
 
   let result = mlDBController.aggregate('MlAppointments', pipeLine);
   result = result && result[0] ? result[0] : [];
+
+  if(!result.events){
+    let vacationPipeline = [
+      { $match : { "userId" : userId, "profileId" : profileId } },
+      {
+        $project: {
+          events: [],
+          days: {
+            "$filter" : {
+              "input": "$vacations",
+              "as": "day",
+              "cond": {
+                "$and":[
+                  {"$or": [
+                    { "$cond": [ { "$eq" : [{ "$month":"$$day.start" }, 8 ] }, true, false ] },
+                    { "$cond": [ { "$eq" : [{ "$month":"$$day.end" }, 8 ] }, true, false ] }
+                  ]},
+                  { "$eq" : ["$$day.isActive", true] }
+                ]
+              }
+            }
+          }
+        }
+      }
+    ];
+    result = mlDBController.aggregate('MlCalendarSettings', vacationPipeline);
+
+    result = result && result[0] ? result[0] : [];
+
+  }
+
   return result;
 
 };

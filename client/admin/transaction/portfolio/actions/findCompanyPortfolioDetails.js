@@ -301,7 +301,70 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                       keyName,
                       booleanKey
                     }
-                  }  
+                  }
+                  achievements{
+                      achievementName
+                      isAchievementNamePrivate
+                      achievementDescription
+                      isAchievementDescriptionPrivate
+                      logo{
+                          fileName
+                          fileUrl
+                        }
+                      index
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  }
+                  
+                  policy{
+                      policyDescription,
+                      isPolicyDescriptionPrivate,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  }
+                  evolution{
+                      evolutionDescription,
+                      isEvolutionDescriptionPrivate,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  
+                   researchAndDevelopment{
+                      researchAndDevelopmentName
+                      isResearchAndDevelopmentNamePrivate
+                      researchAndDevelopmentDescription
+                      isResearchAndDevelopmentDescriptionPrivate
+                      logo{
+                          fileName
+                          fileUrl
+                        }
+                      index
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  }
+                  intrapreneurRecognition{
+                      intrapreneurName
+                      year
+                      intrapreneurDescription
+                      logo{
+                        fileName
+                        fileUrl
+                      }
+                      index
+                      privateFields{
+                          keyName
+                          booleanKey
+                      }
+                      makePrivate
+                  }
               }
           }
       `,

@@ -29,7 +29,13 @@ class MlAppProfileHeader extends Component {
       $('.app_main_wrap ').height(WinHeight - $('.app_header').outerHeight(true));
       $('.ml_app_profile h1').click(function () {
           $(this).parent('.ml_app_profile').toggleClass('profile_open');
+        $('.overlay').toggle();
       });
+    $('.overlay').click(function(){
+      $('.ml_app_profile').removeClass('profile_open');
+      $(this).hide();
+    });
+    ;
       $("#notification").popover({
           'title': 'Notifications',
           'html': true,

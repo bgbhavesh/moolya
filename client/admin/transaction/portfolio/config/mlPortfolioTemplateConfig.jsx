@@ -19,6 +19,7 @@ import MlAppStartupViewTabs from '../../../../app/startup/components/MlAppStartu
 import MlAppServiceProviderEditTabs from "../../../../app/serviceProvider/components/MlAppServiceProviderEditTabs";
 import MlAppServiceProviderViewTabs from "../../../../app/serviceProvider/components/MlAppServiceProviderViewTabs";
 import MlCompanyEditTabs from '../component/Company/edit/MlCompanyEditTabs'
+import MlCompanyViewTabs from '../component/Company/view/MlCompanyViewTabs'
 import MlAppInstitutionsEditTabs from "../../../../app/portfolio/Institutions/components/MlAppInstitutionsEditTabs";
 import MlAppInstitutionsViewTabs from "../../../../app/portfolio/Institutions/components/MlAppInstitutionsViewTabs";
 import MlAppCompaniesEditTabs from "../../../../app/portfolio/Companies/components/MlAppCompaniesEditTabs";
@@ -120,6 +121,16 @@ const mlCompanyEditExternalUserPortfolioTemplateConfig = {
   stepName: 'Portfolio',
   component: MlCompanyEditTabs
 };
+const mlCompanyViewExternalUserPortfolioTemplateConfig = {
+  templateName: "Portfolio-Template-Company-View",
+  templateCode: "PFTCMPVIW",
+  userType: 'internal',
+  process: 'Registration',
+  subProcess: 'Registration',
+  stepCode: 'PORTFOLIO',
+  stepName: 'Portfolio',
+  component: MlCompanyViewTabs
+};
 
 
 const mlInstitutionEditInternalUserPortfolioTemplateConfig = {
@@ -153,7 +164,7 @@ mlRegistrationTemplates.setTemplate(mlFunderViewExternalUserPortfolioTemplateCon
 mlRegistrationTemplates.setTemplate(mlServiceProviderEditExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlServiceProviderViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlCompanyEditExternalUserPortfolioTemplateConfig);
-
+mlRegistrationTemplates.setTemplate(mlCompanyViewExternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlInstitutionViewInternalUserPortfolioTemplateConfig);
 mlRegistrationTemplates.setTemplate(mlInstitutionEditInternalUserPortfolioTemplateConfig);
 

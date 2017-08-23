@@ -12,6 +12,10 @@ class Notifications{
     listenForNotifications(rkConversation, callback){
         rkConversation.socketUtils.listenMessage(rkConversation.socket, 'get_notification', callback);
     }
+
+    updateNotification(rkConversation, data, callback){
+      rkConversation.socketUtils.emitMessage(rkConversation.socket, 'ack_notification', data, callback);
+    }
 }
 
 var rkNotifications = new Notifications()

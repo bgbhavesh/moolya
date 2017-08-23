@@ -58,9 +58,9 @@ class __SocketUtils{
     }
 
     listenMessage(socket, eventName, respCallback){
-      if(socket) {
+      if(socket){
         socket.on(eventName, function (response) {
-          if (respCallback)
+          if(respCallback)
             respCallback(eventName, response)
         })
       }

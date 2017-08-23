@@ -287,7 +287,7 @@ class MlPortfolio extends React.Component {
   render() {
     let that = this;
     let MlActionConfig = []
-    if(FlowRouter.getRouteName() != "transaction_portfolio_EditRequests"){
+    if(FlowRouter.getRouteName() === "portfolio_requested"){
       MlActionConfig.push({
         showAction: true,
         actionName: 'edit',

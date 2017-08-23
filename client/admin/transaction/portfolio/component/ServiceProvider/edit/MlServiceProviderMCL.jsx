@@ -50,45 +50,41 @@ export default class MlStartupMCL extends React.Component {
     let that = this;
     let data = {};
     let portfoliodetailsId = that.props.portfolioDetailsId;
-    // let empty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.memberships)
-    // let compliancesEmpty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.compliances)
-    // let licensesEmpty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.licenses)
-    if (that.context.startupPortfolio && (that.context.startupPortfolio.memberships || that.context.startupPortfolio.compliances || that.context.startupPortfolio.licenses)) {
+    if (that.context.startupPortfolio && (that.context.serviceProviderPortfolio.memberships || that.context.serviceProviderPortfolio.compliances || that.context.serviceProviderPortfolio.licenses)) {
       this.setState({
-        memberships: that.context.startupPortfolio.memberships,
-        compliances: that.context.startupPortfolio.compliances,
-        licenses: that.context.startupPortfolio.licenses
+        memberships: that.context.serviceProviderPortfolio.memberships,
+        compliances: that.context.serviceProviderPortfolio.compliances,
+        licenses: that.context.serviceProviderPortfolio.licenses
       });
       data = {
-        memberships: that.context.startupPortfolio.memberships,
-        licenses: that.context.startupPortfolio.compliances,
-        compliances: that.context.startupPortfolio.licenses
+        memberships: that.context.serviceProviderPortfolio.memberships,
+        compliances: that.context.serviceProviderPortfolio.compliances,
+        licenses: that.context.serviceProviderPortfolio.licenses
       }
-    } else {
+      } else {
       const responseM = await fetchServiceProviderMemberships(portfoliodetailsId);
       if (responseM) {
         this.setState({memberships: responseM});
+        this.setState({privateFields:object.privateFields});
       }
-      // _.each(responseM.privateFields, function (pf) {
-      //   $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      // })
-
       const responseC = await fetchServiceProviderCompliances(portfoliodetailsId);
       if (responseC) {
         this.setState({compliances: responseC});
+        var pf = this.state.privateFields;
+        if(responseC.privateFields){
+          pf = pf.concat(responseC.privateFields)
+          this.setState({privateFields:pf});
+        }
       }
-      // _.each(responseC.privateFields, function (pf) {
-      //   $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      // })
-
       const responseL = await fetchServiceProviderLicenses(portfoliodetailsId);
       if (responseL) {
         this.setState({licenses: responseL});
+        var pf = this.state.privateFields;
+        if(responseL.privateFields){
+          pf = pf.concat(responseL.privateFields)
+          this.setState({privateFields:pf});
+        }
       }
-      // _.each(responseL.privateFields, function (pf) {
-      //   $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      // })
-
       data = {
         memberships: this.state.memberships,
         licenses: this.state.licenses,
@@ -128,12 +124,10 @@ export default class MlStartupMCL extends React.Component {
     let mcl = details[type];
     if (details && mcl) {
       if (className.indexOf("fa-lock") != -1) {
-        // details=_.extend(details,{[key]:true});
         mcl[key] = true
         details[type] = mcl;
         isPrivate = true
       } else {
-        // details=_.extend(details,{[key]:false});
         mcl[key] = false
         details[type] = mcl;
       }
@@ -145,7 +139,7 @@ export default class MlStartupMCL extends React.Component {
       }
     }
 
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, tabName: type}
     this.setState({privateKey:privateKey})
     this.setState({data: details}, function () {
       this.sendDataToParent()

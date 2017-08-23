@@ -18,7 +18,10 @@ class Conversations{
     }
 
     connect(url){
-        this.socket = this.socketUtils.connect(url, this.utils.getToken())
+        var token = this.utils.getToken();
+        if(token){
+          this.socket = this.socketUtils.connect(url, this.utils.getToken())
+        }
     }
 }
 

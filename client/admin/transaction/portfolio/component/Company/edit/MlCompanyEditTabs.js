@@ -9,6 +9,9 @@ import MlCompanyAwards from "./MlCompanyAwards";
 import MlCompanyMCL from "./MlCompanyMCL";
 import MlCompanyIncubatorsEditTabs from "./incubators/MlCompanyIncubatorsEditTabs"
 import MlCompanyPartners from "./MlCompanyPartners";
+import MlCompanyCSREditTabs from "./CSR/MlCompanyCSREditTabs"
+import MlCompanyIntrapreneur from './MlCompanyIntrapreneur'
+import MlCompanyRAndD from './MlCompanyR&D'
 import PortfolioLibrary from '../../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 // import MlStartupCharts from "./MlStartupCharts/MlStartupCharts";
 import {client} from '../../../../../core/apolloConnection'
@@ -60,7 +63,9 @@ export default class MlCompanyEditTabs extends React.Component{
       {tabClassName: 'tab', panelClassName: 'panel', title:"M C & L" , component:<MlCompanyMCL key="8" getMCL={this.getMCL.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Incubators" , component:<MlCompanyIncubatorsEditTabs key="9" getIncubators={this.getIncubators.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.backClickHandler.bind(this)}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Partners" , component:<MlCompanyPartners key="10" getPartnersDetails={this.getPartnersDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-
+      {tabClassName: 'tab', panelClassName: 'panel', title:"CSR" , component:<MlCompanyCSREditTabs key="11" getCSRDetails={this.getCSRDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.backClickHandler.bind(this)}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"R&D" , component:<MlCompanyRAndD key="13" getRDDetails={this.getRDDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" , component:<MlCompanyIntrapreneur key="12" getIntrapreneurDetails={this.getIntrapreneurDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
     ]
     return tabs;
   }
@@ -144,6 +149,45 @@ export default class MlCompanyEditTabs extends React.Component{
       arr.push(updateItem)
     })
     data['partners'] = arr;
+
+    this.props.getPortfolioDetails({companyPortfolio:this.state.companyPortfolio}, privateKey);
+  }
+  getCSRDetails(details,tabName, privateKey){
+
+    let data = this.state.companyPortfolio;
+    data[tabName] = details;
+    this.props.getPortfolioDetails({companyPortfolio : data}, privateKey);
+  }
+  getRDDetails(details, privateKey){
+    let data = this.state.companyPortfolio;
+    if(data && !data.awardsRecognition){
+      data['researchAndDevelopment']=[];
+    }
+    this.setState({companyPortfolio : data})
+    let arr = [];
+    _.each(details, function (obj) {
+      let updateItem = _.omit(obj, 'logo');
+      arr.push(updateItem)
+    })
+    data['researchAndDevelopment'] = arr;
+
+    this.props.getPortfolioDetails({companyPortfolio:this.state.companyPortfolio}, privateKey);
+
+  }
+
+  getIntrapreneurDetails(details, privateKey){
+
+    let data = this.state.companyPortfolio;
+    if(data && !data.intrapreneurRecognition){
+      data['intrapreneurRecognition']=[];
+    }
+    this.setState({companyPortfolio : data})
+    let arr = [];
+    _.each(details, function (obj) {
+      let updateItem = _.omit(obj, 'logo');
+      arr.push(updateItem)
+    })
+    data['intrapreneurRecognition'] = arr;
 
     this.props.getPortfolioDetails({companyPortfolio:this.state.companyPortfolio}, privateKey);
   }

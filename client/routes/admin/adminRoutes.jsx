@@ -295,7 +295,7 @@ adminSection.route('/transactions/conversationsLog', {
 adminSection.route('/transactions/history', {
   name: 'History_Log',
   action(params){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'conversations'}} />, adminContent:<MlTransactionTabHistoryList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'history'}} />, adminContent:<MlTransactionTabHistoryList/>})
   }
 });
 
@@ -413,7 +413,7 @@ adminSection.route('/transactions/portfolio/viewPortfolio/:id/:communityType', {
 adminSection.route('/transactions/office', {
   name: 'transaction_office',
   action(){
-    mount(AdminLayout,{adminContent:<EditTaxation />})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'office'}} />, adminContent:<EditTaxation />})
   }
 });
 
@@ -465,7 +465,7 @@ adminSection.route('/portfolio/about', {
 adminSection.route('/transactions/processSetupList', {
   name: 'transaction_ProcessSetupList',
   action(){
-      mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'requests'}} />, adminContent:<MlProcessSetupRequestsList/>})
+      mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'investorProcessSetup'}} />, adminContent:<MlProcessSetupRequestsList/>})
   }
 });
 
@@ -473,7 +473,7 @@ adminSection.route('/transactions/processSetupList', {
 adminSection.route('/transactions/shareList', {
   name: 'transaction_ShareList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'requests'}} />, adminContent:<MlShareList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'share'}} />, adminContent:<MlShareList/>})
   }
 });
 
@@ -481,6 +481,6 @@ adminSection.route('/transactions/shareList', {
 adminSection.route('/transactions/serviceCardsList', {
   name: 'Service_Cards',
   action(params){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'conversations'}} />, adminContent:<MlserviceCardsList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'serviceCard'}} />, adminContent:<MlserviceCardsList/>})
   }
 });

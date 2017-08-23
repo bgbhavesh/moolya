@@ -183,6 +183,7 @@ let institutePortfolioSchema = `
     
     
     type InstitutionPortfolio{
+      portfolioDetailsId: String
       memberships       : membershipsOutput,
       compliances       : compliancesOutput,
       licenses          : licensesOutput 
@@ -201,6 +202,8 @@ let institutePortfolioSchema = `
       achievements : [achievementsOutput]
       policy : policyOutput
       evolution : evolutionOutput
+      chapterName : String
+      accountType : String
       researchAndDevelopment: [researchAndDevelopmentOutput]
     }
    

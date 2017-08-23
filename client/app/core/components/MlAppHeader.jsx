@@ -146,7 +146,7 @@ class MlAppProfileHeader extends Component {
               {/*<li data-toggle="tooltip" title="Themes" data-placement="top">*/}
               {/*<a href="#"><span className="ml my-ml-themes_10-01"></span></a>*/}
               {/*</li>*/}
-              <li data-toggle="tooltip" title="Calander" data-placement="top">
+              <li data-toggle="tooltip" title="Calendar" data-placement="top">
                 <a href="/app/calendar"><span className="ml my-ml-calendar"></span></a>
               </li>
               <li data-toggle="tooltip" title="My Tasks" data-placement="top">

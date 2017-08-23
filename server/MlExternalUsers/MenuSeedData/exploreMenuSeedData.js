@@ -51,7 +51,7 @@ if(Meteor.isServer){
 
             {
               "image":"ml ml-institutions",
-              "link": "/app/explore/institutions",
+              "link": "/app/explore/institution",
               "isLink" : true,
               "isMenu" : true,
               "name" : "Institutions",

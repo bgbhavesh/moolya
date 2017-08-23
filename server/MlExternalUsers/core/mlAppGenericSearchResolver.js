@@ -33,6 +33,9 @@ MlResolver.MlUnionResolver['AppGenericSearchUnion'] =  {
       case "IDEATORPORTFOLIODETAILS":  //ideatorPortfolioDetails
         return'Ideator';
         break;
+      case "INSTITUTIONPORTFOLIODETAILS":  //institutionPortfolioDetails
+        return'InstitutionPortfolio';
+        break;
       case "EXTERNALUSERS":
         return'Users';
         break;
@@ -53,7 +56,6 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   } else {
     subChapterQuery = { "$nin" : mlSubChapterAccessControl.subChapters };
   }
-  console.log('mlSubChapterAccessControl', mlSubChapterAccessControl);
 
   let moduleName = args ? args.module : "";
   moduleName =moduleName.toUpperCase();
@@ -138,7 +140,6 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
     // data = MlServiceProviderPortfolio.find(finalQuery, findOptions).fetch();
     // count = MlServiceProviderPortfolio.find(finalQuery, findOptions).count();
 
-
     let pipleline = [
       {
         '$lookup': {
@@ -152,7 +153,6 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
     ];
     data = mlDBController.aggregate('MlServiceProviderPortfolio', pipleline, context);
     count = data.length;
-
   }
 
   else if (args.module == "startupPortfolioDetails") {
@@ -292,6 +292,21 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
     //   }
     // ];
 
+  }
+  else if(args.module == "institutionPortfolioDetails"){
+    let pipleline = [
+      {
+        '$lookup': {
+          from: 'mlPortfolioDetails', localField: 'portfolioDetailsId', foreignField: '_id',
+          as: 'port'
+        }
+      },
+      {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
+      {'$match': {"port.status": "gone live", 'port.communityCode': "INS",  'port.subChapterId': subChapterQuery} },
+      {'$project': {portfolioDetailsId: 1, about: 1, chapterName: '$port.chapterName', accountType: '$port.accountType'}}
+    ];
+    data = mlDBController.aggregate('MlInstitutionPortfolio', pipleline, context);
+    count = data.length;
   }
   /*********************************************end of all portfolio queries************************************/
   else if (args.module == "externalUsers"){

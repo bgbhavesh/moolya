@@ -25,6 +25,7 @@ import MlAppMyTransaction from "../../app/myTransaction/component/MlAppMyTransac
 import {appClient} from '../../app/core/appConnection'
 import MlViews from '../../app/commons/view/MlAppViews'
 import {mlDashboardListConfig, mlDashboardMapConfig} from '../../app/dashboard/config/mlAppDashboardConfig'
+import {mlAppInstitutionConfig} from '../../app/portfolio/Institutions/config/mlAppInstitutionsConfig'
 
 // import RegistrationWizard from "../../admin/transaction/requested/component/RegistrationWizard";
 import MlAppRegistrationWizard from "../../../client/app/registrations/component/MlAppRegistrationWizard";
@@ -319,6 +320,38 @@ appSection.route('/serviceProvider/:portfolioId', {
   }
 });
 
+/********************************************************start of routes for the institution*************************/
+appSection.route('/explore/institution', {
+  name: 'explore',
+  action(){
+    var listConfig = _.extend(mlAppInstitutionConfig, {isExplore: true});
+    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
+  }
+});
+
+appSection.route('/explore/institution/:portfolioId', {
+  name: 'explore',
+  action(params){
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={"institution"}/>})
+  }
+  /**there is no need to send community type other than ideator*/
+});
+
+appSection.route('/institution', {
+  name: 'institutions',
+  action(){
+    var listConfig = _.extend(mlAppInstitutionConfig, {isExplore: false});
+    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
+  }
+});
+
+appSection.route('/institution/:portfolioId', {
+  name: 'institutions',
+  action(params){
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={"institution"}/>, isProfileMenu:false})
+  }
+});
+/************************************************end of instituion routes**********************************************/
 appSection.route('/register/:id', {
   name: 'registeras',
   action(params){

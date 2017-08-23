@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 import _ from "lodash";
 import MlInstitutionEditMCL from './MlInstitutionEditMCL';
@@ -12,7 +11,7 @@ import MlInstitutionEditChart from './MlInstitutionEditChart';
 import MlInstitutionEditData from './MlInstitutionEditData';
 import MlInstitutionAboutUs from "./aboutUs/MlInstitutionAboutUsLandingPage";
 import MlInstitutionCSREditTabs from "./CSR/MlInstitutionCSREditTabs";
-import MlInstitutionIntrapreneur from './MlInstitutionEditIntrapreneur';
+import MlInstitutionEditIntrapreneur from './MlInstitutionEditIntrapreneur';
 
 import {client} from '../../../../../core/apolloConnection'
 
@@ -78,8 +77,8 @@ export default class MlInstitutionEditTab extends Component{
       {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlInstitutionEditLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"CSR" , component:<MlInstitutionCSREditTabs key="10" getCSRDetails={this.getCSRDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       //{tabClassName: 'tab', panelClassName: 'panel', title:"R&D" , component:<MlInstitutionEditAwards key="11" getAwardsDetails={this.getAwardsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" , component:<MlInstitutionIntrapreneur key="10" getIntrapreneurDetails={this.getIntrapreneurDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-    ]
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" , component:<MlInstitutionEditIntrapreneur key="12" getIntrapreneurDetails={this.getIntrapreneurDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+    ];
     return tabs;
   }
 

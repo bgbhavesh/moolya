@@ -108,6 +108,7 @@ let portfolioSchema = `
         startupPortfolio:startupPortfolio,
         funderPortfolio:funderPortfolio,
         serviceProviderPortfolio:serviceProviderPortfolio
+        companyPortfolio : companyPortfolio
         institutionPortfolio : institutionPortfolio
     }
     

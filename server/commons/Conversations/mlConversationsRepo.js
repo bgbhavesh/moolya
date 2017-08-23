@@ -24,18 +24,21 @@ class ConversationsRepo{
     var ret = await this.sendRequest('/createApplication', body, 'post', true);
     console.log(ret)
     if(ret.success){
-      MlConversations.insert(ret.result.apiKey)
+      this.setApiKey(ret.result.apiKey)
     }
     return ret;
   }
 
-  async createUser(moolyaUser){
+  async createUser(moolyaUser, cb){
     var user = {
       _id:moolyaUser.userId,
       username:moolyaUser.userName,
       email:moolyaUser.userName,
     }
     var ret = await this.sendRequest('/createUser', user, 'post');
+    if(ret.success){
+      cb(ret)
+    }
     return ret;
   }
 
@@ -54,8 +57,15 @@ class ConversationsRepo{
     return apiKey;
   }
 
-  sendNotifications(){
-    // Push Notifications to conversations server Notification types are email, sms, push
+  // Push Notifications to conversations server Notification types are email, sms, push
+  async sendNotifications(notification){
+    var ret = await this.sendRequest('/createNotification', notification, 'post');
+    return ret;
+  }
+
+  async createNotifications(notification){
+    var ret = await this.sendRequest('/createNotification', notification, 'post');
+    return ret;
   }
 
   async sendRequest(endPoint, payload, method, isApplication){

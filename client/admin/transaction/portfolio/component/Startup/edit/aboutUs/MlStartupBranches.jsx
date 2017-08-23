@@ -74,7 +74,7 @@ export default class MlStartupBranches extends React.Component{
     if(details && details.logo){
       delete details.logo['__typename'];
     }
-    this.setState({selectedIndex:index, data:details,selectedObject : index, popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.addressTypeId});
+    this.setState({selectedIndex:index, data:details,selectedObject : index, popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.addressTypeId, "countryId" : details.countryId, "cityId" : details.cityId, "stateId" : details.stateId});
     setTimeout(function () {
       _.each(details.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
@@ -330,7 +330,7 @@ export default class MlStartupBranches extends React.Component{
                         <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                         {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
                         <div className="hex_outer portfolio-font-icons" onClick={that.onTileClick.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
-                        <h3>{details.name?details.name:""}</h3>
+                        <h3>{details.branchName?details.branchName:""}</h3>
                       </div>
                     </a>
                   </div>)
@@ -375,7 +375,7 @@ export default class MlStartupBranches extends React.Component{
 
 
                         <div className="form-group">
-                          <input type="text" name="branchAddress1" placeholder="Colony/Street/Locality" className="form-control float-label" id="" defaultValue={this.state.data.branchAddress2} onBlur={this.handleBlur.bind(this)}/>
+                          <input type="text" name="branchAddress2" placeholder="Colony/Street/Locality" className="form-control float-label" id="" defaultValue={this.state.data.branchAddress2} onBlur={this.handleBlur.bind(this)}/>
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAddressTwoPrivate" defaultValue={this.state.data.isAddressTwoPrivate} onClick={this.onLockChange.bind(this, "branchAddress2", "isAddressTwoPrivate")}/>
                         </div>
 

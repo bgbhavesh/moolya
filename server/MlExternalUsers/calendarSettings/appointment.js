@@ -158,6 +158,7 @@ class MlAppointment {
       /**
        * Find request day through all the working day to get slots
        */
+      calendarSetting.workingDays = calendarSetting.workingDays ? calendarSetting.workingDays : [];
       let isWorkingDay = calendarSetting.workingDays.find(function (workingDay) {
         return date.getDay() == workingDay.dayName;
       });
@@ -375,6 +376,7 @@ class MlAppointment {
       /**
        * Looping through all the working day to get slots
        */
+      calendarSetting.workingDays = calendarSetting.workingDays ? calendarSetting.workingDays : [];
       let userSlots = calendarSetting.workingDays.map(function (workingDay) {
         workingDay.slotTimes = that.buildSlotTimes(calendarSetting.slotDuration, workingDay.lunch, workingDay.slots);
         workingDay.appointmentPerSlot = workingDay.slotTimes.length;

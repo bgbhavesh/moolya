@@ -15,6 +15,8 @@ import MlInstitutionEditIntrapreneur from './MlInstitutionEditIntrapreneur';
 import MlInstitutionEditRD from './MlInstitutionEditR&D'
 
 import {client} from '../../../../../core/apolloConnection'
+import MlInstitutionIncubatorsEditTabs from "./incubators/MlInstitutionIncubatorsEditTabs"
+
 
 
 export default class MlInstitutionEditTab extends Component{
@@ -79,7 +81,8 @@ export default class MlInstitutionEditTab extends Component{
       {tabClassName: 'tab', panelClassName: 'panel', title:"CSR" , component:<MlInstitutionCSREditTabs key="10" getCSRDetails={this.getCSRDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"R&D" , component:<MlInstitutionEditRD key="11" getRDDetails={this.getRDDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" , component:<MlInstitutionEditIntrapreneur key="12" getIntrapreneurDetails={this.getIntrapreneurDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-    ];
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Incubators" , component:<MlInstitutionIncubatorsEditTabs key="13" getIncubators={this.getIncubators.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.backClickHandler.bind(this)}/>},
+    ]
     return tabs;
   }
 
@@ -131,7 +134,7 @@ export default class MlInstitutionEditTab extends Component{
 
   getRDDetails(details, privateKey){
     let data = this.state.institutionPortfolio;
-    if(data && !data.awardsRecognition){
+    if(data && !data.researchAndDevelopment){
       data['researchAndDevelopment']=[];
     }
     this.setState({institutionPortfolio : data})
@@ -199,6 +202,12 @@ export default class MlInstitutionEditTab extends Component{
 
   getCSRDetails(details,tabName, privateKey){
 
+    let data = this.state.institutionPortfolio;
+    data[tabName] = details;
+    this.props.getPortfolioDetails({institutionPortfolio : data}, privateKey);
+  }
+
+  getIncubators (details,tabName, privateKey){
     let data = this.state.institutionPortfolio;
     data[tabName] = details;
     this.props.getPortfolioDetails({institutionPortfolio : data}, privateKey);

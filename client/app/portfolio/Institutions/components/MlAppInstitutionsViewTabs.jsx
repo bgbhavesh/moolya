@@ -1,22 +1,34 @@
-/**
- * Created by vishwadeep on 8/7/17.
- */
-
-/**
- * Import of all the usable components
- * */
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
+import MlInstitutionViewAboutLanding from "../../../../admin/transaction/portfolio/component/Institution/view/aboutTabs/MlInstitutionViewAboutLanding";
+import MlInstitutionViewManagement from "../../../../admin/transaction/portfolio/component/Institution/view/MlInstitutionViewManagement";
+import MlInstitutionViewInvestor from "../../../../admin/transaction/portfolio/component/Institution/view/MlInstitutionViewInvestor";
+import MlInstitutionViewAwards from "../../../../admin/transaction/portfolio/component/Institution/view/MlInstitutionViewAwards";
+import MlInstitutionViewMCL from "../../../../admin/transaction/portfolio/component/Institution/view/MlInstitutionViewMCL";
+import MlInstitutionViewLookingFor from "../../../../admin/transaction/portfolio/component/Institution/view/MlInstitutionViewLookingFor";
 import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
-import MlServiceProviderViewAbout from "../../../../admin/transaction/portfolio/component/ServiceProvider/view/MlServiceProviderViewAbout";
+import PortfolioLibrary from "../../../../commons/components/portfolioLibrary/PortfolioLibrary";
+import MlInstitutionViewCharts from "../../../../admin/transaction/portfolio/component/Institution/view/MlInstitutionViewChart";
+import MlInstitutionIntrapreneur from "../../../../admin/transaction/portfolio/component/Institution/view/MlInstitutionViewIntrapreneur";
+import MlInstitutionRAndD from "../../../../admin/transaction/portfolio/component/Institution/view/MlInstitutionViewR&D";
+import MlInstitutionCSR from "../../../../admin/transaction/portfolio/component/Institution/view/CSRViewTabs/MlInstitutionCSRViewTabs";
+import {appClient} from "../../../core/appConnection";
+// import MlInstitutionViewAboutUs from "../../../admin/transaction/portfolio/component/InstitutionView/MlInstitutionViewAboutUs";
+// import MlInstitutionViewBranches from "../../../admin/transaction/portfolio/component/InstitutionView/MlInstitutionViewBranches";
+// import MlInstitutionViewClients from "../../../admin/transaction/portfolio/component/InstitutionView/MlInstitutionViewClients";
+// import MlInstitutionViewTechnologies from "../../../admin/transaction/portfolio/component/InstitutionView/MlInstitutionViewTechnologies";
+// import MlInstitutionViewAssets from "../../../admin/transaction/portfolio/component/InstitutionView/MlInstitutionViewAssets";
 
-//todo:import the View component of admin//
+/**
+ * Import of all the files from admin need to seperate from app
+ * */
 
-export default class MlAppInstitutionsViewTabs extends Component {
+//todo://anotations to be includeds
+export default class MlAppInstitutionViewTabs extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {tabs: []};
   }
+
 
   componentDidMount() {
     setTimeout(function () {
@@ -31,17 +43,97 @@ export default class MlAppInstitutionsViewTabs extends Component {
     }, 300);
   }
 
+  backClickHandler(){
+    let tabs = this.state.tabs;
+    this.setState({tabs: tabs})
+  }
+
+  setBackHandler(backMethod){
+    this.props.setBackHandler(backMethod);
+    $('.RRT__tabs').removeClass('menunone');
+  }
+
   /**
-   * Display of all tabs of service provider and passing the portfolioId
+   * rendering of all the tabs in UI
    * */
   getTabComponents() {
     let tabs = [
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "About Institution",
-        component: <MlServiceProviderViewAbout key="1"
-                                               portfolioDetailsId={this.props.portfolioDetailsId}/>
+        title: "About",
+        component: <MlInstitutionViewAboutLanding key="1" portfolioDetailsId={this.props.portfolioDetailsId}
+                                              getSelectedAnnotations={this.props.getSelectedAnnotations}
+                                              backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Management",
+        component: <MlInstitutionViewManagement key="2" isAdmin={false} client={appClient}
+                                            portfolioDetailsId={this.props.portfolioDetailsId}
+                                            getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Investor",
+        component: <MlInstitutionViewInvestor key="3" portfolioDetailsId={this.props.portfolioDetailsId}
+                                          getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+      },
+      {tabClassName: 'tab',
+        panelClassName: 'panel', title:"Charts" ,
+        component:<MlInstitutionViewCharts key="5" portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Awards",
+        component: <MlInstitutionViewAwards key="6" portfolioDetailsId={this.props.portfolioDetailsId}
+                                        getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Library",
+        component: <PortfolioLibrary isAdmin={false} client={appClient} key="7"
+                                     portfolioDetailsId={this.props.portfolioDetailsId}
+                                     getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "M C & L",
+        component: <MlInstitutionViewMCL key="8" portfolioDetailsId={this.props.portfolioDetailsId}
+                                     getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Looking For",
+        component: <MlInstitutionViewLookingFor key="9" portfolioDetailsId={this.props.portfolioDetailsId}
+                                            getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "CSR",
+        component: <MlInstitutionCSR key="10" portfolioDetailsId={this.props.portfolioDetailsId}
+                                     getSelectedAnnotations={this.props.getSelectedAnnotations}
+                                     backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "R&D",
+        component: <MlInstitutionRAndD key="11" portfolioDetailsId={this.props.portfolioDetailsId}
+                                              getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Intrapreneur",
+        component: <MlInstitutionIntrapreneur key="12" portfolioDetailsId={this.props.portfolioDetailsId}
+                                              getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       }
     ]
     return tabs;

@@ -24,12 +24,11 @@ MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => 
     let result = mlDBController.find('MlServiceCardDefinition', query , context).fetch();
     return result;
   }else {
-    let query = {
-      userId: context.userId,
-      profileId: args.profileId,
-      isCurrentVersion: true,
-      isBeSpoke: false
-    };
+    if(args.profileId === "all"){
+      var query = {userId: context.userId,isCurrentVersion: true, isBeSpoke: false};
+    } else {
+      var query = {userId: context.userId,profileId: args.profileId,isCurrentVersion: true, isBeSpoke: false};
+    }
     let result = mlDBController.find('MlServiceCardDefinition', query, context).fetch()
     return result;
   }

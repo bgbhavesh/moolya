@@ -7,9 +7,14 @@ import MlInstitutionViewLookingFor from './MlInstitutionViewLookingFor';
 import MlInstitutionViewData from './MlInstitutionViewData';
 import MlInstitutionViewChart from './MlInstitutionViewChart';
 import MlInstitutionViewLibrary from './MlInstitutionViewLibrary';
+import MlInstitutionViewAboutLanding from './aboutTabs/MlInstitutionViewAboutLanding';
+import MlInstitutionViewIntrapreneur from './MlInstitutionViewIntrapreneur';
+import MlInstitutionCSRViewTabs from './CSRViewTabs/MlInstitutionCSRViewTabs'
+
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
-import PortfolioLibrary from '../../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
+// import PortfolioLibrary from '../../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import {client} from '../../../../../core/apolloConnection'
+import MlInstitutionViewRD from "./MlInstitutionViewR&D";
 
 export default class MlViewInstitutionPortfolioTemplate extends Component {
   constructor(props){
@@ -41,8 +46,15 @@ export default class MlViewInstitutionPortfolioTemplate extends Component {
     }
     this.setState({tabs:getTabs() ||[]});
   }
+
+  backClickHandler(){
+    let tabs = this.state.tabs;
+    this.setState({tabs: tabs})
+  }
+
   getTabComponents(){
     let tabs = [
+      {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlInstitutionViewAboutLanding key="1"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations} backClickHandler={this.backClickHandler.bind(this)}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , component:<MlInstitutionViewManagement key="2" isAdmin={true} client={client} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Investor" , component:<MlInstitutionViewInvestor key="3"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Data" , component:<MlInstitutionViewData key="4"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
@@ -51,7 +63,9 @@ export default class MlViewInstitutionPortfolioTemplate extends Component {
       {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlInstitutionViewLibrary isAdmin={true} client={client}  key="7"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"M C & L" , component:<MlInstitutionViewMCL key="8" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlInstitutionViewLookingFor key="9"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-
+      {tabClassName: 'tab', panelClassName: 'panel', title:"CSR" , component:<MlInstitutionCSRViewTabs key="10"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"R&D" , component:<MlInstitutionViewRD key="11"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" , component:<MlInstitutionViewIntrapreneur key="12"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
     ]
     return tabs;
   }

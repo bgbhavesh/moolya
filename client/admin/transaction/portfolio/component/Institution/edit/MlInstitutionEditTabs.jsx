@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from "react";
-import {render} from "react-dom";
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 import _ from "lodash";
 import MlInstitutionEditMCL from './MlInstitutionEditMCL';
@@ -11,6 +10,10 @@ import MlInstitutionEditLibrary from './MlInstitutionEditLibrary';
 import MlInstitutionEditChart from './MlInstitutionEditChart';
 import MlInstitutionEditData from './MlInstitutionEditData';
 import MlInstitutionAboutUs from "./aboutUs/MlInstitutionAboutUsLandingPage";
+import MlInstitutionCSREditTabs from "./CSR/MlInstitutionCSREditTabs";
+import MlInstitutionEditIntrapreneur from './MlInstitutionEditIntrapreneur';
+import MlInstitutionEditRD from './MlInstitutionEditR&D'
+
 import {client} from '../../../../../core/apolloConnection'
 
 
@@ -73,8 +76,10 @@ export default class MlInstitutionEditTab extends Component{
       {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlInstitutionEditLibrary key="7" client={client} isAdmin={true} getInvestorDetails={this.getInvestorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"M C & L" , component:<MlInstitutionEditMCL key="8" getInstitutionMCL={this.getInstitutionMCL.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlInstitutionEditLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-
-    ]
+      {tabClassName: 'tab', panelClassName: 'panel', title:"CSR" , component:<MlInstitutionCSREditTabs key="10" getCSRDetails={this.getCSRDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"R&D" , component:<MlInstitutionEditRD key="11" getRDDetails={this.getRDDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" , component:<MlInstitutionEditIntrapreneur key="12" getIntrapreneurDetails={this.getIntrapreneurDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+    ];
     return tabs;
   }
 
@@ -124,6 +129,40 @@ export default class MlInstitutionEditTab extends Component{
     this.props.getPortfolioDetails({institutionPortfolio:this.state.institutionPortfolio}, privateKey);
   }
 
+  getRDDetails(details, privateKey){
+    let data = this.state.institutionPortfolio;
+    if(data && !data.researchAndDevelopment){
+      data['researchAndDevelopment']=[];
+    }
+    this.setState({institutionPortfolio : data})
+    let arr = [];
+    _.each(details, function (obj) {
+      let updateItem = _.omit(obj, 'logo');
+      arr.push(updateItem)
+    })
+    data['researchAndDevelopment'] = arr;
+
+    this.props.getPortfolioDetails({institutionPortfolio:this.state.institutionPortfolio}, privateKey);
+
+  }
+
+  getIntrapreneurDetails(details, privateKey){
+
+    let data = this.state.institutionPortfolio;
+    if(data && !data.intrapreneurRecognition){
+      data['intrapreneurRecognition']=[];
+    }
+    this.setState({institutionPortfolio : data})
+    let arr = [];
+    _.each(details, function (obj) {
+      let updateItem = _.omit(obj, 'logo');
+      arr.push(updateItem)
+    })
+    data['intrapreneurRecognition'] = arr;
+
+    this.props.getPortfolioDetails({institutionPortfolio:this.state.institutionPortfolio}, privateKey);
+  }
+
   getLookingForDetails(details, privateKey){
     let data = this.state.institutionPortfolio;
     if(data && !data.lookingFor){
@@ -156,6 +195,13 @@ export default class MlInstitutionEditTab extends Component{
     }
     this.setState({institutionPortfolio : data})
     this.props.getPortfolioDetails({institutionPortfolio:this.state.institutionPortfolio}, privateKey);
+  }
+
+  getCSRDetails(details,tabName, privateKey){
+
+    let data = this.state.institutionPortfolio;
+    data[tabName] = details;
+    this.props.getPortfolioDetails({institutionPortfolio : data}, privateKey);
   }
 
   render(){

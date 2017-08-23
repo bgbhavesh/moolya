@@ -3,6 +3,7 @@ import {render} from "react-dom";
 import {logout} from "../../../../client/admin/layouts/header/actions/logoutAction";
 import {fetchUserDetailsHandler} from "../../commons/actions/fetchUserDetails";
 import BugReportWrapper from '../../commons/components/MlAppBugReportWrapper';
+import MlAppNotificationsConfig from '../../commons/components/notifications/MlAppNotificationsConfig'
 var FontAwesome = require('react-fontawesome');
 import { createContainer } from 'meteor/react-meteor-data';
 
@@ -12,29 +13,22 @@ class MlAppProfileHeader extends Component {
     super(props, context);
     this.state={profilePic:""}
     this.regStatus = false;
-    // this.fetchUserDetails = this.fetchUserDetails.bind(this);
-    this.state = {loading: false,data: {}}
+    this.state = {loading: false,data: {}, notifications:[]}
     return this;
   }
-  componentDidUpdate(){
-   /* var WinWidth = $(window).width();
-     if(WinWidth > 768){
-    $(".app_menu,.app_main_wrap").mCustomScrollbar({theme:"minimal-dark"});
-  }*/
-  }
+
   componentDidMount() {
       var WinHeight = $(window).height();
       var WinWidth = $(window).width();
       $('.app_main_wrap ').height(WinHeight - $('.app_header').outerHeight(true));
       $('.ml_app_profile h1').click(function () {
           $(this).parent('.ml_app_profile').toggleClass('profile_open');
+        $('.overlay').toggle();
       });
-      $("#notification").popover({
-          'title': 'Notifications',
-          'html': true,
-          'placement': 'bottom',
-          'content': $(".ml_app_notification").html()
-      });
+    $('.overlay').click(function(){
+      $('.ml_app_profile').removeClass('profile_open');
+      $(this).hide();
+    });
 
     $('body').tooltip({
       selector: '[data-toggle="tooltip"], [title]:not([data-toggle="popover"])',
@@ -87,8 +81,7 @@ class MlAppProfileHeader extends Component {
 
   render() {
     const {data} = this.state
-    // console.log(this.regStatus)
-    // const showLoader=this.state.loading;
+
     return (
       <div>
         <BugReportWrapper />
@@ -98,19 +91,10 @@ class MlAppProfileHeader extends Component {
         <div className="app_header">
           <a href="/app/dashboard" className="pull-left"><FontAwesome name='home'/></a>
           <a href="/app/dashboard"> <img className="moolya_app_logo" src="/images/logo.png"/></a>
-          <a id="notification" data-placement="top" data-class="large_popover" href="#"
-             className="pull-right notification ripple">
-            <div className="noti_count">1</div>
-            <FontAwesome name='bell-o'/></a>
-          <a href="#" className="pull-right header_search"><FontAwesome name='search'/></a>
-          <span className="pull-right context_name" style={{'padding':'1px 7px','backgroundColor':'#ef4647','color':'#fff','lineHeight':'18px','borderRadius':'2px','fontSize':'12px','marginTop':'17px'}}>{data && data.registrationInfo && data.registrationInfo.communityName?data.registrationInfo.communityName:''}</span>
-          <div style={{'display': 'none'}} className="ml_app_notification">
-            <ul className="unstyled">
-              <li>
-                <a href="#"><span className="ml ml-moolya-symbol"/>Thanks for the registration </a>
-              </li>
-            </ul>
-          </div>
+
+          <MlAppNotificationsConfig />
+
+
           <div className="ml_app_profile" role="navigation">
           <h1 id="NavLbl"  data-toggle="tooltip" title={`Welcome ${data && data.firstName?data.firstName:"User"}`} data-placement="left" className="" style={{'backgroundImage':`url(${data && data.profileImage?data.profileImage:"/images/ideator_01.png"})`, 'backgroundPosition': 'center center'}}>{/*<span className="profile_context ml ml-ideator"></span>*/}</h1>
             <ol>`
@@ -131,7 +115,7 @@ class MlAppProfileHeader extends Component {
               {/*<li data-toggle="tooltip" title="Themes" data-placement="top">*/}
               {/*<a href="#"><span className="ml my-ml-themes_10-01"></span></a>*/}
               {/*</li>*/}
-              <li data-toggle="tooltip" title="Calander" data-placement="top">
+              <li data-toggle="tooltip" title="Calendar" data-placement="top">
                 <a href="/app/calendar"><span className="ml my-ml-calendar"></span></a>
               </li>
               <li data-toggle="tooltip" title="My Tasks" data-placement="top">
@@ -154,4 +138,5 @@ export default MlAppHeader = createContainer(props => {
     user: Meteor.user(),
   };
 }, MlAppProfileHeader);
+
 

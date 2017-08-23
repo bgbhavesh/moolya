@@ -11,6 +11,7 @@ export async function fetchTasksActionHandler (profileId) {
       fetchTasks(profileId: $profileId) {
         taskId : _id
         displayName
+        profileId
       }
     }
     `,

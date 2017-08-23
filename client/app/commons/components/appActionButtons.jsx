@@ -59,7 +59,7 @@ export default class AppActionButtons extends React.Component {
       },
       {
         actionName: 'Wishlist',
-        iconClass: 'ml my-ml-mywishlist'
+        iconClass: 'ml my-ml-wishlist'
       },
       {
         actionName: 'Favorites',

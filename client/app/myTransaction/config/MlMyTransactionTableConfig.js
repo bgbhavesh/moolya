@@ -7,9 +7,10 @@ import moment from "moment";
 import gql from "graphql-tag";
 import MlGenericTransactionAccordion from '../../commons/components/transactionAccordion/MlGenericTransactionAccordion'
 
-function dateFormatter (data){
-  let createdDateTime=data&&data.data&&data.data.createdAt?data.data.createdAt:null;
-  return <div>{createdDateTime&&moment(createdDateTime).format(Meteor.settings.public.dateFormat)}</div>;
+function dateFormatter (cell,data){
+  let createdDateTime=data&&data.createdAt?data.createdAt:null;
+  let dateVal=createdDateTime?moment(createdDateTime).format(Meteor.settings.public.dateFormat):'';
+  return dateVal;
 }
 
 const mlMyTransactionTableConfig = new MlViewer.View({
@@ -36,7 +37,7 @@ const mlMyTransactionTableConfig = new MlViewer.View({
     {dataField: "chapter", title: "Chapter", dataSort: true},
     {dataField: "subChapter", title: "Sub Chapter", dataSort: true},
     {dataField: "community", title: "Community", dataSort: true},
-    {dataField: "createdAt", title: "Date Time", dataSort: true, customComponent:dateFormatter},
+    {dataField: "createdAt", title: "Date Time", dataSort: true,useCustomComponent:true,customComponent:dateFormatter},
     {dataField: "status", title: "status", dataSort: true}
   ],
   tableHeaderClass: 'react_table_head',

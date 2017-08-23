@@ -63,12 +63,40 @@ export default class MlCalendarHeader extends Component {
       <div className="col-lg-12">
         <ul className="users_list well well-sm">
           <li>
-            <a href="#">
+            <a href="#" onClick={()=>that.changeProfile("all")}>
               <img src={that.state.profilePic ? that.state.profilePic : "/images/def_profile.png"}/><br />
               <div className="tooltiprefer">
                 <span>{that.state.displayName ? that.state.displayName : "All"}</span>
               </div>
             </a>
+          </li>
+          <li className={"sub_list_wrap "+ ( selectedProfileId == "all" ? "" :"hidden_list" )}>
+            <ul className="sub_list">
+              <li className={ type == "activity" ? "active_user" : ""}>
+                <a onClick={()=>that.changeType("activity")} href="">
+                  <span className="icon_bg"><span className="icon_lg fa fa-file-text-o"></span></span><br />
+                  <div className="tooltiprefer">
+                    <span>Activity</span>
+                  </div>
+                </a>
+              </li>
+              <li className={ type == "task" ? "active_user" : ""}>
+                <a onClick={()=>that.changeType("task")} href="">
+                  <span className="icon_bg"><span className="icon_lg fa fa-list-alt"></span></span><br />
+                  <div className="tooltiprefer">
+                    <span>Task Master</span>
+                  </div>
+                </a>
+              </li>
+              <li className={ type == "service" ? "active_user" : ""}>
+                <a onClick={()=>that.changeType("service")} href="">
+                  <span className="icon_bg"><span className="icon_lg fa fa-puzzle-piece"></span></span><br />
+                  <div className="tooltiprefer">
+                    <span>Services</span>
+                  </div>
+                </a>
+              </li>
+            </ul>
           </li>
 
           {profiles.map(function (profile, idx) {

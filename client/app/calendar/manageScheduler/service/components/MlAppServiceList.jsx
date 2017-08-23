@@ -51,7 +51,8 @@ export default class MlAppServiceList extends Component {
    * Desc :: Redirect with updating service component
    * @param id :: current service id
    */
-  updateService(id) {
+  updateService(id, selectedProfileId) {
+    this.profileId = this.profileId === "all" ? selectedProfileId : this.profileId;
     FlowRouter.go(`/app/calendar/manageSchedule/${this.profileId}/editService?id=${id}`);
   }
 
@@ -68,19 +69,19 @@ export default class MlAppServiceList extends Component {
           <MlAppScheduleHead type="service" />
           <div className="col-lg-12" id="show">
             <div className="row">
-              <div className="col-lg-2 col-md-4 col-sm-4">
+              {this.profileId !== "all" ? <div className="col-lg-2 col-md-4 col-sm-4">
                 <a href=" " onClick={() => this.createService()}>
                   <div className="list_block notrans">
                     <div className="hex_outer"><span className="ml ml-plus "></span></div>
                     <h3>Create a service</h3>
                   </div>
                 </a>
-              </div>
+              </div>: <div></div> }
 
               {services && services.map((service, index) => {
                 return (
                   <div className="col-lg-2 col-md-4 col-sm-4" key={index}>
-                    <div className="list_block img_list_block notrans" onClick={()=>this.updateService(service._id)}>
+                    <div className="list_block img_list_block notrans" onClick={()=>this.updateService(service._id, service.profileId)}>
                       <img src="/images/activity_1.jpg" />
                       <h3>{service.displayName}</h3>
                     </div>

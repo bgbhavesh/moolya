@@ -50,7 +50,7 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
           {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlIdeatorAudience key="4" client={client} isAdmin={true}  getAudience={this.getAudience.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
           {tabClassName: 'tab', panelClassName: 'panel', title:"Library", component:<PortfolioLibrary client={client} isAdmin={true} key="5" portfolioDetailsId={this.props.portfolioDetailsId}  /> },
           {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Planning", component:<MlIdeatorStrategyAndPlanning key="6" getStrategyAndPlanning={this.getStrategyAndPlanning.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-          {tabClassName: 'tab', panelClassName: 'panel', title:"Intellectual Planning and Trademark" , component:<MlIdeatorIntellectualPlanningAndTrademark key="7" getIntellectualPlanning={this.getIntellectualPlanning.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+          {tabClassName: 'tab', panelClassName: 'panel', title:"IP and Trademark" , component:<MlIdeatorIntellectualPlanningAndTrademark key="7" getIntellectualPlanning={this.getIntellectualPlanning.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
           {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For", component:<MlIdeatorLookingFor  key="8" getLookingFor={this.getLookingFor.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>}
         ]
         return tabs;

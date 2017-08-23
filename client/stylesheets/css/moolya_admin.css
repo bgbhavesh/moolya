@@ -140,8 +140,8 @@ h1,h2,h3,h4,h5,h6{font-family: 'DINPro-Regular';font-weight:normal;margin: 0px;l
 .left_wrap{overflow-x: hidden;overflow-y: auto;}
 .admin_main_wrap .bottom_actions_block{ background: #273545;height: 50px;width: auto;border-radius: 6px 6px 0px 0px;position: absolute;bottom: 0px;left: 50%;transform: translateX(-50%);padding: 0px 14px 0px 0px;transition: .2s linear;z-index: 99;overflow: hidden;}
 .admin_main_wrap .bottom_actions_block.show_block{height: 0px;}
-span.actions_switch{width: 42px;height: 18px;background:url(../images/actions_block_top.png);content: "";position: absolute;left: 50%;transform: translateX(-50%);bottom: 50px;transition: .2s linear;cursor: pointer;}
-span.actions_switch.show_act{bottom: 0px;}
+span.actions_switch{width: 42px;height: 18px;background:url(../images/actions_block_down.png);content: "";position: absolute;left: 50%;transform: translateX(-50%);bottom: 50px;transition: .2s linear;cursor: pointer;}
+span.actions_switch.show_act{bottom: 0px;background:url(../images/actions_block_top.png);}
 .bottom_actions_block .hex_btn{display:inline-block;background: #fff;border:0px;line-height:25px;position: relative;text-decoration: none;font-size: 14px;height: 36px;width: 26px;margin: 8px 6px 0px 21px;color: #000;}
 .bottom_actions_block .hex_btn:after{position:absolute;right:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 18px 0 18px 10px;border-color: transparent transparent transparent #fff;top: 0px;}
 .bottom_actions_block .hex_btn:before{position:absolute;left:-10px;content:" ";width: 0px;height: 0px;border-style: solid;border-width: 18px 10px 18px 0px;border-color: transparent #fff transparent transparent;top: 0px;}
@@ -690,10 +690,10 @@ button:focus{outline: 0;}
 .react-bs-table-search-form input[type="text"]::-moz-placeholder { /* Firefox 19+ */color: transparent;}
 .react-bs-table-search-form input[type="text"]:-ms-input-placeholder { /* IE 10+ */color: transparent;}
 .react-bs-table-search-form input[type="text"]:-moz-placeholder { /* Firefox 18- */color: transparent;}
-.react-bs-table-search-form input[type="text"] {border: none; background: url(../images/search_icon.png) 2px center no-repeat; z-index: 1; width: 25px; height: 25px; transition: all .25s ease-in .25s; color: transparent; line-height: 25px; float: right;margin-top: -10px;}
+.react-bs-table-search-form input[type="text"] {border: none; background: url(../images/search_icon_red.png) 2px center no-repeat; z-index: 1; width: 25px; height: 25px; transition: all .25s ease-in .25s; color: transparent; line-height: 25px; float: right;margin-top: -10px;}
 .react-bs-table-search-form input[type="text"]:hover {cursor: pointer; }
 .react-bs-table-search-form input[type="text"]:hover:focus {cursor: text; }
-.react-bs-table-search-form input[type="text"]:focus {width: 200px; padding: 0 10px 0 30px; outline: none; font-size: 14px; color: black; background: url(../images/search_icon.png) 2px center no-repeat ; color: #000; }
+.react-bs-table-search-form input[type="text"]:focus {width: 200px; padding: 0 10px 0 30px; outline: none; font-size: 14px; color: black; background: url(../images/search_icon_red.png) 2px center no-repeat ; color: #000; }
 
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{background-color: transparent;}
 

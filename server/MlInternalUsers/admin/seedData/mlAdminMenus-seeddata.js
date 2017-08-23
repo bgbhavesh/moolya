@@ -505,7 +505,7 @@ if (Meteor.isServer) {
         {
           "image": "/images/users_icon.png",
           "link": "/admin/users/clusters",
-          "name": "Users",
+          "name": "users",
           "uniqueId": "users",
           "isLink": true,
           "isMenu": true,
@@ -843,6 +843,18 @@ if (Meteor.isServer) {
                   "dynamicLinkHandler" : "",
                   "subMenusId" : "users_cluster",
                   "subMenuMappingId" : "users_library"
+                },
+                {
+                  "link": "/admin/users/history",
+                  "name": "History",
+                  "uniqueId": "users_History",
+                  "isLink": true,
+                  "isMenu": true,
+                  "image": "",
+                  "dynamicLink": true,
+                  "dynamicLinkHandler": "",
+                  "subMenusId": "users_cluster",
+                  "subMenuMappingId": "users_History"
                 }
               ]
             },
@@ -1423,7 +1435,7 @@ if (Meteor.isServer) {
         {
           "image" : "/images/package-icon.png",
           "link" : "/admin/packages/officeList",
-          "name" : "Packages",
+          "name" : "packages",
           "uniqueId" : "packages",
           "isLink" : true,
           "isMenu" : true,

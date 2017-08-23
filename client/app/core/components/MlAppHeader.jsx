@@ -1,8 +1,9 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import {logout} from "../../../../client/admin/layouts/header/actions/logoutAction";
-import {fetchUserDetailsHandler, getNotifications} from "../../commons/actions/fetchUserDetails";
+import {fetchUserDetailsHandler} from "../../commons/actions/fetchUserDetails";
 import BugReportWrapper from '../../commons/components/MlAppBugReportWrapper';
+import MlAppNotificationsConfig from '../../commons/components/notifications/MlAppNotificationsConfig'
 var FontAwesome = require('react-fontawesome');
 import { createContainer } from 'meteor/react-meteor-data';
 
@@ -12,17 +13,10 @@ class MlAppProfileHeader extends Component {
     super(props, context);
     this.state={profilePic:""}
     this.regStatus = false;
-    // this.fetchUserDetails = this.fetchUserDetails.bind(this);
     this.state = {loading: false,data: {}, notifications:[]}
-    this.appNotifications.bind(this)
     return this;
   }
-  componentDidUpdate(){
-   /* var WinWidth = $(window).width();
-     if(WinWidth > 768){
-    $(".app_menu,.app_main_wrap").mCustomScrollbar({theme:"minimal-dark"});
-  }*/
-  }
+
   componentDidMount() {
       var WinHeight = $(window).height();
       var WinWidth = $(window).width();
@@ -49,18 +43,8 @@ class MlAppProfileHeader extends Component {
       console.log(user);
       this.setState({profilePic:user.profile.profileImage});
     }
-
-    getNotifications(this.appNotifications.bind(this))
     const resp = this.fetchUserDetails();
     return resp
-  }
-
-  appNotifications(response){
-    var that =this
-    if(response && response.success){
-      that.setState({notifications:response.result})
-    }
-    console.log(response)
   }
 
   /**this is having issues*/
@@ -92,16 +76,8 @@ class MlAppProfileHeader extends Component {
   }
 
   render() {
-    const {data, notifications} = this.state
-    // console.log(this.regStatus)
-    // const showLoader=this.state.loading;
-    var notificationAry = notifications && notifications.length?notifications:[]
-    var notificationsList = notificationAry.map(function (options, key) {
-        return (
-          <li key={key}>
-            <a href="#"><span className="ml ml-moolya-symbol"/>{options.message}</a>
-          </li>)
-      })
+    const {data} = this.state
+
     return (
       <div>
         <BugReportWrapper />
@@ -111,16 +87,10 @@ class MlAppProfileHeader extends Component {
         <div className="app_header">
           <a href="/app/dashboard" className="pull-left"><FontAwesome name='home'/></a>
           <a href="/app/dashboard"> <img className="moolya_app_logo" src="/images/logo.png"/></a>
-          <a id="notification" data-placement="top" data-class="large_popover" href="#"
-             className="pull-right notification ripple">
-            <div className="noti_count">{this.state.notifications && this.state.notifications.length?this.state.notifications.length:0}</div>
-            <FontAwesome name='bell-o'/></a>
-          <span className="pull-right context_name" style={{'padding':'1px 7px','backgroundColor':'#ef4647','color':'#fff','lineHeight':'18px','borderRadius':'2px','fontSize':'12px','marginTop':'17px'}}>{data && data.registrationInfo && data.registrationInfo.communityName?data.registrationInfo.communityName:''}</span>
-          <div style={{'display': 'none'}} className="ml_app_notification">
-            <ul className="unstyled">
-              {notificationsList}
-            </ul>
-          </div>
+
+          <MlAppNotificationsConfig />
+
+
           <div className="ml_app_profile" role="navigation">
           <h1 id="NavLbl"  data-toggle="tooltip" title={`Welcome ${data && data.firstName?data.firstName:"User"}`} data-placement="left" className="" style={{'backgroundImage':`url(${data && data.profileImage?data.profileImage:"/images/ideator_01.png"})`, 'backgroundPosition': 'center center'}}>{/*<span className="profile_context ml ml-ideator"></span>*/}</h1>
             <ol>`
@@ -164,4 +134,5 @@ export default MlAppHeader = createContainer(props => {
     user: Meteor.user(),
   };
 }, MlAppProfileHeader);
+
 

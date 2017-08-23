@@ -27,7 +27,7 @@ export const mlAppStartupConfig = new MlAppViewer({
                    ...on startupPortfolioOutput{
                       portfolioDetailsId
                         aboutUs{                                            
-                            description
+                            startupDescription
                         }
                       chapterName
                       accountType

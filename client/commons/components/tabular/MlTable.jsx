@@ -84,6 +84,10 @@ export default class MlTable extends React.Component {
         let customColumnComponent=(cell,row)=> {
           return <CustomComponent data={row} />;
         };
+
+        let useCustomComponent=cl.useCustomComponent;
+        if(useCustomComponent){customColumnComponent=CustomComponent};
+
         columnOptions['dataFormat']=customColumnComponent;
        // if(cl.width){
         // columnOptions['width']='10%';

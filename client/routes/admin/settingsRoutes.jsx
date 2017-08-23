@@ -611,7 +611,7 @@ adminSection.route('/settings/documentProcess/editProfession/:id', {
 adminSection.route('/settings/registration/entityList', {
   name: 'settings_EntityTypeList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'entityTypes'}} />, adminContent:< MlEntityTypeList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module': 'registration' ,'subModule' :'entityTypes'}} />, adminContent:< MlEntityTypeList/>})
   }
 });
 adminSection.route('/settings/registration/addEntity', {
@@ -629,7 +629,7 @@ adminSection.route('/settings/registration/editEntity/:id', {
 adminSection.route('/settings/registration/stageOfCompanyList', {
   name: 'settings_StageOfCompanyTypeList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'stageOfCompany'}} />, adminContent:< MlStageOfCompanyTypeList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module': 'registration' ,'subModule' :'stageOfCompany'}} />, adminContent:< MlStageOfCompanyTypeList/>})
   }
 });
 adminSection.route('/settings/registration/addStageOfCompany', {
@@ -647,7 +647,7 @@ adminSection.route('/settings/registration/editStageOfCompany/:id', {
 adminSection.route('/settings/registration/businessList', {
   name: 'settings_BusinessTypeList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'businessTypes'}} />, adminContent:< MlBusinessTypeList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module': 'registration' ,'subModule' :'businessTypes'}} />, adminContent:< MlBusinessTypeList/>})
   }
 });
 adminSection.route('/settings/registration/addBusiness', {
@@ -665,7 +665,7 @@ adminSection.route('/settings/registration/editBusiness/:id', {
 adminSection.route('/settings/registration/citizenshipList', {
   name: 'settings_CitizenshipTypeList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'citizenship'}} />, adminContent:< MlCitizenshipTypeList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module': 'registration' ,'subModule' :'citizenship'}} />, adminContent:< MlCitizenshipTypeList/>})
   }
 });
 adminSection.route('/settings/registration/addCitizenship', {
@@ -683,7 +683,7 @@ adminSection.route('/settings/registration/editCitizenship/:id', {
 adminSection.route('/settings/registration/lookingForList', {
   name: 'settings_LookingForTypeList',
   action(){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module':'lookingFor'}} />,adminContent:< MlLookingForTypeList/>})
+    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'setting','showBreadCrum':true,'module': 'registration' ,'subModule' :'lookingFor'}} />,adminContent:< MlLookingForTypeList/>})
   }
 });
 adminSection.route('/settings/registration/addLookingFor', {

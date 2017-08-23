@@ -120,16 +120,6 @@ let institutePortfolioSchema = `
       index: Int,
       privateFields:[PrivateKeys]
     }
-    type researchAndDevelopmentOutput{
-      researchAndDevelopmentName:String
-      isResearchAndDevelopmentNamePrivate:Boolean
-      researchAndDevelopmentDescription:String
-      isResearchAndDevelopmentDescriptionPrivate:Boolean
-      logo:imagesTypeSchema,
-      makePrivate:Boolean,
-      index: Int,
-      privateFields:[PrivateKeys]
-    }
     type achievementsOutput{
       achievementName:String
       isAchievementNamePrivate:Boolean
@@ -179,9 +169,16 @@ let institutePortfolioSchema = `
         institutionEvolutionDescriptionPrivate :Boolean
         privateFields:[PrivateKeys]
     }
-    
-    
-    
+    type researchAndDevelopmentOutput{
+      researchAndDevelopmentName:String
+      isResearchAndDevelopmentNamePrivate:Boolean
+      researchAndDevelopmentDescription:String
+      isResearchAndDevelopmentDescriptionPrivate:Boolean
+      logo:imagesTypeSchema,
+      makePrivate:Boolean,
+      index: Int,
+      privateFields:[PrivateKeys]
+    }
     type InstitutionPortfolio{
       portfolioDetailsId: String
       memberships       : membershipsOutput,
@@ -354,8 +351,7 @@ let institutePortfolioSchema = `
         isResearchAndDevelopmentDescriptionPrivate:Boolean
         makePrivate:Boolean
         logo : logo
-        index: Int
-    
+        index: Int   
     }
     input institutionPortfolio{
         portfolioDetailsId  : String

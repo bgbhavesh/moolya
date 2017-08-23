@@ -2,6 +2,116 @@
  * Created by pankaj on 25/6/17.
  */
 
+
+const defaultCalenderSetting = {
+  slotDuration: {
+    hours: 0,
+    minutes: 30
+  },
+  appointmentCountPerSlots: 1,
+  slotBreakTime: 0,
+  workingDays: [
+    {
+      "isActive" : true,
+      "dayName" : 0,
+      "lunch" : [
+        {}
+      ],
+      "slots" : [
+        {
+          "isActive" : true,
+          "start" : "00:00",
+          "end" : "24:00"
+        }
+      ]
+    },
+    {
+      "isActive" : true,
+      "dayName" : 1,
+      "lunch" : [
+        {}
+      ],
+      "slots" : [
+        {
+          "isActive" : true,
+          "start" : "00:00",
+          "end" : "24:00"
+        }
+      ]
+    },
+    {
+      "isActive" : true,
+      "dayName" : 2,
+      "lunch" : [
+        {}
+      ],
+      "slots" : [
+        {
+          "isActive" : true,
+          "start" : "00:00",
+          "end" : "24:00"
+        }
+      ]
+    },
+    {
+      "isActive" : true,
+      "dayName" : 3,
+      "lunch" : [
+        {}
+      ],
+      "slots" : [
+        {
+          "isActive" : true,
+          "start" : "00:00",
+          "end" : "24:00"
+        }
+      ]
+    },
+    {
+      "isActive" : true,
+      "dayName" : 4,
+      "lunch" : [
+        {}
+      ],
+      "slots" : [
+        {
+          "isActive" : true,
+          "start" : "00:00",
+          "end" : "24:00"
+        }
+      ]
+    },
+    {
+      "isActive" : true,
+      "dayName" : 5,
+      "lunch" : [
+        {}
+      ],
+      "slots" : [
+        {
+          "isActive" : true,
+          "start" : "00:00",
+          "end" : "24:00"
+        }
+      ]
+    },
+    {
+      "isActive" : true,
+      "dayName" : 6,
+      "lunch" : [
+        {}
+      ],
+      "slots" : [
+        {
+          "isActive" : true,
+          "start" : "00:00",
+          "end" : "24:00"
+        }
+      ]
+    },
+  ],
+};
+
 /**
  * Perform user appointment calculation
  */
@@ -170,6 +280,7 @@ class MlAppointment {
      */
     let task = mlDBController.findOne('MlTask', {_id:taskId} );
     let calendarSetting = mlDBController.findOne('MlCalendarSettings',{userId: task.userId, profileId: task.profileId});
+    calendarSetting = calendarSetting ? calendarSetting : defaultCalenderSetting;
     calendarSetting.vacations = calendarSetting.vacations ? calendarSetting.vacations : [];
 
     /**
@@ -519,6 +630,7 @@ class MlAppointment {
      * Fetch user task info and calendar setting
      */
     let calendarSetting = mlDBController.findOne('MlCalendarSettings',{userId: userId, profileId: profileId});
+    calendarSetting = calendarSetting ? calendarSetting : defaultCalenderSetting;
     calendarSetting.vacations = calendarSetting.vacations ? calendarSetting.vacations : [];
 
     /**

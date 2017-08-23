@@ -21,9 +21,11 @@ export default class MlStartupMCL extends React.Component {
       licenses: {},
       compliances: {},
       privateKey:{},
+      privateFields:[]
     }
     this.onLockChange.bind(this);
     this.handleBlur.bind(this);
+    this.updateprivateFields.bind(this)
     this.fetchPortfolioDetails.bind(this);
   }
 
@@ -31,11 +33,28 @@ export default class MlStartupMCL extends React.Component {
     this.fetchPortfolioDetails();
   }
 
+  updateprivateFields(){
+    var that = this
+    let membershipsPrivateFields = this.state.memberships&&this.state.memberships.privateFields?this.state.memberships.privateFields:[]
+    let compliancesPrivateFields = this.state.compliances&&this.state.compliances.privateFields?this.state.compliances.privateFields:[]
+    let licensesPrivateFields = this.state.licenses&&this.state.licenses.privateFields?this.state.licenses.privateFields:[]
+    setTimeout(function () {
+      _.each(membershipsPrivateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+      _.each(compliancesPrivateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+      _.each(licensesPrivateFields, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+    }, 10)
+  }
+
   componentDidUpdate() {
     OnLockSwitch();
     dataVisibilityHandler();
-
-    _.each(this.state.memberships.privateFields, function (pf) {
+   /* _.each(this.state.memberships.privateFields, function (pf) {
       $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
     _.each(this.state.compliances.privateFields, function (pf) {
@@ -43,45 +62,60 @@ export default class MlStartupMCL extends React.Component {
     })
     _.each(this.state.licenses.privateFields, function (pf) {
       $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-    })
+    })*/
   }
 
   async fetchPortfolioDetails() {
     let that = this;
     let data = {};
     let portfoliodetailsId = that.props.portfolioDetailsId;
-    if (that.context.startupPortfolio && (that.context.serviceProviderPortfolio.memberships || that.context.serviceProviderPortfolio.compliances || that.context.serviceProviderPortfolio.licenses)) {
+    // let empty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.memberships)
+    // let compliancesEmpty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.compliances)
+    // let licensesEmpty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.licenses)
+    if (that.context.startupPortfolio && (that.context.startupPortfolio.memberships || that.context.startupPortfolio.compliances || that.context.startupPortfolio.licenses)) {
       this.setState({
-        memberships: that.context.serviceProviderPortfolio.memberships,
-        compliances: that.context.serviceProviderPortfolio.compliances,
-        licenses: that.context.serviceProviderPortfolio.licenses
+        memberships: that.context.startupPortfolio.memberships,
+        compliances: that.context.startupPortfolio.compliances,
+        licenses: that.context.startupPortfolio.licenses
       });
       data = {
-        memberships: that.context.serviceProviderPortfolio.memberships,
-        compliances: that.context.serviceProviderPortfolio.compliances,
-        licenses: that.context.serviceProviderPortfolio.licenses
+        memberships: that.context.startupPortfolio.memberships,
+        licenses: that.context.startupPortfolio.compliances,
+        compliances: that.context.startupPortfolio.licenses
       }
-      } else {
+    } else {
       const responseM = await fetchServiceProviderMemberships(portfoliodetailsId);
-      if (responseM) {
+      /*if (responseM) {
         this.setState({memberships: responseM});
+      }*/
+      if (responseM) {
+        var object = responseM;
+        object = _.omit(object, '__typename')
+        this.setState({memberships: object});
         this.setState({privateFields:object.privateFields});
       }
       const responseC = await fetchServiceProviderCompliances(portfoliodetailsId);
       if (responseC) {
-        this.setState({compliances: responseC});
+        //this.setState({compliances: responseC});
+        var object = responseC;
+        object = _.omit(object, '__typename')
+        this.setState({compliances: object});
+
         var pf = this.state.privateFields;
-        if(responseC.privateFields){
-          pf = pf.concat(responseC.privateFields)
+        if(object.privateFields){
+          pf = pf.concat(object.privateFields)
           this.setState({privateFields:pf});
         }
       }
       const responseL = await fetchServiceProviderLicenses(portfoliodetailsId);
       if (responseL) {
-        this.setState({licenses: responseL});
+        //this.setState({licenses: responseL});
+        var object = responseL;
+        object = _.omit(object, '__typename')
+        this.setState({licenses: object});
         var pf = this.state.privateFields;
-        if(responseL.privateFields){
-          pf = pf.concat(responseL.privateFields)
+        if(object.privateFields){
+          pf = pf.concat(object.privateFields)
           this.setState({privateFields:pf});
         }
       }
@@ -93,6 +127,7 @@ export default class MlStartupMCL extends React.Component {
     }
 
     this.setState({loading: false, data: data})
+    this.updateprivateFields();
   }
 
   componentDidMount() {
@@ -124,10 +159,12 @@ export default class MlStartupMCL extends React.Component {
     let mcl = details[type];
     if (details && mcl) {
       if (className.indexOf("fa-lock") != -1) {
+        // details=_.extend(details,{[key]:true});
         mcl[key] = true
         details[type] = mcl;
         isPrivate = true
       } else {
+        // details=_.extend(details,{[key]:false});
         mcl[key] = false
         details[type] = mcl;
       }

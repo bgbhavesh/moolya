@@ -505,7 +505,7 @@ if (Meteor.isServer) {
         {
           "image": "/images/users_icon.png",
           "link": "/admin/users/clusters",
-          "name": "Users",
+          "name": "users",
           "uniqueId": "users",
           "isLink": true,
           "isMenu": true,
@@ -1423,7 +1423,7 @@ if (Meteor.isServer) {
         {
           "image" : "/images/package-icon.png",
           "link" : "/admin/packages/officeList",
-          "name" : "Packages",
+          "name" : "packages",
           "uniqueId" : "packages",
           "isLink" : true,
           "isMenu" : true,

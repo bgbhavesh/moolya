@@ -120,6 +120,16 @@ let institutePortfolioSchema = `
       index: Int,
       privateFields:[PrivateKeys]
     }
+    type achievementsOutput{
+      achievementName:String
+      isAchievementNamePrivate:Boolean
+      achievementDescription:String
+      isAchievementDescriptionPrivate:Boolean
+      logo:imagesTypeSchema,
+      makePrivate:Boolean,
+      index: Int,
+      privateFields:[PrivateKeys]
+    }
     type EmployeeBreakupDepartment{
       ebdFromMonth: String
       ebdFromYear: String
@@ -147,7 +157,30 @@ let institutePortfolioSchema = `
         isDescriptionPrivate : Boolean,
         privateFields:[PrivateKeys]
     }
+    
+    type policyOutput{
+        institutionPolicyDescription:String, 
+        institutionPolicyDescriptionPrivate :Boolean
+        privateFields:[PrivateKeys]
+    }
+    
+    type evolutionOutput{
+        institutionEvolutionDescription:String, 
+        institutionEvolutionDescriptionPrivate :Boolean
+        privateFields:[PrivateKeys]
+    }
+    type researchAndDevelopmentOutput{
+      researchAndDevelopmentName:String
+      isResearchAndDevelopmentNamePrivate:Boolean
+      researchAndDevelopmentDescription:String
+      isResearchAndDevelopmentDescriptionPrivate:Boolean
+      logo:imagesTypeSchema,
+      makePrivate:Boolean,
+      index: Int,
+      privateFields:[PrivateKeys]
+    }
     type InstitutionPortfolio{
+      portfolioDetailsId: String
       memberships       : membershipsOutput,
       compliances       : compliancesOutput,
       licenses          : licensesOutput 
@@ -163,6 +196,12 @@ let institutePortfolioSchema = `
       awardsRecognition : [awardsRecognitionOutput],
       investor          : [investorOutput]
       intrapreneurRecognition : [intrapreneurRecognitionOutput]
+      achievements : [achievementsOutput]
+      policy : policyOutput
+      evolution : evolutionOutput
+      chapterName : String
+      accountType : String
+      researchAndDevelopment: [researchAndDevelopmentOutput]
     }
    
     
@@ -287,6 +326,33 @@ let institutePortfolioSchema = `
       logo : logo
       index: Int
     }
+    input achievements{
+      achievementName:String
+      isAchievementNamePrivate:Boolean
+      achievementDescription:String
+      isAchievementDescriptionPrivate:Boolean
+      makePrivate:Boolean
+      logo : logo
+      index: Int
+    }
+    input policy{
+        institutionPolicyDescription:String, 
+        institutionPolicyDescriptionPrivate :Boolean
+    }
+    
+    input evolution{
+        institutionEvolutionDescription:String, 
+        institutionEvolutionDescriptionPrivate :Boolean
+    }
+    input researchAndDevelopmentData{
+        researchAndDevelopmentName:String
+        isResearchAndDevelopmentNamePrivate:Boolean
+        researchAndDevelopmentDescription:String
+        isResearchAndDevelopmentDescriptionPrivate:Boolean
+        makePrivate:Boolean
+        logo : logo
+        index: Int   
+    }
     input institutionPortfolio{
         portfolioDetailsId  : String
         licenses            : licenses
@@ -307,6 +373,10 @@ let institutePortfolioSchema = `
         employeeBreakupDepartmentChart: [employeeBreakupDepartment]
         data                : data
         intrapreneurRecognition : [intrapreneurRecognition]
+        achievements     : [achievements]
+        policy : policy
+        evolution : evolution
+        researchAndDevelopment : [researchAndDevelopmentData]
     }
     type institutePortfolioOutput{
         _id                  : String

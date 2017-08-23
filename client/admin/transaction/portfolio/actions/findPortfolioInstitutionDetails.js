@@ -112,11 +112,29 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                         fileUrl
                       }
                       index
+                      makePrivate
                       privateFields{
                           keyName
                           booleanKey
                       }
                   }
+                  
+                  intrapreneurRecognition{
+                      intrapreneurName
+                      year
+                      intrapreneurDescription
+                      logo{
+                        fileName
+                        fileUrl
+                      }
+                      index
+                      privateFields{
+                          keyName
+                          booleanKey
+                      }
+                      makePrivate
+                  }
+                  
                   investor{
                     investorName,
                     fundingType,
@@ -175,6 +193,55 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                         fileName
                         fileUrl
                       }
+                      index
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  }
+                  
+                  achievements{
+                      achievementName
+                      isAchievementNamePrivate
+                      achievementDescription
+                      isAchievementDescriptionPrivate
+                      logo{
+                          fileName
+                          fileUrl
+                        }
+                      index
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  }
+                  
+                  policy{
+                      institutionPolicyDescription,
+                      institutionPolicyDescriptionPrivate,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  }
+                  evolution{
+                      institutionEvolutionDescription,
+                      institutionEvolutionDescriptionPrivate,
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  },
+                  
+                   researchAndDevelopment{
+                      researchAndDevelopmentName
+                      isResearchAndDevelopmentNamePrivate
+                      researchAndDevelopmentDescription
+                      isResearchAndDevelopmentDescriptionPrivate
+                      logo{
+                          fileName
+                          fileUrl
+                        }
                       index
                       privateFields{
                           keyName,

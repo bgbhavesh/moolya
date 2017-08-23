@@ -30,12 +30,7 @@ class MlAppProfileHeader extends Component {
       $('.ml_app_profile h1').click(function () {
           $(this).parent('.ml_app_profile').toggleClass('profile_open');
       });
-      $("#notification").popover({
-          'title': 'Notifications',
-          'html': true,
-          'placement': 'bottom',
-          'content': $(".ml_app_notification").html()
-      });
+
 
     $('body').tooltip({
       selector: '[data-toggle="tooltip"], [title]:not([data-toggle="popover"])',
@@ -120,7 +115,6 @@ class MlAppProfileHeader extends Component {
              className="pull-right notification ripple">
             <div className="noti_count">{this.state.notifications && this.state.notifications.length?this.state.notifications.length:0}</div>
             <FontAwesome name='bell-o'/></a>
-          <a href="#" className="pull-right header_search"><FontAwesome name='search'/></a>
           <span className="pull-right context_name" style={{'padding':'1px 7px','backgroundColor':'#ef4647','color':'#fff','lineHeight':'18px','borderRadius':'2px','fontSize':'12px','marginTop':'17px'}}>{data && data.registrationInfo && data.registrationInfo.communityName?data.registrationInfo.communityName:''}</span>
           <div style={{'display': 'none'}} className="ml_app_notification">
             <ul className="unstyled">
@@ -147,7 +141,7 @@ class MlAppProfileHeader extends Component {
               {/*<li data-toggle="tooltip" title="Themes" data-placement="top">*/}
               {/*<a href="#"><span className="ml my-ml-themes_10-01"></span></a>*/}
               {/*</li>*/}
-              <li data-toggle="tooltip" title="Calander" data-placement="top">
+              <li data-toggle="tooltip" title="Calendar" data-placement="top">
                 <a href="/app/calendar"><span className="ml my-ml-calendar"></span></a>
               </li>
               <li data-toggle="tooltip" title="My Tasks" data-placement="top">

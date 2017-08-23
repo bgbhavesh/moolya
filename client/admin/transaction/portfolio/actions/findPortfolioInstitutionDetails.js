@@ -232,6 +232,22 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                           booleanKey
                       }
                   },
+                  
+                   researchAndDevelopment{
+                      researchAndDevelopmentName
+                      isResearchAndDevelopmentNamePrivate
+                      researchAndDevelopmentDescription
+                      isResearchAndDevelopmentDescriptionPrivate
+                      logo{
+                          fileName
+                          fileUrl
+                        }
+                      index
+                      privateFields{
+                          keyName,
+                          booleanKey
+                      }
+                  }
               }
           }
       `,

@@ -120,7 +120,6 @@ class MlAppProfileHeader extends Component {
              className="pull-right notification ripple">
             <div className="noti_count">{this.state.notifications && this.state.notifications.length?this.state.notifications.length:0}</div>
             <FontAwesome name='bell-o'/></a>
-          <a href="#" className="pull-right header_search"><FontAwesome name='search'/></a>
           <span className="pull-right context_name" style={{'padding':'1px 7px','backgroundColor':'#ef4647','color':'#fff','lineHeight':'18px','borderRadius':'2px','fontSize':'12px','marginTop':'17px'}}>{data && data.registrationInfo && data.registrationInfo.communityName?data.registrationInfo.communityName:''}</span>
           <div style={{'display': 'none'}} className="ml_app_notification">
             <ul className="unstyled">

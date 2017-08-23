@@ -169,7 +169,7 @@ export default class MlServiceProviderClients extends Component {
           delete item[propName];
         }
       }
-      newItem = _.omit(item, "__typename");
+      let newItem = _.omit(item, "__typename");
       // let updateItem = _.omit(newItem, 'logo');
       let updateItem =_.omit(newItem,"privateFields");
       arr.push(updateItem)

@@ -1,8 +1,16 @@
-import React, {Component} from "react";
+/**
+ * import of libs and routes
+ * */
+import React, {Component, PropTypes} from "react";
 import {fetchPortfolioActionHandler} from '../../../ideators/actions/ideatorActionHandler'
 
 export default class MlAppInstitutionListView extends Component {
 
+  /**
+   * @props isExplore
+   * Note: routes [deciding] based on isExplore
+   * cheking [permissions to view the portfolio]
+   * */
   async viewDetails(portfolioId, e) {
     const response = await fetchPortfolioActionHandler(portfolioId);
     if (this.props.config.isExplore && response && response.canAccess)

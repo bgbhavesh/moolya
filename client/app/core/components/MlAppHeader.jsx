@@ -30,12 +30,7 @@ class MlAppProfileHeader extends Component {
       $('.ml_app_profile h1').click(function () {
           $(this).parent('.ml_app_profile').toggleClass('profile_open');
       });
-      $("#notification").popover({
-          'title': 'Notifications',
-          'html': true,
-          'placement': 'bottom',
-          'content': $(".ml_app_notification").html()
-      });
+
 
     $('body').tooltip({
       selector: '[data-toggle="tooltip"], [title]:not([data-toggle="popover"])',

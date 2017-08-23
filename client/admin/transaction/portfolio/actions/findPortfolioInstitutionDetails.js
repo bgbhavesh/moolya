@@ -112,11 +112,29 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                         fileUrl
                       }
                       index
+                      makePrivate
                       privateFields{
                           keyName
                           booleanKey
                       }
                   }
+                  
+                  intrapreneurRecognition{
+                      intrapreneurName
+                      year
+                      intrapreneurDescription
+                      logo{
+                        fileName
+                        fileUrl
+                      }
+                      index
+                      privateFields{
+                          keyName
+                          booleanKey
+                      }
+                      makePrivate
+                  }
+                  
                   investor{
                     investorName,
                     fundingType,

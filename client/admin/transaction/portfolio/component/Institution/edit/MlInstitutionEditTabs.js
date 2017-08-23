@@ -11,7 +11,9 @@ import MlInstitutionEditLibrary from './MlInstitutionEditLibrary';
 import MlInstitutionEditChart from './MlInstitutionEditChart';
 import MlInstitutionEditData from './MlInstitutionEditData';
 import MlInstitutionAboutUs from "./aboutUs/MlInstitutionAboutUsLandingPage";
-import MlInstitutionCSREditTabs from "./CSR/MlInstitutionCSREditTabs"
+import MlInstitutionCSREditTabs from "./CSR/MlInstitutionCSREditTabs";
+import MlInstitutionIntrapreneur from './MlInstitutionEditIntrapreneur';
+
 import {client} from '../../../../../core/apolloConnection'
 
 
@@ -76,6 +78,7 @@ export default class MlInstitutionEditTab extends Component{
       {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlInstitutionEditLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"CSR" , component:<MlInstitutionCSREditTabs key="10" getCSRDetails={this.getCSRDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       //{tabClassName: 'tab', panelClassName: 'panel', title:"R&D" , component:<MlInstitutionEditAwards key="11" getAwardsDetails={this.getAwardsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" , component:<MlInstitutionIntrapreneur key="10" getIntrapreneurDetails={this.getIntrapreneurDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
     ]
     return tabs;
   }
@@ -122,6 +125,23 @@ export default class MlInstitutionEditTab extends Component{
       arr.push(updateItem)
     })
     data['awardsRecognition'] = arr;
+
+    this.props.getPortfolioDetails({institutionPortfolio:this.state.institutionPortfolio}, privateKey);
+  }
+
+  getIntrapreneurDetails(details, privateKey){
+
+    let data = this.state.institutionPortfolio;
+    if(data && !data.intrapreneurRecognition){
+      data['intrapreneurRecognition']=[];
+    }
+    this.setState({institutionPortfolio : data})
+    let arr = [];
+    _.each(details, function (obj) {
+      let updateItem = _.omit(obj, 'logo');
+      arr.push(updateItem)
+    })
+    data['intrapreneurRecognition'] = arr;
 
     this.props.getPortfolioDetails({institutionPortfolio:this.state.institutionPortfolio}, privateKey);
   }

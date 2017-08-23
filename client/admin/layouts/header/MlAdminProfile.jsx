@@ -5,6 +5,7 @@ import {logout} from "../header/actions/logoutAction";
 import {getAdminUserContext} from "../../../commons/getAdminUserContext";
 import {findBackendUserActionHandler} from "../../settings/backendUsers/actions/findBackendUserAction";
 import { createContainer } from 'meteor/react-meteor-data';
+var FontAwesome = require('react-fontawesome');
 
 
 class  MlAdminProfileApp extends Component {
@@ -25,7 +26,13 @@ class  MlAdminProfileApp extends Component {
   componentDidMount(){
     $('.ml_profile h1').click(function(){
       $(this).parent('.ml_profile').toggleClass('profile_open');
+      $('.overlay').toggle();
     });
+    $('.overlay').click(function(){
+      $('.ml_profile').removeClass('profile_open');
+      $(this).hide();
+    });
+
     setTimeout(function(){
       $('.ml_profile [data-toggle="tooltip"]').tooltip({
         container:'body',
@@ -77,7 +84,8 @@ class  MlAdminProfileApp extends Component {
     return (
       <div className="header_top">
         <a onClick={this.handleClick} style={{cursor: 'pointer'}}>
-          <img className="pull-left home" src="/images/home_icon.png"/>
+         <FontAwesome name='home' className="pull-left"/>
+          {/*<img className="pull-left home" src="/images/home_icon.png"/>*/}
         </a>
         <a onClick={this.handleClick} style={{cursor: 'pointer'}}>
           <img className="logo" src="/images/logo.png" />

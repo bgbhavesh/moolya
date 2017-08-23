@@ -49,17 +49,21 @@ class __SocketUtils{
     }
 
     emitMessage(socket, eventName, payload, ackCallback){
+      if(socket) {
         socket.emit(eventName, payload, function (response) {
-            if(ackCallback)
-                ackCallback(response)
+          if (ackCallback)
+            ackCallback(response)
         });
+      }
     }
 
     listenMessage(socket, eventName, respCallback){
+      if(socket){
         socket.on(eventName, function (response) {
-            if(respCallback)
-                respCallback(eventName, response)
+          if(respCallback)
+            respCallback(eventName, response)
         })
+      }
     }
 
     // getServerTime(){

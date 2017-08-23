@@ -23,6 +23,7 @@ export default class MlAdminHeader extends Component {
 
     return (
       <div className="admin_header">
+        <div className="overlay"> </div>
         <BugReportWrapper />
 
         <MlAdminProfile/>

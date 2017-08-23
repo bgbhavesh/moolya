@@ -71,7 +71,27 @@ let startupPortfolioSchema = `
        privateFields:[PrivateKeys]
     }
     
- 
+    type achievementsOutput{
+      achievementName:String
+      isAchievementNamePrivate:Boolean
+      achievementDescription:String
+      isAchievementDescriptionPrivate:Boolean
+      logo:imageFilesInputSchemaOutput,
+      makePrivate:Boolean,
+      index: Int,
+      privateFields:[PrivateKeys]
+    }
+    type policyOutput{
+        policyDescription:String, 
+        isPolicyDescriptionPrivate :Boolean
+        privateFields:[PrivateKeys]
+    }
+    
+    type evolutionOutput{
+        evolutionDescription:String, 
+        isEvolutionDescriptionPrivate :Boolean
+        privateFields:[PrivateKeys]
+    }
     
     type clientsOutput{
         clientName:String,
@@ -273,6 +293,28 @@ let startupPortfolioSchema = `
       reviewOfCompanyChart:[ReviewOfCompany]
       employeeBreakupDepartmentChart:[EmployeeBreakupDepartment]
     }
+    type intrapreneurRecognitionOutput{
+      intrapreneurName:String
+      isIntrapreneurNamePrivate:Boolean
+      year:String
+      isYearPrivate:Boolean
+      intrapreneurDescription:String
+      isIntrapreneurDescriptionPrivate:Boolean
+      logo:imagesTypeSchema,
+      makePrivate:Boolean,
+      index: Int,
+      privateFields:[PrivateKeys]
+    }
+    type researchAndDevelopmentOutput{
+      researchAndDevelopmentName:String
+      isResearchAndDevelopmentNamePrivate:Boolean
+      researchAndDevelopmentDescription:String
+      isResearchAndDevelopmentDescriptionPrivate:Boolean
+      logo:imagesTypeSchema,
+      makePrivate:Boolean,
+      index: Int,
+      privateFields:[PrivateKeys]
+    }
     
     type CompanyPortfolio{
       aboutUs           : aboutUsOutput
@@ -291,6 +333,11 @@ let startupPortfolioSchema = `
       sectorsAndServices  : sectorsAndServicesOutput
       listOfIncubators    : listOfIncubatorsOutput
       partners            : [PartnersOutput] 
+      achievements        : [achievementsOutput]
+      policy              : policyOutput
+      evolution           : evolutionOutput
+      researchAndDevelopment: [researchAndDevelopmentOutput]
+      intrapreneurRecognition : [intrapreneurRecognitionOutput]
    }
     
     
@@ -494,6 +541,46 @@ let startupPortfolioSchema = `
       ebdAbout: String
       index : Int
     }
+    
+    input achievements{
+      achievementName:String
+      isAchievementNamePrivate:Boolean
+      achievementDescription:String
+      isAchievementDescriptionPrivate:Boolean
+      logo:imageFilesInputSchema,
+      makePrivate:Boolean,
+      index: Int,
+    }
+    
+    input policy{
+        policyDescription:String, 
+        isPolicyDescriptionPrivate :Boolean
+    }
+    
+    input evolution{
+        evolutionDescription:String, 
+        isEvolutionDescriptionPrivate :Boolean
+    }
+    input researchAndDevelopmentData{
+        researchAndDevelopmentName:String
+        isResearchAndDevelopmentNamePrivate:Boolean
+        researchAndDevelopmentDescription:String
+        isResearchAndDevelopmentDescriptionPrivate:Boolean
+        makePrivate:Boolean
+        logo : imageFilesInputSchema
+        index: Int
+    }
+    input intrapreneurRecognition {
+      intrapreneurName:String
+      isIntrapreneurNamePrivate:Boolean
+      year:String
+      isYearPrivate:Boolean
+      intrapreneurDescription:String
+      isIntrapreneurDescriptionPrivate:Boolean
+      makePrivate:Boolean
+      logo : imageFilesInputSchema
+      index: Int
+    }
    
     input companyPortfolio{
         portfolioDetailsId  : String
@@ -516,6 +603,11 @@ let startupPortfolioSchema = `
         sectorsAndServices  : sectorsAndServices
         listOfIncubators    : listOfIncubators
         partners            : [partnersInput]
+        achievements        : [achievements]
+        policy              : policy
+        evolution           : evolution
+        researchAndDevelopment : [researchAndDevelopmentData]
+        intrapreneurRecognition : [intrapreneurRecognition]
     }
     type companyPortfolioOutput{
         _id                  : String

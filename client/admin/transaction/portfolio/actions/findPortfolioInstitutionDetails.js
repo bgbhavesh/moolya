@@ -231,6 +231,30 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                           keyName,
                           booleanKey
                       }
+                  }
+                  institutionIncubators{
+                     institutionIncubatorsDescription, 
+                     isInstitutionIncubatorsPrivate,
+                     privateFields{
+                        keyName,
+                        booleanKey
+                     }
+                  }
+                  sectorsAndServices{
+                     sectorsAndServicesDescription, 
+                     isSectorsAndServicesPrivate,
+                     privateFields{
+                        keyName,
+                        booleanKey
+                     }
+                  }
+                  listOfIncubators{
+                     listOfIncubatorsDescription, 
+                     isListOfIncubatorsPrivate,
+                     privateFields{
+                        keyName,
+                        booleanKey
+                     }
                   },
                   
                    researchAndDevelopment{

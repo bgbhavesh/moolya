@@ -179,6 +179,13 @@ let institutePortfolioSchema = `
       index: Int,
       privateFields:[PrivateKeys]
     }
+    
+    type institutionIncubatorsOutput{
+        institutionIncubatorsDescription:String, 
+        isInstitutionIncubatorsPrivate :Boolean
+        privateFields:[PrivateKeys]
+    }
+    
     type InstitutionPortfolio{
       portfolioDetailsId: String
       memberships       : membershipsOutput,
@@ -202,9 +209,16 @@ let institutePortfolioSchema = `
       chapterName : String
       accountType : String
       researchAndDevelopment: [researchAndDevelopmentOutput]
+      institutionIncubators : institutionIncubatorsOutput
+      sectorsAndServices  : sectorsAndServicesOutput
+      listOfIncubators    : listOfIncubatorsOutput
+    }
+    
+    input institutionIncubators{
+        institutionIncubatorsDescription:String, 
+        isInstitutionIncubatorsPrivate :Boolean
     }
    
-    
     input logo{
       fileName : String,
       fileUrl:String,
@@ -377,6 +391,9 @@ let institutePortfolioSchema = `
         policy : policy
         evolution : evolution
         researchAndDevelopment : [researchAndDevelopmentData]
+        institutionIncubators : institutionIncubators
+        sectorsAndServices  : sectorsAndServices
+        listOfIncubators    : listOfIncubators
     }
     type institutePortfolioOutput{
         _id                  : String

@@ -51,7 +51,7 @@ if(Meteor.isServer){
 
       {
         "image":"fa fa-calendar-check-o",
-        "link": "/app/calendar/manageSchedule",
+        "link": "/app/calendar/manageSchedule/all/activityList",
         "isLink" : true,
         "isMenu" : true,
         "name" : "Manage Schedule",

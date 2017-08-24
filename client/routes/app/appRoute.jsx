@@ -397,13 +397,13 @@ appSection.route('/calendar', {
 });
 
 appSection.route('/calendar/officeCalendar', {
-  name: 'officeCalendar',
+  name: 'calendar_office',
   action(){
     mount(AppLayout, {appContent: <MlAppOfficeCalendar />, isCalenderMenu: true})
   }
 });
 
-appSection.route('/calendar/manageSchedule', {
+appSection.route('/calendar/manageSchedule/all/activityList', {
   name: 'calendar_manageSchedule',
   action(){
     mount(AppLayout, {appContent: <MlAppScheduleHead />, isCalenderMenu: true})

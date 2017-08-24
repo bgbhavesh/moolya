@@ -2,7 +2,7 @@
  * Created by venkatasrinag on 19/12/16.
  */
 
-import mlConversationsRepo from './commons/Conversations/mlConversationsRepo'
+import MlNotificationController from './mlNotifications/mlAppNotifications/mlNotificationsController'
 
 let _ = require('lodash'),
   adminPassword = "MoolyaAdmin@123",
@@ -623,8 +623,7 @@ validateinternalUserLoginAttempt=(user)=>{
     return true;
 }
 
-mlConversationsRepo.createApplication();
-
+MlNotificationController.createNewApplication()
 /******************************************* User Login <End> *********************************************************/
 /******************************************* Teplates <Start> *******************************************************/
 /*let process = MlprocessTypes.findOne({processName:"Registration"})

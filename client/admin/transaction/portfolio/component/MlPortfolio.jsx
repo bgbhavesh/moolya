@@ -364,7 +364,7 @@ class MlPortfolio extends React.Component {
                                                   getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}/>}
             </div>
           </div>)}
-        <div className="overlay"></div>
+        {/*<div className="overlay"></div>*/}
         <Popover placement="bottom" isOpen={this.state.popoverOpen} target="Popover1" toggle={this.toggle}>
           <PopoverTitle>Portfolio Annotations</PopoverTitle>
           <PopoverContent>
@@ -426,7 +426,7 @@ class MlPortfolio extends React.Component {
                 </ul>
               </div>
             </div>
-            <div className="overlay"></div>
+            {/*<div className="overlay"></div>*/}
           </PopoverContent>
         </Popover>
         {this.props.isHideAction? <div></div> :

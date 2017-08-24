@@ -42,7 +42,7 @@ export default class MlAccordion extends React.Component {
 
     return (
       <div>
-        <div className="opacity"></div>
+        {/*<div className="opacity"></div>*/}
         <div className="panel-group bottom-buttons" id={accordionId}>
           <div className="panel">
             <div className="panel-heading clearfix">

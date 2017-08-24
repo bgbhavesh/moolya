@@ -27,10 +27,11 @@ export default class MlAppOfficeCalendarHeader extends Component {
   render(){
     const that = this;
     const {selectUser} = this.props;
+    let selectedUser = this.props.selectedUser && this.props.selectedUser._id ? this.props.selectedUser._id : '';
     return (
       <div className="col-lg-12">
         <ul className="users_list well well-sm">
-          <li>
+          <li className={ selectedUser ? '' : 'active_user' } >
             <a href="" onClick={() => selectUser()}>
               <img src="/images/def_profile.png" /><br />
               <div className="tooltiprefer">
@@ -40,7 +41,7 @@ export default class MlAppOfficeCalendarHeader extends Component {
           </li>
           {that.state.users.map( (user, index) => {
             return(
-              <li key={index}>
+              <li key={index} className={ selectedUser == user._id ? 'active_user' : ''}>
                 <a href="" onClick={()=>selectUser(user)}>
                   <img src={ user.profileImage ? user.profileImage : "/images/def_profile.png"} /><br />
                   <div className="tooltiprefer">

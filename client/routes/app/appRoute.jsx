@@ -366,7 +366,7 @@ appSection.route('/explore/company', {
 appSection.route('/explore/company/:portfolioId', {
   name: 'explore',
   action(params){
-    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={"institution"}/>})
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={"company"}/>})
   }
   /**there is no need to send community type other than ideator*/
 });

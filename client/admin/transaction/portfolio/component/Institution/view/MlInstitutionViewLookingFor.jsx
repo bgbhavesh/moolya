@@ -107,29 +107,29 @@ export default class MlInstitutionViewLookingFor extends React.Component {
   }
   render(){
     let that = this;
-    let lookingforArray = that.state.institutionLookingforList || [];
+    let lookingforArray = (that.state.institutionLookingforList && that.state.institutionLookingforList.lookingFor) || [];
     if (lookingforArray && lookingforArray.length === 0) {
       return (<NoData tabName="Looking For" />);
-    }
-    return (
-
-      <div id="annotatorContent">
-        <h2>Looking For</h2>
-        <div className="col-lg-12">
-          <div className="row">
-            {lookingforArray && lookingforArray.map(function (details, idx) {
-              return(<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
-                <div className="team-block">
-                  <img src={details.logo&&details.logo.fileUrl} className="team_img" />
-                  <h3>
-                    {details.lookingForName&&details.lookingForName}
-                  </h3>
-                </div>
-              </div>)
-            })}
+    } else  {
+      return (
+        <div id="annotatorContent">
+          <h2>Looking For</h2>
+          <div className="col-lg-12">
+            <div className="row">
+              {lookingforArray && lookingforArray.map(function (details, idx) {
+                return(<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
+                  <div className="team-block">
+                    <img src={details.logo&&details.logo.fileUrl} className="team_img" />
+                    <h3>
+                      {details.lookingForName&&details.lookingForName}
+                    </h3>
+                  </div>
+                </div>)
+              })}
+            </div>
           </div>
         </div>
-      </div>
-    )
+      )
+    }
   }
 }

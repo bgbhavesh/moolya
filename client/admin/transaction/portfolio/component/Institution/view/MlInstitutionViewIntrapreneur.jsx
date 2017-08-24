@@ -111,27 +111,27 @@ export default class MlInstitutionViewIntrapreneur extends React.Component {
     let intrapreneurArray = that.state.institutionIntrapreneurList || [];
     if (intrapreneurArray && intrapreneurArray.length === 0) {
       return (<NoData tabName="Intrapreneur" />);
-    }
-    return (
+    } else {
+      return (
+        <div id="annotatorContent">
+          <h2>Intrapreneur</h2>
+          <div className="col-lg-12">
+            <div className="row">
+              {intrapreneurArray && intrapreneurArray.map(function (details, idx) {
+                return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
+                  <div className="team-block">
+                    <img src={details.logo&&details.logo.fileUrl} className="team_img" />
+                    <h3>
+                      {details&&details.intrapreneurName}
+                    </h3>
+                  </div>
+                </div>)
+              })}
 
-      <div id="annotatorContent">
-        <h2>Intrapreneur</h2>
-        <div className="col-lg-12">
-          <div className="row">
-            {intrapreneurArray && intrapreneurArray.map(function (details, idx) {
-              return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
-                <div className="team-block">
-                  <img src={details.logo&&details.logo.fileUrl} className="team_img" />
-                  <h3>
-                    {details&&details.intrapreneurName}
-                  </h3>
-                </div>
-              </div>)
-            })}
-
+            </div>
           </div>
         </div>
-      </div>
-    )
+      )
+    }
   }
 }

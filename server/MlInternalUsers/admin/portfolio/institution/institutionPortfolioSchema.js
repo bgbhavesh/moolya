@@ -141,7 +141,6 @@ let institutePortfolioSchema = `
       index : Int
       ebdDepartmentName:String
     }
-        
    type chartsOutput{
       employmentOfCompanyChart:[EmploymentOfCompany]
       profitRevenueLiabilityChart:[ProfitRevenueLiability]
@@ -204,6 +203,7 @@ let institutePortfolioSchema = `
       investor          : [investorOutput]
       intrapreneurRecognition : [intrapreneurRecognitionOutput]
       achievements : [achievementsOutput]
+      partners            : [PartnersOutput]
       policy : policyOutput
       evolution : evolutionOutput
       chapterName : String
@@ -390,6 +390,7 @@ let institutePortfolioSchema = `
         achievements     : [achievements]
         policy : policy
         evolution : evolution
+        partners            : [partnersInput]
         researchAndDevelopment : [researchAndDevelopmentData]
         institutionIncubators : institutionIncubators
         sectorsAndServices  : sectorsAndServices

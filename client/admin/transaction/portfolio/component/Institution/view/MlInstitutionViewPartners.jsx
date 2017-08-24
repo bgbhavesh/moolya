@@ -5,12 +5,12 @@ import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDet
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../commons/components/noData/noData';
 
-const KEY = 'researchAndDevelopment'
+const KEY = 'partners'
 
-export default class MlInstitutionViewRD extends React.Component {
+export default class MlInstitutionViewPartners extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {institutionRDList: []};
+    this.state = {institutionPartnersList: []};
     this.fetchPortfolioInstitutionDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -61,7 +61,7 @@ export default class MlInstitutionViewRD extends React.Component {
   }
 
   async createAnnotations(annotation){
-    let details = {portfolioId:this.props.portfolioDetailsId, docId:"institutionRD", quote:JSON.stringify(annotation)}
+    let details = {portfolioId:this.props.portfolioDetailsId, docId:"institutionPartners", quote:JSON.stringify(annotation)}
     const response = await createAnnotationActionHandler(details);
     if(response && response.success){
       this.fetchAnnotations(true);
@@ -72,7 +72,7 @@ export default class MlInstitutionViewRD extends React.Component {
 
 
   async fetchAnnotations(isCreate){
-    const response = await findAnnotations(this.props.portfolioDetailsId, "institutionRD");
+    const response = await findAnnotations(this.props.portfolioDetailsId, "institutionPartners");
     let resp = JSON.parse(response.result);
     let annotations = this.state.annotations;
     this.setState({annotations:JSON.parse(response.result)})
@@ -98,40 +98,40 @@ export default class MlInstitutionViewRD extends React.Component {
 
   async fetchPortfolioInstitutionDetails() {
     let that = this;
-    let portfoliodetailsId = that.props.portfolioDetailsId;
+    let portfoliodetailsId=that.props.portfolioDetailsId;
     const response = await fetchInstitutionDetailsHandler(portfoliodetailsId, KEY);
-    if (response && response.researchAndDevelopment) {
-      this.setState({institutionRDList: response.researchAndDevelopment});
+    if (response && response.partners) {
+      this.setState({institutionPartnersList: response.partners});
     }
     this.setState({loading: false})
   }
 
   render(){
     let that = this;
-    let researchAndDevelopmentArray = that.state.institutionRDList || [];
-    if (researchAndDevelopmentArray && researchAndDevelopmentArray.length === 0) {
-      return (<NoData tabName="R & D" />);
-    } else {
-      return (
-        <div id="annotatorContent">
-          <h2>Research And Development</h2>
-          <div className="col-lg-12">
-            <div className="row">
-              {researchAndDevelopmentArray && researchAndDevelopmentArray.map(function (details, idx) {
-                return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
-                  <div className="team-block">
-                    <img src={details.logo&&details.logo.fileUrl} className="team_img" />
-                    <h3>
-                      {details&&details.researchAndDevelopmentName}
-                    </h3>
-                  </div>
-                </div>)
-              })}
+    let partnersArray = that.state.institutionPartnersList || [];
+    if (partnersArray && partnersArray.length === 0) {
+      return (<NoData tabName="Partner" />);
+    }
+    return (
 
-            </div>
+      <div id="annotatorContent">
+        <h2>Partners</h2>
+        <div className="col-lg-12">
+          <div className="row">
+            {partnersArray && partnersArray.map(function (details, idx) {
+              return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
+                <div className="team-block">
+                  <img src={details.logo&&details.logo.fileUrl} className="team_img" />
+                  <h3>
+                    {details&&details.firstName}
+                  </h3>
+                </div>
+              </div>)
+            })}
+
           </div>
         </div>
-      )
-    }
+      </div>
+    )
   }
 }

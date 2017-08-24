@@ -8,7 +8,7 @@ import {findComments} from "../../../commons/annotaterComments/findComments";
 import {createCommentActionHandler,resolveCommentActionHandler,reopenCommentActionHandler} from "../../../commons/annotaterComments/createComment";
 import moment from "moment";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-import {fetchIdeaByPortfolioId} from "../../ideators/actions/ideatorActionHandler";
+import {fetchIdeaByPortfolioId, fetchPortfolioImageHandler} from "../../ideators/actions/ideatorActionHandler";
 import MlLoader from "../../../commons/components/loader/loader";
 import InteractionsCounter from "../../commons/components/InteractionsCounter";
 import MlAppPortfolioAccordionContainer from "../components/MlAppPortfolioAccordion";
@@ -19,7 +19,7 @@ class MlAppPortfolio extends Component{
   constructor(props){
     super(props)
     this.state = {editComponent:'', portfolio:{}, selectedTab:"", privateKeys:[], removePrivateKeys:[],
-      annotations:[], isOpen:false,annotationData: {},commentsData:[], popoverOpen: false, saveButton:false, backHandlerMethod:""}
+      annotations:[], isOpen:false,annotationData: {},commentsData:[], popoverOpen: false, saveButton:false, backHandlerMethod:"" ,portfolioImage:''}
     this.fetchEditPortfolioTemplate.bind(this);
     this.fetchViewPortfolioTemplate.bind(this);
     this.getPortfolioDetails.bind(this);
@@ -72,21 +72,37 @@ class MlAppPortfolio extends Component{
   }
 
   async componentWillMount() {
-    if(this.props.viewMode){
+    if (this.props.viewMode) {
       this.fetchViewPortfolioTemplate(this.props.config);
-    }else{
+    } else {
       this.fetchEditPortfolioTemplate(this.props.config);
     }
-    if(this.props.communityType == "Ideators"){
-      this.setState({loading:true});
+    if (this.props.communityType == "Ideators" || this.props.communityType == "ideator") {
+      this.setState({loading: true});
       this.fetchIdeaId()
-    }else if(this.props.communityType =="ideator"){
-      this.setState({loading:true});
-      this.fetchIdeaId()
-    }else{
-      this.setState({ideaId:" "})
+    } else{
+      this.setState({ideaId: " "})
     }
+    const resp = this.fetchPortfolioImage()
+    return resp
+    // if(this.props.communityType == "Ideators"){
+    //   this.setState({loading:true});
+    //   this.fetchIdeaId()
+    // }else if(this.props.communityType =="ideator"){
+    //   this.setState({loading:true});
+    //   this.fetchIdeaId()
+    // }else{
+    //   this.setState({ideaId:" "})
+    // }
     return;
+  }
+
+  async fetchPortfolioImage() {
+    var response = await fetchPortfolioImageHandler(this.props.config)
+    if(response){
+      this.setState({portfolioImage:response.portfolioImage})
+    }
+    console.log(response)
   }
 
   async fetchEditPortfolioTemplate(pId) {
@@ -315,7 +331,7 @@ class MlAppPortfolio extends Component{
         {showLoader===true?(<MlLoader/>):(
           <div className="app_padding_wrap">
             <div className="col-md-12">
-            <InteractionsCounter resourceType={'portfolio'} resourceId={this.props.config} interactionAutoId={this.state.interactionAutoId} backHandler={this.backHandler.bind(this)} />
+            <InteractionsCounter resourceType={'portfolio'} resourceId={this.props.config} interactionAutoId={this.state.interactionAutoId} backHandler={this.backHandler.bind(this)} portfolioImage={this.state.portfolioImage}/>
               {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} setBackHandler={this.setBackHandler.bind(this)}/>}
                 {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)} setBackHandler={this.setBackHandler.bind(this)}/>}
             </div></div>)}

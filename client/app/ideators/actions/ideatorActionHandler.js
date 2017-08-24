@@ -125,3 +125,25 @@ export async function fetchPortfolioActionHandler(portfoliodetailsId) {
   const id = result.data.fetchPortfolioClusterId;
   return id
 }
+
+/**
+ * Note: Getting the Image of the portfolio
+ * @usage [all six portfolio]
+ * */
+export async function fetchPortfolioImageHandler(portfoliodetailsId) {
+  const result = await appClient.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            fetchPortfolioImage(portfoliodetailsId: $portfoliodetailsId) {
+                  portfolioImage
+            }
+          }
+      `,
+    variables: {
+      portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.fetchPortfolioImage;
+  return id
+}

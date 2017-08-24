@@ -222,7 +222,8 @@ let startupPortfolioSchema = `
         socialLinks:[SocialLinks],
         index:Int,
         logo:imagesTypeSchema,
-        privateFields:[PrivateKeys]
+        privateFields:[PrivateKeys],
+        makePrivate : Boolean
     }
     
     type ratingOutput{,
@@ -338,9 +339,6 @@ let startupPortfolioSchema = `
       evolution           : evolutionOutput
       researchAndDevelopment: [researchAndDevelopmentOutput]
       intrapreneurRecognition : [intrapreneurRecognitionOutput]
-      portfolioDetailsId: String
-      chapterName : String
-      accountType : String
    }
     
     
@@ -471,6 +469,7 @@ let startupPortfolioSchema = `
         socialLinks:[socialLinks],
         index:Int,
         logo:imageFilesInputSchema,
+        makePrivate : Boolean
     }
     
     input aboutUs{

@@ -392,6 +392,10 @@ export default class MlInstitutionEditPartners extends React.Component {
                             <input type="text" placeholder="LinkedIn" className="form-control float-label"/>
                             <FontAwesome name="linkedin-square" className="password_icon"/>
                           </div>
+                          <div className="clearfix"></div>
+                          <div className="form-group">
+                            <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
+                          </div>
                           {/*<div className="form-group">*/}
                           {/*<input type="text" placeholder="Facebook" className="form-control float-label"  />*/}
                           {/*<FontAwesome name="facebook-square" className="password_icon"/>*/}

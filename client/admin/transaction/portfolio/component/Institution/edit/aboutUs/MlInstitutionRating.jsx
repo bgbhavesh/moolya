@@ -26,6 +26,7 @@ export default class MlInstitutionRating extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+    this.updatePrivateKeys();
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.institutionPortfolio && this.context.institutionPortfolio.rating)
@@ -58,6 +59,12 @@ export default class MlInstitutionRating extends React.Component{
       this.sendDataToParent()
     })
   }
+  updatePrivateKeys(){
+    let response = this.props.ratingDetails;
+    _.each(response.privateFields, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
   onRatingChange(rate){
     let details =this.state.data;
     details=_.omit(details,"rating");
@@ -67,9 +74,8 @@ export default class MlInstitutionRating extends React.Component{
     })
   }
   sendDataToParent(){
-    let data = this.state.data
-
-    this.props.getInstitutionRating(data, this.state.privateKey)
+    let data = this.state.data;
+    this.props.getInstitutionRating(data, this.state.privateKey);
   }
   render(){
     let rating = parseInt(this.state.data && this.state.data.rating?this.state.data.rating:0);

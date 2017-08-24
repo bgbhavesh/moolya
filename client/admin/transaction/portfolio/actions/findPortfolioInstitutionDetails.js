@@ -305,6 +305,7 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                       keyName,
                       booleanKey
                     }
+                    makePrivate
                   }
               }
           }
@@ -426,9 +427,6 @@ export async function fetchDetailsInstitutionActionHandler(portfoliodetailsId) {
                 information{
                   informationDescription
                   isDescriptionPrivate
-                }
-                rating{
-                  rating
                 }
             }
           }

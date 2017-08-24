@@ -11,6 +11,7 @@ import MlInstitutionViewAboutLanding from './aboutTabs/MlInstitutionViewAboutLan
 import MlInstitutionViewIntrapreneur from './MlInstitutionViewIntrapreneur';
 import MlInstitutionCSRViewTabs from './CSRViewTabs/MlInstitutionCSRViewTabs';
 import MlInstitutionViewPartners from './MlInstitutionViewPartners';
+import MlInstitutionIncubatorsViewTabs from './incubatorsViewTabs/MlInstitutionIncubatorsViewTabs'
 
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 // import PortfolioLibrary from '../../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
@@ -72,6 +73,7 @@ export default class MlViewInstitutionPortfolioTemplate extends Component {
       {tabClassName: 'tab', panelClassName: 'panel', title:"CSR" , component:<MlInstitutionCSRViewTabs key="11"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"R&D" , component:<MlInstitutionViewRD key="12"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" , component:<MlInstitutionViewIntrapreneur key="14"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Incubators" , component:<MlInstitutionIncubatorsViewTabs key="13"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
     ]
     return tabs;
   }

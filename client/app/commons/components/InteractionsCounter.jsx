@@ -74,7 +74,7 @@ export default class InteractionsCounter extends React.Component{
     return(
       <div>
         <div className="paperfold panel">
-          <a className="startup-logo" href="" onClick={this.onBackHandler.bind(this)}><img src="/images/startup_default.png"/></a>
+          <a className="startup-logo" href="" onClick={this.onBackHandler.bind(this)}><img src={this.props.portfolioImage?this.props.portfolioImage:"/images/startup_default.png"}/></a>
           <ul className="header-action-buttons">
             {actionView}
           </ul>

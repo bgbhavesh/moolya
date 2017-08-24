@@ -26,6 +26,7 @@ import {appClient} from '../../app/core/appConnection'
 import MlViews from '../../app/commons/view/MlAppViews'
 import {mlDashboardListConfig, mlDashboardMapConfig} from '../../app/dashboard/config/mlAppDashboardConfig'
 import {mlAppInstitutionConfig} from '../../app/portfolio/Institutions/config/mlAppInstitutionsConfig'
+import {mlAppCompanyConfig} from '../../app/portfolio/Companies/config/mlAppCompaniesConfig'
 
 // import RegistrationWizard from "../../admin/transaction/requested/component/RegistrationWizard";
 import MlAppRegistrationWizard from "../../../client/app/registrations/component/MlAppRegistrationWizard";
@@ -352,6 +353,39 @@ appSection.route('/institution/:portfolioId', {
   }
 });
 /************************************************end of instituion routes**********************************************/
+
+/********************************************************start of routes for the companies *************************/
+appSection.route('/explore/company', {
+  name: 'explore',
+  action(){
+    var listConfig = _.extend(mlAppCompanyConfig, {isExplore: true});
+    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
+  }
+});
+
+appSection.route('/explore/company/:portfolioId', {
+  name: 'explore',
+  action(params){
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={"company"}/>})
+  }
+  /**there is no need to send community type other than ideator*/
+});
+
+appSection.route('/company', {
+  name: 'companies',
+  action(){
+    var listConfig = _.extend(mlAppInstitutionConfig, {isExplore: false});
+    mount(AppLayout,{appContent:<mlAppCompanyConfig viewMode={false} showInfinity={false} config={listConfig} />})
+  }
+});
+
+appSection.route('/company/:portfolioId', {
+  name: 'companies',
+  action(params){
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={"institution"}/>, isProfileMenu:false})
+  }
+});
+/************************************************end of companies routes**********************************************/
 appSection.route('/register/:id', {
   name: 'registeras',
   action(params){
@@ -397,13 +431,13 @@ appSection.route('/calendar', {
 });
 
 appSection.route('/calendar/officeCalendar', {
-  name: 'officeCalendar',
+  name: 'calendar_office',
   action(){
     mount(AppLayout, {appContent: <MlAppOfficeCalendar />, isCalenderMenu: true})
   }
 });
 
-appSection.route('/calendar/manageSchedule', {
+appSection.route('/calendar/manageSchedule/all/activityList', {
   name: 'calendar_manageSchedule',
   action(){
     mount(AppLayout, {appContent: <MlAppScheduleHead />, isCalenderMenu: true})

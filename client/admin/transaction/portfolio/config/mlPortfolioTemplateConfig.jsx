@@ -270,8 +270,8 @@ const mlAppCompanyEditExternalUserPortfolioTemplateConfig = {
 };
 
 const mlAppCompanyViewExternalUserPortfolioTemplateConfig = {
-  templateName: "Portfolio-Template-Company-Edit",
-  templateCode: "PFTCMPEDT",
+  templateName: "Portfolio-Template-Company-View",
+  templateCode: "PFTCMPVIW",
   userType: 'external',
   process: 'Registration',
   subProcess: 'Registration',

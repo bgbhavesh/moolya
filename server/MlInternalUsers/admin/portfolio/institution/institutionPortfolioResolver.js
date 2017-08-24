@@ -95,12 +95,27 @@ MlResolver.MlQueryResolver['fetchInstitutionPortfolioAboutUs'] = (obj, args, con
     //private keys for service products
     var object = instituteAboutUsArray["serviceProducts"];
     var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
-    instituteAboutUsArray["serviceProducts"] = filteredObject
+    instituteAboutUsArray["serviceProducts"] = filteredObject;
 
-    //private keys for service products
+    //private keys for information
     var object = instituteAboutUsArray["information"];
     var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
-    instituteAboutUsArray["information"] = filteredObject
+    instituteAboutUsArray["information"] = filteredObject;
+
+    //private keys for aboutUs
+    var object = instituteAboutUsArray["aboutUs"];
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    instituteAboutUsArray["aboutUs"] = filteredObject;
+
+    //private keys for clients
+    var object = instituteAboutUsArray["clients"];
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    instituteAboutUsArray["clients"] = filteredObject;
+
+    //private keys for rating
+    var object = instituteAboutUsArray["rating"];
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    instituteAboutUsArray["rating"] = filteredObject;
 
     //for view action
     MlResolver.MlMutationResolver['createView'](obj,{resourceId:args.portfoliodetailsId,resourceType:'portfolio'}, context, info);

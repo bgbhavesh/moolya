@@ -13,7 +13,7 @@ import MlBarChart from '../../../../../../commons/components/d3/MlBarChart'
  import MlPieChart from '../../../../../../../commons/components/d3/MlPieChart'
  import MlStartupChartSubTabs from '../MlStartupCharts/MlStartupChartSubTabs'
 import {fetchDetailsStartupChartsActionHandler} from '../../../../../admin/transaction/portfolio/actions/findPortfolioStartupDetails'*/
-import {fetchInstitutionChartsDetailsActionHandler} from '../../../actions/findPortfolioInstitutionDetails'
+import {fetchDetailsCompanyChartsActionHandler} from '../../../actions/findCompanyPortfolioDetails'
 import MlChartSubTabs from '../../../../../../commons/charts/MlChartsSubTabs'
 
 
@@ -22,7 +22,7 @@ export default class MlCompanyViewChart extends React.Component{
     super(props)
     this.state = {startupPortfolio:{},
       startupCharts:[],startupChartsList:[]}
-    this.fetchPortfolioInstitutionChartDetails.bind(this)
+    this.fetchPortfolioChartDetails.bind(this)
     this.getEmploymentOfCompany.bind(this)
     this.getProfitRevenueLiability.bind(this)
     this.getReviewOfCompany.bind(this)
@@ -31,7 +31,7 @@ export default class MlCompanyViewChart extends React.Component{
   }
 
   componentWillMount(){
-    this.fetchPortfolioInstitutionChartDetails();
+    this.fetchPortfolioChartDetails();
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
     $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
@@ -40,10 +40,10 @@ export default class MlCompanyViewChart extends React.Component{
     }
   }
 
-  async fetchPortfolioInstitutionChartDetails() {
+  async fetchPortfolioChartDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await fetchInstitutionChartsDetailsActionHandler(portfoliodetailsId);
+    const response = await fetchDetailsCompanyChartsActionHandler(portfoliodetailsId);
     if (response) {
       this.setState({loading: false, startupCharts: response, startupChartsList: response});
       this.getEmploymentOfCompany(response);

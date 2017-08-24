@@ -439,30 +439,30 @@ MlResolver.MlQueryResolver['fetchPortfolioImage'] = (obj, args, context, info) =
     let portfolio = MlPortfolioDetails.findOne({_id: args.portfoliodetailsId}) || {}
     switch (portfolio.communityType) {
       case 'Ideators': {
-        response = MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'](obj, args, context, info)
+        response = MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'](obj, args, context, info) || {}
         portfolioImage = response.profilePic
       }
         break;
       case "Startups": {
         args.key = "aboutUs"
-        response = MlResolver.MlQueryResolver['fetchStartupDetails'](obj, args, context, info)
-        portfolioImage = response.logo
+        response = MlResolver.MlQueryResolver['fetchStartupDetails'](obj, args, context, info) || {}
+        portfolioImage = response && response.aboutUs && response.aboutUs.logo && response.aboutUs.logo.length?response && response.aboutUs && response.aboutUs.logo[0].fileUrl:''
       }
         break;
       case "Investors": {
         args.key = "funderAbout"
-        response = MlResolver.MlQueryResolver['fetchFunderDetails'](obj, args, context, info)
-        portfolioImage = response.profilePic
+        response = MlResolver.MlQueryResolver['fetchFunderDetails'](obj, args, context, info) || {}
+        portfolioImage = response && response.funderAbout && response.funderAbout.profilePic?response.funderAbout.profilePic:''
       }
         break;
       case "Service Providers": {
         args.key = "about"
-        response = MlResolver.MlQueryResolver['fetchServiceProviderDetails'](obj, args, context, info)
-        portfolioImage = response.aboutImages
+        response = MlResolver.MlQueryResolver['fetchServiceProviderDetails'](obj, args, context, info) || {}
+        portfolioImage = response && response.about && response.about.aboutImages && response.about.aboutImages.length?response.about.aboutImages[0].fileUrl:''
       }
         break;
     }
-    console.log(portfolioImage)
-    return portfolioImage;
+    portfolio.portfolioImage = portfolioImage
+    return portfolio;
   }
 }

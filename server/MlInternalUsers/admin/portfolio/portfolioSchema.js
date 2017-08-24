@@ -48,6 +48,7 @@ let portfolioSchema = `
         privateFields:[PrivateKeys]
         communityId:String
         canAccess         : Boolean
+        portfolioImage : String
     }
     
     input privateKeys{
@@ -111,12 +112,13 @@ let portfolioSchema = `
         companyPortfolio : companyPortfolio
         institutionPortfolio : institutionPortfolio
     }
+     
     
     type Query{
           fetchPortfolioDetailsByUserId:Portfoliodetails
           fetchPortfolioByReg(registrationId: String): Portfoliodetails
           fetchPortfolioClusterId(portfoliodetailsId: String): Portfoliodetails
-          fetchPortfolioImage(portfolioDetailsId: String): String
+          fetchPortfolioImage(portfoliodetailsId: String): Portfoliodetails 
     }
     
     type Mutation{

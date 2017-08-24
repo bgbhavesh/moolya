@@ -366,7 +366,7 @@ appSection.route('/explore/company', {
 appSection.route('/explore/company/:portfolioId', {
   name: 'explore',
   action(params){
-    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={"institution"}/>})
+    mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={"company"}/>})
   }
   /**there is no need to send community type other than ideator*/
 });
@@ -431,13 +431,13 @@ appSection.route('/calendar', {
 });
 
 appSection.route('/calendar/officeCalendar', {
-  name: 'officeCalendar',
+  name: 'calendar_office',
   action(){
     mount(AppLayout, {appContent: <MlAppOfficeCalendar />, isCalenderMenu: true})
   }
 });
 
-appSection.route('/calendar/manageSchedule', {
+appSection.route('/calendar/manageSchedule/all/activityList', {
   name: 'calendar_manageSchedule',
   action(){
     mount(AppLayout, {appContent: <MlAppScheduleHead />, isCalenderMenu: true})

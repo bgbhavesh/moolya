@@ -214,6 +214,7 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                           keyName,
                           booleanKey
                       }
+                      makePrivate
                   }
                   
                   policy{

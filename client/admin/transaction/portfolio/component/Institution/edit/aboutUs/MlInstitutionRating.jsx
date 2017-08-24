@@ -5,6 +5,7 @@ import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 var Rating = require('react-rating');
+import _ from 'lodash';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 
 const KEY = 'rating'
@@ -36,7 +37,7 @@ export default class MlInstitutionRating extends React.Component{
   }
   onClick(fieldName, field, e){
     var isPrivate = false;
-    let details = this.state.data||{};
+    let details = (this.state.data && _.cloneDeep(this.state.data)) || {};
     let key = e.target.id;
     details=_.omit(details,[key]);
     let className = e.target.className;
@@ -54,7 +55,7 @@ export default class MlInstitutionRating extends React.Component{
       tabName: KEY
     }
     this.setState({privateKey: privateKey})
-
+    details=_.omit(details,"privateFields");
     this.setState({data:details}, function () {
       this.sendDataToParent()
     })
@@ -66,8 +67,9 @@ export default class MlInstitutionRating extends React.Component{
     })
   }
   onRatingChange(rate){
-    let details =this.state.data;
+    let details = _.cloneDeep(this.state.data);
     details=_.omit(details,"rating");
+    details=_.omit(details,"privateFields");
     details=_.extend(details,{"rating":rate});
     this.setState({data:details}, function () {
       this.sendDataToParent()

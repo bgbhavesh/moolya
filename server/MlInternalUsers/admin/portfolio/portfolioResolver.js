@@ -432,14 +432,37 @@ MlResolver.MlQueryResolver['fetchPortfolioClusterId'] = (obj, args, context, inf
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
+MlResolver.MlQueryResolver['fetchPortfolioImage'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    var portfolioImage = ""
+    var response = ""
+    let portfolio = MlPortfolioDetails.findOne({_id: args.portfoliodetailsId}) || {}
+    switch (portfolio.communityType) {
+      case 'Ideators': {
+        response = MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'](obj, args, context, info)
+        portfolioImage = response.profilePic
+      }
+        break;
+      case "Startups": {
+        args.key = "aboutUs"
+        response = MlResolver.MlQueryResolver['fetchStartupDetails'](obj, args, context, info)
+        portfolioImage = response.logo
+      }
+        break;
+      case "Investors": {
+        args.key = "funderAbout"
+        response = MlResolver.MlQueryResolver['fetchFunderDetails'](obj, args, context, info)
+        portfolioImage = response.profilePic
+      }
+        break;
+      case "Service Providers": {
+        args.key = "about"
+        response = MlResolver.MlQueryResolver['fetchServiceProviderDetails'](obj, args, context, info)
+        portfolioImage = response.aboutImages
+      }
+        break;
+    }
+    console.log(portfolioImage)
+    return portfolioImage;
+  }
+}

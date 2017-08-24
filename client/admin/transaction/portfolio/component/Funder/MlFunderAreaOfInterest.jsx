@@ -9,6 +9,7 @@ import Moolyaselect from "../../../../commons/components/MlAdminSelectWrapper";
 import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../client/admin/utils/formElemUtil";
 import {fetchfunderPortfolioAreaInterest} from "../../actions/findPortfolioFunderDetails";
 import MlLoader from '../../../../../commons/components/loader/loader'
+import NoData from '../../../../../commons/components/noData/noData'
 var FontAwesome = require('react-fontawesome');
 
 export default class MlFunderAreaOfInterest extends React.Component {
@@ -184,8 +185,6 @@ export default class MlFunderAreaOfInterest extends React.Component {
 
   render() {
     let that = this;
-    const showLoader = that.state.loading;
-    let funderAreaOfInterestList = that.state.funderAreaOfInterestList || [];
     let industriesquery = gql` query{
     data:fetchIndustries{label:industryName,value:_id}
     }
@@ -195,92 +194,103 @@ export default class MlFunderAreaOfInterest extends React.Component {
     }
   `;
     let subDomainOption = {options: {variables: {industryId: this.state.data.industryTypeId}}};
-    return (
-      <div>
-        {showLoader === true ? (<MlLoader/>) : (
+    const showLoader = that.state.loading;
+    let funderAreaOfInterestList = that.state.funderAreaOfInterestList || [];
+    if(_.isEmpty(funderAreaOfInterestList)){
+      return (
+        showLoader === true ? (<MlLoader/>) :
           <div className="portfolio-main-wrap">
-            <h2>Area of Interest</h2>
-            <div className="requested_input main_wrap_scroll">
-              <ScrollArea
-                speed={0.8}
-                className="main_wrap_scroll"
-                smoothScrolling={true}
-                default={true}
-              >
-                <div className="col-lg-12">
-                  <div className="row">
+            <NoData tabName={this.props.tabName} />
+          </div>
+      )
+    } else {
+      return (
+        <div>
+          {showLoader === true ? (<MlLoader/>) : (
+            <div className="portfolio-main-wrap">
+              <h2>Area of Interest</h2>
+              <div className="requested_input main_wrap_scroll">
+                <ScrollArea
+                  speed={0.8}
+                  className="main_wrap_scroll"
+                  smoothScrolling={true}
+                  default={true}
+                >
+                  <div className="col-lg-12">
+                    <div className="row">
 
-                    <div className="col-lg-2 col-md-4 col-sm-4">
-                      <a href="#" id="create_clientdefault" data-placement="top" data-class="large_popover">
-                        <div className="list_block list_block_intrests notrans"
-                             onClick={this.addAreaOfInterest.bind(this)}>
-                          <div className="hex_outer">
-                            <span className="ml ml-plus "></span>
-                          </div>
-                          <h3>Add Area Of Interest</h3>
-                        </div>
-                      </a>
-                    </div>
-
-                    {/*list of interest*/}
-                    {funderAreaOfInterestList.map(function (details, idx) {
-                      return (
-                        <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
-                          <a href="#" id={"create_client" + idx}>
-                            <div className="list_block list_block_intrests notrans"
-                                 onClick={that.onTileClick.bind(that, idx)}>
-                              <FontAwesome name='lock'/>
-                              <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                              <div className="hex_outer"><img src="/images/def_profile.png"/></div>
-                              <h3>{details.industryTypeName}</h3>
+                      <div className="col-lg-2 col-md-4 col-sm-4">
+                        <a href="#" id="create_clientdefault" data-placement="top" data-class="large_popover">
+                          <div className="list_block list_block_intrests notrans"
+                               onClick={this.addAreaOfInterest.bind(this)}>
+                            <div className="hex_outer">
+                              <span className="ml ml-plus "></span>
                             </div>
-                          </a>
-                        </div>
-                      )
-                    })}
+                            <h3>Add Area Of Interest</h3>
+                          </div>
+                        </a>
+                      </div>
+
+                      {/*list of interest*/}
+                      {funderAreaOfInterestList.map(function (details, idx) {
+                        return (
+                          <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
+                            <a href="#" id={"create_client" + idx}>
+                              <div className="list_block list_block_intrests notrans"
+                                   onClick={that.onTileClick.bind(that, idx)}>
+                                <FontAwesome name='lock'/>
+                                <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
+                                <div className="hex_outer"><img src="/images/def_profile.png"/></div>
+                                <h3>{details.industryTypeName}</h3>
+                              </div>
+                            </a>
+                          </div>
+                        )
+                      })}
+                    </div>
                   </div>
-                </div>
-              </ScrollArea>
+                </ScrollArea>
 
-              {/*popover */}
-              <Popover placement="right" isOpen={this.state.popoverOpen}
-                       target={"create_client" + this.state.selectedObject} toggle={this.toggle}>
-                <PopoverTitle>Add New Area of Interest</PopoverTitle>
-                <PopoverContent>
-                  <div className="ml_create_client">
-                    <div className="medium-popover">
-                      <div className="row">
-                        <div className="col-md-12">
+                {/*popover */}
+                <Popover placement="right" isOpen={this.state.popoverOpen}
+                         target={"create_client" + this.state.selectedObject} toggle={this.toggle}>
+                  <PopoverTitle>Add New Area of Interest</PopoverTitle>
+                  <PopoverContent>
+                    <div className="ml_create_client">
+                      <div className="medium-popover">
+                        <div className="row">
+                          <div className="col-md-12">
 
-                          <div className="form-group">
-                            <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'}
-                                          labelKey={'label'} queryType={"graphql"} query={industriesquery}
-                                          isDynamic={true} placeholder="Select Industry.."
-                                          onSelect={this.onOptionSelectedIndustry.bind(this)}
-                                          selectedValue={this.state.selectedVal}/>
-                          </div>
-                          <div className="form-group">
-                            <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'}
-                                          labelKey={'label'} queryType={"graphql"} query={subDomainQuery}
-                                          queryOptions={subDomainOption}
-                                          isDynamic={true} placeholder="Select SubDomain.."
-                                          onSelect={this.onOptionSelectedSubDomain.bind(this)}
-                                          selectedValue={this.state.selectedValDomain}/>
-                          </div>
+                            <div className="form-group">
+                              <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'}
+                                            labelKey={'label'} queryType={"graphql"} query={industriesquery}
+                                            isDynamic={true} placeholder="Select Industry.."
+                                            onSelect={this.onOptionSelectedIndustry.bind(this)}
+                                            selectedValue={this.state.selectedVal}/>
+                            </div>
+                            <div className="form-group">
+                              <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'}
+                                            labelKey={'label'} queryType={"graphql"} query={subDomainQuery}
+                                            queryOptions={subDomainOption}
+                                            isDynamic={true} placeholder="Select SubDomain.."
+                                            onSelect={this.onOptionSelectedSubDomain.bind(this)}
+                                            selectedValue={this.state.selectedValDomain}/>
+                            </div>
 
-                          <div className="ml_btn" style={{'textAlign': 'center'}}>
-                            <a className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                            <div className="ml_btn" style={{'textAlign': 'center'}}>
+                              <a className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </PopoverContent>
-              </Popover>
-            </div>
-          </div>)}
-      </div>
-    )
+                  </PopoverContent>
+                </Popover>
+              </div>
+            </div>)}
+        </div>
+      )
+    }
   }
 }
 

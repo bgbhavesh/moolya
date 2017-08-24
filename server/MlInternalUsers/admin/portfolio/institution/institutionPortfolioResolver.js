@@ -90,7 +90,7 @@ MlResolver.MlQueryResolver['fetchInstitutionPortfolioAboutUs'] = (obj, args, con
     instituteAboutUsArray["clients"] = portfolio&&portfolio.clients?portfolio.clients:[];
     instituteAboutUsArray["serviceProducts"] = portfolio&&portfolio.serviceProducts?portfolio.serviceProducts:{};
     instituteAboutUsArray["information"] = portfolio&&portfolio.information?portfolio.information:{};
-    instituteAboutUsArray["rating"] = portfolio&&portfolio.rating?portfolio.rating:null;
+    instituteAboutUsArray["rating"] = portfolio&&portfolio.rating?portfolio.rating:{};
 
     //private keys for service products
     var object = instituteAboutUsArray["serviceProducts"];

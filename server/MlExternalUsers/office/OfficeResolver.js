@@ -12,6 +12,10 @@ import MlEmailNotification from "../../mlNotifications/mlEmailNotifications/mlEM
 import MlAlertNotification from '../../mlNotifications/mlAlertNotifications/mlAlertNotification';
 import mlOfficeInteractionService from './mlOfficeInteractionRepo'
 import MlAccounts from '../../commons/mlAccounts'
+
+let request = require('request');
+var base64 = require('base64-min');
+
 MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
   let officeSC = [];
   if (context.userId) {
@@ -577,3 +581,43 @@ MlResolver.MlMutationResolver['updateOfficeMemberOnReg'] = (obj, args, context, 
     return response;
   }
 }
+
+MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, context, info) => {
+  let transactionId = args.transactionId;
+  let officeTransDetails = mlDBController.findOne('MlOfficeTransaction', {transactionId: transactionId }, context);
+  if(officeTransDetails){
+    let paymentInfo = {
+      orderId: officeTransDetails.officeId,
+      paymentAmount: 10,
+      API_KEY: "AESsdjkfhsdkjfjkshfn346346",
+      appId: "zyolo",
+      currency: "USD",
+      transId: transactionId,
+      paymentEndPoint: "paypal",
+      operation: "debit",
+      customerId: officeTransDetails.userId,
+      callBackUrl: Meteor.absoluteUrl() +"app/myOffice"
+    };
+
+    let apiRequest = {
+      body: base64.encodeWithKey(JSON.stringify(paymentInfo), 'Test123'),
+      // postData: {
+      //   mimeType: 'application/x-www-form-urlencoded',
+      //   params:paymentInfo
+      // },
+      headers: {'content-type' : 'application/text'},
+      url:     'http://payment-services-814468192.ap-southeast-1.elb.amazonaws.com/payments/process'
+    };
+
+    var post_req = request.post(apiRequest, function(error, response, body){
+      console.log('error',error);
+      console.log('response',response.headers);
+      // console.log('body',body);
+      // resp.send(response.headers.url);
+    });
+
+
+  } else {
+
+  }
+};

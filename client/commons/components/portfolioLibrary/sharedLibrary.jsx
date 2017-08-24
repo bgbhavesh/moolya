@@ -27,27 +27,12 @@ export default class  SharedLibrary extends React.Component {
     super(props);
     this.state = {
       modal: false,
-      uploadedImage: "",
       previewImage: "",
       templateDetails: [],
       documentDetails: [],
       imageDetails: [],
       videoDetails: [],
-      imageSpecifications: [],
-      videoSpecifications: [],
-      templateSpecifications: [],
-      documentSpecifications: [],
       videoUrl: '',
-      fileType: "",
-      fileName: "",
-      imagesLock: {},
-      templatesLock: {},
-      videosLock: {},
-      documentsLock: {},
-      explore: false,
-      hideLock: false,
-      popoverOpen: false, deleteOption: false,
-      selectedData: [],
       showSharedFiles: false,
       sharedFiles: []
     };
@@ -136,10 +121,10 @@ export default class  SharedLibrary extends React.Component {
   images() {
     let that = this;
     let imageData = that.state.imageDetails ||  [] ;
-    console.log('imageData', imageData)
     const Images = imageData.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
+          <FontAwesome  className="clock-o"/>
           <a href="" data-toggle="modal" data-target=".imagepop"
              onClick={that.random.bind(that, show.file.url, id)}>
             <img src={show.file.url} /></a>
@@ -311,31 +296,40 @@ export default class  SharedLibrary extends React.Component {
           </div>
         </div>
         <div className="modal fade bs-example-modal-sm library-popup documentpop"
-             onContextMenu={(e) => e.preventDefault()} tabindex="-1" role="dialog"
+             onContextMenu={(e) => e.preventDefault()}
+             tabindex="-1"
+             role="dialog"
              aria-labelledby="mySmallModalLabel">
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
-                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span
-                  aria-hidden="true">&times;</span></button>
+                <button type="button"
+                        className="close"
+                        data-dismiss="modal"
+                        aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
               </div>
               <div className="modal-body">
                 <iframe src={this.state.previewDocument}/>
-                {/*{console.log(this.state.previewDocument)}*/}
-                {/*{<MlFileViewer/>}*/}
-                {/*<div className="img_scroll"><MlDocViewer/></div>*/}
               </div>
             </div>
           </div>
         </div>
         <div className="modal fade bs-example-modal-sm library-popup videopop"
-             onContextMenu={(e) => e.preventDefault()} tabindex="-1" role="dialog"
+             onContextMenu={(e) => e.preventDefault()}
+             tabindex="-1"
+             role="dialog"
              aria-labelledby="mySmallModalLabel">
           <div className="modal-dialog" role="document">
             <div className="modal-content">
               <div className="modal-header">
-                <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span
-                  aria-hidden="true">&times;</span></button>
+                <button type="button"
+                        className="close"
+                        data-dismiss="modal"
+                        aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
               </div>
               <div className="modal-body">
                 {this.state.previewVideo ? <MlVideoPlayer videoAttributes={videoJsOptions}/> : <div></div>}

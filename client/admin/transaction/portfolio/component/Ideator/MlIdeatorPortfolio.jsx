@@ -44,14 +44,14 @@ export default class MlIdeatorPortfolioTemplate extends React.Component{
 
     getTabComponents(){
         let tabs = [
-          {tabClassName: 'tab', panelClassName: 'panel', title:"Ideas", component:<MlIdeatorIdeas  key="2" getIdeas={this.getIdeas.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} ideaId={this.props.ideaId}/> },
-          {tabClassName: 'tab', panelClassName: 'panel', title:"Ideator" , component:<MlIdeatorDetails key="1"  client={client} isAdmin={true}  getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-          {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions", component:<MlIdeatorProblemsAndSolutions client={client} isAdmin={true}  key="3" getProblemSolution={this.getProblemSolution.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-          {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlIdeatorAudience key="4" client={client} isAdmin={true}  getAudience={this.getAudience.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-          {tabClassName: 'tab', panelClassName: 'panel', title:"Library", component:<PortfolioLibrary client={client} isAdmin={true} key="5" portfolioDetailsId={this.props.portfolioDetailsId}  /> },
-          {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Planning", component:<MlIdeatorStrategyAndPlanning key="6" getStrategyAndPlanning={this.getStrategyAndPlanning.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-          {tabClassName: 'tab', panelClassName: 'panel', title:"IP and Trademark" , component:<MlIdeatorIntellectualPlanningAndTrademark key="7" getIntellectualPlanning={this.getIntellectualPlanning.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-          {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For", component:<MlIdeatorLookingFor  key="8" getLookingFor={this.getLookingFor.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>}
+          {tabClassName: 'tab', panelClassName: 'panel', title:"Ideas", component:<MlIdeatorIdeas  tabName="Ideas" key="2" getIdeas={this.getIdeas.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} ideaId={this.props.ideaId}/> },
+          {tabClassName: 'tab', panelClassName: 'panel', title:"Ideator" , component:<MlIdeatorDetails key="1" tabName="Ideator" client={client} isAdmin={true}  getIdeatorDetails={this.getIdeatorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+          {tabClassName: 'tab', panelClassName: 'panel', title:"Problems and Solutions", component:<MlIdeatorProblemsAndSolutions tabName="Problems and Solutions" client={client} isAdmin={true}  key="3" getProblemSolution={this.getProblemSolution.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+          {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlIdeatorAudience key="4" client={client} tabName="Audience" isAdmin={true}  getAudience={this.getAudience.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+          {tabClassName: 'tab', panelClassName: 'panel', title:"Library", component:<PortfolioLibrary client={client} isAdmin={true} tabName="Library" key="5" portfolioDetailsId={this.props.portfolioDetailsId}  /> },
+          {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Planning", component:<MlIdeatorStrategyAndPlanning key="6" tabName="Strategy and Planning"  getStrategyAndPlanning={this.getStrategyAndPlanning.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+          {tabClassName: 'tab', panelClassName: 'panel', title:"IP and Trademark" , component:<MlIdeatorIntellectualPlanningAndTrademark key="7" tabName="IP and Trademark" getIntellectualPlanning={this.getIntellectualPlanning.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+          {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For", component:<MlIdeatorLookingFor  key="8" getLookingFor={this.getLookingFor.bind(this)} tabName="Looking For" portfolioDetailsId={this.props.portfolioDetailsId}/>}
         ]
         return tabs;
     }

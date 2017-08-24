@@ -460,7 +460,8 @@ let CoreModules = {
       'clusterId': 'owner.clusterId',
       'chapterId': 'owner.chapterId',
       'subChapterId': 'owner.subChapterId',
-      'communityId': 'owner.communityId'
+      'communityId': 'owner.communityId',
+      'communityCode': 'owner.communityCode'
     };
     var resultantQuery = MlAdminContextQueryConstructor.updateQueryFieldNames(contextQuery, contextFieldMap);
 

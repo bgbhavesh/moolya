@@ -58,6 +58,7 @@ export default class MlInstitutionPolicy extends React.Component{
     }else{
       this.setState({loading: false, data: that.context.institutionPortfolio.policy});
     }
+    this.updatePrivateKeys();
   }
 
   handleBlur(e){

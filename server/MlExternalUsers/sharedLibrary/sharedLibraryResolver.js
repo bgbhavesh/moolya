@@ -42,6 +42,7 @@ MlResolver.MlMutationResolver['createSharedLibrary'] = (obj, args, context, info
         chapterId: profile ? profile.chapterId : '',
         subChapterId: profile ? profile.subChapterId : '',
         communityId: profile ? profile.communityId : '',
+        communityCode: profile ? profile.communityCode : ''
       },
       isSignedUrl: false,
       isActive: true,

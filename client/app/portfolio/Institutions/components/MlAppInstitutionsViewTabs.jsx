@@ -11,6 +11,8 @@ import MlInstitutionViewCharts from "../../../../admin/transaction/portfolio/com
 import MlInstitutionIntrapreneur from "../../../../admin/transaction/portfolio/component/Institution/view/MlInstitutionViewIntrapreneur";
 import MlInstitutionRAndD from "../../../../admin/transaction/portfolio/component/Institution/view/MlInstitutionViewR&D";
 import MlInstitutionCSR from "../../../../admin/transaction/portfolio/component/Institution/view/CSRViewTabs/MlInstitutionCSRViewTabs";
+import MlInstitutionViewPartners from "../../../../admin/transaction/portfolio/component/Institution/view/MlInstitutionViewPartners";
+
 import {appClient} from "../../../core/appConnection";
 // import MlInstitutionViewAboutUs from "../../../admin/transaction/portfolio/component/InstitutionView/MlInstitutionViewAboutUs";
 // import MlInstitutionViewBranches from "../../../admin/transaction/portfolio/component/InstitutionView/MlInstitutionViewBranches";
@@ -116,8 +118,15 @@ export default class MlAppInstitutionViewTabs extends Component {
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
+        title: "Partner",
+        component: <MlInstitutionViewPartners key="10" portfolioDetailsId={this.props.portfolioDetailsId}
+                                                getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
         title: "CSR",
-        component: <MlInstitutionCSR key="10" portfolioDetailsId={this.props.portfolioDetailsId}
+        component: <MlInstitutionCSR key="11" portfolioDetailsId={this.props.portfolioDetailsId}
                                      getSelectedAnnotations={this.props.getSelectedAnnotations}
                                      backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>
       },
@@ -125,14 +134,14 @@ export default class MlAppInstitutionViewTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "R&D",
-        component: <MlInstitutionRAndD key="11" portfolioDetailsId={this.props.portfolioDetailsId}
+        component: <MlInstitutionRAndD key="12" portfolioDetailsId={this.props.portfolioDetailsId}
                                               getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Intrapreneur",
-        component: <MlInstitutionIntrapreneur key="12" portfolioDetailsId={this.props.portfolioDetailsId}
+        component: <MlInstitutionIntrapreneur key="14" portfolioDetailsId={this.props.portfolioDetailsId}
                                               getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       }
     ]

@@ -111,27 +111,26 @@ export default class MlInstitutionViewInvestor extends React.Component {
     let investorArray = that.state.institutionInvestorList || [];
     if (investorArray && investorArray.length === 0) {
       return (<NoData tabName="Investor" />);
-    }
-    return (
-
-      <div id="annotatorContent">
-        <h2>Investor</h2>
-        <div className="col-lg-12">
-          <div className="row">
-            {investorArray && investorArray.map(function (details, idx) {
-              return(<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
-                <div className="team-block">
-                  <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"} className="team_img"/>
-                  <h3>
-                    {details.investorName} <br /><b>Investor</b>
-                  </h3>
-                </div>
-              </div>)
-            })}
+    } else {
+      return (
+        <div id="annotatorContent">
+          <h2>Investor</h2>
+          <div className="col-lg-12">
+            <div className="row">
+              {investorArray && investorArray.map(function (details, idx) {
+                return(<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
+                  <div className="team-block">
+                    <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"} className="team_img"/>
+                    <h3>
+                      {details.investorName} <br /><b>Investor</b>
+                    </h3>
+                  </div>
+                </div>)
+              })}
+            </div>
           </div>
         </div>
-      </div>
-
-    )
+      )
+    }
   }
 }

@@ -10,6 +10,7 @@ import MlInstitutionViewInformation from "./MlInstitutionViewInformation"*/
 import MlInstitutionViewAchievements from "./MlInstitutionViewAchievements";
 import MlInstitutionViewEvolution from "./MlInstitutionViewEvolution"
 import MlInstitutionViewPolicy from "./MlInstitutionViewPolicy"
+import MlInstitutionCSRReports from "../../edit/CSR/MlInstitutionCSRReports"
 import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent";
 import {client} from '../../../../../../../admin/core/apolloConnection'
 import {appClient} from '../../../../../../../app/core/appConnection'
@@ -78,8 +79,13 @@ export default class MlInstitutionCSRViewTabs extends React.Component {
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
+        title:"Reports" ,
+        component:<MlInstitutionCSRReports key="3" portfolioDetailsId={this.props.portfolioDetailsId} />},
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
         title: "Policy",
-        component: <MlInstitutionViewPolicy key="3" portfolioDetailsId={this.props.portfolioDetailsId}
+        component: <MlInstitutionViewPolicy key="4" portfolioDetailsId={this.props.portfolioDetailsId}
                                                  getSelectedAnnotations={this.props.getSelectedAnnotations}
                                                  />
       }

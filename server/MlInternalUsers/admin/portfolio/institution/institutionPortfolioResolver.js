@@ -92,6 +92,15 @@ MlResolver.MlQueryResolver['fetchInstitutionPortfolioAboutUs'] = (obj, args, con
     instituteAboutUsArray["information"] = portfolio&&portfolio.information?portfolio.information:{};
     instituteAboutUsArray["rating"] = portfolio&&portfolio.rating?portfolio.rating:null;
 
+    //private keys for service products
+    var object = instituteAboutUsArray["serviceProducts"];
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    instituteAboutUsArray["serviceProducts"] = filteredObject
+
+    //private keys for service products
+    var object = instituteAboutUsArray["information"];
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    instituteAboutUsArray["information"] = filteredObject
 
     //for view action
     MlResolver.MlMutationResolver['createView'](obj,{resourceId:args.portfoliodetailsId,resourceType:'portfolio'}, context, info);

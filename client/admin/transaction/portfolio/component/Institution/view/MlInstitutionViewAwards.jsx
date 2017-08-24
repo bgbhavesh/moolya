@@ -111,27 +111,27 @@ export default class MlInstitutionViewAwards extends React.Component {
     let awardsArray = that.state.institutionAwardsList || [];
     if (awardsArray && awardsArray.length === 0) {
       return (<NoData tabName="Awards" />);
-    }
-    return (
+    } else {
+      return (
+        <div id="annotatorContent">
+          <h2>Awards</h2>
+          <div className="col-lg-12">
+            <div className="row">
+              {awardsArray && awardsArray.map(function (details, idx) {
+                return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
+                  <div className="team-block">
+                    <img src={details.logo&&details.logo.fileUrl} className="team_img" />
+                    <h3>
+                      {details&&details.awardName}
+                    </h3>
+                  </div>
+                </div>)
+              })}
 
-      <div id="annotatorContent">
-        <h2>Awards</h2>
-        <div className="col-lg-12">
-          <div className="row">
-            {awardsArray && awardsArray.map(function (details, idx) {
-              return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
-                <div className="team-block">
-                  <img src={details.logo&&details.logo.fileUrl} className="team_img" />
-                  <h3>
-                    {details&&details.awardName}
-                  </h3>
-                </div>
-              </div>)
-            })}
-
+            </div>
           </div>
         </div>
-      </div>
-    )
+      )
+    }
   }
 }

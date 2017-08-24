@@ -1,21 +1,23 @@
 import React from 'react';
-var FontAwesome = require('react-fontawesome');
-import {fetchInstitutionDetailsHandler} from '../../../actions/findPortfolioInstitutionDetails'
+import {fetchCompanyDetailsHandler} from "../../../actions/findCompanyPortfolioDetails";
 import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnotator'
+import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../commons/components/noData/noData';
 
-const KEY = "lookingFor";
-export default class MlInstitutionViewLookingFor extends React.Component {
+const KEY = 'awardsRecognition'
+
+export default class MlCompanyViewAwards extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {institutionLookingforList: []};
-    this.fetchPortfolioInstitutionDetails.bind(this);
+    this.state = {awardsList: []};
+    this.fetchPortfolioDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
   }
+
 
   componentDidMount(){
     this.initalizeAnnotaor()
@@ -23,7 +25,7 @@ export default class MlInstitutionViewLookingFor extends React.Component {
   }
 
   componentWillMount(){
-    this.fetchPortfolioInstitutionDetails();
+    this.fetchPortfolioDetails();
   }
 
   initalizeAnnotaor(){
@@ -59,7 +61,7 @@ export default class MlInstitutionViewLookingFor extends React.Component {
   }
 
   async createAnnotations(annotation){
-    let details = {portfolioId:this.props.portfolioDetailsId, docId:"institutionLookingFor", quote:JSON.stringify(annotation)}
+    let details = {portfolioId:this.props.portfolioDetailsId, docId:"institutionAwards", quote:JSON.stringify(annotation)}
     const response = await createAnnotationActionHandler(details);
     if(response && response.success){
       this.fetchAnnotations(true);
@@ -70,7 +72,7 @@ export default class MlInstitutionViewLookingFor extends React.Component {
 
 
   async fetchAnnotations(isCreate){
-    const response = await findAnnotations(this.props.portfolioDetailsId, "institutionLookingFor");
+    const response = await findAnnotations(this.props.portfolioDetailsId, "institutionAwards");
     let resp = JSON.parse(response.result);
     let annotations = this.state.annotations;
     this.setState({annotations:JSON.parse(response.result)})
@@ -94,42 +96,42 @@ export default class MlInstitutionViewLookingFor extends React.Component {
     return response;
   }
 
-  async fetchPortfolioInstitutionDetails() {
+  async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await fetchInstitutionDetailsHandler(portfoliodetailsId, KEY);
-    if (response && response.lookingFor) {
-      this.setState({institutionLookingforList: response});
+    const response = await fetchCompanyDetailsHandler(portfoliodetailsId, KEY);
+    if (response && response.awardsRecognition) {
+      this.setState({awardsList: response.awardsRecognition});
     }
-
-    this.setState({lodaing:false})
-
+    this.setState({loading: false})
   }
+
   render(){
     let that = this;
-    let lookingforArray = (that.state.institutionLookingforList && that.state.institutionLookingforList.lookingFor) || [];
-    if (lookingforArray && lookingforArray.length === 0) {
-      return (<NoData tabName="Looking For" />);
-    } else  {
-      return (
-        <div id="annotatorContent">
-          <h2>Looking For</h2>
-          <div className="col-lg-12">
-            <div className="row">
-              {lookingforArray && lookingforArray.map(function (details, idx) {
-                return(<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
-                  <div className="team-block">
-                    <img src={details.logo&&details.logo.fileUrl} className="team_img" />
-                    <h3>
-                      {details.lookingForName&&details.lookingForName}
-                    </h3>
-                  </div>
-                </div>)
-              })}
-            </div>
+    let awardsArray = that.state.awardsList || [];
+    if (awardsArray && awardsArray.length === 0) {
+      return (<NoData tabName="Awards" />);
+    }
+    return (
+
+      <div id="annotatorContent">
+        <h2>Awards</h2>
+        <div className="col-lg-12">
+          <div className="row">
+            {awardsArray && awardsArray.map(function (details, idx) {
+              return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
+                <div className="team-block">
+                  <img src={details.logo&&details.logo.fileUrl} className="team_img" />
+                  <h3>
+                    {details&&details.awardName}
+                  </h3>
+                </div>
+              </div>)
+            })}
+
           </div>
         </div>
-      )
-    }
+      </div>
+    )
   }
 }

@@ -12,7 +12,8 @@ import MlInstitutionEditData from './MlInstitutionEditData';
 import MlInstitutionAboutUs from "./aboutUs/MlInstitutionAboutUsLandingPage";
 import MlInstitutionCSREditTabs from "./CSR/MlInstitutionCSREditTabs";
 import MlInstitutionEditIntrapreneur from './MlInstitutionEditIntrapreneur';
-import MlInstitutionEditRD from './MlInstitutionEditR&D'
+import MlInstitutionEditRD from './MlInstitutionEditR&D';
+import MlInstitutionEditPartners from './MlInstitutionEditPartners';
 
 import {client} from '../../../../../core/apolloConnection'
 import MlInstitutionIncubatorsEditTabs from "./incubators/MlInstitutionIncubatorsEditTabs"
@@ -78,11 +79,12 @@ export default class MlInstitutionEditTab extends Component{
       {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlInstitutionEditLibrary key="7" client={client} isAdmin={true} getInvestorDetails={this.getInvestorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"M C & L" , component:<MlInstitutionEditMCL key="8" getInstitutionMCL={this.getInstitutionMCL.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlInstitutionEditLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"CSR" , component:<MlInstitutionCSREditTabs key="10" getCSRDetails={this.getCSRDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"R&D" , component:<MlInstitutionEditRD key="11" getRDDetails={this.getRDDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" , component:<MlInstitutionEditIntrapreneur key="12" getIntrapreneurDetails={this.getIntrapreneurDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Partner" , component:<MlInstitutionEditPartners key="10" getPartnersDetails={this.getPartnersDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"CSR" , component:<MlInstitutionCSREditTabs key="11" getCSRDetails={this.getCSRDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"R&D" , component:<MlInstitutionEditRD key="12" getRDDetails={this.getRDDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Incubators" , component:<MlInstitutionIncubatorsEditTabs key="13" getIncubators={this.getIncubators.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.backClickHandler.bind(this)}/>},
-    ]
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" , component:<MlInstitutionEditIntrapreneur key="14" getIntrapreneurDetails={this.getIntrapreneurDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+    ];
     return tabs;
   }
 
@@ -113,6 +115,23 @@ export default class MlInstitutionEditTab extends Component{
     })
     data['investor'] = arr;
     this.props.getPortfolioDetails({institutionPortfolio: data}, privateKey);
+  }
+
+  getPartnersDetails(details, privateKey){
+
+    let data = this.state.institutionPortfolio;
+    if(data && !data.partners){
+      data['partners']=[];
+    }
+    this.setState({institutionPortfolio : data})
+    let arr = [];
+    _.each(details, function (obj) {
+      let updateItem = _.omit(obj, 'logo');
+      arr.push(updateItem)
+    })
+    data['partners'] = arr;
+
+    this.props.getPortfolioDetails({institutionPortfolio:this.state.institutionPortfolio}, privateKey);
   }
 
   getAwardsDetails(details, privateKey){

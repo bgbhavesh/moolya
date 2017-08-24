@@ -64,8 +64,6 @@ class MlAppPortfolio extends Component{
         this.fetchComments(selAnnotation.id);
       })
     }
-
-
   }
 
   commentClicked(){

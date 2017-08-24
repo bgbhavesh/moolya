@@ -214,6 +214,7 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                           keyName,
                           booleanKey
                       }
+                      makePrivate
                   }
                   
                   policy{
@@ -231,6 +232,30 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                           keyName,
                           booleanKey
                       }
+                  }
+                  institutionIncubators{
+                     institutionIncubatorsDescription, 
+                     isInstitutionIncubatorsPrivate,
+                     privateFields{
+                        keyName,
+                        booleanKey
+                     }
+                  }
+                  sectorsAndServices{
+                     sectorsAndServicesDescription, 
+                     isSectorsAndServicesPrivate,
+                     privateFields{
+                        keyName,
+                        booleanKey
+                     }
+                  }
+                  listOfIncubators{
+                     listOfIncubatorsDescription, 
+                     isListOfIncubatorsPrivate,
+                     privateFields{
+                        keyName,
+                        booleanKey
+                     }
                   },
                   
                    researchAndDevelopment{
@@ -247,6 +272,39 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                           keyName,
                           booleanKey
                       }
+                  }
+                  partners {
+                    title
+                    firstName
+                    isFirstNamePrivate
+                    lastName
+                    isLastNamePrivate
+                    designation
+                    isDesignationPrivate
+                    partnerCompanyName
+                    isCompanyNamePrivate
+                    duration
+                    isDurationPrivate
+                    yearsOfExperience
+                    isYearsOfExperiencePrivate
+                    qualification
+                    aboutPartner
+                    isQualificationPrivate
+                    isAboutPartnerPrivate
+                    socialLinks{
+                      socialLinkType
+                      userId
+                      isUserIdPrivate
+                    }
+                    index
+                    logo{
+                      fileUrl,
+                      fileName
+                    }
+                    privateFields{
+                      keyName,
+                      booleanKey
+                    }
                   }
               }
           }

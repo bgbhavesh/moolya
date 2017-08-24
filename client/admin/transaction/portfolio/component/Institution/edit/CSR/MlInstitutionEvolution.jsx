@@ -58,6 +58,7 @@ export default class MlInstitutionEvolution extends React.Component{
     }else{
       this.setState({loading: false, data: that.context.institutionPortfolio.evolution});
     }
+    this.updatePrivateKeys();
   }
 
   handleBlur(e){

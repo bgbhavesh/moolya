@@ -116,6 +116,7 @@ let portfolioSchema = `
           fetchPortfolioDetailsByUserId:Portfoliodetails
           fetchPortfolioByReg(registrationId: String): Portfoliodetails
           fetchPortfolioClusterId(portfoliodetailsId: String): Portfoliodetails
+          fetchPortfolioImage(portfolioDetailsId: String): String
     }
     
     type Mutation{
@@ -141,7 +142,8 @@ let supportedApi = [
   {api:'rejectPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'requestForGoLive', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
   {api:'removeIdetaorProfilePic', actionName:'UPDATE', moduleName:"PORTFOLIO", isAppWhiteList:true},
-  {api: 'fetchPortfolioClusterId', actionName: 'READ', moduleName: "PORTFOLIO", isWhiteList:true}   //temp making white list
+  {api: 'fetchPortfolioClusterId', actionName: 'READ', moduleName: "PORTFOLIO", isWhiteList:true},   //temp making white list
+  {api: 'fetchPortfolioImage', actionName: 'READ', moduleName: "PORTFOLIO", isWhiteList:true}
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

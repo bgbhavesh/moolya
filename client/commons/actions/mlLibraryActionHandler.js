@@ -68,6 +68,24 @@ export async function fetchLibrary(userId, connection) {
   return id
 }
 
+
+export async function getUserPermissionDetailsHandler(portfolioDetailsId,connection) {
+  const result = await connection.query({
+    query: gql`
+    query($portfolioDetailsId: String){
+  fetchCurrentUserPermissions(portfolioDetailsId:$portfolioDetailsId){
+      isExploring
+      action
+  }
+}`, forceFetch:true,
+    variables : {
+      portfolioDetailsId
+    }
+  })
+  const id = result.data.fetchCurrentUserPermissions;
+  return id
+}
+
 export async function fetchDataFromCentralLibrary(connection) {
   const result = await connection.query({
     query: gql`

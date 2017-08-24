@@ -16,7 +16,7 @@ let appGenericSearch = `
     
     scalar JSON
 
-    union AppGenericSearchUnion = Activity | FunderPortfolio | serviceProviderPortfolioDetails | startupPortfolioOutput | Ideator | Users | InstitutionPortfolio
+    union AppGenericSearchUnion = Activity | FunderPortfolio | serviceProviderPortfolioDetails | startupPortfolioOutput | Ideator | Users | InstitutionPortfolio | CompanyPortfolio
    
     type AppGenericSearchResponse {
       count:Int,

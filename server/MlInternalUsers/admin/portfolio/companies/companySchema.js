@@ -338,6 +338,9 @@ let startupPortfolioSchema = `
       evolution           : evolutionOutput
       researchAndDevelopment: [researchAndDevelopmentOutput]
       intrapreneurRecognition : [intrapreneurRecognitionOutput]
+      portfolioDetailsId: String
+      chapterName : String
+      accountType : String
    }
     
     

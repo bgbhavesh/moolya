@@ -1,6 +1,8 @@
 import React from 'react';
 import {render} from 'react-dom';
 import {fetchInstitutionDetailsHandler} from "../../../../actions/findPortfolioInstitutionDetails";
+import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
+import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 
 const KEY = "evolution"
 export default class MlInstitutionViewEvolution extends React.Component {

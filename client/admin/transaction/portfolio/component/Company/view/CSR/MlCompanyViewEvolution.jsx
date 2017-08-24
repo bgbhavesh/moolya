@@ -1,33 +1,56 @@
 import React from 'react';
-import {fetchCompanyDetailsHandler} from "../../../actions/findCompanyPortfolioDetails";
-import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnotator'
-import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDetails'
-import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
-import NoData from '../../../../../../commons/components/noData/noData';
+var FontAwesome = require('react-fontawesome');
+import {fetchCompanyDetailsHandler} from "../../../../actions/findCompanyPortfolioDetails";
+import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAnnotator'
+import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
+import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
+import _ from 'lodash'
+import NoData from '../../../../../../../commons/components/noData/noData';
 
-const KEY = 'awardsRecognition'
+const KEY = "evolution"
 
-export default class MlCompanyViewAwards extends React.Component {
+export default class MlCompanyViewEvolution extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {awardsList: []};
-    this.fetchPortfolioDetails.bind(this);
+    this.state={
+      policy:{},
+      data:{},
+      annotations:[],
+      content:{}
+
+    }
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
-  }
 
+  }
 
   componentDidMount(){
     this.initalizeAnnotaor()
     this.fetchAnnotations();
-  }
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
 
+  }
   componentWillMount(){
     this.fetchPortfolioDetails();
   }
+  async fetchPortfolioDetails() {
+    let that = this;
+    let data = {};
+    let portfoliodetailsId=that.props.portfolioDetailsId;
+    const responseM = await fetchCompanyDetailsHandler(portfoliodetailsId, KEY);
+    if (responseM) {
+      this.setState({evolution: responseM.evolution});
+    }
 
+    data = {
+      evolution:this.state.evolution,
+    }
+    this.setState({data:data})
+
+  }
   initalizeAnnotaor(){
     initializeMlAnnotator(this.annotatorEvents.bind(this))
     this.state.content = jQuery("#annotatorContent").annotator();
@@ -61,7 +84,7 @@ export default class MlCompanyViewAwards extends React.Component {
   }
 
   async createAnnotations(annotation){
-    let details = {portfolioId:this.props.portfolioDetailsId, docId:"awards", quote:JSON.stringify(annotation)}
+    let details = {portfolioId:this.props.portfolioDetailsId, docId:"evolution", quote:JSON.stringify(annotation)}
     const response = await createAnnotationActionHandler(details);
     if(response && response.success){
       this.fetchAnnotations(true);
@@ -72,7 +95,7 @@ export default class MlCompanyViewAwards extends React.Component {
 
 
   async fetchAnnotations(isCreate){
-    const response = await findAnnotations(this.props.portfolioDetailsId, "awards");
+    const response = await findAnnotations(this.props.portfolioDetailsId, "evolution");
     let resp = JSON.parse(response.result);
     let annotations = this.state.annotations;
     this.setState({annotations:JSON.parse(response.result)})
@@ -96,42 +119,25 @@ export default class MlCompanyViewAwards extends React.Component {
     return response;
   }
 
-  async fetchPortfolioDetails() {
-    let that = this;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
-    const response = await fetchCompanyDetailsHandler(portfoliodetailsId, KEY);
-    if (response && response.awardsRecognition) {
-      this.setState({awardsList: response.awardsRecognition});
-    }
-    this.setState({loading: false})
-  }
-
   render(){
-    let that = this;
-    let awardsArray = that.state.awardsList || [];
-    if (awardsArray && awardsArray.length === 0) {
-      return (<NoData tabName="Awards" />);
-    }
-    return (
-
-      <div id="annotatorContent">
-        <h2>Awards</h2>
-        <div className="col-lg-12">
-          <div className="row">
-            {awardsArray && awardsArray.map(function (details, idx) {
-              return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
-                <div className="team-block">
-                  <img src={details.logo&&details.logo.fileUrl} className="team_img" />
-                  <h3>
-                    {details&&details.awardName}
-                  </h3>
+    const evolution = this.state.evolution;
+    if (evolution && !evolution.evolutionDescription) {
+      return (<NoData tabName="Evolution" />);
+    } else {
+      return (
+        <div className="portfolio-main-wrap" id="annotatorContent">
+          <div className="col-lg-12 col-sm-12">
+            <div className="row">
+              <h2>Evolution</h2>
+              <div className="panel panel-default panel-form-view">
+                <div className="panel-body">
+                  <p>{this.state.data&&this.state.data.evolutionDescription}</p>
                 </div>
-              </div>)
-            })}
-
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    )
+      )
+    }
   }
 }

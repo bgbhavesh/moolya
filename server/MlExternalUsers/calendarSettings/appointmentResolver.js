@@ -501,13 +501,43 @@ MlResolver.MlQueryResolver['fetchOfficeMemberAppointmentCounts'] = (obj, args, c
 
   let result = mlDBController.aggregate('MlAppointments', pipeLine);
   result = result && result[0] ? result[0] : [];
+
+  if(!result.events){
+    let vacationPipeline = [
+      { $match : { "userId" : userId, "profileId" : profileId } },
+      {
+        $project: {
+          events: [],
+          days: {
+            "$filter" : {
+              "input": "$vacations",
+              "as": "day",
+              "cond": {
+                "$and":[
+                  {"$or": [
+                    { "$cond": [ { "$eq" : [{ "$month":"$$day.start" }, 8 ] }, true, false ] },
+                    { "$cond": [ { "$eq" : [{ "$month":"$$day.end" }, 8 ] }, true, false ] }
+                  ]},
+                  { "$eq" : ["$$day.isActive", true] }
+                ]
+              }
+            }
+          }
+        }
+      }
+    ];
+    result = mlDBController.aggregate('MlCalendarSettings', vacationPipeline);
+    result = result && result[0] ? result[0] : [];
+  }
   return result;
 };
 
 MlResolver.MlQueryResolver['fetchAllOfficeMemberAppointmentCounts'] = (obj, args, context, info) => {
+  let userId = context.userId;
+  let profileId = new MlUserContext().userProfileDetails(userId).profileId;
   let pipeLine = [
     { $lookup: { from: "mlOffice", localField: "officeId", foreignField: "_id", as: "office" } },
-    { $match: { 'office.userId': "uXu8P2Tpcb4AhesSq" } },
+    { $match: { 'office.userId': userId, 'office.profileId': profileId } },
     { $lookup:
       {
         from: "users",

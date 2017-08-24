@@ -1,6 +1,3 @@
-/**
- * Created by vishwadeep on 19/8/17.
- */
 
 /**
  * Import of all the usable components
@@ -8,8 +5,18 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import MlTabComponent from "../../../../commons/components/tabcomponent/MlTabComponent";
-import MlServiceProviderAbout from '../../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderAbout'
 import {appClient} from '../../../core/appConnection'
+import MlCompanyManagement from '../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyManagement';
+import MlCompanyAboutUsLandingPage from "../../../../admin/transaction/portfolio/component/Company/edit/about/MlCompanyAboutUsLandingPage";
+import MlCompanyData from "../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyData";
+import MlCompanyAwards from "../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyAwards";
+import MlCompanyMCL from "../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyMCL";
+import MlCompanyIncubatorsEditTabs from "../../../../admin/transaction/portfolio/component/Company/edit/incubators/MlCompanyIncubatorsEditTabs"
+import MlCompanyPartners from "../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyPartners";
+import MlCompanyCSREditTabs from "../../../../admin/transaction/portfolio/component/Company/edit/CSR/MlCompanyCSREditTabs"
+import MlCompanyIntrapreneur from '../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyIntrapreneur'
+import MlCompanyRAndD from '../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyR&D'
+import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 
 export default class MlAppCompaniesEditTabs extends Component {
   constructor(props) {
@@ -42,14 +49,17 @@ export default class MlAppCompaniesEditTabs extends Component {
    * */
   getTabComponents() {
     let tabs = [
-      {
-        tabClassName: 'tab',
-        panelClassName: 'panel',
-        title: "About Companies",
-        component: <MlServiceProviderAbout client={appClient} isAdmin={false} key="1"
-                                           getAboutus={this.getAboutus.bind(this)}
-                                           portfolioDetailsId={this.props.portfolioDetailsId}/>
-      }
+      {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlCompanyAboutUsLandingPage key="1" getAboutus={this.getAboutus.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.backClickHandler.bind(this)}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , component:<MlCompanyManagement  client={client} isAdmin={true} key="2" getManagementDetails={this.getManagementDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Data" , component:<MlCompanyData key="4" isApp={false} client={client} getDataDetails={this.getDataDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Awards" , component:<MlCompanyAwards key="6" getAwardsDetails={this.getAwardsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<PortfolioLibrary key="7" client={client} isAdmin={false} portfolioDetailsId={this.props.portfolioDetailsId}/>}, //
+      {tabClassName: 'tab', panelClassName: 'panel', title:"M C & L" , component:<MlCompanyMCL key="8" getMCL={this.getMCL.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Incubators" , component:<MlCompanyIncubatorsEditTabs key="9" getIncubators={this.getIncubators.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.backClickHandler.bind(this)}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Partners" , component:<MlCompanyPartners key="10" getPartnersDetails={this.getPartnersDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"CSR" , component:<MlCompanyCSREditTabs key="11" getCSRDetails={this.getCSRDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.backClickHandler.bind(this)}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"R&D" , component:<MlCompanyRAndD key="13" getRDDetails={this.getRDDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" , component:<MlCompanyIntrapreneur key="12" getIntrapreneurDetails={this.getIntrapreneurDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
     ]
     return tabs;
   }

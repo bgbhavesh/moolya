@@ -58,6 +58,7 @@ export default class MlInstitutionListOfIncubators extends React.Component{
     }else{
       this.setState({loading: false, data: that.context.institutionPortfolio.listOfIncubators});
     }
+    this.updatePrivateKeys();
   }
 
   handleBlur(e){

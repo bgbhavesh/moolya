@@ -58,6 +58,7 @@ export default class MlInstitutionSectors extends React.Component{
     }else{
       this.setState({loading: false, data: that.context.institutionPortfolio.sectorsAndServices});
     }
+    this.updatePrivateKeys();
   }
 
   handleBlur(e){

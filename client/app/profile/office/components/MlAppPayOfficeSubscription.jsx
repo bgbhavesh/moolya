@@ -4,6 +4,7 @@
 import React, {Component} from "react";
 import {findOfficeAction} from "../actions/findOfficeAction";
 import MlLoader from "../../../../commons/components/loader/loader";
+import {getOfficeTransactionPaymentLinkActionHandler} from './../actions/getOfficeTransactionPaymentLink';
 
 export default class MlAppPayOfficeSubscription extends Component {
   constructor(props) {
@@ -49,6 +50,19 @@ export default class MlAppPayOfficeSubscription extends Component {
   }
 
   payClick() {
+
+    console.log(this.state);
+
+    // let transactionId = this.state && this.state.transaction && this.state.transaction.transactionId ? this.state.transaction.transactionId : '';
+    // if(transactionId){
+    //   let resposne = getOfficeTransactionPaymentLinkActionHandler(transactionId);
+    //   console.log(resposne);
+    // } else {
+    //   // TransactionId is missing
+    //   toastr.error('Unable to proceed payment.');
+    // }
+
+
     let officeAmount = this.state.transaction && this.state.transaction.orderSubscriptionDetails && this.state.transaction.orderSubscriptionDetails.cost ? this.state.transaction.orderSubscriptionDetails.cost : "00"
     var data = {
       officeId: this.props.config,

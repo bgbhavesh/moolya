@@ -98,7 +98,7 @@ export default class MlInstitutionViewRD extends React.Component {
 
   async fetchPortfolioInstitutionDetails() {
     let that = this;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
+    let portfoliodetailsId = that.props.portfolioDetailsId;
     const response = await fetchInstitutionDetailsHandler(portfoliodetailsId, KEY);
     if (response && response.researchAndDevelopment) {
       this.setState({institutionRDList: response.researchAndDevelopment});
@@ -111,27 +111,27 @@ export default class MlInstitutionViewRD extends React.Component {
     let researchAndDevelopmentArray = that.state.institutionRDList || [];
     if (researchAndDevelopmentArray && researchAndDevelopmentArray.length === 0) {
       return (<NoData tabName="R & D" />);
-    }
-    return (
+    } else {
+      return (
+        <div id="annotatorContent">
+          <h2>Research And Development</h2>
+          <div className="col-lg-12">
+            <div className="row">
+              {researchAndDevelopmentArray && researchAndDevelopmentArray.map(function (details, idx) {
+                return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
+                  <div className="team-block">
+                    <img src={details.logo&&details.logo.fileUrl} className="team_img" />
+                    <h3>
+                      {details&&details.researchAndDevelopmentName}
+                    </h3>
+                  </div>
+                </div>)
+              })}
 
-      <div id="annotatorContent">
-        <h2>Research And Development</h2>
-        <div className="col-lg-12">
-          <div className="row">
-            {researchAndDevelopmentArray && researchAndDevelopmentArray.map(function (details, idx) {
-              return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
-                <div className="team-block">
-                  <img src={details.logo&&details.logo.fileUrl} className="team_img" />
-                  <h3>
-                    {details&&details.researchAndDevelopmentName}
-                  </h3>
-                </div>
-              </div>)
-            })}
-
+            </div>
           </div>
         </div>
-      </div>
-    )
+      )
+    }
   }
 }

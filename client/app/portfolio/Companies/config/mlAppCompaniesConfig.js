@@ -1,32 +1,32 @@
-// import {MlViewer,MlViewerTypes} from "../../../../lib/common/mlViewer/mlViewer";
 import {MlAppViewer} from "../../../../commons/core/MlAppViewer";
-import MlAppServiceProviderListView from "../components/MlAppCompaniesListView";
+import MlAppCompanyListView from "../components/MlAppCompaniesListView";
 import React from "react";
 import gql from "graphql-tag";
 
-export const mlAppServiceProviderConfig = new MlAppViewer({
-  name: "Service Provider List",
-  // viewType:MlViewerTypes.LIST,
+export const mlAppCompanyConfig = new MlAppViewer({
+  name: "Company List",
   extraFields: [],
   fields: ["firstName", "lastName", "category", "investmentBudget"],
   searchFields: ["firstName", "lastName", "category", "investmentBudget"],
   throttleRefresh: true,
   pagination: true,
-  moduleName: "serviceProviderPortfolioDetails",
+  moduleName: "companyPortfolioDetails",
   sort: true,
   perPageLimit: 20,
-  viewComponent: <MlAppServiceProviderListView />,
+  viewComponent: <MlAppCompanyListView />,
   showActionComponent: true,
   graphQlQuery: gql`
               query ($module: String!, $queryProperty: appGenericSearchQueryProperty) {
                 data: AppGenericSearch(module: $module, queryProperty: $queryProperty) {
                   count
                     data{
-                      ...on serviceProviderPortfolioDetails{
+                      ...on CompanyPortfolio{
                         portfolioDetailsId
-                        about{
-                          aboutTitle
+                        aboutUs{
+                          companyDescription
                         }
+                        chapterName
+                        accountType
                       }
                     }
                 }

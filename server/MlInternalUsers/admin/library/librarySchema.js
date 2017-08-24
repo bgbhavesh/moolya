@@ -21,6 +21,11 @@ let librarySchema = `
       portfolioReference: [PortfolioDetails]
     }
     
+    type UserInfo {
+      isExploring: Boolean
+      action: String
+    }
+    
      input portfolioDetails{
       portfolioId: String
       isPrivate: Boolean
@@ -58,6 +63,7 @@ let librarySchema = `
  type Query{
       fetchLibrary(userId:String):[Details]
       fetchDataFromCentralLibrary:[Details]
+      fetchCurrentUserPermissions(portfolioDetailsId: String): UserInfo
  }
  
  type Mutation{
@@ -77,6 +83,7 @@ let supportedApi = [
 
   {api:'fetchLibrary', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'fetchDataFromCentralLibrary', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
+  {api:'fetchCurrentUserPermissions', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
 
 
   {api:'createLibrary', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},

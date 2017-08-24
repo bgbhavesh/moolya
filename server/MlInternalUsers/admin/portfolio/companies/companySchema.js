@@ -222,7 +222,8 @@ let startupPortfolioSchema = `
         socialLinks:[SocialLinks],
         index:Int,
         logo:imagesTypeSchema,
-        privateFields:[PrivateKeys]
+        privateFields:[PrivateKeys],
+        makePrivate : Boolean
     }
     
     type ratingOutput{,
@@ -468,6 +469,7 @@ let startupPortfolioSchema = `
         socialLinks:[socialLinks],
         index:Int,
         logo:imageFilesInputSchema,
+        makePrivate : Boolean
     }
     
     input aboutUs{

@@ -74,7 +74,7 @@ export default class MlAppOfficeCalendar extends Component {
         events: eventsData
       });
     }
-    console.log('Data', data);
+    // console.log('Data', data);
   }
 
   async fetchAllOfficeMemberCalendar(month, year) {
@@ -99,7 +99,7 @@ export default class MlAppOfficeCalendar extends Component {
     return (
       <div className="app_main_wrap" style={{'overflow': 'auto'}}>
         <div className="app_padding_wrap">
-          <MlAppOfficeCalendarHeader selectUser={that.selectUser} />
+          <MlAppOfficeCalendarHeader selectUser={that.selectUser} selectedUser={this.state.selectedUser} />
           <Calender
             events={ that.state.events }
             // dayBackgroundComponent={<MlAppMyCalendarDayComponent componentToLoad={that.componentToLoad.bind(that)}/> }

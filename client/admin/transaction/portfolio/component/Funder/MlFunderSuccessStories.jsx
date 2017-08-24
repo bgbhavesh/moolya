@@ -9,6 +9,7 @@ import {multipartASyncFormHandler} from "../../../../../../client/commons/MlMult
 import {fetchfunderPortfolioSuccess} from "../../actions/findPortfolioFunderDetails";
 import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from '../../../../../commons/components/loader/loader'
+import NoData from '../../../../../commons/components/noData/noData'
 var FontAwesome = require('react-fontawesome');
 
 export default class MlFunderSuccessStories extends React.Component {
@@ -235,103 +236,114 @@ export default class MlFunderSuccessStories extends React.Component {
     let that = this;
     const showLoader = that.state.loading;
     let funderSuccessList = that.state.funderSuccessList || [];
-    return (
-      <div>
-        {showLoader === true ? ( <MlLoader/>) : (
+    if(_.isEmpty(funderSuccessList)){
+      return (
+        showLoader === true ? (<MlLoader/>) :
           <div className="portfolio-main-wrap">
-            <h2>Success Stories</h2>
-            <div className="main_wrap_scroll">
-              <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true}>
-                <div className="col-lg-12">
-                  <div className="row">
-                    <div className="col-lg-2 col-md-4 col-sm-4">
-                      <a href="#" id="team_listdefault" data-placement="top" data-class="large_popover">
-                        <div className="list_block notrans" onClick={this.addSuccess.bind(this)}>
-                          <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                          <h3 onClick={this.addSuccess.bind(this)}>Add New</h3>
-                        </div>
-                      </a>
-                    </div>
-
-                    {/*list of stories*/}
-                    {funderSuccessList.map(function (details, idx) {
-                      return (
-                        <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
-                          <a href="#" id={"team_list" + idx}>
-                            <div className="list_block notrans funding_list" onClick={that.onTileClick.bind(that, idx)}>
-                              <FontAwesome name='lock'/>
-                              <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                              <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/>
-                              <div><p>{details.storyTitle}</p><p>{details.description}</p></div>
-                              <h3>{details.date ? details.date : "Date : "}</h3>
-                            </div>
-                          </a>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-              </ScrollArea>
-
-              {/*popover view*/}
-              <Popover placement="right" isOpen={this.state.popoverOpen}
-                       target={"team_list" + this.state.selectedObject} toggle={this.toggle}>
-                <PopoverTitle>Add New Success Story </PopoverTitle>
-                <PopoverContent>
-                  <div className="team_list-main">
-                    <div className="medium-popover">
-                      <div className="row">
-                        <div className="col-md-12">
-                          <div className="form-group">
-                            <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
-                                      inputProps={{placeholder: "Select Date"}} ref="date"
-                                      defaultValue={this.state.data.date ? this.state.data.date : ''}
-                                      onBlur={this.dateChange.bind(this)}  isValidDate={ valid }/> {/**/} {/*closeOnSelect={true}*/}
-                            <FontAwesome name='unlock' className="input_icon un_lock"
-                                         onClick={this.onLockChange.bind(this, "date", "isDatePrivate")}/>
+            <NoData tabName={this.props.tabName} />
+          </div>
+      )
+    } else {
+      return (
+        <div>
+          {showLoader === true ? ( <MlLoader/>) : (
+            <div className="portfolio-main-wrap">
+              <h2>Success Stories</h2>
+              <div className="main_wrap_scroll">
+                <ScrollArea speed={0.8} className="main_wrap_scroll" smoothScrolling={true} default={true}>
+                  <div className="col-lg-12">
+                    <div className="row">
+                      <div className="col-lg-2 col-md-4 col-sm-4">
+                        <a href="#" id="team_listdefault" data-placement="top" data-class="large_popover">
+                          <div className="list_block notrans" onClick={this.addSuccess.bind(this)}>
+                            <div className="hex_outer"><span className="ml ml-plus "></span></div>
+                            <h3 onClick={this.addSuccess.bind(this)}>Add New</h3>
                           </div>
-                          <div className="clearfix"></div>
-                          {this.state.selectedObject != "default" ?
-                            <div className="form-group">
-                              <div className="fileUpload mlUpload_btn">
-                                <span>Upload Pic</span>
-                                <input type="file" className="upload" name="logo" id="logo" accept="image/*"
-                                       onChange={this.onLogoFileUpload.bind(this)}/>
+                        </a>
+                      </div>
+
+                      {/*list of stories*/}
+                      {funderSuccessList.map(function (details, idx) {
+                        return (
+                          <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
+                            <a href="#" id={"team_list" + idx}>
+                              <div className="list_block notrans funding_list"
+                                   onClick={that.onTileClick.bind(that, idx)}>
+                                <FontAwesome name='lock'/>
+                                <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
+                                <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/>
+                                <div><p>{details.storyTitle}</p><p>{details.description}</p></div>
+                                <h3>{details.date ? details.date : "Date : "}</h3>
                               </div>
-                              {/*<div className="previewImg ProfileImg">*/}
-                              {/*<img src="/images/ideator_01.png"/>*/}
-                              {/*</div>*/}
-                            </div> : <div></div>
-                          }
-                          <div className="form-group">
-                            <input type="text" placeholder="Enter title of Story" className="form-control float-label"
-                                   name="storyTitle" defaultValue={this.state.data.storyTitle}
-                                   onBlur={this.handleBlur.bind(this)}/>
-                            <FontAwesome id="isStoryTitlePrivate" name='unlock' className="input_icon un_lock"
-                                         onClick={this.onLockChange.bind(this, "storyTitle", "isStoryTitlePrivate")}/>
-
+                            </a>
                           </div>
-                          <div className="form-group">
-                            <input type="text" placeholder="Description" className="form-control float-label"
-                                   name="description" defaultValue={this.state.data.description}
-                                   onBlur={this.handleBlur.bind(this)}/>
-                            <FontAwesome id="isDescPrivate" name='unlock' className="input_icon un_lock"
-                                         onClick={this.onLockChange.bind(this, "description", "isDescPrivate")}/>
+                        )
+                      })}
+                    </div>
+                  </div>
+                </ScrollArea>
 
-                          </div>
-                          <div className="ml_btn" style={{'textAlign': 'center'}}>
-                            <a className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                {/*popover view*/}
+                <Popover placement="right" isOpen={this.state.popoverOpen}
+                         target={"team_list" + this.state.selectedObject} toggle={this.toggle}>
+                  <PopoverTitle>Add New Success Story </PopoverTitle>
+                  <PopoverContent>
+                    <div className="team_list-main">
+                      <div className="medium-popover">
+                        <div className="row">
+                          <div className="col-md-12">
+                            <div className="form-group">
+                              <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
+                                        inputProps={{placeholder: "Select Date"}} ref="date"
+                                        defaultValue={this.state.data.date ? this.state.data.date : ''}
+                                        onBlur={this.dateChange.bind(this)}
+                                        isValidDate={ valid }/> {/**/} {/*closeOnSelect={true}*/}
+                              <FontAwesome name='unlock' className="input_icon un_lock"
+                                           onClick={this.onLockChange.bind(this, "date", "isDatePrivate")}/>
+                            </div>
+                            <div className="clearfix"></div>
+                            {this.state.selectedObject != "default" ?
+                              <div className="form-group">
+                                <div className="fileUpload mlUpload_btn">
+                                  <span>Upload Pic</span>
+                                  <input type="file" className="upload" name="logo" id="logo" accept="image/*"
+                                         onChange={this.onLogoFileUpload.bind(this)}/>
+                                </div>
+                                {/*<div className="previewImg ProfileImg">*/}
+                                {/*<img src="/images/ideator_01.png"/>*/}
+                                {/*</div>*/}
+                              </div> : <div></div>
+                            }
+                            <div className="form-group">
+                              <input type="text" placeholder="Enter title of Story" className="form-control float-label"
+                                     name="storyTitle" defaultValue={this.state.data.storyTitle}
+                                     onBlur={this.handleBlur.bind(this)}/>
+                              <FontAwesome id="isStoryTitlePrivate" name='unlock' className="input_icon un_lock"
+                                           onClick={this.onLockChange.bind(this, "storyTitle", "isStoryTitlePrivate")}/>
+
+                            </div>
+                            <div className="form-group">
+                              <input type="text" placeholder="Description" className="form-control float-label"
+                                     name="description" defaultValue={this.state.data.description}
+                                     onBlur={this.handleBlur.bind(this)}/>
+                              <FontAwesome id="isDescPrivate" name='unlock' className="input_icon un_lock"
+                                           onClick={this.onLockChange.bind(this, "description", "isDescPrivate")}/>
+
+                            </div>
+                            <div className="ml_btn" style={{'textAlign': 'center'}}>
+                              <a className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </PopoverContent>
-              </Popover>
-            </div>
-          </div>)}
-      </div>
-    )
+                  </PopoverContent>
+                </Popover>
+              </div>
+            </div>)}
+        </div>
+      )
+    }
   }
 };
 MlFunderSuccessStories.contextTypes = {

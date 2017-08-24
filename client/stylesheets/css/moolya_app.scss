@@ -87,7 +87,7 @@ $menuTrans:all 0.5s linear;
   .profile-img {margin-top: -30px;width: 20px;margin-left: 0px;}
   .ml_app_profile {border: 0px solid #ffc20e;box-sizing: border-box;position: fixed;top: 0;right: 0;padding: 0;border-radius: 0 0 0 100%;width: 2em;height: 2em;/*overflow: hidden;*/transition: all .25s ease-in;}
   .ml_app_profile:focus{outline: 0px;}
-  .ml_app_profile.profile_open {background-color: $mlBlue;width: 253px;height: 203px;outline: none;opacity: inherit;border: 1px solid #ffc20e;z-index: 4;}
+  .ml_app_profile.profile_open {background-color: $mlBlue;width: 253px;height: 203px;outline: none;opacity: inherit;border: 1px solid #ffc20e;z-index: 20;}
   .ml_app_profile h1 {box-sizing: border-box; font-size: 100%; text-transform: uppercase; font-weight: normal; position: fixed; top: 12px; right: 10px; margin: 0; border-radius: 50%; z-index: 50; cursor: pointer; background-image: url(images/img.png); width: 40px; height: 40px;border:2px solid $mlRed;background-size:cover;}
   .ml_app_profile ol, .ml_app_profile li {margin: 0;padding: 0;list-style-type: none;}
   .ml_app_profile li {position: absolute;}
@@ -273,7 +273,7 @@ $menuTrans:all 0.5s linear;
         a{text-decoration: none;
           /*span{background:$mlRed; position: absolute; border-radius: 50%; width: 12px; height: 12px; margin-left: 46px;color: $mlWhite;}*/
           span.icon{background: #ef4647; position: absolute; border-radius: 50%; width: 20px; height: 20px; margin-left: 46px; color: #fff; text-shadow: none; font-size: 13px; line-height: 20px;}
-          img{border-radius:100%; border:$mlRed solid 3px; width: 60px; height: 60px;}
+          img{border-radius:100%; border:$mlRed solid 3px; width: 45px; height: 45px;}
           span.icon_bg {background: $mlRed;color: $mlWhite;display: inline-block;height: 45px;width: 45px;border-radius: 50%;font-size: 28px;line-height: 45px;
             span.icon_lg {
               color: $mlWhite;text-shadow: none;
@@ -496,7 +496,7 @@ background:$mlGray; position: absolute; top: 0; z-index: 100; width: 100%;
    background:$mlRed !important;
   }
 }
-.overlay {position: fixed; display: none; width: 100%; height: 100%; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.8); z-index: 2; }
+.overlay {position: fixed; display: none; width: 100%; height: 100%; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 0, 0, 0.8); z-index: 15; }
 /* Icon 2 */
 
 #nav-icon2 {width: 37px; height: auto; position: relative; margin:17px auto 0px 8px; -webkit-transform: rotate(0deg); -moz-transform: rotate(0deg); -o-transform: rotate(0deg); transform: rotate(0deg); -webkit-transition: .5s ease-in-out; -moz-transition: .5s ease-in-out; -o-transition: .5s ease-in-out; transition: .5s ease-in-out; cursor: pointer;float:left;z-index:3; }
@@ -704,7 +704,7 @@ li {display: inline-block; width: 14px; height: 14px; margin: 0 4px; text-indent
 .crazy ul li:nth-child(3n) { width: 300px; margin: 0 10px 0 5px; }
 .crazy ul li:nth-child(4n) { width: 400px; margin: 0 30px 0 2px; }
 .bottom-buttons{width: 100%; margin:0px;
-  position: fixed; bottom: 0; border-radius:none !important; padding-left:0px; padding-right:0px; z-index:1030;
+  position: fixed; bottom: 0; border-radius:none !important; padding-left:0px; padding-right:0px; z-index:3;
   .opacity{display:none; background: none repeat scroll 0 0 rgba(0, 0, 0, 0.8); height: 100%; left: 0; position: fixed; text-align: center; top: 0; width: 100%; z-index: 999; }
   .panel{background:transparent; border:none; box-shadow:none; margin: 0px; }
   .panel-heading{padding: 0px;height:auto;
@@ -1576,7 +1576,7 @@ p{margin-top:10px;}
   }
 }
 .bugReport{
-      right: -350px; position: fixed; z-index: 9999; transition: .5s linear; top: 37%;
+      right: -350px; position: fixed; z-index: 2; transition: .5s linear; top: 37%;
     &.open{
       right: 0;
       .bug_button:hover{color:$mlBlack;right:340px;}
@@ -1712,7 +1712,7 @@ p{margin-top:10px;}
         a{text-decoration: none;
           /*span{background:$mlRed; position: absolute; border-radius: 50%; width: 12px; height: 12px; margin-left: 46px;color: $mlWhite;}*/
           span.icon{background: #ef4647; position: absolute; border-radius: 50%; width: 20px; height: 20px; margin-left: 46px; color: #fff; text-shadow: none; font-size: 13px; line-height: 20px;}
-          img{border-radius:100%; border:$mlRed solid 3px; width: 44px; height: 45px;}
+          img{border-radius:100%; border:$mlRed solid 3px; width: 45px; height: 45px;}
           span.icon_bg {background: $mlRed;color: $mlWhite;display: inline-block;height: 45px;width: 45px;border-radius: 50%;font-size: 28px;line-height: 45px;
             span.icon_lg {
               color: $mlWhite;text-shadow: none;

@@ -239,7 +239,7 @@ export default class sMlTransactionRequested extends Component {
 
           </div>
           {/*{this.state.createRequest?(<CreateRequestComponent openPopUp={true}/>):""}*/}
-          <div className="overlay"></div>
+          {/*<div className="overlay"></div>*/}
           <Popover placement="bottom" isOpen={this.state.popoverOpen} target="createRegistrationRequest" toggle={this.toggle}>
             <PopoverTitle>Create Request </PopoverTitle>
             <PopoverContent>

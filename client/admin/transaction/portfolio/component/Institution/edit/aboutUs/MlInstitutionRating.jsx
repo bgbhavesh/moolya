@@ -5,6 +5,7 @@ import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 var Rating = require('react-rating');
+import _ from 'lodash';
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 
 const KEY = 'rating'
@@ -26,6 +27,7 @@ export default class MlInstitutionRating extends React.Component{
   componentDidMount(){
     OnLockSwitch();
     dataVisibilityHandler();
+    this.updatePrivateKeys();
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.institutionPortfolio && this.context.institutionPortfolio.rating)
@@ -35,7 +37,7 @@ export default class MlInstitutionRating extends React.Component{
   }
   onClick(fieldName, field, e){
     var isPrivate = false;
-    let details = this.state.data||{};
+    let details = (this.state.data && _.cloneDeep(this.state.data)) || {};
     let key = e.target.id;
     details=_.omit(details,[key]);
     let className = e.target.className;
@@ -53,23 +55,29 @@ export default class MlInstitutionRating extends React.Component{
       tabName: KEY
     }
     this.setState({privateKey: privateKey})
-
+    details=_.omit(details,"privateFields");
     this.setState({data:details}, function () {
       this.sendDataToParent()
     })
   }
+  updatePrivateKeys(){
+    let response = this.props.ratingDetails;
+    _.each(response.privateFields, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
   onRatingChange(rate){
-    let details =this.state.data;
+    let details = _.cloneDeep(this.state.data);
     details=_.omit(details,"rating");
+    details=_.omit(details,"privateFields");
     details=_.extend(details,{"rating":rate});
     this.setState({data:details}, function () {
       this.sendDataToParent()
     })
   }
   sendDataToParent(){
-    let data = this.state.data
-
-    this.props.getInstitutionRating(data, this.state.privateKey)
+    let data = this.state.data;
+    this.props.getInstitutionRating(data, this.state.privateKey);
   }
   render(){
     let rating = parseInt(this.state.data && this.state.data.rating?this.state.data.rating:0);

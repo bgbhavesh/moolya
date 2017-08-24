@@ -12,6 +12,7 @@ import MlInstitutionLookingFor from "../../../../admin/transaction/portfolio/com
 import MlInstitutionIntrapreneur from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditIntrapreneur";
 import MlInstitutionRAndD from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditR&D";
 import MlInstitutionCSR from "../../../../admin/transaction/portfolio/component/Institution/edit/CSR/MlInstitutionCSREditTabs";
+import MlInstitutionEditPartners from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditPartners";
 
 import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import {appClient} from '../../../core/appConnection'
@@ -75,9 +76,10 @@ export default class MlAppInstitutionEditTabs extends React.Component{
       {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<PortfolioLibrary key="7" isAdmin={false} client={appClient}  portfolioDetailsId={this.props.portfolioDetailsId}/>}, //
       {tabClassName: 'tab', panelClassName: 'panel', title:"M C & L" , component:<MlInstitutionMCL key="8" getInstitutionMCL={this.getInstitutionMCL.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlInstitutionLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"CSR" , component:<MlInstitutionCSR client={appClient} isAdmin={false} key="10" getCSR={this.getCSR.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.setBackHandler.bind(this)} isApp={true} />},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"R&D" , component:<MlInstitutionRAndD key="11" getRAndD={this.getRAndD.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" , component:<MlInstitutionIntrapreneur key="12" getIntrapreneurDetails={this.getIntrapreneurDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>}
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Partner" , component:<MlInstitutionEditPartners key="10" getPartnersDetails={this.getPartnersDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"CSR" , component:<MlInstitutionCSR client={appClient} isAdmin={false} key="11" getCSR={this.getCSR.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.setBackHandler.bind(this)} isApp={true} />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"R&D" , component:<MlInstitutionRAndD key="12" getRAndD={this.getRAndD.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" , component:<MlInstitutionIntrapreneur key="14" getIntrapreneurDetails={this.getIntrapreneurDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>}
 
     ]
     return tabs;
@@ -115,6 +117,19 @@ export default class MlAppInstitutionEditTabs extends React.Component{
       arr.push(updateItem)
     })
     data['investor'] = arr;
+    this.props.getPortfolioDetails({institutionPortfolio: data},privatekey);
+  }
+
+  getPartnersDetails(details,privatekey){
+    let data = this.state.institutionPortfolio;
+    data['partners'] = details;
+    this.setState({institutionPortfolio : data})
+    let arr = [];
+    _.each(details, function (obj) {
+      let updateItem = _.omit(obj, 'logo');
+      arr.push(updateItem)
+    })
+    data['partners'] = arr;
     this.props.getPortfolioDetails({institutionPortfolio: data},privatekey);
   }
 

@@ -9,7 +9,8 @@ import MlInstitutionViewChart from './MlInstitutionViewChart';
 import MlInstitutionViewLibrary from './MlInstitutionViewLibrary';
 import MlInstitutionViewAboutLanding from './aboutTabs/MlInstitutionViewAboutLanding';
 import MlInstitutionViewIntrapreneur from './MlInstitutionViewIntrapreneur';
-import MlInstitutionCSRViewTabs from './CSRViewTabs/MlInstitutionCSRViewTabs'
+import MlInstitutionCSRViewTabs from './CSRViewTabs/MlInstitutionCSRViewTabs';
+import MlInstitutionViewPartners from './MlInstitutionViewPartners';
 
 import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
 // import PortfolioLibrary from '../../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
@@ -63,9 +64,10 @@ export default class MlViewInstitutionPortfolioTemplate extends Component {
       {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlInstitutionViewLibrary isAdmin={true} client={client}  key="7"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"M C & L" , component:<MlInstitutionViewMCL key="8" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlInstitutionViewLookingFor key="9"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"CSR" , component:<MlInstitutionCSRViewTabs key="10"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"R&D" , component:<MlInstitutionViewRD key="11"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" , component:<MlInstitutionViewIntrapreneur key="12"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Partner" , component:<MlInstitutionViewPartners key="10"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"CSR" , component:<MlInstitutionCSRViewTabs key="11"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"R&D" , component:<MlInstitutionViewRD key="12"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" , component:<MlInstitutionViewIntrapreneur key="14"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
     ]
     return tabs;
   }

@@ -1,6 +1,4 @@
-/**
- * Created by Birendra on 21/8/17.
- */
+
 import React from 'react';
 
 export default class MlCompanyViewAbout extends React.Component {
@@ -14,7 +12,7 @@ export default class MlCompanyViewAbout extends React.Component {
           <h2>About Us</h2>
           <div className="panel panel-default panel-form-view">
             <div className="panel-body">
-              <p>{this.props.aboutUsDetails && this.props.aboutUsDetails.institutionDescription ? this.props.aboutUsDetails.institutionDescription : ""}</p>
+              <p>{this.props.aboutUsDetails && this.props.aboutUsDetails.companyDescription ? this.props.aboutUsDetails.companyDescription : ""}</p>
             </div>
           </div>
         </div>

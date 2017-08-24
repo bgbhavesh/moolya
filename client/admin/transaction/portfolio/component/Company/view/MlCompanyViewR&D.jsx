@@ -5,12 +5,12 @@ import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDet
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../commons/components/noData/noData';
 
-const KEY = 'awardsRecognition'
+const KEY = 'researchAndDevelopment'
 
-export default class MlCompanyViewAwards extends React.Component {
+export default class MlCompanyViewRAndD extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {awardsList: []};
+    this.state = {RDList: []};
     this.fetchPortfolioDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -61,7 +61,7 @@ export default class MlCompanyViewAwards extends React.Component {
   }
 
   async createAnnotations(annotation){
-    let details = {portfolioId:this.props.portfolioDetailsId, docId:"awards", quote:JSON.stringify(annotation)}
+    let details = {portfolioId:this.props.portfolioDetailsId, docId:"RD", quote:JSON.stringify(annotation)}
     const response = await createAnnotationActionHandler(details);
     if(response && response.success){
       this.fetchAnnotations(true);
@@ -72,7 +72,7 @@ export default class MlCompanyViewAwards extends React.Component {
 
 
   async fetchAnnotations(isCreate){
-    const response = await findAnnotations(this.props.portfolioDetailsId, "awards");
+    const response = await findAnnotations(this.props.portfolioDetailsId, "RD");
     let resp = JSON.parse(response.result);
     let annotations = this.state.annotations;
     this.setState({annotations:JSON.parse(response.result)})
@@ -100,30 +100,30 @@ export default class MlCompanyViewAwards extends React.Component {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
     const response = await fetchCompanyDetailsHandler(portfoliodetailsId, KEY);
-    if (response && response.awardsRecognition) {
-      this.setState({awardsList: response.awardsRecognition});
+    if (response && response.researchAndDevelopment) {
+      this.setState({RDList: response.researchAndDevelopment});
     }
     this.setState({loading: false})
   }
 
   render(){
     let that = this;
-    let awardsArray = that.state.awardsList || [];
-    if (awardsArray && awardsArray.length === 0) {
-      return (<NoData tabName="Awards" />);
+    let researchAndDevelopmentArray = that.state.RDList || [];
+    if (researchAndDevelopmentArray && researchAndDevelopmentArray.length === 0) {
+      return (<NoData tabName="R & D" />);
     }
     return (
 
       <div id="annotatorContent">
-        <h2>Awards</h2>
+        <h2>Research And Development</h2>
         <div className="col-lg-12">
           <div className="row">
-            {awardsArray && awardsArray.map(function (details, idx) {
+            {researchAndDevelopmentArray && researchAndDevelopmentArray.map(function (details, idx) {
               return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
                 <div className="team-block">
                   <img src={details.logo&&details.logo.fileUrl} className="team_img" />
                   <h3>
-                    {details&&details.awardName}
+                    {details&&details.researchAndDevelopmentName}
                   </h3>
                 </div>
               </div>)

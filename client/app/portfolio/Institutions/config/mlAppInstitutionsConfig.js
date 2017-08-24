@@ -7,7 +7,7 @@ import React from "react";
 import gql from "graphql-tag";
 
 export const mlAppInstitutionConfig = new MlAppViewer({
-  name: "Service Provider List",
+  name: "Instituion List",
   extraFields: [],
   fields: ["firstName", "lastName", "category", "investmentBudget"],
   searchFields: ["firstName", "lastName", "category", "investmentBudget"],

@@ -12,6 +12,7 @@ import MlInstitutionIntrapreneur from "../../../../admin/transaction/portfolio/c
 import MlInstitutionRAndD from "../../../../admin/transaction/portfolio/component/Institution/view/MlInstitutionViewR&D";
 import MlInstitutionCSR from "../../../../admin/transaction/portfolio/component/Institution/view/CSRViewTabs/MlInstitutionCSRViewTabs";
 import MlInstitutionViewPartners from "../../../../admin/transaction/portfolio/component/Institution/view/MlInstitutionViewPartners";
+import MlInstitutionIncubator from "../../../../admin/transaction/portfolio/component/Institution/view/incubatorsViewTabs/MlInstitutionIncubatorsViewTabs";
 
 import {appClient} from "../../../core/appConnection";
 // import MlInstitutionViewAboutUs from "../../../admin/transaction/portfolio/component/InstitutionView/MlInstitutionViewAboutUs";
@@ -143,7 +144,15 @@ export default class MlAppInstitutionViewTabs extends Component {
         title: "Intrapreneur",
         component: <MlInstitutionIntrapreneur key="14" portfolioDetailsId={this.props.portfolioDetailsId}
                                               getSelectedAnnotations={this.props.getSelectedAnnotations}/>
-      }
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Incubators",
+        component: <MlInstitutionIncubator key="15" portfolioDetailsId={this.props.portfolioDetailsId}
+                                     getSelectedAnnotations={this.props.getSelectedAnnotations}
+                                     backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>
+      },
     ]
     return tabs;
   }

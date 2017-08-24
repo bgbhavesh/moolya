@@ -13,6 +13,7 @@ import MlInstitutionIntrapreneur from "../../../../admin/transaction/portfolio/c
 import MlInstitutionRAndD from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditR&D";
 import MlInstitutionCSR from "../../../../admin/transaction/portfolio/component/Institution/edit/CSR/MlInstitutionCSREditTabs";
 import MlInstitutionEditPartners from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditPartners";
+import MlInstitutionIncubator from "../../../../admin/transaction/portfolio/component/Institution/edit/incubators/MlInstitutionIncubatorsEditTabs";
 
 import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import {appClient} from '../../../core/appConnection'
@@ -79,7 +80,8 @@ export default class MlAppInstitutionEditTabs extends React.Component{
       {tabClassName: 'tab', panelClassName: 'panel', title:"Partner" , component:<MlInstitutionEditPartners key="10" getPartnersDetails={this.getPartnersDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"CSR" , component:<MlInstitutionCSR client={appClient} isAdmin={false} key="11" getCSR={this.getCSR.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.setBackHandler.bind(this)} isApp={true} />},
       {tabClassName: 'tab', panelClassName: 'panel', title:"R&D" , component:<MlInstitutionRAndD key="12" getRAndD={this.getRAndD.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" , component:<MlInstitutionIntrapreneur key="14" getIntrapreneurDetails={this.getIntrapreneurDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>}
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" , component:<MlInstitutionIntrapreneur key="14" getIntrapreneurDetails={this.getIntrapreneurDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Incubators" , component:<MlInstitutionIncubator client={appClient} isAdmin={false} key="15" getIncubators={this.getIncubators.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.setBackHandler.bind(this)} isApp={true} />},
 
     ]
     return tabs;
@@ -92,6 +94,12 @@ export default class MlAppInstitutionEditTabs extends React.Component{
   }
 
   getCSR(details,tabName,privatekey){
+    let data = this.state.institutionPortfolio;
+    data[tabName] = details;
+    this.props.getPortfolioDetails({institutionPortfolio : data},privatekey);
+  }
+
+  getIncubators(details,tabName,privatekey){
     let data = this.state.institutionPortfolio;
     data[tabName] = details;
     this.props.getPortfolioDetails({institutionPortfolio : data},privatekey);

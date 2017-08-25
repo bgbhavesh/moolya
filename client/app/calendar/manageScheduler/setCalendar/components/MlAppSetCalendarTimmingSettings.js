@@ -19,7 +19,7 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
     props.timingInfo = props.timingInfo ? props.timingInfo : {};
     this.state = {
       dayName: 1,
-      isActive: (typeof props.timingInfo.isActive == undefined) ? props.timingInfo.isActive : true,
+      isActive: ( props.timingInfo && typeof props.timingInfo.isActive == undefined) ? props.timingInfo.isActive : true,
       isCloneDisabled: true,
       slots: [],
       lunch: [],

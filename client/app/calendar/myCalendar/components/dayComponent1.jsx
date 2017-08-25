@@ -37,7 +37,7 @@ export default class MlAppMyCalendarDayComponent extends Component {
 
   render(){
     const that = this;
-    console.log('MLDay',this.props);
+    // console.log('MLDay',this.props);
     return (
       this.state.status=== 'holiday'?<div className="rbc-slot-holiday-status" onClick={()=>that.dayClick()}></div>:
         this.state.status=== 'travel'?<div className="rbc-slot-travel-status" onClick={()=>that.dayClick()}></div>:

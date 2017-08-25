@@ -288,7 +288,7 @@ let startupPortfolioSchema = `
       privateFields:[PrivateKeys]
     }
         
-   type chartsOutput{
+   type CompanyChartsOutput{
       employmentOfCompanyChart:[EmploymentOfCompany]
       profitRevenueLiabilityChart:[ProfitRevenueLiability]
       reviewOfCompanyChart:[ReviewOfCompany]
@@ -325,7 +325,7 @@ let startupPortfolioSchema = `
       clients           : [clientsOutput]
       management        : [managementOutput],
       data              : dataOutput,
-      charts            : chartsOutput,
+      charts            : CompanyChartsOutput,
       awardsRecognition : [awardsRecognitionOutput],
       memberships       : membershipsOutput,
       compliances       : compliancesOutput,
@@ -622,7 +622,7 @@ let startupPortfolioSchema = `
     type Query{
       fetchCompanyPortfolioAboutUs(portfoliodetailsId:String!):companyPortfolioAboutUsOutput
       fetchCompanyDetails(portfoliodetailsId:String!, key:String):CompanyPortfolio
-      fetchCompanyPortfolioCharts(portfoliodetailsId:String):chartsOutput
+      fetchCompanyPortfolioCharts(portfoliodetailsId:String):CompanyChartsOutput
       fetchCompanyPortfolioData(portfoliodetailsId:String):dataOutput
     }
     

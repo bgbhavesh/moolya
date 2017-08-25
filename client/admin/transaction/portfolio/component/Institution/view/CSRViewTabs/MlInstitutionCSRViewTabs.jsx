@@ -30,7 +30,6 @@ export default class MlInstitutionCSRViewTabs extends React.Component {
    * */
   componentDidMount() {
     var props = this.props
-    console.log(props)
     setTimeout(function () {
       if (!props.isApp) {
         $('div[role="tab"]').each(function (index) {
@@ -53,6 +52,13 @@ export default class MlInstitutionCSRViewTabs extends React.Component {
     if (path.indexOf("app") != -1) {
       this.setState({admin: false, client: appClient})
     }
+  }
+  setBackTab(e) {
+    this.props.backClickHandler(this.getInstitutionCSRs.bind(this))
+  }
+
+  getInstitutionCSRs() {
+    this.props.backClickHandler();
   }
 
   /**
@@ -107,12 +113,13 @@ export default class MlInstitutionCSRViewTabs extends React.Component {
 
     this.setState({tabs: getTabs() || []});
     /**UI changes for back button*/  //+tab.tabClassName?tab.tabClassName:""
+    this.setBackTab()
   }
 
 
   render() {
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} backClickHandler={this.props.getStartUpState}/>
+    return <MlTabComponent tabs={tabs} backClickHandler={this.props.backClickHandler}/>
   }
 }
 

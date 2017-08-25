@@ -16,6 +16,7 @@ import MlCompanyPartners from "../../../../admin/transaction/portfolio/component
 import MlCompanyCSREditTabs from "../../../../admin/transaction/portfolio/component/Company/edit/CSR/MlCompanyCSREditTabs"
 import MlCompanyIntrapreneur from '../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyIntrapreneur'
 import MlCompanyRAndD from '../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyR&D'
+import MlCompanyCharts from "../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyEditCharts";
 import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 
 export default class MlAppCompaniesEditTabs extends Component {
@@ -60,6 +61,7 @@ export default class MlAppCompaniesEditTabs extends Component {
       {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlCompanyAboutUsLandingPage key="1" client={appClient} getAboutus={this.getAboutus.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.setBackHandler.bind(this)}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , component:<MlCompanyManagement  client={appClient} isAdmin={true} key="2" getManagementDetails={this.getManagementDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Data" , component:<MlCompanyData key="4" isApp={false} client={appClient} getDataDetails={this.getDataDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Charts" , component:<MlCompanyCharts key="5" client={appClient} isAdmin={false}  getChartDetails={this.getChartDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}  backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Awards" , component:<MlCompanyAwards key="6" getAwardsDetails={this.getAwardsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<PortfolioLibrary key="7" client={appClient} isAdmin={false} portfolioDetailsId={this.props.portfolioDetailsId}/>}, //
       {tabClassName: 'tab', panelClassName: 'panel', title:"M C & L" , component:<MlCompanyMCL key="8" client={appClient} getMCL={this.getMCL.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},

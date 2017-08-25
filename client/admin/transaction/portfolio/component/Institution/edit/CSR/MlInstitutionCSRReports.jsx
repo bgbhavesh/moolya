@@ -1,9 +1,9 @@
 import React from 'react';
-import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
-import {fetchInstitutionPortfolioData} from '../../../actions/findPortfolioInstitutionDetails'
+import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
+import {fetchInstitutionPortfolioReports} from '../../../../actions/findPortfolioInstitutionDetails'
 
 
-export default class MlInstitutionEditData extends React.Component{
+export default class MlInstitutionCSRReports extends React.Component{
   constructor(props){
     super(props);
     this.state={uploadedData: {}};
@@ -13,7 +13,7 @@ export default class MlInstitutionEditData extends React.Component{
 
 
   async fetchInstitutionPortfolioData(){
-    const resp = await fetchInstitutionPortfolioData(this.props.portfolioDetailsId,this.props.client)
+    const resp = await fetchInstitutionPortfolioReports(this.props.portfolioDetailsId,this.props.client)
     this.setState({
       uploadedData: resp
     });
@@ -88,7 +88,7 @@ export default class MlInstitutionEditData extends React.Component{
         data[`${type}`] = tempArray;
       }
       this.setState({uploadedData: data}, function(){
-        that.props.getDataDetails(this.state.uploadedData, 'data')
+        that.props.getInstitutionReports(this.state.uploadedData)
       });
     }
   }

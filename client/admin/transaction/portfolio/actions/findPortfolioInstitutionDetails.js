@@ -100,6 +100,7 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                           keyName
                           booleanKey
                       }
+                      makePrivate
                   }
                   
                   awardsRecognition{
@@ -272,6 +273,7 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                           keyName,
                           booleanKey
                       }
+                      makePrivate
                   }
                   partners {
                     title
@@ -305,6 +307,7 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                       keyName,
                       booleanKey
                     }
+                    makePrivate
                   }
               }
           }
@@ -427,9 +430,6 @@ export async function fetchDetailsInstitutionActionHandler(portfoliodetailsId) {
                   informationDescription
                   isDescriptionPrivate
                 }
-                rating{
-                  rating
-                }
             }
           }
 
@@ -456,10 +456,10 @@ export async function fetchDetailsInstitutionActionHandler(portfoliodetailsId) {
 
 export async function fetchInstitutionPortfolioData(portfoliodetailsId, connection) {
 
-  const result = await connection.query({
+  const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
-            fetchStartupPortfolioData(portfoliodetailsId: $portfoliodetailsId) {
+            fetchInstitutionPortfolioData(portfoliodetailsId: $portfoliodetailsId) {
                   balanceSheet{
                     fileUrl
                     fileName
@@ -515,6 +515,67 @@ export async function fetchInstitutionPortfolioData(portfoliodetailsId, connecti
   // return id
 }
 
+export async function fetchInstitutionPortfolioReports(portfoliodetailsId, connection) {
+
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            fetchInstitutionPortfolioCSRReports(portfoliodetailsId: $portfoliodetailsId) {
+                  balanceSheet{
+                    fileUrl
+                    fileName
+                   } 
+                  profitAndLoss{
+                    fileUrl
+                    fileName
+                   } 
+                  quaterlyReport{
+                    fileUrl
+                    fileName
+                   } 
+                  yearlyReport{
+                    fileUrl
+                    fileName
+                   } 
+                  halfYearlyReport{
+                    fileUrl
+                    fileName
+                   } 
+                  annualReport{
+                    fileUrl
+                    fileName
+                   } 
+                  cashFlow{
+                    fileUrl
+                    fileName
+                   } 
+                  shareHoldings{
+                    fileUrl
+                    fileName
+                   } 
+                  capitalStructure{
+                    fileUrl
+                    fileName
+                   } 
+                  ratio{
+                    fileUrl
+                    fileName
+                   } 
+            }
+          }
+
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.fetchInstitutionPortfolioCSRReports;
+  let data = _.omit(id, '__typename')
+  return data
+  // return id
+}
+
 export async function fetchInstitutionChartsDetailsActionHandler(portfoliodetailsId) {
   const result = await client.query({
     query: gql`
@@ -558,6 +619,7 @@ export async function fetchInstitutionChartsDetailsActionHandler(portfoliodetail
                     ebdDepartmentName
                     index
                 }
+                
             }
           }
 

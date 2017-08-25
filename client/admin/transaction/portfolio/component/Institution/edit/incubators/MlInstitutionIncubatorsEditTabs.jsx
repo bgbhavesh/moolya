@@ -51,6 +51,14 @@ export default class MlInstitutionIncubatorsEditTabs extends React.Component{
     }
   }
 
+  setBackTab(e) {
+    this.props.backClickHandler(this.getIncubators.bind(this))
+  }
+
+  getIncubators() {
+    this.props.backClickHandler();
+  }
+
   getTabComponents(){
     let tabs = [
       // {tabClassName: 'tab back_icon fa fa-hand-o-left', panelClassName: 'panel', title:""},
@@ -94,12 +102,13 @@ export default class MlInstitutionIncubatorsEditTabs extends React.Component{
     }
     this.setState({tabs:getTabs() ||[]});
     /**UI changes for back button*/  //+tab.tabClassName?tab.tabClassName:""
+    this.setBackTab()
   }
 
 
   render(){
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} backClickHandler={this.props.getState}/>
+    return <MlTabComponent tabs={tabs} backClickHandler={this.props.backClickHandler}/>
   }
 }
 

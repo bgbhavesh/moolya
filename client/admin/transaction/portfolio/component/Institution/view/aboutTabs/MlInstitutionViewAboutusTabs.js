@@ -121,7 +121,7 @@ export default class MlInstitutionViewAboutusTabs extends React.Component {
 
   render() {
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} backClickHandler={this.props.getStartUpState}/>
+    return <MlTabComponent tabs={tabs} backClickHandler={this.props.getInstitutionState}/>
   }
 }
 

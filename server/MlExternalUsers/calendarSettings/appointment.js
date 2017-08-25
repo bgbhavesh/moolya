@@ -164,8 +164,8 @@ class MlAppointment {
       });
       if(isWorkingDay){
         isWorkingDay.slotTimes = that.buildSlotTimes(calendarSetting.slotDuration, isWorkingDay.lunch, isWorkingDay.slots);
-        isWorkingDay.appointmentPerSlot = isWorkingDay.slotTimes.length;
-        isWorkingDay.totalSlots = isWorkingDay.appointmentPerSlot * calendarSetting.appointmentCountPerSlots;
+        isWorkingDay.appointmentPerSlot = calendarSetting.appointmentCountPerSlots;
+        isWorkingDay.totalSlots = isWorkingDay.appointmentPerSlot * isWorkingDay.slotTimes.length;
         delete isWorkingDay.lunch;
         delete isWorkingDay.slots;
         return isWorkingDay;
@@ -198,8 +198,10 @@ class MlAppointment {
       /**
        * Define the next day to get current date appointment
        */
+      date.setSeconds(0,0);
       let endDate = new Date(date);
       endDate.setDate(endDate.getDate()+1);
+      endDate.setSeconds(0,0);
       let appointments = mlDBController.aggregate( 'MlAppointments', [
         {
           $lookup: {

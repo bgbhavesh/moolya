@@ -174,8 +174,8 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
         profileId: service.profileId
       },
       client: {
-        userId: userId,
-        profileId: profileId
+        userId: SCOrderDetails.userId,
+        profileId: SCOrderDetails.profileId
       },
       appointmentInfo: {
         resourceType: 'ServiceCard',
@@ -205,6 +205,12 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
        * Insert appointment member info
        */
       attendees.forEach(function (attendee) {
+        if(attendee.userId === SCOrderDetails.userId && attendee.profileId === SCOrderDetails.profileId){
+          return true;
+        }
+        if(attendee.userId === service.userId && attendee.profileId === service.profileId){
+          return true;
+        }
         let attendeeData = {
           appointmentId: appointmentData.appointmentId,
           appointmentUniqueId: result,
@@ -226,8 +232,8 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
       let clientData = {
         appointmentId: appointmentData.appointmentId,
         appointmentUniqueId: result,
-        userId: service.userId,
-        profileId: service.profileId,
+        userId: SCOrderDetails.userId,
+        profileId: SCOrderDetails.profileId,
         status: 'Accepted',
         isProvider: false,
         isClient: true,
@@ -243,8 +249,8 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
       let providerData = {
         appointmentId: appointmentData.appointmentId,
         appointmentUniqueId: result,
-        userId: userId,
-        profileId: profileId,
+        userId: service.userId,
+        profileId: service.profileId,
         status: 'Accepted',
         isProvider: true,
         isClient: false,
@@ -693,6 +699,9 @@ MlResolver.MlMutationResolver["bookTaskInternalAppointment"] = (obj, args, conte
      * Insert appointment member info
      */
     attendees.forEach(function (attendee) {
+      if(attendee.userId === userId && attendee.profileId === profileId){
+        return true;
+      }
       let attendeeData = {
         appointmentId: appointmentData.appointmentId,
         appointmentUniqueId: result,

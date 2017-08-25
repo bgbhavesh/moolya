@@ -23,7 +23,8 @@ export async function fetchOfficeActionHandler (Details) {
     }`,
     variables: {
       Details
-    }
+    },
+    forceFetch: true
   });
   const offices = result.data.fetchOffice;
   return offices

@@ -17,7 +17,7 @@ export default class MlAppInternalTaskItem extends React.Component {
         userInfo:[],
         community:{}
       },
-      taskId: props.taskId
+      taskId: ''
     }
   }
 

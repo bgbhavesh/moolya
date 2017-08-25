@@ -179,7 +179,7 @@ export default class MLAppMyCalendar extends Component {
           <div className="app_main_wrap" style={{'overflow': 'auto'}}>
             <div className="app_padding_wrap">
               <MlCalendarHeader getAppointmentCounts={this.getAppointmentCounts} headerManagement={that.headerManagement.bind(that)} componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
-              <CalCreateTask/>
+              <CalCreateTask componentToLoad={this.componentToLoad.bind(this)} />
             </div>
           </div>
         )

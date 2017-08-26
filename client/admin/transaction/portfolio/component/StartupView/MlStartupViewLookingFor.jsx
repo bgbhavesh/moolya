@@ -109,7 +109,7 @@ export default class MlStartupViewLookingFor extends React.Component {
   }
   render(){
     let that = this;
-    let lookingforArray = that.state.startupLookingforList || [];
+    let lookingforArray = that.state.startupLookingforList && that.state.startupLookingforList.lookingFor  || [];
     return (
 
         <div id="annotatorContent">

@@ -34,7 +34,7 @@ export default class MlInstitutionIncubatorsEditTabs extends React.Component{
           $(this).empty();
           $(this).html('<div class="moolya_btn moolya_btn_in">' + test + '</div>');
         });
-        $('.first-item').addClass('menunone');
+        $('.last-item').addClass('menunone');
         $('.RRT__tabs').addClass('horizon-swiper');
         $('.RRT__tab').addClass('horizon-item');
         $('.RRT__panel').addClass('nomargintop');
@@ -49,6 +49,14 @@ export default class MlInstitutionIncubatorsEditTabs extends React.Component{
     if (path.indexOf("app") != -1){
       this.setState({admin: false, client: appClient})
     }
+  }
+
+  setBackTab(e) {
+    this.props.backClickHandler(this.getIncubators.bind(this))
+  }
+
+  getIncubators() {
+    this.props.backClickHandler();
   }
 
   getTabComponents(){
@@ -94,12 +102,13 @@ export default class MlInstitutionIncubatorsEditTabs extends React.Component{
     }
     this.setState({tabs:getTabs() ||[]});
     /**UI changes for back button*/  //+tab.tabClassName?tab.tabClassName:""
+    this.setBackTab()
   }
 
 
   render(){
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} backClickHandler={this.props.getState}/>
+    return <MlTabComponent tabs={tabs} backClickHandler={this.props.backClickHandler}/>
   }
 }
 

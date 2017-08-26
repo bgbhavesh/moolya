@@ -222,7 +222,8 @@ let startupPortfolioSchema = `
         socialLinks:[SocialLinks],
         index:Int,
         logo:imagesTypeSchema,
-        privateFields:[PrivateKeys]
+        privateFields:[PrivateKeys],
+        makePrivate : Boolean
     }
     
     type ratingOutput{,
@@ -287,7 +288,7 @@ let startupPortfolioSchema = `
       privateFields:[PrivateKeys]
     }
         
-   type chartsOutput{
+   type CompanyChartsOutput{
       employmentOfCompanyChart:[EmploymentOfCompany]
       profitRevenueLiabilityChart:[ProfitRevenueLiability]
       reviewOfCompanyChart:[ReviewOfCompany]
@@ -324,7 +325,7 @@ let startupPortfolioSchema = `
       clients           : [clientsOutput]
       management        : [managementOutput],
       data              : dataOutput,
-      charts            : chartsOutput,
+      charts            : CompanyChartsOutput,
       awardsRecognition : [awardsRecognitionOutput],
       memberships       : membershipsOutput,
       compliances       : compliancesOutput,
@@ -468,6 +469,7 @@ let startupPortfolioSchema = `
         socialLinks:[socialLinks],
         index:Int,
         logo:imageFilesInputSchema,
+        makePrivate : Boolean
     }
     
     input aboutUs{
@@ -620,7 +622,7 @@ let startupPortfolioSchema = `
     type Query{
       fetchCompanyPortfolioAboutUs(portfoliodetailsId:String!):companyPortfolioAboutUsOutput
       fetchCompanyDetails(portfoliodetailsId:String!, key:String):CompanyPortfolio
-      fetchCompanyPortfolioCharts(portfoliodetailsId:String):chartsOutput
+      fetchCompanyPortfolioCharts(portfoliodetailsId:String):CompanyChartsOutput
       fetchCompanyPortfolioData(portfoliodetailsId:String):dataOutput
     }
     

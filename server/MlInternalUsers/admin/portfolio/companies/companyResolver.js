@@ -124,23 +124,23 @@ MlResolver.MlQueryResolver['fetchCompanyPortfolioData'] = (obj, args, context, i
 
 MlResolver.MlQueryResolver['fetchCompanyPortfolioCharts'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {
-    let startChartsArray = {}
+    let companyChartsArray = {}
     let portfolio = MlCompanyPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-    startChartsArray["employmentOfCompanyChart"] = portfolio&&portfolio.employmentOfCompanyChart?portfolio.employmentOfCompanyChart:[];
-    startChartsArray["profitRevenueLiabilityChart"] = portfolio&&portfolio.profitRevenueLiabilityChart?portfolio.profitRevenueLiabilityChart:[];
-    startChartsArray["reviewOfCompanyChart"] = portfolio&&portfolio.reviewOfCompanyChart?portfolio.reviewOfCompanyChart:[];
-    startChartsArray["employeeBreakupDepartmentChart"] = portfolio&&portfolio.employeeBreakupDepartmentChart?portfolio.employeeBreakupDepartmentChart:[];
-    if(startChartsArray && startChartsArray.employeeBreakupDepartmentChart){
-      startChartsArray.employeeBreakupDepartmentChart.map(function(data,index) {
-        if(startChartsArray.employeeBreakupDepartmentChart[index]){
+    companyChartsArray["employmentOfCompanyChart"] = portfolio&&portfolio.employmentOfCompanyChart?portfolio.employmentOfCompanyChart:[];
+    companyChartsArray["profitRevenueLiabilityChart"] = portfolio&&portfolio.profitRevenueLiabilityChart?portfolio.profitRevenueLiabilityChart:[];
+    companyChartsArray["reviewOfCompanyChart"] = portfolio&&portfolio.reviewOfCompanyChart?portfolio.reviewOfCompanyChart:[];
+    companyChartsArray["employeeBreakupDepartmentChart"] = portfolio&&portfolio.employeeBreakupDepartmentChart?portfolio.employeeBreakupDepartmentChart:[];
+    if(companyChartsArray && companyChartsArray.employeeBreakupDepartmentChart){
+      companyChartsArray.employeeBreakupDepartmentChart.map(function(data,index) {
+        if(companyChartsArray.employeeBreakupDepartmentChart[index]){
           let entityData = MlDepartments.findOne({"_id":data.ebdDepartment}) || {};
-          startChartsArray.employeeBreakupDepartmentChart[index].ebdDepartmentName = entityData.displayName || "";
+          companyChartsArray.employeeBreakupDepartmentChart[index].ebdDepartmentName = entityData.displayName || "";
         }
 
       })
     }
-    if (startChartsArray) {
-      return startChartsArray
+    if (companyChartsArray) {
+      return companyChartsArray
     }
   }
 }

@@ -2,6 +2,40 @@ import MlResolver from "../../../commons/mlResolverDef";
 import MlRespPayload from "../../../commons/mlPayload";
 var _ = require('lodash')
 
+
+MlResolver.MlQueryResolver['fetchCurrentUserPermissions'] = (obj, args, context, info) => {
+  let portfolioDetails = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfolioDetailsId}, context)
+  if(portfolioDetails && portfolioDetails.userId ) {
+    try {
+      if (portfolioDetails.userId === context.userId) {
+        action = ( context.url.indexOf("view") > 0 ) ? 'view' : 'edit';
+        let userInfo = {
+          isExploring: false,
+          action: action
+        }
+        return userInfo
+      } else {
+        action = ( context.url.indexOf("view") > 0 ) ? 'view' : 'edit';
+        let userInfo = {
+          isExploring: true,
+          action: action
+        }
+        return userInfo
+      }
+    }
+    catch(e) {
+      let code = 404;
+      let response = new MlRespPayload().errorPayload(e.message, code);
+      return response;
+    }
+  } else {
+    let code = 400;
+    let response = new MlRespPayload().errorPayload("Permissions denied", code);
+    return response;
+  }
+}
+
+
 MlResolver.MlMutationResolver['createLibrary'] = (obj, args, context, info) => {
 
   if (context.url.indexOf("transactions") > 0) {

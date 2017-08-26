@@ -36,6 +36,9 @@ MlResolver.MlUnionResolver['AppGenericSearchUnion'] =  {
       case "INSTITUTIONPORTFOLIODETAILS":  //institutionPortfolioDetails
         return'InstitutionPortfolio';
         break;
+      case "COMPANYPORTFOLIODETAILS":  //companyPortfolioDetails
+        return'CompanyPortfolio';
+        break;
       case "EXTERNALUSERS":
         return'Users';
         break;
@@ -306,6 +309,21 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       {'$project': {portfolioDetailsId: 1, about: 1, chapterName: '$port.chapterName', accountType: '$port.accountType'}}
     ];
     data = mlDBController.aggregate('MlInstitutionPortfolio', pipleline, context);
+    count = data.length;
+  }
+  else if(args.module == "companyPortfolioDetails"){
+    let pipleline = [
+      {
+        '$lookup': {
+          from: 'mlPortfolioDetails', localField: 'portfolioDetailsId', foreignField: '_id',
+          as: 'port'
+        }
+      },
+      {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
+      {'$match': {"port.status": "gone live", 'port.communityCode': "CMP",  'port.subChapterId': subChapterQuery} },
+      {'$project': {portfolioDetailsId: 1, about: 1, chapterName: '$port.chapterName', accountType: '$port.accountType'}}
+    ];
+    data = mlDBController.aggregate('MlCompanyPortfolio', pipleline, context);
     count = data.length;
   }
   /*********************************************end of all portfolio queries************************************/

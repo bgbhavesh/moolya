@@ -217,7 +217,10 @@ export default class MlAppChooseTeam extends React.Component{
    */
   addUser(teamIndex, userIndex){
     let teamData = this.state.teamData;
-    teamData[teamIndex].users[userIndex].isAdded = true;
+    teamData[teamIndex].users[userIndex].isAdded = teamData[teamIndex].users[userIndex].isAdded ? false : true;
+    if(!teamData[teamIndex].users[userIndex].isAdded) {
+      teamData[teamIndex].users[userIndex].isMandatory = false;
+    }
     this.setState({
       teamData: teamData
     }, () => {
@@ -303,13 +306,13 @@ export default class MlAppChooseTeam extends React.Component{
                     <ul className="users_list">
                       {team.users.map(function (user, userIndex) {
                         return (
-                         <li key={userIndex}>
+                         <li key={userIndex} onClick={() => that.addUser(index, userIndex)}>
                             <a href="">
                               <img src={user.profileImage ? user.profileImage : "/images/def_profile.png"} /><br />
                               <div className="tooltiprefer">
                                 <span>{user.name}</span>
                               </div>
-                              <span className="member_status" onClick={() => that.addUser(index, userIndex)}>
+                              <span className="member_status">
                                 { user.isAdded ? <FontAwesome name="check" /> : <FontAwesome name="plus" /> }
                               </span>
                             </a>

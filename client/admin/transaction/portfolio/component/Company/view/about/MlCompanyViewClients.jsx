@@ -12,7 +12,7 @@ const KEY = 'clients'
 export default class MlCompanyViewClients extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {institutionBranchesList: []};
+    this.state = {branchesList: []};
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
@@ -84,7 +84,7 @@ export default class MlCompanyViewClients extends React.Component {
   async createAnnotations(annotation) {
     let details = {
       portfolioId: this.props.portfolioDetailsId,
-      docId: "institutionClients",
+      docId: "clients",
       quote: JSON.stringify(annotation)
     }
     const response = await createAnnotationActionHandler(details);
@@ -96,7 +96,7 @@ export default class MlCompanyViewClients extends React.Component {
 
 
   async fetchAnnotations(isCreate) {
-    const response = await findAnnotations(this.props.portfolioDetailsId, "institutionClients");
+    const response = await findAnnotations(this.props.portfolioDetailsId, "clients");
     let resp = JSON.parse(response.result);
     let annotations = this.state.annotations;
     this.setState({annotations: JSON.parse(response.result)})

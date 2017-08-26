@@ -10,7 +10,9 @@ import _lodash from "lodash";
 import _ from "underscore";
 import moment from "moment";
 import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
-import mlConversationsRepo from '../../../commons/Conversations/mlConversationsRepo'
+import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
+import {getCommunityName} from '../../../commons/utils';
+// import mlConversationsRepo from '../../../commons/Conversations/mlConversationsRepo'
 var fs = Npm.require('fs');
 var Future = Npm.require('fibers/future');
 
@@ -307,7 +309,7 @@ MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context,
       let registerId = profile.registrationId
       let username = mlDBController.findOne('users', {_id: userId}, context).username
       if (registerId) {
-        var response = MlRegistration.findOne({"_id": registerId});
+        var response = MlRegistration.findOne({"_id": registerId}) || {}
         /**getting if any registration is other than pending or approved state*/
         let isAllowRegisterAs = mlDBController.findOne('MlRegistration', {
           "registrationInfo.userName": username,
@@ -319,6 +321,10 @@ MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context,
           response.isAllowRegisterAs = false
           response.pendingRegId = isAllowRegisterAs._id
         }
+
+        let communityCode = response && response.registrationInfo && response.registrationInfo.registrationType?response.registrationInfo.registrationType:''
+        response.registrationInfo.communityName = getCommunityName(communityCode);
+
         response.profileImage = profile.profileImage
         response.firstName = profile.firstName
         return response;
@@ -516,23 +522,7 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
         if (userId) {
           /** Creating user record in Conversations */
 
-          var user = {
-            userId:userId,
-            userName:userObject.username
-          }
-
-          mlConversationsRepo.createUser(user, function (ret) {
-            if(ret && ret.success){
-              let obj ={
-                "notificationType":"PUSHNOTIFICATION",
-                "message":"This is test first",
-                "fromUserId":"system",
-                "toUserId":userId
-              }
-              mlConversationsRepo.createNotifications(obj)
-            }
-          });
-
+          MlNotificationController.createNewUser({userId:userId, userName:userObject.username})
 
           /** Email & MobileNumber verification updates to user*/
           mlDBController.update('users', {username: userObject.username},
@@ -764,6 +754,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       // let regRecord = MlRegistration.findOne(args.registrationId)||{"registrationInfo":{}};
       let regRecord = mlDBController.findOne('MlRegistration', {_id: args.registrationId}, context) || {"registrationInfo": {}};
       MlEmailNotification.onKYCApprove(regRecord);
+      MlNotificationController.onKYCApprove(regRecord);
 
       let portfolioDetails = {
         "transactionType": "portfolio",
@@ -927,6 +918,7 @@ MlResolver.MlMutationResolver['RejectedStatusOfDocuments'] = (obj, args, context
           }, {"kycDocuments.$.status": "Rejected"}, {$set: true}, context)
           if (response) {
             MlEmailNotification.onKYCDecline(user);
+            MlNotificationController.onKYCDecline(user);
             let code = 200;
             let result = {registrationId: response}
             updatedResponse = new MlRespPayload().successPayload(result, code);

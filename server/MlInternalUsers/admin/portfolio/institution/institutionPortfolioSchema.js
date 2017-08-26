@@ -141,7 +141,6 @@ let institutePortfolioSchema = `
       index : Int
       ebdDepartmentName:String
     }
-        
    type chartsOutput{
       employmentOfCompanyChart:[EmploymentOfCompany]
       profitRevenueLiabilityChart:[ProfitRevenueLiability]
@@ -204,6 +203,7 @@ let institutePortfolioSchema = `
       investor          : [investorOutput]
       intrapreneurRecognition : [intrapreneurRecognitionOutput]
       achievements : [achievementsOutput]
+      partners            : [PartnersOutput]
       policy : policyOutput
       evolution : evolutionOutput
       chapterName : String
@@ -212,6 +212,7 @@ let institutePortfolioSchema = `
       institutionIncubators : institutionIncubatorsOutput
       sectorsAndServices  : sectorsAndServicesOutput
       listOfIncubators    : listOfIncubatorsOutput
+      reports             : dataOutput
     }
     
     input institutionIncubators{
@@ -390,10 +391,12 @@ let institutePortfolioSchema = `
         achievements     : [achievements]
         policy : policy
         evolution : evolution
+        partners            : [partnersInput]
         researchAndDevelopment : [researchAndDevelopmentData]
         institutionIncubators : institutionIncubators
         sectorsAndServices  : sectorsAndServices
         listOfIncubators    : listOfIncubators
+        reports : data
     }
     type institutePortfolioOutput{
         _id                  : String
@@ -417,6 +420,7 @@ let institutePortfolioSchema = `
         fetchInstitutePortfolioCharts(portfoliodetailsId:String):chartsOutput   
         fetchInstitutionPortfolioData(portfoliodetailsId:String):dataOutput
         fetchInstitutionDetails(portfoliodetailsId:String!, key:String):InstitutionPortfolio
+        fetchInstitutionPortfolioCSRReports(portfoliodetailsId:String):dataOutput
     }
     
     type Mutation{
@@ -431,9 +435,9 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], institutePortfolioS
 let supportedApi = [
   {api:'fetchInstitutionDetails', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchInstitutionPortfolioAboutUs', actionName:'READ', moduleName:"PORTFOLIO"},
-
-  {api:'fetchInstitutePortfolioCharts', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchInstitutionPortfolioData', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchInstitutePortfolioCharts', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchInstitutionPortfolioCSRReports', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'createInstitutionPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
   {api:'updateInstitutionPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
   {api:'createInstitutePortfolioChart', actionName:'UPDATE', moduleName:"PORTFOLIO"}

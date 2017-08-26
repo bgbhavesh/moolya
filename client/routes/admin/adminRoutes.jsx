@@ -32,7 +32,7 @@ import MlAssignTemplate from '../../admin/templates/component/MlAssignTemplate'
 import MlEditAssignTemplate from '../../admin/templates/component/MlEditAssignTemplate'
 import MlRequestedPortfolioList from '../../admin/transaction/portfolio/component/MlRequestedProtfolioList'
 import MlApprovedPortfolioList from '../../admin/transaction/portfolio/component/MlApprovedPortfolioList'
-import MlCreatePortfolio from '../../admin/transaction/portfolio/component/MlCreatePortfolio'
+// import MlCreatePortfolio from '../../admin/transaction/portfolio/component/MlCreatePortfolio'
 
 import MyProfileAddressBook from '../../admin/profile/component/MlMyProfileAddressBook'
 import MyProfileSettings from '../../admin/profile/component/MlMyProfileSettings'
@@ -381,12 +381,12 @@ adminSection.route('/transactions/portfolio/approvedPortfolioList', {
     mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'portfolio', subModule:'approved'}} />, adminContent:<MlApprovedPortfolioList/>})
   }
 });
-adminSection.route('/transactions/portfolio/createPortfolio', {
-  name: 'portfolio_create',
-  action(params){
-    mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'portfolio', subModule:'create'}} />, adminContent:<MlCreatePortfolio/>})
-  }
-});
+// adminSection.route('/transactions/portfolio/createPortfolio', {
+//   name: 'portfolio_create',
+//   action(params){
+//     mount(AdminLayout, {headerContent:<MlAdminHeader breadcrum={{type:'transaction','showBreadCrum':true,'module':'portfolio', subModule:'create'}} />, adminContent:<MlCreatePortfolio/>})
+//   }
+// });
 adminSection.route('/transactions/portfolio/history', {
   name: 'portfolio_history',
   action(params){

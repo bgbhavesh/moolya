@@ -202,11 +202,11 @@ class MlAppServiceSelectTask extends Component{
                       <form>
                         <div className="form-group">
                           {/*<select className="form-control"><option>Select task</option></select>*/}
-                          <Select name="form-field-name"
+                          { this.props.viewMode ? '' : <Select name="form-field-name"
                                   options={this.getSelectTaskOptions()}
                                   value={serviceTask.selectedTaskId}
                                   placeholder="Select Tasks"
-                                  onChange={(option) => optionsBySelectService(option.value)} />
+                                  onChange={(option) => optionsBySelectService(option.value)} /> }
                           {/*<Moolyaselect multiSelect={false}
                                         placeholder="Select Tasks"
                                         className="form-control float-label"

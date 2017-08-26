@@ -90,17 +90,32 @@ MlResolver.MlQueryResolver['fetchInstitutionPortfolioAboutUs'] = (obj, args, con
     instituteAboutUsArray["clients"] = portfolio&&portfolio.clients?portfolio.clients:[];
     instituteAboutUsArray["serviceProducts"] = portfolio&&portfolio.serviceProducts?portfolio.serviceProducts:{};
     instituteAboutUsArray["information"] = portfolio&&portfolio.information?portfolio.information:{};
-    instituteAboutUsArray["rating"] = portfolio&&portfolio.rating?portfolio.rating:null;
+    instituteAboutUsArray["rating"] = portfolio&&portfolio.rating?portfolio.rating:{};
 
     //private keys for service products
     var object = instituteAboutUsArray["serviceProducts"];
     var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
-    instituteAboutUsArray["serviceProducts"] = filteredObject
+    instituteAboutUsArray["serviceProducts"] = filteredObject;
 
-    //private keys for service products
+    //private keys for information
     var object = instituteAboutUsArray["information"];
     var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
-    instituteAboutUsArray["information"] = filteredObject
+    instituteAboutUsArray["information"] = filteredObject;
+
+    //private keys for aboutUs
+    var object = instituteAboutUsArray["aboutUs"];
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    instituteAboutUsArray["aboutUs"] = filteredObject;
+
+    //private keys for clients
+    var object = instituteAboutUsArray["clients"];
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    instituteAboutUsArray["clients"] = filteredObject;
+
+    //private keys for rating
+    var object = instituteAboutUsArray["rating"];
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    instituteAboutUsArray["rating"] = filteredObject;
 
     //for view action
     MlResolver.MlMutationResolver['createView'](obj,{resourceId:args.portfoliodetailsId,resourceType:'portfolio'}, context, info);
@@ -143,6 +158,17 @@ MlResolver.MlQueryResolver['fetchInstitutionPortfolioData'] = (obj, args, contex
   }
   return {};
 }
+
+MlResolver.MlQueryResolver['fetchInstitutionPortfolioCSRReports'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let portfolio = MlInstitutionPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('reports')) {
+      return portfolio['reports'];
+    }
+  }
+  return {};
+}
+
 
 MlResolver.MlQueryResolver['fetchInstitutePortfolioCharts'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {

@@ -58,6 +58,7 @@ export default class MlInstitutionStartupIncubators extends React.Component{
     }else{
       this.setState({loading: false, data: that.context.institutionPortfolio.institutionIncubators});
     }
+    this.updatePrivateKeys();
   }
 
   handleBlur(e){
@@ -122,7 +123,7 @@ export default class MlInstitutionStartupIncubators extends React.Component{
 
                 <div className="form-group nomargin-bottom">
                   <textarea placeholder="Describe..." name="institutionIncubatorsDescription" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.institutionIncubatorsDescription} onBlur={this.handleBlur.bind(this)}></textarea>
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isInstitutionIncubatorsPrivate" defaultValue={this.state.data&&this.state.data.isInstitutionIncubatorsPrivate} onClick={this.onLockChange.bind(this, "isStartupIncubatorsPrivate")}/>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isInstitutionIncubatorsPrivate" defaultValue={this.state.data&&this.state.data.isInstitutionIncubatorsPrivate} onClick={this.onLockChange.bind(this, "institutionIncubatorsDescription", "isInstitutionIncubatorsPrivate")}/>
                 </div>
 
               </div>

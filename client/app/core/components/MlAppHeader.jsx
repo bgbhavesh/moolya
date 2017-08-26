@@ -91,9 +91,10 @@ class MlAppProfileHeader extends Component {
         <div className="app_header">
           <a href="/app/dashboard" className="pull-left"><FontAwesome name='home'/></a>
           <a href="/app/dashboard"> <img className="moolya_app_logo" src="/images/logo.png"/></a>
-
           <MlAppNotificationsConfig />
-
+          <span className="pull-right context_name" style={{'padding':'1px 7px','backgroundColor':'#ef4647','color':'#fff','lineHeight':'18px','borderRadius':'2px','fontSize':'12px','marginTop':'17px'}}>
+          {data && data.registrationInfo && data.registrationInfo.communityName?data.registrationInfo.communityName:''}
+          </span>
 
           <div className="ml_app_profile" role="navigation">
           <h1 id="NavLbl"  data-toggle="tooltip" title={`Welcome ${data && data.firstName?data.firstName:"User"}`} data-placement="left" className="" style={{'backgroundImage':`url(${data && data.profileImage?data.profileImage:"/images/ideator_01.png"})`, 'backgroundPosition': 'center center'}}>{/*<span className="profile_context ml ml-ideator"></span>*/}</h1>

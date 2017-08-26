@@ -37,6 +37,7 @@
     "fromEmailAddr":"qasmtp@moolya.in",
     "isEmailDomainCheckEnabled":true,
     "isAuditEnabled":true,
-    "conversationsBaseURL":"http://localhost:8081"
+    "conversationsBaseURL":"http://54.254.220.180"
   }
 }
+

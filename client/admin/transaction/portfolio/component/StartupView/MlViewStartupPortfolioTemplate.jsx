@@ -10,11 +10,6 @@ import MlTabComponent from "../../../../../commons/components/tabcomponent/MlTab
 import PortfolioLibrary from '../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import {client} from '../../../../core/apolloConnection'
 import MlStartupViewCharts from '../StartupView/MlStartupViewCharts'
-// import MlStartupViewAboutUs from './MlStartupViewAboutUs';
-// import MlStartupViewTechnologies from './MlStartupViewTechnologies';
-// import MlStartupViewBranches from './MlStartupViewBranches';
-// import MlStartupViewClients from './MlStartupViewClients';
-// import MlStartupViewAssets from './MlStartupViewAssets'
 
 export default class MlViewStartupPortfolioTemplate extends React.Component {
   constructor(props){
@@ -61,12 +56,7 @@ export default class MlViewStartupPortfolioTemplate extends React.Component {
       {tabClassName: 'tab', panelClassName: 'panel', title:"Awards" , component:<MlStartupViewAwards key="6"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<PortfolioLibrary isAdmin={true} client={client}  key="7"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"M C & L" , component:<MlStartupViewMCL key="9" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlStartupViewLookingFor key="10"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      // {tabClassName: 'tab', panelClassName: 'panel', title:"Clients" , component:<MlStartupViewClients key="2"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      // {tabClassName: 'tab', panelClassName: 'panel', title:"Assets" , component:<MlStartupViewAssets key="2"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      // {tabClassName: 'tab', panelClassName: 'panel', title:"Technologies" , component:<MlStartupViewTechnologies key="2"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      // {tabClassName: 'tab', panelClassName: 'panel', title:"Branches" , component:<MlStartupViewBranches key="8"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      // {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlStartupViewAboutUs key="1"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlStartupViewLookingFor key="10"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>}
     ]
     return tabs;
   }

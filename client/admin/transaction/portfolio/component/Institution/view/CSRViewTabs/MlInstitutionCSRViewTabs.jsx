@@ -10,6 +10,7 @@ import MlInstitutionViewInformation from "./MlInstitutionViewInformation"*/
 import MlInstitutionViewAchievements from "./MlInstitutionViewAchievements";
 import MlInstitutionViewEvolution from "./MlInstitutionViewEvolution"
 import MlInstitutionViewPolicy from "./MlInstitutionViewPolicy"
+import MlInstitutionCSRReports from "../../edit/CSR/MlInstitutionCSRReports"
 import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent";
 import {client} from '../../../../../../../admin/core/apolloConnection'
 import {appClient} from '../../../../../../../app/core/appConnection'
@@ -29,7 +30,6 @@ export default class MlInstitutionCSRViewTabs extends React.Component {
    * */
   componentDidMount() {
     var props = this.props
-    console.log(props)
     setTimeout(function () {
       if (!props.isApp) {
         $('div[role="tab"]').each(function (index) {
@@ -52,6 +52,13 @@ export default class MlInstitutionCSRViewTabs extends React.Component {
     if (path.indexOf("app") != -1) {
       this.setState({admin: false, client: appClient})
     }
+  }
+  setBackTab(e) {
+    this.props.backClickHandler(this.getInstitutionCSRs.bind(this))
+  }
+
+  getInstitutionCSRs() {
+    this.props.backClickHandler();
   }
 
   /**
@@ -78,8 +85,13 @@ export default class MlInstitutionCSRViewTabs extends React.Component {
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
+        title:"Reports" ,
+        component:<MlInstitutionCSRReports key="3" portfolioDetailsId={this.props.portfolioDetailsId} />},
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
         title: "Policy",
-        component: <MlInstitutionViewPolicy key="3" portfolioDetailsId={this.props.portfolioDetailsId}
+        component: <MlInstitutionViewPolicy key="4" portfolioDetailsId={this.props.portfolioDetailsId}
                                                  getSelectedAnnotations={this.props.getSelectedAnnotations}
                                                  />
       }
@@ -101,12 +113,13 @@ export default class MlInstitutionCSRViewTabs extends React.Component {
 
     this.setState({tabs: getTabs() || []});
     /**UI changes for back button*/  //+tab.tabClassName?tab.tabClassName:""
+    this.setBackTab()
   }
 
 
   render() {
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} backClickHandler={this.props.getStartUpState}/>
+    return <MlTabComponent tabs={tabs} backClickHandler={this.props.backClickHandler}/>
   }
 }
 

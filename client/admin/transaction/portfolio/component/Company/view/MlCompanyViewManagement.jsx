@@ -60,7 +60,7 @@ export default class MlCompanyViewManagement extends React.Component {
   }
 
   async createAnnotations(annotation){
-    let details = {portfolioId:this.props.portfolioDetailsId, docId:"institutionManagement", quote:JSON.stringify(annotation)}
+    let details = {portfolioId:this.props.portfolioDetailsId, docId:"management", quote:JSON.stringify(annotation)}
     const response = await createAnnotationActionHandler(details);
     if(response && response.success){
       this.fetchAnnotations(true);
@@ -71,7 +71,7 @@ export default class MlCompanyViewManagement extends React.Component {
 
 
   async fetchAnnotations(isCreate){
-    const response = await findAnnotations(this.props.portfolioDetailsId, "institutionManagement");
+    const response = await findAnnotations(this.props.portfolioDetailsId, "management");
     let resp = JSON.parse(response.result);
     let annotations = this.state.annotations;
     this.setState({annotations:JSON.parse(response.result)})

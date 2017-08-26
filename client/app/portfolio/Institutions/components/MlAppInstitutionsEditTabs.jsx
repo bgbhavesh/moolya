@@ -29,9 +29,9 @@ export default class MlAppInstitutionEditTabs extends React.Component{
     this.getAwardsDetails.bind(this);
     this.getLookingForDetails.bind(this);
     this.getInstitutionMCL.bind(this)
-    this.getCSR.bind(this);
+    this.getCSRDetails.bind(this);
     this.getLookingForDetails.bind(this);
-    this.getRAndD.bind(this)
+    this.getRDDetails.bind(this)
   }
 
   getChildContext(){
@@ -78,8 +78,8 @@ export default class MlAppInstitutionEditTabs extends React.Component{
       {tabClassName: 'tab', panelClassName: 'panel', title:"M C & L" , component:<MlInstitutionMCL key="8" getInstitutionMCL={this.getInstitutionMCL.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlInstitutionLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Partner" , component:<MlInstitutionEditPartners key="10" getPartnersDetails={this.getPartnersDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"CSR" , component:<MlInstitutionCSR client={appClient} isAdmin={false} key="11" getCSR={this.getCSR.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.setBackHandler.bind(this)} isApp={true} />},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"R&D" , component:<MlInstitutionRAndD key="12" getRAndD={this.getRAndD.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"CSR" , component:<MlInstitutionCSR client={appClient} isAdmin={false} key="11" getCSRDetails={this.getCSRDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.setBackHandler.bind(this)} isApp={true} />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"R&D" , component:<MlInstitutionRAndD key="12" getRDDetails={this.getRDDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" , component:<MlInstitutionIntrapreneur key="14" getIntrapreneurDetails={this.getIntrapreneurDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Incubators" , component:<MlInstitutionIncubator client={appClient} isAdmin={false} key="15" getIncubators={this.getIncubators.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.setBackHandler.bind(this)} isApp={true} />},
 
@@ -93,7 +93,7 @@ export default class MlAppInstitutionEditTabs extends React.Component{
     this.props.getPortfolioDetails({institutionPortfolio : data},privatekey);
   }
 
-  getCSR(details,tabName,privatekey){
+  getCSRDetails(details,tabName,privatekey){
     let data = this.state.institutionPortfolio;
     data[tabName] = details;
     this.props.getPortfolioDetails({institutionPortfolio : data},privatekey);
@@ -175,7 +175,7 @@ export default class MlAppInstitutionEditTabs extends React.Component{
     this.props.getPortfolioDetails({institutionPortfolio:this.state.institutionPortfolio},privatekey);
   }
 
-  getRAndD(details,privatekey){
+  getRDDetails(details,privatekey){
 
     let data = this.state.institutionPortfolio;
     if(data && !data.awardsRecognition){

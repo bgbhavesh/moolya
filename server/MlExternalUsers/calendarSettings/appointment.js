@@ -283,7 +283,7 @@ class MlAppointment {
      */
     let task = mlDBController.findOne('MlTask', {_id:taskId} );
     let calendarSetting = mlDBController.findOne('MlCalendarSettings',{userId: task.userId, profileId: task.profileId});
-    calendarSetting = calendarSetting ? calendarSetting : defaultCalenderSetting;
+    calendarSetting = calendarSetting ? calendarSetting : JSON.parse(JSON.stringify(defaultCalenderSetting));
     calendarSetting.vacations = calendarSetting.vacations ? calendarSetting.vacations : [];
 
     /**
@@ -626,7 +626,7 @@ class MlAppointment {
     date.setYear(year);
     date.setHours(0);
     date.setMinutes(0);
-    date.setSeconds(0);
+    date.setSeconds(0,0);
 
     let endDate = new Date(date);
     endDate.setDate(endDate.getDate()+1);
@@ -634,7 +634,7 @@ class MlAppointment {
      * Fetch user task info and calendar setting
      */
     let calendarSetting = mlDBController.findOne('MlCalendarSettings',{userId: userId, profileId: profileId});
-    calendarSetting = calendarSetting ? calendarSetting : defaultCalenderSetting;
+    calendarSetting = calendarSetting ? calendarSetting : JSON.parse(JSON.stringify(defaultCalenderSetting));
     calendarSetting.vacations = calendarSetting.vacations ? calendarSetting.vacations : [];
 
     /**

@@ -87,7 +87,7 @@ export default class MlAppInvestmentItem extends Component {
                         <div className={"ideators_list_block " + ( that.state.selected._id == data._id ? "selected_block"  : '') }>
                           <div className="premium">
                           <span>
-                            type
+                            { data.portfolio && data.portfolio.accountType ? data.portfolio.accountType : '' }
                             {/*{ideator.accountType}*/}
                           </span>
                           </div>
@@ -111,7 +111,7 @@ export default class MlAppInvestmentItem extends Component {
                         <div className={"ideators_list_block " + ( that.state.selected._id == data._id ? "selected_block"  : '') }>
                           <div className="premium">
                           <span>
-                            type
+                            { data.portfolio && data.portfolio.accountType ? data.portfolio.accountType : '' }
                             {/*{ideator.accountType}*/}
                             </span>
                           </div>

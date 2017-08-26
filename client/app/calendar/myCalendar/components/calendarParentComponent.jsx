@@ -46,6 +46,18 @@ export default class MLAppMyCalendar extends Component {
     }.bind(this));
   }
 
+  componentWillUpdate(nextProps, nextState){
+    if(nextState.componentToLoad === 'calendar' && this.state.componentToLoad !== "calendar") {
+      console.log('componentWillUpdate');
+      let profileId = this.state.profileId;
+      if(profileId) {
+        this.getProfileBasedAppointments(profileId);
+      } else {
+        this.getAppointmentCounts()
+      }
+    }
+  }
+
   componentWillMount() {
     this.getAppointmentCounts();
     // this.setState({componentToLoad:'calendar'})

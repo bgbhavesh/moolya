@@ -39,6 +39,14 @@ if(Meteor.isServer){
         }]
       },
       {
+        "image":"ml my-ml-service_provider_my_appointments",
+        "link": "/app/myAppointment",
+        "isLink" : true,
+        "isMenu" : true,
+        "name" : "My Appointments",
+        "uniqueId" : "myAppointment"
+      },
+      {
         "image":"ml my-ml-subscriptions",
         "link": "/app/mySubscriptions",
         "isLink" : true,

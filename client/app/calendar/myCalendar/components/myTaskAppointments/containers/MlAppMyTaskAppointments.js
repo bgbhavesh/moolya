@@ -128,6 +128,7 @@ class MyTaskAppointments extends Component {
       const resp = await bookTaskInternalAppointment(data);
       if (resp && resp.success) {
         toastr.success('Task internal appointment booked successfully');
+        this.props.redirectWithCalendar('calendar');
       }
     }
   }

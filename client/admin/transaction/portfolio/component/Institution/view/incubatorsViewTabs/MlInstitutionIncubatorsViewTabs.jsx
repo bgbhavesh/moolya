@@ -1,4 +1,6 @@
-
+/**
+ * Created by vishwadeep on 21/8/17.
+ */
 import React from "react";
 import {render} from "react-dom";
 import MlInstitutionStartupIncubators from "./MlInstitutionViewStartupIncubators";
@@ -8,7 +10,7 @@ import MlTabComponent from "../../../../../../../commons/components/tabcomponent
 import {client} from '../../../../../../core/apolloConnection'
 import {appClient} from '../../../../../../../app/core/appConnection'
 
-export default class MlInstitutionIncubatorsEditTabs extends React.Component{
+export default class MlInstitutionIncubatorsViewTabs extends React.Component{
   constructor(props){
     super(props)
     this.state =  {
@@ -19,7 +21,6 @@ export default class MlInstitutionIncubatorsEditTabs extends React.Component{
       listOfIncubators:{},
       admin: true,
     }
-    ;
   }
 
   /**
@@ -34,7 +35,7 @@ export default class MlInstitutionIncubatorsEditTabs extends React.Component{
           $(this).empty();
           $(this).html('<div class="moolya_btn moolya_btn_in">' + test + '</div>');
         });
-        $('.first-item').addClass('menunone');
+        $('.last-item').addClass('menunone');
         $('.RRT__tabs').addClass('horizon-swiper');
         $('.RRT__tab').addClass('horizon-item');
         $('.RRT__panel').addClass('nomargintop');
@@ -51,10 +52,18 @@ export default class MlInstitutionIncubatorsEditTabs extends React.Component{
     }
   }
 
+  setBackTab(e) {
+    this.props.backClickHandler(this.getIncubators.bind(this))
+  }
+
+  getIncubators() {
+    this.props.backClickHandler();
+  }
+
   getTabComponents(){
     let tabs = [
       // {tabClassName: 'tab back_icon fa fa-hand-o-left', panelClassName: 'panel', title:""},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Startup Incubators", component:<MlInstitutionStartupIncubators client={client} isAdmin={true} key="1" portfolioDetailsId={this.props.portfolioDetailsId}/> },
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Institutions Incubators", component:<MlInstitutionStartupIncubators client={client} isAdmin={true} key="1" portfolioDetailsId={this.props.portfolioDetailsId}/> },
       {tabClassName: 'tab', panelClassName: 'panel', title:"Sectors and Service" , component:<MlInstitutionSectors key="2" portfolioDetailsId={this.props.portfolioDetailsId} />},
       {tabClassName: 'tab', panelClassName: 'panel', title:"List of Incubators", component:<MlInstitutionListOfIncubators client={client} isAdmin={true} key="3" portfolioDetailsId={this.props.portfolioDetailsId} />},
     ]
@@ -73,13 +82,14 @@ export default class MlInstitutionIncubatorsEditTabs extends React.Component{
       }));
     }
     this.setState({tabs:getTabs() ||[]});
+    this.setBackTab()
     /**UI changes for back button*/  //+tab.tabClassName?tab.tabClassName:""
   }
 
 
   render(){
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} backClickHandler={this.props.getState}/>
+    return <MlTabComponent tabs={tabs} backClickHandler={this.props.backClickHandler}/>
   }
 }
 

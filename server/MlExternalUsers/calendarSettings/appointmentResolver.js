@@ -174,8 +174,8 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
         profileId: service.profileId
       },
       client: {
-        userId: userId,
-        profileId: profileId
+        userId: SCOrderDetails.userId,
+        profileId: SCOrderDetails.profileId
       },
       appointmentInfo: {
         resourceType: 'ServiceCard',
@@ -205,6 +205,12 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
        * Insert appointment member info
        */
       attendees.forEach(function (attendee) {
+        if(attendee.userId === SCOrderDetails.userId && attendee.profileId === SCOrderDetails.profileId){
+          return true;
+        }
+        if(attendee.userId === service.userId && attendee.profileId === service.profileId){
+          return true;
+        }
         let attendeeData = {
           appointmentId: appointmentData.appointmentId,
           appointmentUniqueId: result,
@@ -226,8 +232,8 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
       let clientData = {
         appointmentId: appointmentData.appointmentId,
         appointmentUniqueId: result,
-        userId: service.userId,
-        profileId: service.profileId,
+        userId: SCOrderDetails.userId,
+        profileId: SCOrderDetails.profileId,
         status: 'Accepted',
         isProvider: false,
         isClient: true,
@@ -243,8 +249,8 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
       let providerData = {
         appointmentId: appointmentData.appointmentId,
         appointmentUniqueId: result,
-        userId: userId,
-        profileId: profileId,
+        userId: service.userId,
+        profileId: service.profileId,
         status: 'Accepted',
         isProvider: true,
         isClient: false,
@@ -285,10 +291,12 @@ MlResolver.MlQueryResolver["fetchMyAppointmentByStatus"] = (obj, args, context, 
 
 MlResolver.MlQueryResolver["fetchAllProfileAppointmentCounts"] = (obj, args, context, info) => {
   let userId = context.userId;
+  let timeZoneOffsetInMinutes = 330;
   let pipeLine = [
       { $lookup: { from: "mlAppointmentMembers", localField: "appointmentId", foreignField: "appointmentId", as: "members"}},
       { $unwind: "$members"},
       { $match : { "members.userId" : userId } },
+      { $addFields: { "startDate": {$add: ["$startDate" ,timeZoneOffsetInMinutes * 60 * 1000]} } },
       { $project: { yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$startDate" } },
         time: { $dateToString: { format: "%H:%M:%S:%L", date: "$Date" } },
         appointmentInfo: 1,
@@ -327,10 +335,12 @@ MlResolver.MlQueryResolver["fetchAllProfileAppointmentCounts"] = (obj, args, con
 MlResolver.MlQueryResolver["fetchProfileAppointmentCounts"] = (obj, args, context, info) => {
   let userId = context.userId;
   let profileId = args.profileId;
+  let timeZoneOffsetInMinutes = 330;
   let pipeLine = [
     { $lookup: { from: "mlAppointmentMembers", localField: "appointmentId", foreignField: "appointmentId", as: "members"}},
     { $unwind: "$members"},
     { $match : { "members.userId" : userId, "members.profileId" : profileId } },
+    { $addFields: { "startDate": {$add: ["$startDate" ,timeZoneOffsetInMinutes * 60 * 1000]} } },
     { $project: { yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$startDate" } },
       time: { $dateToString: { format: "%H:%M:%S:%L", date: "$Date" } },
       appointmentInfo: 1,
@@ -433,10 +443,12 @@ MlResolver.MlQueryResolver["fetchProfileAppointmentCounts"] = (obj, args, contex
 MlResolver.MlQueryResolver['fetchOfficeMemberAppointmentCounts'] = (obj, args, context, info) => {
   let userId = args.userId;
   let profileId = args.profileId;
+  let timeZoneOffsetInMinutes = 330;
   let pipeLine = [
     { $lookup: { from: "mlAppointmentMembers", localField: "appointmentId", foreignField: "appointmentId", as: "members"}},
     { $unwind: "$members"},
     { $match : { "members.userId" : userId, "members.profileId" : profileId } },
+    { $addFields: { "startDate": {$add: ["$startDate" ,timeZoneOffsetInMinutes * 60 * 1000]} } },
     { $project: { yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$startDate" } },
       time: { $dateToString: { format: "%H:%M:%S:%L", date: "$Date" } },
       appointmentInfo: 1,
@@ -535,6 +547,7 @@ MlResolver.MlQueryResolver['fetchOfficeMemberAppointmentCounts'] = (obj, args, c
 MlResolver.MlQueryResolver['fetchAllOfficeMemberAppointmentCounts'] = (obj, args, context, info) => {
   let userId = context.userId;
   let profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  let timeZoneOffsetInMinutes = 330;
   let pipeLine = [
     { $lookup: { from: "mlOffice", localField: "officeId", foreignField: "_id", as: "office" } },
     { $match: { 'office.userId': userId, 'office.profileId': profileId } },
@@ -554,6 +567,7 @@ MlResolver.MlQueryResolver['fetchAllOfficeMemberAppointmentCounts'] = (obj, args
     { "$lookup": { from: "mlAppointments", localField: "appointments.appointmentId", foreignField: "appointmentId", as: "appointmentData" } },
     { "$unwind": "$appointmentData" },
     { "$replaceRoot": { newRoot: "$appointmentData" } },
+    { $addFields: { "startDate": {$add: ["$startDate" ,timeZoneOffsetInMinutes * 60 * 1000]} } },
     { $project: { yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$startDate" } },
       time: { $dateToString: { format: "%H:%M:%S:%L", date: "$Date" } },
       appointmentInfo: 1,
@@ -693,6 +707,9 @@ MlResolver.MlMutationResolver["bookTaskInternalAppointment"] = (obj, args, conte
      * Insert appointment member info
      */
     attendees.forEach(function (attendee) {
+      if(attendee.userId === userId && attendee.profileId === profileId){
+        return true;
+      }
       let attendeeData = {
         appointmentId: appointmentData.appointmentId,
         appointmentUniqueId: result,

@@ -13,13 +13,7 @@ import MlInstitutionRAndD from "../../../../admin/transaction/portfolio/componen
 import MlInstitutionCSR from "../../../../admin/transaction/portfolio/component/Institution/view/CSRViewTabs/MlInstitutionCSRViewTabs";
 import MlInstitutionViewPartners from "../../../../admin/transaction/portfolio/component/Institution/view/MlInstitutionViewPartners";
 import MlInstitutionIncubator from "../../../../admin/transaction/portfolio/component/Institution/view/incubatorsViewTabs/MlInstitutionIncubatorsViewTabs";
-
 import {appClient} from "../../../core/appConnection";
-// import MlInstitutionViewAboutUs from "../../../admin/transaction/portfolio/component/InstitutionView/MlInstitutionViewAboutUs";
-// import MlInstitutionViewBranches from "../../../admin/transaction/portfolio/component/InstitutionView/MlInstitutionViewBranches";
-// import MlInstitutionViewClients from "../../../admin/transaction/portfolio/component/InstitutionView/MlInstitutionViewClients";
-// import MlInstitutionViewTechnologies from "../../../admin/transaction/portfolio/component/InstitutionView/MlInstitutionViewTechnologies";
-// import MlInstitutionViewAssets from "../../../admin/transaction/portfolio/component/InstitutionView/MlInstitutionViewAssets";
 
 /**
  * Import of all the files from admin need to seperate from app
@@ -55,6 +49,7 @@ export default class MlAppInstitutionViewTabs extends Component {
     this.props.setBackHandler(backMethod);
     $('.RRT__tabs').removeClass('menunone');
   }
+
 
   /**
    * rendering of all the tabs in UI

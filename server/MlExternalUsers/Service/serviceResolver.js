@@ -19,7 +19,8 @@ MlResolver.MlQueryResolver['fetchUserServices'] = (obj, args, context, info) => 
       profileId:portfolio.profileId,
       isCurrentVersion: true,
       isBeSpoke: false,
-      isLive: true
+      isLive: true,
+      validTill: { "$gte": new Date() }
     };
     let result = mlDBController.find('MlServiceCardDefinition', query , context).fetch();
     return result;

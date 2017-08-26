@@ -284,6 +284,7 @@ this.bookDetails(data)
                       className="form-control float-label"
                       valueKey={'value'} labelKey={'label'}
                       selectedValue={this.state.service}
+                      disabled={true}
                       isDynamic={true}
                       queryType={'graphql'}
                       queryOptions={serviceOption}

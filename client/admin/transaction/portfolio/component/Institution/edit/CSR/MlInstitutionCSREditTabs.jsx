@@ -4,6 +4,7 @@ import {render} from "react-dom";
 import MlInstitutionEvolution from "./MlInstitutionEvolution";
 import MlInstitutionPolicy from "./MlInstitutionPolicy";
 import MlInstitutionEditAchivements from "./MlInstitutionEditAchivements";
+import MlInstitutionCSRReports from "./MlInstitutionCSRReports"
 import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent";
 import {client} from '../../../../../../core/apolloConnection'
 import {appClient} from '../../../../../../../app/core/appConnection'
@@ -17,6 +18,7 @@ export default class MlInstitutionCSREditTabs extends React.Component{
       evolution:{},
       achivements:[],
       policy:{},
+      reports : {},
       admin: true,
     }
     ;
@@ -34,7 +36,7 @@ export default class MlInstitutionCSREditTabs extends React.Component{
           $(this).empty();
           $(this).html('<div class="moolya_btn moolya_btn_in">' + test + '</div>');
         });
-        $('.first-item').addClass('menunone');
+        $('.last-item').addClass('menunone');
         $('.RRT__tabs').addClass('horizon-swiper');
         $('.RRT__tab').addClass('horizon-item');
         $('.RRT__panel').addClass('nomargintop');
@@ -51,12 +53,21 @@ export default class MlInstitutionCSREditTabs extends React.Component{
     }
   }
 
+  setBackTab(e) {
+    this.props.backClickHandler(this.getInstitutionCSRs.bind(this))
+  }
+
+  getInstitutionCSRs() {
+    this.props.backClickHandler();
+  }
+
   getTabComponents(){
     let tabs = [
       // {tabClassName: 'tab back_icon fa fa-hand-o-left', panelClassName: 'panel', title:""},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Evolution", component:<MlInstitutionEvolution client={client} isAdmin={true} key="1"  getInstitutionEvolution={this.getInstitutionEvolution.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/> },
       {tabClassName: 'tab', panelClassName: 'panel', title:"Achivements" , component:<MlInstitutionEditAchivements key="2" getInstitutionAchivements={this.getInstitutionAchivements.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Our Policy", component:<MlInstitutionPolicy client={client} isAdmin={true} key="3" getInstitutionPolicy={this.getInstitutionPolicy.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Reports" , component:<MlInstitutionCSRReports key="3"  getInstitutionReports={this.getInstitutionReports.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Our Policy", component:<MlInstitutionPolicy client={client} isAdmin={true} key="4" getInstitutionPolicy={this.getInstitutionPolicy.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
     ]
     return tabs;
   }
@@ -81,6 +92,15 @@ export default class MlInstitutionCSREditTabs extends React.Component{
     this.props.getCSRDetails(data,"policy", privateKey);
   }
 
+
+  getInstitutionReports(details){
+    let data = this.state.reports;
+    data = details;
+    this.setState({reports : data})
+    this.props.getCSRDetails(data,"reports",null);
+  }
+
+
   componentWillMount()
   {
     let tabs = this.getTabComponents();
@@ -94,12 +114,13 @@ export default class MlInstitutionCSREditTabs extends React.Component{
     }
     this.setState({tabs:getTabs() ||[]});
     /**UI changes for back button*/  //+tab.tabClassName?tab.tabClassName:""
+    this.setBackTab()
   }
 
 
   render(){
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} backClickHandler={this.props.getState}/>
+    return <MlTabComponent tabs={tabs} backClickHandler={this.props.backClickHandler}/>
   }
 }
 

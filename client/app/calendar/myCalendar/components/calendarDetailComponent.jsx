@@ -52,6 +52,7 @@ export default class AppCalendarDayView extends React.Component{
   }
 
   render(){
+    console.log('This Slots', this.state.slots)
     const that = this;
     return (
       <div className="app_main_wrap">

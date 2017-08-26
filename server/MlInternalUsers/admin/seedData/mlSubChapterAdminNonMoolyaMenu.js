@@ -9,7 +9,7 @@ if (Meteor.isServer) {
         {
           "image": "/images/db_icon.png",
           "link": "/admin/dashboard/chapters",
-          "name": "Dashboard",
+          "name": "dashboard",
           "uniqueId": "dashboard",
           "isLink": true,
           "isMenu": true,
@@ -73,7 +73,7 @@ if (Meteor.isServer) {
         {
           "image": "/images/cluster_icon.png",
           "link": "",
-          "name": "Cluster",
+          "name": "cluster",
           "uniqueId": "cluster",
           "isLink": true,
           "isMenu": true,
@@ -261,7 +261,7 @@ if (Meteor.isServer) {
         {
           "image": "/images/users_icon.png",
           "link": "/admin/users/clusters",
-          "name": "Users",
+          "name": "users",
           "uniqueId": "users",
           "isLink": true,
           "isMenu": true,
@@ -1138,7 +1138,7 @@ if (Meteor.isServer) {
         {
           "image": "/images/db_icon.png",
           "link": "",
-          "name": "Notifications",
+          "name": "notifications",
           "uniqueId": "notifications",
           "isLink": true,
           "isMenu": true,
@@ -1146,7 +1146,7 @@ if (Meteor.isServer) {
         {
           "image": "/images/db_icon.png",
           "link": "",
-          "name": "Conversations",
+          "name": "conversations",
           "uniqueId": "conversations",
           "isLink": true,
           "isMenu": true,
@@ -1481,7 +1481,7 @@ if (Meteor.isServer) {
         {
           "image": "/images/db_icon.png",
           "link": "",
-          "name": "Offerings",
+          "name": "offerings",
           "uniqueId": "offerings",
           "isLink": true,
           "isMenu": true,

@@ -266,7 +266,7 @@ export default class MlInstitutionEditLookingFor extends Component {
                                      className="form-control float-label"
                                      defaultValue={this.state.data.lookingDescription}
                                      onBlur={this.handleBlur.bind(this)}/>
-                              <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate"
+                              <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate" defaultValue={this.state.data.isDescriptionPrivate}
                                            onClick={this.onLockChange.bind(this, "lookingDescription", "isDescriptionPrivate")}/>
                             </div>
                             <div className="form-group">

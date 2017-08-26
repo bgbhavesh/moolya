@@ -190,9 +190,20 @@ MlResolver.MlMutationResolver['registerAs'] = (obj, args, context, info) => {
 
 /**
  * @module [PHP website]
+ * Registration request can be raised for specific sub chapter or for a cluster/chapter
  * */
 MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, info) => {
   var response = null;
+  var requestedSubChapterId=args.registration && args.registration.subChapterId ?args.registration.subChapterId.trim() :null;
+  args.registration=_lodash.omit(args.registration,'subChapterId');
+  var countryId=args.registration && args.registration.countryId ?args.registration.countryId :null;
+  var cityId = args.registration && args.registration.cityId ? args.registration.cityId : "";
+  /**Country is mandatory if subChapter is not specified*/
+  if(!requestedSubChapterId&&!countryId){
+    response = new MlRespPayload().errorPayload({message:"country is required"},400);
+    return response;
+  }
+ /**Validate if User is registered in moolya application (specific business requirement) */
   var registrationExist = MlRegistration.findOne({
     "registrationInfo.email": args.registration.email,
     status: {$nin: ['Rejected']}
@@ -218,12 +229,18 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
      * attaching "clusterId, chapterId, subChapterId" if they are active
      * @else giving null value to them
      * */
-    let countryId = args.registration && args.registration.countryId ? args.registration.countryId : ""
-    let cityId = args.registration && args.registration.cityId ? args.registration.cityId : ""
-    let clusterData = mlDBController.findOne('MlClusters', {countryId: countryId, isActive: true}, context) || {}
-    let chapterData = mlDBController.findOne('MlChapters', {cityId: cityId, isActive: true}, context) || {}
-    let chapterId = chapterData && chapterData._id ? chapterData._id : ""
-    let subChapterData = mlDBController.findOne('MlSubChapters', {chapterId: chapterId, isActive: true}, context) || {}
+    var subChapterData=null;var clusterData=null;var chapterData=null;var chapterId=null;var cityId=null;
+    if(requestedSubChapterId){/**Registration request for specific sub chapter*/
+      subChapterData = mlDBController.findOne('MlSubChapters', {_id:requestedSubChapterId,isActive:true}, context) || {};
+      clusterData = mlDBController.findOne('MlClusters', {_id: subChapterData.clusterId}, context) || {}
+      chapterData = mlDBController.findOne('MlChapters', {_id: subChapterData.chapterId}, context) || {};
+      args.registration.countryId=clusterData?clusterData.countryId:null;
+    }else{
+       clusterData = mlDBController.findOne('MlClusters', {countryId: countryId, isActive: true}, context) || {}
+       chapterData = mlDBController.findOne('MlChapters', {cityId: cityId, isActive: true}, context) || {}
+       chapterId = chapterData && chapterData._id ? chapterData._id : ""
+       subChapterData = mlDBController.findOne('MlSubChapters', {chapterId: chapterId, isActive: true}, context) || {}
+    }
     args.registration.clusterId = clusterData && clusterData._id ? clusterData._id : "";
     args.registration.clusterName = clusterData && clusterData.clusterName ? clusterData.clusterName : "";
     args.registration.chapterId = chapterData && chapterData._id ? chapterData._id : "";

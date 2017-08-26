@@ -4,6 +4,7 @@ import {mount} from 'react-mounter';
 import {adminSection} from "../admin/adminRoutes";
 import AdminLayout from '../../admin/layouts/AdminLayout'
 
+import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 import MlOfficePackageList from '../../admin/packages/office/component/MlOfficePackageList'
 import MlAddOfficePackage from "../../admin/packages/office/component/MlAddOfficePackage";
 import MlEditOfficePackage from "../../admin/packages/office/component/MlEditOfficePackage";
@@ -18,7 +19,7 @@ import MlEditOfficePackage from "../../admin/packages/office/component/MlEditOff
 adminSection.route('/packages/officeList', {
   name:'packages_ListOffice',
   action(params){
-    mount(AdminLayout,{adminContent:<MlOfficePackageList/>})
+    mount(AdminLayout,{headerContent:<MlAdminHeader breadcrum={{type:'packages','showBreadCrum':true,'module':'officePackages'}} />, adminContent:<MlOfficePackageList/>})
   }
 });
 

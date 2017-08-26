@@ -335,7 +335,7 @@ export default class MlInstitutionEditAchivements extends React.Component{
                     <div className="medium-popover"><div className="row">
                       <div className="col-md-12">
                         <div className="form-group">
-                          <input type="text" name="achievementName" placeholder="About" className="form-control float-label" defaultValue={this.state.data.achievementName}  onBlur={this.handleBlur.bind(this)}/>
+                          <input type="text" name="achievementName" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.achievementName}  onBlur={this.handleBlur.bind(this)}/>
                           <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAchievementNamePrivate" defaultValue={this.state.data.isAchievementNamePrivate}  onClick={this.onLockChange.bind(this, "achievementName", "isAchievementNamePrivate")}/>
                         </div>
                         <div className="form-group">

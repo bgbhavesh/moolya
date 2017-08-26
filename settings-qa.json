@@ -36,6 +36,6 @@
     "fromEmailAddr":"qasmtp@moolya.in",
     "isEmailDomainCheckEnabled":true,
     "isAuditEnabled":true,
-    "conversationsBaseURL":"http://54.254.220.180"
+    "conversationsBaseURL":"https://qarkc.moolya.global"
   }
 }

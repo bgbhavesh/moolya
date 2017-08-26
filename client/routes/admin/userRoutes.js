@@ -29,6 +29,7 @@ adminSection.route('/users/clusters', {
   name: 'users_cluster',
   action(params){
     mount(AdminLayout, {
+      headerContent:<MlAdminHeader breadcrum={{type:'users','showBreadCrum':true,'module':'clusters'}} />,
       adminContent: <MlViews viewMode={false} showInfinity={false}
                              listConfig={mlUsersClusterListConfig}/>
     })

@@ -367,7 +367,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
         let data = req.body.data;
         let apiKey = req.header("apiKey");
         if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
-          if(data.email&&data.countryId){
+          if(data.email){
             let response;
             if(data) {
               response = MlResolver.MlMutationResolver['createRegistrationAPI'](null, {registration: data}, context, null);

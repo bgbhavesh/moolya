@@ -35,7 +35,7 @@ class Step1 extends Component {
 
   componentWillMount() {
     this.props.activeComponent('BasicInfo');
-
+    this.props.setSessionId('');
   }
   //
   // componentWillUpdate() {

@@ -37,7 +37,8 @@ class MlAppServiceSelectTask extends Component{
 
 
   componentWillMount() {
-    this.props.activeComponent('SessionDetails')
+    this.props.activeComponent('SessionDetails');
+    this.props.setSessionId('');
     // console.log(this.props.task)
     this.getOffices();
   }
@@ -421,6 +422,7 @@ class MlAppServiceSelectTask extends Component{
                               isInternal={isInternal}
                               duration={duration}
                               addUser={this.addUser}
+                              setSessionId={this.props.setSessionId}
                               chooseTeamType={this.chooseTeamType}
                               offices={offices}
                               sessionId={this.state.sessionId}

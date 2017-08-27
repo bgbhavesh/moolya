@@ -81,7 +81,47 @@ export default class VerticalBreadCrum extends Component {
        let result = text.replace(/([A-Z])/g, " $1");
        let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
        let breadCrumObject = [
-         {linkName: 'Transaction', linkId: "transactions"},
+         {linkName: 'Documents', linkId: "documents"},
+         {linkName: finalResult, linkId: "module"}
+       ];
+       if (breadCrum.subModule) {
+         let text = breadCrum.subModule;
+         let result = text.replace(/([A-Z])/g, " $1");
+         let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+         breadCrumObject.push({
+           linkName: finalResult,
+           linkId: "subModule"
+         });
+       }
+       this.setBreadCrumHierarchyCallback(
+         breadCrumObject
+       );
+     } else if (breadCrum && breadCrum.type === 'users') {
+       let text = breadCrum.module;
+       let result = text.replace(/([A-Z])/g, " $1");
+       let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+       let breadCrumObject = [
+         {linkName: 'Users', linkId: "users"},
+         {linkName: finalResult, linkId: "module"}
+       ];
+       if (breadCrum.subModule) {
+         let text = breadCrum.subModule;
+         let result = text.replace(/([A-Z])/g, " $1");
+         let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+         breadCrumObject.push({
+           linkName: finalResult,
+           linkId: "subModule"
+         });
+       }
+       this.setBreadCrumHierarchyCallback(
+         breadCrumObject
+       );
+     } else if (breadCrum && breadCrum.type === 'packages') {
+       let text = breadCrum.module;
+       let result = text.replace(/([A-Z])/g, " $1");
+       let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+       let breadCrumObject = [
+         {linkName: 'Packages', linkId: "packages"},
          {linkName: finalResult, linkId: "module"}
        ];
        if (breadCrum.subModule) {
@@ -97,6 +137,9 @@ export default class VerticalBreadCrum extends Component {
          breadCrumObject
        );
      }
+
+
+
     return breadCrumList;
   }
    render(){

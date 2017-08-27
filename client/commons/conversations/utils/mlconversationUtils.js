@@ -6,11 +6,13 @@ import rkConversations from '../library/rkConversations'
 import rkNotifications from '../library/rkNotifications'
 import {loginHandler} from  './mlConversationLoginQuery'
 // const url = "http://localhost:8081/"
-const url = "http://54.254.220.180/"
+// const url = "http://54.254.220.180/"
+const url = "https://qarkc.moolya.global/"
 
 class ConversationUtils{
   constructor(){
   }
+
 
   async login(){
       var response = await loginHandler('conversationlogin');
@@ -40,3 +42,4 @@ class ConversationUtils{
 
 var mlConversationUtils = new ConversationUtils()
 export default mlConversationUtils;
+

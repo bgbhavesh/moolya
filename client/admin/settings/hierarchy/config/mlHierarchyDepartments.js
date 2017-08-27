@@ -15,9 +15,10 @@ const mlHierarchyDepartmentsTableConfig=new MlViewer.View({
   pagination:true,//To display pagination
   filter:false,
   columns:[
-    {dataField: "departmentId",title:"Id",'isKey':true,isHidden:true,selectRow:true},
+    // {dataField: "departmentId",title:"Id",'isKey':true,isHidden:true,selectRow:true},
+    {dataField: "subDepartmentId",title:"Id",'isKey':true,isHidden:true,selectRow:true},
     {dataField: "departmentName", title: "Department",dataSort:true,selectRow:true},
-    {dataField: "subDepartmentId", title: "Created By",isHidden:true,dataSort:true,selectRow:true},
+    // {dataField: "subDepartmentId", title: "Created By",isHidden:true,dataSort:true,selectRow:true},
     {dataField: "subDepartmentName", title: "Sub-Department",dataSort:true,selectRow:true},
     {dataField: "isMoolya", title: "Sub-Department",isHidden:true,dataSort:true,selectRow:true},
     {dataField: "clusterId", title: "clusterId",isHidden:true,dataSort:true,selectRow:true},

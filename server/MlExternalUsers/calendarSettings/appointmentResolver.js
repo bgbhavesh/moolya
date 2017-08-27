@@ -272,6 +272,7 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
 };
 
 MlResolver.MlQueryResolver["fetchMyAppointmentByStatus"] = (obj, args, context, info) => {
+
   let userId = context.userId;
   let profileId = new MlUserContext().userProfileDetails(userId).profileId;
   let appointments = mlDBController.aggregate( 'MlAppointments', [
@@ -865,7 +866,7 @@ MlResolver.MlQueryResolver["fetchServiceSeekerList"] = (obj, args, context, info
 };
 
 MlResolver.MlQueryResolver["fetchMyAppointment"] = (obj, args, context, info) => {
-  let userId = context.userId;
+  let userId = args.userId ? args.userId : context.userId;
   let profileId = args.profileId;
   let date = new Date();
   let day = args.day ? args.day : date.getDate();

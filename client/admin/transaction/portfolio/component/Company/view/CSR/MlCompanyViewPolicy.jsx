@@ -55,18 +55,6 @@ export default class MlCompanyViewPolicy extends React.Component {
     this.setState({data:data})
 
   }
-  async validateUserForAnnotation() {
-    const portfolioId = this.props.portfolioDetailsId
-    const response = await validateUserForAnnotation(portfolioId);
-    if (response && !this.state.isUserValidForAnnotation) {
-      this.setState({isUserValidForAnnotation:response})
-
-      this.initalizeAnnotaor()
-
-      this.fetchAnnotations();
-    }
-  }
-
   initalizeAnnotaor(){
     initializeMlAnnotator(this.annotatorEvents.bind(this))
     this.state.content = jQuery("#annotatorContent").annotator();
@@ -108,7 +96,17 @@ export default class MlCompanyViewPolicy extends React.Component {
     return response;
   }
 
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response && !this.state.isUserValidForAnnotation) {
+      this.setState({isUserValidForAnnotation:response})
 
+      this.initalizeAnnotaor()
+
+      this.fetchAnnotations();
+    }
+  }
 
   async fetchAnnotations(isCreate){
     const response = await findAnnotations(this.props.portfolioDetailsId, "policy");
@@ -147,7 +145,7 @@ export default class MlCompanyViewPolicy extends React.Component {
               <h2>Policy</h2>
               <div className="panel panel-default panel-form-view">
                 <div className="panel-body" id="annotatorContent">
-                  <p>{this.state.data&&this.state.data.policyDescription}</p>
+                  <p>{this.state.policy&&this.state.policy.policyDescription}</p>
                 </div>
               </div>
             </div>

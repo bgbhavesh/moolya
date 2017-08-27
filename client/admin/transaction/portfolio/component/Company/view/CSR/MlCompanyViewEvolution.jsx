@@ -145,7 +145,7 @@ export default class MlCompanyViewEvolution extends React.Component {
               <h2>Evolution</h2>
               <div className="panel panel-default panel-form-view">
                 <div className="panel-body" id="annotatorContent">
-                  <p>{this.state.data&&this.state.data.evolutionDescription}</p>
+                  <p>{this.state.evolution&&this.state.evolution.evolutionDescription}</p>
                 </div>
               </div>
             </div>

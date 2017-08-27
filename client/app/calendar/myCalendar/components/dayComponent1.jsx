@@ -30,9 +30,9 @@ export default class MlAppMyCalendarDayComponent extends Component {
   }
 
   dayClick(){
-    let date = this.props && this.props.calendar && this.props.calendar.value ? this.props.calendar.value : new Date();
+    // let date = this.props && this.props.calendar && this.props.calendar.value ? this.props.calendar.value : new Date();
     // console.log(this.props);
-    this.props.componentToLoad('calendarDayView', date)
+    // this.props.componentToLoad('calendarDayView', date)
   }
 
   render(){

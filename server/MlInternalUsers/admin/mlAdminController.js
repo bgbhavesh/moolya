@@ -288,6 +288,9 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
                                 case 'Institutions':
                                   portfolio = {portfolio:{institutionPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
                                   break;
+                                case 'Companies':
+                                  portfolio = {portfolio:{companyPortfolio:clientPortfolio}, portfoliodetailsId:data.portfolioDetailsId}
+                                  break;
                               }
 
                               portfolio.privateFields = [];

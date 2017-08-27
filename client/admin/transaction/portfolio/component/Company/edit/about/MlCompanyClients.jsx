@@ -187,6 +187,7 @@ export default class MlCompanyClients extends React.Component{
           this.setState({loading: true})
           this.fetchOnlyImages();
           this.imagesDisplay();
+          this.sendDataToParent()
         }
       }
     }

@@ -22,13 +22,13 @@ import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/Po
 export default class MlAppCompaniesEditTabs extends Component {
   constructor(props) {
     super(props)
-    this.state = {tabs: [], companiesPortfolio: {}};
+    this.state = {tabs: [], companyPortfolio: {}};
     this.getChildContext.bind(this)
   }
 
   getChildContext() {
     return {
-      companiesPortfolio: this.state.companiesPortfolio
+      companyPortfolio: this.state.companyPortfolio
     }
   }
   setBackHandler(backMethod){
@@ -227,5 +227,5 @@ export default class MlAppCompaniesEditTabs extends Component {
  * preparing context of all the data coming from child component
  * */
 MlAppCompaniesEditTabs.childContextTypes = {
-  companiesPortfolio: PropTypes.object,
+  companyPortfolio: PropTypes.object,
 };

@@ -11,6 +11,7 @@ class ConversationsRepo{
   async login(context, cb)
   {
     var authRequest = {userId:context.userId}
+    console.log('login attempt server')
     var ret = await this.sendRequest('/login', authRequest, 'post');
     cb(ret);
   }
@@ -95,7 +96,7 @@ class ConversationsRepo{
         }
       })
     })
-
+    console.log(result)
     return result;
   }
 }

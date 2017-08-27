@@ -14,6 +14,7 @@ export default class SessionDetails extends Component {
     let sessionId = this.props.sessionId;
     let details =  this.props.details;
     details.sessionId =  sessionId;
+    this.props.setSessionId(sessionId);
     this.props.saveAction(details);
   }
 

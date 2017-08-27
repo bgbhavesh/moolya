@@ -6,6 +6,7 @@ import MlRespPayload from "../../../../commons/mlPayload";
 import portfolioValidationRepo from '../portfolioValidation'
 import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
+import MlNotificationController from '../../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 var _ = require('lodash')
 
 
@@ -65,6 +66,7 @@ MlResolver.MlMutationResolver['updateFunderPortfolio'] = (obj, args, context, in
                 if (ret) {
                   let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId})
                   MlEmailNotification.onPortfolioUpdate(details);
+                  MlNotificationController.onPotfolioUpdate(details);
                   let portfolioalert =  MlAlertNotification.onPortfolioUpdates()
                     let code = 200;
                     let response = new MlRespPayload().successPayload(portfolioalert, code);

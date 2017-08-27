@@ -7,6 +7,7 @@ import _ from 'lodash';
 import mlInteractionService from '../mlInteractionRepoService';
 import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
 import MlSubChapterAccessControl from './../../../mlAuthorization/mlSubChapterAccessControl';
+import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 
 MlResolver.MlMutationResolver['createReview'] = (obj, args, context, info) => {
   if (args && context && context.userId) {
@@ -53,6 +54,7 @@ MlResolver.MlMutationResolver['createReview'] = (obj, args, context, info) => {
         let fromUserType = 'user';
         mlInteractionService.createTransactionRequest(toUser._id,'review', args.resourceId, resp, fromuser._id, fromUserType );
         MlEmailNotification.reviewRecieved(fromuser,toUser)
+        MlNotificationController.onReviewReceived(fromuser,toUser);
       }
 
     } catch (e) {

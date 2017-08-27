@@ -177,7 +177,7 @@ let appointment=`
      fetchAllOfficeMemberAppointmentCounts(month:Int, year: Int): profileAppointment
      fetchProfileAppointmentCounts( profileId: String, month:Int, year: Int): profileAppointment
      fetchServiceSeekerList(profileId: String!, serviceId: String): [serviceSeekerList]
-     fetchMyAppointment(profileId: String!, day: Int, month: Int, year: Int): [myAppointmentsResponse]
+     fetchMyAppointment(userId: String, profileId: String!, day: Int, month: Int, year: Int): [myAppointmentsResponse]
      fetchSelfTask(selfTaskId: String): selfTask
   }
   

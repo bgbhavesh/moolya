@@ -54,9 +54,9 @@ export default class MlCompanyIncubatorsViewTabs extends React.Component{
   getTabComponents(){
     let tabs = [
       // {tabClassName: 'tab back_icon fa fa-hand-o-left', panelClassName: 'panel', title:""},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Startup Incubators", component:<MlCompanyViewStartupIncubators client={client} isAdmin={true} key="1" portfolioDetailsId={this.props.portfolioDetailsId}/> },
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Sectors and Service" , component:<MlCompanyViewSectors key="2" portfolioDetailsId={this.props.portfolioDetailsId} />},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"List of Incubators", component:<MlCompanyViewListOfIncubators client={client} isAdmin={true} key="3" portfolioDetailsId={this.props.portfolioDetailsId} />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Startup Incubators", component:<MlCompanyViewStartupIncubators client={client} isAdmin={true} key="1" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/> },
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Sectors and Service" , component:<MlCompanyViewSectors key="2" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"List of Incubators", component:<MlCompanyViewListOfIncubators client={client} isAdmin={true} key="3" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
     ]
     return tabs;
   }

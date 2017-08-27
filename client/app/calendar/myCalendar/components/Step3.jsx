@@ -21,6 +21,7 @@ export default class Step3 extends Component{
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
     $('.step_form_wrap').height(WinHeight-(310+$('.app_header').outerHeight(true)));
+    this.props.activeComponent('termAndCondition');
     if(typeof this.props.getServiceDetails !== 'undefined') {
       this.props.getServiceDetails();
     }

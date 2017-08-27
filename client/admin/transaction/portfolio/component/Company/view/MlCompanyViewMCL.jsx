@@ -6,6 +6,8 @@ import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDet
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
 import _ from 'lodash'
 import NoData from '../../../../../../commons/components/noData/noData';
+import {initalizeFloatLabel} from "../../../../../utils/formElemUtil";
+import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails'
 
 const MEMBERKEY = 'memberships'
 const LICENSEKEY = 'licenses'
@@ -27,19 +29,35 @@ export default class MlCompanyViewMCL extends React.Component {
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
-
+    this.validateUserForAnnotation(this)
   }
 
   componentDidMount(){
-    this.initalizeAnnotaor()
-    this.fetchAnnotations();
+    // this.initalizeAnnotaor()
+    // this.fetchAnnotations();
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
-
+    initalizeFloatLabel();
   }
+
   componentWillMount(){
     this.fetchPortfolioDetails();
+    let resp = this.validateUserForAnnotation();
+    return resp
   }
+
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response && !this.state.isUserValidForAnnotation) {
+      this.setState({isUserValidForAnnotation:response})
+
+      this.initalizeAnnotaor()
+
+      this.fetchAnnotations();
+    }
+  }
+
   async fetchPortfolioDetails() {
     let that = this;
     let data = {};

@@ -34,7 +34,7 @@ export default class MlCalendarHead extends Component {
   resetWithAll() {
     this.setState({selectedProfileId: '', isAll: true});
     this.props.componentToLoad('calendar');
-    this.props.getAppointmentCounts();
+    this.props.getAllAppointments(true);
   }
 
   changeProfile(profileId, communityName){
@@ -44,6 +44,7 @@ export default class MlCalendarHead extends Component {
 
 
   async getUserProfiles() {
+    let that = this;
     const resp = await getUserProfileActionHandler();
     // this.setState({profile: resp})
     let name = resp[0].displayName;
@@ -75,7 +76,12 @@ export default class MlCalendarHead extends Component {
                 <li className={selectedProfileId === profile.profileId ? 'active_user' : ''}>
                   <div>
                     <a href="" onClick={()=>that.changeProfile(profile.profileId, profile.communityName)}>
-                      <span className="icon_bg"> <span className="icon_lg ml ml-funder"></span></span><br />
+                      {profile.communityName === "Investors" ? <span className="icon_bg"> <span className="icon_lg ml ml-funder"></span></span>:
+                        profile.communityName === "Startups" ?<span className="icon_bg"><span className="icon_lg ml ml-startup"></span></span>:
+                          profile.communityName === "Ideators" ?<span className="icon_bg"><span className="icon_lg ml ml-startup"></span></span>:
+                            profile.communityName === "Institutions" ?<span className="icon_bg"><span className="icon_lg ml ml-institutions"></span></span>:
+                              profile.communityName === "Service Providers" ? <span className="icon_bg"><span className="icon_lg ml ml-Service-Providers"></span></span>:""}
+                     <br />
                       <div className="tooltiprefer">
                         <span>{profile.communityName}</span>
                       </div>

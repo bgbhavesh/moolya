@@ -5,6 +5,7 @@ import MlResolver from "../../../../commons/mlResolverDef";
 import MlRespPayload from "../../../../commons/mlPayload";
 import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlAlertNotification from "../../../../mlNotifications/mlAlertNotifications/mlAlertNotification";
+import MlNotificationController from '../../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 // import _ from "lodash";
 var _ = require('lodash')
 // import MlUserContext from "../../../../MlExternalUsers/mlUserContext";
@@ -58,6 +59,7 @@ MlResolver.MlMutationResolver['updateServiceProviderPortfolio'] = (obj, args, co
         if (ret) {
           let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId})
           MlEmailNotification.onPortfolioUpdate(details);
+          MlNotificationController.onPotfolioUpdate(details);
           let serviceprovideralert =  MlAlertNotification.onPortfolioUpdates()
           let code = 200;
           let response = new MlRespPayload().successPayload(serviceprovideralert, code);

@@ -134,10 +134,6 @@ export default class MlCompanyViewPolicy extends React.Component {
   }
 
   render(){
-    const policy = this.state.policy;
-    if (!policy.policyDescription) {
-      return (<NoData tabName="Policy" />);
-    } else {
       return (
         <div className="portfolio-main-wrap" id="annotatorContent">
           <div className="col-lg-12 col-sm-12">
@@ -152,6 +148,5 @@ export default class MlCompanyViewPolicy extends React.Component {
           </div>
         </div>
       )
-    }
   }
 }

@@ -134,10 +134,6 @@ export default class MlCompanyViewEvolution extends React.Component {
   }
 
   render(){
-    const evolution = this.state.evolution;
-    if (evolution && !evolution.evolutionDescription) {
-      return (<NoData tabName="Evolution" />);
-    } else {
       return (
         <div className="portfolio-main-wrap" id="annotatorContent">
           <div className="col-lg-12 col-sm-12">
@@ -152,6 +148,5 @@ export default class MlCompanyViewEvolution extends React.Component {
           </div>
         </div>
       )
-    }
   }
 }

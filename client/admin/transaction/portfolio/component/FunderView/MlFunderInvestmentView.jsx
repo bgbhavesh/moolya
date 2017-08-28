@@ -7,6 +7,7 @@ import {createAnnotationActionHandler} from "../../actions/updatePortfolioDetail
 import {findAnnotations} from "../../../../../commons/annotator/findAnnotations";
 import {validateUserForAnnotation} from '../../actions/findPortfolioIdeatorDetails'
 import MlLoader from '../../../../../commons/components/loader/loader'
+import NoData from '../../../../../commons/components/noData/noData'
 
 export default class MlFunderInvestmentView extends React.Component {
   constructor(props, context) {
@@ -175,7 +176,6 @@ export default class MlFunderInvestmentView extends React.Component {
   render() {
     let that = this;
     const showLoader = that.state.loading;
-    let investmentArray = that.state.funderInvestmentList || [];
     const detailData = this.state.viewCurDetail && this.state.viewCurDetail.length > 0 ? this.state.viewCurDetail : [];
     const detailView = detailData.map(function (say, value) {
       return (
@@ -193,83 +193,94 @@ export default class MlFunderInvestmentView extends React.Component {
         </div>
       )
     })
-    return (
-      <div>
-        <h2>Investments</h2>
-        {showLoader === true ? (<MlLoader/>) : (
-          <div>
-            <div className="requested_input main_wrap_scroll" id="show">
+    let investmentArray = that.state.funderInvestmentList || [];
+    if(_.isEmpty(investmentArray)){
+      return (
+        showLoader === true ? (<MlLoader/>) :
+          <div className="portfolio-main-wrap">
+            <NoData tabName={this.props.tabName} />
+          </div>
+      )
+    } else {
+      return (
+        <div>
+          <h2>Investments</h2>
+          {showLoader === true ? (<MlLoader/>) : (
+            <div>
+              <div className="requested_input main_wrap_scroll" id="show">
 
-              <ScrollArea
-                speed={0.8}
-                className="main_wrap_scroll"
-                smoothScrolling={true}
-                default={true}
-              >
-                <div className="col-lg-12 nopadding">
-                  <div className="row">
-                    {investmentArray && investmentArray.map(function (details, idx) {
-                      return (
-                        <div className="col-lg-2 col-md-4 col-sm-4" onClick={that.showDetails.bind(that, idx)}
-                             key={idx}>
-                          <div className="list_block notrans funding_list">
-                            <div><p>{details.companyName}</p><p className="fund">{details.investmentAmount}</p>
-                              <p>{details.typeOfFundingName}</p></div>
-                            <h3>{details.dateOfInvestment ? details.dateOfInvestment : "Date :"}</h3>
-                          </div>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </div>
-              </ScrollArea>
-            </div>
-            < div id="details-div" style={{'display': 'none'}}>
-              <div className="col-lg-12">
-                <div className="row">
-                  <div className="top_block_scroller" id="forcecentered">
-                    <ul>
-                      {/*view listing*/}
-                      {investmentArray && investmentArray.map(function (details, idx) {
-                        return (
-                          <li key={idx}>
-                            <div className="team-block" onClick={that.viewDetails.bind(that, idx)}>
-                              <h2>{details.dateOfInvestment ? details.dateOfInvestment : "Date :"}</h2>
-                              <h3>
-                                <p>{details.companyName}</p><p className="fund">{details.investmentAmount}</p>
-                                <p>{details.typeOfFundingName}</p>
-                              </h3>
-                            </div>
-                          </li>
-                        )
-                      })}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div className="main_wrap_scroll">
                 <ScrollArea
                   speed={0.8}
                   className="main_wrap_scroll"
                   smoothScrolling={true}
                   default={true}
                 >
-                  <div className="col-lg-12" id="psContent">
+                  <div className="col-lg-12 nopadding">
                     <div className="row">
-                      <div className="investement-view-content">
-
-                        <div className="funding-investers" id="funding_show">
-                          {detailView}
-                        </div>
-
-                      </div>
+                      {investmentArray && investmentArray.map(function (details, idx) {
+                        return (
+                          <div className="col-lg-2 col-md-4 col-sm-4" onClick={that.showDetails.bind(that, idx)}
+                               key={idx}>
+                            <div className="list_block notrans funding_list">
+                              <div><p>{details.companyName}</p><p className="fund">{details.investmentAmount}</p>
+                                <p>{details.typeOfFundingName}</p></div>
+                              <h3>{details.dateOfInvestment ? details.dateOfInvestment : "Date :"}</h3>
+                            </div>
+                          </div>
+                        )
+                      })}
                     </div>
                   </div>
                 </ScrollArea>
               </div>
-            </div>
-          </div>)}
-      </div>
-    )
+              < div id="details-div" style={{'display': 'none'}}>
+                <div className="col-lg-12">
+                  <div className="row">
+                    <div className="top_block_scroller" id="forcecentered">
+                      <ul>
+                        {/*view listing*/}
+                        {investmentArray && investmentArray.map(function (details, idx) {
+                          return (
+                            <li key={idx}>
+                              <div className="team-block" onClick={that.viewDetails.bind(that, idx)}>
+                                <h2>{details.dateOfInvestment ? details.dateOfInvestment : "Date :"}</h2>
+                                <h3>
+                                  <p>{details.companyName}</p><p className="fund">{details.investmentAmount}</p>
+                                  <p>{details.typeOfFundingName}</p>
+                                </h3>
+                              </div>
+                            </li>
+                          )
+                        })}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div className="main_wrap_scroll">
+                  <ScrollArea
+                    speed={0.8}
+                    className="main_wrap_scroll"
+                    smoothScrolling={true}
+                    default={true}
+                  >
+                    <div className="col-lg-12" id="psContent">
+                      <div className="row">
+                        <div className="investement-view-content">
+
+                          <div className="funding-investers" id="funding_show">
+                            {detailView}
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </ScrollArea>
+                </div>
+              </div>
+            </div>)}
+        </div>
+      )
+    }
+
   }
 };

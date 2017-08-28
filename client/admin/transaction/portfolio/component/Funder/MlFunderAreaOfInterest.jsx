@@ -196,14 +196,6 @@ export default class MlFunderAreaOfInterest extends React.Component {
     let subDomainOption = {options: {variables: {industryId: this.state.data.industryTypeId}}};
     const showLoader = that.state.loading;
     let funderAreaOfInterestList = that.state.funderAreaOfInterestList || [];
-    if(_.isEmpty(funderAreaOfInterestList)){
-      return (
-        showLoader === true ? (<MlLoader/>) :
-          <div className="portfolio-main-wrap">
-            <NoData tabName={this.props.tabName} />
-          </div>
-      )
-    } else {
       return (
         <div>
           {showLoader === true ? (<MlLoader/>) : (
@@ -290,7 +282,6 @@ export default class MlFunderAreaOfInterest extends React.Component {
             </div>)}
         </div>
       )
-    }
   }
 }
 

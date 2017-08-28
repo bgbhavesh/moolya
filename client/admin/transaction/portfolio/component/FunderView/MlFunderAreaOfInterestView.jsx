@@ -3,6 +3,7 @@ import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import {fetchfunderPortfolioAreaInterest} from "../../actions/findPortfolioFunderDetails";
 import MlLoader from '../../../../../commons/components/loader/loader'
+import NoData from '../../../../../commons/components/noData/noData'
 
 
 export default class MlFunderAreaOfInterestView extends React.Component {
@@ -79,81 +80,90 @@ export default class MlFunderAreaOfInterestView extends React.Component {
     let that = this;
     const showLoader = that.state.loading;
     let areaOfInterestArray = that.state.funderAreaOfInterestList || [];
-    return (
-      <div>
-        {showLoader === true ? (<MlLoader/>) : (
-        <div className="admin_padding_wrap">
-          <h2>Area of Interest</h2>
-          <div className="requested_input main_wrap_scroll">
-
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
-              <div className="col-lg-12" id="show">
-                <div className="row">
-
-                  {areaOfInterestArray && areaOfInterestArray.map(function (say, value) {
-                    return (<div className="col-lg-2 col-md-4 col-sm-4" key={value} onClick={that.showDetails.bind(that,value)}>
-                      <div className="list_block list_block_intrests notrans">
-                        <div className="hex_outer"><img src="/images/def_profile.png"/></div>
-                        <h3>{say.industryTypeName}</h3>
-                      </div>
-                    </div>)
-                  })}
-                </div>
-              </div>
-
-            </ScrollArea>
-
+    if(_.isEmpty(areaOfInterestArray)){
+      return (
+        showLoader === true ? (<MlLoader/>) :
+          <div className="portfolio-main-wrap">
+            <NoData tabName={this.props.tabName} />
           </div>
-          <div id="details-div" style={{display: 'none'}}>
-            <div className="col-lg-12">
-              <div className="row">
+      )
+    } else {
+      return (
+        <div>
+          {showLoader === true ? (<MlLoader/>) : (
+            <div className="admin_padding_wrap">
+              <h2>Area of Interest</h2>
+              <div className="requested_input main_wrap_scroll">
 
-                <div className="top_block_scroller" id="forcecentered">
-                  <ul className="topscroll_listblock">
-                    {areaOfInterestArray && areaOfInterestArray.map(function (say, value) {
-                      return (<li key={value} className="active">
-                        <div className="list_block list_block_intrests notrans"
-                             onClick={that.viewDetails.bind(that, value)}>
-                          <div className="hex_outer"><img src="/images/def_profile.png"/></div>
-                          <h3>{say.industryTypeName}</h3>
-                        </div>
-                      </li>)
-                    })}
-                  </ul>
-                </div>
-              </div>
+                <ScrollArea
+                  speed={0.8}
+                  className="main_wrap_scroll"
+                  smoothScrolling={true}
+                  default={true}
+                >
+                  <div className="col-lg-12" id="show">
+                    <div className="row">
 
-            </div>
-            <div className="main_wrap_scroll">
-              <ScrollArea
-                speed={0.8}
-                className="main_wrap_scroll"
-                smoothScrolling={true}
-                default={true}
-              >
-
-                <div className="col-lg-12">
-                  <div className="row">
-                    <div className="investement-view-content">
-                      <div className="panel panel-default panel-form-view">
-                        <div className="panel-body">
-                          <p>Domain : {this.state.viewCurDetail}</p>
-                        </div>
-                      </div>
-
+                      {areaOfInterestArray && areaOfInterestArray.map(function (say, value) {
+                        return (<div className="col-lg-2 col-md-4 col-sm-4" key={value} onClick={that.showDetails.bind(that,value)}>
+                          <div className="list_block list_block_intrests notrans">
+                            <div className="hex_outer"><img src="/images/def_profile.png"/></div>
+                            <h3>{say.industryTypeName}</h3>
+                          </div>
+                        </div>)
+                      })}
                     </div>
                   </div>
+
+                </ScrollArea>
+
+              </div>
+              <div id="details-div" style={{display: 'none'}}>
+                <div className="col-lg-12">
+                  <div className="row">
+
+                    <div className="top_block_scroller" id="forcecentered">
+                      <ul className="topscroll_listblock">
+                        {areaOfInterestArray && areaOfInterestArray.map(function (say, value) {
+                          return (<li key={value} className="active">
+                            <div className="list_block list_block_intrests notrans"
+                                 onClick={that.viewDetails.bind(that, value)}>
+                              <div className="hex_outer"><img src="/images/def_profile.png"/></div>
+                              <h3>{say.industryTypeName}</h3>
+                            </div>
+                          </li>)
+                        })}
+                      </ul>
+                    </div>
+                  </div>
+
                 </div>
-              </ScrollArea>
-            </div>
-          </div>
-        </div>)}
-      </div>
-    )
+                <div className="main_wrap_scroll">
+                  <ScrollArea
+                    speed={0.8}
+                    className="main_wrap_scroll"
+                    smoothScrolling={true}
+                    default={true}
+                  >
+
+                    <div className="col-lg-12">
+                      <div className="row">
+                        <div className="investement-view-content">
+                          <div className="panel panel-default panel-form-view">
+                            <div className="panel-body">
+                              <p>Domain : {this.state.viewCurDetail}</p>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </ScrollArea>
+                </div>
+              </div>
+            </div>)}
+        </div>
+      )
+    }
   }
 };

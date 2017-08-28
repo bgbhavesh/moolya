@@ -10,7 +10,7 @@ const KEY = 'partners'
 export default class MlCompanyViewPartners extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {partnersList: []};
+    this.state = {partnersList: [], loading: true};
     this.fetchPortfolioDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -109,7 +109,7 @@ export default class MlCompanyViewPartners extends React.Component {
   render(){
     let that = this;
     let partnersArray = that.state.partnersList || [];
-    if (partnersArray && partnersArray.length === 0) {
+    if (!this.state.loading && partnersArray && partnersArray.length === 0) {
       return (<NoData tabName="Partner" />);
     }
     return (

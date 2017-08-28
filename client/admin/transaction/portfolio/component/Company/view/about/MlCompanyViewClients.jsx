@@ -132,9 +132,6 @@ export default class MlCompanyViewClients extends React.Component {
   render() {
     let that = this;
     let clientsArray = that.props.clientsDetails || [];
-    if (clientsArray && clientsArray.length === 0) {
-      return (<NoData tabName="Clients" />);
-    }
     return (
       <div id="annotatorContent">
         <h2>Clients</h2>

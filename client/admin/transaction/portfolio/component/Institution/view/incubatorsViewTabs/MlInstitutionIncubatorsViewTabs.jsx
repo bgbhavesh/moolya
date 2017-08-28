@@ -46,10 +46,10 @@ export default class MlInstitutionIncubatorsViewTabs extends React.Component{
         $('.RRT__container .RRT__container .RRT__tabs').removeClass('menunone');
       }
     },10);
-    let path = FlowRouter._current.path;
-    if (path.indexOf("app") != -1){
-      this.setState({admin: false, client: appClient})
-    }
+    // let path = FlowRouter._current.path;
+    // if (path.indexOf("app") != -1){
+    //   this.setState({admin: false, client: appClient})
+    // }
   }
 
   setBackTab(e) {
@@ -58,12 +58,11 @@ export default class MlInstitutionIncubatorsViewTabs extends React.Component{
 
   getIncubators() {
     this.props.backClickHandler();
-    $('.RRT__tabs div:first-of-type').click();
+    $('.RRT__tab--first').click();
   }
 
   getTabComponents(){
     let tabs = [
-      // {tabClassName: 'tab back_icon fa fa-hand-o-left', panelClassName: 'panel', title:""},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Institutions Incubators", component:<MlInstitutionStartupIncubators client={client} isAdmin={true} key="1" portfolioDetailsId={this.props.portfolioDetailsId}/> },
       {tabClassName: 'tab', panelClassName: 'panel', title:"Sectors and Service" , component:<MlInstitutionSectors key="2" portfolioDetailsId={this.props.portfolioDetailsId} />},
       {tabClassName: 'tab', panelClassName: 'panel', title:"List of Incubators", component:<MlInstitutionListOfIncubators client={client} isAdmin={true} key="3" portfolioDetailsId={this.props.portfolioDetailsId} />},
@@ -84,7 +83,7 @@ export default class MlInstitutionIncubatorsViewTabs extends React.Component{
     }
     this.setState({tabs:getTabs() ||[]});
     this.setBackTab()
-    /**UI changes for back button*/  //+tab.tabClassName?tab.tabClassName:""
+    /**UI changes for back button*/
   }
 
 

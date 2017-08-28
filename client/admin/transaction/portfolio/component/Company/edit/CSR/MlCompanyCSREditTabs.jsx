@@ -46,10 +46,10 @@ export default class MlCompanyCSREditTabs extends React.Component{
         $('.RRT__container .RRT__container .RRT__tabs').removeClass('menunone');
       }
     },10);
-    let path = FlowRouter._current.path;
-    if (path.indexOf("app") != -1){
-      this.setState({admin: false, client: appClient})
-    }
+    // let path = FlowRouter._current.path;
+    // if (path.indexOf("app") != -1){
+    //   this.setState({admin: false, client: appClient})
+    // }
   }
   setBackTab(e) {
     this.props.backClickHandler(this.getCompanyCSRs.bind(this))
@@ -61,7 +61,6 @@ export default class MlCompanyCSREditTabs extends React.Component{
 
   getTabComponents(){
     let tabs = [
-      // {tabClassName: 'tab back_icon fa fa-hand-o-left', panelClassName: 'panel', title:""},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Evolution", component:<MlCompanyEvolution client={client} isAdmin={true} key="1"  getEvolution={this.getEvolution.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/> },
       {tabClassName: 'tab', panelClassName: 'panel', title:"Achivements" , component:<MlCompanyAchivements key="2" getAchivements={this.getAchivements.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Reports", component:<MlCompanyCSRReports client={client} isAdmin={true} key="4" getReports={this.getReports.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},

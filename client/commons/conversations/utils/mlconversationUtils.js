@@ -6,7 +6,7 @@ import rkConversations from '../library/rkConversations'
 import rkNotifications from '../library/rkNotifications'
 import {loginHandler} from  './mlConversationLoginQuery'
 // const url = "http://localhost:8081/"
- const url = "http://ec2-54-179-189-150.ap-southeast-1.compute.amazonaws.com:32771/"
+ const url = "http://moolya-rkc-1184878506.ap-southeast-1.elb.amazonaws.com/"
 //const url = "https://qarkc.moolya.global/"
 
 class ConversationUtils{

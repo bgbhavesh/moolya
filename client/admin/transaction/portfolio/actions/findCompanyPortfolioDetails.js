@@ -301,6 +301,7 @@ export async function fetchCompanyDetailsHandler(portfoliodetailsId, key) {
                       keyName,
                       booleanKey
                     }
+                    makePrivate
                   }
                   achievements{
                       achievementName

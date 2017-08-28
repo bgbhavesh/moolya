@@ -13,8 +13,9 @@ export async function fetchUserDetailsHandler() {
        isAllowRegisterAs
        firstName
        profileImage
+       headerCommunityDisplay
        pendingRegId
-          registrationInfo {
+          registrationInfo {  
             firstName
             lastName
             contactNumber
@@ -22,7 +23,6 @@ export async function fetchUserDetailsHandler() {
             userName
             countryId
             registrationType
-            communityName
           }
         }
       }

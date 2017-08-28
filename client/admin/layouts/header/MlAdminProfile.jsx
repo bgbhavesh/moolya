@@ -33,6 +33,10 @@ class  MlAdminProfileApp extends Component {
       $(this).hide();
     });
 
+    $(".ml_profile").hover(function(){
+      $('.profile-name').toggleClass('display_none');
+    });
+
     setTimeout(function(){
       $('.ml_profile [data-toggle="tooltip"]').tooltip({
         container:'body',
@@ -101,7 +105,7 @@ class  MlAdminProfileApp extends Component {
             <li data-toggle="tooltip" title="Logout" data-placement="left"><a onClick={this.logoutUser.bind(this)}><img className="profile-img" src="/images/5.png" /></a></li>
           </ol>
         </div>
-        <div className="profile-name">Welcome {this.state.firstName} </div>
+        <div className="profile-name display_none">Welcome {this.state.firstName} </div>
       </div>
 
 

@@ -57,6 +57,7 @@ export default class MlInstitutionIncubatorsEditTabs extends React.Component{
 
   getIncubators() {
     this.props.backClickHandler();
+    $('.RRT__tabs div:first-of-type').click();
   }
 
   getTabComponents(){

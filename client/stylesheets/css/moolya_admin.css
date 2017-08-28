@@ -1500,3 +1500,7 @@ margin: 0px;
 .toast-warning {
   background-color: #f9ac49;
 }
+.display_none{
+  display: none;
+
+}

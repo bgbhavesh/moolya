@@ -12,8 +12,8 @@ class ConversationsRepo{
   {
     var authRequest = {userId:context.userId}
     console.log('login attempt server')
-    var checkData = await this.testApi()
-    console.log('............', checkData)
+    // var checkData = await this.testApi()
+    // console.log('............', checkData)
     var ret = await this.sendRequest('/login', authRequest, 'post');
     cb(ret);
   }
@@ -98,7 +98,7 @@ class ConversationsRepo{
         }
       })
     })
-    console.log(result)
+    // console.log(result)
     return result;
   }
 

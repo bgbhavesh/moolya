@@ -181,4 +181,12 @@ MlResolver.MlQueryResolver['fetchCompanyPortfolioAboutUs'] = (obj, args, context
 
   return {};
 }
-
+MlResolver.MlQueryResolver['fetchCompanyPortfolioCSRReports'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let portfolio = MlCompanyPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('reports')) {
+      return portfolio['reports'];
+    }
+  }
+  return {};
+}

@@ -19,6 +19,7 @@ export default class MlTabView extends Component {
       speed: 400,
       spaceBetween:30,
       slidesPerView:'auto',
+      mousewheelControl:true
     });
   }
 

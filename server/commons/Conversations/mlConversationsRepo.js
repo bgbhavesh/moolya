@@ -90,6 +90,9 @@ class ConversationsRepo{
 
     const result = await new Promise(function (resolve, reject) {
       request(options, function (err, res, body) {
+        console.log('error', err)
+        console.log('response', res)
+        console.log('body', body)
         if(err){
           reject(err)
         }
@@ -98,7 +101,7 @@ class ConversationsRepo{
         }
       })
     })
-    // console.log(result)
+    console.log('final result', result)
     return result;
   }
 

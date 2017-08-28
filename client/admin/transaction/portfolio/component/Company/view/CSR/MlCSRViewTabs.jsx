@@ -33,10 +33,10 @@ export default class MlCSRViewTabs extends Component {
         $('.RRT__container .RRT__container .RRT__tabs').removeClass('menunone');
       }
     }, 10);
-    let path = FlowRouter._current.path;
-    if (path.indexOf("app") != -1) {
-      this.setState({admin: false, client: appClient})
-    }
+    // let path = FlowRouter._current.path;
+    // if (path.indexOf("app") != -1) {
+    //   this.setState({admin: false, client: appClient})
+    // }
   }
   componentWillMount()
   {
@@ -58,6 +58,7 @@ export default class MlCSRViewTabs extends Component {
 
   getCompanyCSRs() {
     this.props.backClickHandler();
+    $('.RRT__tab--first').click();
   }
 
   backClickHandler(){

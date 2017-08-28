@@ -177,7 +177,7 @@ export default class MlCompanyAchivements extends React.Component{
     _.each(institutionAchievements, function (item)
     {
       for (var propName in item) {
-        if (item[propName] === null || item[propName] === undefined) {
+        if (item[propName] === null || item[propName] === undefined || propName === 'privateFields' || propName === 'logo') {
           delete item[propName];
         }
       }

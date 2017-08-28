@@ -4,6 +4,7 @@ import {fetchStartupDetailsHandler} from "../../actions/findPortfolioStartupDeta
 import {initializeMlAnnotator} from "../../../../../commons/annotator/mlAnnotator";
 import {createAnnotationActionHandler} from "../../actions/updatePortfolioDetails";
 import {findAnnotations} from "../../../../../commons/annotator/findAnnotations";
+import NoData from '../../../../../commons/components/noData/noData'
 var FontAwesome = require('react-fontawesome');
 
 const KEY = 'investor'
@@ -108,8 +109,15 @@ export default class MlStartupViewInvestor extends React.Component {
   render(){
     let that = this;
     let investorArray = that.state.startupInvestorList || [];
-    return (
 
+    if(_.isEmpty(investorArray)){
+      return (
+          <div className="portfolio-main-wrap">
+            <NoData tabName={this.props.tabName} />
+          </div>
+      )
+    } else {
+      return (
         <div id="annotatorContent">
           <h2>Investor</h2>
           <div className="col-lg-12">
@@ -126,8 +134,8 @@ export default class MlStartupViewInvestor extends React.Component {
               })}
             </div>
           </div>
-         </div>
-
-    )
+        </div>
+      )
+    }
   }
 }

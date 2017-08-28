@@ -8,6 +8,8 @@ import mlInteractionService from '../mlInteractionRepoService';
 import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
 import MlAlertNotification from '../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 import MlSubChapterAccessControl from './../../../mlAuthorization/mlSubChapterAccessControl';
+import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
+
 MlResolver.MlMutationResolver['createInquiry'] = (obj, args, context, info) =>{
     if(args && context && context.userId){
       var resp=null;
@@ -48,6 +50,7 @@ MlResolver.MlMutationResolver['createInquiry'] = (obj, args, context, info) =>{
             let fromUserType = 'user';
             mlInteractionService.createTransactionRequest(toUser._id,'inquire', args.resourceId, resp, fromuser._id, fromUserType );
             MlEmailNotification.enquireRequest(fromuser,toUser)
+            MlNotificationController.onEnquiryRequestReceived(fromuser,toUser);
           }
         }catch (e){
             let code = 400;

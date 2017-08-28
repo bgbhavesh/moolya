@@ -236,14 +236,6 @@ export default class MlFunderSuccessStories extends React.Component {
     let that = this;
     const showLoader = that.state.loading;
     let funderSuccessList = that.state.funderSuccessList || [];
-    if(_.isEmpty(funderSuccessList)){
-      return (
-        showLoader === true ? (<MlLoader/>) :
-          <div className="portfolio-main-wrap">
-            <NoData tabName={this.props.tabName} />
-          </div>
-      )
-    } else {
       return (
         <div>
           {showLoader === true ? ( <MlLoader/>) : (
@@ -343,7 +335,6 @@ export default class MlFunderSuccessStories extends React.Component {
             </div>)}
         </div>
       )
-    }
   }
 };
 MlFunderSuccessStories.contextTypes = {

@@ -188,7 +188,7 @@ export default class MlCompanyManagement extends React.Component{
     let managementArr = [];
     _.each(management, function (item) {
         for (var propName in item) {
-          if (item[propName] === null || item[propName] === undefined) {
+          if (item[propName] === null || item[propName] === undefined || propName === 'privateFields' || propName === 'logo') {
             delete item[propName];
           }
         }

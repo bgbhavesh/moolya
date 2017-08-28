@@ -10,6 +10,7 @@ import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/m
 import MlAlertNotification from '../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 import mlNonMoolyaAccess from "../core/non-moolyaAccessControl/mlNonMoolyaAccess"
 import MlSubChapterAccessControl from '../../../mlAuthorization/mlSubChapterAccessControl'
+import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 /**
  * @module [externaluser portfolio Landing]
  * @params [context.userId]
@@ -316,6 +317,7 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
         let response = new MlRespPayload().successPayload(result, code);
         if(response){
           MlEmailNotification.portfolioSuccessfullGoLive(user);
+          MlNotificationController.onGoLiveRequestApproval(user);
         }
         return response
       } else {
@@ -340,6 +342,7 @@ MlResolver.MlMutationResolver['rejectPortfolio'] = (obj, args, context, info) =>
           }, context) || {}
       let user = mlDBController.findOne('users', {_id: regRecord.userId}, context) || {};
       //MlEmailNotification.portfolioGoLiveDecline(user);
+      MlNotificationController.onGoLiveRequestDecline(user);
     }
     return updatedResponse;
   }
@@ -354,6 +357,7 @@ MlResolver.MlMutationResolver["requestForGoLive"] = (obj, args, context, info) =
       if (ret) {
         let code = 200;
         let alert =  MlAlertNotification.onGoLiveRequestAdmin()
+        MlNotificationController.onGoLiveRequest(details);
         let response = new MlRespPayload().successPayload(alert, code);
         return response;
       }

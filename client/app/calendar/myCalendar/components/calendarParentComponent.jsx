@@ -183,6 +183,7 @@ export default class MLAppMyCalendar extends Component {
                 events={ that.state.events }
                 dayBackgroundComponent={<MlAppMyCalendarDayComponent componentToLoad={that.componentToLoad.bind(that)}/> }
                 dayData={{days:that.state.data}}
+                dateHeaderEvent={that.componentToLoad.bind(that, 'calendarDayView')}
                 onNavigate={that.onNavigate}
                 date={that.state.date}
               />

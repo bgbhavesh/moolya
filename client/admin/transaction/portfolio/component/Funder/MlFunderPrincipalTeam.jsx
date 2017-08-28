@@ -392,14 +392,6 @@ export default class MlFunderPrincipalTeam extends React.Component {
     let that = this;
     const showLoader = that.state.loading;
     let funderPrincipalList = that.state.funderPrincipal || [];
-    if(_.isEmpty(funderPrincipalList)){
-      return (
-        showLoader === true ? (<MlLoader/>) :
-          <div className="portfolio-main-wrap">
-            <NoData tabName={this.props.tabName} />
-          </div>
-      )
-    } else {
       return (
         <div>
           {showLoader === true ? (<MlLoader/>) : (
@@ -767,7 +759,6 @@ export default class MlFunderPrincipalTeam extends React.Component {
             </div>)}
         </div>
       )
-    }
   }
 };
 MlFunderPrincipalTeam.contextTypes = {

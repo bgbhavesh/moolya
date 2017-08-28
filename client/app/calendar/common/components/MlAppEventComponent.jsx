@@ -1,0 +1,23 @@
+/**
+ * Created by pankaj on 28/8/17.
+ */
+import React, {Component} from "react";
+
+export default class MlAppEventComponent extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state ={
+      status:''
+    };
+    console.log('props', props);
+  }
+
+  render(){
+    const that = this;
+    const {calendar} = that.props;
+    return (
+      <span className="ml ml-moolya-symbol"> {calendar ? calendar.title : ''} </span>
+    )
+  }
+}

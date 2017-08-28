@@ -2,6 +2,24 @@
  * Created by pankaj on 25/6/17.
  */
 
+const TIMINIG = [
+  {
+    name: 'morning',
+    start: "00:00",
+    end:  "12:00",
+
+  },
+  {
+    name: 'afternoon',
+    start: "12:00",
+    end:  "18:00",
+  },
+  {
+    name: 'evening',
+    start: "18:00",
+    end:  "24:00",
+  }
+];
 
 const defaultCalenderSetting = {
   slotDuration: {
@@ -690,8 +708,16 @@ class MlAppointment {
           name: name
         }
       });
+
+      let shift = TIMINIG.find((shift) => {
+        let shiftStart = getTimeDate(shift.start, date);
+        let shiftEnd = getTimeDate(shift.end, date);
+        return userSlotStart.getTime() >= shiftStart.getTime() && userSlotStart < shiftEnd.getTime();
+      });
+
       response.push({
         slot: userSlots,
+        shift: shift ? shift.name : '',
         appointments: userAppointments
       });
     });

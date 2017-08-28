@@ -130,8 +130,8 @@ class MlAdminContextQueryConstructor
 
       //Sub Chapter can access transactions based on 'TRANSACT' perms (Jira-2956)
       if(this.isTransactModule){
-        userDetails.defaultSubChapters = userProfile.transactionSubChapters;
-        userDetails.defaultChapters = userProfile.transactionChapters;
+        userProfile.defaultSubChapters = userProfile.transactionSubChapters;
+        userProfile.defaultChapters = userProfile.transactionChapters;
       }
 
       if(!userProfile || (!userProfile.hierarchyLevel && userProfile.hierarchyLevel != 0)){

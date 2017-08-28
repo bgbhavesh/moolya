@@ -8,6 +8,7 @@ import MlAdminUserContext from "../../../../mlAuthorization/mlAdminUserContext";
 import portfolioValidationRepo from '../portfolioValidation'
 import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
+import MlNotificationController from '../../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 var _ = require('lodash')
 
 MlResolver.MlMutationResolver['createIdeatorPortfolio'] = (obj, args, context, info) => {
@@ -58,12 +59,13 @@ MlResolver.MlMutationResolver['updateIdeatorPortfolio'] = (obj, args, context, i
                 // let ret = MlIdeatorPortfolio.update({"portfolioDetailsId": args.portfoliodetailsId}, {$set: ideatorPortfolio})
               let ret = mlDBController.update('MlIdeatorPortfolio', {"portfolioDetailsId": args.portfoliodetailsId}, ideatorPortfolio, {$set: true}, context)
               if (ret) {
-                     let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId})
+                      let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId})
                       MlEmailNotification.onPortfolioUpdate(details);
-                    let ideatoralert =  MlAlertNotification.onPortfolioUpdates()
-                    let code = 200;
-                    let response = new MlRespPayload().successPayload(ideatoralert, code);
-                    return response;
+                      MlNotificationController.onPotfolioUpdate(details);
+                      let ideatoralert =  MlAlertNotification.onPortfolioUpdates()
+                      let code = 200;
+                      let response = new MlRespPayload().successPayload(ideatoralert, code);
+                      return response;
               }
             }
         }

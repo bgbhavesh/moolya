@@ -45,15 +45,23 @@ export default class MlCompanyIncubatorsEditTabs extends React.Component{
         $('.RRT__container .RRT__container .RRT__tabs').removeClass('menunone');
       }
     },10);
-    let path = FlowRouter._current.path;
-    if (path.indexOf("app") != -1){
-      this.setState({admin: false, client: appClient})
-    }
+    // let path = FlowRouter._current.path;
+    // if (path.indexOf("app") != -1){
+    //   this.setState({admin: false, client: appClient})
+    // }
+  }
+
+  setBackTab(e) {
+    this.props.backClickHandler(this.getIncubators.bind(this))
+  }
+
+  getIncubators() {
+    this.props.backClickHandler();
+    $('.RRT__tabs div:first-of-type').click();
   }
 
   getTabComponents(){
     let tabs = [
-      // {tabClassName: 'tab back_icon fa fa-hand-o-left', panelClassName: 'panel', title:""},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Startup Incubators", component:<MlCompanyStartupIncubators client={client} isAdmin={true} key="1"  getStartupIncubators={this.getStartupIncubators.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/> },
       {tabClassName: 'tab', panelClassName: 'panel', title:"Sectors and Service" , component:<MlCompanySectors key="2" getSectors={this.getSectors.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
       {tabClassName: 'tab', panelClassName: 'panel', title:"List of Incubators", component:<MlCompanyListOfIncubators client={client} isAdmin={true} key="3" getListOfIncubators={this.getListOfIncubators.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} />},
@@ -93,13 +101,14 @@ export default class MlCompanyIncubatorsEditTabs extends React.Component{
       }));
     }
     this.setState({tabs:getTabs() ||[]});
-    /**UI changes for back button*/  //+tab.tabClassName?tab.tabClassName:""
+    /**UI changes for back button*/
+    this.setBackTab()
   }
 
 
   render(){
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} backClickHandler={this.props.getState}/>
+    return <MlTabComponent tabs={tabs} backClickHandler={this.props.backClickHandler}/>
   }
 }
 

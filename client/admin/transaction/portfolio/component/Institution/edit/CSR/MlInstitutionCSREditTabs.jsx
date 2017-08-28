@@ -36,7 +36,7 @@ export default class MlInstitutionCSREditTabs extends React.Component{
           $(this).empty();
           $(this).html('<div class="moolya_btn moolya_btn_in">' + test + '</div>');
         });
-        $('.last-item').addClass('menunone');
+        $('.first-item').addClass('menunone');
         $('.RRT__tabs').addClass('horizon-swiper');
         $('.RRT__tab').addClass('horizon-item');
         $('.RRT__panel').addClass('nomargintop');
@@ -47,10 +47,10 @@ export default class MlInstitutionCSREditTabs extends React.Component{
         $('.RRT__container .RRT__container .RRT__tabs').removeClass('menunone');
       }
     },10);
-    let path = FlowRouter._current.path;
-    if (path.indexOf("app") != -1){
-      this.setState({admin: false, client: appClient})
-    }
+    // let path = FlowRouter._current.path;
+    // if (path.indexOf("app") != -1){
+    //   this.setState({admin: false, client: appClient})s
+    // }
   }
 
   setBackTab(e) {
@@ -59,6 +59,7 @@ export default class MlInstitutionCSREditTabs extends React.Component{
 
   getInstitutionCSRs() {
     this.props.backClickHandler();
+    $('.RRT__tabs div:first-of-type').click();
   }
 
   getTabComponents(){

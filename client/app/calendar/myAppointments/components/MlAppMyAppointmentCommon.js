@@ -55,6 +55,15 @@ export default class MlAppPendingMyAppointment extends Component{
       isSelectedAppointment: true
     });
   }
+  componentDidUpdate()
+  {
+    var WinWidth = $(window).width();
+    var WinHeight = $(window).height();
+    $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
+    if(WinWidth > 768){
+      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
+
+  }
 
   resetSelectedAppointment() {
     this.setState({isSelectedAppointment: false}, () => this.fetchAppointment() );
@@ -85,7 +94,7 @@ export default class MlAppPendingMyAppointment extends Component{
         {(selectedAppointment && isSelectedAppointment) ?
           <div>{this.getAppointmentComponentToLoad()}</div>
           :
-          <div>
+          <div className="tab_wrap_scroll">
             {that.state.appointments.map(function (appointment, index) {
               return (
                 <div className="col-lg-2 col-md-4 col-sm-4" key={index} >

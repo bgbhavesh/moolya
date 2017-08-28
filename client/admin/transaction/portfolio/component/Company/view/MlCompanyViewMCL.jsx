@@ -41,8 +41,8 @@ export default class MlCompanyViewMCL extends React.Component {
   }
 
   componentWillMount(){
-    this.fetchPortfolioDetails();
-    let resp = this.validateUserForAnnotation();
+    this.validateUserForAnnotation();
+    let resp = this.fetchPortfolioDetails();
     return resp
   }
 
@@ -152,10 +152,6 @@ export default class MlCompanyViewMCL extends React.Component {
   }
 
   render(){
-    const {memberships, compliances, licenses} = this.state;
-    if (!memberships.membershipDescription && !compliances.complianceDescription && !licenses.licenseDescription) {
-      return (<NoData tabName="M C & L" />);
-    } else {
       return (
         <div className="portfolio-main-wrap" id="annotatorContent">
           <h2>MCL</h2>
@@ -165,7 +161,7 @@ export default class MlCompanyViewMCL extends React.Component {
               <div className="panel-heading">Membership </div>
               <div className="panel-body ">
 
-                {this.state.memberships&&this.state.memberships.membershipDescription?this.state.memberships.membershipDescription:""}
+                {this.state.memberships&&this.state.memberships.membershipsDescription?this.state.memberships.membershipsDescription:""}
 
               </div>
             </div>
@@ -180,7 +176,7 @@ export default class MlCompanyViewMCL extends React.Component {
               <div className="panel-heading">Compliances</div>
               <div className="panel-body ">
 
-                {this.state.compliances&&this.state.compliances.complianceDescription?this.state.compliances.complianceDescription:""}
+                {this.state.compliances&&this.state.compliances.compliancesDescription?this.state.compliances.compliancesDescription:""}
 
               </div>
             </div>
@@ -189,7 +185,7 @@ export default class MlCompanyViewMCL extends React.Component {
               <div className="panel-heading">Licenses </div>
               <div className="panel-body ">
 
-                {this.state.licenses&&this.state.licenses.licenseDescription?this.state.licenses.licenseDescription:""}
+                {this.state.licenses&&this.state.licenses.licensesDescription?this.state.licenses.licensesDescription:""}
 
               </div>
             </div>
@@ -198,6 +194,5 @@ export default class MlCompanyViewMCL extends React.Component {
           </div>
         </div>
       )
-    }
   }
 }

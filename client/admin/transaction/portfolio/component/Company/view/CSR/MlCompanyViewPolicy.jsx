@@ -88,7 +88,7 @@ export default class MlCompanyViewPolicy extends React.Component {
   }
 
   async createAnnotations(annotation){
-    let details = {portfolioId:this.props.portfolioDetailsId, docId:"policy", quote:JSON.stringify(annotation)}
+    let details = {portfolioId:this.props.portfolioDetailsId, docId:"companyPolicy", quote:JSON.stringify(annotation)}
     const response = await createAnnotationActionHandler(details);
     if(response && response.success){
       this.fetchAnnotations(true);
@@ -109,7 +109,7 @@ export default class MlCompanyViewPolicy extends React.Component {
   }
 
   async fetchAnnotations(isCreate){
-    const response = await findAnnotations(this.props.portfolioDetailsId, "policy");
+    const response = await findAnnotations(this.props.portfolioDetailsId, "companyPolicy");
     let resp = JSON.parse(response.result);
     let annotations = this.state.annotations;
     this.setState({annotations:JSON.parse(response.result)})
@@ -134,17 +134,13 @@ export default class MlCompanyViewPolicy extends React.Component {
   }
 
   render(){
-    const policy = this.state.policy;
-    if (!policy.policyDescription) {
-      return (<NoData tabName="Policy" />);
-    } else {
       return (
-        <div className="portfolio-main-wrap">
+        <div className="portfolio-main-wrap" id="annotatorContent">
           <div className="col-lg-12 col-sm-12">
             <div className="row">
               <h2>Policy</h2>
               <div className="panel panel-default panel-form-view">
-                <div className="panel-body" id="annotatorContent">
+                <div className="panel-body">
                   <p>{this.state.policy&&this.state.policy.policyDescription}</p>
                 </div>
               </div>
@@ -152,6 +148,5 @@ export default class MlCompanyViewPolicy extends React.Component {
           </div>
         </div>
       )
-    }
   }
 }

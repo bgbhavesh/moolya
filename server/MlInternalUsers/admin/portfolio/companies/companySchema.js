@@ -339,6 +339,13 @@ let startupPortfolioSchema = `
       evolution           : evolutionOutput
       researchAndDevelopment: [researchAndDevelopmentOutput]
       intrapreneurRecognition : [intrapreneurRecognitionOutput]
+      reports             : dataOutput
+      _id                  : String
+      userId               : String
+      communityType        : String
+      portfolioDetailsId   : String
+      chapterName: String
+      accountType: String
    }
     
     
@@ -610,6 +617,7 @@ let startupPortfolioSchema = `
         evolution           : evolution
         researchAndDevelopment : [researchAndDevelopmentData]
         intrapreneurRecognition : [intrapreneurRecognition]
+        reports : data
     }
     type companyPortfolioOutput{
         _id                  : String
@@ -624,6 +632,7 @@ let startupPortfolioSchema = `
       fetchCompanyDetails(portfoliodetailsId:String!, key:String):CompanyPortfolio
       fetchCompanyPortfolioCharts(portfoliodetailsId:String):CompanyChartsOutput
       fetchCompanyPortfolioData(portfoliodetailsId:String):dataOutput
+      fetchCompanyPortfolioCSRReports(portfoliodetailsId:String):dataOutput
     }
     
     type Mutation{
@@ -639,6 +648,7 @@ let supportedApi = [
   {api:'fetchCompanyDetails', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchCompanyPortfolioCharts', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchCompanyPortfolioData', actionName:'READ', moduleName:"PORTFOLIO"},
+  {api:'fetchCompanyPortfolioCSRReports', actionName:'READ', moduleName:"PORTFOLIO"},
 
   {api:'createCompanyPortfolio', actionName:'CREATE', moduleName:"PORTFOLIO"},
   {api:'updateCompanyPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},

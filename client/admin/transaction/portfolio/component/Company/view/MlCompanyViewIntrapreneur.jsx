@@ -10,7 +10,7 @@ const KEY = 'intrapreneurRecognition'
 export default class MlCompanyViewIntrapreneur extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {intrapreneurList: []};
+    this.state = {intrapreneurList: [], loading: true};
     this.fetchPortfolioDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -109,7 +109,7 @@ export default class MlCompanyViewIntrapreneur extends React.Component {
   render(){
     let that = this;
     let intrapreneurArray = that.state.intrapreneurList || [];
-    if (intrapreneurArray && intrapreneurArray.length === 0) {
+    if (!this.state.loading && intrapreneurArray && intrapreneurArray.length === 0) {
       return (<NoData tabName="Intrapreneur" />);
     }
     return (

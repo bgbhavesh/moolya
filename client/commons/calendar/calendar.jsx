@@ -49,7 +49,7 @@ export default class Calender extends Component {
     }
   }
 
-  dayWrapper(date){
+  dateWrapper(date){
     let component = this.props.dayBackgroundComponent;
     if(component) {
       let data = {
@@ -68,6 +68,11 @@ export default class Calender extends Component {
         </div>
       );
     }
+  }
+
+  dateHeader(data){
+    let event = this.props.dateHeaderEvent ? this.props.dateHeaderEvent.bind(this, data.date) : data.onDrillDown;
+    return <a href="" onClick={(evt)  => event(evt)}>{data.label}</a>;
   }
 
   onNavigate(date){
@@ -89,7 +94,8 @@ export default class Calender extends Component {
           onNavigate={that.onNavigate.bind(that)}
           components={{
             event: that.eventComponent.bind(this),
-            dateCellWrapper: that.dayWrapper.bind(this)
+            dateCellWrapper: that.dateWrapper.bind(this),
+            dateHeader: that.dateHeader.bind(this)
           }}
           popup
         />

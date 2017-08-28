@@ -131,7 +131,6 @@ export default class MlCompanyViewClients extends React.Component {
 
   render() {
     let that = this;
-    // let branchesArray = that.state.institutionBranchesList || [];
     let clientsArray = that.props.clientsDetails || [];
     return (
       <div id="annotatorContent">

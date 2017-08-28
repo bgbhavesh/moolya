@@ -374,8 +374,8 @@ appSection.route('/explore/company/:portfolioId', {
 appSection.route('/company', {
   name: 'companies',
   action(){
-    var listConfig = _.extend(mlAppInstitutionConfig, {isExplore: false});
-    mount(AppLayout,{appContent:<mlAppCompanyConfig viewMode={false} showInfinity={false} config={listConfig} />})
+    var listConfig = _.extend(mlAppCompanyConfig, {isExplore: false});
+    mount(AppLayout,{appContent:<MlInfiniteScroll viewMode={false} showInfinity={false} config={listConfig} />})
   }
 });
 

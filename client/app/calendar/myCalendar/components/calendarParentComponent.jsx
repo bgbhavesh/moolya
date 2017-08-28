@@ -130,7 +130,7 @@ export default class MLAppMyCalendar extends Component {
   }
 
   headerManagement(profileId, profileName) {
-    this.setState({ profileId: profileId, communityName: profileName})
+    this.setState({ profileId: profileId, communityName: profileName, componentToLoad:'calendar'})
     this.getProfileBasedAppointments(profileId);
   }
 
@@ -183,6 +183,7 @@ export default class MLAppMyCalendar extends Component {
                 events={ that.state.events }
                 dayBackgroundComponent={<MlAppMyCalendarDayComponent componentToLoad={that.componentToLoad.bind(that)}/> }
                 dayData={{days:that.state.data}}
+                dateHeaderEvent={that.componentToLoad.bind(that, 'calendarDayView')}
                 onNavigate={that.onNavigate}
                 date={that.state.date}
               />

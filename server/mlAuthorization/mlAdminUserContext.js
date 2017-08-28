@@ -106,6 +106,12 @@ class MlAdminUserContext
         userDetails.defaultSubChapters = dataContext.subChapters;
         userDetails.defaultChapters = dataContext.chapters;
       }
+      //Sub Chapter can access transactions based on 'TRANSACT' perms (Jira-2956)
+      var dataContext = MlSubChapterAccessControl.getAccessControl('TRANSACT', {userId: userId});
+      if (dataContext && dataContext.hasAccess && dataContext.subChapters && dataContext.subChapters.length > 0) {
+        userDetails.transactionSubChapters = dataContext.subChapters;
+        userDetails.transactionChapters = dataContext.chapters;
+      }
     }
     return userDetails;
   }
@@ -135,60 +141,9 @@ class MlAdminUserContext
          let countryDetails=MlCountries.findOne(clusterDetails.countryId);
         return {countryId:countryDetails._id,countryCode:countryDetails.countryCode,countryName:countryDetails.country};
       }
-
     }
     return {};
   }
-
-  // nonMoolyaBackedUserAccess(checkUser, userId) {
-  //   check(checkUser, String)
-  //   check(userId, String)
-  //   var curUserProfile = new MlAdminUserContext().userProfileDetails(userId);
-  //   if (!curUserProfile.isMoolya) { //data access by non-moolya users
-  //     if (curUserProfile.defaultSubChapters.indexOf("all") < 0) {
-  //       let subChapterId = curUserProfile.defaultSubChapters ? curUserProfile.defaultSubChapters[0] : ''
-  //       var subChapterInternal = mlDBController.findOne('users', {
-  //         _id: checkUser,
-  //         'profile.isExternaluser': false,
-  //         'profile.InternalUprofile.moolyaProfile.subChapter': subChapterId
-  //       }, context)
-  //
-  //       if(subChapterInternal)
-  //         return true
-  //
-  //       let isExcess = this.userAccessForOtherUsers(curUserProfile, checkUser, subChapterId)
-  //       if(isExcess)
-  //         return true
-  //       else
-  //         return false
-  //     }
-  //   } else {
-  //     return true
-  //   }
-  // }
-
-  // userAccessForOtherUsers(curUserProfile, checkUser, subChapterId) {
-  //   let subChapterDetails = MlSubChapters.findOne({
-  //     _id: subChapterId
-  //   })
-  //   if (!_.isEmpty(subChapterDetails.internalSubChapterAccess)) {
-  //     let canSearch = subChapterDetails.internalSubChapterAccess.backendUser ? subChapterDetails.internalSubChapterAccess.backendUser.canSearch : false
-  //     let canView = subChapterDetails.internalSubChapterAccess.backendUser ? subChapterDetails.internalSubChapterAccess.backendUser.canView : false
-  //     var associated = subChapterDetails.associatedSubChapters ? subChapterDetails.associatedSubChapters : []
-  //     if (canSearch && canView) {
-  //       curUserProfile.defaultSubChapters = _.concat(curUserProfile.defaultSubChapters, associated)
-  //       let availableUser = Meteor.users.findOne({
-  //         _id: checkUser,
-  //         'profile.isExternaluser': false,
-  //         'profile.InternalUprofile.moolyaProfile.subChapter': {$in: curUserProfile.defaultSubChapters}
-  //       })
-  //       if (!_.isEmpty(availableUser)) {
-  //         return true
-  //       }
-  //     }
-  //   }else
-  //     return false
-  // }
 
   getUserLatLng(profile){
     var latitude = null;

@@ -97,6 +97,7 @@ export async function fetchfunderPortfolioPrincipal(portfoliodetailsId) {
                       isUserIdPrivate
                     }
                     index
+                    makePrivate
                     logo{
                       fileUrl,
                       fileName
@@ -149,6 +150,7 @@ export async function fetchfunderPortfolioTeam(portfoliodetailsId) {
                     isUserIdPrivate
                   }
                   index
+                  makePrivate
                   logo{
                     fileUrl,
                     fileName
@@ -224,6 +226,7 @@ export async function fetchfunderPortfolioSuccess(portfoliodetailsId) {
                 description
                 isDescPrivate
                 isActive
+                makePrivate
                 index
                 logo{
                     fileName

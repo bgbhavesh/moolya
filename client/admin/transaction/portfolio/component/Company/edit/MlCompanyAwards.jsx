@@ -181,7 +181,7 @@ export default class MlCompanyAwards extends React.Component{
     _.each(awards, function (item)
     {
         for (var propName in item) {
-          if (item[propName] === null || item[propName] === undefined) {
+          if (item[propName] === null || item[propName] === undefined || propName === 'privateFields' || propName === 'logo') {
             delete item[propName];
           }
         }

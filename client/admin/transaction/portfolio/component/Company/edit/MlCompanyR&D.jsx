@@ -181,7 +181,7 @@ export default class MlCompanyRAndD extends React.Component{
     _.each(institutionRD, function (item)
     {
       for (var propName in item) {
-        if (item[propName] === null || item[propName] === undefined) {
+        if (item[propName] === null || item[propName] === undefined || propName === 'privateFields' || propName === 'logo') {
           delete item[propName];
         }
       }

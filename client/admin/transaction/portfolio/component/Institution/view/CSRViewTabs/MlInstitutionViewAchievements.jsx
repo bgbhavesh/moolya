@@ -80,7 +80,7 @@ export default class MlInstitutionViewAchievements extends React.Component {
   async createAnnotations(annotation) {
     let details = {
       portfolioId: this.props.portfolioDetailsId,
-      docId: "institutionClients",
+      docId: "institutionAchievements",
       quote: JSON.stringify(annotation)
     }
     const response = await createAnnotationActionHandler(details);
@@ -92,7 +92,7 @@ export default class MlInstitutionViewAchievements extends React.Component {
 
 
   async fetchAnnotations(isCreate) {
-    const response = await findAnnotations(this.props.portfolioDetailsId, "institutionClients");
+    const response = await findAnnotations(this.props.portfolioDetailsId, "institutionAchievements");
     let resp = JSON.parse(response.result);
     let annotations = this.state.annotations;
     this.setState({annotations: JSON.parse(response.result)})

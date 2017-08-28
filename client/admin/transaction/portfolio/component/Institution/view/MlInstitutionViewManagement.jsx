@@ -5,22 +5,23 @@ import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnot
 import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../../commons/components/loader/loader";
 
 const KEY = 'management'
 export default class MlInstitutionViewManagement extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {institutionManagementList: []};
-    this.fetchPortfolioInstitutionDetails.bind(this);
+    this.state = {institutionManagementList: [],loading:true};
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
+    this.fetchPortfolioInstitutionDetails.bind(this);
   }
 
   componentDidMount(){
-    this.initalizeAnnotaor()
-    this.fetchAnnotations();
+    // this.initalizeAnnotaor()
+    //this.fetchAnnotations();
   }
 
   componentWillMount(){
@@ -57,6 +58,16 @@ export default class MlInstitutionViewManagement extends React.Component {
       }
         break;
     }
+  }
+
+  compareQueryOptions(a, b) {
+    return JSON.stringify(a) === JSON.stringify(b);
+  };
+
+  componentDidUpdate(prevProps, prevState){
+    //var compareQueryOptions=function(a, b) {return JSON.stringify(a) === JSON.stringify(b);};
+    var currentLoaded=this.state.loading;
+    if(!this.compareQueryOptions(prevState.loading,currentLoaded)){this.initalizeAnnotaor();this.fetchAnnotations();}
   }
 
   async createAnnotations(annotation){
@@ -100,7 +111,7 @@ export default class MlInstitutionViewManagement extends React.Component {
     let portfoliodetailsId=that.props.portfolioDetailsId;
     const response = await fetchInstitutionDetailsHandler(portfoliodetailsId, KEY);
     if (response && response.management) {
-      this.setState({institutionManagementList: response.management});
+      this.setState({institutionManagementList: response.management,loading:false});
     }
 
     this.setState({lodaing:false})
@@ -110,28 +121,40 @@ export default class MlInstitutionViewManagement extends React.Component {
   render(){
     let that = this;
     let managementArray = that.state.institutionManagementList || [];
-    if (managementArray && managementArray.length === 0) {
-      return (<NoData tabName="Management" />);
-    } else {
-      return (
-        <div id="annotatorContent">
-          <h2>Management</h2>
-          <div className="col-lg-12">
-            <div className="row">
-              {managementArray && managementArray.map(function (details, idx) {
-                return(<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
-                  <div className="team-block">
-                    <img src={details.logo&&details.logo.fileUrl} className="team_img" />
-                    <h3>
-                      {details.firstName}<br /><b>{details.designation}</b>
-                    </h3>
-                  </div>
-                </div>)
-              })}
-            </div>
-          </div>
-        </div>
-      )
-    }
+    let loading=this.state.loading?this.state.loading:false;
+
+
+    return (
+      <div>
+        {loading === true ? ( <MlLoader/>) : (
+          <div>
+            {_.isEmpty(managementArray)&& <div className="portfolio-main-wrap">
+              <NoData tabName={this.props.tabName} />
+            </div>}
+
+            {!_.isEmpty(managementArray)&&  <div id="annotatorContent">
+              <h2>Management</h2>
+              <div className="col-lg-12" >
+                <div className="row" >
+                  {managementArray && managementArray.map(function (details, idx) {
+                    return(<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
+                      <div className="team-block">
+                        <img src={details.logo&&details.logo.fileUrl} className="team_img" />
+                        <h3 >
+                          {details.firstName}<br /><b>{details.designation}</b>
+                        </h3>
+                      </div>
+                    </div>)
+                  })}
+                </div>
+              </div>
+            </div> }
+          </div>)}
+      </div>
+    )
+
+
+
+
   }
 }

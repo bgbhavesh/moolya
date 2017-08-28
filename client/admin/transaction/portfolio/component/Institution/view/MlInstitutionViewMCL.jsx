@@ -6,6 +6,7 @@ import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDet
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
 import _ from 'lodash'
 import NoData from '../../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../../commons/components/loader/loader";
 
 const MEMBERKEY = 'memberships'
 const LICENSEKEY = 'licenses'
@@ -20,7 +21,8 @@ export default class MlInstitutionViewMCL extends React.Component {
       licenses:{},
       data:{},
       annotations:[],
-      content:{}
+      content:{},
+      loading:true
 
     }
     this.createAnnotations.bind(this);
@@ -31,8 +33,8 @@ export default class MlInstitutionViewMCL extends React.Component {
   }
 
   componentDidMount(){
-    this.initalizeAnnotaor()
-    this.fetchAnnotations();
+    /*this.initalizeAnnotaor()
+    this.fetchAnnotations();*/
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
 
@@ -46,15 +48,15 @@ export default class MlInstitutionViewMCL extends React.Component {
     let portfoliodetailsId=that.props.portfolioDetailsId;
     const responseM = await fetchInstitutionDetailsHandler(portfoliodetailsId, MEMBERKEY);
     if (responseM) {
-      this.setState({memberships: responseM.memberships});
+      this.setState({memberships: responseM.memberships,loading:false});
     }
     const responseC = await fetchInstitutionDetailsHandler(portfoliodetailsId, COMPLIANCEKEY);
     if (responseC) {
-      this.setState({compliances: responseC.compliances});
+      this.setState({compliances: responseC.compliances,loading:false});
     }
     const responseL = await fetchInstitutionDetailsHandler(portfoliodetailsId, LICENSEKEY);
     if (responseL) {
-      this.setState({licenses: responseL.licenses});
+      this.setState({licenses: responseL.licenses,loading:false});
     }
 
     data = {
@@ -133,8 +135,20 @@ export default class MlInstitutionViewMCL extends React.Component {
     return response;
   }
 
+  compareQueryOptions(a, b) {
+    return JSON.stringify(a) === JSON.stringify(b);
+  };
+
+  componentDidUpdate(prevProps, prevState){
+    //var compareQueryOptions=function(a, b) {return JSON.stringify(a) === JSON.stringify(b);};
+    var currentLoaded=this.state.loading;
+    if(!this.compareQueryOptions(prevState.loading,currentLoaded)){this.initalizeAnnotaor();this.fetchAnnotations();}
+  }
+
   render(){
     const {memberships, compliances, licenses} = this.state;
+    let loading=this.state.loading?this.state.loading:false;
+
     if (!memberships.membershipDescription && !compliances.complianceDescription && !licenses.licenseDescription) {
       return (<NoData tabName="M C & L" />);
     } else {

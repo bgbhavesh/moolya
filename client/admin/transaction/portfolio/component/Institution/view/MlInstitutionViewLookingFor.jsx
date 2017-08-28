@@ -4,12 +4,14 @@ import {fetchInstitutionDetailsHandler} from '../../../actions/findPortfolioInst
 import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnotator'
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../../commons/components/loader/loader";
+
 
 const KEY = "lookingFor";
 export default class MlInstitutionViewLookingFor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {institutionLookingforList: []};
+    this.state = {institutionLookingforList: [],loading:true};
     this.fetchPortfolioInstitutionDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -17,10 +19,10 @@ export default class MlInstitutionViewLookingFor extends React.Component {
     this.annotatorEvents.bind(this);
   }
 
-  componentDidMount(){
+ /* componentDidMount(){
     this.initalizeAnnotaor()
     this.fetchAnnotations();
-  }
+  }*/
 
   componentWillMount(){
     this.fetchPortfolioInstitutionDetails();
@@ -99,37 +101,56 @@ export default class MlInstitutionViewLookingFor extends React.Component {
     let portfoliodetailsId=that.props.portfolioDetailsId;
     const response = await fetchInstitutionDetailsHandler(portfoliodetailsId, KEY);
     if (response && response.lookingFor) {
-      this.setState({institutionLookingforList: response});
+      this.setState({institutionLookingforList: response,loading:false});
     }
 
     this.setState({lodaing:false})
 
   }
+
+  compareQueryOptions(a, b) {
+    return JSON.stringify(a) === JSON.stringify(b);
+  };
+
+  componentDidUpdate(prevProps, prevState){
+    var currentLoaded=this.state.loading;
+    if(!this.compareQueryOptions(prevState.loading,currentLoaded)){this.initalizeAnnotaor();this.fetchAnnotations();}
+  }
   render(){
     let that = this;
     let lookingforArray = (that.state.institutionLookingforList && that.state.institutionLookingforList.lookingFor) || [];
-    if (lookingforArray && lookingforArray.length === 0) {
-      return (<NoData tabName="Looking For" />);
-    } else  {
-      return (
-        <div id="annotatorContent">
-          <h2>Looking For</h2>
-          <div className="col-lg-12">
-            <div className="row">
-              {lookingforArray && lookingforArray.map(function (details, idx) {
-                return(<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
-                  <div className="team-block">
-                    <img src={details.logo&&details.logo.fileUrl} className="team_img" />
-                    <h3>
-                      {details.lookingForName&&details.lookingForName}
-                    </h3>
-                  </div>
-                </div>)
-              })}
-            </div>
-          </div>
-        </div>
-      )
-    }
+    let loading=this.state.loading?this.state.loading:false;
+
+
+    return (
+      <div>
+        {loading === true ? ( <MlLoader/>) : (
+          <div>
+            {_.isEmpty(lookingforArray)&& <div className="portfolio-main-wrap">
+              <NoData tabName={this.props.tabName} />
+            </div>}
+
+            {!_.isEmpty(lookingforArray)&&  <div id="annotatorContent">
+              <h2>Looking For</h2>
+              <div className="col-lg-12">
+                <div className="row">
+                  {lookingforArray && lookingforArray.map(function (details, idx) {
+                    return(<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
+                      <div className="team-block">
+                        <img src={details.logo&&details.logo.fileUrl} className="team_img" />
+                        <h3>
+                          {details.lookingForName&&details.lookingForName}
+                        </h3>
+                      </div>
+                    </div>)
+                  })}
+                </div>
+              </div>
+            </div> }
+          </div>)}
+      </div>
+    )
+
+
   }
 }

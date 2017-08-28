@@ -130,7 +130,7 @@ export default class MLAppMyCalendar extends Component {
   }
 
   headerManagement(profileId, profileName) {
-    this.setState({ profileId: profileId, communityName: profileName})
+    this.setState({ profileId: profileId, communityName: profileName, componentToLoad:'calendar'})
     this.getProfileBasedAppointments(profileId);
   }
 

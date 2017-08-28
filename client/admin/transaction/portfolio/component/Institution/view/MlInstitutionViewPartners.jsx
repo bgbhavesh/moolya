@@ -10,7 +10,7 @@ const KEY = 'partners'
 export default class MlInstitutionViewPartners extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {institutionPartnersList: []};
+    this.state = {institutionPartnersList: [], loading: true};
     this.fetchPortfolioInstitutionDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -109,29 +109,32 @@ export default class MlInstitutionViewPartners extends React.Component {
   render(){
     let that = this;
     let partnersArray = that.state.institutionPartnersList || [];
-    if (partnersArray && partnersArray.length === 0) {
+    if (!this.state.loading && partnersArray && partnersArray.length === 0) {
       return (<NoData tabName="Partner" />);
     }
-    return (
+    else {
+      return (
 
-      <div id="annotatorContent">
-        <h2>Partners</h2>
-        <div className="col-lg-12">
-          <div className="row">
-            {partnersArray && partnersArray.map(function (details, idx) {
-              return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
-                <div className="team-block">
-                  <img src={details.logo&&details.logo.fileUrl} className="team_img" />
-                  <h3>
-                    {details&&details.firstName}
-                  </h3>
-                </div>
-              </div>)
-            })}
+        <div id="annotatorContent">
+          <h2>Partners</h2>
+          <div className="col-lg-12">
+            <div className="row">
+              {partnersArray && partnersArray.map(function (details, idx) {
+                return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
+                  <div className="team-block">
+                    <img src={details.logo&&details.logo.fileUrl} className="team_img" />
+                    <h3>
+                      {details&&details.firstName}
+                    </h3>
+                  </div>
+                </div>)
+              })}
 
+            </div>
           </div>
         </div>
-      </div>
-    )
+      )
+    }
+
   }
 }

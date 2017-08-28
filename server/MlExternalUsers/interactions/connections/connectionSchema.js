@@ -42,6 +42,11 @@ let connections = `
         chapterName :  String
     }
     
+    type MyConnectionUser{
+        userId: String,
+        profileId: String,
+        name: String
+    }
     
     input user{
         userid:String,
@@ -59,7 +64,7 @@ let connections = `
         isDenied:Boolean,
         resendCount:Int
     }
-    
+   
     type Mutation{
         connectionRequest(resourceId:String!,resourceType:String!):response
         acceptConnection(connectionId:String!):response
@@ -70,6 +75,7 @@ let connections = `
         fetchConnections:[ConnectedUser]
         fetchConnectionByTransaction(transactionId:String!):Connection
         fetchConnectionsByPortfolio(portfolioId: String, communityCode: String): [ConnectedUser]
+        fetchConnectionByUser: [MyConnectionUser]
     }
 `
 

@@ -5,6 +5,7 @@ import {client} from '../../../../../../core/apolloConnection'
 import MlCompanyViewEvolution from './MlCompanyViewEvolution'
 import MlCompanyViewPolicy from './MlCompanyViewPolicy'
 import MlCompanyViewAchievements from './MlCompanyViewAchievements'
+import MlCompanyCSRReports from '../../edit/CSR/MlCompanyCSRReports'
 
 export default class MlCSRViewTabs extends Component {
   constructor(props){

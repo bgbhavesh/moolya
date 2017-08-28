@@ -3,6 +3,7 @@ import MlRespPayload from "../../../../commons/mlPayload";
 import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification';
 import portfolioValidationRepo from '../portfolioValidation';
+import MlNotificationController from '../../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 var _ = require('lodash')
 
 MlResolver.MlMutationResolver['createInstitutionPortfolio'] = (obj, args, context, info) => {
@@ -52,6 +53,7 @@ MlResolver.MlMutationResolver['updateInstitutionPortfolio'] = (obj, args, contex
         if (ret) {
           let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId})
           MlEmailNotification.onPortfolioUpdate(details);
+          MlNotificationController.onPotfolioUpdate(details);
           let institutealert =  MlAlertNotification.onPortfolioUpdates()
           let code = 200;
           let response = new MlRespPayload().successPayload(institutealert, code);

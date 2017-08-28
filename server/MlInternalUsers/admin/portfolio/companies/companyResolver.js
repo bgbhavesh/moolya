@@ -3,6 +3,7 @@ import MlRespPayload from "../../../../commons/mlPayload";
 import portfolioValidationRepo from '../portfolioValidation'
 import MlEmailNotification from "../../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlAlertNotification from '../../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
+import MlNotificationController from '../../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 var _ = require('lodash')
 
 
@@ -55,6 +56,7 @@ MlResolver.MlMutationResolver['updateCompanyPortfolio'] = (obj, args, context, i
         if (ret) {
           let details = MlPortfolioDetails.findOne({"_id":args.portfoliodetailsId})
           MlEmailNotification.onPortfolioUpdate(details);
+          MlNotificationController.onPotfolioUpdate(details);
           let startupalert =  MlAlertNotification.onPortfolioUpdates()
           let code = 200;
           let response = new MlRespPayload().successPayload(startupalert, code);
@@ -179,4 +181,12 @@ MlResolver.MlQueryResolver['fetchCompanyPortfolioAboutUs'] = (obj, args, context
 
   return {};
 }
-
+MlResolver.MlQueryResolver['fetchCompanyPortfolioCSRReports'] = (obj, args, context, info) => {
+  if (args.portfoliodetailsId) {
+    let portfolio = MlCompanyPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+    if (portfolio && portfolio.hasOwnProperty('reports')) {
+      return portfolio['reports'];
+    }
+  }
+  return {};
+}

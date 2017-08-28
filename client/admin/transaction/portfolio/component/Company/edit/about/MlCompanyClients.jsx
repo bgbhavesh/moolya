@@ -146,7 +146,7 @@ export default class MlCompanyClients extends React.Component{
     _.each(clients, function (item)
     {
       for (var propName in item) {
-        if (item[propName] === null || item[propName] === undefined) {
+        if (item[propName] === null || item[propName] === undefined || propName === 'privateFields' || propName === 'logo') {
           delete item[propName];
         }
       }
@@ -187,6 +187,7 @@ export default class MlCompanyClients extends React.Component{
           this.setState({loading: true})
           this.fetchOnlyImages();
           this.imagesDisplay();
+          this.sendDataToParent()
         }
       }
     }

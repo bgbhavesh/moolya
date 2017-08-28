@@ -14,9 +14,9 @@ import MlChartSubTabs from '../../../../../../commons/charts/MlChartsSubTabs'
 export default class MlCompanyEditChart extends Component {
   constructor(props, context){
     super(props)
-    this.state = {employmentData:[], prlData:[], reviewData:[], empBreakUpData:[],graphSelected:false, startupPortfolio:{},
+    this.state = {employmentData:[], prlData:[], reviewData:[], empBreakUpData:[],graphSelected:false, companyPortfolio:{},
       startupCharts:[],startupChartsList:[]}
-    this.fetchPortfolioCompanyChartDetails.bind(this)
+    this.fetchPortfolioChartDetails.bind(this)
     this.getEmploymentOfCompany.bind(this)
     this.getProfitRevenueLiability.bind(this)
     this.getReviewOfCompany.bind(this)
@@ -24,12 +24,12 @@ export default class MlCompanyEditChart extends Component {
 
   }
   componentDidMount(){
-    this.fetchPortfolioCompanyChartDetails();
+    this.fetchPortfolioChartDetails();
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
   }
 
-  async fetchPortfolioCompanyChartDetails() {
+  async fetchPortfolioChartDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
     const response = await fetchDetailsCompanyChartsActionHandler(portfoliodetailsId);
@@ -109,8 +109,8 @@ export default class MlCompanyEditChart extends Component {
     //this.props.backClickHandler()
   }
 
-  getPortfolioCompanyChartDetails(details,tabName){
-    let data = this.state.startupPortfolio;
+  getPortfolioStartupChartDetails(details,tabName){
+    let data = this.state.companyPortfolio;
     data[tabName] = details;
     this.props.getChartDetails(details,tabName);
   }
@@ -311,7 +311,7 @@ export default class MlCompanyEditChart extends Component {
            value = {value}
            name = {name}
            />*/
-        ):(<div>{<MlChartSubTabs getPortfolioStartupChartDetails={this.getPortfolioCompanyChartDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupChartsDetails={this.state.startupCharts} isApp={this.props.isApp}></MlChartSubTabs> }</div>)}
+        ):(<div>{<MlChartSubTabs getPortfolioStartupChartDetails={this.getPortfolioStartupChartDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupChartsDetails={this.state.startupCharts} isApp={this.props.isApp}></MlChartSubTabs> }</div>)}
 
       </div>
     )
@@ -319,6 +319,6 @@ export default class MlCompanyEditChart extends Component {
 }
 
 MlCompanyEditChart.contextTypes = {
-  startupPortfolio: PropTypes.object,
+  companyPortfolio: PropTypes.object,
 };
 

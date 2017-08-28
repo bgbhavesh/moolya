@@ -20,8 +20,8 @@ export default class MlInstitutionViewMCL extends React.Component {
       licenses:{},
       data:{},
       annotations:[],
-      content:{}
-
+      content:{},
+      loading: true
     }
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -62,7 +62,7 @@ export default class MlInstitutionViewMCL extends React.Component {
       licenses: this.state.licenses,
       compliances:this.state.compliances
     }
-    this.setState({data:data})
+    this.setState({data:data, loading: false})
 
   }
   initalizeAnnotaor(){
@@ -135,7 +135,7 @@ export default class MlInstitutionViewMCL extends React.Component {
 
   render(){
     const {memberships, compliances, licenses} = this.state;
-    if (!memberships.membershipDescription && !compliances.complianceDescription && !licenses.licenseDescription) {
+    if (!this.state.loading && !memberships.membershipDescription && !compliances.complianceDescription && !licenses.licenseDescription) {
       return (<NoData tabName="M C & L" />);
     } else {
       return (

@@ -11,7 +11,7 @@ import _ from "underscore";
 import moment from "moment";
 import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
-import {getCommunityName} from '../../../commons/utils';
+// import {getCommunityName} from '../../../commons/utils';
 // import mlConversationsRepo from '../../../commons/Conversations/mlConversationsRepo'
 var fs = Npm.require('fs');
 var Future = Npm.require('fibers/future');
@@ -322,9 +322,9 @@ MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context,
           response.pendingRegId = isAllowRegisterAs._id
         }
 
-        let communityCode = response && response.registrationInfo && response.registrationInfo.registrationType?response.registrationInfo.registrationType:''
-        response.registrationInfo.communityName = getCommunityName(communityCode);
-
+        // let communityCode = response && response.registrationInfo && response.registrationInfo.registrationType?response.registrationInfo.registrationType:''
+        // response.registrationInfo.communityName = getCommunityName(communityCode);
+        response.headerCommunityDisplay = headerCommunityDisplay(response.registrationInfo, context)
         response.profileImage = profile.profileImage
         response.firstName = profile.firstName
         return response;
@@ -1636,4 +1636,16 @@ MlResolver.MlQueryResolver['findRegistrationInfoUser'] = (obj, args, context, in
     }
     return response;
   }
+}
+
+
+headerCommunityDisplay = (registrationInfo, context) => {
+  var subChapterName = registrationInfo.subChapterName
+  var chapterName = registrationInfo.chapterName
+  var communityDefCode = registrationInfo.communityDefCode
+  if (subChapterName.length > 12)
+    subChapterName = subChapterName.substr(0, 12) + '...'
+  chapterName = chapterName.substr(0, 4)
+  var returnName = subChapterName + '/' + chapterName + '/' + communityDefCode
+  return returnName
 }

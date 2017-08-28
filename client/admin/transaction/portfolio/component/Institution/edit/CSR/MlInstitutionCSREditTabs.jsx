@@ -59,6 +59,7 @@ export default class MlInstitutionCSREditTabs extends React.Component{
 
   getInstitutionCSRs() {
     this.props.backClickHandler();
+    $('.RRT__tabs div:first-of-type').click();
   }
 
   getTabComponents(){

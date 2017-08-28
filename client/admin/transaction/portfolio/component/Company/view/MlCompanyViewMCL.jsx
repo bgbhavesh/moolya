@@ -152,10 +152,6 @@ export default class MlCompanyViewMCL extends React.Component {
   }
 
   render(){
-    const {memberships, compliances, licenses} = this.state;
-    if (!memberships.membershipsDescription && !compliances.compliancesDescription && !licenses.licensesDescription) {
-      return (<NoData tabName="M C & L" />);
-    } else {
       return (
         <div className="portfolio-main-wrap" id="annotatorContent">
           <h2>MCL</h2>
@@ -198,6 +194,5 @@ export default class MlCompanyViewMCL extends React.Component {
           </div>
         </div>
       )
-    }
   }
 }

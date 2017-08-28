@@ -11,7 +11,7 @@ const KEY = 'investor'
 export default class MlInstitutionViewInvestor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {institutionInvestorList: []};
+    this.state = {institutionInvestorList: [], loading: true};
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
@@ -102,14 +102,14 @@ export default class MlInstitutionViewInvestor extends React.Component {
       this.setState({institutionInvestorList: response.investor});
     }
 
-    this.setState({lodaing:false})
+    this.setState({loading:false})
 
   }
 
   render(){
     let that = this;
     let investorArray = that.state.institutionInvestorList || [];
-    if (investorArray && investorArray.length === 0) {
+    if (!this.state.loading && investorArray && investorArray.length === 0) {
       return (<NoData tabName="Investor" />);
     } else {
       return (

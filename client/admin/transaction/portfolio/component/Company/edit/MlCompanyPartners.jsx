@@ -174,7 +174,7 @@ export default class MlCompanyPartners extends React.Component {
       let arr = [];
       _.each(partners, function (item) {
         for (var propName in item) {
-          if (item[propName] === null || item[propName] === undefined) {
+          if (item[propName] === null || item[propName] === undefined || propName === 'privateFields' || propName === 'logo') {
             delete item[propName];
           }
         }
@@ -234,7 +234,7 @@ export default class MlCompanyPartners extends React.Component {
 
   async fetchOnlyImages() {
 
-    const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
+    const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId, KEY);
       if (response && response.partners && !_.isEmpty(response.partners)) {
         let thisState = this.state.selectedIndex;
         let dataDetails = this.state.partners

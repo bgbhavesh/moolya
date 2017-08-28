@@ -339,6 +339,13 @@ let startupPortfolioSchema = `
       evolution           : evolutionOutput
       researchAndDevelopment: [researchAndDevelopmentOutput]
       intrapreneurRecognition : [intrapreneurRecognitionOutput]
+      reports             : dataOutput
+      _id                  : String
+      userId               : String
+      communityType        : String
+      portfolioDetailsId   : String
+      chapterName: String
+      accountType: String
    }
     
     

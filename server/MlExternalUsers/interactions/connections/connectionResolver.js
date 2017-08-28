@@ -8,6 +8,7 @@ import mlInteractionService from '../mlInteractionRepoService';
 import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
 import MlAlertNotification from '../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 import MlSubChapterAccessControl from './../../../mlAuthorization/mlSubChapterAccessControl';
+import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 /*STATUS
  0 - Pending
  1 - Accepted
@@ -130,6 +131,8 @@ MlResolver.MlMutationResolver['connectionRequest'] = (obj, args, context, info) 
           if(toUser._id&&fromuser._id){
             MlEmailNotification.endUserPortfolioConnect(fromuser._id,toUser._id);
             MlEmailNotification.portfolioConnectRequestReceived(fromuser._id,toUser._id);
+            MlNotificationController.onConnectionRequestSent(fromuser._id,toUser._id);
+            MlNotificationController.onConnectionRequestReceived(fromuser._id,toUser._id);
           }
       }
       let connectRequest = MlAlertNotification.onConnectionRequestSent(toUser._id);

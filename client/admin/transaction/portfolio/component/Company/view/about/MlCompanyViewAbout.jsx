@@ -113,11 +113,11 @@ export default class MlCompanyViewAbout extends React.Component {
 
   render() {
     return (
-      <div className="col-lg-12 col-sm-12">
+      <div className="col-lg-12 col-sm-12" id="annotatorContent">
         <div className="row">
           <h2>About Us</h2>
           <div className="panel panel-default panel-form-view">
-            <div className="panel-body" id="annotatorContent">
+            <div className="panel-body">
               <p>{this.props.aboutUsDetails && this.props.aboutUsDetails.companyDescription ? this.props.aboutUsDetails.companyDescription : ""}</p>
             </div>
           </div>

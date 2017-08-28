@@ -56,6 +56,7 @@ export default class MlCompanyCSREditTabs extends React.Component{
   }
   getCompanyCSRs() {
     this.props.backClickHandler();
+    $('.RRT__tabs div:first-of-type').click();
   }
 
   getTabComponents(){

@@ -76,6 +76,7 @@ class ConversationsRepo{
       json: true
     }
 
+    console.log(Meteor.settings.private.conversationsBaseURL+endPoint);
     if(!isApplication){
       var apiKey = this.getApiKey();
       if(!apiKey)
@@ -90,6 +91,7 @@ class ConversationsRepo{
         if(err){
           reject(err)
         }
+
         else{
           resolve(body)
         }

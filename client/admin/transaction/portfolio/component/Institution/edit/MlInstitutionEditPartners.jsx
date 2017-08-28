@@ -283,7 +283,7 @@ export default class MlInstitutionEditPartners extends React.Component {
                           <a href="#" id={"create_clientP" + idx}>
                             <div className="list_block notrans funding_list"
                                  onClick={that.onPartnerTileClick.bind(that, idx)}>
-                              <FontAwesome name='lock'/>
+                              <FontAwesome name='unlock'  id="makePrivate" defaultValue={principal.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={principal.makePrivate}/>
                               <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
                               <img src={principal.logo ? principal.logo.fileUrl : "/images/def_profile.png"}/>
                               <div>

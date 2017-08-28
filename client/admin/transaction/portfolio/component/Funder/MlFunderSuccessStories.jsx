@@ -99,6 +99,20 @@ export default class MlFunderSuccessStories extends React.Component {
     }, 10)
   }
 
+  onStatusChangeNotify(e) {
+    let updatedData = this.state.data || {};
+    let key = e.target.id;
+    updatedData = _.omit(updatedData, [key]);
+    if (e.currentTarget.checked) {
+      updatedData = _.extend(updatedData, {[key]: true});
+    } else {
+      updatedData = _.extend(updatedData, {[key]: false});
+    }
+    this.setState({data: updatedData}, function () {
+      this.sendDataToParent()
+    })
+  }
+
   componentDidUpdate() {
     OnLockSwitch();
     dataVisibilityHandler();
@@ -259,14 +273,25 @@ export default class MlFunderSuccessStories extends React.Component {
                         return (
                           <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
                             <a href="#" id={"team_list" + idx}>
-                              <div className="list_block notrans funding_list"
-                                   onClick={that.onTileClick.bind(that, idx)}>
-                                <FontAwesome name='lock'/>
-                                <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                                <img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/>
+
+                              <div className="list_block notrans funding_list">
+                                <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
+                                {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
+                                <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img
+                                  src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/></div>
                                 <div><p>{details.storyTitle}</p><p>{details.description}</p></div>
                                 <h3>{details.date ? details.date : "Date : "}</h3>
                               </div>
+
+
+                              {/*<div className="list_block notrans funding_list"*/}
+                                   {/*onClick={that.onTileClick.bind(that, idx)}>*/}
+                                {/*<FontAwesome name='lock'/>*/}
+                                {/*<div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>*/}
+                                {/*<img src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/>*/}
+                                {/*<div><p>{details.storyTitle}</p><p>{details.description}</p></div>*/}
+                                {/*<h3>{details.date ? details.date : "Date : "}</h3>*/}
+                              {/*</div>*/}
                             </a>
                           </div>
                         )
@@ -321,6 +346,9 @@ export default class MlFunderSuccessStories extends React.Component {
                               <FontAwesome id="isDescPrivate" name='unlock' className="input_icon un_lock"
                                            onClick={this.onLockChange.bind(this, "description", "isDescPrivate")}/>
 
+                            </div>
+                            <div className="form-group">
+                              <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                             </div>
                             <div className="ml_btn" style={{'textAlign': 'center'}}>
                               <a className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>

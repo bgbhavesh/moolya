@@ -514,3 +514,64 @@ export async function fetchDetailsCompanyChartsActionHandler(portfoliodetailsId)
 
   return chartsArray
 }
+
+export async function fetchCompanyPortfolioReports(portfoliodetailsId, connection) {
+
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            fetchCompanyPortfolioCSRReports(portfoliodetailsId: $portfoliodetailsId) {
+                  balanceSheet{
+                    fileUrl
+                    fileName
+                   } 
+                  profitAndLoss{
+                    fileUrl
+                    fileName
+                   } 
+                  quaterlyReport{
+                    fileUrl
+                    fileName
+                   } 
+                  yearlyReport{
+                    fileUrl
+                    fileName
+                   } 
+                  halfYearlyReport{
+                    fileUrl
+                    fileName
+                   } 
+                  annualReport{
+                    fileUrl
+                    fileName
+                   } 
+                  cashFlow{
+                    fileUrl
+                    fileName
+                   } 
+                  shareHoldings{
+                    fileUrl
+                    fileName
+                   } 
+                  capitalStructure{
+                    fileUrl
+                    fileName
+                   } 
+                  ratio{
+                    fileUrl
+                    fileName
+                   } 
+            }
+          }
+
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.fetchCompanyPortfolioCSRReports;
+  let data = _.omit(id, '__typename')
+  return data
+  // return id
+}

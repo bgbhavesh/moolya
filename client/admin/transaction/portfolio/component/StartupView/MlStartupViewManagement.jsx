@@ -7,6 +7,7 @@ import {fetchStartupDetailsHandler} from '../../actions/findPortfolioStartupDeta
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
+import NoData from '../../../../../commons/components/noData/noData'
 
 const KEY = 'management'
 export default class MlStartupViewManagement extends React.Component {
@@ -112,27 +113,32 @@ export default class MlStartupViewManagement extends React.Component {
   render(){
     let that = this;
     let managementArray = that.state.startupManagementList || [];
-    return (
-
+    if(_.isEmpty(managementArray)){
+      return (
+          <div className="portfolio-main-wrap">
+            <NoData tabName={this.props.tabName} />
+          </div>
+      )
+    } else {
+      return (
         <div id="annotatorContent">
           <h2>Management</h2>
           <div className="col-lg-12">
             <div className="row">
               {managementArray && managementArray.map(function (details, idx) {
                 return(<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
-                <div className="team-block">
-                  <img src={details.logo&&details.logo.fileUrl} className="team_img" />
-                  <h3>
-                    {details.firstName}<br /><b>{details.designation}</b>
-                  </h3>
-                </div>
-              </div>)
+                  <div className="team-block">
+                    <img src={details.logo&&details.logo.fileUrl} className="team_img" />
+                    <h3>
+                      {details.firstName}<br /><b>{details.designation}</b>
+                    </h3>
+                  </div>
+                </div>)
               })}
             </div>
           </div>
         </div>
-
-
-    )
+      )
+    }
   }
 }

@@ -183,6 +183,7 @@ export default class MlAppTaskCreate extends Component {
                     <span className={`placeHolder ${sessionFrequencyActive}`}>Frequency</span>
                   <Select className="form-field-name" options={sessionFrequencyOptions} placeholder="Frequency"
                           value={this.state.data.sessionFrequency} onChange={this.onFrequencySelect.bind(this)}/>
+                    <br className="clear-fix"/><br className="clear-fix"/>
                   </div>
                   <div className="form-group">
                     <div className="input_types">

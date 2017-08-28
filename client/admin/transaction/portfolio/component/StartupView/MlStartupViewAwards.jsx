@@ -7,6 +7,7 @@ import {fetchStartupDetailsHandler} from '../../actions/findPortfolioStartupDeta
 import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
+import NoData from '../../../../../commons/components/noData/noData'
 
 const KEY = 'awardsRecognition'
 
@@ -112,8 +113,14 @@ export default class MlStartupViewAwards extends React.Component {
   render(){
     let that = this;
     let awardsArray = that.state.startupAwardsList || [];
-    return (
-
+    if(_.isEmpty(awardsArray)) {
+      return (
+        <div className="portfolio-main-wrap">
+          <NoData tabName={this.props.tabName}/>
+        </div>
+      )
+    } else {
+      return (
         <div id="annotatorContent">
           <h2>Awards</h2>
           <div className="col-lg-12">
@@ -132,6 +139,7 @@ export default class MlStartupViewAwards extends React.Component {
             </div>
           </div>
         </div>
-    )
+      )
+    }
   }
 }

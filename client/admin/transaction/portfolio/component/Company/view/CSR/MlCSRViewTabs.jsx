@@ -2,6 +2,7 @@ import React, { Component, PropTypes }  from "react";
 import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent";
 // import PortfolioLibrary from '../../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import {client} from '../../../../../../core/apolloConnection'
+import {appClient} from '../../../../../../../app/core/appConnection'
 import MlCompanyViewEvolution from './MlCompanyViewEvolution'
 import MlCompanyViewPolicy from './MlCompanyViewPolicy'
 import MlCompanyViewAchievements from './MlCompanyViewAchievements'

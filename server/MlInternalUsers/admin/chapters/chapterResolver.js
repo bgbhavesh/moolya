@@ -296,6 +296,10 @@ MlResolver.MlQueryResolver['fetchActiveSubChapters'] = (obj, args, context, info
 MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) => {
   try {
     args.subChapter.isDefaultSubChapter = false;
+    //pre-condition for related sub chapter updation:(Jira-3035)
+    var hasPerm=MlSubChapterPreConditions.hasEditPermSubChapterAccessControl(context);
+    if(!hasPerm){args.subChapter=_.omit(args.subChapter,'moolyaSubChapterAccess')};
+
     let subChapterId = createSubChapter(args.subChapter, context)
 
     if (subChapterId) {
@@ -367,6 +371,11 @@ MlResolver.MlMutationResolver['updateSubChapter'] = (obj, args, context, info) =
     for (key in args.subChapterDetails) {
       subChapter[key] = args.subChapterDetails[key]
     }
+
+    //pre-condition for related sub chapter updation :(Jira-3035)
+    var hasPerm=MlSubChapterPreConditions.hasEditPermSubChapterAccessControl(context);
+    if(!hasPerm){subChapter=_.omit(subChapter,'moolyaSubChapterAccess')};
+
     let resp = mlDBController.update('MlSubChapters', args.subChapterId, subChapter, {$set: true}, context)
     if (resp) {
       if (subChapter && args.subChapterId && subChapter.isEmailNotified) {

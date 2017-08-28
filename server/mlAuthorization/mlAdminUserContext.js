@@ -106,6 +106,12 @@ class MlAdminUserContext
         userDetails.defaultSubChapters = dataContext.subChapters;
         userDetails.defaultChapters = dataContext.chapters;
       }
+      //Sub Chapter can access transactions based on 'TRANSACT' perms (Jira-2956)
+      var dataContext = MlSubChapterAccessControl.getAccessControl('TRANSACT', {userId: userId});
+      if (dataContext && dataContext.hasAccess && dataContext.subChapters && dataContext.subChapters.length > 0) {
+        userDetails.transactionSubChapters = dataContext.subChapters;
+        userDetails.transactionChapters = dataContext.chapters;
+      }
     }
     return userDetails;
   }

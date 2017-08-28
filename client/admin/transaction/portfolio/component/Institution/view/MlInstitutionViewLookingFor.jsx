@@ -9,7 +9,7 @@ const KEY = "lookingFor";
 export default class MlInstitutionViewLookingFor extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {institutionLookingforList: []};
+    this.state = {institutionLookingforList: [], loading: true};
     this.fetchPortfolioInstitutionDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -102,13 +102,13 @@ export default class MlInstitutionViewLookingFor extends React.Component {
       this.setState({institutionLookingforList: response});
     }
 
-    this.setState({lodaing:false})
+    this.setState({loading:false})
 
   }
   render(){
     let that = this;
     let lookingforArray = (that.state.institutionLookingforList && that.state.institutionLookingforList.lookingFor) || [];
-    if (lookingforArray && lookingforArray.length === 0) {
+    if (!this.state.loading && lookingforArray && lookingforArray.length === 0) {
       return (<NoData tabName="Looking For" />);
     } else  {
       return (

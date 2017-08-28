@@ -37,7 +37,7 @@
     "fromEmailAddr":"qasmtp@moolya.in",
     "isEmailDomainCheckEnabled":true,
     "isAuditEnabled":true,
-    "conversationsBaseURL":"https://qarkc.moolya.global"
+    "conversationsBaseURL":"http://ec2-54-179-189-150.ap-southeast-1.compute.amazonaws.com:32771"
   }
 }
 

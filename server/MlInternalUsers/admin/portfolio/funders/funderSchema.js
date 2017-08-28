@@ -18,7 +18,8 @@ let FunderPortfolioSchema = `
         isActive:Boolean
         index: Int
         logo:imagesTypeSchema,
-        privateFields:[PrivateKeys]
+        privateFields:[PrivateKeys],
+        makePrivate:Boolean
     }
     
      type imagesTypeSchema{
@@ -65,7 +66,8 @@ let FunderPortfolioSchema = `
         socialLinks:[SocialLinks]
         index: Int,
         logo:imagesTypeSchema,
-        privateFields:[PrivateKeys]
+        privateFields:[PrivateKeys],
+        makePrivate:Boolean
     }
 
     type Principal{
@@ -89,7 +91,8 @@ let FunderPortfolioSchema = `
         socialLinks:[SocialLinks],
         index:Int,
         logo:imagesTypeSchema,
-        privateFields:[PrivateKeys]
+        privateFields:[PrivateKeys],
+        makePrivate:Boolean
     }
     
     type Investments{
@@ -200,7 +203,8 @@ let FunderPortfolioSchema = `
         description:String,
         isDescPrivate:Boolean,
         isActive:Boolean
-        index: Int
+        index: Int,
+        makePrivate:Boolean
     }
 
     input areaOfInterest{
@@ -239,7 +243,8 @@ let FunderPortfolioSchema = `
         aboutTeam:String,
         isAboutTeamPrivate:Boolean,
         socialLinks:[socialLinks],
-        index: Int
+        index: Int,
+        makePrivate:Boolean
     }
 
     input principal{
@@ -261,7 +266,8 @@ let FunderPortfolioSchema = `
         aboutPrincipal:String,
         isAboutPrincipalPrivate:Boolean,
         socialLinks:[socialLinks],
-        index:Int
+        index:Int,
+        makePrivate: Boolean
     }
 
     input investments{

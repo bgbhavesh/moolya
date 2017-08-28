@@ -10,7 +10,7 @@ const KEY = 'management'
 export default class MlCompanyViewManagement extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {managementList: []};
+    this.state = {managementList: [], loading: true};
     this.fetchPortfolioDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -110,7 +110,7 @@ export default class MlCompanyViewManagement extends React.Component {
   render(){
     let that = this;
     let managementArray = that.state.managementList || [];
-    if (managementArray && managementArray.length === 0) {
+    if (!this.state.loading && managementArray && managementArray.length === 0) {
       return (<NoData tabName="Management" />);
     }
     return (

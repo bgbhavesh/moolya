@@ -6,6 +6,8 @@ import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDet
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
 import _ from 'lodash'
 import NoData from '../../../../../../commons/components/noData/noData';
+import {initalizeFloatLabel} from "../../../../../utils/formElemUtil";
+import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails'
 
 const MEMBERKEY = 'memberships'
 const LICENSEKEY = 'licenses'
@@ -27,19 +29,35 @@ export default class MlCompanyViewMCL extends React.Component {
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
-
+    this.validateUserForAnnotation(this)
   }
 
   componentDidMount(){
-    this.initalizeAnnotaor()
-    this.fetchAnnotations();
+    // this.initalizeAnnotaor()
+    // this.fetchAnnotations();
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+    initalizeFloatLabel();
+  }
 
-  }
   componentWillMount(){
-    this.fetchPortfolioDetails();
+    this.validateUserForAnnotation();
+    let resp = this.fetchPortfolioDetails();
+    return resp
   }
+
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response && !this.state.isUserValidForAnnotation) {
+      this.setState({isUserValidForAnnotation:response})
+
+      this.initalizeAnnotaor()
+
+      this.fetchAnnotations();
+    }
+  }
+
   async fetchPortfolioDetails() {
     let that = this;
     let data = {};
@@ -134,10 +152,6 @@ export default class MlCompanyViewMCL extends React.Component {
   }
 
   render(){
-    const {memberships, compliances, licenses} = this.state;
-    if (!memberships.membershipDescription && !compliances.complianceDescription && !licenses.licenseDescription) {
-      return (<NoData tabName="M C & L" />);
-    } else {
       return (
         <div className="portfolio-main-wrap" id="annotatorContent">
           <h2>MCL</h2>
@@ -147,7 +161,7 @@ export default class MlCompanyViewMCL extends React.Component {
               <div className="panel-heading">Membership </div>
               <div className="panel-body ">
 
-                {this.state.memberships&&this.state.memberships.membershipDescription?this.state.memberships.membershipDescription:""}
+                {this.state.memberships&&this.state.memberships.membershipsDescription?this.state.memberships.membershipsDescription:""}
 
               </div>
             </div>
@@ -162,7 +176,7 @@ export default class MlCompanyViewMCL extends React.Component {
               <div className="panel-heading">Compliances</div>
               <div className="panel-body ">
 
-                {this.state.compliances&&this.state.compliances.complianceDescription?this.state.compliances.complianceDescription:""}
+                {this.state.compliances&&this.state.compliances.compliancesDescription?this.state.compliances.compliancesDescription:""}
 
               </div>
             </div>
@@ -171,7 +185,7 @@ export default class MlCompanyViewMCL extends React.Component {
               <div className="panel-heading">Licenses </div>
               <div className="panel-body ">
 
-                {this.state.licenses&&this.state.licenses.licenseDescription?this.state.licenses.licenseDescription:""}
+                {this.state.licenses&&this.state.licenses.licensesDescription?this.state.licenses.licensesDescription:""}
 
               </div>
             </div>
@@ -180,6 +194,5 @@ export default class MlCompanyViewMCL extends React.Component {
           </div>
         </div>
       )
-    }
   }
 }

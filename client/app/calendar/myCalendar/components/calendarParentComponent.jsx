@@ -14,6 +14,7 @@ import CalCreateTask from './calCreateTask'
 import CalCreateAppointmentView from './calAppointmentDetails'
 import MlAppServiceManageSchedule from './createServiceCard'
 var _ = require('lodash')
+import {getUserProfileActionHandler} from "../../manageScheduler/activity/actions/activityActionHandler";
 
 export default class MLAppMyCalendar extends Component {
 
@@ -25,11 +26,14 @@ export default class MLAppMyCalendar extends Component {
       appointmentDate: new Date(),
       showCalendar: false,
       componentToLoad: 'calendar',
-      events: []
+      events: [],
+      communityName:"",
+      profile:[]
     }
     this.onNavigate = this.onNavigate.bind(this);
     this.componentToLoad.bind(this);
     this.eventsData.bind(this);
+    this.getAllAppointments.bind(this);
     this.getAppointmentCounts = this.getAppointmentCounts.bind(this);
   }
 
@@ -59,17 +63,23 @@ export default class MLAppMyCalendar extends Component {
   }
 
   componentWillMount() {
+    this.getUserProfiles(),
     this.getAppointmentCounts();
     // this.setState({componentToLoad:'calendar'})
   }
 
+  getAllAppointments(response) {
+    if(response) {
+      this.getAppointmentCounts();
+    }
+  }
 
   async getAppointmentCounts() {
     const resp = await fetchAllProfileAppointmentCountsHandler();
     let params = 'events' in resp ? resp.events : [];
     if(_.isEmpty(params)) {
       this.setState({
-        events: []
+        events: params
       });
     } else {
       this.eventsData(params)
@@ -78,21 +88,35 @@ export default class MLAppMyCalendar extends Component {
   }
 
   eventsData(events){
+    let that =  this;
+    let profileInfo  = that.state.profile|| []
     let details = [];
     if(events){
-      events.map(function(data){
-        let temp = {
-          title: data.count,
-          start: new Date(data.date),
-          end: new Date(data.date)
-        }
-        details.push(temp)
+       events.map(function(info){
+        let event = Object.assign({}, info);
+        profileInfo.map(function(data){
+          if(event.profileId === data.profileId) {
+            event.communityName = data.communityName
+            let temp = {
+              title: <span> <span className="ml ml-funder"></span>{" "+info.count + " " + event.communityName}</span>,
+              start: new Date(info.date),
+              end: new Date(info.date)
+            }
+            details.push(temp)
+          }
+        })
       })
     }
     this.setState({
       events: details
     });
     return ( details );
+  }
+
+  async getUserProfiles() {
+    const resp = await getUserProfileActionHandler();
+    this.setState({profile: resp})
+    return resp;
   }
 
 
@@ -106,7 +130,7 @@ export default class MLAppMyCalendar extends Component {
   }
 
   headerManagement(profileId, profileName) {
-    this.setState({ profileId: profileId })
+    this.setState({ profileId: profileId, communityName: profileName, componentToLoad:'calendar'})
     this.getProfileBasedAppointments(profileId);
   }
 
@@ -125,7 +149,7 @@ export default class MLAppMyCalendar extends Component {
       events.map( function( data ) {
         if( profileId === data.profileId ) {
           let temp = {
-            title: data.count  ,
+            title: <span className="ml ml-funder">{" "+data.count+" " +that.state.communityName}</span>,
             start: new Date( data.date ),
             end: new Date( data.date )
           }
@@ -154,11 +178,12 @@ export default class MLAppMyCalendar extends Component {
         return (
           <div className="app_main_wrap" style={{'overflow': 'auto'}}>
             <div className="app_padding_wrap">
-              <MlCalendarHeader getAppointmentCounts={this.getAppointmentCounts} headerManagement={that.headerManagement.bind(that)} userDetails={that.userDetails.bind(that)} componentToLoad={that.componentToLoad.bind(that)} />
+              <MlCalendarHeader getAllAppointments={this.getAllAppointments} getAppointmentCounts={this.getAppointmentCounts}  headerManagement={that.headerManagement.bind(that)} userDetails={that.userDetails.bind(that)} componentToLoad={that.componentToLoad.bind(that)} />
               <Calender
                 events={ that.state.events }
                 dayBackgroundComponent={<MlAppMyCalendarDayComponent componentToLoad={that.componentToLoad.bind(that)}/> }
                 dayData={{days:that.state.data}}
+                dateHeaderEvent={that.componentToLoad.bind(that, 'calendarDayView')}
                 onNavigate={that.onNavigate}
                 date={that.state.date}
               />
@@ -170,7 +195,7 @@ export default class MLAppMyCalendar extends Component {
         return (
           <div className="app_main_wrap" style={{'overflow': 'auto'}}>
             <div className="app_padding_wrap">
-              <MlCalendarHeader getAppointmentCounts={this.getAppointmentCounts} headerManagement={that.headerManagement.bind(that)} componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
+              <MlCalendarHeader getAllAppointments={this.getAllAppointments} getAppointmentCounts={this.getAppointmentCounts}  headerManagement={that.headerManagement.bind(that)} componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
               <AppCalendarDayView profileId={this.state.profileId} componentToLoad={this.componentToLoad.bind(this)} appointmentDate={this.state.appointmentDate} />
             </div>
           </div>
@@ -180,7 +205,7 @@ export default class MLAppMyCalendar extends Component {
         return(
         <div className="app_main_wrap" style={{'overflow': 'auto'}}>
           <div className="app_padding_wrap">
-            <MlCalendarHeader getAppointmentCounts={this.getAppointmentCounts} headerManagement={that.headerManagement.bind(that)} componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
+            <MlCalendarHeader getAllAppointments={this.getAllAppointments} getAppointmentCounts={this.getAppointmentCounts}  headerManagement={that.headerManagement.bind(that)} componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
             <MlAppServiceManageSchedule profileId={this.state.profileId} appointmentDate={appointmentDate} componentToLoad={this.componentToLoad.bind(this)}/>
           </div>
         </div>
@@ -190,7 +215,7 @@ export default class MLAppMyCalendar extends Component {
         return(
           <div className="app_main_wrap" style={{'overflow': 'auto'}}>
             <div className="app_padding_wrap">
-              <MlCalendarHeader getAppointmentCounts={this.getAppointmentCounts} headerManagement={that.headerManagement.bind(that)} componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
+              <MlCalendarHeader getAppointmentCounts={this.getAppointmentCounts}  headerManagement={that.headerManagement.bind(that)} componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
               <CalCreateTask componentToLoad={this.componentToLoad.bind(this)} />
             </div>
           </div>
@@ -200,7 +225,7 @@ export default class MLAppMyCalendar extends Component {
         return(
           <div className="app_main_wrap" style={{'overflow': 'auto'}}>
             <div className="app_padding_wrap">
-              <MlCalendarHeader getAppointmentCounts={this.getAppointmentCounts} headerManagement={that.headerManagement.bind(that)} componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
+              <MlCalendarHeader getAllAppointments={this.getAllAppointments} getAppointmentCounts={this.getAppointmentCounts} headerManagement={that.headerManagement.bind(that)} componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
               <CalCreateAppointmentView/>
             </div>
           </div>

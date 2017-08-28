@@ -91,7 +91,7 @@ export default class MlCompanyAboutUsLandingPage extends React.Component{
                   empty="fa fa-star-o empty"
                   full="fa fa-star fill"
                   fractions={2}
-                  initialRate={this.state.aboutUs.rating && this.state.aboutUs.rating.rating ? this.state.aboutUs.rating.rating : 0}
+                  initialRate={this.state.aboutUs.rating && this.state.aboutUs.rating.rating ? Number(this.state.aboutUs.rating.rating) : 0}
                   readonly={true}
                 />
               </div>

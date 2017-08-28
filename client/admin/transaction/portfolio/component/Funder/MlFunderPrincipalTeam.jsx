@@ -132,14 +132,50 @@ export default class MlFunderPrincipalTeam extends React.Component {
     })
   }
 
+  handleYearsOfExperience(value) {
+    let blankSpace = value.indexOf(' ') >= 0;
+    let experience = parseInt(value);
+    let valuesArray = value.split(".");
+    let decimalExperience = valuesArray.length > 0 ?  valuesArray[0] : "";
+    if(decimalExperience) {
+      experience = parseInt(decimalExperience);
+      if(experience > 75){
+        toastr.error('Experience cannot be more than 75 years')
+        return false;
+      }
+    }
+    if(blankSpace) {
+      toastr.error('Blank spaces are not allowed')
+      return false;
+    } else if(experience > 75 ) {
+      toastr.error('Experience cannot be more than 75 years')
+      return false;
+    } else if (!experience) {
+      toastr.error('Experience not valid')
+      return false
+    } else {return true}
+  }
+
   handleBlur(e) {
     let details = this.state.data;
     let name = e.target.name;
-    details = _.omit(details, [name]);
-    details = _.extend(details, {[name]: e.target.value});
-    this.setState({data: details}, function () {
-      this.sendDataToParent()
-    })
+    let validExperience;
+    if(name === "yearsOfExperience") {
+      validExperience = this.handleYearsOfExperience(e.target.value)
+      if(validExperience) {
+        details = _.omit(details, [name]);
+        details = _.extend(details, {[name]: e.target.value});
+        this.setState({data: details}, function () {
+          this.sendDataToParent()
+        })
+      }
+    } else {
+      details = _.omit(details, [name]);
+      details = _.extend(details, {[name]: e.target.value});
+      this.setState({data: details}, function () {
+        this.sendDataToParent()
+      })
+    }
   }
   onSavePrincipalAction(e) {
     this.setState({funderPrincipalList: this.state.funderPrincipal, popoverOpenP: false})
@@ -392,14 +428,6 @@ export default class MlFunderPrincipalTeam extends React.Component {
     let that = this;
     const showLoader = that.state.loading;
     let funderPrincipalList = that.state.funderPrincipal || [];
-    if(_.isEmpty(funderPrincipalList)){
-      return (
-        showLoader === true ? (<MlLoader/>) :
-          <div className="portfolio-main-wrap">
-            <NoData tabName={this.props.tabName} />
-          </div>
-      )
-    } else {
       return (
         <div>
           {showLoader === true ? (<MlLoader/>) : (
@@ -437,7 +465,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                   <a href="#" id={"create_clientP" + idx}>
                                     <div className="list_block notrans funding_list"
                                          onClick={that.onPrincipalTileClick.bind(that, idx)}>
-                                      <FontAwesome name='lock'/>
+                                      <FontAwesome name='unlock'  id="makePrivate" defaultValue={principal.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={principal.makePrivate}/>
                                       <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
                                       <img src={principal.logo ? principal.logo.fileUrl : "/images/def_profile.png"}/>
                                       <div>
@@ -477,7 +505,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                   <a href="#" id={"create_clientT" + idx}>
                                     <div className="list_block notrans funding_list"
                                          onClick={that.onTeamTileClick.bind(that, idx)}>
-                                      <FontAwesome name='lock'/>
+                                      <FontAwesome name='unlock'  id="makePrivate" defaultValue={team.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={team.makePrivate}/>
                                       <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
                                       <img src={team.logo ? team.logo.fileUrl : "/images/def_profile.png"}/>
                                       <div><p>{team.firstName}</p><p
@@ -606,6 +634,13 @@ export default class MlFunderPrincipalTeam extends React.Component {
                               <input type="text" placeholder="LinkedIn" className="form-control float-label"/>
                               <FontAwesome name="linkedin-square" className="password_icon"/>
                             </div>
+
+                            <div className="input_types">
+                              <input id="makePrivate" type="checkbox"
+                                     checked={this.state.data.makePrivate && this.state.data.makePrivate}
+                                     name="checkbox"
+                                     onChange={this.onStatusChangeNotify.bind(this)}/>
+                              <label htmlFor="checkbox1"><span></span>Make Private</label></div>
                             {/*<div className="form-group">*/}
                             {/*<input type="text" placeholder="Facebook" className="form-control float-label"  />*/}
                             {/*<FontAwesome name="facebook-square" className="password_icon"/>*/}
@@ -738,6 +773,13 @@ export default class MlFunderPrincipalTeam extends React.Component {
                               <input type="text" placeholder="LinkedIn" className="form-control float-label"/>
                               <FontAwesome name="linkedin-square" className="password_icon"/>
                             </div>
+
+                            <div className="input_types">
+                              <input id="makePrivate" type="checkbox"
+                                     checked={this.state.data.makePrivate && this.state.data.makePrivate}
+                                     name="checkbox"
+                                     onChange={this.onStatusChangeNotify.bind(this)}/>
+                              <label htmlFor="checkbox1"><span></span>Make Private</label></div>
                             {/*<div className="form-group">*/}
                             {/*<input type="text" placeholder="Facebook" className="form-control float-label"  />*/}
                             {/*<FontAwesome name="facebook-square" className="password_icon"/>*/}
@@ -767,7 +809,6 @@ export default class MlFunderPrincipalTeam extends React.Component {
             </div>)}
         </div>
       )
-    }
   }
 };
 MlFunderPrincipalTeam.contextTypes = {

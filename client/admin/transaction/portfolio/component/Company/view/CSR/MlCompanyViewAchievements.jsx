@@ -10,7 +10,7 @@ const KEY = 'achievements'
 export default class MlCompanyViewAchievements extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {achievements: []};
+    this.state = {achievements: [], loading: true};
     this.fetchPortfolioDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -109,13 +109,13 @@ export default class MlCompanyViewAchievements extends React.Component {
   render(){
     let that = this;
     let achievements = that.state.achievements || [];
-    if (achievements && achievements.length === 0) {
+    if (!this.state.loading && achievements && achievements.length === 0) {
       return (<NoData tabName="Achievements" />);
     }
     return (
 
       <div id="annotatorContent">
-        <h2>Awards</h2>
+        <h2>Achievements</h2>
         <div className="col-lg-12">
           <div className="row">
             {achievements && achievements.map(function (details, idx) {

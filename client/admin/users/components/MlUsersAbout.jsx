@@ -152,6 +152,13 @@ export default class MlUsersAbout extends Component {
      }
      }
      `;
+    let titlequery=gql`query($type:String,$hierarchyRefId:String){
+     data: fetchMasterSettingsForPlatFormAdmin(type:$type,hierarchyRefId:$hierarchyRefId) {
+     label
+     value
+     }
+     }
+     `;
     let that = this
     let regInfo = this.state.data && this.state.data.registrationInfo ? this.state.data.registrationInfo : {}
     let regDetail = this.state.data && this.state.data.registrationDetails ? this.state.data.registrationDetails : {}
@@ -160,6 +167,7 @@ export default class MlUsersAbout extends Component {
     let userTypeOption = {options: {variables: {communityCode: regInfo.registrationType}}};
     let professionQueryOptions = {options: {variables: {industryId: regInfo.industry}}};
     let employmentOption = {options: {variables: {type: "EMPLOYMENTTYPE", hierarchyRefId: regInfo.clusterId}}};
+    let titleOption={options: { variables: {type : "TITLE",hierarchyRefId:regInfo.clusterId}}};
     let chapterOption = {options: {variables: {id: regInfo.clusterId}}};
     return (
       <div className="admin_main_wrap">
@@ -183,9 +191,16 @@ export default class MlUsersAbout extends Component {
                                disabled="disabled"/>
                       </div>
                       <div className="form-group">
-                        <input type="text" placeholder="Title" name="Title"
-                               className="form-control float-label" disabled="disabled"/>
+                        <Moolyaselect multiSelect={false} placeholder="Title" className="form-control float-label"
+                                      valueKey={'value'} labelKey={'label'}  selectedValue={regDetail.title}
+                                      queryType={"graphql"} query={titlequery}  queryOptions={titleOption}
+                                      isDynamic={true} disabled={true}/>
+
                       </div>
+                      {/*<div className="form-group">*/}
+                        {/*<input type="text" placeholder="Title" name="Title"  defaultValue={regDetail.title}*/}
+                               {/*className="form-control float-label" disabled="disabled"/>*/}
+                      {/*</div>*/}
 
                       <div className="form-group">
                         <input type="text" placeholder="First Name" name="firstName" defaultValue={regInfo.firstName}

@@ -8,6 +8,7 @@ import mlInteractionService from '../mlInteractionRepoService';
 import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/mlEMailNotification'
 import MlAlertNotification from '../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 import MlSubChapterAccessControl from './../../../mlAuthorization/mlSubChapterAccessControl';
+import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 /*STATUS
  0 - Pending
  1 - Accepted
@@ -130,6 +131,8 @@ MlResolver.MlMutationResolver['connectionRequest'] = (obj, args, context, info) 
           if(toUser._id&&fromuser._id){
             MlEmailNotification.endUserPortfolioConnect(fromuser._id,toUser._id);
             MlEmailNotification.portfolioConnectRequestReceived(fromuser._id,toUser._id);
+            MlNotificationController.onConnectionRequestSent(fromuser._id,toUser._id);
+            MlNotificationController.onConnectionRequestReceived(fromuser._id,toUser._id);
           }
       }
       let connectRequest = MlAlertNotification.onConnectionRequestSent(toUser._id);
@@ -248,4 +251,29 @@ MlResolver.MlQueryResolver['fetchConnectionsByPortfolio'] = (obj, args, context,
     response = mlDBController.aggregate('MlPortfolioDetails', query, context);
   }
   return response
+}
+
+MlResolver.MlQueryResolver['fetchConnectionByUser'] = (obj, args, context, info) => {
+  var response = [];
+  var query = [
+    {$match:{'isAccepted': true}},
+    {$match:{'users.userId': context.userId}},
+    {$unwind :"$users"},
+    {$match:{'users.userId': {$ne: context.userId}}},
+    {$lookup:{from: 'users', localField: 'users.userId', foreignField: '_id', as:'users'}},
+    {$unwind :"$users"},
+    {$unwind :"$users.profile.externalUserProfiles"},
+    { $project:
+      {
+        _id: 0,
+        name:
+          { $concat: [ "$users.profile.displayName", "-", "$users.profile.externalUserProfiles.clusterName", "-", "$users.profile.externalUserProfiles.communityDefName" ]},
+        profileId: "$users.profile.externalUserProfiles.profileId",
+        userId: "$_id",
+      }
+
+    }
+  ];
+  response = mlDBController.aggregate('MlConnections', query, context);
+  return response;
 }

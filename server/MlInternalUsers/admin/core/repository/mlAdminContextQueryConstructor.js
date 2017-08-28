@@ -10,6 +10,7 @@ class MlAdminContextQueryConstructor
   constructor(userId,request){
         this.userId=userId;
         this.module=request&&request.module?request.module:"";
+        this.isTransactModule=request&&request.isTransactModule?request.isTransactModule:false;
         this.contextData.bind(this);
   }
 
@@ -126,6 +127,12 @@ class MlAdminContextQueryConstructor
       var query={};
       var hierarchy=null;
       var userProfile=new MlAdminUserContext().userProfileDetails(this.userId);
+
+      //Sub Chapter can access transactions based on 'TRANSACT' perms (Jira-2956)
+      if(this.isTransactModule){
+        userProfile.defaultSubChapters = userProfile.transactionSubChapters;
+        userProfile.defaultChapters = userProfile.transactionChapters;
+      }
 
       if(!userProfile || (!userProfile.hierarchyLevel && userProfile.hierarchyLevel != 0)){
           throw new Error("Invalid User,Default Profile is not available");

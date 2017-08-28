@@ -6,7 +6,7 @@ import MlCompanyViewSectors from "./MlCompanyViewSectors";
 import MlCompanyViewListOfIncubators from "./MlCompanyViewListOfIncubators";
 import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent";
 import {client} from '../../../../../../core/apolloConnection'
-import {appClient} from '../../../../../../../app/core/appConnection'
+// import {appClient} from '../../../../../../../app/core/appConnection'
 
 export default class MlCompanyIncubatorsViewTabs extends React.Component{
   constructor(props){
@@ -45,18 +45,26 @@ export default class MlCompanyIncubatorsViewTabs extends React.Component{
         $('.RRT__container .RRT__container .RRT__tabs').removeClass('menunone');
       }
     },10);
-    let path = FlowRouter._current.path;
-    if (path.indexOf("app") != -1){
-      this.setState({admin: false, client: appClient})
-    }
+    // let path = FlowRouter._current.path;
+    // if (path.indexOf("app") != -1){
+    //   this.setState({admin: false, client: appClient})
+    // }
+  }
+
+  setBackTab(e) {
+    this.props.backClickHandler(this.getIncubators.bind(this))
+  }
+
+  getIncubators() {
+    this.props.backClickHandler();
+    $('.RRT__tab--first').click();
   }
 
   getTabComponents(){
     let tabs = [
-      // {tabClassName: 'tab back_icon fa fa-hand-o-left', panelClassName: 'panel', title:""},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Startup Incubators", component:<MlCompanyViewStartupIncubators client={client} isAdmin={true} key="1" portfolioDetailsId={this.props.portfolioDetailsId}/> },
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Sectors and Service" , component:<MlCompanyViewSectors key="2" portfolioDetailsId={this.props.portfolioDetailsId} />},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"List of Incubators", component:<MlCompanyViewListOfIncubators client={client} isAdmin={true} key="3" portfolioDetailsId={this.props.portfolioDetailsId} />},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Startup Incubators", component:<MlCompanyViewStartupIncubators client={client} isAdmin={true} key="1" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/> },
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Sectors and Service" , component:<MlCompanyViewSectors key="2" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"List of Incubators", component:<MlCompanyViewListOfIncubators client={client} isAdmin={true} key="3" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
     ]
     return tabs;
   }
@@ -74,12 +82,13 @@ export default class MlCompanyIncubatorsViewTabs extends React.Component{
     }
     this.setState({tabs:getTabs() ||[]});
     /**UI changes for back button*/  //+tab.tabClassName?tab.tabClassName:""
+    this.setBackTab()
   }
 
 
   render(){
     let tabs = this.state.tabs;
-    return <MlTabComponent tabs={tabs} backClickHandler={this.props.getState}/>
+    return <MlTabComponent tabs={tabs} backClickHandler={this.props.backClickHandler}/>
   }
 }
 

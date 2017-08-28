@@ -10,7 +10,7 @@ const KEY = 'researchAndDevelopment'
 export default class MlInstitutionViewRD extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {institutionRDList: []};
+    this.state = {institutionRDList: [], loading: true};
     this.fetchPortfolioInstitutionDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -109,7 +109,7 @@ export default class MlInstitutionViewRD extends React.Component {
   render(){
     let that = this;
     let researchAndDevelopmentArray = that.state.institutionRDList || [];
-    if (researchAndDevelopmentArray && researchAndDevelopmentArray.length === 0) {
+    if (!this.state.loading && researchAndDevelopmentArray && researchAndDevelopmentArray.length === 0) {
       return (<NoData tabName="R & D" />);
     } else {
       return (

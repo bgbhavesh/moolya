@@ -51,10 +51,12 @@ class MlAppServiceManageSchedule extends Component {
       activities: [],
       attachments: [],
       task:{},
-      selectedTab:""
+      selectedTab:"",
+      selectedSessionId: ''
     };
     this.onChangeSteps = this.onChangeSteps.bind(this);
     this.selectService.bind(this);
+    this.setSessionId.bind(this);
     this.redirectWithCalendar = this.redirectWithCalendar.bind(this);
     this.saveAction.bind(this);
     this.bookServiceCard.bind(this);
@@ -205,6 +207,10 @@ class MlAppServiceManageSchedule extends Component {
 
   }
 
+  setSessionId(sessionId) {
+    this.setState({selectedSessionId: sessionId});
+  }
+
   async bookServiceCard() {
     const resp = await bookUserServiceCardAppointmentActionHandler(this.state.response);
     if (resp.code === 200) {
@@ -219,12 +225,28 @@ class MlAppServiceManageSchedule extends Component {
     switch(this.state.currentComponent) {
       case 'BasicInfo':
         let firstStep = this.state.details;
-        if (firstStep) {
+        if (firstStep && this.state.serviceId) {
           toastr.success('Data saved')
+        } else {
+          toastr.error('Please select a service seeker');
         }
         break;
       case 'SessionDetails':
-        this.bookServiceCard();
+        if (this.state.selectedSessionId) {
+          this.bookServiceCard();
+        } else {
+          toastr.error('Please select a session');
+        }
+        break;
+      case 'termAndCondition':
+        if (this.state.selectedSessionId) {
+          toastr.success('Data saved')
+        } else {
+          toastr.error('Please select a session');
+        }
+        break;
+      default:
+        // do nothing
     }
   }
 
@@ -252,6 +274,7 @@ class MlAppServiceManageSchedule extends Component {
           bookDetails={this.bookDetails.bind(this)}
           onChangeSteps={this.onChangeSteps}
           selectedService={this.selectedService.bind(this)}
+          setSessionId={this.setSessionId.bind(this)}
           serviceBasicInfo={serviceBasicInfo}
           appointmentDate={this.props.appointmentDate}
           activeComponent={this.activeComponent.bind(this)}
@@ -267,6 +290,7 @@ class MlAppServiceManageSchedule extends Component {
           serviceTask={this.state.serviceTask}
           selectedTab={this.state.selectedTab}
           details={this.state.details}
+          setSessionId={this.setSessionId.bind(this)}
           saveAction={this.saveAction.bind(this)}
           activeComponent={this.activeComponent.bind(this)}
           redirectWithCalendar={this.redirectWithCalendar}
@@ -279,6 +303,7 @@ class MlAppServiceManageSchedule extends Component {
           serviceTermAndCondition={this.state.serviceTermAndCondition}
           taskDetails={this.state.TaskDetails}
           attachments={this.state.attachments}
+          activeComponent={this.activeComponent.bind(this)}
           activities={this.state.activities}
         />,
         icon: <span className="ml ml-payments"></span>

@@ -7,6 +7,8 @@ import Calender from '../../../../commons/calendar/calendar';
 import MlAppOfficeCalendarHeader from './MlAppOfficeCalendarHeader';
 import {fetchOfficeMemberCalendarActionHandler} from './../actions/fetchOfficeMemberCalendar';
 import {fetchAllOfficeMemberCalendarActionHandler} from './../actions/fetchAllOfficeMemberCalendar';
+import MlAppDayAppointmentInfo from "../../common/components/MlAppDayAppointmentInfo";
+
 export default class MlAppOfficeCalendar extends Component {
 
   constructor(props){
@@ -108,7 +110,9 @@ export default class MlAppOfficeCalendar extends Component {
             date={that.state.date}
           />
         </div>
+        {/*<MlAppDayAppointmentInfo />*/}
       </div>
+
     )
   }
 }

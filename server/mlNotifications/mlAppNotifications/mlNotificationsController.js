@@ -1,18 +1,5 @@
-/*-----------------------------------------------------------------------
- * @ file        : mlNotificationsController.js
- * @ description : Includes all Notifications controller operations.
- * @ author      : Duddukuri Mahesh
- * @ date        : 28/07/2017.
- -----------------------------------------------------------------------*/
-
 `use strict`;
 
-/*--------------------------------------------
- * Include internal and external modules.
- ---------------------------------------------*/
-// import MlNotificationsServices from './mlNotificationsServices';
-// import NotificationTemplateEngine from "../../commons/mlTemplateEngine";
-// var mlNotificationsServices = new MlNotificationsServices();
 import mlConversationsRepo from '../../commons/Conversations/mlConversationsRepo'
 class MlNotificationControllerClass {
 
@@ -65,44 +52,154 @@ class MlNotificationControllerClass {
     this.createNewNotification(obj)
   }
 
+  onPotfolioUpdate(details){
+    var userId = details&&details.userId?details.userId:""
+    var currentdate = new Date();
+    var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+    var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+    var updatedDateTime = date+" "+time
+    var notifyMessage = "Your portfolio has been updated on "+updatedDateTime+"."
+    let obj = {
+      notificationType: "PUSHNOTIFICATION",
+      message: notifyMessage,
+      fromUserId: "system",
+      toUserId: userId
+    }
+    this.createNewNotification(obj)
+  }
+
+  onGoLiveRequest(details){
+    var userId = details&&details.userId?details.userId:""
+    var currentdate = new Date();
+    var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+    var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+    var updatedDateTime = date+" "+time
+    var notifyMessage = "Your Portfolio Go-Live request has been sent to Admin on "+updatedDateTime+"."
+    let obj = {
+      notificationType: "PUSHNOTIFICATION",
+      message: notifyMessage,
+      fromUserId: "system",
+      toUserId: userId
+    }
+    this.createNewNotification(obj)
+  }
+
+  onGoLiveRequestApproval(details){
+    var userId = details&&details._id?details._id:""
+    var currentdate = new Date();
+    var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+    var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+    var updatedDateTime = date+" "+time
+    var notifyMessage = "Your Go-Live request has been approved by the Admin  on  "+updatedDateTime+"."
+    let obj = {
+      notificationType: "PUSHNOTIFICATION",
+      message: notifyMessage,
+      fromUserId: "system",
+      toUserId: userId
+    }
+    this.createNewNotification(obj)
+  }
+
+  onGoLiveRequestDecline(details){
+    var userId = details&&details._id?details._id:""
+    var currentdate = new Date();
+    var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+    var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+    var updatedDateTime = date+" "+time
+    var notifyMessage = "Your Go-Live request has been declined by the Admin on "+updatedDateTime+"."
+    let obj = {
+      notificationType: "PUSHNOTIFICATION",
+      message: notifyMessage,
+      fromUserId: "system",
+      toUserId: userId
+    }
+    this.createNewNotification(obj)
+  }
+
+  onConnectionRequestReceived(fromUserId,toUserId){
+    fromUserId  = fromUserId?fromUserId:"";
+    toUserId = toUserId?toUserId:""
+    var fromUserDetails =  mlDBController.findOne('users', {_id: fromUserId})
+    var toUserDetails =  mlDBController.findOne('users', {_id: toUserId})
+    let fromUserFirstName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.firstName?fromUserDetails.profile.firstName:"";
+    let fromUserLastName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.lastName?fromUserDetails.profile.lastName:"";
+
+    let toUserFirstName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.firstName?toUserDetails.profile.firstName:"";
+    let toUserLastName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.lastName?toUserDetails.profile.lastName:"";
+
+    var notifyMessage = "New connection request from  "+fromUserFirstName+" "+fromUserLastName+"."
+    let obj = {
+      notificationType: "PUSHNOTIFICATION",
+      message: notifyMessage,
+      fromUserId: "system",
+      toUserId: toUserId
+    }
+    this.createNewNotification(obj)
+  }
+
+  onConnectionRequestSent(fromUserId,toUserId){
+    fromUserId  = fromUserId?fromUserId:"";
+    toUserId = toUserId?toUserId:""
+    var fromUserDetails =  mlDBController.findOne('users', {_id: fromUserId})
+    var toUserDetails =  mlDBController.findOne('users', {_id: toUserId})
+    let fromUserFirstName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.firstName?fromUserDetails.profile.firstName:"";
+    let fromUserLastName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.lastName?fromUserDetails.profile.lastName:"";
+
+    let toUserFirstName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.firstName?toUserDetails.profile.firstName:"";
+    let toUserLastName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.lastName?toUserDetails.profile.lastName:"";
+
+    var notifyMessage = "Connection request for "+toUserFirstName+" "+toUserLastName+"sent."
+    let obj = {
+      notificationType: "PUSHNOTIFICATION",
+      message: notifyMessage,
+      fromUserId: "system",
+      toUserId: fromUserId
+    }
+    this.createNewNotification(obj)
+  }
+
+  onEnquiryRequestReceived(fromUserId,toUserId){
+    fromUserId  = fromUserId?fromUserId:"";
+    toUserId = toUserId?toUserId:""
+    var currentdate = new Date();
+    var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+    var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+    var updatedDateTime = date+" "+time
+    var notifyMessage = "You have received an Enquiry from "+updatedDateTime+"."
+    let obj = {
+      notificationType: "PUSHNOTIFICATION",
+      message: notifyMessage,
+      fromUserId: "system",
+      toUserId: toUserId
+    }
+    this.createNewNotification(obj)
+  }
+
+  onReviewReceived(fromUserId,toUserId){
+    fromUserId  = fromUserId?fromUserId:"";
+    toUserId = toUserId?toUserId:""
+    var fromUserDetails =  mlDBController.findOne('users', {_id: fromUserId})
+    var toUserDetails =  mlDBController.findOne('users', {_id: toUserId})
+    let fromUserFirstName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.firstName?fromUserDetails.profile.firstName:"";
+    let fromUserLastName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.lastName?fromUserDetails.profile.lastName:"";
+
+    let toUserFirstName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.firstName?toUserDetails.profile.firstName:"";
+    let toUserLastName = toUserDetails&&toUserDetails.profile&&toUserDetails.profile.lastName?toUserDetails.profile.lastName:"";
+
+    var notifyMessage = "You have received a review from "+fromUserFirstName+" "+fromUserLastName+"."
+    let obj = {
+      notificationType: "PUSHNOTIFICATION",
+      message: notifyMessage,
+      fromUserId: "system",
+      toUserId: toUserId
+    }
+    this.createNewNotification(obj)
+  }
+
+
   createNewNotification(payload) {
     mlConversationsRepo.createNotifications(payload)
   }
-
-  // createNewAlert(request, context) {
-  //
-  //   //fetch the notification template
-  //   var isNotifTemp = request.isNotifTemp || false;
-  //
-  //   if (isNotifTemp) {
-  //
-  //     let templateCode = request.tempCode || '';
-  //     let reqObj = request.reqObj || {};
-  //
-  //     var notifContext = NotificationTemplateEngine.fetchTemplateContent(templateCode, "notif", reqObj);
-  //
-  //     request.text = notifContext.content;
-  //   }
-  //
-  //   mlNotificationsServices.createNewAlert(request, context);
-  // }
-  //
-  // // Update Notification read / delete status.
-  // updateNotifyStatus(request, context) {
-  //   mlNotificationsServices.updateNotifyStatus(request, context);
-  // }
-  //
-  // // Fetch user Notifications.
-  // getUserAlerts(request, context) {
-  //   mlNotificationsServices.getUserAlerts(request, context);
-  // }
-  //
-  // // Fetch user Notifications with server side pagination.
-  // fetchNotifiPagination(request, context) {
-  //   mlNotificationsServices.fetchNotifiPagination(request, context);
-  // }
-
-
 }
 
 const MlNotificationController = new MlNotificationControllerClass();

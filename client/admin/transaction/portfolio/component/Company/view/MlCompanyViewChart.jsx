@@ -8,11 +8,6 @@ var BarGroupTooltip = require('react-d3-tooltip').BarGroupTooltip;
 var LineTooltip = require('react-d3-tooltip').LineTooltip;
 var PieTooltip = require('react-d3-tooltip').PieTooltip;
 import MlBarChart from '../../../../../../commons/components/d3/MlBarChart'
-/*import MlBarGroupChart from '../../../../../../../commons/components/d3/MlBarGroupChart'
- import MlLineChart from '../../../../../../../commons/components/d3/MlLineChart'
- import MlPieChart from '../../../../../../../commons/components/d3/MlPieChart'
- import MlStartupChartSubTabs from '../MlStartupCharts/MlStartupChartSubTabs'
-import {fetchDetailsStartupChartsActionHandler} from '../../../../../admin/transaction/portfolio/actions/findPortfolioStartupDetails'*/
 import {fetchDetailsCompanyChartsActionHandler} from '../../../actions/findCompanyPortfolioDetails'
 import MlChartSubTabs from '../../../../../../commons/charts/MlChartsSubTabs'
 
@@ -20,7 +15,7 @@ import MlChartSubTabs from '../../../../../../commons/charts/MlChartsSubTabs'
 export default class MlCompanyViewChart extends React.Component{
   constructor(props, context){
     super(props)
-    this.state = {startupPortfolio:{},
+    this.state = {companyPortfolio:{},
       startupCharts:[],startupChartsList:[]}
     this.fetchPortfolioChartDetails.bind(this)
     this.getEmploymentOfCompany.bind(this)
@@ -266,7 +261,7 @@ export default class MlCompanyViewChart extends React.Component{
   }
 
   getPortfolioStartupChartDetails(details,tabName){
-    let data = this.state.startupPortfolio;
+    let data = this.state.companyPortfolio;
     data[tabName] = details;
     this.props.getChartDetails(details,tabName);
   }
@@ -447,5 +442,5 @@ export default class MlCompanyViewChart extends React.Component{
 }
 
 MlChartSubTabs.contextTypes = {
-  startupPortfolio: PropTypes.object,
+  companyPortfolio: PropTypes.object,
 };

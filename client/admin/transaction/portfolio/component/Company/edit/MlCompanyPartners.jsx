@@ -95,14 +95,51 @@ export default class MlCompanyPartners extends React.Component {
     })
   }
 
+
+  handleYearsOfExperience(value) {
+    let blankSpace = value.indexOf(' ') >= 0;
+    let experience = parseInt(value);
+    let valuesArray = value.split(".");
+    let decimalExperience = valuesArray.length > 0 ?  valuesArray[0] : "";
+    if(decimalExperience) {
+      experience = parseInt(decimalExperience);
+      if(experience > 75){
+        toastr.error('Experience cannot be more than 75 years')
+        return false;
+      }
+    }
+    if(blankSpace) {
+      toastr.error('Blank spaces are not allowed')
+      return false;
+    } else if(experience > 75 ) {
+      toastr.error('Experience cannot be more than 75 years')
+      return false;
+    } else if (!experience) {
+      toastr.error('Experience not valid')
+      return false
+    } else {return true}
+  }
+
   handleBlur(e) {
     let details = this.state.data;
     let name = e.target.name;
-    details = _.omit(details, [name]);
-    details = _.extend(details, {[name]: e.target.value});
-    this.setState({data: details}, function () {
-      this.sendDataToParent()
-    })
+    let validExperience;
+    if(name === "yearsOfExperience") {
+      validExperience = this.handleYearsOfExperience(e.target.value)
+      if(validExperience) {
+        details = _.omit(details, [name]);
+        details = _.extend(details, {[name]: e.target.value});
+        this.setState({data: details}, function () {
+          this.sendDataToParent()
+        })
+      }
+    } else {
+      details = _.omit(details, [name]);
+      details = _.extend(details, {[name]: e.target.value});
+      this.setState({data: details}, function () {
+        this.sendDataToParent()
+      })
+    }
   }
   onSavePrincipalAction(e) {
     this.setState({partnersList: this.state.partners, popoverOpenP: false})
@@ -174,7 +211,7 @@ export default class MlCompanyPartners extends React.Component {
       let arr = [];
       _.each(partners, function (item) {
         for (var propName in item) {
-          if (item[propName] === null || item[propName] === undefined) {
+          if (item[propName] === null || item[propName] === undefined || propName === 'privateFields' || propName === 'logo') {
             delete item[propName];
           }
         }
@@ -185,6 +222,7 @@ export default class MlCompanyPartners extends React.Component {
       })
     partners = arr;
       // funderPrincipal=_.omit(funderPrincipal,["privateFields"]);
+    console.log('partners', partners)
       this.setState({partners: partners})
       this.props.getPartnersDetails(partners, this.state.privateKey);
 
@@ -234,7 +272,7 @@ export default class MlCompanyPartners extends React.Component {
 
   async fetchOnlyImages() {
 
-    const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
+    const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId, KEY);
       if (response && response.partners && !_.isEmpty(response.partners)) {
         let thisState = this.state.selectedIndex;
         let dataDetails = this.state.partners
@@ -284,7 +322,7 @@ export default class MlCompanyPartners extends React.Component {
                                 <a href="#" id={"create_clientP" + idx}>
                                   <div className="list_block notrans funding_list"
                                        onClick={that.onPrincipalTileClick.bind(that, idx)}>
-                                    <FontAwesome name='lock'/>
+                                    <FontAwesome name='unlock'  id="makePrivate" defaultValue={principal.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={principal.makePrivate}/>
                                     <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
                                     <img src={principal.logo ? principal.logo.fileUrl : "/images/def_profile.png"}/>
                                     <div>
@@ -393,6 +431,10 @@ export default class MlCompanyPartners extends React.Component {
                           <div className="form-group">
                             <input type="text" placeholder="LinkedIn" className="form-control float-label"/>
                             <FontAwesome name="linkedin-square" className="password_icon"/>
+                          </div>
+                          <div className="clearfix"></div>
+                          <div className="form-group">
+                            <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
                           </div>
                           {/*<div className="form-group">*/}
                           {/*<input type="text" placeholder="Facebook" className="form-control float-label"  />*/}

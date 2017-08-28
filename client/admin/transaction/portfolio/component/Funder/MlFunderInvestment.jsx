@@ -10,7 +10,6 @@ import {graphql} from "react-apollo";
 import moment from "moment";
 import Moolyaselect from "../../../../commons/components/MlAdminSelectWrapper";
 import MlLoader from "../../../../../commons/components/loader/loader";
-import NoData from '../../../../../commons/components/noData/noData'
 import {fetchfunderPortfolioInvestor} from "../../actions/findPortfolioFunderDetails";
 var FontAwesome = require('react-fontawesome');
 
@@ -211,16 +210,6 @@ export default class MlFunderInvestment extends React.Component {
     let that = this;
     const showLoader = that.state.loading;
     let funderInvestmentList = that.state.funderInvestmentList || [];
-    if(_.isEmpty(funderInvestmentList)){
-      return (
-        showLoader === true ? (<MlLoader/>) :
-        <div className="portfolio-main-wrap">
-          <NoData tabName={this.props.tabName} />
-        </div>
-      )
-    }
-        else
-      {
         return (
           <div>
             {showLoader === true ? (<MlLoader/>) : (
@@ -333,7 +322,6 @@ export default class MlFunderInvestment extends React.Component {
               </div>)}
           </div>
         )
-      }
   }
 };
 MlFunderInvestment.contextTypes = {

@@ -115,6 +115,20 @@ export default class MlFunderAreaOfInterest extends React.Component {
     }
   }
 
+  onStatusChangeNotify(e) {
+    let updatedData = this.state.data || {};
+    let key = e.target.id;
+    updatedData = _.omit(updatedData, [key]);
+    if (e.currentTarget.checked) {
+      updatedData = _.extend(updatedData, {[key]: true});
+    } else {
+      updatedData = _.extend(updatedData, {[key]: false});
+    }
+    this.setState({data: updatedData}, function () {
+      this.sendDataToParent()
+    })
+  }
+
   onLockChange(fieldName, field, e) {
     let details = this.state.data || {};
     let key = field;
@@ -196,14 +210,6 @@ export default class MlFunderAreaOfInterest extends React.Component {
     let subDomainOption = {options: {variables: {industryId: this.state.data.industryTypeId}}};
     const showLoader = that.state.loading;
     let funderAreaOfInterestList = that.state.funderAreaOfInterestList || [];
-    if(_.isEmpty(funderAreaOfInterestList)){
-      return (
-        showLoader === true ? (<MlLoader/>) :
-          <div className="portfolio-main-wrap">
-            <NoData tabName={this.props.tabName} />
-          </div>
-      )
-    } else {
       return (
         <div>
           {showLoader === true ? (<MlLoader/>) : (
@@ -236,11 +242,13 @@ export default class MlFunderAreaOfInterest extends React.Component {
                         return (
                           <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
                             <a href="#" id={"create_client" + idx}>
-                              <div className="list_block list_block_intrests notrans"
-                                   onClick={that.onTileClick.bind(that, idx)}>
-                                <FontAwesome name='lock'/>
-                                <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
-                                <div className="hex_outer"><img src="/images/def_profile.png"/></div>
+                              <div className="list_block list_block_intrests notrans">
+                                <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
+                                {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
+                                <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}>
+                                  <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
+                                  <div className="hex_outer"><img src="/images/def_profile.png"/></div>
+                                </div>
                                 <h3>{details.industryTypeName}</h3>
                               </div>
                             </a>
@@ -276,7 +284,9 @@ export default class MlFunderAreaOfInterest extends React.Component {
                                             onSelect={this.onOptionSelectedSubDomain.bind(this)}
                                             selectedValue={this.state.selectedValDomain}/>
                             </div>
-
+                            <div className="form-group">
+                              <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
+                            </div>
                             <div className="ml_btn" style={{'textAlign': 'center'}}>
                               <a className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
                             </div>
@@ -290,7 +300,6 @@ export default class MlFunderAreaOfInterest extends React.Component {
             </div>)}
         </div>
       )
-    }
   }
 }
 

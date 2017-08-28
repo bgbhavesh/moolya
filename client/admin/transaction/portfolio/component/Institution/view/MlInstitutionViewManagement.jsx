@@ -10,7 +10,7 @@ const KEY = 'management'
 export default class MlInstitutionViewManagement extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {institutionManagementList: []};
+    this.state = {institutionManagementList: [], loading: true};
     this.fetchPortfolioInstitutionDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -103,14 +103,14 @@ export default class MlInstitutionViewManagement extends React.Component {
       this.setState({institutionManagementList: response.management});
     }
 
-    this.setState({lodaing:false})
+    this.setState({loading:false})
 
   }
 
   render(){
     let that = this;
     let managementArray = that.state.institutionManagementList || [];
-    if (managementArray && managementArray.length === 0) {
+    if (!this.state.loading && managementArray && managementArray.length === 0) {
       return (<NoData tabName="Management" />);
     } else {
       return (

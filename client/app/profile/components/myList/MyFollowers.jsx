@@ -9,6 +9,15 @@ export default class MyFollowers extends React.Component{
     super(props)
     this.state =  {loading:true,data: []};
   }
+  componentDidUpdate()
+  {
+    var WinWidth = $(window).width();
+    var WinHeight = $(window).height();
+    $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
+    if(WinWidth > 768){
+      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
+
+  }
 
 
   async componentWillMount() {
@@ -24,7 +33,9 @@ export default class MyFollowers extends React.Component{
     });
     return ( <div>{showLoader===true?(<MlLoader/>):(<div>
       <div className="row">
+        <div className="tab_wrap_scroll">
         {list}
+      </div>
       </div>
     </div>)}</div>)
   }

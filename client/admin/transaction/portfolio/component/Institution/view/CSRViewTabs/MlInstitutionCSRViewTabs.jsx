@@ -59,6 +59,7 @@ export default class MlInstitutionCSRViewTabs extends React.Component {
 
   getInstitutionCSRs() {
     this.props.backClickHandler();
+    $('.RRT__tab--first').click();
   }
 
   /**

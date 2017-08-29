@@ -6,10 +6,12 @@ import ScrollArea from "react-scrollbar";
 import MlLoader from "../../../commons/components/loader/loader";
 import {initalizeFloatLabel} from "../../utils/formElemUtil";
 import {findUserRegistrationActionHandler, findUserPortfolioActionHandler} from "../actions/findUsersHandlers";
-import {deActivateUser} from "../actions/updateUsersHandlers";
+import {deActivateUser, deActivateUserProfileByContextHandler} from "../actions/updateUsersHandlers";
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 import gql from "graphql-tag";
+import {pick} from 'lodash'
+
 export default class MlUsersAbout extends Component {
   constructor(props) {
     super(props);
@@ -55,9 +57,15 @@ export default class MlUsersAbout extends Component {
    * handler to change the status of user's specific profile
    * @autosave
    * */
-  onStatusChange(e) {
+  async onStatusChange(e, userprofile) {
     console.log(e.currentTarget.checked)
-    //write handler to save
+    userprofile = pick(userprofile, ['profileId', 'clusterId', 'chapterId', 'subChapterId', 'communityId'])
+    userprofile.isActive = e.currentTarget.checked
+    const response = await deActivateUserProfileByContextHandler(userprofile)
+    if (response && response.result && response.success)
+      toastr.success(response.result)
+    else (response && response.result && !response.success)
+      toastr.error(response.result)
   }
 
   /**
@@ -441,7 +449,7 @@ export default class MlUsersAbout extends Component {
                                 <div className="form-group switch_wrap">
                                   <label>Status : </label>
                                   <label className="switch">
-                                    <input type="checkbox" onChange={(e) => that.onStatusChange(e)}
+                                    <input type="checkbox" onChange={(e) => that.onStatusChange(e, userProfile)}
                                            defaultChecked={userProfile.isActive}/>
                                     <div className="slider"></div>
                                   </label>

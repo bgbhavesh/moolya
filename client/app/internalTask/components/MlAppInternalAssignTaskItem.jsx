@@ -16,7 +16,11 @@ export default class MlAppInternalAssignTaskItem extends React.Component {
       taskInfo: {
         docs:[],
         userInfo:[],
-        community:{}
+        community:{},
+        expectedInput:'',
+        note:'',
+        expectedOutput:'',
+        name:''
       },
       taskId:''
     };
@@ -101,7 +105,7 @@ export default class MlAppInternalAssignTaskItem extends React.Component {
                           onChange={(date)=> this.dueDate(date)}/>
               </div>
               <div className="form-group">
-                <textarea className="form-control float-label" placeholder="Expected Input" value={task.expectedInput} ></textarea>
+                <textarea className="form-control float-label" placeholder="Expected Input" value={task.expectedInput ? task.expectedInput :''} ></textarea>
               </div>
             </form>
           </div>
@@ -125,10 +129,10 @@ export default class MlAppInternalAssignTaskItem extends React.Component {
               </div>
               <br className="brclear" />
               <div className="form-group">
-                <textarea className="form-control float-label" placeholder="Notes" value={task.note} ></textarea>
+                <textarea className="form-control float-label" placeholder="Notes" value={task.note ? task.note : ''} ></textarea>
               </div>
               <div className="form-group">
-                <textarea className="form-control float-label" placeholder="Expected Output" value={task.expectedOutput} ></textarea>
+                <textarea className="form-control float-label" placeholder="Expected Output" value={task.expectedOutput ? task.expectedOutput : '' } ></textarea>
               </div>
 
               <div className="panel panel-default">

@@ -33,21 +33,23 @@ export default class MlAppInternalPendingTask extends React.Component{
       var $wrap  = $frame.parent();
 
       // Call Sly on frame
-      $frame.sly({
-        horizontal: 1,
-        itemNav: 'centered',
-        smart: 1,
-        mouseDragging: 1,
-        touchDragging: 1,
-        releaseSwing: 1,
-        scrollBar: $wrap.find('.scrollbar'),
-        scrollBy: 1,
-        speed: 300,
-        elasticBounds: 1,
-        easing: 'easeOutExpo',
-        dragHandle: 1,
-        dynamicHandle: 1,
-      });
+
+      // $frame.sly({
+      //   horizontal: 1,
+      //   itemNav: 'centered',
+      //   smart: 1,
+      //   mouseDragging: 1,
+      //   touchDragging: 1,
+      //   releaseSwing: 1,
+      //   scrollBar: $wrap.find('.scrollbar'),
+      //   scrollBy: 1,
+      //   speed: 300,
+      //   elasticBounds: 1,
+      //   easing: 'easeOutExpo',
+      //   dragHandle: 1,
+      //   dynamicHandle: 1,
+      // });
+
       // $("#show").hide();
     });
 
@@ -71,6 +73,7 @@ export default class MlAppInternalPendingTask extends React.Component{
   }
 
   selectTask(task) {
+    console.log('task',task);
     this.setState({
       selectTask: task._id ? task._id : '',
       selectedTaskType: task.type

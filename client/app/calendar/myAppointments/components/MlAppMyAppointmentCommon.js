@@ -94,15 +94,18 @@ export default class MlAppPendingMyAppointment extends Component{
         {(selectedAppointment && isSelectedAppointment) ?
           <div>{this.getAppointmentComponentToLoad()}</div>
           :
-          <div className="tab_wrap_scroll">
+          <div className="tab_wrap_scroll ideators_list">
             {that.state.appointments.map(function (appointment, index) {
               return (
-                <div className="col-lg-2 col-md-4 col-sm-4" key={index} >
-                  <div className="list_block list_block_intrests notrans" onClick={()=>that.viewAppointment(appointment)}>
-                    <div className="hex_outer"><img src="/images/valuation.png"/></div>
-                    <div className="task-status pending"></div>
+                <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={index}>
+                  <div className="ideators_list_block" onClick={()=>that.viewAppointment(appointment)}>
+                    <div className="inactive"><span>inactive</span></div>
                     <h3>{ (appointment.appointmentInfo && appointment.appointmentType === 'SERVICE-TASK') ?
                       appointment.appointmentInfo.serviceName : appointment.appointmentInfo.taskName}</h3>
+                    <img src="/images/valuation.png" className="c_image"/>
+                    <div className="block_footer">
+                      <span></span>
+                    </div>
                   </div>
                 </div>
               )

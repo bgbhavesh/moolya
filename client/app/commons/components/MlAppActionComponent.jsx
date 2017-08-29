@@ -128,7 +128,7 @@ export default class MlAppActionComponent extends React.Component {
       {
         actionName: 'shortlist',
         displayName:'Shortlist',
-        iconClass: 'ml ml-save'
+        iconClass: 'ml my-ml-shortlist'
       },
       {
         actionName: 'onboard',

@@ -422,49 +422,72 @@ MlResolver.MlQueryResolver['fetchMapCenterCordsForExternalUser'] = (obj, args, c
   }
 }
 
+/**
+ * @module [users / LEFT NAV]
+ * Note: Status change of user profile coming in there context
+ * */
+MlResolver.MlMutationResolver['deActivateUserProfileByContext'] = (obj, args, context, info) => {
+  var response = null
+  if (args.userProfiles && args.userProfiles.profileId) {
+    var profileId = args.userProfiles.profileId
+    var result = mlDBController.update('users', {'profile.externalUserProfiles': {$elemMatch: {'profileId': profileId}}},
+      {
+        "profile.externalUserProfiles.$.isDefault": false,
+        "profile.externalUserProfiles.$.isActive": args.userProfiles.isActive
+      }, {$set: true}, context);
+    if (result)
+      response = new MlRespPayload().successPayload('User profile successfully updated', 200);
+    else
+      response = new MlRespPayload().errorPayload('Unable to update profile', 409);
+  } else {
+    response = new MlRespPayload().errorPayload('User profile required', 409);
+  }
+  return response;
+}
+
 /*************************************** @module ['conversation']************************************************* */
 /**
  * first application Create
  * */
-MlResolver.MlMutationResolver['createApplicationAPI'] = (obj, args, context, info) => {
-  var userId = "qwerty" //need to be send with args
-  request.post('http://localhost:8081/createApplication', {form: args.applicationDetailsAPI}, function (error, response, body) {
-    console.log('error:', error); // Print the error if one occurred
-    console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-    console.log('body:', body); // Print the HTML for the Google homepage.
-    var responseData = JSON.parse(body)
-    console.log(responseData)
-    var obj = _.extend({userId: userId}, responseData)
-    // MlConversations.insert(obj)
-  });
-}
+// MlResolver.MlMutationResolver['createApplicationAPI'] = (obj, args, context, info) => {
+//   var userId = "qwerty" //need to be send with args
+//   request.post('http://localhost:8081/createApplication', {form: args.applicationDetailsAPI}, function (error, response, body) {
+//     console.log('error:', error); // Print the error if one occurred
+//     console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+//     console.log('body:', body); // Print the HTML for the Google homepage.
+//     var responseData = JSON.parse(body)
+//     console.log(responseData)
+//     var obj = _.extend({userId: userId}, responseData)
+//     // MlConversations.insert(obj)
+//   });
+// }
 
 /**
  * creating the user wrt application
  * */
-MlResolver.MlMutationResolver['createUserAPI'] = (obj, args, context, info) => {
-  var userId = "qwerty"  //need to be send with the args
-  var conversation = MlConversations.findOne({userId:userId}) || {}
-  // conversation.apiKey ||
-  var options = {
-    url: 'http://localhost:8081/createUser',
-    headers: {'x-api-key': Meteor.settings.private.apiKey},
-    method: 'POST',
-    form: args.userDetailsAPI
-  };
-
-  request(options, function (error, response, body) {
-    // console.log('error:', error); // Print the error if one occurred
-    // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-    // console.log('body:', body); // Print the HTML for the Google homepage.
-    if (error)
-      return new MlRespPayload().errorPayload('error in creating user', 409);
-    else {
-      var responseData = JSON.parse(body)
-      if (responseData && responseData.success)
-        return new MlRespPayload().successPayload(responseData.result, 200);
-      else
-        return new MlRespPayload().errorPayload('Can not create user', 409);
-    }
-  });
-}
+// MlResolver.MlMutationResolver['createUserAPI'] = (obj, args, context, info) => {
+//   var userId = "qwerty"  //need to be send with the args
+//   var conversation = MlConversations.findOne({userId:userId}) || {}
+//   // conversation.apiKey ||
+//   var options = {
+//     url: 'http://localhost:8081/createUser',
+//     headers: {'x-api-key': Meteor.settings.private.apiKey},
+//     method: 'POST',
+//     form: args.userDetailsAPI
+//   };
+//
+//   request(options, function (error, response, body) {
+//     // console.log('error:', error); // Print the error if one occurred
+//     // console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+//     // console.log('body:', body); // Print the HTML for the Google homepage.
+//     if (error)
+//       return new MlRespPayload().errorPayload('error in creating user', 409);
+//     else {
+//       var responseData = JSON.parse(body)
+//       if (responseData && responseData.success)
+//         return new MlRespPayload().successPayload(responseData.result, 200);
+//       else
+//         return new MlRespPayload().errorPayload('Can not create user', 409);
+//     }
+//   });
+// }

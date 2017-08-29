@@ -18,21 +18,21 @@ export default class MlAppServiceProviderListView extends Component {
     let that = this
     const data=this.props.data||[];
     const list=  data.map((provider, idx) =>
-      <div className="col-md-4 col-sm-4 col-lg-3" key={idx}>
+      <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={idx}>
         <a href='' onClick={that.viewDetails.bind(that, provider.portfolioDetailsId)}>
-          <div className="funders_list_block">
+          <div className="ideators_list_block">
             {/*<div className="premium"><span>Starter</span></div>*/}
             <h3>{provider.about&&provider.about.aboutTitle?provider.about.aboutTitle:""}</h3>
             <div className="list_icon"><span className="ml ml-provider"></span></div>
             <div className="block_footer">
-              <span>{provider.chapterName}</span>
+              <span>{provider.chapterName} </span>
             </div>
           </div>
         </a>
       </div>
     );
 
-    return (<div className="row funders_list">{list}</div>);
+    return (<div className="row ideators_list">{list}</div>);
 
   }
 

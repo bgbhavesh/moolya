@@ -100,7 +100,7 @@ export default class MlCommunityList extends Component {
        icon = "moolya-symbol"
 
       return (
-        <div className="col-md-4 col-sm-4 col-lg-3" key={idx}>
+        <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={idx}>
 
           <div className="ideators_list_block">
             <div className={`${prop.profile.isActive?"active":"inactive"}`}><span>Active</span></div>
@@ -145,7 +145,7 @@ export default class MlCommunityList extends Component {
               <span className="ml ml-moolya-symbol ot" onClick={this.onStatusChange.bind(this, "BackendUsers")}></span>
             </a>
           </div>
-          <div className="row communities_block">
+          <div className="row ideators_list">
             {list}
           </div>
       </div>

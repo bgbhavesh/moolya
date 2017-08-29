@@ -532,7 +532,9 @@ MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context
   return depts
 }
 
+//todo://generic way of checking platform admin
 MlResolver.MlMutationResolver['deActivateUser'] = (obj, args, context, info) => {
+  // MlSubChapterPreConditions.hasEditPermSubChapterAccessControl(context);
   var loggedInUser = new MlAdminUserContext().userProfileDetails(context.userId);
   if (loggedInUser && loggedInUser.hierarchyLevel == 4) {
     let user = mlDBController.findOne('users', {_id: args.userId}, context)

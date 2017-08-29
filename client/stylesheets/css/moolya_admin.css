@@ -1160,7 +1160,7 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .popover.bs-tether-element-attached-left:after, .popover.bs-tether-element-attached-left:before, .popover.popover-right:after, .popover.popover-right:before {top: 50%; border-left-width: 0 }
 .popover.bs-tether-element-attached-left:before, .popover.popover-right:before {left: -11px; margin-top: -11px; border-right-color: rgba(0, 0, 0, .25) }
 .popover.bs-tether-element-attached-left:after, .popover.popover-right:after {left: -10px; margin-top: -10px; border-right-color: #fff }
-.popover.bs-tether-element-attached-top, .popover.popover-bottom {margin-top: 10px }
+/*.popover.bs-tether-element-attached-top, .popover.popover-bottom {margin-top: 10px }*/
 .popover.bs-tether-element-attached-top:after, .popover.bs-tether-element-attached-top:before, .popover.popover-bottom:after, .popover.popover-bottom:before {left: 50%; border-top-width: 0 }
 .popover.bs-tether-element-attached-top:before, .popover.popover-bottom:before {top: -11px; margin-left: -11px; border-bottom-color: rgba(0, 0, 0, .25) }
 .popover.bs-tether-element-attached-top:after, .popover.popover-bottom:after {top: -10px; margin-left: -10px; border-bottom-color: #f7f7f7 }

@@ -199,11 +199,11 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                     <img src={principal.logo ? principal.logo.fileUrl : "/images/def_profile.png"}/>
                                     <div><p>{principal.firstName + " " + principal.lastName}</p><p
                                       className="small">{principal.designation}</p></div>
-                                    <div className="ml_icon_btn">
-                                      <a href="#" className="save_btn"><FontAwesome name='facebook'/></a>
-                                      <a href="#" className="save_btn"><FontAwesome name='twitter'/></a>
-                                      <a href="#" className="save_btn"><FontAwesome name='linkedin'/></a>
-                                    </div>
+                                    {/*<div className="ml_icon_btn">*/}
+                                      {/*<a href="#" className="save_btn"><FontAwesome name='facebook'/></a>*/}
+                                      {/*<a href="#" className="save_btn"><FontAwesome name='twitter'/></a>*/}
+                                      {/*<a href="#" className="save_btn"><FontAwesome name='linkedin'/></a>*/}
+                                    {/*</div>*/}
                                   </div>
                                 </div>
                               </div>
@@ -251,11 +251,11 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                           <img src={selectedPrincipal.logo ? selectedPrincipal.logo.fileUrl : "/images/def_profile.png"}/>
                                           <div><p>{selectedPrincipal.firstName + " " + selectedPrincipal.lastName}</p><p
                                             className="small">{selectedPrincipal.designation}</p></div>
-                                          <div className="ml_icon_btn">
-                                            <a href="#" className="save_btn"><FontAwesome name='facebook'/></a>
-                                            <a href="#" className="save_btn"><FontAwesome name='twitter'/></a>
-                                            <a href="#" className="save_btn"><FontAwesome name='linkedin'/></a>
-                                          </div>
+                                          {/*<div className="ml_icon_btn">*/}
+                                            {/*<a href="#" className="save_btn"><FontAwesome name='facebook'/></a>*/}
+                                            {/*<a href="#" className="save_btn"><FontAwesome name='twitter'/></a>*/}
+                                            {/*<a href="#" className="save_btn"><FontAwesome name='linkedin'/></a>*/}
+                                          {/*</div>*/}
                                         </div>
                                       </div>
                                     </div>
@@ -362,11 +362,11 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                     <img src={team.logo ? team.logo.fileUrl : "/images/def_profile.png"}/>
                                     <div><p>{team.firstName + " " + team.lastName}</p><p
                                       className="small">{team.designation}</p></div>
-                                    <div className="ml_icon_btn">
-                                      <a href="#" className="save_btn"><FontAwesome name='facebook'/></a>
-                                      <a href="#" className="save_btn"><FontAwesome name='twitter'/></a>
-                                      <a href="#" className="save_btn"><FontAwesome name='linkedin'/></a>
-                                    </div>
+                                    {/*<div className="ml_icon_btn">*/}
+                                      {/*<a href="#" className="save_btn"><FontAwesome name='facebook'/></a>*/}
+                                      {/*<a href="#" className="save_btn"><FontAwesome name='twitter'/></a>*/}
+                                      {/*<a href="#" className="save_btn"><FontAwesome name='linkedin'/></a>*/}
+                                    {/*</div>*/}
                                   </div>
                                 </div>
                               </div>
@@ -415,11 +415,11 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                           <img src={selectedTeam.logo ? selectedTeam.logo.fileUrl : "/images/def_profile.png"}/>
                                           <div><p>{selectedTeam.firstName + " " + selectedTeam.lastName}</p><p
                                             className="small">{selectedTeam.designation}</p></div>
-                                          <div className="ml_icon_btn">
-                                            <a href="#" className="save_btn"><FontAwesome name='facebook'/></a>
-                                            <a href="#" className="save_btn"><FontAwesome name='twitter'/></a>
-                                            <a href="#" className="save_btn"><FontAwesome name='linkedin'/></a>
-                                          </div>
+                                          {/*<div className="ml_icon_btn">*/}
+                                            {/*<a href="#" className="save_btn"><FontAwesome name='facebook'/></a>*/}
+                                            {/*<a href="#" className="save_btn"><FontAwesome name='twitter'/></a>*/}
+                                            {/*<a href="#" className="save_btn"><FontAwesome name='linkedin'/></a>*/}
+                                          {/*</div>*/}
                                         </div>
                                       </div>
                                     </div>
@@ -567,26 +567,26 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                         <input type="text" placeholder="About" className="form-control float-label"/>
                         <FontAwesome name='unlock' className="input_icon"/>
                       </div>
-                      <div className="form-group">
-                        <input type="text" placeholder="LinkedIn" className="form-control float-label"/>
-                        <FontAwesome name="linkedin-square" className="password_icon"/>
-                      </div>
-                      <div className="form-group">
-                        <input type="text" placeholder="Facebook" className="form-control float-label"/>
-                        <FontAwesome name="facebook-square" className="password_icon"/>
-                      </div>
-                      <div className="form-group">
-                        <input type="text" placeholder="twitter" className="form-control float-label"/>
-                        <FontAwesome name="twitter-square" className="password_icon"/>
-                      </div>
-                      <div className="form-group">
-                        <input type="text" placeholder="Youtube" className="form-control float-label"/>
-                        <FontAwesome name="youtube-square" className="password_icon"/>
-                      </div>
-                      <div className="form-group">
-                        <input type="text" placeholder="Google plus" className="form-control float-label"/>
-                        <FontAwesome name="google-plus-square" className="password_icon"/>
-                      </div>
+                      {/*<div className="form-group">*/}
+                        {/*<input type="text" placeholder="LinkedIn" className="form-control float-label"/>*/}
+                        {/*<FontAwesome name="linkedin-square" className="password_icon"/>*/}
+                      {/*</div>*/}
+                      {/*<div className="form-group">*/}
+                        {/*<input type="text" placeholder="Facebook" className="form-control float-label"/>*/}
+                        {/*<FontAwesome name="facebook-square" className="password_icon"/>*/}
+                      {/*</div>*/}
+                      {/*<div className="form-group">*/}
+                        {/*<input type="text" placeholder="twitter" className="form-control float-label"/>*/}
+                        {/*<FontAwesome name="twitter-square" className="password_icon"/>*/}
+                      {/*</div>*/}
+                      {/*<div className="form-group">*/}
+                        {/*<input type="text" placeholder="Youtube" className="form-control float-label"/>*/}
+                        {/*<FontAwesome name="youtube-square" className="password_icon"/>*/}
+                      {/*</div>*/}
+                      {/*<div className="form-group">*/}
+                        {/*<input type="text" placeholder="Google plus" className="form-control float-label"/>*/}
+                        {/*<FontAwesome name="google-plus-square" className="password_icon"/>*/}
+                      {/*</div>*/}
                       <div className="ml_btn" style={{'textAlign': 'center'}}>
                         <a href="#" className="save_btn">Save</a>
                       </div>

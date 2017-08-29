@@ -110,8 +110,8 @@ export default class MlAppDayAppointmentInfo extends Component {
                         <div className="app_list_head">
                           {data.slot}
                           <span className="pull-right">
-                            { canAdd ? <a href=""><FontAwesome name='plus' onClick={() => addEvent('createTask', data.slot)}/></a> : '' }
-                            { canExplore ? <a href=""><FontAwesome name='ellipsis-h' onClick={ () => exploreEvent('viewTask')}/></a> : '' }
+                            { canAdd ? <a href=""><FontAwesome name='plus' onClick={() => addEvent(data, slots)}/></a> : '' }
+                            { canExplore ? <a href=""><FontAwesome name='ellipsis-h' onClick={ () => exploreEvent(data, slots)}/></a> : '' }
                           </span>
                         </div>
                         <ul className="list-group">

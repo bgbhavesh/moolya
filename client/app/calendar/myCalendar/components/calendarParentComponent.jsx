@@ -14,7 +14,14 @@ import CalCreateTask from './calCreateTask'
 import CalCreateAppointmentView from './calAppointmentDetails'
 import MlAppServiceManageSchedule from './createServiceCard'
 import CalendarSlotDetail from './calCreateTask'
-var _ = require('lodash')
+var _ = require('lodash');
+
+import MlAppCalendarHeader from './../../common/components/MlAppCalendarHeader';
+import MlAppDayAppointmentInfo from "./../../common/components/MlAppDayAppointmentInfo";
+import MlAppDayBackground from "./../../common/components/MlAppDayBackground";
+import MlAppEventComponent from "./../../common/components/MlAppEventComponent";
+import MlAppInfiniteCalendarSidebar from "./../../common/components/MlAppInfiniteCalendarSidebar";
+
 import {getUserProfileActionHandler} from "../../manageScheduler/activity/actions/activityActionHandler";
 
 export default class MLAppMyCalendar extends Component {
@@ -100,11 +107,12 @@ export default class MLAppMyCalendar extends Component {
           if(event.profileId === data.profileId) {
             event.communityName = data.communityName
             let temp = {
-              title: <span> <span className="ml ml-funder"></span>{" "+info.count + " " + event.communityName}</span>,
+              title: info.count + " " + event.communityName,
+              className: "ml ml-funder",
               start: new Date(info.date),
               end: new Date(info.date)
-            }
-            details.push(temp)
+            };
+            details.push(temp);
           }
         })
       })
@@ -151,13 +159,14 @@ export default class MLAppMyCalendar extends Component {
       events.map( function( data ) {
         if( profileId === data.profileId ) {
           let temp = {
-            title: <span className="ml ml-funder">{" "+data.count+" " +that.state.communityName}</span>,
+            title: data.count+" " +that.state.communityName,
+            className: "ml ml-funder",
             start: new Date( data.date ),
             end: new Date( data.date )
-          }
+          };
           details.push( temp )
         }
-      })
+      });
       that.setState({
         events: details
       });
@@ -173,7 +182,7 @@ export default class MLAppMyCalendar extends Component {
     let appointmentIds = [];
     resp.appointments.map(function(data) {
       appointmentIds.push(data.id)
-    })
+    });
     this.getSlotInfo( appointmentIds )
   }
 
@@ -188,7 +197,19 @@ export default class MLAppMyCalendar extends Component {
     }
   }
 
-
+  dayAppointmentInfoAddEvent(currentSlot){
+    let slot = currentSlot.slot;
+    let date = new Date(this.state.appointmentDate);
+    let startDate = slot.split('-')[0];
+    let hours = startDate.split(':')[0];
+    let minutes = startDate.split(':')[1];
+    date.setHours(hours);
+    date.setMinutes(minutes);
+    this.setState({
+      componentToLoad: "createTask",
+      appointmentDate: date
+    });
+  }
 
   render() {
     const {appointmentDate} = this.state;
@@ -202,7 +223,8 @@ export default class MLAppMyCalendar extends Component {
               <MlCalendarHeader getAllAppointments={this.getAllAppointments} getAppointmentCounts={this.getAppointmentCounts}  headerManagement={that.headerManagement.bind(that)} userDetails={that.userDetails.bind(that)} componentToLoad={that.componentToLoad.bind(that)} />
               <Calender
                 events={ that.state.events }
-                dayBackgroundComponent={<MlAppMyCalendarDayComponent componentToLoad={that.componentToLoad.bind(that)}/> }
+                dayBackgroundComponent={<MlAppDayBackground dayClickEvent={that.componentToLoad.bind(that, 'calendarDayView')}/> }
+                eventComponent={<MlAppEventComponent />}
                 dayData={{days:that.state.data}}
                 dateHeaderEvent={that.componentToLoad.bind(that, 'calendarDayView')}
                 onNavigate={that.onNavigate}
@@ -217,7 +239,23 @@ export default class MLAppMyCalendar extends Component {
           <div className="app_main_wrap" style={{'overflow': 'auto'}}>
             <div className="app_padding_wrap">
               <MlCalendarHeader getAllAppointments={this.getAllAppointments} getAppointmentCounts={this.getAppointmentCounts}  headerManagement={that.headerManagement.bind(that)} componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
-              <AppCalendarDayView slotInfo={this.slotInfo.bind(this)} profileId={this.state.profileId} componentToLoad={this.componentToLoad.bind(this)} appointmentDate={this.state.appointmentDate} />
+              <div className="app_main_wrap">
+                <div className="app_padding_wrap">
+                  <MlAppInfiniteCalendarSidebar
+                    startDate={that.state.appointmentDate}
+                    onDateClick={that.componentToLoad.bind(that, 'calendarDayView')}
+                  />
+                  <MlAppDayAppointmentInfo
+                    appointmentDate={that.state.appointmentDate}
+                    profileId={ that.state.profileId ? that.state.profileId : ''}
+                    canAdd= {true}
+                    canExplore= {true}
+                    addEvent={this.dayAppointmentInfoAddEvent.bind(this)}
+                    exploreEvent={this.slotInfo.bind(this)}
+                  />
+                </div>
+              </div>
+              {/*<AppCalendarDayView slotInfo={this.slotInfo.bind(this)} profileId={this.state.profileId} componentToLoad={this.componentToLoad.bind(this)} appointmentDate={this.state.appointmentDate} />*/}
             </div>
           </div>
         )
@@ -227,7 +265,15 @@ export default class MLAppMyCalendar extends Component {
         <div className="app_main_wrap" style={{'overflow': 'auto'}}>
           <div className="app_padding_wrap">
             <MlCalendarHeader getAllAppointments={this.getAllAppointments} getAppointmentCounts={this.getAppointmentCounts}  headerManagement={that.headerManagement.bind(that)} componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
-            <MlAppServiceManageSchedule profileId={this.state.profileId} appointmentDate={appointmentDate} componentToLoad={this.componentToLoad.bind(this)}/>
+            <div className="app_main_wrap">
+              <div className="app_padding_wrap">
+                <MlAppInfiniteCalendarSidebar
+                  startDate={that.state.appointmentDate}
+                  onDateClick={that.componentToLoad.bind(that, 'calendarDayView')}
+                />
+                <MlAppServiceManageSchedule profileId={this.state.profileId} appointmentDate={appointmentDate} componentToLoad={this.componentToLoad.bind(this)}/>
+              </div>
+            </div>
           </div>
         </div>
         )

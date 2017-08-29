@@ -149,7 +149,7 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
    */
   updateBreakStartTime(value, index) {
     let { lunch } = this.state;
-    lunch[index]['start'] = new Moment(value).format('HH:mm');
+    lunch[index]['start'] = typeof value === 'object' ? new Moment(value).format('HH:mm') : value;
     this.setState({
       lunch: lunch
     });
@@ -162,7 +162,7 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
    */
   updateBreakEndTime(value, index) {
     let { lunch } = this.state;
-    lunch[index]['end'] = new Moment(value).format('HH:mm');
+    lunch[index]['end'] = typeof value === 'object' ? new Moment(value).format('HH:mm') : value;
     this.setState({
       lunch: lunch
     });
@@ -175,7 +175,7 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
    */
   updateSlotStartTime(value, index) {
     let { slots } = this.state;
-    slots[index]['start'] = new Moment(value).format('HH:mm');
+    slots[index]['start'] = typeof value === 'object' ? new Moment(value).format('HH:mm') : value;
     this.setState({
       slots: slots
     });
@@ -192,7 +192,7 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
       index -= 1;
       slots[0].isActive = true;
     }
-    slots[index]['end'] = new Moment(value).format('HH:mm');
+    slots[index]['end'] = typeof value === 'object' ? new Moment(value).format('HH:mm') : value;
     this.setState({
       slots: slots,
       workEndTime: slots[index]['end']
@@ -205,43 +205,58 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
   validateBreakTime() {
     let { slots, lunch, workEndTime } = this.state;
     let isRepeat = true;
-    let breakStartTime, breakEndTime;
-    let slotStartTime = slots[0].start ? new Moment(slots[0].start, 'HH:mm').format('HH:mm') : '';
-    let slotEndTime = workEndTime ? new Moment(workEndTime, 'HH:mm').format('HH:mm') : '';
-    this.isValidStartTime = new Moment(breakStartTime, 'HH:mm').isBefore(new Moment(slotStartTime, 'HH:mm'));
-    this.isValidEndTime = new Moment(breakStartTime, 'HH:mm').isAfter(new Moment(slotEndTime, 'HH:mm'));
-    lunch.forEach((data, index) => {
-      this.isValidStartTime = new Moment(slotStartTime, 'HH:mm').isBefore(new Moment(data.start, 'HH:mm')) &&
-        new Moment(slotEndTime, 'HH:mm').isAfter(new Moment(data.start, 'HH:mm'));
-      this.isValidEndTime = new Moment(slotStartTime, 'HH:mm').isBefore(new Moment(data.end, 'HH:mm')) &&
-        new Moment(slotEndTime, 'HH:mm').isAfter(new Moment(data.end, 'HH:mm'));
-      if (!this.isValidStartTime || !this.isValidEndTime) {
-        toastr.error('Please select valid time between working time');
+    lunch.forEach((data) => {
+      if (!new Moment(data.start, 'HH:mm').isValid()) {
+        toastr.error('Please select valid break start time');
         this.isValidBreakTime = false;
-        return;
-      }
-      this.isValidTime = new Moment(data.start, 'HH:mm').isBefore(new Moment(data.end, 'HH:mm'));
-      if (!this.isValidTime) {
-        toastr.error('Start time must be less than end time');
+        return
+      } else if (!new Moment(data.end, 'HH:mm').isValid()) {
+        toastr.error('Please select valid break end time');
         this.isValidBreakTime = false;
-        return;
-      }
-      let isSame = false;
-      if (isRepeat) {
-        lunch.forEach((value, childIndex) => {
-          if (childIndex !== index) {
-            isSame = new Moment(data.start, 'HH:mm').isSame(new Moment(value.start, 'HH:mm')) &&
-              new Moment(data.end, 'HH:mm').isSame(new Moment(value.end, 'HH:mm'));
-            if(isSame) {
-              isRepeat = false;toastr.error('Please select different break time');
-              this.isValidBreakTime = false;
-              isSame = false;
-              return;
-            }
-          }
-        });
+        return
+      } else {
+        this.isValidBreakTime = true;
       }
     });
+    if (this.isValidBreakTime) {
+      let breakStartTime, breakEndTime;
+      let slotStartTime = slots[0].start ? new Moment(slots[0].start, 'HH:mm').format('HH:mm') : '';
+      let slotEndTime = workEndTime ? new Moment(workEndTime, 'HH:mm').format('HH:mm') : '';
+      this.isValidStartTime = new Moment(breakStartTime, 'HH:mm').isBefore(new Moment(slotStartTime, 'HH:mm'));
+      this.isValidEndTime = new Moment(breakStartTime, 'HH:mm').isAfter(new Moment(slotEndTime, 'HH:mm'));
+      lunch.forEach((data, index) => {
+        this.isValidStartTime = new Moment(slotStartTime, 'HH:mm').isBefore(new Moment(data.start, 'HH:mm')) &&
+          new Moment(slotEndTime, 'HH:mm').isAfter(new Moment(data.start, 'HH:mm'));
+        this.isValidEndTime = new Moment(slotStartTime, 'HH:mm').isBefore(new Moment(data.end, 'HH:mm')) &&
+          new Moment(slotEndTime, 'HH:mm').isAfter(new Moment(data.end, 'HH:mm'));
+        if (!this.isValidStartTime || !this.isValidEndTime) {
+          toastr.error('Please select valid time between working time');
+          this.isValidBreakTime = false;
+          return;
+        }
+        this.isValidTime = new Moment(data.start, 'HH:mm').isBefore(new Moment(data.end, 'HH:mm'));
+        if (!this.isValidTime) {
+          toastr.error('Start time must be less than end time');
+          this.isValidBreakTime = false;
+          return;
+        }
+        let isSame = false;
+        if (isRepeat) {
+          lunch.forEach((value, childIndex) => {
+            if (childIndex !== index) {
+              isSame = new Moment(data.start, 'HH:mm').isSame(new Moment(value.start, 'HH:mm')) &&
+                new Moment(data.end, 'HH:mm').isSame(new Moment(value.end, 'HH:mm'));
+              if(isSame) {
+                isRepeat = false;toastr.error('Please select different break time');
+                this.isValidBreakTime = false;
+                isSame = false;
+                return;
+              }
+            }
+          });
+        }
+      });
+    }
   }
 
   /**
@@ -249,9 +264,19 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
    */
   validateSlotsTime() {
     const { slots, workEndTime } = this.state;
-    this.isValidSlotsTime = new Moment(slots[0].start, 'HH:mm').isBefore(new Moment(workEndTime, 'HH:mm'));
-    if (!this.isValidSlotsTime) {
-      toastr.error('Start time must be less than end time');
+    if (!new Moment(slots[0].start, 'HH:mm').isValid()) {
+      toastr.error('Please select valid slot start time');
+      this.isValidSlotsTime = false;
+      return
+    } else if (!new Moment(workEndTime, 'HH:mm').isValid()) {
+      toastr.error('Please select valid slot end time');
+      this.isValidSlotsTime = false;
+      return
+    } else {
+      this.isValidSlotsTime = new Moment(slots[0].start, 'HH:mm').isBefore(new Moment(workEndTime, 'HH:mm'));
+      if (!this.isValidSlotsTime) {
+        toastr.error('Start time must be less than end time');
+      }
     }
   }
 
@@ -354,7 +379,7 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
       toastr.error('Please set the working time');
     } else {
       this.validateSlotsTime();
-      if(!isEmpty(lunch[0].end)) {
+      if(this.isValidSlotsTime && !isEmpty(lunch[0].end)) {
         this.validateBreakTime();
       }
       if (this.isValidSlotsTime && this.isValidBreakTime) {
@@ -486,12 +511,14 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
                           <div className="panel-body">
                             <div className="form-group col-md-6 nopadding-left">
                               <Datetime dateFormat={false} timeFormat={"HH:mm"}
+                                        input={true}
                                         value={ slots[index] && slots[index].start ? ( index == 0 ? slots[index].start : slots[index].end ) : '' }
                                         onChange={(evt)=>that.updateSlotStartTime(evt, index)}
                                         inputProps={{ placeholder: 'Start time', className:"form-control float-label"}}/>
                             </div>
                             <div className="form-group col-md-6 nopadding-right">
                               <Datetime dateFormat={false} timeFormat={"HH:mm"}
+                                        input={true}
                                         value={ slots && workEndTime ? workEndTime : '' }
                                         onChange={(evt)=>that.updateSlotEndTime(evt, index+1)}
                                         inputProps={{ placeholder: 'End time', className:"form-control float-label"}}/>
@@ -520,12 +547,12 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
                         <div className="panel-body">
                           <div className="form-group col-md-6 nopadding-left">
                             <Datetime dateFormat={false} timeFormat={"HH:mm"} value={data.start ? data.start : ''}
-                                      onChange={(evt)=>that.updateBreakStartTime(evt, index)}
+                                      input={true} onChange={(evt)=>that.updateBreakStartTime(evt, index)}
                                       inputProps={{ placeholder: 'Start time', className:"form-control float-label"}}/>
                           </div>
                           <div className="form-group col-md-6 nopadding-right">
                             <Datetime dateFormat={false} timeFormat={"HH:mm"} value={data.end ? data.end : ''}
-                                      onChange={(evt, value)=>that.updateBreakEndTime(evt, index)}
+                                      input={true} onChange={(evt, value)=>that.updateBreakEndTime(evt, index)}
                                       inputProps={{ placeholder: 'End time', className:"form-control float-label"}}/>
                           </div>
                         </div>

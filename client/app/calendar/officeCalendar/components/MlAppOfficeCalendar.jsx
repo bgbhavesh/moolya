@@ -11,7 +11,7 @@ import MlAppCalendarHeader from './../../common/components/MlAppCalendarHeader';
 import MlAppDayBackground from "./../../common/components/MlAppDayBackground";
 import MlAppEventComponent from "./../../common/components/MlAppEventComponent";
 import {fetchOfficeMemberActionHandler} from './../actions/fetchOfficeMember';
-
+import MlAppInfiniteCalendarSidebar from "./../../common/components/MlAppInfiniteCalendarSidebar";
 export default class MlAppOfficeCalendar extends Component {
 
   constructor(props){
@@ -147,13 +147,21 @@ export default class MlAppOfficeCalendar extends Component {
           break;
         case "dayAppointment":
           return (
-            <MlAppDayAppointmentInfo
-              appointmentDate={that.state.selectedDate}
-              userId={ that.state.selectedUser ? that.state.selectedUser.userId : ''}
-              profileId={ that.state.selectedUser ? that.state.selectedUser.profileId : ''}
-              canAdd= {false}
-              canExplore= {false}
-            />
+            <div className="app_main_wrap">
+              <div className="app_padding_wrap">
+                <MlAppInfiniteCalendarSidebar
+                  startDate={that.state.selectedDate}
+                  onDateClick={that.componentToLoad.bind(that, 'dayAppointment')}
+                />
+                <MlAppDayAppointmentInfo
+                  appointmentDate={that.state.selectedDate}
+                  userId={ that.state.selectedUser ? that.state.selectedUser.userId : ''}
+                  profileId={ that.state.selectedUser ? that.state.selectedUser.profileId : ''}
+                  canAdd= {false}
+                  canExplore= {false}
+                />
+              </div>
+            </div>
           );
           break;
         case "dayDetailsAppointment":

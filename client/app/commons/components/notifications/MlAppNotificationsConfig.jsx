@@ -24,7 +24,8 @@ export default class MlAppNotificationsConfig extends Component {
   render() {
     let notificationPopOverConfig = {
       popOverTitle: 'Notifications',
-      placement: 'left bottom',
+      placement: 'bottom',
+      popoverClassName:'notifications_list',
       target: 'appNotification',
       popOverComponent: <MlAppNotifications />,
       actionComponent: function (props) {

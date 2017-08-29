@@ -3,25 +3,19 @@
  */
 import React, {Component} from "react";
 import Calender from '../../../../commons/calendar/calendar'
-import { fetchMyCalendarActionHandler } from '../actions/fetchMyCalendar';
 import { fetchAllProfileAppointmentCountsHandler, fetchProfileAppointmentCountsHandler, fetchSlotDetailsHandler } from '../actions/appointmentCount';
-import MlAppMyCalendarDayComponent from './dayComponent1';
-import AppCalendarDayView from './calendarDetailComponent';
-import CalCreateAppointment from './calSettings'
-// import MlAppScheduleHead from '../../manageScheduler/commons/components/MlAppScheduleHead'
 import MlCalendarHeader from './calendarHeader'
 import CalCreateTask from './calCreateTask'
 import CalCreateAppointmentView from './calAppointmentDetails'
 import MlAppServiceManageSchedule from './createServiceCard'
 import CalendarSlotDetail from './calCreateTask'
 var _ = require('lodash');
-
 import MlAppCalendarHeader from './../../common/components/MlAppCalendarHeader';
 import MlAppDayAppointmentInfo from "./../../common/components/MlAppDayAppointmentInfo";
 import MlAppDayBackground from "./../../common/components/MlAppDayBackground";
 import MlAppEventComponent from "./../../common/components/MlAppEventComponent";
 import MlAppInfiniteCalendarSidebar from "./../../common/components/MlAppInfiniteCalendarSidebar";
-
+import MlAppSlotAppointmentDetails from "./../../common/components/MlAppSlotAppointmentDetails";
 import {getUserProfileActionHandler} from "../../manageScheduler/activity/actions/activityActionHandler";
 
 export default class MLAppMyCalendar extends Component {
@@ -37,8 +31,9 @@ export default class MLAppMyCalendar extends Component {
       events: [],
       communityName:"",
       profile:[],
-      slotDetailInfo: [{}]
-    }
+      slotDetailInfo: [{}],
+      exploreAppointmentIds: []
+    };
     this.onNavigate = this.onNavigate.bind(this);
     this.componentToLoad.bind(this);
     this.eventsData.bind(this);
@@ -183,7 +178,11 @@ export default class MLAppMyCalendar extends Component {
     resp.appointments.map(function(data) {
       appointmentIds.push(data.id)
     });
-    this.getSlotInfo( appointmentIds )
+    this.setState({
+      exploreAppointmentIds: appointmentIds,
+      componentToLoad: 'slotDetailView'
+    })
+    //this.getSlotInfo( appointmentIds )
   }
 
   async getSlotInfo(appointmentId) {
@@ -286,7 +285,7 @@ export default class MLAppMyCalendar extends Component {
               <CalCreateTask componentToLoad={this.componentToLoad.bind(this)} />
             </div>
           </div>
-        )
+        );
         break;
       case 'appointmentDetails':
         return(
@@ -296,7 +295,7 @@ export default class MLAppMyCalendar extends Component {
               <CalCreateAppointmentView/>
             </div>
           </div>
-        )
+        );
         break;
 
       case 'selfAppointment':
@@ -315,7 +314,17 @@ export default class MLAppMyCalendar extends Component {
           <div className="app_main_wrap" style={{'overflow': 'auto'}}>
             <div className="app_padding_wrap">
               <MlCalendarHeader getAppointmentCounts={this.getAppointmentCounts} headerManagement={that.headerManagement.bind(that)} componentToLoad={that.componentToLoad.bind(that)} userDetails={that.userDetails.bind(that)}/>
-              <CalendarSlotDetail slotDetailInfo={this.state.slotDetailInfo} componentToLoad={that.componentToLoad.bind(that)} />
+              <div className="app_main_wrap">
+                <div className="app_padding_wrap">
+                  <MlAppInfiniteCalendarSidebar
+                    startDate={that.state.appointmentDate}
+                    onDateClick={that.componentToLoad.bind(that, 'calendarDayView')}
+                  />
+                  <MlAppSlotAppointmentDetails
+                    appointmentIds={ this.state.exploreAppointmentIds }
+                  />
+                </div>
+              </div>
             </div>
           </div>
         )

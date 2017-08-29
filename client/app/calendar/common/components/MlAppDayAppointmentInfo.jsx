@@ -103,7 +103,7 @@ export default class MlAppDayAppointmentInfo extends Component {
             <div className="row day_tab_content">
               {
                 slots.map(function (data, index) {
-                  let appointments = data.appointments;
+                  let appointments = data.appointments ? data.appointments : [];
                   return (
                     <div className="col-md-3" key={index}>
                       <div className="day_app_list">
@@ -111,7 +111,7 @@ export default class MlAppDayAppointmentInfo extends Component {
                           {data.slot}
                           <span className="pull-right">
                             { canAdd ? <a href=""><FontAwesome name='plus' onClick={() => addEvent(data, slots)}/></a> : '' }
-                            { canExplore ? <a href=""><FontAwesome name='ellipsis-h' onClick={ () => exploreEvent(data, slots)}/></a> : '' }
+                            { appointments.length && canExplore ? <a href=""><FontAwesome name='ellipsis-h' onClick={ () => exploreEvent(data, slots)}/></a> : '' }
                           </span>
                         </div>
                         <ul className="list-group">

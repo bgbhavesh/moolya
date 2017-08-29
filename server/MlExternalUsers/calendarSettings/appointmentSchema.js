@@ -118,6 +118,9 @@ let appointment=`
    lastName: String
    userId: String
    profileImage: String
+   isProvider: Boolean
+   isClient: Boolean
+   isAttendee: Boolean
   }
   
   type SlotInfo {

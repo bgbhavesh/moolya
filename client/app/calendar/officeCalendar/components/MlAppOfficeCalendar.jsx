@@ -12,6 +12,8 @@ import MlAppDayBackground from "./../../common/components/MlAppDayBackground";
 import MlAppEventComponent from "./../../common/components/MlAppEventComponent";
 import {fetchOfficeMemberActionHandler} from './../actions/fetchOfficeMember';
 import MlAppInfiniteCalendarSidebar from "./../../common/components/MlAppInfiniteCalendarSidebar";
+import MlAppSlotAppointmentDetails from "./../../common/components/MlAppSlotAppointmentDetails";
+
 export default class MlAppOfficeCalendar extends Component {
 
   constructor(props){
@@ -21,13 +23,15 @@ export default class MlAppOfficeCalendar extends Component {
       users:[],
       date: new Date(),
       selectedUser: '',
-      componentToLoad: 'calendar'
+      componentToLoad: 'calendar',
+      exploreAppointmentIds:[]
     };
     let month = this.state.date ? this.state.date.getMonth() : '' ;
     let year = this.state.date ? this.state.date.getFullYear() : '' ;
     this.fetchAllOfficeMemberCalendar(month, year);
     this.onNavigate = this.onNavigate.bind(this);
     this.selectUser = this.selectUser.bind(this);
+    this.slotInfo = this.slotInfo.bind(this);
     this.getOfficeMembers();
   }
 
@@ -127,6 +131,17 @@ export default class MlAppOfficeCalendar extends Component {
     }
   }
 
+  slotInfo(resp) {
+    let appointmentIds = [];
+    resp.appointments.map(function(data) {
+      appointmentIds.push(data.id)
+    });
+    this.setState({
+      exploreAppointmentIds: appointmentIds,
+      componentToLoad: 'dayDetailsAppointment'
+    })
+  }
+
   render(){
     const that = this;
     const {componentToLoad} = this.state;
@@ -158,7 +173,8 @@ export default class MlAppOfficeCalendar extends Component {
                   userId={ that.state.selectedUser ? that.state.selectedUser.userId : ''}
                   profileId={ that.state.selectedUser ? that.state.selectedUser.profileId : ''}
                   canAdd= {false}
-                  canExplore= {false}
+                  canExplore= {true}
+                  exploreEvent={that.slotInfo.bind(this)}
                 />
               </div>
             </div>
@@ -166,7 +182,17 @@ export default class MlAppOfficeCalendar extends Component {
           break;
         case "dayDetailsAppointment":
           return (
-            <h1>dayDetailsAppointment</h1>
+            <div className="app_main_wrap">
+              <div className="app_padding_wrap">
+                <MlAppInfiniteCalendarSidebar
+                  startDate={that.state.appointmentDate}
+                  onDateClick={that.componentToLoad.bind(that, 'dayAppointment')}
+                />
+                <MlAppSlotAppointmentDetails
+                  appointmentIds={ that.state.exploreAppointmentIds }
+                />
+              </div>
+            </div>
           );
           break;
 

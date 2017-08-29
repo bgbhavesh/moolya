@@ -267,7 +267,7 @@ export default class MlAppInternalMyTaskItem extends React.Component{
                 </div>
                 <br className="brclear" />
                 <div className="form-group">
-                  <textarea className="form-control float-label" placeholder="Notes" value={that.state.basicData.note} onChange={that.textFieldSaves.bind(that, "note")}></textarea>
+                  <textarea className="form-control float-label" placeholder="Notes" value={ that.state.basicData && that.state.basicData.note ? that.state.basicData.note : ''} onChange={that.textFieldSaves.bind(that, "note")}></textarea>
                 </div>
                 <div className="form-group">
                   <textarea className="form-control float-label" placeholder="Expected Output" value={that.state.basicData.expectedOutput} onChange={that.textFieldSaves.bind(that, "expectedOutput")}></textarea>

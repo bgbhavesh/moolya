@@ -4,13 +4,14 @@ import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnot
 import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../../commons/components/loader/loader";
 
 const KEY = 'partners'
 
 export default class MlInstitutionViewPartners extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {institutionPartnersList: [], loading: true};
+    this.state = {institutionPartnersList: []};
     this.fetchPortfolioInstitutionDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -20,8 +21,8 @@ export default class MlInstitutionViewPartners extends React.Component {
 
 
   componentDidMount(){
-    this.initalizeAnnotaor()
-    this.fetchAnnotations();
+   /* this.initalizeAnnotaor()
+    this.fetchAnnotations();*/
   }
 
   componentWillMount(){
@@ -101,40 +102,54 @@ export default class MlInstitutionViewPartners extends React.Component {
     let portfoliodetailsId=that.props.portfolioDetailsId;
     const response = await fetchInstitutionDetailsHandler(portfoliodetailsId, KEY);
     if (response && response.partners) {
-      this.setState({institutionPartnersList: response.partners});
+      this.setState({institutionPartnersList: response.partners,loading:false});
     }
     this.setState({loading: false})
+  }
+
+  compareQueryOptions(a, b) {
+    return JSON.stringify(a) === JSON.stringify(b);
+  };
+
+  componentDidUpdate(prevProps, prevState){
+    //var compareQueryOptions=function(a, b) {return JSON.stringify(a) === JSON.stringify(b);};
+    var currentLoaded=this.state.loading;
+    if(!this.compareQueryOptions(prevState.loading,currentLoaded)){this.initalizeAnnotaor();this.fetchAnnotations();}
   }
 
   render(){
     let that = this;
     let partnersArray = that.state.institutionPartnersList || [];
-    if (!this.state.loading && partnersArray && partnersArray.length === 0) {
-      return (<NoData tabName="Partner" />);
-    }
-    else {
-      return (
+    let loading=this.state.loading?this.state.loading:false;
+    return(
+      <div>
+        {loading === true ? ( <MlLoader/>) : (
+          <div>
+            {_.isEmpty(partnersArray)&& <div className="portfolio-main-wrap">
+              <NoData tabName={this.props.tabName} />
+            </div>}
 
-        <div id="annotatorContent">
-          <h2>Partners</h2>
-          <div className="col-lg-12">
-            <div className="row">
-              {partnersArray && partnersArray.map(function (details, idx) {
-                return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
-                  <div className="team-block">
-                    <img src={details.logo&&details.logo.fileUrl} className="team_img" />
-                    <h3>
-                      {details&&details.firstName}
-                    </h3>
-                  </div>
-                </div>)
-              })}
+            {!_.isEmpty(partnersArray)&&  <div id="annotatorContent">
+              <h2>Partners</h2>
+              <div className="col-lg-12">
+                <div className="row">
+                  {partnersArray && partnersArray.map(function (details, idx) {
+                    return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
+                      <div className="team-block">
+                        <img src={details.logo&&details.logo.fileUrl} className="team_img" />
+                        <h3>
+                          {details&&details.firstName}
+                        </h3>
+                      </div>
+                    </div>)
+                  })}
 
-            </div>
-          </div>
-        </div>
-      )
-    }
+                </div>
+              </div>
+            </div> }
+          </div>)}
+      </div>
+    )
 
   }
 }

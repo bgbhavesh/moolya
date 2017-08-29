@@ -11,7 +11,7 @@
 import React from 'react';
 import ScrollArea from 'react-scrollbar';
 import {getTeamUsersActionHandler } from '../actions/activityActionHandler';
-import { fetchOfficeActionHandler } from '../actions/fetchOffices';
+import { fetchOfficeActionHandler, fetchMyConnectionActionHandler } from '../actions/fetchOffices';
 let FontAwesome = require('react-fontawesome');
 
 export default class MlAppChooseTeam extends React.Component{
@@ -179,7 +179,19 @@ export default class MlAppChooseTeam extends React.Component{
     if(evt.target.value == "connections") {
       teamData[index].resourceType="connections";
       delete teamData[index].resourceId;
+      const resp = await fetchMyConnectionActionHandler();
       teamData[index].users = [];
+      if(resp){
+        teamData[index].users = resp.map(function (user) {
+          return {
+            name: user.name,
+            profileId: user.profileId,
+            profileImage: user.profileImage,
+            userId: user.userId
+          }
+        });
+
+      }
     } else if (evt.target.value == "moolyaAdmins") {
       teamData[index].resourceType="moolyaAdmins";
       delete teamData[index].resourceId;

@@ -866,6 +866,77 @@ MlResolver.MlQueryResolver["fetchServiceSeekerList"] = (obj, args, context, info
 
 };
 
+MlResolver.MlQueryResolver["fetchSlotDetails"] = (obj, args, context, info) => {
+
+  let userId = context.userId;
+  let appointmentId = args.appointmentId;
+
+  let pipeLine = [
+    {"$match": {"appointmentId":{$in:appointmentId }}},
+    {"$lookup": {
+      from: "users",
+      localField: "client.profileId",
+      foreignField: "profile.externalUserProfiles.profileId",
+      as: "userInfo"
+    }
+    },
+    {"$unwind":{"path": "$userInfo", "preserveNullAndEmptyArrays": true}} ,
+    {"$lookup": {
+      from: "mlTask",
+      localField: "appointmentInfo.taskId",
+      foreignField: "_id",
+      as: "taskInfo"
+    }
+    },
+    {"$unwind":"$taskInfo"} ,
+    {"$lookup": {
+      from: "mlAppointmentMembers",
+      localField: "appointmentId",
+      foreignField: "appointmentId",
+      as: "attendeeDetails"
+    }
+    },
+    {"$unwind":{"path": "$attendeeDetails", "preserveNullAndEmptyArrays": true}},
+    {"$match":{ "attendeeDetails.isAttendee":true,"attendeeDetails.status":"Accepted"} },
+    {"$lookup": {
+      from: "users",
+      localField: "attendeeDetails.userId",
+      foreignField: "_id",
+      as: "attendeeInfo"
+    }
+    },
+    {"$unwind": {"path": "$attendeeInfo", "preserveNullAndEmptyArrays": true}},
+    {"$group": {_id:"$$ROOT._id",
+      "appointmentType" : {$first : "$appointmentType"},
+      "startDate" : { $first : "$startDate"},
+      "endDate" : {$first : "$endDate"},
+      "timeZone": {$first : "$timeZone"},
+      "provider" : {$first : "$provider"},
+      "client" : {$first : "$client"},
+      "appointmentInfo" : {$first : "$appointmentInfo"},
+      "status" : {$first : "$status"},
+      "isCancelled" : {$first : "$isCancelled"},
+      "isSelf" : {$first : "$isSelf"},
+      "isRescheduled" : {$first : "$isRescheduled"},
+      "isInternal" : {$first : "$isInternal"},
+      "createdAt" : {$first : "$createdAt"},
+      "createdBy" : {$first : "$createdBy"},
+      "appointmentId" : {$first : "$appointmentId"},
+      "userImage":{$first: "$userInfo.profile.profileImage"},
+      "userEmail":{$first: "$userInfo.username"},
+      "userCommunity":{$first: "$userInfo.profile.externalUserProfiles.communityName"},
+      "userMobileNumber":{$first: "$userInfo.profile.mobileNumber"},
+      "taskName":{$first: "$taskInfo.name"},
+      "attendeeDetails":{$push: { "firstName":"$attendeeInfo.profile.firstName","lastName":"$attendeeInfo.profile.lastName", "profileImage": "$attendeeInfo.profile.profileImage", "userId":"$attendeeInfo._id"}}
+    }}
+  ]
+
+  let result = mlDBController.aggregate('MlAppointments', pipeLine );
+
+  return result;
+
+};
+
 MlResolver.MlQueryResolver["fetchMyAppointment"] = (obj, args, context, info) => {
   let userId = args.userId ? args.userId : context.userId;
   let profileId = args.profileId;

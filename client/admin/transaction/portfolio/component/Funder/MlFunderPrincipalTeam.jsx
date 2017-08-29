@@ -471,11 +471,11 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                       <div>
                                         <p>{principal.firstName}</p><p className="small">{principal.designation}</p>
                                       </div>
-                                      <div className="ml_icon_btn">
-                                        <a href="#" className="save_btn"><FontAwesome name='facebook'/></a>
-                                        <a href="#" className="save_btn"><FontAwesome name='twitter'/></a>
-                                        <a href="#" className="save_btn"><FontAwesome name='linkedin'/></a>
-                                      </div>
+                                      {/*<div className="ml_icon_btn">*/}
+                                        {/*<a href="#" className="save_btn"><FontAwesome name='facebook'/></a>*/}
+                                        {/*<a href="#" className="save_btn"><FontAwesome name='twitter'/></a>*/}
+                                        {/*<a href="#" className="save_btn"><FontAwesome name='linkedin'/></a>*/}
+                                      {/*</div>*/}
                                     </div>
                                   </a>
                                 </div>
@@ -510,11 +510,11 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                       <img src={team.logo ? team.logo.fileUrl : "/images/def_profile.png"}/>
                                       <div><p>{team.firstName}</p><p
                                         className="small">{team.designation}</p></div>
-                                      <div className="ml_icon_btn">
-                                        <a href="#" className="save_btn"><FontAwesome name='facebook'/></a>
-                                        <a href="#" className="save_btn"><FontAwesome name='twitter'/></a>
-                                        <a href="#" className="save_btn"><FontAwesome name='linkedin'/></a>
-                                      </div>
+                                      {/*<div className="ml_icon_btn">*/}
+                                        {/*<a href="#" className="save_btn"><FontAwesome name='facebook'/></a>*/}
+                                        {/*<a href="#" className="save_btn"><FontAwesome name='twitter'/></a>*/}
+                                        {/*<a href="#" className="save_btn"><FontAwesome name='linkedin'/></a>*/}
+                                      {/*</div>*/}
                                     </div>
                                   </a>
                                 </div>
@@ -630,10 +630,10 @@ export default class MlFunderPrincipalTeam extends React.Component {
                                            onClick={this.onLockChange.bind(this, "aboutPrincipal", "isAboutPrincipalPrivate")}/>
 
                             </div>
-                            <div className="form-group">
-                              <input type="text" placeholder="LinkedIn" className="form-control float-label"/>
-                              <FontAwesome name="linkedin-square" className="password_icon"/>
-                            </div>
+                            {/*<div className="form-group">*/}
+                              {/*<input type="text" placeholder="LinkedIn" className="form-control float-label"/>*/}
+                              {/*<FontAwesome name="linkedin-square" className="password_icon"/>*/}
+                            {/*</div>*/}
 
                             <div className="input_types">
                               <input id="makePrivate" type="checkbox"
@@ -769,10 +769,10 @@ export default class MlFunderPrincipalTeam extends React.Component {
                               <FontAwesome name='unlock' className="input_icon" id="isAboutTeamPrivate"
                                            onClick={this.onLockChange.bind(this, "aboutTeam", "isAboutTeamPrivate")}/>
                             </div>
-                            <div className="form-group">
-                              <input type="text" placeholder="LinkedIn" className="form-control float-label"/>
-                              <FontAwesome name="linkedin-square" className="password_icon"/>
-                            </div>
+                            {/*<div className="form-group">*/}
+                              {/*<input type="text" placeholder="LinkedIn" className="form-control float-label"/>*/}
+                              {/*<FontAwesome name="linkedin-square" className="password_icon"/>*/}
+                            {/*</div>*/}
 
                             <div className="input_types">
                               <input id="makePrivate" type="checkbox"

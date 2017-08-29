@@ -229,7 +229,7 @@ export default class MlFunderInvestment extends React.Component {
                           <a href="" id="create_clientdefault" data-placement="top" data-class="large_popover">
                             <div className="list_block notrans" onClick={this.addInvestment.bind(this)}>
                               <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                              <h3 onClick={this.addInvestment.bind(this)}>Add New Investment</h3>
+                              <h3 onClick={this.addInvestment.bind(this)}>Add New</h3>
                             </div>
                           </a>
                         </div>
@@ -258,7 +258,7 @@ export default class MlFunderInvestment extends React.Component {
                   </ScrollArea>
                   <Popover placement="right" isOpen={this.state.popoverOpen}
                            target={"create_client" + this.state.selectedObject} toggle={this.toggle}>
-                    <PopoverTitle> Add New Investment </PopoverTitle>
+                    <PopoverTitle> Add Investment </PopoverTitle>
                     <PopoverContent>
                       <div className="ml_create_client">
                         <div className="medium-popover">

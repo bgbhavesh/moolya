@@ -11,7 +11,7 @@ export default class MlCountriesList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Country List</h2>
+          <h2>Countries List</h2>
 
           <MlTableViewContainer {...mlCountriesTableConfig}/>
 

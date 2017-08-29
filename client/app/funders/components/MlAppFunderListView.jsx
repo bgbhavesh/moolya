@@ -26,9 +26,9 @@ export default class MlAppFunderListView extends Component {
     let that = this
     const data = this.props.data || [];
     const list = data.map((funder, idx) =>
-      <div className="col-md-4 col-sm-4 col-lg-3" key={idx}>
+      <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={idx}>
         <a href='' onClick={that.viewFunderDetails.bind(that, funder.portfolioDetailsId)}>
-          <div className="funders_list_block">
+          <div className="ideators_list_block">
             <div className="premium"><span>{funder.accountType}</span></div>
             <h3>{funder.funderAbout ? funder.funderAbout.firstName : ''}</h3>
             <div className="list_icon"><span className="ml ml-funder"></span></div>
@@ -40,7 +40,7 @@ export default class MlAppFunderListView extends Component {
       </div>
     );
 
-    return (<div className="row funders_list">{list}</div>);
+    return (<div className="row ideators_list">{list}</div>);
 
   }
 

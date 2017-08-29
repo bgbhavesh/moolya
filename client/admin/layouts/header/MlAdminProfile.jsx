@@ -98,11 +98,11 @@ class  MlAdminProfileApp extends Component {
           <h1 id="NavLbl" className="" style={{'background':`url(${this.state.profilePic}) center center`}}
           ></h1>
           <ol>
-            <li data-toggle="tooltip" title="My Profile" data-placement="right"><a href="/admin/myprofile/personalInfo"><img className="profile-img" src="/images/1.png" /></a></li>
-            <li data-toggle="tooltip" title="Log As" data-placement="right"><a href="/admin/logas"><img className="profile-img" src="/images/2.png" /></a></li>
-            {loggedInUser&&loggedInUser.hierarchyLevel<4?<li data-toggle="tooltip" title="Switch Profile" data-placement="right"><a href="/admin/switchprofile"><img className="profile-img" src="/images/3.png" /></a></li>:""}
-            <li data-toggle="tooltip" title="Themes" data-placement="right"><a href="#"><img className="profile-img" src="/images/4.png" /></a></li>
-            <li data-toggle="tooltip" title="Logout" data-placement="left"><a onClick={this.logoutUser.bind(this)}><img className="profile-img" src="/images/5.png" /></a></li>
+            <li data-toggle="tooltip" title="My Profile" data-placement="right"><a href="/admin/myprofile/personalInfo"><span className="ml my-ml-blank_Profile_3"></span></a></li>
+            <li data-toggle="tooltip" title="Log As" data-placement="right"><a href="/admin/logas"><span className="ml my-ml-Switch_Profile_Log_As"></span></a></li>
+            {loggedInUser&&loggedInUser.hierarchyLevel<4?<li data-toggle="tooltip" title="Switch Profile" data-placement="right"><a href="/admin/switchprofile"><span className="ml my-ml-switch_profile"></span></a></li>:""}
+            <li data-toggle="tooltip" title="Themes" data-placement="right"><a href="#"><span className="ml my-ml-themes_10-01"></span></a></li>
+            <li data-toggle="tooltip" title="Logout" data-placement="left"><a onClick={this.logoutUser.bind(this)}><span className="ml my-ml-exit_or_logoff"></span></a></li>
           </ol>
         </div>
         <div className="profile-name display_none">Welcome {this.state.firstName} </div>

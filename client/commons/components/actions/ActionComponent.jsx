@@ -80,12 +80,12 @@ export default class MlActionComponent extends Component {
       {
         imagefield:'/images/act_select_icon.png',
         actionName:'save',
-        iconClass:'ml ml-save'
+        iconClass:'ml my-ml-save'
       },
       {
         imagefield:'/images/act_select_icon.png',
         actionName:'cancel',
-        iconClass:'ml ml-delete'
+        iconClass:'ml my-ml-cancel'
       },
       {
         imagefield:'/images/act_select_icon.png',

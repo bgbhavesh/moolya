@@ -152,7 +152,7 @@ export default class MlCreateRegistration extends React.Component{
    * */
   enteredUserName(e){
     let lowerCase = e.target.value.toLowerCase()
-    this.refs.email.value = lowerCase
+    this.refs.email.value = lowerCase.trim()
      this.setState({"userName" : lowerCase});
   }
 

@@ -103,7 +103,7 @@ export default class MlInstitutionViewInvestor extends React.Component {
       this.setState({institutionInvestorList: response.investor,loading:false});
     }
 
-    this.setState({lodaing:false})
+    this.setState({loading:false})
 
   }
   compareQueryOptions(a, b) {

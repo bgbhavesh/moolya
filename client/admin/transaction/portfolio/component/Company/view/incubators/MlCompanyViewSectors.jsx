@@ -127,12 +127,12 @@ export default class MlCompanyViewSectors extends React.Component{
 
   render(){
     return (
-      <div className="col-lg-12 col-sm-12" >
+      <div className="col-lg-12 col-sm-12" id="annotatorContent">
         <div className="row">
           <h2>Sectors And Services</h2>
           <div className="panel panel-default panel-form-view">
 
-            <div className="panel-body" id="annotatorContent">
+            <div className="panel-body">
               <p>{this.state.sectorsAndServices && this.state.sectorsAndServices.sectorsAndServicesDescription ? this.state.sectorsAndServices.sectorsAndServicesDescription : ""}</p>
 
             </div>

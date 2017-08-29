@@ -64,7 +64,7 @@ export default class MlInstitutionViewMCL extends React.Component {
       licenses: this.state.licenses,
       compliances:this.state.compliances
     }
-    this.setState({data:data})
+    this.setState({data:data, loading: false})
 
   }
   initalizeAnnotaor(){

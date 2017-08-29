@@ -134,17 +134,13 @@ export default class MlCompanyViewEvolution extends React.Component {
   }
 
   render(){
-    const evolution = this.state.evolution;
-    if (evolution && !evolution.evolutionDescription) {
-      return (<NoData tabName="Evolution" />);
-    } else {
       return (
-        <div className="portfolio-main-wrap">
+        <div className="portfolio-main-wrap" id="annotatorContent">
           <div className="col-lg-12 col-sm-12">
             <div className="row">
               <h2>Evolution</h2>
               <div className="panel panel-default panel-form-view">
-                <div className="panel-body" id="annotatorContent">
+                <div className="panel-body">
                   <p>{this.state.evolution&&this.state.evolution.evolutionDescription}</p>
                 </div>
               </div>
@@ -152,6 +148,5 @@ export default class MlCompanyViewEvolution extends React.Component {
           </div>
         </div>
       )
-    }
   }
 }

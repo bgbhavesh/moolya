@@ -94,14 +94,50 @@ export default class MlInstitutionEditPartners extends React.Component {
     })
   }
 
+  handleYearsOfExperience(value) {
+    let blankSpace = value.indexOf(' ') >= 0;
+    let experience = parseInt(value);
+    let valuesArray = value.split(".");
+    let decimalExperience = valuesArray.length > 0 ?  valuesArray[0] : "";
+    if(decimalExperience) {
+      experience = parseInt(decimalExperience);
+      if(experience > 75){
+        toastr.error('Experience cannot be more than 75 years')
+        return false;
+      }
+    }
+    if(blankSpace) {
+      toastr.error('Blank spaces are not allowed')
+      return false;
+    } else if(experience > 75 ) {
+      toastr.error('Experience cannot be more than 75 years')
+      return false;
+    } else if (!experience) {
+      toastr.error('Experience not valid')
+      return false
+    } else {return true}
+  }
+
   handleBlur(e) {
     let details = this.state.data;
     let name = e.target.name;
-    details = _.omit(details, [name]);
-    details = _.extend(details, {[name]: e.target.value});
-    this.setState({data: details}, function () {
-      this.sendDataToParent()
-    })
+    let validExperience;
+    if(name === "yearsOfExperience") {
+      validExperience = this.handleYearsOfExperience(e.target.value)
+      if(validExperience) {
+        details = _.omit(details, [name]);
+        details = _.extend(details, {[name]: e.target.value});
+        this.setState({data: details}, function () {
+          this.sendDataToParent()
+        })
+      }
+    } else {
+      details = _.omit(details, [name]);
+      details = _.extend(details, {[name]: e.target.value});
+      this.setState({data: details}, function () {
+        this.sendDataToParent()
+      })
+    }
   }
   onSavePartnerAction(e) {
     this.setState({partnersList: this.state.partners, popoverOpenP: false})
@@ -184,6 +220,7 @@ export default class MlInstitutionEditPartners extends React.Component {
     })
     partners = arr;
     // funderPartner=_.omit(funderPartner,["privateFields"]);
+    console.log('partners', partners)
     this.setState({partners: partners})
     this.props.getPartnersDetails(partners, this.state.privateKey);
 
@@ -283,7 +320,7 @@ export default class MlInstitutionEditPartners extends React.Component {
                           <a href="#" id={"create_clientP" + idx}>
                             <div className="list_block notrans funding_list"
                                  onClick={that.onPartnerTileClick.bind(that, idx)}>
-                              <FontAwesome name='lock'/>
+                              <FontAwesome name='unlock'  id="makePrivate" defaultValue={principal.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={principal.makePrivate}/>
                               <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
                               <img src={principal.logo ? principal.logo.fileUrl : "/images/def_profile.png"}/>
                               <div>

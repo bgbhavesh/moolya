@@ -10,7 +10,7 @@ const KEY = 'awardsRecognition'
 export default class MlCompanyViewAwards extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {awardsList: []};
+    this.state = {awardsList: [], loading: true};
     this.fetchPortfolioDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -109,7 +109,7 @@ export default class MlCompanyViewAwards extends React.Component {
   render(){
     let that = this;
     let awardsArray = that.state.awardsList || [];
-    if (awardsArray && awardsArray.length === 0) {
+    if (!this.state.loading && awardsArray && awardsArray.length === 0) {
       return (<NoData tabName="Awards" />);
     }
     return (

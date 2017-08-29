@@ -12,8 +12,8 @@ class ConversationsRepo{
   {
     var authRequest = {userId:context.userId}
     console.log('login attempt server')
-    var checkData = await this.testApi()
-    console.log('............', checkData)
+    // var checkData = await this.testApi()
+    // console.log('............', checkData)
     var ret = await this.sendRequest('/login', authRequest, 'post');
     cb(ret);
   }
@@ -90,6 +90,9 @@ class ConversationsRepo{
 
     const result = await new Promise(function (resolve, reject) {
       request(options, function (err, res, body) {
+        console.log('error', err)
+        console.log('response', res)
+        console.log('body', body)
         if(err){
           reject(err)
         }
@@ -98,7 +101,7 @@ class ConversationsRepo{
         }
       })
     })
-    console.log(result)
+    console.log('final result', result)
     return result;
   }
 

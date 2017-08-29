@@ -7,13 +7,14 @@ import {initializeMlAnnotator} from '../../../../../../../commons/annotator/mlAn
 import {createAnnotationActionHandler} from '../../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../../commons/annotator/findAnnotations'
 import {fetchInstitutionDetailsHandler} from "../../../../actions/findPortfolioInstitutionDetails";
+import NoData from '../../../../../../../commons/components/noData/noData';
 
 const KEY = 'achievements'
 
 export default class MlInstitutionViewAchievements extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {institutionAchievementsList: []};
+    this.state = {institutionAchievementsList: [], loading: true};
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
@@ -129,25 +130,29 @@ export default class MlInstitutionViewAchievements extends React.Component {
     let that = this;
     // let branchesArray = that.state.institutionBranchesList || [];
     let achievementsArray = that.state.institutionAchievementsList || [];
-    return (
-      <div id="annotatorContent">
-        <h2>Achievements</h2>
-        <div className="col-lg-12">
-          <div className="row">
-            {achievementsArray.map(function (details, idx) {
-              return (<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
-                <div className="team-block">
-                  <img src={details.logo && details.logo.fileUrl} className="team_img"/>
-                  <h3>
-                    {details.achievementName && details.achievementName} <br />
-                  </h3>
-                </div>
-              </div>)
-            })}
+    if (!this.state.loading && achievementsArray && achievementsArray.length === 0) {
+      return (<NoData tabName="Achievements" />);
+    } else {
+      return (
+        <div id="annotatorContent">
+          <h2>Achievements</h2>
+          <div className="col-lg-12">
+            <div className="row">
+              {achievementsArray.map(function (details, idx) {
+                return (<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
+                  <div className="team-block">
+                    <img src={details.logo && details.logo.fileUrl} className="team_img"/>
+                    <h3>
+                      {details.achievementName && details.achievementName} <br />
+                    </h3>
+                  </div>
+                </div>)
+              })}
+            </div>
           </div>
         </div>
-      </div>
-    )
+      )
+    }
   }
 }
 // && branchesArray.clients && branchesArray.clients

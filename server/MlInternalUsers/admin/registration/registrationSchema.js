@@ -217,6 +217,7 @@ let registrationSchema = `
          isActive : Boolean
          firstName : String
          profileImage : String
+         headerCommunityDisplay : String
     }
     
    

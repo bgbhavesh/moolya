@@ -226,10 +226,10 @@ export default class MlStartupManagement extends React.Component{
         }
       }
       let newItem = _.omit(item, "__typename")
-      newItem = _.omit(item, "privateFields")
-      if(item && item.logo){
+      newItem = _.omit(newItem, "privateFields")
+      if(newItem && newItem.logo){
         // delete item.logo['__typename'];
-        newItem = _.omit(item, 'logo')
+        newItem = _.omit(newItem, 'logo')
       }
       managementArr.push(newItem)
     })

@@ -15,6 +15,7 @@ import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
 // import passwordSAS_validate from "../../../../../lib/common/validations/passwordSASValidator";
 import {OnToggleSwitch, initalizeFloatLabel, passwordVisibilityHandler} from "../../../utils/formElemUtil";
 import moment from "moment";
+import {first, pick, isEmpty} from 'lodash'
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 
@@ -346,9 +347,15 @@ class MlEditBackendUser extends React.Component{
       userId:this.refs.id.value,
       userObject:userObject
     }
-
-    let loginUserDetails = this.state.loginUserDetails;    /*adding user context*/
-    const response = await updateBackendUserActionHandler(updateUserObject, loginUserDetails)
+    var head = first(userprofiles) || {}
+    let headRole = head.userRoles
+    var headProfile = first(headRole)
+    var updateDetails = pick(headProfile, ['clusterId', 'chapterId', 'subChapterId', 'communityId'])
+    /**If user with no profile giving login user profile*/
+    if (isEmpty(updateDetails)){
+      updateDetails = this.state.loginUserDetails
+    }
+    const response = await updateBackendUserActionHandler(updateUserObject, updateDetails)
     return response;
   }
 

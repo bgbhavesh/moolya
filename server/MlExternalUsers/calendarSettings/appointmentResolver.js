@@ -888,7 +888,7 @@ MlResolver.MlMutationResolver["updateAppointmentByStatus"] = (obj, args, context
     let appointmentMember = mlDBController.findOne('MlAppointmentMembers', query, context);
     if(appointmentMember){
       appointmentMember.status = args.status;
-      let updatedAppointmentMember = mlDBController.update('MlAppointmentMembers', {appointmentId: args.appointmentId}, appointmentMember, {'$set':1}, context);
+      let updatedAppointmentMember = mlDBController.update('MlAppointmentMembers', appointmentMember._id, appointmentMember, {'$set':1}, context);
       if (appointmentMember.createdBy === userId) {
         let status;
         switch (args.status) {

@@ -2,6 +2,7 @@ import MlResolver from "../../../commons/mlResolverDef";
 import CoreModulesRepo from "./repository/mlAdminContextModulesRepo";
 import MlAdminContextQueryConstructor from "./repository/mlAdminContextQueryConstructor";
 import getQuery from "../genericSearch/queryConstructor";
+import {includes} from 'lodash'
 
 let mergeQueries=function(userFilter,serverFilter){
   let query=userFilter||{};
@@ -40,22 +41,17 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
   }
 
   var moduleName=args.module;
-  var action="READ";
   //to resolve the type in data _resolveType for Union
   context.module=args.module;
 
   //Authorization layer
-
+  var transactionModules = ['registrationInfo', 'registrationApprovedInfo', 'registrationRejectedInfo', 'internalRequests', "share", "userTransaction", "ConversationsLog", "portfolioApproved", "portfolioRequests", "internalRejectedRequests", "internalApprovedRequests"]
+  var isTransactModule = includes(transactionModules, context.module)
+  console.log(isTransactModule)
+    // , isTransactModule:isTransactModule
   //Context Specific Search layer
-
   var contextQuery={};
-  var queryCount;
   contextQuery=new MlAdminContextQueryConstructor(context.userId,{module:args.module,action:args.action}).contextQuery();
-  // var bool = _.isEmpty(userFilterQuery)
-  //if(!bool)
-  //  queryCount = mergeQueries(contextQuery, userFilterQuery);
-  //else
-  //  queryCount = contextQuery;
 
   var result=null;
   var  requestParams=null;

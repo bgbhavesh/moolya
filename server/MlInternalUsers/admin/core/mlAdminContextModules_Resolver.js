@@ -45,13 +45,11 @@ MlResolver.MlQueryResolver['ContextSpecSearch'] = (obj, args, context, info) =>{
   context.module=args.module;
 
   //Authorization layer
-  var transactionModules = ['registrationInfo', 'registrationApprovedInfo', 'registrationRejectedInfo', 'internalRequests', "share", "userTransaction", "ConversationsLog", "portfolioApproved", "portfolioRequests", "internalRejectedRequests", "internalApprovedRequests"]
+  var transactionModules = ['registrationInfo', 'registrationApprovedInfo', 'registrationRejectedInfo', 'internalRequests', "share", "userTransaction", "ConversationsLog", "portfolioApproved", "portfolioRequests", "internalRejectedRequests", "internalApprovedRequests", "officeTransaction"]
   var isTransactModule = includes(transactionModules, context.module)
-  console.log(isTransactModule)
-    // , isTransactModule:isTransactModule
   //Context Specific Search layer
   var contextQuery={};
-  contextQuery=new MlAdminContextQueryConstructor(context.userId,{module:args.module,action:args.action}).contextQuery();
+  contextQuery=new MlAdminContextQueryConstructor(context.userId,{module:args.module,action:args.action, isTransactModule:isTransactModule}).contextQuery();
 
   var result=null;
   var  requestParams=null;

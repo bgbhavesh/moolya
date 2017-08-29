@@ -11,10 +11,11 @@ import _ from "lodash";
 import MlEmailNotification from "../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlAlertNotification from '../../mlNotifications/mlAlertNotifications/mlAlertNotification';
 import mlOfficeInteractionService from './mlOfficeInteractionRepo'
-import MlAccounts from '../../commons/mlAccounts'
+import MlAccounts from '../../commons/mlAccounts';
 
 let request = require('request');
 var base64 = require('base64-min');
+let Future = Npm.require('fibers/future');
 
 MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
   let officeSC = [];
@@ -590,7 +591,7 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
       orderId: officeTransDetails.officeId,
       paymentAmount: 10,
       API_KEY: "AESsdjkfhsdkjfjkshfn346346",
-      appId: "zyolo",
+      appId: "zoylo",
       currency: "USD",
       transId: transactionId,
       paymentEndPoint: "paypal",
@@ -600,7 +601,7 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
     };
 
     let apiRequest = {
-      body: base64.encodeWithKey(JSON.stringify(paymentInfo), 'Test123'),
+      //body: base64.encodeWithKey(JSON.stringify(paymentInfo), 'Test123'),
       // postData: {
       //   mimeType: 'application/x-www-form-urlencoded',
       //   params:paymentInfo
@@ -609,13 +610,39 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
       url:     'http://payment-services-814468192.ap-southeast-1.elb.amazonaws.com/payments/process'
     };
 
-    var post_req = request.post(apiRequest, function(error, response, body){
-      console.log('error',error);
-      console.log('response',response.headers);
-      // console.log('body',body);
-      // resp.send(response.headers.url);
+    let future = new Future();
+
+    let post_req = request.post(apiRequest, function(error, response, body){
+      if(error){
+        let result = new MlRespPayload().errorPayload(e.message, 400);
+        future.return(result);
+      } else {
+        response.headers = response.headers ? response.headers : {};
+        let result = new MlRespPayload().successPayload(response.headers.url, 200);
+        future.return(result);
+      }
     });
 
+    paymentInfo = {
+      "orderId": officeTransDetails.officeId,
+      "paymentAmount": "10",
+      "API_KEY": "AESsdjkfhsdkjfjkshfn346346",
+      "appId": "zoylo",
+      "currency": "USD",
+      "transId": transactionId,
+      "paymentEndPoint": "paypal",
+      "operation": "debit",
+      "customerId": officeTransDetails.userId,
+      "callBackUrl": Meteor.absoluteUrl() +"app/myOffice"
+    };
+
+    let text = base64.encodeWithKey(JSON.stringify(paymentInfo), 'Test123');
+
+    post_req.write(text);
+
+    let resposne = future.wait();
+
+    return resposne;
 
   } else {
 

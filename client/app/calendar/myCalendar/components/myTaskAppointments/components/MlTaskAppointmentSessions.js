@@ -9,7 +9,8 @@ import MlAppTaskAppointmentUser from './MlAppTaskAppointmentUser';
 import {
   fetchActivitiesTeamsActionHandler,
   getTeamUsersActionHandler,
-  fetchOfficeActionHandler } from '../actions/MlAppointmentActionHandler';
+  fetchOfficeActionHandler,
+  fetchMyConnectionActionHandler} from '../actions/MlAppointmentActionHandler';
 
 export default class MlTaskAppointmentSessions extends Component{
 
@@ -63,6 +64,8 @@ export default class MlTaskAppointmentSessions extends Component{
         let response ;
           if(team.resourceType == "office") {
             response = await getTeamUsersActionHandler(team.resourceId);
+          } else if (team.resourceType == "connections") {
+            response = await fetchMyConnectionActionHandler(team.resourceId);
           }
           return response;
       });
@@ -158,6 +161,17 @@ export default class MlTaskAppointmentSessions extends Component{
       activities[activityIdx].teams[teamIdx].resourceType="connections";
       delete activities[activityIdx].teams[teamIdx].resourceId;
       activities[activityIdx].teams[teamIdx].users = [];
+      const resp = await fetchMyConnectionActionHandler();
+      if(resp){
+        activities[activityIdx].teams[teamIdx].users = resp.map(function (user) {
+          return {
+            name: user.name,
+            profileId: user.profileId,
+            profileImage: user.profileImage,
+            userId: user.userId
+          }
+        });
+      }
     } else if (evt.target.value == "moolyaAdmins") {
       activities[activityIdx].teams[teamIdx].resourceType="moolyaAdmins";
       delete activities[activityIdx].teams[teamIdx].resourceId;

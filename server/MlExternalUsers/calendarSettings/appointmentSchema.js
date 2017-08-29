@@ -173,6 +173,7 @@ let appointment=`
   
   type myAppointmentsResponse {
     slot: String,
+    shift: String
     appointments: [myAppointmentData]
   }
   

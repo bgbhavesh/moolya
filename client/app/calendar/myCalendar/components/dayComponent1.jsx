@@ -17,7 +17,7 @@ export default class MlAppMyCalendarDayComponent extends Component {
     let that = this;
     let calendarInfo = this.props.dayData.days;
     let dayDate = new Date(this.props.calendar.value);
-    if(calendarInfo.length>0){
+    if(calendarInfo && calendarInfo.length>0) {
       calendarInfo.map(function(info){
         let start = new Date(info.start);
         let end = new Date(info.end);

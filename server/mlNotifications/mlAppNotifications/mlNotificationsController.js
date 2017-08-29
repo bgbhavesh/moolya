@@ -158,9 +158,9 @@ class MlNotificationControllerClass {
     this.createNewNotification(obj)
   }
 
-  onEnquiryRequestReceived(fromUserId,toUserId){
-    fromUserId  = fromUserId?fromUserId:"";
-    toUserId = toUserId?toUserId:""
+  onEnquiryRequestReceived(fromUser,toUser){
+    let fromUserId  = fromUser&&fromUser._id?fromUser._id:"";
+    let toUserId = toUser&&toUser._id?toUser._id:""
     var currentdate = new Date();
     var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
     var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
@@ -175,9 +175,9 @@ class MlNotificationControllerClass {
     this.createNewNotification(obj)
   }
 
-  onReviewReceived(fromUserId,toUserId){
-    fromUserId  = fromUserId?fromUserId:"";
-    toUserId = toUserId?toUserId:""
+  onReviewReceived(fromUser,toUser){
+    let fromUserId  = fromUser&&fromUser._id?fromUser._id:"";
+    let toUserId = toUser&&toUser._id?toUser._id:""
     var fromUserDetails =  mlDBController.findOne('users', {_id: fromUserId})
     var toUserDetails =  mlDBController.findOne('users', {_id: toUserId})
     let fromUserFirstName = fromUserDetails&&fromUserDetails.profile&&fromUserDetails.profile.firstName?fromUserDetails.profile.firstName:"";

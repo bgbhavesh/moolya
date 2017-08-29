@@ -10,7 +10,7 @@ const KEY = 'researchAndDevelopment'
 export default class MlCompanyViewRAndD extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {RDList: []};
+    this.state = {RDList: [], loading: true};
     this.fetchPortfolioDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -109,7 +109,7 @@ export default class MlCompanyViewRAndD extends React.Component {
   render(){
     let that = this;
     let researchAndDevelopmentArray = that.state.RDList || [];
-    if (researchAndDevelopmentArray && researchAndDevelopmentArray.length === 0) {
+    if (!this.state.loading && researchAndDevelopmentArray && researchAndDevelopmentArray.length === 0) {
       return (<NoData tabName="R & D" />);
     }
     return (

@@ -13,7 +13,8 @@ export default class AppCalendarDayView extends React.Component{
     showCreateComponent: false,
     slots:[]
   };
-  this.showCreateComponent=this.showCreateComponent.bind(this)
+  this.showCreateComponent=this.showCreateComponent.bind(this);
+  this.showSlotDetails = this.showSlotDetails.bind(this)
 }
 
 
@@ -40,6 +41,11 @@ export default class AppCalendarDayView extends React.Component{
     }
   }
 
+  showSlotDetails(type, slotDetails) {
+    this.props.slotInfo(slotDetails)
+    // this.props.componentToLoad(type)
+  }
+
   showCreateComponent(type, slot){
     let date = new Date(this.props.appointmentDate);
     let startDate = slot.split('-')[0];
@@ -47,7 +53,6 @@ export default class AppCalendarDayView extends React.Component{
     let minutes = startDate.split(':')[1];
     date.setHours(hours);
     date.setMinutes(minutes);
-    console.log(date);
     this.props.componentToLoad(type, date)
   }
 
@@ -82,7 +87,7 @@ export default class AppCalendarDayView extends React.Component{
                           {data.slot}
                           <span className="pull-right">
                             <a href=""><FontAwesome name='plus' onClick={that.showCreateComponent.bind(this, 'createTask', data.slot)}/></a>
-                            {/*<a href=""><FontAwesome name='ellipsis-h' onClick={that.showCreateComponent.bind(this, 'viewTask')}/></a>*/}
+                            <a href=""><FontAwesome name='ellipsis-h' onClick={that.showSlotDetails.bind(this, 'slotDetailView', data)}/></a>
                           </span>
                         </div>
                         <ul className="list-group">

@@ -113,6 +113,30 @@ let appointment=`
     endDate: Date
   }
   
+  type AttendeeDetails {
+   firstName: String
+   lastName: String
+   userId: String
+   profileImage: String
+  }
+  
+  type SlotInfo {
+   _id: String
+    appointmentType: String
+    appointmentId: String
+    client: AppointmentUser
+    provider: AppointmentUser
+    appointmentInfo: AppointmentInfo
+    startDate: Date
+    endDate: Date
+    status: String
+    attendeeDetails: [AttendeeDetails]
+    taskName: String
+    userMobileNumber: String
+    userEmail: String
+    userImage: String
+  }
+  
   type appointmentEvents {
     date: String
     userId: String
@@ -179,6 +203,7 @@ let appointment=`
      fetchServiceSeekerList(profileId: String!, serviceId: String): [serviceSeekerList]
      fetchMyAppointment(userId: String, profileId: String!, day: Int, month: Int, year: Int): [myAppointmentsResponse]
      fetchSelfTask(selfTaskId: String): selfTask
+     fetchSlotDetails(appointmentId: [String]): [SlotInfo]
   }
   
   type Mutation {
@@ -199,4 +224,5 @@ let supportedApi = [
   {api:'bookUserServiceCardAppointment', actionName:'CREATE', userAction:"CREATEAPPOINTMENT", resourceName:"SERVICECARD", isWhiteList:true},
   {api:'updateAppointmentByStatus', actionName:'UPDATE', resourceName:"SERVICECARD"},
 ];
+
 MlResolver.MlModuleResolver.push(supportedApi);

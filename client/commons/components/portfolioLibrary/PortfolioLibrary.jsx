@@ -86,7 +86,7 @@ import SharedLibrary from './sharedLibrary'
         this.setState({explore: true})
       }
       if (portfolioId !== "portfolio" || path.indexOf("edit") > 0) {
-        this.setState({deleteOption: true})
+        this.setState({deleteOption: true, hideLock: false})
       }
       if (portfolioId === "library") {
         this.setState({explore: false, isLibrary: true, hideLock: true, deleteOption: false})
@@ -334,7 +334,11 @@ import SharedLibrary from './sharedLibrary'
         this.refetchData();
       }
       let imageLock = this.state.imagesLock;
-      imageLock[id] = imageLock[id] ? false : true;
+      if(Object.keys(imageLock).length === 0) {
+        imageLock[id] = true;
+      }else {
+        imageLock[id] = imageLock[id] ? false : true;
+      }
       this.setState({
         imagesLock: imageLock
       });
@@ -670,16 +674,13 @@ import SharedLibrary from './sharedLibrary'
 
     images() {
       let that = this;
+      let lockStatus = this.state.imagesLock;
       let imageData = this.state.isLibrary ? this.state.imageDetails || [] : this.state.imageSpecifications || [];
       const Images = imageData.map(function (show, id) {
         return (
           <div className="thumbnail" key={id}>
-            {that.state.explore ? " " : that.state.imagesLock[id] ? !that.state.hideLock ?
-              <FontAwesome onClick={() => that.toggleImageLock(id)} name='lock'/> : "" : !that.state.hideLock ?
-              <FontAwesome onClick={() => that.toggleImageLock(id)} name='unlock'/> : "" }
-            {that.state.explore ? "" :
-              <FontAwesome name='trash-o' onClick={() => that.delete(id, "image", "portfolio")}/>
-            }
+            {that.state.explore ? " " : lockStatus[id] ? <FontAwesome onClick={() => that.toggleImageLock(id)} name='lock'/>  : <FontAwesome onClick={() => that.toggleImageLock(id)} name='unlock'/> }
+            {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "image", "portfolio")}/>}
             <a href="#" data-toggle="modal" data-target=".imagepop"
                onClick={that.random.bind(that, show.fileUrl, id)}><img src={show.fileUrl}/></a>
             <div id="images" className="title">{show.fileName}</div>
@@ -833,7 +834,7 @@ import SharedLibrary from './sharedLibrary'
             {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "video")}/>}
             <a href="" data-toggle="modal" data-target=".videopop"
                onClick={that.randomVideo.bind(that, show.fileUrl, id)}>
-              <video width="120" height="100" controls>
+              <video  onContextMenu={(e) => e.preventDefault()} width="120" height="100" controls>
                 <source src={show.fileUrl} type="video/mp4"></source>
               </video>
             </a>

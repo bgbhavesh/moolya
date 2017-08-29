@@ -12,7 +12,7 @@ import {findBackendUserActionHandler} from "../actions/findBackendUserAction";
 import {updateBackendUserActionHandler} from "../actions/updateBackendUserAction";
 import {resetPasswordActionHandler} from "../actions/resetPasswordAction";
 import {getAdminUserContext} from "../../../../commons/getAdminUserContext";
-import passwordSAS_validate from "../../../../../lib/common/validations/passwordSASValidator";
+// import passwordSAS_validate from "../../../../../lib/common/validations/passwordSASValidator";
 import {OnToggleSwitch, initalizeFloatLabel, passwordVisibilityHandler} from "../../../utils/formElemUtil";
 import moment from "moment";
 let FontAwesome = require('react-fontawesome');
@@ -133,22 +133,21 @@ class MlEditBackendUser extends React.Component{
   }
 
 
-  passwordValidation() {
-    let password = this.refs.password.value;
-    if (!password) {
-      this.setState({"pwdValidationMsg": ''})
-    } else {
-      let validate = passwordSAS_validate(password)
-      if (validate.isValid) {
-        this.setState({"pwdValidationMsg": ''})
-        // this.setState({passwordValidation: true})
-      }
-      else if (typeof (validate) == 'object') {
-        this.setState({"pwdValidationMsg": validate.errorMsg})
-      }
-
-    }
-  }
+  // passwordValidation() {
+  //   let password = this.refs.password.value;
+  //   if (!password) {
+  //     this.setState({"pwdValidationMsg": ''})
+  //   } else {
+  //     let validate = passwordSAS_validate(password)
+  //     if (validate.isValid) {
+  //       this.setState({"pwdValidationMsg": ''})
+  //       // this.setState({passwordValidation: true})
+  //     }
+  //     else if (typeof (validate) == 'object') {
+  //       this.setState({"pwdValidationMsg": validate.errorMsg})
+  //     }
+  //   }
+  // }
 
   async  findBackendUser() {
     const loggedInUser = getAdminUserContext();
@@ -173,7 +172,6 @@ class MlEditBackendUser extends React.Component{
         genderSelect: response.profile.genderType, dateOfBirth:dateOfBirth ,
         profilePic: response.profile.profileImage
       })
-      let clusterId = "", chapterId = '', subChapterId = '', communityId = ''
       let dataDetails = this.state.data
       if (dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"][0]) {
         let userProfiles = dataDetails["profile"]["InternalUprofile"]["moolyaProfile"]["userProfiles"]

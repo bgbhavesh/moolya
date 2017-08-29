@@ -646,9 +646,10 @@ MlResolver.MlMutationResolver["bookTaskInternalAppointment"] = (obj, args, conte
   }, []);
 
   let userId = context.userId;
-  let profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  let profileId =  new MlUserContext().userProfileDetails(userId).profileId;
+  profileId = taskDoc.userId == userId ? taskDoc.profileId : profileId;
 
-  session.duration = session.duration ? session.duration : {}
+  session.duration = session.duration ? session.duration : {};
   let sessionHours = session.duration.hours ? session.duration.hours : 0;
   let sessionMinutes = session.duration.minutes ? session.duration.minutes : 0;
   let endDate = new Date(startDate);

@@ -35,6 +35,6 @@ export default class MlAppNotifications extends Component {
         </li>)
     })
 
-    return <span>{notificationsList}</span>
+    return <div className="ml_app_notification"> <ul className="unstyled">{notificationsList}</ul></div>
   }
 }

@@ -84,6 +84,23 @@ export default class MlAppChooseTeam extends React.Component{
           return userInfo;
         });
         team.users = users;
+      } else if (team.resourceType == "connections") {
+        const resp = await fetchMyConnectionActionHandler();
+        let users = resp.map(function (user) {
+          let userInfo = {
+            name: user.name,
+            profileId: user.profileId,
+            profileImage: user.profileImage,
+            userId: user.userId
+          };
+          let isFind = team.users.find(function (teamUser){ return teamUser.profileId == user.profileId && teamUser.userId == user.userId });
+          if(isFind) {
+            userInfo.isAdded = true;
+            userInfo.isMandatory = isFind.isMandatory;
+          }
+          return userInfo;
+        });
+        team.users = users;
       }
       return team;
     });

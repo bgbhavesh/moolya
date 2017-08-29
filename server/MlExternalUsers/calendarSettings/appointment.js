@@ -2,6 +2,24 @@
  * Created by pankaj on 25/6/17.
  */
 
+const TIMINIG = [
+  {
+    name: 'morning',
+    start: "00:00",
+    end:  "12:00",
+
+  },
+  {
+    name: 'afternoon',
+    start: "12:00",
+    end:  "18:00",
+  },
+  {
+    name: 'evening',
+    start: "18:00",
+    end:  "24:00",
+  }
+];
 
 const defaultCalenderSetting = {
   slotDuration: {
@@ -133,7 +151,7 @@ class MlAppointment {
     duration.minutes = duration.minutes ? duration.minutes : 0;
     let internal = duration.hours*60 + duration.minutes;
     slots = slots ? slots : [];
-    slots.forEach(function (slot) {
+    slots.forEach(function (slot, index) {
       if(slot.isActive){
         let startTime = getTimeDate(slot.start);
         let endTime   = getTimeDate(slot.end);
@@ -428,23 +446,26 @@ class MlAppointment {
       session.duration.hours = session.duration.hours ? session.duration.hours : 0 ;
       session.duration.minutes = session.duration.minutes ? session.duration.minutes : 0 ;
       let sessionDurationInMinutes = session.duration.hours * 60 + session.duration.minutes;
-      availableSlots.forEach(function (availableSlot) {
-        if(!canAppoinmentBook || totalSlotsDuration >= sessionDurationInMinutes ){
+      let slotEndString = "";
+      availableSlots.forEach(function (availableSlot, index) {
+        if(!canAppoinmentBook || totalSlotsDuration >= sessionDurationInMinutes ) {
           return ;
         }
         let slotStartTime = getTimeDate(availableSlot.slotTime.split('-')[0], date);
         if(date.getHours() === slotStartTime.getHours() && date.getMinutes() === slotStartTime.getMinutes()){
           isStartTimeFind = true;
+          slotEndString = availableSlot.slotTime.split('-')[0];
         }
         let slotEndTime = getTimeDate(availableSlot.slotTime.split('-')[1], date);
         let slotDifference = slotEndTime - slotStartTime;
         let slotDurationInMinutes = Math.round((slotDifference % 86400000) / 60000);
         if(isStartTimeFind) {
-          if(!availableSlot.isAvailable) {
+          if(!availableSlot.isAvailable || (slotEndString !==  availableSlot.slotTime.split('-')[0] && index !== 0 ) ) {
             canAppoinmentBook =false;
           }
           totalSlotsDuration += slotDurationInMinutes;
         }
+        slotEndString = availableSlot.slotTime.split('-')[1];
       });
 
       if(canAppoinmentBook && (totalSlotsDuration >= sessionDurationInMinutes) ) {
@@ -690,8 +711,16 @@ class MlAppointment {
           name: name
         }
       });
+
+      let shift = TIMINIG.find((shift) => {
+        let shiftStart = getTimeDate(shift.start, date);
+        let shiftEnd = getTimeDate(shift.end, date);
+        return userSlotStart.getTime() >= shiftStart.getTime() && userSlotStart < shiftEnd.getTime();
+      });
+
       response.push({
         slot: userSlots,
+        shift: shift ? shift.name : '',
         appointments: userAppointments
       });
     });

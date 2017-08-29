@@ -231,3 +231,18 @@ export async function createInternalAppointmentInfo(selfInternalAppointmentInfo)
   return task;
 }
 
+export async function fetchMyConnectionActionHandler() {
+  const result = await appClient.query({
+    query: gql`
+    query{
+      fetchConnectionByUser {
+        userId
+        profileId
+        name
+      }
+    }`,
+    forceFetch: true
+  });
+  const myConnections = result.data.fetchConnectionByUser;
+  return myConnections;
+}

@@ -83,6 +83,40 @@ export async function fetchServiceSeekerHandler (profileId, day, month) {
   return serviceSeekers;
 }
 
+export async function fetchSlotDetailsHandler (appointmentId) {
+  const result = await appClient.query({
+    query: gql`
+    query($appointmentId: [String]){ 
+      fetchSlotDetails(appointmentId: $appointmentId){
+         _id
+          appointmentType
+          appointmentId
+          startDate
+          endDate
+          status
+          attendeeDetails{
+            firstName
+            lastName
+            profileImage
+            userId
+          }
+          taskName
+          userMobileNumber
+          userEmail
+          userImage
+      }
+    }
+    `,
+    variables:{
+      appointmentId
+    },
+    forceFetch:true
+  });
+  const slotDetails = result.data.fetchSlotDetails;
+  return slotDetails;
+}
+
+
 
 
 

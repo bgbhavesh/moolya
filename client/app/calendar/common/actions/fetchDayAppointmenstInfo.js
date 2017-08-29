@@ -11,6 +11,7 @@ export async function fetctOfficeDayAppointmentActionHandler (userId, profile, d
     query($userId: String!, $profileId: String!, $day: Int, $month: Int, $year: Int) { 
       fetchMyAppointment(userId: $userId, profileId: $profileId, day: $day, month: $month, year: $year) {
         slot
+        shift
         appointments {
           id
           type

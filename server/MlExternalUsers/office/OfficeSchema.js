@@ -216,9 +216,9 @@ let myOfficeSchema = `
         updateOfficeStatus(id:String, clusterId: String, chapterId: String, subChapterId: String, communityId: String):response
         getMyOfficeRole(officeId: String!): response
         updateOfficeMemberOnReg(registrationId: String, officeMember:officeMembers):response
-        getOfficeTransactionPaymentLink(transactionId: String!): response
+        getOfficeTransactionPaymentLink(transactionId: String!):response
     }
-`
+`;
 
 MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'], myOfficeSchema]);
   let supportedApi = [

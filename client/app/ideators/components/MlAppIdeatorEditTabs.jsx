@@ -93,7 +93,8 @@ getChildContext(){
   }
   getAudience(details,privatekey) {
     let data = this.state.ideatorPortfolio;
-    data['audience']=details;
+    let updateItem = _.omit(details, 'logo');
+    data['audience']=updateItem;
     this.setState({ideatorPortfolio : data})
     this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio},privatekey);
   }

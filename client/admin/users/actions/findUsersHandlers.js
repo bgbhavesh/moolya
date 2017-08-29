@@ -154,14 +154,19 @@ export async function findUserRegistrationActionHandler(registrationId) {
             contactNumber
           }
            externalUserProfiles{
-            communityName
-            identityType
-            clusterName
-            chapterName
-            subChapterName
-            accountType
-            isActive
-            registrationId
+              profileId
+              clusterId
+              chapterId
+              subChapterId
+              communityId
+              communityName
+              identityType
+              clusterName
+              chapterName
+              subChapterName
+              accountType
+              isActive
+              registrationId
           }
           isActive
         }
@@ -172,8 +177,8 @@ export async function findUserRegistrationActionHandler(registrationId) {
     },
     forceFetch: true
   })
-  const id = result.data.findRegistrationInfoUser;
-  return id
+  const data = result.data.findRegistrationInfoUser;
+  return data
 }
 
 export async function findUserPortfolioActionHandler(registrationId) {

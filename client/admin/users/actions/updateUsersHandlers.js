@@ -24,3 +24,27 @@ export async function deActivateUser(userId, isActive) {
   const id = result.data.deActivateUser;
   return id;
 }
+
+export async function deActivateUserProfileByContextHandler(userProfiles) {
+  const {clusterId, chapterId ,subChapterId, communityId} = userProfiles
+  const result = await client.mutate({
+    mutation: gql `
+          mutation($userProfiles: userProfiles, $clusterId: String, $chapterId: String, $subChapterId: String, $communityId: String){
+              deActivateUserProfileByContext(userProfiles:$userProfiles, clusterId: $clusterId, chapterId: $chapterId, subChapterId: $subChapterId, communityId: $communityId){
+                  success,
+                  code,
+                  result
+              }  
+          }
+      `,
+    variables: {
+      userProfiles,
+      clusterId,
+      chapterId,
+      subChapterId,
+      communityId
+    }
+  })
+  const returnData = result.data.deActivateUserProfileByContext;
+  return returnData;
+}

@@ -11,7 +11,7 @@ export default class MlKycCategoriesList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>KYC Category List</h2>
+          <h2>KYC Categories List</h2>
 
           <MlTableViewContainer {...mlKycCategoryTableConfig}/>
 

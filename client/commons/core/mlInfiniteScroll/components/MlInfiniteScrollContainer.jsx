@@ -67,8 +67,8 @@ export default class MlInfiniteScrollContainer extends Component {
     let hasMore = data.length == count ? false : true;
 
     return (
-      <div className="admin_main_wrap">
-        <div className="admin_padding_wrap">
+      <div className={props && props.isApp?'':"admin_main_wrap"}>
+        <div className={props && props.isApp?'app_padding_wrap':"admin_padding_wrap"}>
           { props.header ? <MlInfiniteScrollHeader config={props.header} updateSearchValue={this.updateSearchValue} /> : '' }
           <MlInfiniteScrollView viewComponent={viewComponent} data={data} config={props} />
           <MlInfiniteScrollFooter hasMore={hasMore} loadMore={this.loadMore} />

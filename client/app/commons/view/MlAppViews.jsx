@@ -45,6 +45,7 @@ export default class MlViews extends React.Component {
     var infinityViewProps = {viewMode: this.state.viewMode, viewModeParams: this.props.viewMode, onViewModeChange: this.viewModeChange.bind(this)};
     var config = this.props;
     var listConfig = this.props.listConfig;
+    listConfig.isApp = true
     var params = this.props.params ? this.props.params : null;
     return (
       <div className="app_main_wrap">

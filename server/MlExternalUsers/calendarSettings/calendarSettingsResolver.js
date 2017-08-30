@@ -49,8 +49,8 @@ MlResolver.MlQueryResolver['getMyCalendar'] = (obj, args, context, info) => {
   }
   // let mlAppointment = new MlAppointment();
   let date = new Date();
-  let month = args.month ? args.month : date.getMonth() ;
-  let year = args.year ? args.year : date.getFullYear() ;
+  let month = args.month ? args.month : date.getMonth();
+  let year = args.year ? args.year : date.getFullYear();
   return MlAppointment.getUserCalendar(userId, profileId, month, year);
 };
 
@@ -80,9 +80,21 @@ MlResolver.MlQueryResolver['getServiceProviderCalendar'] = (obj, args, context, 
   }
   // let mlAppointment = new MlAppointment();
   let date = new Date();
+  let day = args.month  == date.getMonth() ?  date.getDate() : 1;
   let month = args.month ? args.month : date.getMonth() ;
   let year = args.year ? args.year : date.getFullYear() ;
-  return MlAppointment.getUserCalendar(userId, profileId, month, year);
+
+  let finalResponse = MlAppointment.getUserCalendar(userId, profileId, month, year, day);
+  let orderId = args.orderId;
+  if(orderId){
+    let serviceOrder = mlDBController.findOne('MlServiceCards', {orderId: orderId}, context);
+    console.log(serviceOrder);
+    if(serviceOrder && serviceOrder.expiryDate){
+      finalResponse.expiryDate = serviceOrder.expiryDate;
+    }
+  }
+  console.log(finalResponse);
+  return finalResponse
 };
 
 MlResolver.MlQueryResolver['getMyCalendarDayAvailable'] = (obj, args, context, info) => {

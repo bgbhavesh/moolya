@@ -10,6 +10,7 @@ import {dataVisibilityHandler, OnLockSwitch} from "../../../../../utils/formElem
 import {createAnnotationActionHandler} from "../../../actions/updatePortfolioDetails";
 import {findAnnotations} from "../../../../../../commons/annotator/findAnnotations";
 import {initializeMlAnnotator} from "../../../../../../commons/annotator/mlAnnotator";
+import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails'
 
 export default class MlServiceProviderViewAbout extends React.Component {
 
@@ -25,20 +26,22 @@ export default class MlServiceProviderViewAbout extends React.Component {
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
     this.fetchPortfolioDetails.bind(this);
+    this.validateUserForAnnotation.bind(this)
   }
 
   componentWillMount() {
-    const resp = this.fetchPortfolioDetails();
-    return resp
-  }
+
+ }
 
   componentDidMount() {
     OnLockSwitch();
     dataVisibilityHandler();
     /**fetch the component data*/
-    this.initalizeAnnotaor()
+    //this.initalizeAnnotaor()
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight - (68 + $('.admin_header').outerHeight(true)));
+    this.validateUserForAnnotation();
+    this.fetchPortfolioDetails();
   }
 
   componentDidUpdate() {
@@ -94,25 +97,34 @@ export default class MlServiceProviderViewAbout extends React.Component {
 
   async fetchAnnotations(isCreate) {
     const response = await findAnnotations(this.props.portfolioDetailsId, "serviceproviderAbout");
-    let resp = JSON.parse(response.result);
-    let annotations = this.state.annotations;
-    this.setState({annotations: JSON.parse(response.result)})
+    if(response){
+      let resp = JSON.parse(response.result);
+      let annotations = this.state.annotations;
+      this.setState({annotations: JSON.parse(response.result)})
 
-    let quotes = [];
+      let quotes = [];
 
-    _.each(this.state.annotations, function (value) {
-      quotes.push({
-        "id": value.annotatorId,
-        "text": value.quote.text,
-        "quote": value.quote.quote,
-        "ranges": value.quote.ranges,
-        "userName": value.userName,
-        "roleName": value.roleName,
-        "profileImage": value.profileImage,
-        "createdAt": value.createdAt
+      _.each(this.state.annotations, function (value) {
+        quotes.push({
+          "id": value.annotatorId,
+          "text": value.quote.text,
+          "quote": value.quote.quote,
+          "ranges": value.quote.ranges,
+          "userName": value.userName,
+          "roleName": value.roleName,
+          "profileImage": value.profileImage,
+          "createdAt": value.createdAt
+        })
       })
-    })
-    this.state.content.annotator('loadAnnotations', quotes);
+      if(quotes && quotes.length>0){
+        this.state.content.annotator('loadAnnotations', quotes);
+        return response
+      }else {
+        return response
+      }
+
+    }
+
   }
 
   async fetchPortfolioDetails() {
@@ -128,6 +140,17 @@ export default class MlServiceProviderViewAbout extends React.Component {
     _.each(fields, function (pf) {
       $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
+  }
+
+
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response && !this.state.isUserValidForAnnotation) {
+      this.setState({isUserValidForAnnotation:response})
+      this.initalizeAnnotaor()
+      this.fetchAnnotations()
+    }
   }
 
   render() {

@@ -4,6 +4,7 @@ import {fetchServiceProviderPortfolioAwards} from "../../../actions/findPortfoli
 import {initializeMlAnnotator} from "../../../../../../commons/annotator/mlAnnotator";
 import {createAnnotationActionHandler} from "../../../actions/updatePortfolioDetails";
 import {findAnnotations} from "../../../../../../commons/annotator/findAnnotations";
+import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails'
 var FontAwesome = require('react-fontawesome');
 
 
@@ -16,16 +17,18 @@ export default class MlServiceProviderViewAwards extends React.Component {
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
+    this.validateUserForAnnotation(this)
   }
 
 
   componentDidMount() {
-    this.initalizeAnnotaor()
-    this.fetchAnnotations();
+
+    this.fetchPortfolioStartupDetails();
+    this.validateUserForAnnotation();
   }
 
   componentWillMount() {
-    this.fetchPortfolioStartupDetails();
+
   }
 
   initalizeAnnotaor() {
@@ -94,7 +97,12 @@ export default class MlServiceProviderViewAwards extends React.Component {
         "createdAt": value.createdAt
       })
     })
-    this.state.content.annotator('loadAnnotations', quotes);
+    if(quotes && quotes.length>0){
+      this.state.content.annotator('loadAnnotations', quotes);
+      return response
+    }else {
+      return response
+    }
 
     return response;
   }
@@ -107,6 +115,18 @@ export default class MlServiceProviderViewAwards extends React.Component {
       this.setState({loading: false, serviceProviderAwardsList: response});
     }
 
+  }
+
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response && !this.state.isUserValidForAnnotation) {
+      this.setState({isUserValidForAnnotation:response})
+
+      this.initalizeAnnotaor()
+
+      this.fetchAnnotations();
+    }
   }
 
   render() {

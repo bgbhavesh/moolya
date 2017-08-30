@@ -58,11 +58,11 @@ export default class MlCompanyAboutUs extends React.Component{
   sendDataToParent(){
     let data = this.state.data;
     for (var propName in data) {
-      if (data[propName] === null || data[propName] === undefined) {
+      if (data[propName] === null || data[propName] === undefined || propName === 'privateFields') {
         delete data[propName];
       }
     }
-    data = _.omit(data, ["privateFields"])
+    // data = _.omit(data, ["privateFields"])
 
     this.props.getAboutUs(data, this.state.privateKey)
     this.fetchOnlyImages()

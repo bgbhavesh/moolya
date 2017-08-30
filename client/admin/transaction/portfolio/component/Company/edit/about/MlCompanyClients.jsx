@@ -10,7 +10,7 @@ import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 import _ from 'lodash';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
-import {fetchCompanyDetailsHandler} from "../../../../actions/findCompanyPortfolioDetails";
+import {fetchCompanyDetailsHandler} from '../../../../actions/findCompanyPortfolioDetails';
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 import MlLoader from '../../../../../../../commons/components/loader/loader'
 
@@ -23,10 +23,10 @@ export default class MlCompanyClients extends React.Component{
       loading: false,
       data:{},
       privateKey:{},
-      clients:this.props.employmentDetails || [],
+      companyClients:this.props.employmentDetails || [],
       popoverOpen:false,
       selectedIndex:-1,
-      clientsList:this.props.employmentDetails || [],
+      companyClientsList:this.props.employmentDetails || [],
       selectedVal:null,
       selectedObject:"default"
     }
@@ -49,21 +49,21 @@ export default class MlCompanyClients extends React.Component{
   componentWillMount(){
     let empty = _.isEmpty(this.context.companyPortfolio && this.context.companyPortfolio.clients)
     if(!empty){
-      this.setState({loading: false, clients: this.context.companyPortfolio.clients, clientsList:this.context.companyPortfolio.clients});
+      this.setState({loading: false, companyClients: this.context.companyPortfolio.clients, companyClientsList:this.context.companyPortfolio.clients});
     }
   }
 
   addClient(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
-    if(this.state.clients){
-      this.setState({selectedIndex:this.state.clients.length})
+    if(this.state.companyClients){
+      this.setState({selectedIndex:this.state.companyClients.length})
     }else{
       this.setState({selectedIndex:0})
     }
   }
 
   onTileSelect(index, e){
-    let cloneArray = _.cloneDeep(this.state.clients);
+    let cloneArray = _.cloneDeep(this.state.companyClients);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
     if(details && details.logo){
@@ -89,6 +89,7 @@ export default class MlCompanyClients extends React.Component{
     }else{
       details=_.extend(details,{[key]:false});
     }
+
     var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
     this.setState({privateKey:privateKey})
 
@@ -97,7 +98,7 @@ export default class MlCompanyClients extends React.Component{
     })
   }
   onSaveAction(e){
-    this.setState({clientsList:this.state.clients,popoverOpen : false})
+    this.setState({companyClientsList:this.state.companyClients,popoverOpen : false})
   }
 
   onStatusChangeNotify(e)
@@ -115,17 +116,6 @@ export default class MlCompanyClients extends React.Component{
     })
   }
 
-  // onOptionSelected(selectedId){
-  //   let details =this.state.data;
-  //   details=_.omit(details,["companyId"]);
-  //   details=_.extend(details,{["companyId"]: selectedId});
-  //   this.setState({data:details}, function () {
-  //     this.setState({"selectedVal" : selectedId})
-  //     this.sendDataToParent()
-  //   })
-  //
-  // }
-
   handleBlur(e){
     let details =this.state.data;
     let name  = e.target.name;
@@ -138,15 +128,15 @@ export default class MlCompanyClients extends React.Component{
 
   sendDataToParent(){
     let data = this.state.data;
-    let clients = this.state.clients;
-    clients = _.cloneDeep(clients);
+    let clients = this.state.companyClients;
+    let companyClients = _.cloneDeep(clients);
     data.index = this.state.selectedIndex;
-    clients[this.state.selectedIndex] = data;
+    companyClients[this.state.selectedIndex] = data;
     let arr = [];
-    _.each(clients, function (item)
+    _.each(companyClients, function (item)
     {
       for (var propName in item) {
-        if (item[propName] === null || item[propName] === undefined || propName === 'privateFields' || propName === 'logo') {
+        if (item[propName] === null || item[propName] === undefined) {
           delete item[propName];
         }
       }
@@ -155,9 +145,9 @@ export default class MlCompanyClients extends React.Component{
       let updateItem = _.omit(newItem, 'logo');
       arr.push(updateItem)
     })
-    clients = arr;
-    this.setState({clients:clients})
-    this.props.getClients(clients, this.state.privateKey);
+    companyClients = arr;
+    this.setState({companyClients:companyClients})
+    this.props.getClients(companyClients, this.state.privateKey);
 
   }
 
@@ -187,7 +177,6 @@ export default class MlCompanyClients extends React.Component{
           this.setState({loading: true})
           this.fetchOnlyImages();
           this.imagesDisplay();
-          this.sendDataToParent()
         }
       }
     }
@@ -203,13 +192,13 @@ export default class MlCompanyClients extends React.Component{
     const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId, KEY);
     if (response && response.clients) {
       let thisState=this.state.selectedIndex;
-      let dataDetails =this.state.clients
+      let dataDetails =this.state.companyClients
       let cloneBackUp = _.cloneDeep(dataDetails);
       let specificData = cloneBackUp[thisState];
       if(specificData){
         let curUpload=response.clients[thisState]
         specificData['logo']= curUpload['logo']
-        this.setState({loading: false, clients:cloneBackUp });
+        this.setState({loading: false, companyClients:cloneBackUp });
       }else {
         this.setState({loading: false})
       }
@@ -219,7 +208,7 @@ export default class MlCompanyClients extends React.Component{
   async imagesDisplay(){
     const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId, KEY);
     if (response && response.clients) {
-      let dataDetails =this.state.clients;
+      let dataDetails =this.state.companyClients;
       if(!dataDetails || dataDetails.length<1){
         dataDetails = response&&response.clients?response.clients:[]
       }
@@ -229,10 +218,10 @@ export default class MlCompanyClients extends React.Component{
           cloneBackUp[key]["logo"] = obj.logo;
         })
       }
-      let listDetails = this.state.clientsList || [];
+      let listDetails = this.state.companyClientsList || [];
       listDetails = cloneBackUp
       let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, clients:cloneBackUp,clientsList:cloneBackUpList});
+      this.setState({loading: false, companyClients:cloneBackUp,companyClientsList:cloneBackUpList});
     }
   }
 
@@ -242,15 +231,9 @@ export default class MlCompanyClients extends React.Component{
   }
 
   render(){
-    // let query=gql`query{
-    //   data:fetchStageOfCompany {
-    //     label:stageOfCompanyDisplayName
-    //     value:_id
-    //   }
-    // }`;
     let that = this;
     const showLoader = that.state.loading;
-    let clientsArray = that.state.clientsList || [];
+    let clientsArray = that.state.companyClientsList || [];
     let displayUploadButton = null;
     if(this.state.selectedObject != "default"){
       displayUploadButton = true
@@ -261,71 +244,70 @@ export default class MlCompanyClients extends React.Component{
       <div onClick={this.emptyClick.bind(this)}>
         <h2>Clients</h2>
         {showLoader === true ? ( <MlLoader/>) : (
-        <div className="requested_input main_wrap_scroll">
-          <ScrollArea
-            speed={0.8}
-            className="main_wrap_scroll"
-            smoothScrolling={true}
-            default={true}
-          >
-            <div className="col-lg-12">
-              <div className="row">
-                <div className="col-lg-2 col-md-3 col-sm-3">
-                  <a href="#" id="create_clientdefault" data-placement="right" data-class="large_popover" >
-                    <div className="list_block notrans" onClick={this.addClient.bind(this)}>
-                      <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                      <h3 onClick={this.addClient.bind(this)}>Add New Client</h3>
-                    </div>
-                  </a>
-                </div>
-                {clientsArray.map(function (details, idx) {
-                  return(<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
-                    <a href="#" id={"create_client"+idx}>
-                      <div className="list_block">
-                        <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
-                        <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
-                        {/*<h3>{details.description} <span className="assets-list">50</span></h3>*/}
-                        <h3>{details.companyName?details.companyName:""} </h3>
+          <div className="requested_input main_wrap_scroll">
+            <ScrollArea
+              speed={0.8}
+              className="main_wrap_scroll"
+              smoothScrolling={true}
+              default={true}
+            >
+              <div className="col-lg-12">
+                <div className="row">
+                  <div className="col-lg-2 col-md-3 col-sm-3">
+                    <a href="#" id="create_clientdefault" data-placement="right" data-class="large_popover" >
+                      <div className="list_block notrans" onClick={this.addClient.bind(this)}>
+                        <div className="hex_outer"><span className="ml ml-plus "></span></div>
+                        <h3 onClick={this.addClient.bind(this)}>Add New Client</h3>
                       </div>
                     </a>
-                  </div>)
-                })}
-              </div>
-            </div>
-          </ScrollArea>
-          <Popover placement="right" isOpen={this.state.popoverOpen} target={"create_client"+this.state.selectedObject}  toggle={this.toggle}>
-             <PopoverTitle>Add New Client</PopoverTitle>
-            <PopoverContent>
-              <div className="ml_create_client">
-                <div className="medium-popover"><div className="row">
-                  <div className="col-md-12">
-                    <div className="form-group">
-                      <input type="text" name="clientName" placeholder="Client Name" className="form-control float-label" defaultValue={this.state.data.clientName} onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon" id="isClientNamePrivate"  defaultValue={this.state.data.isClientNamePrivate}  onClick={this.onLockChange.bind(this, "isClientNamePrivate")}/>
-                    </div>
-                    <div className="form-group">
-                      <input type="text" name="clientDescription" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.clientDescription} onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome name='unlock' className="input_icon" id="isClientDescriptionPrivate"  defaultValue={this.state.data.isClientDescriptionPrivate}  onClick={this.onLockChange.bind(this, "isClientDescriptionPrivate")}/>
-                    </div>
-                    {displayUploadButton?<div className="form-group">
-                      <div className="fileUpload mlUpload_btn">
-                        <span>Upload Logo</span>
-                        <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
-                      </div>
-                    </div>:""}
-                    <div className="clearfix"></div>
-                    <div className="form-group">
-                      <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
-                    </div>
-                    <div className="ml_btn" style={{'textAlign': 'center'}}>
-                      <a href="#" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
-                    </div>
                   </div>
-                </div></div>
+                  {clientsArray.map(function (details, idx) {
+                    return(<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
+                      <a href="#" id={"create_client"+idx}>
+                        <div className="list_block">
+                          <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
+                          <div className="hex_outer portfolio-font-icons" onClick={that.onTileSelect.bind(that, idx)}><img src={details.logo&&details.logo.fileUrl}/></div>
+                          <h3>{details.clientName || ''} </h3>
+                        </div>
+                      </a>
+                    </div>)
+                  })}
+                </div>
               </div>
-            </PopoverContent>
-          </Popover>
-        </div>)}
+            </ScrollArea>
+            <Popover placement="right" isOpen={this.state.popoverOpen} target={"create_client"+this.state.selectedObject}  toggle={this.toggle}>
+              <PopoverTitle>Add New Client</PopoverTitle>
+              <PopoverContent>
+                <div className="ml_create_client">
+                  <div className="medium-popover"><div className="row">
+                    <div className="col-md-12">
+                      <div className="form-group">
+                        <input type="text" name="clientName" placeholder="Name" className="form-control float-label" defaultValue={this.state.data.clientName} onBlur={this.handleBlur.bind(this)}/>
+                        <FontAwesome name='unlock' className="input_icon" id="isClientNamePrivate"  defaultValue={this.state.data.isClientNamePrivate}  onClick={this.onLockChange.bind(this, "clientName", "isClientNamePrivate")}/>
+                      </div>
+                      <div className="form-group">
+                        <input type="text" name="clientDescription" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.clientDescription} onBlur={this.handleBlur.bind(this)}/>
+                        <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate"  defaultValue={this.state.data.isDescriptionPrivate}  onClick={this.onLockChange.bind(this, "clientDescription", "isDescriptionPrivate")}/>
+                      </div>
+                      {displayUploadButton?<div className="form-group">
+                        <div className="fileUpload mlUpload_btn">
+                          <span>Upload Logo</span>
+                          <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
+                        </div>
+                      </div>:""}
+                      <div className="clearfix"></div>
+                      <div className="form-group">
+                        <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>
+                      </div>
+                      <div className="ml_btn" style={{'textAlign': 'center'}}>
+                        <a href="#" className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                      </div>
+                    </div>
+                  </div></div>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>)}
       </div>
     )
   }

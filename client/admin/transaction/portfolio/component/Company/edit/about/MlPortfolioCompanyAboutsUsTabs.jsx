@@ -65,6 +65,7 @@ export default class MlPortfolioCompanyAboutsUsTabs extends React.Component{
     data=details;
     this.setState({portfolioAboutUs : data})
     let updateItem = _.omit(details, 'logo');
+    updateItem = _.omit(updateItem, 'privateFields');
     this.props.getPortfolioAboutUsDetails(updateItem,"aboutUs", privateKey);
   }
   getClients(details, privateKey){

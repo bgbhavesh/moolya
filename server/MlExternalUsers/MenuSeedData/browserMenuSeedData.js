@@ -6,7 +6,7 @@ if(Meteor.isServer){
     "name":"mlBrowserMenu",
     "menu" : [
       {
-        "image":"ml ml-dashboard",
+        "image":"ml my-ml-dashboard",
         "link": "/app/dashboard",
         "isLink" : true,
         "isMenu" : true,

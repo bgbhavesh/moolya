@@ -379,8 +379,6 @@ let ideatorPortfolioSchema = `
         fetchComments(annotationId:String): [commentsInfo]
         fetchPortfolioMenu(image: String, link: String, communityType: String, templateName: String, id: String, isLink: Boolean, isMenu: Boolean): portfolioMenu
         fetchIdeas(portfolioId:String):[Idea]
-        fetchLibrary(userId:String):[Details]
-        fetchDataFromCentralLibrary:[Details]
         validateUserForAnnotation(portfoliodetailsId:String!):Boolean
     }
     type Mutation{
@@ -392,12 +390,8 @@ let ideatorPortfolioSchema = `
         resolveComment(commentId:String): response
         reopenComment(commentId:String): response
         createIdea(idea:idea):response
-        createLibrary(detailsInput:libraryInput):response
-        updatePrivacyDetails(detailsInput:privateData): response
         updateIdea(ideaId:String, idea:idea, clusterId: String, chapterId: String, subChapterId: String, communityId: String):response
-        updateLibraryData(files: privateData): response
-        putDataIntoTheLibrary(portfoliodetailsId:String,files:file): response
-        updateLibrary(id: String,files:libraryInput): response
+       
     }
 `
 

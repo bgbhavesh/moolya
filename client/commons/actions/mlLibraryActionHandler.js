@@ -69,6 +69,35 @@ export async function fetchLibrary(userId, connection) {
 }
 
 
+export async function fetchLibraryBasedOnPortfolioIdHandler(portfolioId, connection) {
+  const result = await connection.query({
+    query: gql`
+    query($portfolioId : String){
+  fetchLibraryBasedOnPortfolioId(portfolioId: $portfolioId) {
+      _id
+      userId
+      fileName
+      fileUrl
+      fileType
+      isPrivate
+      libraryType
+      inCentralLibrary
+      portfolioReference{
+        portfolioId
+        isPrivate
+      }
+  }
+}`,
+    variables:{
+      portfolioId
+    },
+    forceFetch:true
+  })
+  const id = result.data.fetchLibraryBasedOnPortfolioId;
+  return id
+}
+
+
 export async function getUserPermissionDetailsHandler(portfolioDetailsId,connection) {
   const result = await connection.query({
     query: gql`
@@ -150,11 +179,11 @@ export async function putDataIntoTheLibrary(portfolioDetailsId, files, connectio
   return id;
 }
 
-export async function updatePrivacyDetails(detailsInput, connection) {
+export async function updatePrivacyDetails(privateInput, connection) {
   const result = await connection.mutate({
     mutation: gql`
-      mutation($detailsInput:privateData){
-        updatePrivacyDetails(detailsInput:$detailsInput) {
+      mutation($privateInput:privacyInfo){
+        updatePrivacyDetails(privateInput:$privateInput) {
           success
           code
           result
@@ -162,7 +191,7 @@ export async function updatePrivacyDetails(detailsInput, connection) {
       }
     `,
     variables: {
-      detailsInput
+      privateInput
     },
     forceFetch: true
   });

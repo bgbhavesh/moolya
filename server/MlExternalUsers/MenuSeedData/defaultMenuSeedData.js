@@ -7,7 +7,7 @@ if(Meteor.isServer){
         "name":"mlDefaultMenu",
         "menu" : [
             {
-                "image":"ml ml-dashboard",
+                "image":"ml my-ml-dashboard",
                 "link": "/app/dashboard",
                 "isLink" : true,
                 "isMenu" : true,

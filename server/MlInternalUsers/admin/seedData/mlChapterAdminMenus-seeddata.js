@@ -882,7 +882,15 @@ if(Meteor.isServer){
             "isMenu": true,
             "image": "",
             "subMenusId": "transaction"
-            // "subMenuMappingId":"Transactions_Log"
+          },
+          {
+            "link": "/admin/transactions/serviceCardsList",
+            "name": "Service Cards",
+            "uniqueId": "Service_Cards",
+            "subMenusId": "transaction",
+            "isLink": true,
+            "isMenu": true,
+            "image": ""
           },
           {
             "link": "/admin/transactions/history",
@@ -892,7 +900,6 @@ if(Meteor.isServer){
             "isMenu": true,
             "image": "",
             "subMenusId": "transaction"
-            // "subMenuMappingId":"Transactions_Log"
           },
         ]
       },

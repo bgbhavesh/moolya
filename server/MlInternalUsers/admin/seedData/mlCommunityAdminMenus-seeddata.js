@@ -9,7 +9,7 @@ if(Meteor.isServer){
     "name" : "mlCommunityAdminMenu",
     "menu" : [
       {
-        "image" : "/images/db_icon.png",
+        "image" : "ml my-ml-dashboard",
         "link" : "/admin/dashboard/chapters",
         "name" : "dashboard",
         "uniqueId" : "dashboard",
@@ -73,7 +73,7 @@ if(Meteor.isServer){
         ]
       },
       {
-        "image" : "/images/cluster_icon.png",
+        "image" : "ml my-ml-cluster",
         "link" : "",
         "name" : "cluster",
         "uniqueId"   :"cluster",
@@ -83,7 +83,7 @@ if(Meteor.isServer){
         "isDisabled":true
       },
       {
-        "image" : "/images/chapter_icon.png",
+        "image" : "ml my-ml-chapter",
         // "link" : "/admin/chapters",
         "uniqueId" : "chapter",
         "name" : "chapter",
@@ -92,7 +92,7 @@ if(Meteor.isServer){
         "isDisabled":true,
       },
       {
-        "image" : "/images/community_icon.png",
+        "image" : "ml my-ml-community",
         "link" : "/admin/communities",
         "uniqueId" : "community",
         "name" : "community",
@@ -184,7 +184,7 @@ if(Meteor.isServer){
         ]
       },
       {
-        "image" : "/images/documents_icon.png",
+        "image" : "ml my-ml-documents_2",
         "link" : "/admin/documents/clusterList",
         "uniqueId" : "documents",
         "name" : "documents",
@@ -275,7 +275,7 @@ if(Meteor.isServer){
 
       },
       {
-        "image" : "/images/services_icon.png",
+        "image" : "ml my-ml-templates",
         "link" : "/admin/templates/templateList",
         "name" : "templates",
         "isLink" : true,
@@ -340,7 +340,7 @@ if(Meteor.isServer){
         ]
       },
       {
-          "image" : "/images/transactions-icon.png",
+          "image" : "ml my-ml-transactions",
           "link" : "/admin/transactions/requestedList",
           "name" : "transaction",
           "uniqueId"   :"transaction",
@@ -751,7 +751,7 @@ if(Meteor.isServer){
         ]
       },
       {
-        "image" : "/images/settings_icon.png",
+        "image" : "ml my-ml-settings1",
         "link" : "/admin/settings/regionalsList",
         "name" : "settings",
         "uniqueId" : "settings",

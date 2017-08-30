@@ -11,7 +11,7 @@ import _ from "underscore";
 import moment from "moment";
 import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
-// import {getCommunityName} from '../../../commons/utils';
+import {getCommunityName} from '../../../commons/utils';
 // import mlConversationsRepo from '../../../commons/Conversations/mlConversationsRepo'
 var fs = Npm.require('fs');
 var Future = Npm.require('fibers/future');
@@ -322,8 +322,8 @@ MlResolver.MlQueryResolver['findRegistrationInfoForUser'] = (obj, args, context,
           response.pendingRegId = isAllowRegisterAs._id
         }
 
-        // let communityCode = response && response.registrationInfo && response.registrationInfo.registrationType?response.registrationInfo.registrationType:''
-        // response.registrationInfo.communityName = getCommunityName(communityCode);
+        let communityCode = response && response.registrationInfo && response.registrationInfo.registrationType?response.registrationInfo.registrationType:''
+        response.registrationInfo.communityName = getCommunityName(communityCode);
         response.headerCommunityDisplay = headerCommunityDisplay(response.registrationInfo, context)
         response.profileImage = profile.profileImage
         response.firstName = profile.firstName
@@ -1640,12 +1640,16 @@ MlResolver.MlQueryResolver['findRegistrationInfoUser'] = (obj, args, context, in
 
 
 headerCommunityDisplay = (registrationInfo, context) => {
+  var subChapter = mlDBController.findOne('MlSubChapters', {_id: registrationInfo.subChapterId}) || {}
+  var isMoolya = subChapter.isDefaultSubChapter
   var subChapterName = registrationInfo.subChapterName
   var chapterName = registrationInfo.chapterName
   var communityDefCode = registrationInfo.communityDefCode
-  if (subChapterName&&subChapterName.length > 12)
+  if (subChapterName && subChapterName.length > 12)
     subChapterName = subChapterName.substr(0, 12) + '...'
   chapterName = chapterName.substr(0, 4)
-  var returnName = subChapterName + '/' + chapterName + '/' + communityDefCode
+  var returnName = registrationInfo.communityName
+  if (!isMoolya)
+    returnName = subChapterName + '/' + chapterName + '/' + registrationInfo.communityName
   return returnName
 }

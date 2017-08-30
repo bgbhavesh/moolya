@@ -49,51 +49,56 @@ export function multipartASyncFormHandler(data,file,endPoint,callback) {
     formdata.append('data', JSON.stringify(data));
   if(file)
     formdata.append('file', file);
-
-    // Make ajax call
-    let filexmlhttp;
-    if (window.XMLHttpRequest) {
-      // code for IE7+, Firefox, Chrome, Opera, Safari
-      filexmlhttp = new XMLHttpRequest();
+    let fileSizeExceeded = file.size/1024/1024 > 10 ? true : false
+    if(fileSizeExceeded) {
+      callback('Maximum file size exceeded');
+      return false;
     } else {
-      // code for IE6, IE5
-      filexmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
+      // Make ajax call
+      let filexmlhttp;
+      if (window.XMLHttpRequest) {
+        // code for IE7+, Firefox, Chrome, Opera, Safari
+        filexmlhttp = new XMLHttpRequest();
+      } else {
+        // code for IE6, IE5
+        filexmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+      }
 
-    if(filexmlhttp){
-      const localStorageLoginToken = localStorage.getItem('Meteor.loginToken');
-      let serverEndPoint=Meteor.absoluteUrl(endPoint)?Meteor.absoluteUrl(endPoint):Meteor.absoluteUrl('');
-      filexmlhttp.open('POST',serverEndPoint , true);
-      filexmlhttp.setRequestHeader("enctype", "multipart/form-data");
-      filexmlhttp.setRequestHeader('meteor-login-token',localStorageLoginToken);
+      if(filexmlhttp){
+        const localStorageLoginToken = localStorage.getItem('Meteor.loginToken');
+        let serverEndPoint=Meteor.absoluteUrl(endPoint)?Meteor.absoluteUrl(endPoint):Meteor.absoluteUrl('');
+        filexmlhttp.open('POST',serverEndPoint , true);
+        filexmlhttp.setRequestHeader("enctype", "multipart/form-data");
+        filexmlhttp.setRequestHeader('meteor-login-token',localStorageLoginToken);
 
-      filexmlhttp.addEventListener("load", function () {
+        filexmlhttp.addEventListener("load", function () {
 
-        if (filexmlhttp.status < 400) {
-          console.log(filexmlhttp.response);
+          if (filexmlhttp.status < 400) {
+            console.log(filexmlhttp.response);
             callback(filexmlhttp.response);
-        }
-        else {
+          }
+          else {
             callback({success:false,code:500,result:"error"});
-        }
-      });
+          }
+        });
 
-      filexmlhttp.addEventListener("error", function () {
-            callback({success:false,code:500,result:"error"});
-      });
+        filexmlhttp.addEventListener("error", function () {
+          callback({success:false,code:500,result:"error"});
+        });
 
-      filexmlhttp.addEventListener("abort", function () {
-        callback({success:false,code:500,result:"error"});
-      });
+        filexmlhttp.addEventListener("abort", function () {
+          callback({success:false,code:500,result:"error"});
+        });
 
-      /*filexmlhttp.onreadystatechange = function() {
-        if (filexmlhttp.readyState === 4 && filexmlhttp.status === 200) {
-          console.log(filexmlhttp.response);
-          callback(filexmlhttp.response);
-        }
-      }*/
+        /*filexmlhttp.onreadystatechange = function() {
+         if (filexmlhttp.readyState === 4 && filexmlhttp.status === 200) {
+         console.log(filexmlhttp.response);
+         callback(filexmlhttp.response);
+         }
+         }*/
 
-      filexmlhttp.send(formdata);
+        filexmlhttp.send(formdata);
+      }
+
     }
-
 }

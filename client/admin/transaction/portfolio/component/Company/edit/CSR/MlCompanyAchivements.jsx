@@ -187,7 +187,7 @@ export default class MlCompanyAchivements extends React.Component{
     })
     institutionAchievements = arr;
     this.setState({institutionAchievements:institutionAchievements})
-    this.props.getInstitutionAchivements(institutionAchievements, this.state.privateKey);
+    this.props.getAchivements(institutionAchievements, this.state.privateKey);
   }
 
   onLogoFileUpload(e){

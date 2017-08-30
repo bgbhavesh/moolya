@@ -39,7 +39,10 @@ export default class MlAppInstitutionListView extends Component {
       </div>
     );
 
-    return (<div className="row funders_list">{list}</div>);
+    return (<div className="row funders_list">
+      <div className="col-md-12"> <h2>Institutions</h2> </div>
+      {list}
+      </div>);
 
   }
 

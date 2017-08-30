@@ -9,9 +9,9 @@ if(Meteor.isServer){
     "name" : "mlCommunityAdminMenu",
     "menu" : [
       {
-        "image" : "/images/db_icon.png",
+        "image" : "ml my-ml-dashboard",
         "link" : "/admin/dashboard/chapters",
-        "name" : "dashboard",
+        "name" : "Dashboard",
         "uniqueId" : "dashboard",
         "isLink" : true,
         "isMenu" : true,
@@ -73,9 +73,9 @@ if(Meteor.isServer){
         ]
       },
       {
-        "image" : "/images/cluster_icon.png",
+        "image" : "ml my-ml-cluster",
         "link" : "",
-        "name" : "cluster",
+        "name" : "Cluster",
         "uniqueId"   :"cluster",
         "isLink" : false,
         "isMenu" : true,
@@ -83,19 +83,19 @@ if(Meteor.isServer){
         "isDisabled":true
       },
       {
-        "image" : "/images/chapter_icon.png",
+        "image" : "ml my-ml-chapter",
         // "link" : "/admin/chapters",
         "uniqueId" : "chapter",
-        "name" : "chapter",
+        "name" : "Chapter",
         "isLink" : false,
         "isMenu" : false,
         "isDisabled":true,
       },
       {
-        "image" : "/images/community_icon.png",
+        "image" : "ml my-ml-community",
         "link" : "/admin/communities",
         "uniqueId" : "community",
-        "name" : "community",
+        "name" : "Community",
         "isLink" : true,
         "isMenu" : true,
         "hideSubMenu":true,
@@ -184,10 +184,10 @@ if(Meteor.isServer){
         ]
       },
       {
-        "image" : "/images/documents_icon.png",
+        "image" : "ml my-ml-documents_2",
         "link" : "/admin/documents/clusterList",
         "uniqueId" : "documents",
-        "name" : "documents",
+        "name" : "Documents",
         "isLink" : true,
         "isMenu" : true,
         "subMenu" : [
@@ -275,9 +275,9 @@ if(Meteor.isServer){
 
       },
       {
-        "image" : "/images/services_icon.png",
+        "image" : "ml my-ml-templates",
         "link" : "/admin/templates/templateList",
-        "name" : "templates",
+        "name" : "Templates",
         "isLink" : true,
         "isMenu" : true,
         "uniqueId" : "templates",
@@ -340,9 +340,9 @@ if(Meteor.isServer){
         ]
       },
       {
-          "image" : "/images/transactions-icon.png",
+          "image" : "ml my-ml-transactions",
           "link" : "/admin/transactions/requestedList",
-          "name" : "transaction",
+          "name" : "Transactions",
           "uniqueId"   :"transaction",
           "isLink" : true,
           "isMenu" : true,
@@ -751,9 +751,9 @@ if(Meteor.isServer){
         ]
       },
       {
-        "image" : "/images/settings_icon.png",
+        "image" : "ml my-ml-settings1",
         "link" : "/admin/settings/regionalsList",
-        "name" : "settings",
+        "name" : "Settings",
         "uniqueId" : "settings",
         "isLink" : true,
         "isMenu" : true,

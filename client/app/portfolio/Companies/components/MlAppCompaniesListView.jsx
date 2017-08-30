@@ -39,7 +39,9 @@ export default class MlAppCompanyListView extends Component {
       </div>
     );
 
-    return (<div className="row funders_list">{list}</div>);
+    return (<div className="row funders_list">
+      <div className="col-md-12"><h2>Companies</h2></div>
+      {list}</div>);
 
   }
 }

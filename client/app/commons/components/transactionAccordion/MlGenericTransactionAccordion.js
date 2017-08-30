@@ -3,7 +3,8 @@
  */
 
 import React, {Component} from "react";
-import MlAppTransaction from '../../../profile/office/components/officeTransaction/MlAppTransaction'
+// import MlAppTransaction from '../../../profile/office/components/officeTransaction/MlAppTransaction'
+import MlAppRegistrationWizard from '../../../registrations/component/MlAppRegistrationWizard'
 import MlConnectionRequest from './MlConnectionRequest';
 import MlInvestmentRequest from './MlInvestmentRequest'
 
@@ -19,7 +20,8 @@ export default function MlGenericTransactionAccordion(props) {
       break;
     }
     case 'registration': {
-      return <MlAppTransaction config={data}/>
+      // return <MlAppTransaction config={data}/>
+      return <MlAppRegistrationWizard config={data._id}/>
       break;
     }
     case 'connectionRequest':

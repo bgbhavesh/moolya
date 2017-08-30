@@ -77,7 +77,7 @@ export default class MlCompanyPolicy extends React.Component{
       }
     }
     data=_.omit(data,["privateFields"]);
-    this.props.getInstitutionPolicy(data, this.state.privateKey)
+    this.props.getPolicy(data, this.state.privateKey)
   }
   onLockChange(fieldName,field, e){
     var isPrivate = false;

@@ -192,7 +192,7 @@
     {api:'fetchTaskDetails', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
     {api:'fetchTask', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
     {api:'fetchTaskDetailsForServiceCard', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
-    {api:'fetchTaskDetailsForAdminServiceCard', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
+    {api:'fetchTaskDetailsForAdminServiceCard', actionName:'READ', moduleName:"SERVICECARD", isAppWhiteList: true},
     {api:'fetchTaskDetailsAdmin', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
     {api:'fetchTasksInBooking', actionName:'READ', moduleName:"OFFICE", isAppWhiteList: true},
     {api:'createTask', actionName:'CREATE', moduleName:"OFFICE", isAppWhiteList: true},

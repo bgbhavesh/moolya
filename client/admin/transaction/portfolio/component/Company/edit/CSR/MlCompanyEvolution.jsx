@@ -77,7 +77,7 @@ export default class MlCompanyEvolution extends React.Component{
       }
     }
     data=_.omit(data,["privateFields"]);
-    this.props.getInstitutionEvolution(data, this.state.privateKey)
+    this.props.getEvolution(data, this.state.privateKey)
   }
   onLockChange(fieldName,field, e){
     var isPrivate = false;

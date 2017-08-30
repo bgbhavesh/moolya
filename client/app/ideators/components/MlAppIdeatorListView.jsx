@@ -38,6 +38,7 @@ export default class MlAppIdeatorListView extends Component {
         <div className="app_padding_wrap">
           <div className="col-md-12 ideators_list">
             <div className="row">
+              <h2>Ideators</h2>
               {data.map(function (ideator, idx) {
                 return (
                   <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={idx}>

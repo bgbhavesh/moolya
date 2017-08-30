@@ -12,14 +12,6 @@ export default class MlAppCalendarHeader extends Component {
     return (
       <div className="col-lg-12">
         <ul className="users_list well well-sm">
-          <li className={ selectedUser ? '' : 'active_user' } >
-            <a href="" onClick={() => selectUser()}>
-              <img src="/images/def_profile.png" /><br />
-              <div className="tooltiprefer">
-                <span>All</span>
-              </div>
-            </a>
-          </li>
           {users.map( (user, index) => {
             return(
               <li key={index} className={ selectedUser == user._id ? 'active_user' : ''}>

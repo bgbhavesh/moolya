@@ -22,7 +22,11 @@ export default class MlAppOfficeCalendar extends Component {
       events: [],
       users:[],
       date: new Date(),
-      selectedUser: '',
+      selectedUser: {
+        _id: 0,
+        name: "All",
+        isConsolidated: true
+      },
       componentToLoad: 'calendar',
       exploreAppointmentIds:[]
     };
@@ -51,7 +55,7 @@ export default class MlAppOfficeCalendar extends Component {
   }
 
   selectUser(user){
-    if(user){
+    if(!user.isConsolidated){
       this.setState({
         selectedUser: user,
         componentToLoad: 'calendar'
@@ -125,9 +129,26 @@ export default class MlAppOfficeCalendar extends Component {
   async getOfficeMembers() {
     let users = await fetchOfficeMemberActionHandler();
     if(users){
-      this.setState({
-        users: users
-      });
+      if(users.length == 1) {
+        console.log('selectedUser', this.state.selectedUser, users);
+        this.setState({
+          users: users,
+          selectedUser: users[0]
+        }, function () {
+          this.selectUser(users[0]);
+        }.bind(this));
+      } else {
+        let teamUsers = JSON.parse(JSON.stringify(users));
+        teamUsers.splice(0, 0,{
+          _id: 0,
+          name: "Consolidated",
+          isConsolidated: true
+        });
+        console.log(teamUsers);
+        this.setState({
+          users: teamUsers
+        });
+      }
     }
   }
 

@@ -10,7 +10,7 @@ export default class MlAppEventComponent extends Component {
     this.state ={
       status:''
     };
-    console.log('props', props);
+    // console.log('props', props);
   }
 
   render(){

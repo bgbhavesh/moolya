@@ -83,7 +83,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
     }
   }
 
-  var parseBody = bodyParser.json();
+  var parseBody = bodyParser.json({limit:'10mb'});
 
   const graphQLServer = express();
 

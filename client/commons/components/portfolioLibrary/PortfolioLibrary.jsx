@@ -14,7 +14,7 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import { Modal, ModalHeader, ModalBody} from 'reactstrap';
 import {multipartASyncFormHandler} from '../../MlMultipartFormAction'
-import {createLibrary, fetchLibrary, updateLibraryData, updatePrivacyDetails, updateLibrary, fetchDataFromCentralLibrary, fetchSharedLibraryHandler} from '../../actions/mlLibraryActionHandler'
+import {createLibrary, fetchLibrary, updateLibraryData, updatePrivacyDetails,fetchLibraryBasedOnPortfolioIdHandler,  updateLibrary, fetchDataFromCentralLibrary, fetchSharedLibraryHandler} from '../../actions/mlLibraryActionHandler'
 import MlVideoPlayer from  '../../videoPlayer/MlVideoPlayer'
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
 import formHandler from "../../../commons/containers/MlFormHandler";
@@ -24,6 +24,8 @@ import PopoverActionIcon from '../../../app/appActions/components/PopoverActionI
 import SharePopOver from './sharePopOver'
 import MlConnectionHeader from './connectionHeader'
 import SharedLibrary from './sharedLibrary'
+// import MlDocViewer from  './MlDocViewer'
+
 
   class  Library extends React.Component {
 
@@ -58,7 +60,9 @@ import SharedLibrary from './sharedLibrary'
         popoverOpen: false, deleteOption: false,
         selectedData: [],
         showSharedFiles: false,
-        sharedFiles: []
+        sharedFiles: [],
+        myPortfolio: false,
+        isLibrary: false
       };
       this.toggle = this.toggle.bind(this);
       this.refetchData.bind(this);
@@ -77,26 +81,47 @@ import SharedLibrary from './sharedLibrary'
 
     componentWillMount() {
       this.getCentralLibrary()
+      let userId = this.props.portfolioDetailsId ? this.props.portfolioDetailsId : "";
       let portfolioId = FlowRouter.getRouteName();
       let path = FlowRouter.current().path
       if (path.indexOf("view") > 0) {
         this.setState({explore: false})
+        this.getLibraryDetails(userId);
       }
-      if (portfolioId !== "portfolio" || path.indexOf("view") > 0) {
+      if (portfolioId === "explore") {
         this.setState({explore: true})
+        this.getLibraryDetails(userId);
+      }
+
+      if (portfolioId !== "portfolio" || path.indexOf("view") > 0) {
+        this.setState({explore: true, myPortfolio: true}, function () {
+          if(!this.state.myPortfolio) {
+            this.getLibraryDetails(userId);
+          }
+        }.bind(this));
+        this.privacySeggregation();
       }
       if (portfolioId !== "portfolio" || path.indexOf("edit") > 0) {
-        this.setState({deleteOption: true, hideLock: false})
+        this.setState({deleteOption: true, hideLock: false, myPortfolio: true}, function () {
+          if(!this.state.myPortfolio) {
+            this.getLibraryDetails(userId);
+          }
+        }.bind(this));
+        this.privacySeggregation();
       }
       if (portfolioId === "library") {
+        this.getLibraryDetails(userId);
         this.setState({explore: false, isLibrary: true, hideLock: true, deleteOption: false})
       }
       if (portfolioId === "transaction_portfolio_EditRequests") {
+        this.getLibraryDetails(userId);
         this.setState({explore: false, isAdminEdit: true})
         this.setState({hideLock: true})
       }
-      userId = this.props.portfolioDetailsId ? this.props.portfolioDetailsId : "";
-      this.getLibraryDetails(userId);
+
+      // if(this.state.getLibraryInfo) {
+      //   this.getLibraryDetails(userId);
+      // }
     }
 
     async getCentralLibrary() {
@@ -121,7 +146,33 @@ import SharedLibrary from './sharedLibrary'
           that.setState({documentDetails: documents})
         }
       })
-      console.log(this.state.imageDetails)
+    }
+
+    async privacySeggregation() {
+      let that = this;
+      let images = [];
+      let videos = [];
+      let templates = [];
+      let documents = [];
+      const response  = await fetchLibraryBasedOnPortfolioIdHandler(this.props.portfolioDetailsId,this.props.client)
+      // console.log('response from privacySeggregation', response);
+      response.map(function (data) {
+        if (data.libraryType === "image") {
+          images.push(data);
+          that.setState({imageSpecifications: images})
+        } else if (data.libraryType === "video") {
+          videos.push(data)
+          that.setState({videoSpecifications: videos})
+        } else if (data.libraryType === "template") {
+          templates.push(data)
+          that.setState({templateSpecifications: templates})
+        } else if (data.libraryType === "document") {
+          documents.push(data)
+          that.setState({documentSpecifications: documents})
+        }
+      })
+      // this.setState({imageSpecifications: images,videoSpecifications: videos, templateSpecifications: templates, documentSpecifications: documents})
+      return response;
     }
 
     /**
@@ -193,16 +244,19 @@ import SharedLibrary from './sharedLibrary'
 
     ImageUpload(e) {
       let file = e.target.files[0];
+      // let fileSizeExceeded =  file.size/1024/1024 > 10 ? false : true;
+      console.log('file attributes', file.size/1024/1024+"MB" )
       this.setState({fileType: file.type, fileName: file.name});
       let fileType = file.type;
-      // this.getCentralLibrary();
+      this.getCentralLibrary();
       let fileExists = this.checkIfFileAlreadyExists(file.name, "image");
       let typeShouldBe = _.compact(fileType.split('/'));
       if (file && typeShouldBe && typeShouldBe[0] == "image") {
         console.log('--fileStatus--', fileExists)
-        if (!fileExists) {
+        if (!fileExists ) {
           let data = {moduleName: "PROFILE", actionName: "UPDATE"}
           let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "image"));
+          console.log('upload response', response)
         } else {
           toastr.error("Image with the same file name already exists");
         }
@@ -221,7 +275,7 @@ import SharedLibrary from './sharedLibrary'
       let file = e.target.files[0];
       this.setState({fileType: file.type, fileName: file.name});
       let fileType = file.type;
-      // this.getCentralLibrary();
+      this.getCentralLibrary();
       let fileExists = this.checkIfFileAlreadyExists(file.name, "video");
       let typeShouldBe = _.compact(fileType.split('/'));
       if (file && typeShouldBe && typeShouldBe[0] == "video") {
@@ -246,7 +300,7 @@ import SharedLibrary from './sharedLibrary'
       let file = e.target.files[0];
       this.setState({fileType: file.type, fileName: file.name});
       let fileType = file.type;
-      // this.getCentralLibrary();
+      this.getCentralLibrary();
       let fileExists = this.checkIfFileAlreadyExists(file.name, "template");
       let typeShouldBe = _.compact(fileType.split('/'));
       if (file && typeShouldBe && typeShouldBe[0] == "image") {
@@ -271,7 +325,7 @@ import SharedLibrary from './sharedLibrary'
       let file = e.target.files[0];
       this.setState({fileType: file.type, fileName: file.name});
       let fileType = file.type;
-      // this.getCentralLibrary();
+      this.getCentralLibrary();
       let fileExists = this.checkIfFileAlreadyExists(file.name, "document");
       let typeShouldBe = _.compact(fileType.split('/'));
       console.log("--doc format--",fileType)
@@ -295,7 +349,12 @@ import SharedLibrary from './sharedLibrary'
 
     refetchData() {
       let userId = this.props.portfolioDetailsId;
-      this.getLibraryDetails(userId)
+      console.log("this.state.myPortfolio", this.state.myPortfolio);
+      if(!this.state.myPortfolio) {
+        this.getLibraryDetails(userId)
+      } else {
+        this.privacySeggregation();
+      }
     }
 
     /**
@@ -305,45 +364,36 @@ import SharedLibrary from './sharedLibrary'
      * @returns Void
      */
 
-    toggleImageLock(id) {
-      let currentPath = FlowRouter.current().path.split("/")
-      let currentPortfolioId = currentPath[4]
+    toggleImageLock(details, id) {
       let images = this.state.imageSpecifications;
-      if (images[id].portfolioReference) {
-        let privacyState;
-        images[id].portfolioReference.map(function (data) {
-          if (data.portfolioId === currentPortfolioId) {
-            privacyState = data.isPrivate ? false : true
-          }
-        })
+      let image = {}
+      images.map(function(data) {
+        if(details._id === data._id) {
+          image = data;
+        }
+      })
+        let privacyState = image.isPrivate ? false : true;
         let imageDetails = {
-          index: id,
-          element: privacyState,
-          type: "image"
+          id: image._id,
+          privacyState: privacyState,
+          portfolioId: this.props.portfolioDetailsId
         }
         this.dataPrivacyHandler(imageDetails)
-        this.refetchData();
-
-      } else {
-        let imageDetails = {
-          index: id,
-          element: true,
-          type: "image"
-        }
-        this.dataPrivacyHandler(imageDetails)
-        this.refetchData();
+        images[id].isPrivate = privacyState;
+        this.setState({imageSpecifications: images})
+        this.privacySeggregation();
       }
-      let imageLock = this.state.imagesLock;
-      if(Object.keys(imageLock).length === 0) {
-        imageLock[id] = true;
-      }else {
-        imageLock[id] = imageLock[id] ? false : true;
-      }
-      this.setState({
-        imagesLock: imageLock
-      });
+      // let imageLock = this.state.imagesLock;
+      // // if(Object.keys(imageLock).length === 0) {
+      // //   imageLock[id] = true;
+      // // }else {
+      // //   imageLock[id] = imageLock[id] ? false : true;
+      // // }
+      // this.setState({
+      //   imagesLock: imageLock
+      // });
 
-    }
+
 
     /**
      * Method :: toggleTemplateLock
@@ -352,38 +402,24 @@ import SharedLibrary from './sharedLibrary'
      * @returns Void
      */
 
-    toggleTemplateLock(id) {
-      let currentPath = FlowRouter.current().path.split("/")
-      let currentPortfolioId = currentPath[4]
+    toggleTemplateLock(details,id) {
       let templates = this.state.templateSpecifications;
-      if (templates[id].portfolioReference) {
-        let privacyState;
-        templates[id].portfolioReference.map(function (data) {
-          if (data.portfolioId === currentPortfolioId) {
-            privacyState = data.isPrivate ? false : true
-          }
-        })
-        let templateDetails = {
-          index: id,
-          element: privacyState,
-          type: "template"
+      let template = {}
+      templates.map(function(data) {
+        if(details._id === data._id) {
+          template = data;
         }
-        this.dataPrivacyHandler(templateDetails)
-        this.refetchData();
-      } else {
-        let templateDetails = {
-          index: id,
-          element: true,
-          type: "template"
-        }
-        this.dataPrivacyHandler(templateDetails)
-        this.refetchData();
+      })
+      let privacyState = template.isPrivate ? false : true;
+      let templateDetails = {
+        id: template._id,
+        privacyState: privacyState,
+        portfolioId: this.props.portfolioDetailsId
       }
-      let templatesLock = this.state.templatesLock;
-      templateLock[id] = templateLock [id] ? false : true;
-      this.setState({
-        templatesLock: templatesLock
-      });
+      this.dataPrivacyHandler(templateDetails)
+      templates[id].isPrivate = privacyState;
+      this.setState({templateSpecifications: templates})
+      this.privacySeggregation();
     }
 
     /**
@@ -394,38 +430,24 @@ import SharedLibrary from './sharedLibrary'
      */
 
 
-    toggleVideoLock(id) {
-      let currentPath = FlowRouter.current().path.split("/")
-      let currentPortfolioId = currentPath[4]
+    toggleVideoLock(details,id) {
       let videos = this.state.videoSpecifications;
-      if (videos[id].portfolioReference) {
-        let privacyState;
-        videos[id].portfolioReference.map(function (data) {
-          if (data.portfolioId === currentPortfolioId) {
-            privacyState = data.isPrivate ? false : true
-          }
-        })
-        let videoDetails = {
-          index: id,
-          element: privacyState,
-          type: "video"
+      let video = {}
+      videos.map(function(data) {
+        if(details._id === data._id) {
+          video = data;
         }
-        this.dataPrivacyHandler(videoDetails)
-        this.refetchData();
-      } else {
-        let videoDetails = {
-          index: id,
-          element: true,
-          type: "video"
-        }
-        this.dataPrivacyHandler(videoDetails)
-        this.refetchData();
+      })
+      let privacyState = video.isPrivate ? false : true;
+      let videoDetails = {
+        id: video._id,
+        privacyState: privacyState,
+        portfolioId: this.props.portfolioDetailsId
       }
-      let videoLock = this.state.videosLock;
-      videoLock[id] = videoLock [id] ? false : true;
-      this.setState({
-        videosLock: videoLock
-      });
+      this.dataPrivacyHandler(videoDetails)
+      videos[id].isPrivate = privacyState;
+      this.setState({videoSpecifications: videos})
+      this.privacySeggregation();
     }
 
     /**
@@ -436,38 +458,24 @@ import SharedLibrary from './sharedLibrary'
      */
 
 
-    toggleDocumentLock(id) {
-      let currentPath = FlowRouter.current().path.split("/")
-      let currentPortfolioId = currentPath[4]
+    toggleDocumentLock(details,id) {
       let documents = this.state.documentSpecifications;
-      if (documents[id].portfolioReference) {
-        let privacyState;
-        documents[id].portfolioReference.map(function (data) {
-          if (data.portfolioId === currentPortfolioId) {
-            privacyState = data.isPrivate ? false : true
-          }
-        })
-        let documentDetails = {
-          index: id,
-          element: privacyState,
-          type: "document"
+      let document = {}
+      documents.map(function(data) {
+        if(details._id === data._id) {
+          document = data;
         }
-        this.dataPrivacyHandler(documentDetails)
-        this.refetchData();
-      } else {
-        let documentDetails = {
-          index: id,
-          element: true,
-          type: "document"
-        }
-        this.dataPrivacyHandler(documentDetails)
-        this.refetchData();
+      })
+      let privacyState = document.isPrivate ? false : true;
+      let documentDetails = {
+        id: document._id,
+        privacyState: privacyState,
+        portfolioId: this.props.portfolioDetailsId
       }
-      let documentsLock = this.state.documentsLock;
-      documentsLock[id] = documentsLock[id] ? false : true;
-      this.setState({
-        documentsLock: documentsLock
-      });
+      this.dataPrivacyHandler(documentDetails)
+      documents[id].isPrivate = privacyState;
+      this.setState({documentSpecifications: documents})
+      this.privacySeggregation();
     }
 
     async dataPrivacyHandler(detailsInput) {
@@ -483,7 +491,7 @@ import SharedLibrary from './sharedLibrary'
      */
 
     onFileUploadCallBack(type, resp) {
-      if (resp) {
+      if (resp !== 'Maximum file size exceeded') {
         this.setState({uploadedData: resp});
         var link = $.parseJSON(this.state.uploadedData).result;
         this.setState({uploadedData: link});
@@ -500,6 +508,8 @@ import SharedLibrary from './sharedLibrary'
           let addToCentralLibrary = true;
           this.storeData(link, type, addToCentralLibrary)
         }
+      } else {
+        toastr.error(resp)
       }
     }
 
@@ -541,7 +551,8 @@ import SharedLibrary from './sharedLibrary'
       let documents = [];
       resp.map(function (data) {
         if (data.libraryType === "image") {
-          images.push(data)
+          images.push(data);
+          console.log("imageSpecifications", images);
           that.setState({imageSpecifications: images, popImagesSpecifications: images})
         } else if (data.libraryType === "video") {
           videos.push(data)
@@ -674,12 +685,11 @@ import SharedLibrary from './sharedLibrary'
 
     images() {
       let that = this;
-      let lockStatus = this.state.imagesLock;
       let imageData = this.state.isLibrary ? this.state.imageDetails || [] : this.state.imageSpecifications || [];
       const Images = imageData.map(function (show, id) {
         return (
           <div className="thumbnail" key={id}>
-            {that.state.explore ? " " : lockStatus[id] ? <FontAwesome onClick={() => that.toggleImageLock(id)} name='lock'/>  : <FontAwesome onClick={() => that.toggleImageLock(id)} name='unlock'/> }
+            {that.state.explore ? " " : show.isPrivate ? !that.state.hideLock ?<FontAwesome onClick={() => that.toggleImageLock(show, id)} name='lock'/>:""  :!that.state.hideLock ? <FontAwesome onClick={() => that.toggleImageLock(show, id)} name='unlock'/>:"" }
             {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "image", "portfolio")}/>}
             <a href="#" data-toggle="modal" data-target=".imagepop"
                onClick={that.random.bind(that, show.fileUrl, id)}><img src={show.fileUrl}/></a>
@@ -761,9 +771,7 @@ import SharedLibrary from './sharedLibrary'
       const Templates = templateData.map(function (show, id) {
         return (
           <div className="thumbnail" key={id}>
-            {that.state.explore ? "" : that.state.templatesLock[id] || show.isPrivate ? !that.state.hideLock ?
-              <FontAwesome onClick={() => that.toggleTemplateLock(id)} name='lock'/> : "" : !that.state.hideLock ?
-              <FontAwesome onClick={() => that.toggleTemplateLock(id)} name='unlock'/> : "" }
+            {that.state.explore ? "" : show.isPrivate ? !that.state.hideLock ? <FontAwesome onClick={() => that.toggleTemplateLock(show,id)} name='lock'/> : "" : !that.state.hideLock ? <FontAwesome onClick={() => that.toggleTemplateLock(show,id)} name='unlock'/> : "" }
             {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "template")}/>}
             <a href="#" data-toggle="modal" data-target=".templatepop"
                onClick={that.randomTemplate.bind(that, show.fileUrl, id)}><img src={show.fileUrl}/></a>
@@ -828,12 +836,9 @@ import SharedLibrary from './sharedLibrary'
       const videos = videodata.map(function (show, id) {
         return (
           <div className="thumbnail" key={id}>
-            {that.state.explore ? "" : that.state.videosLock[id] || show.isPrivate ? !that.state.hideLock ?
-              <FontAwesome onClick={() => that.toggleVideoLock(id)} name='lock'/> : "" : !that.state.hideLock ?
-              <FontAwesome onClick={() => that.toggleVideoLock(id)} name='unlock'/> : "" }
+            {that.state.explore ? "" : show.isPrivate ? !that.state.hideLock ? <FontAwesome onClick={() => that.toggleVideoLock(show,id)} name='lock'/> : "" : !that.state.hideLock ? <FontAwesome onClick={() => that.toggleVideoLock(show,id)} name='unlock'/> : "" }
             {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "video")}/>}
-            <a href="" data-toggle="modal" data-target=".videopop"
-               onClick={that.randomVideo.bind(that, show.fileUrl, id)}>
+            <a href="" data-toggle="modal" data-target=".videopop" onClick={that.randomVideo.bind(that, show.fileUrl, id)}>
               <video  onContextMenu={(e) => e.preventDefault()} width="120" height="100" controls>
                 <source src={show.fileUrl} type="video/mp4"></source>
               </video>
@@ -904,9 +909,7 @@ import SharedLibrary from './sharedLibrary'
       const Documents = documentData.map(function (show, id) {
         return (
           <div className="thumbnail" key={id}>
-            {that.state.explore ? " " : that.state.documentsLock[id] || show.isPrivate ? !that.state.hideLock ?
-              <FontAwesome onClick={() => that.toggleDocumentLock(id)} name='lock'/> : "" : !that.state.hideLock ?
-              <FontAwesome onClick={() => that.toggleDocumentLock(id)} name='unlock'/> : "" }
+            {that.state.explore ? " " : show.isPrivate ? !that.state.hideLock ? <FontAwesome onClick={() => that.toggleDocumentLock(show,id)} name='lock'/> : "" : !that.state.hideLock ? <FontAwesome onClick={() => that.toggleDocumentLock(show,id)} name='unlock'/> : "" }
             {that.state.explore ? "" : <FontAwesome name='trash-o' onClick={() => that.delete(id, "document")}/>}
             <a href="" data-toggle="modal" data-target=".documentpop"
                onClick={that.randomDocument.bind(that, show.fileUrl, id)}><img src="/images/doc.png"/></a>
@@ -1333,7 +1336,8 @@ import SharedLibrary from './sharedLibrary'
                     aria-hidden="true">&times;</span></button>
                 </div>
                 <div className="modal-body">
-                  <iframe src={this.state.previewDocument}/>
+                  {/*<MlDocViewer/>*/}
+                  <iframe src={`https://docs.google.com/gview?url=${this.state.previewDocument}&embedded=true`}/>
                   {/*{console.log(this.state.previewDocument)}*/}
                   {/*{<MlFileViewer/>}*/}
                   {/*<div className="img_scroll"><MlDocViewer/></div>*/}

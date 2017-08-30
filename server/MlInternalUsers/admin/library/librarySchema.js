@@ -49,6 +49,12 @@ let librarySchema = `
       type: String
       libraryType: String
     }
+    
+    input privacyInfo {
+      id: String
+      privacyState: Boolean
+      portfolioId: String
+    }
      
      input file{
       userId: String
@@ -64,6 +70,7 @@ let librarySchema = `
       fetchLibrary(userId:String):[Details]
       fetchDataFromCentralLibrary:[Details]
       fetchCurrentUserPermissions(portfolioDetailsId: String): UserInfo
+      fetchLibraryBasedOnPortfolioId(portfolioId: String): [Details]
  }
  
  type Mutation{
@@ -71,7 +78,7 @@ let librarySchema = `
       putDataIntoTheLibrary(portfoliodetailsId:String,files:file): response
       updateLibrary(id: String,files:libraryInput): response
       createLibrary(detailsInput:libraryInput):response
-      updatePrivacyDetails(detailsInput:privateData): response
+      updatePrivacyDetails(privateInput:privacyInfo): response
  }
 
 `
@@ -84,6 +91,7 @@ let supportedApi = [
   {api:'fetchLibrary', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'fetchDataFromCentralLibrary', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'fetchCurrentUserPermissions', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
+  {api:'fetchLibraryBasedOnPortfolioId', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
 
 
   {api:'createLibrary', actionName:'CREATE', moduleName:"PORTFOLIO", isWhiteList:true},

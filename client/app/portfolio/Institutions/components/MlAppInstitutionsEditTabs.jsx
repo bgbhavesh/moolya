@@ -71,7 +71,7 @@ export default class MlAppInstitutionEditTabs extends React.Component{
       {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlInstitutionAboutUs client={appClient} isAdmin={false} key="1" getAboutus={this.getAboutus.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , component:<MlInstitutionManagement  key="2" isAdmin={false} client={appClient}   getManagementDetails={this.getManagementDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Investor" , component:<MlInstitutionInvestor client={appClient} isAdmin={false} key="3" getInvestorDetails={this.getInvestorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Data" , component:<MlInstitutionData client={appClient}  key="4" getDataDetails={this.getDataDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} isApp={true}/>},
+      /*{tabClassName: 'tab', panelClassName: 'panel', title:"Data" , component:<MlInstitutionData client={appClient}  key="4" getDataDetails={this.getDataDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} isApp={true}/>},*/
       {tabClassName: 'tab', panelClassName: 'panel', title:"Charts" , component:<MlInstitutionCharts key="5" client={appClient} isAdmin={false}  getChartDetails={this.getChartDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}  backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Awards" , component:<MlInstitutionAwards client={appClient} isAdmin={false} key="6" getAwardsDetails={this.getAwardsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<PortfolioLibrary key="7" isAdmin={false} client={appClient}  portfolioDetailsId={this.props.portfolioDetailsId}/>}, //
@@ -94,9 +94,16 @@ export default class MlAppInstitutionEditTabs extends React.Component{
   }
 
   getCSRDetails(details,tabName,privatekey){
-    let data = this.state.institutionPortfolio;
-    data[tabName] = details;
-    this.props.getPortfolioDetails({institutionPortfolio : data},privatekey);
+
+    if(tabName == "reports"){
+      let data = this.state.institutionPortfolio;
+      data[tabName] = details;
+      this.props.getPortfolioDetails({institutionPortfolio : data});
+    }else{
+      let data = this.state.institutionPortfolio;
+      data[tabName] = details;
+      this.props.getPortfolioDetails({institutionPortfolio : data}, privateKey);
+    }
   }
 
   getIncubators(details,tabName,privatekey){

@@ -8,6 +8,7 @@ import MlLoader from "../../../../../../commons/components/loader/loader";
 import {createAnnotationActionHandler} from "../../../actions/updatePortfolioDetails";
 import {findAnnotations} from "../../../../../../commons/annotator/findAnnotations";
 import {initializeMlAnnotator} from "../../../../../../commons/annotator/mlAnnotator";
+import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails'
 var FontAwesome = require('react-fontawesome');
 
 export default class MlServiceProviderViewServices extends Component {
@@ -16,26 +17,29 @@ export default class MlServiceProviderViewServices extends Component {
     this.state = {
       loading: true,
       data: {},
-      privateKey: {}
+      privateKey: {},
+      isUserValidForAnnotation:false
     }
     this.fetchPortfolioDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
+    this.validateUserForAnnotation(this)
   }
 
   componentWillMount() {
-    const resp = this.fetchPortfolioDetails();
-    return resp
+
   }
 
   componentDidMount() {
     OnLockSwitch();
     dataVisibilityHandler();
-    this.initalizeAnnotaor()
+    //this.initalizeAnnotaor()
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight - (68 + $('.admin_header').outerHeight(true)));
+    this.fetchPortfolioDetails();
+    this.validateUserForAnnotation();
   }
 
   componentDidUpdate() {
@@ -122,9 +126,24 @@ export default class MlServiceProviderViewServices extends Component {
         "createdAt" : value.createdAt
       })
     })
-    this.state.content.annotator('loadAnnotations', quotes);
+    if(quotes && quotes.length>0){
+      this.state.content.annotator('loadAnnotations', quotes);
+      return response
+    }else {
+      return response
+    }
+  }
 
-    return response;
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response && !this.state.isUserValidForAnnotation) {
+      this.setState({isUserValidForAnnotation:response})
+
+      this.initalizeAnnotaor()
+
+      this.fetchAnnotations();
+    }
   }
 
   /**

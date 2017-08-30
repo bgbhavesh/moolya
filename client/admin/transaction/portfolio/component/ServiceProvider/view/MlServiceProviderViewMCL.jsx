@@ -9,6 +9,7 @@ import {
 import {initializeMlAnnotator} from "../../../../../../commons/annotator/mlAnnotator";
 import {createAnnotationActionHandler} from "../../../actions/updatePortfolioDetails";
 import {findAnnotations} from "../../../../../../commons/annotator/findAnnotations";
+import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails'
 import _ from "lodash";
 var FontAwesome = require('react-fontawesome');
 
@@ -22,23 +23,26 @@ export default class MlServiceProviderViewMCL extends Component {
       licenses: {},
       data: {},
       annotations: [],
-      content: {}
+      content: {},
+      isUserValidForAnnotation:false
     }
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
+    this.validateUserForAnnotation(this)
   }
 
   componentDidMount() {
-    this.initalizeAnnotaor()
+    //this.initalizeAnnotaor()
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight - (68 + $('.admin_header').outerHeight(true)));
-
+    this.fetchPortfolioStartupDetails();
+    this.validateUserForAnnotation();
   }
 
   componentWillMount() {
-    this.fetchPortfolioStartupDetails();
+
   }
 
   async fetchPortfolioStartupDetails() {
@@ -131,10 +135,26 @@ export default class MlServiceProviderViewMCL extends Component {
         "createdAt": value.createdAt
       })
     })
-    this.state.content.annotator('loadAnnotations', quotes);
-
-    return response;
+    if(quotes && quotes.length>0){
+      this.state.content.annotator('loadAnnotations', quotes);
+      return response
+    }else {
+      return response
+    }
   }
+
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response && !this.state.isUserValidForAnnotation) {
+      this.setState({isUserValidForAnnotation:response})
+
+      this.initalizeAnnotaor()
+
+      this.fetchAnnotations();
+    }
+  }
+
 
   render() {
 

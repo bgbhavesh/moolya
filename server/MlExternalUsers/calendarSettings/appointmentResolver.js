@@ -292,6 +292,9 @@ MlResolver.MlQueryResolver["fetchMyAppointmentByStatus"] = (obj, args, context, 
 
 MlResolver.MlQueryResolver["fetchAllProfileAppointmentCounts"] = (obj, args, context, info) => {
   let userId = context.userId;
+  let date = new Date();
+  let month = args.month ? args.month : date.getMonth() ;
+  let year = args.year ? args.year : date.getFullYear() ;
   let timeZoneOffsetInMinutes = 330;
   let pipeLine = [
       { $lookup: { from: "mlAppointmentMembers", localField: "appointmentId", foreignField: "appointmentId", as: "members"}},
@@ -336,6 +339,9 @@ MlResolver.MlQueryResolver["fetchAllProfileAppointmentCounts"] = (obj, args, con
 MlResolver.MlQueryResolver["fetchProfileAppointmentCounts"] = (obj, args, context, info) => {
   let userId = context.userId;
   let profileId = args.profileId;
+  let date = new Date();
+  let month = args.month ? args.month : date.getMonth() ;
+  let year = args.year ? args.year : date.getFullYear() ;
   let timeZoneOffsetInMinutes = 330;
   let pipeLine = [
     { $lookup: { from: "mlAppointmentMembers", localField: "appointmentId", foreignField: "appointmentId", as: "members"}},
@@ -392,8 +398,8 @@ MlResolver.MlQueryResolver["fetchProfileAppointmentCounts"] = (obj, args, contex
             "cond": {
               "$and":[
                 {"$or": [
-                  { "$cond": [ { "$eq" : [{ "$month":"$$day.start" }, 8 ] }, true, false ] },
-                  { "$cond": [ { "$eq" : [{ "$month":"$$day.end" }, 8 ] }, true, false ] }
+                  { "$cond": [ { "$eq" : [{ "$month":"$$day.start" }, month ] }, true, false ] },
+                  { "$cond": [ { "$eq" : [{ "$month":"$$day.end" }, month ] }, true, false ] }
                 ]},
                 { "$eq" : ["$$day.isActive", true] }
               ]
@@ -420,8 +426,8 @@ MlResolver.MlQueryResolver["fetchProfileAppointmentCounts"] = (obj, args, contex
               "cond": {
                 "$and":[
                   {"$or": [
-                    { "$cond": [ { "$eq" : [{ "$month":"$$day.start" }, 8 ] }, true, false ] },
-                    { "$cond": [ { "$eq" : [{ "$month":"$$day.end" }, 8 ] }, true, false ] }
+                    { "$cond": [ { "$eq" : [{ "$month":"$$day.start" }, month ] }, true, false ] },
+                    { "$cond": [ { "$eq" : [{ "$month":"$$day.end" }, month ] }, true, false ] }
                   ]},
                   { "$eq" : ["$$day.isActive", true] }
                 ]
@@ -444,6 +450,9 @@ MlResolver.MlQueryResolver["fetchProfileAppointmentCounts"] = (obj, args, contex
 MlResolver.MlQueryResolver['fetchOfficeMemberAppointmentCounts'] = (obj, args, context, info) => {
   let userId = args.userId;
   let profileId = args.profileId;
+  let date = new Date();
+  let month = args.month ? args.month : date.getMonth() ;
+  let year = args.year ? args.year : date.getFullYear() ;
   let timeZoneOffsetInMinutes = 330;
   let pipeLine = [
     { $lookup: { from: "mlAppointmentMembers", localField: "appointmentId", foreignField: "appointmentId", as: "members"}},
@@ -500,8 +509,8 @@ MlResolver.MlQueryResolver['fetchOfficeMemberAppointmentCounts'] = (obj, args, c
             "cond": {
               "$and":[
                 {"$or": [
-                  { "$cond": [ { "$eq" : [{ "$month":"$$day.start" }, 8 ] }, true, false ] },
-                  { "$cond": [ { "$eq" : [{ "$month":"$$day.end" }, 8 ] }, true, false ] }
+                  { "$cond": [ { "$eq" : [{ "$month":"$$day.start" }, month ] }, true, false ] },
+                  { "$cond": [ { "$eq" : [{ "$month":"$$day.end" }, month ] }, true, false ] }
                 ]},
                 { "$eq" : ["$$day.isActive", true] }
               ]
@@ -528,8 +537,8 @@ MlResolver.MlQueryResolver['fetchOfficeMemberAppointmentCounts'] = (obj, args, c
               "cond": {
                 "$and":[
                   {"$or": [
-                    { "$cond": [ { "$eq" : [{ "$month":"$$day.start" }, 8 ] }, true, false ] },
-                    { "$cond": [ { "$eq" : [{ "$month":"$$day.end" }, 8 ] }, true, false ] }
+                    { "$cond": [ { "$eq" : [{ "$month":"$$day.start" }, month ] }, true, false ] },
+                    { "$cond": [ { "$eq" : [{ "$month":"$$day.end" }, month ] }, true, false ] }
                   ]},
                   { "$eq" : ["$$day.isActive", true] }
                 ]
@@ -548,6 +557,9 @@ MlResolver.MlQueryResolver['fetchOfficeMemberAppointmentCounts'] = (obj, args, c
 MlResolver.MlQueryResolver['fetchAllOfficeMemberAppointmentCounts'] = (obj, args, context, info) => {
   let userId = context.userId;
   let profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  let date = new Date();
+  let month = args.month ? args.month : date.getMonth() ;
+  let year = args.year ? args.year : date.getFullYear() ;
   let timeZoneOffsetInMinutes = 330;
   let pipeLine = [
     { $lookup: { from: "mlOffice", localField: "officeId", foreignField: "_id", as: "office" } },

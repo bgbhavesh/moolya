@@ -2,11 +2,11 @@ import gql from 'graphql-tag'
 import {appClient} from '../../../core/appConnection';
 
 
-export async function fetchAllProfileAppointmentCountsHandler () {
+export async function fetchAllProfileAppointmentCountsHandler (month, year) {
   const result = await appClient.query({
     query: gql`
-    query{ 
-      fetchAllProfileAppointmentCounts{
+    query($month:Int, $year: Int){ 
+      fetchAllProfileAppointmentCounts(month:$month, year: $year) {
         events{
           date
           userId
@@ -22,18 +22,22 @@ export async function fetchAllProfileAppointmentCountsHandler () {
       }
     }
     `,
-    forceFetch:true
+    forceFetch:true,
+    variables:{
+      month:month,
+      year: year
+    },
   });
   const appointmentCounts = result.data.fetchAllProfileAppointmentCounts;
   return appointmentCounts;
 }
 
 
-export async function fetchProfileAppointmentCountsHandler (profileId) {
+export async function fetchProfileAppointmentCountsHandler (profileId, month, year) {
   const result = await appClient.query({
     query: gql`
-    query($profileId: String){ 
-      fetchProfileAppointmentCounts(profileId: $profileId){
+    query($profileId: String, $month:Int, $year: Int){ 
+      fetchProfileAppointmentCounts(profileId: $profileId, month:$month, year: $year){
         events{
           date
           userId
@@ -50,7 +54,9 @@ export async function fetchProfileAppointmentCountsHandler (profileId) {
     }
     `,
     variables:{
-      profileId
+      profileId: profileId,
+      month:month,
+      year: year
     },
     forceFetch:true
   });

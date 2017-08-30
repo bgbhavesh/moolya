@@ -6,7 +6,8 @@ import {fetchInstitutionPortfolioReports} from '../../../../actions/findPortfoli
 export default class MlInstitutionCSRReports extends React.Component{
   constructor(props){
     super(props);
-    this.state={uploadedData: {}};
+    this.state={uploadedData: {balanceSheet : [],profitAndLoss:[],quaterlyReport:[],yearlyReport:[],halfYearlyReport:[],annualReport:[],cashFlow:[],
+      shareHoldings:[],ratio:[],capitalStructure:[]}};
     this.loopingTheUploadedData.bind(this)
     this.fetchInstitutionPortfolioData.bind(this)
   }
@@ -14,6 +15,8 @@ export default class MlInstitutionCSRReports extends React.Component{
 
   async fetchInstitutionPortfolioData(){
     const resp = await fetchInstitutionPortfolioReports(this.props.portfolioDetailsId,this.props.client)
+    console.log("///////////////////////////////////////");
+    console.log(resp);
     this.setState({
       uploadedData: resp
     });
@@ -95,6 +98,7 @@ export default class MlInstitutionCSRReports extends React.Component{
 
   loopingTheUploadedData(type) {
     let data = this.state.uploadedData[`${type}`];
+
     switch(type){
       case 'balanceSheet':
         if(data) {

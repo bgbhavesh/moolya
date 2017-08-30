@@ -6,7 +6,8 @@ import {fetchCompanyPortfolioReports} from '../../../../actions/findCompanyPortf
 export default class MlCompanyCSRReports extends React.Component{
   constructor(props){
     super(props);
-    this.state={uploadedData: {}};
+    this.state={uploadedData: {balanceSheet : [],profitAndLoss:[],quaterlyReport:[],yearlyReport:[],halfYearlyReport:[],annualReport:[],cashFlow:[],
+      shareHoldings:[],ratio:[],capitalStructure:[]}};
     this.loopingTheUploadedData.bind(this)
     this.fetchCompanyPortfolioData.bind(this)
   }

@@ -1,6 +1,6 @@
 import React from 'react';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
-import {fetchCompanyPortfolioReports} from "../../../../actions/findCompanyPortfolioDetails";
+import {fetchCompanyPortfolioReports} from '../../../../actions/findCompanyPortfolioDetails'
 
 
 export default class MlCompanyCSRReports extends React.Component{
@@ -8,11 +8,11 @@ export default class MlCompanyCSRReports extends React.Component{
     super(props);
     this.state={uploadedData: {}};
     this.loopingTheUploadedData.bind(this)
-    this.fetchInstitutionPortfolioData.bind(this)
+    this.fetchCompanyPortfolioData.bind(this)
   }
 
 
-  async fetchInstitutionPortfolioData(){
+  async fetchCompanyPortfolioData(){
     const resp = await fetchCompanyPortfolioReports(this.props.portfolioDetailsId,this.props.client)
     this.setState({
       uploadedData: resp
@@ -37,7 +37,7 @@ export default class MlCompanyCSRReports extends React.Component{
       this.setState({explore: false, isAdminEdit: true})
       this.setState({hideLock: true})
     }
-    this.fetchInstitutionPortfolioData()
+    this.fetchCompanyPortfolioData()
   }
   componentDidMount()
   {
@@ -88,7 +88,7 @@ export default class MlCompanyCSRReports extends React.Component{
         data[`${type}`] = tempArray;
       }
       this.setState({uploadedData: data}, function(){
-        that.props.getInstitutionReports(this.state.uploadedData)
+        that.props.getReports(this.state.uploadedData)
       });
     }
   }

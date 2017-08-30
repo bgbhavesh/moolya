@@ -166,8 +166,10 @@ export default class MlCommunityList extends Component {
               <span className="ml ml-institutions in" onClick={this.onStatusChange.bind(this, "Institutions")}></span>
             </a>
           </div>
+        <div className="col-md-12">
           <div className="row ideators_list">
             {list}
+          </div>
           </div>
       </div>
         );

@@ -389,7 +389,6 @@ appSection.route('/company/:portfolioId', {
 appSection.route('/register/:id', {
   name: 'registeras',
   action(params){
-    // mount(AppLayout,{appContent:<RegistrationWizard config={params.id}/>})
     mount(AppLayout,{appContent:<MlAppRegistrationWizard config={params.id}/>}) /*making seperate registration wizard for app and admin*/
   }
 });

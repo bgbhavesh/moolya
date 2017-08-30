@@ -84,7 +84,7 @@ import {mlAppFunderConfig2} from "../../app/funders/config/mlAppFunderConfig2";
  */
 import MlAppMyAppointment from '../../app/calendar/myAppointments/components/MlAppMyAppointment';
 import MlAppMyTaskAppointment from '../../app/calendar/myCalendar/components/myTaskAppointments/containers/MlAppMyTaskAppointments';
-//import mlConversationUtils from '../../commons/conversations/utils/mlconversationUtils'
+import mlConversationUtils from '../../commons/conversations/utils/mlconversationUtils'
 
 export const appSection = FlowRouter.group({
   prefix: "/app",
@@ -95,7 +95,7 @@ export const appSection = FlowRouter.group({
       if (!userId) {
         redirect('/login')
       }
-      //mlConversationUtils.init();
+      mlConversationUtils.init();
   }]
 });
 
@@ -389,7 +389,6 @@ appSection.route('/company/:portfolioId', {
 appSection.route('/register/:id', {
   name: 'registeras',
   action(params){
-    // mount(AppLayout,{appContent:<RegistrationWizard config={params.id}/>})
     mount(AppLayout,{appContent:<MlAppRegistrationWizard config={params.id}/>}) /*making seperate registration wizard for app and admin*/
   }
 });

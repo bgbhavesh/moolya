@@ -130,7 +130,7 @@ class MlAppTaskLanding extends Component {
   getSessionDetails(details, activities, isExternal) {
     let totalMinutes = details.reduce(function(sum, value) {
       let duration = value.duration ? value.duration : {};
-      return sum + (duration.hours ? duration.hours : 0)*60 + ( duration.minutes ? duration.minutes : 0 ) ;
+      return parseInt(sum) + parseInt((duration.hours ? duration.hours : 0))*60 + parseInt(( duration.minutes ? duration.minutes : 0 )) ;
     }, 0);
     let obj = {
       duration: {
@@ -139,17 +139,14 @@ class MlAppTaskLanding extends Component {
       },
       session: details
     }
-    console.log(obj);
     this.setState({createData: obj, saveType: 'taskUpdate', activities: activities, isExternal: isExternal});
   }
 
   getPaymentDetails(details) {
-    console.log(details)
     this.setState({createData: details, saveType: 'taskUpdate'});
   }
 
   getConditionDetails(details) {
-    console.log(details)
     this.setState({createData: details, saveType: 'taskUpdate'});
   }
 

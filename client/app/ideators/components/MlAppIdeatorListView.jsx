@@ -40,7 +40,7 @@ export default class MlAppIdeatorListView extends Component {
             <div className="row">
               {data.map(function (ideator, idx) {
                 return (
-                  <div className="col-md-3 col-sx-3 col-sm-4 col-lg-3" key={idx}>
+                  <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={idx}>
                     <a href='' onClick={that.viewDetails.bind(that, ideator.ideas[0].portfolioId)}>
                       <div className="ideators_list_block">
                         <div className="premium">
@@ -48,7 +48,7 @@ export default class MlAppIdeatorListView extends Component {
                         </div>
                         <h3>{ideator.name}</h3>
                         <div className="list_icon"><span className="ml ml-ideator"></span></div>
-                        <p>{ideator.ideas[0].title}<br/>...</p>
+                        <p>{ideator.ideas[0].title}</p>
                         <div className="block_footer">
                           <span>{ideator.chapterName}</span>
                         </div>

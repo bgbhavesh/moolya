@@ -1,18 +1,19 @@
 import React from 'react';
 import {multipartASyncFormHandler} from '../../../../../../../commons/MlMultipartFormAction'
-import {fetchCompanyPortfolioReports} from "../../../../actions/findCompanyPortfolioDetails";
+import {fetchCompanyPortfolioReports} from '../../../../actions/findCompanyPortfolioDetails'
 
 
 export default class MlCompanyCSRReports extends React.Component{
   constructor(props){
     super(props);
-    this.state={uploadedData: {}};
+    this.state={uploadedData: {balanceSheet : [],profitAndLoss:[],quaterlyReport:[],yearlyReport:[],halfYearlyReport:[],annualReport:[],cashFlow:[],
+      shareHoldings:[],ratio:[],capitalStructure:[]}};
     this.loopingTheUploadedData.bind(this)
-    this.fetchInstitutionPortfolioData.bind(this)
+    this.fetchCompanyPortfolioData.bind(this)
   }
 
 
-  async fetchInstitutionPortfolioData(){
+  async fetchCompanyPortfolioData(){
     const resp = await fetchCompanyPortfolioReports(this.props.portfolioDetailsId,this.props.client)
     this.setState({
       uploadedData: resp
@@ -28,7 +29,7 @@ export default class MlCompanyCSRReports extends React.Component{
       this.setState({explore: true})
     }
     if (portfolioId !== "portfolio" || path.indexOf("edit") > 0) {
-      this.setState({deleteOption: true})
+      this.setState({deleteOption: true,isEndUserEdit : true})
     }
     if (portfolioId === "library") {
       this.setState({explore: false, isLibrary: true, hideLock: true, deleteOption: false})
@@ -37,7 +38,7 @@ export default class MlCompanyCSRReports extends React.Component{
       this.setState({explore: false, isAdminEdit: true})
       this.setState({hideLock: true})
     }
-    this.fetchInstitutionPortfolioData()
+    this.fetchCompanyPortfolioData()
   }
   componentDidMount()
   {
@@ -88,7 +89,7 @@ export default class MlCompanyCSRReports extends React.Component{
         data[`${type}`] = tempArray;
       }
       this.setState({uploadedData: data}, function(){
-        that.props.getInstitutionReports(this.state.uploadedData)
+        that.props.getReports(this.state.uploadedData)
       });
     }
   }
@@ -239,7 +240,7 @@ export default class MlCompanyCSRReports extends React.Component{
               <div className="panel panel-default">
                 <div className="panel-heading">
                   Balance Sheet
-                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit ?<div className="fileUpload upload_file_mask pull-right" id="create_document">
+                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'balanceSheet' )} /></span></a>
                   </div>:""}
@@ -251,7 +252,7 @@ export default class MlCompanyCSRReports extends React.Component{
               <div className="panel panel-default">
                 <div className="panel-heading">
                   Quaterly Report
-                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit ?<div className="fileUpload upload_file_mask pull-right" id="create_document">
+                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'quaterlyReport' )} /></span></a>
                   </div>:""}
@@ -263,7 +264,7 @@ export default class MlCompanyCSRReports extends React.Component{
               <div className="panel panel-default">
                 <div className="panel-heading">
                   Yearly Report
-                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit ?<div className="fileUpload upload_file_mask pull-right" id="create_document">
+                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'yearlyReport' )} /></span></a>
                   </div>:""}
@@ -275,7 +276,7 @@ export default class MlCompanyCSRReports extends React.Component{
               <div className="panel panel-default">
                 <div className="panel-heading">
                   Half Yearly Report
-                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
+                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'halfYearlyReport' )} /></span></a>
                   </div>:""}
@@ -287,7 +288,7 @@ export default class MlCompanyCSRReports extends React.Component{
               <div className="panel panel-default">
                 <div className="panel-heading">
                   Annual Report
-                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit ?<div className="fileUpload upload_file_mask pull-right" id="create_document">
+                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'annualReport' )} /></span></a>
                   </div>:""}
@@ -301,7 +302,7 @@ export default class MlCompanyCSRReports extends React.Component{
               <div className="panel panel-default">
                 <div className="panel-heading">
                   Profit and Loss
-                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit ?<div className="fileUpload upload_file_mask pull-right" id="create_document">
+                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'profitAndLoss' )} /></span></a>
                   </div>:""}
@@ -313,7 +314,7 @@ export default class MlCompanyCSRReports extends React.Component{
               <div className="panel panel-default">
                 <div className="panel-heading">
                   Cash Flow
-                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit ?<div className="fileUpload upload_file_mask pull-right" id="create_document">
+                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'cashFlow' )} /></span></a>
                   </div>:""}
@@ -325,7 +326,7 @@ export default class MlCompanyCSRReports extends React.Component{
               <div className="panel panel-default">
                 <div className="panel-heading">
                   Share Holdings
-                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit ?<div className="fileUpload upload_file_mask pull-right" id="create_document">
+                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'shareHoldings' )} /></span></a>
                   </div>:""}
@@ -337,7 +338,7 @@ export default class MlCompanyCSRReports extends React.Component{
               <div className="panel panel-default">
                 <div className="panel-heading">
                   Capital Structure
-                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit ?<div className="fileUpload upload_file_mask pull-right" id="create_document">
+                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'capitalStructure' )} /></span></a>
                   </div>:""}
@@ -349,7 +350,7 @@ export default class MlCompanyCSRReports extends React.Component{
               <div className="panel panel-default">
                 <div className="panel-heading">
                   Ratio
-                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit ?<div className="fileUpload upload_file_mask pull-right" id="create_document">
+                  {this.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit || this.state.isEndUserEdit?<div className="fileUpload upload_file_mask pull-right" id="create_document">
                     <a href="javascript:void(0);">
                       <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="document_upload" onChange={this.documentUpload.bind(this,'ratio' )} /></span></a>
                   </div>:""}

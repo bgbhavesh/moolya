@@ -569,5 +569,3 @@ let supportedApi = [
     {api:'switchProfile', actionName:'UPDATE', moduleName:"USERS", isWhiteList:true}
 ];
 MlResolver.MlModuleResolver.push(supportedApi)
-  // , moduleName:String, actionName:String
-/* removing excess variables>> moduleName:String, actionName:String*/

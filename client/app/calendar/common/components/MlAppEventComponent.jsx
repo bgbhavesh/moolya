@@ -16,8 +16,9 @@ export default class MlAppEventComponent extends Component {
   render(){
     const that = this;
     const {calendar} = that.props;
+    const className = calendar && calendar.event ? calendar.event.className : '';
     return (
-      <span className="ml ml-moolya-symbol"> {calendar ? calendar.title : ''} </span>
+      <span className={className}> {calendar ? calendar.title : ''} </span>
     )
   }
 }

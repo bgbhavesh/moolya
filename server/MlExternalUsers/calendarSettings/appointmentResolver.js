@@ -874,14 +874,6 @@ MlResolver.MlQueryResolver["fetchSlotDetails"] = (obj, args, context, info) => {
   let pipeLine = [
     {"$match": {"appointmentId":{$in:appointmentId }}},
     {"$lookup": {
-      from: "users",
-      localField: "client.profileId",
-      foreignField: "profile.externalUserProfiles.profileId",
-      as: "userInfo"
-    }
-    },
-    {"$unwind":{"path": "$userInfo", "preserveNullAndEmptyArrays": true}} ,
-    {"$lookup": {
       from: "mlTask",
       localField: "appointmentInfo.taskId",
       foreignField: "_id",
@@ -897,7 +889,6 @@ MlResolver.MlQueryResolver["fetchSlotDetails"] = (obj, args, context, info) => {
     }
     },
     {"$unwind":{"path": "$attendeeDetails", "preserveNullAndEmptyArrays": true}},
-    {"$match":{ "attendeeDetails.isAttendee":true,"attendeeDetails.status":"Accepted"} },
     {"$lookup": {
       from: "users",
       localField: "attendeeDetails.userId",
@@ -927,7 +918,15 @@ MlResolver.MlQueryResolver["fetchSlotDetails"] = (obj, args, context, info) => {
       "userCommunity":{$first: "$userInfo.profile.externalUserProfiles.communityName"},
       "userMobileNumber":{$first: "$userInfo.profile.mobileNumber"},
       "taskName":{$first: "$taskInfo.name"},
-      "attendeeDetails":{$push: { "firstName":"$attendeeInfo.profile.firstName","lastName":"$attendeeInfo.profile.lastName", "profileImage": "$attendeeInfo.profile.profileImage", "userId":"$attendeeInfo._id"}}
+      "attendeeDetails":{$push: {
+        "firstName":"$attendeeInfo.profile.firstName",
+        "lastName":"$attendeeInfo.profile.lastName",
+        "profileImage": "$attendeeInfo.profile.profileImage",
+        "userId":"$attendeeInfo._id",
+        "isProvider": "$attendeeDetails.isProvider",
+        "isClient": "$attendeeDetails.isClient",
+        "isAttendee": "$attendeeDetails.isAttendee",
+      }}
     }}
   ]
 

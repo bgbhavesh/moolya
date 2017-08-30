@@ -208,24 +208,7 @@ let externalUser = `
     type mapCenterCords{
         lat:Float,
         lng:Float
-    }
-    
-    input usersObjAPI{
-        appId        : String
-        username     : String
-        password     : String
-        picurl       : String
-        firstname    : String
-        lastname     : String
-        email        : String
-        mobile      : String
-        status       : String
-        description  : String
-    }
-    
-    input applicationObjAPI{
-      appName: String
-    }
+    }    
     
     type Mutation{
       updateContactNumber(contactDetails:contactObj):response
@@ -235,8 +218,7 @@ let externalUser = `
       setDefaultProfile(profileId:String!):response
       switchExternalProfile(profileId:String!):response
       updateUserGeneralInfo(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,profileId:String!,type:String!):response
-      createUserAPI(userDetailsAPI:usersObjAPI):response
-      createApplicationAPI(applicationDetailsAPI:applicationObjAPI):response
+      deActivateUserProfileByContext(userProfiles:userProfiles, clusterId: String, chapterId: String, subChapterId: String, communityId: String):response
     }
     
     type Query{
@@ -260,8 +242,7 @@ let supportedApi = [
     {api:'setDefaultProfile', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
     {api:'createUserAddressInfo', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
     {api:'updateUserGeneralInfo', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
-    {api:'createUserAPI', actionName:'CREATE', moduleName:"USERS", isWhiteList:true},
-    {api:'createApplicationAPI', actionName:'CREATE', moduleName:"USERS", isWhiteList:true},
+     {api:'deActivateUserProfileByContext', actionName:'UPDATE', moduleName:"USERS"},
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

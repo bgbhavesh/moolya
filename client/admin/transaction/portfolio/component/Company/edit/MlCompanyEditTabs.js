@@ -161,7 +161,7 @@ export default class MlCompanyEditTabs extends React.Component{
   }
   getRDDetails(details, privateKey){
     let data = this.state.companyPortfolio;
-    if(data && !data.awardsRecognition){
+    if(data && !data.researchAndDevelopment){
       data['researchAndDevelopment']=[];
     }
     this.setState({companyPortfolio : data})
@@ -172,7 +172,7 @@ export default class MlCompanyEditTabs extends React.Component{
     })
     data['researchAndDevelopment'] = arr;
 
-    this.props.getPortfolioDetails({companyPortfolio:this.state.companyPortfolio}, privateKey);
+    this.props.getPortfolioDetails({companyPortfolio: data}, privateKey);
 
   }
 

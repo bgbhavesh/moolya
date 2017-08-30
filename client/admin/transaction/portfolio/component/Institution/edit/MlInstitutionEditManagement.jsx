@@ -216,13 +216,14 @@ export default class MlInstitutionEditManagement extends React.Component{
     institutionManagement[this.state.selectedIndex] = data;
     let managementArr = [];
     _.each(institutionManagement, function (item) {
+
       for (var propName in item) {
         if (item[propName] === null || item[propName] === undefined || propName === 'privateFields') {
           delete item[propName];
         }
       }
-      let newItem = _.omit(item, "__typename");
-      newItem = _.omit(item, 'privateFields');
+      item = _.omit(item, "__typename");
+      let newItem = _.omit(item, 'privateFields');
       if(item && item.logo){
         // delete item.logo['__typename'];
         newItem = _.omit(item, 'logo')

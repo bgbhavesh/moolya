@@ -50,6 +50,7 @@ h1,h2,h3,h4,h5,h6{font-family: 'DINPro-Regular';font-weight:normal;margin: 0px;l
 .admin_menu ul{padding:20px 6px 0px 6px;}
 .admin_menu ul .menu_item a{color:#000;text-decoration: none;}
 .admin_menu ul .menu_item .menu_in{width:100%; position: absolute;/*left: 50%;transform: translateX(-50%);*/z-index: 1; line-height: 15px;}
+.admin_menu ul .menu_item .menu_in .ml{font-size: 48px; color: #EF4647;line-height: 26px;display: block; margin-bottom: 14px;}
 .admin_menu ul .menu_item .menu_in img{margin-bottom: 5px;margin-top: -8px;}
 .admin_menu ul .menu_item:nth-of-type(2) .menu_in img{margin-bottom: -3px; margin-top: -9px;}
 .admin_menu ul .menu_item {background: #ffe144;display: inline-block;height: 102px;margin-left: 0px;margin-top: 6px;position: relative;width: 82px;padding-top: 15px;color: #000;text-align: center;cursor: pointer;font-size: 14px;}
@@ -212,6 +213,7 @@ input:checked + .slider:before {-webkit-transform: translateX(34px);-ms-transfor
 .ml_profile li {position: absolute;}
 .ml_profile li, .ml_profile a {display: block;box-sizing: border-box;/*position: absolute;*//*position: relative;*/top: -5em;right: -5em;/*border: 1px dotted #f00;*/transition: all 0.2s ease-in;}
 .ml_profile a {-webkit-border-radius: 50%;-moz-border-radius: 50%;border: 2px solid #fff;width: 40px;height: 40px;overflow: hidden;text-align: center;font-size: 22px;/*box-shadow: 0 0 10px rgba(50, 50, 50, 0.75);*/color: #000;background-color: #ffc20e;text-decoration: none;outline: none;}
+.ml_profile a .ml {display: block;margin-top: 7px;font-size: 22px;font-weight: bold;color: #273545;text-shadow: none;}
 .ml_profile>ol>li, nav>ol>li>a { /* So the first tier sits on top of the second tier disk */z-index: 10;}
 .ml_profile li:active a, .ml_profile li:focus a, .ml_profile li.focus a {background-color: #fff;box-shadow: 0 0 10px rgba(0, 0, 0, 1);outline: none;position: relative;left: 0;top: auto;/*z-index: 25;*/}
 .ml_profile>ol>li:active, nav>ol>li:focus, .ml_profile>ol>li.focus { /* Keep this to make sure only the current item appears above the disc. */z-index: 25;}
@@ -695,6 +697,16 @@ button:focus{outline: 0;}
 .react-bs-table-search-form input[type="text"]:hover:focus {cursor: text; }
 .react-bs-table-search-form input[type="text"]:focus {width: 200px; padding: 0 10px 0 30px; outline: none; font-size: 14px; color: black; background: url(../images/search_icon_red.png) 2px center no-repeat ; color: #000; }
 
+
+#btn-search::-webkit-input-placeholder { /* Chrome/Opera/Safari */color: transparent;}
+#btn-search::-moz-placeholder { /* Firefox 19+ */color: transparent;}
+#btn-search:-ms-input-placeholder { /* IE 10+ */color: transparent;}
+#btn-search:-moz-placeholder { /* Firefox 18- */color: transparent;}
+#btn-search {border: none; background: url(../images/search_icon_red.png) 2px center no-repeat; z-index: 1; width: 25px; height: 25px; transition: all .25s ease-in .25s; color: transparent; line-height: 25px; position: absolute;  right: 27px;  top: 15px;}
+#btn-search:hover {cursor: pointer; }
+#btn-search:hover:focus {cursor: text; }
+#btn-search:focus {width: 200px; padding: 0 10px 0 30px; outline: none; font-size: 14px; color: black; background: url(../images/search_icon_red.png) 2px center no-repeat ; color: #000; }
+
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{background-color: transparent;}
 
 /*.step5{padding-top: 10px;}*/
@@ -1074,7 +1086,7 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .upload-image img{width:100%}
 
 .see-more a{color:#fff;font-size:12px;cursor:pointer;text-decoration:none;background:#273545;padding:4px 6px;border-radius:4px;text-shadow:none;font-weight: normal;}
-.library-wrap .thumbnail{float:left;width:120px;height:120px;margin:4px 10px 4px 4px;position:relative;padding:0; padding-top: 20px;}
+.library-wrap .thumbnail{float:left;width:120px;height:120px;margin:4px 10px 4px 4px;position:relative;padding:0;}
 .library-wrap .thumbnail .thumbnail_new_actions{margin: 0px;padding: 0px;}
 .library-wrap .thumbnail .thumbnail_new_actions li{display: block;}
 .library-wrap .thumbnail .thumbnail_new_actions .fa.fa-lock{ margin-right: 5px; font-size: 12px;position:static;color:#fff;background:transparent;width:auto;height:auto;text-align:center;line-height:normal;border-radius:0%;cursor:pointer}
@@ -1160,7 +1172,7 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .popover.bs-tether-element-attached-left:after, .popover.bs-tether-element-attached-left:before, .popover.popover-right:after, .popover.popover-right:before {top: 50%; border-left-width: 0 }
 .popover.bs-tether-element-attached-left:before, .popover.popover-right:before {left: -11px; margin-top: -11px; border-right-color: rgba(0, 0, 0, .25) }
 .popover.bs-tether-element-attached-left:after, .popover.popover-right:after {left: -10px; margin-top: -10px; border-right-color: #fff }
-.popover.bs-tether-element-attached-top, .popover.popover-bottom {margin-top: 10px }
+/*.popover.bs-tether-element-attached-top, .popover.popover-bottom {margin-top: 10px }*/
 .popover.bs-tether-element-attached-top:after, .popover.bs-tether-element-attached-top:before, .popover.popover-bottom:after, .popover.popover-bottom:before {left: 50%; border-top-width: 0 }
 .popover.bs-tether-element-attached-top:before, .popover.popover-bottom:before {top: -11px; margin-left: -11px; border-bottom-color: rgba(0, 0, 0, .25) }
 .popover.bs-tether-element-attached-top:after, .popover.popover-bottom:after {top: -10px; margin-left: -10px; border-bottom-color: #f7f7f7 }

@@ -571,8 +571,41 @@ export async function fetchInstitutionPortfolioReports(portfoliodetailsId, conne
     forceFetch: true
   })
   const id = result.data.fetchInstitutionPortfolioCSRReports;
-  let data = _.omit(id, '__typename')
-  return data
+  let reportsArray = {}
+  reportsArray["balanceSheet"] = _.map(id.balanceSheet, function (row) {
+    return _.omit(row, ['__typename'])
+  });
+  reportsArray["profitAndLoss"] = _.map(id.profitAndLoss, function (row) {
+    return _.omit(row, ['__typename'])
+  });
+  reportsArray["quaterlyReport"] = _.map(id.quaterlyReport, function (row) {
+    return _.omit(row, ['__typename'])
+  });
+  reportsArray["yearlyReport"] = _.map(id.yearlyReport, function (row) {
+    return _.omit(row, ['__typename'])
+  });
+  reportsArray["halfYearlyReport"] = _.map(id.halfYearlyReport, function (row) {
+    return _.omit(row, ['__typename'])
+  });
+  reportsArray["annualReport"] = _.map(id.annualReport, function (row) {
+    return _.omit(row, ['__typename'])
+  });
+  reportsArray["cashFlow"] = _.map(id.cashFlow, function (row) {
+    return _.omit(row, ['__typename'])
+  });
+  reportsArray["shareHoldings"] = _.map(id.shareHoldings, function (row) {
+    return _.omit(row, ['__typename'])
+  });
+  reportsArray["ratio"] = _.map(id.ratio, function (row) {
+    return _.omit(row, ['__typename'])
+  });
+  reportsArray["capitalStructure"] = _.map(id.capitalStructure, function (row) {
+    return _.omit(row, ['__typename'])
+  });
+
+  /*return chartsArray
+  let data = _.omit(id, '__typename')*/
+  return reportsArray
   // return id
 }
 

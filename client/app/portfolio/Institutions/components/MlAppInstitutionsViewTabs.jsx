@@ -13,6 +13,7 @@ import MlInstitutionRAndD from "../../../../admin/transaction/portfolio/componen
 import MlInstitutionCSR from "../../../../admin/transaction/portfolio/component/Institution/view/CSRViewTabs/MlInstitutionCSRViewTabs";
 import MlInstitutionViewPartners from "../../../../admin/transaction/portfolio/component/Institution/view/MlInstitutionViewPartners";
 import MlInstitutionIncubator from "../../../../admin/transaction/portfolio/component/Institution/view/incubatorsViewTabs/MlInstitutionIncubatorsViewTabs";
+import MlInstitutionEditData from "../../../../admin/transaction/portfolio/component/Institution/edit/MlInstitutionEditData";
 import {appClient} from "../../../core/appConnection";
 
 /**
@@ -78,6 +79,12 @@ export default class MlAppInstitutionViewTabs extends Component {
         title: "Investor",
         component: <MlInstitutionViewInvestor key="3" portfolioDetailsId={this.props.portfolioDetailsId}
                                           getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+      },
+      { tabClassName: 'tab',
+        panelClassName: 'panel',
+        title:"Data" ,
+        component:<MlInstitutionEditData key="4"  portfolioDetailsId={this.props.portfolioDetailsId}
+                                         getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       },
       {tabClassName: 'tab',
         panelClassName: 'panel', title:"Charts" ,

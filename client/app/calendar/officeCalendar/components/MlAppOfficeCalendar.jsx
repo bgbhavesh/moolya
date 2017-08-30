@@ -24,7 +24,7 @@ export default class MlAppOfficeCalendar extends Component {
       date: new Date(),
       selectedUser: {
         _id: 0,
-        name: "All",
+        name: "Consolidated",
         isConsolidated: true
       },
       componentToLoad: 'calendar',

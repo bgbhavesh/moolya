@@ -13,6 +13,43 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.my-ml-shortlist:before {
+  content: "\e9cb";
+}
+.my-ml-cancel:before {
+  content: "\e9cc";
+}
+.my-ml-chapter:before {
+  content: "\e9cd";
+}
+.my-ml-cluster:before {
+  content: "\e9ce";
+}
+.my-ml-community:before {
+  content: "\e9cf";
+}
+.my-ml-dashboard:before {
+  content: "\e9d0";
+}
+.my-ml-packages:before {
+  content: "\e9d1";
+}
+.my-ml-save:before {
+  content: "\e9d2";
+}
+.my-ml-search:before {
+  content: "\e9d3";
+}
+.my-ml-subchapter_linked:before {
+  content: "\e9d4";
+}
+.my-ml-templates:before {
+  content: "\e9d5";
+}
+.my-ml-users:before {
+  content: "\e9d6";
+}
 .my-ml-Assess:before {
   content: "\e9b8";
 }

@@ -148,7 +148,7 @@ class MlSubChapterAccessControl {
     var contextSubChapterId = context.contextSubChapterId;
     var contextChapterId= context.contextChapterId;
     var requestSubChapterId = context.requestSubChapterId;
-    var accessControl = {hasAccess: false, isInclusive: true, subChapters: []};
+    var accessControl = {hasAccess: false, isInclusive: true, subChapters: [], chapters:[]};
     /** Add context user specific subChapter*/
     var allowedSubChapters = [contextSubChapterId];
     var allowedChapters=[contextChapterId];
@@ -172,7 +172,13 @@ class MlSubChapterAccessControl {
         accessControl.hasAccess = _.lastIndexOf(allowedSubChapters, requestSubChapterId) < 0 ? false : true;
         break;
       case 'TRANSACT':
-        accessControl.hasAccess = _.lastIndexOf(allowedSubChapters, requestSubChapterId) < 0 ? false : true;
+        // accessControl.hasAccess = _.lastIndexOf(allowedSubChapters, requestSubChapterId) < 0 ? false : true;
+        accessControl = {
+          hasAccess: _.lastIndexOf(allowedSubChapters, requestSubChapterId) < 0 ? false : true,
+          isInclusive: true,
+          subChapters: allowedSubChapters,
+          chapters: allowedChapters
+        }
         break;
     }
     return accessControl;

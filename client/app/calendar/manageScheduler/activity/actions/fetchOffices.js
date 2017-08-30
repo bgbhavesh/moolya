@@ -29,3 +29,19 @@ export async function fetchOfficeActionHandler (Details) {
   const offices = result.data.fetchOffice;
   return offices
 }
+
+export async function fetchMyConnectionActionHandler() {
+  const result = await appClient.query({
+    query: gql`
+    query{
+      fetchConnectionByUser {
+        userId
+        profileId
+        name
+      }
+    }`,
+    forceFetch: true
+  });
+  const myConnections = result.data.fetchConnectionByUser;
+  return myConnections;
+}

@@ -4,13 +4,14 @@ import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnot
 import {createAnnotationActionHandler} from '../../../actions/updatePortfolioDetails'
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../commons/components/noData/noData';
+import MlLoader from "../../../../../../commons/components/loader/loader";
 
 const KEY = 'awardsRecognition'
 
 export default class MlInstitutionViewAwards extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {institutionAwardsList: [], loading: true};
+    this.state = {institutionAwardsList: [],loading:true};
     this.fetchPortfolioInstitutionDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
@@ -19,10 +20,10 @@ export default class MlInstitutionViewAwards extends React.Component {
   }
 
 
-  componentDidMount(){
+/*  componentDidMount(){
     this.initalizeAnnotaor()
     this.fetchAnnotations();
-  }
+  }*/
 
   componentWillMount(){
     this.fetchPortfolioInstitutionDetails();
@@ -101,37 +102,55 @@ export default class MlInstitutionViewAwards extends React.Component {
     let portfoliodetailsId=that.props.portfolioDetailsId;
     const response = await fetchInstitutionDetailsHandler(portfoliodetailsId, KEY);
     if (response && response.awardsRecognition) {
-      this.setState({institutionAwardsList: response.awardsRecognition});
+      this.setState({institutionAwardsList: response.awardsRecognition,loading:false});
     }
     this.setState({loading: false})
+  }
+
+  compareQueryOptions(a, b) {
+    return JSON.stringify(a) === JSON.stringify(b);
+  };
+
+  componentDidUpdate(prevProps, prevState){
+    //var compareQueryOptions=function(a, b) {return JSON.stringify(a) === JSON.stringify(b);};
+    var currentLoaded=this.state.loading;
+    if(!this.compareQueryOptions(prevState.loading,currentLoaded)){this.initalizeAnnotaor();this.fetchAnnotations();}
   }
 
   render(){
     let that = this;
     let awardsArray = that.state.institutionAwardsList || [];
-    if (!this.state.loading && awardsArray && awardsArray.length === 0) {
-      return (<NoData tabName="Awards" />);
-    } else {
-      return (
-        <div id="annotatorContent">
-          <h2>Awards</h2>
-          <div className="col-lg-12">
-            <div className="row">
-              {awardsArray && awardsArray.map(function (details, idx) {
-                return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
-                  <div className="team-block">
-                    <img src={details.logo&&details.logo.fileUrl} className="team_img" />
-                    <h3>
-                      {details&&details.awardName}
-                    </h3>
-                  </div>
-                </div>)
-              })}
+    let loading=this.state.loading?this.state.loading:false;
 
-            </div>
-          </div>
-        </div>
-      )
-    }
+    return (
+      <div>
+        {loading === true ? ( <MlLoader/>) : (
+          <div>
+            {_.isEmpty(awardsArray)&& <div className="portfolio-main-wrap">
+              <NoData tabName={this.props.tabName} />
+            </div>}
+
+            {!_.isEmpty(awardsArray)&&  <div id="annotatorContent">
+              <h2>Awards</h2>
+              <div className="col-lg-12">
+                <div className="row">
+                  {awardsArray && awardsArray.map(function (details, idx) {
+                    return (<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
+                      <div className="team-block">
+                        <img src={details.logo&&details.logo.fileUrl} className="team_img" />
+                        <h3>
+                          {details&&details.awardName}
+                        </h3>
+                      </div>
+                    </div>)
+                  })}
+
+                </div>
+              </div>
+            </div> }
+          </div>)}
+      </div>
+    )
+
   }
 }

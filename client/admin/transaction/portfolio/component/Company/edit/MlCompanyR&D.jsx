@@ -22,10 +22,10 @@ export default class MlCompanyRAndD extends React.Component{
       loading: true,
       data:{},
       privateKey:{},
-      institutionRD: [],
+      companyRD: [],
       popoverOpen:false,
       selectedIndex:-1,
-      institutionRDList:[],
+      companyRDList:[],
       selectedVal:null,
       selectedObject:"default"
     }
@@ -60,29 +60,29 @@ export default class MlCompanyRAndD extends React.Component{
     if(empty){
       const response = await fetchCompanyDetailsHandler(portfolioDetailsId, KEY);
       if (response && response.researchAndDevelopment) {
-        this.setState({loading: false, institutionRD: response.researchAndDevelopment, institutionRDList: response.researchAndDevelopment});
+        this.setState({loading: false, companyRD: response.researchAndDevelopment, companyRDList: response.researchAndDevelopment});
       }else{
         this.setState({loading:false})
       }
     }else{
-      this.setState({loading: false, institutionRD: that.context.companyPortfolio.researchAndDevelopment, institutionRDList: that.context.companyPortfolio.researchAndDevelopment});
+      this.setState({loading: false, companyRD: that.context.companyPortfolio.researchAndDevelopment, companyRDList: that.context.companyPortfolio.researchAndDevelopment});
     }
   }
   addRD(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
-    if(this.state.institutionRD){
-      this.setState({selectedIndex:this.state.institutionRD.length})
+    if(this.state.companyRD){
+      this.setState({selectedIndex:this.state.companyRD.length})
     }else{
       this.setState({selectedIndex:0})
     }
   }
 
   onSaveAction(e){
-    this.setState({institutionRDList:this.state.institutionRD, popoverOpen : false})
+    this.setState({companyRDList:this.state.companyRD, popoverOpen : false})
   }
 
   onTileClick(index, e){
-    let cloneArray = _.cloneDeep(this.state.institutionRD);
+    let cloneArray = _.cloneDeep(this.state.companyRD);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
     if(details && details.logo){
@@ -173,12 +173,12 @@ export default class MlCompanyRAndD extends React.Component{
 
   sendDataToParent(){
     let data = this.state.data;
-    let awards = this.state.institutionRD;
-    let institutionRD = _.cloneDeep(awards);
+    let awards = this.state.companyRD;
+    let companyRD = _.cloneDeep(awards);
     data.index = this.state.selectedIndex;
-    institutionRD[this.state.selectedIndex] = data;
+    companyRD[this.state.selectedIndex] = data;
     let arr = [];
-    _.each(institutionRD, function (item)
+    _.each(companyRD, function (item)
     {
       for (var propName in item) {
         if (item[propName] === null || item[propName] === undefined || propName === 'privateFields' || propName === 'logo') {
@@ -189,9 +189,9 @@ export default class MlCompanyRAndD extends React.Component{
       newItem = _.omit(newItem, ["privateFields"])
       arr.push(newItem)
     })
-    institutionRD = arr;
-    this.setState({institutionRD:institutionRD})
-    this.props.getRDDetails(institutionRD, this.state.privateKey);
+    companyRD = arr;
+    this.setState({companyRD:companyRD})
+    this.props.getRDDetails(companyRD, this.state.privateKey);
   }
 
   onLogoFileUpload(e){
@@ -236,13 +236,13 @@ export default class MlCompanyRAndD extends React.Component{
   async fetchOnlyImages(){
     const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId, KEY);
     if (response && response.researchAndDevelopment) {
-      let dataDetails =this.state.institutionRD
+      let dataDetails =this.state.companyRD
       let cloneBackUp = _.cloneDeep(dataDetails);
       let specificData = cloneBackUp[thisState];
       if(specificData){
         let curUpload=response.researchAndDevelopment[this.state.selectedIndex]
         specificData['logo']= curUpload['logo']
-        this.setState({loading: false, institutionRD:cloneBackUp });
+        this.setState({loading: false, companyRD:cloneBackUp });
 
       }else {
         this.setState({loading: false})
@@ -254,7 +254,7 @@ export default class MlCompanyRAndD extends React.Component{
   async imagesDisplay(){
     const response = await fetchCompanyDetailsHandler(this.props.portfolioDetailsId, KEY);
     if (response && response.researchAndDevelopment) {
-      let dataDetails =this.state.institutionRD
+      let dataDetails =this.state.companyRD
       if(!dataDetails || dataDetails.length<1){
         dataDetails = response.researchAndDevelopment?response.researchAndDevelopment:[]
       }
@@ -264,10 +264,10 @@ export default class MlCompanyRAndD extends React.Component{
           cloneBackUp[key]["logo"] = obj.logo;
         })
       }
-      let listDetails = this.state.institutionRDList || [];
+      let listDetails = this.state.companyRDList || [];
       listDetails = cloneBackUp
       let cloneBackUpList = _.cloneDeep(listDetails);
-      this.setState({loading: false, institutionRD:cloneBackUp,institutionRDList:cloneBackUpList});
+      this.setState({loading: false, companyRD:cloneBackUp,companyRDList:cloneBackUpList});
     }
   }
 
@@ -285,7 +285,7 @@ export default class MlCompanyRAndD extends React.Component{
     }`;*/
     let that = this;
     const showLoader = that.state.loading;
-    let institutionRDList = that.state.institutionRDList || [];
+    let companyRDList = that.state.companyRDList || [];
     let displayUploadButton = null;
     if(this.state.selectedObject != "default"){
       displayUploadButton = true
@@ -313,7 +313,7 @@ export default class MlCompanyRAndD extends React.Component{
                         </div>
                       </a>
                     </div>
-                    {institutionRDList&&institutionRDList.map(function (details, idx) {
+                    {companyRDList&&companyRDList.map(function (details, idx) {
                       return(<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
                         <a href="#" id={"create_client"+idx}>
                           <div className="list_block">

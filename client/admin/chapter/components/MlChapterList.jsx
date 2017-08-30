@@ -40,7 +40,7 @@ export default class MlChapterList extends Component {
 
     return (
       <div className="row">
-        <h2> Chapter </h2>
+        <h2> Chapters </h2>
           {list}
       </div>
     );

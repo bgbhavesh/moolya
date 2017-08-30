@@ -11,7 +11,7 @@
 import React from 'react';
 import ScrollArea from 'react-scrollbar';
 import {getTeamUsersActionHandler } from '../actions/activityActionHandler';
-import { fetchOfficeActionHandler } from '../actions/fetchOffices';
+import { fetchOfficeActionHandler, fetchMyConnectionActionHandler } from '../actions/fetchOffices';
 let FontAwesome = require('react-fontawesome');
 
 export default class MlAppChooseTeam extends React.Component{
@@ -69,6 +69,23 @@ export default class MlAppChooseTeam extends React.Component{
     teamData = await teamData.map(async function (team) {
       if(team.resourceType == "office") {
         const resp = await getTeamUsersActionHandler(team.resourceId);
+        let users = resp.map(function (user) {
+          let userInfo = {
+            name: user.name,
+            profileId: user.profileId,
+            profileImage: user.profileImage,
+            userId: user.userId
+          };
+          let isFind = team.users.find(function (teamUser){ return teamUser.profileId == user.profileId && teamUser.userId == user.userId });
+          if(isFind) {
+            userInfo.isAdded = true;
+            userInfo.isMandatory = isFind.isMandatory;
+          }
+          return userInfo;
+        });
+        team.users = users;
+      } else if (team.resourceType == "connections") {
+        const resp = await fetchMyConnectionActionHandler();
         let users = resp.map(function (user) {
           let userInfo = {
             name: user.name,
@@ -179,7 +196,19 @@ export default class MlAppChooseTeam extends React.Component{
     if(evt.target.value == "connections") {
       teamData[index].resourceType="connections";
       delete teamData[index].resourceId;
+      const resp = await fetchMyConnectionActionHandler();
       teamData[index].users = [];
+      if(resp){
+        teamData[index].users = resp.map(function (user) {
+          return {
+            name: user.name,
+            profileId: user.profileId,
+            profileImage: user.profileImage,
+            userId: user.userId
+          }
+        });
+
+      }
     } else if (evt.target.value == "moolyaAdmins") {
       teamData[index].resourceType="moolyaAdmins";
       delete teamData[index].resourceId;

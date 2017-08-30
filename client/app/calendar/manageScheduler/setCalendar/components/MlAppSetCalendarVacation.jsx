@@ -45,6 +45,10 @@ export default class MlAppSetCalendarVacation extends Component {
     $('.step_form_wrap').height(WinHeight-(250+$('.app_header').outerHeight(true)));
   }
 
+  componentWillReceiveProps(newProps) {
+    this.setState({vacations: newProps.vacations})
+  }
+
   /**
    * selectDate() --> set the selected date
    * @param dateValue --> current changed value

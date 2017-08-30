@@ -73,7 +73,7 @@ export default class MlAdminLeftNav extends Component {
         <li className={`menu_item ${activeClass} `} key={dataItem.uniqueId}>
           <a href={dataItem.link} id={dataItem.uniqueId}>
             <div className={"menu_in"}>
-              <img src={dataItem.image}/>
+              <span className={dataItem.image}></span>
               {dataItem.name}
             </div>
             <div className={"menu_item menu_item_in"}></div>

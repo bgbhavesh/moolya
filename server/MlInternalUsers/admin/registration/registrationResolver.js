@@ -1643,7 +1643,7 @@ headerCommunityDisplay = (registrationInfo, context) => {
   var subChapterName = registrationInfo.subChapterName
   var chapterName = registrationInfo.chapterName
   var communityDefCode = registrationInfo.communityDefCode
-  if (subChapterName.length > 12)
+  if (subChapterName&&subChapterName.length > 12)
     subChapterName = subChapterName.substr(0, 12) + '...'
   chapterName = chapterName.substr(0, 4)
   var returnName = subChapterName + '/' + chapterName + '/' + communityDefCode

@@ -1,33 +1,14 @@
 /**
- * Created by pankaj on 20/8/17.
+ * Created by pankaj on 28/8/17.
  */
-
 import React, {Component} from "react";
-import {fetchOfficeMemberActionHandler} from './../actions/fetchOfficeMember';
 
-export default class MlAppOfficeCalendarHeader extends Component {
-
-  constructor(props){
-    super(props);
-    this.state={
-      users:[]
-    };
-    this.getOfficeMembers();
-  }
-
-  async getOfficeMembers() {
-    let users = await fetchOfficeMemberActionHandler();
-    if(users){
-      this.setState({
-        users: users
-      });
-    }
-  }
+export default class MlAppCalendarHeader extends Component {
 
   render(){
     const that = this;
-    const {selectUser} = this.props;
-    let selectedUser = this.props.selectedUser && this.props.selectedUser._id ? this.props.selectedUser._id : '';
+    const {selectUser, users} = that.props;
+    let selectedUser = that.props.selectedUser && that.props.selectedUser._id ? that.props.selectedUser._id : '';
     return (
       <div className="col-lg-12">
         <ul className="users_list well well-sm">
@@ -39,7 +20,7 @@ export default class MlAppOfficeCalendarHeader extends Component {
               </div>
             </a>
           </li>
-          {that.state.users.map( (user, index) => {
+          {users.map( (user, index) => {
             return(
               <li key={index} className={ selectedUser == user._id ? 'active_user' : ''}>
                 <a href="" onClick={()=>selectUser(user)}>

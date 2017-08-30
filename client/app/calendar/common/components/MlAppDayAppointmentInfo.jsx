@@ -3,39 +3,45 @@
  */
 let FontAwesome = require('react-fontawesome');
 import React, { Component } from 'react';
-// import InlineCalender from './inlineCalendar';
-import {fetchMyAppointmentActionHandler} from './../actions/fetchDayAppointmenstInfo';
+import {fetctOfficeDayAppointmentActionHandler} from './../actions/fetchDayAppointmenstInfo';
+import ScrollArea from 'react-scrollbar';
 
 export default class MlAppDayAppointmentInfo extends Component {
-
 
   constructor(props) {
     super(props);
     this.state= {
       showCreateComponent: false,
+      shift:'morning',
       slots:[]
     };
-    this.showCreateComponent=this.showCreateComponent.bind(this)
+    this.showCreateComponent=this.showCreateComponent.bind(this);
   }
-
 
   componentDidMount() {
     let WinWidth = $(window).width();
+    let WinHeight = $(window).height();
+    $('.main_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
     if(WinWidth > 768){
       $(".app_main_wrap").mCustomScrollbar({theme:"minimal-dark"});
     }
-    this.getMyAppointment();
+    this.getMyAppointment(this.props.appointmentDate);
   }
 
-  async getMyAppointment() {
-    console.log(this.props);
-    let date = new Date(this.props.appointmentDate);
+  componentWillReceiveProps(nextProps){
+    if(nextProps.appointmentDate){
+      this.getMyAppointment(nextProps.appointmentDate);
+    }
+  }
+
+  async getMyAppointment(selectedDate) {
+    let date = new Date(selectedDate);
     let day = date.getDate();
     let month = date.getMonth();
     let year = date.getFullYear();
     let profileId = this.props.profileId;
     let userId = this.props.userId;
-    let response = await fetchMyAppointmentActionHandler(userId, profileId, day, month, year);
+    let response = await fetctOfficeDayAppointmentActionHandler(userId, profileId, day, month, year);
     if (response) {
       this.setState({
         slots: response
@@ -54,38 +60,58 @@ export default class MlAppDayAppointmentInfo extends Component {
     this.props.componentToLoad(type, date)
   }
 
+  updateShift(shift){
+    this.setState({
+      shift: shift
+    })
+  }
+
   render(){
-    console.log('This Slots', this.state.slots)
+    //console.log('This Slots', this.state.slots)
     const that = this;
+    const {canAdd, canExplore, addEvent, exploreEvent} = this.props;
+    let slots = that.state.slots.filter( (slot) => {
+      return slot.shift === that.state.shift;
+    });
     return (
-      <div className="app_main_wrap">
-        <div className="app_padding_wrap">
-          {/*<InlineCalender/>*/}
+      <div className="main_wrap_scroll">
+        <ScrollArea
+          speed={0.8}
+          className="main_wrap_scroll"
+          smoothScrolling={true}
+          default={true}
+        >
           <div className="col-md-12">
-            {/*<ul className="cal_tabs act_tab">*/}
-            {/*<li className="col-md-4 nopadding-left">*/}
-            {/*<span><img src="/images/mor_icon.png"/> Morning</span>*/}
-            {/*</li>*/}
-            {/*<li className="col-md-4 nopadding">*/}
-            {/*<span className="act_tab"><img src="/images/aft_icon.png"/> Afternoon</span>*/}
-            {/*</li>*/}
-            {/*<li className="col-md-4 nopadding-right">*/}
-            {/*<span><img src="/images/eve_icon.png"/> Evening</span>*/}
-            {/*</li>*/}
-            {/*</ul>*/}
+            <ul className="cal_tabs act_tab">
+              <li className="col-md-4 nopadding-left" onClick={() => that.updateShift('morning') } style={{cursor: "pointer"}} >
+                <span className={ that.state.shift === "morning" ? "act_tab" : ''} >
+                  <img src="/images/mor_icon.png"/> Morning
+                </span>
+              </li>
+              <li className="col-md-4 nopadding" onClick={() => that.updateShift('afternoon') } style={{cursor: "pointer"}} >
+                <span className={ that.state.shift === "afternoon" ? "act_tab" : ''} >
+                  <img src="/images/aft_icon.png"/> Afternoon
+                </span>
+              </li>
+              <li className="col-md-4 nopadding-right"  onClick={() => that.updateShift('evening') } style={{cursor: "pointer"}} >
+                <span className={ that.state.shift === "evening" ? "act_tab" : ''} >
+                  <img src="/images/eve_icon.png"/> Evening
+                </span>
+              </li>
+            </ul>
             <br className="brclear"/>
             <div className="row day_tab_content">
               {
-                that.state.slots.map(function (data, index) {
-                  let appointments = data.appointments;
+                slots.map(function (data, index) {
+                  let appointments = data.appointments ? data.appointments : [];
                   return (
                     <div className="col-md-3" key={index}>
                       <div className="day_app_list">
                         <div className="app_list_head">
                           {data.slot}
                           <span className="pull-right">
-                            <a href=""><FontAwesome name='plus' onClick={that.showCreateComponent.bind(this, 'createTask', data.slot)}/></a>
-                            {/*<a href=""><FontAwesome name='ellipsis-h' onClick={that.showCreateComponent.bind(this, 'viewTask')}/></a>*/}
+                            { canAdd ? <a href=""><FontAwesome name='plus' onClick={() => addEvent(data, slots)}/></a> : '' }
+                            { appointments.length && canExplore ? <a href=""><FontAwesome name='ellipsis-h' onClick={ () => exploreEvent(data, slots)}/></a> : '' }
                           </span>
                         </div>
                         <ul className="list-group">
@@ -109,11 +135,12 @@ export default class MlAppDayAppointmentInfo extends Component {
                     </div>
                   )
                 })
-
               }
             </div>
-          </div>
-        </div>
+          {/*</div>*/}
+        {/*</div>*/}
+      </div>
+        </ScrollArea>
       </div>
     )
   }

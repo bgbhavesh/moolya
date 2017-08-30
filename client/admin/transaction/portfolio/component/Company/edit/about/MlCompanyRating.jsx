@@ -61,6 +61,7 @@ export default class MlCompanyRating extends React.Component{
   onRatingChange(rate){
     let details =this.state.data;
     details=_.omit(details,"rating");
+    details=_.omit(details,"privateFields");
     details=_.extend(details,{"rating":rate});
     this.setState({data:details}, function () {
       this.sendDataToParent()

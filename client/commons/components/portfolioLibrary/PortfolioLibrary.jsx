@@ -24,7 +24,7 @@ import PopoverActionIcon from '../../../app/appActions/components/PopoverActionI
 import SharePopOver from './sharePopOver'
 import MlConnectionHeader from './connectionHeader'
 import SharedLibrary from './sharedLibrary'
-// import MlDocViewer from  './MlDocViewer'
+
 
 
   class  Library extends React.Component {
@@ -1336,7 +1336,6 @@ import SharedLibrary from './sharedLibrary'
                     aria-hidden="true">&times;</span></button>
                 </div>
                 <div className="modal-body">
-                  {/*<MlDocViewer/>*/}
                   <iframe src={`https://docs.google.com/gview?url=${this.state.previewDocument}&embedded=true`}/>
                   {/*{console.log(this.state.previewDocument)}*/}
                   {/*{<MlFileViewer/>}*/}

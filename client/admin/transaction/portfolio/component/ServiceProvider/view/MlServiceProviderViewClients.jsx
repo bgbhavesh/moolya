@@ -4,6 +4,7 @@ import {fetchServiceProviderPortfolioClients} from "../../../actions/findPortfol
 import {initializeMlAnnotator} from "../../../../../../commons/annotator/mlAnnotator";
 import {createAnnotationActionHandler} from "../../../actions/updatePortfolioDetails";
 import {findAnnotations} from "../../../../../../commons/annotator/findAnnotations";
+import {validateUserForAnnotation} from '../../../actions/findPortfolioIdeatorDetails'
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 
@@ -11,17 +12,18 @@ var FontAwesome = require('react-fontawesome');
 export default class MlServiceProviderViewClients extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {serviceProviderClientsList: [],selectedAbout:"",tabIndex:0};
+    this.state = {serviceProviderClientsList: [],selectedAbout:"",tabIndex:0,isUserValidForAnnotation:false};
     this.fetchPortfolioStartupDetails.bind(this);
     this.createAnnotations.bind(this);
     this.fetchAnnotations.bind(this);
     this.initalizeAnnotaor.bind(this);
     this.annotatorEvents.bind(this);
+    this.validateUserForAnnotation(this)
   }
 
 
   componentDidMount() {
-    this.initalizeAnnotaor()
+    //this.initalizeAnnotaor()
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
 
@@ -56,11 +58,12 @@ export default class MlServiceProviderViewClients extends React.Component {
     $(function() {
       $('.float-label').jvFloat();
     });
-
+    this.fetchPortfolioStartupDetails();
+    this.validateUserForAnnotation();
   }
 
   componentWillMount() {
-    this.fetchPortfolioStartupDetails();
+
   }
 
   initalizeAnnotaor() {
@@ -129,9 +132,12 @@ export default class MlServiceProviderViewClients extends React.Component {
         "createdAt": value.createdAt
       })
     })
-    this.state.content.annotator('loadAnnotations', quotes);
-
-    return response;
+    if(quotes && quotes.length>0){
+      this.state.content.annotator('loadAnnotations', quotes);
+      return response
+    }else {
+      return response
+    }
   }
 
   async fetchPortfolioStartupDetails() {
@@ -156,6 +162,18 @@ export default class MlServiceProviderViewClients extends React.Component {
 
   onChangeIndex(e){
     this.fetchAnnotations(0);
+  }
+
+  async validateUserForAnnotation() {
+    const portfolioId = this.props.portfolioDetailsId
+    const response = await validateUserForAnnotation(portfolioId);
+    if (response && !this.state.isUserValidForAnnotation) {
+      this.setState({isUserValidForAnnotation:response})
+
+      this.initalizeAnnotaor()
+
+      this.fetchAnnotations();
+    }
   }
 
   render() {

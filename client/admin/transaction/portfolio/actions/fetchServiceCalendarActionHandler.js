@@ -3,11 +3,12 @@
  */
 import gql from "graphql-tag";
 import {appClient} from "../../../../app/core/appConnection";
-export async function fetchServiceCalendarActionHandler (portfolioId,month, year) {
+export async function fetchServiceCalendarActionHandler (portfolioId,month, year,orderId) {
   const result = await appClient.query({
     query: gql`
-    query($portfolioId: String, $month:Int, $year: Int) { 
-      getServiceProviderCalendar(portfolioId: $portfolioId,month: $month, year: $year) {
+    query($portfolioId: String, $month:Int, $year: Int, $orderId: String) { 
+      getServiceProviderCalendar(portfolioId: $portfolioId,month: $month, year: $year, orderId: $orderId) {
+        expiryDate
         days {
           date
           status
@@ -18,7 +19,8 @@ export async function fetchServiceCalendarActionHandler (portfolioId,month, year
     variables: {
       portfolioId: portfolioId,
       month: month?month:0,
-      year: year?year:0
+      year: year?year:0,
+      orderId : orderId ? orderId : ''
     },
     forceFetch:true
   });

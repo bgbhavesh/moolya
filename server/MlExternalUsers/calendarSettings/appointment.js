@@ -362,6 +362,7 @@ class MlAppointment {
       let isServiceProviderSlotStartTimeFind = false;
       let isServiceProviderSlotEndTimeFind = false;
       teamSlotsAvailabilities.forEach(function (teamSlotsAvailability) {
+        teamSlotsAvailability.slotsAvailability = teamSlotsAvailability.slotsAvailability ? teamSlotsAvailability.slotsAvailability : [];
         teamSlotsAvailability.slotsAvailability.forEach(function (slotAvailability) {
           if(!serviceProviderSlotAvailabily.isAvailable){
             serviceProviderSlotAvailabily.status = 2;
@@ -505,7 +506,7 @@ class MlAppointment {
    * @param year       :: Integer - Year of calendar
    * @returns {{days: Array}}
    */
-  getUserCalendar(userId, profileId, month, year){
+  getUserCalendar(userId, profileId, month, year, data){
 
     /**
      * response variable for send response to user
@@ -516,7 +517,7 @@ class MlAppointment {
      * Create the first date of current requested month
      */
     let date = new Date();
-    date.setDate(1);
+    date.setDate( data ? data : 1 );
     date.setMonth(month);
     date.setYear(year);
     date.setHours(0);

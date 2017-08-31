@@ -78,7 +78,7 @@ export default class MlAppInternalMyTaskList extends React.Component{
     const that = this;
     return (
       <div>
-        <div className="requested_input">
+        <div className="requested_input ideators_list">
           <div className="col-lg-12" id="show">
             <div className="row" style={( that.state.selectTask ? {display:'none'} : {})}>
               <div className="col-lg-2 col-md-4 col-sm-4" >
@@ -91,11 +91,14 @@ export default class MlAppInternalMyTaskList extends React.Component{
               </div>
               {that.state.tasks.map(function (task, index) {
                 return (
-                  <div className="col-lg-2 col-md-4 col-sm-4" key={index} onClick={()=>that.selectTask(task)} >
-                    <div className="list_block list_block_intrests notrans">
-                      <div className="hex_outer"><img src="/images/valuation.png"/></div>
-                      <div className="task-status pending"></div>
-                      <h3>{task.name}</h3>
+                  <div className="col-md-2 col-sx-3 col-sm-4 col-lg-" key={index} onClick={()=>that.selectTask(task)} >
+                    <div className="ideators_list_block">
+                      <div className="inactive"><span>{task.name}</span></div>
+                      <h3></h3>
+                      <img src="/images/valuation.png" className="c_image"/>
+                        <div className="block_footer">
+                          <span></span>
+                        </div>
                     </div>
                   </div>
                 )

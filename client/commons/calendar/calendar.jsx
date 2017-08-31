@@ -16,13 +16,16 @@ export default class Calender extends Component {
     super(props);
     this.state = {
       events: props.events ? props.events : [],
-      date : props.date ? props.date : new Date()
+      date : props.date ? props.date : new Date(),
+      dayData: props.dayData ? props.dayData : [],
     };
   }
 
   componentWillReceiveProps(newPorps){
+    console.log(newPorps);
     this.setState({
       events: newPorps.events ? newPorps.events : [],
+      dayData: newPorps.dayData ? newPorps.dayData : [],
       date : newPorps.date ? newPorps.date : new Date()
     });
   }
@@ -31,7 +34,7 @@ export default class Calender extends Component {
     let component = this.props.eventComponent;
     if(component){
       let data = {
-        dayData: this.props.dayData ? this.props.dayData : [],
+        dayData: this.state.dayData ? this.state.dayData : [],
         calendar: event
       };
       let eventComponent = React.cloneElement(component, data);
@@ -49,11 +52,11 @@ export default class Calender extends Component {
     }
   }
 
-  dateWrapper(date){
+  dateWrapper(date) {
     let component = this.props.dayBackgroundComponent;
     if(component) {
       let data = {
-        dayData: this.props.dayData ? this.props.dayData : [],
+        dayData: this.state.dayData ? this.state.dayData : [],
         calendar: date
       };
       let dayComponent = React.cloneElement(component, data);
@@ -82,6 +85,7 @@ export default class Calender extends Component {
   }
 
   render() {
+    console.log("dayData", this.state.dayData);
     const that = this;
     return (
       <div className="col-md-12">

@@ -71,7 +71,11 @@ export default class MlSubChapterList extends Component {
       )
     });
 
-    return (<div className="row">{addSubChapter}{list}</div>);
+    return (<div className="row">
+      <h2>Add SubChapter</h2>
+      {addSubChapter}
+      {list}
+      </div>);
 
   }
 

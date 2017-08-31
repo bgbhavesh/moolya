@@ -59,6 +59,7 @@ let calendarSettingSlot=`
   
   type MonthCalendar {
     days: [DayCalendar]
+    expiryDate: String
   }
   
   type TimeSlots{
@@ -114,7 +115,7 @@ let calendarSettingSlot=`
   type Query {   
      fetchMyCalendarSetting(profileId:String):CalendarSetting
      getMyCalendar(month:Int, year: Int): MonthCalendar
-     getServiceProviderCalendar(portfolioId:String, month:Int, year: Int): MonthCalendar
+     getServiceProviderCalendar(portfolioId:String, month:Int, year: Int, orderId: String): MonthCalendar
      getMyCalendarDayAvailable:response
      getSessionDayAvailable(orderId:String!, sessionId: String!, day: Int, month: Int, year: Int): [TimeSlots]
   }

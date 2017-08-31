@@ -275,6 +275,6 @@ export default class MlCompanyEmployment extends React.Component{
 }
 
 MlCompanyEmployment.contextTypes = {
-  institutionPortfolio: PropTypes.object,
+  //institutionPortfolio: PropTypes.object,
   startupPortfolio: PropTypes.object,
 };

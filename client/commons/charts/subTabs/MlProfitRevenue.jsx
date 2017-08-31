@@ -348,7 +348,7 @@ export default class MlProfitRevenue extends React.Component{
 
 
 MlProfitRevenue.contextTypes = {
-  institutionPortfolio: PropTypes.object,
+  //institutionPortfolio: PropTypes.object,
   startupPortfolio: PropTypes.object,
 };
 

@@ -83,12 +83,14 @@ MlResolver.MlQueryResolver['getServiceProviderCalendar'] = (obj, args, context, 
   let day = args.month  == date.getMonth() ?  date.getDate() : 1;
   let month = args.month ? args.month : date.getMonth() ;
   let year = args.year ? args.year : date.getFullYear() ;
+  let finalResponse = {};
+  if(month >= date.getMonth() && year >= date.getFullYear() ){
+    finalResponse = MlAppointment.getUserCalendar(userId, profileId, month, year, day);
+  }
 
-  let finalResponse = MlAppointment.getUserCalendar(userId, profileId, month, year, day);
   let orderId = args.orderId;
   if(orderId){
     let serviceOrder = mlDBController.findOne('MlServiceCards', {orderId: orderId}, context);
-    console.log(serviceOrder);
     if(serviceOrder && serviceOrder.expiryDate){
       finalResponse.expiryDate = serviceOrder.expiryDate;
     }

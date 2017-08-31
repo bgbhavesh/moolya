@@ -71,6 +71,10 @@ if (!shareNumber) {
   MlSerialNumbers.insert({_id: "shareNumber", seq: 0});
 }
 
+let paymentNumber = MlSerialNumbers.findOne({_id: "paymentNumber"});
+if (!paymentNumber) {
+  MlSerialNumbers.insert({_id: "paymentNumber", seq: 0});
+}
 
 orderNumberGenService = (function(){
   function getNextSequence(name) {
@@ -148,6 +152,9 @@ orderNumberGenService = (function(){
     },
     createShareId: function (data) {
       data.sharedId = "MLSHR"+ FormatUtil.leadingZeros(getNextSequence("shareNumber"), 8);
+    },
+    createPaymentId: function (data) {
+      data.paymentId = "MLPYM"+ FormatUtil.leadingZeros(getNextSequence("paymentNumber"), 8);
     },
     generateRandomPassword:function(){
       var randomId = function makeid(){

@@ -641,7 +641,7 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
         "operation": "debit",
         "customerId": officeTransDetails.userId,
         // "callBackUrl": "http://10.0.2.188:3000/app/myOffice"
-        "callBackUrl": Meteor.absoluteUrl() +"app/myOffice"
+        "callBackUrl": Meteor.absoluteUrl() +"/app/transaction"
       };
 
       let apiRequest = {

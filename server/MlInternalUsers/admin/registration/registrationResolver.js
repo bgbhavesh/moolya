@@ -239,7 +239,7 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
        clusterData = mlDBController.findOne('MlClusters', {countryId: countryId, isActive: true}, context) || {}
        chapterData = mlDBController.findOne('MlChapters', {cityId: cityId, isActive: true}, context) || {}
        chapterId = chapterData && chapterData._id ? chapterData._id : ""
-       subChapterData = mlDBController.findOne('MlSubChapters', {chapterId: chapterId, isActive: true}, context) || {}
+       subChapterData = mlDBController.findOne('MlSubChapters', {chapterId: chapterId, isActive: true,isDefaultSubChapter:true}, context) || {}
     }
     args.registration.clusterId = clusterData && clusterData._id ? clusterData._id : "";
     args.registration.clusterName = clusterData && clusterData.clusterName ? clusterData.clusterName : "";

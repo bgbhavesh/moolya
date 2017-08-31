@@ -1,5 +1,4 @@
 import React, {Component, PropTypes}  from "react";
-import {Meteor} from 'meteor/meteor';
 import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 import {Button, Popover, PopoverTitle, PopoverContent} from 'reactstrap';

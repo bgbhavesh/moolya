@@ -64,7 +64,6 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   moduleName =moduleName.toUpperCase();
   let count = 0;
   let data = [];
-  var isNonMoolyaSubChapter = false;
   let findOptions = {
     skip: args.queryProperty&&args.queryProperty.skip,
     limit: args.queryProperty&&args.queryProperty.limit
@@ -77,72 +76,43 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   }
 
   /**
-   * checking is a [moolya/non-moolya]
-   * */
-  var associatedSubChapters = []
-  var subChapter = mlDBController.findOne('MlSubChapters', {
-    _id: userProfile.subChapterId,
-    isDefaultSubChapter: false
-  }, context)
-  if (subChapter) {
-    isNonMoolyaSubChapter = true;
-    if (subChapter.internalSubChapterAccess && subChapter.internalSubChapterAccess.externalUser && subChapter.internalSubChapterAccess.externalUser.canSearch)
-      associatedSubChapters = _.concat(userProfile.subChapterId, subChapter.associatedSubChapters);
-    else
-      associatedSubChapters.push(userProfile.subChapterId)
-  }
-
-  /**
    * @module ["portfolio"]
    * changed query for adding [chapter and accountType]
    * */
   if (moduleName == "FUNDERPORTFOLIO") {
-    let query;
-    // console.log(associatedSubChapters)
-    // if(!isNonMoolyaSubChapter){
-    //   query = [
-    //     {
-    //       '$lookup': {
-    //         from: 'mlPortfolioDetails', localField: 'portfolioDetailsId', foreignField: '_id',
-    //         as: 'port'
-    //       }
-    //     },
-    //     {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-    //     {'$match': {"port.status": "gone live", 'port.communityCode': "FUN"}},
-    //     {'$project': {portfolioDetailsId: 1, funderAbout: 1, chapterName: '$port.chapterName', accountType: '$port.accountType'}}
-    //   ]
-    // }else{
-      query = [
-        {
-          '$lookup': {
-            from: 'mlPortfolioDetails', localField: 'portfolioDetailsId', foreignField: '_id',
-            as: 'port'
-          }
-        },
-        {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-        {'$match': {"port.status": "gone live", 'port.communityCode': "FUN", 'port.subChapterId': subChapterQuery }},
-        {'$project': {portfolioDetailsId: 1, funderAbout: 1, chapterName: '$port.chapterName', accountType: '$port.accountType'}}
-      ]
-    // }
-
+   var query = [
+      {
+        '$lookup': {
+          from: 'mlPortfolioDetails', localField: 'portfolioDetailsId', foreignField: '_id',
+          as: 'port'
+        }
+      },
+      {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
+      {'$match': {"port.status": "gone live", 'port.communityCode': "FUN", 'port.subChapterId': subChapterQuery}},
+      {
+        '$lookup': {
+          from: 'users', localField: 'userId', foreignField: '_id',
+          as: 'user'
+        }
+      },
+      {'$unwind': {"path": "$user", "preserveNullAndEmptyArrays": true}},
+      {
+        '$project': {
+          portfolioDetailsId: 1,
+          funderAbout: 1,
+          chapterName: '$port.chapterName',
+          accountType: '$port.accountType',
+          communityType: '$port.communityType',
+          firstName: '$user.profile.firstName',
+          lastName: "$user.profile.lastName"
+        }
+      }
+    ]
     data = mlDBController.aggregate('MlFunderPortfolio', query, context);
     count = data.length
   }
 
   else if (args.module == "serviceProviderPortfolioDetails") {
-    // console.log(associatedSubChapters)
-    // var query = {}
-    // if (!isNonMoolyaSubChapter) {
-      // query = {status: 'gone live', communityCode: "SPS"}
-    // } else {
-    //   query = {status: 'gone live', communityCode: "SPS", subChapterId: subChapterQuery}
-    // }
-    // let value = mlDBController.find('MlPortfolioDetails', query, context).fetch()
-    // let portId = _.map(value, '_id')
-    // let finalQuery = {portfolioDetailsId: {$in: portId}};
-    // data = MlServiceProviderPortfolio.find(finalQuery, findOptions).fetch();
-    // count = MlServiceProviderPortfolio.find(finalQuery, findOptions).count();
-
     let pipleline = [
       {
         '$lookup': {
@@ -151,28 +121,31 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "SPS",  'port.subChapterId': subChapterQuery} },
-      {'$project': {portfolioDetailsId: 1, about: 1, chapterName: '$port.chapterName', accountType: '$port.accountType'}}
+      {'$match': {"port.status": "gone live", 'port.communityCode': "SPS", 'port.subChapterId': subChapterQuery}},
+      {
+        '$lookup': {
+          from: 'users', localField: 'userId', foreignField: '_id',
+          as: 'user'
+        }
+      },
+      {'$unwind': {"path": "$user", "preserveNullAndEmptyArrays": true}},
+      {
+        '$project': {
+          portfolioDetailsId: 1,
+          about: 1,
+          chapterName: '$port.chapterName',
+          accountType: '$port.accountType',
+          communityType: '$port.communityType',
+          firstName: '$user.profile.firstName',
+          lastName: "$user.profile.lastName"
+        }
+      }
     ];
     data = mlDBController.aggregate('MlServiceProviderPortfolio', pipleline, context);
     count = data.length;
   }
 
   else if (args.module == "startupPortfolioDetails") {
-    // console.log(associatedSubChapters)
-    // var query = {}
-    // if (!isNonMoolyaSubChapter) {
-      // query = {status: 'gone live', communityCode: "STU"}
-    // } else {
-    //   query = {status: 'gone live', communityCode: "STU", subChapterId: subChapterQuery };
-    // }
-
-    // let value = mlDBController.find('MlPortfolioDetails', query, context).fetch()
-    // let portId = _.map(value, '_id')
-    // let finalQuery = {portfolioDetailsId: {$in: portId}};
-    // data = MlStartupPortfolio.find(finalQuery, findOptions).fetch();
-    // count = MlStartupPortfolio.find(finalQuery, findOptions).count();
-
     let pipleline = [
       {
         '$lookup': {
@@ -181,22 +154,31 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "STU",  'port.subChapterId': subChapterQuery} },
-      {'$project': {portfolioDetailsId: 1, aboutUs: 1, chapterName: '$port.chapterName', accountType: '$port.accountType'}}
+      {'$match': {"port.status": "gone live", 'port.communityCode': "STU", 'port.subChapterId': subChapterQuery}},
+      {
+        '$lookup': {
+          from: 'users', localField: 'userId', foreignField: '_id',
+          as: 'user'
+        }
+      },
+      {'$unwind': {"path": "$user", "preserveNullAndEmptyArrays": true}},
+      {
+        '$project': {
+          portfolioDetailsId: 1,
+          aboutUs: 1,
+          chapterName: '$port.chapterName',
+          accountType: '$port.accountType',
+          communityType: '$port.communityType',
+          firstName: '$user.profile.firstName',
+          lastName: "$user.profile.lastName"
+        }
+      }
     ];
     data = mlDBController.aggregate('MlStartupPortfolio', pipleline, context);
     count = data.length;
   }
 
   else if (args.module == "ideatorPortfolioDetails") {
-    console.log(associatedSubChapters)
-    var query = false
-    if (!isNonMoolyaSubChapter) {
-      query = true
-    } else {
-      query = false
-    }
-
     var allIds = [];
     var ideator = [];
 
@@ -205,12 +187,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
     allIds = _.uniq(allIds);
 
     _.each(allIds, function (userId) {
-      var queryThis = {}
-      // if (query) {
-      //   queryThis = {userId: userId, status: 'gone live'}
-      // } else {
-        queryThis = {userId: userId, status: 'gone live', subChapterId: subChapterQuery }
-      // }
+      var queryThis = {userId: userId, status: 'gone live', subChapterId: subChapterQuery }
 
       let portfolios = MlPortfolioDetails.find(queryThis).fetch();
       var ideasArr = [];
@@ -264,40 +241,11 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
     //       "accountType": "$port.accountType"
     //     }
     //   }
-    // ];let pipeline = [
-    //   {"$match": {isActive: true} },
-    //   {
-    //     '$lookup': {
-    //       from: 'mlPortfolioDetails', localField: 'portfolioId', foreignField: '_id',
-    //       as: 'port'
-    //     }
-    //   },
-    //   {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-    //   {'$match': {"port.status": "gone live", 'port.communityCode': "IDE", subChapterId: subChapterQuery } },
-    //   {
-    //     '$lookup': {
-    //       from: 'users', localField: 'userId', foreignField: '_id',
-    //       as: 'user'
-    //     }
-    //   },
-    //   {'$unwind': {"path": "$user", "preserveNullAndEmptyArrays": true}},
-    //   {
-    //     "$project": {
-    //       "userId": "$userId",
-    //       "ideas": {
-    //         "title": "$title",
-    //         "description": "$description"
-    //       },
-    //       "chapterName": "$port.chapterName",
-    //       "name": "$user.profile.firstName" + " " + "$user.profile.lastName",
-    //       "accountType": "$port.accountType"
-    //     }
-    //   }
-    // ];
+    // ]
 
   }
-  else if(args.module == "institutionPortfolioDetails"){
-    let pipleline = [
+  else if (args.module == "institutionPortfolioDetails") {
+    var pipleline = [
       {
         '$lookup': {
           from: 'mlPortfolioDetails', localField: 'portfolioDetailsId', foreignField: '_id',
@@ -305,13 +253,30 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "INS",  'port.subChapterId': subChapterQuery} },
-      {'$project': {portfolioDetailsId: 1, about: 1, chapterName: '$port.chapterName', accountType: '$port.accountType'}}
+      {'$match': {"port.status": "gone live", 'port.communityCode': "INS", 'port.subChapterId': subChapterQuery}},
+      {
+        '$lookup': {
+          from: 'users', localField: 'userId', foreignField: '_id',
+          as: 'user'
+        }
+      },
+      {'$unwind': {"path": "$user", "preserveNullAndEmptyArrays": true}},
+      {
+        '$project': {
+          portfolioDetailsId: 1,
+          about: 1,
+          chapterName: '$port.chapterName',
+          accountType: '$port.accountType',
+          communityType: '$port.communityType',
+          firstName: '$user.profile.firstName',
+          lastName: "$user.profile.lastName"
+        }
+      }
     ];
     data = mlDBController.aggregate('MlInstitutionPortfolio', pipleline, context);
     count = data.length;
   }
-  else if(args.module == "companyPortfolioDetails"){
+  else if (args.module == "companyPortfolioDetails") {
     let pipleline = [
       {
         '$lookup': {
@@ -320,8 +285,25 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "CMP",  'port.subChapterId': subChapterQuery} },
-      {'$project': {portfolioDetailsId: 1, about: 1, chapterName: '$port.chapterName', accountType: '$port.accountType'}}
+      {'$match': {"port.status": "gone live", 'port.communityCode': "CMP", 'port.subChapterId': subChapterQuery}},
+      {
+        '$lookup': {
+          from: 'users', localField: 'userId', foreignField: '_id',
+          as: 'user'
+        }
+      },
+      {'$unwind': {"path": "$user", "preserveNullAndEmptyArrays": true}},
+      {
+        '$project': {
+          portfolioDetailsId: 1,
+          about: 1,
+          chapterName: '$port.chapterName',
+          accountType: '$port.accountType',
+          communityType: '$port.communityType',
+          firstName: '$user.profile.firstName',
+          lastName: "$user.profile.lastName"
+        }
+      }
     ];
     data = mlDBController.aggregate('MlCompanyPortfolio', pipleline, context);
     count = data.length;

@@ -108,8 +108,10 @@ let serviceProviderPortfolioSchema = `
          awardsRecognition    : [awardsRecognitionOutput]
          clients              : [clientsOutput]
          services             : servicesOutput
-         chapterName: String
-         accountType: String
+         chapterName          : String
+         accountType          : String
+         firstName            : String
+         lastName             : String
     }
     
     input logo{

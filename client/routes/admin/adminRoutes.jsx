@@ -42,19 +42,15 @@ import MlAdminProfileHeader from'../../admin/layouts/header/MlAdminProfileHeader
 
 import  MlAdminSwitchProfile from '../../admin/profile/component/MlAdminSwitchProfile'
 import MlPortfolio from '../../admin/transaction/portfolio/component/MlPortfolio'
-import MlIdeatorPortfolioTemplate from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorPortfolio'
-import MlIdeatorPortfolioAbout from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorPortfolioAbout'
-import MlTransactionApprovals from '../../admin/transaction/requests/components/MlTransactionApprovals'
+// import MlIdeatorPortfolioTemplate from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorPortfolio'
+// import MlIdeatorPortfolioAbout from '../../admin/transaction/portfolio/component/Ideator/MlIdeatorPortfolioAbout'
+// import MlTransactionApprovals from '../../admin/transaction/requests/components/MlTransactionApprovals'
 import MlInteractionsLogList from '../../admin/transaction/interactions/component/MlinteractionsLogList'
 import MlConversationsLogList from '../../admin/transaction/conversations/component/MlConversationsLogList'
 import MlAdminHeader from '../../admin/layouts/header/MlAdminHeader';
 
 import MlProcessSetupRequestsList from '../../admin/transaction/processSetup/component/MlProcessSetupRequestsList'
-
-
 import MlShareList from '../../admin/transaction/share/component/MlShareList'
-
-
 import MlserviceCardsList from  '../../admin/transaction/serviceCards/component/MlserviceCardsList'
 
 import MlInternalRequestsList from '../../admin/transaction/internalRequests/component/MlInternalRequestsList'
@@ -448,17 +444,17 @@ adminSection.route('/templates/assignTemplate/:id', {
 
 
 // test routes need to remove later
-adminSection.route('/portfolio/tabcomponent', {
-    action(params){
-        mount(AdminLayout,{adminContent:<MlIdeatorPortfolioTemplate />})
-    }
-});
+// adminSection.route('/portfolio/tabcomponent', {
+//     action(params){
+//         mount(AdminLayout,{adminContent:<MlIdeatorPortfolioTemplate />})
+//     }
+// });
 
-adminSection.route('/portfolio/about', {
-  action(params){
-      mount(AdminLayout,{adminContent:<MlIdeatorPortfolioAbout />})
-  }
-});
+// adminSection.route('/portfolio/about', {
+//   action(params){
+//       mount(AdminLayout,{adminContent:<MlIdeatorPortfolioAbout />})
+//   }
+// });
 
 
 // Process Setup Routes

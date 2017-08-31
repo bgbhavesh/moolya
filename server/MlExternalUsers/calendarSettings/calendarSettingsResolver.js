@@ -347,3 +347,71 @@ MlResolver.MlMutationResolver['updateMyCalendarVacation'] = (obj, args, context,
     }
   }
 }
+
+MlResolver.MlMutationResolver['updateCalendarVacationByVacationId'] = (obj, args, context, info) => {
+  let vacation = args.vacation;
+  let userId = context.userId;
+  let profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  if(!userId){
+    let code = 400;
+    let result = 'User ID is not defined for this user';
+    let response = new MlRespPayload().errorPayload(result, code);
+    return response;
+  }
+  if(!profileId){
+    let code = 400;
+    let result = 'Profile ID is not defined for this user';
+    let response = new MlRespPayload().errorPayload(result, code);
+    return response;
+  }
+  if(!vacation){
+    let code = 400;
+    let result = 'Vacation data is missing';
+    let response = new MlRespPayload().errorPayload(result, code);
+    return response;
+  }
+  vacation.start = new Date(vacation.start);
+  vacation.end = new Date(vacation.end);
+  vacation.vacationId = args.vacationId || '';
+  let isAlreadyExist = mlDBController.findOne('MlCalendarSettings',{userId:userId, profileId:profileId}, context);
+  if(isAlreadyExist){
+    isAlreadyExist.vacations = isAlreadyExist.vacations ? isAlreadyExist.vacations : [];
+    let startDate = new Date(vacation.start);
+    let endDate   = new Date(vacation.end);
+    let isAlreadyOnVacation = false;
+    isAlreadyExist.vacations.forEach(function (vacationInfo) {
+      if (vacationInfo.vacationId !== args.vacationId) {
+        let vacationStartDate = new Date(vacationInfo.start);
+        let vacationEndDate = new Date(vacationInfo.end);
+        if( (vacationStartDate.getTime() >= startDate.getTime() && startDate.getTime() <=  vacationEndDate.getTime() ) || ( vacationStartDate.getTime() >= endDate.getTime() && endDate.getTime() <=  vacationEndDate.getTime() ) ){
+          isAlreadyOnVacation = true;
+        }
+      }
+    });
+    if(isAlreadyOnVacation){
+      let code = 400;
+      let response = new MlRespPayload().errorPayload('Vacation Overlapping', code);
+      return response;
+    } else {
+      //isAlreadyExist.vacations.push(vacation);
+      let newVacationData = isAlreadyExist.vacations.map((vactionData) => {
+        if (vactionData.vacationId === args.vacationId) {
+          return vacation;
+        } else {
+          return vactionData;
+        }
+      });
+      let result = mlDBController.update('MlCalendarSettings', isAlreadyExist._id, { vacations: newVacationData ,updatedAt: new Date()}, {$set:true}, context);
+      if(result){
+        let code = 200;
+        let response = new MlRespPayload().successPayload('Calendar Setting updated successfully', code);
+        return response;
+      }
+    }
+  } else {
+    let code = 400;
+    let result = 'Calendar Setting not found';
+    let response = new MlRespPayload().errorPayload(result, code);
+    return response;
+  }
+}

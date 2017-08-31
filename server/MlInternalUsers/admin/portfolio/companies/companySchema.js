@@ -346,6 +346,8 @@ let startupPortfolioSchema = `
       portfolioDetailsId   : String
       chapterName: String
       accountType: String
+      firstName : String
+      lastName : String
    }
     
     

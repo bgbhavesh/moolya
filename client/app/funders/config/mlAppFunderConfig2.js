@@ -28,6 +28,9 @@ export const mlAppFunderConfig2=new MlAppViewer({
                       }
                       chapterName
                       accountType
+                      communityType
+                      firstName
+                      lastName
                     }
                   }
                 }

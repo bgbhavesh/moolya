@@ -109,7 +109,7 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
 
                   <div className="panel panel-default panel-form">
                     <div className="panel-heading">
-                      Intellectual Training and Trademark
+                      Intellectual Property And Trademark
                     </div>
                     <div className="panel-body">
 

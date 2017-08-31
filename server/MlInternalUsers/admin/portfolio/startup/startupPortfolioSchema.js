@@ -619,6 +619,8 @@ let startupPortfolioSchema = `
         aboutUs              : aboutUsOutput
         chapterName         : String
         accountType         : String
+        firstName            : String
+        lastName            : String
     }
     
     type Query{

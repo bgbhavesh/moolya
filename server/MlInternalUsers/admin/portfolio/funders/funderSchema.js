@@ -192,6 +192,9 @@ let FunderPortfolioSchema = `
         services            : Services
         chapterName         : String
         accountType         : String
+        communityType       : String
+        firstName           : String
+        lastName            : String
     }
   
     input successStories{

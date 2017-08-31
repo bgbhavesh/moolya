@@ -13,6 +13,7 @@ let ideatorPortfolioSchema = `
         chapterName:String,
         userId:String
         name:String
+        communityType : String
     }
     type ideasOutput{
         _id:String,

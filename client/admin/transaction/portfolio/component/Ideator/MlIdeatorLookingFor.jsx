@@ -1,5 +1,4 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
@@ -8,7 +7,7 @@ import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUti
 import {findIdeatorLookingForActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import MlLoader from '../../../../../commons/components/loader/loader'
 
-export default class MlIdeatorLookingFor extends React.Component{
+export default class MlIdeatorLookingFor extends Component{
   constructor(props, context){
     super(props);
     this.state={
@@ -22,7 +21,8 @@ export default class MlIdeatorLookingFor extends React.Component{
   }
 
   componentWillMount(){
-    this.fetchPortfolioDetails();
+    const resp = this.fetchPortfolioDetails();
+    return resp
   }
 
   componentDidMount(){
@@ -49,6 +49,7 @@ export default class MlIdeatorLookingFor extends React.Component{
       })
 
     }else{
+      console.log('newPropsPrivatefields',this.context.privateValues)
       this.setState({loading: false, data: this.context.ideatorPortfolio.lookingFor});
     }
   }
@@ -65,9 +66,9 @@ export default class MlIdeatorLookingFor extends React.Component{
     }else{
       details=_.extend(details,{[key]:false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
+    var privateKey = {keyName: fieldName, booleanKey: field, isPrivate: isPrivate, tabName: this.props.tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data:details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
 
@@ -130,7 +131,7 @@ export default class MlIdeatorLookingFor extends React.Component{
               </div>
             </ScrollArea>
           </div>
-)}
+        )}
       </div>
     )
   }
@@ -138,4 +139,5 @@ export default class MlIdeatorLookingFor extends React.Component{
 
 MlIdeatorLookingFor.contextTypes = {
   ideatorPortfolio: PropTypes.object,
+  privateValues: PropTypes.array,
 };

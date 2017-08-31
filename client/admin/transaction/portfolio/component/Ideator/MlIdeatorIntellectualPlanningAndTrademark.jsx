@@ -1,5 +1,4 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
@@ -8,15 +7,16 @@ import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUti
 import {findIdeatorIntellectualPlanningTrademarkActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import MlLoader from '../../../../../commons/components/loader/loader'
 
-export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Component{
-   constructor(props, context) {
-     super(props);
-     this.state =  {loading:true,data:{}, privateKey:{}};
-     this.fetchPortfolioDetails.bind(this);
-     return this
-   }
+export default class MlIdeatorIntellectualPlanningAndTrademark extends Component{
+  constructor(props, context) {
+    super(props);
+    this.state =  {loading:true,data:{}, privateKey:{}};
+    this.fetchPortfolioDetails.bind(this);
+    return this
+  }
   componentWillMount(){
-    this.fetchPortfolioDetails();
+    const resp = this.fetchPortfolioDetails();
+    return resp
   }
 
   componentDidUpdate(){
@@ -39,11 +39,11 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
         this.setState({loading: false, data: response});
       }
 
-
       _.each(response.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
     }else{
+      console.log('newPropsPrivatefields',this.context.privateValues)
       this.setState({loading: false, data: that.context.ideatorPortfolio.intellectualPlanning});
     }
   }
@@ -71,9 +71,9 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
       details=_.extend(details,{[key]:false});
     }
 
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
+    var privateKey = {keyName: fieldName, booleanKey: field, isPrivate: isPrivate, tabName: this.props.tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data:details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -130,4 +130,5 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends React.Com
 };
 MlIdeatorIntellectualPlanningAndTrademark.contextTypes = {
   ideatorPortfolio: PropTypes.object,
+  privateValues: PropTypes.array,
 };

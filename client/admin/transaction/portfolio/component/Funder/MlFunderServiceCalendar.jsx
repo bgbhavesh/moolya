@@ -98,7 +98,7 @@ export default class MlAppMyCalendar extends Component {
             date={that.state.date}/>
         </div>
       </div>:
-        <MlAppFunderCalendarSlots orderId={this.props.orderId} sessionId={this.state.sessionIds} date={that.state.slotDate}/>
+        <MlAppFunderCalendarSlots  componentToView={this.props.componentToView} orderId={this.props.orderId} sessionId={this.state.sessionIds} date={that.state.slotDate}/>
     )
   }
 }

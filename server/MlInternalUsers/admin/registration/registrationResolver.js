@@ -229,7 +229,7 @@ MlResolver.MlMutationResolver['createRegistrationAPI'] = (obj, args, context, in
      * attaching "clusterId, chapterId, subChapterId" if they are active
      * @else giving null value to them
      * */
-    var subChapterData=null;var clusterData=null;var chapterData=null;var chapterId=null;var cityId=null;
+    var subChapterData=null;var clusterData=null;var chapterData=null;var chapterId=null;
     if(requestedSubChapterId){/**Registration request for specific sub chapter*/
       subChapterData = mlDBController.findOne('MlSubChapters', {_id:requestedSubChapterId,isActive:true}, context) || {};
       clusterData = mlDBController.findOne('MlClusters', {_id: subChapterData.clusterId}, context) || {}

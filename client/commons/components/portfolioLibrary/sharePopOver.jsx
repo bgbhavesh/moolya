@@ -203,8 +203,11 @@ export default class SharePopOver extends React.Component {
     if(this.state.endDate) {
       Details.sharedEndDate = this.state.endDate.format("MM-DD-YYYY hh:mm:ss");
     }
-    console.log('--Details--',Details)
-     this.saveInfo(Details);
+    if(this.state.startDate < this.state.endDate) {
+      this.saveInfo(Details);
+    }else{
+      toastr.error('End date should be after the start date')
+    }
   }
 
   async saveInfo(Details) {

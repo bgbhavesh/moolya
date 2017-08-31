@@ -8,7 +8,7 @@ import ScrollArea from 'react-scrollbar';
 import Datetime from "react-datetime";
 import Moment from 'moment';
 import { isEmpty } from 'lodash';
-import { updateCalendarVacationActionHandler } from '../actions/updateCalendarVacationSettings';
+import { updateCalendarVacationActionHandler, updateCalendarVacationByIdActionHandler } from '../actions/updateCalendarVacationSettings';
 
 export default class MlAppSetCalendarVacation extends Component {
   constructor(props) {
@@ -22,7 +22,9 @@ export default class MlAppSetCalendarVacation extends Component {
         endTime: '',
         endDate: '',
         note: '',
-        type: 'holiday'
+        type: 'holiday',
+        isAllowBooking: false,
+        isAutoCancelAppointment: false
       }
     };
     this.errorMessages = {
@@ -46,7 +48,17 @@ export default class MlAppSetCalendarVacation extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    this.setState({vacations: newProps.vacations})
+    let vacationData = {
+      startTime: '',
+      startDate: '',
+      endTime: '',
+      endDate: '',
+      note: '',
+      type: 'holiday',
+      isAllowBooking: false,
+      isAutoCancelAppointment: false
+    };
+    this.setState({vacations: newProps.vacations, selectedVacation: '', vacationData: vacationData});
   }
 
   /**
@@ -56,10 +68,12 @@ export default class MlAppSetCalendarVacation extends Component {
    */
   selectDate(dateValue, isStartDate) {
     let vacationData = this.state.vacationData;
-    if (isStartDate) {
-      vacationData.startDate = new Moment(dateValue, 'DD-MM-YYYY').format('DD-MM-YYYY');
-    } else {
-      vacationData.endDate = new Moment(dateValue, 'DD-MM-YYYY').format('DD-MM-YYYY');
+    if (dateValue) {
+      if (isStartDate) {
+        vacationData.startDate = new Moment(dateValue, 'DD-MM-YYYY').format('DD-MM-YYYY');
+      } else {
+        vacationData.endDate = new Moment(dateValue, 'DD-MM-YYYY').format('DD-MM-YYYY');
+      }
     }
     this.setState({ vacationData: vacationData })
   }
@@ -71,10 +85,12 @@ export default class MlAppSetCalendarVacation extends Component {
    */
   selectTime(timeValue, isStartTime) {
     let vacationData = this.state.vacationData;
-    if (isStartTime) {
-      vacationData.startTime = new Moment(timeValue).format('HH:mm:ss');
-    } else {
-      vacationData.endTime = new Moment(timeValue).format('HH:mm:ss');
+    if (timeValue) {
+      if (isStartTime) {
+        vacationData.startTime = new Moment(timeValue).format('HH:mm:ss');
+      } else {
+        vacationData.endTime = new Moment(timeValue).format('HH:mm:ss');
+      }
     }
     this.setState({ vacationData: vacationData })
   }
@@ -130,9 +146,10 @@ export default class MlAppSetCalendarVacation extends Component {
    */
   validateFormFields() {
     let { vacationData } = this.state;
+    this.isValidTime = true;
     let errorFields = [];
     Object.keys(vacationData).forEach((field) => {
-      if (isEmpty(vacationData[field])) {
+      if (field !== 'isAllowBooking' && field !== 'isAutoCancelAppointment' && !vacationData[field] && isEmpty(vacationData[field])) {
         errorFields.push(this.errorMessages[field]);
         this.isValid = false;
       }
@@ -151,11 +168,21 @@ export default class MlAppSetCalendarVacation extends Component {
       return;
     }
     if (this.isValid) {
+      if (this.state.selectedVacation) {
+        vacationData.startDate = (typeof vacationData.startDate === 'object') ? new Moment(vacationData.startDate).format('DD-MM-YYYY') : vacationData.startDate;
+        vacationData.startTime = (typeof vacationData.startTime === 'object') ? new Moment(vacationData.startTime).format('HH:mm:ss') : vacationData.startTime;
+        vacationData.endDate = (typeof vacationData.endDate === 'object') ? new Moment(vacationData.endDate).format('DD-MM-YYYY') : vacationData.endDate;
+        vacationData.endTime = (typeof vacationData.endTime === 'object') ? new Moment(vacationData.endTime).format('HH:mm:ss') : vacationData.endTime;
+      }
       let start = new Moment(vacationData.startDate + ' ' + vacationData.startTime, 'DD-MM-YYYY HH:mm:ss');
       let end = new Moment(vacationData.endDate + ' ' + vacationData.endTime, 'DD-MM-YYYY HH:mm:ss');
       this.isValidTime = new Moment(end, 'DD-MM-YYYY HH:mm:ss').isSameOrAfter(new Moment(start, 'DD-MM-YYYY HH:mm:ss'));
       if (!this.isValidTime) {
         toastr.error('Start datetime must be less than end datetime');
+        this.isValid = false;
+        return;
+      } else if (vacationData.startTime === vacationData.endTime) {
+        toastr.error(`Start time and End time must be different `);
         this.isValid = false;
         return;
       } else {
@@ -164,6 +191,8 @@ export default class MlAppSetCalendarVacation extends Component {
         this.validVacationData.isActive = true;
         this.validVacationData.type = vacationData.type;
         this.validVacationData.note = vacationData.note;
+        this.validVacationData.isAllowBooking = vacationData.isAllowBooking;
+        this.validVacationData.isAutoCancelAppointment = vacationData.isAutoCancelAppointment;
       }
     }
 
@@ -180,8 +209,14 @@ export default class MlAppSetCalendarVacation extends Component {
     this.validVacationData = {};
     this.validateFormFields();
     if (this.isValid) {
-      let response = await updateCalendarVacationActionHandler(this.validVacationData);
-      this.showResponseMsg(response);
+      let response = '';
+      if (this.state.selectedVacation) {
+        response = await updateCalendarVacationByIdActionHandler(this.validVacationData, this.state.selectedVacation);
+        this.showResponseMsg(response);
+      } else {
+        response = await updateCalendarVacationActionHandler(this.validVacationData);
+        this.showResponseMsg(response);
+      }
     }
   }
 
@@ -198,12 +233,22 @@ export default class MlAppSetCalendarVacation extends Component {
       endTime: vacation.end ? new Date(vacation.end) : '',
       endDate: vacation.end ? new Date(vacation.end) : '',
       note: vacation.note ? vacation.note : '',
-      type: vacation.type ? vacation.type : 'holiday'
+      type: vacation.type ? vacation.type : 'holiday',
+      isAllowBooking: vacation.isAllowBooking,
+      isAutoCancelAppointment: vacation.isAutoCancelAppointment
     };
     this.setState({
       vacationData: data,
       selectedVacation: vacation.vacationId
     });
+  }
+
+  onChangeCheckboxFields(event) {
+    const vacationData = this.state.vacationData;
+    const name = event.target.name;
+    const value = event.target.value;
+    vacationData[name] = value;
+    this.setState({vacationData: vacationData});
   }
 
   render(){
@@ -236,7 +281,10 @@ export default class MlAppSetCalendarVacation extends Component {
               </div>
               <div className="form-group">
                 <div className="input_types">
-                  <input id="check1" type="checkbox" name="check1" value="1"/><label htmlFor="check1"><span><span></span></span>Allow booking on start date & end date</label>
+                  <input id="isAllowBooking" type="checkbox" name="isAllowBooking"
+                         checked={vacationData.isAllowBooking}
+                         onChange={(event) => this.onChangeCheckboxFields(event)}/>
+                  <label htmlFor="isAllowBooking"><span><span></span></span>Allow booking on start date & end date</label>
                 </div>
                 <br className="brclear"/>
               </div>
@@ -266,7 +314,10 @@ export default class MlAppSetCalendarVacation extends Component {
               </div>
               <div className="form-group">
                 <div className="input_types">
-                  <input id="check1" type="checkbox" name="check1" value="1"/><label htmlFor="check1"><span><span></span></span>Auto cancel all the appointments</label>
+                  <input id="isAutoCancelAppointment" type="checkbox" name="isAutoCancelAppointment"
+                         checked={vacationData.isAutoCancelAppointment}
+                         onChange={(event) => this.onChangeCheckboxFields(event)}/>
+                  <label htmlFor="isAutoCancelAppointment"><span><span></span></span>Auto cancel all the appointments</label>
                 </div>
                 <br className="brclear"/>
               </div>
@@ -281,7 +332,7 @@ export default class MlAppSetCalendarVacation extends Component {
               {this.state.vacations.map(function (vacation, index) {
                 return (
                   <li className={ that.state.selectedVacation == vacation.vacationId ? 'active' : '' } key={index} onClick={() => that.selectVacation(vacation)}>
-                    <FontAwesome name='plane'/><b>Vacation..</b>
+                    <FontAwesome name='plane'/><b>{vacation.note}</b>
                   </li>
                 )
               })}
@@ -289,7 +340,7 @@ export default class MlAppSetCalendarVacation extends Component {
           </div>
         </ScrollArea>
         <div className="form-group">
-          <div className="ml_btn" style={{'textAlign':'center'}} hidden={ this.state.selectedVacation ? true : false } >
+          <div className="ml_btn" style={{'textAlign':'center'}}>
             <button onClick={(event)=>this.updateCalendarVacation(event)} className="save_btn" >Save</button>
           </div>
         </div>

@@ -38,6 +38,8 @@ export async function fetchCalendarSettingsActionHandler (profileId) {
           end
           type
           note
+          isAllowBooking
+          isAutoCancelAppointment
         }
       }
     }

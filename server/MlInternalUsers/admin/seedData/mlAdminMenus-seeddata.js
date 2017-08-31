@@ -6,7 +6,7 @@ if (Meteor.isServer) {
         {
           "image": "ml my-ml-dashboard",
           "link": "/admin/dashboard/clusters",
-          "name": "dashboard",
+          "name": "Dashboard",
           "uniqueId": "dashboard",
           "isLink": true,
           "isMenu": true,
@@ -85,7 +85,7 @@ if (Meteor.isServer) {
         {
           "image": "ml my-ml-cluster",
           "link": "/admin/clusters",
-          "name": "cluster",
+          "name": "Cluster",
           "uniqueId": "cluster",
           "isLink": true,
           "isMenu": true,
@@ -246,7 +246,7 @@ if (Meteor.isServer) {
         {
           "image": "ml my-ml-chapter",
           "link": "/admin/chapters",
-          "uniqueId": "chapter",
+          "uniqueId": "Chapter",
           "name": "chapter",
           "isLink": true,
           "isMenu": true,
@@ -364,7 +364,7 @@ if (Meteor.isServer) {
           "image": "ml my-ml-community",
           "link": "/admin/community",
           "uniqueId": "community",
-          "name": "community",
+          "name": "Community",
           "isLink": true,
           "isMenu": true,
           "hideSubMenu": true,
@@ -411,7 +411,7 @@ if (Meteor.isServer) {
           "image": "ml my-ml-documents_2",
           "link": "/admin/documents/clusterList",
           "uniqueId": "documents",
-          "name": "documents",
+          "name": "Documents",
           "isLink": true,
           "isMenu": true,
           "subMenu": [
@@ -505,7 +505,7 @@ if (Meteor.isServer) {
         {
           "image": "ml my-ml-users",
           "link": "/admin/users/clusters",
-          "name": "users",
+          "name": "Users",
           "uniqueId": "users",
           "isLink": true,
           "isMenu": true,
@@ -887,7 +887,7 @@ if (Meteor.isServer) {
         {
           "image": "ml my-ml-templates",
           "link": "/admin/templates/templateList",
-          "name": "templates",
+          "name": "Templates",
           "isLink": true,
           "isMenu": true,
           "uniqueId": "templates",
@@ -964,7 +964,7 @@ if (Meteor.isServer) {
         {
           "image": "ml my-ml-transactions",
           "link": "/admin/transactions/requestedList",
-          "name": "transaction",
+          "name": "Transactions",
           "uniqueId": "transaction",
           "isLink": true,
           "isMenu": true,
@@ -1001,7 +1001,7 @@ if (Meteor.isServer) {
             },
             {
               "link": "/admin/transactions/approvedList",
-              "name": "Requests Approved",
+              "name": "Approved Requests",
               "uniqueId": "transaction_Approved",
               "isLink": true,
               "isMenu": true,
@@ -1031,7 +1031,7 @@ if (Meteor.isServer) {
             },
             {
               "link": "/admin/transactions/rejectList",
-              "name": "Requests Rejected",
+              "name": "Rejected Requests",
               "uniqueId": "transaction_Reject",
               "isLink": true,
               "isMenu": true,
@@ -1061,7 +1061,7 @@ if (Meteor.isServer) {
             },
             {
               "link": "/admin/transactions/registrationRequested",
-              "name": "Registration",
+              "name": "Registrations",
               "uniqueId": "transaction_Registration",
               "isLink": true,
               "isMenu": true,
@@ -1172,7 +1172,7 @@ if (Meteor.isServer) {
             },
             {
               "link": "/admin/transactions/portfolio/requestedPortfolioList",
-              "name": "Portfolio",
+              "name": "Portfolios",
               "uniqueId": "portfolio",
               "isLink": true,
               "isMenu": true,
@@ -1396,7 +1396,7 @@ if (Meteor.isServer) {
             },
             {
               "link": "/admin/transactions/serviceCardsList",
-              "name": "ServiceCards",
+              "name": "Service Cards",
               "uniqueId": "Service_Cards",
               "subMenusId": "transaction",
               "isLink": true,
@@ -1435,7 +1435,7 @@ if (Meteor.isServer) {
         {
           "image" : "ml my-ml-packages",
           "link" : "/admin/packages/officeList",
-          "name" : "packages",
+          "name" : "Packages",
           "uniqueId" : "packages",
           "isLink" : true,
           "isMenu" : true,
@@ -1504,7 +1504,7 @@ if (Meteor.isServer) {
         {
           "image": "ml my-ml-settings1",
           "link": "/admin/settings/departmentsList",
-          "name": "settings",
+          "name": "Settings",
           "uniqueId": "settings",
           "isLink": true,
           "isMenu": true,
@@ -1671,7 +1671,7 @@ if (Meteor.isServer) {
 
             {
               "link": "/admin/settings/registration/entityList",
-              "name": "Registration",
+              "name": "Registrations",
               "uniqueId": "settings_registration",
               "isLink": true,
               "isMenu": true,
@@ -1723,7 +1723,7 @@ if (Meteor.isServer) {
                 },
                 {
                   "link": "/admin/settings/registration/stageOfCompanyList",
-                  "name": "Stage Of Company",
+                  "name": "Company Stages",
                   "uniqueId": "settings_stageOfCompanyTypes",
                   "isLink": true,
                   "isMenu": true,
@@ -1765,7 +1765,7 @@ if (Meteor.isServer) {
                 },
                 {
                   "link": "/admin/settings/registration/businessList",
-                  "name": "Business Types",
+                  "name": "Types Of Business",
                   "uniqueId": "settings_businessTypes",
                   "isLink": true,
                   "isMenu": true,
@@ -2186,7 +2186,7 @@ if (Meteor.isServer) {
             },
             {
               "link": "/admin/settings/actionsAndStatusesList",
-              "name": "Action & Status",
+              "name": "Actions & Status",
               "uniqueId": "settings_Action_And_Status",
               "isLink": true,
               "isMenu": true,
@@ -2497,7 +2497,7 @@ if (Meteor.isServer) {
               },
                 {
                   "link": "/admin/settings/documentProcess/documentFormatList",
-                  "name": "Document Format",
+                  "name": "Document Formats",
                   "uniqueId": "settings_documentFormats",
                   "isLink": true,
                   "isMenu": true,
@@ -2538,7 +2538,7 @@ if (Meteor.isServer) {
                 },
                 {
                   "link": "/admin/settings/documentProcess/specificationList",
-                  "name": "Specification",
+                  "name": "Specifications",
                   "uniqueId": "settings_specificationTypes",
                   "isLink": true,
                   "isMenu": true,
@@ -2579,7 +2579,7 @@ if (Meteor.isServer) {
                 },
                 {
                   "link": "/admin/settings/documentProcess/industryList",
-                  "name": "Industry",
+                  "name": "Industries",
                   "uniqueId": "settings_industryTypes",
                   "isLink": true,
                   "isMenu": true,
@@ -2620,7 +2620,7 @@ if (Meteor.isServer) {
                 },
                 {
                   "link": "/admin/settings/documentProcess/professionList",
-                  "name": "Profession",
+                  "name": "Professions",
                   "uniqueId": "settings_professionTypes",
                   "isLink": true,
                   "isMenu": true,
@@ -2743,7 +2743,7 @@ if (Meteor.isServer) {
                 },
                 {
                   "link": "/admin/settings/documentProcess/subDomainList",
-                  "name": "Sub Domain",
+                  "name": "Sub Domains",
                   "uniqueId": "settings_SubDomain",
                   "isLink": true,
                   "isMenu": true,
@@ -3213,7 +3213,7 @@ if (Meteor.isServer) {
             },
             {
               "link": "/admin/settings/awardList",
-              "name": "Award",
+              "name": "Awards",
               "uniqueId": "settings_awardTypes",
               "isLink": true,
               "isMenu": true,
@@ -3327,7 +3327,7 @@ if (Meteor.isServer) {
             // },
             {
               "link": "/admin/settings/fundingTypeList",
-              "name": "Funding Type",
+              "name": "Types Of Funding",
               "uniqueId": "settings_FundingType",
               "isLink": true,
               "isMenu": true,
@@ -3424,7 +3424,7 @@ if (Meteor.isServer) {
             },
             {
               "link": "/admin/settings/notificationTemplateList",
-              "name": "Notification Template",
+              "name": "Notification Templates",
               "uniqueId": "settings_NotificationTemplate",
               "isLink": true,
               "isMenu": true,

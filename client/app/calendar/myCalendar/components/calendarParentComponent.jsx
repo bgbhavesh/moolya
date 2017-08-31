@@ -79,7 +79,10 @@ export default class MLAppMyCalendar extends Component {
   }
 
   async getAppointmentCounts() {
-    const resp = await fetchAllProfileAppointmentCountsHandler();
+    let date = this.state.date ? new Date(this.state.date) : new Date();
+    let month = date.getMonth();
+    let year = date.getFullYear();
+    const resp = await fetchAllProfileAppointmentCountsHandler(month, year);
     let params = 'events' in resp ? resp.events : [];
     if(_.isEmpty(params)) {
       this.setState({
@@ -140,7 +143,10 @@ export default class MLAppMyCalendar extends Component {
   }
 
   async getProfileBasedAppointments(profileId) {
-    const resp = await fetchProfileAppointmentCountsHandler(profileId)
+    let date = this.state.date ? new Date(this.state.date) : new Date();
+    let month = date.getMonth();
+    let year = date.getFullYear();
+    const resp = await fetchProfileAppointmentCountsHandler(profileId,month, year)
     let that = this;
     let details = [];
     let events = 'events' in resp ? resp.events : [];

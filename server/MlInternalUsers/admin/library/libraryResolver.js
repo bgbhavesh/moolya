@@ -128,7 +128,7 @@ MlResolver.MlQueryResolver['fetchLibrary'] = (obj, args, context, info) => {
   if(context.url.indexOf("transactions") > 0) {
     let currentProfile = context.url.split("/")
     let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: currentProfile [7]}, context)
-    var libraryData = mlDBController.find('MlLibrary', { isActive: true, 'portfolioReference.portfolioId': portfolio._id}, context).fetch();
+    var libraryData = mlDBController.find('MlLibrary', { isActive: true, 'portfolioReference.portfolioId': portfolio._id, 'portfolioReference.isPrivate': false}, context).fetch();
     return libraryData;
   }
   else if(context.url.indexOf("portfolio") > 0){
@@ -167,6 +167,25 @@ MlResolver.MlQueryResolver['fetchLibrary'] = (obj, args, context, info) => {
   }
 }
 
+MlResolver.MlQueryResolver['fetchLibraryBasedOnPortfolioId'] = (obj, args, context, info) => {
+  let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfolioId}, context)
+  if(portfolio.userId === context.userId) {
+    let libraryDetails = mlDBController.find('MlLibrary', {'portfolioReference.portfolioId': args.portfolioId,userId:context.userId, isActive: true}, context).fetch();
+    if(libraryDetails) {
+      libraryDetails.map(function(data){
+        if(_.isArray(data.portfolioReference)) {
+          data.portfolioReference.map(function(info) {
+            data.isPrivate = info.isPrivate;
+          })
+        }
+      })
+      return libraryDetails
+    }
+  } else {
+    return false;
+  }
+}
+
 
 MlResolver.MlQueryResolver['fetchDataFromCentralLibrary'] = (obj, args, context, info) => {
   var libraryData = mlDBController.find('MlLibrary', {userId: context.userId, isActive: true, inCentralLibrary: true}, context).fetch();
@@ -174,16 +193,17 @@ MlResolver.MlQueryResolver['fetchDataFromCentralLibrary'] = (obj, args, context,
 }
 
 MlResolver.MlMutationResolver['updatePrivacyDetails'] = (obj, args, context, info) => {
-  let currentProfile = context.url.split("/")
-  let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: currentProfile [6]}, context)
-  var libraryData = mlDBController.find('MlLibrary', {userId: context.userId, isActive: true, 'portfolioReference.portfolioId': portfolio._id}, context).fetch();
-  libraryData[args.detailsInput.index].portfolioReference.map(function(data){
-    if(data.portfolioId === currentProfile[6]){
-      data.isPrivate = args.detailsInput.element
-    }
-  })
-  var updateTemplateCollection1 = mlDBController.update('MlLibrary', {_id: libraryData[args.detailsInput.index]._id},libraryData[args.detailsInput.index], {$set: 1}, context)
-  return updateTemplateCollection1;
+  let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: args.privateInput.portfolioId}, context)
+  if(portfolio) {
+    var libraryData = mlDBController.findOne('MlLibrary', {_id: args.privateInput.id,libraryData, 'portfolioReference.portfolioId': args.privateInput.portfolioId}, context);
+    libraryData.portfolioReference.map(function(data){
+      if(data.portfolioId === args.privateInput.portfolioId){
+        data.isPrivate = args.privateInput.privacyState
+      }
+    })
+    var updateTemplateCollection1 = mlDBController.update('MlLibrary', {_id: args.privateInput.id},libraryData, {$set: 1}, context)
+    return updateTemplateCollection1;
+  }
 }
 
 MlResolver.MlMutationResolver['updateLibraryData'] = (obj, args, context, info) => {

@@ -11,7 +11,7 @@ export default class MlDocumentFormatsList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Document Format List</h2>
+          <h2>Document Formats List</h2>
 
           <MlTableViewContainer {...mlDocumentFormatTableConfig}/>
 

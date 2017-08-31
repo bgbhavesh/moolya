@@ -8,7 +8,7 @@ export default class MlActionAndStatusList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Action and Statuses List</h2>
+          <h2>Actions and Statuses List</h2>
 
           <MlTableViewContainer {...mlActionsAndStatueseTableConfig}/>
 

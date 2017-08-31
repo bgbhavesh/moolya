@@ -14,7 +14,7 @@ export default class MlSystemsLogList extends Component {
     return (
       <div className="admin_main_wrap">
         <div className="admin_padding_wrap">
-          <h2>Systems Log </h2>
+          <h2>System Logs </h2>
           <MlTableViewContainer {...mlSystemsLogTableConfig} />
         </div>
       </div>

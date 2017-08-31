@@ -296,10 +296,16 @@ MlResolver.MlQueryResolver['fetchActiveSubChapters'] = (obj, args, context, info
 MlResolver.MlMutationResolver['createSubChapter'] = (obj, args, context, info) => {
   try {
     args.subChapter.isDefaultSubChapter = false;
+    //Required to set the external access perms
+    var externalUser=args.subChapter&&args.subChapter.moolyaSubChapterAccess&&args.subChapter.moolyaSubChapterAccess.externalUser?args.subChapter.moolyaSubChapterAccess.externalUser:{};
+    args.subChapter.moolyaSubChapterAccess={externalUser:{
+      "canSearch":externalUser.canSearch||false,
+      "canView" :externalUser.canView||false,
+      "canTransact" :externalUser.canTransact||false
+    }};
     //pre-condition for related sub chapter updation:(Jira-3035)
     var hasPerm=MlSubChapterPreConditions.hasEditPermSubChapterAccessControl(context);
-    if(!hasPerm){args.subChapter=_.omit(args.subChapter,'moolyaSubChapterAccess')};
-
+    if(!hasPerm){args.subChapter.moolyaSubChapterAccess={externalUser:{canSearch:false,"canView" : false,"canTransact" : false}}};//args.subChapter=_.omit(args.subChapter,'moolyaSubChapterAccess')
     let subChapterId = createSubChapter(args.subChapter, context)
 
     if (subChapterId) {

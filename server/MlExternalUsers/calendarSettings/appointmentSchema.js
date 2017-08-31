@@ -200,7 +200,7 @@ let appointment=`
   }
   type Query {
      fetchMyAppointmentByStatus(status: String): [Appointment]
-     fetchAllProfileAppointmentCounts: profileAppointment
+     fetchAllProfileAppointmentCounts(month:Int, year: Int): profileAppointment
      fetchOfficeMemberAppointmentCounts(userId:String!, profileId:String!, month:Int, year: Int): profileAppointment
      fetchAllOfficeMemberAppointmentCounts(month:Int, year: Int): profileAppointment
      fetchProfileAppointmentCounts( profileId: String, month:Int, year: Int): profileAppointment

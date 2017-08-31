@@ -37,13 +37,15 @@ export default class MlAppMyCalendar extends Component {
 
   async getMyCalendar(){
     let date = new Date(this.state.date);
+    console.log(this.props);
+    let orderId = this.props.orderId;
     let portfolioId = FlowRouter.getParam('portfolioId');
-    const data = await fetchServiceCalendarActionHandler(portfolioId, date.getMonth(), date.getFullYear())
+    const data = await fetchServiceCalendarActionHandler(portfolioId, date.getMonth(), date.getFullYear(), orderId);
     // let data = await fetchMyCalendarActionHandler();
     if(data) {
       this.setState({
-        data: data.days
-      })
+        data: data
+      });
     }
   }
 
@@ -85,12 +87,13 @@ export default class MlAppMyCalendar extends Component {
 
   render() {
     const that = this;
+    console.log("this.state.data",this.state.data);
     return (
       !that.state.showDetailView?<div className="app_main_wrap" style={{'overflow':'auto'}}>
         <div className="app_padding_wrap">
           <Calender
             dayBackgroundComponent={<MlFunderDayComponent cellValue={this.cellValue.bind(this)} slots={this.slots.bind(this)} orderId={this.props.orderId} sessionId={this.state.sessionIds} dayDetailView={this.dayDetail.bind(this)}/> }
-            dayData={this.props.calendarDetails}
+            dayData={this.state.data}
             onNavigate={that.onNavigate}
             date={that.state.date}/>
         </div>

@@ -161,11 +161,11 @@ export default class MlAppCompaniesEditTabs extends Component {
   }
   getCSRDetails(details,tabName, privateKey){
     if(tabName == "reports"){
-      let data = this.state.institutionPortfolio;
+      let data = this.state.companyPortfolio;
       data[tabName] = details;
       this.props.getPortfolioDetails({companyPortfolio : data});
     }else{
-      let data = this.state.institutionPortfolio;
+      let data = this.state.companyPortfolio;
       data[tabName] = details;
       this.props.getPortfolioDetails({companyPortfolio : data}, privateKey);
     }

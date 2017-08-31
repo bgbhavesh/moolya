@@ -66,7 +66,11 @@ export default class MlCalendarHead extends Component {
             <a href="#" onClick={()=>that.resetWithAll()}>
               <img src={that.state.profilePic ? that.state.profilePic : "/images/def_profile.png"}/><br />
               <div className="tooltiprefer">
-                <span>{that.state.displayName ? that.state.displayName : "All"}</span>
+                {/*Need to show only first name*/}
+                <span ref={(node) => {
+                  if (node) {
+                    node.style.setProperty("width", "106%", "important");
+                  }}} >{that.state.displayName ? that.state.displayName.split(' ')[0] + " Consolidated" : "Consolidated"}</span>
               </div>
             </a>
           </li>

@@ -129,7 +129,7 @@ class MlAdminContextQueryConstructor
       var userProfile=new MlAdminUserContext().userProfileDetails(this.userId);
 
       //Sub Chapter can access transactions based on 'TRANSACT' perms (Jira-2956)
-      if(this.isTransactModule){
+      if(this.isTransactModule && !userProfile.isMoolya){
         userProfile.defaultSubChapters = userProfile.transactionSubChapters;
         userProfile.defaultChapters = userProfile.transactionChapters;
       }

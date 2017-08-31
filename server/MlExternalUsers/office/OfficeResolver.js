@@ -634,7 +634,7 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
         "orderId": officeTransDetails._id,
         "paymentAmount": (officeTransDetails.orderSubscriptionDetails.cost ? officeTransDetails.orderSubscriptionDetails.cost : 0).toString(),
         "API_KEY": "AESsdjkfhsdkjfjkshfn346346",
-        "appId": "zoylo",
+        "appId": "moolya",
         "currency": "USD",
         "transId": paymentResponse,
         "paymentEndPoint": "paypal",

@@ -4,17 +4,17 @@ MlResolver.MlMutationResolver['updatePayment'] = (obj, args, context, info) => {
   console.log(args);
   let paymentId = args.transactionId;
   if(!paymentId) {
-
+    return ;
   }
 
-  let paymentSuccess = args.success;
+  let paymentSuccess = args.response;
   if(!paymentSuccess){
-
+    return ;
   }
 
   let paymentInfo =mlDBController.findOne('MlPayment',{paymentId: paymentId}, context);
   if(!paymentInfo) {
-
+    return
   }
 
   let activityType = paymentInfo.activityType;

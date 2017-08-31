@@ -29,3 +29,28 @@ export async function updateCalendarVacationActionHandler(vacation) {
   const response = result.data.updateMyCalendarVacation;
   return response;
 }
+
+/**
+ * updateCalendarVacationByIdActionHandler() --> construct the query to save in db
+ * @param vacation --> updated object
+ * @returns {Promise.<*>} --> succeed response send to component
+ */
+export async function updateCalendarVacationByIdActionHandler(vacation, vacationId) {
+  const result = await appClient.mutate({
+    mutation: gql`
+    mutation($vacation: calendarSettingVacation, $vacationId: String) {
+      updateCalendarVacationByVacationId(vacation: $vacation, vacationId: $vacationId) {
+        success
+        code
+        result
+      }
+    }
+    `,
+    variables: {
+      vacation,
+      vacationId
+    }
+  });
+  const response = result.data.updateCalendarVacationByVacationId;
+  return response;
+}

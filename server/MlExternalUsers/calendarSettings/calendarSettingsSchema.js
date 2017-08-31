@@ -33,6 +33,8 @@ let calendarSettingSlot=`
     end       : Date
     type      : String
     note      : String
+    isAllowBooking: Boolean
+    isAutoCancelAppointment: Boolean
   }
   
   type CalendarSettingWorkingDays {
@@ -94,6 +96,8 @@ let calendarSettingSlot=`
     end       : String
     type      : String
     note      : String
+    isAllowBooking: Boolean
+    isAutoCancelAppointment: Boolean
   }
   
   input calendarSettingWorkingDays {
@@ -125,6 +129,7 @@ let calendarSettingSlot=`
      updateMyCalendarWorkingDays(workingDays:[calendarSettingWorkingDays]):response
      updateMyCalendarWorkingDay(workingDay:calendarSettingWorkingDays):response
      updateMyCalendarVacation(vacation:calendarSettingVacation):response
+     updateCalendarVacationByVacationId(vacation: calendarSettingVacation, vacationId: String): response
   }
 `;
 
@@ -138,5 +143,6 @@ let supportedApi = [
   {api:'updateMyCalendarWorkingDay', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList:true},
   {api:'updateMyCalendarWorkingDays', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList:true},
   {api:'updateMyCalendarVacation', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList:true},
+  {api:'updateCalendarVacationByVacationId', actionName:'UPDATE', moduleName:"OFFICE", isAppWhiteList:true},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)

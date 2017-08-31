@@ -340,16 +340,29 @@ class MlServiceCardRepo{
 
       try {
         let service = mlDBController.findOne('MlScOrder', {orderId: orderId}, context);
+        let profile = new MlUserContext(userId).userProfileDetails(userId);
+        profile = profile ? profile : {};
         let dataToInsert = {
-          paymentId         : payload.userServiceCardPaymentInfo.paymentId,
           paymentMethod     : payload.userServiceCardPaymentInfo.paymentMethod,
           amount            : payload.userServiceCardPaymentInfo.amount,
           currencyId        : payload.userServiceCardPaymentInfo.currencyCode,
           resourceId        : orderId,
-          resourceType      : "UserServiceCard",
+          resourceType      : "User-ServiceCard",
+          activityType      : "SERVICE-PURCHASED",
+          status            : "Pending",
           userId            : userId,
-          createdAt         : new Date()
+          createdAt         : new Date(),
+          profileId         : profile.profileId,
+          clusterId         : profile.clusterId,
+          clusterName       : profile.clusterName,
+          chapterId         : profile.chapterId,
+          chapterName       : profile.chapterName,
+          subChapterId      : profile.subChapterId,
+          subChapterName    : profile.subChapterName,
+          communityId       : profile.communityId,
+          communityName     : profile.communityName,
         };
+        orderNumberGenService.createPaymentId(dataToInsert);
         let paymentResponse = mlDBController.insert('MlPayment', dataToInsert, context);
         if(!paymentResponse){
           return new MlRespPayload().errorPayload(paymentResponse, 400);

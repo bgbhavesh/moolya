@@ -600,65 +600,84 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
   let transactionId = args.transactionId;
   let officeTransDetails = mlDBController.findOne('MlOfficeTransaction', {transactionId: transactionId }, context);
   if(officeTransDetails){
-    let paymentInfo = {
-      orderId: officeTransDetails.officeId,
-      paymentAmount: 10,
-      API_KEY: "AESsdjkfhsdkjfjkshfn346346",
-      appId: "zoylo",
-      currency: "USD",
-      transId: transactionId,
-      paymentEndPoint: "paypal",
-      operation: "debit",
-      customerId: officeTransDetails.userId,
-      callBackUrl: Meteor.absoluteUrl() +"app/myOffice"
+    let userId = context.userId;
+    let profile = new MlUserContext(userId).userProfileDetails(userId);
+    officeTransDetails.orderSubscriptionDetails = officeTransDetails.orderSubscriptionDetails ? officeTransDetails.orderSubscriptionDetails : {};
+    let paymentData = {
+      paymentMethod: 'Paypal', //later from client only
+      amount: officeTransDetails.orderSubscriptionDetails.cost ? officeTransDetails.orderSubscriptionDetails.cost : 0,
+      currencyId: 'USD',
+      resourceId: officeTransDetails.officeId,
+      resourceType: 'OFFICE',
+      activityId: officeTransDetails._id,
+      activityType: 'OFFICE-PURCHASED',
+      status:"Pending",
+      userId: userId,
+      profileId: profile.profileId,
+      clusterId: profile.clusterId,
+      clusterName: profile.clusterName,
+      chapterId: profile.chapterId,
+      chapterName: profile.chapterName,
+      subChapterId: profile.subChapterId,
+      subChapterName: profile.subChapterName,
+      communityId: profile.communityId,
+      communityName: profile.communityName,
+      createdAt: new Date()
     };
 
-    let apiRequest = {
-      //body: base64.encodeWithKey(JSON.stringify(paymentInfo), 'Test123'),
-      // postData: {
-      //   mimeType: 'application/x-www-form-urlencoded',
-      //   params:paymentInfo
-      // },
-      headers: {'content-type' : 'application/text'},
-      url:     'http://payment-services-814468192.ap-southeast-1.elb.amazonaws.com/payments/process'
-      // url:     "http://10.0.2.186:8080/payments/process"
-    };
+    orderNumberGenService.createPaymentId(paymentData);
 
-    let future = new Future();
+    let paymentResponse = mlDBController.insert('MlPayment', paymentData, context);
 
-    let post_req = request.post(apiRequest, function(error, response, body){
-      if(error){
-        console.log(error);
-        let result = new MlRespPayload().errorPayload(error.message, 400);
-        future.return(result);
-      } else {
-        response.headers = response.headers ? response.headers : {};
-        let result = new MlRespPayload().successPayload(response.headers.url, 200);
-        future.return(result);
-      }
-    });
+    if(paymentResponse){
+      let paymentInfo = {
+        "orderId": officeTransDetails._id,
+        "paymentAmount": (officeTransDetails.orderSubscriptionDetails.cost ? officeTransDetails.orderSubscriptionDetails.cost : 0).toString(),
+        "API_KEY": "AESsdjkfhsdkjfjkshfn346346",
+        "appId": "zoylo",
+        "currency": "USD",
+        "transId": paymentResponse,
+        "paymentEndPoint": "paypal",
+        "operation": "debit",
+        "customerId": officeTransDetails.userId,
+        // "callBackUrl": "http://10.0.2.188:3000/app/myOffice"
+        "callBackUrl": Meteor.absoluteUrl() +"app/myOffice"
+      };
 
-    paymentInfo = {
-      "orderId": officeTransDetails.officeId,
-      "paymentAmount": "20",
-      "API_KEY": "AESsdjkfhsdkjfjkshfn346346",
-      "appId": "zoylo",
-      "currency": "USD",
-      "transId": transactionId,
-      "paymentEndPoint": "paypal",
-      "operation": "debit",
-      "customerId": officeTransDetails.userId,
-      "callBackUrl": "http://10.0.2.188:3000/app/myOffice"
-      // "callBackUrl": Meteor.absoluteUrl() +"app/myOffice"
-    };
+      let apiRequest = {
+        headers: {'content-type' : 'application/text'},
+        url:     'http://payment-services-814468192.ap-southeast-1.elb.amazonaws.com/payments/process'
+        // url:     "http://10.0.2.186:8080/payments/process"
+      };
 
-    let text = base64.encodeWithKey(JSON.stringify(paymentInfo), 'Test123');
+      let future = new Future();
 
-    post_req.write(text);
+      let post_req = request.post(apiRequest, function(error, response, body){
+        if(error){
+          console.log(error);
+          let result = new MlRespPayload().errorPayload(error.message, 400);
+          future.return(result);
+        } else {
+          response.headers = response.headers ? response.headers : {};
+          let result;
+          if(response.headers.url){
+            result = new MlRespPayload().successPayload(response.headers.url, 200);
+          } else {
+            result = new MlRespPayload().errorPayload("Unable to proceed your payment right now", 400);
+          }
+          future.return(result);
+        }
+      });
 
-    let resposne = future.wait();
+      let text = base64.encodeWithKey(JSON.stringify(paymentInfo), 'Test123');
 
-    return resposne;
+      post_req.write(text);
+
+      let resposne = future.wait();
+
+      return resposne;
+    }
+
 
   } else {
 

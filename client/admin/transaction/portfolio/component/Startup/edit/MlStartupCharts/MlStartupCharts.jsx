@@ -14,6 +14,7 @@ import MlPieChart from '../../../../../../../commons/components/d3/MlPieChart'
 //import MlStartupChartSubTabs from '../MlStartupCharts/MlStartupChartSubTabs'
 import MlChartSubTabs from '../../../../../../../commons/charts/MlChartsSubTabs'
 import {fetchDetailsStartupChartsActionHandler} from '../../../../actions/findPortfolioStartupDetails'
+import MlStartupChartConfig from '../MlStartupCharts/MlStartupChartConfig'
 
 export default class MlStartupCharts extends React.Component{
   constructor(props, context){
@@ -461,7 +462,7 @@ export default class MlStartupCharts extends React.Component{
           value = {value}
           name = {name}
         />*/
-        ):(<div>{<MlChartSubTabs getPortfolioStartupChartDetails={this.getPortfolioStartupChartDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupChartsDetails={this.state.startupCharts} isApp={this.props.isApp}></MlChartSubTabs> }</div>)}
+        ):(<div>{<MlStartupChartConfig getPortfolioStartupChartDetails={this.getPortfolioStartupChartDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupChartsDetails={this.state.startupCharts} isApp={this.props.isApp}></MlStartupChartConfig> }</div>)}
 
       </div>
     )

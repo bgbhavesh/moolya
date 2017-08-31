@@ -122,6 +122,19 @@ MlResolver.MlQueryResolver['fetchAllOfficeMembersWithUserId'] = (obj, args, cont
     { $project: {name:1, profileId:1, userId: '$user._id' , profileImage:'$user.profile.profileImage'} }
   ];
   let response = mlDBController.aggregate('MlOfficeMembers', pipeline);
+  if(!response || !response.length ) {
+    let userId = context.userId;
+    let profile = new MlUserContext(userId).userProfileDetails(userId)
+    if(profile){
+      response = [{
+        name: profile.firstName + " " + profile.lastName,
+        userId: userId,
+        profileImage: profile.profileImage,
+        profileId: profile.profileId
+      }];
+    }
+
+  }
   return response;
 }
 
@@ -608,13 +621,15 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
       // },
       headers: {'content-type' : 'application/text'},
       url:     'http://payment-services-814468192.ap-southeast-1.elb.amazonaws.com/payments/process'
+      // url:     "http://10.0.2.186:8080/payments/process"
     };
 
     let future = new Future();
 
     let post_req = request.post(apiRequest, function(error, response, body){
       if(error){
-        let result = new MlRespPayload().errorPayload(e.message, 400);
+        console.log(error);
+        let result = new MlRespPayload().errorPayload(error.message, 400);
         future.return(result);
       } else {
         response.headers = response.headers ? response.headers : {};
@@ -625,7 +640,7 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
 
     paymentInfo = {
       "orderId": officeTransDetails.officeId,
-      "paymentAmount": "10",
+      "paymentAmount": "20",
       "API_KEY": "AESsdjkfhsdkjfjkshfn346346",
       "appId": "zoylo",
       "currency": "USD",
@@ -633,7 +648,8 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
       "paymentEndPoint": "paypal",
       "operation": "debit",
       "customerId": officeTransDetails.userId,
-      "callBackUrl": Meteor.absoluteUrl() +"app/myOffice"
+      "callBackUrl": "http://10.0.2.188:3000/app/myOffice"
+      // "callBackUrl": Meteor.absoluteUrl() +"app/myOffice"
     };
 
     let text = base64.encodeWithKey(JSON.stringify(paymentInfo), 'Test123');

@@ -182,7 +182,8 @@ MlResolver.MlQueryResolver['fetchLibraryBasedOnPortfolioId'] = (obj, args, conte
       return libraryDetails
     }
   } else {
-    return false;
+    let libraryDetails = mlDBController.find('MlLibrary', {'portfolioReference.portfolioId': args.portfolioId,'portfolioReference.isPrivate':false,isActive: true}, context).fetch();
+    return libraryDetails;
   }
 }
 

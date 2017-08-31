@@ -1939,3 +1939,9 @@ p{margin-top:10px;}
 .bs-tether-target-attached-bottom{margin-left: -80px;}
 .popover.bs-tether-element-attached-top:before, .popover.popover-bottom:before{margin-left: 70px !important;}
 .popover.bs-tether-element-attached-top:after, .popover.popover-bottom:after{margin-left: 71px !important;}
+
+.documentpop{
+  iframe{
+    height: 500px;
+  }
+}

@@ -31,6 +31,9 @@ export const mlAppStartupConfig = new MlAppViewer({
                         }
                       chapterName
                       accountType
+                      communityType
+                      firstName
+                      lastName
                       }
                    }                                                                                                     
                 }

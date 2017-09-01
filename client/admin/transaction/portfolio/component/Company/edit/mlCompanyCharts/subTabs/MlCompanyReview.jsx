@@ -80,9 +80,9 @@ export default class MlCompanyReview extends React.Component{
     }else{
       let data = this.state.data;
       let clients = this.state.startupCompanyReview;
-      // if(clients && clients.length>0 && clients[index]){
-      clients[index] = _.extend(clients[index],data);
-
+      if(clients[index]) {
+        clients[index] = _.extend(clients[index], data);
+      }
       let arr = [];
       clients = _.map(clients, function (row) {
         return _.omit(row, ['__typename'])
@@ -94,6 +94,14 @@ export default class MlCompanyReview extends React.Component{
   }
 
   onSaveAction(index,e){
+    let data = this.state.data
+    data["rofYear"] =  this.refs["rofYear"+index].state.inputValue ;
+    data["rofValue"] =  this.refs["rofValue"+index].value;
+    data["rofAbout"] = this.refs["rofAbout"+index].value;
+    let clients = this.state.startupCompanyReview;
+    clients[index] = data
+    this.setState({startupCompanyReview:clients})
+    this.props.getStartupCompanyReview(clients);
     this.setState({reviewList:this.state.startupCompanyReview})
     if(this.state.startupCompanyReview){
       this.setState({selectedIndex:this.state.startupCompanyReview.length})

@@ -109,9 +109,9 @@ export default class MlCompanyEmployment extends React.Component{
     }else{
       let data = this.state.data;
       let clients = this.state.startupCompanyEmployment;
-      // if(clients && clients.length>0 && clients[index]){
-      clients[index] = _.extend(clients[index],data);
-
+      if(clients[index]) {
+        clients[index] = _.extend(clients[index], data);
+      }
       let arr = [];
       clients = _.map(clients, function (row) {
         return _.omit(row, ['__typename'])
@@ -123,6 +123,17 @@ export default class MlCompanyEmployment extends React.Component{
   }
 
   onSaveAction(index,e){
+    let data = this.state.data;
+    data["eofFromYear"] =  this.refs["eofFromYear"+index].state.inputValue;
+    data["eofFromMonth"] =  this.refs["eofFromMonth"+index].state.inputValue;
+    data["eofToYear"] =  this.refs["eofToYear"+index].state.inputValue;
+    data["eofToMonth"] =  this.refs["eofToMonth"+index].state.inputValue;
+    data["eofNumberOfEmployment"] =  this.refs["eofNumberOfEmployment"+index].value
+    data["eofAbout"] =  this.refs["eofAbout"+index].value
+    let clients = this.state.startupCompanyEmployment;
+    clients[index] = data
+    this.setState({startupCompanyEmployment:clients})
+    this.props.getStartupCompanyEmployment(clients);
     this.setState({employmentList:this.state.startupCompanyEmployment})
     if(this.state.startupCompanyEmployment){
       this.setState({selectedIndex:this.state.startupCompanyEmployment.length})

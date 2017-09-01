@@ -140,9 +140,9 @@ export default class MlProfitRevenue extends React.Component{
   }
 
   componentWillMount(){
-    let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.profitRevenueLiabilityChart)
+    let empty = _.isEmpty(this.context.companyPortfolio && this.context.companyPortfolio.profitRevenueLiabilityChart)
     if(!empty){
-      this.setState({loading: false, startupCompanyRevenue: this.context.startupPortfolio.profitRevenueLiabilityChart, revenuList:this.context.startupPortfolio.profitRevenueLiabilityChart});
+      this.setState({loading: false, startupCompanyRevenue: this.context.companyPortfolio.profitRevenueLiabilityChart, revenuList:this.context.companyPortfolio.profitRevenueLiabilityChart});
     }
   }
 
@@ -349,6 +349,6 @@ export default class MlProfitRevenue extends React.Component{
 
 MlProfitRevenue.contextTypes = {
   //institutionPortfolio: PropTypes.object,
-  startupPortfolio: PropTypes.object,
+  companyPortfolio: PropTypes.object,
 };
 

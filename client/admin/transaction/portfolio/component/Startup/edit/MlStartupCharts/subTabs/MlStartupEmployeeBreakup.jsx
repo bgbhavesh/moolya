@@ -1,13 +1,12 @@
-/*
 import React, { Component, PropTypes }  from "react";
 import {render} from "react-dom";
 import gql from "graphql-tag";
-import Moolyaselect from "../../../admin/commons/components/MlAdminSelectWrapper";
+import Moolyaselect from "../../../../../../../commons/components/MlAdminBugReportWrapper";
 import Datetime from "react-datetime";
 import _ from 'lodash';
 import ScrollArea from "react-scrollbar";
 
-export default class MlEmployeeBreakup extends React.Component{
+export default class MlStartupEmployeeBreakup extends React.Component{
   constructor(props, context){
     super(props)
     this.state={
@@ -18,6 +17,7 @@ export default class MlEmployeeBreakup extends React.Component{
       selectedObject:"default",
       dataList : this.props.dataDetails || []
     }
+    this.fetchDetails.bind(this);
   }
 
 
@@ -88,12 +88,23 @@ export default class MlEmployeeBreakup extends React.Component{
 
 
   componentWillMount(){
-    let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.employeeBreakupDepartmentChart)
+    this.fetchDetails()
+    /*let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.employeeBreakupDepartmentChart)
     if(!empty){
       this.setState({loading: false, startupCompanyData: this.context.startupPortfolio.employeeBreakupDepartmentChart, dataList:this.context.startupPortfolio.employeeBreakupDepartmentChart});
-    }
+    }*/
   }
 
+  fetchDetails(){
+    let that = this;
+    //let portfoliodetailsId=that.props.portfolioDetailsId;
+    let empty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.employeeBreakupDepartmentChart)
+    if(empty){
+      this.setState({loading: false, startupCompanyData: that.props.dataDetails, dataList: that.props.dataDetails});
+    }else{
+      this.setState({loading: false, startupCompanyData: that.context.startupPortfolio.employeeBreakupDepartmentChart, dataList:that.context.startupPortfolio.employeeBreakupDepartmentChart});
+    }
+  }
 
   sendDataToParent(index){
     if(index == null){
@@ -102,24 +113,19 @@ export default class MlEmployeeBreakup extends React.Component{
     }else{
       let data = this.state.data;
       let clients = this.state.startupCompanyData;
-      let startupCompanyData = _.cloneDeep(clients);
-      data.index = index;
-      startupCompanyData[index] = data;
+      if(clients && clients.length>0 && clients[index]){
+        clients[index] = _.extend(clients[index],data);
+      }
+      /*}else{
+        clients[index] = data;
+      }*/
+
       let arr = [];
-      _.each(startupCompanyData, function (item)
-      {
-        for (var propName in item) {
-          if (item[propName] === null || item[propName] === undefined) {
-            delete item[propName];
-          }
-        }
-        let newItem = _.omit(item, "__typename");
-         newItem = _.omit(item, "ebdDepartmentName");
-        arr.push(newItem)
-      })
-      startupCompanyData = arr;
-      this.setState({startupCompanyData:startupCompanyData})
-      this.props.getStartupEmployeeBreakup(startupCompanyData);
+      clients = _.map(clients, function (row) {
+        return _.omit(row, ['__typename'])
+      });
+      this.setState({startupCompanyData:clients})
+      this.props.getStartupEmployeeBreakup(clients);
     }
 
   }
@@ -139,20 +145,20 @@ export default class MlEmployeeBreakup extends React.Component{
     this.refs["ebdAbout"+index].value = ""
     this.setState({"selectedVal" : ""})
 
-    /!* this.refs["prlFromYear"+index].val(" ")
+    /* this.refs["prlFromYear"+index].val(" ")
      this.refs["prlFromMonth"+index].val(" ")
      this.refs["prlToYear"+index].val(" ")
-     this.refs["prlToMonth"+index].val(" ")*!/
+     this.refs["prlToMonth"+index].val(" ")*/
 
   }
 
-  /!*onRemoveAction(index,e){
+  /*onRemoveAction(index,e){
    let updatedData = this.state.startupCompanyData || [];
    updatedData.splice(updatedData.indexOf(index), 1);
    this.setState({dataList: updatedData}, function () {
    this.sendDataToParent()
    });
-   }*!/
+   }*/
   optionsBySelectTypeOfDepartment(index,selectedId, callback, selObject){
     let details =this.state.data;
     details=_.omit(details,["ebdDepartment"]);
@@ -190,7 +196,7 @@ export default class MlEmployeeBreakup extends React.Component{
             <div className="office-members-detail">
 
             <div className="form_inner_block">
-              {/!*<div className="add_form_block" onClick={this.onSaveAction.bind(this,defaultIndex)}><img src="/images/add.png"/></div>*!/}
+              {/*<div className="add_form_block" onClick={this.onSaveAction.bind(this,defaultIndex)}><img src="/images/add.png"/></div>*/}
 
               <div className="col-lg-12 col-md-12 col-sm-10">
                 <div className="row">
@@ -246,7 +252,7 @@ export default class MlEmployeeBreakup extends React.Component{
 
               return(<div className="form_inner_block">
 
-                {/!*<div className="add_form_block" onClick={that.onRemoveAction.bind(that,idx)}><img src="/images/remove.png"/></div>*!/}
+                {/*<div className="add_form_block" onClick={that.onRemoveAction.bind(that,idx)}><img src="/images/remove.png"/></div>*/}
                 <div className="col-lg-12 col-md-12 col-sm-10">
                   <div className="row">
                     <div className="form-group col-lg-6 col-md-6 col-sm-6">
@@ -315,7 +321,6 @@ export default class MlEmployeeBreakup extends React.Component{
   }
 }
 
-MlEmployeeBreakup.contextTypes = {
+MlStartupEmployeeBreakup.contextTypes = {
   startupPortfolio: PropTypes.object,
 };
-*/

@@ -1,15 +1,15 @@
-import React from "react";
+import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
-import MlTabComponent from "../../../../../../commons/components/tabcomponent/MlTabComponent";
-import {client} from '../../../../../core/apolloConnection'
-import {appClient} from '../../../../../../app/core/appConnection'
-import MlCompanyEmployment from "../../../../../../commons/charts/subTabs/MlCompanyEmployment";
-import MlProfitRevenue from "../../../../../../commons/charts/subTabs/MlProfitRevenue";
-import MlCompanyReview from "../../../../../../commons/charts/subTabs/MlCompanyReview";
-import MlEmployeeBreakup from "../../../../../../commons/charts/subTabs/MlEmployeeBreakup";
+import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent";
+import {client} from '../../../../../../core/apolloConnection'
+import {appClient} from '../../../../../../../app/core/appConnection'
+import MlInstitutionCompanyEmployment from "./subTabs/MlInstitutionCompanyEmployment";
+import MlInstitutionProfitRevenue from "./subTabs/MlInstitutionProfitRevenue";
+import MlInstitutionCompanyReview from "./subTabs/MlInstitutionCompanyReview";
+import MlInstitutionEmployeeBreakup from "./subTabs/MlInstitutionEmployeeBreakup";
 
-export default class MlCompanyChartConfig extends React.Component{
-  constructor(props){
+export default class MlInstitutionChart extends React.Component{
+  constructor(props,context){
     super(props)
     this.state =  {tabs: [],portfolioStartupEmployment:{},getStartupProfitRevenue:{},getStartupReview:{},getStartupEmployeeData:{}}
   }
@@ -18,26 +18,26 @@ export default class MlCompanyChartConfig extends React.Component{
     let data = this.state.portfolioStartupEmployment;
     data=details;
     this.setState({portfolioStartupEmployment : data})
-    this.props.getPortfolioStartupChartDetails(data,"employmentOfCompanyChart");
+    this.props.getPortfolioInstitutionChartDetails(data,"employmentOfCompanyChart");
 
   }
   getStartupProfitRevenue(details){
     let data = this.state.getStartupProfitRevenue;
     data=details;
     this.setState({getStartupProfitRevenue : data})
-    this.props.getPortfolioStartupChartDetails(data,"profitRevenueLiabilityChart");
+    this.props.getPortfolioInstitutionChartDetails(data,"profitRevenueLiabilityChart");
   }
   getStartupCompanyReview(details){
     let data = this.state.getStartupReview;
     data=details;
     this.setState({getStartupReview : data})
-    this.props.getPortfolioStartupChartDetails(data,"reviewOfCompanyChart");
+    this.props.getPortfolioInstitutionChartDetails(data,"reviewOfCompanyChart");
   }
   getStartupEmployeeBreakup(details){
     let data = this.state.getStartupEmployeeData;
     data=details;
     this.setState({getStartupEmployeeData : data})
-    this.props.getPortfolioStartupChartDetails(data,"employeeBreakupDepartmentChart");
+    this.props.getPortfolioInstitutionChartDetails(data,"employeeBreakupDepartmentChart");
   }
 
   getTabComponents() {
@@ -47,25 +47,27 @@ export default class MlCompanyChartConfig extends React.Component{
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Employment Of Company",
-        component: <MlCompanyEmployment client={client} isAdmin={true} key="1"
+        component: <MlInstitutionCompanyEmployment client={client} isAdmin={true} key="1"
                                         getStartupCompanyEmployment={this.getStartupCompanyEmployment.bind(this)}
                                         portfolioDetailsId={this.props.portfolioDetailsId}
-                                        employmentDetails={this.props.startupChartsDetails&&this.props.startupChartsDetails.employmentOfCompanyChart}/>
+                                        employmentDetails={this.props.startupChartsDetails&&this.props.startupChartsDetails.employmentOfCompanyChart}
+                                        communityType={"institution"}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Profit,Revenu & Liability",
-        component: <MlProfitRevenue key="2" client={client} isAdmin={true}
+        component: <MlInstitutionProfitRevenue key="2" client={client} isAdmin={true}
                                     getStartupProfitRevenue={this.getStartupProfitRevenue.bind(this)}
                                     portfolioDetailsId={this.props.portfolioDetailsId}
-                                    revenueDetails={this.props.startupChartsDetails&&this.props.startupChartsDetails.profitRevenueLiabilityChart}/>
+                                    revenueDetails={this.props.startupChartsDetails&&this.props.startupChartsDetails.profitRevenueLiabilityChart}
+                                    communityType={"institution"}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Review Of Company",
-        component: <MlCompanyReview client={client} isAdmin={true} key="3"
+        component: <MlInstitutionCompanyReview client={client} isAdmin={true} key="3"
                                     getStartupCompanyReview={this.getStartupCompanyReview.bind(this)}
                                     portfolioDetailsId={this.props.portfolioDetailsId}
                                     reviewDetails={this.props.startupChartsDetails&&this.props.startupChartsDetails.reviewOfCompanyChart}/>
@@ -74,7 +76,7 @@ export default class MlCompanyChartConfig extends React.Component{
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Employee Breakup/Dept",
-        component: <MlEmployeeBreakup key="4" client={client} isAdmin={true}
+        component: <MlInstitutionEmployeeBreakup key="4" client={client} isAdmin={true}
                                       getStartupEmployeeBreakup={this.getStartupEmployeeBreakup.bind(this)}
                                       portfolioDetailsId={this.props.portfolioDetailsId}
                                       dataDetails={this.props.startupChartsDetails&&this.props.startupChartsDetails.employeeBreakupDepartmentChart}/>
@@ -131,3 +133,7 @@ export default class MlCompanyChartConfig extends React.Component{
   }
 
 }
+
+MlInstitutionChart.contextTypes = {
+  institutionPortfolio: PropTypes.object,
+};

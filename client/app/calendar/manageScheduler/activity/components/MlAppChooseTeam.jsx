@@ -124,7 +124,8 @@ export default class MlAppChooseTeam extends React.Component{
    * @returns Void
    */
   async getOffices () {
-    let response = await fetchOfficeActionHandler();
+    let profileId = FlowRouter.getParam('profileId') ? FlowRouter.getParam('profileId') : '';
+    let response = await fetchOfficeActionHandler(profileId);
     if(response){
       this.setState({
         offices:response

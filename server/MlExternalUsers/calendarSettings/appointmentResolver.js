@@ -299,7 +299,7 @@ MlResolver.MlQueryResolver["fetchAllProfileAppointmentCounts"] = (obj, args, con
   let pipeLine = [
       { $lookup: { from: "mlAppointmentMembers", localField: "appointmentId", foreignField: "appointmentId", as: "members"}},
       { $unwind: "$members"},
-      { $match : { "members.userId" : userId } },
+      { $match : { "members.userId" : userId, "members.status": { "$ne" : "Rejected" } } },
       { $addFields: { "startDate": {$add: ["$startDate" ,timeZoneOffsetInMinutes * 60 * 1000]} } },
       { $project: { yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$startDate" } },
         time: { $dateToString: { format: "%H:%M:%S:%L", date: "$Date" } },
@@ -346,7 +346,7 @@ MlResolver.MlQueryResolver["fetchProfileAppointmentCounts"] = (obj, args, contex
   let pipeLine = [
     { $lookup: { from: "mlAppointmentMembers", localField: "appointmentId", foreignField: "appointmentId", as: "members"}},
     { $unwind: "$members"},
-    { $match : { "members.userId" : userId, "members.profileId" : profileId } },
+    { $match : { "members.userId" : userId, "members.profileId" : profileId, "members.status": { "$ne" : "Rejected" } } },
     { $addFields: { "startDate": {$add: ["$startDate" ,timeZoneOffsetInMinutes * 60 * 1000]} } },
     { $project: { yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$startDate" } },
       time: { $dateToString: { format: "%H:%M:%S:%L", date: "$Date" } },
@@ -457,7 +457,7 @@ MlResolver.MlQueryResolver['fetchOfficeMemberAppointmentCounts'] = (obj, args, c
   let pipeLine = [
     { $lookup: { from: "mlAppointmentMembers", localField: "appointmentId", foreignField: "appointmentId", as: "members"}},
     { $unwind: "$members"},
-    { $match : { "members.userId" : userId, "members.profileId" : profileId } },
+    { $match : { "members.userId" : userId, "members.profileId" : profileId, "members.status": { "$ne" : "Rejected" } } },
     { $addFields: { "startDate": {$add: ["$startDate" ,timeZoneOffsetInMinutes * 60 * 1000]} } },
     { $project: { yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$startDate" } },
       time: { $dateToString: { format: "%H:%M:%S:%L", date: "$Date" } },
@@ -563,7 +563,7 @@ MlResolver.MlQueryResolver['fetchAllOfficeMemberAppointmentCounts'] = (obj, args
   let timeZoneOffsetInMinutes = 330;
   let pipeLine = [
     { $lookup: { from: "mlOffice", localField: "officeId", foreignField: "_id", as: "office" } },
-    { $match: { 'office.userId': userId, 'office.profileId': profileId } },
+    { $match: { 'office.userId': userId, 'office.profileId': profileId, "members.status": { "$ne" : "Rejected" } } },
     { $lookup:
       {
         from: "users",

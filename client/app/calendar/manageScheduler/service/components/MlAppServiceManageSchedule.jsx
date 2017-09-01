@@ -92,6 +92,7 @@ class MlAppServiceManageSchedule extends Component {
     this.calculateDiscounts = this.calculateDiscounts.bind(this);
     this.checkTaxStatus = this.checkTaxStatus.bind(this);
     this.checkPromoStatus = this.checkPromoStatus.bind(this);
+    this.checkApprovalRequiredFromSeeker = this.checkApprovalRequiredFromSeeker.bind(this);
     this.checkDiscountStatus = this.checkDiscountStatus.bind(this);
     this.deleteSelectedTask = this.deleteSelectedTask.bind(this);
     this.getRedirectServiceList = this.getRedirectServiceList.bind(this);
@@ -202,6 +203,7 @@ class MlAppServiceManageSchedule extends Component {
                                         calculateDiscounts={this.calculateDiscounts}
                                         checkTaxStatus={this.checkTaxStatus}
                                         checkPromoStatus={this.checkPromoStatus}
+                                        checkApprovalRequiredFromSeeker={this.checkApprovalRequiredFromSeeker}
                                         checkDiscountStatus={this.checkDiscountStatus}
                                         bookService={this.props.bookService}
                                         serviceId={this.props.serviceId}/>,
@@ -869,6 +871,17 @@ class MlAppServiceManageSchedule extends Component {
     servicePayment.isPromoCodeApplicable = !event.target.checked;
     this.setState({servicePayment: servicePayment});
   }
+
+  /**
+   * Method :: checkApprovalRequiredFromSeeker
+   * Desc :: Check the isApproval Required From Seeker status
+   */
+  checkApprovalRequiredFromSeeker(event) {
+    let {servicePayment} = this.state;
+    servicePayment.isApprovalRequiredFromSeeker = !event.target.checked;
+    this.setState({servicePayment: servicePayment});
+  }
+
 
   /**
    * Method :: onChangeFormField

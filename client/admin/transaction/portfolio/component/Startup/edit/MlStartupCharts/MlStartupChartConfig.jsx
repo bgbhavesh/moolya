@@ -3,10 +3,10 @@ import {render} from "react-dom";
 import MlTabComponent from "../../../../../../../commons/components/tabcomponent/MlTabComponent";
 import {client} from '../../../../../../core/apolloConnection'
 import {appClient} from '../../../../../../../app/core/appConnection'
-import MlCompanyEmployment from "../../../../../../../commons/charts/subTabs/MlCompanyEmployment";
-import MlProfitRevenue from "../../../../../../../commons/charts/subTabs/MlProfitRevenue";
-import MlCompanyReview from "../../../../../../../commons/charts/subTabs/MlCompanyReview";
-import MlEmployeeBreakup from "../../../../../../../commons/charts/subTabs/MlEmployeeBreakup";
+import MlStartupCompanyEmployment from "./subTabs/MlStartupCompanyEmployment";
+import MlStartupProfitRevenue from "./subTabs/MlStartupProfitRevenue";
+import MlStartupCompanyReview from "./subTabs/MlStartupCompanyReview";
+import MlStartupEmployeeBreakup from "./subTabs/MlStartupEmployeeBreakup";
 
 export default class MlStartupChartConfig extends React.Component{
   constructor(props){
@@ -47,7 +47,7 @@ export default class MlStartupChartConfig extends React.Component{
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Employment Of Company",
-        component: <MlCompanyEmployment client={client} isAdmin={true} key="1"
+        component: <MlStartupCompanyEmployment client={client} isAdmin={true} key="1"
                                         getStartupCompanyEmployment={this.getStartupCompanyEmployment.bind(this)}
                                         portfolioDetailsId={this.props.portfolioDetailsId}
                                         employmentDetails={this.props.startupChartsDetails&&this.props.startupChartsDetails.employmentOfCompanyChart}/>
@@ -56,7 +56,7 @@ export default class MlStartupChartConfig extends React.Component{
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Profit,Revenu & Liability",
-        component: <MlProfitRevenue key="2" client={client} isAdmin={true}
+        component: <MlStartupProfitRevenue key="2" client={client} isAdmin={true}
                                     getStartupProfitRevenue={this.getStartupProfitRevenue.bind(this)}
                                     portfolioDetailsId={this.props.portfolioDetailsId}
                                     revenueDetails={this.props.startupChartsDetails&&this.props.startupChartsDetails.profitRevenueLiabilityChart}/>
@@ -65,7 +65,7 @@ export default class MlStartupChartConfig extends React.Component{
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Review Of Company",
-        component: <MlCompanyReview client={client} isAdmin={true} key="3"
+        component: <MlStartupCompanyReview client={client} isAdmin={true} key="3"
                                     getStartupCompanyReview={this.getStartupCompanyReview.bind(this)}
                                     portfolioDetailsId={this.props.portfolioDetailsId}
                                     reviewDetails={this.props.startupChartsDetails&&this.props.startupChartsDetails.reviewOfCompanyChart}/>
@@ -74,7 +74,7 @@ export default class MlStartupChartConfig extends React.Component{
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Employee Breakup/Dept",
-        component: <MlEmployeeBreakup key="4" client={client} isAdmin={true}
+        component: <MlStartupEmployeeBreakup key="4" client={client} isAdmin={true}
                                       getStartupEmployeeBreakup={this.getStartupEmployeeBreakup.bind(this)}
                                       portfolioDetailsId={this.props.portfolioDetailsId}
                                       dataDetails={this.props.startupChartsDetails&&this.props.startupChartsDetails.employeeBreakupDepartmentChart}/>

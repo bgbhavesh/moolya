@@ -7,7 +7,7 @@ MlResolver.MlMutationResolver['updatePayment'] = (obj, args, context, info) => {
     return ;
   }
 
-  let paymentSuccess = args.response;
+  let paymentSuccess = args.paymentStatus;
   if(!paymentSuccess){
     return ;
   }
@@ -19,7 +19,7 @@ MlResolver.MlMutationResolver['updatePayment'] = (obj, args, context, info) => {
 
   let activityType = paymentInfo.activityType;
 
-  let response;
+  var response=null;
   switch (activityType) {
     case "OFFICE-PURCHASED":
       let paymentUpdate =mlDBController.update('MlPayment',{paymentId: paymentId}, { status: paymentSuccess }, context);

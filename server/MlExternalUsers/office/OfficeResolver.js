@@ -19,8 +19,16 @@ let Future = Npm.require('fibers/future');
 
 MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
   let officeSC = [];
+  let profileId = args.profileId;
   if (context.userId) {
-    officeSC = mlDBController.find('MlOffice', {userId: context.userId, isActive:true}).fetch()
+    let query = {
+      userId: context.userId,
+      isActive:true
+    };
+    if(profileId){
+      query.profileId = profileId;
+    }
+    officeSC = mlDBController.find('MlOffice', query ).fetch();
     return officeSC
   } else {
     let code = 400;
@@ -636,12 +644,12 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
         "API_KEY": "AESsdjkfhsdkjfjkshfn346346",
         "appId": "moolya",
         "currency": "USD",
-        "transId": paymentResponse,
+        "transId": orderNumberGenService.paymentId,
         "paymentEndPoint": "paypal",
         "operation": "debit",
         "customerId": officeTransDetails.userId,
         // "callBackUrl": "http://10.0.2.188:3000/app/myOffice"
-        "callBackUrl": Meteor.absoluteUrl() +"/app/transaction"
+        "callBackUrl": Meteor.absoluteUrl() +"app/transaction"
       };
 
       let apiRequest = {

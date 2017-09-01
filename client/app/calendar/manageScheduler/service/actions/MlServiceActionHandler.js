@@ -109,6 +109,7 @@ export async function fetchServiceActionHandler (serviceId) {
           tasksAmount
           tasksDiscount
           tasksDerived
+          isApprovalRequiredFromSeeker
         }
         tasks {
           id

@@ -43,6 +43,7 @@ export default class MlAppServicePayment extends React.Component{
       calculateDiscounts,
       checkTaxStatus,
       checkPromoStatus,
+      checkApprovalRequiredFromSeeker,
       taxStatus} = this.props;
     return (
       <div className="step_form_wrap step1">
@@ -135,6 +136,20 @@ export default class MlAppServicePayment extends React.Component{
               </label>
                 <span className={servicePayment.isPromoCodeApplicable ? 'state_label' : 'state_label acLabel'}>No</span>
               </div>
+
+              <div className="form-group switch_wrap switch_names inline_switch">
+                <label htmlFor="isApprovalRequiredFromSeeker">Need approval to release fund from seeker</label>
+                <span className={servicePayment.isApprovalRequiredFromSeeker ? 'state_label acLabel' : 'state_label'}>Yes</span>
+                <label htmlFor="isApprovalRequiredFromSeeker" className="switch nocolor-switch">
+                <input id="isApprovalRequiredFromSeeker" type="checkbox" checked={!servicePayment.isApprovalRequiredFromSeeker}
+                       value={servicePayment.isApprovalRequiredFromSeeker}
+                       disabled={this.props.viewMode}
+                       onChange={(event) => checkApprovalRequiredFromSeeker(event)}/>
+                <div className="slider"></div>
+              </label>
+                <span className={servicePayment.isApprovalRequiredFromSeeker ? 'state_label' : 'state_label acLabel'}>No</span>
+              </div>
+
               <div className="form-group">
                 <label>Moolya facilitation charges &nbsp; &nbsp; &nbsp; &nbsp; </label>
                 <div className="input_types">

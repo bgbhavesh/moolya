@@ -7,17 +7,18 @@ import gql from "graphql-tag";
 var Select = require('react-select');
 import ScrollArea from "react-scrollbar";
 
-export default class MlProfitRevenue extends React.Component{
+export default class MlStartupProfitRevenue extends React.Component{
   constructor(props, context){
     super(props)
     this.state={
       data:{},
-      startupCompanyRevenue:this.props.revenueDetails || [],
+      startupCompanyRevenue: [],
       selectedIndex:0,
       selectedVal:null,
       selectedObject:"default",
-      revenuList : this.props.revenueDetails || []
+      revenuList : []
     }
+    this.fetchDetails.bind(this);
   }
 
   componentDidMount(){
@@ -93,28 +94,33 @@ export default class MlProfitRevenue extends React.Component{
     }else{
       let data = this.state.data;
       let clients = this.state.startupCompanyRevenue;
-      let startupCompanyRevenue = _.cloneDeep(clients);
-      data.index = index;
-      startupCompanyRevenue[index] = data;
+      if(clients[index]) {
+        clients[index] = _.extend(clients[index], data);
+      }
       let arr = [];
-      _.each(startupCompanyRevenue, function (item)
-      {
-        for (var propName in item) {
-          if (item[propName] === null || item[propName] === undefined) {
-            delete item[propName];
-          }
-        }
-        let newItem = _.omit(item, "__typename");
-        arr.push(newItem)
-      })
-      startupCompanyRevenue = arr;
-      this.setState({startupCompanyRevenue:startupCompanyRevenue})
-      this.props.getStartupProfitRevenue(startupCompanyRevenue);
+      clients = _.map(clients, function (row) {
+        return _.omit(row, ['__typename'])
+      });
+      this.setState({startupCompanyRevenue:clients})
+      this.props.getStartupProfitRevenue(clients);
     }
 
   }
 
   onSaveAction(index,e){
+    let data = this.state.data;
+    data["prlFromMonth"] =  this.refs["prlFromMonth"+index].state.inputValue;
+    data["prlFromYear"] =  this.refs["prlFromYear"+index].state.inputValue;
+    data["prlToMonth"] =  this.refs["prlToMonth"+index].state.inputValue;
+    data["prlToYear"] =  this.refs["prlToYear"+index].state.inputValue;
+    data["prlValue"] =  this.refs["prlValue"+index].value;
+    data["prlabout"] =  this.refs["prlabout"+index].value;
+    data["pelValueType"] = this.state.selectedValType;
+    data["prlValue"] =  this.refs["prlValue"+index].value;
+    let clients = this.state.startupCompanyRevenue;
+    clients[index] = data
+    this.setState({startupCompanyRevenue:clients})
+    this.props.getStartupProfitRevenue(clients);
     this.setState({revenuList:this.state.startupCompanyRevenue})
     if(this.state.startupCompanyRevenue){
       this.setState({selectedIndex:this.state.startupCompanyRevenue.length})
@@ -127,7 +133,7 @@ export default class MlProfitRevenue extends React.Component{
     this.refs["prlToYear"+index].state.inputValue = ""
     this.refs["prlValue"+index].value = ""
     this.refs["prlabout"+index].value = ""
-    this.refs["pelValueType"+index].value = ""
+    this.setState({"selectedValType" : ""})
     this.refs["prlValue"+index].value = ""
 
   }
@@ -140,9 +146,21 @@ export default class MlProfitRevenue extends React.Component{
   }
 
   componentWillMount(){
-    let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.profitRevenueLiabilityChart)
+    this.fetchDetails()
+   /* let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.profitRevenueLiabilityChart)
     if(!empty){
       this.setState({loading: false, startupCompanyRevenue: this.context.startupPortfolio.profitRevenueLiabilityChart, revenuList:this.context.startupPortfolio.profitRevenueLiabilityChart});
+    }*/
+  }
+
+  fetchDetails(){
+    let that = this;
+    //let portfoliodetailsId=that.props.portfolioDetailsId;
+    let empty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.profitRevenueLiabilityChart)
+    if(empty){
+      this.setState({loading: false, startupCompanyRevenue: that.props.revenueDetails, revenuList: that.props.revenueDetails});
+    }else{
+      this.setState({loading: false, startupCompanyRevenue: that.context.startupPortfolio.profitRevenueLiabilityChart, revenuList:that.context.startupPortfolio.profitRevenueLiabilityChart});
     }
   }
 
@@ -347,7 +365,7 @@ export default class MlProfitRevenue extends React.Component{
 }
 
 
-MlProfitRevenue.contextTypes = {
+MlStartupProfitRevenue.contextTypes = {
   //institutionPortfolio: PropTypes.object,
   startupPortfolio: PropTypes.object,
 };

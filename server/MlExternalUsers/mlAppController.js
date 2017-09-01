@@ -118,7 +118,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>
             // console.log(data);
             if(apiKey&&apiKey==="741432fd-8c10-404b-b65c-a4c4e9928d32"){
               console.log(data);
-              MlResolver.MlMutationResolver['updatePayment'](null, data, context, null);
+              let response = MlResolver.MlMutationResolver['updatePayment'](null, data, context, null);
               res.send(response);
             }else{
               let code = 401;

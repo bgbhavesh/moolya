@@ -644,12 +644,12 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
         "API_KEY": "AESsdjkfhsdkjfjkshfn346346",
         "appId": "moolya",
         "currency": "USD",
-        "transId": paymentResponse,
+        "transId": orderNumberGenService.paymentId,
         "paymentEndPoint": "paypal",
         "operation": "debit",
         "customerId": officeTransDetails.userId,
         // "callBackUrl": "http://10.0.2.188:3000/app/myOffice"
-        "callBackUrl": Meteor.absoluteUrl() +"/app/transaction"
+        "callBackUrl": Meteor.absoluteUrl() +"app/transaction"
       };
 
       let apiRequest = {

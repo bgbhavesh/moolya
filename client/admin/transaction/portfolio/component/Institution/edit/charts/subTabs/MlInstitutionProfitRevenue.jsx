@@ -115,7 +115,7 @@ export default class MlInstitutionProfitRevenue extends React.Component{
     data["prlToYear"] =  this.refs["prlToYear"+index].state.inputValue;
     data["prlValue"] =  this.refs["prlValue"+index].value;
     data["prlabout"] =  this.refs["prlabout"+index].value;
-    data["pelValueType"] =  this.refs["pelValueType"+index].value;
+    data["pelValueType"] =  this.state.selectedValType;;
     data["prlValue"] =  this.refs["prlValue"+index].value;
     let clients = this.state.startupCompanyRevenue;
     clients[index] = data
@@ -133,7 +133,7 @@ export default class MlInstitutionProfitRevenue extends React.Component{
     this.refs["prlToYear"+index].state.inputValue = ""
     this.refs["prlValue"+index].value = ""
     this.refs["prlabout"+index].value = ""
-    this.refs["pelValueType"+index].value = ""
+    this.setState({"selectedValType" : ""})
     this.refs["prlValue"+index].value = ""
 
   }

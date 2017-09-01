@@ -1434,7 +1434,7 @@ import SharedLibrary from './sharedLibrary'
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
                 {this.state.isLibrary ? this.popTemplates() : this.templates()}
-                <p className="show-information" style={{'display':'none'}}>Document Format : Mb <br />Document Size : 10 MB</p>
+                <p className="show-information" style={{'display':'none'}}>Document Format :png, jpg, jpeg <br />Document Size : 10 MB</p>
               </div>
             </div>
           </div>

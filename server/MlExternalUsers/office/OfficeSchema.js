@@ -194,7 +194,7 @@ let myOfficeSchema = `
      }
   
     type Query{
-        fetchOffice:[MyOffice]
+        fetchOffice(profileId: String) :[MyOffice]
         fetchOfficeSC:[OfficeSC]
         fetchOfficeById(officeId:String):MyOffice
         fetchOfficeSCById(officeId:String):MyOffice

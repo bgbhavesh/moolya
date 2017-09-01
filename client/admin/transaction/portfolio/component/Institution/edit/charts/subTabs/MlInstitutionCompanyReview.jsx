@@ -80,11 +80,8 @@ export default class MlInstitutionCompanyReview extends React.Component{
     }else{
       let data = this.state.data;
       let clients = this.state.startupCompanyReview;
-      if(clients && clients.length>0 && clients[index]){
-        clients[index] = _.extend(clients[index],data);
-      }/*else{
-       clients[index] = data;
-       }*/
+      // if(clients && clients.length>0 && clients[index]){
+      clients[index] = _.extend(clients[index],data);
 
       let arr = [];
       clients = _.map(clients, function (row) {
@@ -212,7 +209,6 @@ export default class MlInstitutionCompanyReview extends React.Component{
     </div>)
   }
 }
-
 MlInstitutionCompanyReview.contextTypes = {
   institutionPortfolio: PropTypes.object,
 };

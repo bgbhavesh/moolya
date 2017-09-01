@@ -94,12 +94,8 @@ export default class MlInstitutionProfitRevenue extends React.Component{
     }else{
       let data = this.state.data;
       let clients = this.state.startupCompanyRevenue;
-      if(clients && clients.length>0 && clients[index]){
-        clients[index] = _.extend(clients[index],data);
-      }/*else{
-       clients[index] = data;
-       }
-       */
+      // if(clients && clients.length>0 && clients[index]){
+      clients[index] = _.extend(clients[index],data);
       let arr = [];
       clients = _.map(clients, function (row) {
         return _.omit(row, ['__typename'])

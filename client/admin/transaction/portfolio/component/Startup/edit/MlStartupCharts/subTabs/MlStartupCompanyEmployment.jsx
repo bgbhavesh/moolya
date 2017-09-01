@@ -109,11 +109,8 @@ export default class MlCompanyEmployment extends React.Component{
     }else{
       let data = this.state.data;
       let clients = this.state.startupCompanyEmployment;
-      if(clients && clients.length>0 && clients[index]){
+      // if(clients && clients.length>0 && clients[index]){
         clients[index] = _.extend(clients[index],data);
-      }/*else if(this.context.startupPortfolio && this.context.startupPortfolio.employmentOfCompanyChart || !clients[index]){
-        clients[index] = data;
-      }*/
 
       let arr = [];
       clients = _.map(clients, function (row) {

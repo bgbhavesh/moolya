@@ -17,12 +17,13 @@ var Select = require('react-select');
 export default class MlIdeatorDetails extends React.Component{
   constructor(props, context){
     super(props);
-    this.state={
-        loading: true,
-        data:{},
+    this.state = {
+      loading: true,
+      data: {},
       profilePic: " ",
-      privateKey:{},
-      defaultProfilePic: "/images/def_profile.png"
+      privateKey: {},
+      defaultProfilePic: "/images/def_profile.png",
+      privateValues: []
     }
     this.onClick.bind(this);
     this.handleBlur.bind(this);
@@ -54,8 +55,8 @@ export default class MlIdeatorDetails extends React.Component{
     }
   }
   componentWillMount(){
-    this.fetchPortfolioDetails();
-
+    const resp = this.fetchPortfolioDetails();
+    return resp
   }
 
   onClick(fieldName,field,e){
@@ -70,12 +71,11 @@ export default class MlIdeatorDetails extends React.Component{
       }else{
         details=_.extend(details,{[key]:false});
       }
-
-      var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
-      this.setState({privateKey:privateKey})
-      this.setState({data:details}, function () {
-        this.sendDataToParent()
-      })
+    var privateKey = {keyName: fieldName, booleanKey: field, isPrivate: isPrivate, tabName: this.props.tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data: details, privateKey: privateKey}, function () {
+      this.sendDataToParent()
+    })
   }
 
   handleYearsOfExperience(value) {
@@ -127,24 +127,37 @@ export default class MlIdeatorDetails extends React.Component{
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
+    const response = await findIdeatorDetailsActionHandler(portfoliodetailsId);
     let empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.portfolioIdeatorDetails)
     if(empty){
-      const response = await findIdeatorDetailsActionHandler(portfoliodetailsId);
       if (response) {
         this.setState({loading: false, data: response,profilePic:response.profilePic});
       }
-
         _.each(response.privateFields, function (pf) {
             $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
         })
 
     }else{
-      this.setState({loading: false, data: that.context.ideatorPortfolio.portfolioIdeatorDetails});
+      this.setState({loading: false, data: that.context.ideatorPortfolio.portfolioIdeatorDetails, privateValues: response.privateFields}, () => {
+        this.lockPrivateKeys()
+      });
     }
-
-
-
   }
+
+  /**
+   * UI creating lock function
+   * */
+  lockPrivateKeys() {
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName})
+    var finalKeys = _.unionBy(filterPrivateKeys, this.state.privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
+
 
   sendDataToParent(){
     let data = this.state.data;
@@ -161,8 +174,6 @@ export default class MlIdeatorDetails extends React.Component{
     if(e.target.files[0].length ==  0)
       return;
     let file = e.target.files[0];
-    // let name = e.target.name;
-    // let fileName = e.target.files[0].name;
     let data ={moduleName: "PORTFOLIO_PROFILE_IMG", actionName: "UPDATE", portfolioId:this.props.portfolioDetailsId,communityType:"IDE", portfolio:{portfolioIdeatorDetails:{profilePic:" "}}};
     let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, file));
   }
@@ -195,7 +206,6 @@ export default class MlIdeatorDetails extends React.Component{
 
   async deleteProfilePic() {
 
-
     const response = await removePortfolioProfilePic(this.props.portfolioDetailsId);
     if(response){
       this.fetchPortfolioDetails();
@@ -203,11 +213,6 @@ export default class MlIdeatorDetails extends React.Component{
     }else{
       toastr.error("Error in deleting picture")
     }
-   /* let details =this.state.data;
-
-    details=_.omit(details,["profilePic"]);
-   this.setState({data:details});
-    this.sendDataToParent()*/
   }
   render(){
     const showLoader = this.state.loading;
@@ -224,36 +229,36 @@ export default class MlIdeatorDetails extends React.Component{
                   <form id="ideatorDetails">
                     <div className="form-group">
                       <input type="text" placeholder="First Name" name="firstName" defaultValue={this.state.data.firstName} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome for="firstName" name='unlock' className="input_icon un_lock" id="isfirstNamePrivate" onClick={this.onClick.bind(this, "firstName", "isfirstNamePrivate")}/>
+                      <FontAwesome htmlFor="firstName" name='unlock' className="input_icon un_lock" id="isfirstNamePrivate" onClick={this.onClick.bind(this, "firstName", "isfirstNamePrivate")}/>
                     </div>
                     <div className="form-group">
                       <input type="text" placeholder="Last Name" name="lastName" defaultValue={this.state.data.lastName} className="form-control float-label" id="cluster_name"  onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome for="lastName" name='unlock' className="input_icon un_lock" id="islastNamePrivate" onClick={this.onClick.bind(this, "lastName", "islastNamePrivate")}/>
+                      <FontAwesome htmlFor="lastName" name='unlock' className="input_icon un_lock" id="islastNamePrivate" onClick={this.onClick.bind(this, "lastName", "islastNamePrivate")}/>
                     </div>
 
                     <div className="form-group">
                       <input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label" disabled="true" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome for="gender" name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "gender", "isGenderPrivate")}/>
+                      <FontAwesome htmlFor="gender" name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "gender", "isGenderPrivate")}/>
                     </div>
 
                     <div className="form-group">
                       <input type="text" placeholder="Education" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome for="qualification" name='unlock' className="input_icon un_lock" id="isQualificationPrivate" onClick={this.onClick.bind(this, "qualification", "isQualificationPrivate")}/>
+                      <FontAwesome htmlFor="qualification" name='unlock' className="input_icon un_lock" id="isQualificationPrivate" onClick={this.onClick.bind(this, "qualification", "isQualificationPrivate")}/>
                     </div>
 
                     <div className="form-group">
                       <input type="text" placeholder="Employment Status" name="employmentStatus" defaultValue={this.state.data.employmentStatus} className="form-control float-label" disabled="true" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome for="employmentStatus" name='unlock' className="input_icon un_lock" id="isEmploymentStatusPrivate" onClick={this.onClick.bind(this, "employmentStatus", "isEmploymentStatusPrivate")}/>
+                      <FontAwesome htmlFor="employmentStatus" name='unlock' className="input_icon un_lock" id="isEmploymentStatusPrivate" onClick={this.onClick.bind(this, "employmentStatus", "isEmploymentStatusPrivate")}/>
                     </div>
 
                     <div className="form-group">
                       <input type="text" placeholder="Professional Tag" name="professionalTag" defaultValue={this.state.data.professionalTag} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome for="professionalTag" name='unlock' className="input_icon un_lock" id="isProfessionalTagPrivate" onClick={this.onClick.bind(this, "professionalTag", "isProfessionalTagPrivate")}/>
+                      <FontAwesome htmlFor="professionalTag" name='unlock' className="input_icon un_lock" id="isProfessionalTagPrivate" onClick={this.onClick.bind(this, "professionalTag", "isProfessionalTagPrivate")}/>
                     </div>
 
                     <div className="form-group">
                       <input type="text" placeholder="Years of Experience" name="yearsofExperience" defaultValue={this.state.data.yearsofExperience} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome for="yearsofExperience" name='unlock' className="input_icon un_lock" id="isYoePrivate" onClick={this.onClick.bind(this, "yearsofExperience", "isYoePrivate")}/>
+                      <FontAwesome htmlFor="yearsofExperience" name='unlock' className="input_icon un_lock" id="isYoePrivate" onClick={this.onClick.bind(this, "yearsofExperience", "isYoePrivate")}/>
                     </div>
                   </form>
                 </div>
@@ -279,27 +284,27 @@ export default class MlIdeatorDetails extends React.Component{
                     <br className="brclear"/>
                     <div className="form-group">
                       <input type="text" placeholder="Industry" name="industry" defaultValue={this.state.data.industry} className="form-control float-label" disabled="true" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome for="industry" name='unlock' className="input_icon un_lock" id="isIndustryPrivate" onClick={this.onClick.bind(this, "industry","isIndustryPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isIndustryPrivate}/>
+                      <FontAwesome htmlFor="industry" name='unlock' className="input_icon un_lock" id="isIndustryPrivate" onClick={this.onClick.bind(this, "industry","isIndustryPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isIndustryPrivate}/>
                     </div>
 
                     <div className="form-group">
                       <input type="text" placeholder="Profession" name="profession" defaultValue={this.state.data.profession} className="form-control float-label" disabled="true" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome for="profession" name='unlock' className="input_icon un_lock" id="isProfessionPrivate" onClick={this.onClick.bind(this, "profession", "isProfessionPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isProfessionPrivate}/>
+                      <FontAwesome htmlFor="profession" name='unlock' className="input_icon un_lock" id="isProfessionPrivate" onClick={this.onClick.bind(this, "profession", "isProfessionPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isProfessionPrivate}/>
                     </div>
 
                     <div className="form-group">
                       <input type="text" placeholder="Employer Name" ref="employerName" defaultValue={this.state.data.employerName} disabled="true" className="form-control float-label"/>
-                      <FontAwesome for="employerName" name='unlock' className="input_icon un_lock" id="isEmployerNamePrivate" onClick={this.onClick.bind(this, "employerName", "isEmployerNamePrivate")}/>
+                      <FontAwesome htmlFor="employerName" name='unlock' className="input_icon un_lock" id="isEmployerNamePrivate" onClick={this.onClick.bind(this, "employerName", "isEmployerNamePrivate")}/>
                     </div>
 
                     <div className="form-group">
                       <input type="text" placeholder="Phone No" name="mobileNumber" defaultValue={this.state.data.mobileNumber} disabled="true" className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome for="mobileNumber" name='unlock' className="input_icon un_lock" id="isMobileNumberPrivate" onClick={this.onClick.bind(this, "mobileNumber", "isMobileNumberPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isMobileNumberPrivate}/>
+                      <FontAwesome htmlFor="mobileNumber" name='unlock' className="input_icon un_lock" id="isMobileNumberPrivate" onClick={this.onClick.bind(this, "mobileNumber", "isMobileNumberPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isMobileNumberPrivate}/>
                     </div>
 
                     <div className="form-group">
                       <input type="text" placeholder="Email Id" name="emailId" defaultValue={this.state.data.emailId} disabled="true" className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                      <FontAwesome for="emailId" name='unlock' className="input_icon un_lock" id="isEmailIdPrivate" onClick={this.onClick.bind(this, "emailId", "isEmailIdPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isEmailIdPrivate}/>
+                      <FontAwesome htmlFor="emailId" name='unlock' className="input_icon un_lock" id="isEmailIdPrivate" onClick={this.onClick.bind(this, "emailId", "isEmailIdPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isEmailIdPrivate}/>
                     </div>
 
                   </form>
@@ -313,4 +318,5 @@ export default class MlIdeatorDetails extends React.Component{
 };
 MlIdeatorDetails.contextTypes = {
   ideatorPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object,
 };

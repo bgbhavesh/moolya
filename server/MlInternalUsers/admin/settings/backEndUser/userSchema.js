@@ -524,6 +524,7 @@ let BackEndUser = `
         fetchMyProfile(userId:String): BackendUsers
         getUserProfileForService(profileId: String): ExternalProfile
         findExternalUserAddressBook(registrationId:String): externalUserAdditionalInfoSchema
+        findBranchAddressInfo: [AddressInfoSchema]
     }
 `
 

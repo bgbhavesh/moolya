@@ -214,7 +214,6 @@ class MlPortfolio extends React.Component {
     if(!_.isEmpty(privateKey)){
       this.updatePrivateKeys(privateKey)
     }
-
   }
 
   updatePrivateKeys(privateKey){
@@ -358,7 +357,8 @@ class MlPortfolio extends React.Component {
               {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)}
                                                   getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)}
                                                   portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}
-                                                  privateKeys = {this.state.privateKeys}/>}
+                                                  privateKeys = {this.state.privateKeys}
+                                                  removePrivateKeys={this.state.removePrivateKeys}/>}
               {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)}
                                                   portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}
                                                   annotations={annotations}

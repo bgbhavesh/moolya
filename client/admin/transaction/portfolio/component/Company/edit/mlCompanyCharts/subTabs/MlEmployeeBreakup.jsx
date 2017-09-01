@@ -113,9 +113,9 @@ export default class MlEmployeeBreakup extends React.Component{
     }else{
       let data = this.state.data;
       let clients = this.state.startupCompanyData;
-      // if(clients && clients.length>0 && clients[index]){
-      clients[index] = _.extend(clients[index],data);
-
+      if(clients[index]) {
+        clients[index] = _.extend(clients[index], data);
+      }
       let arr = [];
       clients = _.map(clients, function (row) {
         return _.omit(row, ['__typename'])
@@ -127,6 +127,17 @@ export default class MlEmployeeBreakup extends React.Component{
   }
 
   onSaveAction(index,e){
+    let data = this.state.data
+    data["ebdFromMonth"] =  this.refs["ebdFromMonth"+index].state.inputValue ;
+    data["ebdFromYear"] =  this.refs["ebdFromYear"+index].state.inputValue;
+    data["ebdToMonth"] =  this.refs["ebdToMonth"+index].state.inputValue;
+    data["ebdToYear"] =   this.refs["ebdToYear"+index].state.inputValue;
+    data["ebdNumberOfEmployment"] =  this.refs["ebdNumberOfEmployment"+index].value;
+    data["ebdAbout"] = this.state.selectedVal;
+    let clients = this.state.startupCompanyData;
+    clients[index] = data
+    this.setState({startupCompanyData:clients})
+    this.props.getStartupEmployeeBreakup(clients);
     this.setState({dataList:this.state.startupCompanyData})
     if(this.state.startupCompanyData){
       this.setState({selectedIndex:this.state.startupCompanyData.length})

@@ -332,8 +332,17 @@ class MlAppPortfolio extends Component{
           <div className="app_padding_wrap">
             <div className="col-md-12">
             <InteractionsCounter resourceType={'portfolio'} resourceId={this.props.config} interactionAutoId={this.state.interactionAutoId} backHandler={this.backHandler.bind(this)} portfolioImage={this.state.portfolioImage}/>
-              {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} setBackHandler={this.setBackHandler.bind(this)}/>}
-                {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)} setBackHandler={this.setBackHandler.bind(this)}/>}
+              {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)}
+                                                  getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)}
+                                                  portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}
+                                                  privateKeys={this.state.privateKeys}
+                                                  removePrivateKeys={this.state.removePrivateKeys}
+                                                  setBackHandler={this.setBackHandler.bind(this)}/>}
+              {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)}
+                                                  portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}
+                                                  annotations={annotations}
+                                                  getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}
+                                                  setBackHandler={this.setBackHandler.bind(this)}/>}
             </div></div>)}
         {/*<div className="overlay"></div>*/}
           <Popover placement="top" isOpen={this.state.popoverOpen} target="comment" toggle={this.toggle}>

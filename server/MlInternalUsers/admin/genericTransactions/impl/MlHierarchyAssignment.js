@@ -7,8 +7,13 @@ import _ from 'lodash';
 
 class MlHierarchyAssignment {
 
-  findHierarchy(clusterId, departmentId, subDepartmentId, roleId) {
+  findHierarchy(clusterId, departmentId, subDepartmentId, roleId, subChapterId) {        // subChapterId is the Id loggedIn user belongs to not his role
     let roleDetails = mlDBController.findOne('MlRoles', {_id: roleId})
+    var isDefaultSubChapter = true;
+    if(subChapterId && subChapterId != "all"){
+      let subChapter = mlDBController.findOne('MlSubChapters', {_id: subChapterId});
+      isDefaultSubChapter = subChapter.isDefaultSubChapter
+    }
     /*
         Coded by - Murali
         Works for Platform admin self assignment of a transaction
@@ -16,7 +21,8 @@ class MlHierarchyAssignment {
     let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
       parentDepartment: departmentId,
       parentSubDepartment: subDepartmentId,
-      clusterId: roleDetails.isSystemDefined ? "All" : clusterId
+      clusterId: roleDetails.isSystemDefined ? "All" : clusterId,
+      isDefaultSubChapter:isDefaultSubChapter,
     }, context, {teamStructureAssignment: {$elemMatch: {roleId: roleId}}})
 
     /*
@@ -366,7 +372,7 @@ class MlHierarchyAssignment {
       if (this.checkisPlatformAdmin(userRole)) {
         return true;
       } else {
-        let userhierarchy = this.findHierarchy(userRole.clusterId, userRole.departmentId, userRole.subDepartmentId, userRole.roleId);
+        let userhierarchy = this.findHierarchy(userRole.clusterId, userRole.departmentId, userRole.subDepartmentId, userRole.roleId, userRole.subChapterId);
         if (userhierarchy && userhierarchy._id) {
           let roles = userhierarchy.teamStructureAssignment;
           let activeHierarchyRoleAvailable = false;

@@ -5,8 +5,8 @@ import gql from 'graphql-tag'
 import {client} from '../../../core/apolloConnection';
 import _ from 'lodash'
 
+//todo://all the keys passing to server for fetching through props
 export async function findIdeatorDetailsActionHandler(portfoliodetailsId) {
-
   const result = await client.query({
       query: gql`
           query ($portfoliodetailsId: String!) {
@@ -49,6 +49,7 @@ export async function findIdeatorDetailsActionHandler(portfoliodetailsId) {
               privateFields{
                 keyName,
                 booleanKey
+                tabName
               }
             }
           }
@@ -59,7 +60,6 @@ export async function findIdeatorDetailsActionHandler(portfoliodetailsId) {
       },
       forceFetch: true
   })
-  console.log(result)
   const id = result.data.fetchIdeatorPortfolioDetails;
   let data = _.omit(id,'__typename')
   return data
@@ -79,6 +79,7 @@ export async function findIdeatorIdeasActionHandler(ideaId) {
               privateFields{
                 keyName,
                 booleanKey
+                tabName
               }
             }
           }
@@ -89,10 +90,8 @@ export async function findIdeatorIdeasActionHandler(ideaId) {
     },
     forceFetch: true
   })
-  const id
-    = result.data.fetchIdeatorPortfolioIdeas;
+  const id = result.data.fetchIdeatorPortfolioIdeas;
   let data = _.omit(id, '__typename')
-  console.log(data)
   return data
 }
 
@@ -117,6 +116,7 @@ export async function findIdeatorProblemsAndSolutionsActionHandler(portfoliodeta
                       privateFields{
                         keyName,
                         booleanKey
+                        tabName
                       }
                   }      
               }
@@ -149,6 +149,7 @@ export async function findIdeatorAudienceActionHandler(portfoliodetailsId) {
                   privateFields{
                     keyName,
                     booleanKey
+                    tabName
                   }
                   
                 }
@@ -200,6 +201,7 @@ export async function findIdeatorStrategyPlansActionHandler(portfoliodetailsId) 
                 privateFields{
                   keyName,
                   booleanKey
+                  tabName
                 }
               }
               
@@ -227,7 +229,8 @@ export async function findIdeatorLookingForActionHandler(portfoliodetailsId) {
                 isLookingForPrivate
                 privateFields{
                   keyName,
-                  booleanKey
+                  booleanKey,
+                  tabName
                 }
               }
             }
@@ -256,6 +259,7 @@ export async function findIdeatorIntellectualPlanningTrademarkActionHandler(port
                 privateFields{
                   keyName,
                   booleanKey
+                  tabName
                 }
               }
             }

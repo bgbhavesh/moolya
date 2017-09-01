@@ -15,7 +15,7 @@ import {client} from '../../../../core/apolloConnection'
 export default class MlIdeatorPortfolioEditTabs extends Component {
   constructor(props) {
     super(props)
-    this.state = {tabs: [], ideatorPortfolio: {}, idea: {}, privateValues: []}; //privateKeys: []
+    this.state = {tabs: [], ideatorPortfolio: {}, idea: {}, portfolioKeys: {privateKeys:[], removePrivateKeys:[]}};
     this.getIdeatorDetails.bind(this);
     this.getProblemSolution.bind(this)
     this.getChildContext.bind(this)
@@ -25,7 +25,7 @@ export default class MlIdeatorPortfolioEditTabs extends Component {
     return {
       ideatorPortfolio: this.state.ideatorPortfolio,
       idea: this.state.idea,
-      privateValues: this.state.privateValues
+      portfolioKeys: this.state.portfolioKeys
     }
   }
 
@@ -43,20 +43,19 @@ export default class MlIdeatorPortfolioEditTabs extends Component {
   }
 
   getTabComponents() {
-    console.log("This state", this.state);
     let tabs = [
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Ideas",
-        component: <MlIdeatorIdeas tabName="Ideas" key="2" getIdeas={this.getIdeas.bind(this)}
+        component: <MlIdeatorIdeas tabName="ideas" key="2" getIdeas={this.getIdeas.bind(this)}
                                    portfolioDetailsId={this.props.portfolioDetailsId} ideaId={this.props.ideaId}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Ideator",
-        component: <MlIdeatorDetails key="1" tabName="Ideator" client={client} isAdmin={true}
+        component: <MlIdeatorDetails key="1" tabName="ideatorAbout" client={client} isAdmin={true}
                                      getIdeatorDetails={this.getIdeatorDetails.bind(this)}
                                      portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
@@ -64,7 +63,7 @@ export default class MlIdeatorPortfolioEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Problems and Solutions",
-        component: <MlIdeatorProblemsAndSolutions tabName="Problems and Solutions" client={client} isAdmin={true}
+        component: <MlIdeatorProblemsAndSolutions tabName="problemSolution" client={client} isAdmin={true}
                                                   key="3" getProblemSolution={this.getProblemSolution.bind(this)}
                                                   portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
@@ -72,7 +71,7 @@ export default class MlIdeatorPortfolioEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Audience",
-        component: <MlIdeatorAudience key="4" client={client} tabName="Audience" isAdmin={true}
+        component: <MlIdeatorAudience key="4" client={client} tabName="audience" isAdmin={true}
                                       getAudience={this.getAudience.bind(this)}
                                       portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
@@ -87,7 +86,7 @@ export default class MlIdeatorPortfolioEditTabs extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Strategy and Planning",
-        component: <MlIdeatorStrategyAndPlanning key="6" tabName="Strategy and Planning"
+        component: <MlIdeatorStrategyAndPlanning key="6" tabName="strategyAndPlanning"
                                                  getStrategyAndPlanning={this.getStrategyAndPlanning.bind(this)}
                                                  portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
@@ -97,16 +96,14 @@ export default class MlIdeatorPortfolioEditTabs extends Component {
         title: "Intellectual Property And Trademark",
         component: <MlIdeatorIntellectualPlanningAndTrademark key="7" tabName="intellectualPlanning"
                                                               getIntellectualPlanning={this.getIntellectualPlanning.bind(this)}
-                                                              portfolioDetailsId={this.props.portfolioDetailsId}
-                                                              getPrivateKeys={this.getAllPrivateKeys.bind(this)}/>
+                                                              portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Looking For",
         component: <MlIdeatorLookingFor key="8" getLookingFor={this.getLookingFor.bind(this)} tabName="lookingFor"
-                                        portfolioDetailsId={this.props.portfolioDetailsId}
-                                        getPrivateKeys={this.getAllPrivateKeys.bind(this)}/>
+                                        portfolioDetailsId={this.props.portfolioDetailsId}/>
       }
     ]
     return tabs;
@@ -176,15 +173,19 @@ export default class MlIdeatorPortfolioEditTabs extends Component {
     this.setState({tabs: getTabs() || []});
   }
 
-  getAllPrivateKeys(newProps) {
-    this.setState({privateValues: newProps});
-    return newProps
+  getAllPrivateKeys(privateKeys, removePrivateKeys) {
+    let obj = {
+      privateKeys:privateKeys,
+      removePrivateKeys:removePrivateKeys
+    }
+    this.setState({portfolioKeys: obj});
+    return obj
   }
 
   componentWillReceiveProps(newProps) {
     console.log('newProps', newProps);
-    if (newProps && newProps.privateKeys.length) {
-      const resp = this.getAllPrivateKeys(newProps.privateKeys);
+    if (newProps) {
+      const resp = this.getAllPrivateKeys(newProps.privateKeys, newProps.removePrivateKeys);
       return resp
     }
   }
@@ -197,5 +198,5 @@ export default class MlIdeatorPortfolioEditTabs extends Component {
 MlIdeatorPortfolioEditTabs.childContextTypes = {
   ideatorPortfolio: PropTypes.object,
   idea: PropTypes.object,
-  privateValues: PropTypes.array
+  portfolioKeys: PropTypes.object
 };

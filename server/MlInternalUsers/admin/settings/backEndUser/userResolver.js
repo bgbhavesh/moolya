@@ -1251,6 +1251,20 @@ MlResolver.MlQueryResolver['fetchAddressBookInfo'] = (obj, args, context, info) 
   return user.profile;
 }
 
+MlResolver.MlQueryResolver['findBranchAddressInfo'] = (obj, args, context, info) => {
+  let rest = null;
+  var branchAddress = [];
+  let user = mlDBController.findOne('users', {_id: context.userId}, context);
+  if(user && user.profile && user.profile.externalUserAdditionalInfo[0] && user.profile.externalUserAdditionalInfo[0].addressInfo){
+      var addressInfo = user.profile.externalUserAdditionalInfo[0].addressInfo
+      if(addressInfo){
+        branchAddress = _.filter(addressInfo, function (item) {
+            return item.addressTypeName === 'Branch'
+        })
+      }
+  }
+  return branchAddress;
+}
 
 MlResolver.MlQueryResolver['findUserOnToken'] = (obj, args, context, info) => {
   const hashedToken = Accounts._hashLoginToken(args.token)

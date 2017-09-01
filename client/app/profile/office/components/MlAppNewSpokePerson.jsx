@@ -4,7 +4,10 @@
 
 import React from "react";
 import {render} from "react-dom";
+import gql from 'graphql-tag'
 import _ from "lodash";
+import MoolyaSelect from '../../../commons/components/MlAppSelectWrapper'
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation'
 import {fetchAllCommunitiesHandler} from "../../../../app/commons/actions/fetchCommunitiesActionHandler";
 import {createOfficeActionHandler} from "../actions/createOfficeAction";
 import {initalizeFloatLabel} from "../../../../../client/commons/utils/formElemUtil";
@@ -12,8 +15,9 @@ import {initalizeFloatLabel} from "../../../../../client/commons/utils/formElemU
 export default class MlAppNewSpokePerson extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {showCommunityBlock: [], availableCommunities: []};
+    this.state = {showCommunityBlock: [], availableCommunities: [], branchType:"", branchAddress:"", selectedCountry:""};
     this.handleBlur.bind(this)
+    this.setDefaultValues.bind(this)
     return this;
   }
 
@@ -31,6 +35,14 @@ export default class MlAppNewSpokePerson extends React.Component {
   }
 
   submitDetails() {
+
+    var ret = mlFieldValidations(this.refs);
+    if(ret)
+    {
+      toastr.error(ret)
+      return;
+    }
+
     let community = _.uniqBy(this.state.availableCommunities, 'communityId');
     community = community.filter(function (data) {
       return typeof data.userCount !== undefined && data.userCount !== 0;
@@ -40,14 +52,14 @@ export default class MlAppNewSpokePerson extends React.Component {
       principalUserCount: this.refs.principalUserCount.value,
       teamUserCount: this.refs.teamUserCount.value,
       officeName: this.refs.officeName.value,
-      branchType: this.refs.branchType.value,
+      branchType: this.state.branchType,
       officeLocation: this.refs.officeLocation.value,
       streetLocality: this.refs.streetLocality.value,
       landmark: this.refs.landmark.value,
       area: this.refs.area.value,
       city: this.refs.city.value,
       state: this.refs.state.value,
-      country: this.refs.country.value,
+      country: this.state.selectedCountry,
       zipCode: this.refs.zipCode.value,
       about: this.refs.about.value,
       availableCommunities: community,
@@ -166,7 +178,62 @@ export default class MlAppNewSpokePerson extends React.Component {
     FlowRouter.go('/app/myOffice/')
   }
 
+  optionsBySelectOfficeType(index, selectedIndex){
+    this.setState({branchType: index})
+    if(index != 'BRANCH'){
+      this.setDefaultValues()
+    }
+  }
+
+  optionsBySelectBranchAddress(index, cb, selectedItem){
+    this.setState({branchAddress: index})
+    this.setDefaultValues(selectedItem)
+  }
+
+  setDefaultValues(selectedItem){
+    this.refs.officeLocation.value = selectedItem && selectedItem.addressLocality ? selectedItem.addressLocality : ""
+    this.refs.streetLocality.value = selectedItem && selectedItem.addressLocality ? selectedItem.addressLocality : ""
+    this.refs.landmark.value = selectedItem && selectedItem.addressLandmark ? selectedItem.addressLandmark : ""
+    this.refs.area.value = selectedItem && selectedItem.addressArea ? selectedItem.addressArea : ""
+    this.refs.city.value = selectedItem && selectedItem.addressCity ? selectedItem.addressCity: ""
+    this.refs.state.value = selectedItem && selectedItem.addressState ? selectedItem.addressState: ""
+    this.state.selectedCountry = selectedItem && selectedItem.addressCountry ? selectedItem.addressCountry : ""
+    this.refs.zipCode.value = selectedItem && selectedItem.addressPinCode ? selectedItem.addressPinCode : ""
+  }
+
+  optionsBySelectCountry(index, selectedItem){
+    this.setState({selectedCountry: index})
+  }
+
   render() {
+    let query = gql`query {
+        data: getOfficeType{label:displayName, value:code}
+      }`
+
+    let countryQuery = gql`query{
+     data:fetchCountries {
+        value:_id
+        label:country
+        code: countryCode
+      }
+    }`
+
+    let addressQuery = gql`query{
+     data:findBranchAddressInfo{
+        value:addressType
+        label:name,
+        phoneNumber      :  phoneNumber,
+        addressFlat      :  addressFlat
+        addressLocality  :  addressLocality
+        addressLandmark  :  addressLandmark
+        addressArea      :  addressArea
+        addressCity      :  addressCity
+        addressState     :  addressState
+        addressCountry   : addressCountry
+        addressPinCode   : addressPinCode
+      }
+    }`
+
     let that = this;
     return (
       <div className="col-lg-12">
@@ -243,54 +310,61 @@ export default class MlAppNewSpokePerson extends React.Component {
               <div className="form_bg">
                 <form>
                   <div className="form-group">
-                    <input type="text" placeholder="Office Name" className="form-control float-label" ref="officeName"/>
+                    <input type="text" placeholder="Office Name" className="form-control float-label" ref="officeName" data-required={true} data-errMsg="Office Name is required"/>
                   </div>
 
                   <div className="form-group">
-                    <input type="text" placeholder="Branch Type" className="form-control float-label" ref="branchType"/>
+                    {/*<input type="text" placeholder="Branch Type" className="form-control float-label" ref="branchType"/>*/}
+                    <MoolyaSelect multiSelect={false} className="form-control float-label" valueKey={'value'} placeholder="Office Type"
+                                  labelKey={'label'} queryType={"graphql"} query={query} isDynamic={true}
+                                  onSelect={that.optionsBySelectOfficeType.bind(that)}
+                                  selectedValue={that.state.branchType} data-required={true} data-errMsg="Office Type is required"/>
+                  </div>
+
+                  <div className="form-group">
+                    <MoolyaSelect multiSelect={false} className="form-control float-label" valueKey={'value'} placeholder="Branch Address"
+                                  labelKey={'label'} queryType={"graphql"} query={addressQuery} isDynamic={true}
+                                  disabled={this.state.branchType == 'BRANCH'?false:true}
+                                  onSelect={that.optionsBySelectBranchAddress.bind(that)}
+                                  selectedValue={that.state.branchAddress}/>
                   </div>
 
                   <div className="form-group">
                     <input type="text" placeholder="Office Location" className="form-control float-label"
-                           ref="officeLocation"/>
+                           ref="officeLocation" data-required={true} data-errMsg="Office Location is required" disabled={this.state.branchType == 'BRANCH'?"disabled":""}/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Street No/Locality" className="form-control float-label"
-                           ref="streetLocality"/>
+                           ref="streetLocality" data-required={true} data-errMsg="Street/Locality is required" disabled={this.state.branchType == 'BRANCH'?"disabled":""}/>
                   </div>
 
                   <div className="form-group">
                     <input type="text" placeholder="Landmark" className="form-control float-label"
-                           ref="landmark"/>
+                           ref="landmark" data-required={true} data-errMsg="Landmark is required" disabled={this.state.branchType == 'BRANCH'?"disabled":""}/>
                   </div>
 
                   <div className="form-group">
-                    <input type="text" placeholder="Area" className="form-control float-label" ref="area"/>
+                    <input type="text" placeholder="Area" className="form-control float-label" ref="area" data-required={true} data-errMsg="Area is required" disabled={this.state.branchType == 'BRANCH'?"disabled":""}/>
                   </div>
 
                   <div className="form-group">
                     <input type="text" placeholder="Town/City" className="form-control float-label"
-                           ref="city"/>
+                           ref="city" data-required={true} data-errMsg="Town/City is required" disabled={this.state.branchType == 'BRANCH'?"disabled":""}/>
                   </div>
                   <div className="form-group">
-                    <input type="text" placeholder="State" className="form-control float-label" ref="state"/>
+                    <input type="text" placeholder="State" className="form-control float-label" ref="state" data-required={true} data-errMsg="State is required" disabled={this.state.branchType == 'BRANCH'?"disabled":""}/>
                   </div>
 
                   <div className="form-group">
-                    <input type="text" placeholder="Country" className="form-control float-label"
-                           ref="country"/>
+                    <MoolyaSelect multiSelect={false} className="form-control float-label" valueKey={'value'} placeholder="Country"
+                                  labelKey={'label'} queryType={"graphql"} query={countryQuery} isDynamic={true}
+                                  onSelect={that.optionsBySelectCountry.bind(that)} disabled={this.state.branchType == 'BRANCH'?true:false}
+                                  selectedValue={that.state.selectedCountry} data-required={true} data-errMsg="Country is required"/>
                   </div>
                   <div className="form-group">
                     <input type="number" placeholder="Zip Code" className="form-control float-label" min="0"
-                           ref="zipCode"/>
+                           ref="zipCode" data-required={true} data-errMsg="Zipcode is required" disabled={this.state.branchType == 'BRANCH'?"disabled":""}/>
                   </div>
-                  {/*<div className="form-group switch_wrap inline_switch">*/}
-                  {/*<label>Is Active</label>*/}
-                  {/*<label className="switch">*/}
-                  {/*<input type="checkbox" />*/}
-                  {/*<div className="slider"></div>*/}
-                  {/*</label>*/}
-                  {/*</div>*/}
                   <div className="form-group">
                     <a className="mlUpload_btn" onClick={this.submitDetails.bind(this)}>Submit</a>
                     <a className="mlUpload_btn" onClick={this.backUserRoute.bind(this)}>Cancel</a>

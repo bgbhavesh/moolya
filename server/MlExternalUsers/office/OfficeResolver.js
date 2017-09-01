@@ -691,3 +691,8 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
 
   }
 };
+
+MlResolver.MlQueryResolver['getOfficeType'] = (obj, args, context, info) => {
+  var officeTypes = mlDBController.find('MlOfficeType', {}, context).fetch();
+  return officeTypes;
+}

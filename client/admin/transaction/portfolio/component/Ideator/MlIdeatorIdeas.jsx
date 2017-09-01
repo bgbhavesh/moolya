@@ -1,14 +1,10 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
 import {findIdeatorIdeasActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import _ from 'lodash';
 import MlLoader from '../../../../../commons/components/loader/loader'
-
-
 
 export default class MlIdeatorIdeas extends React.Component{
   constructor(props, context){
@@ -16,7 +12,8 @@ export default class MlIdeatorIdeas extends React.Component{
     this.state={
       loading: true,
       data:{},
-      privateKey:{}
+      privateKey:{},
+      privateValues:[]
     }
     this.onClick.bind(this);
     this.handleBlur.bind(this);
@@ -35,7 +32,8 @@ export default class MlIdeatorIdeas extends React.Component{
     dataVisibilityHandler();
   }
   componentWillMount(){
-    this.fetchPortfolioDetails();
+    const resp = this.fetchPortfolioDetails();
+    return resp
   }
   onClick(fieldName, field,e){
     let details = this.state.data||{};
@@ -50,10 +48,9 @@ export default class MlIdeatorIdeas extends React.Component{
       details=_.extend(details,{[key]:false});
     }
 
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
-    this.setState({privateKey:privateKey})
-
-    this.setState({data:details}, function () {
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, tabName: this.props.tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data:details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
 
@@ -71,21 +68,36 @@ export default class MlIdeatorIdeas extends React.Component{
     let that = this;
     let ideaId=that.props.ideaId;
     let empty = _.isEmpty(that.context.idea)
-    if(empty){
-      const response = await findIdeatorIdeasActionHandler(ideaId);
-      if (response) {
-        this.setState({loading: false, data: response});
-      }
+    const response = await findIdeatorIdeasActionHandler(ideaId);
+    if(empty && response){
 
+        this.setState({loading: false, data: response});
       _.each(response.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
 
     }else{
-      this.setState({loading: false, data: that.context.idea});
-    }
+      this.setState({loading: false, data: that.context.idea, privateValues: response.privateFields}, () => {
+        this.lockPrivateKeys()
+      })
 
+    }
   }
+
+  /**
+   * UI creating lock function
+   * */
+  lockPrivateKeys() {
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName})
+    var finalKeys = _.unionBy(filterPrivateKeys, this.state.privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
+
   sendDataToParent(){
     let data = this.state.data;
     for (var propName in data) {
@@ -135,4 +147,5 @@ export default class MlIdeatorIdeas extends React.Component{
 };
 MlIdeatorIdeas.contextTypes = {
   idea: PropTypes.object,
+  portfolioKeys: PropTypes.object,
 };

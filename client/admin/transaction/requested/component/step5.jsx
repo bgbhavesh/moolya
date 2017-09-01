@@ -470,11 +470,11 @@ export default class Step5 extends React.Component {
           showAction: true,
           handler: this.rejectedDocuments.bind(this)
         },
-        {
+        /*{
           actionName: 'download',
           showAction: true,
           handler: this.downloadDocuments.bind(this)
-        },
+        },*/
         {
           showAction: false,
           actionName: 'save',

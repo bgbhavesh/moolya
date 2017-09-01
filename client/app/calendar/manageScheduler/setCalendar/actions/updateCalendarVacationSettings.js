@@ -11,11 +11,11 @@ import {appClient} from '../../../../core/appConnection';
  * @param vacation --> updated object
  * @returns {Promise.<*>} --> succeed response send to component
  */
-export async function updateCalendarVacationActionHandler(vacation) {
+export async function updateCalendarVacationActionHandler(profileId, vacation) {
   const result = await appClient.mutate({
     mutation: gql`
-    mutation($vacation: calendarSettingVacation) {
-      updateMyCalendarVacation(vacation: $vacation) {
+    mutation($profileId: String, $vacation: calendarSettingVacation) {
+      updateMyCalendarVacation(profileId: $profileId, vacation: $vacation) {
         success
         code
         result
@@ -23,7 +23,8 @@ export async function updateCalendarVacationActionHandler(vacation) {
     }
     `,
     variables: {
-      vacation,
+      profileId,
+      vacation
     }
   });
   const response = result.data.updateMyCalendarVacation;
@@ -35,11 +36,11 @@ export async function updateCalendarVacationActionHandler(vacation) {
  * @param vacation --> updated object
  * @returns {Promise.<*>} --> succeed response send to component
  */
-export async function updateCalendarVacationByIdActionHandler(vacation, vacationId) {
+export async function updateCalendarVacationByIdActionHandler(profileId, vacation, vacationId) {
   const result = await appClient.mutate({
     mutation: gql`
-    mutation($vacation: calendarSettingVacation, $vacationId: String) {
-      updateCalendarVacationByVacationId(vacation: $vacation, vacationId: $vacationId) {
+    mutation($profileId:String, $vacation: calendarSettingVacation, $vacationId: String) {
+      updateCalendarVacationByVacationId(profileId: $profileId, vacation: $vacation, vacationId: $vacationId) {
         success
         code
         result
@@ -47,6 +48,7 @@ export async function updateCalendarVacationByIdActionHandler(vacation, vacation
     }
     `,
     variables: {
+      profileId,
       vacation,
       vacationId
     }

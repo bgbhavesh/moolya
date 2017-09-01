@@ -216,7 +216,13 @@ MlResolver.MlMutationResolver['updateMyCalendarSetting'] = (obj, args, context, 
 
 MlResolver.MlMutationResolver['updateMyCalendarWorkingDays'] = (obj, args, context, info) => {
   let userId = context.userId;
-  let profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  //let profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  let profileId;
+  if(args.profileId){
+    profileId = args.profileId;
+  } else {
+    profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  };
   if(!userId){
     let code = 400;
     let result = 'User ID is not defined for this user';
@@ -278,13 +284,19 @@ MlResolver.MlMutationResolver['updateMyCalendarWorkingDay'] = (obj, args, contex
     let response = new MlRespPayload().errorPayload(result, code);
     return response;
   }
-  return MlResolver.MlMutationResolver['updateMyCalendarWorkingDays'](obj, {workingDays: [args.workingDay]}, context, info);
-}
+  return MlResolver.MlMutationResolver['updateMyCalendarWorkingDays'](obj, { profileId:args.profileId,  workingDays: [args.workingDay]}, context, info);
+};
 
 MlResolver.MlMutationResolver['updateMyCalendarVacation'] = (obj, args, context, info) => {
   let vacation = args.vacation;
   let userId = context.userId;
-  let profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  //let profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  let profileId;
+  if(args.profileId){
+    profileId = args.profileId;
+  } else {
+    profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  };
   if(!userId){
     let code = 400;
     let result = 'User ID is not defined for this user';
@@ -314,7 +326,7 @@ MlResolver.MlMutationResolver['updateMyCalendarVacation'] = (obj, args, context,
     isAlreadyExist.vacations.forEach(function (vacationInfo) {
         let vacationStartDate = new Date(vacationInfo.start);
         let vacationEndDate = new Date(vacationInfo.end);
-        if( vacationStartDate.getTime() >= startDate.getTime() && startDate.getTime() <=  vacationEndDate.getTime() || vacationStartDate.getTime() >= endDate.getTime() && endDate.getTime() <=  vacationEndDate.getTime() ){
+        if( vacationStartDate.getTime() <= startDate.getTime() && startDate.getTime() <=  vacationEndDate.getTime() || vacationStartDate.getTime() <= endDate.getTime() && endDate.getTime() <=  vacationEndDate.getTime() ){
           isAlreadyOnVacation = true;
         }
     });
@@ -351,7 +363,13 @@ MlResolver.MlMutationResolver['updateMyCalendarVacation'] = (obj, args, context,
 MlResolver.MlMutationResolver['updateCalendarVacationByVacationId'] = (obj, args, context, info) => {
   let vacation = args.vacation;
   let userId = context.userId;
-  let profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  // let profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  let profileId;
+  if(args.profileId){
+    profileId = args.profileId;
+  } else {
+    profileId = new MlUserContext().userProfileDetails(userId).profileId;
+  };
   if(!userId){
     let code = 400;
     let result = 'User ID is not defined for this user';
@@ -383,7 +401,7 @@ MlResolver.MlMutationResolver['updateCalendarVacationByVacationId'] = (obj, args
       if (vacationInfo.vacationId !== args.vacationId) {
         let vacationStartDate = new Date(vacationInfo.start);
         let vacationEndDate = new Date(vacationInfo.end);
-        if( (vacationStartDate.getTime() >= startDate.getTime() && startDate.getTime() <=  vacationEndDate.getTime() ) || ( vacationStartDate.getTime() >= endDate.getTime() && endDate.getTime() <=  vacationEndDate.getTime() ) ){
+        if( vacationStartDate.getTime() <= startDate.getTime() && startDate.getTime() <=  vacationEndDate.getTime() || vacationStartDate.getTime() <= endDate.getTime() && endDate.getTime() <=  vacationEndDate.getTime() ){
           isAlreadyOnVacation = true;
         }
       }

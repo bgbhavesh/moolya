@@ -10,11 +10,11 @@ import {appClient} from '../../../../core/appConnection';
  * @param workingDay --> updated object
  * @returns {Promise.<*>} --> succeed response send to component
  */
-export async function updateCalendarWorkingDayActionHandler(workingDay) {
+export async function updateCalendarWorkingDayActionHandler(profileId, workingDay) {
   const result = await appClient.mutate({
     mutation: gql`
-    mutation($workingDay: calendarSettingWorkingDays) {
-      updateMyCalendarWorkingDay(workingDay: $workingDay) {
+    mutation($profileId:String, $workingDay: calendarSettingWorkingDays) {
+      updateMyCalendarWorkingDay(profileId: $profileId, workingDay: $workingDay) {
         success
         code
         result
@@ -22,6 +22,7 @@ export async function updateCalendarWorkingDayActionHandler(workingDay) {
     }
     `,
     variables: {
+      profileId: profileId,
       workingDay: workingDay,
     }
   });
@@ -34,11 +35,11 @@ export async function updateCalendarWorkingDayActionHandler(workingDay) {
  * @param workingDays --> updated array of objects
  * @returns {Promise.<*>} --> succeed response send to component
  */
-export async function updateCalendarWorkingDaysActionHandler(workingDays) {
+export async function updateCalendarWorkingDaysActionHandler(profileId, workingDays) {
   const result = await appClient.mutate({
     mutation: gql`
-    mutation($workingDays: [calendarSettingWorkingDays]) {
-      updateMyCalendarWorkingDays(workingDays: $workingDays) {
+    mutation($profileId: String, $workingDays: [calendarSettingWorkingDays]) {
+      updateMyCalendarWorkingDays(profileId: $profileId, workingDays: $workingDays) {
         success
         code
         result
@@ -46,6 +47,7 @@ export async function updateCalendarWorkingDaysActionHandler(workingDays) {
     }
     `,
     variables: {
+      profileId : profileId,
       workingDays: workingDays
     }
   });

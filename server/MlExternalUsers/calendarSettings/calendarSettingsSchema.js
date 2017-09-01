@@ -68,6 +68,7 @@ let calendarSettingSlot=`
     isAvailable: Boolean
     slotTime: String
     status: Int
+    shift: String
   }
   
   input calendarSettingSlotDuration {

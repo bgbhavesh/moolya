@@ -6,6 +6,7 @@
  * */
 import React, {Component} from "react";
 import {render} from "react-dom";
+import gql from 'graphql-tag'
 import {initalizeFloatLabel} from "../../../../../client/commons/utils/formElemUtil";
 
 export default class MlSpokePersonDetail extends Component {

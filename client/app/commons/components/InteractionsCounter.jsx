@@ -44,8 +44,8 @@ export default class InteractionsCounter extends React.Component{
       {name: 'collaborate',displayName:'Collaborations',iconClass: 'ml flaticon-ml-networking'},
       {name: 'favourite',displayName:'Favourites',iconClass: 'ml my-ml-favourites'},
       {name: 'view',displayName:'Views',iconClass: 'ml my-ml-browser_3'},
-      {name: 'partner', displayName:'Partners',iconClass: 'ml flaticon-ml-support'},
-      {name: 'enquire',displayName:'Enquiries',iconClass: 'ml flaticon-ml-handshake-1'}
+      {name: 'partner', displayName:'Partners',iconClass: 'ml flaticon-ml-handshake-1'},
+      {name: 'enquire',displayName:'Enquiries',iconClass: 'ml flaticon-ml-support'}
     ];
 
     let data=this.state.data;

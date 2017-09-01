@@ -52,7 +52,7 @@ getChildContext(){
       {tabClassName: 'tab', panelClassName: 'panel', title:"Audience" , component:<MlIdeatorAudience key="3" isAdmin={false} client={appClient}  portfolioDetailsId={this.props.portfolioDetailsId} getAudience={this.getAudience.bind(this)}/>},                            //id will be dyanmic
       {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<PortfolioLibrary key="4" client={appClient} isAdmin={false} portfolioDetailsId={this.props.portfolioDetailsId} />},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Strategy and Plans" , component:<MlIdeatorStrategyAndPlanning key="5"  portfolioDetailsId={this.props.portfolioDetailsId} getStrategyAndPlanning={this.getStrategyAndPlanning.bind(this)}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"IP and Trademark" , component:<MlIdeatorIntellectualPlanningAndTrademark key="6"  portfolioDetailsId={this.props.portfolioDetailsId} getIntellectualPlanning={this.getIntellectualPlanning.bind(this)}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Intellectual Property And Trademark" , component:<MlIdeatorIntellectualPlanningAndTrademark key="6"  portfolioDetailsId={this.props.portfolioDetailsId} getIntellectualPlanning={this.getIntellectualPlanning.bind(this)}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlIdeatorLookingFor key="7"  portfolioDetailsId={this.props.portfolioDetailsId} getLookingFor={this.getLookingFor.bind(this)}/>},
     ]
     return tabs;

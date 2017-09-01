@@ -146,7 +146,7 @@ export default class MlPortfolioIdeatorPlanningTrademarkView extends React.Compo
 
       <div className="col-lg-12 col-sm-12">
         <div className="row">
-          <h2>Intellectual Planing and Trademark</h2>
+          <h2>Intellectual Property And Trademark</h2>
           <div id="trademarkContent" className="panel panel-default panel-form-view">
 
             <div className="panel-body">

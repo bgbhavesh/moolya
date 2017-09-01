@@ -88,7 +88,7 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
   let orderId = args.userServiceCardAppointmentInfo.orderId;
   let sessionId = args.userServiceCardAppointmentInfo.sessionId;
   let SCOrderDetails = mlDBController.findOne('MlScOrder', {orderId: orderId}, context);
-
+  let extraUsers = args.userServiceCardAppointmentInfo.extraUsers ? args.userServiceCardAppointmentInfo.extraUsers : [];
   if(!SCOrderDetails) {
     let code = 400;
     let response = new MlRespPayload().errorPayload("Order is not valid", code);
@@ -158,7 +158,7 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
         attendee = attendee.concat(team.users);
       });
       return attendee;
-    }, []);
+    }, extraUsers);
 
     let userId = context.userId;
     let profileId = new MlUserContext().userProfileDetails(userId).profileId;
@@ -299,7 +299,7 @@ MlResolver.MlQueryResolver["fetchAllProfileAppointmentCounts"] = (obj, args, con
   let pipeLine = [
       { $lookup: { from: "mlAppointmentMembers", localField: "appointmentId", foreignField: "appointmentId", as: "members"}},
       { $unwind: "$members"},
-      { $match : { "members.userId" : userId } },
+      { $match : { "members.userId" : userId, "members.status": { "$ne" : "Rejected" } } },
       { $addFields: { "startDate": {$add: ["$startDate" ,timeZoneOffsetInMinutes * 60 * 1000]} } },
       { $project: { yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$startDate" } },
         time: { $dateToString: { format: "%H:%M:%S:%L", date: "$Date" } },
@@ -346,7 +346,7 @@ MlResolver.MlQueryResolver["fetchProfileAppointmentCounts"] = (obj, args, contex
   let pipeLine = [
     { $lookup: { from: "mlAppointmentMembers", localField: "appointmentId", foreignField: "appointmentId", as: "members"}},
     { $unwind: "$members"},
-    { $match : { "members.userId" : userId, "members.profileId" : profileId } },
+    { $match : { "members.userId" : userId, "members.profileId" : profileId, "members.status": { "$ne" : "Rejected" } } },
     { $addFields: { "startDate": {$add: ["$startDate" ,timeZoneOffsetInMinutes * 60 * 1000]} } },
     { $project: { yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$startDate" } },
       time: { $dateToString: { format: "%H:%M:%S:%L", date: "$Date" } },
@@ -457,7 +457,7 @@ MlResolver.MlQueryResolver['fetchOfficeMemberAppointmentCounts'] = (obj, args, c
   let pipeLine = [
     { $lookup: { from: "mlAppointmentMembers", localField: "appointmentId", foreignField: "appointmentId", as: "members"}},
     { $unwind: "$members"},
-    { $match : { "members.userId" : userId, "members.profileId" : profileId } },
+    { $match : { "members.userId" : userId, "members.profileId" : profileId, "members.status": { "$ne" : "Rejected" } } },
     { $addFields: { "startDate": {$add: ["$startDate" ,timeZoneOffsetInMinutes * 60 * 1000]} } },
     { $project: { yearMonthDay: { $dateToString: { format: "%Y-%m-%d", date: "$startDate" } },
       time: { $dateToString: { format: "%H:%M:%S:%L", date: "$Date" } },
@@ -563,7 +563,7 @@ MlResolver.MlQueryResolver['fetchAllOfficeMemberAppointmentCounts'] = (obj, args
   let timeZoneOffsetInMinutes = 330;
   let pipeLine = [
     { $lookup: { from: "mlOffice", localField: "officeId", foreignField: "_id", as: "office" } },
-    { $match: { 'office.userId': userId, 'office.profileId': profileId } },
+    { $match: { 'office.userId': userId, 'office.profileId': profileId, "members.status": { "$ne" : "Rejected" } } },
     { $lookup:
       {
         from: "users",
@@ -620,6 +620,7 @@ MlResolver.MlMutationResolver["bookTaskInternalAppointment"] = (obj, args, conte
   let year = args.taskInternalAppointmentInfo.year; //date.getFullYear();
   let hours = args.taskInternalAppointmentInfo.hours; //9;
   let minutes = args.taskInternalAppointmentInfo.minutes; // 0;
+  let extraUsers = args.taskInternalAppointmentInfo.extraUsers ? args.taskInternalAppointmentInfo.extraUsers : [];
 
   let startDate = new Date();
   startDate.setDate(day);
@@ -655,7 +656,7 @@ MlResolver.MlMutationResolver["bookTaskInternalAppointment"] = (obj, args, conte
       attendee = attendee.concat(team.users);
     });
     return attendee;
-  }, []);
+  }, extraUsers);
 
   let userId = context.userId;
   let profileId =  new MlUserContext().userProfileDetails(userId).profileId;

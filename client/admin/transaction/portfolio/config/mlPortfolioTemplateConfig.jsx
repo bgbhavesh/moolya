@@ -1,5 +1,5 @@
 import React from 'react';
-import MlIdeatorPortfolioTemplate from '../component/Ideator/MlIdeatorPortfolio'
+import MlIdeatorPortfolioEditTabs from '../component/Ideator/MlIdeatorPortfolioEditTabs'
 import mlRegistrationTemplates from '../../../../commons/containers/templates/mlRegistrationTemplate';
 import MlViewIdeatorPortfolioTemplate from '../component/IdeatorView/MlViewIdeatorPortfolio'
 import MlStartupEditTemplate from '../component/Startup/edit/MlStartupEditTemplate'
@@ -35,7 +35,7 @@ const mlIdeatorEditExternalUserPortfolioTemplateConfig={
   subProcess:'Registration',
   stepCode:'PORTFOLIO',
   stepName:'Portfolio',
-  component:MlIdeatorPortfolioTemplate
+  component:MlIdeatorPortfolioEditTabs
 };
 
 const mlIdeatorViewExternalUserPortfolioTemplateConfig={

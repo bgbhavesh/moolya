@@ -82,7 +82,7 @@ if(Meteor.isServer){
         "image" : "ml my-ml-chapter",
         "link" : "/admin/chapters",
         "uniqueId" : "chapter",
-        "name" : "chapter",
+        "name" : "Chapter",
         "isLink" : true,
         "isMenu" : true,
         "hideSubMenu":true,

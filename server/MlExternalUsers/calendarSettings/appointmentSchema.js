@@ -34,6 +34,7 @@ let appointment=`
     day: Int!
     month: Int!
     year: Int!
+    extraUsers: [appointmentExtraUser]
   }
   
   input appointmentExtraUser {

@@ -10,6 +10,7 @@ var PieTooltip = require('react-d3-tooltip').PieTooltip;
 import MlBarChart from '../../../../../../commons/components/d3/MlBarChart'
 import {fetchInstitutionChartsDetailsActionHandler} from '../../../actions/findPortfolioInstitutionDetails'
 import MlChartSubTabs from '../../../../../../commons/charts/MlChartsSubTabs'
+import MlInstitutionChart from '../edit/charts/MlInstitutionChart'
 
 export default class MlInstitutionEditChart extends React.Component {
   constructor(props, context){
@@ -109,7 +110,7 @@ export default class MlInstitutionEditChart extends React.Component {
     //this.props.backClickHandler()
   }
 
-  getPortfolioStartupChartDetails(details,tabName){
+  getPortfolioInstitutionChartDetails(details,tabName){
     let data = this.state.startupPortfolio;
     data[tabName] = details;
     this.props.getChartDetails(details,tabName);
@@ -311,7 +312,10 @@ export default class MlInstitutionEditChart extends React.Component {
            value = {value}
            name = {name}
            />*/
-        ):(<div>{<MlChartSubTabs getPortfolioStartupChartDetails={this.getPortfolioStartupChartDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupChartsDetails={this.state.startupCharts} isApp={this.props.isApp}></MlChartSubTabs> }</div>)}
+        ):(<div>{
+
+          <MlInstitutionChart getPortfolioInstitutionChartDetails={this.getPortfolioInstitutionChartDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} startupChartsDetails={this.state.startupCharts} isApp={this.props.isApp}></MlInstitutionChart> }</div>)
+        }
 
       </div>
     )
@@ -319,6 +323,6 @@ export default class MlInstitutionEditChart extends React.Component {
 }
 
 MlInstitutionEditChart.contextTypes = {
-  startupPortfolio: PropTypes.object,
+  institutionPortfolio: PropTypes.object,
 };
 

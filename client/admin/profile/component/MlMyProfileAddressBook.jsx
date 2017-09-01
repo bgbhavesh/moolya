@@ -75,7 +75,7 @@ export default class Step3 extends React.Component{
     return (
 <div className="admin_main_wrap">
 
-    <h2>Address book</h2>
+    <h2>My Contact Details</h2>
     <div className="col-lg-6 ">
       <div className="form_bg left_wrap">
       <ScrollArea
@@ -88,7 +88,7 @@ export default class Step3 extends React.Component{
           <form>
             <div className="panel panel-default new_profile_tabs">
               <div className="panel-heading">
-                Contact Number
+                Contact Numbers
               </div>
 
               <ContactDetails registerId={this.state.registerId} registrationInfo={this.state.registrationDetails}  clusterId={this.state.clusterId}/>
@@ -114,7 +114,7 @@ export default class Step3 extends React.Component{
       <form>
       <div className="panel panel-default new_profile_tabs">
       <div className="panel-heading">
-      Address
+      Addresses
       </div>
       <AddressDetails registerId={this.state.registerId}  registrationInfo={this.state.registrationDetails}  clusterId={this.state.clusterId}/>
   </div>

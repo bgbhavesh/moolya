@@ -1,3 +1,4 @@
+/*
 import React, { Component, PropTypes }  from "react";
 import {render} from "react-dom";
 import gql from "graphql-tag";
@@ -138,20 +139,20 @@ export default class MlEmployeeBreakup extends React.Component{
     this.refs["ebdAbout"+index].value = ""
     this.setState({"selectedVal" : ""})
 
-    /* this.refs["prlFromYear"+index].val(" ")
+    /!* this.refs["prlFromYear"+index].val(" ")
      this.refs["prlFromMonth"+index].val(" ")
      this.refs["prlToYear"+index].val(" ")
-     this.refs["prlToMonth"+index].val(" ")*/
+     this.refs["prlToMonth"+index].val(" ")*!/
 
   }
 
-  /*onRemoveAction(index,e){
+  /!*onRemoveAction(index,e){
    let updatedData = this.state.startupCompanyData || [];
    updatedData.splice(updatedData.indexOf(index), 1);
    this.setState({dataList: updatedData}, function () {
    this.sendDataToParent()
    });
-   }*/
+   }*!/
   optionsBySelectTypeOfDepartment(index,selectedId, callback, selObject){
     let details =this.state.data;
     details=_.omit(details,["ebdDepartment"]);
@@ -189,7 +190,7 @@ export default class MlEmployeeBreakup extends React.Component{
             <div className="office-members-detail">
 
             <div className="form_inner_block">
-              {/*<div className="add_form_block" onClick={this.onSaveAction.bind(this,defaultIndex)}><img src="/images/add.png"/></div>*/}
+              {/!*<div className="add_form_block" onClick={this.onSaveAction.bind(this,defaultIndex)}><img src="/images/add.png"/></div>*!/}
 
               <div className="col-lg-12 col-md-12 col-sm-10">
                 <div className="row">
@@ -245,7 +246,7 @@ export default class MlEmployeeBreakup extends React.Component{
 
               return(<div className="form_inner_block">
 
-                {/*<div className="add_form_block" onClick={that.onRemoveAction.bind(that,idx)}><img src="/images/remove.png"/></div>*/}
+                {/!*<div className="add_form_block" onClick={that.onRemoveAction.bind(that,idx)}><img src="/images/remove.png"/></div>*!/}
                 <div className="col-lg-12 col-md-12 col-sm-10">
                   <div className="row">
                     <div className="form-group col-lg-6 col-md-6 col-sm-6">
@@ -317,3 +318,4 @@ export default class MlEmployeeBreakup extends React.Component{
 MlEmployeeBreakup.contextTypes = {
   startupPortfolio: PropTypes.object,
 };
+*/

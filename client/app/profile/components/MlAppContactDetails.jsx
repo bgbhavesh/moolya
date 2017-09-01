@@ -274,7 +274,7 @@ export default class AppContactDetails extends React.Component {
 
             <div className={"tab-pane" + this.state.activeTab} id="contactA">
               <div className="form-group">
-                <Moolyaselect multiSelect={false} ref="numberType" placeholder="Select NumberType" mandatory={true}
+                <Moolyaselect multiSelect={false} ref="numberType" placeholder="Select Number Type" mandatory={true}
                               className="form-control float-label" selectedValue={this.state.selectedNumberTypeValue}
                               valueKey={'value'} labelKey={'label'} queryType={"graphql"} query={numberTypeQuery}
                               queryOptions={numberTypeOption} onSelect={this.optionsBySelectNumberType.bind(this)}

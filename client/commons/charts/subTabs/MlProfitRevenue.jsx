@@ -3,7 +3,7 @@ import {render} from "react-dom";
 import Datetime from "react-datetime";
 import _ from 'lodash';
 import gql from "graphql-tag";
-import Moolyaselect from "../../../admin/commons/components/MlAdminSelectWrapper";
+//import Moolyaselect from "../../../admin/commons/components/MlAdminSelectWrapper";
 var Select = require('react-select');
 import ScrollArea from "react-scrollbar";
 
@@ -348,6 +348,7 @@ export default class MlProfitRevenue extends React.Component{
 
 
 MlProfitRevenue.contextTypes = {
+  //institutionPortfolio: PropTypes.object,
   startupPortfolio: PropTypes.object,
 };
 

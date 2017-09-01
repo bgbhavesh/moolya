@@ -84,7 +84,8 @@ export default class MlCalendarHead extends Component {
                         profile.communityName === "Startups" ?<span className="icon_bg"><span className="icon_lg ml ml-startup"></span></span>:
                           profile.communityName === "Ideators" ?<span className="icon_bg"><span className="icon_lg ml ml-startup"></span></span>:
                             profile.communityName === "Institutions" ?<span className="icon_bg"><span className="icon_lg ml ml-institutions"></span></span>:
-                              profile.communityName === "Service Providers" ? <span className="icon_bg"><span className="icon_lg ml ml-Service-Providers"></span></span>:""}
+                              profile.communityName === "Service Providers" ? <span className="icon_bg"><span className="icon_lg ml ml-Service-Providers"></span></span>:
+                                profile.communityName === "Office Bearer" ? <span className="icon_bg"><span className="icon_lg ml my-ml-team-members"></span></span>:""}
                      <br />
                       <div className="tooltiprefer">
                         <span>{profile.communityName}</span>

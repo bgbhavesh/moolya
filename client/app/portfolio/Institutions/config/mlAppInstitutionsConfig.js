@@ -30,6 +30,9 @@ export const mlAppInstitutionConfig = new MlAppViewer({
                         }
                         chapterName
                         accountType
+                        communityType
+                        firstName
+                        lastName
                       }
                     }
                 }

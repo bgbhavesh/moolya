@@ -250,7 +250,8 @@ class MlAppointment {
           appointmentStartDate.setSeconds(0,0);
           let appointmentEndDate = new Date(appointment.endDate);
           appointmentStartDate.setSeconds(0,0);
-          return (slotStartTime >= appointmentStartDate && slotEndTime <= appointmentEndDate);
+          // return (slotStartTime >= appointmentStartDate && slotEndTime <= appointmentEndDate);
+          return (slotStartTime <= appointmentStartDate && appointmentStartDate <= slotEndTime);
         }).length;
 
         /**

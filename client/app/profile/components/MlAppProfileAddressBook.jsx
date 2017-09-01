@@ -57,7 +57,7 @@ export default class MlAppProfileAddressBook extends React.Component {
       <div className="admin_main_wrap">
         {showLoader === true ? (<MlLoader/>) : (
         <div className="admin_padding_wrap">
-          <h2>Address Book</h2>
+          <h2>My Contact Details</h2>
           <div className="main_wrap_scroll">
             <ScrollArea
               speed={0.8}
@@ -70,7 +70,7 @@ export default class MlAppProfileAddressBook extends React.Component {
                   <form>
                     <div className="panel panel-default new_profile_tabs">
                       <div className="panel-heading">
-                        Contact Number
+                        Contact Numbers
                       </div>
                       <AppContactDetails clusterId={clusterId} contactInfoDetails={contactInfo}  registerId = {registerId} profileId={profileId} registrationDetails={this.findAddressBook.bind(this)}/>
                     </div>
@@ -86,7 +86,7 @@ export default class MlAppProfileAddressBook extends React.Component {
                   <form>
                     <div className="panel panel-default new_profile_tabs">
                       <div className="panel-heading">
-                        Address
+                        Addresses
                       </div>
                       <AppAddressDetails clusterId={clusterId} addressInfoDetails={addressInfo} registerId = {registerId} profileId={profileId} registrationDetails={this.findAddressBook.bind(this)}/>
                     </div>

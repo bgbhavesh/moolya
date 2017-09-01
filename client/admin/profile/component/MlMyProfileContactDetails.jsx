@@ -186,7 +186,7 @@ export default class ContactDetails extends React.Component{
           <div className="tab-content clearfix">
             <div className={"tab-pane"+this.state.activeTab} id="contactA">
               <div className="form-group">
-                <Moolyaselect multiSelect={false} ref="numberType" placeholder="Select NumberType" query={numberTypeQuery}
+                <Moolyaselect multiSelect={false} ref="numberType" placeholder="Select Number Type" query={numberTypeQuery}
                               queryOptions={numberTypeOption} className="form-control float-label" selectedValue = {this.state.selectedNumberTypeValue}
                               valueKey={'value'} labelKey={'label'} queryType={"graphql"}
                               onSelect={this.optionsBySelectNumberType.bind(this)}

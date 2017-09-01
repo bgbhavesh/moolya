@@ -1081,6 +1081,15 @@ import SharedLibrary from './sharedLibrary'
         });
         return false;
       });
+
+      $(".information").unbind("click").click(function(){
+        if($(this).hasClass('ml-information')){
+          $(this).removeClass('ml-information').addClass('ml-delete');
+        }else{
+          $(this).removeClass('ml-delete').addClass('ml-information');
+        }
+        $(this).parents('.panel').find(".show-information").toggle(200);
+      });
     }
 
     componentDidUpdate() {
@@ -1362,9 +1371,10 @@ import SharedLibrary from './sharedLibrary'
           </div>
           {!that.state.showSharedFiles?<div>
           <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
-            <div className="panel panel-default">
+            <div className="panel panel-default uploaded_files">
               <div className="panel-heading">
                 Images
+                <div className="pull-right block_action">
                 <div className="fileUpload upload_file_mask pull-right" id="create_client">
                   <a href="javascript:void(0);">
                     {that.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit ?
@@ -1375,54 +1385,64 @@ import SharedLibrary from './sharedLibrary'
                   </a>
                 </div>
               </div>
+              <div className="pull-right block_action">
+                <span className="single_icon ml ml-information information"></span>
+              </div>
+              </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
                 {this.state.isLibrary ? this.popImages() : this.images()}
+                <p className="show-information" style={{'display':'none'}}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB</p>
               </div>
             </div>
           </div>
           <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-right">
-            <div className="panel panel-default">
+            <div className="panel panel-default uploaded_files">
               <div className="panel-heading">
                 Videos
-                <div className="fileUpload upload_file_mask pull-right" id="create_video">
-                  <a href="javascript:void(0);">
-                    {that.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit ?
-                      <span className="ml ml-upload"><input type="file" className="upload_file upload"
-                                                            name="video_source" id="video_upload"
-                                                            onChange={that.videoUpload.bind(that)}/></span> :
-                      <span className="ml ml-upload" onClick={that.PopOverAction.bind(that, VideoDetails)}></span>}
-                  </a>
+                <div className="pull-right block_action">
+                  <div className="fileUpload upload_file_mask" id="create_video">
+                    <a href="javascript:void(0);">
+                      {that.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit ? <span className="ml ml-upload"><input type="file" className="upload_file upload" name="video_source" id="video_upload" onChange={that.videoUpload.bind(that)}/></span> : <span className="ml ml-upload" onClick={that.PopOverAction.bind(that, VideoDetails)}></span>}
+                    </a>
+                  </div>
+                </div>
+                <div className="pull-right block_action">
+                  <span className="single_icon ml ml-information information"></span>
                 </div>
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
                 {this.state.isLibrary ? this.popVideos() : this.videos()}
+                <p className="show-information" style={{'display':'none'}}>Document Format : mp4 <br />Document Size : 10 MB</p>
               </div>
             </div>
           </div>
           <br className="brclear"/>
           <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-left">
-            <div className="panel panel-default">
+            <div className="panel panel-default uploaded_files">
               <div className="panel-heading">
                 Templates
-                <div className="fileUpload upload_file_mask pull-right" id="create_template">
+                <div className="pull-right block_action">
+                  <div className="fileUpload upload_file_mask pull-right" id="create_template">
                   <a href="javascript:void(0);">
-                    {that.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit ?
-                      <span className="ml ml-upload"><input type="file" className="upload_file upload"
-                                                            name="image_source" id="template_upload"
-                                                            onChange={that.TemplateUpload.bind(that)}/></span> :
-                      <span className="ml ml-upload" onClick={that.PopOverAction.bind(that, TemplateDetails)}></span>}
+                    {that.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit ? <span className="ml ml-upload"><input type="file" className="upload_file upload" name="image_source" id="template_upload" onChange={that.TemplateUpload.bind(that)}/></span> : <span className="ml ml-upload" onClick={that.PopOverAction.bind(that, TemplateDetails)}></span>}
                   </a>
+                </div>
+              </div>
+                <div className="pull-right block_action">
+                  <span className="single_icon ml ml-information information"></span>
                 </div>
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
                 {this.state.isLibrary ? this.popTemplates() : this.templates()}
+                <p className="show-information" style={{'display':'none'}}>Document Format : Mb <br />Document Size : 10 MB</p>
               </div>
             </div>
           </div>
           <div className="col-lg-6 col-md-6 col-sm-12 library-wrap nopadding-right">
-            <div className="panel panel-default">
+            <div className="panel panel-default uploaded_files">
               <div className="panel-heading">
                 Documents
+                <div className="pull-right block_action">
                 <div className="fileUpload upload_file_mask pull-right" id="create_document">
                   <a href="javascript:void(0);">
                     {that.state.explore ? "" : this.state.isLibrary || this.state.isAdminEdit ?
@@ -1433,8 +1453,13 @@ import SharedLibrary from './sharedLibrary'
                   </a>
                 </div>
               </div>
+                <div className="pull-right block_action">
+                  <span className="single_icon ml ml-information information"></span>
+                </div>
+                </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
                 {this.state.isLibrary ? this.popDocuments() : this.documents()}
+                <p className="show-information" style={{'display':'none'}}>Document Format : docs, docx, xls, xslx, ppt <br />Document Size : 10 MB</p>
               </div>
             </div>
           </div>

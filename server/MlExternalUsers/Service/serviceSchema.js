@@ -27,6 +27,7 @@ let service=`
      discountValue: Float
      isTaxInclusive: Boolean
      isPromoCodeApplicable: Boolean
+     isApprovalRequiredFromSeeker: Boolean
   }
   type TermsAndCondition {
      isCancelable: Boolean
@@ -209,6 +210,7 @@ let service=`
        discountValue: Float
        isTaxInclusive: Boolean
        isPromoCodeApplicable: Boolean
+       isApprovalRequiredFromSeeker: Boolean
    }
 
    input termsAndCondition {

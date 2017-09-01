@@ -25,21 +25,22 @@ export default class MlAppCompanyListView extends Component {
     let that = this
     const data=this.props.data||[];
     const list=  data.map((company, idx) =>
-      <div className="col-md-4 col-sm-4 col-lg-3" key={idx}>
+      <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={idx}>
         <a href='' onClick={that.viewDetails.bind(that, company.portfolioDetailsId)}>
-          <div className="funders_list_block">
+          <div className="ideators_list_block">
             {/*<div className="premium"><span>Starter</span></div>*/}
-            <h3>{company.aboutUs&&company.aboutUs.companyDescription?company.aboutUs.companyDescription:""}</h3>
+            {/*<h3>{company.aboutUs&&company.aboutUs.companyDescription?company.aboutUs.companyDescription:""}</h3>*/}
+            <h3>{company.firstName}</h3>
             <div className="list_icon"><span className="ml ml-companies"></span></div>
             <div className="block_footer">
-              <span>{company.chapterName}</span>
+              <span>{company.chapterName}-{company.communityType}</span>
             </div>
           </div>
         </a>
       </div>
     );
 
-    return (<div className="row funders_list">
+    return (<div className="row ideators_list">
       <div className="col-md-12"><h2>Companies</h2></div>
       {list}</div>);
 

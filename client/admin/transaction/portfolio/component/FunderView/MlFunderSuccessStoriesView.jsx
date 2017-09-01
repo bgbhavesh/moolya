@@ -15,7 +15,8 @@ export default class MlFunderSuccessStoriesView extends React.Component {
   }
 
   componentWillMount() {
-    this.fetchPortfolioDetails();
+    const resp = this.fetchPortfolioDetails();
+    return resp
   }
 
   async fetchPortfolioDetails() {
@@ -27,6 +28,7 @@ export default class MlFunderSuccessStoriesView extends React.Component {
   }
 
   render() {
+    const showLoader = this.state.loading;
     let funderSuccessList = this.state.funderSuccessList || [];
     if(_.isEmpty(funderSuccessList)) {
       return (

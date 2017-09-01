@@ -10,7 +10,7 @@ var PieTooltip = require('react-d3-tooltip').PieTooltip;
 import MlBarChart from '../../../../../../commons/components/d3/MlBarChart'
 import {fetchInstitutionChartsDetailsActionHandler} from '../../../actions/findPortfolioInstitutionDetails'
 import MlChartSubTabs from '../../../../../../commons/charts/MlChartsSubTabs'
-import MlInstitutionChart from '../edit/MlInstitutionChart'
+import MlInstitutionChart from '../edit/charts/MlInstitutionChart'
 
 export default class MlInstitutionEditChart extends React.Component {
   constructor(props, context){

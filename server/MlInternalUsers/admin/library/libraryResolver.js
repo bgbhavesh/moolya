@@ -169,7 +169,8 @@ MlResolver.MlQueryResolver['fetchLibrary'] = (obj, args, context, info) => {
 
 MlResolver.MlQueryResolver['fetchLibraryBasedOnPortfolioId'] = (obj, args, context, info) => {
   let portfolio = mlDBController.findOne('MlPortfolioDetails', {_id: args.portfolioId}, context)
-  if(portfolio.userId === context.userId) {
+  let userId = portfolio && portfolio.userId  ? portfolio.userId : ""
+  if(userId === context.userId) {
     let libraryDetails = mlDBController.find('MlLibrary', {'portfolioReference.portfolioId': args.portfolioId,userId:context.userId, isActive: true}, context).fetch();
     if(libraryDetails) {
       libraryDetails.map(function(data){

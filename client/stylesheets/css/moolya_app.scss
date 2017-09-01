@@ -552,8 +552,8 @@ background:$mlGray; position: absolute; top: 0; z-index: 100; width: 100%;
 .ideators_list .ideators_list_block .c_image{background: #B9C5CC; border-radius: 50%; color: #273545; text-shadow: 0px 1px 1px #EEE;font-size: 70px;display: inline-block;border: 2px solid #161E27;width:74px;height:74px;margin-top: 22px;}
 .ideators_list .ideators_list_block p{color: #fff;text-overflow: ellipsis; overflow: hidden; white-space: nowrap; width: 80%; margin: 0 auto;font-size: 12px;}
 .ideators_list .ideators_list_block .block_footer{height: 42px;}
-.ideators_list .ideators_list_block .block_footer span{font-size: 14px;}
-.block_footer{position: absolute; text-align: center; width: 100%; bottom: 0; background: #212d3c; padding: 10px 0px; border-top: #34404e solid 1px;border-radius: 0px 0px 10px 10px;}
+.ideators_list .ideators_list_block .block_footer span{font-size: 14px;text-overflow: ellipsis;overflow: hidden; white-space: nowrap; width: 80%; margin: 0 auto;display: inline-block;margin-top: -6px;}
+.block_footer{position: absolute; text-align: center; width: 100%; bottom: 0; background: #212d3c; padding: 10px 0px; border-top: #34404e solid 1px;border-radius: 0px 0px 10px 10px; }
 .block_footer span{color: #fff; text-shadow: none; font-weight: normal; font-size: 21px; padding: 5px 0px;}
 .ideators_list a:hover{text-decoration: none;}
 .ideators_list a:focus{text-decoration: none;}

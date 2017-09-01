@@ -84,6 +84,31 @@ export default class MlAppAddOfficeMember extends React.Component{
     if(this.refs.phoneNumber.value) {
       data['mobileNumber'] = this.refs.phoneNumber.value;
     }
+
+    if(!data.firstName){
+      toastr.error("First name is required");
+      return
+    }
+    if(!data.lastName){
+      toastr.error("Last name is required");
+      return
+    }
+    if(!data.emailId){
+      toastr.error("EmailId is required");
+      return
+    }
+
+    if( !data.mobileNumber ){
+      toastr.error("Mobile number is required");
+      return
+    }
+
+    if( this.state.selected !== 'principle' && !data.communityType ){
+      toastr.error("Community Type is required");
+      return
+    }
+
+
     let id = FlowRouter.getParam('officeId');
     let response = await createOfficeMembers(id, data);
     if(response.success){

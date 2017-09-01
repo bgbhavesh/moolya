@@ -259,6 +259,9 @@ class MlEditCommunityFormComponent extends React.Component {
                                   queryType={"graphql"} query={subChapterquery} queryOptions={subChapterOption}
                                   isDynamic={true} id={'query'} onSelect={this.optionsBySelectSubChapters.bind(this)}/>
                   </div>
+                  <br className="clearfix"/> <br className="clearfix"/><br className="clearfix"/><br className="clearfix"/>
+                  <br className="clearfix"/><br className="clearfix"/><br className="clearfix"/><br className="clearfix"/>
+                  <br className="clearfix"/><br className="clearfix"/>
                 </form>
               </div>
             </div>

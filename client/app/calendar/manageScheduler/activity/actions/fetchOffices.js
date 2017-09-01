@@ -11,18 +11,18 @@
 import gql from 'graphql-tag'
 import {appClient} from '../../../../core/appConnection';
 
-export async function fetchOfficeActionHandler (Details) {
+export async function fetchOfficeActionHandler (profileId) {
   const result = await appClient.query({
     query: gql`
-    query{
-      fetchOffice {
+    query($profileId: String ) {
+      fetchOffice( profileId: $profileId ) {
         _id
         officeName
         branchType
       }
     }`,
     variables: {
-      Details
+      profileId: profileId
     },
     forceFetch: true
   });

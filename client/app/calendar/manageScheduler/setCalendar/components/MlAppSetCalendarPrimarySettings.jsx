@@ -97,6 +97,7 @@ export default class MlAppSetCalendarPrimarySettings extends React.Component{
     let response = await updateCalendarSettingActionHandler(profileId, dataToInsert);
     if(response.success){
       toastr.success(response.result);
+      this.props.fetchCalendarSettings();
     } else {
       toastr.error(response.result);
     }

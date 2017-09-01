@@ -126,10 +126,10 @@ let calendarSettingSlot=`
   
   type Mutation {
      updateMyCalendarSetting(profileId:String,calendarSetting:calendarSetting):response
-     updateMyCalendarWorkingDays(workingDays:[calendarSettingWorkingDays]):response
-     updateMyCalendarWorkingDay(workingDay:calendarSettingWorkingDays):response
-     updateMyCalendarVacation(vacation:calendarSettingVacation):response
-     updateCalendarVacationByVacationId(vacation: calendarSettingVacation, vacationId: String): response
+     updateMyCalendarWorkingDays(profileId:String, workingDays:[calendarSettingWorkingDays]):response
+     updateMyCalendarWorkingDay(profileId:String, workingDay:calendarSettingWorkingDays):response
+     updateMyCalendarVacation(profileId:String, vacation:calendarSettingVacation):response
+     updateCalendarVacationByVacationId(profileId:String, vacation: calendarSettingVacation, vacationId: String): response
   }
 `;
 

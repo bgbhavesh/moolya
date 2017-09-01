@@ -15,8 +15,6 @@ export default class MlInstitutionCSRReports extends React.Component{
 
   async fetchInstitutionPortfolioData(){
     const resp = await fetchInstitutionPortfolioReports(this.props.portfolioDetailsId,this.props.client)
-    console.log("///////////////////////////////////////");
-    console.log(resp);
     this.setState({
       uploadedData: resp
     });

@@ -76,8 +76,6 @@ let modules = [
     'notificationtemplate'
   ];
 
-// Meteor.startup(function () {
-
 for (i = 0; i < modules.length; i++) {
   let module = MlModules.findOne({name: modules[i]});
   if (!module) {
@@ -85,4 +83,3 @@ for (i = 0; i < modules.length; i++) {
     MlModules.insert(module);
   }
 }
-// })

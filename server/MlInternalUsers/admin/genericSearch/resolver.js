@@ -1075,7 +1075,8 @@ MlResolver.MlQueryResolver['SearchQuery'] = (obj, args, context, info) =>{
         switch (activity){
           case 'connection':
             let status = [ "Pending", "Accepted", "Declined","Blocked"];
-            let data = mlDBController.findOne('MlConnections', activityDocId);
+            var data = mlDBController.findOne('MlConnections', activityDocId);
+            data = data ? data : {};
             doc.transactionId = data && data.transactionId ? data.transactionId : doc.transactionId;
             doc.status = status[data.status];
             break;

@@ -12,8 +12,6 @@ class ConversationsRepo{
   {
     var authRequest = {userId:context.userId}
     console.log('login attempt server')
-    // var checkData = await this.testApi()
-    // console.log('............', checkData)
     var ret = await this.sendRequest('/login', authRequest, 'post');
     cb(ret);
   }
@@ -39,6 +37,21 @@ class ConversationsRepo{
       email:moolyaUser.userName,
     }
     var ret = await this.sendRequest('/createUser', user, 'post');
+    if(ret.success){
+      cb(ret)
+    }
+    return ret;
+  }
+
+  async createDirectRoom(fromUserId, toUserId){
+    var room = {
+      type : 'D',
+      fromUserId:fromUserId,
+      toUserId:toUserId,
+      isActive:true,
+      isBlock:false
+    }
+    var ret = await this.sendRequest('/createRoom', room, 'post')
     if(ret.success){
       cb(ret)
     }
@@ -71,6 +84,7 @@ class ConversationsRepo{
     return ret;
   }
 
+  // Send Http Request to conversations endpoint
   async sendRequest(endPoint, payload, method, isApplication){
     var options = {
       url: Meteor.settings.private.conversationsBaseURL+endPoint,
@@ -102,25 +116,6 @@ class ConversationsRepo{
       })
     })
     console.log('final result', result)
-    return result;
-  }
-
-  async testApi(){
-    var options = {
-      url: "https://maps.googleapis.com/maps/api/place/details/json?placeid=ChIJKxSwWSZgAUgR0tWM0zAkZBc&key=AIzaSyC53qhhXAmPOsxc34WManoorp7SVN_Qezo"
-    }
-
-    const result = await new Promise(function (resolve, reject) {
-      request(options, function (err, res, body) {
-        if(err){
-          reject(err)
-        }
-        else{
-          resolve(body)
-        }
-      })
-    })
-    console.log(result)
     return result;
   }
 }

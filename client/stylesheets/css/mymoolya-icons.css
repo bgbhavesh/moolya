@@ -14,6 +14,45 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.my-ml-alert_Warning:before {
+  content: "\e9d7";
+}
+.my-ml-audio:before {
+  content: "\e9d8";
+}
+.my-ml-chat:before {
+  content: "\e9d9";
+}
+.my-ml-message:before {
+  content: "\e9da";
+}
+.my-ml-pause:before {
+  content: "\e9db";
+}
+.my-ml-phone-call:before {
+  content: "\e9dc";
+}
+.my-ml-play-button:before {
+  content: "\e9dd";
+}
+.my-ml-record:before {
+  content: "\e9de";
+}
+.my-ml-services:before {
+  content: "\e9df";
+}
+.my-ml-stop:before {
+  content: "\e9e0";
+}
+.my-ml-timeline:before {
+  content: "\e9e1";
+}
+.my-ml-video-Chat:before {
+  content: "\e9e2";
+}
+.my-ml-video-camera:before {
+  content: "\e9e3";
+}
 .my-ml-shortlist:before {
   content: "\e9cb";
 }

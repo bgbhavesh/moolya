@@ -3,22 +3,6 @@
  */
 import gql from 'graphql-tag'
 
-
-// export async function loginHandler(moolyaClient) {
-//   const result = await moolyaClient.query({
-//     query: gql`
-//         fetchConversationAuthToken{
-//             success,
-//             code,
-//             result
-//         }
-//     `
-//   })
-//
-//   const ret = result.data.fetchConversationAuthToken;
-//   return ret;
-// }
-
 export async function loginHandler(endPoint) {
   const result = await new Promise(function (resolve, reject) {
     // Make ajax call

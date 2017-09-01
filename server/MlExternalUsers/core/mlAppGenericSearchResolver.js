@@ -50,7 +50,7 @@ MlResolver.MlUnionResolver['AppGenericSearchUnion'] =  {
 
 MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
 
-  let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('SEARCH', context);
+  let mlSubChapterAccessControl = new MlSubChapterAccessControl().getAccessControl('SEARCH', context);
   mlSubChapterAccessControl = mlSubChapterAccessControl ? mlSubChapterAccessControl : {};
   mlSubChapterAccessControl.subChapters = mlSubChapterAccessControl.subChapters ? mlSubChapterAccessControl.subChapters : [];
   let subChapterQuery = {};

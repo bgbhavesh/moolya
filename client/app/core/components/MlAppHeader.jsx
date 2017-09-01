@@ -6,7 +6,7 @@ import BugReportWrapper from '../../commons/components/MlAppBugReportWrapper';
 import MlAppNotificationsConfig from '../../commons/components/notifications/MlAppNotificationsConfig'
 var FontAwesome = require('react-fontawesome');
 import { createContainer } from 'meteor/react-meteor-data';
-
+import mlConversationUtils from '../../../commons/conversations/utils/mlconversationUtils'
 
 class MlAppProfileHeader extends Component {
   constructor(props, context) {
@@ -61,6 +61,7 @@ class MlAppProfileHeader extends Component {
 
   /**user logout function*/
   logoutUser() {
+    mlConversationUtils.disconnect();
     logout();
   }
 

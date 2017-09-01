@@ -9,6 +9,7 @@ import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/m
 import MlAlertNotification from '../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 import MlSubChapterAccessControl from './../../../mlAuthorization/mlSubChapterAccessControl';
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
+import mlConversationsRepo from '../../../commons/Conversations/mlConversationsRepo'
 /*STATUS
  0 - Pending
  1 - Accepted
@@ -185,6 +186,9 @@ MlResolver.MlMutationResolver['acceptConnection'] = (obj,args, context, info) =>
       {$set:true},context);
 
     if(result===0){ return new MlRespPayload().errorPayload('Failed to accept the connection request', 400);}
+
+    // Creating direct room between the users
+    mlConversationsRepo.createDirectRoom(connection.requestedFrom, context.userId)
     return new MlRespPayload().successPayload('Connection Request Accepted', 200);
   } catch (e) {
     let code = 400;

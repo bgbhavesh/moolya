@@ -28,7 +28,7 @@ class MlSubChapterAccessControl {
    */
   static getAccessControl(permission, context, requestSubChapterId, internalCrossAccess) {
     /**set the user context*/
-    var context = MlSubChapterAccessControl.setUserContext(context, requestSubChapterId);
+    var context = new MlSubChapterAccessControl().setUserContext(context, requestSubChapterId);
     /**set externalUserAccess */
     // context.internalCrossAccess=internalCrossAccess?true:false;
     /**fetch context details isInternal,isMoolya*/

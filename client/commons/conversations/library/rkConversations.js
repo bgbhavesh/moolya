@@ -18,10 +18,25 @@ class Conversations{
     }
 
     connect(url){
-        var token = this.utils.getToken();
-        if(token){
-          this.socket = this.socketUtils.connect(url, this.utils.getToken())
+        var token = this.utils.getAuthToken();
+        if(token && !this.socket){
+          this.socket = this.socketUtils.connect(url, token)
         }
+    }
+
+    disconnect(){
+      this.utils.removeToken();
+      this.socketUtils.disconnect(this.socket);
+    }
+
+    getUserDetails(cb){
+      var token = this.utils.getAuthToken();
+      if(token){
+        this.socketUtils.emitMessage(this.socket, 'user_details', {}, function (response) {
+          if(cb)
+            cb(response)
+        })
+      }
     }
 }
 
@@ -29,12 +44,25 @@ class __Utils{
     constructor(){
     }
 
-    setToken(token){
+    setAuthToken(token){
         localStorage.setItem('auth_token', token)
     }
 
-    getToken(){
+    setToken(key, token){
+      localStorage.setItem(key, token)
+    }
+
+    getAuthToken(){
         return localStorage.getItem('auth_token')
+    }
+
+    getToken(key){
+      return localStorage.getItem(key)
+    }
+
+
+    removeToken(){
+      localStorage.clear();
     }
 }
 
@@ -63,6 +91,13 @@ class __SocketUtils{
           if(respCallback)
             respCallback(eventName, response)
         })
+      }
+    }
+
+    disconnect(socket){
+      if(socket) {
+        socket.disconnect();
+        socket = null;
       }
     }
 

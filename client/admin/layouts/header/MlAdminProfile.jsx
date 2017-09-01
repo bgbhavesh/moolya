@@ -54,8 +54,6 @@ class  MlAdminProfileApp extends Component {
 
   logoutUser(){
     logout();
-
-
   }
   handleClick(){
     const userDefaultObj = getAdminUserContext();

@@ -10,7 +10,8 @@ import MlLoader from '../../../../../commons/components/loader/loader'
 export default class MlIdeatorIntellectualPlanningAndTrademark extends Component{
   constructor(props, context) {
     super(props);
-    this.state =  {loading:true,data:{}, privateKey:{}};
+    this.state =  {loading:true,data:{}, privateKey:{},
+      privateValues:[]};
     this.fetchPortfolioDetails.bind(this);
     return this
   }
@@ -30,22 +31,33 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends Component
   }
 
   async fetchPortfolioDetails() {
-    let that = this;
-    let portfoliodetailsId=that.props.portfolioDetailsId;
-    let empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.intellectualPlanning)
-    if(empty){
-      const response = await findIdeatorIntellectualPlanningTrademarkActionHandler(portfoliodetailsId);
-      if (response) {
+    let portfoliodetailsId=this.props.portfolioDetailsId;
+    const response = await findIdeatorIntellectualPlanningTrademarkActionHandler(portfoliodetailsId);
+    let empty = _.isEmpty(this.context.ideatorPortfolio && this.context.ideatorPortfolio.intellectualPlanning)
+    if(empty && response){
         this.setState({loading: false, data: response});
-      }
-
       _.each(response.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
     }else{
-      console.log('newPropsPrivatefields',this.context.privateValues)
-      this.setState({loading: false, data: that.context.ideatorPortfolio.intellectualPlanning});
+      this.setState({loading: false, data: this.context.ideatorPortfolio.intellectualPlanning, privateValues: response.privateFields}, () => {
+        this.lockPrivateKeys()
+      });
     }
+  }
+
+  /**
+   * UI creating lock function
+   * */
+  lockPrivateKeys() {
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName})
+    var finalKeys = _.unionBy(filterPrivateKeys, this.state.privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   onInputChange(e){
@@ -130,5 +142,5 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends Component
 };
 MlIdeatorIntellectualPlanningAndTrademark.contextTypes = {
   ideatorPortfolio: PropTypes.object,
-  privateValues: PropTypes.array,
+  portfolioKeys: PropTypes.object,
 };

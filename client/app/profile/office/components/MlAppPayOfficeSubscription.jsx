@@ -49,43 +49,45 @@ export default class MlAppPayOfficeSubscription extends Component {
     }
   }
 
-  payClick() {
+  async payClick() {
 
-    console.log(this.state);
-
-    // let transactionId = this.state && this.state.transaction && this.state.transaction.transactionId ? this.state.transaction.transactionId : '';
-    // if(transactionId){
-    //   let resposne = getOfficeTransactionPaymentLinkActionHandler(transactionId);
-    //   console.log(resposne);
-    // } else {
-    //   // TransactionId is missing
-    //   toastr.error('Unable to proceed payment.');
-    // }
-
-
-    let officeAmount = this.state.transaction && this.state.transaction.orderSubscriptionDetails && this.state.transaction.orderSubscriptionDetails.cost ? this.state.transaction.orderSubscriptionDetails.cost : "00"
-    var data = {
-      officeId: this.props.config,
-      amount: officeAmount,
-      transactionId: this.state.transaction && this.state.transaction.transactionId
-    }
-    var header = {apiKey: "741432fd-8c10-404b-b65c-a4c4e9928d32"};
-    $.ajax({
-      type: 'POST',
-      dataType: 'json',
-      url: Meteor.absoluteUrl('moolyaPaymentStatus'),
-      data: JSON.stringify(data),
-      headers: header,
-      contentType: "application/json; charset=utf-8",
-      success: function (response) {
-        if (response.success) {
-          toastr.success(response.result);
-          FlowRouter.go("/app/myOffice")
-        } else {
-          toastr.error(response.result);
-        }
+    let transactionId = this.state && this.state.transaction && this.state.transaction.transactionId ? this.state.transaction.transactionId : '';
+    if(transactionId){
+      let resposne = await getOfficeTransactionPaymentLinkActionHandler(transactionId);
+      if(resposne.success){
+        window.location = resposne.result;
+      } else {
+        toastr.error(resposne.result);
       }
-    });
+    } else {
+      // TransactionId is missing
+      toastr.error('Unable to proceed payment.');
+    }
+
+
+    // let officeAmount = this.state.transaction && this.state.transaction.orderSubscriptionDetails && this.state.transaction.orderSubscriptionDetails.cost ? this.state.transaction.orderSubscriptionDetails.cost : "00"
+    // var data = {
+    //   officeId: this.props.config,
+    //   amount: officeAmount,
+    //   transactionId: this.state.transaction && this.state.transaction.transactionId
+    // }
+    // var header = {apiKey: "741432fd-8c10-404b-b65c-a4c4e9928d32"};
+    // $.ajax({
+    //   type: 'POST',
+    //   dataType: 'json',
+    //   url: Meteor.absoluteUrl('moolyaPaymentStatus'),
+    //   data: JSON.stringify(data),
+    //   headers: header,
+    //   contentType: "application/json; charset=utf-8",
+    //   success: function (response) {
+    //     if (response.success) {
+    //       toastr.success(response.result);
+    //       FlowRouter.go("/app/myOffice")
+    //     } else {
+    //       toastr.error(response.result);
+    //     }
+    //   }
+    // });
   }
 
   render() {

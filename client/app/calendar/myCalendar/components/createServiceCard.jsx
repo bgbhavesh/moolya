@@ -52,7 +52,8 @@ class MlAppServiceManageSchedule extends Component {
       attachments: [],
       task:{},
       selectedTab:"",
-      selectedSessionId: ''
+      selectedSessionId: '',
+      extraUsers:[]
     };
     this.onChangeSteps = this.onChangeSteps.bind(this);
     this.selectService.bind(this);
@@ -211,8 +212,18 @@ class MlAppServiceManageSchedule extends Component {
     this.setState({selectedSessionId: sessionId});
   }
 
+  addExtraUsers(user){
+    let extraUsers = this.state.extraUsers ? this.state.extraUsers : [] ;
+    extraUsers.push(user);
+    this.setState({
+      extraUsers: extraUsers
+    });
+  }
+
   async bookServiceCard() {
-    const resp = await bookUserServiceCardAppointmentActionHandler(this.state.response);
+    let data = this.state.response;
+    data.extraUsers = this.state.extraUsers;
+    const resp = await bookUserServiceCardAppointmentActionHandler(data);
     if (resp.code === 200) {
       toastr.success(resp.result);
       this.redirectWithCalendar('calendar');
@@ -294,6 +305,7 @@ class MlAppServiceManageSchedule extends Component {
           saveAction={this.saveAction.bind(this)}
           activeComponent={this.activeComponent.bind(this)}
           redirectWithCalendar={this.redirectWithCalendar}
+          addExtraUsers={this.addExtraUsers.bind(this)}
         />,
         icon: <span className="ml fa fa-users"></span>
       },

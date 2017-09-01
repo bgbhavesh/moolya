@@ -116,8 +116,16 @@ class MlAppServiceSelectTask extends Component{
     activities[activityIdx].teams[teamIdx].users[userIdx].isAdded = true;
     let userId = activities[activityIdx].teams[teamIdx].users[userIdx].userId;
     let profileId = activities[activityIdx].teams[teamIdx].users[userIdx].profileId;
+    console.log(activities);
+    let extraUser = activities[activityIdx].teams[teamIdx].users[userIdx];
+    extraUser = {
+      userId: extraUser.userId,
+      profileId: extraUser.profileId
+    };
+    this.props.addExtraUsers(extraUser);
     this.setState({
-      activities: activities
+      activities: activities,
+      extraUsers: extraUsers,
     });
     // this.props.saveDetails('user', {userId: userId, profileId: profileId});
   }

@@ -305,7 +305,7 @@ export default class FunderAboutView extends React.Component{
             </ScrollArea>
           </div>
         </div>:""}
-        </div>:<MlAppMyCalendar orderId={this.state.orderId} calendarDetails={this.state.calendarDetails} serviceDetails={this.props.serviceDetails}/>
+        </div>:<MlAppMyCalendar componentToView={this.props.componentToView} orderId={this.state.orderId} calendarDetails={this.state.calendarDetails} serviceDetails={this.props.serviceDetails}/>
 
     )
   }

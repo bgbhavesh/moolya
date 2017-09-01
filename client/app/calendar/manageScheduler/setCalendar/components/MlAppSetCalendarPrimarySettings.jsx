@@ -122,13 +122,13 @@ export default class MlAppSetCalendarPrimarySettings extends React.Component{
               <input type="number" onChange={(evt)=>this.updateAppointmentCountPerSlots(evt)} value={(this.state.appointmentCountPerSlots ? this.state.appointmentCountPerSlots : '')} className="form-control inline_input"/>
             </label>
           </div>
-          <div className="form-group">
-            <label>
-              <FontAwesome name="clock-o"/>
-              Time slots per break-up time: &nbsp;
-              <input type="number" onChange={(evt)=>this.updateSlotBreakTime(evt)} value={(this.state.slotBreakTime ? this.state.slotBreakTime : '')} className="form-control inline_input"/>
-            </label>
-          </div>
+          {/*<div className="form-group">*/}
+            {/*<label>*/}
+              {/*<FontAwesome name="clock-o"/>*/}
+              {/*Time slots per break-up time: &nbsp;*/}
+              {/*<input type="number" onChange={(evt)=>this.updateSlotBreakTime(evt)} value={(this.state.slotBreakTime ? this.state.slotBreakTime : '')} className="form-control inline_input"/>*/}
+            {/*</label>*/}
+          {/*</div>*/}
           <div className="form-group switch_wrap switch_names inline_switch small_sw">
             <label style={{'marginLeft':'0px'}}><FontAwesome name="clock-o"/> Overlapping in schedule</label>
             <span className="state_label">Yes</span><label className="switch nocolor-switch">

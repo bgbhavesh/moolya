@@ -124,10 +124,10 @@ export default class  SharedLibrary extends React.Component {
     const Images = imageData.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
-          <FontAwesome  className="clock-o"/>
-          <a href="" data-toggle="modal" data-target=".imagepop"
-             onClick={that.random.bind(that, show.file.url, id)}>
-            <img src={show.file.url} /></a>
+          {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
+            <a href="" data-toggle="modal" data-target=".imagepop"
+                                                 onClick={that.random.bind(that, show.file.url, id)}>
+              <img src={show.file.url} /></a>
           <div id="images" className="title">{show.file.fileName}</div>
 
         </div>
@@ -148,6 +148,7 @@ export default class  SharedLibrary extends React.Component {
     const Templates = templateData.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
+          {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
           <a href="" data-toggle="modal" data-target=".templatepop"
              onClick={that.randomTemplate.bind(that, show.file.url, id)}>
             <img src={show.file.url} /></a>
@@ -171,6 +172,7 @@ export default class  SharedLibrary extends React.Component {
     const videos = videodata.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
+          {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
           <a href="" data-toggle="modal" data-target=".videopop"
              onClick={that.randomVideo.bind(that, show.file.url, id)}>
             <video width="120" height="100" controls>
@@ -196,6 +198,7 @@ export default class  SharedLibrary extends React.Component {
     const Documents = documentData.map(function (show, id) {
       return (
         <div className="thumbnail" key={id}>
+          {show.isDownloadable ? <a href={show.file.url} download={show.file.fileName}><FontAwesome  name='download'/></a>:<div></div>}
           <a href="" data-toggle="modal" data-target=".documentpop"
              onClick={that.randomDocument.bind(that, show.file.url, id)}>
             <img src="/images/doc.png"/></a>

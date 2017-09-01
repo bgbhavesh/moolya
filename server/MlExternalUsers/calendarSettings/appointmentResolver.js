@@ -88,7 +88,7 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
   let orderId = args.userServiceCardAppointmentInfo.orderId;
   let sessionId = args.userServiceCardAppointmentInfo.sessionId;
   let SCOrderDetails = mlDBController.findOne('MlScOrder', {orderId: orderId}, context);
-
+  let extraUsers = args.userServiceCardAppointmentInfo.extraUsers ? args.userServiceCardAppointmentInfo.extraUsers : [];
   if(!SCOrderDetails) {
     let code = 400;
     let response = new MlRespPayload().errorPayload("Order is not valid", code);
@@ -158,7 +158,7 @@ MlResolver.MlMutationResolver["bookUserServiceCardAppointment"] = (obj, args, co
         attendee = attendee.concat(team.users);
       });
       return attendee;
-    }, []);
+    }, extraUsers);
 
     let userId = context.userId;
     let profileId = new MlUserContext().userProfileDetails(userId).profileId;
@@ -620,6 +620,7 @@ MlResolver.MlMutationResolver["bookTaskInternalAppointment"] = (obj, args, conte
   let year = args.taskInternalAppointmentInfo.year; //date.getFullYear();
   let hours = args.taskInternalAppointmentInfo.hours; //9;
   let minutes = args.taskInternalAppointmentInfo.minutes; // 0;
+  let extraUsers = args.taskInternalAppointmentInfo.extraUsers ? args.taskInternalAppointmentInfo.extraUsers : [];
 
   let startDate = new Date();
   startDate.setDate(day);
@@ -655,7 +656,7 @@ MlResolver.MlMutationResolver["bookTaskInternalAppointment"] = (obj, args, conte
       attendee = attendee.concat(team.users);
     });
     return attendee;
-  }, []);
+  }, extraUsers);
 
   let userId = context.userId;
   let profileId =  new MlUserContext().userProfileDetails(userId).profileId;

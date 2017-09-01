@@ -6,12 +6,17 @@ import MlLoader from '../../../commons/components/loader/loader'
 import passwordSAS_validate from '../../../../lib/common/validations/passwordSASValidator';
 import {resetPasswordActionHandler} from "../../../admin/settings/backendUsers/actions/resetPasswordAction";
 import {passwordVerification} from '../../../admin/profile/actions/addProfilePicAction'
+import {updateDataEntry} from '../actions/updateProfile';
 import {mlFieldValidations} from '../../../commons/validations/mlfieldValidation';
 import {fetchUserDetails} from '../actions/findAddressBookAction'
+import MlAppActionComponent from "../../commons/components/MlAppActionComponent";
 import moment from "moment";
+import Datetime from "react-datetime";
+import formHandler from "../../../commons/containers/MlFormHandler";
+import MlAccordion from "../../commons/components/MlAccordion";
 
 
-export default class MlAppMyProfile extends Component {
+class MlAppMyProfile extends Component {
   constructor(props) {
     super(props)
     this.state = {loading: true,
@@ -26,7 +31,8 @@ export default class MlAppMyProfile extends Component {
     };
     this.checkExistingPassword.bind(this);
     this.passwordCheck.bind(this);
-    this.findUserDetails.bind(this)
+    this.findUserDetails.bind(this);
+    this.onfoundationDateSelection.bind(this);
   }
   componentDidUpdate() {
     $(function () {
@@ -79,6 +85,36 @@ export default class MlAppMyProfile extends Component {
     this.passwordCheck(digest);
   }
 
+  async saveTaskDetails() {
+    let updatedData = {
+      "profileImage": this.state.profileImage,
+      "firstName": this.state.firstName,
+      "middleName": this.state.middleName,
+      "lastName":  this.state.lastName,
+      "userName": this.state.displayName,
+      "genderType":this.state.gender,
+      "dateOfBirth": this.state.dateOfBirth
+    }
+    console.log('The updated data is: ', updatedData);
+    // let val = await updateDataEntry(updatedData);
+  }
+
+  async handleError(response) {
+    console.log('error')
+    console.log(response)
+  };
+
+  async handleSuccess(response) {
+    console.log(response)
+    if (response && response.success) {
+      if (this.state.saveType == 'taskCreate')
+        FlowRouter.setQueryParams({id: response.result})
+      toastr.success("Saved Successfully move to next step");
+    } else if (response && !response.success) {
+      toastr.error(response.result);
+    }
+  }
+
   async resetPassword() {
     let ret = mlFieldValidations(this.refs)
     if (ret) {
@@ -116,6 +152,23 @@ export default class MlAppMyProfile extends Component {
     }
   }
 
+  onfoundationDateSelection(event) {
+    var ageDifMs = Date.now() - event._d.getTime();
+    var ageDate = new Date(ageDifMs);
+    if (event._d) {
+      let value = moment(event._d).format(Meteor.settings.public.dateFormat);
+      this.setState({loading: false, dateOfBirth: value});
+    }
+    if((Math.abs(ageDate.getUTCFullYear() - 1970)>=18)){
+    }
+    else{
+      toastr.error("age limit exceeded")
+    }
+  }
+
+  openDatePickerDateOfBirth() {
+    $('#date-of-birth').toggleClass('rdtOpen')
+  }
 
   onCheckPassword() {
     let password = this.refs.password.value;
@@ -184,7 +237,38 @@ export default class MlAppMyProfile extends Component {
   }
 
   render(){
+    const _this = this;
   const showLoader=this.state.loading;
+  var yesterday = Datetime.moment().subtract(0,'day');
+  var valid = function( current ){
+    return current.isBefore( yesterday );
+  };
+  let appActionConfig = [
+    {
+      showAction: true,
+      actionName: 'save',
+      handler: async(event) => _this.props.handler(this.saveTaskDetails.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+    },
+    {
+      showAction: true,
+      actionName: 'exit',
+      handler: async(event) => {
+        FlowRouter.go('/app/dashboard')
+      }
+    }
+  ];
+  export const genericPortfolioAccordionConfig = {
+    id: 'portfolioAccordion',
+    panelItems: [
+      {
+        'title': 'Actions',
+        isText: false,
+        style: {'background': '#ef4647'},
+        contentComponent: <MlAppActionComponent
+          resourceDetails={{resourceId: 'sacsdvdsv', resourceType: 'task'}}   //resource id need to be given
+          actionOptions={appActionConfig}/>
+      }]
+  };
   return (
     <div className="admin_main_wrap">
       {showLoader === true ? (<MlLoader/>) : (
@@ -253,12 +337,18 @@ export default class MlAppMyProfile extends Component {
                       </div>
                     </div>
                     <br className="brclear"/>
-                    <div className="form-group">
-                      <input type="text" ref="dob" placeholder="Date Of Birth" className="form-control float-label"
-                             defaultValue={this.state.dateOfBirth} readOnly="readOnly"/>
-                      <FontAwesome name='calendar' className="password_icon"/>
+                    {/*<div className="form-group">*/}
+                      {/*<input type="text" ref="dob" placeholder="Date Of Birth" className="form-control float-label"*/}
+                             {/*defaultValue={this.state.dateOfBirth}/>*/}
+                      {/*<FontAwesome name='calendar' className="password_icon"/>*/}
 
+                    {/*</div>*/}
+
+                    <div className="form-group" id="date-of-birth">
+                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}  closeOnSelect={true} value={this.state.dateOfBirth?moment(this.state.dateOfBirth, 'DD-MM-YYYY HH:mm:ss').format('DD-MM-YYYY'): null} onChange={this.onfoundationDateSelection.bind(this)} isValidDate={ valid } />
+                      <FontAwesome name="calendar" className="password_icon" onClick={this.openDatePickerDateOfBirth.bind(this)}/>
                     </div>
+
 
                     {this.state.showPasswordFields ?
                       <div className="form-group">
@@ -286,8 +376,11 @@ export default class MlAppMyProfile extends Component {
 
             </ScrollArea>
           </div>
+          <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
         </div>)}
     </div>
   )
 }
 }
+
+export default MlAppMyProfile = formHandler()(MlAppMyProfile);

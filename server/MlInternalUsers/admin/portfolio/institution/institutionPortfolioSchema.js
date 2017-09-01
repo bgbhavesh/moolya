@@ -213,6 +213,9 @@ let institutePortfolioSchema = `
       sectorsAndServices  : sectorsAndServicesOutput
       listOfIncubators    : listOfIncubatorsOutput
       reports             : dataOutput
+      communityType   : String
+      firstName         : String
+      lastName : String
     }
     
     input institutionIncubators{

@@ -42,6 +42,7 @@ export default class MlAppFunderCalendarSlots extends Component {
     const resp = await bookUserServiceCardAppointmentActionHandler(userServiceCardAppointmentInfo)
     if(resp && resp.success){
       toastr.success('Appointment Booked Successfully')
+      this.props.componentToView('landingPage')
     } else {
       toastr.error(resp.result);
     }

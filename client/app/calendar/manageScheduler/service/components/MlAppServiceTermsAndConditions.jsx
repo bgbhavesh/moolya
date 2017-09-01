@@ -86,7 +86,7 @@ export default class MlAppServiceTermsAndConditions extends Component{
                   <input id="cancelable" type="checkbox"
                          checked={!serviceTermAndCondition.isCancelable}
                          value={serviceTermAndCondition.isCancelable}
-                         onChange={(event) => onChangeCheckBox(event)} />
+                         onChange={(event) => onChangeCheckBox(event)} disabled={!serviceTermAndCondition.isCancelable || this.props.viewMode} />
                   <div className="slider"></div>
                 </label>
                   <span className={serviceTermAndCondition.isCancelable ? 'state_label' : 'state_label acLabel'}>No</span>
@@ -95,6 +95,7 @@ export default class MlAppServiceTermsAndConditions extends Component{
                   <label htmlFor="schedulable">Can be Rescheduled</label>
                   <span className={serviceTermAndCondition.isReschedulable ? 'state_label acLabel' : 'state_label'}>Yes</span><label className="switch nocolor-switch">
                   <input id="schedulable" type="checkbox"
+                         disabled={!serviceTermAndCondition.isReschedulable || this.props.viewMode}
                          checked={!serviceTermAndCondition.isReschedulable}
                          value={serviceTermAndCondition.isReschedulable}
                          onChange={(event) => onChangeCheckBox(event)} />
@@ -112,7 +113,7 @@ export default class MlAppServiceTermsAndConditions extends Component{
                   <label>Can be cancelled &nbsp;
                     <input className="form-control inline_input medium_in"
                            id="cancelationday"
-                           disabled={!serviceTermAndCondition.isCancelable}
+                           disabled={!serviceTermAndCondition.isCancelable || this.props.viewMode}
                            value={serviceTermAndCondition.noOfDaysBeforeCancelation}
                            onChange={(event) => onChangeValue(event)} /> days
                   </label>

@@ -27,7 +27,7 @@ class MlPortfolio extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      editComponent: '', portfolio: {}, privateKeys:[], removePrivateKeys:[], selectedTab: "", annotations: [],
+        editComponent: '', portfolio: {}, privateKeys:[], removePrivateKeys:[], selectedTab: "", annotations: [],
       isOpen: false,annotationData: {}, commentsData: [], popoverOpen: false, saveButton: false
     }
     this.fetchEditPortfolioTemplate.bind(this);
@@ -244,7 +244,7 @@ class MlPortfolio extends React.Component {
       var rIndex = _.findIndex(this.state.removePrivateKeys, {keyName:keyName})
       removePrivateKeys.splice(rIndex, 1);
       privateKeys.push({keyName:keyName, booleanKey:booleanKey, index:index, tabName:tabName, objectName : objectName})
-      this.setState({privateKeys:privateKeys})
+      // this.setState({privateKeys:privateKeys})
     }else if(!isPrivate){
       if(keyIndex >= 0){
         var keyObj = _.cloneDeep(privateKeys[keyIndex])
@@ -357,7 +357,8 @@ class MlPortfolio extends React.Component {
               {/*{this.props.viewMode?<ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>:<EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config}/>}*/}
               {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)}
                                                   getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)}
-                                                  portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}/>}
+                                                  portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}
+                                                  privateKeys = {this.state.privateKeys}/>}
               {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)}
                                                   portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}
                                                   annotations={annotations}

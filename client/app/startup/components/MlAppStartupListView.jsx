@@ -30,10 +30,11 @@ export default class MlAppStartupListView extends Component {
         <a href='' onClick={that.viewDetails.bind(that, startup.portfolioDetailsId)}>
           <div className="ideators_list_block">
             {/*<div className="premium"><span>Starter</span></div>*/}
-            <h3>{startup.aboutUs&&startup.aboutUs.description?startup.aboutUs.description:""}</h3>
+            {/*<h3>{startup.aboutUs&&startup.aboutUs.description?startup.aboutUs.description:""}</h3>*/}
+            <h3>{startup.firstName}</h3>
             <div className="list_icon"><span className="ml ml-startup"></span></div>
             <div className="block_footer">
-              <span>{startup.chapterName}</span>
+              <span>{startup.chapterName}-{startup.communityType}</span>
             </div>
           </div>
         </a>

@@ -92,7 +92,7 @@ export default class  MlFunderServicesListView extends Component {
         return(
           <div className="app_main_wrap" style={{'overflow':'auto'}}>
             <div className="app_padding_wrap">
-              <FunderAboutView serviceDetails={this.props.serviceDetails}/>
+              <FunderAboutView componentToView={this.props.componentToView} serviceDetails={this.props.serviceDetails}/>
             </div>
           </div>
         )

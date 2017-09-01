@@ -261,6 +261,7 @@ export async function fetchSharedLibraryHandler(userId) {
       fileName
       fileType
       }
+      isDownloadable
   }
 }`,
     variables: {

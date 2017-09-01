@@ -742,7 +742,7 @@ li {display: inline-block; width: 14px; height: 14px; margin: 0 4px; text-indent
     li{
     display: inline-block; text-align: center;margin-right:30px;
     a{
-      display: block; text-shadow: none;color:$mlWhite;padding: 3px; border-radius: 5px;font-size:12px;
+      display: block; text-shadow: none;color:$mlWhite;padding: 3px; border-radius: 5px;font-size:14px;line-height: 19px;
       &.act_disable{
         cursor: no-drop !important;color: rgba(255, 255, 255, 0.49) !important;
       }

@@ -219,6 +219,10 @@ export default class MLAppMyCalendar extends Component {
   render() {
     const {appointmentDate} = this.state;
     const that = this;
+    let yesterday = new Date();
+    yesterday.setDate(yesterday.getDate()-1);
+    console.log(yesterday);
+    console.log(yesterday.getTime());
     // let eventsData = [{ title: '3', 'start': new Date(2017, 7, 7), 'end': new Date(2017, 7, 10) }];
     switch(that.state.componentToLoad) {
       case 'calendar':
@@ -253,7 +257,7 @@ export default class MLAppMyCalendar extends Component {
                   <MlAppDayAppointmentInfo
                     appointmentDate={that.state.appointmentDate}
                     profileId={ that.state.profileId ? that.state.profileId : ''}
-                    canAdd= {true}
+                    canAdd= { yesterday.getTime() <  that.state.appointmentDate.getTime()}
                     canExplore= {true}
                     addEvent={this.dayAppointmentInfoAddEvent.bind(this)}
                     exploreEvent={this.slotInfo.bind(this)}

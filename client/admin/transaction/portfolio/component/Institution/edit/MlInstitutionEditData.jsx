@@ -6,7 +6,8 @@ import {fetchInstitutionPortfolioData} from '../../../actions/findPortfolioInsti
 export default class MlInstitutionEditData extends React.Component{
   constructor(props){
     super(props);
-    this.state={uploadedData: {}};
+    this.state={uploadedData: {balanceSheet : [],profitAndLoss:[],quaterlyReport:[],yearlyReport:[],halfYearlyReport:[],annualReport:[],cashFlow:[],
+      shareHoldings:[],ratio:[],capitalStructure:[]}};
     this.loopingTheUploadedData.bind(this)
     this.fetchInstitutionPortfolioData.bind(this)
   }

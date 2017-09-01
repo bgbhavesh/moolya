@@ -66,13 +66,17 @@ export default class MlUsersCluster extends Component {
         icon = "ml ml-company";
       }
       return (
-        <div className="col-lg-3 col-md-3 col-sm-3" key={idx}>
+        <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={idx}>
           <a href="" onClick={(event) => that.viewDetails(event, prop.registrationId)}>
-            <div className="subscriptions_block">
+            <div className="ideators_list_block">
               <div className="premium"><span>{prop.accountType}</span></div>
               <h3>{prop.firstName}&nbsp; {prop.lastName}</h3>
-              <div className="sub_icon"><span className={icon}></span><br />{prop.chapterName}</div>
-              <h4>{prop.portfolioUserName}</h4>
+              <div className="list_icon"><span className={icon}></span></div>
+              {/*<img src="/images/ideator_01.png" className="c_image"/>*/}
+              <div className="block_footer">
+                <span>{prop.chapterName}</span>
+              </div>
+              {/*<h4>{prop.portfolioUserName}</h4>*/}
             </div>
           </a>
         </div>
@@ -80,7 +84,7 @@ export default class MlUsersCluster extends Component {
     });
 
     return (
-      <div className="row subscriptions">
+      <div className="row ideators_list">
         <h2> Users </h2>
         {list}
       </div>

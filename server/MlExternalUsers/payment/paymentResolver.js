@@ -7,7 +7,7 @@ MlResolver.MlMutationResolver['updatePayment'] = (obj, args, context, info) => {
     return ;
   }
 
-  let paymentSuccess = args.response;
+  let paymentSuccess = args.paymentStatus;
   if(!paymentSuccess){
     return ;
   }

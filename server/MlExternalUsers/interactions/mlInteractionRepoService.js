@@ -48,6 +48,27 @@ class MlInteractionService{
         return {resourceId:resourceId,resourceType:resourceType,resourceOwner:resourceOwnerUser,resourceOwnerId:resourceOwnerUser._id,resourceOwnerUserName:resourceOwnerUser.username,
           contextUserId:contextUser._id,contextUserName:contextUser.username,contextUser:contextUser};
     }
+
+  interactionPreConditions(resourceType, resourceId, context) {
+    var curUserId = context ? context.userId : null;
+    var response = true
+    switch (resourceType) {
+      case 'portfolio':
+        var userDetails = this.getUserDetails(curUserId) || {};
+        var isInternalUser = userDetails && userDetails.profile ? userDetails.profile.isInternaluser : false
+        if (isInternalUser)
+          response = false
+        else {
+          var resourceData = mlDBController.findOne('MlPortfolioDetails', {_id: resourceId}, context) || {}
+          var isOwner = _.isMatch(resourceData, {userId: curUserId})
+          if (isOwner)
+            response = false
+        }
+        break;
+    }
+    return response
+  }
+
     buildAggregationQuery(resourceType, userId){
       switch (resourceType){
         case 'portfolio':

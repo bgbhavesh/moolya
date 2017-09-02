@@ -6,9 +6,17 @@
  * */
 import React, {Component} from "react";
 import {render} from "react-dom";
+import gql from 'graphql-tag'
 import {initalizeFloatLabel} from "../../../../../client/commons/utils/formElemUtil";
 
 export default class MlSpokePersonDetail extends Component {
+
+  constructor(props){
+    super(props)
+    this.state = {
+      branchType:""
+    }
+  }
   /**
    * Initialize labels
    * */
@@ -20,12 +28,19 @@ export default class MlSpokePersonDetail extends Component {
     initalizeFloatLabel();
   }
 
+  optionsBySelectOfficeType(index, selectedIndex){
+      this.setState({branchType: index})
+  }
+
   /**
    * UI to be render
    * */
   render() {
-    console.log(this.props)
+    let query = gql`query () {
+        data: getOfficeType{label:displayName, value:code}
+      }`
     var props = this.props.officeData?this.props.officeData:{}
+    var that = this
     return (
       <div className="col-lg-12">
         <div className="row">
@@ -84,8 +99,12 @@ export default class MlSpokePersonDetail extends Component {
               <div className="form_bg">
                 <form>
                   <div className="form-group">
-                    <input type="text" placeholder="Branch Type" className="form-control float-label"
-                           defaultValue={props.branchType}/>
+                    {/*<input type="text" placeholder="Office Type" className="form-control float-label"*/}
+                           {/*defaultValue={props.branchType}/>*/}
+                    <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'}
+                                  labelKey={'label'} queryType={"graphql"} query={query} isDynamic={true}
+                                  onSelect={that.optionsBySelectOfficeType.bind(that)}
+                                  selectedValue={that.state.branchType}/>
                   </div>
                   <div className="form-group">
                     <input type="text" placeholder="Office Location" className="form-control float-label"

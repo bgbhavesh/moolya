@@ -210,11 +210,12 @@ export default class MlAppSetCalendarVacation extends Component {
     this.validateFormFields();
     if (this.isValid) {
       let response = '';
+      let profileId = FlowRouter.getParam('profileId');
       if (this.state.selectedVacation) {
-        response = await updateCalendarVacationByIdActionHandler(this.validVacationData, this.state.selectedVacation);
+        response = await updateCalendarVacationByIdActionHandler(profileId, this.validVacationData, this.state.selectedVacation);
         this.showResponseMsg(response);
       } else {
-        response = await updateCalendarVacationActionHandler(this.validVacationData);
+        response = await updateCalendarVacationActionHandler(profileId, this.validVacationData);
         this.showResponseMsg(response);
       }
     }

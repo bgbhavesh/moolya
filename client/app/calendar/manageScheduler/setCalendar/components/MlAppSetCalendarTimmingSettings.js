@@ -188,14 +188,17 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
    */
   updateSlotEndTime(value, index) {
     let { slots, lunch } = this.state;
+    let indexToUpdate = slots.length == 1 ? index - 1 : index;
     if (!lunch[0].end) {
       index -= 1;
       slots[0].isActive = true;
     }
-    slots[index]['end'] = typeof value === 'object' ? new Moment(value).format('HH:mm') : value;
+
+    slots[indexToUpdate]['end'] = typeof value === 'object' ? new Moment(value).format('HH:mm') : value;
+
     this.setState({
       slots: slots,
-      workEndTime: slots[index]['end']
+      workEndTime: slots[indexToUpdate]['end']
     });
   };
 
@@ -441,11 +444,12 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
           workingTimeInfo.push(workingDays);
         }
         workingTimeInfo = await this.constructData(workingTimeInfo);
+        let profileId = FlowRouter.getParam('profileId');
         if (workingTimeInfo.length > 1) {
-          response = await updateCalendarWorkingDaysActionHandler(workingTimeInfo);
+          response = await updateCalendarWorkingDaysActionHandler(profileId, workingTimeInfo);
           this.showResponseMsg(response);
         } else {
-          response = await updateCalendarWorkingDayActionHandler(workingTimeInfo[0]);
+          response = await updateCalendarWorkingDayActionHandler(profileId, workingTimeInfo[0]);
           this.showResponseMsg(response);
         }
         this.props.fetchCalendarSettings();

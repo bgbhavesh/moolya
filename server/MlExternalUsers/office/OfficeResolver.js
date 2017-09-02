@@ -644,7 +644,7 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
         "API_KEY": "AESsdjkfhsdkjfjkshfn346346",
         "appId": "moolya",
         "currency": "USD",
-        "transId": orderNumberGenService.paymentId,
+        "transId": paymentData.paymentId,
         "paymentEndPoint": "paypal",
         "operation": "debit",
         "customerId": officeTransDetails.userId,
@@ -654,8 +654,8 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
 
       let apiRequest = {
         headers: {'content-type' : 'application/text'},
-        // url:     'http://payment-services-814468192.ap-southeast-1.elb.amazonaws.com/payments/process'
-        url:     "http://10.0.2.186:8080/payments/process"
+        url:     'http://payment-services-814468192.ap-southeast-1.elb.amazonaws.com/payments/process'
+        // url:     "http://10.0.2.186:8080/payments/process"
       };
 
       let future = new Future();
@@ -691,3 +691,8 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
 
   }
 };
+
+MlResolver.MlQueryResolver['getOfficeType'] = (obj, args, context, info) => {
+  var officeTypes = mlDBController.find('MlOfficeType', {}, context).fetch();
+  return officeTypes;
+}

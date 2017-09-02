@@ -192,6 +192,12 @@ let myOfficeSchema = `
         paymentLink:String,
         location : [locationCoordinates]
      }
+     
+     type officeType{
+        displayName:String,
+        code:String,
+        isActive:Boolean
+     }
   
     type Query{
         fetchOffice(profileId: String) :[MyOffice]
@@ -206,6 +212,7 @@ let myOfficeSchema = `
         getTeamMembers:[AvailableCommunities]
         getBranchDetails:[BranchType]
         getOfficeUserTypes:[OfficeUserTypes]
+        getOfficeType:[officeType]
     }
     
     type Mutation{       

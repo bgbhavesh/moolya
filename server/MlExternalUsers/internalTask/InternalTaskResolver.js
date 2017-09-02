@@ -38,6 +38,14 @@ MlResolver.MlQueryResolver['fetchMyInternalTask'] = (obj, args, context, info) =
       }
     }
     internalTask = mlDBController.find('MlInternalTask', query).fetch();
+    internalTask.map(function(data){
+      if(data.attendeeProfileId === profile.profileId ) {
+        let community = {name:""}
+        community.name= profile.communityName
+        data.community = community;
+        data.attendeeName = profile.firstName+" "+profile.lastName;
+      }
+    })
     return internalTask
   } else {
     let code = 400;
@@ -62,6 +70,11 @@ MlResolver.MlQueryResolver['fetchSelfCreatedInternalTask'] = (obj, args, context
       }
     }
     internalTask = mlDBController.find('MlInternalTask', query).fetch();
+    internalTask.map(function(data){
+      if(data.attendeeProfileId === profile.profileId) {
+        data.community.name = profile.communityName;
+      }
+    })
     return internalTask;
   } else {
     let code = 400;
@@ -90,7 +103,8 @@ MlResolver.MlQueryResolver['fetchInternalTaskById'] = (obj, args, context, info)
       return {
         id: user._id,
         name: user.profile.displayName,
-        profileUrl: user.profile.profileImage
+        profileUrl: user.profile.profileImage,
+        communityName: user.profile.displayName,
       };
     });
     return internalTask;

@@ -27,7 +27,8 @@ export default class MlFunderAbout extends React.Component {
     return this;
   }
   componentWillMount(){
-    this.fetchPortfolioDetails();
+    const resp = this.fetchPortfolioDetails();
+    return resp
   }
 
   componentDidMount()
@@ -61,9 +62,9 @@ export default class MlFunderAbout extends React.Component {
     }else{
       details=_.extend(details,{[key]:false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, tabName:"funderAbout"}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, tabName:this.props.tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data:details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
 
@@ -175,20 +176,34 @@ export default class MlFunderAbout extends React.Component {
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
+    const response = await fetchfunderPortfolioAbout(portfoliodetailsId);
     let empty = _.isEmpty(that.context.funderPortfolio && that.context.funderPortfolio.funderAbout)
     if(empty){
-      const response = await fetchfunderPortfolioAbout(portfoliodetailsId);
       if (response) {
         this.setState({loading: false, data: response, profilePic:response.profilePic});
         _.each(response.privateFields, function (pf) {
           $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
         })
       }
-
     }else{
-      this.setState({loading: false, data: that.context.funderPortfolio.funderAbout});
+      this.setState({loading: false, data: that.context.funderPortfolio.funderAbout, privateValues: response.privateFields}, () => {
+        this.lockPrivateKeys()
+      });
     }
+  }
 
+  /**
+   * UI creating lock function
+   * */
+  lockPrivateKeys() {
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName})
+    var finalKeys = _.unionBy(filterPrivateKeys, this.state.privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   sendDataToParent(){
@@ -437,4 +452,5 @@ export default class MlFunderAbout extends React.Component {
 };
 MlFunderAbout.contextTypes = {
   funderPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object,
 };

@@ -16,7 +16,7 @@ import {client} from '../../../../core/apolloConnection'
 export default class MlFunderEditTemplate extends React.Component{
   constructor(props){
     super(props)
-    this.state =  {tabs: [],aboutUs: {}, funderPortfolio:{}};
+    this.state =  {tabs: [],aboutUs: {}, funderPortfolio:{}, portfolioKeys: {privateKeys:[], removePrivateKeys:[]}};
     this.getChildContext.bind(this)
     this.getInvestmentsDetails.bind(this);
     this.getFunderNewsDetails.bind(this);
@@ -25,7 +25,8 @@ export default class MlFunderEditTemplate extends React.Component{
 
   getChildContext(){
     return {
-      funderPortfolio: this.state.funderPortfolio
+      funderPortfolio: this.state.funderPortfolio,
+      portfolioKeys: this.state.portfolioKeys
     }
   }
 
@@ -44,7 +45,7 @@ export default class MlFunderEditTemplate extends React.Component{
 
   getTabComponents(){
     let tabs = [
-      {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlFunderAbout client={client} tabName="About" isAdmin={true} key="1" getAboutus={this.getAboutus.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlFunderAbout client={client} tabName="funderAbout" isAdmin={true} key="1" getAboutus={this.getAboutus.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Investments" , component:<MlFunderInvestment key="2" tabName="Investments" getInvestmentsDetails={this.getInvestmentsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Principals & Team" , component:<MlFunderPrincipalTeam client={client} tabName="Principals & Team" key="3" getPrincipalDetails={this.getPrincipalDetails.bind(this)} getTeamDetails={this.getTeamDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Engagement Methods" , component:<MlFunderEngagementMethod key="4" tabName="Engagement Methods" portfolioDetailsId={this.props.portfolioDetailsId}/>},
@@ -150,6 +151,23 @@ export default class MlFunderEditTemplate extends React.Component{
     this.props.getPortfolioDetails({funderPortfolio:this.state.funderPortfolio}, []);
   }
 
+  getAllPrivateKeys(privateKeys, removePrivateKeys) {
+    let obj = {
+      privateKeys:privateKeys,
+      removePrivateKeys:removePrivateKeys
+    }
+    this.setState({portfolioKeys: obj});
+    return obj
+  }
+
+  componentWillReceiveProps(newProps) {
+    console.log('newProps', newProps);
+    if (newProps) {
+      const resp = this.getAllPrivateKeys(newProps.privateKeys, newProps.removePrivateKeys);
+      return resp
+    }
+  }
+
   componentWillMount()
   {
     let tabs = this.getTabComponents();
@@ -171,4 +189,5 @@ export default class MlFunderEditTemplate extends React.Component{
 }
 MlFunderEditTemplate.childContextTypes = {
   funderPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };

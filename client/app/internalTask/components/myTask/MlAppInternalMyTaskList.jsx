@@ -91,7 +91,7 @@ export default class MlAppInternalMyTaskList extends React.Component{
               </div>
               {that.state.tasks.map(function (task, index) {
                 return (
-                  <div className="col-md-2 col-sx-3 col-sm-4 col-lg-" key={index} onClick={()=>that.selectTask(task)} >
+                  <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={index} onClick={()=>that.selectTask(task)} >
                     <div className="ideators_list_block">
                       <div className="inactive"><span>{task.name}</span></div>
                       <h3></h3>

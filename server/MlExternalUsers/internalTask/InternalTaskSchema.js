@@ -34,6 +34,7 @@ let internalTaskSchema = `
         _id: String
         userId:String
         attendee: String
+        attendeeName: String
         attendeeProfileId: String
         name: String
         stage: String

@@ -97,10 +97,10 @@ export default class MlAppInternalCurrentTask extends React.Component{
                     <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={index} onClick={()=>that.selectTask(task)}>
                       <div className="ideators_list_block">
                         <div className="inactive"><span>{task.name}</span></div>
-                        <h3></h3>
+                        <h3><span>{task.attendeeName ? task.attendeeName : "" }</span></h3>
                         <img src="/images/valuation.png" className="c_image"/>
                         <div className="block_footer">
-                          <span></span>
+                          <span>{task.community && task.community.name ? task.community.name:""}</span>
                         </div>
                       {/*<div className="hex_outer"><img src="/images/valuation.png"/></div>*/}
                       {/*<div className="task-status pending"></div>*/}

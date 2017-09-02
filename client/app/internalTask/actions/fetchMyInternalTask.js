@@ -13,6 +13,9 @@ export async function fetchSelfCreatedInternalTask(status) {
           name
           type
           status
+          community{
+            name
+          }
         }
       }
     `,

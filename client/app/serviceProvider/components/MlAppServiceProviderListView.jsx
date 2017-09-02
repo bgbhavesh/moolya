@@ -22,6 +22,9 @@ export default class MlAppServiceProviderListView extends Component {
         <a href='' onClick={that.viewDetails.bind(that, provider.portfolioDetailsId)}>
           <div className="ideators_list_block">
             {/*<div className="premium"><span>Starter</span></div>*/}
+            <div className="premium">
+              <span>{provider.accountType}</span>
+            </div>
             <h3>{provider.about&&provider.about.aboutTitle?provider.about.aboutTitle:""}</h3>
             <div className="list_icon"><span className="ml my-ml-Service-Providers"></span></div>
             {/*<img src="/images/valuation.png" className="c_image"/>*/}

@@ -1105,6 +1105,8 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .library-wrap .thumbnail .fa.fa-minus{position: absolute; right: 6px; bottom: 16px; color: #FFF; background: #EF4647; width: 20px; height: 20px; text-align: center; line-height: 18px; border-radius: 4px; cursor: pointer; z-index: 1; font-size: 12px;}
 .library-wrap .thumbnail .fa.fa-times{position: absolute; right: 5px; bottom: 16px; color: #FFF; background: #EF4647; width: 20px; height: 20px; text-align: center; line-height: 18px; border-radius: 4px; cursor: pointer; z-index: 1; font-size: 12px;}
 .library-wrap .thumbnail .fa.fa-trash-o{position:absolute;right:-6px;top:-6px;color:#fff;background:#ef4647;width:25px;height:25px;text-align:center;line-height:25px;border-radius:50%;cursor:pointer}
+.library-wrap .thumbnail .fa.fa-clock-o{position:absolute;left:-6px;top:-6px;color:#fff;background:#273545;width:25px;height:25px;text-align:center;line-height:25px;border-radius:50%;cursor:pointer}
+.library-wrap .thumbnail .fa.fa-download{position:absolute;right:-6px;top:-6px;color:#fff;background:#ef4647;width:25px;height:25px;text-align:center;line-height:25px;border-radius:50%;cursor:pointer}
 .library-wrap .thumbnail .input_types {
   float: left;
   margin-top: -15px;

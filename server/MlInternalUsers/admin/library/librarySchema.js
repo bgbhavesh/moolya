@@ -15,6 +15,7 @@ let librarySchema = `
       fileName: String
       fileUrl: String
       fileType: String
+      fileSize: Float
       isPrivate: Boolean
       libraryType: String
       inCentralLibrary: Boolean
@@ -36,6 +37,7 @@ let librarySchema = `
       userId: String
       fileName: String
       fileUrl: String
+      fileSize: Float
       fileType: String
       isPrivate: Boolean
       libraryType: String

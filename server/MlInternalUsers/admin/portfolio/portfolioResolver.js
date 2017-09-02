@@ -242,30 +242,31 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
         detailsUpdate = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {privateFields:privateFields}, {$set:true}, context)
       }
         if(details && detailsUpdate){
-            switch (details.communityType){
-                case 'Ideators':{
+            // switch (details.communityType){
+              switch (details.communityCode){
+                case 'IDE':{
                     response = MlResolver.MlMutationResolver['updateIdeatorPortfolio'](obj, args, context, info)
                 }
                 break;
 
-                case "Startups":{
+                case "STU":{
                     response = MlResolver.MlMutationResolver['updateStartupPortfolio'](obj, args, context, info)
                 }
                 break;
 
-                case "Investors":{
+                case "FUN":{
                     response = MlResolver.MlMutationResolver['updateFunderPortfolio'](obj, args, context, info)
                 }
                 break;
-                case "Service Providers":{
+                case "SPS":{
                   response = MlResolver.MlMutationResolver['updateServiceProviderPortfolio'](obj, args, context, info)
                 }
                 break;
-                case "Companies":{
+                case "CMP":{
                   response = MlResolver.MlMutationResolver['updateCompanyPortfolio'](obj, args, context, info)
                 }
                 break;
-              case "Institutions":{
+              case "INS":{
                 response = MlResolver.MlMutationResolver['updateInstitutionPortfolio'](obj, args, context, info)
               }
                 break;

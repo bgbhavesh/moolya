@@ -171,6 +171,8 @@ let chapterSchema = `
         fetchSubChaptersForRegistration(id: String):[SubChapter]
         fetchSubChaptersSelectMoolya(chapterId: String,clusterId:String):[SubChapter]
         fetchRelatedSubChapters(subChapterId: String): [relatedSubChaptersOutput]
+        isSubChapterMoolyaNonMoolya(id : String):SubChapter
+        
     }
     
      type Mutation {
@@ -203,7 +205,8 @@ let supportedApi = [
     {api:'fetchSubChaptersForRegistration', actionName:'READ', moduleName:"SUBCHAPTER"},
     {api:'fetchSubChaptersSelectMoolya', actionName:'READ', moduleName:"SUBCHAPTER"},
     {api:'fetchRelatedSubChapters', actionName:'READ', moduleName:"SUBCHAPTER"},
-    {api:'updateRelatedSubChapters', actionName:'READ', moduleName:"SUBCHAPTER"}
+    {api:'updateRelatedSubChapters', actionName:'READ', moduleName:"SUBCHAPTER"},
+    {api:'isSubChapterMoolyaNonMoolya', actionName:'READ', moduleName:"SUBCHAPTER", isWhiteList:true},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
 

@@ -5,6 +5,7 @@
 import MlResolver from '../../../commons/mlResolverDef'
 import MlAdminUserContext from '../../../mlAuthorization/mlAdminUserContext'
 import MlUserContext from '../../../MlExternalUsers/mlUserContext'
+import menuRepo from './menuRepo'
 var _lodash = require('lodash');
 
 
@@ -24,8 +25,14 @@ MlResolver.MlQueryResolver['fetchExternalUserMenu'] = ( _, {name}, context) =>{
 MlResolver.MlQueryResolver['fetchExternalUserProfileMenu'] = ( _, {name}, context) =>{
   let menuName = new MlUserContext().getDefaultProfileMenu(context.userId);
   if(menuName){
-    return MlMenus.findOne({name:menuName});
+    var menu = MlMenus.findOne({name:menuName});
+    if(menu){
+        var result = menuRepo.findProfileResources(menu, context);
+        return result;
+    }
   }
+
+  return []
 }
 
 MlResolver.MlQueryResolver['fetchExploreMenu'] = ( _, {name}, context) =>{
@@ -34,6 +41,13 @@ MlResolver.MlQueryResolver['fetchExploreMenu'] = ( _, {name}, context) =>{
 }
 
 MlResolver.MlQueryResolver['fetchCalendarMenu'] = ( _, {name}, context) =>{
-  let menu = new MlUserContext().getCalendarMenu(context.userId);
-  return MlMenus.findOne({name:menu});
+  var menuName = new MlUserContext().getCalendarMenu(context.userId);
+  if(menuName){
+    var menu = MlMenus.findOne({name:menuName});
+    if(menu){
+      var result = menuRepo.findCalendarResources(menu, context);
+      return result;
+    }
+  }
+  return []
 }

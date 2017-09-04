@@ -29,23 +29,23 @@ if(Meteor.isServer){
               "name" : "My Portfolio",
               "uniqueId" : "portfolio"
           },
-          {
-            "image": "ml ml-institutions",
-            "link": "/app/myOffice",
-            "isLink": true,
-            "isMenu": true,
-            "name": "My Office",
-            "uniqueId": "myOffice",
-            "hideSubMenu": true,
-            "subMenu": [{
-              "link": "/app/addOffice",
-              "isLink": true,
-              "isMenu": false,
-              "name": "Add Office",
-              "uniqueId": "addOffice",
-              "subMenusId": "myOffice"
-            }]
-          },
+          // {
+          //   "image": "ml ml-institutions",
+          //   "link": "/app/myOffice",
+          //   "isLink": true,
+          //   "isMenu": true,
+          //   "name": "My Office",
+          //   "uniqueId": "myOffice",
+          //   "hideSubMenu": true,
+          //   "subMenu": [{
+          //     "link": "/app/addOffice",
+          //     "isLink": true,
+          //     "isMenu": false,
+          //     "name": "Add Office",
+          //     "uniqueId": "addOffice",
+          //     "subMenusId": "myOffice"
+          //   }]
+          // },
           {
               "image":"ml my-ml-my_list",
               "link": "/app/myConnections",

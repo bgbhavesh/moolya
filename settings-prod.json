@@ -22,6 +22,7 @@
         "s3Config":{
           "accessKeyId":"AKIAJHBOSWTUYOZYGKHA",
           "secretAccessKey":"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",
+          "region":"ap-southeast-1",
           "maxAsyncS3":20,
           "s3RetryCount":3,
           "s3RetryDelay":1000,

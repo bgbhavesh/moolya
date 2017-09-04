@@ -70,38 +70,20 @@ export default class MlStartupMCL extends React.Component{
         licenses:that.context.startupPortfolio.licenses
       }
 
-      if (responseM && responseM.memberships) {
-        this.setState({loading: false,data:data}, () => {
-          this.lockPrivateKeys('memberships', responseM.memberships.privateFields);
-        });
-      }
-      else {
-        this.setState({loading: false,data:data}, () => {
-          this.lockPrivateKeys('memberships');
-        });
-      }
+      this.setState({loading: false,data:data}, () => {
+        var MprivateKeys = responseM && responseM.memberships? responseM.memberships.privateFields: [];
+        this.lockPrivateKeys('memberships', MprivateKeys);
+      });
 
-      if (responseL && responseL.licenses) {
-        this.setState({loading: false, data: data}, () => {
-          this.lockPrivateKeys('licenses', responseL.licenses.privateFields);
-        });
-      }
-      else {
-        this.setState({loading: false, data: data}, () => {
-          this.lockPrivateKeys('licenses');
-        });
-      }
+      this.setState({loading: false, data: data}, () => {
+        var LprivateKeys = responseL && responseL.licenses? responseL.licenses.privateFields: [];
+        this.lockPrivateKeys('licenses', LprivateKeys);
+      });
 
-      if (responseC && responseC.compliances) {
-        this.setState({loading: false, data: data}, () => {
-          this.lockPrivateKeys('compliances', responseC.compliances.privateFields);
-        });
-      }
-      else {
-        this.setState({loading: false, data: data}, () => {
-          this.lockPrivateKeys('compliances');
-        });
-      }
+      this.setState({loading: false, data: data}, () => {
+        var CprivateKeys = responseC && responseC.compliances? responseC.compliances.privateFields: [];
+        this.lockPrivateKeys('compliances', CprivateKeys);
+      });
 
     }else {
       var pf;

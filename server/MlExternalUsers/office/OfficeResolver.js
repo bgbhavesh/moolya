@@ -20,6 +20,7 @@ let Future = Npm.require('fibers/future');
 MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
   let officeSC = [];
   let profileId = args.profileId;
+  let profile;
   if (context.userId) {
     let query = {
       userId: context.userId,
@@ -27,8 +28,20 @@ MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
     };
     if(profileId){
       query.profileId = profileId;
+    } else {
+      profile = new MlUserContext(context.userId).userProfileDetails(context.userId);
     }
-    officeSC = mlDBController.find('MlOffice', query ).fetch();
+
+    if(profile && profile.communityDefCode === "OFB"){
+      let pipeline = [
+        { "$lookup": { from: "mlOfficeMembers", localField: "_id", foreignField: "officeId", as: "officeMembers" } },
+        { "$unwind": "$officeMembers" },
+        { "$match" : { "officeMembers.userId": context.userId, "officeMembers.profileId": profile.profileId } }
+      ];
+      officeSC = mlDBController.aggregate('MlOffice', pipeline );
+    } else {
+      officeSC = mlDBController.find('MlOffice', query ).fetch();
+    }
     return officeSC
   } else {
     let code = 400;

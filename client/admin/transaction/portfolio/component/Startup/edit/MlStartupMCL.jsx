@@ -7,6 +7,7 @@ var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../utils/formElemUtil';
 import {fetchStartupPortfolioMemberships, fetchStartupPortfolioLicenses, fetchStartupPortfolioCompliances} from '../../../actions/findPortfolioStartupDetails'
 import {fetchStartupDetailsHandler} from '../../../actions/findPortfolioStartupDetails'
+import _ from 'lodash';
 
 const MEMBERKEY = 'memberships'
 const LICENSEKEY = 'licenses'
@@ -31,13 +32,13 @@ export default class MlStartupMCL extends React.Component{
     this.fetchPortfolioDetails.bind(this);
   }
   componentWillMount(){
-    this.fetchPortfolioDetails();
+   const resp = this.fetchPortfolioDetails();
+   return resp
   }
 
   componentDidUpdate(){
     OnLockSwitch();
     dataVisibilityHandler();
-    //this.updateprivateFields();
   }
 
   updateprivateFields(){
@@ -53,6 +54,10 @@ export default class MlStartupMCL extends React.Component{
     let that = this;
     let data = {};
     let portfoliodetailsId=that.props.portfolioDetailsId;
+    var responseM = await fetchStartupDetailsHandler(portfoliodetailsId, MEMBERKEY);
+    var responseC = await fetchStartupDetailsHandler(portfoliodetailsId, COMPLIANCEKEY);
+    var responseL = await fetchStartupDetailsHandler(portfoliodetailsId, LICENSEKEY);
+
     if(that.context.startupPortfolio && (that.context.startupPortfolio.memberships || that.context.startupPortfolio.compliances || that.context.startupPortfolio.licenses)){
       this.setState({
         memberships: that.context.startupPortfolio.memberships,
@@ -64,47 +69,74 @@ export default class MlStartupMCL extends React.Component{
         compliances: that.context.startupPortfolio.compliances,
         licenses:that.context.startupPortfolio.licenses
       }
+
+      if (responseM && responseM.memberships) {
+        this.setState({loading: false,data:data}, () => {
+          this.lockPrivateKeys('memberships', responseM.memberships.privateFields);
+        });
+      }
+      else {
+        this.setState({loading: false,data:data}, () => {
+          this.lockPrivateKeys('memberships');
+        });
+      }
+
+      if (responseL && responseL.licenses) {
+        this.setState({loading: false, data: data}, () => {
+          this.lockPrivateKeys('licenses', responseL.licenses.privateFields);
+        });
+      }
+      else {
+        this.setState({loading: false, data: data}, () => {
+          this.lockPrivateKeys('licenses');
+        });
+      }
+
+      if (responseC && responseC.compliances) {
+        this.setState({loading: false, data: data}, () => {
+          this.lockPrivateKeys('compliances', responseC.compliances.privateFields);
+        });
+      }
+      else {
+        this.setState({loading: false, data: data}, () => {
+          this.lockPrivateKeys('compliances');
+        });
+      }
+
     }else {
-      var responseM = await fetchStartupDetailsHandler(portfoliodetailsId, MEMBERKEY);
+      var pf;
       if (responseM && responseM.memberships) {
         var object = responseM.memberships;
         object = _.omit(object, '__typename')
         this.setState({memberships: object});
-        this.setState({privateFields:object.privateFields});
+        pf = object.privateFields;
       }
-      var responseC = await fetchStartupDetailsHandler(portfoliodetailsId, COMPLIANCEKEY);
       if (responseC && responseC.compliances) {
         var object = responseC.compliances;
         object = _.omit(object, '__typename')
         this.setState({compliances: object});
 
-        var pf = this.state.privateFields;
         if(object.privateFields){
           pf = pf.concat(object.privateFields)
-          this.setState({privateFields:pf});
         }
       }
-      var responseL = await fetchStartupDetailsHandler(portfoliodetailsId, LICENSEKEY);
       if (responseL && responseL.licenses) {
         var object = responseL.licenses;
         object = _.omit(object, '__typename')
         this.setState({licenses: object});
-        var pf = this.state.privateFields;
         if(object.privateFields){
           pf = pf.concat(object.privateFields)
-          this.setState({privateFields:pf});
         }
       }
-
+      this.setState({privateFields:pf});
       data = {
         memberships:this.state.memberships,
         licenses: this.state.licenses,
         compliances:this.state.compliances
       }
+      this.setState({loading: false,data:data});
+      this.updateprivateFields();
     }
-
-    this.setState({loading: false,data:data})
-    this.updateprivateFields();
   }
 
   componentDidMount(){
@@ -190,6 +222,23 @@ export default class MlStartupMCL extends React.Component{
 
     this.props.getStartupMCL(data, this.state.privateKey)
   }
+
+  /**
+   * UI creating lock function
+   * */
+  lockPrivateKeys(tabname, privateValues) {
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: tabname});
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: tabname})
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    // setTimeout(function () {
+      _.each(keys, function (pf) {
+        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+      })
+    // }, 10)
+  }
+
   render(){
     const showLoader = this.state.loading;
     return (
@@ -244,4 +293,5 @@ export default class MlStartupMCL extends React.Component{
 };
 MlStartupMCL.contextTypes = {
   startupPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object,
 };

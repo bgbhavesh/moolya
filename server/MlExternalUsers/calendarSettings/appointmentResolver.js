@@ -14,7 +14,7 @@ MlResolver.MlMutationResolver["bookUserServiceCard"] = (obj, args, context, info
   let userId = context.userId;
   let profileId = new MlUserContext().userProfileDetails(userId).profileId;
   let serviceId = args.serviceId;
-  let service = mlDBController.findOne('MlService', serviceId , context);
+  let service = mlDBController.findOne('MlServiceCardDefinition', serviceId , context);
   let tax = 0; // Need to update later
   let discountAmount = 0; // Need to update later
 

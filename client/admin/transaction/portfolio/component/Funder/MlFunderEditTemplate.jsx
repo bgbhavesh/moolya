@@ -57,7 +57,7 @@ export default class MlFunderEditTemplate extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Investments",
-        component: <MlFunderInvestment key="2" tabName="Investments"
+        component: <MlFunderInvestment key="2" tabName="investments"
                                        getInvestmentsDetails={this.getInvestmentsDetails.bind(this)}
                                        portfolioDetailsId={this.props.portfolioDetailsId}/>
       },

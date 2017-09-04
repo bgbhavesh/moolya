@@ -14,6 +14,7 @@ import {createRegistrationInfo} from '../actions/createRegistrationInfo'
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import formHandler from '../../../../commons/containers/MlFormHandler'
 import {mlFieldValidations, validatedPhoneNumber} from '../../../../commons/validations/mlfieldValidation';
+import {fetchSubChapterDetails} from "../../requested/actions/findRegistration"
 export default class MlCreateRegistration extends React.Component{
 
   constructor(props){
@@ -34,7 +35,7 @@ export default class MlCreateRegistration extends React.Component{
       coummunityName:'',
       userName : '',
       selectedAccountsType:" ",
-      countryCode: ''
+      countryCode: '',
     }
     this.createRegistration.bind(this);
     return this;
@@ -44,6 +45,7 @@ export default class MlCreateRegistration extends React.Component{
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
     initalizeFloatLabel();
+    this.fetchSubChapterDetails()
   }
 
   async  createRegistration() {
@@ -110,7 +112,9 @@ export default class MlCreateRegistration extends React.Component{
   }
 
   optionsBySelectSubChapter(value){
-    this.setState({subChapter:value})
+    this.setState({subChapter:value},function () {
+      this.fetchSubChapterDetails()
+    })
   }
 
   optionsBySelectCluster(value){
@@ -144,6 +148,15 @@ export default class MlCreateRegistration extends React.Component{
       this.setState({institutionAssociation:val.value})
     }else{
       this.setState({institutionAssociation:null});
+    }
+  }
+
+  async fetchSubChapterDetails(){
+    let result = await fetchSubChapterDetails(this.state.subChapter)
+    if(result && result.isDefaultSubChapter){
+      this.setState({"isEcoSystem" : true})
+    }else if(result && !result.isDefaultSubChapter){
+      this.setState({"isEcoSystem" : false})
     }
   }
 
@@ -249,7 +262,9 @@ export default class MlCreateRegistration extends React.Component{
 
     return (
         <div className="admin_main_wrap">
-          <h2>Fill Registration Details</h2>
+          <div className="col-md-12">
+
+            <h2>Fill Registration Details</h2>
           <div className="col-md-6 nopadding-left">
             <div className="form_bg left_wrap">
               <ScrollArea
@@ -310,8 +325,10 @@ export default class MlCreateRegistration extends React.Component{
                   <Moolyaselect  placeholder="Account Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedAccountsType} queryType={"graphql"} query={accountsquery} onSelect={this.optionsBySelectTypeOfAccounts.bind(this)} isDynamic={true}/>
                 </div>
                 <div className="form-group">
-                  <span className={`placeHolder ${institutionAssociationActive}`}>Do You Want To Associate To Any Of The Institution</span>
-                  <Select name="form-field-name"  placeholder="Do you want to associate to any of the institution" value={this.state.institutionAssociation}  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label"/>
+
+                  <span className='placeHolder active'>Do You Want To Associate To Any Of The Sub Chapter</span>
+                  {/*<Select name="form-field-name"  placeholder="Do you want to associate to any of the sub chapter" value={this.state.institutionAssociation}  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label"/>*/}
+                  {this.state.isEcoSystem?<div><Select name="form-field-name"  placeholder="Do you want to associate to any of the Sub Chapter" value="No" options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="form-control float-label" disabled={true}/></div>:<div><Select name="form-field-name"  placeholder="Do you want to associate to any of the Sub Chapter" value="Yes"  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="form-control float-label" disabled={true}/></div>}
                 </div>
                 <div className="form-group">
                   <input type="text" ref="companyName" placeholder="Company Name"    className="form-control float-label" id=""/>
@@ -335,6 +352,7 @@ export default class MlCreateRegistration extends React.Component{
               </form>
               </ScrollArea>
             </div>
+          </div>
           </div>
           <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
         </div>

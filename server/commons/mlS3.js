@@ -10,9 +10,11 @@ Meteor.startup(function () {
 
 })
 
+const accessKeyId = Meteor.settings.private.aws&&Meteor.settings.private.aws.s3Config&&Meteor.settings.private.aws.s3Config.accessKeyId?Meteor.settings.private.aws.s3Config.accessKeyId:'AKIAIOLVK4M2SMABND3Q';
+const secretAccessKey = Meteor.settings.private.aws&&Meteor.settings.private.aws.s3Config&&Meteor.settings.private.aws.s3Config.secretAccessKey?Meteor.settings.private.aws.s3Config.secretAccessKey:'tX/MmyWGfVjEX37FCQlE+MLWBcwdY59FX23fXSmj';
 module.exports = class s3Client{
     constructor(){
-        this.client = new AWS.S3(awsConfig({region:"ap-south-1", accessKeyId: 'AKIAIOLVK4M2SMABND3Q', secretAccessKey: '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', timeout: 15000}));
+        this.client = new AWS.S3(awsConfig({region:"ap-south-1", accessKeyId:accessKeyId, secretAccessKey:secretAccessKey, timeout: 15000}));
     }
 
     uploadFile(file, s3Bucket, bucketFolder, callback){

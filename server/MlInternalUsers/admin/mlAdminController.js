@@ -37,6 +37,7 @@ const typeDefs = MlSchemaDef['schema']
   resolvers
 });
 
+const bucketName= Meteor.settings.private.aws&&Meteor.settings.private.aws.s3Config&&Meteor.settings.private.aws.s3Config.bucketName?Meteor.settings.private.aws.s3Config.bucketName:'moolya-users';
 // default server configuration object
 const defaultServerConfig = {
   path: '/moolyaAdmin',
@@ -164,7 +165,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
 
           let file = req.files.file;
           if (file) {
-            mlS3Client.uploadFile(file, "moolya-users", "moolya-admin-users/")
+            mlS3Client.uploadFile(file,bucketName, "moolya-admin-users/")
           }
           switch (moduleName) {
             case "USERS": {
@@ -243,7 +244,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
           let imageUploadCallback=null;
           switch (moduleName){
               case "REGISTRATION":{
-                imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "registrationDocuments/");
+                imageUploaderPromise=new ImageUploader().uploadFile(file,bucketName, "registrationDocuments/");
                 imageUploadCallback=Meteor.bindEnvironment(function(resp) {
                   let registrationDocumentUploadReq={registrationId:data.registrationId,docUrl: resp,document: file,documentId:documentId,docTypeId:docTypeId,moduleName: data.moduleName,actionName: data.actionName};
                   MlResolver.MlMutationResolver['updateRegistrationUploadedDocumentUrl'](null,registrationDocumentUploadReq, context, null);
@@ -253,7 +254,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
               case "PORTFOLIO":{
                   if(data.portfolioDetailsId){
                       let portfolio = {};
-                      imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "portfolioDocuments/");
+                      imageUploaderPromise=new ImageUploader().uploadFile(file,bucketName, "portfolioDocuments/");
                       imageUploadCallback=Meteor.bindEnvironment(function(resp) {
                           let details = MlPortfolioDetails.findOne({"_id":data.portfolioDetailsId});
                           if(details){
@@ -302,7 +303,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
               }
             break;
             case "PROFILE":{
-              imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "registrationDocuments/");
+              imageUploaderPromise=new ImageUploader().uploadFile(file,bucketName, "registrationDocuments/");
               imageUploadCallback=Meteor.bindEnvironment(function(resp) {
                 // MlResolver.MlMutationResolver['createRegistration'](null, {userId:data.userId, userProfile:data.userProfile, moduleName:data.moduleName, actionName:data.actionName,userProfilePic:resp}, context, null);
                 MlResolver.MlMutationResolver['uploadUserImage'](null, {userId:data.userId, moduleName:data.moduleName, actionName:data.actionName,userProfilePic:resp}, context, null);
@@ -310,7 +311,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
               break;
             }
             case "SUBCHAPTER":{
-              imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "registrationDocuments/");
+              imageUploaderPromise=new ImageUploader().uploadFile(file, bucketName, "registrationDocuments/");
               imageUploadCallback=Meteor.bindEnvironment(function(resp) {
                 if(data.subChapterId){
                   MlResolver.MlMutationResolver['updateSubChapter'](null, {
@@ -324,7 +325,7 @@ export const createApolloServer = (customOptions = {}, customConfig = {}) =>{
               break;
             }
             case "PORTFOLIO_PROFILE_IMG":{
-              imageUploaderPromise=new ImageUploader().uploadFile(file, "moolya-users", "registrationDocuments/");
+              imageUploaderPromise=new ImageUploader().uploadFile(file,bucketName, "registrationDocuments/");
               imageUploadCallback=Meteor.bindEnvironment(function(resp) {
                 let portfolioDocumentUploadReq={portfolioId:data.portfolioId,docUrl: resp,communityType:data.communityType,moduleName: data.moduleName,actionName: data.actionName};
                 MlResolver.MlMutationResolver['updatePortfolioProfilePic'](null,portfolioDocumentUploadReq, context, null);

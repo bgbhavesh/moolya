@@ -453,3 +453,22 @@ export async function updateReviewServiceActionHandler (serviceId) {
   const services = result.data.updateServiceSendReview;
   return services
 }
+
+export async function checkServiceSubChapterAccessControl(serviceId) {
+  const result = await appClient.mutate({
+    mutation: gql`
+    mutation($serviceId:String!){
+        checkServiceSubChapterAccessControl(serviceId:$serviceId){
+        success
+        code
+        result
+      }
+      }
+    `,
+    variables: {
+      serviceId:serviceId
+    }
+  });
+  const data = result.data.checkServiceSubChapterAccessControl;
+  return data;
+}

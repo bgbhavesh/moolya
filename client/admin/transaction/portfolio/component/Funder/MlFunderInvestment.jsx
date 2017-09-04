@@ -45,21 +45,18 @@ export default class MlFunderInvestment extends React.Component {
   }
 
   componentWillMount() {
-    this.fetchPortfolioDetails();
+    const resp = this.fetchPortfolioDetails();
+    return resp
   }
 
   async fetchPortfolioDetails() {
     let that = this;
     let portfolioDetailsId = that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.funderPortfolio && that.context.funderPortfolio.investments)
+    const response = await fetchfunderPortfolioInvestor(portfolioDetailsId);
     if (empty) {
-      const response = await fetchfunderPortfolioInvestor(portfolioDetailsId);
-      if (response) {
+      if(response)
         this.setState({loading: false, funderInvestment: response, funderInvestmentList: response});
-        // _.each(response.privateFields, function (pf) {
-        //   $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-        // })
-      }
     } else {
       this.setState({
         loading: false,
@@ -67,6 +64,7 @@ export default class MlFunderInvestment extends React.Component {
         funderInvestmentList: that.context.funderPortfolio.investments
       });
     }
+    this.funderInvestmentServer = response
   }
 
   onLockChange(fieldName, field, e) {
@@ -81,9 +79,9 @@ export default class MlFunderInvestment extends React.Component {
     } else {
       details = _.extend(details, {[key]: false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex}
-    this.setState({privateKey:privateKey})
-    this.setState({data: details}, function () {
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data: details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -162,14 +160,33 @@ export default class MlFunderInvestment extends React.Component {
       data: details,
       selectedObject: index,
       popoverOpen: !(this.state.popoverOpen),
-      "selectedVal": details.typeOfFundingId
+      "selectedVal": details.typeOfFundingId}, () => {
+      this.lockPrivateKeys(index)
     });
 
-    setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    // setTimeout(function () {
+    //   _.each(details.privateFields, function (pf) {
+    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
+  }
+
+  /**
+   * UI creating lock function\
+   * @Note: For the first Time context data is not working
+   *        from the second time context when connection establish then its working
+   * */
+  //todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.funderInvestmentServer && this.funderInvestmentServer[selIndex]?this.funderInvestmentServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   sendDataToParent() {
@@ -310,7 +327,7 @@ export default class MlFunderInvestment extends React.Component {
                                   <label htmlFor="checkbox1"><span></span>Make Private</label></div>
                               </div>
                               <div className="ml_btn" style={{'textAlign': 'center'}}>
-                                <a className="save_btn" onClick={this.onSaveAction.bind(this)}>Save</a>
+                                <a className="save_btn" href="" onClick={this.onSaveAction.bind(this)}>Save</a>
                               </div>
                             </div>
                           </div>
@@ -326,4 +343,5 @@ export default class MlFunderInvestment extends React.Component {
 };
 MlFunderInvestment.contextTypes = {
   funderPortfolio: PropTypes.object,
+  portfolioKeys :PropTypes.object,
 };

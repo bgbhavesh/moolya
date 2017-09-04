@@ -743,7 +743,9 @@ export async function fetchStartupDetailsHandler(portfoliodetailsId, key) {
                     index
                     privateFields{
                         keyName,
-                        booleanKey
+                        booleanKey,
+                        index
+                        tabName
                     }
                   },
                   awardsRecognition{
@@ -788,8 +790,9 @@ export async function fetchStartupDetailsHandler(portfoliodetailsId, key) {
                     membershipDescription,
                     isDescriptionPrivate,
                     privateFields{
-                        keyName,
+                        keyName
                         booleanKey
+                        tabName
                     }
                   },
                   
@@ -799,6 +802,7 @@ export async function fetchStartupDetailsHandler(portfoliodetailsId, key) {
                      privateFields{
                         keyName,
                         booleanKey
+                        tabName
                      }
                   },
                   
@@ -807,7 +811,8 @@ export async function fetchStartupDetailsHandler(portfoliodetailsId, key) {
                      isDescriptionPrivate,
                      privateFields{
                         keyName,
-                        booleanKey
+                        booleanKey,
+                        tabName
                      }
                   }
               }

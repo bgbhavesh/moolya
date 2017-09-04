@@ -304,11 +304,11 @@ export default class MlStartupCharts extends React.Component{
         return d.year;
       },
         prlY = function(d) {
-          return d / 100;
+          return d;
         },
 
       xScale = 'ordinal',
-      yTicks = [1, "%"],
+      //yTicks = [1, "%"],
       prlXLabel = "Profit, Revenue & Liablity",
       prlYLabel = "Value",
 

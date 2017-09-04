@@ -156,7 +156,7 @@ span.actions_switch.show_act{bottom: 0px;background:url(../images/actions_block_
 .bottom_actions_block .hex_btn.hex_btn_in:hover:after{border-color: transparent transparent transparent #fff;color: #ef4647}
 .bottom_actions_block .hex_btn.hex_btn_in:hover:before{border-color: transparent #fff transparent transparent;color: #ef4647}
 .large_popover{min-width: 736px;margin-left: 8px;max-height: 400px;}
-.popover{max-width: inherit;}
+.popover{max-width: inherit;z-index: 14;}
 .popover-content{padding:9px 0px 9px 0px;}
 .bottom_actions_block .ml, .bottom_actions_block .fa{font-size: 22px; text-shadow: none; }
 .bottom_actions_block .ml.ml-import,.bottom_actions_block .ml.ml-export,.bottom_actions_block .ml.ml-annotate,.bottom_actions_block .ml.ml-plus,.bottom_actions_block .ml.ml-save,.bottom_actions_block .ml.ml-delete, .bottom_actions_block .ml-document-approve, .bottom_actions_block .ml-document-reject,.bottom_actions_block .flaticon-ml-file, .bottom_actions_block .flaticon-ml-file-1, .bottom_actions_block .flaticon-ml-cloud-computing-1, .bottom_actions_block .flaticon-ml-unassign-user, .bottom_actions_block .flaticon-ml-assign-user, .bottom_actions_block .flaticon-ml-active-user, .bottom_actions_block .flaticon-ml-inactive-user{font-weight: bold; }
@@ -1105,6 +1105,8 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .library-wrap .thumbnail .fa.fa-minus{position: absolute; right: 6px; bottom: 16px; color: #FFF; background: #EF4647; width: 20px; height: 20px; text-align: center; line-height: 18px; border-radius: 4px; cursor: pointer; z-index: 1; font-size: 12px;}
 .library-wrap .thumbnail .fa.fa-times{position: absolute; right: 5px; bottom: 16px; color: #FFF; background: #EF4647; width: 20px; height: 20px; text-align: center; line-height: 18px; border-radius: 4px; cursor: pointer; z-index: 1; font-size: 12px;}
 .library-wrap .thumbnail .fa.fa-trash-o{position:absolute;right:-6px;top:-6px;color:#fff;background:#ef4647;width:25px;height:25px;text-align:center;line-height:25px;border-radius:50%;cursor:pointer}
+.library-wrap .thumbnail .fa.fa-clock-o{position:absolute;left:-6px;top:-6px;color:#fff;background:#273545;width:25px;height:25px;text-align:center;line-height:25px;border-radius:50%;cursor:pointer}
+.library-wrap .thumbnail .fa.fa-download{position:absolute;right:-6px;top:-6px;color:#fff;background:#ef4647;width:25px;height:25px;text-align:center;line-height:25px;border-radius:50%;cursor:pointer}
 .library-wrap .thumbnail .input_types {
   float: left;
   margin-top: -15px;
@@ -1464,7 +1466,7 @@ button.close {
 margin: 0px;
 }
 .show-information{position: absolute; background: rgba(51, 51, 51, 0.76); width: 100%; top: 0; left: 0; height: 100%; z-index: 9; color: #fff; padding: 10px;border-radius: 0 0 4px 4px;text-align: center; line-height:50px}
-.uploaded_files .panel-body{position: relative;}
+.uploaded_files .panel-body{position: relative;height: 158px; overflow: auto;}
 .full_user_block .form_inner_block {width: 100%;}
 .full_user_block .ml{	font-size: 32px;}
 

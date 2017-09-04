@@ -2,7 +2,7 @@ import MlResolver from '../../commons/mlResolverDef';
 
 MlResolver.MlMutationResolver['updatePayment'] = (obj, args, context, info) => {
   console.log(args);
-  let paymentId = args.transId;
+  let paymentId = args.transID;
   if(!paymentId) {
     return ;
   }

@@ -62,7 +62,8 @@ import SharedLibrary from './sharedLibrary'
         showSharedFiles: false,
         sharedFiles: [],
         myPortfolio: false,
-        isLibrary: false
+        isLibrary: false,
+        totalLibrarySize:0
       };
       this.toggle = this.toggle.bind(this);
       this.refetchData.bind(this);
@@ -71,6 +72,7 @@ import SharedLibrary from './sharedLibrary'
       this.portfolioShareHandler.bind(this);
       this.getSharedFiles.bind(this);
       this.showSharedFiles.bind(this);
+      this.getTotalSpaceLeft.bind(this);
     }
 
     /**
@@ -111,6 +113,7 @@ import SharedLibrary from './sharedLibrary'
       }
       if (portfolioId === "library") {
         this.getLibraryDetails(userId);
+        this.getTotalSpaceLeft();
         this.setState({explore: false, isLibrary: true, hideLock: true, deleteOption: false})
       }
       if (portfolioId === "transaction_portfolio_EditRequests") {
@@ -122,6 +125,19 @@ import SharedLibrary from './sharedLibrary'
       // if(this.state.getLibraryInfo) {
       //   this.getLibraryDetails(userId);
       // }
+    }
+
+    getTotalSpaceLeft(response) {
+      let totalSize = 0;
+      if( response && response.length > 0){
+        response.map(function(data){
+          if(data && data.fileSize){
+            totalSize = totalSize + data.fileSize;
+          }
+        })
+        totalSize = totalSize.toFixed(2);
+        this.setState({totalLibrarySize: totalSize})
+      }
     }
 
     async getCentralLibrary() {
@@ -146,6 +162,7 @@ import SharedLibrary from './sharedLibrary'
           that.setState({documentDetails: documents})
         }
       })
+      this.getTotalSpaceLeft(resp)
     }
 
     async privacySeggregation() {
@@ -155,7 +172,6 @@ import SharedLibrary from './sharedLibrary'
       let templates = [];
       let documents = [];
       const response  = await fetchLibraryBasedOnPortfolioIdHandler(this.props.portfolioDetailsId,this.props.client)
-      // console.log('response from privacySeggregation', response);
       response.map(function (data) {
         if (data.libraryType === "image") {
           images.push(data);
@@ -244,24 +260,25 @@ import SharedLibrary from './sharedLibrary'
 
     ImageUpload(e) {
       let file = e.target.files[0];
-      // let fileSizeExceeded =  file.size/1024/1024 > 10 ? false : true;
-      console.log('file attributes', file.size/1024/1024+"MB" )
-      this.setState({fileType: file.type, fileName: file.name});
+      let fileSize  = file.size/1024/1024;
       let fileType = file.type;
+      this.setState({fileType: file.type, fileName: file.name, fileSize: fileSize});
       this.getCentralLibrary();
-      let fileExists = this.checkIfFileAlreadyExists(file.name, "image");
-      let typeShouldBe = _.compact(fileType.split('/'));
-      if (file && typeShouldBe && typeShouldBe[0] == "image") {
-        console.log('--fileStatus--', fileExists)
-        if (!fileExists ) {
-          let data = {moduleName: "PROFILE", actionName: "UPDATE"}
-          let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "image"));
-          console.log('upload response', response)
+      if(this.state.totalLibrarySize < 50){
+        let fileExists = this.checkIfFileAlreadyExists(file.name, "image");
+        let typeShouldBe = _.compact(fileType.split('/'));
+        if (file && typeShouldBe && typeShouldBe[0] == "image") {
+          if (!fileExists ) {
+            let data = {moduleName: "PROFILE", actionName: "UPDATE"}
+            let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "image"));
+          } else {
+            toastr.error("Image with the same file name already exists");
+          }
         } else {
-          toastr.error("Image with the same file name already exists");
+          toastr.error("Please select a Image Format");
         }
       } else {
-        toastr.error("Please select a Image Format");
+        toastr.error("Allotted library limit exceeded");
       }
     }
 
@@ -273,20 +290,25 @@ import SharedLibrary from './sharedLibrary'
 
     videoUpload(e) {
       let file = e.target.files[0];
-      this.setState({fileType: file.type, fileName: file.name});
+      let fileSize  = file.size/1024/1024;
       let fileType = file.type;
+      this.setState({fileType: file.type, fileName: file.name, fileSize: fileSize});
       this.getCentralLibrary();
-      let fileExists = this.checkIfFileAlreadyExists(file.name, "video");
-      let typeShouldBe = _.compact(fileType.split('/'));
-      if (file && typeShouldBe && typeShouldBe[0] == "video") {
-        if (!fileExists) {
-          let data = {moduleName: "PROFILE", actionName: "UPDATE"}
-          let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "video"));
+      if(this.state.totalLibrarySize < 50) {
+        let fileExists = this.checkIfFileAlreadyExists(file.name, "video");
+        let typeShouldBe = _.compact(fileType.split('/'));
+        if (file && typeShouldBe && typeShouldBe[0] == "video") {
+          if (!fileExists) {
+            let data = {moduleName: "PROFILE", actionName: "UPDATE"}
+            let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "video"));
+          } else {
+            toastr.error("Video with the same file name already exists");
+          }
         } else {
-          toastr.error("Video with the same file name already exists");
+          toastr.error("Please select a Video Format");
         }
       } else {
-        toastr.error("Please select a Video Format");
+        toastr.error("Allotted library limit exceeded");
       }
     }
 
@@ -298,20 +320,25 @@ import SharedLibrary from './sharedLibrary'
 
     TemplateUpload(e) {
       let file = e.target.files[0];
-      this.setState({fileType: file.type, fileName: file.name});
       let fileType = file.type;
+      let fileSize  = file.size/1024/1024;
+      this.setState({fileType: file.type, fileName: file.name, fileSize: fileSize});
       this.getCentralLibrary();
-      let fileExists = this.checkIfFileAlreadyExists(file.name, "template");
-      let typeShouldBe = _.compact(fileType.split('/'));
-      if (file && typeShouldBe && typeShouldBe[0] == "image") {
-        if (!fileExists) {
-          let data = {moduleName: "PROFILE", actionName: "UPDATE"}
-          let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "template"));
+      if(this.state.totalLibrarySize < 50) {
+        let fileExists = this.checkIfFileAlreadyExists(file.name, "template");
+        let typeShouldBe = _.compact(fileType.split('/'));
+        if (file && typeShouldBe && typeShouldBe[0] == "image") {
+          if (!fileExists) {
+            let data = {moduleName: "PROFILE", actionName: "UPDATE"}
+            let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "template"));
+          } else {
+            toastr.error("Template with the same file name already exists");
+          }
         } else {
-          toastr.error("Template with the same file name already exists");
+          toastr.error("Please select a Template Format");
         }
       } else {
-        toastr.error("Please select a Template Format");
+        toastr.error("Allotted library limit exceeded");
       }
     }
 
@@ -323,21 +350,25 @@ import SharedLibrary from './sharedLibrary'
 
     documentUpload(e) {
       let file = e.target.files[0];
-      this.setState({fileType: file.type, fileName: file.name});
+      let fileSize  = file.size/1024/1024;
       let fileType = file.type;
+      this.setState({fileType: file.type, fileName: file.name, fileSize: fileSize});
       this.getCentralLibrary();
-      let fileExists = this.checkIfFileAlreadyExists(file.name, "document");
-      let typeShouldBe = _.compact(fileType.split('/'));
-      console.log("--doc format--",fileType)
-      if (file && typeShouldBe && typeShouldBe[1] !== "image" && typeShouldBe[1] !== "video") {
-        if (!fileExists) {
-          let data = {moduleName: "PROFILE", actionName: "UPDATE"}
-          let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "document"));
+      if(this.state.totalLibrarySize < 50) {
+        let fileExists = this.checkIfFileAlreadyExists(file.name, "document");
+        let typeShouldBe = _.compact(fileType.split('/'));
+        if (file && typeShouldBe && typeShouldBe[1] !== "image" && typeShouldBe[1] !== "video") {
+          if (!fileExists) {
+            let data = {moduleName: "PROFILE", actionName: "UPDATE"}
+            let response = multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this, "document"));
+          } else {
+            toastr.error("Document with the same file name already exists")
+          }
         } else {
-          toastr.error("Document with the same file name already exists")
+          toastr.error("Please select a Document Format")
         }
       } else {
-        toastr.error("Please select a Document Format")
+        toastr.error("Allotted library limit exceeded");
       }
     }
 
@@ -349,7 +380,6 @@ import SharedLibrary from './sharedLibrary'
 
     refetchData() {
       let userId = this.props.portfolioDetailsId;
-      console.log("this.state.myPortfolio", this.state.myPortfolio);
       if(!this.state.myPortfolio) {
         this.getLibraryDetails(userId)
       } else {
@@ -524,6 +554,7 @@ import SharedLibrary from './sharedLibrary'
       let Details = {
         userId: this.props.portfolioDetailsId,
         fileName: this.state.fileName,
+        fileSize: this.state.fileSize,
         fileUrl: link,
         fileType: this.state.fileType,
         libraryType: dataType,
@@ -552,7 +583,6 @@ import SharedLibrary from './sharedLibrary'
       resp.map(function (data) {
         if (data.libraryType === "image") {
           images.push(data);
-          console.log("imageSpecifications", images);
           that.setState({imageSpecifications: images, popImagesSpecifications: images})
         } else if (data.libraryType === "video") {
           videos.push(data)
@@ -598,7 +628,6 @@ import SharedLibrary from './sharedLibrary'
     ///================================================================================================================
 
     onFileSelect(index,type, e ) {
-      console.log('--index--', index, '==type==', type, '--event--', e.target.checked)
       if(e.target.checked) {
         switch(type){
           case 'image':
@@ -746,9 +775,7 @@ import SharedLibrary from './sharedLibrary'
     showSharedFiles() {
     let that = this;
     let popImageData = that.state.sharedFiles || [];
-    // console.log('==shared files==',that.state.sharedFiles);
     const popImages = popImageData.map(function (show, id) {
-      // console.log('urls', show.files.url)
       return (
         <div className="thumbnail" key={id}>
           <img src={show.file.url} style={{'width':'200px', 'height':'150px'}}/>
@@ -972,7 +999,6 @@ import SharedLibrary from './sharedLibrary'
     sendDataToPortfolioLibrary(dataDetail, index) {
       let portfolioId = FlowRouter.getRouteName();
       let tempObject = Object.assign({}, dataDetail);
-      console.log('tempObject', tempObject);
       if (dataDetail.libraryType === "image") {
         if (portfolioId === "library") {
           let data = this.state.imageDetails || [];
@@ -1040,7 +1066,6 @@ import SharedLibrary from './sharedLibrary'
 
     async updateLibraryPortfolioLibrary(id, data) {
       const resp = await updateLibrary(id, data, this.props.client)
-      console.log(resp)
       // if(!resp.success){
       //   toastr.error("Image already Exists in library")
       // }
@@ -1346,7 +1371,6 @@ import SharedLibrary from './sharedLibrary'
                 </div>
                 <div className="modal-body">
                   <iframe src={`https://docs.google.com/gview?url=${this.state.previewDocument}&embedded=true`}/>
-                  {/*{console.log(this.state.previewDocument)}*/}
                   {/*{<MlFileViewer/>}*/}
                   {/*<div className="img_scroll"><MlDocViewer/></div>*/}
                 </div>
@@ -1391,7 +1415,7 @@ import SharedLibrary from './sharedLibrary'
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
                 {this.state.isLibrary ? this.popImages() : this.images()}
-                <p className="show-information" style={{'display':'none'}}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB</p>
+                <p className="show-information" style={{'display':'none'}}>Document Format : png, jpg, jpeg <br />Document Size : 10 MB <br /> Library Size : {this.state.totalLibrarySize}/50 MB</p>
               </div>
             </div>
           </div>
@@ -1412,7 +1436,7 @@ import SharedLibrary from './sharedLibrary'
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
                 {this.state.isLibrary ? this.popVideos() : this.videos()}
-                <p className="show-information" style={{'display':'none'}}>Document Format : mp4 <br />Document Size : 10 MB</p>
+                <p className="show-information" style={{'display':'none'}}>Document Format : mp4 <br />Document Size : 10 MB <br /> Library Size : {this.state.totalLibrarySize}/50 MB</p>
               </div>
             </div>
           </div>
@@ -1434,7 +1458,7 @@ import SharedLibrary from './sharedLibrary'
               </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
                 {this.state.isLibrary ? this.popTemplates() : this.templates()}
-                <p className="show-information" style={{'display':'none'}}>Document Format :png, jpg, jpeg <br />Document Size : 10 MB</p>
+                <p className="show-information" style={{'display':'none'}}>Document Format :png, jpg, jpeg <br />Document Size : 10 MB <br /> Library Size : {this.state.totalLibrarySize}/50 MB</p>
               </div>
             </div>
           </div>
@@ -1459,7 +1483,7 @@ import SharedLibrary from './sharedLibrary'
                 </div>
               <div className="panel-body" onContextMenu={(e) => e.preventDefault()}>
                 {this.state.isLibrary ? this.popDocuments() : this.documents()}
-                <p className="show-information" style={{'display':'none'}}>Document Format : docs, docx, xls, xslx, ppt <br />Document Size : 10 MB</p>
+                <p className="show-information" style={{'display':'none'}}>Document Format : docs, docx, xls, xslx, ppt <br />Document Size : 10 MB <br /> Library Size : {this.state.totalLibrarySize}/50 MB</p>
               </div>
             </div>
           </div>

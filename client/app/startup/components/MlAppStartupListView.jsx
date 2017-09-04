@@ -31,6 +31,9 @@ export default class MlAppStartupListView extends Component {
           <div className="ideators_list_block">
             {/*<div className="premium"><span>Starter</span></div>*/}
             {/*<h3>{startup.aboutUs&&startup.aboutUs.description?startup.aboutUs.description:""}</h3>*/}
+            <div className="premium">
+              <span>{startup.accountType}</span>
+            </div>
             <h3>{startup.firstName}</h3>
             <div className="list_icon"><span className="ml ml-startup"></span></div>
             <div className="block_footer">

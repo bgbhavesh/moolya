@@ -28,7 +28,7 @@
           "multipartUploadThreshold": 20971520,
           "multipartUploadSize": 15728640,
           "urlExpirationTime":4000,
-          "bucketName":"moolya-users/",
+          "bucketName":"moolya-users",
           "adminBucketKey":"moolya-admin-users"
         }
       },

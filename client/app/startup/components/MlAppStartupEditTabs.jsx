@@ -82,7 +82,7 @@ export default class MlAppStartupEditTabs extends React.Component {
         title: "Investor",
         component: <MlStartupInvestor client={appClient} isAdmin={false} key="3"
                                       getInvestorDetails={this.getInvestorDetails.bind(this)}
-                                      portfolioDetailsId={this.props.portfolioDetailsId}/>
+                                      portfolioDetailsId={this.props.portfolioDetailsId} tabName="investor"/>
       },
       {
         tabClassName: 'tab',

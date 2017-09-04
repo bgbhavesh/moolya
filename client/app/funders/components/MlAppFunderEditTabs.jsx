@@ -94,7 +94,7 @@ export default class MlAppFunderEditTabs extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Success Stories",
-        component: <MlFunderSuccessStories client={appClient} isAdmin={false} key="7"
+        component: <MlFunderSuccessStories client={appClient} isAdmin={false} key="7" tabName="successStories"
                                            getSuccessStoriesDetails={this.getSuccessStoriesDetails.bind(this)}
                                            portfolioDetailsId={this.props.portfolioDetailsId}/>
       },

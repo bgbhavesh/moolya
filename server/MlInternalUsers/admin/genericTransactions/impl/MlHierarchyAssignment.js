@@ -9,6 +9,12 @@ class MlHierarchyAssignment {
 
   findHierarchy(clusterId, departmentId, subDepartmentId, roleId, subChapterId) {        // subChapterId is the Id loggedIn user belongs to not his role
     let roleDetails = mlDBController.findOne('MlRoles', {_id: roleId})
+
+    /*
+     SubChapter Admin(Moolya/Non-Moolya) is admin of a specific subChapter, use id to figure out if subchapter is a default subchapter(isDefaultSubChapter)
+     and then use that to find hierarchy
+     */
+
     var isDefaultSubChapter = true;
     if(subChapterId && subChapterId != "all"){
       let subChapter = mlDBController.findOne('MlSubChapters', {_id: subChapterId});
@@ -113,7 +119,16 @@ class MlHierarchyAssignment {
               2) Parent node can only self assign an unassigned transaction.
               3) Parent node can't assign an already assigned transaction if transaction belongs to same level.
           */
-          let parentHierarchy = _.find(userhierarchy.teamStructureAssignment, {"assignedLevel":'cluster', "reportingRole":''});
+          let parentHierarchy = {};
+          if(userhierarchy.isDefaultSubChapter){
+            parentHierarchy = _.find(userhierarchy.teamStructureAssignment, {"assignedLevel":'cluster', "reportingRole":''});
+          }else{
+            parentHierarchy = _.find(userhierarchy.teamStructureAssignment, function (obj) {
+              if(obj.assignedLevel == "subChapter" && (!obj.reportingRole || obj.reportingRole == "")){
+                return obj
+              }
+            });
+          }
 
           /*    Checking if transaction is already assigned or not     */
           if(!trans.allocation){
@@ -389,7 +404,8 @@ class MlHierarchyAssignment {
           //let userhierarchy = this.findHierarchy(role.clusterId, role.departmentId, role.subDepartmentId, role.roleId);
 
           /*
-            SubChapter Admin is admin of a specific subChapter, use id to figure out if subchapter is a default subchapter
+           SubChapter Admin(Moolya/Non-Moolya) is admin of a specific subChapter, use id to figure out if subchapter is a default subchapter(isDefaultSubChapter)
+           and then use that to find hierarchy
            */
 
           var isDefaultSubChapter = true;

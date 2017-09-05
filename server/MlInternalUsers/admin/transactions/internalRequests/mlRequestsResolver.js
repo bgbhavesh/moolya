@@ -48,7 +48,7 @@ MlResolver.MlMutationResolver['createRequestss'] = (obj, args, context, info) =>
         return response;
       }
     }else{
-      let result = "No Hierarchy available for user,contact Administrator"
+      let result = "No Hierarchy available for user, contact Administrator"
       let response = new MlRespPayload().errorPayload(result);
       return response;
     }

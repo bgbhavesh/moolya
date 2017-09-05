@@ -10,7 +10,11 @@ import MlLoader from '../../../../../commons/components/loader/loader'
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 import 'react-responsive-tabs/styles.css'
-
+const genderValues = [
+  {value: 'male', label: 'Male'},
+  {value: 'female', label: 'Female'},
+  {value: 'others', label: 'Others'}
+];
 
 export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
   constructor(props,context){
@@ -64,7 +68,6 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
     })
   }
 
-
   render(){
     const showLoader = this.state.loading;
     return (
@@ -87,9 +90,14 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
                           <FontAwesome name='unlock' className="input_icon un_lock" id="islastNamePrivate"/>
                         </div>
 
+                        {/*<div className="form-group">*/}
+                          {/*<input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label"  disabled="disabled"/>*/}
+                          {/*<FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate"/>*/}
+                        {/*</div>*/}
+
                         <div className="form-group">
-                          <input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label"  disabled="disabled"/>
-                          <FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate"/>
+                          <Select name="form-field-name" placeholder="Select Gender" value={this.state.data.gender}  options={genderValues} disabled className="float-label" />
+                          <FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate"/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isGenderPrivate}/>
                         </div>
 
                         <div className="form-group">

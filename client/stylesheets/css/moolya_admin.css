@@ -1145,6 +1145,8 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 
 .ideas_swiper{margin-bottom: 15px;}
 .ideas_swiper .ideas_block{height: 182px; background-color: #273545; border-radius: 10px; text-align: center; position: relative; margin-bottom: 15px; color: #fff; width: 305px; padding: 10px 0px; font-size: 24px; text-shadow: none;background-size: cover;background-position: center center; }
+.ideas_swiper .ideas_block.swiper-slide-active{background-color: #ef4647;}
+.ideas_swiper .ideas_block.swiper-slide-active:before{border-color: #ca2122 #fff;}
 .ideas_swiper .ideas_block:before {content: ""; position: absolute; top: 0; right: 0; border-width: 0 25px 25px 0; border-style: solid; border-color: #0e1c2d #fff; }
 .ideas_swiper .ideas_block img{width: 100px; height: 60px }
 .ideas_swiper .ideas_block h3{color: #ffffff; font-size: 16px; bottom: 0; position: absolute; background: rgba(39, 53, 69, 0.83); width: 100%; padding:5px 0px; border-radius: 0 0 10px 10px;line-height: 19px;}

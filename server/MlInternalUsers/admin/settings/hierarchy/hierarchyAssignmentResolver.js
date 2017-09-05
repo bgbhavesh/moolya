@@ -307,7 +307,7 @@ MlResolver.MlQueryResolver['fetchHierarchyUsers'] = (obj, args, context, info) =
   let levelCode = "";
   let department = mlDBController.findOne("MlDepartments", {"_id": args.departmentId}, context)
   if (department && department.isActive && args.roleId) {
-    hierarchy= mlAssignHierarchy.findHierarchy(args.clusterId, args.departmentId, args.subDepartmentId, args.roleId)
+    hierarchy= mlAssignHierarchy.findHierarchy(args.clusterId, args.departmentId, args.subDepartmentId, args.roleId, args.subChapterId)
   }
   if(hierarchy){
     //get all users associated with the hierarchy

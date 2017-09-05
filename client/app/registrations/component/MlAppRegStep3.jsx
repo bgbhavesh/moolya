@@ -100,7 +100,7 @@ export default class MlAppRegStep3 extends React.Component {
     this.setState({'registrationDetails': this.props.registrationData});
   }
 
-  isValidated(){
+  isUpdated(){
     let contactDetailsValidate = this.refs.contactDetailsComponent.isValidate()
     let emailDetailsValidate = this.refs.emailDetailsComponent.isValidate()
     let addressDetailsValidate = this.refs.addressDetailsComponent.isValidate()

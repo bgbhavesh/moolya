@@ -201,6 +201,15 @@ export default class MlAppServiceProviderIndividualComponent extends React.Compo
   }
 
   isValidated(){
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      return false
+    }else{
+      return true
+    }
+  }
+
+  isUpdated(){
     let existingObject = this.props.registrationDetails || {}
     let oldObject = {
       title: existingObject.title ? existingObject.title:null,

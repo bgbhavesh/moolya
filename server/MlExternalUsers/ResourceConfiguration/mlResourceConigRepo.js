@@ -22,7 +22,7 @@ class MlResourceConfigRepo{
               break;
 
               case 'MANAGESCHEDULE':{
-                  allowedCommunities = [  'SPS']
+                  allowedCommunities = ['SPS', 'FUN']
               }
               break;
           }

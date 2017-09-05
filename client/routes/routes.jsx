@@ -5,14 +5,11 @@ import {mount} from 'react-mounter';
 import {findUserActionHandler} from './actions/findCurrentUserDetails'
 import loginActions,{loginActionHandler} from '../login/actions/loginActions';
 import MlAccessDenied from '../admin/MlAccessDenied'
+import MlLogout from '../login/layouts/MlLogout'
 
 let userId = Meteor.userId();
 const localStorageLoginToken = localStorage.getItem('Meteor.loginToken');
-// if(user && user.profile && user.profile.isExternaluser){
-//   FlowRouter.go("/app");
-// }else if(user && user.profile && user.profile.isInternaluser){
-//   FlowRouter.go("/admin");
-// }
+
 FlowRouter.route('/', {
   action: async function() {
     let response = await findUserActionHandler(localStorageLoginToken);
@@ -67,5 +64,12 @@ FlowRouter.route('/unauthorize', {
   name:'unauthorize',
   action:()=>{
     mount(MlLoginLayout, {content:<MlAccessDenied/>})
+  }
+});
+
+FlowRouter.route('/logout', {
+  name:'logout',
+  action:()=>{
+    mount(MlLoginLayout, {content:<MlLogout formSubmit={loginActionHandler.onLoginFormSubmit}/>})
   }
 });

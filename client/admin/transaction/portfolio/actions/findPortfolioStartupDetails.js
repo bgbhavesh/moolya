@@ -76,6 +76,12 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                     fileName,
                     fileUrl
                   }
+                  privateFields{
+                      keyName
+                      booleanKey
+                      index
+                      tabName
+                  }
                   isLogoPrivate,
                   isDescriptionPrivate,
                   annotatorId
@@ -743,7 +749,9 @@ export async function fetchStartupDetailsHandler(portfoliodetailsId, key) {
                     index
                     privateFields{
                         keyName,
-                        booleanKey
+                        booleanKey,
+                        index
+                        tabName
                     }
                   },
                   awardsRecognition{

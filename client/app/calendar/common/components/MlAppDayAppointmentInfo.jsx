@@ -121,7 +121,7 @@ export default class MlAppDayAppointmentInfo extends Component {
                               return (
                                 <li key={aptIndex} className="list-group-item">
                                   <span className="task_with">
-                                    <span className="ml ml-funder">
+                                    <span className="ml my-ml-Investors">
                                     </span>
                                   </span> { appointments.name } <span className="task_status act_task">
                                   <FontAwesome name='check'/>

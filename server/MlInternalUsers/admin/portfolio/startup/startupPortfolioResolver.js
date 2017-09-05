@@ -110,6 +110,10 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioAboutUs'] = (obj, args, context
     startAboutUsArray["rating"] = portfolio&&portfolio.rating?portfolio.rating:null;
     startAboutUsArray["assets"] = portfolio&& portfolio.assets?portfolio.assets:[];
 
+    var object = startAboutUsArray["aboutUs"];
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    startAboutUsArray["aboutUs"] = filteredObject
+
     //private keys for service products
       var object = startAboutUsArray["serviceProducts"];
       var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)

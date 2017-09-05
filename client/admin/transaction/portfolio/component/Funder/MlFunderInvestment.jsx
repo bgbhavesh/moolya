@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import {Popover, PopoverContent, PopoverTitle} from "reactstrap";
-import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../client/admin/utils/formElemUtil";
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../../client/admin/utils/formElemUtil";
 import _ from "lodash";
 import Datetime from "react-datetime";
 import gql from "graphql-tag";
@@ -37,6 +37,7 @@ export default class MlFunderInvestment extends React.Component {
   componentDidUpdate() {
     OnLockSwitch();
     dataVisibilityHandler();
+    initalizeFloatLabel();
   }
 
   componentDidMount() {
@@ -54,8 +55,9 @@ export default class MlFunderInvestment extends React.Component {
     let portfolioDetailsId = that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.funderPortfolio && that.context.funderPortfolio.investments)
     const response = await fetchfunderPortfolioInvestor(portfolioDetailsId);
-    if (empty && response) {
-      this.setState({loading: false, funderInvestment: response, funderInvestmentList: response});
+    if (empty) {
+      if(response)
+        this.setState({loading: false, funderInvestment: response, funderInvestmentList: response});
     } else {
       this.setState({
         loading: false,

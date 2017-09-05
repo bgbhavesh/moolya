@@ -71,16 +71,20 @@ export default class MlStartupMCL extends React.Component{
       }
 
       this.setState({loading: false,data:data}, () => {
-        this.lockPrivateKeys('memberships', responseM.memberships.privateFields);
+        var MprivateKeys = responseM && responseM.memberships? responseM.memberships.privateFields: [];
+        this.lockPrivateKeys('memberships', MprivateKeys);
       });
 
-      this.setState({loading: false,data:data}, () => {
-        this.lockPrivateKeys('licenses', responseL.licenses.privateFields);
+      this.setState({loading: false, data: data}, () => {
+        var LprivateKeys = responseL && responseL.licenses? responseL.licenses.privateFields: [];
+        this.lockPrivateKeys('licenses', LprivateKeys);
       });
 
-      this.setState({loading: false,data:data}, () => {
-        this.lockPrivateKeys('compliances', responseC.compliances.privateFields);
+      this.setState({loading: false, data: data}, () => {
+        var CprivateKeys = responseC && responseC.compliances? responseC.compliances.privateFields: [];
+        this.lockPrivateKeys('compliances', CprivateKeys);
       });
+
     }else {
       var pf;
       if (responseM && responseM.memberships) {

@@ -38,6 +38,10 @@ export function searchFunction(args) {
         }
       }
       filterArray.push(json);
+    }else if(s.operator == "Starts_With"){
+      let regex={$regex:"\^"+s.value.trim()+".*",$options:"i"};
+      json[s.fieldName]=regex;
+      ary.push(json);
     }else{
       let regex={$regex:".*"+s.value+".*",$options:"i"};
       json[s.fieldName]=regex

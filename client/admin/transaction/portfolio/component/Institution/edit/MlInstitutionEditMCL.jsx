@@ -3,7 +3,7 @@ import MlLoader from '../../../../../../commons/components/loader/loader'
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch} from '../../../../../utils/formElemUtil';
 import {fetchInstitutionDetailsHandler} from '../../../actions/findPortfolioInstitutionDetails'
-
+import _ from 'lodash';
 const MEMBERKEY = 'memberships'
 const LICENSEKEY = 'licenses'
 const COMPLIANCEKEY = 'compliances'
@@ -49,6 +49,10 @@ export default class MlInstitutionEditMCL extends React.Component {
     let that = this;
     let data = {};
     let portfoliodetailsId = that.props.portfolioDetailsId;
+    var responseM = await fetchInstitutionDetailsHandler(portfoliodetailsId, MEMBERKEY);
+    var responseC = await fetchInstitutionDetailsHandler(portfoliodetailsId, COMPLIANCEKEY);
+    var responseL = await fetchInstitutionDetailsHandler(portfoliodetailsId, LICENSEKEY);
+
     if (that.context.institutionPortfolio && (that.context.institutionPortfolio.memberships || that.context.institutionPortfolio.compliances || that.context.institutionPortfolio.licenses)) {
       this.setState({
         memberships: that.context.institutionPortfolio.memberships,
@@ -57,50 +61,59 @@ export default class MlInstitutionEditMCL extends React.Component {
       });
       data = {
         memberships: that.context.institutionPortfolio.memberships,
-        licenses: that.context.institutionPortfolio.compliances,
-        compliances: that.context.institutionPortfolio.licenses
+        licenses: that.context.institutionPortfolio.licenses,
+        compliances: that.context.institutionPortfolio.compliances
       }
+
+      this.setState({loading: false,data:data}, () => {
+        var MprivateKeys = responseM && responseM.memberships? responseM.memberships.privateFields: [];
+        this.lockPrivateKeys('memberships', MprivateKeys);
+      });
+
+      this.setState({loading: false, data: data}, () => {
+        var LprivateKeys = responseL && responseL.licenses? responseL.licenses.privateFields: [];
+        this.lockPrivateKeys('licenses', LprivateKeys);
+      });
+
+      this.setState({loading: false, data: data}, () => {
+        var CprivateKeys = responseC && responseC.compliances? responseC.compliances.privateFields: [];
+        this.lockPrivateKeys('compliances', CprivateKeys);
+      });
     } else {
-      var responseM = await fetchInstitutionDetailsHandler(portfoliodetailsId, MEMBERKEY);
+      var pf;
       if (responseM && responseM.memberships) {
         var object = responseM.memberships;
         object = _.omit(object, '__typename')
         this.setState({memberships: object});
-        this.setState({privateFields: object.privateFields});
+        pf = object.privateFields;
       }
-      var responseC = await fetchInstitutionDetailsHandler(portfoliodetailsId, COMPLIANCEKEY);
       if (responseC && responseC.compliances) {
         var object = responseC.compliances;
         object = _.omit(object, '__typename')
         this.setState({compliances: object});
 
-        var pf = this.state.privateFields;
         if (object.privateFields) {
           pf = pf.concat(object.privateFields)
-          this.setState({privateFields: pf});
         }
       }
-      var responseL = await fetchInstitutionDetailsHandler(portfoliodetailsId, LICENSEKEY);
       if (responseL && responseL.licenses) {
         var object = responseL.licenses;
         object = _.omit(object, '__typename')
         this.setState({licenses: object});
-        var pf = this.state.privateFields;
         if (object.privateFields) {
           pf = pf.concat(object.privateFields)
-          this.setState({privateFields: pf});
         }
       }
-
+      this.setState({privateFields:pf});
       data = {
         memberships: this.state.memberships,
         licenses: this.state.licenses,
         compliances: this.state.compliances
       }
-    }
 
-    this.setState({loading: false, data: data})
-    this.updateprivateFields();
+      this.setState({loading: false, data: data})
+      this.updateprivateFields();
+    }
   }
 
   componentDidMount() {
@@ -190,6 +203,22 @@ export default class MlInstitutionEditMCL extends React.Component {
     this.props.getInstitutionMCL(data, this.state.privateKey)
   }
 
+  /**
+   * UI creating lock function
+   * */
+  lockPrivateKeys(tabname, privateValues) {
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: tabname});
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: tabname})
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    // setTimeout(function () {
+    _.each(keys, function (pf) {
+      $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+    // }, 10)
+  }
+
   render() {
     const showLoader = this.state.loading;
     return (
@@ -253,4 +282,5 @@ export default class MlInstitutionEditMCL extends React.Component {
 };
 MlInstitutionEditMCL.contextTypes = {
   institutionPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object,
 };

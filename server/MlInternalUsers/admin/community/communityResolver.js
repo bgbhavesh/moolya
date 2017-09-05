@@ -34,7 +34,7 @@ MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
     // query.communityDefId=item._id;
     query.communityDefName = item.name;
     query.isApprove=true;
-    if(item.communityImageLink!="ml ml-browser"){
+    if(item.communityImageLink!="ml my-ml-browser_5"){
       response.push({
         key: item._id,
         // count: mlDBController.find('MlCommunity', query, context).count(),
@@ -49,7 +49,7 @@ MlResolver.MlQueryResolver['FetchMapData'] = (obj, args, context, info) => {
     response.push({
       key: '123',
       count: totalUsers,
-      icon: "ml ml-browser"
+      icon: "ml my-ml-browser_5"
     })
   if(chapterCount>=0){
     response.push({

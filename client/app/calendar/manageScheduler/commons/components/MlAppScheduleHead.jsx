@@ -105,7 +105,7 @@ export default class MlCalendarHeader extends Component {
                 < li>
                   <div >
                     <a href="" onClick={()=>that.changeProfile(profile.profileId)}>
-                      <span className="icon_bg"> <span className="icon_lg ml ml-funder"></span></span><br />
+                      <span className="icon_bg"> <span className="icon_lg ml my-ml-Investors"></span></span><br />
                       <div className="tooltiprefer">
                         <span>{profile.communityName}</span>
                       </div>

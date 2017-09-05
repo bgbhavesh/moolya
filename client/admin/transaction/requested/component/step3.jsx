@@ -46,7 +46,7 @@ export default class Step3 extends React.Component{
     const resp=this.props.getRegistrationContactDetails();
     this.setState({'registrationDetails':this.props.registrationData});
   }
-  isValidated(){
+  isUpdated(){
     let contactDetailsValidate = this.refs.contactDetailsComponent.isValidate()
     let emailDetailsValidate = this.refs.emailDetailsComponent.isValidate()
     let addressDetailsValidate = this.refs.addressDetailsComponent.isValidate()

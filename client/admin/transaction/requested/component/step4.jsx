@@ -99,7 +99,7 @@ export default class Step4 extends React.Component{
       this.setState({loading:false,socialLinkArray:nextProps.registrationData.socialLinksInfo||[]});
     //}
   }
-  isValidated(){
+  isUpdated(){
     if(this.refs["socialLinkTypeUrl"].value){
       return false
     }else if(this.state.selectedSocialLinkLabel){

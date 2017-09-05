@@ -4,7 +4,7 @@ import ScrollArea from "react-scrollbar";
 import Datetime from "react-datetime";
 import {Popover, PopoverContent, PopoverTitle} from "reactstrap";
 import _ from "lodash";
-import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../client/admin/utils/formElemUtil";
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../../client/admin/utils/formElemUtil";
 import {multipartASyncFormHandler} from "../../../../../../client/commons/MlMultipartFormAction";
 import {fetchfunderPortfolioSuccess} from "../../actions/findPortfolioFunderDetails";
 import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler'
@@ -127,7 +127,7 @@ export default class MlFunderSuccessStories extends React.Component {
   componentDidUpdate() {
     OnLockSwitch();
     dataVisibilityHandler();
-    // initalizeFloatLabel();
+    initalizeFloatLabel();
   }
 
   componentDidMount() {

@@ -671,14 +671,14 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
         "paymentEndPoint": "paypal",
         "operation": "debit",
         "customerId": officeTransDetails.userId,
-        // "callBackUrl": "http://10.0.2.188:3000/app/myOffice"
-        "callBackUrl": Meteor.absoluteUrl() +"app/transaction"
+        "callBackUrl": "http://10.0.2.188:3000/app/myOffice"
+        // "callBackUrl": Meteor.absoluteUrl() +"app/transaction"
       };
 
       let apiRequest = {
         headers: {'content-type' : 'application/text'},
-        url:     'http://payment-services-814468192.ap-southeast-1.elb.amazonaws.com/payments/process'
-        // url:     "http://10.0.2.186:8080/payments/process"
+        // url:     'http://payment-services-814468192.ap-southeast-1.elb.amazonaws.com/payments/process'
+        url:     "http://10.0.2.140:8080/payments/process"
       };
 
       let future = new Future();

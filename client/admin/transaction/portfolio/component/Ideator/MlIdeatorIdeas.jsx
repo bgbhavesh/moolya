@@ -1,7 +1,7 @@
 import React, { Component, PropTypes }  from "react";
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {findIdeatorIdeasActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import _ from 'lodash';
 import MlLoader from '../../../../../commons/components/loader/loader'
@@ -30,6 +30,7 @@ export default class MlIdeatorIdeas extends React.Component{
   {
     OnLockSwitch();
     dataVisibilityHandler();
+    initalizeFloatLabel();
   }
   componentWillMount(){
     const resp = this.fetchPortfolioDetails();
@@ -136,7 +137,7 @@ export default class MlIdeatorIdeas extends React.Component{
               <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeasTitlePrivate" onClick={this.onClick.bind(this, "title", "isIdeasTitlePrivate")}/>
             </div>
             <div className="form-group">
-              <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description} name="description" onBlur={this.handleBlur.bind(this)}></textarea>
+              <textarea placeholder="Describe..." className="form-control float-label" id="cl_about" defaultValue={description} name="description" onBlur={this.handleBlur.bind(this)}></textarea>
               <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeasPrivate" onClick={this.onClick.bind(this, "description", "isIdeasPrivate")}/>
             </div>
           </form>

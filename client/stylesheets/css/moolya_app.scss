@@ -1930,18 +1930,49 @@ p{margin-top:10px;}
 
 .notifications_list .popover-content{padding: 0px !important;}
 .ml_app_notification ul{width: 250px;margin-bottom: 0px;max-height: 200px;overflow-y: auto;}
+.notifications_list{
+  .popover-title{
+    background-color: $mlRed !important;color: $mlWhite;
+  }
+}
 .ml_app_notification ul li{width: 250px;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;text-align: left; line-height: 31px;
   border-bottom: 1px solid #ddd;  padding: 0px 5px; }
 .ml_app_notification ul li:last-child{border-bottom: 0px;}
-.ml_app_notification ul li a{color: #000;}
-.ml_app_notification ul li:hover{background: $mlBlue;}
+.ml_app_notification ul li a{color: #000;
+  .ml{
+    background: $mlBlue;color: $mlWhite;border-radius: 50%;padding: 2px;margin-right: 5px;
+  }
+}
+.ml_app_notification ul li:hover{background: $mlBlue;
+  .ml{
+    background: $mlWhite;color: $mlBlue;border-radius: 50%;padding: 2px;margin-right: 5px;
+  }
+}
 .ml_app_notification ul li:hover a{color: $mlWhite}
-.bs-tether-target-attached-bottom{margin-left: -80px;}
+.bs-tether-target-attached-bottom{margin-left: -80px;padding: 0px;}
+
 .popover.bs-tether-element-attached-top:before, .popover.popover-bottom:before{margin-left: 70px !important;}
-.popover.bs-tether-element-attached-top:after, .popover.popover-bottom:after{margin-left: 71px !important;}
+.popover.bs-tether-element-attached-top:after, .popover.popover-bottom:after{margin-left: 71px !important;    border-bottom-color: $mlRed;}
 
 .documentpop{
   iframe{
     height: 500px;
+  }
+}
+.logout{
+  .logout_message{ width: 50%; margin: 0 auto; margin-top: 140px;
+    h2{
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    h3{
+      font-weight: bold;
+      font-size: 22px;
+    }
+  }
+  #login_wrap{
+    position: absolute;
+    top: 60px;
+    left: 50%;
   }
 }

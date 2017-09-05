@@ -1,7 +1,7 @@
 import React, {Component, PropTypes}  from "react";
 import ScrollArea from 'react-scrollbar'
 import {Button, Popover, PopoverTitle, PopoverContent} from 'reactstrap';
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../../utils/formElemUtil';
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../../utils/formElemUtil';
 var FontAwesome = require('react-fontawesome');
 import Moolyaselect from  '../../../../../commons/components/MlAdminSelectWrapper';
 import gql from 'graphql-tag';
@@ -33,6 +33,7 @@ export default class MlInstitutionEditLookingFor extends Component {
   componentDidUpdate() {
     OnLockSwitch();
     dataVisibilityHandler();
+    initalizeFloatLabel();
   }
 
   componentDidMount() {

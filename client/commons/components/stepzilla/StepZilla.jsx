@@ -115,7 +115,9 @@ export default class StepZilla extends Component {
 
                 return;
             }
+
             let validate = this.refs.activeComponent.isValidated?this.refs.activeComponent.isValidated():true;
+          let isupdated = this.refs.activeComponent.isUpdated?this.refs.activeComponent.isUpdated():true;
             if (this.props.dontValidate || typeof this.refs.activeComponent.isValidated == 'undefined' || this.refs.activeComponent.isValidated() ) {
                 if (evt.currentTarget.value === (this.props.steps.length - 1) &&
                     this.state.compState === (this.props.steps.length - 1)) {
@@ -124,24 +126,49 @@ export default class StepZilla extends Component {
                 else {
                     this._setNavState(evt.currentTarget.value);
                 }
-            }else if(!validate){
+            }else if(!this.props.dontValidate && !validate){
+              this.setState({
+                maditoryModalOpen: true,
+              });
+            }
+
+            if ( typeof this.refs.activeComponent.isUpdated == 'undefined' || this.refs.activeComponent.isUpdated() ) {
+              if (evt.currentTarget.value === (this.props.steps.length - 1) &&
+                this.state.compState === (this.props.steps.length - 1)) {
+                this._setNavState(this.props.steps.length);
+              }
+              else {
+                this._setNavState(evt.currentTarget.value);
+              }
+            }else if(!this.props.dontValidate && !isupdated){
               this.setState({
                 modalOpen: true,
               });
+              this._setNavState(this.state.compState);
             }
         }
     }
 
   _next() {
+      /*
+      * Check out all manditory fields are entered or not for registration
+      * Else show manditory alert modal
+      * If entered manditory fields through update modal
+      * */
     // if its a form component, it should have implemeted a public isValidated class. If not then continue
+    let isupdated = this.refs.activeComponent.isUpdated?this.refs.activeComponent.isUpdated():true;
     let validate = this.refs.activeComponent.isValidated?this.refs.activeComponent.isValidated():true;
-
-    if(!validate){
+    if(!this.props.dontValidate && !validate){
+      this.setState({
+        maditoryModalOpen: true,
+        prevButton:false
+      });
+    }else if(!this.props.dontValidate && !isupdated){
       this.setState({
         modalOpen: true,
         prevButton:false
       });
-    }else if (this.props.dontValidate || validate) {
+    }else if (this.props.dontValidate || isupdated ) {
       this._setNavState(this.state.compState + 1);
     }
   }
@@ -155,13 +182,19 @@ export default class StepZilla extends Component {
     }
 
     _previous() {
+      let isupdated = this.refs.activeComponent.isUpdated?this.refs.activeComponent.isUpdated():true;
       let validate = this.refs.activeComponent.isValidated?this.refs.activeComponent.isValidated():true;
       if(!validate){
+        this.setState({
+          maditoryModalOpen: true,
+          prevButton:true
+        });
+      }else if(!isupdated){
         this.setState({
           modalOpen: true,
           prevButton:true
         });
-      }else if (this.props.dontValidate || validate) {
+      }else if (this.props.dontValidate || isupdated) {
         if (this.state.compState > 0) {
           this._setNavState(this.state.compState - 1);
         }
@@ -218,6 +251,12 @@ export default class StepZilla extends Component {
         modalOpen: false
       });
     }
+    onManditoryCancel(){
+      this.setState({
+        maditoryModalOpen: false
+      });
+    }
+
 
     render() {
         // clone the step component dynamically and tag it as activeComponent so we can validate it on next. also bind the jumpToStep piping method
@@ -231,6 +270,16 @@ export default class StepZilla extends Component {
 
         return (
           <div>
+            <Modal isOpen={this.state.maditoryModalOpen} onHide={this.onClose}>
+              <ModalHeader>Title</ModalHeader>
+              <ModalBody>
+                <div>Kindly enter all manditory fields</div>
+              </ModalBody>
+              <ModalFooter>
+               {/* <Button color="primary" onClick={this.onManditoryConfirm.bind(this)}>Ok</Button>{' '}*/}
+                <Button color="secondary" onClick={this.onManditoryCancel.bind(this)}>Cancel</Button>
+              </ModalFooter>
+            </Modal>
             <Modal isOpen={this.state.modalOpen} onHide={this.onClose}>
               <ModalHeader>Title</ModalHeader>
               <ModalBody>

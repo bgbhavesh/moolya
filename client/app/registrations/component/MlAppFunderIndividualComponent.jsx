@@ -14,6 +14,7 @@ var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
 var diff = require('deep-diff').diff;
 import _underscore from 'underscore'
+import {mlFieldValidations} from '../../../commons/validations/mlfieldValidation';
 
 export default class MlAppFunderIndividualComponent extends React.Component {
   constructor(props) {
@@ -128,6 +129,16 @@ export default class MlAppFunderIndividualComponent extends React.Component {
   }
 
   isValidated(){
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      return false
+    }else{
+      return true
+    }
+  }
+
+
+  isUpdated(){
     let existingObject = this.props.registrationDetails || {}
     let oldObject = {
       title: existingObject.title ? existingObject.title:null,

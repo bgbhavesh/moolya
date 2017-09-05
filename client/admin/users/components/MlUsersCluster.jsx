@@ -53,17 +53,17 @@ export default class MlUsersCluster extends Component {
       let icon;
 
       if (prop.registrationType == "IDE") {
-        icon = "ml ml-ideator";
+        icon = "ml my-ml-Ideator";
       } else if (prop.registrationType == "FUN") {
-        icon = "ml ml-funder";
+        icon = "ml my-ml-Investors";
       } else if (prop.registrationType == "SPS") {
-        icon = "ml ml-users";
+        icon = "ml my-ml-Service-Providers";
       } else if (prop.registrationType == "STU") {
-        icon = "ml ml-startup";
+        icon = "ml my-ml-Startups";
       } else if (prop.registrationType == "INS") {
-        icon = "ml ml-institutions";
+        icon = "ml my-ml-Institutions";
       } else if (prop.registrationType == "CMP") {
-        icon = "ml ml-company";
+        icon = "ml my-ml-Company";
       }
       return (
         <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={idx}>

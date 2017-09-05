@@ -511,6 +511,8 @@ export default class AppAddressDetails extends React.Component {
                 <a href="#" className="save_btn"  onClick={this.onSavingAddress.bind(this)}>
                   <span className="ml ml-save"></span>
                 </a>
+                <a href="#" className="cancel_btn">
+                  <span className="ml ml-delete"></span></a>
               </div>
             </div>
             {details && (details.map(function(options,key) {

@@ -291,14 +291,16 @@ export default class MlFunderSuccessStories extends React.Component {
                           <a href="#" id={"team_list" + idx}>
 
                             <div className="list_block notrans funding_list">
-                              <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
+                              <div className="cluster_status inactive_cl">
+                                <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/>
+                                <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
+                              </div>
                               {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
-                              <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img
+                              <div className="" onClick={that.onTileClick.bind(that, idx)}><img
                                 src={details.logo ? details.logo.fileUrl : "/images/def_profile.png"}/></div>
                               <div><p>{details.storyTitle}</p><p>{details.description}</p></div>
                               <h3>{details.date ? details.date : "Date : "}</h3>
                             </div>
-
 
                             {/*<div className="list_block notrans funding_list"*/}
                             {/*onClick={that.onTileClick.bind(that, idx)}>*/}

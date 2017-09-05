@@ -286,8 +286,7 @@ table{background: #fff;}
 .vTimeline li.timelineLast{background: #000;margin-top: -6px;}
 .loading{position: absolute;    top: calc(50% - 30px);    left: calc(50% - 60px);}
 .loader_wrap{position: fixed;width: 100%;height: 100%;top: 0px;left: 0px;background-color: rgba(255,255,255,0.8);z-index: 9;background-image: url(/images/loading.gif);background-position: center center;background-repeat: no-repeat;}
-.fileUpload {position: relative;
-  overflow: hidden; }
+.fileUpload {position: relative;}
 .upload_file_mask{margin-top: -6px !important;}
 .upload_file_mask input.upload{width: 33px !important;}
 .fileUpload .ml{font-size: 18px; background: #273545; border-radius: 5px; padding: 3px 4px; text-shadow: none; color: #fff; line-height: 30px; cursor: pointer;}
@@ -1210,7 +1209,7 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .list_block_intrests.list_block img { width: auto; z-index: 2; position: relative; left: auto; top: auto; border: none;}
 .list_block_intrests.list_block .hex_outer { line-height: 135px }
 .list_block.funding_list{ background-color: #273545; color: #fff; font-size: 18px; padding-top: 30px;margin-top:15px;}
-.list_block.funding_list p{display: block; text-shadow: none; color: #fff; text-decoration: none;font-size: 18px; margin-bottom:10px;}
+.list_block.funding_list p{display: block; text-shadow: none; color: #fff; text-decoration: none;font-size: 18px; margin-bottom:10px;    text-overflow: ellipsis; overflow: hidden; white-space: nowrap; width: 80%; margin: 0 auto;}
 .list_block.funding_list span {font-size: 16px;display: block; text-shadow: none;line-height: 24px;}
 .list_block.funding_list .form-group {text-shadow: none;font-size: 16px;}
 .list_block.funding_list .fa {display: inline-block;}

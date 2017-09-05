@@ -31,7 +31,7 @@ export default class MlAppFunderListView extends Component {
           <div className="ideators_list_block">
             <div className="premium"><span>{funder.accountType}</span></div>
             <h3>{funder.funderAbout ? funder.funderAbout.firstName : ''}</h3>
-            <div className="list_icon"><span className="ml ml-funder"></span></div>
+            <div className="list_icon"><span className="ml my-ml-Investors"></span></div>
             <div className="block_footer">
               <span>{funder.chapterName}-{funder.communityType}</span>
             </div>

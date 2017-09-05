@@ -214,7 +214,6 @@ class MlPortfolio extends React.Component {
     if(!_.isEmpty(privateKey)){
       this.updatePrivateKeys(privateKey)
     }
-
   }
 
   updatePrivateKeys(privateKey){
@@ -266,7 +265,7 @@ class MlPortfolio extends React.Component {
       removeKeys: this.state.removePrivateKeys
     }
     const response = await updatePortfolioActionHandler(jsonData)
-    toastr.success(response.result)
+    // toastr.success(response.result)
     if (response) {
       if (this.props.communityType == "Ideators") {
         let idea = this.state.idea
@@ -280,8 +279,15 @@ class MlPortfolio extends React.Component {
     }
   }
 
+  /**
+   * success handle if no error in server
+   * */
   async handleSuccess(response) {
-    FlowRouter.go("/admin/transactions/portfolio/requestedPortfolioList");
+    if (response && response.success)
+      toastr.success(response.result)
+    else if (response && !response.success)
+      toastr.error(response.result)
+    // FlowRouter.go("/admin/transactions/portfolio/requestedPortfolioList");
   };
 
   render() {
@@ -358,7 +364,8 @@ class MlPortfolio extends React.Component {
               {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)}
                                                   getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)}
                                                   portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}
-                                                  privateKeys = {this.state.privateKeys}/>}
+                                                  privateKeys = {this.state.privateKeys}
+                                                  removePrivateKeys={this.state.removePrivateKeys}/>}
               {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)}
                                                   portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}
                                                   annotations={annotations}

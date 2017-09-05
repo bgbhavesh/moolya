@@ -326,6 +326,7 @@ let service=`
         updateServiceAdmin(serviceId:String,Services:service):response
         createServiceCardOrder(serviceId: String!, taskDetails: [tasks]):response
         updateServiceCardOrder(userServiceCardPaymentInfo: userServiceCardPaymentInfo):response
+        checkServiceSubChapterAccessControl(serviceId:String!):response
    }
 `;
 

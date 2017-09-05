@@ -3,6 +3,7 @@
  */
 
 import MlNotificationController from './mlNotifications/mlAppNotifications/mlNotificationsController'
+import mlResourceConfigRepo from './MlExternalUsers/ResourceConfiguration/mlResourceConigRepo'
 
 let _ = require('lodash'),
   adminPassword = "MoolyaAdmin@123",
@@ -626,6 +627,7 @@ validateinternalUserLoginAttempt=(user)=>{
 }
 
 MlNotificationController.createNewApplication()
+mlResourceConfigRepo.defaultResourceConfig();
 /******************************************* User Login <End> *********************************************************/
 /******************************************* Teplates <Start> *******************************************************/
 /*let process = MlprocessTypes.findOne({processName:"Registration"})

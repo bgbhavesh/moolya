@@ -222,7 +222,7 @@ class MlAppPortfolio extends Component{
     }
     console.log(jsonData)
     const response = await updatePortfolioActionHandler(jsonData)
-    toastr.success(response.result)
+    // toastr.success(response.result)
     if(response){
       if(this.props.communityType == "Ideators" || this.props.communityType == "ideator"){
         let idea = this.state.idea
@@ -247,8 +247,15 @@ class MlAppPortfolio extends Component{
     return response
   }
 
+  /**
+   * success handle if no error in server
+   * */
   async handleSuccess(response) {
-    FlowRouter.go("/app/portfolio");
+    if (response && response.success)
+      toastr.success(response.result)
+    else if (response && !response.success)
+      toastr.error(response.result)
+    // FlowRouter.go("/app/portfolio");
   };
 
   //handler for like,review,comment,inquiry,collaborate,connect,follow
@@ -332,8 +339,17 @@ class MlAppPortfolio extends Component{
           <div className="app_padding_wrap">
             <div className="col-md-12">
             <InteractionsCounter resourceType={'portfolio'} resourceId={this.props.config} interactionAutoId={this.state.interactionAutoId} backHandler={this.backHandler.bind(this)} portfolioImage={this.state.portfolioImage}/>
-              {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} setBackHandler={this.setBackHandler.bind(this)}/>}
-                {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)} portfolioDetailsId={this.props.config} ideaId={this.state.ideaId} annotations={annotations} getSelectedAnnotations={this.getSelectedAnnotation.bind(this)} setBackHandler={this.setBackHandler.bind(this)}/>}
+              {hasEditComponent && <EditComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)}
+                                                  getIdeatorIdeaDetails={this.getIdeatorIdeaDetails.bind(this)}
+                                                  portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}
+                                                  privateKeys={this.state.privateKeys}
+                                                  removePrivateKeys={this.state.removePrivateKeys}
+                                                  setBackHandler={this.setBackHandler.bind(this)}/>}
+              {hasViewComponent && <ViewComponent getPortfolioDetails={this.getPortfolioDetails.bind(this)}
+                                                  portfolioDetailsId={this.props.config} ideaId={this.state.ideaId}
+                                                  annotations={annotations}
+                                                  getSelectedAnnotations={this.getSelectedAnnotation.bind(this)}
+                                                  setBackHandler={this.setBackHandler.bind(this)}/>}
             </div></div>)}
         {/*<div className="overlay"></div>*/}
           <Popover placement="top" isOpen={this.state.popoverOpen} target="comment" toggle={this.toggle}>

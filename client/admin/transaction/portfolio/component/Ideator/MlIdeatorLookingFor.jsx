@@ -13,7 +13,8 @@ export default class MlIdeatorLookingFor extends Component{
     this.state={
       loading:true,
       data:{},
-      privateKey:{}
+      privateKey:{},
+      privateValues:[]
     }
     this.onClick.bind(this);
     this.handleBlur.bind(this)
@@ -30,28 +31,39 @@ export default class MlIdeatorLookingFor extends Component{
     dataVisibilityHandler();
   }
 
-  componentDidUpdate()
-  {
+  componentDidUpdate(){
     OnLockSwitch();
     dataVisibilityHandler();
   }
 
   async fetchPortfolioDetails() {
+    const response = await findIdeatorLookingForActionHandler(this.props.portfolioDetailsId);
     let empty = _.isEmpty(this.context.ideatorPortfolio && this.context.ideatorPortfolio.lookingFor)
-    if(empty){
-      const response = await findIdeatorLookingForActionHandler(this.props.portfolioDetailsId);
-      if (response) {
-        this.setState({loading: false, data: response});
-      }
-
+    if(empty && response){
+       this.setState({loading: false, data: response});
       _.each(response.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
-
     }else{
-      console.log('newPropsPrivatefields',this.context.privateValues)
-      this.setState({loading: false, data: this.context.ideatorPortfolio.lookingFor});
+      this.setState({
+        loading: false,
+        data: this.context.ideatorPortfolio.lookingFor,
+        privateValues: response.privateFields
+      }, () => {
+        this.lockPrivateKeys()
+      });
     }
+  }
+
+  lockPrivateKeys() {
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName})
+    var finalKeys = _.unionBy(filterPrivateKeys, this.state.privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
   onClick(fieldName, field,e){
@@ -139,5 +151,5 @@ export default class MlIdeatorLookingFor extends Component{
 
 MlIdeatorLookingFor.contextTypes = {
   ideatorPortfolio: PropTypes.object,
-  privateValues: PropTypes.array,
+  portfolioKeys: PropTypes.object,
 };

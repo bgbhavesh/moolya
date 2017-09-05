@@ -49,14 +49,14 @@ if(Meteor.isServer){
         "uniqueId" : "calendar_notification"
       },
 
-      {
-        "image":"fa fa-calendar-check-o",
-        "link": "/app/calendar/manageSchedule/all/activityList",
-        "isLink" : true,
-        "isMenu" : true,
-        "name" : "Manage Schedule",
-        "uniqueId" : "calendar_manageSchedule"
-      }
+      // {
+      //   "image":"fa fa-calendar-check-o",
+      //   "link": "/app/calendar/manageSchedule/all/activityList",
+      //   "isLink" : true,
+      //   "isMenu" : true,
+      //   "name" : "Manage Schedule",
+      //   "uniqueId" : "calendar_manageSchedule"
+      // }
     ]
   }});
 }

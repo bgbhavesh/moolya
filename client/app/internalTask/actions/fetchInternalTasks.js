@@ -13,6 +13,10 @@ export async function fetchInternalTask(status) {
           name
           type
           status
+          attendeeName
+          community{
+           name 
+          }  
         }
       }
     `,

@@ -251,7 +251,8 @@ class MlAppointment {
           let appointmentEndDate = new Date(appointment.endDate);
           appointmentStartDate.setSeconds(0,0);
           // return (slotStartTime >= appointmentStartDate && slotEndTime <= appointmentEndDate);
-          return (slotStartTime <= appointmentStartDate && appointmentStartDate <= slotEndTime);
+          // return (slotStartTime <= appointmentStartDate && appointmentStartDate <= slotEndTime);
+          return ( appointmentStartDate <= slotStartTime && slotStartTime < appointmentEndDate);
         }).length;
 
         /**
@@ -382,6 +383,15 @@ class MlAppointment {
           }
         });
       });
+
+      let shift = TIMINIG.find((shift) => {
+        let shiftStart = getTimeDate(shift.start, date);
+        let shiftEnd = getTimeDate(shift.end, date);
+        return serviceProviderSlotStartTime.getTime() >= shiftStart.getTime() && serviceProviderSlotStartTime < shiftEnd.getTime();
+      });
+
+      serviceProviderSlotAvailabily.shift = shift ? shift.name : '';
+
     });
     return serviceProviderSlotsAvailability;
   }

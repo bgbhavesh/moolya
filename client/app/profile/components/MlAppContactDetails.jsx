@@ -292,7 +292,8 @@ export default class AppContactDetails extends React.Component {
               <div className="ml_icon_btn">
                 <a href="#" onClick={this.onSavingContact.bind(this)} className="save_btn"><span
                   className="ml ml-save"></span></a>
-                {/*<a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>*/}
+                <a href="#" id="cancel_contact" className="cancel_btn">
+                  <span className="ml ml-delete"></span></a>
               </div>
             </div>
             {details && (details.map(function (options, key) {

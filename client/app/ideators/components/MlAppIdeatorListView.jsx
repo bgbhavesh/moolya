@@ -48,7 +48,7 @@ export default class MlAppIdeatorListView extends Component {
                           <span>{ideator.accountType}</span>
                         </div>
                         <h3>{ideator.name}</h3>
-                        <div className="list_icon"><span className="ml ml-ideator"></span></div>
+                        <div className="list_icon"><span className="ml my-ml-Ideator"></span></div>
                         <p>{ideator.ideas[0].title}</p>
                         <div className="block_footer">
                           <span>{ideator.chapterName}</span>

@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import MlLoader from '../../../../../commons/components/loader/loader'
 import {findIdeatorProblemsAndSolutionsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler'
@@ -137,6 +137,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
   componentDidUpdate(){
     OnLockSwitch();
     dataVisibilityHandler();
+    initalizeFloatLabel();
   }
 
   componentDidMount(){

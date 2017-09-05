@@ -6,7 +6,7 @@ if(Meteor.isServer){
         "name":"mlExploreMenu",
         "menu" : [
             {
-              "image":"ml ml-ideator",
+              "image":"ml my-ml-Ideator",
               "link": "/app/explore/ideator",
               "isLink" : true,
               "isMenu" : true,
@@ -14,7 +14,7 @@ if(Meteor.isServer){
               "uniqueId" : "explore"
             },
             {
-              "image":"ml ml-startup",
+              "image":"ml my-ml-Startups",
               "link": "/app/explore/startup",
               "isLink" : true,
               "isMenu" : true,
@@ -23,7 +23,7 @@ if(Meteor.isServer){
             },
 
             {
-              "image":"ml ml-funder",
+              "image":"ml my-ml-Investors",
               "link": "/app/explore/investor",
               "isLink" : true,
               "isMenu" : true,
@@ -41,7 +41,7 @@ if(Meteor.isServer){
             },
 
             {
-              "image":"ml ml-company",
+              "image":"ml my-ml-Company",
               "link": "/app/explore/company",
               "isLink" : true,
               "isMenu" : true,
@@ -50,7 +50,7 @@ if(Meteor.isServer){
             },
 
             {
-              "image":"ml ml-institutions",
+              "image":"ml my-ml-Institutions",
               "link": "/app/explore/institution",
               "isLink" : true,
               "isMenu" : true,

@@ -80,10 +80,10 @@ export default class MlCalendarHead extends Component {
                 <li className={selectedProfileId === profile.profileId ? 'active_user' : ''}>
                   <div>
                     <a href="" onClick={()=>that.changeProfile(profile.profileId, profile.communityName)}>
-                      {profile.communityName === "Investors" ? <span className="icon_bg"> <span className="icon_lg ml ml-funder"></span></span>:
-                        profile.communityName === "Startups" ?<span className="icon_bg"><span className="icon_lg ml ml-startup"></span></span>:
-                          profile.communityName === "Ideators" ?<span className="icon_bg"><span className="icon_lg ml ml-startup"></span></span>:
-                            profile.communityName === "Institutions" ?<span className="icon_bg"><span className="icon_lg ml ml-institutions"></span></span>:
+                      {profile.communityName === "Investors" ? <span className="icon_bg"> <span className="icon_lg ml my-ml-Investors"></span></span>:
+                        profile.communityName === "Startups" ?<span className="icon_bg"><span className="icon_lg ml my-ml-Startups"></span></span>:
+                          profile.communityName === "Ideators" ?<span className="icon_bg"><span className="icon_lg ml my-ml-Ideator"></span></span>:
+                            profile.communityName === "Institutions" ?<span className="icon_bg"><span className="icon_lg ml my-ml-Institutions"></span></span>:
                               profile.communityName === "Service Providers" ? <span className="icon_bg"><span className="icon_lg ml ml-Service-Providers"></span></span>:
                                 profile.communityName === "Office Bearer" ? <span className="icon_bg"><span className="icon_lg ml my-ml-team-members"></span></span>:""}
                      <br />

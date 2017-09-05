@@ -153,7 +153,7 @@ export default class MlAppAddOfficeMember extends React.Component{
                       <a href={ canView ? '/app/officeMember/'+FlowRouter.getParam('officeId')+'/'+data._id : ''} >
                         <div className="list_block notrans">
                           <div className="cluster_status active_cl"></div>
-                          <div className="hex_outer"><span className="ml ml-funder"></span></div>
+                          <div className="hex_outer"><span className="ml my-ml-Investors"></span></div>
                           <h3>{data.name}</h3>
                         </div>
                       </a>

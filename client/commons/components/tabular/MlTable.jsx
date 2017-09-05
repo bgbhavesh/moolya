@@ -68,7 +68,8 @@ export default class MlTable extends React.Component {
       onSizePerPageList: this.props.onSizePerPageList,
       onSortChange:this.props.onSortChange,
       onSearchChange:this.props.onSearchChange,
-      clearSearch: false};
+      clearSearch: false,
+      onlyOneExpanding:true};
 
     const columnItems = this.props.columns.map((cl) =>{
       let columnOptions = {

@@ -233,11 +233,11 @@ export default class MlStartupLookingFor extends React.Component {
                       return (<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
                         <a href="" id={"create_client" + idx}>
                           <div className="list_block">
-                            <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate}/><input
+                            <div className="cluster_status"><FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate}/><input
                             type="checkbox" className="lock_input" id="isAssetTypePrivate"
-                            checked={details.makePrivate}/>
-                            <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img
-                              src={details.logo && details.logo.fileUrl}/></div>
+                            checked={details.makePrivate}/></div>
+                            <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}>
+                              <span className="ml ml-moolya-symbol" /></div>
                             <h3>{details.lookingForName ? details.lookingForName : ""}</h3>
                           </div>
                         </a>

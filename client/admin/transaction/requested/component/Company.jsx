@@ -12,6 +12,7 @@ import Datetime from "react-datetime";
 import moment from "moment";
 import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import MlLoader from '../../../../commons/components/loader/loader'
+import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 var diff = require('deep-diff').diff;
 import _underscore from 'underscore'
 
@@ -108,7 +109,18 @@ export default class Company extends React.Component{
     }
   }
 
+
   isValidated(){
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      return false
+    }else{
+      return true
+    }
+  }
+
+
+  isUpdated(){
     let existingObject = this.props.registrationDetails || {}
     let oldObject = {
 

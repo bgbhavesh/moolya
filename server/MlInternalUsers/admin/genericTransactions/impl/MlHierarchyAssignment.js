@@ -18,25 +18,14 @@ class MlHierarchyAssignment {
         Coded by - Murali
         Works for Platform admin self assignment of a transaction
       */
-    let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
+    var hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
       parentDepartment: departmentId,
       parentSubDepartment: subDepartmentId,
       clusterId: roleDetails.isSystemDefined ? "All" : clusterId,
+      subChapterId: roleDetails.isSystemDefined ? "all" : subChapterId,
       isDefaultSubChapter:isDefaultSubChapter,
     }, context, {teamStructureAssignment: {$elemMatch: {roleId: roleId}}})
 
-    /*
-        Coded by - Rajat
-    */
-
-    // let hierarchy = mlDBController.findOne('MlHierarchyAssignments',
-    //   {"$and":[
-    //     {parentDepartment: departmentId},
-    //     {parentSubDepartment: subDepartmentId},
-    //     {clusterId: roleDetails.isSystemDefined ? "All" : clusterId},
-    //     {teamStructureAssignment: {$elemMatch: {roleId: roleId}}}
-    //   ]
-    //   }, context)
     return hierarchy;
   }
 
@@ -107,8 +96,8 @@ class MlHierarchyAssignment {
     if (userId == assignedUserId) {
       return true;
     }
-    let userhierarchy = this.findHierarchy(userRole.clusterId, userRole.departmentId, userRole.subDepartmentId, userRole.roleId);
-    let assignedRolehierarchy = this.findHierarchy(assignedRole.clusterId, assignedRole.departmentId, assignedRole.subDepartmentId, assignedRole.roleId);
+    let userhierarchy = this.findHierarchy(userRole.clusterId, userRole.departmentId, userRole.subDepartmentId, userRole.roleId, userRole.subChapterId);
+    let assignedRolehierarchy = this.findHierarchy(assignedRole.clusterId, assignedRole.departmentId, assignedRole.subDepartmentId, assignedRole.roleId, userRole.subChapterId);
     if (this.checkSystemSystemDefinedRole(userRole) && this.checkSystemSystemDefinedRole(assignedRole)) {
       if (userhierarchy._id == assignedRolehierarchy._id) {
         let decision = this.hierarchyDecision(userhierarchy, userRole.roleId, assignedRole.roleId);
@@ -278,8 +267,8 @@ class MlHierarchyAssignment {
     if (transaction.userId == userId) {
       return false;
     }
-    let userhierarchy = this.findHierarchy(userRole.clusterId, userRole.departmentId, userRole.subDepartmentId, userRole.roleId);
-    let assignedRolehierarchy = this.findHierarchy(requestRole.clusterId, requestRole.departmentId, requestRole.subDepartmentId, requestRole.roleId);
+    let userhierarchy = this.findHierarchy(userRole.clusterId, userRole.departmentId, userRole.subDepartmentId, userRole.roleId, userRole.subChapterId);
+    let assignedRolehierarchy = this.findHierarchy(requestRole.clusterId, requestRole.departmentId, requestRole.subDepartmentId, requestRole.roleId, userRole.subChapterId);
 
     if(!userhierarchy){
       return false;
@@ -343,8 +332,8 @@ class MlHierarchyAssignment {
     if (userId == assignedUserId) {
       return true;
     }
-    let userhierarchy = this.findHierarchy(userRole.clusterId, userRole.departmentId, userRole.subDepartmentId, userRole.roleId);
-    let assignedRolehierarchy = this.findHierarchy(assignedRole.clusterId, assignedRole.departmentId, assignedRole.subDepartmentId, assignedRole.roleId);
+    let userhierarchy = this.findHierarchy(userRole.clusterId, userRole.departmentId, userRole.subDepartmentId, userRole.roleId, userRole.subChapterId);
+    let assignedRolehierarchy = this.findHierarchy(assignedRole.clusterId, assignedRole.departmentId, assignedRole.subDepartmentId, assignedRole.roleId, userRole.subChapterId);
     if (this.checkSystemSystemDefinedRole(userRole) && this.checkSystemSystemDefinedRole(assignedRole)) {
       if (userhierarchy._id == assignedRolehierarchy._id) {
         let decision = this.hierarchyDecision(userhierarchy, userRole.roleId, assignedRole.roleId);
@@ -398,11 +387,23 @@ class MlHierarchyAssignment {
         let userRoles = doc && doc.userRoles ? doc.userRoles : [];
         userRoles.map(function (role) {
           //let userhierarchy = this.findHierarchy(role.clusterId, role.departmentId, role.subDepartmentId, role.roleId);
+
+          /*
+            SubChapter Admin is admin of a specific subChapter, use id to figure out if subchapter is a default subchapter
+           */
+
+          var isDefaultSubChapter = true;
+          if(role.subChapterId && role.subChapterId != "all"){
+            let subChapter = mlDBController.findOne('MlSubChapters', {_id: subChapterId});
+            isDefaultSubChapter = subChapter.isDefaultSubChapter
+          }
           let roleDetails = mlDBController.findOne('MlRoles', {_id: role.roleId})
           let hierarchy = mlDBController.findOne('MlHierarchyAssignments', {
             parentDepartment: role.departmentId,
             parentSubDepartment: role.subDepartmentId,
             clusterId: roleDetails.isSystemDefined ? "All" : role.clusterId,
+            subChapterId: roleDetails.isSystemDefined ? "all" : role.subChapterId,
+            isDefaultSubChapter: isDefaultSubChapter,
             "finalApproval.role":role.roleId
           }, context)
           if(hierarchy&&hierarchy._id){

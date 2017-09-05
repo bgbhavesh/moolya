@@ -121,7 +121,12 @@ class MlHierarchyAssignment {
           */
           let parentHierarchy = {};
           if(userhierarchy.isDefaultSubChapter){
-            parentHierarchy = _.find(userhierarchy.teamStructureAssignment, {"assignedLevel":'cluster', "reportingRole":''});
+            // parentHierarchy = _.find(userhierarchy.teamStructureAssignment, {"assignedLevel":'cluster', "reportingRole":''});
+            parentHierarchy = _.find(userhierarchy.teamStructureAssignment, function (obj) {
+              if(obj.assignedLevel == "cluster" && (!obj.reportingRole || obj.reportingRole == "")){
+                return obj
+              }
+            });
           }else{
             parentHierarchy = _.find(userhierarchy.teamStructureAssignment, function (obj) {
               if(obj.assignedLevel == "subChapter" && (!obj.reportingRole || obj.reportingRole == "")){

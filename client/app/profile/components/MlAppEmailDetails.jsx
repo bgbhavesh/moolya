@@ -237,6 +237,8 @@ export default class AppEmailDetails extends React.Component {
               <div className="ml_icon_btn">
                 <a href="#" className="save_btn" onClick={this.onSavingEmailDetails.bind(this)}><span
                   className="ml ml-save"></span></a>
+                <a href="#" className="cancel_btn">
+                  <span className="ml ml-delete"></span></a>
               </div>
             </div>
             {details && (details.map(function(options,key) {

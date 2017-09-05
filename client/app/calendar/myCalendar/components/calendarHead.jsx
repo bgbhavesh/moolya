@@ -26,7 +26,7 @@ export default class CalenderHead extends React.Component{
           </li>
           <li>
             <a href="#">
-              <span className="icon_bg"> <span className="icon_lg ml ml-funder"></span></span><br />
+              <span className="icon_bg"> <span className="icon_lg ml my-ml-Investors"></span></span><br />
               <div className="tooltiprefer">
                 <span>Funder</span>
               </div>
@@ -90,7 +90,7 @@ export default class CalenderHead extends React.Component{
           </li>
           <li>
             <a href="#">
-              <span className="icon_bg"><span className="icon_lg ml ml-ideator"></span></span><br />
+              <span className="icon_bg"><span className="icon_lg ml my-ml-Ideator"></span></span><br />
               <div className="tooltiprefer">
                 <span>Ideator</span>
               </div>

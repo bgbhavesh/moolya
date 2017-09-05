@@ -12,6 +12,7 @@ export default class MlListView extends Component {
       sizePerPage: 50,
       pageNumber: 1,
       sort: null,
+      alphaValue:null,
       pubSelector: null
     }
     this.onPageChange.bind(this);
@@ -25,6 +26,12 @@ export default class MlListView extends Component {
     var WinHeight = $(window).height();
     $('.list_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
   }
+
+
+  compareQueryOptions(a, b) {
+    return JSON.stringify(a) === JSON.stringify(b);
+  };
+
   componentWillUpdate(nextProps, nextState) {
     if ((this.state.sizePerPage !== nextState.sizePerPage) || (this.state.pageNumber !== nextState.pageNumber)) {
 
@@ -53,6 +60,13 @@ export default class MlListView extends Component {
         fieldsData :searchCriteria||null
       }
       this.props.fetchMore(variables);
+    }else if(!this.compareQueryOptions(this.state.alphaValue,nextState.alphaValue)){
+      let searchCriteria=this.constructAlphaCriteria(nextState.alphaValue);
+      let variables = {
+        offset: nextState.sizePerPage * (nextState.pageNumber - 1) || 0,
+        fieldsData :searchCriteria||null
+      }
+      this.props.fetchMore(variables);
     }
   }
 
@@ -62,6 +76,17 @@ export default class MlListView extends Component {
       fieldsAry=[];
       _.find(this.props.options.searchFields, function (num) {
         fieldsAry.push({fieldName: num, value: search.trim()})
+      });
+    }
+    return fieldsAry;
+  }
+
+  constructAlphaCriteria(alpha){
+    let fieldsAry = null;
+    if (alpha && alpha.trim() !== "") {
+      fieldsAry=[];
+      _.find(this.props.options.searchFields, function (num) {
+        fieldsAry.push({fieldName: num, value: alpha.trim(),operator:'Starts_With'});
       });
     }
     return fieldsAry;
@@ -81,7 +106,8 @@ export default class MlListView extends Component {
 
   onAlphaSearchChange(alpha){
     //alert("selected alphabet is "+alpha);
-    this.setState({searchValue: alpha})
+    //this.setState({searchValue: alpha});
+    this.setState({alphaValue:alpha});
   }
 
   onSizePerPageList(sizePerPage) {

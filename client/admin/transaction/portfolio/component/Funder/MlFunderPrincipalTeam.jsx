@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import {Popover, PopoverContent, PopoverTitle} from "reactstrap";
-import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../client/admin/utils/formElemUtil";
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../../client/admin/utils/formElemUtil";
 import _ from "lodash";
 import {multipartASyncFormHandler} from "../../../../../../client/commons/MlMultipartFormAction";
 import {fetchfunderPortfolioPrincipal, fetchfunderPortfolioTeam} from "../../actions/findPortfolioFunderDetails";
@@ -49,6 +49,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
   componentDidUpdate() {
     OnLockSwitch();
     dataVisibilityHandler();
+    initalizeFloatLabel();
   }
 
   componentDidMount() {

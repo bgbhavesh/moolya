@@ -38,17 +38,18 @@ export default class MlAppTempRoute extends Component {
             <div className="row">
               {this.state.register.map(function (reg, idx) {
                 return (
-                  <div className="col-md-3 col-sx-3 col-sm-4 col-lg-3" key={idx}>
+                  <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={idx}>
                     {/*<a href={ideatorListRoutes.ideatorDetailsRoute("ideator",ideator.ideas[0].portfolioId)}>*/}
                     <a href='' onClick={that.fillRegistration.bind(that, reg.registrationId)}>
                       <div className="ideators_list_block">
                         <div className="premium">
                           <span>{reg.registrationInfo?reg.registrationInfo.communityName:''}</span>
                         </div>
+                        <div className="block_footer">
+                          <span>{reg.registrationInfo?reg.registrationInfo.email:''}</span>
+                        </div>
                       </div>
-                      <div className="block_footer">
-                        <span>{reg.registrationInfo?reg.registrationInfo.email:''}</span>
-                      </div>
+
                     </a>
                   </div>
                 )

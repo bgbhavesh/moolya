@@ -13,6 +13,7 @@ import {fetchIdentityTypes} from "../actions/findRegistration";
 import _ from "lodash";
 import MlLoader from "../../../commons/components/loader/loader";
 import moment from "moment";
+import {fetchSubChapterDetails} from "../actions/findRegistration"
 // import MlActionComponent from "../../../commons/components/actions/ActionComponent";
 var Select = require('react-select');
 // import {fetchIdentityTypes} from "../../../admin/transaction/requested/actions/findRegistration";
@@ -101,7 +102,7 @@ export default class MlAppStep1ExternalUser extends Component {
       $('#individualId').hide();
 
     }
-
+    this.fetchSubChapterDetails()
 
     //this.props.getRegistrationDetails(this.state)
   }
@@ -119,7 +120,9 @@ export default class MlAppStep1ExternalUser extends Component {
   }
 
   optionsBySelectSubChapter(value) {
-    this.setState({subChapter: value})
+    this.setState({subChapter:value},function () {
+      this.fetchSubChapterDetails()
+    })
   }
 
   optionsBySelectCity(value) {
@@ -185,6 +188,14 @@ export default class MlAppStep1ExternalUser extends Component {
 
   optionsBySelectUserType(value) {
     this.setState({userType: value})
+  }
+  async fetchSubChapterDetails(){
+    let result = await fetchSubChapterDetails(this.state.subChapter)
+    if(result && result.isDefaultSubChapter){
+      this.setState({"isEcoSystem" : true})
+    }else if(result && !result.isDefaultSubChapter){
+      this.setState({"isEcoSystem" : false})
+    }
   }
 
   async sendEmailVerification() {
@@ -526,11 +537,9 @@ export default class MlAppStep1ExternalUser extends Component {
                       {/*<Select name="form-field-name" placeholder="Account Type" value={this.state.subscription} options={subscriptionOptions} className="float-label" onChange={this.optionBySelectSubscription.bind(this)} />*/}
                     </div>
                     <div className="form-group">
-                      <span className={`placeHolder ${institutionAssociationActive}`}>Do You Want To Associate To Any Of The Institution</span>
-                      <Select name="form-field-name" placeholder="Do You Want To Associate To Any Of The Institution"
-                              value={this.state.institutionAssociation} options={options3}
-                              onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label"
-                              disabled={true}/>
+                      {/*<span className={`placeHolder ${institutionAssociationActive}`}>Do You Want To Associate To Any Of The Sub Chapter</span>*/}
+                      <span className='placeHolder active'>Do You Want To Associate To Any Of The Sub Chapter</span>
+                      {that.state.isEcoSystem?<div><Select name="form-field-name"  placeholder="Do you want to associate to any of the Sub Chapter" value="No" options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label" disabled={true}/></div>:<div><Select name="form-field-name"  placeholder="Do you want to associate to any of the Sub Chapter" value="Yes"  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label" disabled={true}/></div>}
                     </div>
                     <div className="form-group">
                       <input type="text" ref="companyName" placeholder="Company Name"

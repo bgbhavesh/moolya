@@ -20,15 +20,16 @@
       },
       "aws":{
         "s3Config":{
-          "accessKeyId":"AKIAIOLVK4M2SMABND3Q",
-          "secretAccessKey":"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",
+          "accessKeyId":"AKIAJHBOSWTUYOZYGKHA",
+          "secretAccessKey":"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",
+          "region":"ap-southeast-1",
           "maxAsyncS3":20,
           "s3RetryCount":3,
           "s3RetryDelay":1000,
           "multipartUploadThreshold": 20971520,
           "multipartUploadSize": 15728640,
           "urlExpirationTime":4000,
-          "bucketName":"moolya-users/",
+          "bucketName":"moolya",
           "adminBucketKey":"moolya-admin-users"
         }
       },

@@ -74,7 +74,7 @@ export default class MlStartupEditTemplate extends React.Component {
         panelClassName: 'panel',
         title: "Investor",
         component: <MlStartupInvestor key="3" getInvestorDetails={this.getInvestorDetails.bind(this)}
-                                      portfolioDetailsId={this.props.portfolioDetailsId}/>
+                                      portfolioDetailsId={this.props.portfolioDetailsId} tabName="investor"/>
       },
       {
         tabClassName: 'tab',

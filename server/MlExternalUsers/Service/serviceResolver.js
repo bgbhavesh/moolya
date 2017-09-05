@@ -5,7 +5,7 @@
 import MlResolver from '../../commons/mlResolverDef';
 import MlRespPayload from '../../commons/mlPayload';
 import MlUserContext from '../../MlExternalUsers/mlUserContext';
-
+import MlSubChapterAccessControl from './../../mlAuthorization/mlSubChapterAccessControl';
 import mlServiceCardRepo from '../servicecards/servicecardRepo'
 
 var extendify = require('extendify');
@@ -95,6 +95,14 @@ MlResolver.MlQueryResolver['findService'] = (obj, args, context, info) => {
 
 MlResolver.MlMutationResolver['createBeSpokeService'] = (obj, args, context, info) => {
   let portfolioId =  args.portfolioId;
+  let portfolioDetails =mlDBController.findOne('MlPortfolioDetails',{_id:portfolioId}, context);
+  let subChapterId = portfolioDetails && portfolioDetails.subChapterId ? portfolioDetails.subChapterId : '';
+  let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('TRANSACT', context, subChapterId);
+  if(!mlSubChapterAccessControl.hasAccess){
+    let code = 400;
+    let response = new MlRespPayload().errorPayload('You do not have access to transact', code);
+    return response;
+  }
   return mlServiceCardRepo.createBespokeServiceCardDefinition(args.Services, portfolioId, context);
 };
 
@@ -113,6 +121,22 @@ MlResolver.MlMutationResolver['updateService'] = (obj, args, context, info) => {
 
 MlResolver.MlMutationResolver['createServiceCardOrder'] = (obj, args, context, info) => {
   return mlServiceCardRepo.createServiceCardOrder(args, context)
+};
+
+MlResolver.MlMutationResolver['checkServiceSubChapterAccessControl'] = (obj, args, context, info) => {
+  let serviceId = args.serviceId;
+  let serviceDetails =mlDBController.findOne('MlServiceCardDefinition', serviceId , context);
+  let subChapterId = serviceDetails && serviceDetails.subChapterId ? serviceDetails.subChapterId : '';
+  let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('TRANSACT', context, subChapterId);
+  let response;
+  if(!mlSubChapterAccessControl.hasAccess){
+    let code = 400;
+    response = new MlRespPayload().errorPayload('You do not have access to transact', code);
+  } else {
+    let code = 200;
+    response = new MlRespPayload().successPayload('You have access to transact', code);
+  }
+  return response;
 };
 
 MlResolver.MlMutationResolver['updateServiceCardOrder'] = (obj, args, context, info) => {

@@ -4,8 +4,8 @@ import {appClient} from '../../core/appConnection';
 export async function updateDataEntry(Details) {
   const result = await appClient.mutate({
     mutation: gql`
-    mutation ($Details: attributesObject) {
-    updateDataEntry(Details: $Details) {
+    mutation ($attributes: attributesObject) {
+    updateDataEntry(attributes: $attributes) {
     success
     code
     result
@@ -13,7 +13,7 @@ export async function updateDataEntry(Details) {
 }
 `,
     variables: {
-      Details
+      attributes: Details
     }
   })
   const id = result.data.updateDataEntry;

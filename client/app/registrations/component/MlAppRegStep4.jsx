@@ -134,7 +134,7 @@ export default class MlAppRegStep4 extends React.Component {
     //}
   }
 
-  isValidated(){
+  isUpdated(){
     if(this.refs["socialLinkTypeUrl"].value){
       return false
     }else if(this.state.selectedSocialLinkLabel){

@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-import {dataVisibilityHandler, OnLockSwitch} from "../../../../../utils/formElemUtil";
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../utils/formElemUtil";
 import {graphql} from "react-apollo";
 import _ from "lodash";
 import {multipartASyncFormHandler} from "../../../../../../commons/MlMultipartFormAction";
@@ -37,6 +37,7 @@ export default class MlServiceProviderClients extends Component {
   componentDidUpdate() {
     OnLockSwitch();
     dataVisibilityHandler();
+    initalizeFloatLabel();
   }
 
   componentDidMount() {

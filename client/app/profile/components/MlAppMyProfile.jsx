@@ -86,17 +86,20 @@ class MlAppMyProfile extends Component {
   }
 
   async saveTaskDetails() {
-    let updatedData = {
-      "profileImage": this.state.profileImage,
-      "firstName": this.state.firstName,
-      "middleName": this.state.middleName,
-      "lastName":  this.state.lastName,
-      "userName": this.state.displayName,
-      "genderType":this.state.gender,
-      "dateOfBirth": this.state.dateOfBirth
+    let Details = {
+      profileImage: this.state.profileImage,
+      firstName: this.state.firstName,
+      middleName: this.state.middleName,
+      lastName: this.state.lastName,
+      userName: this.state.displayName,
+      genderType: this.state.gender,
+      dateOfBirth: this.state.dateOfBirth?this.state.dateOfBirth : null
     }
-    console.log('The updated data is: ', updatedData);
-    // let val = await updateDataEntry(updatedData);
+    const dataresponse = await updateDataEntry(Details);
+    console.log('--dataresponse--',dataresponse);
+    if(dataresponse){
+      toastr.success("Update Successful")
+    }
   }
 
   async handleError(response) {

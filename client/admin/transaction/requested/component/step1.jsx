@@ -337,7 +337,16 @@ export default class step1 extends React.Component{
     const resp = this.updateRejectUser();
     return resp;
   }
+
   isValidated(){
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+     return false
+    }else{
+      return true
+    }
+  }
+  isUpdated(){
     let existingObject = this.props.registrationInfo || {}
     let oldObject = {
       registrationId: existingObject.registrationId?existingObject.registrationId:null,
@@ -393,6 +402,8 @@ export default class step1 extends React.Component{
     }
     var differences = diff(existingObject, newObject);
     var filteredObject = _underscore.where(differences, {kind: "E"});
+    console.log("///////////////////////////")
+    console.log(filteredObject);
     if(filteredObject && filteredObject.length>0){
       return false
     }else{
@@ -591,9 +602,9 @@ export default class step1 extends React.Component{
                     <div className="panel panel-default">
                       <div className="panel-heading">Operation Area</div>
                       <div className="panel-body">
-                        <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true}  onSelect={this.optionsBySelectCluster.bind(this)}/>
-                        <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterQuery} reExecuteQuery={true} queryOptions={chapterOption}  isDynamic={true}  onSelect={this.optionsBySelectChapter.bind(this)}/>
-                        <Moolyaselect multiSelect={false} placeholder="Select Sub Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapter} queryType={"graphql"} query={subChapterQuery} reExecuteQuery={true} queryOptions={subChapterOption}  isDynamic={true}  onSelect={this.optionsBySelectSubChapter.bind(this)}/>
+                        <Moolyaselect multiSelect={false} mandatory={true} ref="cluster" placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true}  onSelect={this.optionsBySelectCluster.bind(this)} data-required={true} data-errMsg="Cluster is required"/>
+                        <Moolyaselect multiSelect={false} mandatory={true} ref="chapter" placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterQuery} reExecuteQuery={true} queryOptions={chapterOption}  isDynamic={true}  onSelect={this.optionsBySelectChapter.bind(this)} data-required={true} data-errMsg="Chapter is required"/>
+                        <Moolyaselect multiSelect={false} mandatory={true} ref="subChapter" placeholder="Select Sub Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapter} queryType={"graphql"} query={subChapterQuery} reExecuteQuery={true} queryOptions={subChapterOption}  isDynamic={true}  onSelect={this.optionsBySelectSubChapter.bind(this)} data-required={true} data-errMsg="SubChapter is required"/>
                         {/* {canSelectIdentity&&
                          <div className="ml_tabs">
                          <ul  className="nav nav-pills">
@@ -651,13 +662,13 @@ export default class step1 extends React.Component{
                         }
                         <div className="clearfix"></div>
                         <div className="form-group mart20">
-                          <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.userType} queryType={"graphql"} query={userTypequery} reExecuteQuery={true} queryOptions={userTypeOption}   onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
+                          <Moolyaselect multiSelect={false} placeholder="Select User Category"  mandatory={true} ref="userCategory" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.userType} queryType={"graphql"} query={userTypequery} reExecuteQuery={true} queryOptions={userTypeOption}   onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true} data-required={true} data-errMsg="User Category is required"/>
                         </div>
                         <div className="form-group">
-                          <Moolyaselect multiSelect={false} placeholder="Select Type Of Industry" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfIndustry} queryType={"graphql"} query={industriesquery} onSelect={that.optionsBySelectTypeOfIndustry.bind(this)} isDynamic={true}/>
+                          <Moolyaselect multiSelect={false} placeholder="Select Type Of Industry"  mandatory={true} ref="industry" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfIndustry} queryType={"graphql"} query={industriesquery} onSelect={that.optionsBySelectTypeOfIndustry.bind(this)} isDynamic={true} data-required={true} data-errMsg="Industry is required"/>
                         </div>
                         <div className="form-group">
-                          <Moolyaselect multiSelect={false} placeholder="Select Profession" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.profession} queryType={"graphql"} query={professionQuery} queryOptions={professionQueryOptions}  onSelect={that.optionsBySelectProfession.bind(this)} isDynamic={true} />
+                          <Moolyaselect multiSelect={false} placeholder="Select Profession"  mandatory={true} ref="profession" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.profession} queryType={"graphql"} query={professionQuery} queryOptions={professionQueryOptions}  onSelect={that.optionsBySelectProfession.bind(this)} isDynamic={true} data-required={true} data-errMsg="Profession is required"/>
 
                         </div>
 

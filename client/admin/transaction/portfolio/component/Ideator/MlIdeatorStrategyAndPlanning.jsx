@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {findIdeatorStrategyPlansActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import _ from 'lodash';
 import MlLoader from '../../../../../commons/components/loader/loader'
@@ -34,6 +34,7 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
   componentDidUpdate(){
     OnLockSwitch();
     dataVisibilityHandler();
+    initalizeFloatLabel();
   }
 
   async fetchPortfolioDetails() {

@@ -76,6 +76,12 @@ export async function fetchDetailsStartupActionHandler(portfoliodetailsId) {
                     fileName,
                     fileUrl
                   }
+                  privateFields{
+                      keyName
+                      booleanKey
+                      index
+                      tabName
+                  }
                   isLogoPrivate,
                   isDescriptionPrivate,
                   annotatorId

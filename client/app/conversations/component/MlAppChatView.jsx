@@ -2,6 +2,7 @@ import React from 'react';
 import MlAppChatViewHeader from './MlAppChatViewHeader'
 import {getUserDetails, listenMessage, emitMessage, getMessageHistory} from '../actions/chatviewActions'
 import InfiniteScroll from 'react-infinite-scroll-component'
+import moment from "moment"
 
 
 export default class MlAppChatView extends React.Component{
@@ -12,7 +13,8 @@ export default class MlAppChatView extends React.Component{
       roomId:"",
       roomName:"",
       msgLength:0,
-      user:{}
+      user:{},
+      isLoading:true
     }
     this.sendMessage.bind(this)
     this.getuserDetails.bind(this)
@@ -53,13 +55,19 @@ export default class MlAppChatView extends React.Component{
     var rid = roomId;
     if(!rid)
       rid = this.state.roomId
-    getMessageHistory(rid, this.state.msgLength, function (response) {
+    getMessageHistory(rid, this.state.msgLength || 0, function (response) {
         if(response.success){
-          var messages = self.state.messages
-          messages = messages.concat(response.result)
-          var msgLength = self.state.msgLength;
-          msgLength = msgLength + response.result.length;
-          self.setState({messages:messages, msgLength:msgLength})
+          if(response.result.length == 0){
+            var messages = self.state.messages
+            self.setState({messages:messages, msgLength:msgLength, isLoading:false})
+          }
+          else{
+            var messages = self.state.messages
+            messages = messages.concat(response.result)
+            var msgLength = self.state.msgLength;
+            msgLength = msgLength + response.result.length;
+            self.setState({messages:messages, msgLength:msgLength})
+          }
         }
     })
   }
@@ -72,8 +80,10 @@ export default class MlAppChatView extends React.Component{
   }
 
   getSelectedRoom(roomId, roomName){
-    this.setState({roomName:roomName, roomId:roomId, messages:[]})
-    this.getmessageHistory(roomId)
+    if(roomId != this.state.roomId){
+      this.setState({roomName:roomName, roomId:roomId, messages:[], msgLength: 0})
+      this.getmessageHistory(roomId)
+    }
   }
 
   msgAckCallback(response){
@@ -113,27 +123,27 @@ export default class MlAppChatView extends React.Component{
                     <ul className="chat">
                       <InfiniteScroll
                         next={that.getmessageHistory.bind(that)}
-                        hasMore={true}
+                        hasMore={that.state.isLoading}
                         height={350}
                         loader={<h4>Loading...</h4>}>
-                      {messages.map(function (item, id) {
-                        return(
-                          <li className={that.state.user.username == item.user.username?"left clearfix":"right clearfix"}  key={id}>
-                            <span className={that.state.user.username == item.user.username?"chat-img pull-left":"chat-img pull-right"}>
-                              <img src="https://bootdey.com/img/Content/user_3.jpg" alt="User Avatar"/>
-                            </span>
-                            <div className="chat-body clearfix">
-                              <div className="header">
-                                <strong className="primary-font">{item.user.username}</strong>
-                                <small className="pull-right text-muted"><i className="fa fa-clock-o"></i> 12 mins ago</small>
+                        {messages.map(function (item, id) {
+                          return(
+                            <li className={that.state.user.username == item.user.username?"right clearfix":"left clearfix"}  key={id}>
+                              <span className={that.state.user.username == item.user.username?"chat-img pull-right":"chat-img pull-left"}>
+                                <img src="https://bootdey.com/img/Content/user_3.jpg" alt="User Avatar"/>
+                              </span>
+                              <div className="chat-body clearfix">
+                                <div className="header">
+                                  <strong className="primary-font">{item.user.username}</strong>
+                                  <small className="pull-right text-muted"><i className="fa fa-clock-o"></i>{moment.unix(item.ts/1000).format("DD MMM YYYY hh:mm a")}</small>
+                                </div>
+                                <p>
+                                  {item.msg}
+                                </p>
                               </div>
-                              <p>
-                                {item.msg}
-                              </p>
-                            </div>
-                          </li>
-                        )
-                      })}
+                            </li>
+                          )
+                        })}
                       </InfiniteScroll>
                     </ul>
                 </div>

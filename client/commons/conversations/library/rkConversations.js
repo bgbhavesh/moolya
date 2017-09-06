@@ -3,7 +3,7 @@
  */
 
 import io from 'socket.io-client'
-import kinda_ntp from 'socket-kinda-ntp/client/socket-kinda-ntp'
+import kinda_ntp from './ntp'
 
 class Conversations{
     constructor(){
@@ -64,6 +64,14 @@ class __Utils{
     removeToken(){
       localStorage.clear();
     }
+
+    covertTimestamptoLocalDate(timestamp){
+      var date = new Date(timestamp);
+      var formatter = new Intl.DateTimeFormat("eng", { month: "short" });
+      var month = formatter.format(new Date(timestamp))
+      var formattedDate = month + " " + date.getDate();
+      return formattedDate;
+    }
 }
 
 class __SocketUtils{
@@ -72,7 +80,7 @@ class __SocketUtils{
 
     connect(url, token){
         var socket = io(url, {query:{'x-access-token':token}}, {'forceNew': true}, {'sync disconnect on unload' : true}, {'secure': true}, {'reconnection':true})
-        // kinda_ntp.init(socket);
+        kinda_ntp.init(socket)
         return socket;
     }
 
@@ -103,9 +111,9 @@ class __SocketUtils{
       return null
     }
 
-    // getServerTime(){
-    //     return Math.round(kinda_ntp.time())
-    // }
+    getServerTime(){
+        return Math.round(kinda_ntp.time())
+    }
 }
 
 var rkConversations = new Conversations();

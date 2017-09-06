@@ -28,7 +28,7 @@ class Chat{
     }
 
     sendMessage(rkConversation, payload, callback){
-        // payload.ts = rkConversation.socketUtils.getServerTime();
+        payload.ts = rkConversation.socketUtils.getServerTime();
         rkConversation.socketUtils.emitMessage(rkConversation.socket, 'message', payload, callback);
     }
 

@@ -26,7 +26,7 @@ export default class MlStartupLookingFor extends React.Component {
       selectedVal: null,
       selectedObject: "default"
     }
-    this.handleBlur.bind(this);
+    // this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
     return this;
@@ -43,7 +43,8 @@ export default class MlStartupLookingFor extends React.Component {
   }
 
   componentWillMount() {
-    this.fetchPortfolioDetails();
+    const resp = this.fetchPortfolioDetails();
+    return resp
   }
 
   async fetchPortfolioDetails() {
@@ -83,15 +84,15 @@ export default class MlStartupLookingFor extends React.Component {
     let cloneArray = _.cloneDeep(this.state.startupLookingFor);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if (details && details.logo) {
-      delete details.logo['__typename'];
-    }
+    // if (details && details.logo) {
+    //   delete details.logo['__typename'];
+    // }
     this.setState({
       selectedIndex: index,
       data: details,
       selectedObject: index,
       popoverOpen: !(this.state.popoverOpen),
-      "selectedVal": details.typeId
+      "selectedVal": details.lookingForId
     });
 
     setTimeout(function () {
@@ -125,9 +126,7 @@ export default class MlStartupLookingFor extends React.Component {
       index: this.state.selectedIndex,
       tabName: KEY
     }
-    this.setState({privateKey: privateKey})
-
-    this.setState({data: details}, function () {
+    this.setState({data: details, privateKey: privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -148,24 +147,29 @@ export default class MlStartupLookingFor extends React.Component {
 
   onOptionSelected(selectedId, callback, selObject) {
     let details = this.state.data;
-    details = _.omit(details, ["typeId"]);
+    details = _.omit(details, ["lookingForId"]);
     details = _.omit(details, ["lookingForName"]);
-    details = _.extend(details, {["typeId"]: selectedId, ["lookingForName"]: selObject.label});
+    details = _.omit(details, ["lookingDescription"]);
+    details = _.extend(details, {
+      ["lookingForId"]: selectedId,
+      ["lookingForName"]: selObject.label,
+      lookingDescription: selObject.about
+    });
     this.setState({data: details}, function () {
       this.setState({"selectedVal": selectedId})
       this.sendDataToParent()
     })
   }
 
-  handleBlur(e) {
-    let details = this.state.data;
-    let name = e.target.name;
-    details = _.omit(details, [name]);
-    details = _.extend(details, {[name]: e.target.value});
-    this.setState({data: details}, function () {
-      this.sendDataToParent()
-    })
-  }
+  // handleBlur(e) {
+  //   let details = this.state.data;
+  //   let name = e.target.name;
+  //   details = _.omit(details, [name]);
+  //   details = _.extend(details, {[name]: e.target.value});
+  //   this.setState({data: details}, function () {
+  //     this.sendDataToParent()
+  //   })
+  // }
 
   sendDataToParent() {
     let data = this.state.data;
@@ -180,15 +184,14 @@ export default class MlStartupLookingFor extends React.Component {
           delete item[propName];
         }
       }
-      newItem = _.omit(item, "__typename")
+      var newItem = _.omit(item, "__typename")
       newItem = _.omit(newItem, ["privateFields"])
-      if (item && item.logo) {
-        delete item.logo['__typename'];
-      }
+      // if (item && item.logo) {
+      //   delete item.logo['__typename'];
+      // }
       arr.push(newItem)
     })
 
-    console.log(arr)
     startupLookingFor = arr;
     this.setState({startupLookingFor: startupLookingFor})
     this.props.getLookingForDetails(startupLookingFor, this.state.privateKey);    //indexArray
@@ -199,8 +202,9 @@ export default class MlStartupLookingFor extends React.Component {
   render() {
     let query = gql`query($communityCode:String){
         data:fetchLookingFor(communityCode:$communityCode) {
-          label:lookingForName
+          label:lookingForDisplayName
           value:_id
+          about
         }
       }`;
     const showLoader = this.state.loading;
@@ -234,10 +238,11 @@ export default class MlStartupLookingFor extends React.Component {
                         <a href="" id={"create_client" + idx}>
                           <div className="list_block">
                             <div className="cluster_status"><FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate}/><input
-                            type="checkbox" className="lock_input" id="isAssetTypePrivate"
+                            type="checkbox" className="lock_input" id="makePrivate"
                             checked={details.makePrivate}/></div>
                             <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}>
-                              <span className="ml ml-moolya-symbol" /></div>
+                              <span className="ml my-ml-browser_3" />
+                            </div>
                             <h3>{details.lookingForName ? details.lookingForName : ""}</h3>
                           </div>
                         </a>
@@ -264,10 +269,10 @@ export default class MlStartupLookingFor extends React.Component {
                                           selectedValue={this.state.selectedVal}/>
 
                             <div className="form-group">
-                              <input type="text" name="lookingDescription" placeholder="About"
-                                     className="form-control float-label"
-                                     defaultValue={this.state.data.lookingDescription}
-                                     onBlur={this.handleBlur.bind(this)}/>
+                              <textarea type="text" name="lookingDescription" placeholder="About"
+                                     className="form-control float-label" disabled="disabled"
+                                     defaultValue={this.state.data.lookingDescription}>
+                              </textarea>
                               <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate"
                                            onClick={this.onLockChange.bind(this, "lookingDescription", "isDescriptionPrivate")}/>
                             </div>

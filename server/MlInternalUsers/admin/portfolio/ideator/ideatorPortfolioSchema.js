@@ -84,6 +84,7 @@ let ideatorPortfolioSchema = `
         isIdeasPrivate:Boolean,
         isActive:Boolean,
         privateFields:[PrivateKeys]
+        ideaImage      : imagesTypeSchema
     }
     
     type imagesTypeSchema{
@@ -218,6 +219,7 @@ let ideatorPortfolioSchema = `
         description:String,
         isIdeasPrivate:Boolean,
         isActive:Boolean
+        ideaImage : imageFilesInputSchema
     }
     
     input intellectualPlanning{
@@ -278,6 +280,7 @@ let ideatorPortfolioSchema = `
         description:String,
         isIdeaPrivate:Boolean,
         isActive:Boolean
+        ideaImage : imagesTypeSchema
     }
     
     input idea{
@@ -286,6 +289,7 @@ let ideatorPortfolioSchema = `
         description:String,
         isIdeaPrivate:Boolean,
         isActive:Boolean
+        ideaImage : imageFilesInputSchema
     }
     
     input fileAttributes{

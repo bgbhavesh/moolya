@@ -81,6 +81,10 @@ export async function findIdeatorIdeasActionHandler(ideaId) {
                 booleanKey
                 tabName
               }
+              ideaImage {
+                fileUrl
+                fileName
+              }
             }
           }
 

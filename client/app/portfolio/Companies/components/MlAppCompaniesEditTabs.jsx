@@ -16,6 +16,7 @@ import MlCompanyPartners from "../../../../admin/transaction/portfolio/component
 import MlCompanyCSREditTabs from "../../../../admin/transaction/portfolio/component/Company/edit/CSR/MlCompanyCSREditTabs"
 import MlCompanyIntrapreneur from '../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyIntrapreneur'
 import MlCompanyRAndD from '../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyR&D'
+import MlCompanyLookingFor from '../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyLookingFor'
 import MlCompanyCharts from "../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyEditCharts";
 import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 
@@ -70,6 +71,7 @@ export default class MlAppCompaniesEditTabs extends Component {
       {tabClassName: 'tab', panelClassName: 'panel', title:"CSR" , component:<MlCompanyCSREditTabs key="11" client={appClient} getCSRDetails={this.getCSRDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"R&D" , component:<MlCompanyRAndD key="13" client={appClient} getRDDetails={this.getRDDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" , component:<MlCompanyIntrapreneur key="12" client={appClient} getIntrapreneurDetails={this.getIntrapreneurDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlCompanyLookingFor key="14" client={appClient} getLookingForDetails={this.getLookingForDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
     ]
     return tabs;
   }
@@ -204,6 +206,16 @@ export default class MlAppCompaniesEditTabs extends Component {
     this.props.getPortfolioDetails({companyPortfolio:this.state.companyPortfolio}, privateKey);
   }
 
+  getLookingForDetails(details, privatekey) {
+
+    let data = this.state.companyPortfolio;
+    if (data && !data.lookingFor) {
+      data['lookingFor'] = [];
+    }
+    data['lookingFor'] = details;
+    this.setState({companyPortfolio: data})
+    this.props.getPortfolioDetails({companyPortfolio: this.state.companyPortfolio}, privatekey);
+  }
   /**
    * tab mounting component
    * */

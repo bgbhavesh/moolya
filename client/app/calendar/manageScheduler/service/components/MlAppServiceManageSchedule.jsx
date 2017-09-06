@@ -20,7 +20,7 @@ import MlAppServiceHistory from "./MlAppServiceHistory";
 import MlAppActionComponent from "../../../../commons/components/MlAppActionComponent";
 import MlAccordion from "../../../../commons/components/MlAccordion";
 import formHandler from "../../../../../commons/containers/MlFormHandler";
-
+import { initalizeFloatLabel } from '../../../../../commons/utils/formElemUtil';
 import {
   createServiceActionHandler,
   fetchServiceActionHandler,
@@ -111,6 +111,10 @@ class MlAppServiceManageSchedule extends Component {
         $(this).parent('.switch').removeClass('on');
       }
     });
+  }
+
+  componentWillUpdate() {
+    initalizeFloatLabel();
   }
 
   /**

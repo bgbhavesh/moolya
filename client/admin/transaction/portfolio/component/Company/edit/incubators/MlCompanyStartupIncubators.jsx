@@ -122,7 +122,7 @@ export default class MlCompanyStartupIncubators extends React.Component{
 
                 <div className="form-group nomargin-bottom">
                   <textarea placeholder="Describe..." name="startupIncubatorsDescription" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.startupIncubatorsDescription} onBlur={this.handleBlur.bind(this)}></textarea>
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isStartupIncubatorsPrivate" defaultValue={this.state.data&&this.state.data.isStartupIncubatorsPrivate} onClick={this.onLockChange.bind(this, "isStartupIncubatorsPrivate")}/>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isStartupIncubatorsPrivate" defaultValue={this.state.data&&this.state.data.isStartupIncubatorsPrivate} onClick={this.onLockChange.bind(this, "startupIncubatorsDescription", "isStartupIncubatorsPrivate")}/>
                 </div>
 
               </div>

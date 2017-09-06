@@ -58,6 +58,7 @@ export async function fetchSessionDayActionHandler (orderId,sessionId, day, mont
         isAvailable
         slotTime
         status
+        shift
       }
     }
     `,

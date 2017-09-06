@@ -2,7 +2,7 @@ import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {findIdeatorAudienceActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler'
@@ -15,7 +15,8 @@ export default class MlIdeatorAudience extends React.Component{
     this.state={
       loading: true,
       data:{},
-      privateKey:{}
+      privateKey:{},
+      privateValues:[]
     }
     this.onClick.bind(this);
     this.handleBlur.bind(this);
@@ -25,11 +26,13 @@ export default class MlIdeatorAudience extends React.Component{
     this.libraryAction.bind(this);
   }
   componentWillMount(){
-    this.fetchPortfolioInfo();
+    const resp = this.fetchPortfolioInfo();
+    return resp
   }
   componentDidUpdate(){
     OnLockSwitch();
     dataVisibilityHandler();
+    initalizeFloatLabel();
   }
 
   componentDidMount(){
@@ -50,10 +53,9 @@ export default class MlIdeatorAudience extends React.Component{
       details=_.extend(details,{[key]:false});
     }
 
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
-    this.setState({privateKey:privateKey})
-
-    this.setState({data:details}, function () {
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, tabName: this.props.tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data:details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
 
@@ -83,22 +85,33 @@ export default class MlIdeatorAudience extends React.Component{
   async fetchPortfolioInfo() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
+    const response = await findIdeatorAudienceActionHandler(portfoliodetailsId);
     let empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.audience)
-    if(empty){
-      const response = await findIdeatorAudienceActionHandler(portfoliodetailsId);
-      if (response) {
+    if(empty && response){
         this.setState({loading: false, data: response});
-      }
-
       _.each(response.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
-
     }else{
       this.fetchOnlyImages();
       this.setState({loading: true, data: that.context.ideatorPortfolio.audience});
     }
   }
+
+  /**
+   * UI creating lock function
+   * */
+  lockPrivateKeys() {
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName})
+    var finalKeys = _.unionBy(filterPrivateKeys, this.state.privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
+
   onAudienceImageFileUpload(e){
     if(e.target.files[0].length ==  0)
       return;
@@ -114,7 +127,9 @@ export default class MlIdeatorAudience extends React.Component{
     if (response) {
       let dataDetails =this.state.data
       dataDetails['audienceImages'] = response.audienceImages
-      this.setState({loading: false, data: dataDetails});
+      this.setState({loading: false, data: dataDetails, privateValues: response.privateFields}, () => {
+        this.lockPrivateKeys()
+      })
     }
   }
 
@@ -200,4 +215,5 @@ export default class MlIdeatorAudience extends React.Component{
 };
 MlIdeatorAudience.contextTypes = {
   ideatorPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object,
 };

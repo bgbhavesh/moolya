@@ -14,12 +14,27 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+}
+.my-ml-Company:before {
+  content: "\e9e4";
+}
+.my-ml-Ideator:before {
+  content: "\e9e5";
+.my-ml-Institutions:before {
+  content: "\e9e6";
+}
+.my-ml-Investors:before {
+  content: "\e9e7";
+}
+.my-ml-Startups:before {
+  content: "\e9e8";
+}
 .my-ml-alert_Warning:before {
   content: "\e9d7";
 }
 .my-ml-audio:before {
-  content: "\e9d8";
 }
+  content: "\e9d8";
 .my-ml-chat:before {
   content: "\e9d9";
 }
@@ -38,8 +53,8 @@
 .my-ml-record:before {
   content: "\e9de";
 }
-.my-ml-services:before {
   content: "\e9df";
+.my-ml-services:before {
 }
 .my-ml-stop:before {
   content: "\e9e0";

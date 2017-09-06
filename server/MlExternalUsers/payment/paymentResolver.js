@@ -2,7 +2,7 @@ import MlResolver from '../../commons/mlResolverDef';
 
 MlResolver.MlMutationResolver['updatePayment'] = (obj, args, context, info) => {
   console.log(args);
-  let paymentId = args.transactionId;
+  let paymentId = args.transID;
   if(!paymentId) {
     return ;
   }
@@ -22,7 +22,7 @@ MlResolver.MlMutationResolver['updatePayment'] = (obj, args, context, info) => {
   var response=null;
   switch (activityType) {
     case "OFFICE-PURCHASED":
-      let paymentUpdate =mlDBController.update('MlPayment',{paymentId: paymentId}, { status: paymentSuccess }, context);
+      let paymentUpdate =mlDBController.update('MlPayment',{paymentId: paymentId}, { status: paymentSuccess }, {$set: true},  context);
       let officeDate = {
         officeId: paymentInfo.resourceId,
         amount: paymentInfo.amount,

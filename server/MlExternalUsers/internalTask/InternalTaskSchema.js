@@ -34,6 +34,7 @@ let internalTaskSchema = `
         _id: String
         userId:String
         attendee: String
+        attendeeName: String
         attendeeProfileId: String
         name: String
         stage: String
@@ -53,6 +54,10 @@ let internalTaskSchema = `
         priority: String
         expectedInput: String
         expectedOutput: String
+        communityName: String
+        clusterName: String
+        ownerName: String
+        portfolioTitle: String
     }
     
     input internalTaskCommunity {

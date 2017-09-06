@@ -1,11 +1,9 @@
 import React, { Component, PropTypes }  from "react";
-import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
-import ScrollArea from 'react-scrollbar';
 import _ from 'lodash';
 var FontAwesome = require('react-fontawesome');
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import MlLoader from '../../../../../commons/components/loader/loader'
 import {findIdeatorProblemsAndSolutionsActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler'
@@ -14,7 +12,8 @@ import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryAct
 export default class MlIdeatorProblemsAndSolutions extends React.Component{
   constructor(props, context) {
     super(props);
-    this.state =  {loading: true, data:{}, privateKey:{}};
+    this.state =  {loading: true, data:{}, privateKey:{},
+      privateValues:[]};
     this.onProblemImageFileUpload.bind(this);
     this.onSolutionImageFileUpload.bind(this);
     this.fetchPortfolioInfo.bind(this);
@@ -23,8 +22,9 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
     return this;
   }
 
-  componentWillMount(){
-      this.fetchPortfolioInfo();
+  componentWillMount() {
+    const resp = this.fetchPortfolioInfo();
+    return resp
   }
 
   async fetchPortfolioInfo(){
@@ -50,10 +50,25 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
       let dataDetails =this.state.data
       dataDetails['problemImage'] = response.problemImage
       dataDetails['solutionImage'] =response.solutionImage
-      this.setState({loading: false, data: dataDetails});
+      this.setState({loading: false, data: dataDetails, privateValues: response.privateFields}, () => {
+        this.lockPrivateKeys()
+      })
     }
   }
 
+  /**
+   * UI creating lock function
+   * */
+  lockPrivateKeys() {
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName})
+    var finalKeys = _.unionBy(filterPrivateKeys, this.state.privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
 
   onInputChange(e){
       let details =this.state.data;
@@ -78,9 +93,9 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
         details=_.extend(details,{[key]:false});
       }
 
-      var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
-      this.setState({privateKey:privateKey})
-      this.setState({data:details}, function () {
+      var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, tabName: this.props.tabName}
+      // this.setState({privateKey:privateKey})
+      this.setState({data:details, privateKey:privateKey}, function () {
         this.sendDataToParent()
       })
   }
@@ -122,6 +137,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
   componentDidUpdate(){
     OnLockSwitch();
     dataVisibilityHandler();
+    initalizeFloatLabel();
   }
 
   componentDidMount(){
@@ -250,5 +266,5 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
 };
 MlIdeatorProblemsAndSolutions.contextTypes = {
   ideatorPortfolio: PropTypes.object,
-
+  portfolioKeys: PropTypes.object
 };

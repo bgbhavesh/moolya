@@ -4,24 +4,35 @@
 import React from "react";
 import {render} from "react-dom";
 import _ from "lodash";
+import FontAwesome from 'react-fontawesome';
 
 export default class MlAccordion extends React.Component {
 
   constructor(props) {
     super(props);
+    this.state={
+      isExpand:true
+    }
+    this.onTabClick.bind(this)
     return this;
   }
-
+  onTabClick(){
+    var data = $('#pdp-accord-toggle').attr('aria-expanded')
+    var isExpand = data == 'true'?true:false
+    this.setState({isExpand:isExpand})
+  }
   render() {
-    var that = this;
+    var _this = this;
     /*props 'accordionOptions'  contains accordion configuration only*/
     let accordion = this.props.accordionOptions ? this.props.accordionOptions : {};
     let accordionId = accordion.id || 'accordion';
     let panelOptions = accordion.panelItems || [];
     let panelItems = panelOptions.map(function (option, index) {
       return (
-        <a className="re-btn" data-toggle="collapse" data-parent={"#" + accordionId} key={"panel"+index}
-           href={"#" + accordionId + index}>{option.title}</a>
+        <a className="re-btn" id="pdp-accord-toggle" data-toggle="collapse" data-parent={"#" + accordionId} key={"panel"+index}
+           href={"#" + accordionId + index} onClick={_this.onTabClick.bind(_this)}>
+          {option.title} <span className={`fa fa-caret-${_this.state.isExpand?"down":"up"}`}/>
+          </a>
       )
     });
 

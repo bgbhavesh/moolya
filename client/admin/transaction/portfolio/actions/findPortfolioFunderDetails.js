@@ -196,6 +196,8 @@ export async function fetchfunderPortfolioInvestor(portfoliodetailsId) {
                   privateFields{
                     keyName,
                     booleanKey
+                    index
+                    tabName
                   }
                 }  
             }
@@ -234,7 +236,9 @@ export async function fetchfunderPortfolioSuccess(portfoliodetailsId) {
                 }
                 privateFields{
                   keyName,
-                  booleanKey
+                  booleanKey,
+                  index,
+                  tabName
                 }
               }    
             }

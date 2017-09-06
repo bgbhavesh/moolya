@@ -1157,7 +1157,8 @@ MlResolver.MlMutationResolver['updateDataEntry'] = (obj, args, context, info) =>
   let resp;
   if(user){
     // resp = Meteor.users.update({_id:args.userId}, {$set:{"profile.isActive":args.isActive}});
-    resp = mlDBController.update('users', context.userId,{"profile.profileImage":args.attributes.profileImage,"profile.InternalUprofile.moolyaProfile.firstName":args.attributes.firstName,"profile.InternalUprofile.moolyaProfile.middleName":args.attributes.middleName, "profile.InternalUprofile.moolyaProfile.lastName":args.attributes.lastName,  "profile.InternalUprofile.moolyaProfile.displayName": args.attributes.userName, "profile.genderType": args.attributes.genderType, "profile.dateOfBirth": args.attributes.dateOfBirth},{$set:true}, context)
+    // resp = mlDBController.update('users', context.userId,{"profile.profileImage":args.attributes.profileImage,"profile.InternalUprofile.moolyaProfile.firstName":args.attributes.firstName,"profile.InternalUprofile.moolyaProfile.middleName":args.attributes.middleName, "profile.InternalUprofile.moolyaProfile.lastName":args.attributes.lastName,  "profile.InternalUprofile.moolyaProfile.displayName": args.attributes.userName, "profile.genderType": args.attributes.genderType, "profile.dateOfBirth": args.attributes.dateOfBirth},{$set:true}, context)
+    resp = mlDBController.update('users', context.userId,{"profile.profileImage":args.attributes.profileImage,"profile.firstName":args.attributes.firstName,"profile.middleName":args.attributes.middleName, "profile.lastName":args.attributes.lastName,  "profile.displayName": args.attributes.userName, "profile.genderType": args.attributes.genderType, "profile.dateOfBirth": args.attributes.dateOfBirth},{$set:true}, context)
   }
   if(resp){
     resp = new MlRespPayload().successPayload("User Profile Updated Successfully", 200);
@@ -1251,6 +1252,20 @@ MlResolver.MlQueryResolver['fetchAddressBookInfo'] = (obj, args, context, info) 
   return user.profile;
 }
 
+MlResolver.MlQueryResolver['findBranchAddressInfo'] = (obj, args, context, info) => {
+  let rest = null;
+  var branchAddress = [];
+  let user = mlDBController.findOne('users', {_id: context.userId}, context);
+  if(user && user.profile && user.profile.externalUserAdditionalInfo[0] && user.profile.externalUserAdditionalInfo[0].addressInfo){
+      var addressInfo = user.profile.externalUserAdditionalInfo[0].addressInfo
+      if(addressInfo){
+        branchAddress = _.filter(addressInfo, function (item) {
+            return item.addressTypeName === 'Branch'
+        })
+      }
+  }
+  return branchAddress;
+}
 
 MlResolver.MlQueryResolver['findUserOnToken'] = (obj, args, context, info) => {
   const hashedToken = Accounts._hashLoginToken(args.token)

@@ -11,6 +11,7 @@ export default class MlAppFunderCalendarSlots extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      shift:'morning',
       slotDetails:[],
       date: props.date ? props.date : new Date()
     };
@@ -76,9 +77,18 @@ export default class MlAppFunderCalendarSlots extends Component {
     }.bind(this));
   }
 
+  updateShift(shift){
+    this.setState({
+      shift: shift
+    })
+  }
+
   render() {
     const that = this;
-    const slots = this.state.slotDetails;
+    // const slots = this.state.slotDetails;
+    let slots = that.state.slotDetails.filter( (slot) => {
+      return slot.shift === that.state.shift;
+    });
     const slotTimings = slots.map(function(slot, index){
       return(
         <div className="col-md-4 col-sm-4 col-lg-3" key={index} >
@@ -96,14 +106,36 @@ export default class MlAppFunderCalendarSlots extends Component {
     });
 
     return (
-      <div className="row funders_list">
-        {slotTimings}
-        <span className="calender_switch"><FontAwesome name="calendar"/></span>
-        <div>
-          <Days
-            width = {that.state.width}
-            onDateSelect = {that.handleDateSelect}
-            startDate = { that.state.date } />
+      <div className="main_wrap_scroll" style={{"overflow": "hidden"}}>
+        <div className="row funders_list">
+          <ul className="cal_tabs act_tab">
+            <li className="col-md-4 nopadding-left" onClick={() => that.updateShift('morning') } style={{cursor: "pointer"}} >
+                  <span className={ that.state.shift === "morning" ? "act_tab" : ''} >
+                    <img src="/images/mor_icon.png"/> Morning
+                  </span>
+            </li>
+            <li className="col-md-4 nopadding" onClick={() => that.updateShift('afternoon') } style={{cursor: "pointer"}} >
+                  <span className={ that.state.shift === "afternoon" ? "act_tab" : ''} >
+                    <img src="/images/aft_icon.png"/> Afternoon
+                  </span>
+            </li>
+            <li className="col-md-4 nopadding-right"  onClick={() => that.updateShift('evening') } style={{cursor: "pointer"}} >
+                  <span className={ that.state.shift === "evening" ? "act_tab" : ''} >
+                    <img src="/images/eve_icon.png"/> Evening
+                  </span>
+            </li>
+          </ul>
+          <br className="brclear"/>
+          <div className="row day_tab_content">
+            {slotTimings}
+          </div>
+          <span className="calender_switch"><FontAwesome name="calendar"/></span>
+          <div>
+            <Days
+              width = {that.state.width}
+              onDateSelect = {that.handleDateSelect}
+              startDate = { that.state.date } />
+          </div>
         </div>
       </div>
     )

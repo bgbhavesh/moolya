@@ -37,8 +37,60 @@ MlResolver.MlQueryResolver['fetchMyInternalTask'] = (obj, args, context, info) =
         '$in': args.status
       }
     }
-    internalTask = mlDBController.find('MlInternalTask', query).fetch();
-    return internalTask
+
+    let pipeline = [
+      { "$match": query },
+      { "$lookup": { from: "mlPortfolioDetails", localField: "resourceId", foreignField: "_id", as: "portfolio" } },
+      { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "users", localField: "portfolio.userId", foreignField: "_id", as: "portfolioUser" } },
+      { "$unwind": { path: "$portfolioUser", preserveNullAndEmptyArrays: true } },
+      { "$lookup":{ from: "users", localField: "userId", foreignField: "_id", as: "user" } },
+      { "$unwind": { path: "$user", preserveNullAndEmptyArrays: true } },
+      { "$addFields": {
+        "userProfile" : { "$filter": {
+          "input": "$user.profile.externalUserProfiles",
+          "as": "profile",
+          "cond": {"$cmp" : ["$profileId", "$$profile.profileId" ] }
+          }
+        }
+      }},
+      { "$unwind": { path: "$userProfile", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "mlIdeas", localField: "resourceId", foreignField: "portfolioId", as: "idea" } },
+      { "$unwind": { path: "$idea", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "mlStartupPortfolio", localField: "resourceId", foreignField: "portfolioDetailsId", as: "startup" } },
+      { "$unwind": { path: "$startup", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "mlFunderPortfolio", localField: "resourceId", foreignField: "portfolioDetailsId", as: "funder" } },
+      { "$unwind": { path: "$funder", preserveNullAndEmptyArrays: true } },
+      { "$project": {
+        "ownerName": { "$ifNull": ['$portfolioUser.profile.displayName', '$user.profile.displayName' ]},
+        "name": 1,
+        "type": 1,
+        "isSelfAssigned":1,
+        "status": 1,
+        "communityName":  { "$ifNull": ["$portfolio.communityType",  "$userProfile.communityName" ] },
+        "clusterName":  { "$ifNull": ["$portfolio.clusterName", "$userProfile.clusterName" ]},
+        "idea": { "$ifNull": ["$idea.title", '']},
+        "startup":  { "$ifNull": ["$startup.aboutUs.description", '']},
+        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']}
+        }
+      },
+      {
+        "$addFields": {
+          "portfolioTitle": {"$concat": ["$idea","$startup","$funder"]},
+        }
+      }
+    ];
+    internalTask = mlDBController.aggregate("MlInternalTask", pipeline);
+    // internalTask = mlDBController.find('MlInternalTask', query).fetch();
+    // internalTask.map(function(data){
+    //   if(data.attendeeProfileId === profile.profileId ) {
+    //     let community = {name:""}
+    //     community.name= profile.communityName
+    //     data.community = community;
+    //     data.attendeeName = profile.firstName+" "+profile.lastName;
+    //   }
+    // })
+    return internalTask;
   } else {
     let code = 400;
     let response = new MlRespPayload().errorPayload("Not a Valid user", code);
@@ -61,7 +113,39 @@ MlResolver.MlQueryResolver['fetchSelfCreatedInternalTask'] = (obj, args, context
         '$in': args.status
       }
     }
-    internalTask = mlDBController.find('MlInternalTask', query).fetch();
+
+    let pipeline = [
+      { "$match": query },
+      { "$lookup":{ from: "users", localField: "userId", foreignField: "_id", as: "user" } },
+      { "$unwind": { path: "$user", preserveNullAndEmptyArrays: true } },
+      { "$addFields": {
+        "userProfile" : { "$filter": {
+          "input": "$user.profile.externalUserProfiles",
+          "as": "profile",
+          "cond": {"$cmp" : ["$profileId", "$$profile.profileId" ] }
+        }
+        }
+      }},
+      { "$unwind": { path: "$userProfile", preserveNullAndEmptyArrays: true } },
+      { "$project": {
+        "ownerName": '$user.profile.displayName',
+        "name": 1,
+        "type": 1,
+        "isSelfAssigned":1,
+        "status": 1,
+        "communityName": "$userProfile.communityName",
+        "clusterName":  "$userProfile.clusterName",
+       }
+      }
+    ];
+    internalTask = mlDBController.aggregate("MlInternalTask", pipeline);
+
+    //internalTask = mlDBController.find('MlInternalTask', query).fetch();
+    //internalTask.map(function(data){
+     // if(data.attendeeProfileId === profile.profileId) {
+     //   data.community.name = profile.communityName;
+      //}
+    //})
     return internalTask;
   } else {
     let code = 400;
@@ -90,7 +174,8 @@ MlResolver.MlQueryResolver['fetchInternalTaskById'] = (obj, args, context, info)
       return {
         id: user._id,
         name: user.profile.displayName,
-        profileUrl: user.profile.profileImage
+        profileUrl: user.profile.profileImage,
+        communityName: user.profile.displayName,
       };
     });
     return internalTask;

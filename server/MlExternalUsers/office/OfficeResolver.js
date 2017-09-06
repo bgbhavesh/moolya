@@ -20,6 +20,7 @@ let Future = Npm.require('fibers/future');
 MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
   let officeSC = [];
   let profileId = args.profileId;
+  let profile;
   if (context.userId) {
     let query = {
       userId: context.userId,
@@ -27,8 +28,20 @@ MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
     };
     if(profileId){
       query.profileId = profileId;
+    } else {
+      profile = new MlUserContext(context.userId).userProfileDetails(context.userId);
     }
-    officeSC = mlDBController.find('MlOffice', query ).fetch();
+
+    if(profile && profile.communityDefCode === "OFB"){
+      let pipeline = [
+        { "$lookup": { from: "mlOfficeMembers", localField: "_id", foreignField: "officeId", as: "officeMembers" } },
+        { "$unwind": "$officeMembers" },
+        { "$match" : { "officeMembers.userId": context.userId, "officeMembers.profileId": profile.profileId } }
+      ];
+      officeSC = mlDBController.aggregate('MlOffice', pipeline );
+    } else {
+      officeSC = mlDBController.find('MlOffice', query ).fetch();
+    }
     return officeSC
   } else {
     let code = 400;
@@ -383,97 +396,107 @@ MlResolver.MlMutationResolver['createOfficeMembers'] = (obj, args, context, info
   try {
 
     /**checking if user already present in the users collectio*/
-    let isUserRegExist = mlDBController.findOne('MlRegistration', { 'registrationInfo.email': args.officeMember.emailId});
+    let isUserRegExist = mlDBController.findOne('MlRegistration', { 'registrationInfo.email': args.officeMember.emailId, status:{$ne: "Rejected"}});
     let isUserExist = mlDBController.findOne('users', {username: args.officeMember.emailId});
     if (isUserExist || isUserRegExist) {
-      console.log('user already present');
-      let code = 400;
-      let response = new MlRespPayload().errorPayload("User is not allowed to be associated to this office. Please contact administrator", code);
-      return response;
+      let pipeline = [
+        { "$match": { "_id": args.myOfficeId }},
+        { "$lookup": { from: "mlOffice", localField: "profileId", foreignField: "profileId", as: "offices" } },
+        { "$unwind": "$offices" },
+        { $replaceRoot: { newRoot: "$offices" } },
+        { "$lookup": { from: "mlOfficeMembers", localField: "_id", foreignField: "officeId", as: "officeMembers" } },
+        { "$unwind": "$officeMembers" },
+        { "$match" : { "officeMembers.emailId" : args.officeMember.emailId , _id : { $ne : args.myOfficeId } } }
+      ];
+      let memberAssicatedWithSameInvester = mlDBController.aggregate('MlOffice', pipeline);
+      // let isAlreadyInSameOffice = mlDBController.find('MlOfficeMembers', {emailId: args.officeMember.emailId}).fetch();
+      if(memberAssicatedWithSameInvester.length  == 0) {
+        let code = 400;
+        let response = new MlRespPayload().errorPayload("User is not allowed to be associated to this office. Please contact administrator", code);
+        return response;
+      }
       // Send an invite to the Existing User
     }
-    else {
-      // Soft Registration has to be done to new user
-      /**generating random password for the users and saving in the registration*/
-      var emails = [{address: args.officeMember.emailId, verified: false}];
-      let randomPassword = orderNumberGenService.generateRandomPassword()
 
-      /**user details who is creating the office member*/
-      var adminUser = mlDBController.findOne('users', {_id: context.userId}) || {}
+    // Soft Registration has to be done to new user
+    /**generating random password for the users and saving in the registration*/
+    var emails = [{address: args.officeMember.emailId, verified: ( isUserRegExist ? true : false ) }];
+    let randomPassword = orderNumberGenService.generateRandomPassword()
 
-      var registrationData = {
-        createdBy: adminUser.username,
-        password: randomPassword,
-        firstName: args.officeMember.firstName,
-        lastName: args.officeMember.lastName,
-        email:args.officeMember.emailId,
-        userName:args.officeMember.emailId,
-        contactNumber: args.officeMember.mobileNumber,
-        communityName: "Office Bearer",
-        communityDefCode : "OFB",
-        registrationType : "OFB",
-        communityDefName : "Office Bearer",
-        registrationDate :new Date()
-      }
+    /**user details who is creating the office member*/
+    var adminUser = mlDBController.findOne('users', {_id: context.userId}) || {}
 
-
-      /**attaching creator details to the office member details in the registration*/
-      let profile = new MlUserContext(context.userId).userProfileDetails(context.userId)
-      let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'countryId']);
-      let finalRegData = _.extend(registrationData, extendObj)
-      orderNumberGenService.assignRegistrationId(finalRegData)
-
-      let registrationId = mlDBController.insert('MlRegistration', {
-        registrationInfo: finalRegData,
-        status: "Yet To Start",
-        emails: emails,
-        transactionId :finalRegData.registrationId
-      }, context)
-
-      /**sending email verification token to the created office member*/
-      if (registrationId) {
-        let address
-        var user=mlDBController.findOne('MlRegistration', {_id:registrationId},context||{});
-        var email = _.find(user.emails || [], function (e) {
-          return !e.verified;
-        });
-
-        address = (email || {}).address;
-        var tokenRecord = {
-          token: Random.secret(),
-          address: address,
-          when: new Date()
-        };
-        MlRegistration.update({_id: registrationId},
-          {$push: {'services.email.verificationTokens': tokenRecord}});
-        //Meteor.users.update({_id: userId }, {$push: {'services.email.verificationTokens': tokenRecord}});
-
-        var verificationLink = MlAccounts.verifyEmailLink(tokenRecord.token);
-        //MlAccounts.sendVerificationEmail(registrationId,{emailContentType:"html",subject:"Email Verification",context:context});
-         MlEmailNotification.officeInvitationEmail(verificationLink,registrationId,context,registrationData)
-      }
-      if (registrationId) {
-
-        /**finally saving the user to the office member collection*/
-        var officeMember = args.officeMember;
-        officeMember.officeId = args.myOfficeId;
-        officeMember.name = officeMember.firstName + ' ' + officeMember.lastName;
-        officeMember['registrationId'] = registrationId
-
-        /**no user is created at this step user will be created after admin approval*/
-        // officeMember['userId'] = userId
-        officeMember['createdDate'] = new Date()
-        let ret = mlDBController.insert('MlOfficeMembers', officeMember, context)
-
-        let fromUserType = 'user';     //to userId is not available as user is not created till
-        mlOfficeInteractionService.createTransactionRequest(context.userId, 'officeBearerInvitation', officeMember.officeId, ret, context.userId, fromUserType, context);
-        // update ledger balance and journal
-        ret = mlOfficeValidationRepo.updateLedgerBalanceOfficeJournal(args.myOfficeId, officeMember, context)
-        if(!ret)
-          return new MlRespPayload().errorPayload("Error In Updating Ledger Balance", 400);
-      }
+    var registrationData = {
+      createdBy: adminUser.username,
+      password: randomPassword,
+      firstName: args.officeMember.firstName,
+      lastName: args.officeMember.lastName,
+      email:args.officeMember.emailId,
+      userName:args.officeMember.emailId,
+      contactNumber: args.officeMember.mobileNumber,
+      communityName: "Office Bearer",
+      communityDefCode : "OFB",
+      registrationType : "OFB",
+      communityDefName : "Office Bearer",
+      registrationDate :new Date()
     }
 
+
+    /**attaching creator details to the office member details in the registration*/
+    let profile = new MlUserContext(context.userId).userProfileDetails(context.userId)
+    let extendObj = _.pick(profile, ['clusterId', 'clusterName', 'chapterId', 'chapterName', 'subChapterId', 'subChapterName', 'countryId']);
+    let finalRegData = _.extend(registrationData, extendObj)
+    orderNumberGenService.assignRegistrationId(finalRegData)
+
+    let registrationId = mlDBController.insert('MlRegistration', {
+      registrationInfo: finalRegData,
+      status: "Yet To Start",
+      emails: emails,
+      transactionId :finalRegData.registrationId
+    }, context)
+
+    /**sending email verification token to the created office member*/
+    if (registrationId && !isUserRegExist) {
+      let address
+      var user=mlDBController.findOne('MlRegistration', {_id:registrationId},context||{});
+      var email = _.find(user.emails || [], function (e) {
+        return !e.verified;
+      });
+
+      address = (email || {}).address;
+      var tokenRecord = {
+        token: Random.secret(),
+        address: address,
+        when: new Date()
+      };
+      MlRegistration.update({_id: registrationId},
+        {$push: {'services.email.verificationTokens': tokenRecord}});
+      //Meteor.users.update({_id: userId }, {$push: {'services.email.verificationTokens': tokenRecord}});
+
+      var verificationLink = MlAccounts.verifyEmailLink(tokenRecord.token);
+      //MlAccounts.sendVerificationEmail(registrationId,{emailContentType:"html",subject:"Email Verification",context:context});
+       MlEmailNotification.officeInvitationEmail(verificationLink,registrationId,context,registrationData)
+    }
+    if (registrationId) {
+
+      /**finally saving the user to the office member collection*/
+      var officeMember = args.officeMember;
+      officeMember.officeId = args.myOfficeId;
+      officeMember.name = officeMember.firstName + ' ' + officeMember.lastName;
+      officeMember['registrationId'] = registrationId
+
+      /**no user is created at this step user will be created after admin approval*/
+      // officeMember['userId'] = userId
+      officeMember['createdDate'] = new Date()
+      let ret = mlDBController.insert('MlOfficeMembers', officeMember, context)
+
+      let fromUserType = 'user';     //to userId is not available as user is not created till
+      mlOfficeInteractionService.createTransactionRequest(context.userId, 'officeBearerInvitation', officeMember.officeId, ret, context.userId, fromUserType, context);
+      // update ledger balance and journal
+      ret = mlOfficeValidationRepo.updateLedgerBalanceOfficeJournal(args.myOfficeId, officeMember, context)
+      if(!ret)
+        return new MlRespPayload().errorPayload("Error In Updating Ledger Balance", 400);
+    }
   } catch (e) {
     let code = 400;
     let response = new MlRespPayload().errorPayload(e.message, code);
@@ -644,18 +667,18 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
         "API_KEY": "AESsdjkfhsdkjfjkshfn346346",
         "appId": "moolya",
         "currency": "USD",
-        "transId": orderNumberGenService.paymentId,
+        "transId": paymentData.paymentId,
         "paymentEndPoint": "paypal",
         "operation": "debit",
         "customerId": officeTransDetails.userId,
-        // "callBackUrl": "http://10.0.2.188:3000/app/myOffice"
-        "callBackUrl": Meteor.absoluteUrl() +"app/transaction"
+        "callBackUrl": "http://10.0.2.188:3000/app/myOffice"
+        // "callBackUrl": Meteor.absoluteUrl() +"app/transaction"
       };
 
       let apiRequest = {
         headers: {'content-type' : 'application/text'},
         // url:     'http://payment-services-814468192.ap-southeast-1.elb.amazonaws.com/payments/process'
-        url:     "http://10.0.2.186:8080/payments/process"
+        url:     "http://10.0.2.140:8080/payments/process"
       };
 
       let future = new Future();
@@ -691,3 +714,8 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
 
   }
 };
+
+MlResolver.MlQueryResolver['getOfficeType'] = (obj, args, context, info) => {
+  var officeTypes = mlDBController.find('MlOfficeType', {}, context).fetch();
+  return officeTypes;
+}

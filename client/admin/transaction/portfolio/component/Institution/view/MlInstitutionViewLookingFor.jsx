@@ -5,6 +5,7 @@ import {initializeMlAnnotator} from '../../../../../../commons/annotator/mlAnnot
 import {findAnnotations} from '../../../../../../commons/annotator/findAnnotations'
 import NoData from '../../../../../../commons/components/noData/noData';
 import MlLoader from "../../../../../../commons/components/loader/loader";
+import _ from 'lodash'
 
 
 const KEY = "lookingFor";
@@ -104,7 +105,7 @@ export default class MlInstitutionViewLookingFor extends React.Component {
       this.setState({institutionLookingforList: response,loading:false});
     }
 
-    this.setState({lodaing:false})
+    this.setState({loading:false})
 
   }
 

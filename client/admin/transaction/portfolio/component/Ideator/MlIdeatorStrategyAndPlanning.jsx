@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
 var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {findIdeatorStrategyPlansActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import _ from 'lodash';
 import MlLoader from '../../../../../commons/components/loader/loader'
@@ -14,14 +14,16 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
     this.state={
       loading:true,
       data:{},
-      privateKey:{}
+      privateKey:{},
+      privateValues:[]
     }
     this.onClick.bind(this);
     this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
   }
   componentWillMount(){
-    this.fetchPortfolioDetails();
+    const resp = this.fetchPortfolioDetails();
+    return resp
   }
 
   componentDidMount(){
@@ -32,26 +34,40 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
   componentDidUpdate(){
     OnLockSwitch();
     dataVisibilityHandler();
+    initalizeFloatLabel();
   }
 
   async fetchPortfolioDetails() {
     let that = this;
     let portfoliodetailsId=that.props.portfolioDetailsId;
+    const response = await findIdeatorStrategyPlansActionHandler(portfoliodetailsId);
     let empty = _.isEmpty(that.context.ideatorPortfolio && that.context.ideatorPortfolio.strategyAndPlanning)
-    if(empty){
-      const response = await findIdeatorStrategyPlansActionHandler(portfoliodetailsId);
-      if (response) {
+    if(empty && response){
         this.setState({loading: false, data: response});
-      }
-
       _.each(response.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
-
     }else{
-      this.setState({loading: false, data: that.context.ideatorPortfolio.strategyAndPlanning});
+      this.setState({loading: false, data: that.context.ideatorPortfolio.strategyAndPlanning, privateValues: response.privateFields}, () => {
+        this.lockPrivateKeys()
+      });
     }
   }
+
+  /**
+   * UI creating lock function
+   * */
+  lockPrivateKeys() {
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName})
+    var finalKeys = _.unionBy(filterPrivateKeys, this.state.privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
+
   onClick(fieldName, field,e){
     let details = this.state.data||{};
     let key = e.target.id;
@@ -65,13 +81,13 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
       details=_.extend(details,{[key]:false});
     }
 
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
+    var privateKey = {keyName: fieldName, booleanKey: field, isPrivate: isPrivate, tabName: this.props.tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data: details, privateKey: privateKey}, function () {
       this.sendDataToParent()
     })
-
   }
+
   handleBlur(e){
     let details =this.state.data;
     let name  = e.target.name;
@@ -135,4 +151,5 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
 };
 MlIdeatorStrategyAndPlanning.contextTypes = {
   ideatorPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object,
 };

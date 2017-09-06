@@ -300,5 +300,4 @@ class MlOfficeRepo{
 
 const mlOfficeValidationRepo = new MlOfficeRepo();
 Object.freeze(mlOfficeValidationRepo);
-
 export default mlOfficeValidationRepo;

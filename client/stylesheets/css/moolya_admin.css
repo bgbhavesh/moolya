@@ -156,7 +156,7 @@ span.actions_switch.show_act{bottom: 0px;background:url(../images/actions_block_
 .bottom_actions_block .hex_btn.hex_btn_in:hover:after{border-color: transparent transparent transparent #fff;color: #ef4647}
 .bottom_actions_block .hex_btn.hex_btn_in:hover:before{border-color: transparent #fff transparent transparent;color: #ef4647}
 .large_popover{min-width: 736px;margin-left: 8px;max-height: 400px;}
-.popover{max-width: inherit; z-index: 14px}
+.popover{max-width: inherit;z-index: 14;}
 .popover-content{padding:9px 0px 9px 0px;}
 .bottom_actions_block .ml, .bottom_actions_block .fa{font-size: 22px; text-shadow: none; }
 .bottom_actions_block .ml.ml-import,.bottom_actions_block .ml.ml-export,.bottom_actions_block .ml.ml-annotate,.bottom_actions_block .ml.ml-plus,.bottom_actions_block .ml.ml-save,.bottom_actions_block .ml.ml-delete, .bottom_actions_block .ml-document-approve, .bottom_actions_block .ml-document-reject,.bottom_actions_block .flaticon-ml-file, .bottom_actions_block .flaticon-ml-file-1, .bottom_actions_block .flaticon-ml-cloud-computing-1, .bottom_actions_block .flaticon-ml-unassign-user, .bottom_actions_block .flaticon-ml-assign-user, .bottom_actions_block .flaticon-ml-active-user, .bottom_actions_block .flaticon-ml-inactive-user{font-weight: bold; }
@@ -286,8 +286,7 @@ table{background: #fff;}
 .vTimeline li.timelineLast{background: #000;margin-top: -6px;}
 .loading{position: absolute;    top: calc(50% - 30px);    left: calc(50% - 60px);}
 .loader_wrap{position: fixed;width: 100%;height: 100%;top: 0px;left: 0px;background-color: rgba(255,255,255,0.8);z-index: 9;background-image: url(/images/loading.gif);background-position: center center;background-repeat: no-repeat;}
-.fileUpload {position: relative;
-  overflow: hidden; }
+.fileUpload {position: relative;}
 .upload_file_mask{margin-top: -6px !important;}
 .upload_file_mask input.upload{width: 33px !important;}
 .fileUpload .ml{font-size: 18px; background: #273545; border-radius: 5px; padding: 3px 4px; text-shadow: none; color: #fff; line-height: 30px; cursor: pointer;}
@@ -1105,6 +1104,8 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .library-wrap .thumbnail .fa.fa-minus{position: absolute; right: 6px; bottom: 16px; color: #FFF; background: #EF4647; width: 20px; height: 20px; text-align: center; line-height: 18px; border-radius: 4px; cursor: pointer; z-index: 1; font-size: 12px;}
 .library-wrap .thumbnail .fa.fa-times{position: absolute; right: 5px; bottom: 16px; color: #FFF; background: #EF4647; width: 20px; height: 20px; text-align: center; line-height: 18px; border-radius: 4px; cursor: pointer; z-index: 1; font-size: 12px;}
 .library-wrap .thumbnail .fa.fa-trash-o{position:absolute;right:-6px;top:-6px;color:#fff;background:#ef4647;width:25px;height:25px;text-align:center;line-height:25px;border-radius:50%;cursor:pointer}
+.library-wrap .thumbnail .fa.fa-clock-o{position:absolute;left:-6px;top:-6px;color:#fff;background:#273545;width:25px;height:25px;text-align:center;line-height:25px;border-radius:50%;cursor:pointer}
+.library-wrap .thumbnail .fa.fa-download{position:absolute;right:-6px;top:-6px;color:#fff;background:#ef4647;width:25px;height:25px;text-align:center;line-height:25px;border-radius:50%;cursor:pointer}
 .library-wrap .thumbnail .input_types {
   float: left;
   margin-top: -15px;
@@ -1138,12 +1139,14 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .team-block{background:#273545;border-radius:8px;text-align:center;margin-bottom:10px;}
 .team-block.active{background:#ef4647;}
 .team-block .team_img{border-radius:50%;border:#17273a solid 2px; margin-top:10px; width: 110px; height: 110px;margin-bottom: 10px;}
-.team-block h3{font-size: 16px;text-shadow:none;color:#273545; padding:10px;background: #B9C5CC;border-radius: 0px 0px 8px 8px;}
+.team-block h3{font-size: 16px;text-shadow:none;color:#273545; padding:10px;background: #B9C5CC;border-radius: 0px 0px 8px 8px;    height: 37px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
 .team-block h3 b{font-weight: normal;font-size: 12px;padding-top: 5px;display: inline-block;}
 .team-block .ml{background: #B9C5CC; border-radius: 50%;  padding: 14px; color: #273545; text-shadow: 0px 1px 1px #eee; font-size: 42px; display: inline-block; border: 2px solid #161e27;  margin: 20px 0;}
 
 .ideas_swiper{margin-bottom: 15px;}
 .ideas_swiper .ideas_block{height: 182px; background-color: #273545; border-radius: 10px; text-align: center; position: relative; margin-bottom: 15px; color: #fff; width: 305px; padding: 10px 0px; font-size: 24px; text-shadow: none;background-size: cover;background-position: center center; }
+.ideas_swiper .ideas_block.swiper-slide-active{background-color: #ef4647;}
+.ideas_swiper .ideas_block.swiper-slide-active:before{border-color: #ca2122 #fff;}
 .ideas_swiper .ideas_block:before {content: ""; position: absolute; top: 0; right: 0; border-width: 0 25px 25px 0; border-style: solid; border-color: #0e1c2d #fff; }
 .ideas_swiper .ideas_block img{width: 100px; height: 60px }
 .ideas_swiper .ideas_block h3{color: #ffffff; font-size: 16px; bottom: 0; position: absolute; background: rgba(39, 53, 69, 0.83); width: 100%; padding:5px 0px; border-radius: 0 0 10px 10px;line-height: 19px;}
@@ -1208,7 +1211,7 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 .list_block_intrests.list_block img { width: auto; z-index: 2; position: relative; left: auto; top: auto; border: none;}
 .list_block_intrests.list_block .hex_outer { line-height: 135px }
 .list_block.funding_list{ background-color: #273545; color: #fff; font-size: 18px; padding-top: 30px;margin-top:15px;}
-.list_block.funding_list p{display: block; text-shadow: none; color: #fff; text-decoration: none;font-size: 18px; margin-bottom:10px;}
+.list_block.funding_list p{display: block; text-shadow: none; color: #fff; text-decoration: none;font-size: 18px; margin-bottom:10px;    text-overflow: ellipsis; overflow: hidden; white-space: nowrap; width: 80%; margin: 0 auto;}
 .list_block.funding_list span {font-size: 16px;display: block; text-shadow: none;line-height: 24px;}
 .list_block.funding_list .form-group {text-shadow: none;font-size: 16px;}
 .list_block.funding_list .fa {display: inline-block;}
@@ -1464,7 +1467,7 @@ button.close {
 margin: 0px;
 }
 .show-information{position: absolute; background: rgba(51, 51, 51, 0.76); width: 100%; top: 0; left: 0; height: 100%; z-index: 9; color: #fff; padding: 10px;border-radius: 0 0 4px 4px;text-align: center; line-height:50px}
-.uploaded_files .panel-body{position: relative;}
+.uploaded_files .panel-body{position: relative;height: 158px; overflow: auto;}
 .full_user_block .form_inner_block {width: 100%;}
 .full_user_block .ml{	font-size: 32px;}
 

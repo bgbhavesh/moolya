@@ -30,8 +30,11 @@ export default class MlAppCompanyListView extends Component {
           <div className="ideators_list_block">
             {/*<div className="premium"><span>Starter</span></div>*/}
             {/*<h3>{company.aboutUs&&company.aboutUs.companyDescription?company.aboutUs.companyDescription:""}</h3>*/}
+            <div className="premium">
+              <span>{company.accountType}</span>
+            </div>
             <h3>{company.firstName}</h3>
-            <div className="list_icon"><span className="ml ml-companies"></span></div>
+            <div className="list_icon"><span className="ml my-ml-Company"></span></div>
             <div className="block_footer">
               <span>{company.chapterName}-{company.communityType}</span>
             </div>

@@ -34,17 +34,17 @@ export default class MlUsersFavourites extends Component {
       let icon;
 
       if (config.communityCode == "IDE") {
-        icon = "ml ml-ideator";
+        icon = "ml my-ml-Ideator";
       } else if (config.communityCode == "FUN") {
-        icon = "ml ml-funder";
+        icon = "ml my-ml-Investors";
       } else if (config.communityCode == "SPS") {
-        icon = "ml ml-users";
+        icon = "ml my-ml-Service-Providers";
       } else if (config.communityCode == "STU") {
-        icon = "ml ml-startup";
+        icon = "ml my-ml-Startups";
       } else if (config.communityCode == "INS") {
-        icon = "ml ml-institutions";
+        icon = "ml my-ml-Institutions";
       } else if (config.communityCode == "CMP") {
-        icon = "ml ml-company";
+        icon = "ml my-ml-Company";
       }
       return (
         <div className="col-lg-3 col-md-3 col-sm-3" key={idx}>

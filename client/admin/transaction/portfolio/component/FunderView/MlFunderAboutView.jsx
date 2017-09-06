@@ -116,6 +116,8 @@ export default class MlFunderAboutView extends React.Component{
                           <div className="form-group">
                             <input type="text" placeholder="Education" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label" id="cluster_name" disabled='disabled'/>
                             <FontAwesome name='unlock' className="input_icon un_lock" id="isQualificationPrivate" /><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isQualificationPrivate}/>
+                            <input type="text" placeholder="Qualification" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label" id="cluster_name" disabled='disabled'/>
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isQualificationPrivate" /><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isQualificationPrivate}/>
                           </div>
 
                           <div className="form-group">

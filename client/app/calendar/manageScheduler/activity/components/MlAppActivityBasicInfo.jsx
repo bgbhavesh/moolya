@@ -17,6 +17,7 @@ import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormA
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 import _ from 'lodash';
+
 /**
  * Initialize conversation types
  */
@@ -233,7 +234,7 @@ export default class MlAppBasicInfo extends React.Component{
     let deliverable = _.cloneDeep(this.state.basicData.deliverable);
     let basicData = _.cloneDeep(this.state.basicData);
     deliverable.splice(index+1, 0, '');
-    basicData.deliverable = deliverable;
+    basicData.deliverable = deliverable.reverse();
     this.setState({
       basicData: basicData
     }, () => {
@@ -344,7 +345,7 @@ export default class MlAppBasicInfo extends React.Component{
                   <br className="brclear"/>
                 </div>
                 <div className="form-group">
-                  <span className="placeHolder active">Conversation type</span>
+                  <span className={`placeHolder ${(this.state.basicData.conversation && this.state.basicData.conversation.length > 0) ? 'active' : ''}`}>Conversation type</span>
                   <div className="form-group">
                     <Select name="form-field-name"
                             multi={true}
@@ -435,8 +436,8 @@ export default class MlAppBasicInfo extends React.Component{
                 <div className="panel-heading">
                   Deliverables
                   <span className="see-more pull-right">
-                    <FontAwesome name='plus-square' hidden={ index !== 0 } onClick={that.addDeliverables.bind(that, index)} />
                     <FontAwesome name='minus-square' hidden={ index == 0 } onClick={that.removeDeliverables.bind(that,index)} />
+                    <FontAwesome name='plus-square' hidden={ index !== 0 } onClick={that.addDeliverables.bind(that, index)} />
                   </span>
                 </div>
                 <div className="panel-body">

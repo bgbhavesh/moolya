@@ -128,17 +128,14 @@ export default class MlCompanyMCL extends React.Component{
     var isPrivate = false;
     let details = this.state.data||{};
     let key = e.target.id;
-    // details=_.omit(details,[key]);
     let className = e.target.className;
 
     let mcl = details[type];
     if(details && mcl){
       if(className.indexOf("fa-lock") != -1){
-        // details=_.extend(details,{[key]:true});
         mcl[key] = true
         details[type] = mcl;
       }else{
-        // details=_.extend(details,{[key]:false});
         mcl[key] = false
         details[type] = mcl;
       }
@@ -207,7 +204,7 @@ export default class MlCompanyMCL extends React.Component{
                   <div className="panel-body ">
                     <div className="form-group nomargin-bottom">
                       <textarea placeholder="Describe..." name="membershipsDescription" className="form-control" id="cl_about" defaultValue={this.state.memberships&&this.state.memberships.membershipsDescription?this.state.memberships.membershipsDescription:""}  onBlur={this.handleBlur.bind(this, "memberships")}></textarea>
-                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isMembershipsDescriptionPrivate"  onClick={this.onLockChange.bind(this, "isMembershipsDescriptionPrivate", "memberships")}/>
+                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isMembershipsDescriptionPrivate"  onClick={this.onLockChange.bind(this, "isMembershipsDescriptionPrivate", "memberships", MEMBERKEY)}/>
                     </div>
                   </div>
                 </div>
@@ -219,7 +216,7 @@ export default class MlCompanyMCL extends React.Component{
                   <div className="panel-body ">
                     <div className="form-group nomargin-bottom">
                       <textarea placeholder="Describe..." name="compliancesDescription" className="form-control" id="cl_about" defaultValue={this.state.compliances&&this.state.compliances.compliancesDescription?this.state.compliances.compliancesDescription:""}  onBlur={this.handleBlur.bind(this, "compliances")}></textarea>
-                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isCompliancesDescriptionPrivate" onClick={this.onLockChange.bind(this, "isCompliancesDescriptionPrivate", "compliances")}/>
+                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isCompliancesDescriptionPrivate" onClick={this.onLockChange.bind(this, "isCompliancesDescriptionPrivate", "compliances", COMPLIANCEKEY)}/>
                     </div>
                   </div>
                 </div>
@@ -229,7 +226,7 @@ export default class MlCompanyMCL extends React.Component{
                   <div className="panel-body ">
                     <div className="form-group nomargin-bottom">
                       <textarea placeholder="Describe..." name="licensesDescription" className="form-control" id="cl_about" defaultValue={this.state.licenses&&this.state.licenses.licensesDescription?this.state.licenses.licensesDescription:""}  onBlur={this.handleBlur.bind(this, "licenses")}></textarea>
-                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isLicensesDescriptionPrivate" onClick={this.onLockChange.bind(this, "isLicensesDescriptionPrivate", "licenses")}/>
+                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isLicensesDescriptionPrivate" onClick={this.onLockChange.bind(this, "isLicensesDescriptionPrivate", "licenses", LICENSEKEY)}/>
                     </div>
                   </div>
                 </div>

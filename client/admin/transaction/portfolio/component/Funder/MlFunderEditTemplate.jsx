@@ -11,6 +11,7 @@ import MlFunderNews from './MlFunderNews'
 import MlFunderPrincipalTeam from './MlFunderPrincipalTeam'
 import MlFunderSuccessStories from './MlFunderSuccessStories'
 import MlFunderServices from './MlFunderServices'
+import MlFunderLookingFor from './MlFunderLookingFor'
 import {client} from '../../../../core/apolloConnection'
 
 export default class MlFunderEditTemplate extends React.Component {
@@ -111,11 +112,25 @@ export default class MlFunderEditTemplate extends React.Component {
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
+        title: "Looking For",
+        component: <MlFunderLookingFor key="8" getLookingFor={this.getLookingFor.bind(this)} tabName="lookingFor"
+                                        portfolioDetailsId={this.props.portfolioDetailsId}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
         title: "Services",
         component: <MlFunderServices key="10" tabName="Services" portfolioDetailsId={this.props.portfolioDetailsId}/>
-      } //getFunderServicesDetails={this.getFunderServicesDetails.bind(this)}
+      }
     ]
     return tabs;
+  }
+
+  getLookingFor(details, privateKey) {
+    let data = this.state.funderPortfolio;
+    data['lookingFor'] = details;
+    this.setState({funderPortfolio: data})
+    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey);
   }
 
   getSuccessStoriesDetails(details, privateKey) {

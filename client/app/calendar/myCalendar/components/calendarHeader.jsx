@@ -70,7 +70,10 @@ export default class MlCalendarHead extends Component {
                 <span ref={(node) => {
                   if (node) {
                     node.style.setProperty("width", "106%", "important");
-                  }}} >{that.state.displayName ? that.state.displayName.split(' ')[0] + " Consolidated" : "Consolidated"}</span>
+                  }}} >
+                  {/*{that.state.displayName ? that.state.displayName.split(' ')[0] + " Consolidated" : "Consolidated"} */}
+                  Consolidated View
+                </span>
               </div>
             </a>
           </li>

@@ -76,7 +76,8 @@ class MlAppProfileHeader extends Component {
    * redirect to registration page
    * */
   registrationRedirect() {
-    FlowRouter.go("/app/register/");
+    if (this.state.data && !this.state.data.isAllowRegisterAs)
+      FlowRouter.go("/app/register/");
   }
 
   render() {
@@ -92,7 +93,7 @@ class MlAppProfileHeader extends Component {
           <a href="/app/dashboard" className="pull-left"><FontAwesome name='home'/></a>
           <a href="/app/dashboard"> <img className="moolya_app_logo" src="/images/logo.png"/></a>
           <MlAppNotificationsConfig />
-          <span className="pull-right context_name" style={{'padding':'1px 7px','backgroundColor':'#ef4647','color':'#fff','lineHeight':'18px','borderRadius':'2px','fontSize':'12px','marginTop':'17px'}}>
+          <span className="pull-right context_name" style={{'padding':'1px 7px','color':'#fff','lineHeight':'18px','borderRadius':'2px','fontSize':'12px','marginTop':'17px'}}>
           {data && data.headerCommunityDisplay?data.headerCommunityDisplay:''}
           </span>
 
@@ -102,11 +103,10 @@ class MlAppProfileHeader extends Component {
               <li data-toggle="tooltip" title="My Profile" data-placement="right">
                 <a href="/app/myprofile"><span className="ml my-ml-blank_Profile_3"></span></a>
               </li>
-              {(this.state.data && !this.state.data.isAllowRegisterAs) ?
                 <li data-toggle="tooltip" title="Registration" data-placement="right">
                   <a href="" onClick={this.registrationRedirect.bind(this)}><span className="ml my-ml-Switch_Profile_Log_As">
                   </span></a>
-                </li> : <div></div>}
+                </li>
               <li data-toggle="tooltip" title="Switch Profile" data-placement="right">
                 <a href="/app/appSwitchProfile"><span className="ml my-ml-switch_profile"></span></a>
               </li>

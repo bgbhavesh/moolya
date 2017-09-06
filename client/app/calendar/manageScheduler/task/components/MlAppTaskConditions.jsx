@@ -100,7 +100,7 @@ export default class MlAppTaskConditions extends Component {
         {showLoader === true ? ( <MlLoader/>) : (
           <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true}>
             <div className="form_bg">
-              {this.state.data.attachments.map(function (item, say) {
+              {this.state.data && this.state.data.attachments && this.state.data.attachments.map(function (item, say) {
                 return (
                   <div className="col-md-6 nopadding-left" key={say}>
 

@@ -17,6 +17,7 @@ import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormA
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 import _ from 'lodash';
+
 /**
  * Initialize conversation types
  */
@@ -344,7 +345,7 @@ export default class MlAppBasicInfo extends React.Component{
                   <br className="brclear"/>
                 </div>
                 <div className="form-group">
-                  <span className="placeHolder active">Conversation type</span>
+                  <span className={`placeHolder ${(this.state.basicData.conversation && this.state.basicData.conversation.length > 0) ? 'active' : ''}`}>Conversation type</span>
                   <div className="form-group">
                     <Select name="form-field-name"
                             multi={true}

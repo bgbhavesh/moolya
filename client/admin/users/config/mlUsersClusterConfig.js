@@ -8,6 +8,8 @@ import {MlViewer, MlViewerTypes} from "../../../../lib/common/mlViewer/mlViewer"
 import MlUsersCluster from "../components/MlUsersCluster";
 import React from "react";
 import gql from "graphql-tag";
+import MlCustomFilter from '../../../commons/customFilters/customFilter';
+import {client} from '../../core/apolloConnection';
 
 /**
  * export of config file
@@ -31,6 +33,8 @@ const mlUsersClusterListConfig = new MlViewer.View({
       }
     }
   ],
+  filter:true,
+  filterComponent: <MlCustomFilter module="users" moduleName="users" client={client}/>,
   viewComponent: <MlUsersCluster />,
   graphQlQuery: gql`
               query ContextSpecSearch($offset: Int, $limit: Int, $searchSpec: SearchSpec, $fieldsData: [GenericFilter], $sortData: [SortFilter]) {

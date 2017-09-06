@@ -348,6 +348,7 @@ let startupPortfolioSchema = `
       accountType: String
       firstName : String
       lastName : String
+      lookingFor           : [lookingForOutput]
    }
     
     
@@ -620,6 +621,7 @@ let startupPortfolioSchema = `
         researchAndDevelopment : [researchAndDevelopmentData]
         intrapreneurRecognition : [intrapreneurRecognition]
         reports : data
+        lookingFor          : [lookingFor]
     }
     type companyPortfolioOutput{
         _id                  : String
@@ -656,3 +658,9 @@ let supportedApi = [
   {api:'updateCompanyPortfolio', actionName:'UPDATE', moduleName:"PORTFOLIO"},
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
+
+/**
+ * Note: graphql schema to be used multiple times hence using only onces
+ * @lookingFor  : startup
+ * @lookingForOutput : startup
+ * */

@@ -42,7 +42,7 @@ if(Meteor.isServer){
         "link": "/app/subscriptions",
         "isLink" : true,
         "isMenu" : true,
-        "name" : "Subscriptions",
+        "name" : "moolya Services",
         "uniqueId" : "subscriptions"
       },
       {

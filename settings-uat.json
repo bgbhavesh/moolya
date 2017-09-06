@@ -37,6 +37,7 @@
     "smtpMailUrl":"smtp://noreply:RakSan123$@smtp.moolya.in:25",
     "googleApiKey": "AIzaSyAd7VZpzSCdkOrkgdhCbMm3JYqwGap0Pa4",
     "fromEmailAddr":"noreply@moolya.in",
+    "bugReportEmailAddr":"noreply@moolya.in",
     "isEmailDomainCheckEnabled":true,
     "isAuditEnabled":true
   }

@@ -39,6 +39,10 @@ export async function fetchIdeaActionHandler(portfolioId) {
                     isIdeaPrivate
                     userId
                     isActive
+                    ideaImage {
+                      fileUrl
+                      fileName
+                    }
                 }
             }
         `,
@@ -63,6 +67,10 @@ export async function fetchIdeators() {
                       title
                       description
                       portfolioId
+                      ideaImage {
+                        fileUrl
+                        fileName
+                      }
                     }
                     accountType
                     chapterName
@@ -89,6 +97,10 @@ export async function fetchIdeaByPortfolioId(portfolioId) {
                       title
                       description
                       portfolioId
+                      ideaImage {
+                        fileUrl
+                        fileName
+                      }
                 }
             }
         `,

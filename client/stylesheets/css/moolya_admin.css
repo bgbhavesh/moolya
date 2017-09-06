@@ -1169,6 +1169,7 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 /*.react-bs-container-body {position:relative !important;}*/
 
 .profile_block img{display: block;border-radius: 5px;width: auto;margin:0 auto;}
+.popover.bs-tether-target-attached-right{ margin-top: 50px; }
 .profile_block span{font-size: 20px;}
 
 .popover.bs-tether-element-attached-bottom,.popover.popover-top {margin-top: -10px;}

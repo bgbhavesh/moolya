@@ -33,8 +33,8 @@ export default class MlServiceProviderViewServices extends Component {
   }
 
   componentDidMount() {
-    OnLockSwitch();
-    dataVisibilityHandler();
+    // OnLockSwitch();
+    // dataVisibilityHandler();
     //this.initalizeAnnotaor()
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight - (68 + $('.admin_header').outerHeight(true)));
@@ -43,8 +43,8 @@ export default class MlServiceProviderViewServices extends Component {
   }
 
   componentDidUpdate() {
-    OnLockSwitch();
-    dataVisibilityHandler();
+    // OnLockSwitch();
+    // dataVisibilityHandler();
   }
 
   /**

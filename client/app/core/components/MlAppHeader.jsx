@@ -76,7 +76,8 @@ class MlAppProfileHeader extends Component {
    * redirect to registration page
    * */
   registrationRedirect() {
-    FlowRouter.go("/app/register/");
+    if (this.state.data && !this.state.data.isAllowRegisterAs)
+      FlowRouter.go("/app/register/");
   }
 
   render() {
@@ -102,11 +103,10 @@ class MlAppProfileHeader extends Component {
               <li data-toggle="tooltip" title="My Profile" data-placement="right">
                 <a href="/app/myprofile"><span className="ml my-ml-blank_Profile_3"></span></a>
               </li>
-              {(this.state.data && !this.state.data.isAllowRegisterAs) ?
                 <li data-toggle="tooltip" title="Registration" data-placement="right">
                   <a href="" onClick={this.registrationRedirect.bind(this)}><span className="ml my-ml-Switch_Profile_Log_As">
                   </span></a>
-                </li> : <div></div>}
+                </li>
               <li data-toggle="tooltip" title="Switch Profile" data-placement="right">
                 <a href="/app/appSwitchProfile"><span className="ml my-ml-switch_profile"></span></a>
               </li>

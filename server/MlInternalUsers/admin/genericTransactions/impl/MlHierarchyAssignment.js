@@ -220,7 +220,7 @@ class MlHierarchyAssignment {
     teamStructureAssignment.map(function (role, key) {
       if (role.roleId == userRole) {
         userRoleMapping = role;
-        if (role.assignedLevel == 'cluster' && role.reportingRole == '') {
+        if (role.assignedLevel == 'cluster' && (!role.reportingRole || role.reportingRole == "")) {
           return true;
         }
       } else if (role.roleId == assignedRole) {

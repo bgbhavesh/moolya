@@ -12,7 +12,11 @@ import {removePortfolioProfilePic} from '../../actions/removeIdatorPortfolioProf
 import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler'
 var FontAwesome = require('react-fontawesome');
 var Select = require('react-select');
-
+const genderValues = [
+  {value: 'male', label: 'Male'},
+  {value: 'female', label: 'Female'},
+  {value: 'others', label: 'Others'}
+];
 
 export default class MlIdeatorDetails extends React.Component{
   constructor(props, context){
@@ -36,7 +40,7 @@ export default class MlIdeatorDetails extends React.Component{
   {
     OnLockSwitch();
     dataVisibilityHandler();
-
+    initalizeFloatLabel();
   }
   componentDidUpdate()
   {
@@ -122,6 +126,14 @@ export default class MlIdeatorDetails extends React.Component{
         this.sendDataToParent()
       })
     }
+  }
+
+  optionsBySelectGender(val) {
+    var dataDetails = this.state.data
+    dataDetails['gender'] = val.value
+    this.setState({data: dataDetails}, function () {
+      this.sendDataToParent();
+    })
   }
 
   async fetchPortfolioDetails() {
@@ -236,13 +248,17 @@ export default class MlIdeatorDetails extends React.Component{
                       <FontAwesome htmlFor="lastName" name='unlock' className="input_icon un_lock" id="islastNamePrivate" onClick={this.onClick.bind(this, "lastName", "islastNamePrivate")}/>
                     </div>
 
-                    <div className="form-group">
+                    {/*<div className="form-group">
                       <input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label" disabled="true" onBlur={this.handleBlur.bind(this)}/>
                       <FontAwesome htmlFor="gender" name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "gender", "isGenderPrivate")}/>
+                    </div>*/}
+                    <div className="form-group">
+                      <Select name="form-field-name" placeholder="Select Gender" value={this.state.data.gender}  options={genderValues} onChange={this.optionsBySelectGender.bind(this)} disabled className="float-label" />
+                      <FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "gender", "isGenderPrivate")}/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isGenderPrivate}/>
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="Education" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                      <input type="text" placeholder="Qualification" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
                       <FontAwesome htmlFor="qualification" name='unlock' className="input_icon un_lock" id="isQualificationPrivate" onClick={this.onClick.bind(this, "qualification", "isQualificationPrivate")}/>
                     </div>
 

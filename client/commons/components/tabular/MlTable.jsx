@@ -28,7 +28,8 @@ export default class MlTable extends React.Component {
       bgColor: this.props.bgColor?this.props.bgColor:'#feeebf',
       onSelect: this.props.handleRowSelect,
       clickToExpand: this.props.isExpandableRow?true:false,
-      onSelectAll: this.props.handleRowSelectAll
+      onSelectAll: this.props.handleRowSelectAll,
+      clickToSelect: true
     };
     var WinHeight = $(window).height();
     var tblHeight = WinHeight-(125+$('.admin_header').outerHeight(true));
@@ -67,7 +68,8 @@ export default class MlTable extends React.Component {
       onSizePerPageList: this.props.onSizePerPageList,
       onSortChange:this.props.onSortChange,
       onSearchChange:this.props.onSearchChange,
-      clearSearch: false};
+      clearSearch: false,
+      onlyOneExpanding:true};
 
     const columnItems = this.props.columns.map((cl) =>{
       let columnOptions = {

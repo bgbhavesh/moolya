@@ -10,6 +10,11 @@ import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryAct
 import _ from 'lodash';
 import MlLoader from '../../../../../commons/components/loader/loader'
 
+const genderValues = [
+  {value: 'male', label: 'Male'},
+  {value: 'female', label: 'Female'},
+  {value: 'others', label: 'Others'}
+];
 export default class MlFunderAbout extends React.Component {
   constructor(props, context){
     super(props);
@@ -274,6 +279,13 @@ export default class MlFunderAbout extends React.Component {
       }
     }
   }
+  optionsBySelectGender(val) {
+    var dataDetails = this.state.data
+    dataDetails['gender'] = val.value
+    this.setState({data: dataDetails}, function () {
+      this.sendDataToParent();
+    })
+  }
 
   render() {
     const showLoader = this.state.loading;
@@ -308,9 +320,13 @@ export default class MlFunderAbout extends React.Component {
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate" onClick={this.onClick.bind(this, "lastName","isLastNamePrivate")}/>
                       </div>
 
+                      {/*<div className="form-group">*/}
+                        {/*<input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>*/}
+                        {/*<FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "gender","isGenderPrivate")}/>*/}
+                      {/*</div>*/}
                       <div className="form-group">
-                        <input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                        <FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "gender","isGenderPrivate")}/>
+                        <Select name="form-field-name"  placeholder="Select Gender" value={this.state.data.gender}  options={genderValues} onChange={this.optionsBySelectGender.bind(this)} className="float-label" />
+                        <FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "isGenderPrivate")}/>
                       </div>
 
                       <div className="form-group">

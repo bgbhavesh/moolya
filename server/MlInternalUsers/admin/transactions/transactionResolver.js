@@ -77,18 +77,25 @@ MlResolver.MlMutationResolver['assignTransaction'] = (obj, args, context, info) 
       subDepartmentId     : params.subDepartment,
     }
     //find hierarchy
-    let hierarchy = mlHierarchyAssignment.findHierarchy(params.cluster,params.department,params.subDepartment,params.role)
+    let hierarchy = mlHierarchyAssignment.findHierarchy(params.cluster,params.department,params.subDepartment,params.role, params.subChapter)
     let updateCount = 0
     transactions.map(function (trans) {
-    let id =mlDBController.update(collection, {transactionId:trans},
-      {allocation:allocation,
-        status:"WIP",
-        //userId:params.user,
-        hierarchy:hierarchy._id,
-        transactionUpdatedDate:date}
-      , {$set: true},context)
-      if (id) {
-        updateCount++
+      if(hierarchy){
+        let id =mlDBController.update(collection, {transactionId:trans},
+          {allocation:allocation,
+            status:"WIP",
+            //userId:params.user,
+            hierarchy:hierarchy._id,
+            transactionUpdatedDate:date}
+          , {$set: true},context)
+        if (id) {
+          updateCount++
+        }
+      }else{
+        let code = 400;
+        let result = {message:"Not available in hierarchy"}
+        let response = new MlRespPayload().errorPayload(result, code);
+        return response
       }
     })
     if(updateCount>0){
@@ -191,16 +198,23 @@ MlResolver.MlMutationResolver['selfAssignTransaction'] = (obj, args, context, in
     //find hierarchy
     let updateCount = 0
     transactions.map(function (trans) {
-      let hierarchy = mlHierarchyAssignment.findHierarchy(roleDetails.clusterId, roleDetails.departmentId, roleDetails.subDepartmentId, roleDetails.roleId)
-      let id = mlDBController.update(collection, {transactionId: trans}, {
-        allocation: allocation,
-        status: "WIP",
-        //userId: user._id,
-        hierarchy: hierarchy._id,
-        transactionUpdatedDate: date
-      }, {$set: true}, context)
-      if (id) {
-        updateCount++
+      let hierarchy = mlHierarchyAssignment.findHierarchy(roleDetails.clusterId, roleDetails.departmentId, roleDetails.subDepartmentId, roleDetails.roleId, roleDetails.subChapterId)
+      if(hierarchy){
+        let id = mlDBController.update(collection, {transactionId: trans}, {
+          allocation: allocation,
+          status: "WIP",
+          //userId: user._id,
+          hierarchy: hierarchy._id,
+          transactionUpdatedDate: date
+        }, {$set: true}, context)
+        if (id) {
+          updateCount++
+        }
+      }else{
+        let code = 400;
+        let result = {message:"Not available in hierarchy"}
+        let response = new MlRespPayload().errorPayload(result, code);
+        return response
       }
     })
     if(updateCount>0){

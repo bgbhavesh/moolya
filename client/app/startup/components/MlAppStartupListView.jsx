@@ -35,7 +35,7 @@ export default class MlAppStartupListView extends Component {
               <span>{startup.accountType}</span>
             </div>
             <h3>{startup.firstName}</h3>
-            <div className="list_icon"><span className="ml ml-startup"></span></div>
+            <div className="list_icon"><span className="ml my-ml-Startups"></span></div>
             <div className="block_footer">
               <span>{startup.chapterName}-{startup.communityType}</span>
             </div>

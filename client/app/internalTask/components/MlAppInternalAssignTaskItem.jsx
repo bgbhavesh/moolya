@@ -22,9 +22,16 @@ export default class MlAppInternalAssignTaskItem extends React.Component {
         expectedOutput:'',
         name:''
       },
-      taskId:''
+      taskId: props.taskId ? props.taskId : ''
     };
     console.log('Props:',props)
+  }
+
+  componentDidMount(){
+    this.fetchTaskInfo();
+    setTimeout(function () {
+      $('.float-label').jvFloat();
+    },200);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -50,6 +57,8 @@ export default class MlAppInternalAssignTaskItem extends React.Component {
         response.docs = response.docs ? response.docs : [];
         this.setState({
           taskInfo:response
+        }, function () {
+          $('.float-label').jvFloat();
         })
       };
     }
@@ -88,20 +97,20 @@ export default class MlAppInternalAssignTaskItem extends React.Component {
       }
     };
     return(
-      <div className="step_form_wrap step1">
+      <div className="">
         <div className="col-md-6 nopadding-left">
           <div className="form_bg">
             <form>
               <div className="form-group">
-                <input className="form-control float-label" placeholder="Task Name" value={task.name} />
+                <input className="form-control float-label" placeholder="Task Name" value={task.name ? task.name : ''} />
               </div>
 
               <div className="form-group">
                 <Datetime dateFormat="DD-MM-YYYY"
                           timeFormat={false}
-                          inputProps={{placeholder: "Due Date"}}
+                          inputProps={{placeholder: "Due Date", className:"form-control float-label"}}
                           closeOnSelect={true}
-                          value={moment( task.dueDate ? task.dueDate : '' )}
+                          value={ task.dueDate ? moment(task.dueDate) : '' }
                           onChange={(date)=> this.dueDate(date)}/>
               </div>
               <div className="form-group">
@@ -139,7 +148,7 @@ export default class MlAppInternalAssignTaskItem extends React.Component {
                 <div className="panel-heading"> Attendees </div>
                 <div className="panel-body">
                   <ul className="users_list well well-sm">
-                    {task.userInfo.map(function(user, index){
+                    {task.userInfo && task.userInfo.map(function(user, index){
                       return(
                         <li key={index}>
                           <a href="#">
@@ -155,11 +164,10 @@ export default class MlAppInternalAssignTaskItem extends React.Component {
                   </ul>
                 </div>
               </div>
-
             </form>
+            {renderActions()}
           </div>
         </div>
-        {renderActions()}
       </div>
 
 

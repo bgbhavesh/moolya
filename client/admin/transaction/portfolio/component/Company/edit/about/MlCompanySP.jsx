@@ -94,7 +94,7 @@ export default class MlCompanySP extends React.Component{
 
                 <div className="form-group nomargin-bottom">
                   <textarea placeholder="Describe..." name="spDescription" className="form-control" id="cl_about"  defaultValue={this.state.data&&this.state.data.spDescription} onBlur={this.handleBlur.bind(this)}></textarea>
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isSPDescriptionPrivate" defaultValue={this.state.data&&this.state.data.isSPDescriptionPrivate} onClick={this.onLockChange.bind(this, "isSPDescriptionPrivate")}/>
+                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isSPDescriptionPrivate" defaultValue={this.state.data&&this.state.data.isSPDescriptionPrivate} onClick={this.onLockChange.bind(this, "spDescription", "isSPDescriptionPrivate")}/>
                 </div>
 
               </div>

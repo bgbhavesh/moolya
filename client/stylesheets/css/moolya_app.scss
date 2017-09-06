@@ -1976,3 +1976,74 @@ p{margin-top:10px;}
     left: 50%;
   }
 }
+
+.upload_hex {
+  .fa{
+    position: absolute;    right: -10px;    background: #ef4647;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    z-index: 99;
+    top: -5px;
+    color: #fff;
+  }
+  display: block;
+  background: #273545;
+  border: 0px;
+  position: relative;
+  height: 136px;
+  z-index: 1;
+  width: 99px;
+  margin-top: 8px;
+  margin-right: auto;
+  margin-left: auto;
+  text-align: center;
+  line-height: 136px;
+}
+
+.upload_hex:before {
+  position: absolute;
+  left: -30px;
+  content: " ";
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 67px 30px 67px 0px;
+  border-color: transparent #273545 transparent transparent;
+  top: 1px;
+}
+
+.upload_hex:after {
+  position: absolute;
+  right: -30px;
+  content: " ";
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 67px 0px 67px 30px;
+  border-color: transparent transparent transparent #273545;
+  top: 1px;
+}
+.upload_hex input.upload {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  width: 115px;
+  height: 70px;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+}
+
+.upload_hex img {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  z-index: 1;
+}

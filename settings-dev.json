@@ -36,6 +36,7 @@
      "googleApiKey": "AIzaSyDnlajbJKYdilDs22Rvso9blSOj8KuL8-A",
     "smtpMailUrl":"smtp://qasmtp%40moolya.in:Moolya123@10.0.2.20:25",
     "fromEmailAddr":"qasmtp@moolya.in",
+    "bugReportEmailAddr":"qasmtp@moolya.in",
     "isEmailDomainCheckEnabled":true,
     "isAuditEnabled":true,
     "conversationsBaseURL":"https://qarkc.moolya.global"

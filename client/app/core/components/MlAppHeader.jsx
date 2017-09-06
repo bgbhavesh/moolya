@@ -92,7 +92,7 @@ class MlAppProfileHeader extends Component {
           <a href="/app/dashboard" className="pull-left"><FontAwesome name='home'/></a>
           <a href="/app/dashboard"> <img className="moolya_app_logo" src="/images/logo.png"/></a>
           <MlAppNotificationsConfig />
-          <span className="pull-right context_name" style={{'padding':'1px 7px','backgroundColor':'#ef4647','color':'#fff','lineHeight':'18px','borderRadius':'2px','fontSize':'12px','marginTop':'17px'}}>
+          <span className="pull-right context_name" style={{'padding':'1px 7px','color':'#fff','lineHeight':'18px','borderRadius':'2px','fontSize':'12px','marginTop':'17px'}}>
           {data && data.headerCommunityDisplay?data.headerCommunityDisplay:''}
           </span>
 

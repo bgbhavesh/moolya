@@ -38,9 +38,9 @@ export function listenMessage(cb)
 }
 
 
-export function getMessageHistory(roomId, cb)
+export function getMessageHistory(roomId, scope, cb)
 {
-  mlConversationUtils.getMessageHistory({rid:roomId}, function (response) {
+  mlConversationUtils.getMessageHistory({rid:roomId, skip:scope}, function (response) {
     if(cb)
       cb(response)
   })

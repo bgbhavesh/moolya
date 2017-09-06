@@ -7,9 +7,9 @@ import kinda_ntp from 'socket-kinda-ntp/client/socket-kinda-ntp'
 
 class Conversations{
     constructor(){
-        this.socket      = null;
-        this.utils 		 = null;
-        this.socketUtils = null;
+        this.socket       = null;
+        this.utils 		    = null;
+        this.socketUtils  = null;
     }
 
     init(){
@@ -26,7 +26,7 @@ class Conversations{
 
     disconnect(){
       this.utils.removeToken();
-      this.socketUtils.disconnect(this.socket);
+      this.socket = this.socketUtils.disconnect(this.socket);
     }
 
     getUserDetails(cb){
@@ -99,6 +99,8 @@ class __SocketUtils{
         socket.disconnect();
         socket = null;
       }
+
+      return null
     }
 
     // getServerTime(){

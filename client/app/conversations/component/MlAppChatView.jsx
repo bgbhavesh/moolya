@@ -1,12 +1,7 @@
 import React from 'react';
-import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
 import MlAppChatViewHeader from './MlAppChatViewHeader'
 import {getUserDetails, listenMessage, emitMessage, getMessageHistory} from '../actions/chatviewActions'
-import ReactObserver from 'react-event-observer';
-import ScrollArea from 'react-scrollbar';
 import InfiniteScroll from 'react-infinite-scroll-component'
-var FontAwesome = require('react-fontawesome');
 
 
 export default class MlAppChatView extends React.Component{
@@ -16,6 +11,7 @@ export default class MlAppChatView extends React.Component{
       messages: [],
       roomId:"",
       roomName:"",
+      msgLength:0,
       user:{}
     }
     this.sendMessage.bind(this)
@@ -23,7 +19,6 @@ export default class MlAppChatView extends React.Component{
     this.listenmessage.bind(this)
     this.msgAckCallback.bind(this)
     this.getmessageHistory.bind(this)
-    this.getMessageByScroll.bind(this)
   }
 
   componentDidMount(){
@@ -58,16 +53,17 @@ export default class MlAppChatView extends React.Component{
     var rid = roomId;
     if(!rid)
       rid = this.state.roomId
-    getMessageHistory(rid, function (response) {
-        var messages = self.state.messages
-        messages = messages.concat(response.result)
-        self.setState({messages:messages})
+    getMessageHistory(rid, this.state.msgLength, function (response) {
+        if(response.success){
+          var messages = self.state.messages
+          messages = messages.concat(response.result)
+          var msgLength = self.state.msgLength;
+          msgLength = msgLength + response.result.length;
+          self.setState({messages:messages, msgLength:msgLength})
+        }
     })
   }
 
-  getMessageByScroll(value) {
-    console.log('----value---', value);
-  }
   getuserDetails(){
     var self = this
     getUserDetails(function (response) {
@@ -76,8 +72,7 @@ export default class MlAppChatView extends React.Component{
   }
 
   getSelectedRoom(roomId, roomName){
-    var self = this
-    this.setState({roomName:roomName, roomId:roomId})
+    this.setState({roomName:roomName, roomId:roomId, messages:[]})
     this.getmessageHistory(roomId)
   }
 

@@ -10,6 +10,19 @@ class Chat{
         rkConversation.socketUtils.emitMessage(rkConversation.socket, 'createroom', payload, callback);
     }
 
+    createPrivateRoom(rkConversation, payload, callback){
+        payload['type'] = 'P'
+        rkConversation.socketUtils.emitMessage(rkConversation.socket, 'createroom', payload, callback);
+    }
+
+    addMemberstoRoom(rkConversation, payload, callback){
+        rkConversation.socketUtils.emitMessage(rkConversation.socket, 'addtoroom', payload, callback)
+    }
+
+    joinMemberstoRoom(rkConversation, payload, callback){
+        rkConversation.socketUtils.emitMessage(rkConversation.socket, 'jointoroom', payload, callback)
+    }
+
     getJoinedRooms(rkConversation, callback){
         rkConversation.socketUtils.emitMessage(rkConversation.socket, 'getjoinedrooms', {}, callback);
     }
@@ -25,10 +38,7 @@ class Chat{
     }
 
     getmessageHistory(rkConversation, payload, callback){
-        payload.skip = parseInt(rkConversation.utils.getToken('skip')) || 0
         rkConversation.socketUtils.emitMessage(rkConversation.socket, 'getmessage_history', payload || {}, function (response) {
-            if(response.skip)
-                rkConversation.utils.setToken('skip', response.skip)
             callback(response);
         });
     }

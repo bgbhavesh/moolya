@@ -3,6 +3,7 @@ import {Meteor} from 'meteor/meteor';
 import {render} from 'react-dom';
 import {getJoinedRooms} from '../actions/chatviewActions'
 var FontAwesome = require('react-fontawesome');
+import _ from 'lodash'
 
 
 export default class MlAppChatViewHeader extends React.Component {
@@ -10,6 +11,7 @@ export default class MlAppChatViewHeader extends React.Component {
     super(props)
     this.state = {
       rooms: [],
+      uirooms: [],
       selectedIndex:0
     }
     this.getMyRooms.bind(this)
@@ -26,23 +28,40 @@ export default class MlAppChatViewHeader extends React.Component {
     });
   }
 
-  getMyRooms() {
+  getMyRooms(type) {
     var self = this
+    if(this.state.rooms.length > 0){
+      var directRooms = _.filter(this.state.rooms, function (room) {
+        return room.type == type
+      })
+      this.setState({uirooms:directRooms})
+      return;
+    }
     getJoinedRooms(function (response){
-      self.setState({rooms:response.result})
+      if(response.success){
+        var directRooms = _.filter(response.result, function (room) {
+            return room.type == type
+        })
+        self.setState({uirooms:directRooms})
+        self.setState({rooms:response.result})
+      }
     })
   }
 
   getSelectedIndex(id, name){
     this.setState({selectedIndex:id})
-    this.setState({rooms:[]})
+    this.setState({directRooms:[]})
     this.getSelctedItemData(name)
   }
 
   getSelctedItemData(itemName){
     switch (itemName){
       case 'Contacts':{
-        this.getMyRooms();
+        this.getMyRooms('D');
+      }
+      break;
+      case 'Groups':{
+        this.getMyRooms('P')
       }
       break;
     }
@@ -56,7 +75,7 @@ export default class MlAppChatViewHeader extends React.Component {
   render() {
     var that = this
     var selectedIndex = this.state.selectedIndex
-    var rooms = this.state.rooms
+    var rooms = this.state.uirooms
     const menuItems = [
       {className:"ml my-ml-chat", itemName:"Recent Chats"},
       {className:"ml flaticon-ml-agenda", itemName:"Contacts"},

@@ -160,6 +160,7 @@ export default class MlAppTaskPayment extends Component {
 
   render() {
     const showLoader = this.state.loading;
+    const data = this.state.data;
     return (
       <div className="step_form_wrap step1">
         {showLoader === true ? ( <MlLoader/>) : (
@@ -168,52 +169,52 @@ export default class MlAppTaskPayment extends Component {
               <form>
                 <div className="form-group">
                   <label>Activity gross payable amount &nbsp;<label>Rs</label>&nbsp;<input className="form-control inline_input medium_in"
-                                                         defaultValue={this.state.data.payment.activitiesAmount ? parseFloat(this.state.data.payment.activitiesAmount).toFixed(2) : '' } disabled="true"/>
+                                                         defaultValue={(data.payment && data.payment.activitiesAmount) ? parseFloat(data.payment.activitiesAmount).toFixed(2) : '' } disabled="true"/>
                   </label>
                 </div>
                 <div className="form-group">
                   <label>Activity discount payable amount &nbsp;<label>Rs</label>&nbsp;<input className="form-control inline_input medium_in"
-                                                         defaultValue={this.state.data.payment.activitiesDiscount ? parseFloat(this.state.data.payment.activitiesDiscount).toFixed(2) : '' } disabled="true"/>
+                                                         defaultValue={(data.payment && data.payment.activitiesDiscount) ? parseFloat(data.payment.activitiesDiscount).toFixed(2) : '' } disabled="true"/>
                   </label>
                 </div>
                 <div className="form-group">
                   <label>Activity net payable amount &nbsp;<label>Rs</label>&nbsp;<input className="form-control inline_input medium_in"
-                                                         defaultValue={this.state.data.payment.activitiesDerived ? parseFloat(this.state.data.payment.activitiesDerived).toFixed(2) : '' } disabled="true"/>
+                                                         defaultValue={(data.payment && data.payment.activitiesDerived) ? parseFloat(data.payment.activitiesDerived).toFixed(2) : '' } disabled="true"/>
                   </label>
                 </div>
                 <div className="form-group switch_wrap switch_names inline_switch">
                   <label>Is Eligible for discount</label>
-                  <span  htmlFor="discount" className={this.state.data.payment.isDiscount ? 'state_label acLabel' : 'state_label'}>Yes</span><label className="switch nocolor-switch">
+                  <span  htmlFor="discount" className={(data.payment && data.payment.isDiscount) ? 'state_label acLabel' : 'state_label'}>Yes</span><label className="switch nocolor-switch">
                   <input id="discount" type="checkbox" name="isDiscount"
-                         checked={!this.state.data.payment.isDiscount}
+                         checked={!(data.payment && data.payment.isDiscount)}
                          onChange={this.onStatusChange.bind(this)}/>
                   <div className="slider"></div>
                 </label>
-                  <span className={this.state.data.payment.isDiscount ? 'state_label' : 'state_label acLabel'}>No</span>
+                  <span className={(data.payment && data.payment.isDiscount) ? 'state_label' : 'state_label acLabel'}>No</span>
                 </div>
                 <br className="brclear"/>
                 <div className="form-group">
                   <div className="input_types">
                     <input id="radio1" type="radio" name="radio1" value="1"
-                           disabled={!this.state.data.payment.isDiscount}
-                           checked={(this.state.data.payment && this.state.data.payment.discountType == 'amount') ? true : false}
+                           disabled={!(data.payment && data.payment.isDiscount)}
+                           checked={(data.payment && data.payment.discountType == 'amount') ? true : false}
                            onChange={this.discountAmount.bind(this)}/><label
                     htmlFor="radio1"><span><span></span></span>Amount
-                     {(this.state.data.payment && this.state.data.payment.discountType == 'amount') ? <input
+                     {(data.payment && data.payment.discountType == 'amount') ? <input
                       className="form-control inline_input"
-                      disabled={!this.state.data.payment.isDiscount}
-                      defaultValue={this.state.data.payment.discountValue}
+                      disabled={!(data.payment && data.payment.isDiscount)}
+                      defaultValue={(data.payment && data.payment.discountValue)}
                       onChange={this.handleBlurAmount.bind(this)}/> : ''}</label>
                   </div>
                   <div className="input_types">
                     <input id="radio2" type="radio" name="radio1" value="2"
-                           checked={(this.state.data.payment && this.state.data.payment.discountType == 'percent') ? true : false}
-                           disabled={!this.state.data.payment.isDiscount}
+                           checked={(data.payment && data.payment.discountType == 'percent') ? true : false}
+                           disabled={!(data.payment && data.payment.isDiscount)}
                            onChange={this.discountPercent.bind(this)}/><label
-                    htmlFor="radio2"><span><span></span></span>Percentage {(this.state.data.payment && this.state.data.payment.discountType == 'percent') ?
+                    htmlFor="radio2"><span><span></span></span>Percentage {(data.payment && data.payment.discountType == 'percent') ?
                     <input className="form-control inline_input"
-                           disabled={!this.state.data.payment.isDiscount}
-                           defaultValue={this.state.data.payment.discountValue}
+                           disabled={!(data.payment && data.payment.isDiscount)}
+                           defaultValue={(data.payment && data.payment.discountValue)}
                            onChange={this.handleBlurPercent.bind(this)}/> : ''}
                     %
                   </label>
@@ -223,7 +224,7 @@ export default class MlAppTaskPayment extends Component {
                 <div className="form-group">
                   <label>Net payable amount &nbsp;<label>Rs</label>&nbsp;<input className="form-control inline_input medium_in"
                                                    onChange={this.handleNull.bind(this)}
-                                                   value={this.state.data.payment.derivedAmount ? parseInt(this.state.data.payment.derivedAmount).toFixed(2) :''}
+                                                   value={(data.payment && data.payment.derivedAmount) ? parseInt(data.payment.derivedAmount).toFixed(2) :''}
                                                    disabled />
                   </label>
                 </div>

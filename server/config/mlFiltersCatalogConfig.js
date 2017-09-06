@@ -382,6 +382,147 @@ if(Meteor.isServer){
     }});
   }
 
+  //Office filter
+  let officeFilterExists = MlFiltersCatalog.findOne({"moduleName":"office"});
+  if(!officeFilterExists){
+    MlFiltersCatalog.upsert({
+      "_id" : "office",
+      "moduleName":"office"
+    },{$set:{
+      fields:[
+        {
+          name:"clusterId",
+          type:'List',
+          resolverName : "Gen_Clusters",
+          isDynamic:true
+        },
+        {
+          name:"chapterId",
+          type:'List',
+          resolverName : "Gen_Chapters",
+          isDynamic:true
+        },
+        {
+          name:"subChapterId",
+          type:'List',
+          resolverName : "Gen_SubChapters",
+          isDynamic:true
+        },
+       /* {
+          name:"communityName",
+          type:'List',
+          resolverName : "Gen_Community",
+          isDynamic:true
+        },*/
+        {
+          name:"createdDate",
+          type:'Date',
+          resolverName : " ",
+          isDynamic:true
+        }
+        /*{
+          name:"createdBy",
+          type:'String',
+          resolverName : " "
+        },*/
+      ]
+    }});
+  }
+
+  //ProcessSetup Filter
+  let processSetupFilterExists = MlFiltersCatalog.findOne({"moduleName":"processSetup"});
+  if(!processSetupFilterExists){
+    MlFiltersCatalog.upsert({
+      "_id" : "processSetup",
+      "moduleName":"processSetup"
+    },{$set:{
+      fields:[
+        {
+          name:"clusterId",
+          type:'List',
+          resolverName : "Gen_Clusters",
+          isDynamic:true
+        },
+        {
+          name:"chapterId",
+          type:'List',
+          resolverName : "Gen_Chapters",
+          isDynamic:true
+        },
+        {
+          name:"subChapterId",
+          type:'List',
+          resolverName : "Gen_SubChapters",
+          isDynamic:true
+        },
+       /* {
+          name:"communityName",
+          type:'List',
+          resolverName : "Gen_Community",
+          isDynamic:true
+        },*/
+        {
+          name:"createdDate",
+          type:'Date',
+          resolverName : " ",
+          isDynamic:true
+        }
+        /*{
+         name:"createdBy",
+         type:'String',
+         resolverName : " "
+         },*/
+      ]
+    }});
+  }
+
+  //Share Filter
+  let shareFilterExists = MlFiltersCatalog.findOne({"moduleName":"share"});
+  if(!shareFilterExists){
+    MlFiltersCatalog.upsert({
+      "_id" : "share",
+      "moduleName":"share"
+    },{$set:{
+      fields:[
+        {
+          name:"owner.clusterId",
+          type:'List',
+          resolverName : "Gen_Clusters",
+          isDynamic:true
+        },
+        {
+          name:"owner.chapterId",
+          type:'List',
+          resolverName : "Gen_Chapters",
+          isDynamic:true
+        },
+        {
+          name:"owner.subChapterId",
+          type:'List',
+          resolverName : "Gen_SubChapters",
+          isDynamic:true
+        },
+         {
+         name:"owner.communityId",
+         type:'List',
+         resolverName : "Gen_Community",
+         isDynamic:true
+         },
+        {
+          name:"createdAt",
+          type:'Date',
+          resolverName : " ",
+          isDynamic:true
+        },
+        {
+         name:"createdBy",
+         type:'String',
+         resolverName : " "
+         },
+      ]
+    }});
+  }
+
 
 
 }

@@ -434,7 +434,7 @@ if(Meteor.isServer){
           "fieldType" : "List",
           "fieldResolverName" : "Gen_Chapters",
           "isActive":true,
-          "clearFields" : ["subChapter"]
+          "clearFields" : ["subChapters"]
         },
         {
           "fieldName" : "subChapters",
@@ -525,6 +525,198 @@ if(Meteor.isServer){
           "fieldResolverName" : null,
         },
 
+      ]
+    }});
+  }
+
+  //for office
+  let officeFilterExists = MlFilters.findOne({"moduleName":"office"});
+  if(!officeFilterExists){
+    MlFilters.upsert({"moduleName" : "office"},{$set:{
+      "filterName" : "Office",
+      "filterDescription" : "Office Filter",
+      "isActive" : true,
+      "moduleName" : "office",
+      "filterFields" : [
+        {
+          "fieldName" : "clusterId",
+          "displayName" : "Cluster",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Clusters",
+          "isActive":true,
+          "clearFields" : ["chapterId","subChapterId"]
+        },
+        {
+          "fieldName" : "chapterId",
+          "displayName" : "Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Chapters",
+          "isActive":true,
+          "clearFields" : ["subChapter"]
+        },
+        {
+          "fieldName" : "subChapterId",
+          "displayName" : "Sub Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_SubChapters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "communityName",
+          "displayName" : "Community",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Community",
+          "isActive":true
+        },
+        {
+          "fieldName" : "createdDate",
+          "displayName" : "Created Date",
+          "isDynamic" : null,
+          "fieldType" : "Date",
+          "fieldResolverName" : null,
+          "isActive":true
+        }/*,
+        {
+          "fieldName" : "createdBy",
+          "displayName" : "Created By",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        },
+*/
+      ]
+    }});
+  }
+
+
+  //for processSetup assignment
+  let processSetupFilterExists = MlFilters.findOne({"moduleName":"processSetup"});
+  if(!processSetupFilterExists){
+    MlFilters.upsert({"moduleName" : "processSetup"},{$set:{
+      "filterName" : "Process Setup",
+      "filterDescription" : "Process Setup Filter",
+      "isActive" : true,
+      "moduleName" : "processSetup",
+      "filterFields" : [
+        {
+          "fieldName" : "clusterId",
+          "displayName" : "Cluster",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Clusters",
+          "isActive":true,
+          "clearFields" : ["chapterId","subChapterId"]
+        },
+        {
+          "fieldName" : "chapterId",
+          "displayName" : "Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Chapters",
+          "isActive":true,
+          "clearFields" : ["subChapter"]
+        },
+        {
+          "fieldName" : "subChapterId",
+          "displayName" : "Sub Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_SubChapters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "communityName",
+          "displayName" : "Community",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Community",
+          "isActive":true
+        },
+        {
+          "fieldName" : "createdDate",
+          "displayName" : "Created Date",
+          "isDynamic" : null,
+          "fieldType" : "Date",
+          "fieldResolverName" : null,
+          "isActive":true
+        }/*,
+         {
+         "fieldName" : "createdBy",
+         "displayName" : "Created By",
+         "isActive" : true,
+         "isDynamic" : null,
+         "fieldType" : "String",
+         "fieldResolverName" : null,
+         },
+         */
+      ]
+    }});
+  }
+
+  //for share
+  let shareFilterExists = MlFilters.findOne({"moduleName":"share"});
+  if(!shareFilterExists){
+    MlFilters.upsert({"moduleName" : "share"},{$set:{
+      "filterName" : "Share Setup",
+      "filterDescription" : "Share Setup Filter",
+      "isActive" : true,
+      "moduleName" : "share",
+      "filterFields" : [
+        {
+          "fieldName" : "owner.clusterId",
+          "displayName" : "Cluster",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Clusters",
+          "isActive":true,
+          "clearFields" : ["owner.chapterId","owner.subChapterId"]
+        },
+        {
+          "fieldName" : "owner.chapterId",
+          "displayName" : "Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Chapters",
+          "isActive":true,
+          "clearFields" : ["owner.subChapter"]
+        },
+        {
+          "fieldName" : "owner.subChapterId",
+          "displayName" : "Sub Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_SubChapters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "owner.communityId",
+          "displayName" : "Community",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Community",
+          "isActive":true
+        },
+        {
+          "fieldName" : "createdAt",
+          "displayName" : "Created Date",
+          "isDynamic" : null,
+          "fieldType" : "Date",
+          "fieldResolverName" : null,
+          "isActive":true
+        },
+         {
+         "fieldName" : "createdBy",
+         "displayName" : "Created By",
+         "isActive" : true,
+         "isDynamic" : null,
+         "fieldType" : "String",
+         "fieldResolverName" : null,
+         },
       ]
     }});
   }

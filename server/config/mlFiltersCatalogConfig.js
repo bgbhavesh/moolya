@@ -327,6 +327,24 @@ if(Meteor.isServer){
           isDynamic:true
         },
         {
+          name:"userTypes",
+          type:'List',
+          resolverName : "Gen_UserType",
+          isDynamic:true
+        },
+        {
+          name:"industries",
+          type:'List',
+          resolverName : "Gen_Industries",
+          isDynamic:true
+        },
+        {
+          name:"identity",
+          type:'List',
+          resolverName : "Gen_IdentityTypes",
+          isDynamic:true
+        },
+        {
           name:"date",
           type:'Date',
           resolverName : " ",
@@ -365,6 +383,12 @@ if(Meteor.isServer){
           name:"templatecommunityCode",
           type:'List',
           resolverName : "Gen_Community",
+          isDynamic:true
+        },
+        {
+          name:"templateuserType",
+          type:'List',
+          resolverName : "Gen_UserType",
           isDynamic:true
         },
         {
@@ -502,12 +526,12 @@ if(Meteor.isServer){
           resolverName : "Gen_SubChapters",
           isDynamic:true
         },
-         {
+      /*   {
          name:"owner.communityId",
          type:'List',
          resolverName : "Gen_Community",
          isDynamic:true
-         },
+         },*/
         {
           name:"createdAt",
           type:'Date',
@@ -522,6 +546,70 @@ if(Meteor.isServer){
       ]
     }});
   }
+
+
+  //External Users Filter
+  let usersFilterExists = MlFiltersCatalog.findOne({"moduleName":"users"});
+  if(!usersFilterExists){
+    MlFiltersCatalog.upsert({
+      "_id" : "users",
+      "moduleName":"users"
+    },{$set:{
+      fields:[
+        {
+          name:"registrationInfo.registrationDate",
+          type:'Date',
+          resolverName : " "
+        },
+        {
+          name:"registrationInfo.firstName",
+          type:'String',
+          resolverName : " "
+        },
+        {
+          name:"registrationInfo.clusterId",
+          type:'List',
+          resolverName : "Gen_Clusters",
+          isDynamic:true
+        },
+        {
+          name:"registrationInfo.chapterId",
+          type:'List',
+          resolverName : "Gen_Chapters",
+          isDynamic:true
+        },
+        {
+          name:"registrationInfo.subChapterId",
+          type:'List',
+          resolverName : "Gen_SubChapters",
+          isDynamic:true
+        },
+        {
+          name:"registrationInfo.communityDefCode",
+          type:'List',
+          resolverName : "Gen_Community",
+          isDynamic:true
+        },
+        {
+          name:"registrationInfo.transactionType",
+          type:'List',
+          resolverName : "Gen_TransactionType",
+          isDynamic:true
+        },
+        {
+          name:"registrationInfo.createdBy",
+          type:'String',
+          resolverName : " "
+        },
+        {
+          name:"registrationInfo.email",
+          type:'String',
+          resolverName : " "
+        },
+      ]
+    }});
+  }
+
 
 
 

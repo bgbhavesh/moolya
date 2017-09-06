@@ -453,6 +453,30 @@ if(Meteor.isServer){
           "isActive":true
         },
         {
+          "fieldName" : "userTypes",
+          "displayName" : "User Type",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_UserType",
+          "isActive":true
+        },
+        {
+          "fieldName" : "industries",
+          "displayName" : "Industries",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Industries",
+          "isActive":true
+        },
+        {
+          "fieldName" : "identity",
+          "displayName" : "Identity",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_IdentityTypes",
+          "isActive":true
+        },
+        {
           "fieldName" : "date",
           "displayName" : "Created Date",
           "isDynamic" : null,
@@ -506,6 +530,14 @@ if(Meteor.isServer){
           "isDynamic" : true,
           "fieldType" : "List",
           "fieldResolverName" : "Gen_Community",
+          "isActive":true
+        },
+        {
+          "fieldName" : "templateuserType",
+          "displayName" : "User Type",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_UserType",
           "isActive":true
         },
         {
@@ -564,14 +596,14 @@ if(Meteor.isServer){
           "fieldResolverName" : "Gen_SubChapters",
           "isActive":true
         },
-        {
+        /*{
           "fieldName" : "communityName",
           "displayName" : "Community",
           "isDynamic" : true,
           "fieldType" : "List",
           "fieldResolverName" : "Gen_Community",
           "isActive":true
-        },
+        },*/
         {
           "fieldName" : "createdDate",
           "displayName" : "Created Date",
@@ -629,14 +661,14 @@ if(Meteor.isServer){
           "fieldResolverName" : "Gen_SubChapters",
           "isActive":true
         },
-        {
+     /*   {
           "fieldName" : "communityName",
           "displayName" : "Community",
           "isDynamic" : true,
           "fieldType" : "List",
           "fieldResolverName" : "Gen_Community",
           "isActive":true
-        },
+        },*/
         {
           "fieldName" : "createdDate",
           "displayName" : "Created Date",
@@ -693,14 +725,14 @@ if(Meteor.isServer){
           "fieldResolverName" : "Gen_SubChapters",
           "isActive":true
         },
-        {
+        /*{
           "fieldName" : "owner.communityId",
           "displayName" : "Community",
           "isDynamic" : true,
           "fieldType" : "List",
           "fieldResolverName" : "Gen_Community",
           "isActive":true
-        },
+        },*/
         {
           "fieldName" : "createdAt",
           "displayName" : "Created Date",
@@ -717,6 +749,94 @@ if(Meteor.isServer){
          "fieldType" : "String",
          "fieldResolverName" : null,
          },
+      ]
+    }});
+  }
+
+  //for external users
+  let usersFilterExists = MlFilters.findOne({"moduleName":"users"});
+  if(!usersFilterExists){
+    MlFilters.upsert({"moduleName" : "users"},{$set:{
+      "filterName" : "Users",
+      "filterDescription" : "Users Filter",
+      "isActive" : true,
+      "moduleName" : "users",
+      "filterFields" : [
+        {
+          "fieldName" : "registrationInfo.registrationDate",
+          "displayName" : "Created Date",
+          "isDynamic" : null,
+          "fieldType" : "Date",
+          "fieldResolverName" : null,
+          "isActive":true
+        },
+        {
+          "fieldName" : "registrationInfo.firstName",
+          "displayName" : "First Name",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+
+        },
+        {
+          "fieldName" : "registrationInfo.clusterId",
+          "displayName" : "Cluster",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Clusters",
+          "isActive":true,
+          "clearFields" : ["registrationInfo.chapterId","registrationInfo.subChapterId"]
+        },
+        {
+          "fieldName" : "registrationInfo.chapterId",
+          "displayName" : "Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Chapters",
+          "isActive":true,
+          "clearFields" : ["registrationInfo.subChapterId"]
+        },
+        {
+          "fieldName" : "registrationInfo.subChapterId",
+          "displayName" : "Sub Chapter",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_SubChapters",
+          "isActive":true
+        },
+        {
+          "fieldName" : "registrationInfo.communityDefCode",
+          "displayName" : "Community",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Community",
+          "isActive":true
+        },
+        {
+          "fieldName" : "registrationInfo.transactionType",
+          "displayName" : "Transaction Type",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_TransactionType",
+          "isActive":true
+        },
+        {
+          "fieldName" : "registrationInfo.createdBy",
+          "displayName" : "Created By",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        },
+        {
+          "fieldName" : "registrationInfo.email",
+          "displayName" : "Email",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        }
       ]
     }});
   }

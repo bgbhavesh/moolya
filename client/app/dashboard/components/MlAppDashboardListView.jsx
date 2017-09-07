@@ -121,7 +121,7 @@ export default class MlCommunityList extends Component {
         icon = "moolya-symbol"
 
       return (
-        <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={idx}>
+        <div className="col-md-3 col-sm-4 col-lg-2" key={idx}>
 
           <div className="ideators_list_block">
             <div className={`${prop.isActive?"active":"inactive"}`}><span>Active</span></div>

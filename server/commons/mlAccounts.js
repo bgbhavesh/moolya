@@ -7,6 +7,7 @@ import MlDBController from './mlDBController';
 import MlTransactionsHandler from '../../server/commons/mlTransactionsLog';
 import passwordUtil from "./passwordUtil";
 import NotificationTemplateEngine from "../commons/mlTemplateEngine"
+import mlSmsController from "../mlNotifications/mlSmsNotifications/mlSmsController"
 import MlEmailNotification from "../mlNotifications/mlEmailNotifications/mlEMailNotification"
 import _ from 'underscore'
 import moment from "moment";
@@ -150,10 +151,12 @@ export default MlAccounts=class MlAccounts {
 
     if(emailVerified){
        let emailSent = MlEmailNotification.onEmailVerificationSuccess(user);
+       // on successful verification an sms has to send
+      this.sendVerificationSmsOtp(user._id, user.registrationInfo.contactNumber)
     }
 
     return {
-      email:tokenRecord.address,emailVerified:true,recordId:user._id,error: false
+      email:tokenRecord.address,emailVerified:true,recordId:user._id,error: false, mobileNumber:user.registrationInfo.contactNumber
     };
   }
 
@@ -204,7 +207,7 @@ export default MlAccounts=class MlAccounts {
     if (typeof customEmailComponent === 'function') {
       msg = customEmailComponent(regDetails,otpNum);
     }else{
-      msg= "\n\nThank you for registering with moolya!\n\n"+
+      msg= "\n\nThank you for registering with moolya!\n"+
       "\n\nUse "+otpNum+" as One Time Password (OTP) to verify your moolya account. Do not share this OTP to anyone for security reasons.\n"+
       "\n\nRegards,\n" +
       "\n\nTeam moolya\n";
@@ -215,8 +218,8 @@ export default MlAccounts=class MlAccounts {
     if(mobileNumber){
 
       Meteor.setTimeout(function() {
-
-        mlSms.send(countryCode,mobileNumber,msg);
+        mlSmsController.sendSMS(msg, countryCode, mobileNumber)
+        // mlSms.send(countryCode,mobileNumber,msg);
       }, 1 * 1000);
 
     }
@@ -282,7 +285,8 @@ export default MlAccounts=class MlAccounts {
 
       Meteor.setTimeout(function() {
 
-        mlSms.send(countryCode,to,msg);
+        // mlSms.send(countryCode,to,msg);
+        mlSmsController.sendSMS(msg, countryCode, to)
       }, 1 * 1000);
 
     }

@@ -41,7 +41,7 @@ export default class MlAppIdeatorListView extends Component {
               <h2>Ideators</h2>
               {data.map(function (ideator, idx) {
                 return (
-                  <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={idx}>
+                  <div className="col-md-3 col-sm-4 col-lg-2" key={idx}>
                     <a href='' onClick={that.viewDetails.bind(that, ideator.ideas[0].portfolioId)}>
                       <div className="ideators_list_block">
                         <div className="premium">

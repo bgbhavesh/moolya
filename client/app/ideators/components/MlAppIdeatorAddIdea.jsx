@@ -43,7 +43,7 @@ class MlAppIdeatorAddIdea extends React.Component{
     } else {
       let idea = {
         title: this.refs.title.value,
-        description: this.refs.description.value,
+        ideaDescription: this.refs.ideaDescription.value,
         isIdeaTitlePrivate: false,
         isIdeaPrivate: false,
         isActive: true
@@ -102,7 +102,7 @@ class MlAppIdeatorAddIdea extends React.Component{
                                       <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeaTitlePrivate"/><input type="checkbox" className="lock_input" id="makePrivate"/>
                                   </div>
                                   <div className="form-group mandatory">
-                                      <textarea placeholder="Describe..." className="form-control float-label" ref="description" id="cl_about" name="description" data-required={true} data-errMsg="Description is required" ></textarea>
+                                      <textarea placeholder="Describe..." className="form-control float-label" ref="ideaDescription" id="cl_about" name="ideaDescription" data-required={true} data-errMsg="Description is required" ></textarea>
                                       <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeaDescriptionPrivate"/><input type="checkbox" className="lock_input" id="makePrivate" />
                                   </div>
                               </form>

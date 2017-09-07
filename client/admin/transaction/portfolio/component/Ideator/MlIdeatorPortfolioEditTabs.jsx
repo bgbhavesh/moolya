@@ -10,7 +10,7 @@ import MlIdeatorLookingFor from "../Ideator/MlIdeatorLookingFor";
 import MlIdeatorIdeas from '../Ideator/MlIdeatorIdeas'
 import PortfolioLibrary from '../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import {client} from '../../../../core/apolloConnection'
-
+import _ from 'lodash'
 
 export default class MlIdeatorPortfolioEditTabs extends Component {
   constructor(props) {
@@ -117,10 +117,11 @@ export default class MlIdeatorPortfolioEditTabs extends Component {
   }
 
   getIdeas(details, privateKey) {
-    let data = this.state.idea;
+    var data = this.state.idea;
     data = details;
     this.setState({idea: data})
-    this.props.getIdeatorIdeaDetails(data, privateKey);
+    let updateItem = _.omit(data, 'ideaImage');
+    this.props.getIdeatorIdeaDetails(updateItem, privateKey);
   }
 
   getProblemSolution(details, privateKey) {

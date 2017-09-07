@@ -155,7 +155,7 @@ export default class MlIdeaView extends React.Component {
 
               </div>
               <div className="form-group">
-                <p><b>Description:</b>{this.state.portfolioIdeatorInfo.description}</p>
+                <p><b>Description:</b>{this.state.portfolioIdeatorInfo.ideaDescription}</p>
                  {/* <textarea placeholder="Describe..." className="form-control" id="cl_about"
                             defaultValue={this.state.portfolioIdeatorInfo.description} name="description"
                             readOnly="true"></textarea>*/}

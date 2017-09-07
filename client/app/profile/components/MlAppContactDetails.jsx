@@ -18,6 +18,7 @@ import _ from "lodash";
 import _underscore from 'underscore'
 import update from "immutability-helper";
 import MlLoader from '../../../commons/components/loader/loader'
+import { initalizeFloatLabel } from '../../../commons/utils/formElemUtil';
 
 export default class AppContactDetails extends React.Component {
   constructor(props) {
@@ -45,6 +46,9 @@ export default class AppContactDetails extends React.Component {
     this.fetchCountryCode();
   }
 
+  componentDidUpdate() {
+    initalizeFloatLabel();
+  }
 
   tabSelected(index, value) {
     this.setState({selectedContactTab: true});
@@ -281,9 +285,10 @@ export default class AppContactDetails extends React.Component {
                               isDynamic={true} data-required={true} data-errMsg="Number Type is required"/>
               </div>
               <div className="form-group">
-                <input type="text" placeholder="Enter Country Code" defaultValue={defaultCountryCode}
-                       ref={'countryCode'} className="form-control float-label" id="" disabled={true}/>
+                <input type="text" placeholder="Enter Country Code"
+                       ref={'countryCode'} className="form-control float-label"/>
               </div>
+              {/*defaultValue={defaultCountryCode}*/}
               <div className="form-group mandatory">
                 <input type="text" ref={"contactNumber"} placeholder="Enter Number" id="phoneNumber"
                        className="form-control float-label" data-required={true}
@@ -292,7 +297,8 @@ export default class AppContactDetails extends React.Component {
               <div className="ml_icon_btn">
                 <a href="#" onClick={this.onSavingContact.bind(this)} className="save_btn"><span
                   className="ml ml-save"></span></a>
-                {/*<a href="#" id="cancel_contact" className="cancel_btn"><span className="ml ml-delete"></span></a>*/}
+                <a href="#" id="cancel_contact" className="cancel_btn">
+                  <span className="ml ml-delete"></span></a>
               </div>
             </div>
             {details && (details.map(function (options, key) {
@@ -308,19 +314,22 @@ export default class AppContactDetails extends React.Component {
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Enter Country Code" ref={'countryCode' + key}
-                         defaultValue={countryPhoneCode} valueKey={countryPhoneCode}
-                         className="form-control float-label" id="" disabled={true}/>
+                         defaultValue={options.countryCode}
+                         className="form-control float-label" disabled={true}/>
                 </div>
+                {/*defaultValue={countryPhoneCode} valueKey={countryPhoneCode}*/}
                 <div className="form-group mandatory">
                   <input type="text" ref={'contactNumber' + key} placeholder="Enter Number" id="phoneNumber"
                          defaultValue={options.contactNumber}
                          className="form-control float-label" data-required={true} data-errMsg="Number is required"/>
                 </div>
                 <div className="ml_icon_btn">
-                  <a href="#" onClick={that.onEditingContact.bind(that, key)} className="save_btn"><span
-                    className="ml ml-save"></span></a>
-                  <a href="#" id="cancel_contact" className="cancel_btn" onClick={that.onClear.bind(that, key)}><span
-                    className="ml ml-delete"></span></a>
+                  <a href="" onClick={that.onEditingContact.bind(that, key)} className="save_btn">
+                    <span className="ml ml-save"></span>
+                  </a>
+                  <a href="" id="cancel_contact" className="cancel_btn" onClick={that.onClear.bind(that, key)}>
+                    <span className="ml ml-delete"></span>
+                  </a>
                 </div>
               </div>)
              }))}

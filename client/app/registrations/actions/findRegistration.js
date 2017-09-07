@@ -265,3 +265,42 @@ export async function fetchPendingRegistration() {
   const id = result.data.findUserPendingRegistration;
   return id
 }
+
+export async function fetchSubChapterDetails(id) {
+  let subChapterId = id
+  const result = await appClient.query({
+    query: gql`query($id: String){  
+      isSubChapterMoolyaNonMoolya(id:$id){
+        _id
+        clusterId
+        isDefaultSubChapter
+        clusterName
+        chapterId
+        subChapterUrl 
+        subChapterImageLink
+        chapterName 
+        stateName
+        subChapterName
+        subChapterDisplayName
+        subChapterCode
+        aboutSubChapter
+        subChapterImageLink
+        subChapterEmail
+        isEmailNotified
+        showOnMap
+        isActive
+        latitude
+        longitude
+        isBespokeRegistration
+        isBespokeWorkFlow
+      }  
+    }`,
+    variables: {
+      id: subChapterId
+    },
+    forceFetch: true
+  });
+  const data = result.data.isSubChapterMoolyaNonMoolya;
+  return data
+}
+

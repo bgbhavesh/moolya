@@ -2,7 +2,7 @@ import React, { Component, PropTypes }  from "react";
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 var FontAwesome = require('react-fontawesome');
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../utils/formElemUtil';
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {findIdeatorAudienceActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
 import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler'
@@ -32,6 +32,7 @@ export default class MlIdeatorAudience extends React.Component{
   componentDidUpdate(){
     OnLockSwitch();
     dataVisibilityHandler();
+    initalizeFloatLabel();
   }
 
   componentDidMount(){
@@ -146,6 +147,7 @@ export default class MlIdeatorAudience extends React.Component{
         }
         this.libraryAction(fileObjectStructure)
       }
+      this.fetchOnlyImages();
     }
   }
 

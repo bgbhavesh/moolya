@@ -30,8 +30,11 @@ export default class MlAppInstitutionListView extends Component {
           <div className="ideators_list_block">
             {/*<div className="premium"><span>Starter</span></div>*/}
             {/*<h3>{intitution.aboutUs&&intitution.aboutUs.institutionDescription?intitution.aboutUs.institutionDescription:""}</h3>*/}
+            <div className="premium">
+              <span>{intitution.accountType}</span>
+            </div>
             <h3>{intitution.firstName}</h3>
-            <div className="list_icon"><span className="ml ml-institutions"></span></div>
+            <div className="list_icon"><span className="ml my-ml-Institutions"></span></div>
             <div className="block_footer">
               <span>{intitution.chapterName}-{intitution.communityType}</span>
             </div>

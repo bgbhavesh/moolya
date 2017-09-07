@@ -13,6 +13,14 @@ export async function fetchInternalTask(status) {
           name
           type
           status
+          attendeeName
+          communityName
+          clusterName
+          ownerName
+          portfolioTitle
+          community{
+           name 
+          }  
         }
       }
     `,

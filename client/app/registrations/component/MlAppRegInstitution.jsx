@@ -70,6 +70,15 @@ export default class MlAppRegInstitution extends Component {
   }
 
   isValidated(){
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+      return false
+    }else{
+      return true
+    }
+  }
+
+  isUpdated(){
     let existingObject = this.props.registrationDetails || {}
     let oldObject = {
       userType        : existingObject.userType?existingObject.userType:null,

@@ -89,16 +89,26 @@ export default class MlAppInternalCurrentTask extends React.Component{
           default={true}
         >
           <h2>Area of Intrests</h2>
-          <div className="requested_input">
+          <div className="requested_input ideators_list">
             <div className="col-lg-12" id="show" style={( that.state.selectTask ? {display:'none'} : {})}>
               <div className="row">
                 {that.state.tasks.map(function (task, index) {
                   return (
-                    <div className="col-lg-2 col-md-4 col-sm-4" key={index} onClick={()=>that.selectTask(task)}>
-                      <div className="list_block list_block_intrests notrans">
-                        <div className="hex_outer"><img src="/images/valuation.png"/></div>
-                        <div className="task-status pending"></div>
-                        <h3>{task.name}</h3>
+                    <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={index} onClick={()=>that.selectTask(task)}>
+                      <div className="ideators_list_block">
+                        <div className="premium">
+                          <span>{task.name}</span>
+                        </div>
+                        <h3>{task.ownerName ? task.ownerName : "" }</h3>
+                        <div className="list_icon">
+                          <img src="/images/valuation.png" style={{ "margin": 0 }} className="c_image ml ml-ideator"/>
+                        </div>
+                        <p>{task.portfolioTitle ? task.portfolioTitle : "" }</p>
+                        <div className="block_footer">
+                          <span>
+                            { ( task.clusterName ?  task.clusterName + " - " : '' ) + (task.communityName ? task.communityName : '') }
+                          </span>
+                        </div>
                       </div>
                     </div>
                   )
@@ -110,13 +120,22 @@ export default class MlAppInternalCurrentTask extends React.Component{
             <div className="col-lg-12">
               <div className="row">
                 <div className="top_block_scroller" id="centered">
-                  <ul className="topscroll_listblock">
+                  <ul className="topscroll_listblock ideators_list">
                     {that.state.tasks.map(function (task, index) {
                       return (
-                        <li key={index} onClick={()=>that.selectTask(task)} className={task._id == that.state.selectTask ? "active" : ''}>
-                          <div className="list_block list_block_intrests notrans">
-                            <div className="hex_outer"><img src="/images/valuation.png"/></div>
-                            <h3>{task.name}</h3>
+                        <li key={index} onClick={()=>that.selectTask(task)} className={task._id == that.state.selectTask ? "selected_block ideators_list_block" : 'ideators_list_block'}>
+                          <div className="premium">
+                            <span>{task.name}</span>
+                          </div>
+                          <h3>{task.ownerName ? task.ownerName : "" }</h3>
+                          <div className="list_icon">
+                            <img src="/images/valuation.png" style={{ "margin": 0 }} className="c_image ml ml-ideator"/>
+                          </div>
+                          <p>{task.portfolioTitle ? task.portfolioTitle : "" }</p>
+                          <div className="block_footer">
+                            <span>
+                              { ( task.clusterName ?  task.clusterName + " - " : '' ) + (task.communityName ? task.communityName : '') }
+                            </span>
                           </div>
                         </li>
                       )

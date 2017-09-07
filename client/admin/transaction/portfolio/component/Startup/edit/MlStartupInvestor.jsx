@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-import {dataVisibilityHandler, OnLockSwitch} from "../../../../../utils/formElemUtil";
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from "../../../../../utils/formElemUtil";
 import Moolyaselect from "../../../../../commons/components/MlAdminSelectWrapper";
 import gql from "graphql-tag";
 import {graphql} from "react-apollo";
@@ -39,6 +39,7 @@ export default class MlStartupInvestor extends React.Component{
   componentDidUpdate(){
     OnLockSwitch();
     dataVisibilityHandler();
+    initalizeFloatLabel();
   }
 
   componentDidMount(){
@@ -47,23 +48,22 @@ export default class MlStartupInvestor extends React.Component{
     this.imagesDisplay()
   }
   componentWillMount(){
-    this.fetchPortfolioDetails();
+    const resp = this.fetchPortfolioDetails();
+    return resp
   }
   async fetchPortfolioDetails() {
     let that = this;
     let portfolioDetailsId=that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.investor)
+    const response = await fetchStartupDetailsHandler(portfolioDetailsId, KEY);
     if(empty){
-      const response = await fetchStartupDetailsHandler(portfolioDetailsId, KEY);
-      if (response && response.investor) {
+      if (response) {
         this.setState({loading: false, startupInvestor: response.investor, startupInvestorList: response.investor});
-      }
-      else{
-        this.setState({loading:false})
       }
     }else{
       this.setState({loading: false, startupInvestor: that.context.startupPortfolio.investor, startupInvestorList:that.context.startupPortfolio.investor});
     }
+    this.startupInvestorServer = response
   }
   addInvestor(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
@@ -80,13 +80,36 @@ export default class MlStartupInvestor extends React.Component{
     if(details && details.logo){
       delete details.logo['__typename'];
     }
-    this.setState({selectedIndex: index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen),"selectedVal" : details.fundingTypeId});
+    this.setState({ selectedIndex: index,
+                    data:details,
+                    selectedObject : index,
+                    popoverOpen : !(this.state.popoverOpen),
+                    "selectedVal" : details.fundingTypeId}, () => {
+                    this.lockPrivateKeys(index)
+    });
 
-    setTimeout(function () {
+   /* setTimeout(function () {
       _.each(details.privateFields, function (pf) {
         $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
       })
-    }, 10)
+    }, 10)*/
+  }
+
+  /**
+   * UI creating lock function\
+   * @Note: For the first Time context data is not working
+   *        from the second time context when connection establish then its working
+   * */
+  //todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.startupInvestorServer && this.startupInvestorServer[selIndex]?this.startupInvestorServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
   }
 
 
@@ -102,9 +125,8 @@ export default class MlStartupInvestor extends React.Component{
     }else{
       details=_.extend(details,{[key]:false});
     }
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
+    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:this.props.tabName}
+    this.setState({data: details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }

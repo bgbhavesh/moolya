@@ -196,6 +196,8 @@ export async function fetchfunderPortfolioInvestor(portfoliodetailsId) {
                   privateFields{
                     keyName,
                     booleanKey
+                    index
+                    tabName
                   }
                 }  
             }
@@ -234,7 +236,9 @@ export async function fetchfunderPortfolioSuccess(portfoliodetailsId) {
                 }
                 privateFields{
                   keyName,
-                  booleanKey
+                  booleanKey,
+                  index,
+                  tabName
                 }
               }    
             }
@@ -315,5 +319,34 @@ export async function fetchfunderPortfolioService(portfoliodetailsId) {
   const id = result.data.fetchfunderPortfolioService;
   // let data = _.omit(id,'__typename')
   // return data
+  return id
+}
+export async function findFunderLookingForActionHandler(portfoliodetailsId) {
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            data:fetchFunderDetails(portfoliodetailsId: $portfoliodetailsId, key:"lookingFor") {
+              lookingFor{
+                lookingForName,
+                lookingForId,
+                lookingDescription,
+                index
+                privateFields{
+                  keyName
+                  booleanKey
+                  index
+                  tabName
+                }
+                makePrivate
+              }
+            }
+          }
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.data && result.data.data.lookingFor;
   return id
 }

@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {fetchServicesActionHandler, createBeSpokeServiceActionHandler, fetchBeSpokeServicesActionHandler, updateBeSpokeServiceActionHandler} from '../../../../../../../app/calendar/manageScheduler/service/actions/MlServiceActionHandler'
+import {fetchServicesActionHandler, checkServiceSubChapterAccessControl, createBeSpokeServiceActionHandler, fetchBeSpokeServicesActionHandler, updateBeSpokeServiceActionHandler} from '../../../../../../../app/calendar/manageScheduler/service/actions/MlServiceActionHandler'
 import MlFunderServicesListView from '../Presentation/MlFunderServicesListView'
 
 export default class  MlFunderServicesList extends Component {
@@ -46,9 +46,29 @@ export default class  MlFunderServicesList extends Component {
   }
 
 
-  bookService(bookingStatus){
-    if(bookingStatus){
-      this.setState({componentToView:'bookService',createNewBeSpoke: true, showBeSpoke:false,showService:false,showBeSpokeService:false, bookingStatus: true})
+  async bookService(bookingStatus) {
+    let serviceId = this.state.serviceId;
+    if(!serviceId){
+      toastr.error("Please select a service");
+    }
+    let response = await checkServiceSubChapterAccessControl(serviceId);
+    if(response && response.success){
+      if(bookingStatus) {
+        this.setState({
+          componentToView: 'bookService',
+          createNewBeSpoke: true,
+          showBeSpoke: false,
+          showService: false,
+          showBeSpokeService: false,
+          bookingStatus: true
+        })
+      }
+    } else {
+      if(!response) {
+        toastr.error("No response from server");
+      } else {
+        toastr.error(response.result);
+      }
     }
   }
 

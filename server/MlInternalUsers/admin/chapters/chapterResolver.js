@@ -50,7 +50,7 @@ MlResolver.MlMutationResolver['createChapter'] = (obj, args, context, info) => {
           subChapterEmail: "",
           isEmailNotified: false,
           aboutSubChapter: "",
-          subChapterImageLink: "",
+          MoolyaImageLink: "",
           showOnMap: false,
           isActive: false,
           latitude: chapter.latitude,
@@ -688,6 +688,16 @@ MlResolver.MlMutationResolver['updateRelatedSubChapters'] = (obj, args, context,
     response = new MlRespPayload().errorPayload(e.message, code);
     return response
   }
+}
+
+
+MlResolver.MlQueryResolver['isSubChapterMoolyaNonMoolya'] = (obj, args, context, info) => {
+  // let result =  MlSubChapters.find({chapterId: args.id}).fetch()||[];
+  if(args.id){
+    let result = mlDBController.findOne('MlSubChapters', {_id: args.id}, context) || {};
+    return result;
+  }
+
 }
 
 /******************************************** end related subChapter resolvers ********************************************/

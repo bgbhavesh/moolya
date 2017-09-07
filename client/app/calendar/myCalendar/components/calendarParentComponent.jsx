@@ -106,7 +106,7 @@ export default class MLAppMyCalendar extends Component {
             event.communityName = data.communityName
             let temp = {
               title: info.count + " " + event.communityName,
-              className: "ml ml-funder",
+              className: "ml my-ml-Investors",
               start: new Date(info.date),
               end: new Date(info.date)
             };
@@ -161,7 +161,7 @@ export default class MLAppMyCalendar extends Component {
         if( profileId === data.profileId ) {
           let temp = {
             title: data.count+" " +that.state.communityName,
-            className: "ml ml-funder",
+            className: "ml my-ml-Investors",
             start: new Date( data.date ),
             end: new Date( data.date )
           };

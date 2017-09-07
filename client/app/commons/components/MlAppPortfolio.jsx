@@ -222,7 +222,7 @@ class MlAppPortfolio extends Component{
     }
     console.log(jsonData)
     const response = await updatePortfolioActionHandler(jsonData)
-    toastr.success(response.result)
+    // toastr.success(response.result)
     if(response){
       if(this.props.communityType == "Ideators" || this.props.communityType == "ideator"){
         let idea = this.state.idea
@@ -247,8 +247,15 @@ class MlAppPortfolio extends Component{
     return response
   }
 
+  /**
+   * success handle if no error in server
+   * */
   async handleSuccess(response) {
-    FlowRouter.go("/app/portfolio");
+    if (response && response.success)
+      toastr.success(response.result)
+    else if (response && !response.success)
+      toastr.error(response.result)
+    // FlowRouter.go("/app/portfolio");
   };
 
   //handler for like,review,comment,inquiry,collaborate,connect,follow

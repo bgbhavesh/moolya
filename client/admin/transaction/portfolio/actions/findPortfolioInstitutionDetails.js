@@ -67,7 +67,8 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                     membershipDescription,
                     privateFields{
                         keyName,
-                        booleanKey
+                        booleanKey,
+                        tabName
                     }
                   },
                   
@@ -75,7 +76,8 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                      complianceDescription, 
                      privateFields{
                         keyName,
-                        booleanKey
+                        booleanKey,
+                        tabName
                      }
                   },
                   
@@ -83,22 +85,21 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                      licenseDescription, 
                      privateFields{
                         keyName,
-                        booleanKey
+                        booleanKey,
+                        tabName
                      }
                   }
                   
                   lookingFor{
                       lookingForName,
-                      typeId,
+                      lookingForId,
                       lookingDescription,
-                      logo{
-                        fileName,
-                        fileUrl
-                      },
                       index
                       privateFields{
                           keyName
                           booleanKey
+                          index
+                          tabName
                       }
                       makePrivate
                   }

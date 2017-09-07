@@ -6,7 +6,7 @@ if(Meteor.isServer){
     "name":"mlCalendarMenu",
     "menu" : [
       {
-        "image":"fa fa-calendar",
+        "image":"ml my-ml-calendar",
         "link": "/app/calendar",
         "isLink" : true,
         "isMenu" : true,
@@ -14,7 +14,7 @@ if(Meteor.isServer){
         "uniqueId" : "mycalendar"
       },
       {
-        "image":"fa fa-calendar",
+        "image":"ml my-ml-calendar",
         "link": "/app/calendar/clientCalendar",
         "isLink" : true,
         "isMenu" : true,
@@ -23,7 +23,7 @@ if(Meteor.isServer){
       },
 
       {
-        "image":"fa fa-calendar",
+        "image":"ml my-ml-calendar",
         "link": "/app/calendar/officeCalendar",
         "isLink" : true,
         "isMenu" : true,
@@ -49,14 +49,14 @@ if(Meteor.isServer){
         "uniqueId" : "calendar_notification"
       },
 
-      {
-        "image":"fa fa-calendar-check-o",
-        "link": "/app/calendar/manageSchedule/all/activityList",
-        "isLink" : true,
-        "isMenu" : true,
-        "name" : "Manage Schedule",
-        "uniqueId" : "calendar_manageSchedule"
-      }
+      // {
+      //   "image":"fa fa-calendar-check-o",
+      //   "link": "/app/calendar/manageSchedule/all/activityList",
+      //   "isLink" : true,
+      //   "isMenu" : true,
+      //   "name" : "Manage Schedule",
+      //   "uniqueId" : "calendar_manageSchedule"
+      // }
     ]
   }});
 }

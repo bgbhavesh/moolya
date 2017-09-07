@@ -125,6 +125,7 @@ export async function fetchDataFromCentralLibrary(connection) {
       fileName
       fileUrl
       fileType
+      fileSize
       isPrivate
       libraryType
       inCentralLibrary
@@ -251,6 +252,7 @@ export async function getSharedConnectionsActionHandler() {
   const id = result.data.getMySharedConnections;
   return id
 }
+
 export async function fetchSharedLibraryHandler(userId) {
   const result = await appClient.query({
     query: gql`

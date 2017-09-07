@@ -1,7 +1,7 @@
 import React, {Component, PropTypes}  from "react";
 import ScrollArea from 'react-scrollbar'
 import {Button, Popover, PopoverTitle, PopoverContent} from 'reactstrap';
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../../utils/formElemUtil';
+import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../../../../utils/formElemUtil';
 var FontAwesome = require('react-fontawesome');
 import Moolyaselect from  '../../../../../commons/components/MlAdminSelectWrapper';
 import gql from 'graphql-tag';
@@ -24,7 +24,6 @@ export default class MlInstitutionEditLookingFor extends Component {
       selectedVal: null,
       selectedObject: "default"
     }
-    this.handleBlur.bind(this);
     this.fetchPortfolioDetails.bind(this);
     this.onSaveAction.bind(this);
     return this;
@@ -33,6 +32,7 @@ export default class MlInstitutionEditLookingFor extends Component {
   componentDidUpdate() {
     OnLockSwitch();
     dataVisibilityHandler();
+    initalizeFloatLabel();
   }
 
   componentDidMount() {
@@ -41,7 +41,8 @@ export default class MlInstitutionEditLookingFor extends Component {
   }
 
   componentWillMount() {
-    this.fetchPortfolioDetails();
+    const resp = this.fetchPortfolioDetails();
+    return resp
   }
 
   async fetchPortfolioDetails() {
@@ -81,15 +82,12 @@ export default class MlInstitutionEditLookingFor extends Component {
     let cloneArray = _.cloneDeep(this.state.institutionLookingFor);
     let details = cloneArray[index]
     details = _.omit(details, "__typename");
-    if (details && details.logo) {
-      delete details.logo['__typename'];
-    }
     this.setState({
       selectedIndex: index,
       data: details,
       selectedObject: index,
       popoverOpen: !(this.state.popoverOpen),
-      "selectedVal": details.typeId
+      "selectedVal": details.lookingForId
     });
 
     setTimeout(function () {
@@ -115,7 +113,6 @@ export default class MlInstitutionEditLookingFor extends Component {
     } else {
       details = _.extend(details, {[key]: false});
     }
-
     var privateKey = {
       keyName: fieldName,
       booleanKey: field,
@@ -123,9 +120,7 @@ export default class MlInstitutionEditLookingFor extends Component {
       index: this.state.selectedIndex,
       tabName: KEY
     }
-    this.setState({privateKey: privateKey})
-
-    this.setState({data: details}, function () {
+    this.setState({data: details, privateKey: privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -146,21 +141,16 @@ export default class MlInstitutionEditLookingFor extends Component {
 
   onOptionSelected(selectedId, callback, selObject) {
     let details = this.state.data;
-    details = _.omit(details, ["typeId"]);
+    details = _.omit(details, ["lookingForId"]);
     details = _.omit(details, ["lookingForName"]);
-    details = _.extend(details, {["typeId"]: selectedId, ["lookingForName"]: selObject.label});
+    details = _.omit(details, ["lookingDescription"]);
+    details = _.extend(details, {
+      ["lookingForId"]: selectedId,
+      ["lookingForName"]: selObject.label,
+      lookingDescription: selObject.about
+    });
     this.setState({data: details}, function () {
       this.setState({"selectedVal": selectedId})
-      this.sendDataToParent()
-    })
-  }
-
-  handleBlur(e) {
-    let details = this.state.data;
-    let name = e.target.name;
-    details = _.omit(details, [name]);
-    details = _.extend(details, {[name]: e.target.value});
-    this.setState({data: details}, function () {
       this.sendDataToParent()
     })
   }
@@ -178,18 +168,14 @@ export default class MlInstitutionEditLookingFor extends Component {
           delete item[propName];
         }
       }
-      newItem = _.omit(item, "__typename")
+      var newItem = _.omit(item, "__typename")
       newItem = _.omit(newItem, ["privateFields"])
-      if (item && item.logo) {
-        delete item.logo['__typename'];
-      }
       arr.push(newItem)
     })
 
-    console.log(arr)
     institutionLookingFor = arr;
     this.setState({institutionLookingFor: institutionLookingFor})
-    this.props.getLookingForDetails(institutionLookingFor, this.state.privateKey);    //indexArray
+    this.props.getLookingForDetails(institutionLookingFor, this.state.privateKey);
 
   }
 
@@ -199,10 +185,11 @@ export default class MlInstitutionEditLookingFor extends Component {
         data:fetchLookingFor(communityCode:$communityCode) {
           label:lookingForName
           value:_id
+          about
         }
       }`;
     const showLoader = this.state.loading;
-    let lookingOption = {options: {variables: {communityCode: "STU"}}};
+    let lookingOption = {options: {variables: {communityCode: "INS"}}};
     let that = this;
     let institutionLookingForList = that.state.institutionLookingForList || [];
     return (
@@ -231,11 +218,13 @@ export default class MlInstitutionEditLookingFor extends Component {
                       return (<div className="col-lg-2 col-md-3 col-sm-3" key={idx}>
                         <a href="" id={"create_client" + idx}>
                           <div className="list_block">
-                            <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate}/><input
-                            type="checkbox" className="lock_input" id="isAssetTypePrivate"
-                            checked={details.makePrivate}/>
-                            <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}><img
-                              src={details.logo && details.logo.fileUrl}/></div>
+                            <div className="cluster_status">
+                              <FontAwesome name='unlock' id="makePrivate" defaultValue={details.makePrivate}/>
+                              <input type="checkbox" className="lock_input" id="makePrivate" checked={details.makePrivate}/>
+                            </div>
+                            <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}>
+                              <span className="ml my-ml-browser_3"/>
+                            </div>
                             <h3>{details.lookingForName ? details.lookingForName : ""}</h3>
                           </div>
                         </a>
@@ -263,9 +252,8 @@ export default class MlInstitutionEditLookingFor extends Component {
 
                             <div className="form-group">
                               <input type="text" name="lookingDescription" placeholder="About"
-                                     className="form-control float-label"
-                                     defaultValue={this.state.data.lookingDescription}
-                                     onBlur={this.handleBlur.bind(this)}/>
+                                     className="form-control float-label" disabled="disabled"
+                                     defaultValue={this.state.data.lookingDescription}/>
                               <FontAwesome name='unlock' className="input_icon" id="isDescriptionPrivate" defaultValue={this.state.data.isDescriptionPrivate}
                                            onClick={this.onLockChange.bind(this, "lookingDescription", "isDescriptionPrivate")}/>
                             </div>

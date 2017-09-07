@@ -547,8 +547,10 @@ MlResolver.MlMutationResolver['updateRegistrationInfo'] = (obj, args, context, i
       if (updateCount === 1 || userId) {
         let code = 200;
         result = {username: userObject.username};
-        // MlRegistration.update(id, {$set:  {"registrationInfo.userId":userId}});
         mlDBController.update('MlRegistration', id, {"registrationInfo.userId": userId}, {$set: true}, context)
+        /**Creating moolya request*/
+        mlRegistrationRepo.createRegistrationProxy(id, context);
+
         updatedResponse = new MlRespPayload().successPayload(result, code);
         //update transaction with operational area
         // var temp =mlDbController.find('MlRegistration',id,{"registrationInfo.userId": userId},context ).fetch()

@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag'
+import {fetchSubChapterDetails} from "../actions/findRegistration"
 var Select = require('react-select');
 import Moolyaselect from '../../../commons/components/MlAdminSelectWrapper'
 import ScrollArea from 'react-scrollbar';
@@ -53,7 +54,8 @@ export default class step1 extends React.Component{
       transactionId:null,
       selectedAccountsType: "",
       registrationDate:'',
-      emailVerified:false
+      emailVerified:false,
+      isOfficeBearer :false,
     }
 
     this.fetchIdentityTypesMaster.bind(this);
@@ -87,18 +89,14 @@ export default class step1 extends React.Component{
     return response;
   }
 
-
-  // async checkEmailVerify() {
-  //   const response = await findRegistrationActionHandler(this.props.registrationInfo.registrationId);
-  //   if(response.emails){
-  //     this.setState({emailVerified: response.emails[0].verified});
-  //   }
-  //   return response;
-  // }
-
+  /**
+   * getting all the data from parent any displaying in child
+   * Note: if [registration from office] "disabling" change in registrationType == "OFB"
+   * */
   componentWillMount() {
     this.fetchIdentityTypesMaster();
     let details=this.props.registrationInfo;
+    var isOFB = _.isMatch(details, { registrationType: 'OFB' });
     this.setState({loading:false,
       registrationDetails:details,
       registrationId:details.registrationId,
@@ -117,7 +115,8 @@ export default class step1 extends React.Component{
       profession:details.profession,
       transactionId : this.props.registrationData.transactionId,
       selectedAccountsType:details.accountType,
-      registrationDate:details.registrationDate
+      registrationDate:details.registrationDate,
+      isOfficeBearer : isOFB
           });
     //this.settingIdentity(details.identityType);
 
@@ -136,6 +135,8 @@ export default class step1 extends React.Component{
       $('#individualId').hide();
 
     }
+    this.fetchSubChapterDetails()
+
   }
   optionsBySelectCountry(value){
     this.setState({country:value})
@@ -147,7 +148,9 @@ export default class step1 extends React.Component{
     this.setState({chapter:value})
   }
   optionsBySelectSubChapter(value){
-    this.setState({subChapter:value})
+    this.setState({subChapter:value},function () {
+      this.fetchSubChapterDetails()
+    })
   }
   optionsBySelectCity(value){
     this.setState({selectedCity:value})
@@ -209,7 +212,14 @@ export default class step1 extends React.Component{
     }
   }
 
-
+  async fetchSubChapterDetails(){
+   let result = await fetchSubChapterDetails(this.state.subChapter)
+    if(result && result.isDefaultSubChapter){
+      this.setState({"isEcoSystem" : true})
+    }else if(result && !result.isDefaultSubChapter){
+      this.setState({"isEcoSystem" : false})
+    }
+  }
   /* checkIdentityCompany(event) {
    this.setState({identityType: event.target.name});
    i++;
@@ -327,7 +337,16 @@ export default class step1 extends React.Component{
     const resp = this.updateRejectUser();
     return resp;
   }
+
   isValidated(){
+    let ret = mlFieldValidations(this.refs)
+    if (ret) {
+     return false
+    }else{
+      return true
+    }
+  }
+  isUpdated(){
     let existingObject = this.props.registrationInfo || {}
     let oldObject = {
       registrationId: existingObject.registrationId?existingObject.registrationId:null,
@@ -383,6 +402,8 @@ export default class step1 extends React.Component{
     }
     var differences = diff(existingObject, newObject);
     var filteredObject = _underscore.where(differences, {kind: "E"});
+    console.log("///////////////////////////")
+    console.log(filteredObject);
     if(filteredObject && filteredObject.length>0){
       return false
     }else{
@@ -573,7 +594,7 @@ export default class step1 extends React.Component{
                       <input type="text" ref="email" defaultValue={that.state.registrationDetails&&that.state.registrationDetails.email}  placeholder="Email Id" className="form-control float-label" id="" disabled="true" data-required={true} data-errMsg="Email Id is required"/>
                     </div>
                     <div className="form-group">
-                      <Moolyaselect multiSelect={false} placeholder="Registration Type" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={that.optionBySelectRegistrationType.bind(this)} isDynamic={true} />
+                      <Moolyaselect multiSelect={false} placeholder="Registration Type" disabled={this.state.isOfficeBearer} className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.registrationType} queryType={"graphql"} query={fetchcommunities} onSelect={that.optionBySelectRegistrationType.bind(this)} isDynamic={true} />
                     </div>
                     {/*<div className="form-group">*/}
                     {/*<Moolyaselect multiSelect={false} placeholder="Headquarter Location" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={that.optionsBySelectCity.bind(this)} isDynamic={true}/>*/}
@@ -581,9 +602,9 @@ export default class step1 extends React.Component{
                     <div className="panel panel-default">
                       <div className="panel-heading">Operation Area</div>
                       <div className="panel-body">
-                        <Moolyaselect multiSelect={false} placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true}  onSelect={this.optionsBySelectCluster.bind(this)}/>
-                        <Moolyaselect multiSelect={false} placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterQuery} reExecuteQuery={true} queryOptions={chapterOption}  isDynamic={true}  onSelect={this.optionsBySelectChapter.bind(this)}/>
-                        <Moolyaselect multiSelect={false} placeholder="Select Sub Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapter} queryType={"graphql"} query={subChapterQuery} reExecuteQuery={true} queryOptions={subChapterOption}  isDynamic={true}  onSelect={this.optionsBySelectSubChapter.bind(this)}/>
+                        <Moolyaselect multiSelect={false} mandatory={true} ref="cluster" placeholder="Select Cluster" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.cluster} queryType={"graphql"} query={clusterQuery}  isDynamic={true}  onSelect={this.optionsBySelectCluster.bind(this)} data-required={true} data-errMsg="Cluster is required"/>
+                        <Moolyaselect multiSelect={false} mandatory={true} ref="chapter" placeholder="Select Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.chapter} queryType={"graphql"} query={chapterQuery} reExecuteQuery={true} queryOptions={chapterOption}  isDynamic={true}  onSelect={this.optionsBySelectChapter.bind(this)} data-required={true} data-errMsg="Chapter is required"/>
+                        <Moolyaselect multiSelect={false} mandatory={true} ref="subChapter" placeholder="Select Sub Chapter" className="form-control float-label" valueKey={'value'} labelKey={'label'} selectedValue={this.state.subChapter} queryType={"graphql"} query={subChapterQuery} reExecuteQuery={true} queryOptions={subChapterOption}  isDynamic={true}  onSelect={this.optionsBySelectSubChapter.bind(this)} data-required={true} data-errMsg="SubChapter is required"/>
                         {/* {canSelectIdentity&&
                          <div className="ml_tabs">
                          <ul  className="nav nav-pills">
@@ -641,13 +662,13 @@ export default class step1 extends React.Component{
                         }
                         <div className="clearfix"></div>
                         <div className="form-group mart20">
-                          <Moolyaselect multiSelect={false} placeholder="Select User Category" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.userType} queryType={"graphql"} query={userTypequery} reExecuteQuery={true} queryOptions={userTypeOption}   onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true}/>
+                          <Moolyaselect multiSelect={false} placeholder="Select User Category"  mandatory={true} ref="userCategory" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.userType} queryType={"graphql"} query={userTypequery} reExecuteQuery={true} queryOptions={userTypeOption}   onSelect={that.optionsBySelectUserType.bind(this)} isDynamic={true} data-required={true} data-errMsg="User Category is required"/>
                         </div>
                         <div className="form-group">
-                          <Moolyaselect multiSelect={false} placeholder="Select Type Of Industry" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfIndustry} queryType={"graphql"} query={industriesquery} onSelect={that.optionsBySelectTypeOfIndustry.bind(this)} isDynamic={true}/>
+                          <Moolyaselect multiSelect={false} placeholder="Select Type Of Industry"  mandatory={true} ref="industry" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedTypeOfIndustry} queryType={"graphql"} query={industriesquery} onSelect={that.optionsBySelectTypeOfIndustry.bind(this)} isDynamic={true} data-required={true} data-errMsg="Industry is required"/>
                         </div>
                         <div className="form-group">
-                          <Moolyaselect multiSelect={false} placeholder="Select Profession" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.profession} queryType={"graphql"} query={professionQuery} queryOptions={professionQueryOptions}  onSelect={that.optionsBySelectProfession.bind(this)} isDynamic={true} />
+                          <Moolyaselect multiSelect={false} placeholder="Select Profession"  mandatory={true} ref="profession" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.profession} queryType={"graphql"} query={professionQuery} queryOptions={professionQueryOptions}  onSelect={that.optionsBySelectProfession.bind(this)} isDynamic={true} data-required={true} data-errMsg="Profession is required"/>
 
                         </div>
 
@@ -691,8 +712,9 @@ export default class step1 extends React.Component{
                       {/*<Select name="form-field-name" placeholder="Account Type" value={this.state.subscription} options={subscriptionOptions} className="float-label" onChange={this.optionBySelectSubscription.bind(this)} />*/}
                     </div>
                     <div className="form-group">
-                      <span className={`placeHolder ${institutionAssociationActive}`}>Do You Want To Associate To Any Of The Institution</span>
-                      <Select name="form-field-name"  placeholder="Do You Want To Associate To Any Of The Institution" value={this.state.institutionAssociation}  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label" />
+                      {/*<span className={`placeHolder ${institutionAssociationActive}`}>Do you want to associate to any of the Sub Chapter</span>*/}
+                      <span className='placeHolder active'>Do You Want To Associate To Any Of The Sub Chapter</span>
+                      {that.state.isEcoSystem?<div><Select name="form-field-name"  placeholder="Do you want to associate to any of the Sub Chapter" value="No" options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label" disabled={true}/></div>:<div><Select name="form-field-name"  placeholder="Do you want to associate to any of the Sub Chapter" value="Yes"  options={options3} onChange={this.optionBySelectinstitutionAssociation.bind(this)} className="float-label" disabled={true}/></div>}
                     </div>
                     <div className="form-group">
                       <input type="text" ref="companyName" placeholder="Company Name"  defaultValue={that.state.registrationDetails&&that.state.registrationDetails.companyname}  className="form-control float-label" id="" />

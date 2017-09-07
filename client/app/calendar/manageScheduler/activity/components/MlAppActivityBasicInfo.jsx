@@ -17,6 +17,7 @@ import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormA
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 import _ from 'lodash';
+
 /**
  * Initialize conversation types
  */
@@ -232,7 +233,7 @@ export default class MlAppBasicInfo extends React.Component{
   addDeliverables(index, evt) {
     let deliverable = _.cloneDeep(this.state.basicData.deliverable);
     let basicData = _.cloneDeep(this.state.basicData);
-    deliverable.splice(index+1, 0, '');
+    deliverable.splice(index, 0, '');
     basicData.deliverable = deliverable;
     this.setState({
       basicData: basicData

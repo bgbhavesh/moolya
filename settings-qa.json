@@ -20,20 +20,24 @@
     },
     "aws":{
       "s3Config":{
-        "accessKeyId":"",
-        "secretAccessKey":"",
+        "accessKeyId":"AKIAIOLVK4M2SMABND3Q",
+        "secretAccessKey":"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",
+        "region":"ap-south-1",
         "maxAsyncS3":20,
         "s3RetryCount":3,
         "s3RetryDelay":1000,
         "multipartUploadThreshold": 20971520,
         "multipartUploadSize": 15728640,
-        "urlExpirationTime":4000
+        "urlExpirationTime":4000,
+        "bucketName":"moolya-users",
+        "adminBucketKey":"moolya-admin-users"
       }
     },
     "graphql_proxy_url":"http://localhost:8090/graphql",
     "googleApiKey": "AIzaSyAd7VZpzSCdkOrkgdhCbMm3JYqwGap0Pa4",
     "smtpMailUrl":"smtp://qasmtp%40moolya.in:Moolya123@smtp.moolya.in:25",
     "fromEmailAddr":"qasmtp@moolya.in",
+    "bugReportEmailAddr":"qasmtp@moolya.in",
     "isEmailDomainCheckEnabled":true,
     "isAuditEnabled":true,
     "conversationsBaseURL":"https://qarkc.moolya.global"

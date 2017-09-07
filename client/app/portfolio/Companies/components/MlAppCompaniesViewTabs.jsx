@@ -17,6 +17,7 @@ import MlCompanyViewIntrapreneur from '../../../../admin/transaction/portfolio/c
 import MlCSRViewTabs from '../../../../admin/transaction/portfolio/component/Company/view/CSR/MlCSRViewTabs'
 import MlCompanyViewPartners from '../../../../admin/transaction/portfolio/component/Company/view/MlCompanyViewPartners'
 import MlCompanyViewRAndD from '../../../../admin/transaction/portfolio/component/Company/view/MlCompanyViewR&D'
+import MlCompanyViewLookingFor from '../../../../admin/transaction/portfolio/component/Company/view/MlCompanyViewLookingFor'
 import MlCompanyIncubatorsViewTabs from '../../../../admin/transaction/portfolio/component/Company/view/incubators/MlCompanyIncubatorsViewTabs'
 //todo:import the View component of about screen//
 
@@ -66,6 +67,7 @@ export default class MlAppCompaniesViewTabs extends Component {
       {tabClassName: 'tab', panelClassName: 'panel', title:"CSR" , component:<MlCSRViewTabs key="10"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations} backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"R&D" , component:<MlCompanyViewRAndD key="11" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" , component:<MlCompanyViewIntrapreneur key="12"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlCompanyViewLookingFor key="14"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
     ]
     return tabs;
   }

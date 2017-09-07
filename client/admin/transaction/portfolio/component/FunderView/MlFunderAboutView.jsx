@@ -2,10 +2,16 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
+var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {fetchfunderPortfolioAbout} from '../../actions/findPortfolioFunderDetails'
 import MlLoader from '../../../../../commons/components/loader/loader'
+const genderValues = [
+  {value: 'male', label: 'Male'},
+  {value: 'female', label: 'Female'},
+  {value: 'others', label: 'Others'}
+];
 export default class MlFunderAboutView extends React.Component{
   constructor(props, context){
     super(props);
@@ -54,7 +60,13 @@ export default class MlFunderAboutView extends React.Component{
     }
 
   }
-
+  optionsBySelectGender(val) {
+    var dataDetails = this.state.data
+    dataDetails['gender'] = val.value
+    this.setState({data: dataDetails}, function () {
+      this.sendDataToParent();
+    })
+  }
   render(){
     const showLoader = this.state.loading;
     let investmentFrom = this.state.data&&this.state.data.investmentFrom?this.state.data.investmentFrom:"";
@@ -87,8 +99,12 @@ export default class MlFunderAboutView extends React.Component{
                             <FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate"/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isLastNamePrivate}/>
                           </div>
 
+                          {/*<div className="form-group">*/}
+                            {/*<input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label" id="cluster_name" disabled='disabled'/>*/}
+                            {/*<FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate"/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isGenderPrivate}/>*/}
+                          {/*</div>*/}
                           <div className="form-group">
-                            <input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label" id="cluster_name" disabled='disabled'/>
+                            <Select name="form-field-name"  placeholder="Select Gender" value={this.state.data.gender}  options={genderValues} onChange={this.optionsBySelectGender.bind(this)} disabled='disabled' className="float-label" />
                             <FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate"/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isGenderPrivate}/>
                           </div>
 
@@ -99,6 +115,8 @@ export default class MlFunderAboutView extends React.Component{
 
                           <div className="form-group">
                             <input type="text" placeholder="Education" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label" id="cluster_name" disabled='disabled'/>
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isQualificationPrivate" /><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isQualificationPrivate}/>
+                            <input type="text" placeholder="Qualification" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label" id="cluster_name" disabled='disabled'/>
                             <FontAwesome name='unlock' className="input_icon un_lock" id="isQualificationPrivate" /><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isQualificationPrivate}/>
                           </div>
 

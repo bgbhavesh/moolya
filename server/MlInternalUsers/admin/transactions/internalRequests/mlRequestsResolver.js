@@ -24,6 +24,12 @@ MlResolver.MlMutationResolver['createRequestss'] = (obj, args, context, info) =>
     let communityDetails = MlCommunityDefinition.findOne({"code":args.requests.community})|| {};
     args.requests.communityName = communityDetails.name;
 
+    //Fix for Issue-1971
+    if(args.requests&&args.requests.community==='all'){
+      args.requests.communityName = 'All';
+      args.requests.communityId = "all";
+    }
+
     let user = mlDBController.findOne('users', {_id: context.userId}, context)
     if(user){
       args.requests.createdBy =user.profile.InternalUprofile.moolyaProfile.firstName?user.profile.InternalUprofile.moolyaProfile.firstName:""+" "+user.profile.InternalUprofile.moolyaProfile.lastName?user.profile.InternalUprofile.moolyaProfile.lastName:"";

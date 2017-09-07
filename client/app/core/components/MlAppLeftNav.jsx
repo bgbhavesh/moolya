@@ -57,6 +57,8 @@ export default class MlAppLeftNav extends Component {
             let activeClass
             if (parentKey == dataItem.uniqueId) {
                 activeClass = 'active_menu'
+            }else if(dataItem.isDisabled){                               /**for making the menu greyOut req from marketing*/
+              activeClass = 'inactive_menu'
             }
             return (
                 <li className={`menu_item ${activeClass}`} key={idx}>

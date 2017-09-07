@@ -274,6 +274,10 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
         }
     }
 
+    if(response && response.success){
+      portfolioValidationRepo.sendSMSonPortfolioUpdate(args.portfoliodetailsId);
+    }
+
     return response;
 }
 

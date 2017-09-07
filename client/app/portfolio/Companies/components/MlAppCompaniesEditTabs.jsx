@@ -23,13 +23,14 @@ import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/Po
 export default class MlAppCompaniesEditTabs extends Component {
   constructor(props) {
     super(props)
-    this.state = {tabs: [], companyPortfolio: {}};
+    this.state = {tabs: [], companyPortfolio: {}, portfolioKeys: {privateKeys: [], removePrivateKeys: []}};
     this.getChildContext.bind(this)
   }
 
   getChildContext() {
     return {
-      companyPortfolio: this.state.companyPortfolio
+      companyPortfolio: this.state.companyPortfolio,
+      portfolioKeys: this.state.portfolioKeys
     }
   }
   setBackHandler(backMethod){
@@ -234,6 +235,22 @@ export default class MlAppCompaniesEditTabs extends Component {
     this.setState({tabs: getTabs() || []});
   }
 
+  getAllPrivateKeys(privateKeys, removePrivateKeys) {
+    let obj = {
+      privateKeys:privateKeys,
+      removePrivateKeys:removePrivateKeys
+    }
+    this.setState({portfolioKeys: obj});
+    return obj
+  }
+
+  componentWillReceiveProps(newProps) {
+    console.log('newProps', newProps);
+    if (newProps) {
+      const resp = this.getAllPrivateKeys(newProps.privateKeys, newProps.removePrivateKeys);
+      return resp
+    }
+  }
   render() {
     let tabs = this.state.tabs;
     return <MlTabComponent tabs={tabs}/>
@@ -245,4 +262,5 @@ export default class MlAppCompaniesEditTabs extends Component {
  * */
 MlAppCompaniesEditTabs.childContextTypes = {
   companyPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };

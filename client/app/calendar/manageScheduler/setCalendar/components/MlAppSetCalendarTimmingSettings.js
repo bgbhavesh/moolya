@@ -11,8 +11,11 @@ import { initalizeFloatLabel } from '../../../../../commons/utils/formElemUtil';
 import {
   updateCalendarWorkingDayActionHandler,
   updateCalendarWorkingDaysActionHandler } from '../actions/updateCalendarTimingSettings';
+import MlAccordion from "../../../../commons/components/MlAccordion";
+import formHandler from "../../../../../commons/containers/MlFormHandler";
+import MlAppActionComponent from "../../../../commons/components/MlAppActionComponent";
 
-export default class MlAppSetCalendarTimmingSettings extends Component {
+class MlAppSetCalendarTimmingSettings extends Component {
 
   constructor(props) {
     super(props);
@@ -66,7 +69,7 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
   componentDidMount() {
     initalizeFloatLabel();
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(290+$('.admin_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight-(300+$('.app_header').outerHeight(true)));
   }
 
   /**
@@ -374,7 +377,7 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
    * @returns {Promise.<void>}
    */
   async updateCalendarSetting(event) {
-    event.preventDefault();
+    //event.preventDefault();
     const { lunch, slots, isActive, dayName, weekDays } = this.state;
     this.isValidSlotsTime = true;
     this.isValidBreakTime = true;
@@ -499,6 +502,28 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
   render(){
     const that = this;
     const { slots, lunch, isCloneDisabled, workEndTime, weekDays } = this.state;
+    /**
+     * Setting up action handler for activity different event
+     */
+    let appActionConfig = [
+      {
+        showAction: true,
+        actionName: 'save',
+        handler: async(event) => that.props.handler(that.updateCalendarSetting.bind(this))
+      }
+    ];
+    export const genericPortfolioAccordionConfig = {
+      id: 'portfolioAccordion',
+      panelItems: [
+        {
+          'title': 'Actions',
+          isText: false,
+          style: {'background': '#ef4647'},
+          contentComponent: <MlAppActionComponent
+            resourceDetails={{resourceId: 'calendartiming', resourceType: 'calendartiming'}}   //resource id need to be given
+            actionOptions={appActionConfig}/>
+        }]
+    };
     return (
       <div className="step_form_wrap step1">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true} >
@@ -707,13 +732,15 @@ export default class MlAppSetCalendarTimmingSettings extends Component {
             {this.setWeeksLayout()}
           </div>
         </ScrollArea>
-        <div className="form-group">
+        {/*<div className="form-group">
           <div className="ml_btn" style={{'textAlign':'center'}}>
             <button onClick={(event)=>this.updateCalendarSetting(event)} className="save_btn" >Save</button>
           </div>
-        </div>
+        </div>*/}
+        <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
       </div>
     )
   }
 };
 
+export default MlAppSetCalendarTimmingSettings = formHandler()(MlAppSetCalendarTimmingSettings);

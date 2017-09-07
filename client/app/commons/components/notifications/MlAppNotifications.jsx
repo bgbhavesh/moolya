@@ -31,7 +31,7 @@ export default class MlAppNotifications extends Component {
     var notificationsList = notificationAry.map(function (options, key) {
       return (
         <li key={key}>
-          <a href="#"><span className="ml ml-moolya-symbol"/>{options.message}</a>
+          <a href="/app/calendar/notification"><span className="ml ml-moolya-symbol"/>{options.message}</a>
         </li>)
     })
 

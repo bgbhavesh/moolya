@@ -60,7 +60,7 @@ export default class MlAppProfileAddressBook extends React.Component {
 
           <h2>My Contact Details</h2>
 
-              <div className="col-md-12  main_wrap_scroll">
+              <div className="col-md-12  main_wrap_scroll nopadding">
                 <ScrollArea
                   speed={0.8}
                   className="main_wrap_scroll"

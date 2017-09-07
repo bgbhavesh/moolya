@@ -840,4 +840,77 @@ if(Meteor.isServer){
       ]
     }});
   }
+
+
+  //for history
+  let auditFilterExists = MlFilters.findOne({"moduleName":"audit"});
+  if(!auditFilterExists){
+    MlFilters.upsert({"moduleName" : "audit"},{$set:{
+      "filterName" : "History",
+      "filterDescription" : "History Filter",
+      "isActive" : true,
+      "moduleName" : "audit",
+      "filterFields" : [
+        {
+          "fieldName" : "timeStamp",
+          "displayName" : "Created Date",
+          "isDynamic" : null,
+          "fieldType" : "Date",
+          "fieldResolverName" : null,
+          "isActive":true
+        },
+
+        {
+          "fieldName" : "moduleName",
+          "displayName" : "Module",
+          "isDynamic" : true,
+          "fieldType" : "List",
+          "fieldResolverName" : "Gen_Modules",
+          "isActive":true,
+        },
+        {
+          "fieldName" : "fieldName",
+          "displayName" : "Field Name",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+
+        },
+        {
+          "fieldName" : "previousValue",
+          "displayName" : "Previous Value",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        },
+        {
+          "fieldName" : "currentValue",
+          "displayName" : "Current Value",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        },
+
+        {
+          "fieldName" : "userAgent.ipAddress",
+          "displayName" : "IP Address",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        },
+        {
+          "fieldName" : "userName",
+          "displayName" : "Modified By",
+          "isActive" : true,
+          "isDynamic" : null,
+          "fieldType" : "String",
+          "fieldResolverName" : null,
+        },
+      ]
+    }});
+  }
 }

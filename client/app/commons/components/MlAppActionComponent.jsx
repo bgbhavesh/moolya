@@ -225,7 +225,12 @@ export default class MlAppActionComponent extends React.Component {
         actionName: 'complete',
         displayName:'Complete',
         iconClass: 'ml ml-save'
-      }
+      },
+      {
+        actionName: 'cancel',
+        displayName:'cancel',
+        iconClass: 'ml ml-delete'
+      },
     ]
     let actionOptions= this.props.actionOptions|| [];
 

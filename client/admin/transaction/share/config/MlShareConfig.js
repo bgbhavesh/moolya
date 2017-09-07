@@ -25,7 +25,7 @@ const mlShareTableConfig=new MlViewer.View({
   searchFields:["createdBy","email" ,"transactionType" , "cluster", "chapter", "subChapter", "community", "status"],
   throttleRefresh:false,
   pagination:true,//To display pagination
-  filter:false,
+  filter:true,
   filterComponent: <MlCustomFilter module="share" moduleName="share" client={client}/>,
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,selectRow:true},

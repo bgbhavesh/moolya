@@ -5,6 +5,8 @@ import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../..
 import {findIdeatorIdeasActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import _ from 'lodash';
 import MlLoader from '../../../../../commons/components/loader/loader'
+import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
+import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler'
 
 export default class MlIdeatorIdeas extends React.Component{
   constructor(props, context){
@@ -25,6 +27,9 @@ export default class MlIdeatorIdeas extends React.Component{
   {
     OnLockSwitch();
     dataVisibilityHandler();
+    $('#upload_hex').change(function(){
+      document.getElementById('blah').src = window.URL.createObjectURL(this.files[0]);
+    });
   }
   componentDidUpdate()
   {
@@ -102,7 +107,7 @@ export default class MlIdeatorIdeas extends React.Component{
   sendDataToParent(){
     let data = this.state.data;
     for (var propName in data) {
-      if (data[propName] === null || data[propName] === undefined) {
+      if (data[propName] === null || data[propName] === undefined || propName === '__typename' || propName === 'ideaImage' || propName === 'privateFields') {
         delete data[propName];
       }
     }
@@ -110,6 +115,40 @@ export default class MlIdeatorIdeas extends React.Component{
     data=_.omit(data,["privateFields"]);
 
     this.props.getIdeas(data, this.state.privateKey)
+  }
+  async libraryAction(file) {
+    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
+    return resp;
+  }
+
+  onLogoFileUpload(e){
+    if(e.target.files[0].length ==  0)
+      return;
+    let file = e.target.files[0];
+    let fileName = e.target.files[0].name;
+    let name = e.target.name;
+    let data ={moduleName: "PORTFOLIO_IDEA_IMG", actionName: "UPDATE", portfolioId:this.props.portfolioDetailsId, ideaId:this.props.ideaId, communityType:"IDE", portfolio:{ideaImage:{fileUrl:" ", fileName : fileName}}};
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, file));
+  }
+  onFileUploadCallBack(name,file,resp){
+    if(resp){
+      let result = JSON.parse(resp)
+      let userOption = confirm("Do you want to add the file into the library")
+      if(userOption){
+        let fileObjectStructure = {
+          fileName: file.name,
+          fileType: file.type,
+          fileUrl: result.result,
+          libraryType: "image"
+        }
+        this.libraryAction(fileObjectStructure)
+      }
+      if(result.success){
+        this.setState({loading:true})
+        this.fetchPortfolioDetails();
+      }
+    }
   }
 
   render(){
@@ -123,10 +162,10 @@ export default class MlIdeatorIdeas extends React.Component{
         <h2>Ideas</h2>
         <div className="col-lg-2 col-lg-offset-5 col-md-3 col-md-offset-4 col-sm-3 col-sm-offset-4">
           <a href="#" >
-            <div className="list_block notrans">
-              <FontAwesome name='lock'/>
-              <div className="hex_outer portfolio-font-icons"><span className="ml ml-idea"></span></div>
-              <h3>Ideas</h3>
+            <div className="upload_hex">
+              <FontAwesome name='unlock' className="req_textarea_icon un_lock" id="isIdeaPrivate"/><input type="checkbox" className="lock_input" id="makePrivate"/>
+              <img src={this.state.data && this.state.data.ideaImage&&this.state.data.ideaImage.fileUrl?this.state.data.ideaImage.fileUrl:"/images/images.png"} id="blah" width="105" height="auto"/>
+              <input className="upload" type="file" id="upload_hex"  onChange={this.onLogoFileUpload.bind(this)}/>
             </div>
           </a>
         </div>

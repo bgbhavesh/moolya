@@ -234,7 +234,7 @@ export default class MlAppBasicInfo extends React.Component{
     let deliverable = _.cloneDeep(this.state.basicData.deliverable);
     let basicData = _.cloneDeep(this.state.basicData);
     deliverable.splice(index+1, 0, '');
-    basicData.deliverable = deliverable;
+    basicData.deliverable = deliverable.reverse();
     this.setState({
       basicData: basicData
     }, () => {
@@ -436,8 +436,8 @@ export default class MlAppBasicInfo extends React.Component{
                 <div className="panel-heading">
                   Deliverables
                   <span className="see-more pull-right">
-                    <FontAwesome name='plus-square' hidden={ index !== 0 } onClick={that.addDeliverables.bind(that, index)} />
                     <FontAwesome name='minus-square' hidden={ index == 0 } onClick={that.removeDeliverables.bind(that,index)} />
+                    <FontAwesome name='plus-square' hidden={ index !== 0 } onClick={that.addDeliverables.bind(that, index)} />
                   </span>
                 </div>
                 <div className="panel-body">

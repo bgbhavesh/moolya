@@ -99,7 +99,7 @@ export default class MlInstitutionEmployeeBreakup extends React.Component{
   componentDidUpdate(){
     initalizeFloatLabel();
   }
-  
+
   fetchDetails(){
     let that = this;
     //let portfoliodetailsId=that.props.portfolioDetailsId;
@@ -268,7 +268,7 @@ export default class MlInstitutionEmployeeBreakup extends React.Component{
                     <div className="col-lg-12 col-md-12 col-sm-10">
                       <div className="row">
                         <div className="form-group col-lg-6 col-md-6 col-sm-6">
-                          <Moolyaselect multiSelect={false} placeholder="Select Type Of Entity"
+                          <Moolyaselect multiSelect={false} placeholder="Select Department"
                                         className="form-control float-label" valueKey={'value'} labelKey={'label'}
                                         selectedValue={details.ebdDepartment} queryType={"graphql"}
                                         query={departmentQuery} onSelect={that.optionsBySelectTypeOfDepartment.bind(that,idx)}

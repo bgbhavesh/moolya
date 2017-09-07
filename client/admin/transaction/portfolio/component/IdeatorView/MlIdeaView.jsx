@@ -128,16 +128,21 @@ export default class MlIdeaView extends React.Component {
 
   render() {
     const showLoader = this.state.loading;
+    let image = this.state.portfolioIdeatorInfo&&this.state.portfolioIdeatorInfo.ideaImage&&this.state.portfolioIdeatorInfo.ideaImage.fileUrl?this.state.portfolioIdeatorInfo.ideaImage.fileUrl:null;
     return (
       <div id="psContent" className="admin_padding_wrap">
         {showLoader === true ? ( <div className="loader_wrap"></div>) : (
           <div>
             <h2>About Ideas</h2>
             <div className="col-lg-2 col-lg-offset-5 col-md-3 col-md-offset-4 col-sm-3 col-sm-offset-4">
-              <div className="list_block notrans">
-                <FontAwesome name='lock'/>
-                <div className="hex_outer portfolio-font-icons"><span className="ml ml-idea"></span></div>
-                <h3>Ideas</h3>
+              {/*<div className="list_block notrans">*/}
+                {/*<FontAwesome name='lock'/>*/}
+                {/*<div className="hex_outer portfolio-font-icons"><span className="ml ml-idea"></span></div>*/}
+                {/*<h3>Ideas</h3>*/}
+              {/*</div>*/}
+              <div className="upload_hex">
+                <FontAwesome name='unlock' className="req_textarea_icon un_lock" id="isIdeaImagePrivate"/>
+                {image?<img src={image} id="blah" width="105" height="auto"/>:<div className="hex_outer portfolio-font-icons"><span className="ml ml-idea"></span></div>}
               </div>
             </div>
             <div className="form_bg col-lg-8 col-lg-offset-2">

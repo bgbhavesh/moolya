@@ -51,13 +51,13 @@ $menuTrans:all 0.5s linear;
   padding: 0;
   float: left;
   background: $mlYellow;
-  margin: 0 5px 5px;
+  margin: 0 5px 0px;
   border-radius:0 0 4px 4px;
 }
 .app_menu .profile_pic_in_menu{display: none;}
 /*.app_menu ul{padding:20px 6px 0px 6px;}*/
 .app_menu ul {
-  padding: 20px 0px 0px 0px;
+  padding: 20px 0px 20px 0px;
   background:$mlWhite;
   margin-bottom: -20px;
   text-align: center;
@@ -679,7 +679,7 @@ background:$mlGray; position: absolute; top: 0; z-index: 100; width: 100%;
 .shadow_block{background-color:#fff;box-shadow: 0px 0px 5px #888;border-radius: 4px;margin-top: 15px;text-align: center;position: relative;margin-bottom: 15px;-webkit-transform: translateX(0) translateY(0) translateZ(0) rotate(0deg) scale(1); -moz-transform: translateX(0) translateY(0) translateZ(0) rotate(0deg) scale(1); -ms-transform: translateX(0) translateY(0) translateZ(0) rotate(0deg) scale(1); -o-transform: translateX(0) translateY(0) translateZ(0) rotate(0deg) scale(1); transform: translateX(0) translateY(0) translateZ(0) rotate(0deg) scale(1); -webkit-transition: all 0.4s ease-out; -moz-transition: all 0.4s ease-out; -o-transition: all 0.4s ease-out; -ms-transition: all 0.4s ease-out; transition: all 0.4s ease-out; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}
 .shadow_block:hover{-webkit-transition: all 0.4s ease-out; -moz-transition: all 0.4s ease-out; -o-transition: all 0.4s ease-out; -ms-transition: all 0.4s ease-out; transition: all 0.4s ease-out; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; -webkit-box-shadow: 0 21px 65px 0 rgba(0, 0, 0, 0.28); -moz-box-shadow: 0 21px 65px 0 rgba(0, 0, 0, 0.28); -ms-box-shadow: 0 21px 65px 0 rgba(0, 0, 0, 0.28); -o-box-shadow: 0 21px 65px 0 rgba(0, 0, 0, 0.28); box-shadow: 0 21px 65px 0 rgba(0, 0, 0, 0.28); -webkit-transform: translateX(0) translateY(-5px) translateZ(0) rotate(0deg) scale(1); -moz-transform: translateX(0) translateY(-5px) translateZ(0) rotate(0deg) scale(1); -ms-transform: translateX(0) translateY(-5px) translateZ(0) rotate(0deg) scale(1); -o-transform: translateX(0) translateY(-5px) translateZ(0) rotate(0deg) scale(1); transform: translateX(0) translateY(-5px) translateZ(0) rotate(0deg) scale(1);}
 .branch_block{min-height: 150px;margin-bottom:25px;padding:10px;text-align:left;}
-.branch_block img{float: left;margin-right:25px;}
+.branch_block img{float: left;margin-right:25px; width:120px; height:110px;}
 .branch_block h3{font-size: 20px;margin-bottom:10px;}
 /* .open{bottom: 57px !important;position:relative;} */
 .review_pop{

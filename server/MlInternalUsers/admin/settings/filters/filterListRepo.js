@@ -285,6 +285,15 @@ export default class MlFilterListRepo{
         })
 
         break;
+      case "Gen_Modules":
+
+        result= MlModules.find({"isActive" : true}).fetch()
+
+        let genModulesResponse=_.each(result,function (option,id) {
+          options.push({"label":option.code,"value":option.code})
+        })
+
+        break;
 
 
 

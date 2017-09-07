@@ -138,7 +138,6 @@ let externalUser = `
         isDefault:Boolean,
         isActive:Boolean,
         accountType:String,
-        isActive:Boolean,
         optional:Boolean,
         userType :String,
         identityType:String,
@@ -226,6 +225,7 @@ let externalUser = `
         findAddressBook:externalUserAdditionalInfoSchema
         fetchUserProfiles:[externalUserProfiles]
         fetchMapCenterCordsForExternalUser(module:String, id:String):mapCenterCords
+        findDefaultUserProfile:externalUserProfiles
     }
 `
 
@@ -234,6 +234,7 @@ MlSchemaDef['schema'] = mergeStrings([MlSchemaDef['schema'],externalUser]);
 let supportedApi = [
     {api:'fetchMapCenterCordsForExternalUser', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
     {api:'fetchUserProfiles', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
+    {api:'findDefaultUserProfile', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
     {api:'findAddressBook', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
     {api:'fetchUserProfiles', actionName:'READ', moduleName:"USERS", isAppWhiteList:true},
     {api:'updateContactNumber', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},

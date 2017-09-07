@@ -78,7 +78,7 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
                               ideatorInfo = {
                                   firstName: args.registrationInfo.firstName ? args.registrationInfo.firstName : "",
                                   lastName: args.registrationInfo.lastName ? args.registrationInfo.lastName : "",
-                                  emailId: args.registrationInfo.userName ? args.registrationInfo.userName : "",
+                                  emailId: args.registrationInfo.userName ? args.registrationInfo.userName : args.registrationInfo.emailId,
                                   gender: args.registrationInfo.gender ? args.registrationInfo.gender : "",
                                   dateOfBirth: args.registrationInfo.dateOfBirth ? args.registrationInfo.dateOfBirth : "",
                                   qualification: args.registrationInfo.qualification ? args.registrationInfo.qualification : "",

@@ -14,6 +14,7 @@ import MlServiceProviderViewAwards from "../../../admin/transaction/portfolio/co
 import MlServiceProviderViewMCL from "../../../admin/transaction/portfolio/component/ServiceProvider/view/MlServiceProviderViewMCL";
 import MlServiceProviderViewServices from "../../../admin/transaction/portfolio/component/ServiceProvider/view/MlServiceProviderViewServices";
 import MlServiceProviderViewClients from "../../../admin/transaction/portfolio/component/ServiceProvider/view/MlServiceProviderViewClients";
+import MlServiceProviderViewLookingFor from "../../../admin/transaction/portfolio/component/ServiceProvider/view/MlServiceProviderViewLookingFor";
 import PortfolioLibrary from '../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import {appClient} from '../../core/appConnection'
 //todo:import the View component of about screen//
@@ -89,6 +90,14 @@ export default class MlAppServiceProviderViewTabs extends Component {
         component: <MlServiceProviderViewClients key="6"
                                              portfolioDetailsId={this.props.portfolioDetailsId}
                                              getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Looking For",
+        component: <MlServiceProviderViewLookingFor key="7"
+                                                 portfolioDetailsId={this.props.portfolioDetailsId}
+                                                 getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       }
     ]
     return tabs;

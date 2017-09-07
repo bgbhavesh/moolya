@@ -15,6 +15,8 @@ import {updateUserGeneralInfoDetails} from '../actions/updateAddressBookInfo'
 import {findAddressBookActionHandler} from '../actions/findAddressBookAction'
 import update from 'immutability-helper';
 import _underscore from 'underscore'
+import { initalizeFloatLabel } from '../../../commons/utils/formElemUtil';
+
 export default class AppAddressDetails extends React.Component {
   constructor(props) {
     super(props);
@@ -42,7 +44,9 @@ export default class AppAddressDetails extends React.Component {
     return this;
   }
 
-
+  componentDidMount() {
+    initalizeFloatLabel();
+  }
 
   optionsBySelectAddressType(selectedIndex, handler, selectedObj) {
     this.setState({selectedValue: selectedIndex, selectedAddressLabel: selectedObj.label});
@@ -245,6 +249,10 @@ export default class AppAddressDetails extends React.Component {
     }
 
 
+  }
+
+  componentWillUpdate() {
+    //initalizeFloatLabel();
   }
 
   stateUpdateOptions(index, did, selectedValue, selObject,callback){

@@ -81,7 +81,7 @@ export default class MlCompanyRating extends React.Component{
           <div className="panel panel-default panel-form">
             <div className="panel-body">
               <div className="form-group nomargin-bottom">
-                <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isRatingPrivate" onClick={this.onClick.bind(this, "isRatingPrivate")}/>
+                <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isRatingPrivate" onClick={this.onClick.bind(this, "rating", "isRatingPrivate")}/>
                 <div className="star_ratings">
                   <Rating
                     empty="fa fa-star-o empty"

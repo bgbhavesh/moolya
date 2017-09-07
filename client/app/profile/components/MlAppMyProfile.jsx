@@ -348,7 +348,7 @@ class MlAppMyProfile extends Component {
                     {/*</div>*/}
 
                     <div className="form-group" id="date-of-birth">
-                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth"}}  closeOnSelect={true} value={this.state.dateOfBirth?moment(this.state.dateOfBirth, 'DD-MM-YYYY HH:mm:ss').format('DD-MM-YYYY'): null} onChange={this.onfoundationDateSelection.bind(this)} isValidDate={ valid } />
+                      <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}  inputProps={{placeholder: "Date Of Birth",className:"form-control float-label"}}  closeOnSelect={true} value={this.state.dateOfBirth?moment(this.state.dateOfBirth, 'DD-MM-YYYY HH:mm:ss').format('DD-MM-YYYY'): null} onChange={this.onfoundationDateSelection.bind(this)} isValidDate={ valid } />
                       <FontAwesome name="calendar" className="password_icon" onClick={this.openDatePickerDateOfBirth.bind(this)}/>
                     </div>
 
@@ -357,7 +357,7 @@ class MlAppMyProfile extends Component {
                       <div className="form-group">
                         <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.passwordState}</text>
                         <input type="Password" ref="existingPassword"  placeholder="Password" className="form-control float-label" onBlur={this.checkExistingPassword.bind(this)}id="password" data-required={true} data-errMsg="Existing password is required"/>
-                        <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
+
                       </div> : <div></div>}
                     {this.state.showChangePassword?(<div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.OnChangePassword.bind(this)}>Change Password</a></div>):""}
                     {this.state.PasswordReset?(
@@ -365,12 +365,12 @@ class MlAppMyProfile extends Component {
                       <div className="form-group">
                         <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdValidationMsg}</text>
                         <input type="Password" ref="password" defaultValue={this.state.password} onBlur={this.passwordValidation.bind(this)} placeholder="New Password" className="form-control float-label" id="password" data-required={true} data-errMsg="New Password is required"/>
-                        <FontAwesome name='eye-slash' className="password_icon Password hide_p"/>
+
                       </div>
                       <div className="form-group">
                         <text style={{float:'right',color:'#ef1012',"fontSize":'12px',"marginTop":'-12px',"fontWeight":'bold'}}>{this.state.pwdErrorMsg}</text>
                         <input type="Password" ref="confirmPassword" defaultValue={this.state.confirmPassword} placeholder="Confirm New Password" className="form-control float-label" onBlur={this.onCheckPassword.bind(this)} id="confirmPassword" data-errMsg="Confirm Password is required"/>
-                        <FontAwesome name='eye-slash' className="password_icon ConfirmPassword hide_p"/>
+
                       </div>
                         <div className="form-group"> <a href="" className="mlUpload_btn" onClick={this.resetPassword.bind(this)}>Save</a> <a href="#" className="mlUpload_btn" onClick={this.cancelResetPassword.bind(this)}>Cancel</a> </div></div>):""}
                   </form>

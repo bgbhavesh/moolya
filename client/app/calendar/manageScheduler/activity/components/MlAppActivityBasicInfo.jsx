@@ -17,6 +17,7 @@ import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormA
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 import _ from 'lodash';
+
 /**
  * Initialize conversation types
  */

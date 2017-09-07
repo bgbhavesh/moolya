@@ -121,7 +121,12 @@ class MlHierarchyAssignment {
           */
           let parentHierarchy = {};
           if(userhierarchy.isDefaultSubChapter){
-            parentHierarchy = _.find(userhierarchy.teamStructureAssignment, {"assignedLevel":'cluster', "reportingRole":''});
+            // parentHierarchy = _.find(userhierarchy.teamStructureAssignment, {"assignedLevel":'cluster', "reportingRole":''});
+            parentHierarchy = _.find(userhierarchy.teamStructureAssignment, function (obj) {
+              if(obj.assignedLevel == "cluster" && (!obj.reportingRole || obj.reportingRole == "")){
+                return obj
+              }
+            });
           }else{
             parentHierarchy = _.find(userhierarchy.teamStructureAssignment, function (obj) {
               if(obj.assignedLevel == "subChapter" && (!obj.reportingRole || obj.reportingRole == "")){
@@ -215,7 +220,7 @@ class MlHierarchyAssignment {
     teamStructureAssignment.map(function (role, key) {
       if (role.roleId == userRole) {
         userRoleMapping = role;
-        if (role.assignedLevel == 'cluster' && role.reportingRole == '') {
+        if (role.assignedLevel == 'cluster' && (!role.reportingRole || role.reportingRole == "")) {
           return true;
         }
       } else if (role.roleId == assignedRole) {

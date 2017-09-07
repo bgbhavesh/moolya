@@ -44,9 +44,24 @@ $menuTrans:all 0.5s linear;
     img.moolya_app_logo{width: 130px; margin-top: 6px; position: absolute; left: calc(50% - 65px); }
     .mobile_menu_trigger{ position: relative;z-index:1;display:none;}
 }
-.moolya_app .app_menu{width: 94px;min-height: 400px;padding: 0px;/*overflow-y:auto;*/float:left;background: #fff;}
+/*.moolya_app .app_menu{width: 94px;min-height: 400px;padding: 0px;float:left;background: #fff;}*/
+.moolya_app .app_menu{
+  width: 82px;
+  min-height: 400px;
+  padding: 0;
+  float: left;
+  background: $mlYellow;
+  margin: 0 5px 5px;
+  border-radius:0 0 4px 4px;
+}
 .app_menu .profile_pic_in_menu{display: none;}
-.app_menu ul{padding:20px 6px 0px 6px;}
+/*.app_menu ul{padding:20px 6px 0px 6px;}*/
+.app_menu ul {
+  padding: 20px 0px 0px 0px;
+  background:$mlWhite;
+  margin-bottom: -20px;
+  text-align: center;
+}
 .app_menu ul .menu_item a{color:#000;text-decoration: none;}
 .app_menu ul .menu_item .menu_in{/*position: absolute;left: 50%;transform: translateX(-50%);*/line-height: 15px;z-index: 1;color:#ef4647;text-shadow:none;}
 .app_menu ul .menu_item .menu_in b.menu_title{font-weight: normal;}
@@ -93,6 +108,16 @@ $menuTrans:all 0.5s linear;
   .ml_app_profile li {position: absolute;}
   .ml_app_profile li, .ml_app_profile a {display: block;box-sizing: border-box;/*position: absolute;*//*position: relative;*/top: -5em;right: -5em;/*border: 1px dotted #f00;*/transition: all 0.2s ease-in;}
   .ml_app_profile a {-webkit-border-radius: 50%;-moz-border-radius: 50%;border: 2px solid #fff;width: 35px;height: 35px;overflow: hidden;text-align: center;font-size: 22px;/*box-shadow: 0 0 10px rgba(50, 50, 50, 0.75);*/color: #000;background-color: #ffc20e;text-decoration: none;outline: none;
+    &.active{
+      border: $mlRed solid 2px;background: $mlWhite;
+    }
+    &.disable{
+      background: $mlGray; border: #929191 solid 2px; cursor: no-drop;
+      .ml{
+        color:#929191;
+      }
+    }
+
     .ml{
       display: block; margin-top: 4px; font-size: 22px;font-weight:bold;color:$mlBlue;
     }
@@ -1974,5 +1999,95 @@ p{margin-top:10px;}
     position: absolute;
     top: 60px;
     left: 50%;
+  }
+}
+
+.upload_hex {
+  .fa{
+    position: absolute;    right: -10px;    background: #ef4647;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    z-index: 99;
+    top: -5px;
+    color: #fff;
+  }
+  display: block;
+  background: #273545;
+  border: 0px;
+  position: relative;
+  height: 136px;
+  z-index: 1;
+  width: 99px;
+  margin-top: 8px;
+  margin-right: auto;
+  margin-left: auto;
+  text-align: center;
+  line-height: 136px;
+}
+
+.upload_hex:before {
+  position: absolute;
+  left: -30px;
+  content: " ";
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 67px 30px 67px 0px;
+  border-color: transparent #273545 transparent transparent;
+  top: 1px;
+}
+
+.upload_hex:after {
+  position: absolute;
+  right: -30px;
+  content: " ";
+  width: 0px;
+  height: 0px;
+  border-style: solid;
+  border-width: 67px 0px 67px 30px;
+  border-color: transparent transparent transparent #273545;
+  top: 1px;
+}
+.upload_hex input.upload {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: 0;
+  padding: 0;
+  font-size: 20px;
+  cursor: pointer;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  width: 115px;
+  height: 70px;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+}
+
+.upload_hex img {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  z-index: 1;
+}
+.red_color_btn{
+  background: $mlRed !important;color: $mlWhite !important;
+  &:after{
+    border-color: transparent transparent transparent $mlRed !important;
+  }
+  &:before{
+    border-color: transparent $mlRed transparent transparent !important;
+  }
+}
+
+.blue_color_btn{
+  background: $mlBlue !important;color: $mlWhite !important;
+  &:after{
+    border-color: transparent transparent transparent $mlBlue !important;
+  }
+  &:before{
+    border-color: transparent $mlBlue transparent transparent !important;
   }
 }

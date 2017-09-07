@@ -53,7 +53,8 @@ MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
 MlResolver.MlQueryResolver['fetchOfficeSC'] = (obj, args, context, info) => {
   let officeSC = [];
   if (context.userId) {
-    let myOffices = mlDBController.find('MlOfficeMembers', {userId: context.userId, isActive:true}).fetch().map(function (data) {
+    var defaultProfile = new MlUserContext().userProfileDetails(context.userId)
+    let myOffices = mlDBController.find('MlOfficeMembers', {userId: context.userId, profileId:defaultProfile.profileId, isActive:true}).fetch().map(function (data) {
       return data.officeId;
     });
     let officeQuery= {
@@ -64,7 +65,8 @@ MlResolver.MlQueryResolver['fetchOfficeSC'] = (obj, args, context, info) => {
           }
         },
         {
-          userId: context.userId
+          userId: context.userId,
+          profileId:defaultProfile.profileId
         }
       ],
       isActive:true

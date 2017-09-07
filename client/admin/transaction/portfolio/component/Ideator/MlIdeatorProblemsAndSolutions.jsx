@@ -158,9 +158,9 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
           }
           this.libraryAction(fileObjectStructure)
         }
-          if(result.success){
-              this.fetchOnlyImages();
-          }
+        if(result.success){
+            this.fetchOnlyImages();
+        }
       }
   }
 

@@ -147,6 +147,7 @@ export default class MlIdeatorAudience extends React.Component{
         }
         this.libraryAction(fileObjectStructure)
       }
+      this.fetchOnlyImages();
     }
   }
 

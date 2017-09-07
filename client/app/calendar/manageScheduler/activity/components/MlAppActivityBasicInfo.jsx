@@ -232,7 +232,7 @@ export default class MlAppBasicInfo extends React.Component{
   addDeliverables(index, evt) {
     let deliverable = _.cloneDeep(this.state.basicData.deliverable);
     let basicData = _.cloneDeep(this.state.basicData);
-    deliverable.splice(index+1, 0, '');
+    deliverable.splice(index, 0, '');
     basicData.deliverable = deliverable;
     this.setState({
       basicData: basicData

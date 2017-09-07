@@ -291,7 +291,7 @@ class MlOfficeRepo{
             return {success:false, msg:'Invalid Community Type'}
 
           if(obj.userCount == 0)
-            return {success:false, msg:'Limit Exceeded'}
+            return {success:false, msg:obj.communityName+' Limit Exceeded'}
         }
         return {success:true}
     }

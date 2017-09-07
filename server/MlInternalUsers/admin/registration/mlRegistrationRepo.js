@@ -114,6 +114,44 @@ class MlRegistrationRepo{
       {"profile.externalUserProfiles.$.isApprove": true}, {$set: true}, context);
   }
 
+  /**
+   * creating the registration for moolya in case of
+   * 1) non-moolya subchapter
+   * 2) transact with moolya enabled
+   * */
+  createRegistrationProxy(registrationId, context) {
+    //check the condition if canTransact is enabled in moolya then only follow the steps
+    var registrationDetails = mlDBController.findOne('MlRegistration', {_id: registrationId}) || {}
+    registrationDetails = _.omit(registrationDetails, '_id')
+    var subChapterId = registrationDetails.registrationInfo && registrationDetails.registrationInfo.subChapterId ? registrationDetails.registrationInfo.subChapterId : ''
+    var subChapterDetails = mlDBController.findOne('MlSubChapters', {_id: subChapterId}) || {}
+    var resp = null
+    if (subChapterDetails && !subChapterDetails.isDefaultSubChapter) {
+      var defaultSubChapter = mlDBController.findOne('MlSubChapters', {
+        clusterId: subChapterDetails.clusterId,
+        chapterId: subChapterDetails.chapterId,
+        isDefaultSubChapter: true
+      })
+      registrationDetails.status = "Yet To Start"
+      let regInfo = registrationDetails.registrationInfo
+      var isRegister = mlDBController.findOne('MlRegistration', {
+        "registrationInfo.clusterId": regInfo.clusterId,
+        "registrationInfo.chapterId": regInfo.chapterId,
+        "registrationInfo.subChapterId": defaultSubChapter._id,
+        "registrationInfo.userId": regInfo.userId
+      })
+      if (!isRegister && regInfo.userId) {
+        regInfo.registrationDate = new Date()
+        regInfo.subChapterId = defaultSubChapter._id
+        regInfo.subChapterName = defaultSubChapter.subChapterName
+        orderNumberGenService.assignRegistrationId(regInfo)
+        registrationDetails.transactionId = regInfo.registrationId
+        registrationDetails.registrationInfo = regInfo
+        resp = mlDBController.insert('MlRegistration', registrationDetails, context)
+        return resp
+      }
+    }
+  }
 }
 const mlRegistrationRepo = new MlRegistrationRepo();
 Object.freeze(mlRegistrationRepo);

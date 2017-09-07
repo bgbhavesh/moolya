@@ -319,6 +319,10 @@ export default class MlAppRegStep5 extends React.Component {
     this.setState({[key]: false})
   }
 
+  exitRegistration(){
+    FlowRouter.go('/app/dashboard')
+  }
+
   render() {
     let MlActionConfig
     let userType = this.props.userType;
@@ -399,7 +403,7 @@ export default class MlAppRegStep5 extends React.Component {
       {
         showAction: true,
         actionName: 'exit',
-        handler: null
+        handler: this.exitRegistration.bind(this)
       }
     ]
 

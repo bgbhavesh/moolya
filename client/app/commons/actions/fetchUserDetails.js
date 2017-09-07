@@ -72,6 +72,30 @@ export async function requestPortfolioForGoLive(resId) {
   return response
 }
 
+export async function findDefaultProfile() {
+  const result = await appClient.query({
+    query: gql`
+      query{
+        findDefaultUserProfile{
+          profileId,
+          countryId,
+          clusterId,
+          clusterName,
+          chapterId,
+          chapterName,
+          subChapterId,
+          subChapterName,
+          communityId,
+          communityName
+        }
+      }
+    `
+  })
+
+  const response = result.data.findDefaultUserProfile;
+  return response
+}
+
 
 export function getNotifications(cb) {
   mlConversationUtils.getUnreadNotifications(cb)

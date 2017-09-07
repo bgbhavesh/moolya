@@ -1,11 +1,16 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
 import _ from "lodash";
+import ScrollArea from "react-scrollbar";
 
 export default class MlAppTermsAndConditions extends Component {
   constructor(props) {
     super(props);
     return this;
+  }
+  componentDidUpdate() {
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.app_header').outerHeight(true)));
   }
 
   render() {
@@ -14,7 +19,15 @@ export default class MlAppTermsAndConditions extends Component {
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap no_padding">
-          <div className="list_view_block">
+          <div className="main_wrap_scroll">
+            <ScrollArea
+              speed={0.8}
+              className="main_wrap_scroll"
+              smoothScrolling={true}
+              default={true}
+            >
+          <div className="col-md-12">
+            <div className="blank_content">
             <h5>Introduction</h5>
             <p>
               These Standard Terms and Conditions written on this webpage shall manage your use of this website and the related mobility applications (hereby jointly called as ‘Website’ for the entire course of the document). These Terms and Conditions will be applied fully and affect your use of this Website. By using this Website, you agree and agree to abide by all terms and conditions written in here as well as the ones which are updated from time to time. You MUST NOT use this Website if you disagree with any of these Website Standard Terms and Conditions. User Registrations and Transactions on the application are allowed for majors only. The age for being a major may vary from country/state to country/state and the prevailing law of the land where the user is registering from will be applicable for defining the age from being a major. This ‘Terms and Conditions’ document also includes the ‘Disclaimer’ document. Please read and accept the points completely, before you proceed further.</p>
@@ -170,6 +183,8 @@ export default class MlAppTermsAndConditions extends Component {
 
             </ul>
           </div>
+          </div>
+            </ScrollArea></div>
           </div>
         </div>
     )

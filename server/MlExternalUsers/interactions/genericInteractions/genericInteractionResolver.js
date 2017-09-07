@@ -50,6 +50,10 @@ MlResolver.MlQueryResolver['fetchInteractionsCount'] = (obj, args, context, info
           let enquireCount=MlInquiries.find({resourceType:resourceType,resourceId:resourceId}).count();
           counterList.push({'actionName':'enquire',count:enquireCount});
           break
+        case 'follow':
+          let followCount=MlFollowings.find({'followerId':resourceDetails.resourceOwnerId,"isActive" : true}).count();
+          counterList.push({'actionName':'follow',count:followCount});
+          break
       }
     });
   }

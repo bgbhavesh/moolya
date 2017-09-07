@@ -1,7 +1,7 @@
 import React, { Component, PropTypes }  from "react";
 import {render} from "react-dom";
 import gql from "graphql-tag";
-import Moolyaselect from "../../../../../../../commons/components/MlAdminBugReportWrapper";
+import Moolyaselect from "../../../../../../../commons/components/MlAdminSelectWrapper";
 import Datetime from "react-datetime";
 import _ from 'lodash';
 import ScrollArea from "react-scrollbar";

@@ -5,6 +5,7 @@ import Moolyaselect from "../../../../../../../commons/components/MlAdminSelectW
 import Datetime from "react-datetime";
 import _ from 'lodash';
 import ScrollArea from "react-scrollbar";
+import {initalizeFloatLabel} from '../../../../../../../utils/formElemUtil';
 
 export default class MlInstitutionEmployeeBreakup extends React.Component{
   constructor(props, context){
@@ -95,6 +96,10 @@ export default class MlInstitutionEmployeeBreakup extends React.Component{
      }*/
   }
 
+  componentDidUpdate(){
+    initalizeFloatLabel();
+  }
+  
   fetchDetails(){
     let that = this;
     //let portfoliodetailsId=that.props.portfolioDetailsId;

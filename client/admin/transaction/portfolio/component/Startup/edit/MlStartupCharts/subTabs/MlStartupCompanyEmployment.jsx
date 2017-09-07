@@ -4,6 +4,8 @@ import Datetime from "react-datetime";
 import _ from 'lodash';
 import ScrollArea from "react-scrollbar";
 
+import {initalizeFloatLabel} from '../../../../../../../utils/formElemUtil';
+
 export default class MlCompanyEmployment extends React.Component{
   constructor(props, context){
     super(props)
@@ -30,6 +32,9 @@ export default class MlCompanyEmployment extends React.Component{
     if(!empty){
       this.setState({loading: false, startupCompanyEmployment: this.context.startupPortfolio.employmentOfCompanyChart, employmentList:this.context.startupPortfolio.employmentOfCompanyChart});
     }*/
+  }
+  componentDidUpdate(){
+    initalizeFloatLabel();
   }
   fetchDetails(){
     let that = this;

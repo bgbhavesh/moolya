@@ -5,6 +5,7 @@ import Moolyaselect from "../../../../../../../../admin/commons/components/MlAdm
 import Datetime from "react-datetime";
 import _ from 'lodash';
 import ScrollArea from "react-scrollbar";
+import {initalizeFloatLabel} from '../../../../../../../utils/formElemUtil';
 
 export default class MlEmployeeBreakup extends React.Component{
   constructor(props, context){
@@ -93,6 +94,9 @@ export default class MlEmployeeBreakup extends React.Component{
      if(!empty){
      this.setState({loading: false, startupCompanyData: this.context.startupPortfolio.employeeBreakupDepartmentChart, dataList:this.context.startupPortfolio.employeeBreakupDepartmentChart});
      }*/
+  }
+  componentDidUpdate(){
+    initalizeFloatLabel();
   }
 
   fetchDetails(){

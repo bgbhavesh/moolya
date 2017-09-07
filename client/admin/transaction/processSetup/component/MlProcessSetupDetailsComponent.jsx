@@ -61,13 +61,31 @@ export default class MlProcessSetupDetailsComponent extends React.Component {
 
   optionsBySelectStage(sIdx, selectedValue){
     let stages = this.state.stages;
-    stages[sIdx]['stageId'] = selectedValue;
-    this.setState({stages: stages});
+    let findActionIndex=stages.findIndex(function(obj){
+      if(obj.stageId === selectedValue){
+        return obj;
+      }
+    });
+    if(findActionIndex!=-1){
+      toastr.error("Stage cannot be duplicate");
+    }else{
+      stages[sIdx]['stageId'] = selectedValue;
+      this.setState({stages: stages});
+    }
   }
   optionsBySelectAction(sIdx, aIdx, selectedValue){
     let stages = this.state.stages
-    stages[sIdx].stageActions[aIdx]['actionId'] = selectedValue;
-    this.setState({stages:stages})
+    let findActionIndex=stages[sIdx].stageActions.findIndex(function(obj){
+      if(obj.actionId === selectedValue){
+       return obj;
+      }
+    });
+    if(findActionIndex!=-1){
+      toastr.error("Action cannot be duplicate");
+    }else{
+      stages[sIdx].stageActions[aIdx]['actionId'] = selectedValue;
+      this.setState({stages:stages})
+    }
   }
   onStageStatusChange(sIdx, e){
     let value = e.target.checked

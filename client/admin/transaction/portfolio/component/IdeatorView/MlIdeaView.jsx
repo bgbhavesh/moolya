@@ -145,7 +145,7 @@ export default class MlIdeaView extends React.Component {
                 {image?<img src={image} id="blah" width="105" height="auto"/>:<div className="hex_outer portfolio-font-icons"><span className="ml ml-idea"></span></div>}
               </div>
             </div>
-            <div className="form_bg col-lg-8 col-lg-offset-2">
+            <div className="form_bg col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
               <div className="form-group">
 
               {/*  <input type="text" placeholder="Title" className="form-control float-label" id="cluster_name"

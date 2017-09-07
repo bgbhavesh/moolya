@@ -16,7 +16,9 @@ import {fetchMasterTasks} from '../../actions/fetchMasterInternalTask';
 import {createSelfInternalTask} from '../../actions/createSelfInternalTask';
 import { fetchOfficeActionHandler, getTeamUsersActionHandler } from '../../actions/fetchOffices';
 let FontAwesome = require('react-fontawesome');
-
+import MlAccordion from "../../../commons/components/MlAccordion";
+import formHandler from "../../../../commons/containers/MlFormHandler";
+import MlAppActionComponent from "../../../commons/components/MlAppActionComponent";
 
 let yesterday = Datetime.moment().subtract( 1, 'day' );
 let valid = function( current ){
@@ -26,7 +28,7 @@ let valid = function( current ){
 /**
  * Initialize conversation types
  */
-export default class MlAppInternalMyTaskItem extends React.Component{
+class MlAppInternalMyTaskItem extends React.Component{
 
   /**
    * Constructor
@@ -210,7 +212,33 @@ export default class MlAppInternalMyTaskItem extends React.Component{
    */
   render() {
     const that = this;
-
+    /**
+     * Setting up action handler for activity different event
+     */
+    let appActionConfig = [
+      {
+        showAction: true,
+        actionName: 'save',
+        handler: async(event) => that.props.handler(that.saveDetails.bind(this))
+      },
+      {
+        showAction: true,
+        actionName: 'cancel',
+        handler: async(event) => that.props.handler(that.props.updateType.bind(this, 'list'))
+      }
+    ];
+    export const genericPortfolioAccordionConfig = {
+      id: 'portfolioAccordion',
+      panelItems: [
+        {
+          'title': 'Actions',
+          isText: false,
+          style: {'background': '#ef4647'},
+          contentComponent: <MlAppActionComponent
+            resourceDetails={{resourceId: 'mytask', resourceType: 'mytask'}}   //resource id need to be given
+            actionOptions={appActionConfig}/>
+        }]
+    };
     /**
      * Return the html to render
      */
@@ -234,6 +262,7 @@ export default class MlAppInternalMyTaskItem extends React.Component{
                 </div>
 
                 <div className="form-group">
+                  <span className={`placeHolder ${this.state.basicData && this.state.basicData.dueDate ? 'active' : ''}`}>Due Date</span>
                   <Datetime dateFormat="DD-MM-YYYY"
                             isValidDate={valid}
                             timeFormat={false}
@@ -332,11 +361,14 @@ export default class MlAppInternalMyTaskItem extends React.Component{
           </div>
 
         </ScrollArea>
-        <div className="ml_btn" style={{'textAlign':'center'}}>
+        {/*<div className="ml_btn" style={{'textAlign':'center'}}>
           <a href="" className="save_btn" onClick={this.saveDetails.bind(this)}>Save</a>
           <a href="" className="cancel_btn" onClick={()=>that.props.updateType('list')} >Cancel</a>
-        </div>
+        </div>*/}
+        <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
       </div>
     )
   }
 };
+
+export default MlAppInternalMyTaskItem = formHandler()(MlAppInternalMyTaskItem);

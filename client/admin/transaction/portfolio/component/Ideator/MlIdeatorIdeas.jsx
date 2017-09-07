@@ -169,7 +169,7 @@ export default class MlIdeatorIdeas extends React.Component{
             </div>
           </a>
         </div>
-        <div className="form_bg col-lg-8 col-lg-offset-2">
+        <div className="form_bg col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
           <form>
             <div className="form-group">
               <input type="text" placeholder="Title" className="form-control float-label" id="cluster_name" defaultValue={this.state.data.title} name="title" onBlur={this.handleBlur.bind(this)}/>

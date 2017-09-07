@@ -18,6 +18,7 @@ import _ from "lodash";
 import _underscore from 'underscore'
 import update from "immutability-helper";
 import MlLoader from '../../../commons/components/loader/loader'
+import { initalizeFloatLabel } from '../../../commons/utils/formElemUtil';
 
 export default class AppContactDetails extends React.Component {
   constructor(props) {
@@ -45,6 +46,9 @@ export default class AppContactDetails extends React.Component {
     this.fetchCountryCode();
   }
 
+  componentDidUpdate() {
+    initalizeFloatLabel();
+  }
 
   tabSelected(index, value) {
     this.setState({selectedContactTab: true});

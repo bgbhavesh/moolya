@@ -81,6 +81,9 @@ $menuTrans:all 0.5s linear;
 .app_menu ul .menu_item.active_menu {background: $mlRed;}
 .app_menu ul .menu_item.active_menu:before {border-bottom: 20px solid $mlRed;}
 .app_menu ul .menu_item.active_menu .menu_in{color:#fff;}
+.app_menu ul .menu_item.inactive_menu {background: $mlGray;}
+.app_menu ul .menu_item.inactive_menu:before {border-bottom: 20px solid $mlGray;}
+.app_menu ul .menu_item.inactive_menu .menu_in{color:#8c8c8c;}
 .app_menu ul li.menu_item:last-child{height: 32px;}
 .app_menu ul li.menu_item:last-child .menu_in{display: none;}
 .app_menu ul li.menu_item:last-child:after{display: none;}

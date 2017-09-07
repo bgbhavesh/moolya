@@ -233,8 +233,8 @@ export default class MlAppBasicInfo extends React.Component{
   addDeliverables(index, evt) {
     let deliverable = _.cloneDeep(this.state.basicData.deliverable);
     let basicData = _.cloneDeep(this.state.basicData);
-    deliverable.splice(index+1, 0, '');
-    basicData.deliverable = deliverable.reverse();
+    deliverable.splice(index, 0, '');
+    basicData.deliverable = deliverable;
     this.setState({
       basicData: basicData
     }, () => {
@@ -345,7 +345,7 @@ export default class MlAppBasicInfo extends React.Component{
                   <br className="brclear"/>
                 </div>
                 <div className="form-group">
-                  <span className={`placeHolder ${(this.state.basicData.conversation && this.state.basicData.conversation.length > 0) ? 'active' : ''}`}>Conversation type</span>
+                  <span className="placeHolder active">Conversation type</span>
                   <div className="form-group">
                     <Select name="form-field-name"
                             multi={true}
@@ -436,8 +436,8 @@ export default class MlAppBasicInfo extends React.Component{
                 <div className="panel-heading">
                   Deliverables
                   <span className="see-more pull-right">
-                    <FontAwesome name='minus-square' hidden={ index == 0 } onClick={that.removeDeliverables.bind(that,index)} />
                     <FontAwesome name='plus-square' hidden={ index !== 0 } onClick={that.addDeliverables.bind(that, index)} />
+                    <FontAwesome name='minus-square' hidden={ index == 0 } onClick={that.removeDeliverables.bind(that,index)} />
                   </span>
                 </div>
                 <div className="panel-body">

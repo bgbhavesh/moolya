@@ -15,6 +15,7 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 import _underscore from "underscore";
 import update from "immutability-helper";
+import { initalizeFloatLabel } from '../../../commons/utils/formElemUtil';
 
 export default class AppEmailDetails extends React.Component {
   constructor(props) {
@@ -34,6 +35,11 @@ export default class AppEmailDetails extends React.Component {
 
   componentDidMount() {
     this.findRegistration.bind(this);
+    initalizeFloatLabel();
+  }
+
+  componentWillUpdate() {
+    //initalizeFloatLabel();
   }
 
   async findRegistration() {

@@ -12,6 +12,13 @@ const SMS = [
   },
   {
     PORTFOLIO_UPDATE:"Your moolya portfolio has been changed on"
+  },
+  {
+    PORTFOLIO_GOLIVE_APPROVE:"Your moolya portfolio has been changed on"
+  },
+
+  {
+    PORTFOLIO_GOLIVE_DECLINE:"Your moolya portfolio has been changed on"
   }
 ]
 

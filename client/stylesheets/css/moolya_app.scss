@@ -1622,7 +1622,7 @@ p{margin-top:10px;}
   }
 }
 .bugReport{
-      right: -350px; position: fixed; z-index: 2; transition: .5s linear; top: 37%;
+      right: -350px; position: fixed; z-index: 2; transition: .5s linear; top: 50%;
     &.open{
       right: 0;
       .bug_button:hover{color:$mlBlack;right:340px;}

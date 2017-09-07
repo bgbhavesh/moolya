@@ -289,7 +289,7 @@ export default class MlStartupAssets extends React.Component{
 
           </ScrollArea>
           <Popover placement="right" isOpen={this.state.popoverOpen} target={"create_client"+this.state.selectedObject} toggle={this.toggle}>
-            <PopoverTitle>Add Asset</PopoverTitle>
+            <PopoverTitle>Asset</PopoverTitle>
             <PopoverContent>
               <div  className="ml_create_client">
                 <div className="medium-popover"><div className="row">

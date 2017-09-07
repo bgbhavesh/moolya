@@ -26,7 +26,7 @@ export default class MlAppFunderListView extends Component {
     let that = this
     const data = this.props.data || [];
     const list = data.map((funder, idx) =>
-      <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={idx}>
+      <div className="col-md-3 col-sm-4 col-lg-2" key={idx}>
         <a href='' onClick={that.viewFunderDetails.bind(that, funder.portfolioDetailsId)}>
           <div className="ideators_list_block">
             <div className="premium"><span>{funder.accountType}</span></div>

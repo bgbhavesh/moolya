@@ -32,7 +32,7 @@ export default class  MlFunderServicesListView extends Component {
               <a href=" " onClick={() => that.props.componentToView('createBeSpoke')}>
                 <div className="list_block notrans">
                   <div className="hex_outer"><span className="ml ml-plus "></span></div>
-                  <h3>Create a BeSpoke</h3>
+                  <h3>Request BeSpoke</h3>
                 </div>
               </a>
             </div>:<div></div>}

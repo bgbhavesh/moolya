@@ -44,11 +44,13 @@ export default class MlFunderAbout extends React.Component {
   }
   componentDidUpdate()
   {
+    var className = this.props.isAdmin?"admin_header":"app_header"
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-    $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
+    // $('.main_wrap_scroll').height(WinHeight-($('.admin_header').outerHeight(true)+120));
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
     if(WinWidth > 768){
-      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
+      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
     OnLockSwitch();
     dataVisibilityHandler();
     /*var WinHeight = $(window).height();
@@ -303,8 +305,13 @@ export default class MlFunderAbout extends React.Component {
         {showLoader === true ? ( <MlLoader/>) : (
       <div>
         <h2>About Us</h2>
-        <div className="tab_wrap_scroll">
-
+        <div className="main_wrap_scroll">
+          <ScrollArea
+            speed={0.8}
+            className="main_wrap_scroll"
+            smoothScrolling={true}
+            default={true}
+          >
             <div className="col-md-6 nopadding-left">
 
                   <div className="form_bg">
@@ -459,6 +466,7 @@ export default class MlFunderAbout extends React.Component {
 
             </div>
           <br className="brclear"/>
+            </ScrollArea>
         </div>
       </div>
           )}

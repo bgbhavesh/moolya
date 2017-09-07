@@ -359,7 +359,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
             queryObj.communityDefName=userType;
             var pipeline=[
               {
-                $match: {"profile.isSystemDefined":{$exists:false}, "profile.isExternaluser":true,'profile.externalUserProfiles':{$elemMatch:queryObj}}
+                $match: {"profile.isSystemDefined":{$exists:false}, "profile.isExternaluser":true, 'profile.isActive':true, 'profile.externalUserProfiles':{$elemMatch:queryObj}}
               },
               {
                 $unwind :"$profile.externalUserProfiles"
@@ -423,7 +423,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         else{
             var pipeline=[
               {
-                $match: {"profile.isSystemDefined":{$exists:false}, "profile.isExternaluser":true,'profile.externalUserProfiles':{$elemMatch:queryObj}}
+                $match: {"profile.isSystemDefined":{$exists:false}, "profile.isExternaluser":true, 'profile.isActive':true, 'profile.externalUserProfiles':{$elemMatch:queryObj}}
               },
               {
                 $unwind :"$profile.externalUserProfiles"

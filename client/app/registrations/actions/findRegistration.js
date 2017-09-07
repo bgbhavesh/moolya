@@ -268,7 +268,7 @@ export async function fetchPendingRegistration() {
 
 export async function fetchSubChapterDetails(id) {
   let subChapterId = id
-  const result = await client.query({
+  const result = await appClient.query({
     query: gql`query($id: String){  
       isSubChapterMoolyaNonMoolya(id:$id){
         _id

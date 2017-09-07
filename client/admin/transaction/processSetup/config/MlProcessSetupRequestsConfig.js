@@ -14,7 +14,7 @@ const mlProcessSetupRequestsTableConfig=new MlViewer.View({
   searchFields:["dateTime","profileId" ,"name" , "clusterName", "chapterName", "subChapterName", "communityId", "status"],
   throttleRefresh:false,
   pagination:true,//To display pagination
-  filter:false,
+  filter:true,
   filterComponent: <MlCustomFilter module="processSetup" moduleName="processSetup" client={client}/>,
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true,selectRow:true},

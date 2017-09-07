@@ -16,19 +16,21 @@ import MlCompanyPartners from "../../../../admin/transaction/portfolio/component
 import MlCompanyCSREditTabs from "../../../../admin/transaction/portfolio/component/Company/edit/CSR/MlCompanyCSREditTabs"
 import MlCompanyIntrapreneur from '../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyIntrapreneur'
 import MlCompanyRAndD from '../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyR&D'
+import MlCompanyLookingFor from '../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyLookingFor'
 import MlCompanyCharts from "../../../../admin/transaction/portfolio/component/Company/edit/MlCompanyEditCharts";
 import PortfolioLibrary from '../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 
 export default class MlAppCompaniesEditTabs extends Component {
   constructor(props) {
     super(props)
-    this.state = {tabs: [], companyPortfolio: {}};
+    this.state = {tabs: [], companyPortfolio: {}, portfolioKeys: {privateKeys: [], removePrivateKeys: []}};
     this.getChildContext.bind(this)
   }
 
   getChildContext() {
     return {
-      companyPortfolio: this.state.companyPortfolio
+      companyPortfolio: this.state.companyPortfolio,
+      portfolioKeys: this.state.portfolioKeys
     }
   }
   setBackHandler(backMethod){
@@ -70,6 +72,7 @@ export default class MlAppCompaniesEditTabs extends Component {
       {tabClassName: 'tab', panelClassName: 'panel', title:"CSR" , component:<MlCompanyCSREditTabs key="11" client={appClient} getCSRDetails={this.getCSRDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} backClickHandler={this.setBackHandler.bind(this)} isApp={true}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"R&D" , component:<MlCompanyRAndD key="13" client={appClient} getRDDetails={this.getRDDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Intrapreneur" , component:<MlCompanyIntrapreneur key="12" client={appClient} getIntrapreneurDetails={this.getIntrapreneurDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlCompanyLookingFor key="14" client={appClient} getLookingForDetails={this.getLookingForDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
     ]
     return tabs;
   }
@@ -204,6 +207,16 @@ export default class MlAppCompaniesEditTabs extends Component {
     this.props.getPortfolioDetails({companyPortfolio:this.state.companyPortfolio}, privateKey);
   }
 
+  getLookingForDetails(details, privatekey) {
+
+    let data = this.state.companyPortfolio;
+    if (data && !data.lookingFor) {
+      data['lookingFor'] = [];
+    }
+    data['lookingFor'] = details;
+    this.setState({companyPortfolio: data})
+    this.props.getPortfolioDetails({companyPortfolio: this.state.companyPortfolio}, privatekey);
+  }
   /**
    * tab mounting component
    * */
@@ -222,6 +235,22 @@ export default class MlAppCompaniesEditTabs extends Component {
     this.setState({tabs: getTabs() || []});
   }
 
+  getAllPrivateKeys(privateKeys, removePrivateKeys) {
+    let obj = {
+      privateKeys:privateKeys,
+      removePrivateKeys:removePrivateKeys
+    }
+    this.setState({portfolioKeys: obj});
+    return obj
+  }
+
+  componentWillReceiveProps(newProps) {
+    console.log('newProps', newProps);
+    if (newProps) {
+      const resp = this.getAllPrivateKeys(newProps.privateKeys, newProps.removePrivateKeys);
+      return resp
+    }
+  }
   render() {
     let tabs = this.state.tabs;
     return <MlTabComponent tabs={tabs}/>
@@ -233,4 +262,5 @@ export default class MlAppCompaniesEditTabs extends Component {
  * */
 MlAppCompaniesEditTabs.childContextTypes = {
   companyPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };

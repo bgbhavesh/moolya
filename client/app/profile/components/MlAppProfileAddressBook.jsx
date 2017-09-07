@@ -40,9 +40,9 @@ export default class MlAppProfileAddressBook extends React.Component {
     }
   }
 
-  componentDidMount() {
+  componentDidUpdate() {
     var WinHeight = $(window).height();
-    $('.left_wrap').height(WinHeight - (160 + $('.admin_header').outerHeight(true)));
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.app_header').outerHeight(true)));
   }
 
   render() {
@@ -54,18 +54,19 @@ export default class MlAppProfileAddressBook extends React.Component {
     let registerId = this.state.data?this.state.data.registrationId:''
     let profileId = this.state.data?this.state.data.profileId:''
     return (
-      <div className="admin_main_wrap">
+      <div className="app_main_wrap">
         {showLoader === true ? (<MlLoader/>) : (
-        <div className="admin_padding_wrap">
+        <div className="app_padding_wrap  ">
+
           <h2>My Contact Details</h2>
-          <div className="main_wrap_scroll">
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
-              <div className="row">
+
+              <div className="col-md-12  main_wrap_scroll nopadding">
+                <ScrollArea
+                  speed={0.8}
+                  className="main_wrap_scroll"
+                  smoothScrolling={true}
+                  default={true}
+                >
                 <div className="col-lg-6 ">
                   <form>
                     <div className="panel panel-default new_profile_tabs">
@@ -92,9 +93,9 @@ export default class MlAppProfileAddressBook extends React.Component {
                     </div>
                   </form>
                 </div>
+                </ScrollArea>
               </div>
-            </ScrollArea>
-          </div>
+
         </div>)}
       </div>
     )

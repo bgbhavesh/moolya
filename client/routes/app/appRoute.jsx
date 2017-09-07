@@ -17,6 +17,8 @@ import MyList from "../../app/profile/components/myList/MyList";
 import MlAppMyOffice from "../../../client/app/profile/office/components/MlAppMyOffice";
 import MlAppAddOffice from "../../app/profile/office/components/MlAppAddOffice";
 import MlAppEditOffice from "../../app/profile/office/components/MlAppEditOffice";
+import MlAppTermsAndConditions from "../../app/profile/components/MlAppTermsAndConditions";
+import MlAppPrivacy from "../../app/profile/components/MlAppPrivacy";
 import MlAppMember from "../../app/profile/office/components/OfficeMemberInfo/MlAppMember";
 import MlAppOfficeMembersDetails from "../../app/profile/office/components/MlAppOfficeMembersDetails";
 import MlAppPayOfficeSubscription from "../../app/profile/office/components/MlAppPayOfficeSubscription";
@@ -627,6 +629,22 @@ appSection.route('/myTaskAppointment', {
   name: 'myTaskAppointment',
   action(params){
     mount(AppLayout,{appContent:< MlAppMyTaskAppointment />, isProfileMenu: true})
+  }
+  /**there is no need to send community type other than ideator*/
+});
+
+appSection.route('/termsConditions', {
+  name: 'termsConditions',
+  action(params){
+    mount(AppLayout,{appContent:< MlAppTermsAndConditions />, isProfileMenu: true})
+  }
+  /**there is no need to send community type other than ideator*/
+});
+
+appSection.route('/privacy', {
+  name: 'privacy',
+  action(params){
+    mount(AppLayout,{appContent:< MlAppPrivacy />, isProfileMenu: true})
   }
   /**there is no need to send community type other than ideator*/
 });

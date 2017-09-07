@@ -256,6 +256,47 @@ export default class MlFilterListRepo{
 
         break;
 
+      case "Gen_UserType":
+
+        result= MlUserTypes.find({"isActive" : true}).fetch()
+
+        let genUserTypeResponse=_.each(result,function (option,id) {
+          options.push({"label":option.displayName,"value":option._id})
+        })
+
+        break;
+
+      case "Gen_Industries":
+
+        result= MlIndustries.find({"isActive" : true}).fetch()
+
+        let genIndustriesResponse=_.each(result,function (option,id) {
+          options.push({"label":option.industryDisplayName,"value":option._id})
+        })
+
+        break;
+
+      case "Gen_IdentityTypes":
+
+        result= MlIdentityTypes.find({"isActive" : true}).fetch()
+
+        let genIdentityTypeResponse=_.each(result,function (option,id) {
+          options.push({"label":option.identityTypeDisplayName,"value":option._id})
+        })
+
+        break;
+      case "Gen_Modules":
+
+        result= MlModules.find({"isActive" : true}).fetch()
+
+        let genModulesResponse=_.each(result,function (option,id) {
+          options.push({"label":option.code,"value":option.code})
+        })
+
+        break;
+
+
+
 
     }
 

@@ -19,6 +19,7 @@ import { createActivityActionHandler , getActivityActionHandler, updateActivityA
 import MlAccordion from "../../../../commons/components/MlAccordion";
 import formHandler from "../../../../../commons/containers/MlFormHandler";
 import MlAppActionComponent from "../../../../commons/components/MlAppActionComponent";
+import { initalizeFloatLabel } from '../../../../../commons/utils/formElemUtil';
 
 class MlAppActivity extends Component {
 
@@ -62,6 +63,9 @@ class MlAppActivity extends Component {
     this.getActivityDetails();
   }
 
+  componentWillUpdate() {
+    initalizeFloatLabel();
+  }
   /**
    * Method :: getActivityDetails
    * Desc   :: fetch the current activity details from server and set in state

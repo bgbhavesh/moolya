@@ -24,6 +24,11 @@ let ideatorPortfolioSchema = `
         isActive:Boolean
         portfolioId:String,
         userId:String
+        ideaImage : imagesTypeSchema
+    }
+    type imagesTypeSchema{
+        fileUrl   : String,
+        fileName  : String
     }
     
     

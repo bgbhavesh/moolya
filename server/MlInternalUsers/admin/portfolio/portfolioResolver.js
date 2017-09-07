@@ -11,6 +11,8 @@ import MlAlertNotification from '../../../mlNotifications/mlAlertNotifications/m
 import mlNonMoolyaAccess from "../core/non-moolyaAccessControl/mlNonMoolyaAccess"
 import MlSubChapterAccessControl from '../../../mlAuthorization/mlSubChapterAccessControl'
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
+import mlSmsConstants from '../../../mlNotifications/mlSmsNotifications/mlSmsConstants'
+
 /**
  * @module [externaluser portfolio Landing]
  * @params [context.userId]
@@ -274,6 +276,12 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
         }
     }
 
+    if(response && response.success){
+        var sms = _.find(mlSmsConstants, 'PORTFOLIO_UPDATE')
+        var msg= sms.PORTFOLIO_UPDATE+" "+new Date().toString();
+        portfolioValidationRepo.sendSMSforPortfolio(args.portfoliodetailsId, msg);
+    }
+
     return response;
 }
 
@@ -319,6 +327,11 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
         if(response){
           MlEmailNotification.portfolioSuccessfullGoLive(user);
           MlNotificationController.onGoLiveRequestApproval(user);
+          if(response && response.success){
+            var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
+            var msg = "Your Go-Live request for "+ defaultProfile.communityDefName +" has been approved on"+ new Date()+"."+"Login to moolya for next steps."
+            portfolioValidationRepo.sendSMSforPortfolio(args.portfoliodetailsId, msg);
+          }
         }
         return response
       } else {
@@ -344,6 +357,11 @@ MlResolver.MlMutationResolver['rejectPortfolio'] = (obj, args, context, info) =>
       let user = mlDBController.findOne('users', {_id: regRecord.userId}, context) || {};
       //MlEmailNotification.portfolioGoLiveDecline(user);
       MlNotificationController.onGoLiveRequestDecline(user);
+      if(response && response.success){
+        var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
+        var msg = "Your Go-Live request for "+ defaultProfile.communityDefName +" has been declined on"+ new Date()+"."+"Login to moolya for next steps."
+        portfolioValidationRepo.sendSMSforPortfolio(args.portfoliodetailsId, msg);
+      }
     }
     return updatedResponse;
   }

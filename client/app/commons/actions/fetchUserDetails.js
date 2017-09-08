@@ -100,4 +100,5 @@ export async function findDefaultProfile() {
 export function getNotifications(cb) {
   mlConversationUtils.getUnreadNotifications(cb)
   mlConversationUtils.getNotifications(cb)
+  //mlConversationUtils.ackNotification(cb)
 }

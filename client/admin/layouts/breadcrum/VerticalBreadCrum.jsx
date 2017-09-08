@@ -30,126 +30,161 @@ export default class VerticalBreadCrum extends Component {
       }
     }
   }
-   getHierarchyDetails() {
-     let breadCrum = this.props && this.props.breadcrum ? this.props.breadcrum : null;
-     let breadCrumList = [];
-     if (breadCrum && breadCrum.type === 'hierarchy') {
-       let params = FlowRouter.current().params;
-       getBreadCrumListBasedOnhierarchy(breadCrum.module, params, this.setBreadCrumHierarchyCallback.bind(this));
-     } else if (breadCrum && breadCrum.type === 'setting') {
-       let text = breadCrum.module;
-       let result = text.replace(/([A-Z])/g, " $1");
-       let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
-       let breadCrumObject = [
-         {linkName: 'Setting', linkId: "setting"},
-         {linkName: finalResult, linkId: "module"}
-       ];
-       if (breadCrum.subModule) {
-         let text = breadCrum.subModule;
-         let result = text.replace(/([A-Z])/g, " $1");
-         let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
-         breadCrumObject.push({
-           linkName: finalResult,
-           linkId: "subModule"
-         });
-       }
-       this.setBreadCrumHierarchyCallback(
-         breadCrumObject
-       );
-     } else if (breadCrum && breadCrum.type === 'transaction') {
-       let text = breadCrum.module;
-       let result = text.replace(/([A-Z])/g, " $1");
-       let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
-       let breadCrumObject = [
-         {linkName: 'Transaction', linkId: "transactions"},
-         {linkName: finalResult, linkId: "module"}
-       ];
-       if (breadCrum.subModule) {
-         let text = breadCrum.subModule;
-         let result = text.replace(/([A-Z])/g, " $1");
-         let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
-         breadCrumObject.push({
-           linkName: finalResult,
-           linkId: "subModule"
-         });
-       }
-       this.setBreadCrumHierarchyCallback(
-         breadCrumObject
-       );
-     } else if (breadCrum && breadCrum.type === 'documents') {
-       let text = breadCrum.module;
-       let result = text.replace(/([A-Z])/g, " $1");
-       let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
-       let breadCrumObject = [
-         {linkName: 'Documents', linkId: "documents"},
-         {linkName: finalResult, linkId: "module"}
-       ];
-       if (breadCrum.subModule) {
-         let text = breadCrum.subModule;
-         let result = text.replace(/([A-Z])/g, " $1");
-         let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
-         breadCrumObject.push({
-           linkName: finalResult,
-           linkId: "subModule"
-         });
-       }
-       this.setBreadCrumHierarchyCallback(
-         breadCrumObject
-       );
-     } else if (breadCrum && breadCrum.type === 'users') {
-       let text = breadCrum.module;
-       let result = text.replace(/([A-Z])/g, " $1");
-       let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
-       let breadCrumObject = [
-         {linkName: 'Users', linkId: "users"},
-         {linkName: finalResult, linkId: "module"}
-       ];
-       if (breadCrum.subModule) {
-         let text = breadCrum.subModule;
-         let result = text.replace(/([A-Z])/g, " $1");
-         let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
-         breadCrumObject.push({
-           linkName: finalResult,
-           linkId: "subModule"
-         });
-       }
-       this.setBreadCrumHierarchyCallback(
-         breadCrumObject
-       );
-     } else if (breadCrum && breadCrum.type === 'packages') {
-       let text = breadCrum.module;
-       let result = text.replace(/([A-Z])/g, " $1");
-       let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
-       let breadCrumObject = [
-         {linkName: 'Packages', linkId: "packages"},
-         {linkName: finalResult, linkId: "module"}
-       ];
-       if (breadCrum.subModule) {
-         let text = breadCrum.subModule;
-         let result = text.replace(/([A-Z])/g, " $1");
-         let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
-         breadCrumObject.push({
-           linkName: finalResult,
-           linkId: "subModule"
-         });
-       }
-       this.setBreadCrumHierarchyCallback(
-         breadCrumObject
-       );
-     }
 
+  getHierarchyDetails() {
+    let menuConfig =this.context.menu&&this.context.menu.menu?this.context.menu.menu:[];
+    let breadCrum = null;
+    if(this.props  && this.props.breadcrum){
+      breadCrum = this.props.breadcrum;
+      console.log(breadCrum)
+      if(breadCrum.type === 'hierarchy'){
+        let params = FlowRouter.current().params;
+        getBreadCrumListBasedOnhierarchy(breadCrum.module, params, this.setBreadCrumHierarchyCallback.bind(this));
+      }
+      else if(breadCrum.type){
+        let text = breadCrum.module;
+        let result = text.replace(/([A-Z])/g, " $1");
+        let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+        let breadCrumObject = [
+          {linkName: (breadCrum.type).charAt(0).toUpperCase() + (breadCrum.type).slice(1), linkId: breadCrum.type},
+          {linkName: finalResult, linkId: "module"}
+        ];
+        if (breadCrum.subModule) {
+          let text = breadCrum.subModule;
+          let result = text.replace(/([A-Z])/g, " $1");
+          let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+          breadCrumObject.push({
+            linkName: finalResult,
+            linkId: "subModule"
+          });
+        }
 
-
-    return breadCrumList;
+        breadCrumObject = StaticBreadCrumListHandler(breadCrumObject,breadCrum , menuConfig);
+        this.setBreadCrumHierarchyCallback(
+          breadCrumObject
+        );
+      }
+    }
   }
+
+  //  getHierarchyDetails() {
+  //    let breadCrum = this.props && this.props.breadcrum ? this.props.breadcrum : null;
+  //    let breadCrumList = [];
+  //    if (breadCrum && breadCrum.type === 'hierarchy') {
+  //      let params = FlowRouter.current().params;
+  //      getBreadCrumListBasedOnhierarchy(breadCrum.module, params, this.setBreadCrumHierarchyCallback.bind(this));
+  //    } else if (breadCrum && breadCrum.type === 'setting') {
+  //      let text = breadCrum.module;
+  //      let result = text.replace(/([A-Z])/g, " $1");
+  //      let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+  //      let breadCrumObject = [
+  //        {linkName: 'Setting', linkId: "setting"},
+  //        {linkName: finalResult, linkId: "module"}
+  //      ];
+  //      if (breadCrum.subModule) {
+  //        let text = breadCrum.subModule;
+  //        let result = text.replace(/([A-Z])/g, " $1");
+  //        let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+  //        breadCrumObject.push({
+  //          linkName: finalResult,
+  //          linkId: "subModule"
+  //        });
+  //      }
+  //      this.setBreadCrumHierarchyCallback(
+  //        breadCrumObject
+  //      );
+  //    } else if (breadCrum && breadCrum.type === 'transaction') {
+  //      let text = breadCrum.module;
+  //      let result = text.replace(/([A-Z])/g, " $1");
+  //      let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+  //      let breadCrumObject = [
+  //        {linkName: 'Transaction', linkId: "transactions"},
+  //        {linkName: finalResult, linkId: "module"}
+  //      ];
+  //      if (breadCrum.subModule) {
+  //        let text = breadCrum.subModule;
+  //        let result = text.replace(/([A-Z])/g, " $1");
+  //        let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+  //        breadCrumObject.push({
+  //          linkName: finalResult,
+  //          linkId: "subModule"
+  //        });
+  //      }
+  //      this.setBreadCrumHierarchyCallback(
+  //        breadCrumObject
+  //      );
+  //    } else if (breadCrum && breadCrum.type === 'documents') {
+  //      let text = breadCrum.module;
+  //      let result = text.replace(/([A-Z])/g, " $1");
+  //      let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+  //      let breadCrumObject = [
+  //        {linkName: 'Documents', linkId: "documents"},
+  //        {linkName: finalResult, linkId: "module"}
+  //      ];
+  //      if (breadCrum.subModule) {
+  //        let text = breadCrum.subModule;
+  //        let result = text.replace(/([A-Z])/g, " $1");
+  //        let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+  //        breadCrumObject.push({
+  //          linkName: finalResult,
+  //          linkId: "subModule"
+  //        });
+  //      }
+  //      this.setBreadCrumHierarchyCallback(
+  //        breadCrumObject
+  //      );
+  //    } else if (breadCrum && breadCrum.type === 'users') {
+  //      let text = breadCrum.module;
+  //      let result = text.replace(/([A-Z])/g, " $1");
+  //      let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+  //      let breadCrumObject = [
+  //        {linkName: 'Users', linkId: "users"},
+  //        {linkName: finalResult, linkId: "module"}
+  //      ];
+  //      if (breadCrum.subModule) {
+  //        let text = breadCrum.subModule;
+  //        let result = text.replace(/([A-Z])/g, " $1");
+  //        let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+  //        breadCrumObject.push({
+  //          linkName: finalResult,
+  //          linkId: "subModule"
+  //        });
+  //      }
+  //      this.setBreadCrumHierarchyCallback(
+  //        breadCrumObject
+  //      );
+  //    } else if (breadCrum && breadCrum.type === 'packages') {
+  //      let text = breadCrum.module;
+  //      let result = text.replace(/([A-Z])/g, " $1");
+  //      let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+  //      let breadCrumObject = [
+  //        {linkName: 'Packages', linkId: "packages"},
+  //        {linkName: finalResult, linkId: "module"}
+  //      ];
+  //      if (breadCrum.subModule) {
+  //        let text = breadCrum.subModule;
+  //        let result = text.replace(/([A-Z])/g, " $1");
+  //        let finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+  //        breadCrumObject.push({
+  //          linkName: finalResult,
+  //          linkId: "subModule"
+  //        });
+  //      }
+  //      this.setBreadCrumHierarchyCallback(
+  //        breadCrumObject
+  //      );
+  //    }
+  //
+  //
+  //
+  //   return breadCrumList;
+  // }
    render(){
     let path = FlowRouter.current().route.name;
     let params = FlowRouter.current().params;
     let queryParams = FlowRouter.current().queryParams;
-    let menuConfig =this.context.menu&&this.context.menu.menu?this.context.menu.menu:[];
     let menu, tabOptions;
     let breadCrumList=[];
-
     /*menu = find(path,menuConfig,null,0);
 
     function find(uniqueId, menus,parentId,counter) {
@@ -179,7 +214,7 @@ export default class VerticalBreadCrum extends Component {
     const list=  this.state.breadCrumList.map((prop,id) =>{
        ++counter;
       let lastLinkClass='';
-      let linkUrl=prop.linkUrl&&linkUrl.trim()!==''?prop.linkUrl:'';
+      let linkUrl=prop.linkUrl;
        if(counter===linksLength){
          lastLinkClass='current';
        }
@@ -188,9 +223,6 @@ export default class VerticalBreadCrum extends Component {
      if(linksLength>0){ list.push(<li key={'last'} className='timelineLast'></li>)};
 
     return(
-
-
-
       <div className="vTimeline">
         <ul>
           {list}
@@ -204,7 +236,28 @@ export default class VerticalBreadCrum extends Component {
       </div>
     )
   }
+}
 
+function StaticBreadCrumListHandler(list, breadCrum, menu){
+  let currentModule = {};
+  if(breadCrum.type){
+    menu.map((object)=>{
+      if((object.uniqueId).includes(breadCrum.type)||(breadCrum.type).includes(object.uniqueId)){
+        list[0].linkUrl = object.link;
+        currentModule = object;
+      }
+    });
+    if(breadCrum.subModule){
+      currentModule.subMenu.map((object)=>{
+        if((object.uniqueId).includes(breadCrum.module)){
+          list[1].linkUrl = object.link;
+        }
+      });
+    }
+    // if(breadCrum.sub)
+  }
+
+  return list;
 }
 
 

@@ -46,7 +46,7 @@ class MlEditSubDepartment extends React.Component{
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
 
     OnToggleSwitch(true,true);
-    initalizeFloatLabel();
+
   }
 
   async addEventHandler() {

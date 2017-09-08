@@ -141,7 +141,7 @@ export default class MlIdeaView extends React.Component {
                 {/*<h3>Ideas</h3>*/}
               {/*</div>*/}
               <div className="upload_hex">
-                <FontAwesome name='unlock' className="req_textarea_icon un_lock" id="isIdeaImagePrivate"/>
+                {/*<FontAwesome name='unlock' className="req_textarea_icon un_lock" id="isIdeaImagePrivate"/>*/}
                 {image?<img src={image} id="blah" width="105" height="auto"/>:<div className="hex_outer portfolio-font-icons"><span className="ml ml-idea"></span></div>}
               </div>
             </div>
@@ -150,7 +150,7 @@ export default class MlIdeaView extends React.Component {
 
               {/*  <input type="text" placeholder="Title" className="form-control float-label" id="cluster_name"
                        defaultValue={this.state.portfolioIdeatorInfo.title} name="title" readOnly="true"/>*/}
-
+<br /><br />
                     <p><b>Title:</b>{this.state.portfolioIdeatorInfo.title}</p>
                     <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
                                  id="isIdeasTitlePrivate"/><input
@@ -165,8 +165,8 @@ export default class MlIdeaView extends React.Component {
                             defaultValue={this.state.portfolioIdeatorInfo.description} name="description"
                             readOnly="true"></textarea>*/}
                 <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock"
-                             id="isIdeasPrivate"/><input type="checkbox" className="lock_input" id="makePrivate"
-                                                         checked={this.state.portfolioIdeatorInfo.isIdeaPrivate}/>
+                             id="isIdeasPrivate"/>
+                <input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.portfolioIdeatorInfo.isIdeaPrivate}/>
               </div>
             </div>
           </div>

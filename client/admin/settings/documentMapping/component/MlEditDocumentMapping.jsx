@@ -41,7 +41,7 @@ class MlEditDocumentMapping extends React.Component{
     // this.addEventHandler.bind(this);
     return this;
   }
-  componentDidMount()  {  }
+
 
   // async addEventHandler() {
   //   const resp=await this.createBackendUser();
@@ -189,9 +189,14 @@ class MlEditDocumentMapping extends React.Component{
     var WinHeight = $(window).height();
     $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
     OnToggleSwitch(true,true);
-    initalizeFloatLabel();
+
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+  }
+  componentDidMount()  {
+    setTimeout(function(){
+      initalizeFloatLabel();
+    },1000);
   }
   render(){
     let MlActionConfig = [

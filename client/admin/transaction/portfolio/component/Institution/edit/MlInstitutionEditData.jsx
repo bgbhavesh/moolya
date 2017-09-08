@@ -1,6 +1,7 @@
 import React from 'react';
 import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
 import {fetchInstitutionPortfolioData} from '../../../actions/findPortfolioInstitutionDetails'
+import ScrollArea from "react-scrollbar";
 
 
 export default class MlInstitutionEditData extends React.Component{
@@ -55,9 +56,11 @@ export default class MlInstitutionEditData extends React.Component{
     });
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-    $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
+    var className = this.props.isAdmin ? "admin_header" : "app_header"
+    // $('.main_wrap_scroll').height(WinHeight-($('.admin_header').outerHeight(true)+120));
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
     if(WinWidth > 768){
-      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
     }
   }
 
@@ -99,9 +102,9 @@ export default class MlInstitutionEditData extends React.Component{
     switch(type){
       case 'balanceSheet':
         if(data) {
-          const display = data.map(function(docs){
+          const display = data.map(function(docs, id){
             return(
-              <div className="thumbnail">
+              <div className="thumbnail" key={id}>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -112,9 +115,9 @@ export default class MlInstitutionEditData extends React.Component{
         break;
       case 'profitAndLoss':
         if(data) {
-          const display = data.map(function(docs){
+          const display = data.map(function(docs, id){
             return(
-              <div className="thumbnail">
+              <div className="thumbnail" key={id}>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -125,9 +128,9 @@ export default class MlInstitutionEditData extends React.Component{
         break;
       case 'quaterlyReport':
         if(data) {
-          const display = data.map(function(docs){
+          const display = data.map(function(docs, id){
             return(
-              <div className="thumbnail">
+              <div className="thumbnail" key={id}>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -138,9 +141,9 @@ export default class MlInstitutionEditData extends React.Component{
         break;
       case 'yearlyReport':
         if(data) {
-          const display = data.map(function(docs){
+          const display = data.map(function(docs, id){
             return(
-              <div className="thumbnail">
+              <div className="thumbnail" key={id}>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -151,9 +154,9 @@ export default class MlInstitutionEditData extends React.Component{
         break;
       case 'halfYearlyReport':
         if(data) {
-          const display = data.map(function(docs){
+          const display = data.map(function(docs, id){
             return(
-              <div className="thumbnail">
+              <div className="thumbnail" key={id}>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -164,9 +167,9 @@ export default class MlInstitutionEditData extends React.Component{
         break;
       case 'annualReport':
         if(data) {
-          const display = data.map(function(docs){
+          const display = data.map(function(docs, id){
             return(
-              <div className="thumbnail">
+              <div className="thumbnail" key={id}>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -177,9 +180,9 @@ export default class MlInstitutionEditData extends React.Component{
         break;
       case 'cashFlow':
         if(data) {
-          const display = data.map(function(docs){
+          const display = data.map(function(docs, id){
             return(
-              <div className="thumbnail">
+              <div className="thumbnail" key={id}>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -190,9 +193,9 @@ export default class MlInstitutionEditData extends React.Component{
         break;
       case 'shareHoldings':
         if(data) {
-          const display = data.map(function(docs){
+          const display = data.map(function(docs, id){
             return(
-              <div className="thumbnail">
+              <div className="thumbnail" key={id}>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -203,9 +206,9 @@ export default class MlInstitutionEditData extends React.Component{
         break;
       case 'capitalStructure':
         if(data) {
-          const display = data.map(function(docs){
+          const display = data.map(function(docs, id){
             return(
-              <div className="thumbnail">
+              <div className="thumbnail" key={id}>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -216,9 +219,9 @@ export default class MlInstitutionEditData extends React.Component{
         break;
       case 'ratio':
         if(data) {
-          const display = data.map(function(docs){
+          const display = data.map(function(docs, id){
             return(
-              <div className="thumbnail">
+              <div className="thumbnail" key={id}>
                 <img src={docs.fileUrl} style={{'width':'100px'}} />
                 <div id="images" className="title">{docs.fileName}</div>
               </div>
@@ -235,7 +238,12 @@ export default class MlInstitutionEditData extends React.Component{
       <div>
         <div className="portfolio-main-wrap">
           <h2>Data</h2>
-          <div className="tab_wrap_scroll">
+          <div className="main_wrap_scroll">
+            <ScrollArea
+              speed={0.8}
+              className="main_wrap_scroll"
+              smoothScrolling={true}
+              default={true}>
             <div className="col-md-6 col-sm-6 nopadding-left">
               <div className="panel panel-default">
                 <div className="panel-heading">
@@ -360,6 +368,7 @@ export default class MlInstitutionEditData extends React.Component{
                 </div>
               </div>
             </div>
+              </ScrollArea>
           </div>
         </div>
       </div>

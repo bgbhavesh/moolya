@@ -144,7 +144,7 @@ export default class  BeSpokeView extends Component {
                         </div>
                         <div className="panel-body nopadding">
                           <div className="upload-file-wrap">
-                            <input type="file"  name="fileinput[]" id="fileinput" onChange={(e)=>that.props.fileUpload(e, index)}  />
+                            <input type="file" className="inputfile inputfile-upload"  name="fileinput[]" id="fileinput" onChange={(e)=>that.props.fileUpload(e, index)}  />
                             {/*<input type="file" name="fileinput[]" id="fileinput" className="inputfile inputfile-upload"*/}
                             {/*data-multiple-caption="{count} files selected" accept="image/*" onchange="loadFile(event)"*/}
                             {/*multiple/>*/}

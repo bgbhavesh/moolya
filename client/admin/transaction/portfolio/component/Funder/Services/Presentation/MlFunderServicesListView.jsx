@@ -25,10 +25,10 @@ export default class  MlFunderServicesListView extends Component {
   servicesListView(){
     let that = this;
     return(
-      <div className="app_main_wrap" style={{'overflow':'auto'}}>
-        <div className="app_padding_wrap">
-          <div className="col-lg-12" id="show">
-            {!this.state.myPortfolio? <div className="col-lg-2 col-md-4 col-sm-4">
+      <div>
+        <div>
+          <div  id="show">
+            {!this.state.myPortfolio? <div className="col-lg-2 col-md-3 col-sm-4">
               <a href=" " onClick={() => that.props.componentToView('createBeSpoke')}>
                 <div className="list_block notrans">
                   <div className="hex_outer"><span className="ml ml-plus "></span></div>
@@ -38,7 +38,7 @@ export default class  MlFunderServicesListView extends Component {
             </div>:<div></div>}
             {this.props.services.map(function (services, index) {
               return (
-                <div className="col-lg-2 col-md-4 col-sm-4" key={index}>
+                <div className="col-lg-2 col-md-3 col-sm-4" key={index}>
                   <div className="list_block img_list_block notrans" onClick={()=>that.props.viewMode(index,services._id, services.profileId)}>
                     <img src="/images/activity_1.jpg"/>
                     <h3>{services.displayName}</h3>
@@ -46,7 +46,7 @@ export default class  MlFunderServicesListView extends Component {
                 </div>)})}
             {this.props.beSpokeServices.map(function (services, index) {
               return (
-                <div className="col-lg-2 col-md-4 col-sm-4" key={index}>
+                <div className="col-lg-2 col-md-3 col-sm-4" key={index}>
                   <div className="list_block img_list_block notrans" onClick={()=>that.props.viewModeBeSpoke(index,services._id, services.profileId)}>
                     <img src="/images/activity_1.jpg"/>
                     <h3>{services.displayName}</h3>

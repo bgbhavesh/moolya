@@ -35,7 +35,16 @@ MlResolver.MlMutationResolver['createReview'] = (obj, args, context, info) => {
         let response = new MlRespPayload().errorPayload('Invalid User', code);
         return response;
       }
+
+      //fix for Issue: MOOLYA-2508
+      var updateCount = mlDBController.update('MlReviews',{resourceId: args.resourceId,resourceType: args.resourceType,userId: fromuser._id},{resourceId: args.resourceId},{$set:true,upsert:false}, context);
+      if(updateCount==1){
+        let response = new MlRespPayload().errorPayload('Limit exceeded for adding review', 401);
+        return response;
+      }
+
       //todo:set Active through admin
+
       let review = {
         resourceId: args.resourceId,
         resourceType: args.resourceType,

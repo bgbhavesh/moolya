@@ -72,9 +72,9 @@ export async function findIdeatorIdeasActionHandler(ideaId) {
               _id
               title
               portfolioId
-              description
-              isIdeasTitlePrivate
-              isIdeasPrivate
+              ideaDescription
+              isIdeaTitlePrivate
+              isIdeaPrivate
               isActive
               privateFields{
                 keyName,

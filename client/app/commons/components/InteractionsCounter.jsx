@@ -11,7 +11,7 @@ export default class InteractionsCounter extends React.Component{
 
   async componentWillMount() {
     //todo: this may be configured dynamically
-    var actionNames=['like','connect','collaborate','favourite','view','partner','enquire'];
+    var actionNames=['like','connect','collaborate','favourite','view','partner','enquire','follow'];
     const response = await fetchInteractionsCountActionHandler({resourceType:this.props.resourceType,resourceId:this.props.resourceId,actionNames:actionNames});
     this.setState({data: response});
   }
@@ -19,7 +19,7 @@ export default class InteractionsCounter extends React.Component{
   compareQueryOptions(a, b) {return JSON.stringify(a) === JSON.stringify(b);};
 
   async componentWillUpdate(nextProps, nextState) {
-    var actionNames=['like','connect','collaborate','favourite','view','partner','enquire'];
+    var actionNames=['like','connect','collaborate','favourite','view','partner','enquire','follow'];
     if(!this.compareQueryOptions(this.props.interactionAutoId,nextProps.interactionAutoId)){
       const response = await fetchInteractionsCountActionHandler({resourceType:this.props.resourceType,resourceId:this.props.resourceId,actionNames:actionNames});
       this.setState({data: response});
@@ -41,6 +41,7 @@ export default class InteractionsCounter extends React.Component{
     let config = [
       {name: 'like',displayName:'Like',iconClass: 'ml my-ml-like'},
       {name: 'connect', displayName:'Connections',iconClass: 'ml flaticon-ml-handshake'},
+      {name: 'follow',displayName:'Follow',iconClass: 'ml flaticon-ml-shapes'},
       {name: 'collaborate',displayName:'Collaborations',iconClass: 'ml flaticon-ml-networking'},
       {name: 'favourite',displayName:'Favourites',iconClass: 'ml my-ml-favourites'},
       {name: 'view',displayName:'Views',iconClass: 'ml my-ml-browser_3'},

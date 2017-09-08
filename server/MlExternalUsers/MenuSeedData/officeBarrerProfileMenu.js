@@ -48,11 +48,12 @@ if(Meteor.isServer){
       },
       {
         "image":"ml my-ml-subscriptions",
-        "link": "/app/mySubscriptions",
+        "link": "#",
         "isLink" : true,
         "isMenu" : true,
         "name" : "My Subscriptions",
-        "uniqueId" : "mySubscriptions"
+        "uniqueId" : "mySubscriptions",
+        isDisabled:true
       },
       {
         "image":"ml my-ml-settings1",

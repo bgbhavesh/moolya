@@ -133,6 +133,7 @@ sendSMSForReviewReject = (fromUser, portfolioId, context) => {
     var from = new MlUserContext().userProfileDetails(fromuser._id)
     if(countryCode && defaultProfile && from){
       var mobileNumber = defaultProfile.mobileNumber
+      var currentdate = new Date();
       var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
       var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
       var updatedDateTime = date+" "+time

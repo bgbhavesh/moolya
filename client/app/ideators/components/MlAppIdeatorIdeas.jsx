@@ -87,7 +87,7 @@ export default class MlAppIdeatorIdeas extends React.Component {
                 <div className="swiper-container ideas_swiper">
                   <div className="swiper-wrapper">
                     {this.state.userIdeas.map(function (idea, idx) {
-                      let url = idea && idea.ideaImage && idea.ideaImage.fileUrl?idea.ideaImage.fileUrl:'';
+                      let url = idea && idea.ideaImage && idea.ideaImage.fileUrl ? idea.ideaImage.fileUrl : '/images/no_image.png';
                       return (
                         <div className="swiper-slide ideas_block" name={idx}
                              style={{'backgroundImage': 'url(' +url+ ')'}} key={idx}>
@@ -114,10 +114,13 @@ export default class MlAppIdeatorIdeas extends React.Component {
                       <div className="panel panel-default panel-form-view" id={idx} style={{'display': 'none'}}
                            key={idx}>
                         <div className="panel-heading">
-                          Portfolio: {idea.title} <br/>
-                          Type: Basic <br/>
-                          CreatedAt: {idea.createdAt} <br/>
-                          UpdatedAt: {idea.updatedAt}
+                          <div className="row">
+                            <div className="col-md-6"><b>Portfolio&nbsp; : &nbsp;</b> {idea.title}</div>
+                            <div className="col-md-6"><b>Type&nbsp; : &nbsp;</b> Basic</div>
+                            <hr />
+                            <div className="col-md-6"><b>CreatedAt&nbsp; : &nbsp;</b> {idea.createdAt}</div>
+                            <div className="col-md-6"><b>UpdatedAt&nbsp; : &nbsp;</b> {idea.updatedAt}</div>
+                          </div>
                         </div>
                         <div className="panel-body">
                           <p>{idea.ideaDescription}</p>

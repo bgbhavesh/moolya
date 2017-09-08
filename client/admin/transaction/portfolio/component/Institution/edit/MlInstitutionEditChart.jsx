@@ -25,9 +25,18 @@ export default class MlInstitutionEditChart extends React.Component {
 
   }
   componentDidMount(){
-    this.fetchPortfolioInstitutionChartDetails();
+    const resp = this.fetchPortfolioInstitutionChartDetails();
+    return resp
+  }
+
+  componentDidUpdate(){
+    var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+    var className = this.props.isAdmin?"admin_header":"app_header"
+    $('.tab_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
+    if(WinWidth > 768){
+      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    }
   }
 
   async fetchPortfolioInstitutionChartDetails() {
@@ -213,13 +222,8 @@ export default class MlInstitutionEditChart extends React.Component {
       <div>
 
         {this.state.graphSelected===false?(<div>
-            <div className="main_wrap_scroll">
-              <ScrollArea
-                speed={0.8}
-                className="main_wrap_scroll"
-                smoothScrolling={true}
-                default={true}
-              >
+            <div className="tab_wrap_scroll">
+
                 {/*
                  <div className="ml_btn">
                  <a className="save_btn" onClick={this.selectedGraph.bind(this)}>Edit</a>
@@ -290,7 +294,6 @@ export default class MlInstitutionEditChart extends React.Component {
                       name = {name}
                     />
                   </div></div>
-              </ScrollArea>
             </div>
           </div>
           /*<MlLineChart

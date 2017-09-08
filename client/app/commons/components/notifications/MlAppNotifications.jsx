@@ -8,7 +8,7 @@ import {getNotifications} from "../../actions/fetchUserDetails";
 export default class MlAppNotifications extends Component {
   constructor(props, context) {
     super(props, context);
-    this.state = {loading: false, notifications: []}
+    this.state = {loading: false, notifications: []};
     this.appNotifications.bind(this);
     return this;
   }
@@ -22,7 +22,7 @@ export default class MlAppNotifications extends Component {
     if (response && response.success) {
       that.setState({notifications: response.result})
     }
-    console.log(response)
+    console.log('-------notifications data is---------',response)
   }
 
   render() {
@@ -33,7 +33,7 @@ export default class MlAppNotifications extends Component {
         <li key={key}>
           <a href="/app/calendar/notification"><span className="ml ml-moolya-symbol"/>{options.message}</a>
         </li>)
-    })
+    });
 
     return <div className="ml_app_notification"> <ul className="unstyled">{notificationsList}</ul></div>
   }

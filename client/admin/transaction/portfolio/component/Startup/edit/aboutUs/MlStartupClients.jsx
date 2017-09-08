@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 var FontAwesome = require('react-fontawesome');
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
-import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
+import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../../../utils/formElemUtil';
 import Moolyaselect from  '../../../../../../commons/components/MlAdminSelectWrapper';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
@@ -39,6 +39,7 @@ export default class MlStartupClients extends React.Component{
   componentDidUpdate(){
     OnLockSwitch();
     dataVisibilityHandler();
+    initalizeFloatLabel();
   }
 
   componentDidMount(){

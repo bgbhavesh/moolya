@@ -4,6 +4,10 @@
 
 import _ from 'lodash'
 import MlInvestmentsStageRepoService from '../../../MlExternalUsers/stages/mlInvestmentStagesRepoService';
+import MlUserContext from '../../../MlExternalUsers/mlUserContext'
+import mlSmsController from '../../../mlNotifications/mlSmsNotifications/mlSmsController'
+
+
 class portfolioValidation {
   constructor() {
 
@@ -85,6 +89,18 @@ class portfolioValidation {
     var concat = _.concat(dbArray, privateKeyArray);
 
     return concat
+  }
+
+  sendSMSforPortfolio(portfolioDetailsId, msg){
+    var portfolioDetails = MlPortfolioDetails.findOne(portfolioDetailsId) || {};
+    if(portfolioDetails){
+      var countryCode = MlClusters.findOne(portfolioDetails.clusterId);
+      var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
+      if(countryCode && defaultProfile){
+        var mobileNumber = defaultProfile.mobileNumber
+        mlSmsController.sendSMS(msg, countryCode, mobileNumber)
+      }
+    }
   }
 }
 

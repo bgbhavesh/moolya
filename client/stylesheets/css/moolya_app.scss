@@ -1622,7 +1622,7 @@ p{margin-top:10px;}
   }
 }
 .bugReport{
-      right: -350px; position: fixed; z-index: 2; transition: .5s linear; top: 37%;
+      right: -350px; position: fixed; z-index: 2; transition: .5s linear; top: 50%;
     &.open{
       right: 0;
       .bug_button:hover{color:$mlBlack;right:340px;}
@@ -2092,5 +2092,17 @@ p{margin-top:10px;}
   }
   &:before{
     border-color: transparent $mlBlue transparent transparent !important;
+  }
+}
+
+.blank_content{
+  p{text-align:justify;}
+  h3{font-size:22px; color:$mlRed; border-bottom:$mlRed solid 2px;}
+  h5{color:$mlRed;padding:10px 0px; font-size:20px;}
+  ul{
+    margin: 10px 0 10px 10px;
+    li{
+      list-style:circle;margin-left: 35px;
+    }
   }
 }

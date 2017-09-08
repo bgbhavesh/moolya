@@ -110,9 +110,6 @@ export default class MlListView extends Component {
         fieldsAry.push({fieldName: num, value: alpha.trim(),operator:'Starts_With'});
       });
     }
-    if(this.props.filter){
-      fieldsAry=this.state.filterValue||[];
-    }
     return fieldsAry;
   }
 
@@ -201,7 +198,7 @@ export default class MlListView extends Component {
         <div className="list_view_block">
 
 
-         {/* <AlphaSearch onAlphaSearchChange={this.onAlphaSearchChange.bind(this)} />*/}
+          <AlphaSearch onAlphaSearchChange={this.onAlphaSearchChange.bind(this)} />
 
           <div className="col-md-12">
               {ListComponent}

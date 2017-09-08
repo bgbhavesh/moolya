@@ -8,6 +8,7 @@ import MlTransactionsHandler from '../../server/commons/mlTransactionsLog';
 import passwordUtil from "./passwordUtil";
 import NotificationTemplateEngine from "../commons/mlTemplateEngine"
 import mlSmsController from "../mlNotifications/mlSmsNotifications/mlSmsController"
+import mlSMSConst from "../mlNotifications/mlSmsNotifications/mlSmsConstants"
 import MlEmailNotification from "../mlNotifications/mlEmailNotifications/mlEMailNotification"
 import _ from 'underscore'
 import moment from "moment";
@@ -151,13 +152,27 @@ export default MlAccounts=class MlAccounts {
 
     if(emailVerified){
        let emailSent = MlEmailNotification.onEmailVerificationSuccess(user);
-       // on successful verification an sms has to send
+       //otp sms has to be send
       this.sendVerificationSmsOtp(user._id, user.registrationInfo.contactNumber)
+
+      //on successful email verification
+      this.sendSMSonSuccessfulEmailVerification(user._id, user.registrationInfo.contactNumber)
     }
 
     return {
       email:tokenRecord.address,emailVerified:true,recordId:user._id,error: false, mobileNumber:user.registrationInfo.contactNumber
     };
+  }
+
+  static sendSMSonSuccessfulEmailVerification(regId, mobileNumber){
+    var regDetails = mlDBController.findOne('MlRegistration',{_id:regId});
+    if(!regDetails){
+      throw new Error(403, "Mobile Number entered  is not registered");
+    }
+    var countryCode = (regDetails.registrationInfo||{}).countryId;
+    var sms = _.find(mlSMSConst, 'SMS_EMAIL_VERIFIED')
+    var msg= sms.SMS_EMAIL_VERIFIED
+    mlSmsController.sendSMS(msg, countryCode, mobileNumber)
   }
 
   static sendVerificationSmsOtp(regId,numbr,customEmailComponent){

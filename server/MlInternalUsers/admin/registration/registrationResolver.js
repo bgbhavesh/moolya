@@ -12,7 +12,9 @@ import moment from "moment";
 import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 import {getCommunityName} from '../../../commons/utils';
-// import mlConversationsRepo from '../../../commons/Conversations/mlConversationsRepo'
+import mlSMSConst from '../../../mlNotifications/mlSmsNotifications/mlSmsConstants'
+import mlSmsController from '../../../mlNotifications/mlSmsNotifications/mlSmsController'
+
 var fs = Npm.require('fs');
 var Future = Npm.require('fibers/future');
 
@@ -757,6 +759,8 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       let regRecord = mlDBController.findOne('MlRegistration', {_id: args.registrationId}, context) || {"registrationInfo": {}};
       MlEmailNotification.onKYCApprove(regRecord);
       MlNotificationController.onKYCApprove(regRecord);
+      sendSMSonKYCApproved(regRecord)
+      // mlSmsController
 
       let portfolioDetails = {
         "transactionType": "portfolio",
@@ -921,6 +925,7 @@ MlResolver.MlMutationResolver['RejectedStatusOfDocuments'] = (obj, args, context
           if (response) {
             MlEmailNotification.onKYCDecline(user);
             MlNotificationController.onKYCDecline(user);
+            sendSMSonKYCDeclined(user)
             let code = 200;
             let result = {registrationId: response}
             updatedResponse = new MlRespPayload().successPayload(result, code);
@@ -1654,4 +1659,20 @@ headerCommunityDisplay = (registrationInfo, context) => {
   if (!isMoolya)
     returnName = subChapterName + '/' + chapterName + '/' + registrationInfo.communityName
   return returnName
+}
+
+sendSMSonKYCApproved = (regRecord) => {
+    var mobileNumber = regRecord.registrationInfo.contactNumber;
+    var countryCode =  regRecord.registrationInfo.countryId;
+    var obj = _.find(mlSMSConst, 'KYC_APPROVED')
+    var msg= obj.KYC_APPROVED
+    mlSmsController.sendSMS(msg, countryCode, mobileNumber)
+}
+
+sendSMSonKYCDeclined = (regRecord) => {
+  var mobileNumber = regRecord.registrationInfo.contactNumber;
+  var countryCode =  regRecord.registrationInfo.countryId;
+  var obj = _.find(mlSMSConst, 'KYC_DECLINED')
+  var msg= obj.KYC_DECLINED
+  mlSmsController.sendSMS(msg, countryCode, mobileNumber)
 }

@@ -156,9 +156,9 @@ export default class MlFunderAbout extends React.Component {
   }
 
   onSelectInvestmentFrom(type, e){
-    let details =this.state.data;
-    details=_.omit(details,'investmentFrom');
-    details=_.extend(details,{'investmentFrom':type});
+    let details = this.state.data;
+    details = _.omit(details,'investmentFrom');
+    details = _.extend(details,{'investmentFrom':type});
     this.setState({data:details}, function () {
       this.sendDataToParent()
     })
@@ -293,10 +293,12 @@ export default class MlFunderAbout extends React.Component {
     const showLoader = this.state.loading;
     let investmentFrom = this.state.data&&this.state.data.investmentFrom?this.state.data.investmentFrom:"";
     let personal = null, familyFund= null;
-    if(investmentFrom == "Personal Fund"){
+    // temp fix need to remove string compare
+
+    if(investmentFrom == "PERSONAL"){
       personal = true;
       familyFund = false;
-    }else if(investmentFrom == "Family Fund"){
+    }else if(investmentFrom == "FAMILY FUND"){
       familyFund = true;
       personal = false;
     }

@@ -71,20 +71,22 @@ class MlAppIdeatorAddIdea extends React.Component{
         }
       };
       this.setState({loading:true})
-      multipartASyncFormHandler(data, this.state.file, 'registration',this.onFileUploadCallBack.bind(this, this.state.name, this.state.file));
-      // const response = await createIdeaActionHandler(idea)
-      // if(response){
-      //   if (!response.success) {
-      //     toastr.error(response.result);
-      //   } else if (response.success) {
-      //     toastr.success(response.result);
-      //   }
-      //   this.setState({loading:false})
-      //   // toastr.success("Idea created successfully")
-      //   FlowRouter.go("/app/portfolio");
-      //   return response;
-      // }
-      // let response = await multipartFormHandler(data, this.state.file, 'registration');
+      if(this.state.file){
+        multipartASyncFormHandler(data, this.state.file, 'registration',this.onFileUploadCallBack.bind(this, this.state.name, this.state.file));
+      }else{
+        const response = await createIdeaActionHandler(idea)
+        if(response){
+          if (!response.success) {
+            toastr.error(response.result);
+          } else if (response.success) {
+            toastr.success(response.result);
+          }
+          this.setState({loading:false})
+          toastr.success("Idea created successfully")
+          FlowRouter.go("/app/portfolio");
+          // return response;
+        }
+      }
     }
   }
   async libraryAction(file) {
@@ -100,8 +102,8 @@ class MlAppIdeatorAddIdea extends React.Component{
     let fileName = e.target.files[0].name;
     let name = e.target.name;
     this.setState({file:file, name:name, fileName:fileName})
-    // let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, file));
   }
+
   onFileUploadCallBack(name,file,resp){
     if(resp){
       let result = JSON.parse(resp)
@@ -128,26 +130,6 @@ class MlAppIdeatorAddIdea extends React.Component{
   }
 
   render(){
-      // let MlActionConfig = [
-      //     {
-      //         showAction: true,
-      //         actionName: 'edit',
-      //         handler: null
-      //     },
-      //     {
-      //         actionName: 'save',
-      //         showAction: true,
-      //         handler: async(event) => this.props.handler(this.createIdea.bind(this), this.handleSuccess.bind(this))
-      //     },
-      //     {
-      //         showAction: true,
-      //         actionName: 'cancel',
-      //         handler:  async(event) => {
-      //           FlowRouter.go("/app/portfolio")
-      //         }
-      //     }
-      //
-      // ]
     const _this = this;
     let appActionConfig = [
       {
@@ -176,7 +158,7 @@ class MlAppIdeatorAddIdea extends React.Component{
         }]
     };
       const showLoader = this.state.loading;
-      let image = this.state.ideaImage&&this.state.ideaImage.fileUrl?this.state.ideaImage.fileUrl:"/images/images.png";
+      // let image = this.state.ideaImage&&this.state.ideaImage.fileUrl?this.state.ideaImage.fileUrl:"/images/images.png";
       return (
           <div className="admin_main_wrap">
               <div className="admin_padding_wrap">
@@ -187,7 +169,7 @@ class MlAppIdeatorAddIdea extends React.Component{
                               <a href="#" >
                                   <div className="upload_hex">
                                     <FontAwesome name='unlock' className="req_textarea_icon un_lock" id="isIdeaImagePrivate"/>
-                                    <img src={image} id="blah" width="105" height="auto"/>
+                                    <img src="/images/images.png" id="blah" width="105" height="auto"/>
                                     <input className="upload" type="file" id="upload_hex"  onChange={this.onLogoFileUpload.bind(this)}/>
                                   </div>
                               </a>
@@ -206,7 +188,6 @@ class MlAppIdeatorAddIdea extends React.Component{
                           </div>
                       </div>
                   )}
-                  {/*<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>*/}
                 <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
               </div>
           </div>

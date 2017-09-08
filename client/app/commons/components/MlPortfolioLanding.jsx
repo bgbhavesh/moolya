@@ -71,7 +71,7 @@ export default class MlPortfolioLanding extends Component {
         {showLoader === true? (<MlLoader/>) : (
           <div>{registrationStatus=="Approved"?<div>
             {(userCommunity == "Ideators") ?
-              <MlAppIdeatorIdeas/> : <MlAppPortfolioRedirect config={portfolioId} communityType={userCommunity}/>
+              <MlAppIdeatorIdeas/> : <MlAppPortfolioRedirect data={this.state.data}/>
             }
           </div>: <div className="app_main_wrap">
 

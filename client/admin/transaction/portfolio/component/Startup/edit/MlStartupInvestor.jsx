@@ -59,6 +59,8 @@ export default class MlStartupInvestor extends React.Component{
     if(empty){
       if (response) {
         this.setState({loading: false, startupInvestor: response.investor, startupInvestorList: response.investor});
+      }else {
+        this.setState({loading: false})
       }
     }else{
       this.setState({loading: false, startupInvestor: that.context.startupPortfolio.investor, startupInvestorList:that.context.startupPortfolio.investor});

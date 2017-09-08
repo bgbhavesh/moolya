@@ -33,7 +33,8 @@ export default class MlFunderAreaOfInterest extends React.Component {
   }
 
   componentWillMount() {
-    this.fetchPortfolioDetails();
+    const resp = this.fetchPortfolioDetails();
+    return resp
   }
 
   async fetchPortfolioDetails() {
@@ -224,7 +225,6 @@ export default class MlFunderAreaOfInterest extends React.Component {
                 >
                   <div className="col-lg-12">
                     <div className="row">
-
                       <div className="col-lg-2 col-md-4 col-sm-4">
                         <a href="#" id="create_clientdefault" data-placement="top" data-class="large_popover">
                           <div className="list_block list_block_intrests notrans"
@@ -243,10 +243,11 @@ export default class MlFunderAreaOfInterest extends React.Component {
                           <div className="col-lg-2 col-md-4 col-sm-4" key={idx}>
                             <a href="#" id={"create_client" + idx}>
                               <div className="list_block list_block_intrests notrans">
-                                <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/><input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
+                                <FontAwesome name='unlock'  id="makePrivate" defaultValue={details.makePrivate}/>
+                                <input type="checkbox" className="lock_input" id="isAssetTypePrivate" checked={details.makePrivate}/>
                                 {/*<div className="cluster_status inactive_cl"><FontAwesome name='times'/></div>*/}
                                 <div className="hex_outer" onClick={that.onTileClick.bind(that, idx)}>
-                                  <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
+                                  {/*<div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>*/}
                                   <div className="hex_outer"><img src="/images/def_profile.png"/></div>
                                 </div>
                                 <h3>{details.industryTypeName}</h3>
@@ -268,7 +269,6 @@ export default class MlFunderAreaOfInterest extends React.Component {
                       <div className="medium-popover">
                         <div className="row">
                           <div className="col-md-12">
-
                             <div className="form-group">
                               <Moolyaselect multiSelect={false} className="form-field-name" valueKey={'value'}
                                             labelKey={'label'} queryType={"graphql"} query={industriesquery}

@@ -65,7 +65,7 @@ export default class MlAppPortfolioAccordionContainer extends React.Component{
         panelItems:[{'title':'Actions',isText:false,style:{'background': '#ef4647'},contentComponent:<MlAppActionComponent resourceDetails={{resourceId:this.props.resourceId,resourceType:'portfolio'}} actionOptions={actionOptions}/>}]};
     //todo: dynamic check for accordion configuration
        if(this.props.communityType==="Ideators"||this.props.communityType==="ideator"){
-         accordionOptions["panelItems"].push({title:'Related Ideas',isText:false,contentComponent:<MlIdeatorRelatedIdeas />,style:{'background': '#273545'}});
+         accordionOptions["panelItems"].push({title:'Related Ideas',isText:false,contentComponent:<MlIdeatorRelatedIdeas />,style:{'background': '#ef4647'}});
        }
 
     return(

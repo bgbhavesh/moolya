@@ -2094,3 +2094,15 @@ p{margin-top:10px;}
     border-color: transparent $mlBlue transparent transparent !important;
   }
 }
+
+.blank_content{
+  p{text-align:justify;}
+  h3{font-size:22px; color:$mlRed; border-bottom:$mlRed solid 2px;}
+  h5{color:$mlRed;padding:10px 0px; font-size:20px;}
+  ul{
+    margin: 10px 0 10px 10px;
+    li{
+      list-style:circle;margin-left: 35px;
+    }
+  }
+}

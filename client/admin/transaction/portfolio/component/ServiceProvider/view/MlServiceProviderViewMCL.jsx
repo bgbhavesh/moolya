@@ -159,48 +159,46 @@ export default class MlServiceProviderViewMCL extends Component {
   render() {
 
     return (
-      <div className="admin_main_wrap">
-        <div className="admin_padding_wrap portfolio-main-wrap" id="annotatorContent">
-          <h2>MCL</h2>
-          <div className="main_wrap_scroll" id="annotatorContent">
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
-              <div className="col-md-6 col-sm-6 nopadding-left">
-                <div className="panel panel-default panel-form-view">
-                  <div className="panel-heading">Memberships</div>
-                  <div className="panel-body ">
+      <div className="portfolio-main-wrap" id="annotatorContent">
+        <h2>MCL</h2>
+        <div className="main_wrap_scroll" id="annotatorContent">
+          <ScrollArea
+            speed={0.8}
+            className="main_wrap_scroll"
+            smoothScrolling={true}
+            default={true}
+          >
+            <div className="col-md-6 col-sm-6 nopadding-left">
+              <div className="panel panel-default panel-form-view">
+                <div className="panel-heading">Memberships</div>
+                <div className="panel-body ">
 
-                    {this.state.memberships && this.state.memberships.membershipDescription ? this.state.memberships.membershipDescription : ""}
+                  {this.state.memberships && this.state.memberships.membershipDescription ? this.state.memberships.membershipDescription : ""}
 
-                  </div>
-                </div>
-                <div className="clearfix"></div>
-              </div>
-              <div className="col-md-6 col-sm-6 nopadding-right">
-                <div className="panel panel-default panel-form-view">
-                  <div className="panel-heading">Compliances</div>
-                  <div className="panel-body ">
-
-                    {this.state.compliances && this.state.compliances.compliancesDescription ? this.state.compliances.compliancesDescription : ""}
-
-                  </div>
-                </div>
-                <div className="clearfix"></div>
-                <div className="panel panel-default panel-form-view">
-                  <div className="panel-heading">Licenses</div>
-                  <div className="panel-body ">
-
-                    {this.state.licenses && this.state.licenses.licensesDescription ? this.state.licenses.licensesDescription : ""}
-
-                  </div>
                 </div>
               </div>
-            </ScrollArea>
-          </div>
+              <div className="clearfix"></div>
+            </div>
+            <div className="col-md-6 col-sm-6 nopadding-right">
+              <div className="panel panel-default panel-form-view">
+                <div className="panel-heading">Compliances</div>
+                <div className="panel-body ">
+
+                  {this.state.compliances && this.state.compliances.compliancesDescription ? this.state.compliances.compliancesDescription : ""}
+
+                </div>
+              </div>
+              <div className="clearfix"></div>
+              <div className="panel panel-default panel-form-view">
+                <div className="panel-heading">Licenses</div>
+                <div className="panel-body ">
+
+                  {this.state.licenses && this.state.licenses.licensesDescription ? this.state.licenses.licensesDescription : ""}
+
+                </div>
+              </div>
+            </div>
+          </ScrollArea>
         </div>
       </div>
     )

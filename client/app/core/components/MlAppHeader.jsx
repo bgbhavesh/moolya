@@ -29,6 +29,10 @@ class MlAppProfileHeader extends Component {
       $('.ml_app_profile').removeClass('profile_open');
       $(this).hide();
     });
+    $('.ml_app_profile ol a').click(function(){
+      $('.ml_app_profile ol a').removeClass('active');
+      $(this).addClass('active');
+    });
 
     $('body').tooltip({
       selector: '[data-toggle="tooltip"], [title]:not([data-toggle="popover"])',
@@ -102,14 +106,18 @@ class MlAppProfileHeader extends Component {
           <h1 id="NavLbl"  data-toggle="tooltip" title={`Welcome ${data && data.firstName?data.firstName:"User"}`} data-placement="left" className="" style={{'backgroundImage':`url(${data && data.profileImage?data.profileImage:"/images/ideator_01.png"})`, 'backgroundPosition': 'center center'}}>{/*<span className="profile_context ml ml-ideator"></span>*/}</h1>
             <ol>
               <li data-toggle="tooltip" title="My Profile" data-placement="right">
-                <a href="/app/myprofile"><span className="ml my-ml-blank_Profile_3"></span></a>
+                <a href="/app/myprofile">
+                  <span className="ml my-ml-blank_Profile_3"></span>
+                </a>
               </li>
                 <li data-toggle="tooltip" title="Registration" data-placement="right">
                   <a href="" onClick={this.registrationRedirect.bind(this)}><span className="ml my-ml-Switch_Profile_Log_As">
                   </span></a>
                 </li>
               <li data-toggle="tooltip" title="Switch Profile" data-placement="right">
-                <a href="/app/appSwitchProfile"><span className="ml my-ml-switch_profile"></span></a>
+                <a href="/app/appSwitchProfile">
+                  <span className="ml my-ml-switch_profile"></span>
+                </a>
               </li>
               <li data-toggle="tooltip" title="Register As" data-placement="right">
                 <a href={this.state.isAllowRegisterAs?"/app/myProfile/registerAs":""}><span className="ml my-ml-Switch_Profile_Log_As"></span></a>

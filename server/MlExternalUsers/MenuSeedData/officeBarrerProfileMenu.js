@@ -56,7 +56,7 @@ if(Meteor.isServer){
         isDisabled:true
       },
       {
-        "image":"ml my-ml-settings1",
+        "image":"ml my-ml-settings_new",
         "link": "/app/settings",
         "isLink" : true,
         "isMenu" : true,

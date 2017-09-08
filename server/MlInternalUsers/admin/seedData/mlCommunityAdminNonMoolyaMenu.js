@@ -565,7 +565,7 @@ if(Meteor.isServer){
         ]
       },
       {
-        "image" : "ml my-ml-settings1",
+        "image" : "ml my-ml-settings_new",
         "link" : "",
         "name" : "Settings",
         "uniqueId" : "settings",

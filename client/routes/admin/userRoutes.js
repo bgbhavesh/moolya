@@ -105,11 +105,11 @@ adminSection.route('/users/:registrationId/:portfolioId/transactions', {
     })
   }
 })
-adminSection.route('/users/:registrationId/:portfolioId/history', {
+adminSection.route('/users/history', {
   name: 'users_History',
-  action(params){
+  action(){
     mount(AdminLayout,{
       headerContent: <MlAdminHeader breadcrum={{type: 'users', 'showBreadCrum': true, 'module': 'History'}}/>,
-      adminContent:<MlUsersHistoryList config={params}/> })
+      adminContent:<MlUsersHistoryList/> })
   }
 });

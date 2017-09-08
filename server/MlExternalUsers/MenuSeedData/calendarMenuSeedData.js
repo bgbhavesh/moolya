@@ -32,7 +32,7 @@ if(Meteor.isServer){
       },
 
       {
-        "image":"ml my-ml-settings1",
+        "image":"ml my-ml-settings_new",
         "link": "/app/calendar/settings",
         "isLink" : true,
         "isMenu" : true,
@@ -41,7 +41,7 @@ if(Meteor.isServer){
       },
 
       {
-        "image":"fa fa-bell-o",
+        "image":"ml my-ml-notifications",
         "link": "/app/calendar/notification",
         "isLink" : true,
         "isMenu" : true,

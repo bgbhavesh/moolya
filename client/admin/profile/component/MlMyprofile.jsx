@@ -1,6 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
-import { render } from 'react-dom';
+import { Modal } from 'react-bootstrap';
+import Cropper from 'react-cropper';
 var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar'
 import {updateBackendUserActionHandler} from '../../settings/backendUsers/actions/findBackendUserAction';
@@ -19,6 +20,7 @@ import passwordSAS_validate from '../../../../lib/common/validations/passwordSAS
 import {MlAdminProfile} from '../../../admin/layouts/header/MlAdminHeader'
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 import {findMyProfileActionHandler} from '../actions/getProfileDetails'
+import '../../../../node_modules/cropperjs/dist/cropper.min.css';
 
 export default class MlMyProfile extends React.Component {
 
@@ -47,7 +49,8 @@ export default class MlMyProfile extends React.Component {
       passwordState: " ",
       passwordValidation: false,
       PasswordReset:false,
-      showChangePassword:true
+      showChangePassword:true,
+      showProfileModal: false,
 
       // Details:{
       //   firstName: " ",
@@ -67,6 +70,9 @@ export default class MlMyProfile extends React.Component {
     this.onfoundationDateSelection.bind(this);
     this.checkExistingPassword.bind(this);
     this.passwordCheck.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
+    this.onChangeAvatarSrc = this.onChangeAvatarSrc.bind(this);
+    this.handleUploadAvatar = this.handleUploadAvatar.bind(this);
     // this.showImage.bind(this);
     //this.fileUpdation.bind(this);
     // this.firstNameUpdation.bind(this);
@@ -127,6 +133,10 @@ export default class MlMyProfile extends React.Component {
   }
 
   onFileUploadCallBack(resp) {
+    this.setState({
+      uploadingAvatar: false,
+      showProfileModal: false
+    });
     if (resp) {
       var link = $.parseJSON(resp).result;
       console.log('--link--', link)
@@ -372,13 +382,13 @@ export default class MlMyProfile extends React.Component {
    * returns :: Hits storeImage()
    * **/
 
-  async onFileUpload(){
+  async onFileUpload(imageFile){
     let user = {
       profile: {
         InternalUprofile: {moolyaProfile: {profileImage:" " }}
       }
     }
-    let file=document.getElementById("profilePic").files[0];
+    let file=imageFile || document.getElementById("profilePic").files[0];
     if(file) {
       let data = {moduleName: "PROFILE", actionName: "UPDATE", userId: this.state.selectedBackendUser, user: user}
       let response = await multipartASyncFormHandler(data, file, 'registration', this.onFileUploadCallBack.bind(this));
@@ -387,6 +397,9 @@ export default class MlMyProfile extends React.Component {
     }
     else{
       this.storeImage();
+      this.setState({
+        uploadingAvatar: false,
+      });
     }
   }
 
@@ -397,6 +410,60 @@ export default class MlMyProfile extends React.Component {
   cancelResetPassword(){
     $('#password').val("");
     this.setState({PasswordReset:false,showChangePassword:true})
+  }
+
+  toggleModal() {
+    const that = this;
+    this.setState({
+      showProfileModal: !that.state.showProfileModal
+    });
+  }
+
+  dataURItoBlob(dataURI) {
+    // convert base64/URLEncoded data component to raw binary data held in a string
+    var byteString;
+    if (dataURI.split(',')[0].indexOf('base64') >= 0)
+      byteString = atob(dataURI.split(',')[1]);
+    else
+      byteString = unescape(dataURI.split(',')[1]);
+
+    // separate out the mime component
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+    // write the bytes of the string to a typed array
+    var ia = new Uint8Array(byteString.length);
+    for (var i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([ia], {type:mimeString});
+  }
+
+  handleUploadAvatar() {
+    this.setState({
+      uploadingAvatar: true,
+    });
+    if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
+      return;
+    }
+    this.onFileUpload(this.dataURItoBlob(this.cropper.getCroppedCanvas().toDataURL()));
+  }
+
+  onChangeAvatarSrc(evt) {
+    if (evt && evt.preventDefault) { evt.preventDefault(); }
+    let files;
+    if (evt.dataTransfer) {
+      files = evt.dataTransfer.files;
+    } else if (evt.target) {
+      files = evt.target.files;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.setState({
+        avatarSrc: reader.result,
+      });
+    };
+    reader.readAsDataURL(files[0]);
   }
 
   render(){
@@ -455,12 +522,14 @@ export default class MlMyProfile extends React.Component {
                       <input type="text" placeholder="Last Name" className="form-control float-label" defaultValue={this.state.lastName} onBlur={this.lastNameUpdation.bind(this)} />
                     </div>
                     <div className="form-group">
-                      <div className="fileUpload mlUpload_btn">
+                      <button onClick={this.toggleModal.bind(this)} type="button" className="fileUpload mlUpload_btn">
                         <span>Profile Pic</span>
-                        {isExternaluser ? <div></div> :
-                          <input type="file" className="upload" id="profilePic" onChange={this.onFileUpload.bind(this)}/>
+
+                        {/*isExternaluser ? '' :
+                          <input type="file" className="upload" id="profilePic" onChange={this.onFileUpload.bind(this)}/>*/
                         }
-                      </div>
+
+                      </button>
                       <div className="previewImg ProfileImg">
                         <img src={this.state.uploadedProfilePic !== " " ?this.state.uploadedProfilePic:profilePic}/>
                       </div>
@@ -468,6 +537,40 @@ export default class MlMyProfile extends React.Component {
                   </form>
                 </div>
               </div>
+              <Modal show={this.state.showProfileModal}>
+                <Modal.Header>
+                  Choose your profile picture.
+                </Modal.Header>
+                <Modal.Body>
+                  <div style={{ width: '100%' }}>
+                    <label htmlFor="avatar" className="btn btn-primary btn-file">
+                      <i className="glyphicon glyphicon-folder-open" style={{ paddingRight: 15 }} />
+                      Browse Photo <input accept=".jpeg,.png,.jpg," id="avatar" type="file" onChange={this.onChangeAvatarSrc} style={{ display: 'none' }} />
+                    </label>
+                    <br />
+                    <br />
+                    <Cropper
+                      zoomTo={1}
+                      viewMode={1}
+                      style={{ height: 350, width: '100%' }}
+                      aspectRatio={1 / 1}
+                      guides={false}
+                      src={this.state.avatarSrc}
+                      ref={(cropper) => { this.cropper = cropper; }}
+                      onChange
+                    />
+                  </div>
+                </Modal.Body>
+                <Modal.Footer>
+                  <button disabled={this.state.uploadingAvatar} className="btn btn-danger" onClick={this.toggleModal.bind(this)}>
+                    <i className="fa fa-close" /> Close
+                  </button>
+                  <button onClick={this.handleUploadAvatar} disabled={this.state.uploadingAvatar} className="btn btn-primary" >
+                    {this.state.uploadingAvatar ? <i className="fa fa-spinner fa-spin" /> : <i className="fa fa-upload" />}
+                    {this.state.uploadingAvatr ? 'Uploading' : 'Upload'}
+                  </button>
+                </Modal.Footer>
+              </Modal>
               <div className="col-md-6">
                 <div className="form_bg">
                   <form>

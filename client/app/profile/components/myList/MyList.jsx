@@ -42,11 +42,11 @@ export default class MyList extends React.Component{
   getTabComponents(){
     let tabs = [
       {
-        tabClassName:'ml ml-connect', title: <b>My Connections</b>,
+        tabClassName:'ml flaticon-ml-handshake', title: <b>My Connections</b>,
         component: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlAppMyConnectionConfig} />
       },
       {
-        tabClassName:'ml my-ml-favourites',title: <b>My Favourites</b>,
+        tabClassName:'ml flaticon-ml-shapes',title: <b>My Favourites</b>,
         component: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlAppMyFavouritesConfig} />
       },
       {

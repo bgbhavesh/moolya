@@ -4,6 +4,8 @@ import Datetime from "react-datetime";
 import _ from 'lodash';
 import ScrollArea from "react-scrollbar";
 
+import {initalizeFloatLabel} from '../../../../../../../utils/formElemUtil';
+
 export default class MlStartupCompanyReview extends React.Component{
   constructor(props, context){
     super(props)
@@ -22,7 +24,10 @@ export default class MlStartupCompanyReview extends React.Component{
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
   }
-
+  
+  componentDidUpdate(){
+    initalizeFloatLabel();
+  }
 
   handleFromYearChange(index,e){
     let details =this.state.data;

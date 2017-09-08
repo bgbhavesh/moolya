@@ -190,7 +190,7 @@ export default class MlInstitutionEditManagement extends React.Component{
         this.fetchOnlyImages()
 
       }else{
-        this.setState({lodaing:false})
+        this.setState({loading:false})
       }
     }else{
       this.setState({loading: false, institutionManagement: that.context.institutionPortfolio.management, institutionManagementList:that.context.institutionPortfolio.management});

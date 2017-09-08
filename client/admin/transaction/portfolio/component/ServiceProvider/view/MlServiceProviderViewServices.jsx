@@ -156,6 +156,7 @@ export default class MlServiceProviderViewServices extends Component {
     return (
       <div>
         <div className="main_wrap_scroll">
+          <h2>Services</h2>
           <ScrollArea
             speed={0.8}
             className="main_wrap_scroll"
@@ -164,7 +165,7 @@ export default class MlServiceProviderViewServices extends Component {
           >
             <div className="row">
               <div className="col-lg-12">
-                <div className="panel panel-default  panel-form-view">
+                <div className="panel panel-default">
                   <div className="panel-heading">
                     Services
                   </div>

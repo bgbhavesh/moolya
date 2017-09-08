@@ -30,9 +30,18 @@ export default class MlStartupCharts extends React.Component{
   }
 
   componentDidMount(){
-    this.fetchPortfolioStartupChartDetails();
+    const resp = this.fetchPortfolioStartupChartDetails();
+    return resp
+  }
+
+  componentDidUpdate(){
+    var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-    $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
+    var className = this.props.isAdmin?"admin_header":"app_header"
+    $('.tab_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
+    if(WinWidth > 768){
+      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+    }
   }
 
   async fetchPortfolioStartupChartDetails() {
@@ -363,13 +372,8 @@ export default class MlStartupCharts extends React.Component{
       <div>
 
         {this.state.graphSelected===false?(<div>
-          <div className="main_wrap_scroll">
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
+          <div className="tab_wrap_scroll">
+
 {/*
             <div className="ml_btn">
               <a className="save_btn" onClick={this.selectedGraph.bind(this)}>Edit</a>
@@ -430,6 +434,7 @@ export default class MlStartupCharts extends React.Component{
             <div className="col-md-6">
               <div className="chart_bg">
                 <a  onClick={this.selectedGraph.bind(this)}>Edit</a>
+                <p className="text-center">Employee breakup at Department level</p>
                 <PieTooltip
               title= {title}
               data= {this.state.empBreakUpData}
@@ -440,7 +445,6 @@ export default class MlStartupCharts extends React.Component{
               name = {name}
             />
               </div></div>
-            </ScrollArea>
           </div>
         </div>
           /*<MlLineChart

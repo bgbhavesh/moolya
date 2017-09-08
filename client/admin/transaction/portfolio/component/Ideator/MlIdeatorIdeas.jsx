@@ -156,14 +156,14 @@ export default class MlIdeatorIdeas extends React.Component{
     let ideaDescription = this.state.data.ideaDescription?this.state.data.ideaDescription:''
     let image = that.state.data && that.state.data.ideaImage&&that.state.data.ideaImage.fileUrl?that.state.data.ideaImage.fileUrl:"/images/images.png";
     return (
-      <div className="admin_main_wrap">
+      <div>
         {showLoader === true ? (<MlLoader/>) : (
       <div>
         <h2>Ideas</h2>
         <div className="col-lg-2 col-lg-offset-5 col-md-3 col-md-offset-4 col-sm-3 col-sm-offset-4">
           <a href="#" >
             <div className="upload_hex">
-              <FontAwesome name='unlock' className="req_textarea_icon un_lock" id="isIdeaImagePrivate"/>
+              {/*<FontAwesome name='unlock' className="req_textarea_icon un_lock" id="isIdeaImagePrivate"/>*/}
               <img src={image} id="blah" width="105" height="auto"/>
               <input className="upload" type="file" id="upload_hex"  onChange={this.onLogoFileUpload.bind(this)}/>
             </div>

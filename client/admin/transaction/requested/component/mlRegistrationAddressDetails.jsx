@@ -48,6 +48,9 @@ export default class AddressDetails extends React.Component{
     return this;
   }
 
+  componentDidMount(){
+    initalizeFloatLabel();
+  }
 
   optionsBySelectAddressType(selectedIndex,handler,selectedObj){
     this.setState({selectedValue : selectedIndex,selectedAddressLabel:selectedObj.label});

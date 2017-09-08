@@ -43,6 +43,8 @@ export async function fetchIdeaActionHandler(portfolioId) {
                       fileUrl
                       fileName
                     }
+                    createdAt
+                    updatedAt
                 }
             }
         `,

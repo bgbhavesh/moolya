@@ -113,9 +113,14 @@ export default class MlAppIdeatorIdeas extends React.Component {
                     return (
                       <div className="panel panel-default panel-form-view" id={idx} style={{'display': 'none'}}
                            key={idx}>
-                        <div className="panel-heading">{idea.title}</div>
+                        <div className="panel-heading">
+                          Portfolio: {idea.title} <br/>
+                          Type: Basic <br/>
+                          CreatedAt: {idea.createdAt} <br/>
+                          UpdatedAt: {idea.updatedAt}
+                        </div>
                         <div className="panel-body">
-                          <p>{idea.description}</p>
+                          <p>{idea.ideaDescription}</p>
                           <a className="mlUpload_btn pull-left"
                              onClick={that.viewIdea.bind(that, idea.portfolioId, "Ideators")}>View</a>
                           <a className="mlUpload_btn pull-left"

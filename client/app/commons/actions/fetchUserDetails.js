@@ -42,6 +42,11 @@ export async function fetchPortfolioDetails() {
           portfolioId : _id
           communityType
           communityCode
+          portfolioImage
+          portfolioUserName
+          portfolioImage
+          transactionCreatedDate
+          transactionUpdatedDate
         }
       }
         `,

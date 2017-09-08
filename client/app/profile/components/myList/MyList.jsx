@@ -37,8 +37,8 @@ export default class MyList extends React.Component{
 
   getTabComponents(){
     let tabs = [
-      {tabClassName:'ml ml-connect', title: <b>My Connections</b>,component: <MyConnections/>},
-      {tabClassName:'ml my-ml-favourites',title: <b>My Favourites</b>,component: <MyFavourites/>},
+      {tabClassName:' ml flaticon-ml-handshake', title: <b>My Connections</b>,component: <MyConnections/>},
+      {tabClassName:' ml flaticon-ml-shapes',title: <b>My Favourites</b>,component: <MyFavourites/>},
       {tabClassName:'ml ml-connect',title: <b>My Followers</b>,component: <MyFollowers/>},
       {tabClassName:'ml ml-connect',title: <b>I Follow</b>,component: <MyFollowings/>}
     ]

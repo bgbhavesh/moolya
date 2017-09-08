@@ -1543,7 +1543,21 @@ p{margin-top:10px;}
 }
 .notification_view{
   li{
-   float: left; background: $mlGray; width: 48%; margin-left: 17px; margin-top: 16px; border-radius: 8px;
+   float: left;  width: 48%; margin-left: 17px; margin-top: 16px; border-radius: 8px;
+    &.unread{
+      background: $mlBlue;color: $mlWhite;text-shadow: none;
+      .left_icon{
+        background: #405368;
+      }
+      .right_text{
+        span{
+          color: $mlWhite;
+        }
+      }
+    }
+    &.read{
+      background: $mlGray;
+    }
     .left_icon{
           float: left; width: 20%; height: 80px; background: $mlBlue; padding-top: 10px; padding-left: 25px; border-radius:8px 0 0 8px;
     img{
@@ -1554,7 +1568,7 @@ p{margin-top:10px;}
       }
     }
     .right_text{
-      float: left; width: 80%; height: 80px; padding:5px; position:relative;
+      float: left; width: 80%; height: 80px; padding:5px; position:relative;overflow: auto;
       span{
         font-size: 12px;font-weight:bold;color:$mlBlue;
       }

@@ -171,7 +171,7 @@ class MlAppServiceBasicInfo extends Component {
                   <Select name="form-field-name"
                           options={options}
                           value={data.sessionFrequency}
-                          placeholder='Frequency Type'
+                          placeholder='Renewal Frequency'
                           onChange={(value) => setSessionFrequency(value.value)}
                           disabled={this.props.viewMode}/>
                 </div>

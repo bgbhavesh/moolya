@@ -1024,7 +1024,7 @@ class MlAppServiceManageSchedule extends Component {
       },
       {
         showAction: true,
-        actionName: 'exit',
+        actionName: 'cancel',
         handler: async(event) => {
           FlowRouter.go('/app/calendar/manageSchedule/' + _this.profileId + '/serviceList')
         }

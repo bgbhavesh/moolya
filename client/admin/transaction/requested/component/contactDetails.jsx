@@ -43,12 +43,16 @@ export default class ContactDetails extends React.Component{
     return this;
   }
 
+
+  componentDidUpdate(){
+   // initalizeFloatLabel();
+  }
   componentDidMount(){
     this.findRegistration.bind(this);
     this.fetchCountryCode();
-  }
-  componentDidUpdate(){
-    initalizeFloatLabel();
+    setTimeout(function(){
+      initalizeFloatLabel();
+    },1000);
   }
   componentWillUpdate(nextProps, nextState) {
 

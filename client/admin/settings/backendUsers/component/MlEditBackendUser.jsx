@@ -68,7 +68,6 @@ class MlEditBackendUser extends React.Component{
 
   componentDidUpdate(){
     OnToggleSwitch(true,true);
-    initalizeFloatLabel();
     passwordVisibilityHandler();
     var WinHeight = $(window).height();
     $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));
@@ -77,6 +76,11 @@ class MlEditBackendUser extends React.Component{
     if(url.indexOf("dashboard") != -1){
       $('input').attr('disabled', 'disabled');
     }
+  }
+  componentDidMount(){
+    setTimeout(function(){
+      initalizeFloatLabel();
+    },1000);
   }
 
     genderSelect(e){

@@ -174,7 +174,10 @@ export default class AppEmailDetails extends React.Component {
   }
 
   async onClear(index, selectedTabValue, value) {
-    this.refs["emailId" + index].value = "";
+    if(index == null)
+      this.refs["emailId"].value = "";
+    else
+      this.refs["emailId" + index].value = "";
   }
 
   async onDeleteEmail(index, value) {
@@ -243,7 +246,7 @@ export default class AppEmailDetails extends React.Component {
               <div className="ml_icon_btn">
                 <a href="#" className="save_btn" onClick={this.onSavingEmailDetails.bind(this)}><span
                   className="ml ml-save"></span></a>
-                <a href="#" className="cancel_btn">
+                <a href="#" className="cancel_btn" onClick={this.onClear.bind(this,null)}>
                   <span className="ml ml-delete"></span></a>
               </div>
             </div>

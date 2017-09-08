@@ -280,6 +280,7 @@ export default class MlCompanyEditChart extends Component {
                 <div className="col-md-6">
                   <div className="chart_bg">
                     <a  onClick={this.selectedGraph.bind(this)}>Edit</a>
+                    <p className="text-center">Employee breakup at Department level</p>
                     <PieTooltip
                       title= {title}
                       data= {this.state.empBreakUpData}

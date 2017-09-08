@@ -9,6 +9,7 @@ import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/m
 import MlAlertNotification from '../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
 import MlSubChapterAccessControl from './../../../mlAuthorization/mlSubChapterAccessControl';
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
+import mlSmsController from '../../../mlNotifications/mlSmsNotifications/mlSmsController'
 
 MlResolver.MlMutationResolver['createInquiry'] = (obj, args, context, info) =>{
     if(args && context && context.userId){

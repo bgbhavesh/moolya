@@ -938,6 +938,7 @@ button:focus{outline: 0;}
 .requested_input textarea{background: #fff; border: #ccc solid 1px; border-radius: 10px; padding: 10px; height: 250px;}
 .requested_input input[type="text"]{background: #fff; border: #ccc solid 1px; border-radius: 5px; padding: 10px;}
 .requested_input .req_input_icon{top: 31px; background: #ef4647; width: 25px; height: 25px; color: #ffffff; text-align: center; line-height: 25px; text-shadow: none; border-radius: 50%; right: -10px;}
+.requested_input .req_input_icon.fa-unlock{background: #273545;}
 
 .requested_input .req_textarea_icon{ margin-right:5px;   top: 29px; background: #273545; width: 25px; height: 25px; color: #fff; text-align: center; line-height: 25px; text-shadow: none; border-radius: 50%;}
 .requested_input .req_textarea_icon.fa-lock{background: #ef4647; }

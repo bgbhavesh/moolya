@@ -165,7 +165,7 @@ export default class MlServiceProviderAbout extends Component {
     let description = this.state.data.aboutDescription ? this.state.data.aboutDescription : ''
     let isDescriptionPrivate = this.state.data.isDescriptionPrivate ? this.state.data.isDescriptionPrivate : false
     return (
-      <div className="admin_main_wrap">
+      <div>
         {showLoader === true ? ( <MlLoader/>) : (
           <div className="requested_input">
             <h2>About</h2>

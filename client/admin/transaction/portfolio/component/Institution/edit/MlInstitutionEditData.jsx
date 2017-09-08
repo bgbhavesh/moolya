@@ -1,6 +1,7 @@
 import React from 'react';
 import {multipartASyncFormHandler} from '../../../../../../commons/MlMultipartFormAction'
 import {fetchInstitutionPortfolioData} from '../../../actions/findPortfolioInstitutionDetails'
+import ScrollArea from "react-scrollbar";
 
 
 export default class MlInstitutionEditData extends React.Component{
@@ -55,9 +56,11 @@ export default class MlInstitutionEditData extends React.Component{
     });
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-    $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
+    var className = this.props.isAdmin ? "admin_header" : "app_header"
+    // $('.main_wrap_scroll').height(WinHeight-($('.admin_header').outerHeight(true)+120));
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
     if(WinWidth > 768){
-      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
     }
   }
 
@@ -235,7 +238,12 @@ export default class MlInstitutionEditData extends React.Component{
       <div>
         <div className="portfolio-main-wrap">
           <h2>Data</h2>
-          <div className="tab_wrap_scroll">
+          <div className="main_wrap_scroll">
+            <ScrollArea
+              speed={0.8}
+              className="main_wrap_scroll"
+              smoothScrolling={true}
+              default={true}>
             <div className="col-md-6 col-sm-6 nopadding-left">
               <div className="panel panel-default">
                 <div className="panel-heading">
@@ -360,6 +368,7 @@ export default class MlInstitutionEditData extends React.Component{
                 </div>
               </div>
             </div>
+              </ScrollArea>
           </div>
         </div>
       </div>

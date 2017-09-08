@@ -207,7 +207,7 @@ export default class MlStartupManagement extends React.Component{
         this.fetchOnlyImages()
 
       }else{
-        this.setState({lodaing:false})
+        this.setState({loading:false})
       }
     }else{
       this.setState({loading: false, startupManagement: that.context.startupPortfolio.management, startupManagementList:that.context.startupPortfolio.management});

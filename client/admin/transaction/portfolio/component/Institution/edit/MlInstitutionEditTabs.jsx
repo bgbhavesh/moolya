@@ -100,7 +100,7 @@ export default class MlInstitutionEditTab extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Data",
-        component: <MlInstitutionEditData key="4" getDataDetails={this.getDataDetails.bind(this)}
+        component: <MlInstitutionEditData key="4" getDataDetails={this.getDataDetails.bind(this)} isAdmin={true}
                                           portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {

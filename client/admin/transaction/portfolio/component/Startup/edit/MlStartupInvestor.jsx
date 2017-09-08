@@ -57,11 +57,12 @@ export default class MlStartupInvestor extends React.Component{
     let empty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.investor)
     const response = await fetchStartupDetailsHandler(portfolioDetailsId, KEY);
     if(empty){
+      this.setState({loading: false})
       if (response) {
-        this.setState({loading: false, startupInvestor: response.investor, startupInvestorList: response.investor});
+        this.setState({startupInvestor: response.investor, startupInvestorList: response.investor});
       }
     }else{
-      this.setState({loading: false, startupInvestor: that.context.startupPortfolio.investor, startupInvestorList:that.context.startupPortfolio.investor});
+      this.setState({startupInvestor: that.context.startupPortfolio.investor, startupInvestorList:that.context.startupPortfolio.investor});
     }
     this.startupInvestorServer = response
   }

@@ -63,7 +63,7 @@ export default class MlAppActionComponent extends React.Component {
       {
         actionName: 'partner',
         displayName:'Partner',
-        iconClass: 'ml flaticon-ml-shapes'
+        iconClass: 'ml flaticon-ml-handshake-1'
       },
       {
         actionName: 'enquire',

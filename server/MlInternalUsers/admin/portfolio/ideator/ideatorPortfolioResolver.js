@@ -764,7 +764,7 @@ MlResolver.MlQueryResolver['validateUserForAnnotation'] = (obj, args, context, i
         if(portfolio.userId == context.userId){
           return true;
         }
-        if(user.profile.isInternaluser){
+        if(user && user.profile &&user.profile.isInternaluser){
           return true;
         }
         return false;

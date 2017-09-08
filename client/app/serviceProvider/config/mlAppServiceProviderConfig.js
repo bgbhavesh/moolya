@@ -3,6 +3,8 @@ import {MlAppViewer} from "../../../commons/core/MlAppViewer";
 import MlAppServiceProviderListView from "../components/MlAppServiceProviderListView";
 import React from "react";
 import gql from "graphql-tag";
+import MlAppFilterContainer from "../../commons/filter/MlAppFilterContainer";
+import filterData from '../../commons/config/exploreFilterConfig';
 
 export const mlAppServiceProviderConfig = new MlAppViewer({
   name: "Service Provider List",
@@ -17,6 +19,14 @@ export const mlAppServiceProviderConfig = new MlAppViewer({
   perPageLimit: 20,
   viewComponent: <MlAppServiceProviderListView />,
   showActionComponent: true,
+  header: true,
+  headerComponents:{
+    filter: true,
+    filterComponent: <MlAppFilterContainer />,
+    filterData: filterData,
+    search: true,
+    searchFields: ["about.aboutTitle","chapterName","accountType","communityType","firstName","lastName"]
+  },
   graphQlQuery: gql`
               query ($module: String!, $queryProperty: appGenericSearchQueryProperty) {
                 data: AppGenericSearch(module: $module, queryProperty: $queryProperty) {

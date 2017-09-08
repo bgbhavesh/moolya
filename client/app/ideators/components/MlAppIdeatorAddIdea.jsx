@@ -10,10 +10,15 @@ import formHandler from '../../../commons/containers/MlFormHandler';
 import {createIdeaActionHandler} from '../actions/ideatorActionHandler'
 import MlLoader from '../../../commons/components/loader/loader'
 import {mlFieldValidations} from '../../../commons/validations/mlfieldValidation'
+import MlAccordion from "../../commons/components/MlAccordion";
+import MlAppActionComponent from "../../commons/components/MlAppActionComponent";
+import {multipartASyncFormHandler, multipartFormHandler} from '../../../commons/MlMultipartFormAction'
+import {putDataIntoTheLibrary} from '../../../commons/actions/mlLibraryActionHandler'
+
 class MlAppIdeatorAddIdea extends React.Component{
   constructor(props, context){
       super(props);
-      this.state= {loading: false}
+      this.state= {loading: false, ideaImage:{}}
       this.createIdea.bind(this);
       this.handleSuccess.bind(this);
       return this;
@@ -23,18 +28,25 @@ class MlAppIdeatorAddIdea extends React.Component{
   {
       OnLockSwitch();
       dataVisibilityHandler();
-    initalizeFloatLabel();
+      initalizeFloatLabel();
   }
   componentDidUpdate()
   {
       OnLockSwitch();
       dataVisibilityHandler();
-    initalizeFloatLabel();
+      initalizeFloatLabel();
+      $('#upload_hex').change(function(){
+        document.getElementById('blah').src = window.URL.createObjectURL(this.files[0]);
+      });
   }
 
   async handleSuccess(response){
       FlowRouter.go('/app/portfolio')
   }
+  async handleError(response) {
+    console.log('error')
+    console.log(response)
+  };
 
   async createIdea() {
     let ret = mlFieldValidations(this.refs)
@@ -48,38 +60,123 @@ class MlAppIdeatorAddIdea extends React.Component{
         isIdeaPrivate: false,
         isActive: true
       };
-      const response = await createIdeaActionHandler(idea)
-      if (response && !response.success) {
-        toastr.error(response.result);
-      } else if (response && response.success) {
-        toastr.success(response.result);
+      let data ={
+        moduleName: "PORTFOLIO_IDEA_IMG",
+        actionName: "UPDATE",
+        isCreate:true,
+        communityType:"IDE",
+        idea:idea,
+        portfolio:{
+          ideaImage:{fileUrl:" ", fileName : this.state.fileName}
+        }
+      };
+      this.setState({loading:true})
+      multipartASyncFormHandler(data, this.state.file, 'registration',this.onFileUploadCallBack.bind(this, this.state.name, this.state.file));
+      // const response = await createIdeaActionHandler(idea)
+      // if(response){
+      //   if (!response.success) {
+      //     toastr.error(response.result);
+      //   } else if (response.success) {
+      //     toastr.success(response.result);
+      //   }
+      //   this.setState({loading:false})
+      //   // toastr.success("Idea created successfully")
+      //   FlowRouter.go("/app/portfolio");
+      //   return response;
+      // }
+      // let response = await multipartFormHandler(data, this.state.file, 'registration');
+    }
+  }
+  async libraryAction(file) {
+    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
+    return resp;
+  }
+
+  onLogoFileUpload(e){
+    if(e.target.files[0].length ==  0)
+      return;
+    let file = e.target.files[0];
+    let fileName = e.target.files[0].name;
+    let name = e.target.name;
+    this.setState({file:file, name:name, fileName:fileName})
+    // let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, file));
+  }
+  onFileUploadCallBack(name,file,resp){
+    if(resp){
+      let result = JSON.parse(resp)
+      // let userOption = confirm("Do you want to add the file into the library")
+      // if(userOption){
+      //   let fileObjectStructure = {
+      //     fileName: file.name,
+      //     fileType: file.type,
+      //     fileUrl: result.result,
+      //     libraryType: "image"
+      //   }
+      //   this.libraryAction(fileObjectStructure)
+      // }
+      if(result.success){
+        this.setState({loading:false, ideaImage:{fileUrl:result.result}}, function () {
+          setTimeout(function () {
+            toastr.success("Idea created successfully")
+            FlowRouter.go("/app/portfolio");
+          }, 1000)
+
+        })
       }
-      return response;
     }
   }
 
   render(){
-      let MlActionConfig = [
-          {
-              showAction: true,
-              actionName: 'edit',
-              handler: null
-          },
-          {
-              actionName: 'save',
-              showAction: true,
-              handler: async(event) => this.props.handler(this.createIdea.bind(this), this.handleSuccess.bind(this))
-          },
-          {
-              showAction: true,
-              actionName: 'cancel',
-              handler:  async(event) => {
-                FlowRouter.go("/app/portfolio")
-              }
-          }
-
-      ]
+      // let MlActionConfig = [
+      //     {
+      //         showAction: true,
+      //         actionName: 'edit',
+      //         handler: null
+      //     },
+      //     {
+      //         actionName: 'save',
+      //         showAction: true,
+      //         handler: async(event) => this.props.handler(this.createIdea.bind(this), this.handleSuccess.bind(this))
+      //     },
+      //     {
+      //         showAction: true,
+      //         actionName: 'cancel',
+      //         handler:  async(event) => {
+      //           FlowRouter.go("/app/portfolio")
+      //         }
+      //     }
+      //
+      // ]
+    const _this = this;
+    let appActionConfig = [
+      {
+        showAction: true,
+        actionName: 'save',
+        handler: async(event) => _this.props.handler(this.createIdea.bind(this), this.handleSuccess.bind(this), this.handleError.bind(this))
+      },
+      {
+        showAction: true,
+        actionName: 'cancel',
+        handler: async(event) => {
+          FlowRouter.go('/app/portfolio')
+        }
+      }
+    ];
+    export const genericPortfolioAccordionConfig = {
+      id: 'portfolioAccordion',
+      panelItems: [
+        {
+          'title': 'Actions',
+          isText: false,
+          style: {'background': '#ef4647'},
+          contentComponent: <MlAppActionComponent
+            resourceDetails={{resourceId: 'sacsdvdsv', resourceType: 'task'}}   //resource id need to be given
+            actionOptions={appActionConfig}/>
+        }]
+    };
       const showLoader = this.state.loading;
+      let image = this.state.ideaImage&&this.state.ideaImage.fileUrl?this.state.ideaImage.fileUrl:"/images/images.png";
       return (
           <div className="admin_main_wrap">
               <div className="admin_padding_wrap">
@@ -88,10 +185,10 @@ class MlAppIdeatorAddIdea extends React.Component{
                           <h2>Add Idea</h2>
                           <div className="col-lg-2 col-lg-offset-5 col-md-3 col-md-offset-4 col-sm-3 col-sm-offset-4">
                               <a href="#" >
-                                  <div className="list_block notrans">
-                                      <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeaPrivate"/><input type="checkbox" className="lock_input" id="makePrivate"/>
-                                      <div className="hex_outer portfolio-font-icons"><span className="ml ml-idea"></span></div>
-                                      <h3>Ideas</h3>
+                                  <div className="upload_hex">
+                                    <FontAwesome name='unlock' className="req_textarea_icon un_lock" id="isIdeaImagePrivate"/>
+                                    <img src={image} id="blah" width="105" height="auto"/>
+                                    <input className="upload" type="file" id="upload_hex"  onChange={this.onLogoFileUpload.bind(this)}/>
                                   </div>
                               </a>
                           </div>
@@ -109,7 +206,8 @@ class MlAppIdeatorAddIdea extends React.Component{
                           </div>
                       </div>
                   )}
-                  <MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>
+                  {/*<MlActionComponent ActionOptions={MlActionConfig} showAction='showAction' actionName="actionName"/>*/}
+                <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
               </div>
           </div>
       )

@@ -78,7 +78,7 @@ if(Meteor.isServer){
         "uniqueId" : "news"
       },
       {
-        "image":"ml my-ml-settings1",
+        "image":"ml my-ml-settings_new",
         "link": "/app/news",
         "isLink" : true,
         "isMenu" : true,

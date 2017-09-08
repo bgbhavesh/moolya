@@ -118,7 +118,7 @@ export default class MlAppActionComponent extends React.Component {
       {
         actionName: 'golive',
         displayName:'GoLive',
-        iconClass: 'ml ml-save'
+        iconClass: 'ml my-ml-launch_3'
       },
       {
         actionName: 'comment',

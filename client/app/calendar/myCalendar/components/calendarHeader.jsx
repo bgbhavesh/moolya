@@ -63,7 +63,7 @@ export default class MlCalendarHead extends Component {
       <div className="col-lg-12">
         <ul className="users_list well well-sm">
           <li className={that.state.isAll ? 'active_user' : ''}>
-            <a href="#" onClick={()=>that.resetWithAll()}>
+            <a href="" onClick={()=>that.resetWithAll()}>
               <img src={that.state.profilePic ? that.state.profilePic : "/images/def_profile.png"}/><br />
               <div className="tooltiprefer">
                 {/*Need to show only first name*/}

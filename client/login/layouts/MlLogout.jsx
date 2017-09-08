@@ -4,6 +4,7 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
 import {mlValidations} from "../../commons/validations/formValidation";
+import {initalizeFloatLabel} from '../../admin/utils/formElemUtil';
 
 export default class MlLogout extends Component {
   constructor(props) {
@@ -33,6 +34,9 @@ export default class MlLogout extends Component {
     }
   }
 
+  componentDidMount() {
+    initalizeFloatLabel();
+  }
   onValueChange(event) {
     if (event.target.name == 'userName')
       this.setState({userNameErr: ""})
@@ -53,11 +57,12 @@ export default class MlLogout extends Component {
           <img className="logo" src="/images/moolya_logo.png"/>
           <div className="clearfix"/>
           <div className="logout_message">
-            <h2>You have been logged out...</h2>
+            <h3>You have been logged out...</h3>
+            <br />
             <p>
-              ...as the result of clicking the logout link or because of an exteanded period of inactivity or as the
+              ...as the result of clicking the logout link or because of an extended period of inactivity or as the
               result of attempting to re-login using a bookmark or 'favorite' link.It could also be because of security
-              reasons or a percevide threat.
+              reasons or a perceived threat.
             </p>
             <h3>Please 'Sign in' below to continue</h3>
           </div>
@@ -66,10 +71,10 @@ export default class MlLogout extends Component {
               <div className="login_block login_block_in" id="login">
                 <form className="form-signin" onChange={this.onValueChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)}>
                   <span ref="userName">{this.state.userNameErr}</span>
-                  <input type="text" name="userName" ref="username" className="form-control" placeholder="Email"
+                  <input type="text" name="userName" ref="username" className="form-control float-label" placeholder="Email"
                          required autoFocus defaultValue={this.state.username} onBlur={this.validationCheck}/>
                   <span ref="Password">{this.state.passwordErr}</span>
-                  <input type="password" name="Password" className="form-control" ref="password"
+                  <input type="password" name="Password" className="form-control float-label" ref="password"
                          placeholder="Password" required defaultValue={this.state.password}
                          onBlur={this.validationCheck}/>
                   <div className="checkbox_wrap"><input type="checkbox"/><span>Remember me</span></div>

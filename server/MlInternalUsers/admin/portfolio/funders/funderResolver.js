@@ -126,7 +126,8 @@ MlResolver.MlQueryResolver['fetchfunderPortfolioInvestor'] = (obj, args, context
 
         })
       }
-      return portfolio['investments'];
+      var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, portfolio['investments'], context)
+      return filteredObject;
     }
   }
 

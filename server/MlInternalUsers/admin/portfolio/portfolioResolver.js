@@ -23,8 +23,11 @@ MlResolver.MlQueryResolver['fetchPortfolioDetailsByUserId'] = (obj, args, contex
     if (defaultProfile) {
       var defaultCommunity = defaultProfile.communityDefCode || {};
       var portfolio = MlPortfolioDetails.findOne({$and: [{userId: context.userId}, {communityCode: defaultCommunity}, {profileId: defaultProfile.profileId}]})
-      if (portfolio)
-        return portfolio;
+      if (portfolio) {
+          var data = MlResolver.MlQueryResolver['fetchPortfolioImage'](obj, {portfoliodetailsId: portfolio._id}, context, info);
+          portfolio.portfolioImage = data.portfolioImage
+          return portfolio;
+      }
       else
         console.log("portfolio not found")
     }
@@ -239,7 +242,7 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
         else{
           privateFields = args.privateFields || [];
         }
-        let detailsUpdate = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {status: 'WIP'}, {$set:true}, context)
+        let detailsUpdate = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {status: 'WIP', transactionUpdatedDate:new Date()}, {$set:true}, context)
       if(privateFields){
         detailsUpdate = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {privateFields:privateFields}, {$set:true}, context)
       }

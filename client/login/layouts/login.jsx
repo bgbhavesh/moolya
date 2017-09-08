@@ -1,6 +1,7 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import {mlValidations} from "../../commons/validations/formValidation";
+import {initalizeFloatLabel} from '../../admin/utils/formElemUtil';
 
 MlLoginLayout = React.createClass({
   render(){
@@ -36,7 +37,9 @@ MlLoginContent = React.createClass({
         // this.setState(Object.assign({passwordErr: this.validationMessage.errMsg}))
     }
   },
-
+  componentDidMount() {
+    initalizeFloatLabel();
+  },
   onValueChange(event){
     if (event.target.name == 'userName')
       this.setState(Object.assign({userNameErr: ""}))
@@ -66,10 +69,10 @@ MlLoginContent = React.createClass({
               <div className="login_block login_block_in">
                 <form className="form-signin" onChange={this.onValueChange} onKeyPress={this.handleKeyPress}>
                   <span ref="userName">{this.state.userNameErr}</span>
-                  <input name="userName" ref="username" type="text" className="form-control" placeholder="Email"
+                  <input name="userName" ref="username" type="text" className="form-control float-label" placeholder="Email"
                          required autoFocus defaultValue={this.state.username} onBlur={this.validationCheck}/>
                   <span ref="Password">{this.state.passwordErr}</span>
-                  <input name="Password" ref="password" type="password" className="form-control"
+                  <input name="Password" ref="password" type="password" className="form-control float-label"
                          placeholder="Password" required defaultValue={this.state.password}
                          onBlur={this.validationCheck}/>
 

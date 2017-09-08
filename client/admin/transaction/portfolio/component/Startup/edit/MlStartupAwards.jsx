@@ -57,7 +57,8 @@ export default class MlStartupAwards extends React.Component{
   async fetchPortfolioDetails() {
     let that = this;
     let portfolioDetailsId=that.props.portfolioDetailsId;
-    let empty = _.isEmpty(that.context.startupPortfolio && that.context.startupPortfolio.awardsRecognition)
+    var awardsRecognition = that.context.startupPortfolio && that.context.startupPortfolio.awardsRecognition
+    let empty = _.isEmpty(awardsRecognition)
     if(empty){
       const response = await fetchStartupDetailsHandler(portfolioDetailsId, KEY);
       if (response && response.awardsRecognition) {
@@ -239,7 +240,7 @@ export default class MlStartupAwards extends React.Component{
     if (response && response.awardsRecognition) {
       let dataDetails =this.state.startupAwards
       let cloneBackUp = _.cloneDeep(dataDetails);
-      let specificData = cloneBackUp[thisState];
+      let specificData = cloneBackUp[this.state.selectedIndex];
       if(specificData){
         let curUpload=response.awardsRecognition[this.state.selectedIndex]
         specificData['logo']= curUpload['logo']

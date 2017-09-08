@@ -109,6 +109,7 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends Component
     const showLoader = this.state.loading;
     return (
       <div>
+        <h2>Intellectual Property And Trademark</h2>
         {showLoader === true ? (<MlLoader/>) : (
           <div className="main_wrap_scroll">
             <ScrollArea
@@ -123,12 +124,13 @@ export default class MlIdeatorIntellectualPlanningAndTrademark extends Component
                   <div className="panel panel-default panel-form">
                     <div className="panel-heading">
                       Intellectual Property And Trademark
+                      <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isIntellectualPrivate" onClick={this.onLockChange.bind(this, "IPdescription", "isIntellectualPrivate")}/>
                     </div>
                     <div className="panel-body">
 
                       <div className="form-group nomargin-bottom">
                         <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description} onBlur={this.onInputChange.bind(this)} name="IPdescription"></textarea>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIntellectualPrivate" onClick={this.onLockChange.bind(this, "IPdescription", "isIntellectualPrivate")}/>
+
                       </div>
 
                     </div>

@@ -198,6 +198,7 @@ export default class MlIdeatorProblemsAndSolutions extends React.Component{
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
               <div className="row requested_input">
+                <div className="col-md-12"><h2>Problems and Solutions</h2></div>
                 <div className="col-lg-6">
                   <div className="panel panel-default panel-form">
                     <div className="panel-heading">

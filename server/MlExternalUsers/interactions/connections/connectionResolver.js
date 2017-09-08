@@ -149,9 +149,10 @@ MlResolver.MlMutationResolver['connectionRequest'] = (obj, args, context, info) 
                                          {$set:true},context);
     if(resp===1){
       ////create the transaction record and log
+      let fromUserType = 'user';
       let connectionRec=mlDBController.findOne('MlConnections',{connectionCode:connectionCode},context)||{};
-      mlInteractionService.createTransactionRequest(toUser._id,'connectionRequest',connectionRec._id);
-
+      //mlInteractionService.createTransactionRequest(toUser._id,'connectionRequest',connectionRec._id);
+      mlInteractionService.createTransactionRequest(toUser._id,'connectionRequest', args.resourceId,connectionRec._id, fromuser._id, fromUserType );
       return new MlRespPayload().successPayload(resp,200)
     };
 

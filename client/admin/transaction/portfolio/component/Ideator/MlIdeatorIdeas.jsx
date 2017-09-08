@@ -49,14 +49,13 @@ export default class MlIdeatorIdeas extends React.Component{
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
       details=_.extend(details,{[key]:true});
-      isPrivate = true;
+      isPrivate = true
     }else{
       details=_.extend(details,{[key]:false});
     }
-
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, tabName: this.props.tabName}
+    var privateKey = {keyName: fieldName, booleanKey: field, isPrivate: isPrivate, tabName: this.props.tabName}
     // this.setState({privateKey:privateKey})
-    this.setState({data:details, privateKey:privateKey}, function () {
+    this.setState({data: details, privateKey: privateKey}, function () {
       this.sendDataToParent()
     })
 
@@ -107,7 +106,7 @@ export default class MlIdeatorIdeas extends React.Component{
   sendDataToParent(){
     let data = this.state.data;
     for (var propName in data) {
-      if (data[propName] === null || data[propName] === undefined || propName === '__typename' || propName === 'ideaImage' || propName === 'privateFields') {
+      if (data[propName] === null || data[propName] === undefined || propName === '__typename' || propName === 'privateFields') {
         delete data[propName];
       }
     }
@@ -152,9 +151,10 @@ export default class MlIdeatorIdeas extends React.Component{
   }
 
   render(){
+    let that = this;
     const showLoader = this.state.loading;
-    let description = this.state.data.description?this.state.data.description:''
-    let lockStatus =  this.state.data.isIdeasPrivate?this.state.data.isIdeasPrivate:false
+    let ideaDescription = this.state.data.ideaDescription?this.state.data.ideaDescription:''
+    let image = that.state.data && that.state.data.ideaImage&&that.state.data.ideaImage.fileUrl?that.state.data.ideaImage.fileUrl:"/images/images.png";
     return (
       <div className="admin_main_wrap">
         {showLoader === true ? (<MlLoader/>) : (
@@ -163,8 +163,8 @@ export default class MlIdeatorIdeas extends React.Component{
         <div className="col-lg-2 col-lg-offset-5 col-md-3 col-md-offset-4 col-sm-3 col-sm-offset-4">
           <a href="#" >
             <div className="upload_hex">
-              <FontAwesome name='unlock' className="req_textarea_icon un_lock" id="isIdeaPrivate"/><input type="checkbox" className="lock_input" id="makePrivate"/>
-              <img src={this.state.data && this.state.data.ideaImage&&this.state.data.ideaImage.fileUrl?this.state.data.ideaImage.fileUrl:"/images/images.png"} id="blah" width="105" height="auto"/>
+              <FontAwesome name='unlock' className="req_textarea_icon un_lock" id="isIdeaImagePrivate"/>
+              <img src={image} id="blah" width="105" height="auto"/>
               <input className="upload" type="file" id="upload_hex"  onChange={this.onLogoFileUpload.bind(this)}/>
             </div>
           </a>
@@ -173,11 +173,11 @@ export default class MlIdeatorIdeas extends React.Component{
           <form>
             <div className="form-group">
               <input type="text" placeholder="Title" className="form-control float-label" id="cluster_name" defaultValue={this.state.data.title} name="title" onBlur={this.handleBlur.bind(this)}/>
-              <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeasTitlePrivate" onClick={this.onClick.bind(this, "title", "isIdeasTitlePrivate")}/>
+              <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeaTitlePrivate" onClick={this.onClick.bind(this, "title", "isIdeaTitlePrivate")}/>
             </div>
             <div className="form-group">
-              <textarea placeholder="Describe..." className="form-control float-label" id="cl_about" defaultValue={description} name="description" onBlur={this.handleBlur.bind(this)}></textarea>
-              <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeasPrivate" onClick={this.onClick.bind(this, "description", "isIdeasPrivate")}/>
+              <textarea placeholder="Describe..." className="form-control float-label" id="cl_about" defaultValue={ideaDescription} name="ideaDescription" onBlur={this.handleBlur.bind(this)}></textarea>
+              <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeaPrivate" onClick={this.onClick.bind(this, "ideaDescription", "isIdeaPrivate")}/>
             </div>
           </form>
         </div>

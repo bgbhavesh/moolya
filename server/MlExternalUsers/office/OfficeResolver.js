@@ -53,7 +53,8 @@ MlResolver.MlQueryResolver['fetchOffice'] = (obj, args, context, info) => {
 MlResolver.MlQueryResolver['fetchOfficeSC'] = (obj, args, context, info) => {
   let officeSC = [];
   if (context.userId) {
-    let myOffices = mlDBController.find('MlOfficeMembers', {userId: context.userId, isActive:true}).fetch().map(function (data) {
+    var defaultProfile = new MlUserContext().userProfileDetails(context.userId)
+    let myOffices = mlDBController.find('MlOfficeMembers', {userId: context.userId, profileId:defaultProfile.profileId, isActive:true}).fetch().map(function (data) {
       return data.officeId;
     });
     let officeQuery= {
@@ -64,7 +65,8 @@ MlResolver.MlQueryResolver['fetchOfficeSC'] = (obj, args, context, info) => {
           }
         },
         {
-          userId: context.userId
+          userId: context.userId,
+          profileId:defaultProfile.profileId
         }
       ],
       isActive:true
@@ -671,14 +673,14 @@ MlResolver.MlMutationResolver["getOfficeTransactionPaymentLink"] = (obj, args, c
         "paymentEndPoint": "paypal",
         "operation": "debit",
         "customerId": officeTransDetails.userId,
-        "callBackUrl": "http://10.0.2.188:3000/app/myOffice"
-        // "callBackUrl": Meteor.absoluteUrl() +"app/transaction"
+        // "callBackUrl": "http://10.0.2.188:3000/app/myOffice"
+        "callBackUrl": Meteor.absoluteUrl() +"app/transaction"
       };
 
       let apiRequest = {
         headers: {'content-type' : 'application/text'},
-        // url:     'http://payment-services-814468192.ap-southeast-1.elb.amazonaws.com/payments/process'
-        url:     "http://10.0.2.140:8080/payments/process"
+        url:     'http://payment-services-814468192.ap-southeast-1.elb.amazonaws.com/payments/process'
+        // url:     "http://10.0.2.140:8080/payments/process"
       };
 
       let future = new Future();

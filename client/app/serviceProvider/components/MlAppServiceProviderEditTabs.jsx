@@ -15,13 +15,14 @@ import MlServiceProviderAwards from "../../../admin/transaction/portfolio/compon
 import MlServiceProviderMCL from "../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderMCL";
 import MlServiceProviderServices from "../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderServices";
 import MlServiceProviderClients from "../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderClients";
+import MlServiceProviderLookingFor from "../../../admin/transaction/portfolio/component/ServiceProvider/edit/MlServiceProviderLookingFor";
 import PortfolioLibrary from '../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import {appClient} from '../../core/appConnection'
 
 export default class MlAppServiceProviderEditTabs extends Component {
   constructor(props) {
     super(props)
-    this.state = {tabs: [], aboutUs: {}, serviceProviderPortfolio: {}};
+    this.state = {tabs: [], aboutUs: {}, serviceProviderPortfolio: {}, portfolioKeys: {privateKeys: [], removePrivateKeys: []}};
     this.getChildContext.bind(this)
     this.getAwardsDetails.bind(this);
     this.getFunderLibrary.bind(this)
@@ -29,7 +30,8 @@ export default class MlAppServiceProviderEditTabs extends Component {
 
   getChildContext() {
     return {
-      serviceProviderPortfolio: this.state.serviceProviderPortfolio
+      serviceProviderPortfolio: this.state.serviceProviderPortfolio,
+      portfolioKeys: this.state.portfolioKeys
     }
   }
 
@@ -94,11 +96,28 @@ export default class MlAppServiceProviderEditTabs extends Component {
         component: <MlServiceProviderClients key="6" client={appClient} isAdmin={false}
                                              getServiceProviderClients={this.getServiceProviderClients.bind(this)}
                                              portfolioDetailsId={this.props.portfolioDetailsId}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Looking For",
+        component: <MlServiceProviderLookingFor key="7" client={appClient} isAdmin={false}
+                                             getLookingForDetails={this.getLookingForDetails.bind(this)}
+                                             portfolioDetailsId={this.props.portfolioDetailsId}/>
       }
-    ]
+    ];
     return tabs;
   }
 
+  getLookingForDetails(details, privatekey) {
+    let data = this.state.serviceProviderPortfolio;
+    if (data && !data.lookingFor) {
+      data['lookingFor'] = [];
+    }
+    data['lookingFor'] = details;
+    this.setState({serviceProviderPortfolio: data})
+    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privatekey);
+  }
   /**
    * getting all values from the child components and passing all to Main component through props
    * */
@@ -197,6 +216,22 @@ export default class MlAppServiceProviderEditTabs extends Component {
     this.setState({tabs: getTabs() || []});
   }
 
+  getAllPrivateKeys(privateKeys, removePrivateKeys) {
+    let obj = {
+      privateKeys:privateKeys,
+      removePrivateKeys:removePrivateKeys
+    }
+    this.setState({portfolioKeys: obj});
+    return obj
+  }
+
+  componentWillReceiveProps(newProps) {
+    console.log('newProps', newProps);
+    if (newProps) {
+      const resp = this.getAllPrivateKeys(newProps.privateKeys, newProps.removePrivateKeys);
+      return resp
+    }
+  }
   render() {
     let tabs = this.state.tabs;
     return <MlTabComponent tabs={tabs}/>
@@ -208,4 +243,5 @@ export default class MlAppServiceProviderEditTabs extends Component {
  * */
 MlAppServiceProviderEditTabs.childContextTypes = {
   serviceProviderPortfolio: PropTypes.object,
+  portfolioKeys: PropTypes.object
 };

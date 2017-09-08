@@ -17,6 +17,7 @@ import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormA
 let FontAwesome = require('react-fontawesome');
 let Select = require('react-select');
 import _ from 'lodash';
+
 /**
  * Initialize conversation types
  */
@@ -188,7 +189,7 @@ export default class MlAppBasicInfo extends React.Component{
         InternalUprofile: {moolyaProfile: {profileImage: " "}}
       }
     };
-    let file = document.getElementById("profilePic").files[0];
+    let file = document.getElementById("upload_hex").files[0];
     if (file) {
       let data = {moduleName: "PROFILE", actionName: "UPDATE", user: user};
 
@@ -203,7 +204,7 @@ export default class MlAppBasicInfo extends React.Component{
           that.setState({
             basicData : data
           }, () => {
-            this.saveDetails();
+            that.saveDetails();
           });
         }
       });
@@ -232,7 +233,7 @@ export default class MlAppBasicInfo extends React.Component{
   addDeliverables(index, evt) {
     let deliverable = _.cloneDeep(this.state.basicData.deliverable);
     let basicData = _.cloneDeep(this.state.basicData);
-    deliverable.splice(index+1, 0, '');
+    deliverable.splice(index, 0, '');
     basicData.deliverable = deliverable;
     this.setState({
       basicData: basicData
@@ -287,7 +288,7 @@ export default class MlAppBasicInfo extends React.Component{
 
     $('.float-label').jvFloat();
     let WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(290+$('.app_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight-(260+$('.app_header').outerHeight(true)));
     $('.switch input').change(function () {
       if ($(this).is(':checked')) {
         $(this).parent('.switch').addClass('on');
@@ -406,15 +407,19 @@ export default class MlAppBasicInfo extends React.Component{
                               selectedValue={that.state.basicData.industryTypes}
                 />
 
-                <div className="previewImg ProfileImg">
+                {/*<div className="previewImg ProfileImg">
                   <img src={ that.state.basicData.imageLink ? that.state.basicData.imageLink :'/images/def_profile.png'}/>
-                </div>
+                </div>*/}
                 <div className="form-group">
-                  <div className="fileUpload mlUpload_btn">
+                  {/*<div className="fileUpload mlUpload_btn">
                     <span>Upload Image</span>
                     <input type="file" className="upload" id="profilePic"  onChange={that.onFileUpload.bind(that)} />
                   </div>
-                  <br className="brclear"/>
+                  <br className="brclear"/>*/}
+                  <div className="upload_hex">
+                    <img src={ that.state.basicData.imageLink ? that.state.basicData.imageLink :'/images/images.png'} id="blah" width="105" height="auto"/>
+                    <input className="upload" type="file" id="upload_hex"  onChange={that.onFileUpload.bind(this)}/>
+                  </div>
                 </div>
                 <div className="form-group">
                   <div className="input_types">

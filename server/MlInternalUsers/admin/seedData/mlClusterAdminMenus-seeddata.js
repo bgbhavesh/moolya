@@ -883,7 +883,7 @@ if(Meteor.isServer){
         ]
       },
       {
-        "image" : "ml my-ml-settings1",
+        "image" : "ml my-ml-settings_new",
         "link" : "/admin/settings/regionalsList",
         "name" : "Settings",
         "uniqueId" : "settings",

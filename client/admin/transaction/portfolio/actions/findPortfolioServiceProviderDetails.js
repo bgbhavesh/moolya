@@ -451,3 +451,53 @@ export async function findServiceProviderAboutActionHandler(portfoliodetailsId) 
   let data = _.omit(id, '__typename')
   return data
 }
+
+export async function findServiceProviderLookingForActionHandler(portfoliodetailsId) {
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            data:fetchServiceProviderDetails(portfoliodetailsId: $portfoliodetailsId, key:"lookingFor") {
+              lookingFor{
+                lookingForName,
+                lookingForId,
+                lookingDescription,
+                index
+                privateFields{
+                  keyName
+                  booleanKey
+                  index
+                  tabName
+                }
+                makePrivate
+              }
+            }
+          }
+
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data.data && result.data.data.lookingFor;
+  // let data = _.omit(id, '__typename')
+  return id
+}
+
+export async function validateUserForAnnotation(portfoliodetailsId) {
+
+  const result = await client.query({
+    query: gql`
+          query ($portfoliodetailsId: String!) {
+            validateUserForAnnotation(portfoliodetailsId: $portfoliodetailsId)
+          }
+
+      `,
+    variables: {
+      portfoliodetailsId: portfoliodetailsId
+    },
+    forceFetch: true
+  })
+  const id = result.data && result.data.validateUserForAnnotation;
+  return id
+}

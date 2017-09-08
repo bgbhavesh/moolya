@@ -302,7 +302,7 @@ export default class MlAppRegStep4 extends React.Component {
 
       {
         showAction: true,
-        actionName: 'exit',
+        actionName: 'cancel',
         handler: null
       },
     ]

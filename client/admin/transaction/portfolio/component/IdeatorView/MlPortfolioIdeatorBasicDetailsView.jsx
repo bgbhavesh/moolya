@@ -28,30 +28,32 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
 
   componentDidMount()
   {
-    OnLockSwitch();
-    dataVisibilityHandler();
+    // OnLockSwitch();
+    // dataVisibilityHandler();
 
   }
 
   componentDidUpdate()
   {
     initalizeFloatLabel();
-    OnLockSwitch();
-    dataVisibilityHandler();
-
+    // OnLockSwitch();
+    // dataVisibilityHandler();
+    var className = this.props.isAdmin?"admin_header":"app_header"
 
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
 
-    $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
+    // $('.main_wrap_scroll').height(WinHeight-($('.admin_header').outerHeight(true)+120));
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
     if(WinWidth > 768){
-      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
     }
 
   }
 
   componentWillMount(){
-    this.fetchPortfolioDetails();
+    const resp = this.fetchPortfolioDetails();
+    return resp
   }
 
 
@@ -75,7 +77,7 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
         {showLoader === true ? ( <MlLoader />) : (
             <div>
               <h2>Ideator</h2>
-        <div className="tab_wrap_scroll">
+        <div className="main_wrap_scroll">
               <div className="col-md-6 nopadding-left">
 
                     <div className="form_bg">
@@ -83,11 +85,11 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
 
                         <div className="form-group">
                           <input type="text" placeholder="First Name" name="firstName" defaultValue={this.state.data.firstName} className="form-control float-label"  disabled="disabled"/>
-                          <FontAwesome name='unlock' className="input_icon un_lock" id="isfirstNamePrivate"/>
+                          <FontAwesome name='unlock' className="input_icon " id="isfirstNamePrivate"/>
                         </div>
                         <div className="form-group">
                           <input type="text" placeholder="Last Name" name="lastName" defaultValue={this.state.data.lastName} className="form-control float-label"  disabled="disabled"/>
-                          <FontAwesome name='unlock' className="input_icon un_lock" id="islastNamePrivate"/>
+                          <FontAwesome name='unlock' className="input_icon " id="islastNamePrivate"/>
                         </div>
 
                         {/*<div className="form-group">*/}
@@ -97,7 +99,7 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
 
                         <div className="form-group">
                           <Select name="form-field-name" placeholder="Select Gender" value={this.state.data.gender}  options={genderValues} disabled className="float-label" />
-                          <FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate"/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isGenderPrivate}/>
+                          <FontAwesome name='unlock' className="input_icon " id="isGenderPrivate"/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isGenderPrivate}/>
                         </div>
 
                         <div className="form-group">
@@ -107,18 +109,18 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
 
                         <div className="form-group">
                           <input type="text" placeholder="Employment Status" name="employmentStatus" defaultValue={this.state.data.employmentStatus} className="form-control float-label"  disabled="disabled"/>
-                          <FontAwesome name='unlock' className="input_icon un_lock" id="isEmploymentStatusPrivate"/>
+                          <FontAwesome name='unlock' className="input_icon " id="isEmploymentStatusPrivate"/>
                         </div>
 
                         <div className="form-group">
                           <input type="text" placeholder="Professional Tag" name="professionalTag" defaultValue={this.state.data.professionalTag} className="form-control float-label" disabled="disabled"/>
-                          <FontAwesome name='unlock' className="input_icon un_lock" id="isProfessionalTagPrivate"/>
+                          <FontAwesome name='unlock' className="input_icon " id="isProfessionalTagPrivate"/>
                         </div>
 
 
                         <div className="form-group">
                           <input type="text" placeholder="Years of Experience" name="yearsofExperience" defaultValue={this.state.data.yearsofExperience} className="form-control float-label"  disabled="disabled"/>
-                          <FontAwesome name='unlock' className="input_icon un_lock" id="isYoePrivate"/>
+                          <FontAwesome name='unlock' className="input_icon " id="isYoePrivate"/>
                         </div>
                       </form>
 
@@ -138,7 +140,7 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
 
                         <div className="form-group">
                           <input type="text" placeholder="Industry" ref="industry" defaultValue={this.state.data.industry} className="form-control float-label"  disabled="disabled"/>
-                          <FontAwesome name='unlock' className="input_icon un_lock" id="isIndustryPrivate"/>
+                          <FontAwesome name='unlock' className="input_icon " id="isIndustryPrivate"/>
                         </div>
 
 

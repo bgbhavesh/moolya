@@ -64,6 +64,10 @@ componentDidUpdate(){
       let index=_.findIndex(response, {'isDefault':true })||0;
       let initialSlideIndex=index>=0?index:0;
       this.setState({loading: false, userProfiles: response,'currentSlideIndex':initialSlideIndex});
+      let profileDetails=this.state.userProfiles[this.state.currentSlideIndex]||{};
+      if(profileDetails && profileDetails.isDefault==true){
+        $('#makeDefault').addClass('red_color_btn');
+      }
     }
   }
 
@@ -199,7 +203,7 @@ componentDidUpdate(){
 
             <div className="col-md-12 text-center">
               <div className="col-md-4" onClick={this.setDefaultUserProfile.bind(this)}>
-                <a href="#" className="fileUpload mlUpload_btn">Make Default</a>
+                <a href="#" id="makeDefault" className="fileUpload mlUpload_btn">Make Default</a>
               </div>
 
               <div className="col-md-4" onClick={this.switchProfile.bind(this)}>

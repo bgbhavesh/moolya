@@ -32,7 +32,7 @@ let ideatorPortfolioSchema = `
     
     type ideatoraboutInfo{
         title:String
-        description:String
+        ideaDescription:String
         isTitlePublic:Boolean
         isDescriptionPublic:Boolean
     }
@@ -78,12 +78,13 @@ let ideatorPortfolioSchema = `
     type ideasObject{
         _id:String
         title:String,
-        isIdeasTitlePrivate:Boolean,
+        isIdeaTitlePrivate:Boolean,
         portfolioId:String
-        description:String,
-        isIdeasPrivate:Boolean,
+        ideaDescription:String,
+        isIdeaPrivate:Boolean,
         isActive:Boolean,
         privateFields:[PrivateKeys]
+        ideaImage      : imagesTypeSchema
     }
     
     type imagesTypeSchema{
@@ -119,13 +120,7 @@ let ideatorPortfolioSchema = `
         isIntellectualPrivate :Boolean
         privateFields:[PrivateKeys]
     }
-    
-    type lookingforInfo{
-        lookingForDescription:String
-        isLookingForPrivate:Boolean
-        privateFields:[PrivateKeys]
-    }
-    
+       
     type libraryInfo{
         fileType:String
         portfolioId:String
@@ -144,14 +139,14 @@ let ideatorPortfolioSchema = `
          audience : audienceInfo
          strategyAndPlanning : strategyplansInfo
          intellectualPlanning : intellectualplanningInfo
-         lookingFor : lookingforInfo
+         lookingFor : [lookingForOutput]
          library:libraryInfo
     }
     
 
     input ideatorabout{
         title:String,
-        description:String,
+        ideaDescription:String,
         isTitlePublic:Boolean,
         isDescriptionPublic:Boolean
     }
@@ -220,22 +215,18 @@ let ideatorPortfolioSchema = `
     }
     input ideas{
         title:String,
-        isIdeasTitlePrivate:Boolean,
-        description:String,
-        isIdeasPrivate:Boolean,
+        isIdeaTitlePrivate:Boolean,
+        ideaDescription:String,
+        isIdeaPrivate:Boolean,
         isActive:Boolean
+        ideaImage : imageFilesInputSchema
     }
     
     input intellectualPlanning{
         IPdescription:String, 
         isIntellectualPrivate :Boolean
     }
-    
-    input lookingFor{
-        lookingForDescription:String,
-        isLookingForPrivate:Boolean
-    }
-    
+        
     input library{
         fileType:String,
         portfolioId:String,
@@ -251,7 +242,7 @@ let ideatorPortfolioSchema = `
         audience:audience,
         strategyAndPlanning:strategyAndPlanning,
         intellectualPlanning:intellectualPlanning,
-        lookingFor:lookingFor,
+        lookingFor:[lookingFor],
         library:library
     }
     
@@ -286,17 +277,19 @@ let ideatorPortfolioSchema = `
         portfolioId:String,
         title:String,
         isIdeaTitlePrivate:Boolean,
-        description:String,
+        ideaDescription:String,
         isIdeaPrivate:Boolean,
         isActive:Boolean
+        ideaImage : imagesTypeSchema
     }
     
     input idea{
         title:String,
         isIdeaTitlePrivate:Boolean,
-        description:String,
+        ideaDescription:String,
         isIdeaPrivate:Boolean,
         isActive:Boolean
+        ideaImage : imageFilesInputSchema
     }
     
     input fileAttributes{
@@ -372,8 +365,7 @@ let ideatorPortfolioSchema = `
         fetchIdeatorPortfolioAudience(portfoliodetailsId:String!): audienceInfo
         fetchIdeatorPortfolioLibrary(portfoliodetailsId:String!): libraryInfo
         fetchIdeatorPortfolioStrategyAndPlanning(portfoliodetailsId:String!): strategyplansInfo
-        fetchIdeatorPortfolioIntellectualPlanning(portfoliodetailsId:String!): intellectualplanningInfo
-        fetchIdeatorPortfolioLookingFor(portfoliodetailsId:String!): lookingforInfo
+        fetchIdeatorPortfolioIntellectualPlanning(portfoliodetailsId:String!): intellectualplanningInfo       
         fetchIdeatorPortfolioRequests:response
         fetchAnnotations(portfoliodetailsId:String!, docId:String!): response
         fetchComments(annotationId:String): [commentsInfo]
@@ -407,7 +399,6 @@ let supportedApi = [
   {api:'fetchIdeatorPortfolioLibrary', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchIdeatorPortfolioStrategyAndPlanning', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchIdeatorPortfolioIntellectualPlanning', actionName:'READ', moduleName:"PORTFOLIO"},
-  {api:'fetchIdeatorPortfolioLookingFor', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchIdeatorPortfolioRequests', actionName:'READ', moduleName:"PORTFOLIO"},
   {api:'fetchAnnotations', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
   {api:'fetchComments', actionName:'READ', moduleName:"PORTFOLIO", isWhiteList:true},
@@ -437,3 +428,11 @@ let supportedApi = [
 
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
+/**
+ * Note: graphQl schema to be used multiple times hence using only onces
+ * @lookingFor  : startup
+ * @lookingForOutput : startup
+ * */
+
+// fetchIdeatorPortfolioLookingFor(portfoliodetailsId:String!): lookingforInfo
+// {api:'fetchIdeatorPortfolioLookingFor', actionName:'READ', moduleName:"PORTFOLIO"},

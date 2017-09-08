@@ -12,6 +12,7 @@ import MlFunderNews from '../../../admin/transaction/portfolio/component/Funder/
 import MlFunderPrincipalTeam from '../../../admin/transaction/portfolio/component/Funder/MlFunderPrincipalTeam'
 import MlFunderSuccessStories from '../../../admin/transaction/portfolio/component/Funder/MlFunderSuccessStories'
 import MlFunderServices from '../../../admin/transaction/portfolio/component/Funder/MlFunderServices'
+import MlFunderLookingFor from '../../../admin/transaction/portfolio/component/Funder/MlFunderLookingFor'
 import FunderCreateServicesView from '../../../admin/transaction/portfolio/component/Funder/beSpokeHandler'
 import MlBeSpokeListView from '../../../admin/transaction/portfolio/component/Funder/MlFunderServicesList'
 import {appClient} from '../../core/appConnection'
@@ -117,6 +118,13 @@ export default class MlAppFunderEditTabs extends React.Component {
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
+        title: "Looking For",
+        component: <MlFunderLookingFor key="8" getLookingFor={this.getLookingFor.bind(this)} tabName="lookingFor"
+                                       portfolioDetailsId={this.props.portfolioDetailsId}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
         title: "Services",
         component: <MlFunderServices myPortfolio={true} createServiceMode={true} client={appClient} isAdmin={false}
                                      key="10" getServiceDetails={this.getServiceDetails.bind(this)}
@@ -124,6 +132,13 @@ export default class MlAppFunderEditTabs extends React.Component {
       } //getFunderServicesDetails={this.getFunderServicesDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}
     ]
     return tabs;
+  }
+
+  getLookingFor(details, privateKey) {
+    let data = this.state.funderPortfolio;
+    data['lookingFor'] = details;
+    this.setState({funderPortfolio: data})
+    this.props.getPortfolioDetails({funderPortfolio: this.state.funderPortfolio}, privateKey);
   }
 
   getSuccessStoriesDetails(details, privatekey) {

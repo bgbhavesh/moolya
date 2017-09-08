@@ -116,7 +116,7 @@
     "react-addons-pure-render-mixin": "^15.5.2",
     "react-addons-transition-group": "^15.5.2",
     "react-apollo": "0.8.3",
-    "react-big-calendar": "0.14.4",
+    "react-big-calendar": "^0.14.4",
     "react-bootstrap": "0.31.2",
     "react-bootstrap-table": "^3.3.9",
     "react-composer": "1.0.1",

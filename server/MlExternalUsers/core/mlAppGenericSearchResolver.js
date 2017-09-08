@@ -50,6 +50,22 @@ MlResolver.MlUnionResolver['AppGenericSearchUnion'] =  {
 
 MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
 
+  let filterQuery = args.queryProperty && args.queryProperty.filterQuery ? JSON.parse(args.queryProperty.filterQuery) : {};
+  let searchText = args.queryProperty && args.queryProperty.searchText ? args.queryProperty.searchText : '';
+  let searchFields = args.queryProperty && args.queryProperty.searchFields ? args.queryProperty.searchFields : [];
+
+  let searchQuery = {};
+  if(searchText && searchFields.length){
+    searchQuery = searchFields.map( (field) => {
+      let res = {};
+      res[field] = new RegExp(searchText, 'ig');
+      return res;
+    });
+    searchQuery = { "$or" : searchQuery };
+  }
+
+  console.log(filterQuery, searchFields, searchText, searchQuery);
+
   let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('SEARCH', context);
   mlSubChapterAccessControl = mlSubChapterAccessControl ? mlSubChapterAccessControl : {};
   mlSubChapterAccessControl.subChapters = mlSubChapterAccessControl.subChapters ? mlSubChapterAccessControl.subChapters : [];
@@ -104,10 +120,15 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           accountType: '$port.accountType',
           communityType: '$port.communityType',
           firstName: '$user.profile.firstName',
-          lastName: "$user.profile.lastName"
+          lastName: "$user.profile.lastName",
+          clusterId: '$port.clusterId',
+          chapterId: '$port.chapterId',
+          communityCode: '$port.communityCode',
+          industryId: '$port.industryId',
         }
-      }
-    ]
+      },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+    ];
     data = mlDBController.aggregate('MlFunderPortfolio', query, context);
     count = data.length
   }
@@ -137,9 +158,14 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           accountType: '$port.accountType',
           communityType: '$port.communityType',
           firstName: '$user.profile.firstName',
-          lastName: "$user.profile.lastName"
+          lastName: "$user.profile.lastName",
+          clusterId: '$port.clusterId',
+          chapterId: '$port.chapterId',
+          communityCode: '$port.communityCode',
+          industryId: '$port.industryId',
         }
-      }
+      },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
     ];
     data = mlDBController.aggregate('MlServiceProviderPortfolio', pipleline, context);
     count = data.length;
@@ -170,79 +196,90 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           accountType: '$port.accountType',
           communityType: '$port.communityType',
           firstName: '$user.profile.firstName',
-          lastName: "$user.profile.lastName"
+          lastName: "$user.profile.lastName",
+          clusterId: '$port.clusterId',
+          chapterId: '$port.chapterId',
+          communityCode: '$port.communityCode',
+          industryId: '$port.industryId',
         }
-      }
+      },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
     ];
     data = mlDBController.aggregate('MlStartupPortfolio', pipleline, context);
     count = data.length;
   }
 
   else if (args.module == "ideatorPortfolioDetails") {
-    var allIds = [];
-    var ideator = [];
-
-    var allIdeas = MlIdeas.find({isActive: true}).fetch();
-    allIds = _.map(allIdeas, "userId");
-    allIds = _.uniq(allIds);
-
-    _.each(allIds, function (userId) {
-      var queryThis = {userId: userId, status: 'gone live', subChapterId: subChapterQuery }
-
-      let portfolios = MlPortfolioDetails.find(queryThis).fetch();
-      var ideasArr = [];
-      if (!_.isEmpty(portfolios)) {
-        /**checking portfolio is there or not with this ID*/
-        _.each(portfolios, function (portfolio) {
-          let ideas = MlIdeas.findOne({portfolioId: portfolio._id}) || {};
-          ideasArr.push(ideas);
-        })
-        let user = Meteor.users.findOne({_id: userId});
-        let ideaObj = {
-          userId: userId,
-          ideas: ideasArr,
-          chapterName: portfolios[0].chapterName,
-          name: user.profile.firstName + " " + user.profile.lastName,
-          accountType: portfolios[0].accountType
-        }
-        ideator.push(ideaObj)
-      }
-    })
-    //todo://need to include the search params in the query it self this is need to be change
-    data = ideator;
-    count = ideator.length;
-
-    // let pipeline = [
-    //   {"$match": {isActive: true} },
-    //   {
-    //     '$lookup': {
-    //       from: 'mlPortfolioDetails', localField: 'portfolioId', foreignField: '_id',
-    //       as: 'port'
+    // var allIds = [];
+    // var ideator = [];
+    //
+    // var allIdeas = MlIdeas.find({isActive: true}).fetch();
+    // allIds = _.map(allIdeas, "userId");
+    // allIds = _.uniq(allIds);
+    //
+    // _.each(allIds, function (userId) {
+    //   var queryThis = {userId: userId, status: 'gone live', subChapterId: subChapterQuery }
+    //
+    //   let portfolios = MlPortfolioDetails.find(queryThis).fetch();
+    //   var ideasArr = [];
+    //   if (!_.isEmpty(portfolios)) {
+    //     /**checking portfolio is there or not with this ID*/
+    //     _.each(portfolios, function (portfolio) {
+    //       let ideas = MlIdeas.findOne({portfolioId: portfolio._id}) || {};
+    //       ideasArr.push(ideas);
+    //     })
+    //     let user = Meteor.users.findOne({_id: userId});
+    //     let ideaObj = {
+    //       userId: userId,
+    //       ideas: ideasArr,
+    //       chapterName: portfolios[0].chapterName,
+    //       name: user.profile.firstName + " " + user.profile.lastName,
+    //       accountType: portfolios[0].accountType
     //     }
-    //   },
-    //   {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-    //   {'$match': {"port.status": "gone live", 'port.communityCode': "IDE", subChapterId: subChapterQuery } },
-    //   {
-    //     '$lookup': {
-    //       from: 'users', localField: 'userId', foreignField: '_id',
-    //       as: 'user'
-    //     }
-    //   },
-    //   {'$unwind': {"path": "$user", "preserveNullAndEmptyArrays": true}},
-    //   {
-    //     "$project": {
-    //       "userId": "$userId",
-    //       "ideas": {
-    //         "title": "$title",
-    //         "description": "$description"
-    //       },
-    //       "chapterName": "$port.chapterName",
-    //       "name": "$user.profile.firstName" + " " + "$user.profile.lastName",
-    //       "accountType": "$port.accountType"
-    //     }
+    //     ideator.push(ideaObj)
     //   }
-    // ]
+    // })
+    //todo://need to include the search params in the query it self this is need to be change
+    // data = ideator;
+    // count = ideator.length;
 
+    let pipeline = [
+      {"$match": {isActive: true} },
+      {
+        '$lookup': {
+          from: 'mlPortfolioDetails', localField: 'portfolioId', foreignField: '_id',
+          as: 'port'
+        }
+      },
+      {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
+      {'$match': {"port.status": "gone live", 'port.communityCode': "IDE", subChapterId: subChapterQuery } },
+      {
+        '$lookup': {
+          from: 'users', localField: 'userId', foreignField: '_id',
+          as: 'user'
+        }
+      },
+      {'$unwind': {"path": "$user", "preserveNullAndEmptyArrays": true}},
+      {
+        "$project": {
+          "userId": "$userId",
+          "ideas": [{
+            "title": "$title",
+            "description": "$description"
+          }],
+          "chapterName": "$port.chapterName",
+          "name": "$user.profile.firstName" + " " + "$user.profile.lastName",
+          "accountType": "$port.accountType",
+          "clusterId": '$port.clusterId',
+          "chapterId": '$port.chapterId',
+          "communityCode": '$port.communityCode',
+          "industryId": '$port.industryId',
+        }
+      },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+    ];
+    data = mlDBController.aggregate('MlIdeas', pipeline, context);
+    count = data.length;
   }
   else if (args.module == "institutionPortfolioDetails") {
     var pipleline = [
@@ -269,9 +306,14 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           accountType: '$port.accountType',
           communityType: '$port.communityType',
           firstName: '$user.profile.firstName',
-          lastName: "$user.profile.lastName"
+          lastName: "$user.profile.lastName",
+          clusterId: '$port.clusterId',
+          chapterId: '$port.chapterId',
+          communityCode: '$port.communityCode',
+          industryId: '$port.industryId',
         }
-      }
+      },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
     ];
     data = mlDBController.aggregate('MlInstitutionPortfolio', pipleline, context);
     count = data.length;
@@ -301,9 +343,14 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           accountType: '$port.accountType',
           communityType: '$port.communityType',
           firstName: '$user.profile.firstName',
-          lastName: "$user.profile.lastName"
+          lastName: "$user.profile.lastName",
+          clusterId: '$port.clusterId',
+          chapterId: '$port.chapterId',
+          communityCode: '$port.communityCode',
+          industryId: '$port.industryId'
         }
-      }
+      },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
     ];
     data = mlDBController.aggregate('MlCompanyPortfolio', pipleline, context);
     count = data.length;
@@ -359,7 +406,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
             queryObj.communityDefName=userType;
             var pipeline=[
               {
-                $match: {"profile.isSystemDefined":{$exists:false}, "profile.isExternaluser":true,'profile.externalUserProfiles':{$elemMatch:queryObj}}
+                $match: {"profile.isSystemDefined":{$exists:false}, "profile.isExternaluser":true, 'profile.isActive':true, 'profile.externalUserProfiles':{$elemMatch:queryObj}}
               },
               {
                 $unwind :"$profile.externalUserProfiles"
@@ -423,7 +470,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         else{
             var pipeline=[
               {
-                $match: {"profile.isSystemDefined":{$exists:false}, "profile.isExternaluser":true,'profile.externalUserProfiles':{$elemMatch:queryObj}}
+                $match: {"profile.isSystemDefined":{$exists:false}, "profile.isExternaluser":true, 'profile.isActive':true, 'profile.externalUserProfiles':{$elemMatch:queryObj}}
               },
               {
                 $unwind :"$profile.externalUserProfiles"

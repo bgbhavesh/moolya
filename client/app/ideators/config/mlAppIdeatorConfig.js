@@ -7,12 +7,15 @@ import {MlAppViewer} from "../../../commons/core/MlAppViewer";
 import MlAppIdeatorListView from "../components/MlAppIdeatorListView";
 import React from "react";
 import gql from "graphql-tag";
+import filterData from '../../commons/config/exploreFilterConfig';
+import MlAppFilterContainer from "../../commons/filter/MlAppFilterContainer";
 
 /**
  * config file to be used in rendering of the component
  * */
 //todo://need to be used repo service on the server and send community code from  client with module name as portfolio
-export const mlAppIdeatorConfig = new MlAppViewer({
+export const
+  mlAppIdeatorConfig = new MlAppViewer({
   name: "Ideator List",
   extraFields: [],
   fields: ["firstName", "lastName", "category", "investmentBudget"],
@@ -24,6 +27,14 @@ export const mlAppIdeatorConfig = new MlAppViewer({
   perPageLimit: 20,
   viewComponent: <MlAppIdeatorListView />,
   showActionComponent: true,
+  header: true,
+  headerComponents:{
+    filter: true,
+    filterComponent: <MlAppFilterContainer />,
+    filterData: filterData,
+    search: true,
+    searchFields: ["ideas.title"]
+  },
   graphQlQuery: gql`
               query ($module: String!, $queryProperty: appGenericSearchQueryProperty) {
                 data: AppGenericSearch(module: $module, queryProperty: $queryProperty) {

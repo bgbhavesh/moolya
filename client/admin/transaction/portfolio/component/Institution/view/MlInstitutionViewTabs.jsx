@@ -4,7 +4,6 @@ import MlInstitutionViewInvestor from './MlInstitutionViewInvestor';
 import MlInstitutionViewAwards from './MlInstitutionViewAwards';
 import MlInstitutionViewMCL from './MlInstitutionViewMCL';
 import MlInstitutionViewLookingFor from './MlInstitutionViewLookingFor';
-import MlInstitutionViewData from './MlInstitutionViewData';
 import MlInstitutionViewChart from './MlInstitutionViewChart';
 import MlInstitutionViewAboutLanding from './aboutTabs/MlInstitutionViewAboutLanding';
 import MlInstitutionViewIntrapreneur from './MlInstitutionViewIntrapreneur';
@@ -59,8 +58,7 @@ export default class MlViewInstitutionPortfolioTemplate extends Component {
       {tabClassName: 'tab', panelClassName: 'panel', title:"About" , component:<MlInstitutionViewAboutLanding key="1"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations} backClickHandler={this.backClickHandler.bind(this)}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Management" , component:<MlInstitutionViewManagement key="2" tabName="Management" isAdmin={true} client={client} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Investor" , component:<MlInstitutionViewInvestor key="3"  tabName="Investor" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      //{tabClassName: 'tab', panelClassName: 'panel', title:"Data" , component:<MlInstitutionViewData key="4"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"Data" , component:<MlInstitutionEditData key="4"  portfolioDetailsId={this.props.portfolioDetailsId}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Data" , component:<MlInstitutionEditData key="4" isAdmin={true} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Chart" , component:<MlInstitutionViewChart key="5"  portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Awards" , component:<MlInstitutionViewAwards key="6" tabName="Awards" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<PortfolioLibrary isAdmin={true} client={client}  key="7"  portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},

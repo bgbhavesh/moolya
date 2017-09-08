@@ -212,7 +212,7 @@ export default class MlCompanyManagement extends React.Component{
         this.setState({loading: false, management: response.management, managementList: response.management});
         this.fetchOnlyImages()
       }else{
-        this.setState({lodaing:false})
+        this.setState({loading:false})
       }
     }else{
       this.setState({loading: false, management: that.context.companyPortfolio.management, managementList:that.context.companyPortfolio.management});

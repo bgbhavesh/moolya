@@ -397,16 +397,31 @@ export default class AppAddressDetails extends React.Component {
   }
 
   async onClear(index,value){
-    this.refs["name"+index].value = "";
-    this.refs["phoneNumber"+index].value = "";
-    this.refs["addressFlat"+index].value = "";
-    this.refs["addressLocality"+index].value = "";
-    this.refs["addressLandmark"+index].value = "";
-    this.refs["addressArea"+index].value = "";
-    this.refs["addressCity"+index].value = "";
-    this.refs["addressState"+index].value = "";
-    this.refs["addressCountry"+index].value = "";
-    this.refs["addressPinCode"+index].value = "";
+    if(index == null){
+      this.refs["name"].value = "";
+      this.refs["phoneNumber"].value = "";
+      this.refs["addressFlat"].value = "";
+      this.refs["addressLocality"].value = "";
+      this.refs["addressLandmark"].value = "";
+      this.refs["addressArea"].value = "";
+      this.refs["addressCity"].value = "";
+      this.refs["addressState"].value = "";
+      this.refs["addressCountry"].value = "";
+      this.refs["addressPinCode"].value = "";
+
+    }else{
+      this.refs["name"+index].value = "";
+      this.refs["phoneNumber"+index].value = "";
+      this.refs["addressFlat"+index].value = "";
+      this.refs["addressLocality"+index].value = "";
+      this.refs["addressLandmark"+index].value = "";
+      this.refs["addressArea"+index].value = "";
+      this.refs["addressCity"+index].value = "";
+      this.refs["addressState"+index].value = "";
+      this.refs["addressCountry"+index].value = "";
+      this.refs["addressPinCode"+index].value = "";
+
+    }
 
   }
 
@@ -519,7 +534,7 @@ export default class AppAddressDetails extends React.Component {
                 <a href="#" className="save_btn"  onClick={this.onSavingAddress.bind(this)}>
                   <span className="ml ml-save"></span>
                 </a>
-                <a href="#" className="cancel_btn">
+                <a href="#" className="cancel_btn"  onClick={this.onClear.bind(this,null)}>
                   <span className="ml ml-delete"></span></a>
               </div>
             </div>

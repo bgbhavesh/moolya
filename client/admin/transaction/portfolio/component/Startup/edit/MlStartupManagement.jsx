@@ -416,7 +416,7 @@ export default class MlStartupManagement extends React.Component{
                       <div className="form-group date-pick-wrap">
                         {/*<input type="text" placeholder="Joining Date to this Company" name="joiningDate" defaultValue={this.state.data.joiningDate} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>*/}
                         <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
-                                  inputProps={{placeholder: "Joining Date to this Company"}}
+                                  inputProps={{placeholder: "Joining Date to this Company",className:"float-label form-control"}}
                                   closeOnSelect={true} value={this.state.data.joiningDate}
                                   onChange={this.onDateChange.bind(this, "joiningDate")}  isValidDate={ valid }/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isJoiningDatePrivate" onClick={this.onClick.bind(this, "joiningDate", "isJoiningDatePrivate")}/>
@@ -425,7 +425,7 @@ export default class MlStartupManagement extends React.Component{
                       <div className="form-group date-pick-wrap">
                         {/*<input type="text" placeholder="First Job Joining Date" name="firstJobJoiningDate" defaultValue={this.state.data.firstJobJoiningDate} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>*/}
                         <Datetime dateFormat="DD-MM-YYYY" timeFormat={false}
-                                  inputProps={{placeholder: "First Job Joining Date"}}
+                                  inputProps={{placeholder: "First Job Joining Date",className:"float-label form-control"}}
                                   closeOnSelect={true} value={this.state.data.firstJobJoiningDate}
                                   onChange={this.onDateChange.bind(this, "firstJobJoiningDate")}  isValidDate={ valid }/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isFJJDPrivate" onClick={this.onClick.bind(this, "firstJobJoiningDate", "isFJJDPrivate")}/>

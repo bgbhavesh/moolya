@@ -200,8 +200,8 @@ export default class MlServiceProviderViewClients extends React.Component {
         </div>
       </div>*/
 
-      <div className="app_main_wrap" id="annotatorContent">
-        <div className="app_padding_wrap">
+      <div className="" id="annotatorContent">
+        <div className="">
          <div className="col-lg-12" id="show">
             <div className="row">
               {clientsArray && clientsArray.map(function (details, idx) {

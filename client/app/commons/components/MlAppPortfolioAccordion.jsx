@@ -51,6 +51,13 @@ export default class MlAppPortfolioAccordionContainer extends React.Component{
 
     var that=this;
     var viewMode=this.props.viewMode===false?"edit":"view";
+
+    let path = FlowRouter._current.path;
+    let isPortfolio = false;
+    if (path.indexOf("/app/portfolio/") != -1) {
+      isPortfolio = true
+    }
+
     //resolve the actions for the portfolio
     /*var actionOptions= _.filter(GenericPortfolioActionsConfig,{actionType:viewMode})||[];
        actionOptions.forEach(function (action) {
@@ -64,8 +71,8 @@ export default class MlAppPortfolioAccordionContainer extends React.Component{
        {id:'portfolioAccordion',
         panelItems:[{'title':'Actions',isText:false,style:{'background': '#ef4647'},contentComponent:<MlAppActionComponent resourceDetails={{resourceId:this.props.resourceId,resourceType:'portfolio'}} actionOptions={actionOptions}/>}]};
     //todo: dynamic check for accordion configuration
-       if(this.props.communityType==="Ideators"||this.props.communityType==="ideator"){
-         accordionOptions["panelItems"].push({title:'Related Ideas',isText:false,contentComponent:<MlIdeatorRelatedIdeas />,style:{'background': '#273545'}});
+       if((this.props.communityType==="Ideators"||this.props.communityType==="ideator") && !isPortfolio){
+         accordionOptions["panelItems"].push({title:'Related Ideas',isText:false,contentComponent:<MlIdeatorRelatedIdeas />,style:{'background': '#ef4647'}});
        }
 
     return(

@@ -30,7 +30,8 @@ class __Utils{
     }
 
     setToken(token){
-        localStorage.setItem('auth_token', token)
+        localStorage.setItem('auth_token', token);
+        console.log('-----save auth token-----');
     }
 
     getToken(){
@@ -45,6 +46,7 @@ class __SocketUtils{
     connect(url, token){
         var socket = io(url, {query:{'x-access-token':token}}, {'forceNew': true}, {'sync disconnect on unload' : true}, {'secure': true}, {'reconnection':true})
         // kinda_ntp.init(socket);
+      console.log('-------------connecting socket-----------------', socket);
         return socket;
     }
 

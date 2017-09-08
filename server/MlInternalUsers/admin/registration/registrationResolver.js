@@ -758,7 +758,7 @@ MlResolver.MlMutationResolver['ApprovedStatusForUser'] = (obj, args, context, in
       // let regRecord = MlRegistration.findOne(args.registrationId)||{"registrationInfo":{}};
       let regRecord = mlDBController.findOne('MlRegistration', {_id: args.registrationId}, context) || {"registrationInfo": {}};
       MlEmailNotification.onKYCApprove(regRecord);
-      MlNotificationController.onKYCApprove(regRecord);
+      MlNotificationController.onUserApproval(regRecord);
       sendSMSonKYCApproved(regRecord)
       // mlSmsController
 
@@ -886,6 +886,7 @@ MlResolver.MlMutationResolver['ApprovedStatusOfDocuments'] = (obj, args, context
 
             let code = 200;
             let result = {registrationId: response}
+            MlNotificationController.onKYCApprove(user);
             updatedResponse = new MlRespPayload().successPayload(result, code);
 
           }

@@ -322,6 +322,7 @@ MlResolver.MlMutationResolver['updateOfficeStatus'] = (obj, args, context, info)
       return new MlRespPayload().errorPayload('Error in Activating the office', code);
     }else if(result){
        MlEmailNotification.bespokeOfficeActivated( args.id);
+       mlOfficeValidationRepo.sendSMSonOfficeActivation(args.id, context);
      }
     result = mlDBController.update('MlOfficeSC', {officeId:args.id, isActive:true}, {isActivated:true, isReconciled:true}, {$set:true}, context)
     if(!result){

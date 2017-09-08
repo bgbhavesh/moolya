@@ -50,11 +50,11 @@ export default class MyList extends React.Component{
         component: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlAppMyFavouritesConfig} />
       },
       {
-        tabClassName:'ml ml-connect',title: <b>My Followers</b>,
+        tabClassName:'ml my-ml-my_followers',title: <b>My Followers</b>,
         component: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlAppMyFollowersConfig} />
       },
       {
-        tabClassName:'ml ml-connect',title: <b>I Follow</b>,
+        tabClassName:'ml my-ml-i_follow',title: <b>I Follow</b>,
         component: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlAppMyFollowingsConfig} />
       }
     ]

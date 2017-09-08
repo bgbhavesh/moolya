@@ -10,6 +10,11 @@ import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryAct
 import _ from 'lodash';
 import MlLoader from '../../../../../commons/components/loader/loader'
 
+const genderValues = [
+  {value: 'male', label: 'Male'},
+  {value: 'female', label: 'Female'},
+  {value: 'others', label: 'Others'}
+];
 export default class MlFunderAbout extends React.Component {
   constructor(props, context){
     super(props);
@@ -39,11 +44,13 @@ export default class MlFunderAbout extends React.Component {
   }
   componentDidUpdate()
   {
+    var className = this.props.isAdmin?"admin_header":"app_header"
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-    $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
+    // $('.main_wrap_scroll').height(WinHeight-($('.admin_header').outerHeight(true)+120));
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
     if(WinWidth > 768){
-      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
+      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
     OnLockSwitch();
     dataVisibilityHandler();
     /*var WinHeight = $(window).height();
@@ -274,6 +281,13 @@ export default class MlFunderAbout extends React.Component {
       }
     }
   }
+  optionsBySelectGender(val) {
+    var dataDetails = this.state.data
+    dataDetails['gender'] = val.value
+    this.setState({data: dataDetails}, function () {
+      this.sendDataToParent();
+    })
+  }
 
   render() {
     const showLoader = this.state.loading;
@@ -291,8 +305,13 @@ export default class MlFunderAbout extends React.Component {
         {showLoader === true ? ( <MlLoader/>) : (
       <div>
         <h2>About Us</h2>
-        <div className="tab_wrap_scroll">
-
+        <div className="main_wrap_scroll">
+          <ScrollArea
+            speed={0.8}
+            className="main_wrap_scroll"
+            smoothScrolling={true}
+            default={true}
+          >
             <div className="col-md-6 nopadding-left">
 
                   <div className="form_bg">
@@ -308,9 +327,13 @@ export default class MlFunderAbout extends React.Component {
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate" onClick={this.onClick.bind(this, "lastName","isLastNamePrivate")}/>
                       </div>
 
+                      {/*<div className="form-group">*/}
+                        {/*<input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>*/}
+                        {/*<FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "gender","isGenderPrivate")}/>*/}
+                      {/*</div>*/}
                       <div className="form-group">
-                        <input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
-                        <FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "gender","isGenderPrivate")}/>
+                        <Select name="form-field-name"  placeholder="Select Gender" value={this.state.data.gender}  options={genderValues} onChange={this.optionsBySelectGender.bind(this)} className="float-label" />
+                        <FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "isGenderPrivate")}/>
                       </div>
 
                       <div className="form-group">
@@ -319,7 +342,7 @@ export default class MlFunderAbout extends React.Component {
                       </div>
 
                       <div className="form-group">
-                        <input type="text" placeholder="Education" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
+                        <input type="text" placeholder="Qualification" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label" id="cluster_name" onBlur={this.handleBlur.bind(this)}/>
                         <FontAwesome name='unlock' className="input_icon un_lock" id="isQualificationPrivate" onClick={this.onClick.bind(this, "qualification", "isQualificationPrivate")}/>
                       </div>
 
@@ -443,6 +466,7 @@ export default class MlFunderAbout extends React.Component {
 
             </div>
           <br className="brclear"/>
+            </ScrollArea>
         </div>
       </div>
           )}

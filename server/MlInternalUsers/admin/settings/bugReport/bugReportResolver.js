@@ -2,7 +2,7 @@ import MlResolver from '../../../../commons/mlResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 import _ from 'lodash';
 import MlTransactionsHandler from '../../../../commons/mlTransactionsLog';
-
+import MlEmailNotification from '../../../../mlNotifications/mlEmailNotifications/mlEMailNotification';
 MlResolver.MlMutationResolver['createBugReport'] = (obj, args, context, info) => {
 
     if(!context.userId)return new MlRespPayload().errorPayload("Please login to report a bug", 400);
@@ -19,6 +19,7 @@ MlResolver.MlMutationResolver['createBugReport'] = (obj, args, context, info) =>
   bugReportData.userAgent=userAgent;
   let result = mlDBController.insert('MlBugReport',bugReportData, context);
   if (result) {
+    MlEmailNotification.sendBugReportToAdmin(bugReportData);
     let code = 200;
     let result = {bugReportId: result};
     let response = new MlRespPayload().successPayload(result, code);

@@ -34,8 +34,8 @@ export default class MlServiceProviderViewAbout extends React.Component {
  }
 
   componentDidMount() {
-    OnLockSwitch();
-    dataVisibilityHandler();
+    // OnLockSwitch();
+    // dataVisibilityHandler();
     /**fetch the component data*/
     //this.initalizeAnnotaor()
     var WinHeight = $(window).height();
@@ -45,8 +45,8 @@ export default class MlServiceProviderViewAbout extends React.Component {
   }
 
   componentDidUpdate() {
-    OnLockSwitch();
-    dataVisibilityHandler();
+    // OnLockSwitch();
+    // dataVisibilityHandler();
   }
 
 

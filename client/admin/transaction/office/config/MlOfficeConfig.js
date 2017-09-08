@@ -6,6 +6,8 @@ import MlOfficeItem from '../component/MlOfficeItem';
 import React from 'react';
 import gql from 'graphql-tag'
 import moment from 'moment'
+import MlCustomFilter from "../../../../commons/customFilters/customFilter";
+import {client} from '../../../core/apolloConnection';
 
 function dateFormatter (data){
   let createdDateTime=data&&data.data&&data.data.dateTime;
@@ -33,6 +35,8 @@ const mlOfficeTableConfig=new MlViewer.View({
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
+  filter:true,
+  filterComponent: <MlCustomFilter module="office" moduleName="office" client={client}/>,
   isExpandableRow:(row)=>{return true;},
   expandComponent:MlOfficeItem,
   columns:[

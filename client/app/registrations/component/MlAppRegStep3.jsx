@@ -118,7 +118,7 @@ export default class MlAppRegStep3 extends React.Component {
     let appActionConfig = [
       {
         showAction: true,
-        actionName: 'exit',
+        actionName: 'cancel',
         handler: null
       }
     ]

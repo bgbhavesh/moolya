@@ -126,7 +126,7 @@ export default class MlStartupViewLookingFor extends React.Component {
               {lookingforArray && lookingforArray.map(function (details, idx) {
                 return(<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
                   <div className="team-block">
-                    <span className="ml ml-moolya-symbol" />
+                    <span className="ml my-ml-browser_3" />
                     <h3>
                       {details.lookingForName&&details.lookingForName}
                     </h3>

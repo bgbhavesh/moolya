@@ -25,12 +25,16 @@ export default class Review extends React.Component {
     var response=await reviewActionHandler({'resourceId':resourceDetails.resourceId,'resourceType':resourceDetails.resourceType,'message':message,
                                             'rating':this.state.reviewRating||0 });
 
-    if(response){
+    if(response&&response.success){
       toastr.success("review send successfully");
       this.setState({"viewType":"view","reviewRating":0});
       this.fetchReviews();
     }else{
-      toastr.error("Failed to send the review");
+      if(response&&!response.success&&response.code===401){
+        toastr.error(response.result);
+      }else{
+        toastr.error("Failed to send the review");
+      }
     }
     //this.props.toggle();
   }

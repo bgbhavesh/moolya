@@ -35,7 +35,13 @@ class MlAddSubDepartment extends React.Component{
   };
 
   async handleSuccess(response) {
-    FlowRouter.go("/admin/settings/subDepartmentsList");
+    //Fix for: MOOLYA-2601
+    if(response&&!response.success){
+      toastr.error(response.result);
+    }else{
+      toastr.success("SubDepartment Created Successfully");
+      FlowRouter.go("/admin/settings/subDepartmentsList");
+    }
   };
 
   async  createSubDepartment() {
@@ -54,7 +60,6 @@ class MlAddSubDepartment extends React.Component{
       }
 
       const response = await addSubDepartmentActionHandler(SubDepartmentDetails);
-      toastr.success("SubDepartment Created Successfully");
       return response;
     }
   }

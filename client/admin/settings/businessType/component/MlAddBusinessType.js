@@ -26,7 +26,7 @@ class MlAddBusinessType extends React.Component {
   async handleSuccess(response) {
     if (response) {
       if (response.success)
-        FlowRouter.go("/admin/settings/businessList");
+        FlowRouter.go("/admin/settings/registration/businessList");
       else
         toastr.error(response.result);
     }
@@ -49,7 +49,7 @@ class MlAddBusinessType extends React.Component {
         toastr.error("Already Exists")
       } else if (response.success) {
         toastr.success("BusinessType Created Successfully");
-        FlowRouter.go("/admin/settings/businessList");
+        FlowRouter.go("/admin/settings/registration/businessList");
       }
     }
   }
@@ -75,7 +75,7 @@ class MlAddBusinessType extends React.Component {
         showAction: true,
         actionName: 'cancel',
         handler: async(event) => {
-          this.props.handler(" ");
+         // this.props.handler(" ");
           FlowRouter.go("/admin/settings/businessList")
         }
       }

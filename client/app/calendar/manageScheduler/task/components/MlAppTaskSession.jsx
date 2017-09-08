@@ -59,12 +59,14 @@ export default class MlAppTaskSession extends Component {
   async fetchActivities() {
     let profileId = this.props.profileId;
     let taskId = this.props.taskId;
-    let response = await fetchActivitiesForTaskActionHandler(taskId);
-    // let response = await fetchActivitiesActionHandler(profileId);
-    if(response){
-      this.setState({
-        activities: response
-      });
+    if (taskId) {
+      let response = await fetchActivitiesForTaskActionHandler(taskId);
+      // let response = await fetchActivitiesActionHandler(profileId);
+      if(response){
+        this.setState({
+          activities: response
+        });
+      }
     }
   }
 

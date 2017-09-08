@@ -2,10 +2,16 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar';
+var Select = require('react-select');
 var FontAwesome = require('react-fontawesome');
 import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../utils/formElemUtil';
 import {fetchfunderPortfolioAbout} from '../../actions/findPortfolioFunderDetails'
 import MlLoader from '../../../../../commons/components/loader/loader'
+const genderValues = [
+  {value: 'male', label: 'Male'},
+  {value: 'female', label: 'Female'},
+  {value: 'others', label: 'Others'}
+];
 export default class MlFunderAboutView extends React.Component{
   constructor(props, context){
     super(props);
@@ -26,12 +32,13 @@ export default class MlFunderAboutView extends React.Component{
    * inializing float label
    * */
   componentDidUpdate(){
-
+    var className = this.props.isAdmin?"admin_header":"app_header"
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-    $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
+    // $('.main_wrap_scroll').height(WinHeight-($('.admin_header').outerHeight(true)+120));
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
     if(WinWidth > 768){
-      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
+      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
 
     initalizeFloatLabel();
   }
@@ -54,7 +61,13 @@ export default class MlFunderAboutView extends React.Component{
     }
 
   }
-
+  optionsBySelectGender(val) {
+    var dataDetails = this.state.data
+    dataDetails['gender'] = val.value
+    this.setState({data: dataDetails}, function () {
+      this.sendDataToParent();
+    })
+  }
   render(){
     const showLoader = this.state.loading;
     let investmentFrom = this.state.data&&this.state.data.investmentFrom?this.state.data.investmentFrom:"";
@@ -71,8 +84,13 @@ export default class MlFunderAboutView extends React.Component{
         {showLoader === true ? (<MlLoader/>) : (
           <div>
             <h2>About Us</h2>
-            <div className="tab_wrap_scroll">
-
+            <div className="main_wrap_scroll">
+              <ScrollArea
+                speed={0.8}
+                className="main_wrap_scroll"
+                smoothScrolling={true}
+                default={true}
+              >
                 <div className="col-md-6 nopadding-left">
                       <div className="form_bg">
                         <form>
@@ -87,8 +105,12 @@ export default class MlFunderAboutView extends React.Component{
                             <FontAwesome name='unlock' className="input_icon un_lock" id="isLastNamePrivate"/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isLastNamePrivate}/>
                           </div>
 
+                          {/*<div className="form-group">*/}
+                            {/*<input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label" id="cluster_name" disabled='disabled'/>*/}
+                            {/*<FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate"/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isGenderPrivate}/>*/}
+                          {/*</div>*/}
                           <div className="form-group">
-                            <input type="text" placeholder="Gender" name="gender" defaultValue={this.state.data.gender} className="form-control float-label" id="cluster_name" disabled='disabled'/>
+                            <Select name="form-field-name"  placeholder="Select Gender" value={this.state.data.gender}  options={genderValues} onChange={this.optionsBySelectGender.bind(this)} disabled='disabled' className="float-label" />
                             <FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate"/><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isGenderPrivate}/>
                           </div>
 
@@ -98,7 +120,9 @@ export default class MlFunderAboutView extends React.Component{
                           </div>
 
                           <div className="form-group">
-                            <input type="text" placeholder="Education" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label" id="cluster_name" disabled='disabled'/>
+                            {/*<input type="text" placeholder="Education" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label" id="cluster_name" disabled='disabled'/>*/}
+                            {/*<FontAwesome name='unlock' className="input_icon un_lock" id="isQualificationPrivate" /><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isQualificationPrivate}/>*/}
+                            <input type="text" placeholder="Qualification" name="qualification" defaultValue={this.state.data.qualification} className="form-control float-label" id="cluster_name" disabled='disabled'/>
                             <FontAwesome name='unlock' className="input_icon un_lock" id="isQualificationPrivate" /><input type="checkbox" className="lock_input" id="makePrivate" checked={this.state.data.isQualificationPrivate}/>
                           </div>
 
@@ -216,6 +240,7 @@ export default class MlFunderAboutView extends React.Component{
                       </div>
                 </div>
               <br className="brclear"/>
+                </ScrollArea>
             </div>
           </div>
         )}

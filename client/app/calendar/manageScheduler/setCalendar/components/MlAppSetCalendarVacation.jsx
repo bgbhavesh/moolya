@@ -9,8 +9,11 @@ import Datetime from "react-datetime";
 import Moment from 'moment';
 import { isEmpty } from 'lodash';
 import { updateCalendarVacationActionHandler, updateCalendarVacationByIdActionHandler } from '../actions/updateCalendarVacationSettings';
+import MlAccordion from "../../../../commons/components/MlAccordion";
+import formHandler from "../../../../../commons/containers/MlFormHandler";
+import MlAppActionComponent from "../../../../commons/components/MlAppActionComponent";
 
-export default class MlAppSetCalendarVacation extends Component {
+class MlAppSetCalendarVacation extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -44,7 +47,7 @@ export default class MlAppSetCalendarVacation extends Component {
   componentDidMount() {
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(250+$('.app_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight-(290+$('.app_header').outerHeight(true)));
   }
 
   componentWillReceiveProps(newProps) {
@@ -204,7 +207,7 @@ export default class MlAppSetCalendarVacation extends Component {
    * @returns {Promise.<void>}
    */
   async updateCalendarVacation(event) {
-    event.preventDefault();
+    // event.preventDefault();
     this.isValid = true;
     this.validVacationData = {};
     this.validateFormFields();
@@ -255,6 +258,28 @@ export default class MlAppSetCalendarVacation extends Component {
   render(){
     const { vacationData } = this.state;
     const that = this;
+    /**
+     * Setting up action handler for activity different event
+     */
+    let appActionConfig = [
+      {
+        showAction: true,
+        actionName: 'save',
+        handler: async(event) => that.props.handler(that.updateCalendarVacation.bind(this))
+      }
+    ];
+    export const genericPortfolioAccordionConfig = {
+      id: 'portfolioAccordion',
+      panelItems: [
+        {
+          'title': 'Actions',
+          isText: false,
+          style: {'background': '#ef4647'},
+          contentComponent: <MlAppActionComponent
+            resourceDetails={{resourceId: 'calendarpriming', resourceType: 'calendarpriming'}}   //resource id need to be given
+            actionOptions={appActionConfig}/>
+        }]
+    };
     return (
       <div className="step_form_wrap step3">
         <ScrollArea speed={0.8} className="step_form_wrap" smoothScrolling={true} default={true} >
@@ -340,12 +365,15 @@ export default class MlAppSetCalendarVacation extends Component {
             </ul>
           </div>
         </ScrollArea>
-        <div className="form-group">
+        {/*<div className="form-group">
           <div className="ml_btn" style={{'textAlign':'center'}}>
             <button onClick={(event)=>this.updateCalendarVacation(event)} className="save_btn" >Save</button>
           </div>
-        </div>
+        </div>*/}
+        <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
       </div>
     )
   }
 };
+
+export default MlAppSetCalendarVacation = formHandler()(MlAppSetCalendarVacation);

@@ -13,11 +13,11 @@ class Notifications{
         rkConversation.socketUtils.listenMessage(rkConversation.socket, 'get_notification', callback);
     }
 
-    updateNotification(rkConversation, data, callback){
-      rkConversation.socketUtils.emitMessage(rkConversation.socket, 'ack_notification', data, callback);
+    updateNotification(rkConversation, callback){
+      rkConversation.socketUtils.emitMessage(rkConversation.socket, 'ack_notification', callback);
     }
 }
 
-var rkNotifications = new Notifications()
-Object.freeze(rkNotifications)
+var rkNotifications = new Notifications();
+Object.freeze(rkNotifications);
 export default rkNotifications

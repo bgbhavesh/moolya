@@ -189,6 +189,7 @@ let FunderPortfolioSchema = `
         team                : [Team],
         areaOfInterest      : [AreaOfInterest],
         successStories      : [SuccessStories]
+        lookingFor          : [lookingForOutput]
         services            : Services
         chapterName         : String
         accountType         : String
@@ -367,6 +368,7 @@ let FunderPortfolioSchema = `
         areaOfInterest      : [areaOfInterest],
         successStories      : [successStories]
         services            : services
+        lookingFor          : [lookingFor]
     }
     
     type Query{
@@ -404,3 +406,8 @@ let supportedApi = [
 
 ]
 MlResolver.MlModuleResolver.push(supportedApi)
+/**
+ * Note: graphQl schema to be used multiple times hence using only onces
+ * @lookingFor  : startup
+ * @lookingForOutput : startup
+ * */

@@ -1,18 +1,16 @@
 import React, { Component, PropTypes }  from "react";
 import {render} from "react-dom";
 import MlTabComponent from "../../../../.././commons/components/tabcomponent/MlTabComponent";
-import MlIdeatorDetails from "../Ideator/MlIdeatorDetails";
-import _ from 'lodash'
 import MlFunderAboutView from './MlFunderAboutView'
 import MlFunderInvestmentView from './MlFunderInvestmentView'
 import MlFunderEngagementMethodView from './MlFunderEngagementMethodView'
-
 import MlFunderAreaOfInterestView from './MlFunderAreaOfInterestView'
 import MlFunderLibraryView from './MlFunderLibraryView'
 import MlFunderNewsView from './MlFunderNewsView'
 import PortfolioLibrary from '../../../../../commons/components/portfolioLibrary/PortfolioLibrary'
 import MlFunderPrincipalTeamView from './MlFunderPrincipalTeamView'
 import MlFunderSuccessStoriesView from './MlFunderSuccessStoriesView'
+import MlFunderLookingForView from './MlFunderLookingForView'
 import {client} from '../../../../core/apolloConnection'
 
 export default class MlFunderViewTemplate extends React.Component{
@@ -53,7 +51,8 @@ export default class MlFunderViewTemplate extends React.Component{
       {tabClassName: 'tab', panelClassName: 'panel', title:"Areas Of Interest" , component:<MlFunderAreaOfInterestView client={client} isAdmin={true}  key="6" tabName="Areas Of Interest" getAreaOfInterestDetails={this.getAreaOfInterestDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Success Stories" , component:<MlFunderSuccessStoriesView client={client} isAdmin={true}  key="7" tabName="Success Stories" getSuccessStoriesDetails={this.getSuccessStoriesDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
       {tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<PortfolioLibrary client={client} isAdmin={true} key="8" tabName="Library" getFunderLibrary={this.getFunderLibrary.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
-      {tabClassName: 'tab', panelClassName: 'panel', title:"News" , component:<MlFunderNewsView key="9" client={client} isAdmin={true} tabName="News" getFunderNewsDetails={this.getFunderNewsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>}
+      {tabClassName: 'tab', panelClassName: 'panel', title:"News" , component:<MlFunderNewsView key="9" client={client} isAdmin={true} tabName="News" getFunderNewsDetails={this.getFunderNewsDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
+      {tabClassName: 'tab', panelClassName: 'panel', title:"Looking For" , component:<MlFunderLookingForView key="7" tabName="lookingFor" portfolioDetailsId={this.props.portfolioDetailsId} getSelectedAnnotations={this.props.getSelectedAnnotations}/>},
     ]
     return tabs;
   }
@@ -61,8 +60,6 @@ export default class MlFunderViewTemplate extends React.Component{
     let data = this.state.funderPortfolio;
     data['portfolioIdeatorDetails']=details;
     this.setState({ideatorPortfolio : data})
-    // this.state.ideatorPortfolio['portfolioIdeatorDetails'] = details;
-    // this.setState({ideatorDetails:details})
     this.props.getPortfolioDetails({ideatorPortfolio:this.state.ideatorPortfolio});
   }
   getAboutus(details,tabName){

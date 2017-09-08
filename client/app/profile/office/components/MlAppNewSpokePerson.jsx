@@ -11,13 +11,15 @@ import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidat
 import {fetchAllCommunitiesHandler} from "../../../../app/commons/actions/fetchCommunitiesActionHandler";
 import {createOfficeActionHandler} from "../actions/createOfficeAction";
 import {initalizeFloatLabel} from "../../../../../client/commons/utils/formElemUtil";
+import {findDefaultProfile} from '../../../commons/actions/fetchUserDetails'
 
 export default class MlAppNewSpokePerson extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {showCommunityBlock: [], availableCommunities: [], branchType:"", branchAddress:"", selectedCountry:""};
+    this.state = {showCommunityBlock: [], availableCommunities: [], branchType:"", branchAddress:"", selectedCountry:"", user:{}};
     this.handleBlur.bind(this)
     this.setDefaultValues.bind(this)
+    this.findUserDetails.bind(this)
     return this;
   }
 
@@ -35,10 +37,8 @@ export default class MlAppNewSpokePerson extends React.Component {
   }
 
   submitDetails() {
-
     var ret = mlFieldValidations(this.refs);
-    if(ret)
-    {
+    if(ret){
       toastr.error(ret)
       return;
     }
@@ -120,7 +120,8 @@ export default class MlAppNewSpokePerson extends React.Component {
 
   componentWillMount() {
     const resp = this.fetchCommunities({code: 'OFB'});
-    return resp;
+    this.findUserDetails();
+    return resp
   }
 
   communityType(e) {
@@ -130,6 +131,14 @@ export default class MlAppNewSpokePerson extends React.Component {
       const communityList = this.fetchCommunities({code: 'OFB'});
     }
   }
+
+  async findUserDetails(){
+    var user = await findDefaultProfile();
+    if(user){
+        this.setState({user:user, selectedCountry:user.countryId})
+    }
+  }
+
 
   async fetchCommunities(specCode) {
     let communities = await fetchAllCommunitiesHandler();
@@ -197,7 +206,7 @@ export default class MlAppNewSpokePerson extends React.Component {
     this.refs.area.value = selectedItem && selectedItem.addressArea ? selectedItem.addressArea : ""
     this.refs.city.value = selectedItem && selectedItem.addressCity ? selectedItem.addressCity: ""
     this.refs.state.value = selectedItem && selectedItem.addressState ? selectedItem.addressState: ""
-    this.state.selectedCountry = selectedItem && selectedItem.addressCountry ? selectedItem.addressCountry : ""
+    // this.state.selectedCountry = selectedItem && selectedItem.addressCountry ? selectedItem.addressCountry : ""
     this.refs.zipCode.value = selectedItem && selectedItem.addressPinCode ? selectedItem.addressPinCode : ""
   }
 
@@ -358,7 +367,7 @@ export default class MlAppNewSpokePerson extends React.Component {
                   <div className="form-group">
                     <MoolyaSelect multiSelect={false} className="form-control float-label" valueKey={'value'} placeholder="Country"
                                   labelKey={'label'} queryType={"graphql"} query={countryQuery} isDynamic={true}
-                                  onSelect={that.optionsBySelectCountry.bind(that)} disabled={this.state.branchType == 'BRANCH'?true:false}
+                                  onSelect={that.optionsBySelectCountry.bind(that)} disabled={true}
                                   selectedValue={that.state.selectedCountry} data-required={true} data-errMsg="Country is required"/>
                   </div>
                   <div className="form-group">

@@ -92,14 +92,14 @@ export default class EmailVerification extends React.Component{
                 <p style={{'fontSize':'24px'}}>Thank you for your time. Your email id has been verified.<br />
                 We will keep you posted on the next steps once <span className="m_red">m</span><span className="m_yel">oo</span><span className="m_red">lya</span> app is ready in the next few weeks.<br/><br/>
                   Good day and God speed to all your efforts.</p>
-              {/*<div className="form-group">
+              <div className="form-group">
                 <input type="text"  value={mobileNumber} className="form-control sendotp float-label" disabled id="mobileNumber"/>
               </div>
               <div className="form-group sendotp">
                 <input type="text" ref="otpValue" placeholder="Enter OTP" className="form-control float-label"/>
                 <a href="#" className="resendotp">Resend OTP</a>
               </div><br />
-              <a href="#" className="save_btn" onClick={this.verifyMobileNumber.bind(this)}>Verify Now</a>*/}
+              <a href="#" className="save_btn" onClick={this.verifyMobileNumber.bind(this)}>Verify Now</a>
               </div>
             }
             {!emailVerificationSuccess&&<div>
@@ -108,14 +108,14 @@ export default class EmailVerification extends React.Component{
               {/*<a href="/login" className="save_btn" >Login</a>*/}
              </div>}
 
-            {/*{mobileNumberVerificationSuccess&&
-            <div>
-              <img src="../images/success_icon.png" /><br />
-              <h2>Congratulations</h2>
-              You have successfully verified your account. You will be notified once your profile is activated<br /><br />
-              <a href="/login" className="save_btn" >Login</a>
-            </div>
-            }*/}
+            {mobileNumberVerificationSuccess&&
+              <div>
+                <img src="../images/success_icon.png" /><br />
+                <h2>Congratulations</h2>
+                You have successfully verified your account. You will be notified once your profile is activated<br /><br />
+                <a href="/login" className="save_btn" >Login</a>
+              </div>
+            }
 
 
           </div>

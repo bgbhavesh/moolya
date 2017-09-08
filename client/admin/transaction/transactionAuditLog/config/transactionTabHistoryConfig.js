@@ -47,7 +47,7 @@ const mlTransactionTabHistoryTableConfig=new MlViewer.View({
   ],
   queryOptions:true,
   buildQueryOptions:(config)=>{
-    return {context:{moduleName:"REGISTRATION,PORTFOLIO,PORTFOLIOLIBRARY,REQUESTTYPE,CONVERSATIONS,TRANSACTIONTYPE"}}
+    return {context:{moduleName:"SHAREDLIBRARY,REQUESTTYPE,CONVERSATIONS,TRANSACTIONTYPE,OFFICE,PROCESSSETUP"}}
     // return {context:{moduleName:"CLUSTER, SUBCHAPTER",clusterId:config.params&&config.params.clusterId?config.params.clusterId:null}}
   },
   sizePerPage:5,

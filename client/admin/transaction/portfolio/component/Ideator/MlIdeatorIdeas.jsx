@@ -5,6 +5,8 @@ import {dataVisibilityHandler, OnLockSwitch, initalizeFloatLabel} from '../../..
 import {findIdeatorIdeasActionHandler} from '../../actions/findPortfolioIdeatorDetails'
 import _ from 'lodash';
 import MlLoader from '../../../../../commons/components/loader/loader'
+import {multipartASyncFormHandler} from '../../../../../commons/MlMultipartFormAction'
+import {putDataIntoTheLibrary} from '../../../../../commons/actions/mlLibraryActionHandler'
 
 export default class MlIdeatorIdeas extends React.Component{
   constructor(props, context){
@@ -25,6 +27,9 @@ export default class MlIdeatorIdeas extends React.Component{
   {
     OnLockSwitch();
     dataVisibilityHandler();
+    $('#upload_hex').change(function(){
+      document.getElementById('blah').src = window.URL.createObjectURL(this.files[0]);
+    });
   }
   componentDidUpdate()
   {
@@ -44,14 +49,13 @@ export default class MlIdeatorIdeas extends React.Component{
     let className = e.target.className;
     if(className.indexOf("fa-lock") != -1){
       details=_.extend(details,{[key]:true});
-      isPrivate = true;
+      isPrivate = true
     }else{
       details=_.extend(details,{[key]:false});
     }
-
-    var privateKey = {keyName:fieldName, booleanKey:field, isPrivate:isPrivate, tabName: this.props.tabName}
+    var privateKey = {keyName: fieldName, booleanKey: field, isPrivate: isPrivate, tabName: this.props.tabName}
     // this.setState({privateKey:privateKey})
-    this.setState({data:details, privateKey:privateKey}, function () {
+    this.setState({data: details, privateKey: privateKey}, function () {
       this.sendDataToParent()
     })
 
@@ -102,7 +106,7 @@ export default class MlIdeatorIdeas extends React.Component{
   sendDataToParent(){
     let data = this.state.data;
     for (var propName in data) {
-      if (data[propName] === null || data[propName] === undefined) {
+      if (data[propName] === null || data[propName] === undefined || propName === '__typename' || propName === 'privateFields') {
         delete data[propName];
       }
     }
@@ -111,11 +115,46 @@ export default class MlIdeatorIdeas extends React.Component{
 
     this.props.getIdeas(data, this.state.privateKey)
   }
+  async libraryAction(file) {
+    let portfolioDetailsId = this.props.portfolioDetailsId;
+    const resp = await putDataIntoTheLibrary(portfolioDetailsId ,file, this.props.client)
+    return resp;
+  }
+
+  onLogoFileUpload(e){
+    if(e.target.files[0].length ==  0)
+      return;
+    let file = e.target.files[0];
+    let fileName = e.target.files[0].name;
+    let name = e.target.name;
+    let data ={moduleName: "PORTFOLIO_IDEA_IMG", actionName: "UPDATE", portfolioId:this.props.portfolioDetailsId, ideaId:this.props.ideaId, communityType:"IDE", portfolio:{ideaImage:{fileUrl:" ", fileName : fileName}}};
+    let response = multipartASyncFormHandler(data,file,'registration',this.onFileUploadCallBack.bind(this, name, file));
+  }
+  onFileUploadCallBack(name,file,resp){
+    if(resp){
+      let result = JSON.parse(resp)
+      let userOption = confirm("Do you want to add the file into the library")
+      if(userOption){
+        let fileObjectStructure = {
+          fileName: file.name,
+          fileType: file.type,
+          fileUrl: result.result,
+          libraryType: "image"
+        }
+        this.libraryAction(fileObjectStructure)
+      }
+      if(result.success){
+        this.setState({loading:true})
+        this.fetchPortfolioDetails();
+      }
+    }
+  }
 
   render(){
+    let that = this;
     const showLoader = this.state.loading;
-    let description = this.state.data.description?this.state.data.description:''
-    let lockStatus =  this.state.data.isIdeasPrivate?this.state.data.isIdeasPrivate:false
+    let ideaDescription = this.state.data.ideaDescription?this.state.data.ideaDescription:''
+    let image = that.state.data && that.state.data.ideaImage&&that.state.data.ideaImage.fileUrl?that.state.data.ideaImage.fileUrl:"/images/images.png";
     return (
       <div className="admin_main_wrap">
         {showLoader === true ? (<MlLoader/>) : (
@@ -123,22 +162,22 @@ export default class MlIdeatorIdeas extends React.Component{
         <h2>Ideas</h2>
         <div className="col-lg-2 col-lg-offset-5 col-md-3 col-md-offset-4 col-sm-3 col-sm-offset-4">
           <a href="#" >
-            <div className="list_block notrans">
-              <FontAwesome name='lock'/>
-              <div className="hex_outer portfolio-font-icons"><span className="ml ml-idea"></span></div>
-              <h3>Ideas</h3>
+            <div className="upload_hex">
+              <FontAwesome name='unlock' className="req_textarea_icon un_lock" id="isIdeaImagePrivate"/>
+              <img src={image} id="blah" width="105" height="auto"/>
+              <input className="upload" type="file" id="upload_hex"  onChange={this.onLogoFileUpload.bind(this)}/>
             </div>
           </a>
         </div>
-        <div className="form_bg col-lg-8 col-lg-offset-2">
+        <div className="form_bg col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2">
           <form>
             <div className="form-group">
               <input type="text" placeholder="Title" className="form-control float-label" id="cluster_name" defaultValue={this.state.data.title} name="title" onBlur={this.handleBlur.bind(this)}/>
-              <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeasTitlePrivate" onClick={this.onClick.bind(this, "title", "isIdeasTitlePrivate")}/>
+              <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeaTitlePrivate" onClick={this.onClick.bind(this, "title", "isIdeaTitlePrivate")}/>
             </div>
             <div className="form-group">
-              <textarea placeholder="Describe..." className="form-control float-label" id="cl_about" defaultValue={description} name="description" onBlur={this.handleBlur.bind(this)}></textarea>
-              <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeasPrivate" onClick={this.onClick.bind(this, "description", "isIdeasPrivate")}/>
+              <textarea placeholder="Describe..." className="form-control float-label" id="cl_about" defaultValue={ideaDescription} name="ideaDescription" onBlur={this.handleBlur.bind(this)}></textarea>
+              <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isIdeaPrivate" onClick={this.onClick.bind(this, "ideaDescription", "isIdeaPrivate")}/>
             </div>
           </form>
         </div>

@@ -14,6 +14,7 @@ import {findTaskActionHandler} from "../actions/saveCalanderTask";
 import MlLoader from "../../../../../commons/components/loader/loader";
 import _ from "lodash";
 let Select = require('react-select');
+import { initalizeFloatLabel } from '../../../../../commons/utils/formElemUtil';
 
 export default class MlAppTaskCreate extends Component {
 
@@ -47,6 +48,10 @@ export default class MlAppTaskCreate extends Component {
   componentWillMount() {
     const resp = this.findTaskDetails();
     return resp;
+  }
+
+  componentDidUpdate() {
+    initalizeFloatLabel();
   }
 
   async findTaskDetails() {

@@ -319,16 +319,16 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioStrategyAndPlanning'] = (obj, a
 
   return {};
 }
-MlResolver.MlQueryResolver['fetchIdeatorPortfolioLookingFor'] = (obj, args, context, info) => {
-  if(args.portfoliodetailsId){
-    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-    if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('lookingFor')) {
-      return ideatorPortfolio['lookingFor'];
-    }
-  }
-
-  return {};
-}
+// MlResolver.MlQueryResolver['fetchIdeatorPortfolioLookingFor'] = (obj, args, context, info) => {
+//   if(args.portfoliodetailsId){
+//     let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+//     if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('lookingFor')) {
+//       return ideatorPortfolio['lookingFor'];
+//     }
+//   }
+//
+//   return {};
+// }
 
 MlResolver.MlQueryResolver['fetchIdeatorPortfolioIntellectualPlanning'] = (obj, args, context, info) => {
   if(args.portfoliodetailsId){

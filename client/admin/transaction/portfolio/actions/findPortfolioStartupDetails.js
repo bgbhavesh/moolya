@@ -776,7 +776,7 @@ export async function fetchStartupDetailsHandler(portfoliodetailsId, key) {
                   
                   lookingFor{
                       lookingForName,
-                      typeId,
+                      lookingForId,
                       isTypePrivate,
                       lookingDescription,
                       isDescriptionPrivate,

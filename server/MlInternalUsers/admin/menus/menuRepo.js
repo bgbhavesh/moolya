@@ -56,7 +56,7 @@ class MenuRepo{
           switch (resource.resourceCode){
             case 'MANAGESCHEDULE':{
               var item = {
-                  "image":"fa fa-calendar-check-o",
+                  "image":"ml my-ml-manage_schedule",
                   "link": "/app/calendar/manageSchedule/all/activityList",
                   "isLink" : true,
                   "isMenu" : true,

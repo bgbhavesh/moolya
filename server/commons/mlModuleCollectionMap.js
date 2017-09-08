@@ -92,6 +92,7 @@ MlModuleCollectionMap['MlActivity'] = 'OFFICE'; //need to clarify the module nam
 MlModuleCollectionMap['MlService'] = 'OFFICE'; //need to clarify the module name
 MlModuleCollectionMap['MlTask'] = 'OFFICE'; //need to clarify the module name
 MlModuleCollectionMap['MlNotificationTemplates'] = 'NOTIFICATIONTEMPLATE';
+MlModuleCollectionMap['MlSharedLibrary'] = 'SHAREDLIBRARY';
 
 module.exports=  MlModuleCollectionMap;
 

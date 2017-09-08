@@ -6,8 +6,11 @@ import React from 'react';
 var FontAwesome = require('react-fontawesome');
 import ScrollArea from 'react-scrollbar';
 import {updateCalendarSettingActionHandler} from '../actions/updateCalendarSettings';
+import MlAccordion from "../../../../commons/components/MlAccordion";
+import formHandler from "../../../../../commons/containers/MlFormHandler";
+import MlAppActionComponent from "../../../../commons/components/MlAppActionComponent";
 
-export default class MlAppSetCalendarPrimarySettings extends React.Component{
+class MlAppSetCalendarPrimarySettings extends React.Component{
 
   constructor(props){
     super(props);
@@ -41,7 +44,7 @@ export default class MlAppSetCalendarPrimarySettings extends React.Component{
   componentDidMount() {
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(290+$('.admin_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight-(290+$('.app_header').outerHeight(true)));
   }
 
   updateSlotBreakTime(event){
@@ -104,6 +107,29 @@ export default class MlAppSetCalendarPrimarySettings extends React.Component{
   }
 
   render(){
+    const that = this;
+    /**
+     * Setting up action handler for activity different event
+     */
+    let appActionConfig = [
+      {
+        showAction: true,
+        actionName: 'save',
+        handler: async(event) => that.props.handler(that.updateCalendarSetting.bind(this))
+      }
+    ];
+    export const genericPortfolioAccordionConfig = {
+      id: 'portfolioAccordion',
+      panelItems: [
+        {
+          'title': 'Actions',
+          isText: false,
+          style: {'background': '#ef4647'},
+          contentComponent: <MlAppActionComponent
+            resourceDetails={{resourceId: 'calendar', resourceType: 'calendar'}}   //resource id need to be given
+            actionOptions={appActionConfig}/>
+        }]
+    };
     return (
     <div className="step_form_wrap step1">
       <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
@@ -118,7 +144,8 @@ export default class MlAppSetCalendarPrimarySettings extends React.Component{
           </div>
           <div className="form-group">
             <label>
-              <FontAwesome name="clock-o"/>
+              {/*<FontAwesome name="clock-o"/>*/}
+              <span className="ml my-ml-calendar"/>
               Number of Appointments per slot: &nbsp;
               <input type="number" onChange={(evt)=>this.updateAppointmentCountPerSlots(evt)} value={(this.state.appointmentCountPerSlots ? this.state.appointmentCountPerSlots : '')} className="form-control inline_input"/>
             </label>
@@ -131,7 +158,10 @@ export default class MlAppSetCalendarPrimarySettings extends React.Component{
             {/*</label>*/}
           {/*</div>*/}
           <div className="form-group switch_wrap switch_names inline_switch small_sw">
-            <label style={{'marginLeft':'0px'}}><FontAwesome name="clock-o"/> Overlapping in schedule</label>
+            <label style={{'marginLeft':'0px'}}>
+              {/*<FontAwesome name="clock-o"/>*/}
+              <span className="ml my-ml-switch_profile-01"/>
+              Overlapping in schedule</label>
             <span className="state_label">Yes</span><label className="switch nocolor-switch">
             <input type="checkbox" onClick={(evt)=>this.updateOverlappingSchedule(evt)} checked={this.state.isOverlappingSchedule} />
             <div className="slider"></div>
@@ -140,13 +170,16 @@ export default class MlAppSetCalendarPrimarySettings extends React.Component{
           </div>
           <div className="clearfix"></div>
         </form>
-        <div className="form-group">
+        {/*<div className="form-group">
           <div className="ml_btn" style={{'textAlign':'center'}}>
             <button onClick={()=>this.updateCalendarSetting()} className="save_btn" >Save</button>
           </div>
-        </div>
+        </div>*/}
       </ScrollArea>
+      <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
     </div>
     )
   }
 };
+
+export default MlAppSetCalendarPrimarySettings = formHandler()(MlAppSetCalendarPrimarySettings);

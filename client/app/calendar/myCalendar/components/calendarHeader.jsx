@@ -70,7 +70,10 @@ export default class MlCalendarHead extends Component {
                 <span ref={(node) => {
                   if (node) {
                     node.style.setProperty("width", "106%", "important");
-                  }}} >{that.state.displayName ? that.state.displayName.split(' ')[0] + " Consolidated" : "Consolidated"}</span>
+                  }}} >
+                  {/*{that.state.displayName ? that.state.displayName.split(' ')[0] + " Consolidated" : "Consolidated"} */}
+                  Consolidated View
+                </span>
               </div>
             </a>
           </li>
@@ -84,7 +87,7 @@ export default class MlCalendarHead extends Component {
                         profile.communityName === "Startups" ?<span className="icon_bg"><span className="icon_lg ml my-ml-Startups"></span></span>:
                           profile.communityName === "Ideators" ?<span className="icon_bg"><span className="icon_lg ml my-ml-Ideator"></span></span>:
                             profile.communityName === "Institutions" ?<span className="icon_bg"><span className="icon_lg ml my-ml-Institutions"></span></span>:
-                              profile.communityName === "Service Providers" ? <span className="icon_bg"><span className="icon_lg ml ml-Service-Providers"></span></span>:
+                              profile.communityName === "Service Providers" ? <span className="icon_bg"><span className="icon_lg ml my-ml-Service-Providers"></span></span>:
                                 profile.communityName === "Office Bearer" ? <span className="icon_bg"><span className="icon_lg ml my-ml-team-members"></span></span>:""}
                      <br />
                       <div className="tooltiprefer">

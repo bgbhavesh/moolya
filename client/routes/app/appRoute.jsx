@@ -17,6 +17,8 @@ import MyList from "../../app/profile/components/myList/MyList";
 import MlAppMyOffice from "../../../client/app/profile/office/components/MlAppMyOffice";
 import MlAppAddOffice from "../../app/profile/office/components/MlAppAddOffice";
 import MlAppEditOffice from "../../app/profile/office/components/MlAppEditOffice";
+import MlAppTermsAndConditions from "../../app/profile/components/MlAppTermsAndConditions";
+import MlAppPrivacy from "../../app/profile/components/MlAppPrivacy";
 import MlAppMember from "../../app/profile/office/components/OfficeMemberInfo/MlAppMember";
 import MlAppOfficeMembersDetails from "../../app/profile/office/components/MlAppOfficeMembersDetails";
 import MlAppPayOfficeSubscription from "../../app/profile/office/components/MlAppPayOfficeSubscription";
@@ -64,6 +66,7 @@ import MlAppInternalTask from "../../app/internalTask/components/MlAppInternalTa
  */
 import MlAppSetCalendarSettings from '../../app/calendar/manageScheduler/setCalendar/components/MlAppSetCalendarSettings';
 import MlAppOfficeCalendar from '../../app/calendar/officeCalendar/components/MlAppOfficeCalendar';
+import AppMyProfileMyoffice from '../../app/calendar/notifications/components/calenderNotificationComponent';
 
 
 import _ from "lodash";
@@ -436,6 +439,13 @@ appSection.route('/calendar/officeCalendar', {
   }
 });
 
+appSection.route('/calendar/notification', {
+  name: 'calendar_notification',
+  action(){
+    mount(AppLayout, {appContent: <AppMyProfileMyoffice />, isCalenderMenu: false})
+  }
+});
+
 appSection.route('/calendar/manageSchedule/all/activityList', {
   name: 'calendar_manageSchedule',
   action(){
@@ -619,6 +629,22 @@ appSection.route('/myTaskAppointment', {
   name: 'myTaskAppointment',
   action(params){
     mount(AppLayout,{appContent:< MlAppMyTaskAppointment />, isProfileMenu: true})
+  }
+  /**there is no need to send community type other than ideator*/
+});
+
+appSection.route('/termsConditions', {
+  name: 'termsConditions',
+  action(params){
+    mount(AppLayout,{appContent:< MlAppTermsAndConditions />, isProfileMenu: true})
+  }
+  /**there is no need to send community type other than ideator*/
+});
+
+appSection.route('/privacy', {
+  name: 'privacy',
+  action(params){
+    mount(AppLayout,{appContent:< MlAppPrivacy />, isProfileMenu: true})
   }
   /**there is no need to send community type other than ideator*/
 });

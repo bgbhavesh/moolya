@@ -4,6 +4,7 @@
 
 import MlUserContext from '../mlUserContext'
 import moment from 'moment'
+import mlSmsController from '../../mlNotifications/mlSmsNotifications/mlSmsController'
 import _ from 'lodash'
 
 var DEFAULT_FREQUENCY_BSPOKE = "YEARLY";
@@ -291,9 +292,26 @@ class MlOfficeRepo{
             return {success:false, msg:'Invalid Community Type'}
 
           if(obj.userCount == 0)
-            return {success:false, msg:'Limit Exceeded'}
+            return {success:false, msg:obj.communityName+' Limit Exceeded'}
         }
         return {success:true}
+    }
+
+    sendSMSonOfficeActivation(officeId, context){
+        var office = mlDBController.findOne('MlOffice', officeId, context)
+        if(office){
+            var countryCode = MlClusters.findOne(office.clusterId);
+            var defaultProfile = new MlUserContext().userProfileDetails(office.userId)
+            if(countryCode && defaultProfile){
+                var mobileNumber = defaultProfile.mobileNumber
+                var currentdate = new Date();
+                var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
+                var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+                var updatedDateTime = date+" "+time
+                var msg = 'Your customized office has bee activated on moolya on '+updatedDateTime+' Login and check it out now.'
+                mlSmsController.sendSMS(msg, countryCode, mobileNumber)
+            }
+        }
     }
 }
 

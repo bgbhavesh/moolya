@@ -13,6 +13,7 @@ import MlServiceProviderViewAbout from "../view/MlServiceProviderViewAbout";
 import MlServiceProviderViewMCL from "../view/MlServiceProviderViewMCL";
 import MlServiceProviderViewServices from "../view/MlServiceProviderViewServices";
 import MlServiceProviderViewClients from "../view/MlServiceProviderViewClients";
+import MlServiceProviderViewLookingFor from "../view/MlServiceProviderViewLookingFor";
 import PortfolioLibrary from "../../../../../../commons/components/portfolioLibrary/PortfolioLibrary";
 import {client} from "../../../../../core/apolloConnection";
 //todo:import the View components//
@@ -87,6 +88,14 @@ export default class MlServiceProviderViewTabs extends Component {
         component: <MlServiceProviderViewClients key="6"
                                              portfolioDetailsId={this.props.portfolioDetailsId}
                                              getSelectedAnnotations={this.props.getSelectedAnnotations}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Looking For",
+        component: <MlServiceProviderViewLookingFor key="7" tabName="Looking For"
+                                                 portfolioDetailsId={this.props.portfolioDetailsId}
+                                                 getSelectedAnnotations={this.props.getSelectedAnnotations}/>
       }
     ]
     return tabs;

@@ -26,7 +26,8 @@ export default class MlInstitutionViewLookingFor extends React.Component {
   }*/
 
   componentWillMount(){
-    this.fetchPortfolioInstitutionDetails();
+    const resp = this.fetchPortfolioInstitutionDetails();
+    return resp
   }
 
   initalizeAnnotaor(){
@@ -138,7 +139,7 @@ export default class MlInstitutionViewLookingFor extends React.Component {
                   {lookingforArray && lookingforArray.map(function (details, idx) {
                     return(<div className="col-lg-2 col-md-3 col-sm-4" key={idx}>
                       <div className="team-block">
-                        <img src={details.logo&&details.logo.fileUrl} className="team_img" />
+                        <span className="ml my-ml-browser_3" />
                         <h3>
                           {details.lookingForName&&details.lookingForName}
                         </h3>
@@ -151,7 +152,5 @@ export default class MlInstitutionViewLookingFor extends React.Component {
           </div>)}
       </div>
     )
-
-
   }
 }

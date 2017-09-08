@@ -178,28 +178,26 @@ export async function fetchfunderPortfolioInvestor(portfoliodetailsId) {
   const result = await client.query({
     query: gql`
           query ($portfoliodetailsId: String!) {
-            data:fetchFunderDetails(portfoliodetailsId: $portfoliodetailsId, key:"investments") {
-                investments{
-                  dateOfInvestment
-                  isDateOfInvestmentPrivate
-                  investmentcompanyName
-                  isCompanyNamePrivate
-                  typeOfFundingId
-                  typeOfFundingName
-                  isTypeOfFundingPrivate
-                  aboutInvestment
-                  isAboutInvestmentPrivate
-                  makePrivate
-                  investmentAmount 
-                  isInvestmentAmountPrivate 
-                  index
-                  privateFields{
-                    keyName,
-                    booleanKey
-                    index
-                    tabName
-                  }
-                }  
+            data:fetchfunderPortfolioInvestor(portfoliodetailsId: $portfoliodetailsId) {
+              dateOfInvestment
+              isDateOfInvestmentPrivate
+              investmentcompanyName
+              isCompanyNamePrivate
+              typeOfFundingId
+              typeOfFundingName
+              isTypeOfFundingPrivate
+              aboutInvestment
+              isAboutInvestmentPrivate
+              makePrivate
+              investmentAmount 
+              isInvestmentAmountPrivate 
+              index
+              privateFields{
+                keyName,
+                booleanKey
+                index
+                tabName
+              }
             }
           }
       `,
@@ -208,7 +206,7 @@ export async function fetchfunderPortfolioInvestor(portfoliodetailsId) {
     },
     forceFetch: true
   })
-  const id = result.data.data && result.data.data.investments;
+  const id = result.data.data && result.data.data;
   // let data = _.omit(id,'__typename')
   // return data
   return id

@@ -16,14 +16,14 @@ const genderValues = [
   {value: 'others', label: 'Others'}
 ];
 export default class MlFunderAbout extends React.Component {
-  constructor(props, context){
+  constructor(props, context) {
     super(props);
-    this.state={
+    this.state = {
       loading: true,
       profilePic: " ",
       defaultProfilePic: "/images/def_profile.png",
-      data:{},
-      privateKey:{}
+      data: {},
+      privateKey: {}
     }
     this.onClick.bind(this);
     this.handleBlur.bind(this);
@@ -31,32 +31,31 @@ export default class MlFunderAbout extends React.Component {
     this.libraryAction.bind(this)
     return this;
   }
-  componentWillMount(){
+
+  componentWillMount() {
     const resp = this.fetchPortfolioDetails();
     return resp
   }
 
-  componentDidMount()
-  {
+  componentDidMount() {
     OnLockSwitch();
     dataVisibilityHandler();
-
   }
-  componentDidUpdate()
-  {
-    var className = this.props.isAdmin?"admin_header":"app_header"
+
+  componentDidUpdate() {
+    var className = this.props.isAdmin ? "admin_header" : "app_header"
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
     // $('.main_wrap_scroll').height(WinHeight-($('.admin_header').outerHeight(true)+120));
-    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
-    if(WinWidth > 768){
-      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});}
+    $('.main_wrap_scroll').height(WinHeight - ($('.' + className).outerHeight(true) + 120));
+    if (WinWidth > 768) {
+      $(".main_wrap_scroll").mCustomScrollbar({theme: "minimal-dark"});
+    }
     OnLockSwitch();
     dataVisibilityHandler();
-    /*var WinHeight = $(window).height();
-    $('.left_wrap').height(WinHeight-(90+$('.admin_header').outerHeight(true)));*/
     initalizeFloatLabel();
   }
+
   onClick(fieldName, field,e){
     let details = this.state.data||{};
     let key = e.target.id;

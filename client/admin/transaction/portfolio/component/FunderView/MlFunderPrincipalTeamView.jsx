@@ -163,7 +163,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
     let selectedPrincipal = that.state.funderPrincipalList[PIndex] || {};
     let TIndex = that.state.TIndex
     let selectedTeam = that.state.funderTeamList[TIndex] || {};
-    if(_.isEmpty(selectedPrincipal)){
+    if(_.isEmpty(selectedPrincipal) && _.isEmpty(selectedTeam)){
       return (
         showLoader === true ? (<MlLoader/>) :
           <div className="portfolio-main-wrap">
@@ -276,7 +276,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                         <div className="form-group">
                                           <input type="text" placeholder="Company" className="form-control float-label"
                                                  id="cluster_name"
-                                                 value={selectedPrincipal.company ? selectedPrincipal.company : ""}
+                                                 value={selectedPrincipal.principalcompanyName ? selectedPrincipal.principalcompanyName : ""}
                                                  disabled='disabled'/>
                                           <FontAwesome name='unlock' className="input_icon un_lock"/>
                                         </div>
@@ -440,7 +440,7 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                         <div className="form-group">
                                           <input type="text" placeholder="Company" className="form-control float-label"
                                                  id="cluster_name"
-                                                 value={selectedTeam.company ? selectedTeam.company : ""}
+                                                 value={selectedTeam.teamcompanyName ? selectedTeam.teamcompanyName : ""}
                                                  disabled='disabled'/>
                                           <FontAwesome name='unlock' className="input_icon un_lock"/>
                                         </div>

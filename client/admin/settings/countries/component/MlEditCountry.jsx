@@ -16,11 +16,7 @@ class MlEditCountry extends React.Component{
     this.findCountry.bind(this);
     return this;
   }
-  componentDidMount() {
-    if(this.state.data.isAcive){
-      $('#status').prop('checked', true);
-    }
-  }
+
 
   componentWillMount() {
     const resp=this.findCountry();
@@ -29,7 +25,15 @@ class MlEditCountry extends React.Component{
 
   componentDidUpdate(){
     OnToggleSwitch(true,true);
-    initalizeFloatLabel();
+
+  }
+  componentDidMount() {
+    if(this.state.data.isAcive){
+      $('#status').prop('checked', true);
+    }
+    setTimeout(function(){
+      initalizeFloatLabel();
+    },1000);
   }
 
   async addEventHandler() {

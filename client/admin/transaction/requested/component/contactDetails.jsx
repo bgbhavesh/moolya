@@ -45,18 +45,20 @@ export default class ContactDetails extends React.Component{
 
 
   componentDidUpdate(){
-   // initalizeFloatLabel();
+
   }
-  componentDidMount(){
-    this.findRegistration.bind(this);
-    this.fetchCountryCode();
-    setTimeout(function(){
-      initalizeFloatLabel();
-    },1000);
-  }
+
   componentWillUpdate(nextProps, nextState) {
 
   }
+  componentDidMount(){
+    setTimeout(function(){
+      initalizeFloatLabel();
+    },1000);
+    this.findRegistration.bind(this);
+    this.fetchCountryCode();
+  }
+
   updateContactOptions(index, did, selectedValue, selObject,callback){
     if (index !== -1) {
       // do your stuff here

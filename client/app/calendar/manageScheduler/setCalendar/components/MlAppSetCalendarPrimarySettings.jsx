@@ -144,7 +144,8 @@ class MlAppSetCalendarPrimarySettings extends React.Component{
           </div>
           <div className="form-group">
             <label>
-              <FontAwesome name="clock-o"/>
+              {/*<FontAwesome name="clock-o"/>*/}
+              <span className="ml my-ml-calendar"/>
               Number of Appointments per slot: &nbsp;
               <input type="number" onChange={(evt)=>this.updateAppointmentCountPerSlots(evt)} value={(this.state.appointmentCountPerSlots ? this.state.appointmentCountPerSlots : '')} className="form-control inline_input"/>
             </label>
@@ -157,7 +158,10 @@ class MlAppSetCalendarPrimarySettings extends React.Component{
             {/*</label>*/}
           {/*</div>*/}
           <div className="form-group switch_wrap switch_names inline_switch small_sw">
-            <label style={{'marginLeft':'0px'}}><FontAwesome name="clock-o"/> Overlapping in schedule</label>
+            <label style={{'marginLeft':'0px'}}>
+              {/*<FontAwesome name="clock-o"/>*/}
+              <span className="ml my-ml-switch_profile-01"/>
+              Overlapping in schedule</label>
             <span className="state_label">Yes</span><label className="switch nocolor-switch">
             <input type="checkbox" onClick={(evt)=>this.updateOverlappingSchedule(evt)} checked={this.state.isOverlappingSchedule} />
             <div className="slider"></div>

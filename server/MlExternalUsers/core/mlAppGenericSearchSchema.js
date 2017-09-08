@@ -28,6 +28,9 @@ let appGenericSearch = `
       sortBy : String
       skip : Int,
       query : String
+      filterQuery: String
+      searchText: String
+      searchFields: [String]
     }
   
     type Query {

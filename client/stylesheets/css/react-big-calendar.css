@@ -196,8 +196,9 @@
 }
 
 .rbc-date-cell a{
-  background: #273545;
-  color: #fff !important;
+  /*background: #273545;*/
+  color: #273545 !important;
+  /*color: #fff !important;*/
   text-shadow: none;
   /* padding: 0px 3px; */
   font-size: 13px;
@@ -210,7 +211,7 @@
   margin: 3px 0px;
 }
 .rbc-date-cell.rbc-off-range a{
-  background: #B9C5CC;
+  /*background: #B9C5CC;*/
 }
 
 .rbc-date-cell.rbc-now {

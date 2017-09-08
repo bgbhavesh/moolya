@@ -728,6 +728,8 @@ MlResolver.MlQueryResolver['fetchIdeas'] = (obj, args, context, info) => {
     _.each(portfolios, function (portfolio) {
           let idea = MlIdeas.findOne({"portfolioId":portfolio._id})
           if(idea){
+            idea.createdAt = portfolio?portfolio.createdAt:null;
+            idea.updatedAt = portfolio?portfolio.transactionUpdatedDate:null;
             ideas.push(idea);
           }
     })

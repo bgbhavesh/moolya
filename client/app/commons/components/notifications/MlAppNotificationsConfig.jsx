@@ -32,7 +32,8 @@ export default class MlAppNotificationsConfig extends Component {
       actionComponent: function (props) {
         return <a onClick={props.onClickHandler} id="appNotification" className="pull-right notification ripple">
           <div className="noti_count">{1}</div>
-          <FontAwesome name='bell-o'/>
+          {/*<FontAwesome name='bell-o'/>*/}
+          < i className="ml my-ml-notifications"></i>
         </a>;
       },
       handler: this.notificationHandler.bind(this),

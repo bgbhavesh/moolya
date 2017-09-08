@@ -1136,7 +1136,7 @@ if (Meteor.isServer) {
           ]
         },
         {
-          "image": "ml fa fa-bell-o",
+          "image": "ml my-ml-notifications",
           "link": "",
           "name": "Notifications",
           "uniqueId": "notifications",
@@ -1152,7 +1152,7 @@ if (Meteor.isServer) {
           "isMenu": true,
         },
         {
-          "image" : "ml my-ml-settings1",
+          "image" : "ml my-ml-settings_new",
           "link" : "/admin/settings/departmentsList",
           "name" : "Settings",
           "uniqueId" : "settings",

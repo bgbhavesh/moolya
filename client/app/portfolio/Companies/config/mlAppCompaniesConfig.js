@@ -22,6 +22,8 @@ export const mlAppCompanyConfig = new MlAppViewer({
     filter: true,
     filterComponent: <MlAppFilterContainer />,
     filterData: filterData,
+    alphabeticSearch: true,
+    alphabeticSearchField: "aboutUs.companyDescription",
     search: true,
     searchFields: ["aboutUs.companyDescription", "firstName", "lastName", "chapterName", "accountType", "communityType"]
   },

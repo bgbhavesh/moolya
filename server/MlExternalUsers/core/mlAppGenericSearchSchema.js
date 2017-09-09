@@ -34,6 +34,7 @@ let appGenericSearch = `
       filterQuery: String
       searchText: String
       searchFields: [String]
+      alphabeticSearch: String
     }
   
     type Query {

@@ -79,6 +79,13 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   let filterQuery = args.queryProperty && args.queryProperty.filterQuery ? JSON.parse(args.queryProperty.filterQuery) : {};
   let searchText = args.queryProperty && args.queryProperty.searchText ? args.queryProperty.searchText : '';
   let searchFields = args.queryProperty && args.queryProperty.searchFields ? args.queryProperty.searchFields : [];
+  let alphabeticSearch = args.queryProperty && args.queryProperty.alphabeticSearch ? JSON.parse(args.queryProperty.alphabeticSearch) : {};
+
+  console.log(alphabeticSearch);
+
+  if( Object.keys(alphabeticSearch).length ){
+    alphabeticSearch[Object.keys(alphabeticSearch)[0]] = new RegExp("^"+alphabeticSearch[Object.keys(alphabeticSearch)[0]], "i");
+  }
 
   let searchQuery = {};
   if(searchText && searchFields.length){
@@ -154,7 +161,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           industryId: '$port.industryId',
         }
       },
-      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+      { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
     ];
     data = mlDBController.aggregate('MlFunderPortfolio', query, context);
     count = data.length
@@ -192,7 +199,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           industryId: '$port.industryId',
         }
       },
-      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+      { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
     ];
     data = mlDBController.aggregate('MlServiceProviderPortfolio', pipleline, context);
     count = data.length;
@@ -230,7 +237,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           industryId: '$port.industryId',
         }
       },
-      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+      { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
     ];
     data = mlDBController.aggregate('MlStartupPortfolio', pipleline, context);
     count = data.length;
@@ -304,7 +311,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           "industryId": '$port.industryId',
         }
       },
-      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+      { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
     ];
     data = mlDBController.aggregate('MlIdeas', pipeline, context);
     count = data.length;
@@ -341,7 +348,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           industryId: '$port.industryId',
         }
       },
-      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+      { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
     ];
     data = mlDBController.aggregate('MlInstitutionPortfolio', pipleline, context);
     count = data.length;
@@ -378,7 +385,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           industryId: '$port.industryId'
         }
       },
-      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+      { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
     ];
     data = mlDBController.aggregate('MlCompanyPortfolio', pipleline, context);
     count = data.length;

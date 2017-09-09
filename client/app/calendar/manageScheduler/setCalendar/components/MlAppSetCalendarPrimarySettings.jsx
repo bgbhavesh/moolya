@@ -136,7 +136,7 @@ class MlAppSetCalendarPrimarySettings extends React.Component{
         <form>
           <div className="form-group">
             <label>
-              <FontAwesome name="clock-o"/>
+              <FontAwesome name="clock-o" className="fa-2x"/>
               Slot duration: &nbsp;
               <input type="number" onChange={(evt)=>this.updateSlotDuration(evt, 'hours')} value={(this.state.slotDuration.hours ? this.state.slotDuration.hours : '')} className="form-control inline_input"/> Hours
               <input type="number" onChange={(evt)=>this.updateSlotDuration(evt, 'minutes')} value={(this.state.slotDuration.minutes ? this.state.slotDuration.minutes : '')} className="form-control inline_input"/> Mins
@@ -145,7 +145,7 @@ class MlAppSetCalendarPrimarySettings extends React.Component{
           <div className="form-group">
             <label>
               {/*<FontAwesome name="clock-o"/>*/}
-              <span className="ml my-ml-calendar"/>
+              <span className="ml my-ml-calendar fa-2x" />
               Number of Appointments per slot: &nbsp;
               <input type="number" onChange={(evt)=>this.updateAppointmentCountPerSlots(evt)} value={(this.state.appointmentCountPerSlots ? this.state.appointmentCountPerSlots : '')} className="form-control inline_input"/>
             </label>
@@ -160,7 +160,7 @@ class MlAppSetCalendarPrimarySettings extends React.Component{
           <div className="form-group switch_wrap switch_names inline_switch small_sw">
             <label style={{'marginLeft':'0px'}}>
               {/*<FontAwesome name="clock-o"/>*/}
-              <span className="ml my-ml-switch_profile-01"/>
+              <span className="ml my-ml-switch_profile-01 fa-2x"/>
               Overlapping in schedule</label>
             <span className="state_label">Yes</span><label className="switch nocolor-switch">
             <input type="checkbox" onClick={(evt)=>this.updateOverlappingSchedule(evt)} checked={this.state.isOverlappingSchedule} />

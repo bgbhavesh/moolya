@@ -35,7 +35,9 @@ if(Meteor.isServer){
         "isLink" : true,
         "isMenu" : true,
         "name" : "Conversations",
-        "uniqueId" : "conversations"
+        "uniqueId" : "conversations",
+         isDisabled:true
+
       },
       {
         "image":"ml my-ml-subscriptions",

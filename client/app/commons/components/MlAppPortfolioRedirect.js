@@ -13,7 +13,6 @@ export default class MlAppPortfolioRedirect extends React.Component {
     return this;
   }
 
-
   componentDidMount() {
     let swiper = new Swiper('.ideas_swiper', {
       pagination: '.swiper-pagination',
@@ -69,7 +68,7 @@ export default class MlAppPortfolioRedirect extends React.Component {
                 <div className="swiper-container ideas_swiper">
                   <div className="swiper-wrapper">
                     {data.map(function (pf, idx) {
-                      let url = pf && pf.portfolioImage ? pf.portfolioImage : '';
+                      let url = pf && pf.portfolioImage ? pf.portfolioImage : '/images/no_image.png';
                       return (
                         <div className="swiper-slide ideas_block" name={idx}
                              style={{'backgroundImage': 'url(' + url + ')'}} key={idx}>
@@ -91,10 +90,13 @@ export default class MlAppPortfolioRedirect extends React.Component {
                     <div className="panel panel-default panel-form-view" id={idx} style={{'display': 'none'}}
                          key={idx}>
                       <div className="panel-heading">
-                        Portfolio: {pf.portfolioUserName} <br/>
-                        CommunityType: {pf.communityType} <br/>
-                        CreatedAt: {pf.transactionCreatedDate} <br/>
-                        UpdatedAt: {pf.transactionUpdatedDate} <br/>
+                        <div className="row">
+                          <div className="col-md-6"><b>Portfolio&nbsp; : &nbsp;</b> {pf.portfolioUserName}</div>
+                          <div className="col-md-6"><b>Created Date&nbsp; : &nbsp;</b> {pf.transactionCreatedDate}</div>
+                          <hr />
+                          <div className="col-md-6"><b>CommunityType&nbsp; : &nbsp;</b> {pf.communityType}</div>
+                          <div className="col-md-6"><b>Live Date&nbsp; : &nbsp;</b> {pf.transactionUpdatedDate}</div>
+                        </div>
                       </div>
                       <div className="panel-body">
                         <a className="mlUpload_btn pull-left"

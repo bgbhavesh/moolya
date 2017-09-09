@@ -1122,6 +1122,7 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
   top: 0;
   margin-left: -11px;
 }
+.library-wrap .fileUpload input.upload{overflow: hidden;}
 .library-wrap-details .fa.fa-lock{position:absolute;left:0;top:0;color:#fff;background:#ef4647;width:25px;height:25px;text-align:center;line-height:25px;border-radius:50%;cursor:pointer}
 .medium-popover{ width:350px; padding: 20px; max-height: 300px; overflow-y: auto; }
 .rating-lockicon{margin-right: 5px; top: 29px; background: #273545; width: 25px; height: 25px; color: #fff; text-align: center; line-height: 25px; text-shadow: none; border-radius: 50%; float: right; }

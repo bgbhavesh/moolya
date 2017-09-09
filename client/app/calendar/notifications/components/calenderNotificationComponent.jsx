@@ -4,6 +4,7 @@ import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 var FontAwesome = require('react-fontawesome');
 import {getNotifications} from "../../../commons/actions/fetchUserDetails";
+import mlConversationUtils from '../../../../commons/conversations/utils/mlconversationUtils'
 
 // import CalenderHead from './../calenderHead';
 export default class AppMyProfileMyoffice extends React.Component{
@@ -19,7 +20,6 @@ export default class AppMyProfileMyoffice extends React.Component{
   }
   componentDidUpdate()
   {
-
     var className = this.props.isAdmin?"admin_header":"app_header"
 
     var WinWidth = $(window).width();
@@ -34,19 +34,43 @@ export default class AppMyProfileMyoffice extends React.Component{
     var that = this;
     if (response && response.success) {
       that.setState({notifications: response.result});
-      console.log('----------calender notifications response-----------',response);
+    }
+  }
+  async onChangeStatus(data, key){
+    var _this =this
+    if(!data.isRead){
+      var payload = { _id    : data._id, isRead : true };
+      mlConversationUtils.ackNotification(payload, function(resp){
+        var context = this;
+        if(resp.success){
+          getNotifications(_this.appNotifications.bind(_this))
+        }
+      });
     }
   }
 
   render(){
     const {notifications} = this.state;
+    let that =this;
+    function timeConverter(UNIX_timestamp){
+      var a = new Date(UNIX_timestamp * 1000);
+      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      var year = a.getFullYear();
+      var month = months[a.getMonth()];
+      var date = a.getDate();
+      var hour = a.getHours();
+      var min = a.getMinutes();
+      var sec = a.getSeconds();
+      var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+      return time;
+    };
     var notificationAry = notifications && notifications.length ? notifications : [];
     var notificationsList = notificationAry.map(function (options, key) {
       return (
-        <li key={key} className={options.isRead ? 'read' : 'unread'}>
+        <li key={key} onClick={that.onChangeStatus.bind(that,options,key)} className={options.isRead ? 'read' : 'unread'}>
           <div className="left_icon"><span className="ml ml-moolya-symbol"></span></div>
           <div className="right_text">
-            <span>{(options.createdTS) ? options.createdTS : "4/9/2017 17:32:37" }</span>
+            <span>{(options.createdTS) ? timeConverter(options.createdTS) : "7 Sep 2017 21:57:40" }</span>
             <p>
               {options.message} </p>
             {/*<span className="read_more" title="Read more"><a href="#">...</a></span>*/}

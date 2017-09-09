@@ -1010,7 +1010,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   else if ( args.module === "mySelfInternalTask" ) {
 
     let query = {
-      attendee: userId,
+      userId: userId,
       attendeeProfileId: profileId,
       isSelfAssigned: true,
       status: { '$in': ["pending"] }

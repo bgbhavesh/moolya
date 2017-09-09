@@ -28,7 +28,7 @@ export default class MlAppInternalMyTask extends React.Component{
       case 'edit':
         return '';
       default:
-      return <MlAppInternalMyTaskList updateType={that.updateType} />
+      return <MlAppInternalMyTaskList updateType={that.updateType} data={this.props.data} />
     }
   }
 

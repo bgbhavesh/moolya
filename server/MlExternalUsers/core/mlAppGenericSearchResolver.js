@@ -56,8 +56,10 @@ MlResolver.MlUnionResolver['AppGenericSearchUnion'] =  {
       case "MYCURRENTAPPOINTMENT":
       case "MYCOMPLETEDAPPOINTMENT":
       case "MYREJECTEDAPPOINTMENT":
-      case "MYREQUESTEDPPOINTMENT":
         return "Appointment";
+        break;
+      case "MYREQUESTEDBESPOKESERVICE":
+        return "Service";
         break;
       default:
         return 'Generic';
@@ -760,6 +762,23 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       { $match: { "$and":  [ searchQuery, filterQuery ] } }
     ];
     data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
+    count = data.length;
+  }
+
+  else if ( args.module === "myRequestedBespokeService" ) {
+    let query = {
+      "$and":[
+        {
+          userId: userId,
+          profileId: profileId,
+          isCurrentVersion: true,
+          isBeSpoke: true
+        },
+        searchQuery,
+        filterQuery
+      ]
+    };
+    data = mlDBController.find('MlServiceCardDefinition', query, context).fetch();
     count = data.length;
   }
 

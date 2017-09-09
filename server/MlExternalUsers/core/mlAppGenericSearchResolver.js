@@ -285,7 +285,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           "userId": "$userId",
           "ideas": [{
             "title": "$title",
-            "description": "$description"
+            "description": "$description",
+            "portfolioId":"$portfolioId"
           }],
           "chapterName": "$port.chapterName",
           "name": "$user.profile.firstName" + " " + "$user.profile.lastName",

@@ -36,7 +36,9 @@ export default class InteractionsCounter extends React.Component{
     console.log("on BackClick")
     this.props.backHandler();
   }
-
+  backFunction(){
+    console.log('back clicked')
+  }
   render(){
     let config = [
       {name: 'like',displayName:'Like',iconClass: 'ml my-ml-like'},
@@ -75,7 +77,12 @@ export default class InteractionsCounter extends React.Component{
     return(
       <div>
         <div className="paperfold panel">
-          <a className="startup-logo" href="" onClick={this.onBackHandler.bind(this)}><img src={this.props.portfolioImage?this.props.portfolioImage:"/images/startup_default.png"}/></a>
+          <a href="" className="back_btn" onClick={this.backFunction}>
+            <span className="fa fa-angle-left fa-2x"/>
+          </a>
+          <a className="startup-logo" href="" onClick={this.onBackHandler.bind(this)} ><img src={this.props.portfolioImage?this.props.portfolioImage:"/images/ideator_01.png"} data-toggle="tooltip" title="Community Name" data-placement="right"/>
+             &nbsp; first name
+          </a>
           <ul className="header-action-buttons">
             {actionView}
           </ul>

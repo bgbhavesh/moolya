@@ -402,7 +402,7 @@ export default class MlAppRegStep5 extends React.Component {
     let appActionConfig = [
       {
         showAction: true,
-        actionName: 'exit',
+        actionName: 'cancel',
         handler: this.exitRegistration.bind(this)
       }
     ]

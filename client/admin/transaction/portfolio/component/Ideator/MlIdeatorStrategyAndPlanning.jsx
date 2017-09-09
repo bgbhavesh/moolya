@@ -116,6 +116,7 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
     const showLoader = this.state.loading;
     return (
       <div>
+        <h2>Problems and Solutions</h2>
         {showLoader === true ? (<MlLoader/>) : (
           <div className="main_wrap_scroll">
             <ScrollArea
@@ -129,12 +130,13 @@ export default class MlIdeatorStrategyAndPlanning extends React.Component{
                   <div className="panel panel-default panel-form">
                     <div className="panel-heading">
                       Startergy and Planning
+                      <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isStrategyPlansPrivate" onClick={this.onClick.bind(this, "spDescription", "isStrategyPlansPrivate")}/>
                     </div>
                     <div className="panel-body">
 
                       <div className="form-group nomargin-bottom">
                         <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description} name="spDescription" onBlur={this.handleBlur.bind(this)}></textarea>
-                        <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isStrategyPlansPrivate" onClick={this.onClick.bind(this, "spDescription", "isStrategyPlansPrivate")}/>
+
                       </div>
 
                     </div>

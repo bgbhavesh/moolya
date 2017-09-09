@@ -183,7 +183,7 @@ export default class MlFunderInvestmentView extends React.Component {
           <h3>{say.dateOfInvestment ? say.dateOfInvestment : 'Date :'}</h3>
           <p>Date
             - {say.dateOfInvestment}<br/>
-            Company - {say.companyName}<br/>
+            Company - {say.investmentcompanyName}<br/>
 
             Amount - {say.investmentAmount}<br/>
             Funding Type
@@ -222,7 +222,7 @@ export default class MlFunderInvestmentView extends React.Component {
                           <div className="col-lg-2 col-md-4 col-sm-4" onClick={that.showDetails.bind(that, idx)}
                                key={idx}>
                             <div className="list_block notrans funding_list">
-                              <div><p>{details.companyName}</p><p className="fund">{details.investmentAmount}</p>
+                              <div><p>{details.investmentcompanyName}</p><p className="fund">{details.investmentAmount}</p>
                                 <p>{details.typeOfFundingName}</p></div>
                               <h3>{details.dateOfInvestment ? details.dateOfInvestment : "Date :"}</h3>
                             </div>
@@ -245,7 +245,7 @@ export default class MlFunderInvestmentView extends React.Component {
                               <div className="team-block" onClick={that.viewDetails.bind(that, idx)}>
                                 <h2>{details.dateOfInvestment ? details.dateOfInvestment : "Date :"}</h2>
                                 <h3>
-                                  <p>{details.companyName}</p><p className="fund">{details.investmentAmount}</p>
+                                  <p>{details.investmentcompanyName}</p><p className="fund">{details.investmentAmount}</p>
                                   <p>{details.typeOfFundingName}</p>
                                 </h3>
                               </div>

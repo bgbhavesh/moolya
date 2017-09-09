@@ -130,9 +130,11 @@ export default class StepZilla extends Component {
               this.setState({
                 maditoryModalOpen: true,
               });
+              this._setNavState(this.state.compState);
+              return
             }
 
-            if ( typeof this.refs.activeComponent.isUpdated == 'undefined' || this.refs.activeComponent.isUpdated() ) {
+            if (typeof this.refs.activeComponent.isUpdated == 'undefined' || this.refs.activeComponent.isUpdated() ) {
               if (evt.currentTarget.value === (this.props.steps.length - 1) &&
                 this.state.compState === (this.props.steps.length - 1)) {
                 this._setNavState(this.props.steps.length);
@@ -145,6 +147,7 @@ export default class StepZilla extends Component {
                 modalOpen: true,
               });
               this._setNavState(this.state.compState);
+              return
             }
         }
     }

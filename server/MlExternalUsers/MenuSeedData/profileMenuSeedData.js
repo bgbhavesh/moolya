@@ -64,11 +64,12 @@ if(Meteor.isServer){
           // },
           {
               "image":"ml my-ml-Referral_Invite",
-              "link": "/app/referalInvities",
+              "link": "#",
               "isLink" : true,
               "isMenu" : true,
               "name" : "Referral & Invites",
-              "uniqueId" : "referalInvities"
+              "uniqueId" : "referalInvities",
+              isDisabled: true
           },
           {
               "image":"ml my-ml-library_3",
@@ -80,11 +81,12 @@ if(Meteor.isServer){
           },
           {
               "image":"ml my-ml-subscriptions",
-              "link": "/app/mySubscriptions",
+              "link": "#",
               "isLink" : true,
               "isMenu" : true,
               "name" : "My Subscriptions",
-              "uniqueId" : "mySubscriptions"
+              "uniqueId" : "mySubscriptions",
+              isDisabled:true
           },
           {
             "image":"ml my-ml-service_provider_my_appointments",
@@ -95,7 +97,7 @@ if(Meteor.isServer){
             "uniqueId" : "myAppointment"
           },
           {
-              "image":"ml my-ml-settings1",
+              "image":"ml my-ml-settings_new",
               "link": "/app/settings",
               "isLink" : true,
               "isMenu" : true,

@@ -1024,7 +1024,7 @@ class MlAppServiceManageSchedule extends Component {
       },
       {
         showAction: true,
-        actionName: 'exit',
+        actionName: 'cancel',
         handler: async(event) => {
           FlowRouter.go('/app/calendar/manageSchedule/' + _this.profileId + '/serviceList')
         }
@@ -1043,7 +1043,7 @@ class MlAppServiceManageSchedule extends Component {
         }]
     };
     return (
-      <div className={isViewMode ? 'col-lg-12' : "app_main_wrap"}>
+      <div className="app_main_wrap">
         <div className="app_padding_wrap">
           {!this.props.viewMode?<MlAppScheduleHead type="service" />:""}
           <div className="clearfix"/>

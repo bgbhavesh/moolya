@@ -114,7 +114,7 @@ export default class MlInstitutionViewManagement extends React.Component {
       this.setState({institutionManagementList: response.management,loading:false});
     }
 
-    this.setState({lodaing:false})
+    this.setState({loading:false})
 
   }
 

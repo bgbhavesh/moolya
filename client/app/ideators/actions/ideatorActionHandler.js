@@ -35,7 +35,7 @@ export async function fetchIdeaActionHandler(portfolioId) {
                     portfolioId
                     title
                     isIdeaTitlePrivate
-                    description
+                    ideaDescription
                     isIdeaPrivate
                     userId
                     isActive
@@ -43,6 +43,8 @@ export async function fetchIdeaActionHandler(portfolioId) {
                       fileUrl
                       fileName
                     }
+                    createdAt
+                    updatedAt
                 }
             }
         `,
@@ -65,7 +67,7 @@ export async function fetchIdeators() {
                       isIdeaPrivate
                       isIdeaTitlePrivate
                       title
-                      description
+                      ideaDescription
                       portfolioId
                       ideaImage {
                         fileUrl
@@ -95,7 +97,7 @@ export async function fetchIdeaByPortfolioId(portfolioId) {
                       isIdeaPrivate
                       isIdeaTitlePrivate
                       title
-                      description
+                      ideaDescription
                       portfolioId
                       ideaImage {
                         fileUrl

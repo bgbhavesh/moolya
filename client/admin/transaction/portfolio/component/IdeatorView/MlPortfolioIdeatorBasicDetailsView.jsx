@@ -38,20 +38,22 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
     initalizeFloatLabel();
     // OnLockSwitch();
     // dataVisibilityHandler();
-
+    var className = this.props.isAdmin?"admin_header":"app_header"
 
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
 
-    $('.tab_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+120));
+    // $('.main_wrap_scroll').height(WinHeight-($('.admin_header').outerHeight(true)+120));
+    $('.main_wrap_scroll').height(WinHeight-($('.'+className).outerHeight(true)+120));
     if(WinWidth > 768){
-      $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
     }
 
   }
 
   componentWillMount(){
-    this.fetchPortfolioDetails();
+    const resp = this.fetchPortfolioDetails();
+    return resp
   }
 
 
@@ -75,7 +77,7 @@ export default class MlPortfolioIdeatorBasicDetailsView extends React.Component{
         {showLoader === true ? ( <MlLoader />) : (
             <div>
               <h2>Ideator</h2>
-        <div className="tab_wrap_scroll">
+        <div className="main_wrap_scroll">
               <div className="col-md-6 nopadding-left">
 
                     <div className="form_bg">

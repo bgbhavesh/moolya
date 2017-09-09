@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
+import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from "../../../../../../utils/formElemUtil";
 import ScrollArea from "react-scrollbar";
 import Moolyaselect from "../../../../../../commons/components/MlAdminSelectWrapper";
 import gql from "graphql-tag";
@@ -43,6 +43,9 @@ export default class MlStartupAssets extends React.Component{
     OnLockSwitch();
     dataVisibilityHandler();
     this.imagesDisplay()
+    setTimeout(function () {
+      initalizeFloatLabel();
+    },1000)
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.assets)
@@ -289,7 +292,7 @@ export default class MlStartupAssets extends React.Component{
 
           </ScrollArea>
           <Popover placement="right" isOpen={this.state.popoverOpen} target={"create_client"+this.state.selectedObject} toggle={this.toggle}>
-            <PopoverTitle>Add Asset</PopoverTitle>
+            <PopoverTitle>Asset</PopoverTitle>
             <PopoverContent>
               <div  className="ml_create_client">
                 <div className="medium-popover"><div className="row">
@@ -315,12 +318,12 @@ export default class MlStartupAssets extends React.Component{
                       <input type="text" name="assetDescription" placeholder="About" className="form-control float-label" id="" defaultValue={this.state.data.assetDescription} onBlur={this.handleBlur.bind(this)}/>
                       <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isDescriptionPrivate" onClick={this.onLockChange.bind(this, "assetDescription", "isDescriptionPrivate")}/>
                     </div>
-                    {displayUploadButton?<div className="form-group">
-                      <div className="fileUpload mlUpload_btn">
-                        <span>Upload Logo</span>
-                        <input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />
-                      </div>
-                    </div>:""}
+                    {/*{displayUploadButton?<div className="form-group">*/}
+                      {/*<div className="fileUpload mlUpload_btn">*/}
+                        {/*<span>Upload Logo</span>*/}
+                        {/*<input type="file" name="logo" id="logo" className="upload"  accept="image/*" onChange={this.onLogoFileUpload.bind(this)}  />*/}
+                      {/*</div>*/}
+                    {/*</div>:""}*/}
                     <div className="clearfix"></div>
                     <div className="form-group">
                       <div className="input_types"><input id="makePrivate" type="checkbox" checked={this.state.data.makePrivate&&this.state.data.makePrivate}  name="checkbox" onChange={this.onStatusChangeNotify.bind(this)}/><label htmlFor="checkbox1"><span></span>Make Private</label></div>

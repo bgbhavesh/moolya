@@ -63,7 +63,7 @@ export default class MlCalendarHead extends Component {
       <div className="col-lg-12">
         <ul className="users_list well well-sm">
           <li className={that.state.isAll ? 'active_user' : ''}>
-            <a href="#" onClick={()=>that.resetWithAll()}>
+            <a href="" onClick={()=>that.resetWithAll()}>
               <img src={that.state.profilePic ? that.state.profilePic : "/images/def_profile.png"}/><br />
               <div className="tooltiprefer">
                 {/*Need to show only first name*/}
@@ -87,7 +87,7 @@ export default class MlCalendarHead extends Component {
                         profile.communityName === "Startups" ?<span className="icon_bg"><span className="icon_lg ml my-ml-Startups"></span></span>:
                           profile.communityName === "Ideators" ?<span className="icon_bg"><span className="icon_lg ml my-ml-Ideator"></span></span>:
                             profile.communityName === "Institutions" ?<span className="icon_bg"><span className="icon_lg ml my-ml-Institutions"></span></span>:
-                              profile.communityName === "Service Providers" ? <span className="icon_bg"><span className="icon_lg ml ml-Service-Providers"></span></span>:
+                              profile.communityName === "Service Providers" ? <span className="icon_bg"><span className="icon_lg ml my-ml-Service-Providers"></span></span>:
                                 profile.communityName === "Office Bearer" ? <span className="icon_bg"><span className="icon_lg ml my-ml-team-members"></span></span>:""}
                      <br />
                       <div className="tooltiprefer">

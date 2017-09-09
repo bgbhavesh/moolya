@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { render } from 'react-dom';
 import ScrollArea from 'react-scrollbar'
 import { Button, Popover, PopoverTitle, PopoverContent } from 'reactstrap';
-import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from '../../../../../../utils/formElemUtil';
+import {dataVisibilityHandler, OnLockSwitch} from '../../../../../../utils/formElemUtil';
 import {putDataIntoTheLibrary} from '../../../../../../../commons/actions/mlLibraryActionHandler'
 var FontAwesome = require('react-fontawesome');
 import Moolyaselect from  '../../../../../../commons/components/MlAdminSelectWrapper';
@@ -48,9 +48,6 @@ export default class MlStartupBranches extends React.Component{
     OnLockSwitch();
     dataVisibilityHandler();
     this.imagesDisplay();
-    setTimeout(function () {
-      initalizeFloatLabel();
-    },1000)
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.branches)

@@ -52,6 +52,7 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
         }
           user = MlPortfolioDetails.findOne({"$and": [{'userId': portfolioDetails.userId}, {'communityType': portfolioDetails.communityType}, {profileId:portfolioDetails.profileId}]})
           if (!user || portfolioDetails.communityType == 'Ideators') {
+            portfolioDetails['createdAt'] = new Date();
               ret = mlDBController.insert('MlPortfolioDetails', portfolioDetails, context)
               if(ret){
                   switch (portfolioDetails.communityType){

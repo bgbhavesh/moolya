@@ -91,11 +91,11 @@ export default class MlAppPortfolioRedirect extends React.Component {
                          key={idx}>
                       <div className="panel-heading">
                         <div className="row">
-                        <div className="col-md-6"><b>Portfolio&nbsp; : &nbsp;</b> {pf.portfolioUserName}</div>
-                        <div className="col-md-6"><b>CommunityType&nbsp; : &nbsp;</b> {pf.communityType}</div>
+                          <div className="col-md-6"><b>Portfolio&nbsp; : &nbsp;</b> {pf.portfolioUserName}</div>
+                          <div className="col-md-6"><b>Created Date&nbsp; : &nbsp;</b> {pf.transactionCreatedDate}</div>
                           <hr />
-                        <div className="col-md-6"><b>CreatedAt&nbsp; : &nbsp;</b> {pf.transactionCreatedDate}</div>
-                        <div className="col-md-6"><b>UpdatedAt&nbsp; : &nbsp;</b> {pf.transactionUpdatedDate}</div>
+                          <div className="col-md-6"><b>CommunityType&nbsp; : &nbsp;</b> {pf.communityType}</div>
+                          <div className="col-md-6"><b>Live Date&nbsp; : &nbsp;</b> {pf.transactionUpdatedDate}</div>
                         </div>
                       </div>
                       <div className="panel-body">

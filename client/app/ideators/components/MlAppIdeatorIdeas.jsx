@@ -1,10 +1,6 @@
 import React from 'react';
-import {Meteor} from 'meteor/meteor';
 import {render} from 'react-dom';
 import ScrollArea from 'react-scrollbar';
-var FontAwesome = require('react-fontawesome');
-var Select = require('react-select');
-import StarRatings from '../../commons/components/StarRatings';
 import 'react-responsive-tabs/styles.css'
 import {fetchIdeaActionHandler} from '../actions/ideatorActionHandler'
 import MlLoader from '../../../commons/components/loader/loader'
@@ -91,7 +87,7 @@ export default class MlAppIdeatorIdeas extends React.Component {
                       return (
                         <div className="swiper-slide ideas_block" name={idx}
                              style={{'backgroundImage': 'url(' +url+ ')'}} key={idx}>
-                          <h3 className="rating_xs"> {idea && idea.title?idea.title:''}<br/> <StarRatings/></h3>
+                          <h3 className="rating_xs"> {idea && idea.title?idea.title:''}<br/></h3>
                         </div>
                       )
                     })}
@@ -102,9 +98,16 @@ export default class MlAppIdeatorIdeas extends React.Component {
               <div className="col-md-2"></div>
               <br/>
               {(!this.state.userIdeas || this.state.userIdeas.length < 1) ?
-                <div className="col-lg-12 col-md-12 col-sm-12 portfolio-main-wrap">
-                  <div className="panel panel-default" style={{'display': 'block'}}>
-                    <a className="mlUpload_btn pull-left" onClick={this.addNewIdea.bind(this)}>Add New Idea</a>
+                <div className="col-md-offset-3 col-md-6 col-sm-6 col-xs-6 new-ideas">
+                  <div className="col-md-4">
+                    <img src="/images/ideas2.png"/>
+                  </div>
+                  <div className="col-md-8">
+                    <h3>Get Started With Your Ideas</h3>
+                    <p>With wings to your dreams<br />
+                      and make them happen here
+                    </p>
+                    <a href="" className="ideabtn" onClick={this.addNewIdea.bind(this)}>pen down your idea</a>
                   </div>
                 </div>
                 :
@@ -116,10 +119,10 @@ export default class MlAppIdeatorIdeas extends React.Component {
                         <div className="panel-heading">
                           <div className="row">
                             <div className="col-md-6"><b>Portfolio&nbsp; : &nbsp;</b> {idea.title}</div>
-                            <div className="col-md-6"><b>Type&nbsp; : &nbsp;</b> Basic</div>
+                            <div className="col-md-6"><b>Created Date&nbsp; : &nbsp;</b> {idea.createdAt}</div>
                             <hr />
-                            <div className="col-md-6"><b>CreatedAt&nbsp; : &nbsp;</b> {idea.createdAt}</div>
-                            <div className="col-md-6"><b>UpdatedAt&nbsp; : &nbsp;</b> {idea.updatedAt}</div>
+                            <div className="col-md-6"><b>Type&nbsp; : &nbsp;</b> Basic</div>
+                            <div className="col-md-6"><b>Live Date&nbsp; : &nbsp;</b> {idea.updatedAt}</div>
                           </div>
                         </div>
                         <div className="panel-body">

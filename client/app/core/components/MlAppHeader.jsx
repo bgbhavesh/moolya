@@ -13,7 +13,7 @@ class MlAppProfileHeader extends Component {
     super(props, context);
     this.state={profilePic:""}
     this.regStatus = false;
-    this.state = {loading: false,data: {}, notifications:[]}
+    this.state = {loading: false,data: {}, notifications:[], isAllowRegisterAs:true}
     return this;
   }
 
@@ -28,6 +28,10 @@ class MlAppProfileHeader extends Component {
     $('.overlay').click(function(){
       $('.ml_app_profile').removeClass('profile_open');
       $(this).hide();
+    });
+    $('.ml_app_profile ol a').click(function(){
+      $('.ml_app_profile ol a').removeClass('active');
+      $(this).addClass('active');
     });
 
     $('body').tooltip({
@@ -55,6 +59,9 @@ class MlAppProfileHeader extends Component {
   async fetchUserDetails() {
     let response = await fetchUserDetailsHandler()
     if (response){
+      if(response && response.registrationInfo && response.registrationInfo.registrationType == 'OFB'){
+        this.setState({isAllowRegisterAs:false})
+      }
       this.setState({data: response, loading:false})
     }
   }
@@ -66,17 +73,16 @@ class MlAppProfileHeader extends Component {
 
   componentWillReceiveProps(user){
     if( user && user.user && user.user.profile &&  user.user.profile.profileImage) {
-      console.log(user);
       this.setState({profilePic:user.user.profile.profileImage});
     }
-
   }
 
   /**
    * redirect to registration page
    * */
   registrationRedirect() {
-    FlowRouter.go("/app/register/");
+    if (this.state.data && !this.state.data.isAllowRegisterAs)
+      FlowRouter.go("/app/register/");
   }
 
   render() {
@@ -92,26 +98,29 @@ class MlAppProfileHeader extends Component {
           <a href="/app/dashboard" className="pull-left"><FontAwesome name='home'/></a>
           <a href="/app/dashboard"> <img className="moolya_app_logo" src="/images/logo.png"/></a>
           <MlAppNotificationsConfig />
-          <span className="pull-right context_name" style={{'padding':'1px 7px','backgroundColor':'#ef4647','color':'#fff','lineHeight':'18px','borderRadius':'2px','fontSize':'12px','marginTop':'17px'}}>
+          <span className="pull-right context_name" style={{'padding':'1px 7px','color':'#fff','lineHeight':'18px','borderRadius':'2px','fontSize':'12px','marginTop':'17px'}}>
           {data && data.headerCommunityDisplay?data.headerCommunityDisplay:''}
           </span>
 
           <div className="ml_app_profile" role="navigation">
           <h1 id="NavLbl"  data-toggle="tooltip" title={`Welcome ${data && data.firstName?data.firstName:"User"}`} data-placement="left" className="" style={{'backgroundImage':`url(${data && data.profileImage?data.profileImage:"/images/ideator_01.png"})`, 'backgroundPosition': 'center center'}}>{/*<span className="profile_context ml ml-ideator"></span>*/}</h1>
-            <ol>`
+            <ol>
               <li data-toggle="tooltip" title="My Profile" data-placement="right">
-                <a href="/app/myprofile"><span className="ml my-ml-blank_Profile_3"></span></a>
+                <a href="/app/myprofile">
+                  <span className="ml my-ml-blank_Profile_3"></span>
+                </a>
               </li>
-              {(this.state.data && !this.state.data.isAllowRegisterAs) ?
                 <li data-toggle="tooltip" title="Registration" data-placement="right">
                   <a href="" onClick={this.registrationRedirect.bind(this)}><span className="ml my-ml-Switch_Profile_Log_As">
                   </span></a>
-                </li> : <div></div>}
+                </li>
               <li data-toggle="tooltip" title="Switch Profile" data-placement="right">
-                <a href="/app/appSwitchProfile"><span className="ml my-ml-switch_profile"></span></a>
+                <a href="/app/appSwitchProfile">
+                  <span className="ml my-ml-switch_profile"></span>
+                </a>
               </li>
               <li data-toggle="tooltip" title="Register As" data-placement="right">
-                <a href="/app/myProfile/registerAs"><span className="ml my-ml-Switch_Profile_Log_As"></span></a>
+                <a href={this.state.isAllowRegisterAs?"/app/myProfile/registerAs":""}><span className="ml my-ml-Switch_Profile_Log_As"></span></a>
               </li>
               {/*<li data-toggle="tooltip" title="Themes" data-placement="top">*/}
               {/*<a href="#"><span className="ml my-ml-themes_10-01"></span></a>*/}

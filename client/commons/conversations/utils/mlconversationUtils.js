@@ -6,7 +6,8 @@ import rkConversations from '../library/rkConversations'
 import rkNotifications from '../library/rkNotifications'
 import {loginHandler} from  './mlConversationLoginQuery'
 // const url = "http://localhost:8081/"
- const url = "https://qarkc.moolya.global/"
+const url = "https://qarkc.moolya.global/";
+//const url = "http://localhost:8081/";
 //const url = "https://qarkc.moolya.global/"
 
 class ConversationUtils{
@@ -35,11 +36,11 @@ class ConversationUtils{
     rkNotifications.listenForNotifications(rkConversations, callback)
   }
 
-  updateNotification(data, callback){
-    rkNotifications.updateNotification(rkConversations, data, callback)
+  ackNotification(payload, callback){
+    rkNotifications.updateNotification(rkConversations, payload,  callback)
   }
 }
 
-var mlConversationUtils = new ConversationUtils()
+var mlConversationUtils = new ConversationUtils();
 export default mlConversationUtils;
 

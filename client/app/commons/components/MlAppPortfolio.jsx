@@ -222,7 +222,6 @@ class MlAppPortfolio extends Component{
     }
     console.log(jsonData)
     const response = await updatePortfolioActionHandler(jsonData)
-    // toastr.success(response.result)
     if(response){
       if(this.props.communityType == "Ideators" || this.props.communityType == "ideator"){
         let idea = this.state.idea

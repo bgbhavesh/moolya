@@ -159,7 +159,7 @@ let startupPortfolioSchema = `
     
     type lookingForOutput{
         lookingForName:String,
-        typeId:String,
+        lookingForId:String,
         isTypePrivate:Boolean,
         lookingDescription:String,
         isDescriptionPrivate:Boolean,
@@ -466,7 +466,7 @@ let startupPortfolioSchema = `
     
     input lookingFor{
         lookingForName:String,
-        typeId:String,
+        lookingForId:String,
         isTypePrivate:Boolean,
         lookingDescription:String,
         isDescriptionPrivate:Boolean,

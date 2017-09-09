@@ -38,14 +38,14 @@ export default class MlIdeatorAudience extends React.Component{
     return resp
   }
   componentDidUpdate(){
-    OnLockSwitch();
-    dataVisibilityHandler();
+    // OnLockSwitch();
+    // dataVisibilityHandler();
     initalizeFloatLabel();
   }
 
   componentDidMount(){
-    OnLockSwitch();
-    dataVisibilityHandler();
+    // OnLockSwitch();
+    // dataVisibilityHandler();
   }
 
   initalizeAnnotaor() {

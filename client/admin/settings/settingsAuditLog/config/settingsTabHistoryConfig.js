@@ -2,6 +2,8 @@ import {MlViewer,MlViewerTypes} from "../../../../../lib/common/mlViewer/mlViewe
 import React from 'react';
 import gql from 'graphql-tag'
 import moment from "moment";
+import MlCustomFilter from "../../../../commons/customFilters/customFilter";
+import {client} from '../../../core/apolloConnection';
 
 function ipAddressFormatter(data){
 
@@ -27,6 +29,8 @@ const mlSettingsTabHistoryTableConfig=new MlViewer.View({
   throttleRefresh:false,
   pagination:true,//To display pagination
   selectRow:true,  //Enable checkbox/radio button to select the row.
+  filter:true,
+  filterComponent: <MlCustomFilter module="audit" moduleName="audit" client={client}/>,
   columns:[
     {dataField: "_id",title:"Id",'isKey':true,isHidden:true},
     {dataField: "timeStamp", title: "Date&Time",dataSort:true,customComponent:dateFormatter},

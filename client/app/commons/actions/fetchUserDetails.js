@@ -42,6 +42,11 @@ export async function fetchPortfolioDetails() {
           portfolioId : _id
           communityType
           communityCode
+          portfolioImage
+          portfolioUserName
+          portfolioImage
+          transactionCreatedDate
+          transactionUpdatedDate
         }
       }
         `,
@@ -72,8 +77,33 @@ export async function requestPortfolioForGoLive(resId) {
   return response
 }
 
+export async function findDefaultProfile() {
+  const result = await appClient.query({
+    query: gql`
+      query{
+        findDefaultUserProfile{
+          profileId,
+          countryId,
+          clusterId,
+          clusterName,
+          chapterId,
+          chapterName,
+          subChapterId,
+          subChapterName,
+          communityId,
+          communityName
+        }
+      }
+    `
+  })
+
+  const response = result.data.findDefaultUserProfile;
+  return response
+}
+
 
 export function getNotifications(cb) {
   mlConversationUtils.getUnreadNotifications(cb)
   mlConversationUtils.getNotifications(cb)
+  //mlConversationUtils.ackNotification(payload, cb)
 }

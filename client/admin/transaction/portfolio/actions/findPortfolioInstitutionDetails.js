@@ -92,16 +92,14 @@ export async function fetchInstitutionDetailsHandler(portfoliodetailsId, key) {
                   
                   lookingFor{
                       lookingForName,
-                      typeId,
+                      lookingForId,
                       lookingDescription,
-                      logo{
-                        fileName,
-                        fileUrl
-                      },
                       index
                       privateFields{
                           keyName
                           booleanKey
+                          index
+                          tabName
                       }
                       makePrivate
                   }

@@ -33,7 +33,7 @@ export async function updateIdeatorIdeaActionHandler(details, loginUserDetails) 
   let ideaId  = details._id;
   let idea = _.omit(details, '_id');
   idea = _.omit(idea, 'portfolioId');
-  const {clusterId, chapterId, subChapterId, communityId} = loginUserDetails
+  const {clusterId, chapterId, subChapterId, communityId} = loginUserDetails ? loginUserDetails : {}
   const result = await client.mutate({
     mutation: gql`
           mutation  ($ideaId: String, $idea:idea, $clusterId: String, $chapterId: String, $subChapterId: String, $communityId: String){

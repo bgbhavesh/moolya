@@ -100,7 +100,7 @@ export default class MlInstitutionEditTab extends Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Data",
-        component: <MlInstitutionEditData key="4" getDataDetails={this.getDataDetails.bind(this)}
+        component: <MlInstitutionEditData key="4" getDataDetails={this.getDataDetails.bind(this)} isAdmin={true}
                                           portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {
@@ -108,7 +108,7 @@ export default class MlInstitutionEditTab extends Component {
         panelClassName: 'panel',
         title: "Charts",
         component: <MlInstitutionEditChart key="5" getInvestorDetails={this.getInvestorDetails.bind(this)}
-                                           getChartDetails={this.getChartDetails.bind(this)}
+                                           getChartDetails={this.getChartDetails.bind(this)} isAdmin={true}
                                            portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {

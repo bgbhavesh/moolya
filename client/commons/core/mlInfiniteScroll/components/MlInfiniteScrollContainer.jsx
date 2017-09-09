@@ -12,6 +12,7 @@ import React, {Component} from 'react';
 import MlInfiniteScrollHeader from './MlInfiniteScrollHeader';
 import MlInfiniteScrollFooter from "./MlInfiniteScrollFooter";
 import MlInfiniteScrollView from "./MlInfiniteScrollView";
+import MlAppFilterContainer from "../../../../app/commons/filter/MlAppFilterContainer";
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
@@ -23,8 +24,12 @@ export default class MlInfiniteScrollContainer extends Component {
    */
   constructor(props){
     super(props);
+    this.filterQuery = {};
+    this.searchText = '';
+    this.searchFields = [];
     this.loadMore = this.loadMore.bind(this);
     this.updateSearchValue = this.updateSearchValue.bind(this);
+    this.updateFilterQuery = this.updateFilterQuery.bind(this);
   }
 
   componentWillMount() {
@@ -37,24 +42,35 @@ export default class MlInfiniteScrollContainer extends Component {
     console.log('props',props);
   }
 
-  updateSearchValue(text){
-    console.log(text);
+  updateSearchValue(searchText, searchFields){
+    this.searchText = searchText;
+    this.searchFields = searchFields;
+    this.loadMore(true);
   }
 
-  loadMore(){
+  loadMore(isReset){
     const props = this.props;
     let data = this.props.data && this.props.data.data ? this.props.data.data : [];
     let options = {
       module: props.moduleName,
       queryProperty: {
         limit : props.perPageLimit,
-        skip : data.length ? this.props.data.data.length : 0,
+        skip : data.length && !isReset ? this.props.data.data.length : 0,
+        filterQuery: JSON.stringify(this.filterQuery),
+        searchText: this.searchText,
+        searchFields: this.searchFields
       }
     };
     if(props.sort) {
       options.queryProperty['sortBy'] = props.sortBy;
     }
-    this.props.fetchMore(options);
+    console.log(options);
+    this.props.fetchMore(options, isReset);
+  }
+
+  updateFilterQuery(filterQuery) {
+    this.filterQuery = filterQuery;
+    this.loadMore(true);
   }
 
   render() {
@@ -69,7 +85,12 @@ export default class MlInfiniteScrollContainer extends Component {
     return (
       <div className={props && props.isApp?'':"admin_main_wrap"}>
         <div className={props && props.isApp?'app_padding_wrap':"admin_padding_wrap"}>
-          { props.header ? <MlInfiniteScrollHeader config={props.header} updateSearchValue={this.updateSearchValue} /> : '' }
+          {/*<MlAppFilterContainer  submit={this.updateFilterQuery} />*/}
+          { props.header ? <MlInfiniteScrollHeader
+                              config={props.headerComponents}
+                              updateSearchValue={this.updateSearchValue}
+                              updateFilterQuery={this.updateFilterQuery}
+            /> : '' }
           <MlInfiniteScrollView viewComponent={viewComponent} data={data} config={props} />
           <MlInfiniteScrollFooter hasMore={hasMore} loadMore={this.loadMore} />
         </div>

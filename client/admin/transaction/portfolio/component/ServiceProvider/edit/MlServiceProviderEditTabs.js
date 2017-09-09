@@ -15,6 +15,7 @@ import MlServiceProviderMCL from "./MlServiceProviderMCL";
 import MlServiceProviderServices from "./MlServiceProviderServices";
 import MlServiceProviderClients from "./MlServiceProviderClients";
 import MlServiceProviderAbout from './MlServiceProviderAbout'
+import MlServiceProviderLookingFor from './MlServiceProviderLookingFor'
 import {client} from '../../../../../core/apolloConnection'
 
 export default class MlServiceProviderEditTabs extends Component {
@@ -93,11 +94,28 @@ export default class MlServiceProviderEditTabs extends Component {
         component: <MlServiceProviderClients key="6" client={client}
                                              getServiceProviderClients={this.getServiceProviderClients.bind(this)}
                                              portfolioDetailsId={this.props.portfolioDetailsId}/>
+      },
+      {
+        tabClassName: 'tab',
+        panelClassName: 'panel',
+        title: "Looking For",
+        component: <MlServiceProviderLookingFor key="7" client={client}
+                                                getLookingForDetails={this.getLookingForDetails.bind(this)}
+                                             portfolioDetailsId={this.props.portfolioDetailsId}/>
       }
     ]
     return tabs;
   }
 
+  getLookingForDetails(details, privateKey) {
+    let data = this.state.serviceProviderPortfolio;
+    if (data && !data.lookingFor) {
+      data['lookingFor'] = [];
+    }
+    data['lookingFor'] = details;
+    this.setState({serviceProviderPortfolio: data})
+    this.props.getPortfolioDetails({serviceProviderPortfolio: this.state.serviceProviderPortfolio}, privateKey);
+  }
   /**
    * getting all values from the child components and passing all to Main component through props
    * */

@@ -106,7 +106,7 @@ export default class MlStartupViewManagement extends React.Component {
       this.setState({startupManagementList: response.management});
     }
 
-    this.setState({lodaing:false})
+    this.setState({loading:false})
 
   }
 

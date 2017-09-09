@@ -319,16 +319,16 @@ MlResolver.MlQueryResolver['fetchIdeatorPortfolioStrategyAndPlanning'] = (obj, a
 
   return {};
 }
-MlResolver.MlQueryResolver['fetchIdeatorPortfolioLookingFor'] = (obj, args, context, info) => {
-  if(args.portfoliodetailsId){
-    let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
-    if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('lookingFor')) {
-      return ideatorPortfolio['lookingFor'];
-    }
-  }
-
-  return {};
-}
+// MlResolver.MlQueryResolver['fetchIdeatorPortfolioLookingFor'] = (obj, args, context, info) => {
+//   if(args.portfoliodetailsId){
+//     let ideatorPortfolio = MlIdeatorPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
+//     if (ideatorPortfolio && ideatorPortfolio.hasOwnProperty('lookingFor')) {
+//       return ideatorPortfolio['lookingFor'];
+//     }
+//   }
+//
+//   return {};
+// }
 
 MlResolver.MlQueryResolver['fetchIdeatorPortfolioIntellectualPlanning'] = (obj, args, context, info) => {
   if(args.portfoliodetailsId){
@@ -728,6 +728,8 @@ MlResolver.MlQueryResolver['fetchIdeas'] = (obj, args, context, info) => {
     _.each(portfolios, function (portfolio) {
           let idea = MlIdeas.findOne({"portfolioId":portfolio._id})
           if(idea){
+            idea.createdAt = portfolio?portfolio.createdAt:null;
+            idea.updatedAt = portfolio?portfolio.transactionUpdatedDate:null;
             ideas.push(idea);
           }
     })
@@ -762,7 +764,7 @@ MlResolver.MlQueryResolver['validateUserForAnnotation'] = (obj, args, context, i
         if(portfolio.userId == context.userId){
           return true;
         }
-        if(user.profile.isInternaluser){
+        if(user && user.profile &&user.profile.isInternaluser){
           return true;
         }
         return false;

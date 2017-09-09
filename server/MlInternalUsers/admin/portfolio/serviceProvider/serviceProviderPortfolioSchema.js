@@ -112,6 +112,7 @@ let serviceProviderPortfolioSchema = `
          accountType          : String
          firstName            : String
          lastName             : String
+         lookingFor           : [lookingForOutput]
     }
     
     input logo{
@@ -184,6 +185,7 @@ let serviceProviderPortfolioSchema = `
         about               : about
         services            : services
         clients             : [clients]
+        lookingFor          : [lookingFor]
     }
     
     type Query{

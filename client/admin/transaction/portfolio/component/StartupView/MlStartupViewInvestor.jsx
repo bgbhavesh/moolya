@@ -102,7 +102,7 @@ export default class MlStartupViewInvestor extends React.Component {
       this.setState({startupInvestorList: response.investor});
     }
 
-    this.setState({lodaing:false})
+    this.setState({loading:false})
 
   }
 

@@ -325,6 +325,7 @@ table .switch.on .slider:before {-webkit-transform: translateX(24px);-ms-transfo
 /*profile page*/
 .password_icon{position: absolute;float: right;right: 0;margin-top: -25px; margin-right: 20px;cursor: pointer;color: #273545;}
 .input_icon{position: absolute;float: right;right: 0;margin-top: -25px; margin-right: 20px;cursor: pointer;color: #273545;}
+.input_icon.fa-lock{color: #ef4647;}
 .delete_icon{position: absolute; float: right; right: 0; margin-top: -24px; margin-right: 7px; cursor: pointer; background: #ef4647; width: 30px; height: 30px; text-align: center; border-radius: 50%; color: #fff; /* padding: 9px; */ line-height: 29px;}
 .calendar_icon{position: absolute;float: right;right: 0;margin-top: -30px; margin-right: 20px;cursor: pointer;}
 .input_types{float: left;margin-right: 20px;}
@@ -378,6 +379,8 @@ table .switch.on .slider:before {-webkit-transform: translateX(24px);-ms-transfo
 .form_emails_white_right{float: left;width: 80%;padding-left: 5px;}
 .form_emails_white_right_scroll{height: 250px;}
 .profile_container .profile_accounts{height: 200px; background-color: #273545; border-radius: 10px; margin-top: 15px; text-align: center; position: relative; margin-bottom: 15px; color: #fff; width: 350px; padding: 10px 0px; font-size: 24px; text-shadow: none; }
+.profile_container .profile_accounts.swiper-slide-active{background-color: #ef4647;}
+.profile_container .profile_accounts.swiper-slide-active:before{border-color: #c70e0f #fff;}
 .profile_container .profile_accounts:before {content: ""; position: absolute; top: 0; right: 0; border-width: 0 25px 25px 0; border-style: solid; border-color: #0e1c2d #fff; }
 .profile_container .profile_accounts img{width: 100px; height: 60px }
 .profile_container .profile_accounts h3{border: 0px; color: #ffffff; font-size: 19px; font-weight: bold; margin-bottom: 14px; margin: 0px; }
@@ -935,8 +938,13 @@ button:focus{outline: 0;}
 .requested_input textarea{background: #fff; border: #ccc solid 1px; border-radius: 10px; padding: 10px; height: 250px;}
 .requested_input input[type="text"]{background: #fff; border: #ccc solid 1px; border-radius: 5px; padding: 10px;}
 .requested_input .req_input_icon{top: 31px; background: #ef4647; width: 25px; height: 25px; color: #ffffff; text-align: center; line-height: 25px; text-shadow: none; border-radius: 50%; right: -10px;}
+.requested_input .req_input_icon.fa-unlock{background: #273545;}
 
 .requested_input .req_textarea_icon{ margin-right:5px;   top: 29px; background: #273545; width: 25px; height: 25px; color: #fff; text-align: center; line-height: 25px; text-shadow: none; border-radius: 50%;}
+.requested_input .req_textarea_icon.fa-lock{background: #ef4647; }
+
+.requested_input .req_header_icon{ margin-right:20px;   top: 29px; background: #273545; width: 25px; height: 25px; color: #fff; text-align: center; line-height: 25px; text-shadow: none; border-radius: 50%;}
+.requested_input .req_header_icon.fa-lock{background: #ef4647; }
 
 .btn-mlBlue {color: #fff; background-color: #273545; border-color: #273545;}
 .btn-mlBlue:hover {color: #fff; background-color: #273545; border-color: #273545;}
@@ -1073,6 +1081,7 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 
 
 .list_block .fa.fa-lock {position: absolute;left:4px;top:2px; font-size: 18px; color: #ee4847}
+.list_block .fa.fa-unlock {position: absolute;left:4px;top:2px; font-size: 18px; color: #273545}
 
 .inputfile{width:.1px;height:.1px;opacity:0;overflow:hidden;position:absolute;z-index:-1}
 .inputfile + label{max-width:100%;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;display:inline-block;overflow:hidden;padding:.625rem 1.25rem}
@@ -1113,6 +1122,7 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
   top: 0;
   margin-left: -11px;
 }
+.library-wrap .fileUpload input.upload{overflow: hidden;}
 .library-wrap-details .fa.fa-lock{position:absolute;left:0;top:0;color:#fff;background:#ef4647;width:25px;height:25px;text-align:center;line-height:25px;border-radius:50%;cursor:pointer}
 .medium-popover{ width:350px; padding: 20px; max-height: 300px; overflow-y: auto; }
 .rating-lockicon{margin-right: 5px; top: 29px; background: #273545; width: 25px; height: 25px; color: #fff; text-align: center; line-height: 25px; text-shadow: none; border-radius: 50%; float: right; }
@@ -1165,6 +1175,7 @@ textarea.comment-input-box{border: 2px solid #ddd; border-radius: 4px; margin-bo
 /*.react-bs-container-body {position:relative !important;}*/
 
 .profile_block img{display: block;border-radius: 5px;width: auto;margin:0 auto;}
+.popover.bs-tether-target-attached-right{ margin-top: 50px; }
 .profile_block span{font-size: 20px;}
 
 .popover.bs-tether-element-attached-bottom,.popover.popover-top {margin-top: -10px;}

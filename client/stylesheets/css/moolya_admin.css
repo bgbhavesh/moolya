@@ -111,6 +111,7 @@ h1,h2,h3,h4,h5,h6{font-family: 'DINPro-Regular';font-weight:normal;margin: 0px;l
 .list_block{height: 200px;background-color:#fff;box-shadow: 0px 0px 5px #888;border-radius: 4px;margin-top: 15px;text-align: center;position: relative;margin-bottom: 15px;-webkit-transform: translateX(0) translateY(0) translateZ(0) rotate(0deg) scale(1); -moz-transform: translateX(0) translateY(0) translateZ(0) rotate(0deg) scale(1); -ms-transform: translateX(0) translateY(0) translateZ(0) rotate(0deg) scale(1); -o-transform: translateX(0) translateY(0) translateZ(0) rotate(0deg) scale(1); transform: translateX(0) translateY(0) translateZ(0) rotate(0deg) scale(1); -webkit-transition: all 0.4s ease-out; -moz-transition: all 0.4s ease-out; -o-transition: all 0.4s ease-out; -ms-transition: all 0.4s ease-out; transition: all 0.4s ease-out; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;}
 .list_block:hover{-webkit-transition: all 0.4s ease-out; -moz-transition: all 0.4s ease-out; -o-transition: all 0.4s ease-out; -ms-transition: all 0.4s ease-out; transition: all 0.4s ease-out; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; -webkit-box-shadow: 0 21px 65px 0 rgba(0, 0, 0, 0.28); -moz-box-shadow: 0 21px 65px 0 rgba(0, 0, 0, 0.28); -ms-box-shadow: 0 21px 65px 0 rgba(0, 0, 0, 0.28); -o-box-shadow: 0 21px 65px 0 rgba(0, 0, 0, 0.28); box-shadow: 0 21px 65px 0 rgba(0, 0, 0, 0.28); -webkit-transform: translateX(0) translateY(-5px) translateZ(0) rotate(0deg) scale(1); -moz-transform: translateX(0) translateY(-5px) translateZ(0) rotate(0deg) scale(1); -ms-transform: translateX(0) translateY(-5px) translateZ(0) rotate(0deg) scale(1); -o-transform: translateX(0) translateY(-5px) translateZ(0) rotate(0deg) scale(1); transform: translateX(0) translateY(-5px) translateZ(0) rotate(0deg) scale(1);}
 .list_block img{width: 113px;z-index: 2;position: absolute;left: -7px;top: 34px;border: 1px solid #ddd;height: 76px;}
+.list_block .p_image{width: 80px;height: 80px;border-radius: 50%;top: 30px; left: 9px;}
 .list_block.img_list_block img{width: 100%;position: absolute;left: 0px;top: 0px;border: 0px solid #ddd;height: 81%;border-radius: 4px 4px 0px 0px;}
 .communities_list .list_block img{width: auto;border: 0px;left: 2px;top: 10px;z-index: 0;}
 .list_block .ml{font-size: 75px; line-height: 130px; color: #273545;}
@@ -1504,6 +1505,9 @@ margin: 0px;
 .fixed_icon{
 	position: fixed;
 	top: 111px;
+}
+.app_main_wrap .fixed_icon{
+  top: 62px;
 }
 
 .hanging_btn{display:inline-block;background: #ef4647;border:0px;padding: 2px 0px 4px 0px;line-height:25px;position: absolute;text-decoration: none;font-size: 14px;height: 36px; color: #fff;text-shadow: none;bottom: 0px;right: 105px;}

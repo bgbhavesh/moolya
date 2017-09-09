@@ -1479,7 +1479,7 @@ if (Meteor.isServer) {
           ]
         },
         {
-          "image": "/images/db_icon.png",
+          "image": "ml my-ml-offerings",
           "link": "",
           "name": "Offerings",
           "uniqueId": "offerings",

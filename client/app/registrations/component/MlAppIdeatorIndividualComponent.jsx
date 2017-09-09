@@ -273,7 +273,7 @@ export default class MlAppIdeatorIndividualComponent extends React.Component {
       },
       {
         showAction: true,
-        actionName: 'exit',
+        actionName: 'cancel',
         handler: async(event) => {
           FlowRouter.go("/app/myProfile/registerAs")
         }

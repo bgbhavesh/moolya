@@ -19,6 +19,6 @@ MlResolver.MlQueryResolver['fetchCommunityDefinitionAPI'] = (obj, args, context,
 
 MlResolver.MlQueryResolver['fetchCommunityDefinitionForProcessMapping'] = (obj, args, context, info) => {
   let result=MlCommunityDefinition.find({isActive:true}).fetch()||[];
-
+  result.push({"name" : "All","code" : "all"});
   return result;
 }

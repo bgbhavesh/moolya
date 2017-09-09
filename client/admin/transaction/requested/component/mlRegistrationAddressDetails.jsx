@@ -16,6 +16,7 @@ import _ from 'lodash'
 import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
 import _underscore from 'underscore'
 import {findClusterTypeActionHandler} from '../../../cluster/actions/findCluster'
+import {OnToggleSwitch,initalizeFloatLabel} from '../../../utils/formElemUtil';
 var diff = require('deep-diff').diff;
 
 export default class AddressDetails extends React.Component{
@@ -48,6 +49,9 @@ export default class AddressDetails extends React.Component{
     return this;
   }
 
+  componentDidMount(){
+    initalizeFloatLabel();
+  }
 
   optionsBySelectAddressType(selectedIndex,handler,selectedObj){
     this.setState({selectedValue : selectedIndex,selectedAddressLabel:selectedObj.label});

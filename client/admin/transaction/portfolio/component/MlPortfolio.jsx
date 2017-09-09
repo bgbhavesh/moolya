@@ -203,8 +203,11 @@ class MlPortfolio extends React.Component {
     }
   }
 
-  getIdeatorIdeaDetails(details) {
+  getIdeatorIdeaDetails(details, privateKey) {
     this.setState({idea: details});
+    if(!_.isEmpty(privateKey)){
+      this.updatePrivateKeys(privateKey)
+    }
   }
 
   getPortfolioDetails(portfolioDetails, privateKey) {

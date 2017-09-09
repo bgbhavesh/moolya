@@ -11,7 +11,7 @@ export default class MlAppRequestedMyAppointment extends React.Component {
     this.state = {
       appointments:[]
     }
-    this.fetchAppointment();
+    // this.fetchAppointment();
   }
   componentDidUpdate()
   {
@@ -32,11 +32,12 @@ export default class MlAppRequestedMyAppointment extends React.Component {
     };
   }
 
-  render(){
+  render() {
     const that = this;
+    let appointments = that.props.data || [];
     return (
       <div className="tab_wrap_scroll">
-        {that.state.appointments.map(function (appointment, index) {
+        {appointments.map(function (appointment, index) {
           return (
             <div className="col-lg-2 col-md-4 col-sm-4" key={index} >
               <div className="list_block list_block_intrests notrans">

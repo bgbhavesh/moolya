@@ -140,7 +140,7 @@ export default class MlAppChooseTeam extends React.Component{
   componentDidMount() {
     $('.float-label').jvFloat();
     var WinHeight = $(window).height();
-    $('.step_form_wrap').height(WinHeight-(290+$('.app_header').outerHeight(true)));
+    $('.step_form_wrap').height(WinHeight-(260+$('.app_header').outerHeight(true)));
     this.props.getActivityDetails();
   }
 
@@ -336,7 +336,7 @@ export default class MlAppChooseTeam extends React.Component{
                     <ul className="users_list">
                       {team.users.map(function (user, userIndex) {
                         return (
-                         <li key={userIndex} onClick={() => that.addUser(index, userIndex)}>
+                         <li className={ user.isAdded ? "checkedClass" : "" }   key={userIndex} onClick={() => that.addUser(index, userIndex)}>
                             <a href="">
                               <img src={user.profileImage ? user.profileImage : "/images/def_profile.png"} /><br />
                               <div className="tooltiprefer">

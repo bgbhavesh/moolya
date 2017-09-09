@@ -29,16 +29,18 @@ export default class MlAssignModulesToFilters extends React.Component {
   }
 
 
+
+  componentDidUpdate(){
+    OnToggleSwitch(true,true);
+  }
   componentDidMount() {
     let filterDetails = this.props.filterExistingData;
     this.setState({assignModulesToFilters:filterDetails.filterFields});
+    setTimeout(function(){
+      initalizeFloatLabel();
+    },1000);
 
   }
-  componentDidUpdate(){
-    OnToggleSwitch(true,true);
-    initalizeFloatLabel();
-  }
-
 
   assignModuleToRoles(id) {
     this.setState({

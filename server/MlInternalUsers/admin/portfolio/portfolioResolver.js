@@ -11,6 +11,8 @@ import MlAlertNotification from '../../../mlNotifications/mlAlertNotifications/m
 import mlNonMoolyaAccess from "../core/non-moolyaAccessControl/mlNonMoolyaAccess"
 import MlSubChapterAccessControl from '../../../mlAuthorization/mlSubChapterAccessControl'
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
+import mlSmsConstants from '../../../mlNotifications/mlSmsNotifications/mlSmsConstants'
+
 /**
  * @module [externaluser portfolio Landing]
  * @params [context.userId]
@@ -21,8 +23,11 @@ MlResolver.MlQueryResolver['fetchPortfolioDetailsByUserId'] = (obj, args, contex
     if (defaultProfile) {
       var defaultCommunity = defaultProfile.communityDefCode || {};
       var portfolio = MlPortfolioDetails.findOne({$and: [{userId: context.userId}, {communityCode: defaultCommunity}, {profileId: defaultProfile.profileId}]})
-      if (portfolio)
-        return portfolio;
+      if (portfolio) {
+          var data = MlResolver.MlQueryResolver['fetchPortfolioImage'](obj, {portfoliodetailsId: portfolio._id}, context, info);
+          portfolio.portfolioImage = data.portfolioImage
+          return portfolio;
+      }
       else
         console.log("portfolio not found")
     }
@@ -50,6 +55,7 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
         }
           user = MlPortfolioDetails.findOne({"$and": [{'userId': portfolioDetails.userId}, {'communityType': portfolioDetails.communityType}, {profileId:portfolioDetails.profileId}]})
           if (!user || portfolioDetails.communityType == 'Ideators') {
+            portfolioDetails['createdAt'] = new Date();
               ret = mlDBController.insert('MlPortfolioDetails', portfolioDetails, context)
               if(ret){
                   switch (portfolioDetails.communityType){
@@ -237,7 +243,7 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
         else{
           privateFields = args.privateFields || [];
         }
-        let detailsUpdate = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {status: 'WIP'}, {$set:true}, context)
+        let detailsUpdate = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {status: 'WIP', transactionUpdatedDate:new Date()}, {$set:true}, context)
       if(privateFields){
         detailsUpdate = mlDBController.update('MlPortfolioDetails', args.portfoliodetailsId, {privateFields:privateFields}, {$set:true}, context)
       }
@@ -272,6 +278,12 @@ MlResolver.MlMutationResolver['updatePortfolio'] = (obj, args, context, info) =>
                 break;
             }
         }
+    }
+
+    if(response && response.success){
+        var sms = _.find(mlSmsConstants, 'PORTFOLIO_UPDATE')
+        var msg= sms.PORTFOLIO_UPDATE+" "+new Date().toString();
+        portfolioValidationRepo.sendSMSforPortfolio(args.portfoliodetailsId, msg);
     }
 
     return response;
@@ -319,6 +331,11 @@ MlResolver.MlMutationResolver['approvePortfolio'] = (obj, args, context, info) =
         if(response){
           MlEmailNotification.portfolioSuccessfullGoLive(user);
           MlNotificationController.onGoLiveRequestApproval(user);
+          if(response && response.success){
+            var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
+            var msg = "Your Go-Live request for "+ defaultProfile.communityDefName +" has been approved on"+ new Date()+"."+"Login to moolya for next steps."
+            portfolioValidationRepo.sendSMSforPortfolio(args.portfoliodetailsId, msg);
+          }
         }
         return response
       } else {
@@ -344,6 +361,11 @@ MlResolver.MlMutationResolver['rejectPortfolio'] = (obj, args, context, info) =>
       let user = mlDBController.findOne('users', {_id: regRecord.userId}, context) || {};
       //MlEmailNotification.portfolioGoLiveDecline(user);
       MlNotificationController.onGoLiveRequestDecline(user);
+      if(response && response.success){
+        var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
+        var msg = "Your Go-Live request for "+ defaultProfile.communityDefName +" has been declined on"+ new Date()+"."+"Login to moolya for next steps."
+        portfolioValidationRepo.sendSMSforPortfolio(args.portfoliodetailsId, msg);
+      }
     }
     return updatedResponse;
   }

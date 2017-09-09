@@ -259,7 +259,7 @@ class MlAppMyProfile extends Component {
     },
     {
       showAction: true,
-      actionName: 'exit',
+      actionName: 'cancel',
       handler: async(event) => {
         FlowRouter.go('/app/dashboard')
       }

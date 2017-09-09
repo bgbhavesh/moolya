@@ -81,6 +81,9 @@ $menuTrans:all 0.5s linear;
 .app_menu ul .menu_item.active_menu {background: $mlRed;}
 .app_menu ul .menu_item.active_menu:before {border-bottom: 20px solid $mlRed;}
 .app_menu ul .menu_item.active_menu .menu_in{color:#fff;}
+.app_menu ul .menu_item.inactive_menu {background: $mlGray;}
+.app_menu ul .menu_item.inactive_menu:before {border-bottom: 20px solid $mlGray;}
+.app_menu ul .menu_item.inactive_menu .menu_in{color:#8c8c8c;}
 .app_menu ul li.menu_item:last-child{height: 32px;}
 .app_menu ul li.menu_item:last-child .menu_in{display: none;}
 .app_menu ul li.menu_item:last-child:after{display: none;}
@@ -263,7 +266,19 @@ $menuTrans:all 0.5s linear;
     .nav>li>a:focus, .nav>li>a:hover{background-color: transparent;}
   }
   .users_list{padding: 5px 0px 4px 0px;border-radius: 6px;background-color: #273545;border: 1px solid #e3e3e3;margin-bottom:6px;
-      li{display: inline-block; margin:0px 6px; text-align: center; /* width: 120px; height: 120px; */ vertical-align: top;position: relative;
+      .checkedClass{
+        a{
+          img{border:$mlRed solid 2px;}
+          .tooltiprefer{
+            span{background: $mlRed;
+            &:before{
+              border-bottom-color:$mlRed;
+            }}
+          }
+        }
+
+      }
+    li{display: inline-block; margin:0px 6px; text-align: center; /* width: 120px; height: 120px; */ vertical-align: top;position: relative;
         a{text-decoration: none;
           /*span{background:$mlGray; position: absolute; border-radius: 50%; width: 12px; height: 12px; margin-left: 46px;color: $mlBlue;}*/
           span.green{background:#09ce09; position: absolute; border-radius: 50%; width: 12px; height: 12px; margin-left: 46px;}
@@ -363,7 +378,7 @@ background:$mlBlue; width: 100%;position:absolute;bottom:0px;overflow-x: auto; o
     padding:0px 3px 20px 3px; display:inline-block;width: 90px;
       .tooltipnew {pointer-events: none; position: absolute; bottom: 5px;
         span {
-            display: block; white-space: nowrap; position: relative; background: #ef4647; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; padding: 0px 8px; left: -50%; font-size: 10px; color: #fff; text-shadow: none; width: 80px; font-family: arial; transform: translateX(-35%);
+            display: block; white-space: nowrap; position: relative; background: #ef4647; -moz-border-radius: 3px; -webkit-border-radius: 3px; border-radius: 3px; padding: 0px 8px; left: -50%; font-size: 10px; color: $mlBlack; text-shadow: none; width: 80px; font-family: arial; transform: translateX(-35%);
             &:before {
           border: solid transparent; content: " "; height: 0; width: 0; position: absolute; border-top-color: $mlRed; border-width: 6px; transform: rotate(180deg); top: -12px; left:44%;
           }
@@ -386,9 +401,15 @@ background:$mlBlue; width: 100%;position:absolute;bottom:0px;overflow-x: auto; o
       }
     }
   }
+  .back_btn{
+    float: left;position: absolute;font-size: 24px;left: 5px;color: $mlRed;
+    &:hover{
+      color: $mlBlue;
+    }
+  }
 .startup-logo{
-  position:absolute;left:7px;top:7px;height: 44px;border-radius: 4px;box-shadow: 0px 0px 2px rgba(0,0,0,0.5);
-  img{height: 44px;border-radius: 4px;}
+  position:absolute;left:30px;top:5px;height: 44px;border-radius: 4px;color:$mlBlue;font-weight:bold;/*box-shadow: 0px 0px 2px rgba(0,0,0,0.5);*/
+  img{height: 44px;width:44px;border-radius: 50%;}
 }
 .app_menu ul .menu_item .menu_in img{
   margin: 0px;
@@ -752,7 +773,11 @@ li {display: inline-block; width: 14px; height: 14px; margin: 0 4px; text-indent
   .panel{background:transparent; border:none; box-shadow:none; margin: 0px; }
   .panel-heading{padding: 0px;height:auto;
     .panel-title{
-      .re-btn{display: inline-block; background: $mlBlue; border: 0px; line-height: 25px; position: relative; text-decoration: none; font-size: 12px; height: 25px; margin: 0px 6px 0px 21px; color: $mlWhite; text-shadow: none; text-align: center;padding:0px 10px;}
+      .re-btn{display: inline-block; background: $mlBlue; border: 0px; line-height: 25px; position: relative; text-decoration: none; font-size: 12px; height: 25px; margin: 0px 6px 0px 21px; color: $mlWhite; text-shadow: none; text-align: center;padding:0px 10px;
+        &.active{display: inline-block; background: $mlRed; border: 0px; line-height: 25px; position: relative; text-decoration: none; font-size: 12px; height: 25px; margin: 0px 6px 0px 21px; color: $mlBlack; text-shadow: none; text-align: center;padding:0px 10px;}
+        &.active:after{position: absolute; right: -10px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 25px 0 0px 10px; border-color: transparent transparent transparent $mlRed; top: 0px;}
+        &.active:before{position: absolute; left: -10px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 25px 10px 0px 0px; border-color: transparent $mlRed transparent transparent; top: 0px;}
+      }
       .re-btn:after{position: absolute; right: -10px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 25px 0 0px 10px; border-color: transparent transparent transparent $mlBlue; top: 0px;}
       .re-btn:before{position: absolute; left: -10px; content: " "; width: 0px; height: 0px; border-style: solid; border-width: 25px 10px 0px 0px; border-color: transparent $mlBlue transparent transparent; top: 0px;}
       .act-btn{display: inline-block; background: $mlRed; border: 0px; line-height: 25px; position: relative; text-decoration: none; font-size: 12px; height: 25px; width: 70px; margin: 0px 6px 0px 21px; color: $mlWhite; text-shadow: none; text-align: center;}
@@ -762,24 +787,24 @@ li {display: inline-block; width: 14px; height: 14px; margin: 0 4px; text-indent
    }
   .panel-collapse{width: 100%; }
   .action_buttons{
-  bottom:0px;overflow-x: auto; overflow-y: hidden; white-space: nowrap;text-align:center;
+  bottom:0px;overflow-x: auto; overflow-y: hidden; white-space: nowrap;text-align:center;height: 50px;
   ul{margin: 0px; padding: 3px;
     li{
     display: inline-block; text-align: center;margin-right:30px;
     a{
-      display: block; text-shadow: none;color:$mlWhite;padding: 3px; border-radius: 5px;font-size:14px;line-height: 19px;
+      display: block; text-shadow: none;color:$mlBlack;padding: 3px; border-radius: 5px;font-size:14px;line-height: 19px;
       &.act_disable{
         cursor: no-drop !important;color: rgba(255, 255, 255, 0.49) !important;
       }
       &:hover{
-        text-decoration:none;padding: 3px;border-radius: 5px;color:$mlBlue;
+        text-decoration:none;padding: 3px;border-radius: 5px;color:$mlWhite;
       }
     }
   }
   }
 }
 .related_buttons{
-bottom:0px;overflow-x: auto; overflow-y: hidden; white-space: nowrap;
+bottom:0px;overflow-x: auto; overflow-y: hidden; white-space: nowrap;height: 50px;
 .horizon-swiper{
   .horizon-outer{
     .horizon-inner{
@@ -800,7 +825,9 @@ bottom:0px;overflow-x: auto; overflow-y: hidden; white-space: nowrap;
     }
   ul{margin: 0px; padding:3px;
     li{display: inline-block; text-align: center;margin-right:5px;
+      .notext{    width: 90%; color: #fff; line-height: 40px; font-size: 18px; margin: 0 auto;}
       a{display: block; text-shadow: none;color:$mlWhite;padding: 3px; border-radius: 5px;font-size:12px;
+
         .team-block{margin-bottom:0px;background:$mlGray;
           .team_img{width:60px;height:60px;margin:5px 0px;}
           h3{font-size:10px;padding:5px;background:$mlRed;color:$mlWhite;
@@ -1536,7 +1563,21 @@ p{margin-top:10px;}
 }
 .notification_view{
   li{
-   float: left; background: $mlGray; width: 48%; margin-left: 17px; margin-top: 16px; border-radius: 8px;
+   float: left;  width: 48%; margin-left: 17px; margin-top: 16px; border-radius: 8px;
+    &.unread{
+      background: $mlBlue;color: $mlWhite;text-shadow: none;
+      .left_icon{
+        background: #405368;
+      }
+      .right_text{
+        span{
+          color: $mlWhite;
+        }
+      }
+    }
+    &.read{
+      background: $mlGray;
+    }
     .left_icon{
           float: left; width: 20%; height: 80px; background: $mlBlue; padding-top: 10px; padding-left: 25px; border-radius:8px 0 0 8px;
     img{
@@ -1547,7 +1588,7 @@ p{margin-top:10px;}
       }
     }
     .right_text{
-      float: left; width: 80%; height: 80px; padding:5px; position:relative;
+      float: left; width: 80%; height: 80px; padding:5px; position:relative;overflow: auto;
       span{
         font-size: 12px;font-weight:bold;color:$mlBlue;
       }
@@ -1619,7 +1660,7 @@ p{margin-top:10px;}
   }
 }
 .bugReport{
-      right: -350px; position: fixed; z-index: 2; transition: .5s linear; top: 37%;
+      right: -350px; position: fixed; z-index: 2; transition: .5s linear; top: 50%;
     &.open{
       right: 0;
       .bug_button:hover{color:$mlBlack;right:340px;}
@@ -2097,4 +2138,103 @@ p{margin-top:10px;}
   &:before{
     border-color: transparent $mlBlue transparent transparent !important;
   }
+}
+
+.blank_content{
+  p{text-align:justify;}
+  h3{font-size:22px; color:$mlRed; border-bottom:$mlRed solid 2px;}
+  h5{color:$mlRed;padding:10px 0px; font-size:20px;}
+  ul{
+    margin: 10px 0 10px 10px;
+    li{
+      list-style:circle;margin-left: 35px;
+    }
+  }
+}
+
+
+.card_block {
+  height: 200px;
+  background-color: #273545;
+  box-shadow: 0px 0px 5px #888;
+  border-radius: 10px;
+  text-align: center;
+  position: relative;
+  margin-bottom: 15px;
+  text-shadow: none;
+  margin-top:15px;
+}
+.card_block .active, .card_block .inactive{
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  border-radius: 50%; border:1px solid #fff;
+}
+.card_block .active{background: #5cb85c;}
+.card_block .inactive{background:#d9534f;}
+.card_block h3 {
+  padding: 10px;
+  font-size: 14px;
+  font-weight: normal;
+  color: #ffe144;
+  border-bottom: #161e27 solid 1px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width:100%;
+  margin: 0 auto;
+  height: 36px;
+}
+
+.card_block .list_icon {
+  font-size: 22px;
+  color: #fff;
+  border-top: #34404e solid 1px;
+  padding:2px 0px 0px;
+  font-weight: normal;
+}
+.card_block span.price {
+  font-size: 12px;
+  float: left;
+  margin-left: 5px;
+  line-height: 20px;
+  margin-right: 5px;
+}
+
+.card_block .btn{
+  padding: 0 5px;
+  line-height: 16px;
+  text-transform: uppercase;
+  margin-right: 5px;
+  font-size: 11px;
+}
+.card_block .btn-group{ margin-right:5px !important;}
+.card_block .btn-group .btn{ margin-right:0 !important;}
+.card_block .ml{
+  background: #B9C5CC;
+  border-radius: 50%;
+  padding: 14px;
+  color: #273545;
+  text-shadow: 0px 1px 1px #eee;
+  font-size: 42px;
+  display: inline-block;
+  border: 2px solid #161e27;
+  width: 74px;
+  height: 74px;
+  margin-top: 2px;
+}
+.card_block .block_footer {
+  height: 42px;
+}
+.card_block .block_footer span{
+  font-size: 14px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 80%;
+  margin: 0 auto;
+  display: inline-block;
+  margin-top: -6px;
 }

@@ -102,10 +102,8 @@ export default class MlServiceProviderServices extends Component {
     let isServicesPrivate = this.state.data.isServicesPrivate ? this.state.data.isServicesPrivate : false
     const showLoader = this.state.loading;
     return (
-      <div className="admin_main_wrap">
+      <div>
         {showLoader === true ? (<MlLoader/>) : (
-          <div className="admin_main_wrap">
-            <div className="admin_padding_wrap">
               <div className="main_wrap_scroll">
                 <ScrollArea
                   speed={0.8}
@@ -135,9 +133,7 @@ export default class MlServiceProviderServices extends Component {
                     </div>
                   </div>
                 </ScrollArea>
-              </div>
-            </div>
-          </div>)}
+              </div>)}
       </div>
     )
   }

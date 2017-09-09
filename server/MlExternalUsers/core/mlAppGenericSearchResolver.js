@@ -839,7 +839,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         "$addFields": {
           "portfolioTitle": {"$concat": ["$idea","$startup","$funder"]},
         }
-      }
+      },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
     ];
     data = mlDBController.aggregate("MlInternalTask", pipeline);
     count = data.length;
@@ -893,7 +894,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         "$addFields": {
           "portfolioTitle": {"$concat": ["$idea","$startup","$funder"]},
         }
-      }
+      },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
     ];
     data = mlDBController.aggregate("MlInternalTask", pipeline);
     count = data.length;
@@ -947,7 +949,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         "$addFields": {
           "portfolioTitle": {"$concat": ["$idea","$startup","$funder"]},
         }
-      }
+      },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
     ];
     data = mlDBController.aggregate("MlInternalTask", pipeline);
     count = data.length;
@@ -1001,7 +1004,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         "$addFields": {
           "portfolioTitle": {"$concat": ["$idea","$startup","$funder"]},
         }
-      }
+      },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
     ];
     data = mlDBController.aggregate("MlInternalTask", pipeline);
     count = data.length;
@@ -1056,7 +1060,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         "$addFields": {
           "portfolioTitle": {"$concat": ["$idea","$startup","$funder"]},
         }
-      }
+      },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
     ];
     data = mlDBController.aggregate("MlInternalTask", pipeline);
     count = data.length;

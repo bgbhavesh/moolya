@@ -69,7 +69,7 @@ export default class MlAppActivityList extends React.Component{
                       <span className="price pull-right">{(activity.isExternal && !activity.isInternal? 'EXT' : (activity.isInternal && !activity.isExternal ? 'INT' : (activity.isExternal && activity.isInternal ? 'INT + EXT' : '')))}</span>
                       <div className="clearfix"></div>
                       {activity.imageLink ?
-                        <img className="c_image ml my-ml-Ideator" src={activity.imageLink ? activity.imageLink : "/images/activity_1.jpg"}/>
+                        <img className="c_image" src={activity.imageLink ? activity.imageLink : "/images/activity_1.jpg"}/>
                         : <i className="c_image ml my-ml-Ideator"></i>
                       }
                       <div className="clearfix"></div>

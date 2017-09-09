@@ -6,7 +6,7 @@ import ScrollArea from "react-scrollbar";
 import MlLoader from "../../../commons/components/loader/loader";
 import {initalizeFloatLabel} from "../../utils/formElemUtil";
 import {findUserRegistrationActionHandler, findUserPortfolioActionHandler} from "../actions/findUsersHandlers";
-import {deActivateUser, deActivateUserProfileByContextHandler} from "../actions/updateUsersHandlers";
+import {deActivateUser, deActivateUserProfileByContextHandler, showOnMapActionHandler} from "../actions/updateUsersHandlers";
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 import Moolyaselect from "../../commons/components/MlAdminSelectWrapper";
 import gql from "graphql-tag";
@@ -84,6 +84,17 @@ export default class MlUsersAbout extends Component {
     return response
   }
 
+  async overMapStatusChange(e) {
+    var status = e.currentTarget.checked
+    let regInfo = this.state.data && this.state.data.registrationInfo ? this.state.data.registrationInfo : {}
+    var userId = regInfo.userId
+    const response = await showOnMapActionHandler(userId, status)
+    if (response && response.status)
+      toastr.success(response.result);
+    else if (response && !response.status)
+      toastr.error(response.result);
+    return response
+  }
   componentDidMount() {
     initalizeFloatLabel();
     this.initializeSwiper();
@@ -474,7 +485,8 @@ export default class MlUsersAbout extends Component {
                       <div className="form-group switch_wrap">
                         <label>Show On Map</label>
                         <label className="switch">
-                          <input type="checkbox"/>
+                          <input type="checkbox" onChange={(e) => that.overMapStatusChange(e)}
+                                 defaultChecked={this.state.data && this.state.data.isShowOnMap ? this.state.data.isShowOnMap : false}/>
                           <div className="slider"></div>
                         </label>
                       </div>

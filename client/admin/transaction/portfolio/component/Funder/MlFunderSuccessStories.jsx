@@ -53,7 +53,6 @@ export default class MlFunderSuccessStories extends React.Component {
       });
     }
     this.funderSuccessStoryServer = response
-
   }
 
   handleBlur(e) {
@@ -105,6 +104,7 @@ export default class MlFunderSuccessStories extends React.Component {
     var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
     var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
     var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
     _.each(keys, function (pf) {
       $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
     })
@@ -333,7 +333,7 @@ export default class MlFunderSuccessStories extends React.Component {
                                       defaultValue={this.state.data.date ? this.state.data.date : ''}
                                       onBlur={this.dateChange.bind(this)}
                                       isValidDate={ valid }/> {/**/} {/*closeOnSelect={true}*/}
-                            <FontAwesome name='unlock' className="input_icon un_lock"
+                            <FontAwesome name='unlock' className="input_icon un_lock" id="isDatePrivate"
                                          onClick={this.onLockChange.bind(this, "date", "isDatePrivate")}/>
                           </div>
                           <div className="clearfix"></div>

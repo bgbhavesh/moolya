@@ -14,7 +14,7 @@ export const mlAppPendingAppointmentConfig = new MlAppViewer({
   headerComponents:{
     filter: true,
     search: true,
-    searchFields: ["about.aboutTitle","chapterName","accountType","communityType","firstName","lastName"]
+    searchFields: ["appointmentInfo.taskName", "appointmentInfo.serviceName", "appointmentType","appointmentId","startDate","endDate"]
   },
   graphQlQuery: gql`query ($module: String!, $queryProperty: appGenericSearchQueryProperty) {
                   data: AppGenericSearch(module: $module, queryProperty: $queryProperty) {

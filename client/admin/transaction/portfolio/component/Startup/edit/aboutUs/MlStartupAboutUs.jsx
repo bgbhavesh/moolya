@@ -37,7 +37,7 @@ export default class MlStartupAboutUs extends React.Component{
     var WinHeight = $(window).height();
     $('.main_wrap_scroll ').height(WinHeight-(68+$('.admin_header').outerHeight(true)));
     this.fetchOnlyImages()
-    this.props.getStartupAboutUs(this.state.data)
+    // this.props.getStartupAboutUs(this.state.data)
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.aboutUs)

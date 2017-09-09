@@ -1,12 +1,11 @@
-
 import {MlAppViewer} from "../../../../commons/core/MlAppViewer";
 import MlAppMyAppointmentItems from "../components/MlAppMyAppointmentItems";
 import React from "react";
 import gql from "graphql-tag";
 
-export const mlAppCurrentAppointmentConfig = new MlAppViewer({
+export const mlAppCompletedAppointmentConfig = new MlAppViewer({
   name: "My Appointment List",
-  moduleName: "myCurrentAppointment",
+  moduleName: "myCompletedAppointment",
   sort: true,
   perPageLimit: 20,
   viewComponent: <MlAppMyAppointmentItems/>,

@@ -156,7 +156,7 @@ export default class MlIdeatorIdeas extends React.Component{
     let ideaDescription = this.state.data.ideaDescription?this.state.data.ideaDescription:''
     let image = that.state.data && that.state.data.ideaImage&&that.state.data.ideaImage.fileUrl?that.state.data.ideaImage.fileUrl:"/images/images.png";
     return (
-      <div className="admin_main_wrap">
+      <div>
         {showLoader === true ? (<MlLoader/>) : (
       <div>
         <h2>Ideas</h2>

@@ -211,8 +211,8 @@ export default class MlStartupMCL extends React.Component {
     return (
       <div>
         {showLoader === true ? ( <MlLoader/>) : (
-          <div className="admin_main_wrap">
-            <div className="admin_padding_wrap portfolio-main-wrap">
+          <div>
+            <div className=" portfolio-main-wrap">
               <h2>MCL</h2>
               <div className="main_wrap_scroll">
                 <ScrollArea

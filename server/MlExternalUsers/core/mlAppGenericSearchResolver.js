@@ -426,6 +426,19 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               {
                 $match: {"profile.isSystemDefined":{$exists:false}, "profile.isExternaluser":true, 'profile.isActive':true, 'profile.externalUserProfiles':{$elemMatch:queryObj}}
               },
+              { "$lookup": { from: "mlPortfolioDetails", localField: "_id", foreignField: "userId", as: "portfolio" } },
+              { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
+              { "$match" : {"portfolio.status":"gone live"}},
+              {
+                $unwind :"$profile.externalUserProfiles"
+              },
+              {
+                "$group": {
+                  _id: "$_id",
+                  data: {"$first": "$$ROOT"}
+                }
+              },
+              { "$replaceRoot": { "newRoot" : "$data" }  },
               {
                 $unwind :"$profile.externalUserProfiles"
               },
@@ -490,6 +503,19 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
               {
                 $match: {"profile.isSystemDefined":{$exists:false}, "profile.isExternaluser":true, 'profile.isActive':true, 'profile.externalUserProfiles':{$elemMatch:queryObj}}
               },
+              { "$lookup": { from: "mlPortfolioDetails", localField: "_id", foreignField: "userId", as: "portfolio" } },
+              { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
+              { "$match" : {"portfolio.status":"gone live"}},
+              {
+                $unwind :"$profile.externalUserProfiles"
+              },
+              {
+                "$group": {
+                  _id: "$_id",
+                  data: {"$first": "$$ROOT"}
+                }
+              },
+              { "$replaceRoot": { "newRoot" : "$data" }  },
               {
                 $unwind :"$profile.externalUserProfiles"
               },

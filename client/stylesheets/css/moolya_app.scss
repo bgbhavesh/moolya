@@ -769,7 +769,7 @@ li {display: inline-block; width: 14px; height: 14px; margin: 0 4px; text-indent
    }
   .panel-collapse{width: 100%; }
   .action_buttons{
-  bottom:0px;overflow-x: auto; overflow-y: hidden; white-space: nowrap;text-align:center;
+  bottom:0px;overflow-x: auto; overflow-y: hidden; white-space: nowrap;text-align:center;height: 50px;
   ul{margin: 0px; padding: 3px;
     li{
     display: inline-block; text-align: center;margin-right:30px;
@@ -779,14 +779,14 @@ li {display: inline-block; width: 14px; height: 14px; margin: 0 4px; text-indent
         cursor: no-drop !important;color: rgba(255, 255, 255, 0.49) !important;
       }
       &:hover{
-        text-decoration:none;padding: 3px;border-radius: 5px;color:$mlBlue;
+        text-decoration:none;padding: 3px;border-radius: 5px;color:$mlWhite;
       }
     }
   }
   }
 }
 .related_buttons{
-bottom:0px;overflow-x: auto; overflow-y: hidden; white-space: nowrap;
+bottom:0px;overflow-x: auto; overflow-y: hidden; white-space: nowrap;height: 50px;
 .horizon-swiper{
   .horizon-outer{
     .horizon-inner{
@@ -807,7 +807,9 @@ bottom:0px;overflow-x: auto; overflow-y: hidden; white-space: nowrap;
     }
   ul{margin: 0px; padding:3px;
     li{display: inline-block; text-align: center;margin-right:5px;
+      .notext{    width: 90%; color: #fff; line-height: 40px; font-size: 18px; margin: 0 auto;}
       a{display: block; text-shadow: none;color:$mlWhite;padding: 3px; border-radius: 5px;font-size:12px;
+
         .team-block{margin-bottom:0px;background:$mlGray;
           .team_img{width:60px;height:60px;margin:5px 0px;}
           h3{font-size:10px;padding:5px;background:$mlRed;color:$mlWhite;
@@ -2123,4 +2125,91 @@ p{margin-top:10px;}
       list-style:circle;margin-left: 35px;
     }
   }
+}
+
+
+.card_block {
+  height: 200px;
+  background-color: #273545;
+  box-shadow: 0px 0px 5px #888;
+  border-radius: 10px;
+  text-align: center;
+  position: relative;
+  margin-bottom: 15px;
+  text-shadow: none;
+  margin-top:15px;
+}
+.card_block .active, .card_block .inactive{
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  border-radius: 50%; border:1px solid #fff;
+}
+.card_block .active{background: #5cb85c;}
+.card_block .inactive{background:#d9534f;}
+.card_block h3 {
+  padding: 10px;
+  font-size: 14px;
+  font-weight: normal;
+  color: #ffe144;
+  border-bottom: #161e27 solid 1px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width:100%;
+  margin: 0 auto;
+  height: 36px;
+}
+
+.card_block .list_icon {
+  font-size: 22px;
+  color: #fff;
+  border-top: #34404e solid 1px;
+  padding:2px 0px 0px;
+  font-weight: normal;
+}
+.card_block span.price {
+  font-size: 12px;
+  float: left;
+  margin-left: 5px;
+  line-height: 20px;
+  margin-right: 5px;
+}
+
+.card_block .btn{
+  padding: 0 5px;
+  line-height: 16px;
+  text-transform: uppercase;
+  margin-right: 5px;
+  font-size: 11px;
+}
+.card_block .btn-group{ margin-right:5px !important;}
+.card_block .btn-group .btn{ margin-right:0 !important;}
+.card_block .ml{
+  background: #B9C5CC;
+  border-radius: 50%;
+  padding: 14px;
+  color: #273545;
+  text-shadow: 0px 1px 1px #eee;
+  font-size: 42px;
+  display: inline-block;
+  border: 2px solid #161e27;
+  width: 74px;
+  height: 74px;
+  margin-top: 2px;
+}
+.card_block .block_footer {
+  height: 42px;
+}
+.card_block .block_footer span{
+  font-size: 14px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 80%;
+  margin: 0 auto;
+  display: inline-block;
+  margin-top: -6px;
 }

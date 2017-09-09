@@ -47,7 +47,7 @@ export const
                           isIdeaPrivate
                           isIdeaTitlePrivate
                           title
-                          description
+                          ideaDescription
                           portfolioId
                         }
                         accountType

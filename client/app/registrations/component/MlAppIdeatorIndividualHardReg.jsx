@@ -43,7 +43,7 @@ export default class MlAppIdeatorIndividualHardReg extends React.Component {
       },
       {
         name: 'History',
-        'icon': <span className="ml ml-moolya-symbol"></span>,
+        'icon': <span className="ml my-ml-history"></span>,
         component: <MlAppRegStep7 {...props} />
       }];
     return hardRegSteps;

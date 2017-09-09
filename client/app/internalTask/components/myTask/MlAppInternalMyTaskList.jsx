@@ -15,7 +15,6 @@ export default class MlAppInternalMyTaskList extends React.Component{
       selectTask:'',
       selectedTaskType: ''
     };
-    this.fetchTaskList = this.fetchTaskList.bind(this);
   }
 
   componentDidMount() {
@@ -55,8 +54,8 @@ export default class MlAppInternalMyTaskList extends React.Component{
     if(WinWidth > 768){
       $(".tab_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
     }
-    this.fetchTaskList();
   }
+
   async fetchTaskList() {
     let response = await fetchSelfCreatedInternalTask(['pending']);
     if(response){
@@ -76,6 +75,7 @@ export default class MlAppInternalMyTaskList extends React.Component{
 
   render(){
     const that = this;
+    let tasks = this.props.data;
     return (
       <div>
         <div className="ideators_list">
@@ -89,7 +89,7 @@ export default class MlAppInternalMyTaskList extends React.Component{
                   </div>
                 </a>
               </div>
-              {that.state.tasks.map(function (task, index) {
+              {tasks.map(function (task, index) {
                 return (
                   <div className="col-md-2 col-sx-3 col-sm-4 col-lg-2" key={index} onClick={()=>that.selectTask(task)}>
                     <div className="ideators_list_block">
@@ -116,7 +116,7 @@ export default class MlAppInternalMyTaskList extends React.Component{
                 <div className="row">
                   <div className="top_block_scroller" id="centered">
                     <ul className="topscroll_listblock ideators_list">
-                      {that.state.tasks.map(function (task, index) {
+                      {tasks.map(function (task, index) {
                         return (
                           <li key={index} onClick={()=>that.selectTask(task)} className={task._id == that.state.selectTask ? "selected_block ideators_list_block" : 'ideators_list_block'}>
                             <div className="premium">

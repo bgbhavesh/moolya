@@ -24,7 +24,11 @@ export default class MlInfiniteScrollHeader extends Component {
   }
 
   handleChange(event) {
-    this.setState({searchText: event.target.value});
+    this.setState({
+      searchText: event.target.value
+    }, function () {
+      this.updateSearch(event);
+    }.bind(this));
   }
 
   updateSearch(evt) {

@@ -1,6 +1,7 @@
 import MlResolver from '../../../../commons/mlResolverDef'
 import MlRespPayload from '../../../../commons/mlPayload'
 import _ from 'lodash';
+import _underscore from 'underscore'
 
 MlResolver.MlMutationResolver['UpdateUserType'] = (obj, args, context, info) => {
   let isValidAuth = mlAuthorization.validteAuthorization(context.userId, args.moduleName, args.actionName, args);
@@ -105,16 +106,27 @@ MlResolver.MlQueryResolver['FetchUserTypeForMultiSelect'] = (obj, args, context,
   let community=args.communityId;
   if(community!=undefined){
     let result=[];
-    for(let i=0;i<community.length;i++){
-     let userResult = mlDBController.find('MlUserTypes', {isActive:true,communityCode:community[i]}, context).fetch()||[];
+    let allValueExist = _underscore.contains(community, "all");
+    if(allValueExist){
+      let userResult   = mlDBController.find('MlUserTypes', {isActive:true}, context).fetch()||[];
+      if(userResult!=undefined){
+        for(let j=0;j<userResult.length;j++){
+          result.push(userResult[j]);
+        }
+      }
+    }else{
+      for(let i=0;i<community.length;i++){
+        let userResult = mlDBController.find('MlUserTypes', {isActive:true,communityCode:community[i]}, context).fetch()||[];
 
-          if(userResult!=undefined){
-            for(let j=0;j<userResult.length;j++){
-              result.push(userResult[j]);
-            }
+        if(userResult!=undefined){
+          for(let j=0;j<userResult.length;j++){
+            result.push(userResult[j]);
           }
+        }
 
+      }
     }
+
 
     if(result.length > 0){
       result.push({"userTypeName" : "All","_id" : "all"});

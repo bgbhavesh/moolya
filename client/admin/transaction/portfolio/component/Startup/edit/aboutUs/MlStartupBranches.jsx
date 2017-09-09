@@ -138,19 +138,21 @@ export default class MlStartupBranches extends React.Component{
       this.sendDataToParent()
     })
   }
-  onOptionSelectedStates(value){
+  onOptionSelectedStates(value, callback, label){
     let details =this.state.data;
     details=_.omit(details,["stateId"]);
-    details=_.extend(details,{["stateId"]: value});
+    details=_.omit(details,["branchState"]);
+    details=_.extend(details,{["stateId"]: value, ["branchState"]:label.label});
     this.setState({data:details}, function () {
       this.setState({"stateId" : value})
       this.sendDataToParent()
     })
   }
-  onOptionSelectedCities(val){
+  onOptionSelectedCities(val, callback, label){
     let details =this.state.data;
     details=_.omit(details,["cityId"]);
-    details=_.extend(details,{["cityId"]: val});
+    details=_.omit(details,["branchCity"]);
+    details=_.extend(details,{["cityId"]: val, ["branchCity"]:label.label});
     this.setState({data:details}, function () {
       this.setState({"cityId" : val})
       this.sendDataToParent()

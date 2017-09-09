@@ -9,7 +9,7 @@ import MlEmailNotification from '../../../mlNotifications/mlEmailNotifications/m
 import MlSubChapterAccessControl from './../../../mlAuthorization/mlSubChapterAccessControl';
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 import mlSmsController from '../../../mlNotifications/mlSmsNotifications/mlSmsController'
-
+import MlUserContext from "../../../MlExternalUsers/mlUserContext";
 MlResolver.MlMutationResolver['createReview'] = (obj, args, context, info) => {
   if (args && context && context.userId) {
     var resp = null;
@@ -113,9 +113,10 @@ sendSMSForReviewRecvd = (fromUser, portfolioId, context) => {
   if(portfolioDetails){
     var countryCode = MlClusters.findOne(portfolioDetails.clusterId);
     var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
-    var from = new MlUserContext().userProfileDetails(fromuser._id)
+    var from = new MlUserContext().userProfileDetails(fromUser._id)
     if(countryCode && defaultProfile && from){
-      var mobileNumber = defaultProfile.mobileNumber
+      var mobileNumber = defaultProfile.mobileNumber;
+      var currentdate = new Date();
       var date = currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear();
       var time =  currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
       var updatedDateTime = date+" "+time
@@ -130,7 +131,7 @@ sendSMSForReviewReject = (fromUser, portfolioId, context) => {
   if(portfolioDetails){
     var countryCode = MlClusters.findOne(portfolioDetails.clusterId);
     var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
-    var from = new MlUserContext().userProfileDetails(fromuser._id)
+    var from = new MlUserContext().userProfileDetails(fromUser._id)
     if(countryCode && defaultProfile && from){
       var mobileNumber = defaultProfile.mobileNumber
       var currentdate = new Date();

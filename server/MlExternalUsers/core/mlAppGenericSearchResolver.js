@@ -42,6 +42,16 @@ MlResolver.MlUnionResolver['AppGenericSearchUnion'] =  {
       case "EXTERNALUSERS":
         return'Users';
         break;
+      case "MYCONNECTIONS":
+        return "ConnectedUser";
+        break;
+      case "MYFAVOURITES":
+        return "FavouriteUser";
+        break;
+      case "MYFOLLOWERS":
+      case "MYFOLLOWINGS":
+        return "FollowUser";
+        break;
       default:
         return 'Generic';
     }
@@ -356,7 +366,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
     count = data.length;
   }
   /*********************************************end of all portfolio queries************************************/
-  else if (args.module == "externalUsers"){
+  else if (args.module === "externalUsers"){
     // if(args.offset && args.offset >0){   // `offset` may be `null`
     //   findOptions.skip=args.queryProperty.offset;
     // };
@@ -540,6 +550,111 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
     // context.module = "Users";
     data=users;
     count=users&&users.length?users.length:0;
+  }
+
+  else if ( args.module === "myConnections" ){
+    let pipeline=[{$match:{'users':{$elemMatch:{'userId':context.userId}},isAccepted:true}},
+      {$unwind :"$users" },
+      {$match:{'users.userId':{$ne:context.userId}}},
+      {$lookup:{from:'users',localField:'users.userId',foreignField:'_id',as:'userDetails'}},//join with user
+      {$unwind:'$userDetails'},{$unwind:'$userDetails.profile.externalUserProfiles'},
+      //match the default profile of user //'userDetails.profile.externalUserProfiles.isDefault':true
+      //todo:check with business to display multiple profiles for multiple users
+      {$match:{'userDetails.profile.isActive':true,'userDetails.profile.externalUserProfiles.isActive':true}},
+      {$group : {_id:'$connectionCode',// display first profile of user
+        'id':{ $first: '$_id'},//connection Object Id
+        'userId':{ $first: "$users.userId"},
+        'userName':{ $first: "$users.userName"},
+        'firstName':{ $first:'$userDetails.profile.firstName'},
+        'lastName':{ $first:'$userDetails.profile.lastName'},
+        'displayName':{ $first:'$userDetails.profile.displayName'},
+        'profileImage':{ $first:"$userDetails.profile.profileImage"},
+        'profileId':{ $first:"$userDetails.profile.profileId"},
+        'countryName':{ $first:'$userDetails.profile.externalUserProfiles.countryName'},
+        'communityName':{ $first:'$userDetails.profile.externalUserProfiles.communityName'},
+        'communityCode':{ $first:'$userDetails.profile.externalUserProfiles.communityDefCode'}
+      }},
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+      ];
+    data=mlDBController.aggregate('MlConnections',pipeline,context);
+    count = data.length;
+  }
+
+  else if ( args.module === "myFavourites" ){
+    let pipeline=[{$match:{'isAccepted':true,'users':{$elemMatch:{'userId':context.userId,isFavourite:true}}}},
+      {$unwind :"$users" },
+      {$match:{'users.userId':{$ne:context.userId}}},
+      {$lookup:{from:'users',localField:'users.userId',foreignField:'_id',as:'userDetails'}},//join with user
+      {$unwind:'$userDetails'},{$unwind:'$userDetails.profile.externalUserProfiles'},
+      //match the default profile of user //'userDetails.profile.externalUserProfiles.isDefault':true
+      //todo:check with business to display multiple profiles for multiple users
+      {$match:{'userDetails.profile.isActive':true,'userDetails.profile.externalUserProfiles.isActive':true}},
+      {$group : {_id:'$connectionCode',// display first profile of user
+        'id':{ $first: '$_id'},//connection Object Id
+        'userId':{ $first: "$users.userId"},
+        'userName':{ $first: "$users.userName"},
+        'firstName':{ $first:'$userDetails.profile.firstName'},
+        'lastName':{ $first:'$userDetails.profile.lastName'},
+        'displayName':{ $first:'$userDetails.profile.displayName'},
+        'profileImage':{ $first:"$userDetails.profile.profileImage"},
+        'profileId':{ $first:"$userDetails.profile.profileId"},
+        'countryName':{ $first:'$userDetails.profile.externalUserProfiles.countryName'},
+        'communityName':{ $first:'$userDetails.profile.externalUserProfiles.communityName'},
+        'communityCode':{ $first:'$userDetails.profile.externalUserProfiles.communityDefCode'}
+      }},
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+      ];
+    data=mlDBController.aggregate('MlConnections',pipeline,context);
+    count = data.length;
+  }
+
+  else if ( args.module === "myFollowers" ){
+    let pipeline=[
+      {$match:{'followerId':context.userId,isActive:true}},
+      {$lookup:{from:'users',localField:'followedBy',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails.profile.externalUserProfiles'},
+      {$match:{'userDetails.profile.isActive':true,'userDetails.profile.externalUserProfiles.isActive':true}},
+      {$group : {_id:'$followedBy',
+        'userId':{ $first: "$userDetails._id"},
+        'userName':{ $first: "$userDetails.username"},
+        'firstName':{ $first:'$userDetails.profile.firstName'},
+        'lastName':{ $first:'$userDetails.profile.lastName'},
+        'displayName':{ $first:'$userDetails.profile.displayName'},
+        'profileImage':{ $first:"$userDetails.profile.profileImage"},
+        'profileId':{ $first:"$userDetails.profile.profileId"},
+        'countryName':{ $first:'$userDetails.profile.externalUserProfiles.countryName'},
+        'communityName':{ $first:'$userDetails.profile.externalUserProfiles.communityName'},
+        'communityCode':{ $first:'$userDetails.profile.externalUserProfiles.communityDefCode'}
+      }},
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+    ];
+    data=mlDBController.aggregate('MlFollowings',pipeline,context);
+    count = data.length;
+  }
+
+  else if ( args.module === "myFollowings" ){
+    let pipeline=[
+      {$match:{'followedBy':context.userId,isActive:true}},
+      {$lookup:{from:'users',localField:'followerId',foreignField:'_id',as:'userDetails'}},
+      {$unwind:'$userDetails'},{$unwind:'$userDetails.profile.externalUserProfiles'},
+      {$match:{'userDetails.profile.isActive':true,'userDetails.profile.externalUserProfiles.isActive':true}},
+      {$group : {_id:'$followerId',
+        'id':{$first:"$_id"}, //follow Object Id
+        'userId':{ $first: "$userDetails._id"},
+        'userName':{ $first: "$userDetails.username"},
+        'firstName':{ $first:'$userDetails.profile.firstName'},
+        'lastName':{ $first:'$userDetails.profile.lastName'},
+        'displayName':{ $first:'$userDetails.profile.displayName'},
+        'profileImage':{ $first:"$userDetails.profile.profileImage"},
+        'profileId':{ $first:"$userDetails.profile.profileId"},
+        'countryName':{ $first:'$userDetails.profile.externalUserProfiles.countryName'},
+        'communityName':{ $first:'$userDetails.profile.externalUserProfiles.communityName'},
+        'communityCode':{ $first:'$userDetails.profile.externalUserProfiles.communityDefCode'}
+      }},
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+    ];
+    data=mlDBController.aggregate('MlFollowings',pipeline,context);
+    count = data.length;
   }
 
   else {

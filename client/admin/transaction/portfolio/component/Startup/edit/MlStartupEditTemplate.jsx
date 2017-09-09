@@ -87,7 +87,7 @@ export default class MlStartupEditTemplate extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Charts",
-        component: <MlStartupCharts key="5" getChartDetails={this.getChartDetails.bind(this)}
+        component: <MlStartupCharts key="5" getChartDetails={this.getChartDetails.bind(this)} isAdmin={true}
                                     portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {

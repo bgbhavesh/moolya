@@ -63,7 +63,11 @@ class portfolioValidation {
     _.each(praviteFields, function (praviteField) {
       if (object[praviteField.keyName] != undefined || ((_.isEmpty(object[praviteField.objectName]) == false && object[praviteField.objectName][praviteField.keyName] != undefined))) {
         if (!allowPrivateFields) {
-          delete object[praviteField.keyName]
+          // delete object[praviteField.keyName]
+          if (object[praviteField.keyName])
+            delete object[praviteField.keyName]
+          else
+            delete object[praviteField.objectName][praviteField.keyName]
         }
         var praviteObject = _.find(praviteFields, {keyName: praviteField.keyName})
         omittedFields.push(praviteObject)

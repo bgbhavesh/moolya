@@ -270,7 +270,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "IDE", subChapterId: subChapterQuery } },
+      {'$match': {"port.status": "gone live", 'port.communityCode': "IDE", 'port.subChapterId': subChapterQuery } },
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -283,7 +283,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           "userId": "$userId",
           "ideas": [{
             "title": "$title",
-            "description": "$description"
+            "description": "$description",
+            "portfolioId":"$portfolioId"
           }],
           "chapterName": "$port.chapterName",
           "name": "$user.profile.firstName" + " " + "$user.profile.lastName",
@@ -738,7 +739,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       { "$unwind": "$members" },
-      { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Pending" } },
+      { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Completed" } },
       { $match: { "$and":  [ searchQuery, filterQuery ] } }
     ];
     data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
@@ -756,7 +757,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       { "$unwind": "$members" },
-      { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Pending" } },
+      { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Rejected" } },
       { $match: { "$and":  [ searchQuery, filterQuery ] } }
     ];
     data = mlDBController.aggregate( 'MlAppointments', pipeline, context);

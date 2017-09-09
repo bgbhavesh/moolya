@@ -204,22 +204,13 @@ export default class AppContactDetails extends React.Component {
   }
 
   async onClear(index, value) {
-
-    this.refs["contactNumber" + index].value = "";
-    /*
-     let updatedComment = update(this.state.contactNumberArray[index], {
-     numberType :   {$set: ""}
-     });
-
-     let newData = update(this.state.contactNumberArray, {
-     $splice: [[index, 1, updatedComment]]
-     });
-     this.setState({contactNumberArray : newData});
-     let registrationDetails = _.cloneDeep(this.state.defaultData);
-     let omitData = _.omit(registrationDetails["contactInfo"][index], 'numberType') || [];
-     registrationDetails["contactInfo"][index] = omitData
-     this.setState({defaultData : registrationDetails});*/
-
+    if(index == null){
+      this.refs["contactNumber"].value = ""
+      this.refs["countryCode"].value = ""
+    }else{
+      this.refs["contactNumber" + index].value = "";
+      this.refs["countryCode"+ index].value = ""
+    }
   }
 
   async findRegistration(){
@@ -297,7 +288,7 @@ export default class AppContactDetails extends React.Component {
               <div className="ml_icon_btn">
                 <a href="#" onClick={this.onSavingContact.bind(this)} className="save_btn"><span
                   className="ml ml-save"></span></a>
-                <a href="#" id="cancel_contact" className="cancel_btn">
+                <a href="#" id="cancel_contact" className="cancel_btn" onClick={this.onClear.bind(this,null)}>
                   <span className="ml ml-delete"></span></a>
               </div>
             </div>
@@ -314,8 +305,7 @@ export default class AppContactDetails extends React.Component {
                 </div>
                 <div className="form-group">
                   <input type="text" placeholder="Enter Country Code" ref={'countryCode' + key}
-                         defaultValue={options.countryCode}
-                         className="form-control float-label" disabled={true}/>
+                        className="form-control float-label"/>
                 </div>
                 {/*defaultValue={countryPhoneCode} valueKey={countryPhoneCode}*/}
                 <div className="form-group mandatory">

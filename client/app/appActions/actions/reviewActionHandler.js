@@ -24,10 +24,10 @@ export async function reviewActionHandler(details) {
     }
   })
   var resp = result.data.createReview;
-  if (resp.success) {
+  /*if (resp.success) {
    return resp;
-  }
-  return null;
+  }*/
+  return resp;
 }
 
 

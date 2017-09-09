@@ -19,20 +19,22 @@ class MlEditUserType extends React.Component{
     this.onCommunitySelect.bind(this);
     return this;
   }
-
+  componentDidMount(){
+    setTimeout(function(){
+      initalizeFloatLabel();
+    },1000);
+    if(this.state.data.isActive){
+      $('#status').prop('checked', true);
+    }
+  }
   componentWillMount() {
     const resp=this.findUserType();
     return resp;
   }
 
-  componentDidMount(){
-    if(this.state.data.isActive){
-      $('#status').prop('checked', true);
-    }
-  }
+
   componentDidUpdate()
   {
-    initalizeFloatLabel();
     OnToggleSwitch(true,true);
     var WinHeight = $(window).height();
     $('.admin_main_wrap ').height(WinHeight-$('.admin_header').outerHeight(true));

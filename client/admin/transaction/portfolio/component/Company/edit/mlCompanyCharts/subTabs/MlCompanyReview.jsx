@@ -3,6 +3,7 @@ import {render} from "react-dom";
 import Datetime from "react-datetime";
 import _ from 'lodash';
 import ScrollArea from "react-scrollbar";
+import {initalizeFloatLabel} from '../../../../../../../utils/formElemUtil';
 
 export default class MlCompanyReview extends React.Component{
   constructor(props, context){
@@ -61,7 +62,9 @@ export default class MlCompanyReview extends React.Component{
      this.setState({loading: false, startupCompanyReview: this.context.startupPortfolio.reviewOfCompanyChart, reviewList:this.context.startupPortfolio.reviewOfCompanyChart});
      }*/
   }
-
+  componentDidUpdate(){
+    initalizeFloatLabel();
+  }
   fetchDetails(){
     let that = this;
     //let portfoliodetailsId=that.props.portfolioDetailsId;

@@ -63,7 +63,7 @@ export default class MlAppActionComponent extends React.Component {
       {
         actionName: 'partner',
         displayName:'Partner',
-        iconClass: 'ml flaticon-ml-shapes'
+        iconClass: 'ml flaticon-ml-handshake-1'
       },
       {
         actionName: 'enquire',
@@ -118,7 +118,7 @@ export default class MlAppActionComponent extends React.Component {
       {
         actionName: 'golive',
         displayName:'GoLive',
-        iconClass: 'ml ml-save'
+        iconClass: 'ml my-ml-launch_3'
       },
       {
         actionName: 'comment',
@@ -225,7 +225,17 @@ export default class MlAppActionComponent extends React.Component {
         actionName: 'complete',
         displayName:'Complete',
         iconClass: 'ml ml-save'
-      }
+      },
+      {
+        actionName: 'cancel',
+        displayName:'cancel',
+        iconClass: 'ml ml-delete'
+      },
+      {
+        actionName: 'start',
+        displayName:'Start',
+        iconClass: 'ml ml-save'
+      },
     ]
     let actionOptions= this.props.actionOptions|| [];
 

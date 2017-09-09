@@ -1,11 +1,16 @@
 import React, {Component} from "react";
 import {render} from "react-dom";
 import _ from "lodash";
+import ScrollArea from "react-scrollbar";
 
 export default class MlAppPrivacy extends Component {
   constructor(props) {
     super(props);
     return this;
+  }
+  componentDidUpdate() {
+    var WinHeight = $(window).height();
+    $('.main_wrap_scroll ').height(WinHeight-(68+$('.app_header').outerHeight(true)));
   }
 
   render() {
@@ -14,7 +19,15 @@ export default class MlAppPrivacy extends Component {
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap no_padding">
-          <div className="list_view_block">
+          <div className="main_wrap_scroll">
+            <ScrollArea
+              speed={0.8}
+              className="main_wrap_scroll"
+              smoothScrolling={true}
+              default={true}
+            >
+              <div className="col-md-12">
+                <div className="blank_content">
             <h5>Welcome to our Privacy Policy.</h5>
             <p>Your privacy is critically important to us.</p>
             <p>moolya’s office is located at:<div className="clearfix"></div> #1002, 10th Floor, The Platina, Gachibowli Road, Gachibowli, Hyderabad, Telangana, IN - 500032 <div className="clearfix"></div> Mobile: 91-99664 08213</p>
@@ -53,6 +66,8 @@ export default class MlAppPrivacy extends Component {
             <h5>- Credit & Contact Information:</h5>
             <p>This privacy policy was created at privacygen.com. If you have any questions about this Privacy Policy, please contact us via email or phone (details in CONTACT US of www.moolya.global)</p>
           </div>
+          </div>
+        </ScrollArea></div>
         </div>
       </div>
     )

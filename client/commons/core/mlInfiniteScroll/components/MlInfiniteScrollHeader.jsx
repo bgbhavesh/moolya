@@ -16,16 +16,47 @@ export default class MlInfiniteScrollHeader extends Component {
    * Constructor
    * @param props :: Object - Parents data
    */
-  constructor(props){
+  constructor(props) {
     super(props);
+    this.state = {searchText: ''};
+    this.handleChange = this.handleChange.bind(this);
+    this.updateSearch = this.updateSearch.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({searchText: event.target.value});
+  }
+
+  updateSearch(evt) {
+    evt.preventDefault();
+    let searchText = this.state.searchText;
+    let searchFields = this.props.config && this.props.config.searchFields ? this.props.config.searchFields : [];
+    console.log(searchText , searchFields);
+    this.props.updateSearchValue(searchText , searchFields);
   }
 
   render() {
     const that = this;
     const props = that.props;
+    const {config, updateFilterQuery} = this.props;
+    let filterData = config.filterData ? config.filterData : [];
+    let filterComponent;
+    if(config.filter && config.filterComponent){
+      filterComponent = React.cloneElement(config.filterComponent, { submit:updateFilterQuery, filterData:filterData });
+    }
+    console.log(props);
+    // let ListComponent =React.cloneElement(viewComponent,{data:data, config:pConfig});
     return (
       <div>
-        <input type="text" className="form-control" id="btn-search" placeholder="Search..." onChange={(evt)=>props.updateSearchValue(evt.target.value)} />
+        { config.filter ?
+          filterComponent : ""
+        }
+        { config.search ?
+          <form onSubmit={that.updateSearch} style={{margin:0}}>
+            <input type="text" className="form-control" onBlur={that.updateSearch} id="btn-search" placeholder="Search..." ref="searchText" onChange={(evt) => that.handleChange(evt) }/>
+          </form>
+          : ""
+        }
         <br className="clearfix" />
       </div>
     )

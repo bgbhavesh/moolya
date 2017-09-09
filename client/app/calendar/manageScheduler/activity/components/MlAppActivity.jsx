@@ -137,6 +137,7 @@ class MlAppActivity extends Component {
         });
       }
     }
+    initalizeFloatLabel();
   }
 
   /**
@@ -271,7 +272,7 @@ class MlAppActivity extends Component {
       },
       {
         showAction: true,
-        actionName: 'exit',
+        actionName: 'cancel',
         handler: async(event) => {
           FlowRouter.go('/app/calendar/manageSchedule/' + this.profileId + '/activityList')
         }
@@ -300,7 +301,7 @@ class MlAppActivity extends Component {
           <div className="col-md-12">
             <div className='step-progress'>
               <div id="root">
-                <StepZilla steps={this.setActivitySteps()} stepsNavigation={true} prevBtnOnLastStep={true}/>
+                <StepZilla steps={this.setActivitySteps()} stepsNavigation={true} showNavigation={false} prevBtnOnLastStep={false}/>
               </div>
             </div>
           </div>

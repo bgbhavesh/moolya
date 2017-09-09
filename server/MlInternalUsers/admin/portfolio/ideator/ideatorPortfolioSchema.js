@@ -32,7 +32,7 @@ let ideatorPortfolioSchema = `
     
     type ideatoraboutInfo{
         title:String
-        description:String
+        ideaDescription:String
         isTitlePublic:Boolean
         isDescriptionPublic:Boolean
     }
@@ -78,10 +78,10 @@ let ideatorPortfolioSchema = `
     type ideasObject{
         _id:String
         title:String,
-        isIdeasTitlePrivate:Boolean,
+        isIdeaTitlePrivate:Boolean,
         portfolioId:String
-        description:String,
-        isIdeasPrivate:Boolean,
+        ideaDescription:String,
+        isIdeaPrivate:Boolean,
         isActive:Boolean,
         privateFields:[PrivateKeys]
         ideaImage      : imagesTypeSchema
@@ -146,7 +146,7 @@ let ideatorPortfolioSchema = `
 
     input ideatorabout{
         title:String,
-        description:String,
+        ideaDescription:String,
         isTitlePublic:Boolean,
         isDescriptionPublic:Boolean
     }
@@ -215,9 +215,9 @@ let ideatorPortfolioSchema = `
     }
     input ideas{
         title:String,
-        isIdeasTitlePrivate:Boolean,
-        description:String,
-        isIdeasPrivate:Boolean,
+        isIdeaTitlePrivate:Boolean,
+        ideaDescription:String,
+        isIdeaPrivate:Boolean,
         isActive:Boolean
         ideaImage : imageFilesInputSchema
     }
@@ -277,16 +277,18 @@ let ideatorPortfolioSchema = `
         portfolioId:String,
         title:String,
         isIdeaTitlePrivate:Boolean,
-        description:String,
+        ideaDescription:String,
         isIdeaPrivate:Boolean,
         isActive:Boolean
         ideaImage : imagesTypeSchema
+        createdAt: Date
+        updatedAt: Date
     }
     
     input idea{
         title:String,
         isIdeaTitlePrivate:Boolean,
-        description:String,
+        ideaDescription:String,
         isIdeaPrivate:Boolean,
         isActive:Boolean
         ideaImage : imageFilesInputSchema

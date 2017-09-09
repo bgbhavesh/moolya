@@ -186,7 +186,7 @@ export default class MlFilterListRepo{
             if(userProfile.hierarchyLevel == 4 || userProfile.hierarchyLevel == 3 || userProfile.hierarchyLevel == 2 || userProfile.hierarchyLevel == 0){
               let arrayOfGenSubChapter = _.pluck(requestParams.filteredListId, 'value') || [];
               if(requestParams.fieldActive == "Cluster"){
-                result= MlSubChapters.find({clusterId: {$in : arrayOfGenSubChapter},isActive : true}).fetch();
+                result= MlSubChapters.find({clusterId: {$in : arrayOfGenSubChapter}, chapterId: {$in : arrayOfGenSubChapter},isActive : true}).fetch();
               }else if(requestParams.fieldActive == "Chapter"){
                 result= MlSubChapters.find({chapterId: {$in : arrayOfGenSubChapter},isActive : true}).fetch();
               }else{
@@ -282,6 +282,15 @@ export default class MlFilterListRepo{
 
         let genIdentityTypeResponse=_.each(result,function (option,id) {
           options.push({"label":option.identityTypeDisplayName,"value":option._id})
+        })
+
+        break;
+      case "Gen_Modules":
+
+        result= MlModules.find({"isActive" : true}).fetch()
+
+        let genModulesResponse=_.each(result,function (option,id) {
+          options.push({"label":option.code,"value":option.code})
         })
 
         break;

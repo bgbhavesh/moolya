@@ -611,6 +611,55 @@ if(Meteor.isServer){
   }
 
 
+  // Filter
+  let auditFilterExists = MlFilters.findOne({"moduleName":"audit"});
+  if(!auditFilterExists){
+    MlFiltersCatalog.upsert({
+      "_id" : "audit",
+      "moduleName":"audit"
+    },{$set:{
+      fields:[
+        {
+          name:"timeStamp",
+          type:'Date',
+          resolverName : " "
+        },
+        {
+          name:"moduleName",
+          type:'List',
+          resolverName : "Gen_Clusters",
+          isDynamic:true
+        },
+        {
+          name:"fieldName",
+          type:'String',
+          resolverName : " "
+        },
+        {
+          name:"previousValue",
+          type:'String',
+          resolverName : " "
+        },
+        {
+          name:"currentValue",
+          type:'String',
+          resolverName : " "
+        },
+        {
+          name:"userAgent.ipAddress",
+          type:'String',
+          resolverName : " "
+        },
+        {
+          name:"userName",
+          type:'String',
+          resolverName : " "
+        },
+      ]
+    }});
+  }
+
+
 
 
 }

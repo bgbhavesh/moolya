@@ -6,8 +6,11 @@ var FontAwesome = require('react-fontawesome');
 import {fetchInternalTaskInfo} from '../actions/fetchInternalTaskInfo';
 import {updateInternalTaskInfo} from '../actions/updateInternalTask';
 import moment from "moment";
+import MlAccordion from "../../commons/components/MlAccordion";
+import formHandler from "../../../commons/containers/MlFormHandler";
+import MlAppActionComponent from "../../commons/components/MlAppActionComponent";
 
-export default class MlAppInternalTaskItem extends React.Component {
+class MlAppInternalTaskItem extends React.Component {
 
   constructor(props){
     super(props);
@@ -67,7 +70,61 @@ export default class MlAppInternalTaskItem extends React.Component {
   render(){
     let task = this.state.taskInfo;
     const that = this;
-    const renderActions = function () {
+    /**
+     * Setting up action handler for activity different event
+     */
+    let appActionConfig = [];
+    if( task.status == 'pending') {
+      appActionConfig = [
+        {
+          showAction: true,
+          actionName: 'accept',
+          handler: async(event) => that.props.handler(that.updateStatus.bind(this, 'accepted'))
+        },
+        {
+          showAction: true,
+          actionName: 'reject',
+          handler: async(event) => that.props.handler(that.updateStatus.bind(this, 'rejected'))
+        }
+      ];
+    } else if (task.status == 'accepted') {
+      appActionConfig = [
+        {
+          showAction: true,
+          actionName: 'start',
+          handler: async(event) => that.props.handler(that.updateStatus.bind(this, 'started'))
+        }
+      ];
+    } else if (task.status == 'started') {
+      appActionConfig = [
+        {
+          showAction: true,
+          actionName: 'complete',
+          handler: async(event) => that.props.handler(that.updateStatus.bind(this, 'completed'))
+        }
+      ];
+    } else if (task.status == 'rejected') {
+      appActionConfig = [
+        {
+          showAction: true,
+          actionName: 'accept',
+          handler: async(event) => that.props.handler(that.updateStatus.bind(this, 'accepted'))
+        }
+      ];
+    }
+    export const genericPortfolioAccordionConfig = {
+      id: 'portfolioAccordion',
+      panelItems: [
+        {
+          'title': 'Actions',
+          isText: false,
+          style: {'background': '#ef4647'},
+          contentComponent: <MlAppActionComponent
+            resourceDetails={{resourceId: 'mytask', resourceType: 'mytask'}}   //resource id need to be given
+            actionOptions={appActionConfig}/>
+        }]
+    };
+    /*const renderActions = function () {
       if( task.status == 'pending') {
         return <div className="form-group ml_btn">
           <a href="" onClick={()=>that.updateStatus('accepted')} className="cancel_btn">Accept</a>
@@ -82,7 +139,7 @@ export default class MlAppInternalTaskItem extends React.Component {
           <a href="" onClick={()=>that.updateStatus('completed')} className="cancel_btn">Complete</a>
         </div>
       }
-    };
+    };*/
     return(
       <div id="details-div">
         <div>
@@ -152,14 +209,22 @@ export default class MlAppInternalTaskItem extends React.Component {
 
                     </div>
                   </div>
-                  {renderActions()}
+                  {/*{renderActions()}*/}
                 </div>
               </div>
             </div>
           </div>
+        </div>
+        <div>
+          {task.status !== 'completed' &&
+            <MlAccordion accordionOptions={genericPortfolioAccordionConfig} {...this.props} />
+          }
         </div>
       </div>
     )
   }
 
 }
+
+export default MlAppInternalTaskItem = formHandler()(MlAppInternalTaskItem);
+

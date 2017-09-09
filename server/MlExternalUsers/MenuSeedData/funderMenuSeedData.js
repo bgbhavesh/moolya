@@ -61,11 +61,12 @@ if(Meteor.isServer){
 
       {
         "image":"ml my-ml-subscriptions",
-        "link": "/app/subscriptions",
+        "link": "#",
         "isLink" : true,
         "isMenu" : true,
         "name" : "moolya Services",
-        "uniqueId" : "subscriptions"
+        "uniqueId" : "subscriptions",
+        isDisabled:true
       },
 
       {
@@ -77,7 +78,7 @@ if(Meteor.isServer){
         "uniqueId" : "news"
       },
       {
-        "image":"ml my-ml-settings1",
+        "image":"ml my-ml-settings_new",
         "link": "/app/news",
         "isLink" : true,
         "isMenu" : true,

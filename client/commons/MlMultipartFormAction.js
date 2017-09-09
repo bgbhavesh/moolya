@@ -1,7 +1,7 @@
 /**
  * Created by venkatasrinag on 21/2/17.
  */
-export async function multipartFormHandler(data, file,endPoint) {
+export async function multipartFormHandler(data, file, endPoint) {
     // if(!file)
     //     return  false;
 

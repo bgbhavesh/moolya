@@ -10,7 +10,7 @@ export default class MlAppInternalMyTask extends React.Component{
   constructor(props){
     super(props);
     this.state ={
-    }
+    };
     this.updateType = this.updateType.bind(this);
   }
 
@@ -28,7 +28,7 @@ export default class MlAppInternalMyTask extends React.Component{
       case 'edit':
         return '';
       default:
-      return <MlAppInternalMyTaskList updateType={that.updateType} />
+      return <MlAppInternalMyTaskList updateType={that.updateType} data={that.props.data} />
     }
   }
 

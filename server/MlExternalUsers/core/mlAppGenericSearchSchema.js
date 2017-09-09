@@ -19,7 +19,7 @@ let appGenericSearch = `
     union AppGenericSearchUnion = Activity | FunderPortfolio | serviceProviderPortfolioDetails | 
                                   startupPortfolioOutput | Ideator | Users | 
                                   InstitutionPortfolio | CompanyPortfolio | ConnectedUser |
-                                  FavouriteUser | FollowUser | Appointment | Service
+                                  FavouriteUser | FollowUser | Appointment | Service | InternalTask
    
     type AppGenericSearchResponse {
       count:Int,

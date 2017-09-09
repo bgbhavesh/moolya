@@ -27,8 +27,10 @@ export default class  BeSpokeHandler extends Component {
       saveData: false,
       updateData: false,
       mode: false,
-      details:{}
-    }
+      details:{
+        mode: 'offline'
+      }
+    };
     this.handleBlur.bind(this);
     this.onOptionSelected.bind(this);
     this.saveBeSpokeServiceDetails.bind(this)

@@ -30,7 +30,11 @@ MlResolver.MlMutationResolver['CreateAccount'] = (obj, args, context, info) => {
     let code = 401;
     let response = new MlRespPayload().errorPayload("Account Name is Required", code);
     return response;
-  }else {
+  }if(MlAccountTypes.find({accountName:args.accountName}).count() > 0){
+    let code = 409;
+    return new MlRespPayload().errorPayload("Already Exist", code);
+  }
+  else {
     let id = MlAccountTypes.insert({...args});
     if (id) {
       let code = 200;

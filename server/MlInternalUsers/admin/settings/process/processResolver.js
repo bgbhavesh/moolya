@@ -40,6 +40,8 @@ MlResolver.MlMutationResolver['createProcess'] = (obj, args, context, info) =>{
   let createdBy = firstName +' '+lastName
   args.process.createdBy = createdBy;
   args.process.createdDate = new Date();
+  var randomId = Math.floor(Math.random() * 90000) + 10000;
+  args.process.processId = "PRO"+randomId
     let id = mlDBController.insert('MlProcessMapping', args.process, context)
     if(id){
         let code = 200;

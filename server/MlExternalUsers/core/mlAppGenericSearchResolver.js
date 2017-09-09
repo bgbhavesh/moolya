@@ -20,7 +20,7 @@ MlResolver.MlUnionResolver['AppGenericSearchUnion'] =  {
     switch (moduleName){
       case 'ACTIVITY':
         return 'Activity';
-        break
+        break;
       case 'FUNDERPORTFOLIO':
         return 'FunderPortfolio';
         break;
@@ -52,6 +52,13 @@ MlResolver.MlUnionResolver['AppGenericSearchUnion'] =  {
       case "MYFOLLOWINGS":
         return "FollowUser";
         break;
+      case "MYPENDINGAPPOINTMENT":
+      case "MYCURRENTAPPOINTMENT":
+      case "MYCOMPLETEDAPPOINTMENT":
+      case "MYREJECTEDAPPOINTMENT":
+      case "MYREQUESTEDPPOINTMENT":
+        return "Appointment";
+        break;
       default:
         return 'Generic';
     }
@@ -73,8 +80,6 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
     });
     searchQuery = { "$or" : searchQuery };
   }
-
-  console.log(filterQuery, searchFields, searchText, searchQuery);
 
   let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('SEARCH', context);
   mlSubChapterAccessControl = mlSubChapterAccessControl ? mlSubChapterAccessControl : {};
@@ -100,6 +105,9 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   if(!userProfile){
     return {count : count,data : data}
   }
+
+  let userId = context.userId;
+  let profileId = new MlUserContext().userProfileDetails(userId).profileId;
 
   /**
    * @module ["portfolio"]
@@ -262,7 +270,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "IDE", subChapterId: subChapterQuery } },
+      {'$match': {"port.status": "gone live", 'port.communityCode': "IDE", 'port.subChapterId': subChapterQuery } },
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -275,7 +283,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           "userId": "$userId",
           "ideas": [{
             "title": "$title",
-            "description": "$description"
+            "description": "$description",
+            "portfolioId":"$portfolioId"
           }],
           "chapterName": "$port.chapterName",
           "name": "$user.profile.firstName" + " " + "$user.profile.lastName",
@@ -680,6 +689,78 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       { $match: { "$and":  [ searchQuery, filterQuery ] } }
     ];
     data=mlDBController.aggregate('MlFollowings',pipeline,context);
+    count = data.length;
+  }
+
+  else if ( args.module === "myPendingAppointment" ) {
+    let pipeline = [
+      {
+        $lookup: {
+          from: "mlAppointmentMembers",
+          localField: "appointmentId",
+          foreignField: "appointmentId",
+          as: "members"
+        }
+      },
+      { "$unwind": "$members" },
+      { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Pending" } },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+    ];
+    data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
+    count = data.length;
+  }
+
+  else if ( args.module === "myCurrentAppointment" ) {
+    let pipeline = [
+      {
+        $lookup: {
+          from: "mlAppointmentMembers",
+          localField: "appointmentId",
+          foreignField: "appointmentId",
+          as: "members"
+        }
+      },
+      { "$unwind": "$members" },
+      { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Accepted" } },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+    ];
+    data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
+    count = data.length;
+  }
+
+  else if ( args.module === "myCompletedAppointment" ) {
+    let pipeline = [
+      {
+        $lookup: {
+          from: "mlAppointmentMembers",
+          localField: "appointmentId",
+          foreignField: "appointmentId",
+          as: "members"
+        }
+      },
+      { "$unwind": "$members" },
+      { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Completed" } },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+    ];
+    data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
+    count = data.length;
+  }
+
+  else if ( args.module === "myRejectedAppointment" ) {
+    let pipeline = [
+      {
+        $lookup: {
+          from: "mlAppointmentMembers",
+          localField: "appointmentId",
+          foreignField: "appointmentId",
+          as: "members"
+        }
+      },
+      { "$unwind": "$members" },
+      { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Rejected" } },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+    ];
+    data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
     count = data.length;
   }
 

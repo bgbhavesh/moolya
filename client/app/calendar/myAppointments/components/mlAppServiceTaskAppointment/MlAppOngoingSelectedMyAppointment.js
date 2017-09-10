@@ -64,21 +64,21 @@ class MlAppOngoingSelectedMyAppointment extends Component {
           service={service}
           daysRemaining={daysRemaining}
           appointment={appointment} />,
-        icon: <span className="ml my-ml-information_3"></span>
+        icon: <span className="ml fa fa-puzzle-piece"></span>
       },
       {
         name: 'Sessions',
         component: <MlAppOngoingMyAppointmentSession
           service={service}
           appointment={appointment}/>,
-        icon: <span className=""></span>
+        icon: <span className="ml flaticon-ml-file-1"></span>
       },
       {
         name: 'Info',
         component: <MlAppOngoingMyAppointmentInfo
           service={service}
           appointment={appointment}/>,
-        icon: <span className=""></span>
+        icon: <span className="ml my-ml-information_3"></span>
       }
 
     ];

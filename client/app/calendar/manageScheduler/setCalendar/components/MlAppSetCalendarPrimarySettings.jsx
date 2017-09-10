@@ -133,7 +133,7 @@ class MlAppSetCalendarPrimarySettings extends React.Component{
     return (
     <div className="step_form_wrap step1">
       <ScrollArea speed={0.8} className="step_form_wrap"smoothScrolling={true} default={true} >
-        <form>
+        <form className="calendar-settings">
           <div className="form-group">
             <label>
               <FontAwesome name="clock-o" className="fa-2x"/>

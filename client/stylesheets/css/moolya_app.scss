@@ -37,7 +37,7 @@ $menuTrans:all 0.5s linear;
 .marb0{margin-bottom: 0;}
 .moolya_app{transition:$menuTrans;left:0px;position:relative;}
 .moolya_app.slid{position: relative;left: 300px;}
-.app_header{background:#000; height: 62px; padding:0px 5px; line-height: 42px; text-align: center; border-top:3px solid $mlRed;
+.app_header{background:#000; height:64px; padding:0px 5px; line-height: 42px; text-align: center; border-top:3px solid $mlRed;
     a{color: $mlRed; font-size: 32px; margin-left: 8px; line-height: 56px;
       &:hover{color: $mlYellow;text-shadow:none;}
     }
@@ -81,16 +81,16 @@ $menuTrans:all 0.5s linear;
 .app_menu ul .menu_item.active_menu {background: $mlRed;}
 .app_menu ul .menu_item.active_menu:before {border-bottom: 20px solid $mlRed;}
 .app_menu ul .menu_item.active_menu .menu_in{color:#fff;}
-.app_menu ul .menu_item.inactive_menu {background: $mlGray;}
-.app_menu ul .menu_item.inactive_menu:before {border-bottom: 20px solid $mlGray;}
-.app_menu ul .menu_item.inactive_menu .menu_in{color:#8c8c8c;}
+.app_menu ul .menu_item.inactive_menu {background: $mlYellow; opacity: .5; cursor: not-allowed; a{cursor: not-allowed; }}
+.app_menu ul .menu_item.inactive_menu:before {border-bottom: 20px solid $mlYellow;}
+.app_menu ul .menu_item.inactive_menu .menu_in{}
 .app_menu ul li.menu_item:last-child{height: 32px;}
 .app_menu ul li.menu_item:last-child .menu_in{display: none;}
 .app_menu ul li.menu_item:last-child:after{display: none;}
 .app_menu ul li.menu_item:last-child .menu_item_in{height: 30px;margin-top: -15px;}
 .app_menu ul li.menu_item:last-child .menu_item_in:after{display: none;}
 .app_main_wrap{width:calc(100% - 94px);float: left;position: relative;background:#fff url(/images/bg.png);
-  h2{color: #ef4747;padding-bottom: 8px;border-bottom: 2px solid #ef4647;margin: 5px 0px 8px 0px;font-size: 20px;display: none;}
+  h2{color: #ef4747;padding-bottom: 8px;border-bottom: 2px solid #ef4647;margin: 5px 0px 8px 0px;font-size: 20px;}
   .app_padding_wrap{padding:10px 0px 0px 0px;}
   form{margin-top: 20px;}
   .form-group label{font-weight: normal;}
@@ -106,7 +106,7 @@ $menuTrans:all 0.5s linear;
   .ml_app_profile {border: 0px solid #ffc20e;box-sizing: border-box;position: fixed;top: 0;right: 0;padding: 0;border-radius: 0 0 0 100%;width: 2em;height: 2em;/*overflow: hidden;*/transition: all .25s ease-in;}
   .ml_app_profile:focus{outline: 0px;}
   .ml_app_profile.profile_open {background-color: $mlBlue;width: 253px;height: 203px;outline: none;opacity: inherit;border: 1px solid #ffc20e;z-index: 20;}
-  .ml_app_profile h1 {box-sizing: border-box; font-size: 100%; text-transform: uppercase; font-weight: normal; position: fixed; top: 12px; right: 10px; margin: 0; border-radius: 50%; z-index: 50; cursor: pointer; background-image: url(images/img.png); width: 40px; height: 40px;border:2px solid $mlRed;background-size:cover;}
+  .ml_app_profile h1 {box-sizing: border-box; font-size: 100%; text-transform: uppercase; font-weight: normal; position: fixed; top:8px; right: 10px; margin: 0; border-radius: 50%; z-index: 50; cursor: pointer; background-image: url(images/img.png); width: 40px; height: 40px;border:2px solid $mlRed;background-size:cover;}
   .ml_app_profile ol, .ml_app_profile li {margin: 0;padding: 0;list-style-type: none;}
   .ml_app_profile li {position: absolute;}
   .ml_app_profile li, .ml_app_profile a {display: block;box-sizing: border-box;/*position: absolute;*//*position: relative;*/top: -5em;right: -5em;/*border: 1px dotted #f00;*/transition: all 0.2s ease-in;}
@@ -140,7 +140,7 @@ $menuTrans:all 0.5s linear;
   .ml_app_profile.profile_open>ol>li .my-ml-exit_or_logoff{ margin: 7px 0 0 4px; font-size: 18px; }
 
   .header_search{/* position: absolute;right: 90px; */}
-  .notification{/* position: absolute;right: 55px;float:right */margin-right: 55px;margin-left:10px;}
+  .notification{/* position: absolute;right: 55px;float:right */margin-right: 55px;margin-left:10px; margin-top:-4px;}
   .notification .noti_count{color: $mlBlack;background: $mlYellow; border-radius: 100%; width: 15px; height: 15px; font-size: 10px; /* padding: 5px; */ line-height: 15px; position: absolute; margin-left: 8px; top: 7px; right: 0px;}
   .app_header {
       .ml{text-shadow:none;}
@@ -591,7 +591,7 @@ background:$mlGray; position: absolute; top: 0; z-index: 100; width: 100%;
     }
   }
 }
-.ideators_list .ideators_list_block h3{padding: 10px; font-size: 14px; font-weight: normal; color: #ffe144; border-bottom: #161e27 solid 1px; text-overflow: ellipsis;overflow: hidden; white-space: nowrap; width: 80%; margin: 0 auto; height: 36px;}
+.ideators_list .ideators_list_block h3{padding: 10px; font-size: 14px; font-weight: normal; color: #ffe144; border-bottom: #161e27 solid 1px; text-overflow: ellipsis;overflow: hidden; white-space: nowrap; width:100%; margin: 0 auto; height: 36px;}
 .ideators_list .ideators_list_block .list_icon{font-size: 22px; color: #fff; border-top: #34404e solid 1px; padding: 12px 0px 0px; font-weight: normal;}
 .ideators_list .ideators_list_block .list_icon .ml{background: #B9C5CC; border-radius: 50%; padding: 14px; color: #273545; text-shadow: 0px 1px 1px #eee;font-size: 42px;display: inline-block;border: 2px solid #161e27;}
 .ideators_list .ideators_list_block .ml2{ position: absolute; right: 50px; top: 58px; background: #FFF; border-radius: 50%; padding: 2px;border: #273545 solid 1px;}
@@ -1975,6 +1975,13 @@ p{margin-top:10px;}
   text-align: center;
   font-size: 11px;
   padding: 3px;}
+.context_name{padding: 1px 7px;
+  color: rgb(255, 255, 255);
+  line-height: 18px;
+  border-radius: 2px;
+  font-size: 12px;
+  margin-top: -15px;
+  text-shadow: none;}
 
 .act-btn{
   .up{display:none}
@@ -1995,7 +2002,7 @@ p{margin-top:10px;}
 }
 
 .notifications_list .popover-content{padding: 0px !important;}
-.ml_app_notification ul{width: 250px;margin-bottom: 0px;max-height: 200px;overflow-y: auto;}
+.ml_app_notification ul{width: 250px;margin-bottom: 0px;max-height: 200px;overflow-y: auto; overflow-x: hidden;}
 .notifications_list{
   .popover-title{
     background-color: $mlRed !important;color: $mlWhite;
@@ -2255,3 +2262,12 @@ p{margin-top:10px;}
   font-size: 12px; top: 54px;
 }
 .card_block.appointment_card .ml{margin-top: 15px;}
+
+
+.calendar-settings .form-group .ml, .calendar-settings .form-group .fa {
+  width: 38px;
+  float: left;
+  font-size: 25px;
+  line-height: 30px;
+  text-align: center;
+}

@@ -55,7 +55,7 @@ export default class MlChartSubTabs extends React.Component{
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Profit,Revenu & Liability",
+        title: "Profit,Revenue & Liability",
         component: <MlProfitRevenue key="2" client={client} isAdmin={true}
                                     getStartupProfitRevenue={this.getStartupProfitRevenue.bind(this)}
                                     portfolioDetailsId={this.props.portfolioDetailsId}
@@ -73,7 +73,7 @@ export default class MlChartSubTabs extends React.Component{
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
-        title: "Employee Breakup/Dept",
+        title: "Employee Breakup At Department",
         component: <MlEmployeeBreakup key="4" client={client} isAdmin={true}
                                       getStartupEmployeeBreakup={this.getStartupEmployeeBreakup.bind(this)}
                                       portfolioDetailsId={this.props.portfolioDetailsId}

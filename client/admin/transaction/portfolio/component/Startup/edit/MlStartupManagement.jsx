@@ -353,8 +353,8 @@ export default class MlStartupManagement extends React.Component{
                   {managementArr.map(function (user, index) {
                     return (
                       <div className="col-lg-2 col-md-3 col-sm-3" key={index}>
-                        <div className="list_block notrans" onClick={that.onSelectUser.bind(that, index)}>
-                          <div className="hex_outer"><img src={user.logo ? user.logo.fileUrl : "/images/def_profile.png"}/></div>
+                        <div className="list_block" onClick={that.onSelectUser.bind(that, index)}>
+                          <div className="hex_outer"><img src={user.logo ? user.logo.fileUrl : "/images/def_profile.png"} className="p_image"/></div>
                           <h3>{user.firstName?user.firstName:""}</h3>
                         </div>
                       </div>

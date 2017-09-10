@@ -42,7 +42,7 @@ export default class MlStartupViewAboutLanding extends Component {
     this.setState({aboutStartup: true})
     this.props.backClickHandler(this.getStartUpState.bind(this))
   }
-  
+
   getStartUpState() {
     this.setState({aboutStartup: false})
     this.props.backClickHandler();
@@ -96,7 +96,7 @@ export default class MlStartupViewAboutLanding extends Component {
                       empty="fa fa-star-o empty"
                       full="fa fa-star fill"
                       fractions={2}
-                      initialRate={this.state.startupAboutUs.rating && this.state.startupAboutUs.rating.rating ? Number(this.state.startupAboutUs.rating.rating) : 0}
+                      initialRate={this.state.startupAboutUs.rating && this.state.startupAboutUs.rating.rating ? Number(this.state.startupAboutUs.rating.rating) : 4}
                       readonly={true}
                     />
                   </div>

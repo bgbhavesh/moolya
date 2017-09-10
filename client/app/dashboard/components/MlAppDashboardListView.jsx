@@ -168,6 +168,7 @@ export default class MlCommunityList extends Component {
             </a>
           </div>
         <div className="col-md-12">
+          <h2>Communities</h2>
           <div className="row ideators_list">
             {list}
           </div>

@@ -87,6 +87,7 @@ class MlAppProfileHeader extends Component {
 
   render() {
     const {data} = this.state
+    let isDisabled = (!this.state.data || (this.state.data && this.state.data.isAllowRegisterAs))?true:false;
 
     return (
       <div>
@@ -108,8 +109,8 @@ class MlAppProfileHeader extends Component {
                   <span className="ml my-ml-blank_Profile_3"></span>
                 </a>
               </li>
-                <li data-toggle="tooltip" title="Registration" data-placement="right">
-                  <a href="" onClick={this.registrationRedirect.bind(this)}><span className="ml my-ml-Switch_Profile_Log_As">
+                <li data-toggle={isDisabled?"":"tooltip"} title={isDisabled?"":"Registration"} data-placement="right">
+                  <a href="" className={isDisabled?"disable":""} onClick={this.registrationRedirect.bind(this)}><span className="ml my-ml-Switch_Profile_Log_As">
                   </span></a>
                 </li>
               <li data-toggle="tooltip" title="Switch Profile" data-placement="right">

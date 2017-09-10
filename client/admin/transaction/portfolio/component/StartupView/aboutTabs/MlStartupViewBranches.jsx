@@ -120,10 +120,16 @@ export default class MlStartupViewBranches extends React.Component {
                         {details.branchName} <br />
                       </h3>
                       <p>
-                        {details.branchAddress1} <br />
+                        #{details.branchAddress1} {details.branchAddress2}<br />
                       </p>
                       <p>
-                        {details.branchAddress2} <br />
+                        {details.branchLandmark} {details.branchArea?',' + details.branchArea:''}<br/>
+                      </p>
+                      <p>
+                        {details.branchCity} {details.branchState?',' + details.branchState:''}<br/>
+                      </p>
+                      <p>
+                        Phone: {details.branchPhoneNumber}
                       </p>
                     </div>
                   </div>

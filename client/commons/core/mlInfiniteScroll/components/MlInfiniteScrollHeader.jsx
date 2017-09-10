@@ -9,6 +9,7 @@
  * Imports libs and components
  */
 import React, {Component} from 'react';
+import AlphaSearch from "./../../../../commons/components/alphaSearch/AlphaSearch";
 
 export default class MlInfiniteScrollHeader extends Component {
 
@@ -24,7 +25,11 @@ export default class MlInfiniteScrollHeader extends Component {
   }
 
   handleChange(event) {
-    this.setState({searchText: event.target.value});
+    this.setState({
+      searchText: event.target.value
+    }, function () {
+      this.updateSearch(event);
+    }.bind(this));
   }
 
   updateSearch(evt) {
@@ -57,6 +62,11 @@ export default class MlInfiniteScrollHeader extends Component {
           </form>
           : ""
         }
+        { config.alphabeticSearch ?
+            <AlphaSearch onAlphaSearchChange={props.onAlphaSearchChange} />
+          : ""
+        }
+
         <br className="clearfix" />
       </div>
     )

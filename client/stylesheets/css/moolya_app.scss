@@ -81,16 +81,16 @@ $menuTrans:all 0.5s linear;
 .app_menu ul .menu_item.active_menu {background: $mlRed;}
 .app_menu ul .menu_item.active_menu:before {border-bottom: 20px solid $mlRed;}
 .app_menu ul .menu_item.active_menu .menu_in{color:#fff;}
-.app_menu ul .menu_item.inactive_menu {background: $mlGray;}
-.app_menu ul .menu_item.inactive_menu:before {border-bottom: 20px solid $mlGray;}
-.app_menu ul .menu_item.inactive_menu .menu_in{color:#8c8c8c;}
+.app_menu ul .menu_item.inactive_menu {background: $mlYellow; opacity: .5; cursor: not-allowed; a{cursor: not-allowed; }}
+.app_menu ul .menu_item.inactive_menu:before {border-bottom: 20px solid $mlYellow;}
+.app_menu ul .menu_item.inactive_menu .menu_in{}
 .app_menu ul li.menu_item:last-child{height: 32px;}
 .app_menu ul li.menu_item:last-child .menu_in{display: none;}
 .app_menu ul li.menu_item:last-child:after{display: none;}
 .app_menu ul li.menu_item:last-child .menu_item_in{height: 30px;margin-top: -15px;}
 .app_menu ul li.menu_item:last-child .menu_item_in:after{display: none;}
 .app_main_wrap{width:calc(100% - 94px);float: left;position: relative;background:#fff url(/images/bg.png);
-  h2{color: #ef4747;padding-bottom: 8px;border-bottom: 2px solid #ef4647;margin: 5px 0px 8px 0px;font-size: 20px;display: none;}
+  h2{color: #ef4747;padding-bottom: 8px;border-bottom: 2px solid #ef4647;margin: 5px 0px 8px 0px;font-size: 20px;}
   .app_padding_wrap{padding:10px 0px 0px 0px;}
   form{margin-top: 20px;}
   .form-group label{font-weight: normal;}
@@ -2164,8 +2164,12 @@ p{margin-top:10px;}
   top: -5px;
   right: -5px;
   border-radius: 50%; border:1px solid #fff;
+  line-height: 18px;
+  color: #fff;
+  font-size: 12px;
 }
 .card_block .active{background: #5cb85c;}
+.card_block .active.warning{background: #f18f27;}
 .card_block .inactive{background:#d9534f;}
 .card_block h3 {
   padding: 10px;
@@ -2218,6 +2222,14 @@ p{margin-top:10px;}
   height: 74px;
   margin-top: 2px;
 }
+.card_block .c_image{
+  border-radius: 50%;
+  display: inline-block;
+  border: 2px solid #161e27;
+  width: 74px;
+  height: 74px;
+  margin-top: 2px;
+}
 .card_block .block_footer {
   height: 42px;
 }
@@ -2230,4 +2242,25 @@ p{margin-top:10px;}
   margin: 0 auto;
   display: inline-block;
   margin-top: -6px;
+}
+.appointment_card .date{ text-align: center;
+  background: none;
+  font-size: 12px;
+  width: 100%;}
+.card_block.appointment_card .active{    top: 40px;
+  right: 5px;}
+.card_block.appointment_card .profile-text {
+  position: absolute;
+  left: 32px;
+  font-size: 12px; top: 54px;
+}
+.card_block.appointment_card .ml{margin-top: 15px;}
+
+
+.calendar-settings .form-group .ml, .calendar-settings .form-group .fa {
+  width: 38px;
+  float: left;
+  font-size: 25px;
+  line-height: 30px;
+  text-align: center;
 }

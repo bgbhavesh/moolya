@@ -20,7 +20,7 @@ export default class IdeatorCompanyHardReg extends React.Component{
         {name: 'Social Links','icon':<span className="ml ml-social-Links"></span>,  component: <Step4 {...props} />},
         {name: 'KYC\'s Documents','icon':<span className="ml ml-kyc-document"></span>,  component: <Step5 {...props} />},
         {name: 'Payment Gateway','icon':<span className="ml ml-payments"></span>, component: <Step6 {...props} />},
-        {name: 'History','icon':<span className="ml ml-moolya-symbol"></span>, component: <Step7 {...props} />}];
+        {name: 'History','icon':<span className="ml my-ml-history"></span>, component: <Step7 {...props} />}];
       return hardRegSteps;
     }
     componentWillMount(){

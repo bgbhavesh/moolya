@@ -119,7 +119,7 @@ export default class MlStartupViewAboutUs extends React.Component {
 
   render(){
     let clientsArray = this.state.startupAboutUsList.clients || [];
-    let rating = parseInt(this.state.startupAboutUsList.rating&&this.state.startupAboutUsList.rating.rating?this.state.startupAboutUsList.rating.rating:0);
+    let rating = parseInt(this.state.startupAboutUsList.rating&&this.state.startupAboutUsList.rating.rating?this.state.startupAboutUsList.rating.rating:4);
     return (
       <div>
           <h2>About</h2>

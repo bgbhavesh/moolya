@@ -156,7 +156,7 @@ export default class MlInstitutionEditChart extends React.Component {
         },
         {
           field:"Liablity",
-          name:"Liablity"
+          name:"Liability"
         }
       ],
       prlX = function(d) {
@@ -168,7 +168,7 @@ export default class MlInstitutionEditChart extends React.Component {
 
       xScale = 'ordinal',
       yTicks = [1, "%"],
-      prlXLabel = "Profit, Revenue & Liablity",
+      prlXLabel = "Profit, Revenue & Liability",
       prlYLabel = "Value",
 
       reviewTitle = "Review of Company",

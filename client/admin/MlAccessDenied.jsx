@@ -6,6 +6,9 @@ export default class MlAccessDenied extends React.Component{
   componentDidMount()
   {
   }
+  goBack() {
+    window.history.back();
+  }
   render(){
     return (
       <div className="app_main_wrap">
@@ -13,8 +16,8 @@ export default class MlAccessDenied extends React.Component{
           <div className="hex_outer">
             <FontAwesome name='ban'/>
             <h3>Access Denied</h3>
-            <p>Return to the <a href="#">previous page</a> or
-              go back to your <a href={"https://"+window.location.host}>dashboard</a>.</p>
+            <p>Return to the <a href="" onClick={this.goBack}>previous page</a> or
+              go back to your <a href="/admin">dashboard</a>.</p>
           </div>
 
         </div>

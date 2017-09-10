@@ -759,8 +759,11 @@ button:focus{outline: 0;}
 
 
 .button-with-icon .btn{position: relative;padding: 6px 12px 6px 37px;margin-right: 40px;font-weight: bold;background: #b9c5cc;color: #273545;border: #939ea5 solid 1px; text-shadow: 0px 1px 1px #fff;outline:0;}
-.button-with-icon .btn-label {left: -10px; display: inline-block; background: #EF4647; border-radius: 50%; height: 40px; width: 40px; top: -4px; line-height: 40px; text-align: center; position: absolute; color: #fff;}
+.button-with-icon .btn-label {left: -10px; display: inline-block; background: #273545; border-radius: 50%; height: 40px; width: 40px; top: -4px; line-height: 40px; text-align: center; position: absolute; color: #fff;}
 .button-with-icon .btn-label .ml{text-shadow: none}
+
+.button-with-icon .btn.pre_verify{background: #d9534f;color: #fff;border: #d43f3a solid 1px; text-shadow: 0px 1px 1px #333;}
+.button-with-icon .btn.post_verify{background: #5cb85c;color: #fff;border: #4cae4c solid 1px; text-shadow: 0px 1px 1px #333;}
 
 .profilestep4 .panel{border:none;}
 .profilestep4 .panel-body {padding: 0px; }

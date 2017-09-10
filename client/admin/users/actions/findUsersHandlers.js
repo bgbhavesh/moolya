@@ -169,6 +169,7 @@ export async function findUserRegistrationActionHandler(registrationId) {
               registrationId
           }
           isActive
+          isShowOnMap
         }
       }
     `,
@@ -209,7 +210,7 @@ export async function fetchIdeaActionHandler(portfolioId) {
                     portfolioId
                     title
                     isIdeaTitlePrivate
-                    description
+                    ideaDescription
                     isIdeaPrivate
                     userId
                     isActive

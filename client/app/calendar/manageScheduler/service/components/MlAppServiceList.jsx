@@ -63,6 +63,7 @@ export default class MlAppServiceList extends Component {
    */
   render() {
     const { services } = this.state;
+    const that = this;
     return (
       <div className="app_main_wrap" style={{'overflow':'auto'}}>
         <div className="app_padding_wrap">
@@ -81,10 +82,17 @@ export default class MlAppServiceList extends Component {
               {services && services.map((service, index) => {
                 return (
                   <div className="col-lg-2 col-md-4 col-sm-4" key={index}>
-                    <div className="list_block img_list_block notrans" onClick={()=>this.updateService(service._id, service.profileId)}>
-                      <img src="/images/activity_1.jpg" />
-                      <h3>{service.displayName}</h3>
-                    </div>
+                    <div className="card_block"  onClick={()=>that.updateService(service._id, service.profileId)}><h3>{service.displayName}</h3>
+                      <div className="clearfix"></div>
+                      <div className="list_icon mart0">
+                        <span className="price">Rs. {service.finalAmount ? service.finalAmount.toFixed(2).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") : '0.00'}</span>
+                        <span className="price pull-right">{service.status ? 'TRUE' : 'FALSE'}</span>
+                        <div className="clearfix"></div>
+                        <i className="c_image ml my-ml-Ideator"></i>
+                        <div className="clearfix"></div>
+                        <span className="price">{service.duration ? `${service.duration.hours ? service.duration.hours : 0} Hrs ${service.duration.minutes ? service.duration.minutes : 0} Mins` : ''}</span>
+                        <span className="price pull-right">{`${service.noOfSession ? service.noOfSession : '0'} Sessions`}</span>
+                      </div><div className="block_footer"><span>{(service.termsAndCondition && service.termsAndCondition.isCancelable) ? 'CAN BE CANCELLED' : 'NON - CANCELLABLE'}</span></div></div>
                   </div>
                 )
               })}

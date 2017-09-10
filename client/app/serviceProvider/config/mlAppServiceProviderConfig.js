@@ -24,6 +24,8 @@ export const mlAppServiceProviderConfig = new MlAppViewer({
     filter: true,
     filterComponent: <MlAppFilterContainer />,
     filterData: filterData,
+    alphabeticSearch: true,
+    alphabeticSearchField: "about.aboutTitle",
     search: true,
     searchFields: ["about.aboutTitle","chapterName","accountType","communityType","firstName","lastName"]
   },

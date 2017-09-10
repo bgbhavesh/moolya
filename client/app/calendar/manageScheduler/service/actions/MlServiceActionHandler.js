@@ -207,6 +207,16 @@ export async function fetchServicesActionHandler (profileId) {
         displayName
         profileId
         _id
+        duration {
+          hours
+          minutes
+        }
+        finalAmount
+        termsAndCondition{
+          isCancelable
+        }
+        noOfSession
+        status
       }
     }
     `,
@@ -252,8 +262,16 @@ export async function fetchBeSpokeServicesActionHandler (portfolioId) {
       portfolioId:portfolioId
     }
   });
-  const services = result.data.fetchBeSpokeServices;
-  return services;
+  const response = result.data.fetchBeSpokeServices;
+  // let service = _.omit(response, '__typename');
+  // service.duration = _.omit(service.duration, '__typename');
+  // // let attachments = [];
+  // // _.each(service.attachments, (item, say) => {
+  // //   let value = _.omit(item, '__typename')
+  // //   attachments.push(value)
+  // // });
+  // // service.attachments = attachments;
+  return response;
 }
 
 

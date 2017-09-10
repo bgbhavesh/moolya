@@ -1641,6 +1641,7 @@ MlResolver.MlQueryResolver['findRegistrationInfoUser'] = (obj, args, context, in
       users = mlDBController.findOne('users', userId, context)
       response.externalUserProfiles = users.profile.externalUserProfiles
       response.isActive = users.profile.isActive
+      response.isShowOnMap = users.profile.isShowOnMap
     }
     return response;
   }

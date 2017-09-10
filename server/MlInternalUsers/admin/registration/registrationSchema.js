@@ -218,6 +218,7 @@ let registrationSchema = `
          firstName : String
          profileImage : String
          headerCommunityDisplay : String
+         isShowOnMap : Boolean
     }
     
    

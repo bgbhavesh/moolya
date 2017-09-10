@@ -13,7 +13,7 @@ import {initalizeFloatLabel} from '../../../utils/formElemUtil';
 import {fetchIdentityTypes} from "../actions/findRegistration";
 import {findRegistrationActionHandler} from "../actions/findRegistration";
 import _ from 'lodash';
-import {mlFieldValidations} from '../../../../commons/validations/mlfieldValidation';
+import {mlFieldValidations, validatedPhoneNumber} from '../../../../commons/validations/mlfieldValidation';
 import MlLoader from '../../../../commons/components/loader/loader'
 import {findAccountTypeActionHandler} from '../../../settings/accountType/actions/findAccountTypeAction'
 import moment from 'moment'
@@ -116,7 +116,8 @@ export default class step1 extends React.Component{
       transactionId : this.props.registrationData.transactionId,
       selectedAccountsType:details.accountType,
       registrationDate:details.registrationDate,
-      isOfficeBearer : isOFB
+      isOfficeBearer : isOFB,
+      isUpdate: false
           });
     //this.settingIdentity(details.identityType);
 
@@ -138,8 +139,12 @@ export default class step1 extends React.Component{
     this.fetchSubChapterDetails()
 
   }
-  optionsBySelectCountry(value){
-    this.setState({country:value})
+  optionsBySelectCountry(value, callback, label){
+    this.setState({
+      country: value,
+      countryCode: label.code,
+      isUpdate: true
+    })
   }
   optionsBySelectCluster(value){
     this.setState({cluster:value})
@@ -241,8 +246,13 @@ export default class step1 extends React.Component{
 
   async updateregistrationInfo() {
     let ret = mlFieldValidations(this.refs)
+    let {countryCode, isUpdate} = this.state;
+    let contactNumber = this.refs.contactNumber && this.refs.contactNumber.value;
+    let isValidPhoneNumber = validatedPhoneNumber(countryCode, contactNumber);
     if (ret) {
       toastr.error(ret);
+    } else if (isUpdate && !isValidPhoneNumber) {
+      toastr.error('Please enter a valid contact number');
     } else {
 
       let Details = {
@@ -460,6 +470,7 @@ export default class step1 extends React.Component{
  data:fetchCountries {
     value:_id
     label:country
+    code: countryCode
   }
 }`
 

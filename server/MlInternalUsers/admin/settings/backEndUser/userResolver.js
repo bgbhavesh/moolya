@@ -533,6 +533,10 @@ MlResolver.MlQueryResolver['fetchsubChapterUserDepSubDep'] = (obj, args, context
 }
 
 //todo://generic way of checking platform admin
+/**
+ * Users left Nav
+ * @Note: "updateUserShowOnMap" both have to be merged
+ * */
 MlResolver.MlMutationResolver['deActivateUser'] = (obj, args, context, info) => {
   // MlSubChapterPreConditions.hasEditPermSubChapterAccessControl(context);
   var loggedInUser = new MlAdminUserContext().userProfileDetails(context.userId);

@@ -8,8 +8,8 @@ import _ from "lodash";
 import portfolioValidationRepo from "./portfolioValidation";
 import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlAlertNotification from '../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
-import mlNonMoolyaAccess from "../core/non-moolyaAccessControl/mlNonMoolyaAccess"
 import MlSubChapterAccessControl from '../../../mlAuthorization/mlSubChapterAccessControl'
+import {getCommunityName} from '../../../commons/utils';
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 import mlSmsConstants from '../../../mlNotifications/mlSmsNotifications/mlSmsConstants'
 
@@ -23,8 +23,11 @@ MlResolver.MlQueryResolver['fetchPortfolioDetailsByUserId'] = (obj, args, contex
     if (defaultProfile) {
       var defaultCommunity = defaultProfile.communityDefCode || {};
       var portfolio = MlPortfolioDetails.findOne({$and: [{userId: context.userId}, {communityCode: defaultCommunity}, {profileId: defaultProfile.profileId}]})
-      if (portfolio)
-        return portfolio;
+      if (portfolio) {
+          var data = MlResolver.MlQueryResolver['fetchPortfolioImage'](obj, {portfoliodetailsId: portfolio._id}, context, info);
+          portfolio.portfolioImage = data.portfolioImage
+          return portfolio;
+      }
       else
         console.log("portfolio not found")
     }
@@ -52,6 +55,7 @@ MlResolver.MlMutationResolver['createPortfolioRequest'] = (obj, args, context, i
         }
           user = MlPortfolioDetails.findOne({"$and": [{'userId': portfolioDetails.userId}, {'communityType': portfolioDetails.communityType}, {profileId:portfolioDetails.profileId}]})
           if (!user || portfolioDetails.communityType == 'Ideators') {
+            portfolioDetails['createdAt'] = new Date();
               ret = mlDBController.insert('MlPortfolioDetails', portfolioDetails, context)
               if(ret){
                   switch (portfolioDetails.communityType){
@@ -434,7 +438,6 @@ MlResolver.MlQueryResolver['fetchPortfolioByReg'] = (obj, args, context, info) =
       subChapterId = registrationDetails && registrationDetails.registrationInfo && registrationDetails.registrationInfo.subChapterId ? registrationDetails && registrationDetails.registrationInfo && registrationDetails.registrationInfo.subChapterId : ''
     }
     var dataContext = MlSubChapterAccessControl.getAccessControl('VIEW', context, subChapterId, false)
-    // response.canAccess = mlNonMoolyaAccess.canExternalUserViewReg(args.registrationId, context)
     response.canAccess = dataContext.hasAccess
   }
   return response
@@ -448,7 +451,6 @@ MlResolver.MlQueryResolver['fetchPortfolioClusterId'] = (obj, args, context, inf
   if (args.portfoliodetailsId) {
     let portfolio = MlPortfolioDetails.findOne({"_id": args.portfoliodetailsId}) || {}
     var subChapterId = portfolio?portfolio.subChapterId:''
-    // portfolio.canAccess = mlNonMoolyaAccess.canExternalUserView(args.portfoliodetailsId, context)
     var dataContext = MlSubChapterAccessControl.getAccessControl('VIEW', context, subChapterId, false)
     portfolio.canAccess = dataContext.hasAccess
     return portfolio;
@@ -460,6 +462,7 @@ MlResolver.MlQueryResolver['fetchPortfolioImage'] = (obj, args, context, info) =
     var portfolioImage = ""
     var response = ""
     let portfolio = MlPortfolioDetails.findOne({_id: args.portfoliodetailsId}) || {}
+    var defaultProfile = new MlUserContext().userProfileDetails(portfolio.userId)
     switch (portfolio.communityCode) {
       case 'IDE': {
         response = MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'](obj, args, context, info) || {}
@@ -498,6 +501,8 @@ MlResolver.MlQueryResolver['fetchPortfolioImage'] = (obj, args, context, info) =
         break;
     }
     portfolio.portfolioImage = portfolioImage
+    portfolio.portfolioUserName = defaultProfile.firstName +' '+ defaultProfile.lastName  /**attached first and last name to portfolioUserName*/
+    portfolio.communityType = getCommunityName(portfolio.communityCode)
     return portfolio;
   }
 }

@@ -21,6 +21,7 @@ import {MlAdminProfile} from '../../../admin/layouts/header/MlAdminHeader'
 import {getAdminUserContext} from '../../../commons/getAdminUserContext'
 import {findMyProfileActionHandler} from '../actions/getProfileDetails'
 import '../../../../node_modules/cropperjs/dist/cropper.min.css';
+import '../../../stylesheets/css/cropper.css';
 
 export default class MlMyProfile extends React.Component {
 
@@ -443,6 +444,9 @@ export default class MlMyProfile extends React.Component {
     this.setState({
       uploadingAvatar: true,
     });
+    if (!this.state.avatarSrc) {
+      return;
+    }
     if (typeof this.cropper.getCroppedCanvas() === 'undefined') {
       return;
     }
@@ -542,33 +546,40 @@ export default class MlMyProfile extends React.Component {
                   Choose your profile picture.
                 </Modal.Header>
                 <Modal.Body>
+                  {this.state.uploadingAvatar ? <MlLoader/> : ''}
                   <div style={{ width: '100%' }}>
-                    <label htmlFor="avatar" className="btn btn-primary btn-file">
-                      <i className="glyphicon glyphicon-folder-open" style={{ paddingRight: 15 }} />
-                      Browse Photo <input accept=".jpeg,.png,.jpg," id="avatar" type="file" onChange={this.onChangeAvatarSrc} style={{ display: 'none' }} />
-                    </label>
+                    <center>
+                      <label htmlFor="avatar" className="">
+                        <a className="mlUpload_btn">Browse Image</a>
+                      </label>
+                    </center>
+                    <input accept=".jpeg,.png,.jpg," id="avatar" type="file" onChange={this.onChangeAvatarSrc} style={{ display: 'none' }} />
                     <br />
                     <br />
-                    <Cropper
-                      zoomTo={1}
-                      viewMode={1}
-                      style={{ height: 350, width: '100%' }}
-                      aspectRatio={1 / 1}
-                      guides={false}
-                      src={this.state.avatarSrc}
-                      ref={(cropper) => { this.cropper = cropper; }}
-                      onChange
-                    />
+                    <div className="circle-cropper">
+                      <Cropper
+                        zoomTo={1}
+                        viewMode={1}
+                        style={{ height: 350, width: '100%' }}
+                        aspectRatio={1 / 1}
+                        guides={false}
+                        src={this.state.avatarSrc}
+                        ref={(cropper) => { this.cropper = cropper; }}
+                        onChange
+                        center
+                      />
+                    </div>
                   </div>
                 </Modal.Body>
                 <Modal.Footer>
-                  <button disabled={this.state.uploadingAvatar} className="btn btn-danger" onClick={this.toggleModal.bind(this)}>
-                    <i className="fa fa-close" /> Close
-                  </button>
-                  <button onClick={this.handleUploadAvatar} disabled={this.state.uploadingAvatar} className="btn btn-primary" >
-                    {this.state.uploadingAvatar ? <i className="fa fa-spinner fa-spin" /> : <i className="fa fa-upload" />}
-                    {this.state.uploadingAvatr ? 'Uploading' : 'Upload'}
-                  </button>
+                  <div className="form-group">
+                    <a disabled={this.state.uploadingAvatar} className="mlUpload_btn" onClick={this.toggleModal.bind(this)}>
+                      Close
+                    </a>
+                    <a onClick={this.handleUploadAvatar} disabled={this.state.uploadingAvatar} className="mlUpload_btn" >
+                      Upload
+                    </a>
+                  </div>
                 </Modal.Footer>
               </Modal>
               <div className="col-md-6">

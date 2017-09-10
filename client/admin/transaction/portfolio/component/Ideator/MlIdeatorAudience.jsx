@@ -180,14 +180,11 @@ export default class MlIdeatorAudience extends React.Component{
             <div className="panel panel-default panel-form">
               <div className="panel-heading">
                 Audience
+                <FontAwesome name='unlock' className="input_icon req_header_icon un_lock" id="isAudiencePrivate" onClick={this.onClick.bind(this, "audienceDescription", "isAudiencePrivate")}/>
               </div>
               <div className="panel-body">
-
                 <div className="form-group nomargin-bottom">
-                  <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description } name="audienceDescription" onBlur={this.handleBlur.bind(this)}></textarea>
-                  <FontAwesome name='unlock' className="input_icon req_textarea_icon un_lock" id="isAudiencePrivate" onClick={this.onClick.bind(this, "audienceDescription", "isAudiencePrivate")}/>
-                </div>
-
+                  <textarea placeholder="Describe..." className="form-control" id="cl_about" defaultValue={description } name="audienceDescription" onBlur={this.handleBlur.bind(this)}></textarea>                </div>
               </div>
             </div>
             <div className="panel panel-default">
@@ -201,9 +198,7 @@ export default class MlIdeatorAudience extends React.Component{
                     </figure>
                   </label>
                 </div>
-
                 {audienceImages}
-
               </div>
             </div>
 

@@ -32,8 +32,10 @@ export const
     filter: true,
     filterComponent: <MlAppFilterContainer />,
     filterData: filterData,
+    alphabeticSearch: true,
+    alphabeticSearchField: "ideas.title",
     search: true,
-    searchFields: ["ideas.title"]
+    searchFields: ["ideas.title", "accountType", "name", "accountType"]
   },
   graphQlQuery: gql`
               query ($module: String!, $queryProperty: appGenericSearchQueryProperty) {
@@ -47,7 +49,7 @@ export const
                           isIdeaPrivate
                           isIdeaTitlePrivate
                           title
-                          description
+                          ideaDescription
                           portfolioId
                         }
                         accountType

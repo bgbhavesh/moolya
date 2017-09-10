@@ -3,8 +3,6 @@
  */
 import React, {Component} from "react";
 import {getNotifications} from "../../actions/fetchUserDetails";
-import mlConversationUtils from '../../../../commons/conversations/utils/mlconversationUtils';
-import {render} from "react-dom";
 var FontAwesome = require('react-fontawesome');
 import  PopOverAction from '../../../../commons/components/popover/PopOverAction';
 import MlAppNotifications from './MlAppNotifications'

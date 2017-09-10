@@ -80,7 +80,7 @@ export default class MlStartupEditTemplate extends React.Component {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Data",
-        component: <MlStartupData key="4" isApp={false} client={client} getDataDetails={this.getDataDetails.bind(this)}
+        component: <MlStartupData key="4" isApp={false} isAdmin={true} client={client} getDataDetails={this.getDataDetails.bind(this)}
                                   portfolioDetailsId={this.props.portfolioDetailsId}/>
       },
       {

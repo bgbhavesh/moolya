@@ -5,7 +5,6 @@
 import MlAdminUserContext from './mlAdminUserContext'
 import { parse, buildASTSchema } from 'graphql';
 import MlResolver from '../commons/mlResolverDef';
-import mlNonMoolyaAccess from "../MlInternalUsers/admin/core/non-moolyaAccessControl/mlNonMoolyaAccess"
 
 var _ = require('lodash');
 

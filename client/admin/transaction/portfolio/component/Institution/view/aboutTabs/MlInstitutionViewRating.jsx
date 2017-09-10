@@ -15,7 +15,7 @@ export default class MlInstitutionViewRating extends Component {
 
   render() {
     console.log(this.props)
-    let rating = parseInt(this.props.ratingDetails && this.props.ratingDetails.rating ? this.props.ratingDetails.rating : 0);
+    let rating = parseInt(this.props.ratingDetails && this.props.ratingDetails.rating ? this.props.ratingDetails.rating : 4);
     return (
       <div className="requested_input">
         <div className="col-lg-12">

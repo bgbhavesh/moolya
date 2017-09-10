@@ -13,8 +13,8 @@ class Notifications{
         rkConversation.socketUtils.listenMessage(rkConversation.socket, 'get_notification', callback);
     }
 
-    updateNotification(rkConversation, callback){
-      rkConversation.socketUtils.emitMessage(rkConversation.socket, 'ack_notification', callback);
+    updateNotification(rkConversation, payload, callback){
+      rkConversation.socketUtils.emitMessage(rkConversation.socket, 'ack_notification', payload, callback);
     }
 }
 

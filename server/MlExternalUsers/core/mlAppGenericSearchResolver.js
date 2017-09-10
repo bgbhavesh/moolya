@@ -20,7 +20,7 @@ MlResolver.MlUnionResolver['AppGenericSearchUnion'] =  {
     switch (moduleName){
       case 'ACTIVITY':
         return 'Activity';
-        break
+        break;
       case 'FUNDERPORTFOLIO':
         return 'FunderPortfolio';
         break;
@@ -52,6 +52,22 @@ MlResolver.MlUnionResolver['AppGenericSearchUnion'] =  {
       case "MYFOLLOWINGS":
         return "FollowUser";
         break;
+      case "MYPENDINGAPPOINTMENT":
+      case "MYCURRENTAPPOINTMENT":
+      case "MYCOMPLETEDAPPOINTMENT":
+      case "MYREJECTEDAPPOINTMENT":
+        return "Appointment";
+        break;
+      case "MYREQUESTEDBESPOKESERVICE":
+        return "Service";
+        break;
+      case "MYPENDINGINTERNALTASK":
+      case "MYCURRENTINTERNALTASK":
+      case "MYCOMPLETEDINTERNALTASK":
+      case "MYREJECTEDINTERNALTASK":
+      case "MYSELFINTERNALTASK":
+        return "InternalTask";
+        break;
       default:
         return 'Generic';
     }
@@ -63,6 +79,13 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   let filterQuery = args.queryProperty && args.queryProperty.filterQuery ? JSON.parse(args.queryProperty.filterQuery) : {};
   let searchText = args.queryProperty && args.queryProperty.searchText ? args.queryProperty.searchText : '';
   let searchFields = args.queryProperty && args.queryProperty.searchFields ? args.queryProperty.searchFields : [];
+  let alphabeticSearch = args.queryProperty && args.queryProperty.alphabeticSearch ? JSON.parse(args.queryProperty.alphabeticSearch) : {};
+
+  console.log(alphabeticSearch);
+
+  if( Object.keys(alphabeticSearch).length ){
+    alphabeticSearch[Object.keys(alphabeticSearch)[0]] = new RegExp("^"+alphabeticSearch[Object.keys(alphabeticSearch)[0]], "i");
+  }
 
   let searchQuery = {};
   if(searchText && searchFields.length){
@@ -73,8 +96,6 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
     });
     searchQuery = { "$or" : searchQuery };
   }
-
-  console.log(filterQuery, searchFields, searchText, searchQuery);
 
   let mlSubChapterAccessControl = MlSubChapterAccessControl.getAccessControl('SEARCH', context);
   mlSubChapterAccessControl = mlSubChapterAccessControl ? mlSubChapterAccessControl : {};
@@ -100,6 +121,9 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
   if(!userProfile){
     return {count : count,data : data}
   }
+
+  let userId = context.userId;
+  let profileId = new MlUserContext().userProfileDetails(userId).profileId;
 
   /**
    * @module ["portfolio"]
@@ -137,7 +161,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           industryId: '$port.industryId',
         }
       },
-      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+      { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
     ];
     data = mlDBController.aggregate('MlFunderPortfolio', query, context);
     count = data.length
@@ -175,7 +199,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           industryId: '$port.industryId',
         }
       },
-      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+      { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
     ];
     data = mlDBController.aggregate('MlServiceProviderPortfolio', pipleline, context);
     count = data.length;
@@ -213,7 +237,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           industryId: '$port.industryId',
         }
       },
-      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+      { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
     ];
     data = mlDBController.aggregate('MlStartupPortfolio', pipleline, context);
     count = data.length;
@@ -262,7 +286,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
         }
       },
       {'$unwind': {"path": "$port", "preserveNullAndEmptyArrays": true}},
-      {'$match': {"port.status": "gone live", 'port.communityCode': "IDE", subChapterId: subChapterQuery } },
+      {'$match': {"port.status": "gone live", 'port.communityCode': "IDE", 'port.subChapterId': subChapterQuery } },
       {
         '$lookup': {
           from: 'users', localField: 'userId', foreignField: '_id',
@@ -275,7 +299,8 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           "userId": "$userId",
           "ideas": [{
             "title": "$title",
-            "description": "$description"
+            "description": "$description",
+            "portfolioId":"$portfolioId"
           }],
           "chapterName": "$port.chapterName",
           "name": "$user.profile.firstName" + " " + "$user.profile.lastName",
@@ -286,7 +311,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           "industryId": '$port.industryId',
         }
       },
-      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+      { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
     ];
     data = mlDBController.aggregate('MlIdeas', pipeline, context);
     count = data.length;
@@ -323,7 +348,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           industryId: '$port.industryId',
         }
       },
-      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+      { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
     ];
     data = mlDBController.aggregate('MlInstitutionPortfolio', pipleline, context);
     count = data.length;
@@ -360,7 +385,7 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
           industryId: '$port.industryId'
         }
       },
-      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+      { $match: { "$and":  [ searchQuery, filterQuery, alphabeticSearch ] } }
     ];
     data = mlDBController.aggregate('MlCompanyPortfolio', pipleline, context);
     count = data.length;
@@ -680,6 +705,372 @@ MlResolver.MlQueryResolver['AppGenericSearch'] = (obj, args, context, info) =>{
       { $match: { "$and":  [ searchQuery, filterQuery ] } }
     ];
     data=mlDBController.aggregate('MlFollowings',pipeline,context);
+    count = data.length;
+  }
+
+  else if ( args.module === "myPendingAppointment" ) {
+    let pipeline = [
+      {
+        $lookup: {
+          from: "mlAppointmentMembers",
+          localField: "appointmentId",
+          foreignField: "appointmentId",
+          as: "members"
+        }
+      },
+      { "$unwind": "$members" },
+      { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Pending" } },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+    ];
+    data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
+    count = data.length;
+  }
+
+  else if ( args.module === "myCurrentAppointment" ) {
+    let pipeline = [
+      {
+        $lookup: {
+          from: "mlAppointmentMembers",
+          localField: "appointmentId",
+          foreignField: "appointmentId",
+          as: "members"
+        }
+      },
+      { "$unwind": "$members" },
+      { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Accepted" } },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+    ];
+    data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
+    count = data.length;
+  }
+
+  else if ( args.module === "myCompletedAppointment" ) {
+    let pipeline = [
+      {
+        $lookup: {
+          from: "mlAppointmentMembers",
+          localField: "appointmentId",
+          foreignField: "appointmentId",
+          as: "members"
+        }
+      },
+      { "$unwind": "$members" },
+      { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Completed" } },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+    ];
+    data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
+    count = data.length;
+  }
+
+  else if ( args.module === "myRejectedAppointment" ) {
+    let pipeline = [
+      {
+        $lookup: {
+          from: "mlAppointmentMembers",
+          localField: "appointmentId",
+          foreignField: "appointmentId",
+          as: "members"
+        }
+      },
+      { "$unwind": "$members" },
+      { "$match": {'members.userId':userId, 'members.profileId':profileId, 'members.status': "Rejected" } },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+    ];
+    data = mlDBController.aggregate( 'MlAppointments', pipeline, context);
+    count = data.length;
+  }
+
+  else if ( args.module === "myRequestedBespokeService" ) {
+    let query = {
+      "$and":[
+        {
+          userId: userId,
+          profileId: profileId,
+          isCurrentVersion: true,
+          isBeSpoke: true
+        },
+        searchQuery,
+        filterQuery
+      ]
+    };
+    data = mlDBController.find('MlServiceCardDefinition', query, context).fetch();
+    count = data.length;
+  }
+
+  else if ( args.module === "myPendingInternalTask" ) {
+
+    let query = {
+      attendee: userId,
+      attendeeProfileId: profileId,
+      isSelfAssigned: false,
+      status: { '$in': ["pending"] }
+    };
+
+    let pipeline = [
+      { "$match": query },
+      { "$lookup": { from: "mlPortfolioDetails", localField: "resourceId", foreignField: "_id", as: "portfolio" } },
+      { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "users", localField: "portfolio.userId", foreignField: "_id", as: "portfolioUser" } },
+      { "$unwind": { path: "$portfolioUser", preserveNullAndEmptyArrays: true } },
+      { "$lookup":{ from: "users", localField: "userId", foreignField: "_id", as: "user" } },
+      { "$unwind": { path: "$user", preserveNullAndEmptyArrays: true } },
+      { "$addFields": {
+        "userProfile" : { "$filter": {
+          "input": "$user.profile.externalUserProfiles",
+          "as": "profile",
+          "cond": {"$eq" : ["$$profile.profileId", profileId ] } //"$profileId",
+        }
+        }
+      }},
+      { "$unwind": { path: "$userProfile", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "mlIdeas", localField: "resourceId", foreignField: "portfolioId", as: "idea" } },
+      { "$unwind": { path: "$idea", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "mlStartupPortfolio", localField: "resourceId", foreignField: "portfolioDetailsId", as: "startup" } },
+      { "$unwind": { path: "$startup", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "mlFunderPortfolio", localField: "resourceId", foreignField: "portfolioDetailsId", as: "funder" } },
+      { "$unwind": { path: "$funder", preserveNullAndEmptyArrays: true } },
+      { "$project": {
+        "ownerName": { "$ifNull": ['$portfolioUser.profile.displayName', '$user.profile.displayName' ]},
+        "name": 1,
+        "type": 1,
+        "isSelfAssigned":1,
+        "status": 1,
+        "communityName":  { "$ifNull": ["$portfolio.communityType",  "$userProfile.communityName" ] },
+        "clusterName":  { "$ifNull": ["$portfolio.clusterName", "$userProfile.clusterName" ]},
+        "idea": { "$ifNull": ["$idea.title", '']},
+        "startup":  { "$ifNull": ["$startup.aboutUs.description", '']},
+        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']}
+      }
+      },
+      {
+        "$addFields": {
+          "portfolioTitle": {"$concat": ["$idea","$startup","$funder"]},
+        }
+      },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+    ];
+    data = mlDBController.aggregate("MlInternalTask", pipeline);
+    count = data.length;
+  }
+
+  else if ( args.module === "myCurrentInternalTask" ) {
+
+    let query = {
+      attendee: userId,
+      attendeeProfileId: profileId,
+      status: { '$in': ['accepted', 'started'] }
+    };
+
+    let pipeline = [
+      { "$match": query },
+      { "$lookup": { from: "mlPortfolioDetails", localField: "resourceId", foreignField: "_id", as: "portfolio" } },
+      { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "users", localField: "portfolio.userId", foreignField: "_id", as: "portfolioUser" } },
+      { "$unwind": { path: "$portfolioUser", preserveNullAndEmptyArrays: true } },
+      { "$lookup":{ from: "users", localField: "userId", foreignField: "_id", as: "user" } },
+      { "$unwind": { path: "$user", preserveNullAndEmptyArrays: true } },
+      { "$addFields": {
+        "userProfile" : { "$filter": {
+          "input": "$user.profile.externalUserProfiles",
+          "as": "profile",
+          "cond": {"$eq" : ["$$profile.profileId", profileId ] } //"$profileId",
+        }
+        }
+      }},
+      { "$unwind": { path: "$userProfile", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "mlIdeas", localField: "resourceId", foreignField: "portfolioId", as: "idea" } },
+      { "$unwind": { path: "$idea", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "mlStartupPortfolio", localField: "resourceId", foreignField: "portfolioDetailsId", as: "startup" } },
+      { "$unwind": { path: "$startup", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "mlFunderPortfolio", localField: "resourceId", foreignField: "portfolioDetailsId", as: "funder" } },
+      { "$unwind": { path: "$funder", preserveNullAndEmptyArrays: true } },
+      { "$project": {
+        "ownerName": { "$ifNull": ['$portfolioUser.profile.displayName', '$user.profile.displayName' ]},
+        "name": 1,
+        "type": 1,
+        "isSelfAssigned":1,
+        "status": 1,
+        "communityName":  { "$ifNull": ["$portfolio.communityType",  "$userProfile.communityName" ] },
+        "clusterName":  { "$ifNull": ["$portfolio.clusterName", "$userProfile.clusterName" ]},
+        "idea": { "$ifNull": ["$idea.title", '']},
+        "startup":  { "$ifNull": ["$startup.aboutUs.description", '']},
+        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']}
+      }
+      },
+      {
+        "$addFields": {
+          "portfolioTitle": {"$concat": ["$idea","$startup","$funder"]},
+        }
+      },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+    ];
+    data = mlDBController.aggregate("MlInternalTask", pipeline);
+    count = data.length;
+  }
+
+  else if ( args.module === "myCompletedInternalTask" ) {
+
+    let query = {
+      attendee: userId,
+      attendeeProfileId: profileId,
+      status: { '$in': ["completed"] }
+    };
+
+    let pipeline = [
+      { "$match": query },
+      { "$lookup": { from: "mlPortfolioDetails", localField: "resourceId", foreignField: "_id", as: "portfolio" } },
+      { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "users", localField: "portfolio.userId", foreignField: "_id", as: "portfolioUser" } },
+      { "$unwind": { path: "$portfolioUser", preserveNullAndEmptyArrays: true } },
+      { "$lookup":{ from: "users", localField: "userId", foreignField: "_id", as: "user" } },
+      { "$unwind": { path: "$user", preserveNullAndEmptyArrays: true } },
+      { "$addFields": {
+        "userProfile" : { "$filter": {
+          "input": "$user.profile.externalUserProfiles",
+          "as": "profile",
+          "cond": {"$eq" : ["$$profile.profileId", profileId ] } //"$profileId",
+        }
+        }
+      }},
+      { "$unwind": { path: "$userProfile", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "mlIdeas", localField: "resourceId", foreignField: "portfolioId", as: "idea" } },
+      { "$unwind": { path: "$idea", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "mlStartupPortfolio", localField: "resourceId", foreignField: "portfolioDetailsId", as: "startup" } },
+      { "$unwind": { path: "$startup", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "mlFunderPortfolio", localField: "resourceId", foreignField: "portfolioDetailsId", as: "funder" } },
+      { "$unwind": { path: "$funder", preserveNullAndEmptyArrays: true } },
+      { "$project": {
+        "ownerName": { "$ifNull": ['$portfolioUser.profile.displayName', '$user.profile.displayName' ]},
+        "name": 1,
+        "type": 1,
+        "isSelfAssigned":1,
+        "status": 1,
+        "communityName":  { "$ifNull": ["$portfolio.communityType",  "$userProfile.communityName" ] },
+        "clusterName":  { "$ifNull": ["$portfolio.clusterName", "$userProfile.clusterName" ]},
+        "idea": { "$ifNull": ["$idea.title", '']},
+        "startup":  { "$ifNull": ["$startup.aboutUs.description", '']},
+        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']}
+      }
+      },
+      {
+        "$addFields": {
+          "portfolioTitle": {"$concat": ["$idea","$startup","$funder"]},
+        }
+      },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+    ];
+    data = mlDBController.aggregate("MlInternalTask", pipeline);
+    count = data.length;
+  }
+
+  else if ( args.module === "myRejectedInternalTask" ) {
+
+    let query = {
+      attendee: userId,
+      attendeeProfileId: profileId,
+      status: { '$in': ["rejected"] }
+    };
+
+    let pipeline = [
+      { "$match": query },
+      { "$lookup": { from: "mlPortfolioDetails", localField: "resourceId", foreignField: "_id", as: "portfolio" } },
+      { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "users", localField: "portfolio.userId", foreignField: "_id", as: "portfolioUser" } },
+      { "$unwind": { path: "$portfolioUser", preserveNullAndEmptyArrays: true } },
+      { "$lookup":{ from: "users", localField: "userId", foreignField: "_id", as: "user" } },
+      { "$unwind": { path: "$user", preserveNullAndEmptyArrays: true } },
+      { "$addFields": {
+        "userProfile" : { "$filter": {
+          "input": "$user.profile.externalUserProfiles",
+          "as": "profile",
+          "cond": {"$eq" : ["$$profile.profileId", profileId ] } //"$profileId",
+        }
+        }
+      }},
+      { "$unwind": { path: "$userProfile", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "mlIdeas", localField: "resourceId", foreignField: "portfolioId", as: "idea" } },
+      { "$unwind": { path: "$idea", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "mlStartupPortfolio", localField: "resourceId", foreignField: "portfolioDetailsId", as: "startup" } },
+      { "$unwind": { path: "$startup", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "mlFunderPortfolio", localField: "resourceId", foreignField: "portfolioDetailsId", as: "funder" } },
+      { "$unwind": { path: "$funder", preserveNullAndEmptyArrays: true } },
+      { "$project": {
+        "ownerName": { "$ifNull": ['$portfolioUser.profile.displayName', '$user.profile.displayName' ]},
+        "name": 1,
+        "type": 1,
+        "isSelfAssigned":1,
+        "status": 1,
+        "communityName":  { "$ifNull": ["$portfolio.communityType",  "$userProfile.communityName" ] },
+        "clusterName":  { "$ifNull": ["$portfolio.clusterName", "$userProfile.clusterName" ]},
+        "idea": { "$ifNull": ["$idea.title", '']},
+        "startup":  { "$ifNull": ["$startup.aboutUs.description", '']},
+        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']}
+      }
+      },
+      {
+        "$addFields": {
+          "portfolioTitle": {"$concat": ["$idea","$startup","$funder"]},
+        }
+      },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+    ];
+    data = mlDBController.aggregate("MlInternalTask", pipeline);
+    count = data.length;
+  }
+
+  else if ( args.module === "mySelfInternalTask" ) {
+
+    let query = {
+      userId: userId,
+      attendeeProfileId: profileId,
+      isSelfAssigned: true,
+      status: { '$in': ["pending"] }
+    };
+
+    let pipeline = [
+      { "$match": query },
+      { "$lookup": { from: "mlPortfolioDetails", localField: "resourceId", foreignField: "_id", as: "portfolio" } },
+      { "$unwind": { path: "$portfolio", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "users", localField: "portfolio.userId", foreignField: "_id", as: "portfolioUser" } },
+      { "$unwind": { path: "$portfolioUser", preserveNullAndEmptyArrays: true } },
+      { "$lookup":{ from: "users", localField: "userId", foreignField: "_id", as: "user" } },
+      { "$unwind": { path: "$user", preserveNullAndEmptyArrays: true } },
+      { "$addFields": {
+        "userProfile" : { "$filter": {
+          "input": "$user.profile.externalUserProfiles",
+          "as": "profile",
+          "cond": {"$eq" : ["$$profile.profileId", profileId ] } //"$profileId",
+        }
+        }
+      }},
+      { "$unwind": { path: "$userProfile", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "mlIdeas", localField: "resourceId", foreignField: "portfolioId", as: "idea" } },
+      { "$unwind": { path: "$idea", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "mlStartupPortfolio", localField: "resourceId", foreignField: "portfolioDetailsId", as: "startup" } },
+      { "$unwind": { path: "$startup", preserveNullAndEmptyArrays: true } },
+      { "$lookup": { from: "mlFunderPortfolio", localField: "resourceId", foreignField: "portfolioDetailsId", as: "funder" } },
+      { "$unwind": { path: "$funder", preserveNullAndEmptyArrays: true } },
+      { "$project": {
+        "ownerName": { "$ifNull": ['$portfolioUser.profile.displayName', '$user.profile.displayName' ]},
+        "name": 1,
+        "type": 1,
+        "isSelfAssigned":1,
+        "status": 1,
+        "communityName":  { "$ifNull": ["$portfolio.communityType",  "$userProfile.communityName" ] },
+        "clusterName":  { "$ifNull": ["$portfolio.clusterName", "$userProfile.clusterName" ]},
+        "idea": { "$ifNull": ["$idea.title", '']},
+        "startup":  { "$ifNull": ["$startup.aboutUs.description", '']},
+        "funder" : { "$ifNull": ["$mlFunderPortfolio.funderAbout.firstName"+"$mlFunderPortfolio.funderAbout.lastName", '']}
+      }
+      },
+      {
+        "$addFields": {
+          "portfolioTitle": {"$concat": ["$idea","$startup","$funder"]},
+        }
+      },
+      { $match: { "$and":  [ searchQuery, filterQuery ] } }
+    ];
+    data = mlDBController.aggregate("MlInternalTask", pipeline);
     count = data.length;
   }
 

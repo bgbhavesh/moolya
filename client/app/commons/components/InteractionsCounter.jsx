@@ -36,17 +36,21 @@ export default class InteractionsCounter extends React.Component{
     console.log("on BackClick")
     this.props.backHandler();
   }
-
+  backFunction(){
+    window.history.back();
+    console.log('back clicked')
+  }
   render(){
+    var props = this.props.portfolioDetails
     let config = [
       {name: 'like',displayName:'Like',iconClass: 'ml my-ml-like'},
       {name: 'connect', displayName:'Connections',iconClass: 'ml flaticon-ml-handshake'},
-      {name: 'follow',displayName:'Follow',iconClass: 'ml flaticon-ml-shapes'},
       {name: 'collaborate',displayName:'Collaborations',iconClass: 'ml flaticon-ml-networking'},
       {name: 'favourite',displayName:'Favourites',iconClass: 'ml my-ml-favourites'},
       {name: 'view',displayName:'Views',iconClass: 'ml my-ml-browser_3'},
       {name: 'partner', displayName:'Partners',iconClass: 'ml flaticon-ml-handshake-1'},
-      {name: 'enquire',displayName:'Enquiries',iconClass: 'ml flaticon-ml-support'}
+      {name: 'enquire',displayName:'Enquiries',iconClass: 'ml flaticon-ml-support'},
+      {name: 'follow',displayName:'Follow',iconClass: 'ml flaticon-ml-shapes'}
     ];
 
     let data=this.state.data;
@@ -75,7 +79,15 @@ export default class InteractionsCounter extends React.Component{
     return(
       <div>
         <div className="paperfold panel">
-          <a className="startup-logo" href="" onClick={this.onBackHandler.bind(this)}><img src={this.props.portfolioImage?this.props.portfolioImage:"/images/startup_default.png"}/></a>
+          <a href="" className="back_btn" onClick={this.backFunction}>
+            <span className="fa fa-angle-left fa-2x"/>
+          </a>
+          <a className="startup-logo" href="" onClick={this.onBackHandler.bind(this)}>
+            <img src={props && props.portfolioImage ? props.portfolioImage : "/images/ideator_01.png"}
+                 data-toggle="tooltip" title={props && props.communityType ? props.communityType : ''}
+                 data-placement="right"/>
+            &nbsp; {props && props.portfolioUserName ? props.portfolioUserName : ''}
+          </a>
           <ul className="header-action-buttons">
             {actionView}
           </ul>

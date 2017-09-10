@@ -50,7 +50,7 @@ MlResolver.MlQueryResolver['fetchMyInternalTask'] = (obj, args, context, info) =
         "userProfile" : { "$filter": {
           "input": "$user.profile.externalUserProfiles",
           "as": "profile",
-          "cond": {"$cmp" : ["$profileId", "$$profile.profileId" ] }
+          "cond": {"$eq" : ["$$profile.profileId", profile.profileId ] } //"$profileId",
           }
         }
       }},

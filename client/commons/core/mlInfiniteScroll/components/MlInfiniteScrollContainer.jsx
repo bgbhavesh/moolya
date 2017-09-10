@@ -27,9 +27,11 @@ export default class MlInfiniteScrollContainer extends Component {
     this.filterQuery = {};
     this.searchText = '';
     this.searchFields = [];
+    this.alphabeticSearch = {};
     this.loadMore = this.loadMore.bind(this);
     this.updateSearchValue = this.updateSearchValue.bind(this);
     this.updateFilterQuery = this.updateFilterQuery.bind(this);
+    this.onAlphaSearchChange = this.onAlphaSearchChange.bind(this);
   }
 
   componentWillMount() {
@@ -58,7 +60,8 @@ export default class MlInfiniteScrollContainer extends Component {
         skip : data.length && !isReset ? this.props.data.data.length : 0,
         filterQuery: JSON.stringify(this.filterQuery),
         searchText: this.searchText,
-        searchFields: this.searchFields
+        searchFields: this.searchFields,
+        alphabeticSearch: JSON.stringify(this.alphabeticSearch)
       }
     };
     if(props.sort) {
@@ -71,6 +74,14 @@ export default class MlInfiniteScrollContainer extends Component {
   updateFilterQuery(filterQuery) {
     this.filterQuery = filterQuery;
     this.loadMore(true);
+  }
+
+  onAlphaSearchChange(alphabet) {
+    let alphabeticSearchField = this.props && this.props.headerComponents && this.props.headerComponents.alphabeticSearchField ? this.props.headerComponents.alphabeticSearchField : '';
+    if(alphabeticSearchField) {
+      this.alphabeticSearch[alphabeticSearchField] = alphabet;
+      this.loadMore(true);
+    }
   }
 
   render() {
@@ -90,6 +101,7 @@ export default class MlInfiniteScrollContainer extends Component {
                               config={props.headerComponents}
                               updateSearchValue={this.updateSearchValue}
                               updateFilterQuery={this.updateFilterQuery}
+                              onAlphaSearchChange={that.onAlphaSearchChange}
             /> : '' }
           <MlInfiniteScrollView viewComponent={viewComponent} data={data} config={props} />
           <MlInfiniteScrollFooter hasMore={hasMore} loadMore={this.loadMore} />

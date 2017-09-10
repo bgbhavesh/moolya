@@ -218,6 +218,7 @@ let externalUser = `
       switchExternalProfile(profileId:String!):response
       updateUserGeneralInfo(registration: registrationObject!, moduleName:String!, actionName:String!, registrationId:String!,profileId:String!,type:String!):response
       deActivateUserProfileByContext(userProfiles:userProfiles, clusterId: String, chapterId: String, subChapterId: String, communityId: String):response
+      updateUserShowOnMap(userId: String, isShowOnMap: Boolean):response
     }
     
     type Query{
@@ -243,7 +244,8 @@ let supportedApi = [
     {api:'setDefaultProfile', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
     {api:'createUserAddressInfo', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
     {api:'updateUserGeneralInfo', actionName:'UPDATE', moduleName:"USERS", isAppWhiteList:true},
-     {api:'deActivateUserProfileByContext', actionName:'UPDATE', moduleName:"USERS"},
+    {api:'deActivateUserProfileByContext', actionName:'UPDATE', moduleName:"USERS"},
+    {api:'updateUserShowOnMap', actionName:'UPDATE', moduleName:"USERS"},
 ]
 
 MlResolver.MlModuleResolver.push(supportedApi)

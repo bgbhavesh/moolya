@@ -360,13 +360,9 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                     <FontAwesome name='lock'/>
                                     <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
                                     <img src={team.logo ? team.logo.fileUrl : "/images/def_profile.png"}/>
-                                    <div><p>{team.firstName?team.firstName:"" + " " + team.lastName?team.lastName:""}</p><p
-                                      className="small">{team.designation}</p></div>
-                                    {/*<div className="ml_icon_btn">*/}
-                                      {/*<a href="#" className="save_btn"><FontAwesome name='facebook'/></a>*/}
-                                      {/*<a href="#" className="save_btn"><FontAwesome name='twitter'/></a>*/}
-                                      {/*<a href="#" className="save_btn"><FontAwesome name='linkedin'/></a>*/}
-                                    {/*</div>*/}
+                                    <div><p>{team.firstName?team.firstName:"" + " " + team.lastName?team.lastName:""}</p>
+                                      <p className="small">{team.designation}</p>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -394,8 +390,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                 })}
                               </ul>
                             </div>
-
-
                           </div>
                           <div className="main_wrap_scroll">
                             <ScrollArea
@@ -413,8 +407,10 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                           <FontAwesome name='lock'/>
                                           <div className="cluster_status inactive_cl"><FontAwesome name='trash-o'/></div>
                                           <img src={selectedTeam.logo ? selectedTeam.logo.fileUrl : "/images/def_profile.png"}/>
-                                          <div><p>{selectedTeam.firstName?selectedTeam.firstName:"" + " " + selectedTeam.lastName?selectedTeam.lastName:""}</p><p
-                                            className="small">{selectedTeam.designation}</p></div>
+                                          <div>
+                                            <p>{selectedTeam.firstName?selectedTeam.firstName:"" + " " + selectedTeam.lastName?selectedTeam.lastName:""}</p>
+                                            <p className="small">{selectedTeam.designation}</p>
+                                          </div>
                                           {/*<div className="ml_icon_btn">*/}
                                             {/*<a href="#" className="save_btn"><FontAwesome name='facebook'/></a>*/}
                                             {/*<a href="#" className="save_btn"><FontAwesome name='twitter'/></a>*/}
@@ -490,17 +486,15 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                                     </div>
                                     <div className="form_bg col-md-12">
                                       <form>
-
                                         <div className="form-group">
                                           <input type="text" placeholder="About" className="form-control float-label"
                                                  id="cluster_name"
-                                                 value={selectedTeam.aboutPrincipal ? selectedTeam.aboutPrincipal : ""}
+                                                 value={selectedTeam.aboutTeam ? selectedTeam.aboutTeam : ""}
                                                  disabled='disabled'/>
                                           <FontAwesome name='unlock' className="input_icon un_lock"/><input
                                           type="checkbox" className="lock_input" id="makePrivate"
-                                          checked={selectedTeam.isAboutPrincipalPrivate}/>
+                                          checked={selectedTeam.isAboutTeamPrivate}/>
                                         </div>
-
                                       </form>
                                     </div>
                                   </div>
@@ -508,7 +502,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                               </div>
                             </ScrollArea>
                           </div>
-
                         </div>
                       </div>
                     </div>
@@ -567,26 +560,6 @@ export default class MlFunderPrincipalTeamView extends React.Component {
                         <input type="text" placeholder="About" className="form-control float-label"/>
                         <FontAwesome name='unlock' className="input_icon"/>
                       </div>
-                      {/*<div className="form-group">*/}
-                        {/*<input type="text" placeholder="LinkedIn" className="form-control float-label"/>*/}
-                        {/*<FontAwesome name="linkedin-square" className="password_icon"/>*/}
-                      {/*</div>*/}
-                      {/*<div className="form-group">*/}
-                        {/*<input type="text" placeholder="Facebook" className="form-control float-label"/>*/}
-                        {/*<FontAwesome name="facebook-square" className="password_icon"/>*/}
-                      {/*</div>*/}
-                      {/*<div className="form-group">*/}
-                        {/*<input type="text" placeholder="twitter" className="form-control float-label"/>*/}
-                        {/*<FontAwesome name="twitter-square" className="password_icon"/>*/}
-                      {/*</div>*/}
-                      {/*<div className="form-group">*/}
-                        {/*<input type="text" placeholder="Youtube" className="form-control float-label"/>*/}
-                        {/*<FontAwesome name="youtube-square" className="password_icon"/>*/}
-                      {/*</div>*/}
-                      {/*<div className="form-group">*/}
-                        {/*<input type="text" placeholder="Google plus" className="form-control float-label"/>*/}
-                        {/*<FontAwesome name="google-plus-square" className="password_icon"/>*/}
-                      {/*</div>*/}
                       <div className="ml_btn" style={{'textAlign': 'center'}}>
                         <a href="#" className="save_btn">Save</a>
                       </div>

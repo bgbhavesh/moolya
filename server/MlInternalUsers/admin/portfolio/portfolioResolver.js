@@ -8,8 +8,8 @@ import _ from "lodash";
 import portfolioValidationRepo from "./portfolioValidation";
 import MlEmailNotification from "../../../mlNotifications/mlEmailNotifications/mlEMailNotification";
 import MlAlertNotification from '../../../mlNotifications/mlAlertNotifications/mlAlertNotification'
-import mlNonMoolyaAccess from "../core/non-moolyaAccessControl/mlNonMoolyaAccess"
 import MlSubChapterAccessControl from '../../../mlAuthorization/mlSubChapterAccessControl'
+import {getCommunityName} from '../../../commons/utils';
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 import mlSmsConstants from '../../../mlNotifications/mlSmsNotifications/mlSmsConstants'
 
@@ -438,7 +438,6 @@ MlResolver.MlQueryResolver['fetchPortfolioByReg'] = (obj, args, context, info) =
       subChapterId = registrationDetails && registrationDetails.registrationInfo && registrationDetails.registrationInfo.subChapterId ? registrationDetails && registrationDetails.registrationInfo && registrationDetails.registrationInfo.subChapterId : ''
     }
     var dataContext = MlSubChapterAccessControl.getAccessControl('VIEW', context, subChapterId, false)
-    // response.canAccess = mlNonMoolyaAccess.canExternalUserViewReg(args.registrationId, context)
     response.canAccess = dataContext.hasAccess
   }
   return response
@@ -452,7 +451,6 @@ MlResolver.MlQueryResolver['fetchPortfolioClusterId'] = (obj, args, context, inf
   if (args.portfoliodetailsId) {
     let portfolio = MlPortfolioDetails.findOne({"_id": args.portfoliodetailsId}) || {}
     var subChapterId = portfolio?portfolio.subChapterId:''
-    // portfolio.canAccess = mlNonMoolyaAccess.canExternalUserView(args.portfoliodetailsId, context)
     var dataContext = MlSubChapterAccessControl.getAccessControl('VIEW', context, subChapterId, false)
     portfolio.canAccess = dataContext.hasAccess
     return portfolio;
@@ -464,6 +462,7 @@ MlResolver.MlQueryResolver['fetchPortfolioImage'] = (obj, args, context, info) =
     var portfolioImage = ""
     var response = ""
     let portfolio = MlPortfolioDetails.findOne({_id: args.portfoliodetailsId}) || {}
+    var defaultProfile = new MlUserContext().userProfileDetails(portfolio.userId)
     switch (portfolio.communityCode) {
       case 'IDE': {
         response = MlResolver.MlQueryResolver['fetchIdeatorPortfolioDetails'](obj, args, context, info) || {}
@@ -502,6 +501,8 @@ MlResolver.MlQueryResolver['fetchPortfolioImage'] = (obj, args, context, info) =
         break;
     }
     portfolio.portfolioImage = portfolioImage
+    portfolio.portfolioUserName = defaultProfile.firstName +' '+ defaultProfile.lastName  /**attached first and last name to portfolioUserName*/
+    portfolio.communityType = getCommunityName(portfolio.communityCode)
     return portfolio;
   }
 }

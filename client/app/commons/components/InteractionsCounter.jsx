@@ -37,9 +37,11 @@ export default class InteractionsCounter extends React.Component{
     this.props.backHandler();
   }
   backFunction(){
+    window.history.back();
     console.log('back clicked')
   }
   render(){
+    var props = this.props.portfolioDetails
     let config = [
       {name: 'like',displayName:'Like',iconClass: 'ml my-ml-like'},
       {name: 'connect', displayName:'Connections',iconClass: 'ml flaticon-ml-handshake'},
@@ -80,8 +82,11 @@ export default class InteractionsCounter extends React.Component{
           <a href="" className="back_btn" onClick={this.backFunction}>
             <span className="fa fa-angle-left fa-2x"/>
           </a>
-          <a className="startup-logo" href="" onClick={this.onBackHandler.bind(this)} ><img src={this.props.portfolioImage?this.props.portfolioImage:"/images/ideator_01.png"} data-toggle="tooltip" title="Community Name" data-placement="right"/>
-             &nbsp; first name
+          <a className="startup-logo" href="" onClick={this.onBackHandler.bind(this)}>
+            <img src={props && props.portfolioImage ? props.portfolioImage : "/images/ideator_01.png"}
+                 data-toggle="tooltip" title={props && props.communityType ? props.communityType : ''}
+                 data-placement="right"/>
+            &nbsp; {props && props.portfolioUserName ? props.portfolioUserName : ''}
           </a>
           <ul className="header-action-buttons">
             {actionView}

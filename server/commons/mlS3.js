@@ -18,12 +18,23 @@ module.exports = class s3Client{
         this.client = new AWS.S3(awsConfig({region:region, accessKeyId:accessKeyId, secretAccessKey:secretAccessKey, timeout: 15000}));
     }
 
+  generateUUID(){
+    var d = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = (d + Math.random() * 16) % 16 | 0;
+      d = Math.floor(d / 16);
+      return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+    });
+    return uuid;
+  }
+
     uploadFile(file, s3Bucket, bucketFolder, callback){
         let fileData = fs.createReadStream(file.path);
+        var uniqueId=this.generateUUID();
         let filename = file.name.replace(/ /g,'')
         var params = {
             Bucket:s3Bucket,
-            Key: bucketFolder+filename,
+            Key: bucketFolder+uniqueId+"-"+filename,
             ContentType:file.type,
             Body: fileData
         }
@@ -34,7 +45,7 @@ module.exports = class s3Client{
                 callback(err, response);
             }
             else{
-                let url = self.client.endpoint.href+s3Bucket+"/"+bucketFolder+filename;
+                let url = self.client.endpoint.href+s3Bucket+"/"+bucketFolder+uniqueId+"-"+filename;
                 callback(err,url);
             }
 

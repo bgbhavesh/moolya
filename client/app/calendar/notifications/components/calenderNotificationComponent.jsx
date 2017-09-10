@@ -24,9 +24,9 @@ export default class AppMyProfileMyoffice extends React.Component{
 
     var WinWidth = $(window).width();
     var WinHeight = $(window).height();
-    $('.main_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+0));
+    $('.main_wrap_scroll').height(WinHeight-($('.app_header').outerHeight(true)+70));
     if(WinWidth > 768){
-      //$(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
+      $(".main_wrap_scroll").mCustomScrollbar({theme:"minimal-dark"});
     }
 
   }
@@ -70,8 +70,9 @@ export default class AppMyProfileMyoffice extends React.Component{
         <li key={key} onClick={that.onChangeStatus.bind(that,options,key)} className={options.isRead ? 'read' : 'unread'}>
           <div className="left_icon"><span className="ml ml-moolya-symbol"></span></div>
           <div className="right_text">
-            <span>{(options.createdTS) ? timeConverter(options.createdTS) : "7 Sep 2017 21:57:40" }</span>
             <p>
+              <span>{(options.createdTS) ? timeConverter(options.createdTS) : "7 Sep 2017 21:57:40" }</span>
+              <br className="brclear"/>
               {options.message} </p>
             {/*<span className="read_more" title="Read more"><a href="#">...</a></span>*/}
           </div>
@@ -80,17 +81,13 @@ export default class AppMyProfileMyoffice extends React.Component{
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">
+          <h2>Notifications</h2>
           <div className="main_wrap_scroll">
-            <ScrollArea
-              speed={0.8}
-              className="main_wrap_scroll"
-              smoothScrolling={true}
-              default={true}
-            >
+
           <ul className="notification_view">
             {notificationsList}
           </ul>
-            </ScrollArea>
+
           </div>
         </div>
       </div>

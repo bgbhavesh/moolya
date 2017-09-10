@@ -27,6 +27,15 @@ export async function fetchSlotAppointmentsDetailsActionHandler (appointmentId) 
           userMobileNumber
           userEmail
           userImage
+          appointmentInfo {
+            resourceType
+            resourceId
+            serviceCardId
+            serviceName
+            taskName
+            sessionId
+            serviceOrderId
+          }
       }
     }
     `,

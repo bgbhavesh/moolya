@@ -81,7 +81,7 @@ $menuTrans:all 0.5s linear;
 .app_menu ul .menu_item.active_menu {background: $mlRed;}
 .app_menu ul .menu_item.active_menu:before {border-bottom: 20px solid $mlRed;}
 .app_menu ul .menu_item.active_menu .menu_in{color:#fff;}
-.app_menu ul .menu_item.inactive_menu {background: $mlYellow; opacity: .5; cursor: not-allowed; a{cursor: not-allowed; }}
+.app_menu ul .menu_item.inactive_menu {background: $mlYellow; opacity: .4; cursor: not-allowed; a{cursor: not-allowed; }}
 .app_menu ul .menu_item.inactive_menu:before {border-bottom: 20px solid $mlYellow;}
 .app_menu ul .menu_item.inactive_menu .menu_in{}
 .app_menu ul li.menu_item:last-child{height: 32px;}
@@ -408,7 +408,7 @@ background:$mlBlue; width: 100%;position:absolute;bottom:0px;overflow-x: auto; o
     }
   }
 .startup-logo{
-  position:absolute;left:30px;top:5px;height: 44px;border-radius: 4px;color:$mlBlue;font-weight:bold;/*box-shadow: 0px 0px 2px rgba(0,0,0,0.5);*/    text-overflow: ellipsis;  overflow: hidden;  white-space: nowrap;  width: 130px;
+  position:absolute;left:30px;top:5px;height: 44px;border-radius: 4px;color:$mlBlue;font-weight:bold;/*box-shadow: 0px 0px 2px rgba(0,0,0,0.5);*/    text-overflow: ellipsis;  overflow: hidden;  white-space: nowrap;  width: 130px;font-size: 12px;
   img{height: 44px;width:44px;border-radius: 50%;}
 }
 .app_menu ul .menu_item .menu_in img{

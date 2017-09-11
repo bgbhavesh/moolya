@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from "../../../../../../utils/formElemUtil";
+import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
 import ScrollArea from "react-scrollbar";
 import Moolyaselect from "../../../../../../commons/components/MlAdminSelectWrapper";
 import gql from "graphql-tag";
@@ -43,9 +43,6 @@ export default class MlStartupAssets extends React.Component{
     OnLockSwitch();
     dataVisibilityHandler();
     this.imagesDisplay()
-    setTimeout(function () {
-      initalizeFloatLabel();
-    },1000)
   }
   componentWillMount(){
     let empty = _.isEmpty(this.context.startupPortfolio && this.context.startupPortfolio.assets)

@@ -126,10 +126,10 @@ class MlEditBackendUser extends React.Component{
   }
 
   async getGender() {
-    if(this.state.genderSelect === "Others"){
+    if(this.state.genderSelect === "others"){
       this.setState({genderStateMale: false, genderStateFemale: false, genderStateOthers:true})
     }
-    else if(this.state.genderSelect === "Female"){
+    else if(this.state.genderSelect === "female"){
       this.setState({genderStateFemale: true, genderStateMale: false, genderStateOthers:false})
     }
     else{
@@ -580,13 +580,13 @@ class MlEditBackendUser extends React.Component{
                         <label>Gender : </label>
                       </div>
                       <div className="input_types">
-                        <input id="radio1" type="radio" name="radio" value="Male" onChange={this.genderSelect.bind(this)} checked={this.state.genderStateMale} /><label htmlFor="radio1" ><span><span></span></span>Male</label>
+                        <input id="radio1" type="radio" name="radio" value="male" onChange={this.genderSelect.bind(this)} checked={this.state.genderStateMale} /><label htmlFor="radio1" ><span><span></span></span>Male</label>
                       </div>
                       <div className="input_types">
-                          <input id="radio2" type="radio" name="radio" value="Female" onChange={this.genderSelect.bind(this)} checked={this.state.genderStateFemale} /><label htmlFor="radio2" ><span><span></span></span>Female</label>
+                          <input id="radio2" type="radio" name="radio" value="female" onChange={this.genderSelect.bind(this)} checked={this.state.genderStateFemale} /><label htmlFor="radio2" ><span><span></span></span>Female</label>
                       </div>
                       <div className="input_types">
-                        <input id="radio3" type="radio" name="radio" value="Others" onChange={this.genderSelect.bind(this)} checked={this.state.genderStateOthers} /><label htmlFor="radio3" ><span><span></span></span>Others</label>
+                        <input id="radio3" type="radio" name="radio" value="others" onChange={this.genderSelect.bind(this)} checked={this.state.genderStateOthers} /><label htmlFor="radio3" ><span><span></span></span>Others</label>
                       </div>
                     </div>
                     <div className="clearfix"></div>

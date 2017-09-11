@@ -245,7 +245,7 @@ export default class MlAppCommunitiesList extends Component {
                           <input type="text" ref="contactNumber" value={this.state.lastName} placeholder="Contact number" className="form-control float-label" id="" disabled="true"/>
                         </div>
                       <div className="form-group">
-                        <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Your Country"  selectedValue={this.state.country} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={this.optionsBySelectCountry.bind(this)}  disabled={true} />
+                        <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Country of Residence"  selectedValue={this.state.country} queryType={"graphql"} query={countryQuery} isDynamic={true}  onSelect={this.optionsBySelectCountry.bind(this)}  disabled={true} />
                       </div>
 
                       </div>
@@ -257,7 +257,7 @@ export default class MlAppCommunitiesList extends Component {
                           <input type="text" ref="email"   value={this.state.email} placeholder="Email Id" className="form-control float-label" id="" disabled="true" />
                         </div>
                         <div className="form-group">
-                          <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Operation Country"  selectedValue={this.state.clusterId} queryType={"graphql"} query={clusterQuery} isDynamic={true}  onSelect={this.optionsBySelectOperationCountry.bind(this)} />
+                          <Moolyaselect multiSelect={false} className="form-control float-label" valueKey={'value'} labelKey={'label'} placeholder="Country of Operations"  selectedValue={this.state.clusterId} queryType={"graphql"} query={clusterQuery} isDynamic={true}  onSelect={this.optionsBySelectOperationCountry.bind(this)} />
                           {/*<Moolyaselect multiSelect={false} placeholder="Your City" className="form-control float-label" valueKey={'value'} labelKey={'label'}  selectedValue={this.state.selectedCity} queryType={"graphql"} queryOptions={countryOption} query={citiesquery} onSelect={this.optionsBySelect.bind(this)} isDynamic={true}/>*/}
                         </div>
                       </div>

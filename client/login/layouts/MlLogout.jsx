@@ -37,10 +37,12 @@ export default class MlLogout extends Component {
   componentDidMount() {
     initalizeFloatLabel();
   }
+
   onValueChange(event) {
-    if (event.target.name == 'userName')
+    if (event.target.name == 'userName') {
+      event.target.value = event.target.value.trim()
       this.setState({userNameErr: ""})
-    if (event.target.name == 'Password')
+    } else if (event.target.name == 'Password')
       this.setState({passwordErr: ""})
   }
 
@@ -72,11 +74,10 @@ export default class MlLogout extends Component {
                 <form className="form-signin" onChange={this.onValueChange.bind(this)} onKeyPress={this.handleKeyPress.bind(this)}>
                   <span ref="userName">{this.state.userNameErr}</span>
                   <input type="text" name="userName" ref="username" className="form-control float-label" placeholder="Email"
-                         required autoFocus defaultValue={this.state.username} onBlur={this.validationCheck}/>
+                         required autoFocus defaultValue={this.state.username} />
                   <span ref="Password">{this.state.passwordErr}</span>
                   <input type="password" name="Password" className="form-control float-label" ref="password"
-                         placeholder="Password" required defaultValue={this.state.password}
-                         onBlur={this.validationCheck}/>
+                         placeholder="Password" required defaultValue={this.state.password}/>
                   <div className="checkbox_wrap"><input type="checkbox"/><span>Remember me</span></div>
                   <button className="ml_submit_btn" type="button" onClick={this.loginSubmit.bind(this)}>Sign in</button>
                   <br className="brclear"/>

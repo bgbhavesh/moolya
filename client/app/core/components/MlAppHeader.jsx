@@ -51,9 +51,15 @@ class MlAppProfileHeader extends Component {
   /**fetching user details from registration*/
   componentWillMount(){
     let user = Meteor.user();
+    let gImg = user && user.profile && user.profile.genderType==='female'?"/images/female.jpg":"/images/def_profile.png";
     if( user && user.profile && user.profile.profileImage) {
       console.log(user);
-      this.setState({profilePic:user.profile.profileImage});
+      this.setState({
+        profilePic:user.profile.profileImage == " "?gImg:user.profile.profileImage
+      });
+    }
+    else {
+      this.setState({profilePic:gImg});
     }
     const resp = this.fetchUserDetails();
     return resp
@@ -76,8 +82,14 @@ class MlAppProfileHeader extends Component {
   }
 
   componentWillReceiveProps(user){
+    let gImg = user && user.user && user.user.profile && user.profile.genderType==='female'?"/images/female.jpg":"/images/def_profile.png";
     if( user && user.user && user.user.profile &&  user.user.profile.profileImage) {
-      this.setState({profilePic:user.user.profile.profileImage});
+      this.setState({
+        profilePic:user.user.profile.profileImage == " "?gImg:user.user.profile.profileImage
+      });
+    }
+    else {
+      this.setState({profilePic:gImg});
     }
   }
 
@@ -107,7 +119,7 @@ class MlAppProfileHeader extends Component {
 
 
           <div className="ml_app_profile" role="navigation">
-          <h1 id="NavLbl"  data-toggle="tooltip" title={`Welcome ${data && data.firstName?data.firstName:"User"}`} data-placement="left" className="" style={{'backgroundImage':`url(${data && data.profileImage?data.profileImage:"/images/ideator_01.png"})`, 'backgroundPosition': 'center center'}}>{/*<span className="profile_context ml ml-ideator"></span>*/}</h1>
+          <h1 id="NavLbl"  data-toggle="tooltip" title={`Welcome ${data && data.firstName?data.firstName:"User"}`} data-placement="left" className="" style={{'backgroundImage':`url(${this.state.profilePic})`, 'backgroundPosition': 'center center'}}>{/*<span className="profile_context ml ml-ideator"></span>*/}</h1>
             <ol>
               <li data-toggle="tooltip" title="My Profile" data-placement="right">
                 <a href="/app/myprofile">

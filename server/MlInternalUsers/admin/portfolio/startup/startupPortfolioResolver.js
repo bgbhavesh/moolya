@@ -130,16 +130,22 @@ MlResolver.MlQueryResolver['fetchStartupPortfolioAboutUs'] = (obj, args, context
     var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
     startAboutUsArray["information"] = filteredObject
 
+    var object = startAboutUsArray["clients"];
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    startAboutUsArray["clients"] = filteredObject
 
+    var object = startAboutUsArray["branches"];
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    startAboutUsArray["branches"] = filteredObject
 
-    // if(startAboutUsArray && startAboutUsArray.clients){
-    //   startAboutUsArray.clients.map(function(client,index) {
-    //     let clientData = MlStageOfCompany.findOne({"_id":client.companyId}) || {};
-    //     if(startAboutUsArray.clients[index]){
-    //       startAboutUsArray.clients[index].companyName = clientData.stageOfCompanyDisplayName || "";
-    //     }
-    //   })
-    // }
+    var object = startAboutUsArray["technologies"];
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    startAboutUsArray["technologies"] = filteredObject
+
+    var object = startAboutUsArray["assets"];
+    var filteredObject = portfolioValidationRepo.omitPrivateDetails(args.portfoliodetailsId, object, context)
+    startAboutUsArray["assets"] = filteredObject
+
     if(startAboutUsArray && startAboutUsArray.assets){
       startAboutUsArray.assets.map(function(asset,index) {
         if(startAboutUsArray.assets[index]){

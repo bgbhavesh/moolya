@@ -234,6 +234,7 @@ let registrationSchema = `
         firstName       :   String,
         lastName        :   String,
         countryId       :   String,
+        countryCode     :   String,
         countryName     :   String,
         contactNumber   :   String,
         email           :   String,

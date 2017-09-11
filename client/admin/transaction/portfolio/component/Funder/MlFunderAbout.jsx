@@ -335,7 +335,7 @@ export default class MlFunderAbout extends React.Component {
                       {/*</div>*/}
                       <div className="form-group">
                         <Select name="form-field-name"  placeholder="Select Gender" value={this.state.data.gender}  options={genderValues} onChange={this.optionsBySelectGender.bind(this)} className="float-label" />
-                        <FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this, "isGenderPrivate")}/>
+                        <FontAwesome name='unlock' className="input_icon un_lock" id="isGenderPrivate" onClick={this.onClick.bind(this,"gender", "isGenderPrivate")}/>
                       </div>
 
                       <div className="form-group">

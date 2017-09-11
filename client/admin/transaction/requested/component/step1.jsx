@@ -101,6 +101,7 @@ export default class step1 extends React.Component{
       registrationDetails:details,
       registrationId:details.registrationId,
       country :details.countryId,
+      countryCode: details.countryCode,
       selectedCity : details.cityId,
       registrationType : details.registrationType,
       subscription: details.accountType,
@@ -116,8 +117,7 @@ export default class step1 extends React.Component{
       transactionId : this.props.registrationData.transactionId,
       selectedAccountsType:details.accountType,
       registrationDate:details.registrationDate,
-      isOfficeBearer : isOFB,
-      isUpdate: false
+      isOfficeBearer : isOFB
           });
     //this.settingIdentity(details.identityType);
 
@@ -148,8 +148,7 @@ export default class step1 extends React.Component{
   optionsBySelectCountry(value, callback, label){
     this.setState({
       country: value,
-      countryCode: label.code,
-      isUpdate: true
+      countryCode: label.code
     })
   }
   optionsBySelectCluster(value){
@@ -252,12 +251,12 @@ export default class step1 extends React.Component{
 
   async updateregistrationInfo() {
     let ret = mlFieldValidations(this.refs)
-    let {countryCode, isUpdate} = this.state;
+    let {countryCode} = this.state;
     let contactNumber = this.refs.contactNumber && this.refs.contactNumber.value;
     let isValidPhoneNumber = validatedPhoneNumber(countryCode, contactNumber);
     if (ret) {
       toastr.error(ret);
-    } else if (isUpdate && !isValidPhoneNumber) {
+    } else if (countryCode && !isValidPhoneNumber) {
       toastr.error('Please enter a valid contact number');
     } else {
 

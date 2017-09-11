@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from "react";
 import {render} from "react-dom";
 import ScrollArea from "react-scrollbar";
 import {Popover, PopoverTitle, PopoverContent} from "reactstrap";
-import {dataVisibilityHandler, OnLockSwitch,initalizeFloatLabel} from "../../../../../../utils/formElemUtil";
+import {dataVisibilityHandler, OnLockSwitch} from "../../../../../../utils/formElemUtil";
 import Moolyaselect from "../../../../../../commons/components/MlAdminSelectWrapper";
 import gql from "graphql-tag";
 import {graphql} from "react-apollo";
@@ -36,7 +36,6 @@ export default class MlStartupTechnology extends React.Component{
   }
   componentDidUpdate(){
     OnLockSwitch();
-    initalizeFloatLabel();
     dataVisibilityHandler();
   }
 

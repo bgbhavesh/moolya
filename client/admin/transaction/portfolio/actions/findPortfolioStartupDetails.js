@@ -730,6 +730,8 @@ export async function fetchStartupDetailsHandler(portfoliodetailsId, key) {
                       privateFields{
                           keyName,
                           booleanKey
+                          tabName
+                          index
                       }
                   },
                   investor{
@@ -791,6 +793,8 @@ export async function fetchStartupDetailsHandler(portfoliodetailsId, key) {
                       privateFields{
                           keyName,
                           booleanKey
+                          index
+                          tabName
                       }
                   },
                   

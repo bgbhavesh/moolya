@@ -224,7 +224,7 @@ MlResolver.MlQueryResolver['fetchUserDetails'] = (obj, args, context, info) =>
         let assignedRoles = "";
         let userProfiles=user&&user.profile.InternalUprofile.moolyaProfile.userProfiles?user.profile.InternalUprofile.moolyaProfile.userProfiles:[];
         let displayName = user.profile.InternalUprofile.moolyaProfile.displayName;
-        let deActive = user.profile.isActive
+        let deActive = user.profile.isActive;
         userProfiles.map(function (profile, index) {
             let userRoles = profile.userRoles;
             // const clusterData = MlClusters.findOne({_id:profile.clusterId})||[];
@@ -252,6 +252,8 @@ MlResolver.MlQueryResolver['fetchUserDetails'] = (obj, args, context, info) =>
         userDetails['displayName'] = displayName;
         userDetails['userName'] = user.username;
         userDetails['deActive'] = deActive;
+        userDetails['genderType'] = user.profile.genderType;
+        userDetails['profileImage'] = user.profile.profileImage;
     }
     return userDetails;
 };

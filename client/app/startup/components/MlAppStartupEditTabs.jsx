@@ -106,7 +106,7 @@ export default class MlAppStartupEditTabs extends React.Component {
         title: "Awards",
         component: <MlStartupAwards client={appClient} isAdmin={false} key="6"
                                     getAwardsDetails={this.getAwardsDetails.bind(this)}
-                                    portfolioDetailsId={this.props.portfolioDetailsId}/>
+                                    portfolioDetailsId={this.props.portfolioDetailsId} tabName="awardsRecognition"/>
       },
       {
         tabClassName: 'tab',
@@ -127,7 +127,7 @@ export default class MlAppStartupEditTabs extends React.Component {
         panelClassName: 'panel',
         title: "Looking For",
         component: <MlStartupLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)}
-                                        portfolioDetailsId={this.props.portfolioDetailsId}/>
+                                        portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
       },
 
 

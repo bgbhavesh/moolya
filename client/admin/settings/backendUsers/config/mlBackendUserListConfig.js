@@ -41,6 +41,7 @@ export const mlBackendUserListConfig=new MlViewer.View({
                                       isActive,
                                       profileImage
                                       firstName
+                                      genderType
                                       lastName
                                       InternalUprofile{
                                           moolyaProfile{

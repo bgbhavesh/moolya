@@ -402,7 +402,7 @@ appSection.route('/explore/company/:portfolioId', {
 });
 
 appSection.route('/company', {
-  name: 'companies',
+  name: 'company',
   action(){
     var listConfig = _.extend(mlAppCompanyConfig, {isExplore: false});
     mount(AppLayout,{appContent:
@@ -414,7 +414,7 @@ appSection.route('/company', {
 });
 
 appSection.route('/company/:portfolioId', {
-  name: 'companies',
+  name: 'company',
   action(params){
     mount(AppLayout,{appContent:< MlAppPortfolio viewMode={true} config={params.portfolioId} communityType={"institution"}/>, isProfileMenu:false})
   }

@@ -6,6 +6,7 @@ import {fetchStartupDetailsHandler} from '../../actions/findPortfolioStartupDeta
 // import {initializeMlAnnotator} from '../../../../../commons/annotator/mlAnnotator'
 // import {createAnnotationActionHandler} from '../../actions/updatePortfolioDetails'
 // import {findAnnotations} from '../../../../../commons/annotator/findAnnotations'
+import MlGenericManagementView from './MlGenericManagementView'
 import NoData from '../../../../../commons/components/noData/noData'
 
 const KEY = 'management'
@@ -123,7 +124,8 @@ export default class MlStartupViewManagement extends React.Component {
         <div id="annotatorContent">
           <h2>Management</h2>
           <div className="col-lg-12">
-            <div className="row">
+            <MlGenericManagementView data={managementArray} isAdmin={this.props.isAdmin}/>
+            {/*<div className="row">
               {managementArray && managementArray.map(function (details, idx) {
                 return(<div className="col-lg-2 col-md-3 col-xs-12 col-sm-4" key={idx}>
                   <div className="team-block">
@@ -134,7 +136,7 @@ export default class MlStartupViewManagement extends React.Component {
                   </div>
                 </div>)
               })}
-            </div>
+            </div>*/}
           </div>
         </div>
       )

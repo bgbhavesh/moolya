@@ -70,7 +70,7 @@ export default class MlStartupAwards extends React.Component{
     }else{
       this.setState({loading: false, startupAwards: that.context.startupPortfolio.awardsRecognition, startupAwardsList: that.context.startupPortfolio.awardsRecognition});
     }
-    this.startupAwardServer = response
+    this.startupAwardServer = response&&response.awardsRecognition?response.awardsRecognition:[]
   }
   addAward(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
@@ -108,8 +108,8 @@ export default class MlStartupAwards extends React.Component{
   //todo:// context data connection first time is not coming have to fix
   lockPrivateKeys(selIndex) {
     var privateValues = this.startupAwardServer && this.startupAwardServer[selIndex]?this.startupAwardServer[selIndex].privateFields : []
-    var filterPrivateKeys = _.filter(this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
-    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys&&this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
     var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
     var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
     console.log('keysssssssssssssss', keys)
@@ -371,8 +371,8 @@ export default class MlStartupAwards extends React.Component{
                       </div>
                       <div className="form-group">
                         <Datetime dateFormat="YYYY" timeFormat={false} viewMode="years"
-                                  inputProps={{placeholder: "Select Year", className:"float-label form-control"}} defaultValue={this.state.data.year}
-                                  closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)} isValidDate={ valid }/>
+                                  inputProps={{placeholder: "Select Year", className:"float-label form-control"}} defaultValue={this.state.data&&this.state.data.year?this.state.data.year:0}
+                                  closeOnSelect={true} ref="year" onBlur={this.handleYearChange.bind(this)} isValidDate={this.state.data&&this.state.data.year? valid :"" }/>
                       </div>
                       <div className="form-group">
                         <input type="text" name="awardsDescription" placeholder="About" className="form-control float-label" defaultValue={this.state.data.awardsDescription}  onBlur={this.handleBlur.bind(this)}/>

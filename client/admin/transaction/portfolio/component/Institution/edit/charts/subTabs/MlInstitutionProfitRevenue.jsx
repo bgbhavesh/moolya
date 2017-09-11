@@ -179,8 +179,14 @@ export default class MlInstitutionProfitRevenue extends React.Component{
     let details =this.state.data;
     details=_.omit(details,["prlEntityType"]);
     details=_.extend(details,{["prlEntityType"]: val.value});
+    let revenueArray = this.state.revenuList;
     this.setState({data:details}, function () {
-      this.setState({"selectedVal" :  val.value})
+      if(revenueArray && index==revenueArray.length){
+        this.setState({"selectedVal" :  val.value})
+      }else{
+        revenueArray[index].prlEntityType=val.value;
+        this.setState({"revenuList" :  revenueArray})
+      }
       this.sendDataToParent(index)
     })
   }

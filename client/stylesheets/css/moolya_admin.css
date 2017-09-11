@@ -705,7 +705,7 @@ button:focus{outline: 0;}
 #btn-search::-moz-placeholder { /* Firefox 19+ */color: transparent;}
 #btn-search:-ms-input-placeholder { /* IE 10+ */color: transparent;}
 #btn-search:-moz-placeholder { /* Firefox 18- */color: transparent;}
-#btn-search {border: none; background: url(../images/search_icon_red.png) 2px center no-repeat; z-index: 1; width: 25px; height: 25px; transition: all .25s ease-in .25s; color: transparent; line-height: 25px; position: absolute;  right: 27px;  top: 15px;}
+#btn-search {border: none; background: url(../images/search_icon_red.png) 2px center no-repeat; z-index: 1; width: 25px; height: 25px; transition: all .25s ease-in .25s; color: transparent; line-height: 25px; /*position: absolute;  right: 27px;  top: 15px;*/}
 #btn-search:hover {cursor: pointer; }
 #btn-search:hover:focus {cursor: text; }
 #btn-search:focus {width: 200px; padding: 0 10px 0 30px; outline: none; font-size: 14px; color: black; background: url(../images/search_icon_red.png) 2px center no-repeat ; color: #000; }

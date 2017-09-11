@@ -35,30 +35,28 @@ export default class MlAppIdeatorListView extends Component {
     const data = this.props.data || [];
     return (
       <div>
-        <div className="app_padding_wrap">
-          <div className="col-md-12 ideators_list">
-            <div className="row">
-              <h2>Ideators</h2>
-              {data.map(function (ideator, idx) {
-                return (
-                  <div className="col-md-3 col-sm-4 col-lg-2" key={idx}>
-                    <a href='' onClick={that.viewDetails.bind(that, ideator.ideas[0].portfolioId)}>
-                      <div className="ideators_list_block">
-                        <div className="premium">
-                          <span>{ideator.accountType}</span>
-                        </div>
-                        <h3>{ideator.name}</h3>
-                        <div className="list_icon"><span className="ml my-ml-Ideator"></span></div>
-                        <p>{ideator.ideas[0].title}</p>
-                        <div className="block_footer">
-                          <span>{ideator.chapterName}</span>
-                        </div>
+        <div className="col-md-12 ideators_list">
+          <div className="row">
+            <h2>Ideators</h2>
+            {data.map(function (ideator, idx) {
+              return (
+                <div className="col-md-3 col-sm-4 col-lg-2" key={idx}>
+                  <a href='' onClick={that.viewDetails.bind(that, ideator.ideas[0].portfolioId)}>
+                    <div className="ideators_list_block">
+                      <div className="premium">
+                        <span>{ideator.accountType}</span>
                       </div>
-                    </a>
-                  </div>
-                )
-              })}
-            </div>
+                      <h3>{ideator.name}</h3>
+                      <div className="list_icon"><span className="ml my-ml-Ideator"></span></div>
+                      <p>{ideator.ideas[0].title}</p>
+                      <div className="block_footer">
+                        <span>{ideator.chapterName}</span>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>

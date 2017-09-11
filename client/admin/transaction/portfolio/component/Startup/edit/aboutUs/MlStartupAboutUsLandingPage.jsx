@@ -86,7 +86,7 @@ export default class MlStartupAboutUs extends React.Component{
                   empty="fa fa-star-o empty"
                   full="fa fa-star fill"
                   fractions={2}
-                  initialRate={this.state.startupAboutUs.rating && this.state.startupAboutUs.rating.rating ? Number(this.state.startupAboutUs.rating.rating) : 0}
+                  initialRate={this.state.startupAboutUs.rating && this.state.startupAboutUs.rating.rating ? Number(this.state.startupAboutUs.rating.rating) : 4}
                   readonly={true}
                 />
               </div>

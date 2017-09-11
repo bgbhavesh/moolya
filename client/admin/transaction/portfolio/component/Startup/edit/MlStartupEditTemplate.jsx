@@ -116,7 +116,7 @@ export default class MlStartupEditTemplate extends React.Component {
         panelClassName: 'panel',
         title: "Looking For",
         component: <MlStartupLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)}
-                                        portfolioDetailsId={this.props.portfolioDetailsId}/>
+                                        portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
       },
 
 

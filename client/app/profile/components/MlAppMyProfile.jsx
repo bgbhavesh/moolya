@@ -277,7 +277,9 @@ class MlAppMyProfile extends Component {
           actionOptions={appActionConfig}/>
       }]
   };
-  return (
+    let gImg = this.state.gender==='female'?"/images/female.jpg":"/images/def_profile.png";
+    let genderImage = (!this.state.profileImage || this.state.profileImage==" ")?gImg:this.state.profileImage;
+    return (
     <div className="admin_main_wrap">
       {showLoader === true ? (<MlLoader/>) : (
         <div className="admin_padding_wrap">
@@ -314,16 +316,16 @@ class MlAppMyProfile extends Component {
                         <label>Gender : </label>
                       </div>
                       <div className="input_types">
-                        <input id="radio1" type="radio" name="radio" value="Male" checked={this.state.genderStateMale}/><label
+                        <input id="radio1" type="radio" name="radio" value="male" checked={this.state.genderStateMale}/><label
                         htmlFor="radio1"><span><span></span></span>Male</label>
                       </div>
                       <div className="input_types">
-                        <input id="radio2" type="radio" name="radio" value="Female"
+                        <input id="radio2" type="radio" name="radio" value="female"
                                checked={this.state.genderStateFemale}/><label
                         htmlFor="radio2"><span><span></span></span>Female</label>
                       </div>
                       <div className="input_types">
-                        <input id="radio3" type="radio" name="radio" value="Others"
+                        <input id="radio3" type="radio" name="radio" value="others"
                                checked={this.state.genderStateOthers}/><label
                         htmlFor="radio3"><span><span></span></span>Others</label>
                       </div>
@@ -341,7 +343,7 @@ class MlAppMyProfile extends Component {
                         <input type="file" className="upload" id="profilePic" name="profileImage" accept="image/*" onChange={this.onImageFileUpload.bind(this)}/>
                       </div>
                       <div className="previewImg ProfileImg">
-                        <img src={this.state.profileImage?this.state.profileImage:"/images/def_profile.png"}/>
+                        <img src={genderImage}/>
                       </div>
                     </div>
                     <br className="brclear"/>

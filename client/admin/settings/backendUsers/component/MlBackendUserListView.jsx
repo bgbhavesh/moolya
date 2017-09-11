@@ -29,6 +29,9 @@ export default class MlBackendUserListView extends Component {
           userStatus = 'inactive'
         }
       }
+      let gImg = prop.profile.genderType==='female'?"/images/female.jpg":"/images/def_profile.png"
+      let genderImage = (!prop.profile.profileImage || prop.profile.profileImage==" ")?gImg:prop.profile.profileImage;
+
       return (
         <div className="col-lg-2 col-md-4 col-sm-4" key={prop._id}>
           <div className="list_block provider_block">
@@ -38,7 +41,7 @@ export default class MlBackendUserListView extends Component {
               <div className="provider_mask">
                 <img src="/images/funder_bg.png"/>
                 <img className="user_pic"
-                     src={prop.profile.profileImage ? prop.profile.profileImage : '/images/def_profile.png'}/>
+                     src={genderImage}/>
               </div>
             </a>
             <h3>{username} <br />

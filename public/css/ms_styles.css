@@ -46,3 +46,29 @@ h1,h2,h3,h4,h5,h6{font-family: 'DINPro-Regular';font-weight:normal;}
 .ms_content_wrap .content_right .ms_menu{position: relative;margin-top: 35px;overflow: hidden;}
 .ms_content_wrap .content_right .ms_menu:before{position: absolute;content: '';border:1px solid #ffc20e;width: 100%;top: 16px;}
 .ms_content_wrap .content_right .ms_menu li{display: inline-block;margin-left: 10px;}
+
+.ms_branches_banner {display: block; margin:30px auto; width: 400px;}
+.ms_branches_banner img {display: block; width: 100%; height: auto;}
+
+.ms_swiper 	{margin: 20px 0; padding: 0 28px; position: relative; width: calc(100% - 100px); box-sizing: border-box;}
+.ms_swiper .swiper-slide img {width: 100%; height: auto;}
+.ms_swiper .swiper-button-prev {left:0px; background-size: 20px auto;}
+.ms_swiper .swiper-button-next	{right: 0px; background-size: 20px auto;}
+
+.ms_swiper .profile_info {display: block; position: absolute; bottom: 6px; left: 3px; background:rgba(255, 255, 255, 0.90); text-align:center; width:calc(100% - 10px); padding:5px 2px;}
+.ms_swiper .profile_info h5 {margin: 0px; padding: 0px; color: #000000; font-size: 14px; text-transform: capitalize;}
+.ms_swiper .profile_info h6 {margin: 0px; padding: 0px; color:#ef4647; font-size: 13px; text-transform: capitalize;}
+.ms_swiper .profile_info p  {display: none; margin: 0px; padding: 0px; height:calc(100% - 38px); padding: 4px 6px 0; text-align: justify; overflow: auto; font-size: 12px; }
+.ms_swiper .profile_info.open p {display: block;}
+.ms_swiper .profile_info.open {height: calc(100% - 9px); box-sizing: border-box; }
+.ms_swiper .expand_info	{position: absolute; top:0px; right: 0px; font-size: 25px; cursor: pointer; color: blue;     width: 25px;
+    background: red;
+    height: 25px;
+    text-align: right;
+    line-height: 19px;
+    border-radius: 0 0 0 20px;
+    box-sizing: border-box;
+    background:#ef4647 url(../images/expand.png) no-repeat 8px center;
+    background-size: 15px auto; 
+}
+.ms_swiper .expand_info.collapse {background:#ef4647  url(../images/collapse.png) no-repeat 8px center; background-size: 15px auto; }

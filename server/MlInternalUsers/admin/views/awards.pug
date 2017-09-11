@@ -1,4 +1,5 @@
-
+//
+   Created by kanwarjeet on 9/9/17.
 
 doctype html
 html
@@ -30,7 +31,7 @@ html
             img(src=profilePic)
         .content_right
           h2
-            | #{firstName} #{lastName} an '#{communityType}' on #{space}
+            | #{firstName} #{lastName} / an '#{communityType}' on #{space}
             span.m_red m
             span.m_yel oo
             span.m_red lya
@@ -44,7 +45,7 @@ html
                  a.ms_btn_ye(href= list.link) #{list.name}
             li
           p
-             | #{aboutDiscription}
+            | #{aboutDiscription}
           h3 Past winners have included:
           .img_list
             img(src='images/list_img_01.png')

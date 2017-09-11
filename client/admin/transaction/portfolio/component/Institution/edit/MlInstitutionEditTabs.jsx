@@ -94,7 +94,7 @@ export default class MlInstitutionEditTab extends Component {
         panelClassName: 'panel',
         title: "Investor",
         component: <MlInstitutionEditInvestor key="3" getInvestorDetails={this.getInvestorDetails.bind(this)}
-                                              portfolioDetailsId={this.props.portfolioDetailsId}/>
+                                              portfolioDetailsId={this.props.portfolioDetailsId} tabName="investor"/>
       },
       {
         tabClassName: 'tab',
@@ -116,7 +116,7 @@ export default class MlInstitutionEditTab extends Component {
         panelClassName: 'panel',
         title: "Awards",
         component: <MlInstitutionEditAwards key="6" getAwardsDetails={this.getAwardsDetails.bind(this)}
-                                            portfolioDetailsId={this.props.portfolioDetailsId}/>
+                                            portfolioDetailsId={this.props.portfolioDetailsId} tabName="awardsRecognition"/>
       },
       //{tabClassName: 'tab', panelClassName: 'panel', title:"Library" , component:<MlInstitutionEditLibrary key="7" client={client} isAdmin={true} getInvestorDetails={this.getInvestorDetails.bind(this)} portfolioDetailsId={this.props.portfolioDetailsId}/>},
       {
@@ -138,14 +138,14 @@ export default class MlInstitutionEditTab extends Component {
         panelClassName: 'panel',
         title: "Looking For",
         component: <MlInstitutionEditLookingFor key="9" getLookingForDetails={this.getLookingForDetails.bind(this)}
-                                                portfolioDetailsId={this.props.portfolioDetailsId}/>
+                                                portfolioDetailsId={this.props.portfolioDetailsId} tabName="lookingFor"/>
       },
       {
         tabClassName: 'tab',
         panelClassName: 'panel',
         title: "Partner",
         component: <MlInstitutionEditPartners key="10" getPartnersDetails={this.getPartnersDetails.bind(this)}
-                                              portfolioDetailsId={this.props.portfolioDetailsId}/>
+                                              portfolioDetailsId={this.props.portfolioDetailsId} tabName="partners"/>
       },
       {
         tabClassName: 'tab',
@@ -160,7 +160,7 @@ export default class MlInstitutionEditTab extends Component {
         panelClassName: 'panel',
         title: "R&D",
         component: <MlInstitutionEditRD key="12" getRDDetails={this.getRDDetails.bind(this)}
-                                        portfolioDetailsId={this.props.portfolioDetailsId}/>
+                                        portfolioDetailsId={this.props.portfolioDetailsId} tabName="researchAndDevelopment"/>
       },
       {
         tabClassName: 'tab',
@@ -176,7 +176,7 @@ export default class MlInstitutionEditTab extends Component {
         title: "Intrapreneur",
         component: <MlInstitutionEditIntrapreneur key="14"
                                                   getIntrapreneurDetails={this.getIntrapreneurDetails.bind(this)}
-                                                  portfolioDetailsId={this.props.portfolioDetailsId}/>
+                                                  portfolioDetailsId={this.props.portfolioDetailsId} tabName="intrapreneurRecognition"/>
       },
     ];
     return tabs;

@@ -10,6 +10,7 @@ import MlAlertNotification from '../../../mlNotifications/mlAlertNotifications/m
 import MlSubChapterAccessControl from './../../../mlAuthorization/mlSubChapterAccessControl';
 import MlNotificationController from '../../../mlNotifications/mlAppNotifications/mlNotificationsController'
 import mlSmsController from '../../../mlNotifications/mlSmsNotifications/mlSmsController'
+import MlUserContext from "../../../MlExternalUsers/mlUserContext";
 
 MlResolver.MlMutationResolver['createInquiry'] = (obj, args, context, info) =>{
     if(args && context && context.userId){
@@ -52,7 +53,7 @@ MlResolver.MlMutationResolver['createInquiry'] = (obj, args, context, info) =>{
             mlInteractionService.createTransactionRequest(toUser._id,'inquire', args.resourceId, resp, fromuser._id, fromUserType );
             MlEmailNotification.enquireRequest(fromuser,toUser)
             MlNotificationController.onEnquiryRequestReceived(fromuser,toUser);
-            sendSMSForEnquiryRequest(fromuser, args.resourceId, context)
+           // sendSMSForEnquiryRequest(fromuser, args.resourceId, context)
           }
         }catch (e){
             let code = 400;
@@ -82,7 +83,7 @@ sendSMSForEnquiryRequest = (fromUser, portfolioId, context) => {
   if(portfolioDetails){
     var countryCode = MlClusters.findOne(portfolioDetails.clusterId);
     var defaultProfile = new MlUserContext().userProfileDetails(portfolioDetails.userId)
-    var from = new MlUserContext().userProfileDetails(fromuser._id)
+    var from = new MlUserContext().userProfileDetails(fromUser._id);
     if(countryCode && defaultProfile && from){
       var mobileNumber = defaultProfile.mobileNumber
       var currentdate = new Date();

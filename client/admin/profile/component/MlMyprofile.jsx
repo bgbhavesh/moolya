@@ -499,7 +499,7 @@ export default class MlMyProfile extends React.Component {
     let isExternaluser = Meteor.user().profile.isExternaluser;
     let profilePic = this.state.uploadedProfilePic;
     if(!profilePic || profilePic == " "){
-      profilePic ="/images/img2.png"
+      profilePic =Meteor.user().profile.genderType==='female'?"/images/female.jpg":"/images/img2.png"
     }
     return (
       <div className="admin_main_wrap">

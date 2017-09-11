@@ -31,6 +31,16 @@ export default class MlAppFilterContainer extends Component {
         $(this).tooltip('hide');
       });
     },1000);
+
+    $('.filter_btn').click(function(){
+      $('.filter_overlay').toggle();
+      });
+
+    $('.filter_overlay').click(function(){
+      $('.filter_table').addClass('filter_hide');
+      $(this).hide();
+    });
+
     initalizeFloatLabel();
   }
 

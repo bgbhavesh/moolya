@@ -16,6 +16,7 @@ import {mlAppPendingAppointmentConfig} from "./../config/mlAppPendingAppointment
 import {mlAppCurrentAppointmentConfig} from "./../config/mlAppCurrentAppointmentsConfig";
 import {mlAppRejectedAppointmentConfig} from "./../config/mlAppRejectedAppointmentsConfig";
 import {mlAppCompletedAppointmentConfig} from "./../config/mlAppCompletedAppointments";
+import {mlAppMyRequestedBespokeServiceConfig} from "./../config/mlAppRequestedAppointmentsConfig";
 
 import MlAppOngoingSelectedMyAppointment from './mlAppServiceTaskAppointment/MlAppOngoingSelectedMyAppointment';
 import MlAppSelectedTaskMyAppointment from './mlAppInternalTaskAppointment/MlAppSelectedTaskMyAppointment';
@@ -28,7 +29,7 @@ export default class MlAppMyAppointment extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      activeTab: FlowRouter.getQueryParam('tab') ? FlowRouter.getQueryParam('tab') : 'Pending',
+      activeTab: FlowRouter.getQueryParam('tab') ? FlowRouter.getQueryParam('tab') : 'pending',
       selectedAppointment: FlowRouter.getQueryParam('appointment')
     }
   }
@@ -86,7 +87,10 @@ export default class MlAppMyAppointment extends React.Component {
         name: 'Rejected',
         tabContent: appointment ? that.getAppointmentComponentToLoad(status) : <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlAppRejectedAppointmentConfig} />
       },
-      { name: 'Requested', tabContent: <MlAppRequestedMyAppointment /> }
+      {
+        name: 'Requested',
+        tabContent: appointment ? that.getAppointmentComponentToLoad(status) : <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlAppMyRequestedBespokeServiceConfig} />
+      }
     ];
 
     function getTabs() {
@@ -99,7 +103,7 @@ export default class MlAppMyAppointment extends React.Component {
       }));
     }
 
-    const App = () => <Tabs items={getTabs()} selectedTabKey={ activeTab ? activeTab : "Pending" }  onChange={that.onChange} />;
+    const App = () => <Tabs items={getTabs()} selectedTabKey={ activeTab ? activeTab : "pending" }  onChange={that.onChange} />;
     return (
       <div className="app_main_wrap">
         <div className="app_padding_wrap">

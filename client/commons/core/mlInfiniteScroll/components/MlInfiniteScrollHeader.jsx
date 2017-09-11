@@ -9,6 +9,7 @@
  * Imports libs and components
  */
 import React, {Component} from 'react';
+import AlphaSearch from "./../../../../commons/components/alphaSearch/AlphaSearch";
 
 export default class MlInfiniteScrollHeader extends Component {
 
@@ -24,7 +25,11 @@ export default class MlInfiniteScrollHeader extends Component {
   }
 
   handleChange(event) {
-    this.setState({searchText: event.target.value});
+    this.setState({
+      searchText: event.target.value
+    }, function () {
+      this.updateSearch(event);
+    }.bind(this));
   }
 
   updateSearch(evt) {
@@ -52,12 +57,17 @@ export default class MlInfiniteScrollHeader extends Component {
           filterComponent : ""
         }
         { config.search ?
-          <form onSubmit={that.updateSearch} style={{margin:0}}>
+          <form onSubmit={that.updateSearch} style={{'margin':'0','position':'absolute','top':'19px','right':'11px','zIndex':'1'}}>
             <input type="text" className="form-control" onBlur={that.updateSearch} id="btn-search" placeholder="Search..." ref="searchText" onChange={(evt) => that.handleChange(evt) }/>
           </form>
           : ""
         }
-        <br className="clearfix" />
+        { config.alphabeticSearch ?
+            <AlphaSearch onAlphaSearchChange={props.onAlphaSearchChange} />
+          : ""
+        }
+
+        {/*<br className="clearfix" />*/}
       </div>
     )
   }

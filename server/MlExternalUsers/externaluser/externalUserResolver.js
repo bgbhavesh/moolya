@@ -445,6 +445,26 @@ MlResolver.MlMutationResolver['deActivateUserProfileByContext'] = (obj, args, co
   }
   return response;
 }
+/**
+ * Users left nav
+ * @Note: "deActivateUser" both have to be merged
+ * */
+MlResolver.MlMutationResolver['updateUserShowOnMap'] = (obj, args, context, info) => {
+  var user = mlDBController.findOne('users', {_id: args.userId}, context)
+  var resp;
+  if (user) {
+    resp = mlDBController.update('users', args.userId, {"profile.isShowOnMap": args.isShowOnMap}, {$set: true}, context)
+    if (resp) {
+      resp = new MlRespPayload().successPayload("User Updated Successfully", 200);
+      return resp
+    } else {
+      resp = new MlRespPayload().errorPayload("Error in update", 400);
+      return resp
+    }
+  }else {
+    return new MlRespPayload().errorPayload("Invalid user", 400);
+  }
+}
 
 MlResolver.MlQueryResolver['findDefaultUserProfile'] = (obj, args, context, info) => {
   var defaultProfile = {};
@@ -458,3 +478,4 @@ MlResolver.MlQueryResolver['findDefaultUserProfile'] = (obj, args, context, info
   }
   return defaultProfile;
 }
+

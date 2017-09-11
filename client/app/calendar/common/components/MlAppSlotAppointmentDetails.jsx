@@ -36,6 +36,7 @@ export default class MlAppSlotAppointmentDetails extends Component {
 
   render(){
     const that = this;
+    const props = this.props;
     console.log(that.state.appointmentsInfo);
     return (
       <div className="app_main_wrap">
@@ -95,12 +96,16 @@ export default class MlAppSlotAppointmentDetails extends Component {
                         }):<div></div>}
                       </ul>
                     </div>
-                    {/*<div className="col-md-12 nopadding">*/}
-                    {/*<div className="ml_btn">*/}
-                    {/*<a href="#" id="save_contact" className="save_btn">Call</a>*/}
-                    {/*<a href="" id="cancel_contact" className="cancel_btn" onClick={this.clickHandlers.bind(this, 'appointmentDetails')}>View</a>*/}
-                    {/*</div>*/}
-                    {/*</div>*/}
+                    <div className="col-md-12 nopadding">
+                      <div className="ml_btn">
+                        <a href="" id="save_contact" className="save_btn">Call</a>
+                        {
+                          props.isView ?
+                            <a href="" onClick={()=>props.viewEvent(data)} className="cancel_btn">View</a>
+                          : ""
+                        }
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

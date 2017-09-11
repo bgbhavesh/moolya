@@ -11,6 +11,13 @@ import MlAppInternalRejectTask from './MlAppInternalRejectTask';
 import MlAppInternalMyTask from './myTask/MlAppInternalMyTask';
 import 'react-responsive-tabs/styles.css';
 
+import MlInfiniteScroll from "../../../commons/core/mlInfiniteScroll/components/MlInfiniteScroll";
+import {mlMyAppPendingInternalTaskConfig} from './../config/MlAppPendingTasksConfig';
+import {mlMyAppCurrentInternalTaskConfig} from './../config/MlAppCurrentTasksConfig';
+import {mlMyAppCompletedInternalTaskConfig} from './../config/mlAppCompletedTasksConfig';
+import {mlMyAppRejectedInternalTaskConfig} from './../config/mlAppRejectedTasksConfig';
+import {mlMyAppSelfInternalTaskConfig} from './../config/MlAppSelfTasksConfig';
+
 export default class MlAppInternalTask extends React.Component{
 
   componentDidMount() {
@@ -18,11 +25,26 @@ export default class MlAppInternalTask extends React.Component{
 
   render(){
     let MlTabs = [
-      { name: 'My Tasks', tabContent: <MlAppInternalMyTask/> },
-      { name: 'Pending Tasks', tabContent: <MlAppInternalPendingTask/> },
-      { name: 'Current Tasks', tabContent: <MlAppInternalCurrentTask/> },
-      { name: 'Completed Tasks', tabContent: <MlAppInternalCompleteTask/> },
-      { name: 'Rejected Tasks', tabContent: <MlAppInternalRejectTask/> }
+      {
+        name: 'My Tasks',
+        tabContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlMyAppSelfInternalTaskConfig} />
+      },
+      {
+        name: 'Pending Tasks',
+        tabContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlMyAppPendingInternalTaskConfig} />
+      },
+      {
+        name: 'Current Tasks',
+        tabContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlMyAppCurrentInternalTaskConfig} />
+      },
+      {
+        name: 'Completed Tasks',
+        tabContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlMyAppCompletedInternalTaskConfig} />
+      },
+      {
+        name: 'Rejected Tasks',
+        tabContent: <MlInfiniteScroll viewMode={false} showInfinity={false} config={mlMyAppRejectedInternalTaskConfig} />
+      }
     ];
 
     function getTabs() {

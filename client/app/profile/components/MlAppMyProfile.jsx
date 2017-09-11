@@ -34,10 +34,15 @@ class MlAppMyProfile extends Component {
     this.findUserDetails.bind(this);
     this.onfoundationDateSelection.bind(this);
   }
+  componentDidMount() {
+  setTimeout(function(){
+  $('.float-label').jvFloat();
+  },1000);
+}
   componentDidUpdate() {
-    $(function () {
+    /*$(function () {
       $('.float-label').jvFloat();
-    });
+    });*/
     // this.initializeSwiper();
   }
   // componentDidUpdate(){

@@ -14,6 +14,7 @@ var Select = require('react-select');
 import MlLoader from '../../../../../commons/components/loader/loader'
 import gql from 'graphql-tag'
 import Moolyaselect from  '../../../../commons/components/MlAdminSelectWrapper'
+
 export default class MlFunderPrincipalTeam extends React.Component {
   constructor(props, context) {
     super(props);
@@ -271,7 +272,7 @@ export default class MlFunderPrincipalTeam extends React.Component {
 
   sendDataToParent() {
     let data = this.state.data;
-    selectedTab = this.state.selectedTab;
+    var selectedTab = this.state.selectedTab;
     if (selectedTab == "principal") {
       let fun = this.state.funderPrincipal;
       let funderPrincipal = _.cloneDeep(fun);

@@ -184,7 +184,8 @@ export default class MlAppRegistrationWizard extends Component {
     return (
       <div>
         {showLoader === true ? (<MlLoader/>) : (
-          <div className="app_padding_wrap">
+         <div className={this.props.isAccodion?'':"app_main_wrap"}>
+          <div className={this.props.isAccodion?'':"app_padding_wrap"}>
             {/*<h2>Registration Process</h2>*/}
             <div className='step-progress'>
               <div >
@@ -193,7 +194,9 @@ export default class MlAppRegistrationWizard extends Component {
                 {hasSteps && <StepZilla steps={steps} stepsNavigation={true} prevBtnOnLastStep={true} dontValidate={false} showConfirm={true}/>}
               </div>
             </div>
-          </div>)}
+          </div>
+         </div>
+        )}
       </div>
     )
   }

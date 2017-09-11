@@ -92,10 +92,12 @@ MlResolver.MlQueryResolver['fetchFunderAbout'] = (obj, args, context, info) => {
   if (args.portfoliodetailsId) {
     let portfolio = MlFunderPortfolio.findOne({"portfolioDetailsId": args.portfoliodetailsId})
     if (portfolio && portfolio.hasOwnProperty('funderAbout')) {
-      let details = portfolio.funderAbout
+      let details = portfolio.funderAbout?portfolio.funderAbout:{}
       let extendData = MlProfessions.findOne({_id: details.profession, industryId: details.industry})|| {};
+      let userType =  mlDBController.findOne('MlUserTypes', {_id:details.category?details.category:""})||{};
       details.industry = extendData.industryName || details.industry;
       details.profession = extendData.professionName || details.profession;
+      details.category = userType.displayName?userType.displayName:details.category;
       /*let userPersonal = MlMasterSettings.findOne({_id:details.gender}) || {}
       details.gender = userPersonal.genderInfo ? userPersonal.genderInfo.genderName : ''*/
       let userEmp = MlMasterSettings.findOne({_id:details.employmentStatus}) || {}

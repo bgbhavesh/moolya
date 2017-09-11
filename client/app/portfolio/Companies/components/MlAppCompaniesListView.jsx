@@ -36,7 +36,7 @@ export default class MlAppCompanyListView extends Component {
             <h3>{company.firstName}</h3>
             <div className="list_icon"><span className="ml my-ml-Company"></span></div>
             <div className="block_footer">
-              <span>{company.chapterName}-{company.communityType}</span>
+              <span>{company.chapterName} - {company.communityType}</span>
             </div>
           </div>
         </a>

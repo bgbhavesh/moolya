@@ -306,7 +306,7 @@ class MlAppMyProfile extends Component {
                     </div>
 
                     <div className="form-group">
-                      <input type="text" placeholder="User Name" className="form-control float-label" readOnly="readOnly"
+                      <input type="text" placeholder="User Name / Registered Email Id" className="form-control float-label" readOnly="readOnly"
                              defaultValue={this.state.displayName}/>
                     </div>
                     <div className="form-group">

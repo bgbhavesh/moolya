@@ -824,7 +824,7 @@ bottom:0px;overflow-x: auto; overflow-y: hidden; white-space: nowrap;height: 50p
       }
     }
   ul{margin: 0px; padding:3px;
-    li{display: inline-block; text-align: center;margin-right:5px;
+    li{display: inline-block; text-align: center;margin-right:5px;background:#dc3b3c;
       .notext{    width: 90%; color: #fff; line-height: 40px; font-size: 18px; margin: 0 auto;}
       a{display: block; text-shadow: none;color:$mlWhite;padding: 3px; border-radius: 5px;font-size:12px;
 
@@ -834,7 +834,7 @@ bottom:0px;overflow-x: auto; overflow-y: hidden; white-space: nowrap;height: 50p
             b{font-size:9px;}
           }
         }
-        &:hover{text-decoration:none;padding: 3px;border-radius: 5px;background:#dc3b3c;}
+        &:hover{text-decoration:none;padding: 3px;border-radius: 5px;background:#ce4444;}
       }
     }
   }

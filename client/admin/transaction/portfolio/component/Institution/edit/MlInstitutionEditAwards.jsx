@@ -51,15 +51,16 @@ export default class MlInstitutionEditAwards extends React.Component{
     //initalizeFloatLabel();
   }
   componentWillMount(){
-    this.fetchPortfolioDetails();
+   const resp= this.fetchPortfolioDetails();
+    return resp;
   }
   async fetchPortfolioDetails() {
     let that = this;
     let portfolioDetailsId=that.props.portfolioDetailsId;
     let empty = _.isEmpty(that.context.institutionPortfolio && that.context.institutionPortfolio.awardsRecognition)
+    const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
     if(empty){
-      const response = await fetchInstitutionDetailsHandler(portfolioDetailsId, KEY);
-      if (response && response.awardsRecognition) {
+      if (response && response.awardsRecognition && response.awardsRecognition.length>0) {
         this.setState({loading: false, institutionAwards: response.awardsRecognition, institutionAwardsList: response.awardsRecognition});
       }else{
         this.setState({loading:false})
@@ -67,6 +68,7 @@ export default class MlInstitutionEditAwards extends React.Component{
     }else{
       this.setState({loading: false, institutionAwards: that.context.institutionPortfolio.awardsRecognition, institutionAwardsList: that.context.institutionPortfolio.awardsRecognition});
     }
+    this.institutionAwardServer = response && response.awardsRecognition?response.awardsRecognition:[]
   }
   addAward(){
     this.setState({selectedObject : "default", popoverOpen : !(this.state.popoverOpen), data : {}})
@@ -88,14 +90,29 @@ export default class MlInstitutionEditAwards extends React.Component{
     if(details && details.logo){
       delete details.logo['__typename'];
     }
-    this.setState({selectedIndex:index, data:details,selectedObject : index,popoverOpen : !(this.state.popoverOpen), "selectedVal" : details.awardId});
-    setTimeout(function () {
-      _.each(details.privateFields, function (pf) {
-        $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
-      })
-    }, 10)
+    this.setState({selectedIndex:index, data:details,
+      "selectedVal" : details.awardId,
+      selectedObject : index,popoverOpen : !(this.state.popoverOpen)},()=>{
+      this.lockPrivateKeys(index)
+    });
+    // setTimeout(function () {
+    //   _.each(details.privateFields, function (pf) {
+    //     $("#"+pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    //   })
+    // }, 10)
   }
-
+//todo:// context data connection first time is not coming have to fix
+  lockPrivateKeys(selIndex) {
+    var privateValues = this.institutionAwardServer && this.institutionAwardServer[selIndex]?this.institutionAwardServer[selIndex].privateFields : []
+    var filterPrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.privateKeys, {tabName: this.props.tabName, index:selIndex})
+    var filterRemovePrivateKeys = _.filter(this.context.portfolioKeys && this.context.portfolioKeys.removePrivateKeys, {tabName: this.props.tabName, index:selIndex})
+    var finalKeys = _.unionBy(filterPrivateKeys, privateValues, 'booleanKey')
+    var keys = _.differenceBy(finalKeys, filterRemovePrivateKeys, 'booleanKey')
+    console.log('keysssssssssssssss', keys)
+    _.each(keys, function (pf) {
+      $("#" + pf.booleanKey).removeClass('un_lock fa-unlock').addClass('fa-lock')
+    })
+  }
   onLockChange(fiedName, field, e){
     var isPrivate = false
     let details = this.state.data||{};
@@ -109,9 +126,14 @@ export default class MlInstitutionEditAwards extends React.Component{
       details=_.extend(details,{[key]:false});
     }
 
-    var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
-    this.setState({privateKey:privateKey})
-    this.setState({data:details}, function () {
+    // var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName:KEY}
+    // this.setState({privateKey:privateKey})
+    // this.setState({data:details}, function () {
+    //   this.sendDataToParent()
+    // })
+    var privateKey = {keyName:fiedName, booleanKey:field, isPrivate:isPrivate, index:this.state.selectedIndex, tabName: this.props.tabName}
+    // this.setState({privateKey:privateKey})
+    this.setState({data: details, privateKey:privateKey}, function () {
       this.sendDataToParent()
     })
   }
@@ -377,4 +399,5 @@ export default class MlInstitutionEditAwards extends React.Component{
 }
 MlInstitutionEditAwards.contextTypes = {
   institutionPortfolio: PropTypes.object,
+  portfolioKeys :PropTypes.object,
 };
